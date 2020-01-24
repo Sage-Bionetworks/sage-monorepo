@@ -44,6 +44,7 @@ Install brew: https://brew.sh/
 
 Then:
 
+- xcode-select --install
 - brew install R
 - brew install cairo
 - brew install git-lfs
