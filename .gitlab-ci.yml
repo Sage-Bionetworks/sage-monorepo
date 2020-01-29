@@ -1,0 +1,39 @@
+variables:
+  # Used for deployment command.  The secret values are in Gitlab secrets
+  SHINYAPPS_ACCOUNT_NAME: isb-cgc
+  # So we can set the R version to build against in one place
+  R_VERSION: "3.6.2"
+
+stages:
+  - test
+  - deploy_to_staging
+  - deploy_to_prod
+
+Run Tests:
+  stage: test
+  image: rocker/verse:${R_VERSION}
+  script:
+    - echo "Tests run here!"
+
+Deploy To Staging:
+  stage: deploy_to_staging
+  image: rocker/verse:${R_VERSION}
+  only:
+    - staging
+  variables:
+    STAGING_DB_NAME: iatlas_staging
+    STAGING_DB_HOST: sage-test.cau5la50px0r.us-west-2.rds.amazonaws.com
+    STAGING_DB_USER: postgres
+  script:
+    # Set the creds to use with Shinyapps.io
+    - echo $SHINYAPPS_ACCOUNT_NAME
+    - R -e
+      "rsconnect::setAccountInfo(
+      name=\"${SHINYAPPS_ACCOUNT_NAME}\",
+      token=\"${SHINYAPPS_TOKEN}\",
+      secret=\"${SHINYAPPS_SECRET}\"
+      )"
+    # Gather all required packages
+    - R -e "renv::restore()"
+    # Deploy it to Shinyapps.io
+    - R -e "rsconnect::deployApp()"
