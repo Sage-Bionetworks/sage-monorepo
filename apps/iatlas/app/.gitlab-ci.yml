@@ -25,6 +25,7 @@ Deploy To Staging:
     STAGING_DB_HOST: sage-test.cau5la50px0r.us-west-2.rds.amazonaws.com
     STAGING_DB_USER: postgres
   script:
+    - pwd
     # Gather all required packages
     - R -e "renv::restore()"
     # Set the creds to use with Shinyapps.io
