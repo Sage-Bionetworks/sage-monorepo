@@ -1,6 +1,7 @@
 library(magrittr)
 
 source("R/functions/connect_to_db.R")
+DB_NAME <- "iatlas_dev"
 pool <- connect_to_db()
 rm(connect_to_db)
 

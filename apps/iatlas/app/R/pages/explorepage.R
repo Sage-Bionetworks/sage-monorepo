@@ -1,6 +1,6 @@
 analysis_module_dir   <- "R/modules/ui/analysis_modules"
 analysis_module_files <- list.files(analysis_module_dir, full.names = T)
-for(item in analysis_module_files){
+for (item in analysis_module_files) {
     source(item, local = T)
 }
 
@@ -86,7 +86,7 @@ explorepage <- shinydashboard::dashboardPage(
                             width = 3,
                             color = "black",
                             fill = FALSE,
-                            icon = icon("search")
+                            icon = shiny::icon("search")
                         ),
                         shinydashboard::infoBox(
                             "Classes of Readouts:",
@@ -94,7 +94,7 @@ explorepage <- shinydashboard::dashboardPage(
                             width = 3,
                             color = "black",
                             fill = FALSE,
-                            icon = icon("filter")
+                            icon = shiny::icon("filter")
                         ),
                         shinydashboard::infoBox(
                             "TCGA Cancers:",
@@ -102,7 +102,7 @@ explorepage <- shinydashboard::dashboardPage(
                             width = 3,
                             color = "black",
                             fill = FALSE,
-                            icon = icon("flask")
+                            icon = shiny::icon("flask")
                         ),
                         shinydashboard::infoBox(
                             "TCGA Samples:",
@@ -110,7 +110,7 @@ explorepage <- shinydashboard::dashboardPage(
                             width = 3,
                             color = "black",
                             fill = FALSE,
-                            icon = icon("users")
+                            icon = shiny::icon("users")
                         )
                     )
                 ),
@@ -130,7 +130,7 @@ explorepage <- shinydashboard::dashboardPage(
                             width = 6,
                             linkId = "link_to_cohort_selection",
                             title = "Cohort Selection",
-                            imgSrc = "images/groupsoverview.png",
+                            imgSrc = "images/cohort_selection.png",
                             boxText = "Use this module to create a cohort of interest.",
                             linkText = "Open Module"
                         ),
@@ -138,7 +138,7 @@ explorepage <- shinydashboard::dashboardPage(
                             width = 6,
                             linkId = "link_to_tumor_microenvironment",
                             title = "Tumor Microenvironment",
-                            imgSrc = "images/cellcontent.png",
+                            imgSrc = "images/tumor_microenvironment.png",
                             boxText = "Explore the immune cell proportions in your sample groups.",
                             linkText = "Open Module"
                         )
@@ -148,7 +148,7 @@ explorepage <- shinydashboard::dashboardPage(
                             width = 6,
                             title = "Immune Feature Trends",
                             linkId = "link_to_immune_features",
-                            imgSrc = "images/immunefeatures.png",
+                            imgSrc = "images/immune_features.png",
                             boxText = "This module allows you to see how immune readouts vary across your groups, and how they relate to one another.",
                             linkText = "Open Module"
                         ),
@@ -156,11 +156,10 @@ explorepage <- shinydashboard::dashboardPage(
                             width = 6,
                             linkId = "link_to_clinical_outcomes",
                             title = "Clinical Outcomes",
-                            imgSrc = "images/survival.png",
+                            imgSrc = "images/clinical_outcomes.png",
                             boxText = "Plot survival curves based on immune characteristics and identify variables associated with outcome.",
                             linkText = "Open Module"
                         )
-
                     ),
                     shiny::fluidRow(
                         .GlobalEnv$imgLinkBox(
@@ -175,7 +174,7 @@ explorepage <- shinydashboard::dashboardPage(
                             width = 6,
                             title = "TIL Maps",
                             linkId = "link_to_til_maps",
-                            imgSrc = "images/TILmap.png",
+                            imgSrc = "images/til_maps.png",
                             boxText = "Explore the characteristics of maps of tumor infiltrating lymphocytes obtained from analysis of H&E images.",
                             linkText = "Open Module"
                         )
@@ -185,7 +184,7 @@ explorepage <- shinydashboard::dashboardPage(
                             width = 6,
                             title = "Driver Associations",
                             linkId = "link_to_driver_associations",
-                            imgSrc = "images/drivers.png",
+                            imgSrc = "images/driver_associations.png",
                             boxText = "Explore Associations of Microenvironment with Driver Mutations.",
                             linkText = "Open Module"
                         ),
@@ -193,7 +192,7 @@ explorepage <- shinydashboard::dashboardPage(
                             width = 6,
                             title = "IO Targets",
                             linkId = "link_to_io_targets",
-                            imgSrc = "images/iotargets.png",
+                            imgSrc = "images/io_targets.png",
                             boxText = "Explore the expression of genes that code for immuno-oncological (IO) targets .",
                             linkText = "Open Module"
                         )
