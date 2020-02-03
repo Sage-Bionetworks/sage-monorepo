@@ -623,6 +623,13 @@
       "Repository": "CRAN",
       "Hash": "f27a078d834614513608da2c08031130"
     },
+    "startup": {
+      "Package": "startup",
+      "Version": "0.14.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "17a4b68eeeef4ab9f521caf9f16d1e86"
+    },
     "stringi": {
       "Package": "stringi",
       "Version": "1.4.5",
