@@ -15,8 +15,8 @@ immune_feature_correlations_server <- function(
         shiny::selectInput(
             ns("class_choice_id"),
             "Select or Search for Variable Class",
-            selected = get_dna_alteration_class_id(),
-            choices = create_class_list()
+            selected = .GlobalEnv$get_class_id_from_name("DNA Alteration"),
+            choices = .GlobalEnv$create_class_list()
         )
     })
 
@@ -27,13 +27,15 @@ immune_feature_correlations_server <- function(
             ns("response_choice_id"),
             "Select or Search for Response Variable",
             choices = feature_named_list(),
-            selected = get_leukocyte_fraction_id()
+            selected = .GlobalEnv$get_feature_id_from_display(
+                "Leukocyte Fraction"
+            ),
         )
     })
 
     response_name <- shiny::reactive({
         shiny::req(input$response_choice_id)
-        get_feature_name(input$response_choice_id)
+        .GlobalEnv$get_feature_display_from_id(input$response_choice_id)
     })
 
     value_tbl <- shiny::reactive({

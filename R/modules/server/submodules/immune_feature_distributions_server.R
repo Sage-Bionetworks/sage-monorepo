@@ -14,19 +14,21 @@ immune_feature_distributions_server <- function(
     source("R/functions/immune_feature_distributions_functions.R", local = T)
 
     output$selection_ui <- shiny::renderUI({
-        req(feature_named_list())
+        shiny::req(feature_named_list())
 
         shiny::selectInput(
             ns("feature_choice_id"),
             label = "Select or Search for Variable",
-            selected = get_leukocyte_fraction_id(),
+            selected = .GlobalEnv$get_feature_id_from_display(
+                "Leukocyte Fraction"
+            ),
             choices = feature_named_list()
         )
     })
 
     feature_name <- shiny::reactive({
         shiny::req(input$feature_choice_id)
-        get_feature_name(input$feature_choice_id)
+        .GlobalEnv$get_feature_display_from_id(input$feature_choice_id)
     })
 
     feature_plot_label <- shiny::reactive({
@@ -80,9 +82,10 @@ immune_feature_distributions_server <- function(
         )
     })
 
-    distplot_selected_group <- reactive({
+    distplot_selected_group <- shiny::reactive({
         shiny::req(distplot_eventdata())
         selected_group <- distplot_eventdata()$x[[1]]
+        return(selected_group)
     })
 
     output$distplot_group_text <- shiny::renderText({
@@ -100,11 +103,11 @@ immune_feature_distributions_server <- function(
 
     output$download_tbl <- shiny::downloadHandler(
         filename = function() stringr::str_c("data-", Sys.Date(), ".csv"),
-        content = function(con) readr::write_csv(plot_tbl(), con)
+        content = function(con) readr::write_csv(distplot_tbl(), con)
     )
 
     # histplot ----------------------------------------------------------------
-    histplot_tbl <- reactive({
+    histplot_tbl <- shiny::reactive({
         shiny::validate(shiny::need(distplot_eventdata(), "Click above plot"))
         shiny::req(distplot_tbl(), distplot_selected_group())
 

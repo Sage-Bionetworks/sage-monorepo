@@ -1,5 +1,5 @@
 # query functions -------------------------------------------------------------
-
+#
 create_feature_value_query <- function(feature_id){
     paste(
         "SELECT * FROM features_to_samples",
@@ -205,20 +205,7 @@ assert_data_has_rows <- function(data){
 
 # database functions ----------------------------------------------------------
 
-perform_query <- function(query, string = "") {
-    tictoc::tic(paste(
-        "Time taken to perfrom query",
-        string
-    ))
-    current_pool <- pool::poolCheckout(.GlobalEnv$pool)
-    tbl <- query %>%
-        dplyr::sql() %>%
-        pool::dbGetQuery(current_pool, .) %>%
-        dplyr::as_tibble()
-    pool::poolReturn(current_pool)
-    tictoc::toc()
-    return(tbl)
-}
+
 
 read_table <- function(table_name) {
     tictoc::tic(paste0(

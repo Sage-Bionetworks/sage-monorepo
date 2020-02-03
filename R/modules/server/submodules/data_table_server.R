@@ -10,7 +10,6 @@ data_table_server <- function(
     ...
 ){
     output$data_table_module <- DT::renderDT({
-        print(data_df())
         dt <- DT::datatable(
             data_df(),
             options = options,
