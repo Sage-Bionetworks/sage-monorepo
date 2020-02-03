@@ -3,7 +3,7 @@ docspage <- shiny::fluidPage(
     .GlobalEnv$titleBox("Documentation"),
     .GlobalEnv$messageBox(
         width = 12,
-        shiny::includeMarkdown("md/docs.md")
+        shiny::includeMarkdown("markdown/docs.markdown")
     ),
     shiny::fluidRow(
         shiny::column(
