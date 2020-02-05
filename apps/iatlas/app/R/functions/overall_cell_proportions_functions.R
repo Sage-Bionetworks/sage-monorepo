@@ -23,8 +23,7 @@ build_value_tbl <- function(sample_tbl){
         .GlobalEnv$perform_query(
             "build overall_cell_proportions value table"
         ) %>%
-        dplyr::inner_join(sample_tbl, by = "sample_id") %>%
-        dplyr::select(-sample_id)
+        dplyr::inner_join(sample_tbl, by = "sample_id")
 }
 
 build_barplot_tbl <- function(value_tbl){
@@ -50,7 +49,12 @@ build_barplot_tbl <- function(value_tbl){
 
 
 build_scatterplot_tbl <- function(value_tbl, group_value){
+    sample_tbl <-
+        "SELECT id AS sample_id, name AS sample_name FROM samples" %>%
+        .GlobalEnv$perform_query("Get sample table")
+
     value_tbl %>%
+        dplyr::inner_join(sample_tbl, by = "sample_id") %>%
         dplyr::select(
             sample_name,
             group,
