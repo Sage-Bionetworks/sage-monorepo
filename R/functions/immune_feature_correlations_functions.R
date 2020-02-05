@@ -56,8 +56,13 @@ build_heatmap_matrix <- function(tbl, method){
 }
 
 build_scatterplot_tbl <- function(tbl, clicked_feature, clicked_group){
+    sample_tbl <-
+        "SELECT id AS sample_id, name AS sample_name FROM samples" %>%
+        .GlobalEnv$perform_query("Get sample table")
+
     tbl %>%
         dplyr::filter(feature == clicked_feature, group == clicked_group) %>%
+        dplyr::inner_join(sample_tbl, by = "sample_id") %>%
         dplyr::select(group, y = response_value, x = value, name = sample_name) %>%
         create_plotly_label(
             name_column = "name",

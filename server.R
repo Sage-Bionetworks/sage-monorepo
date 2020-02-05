@@ -71,15 +71,15 @@ shiny::shinyServer(function(input, output, session) {
         cohort_group_tbl
     )
 
-    # shiny::callModule(
-    #     immune_features_server,
-    #     "immune_features",
-    #     cohort_sample_tbl,
-    #     cohort_group_tbl,
-    #     cohort_group_name,
-    #     feature_named_list,
-    #     cohort_colors
-    # )
+    shiny::callModule(
+        immune_features_server,
+        "immune_features",
+        cohort_sample_tbl,
+        cohort_group_tbl,
+        cohort_group_name,
+        feature_named_list,
+        cohort_colors
+    )
 
     # shiny::callModule(
     #     til_maps_server,
