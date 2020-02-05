@@ -45,3 +45,52 @@ create_class_list <- function(){
         perform_query("get class id") %>%
         tibble::deframe()
 }
+
+build_immunomodultors_tbl <- function(){
+    create_build_immunomodulators_tbl_query() %>%
+        perform_query("Build Immunomodultors Table")
+}
+
+build_gene_expression_tbl_by_gene_ids <- function(gene_ids){
+    gene_ids %>%
+        create_build_get_gene_expression_tbl_by_gene_ids_query() %>%
+        perform_query("Build gene expression table")
+}
+
+get_sample_ids_from_dataset <- function(dataset){
+    if (dataset == "TCGA") {
+        tag_display <- "TCGA Study"
+    } else if (dataset == "PCAWG") {
+        tag_display <- "PCAWG Study"
+    } else {
+        tag_display = dataset
+    }
+
+    tag_display %>%
+        create_get_sample_ids_from_parent_tag_display_query() %>%
+        perform_query("Get Dataset Sample Ids") %>%
+        dplyr::pull(sample_id)
+}
+
+get_gene_id_from_hgnc <- function(hgnc){
+    query <- paste0(
+        "SELECT id FROM genes WHERE hgnc = '",
+        hgnc,
+        "'"
+    )
+    query %>%
+        perform_query("get gene id") %>%
+        dplyr::pull(id)
+}
+
+create_driver_mutation_list <- function(){
+    paste(
+        "SELECT hgnc, id FROM (",
+        create_get_genes_by_type_query("driver_mutation"),
+        ") a"
+    ) %>%
+        perform_query("Get mutation genes") %>%
+        tibble::deframe()
+}
+
+

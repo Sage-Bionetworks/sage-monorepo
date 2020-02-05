@@ -2,97 +2,76 @@ immunomodulators_server <- function(
     input,
     output,
     session,
-    sample_con,
-    group_con,
-    genes_con,
+    sample_tbl,
+    group_tbl,
     group_name,
     cohort_colors
 ){
 
+    ns <- session$ns
+
     source("R/modules/server/submodules/data_table_server.R", local = T)
     source("R/modules/server/submodules/distribution_plot_server.R", local = T)
 
-    im_id_con <- shiny::reactive({
-        create_connection("gene_types") %>%
-            dplyr::filter(name == "immunomodulator") %>%
-            dplyr::select(id) %>%
-            dplyr::inner_join(
-                create_connection("genes_to_types"),
-                by = c("id" = "type_id")
-            ) %>%
-            dplyr::select(gene_id) %>%
-            dplyr::compute()
+    immunomodulator_tbl <- shiny::reactive({
+        .GlobalEnv$build_immunomodultors_tbl()
     })
 
-    expression_con <- shiny::reactive({
-        shiny::req(
-            im_id_con(),
-            sample_con()
+    output$gene_choice_ui <- shiny::renderUI({
+        shiny::req(immunomodulator_tbl(), input$group_choice)
+        choices <- immunomodulator_tbl() %>%
+            dplyr::select(
+                class = input$group_choice,
+                display = "hgnc",
+                feature = "id"
+            ) %>%
+            .GlobalEnv$create_nested_named_list()
+        shiny::selectInput(
+            ns("gene_choice_id"),
+            label = "Select or Search Gene",
+            choices = choices
         )
-
-        im_id_con() %>%
-            dplyr::inner_join(
-                create_connection("genes_to_samples"),
-                by = c("gene_id")
-            ) %>%
-            dplyr::select(feature_id = gene_id, sample_id, value = rna_seq_expr) %>%
-            dplyr::inner_join(sample_con(), by = "sample_id") %>%
-            dplyr::compute()
     })
 
-    im_con <- shiny::reactive({
-        req(im_id_con(), genes_con())
-
-        genes_con() %>%
-            dplyr::inner_join(im_id_con(), by = "gene_id") %>%
-            dplyr::compute()
+    expression_tbl <- shiny::reactive({
+        shiny::req(immunomodulator_tbl(), input$gene_choice_id)
+        .GlobalEnv$build_gene_expression_tbl_by_gene_ids(
+            input$gene_choice_id
+        )
     })
 
-    relationship_con <- shiny::reactive({
-        shiny::req(im_con())
+    data_tbl <- shiny::reactive({
+        shiny::req(immunomodulator_tbl())
 
-        im_con() %>%
+        immunomodulator_tbl() %>%
+            dplyr::mutate(references = stringr::str_remove_all(references, "[{}]")) %>%
             dplyr::select(
-                feature_id = gene_id,
-                feature_name = hgnc,
-                `Gene Family` = gene_family,
-                `Super Category` = super_category,
-                `Immune Checkpoint` = immune_checkpoint,
-            ) %>%
-            dplyr::compute()
-    })
-
-    im_dt_tbl <- shiny::reactive({
-        shiny::req(im_con())
-
-        im_con() %>%
-            dplyr::select(
-                Hugo = hgnc,
-                `Entrez ID` =  entrez,
-                `Gene Family` = gene_family,
-                `Super Category` = super_category,
-                `Immune Checkpoint` = immune_checkpoint,
-                Function = gene_function,
+                Hugo                  = hgnc,
+                `Entrez ID`           = entrez,
+                `Friendly Name`       = friendly_name,
+                `Gene Family`         = gene_family,
+                `Super Category`      = super_category,
+                `Immune Checkpoint`   = immune_checkpoint,
+                Function              = gene_function,
                 `Reference(s) [PMID]` = references
-            ) %>%
-            dplyr::collect()
+            )
     })
 
-    shiny::callModule(
-        distributions_plot_server,
-        "dist",
-        "immunomodulators_dist_plot",
-        expression_con,
-        relationship_con,
-        group_con,
-        group_name,
-        cohort_colors,
-        key_col = "label"
-    )
+    # shiny::callModule(
+    #     distributions_plot_server,
+    #     "dist",
+    #     "immunomodulators_dist_plot",
+    #     expression_con,
+    #     relationship_con,
+    #     group_con,
+    #     group_name,
+    #     cohort_colors,
+    #     key_col = "label"
+    # )
 
     shiny::callModule(
         data_table_server,
         "im_table",
-        im_dt_tbl
+        data_tbl
     )
 }
