@@ -1,3 +1,39 @@
+create_build_get_gene_expression_tbl_by_gene_ids_query <- function(gene_ids){
+    paste0(
+        "SELECT gene_id, sample_id, rna_seq_expr FROM genes_to_samples WHERE ",
+        "gene_id IN (",
+        numeric_values_to_query_list(gene_ids),
+        ")"
+    )
+}
+
+create_get_sample_ids_from_parent_tag_display_query <- function(display){
+    paste0(
+        "SELECT sample_id FROM samples_to_tags WHERE tag_id IN (",
+        "SELECT tag_id FROM tags_to_tags WHERE related_tag_id IN (",
+        "SELECT id FROM tags WHERE display IN (",
+        string_values_to_query_list(display),
+        ")))"
+    )
+}
+
+
+#' Create Build Immunomodulators Table Query
+#' @export
+create_build_immunomodulators_tbl_query <- function(){
+    paste0(
+        "SELECT a.id, a.hgnc, a.entrez, a.friendly_name, a.references, ",
+        "gf.name AS gene_family, sc.name as super_category, ic.name AS ",
+        "immune_checkpoint, gfunc.name as gene_function FROM (",
+        create_get_genes_by_type_query("immunomodulator"), ") a ",
+        "LEFT JOIN gene_families gf ON a.gene_family_id = gf.id ",
+        "LEFT JOIN super_categories sc ON a.super_cat_id = sc.id ",
+        "LEFT JOIN immune_checkpoints ic ON a.immune_checkpoint_id = ic.id ",
+        "LEFT JOIN gene_functions gfunc ON a.gene_function_id = gfunc.id"
+    )
+}
+
+
 #' Create Combined Feature Values Query From Class Ids
 #' @param class_ids class ids in the features to samples table
 #' @export
@@ -87,13 +123,13 @@ create_get_feature_id_from_display_query <- function(display){
     )
 }
 
-#' Create Parent Group Query From Id
-#' @param name The name of the parent group
+#' Create Parent Group Query From Display
+#' @param display The display name of the parent group
 #' @export
-create_parent_group_query_from_group <- function(name){
+create_parent_group_query_from_display <- function(display){
     parent_tag_query <- create_translate_values_query(
         "tags", "id", "display",
-        string_values_to_query_list(name)
+        string_values_to_query_list(display)
     )
 
     create_parent_group_query_from_id(parent_tag_query)
@@ -120,7 +156,7 @@ create_parent_group_query_from_id <- function(id) {
 #' @export
 create_get_genes_by_type_query <- function(gene_type){
     gene_types_subquery <- create_translate_values_query(
-        "gene_types", "id", "name",string_values_to_query_list(gene_type)
+        "gene_types", "id", "name", string_values_to_query_list(gene_type)
     )
     gene_ids_subquery <- create_translate_values_query(
         "genes_to_types", "gene_id", "type_id", gene_types_subquery

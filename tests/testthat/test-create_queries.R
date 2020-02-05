@@ -60,9 +60,9 @@ test_that("create get genes by type query", {
     )
 })
 
-test_that("create parent group query from group", {
+test_that("create parent group query from display", {
     expect_equal(
-        create_parent_group_query_from_group("Immune Subtype"),
+        create_parent_group_query_from_display("Immune Subtype"),
         paste0(
             "SELECT * FROM tags WHERE id IN (",
             "SELECT tag_id FROM tags_to_tags WHERE related_tag_id IN (",
@@ -133,3 +133,4 @@ test_that("numeric values to query list", {
     expect_equal(numeric_values_to_query_list(c(1, 2)), "1, 2")
     expect_equal(numeric_values_to_query_list(c(1, 2L)), "1, 2")
 })
+

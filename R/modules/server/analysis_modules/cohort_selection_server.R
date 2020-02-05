@@ -10,7 +10,6 @@ cohort_selection_server <- function(
     source("R/modules/server/submodules/cohort_filter_selection_server.R", local = T)
     source("R/modules/server/submodules/cohort_dataset_selection_server.R", local = T)
     source("R/modules/server/submodules/data_table_server.R", local = T)
-    source("R/functions/cohort_selection_functions.R", local = T)
 
     # cohort selection --------------------------------------------------------
 
@@ -31,8 +30,8 @@ cohort_selection_server <- function(
     })
 
     all_sample_ids <- shiny::reactive({
-        req(dataset())
-        get_all_dataset_ids(dataset())
+        shiny::req(dataset())
+        .GlobalEnv$get_sample_ids_from_dataset(dataset())
     })
 
     selected_sample_ids <- cohort_obj <- shiny::callModule(
@@ -45,7 +44,7 @@ cohort_selection_server <- function(
 
     sample_ids <- shiny::reactive({
         if (is.null(selected_sample_ids())) {
-            req(all_sample_ids())
+            shiny::req(all_sample_ids())
             return(all_sample_ids())
         } else {
             return(selected_sample_ids())

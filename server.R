@@ -89,18 +89,16 @@ shiny::shinyServer(function(input, output, session) {
         cohort_group_name,
         cohort_colors
     )
-    #
-    #
-    # shiny::callModule(
-    #     immunomodulators_server,
-    #     "immunomodulators",
-    #     cohort_sample_con,
-    #     cohort_group_con,
-    #     genes_con,
-    #     cohort_group_name,
-    #     cohort_colors
-    # )
-    #
+
+    shiny::callModule(
+        immunomodulators_server,
+        "immunomodulators",
+        cohort_sample_tbl,
+        cohort_group_tbl,
+        cohort_group_name,
+        cohort_colors
+    )
+
     shiny::callModule(
         clinical_outcomes_server,
         "clinical_outcomes",
@@ -109,17 +107,16 @@ shiny::shinyServer(function(input, output, session) {
         cohort_group_name,
         cohort_colors
     )
-    #
+
     # shiny::callModule(
     #     io_targets_server,
     #     "io_targets",
-    #     cohort_sample_con,
-    #     cohort_group_con,
-    #     genes_con,
+    #     cohort_sample_tbl,
+    #     cohort_group_tbl,
     #     cohort_group_name,
     #     cohort_colors
     # )
-    #
+
     shiny::callModule(
         driver_associations_server,
         "driver_associations",

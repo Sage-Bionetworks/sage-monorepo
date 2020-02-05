@@ -67,7 +67,7 @@ cohort_group_selection_server <- function(
 
     default_driver_gene <- "ABL1"
 
-    default_driver_gene_id <- .GlobalEnv$get_gene_id(default_driver_gene)
+    default_driver_gene_id <- .GlobalEnv$get_gene_id_from_hgnc(default_driver_gene)
 
     output$select_driver_mutation_group_ui <- shiny::renderUI({
         shiny::req(input$group_choice == "Driver Mutation")

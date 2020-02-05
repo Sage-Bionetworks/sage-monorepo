@@ -2,9 +2,8 @@ io_targets_server <- function(
     input,
     output,
     session,
-    sample_con,
-    group_con,
-    genes_con,
+    sample_tbl,
+    group_tbl,
     group_name,
     cohort_colors
 ) {

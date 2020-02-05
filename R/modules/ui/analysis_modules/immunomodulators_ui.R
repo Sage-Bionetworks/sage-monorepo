@@ -15,14 +15,34 @@ immunomodulators_ui <- function(id) {
                 sep = " "
             ))
         ),
-
-        distributions_plot_ui(
-            ns("dist"),
-            message_html = shiny::includeMarkdown("markdown/im_dist.markdown"),
-            title_text = "Immunomodulator Distributions",
-            scale_default = "Log10",
-            plot_clicked_group_default = T,
+        .GlobalEnv$optionsBox(
+            width = 12,
+            shiny::column(
+                width = 4,
+                shiny::selectInput(
+                    inputId = ns("group_choice"),
+                    label = "Select Group",
+                    choices = c(
+                        "Gene Family" = "gene_family",
+                        "Super Category" = "super_category",
+                        "Immune Checkpoint" = "immune_checkpoint"
+                    )
+                )
+            ),
+            shiny::column(
+                width = 4,
+                shiny::uiOutput(ns("gene_choice_ui"))
+            )
         ),
+
+
+        # distributions_plot_ui(
+        #     ns("dist"),
+        #     message_html = shiny::includeMarkdown("markdown/im_dist.markdown"),
+        #     title_text = "Immunomodulator Distributions",
+        #     scale_default = "Log10",
+        #     plot_clicked_group_default = T,
+        # ),
 
         data_table_ui(
             ns("im_table"),
