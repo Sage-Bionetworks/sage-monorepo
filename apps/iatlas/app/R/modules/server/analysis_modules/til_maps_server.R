@@ -17,10 +17,27 @@ til_maps_server <- function(
         local = T
     )
 
+    sample_tbl2 <- shiny::reactive({
+        shiny::req(sample_tbl())
+        tbl <-
+            paste(
+                "SELECT s.id AS sample_id, s.name AS sample_name, ",
+                "sl.name AS slide_barcode FROM samples s ",
+                "INNER JOIN patients_to_slides pts ",
+                "ON s.patient_id = pts.patient_id ",
+                "INNER JOIN slides sl ON pts.slide_id = sl.id ",
+                "WHERE sl.name IS NOT NULL"
+            ) %>%
+            .GlobalEnv$perform_query("Get sample table") %>%
+            dplyr::inner_join(sample_tbl(), by = "sample_id")
+
+
+    })
+
     shiny::callModule(
         til_map_distributions_server,
         "til_map_distributions",
-        sample_tbl,
+        sample_tbl2,
         group_tbl,
         group_name,
         plot_colors
@@ -56,17 +73,17 @@ til_maps_server <- function(
             .GlobalEnv$perform_query("build feature table") %>%
             dplyr::mutate(value = round(value, digits = 1)) %>%
             tidyr::pivot_wider(names_from = display, values_from = value) %>%
-            dplyr::inner_join(sample_tbl(), by = "sample_id") %>%
-            dplyr::filter(!is.na(slide_id)) %>%
+            dplyr::inner_join(sample_tbl2(), by = "sample_id") %>%
+            dplyr::filter(!is.na(slide_barcode)) %>%
             dplyr::mutate(Image = stringr::str_c(
                 "<a href=\"",
                 "https://quip1.bmi.stonybrook.edu:443/camicroscope/osdCamicroscope.php?tissueId=",
-                slide_id,
+                slide_barcode,
                 "\">",
-                slide_id,
+                slide_barcode,
                 "</a>"
             )) %>%
-            dplyr::select(-c(slide_id, sample_id)) %>%
+            dplyr::select(-c(slide_barcode, sample_id)) %>%
             dplyr::select(
                 Sample = sample_name,
                 `Selected Group` = group,
