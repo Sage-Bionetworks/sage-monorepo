@@ -83,6 +83,13 @@ get_gene_id_from_hgnc <- function(hgnc){
         dplyr::pull(id)
 }
 
+get_gene_hgnc_from_id <- function(gene_id){
+    query <- paste0("SELECT hgnc FROM genes WHERE id = ", gene_id)
+    query %>%
+        perform_query("Get gene HGNC") %>%
+        dplyr::pull(hgnc)
+}
+
 create_driver_mutation_list <- function(){
     paste(
         "SELECT hgnc, id FROM (",
@@ -91,6 +98,34 @@ create_driver_mutation_list <- function(){
     ) %>%
         perform_query("Get mutation genes") %>%
         tibble::deframe()
+}
+
+build_cohort_tbl_by_group <- function(sample_ids, group){
+    paste0(
+        "SELECT sts.sample_id, g.name AS group, g.display AS name, g.characteristics, g.color FROM (",
+        create_parent_group_query_from_display(group),
+        ") g INNER JOIN samples_to_tags sts ON g.id = sts.tag_id ",
+        "WHERE sample_id IN (",
+        numeric_values_to_query_list(sample_ids),
+        ")"
+    ) %>%
+        perform_query("Build Cohort Table")
+}
+
+build_cohort_tbl_by_feature_id <- function(sample_ids, feature_id){
+    paste(
+        "SELECT a.sample_id, a.value FROM (",
+        create_feature_value_query_from_ids(feature_id),
+        ") a WHERE a.sample_id IN (",
+        numeric_values_to_query_list(sample_ids),
+        ")"
+    ) %>%
+        perform_query("Build immune feature bin table")
+}
+
+build_feature_value_tbl <- function(feature_id){
+    create_feature_value_query_from_ids(feature_id) %>%
+        perform_query("Build feature value table")
 }
 
 
