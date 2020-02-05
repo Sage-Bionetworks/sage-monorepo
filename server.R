@@ -71,42 +71,42 @@ shiny::shinyServer(function(input, output, session) {
         cohort_group_tbl
     )
 
-    shiny::callModule(
-        immune_features_server,
-        "immune_features",
-        cohort_sample_tbl,
-        cohort_group_tbl,
-        cohort_group_name,
-        feature_named_list,
-        cohort_colors
-    )
+    # shiny::callModule(
+    #     immune_features_server,
+    #     "immune_features",
+    #     cohort_sample_tbl,
+    #     cohort_group_tbl,
+    #     cohort_group_name,
+    #     feature_named_list,
+    #     cohort_colors
+    # )
 
-    shiny::callModule(
-        til_maps_server,
-        "til_maps",
-        cohort_sample_tbl,
-        cohort_group_tbl,
-        cohort_group_name,
-        cohort_colors
-    )
+    # shiny::callModule(
+    #     til_maps_server,
+    #     "til_maps",
+    #     cohort_sample_tbl,
+    #     cohort_group_tbl,
+    #     cohort_group_name,
+    #     cohort_colors
+    # )
 
-    shiny::callModule(
-        immunomodulators_server,
-        "immunomodulators",
-        cohort_sample_tbl,
-        cohort_group_tbl,
-        cohort_group_name,
-        cohort_colors
-    )
+    # shiny::callModule(
+    #     immunomodulators_server,
+    #     "immunomodulators",
+    #     cohort_sample_tbl,
+    #     cohort_group_tbl,
+    #     cohort_group_name,
+    #     cohort_colors
+    # )
 
-    shiny::callModule(
-        clinical_outcomes_server,
-        "clinical_outcomes",
-        cohort_sample_tbl,
-        cohort_group_tbl,
-        cohort_group_name,
-        cohort_colors
-    )
+    # shiny::callModule(
+    #     clinical_outcomes_server,
+    #     "clinical_outcomes",
+    #     cohort_sample_tbl,
+    #     cohort_group_tbl,
+    #     cohort_group_name,
+    #     cohort_colors
+    # )
 
     # shiny::callModule(
     #     io_targets_server,
@@ -117,12 +117,12 @@ shiny::shinyServer(function(input, output, session) {
     #     cohort_colors
     # )
 
-    shiny::callModule(
-        driver_associations_server,
-        "driver_associations",
-        cohort_group_name,
-        feature_named_list
-    )
+    # shiny::callModule(
+    #     driver_associations_server,
+    #     "driver_associations",
+    #     cohort_group_name,
+    #     feature_named_list
+    # )
 
 
     shiny::observeEvent(input$link_to_tumor_microenvironment, {
