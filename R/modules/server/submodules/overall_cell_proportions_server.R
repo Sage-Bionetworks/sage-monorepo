@@ -12,7 +12,6 @@ overall_cell_proportions_server  <- function(
     value_tbl <- shiny::reactive({
         shiny::req(sample_tbl())
         build_value_tbl(sample_tbl())
-
     })
 
     barplot_tbl <- shiny::reactive({
@@ -20,16 +19,29 @@ overall_cell_proportions_server  <- function(
         build_barplot_tbl(value_tbl())
     })
 
-    barplot_eventdata <- shiny::callModule(
+    output$barplot <- plotly::renderPlotly({
+        shiny::req(barplot_tbl())
+
+        .GlobalEnv$create_barplot(
+            barplot_tbl(),
+            source_name = "overall_cell_proportions_barplot",
+            color_col = "color",
+            label_col = "label",
+            xlab = "Fraction type by group",
+            ylab = "Fraction mean"
+        )
+    })
+
+    barplot_eventdata <- shiny::reactive({
+        plotly::event_data("plotly_click", "overall_cell_proportions_barplot")
+    })
+
+    shiny::callModule(
         plotly_server,
-        "plotly_barplot",
-        plot_tbl = barplot_tbl,
-        plot_function = shiny::reactive(.GlobalEnv$create_barplot),
-        plot_source_name = "overall_cell_proportions_barplot",
-        color_col = "color",
-        label_col = "label",
-        xlab = "Fraction type by group",
-        ylab = "Fraction mean",
+        "barplot",
+        plot_tbl       = barplot_tbl,
+        plot_eventdata = barplot_eventdata,
+        group_tbl      = group_tbl,
     )
 
     barplot_selected_group <- shiny::reactive({
@@ -38,34 +50,34 @@ overall_cell_proportions_server  <- function(
     })
 
     scatterplot_tbl <- shiny::reactive({
-        shiny::validate(shiny::need(barplot_eventdata(), "Click above plot"))
         shiny::req(value_tbl(), barplot_selected_group())
+        build_scatterplot_tbl(value_tbl(), barplot_selected_group())
+    })
+
+    output$scatterplot <- plotly::renderPlotly({
+        shiny::validate(shiny::need(barplot_eventdata(), "Click above plot"))
+        shiny::req(value_tbl())
 
         groups <- dplyr::pull(value_tbl(), group)
         shiny::validate(shiny::need(
             barplot_selected_group() %in% groups,
             "Click above barchart"
         ))
-
-        build_scatterplot_tbl(
-            value_tbl(),
-            barplot_selected_group()
+        .GlobalEnv$create_scatterplot(
+            scatterplot_tbl(),
+            source_name = "overall_cell_proportions_scatterplot",
+            xlab = "Stromal Fraction",
+            ylab = "Leukocyte Fraction",
+            label_col = "label",
+            fill_colors = "blue",
+            title = barplot_selected_group(),
+            identity_line = TRUE
         )
     })
 
     shiny::callModule(
         plotly_server,
-        "plotly_scatterplot",
-        plot_tbl = scatterplot_tbl,
-        plot_function = shiny::reactive(.GlobalEnv$create_scatterplot),
-        plot_source_name = "overall_cell_proportions_scatterplot",
-        group_tbl = group_tbl,
-        show_group_text = F,
-        xlab = "Stromal Fraction",
-        ylab = "Leukocyte Fraction",
-        label_col = "label",
-        fill_colors = "blue",
-        title = barplot_selected_group(),
-        identity_line = TRUE
+        "scatterplot",
+        plot_tbl = barplot_tbl
     )
 }

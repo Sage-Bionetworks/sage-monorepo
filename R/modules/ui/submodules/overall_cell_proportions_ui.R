@@ -12,7 +12,16 @@ overall_cell_proportions_ui <- function(id){
                 "markdown/overall_cell_proportions1.markdown"
             )
         ),
-        shiny::fluidRow(plotly_ui(ns("plotly_barplot"))),
+        shiny::fluidRow(
+            .GlobalEnv$plotBox(
+                width = 12,
+                "barplot" %>%
+                    ns() %>%
+                    plotly::plotlyOutput() %>%
+                    shinycssloaders::withSpinner(),
+                plotly_ui(ns("barplot"))
+            )
+        ),
         .GlobalEnv$messageBox(
             width = 12,
             shiny::includeMarkdown(
@@ -20,8 +29,14 @@ overall_cell_proportions_ui <- function(id){
             )
         ),
         shiny::fluidRow(
-            plotly_ui(ns("plotly_scatterplot")),
-            show_group_text = F
-        ),
+            .GlobalEnv$plotBox(
+                width = 12,
+                "scatterplot" %>%
+                    ns() %>%
+                    plotly::plotlyOutput() %>%
+                    shinycssloaders::withSpinner(),
+                plotly_ui(ns("scatterplot"))
+            )
+        )
     )
 }
