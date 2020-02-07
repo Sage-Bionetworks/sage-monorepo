@@ -27,7 +27,16 @@ cell_type_fractions_ui <- function(id){
             )
         ),
         shiny::fluidRow(
-            plotly_ui(ns("plotly_barplot"))
+            shiny::fluidRow(
+                .GlobalEnv$plotBox(
+                    width = 12,
+                    "barplot" %>%
+                        ns() %>%
+                        plotly::plotlyOutput() %>%
+                        shinycssloaders::withSpinner(),
+                    plotly_ui(ns("barplot"))
+                )
+            )
         )
     )
 }

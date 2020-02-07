@@ -14,17 +14,28 @@ cell_type_fractions_server <- function(
         build_plot_tbl(input$fraction_group_choice)
     })
 
+    output$barplot <- plotly::renderPlotly({
+        shiny::req(plot_tbl())
+
+        .GlobalEnv$create_barplot(
+            plot_tbl(),
+            source_name = "cell_type_fractions_barplot",
+            color_col = "color",
+            label_col = "label",
+            xlab = "Fraction type by group",
+            ylab = "Fraction mean"
+        )
+    })
+
+    barplot_eventdata <- shiny::reactive({
+        plotly::event_data("plotly_click", "cell_type_fractions_barplot")
+    })
+
     shiny::callModule(
         plotly_server,
-        "plotly_barplot",
-        plot_tbl = plot_tbl,
-        plot_function = shiny::reactive(.GlobalEnv$create_barplot),
-        plot_source_name = "cell_type_fractions_barplot",
-        group_tbl = group_tbl,
-        color_col = "color",
-        error_col = "error",
-        label_col = "label",
-        xlab = "Fraction type by group",
-        ylab = "Fraction mean",
+        "barplot",
+        plot_tbl       = plot_tbl,
+        plot_eventdata = barplot_eventdata,
+        group_tbl      = group_tbl
     )
 }
