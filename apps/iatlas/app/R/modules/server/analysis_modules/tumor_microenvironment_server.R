@@ -16,10 +16,10 @@ tumor_microenvironment_server <- function(
         group_tbl
     )
 
-    # shiny::callModule(
-    #     cell_type_fractions_server,
-    #     "cell_type_fractions",
-    #     sample_tbl,
-    #     group_tbl
-    # )
+    shiny::callModule(
+        cell_type_fractions_server,
+        "cell_type_fractions",
+        sample_tbl,
+        group_tbl
+    )
 }
