@@ -3,7 +3,7 @@ immunomodulators_ui <- function(id) {
     ns <- shiny::NS(id)
 
     source("R/modules/ui/submodules/data_table_ui.R", local = T)
-    source("R/modules/ui/submodules/distribution_plot_ui.R", local = T)
+    source("R/modules/ui/submodules/plotly_ui.R", local = T)
 
     shiny::tagList(
         .GlobalEnv$titleBox("iAtlas Explorer — Immunomodulators"),
@@ -15,35 +15,77 @@ immunomodulators_ui <- function(id) {
                 sep = " "
             ))
         ),
-        .GlobalEnv$optionsBox(
-            width = 12,
-            shiny::column(
-                width = 4,
-                shiny::selectInput(
-                    inputId = ns("group_choice"),
-                    label = "Select Group",
-                    choices = c(
-                        "Gene Family" = "gene_family",
-                        "Super Category" = "super_category",
-                        "Immune Checkpoint" = "immune_checkpoint"
+        .GlobalEnv$sectionBox(
+            title = "Immunomodulator Distributions",
+            messageBox(
+                width = 12,
+                shiny::includeMarkdown("markdown/im_dist.markdown")
+            ),
+            shiny::fluidRow(
+                .GlobalEnv$optionsBox(
+                    width = 12,
+                    shiny::column(
+                        width = 3,
+                        shiny::selectInput(
+                            inputId = ns("group_choice"),
+                            label = "Select Group",
+                            choices = c(
+                                "Gene Family" = "gene_family",
+                                "Super Category" = "super_category",
+                                "Immune Checkpoint" = "immune_checkpoint"
+                            )
+                        )
+                    ),
+                    shiny::column(
+                        width = 3,
+                        shiny::uiOutput(ns("gene_choice_ui"))
+                    ),
+                    shiny::column(
+                        width = 3,
+                        shiny::selectInput(
+                            ns("plot_type_choice"),
+                            "Select or Search for Plot Type",
+                            choices = c("Violin", "Box")
+                        )
+                    ),
+                    shiny::column(
+                        width = 3,
+                        shiny::selectInput(
+                            ns("scale_method_choice"),
+                            "Select or Search for variable scaling",
+                            selected = "Log10",
+                            choices = c(
+                                "None",
+                                "Log2",
+                                "Log2 + 1",
+                                "Log10",
+                                "Log10 + 1"
+                            ),
+                        )
                     )
                 )
             ),
-            shiny::column(
-                width = 4,
-                shiny::uiOutput(ns("gene_choice_ui"))
+            shiny::fluidRow(
+                .GlobalEnv$plotBox(
+                    width = 12,
+                    "distplot" %>%
+                        ns() %>%
+                        plotly::plotlyOutput() %>%
+                        shinycssloaders::withSpinner(),
+                    plotly_ui(ns("immunomodulators_dist_plot"))
+                )
+            ),
+            shiny::fluidRow(
+                .GlobalEnv$plotBox(
+                    width = 12,
+                    "histplot" %>%
+                        ns() %>%
+                        plotly::plotlyOutput() %>%
+                        shinycssloaders::withSpinner(),
+                    plotly_ui(ns("immunomodulators_hist_plot"))
+                )
             )
         ),
-
-
-        # distributions_plot_ui(
-        #     ns("dist"),
-        #     message_html = shiny::includeMarkdown("markdown/im_dist.markdown"),
-        #     title_text = "Immunomodulator Distributions",
-        #     scale_default = "Log10",
-        #     plot_clicked_group_default = T,
-        # ),
-
         data_table_ui(
             ns("im_table"),
             title = "Immunomodulator Annotations",
