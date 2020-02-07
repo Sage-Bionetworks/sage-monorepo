@@ -64,40 +64,40 @@ shiny::shinyServer(function(input, output, session) {
     cohort_colors      <- shiny::reactive(cohort_cons()$plot_colors)
     #cohort_dataset     <- shiny::reactive(cohort_cons()$dataset)
 
-    shiny::callModule(
-        tumor_microenvironment_server,
-        "tumor_microenvironment",
-        cohort_sample_tbl,
-        cohort_group_tbl
-    )
-
-    shiny::callModule(
-        immune_features_server,
-        "immune_features",
-        cohort_sample_tbl,
-        cohort_group_tbl,
-        cohort_group_name,
-        feature_named_list,
-        cohort_colors
-    )
-
-    shiny::callModule(
-        til_maps_server,
-        "til_maps",
-        cohort_sample_tbl,
-        cohort_group_tbl,
-        cohort_group_name,
-        cohort_colors
-    )
+    # shiny::callModule(
+    #     tumor_microenvironment_server,
+    #     "tumor_microenvironment",
+    #     cohort_sample_tbl,
+    #     cohort_group_tbl
+    # )
+    #
+    # shiny::callModule(
+    #     immune_features_server,
+    #     "immune_features",
+    #     cohort_sample_tbl,
+    #     cohort_group_tbl,
+    #     cohort_group_name,
+    #     feature_named_list,
+    #     cohort_colors
+    # )
 
     # shiny::callModule(
-    #     immunomodulators_server,
-    #     "immunomodulators",
+    #     til_maps_server,
+    #     "til_maps",
     #     cohort_sample_tbl,
     #     cohort_group_tbl,
     #     cohort_group_name,
     #     cohort_colors
     # )
+
+    shiny::callModule(
+        immunomodulators_server,
+        "immunomodulators",
+        cohort_sample_tbl,
+        cohort_group_tbl,
+        cohort_group_name,
+        cohort_colors
+    )
 
     shiny::callModule(
         clinical_outcomes_server,

@@ -21,7 +21,7 @@ immune_feature_distributions_ui <- function(id) {
                     width = 4,
                     shiny::selectInput(
                         ns("plot_type"),
-                        "Select or Search for Plot Type",
+                        "Select Plot Type",
                         choices = c("Violin", "Box")
                     )
                 ),
@@ -29,7 +29,7 @@ immune_feature_distributions_ui <- function(id) {
                     width = 4,
                     shiny::selectInput(
                         ns("scale_method"),
-                        "Select or Search for variable scaling",
+                        "Select gene scaling",
                         selected = "None",
                         choices = c(
                             "None",
