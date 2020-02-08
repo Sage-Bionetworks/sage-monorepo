@@ -10,6 +10,7 @@ immune_feature_correlations_server <- function(
     ns <- session$ns
 
     source("R/functions/immune_feature_correlations_functions.R", local = T)
+    source("R/modules/server/submodules/plotly_server.R", local = T)
 
     output$class_selection_ui <- shiny::renderUI({
         shiny::selectInput(
@@ -71,39 +72,38 @@ immune_feature_correlations_server <- function(
         )
     })
 
-
-    output$heatmap_group_text <- shiny::renderText({
-        shiny::req(group_tbl())
-        eventdata <- plotly::event_data(
-            "plotly_click",
-            source = "immune_features_heatmap"
-        )
-        shiny::validate( shiny::need(eventdata, "Click above heatmap"))
-        group_tbl() %>%
-            dplyr::filter(group == local(unique(dplyr::pull(eventdata, "x")))) %>%
-            dplyr::mutate(text = paste0(name, ": ", characteristics)) %>%
-            dplyr::pull(text)
+    heatmap_eventdata <- shiny::reactive({
+        plotly::event_data("plotly_click", "immune_features_heatmap")
     })
 
+    shiny::callModule(
+        plotly_server,
+        "heatmap",
+        plot_tbl       = heatmap_matrix,
+        plot_eventdata = heatmap_eventdata,
+        group_tbl      = group_tbl
+    )
 
-    output$scatterPlot <- plotly::renderPlotly({
-        shiny::req(value_tbl(), response_name())
-        eventdata <- plotly::event_data(
-            "plotly_click",
-            source = "immune_features_heatmap"
-        )
+
+    # output$heatmap_group_text <- shiny::renderText({
+    #     shiny::req(group_tbl())
+    #     eventdata <- plotly::event_data(
+    #         "plotly_click",
+    #         source = "immune_features_heatmap"
+    #     )
+    #     shiny::validate( shiny::need(eventdata, "Click above heatmap"))
+    #     group_tbl() %>%
+    #         dplyr::filter(group == local(unique(dplyr::pull(eventdata, "x")))) %>%
+    #         dplyr::mutate(text = paste0(name, ": ", characteristics)) %>%
+    #         dplyr::pull(text)
+    # })
+
+    scatterplot_tbl <- shiny::reactive({
+        eventdata <- heatmap_eventdata()
         shiny::validate(shiny::need(eventdata, "Click above heatmap"))
-
         clicked_group <- eventdata$x[[1]]
         clicked_feature <- eventdata$y[[1]]
 
-        shiny::validate(shiny::need(
-            all(
-                clicked_feature %in% value_tbl()$feature,
-                clicked_group %in% value_tbl()$group
-            ),
-            "Click above heatmap"
-        ))
 
         value_tbl() %>%
             build_scatterplot_tbl(clicked_feature, clicked_group) %>%
@@ -115,5 +115,32 @@ immune_feature_correlations_server <- function(
                 fill_colors = "blue"
             )
     })
+
+
+    output$scatterPlot <- plotly::renderPlotly({
+        shiny::req(value_tbl(), response_name())
+
+        eventdata <- heatmap_eventdata()
+        shiny::validate(shiny::need(eventdata, "Click above heatmap"))
+
+        clicked_group <- eventdata$x[[1]]
+        clicked_feature <- eventdata$y[[1]]
+
+
+        shiny::validate(shiny::need(
+            all(
+                clicked_feature %in% value_tbl()$feature,
+                clicked_group %in% value_tbl()$group
+            ),
+            "Click above heatmap"
+        ))
+        scatterplot_tbl()
+    })
+
+    shiny::callModule(
+        plotly_server,
+        "scatterplot",
+        plot_tbl       = heatmap_matrix
+    )
 }
 

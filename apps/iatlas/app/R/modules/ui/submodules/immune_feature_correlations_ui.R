@@ -2,6 +2,8 @@ immune_feature_correlations_ui <- function(id) {
 
     ns <- shiny::NS(id)
 
+    source("R/modules/ui/submodules/plotly_ui.R", local = T)
+
     sectionBox(
         title = "Correlations",
         .GlobalEnv$messageBox(
@@ -44,7 +46,7 @@ immune_feature_correlations_ui <- function(id) {
                         ns() %>%
                         plotly::plotlyOutput() %>%
                         shinycssloaders::withSpinner(),
-                    shiny::textOutput(ns("heatmap_group_text"))
+                    plotly_ui(ns("heatmap"))
                 )
             )
         ),
@@ -54,7 +56,8 @@ immune_feature_correlations_ui <- function(id) {
                 "scatterPlot" %>%
                     ns() %>%
                     plotly::plotlyOutput() %>%
-                    shinycssloaders::withSpinner()
+                    shinycssloaders::withSpinner(),
+                plotly_ui(ns("scatterplot"))
             )
         )
     )
