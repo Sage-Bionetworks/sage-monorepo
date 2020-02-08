@@ -1,3 +1,6 @@
+#' Create Build Get Gene Expression Table By Gene IDs Query
+#'
+#' @param gene_ids Integers in the gene_id column of the genes_to_samples table
 create_build_get_gene_expression_tbl_by_gene_ids_query <- function(gene_ids){
     paste0(
         "SELECT gene_id, sample_id, rna_seq_expr FROM genes_to_samples WHERE ",
@@ -7,6 +10,9 @@ create_build_get_gene_expression_tbl_by_gene_ids_query <- function(gene_ids){
     )
 }
 
+#' Create Get Sample IDs From Parent Tag Display Query
+#'
+#' @param display A string in the display column of the tags table
 create_get_sample_ids_from_parent_tag_display_query <- function(display){
     paste0(
         "SELECT sample_id FROM samples_to_tags WHERE tag_id IN (",
@@ -17,9 +23,7 @@ create_get_sample_ids_from_parent_tag_display_query <- function(display){
     )
 }
 
-
 #' Create Build Immunomodulators Table Query
-#' @export
 create_build_immunomodulators_tbl_query <- function(){
     paste0(
         "SELECT a.id, a.hgnc, a.entrez, a.friendly_name, a.references, ",
@@ -36,7 +40,6 @@ create_build_immunomodulators_tbl_query <- function(){
 
 #' Create Combined Feature Values Query From Class Ids
 #' @param class_ids class ids in the features to samples table
-#' @export
 create_combined_feature_values_query_from_class_ids <- function(class_ids){
 
     subquery <- paste0(
@@ -56,7 +59,6 @@ create_combined_feature_values_query_from_class_ids <- function(class_ids){
 
 #' Create Feature Value Query from class ids
 #' @param class_ids class ids in the features to samples table
-#' @export
 create_feature_value_query_from_class_ids <- function(class_ids){
     subquery <- create_translate_values_query(
         "features",
@@ -69,14 +71,12 @@ create_feature_value_query_from_class_ids <- function(class_ids){
 
 #' Create Feature Value Query from ids
 #' @param ids ids in the features to samples table
-#' @export
 create_feature_value_query_from_ids <- function(ids){
     create_feature_value_query_from_subquery(numeric_values_to_query_list(ids))
 }
 
 #' Create Feature Value Query from subquery
 #' @param subquery subquery that results in a list of feature ids
-#' @export
 create_feature_value_query_from_subquery <- function(subquery){
     paste0(
         "SELECT sample_id, feature_id, value ",
@@ -89,7 +89,6 @@ create_feature_value_query_from_subquery <- function(subquery){
 
 #' Create Get Feature Display from Id Query
 #' @param id A feature id
-#' @export
 create_get_feature_display_from_id_query <- function(id){
     create_translate_values_query(
         "features",
@@ -100,8 +99,7 @@ create_get_feature_display_from_id_query <- function(id){
 }
 
 #' Create Get Class Id from Name Query
-#' @param display A feature display name
-#' @export
+#' @param name A feature's name
 create_get_class_id_from_name_query <- function(name){
     create_translate_values_query(
         "classes",
@@ -113,7 +111,6 @@ create_get_class_id_from_name_query <- function(name){
 
 #' Create Get Feature Id from Display Query
 #' @param display A feature display name
-#' @export
 create_get_feature_id_from_display_query <- function(display){
     create_translate_values_query(
         "features",
@@ -125,7 +122,6 @@ create_get_feature_id_from_display_query <- function(display){
 
 #' Create Parent Group Query From Display
 #' @param display The display name of the parent group
-#' @export
 create_parent_group_query_from_display <- function(display){
     parent_tag_query <- create_translate_values_query(
         "tags", "id", "display",
@@ -137,7 +133,6 @@ create_parent_group_query_from_display <- function(display){
 
 #' Create Parent Group Query From Id
 #' @param id The id of the parent group
-#' @export
 create_parent_group_query_from_id <- function(id) {
     tag_id_query <- create_translate_values_query(
         "tags_to_tags", "tag_id", "related_tag_id",
@@ -153,7 +148,6 @@ create_parent_group_query_from_id <- function(id) {
 
 #' Create Get Gene by Type Query
 #' @param gene_type The name of the gene type
-#' @export
 create_get_genes_by_type_query <- function(gene_type){
     gene_types_subquery <- create_translate_values_query(
         "gene_types", "id", "name", string_values_to_query_list(gene_type)
@@ -168,9 +162,8 @@ create_get_genes_by_type_query <- function(gene_type){
 #' @param table The name of the table in the database to query
 #' @param into The column in the table to translate into
 #' @param from The column in the table to translate from
-#' @param values A vector of values to translate
-#' @param type They type of vector in values
-#' @export
+#' @param query A string that is a valid sql query that results in a one column
+#' table that contains the from value
 create_translate_values_query <- function(
     table,
     into,
@@ -184,14 +177,12 @@ create_translate_values_query <- function(
 
 #' String Values to Query List
 #' @param values A character vector
-#' @export
 string_values_to_query_list <- function(values){
     paste0("'", values, "'", collapse = ", ")
 }
 
 #' Numeric Values to Query List
 #' @param values A numeric vector
-#' @export
 numeric_values_to_query_list <- function(values){
     paste0(values, collapse = ", ")
 }

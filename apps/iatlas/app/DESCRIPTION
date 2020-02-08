@@ -8,8 +8,10 @@ Authors@R:
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
-License: What license it uses
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
     testthat (>= 2.1.0)
+RoxygenNote: 7.0.2
+Imports: RPostgres, dplyr, magrittr, pool, rlang, tictoc, tibble
