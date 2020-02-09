@@ -1,6 +1,5 @@
 # This is to stop the warning: no visible binding for global variable '.'
 # when doing devtools::check()
-
 if (getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 
 #' Get Feature ID From Display Name
@@ -29,7 +28,7 @@ get_feature_display_from_id <- function(id){
         dplyr::pull(.data$display)
 }
 
-#' Get Feature Values Tibble Name From IDs
+#' Get Feature Values Tibble From IDs
 #'
 #' @param ids An Integers in the id column of the features_to_samples table
 #' @importFrom magrittr %>%
@@ -70,7 +69,7 @@ build_immunomodultors_tbl <- function(){
         perform_query("Build Immunomodultors Table")
 }
 
-#' Title
+#' Build Gene Expression Table by Gene IDs
 #'
 #' @param gene_ids Integers in the gene_id column of genes_to_samples
 #' @importFrom magrittr %>%
@@ -80,7 +79,7 @@ build_gene_expression_tbl_by_gene_ids <- function(gene_ids){
         perform_query("Build gene expression table")
 }
 
-#' Title
+#' Get Sample IDs from Dataset
 #'
 #' @param dataset The name of a dataset in the database
 #' @importFrom magrittr %>%
