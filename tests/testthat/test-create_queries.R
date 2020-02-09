@@ -1,3 +1,42 @@
+test_that("Create Build Get Gene Expression Table By Gene IDs Query", {
+    expect_equal(
+        create_build_get_gene_expression_tbl_by_gene_ids_query(1:5),
+        paste0(
+            "SELECT gene_id, sample_id, rna_seq_expr FROM genes_to_samples ",
+            "WHERE gene_id IN (1, 2, 3, 4, 5)"
+        )
+    )
+})
+
+test_that("Create Get Sample IDs From Parent Tag Display Query", {
+    expect_equal(
+        create_get_sample_ids_from_parent_tag_display_query("Immune Subtype"),
+        paste0(
+            "SELECT sample_id FROM samples_to_tags WHERE tag_id IN (",
+            "SELECT tag_id FROM tags_to_tags WHERE related_tag_id IN (",
+            "SELECT id FROM tags WHERE display IN ('Immune Subtype')))"
+        )
+    )
+})
+
+test_that("Create Build Immunomodulators Table Query", {
+    expect_equal(
+        create_build_immunomodulators_tbl_query(),
+        paste0(
+            "SELECT a.id, a.hgnc, a.entrez, a.friendly_name, a.references, ",
+            "gf.name AS gene_family, sc.name as super_category, ic.name AS ",
+            "immune_checkpoint, gfunc.name as gene_function FROM (",
+            "SELECT * FROM genes WHERE id IN ",
+            "(SELECT gene_id FROM genes_to_types WHERE type_id IN ",
+            "(SELECT id FROM gene_types WHERE name IN ('immunomodulator')))) a " ,
+            "LEFT JOIN gene_families gf ON a.gene_family_id = gf.id ",
+            "LEFT JOIN super_categories sc ON a.super_cat_id = sc.id ",
+            "LEFT JOIN immune_checkpoints ic ON a.immune_checkpoint_id = ic.id ",
+            "LEFT JOIN gene_functions gfunc ON a.gene_function_id = gfunc.id"
+        )
+    )
+})
+
 test_that("create combined feature values query from class ids", {
     expect_equal(
         create_combined_feature_values_query_from_class_ids(1),
@@ -10,7 +49,6 @@ test_that("create combined feature values query from class ids", {
         )
     )
 })
-
 
 test_that("create feature value query from class ids", {
     expect_equal(
@@ -42,7 +80,21 @@ test_that("create get feature display from id query", {
     )
 })
 
-test_that("create get feature id from display query", {
+test_that("create get feature display from id query", {
+    expect_equal(
+        create_get_feature_display_from_id_query(1),
+        "SELECT display FROM features WHERE id IN (1)"
+    )
+})
+
+test_that("Create Get Class Id from Name Query", {
+    expect_equal(
+        create_get_class_id_from_name_query("DNA Alteration"),
+        "SELECT id FROM classes WHERE name IN ('DNA Alteration')"
+    )
+})
+
+test_that("Create Get Feature Id from Display Query", {
     expect_equal(
         create_get_feature_id_from_display_query("Leukocyte Fraction"),
         "SELECT id FROM features WHERE display IN ('Leukocyte Fraction')"
