@@ -96,38 +96,11 @@ create_get_feature_display_from_id_query <- function(id){
     )
 }
 
-#' Create Get Class Id from Name Query
-#' @param name A feature's name
-create_get_class_id_from_name_query <- function(name){
-    create_translate_values_query(
-        "classes",
-        "id",
-        "name",
-        string_values_to_query_list(name)
-    )
-}
 
-#' Create Get Feature Id from Display Query
-#' @param display A feature display name
-create_get_feature_id_from_display_query <- function(display){
-    create_translate_values_query(
-        "features",
-        "id",
-        "display",
-        string_values_to_query_list(display)
-    )
-}
 
-#' Create Parent Group Query From Display
-#' @param display The display name of the parent group
-create_parent_group_query_from_display <- function(display){
-    parent_tag_query <- create_translate_values_query(
-        "tags", "id", "display",
-        string_values_to_query_list(display)
-    )
 
-    create_parent_group_query_from_id(parent_tag_query)
-}
+
+
 
 #' Create Parent Group Query From Id
 #' @param id The id of the parent group
@@ -156,6 +129,17 @@ create_get_genes_by_type_query <- function(gene_type){
     paste0("SELECT * FROM genes WHERE id IN (", gene_ids_subquery, ")")
 }
 
+#' Create Parent Group Query From Display
+#' @param display The display name of the parent group
+create_parent_group_query_from_display <- function(display){
+    parent_tag_query <- create_translate_values_query(
+        "tags", "id", "display",
+        string_values_to_query_list(display)
+    )
+
+    create_parent_group_query_from_id(parent_tag_query)
+}
+
 #' Create Translate Values Query
 #' @param table The name of the table in the database to query
 #' @param into The column in the table to translate into
@@ -173,6 +157,34 @@ create_translate_values_query <- function(
     )
 }
 
+# Translation utilities -------------------------------------------------------
+# The function take a single value from one or more columns and translate those
+# into a value from a different column in the row
+
+#' Create Get Class Id from Name Query
+#' @param name A feature's name
+create_get_class_id_from_name_query <- function(name){
+    create_translate_values_query(
+        "classes",
+        "id",
+        "name",
+        string_values_to_query_list(name)
+    )
+}
+
+#' Create Get Feature Id from Display Query
+#' @param display A feature display name
+create_get_feature_id_from_display_query <- function(display){
+    create_translate_values_query(
+        "features",
+        "id",
+        "display",
+        string_values_to_query_list(display)
+    )
+}
+
+# helper functions ------------------------------------------------------------
+
 #' String Values to Query List
 #' @param values A character vector
 string_values_to_query_list <- function(values){
@@ -184,3 +196,6 @@ string_values_to_query_list <- function(values){
 numeric_values_to_query_list <- function(values){
     paste0(values, collapse = ", ")
 }
+
+
+
