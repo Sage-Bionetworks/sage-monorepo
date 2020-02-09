@@ -13,20 +13,12 @@ plotly_server <- function(
     shiny::outputOptions(output, "show_group_text", suspendWhenHidden = FALSE)
 
     output$plot_group_text <- shiny::renderText({
-        shiny::req(
-            show_group_text,
-            group_tbl(),
-            plot_eventdata()
-        )
-
-        shiny::validate(shiny::need(plot_eventdata(), "Click above plot"))
-
-        selected_group <- plot_eventdata()$x[[1]]
-
-        group_tbl() %>%
-            dplyr::filter(group == selected_group) %>%
-            dplyr::mutate(text = paste0(name, ": ", characteristics)) %>%
-            dplyr::pull(text)
+        shiny::req(show_group_text, group_tbl())
+        shiny::validate(shiny::need(
+            plot_eventdata(),
+            "Click plot to see group information."
+        ))
+        create_group_text_from_eventdata(plot_eventdata(), group_tbl())
     })
 
     output$download_tbl <- shiny::downloadHandler(

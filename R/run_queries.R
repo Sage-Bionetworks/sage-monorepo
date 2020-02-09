@@ -121,6 +121,7 @@ get_sample_ids_from_dataset <- function(dataset){
 #' @importFrom magrittr %>%
 #' @importFrom dplyr pull
 #' @importFrom rlang .data
+#' @importFrom assertthat assert_that
 get_gene_hgnc_from_id <- function(id){
     assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
     hgnc <-
@@ -137,6 +138,7 @@ get_gene_hgnc_from_id <- function(id){
 #' @importFrom magrittr %>%
 #' @importFrom dplyr pull
 #' @importFrom rlang .data
+#' @importFrom assertthat assert_that
 get_gene_id_from_hgnc <- function(hgnc){
     assertthat::assert_that(length(hgnc) == 1, is.character(hgnc))
     id <-
@@ -153,6 +155,7 @@ get_gene_id_from_hgnc <- function(hgnc){
 #' @importFrom magrittr %>%
 #' @importFrom dplyr pull
 #' @importFrom rlang .data
+#' @importFrom assertthat assert_that
 get_class_id_from_name <- function(name){
     assertthat::assert_that(length(name) == 1, is.character(name))
     id <-
@@ -169,6 +172,7 @@ get_class_id_from_name <- function(name){
 #' @importFrom magrittr %>%
 #' @importFrom dplyr pull
 #' @importFrom rlang .data
+#' @importFrom assertthat assert_that
 get_feature_display_from_id <- function(id){
     assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
     display <-
@@ -185,6 +189,7 @@ get_feature_display_from_id <- function(id){
 #' @importFrom magrittr %>%
 #' @importFrom dplyr pull
 #' @importFrom rlang .data
+#' @importFrom assertthat assert_that
 get_feature_id_from_display <- function(display){
     assertthat::assert_that(length(display) == 1, is.character(display))
     id <-

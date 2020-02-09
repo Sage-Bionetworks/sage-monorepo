@@ -1,3 +1,5 @@
+# transforms ------------------------------------------------------------------
+
 #' Scale Tibble Value Column
 #'
 #' @param tbl A Tibble with column "value"
@@ -34,4 +36,19 @@ log_tbl_value_column <- function(tbl, base = 10, add_amt = 0){
         dplyr::mutate(value = .data$value + add_amt) %>%
         dplyr::filter(.data$value > 0) %>%
         dplyr::mutate(value = log(.data$value, base))
+}
+
+# event data utils -------------------------------------------------------------
+
+#' Get Values from Eventdata Dataframe
+#'
+#' @param eventdata Eventdata from "plotly_click" plotly::event_data
+#' @param col The column to get the values from
+#' @importFrom magrittr %>% extract2
+#' @importFrom dplyr as_tibble
+get_values_from_eventdata <- function(eventdata, col = "x"){
+    eventdata %>%
+        dplyr::as_tibble() %>%
+        magrittr::extract2(col) %>%
+        unique()
 }
