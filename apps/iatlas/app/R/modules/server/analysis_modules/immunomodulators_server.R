@@ -45,7 +45,7 @@ immunomodulators_server <- function(
 
     gene_name <- shiny::reactive({
         shiny::req(input$gene_choice_id)
-        .GlobalEnv$get_gene_hgnc_from_id(input$gene_choice_id)
+        .GlobalEnv$get_gene_hgnc_from_id(as.integer(input$gene_choice_id))
     })
 
     gene_plot_label <- shiny::reactive({

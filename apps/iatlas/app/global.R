@@ -1,11 +1,12 @@
 library(magrittr)
 
-source("R/functions/connect_to_db.R")
+source("R/connect_to_db.R")
 pool <- connect_to_db()
 rm(connect_to_db)
 
 source("R/create_queries.R")
-source("R/perform_queries.R")
+source("R/perform_query.R")
+source("R/run_queries.R")
 source("R/functions/utils.R")
 source("R/functions/format.R")
 source("R/functions/plot_functions/scatterplot.R")

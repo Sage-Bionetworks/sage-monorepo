@@ -28,7 +28,9 @@ immune_feature_distributions_server <- function(
 
     feature_name <- shiny::reactive({
         shiny::req(input$feature_choice_id)
-        .GlobalEnv$get_feature_display_from_id(input$feature_choice_id)
+        input$feature_choice_id %>%
+            as.integer() %>%
+            .GlobalEnv$get_feature_display_from_id()
     })
 
     feature_plot_label <- shiny::reactive({
