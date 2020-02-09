@@ -12,10 +12,10 @@ immune_feature_distributions_server <- function(
     ns <- session$ns
 
     source("R/functions/immune_feature_distributions_functions.R", local = T)
+    source("R/modules/server/submodules/plotly_server.R", local = T)
 
     output$selection_ui <- shiny::renderUI({
         shiny::req(feature_named_list())
-
         shiny::selectInput(
             ns("feature_choice_id"),
             label = "Select or Search for Variable",
@@ -34,10 +34,7 @@ immune_feature_distributions_server <- function(
     })
 
     feature_plot_label <- shiny::reactive({
-        shiny::req(
-            feature_name(),
-            input$scale_method
-        )
+        shiny::req(input$scale_method)
         .GlobalEnv$transform_feature_string(
             feature_name(),
             input$scale_method
@@ -59,6 +56,7 @@ immune_feature_distributions_server <- function(
     })
 
     distplot_function <- shiny::reactive({
+        shiny::req(input$plot_type)
         switch(
             input$plot_type,
             "Violin" = create_violinplot,
@@ -67,6 +65,13 @@ immune_feature_distributions_server <- function(
     })
 
     output$distplot <- plotly::renderPlotly({
+        shiny::req(
+            distplot_tbl(),
+            group_name(),
+            feature_name(),
+            plot_colors()
+        )
+
         distplot_function()(
             distplot_tbl(),
             source_name = "immune_feature_dist_plot",
@@ -78,59 +83,54 @@ immune_feature_distributions_server <- function(
     })
 
     distplot_eventdata <- shiny::reactive({
-        plotly::event_data(
-            "plotly_click",
-            source = "immune_feature_dist_plot"
-        )
+        plotly::event_data("plotly_click", "immune_feature_dist_plot")
     })
 
-    distplot_selected_group <- shiny::reactive({
-        shiny::req(distplot_eventdata())
-        selected_group <- distplot_eventdata()$x[[1]]
-        return(selected_group)
-    })
-
-    output$distplot_group_text <- shiny::renderText({
-        shiny::validate(shiny::need(distplot_eventdata(), "Click above plot"))
-        shiny::req(
-            group_tbl(),
-            distplot_selected_group()
-        )
-
-        group_tbl() %>%
-            dplyr::filter(group == distplot_selected_group()) %>%
-            dplyr::mutate(text = paste0(name, ": ", characteristics)) %>%
-            dplyr::pull(text)
-    })
-
-    output$download_tbl <- shiny::downloadHandler(
-        filename = function() stringr::str_c("data-", Sys.Date(), ".csv"),
-        content = function(con) readr::write_csv(distplot_tbl(), con)
+    shiny::callModule(
+        plotly_server,
+        "immune_feature_dist_plot",
+        plot_tbl       = distplot_tbl,
+        plot_eventdata = distplot_eventdata,
+        group_tbl      = group_tbl,
     )
+
 
     # histplot ----------------------------------------------------------------
     histplot_tbl <- shiny::reactive({
         shiny::validate(shiny::need(distplot_eventdata(), "Click above plot"))
-        shiny::req(distplot_tbl(), distplot_selected_group())
+        distplot_selected_group <- distplot_eventdata()$x[[1]]
+        shiny::req(distplot_tbl())
 
         groups <- dplyr::pull(distplot_tbl(), "x")
         shiny::validate(shiny::need(
-            distplot_selected_group() %in% groups,
+            distplot_selected_group %in% groups,
             "Click above barchart"
         ))
 
         distplot_tbl() %>%
-            dplyr::filter(x == distplot_selected_group()) %>%
+            dplyr::filter(x == distplot_selected_group) %>%
             dplyr::select(x = y)
     })
 
     output$histplot <- plotly::renderPlotly({
+        shiny::req(
+            histplot_tbl(),
+            feature_plot_label(),
+            distplot_eventdata()$x[[1]]
+        )
+
         .GlobalEnv$create_histogram(
             histplot_tbl(),
-            source_name = "immune_feature_histogram",
+            source_name = "immune_feature_hist_plot",
             x_lab = feature_plot_label(),
             y_lab = "Count",
-            title = distplot_selected_group(),
+            title = distplot_eventdata()$x[[1]],
         )
     })
+
+    shiny::callModule(
+        plotly_server,
+        "immune_feature_hist_plot",
+        plot_tbl = histplot_tbl
+    )
 }

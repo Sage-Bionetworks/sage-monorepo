@@ -2,6 +2,8 @@ immune_feature_distributions_ui <- function(id) {
 
     ns <- shiny::NS(id)
 
+    source("R/modules/ui/submodules/plotly_ui.R", local = T)
+
     .GlobalEnv$sectionBox(
         title = "Distributions",
         .GlobalEnv$messageBox(
@@ -48,12 +50,7 @@ immune_feature_distributions_ui <- function(id) {
                 ns() %>%
                 plotly::plotlyOutput() %>%
                 shinycssloaders::withSpinner(),
-            shiny::textOutput(ns("distplot_group_text")),
-            shiny::h4("Click plot to see group information."),
-            shiny::downloadButton(
-                ns("download_distplot_tbl"),
-                "Download plot table"
-            )
+            plotly_ui(ns("immune_feature_dist_plot"))
         ),
         .GlobalEnv$plotBox(
             width = 12,
@@ -61,10 +58,7 @@ immune_feature_distributions_ui <- function(id) {
                 ns() %>%
                 plotly::plotlyOutput() %>%
                 shinycssloaders::withSpinner(),
-            shiny::downloadButton(
-                ns("download_histtplot_tbl"),
-                "Download plot table"
-            )
+            plotly_ui(ns("immune_feature_hist_plot"))
         )
     )
 
