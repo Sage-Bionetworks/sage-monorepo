@@ -86,25 +86,11 @@ immune_feature_correlations_server <- function(
         group_tbl      = group_tbl
     )
 
-
-    # output$heatmap_group_text <- shiny::renderText({
-    #     shiny::req(group_tbl())
-    #     eventdata <- plotly::event_data(
-    #         "plotly_click",
-    #         source = "immune_features_heatmap"
-    #     )
-    #     shiny::validate( shiny::need(eventdata, "Click above heatmap"))
-    #     group_tbl() %>%
-    #         dplyr::filter(group == local(unique(dplyr::pull(eventdata, "x")))) %>%
-    #         dplyr::mutate(text = paste0(name, ": ", characteristics)) %>%
-    #         dplyr::pull(text)
-    # })
-
     scatterplot_tbl <- shiny::reactive({
         eventdata <- heatmap_eventdata()
         shiny::validate(shiny::need(eventdata, "Click above heatmap"))
-        clicked_group <- eventdata$x[[1]]
-        clicked_feature <- eventdata$y[[1]]
+        clicked_group <- get_values_from_eventdata(eventdata)
+        clicked_feature <- get_values_from_eventdata(eventdata, "y")
 
 
         value_tbl() %>%

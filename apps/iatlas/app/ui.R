@@ -40,6 +40,10 @@ ui <- shiny::navbarPage(
     collapsible = TRUE,
     inverse = TRUE,
     windowTitle = "CRI iAtlas Portal",
+    # This make shiny::need messages easier to see
+    shiny::tags$head(shiny::tags$style(shiny::HTML(
+        ".shiny-output-error-validation {color: black; font-size: large}"
+    ))),
     shiny::tags$head(
         shiny::tags$script(
             '
