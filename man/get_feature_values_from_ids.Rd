@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_queries.R
 \name{get_feature_values_from_ids}
 \alias{get_feature_values_from_ids}
-\title{Get Feature Values Tibble Name From IDs}
+\title{Get Feature Values Tibble From IDs}
 \usage{
 get_feature_values_from_ids(ids)
 }
@@ -10,5 +10,5 @@ get_feature_values_from_ids(ids)
 \item{ids}{An Integers in the id column of the features_to_samples table}
 }
 \description{
-Get Feature Values Tibble Name From IDs
+Get Feature Values Tibble From IDs
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_queries.R
 \name{get_sample_ids_from_dataset}
 \alias{get_sample_ids_from_dataset}
-\title{Title}
+\title{Get Sample IDs from Dataset}
 \usage{
 get_sample_ids_from_dataset(dataset)
 }
@@ -10,5 +10,5 @@ get_sample_ids_from_dataset(dataset)
 \item{dataset}{The name of a dataset in the database}
 }
 \description{
-Title
+Get Sample IDs from Dataset
 }

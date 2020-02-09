@@ -37,7 +37,6 @@ create_build_immunomodulators_tbl_query <- function(){
     )
 }
 
-
 #' Create Combined Feature Values Query From Class Ids
 #' @param class_ids class ids in the features to samples table
 create_combined_feature_values_query_from_class_ids <- function(class_ids){
@@ -55,7 +54,6 @@ create_combined_feature_values_query_from_class_ids <- function(class_ids){
         "ON a.feature_id = b.id"
     )
 }
-
 
 #' Create Feature Value Query from class ids
 #' @param class_ids class ids in the features to samples table
