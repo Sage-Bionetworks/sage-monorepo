@@ -11,7 +11,7 @@ immune_feature_distributions_server <- function(
 
     ns <- session$ns
 
-    source("R/functions/immune_feature_distributions_functions.R", local = T)
+    source("R/immune_feature_distributions_functions.R", local = T)
     source("R/modules/server/submodules/plotly_server.R", local = T)
 
     output$selection_ui <- shiny::renderUI({
@@ -97,7 +97,11 @@ immune_feature_distributions_server <- function(
 
     # histplot ----------------------------------------------------------------
     histplot_tbl <- shiny::reactive({
-        shiny::validate(shiny::need(distplot_eventdata(), "Click above plot"))
+        shiny::validate(shiny::need(
+            distplot_eventdata(),
+            "Click above plot"
+        ))
+
         distplot_selected_group <- distplot_eventdata()$x[[1]]
         shiny::req(distplot_tbl())
 
@@ -107,9 +111,7 @@ immune_feature_distributions_server <- function(
             "Click above barchart"
         ))
 
-        distplot_tbl() %>%
-            dplyr::filter(x == distplot_selected_group) %>%
-            dplyr::select(x = y)
+        build_histplot_tbl(distplot_tbl(), distplot_selected_group)
     })
 
     output$histplot <- plotly::renderPlotly({

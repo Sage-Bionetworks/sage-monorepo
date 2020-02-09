@@ -4,10 +4,10 @@
 \alias{get_gene_hgnc_from_id}
 \title{Get HGNC Symbol from Gene ID}
 \usage{
-get_gene_hgnc_from_id(gene_id)
+get_gene_hgnc_from_id(id)
 }
 \arguments{
-\item{gene_id}{A integer from the id column of the genes table}
+\item{id}{A integer from the id column of the genes table}
 }
 \description{
 Get HGNC Symbol from Gene ID
