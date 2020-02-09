@@ -36,7 +36,9 @@ immune_feature_correlations_server <- function(
 
     response_name <- shiny::reactive({
         shiny::req(input$response_choice_id)
-        .GlobalEnv$get_feature_display_from_id(input$response_choice_id)
+        input$response_choice_id %>%
+            as.integer() %>%
+            .GlobalEnv$get_feature_display_from_id()
     })
 
     value_tbl <- shiny::reactive({

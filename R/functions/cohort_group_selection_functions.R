@@ -86,7 +86,7 @@ create_tag_plot_colors <- function(cohort_tbl){
 
 # mutation choice -------------------------------------------------------------
 create_mutation_cohort_oject <- function(sample_ids, group_choice, gene_id){
-    gene_name   <- .GlobalEnv$get_gene_hgnc_from_id(gene_id)
+    gene_name   <- .GlobalEnv$get_gene_hgnc_from_id(as.integer(gene_id))
     sample_tbl  <- create_mutation_sample_tbl(sample_ids, gene_id)
     list(
         "sample_tbl"  = sample_tbl,
