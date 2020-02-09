@@ -4,6 +4,7 @@ test_that("Build Distribution Plot Tibble", {
         group = c(rep("C1", 5), rep("C2", 5))
     )
     result1 <- build_distplot_tbl(sample_tbl, 1, "None")
+    expect_named(result1, c("x", "group"))
 })
 
 test_that("Build Histogram Tibble", {
