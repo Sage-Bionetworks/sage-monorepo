@@ -1,4 +1,4 @@
-create_cohort_oject <- function(
+create_cohort_object <- function(
     sample_ids,
     group_choice,
     dataset,
@@ -8,15 +8,15 @@ create_cohort_oject <- function(
     immune_feature_bin_number = NULL
 ){
     if (group_choice %in% c("Immune Subtype", "TCGA Subtype", "TCGA Study")) {
-        cohort_oject <- create_tag_cohort_oject(sample_ids, group_choice)
+        cohort_object <- create_tag_cohort_object(sample_ids, group_choice)
     } else if (group_choice == "Driver Mutation") {
-        cohort_oject <- create_mutation_cohort_oject(
+        cohort_object <- create_mutation_cohort_ojbect(
             sample_ids,
             group_choice,
             driver_gene_id
         )
     } else if (group_choice() == "Immune Feature Bins") {
-        cohort_oject <- create_mutation_cohort_object(
+        cohort_object <- create_mutation_cohort_object(
             sample_ids,
             group_choice,
             immune_feature_bin_id,
@@ -24,7 +24,7 @@ create_cohort_oject <- function(
         )
     }
     c(
-        cohort_oject,
+        cohort_object,
         "dataset"     = dataset,
         "groups"      = groups
     )
@@ -52,7 +52,7 @@ create_gene_mutation_list <- function(){
 
 # tag choice ------------------------------------------------------------------
 
-create_tag_cohort_oject <- function(sample_ids, group_choice){
+create_tag_cohort_object <- function(sample_ids, group_choice){
     cohort_tbl  <- .GlobalEnv$build_cohort_tbl_by_group(sample_ids, group_choice)
     list(
         "sample_tbl"  = dplyr::select(cohort_tbl, sample_id, group),
@@ -85,7 +85,7 @@ create_tag_plot_colors <- function(cohort_tbl){
 }
 
 # mutation choice -------------------------------------------------------------
-create_mutation_cohort_oject <- function(sample_ids, group_choice, gene_id){
+create_mutation_cohort_object <- function(sample_ids, group_choice, gene_id){
     gene_name   <- .GlobalEnv$get_gene_hgnc_from_id(as.integer(gene_id))
     sample_tbl  <- create_mutation_sample_tbl(sample_ids, gene_id)
     list(

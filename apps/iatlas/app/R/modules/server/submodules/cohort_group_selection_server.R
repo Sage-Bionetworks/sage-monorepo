@@ -116,14 +116,14 @@ cohort_group_selection_server <- function(
                 input$immune_feature_bin_number
             )
         }
-        create_cohort_oject(
+        create_cohort_object(
             sample_ids(),
             group_choice(),
             selected_dataset(),
             available_groups(),
             driver_gene_id(),
-            input$immune_feature_bin_choice,
-            input$immune_feature_bin_number
+            as.integer(input$immune_feature_bin_choice),
+            as.integer(input$immune_feature_bin_number)
         )
     })
 
