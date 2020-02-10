@@ -7,8 +7,14 @@ clinical_outcomes_server <- function(
     group_name,
     plot_colors
 ){
-    source("R/modules/server/submodules/clinical_outcomes_survival_server.R", local = T)
-    source("R/modules/server/submodules/clinical_outcomes_heatmap_server.R", local = T)
+    source(
+        "R/modules/server/submodules/clinical_outcomes_survival_server.R",
+        local = T
+    )
+    source(
+        "R/modules/server/submodules/clinical_outcomes_heatmap_server.R",
+        local = T
+    )
 
     shiny::callModule(
         clinical_outcomes_survival_server,

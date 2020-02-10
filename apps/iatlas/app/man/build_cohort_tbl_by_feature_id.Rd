@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_queries.R
 \name{build_cohort_tbl_by_feature_id}
 \alias{build_cohort_tbl_by_feature_id}
-\title{Build Cohort Table By Feature ID}
+\title{Build Cohort Tibble By Feature ID}
 \usage{
 build_cohort_tbl_by_feature_id(sample_ids, feature_id)
 }
@@ -13,5 +13,5 @@ build_cohort_tbl_by_feature_id(sample_ids, feature_id)
 table}
 }
 \description{
-Build Cohort Table By Feature ID
+Build Cohort Tibble By Feature ID
 }

@@ -1,6 +1,12 @@
-
-
-
+test_that("Build Feature Tibble", {
+    result1 <- build_feature_tbl()
+    expect_named(result1, c("class", "display", "feature"))
+    result2 <- build_feature_tbl(1)
+    class_tbl <- "SELECT name FROM classes WHERE id = 1" %>%
+        perform_query("Build Class Tibble")
+    expect_named(result2, c("class", "display", "feature"))
+    expect_true(all(result2$class %in% class_tbl$name))
+})
 
 test_that("Get Feature Values Tibble From IDs", {
     result1 <- get_feature_values_from_ids(1:5)

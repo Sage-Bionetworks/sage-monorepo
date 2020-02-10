@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_queries.R
 \name{build_immunomodultors_tbl}
 \alias{build_immunomodultors_tbl}
-\title{Build Immunomodulators Table}
+\title{Build Immunomodulators Tibble}
 \usage{
 build_immunomodultors_tbl()
 }

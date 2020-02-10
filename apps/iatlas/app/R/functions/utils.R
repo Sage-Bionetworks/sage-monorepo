@@ -8,13 +8,13 @@
 #     )
 # }
 #
-create_sample_id_query <- function(sample_ids){
-    paste(
-        "SELECT * FROM samples WHERE id IN (",
-        stringr::str_c(sample_ids, collapse = ", "),
-        ")"
-    )
-}
+# create_sample_id_query <- function(sample_ids){
+#     paste(
+#         "SELECT * FROM samples WHERE id IN (",
+#         stringr::str_c(sample_ids, collapse = ", "),
+#         ")"
+#     )
+# }
 #
 # create_gene_type_query <- function(name){
 #     gene_types_subquery <- paste0(
@@ -49,25 +49,25 @@ create_sample_id_query <- function(sample_ids){
 #     )
 # }
 #
-create_parent_group_query <- function(parent_group){
-    parent_tag_query <- paste0(
-        "SELECT id FROM tags WHERE display = '",
-        parent_group,
-        "'"
-    )
-
-    tag_id_query <- paste(
-        "SELECT tag_id FROM tags_to_tags WHERE related_tag_id = (",
-        parent_tag_query,
-        ")"
-    )
-
-    paste(
-        "SELECT * FROM tags WHERE id IN (",
-        tag_id_query,
-        ")"
-    )
-}
+# create_parent_group_query <- function(parent_group){
+#     parent_tag_query <- paste0(
+#         "SELECT id FROM tags WHERE display = '",
+#         parent_group,
+#         "'"
+#     )
+#
+#     tag_id_query <- paste(
+#         "SELECT tag_id FROM tags_to_tags WHERE related_tag_id = (",
+#         parent_tag_query,
+#         ")"
+#     )
+#
+#     paste(
+#         "SELECT * FROM tags WHERE id IN (",
+#         tag_id_query,
+#         ")"
+#     )
+# }
 #
 #
 # get_feature_id <- function(display_name){
@@ -122,20 +122,7 @@ create_named_list <- function(con, display_col, internal_col){
         tibble::deframe()
 }
 
-create_nested_named_list <- function(
-    con,
-    names_col1 = "class",
-    names_col2 = "display",
-    values_col = "feature"
-){
-    con %>%
-        dplyr::select(n1 = names_col1, n2 = names_col2, v = values_col) %>%
-        dplyr::filter(!is.na(n1)) %>%
-        dplyr::as_tibble() %>%
-        tidyr::nest(data = c(n2, v)) %>%
-        dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
-        tibble::deframe()
-}
+
 
 translate_value <- function(con, value, from_col, to_col){
     con %>%
