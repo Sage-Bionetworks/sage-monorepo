@@ -25,14 +25,14 @@ clinical_outcomes_server <- function(
         plot_colors
     )
 
-    shiny::callModule(
-        clinical_outcomes_heatmap_server,
-        "clinical_outcomes_heatmap",
-        sample_tbl,
-        group_tbl,
-        group_name,
-        plot_colors
-    )
+    # shiny::callModule(
+    #     clinical_outcomes_heatmap_server,
+    #     "clinical_outcomes_heatmap",
+    #     sample_tbl,
+    #     group_tbl,
+    #     group_name,
+    #     plot_colors
+    # )
 }
 
 

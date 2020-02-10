@@ -67,6 +67,33 @@ build_feature_value_tbl <- function(feature_id){
 
 # Module specfic functions ----------------------------------------------------
 
+#' Build Clinical Outcomes Survival Tibble
+#'
+#' @param time_id An integer in the id column of the samples table
+#' @param status_id An integer in the id column of the samples table
+build_clincal_outcomes_survival_tbl <- function(time_id, status_id){
+    paste0(
+        "SELECT a.sample_id, a.time, b.status FROM (",
+        paste0(
+            "SELECT a.sample_id, a.value AS time ",
+            "FROM features_to_samples a ",
+            "INNER JOIN features f ON a.feature_id = f.id ",
+            "WHERE feature_id = ",
+            time_id
+        ),
+        ") a INNER JOIN (",
+        paste0(
+            "SELECT a.sample_id, a.value AS status ",
+            "FROM features_to_samples a ",
+            "INNER JOIN features f ON a.feature_id = f.id ",
+            "WHERE feature_id = ",
+            status_id
+        ),
+        ") b ON a.sample_id = b.sample_id"
+    )  %>%
+        perform_query("Build Survival Values Tibble")
+}
+
 #' Build Immunomodulators Tibble
 #'
 #' #' @importFrom magrittr %>%

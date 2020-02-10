@@ -1,5 +1,5 @@
 clinical_outcomes_survival_ui <- function(id) {
-    ns <- NS(id)
+    ns <- shiny::NS(id)
 
     .GlobalEnv$sectionBox(
         title = "Sample Group Survival",
@@ -14,15 +14,7 @@ clinical_outcomes_survival_ui <- function(id) {
                 width = 12,
                 shiny::column(
                     width = 8,
-                    shiny::selectInput(
-                        inputId = ns("time_feature_choice"),
-                        label = "Select or Search for Survival Endpoint",
-                        selected = "OS Time",
-                        choices = c(
-                            "Overall Survival" = "OS Time",
-                            "Progression Free Interval" = "PFI Time"
-                        )
-                    )
+                    shiny::uiOutput(ns("time_feature_selection_ui"))
                 ),
                 shiny::column(
                     width = 2,
@@ -47,7 +39,8 @@ clinical_outcomes_survival_ui <- function(id) {
                     ns() %>%
                     shiny::plotOutput(height = 600) %>%
                     shinycssloaders::withSpinner()
-            )
+            ),
+            shiny::downloadButton(ns("download_tbl"), "Download plot table")
         )
     )
 }
