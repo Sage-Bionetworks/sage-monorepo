@@ -6,22 +6,20 @@ immunomodulators_server <- function(
     group_tbl,
     group_name,
     plot_colors
-){
+) {
 
     ns <- session$ns
 
-    source("R/modules/server/submodules/data_table_server.R", local = T)
     source("R/modules/server/submodules/plotly_server.R", local = T)
+    source("R/modules/server/submodules/data_table_server.R", local = T)
 
-    immunomodulator_tbl <- shiny::reactive({
-        .GlobalEnv$build_immunomodultors_tbl()
-    })
+    immunomodulator_tbl <- .GlobalEnv$build_immunomodultors_tbl()
 
     # distplot ----------------------------------------------------------------
 
     output$gene_choice_ui <- shiny::renderUI({
-        shiny::req(immunomodulator_tbl(), input$group_choice)
-        choices <- immunomodulator_tbl() %>%
+        shiny::req(immunomodulator_tbl, input$group_choice)
+        choices <- immunomodulator_tbl %>%
             dplyr::select(
                 class = input$group_choice,
                 display = "hgnc",
@@ -59,16 +57,17 @@ immunomodulators_server <- function(
 
     distplot_tbl <- shiny::reactive({
         shiny::req(
-            immunomodulator_tbl(),
+            sample_tbl(),
             input$gene_choice_id,
             input$scale_method_choice
         )
 
-        tbl <-
-            .GlobalEnv$build_gene_expression_tbl_by_gene_ids(input$gene_choice_id) %>%
+        input$gene_choice_id %>%
+            as.integer() %>%
+            .GlobalEnv$build_gene_expression_tbl_by_gene_ids() %>%
             dplyr::inner_join(sample_tbl(), by = "sample_id") %>%
             dplyr::select(group, value = rna_seq_expr) %>%
-            scale_db_connection(input$scale_method_choice) %>%
+            .GlobalEnv$scale_tbl_value_column(input$scale_method_choice) %>%
             dplyr::select(x = group, y = value)
     })
 
@@ -97,6 +96,8 @@ immunomodulators_server <- function(
         group_tbl      = group_tbl,
     )
 
+    # histplot ----------------------------------------------------------------
+
     histplot_tbl <- shiny::reactive({
 
         eventdata <- distplot_eventdata()
@@ -120,7 +121,7 @@ immunomodulators_server <- function(
         shiny::req(histplot_tbl())
         .GlobalEnv$create_histogram(
             df = histplot_tbl(),
-            source_name = "immunomodulators_dist_plot",
+            source_name = "immunomodulators_hist_plot",
             x_lab = gene_plot_label(),
             title = gene_name()
         )
@@ -134,10 +135,12 @@ immunomodulators_server <- function(
 
 
     data_tbl <- shiny::reactive({
-        shiny::req(immunomodulator_tbl())
+        shiny::req(immunomodulator_tbl)
 
-        immunomodulator_tbl() %>%
-            dplyr::mutate(references = stringr::str_remove_all(references, "[{}]")) %>%
+        immunomodulator_tbl %>%
+            dplyr::mutate(
+                references = stringr::str_remove_all(references, "[{}]")
+            ) %>%
             dplyr::select(
                 Hugo                  = hgnc,
                 `Entrez ID`           = entrez,

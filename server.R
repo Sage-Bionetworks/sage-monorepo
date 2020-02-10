@@ -87,14 +87,14 @@ shiny::shinyServer(function(input, output, session) {
         cohort_colors
     )
 
-    # shiny::callModule(
-    #     io_targets_server,
-    #     "io_targets",
-    #     cohort_sample_tbl,
-    #     cohort_group_tbl,
-    #     cohort_group_name,
-    #     cohort_colors
-    # )
+    shiny::callModule(
+        io_targets_server,
+        "io_targets",
+        cohort_sample_tbl,
+        cohort_group_tbl,
+        cohort_group_name,
+        cohort_colors
+    )
 
     # shiny::callModule(
     #     driver_associations_server,
