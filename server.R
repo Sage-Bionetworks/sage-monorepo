@@ -29,33 +29,12 @@ shiny::shinyServer(function(input, output, session) {
         source(item, local = T)
     }
 
-    feature_named_list <- reactive({
-        subquery1 <- "SELECT id, display, class_id FROM features"
-        subquery2 <- "SELECT * FROM classes"
-
-        query <- paste(
-            "SELECT b.name AS class, a.display, a.id AS feature FROM",
-            "(", subquery1, ") a",
-            "LEFT OUTER JOIN",
-            "(", subquery2, ") b",
-            "ON a.class_id = b.id"
-        )
-
-        query %>%
-            dplyr::sql() %>%
-            .GlobalEnv$perform_query("build feature table") %>%
-            dplyr::mutate(class = dplyr::if_else(
-                is.na(class),
-                "Other",
-                class
-            )) %>%
-            .GlobalEnv$create_nested_named_list()
-    })
+    feature_list <- shiny::reactive(.GlobalEnv$create_feature_named_list())
 
     cohort_cons <- shiny::callModule(
         cohort_selection_server,
         "cohort_selection",
-        feature_named_list
+        feature_list
     )
 
     cohort_sample_tbl  <- shiny::reactive(cohort_cons()$sample_tbl)
@@ -77,7 +56,7 @@ shiny::shinyServer(function(input, output, session) {
         cohort_sample_tbl,
         cohort_group_tbl,
         cohort_group_name,
-        feature_named_list,
+        feature_list,
         cohort_colors
     )
 
@@ -121,7 +100,7 @@ shiny::shinyServer(function(input, output, session) {
     #     driver_associations_server,
     #     "driver_associations",
     #     cohort_group_name,
-    #     feature_named_list
+    #     feature_list
     # )
 
 

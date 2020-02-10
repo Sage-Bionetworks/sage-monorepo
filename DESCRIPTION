@@ -14,4 +14,14 @@ LazyData: true
 Suggests: 
     testthat (>= 2.1.0)
 RoxygenNote: 7.0.2
-Imports: RPostgres, dplyr, magrittr, pool, rlang, tictoc, tibble, assertthat
+Imports: 
+    RPostgres, 
+    dplyr, 
+    magrittr,
+    pool, 
+    rlang, 
+    tictoc, 
+    tibble,
+    assertthat,
+    purrr,
+    tidyr

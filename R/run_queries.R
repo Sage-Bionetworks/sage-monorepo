@@ -2,6 +2,29 @@
 # when doing devtools::check()
 if (getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 
+#' Build Feature Tibble
+#'
+#' @param class_ids Integers in the id column of the classes table
+build_feature_tbl <- function(class_ids = "all"){
+    query <- paste(
+        "SELECT b.name AS class, a.display, a.id AS feature FROM",
+        "(SELECT id, display, class_id FROM features) a",
+        "LEFT OUTER JOIN",
+        "(SELECT * FROM classes) b",
+        "ON a.class_id = b.id"
+    )
+    if (class_ids != "all") {
+        query <- paste(
+            query,
+            " WHERE b.id IN (",
+            numeric_values_to_query_list(class_ids),
+            ")"
+        )
+    }
+    perform_query(query, "Build Feature Tibble")
+}
+
+
 #' Get Feature Values Tibble From IDs
 #'
 #' @param ids An Integers in the id column of the features_to_samples table
@@ -9,7 +32,7 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 get_feature_values_from_ids <- function(ids){
     ids %>%
         create_feature_value_query_from_ids() %>%
-        perform_query("Get feature values from ids")
+        perform_query("Get Feature Values Tibble From IDs")
 }
 
 #' Create Class List
@@ -18,41 +41,41 @@ get_feature_values_from_ids <- function(ids){
 #' @importFrom tibble deframe
 create_class_list <- function(){
     "SELECT name, id FROM classes" %>%
-        perform_query("get class id") %>%
+        perform_query("Create Class List") %>%
         tibble::deframe(.)
 }
 
-#' Build Gene Expression Table by Gene IDs
+#' Build Gene Expression Tibble by Gene IDs
 #'
 #' @param gene_ids Integers in the gene_id column of genes_to_samples
 #' @importFrom magrittr %>%
 build_gene_expression_tbl_by_gene_ids <- function(gene_ids){
     gene_ids %>%
         create_build_get_gene_expression_tbl_by_gene_ids_query() %>%
-        perform_query("Build gene expression table")
+        perform_query("Build Gene Expression Tibble by Gene IDs")
 }
 
-#' Build Feature Value Table
+#' Build Feature Value Tibble
 #'
 #' @param feature_id An integer in the feature_id column of the
 #' features_to_samples table
 #' @importFrom magrittr %>%
 build_feature_value_tbl <- function(feature_id){
     create_feature_value_query_from_ids(feature_id) %>%
-        perform_query("Build feature value table")
+        perform_query("Build Feature Value Tibble")
 }
 
 # Module specfic functions ----------------------------------------------------
 
-#' Build Immunomodulators Table
+#' Build Immunomodulators Tibble
 #'
 #' #' @importFrom magrittr %>%
 build_immunomodultors_tbl <- function(){
     create_build_immunomodulators_tbl_query() %>%
-        perform_query("Build Immunomodultors Table")
+        perform_query("Build Immunomodulators Tibble")
 }
 
-#' Build Cohort Table By Feature ID
+#' Build Cohort Tibble By Feature ID
 #'
 #' @param sample_ids Integers in the id column of the samples table
 #' @param feature_id An integer in the id column of the features_to_samples
@@ -66,10 +89,10 @@ build_cohort_tbl_by_feature_id <- function(sample_ids, feature_id){
         numeric_values_to_query_list(sample_ids),
         ")"
     ) %>%
-        perform_query("Build Cohort Table By Feature ID")
+        perform_query("Build Cohort Tibble By Feature ID")
 }
 
-#' Build Cohort Table By Group
+#' Build Cohort Tibble By Group
 #'
 #' @param sample_ids Integers in the id column of the samples table
 #' @param group A String that is the display column of the tags table
@@ -84,7 +107,7 @@ build_cohort_tbl_by_group <- function(sample_ids, group){
         numeric_values_to_query_list(sample_ids),
         ")"
     ) %>%
-        perform_query("Build Cohort Table By Group")
+        perform_query("Build Cohort Tibble By Group")
 }
 
 #' Get Sample IDs from Dataset
@@ -104,7 +127,7 @@ get_sample_ids_from_dataset <- function(dataset){
 
     tag_display %>%
         create_get_sample_ids_from_parent_tag_display_query() %>%
-        perform_query("Get Dataset Sample Ids") %>%
+        perform_query("Get Sample IDs from Dataset") %>%
         dplyr::pull(.data$sample_id)
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_queries.R
 \name{build_gene_expression_tbl_by_gene_ids}
 \alias{build_gene_expression_tbl_by_gene_ids}
-\title{Build Gene Expression Table by Gene IDs}
+\title{Build Gene Expression Tibble by Gene IDs}
 \usage{
 build_gene_expression_tbl_by_gene_ids(gene_ids)
 }
@@ -10,5 +10,5 @@ build_gene_expression_tbl_by_gene_ids(gene_ids)
 \item{gene_ids}{Integers in the gene_id column of genes_to_samples}
 }
 \description{
-Build Gene Expression Table by Gene IDs
+Build Gene Expression Tibble by Gene IDs
 }

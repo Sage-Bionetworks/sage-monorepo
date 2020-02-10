@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_queries.R
 \name{build_cohort_tbl_by_group}
 \alias{build_cohort_tbl_by_group}
-\title{Build Cohort Table By Group}
+\title{Build Cohort Tibble By Group}
 \usage{
 build_cohort_tbl_by_group(sample_ids, group)
 }
@@ -12,5 +12,5 @@ build_cohort_tbl_by_group(sample_ids, group)
 \item{group}{A String that is the display column of the tags table}
 }
 \description{
-Build Cohort Table By Group
+Build Cohort Tibble By Group
 }

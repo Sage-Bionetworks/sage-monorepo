@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_queries.R
 \name{build_feature_value_tbl}
 \alias{build_feature_value_tbl}
-\title{Build Feature Value Table}
+\title{Build Feature Value Tibble}
 \usage{
 build_feature_value_tbl(feature_id)
 }
@@ -11,5 +11,5 @@ build_feature_value_tbl(feature_id)
 features_to_samples table}
 }
 \description{
-Build Feature Value Table
+Build Feature Value Tibble
 }

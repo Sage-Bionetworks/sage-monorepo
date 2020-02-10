@@ -10,6 +10,16 @@ clinical_outcomes_survival_server <- function(
 
     source("R/functions/clinical_outcomes_survival_functions.R")
 
+    # output$time_feature_selection_ui <- shiny::renderUI({
+    #
+    #     shiny::selectInput(
+    #         ns("class_choice_id"),
+    #         "Select or Search for Variables Class",
+    #         choices = create_class_list(),
+    #         selected = get_t_helper_score_class_id()
+    #     )
+    # })
+
     status_feature_name <- shiny::reactive({
         shiny::req(input$time_feature_choice)
         get_status_feature_name(input$time_feature_choice)
