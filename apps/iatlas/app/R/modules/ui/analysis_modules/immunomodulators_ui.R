@@ -9,17 +9,15 @@ immunomodulators_ui <- function(id) {
         .GlobalEnv$titleBox("iAtlas Explorer — Immunomodulators"),
         .GlobalEnv$textBox(
             width = 12,
-            shiny::p(stringr::str_c(
-                "Explore the expression of genes that code for immunomodulating",
-                "proteins, including checkpoint proteins.",
-                sep = " "
-            ))
+            shiny::includeMarkdown("markdown/immunomodulators.markdown")
         ),
         .GlobalEnv$sectionBox(
             title = "Immunomodulator Distributions",
             messageBox(
                 width = 12,
-                shiny::includeMarkdown("markdown/im_dist.markdown")
+                shiny::includeMarkdown(
+                    "markdown/immunomodulators_distributions.markdown"
+                )
             ),
             shiny::fluidRow(
                 .GlobalEnv$optionsBox(
@@ -89,12 +87,9 @@ immunomodulators_ui <- function(id) {
         data_table_ui(
             ns("im_table"),
             title = "Immunomodulator Annotations",
-            message_html = shiny::p(stringr::str_c(
-                "The table shows annotations of the immumodulators, and source.",
-                "Use the Search box in the upper right to find an immumodulator of",
-                "interest.",
-                sep = " "
-            ))
+            message_html = shiny::includeMarkdown(
+                "markdown/immunomodulators_dt.markdown"
+            )
         )
     )
 }
