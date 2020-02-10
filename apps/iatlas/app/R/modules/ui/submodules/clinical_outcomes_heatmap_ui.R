@@ -1,5 +1,9 @@
 clinical_outcomes_heatmap_ui <- function(id) {
+
     ns <- shiny::NS(id)
+
+    source("R/modules/ui/submodules/plotly_ui.R", local = T)
+
 
     .GlobalEnv$sectionBox(
         title = "Concordance Index",
@@ -12,15 +16,7 @@ clinical_outcomes_heatmap_ui <- function(id) {
                 width = 12,
                 shiny::column(
                     width = 6,
-                    shiny::selectInput(
-                        inputId = ns("time_feature_choice"),
-                        label = "Select or Search for Survival Endpoint",
-                        selected = "OS Time",
-                        choices = c(
-                            "Overall Survival" = "OS Time",
-                            "Progression Free Interval" = "PFI Time"
-                        ),
-                    ),
+                    shiny::uiOutput(ns("time_feature_selection_ui"))
                 ),
                 shiny::column(
                     width = 6,
@@ -34,7 +30,7 @@ clinical_outcomes_heatmap_ui <- function(id) {
                         ns() %>%
                         plotly::plotlyOutput(height = 600) %>%
                         shinycssloaders::withSpinner(),
-                    shiny::textOutput(ns("heatmap_group_text"))
+                    plotly_ui(ns("heatmap"))
                 )
             )
         )

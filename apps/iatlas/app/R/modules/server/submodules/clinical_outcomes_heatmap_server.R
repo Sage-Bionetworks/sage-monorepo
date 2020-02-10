@@ -10,73 +10,86 @@ clinical_outcomes_heatmap_server <- function(
 
     ns <- session$ns
 
-    source("R/functions/clinical_outcomes_heatmap_functions.R", local = T)
+    source("R/clinical_outcomes_functions.R")
+    source("R/modules/server/submodules/plotly_server.R", local = T)
 
     output$class_selection_ui <- shiny::renderUI({
-
-        shiny::req(feature_named_list())
         shiny::selectInput(
-            ns("class_choice_id"),
-            "Select or Search for Variables Class",
-            choices = create_class_list(),
-            selected = get_t_helper_score_class_id()
+            inputId = ns("class_choice_id"),
+            label = "Select or Search for Variables Class",
+            choices = .GlobalEnv$create_class_list(),
+            selected = .GlobalEnv$get_class_id_from_name("T Helper Cell Score")
         )
     })
 
-    time_feature_id <- shiny::reactive({
-        shiny::req(input$time_feature_choice)
-        get_feature_id(input$time_feature_choice)
+    time_class_id <- .GlobalEnv$get_class_id_from_name("Survival Time")
+
+    output$time_feature_selection_ui <- shiny::renderUI({
+        shiny::req(time_class_id)
+
+        shiny::selectInput(
+            inputId = ns("time_feature_choice_id"),
+            label = "Select or Search for Survival Endpoint",
+            choices = .GlobalEnv$create_feature_named_list(time_class_id),
+            selected = "OS Time"
+        )
     })
 
-    status_feature_name <- shiny::reactive({
-        shiny::req(input$time_feature_choice)
-        get_status_feature_name(input$time_feature_choice)
+    time_feature_id   <- shiny::reactive({
+        shiny::req(input$time_feature_choice_id)
+        as.integer(input$time_feature_choice_id)
     })
 
     status_feature_id <- shiny::reactive({
-        shiny::req(status_feature_name())
-        get_feature_id(status_feature_name())
-
+        shiny::req(time_feature_id())
+        get_status_id_from_time_id(time_feature_id())
     })
 
-    value_tbl <- shiny::reactive({
+    survival_tbl <- shiny::reactive({
         shiny::req(
             sample_tbl(),
-            input$class_choice_id,
             time_feature_id(),
             status_feature_id()
         )
-        build_value_tbl(
+        build_survival_value_tbl(
             sample_tbl(),
-            input$class_choice_id,
             time_feature_id(),
             status_feature_id()
         )
+    })
+
+    feature_tbl <- shiny::reactive({
+        shiny::req(input$class_choice_id)
+        build_feature_value_tbl_from_class_id(input$class_choice_id)
+    })
+
+    heatmap_tbl <- shiny::reactive({
+        shiny::req(survival_tbl(), feature_tbl())
+        dplyr::inner_join(survival_tbl(), feature_tbl(), by = "sample_id")
     })
 
     output$heatmap <- plotly::renderPlotly({
-        shiny::req(value_tbl())
+        shiny::req(heatmap_tbl())
 
-        mat <- build_hetamap_matrix(value_tbl())
+        heatmap_matrix <- build_heatmap_matrix(heatmap_tbl())
 
         shiny::validate(shiny::need(
-            nrow(mat > 0) & ncol(mat > 0),
+            nrow(heatmap_matrix > 0) & ncol(heatmap_matrix > 0),
             "No results to display, pick a different group."
         ))
 
-        create_heatmap(mat, "clinical_outcomes_heatmap")
+        create_heatmap(heatmap_matrix, "clinical_outcomes_heatmap")
     })
 
-    output$heatmap_group_text <- shiny::renderText({
-        shiny::req(group_tbl)
-        eventdata <- plotly::event_data("plotly_click", source = "clinical_outcomes_heatmap")
-        shiny::validate(shiny::need(eventdata, "Click above plot"))
-
-        group_tbl() %>%
-            dplyr::filter(group == local(unique(dplyr::pull(eventdata, "x")))) %>%
-            dplyr::mutate(text = paste0(name, ": ", characteristics)) %>%
-            dplyr::pull(text)
+    heatmap_eventdata <- shiny::reactive({
+        plotly::event_data("plotly_click", "clinical_outcomes_heatmap")
     })
 
-
+    shiny::callModule(
+        plotly_server,
+        "heatmap",
+        plot_tbl       = heatmap_tbl,
+        plot_eventdata = heatmap_eventdata,
+        group_tbl      = group_tbl
+    )
 }

@@ -10,9 +10,9 @@ clinical_outcomes_survival_server <- function(
 
     ns <- session$ns
 
-    source("R/clinical_outcomes_survival_functions.R")
+    source("R/clinical_outcomes_functions.R")
 
-    time_class_id   <- .GlobalEnv$get_class_id_from_name("Survival Time")
+    time_class_id <- .GlobalEnv$get_class_id_from_name("Survival Time")
 
     output$time_feature_selection_ui <- shiny::renderUI({
         shiny::req(time_class_id)
@@ -35,13 +35,13 @@ clinical_outcomes_survival_server <- function(
         get_status_id_from_time_id(time_feature_id())
     })
 
-    value_tbl <- shiny::reactive({
+    survival_value_tbl <- shiny::reactive({
         shiny::req(
             sample_tbl(),
             time_feature_id(),
             status_feature_id()
         )
-        build_survival_values_tbl(
+        build_survival_value_tbl(
             sample_tbl(),
             time_feature_id(),
             status_feature_id()
@@ -51,21 +51,21 @@ clinical_outcomes_survival_server <- function(
     output$survival_plot <- shiny::renderPlot({
 
         shiny::req(
-            value_tbl(),
+            survival_value_tbl(),
             plot_colors(),
             group_name(),
             input$risktable
         )
 
         shiny::validate(shiny::need(
-            nrow(value_tbl()) > 0,
+            nrow(survival_value_tbl()) > 0,
             paste0(
                 "Samples with selected variable don't have selected ",
                 "survival features."
             )
         ))
 
-        num_groups <- length(unique(value_tbl()$group))
+        num_groups <- length(unique(survival_value_tbl()$group))
 
         shiny::validate(shiny::need(
             num_groups <= 10,
@@ -78,12 +78,12 @@ clinical_outcomes_survival_server <- function(
 
         fit <- survival::survfit(
             survival::Surv(time, status) ~ group,
-            data = value_tbl()
+            data = survival_value_tbl()
         )
 
         .GlobalEnv$create_kmplot(
             fit = fit,
-            df = value_tbl(),
+            df = survival_value_tbl(),
             confint = input$confint,
             risktable = input$risktable,
             title = group_name(),
@@ -92,6 +92,6 @@ clinical_outcomes_survival_server <- function(
 
     output$download_tbl <- shiny::downloadHandler(
         filename = function() stringr::str_c("data-", Sys.Date(), ".csv"),
-        content = function(con) readr::write_csv(value_tbl(), con)
+        content = function(con) readr::write_csv(survival_value_tbl(), con)
     )
 }
