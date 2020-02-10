@@ -8,33 +8,43 @@ clinical_outcomes_survival_server <- function(
     plot_colors
 ){
 
-    source("R/functions/clinical_outcomes_survival_functions.R")
+    ns <- session$ns
 
-    # output$time_feature_selection_ui <- shiny::renderUI({
-    #
-    #     shiny::selectInput(
-    #         ns("class_choice_id"),
-    #         "Select or Search for Variables Class",
-    #         choices = create_class_list(),
-    #         selected = get_t_helper_score_class_id()
-    #     )
-    # })
+    source("R/clinical_outcomes_survival_functions.R")
 
-    status_feature_name <- shiny::reactive({
-        shiny::req(input$time_feature_choice)
-        get_status_feature_name(input$time_feature_choice)
+    time_class_id   <- .GlobalEnv$get_class_id_from_name("Survival Time")
+
+    output$time_feature_selection_ui <- shiny::renderUI({
+        shiny::req(time_class_id)
+
+        shiny::selectInput(
+            inputId = ns("time_feature_choice_id"),
+            label = "Select or Search for Survival Endpoint",
+            choices = .GlobalEnv$create_feature_named_list(time_class_id),
+            selected = "OS Time"
+        )
+    })
+
+    time_feature_id   <- shiny::reactive({
+        shiny::req(input$time_feature_choice_id)
+        as.integer(input$time_feature_choice_id)
+    })
+
+    status_feature_id <- shiny::reactive({
+        shiny::req(time_feature_id())
+        get_status_id_from_time_id(time_feature_id())
     })
 
     value_tbl <- shiny::reactive({
         shiny::req(
             sample_tbl(),
-            input$time_feature_choice,
-            status_feature_name()
+            time_feature_id(),
+            status_feature_id()
         )
-        build_value_tbl(
+        build_survival_values_tbl(
             sample_tbl(),
-            input$time_feature_choice,
-            status_feature_name()
+            time_feature_id(),
+            status_feature_id()
         )
     })
 
@@ -49,7 +59,10 @@ clinical_outcomes_survival_server <- function(
 
         shiny::validate(shiny::need(
             nrow(value_tbl()) > 0,
-            "Samples with selected variable don't have selected survival feature"
+            paste0(
+                "Samples with selected variable don't have selected ",
+                "survival features."
+            )
         ))
 
         num_groups <- length(unique(value_tbl()$group))
@@ -76,4 +89,9 @@ clinical_outcomes_survival_server <- function(
             title = group_name(),
             group_colors = unname(plot_colors()))
     })
+
+    output$download_tbl <- shiny::downloadHandler(
+        filename = function() stringr::str_c("data-", Sys.Date(), ".csv"),
+        content = function(con) readr::write_csv(value_tbl(), con)
+    )
 }

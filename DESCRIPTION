@@ -24,4 +24,5 @@ Imports:
     tibble,
     assertthat,
     purrr,
-    tidyr
+    tidyr,
+    stringr
