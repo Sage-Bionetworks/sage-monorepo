@@ -99,9 +99,7 @@ immune_feature_distributions_server <- function(
     histplot_tbl <- shiny::reactive({
         shiny::req(distplot_tbl())
         shiny::validate(shiny::need(distplot_eventdata(), "Click above plot"))
-        selected_group <- get_selected_values_from_eventdata(
-            distplot_eventdata()
-        )
+        selected_group <- get_values_from_eventdata(distplot_eventdata())
 
         groups <- dplyr::pull(distplot_tbl(), "x")
         shiny::validate(shiny::need(
