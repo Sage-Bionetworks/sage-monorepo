@@ -1,3 +1,18 @@
+test_that("Build Feature Value Tibble from Feature IDs", {
+    result1 <- build_feature_value_tbl_from_ids(1:5)
+    expect_named(result1, c("sample_id", "feature_id", "value"))
+    expect_true(all(result1$feature_id %in% 1:5))
+})
+
+test_that("Build Feature Value Tibble", {
+    result1 <- build_feature_value_tbl_from_class_id(1)
+    expect_named(result1, c("sample_id", "value", "feature"))
+})
+
+
+
+
+
 test_that("Build Feature Tibble", {
     result1 <- build_feature_tbl()
     expect_named(result1, c("class", "display", "feature"))
@@ -8,11 +23,7 @@ test_that("Build Feature Tibble", {
     expect_true(all(result2$class %in% class_tbl$name))
 })
 
-test_that("Get Feature Values Tibble From IDs", {
-    result1 <- get_feature_values_from_ids(1:5)
-    expect_named(result1, c("sample_id", "feature_id", "value"))
-    expect_true(all(result1$feature_id %in% 1:5))
-})
+
 
 
 
@@ -65,12 +76,6 @@ test_that("Build Cohort Table By Feature ID", {
         build_cohort_tbl_by_feature_id(c(1:10), 1),
         c("sample_id", "value")
     )
-})
-
-test_that("Build Feature Value Table", {
-    result1 <- build_feature_value_tbl(1:5)
-    expect_named(result1, c("sample_id", "feature_id", "value"))
-    expect_true(all(result1$feature_id %in% 1:5))
 })
 
 # test_that("Build Driver Results Table", {

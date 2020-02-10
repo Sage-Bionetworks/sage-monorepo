@@ -24,9 +24,7 @@ numeric_filter_element_server <- function(
         req(input$feature_choice)
         input$feature_choice %>%
             print() %>%
-            .GlobalEnv$build_feature_value_tbl() %>%
-            # .GlobalEnv$create_feature_value_query() %>%
-            # .GlobalEnv$perform_query("build features table") %>%
+            .GlobalEnv$build_feature_value_tbl_from_ids() %>%
             dplyr::filter(!is.na(value), !is.infinite(value)) %>%
             dplyr::summarise(mx = max(value), mn = min(value))
     })

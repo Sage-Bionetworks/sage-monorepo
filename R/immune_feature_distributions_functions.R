@@ -8,7 +8,7 @@
 #' @importFrom rlang .data
 build_distplot_tbl <- function(sample_tbl, feature_id, scale_method){
     feature_id %>%
-        get_feature_values_from_ids() %>%
+        build_feature_value_tbl_from_ids() %>%
         dplyr::inner_join(sample_tbl, by = "sample_id") %>%
         dplyr::select(.data$group, .data$value) %>%
         scale_tbl_value_column(scale_method) %>%

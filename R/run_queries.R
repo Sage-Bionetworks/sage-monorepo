@@ -2,6 +2,35 @@
 # when doing devtools::check()
 if (getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 
+
+#' Build Feature Value Tibble from Feature IDs
+#'
+#' @param feature_ids Integers in the id column of the features_to_samples table
+#' @importFrom magrittr %>%
+build_feature_value_tbl_from_ids <- function(feature_ids){
+    feature_ids %>%
+        create_feature_value_query_from_ids() %>%
+        perform_query("Build Feature Value Tibble from Feature IDs")
+}
+
+
+#' Build Feature Value Tibble from Class IDs
+#'
+#' @param class_ids An integer in the class_id column of the features table
+#' @importFrom magrittr %>%
+build_feature_value_tbl_from_class_id <- function(class_ids){
+    paste0(
+        "SELECT fts.sample_id, fts.value, f.display AS feature ",
+        "FROM features_to_samples fts ",
+        "INNER JOIN features f ",
+        "ON fts.feature_id = f.id ",
+        "WHERE f.class_id IN (",
+        class_ids,
+        ")"
+    ) %>%
+        perform_query("Build Feature Value Tibble from Class IDs")
+}
+
 #' Build Feature Tibble
 #'
 #' @param class_ids Integers in the id column of the classes table
@@ -24,17 +53,6 @@ build_feature_tbl <- function(class_ids = "all"){
     perform_query(query, "Build Feature Tibble")
 }
 
-
-#' Get Feature Values Tibble From IDs
-#'
-#' @param ids An Integers in the id column of the features_to_samples table
-#' @importFrom magrittr %>%
-get_feature_values_from_ids <- function(ids){
-    ids %>%
-        create_feature_value_query_from_ids() %>%
-        perform_query("Get Feature Values Tibble From IDs")
-}
-
 #' Create Class List
 #'
 #' @importFrom magrittr %>%
@@ -55,15 +73,7 @@ build_gene_expression_tbl_by_gene_ids <- function(gene_ids){
         perform_query("Build Gene Expression Tibble by Gene IDs")
 }
 
-#' Build Feature Value Tibble
-#'
-#' @param feature_id An integer in the feature_id column of the
-#' features_to_samples table
-#' @importFrom magrittr %>%
-build_feature_value_tbl <- function(feature_id){
-    create_feature_value_query_from_ids(feature_id) %>%
-        perform_query("Build Feature Value Tibble")
-}
+
 
 # Module specfic functions ----------------------------------------------------
 

@@ -25,4 +25,5 @@ Imports:
     assertthat,
     purrr,
     tidyr,
-    stringr
+    stringr,
+    concordanceIndex
