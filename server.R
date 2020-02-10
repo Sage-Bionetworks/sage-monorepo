@@ -81,14 +81,14 @@ shiny::shinyServer(function(input, output, session) {
         cohort_colors
     )
 
-    # shiny::callModule(
-    #     til_maps_server,
-    #     "til_maps",
-    #     cohort_sample_tbl,
-    #     cohort_group_tbl,
-    #     cohort_group_name,
-    #     cohort_colors
-    # )
+    shiny::callModule(
+        til_maps_server,
+        "til_maps",
+        cohort_sample_tbl,
+        cohort_group_tbl,
+        cohort_group_name,
+        cohort_colors
+    )
 
     shiny::callModule(
         immunomodulators_server,

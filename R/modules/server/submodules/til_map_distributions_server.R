@@ -13,8 +13,6 @@ til_map_distributions_server <- function(
     source("R/functions/til_map_distributions_functions.R", local = T)
 
     output$selection_ui <- shiny::renderUI({
-        shiny::req(feature_named_list())
-
         shiny::selectInput(
             ns("feature_choice_id"),
             label = "Select or Search for Variable",
@@ -25,7 +23,7 @@ til_map_distributions_server <- function(
 
     feature_name <- shiny::reactive({
         shiny::req(input$feature_choice_id)
-        get_feature_name(input$feature_choice_id)
+        get_feature_name(as.integer(input$feature_choice_id))
     })
 
     feature_plot_label <- shiny::reactive({
