@@ -2,15 +2,10 @@ immune_subtype_classifier_server <- function(
     input, output, session, group_display_choice, group_internal_choice,
     subset_df, plot_colors) {
 
-    ns <- session$ns
-    
-    source("functions/immune_subtype_classifier_functions.R", local = T)
-
-    # in src files ... have same path as app.R
-    # reportedClusters <- getSubtypeTable()
+    source("R/functions/immune_subtype_classifier_functions.R", local = T)
 
     # get new calls
-    getCalls <- eventReactive(input$subtypeGObutton, {
+    getCalls <- shiny::eventReactive(input$subtypeGObutton, {
 
       newdat <- input$expr_file_pred
 
@@ -19,11 +14,13 @@ immune_subtype_classifier_server <- function(
       classifySubtype(newdat, input$sepa)
     })
 
-
-    output$barPlot <- renderPlot({
+    output$barPlot <- shiny::renderPlot({
       counts <- table(getCalls()$Calls$BestCall)
-      barplot(counts, main="New Cluster Label Calls",
-              xlab="Cluster Labels")
+      barplot(
+        counts,
+        main = "New Cluster Label Calls",
+        xlab = "Cluster Labels"
+      )
     })
 
 

@@ -148,9 +148,15 @@ shiny::shinyServer(function(input, output, session) {
 
     # tool modules --------------------------------------------------------
 
-    # shiny::callModule(
-    #     immune_subtype_classifier_server,
-    #     "immune_subtype_classifier")
+    tool_module_dir   <- "R/modules/server/tool_modules/"
+    tool_module_files <- list.files(tool_module_dir, full.names = T)
+    for (item in tool_module_files) {
+        source(item, local = T)
+    }
+
+    shiny::callModule(
+        immune_subtype_classifier_server,
+        "immune_subtype_classifier")
 
 
     shiny::observeEvent(input$link_to_immune_subtype_classifier, {
