@@ -5,15 +5,39 @@ variables:
   R_VERSION: "3.6.2"
 
 stages:
-  - test
+  - build_container
+  #- test
   - deploy_to_staging
   - deploy_to_prod
 
-Run Tests:
-  stage: test
-  image: rocker/verse:${R_VERSION}
+Build Container:
+  stage: build_container
+  image: docker:19.03.1-dind
+  services:
+    - docker:19.03.1-dind
+  only:
+    refs:
+      - feature/feather_file_structure
+    changes:
+      - renv.lock
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - echo "Tests run here!"
+    - export RENV_HASH=`md5sum renv.lock | awk '{print $1}'`
+    - docker build
+      --build-arg R_VERSION
+      --cache-from ${CI_REGISTRY_IMAGE}-renv:latest
+      --tag ${CI_REGISTRY_IMAGE}:renv-latest
+      --tag ${CI_REGISTRY_IMAGE}:renv-${RENV_HASH}
+      -f Dockerfile.build .
+    - docker push ${CI_REGISTRY_IMAGE}:renv-latest
+    - docker push ${CI_REGISTRY_IMAGE}:renv-${RENV_HASH}
+
+# Run Tests:
+#   stage: test
+#   image: rocker/verse:${R_VERSION}
+#   script:
+#     - echo "Tests run here!"
 
 Deploy To Staging:
   stage: deploy_to_staging
