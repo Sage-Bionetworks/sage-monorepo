@@ -140,11 +140,16 @@ shiny::shinyServer(function(input, output, session) {
 
     # other modules --------------------------------------------------------
 
-    # shiny::callModule(
-    #     data_info_server,
-    #     "data_info",
-    #     features_con
-    # )
+    other_module_dir   <- "R/modules/server/other_modules/"
+    other_module_files <- list.files(other_module_dir, full.names = T)
+    for (item in other_module_files) {
+        source(item, local = T)
+    }
+
+    shiny::callModule(
+        data_info_server,
+        "data_info"
+    )
 
     # tool modules --------------------------------------------------------
 
