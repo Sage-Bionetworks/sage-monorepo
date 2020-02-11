@@ -116,7 +116,7 @@ This will ensure the new package is added to the renv.lock file.
 To remove an installed package, run (where "useful_package" is the name of the package to remove):
 
 ```R
-renve::remove("useful_package")
+renv::remove("useful_package")
 ```
 
 For more on package management with renv, please see [https://rstudio.github.io/renv/articles/renv.html](https://rstudio.github.io/renv/articles/renv.html)

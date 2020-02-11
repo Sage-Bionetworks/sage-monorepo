@@ -36,4 +36,4 @@ Deploy To Staging:
       secret=\"${SHINYAPPS_SECRET}\"
       )"
     # Deploy it to Shinyapps.io
-    - R -e "rsconnect::deployApp()"
+    - R -e "rsconnect::deployApp(appName=\"iatlas-staging\", appTitle=\"iAtlas Staging\")"
