@@ -17,7 +17,7 @@ Build Container:
     - docker:19.03.1-dind
   only:
     refs:
-      - feature/feather_file_structure
+      - staging
     changes:
       - renv.lock
   before_script:
@@ -41,7 +41,7 @@ Build Container:
 
 Deploy To Staging:
   stage: deploy_to_staging
-  image: rocker/verse:${R_VERSION}
+  image: ${CI_REGISTRY_IMAGE}:renv-latest
   only:
     - staging
   variables:
