@@ -31,9 +31,13 @@ cohort_upload_selection_ui <- function(id) {
             .GlobalEnv$messageBox(
                 width = 12,
                 p("After uploading your file, the table below will show your defined groups."),
-                DT::dataTableOutput(
-                    ns("user_group_df")
-                )
+                DT::dataTableOutput(ns("dt"))
+            )
+        ),
+        shiny::fluidRow(
+            .GlobalEnv$optionsBox(
+                width = 12,
+                shiny::uiOutput(ns("user_group_selection"))
             )
         )
     )
