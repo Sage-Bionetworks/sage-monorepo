@@ -6,58 +6,22 @@ cohort_selection_server <- function(
 ){
     ns <- session$ns
 
-    source("R/modules/server/submodules/cohort_group_selection_server.R", local = T)
-    source("R/modules/server/submodules/cohort_filter_selection_server.R", local = T)
-    source("R/modules/server/submodules/cohort_dataset_selection_server.R", local = T)
-    source("R/modules/server/submodules/data_table_server.R", local = T)
-
-    # cohort selection --------------------------------------------------------
-
-    default_dataset <- "TCGA"
-
-    selected_dataset <- cohort_obj <- shiny::callModule(
-        cohort_dataset_selection_server,
-        "cohort_dataset_selection",
-        default_dataset
+    source(
+        "R/modules/server/submodules/cohort_manual_selection_server.R",
+        local = T
     )
-
-    dataset <- shiny::reactive({
-        if (is.null(selected_dataset())) {
-            return(default_dataset)
-        } else {
-            return(selected_dataset())
-        }
-    })
-
-    all_sample_ids <- shiny::reactive({
-        shiny::req(dataset())
-        .GlobalEnv$get_sample_ids_from_dataset(dataset())
-    })
-
-    selected_sample_ids <- cohort_obj <- shiny::callModule(
-        cohort_filter_selection_server,
-        "cohort_filter_selection",
-        feature_named_list,
-        dataset,
-        all_sample_ids
+    source(
+        "R/modules/server/submodules/data_table_server.R",
+        local = T
     )
-
-    sample_ids <- shiny::reactive({
-        if (is.null(selected_sample_ids())) {
-            shiny::req(all_sample_ids())
-            return(all_sample_ids())
-        } else {
-            return(selected_sample_ids())
-        }
-    })
 
     cohort_obj <- shiny::callModule(
-        cohort_group_selection_server,
-        "cohort_group_selection",
-        feature_named_list,
-        sample_ids,
-        dataset
+        cohort_manual_selection_server,
+        "cohort_manual_selection",
+        feature_named_list
     )
+
+
 
     # group key ---------------------------------------------------------------
 
