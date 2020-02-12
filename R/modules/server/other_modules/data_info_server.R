@@ -1,109 +1,83 @@
 data_info_server <- function(
-    input, 
-    output, 
-    session,
-    features_con
+    input,
+    output,
+    session
 ){
     ns <- session$ns
-    
+
+    source("R/data_info_functions.R", local = T)
+
+    class_list <- create_class_list()
+
     output$classes <- shiny::renderUI({
-        shiny::req(features_con()) 
-        choices <- features_con() %>%
-            dplyr::filter(!is.na(class_name), !is.na(class_id)) %>%
-            dplyr::select(class_name, class_id) %>% 
-            dplyr::distinct() %>% 
-            dplyr::arrange(class_name) %>% 
-            dplyr::collect() %>% 
-            tibble::deframe() %>% 
-            c("All classes" = -1L)
         shiny::selectInput(
             ns("class_choice_id"),
             label = "Select or Search for Class",
-            choices = choices,
+            choices = class_list,
             selected = -1
         )
     })
-    
-    filtered_feature_con <- shiny::reactive({
-        shiny::req(features_con(), input$class_choice_id)
-        class_choice_id <- as.numeric(input$class_choice_id)
-        if(class_choice_id != -1L){
-            con <- features_con() %>% 
-                dplyr::filter(class_id == local(class_choice_id)) %>% 
-                dplyr::compute() 
-        } else {
-            con <- features_con()
-        }
-        return(con)
-    })
-    
-    output$feature_table <- DT::renderDT({
-        shiny::req(filtered_feature_con())
-        
-        tbl <- filtered_feature_con() %>%
-            dplyr::select(
-                `Feature Name` = feature_name,
-                `Variable Class` = class_name,
-                Unit = unit
-            ) %>% 
-            dplyr::collect()
 
+    feature_tbl <- shiny::reactive({
+        shiny::req(input$class_choice_id)
+        create_feature_tbl(as.integer(input$class_choice_id))
+    })
+
+    output$feature_table <- DT::renderDT({
+        shiny::req(feature_tbl())
         DT::datatable(
-            tbl, 
+            format_feature_tbl(feature_tbl()),
             selection = list(mode = 'single'),
-            options = list(scrollX = TRUE, autoWidth = F ),
-            rownames = FALSE
+            options   = list(scrollX = TRUE, autoWidth = F ),
+            rownames  = FALSE
         )
     }, server = FALSE)
-    
-    feature_class_tbl <- shiny::reactive({
-        shiny::req(input$feature_table_rows_selected, filtered_feature_con())
-        
-        clicked_row_num <- input$feature_table_rows_selected
-        
-        selected_class_id <- filtered_feature_con() %>% 
-            dplyr::pull(class_id) %>% 
-            magrittr::extract2(clicked_row_num) 
-        
-        filtered_feature_con() %>% 
-            dplyr::filter(class_id == selected_class_id) %>% 
-            dplyr::arrange(order, feature_name) %>% 
-            dplyr::collect()
+
+
+    filtered_feature_tbl <- shiny::reactive({
+        shiny::req(feature_tbl(), input$feature_table_rows_selected)
+        filter_feature_tbl(feature_tbl(), input$feature_table_rows_selected)
     })
-    
+
     output$variable_class_table <- shiny::renderTable({
-        shiny::req(feature_class_tbl())
-        feature_class_tbl()
+        shiny::req(filtered_feature_tbl())
+        format_filtered_feature_tbl(filtered_feature_tbl())
     })
-    
+
+    selected_method_tags <- shiny::reactive({
+        shiny::req(filtered_feature_tbl())
+        get_selected_method_tags(filtered_feature_tbl())
+    })
+
     output$method_buttons <- shiny::renderUI({
-        shiny::req(feature_class_tbl())
-        feature_class_tbl() %>% 
-            dplyr::filter(!is.na(method_tag)) %>% 
-            dplyr::distinct(method_tag) %>% 
-            dplyr::pull(method_tag) %>% 
+        shiny::req(selected_method_tags())
+        selected_method_tags() %>%
             purrr::map(
                 ~fluidRow(actionButton(ns(paste0("show_", .x)), .x))
             ) %>%
             shiny::tagList()
     })
-    
+
+    show_method <- function(tag){
+        shiny::observeEvent(input[[paste0("show_", tag)]], {
+            shiny::showModal(shiny::modalDialog(
+                title = "Methods",
+                shiny::includeMarkdown(paste0(
+                    "markdown/methods/",
+                    tag,
+                    ".markdown"
+                )),
+                size = "l",
+                easyClose = TRUE
+            ))
+        })
+    }
+
     shiny::observeEvent(input$feature_table_rows_selected, {
-        feature_class_tbl() %>% 
-            dplyr::filter(!is.na(method_tag)) %>% 
-            dplyr::distinct(method_tag) %>% 
-            dplyr::pull(method_tag) %>% 
-            purrr::map(function(tag) {
-                observeEvent(input[[paste0("show_", tag)]], {
-                    showModal(modalDialog(
-                        title = "Methods",
-                        includeMarkdown(paste0("data/MethodsText/Methods_", tag, ".txt")),
-                        size = "l", easyClose = TRUE
-                    ))
-                })
-            })
+        shiny::req(selected_method_tags())
+        purrr::walk(selected_method_tags(), show_method)
     })
-    
+
     shiny::observeEvent(input$feature_table_rows_selected, {
         output$variable_details_section <- shiny::renderUI({
             .GlobalEnv$sectionBox(
@@ -115,7 +89,7 @@ data_info_server <- function(
                 shiny::fluidRow(
                     .GlobalEnv$tableBox(
                         width = 9,
-                        tableOutput(ns('variable_class_table'))
+                        shiny::tableOutput(ns('variable_class_table'))
                     ),
                     shiny::column(
                         width = 3,

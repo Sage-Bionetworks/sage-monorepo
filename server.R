@@ -140,17 +140,28 @@ shiny::shinyServer(function(input, output, session) {
 
     # other modules --------------------------------------------------------
 
-    # shiny::callModule(
-    #     data_info_server,
-    #     "data_info",
-    #     features_con
-    # )
+    other_module_dir   <- "R/modules/server/other_modules/"
+    other_module_files <- list.files(other_module_dir, full.names = T)
+    for (item in other_module_files) {
+        source(item, local = T)
+    }
+
+    shiny::callModule(
+        data_info_server,
+        "data_info"
+    )
 
     # tool modules --------------------------------------------------------
 
-    # shiny::callModule(
-    #     immune_subtype_classifier_server,
-    #     "immune_subtype_classifier")
+    tool_module_dir   <- "R/modules/server/tool_modules/"
+    tool_module_files <- list.files(tool_module_dir, full.names = T)
+    for (item in tool_module_files) {
+        source(item, local = T)
+    }
+
+    shiny::callModule(
+        immune_subtype_classifier_server,
+        "immune_subtype_classifier")
 
 
     shiny::observeEvent(input$link_to_immune_subtype_classifier, {
