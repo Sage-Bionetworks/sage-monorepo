@@ -28,4 +28,5 @@ Imports:
     stringr,
     concordanceIndex,
     config,
-    crayon
+    crayon,
+    ggplot2
