@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "3.6.0",
+    "Version": "3.6.2",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -29,6 +29,18 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "41012742c331838c6f802830f2b87021"
+    },
+    "ImmuneSubtypeClassifier": {
+      "Package": "ImmuneSubtypeClassifier",
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "ImmuneSubtypeClassifier",
+      "RemoteUsername": "Gibbsdavidl",
+      "RemoteRef": "master",
+      "RemoteSha": "59e9aa1d377706819da69771dc0cb2cd13bb23d1",
+      "Hash": "143380067bd6b9f075c681950181fba7"
     },
     "KMsurv": {
       "Package": "KMsurv",
@@ -85,6 +97,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "f3ca785924863b0e4c8cb23b6a5c75a1"
+    },
+    "XML": {
+      "Package": "XML",
+      "Version": "3.99-0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c1616606f097075542c12fb8a10a071e"
     },
     "askpass": {
       "Package": "askpass",
@@ -230,6 +249,13 @@
       "RemoteRef": "master",
       "RemoteSha": "2e6f75f9c85c509e021e374a83ca58478e88e2dc",
       "Hash": "9e7ddcc3e0475e12c511d53ba431a37f"
+    },
+    "config": {
+      "Package": "config",
+      "Version": "0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "76268942467fa8ba171e9aa34203ee2a"
     },
     "covr": {
       "Package": "covr",
@@ -440,6 +466,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "7d7f283939f563670a697165b2cf5560"
+    },
+    "gridSVG": {
+      "Package": "gridSVG",
+      "Version": "1.7-1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c262542c927c2e85d5825214b65836bb"
     },
     "gtable": {
       "Package": "gtable",
@@ -692,6 +725,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "09eb987710984fc2905c7129c7d85e65"
+    },
+    "plotROC": {
+      "Package": "plotROC",
+      "Version": "2.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "3e3ab3eff749f0f44cb54d09c8fb365c"
     },
     "plotly": {
       "Package": "plotly",
@@ -1075,6 +1115,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "ccd8453a7b9e380628f6cd2862e46cad"
+    },
+    "xgboost": {
+      "Package": "xgboost",
+      "Version": "0.90.0.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1f29db60e440a590f98511b44595f0f3"
     },
     "xml2": {
       "Package": "xml2",

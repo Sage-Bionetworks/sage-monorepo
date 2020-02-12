@@ -1,0 +1,22 @@
+default:
+  database:
+    host:     localhost
+    port:     5432
+    user:     postgres
+    password: docker
+
+test:
+  database:
+    name:     iatlas_shiny_test
+
+dev:
+  database:
+    name:     iatlas_dev
+
+shinyapps:
+  database:
+    name:     xxx
+    host:     xxx
+    port:     5432
+    user:     xxx
+    password: xxx
