@@ -7,7 +7,7 @@ default:
 
 test:
   database:
-    name:     iatlas_shiny_test
+    name:     iatlas_test
 
 dev:
   database:
