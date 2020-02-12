@@ -1,0 +1,42 @@
+cell_type_fractions_ui <- function(id){
+
+    ns <- shiny::NS(id)
+
+    source("R/modules/ui/submodules/plotly_ui.R", local = T)
+
+    .GlobalEnv$sectionBox(
+        title = "Cell Type Fractions",
+        .GlobalEnv$messageBox(
+            width = 12,
+            shiny::includeMarkdown("markdown/cell_type_fractions.markdown")
+        ),
+        shiny::fluidRow(
+            .GlobalEnv$optionsBox(
+                width = 12,
+                shiny::selectInput(
+                    inputId = ns("fraction_group_choice"),
+                    label = "Select Cell Fraction Type",
+                    choices = c(
+                        "Immune Cell Proportion - Common Lymphoid and Myeloid Cell Derivative Class",
+                        "Immune Cell Proportion - Differentiated Lymphoid and Myeloid Cell Derivative Class",
+                        "Immune Cell Proportion - Multipotent Progenitor Cell Derivative Class",
+                        "Immune Cell Proportion - Original"
+                    ),
+                    selected = "Immune Cell Proportion - Differentiated Lymphoid and Myeloid Cell Derivative Class"
+                )
+            )
+        ),
+        shiny::fluidRow(
+            shiny::fluidRow(
+                .GlobalEnv$plotBox(
+                    width = 12,
+                    "barplot" %>%
+                        ns() %>%
+                        plotly::plotlyOutput() %>%
+                        shinycssloaders::withSpinner(),
+                    plotly_ui(ns("barplot"))
+                )
+            )
+        )
+    )
+}

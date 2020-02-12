@@ -47,7 +47,7 @@ The portal is built entirely in **R** and **Shiny** using the **RStudio** develo
 
 ### MacOS Install instructions
 
-Install brew: https://brew.sh/
+Install package manager: [HomeBrew](https://brew.sh/) (or [MacPorts](https://www.macports.org/) or your package manager of choice)
 
 Then:
 

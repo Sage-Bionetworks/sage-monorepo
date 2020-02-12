@@ -16,3 +16,9 @@ if (file.exists("renv/activate.R")) {
     source('./install.R')
   }
 }
+
+if (interactive()) {
+  suppressMessages(require(devtools))
+  suppressMessages(require(testthat))
+  suppressMessages(require(usethis))
+}
