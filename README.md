@@ -173,6 +173,20 @@ Input data for the Shiny-iAtlas portal were accessed from multiple remote source
 - `io_targets.feather`
 - `til_image_links.feather`
 
+## Configuration and Environment Variables
+
+The database connection is configured in the `config.yml` file. We use the [config package](https://github.com/rstudio/config) to load the correct config. See init.R for exactly how this is done. You can also override the config by setting these environment variables:
+
+```
+DB_NAME=XYZ
+DB_HOST=XYZ
+DB_PORT=123
+DB_USER=XYZ
+DB_PW=XYZ
+```
+
+WARNING! `config.yml` is part of the *public* git repository. Do NOT put sensitive passwords or keys in `config.yml`. Use environment variables for any passwords or keys you do not wish to share publicly.
+
 ## Methods
 
 While many of the results presented in tables and plots are taken directly from IRWG data (including the main **feature matrix** and various feature and group annotations), we compute some values internally. Unless otherwise noted, the following methods/tools were used to compute summary statistics:
