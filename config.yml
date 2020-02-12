@@ -1,22 +1,22 @@
 default:
   database:
-    host:     localhost
-    port:     5432
-    user:     postgres
+    host: localhost
+    port: 5432
+    user: postgres
     password: docker
 
 test:
   database:
-    name:     iatlas_shiny_test
+    name: iatlas_shiny_test
 
 dev:
   database:
-    name:     iatlas_dev
+    name: iatlas_dev
 
 shinyapps:
   database:
-    name:     xxx
-    host:     xxx
-    port:     5432
-    user:     xxx
-    password: xxx
+    name: ${DB_NAME}
+    host: ${DB_HOST}
+    port: ${DB_PORT}
+    user: ${DB_USER}
+    password: ${DB_PASSWORD}

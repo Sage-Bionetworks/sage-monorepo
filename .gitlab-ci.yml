@@ -18,8 +18,9 @@ Build Container:
   only:
     refs:
       - staging
-    # changes:
-    #   - renv.lock
+    changes:
+      - renv.lock
+      - Dockerfile.build
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
@@ -45,11 +46,16 @@ Deploy To Staging:
   only:
     - staging
   variables:
-    STAGING_DB_NAME: iatlas_staging
-    STAGING_DB_HOST: sage-test.cau5la50px0r.us-west-2.rds.amazonaws.com
-    STAGING_DB_USER: postgres
+    DB_NAME: iatlas_staging
+    DB_HOST: sage-test.cau5la50px0r.us-west-2.rds.amazonaws.com
+    DB_PORT: 5432
+    DB_USER: postgres
+    DB_PASSWORD: ${STAGING_DB_PASSWORD}
   script:
-    - pwd
+    # Hack to work around Shinyapps.io lack of support for environment variables
+    - envsubst < config.yml > config.tmp
+    - mv config.tmp config.yml
+    - cat config.yml
     # Gather all required packages
     - R -e "renv::restore()"
     # Set the creds to use with Shinyapps.io
