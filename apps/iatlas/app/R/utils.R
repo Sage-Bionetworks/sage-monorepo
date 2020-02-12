@@ -75,6 +75,20 @@ create_plotly_label <- function(
 }
 
 
+#' Get Unique Values from Column
+#'
+#' @param tbl A tibble
+#' @param col A column in the tibble
+#' @importFrom dplyr select distinct pull
+#' @importFrom tydyr drop_na
+#' @importFrom rlang .data
+get_unique_values_from_col <- function(tbl, col){
+    tbl %>%
+        dplyr::select({{col}}) %>%
+        tidyr::drop_na() %>%
+        dplyr::distinct() %>%
+        dplyr::pull({{col}})
+}
 
 
 #' Create Feature Named List
