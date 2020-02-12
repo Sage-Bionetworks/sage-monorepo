@@ -875,15 +875,15 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "0.9.3-4",
+      "Version": "0.9.3-3",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "rstudio",
       "RemoteRepo": "renv",
-      "RemoteRef": "master",
-      "RemoteSha": "f85f2f7b1ed0fb8af158d6a4eafd899d09f03b45",
-      "RemoteHost": "api.github.com",
-      "Hash": "fb8de9f0c811dec7a46a4d60d82b176e"
+      "RemoteRef": "0.9.3-3",
+      "RemoteSha": "4fd2ea4975f9946afae7691315b9a8c6bfabd8b3",
+      "Hash": "63232c4242a6d1c0d35eb6bdf7015308"
     },
     "reshape2": {
       "Package": "reshape2",
