@@ -1,7 +1,7 @@
 Package: iatlas.app
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
-Authors@R: 
+Authors@R:
     person(given = "First",
            family = "Last",
            role = c("aut", "cre"),
@@ -11,19 +11,21 @@ Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Suggests: 
+Suggests:
     testthat (>= 2.1.0)
 RoxygenNote: 7.0.2
-Imports: 
-    RPostgres, 
-    dplyr, 
+Imports:
+    RPostgres,
+    dplyr,
     magrittr,
-    pool, 
-    rlang, 
-    tictoc, 
+    pool,
+    rlang,
+    tictoc,
     tibble,
     assertthat,
     purrr,
     tidyr,
     stringr,
-    concordanceIndex
+    concordanceIndex,
+    config,
+    crayon

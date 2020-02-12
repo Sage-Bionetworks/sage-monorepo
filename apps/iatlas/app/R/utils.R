@@ -1,3 +1,82 @@
+transform_feature_string <- function(feature, transformation){
+    switch(
+        transformation,
+        "None" = feature,
+        "Log2" = stringr::str_c("Log2( ", feature, " )"),
+        "Log2 + 1" = stringr::str_c("Log2( ", feature,  " + 1 )"),
+        "Log10" = stringr::str_c("Log10( ",  feature,  " )"),
+        "Log10 + 1" = stringr::str_c("Log10( ", feature, " + 1 )"),
+        "Squared" = stringr::str_c(feature, "**2"),
+        "Reciprocal" = stringr::str_c("1/", feature)
+    )
+}
+
+transform_feature_formula <- function(feature, transformation){
+    switch(
+        transformation,
+        "None" = feature,
+        "Squared" = stringr::str_c("I(", feature, "**2)"),
+        "Log10" = stringr::str_c("I(log10(", feature, "))"),
+        "Reciprocal" = stringr::str_c("I(1/", feature, ")")
+    )
+}
+
+
+assert_df_has_columns <- function(df, columns){
+    missing_columns <- columns[!columns %in% colnames(df)]
+    if (length(missing_columns) != 0) {
+        stop("df has missing columns: ",
+             stringr::str_c(missing_columns, collapse = ", "))
+    }
+}
+
+assert_df_has_rows <- function(df){
+    if (nrow(df) == 0) {
+        stop("result df is empty")
+    }
+}
+
+create_plotly_label <- function(
+    df,
+    value_columns,
+    title = "ParticipantBarcode",
+    name_column = "name",
+    group_column = "group") {
+
+    result_df <- wrapr::let(
+        alias = c(
+            namevar = name_column,
+            groupvar = group_column),
+        df %>%
+            dplyr::mutate(
+                label = stringr::str_glue(
+                    "<b>{title}:</b> {name} ({group})",
+                    title = title,
+                    name = namevar,
+                    group = groupvar
+                )) %>%
+            tidyr::gather(value_name, value, dplyr::one_of(value_columns)) %>%
+            dplyr::mutate(
+                value_label = stringr::str_glue(
+                    "{name}: {value}",
+                    name = stringr::str_to_upper(value_name),
+                    value = sprintf("%0.3f", value)
+                )
+            ) %>%
+            dplyr::group_by(label) %>%
+            dplyr::mutate(value_label = stringr::str_c(value_label, collapse = "</br>")) %>%
+            dplyr::ungroup() %>%
+            tidyr::spread(value_name, value) %>%
+            tidyr::unite(label, label, value_label, sep = "</br></br>")
+    )
+    assert_df_has_columns(result_df, c("label", name_column, group_column, value_columns))
+    assert_df_has_rows(result_df)
+    return(result_df)
+}
+
+
+
+
 #' Create Feature Named List
 #'
 #' @param class_ids Integers in the id column of the classes table
