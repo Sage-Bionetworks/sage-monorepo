@@ -33,10 +33,8 @@ build_barplot_tbl <- function(value_tbl){
         dplyr::summarise(mean = mean(feature_value), count = dplyr::n()) %>%
         dplyr::ungroup() %>%
         dplyr::mutate(se = mean / sqrt(count)) %>%
-        .GlobalEnv$create_plotly_label(
-            name_column = "feature_name",
-            group_column = "group",
-            value_columns = c("mean", "se")
+        create_plotly_label(
+            .data$feature_name, .data$group, c("mean", "se")
         ) %>%
         dplyr::select(
             x = group,
@@ -67,10 +65,6 @@ build_scatterplot_tbl <- function(value_tbl, group_value){
         tidyr::pivot_wider(values_from = value, names_from = feature) %>%
         tidyr::drop_na() %>%
         dplyr::rename(x = `Stromal Fraction`, y = `Leukocyte Fraction`) %>%
-        .GlobalEnv$create_plotly_label(
-            name_column = "sample_name",
-            group_column = "group",
-            value_columns = c("x", "y")
-        ) %>%
+        create_plotly_label(.data$sample_name, .data$group, c("x", "y")) %>%
         dplyr::select(x, y, label)
 }
