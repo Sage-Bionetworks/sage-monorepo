@@ -1,4 +1,76 @@
+test_that("Transform Feature String", {
+    feature <- "Leukocyte Fraction"
+    expect_equal(transform_feature_string(feature, "None"), feature)
+    expect_equal(
+        transform_feature_string(feature, "Log2"),
+        "Log2( Leukocyte Fraction )"
+    )
+    expect_equal(
+        transform_feature_string(feature, "Log2 + 1"),
+        "Log2( Leukocyte Fraction + 1 )"
+    )
+    expect_equal(
+        transform_feature_string(feature, "Log10"),
+        "Log10( Leukocyte Fraction )"
+    )
+    expect_equal(
+        transform_feature_string(feature, "Log10 + 1"),
+        "Log10( Leukocyte Fraction + 1 )"
+    )
+    expect_equal(
+        transform_feature_string(feature, "Squared"),
+        "Leukocyte Fraction**2"
+    )
+    expect_equal(
+        transform_feature_string(feature, "Reciprocal"),
+        "1/Leukocyte Fraction"
+    )
+})
 
+test_that("Transform Feature Formula", {
+    feature <- "Leukocyte Fraction"
+    expect_equal(transform_feature_formula(feature, "None"), feature)
+    expect_equal(
+        transform_feature_formula(feature, "Log10"),
+        "I(log10(Leukocyte Fraction))"
+    )
+    expect_equal(
+        transform_feature_formula(feature, "Squared"),
+        "I(Leukocyte Fraction**2)"
+    )
+    expect_equal(
+        transform_feature_formula(feature, "Reciprocal"),
+        "I(1/Leukocyte Fraction)"
+    )
+})
+
+test_that("Assert Tibble Has Columns", {
+    tbl1 <- dplyr::tibble(
+        col1 = c("value1", "value2"),
+        col2 = c("A", "B"),
+        col3 = c("C", "C")
+    )
+    expect_equal(assert_tbl_has_columns(tbl1, c("col1", "col2")), NULL)
+    expect_error(
+        assert_tbl_has_columns(tbl1, c("cola", "col2")),
+        "tbl has missing columns: cola"
+    )
+    expect_error(
+        assert_tbl_has_columns(tbl1, c("cola", "colb")),
+        "tbl has missing columns: cola, colb"
+    )
+})
+
+test_that("Assert Tibble has Rows", {
+    tbl1 <- dplyr::tibble(
+        "col1" = c("value1", "value2"),
+        "col2" = c("A", "B"),
+        "col3" = c("C", "C")
+    )
+    tbl2 <- filter(tbl1, col1 == "value3")
+    expect_equal(assert_tbl_has_rows(tbl1), NULL)
+    expect_error(assert_tbl_has_rows(tbl2), "result tbl is empty")
+})
 
 test_that("Create Plotly Label", {
     tbl <- dplyr::tribble(
@@ -33,6 +105,53 @@ test_that("Create Plotly Label", {
         "<b>title:</b> name7 (g2)</br></br>V1: 3.000</br>V2: 3.300"
     )
 })
+
+test_that("Add Plotly Value Label", {
+    tbl1 <- dplyr::tribble(
+        ~label,  ~V1, ~V2, ~V3,
+        "l1",    1,   2,   3,
+        "l2",    4,   5,   6,
+        "l3",    7,   8,   9,
+        "l4",    10,  11,  12
+    )
+    result1 <- add_plotly_value_label(tbl1, "V1")
+    result2 <- add_plotly_value_label(tbl1, c("V1", "V2"))
+    result3 <- add_plotly_value_label(tbl1, c("V1", "V2", "V3"))
+    expect_equal(
+        result1$value_label,
+        c("V1: 1.000", "V1: 4.000", "V1: 7.000", "V1: 10.000")
+    )
+    expect_equal(
+        result2$value_label,
+        c("V1: 1.000</br>V2: 2.000", "V1: 4.000</br>V2: 5.000",
+          "V1: 7.000</br>V2: 8.000", "V1: 10.000</br>V2: 11.000"
+        )
+    )
+    expect_equal(
+        result3$value_label,
+        c("V1: 1.000</br>V2: 2.000</br>V3: 3.000",
+          "V1: 4.000</br>V2: 5.000</br>V3: 6.000",
+          "V1: 7.000</br>V2: 8.000</br>V3: 9.000",
+          "V1: 10.000</br>V2: 11.000</br>V3: 12.000"
+        )
+    )
+})
+
+test_that("Get Unique Values from Column", {
+    tbl1 <- dplyr::tibble("col" = c("value1", "value2"))
+    tbl2 <- dplyr::tibble("col" = c("value1", "value1"))
+    tbl3 <- dplyr::tibble("col" = c("value1", NA))
+    tbl4 <- dplyr::tibble("col" = c(5, 6))
+    tbl5 <- dplyr::tibble("col" = c("value2", "value1"))
+
+    expect_equal(get_unique_values_from_col(tbl1, col), c("value1", "value2"))
+    expect_equal(get_unique_values_from_col(tbl2, col), "value1")
+    expect_equal(get_unique_values_from_col(tbl3, col), "value1")
+    expect_equal(get_unique_values_from_col(tbl4, col), c(5, 6))
+    expect_equal(get_unique_values_from_col(tbl5, col), c("value2", "value1"))
+})
+
+
 
 test_that("Create Feature Named List", {
     result1 <- create_feature_named_list()

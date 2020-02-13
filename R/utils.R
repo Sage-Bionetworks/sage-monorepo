@@ -7,9 +7,9 @@ transform_feature_string <- function(feature, transformation){
         transformation,
         "None"       = feature,
         "Log2"       = paste("Log2(",   feature,  ")"),
-        "Log2 + 1"   = paste("Log2(",   feature,  "+ 1)"),
+        "Log2 + 1"   = paste("Log2(",   feature,  "+ 1 )"),
         "Log10"      = paste("Log10(",  feature,  ")"),
-        "Log10 + 1"  = paste("Log10(",  feature,  "+ 1)"),
+        "Log10 + 1"  = paste("Log10(",  feature,  "+ 1 )"),
         "Squared"    = paste0(feature, "**2"),
         "Reciprocal" = paste0("1/", feature)
     )
@@ -50,13 +50,29 @@ assert_tbl_has_rows <- function(tbl){
     }
 }
 
-add_plotly_label1 <- function(tbl, title, name, group){
+#' Title
+#'
+#' @param tbl A tibble
+#' @param title A string
+#' @param name Name of a column
+#' @param group Name of a column
+#' @importFrom rlang .data
+#' @importFrom dplyr mutate
+add_plotly_label <- function(tbl, title, name, group){
     dplyr::mutate(tbl, label = paste0(
         "<b>", title, ":</b> ", {{name}}, " (", {{group}}, ")"
     ))
 }
 
-add_plotly_label2 <- function(tbl, cols){
+#' Add Plotly Value Label
+#'
+#' @param tbl A tibble with column label
+#' @param cols A vector of strings that are columns in the tibble
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+#' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom dplyr mutate group_by ungroup
+add_plotly_value_label <- function(tbl, cols){
     tbl %>%
         tidyr::pivot_longer(
             .,
@@ -70,7 +86,7 @@ add_plotly_label2 <- function(tbl, cols){
             value = sprintf("%0.3f", .data$value)
         )) %>%
         dplyr::group_by(.data$label) %>%
-        dplyr::mutate(value_label = stringr::str_c(
+        dplyr::mutate(value_label = paste0(
             .data$value_label,
             collapse = "</br>"
         )) %>%
@@ -81,7 +97,6 @@ add_plotly_label2 <- function(tbl, cols){
             values_from = .data$value
         )
 }
-
 
 
 #' Create Plotly Label
@@ -103,8 +118,8 @@ create_plotly_label <- function(
 ){
 
     tbl %>%
-        add_plotly_label1(title, {{name}}, {{group}}) %>%
-        add_plotly_label2(cols) %>%
+        add_plotly_label(title, {{name}}, {{group}}) %>%
+        add_plotly_value_label(cols) %>%
         tidyr::unite(
             "label",
             .data$label,
