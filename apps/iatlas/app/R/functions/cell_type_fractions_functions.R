@@ -33,10 +33,8 @@ build_plot_tbl <- function(class_name){
         dplyr::summarise(mean = mean(feature_value), count = dplyr::n()) %>%
         dplyr::ungroup() %>%
         dplyr::mutate(se = mean / sqrt(count)) %>%
-        .GlobalEnv$create_plotly_label(
-            name_column = "feature_name",
-            group_column = "group",
-            value_columns = c("mean", "se")
+        create_plotly_label(
+            .data$feature_name, .data$group, c("mean", "se")
         ) %>%
         dplyr::select(
             x = group,

@@ -23,9 +23,7 @@ til_maps_server <- function(
             paste(
                 "SELECT s.id AS sample_id, s.name AS sample_name, ",
                 "sl.name AS slide_barcode FROM samples s ",
-                "INNER JOIN patients_to_slides pts ",
-                "ON s.patient_id = pts.patient_id ",
-                "INNER JOIN slides sl ON pts.slide_id = sl.id ",
+                "INNER JOIN slides sl ON s.patient_id = sl.id ",
                 "WHERE sl.name IS NOT NULL"
             ) %>%
             .GlobalEnv$perform_query("Get sample table") %>%
