@@ -64,9 +64,5 @@ build_scatterplot_tbl <- function(tbl, clicked_feature, clicked_group){
         dplyr::filter(feature == clicked_feature, group == clicked_group) %>%
         dplyr::inner_join(sample_tbl, by = "sample_id") %>%
         dplyr::select(group, y = response_value, x = value, name = sample_name) %>%
-        create_plotly_label(
-            name_column = "name",
-            group_column = "group",
-            value_columns = c("x", "y")
-        )
+        create_plotly_label(.data$name, .data$group, cols = c("x", "y"))
 }

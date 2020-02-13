@@ -1,10 +1,18 @@
-create_class_list <- function(){
+#' Create Data Info Class List
+#'
+#' @importFrom magrittr %>%
+create_data_info_class_list <- function(){
     class_list <-
-        .GlobalEnv$create_class_list() %>%
+        create_class_list() %>%
         c("All classes" = -1L, .)
     return(class_list)
 }
 
+#' Create Feature Tibble
+#'
+#' @param class_choice_id An integer in class_id column of the features table,
+#' or -1
+#' @importFrom magrittr %>%
 create_feature_tbl <- function(class_choice_id){
     query <- paste0(
         "SELECT f.display AS feature, f.unit, f.class_id, f.order, ",
@@ -17,9 +25,14 @@ create_feature_tbl <- function(class_choice_id){
     }
     query <- paste0(query, " ORDER BY c.name, f.order, f.display")
 
-    .GlobalEnv$perform_query(query)
+    perform_query(query)
 }
 
+#' Format Feature Tibble
+#'
+#' @param feature_tbl A tibble with columns feature, unit and class
+#' @importFrom dplyr select
+#' @importFrom rlang .data
 format_feature_tbl <- function(feature_tbl){
     dplyr::select(
         feature_tbl,
@@ -29,6 +42,13 @@ format_feature_tbl <- function(feature_tbl){
     )
 }
 
+#' Filter Feature Tibble
+#'
+#' @param feature_tbl A tibble with columns class_id
+#' @param selected_row An integer that is a row number in the tibble
+#' @importFrom magrittr %>%
+#' @importFrom dplyr slice pull filter
+#' @importFrom rlang .data
 filter_feature_tbl <- function(feature_tbl, selected_row){
     id <- feature_tbl %>%
         dplyr::slice(selected_row) %>%
@@ -37,6 +57,12 @@ filter_feature_tbl <- function(feature_tbl, selected_row){
      dplyr::filter(feature_tbl, .data$class_id == id)
 }
 
+#' Format Filtered Feature Tibble
+#'
+#' @param filtered_feature_tbl A tibble with columns order, feature, unit, and
+#' method_tag
+#' @importFrom dplyr select
+#' @importFrom rlang .data
 format_filtered_feature_tbl <- function(filtered_feature_tbl){
     dplyr::select(
         filtered_feature_tbl,
@@ -47,10 +73,3 @@ format_filtered_feature_tbl <- function(filtered_feature_tbl){
     )
 }
 
-get_selected_method_tags <- function(filtered_feature_tbl){
-    filtered_feature_tbl %>%
-        dplyr::select(.data$method_tag) %>%
-        tidyr::drop_na() %>%
-        dplyr::distinct() %>%
-        dplyr::pull(.data$method_tag)
-}
