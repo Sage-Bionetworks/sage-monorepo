@@ -95,31 +95,49 @@ To run the app locally:
    shiny::runApp()
    ```
 
-## Development
+## Installing and Upgrading Packages
+
+This project uses [renv](https://rstudio.github.io/renv/reference/install.html) to manage packages. The definitive list of required packages and versions is stored in the `renv.lock` file.
 
 When adding any new dependencies to the application, they may be added using (where "useful_package" is the name of the package to add):
 
 ```R
+# install a package
 renv::install("useful_package")
-```
 
-see [https://rstudio.github.io/renv/reference/install.html](https://rstudio.github.io/renv/reference/install.html) for more details.
-
-Once a new package is added, run:
-
-```R
+# update the renv.lock file
 renv::snapshot()
 ```
 
-This will ensure the new package is added to the renv.lock file.
+Git works will with renv. Once you validate the package should be kept, `git add renv.lock` to the repo and everyone else will automatically install it when they git-pull and re-open their R session or run renv::restore.
+
+If you decide you don't want to include the package, just `git checkout renv.lock` to reset your dependencies to the point before you made changes.
 
 To remove an installed package, run (where "useful_package" is the name of the package to remove):
 
 ```R
 renv::remove("useful_package")
+renv::snapshot()
 ```
 
-For more on package management with renv, please see [https://rstudio.github.io/renv/articles/renv.html](https://rstudio.github.io/renv/articles/renv.html)
+And git-commit it once you are sure you want to keep the changes.
+
+
+### Upgrading Packages
+
+You can use renv::upgrade("package-name") to upgrade a package, but it'll always update to the very latest uniless you manually tell it otherwise.
+
+* IMPORTANT: A few of the packages we currently use don't work with the latest versions, so **don't use renv::update to update all packages.**
+* Known upgrade-problems:
+  - don't upgrade shinycssloaders to v0.3.0
+  - don't upgrade plotly to v4.9.2
+
+### Installing Packages and RsConnect
+
+This application is deployed using rsconnect::deployApp(). As of the current version (0.8.16-9000), rsconnect does not support using the renv.lock file to determin which packages to deploy. Instead, it uses its own till (rsconnect::appDependencies) to detect your app's dependencies from the R source files and the DESCRIPTION file. The good news is it will generally get the correct version, since it'll use the current version you have installed and renv manages that tightly. The bad news is sometimes it won't detect you need a package. Here's how you solve that problem:
+
+* If a package is missing after you push to the staging branch and check the staging server, add that the package name to the `Imports:` section of the DESCRIPTION file.
+
 
 ## Deployment
 
