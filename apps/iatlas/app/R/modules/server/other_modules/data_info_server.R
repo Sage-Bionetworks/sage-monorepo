@@ -7,7 +7,7 @@ data_info_server <- function(
 
     source("R/data_info_functions.R", local = T)
 
-    class_list <- create_class_list()
+    class_list <- create_data_info_class_list()
 
     output$classes <- shiny::renderUI({
         shiny::selectInput(
@@ -46,7 +46,10 @@ data_info_server <- function(
 
     selected_method_tags <- shiny::reactive({
         shiny::req(filtered_feature_tbl())
-        get_selected_method_tags(filtered_feature_tbl())
+        .GlobalEnv$get_unique_values_from_col(
+            filtered_feature_tbl(),
+            method_tag
+        )
     })
 
     output$method_buttons <- shiny::renderUI({
