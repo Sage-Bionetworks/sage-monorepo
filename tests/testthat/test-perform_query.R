@@ -1,5 +1,4 @@
 test_that("perform_query", {
-    pool <- connect_to_db()
-    tbl <- perform_query("SELECT id, display from features", db_pool = pool)
+    tbl <- perform_query("SELECT id, display from features")
     expect_named(tbl, c("id", "display"))
 })
