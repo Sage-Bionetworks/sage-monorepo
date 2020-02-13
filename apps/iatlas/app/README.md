@@ -99,6 +99,8 @@ To run the app locally:
 
 We recommend the following workflow. When you are starting feature or project:
 
+### Working Branch
+
 ```shell
 # checkout and get the latest from staging
 git checkout staging
@@ -110,26 +112,39 @@ git checkout -b feature/my-new-feature
 # > git branch feature/my-new-feature
 # > git checkout feature/my-new-feature
 
-# do your work and commit your changes
+# Do your work and periodically commit your changes:
+git add .
+git commit -m "my message"
+git push
 
 # Keep up to date with changes on staging by others:
 git checkout staging
 git pull
 git checkout feature/my-new-feature
 git merge staging
+```
 
-# Ready to commit to staging?
-git checkout staging
-git pull # should be no changes, otherwise, update your branch as above
-git merge feature/my-new-feature
+### Staging
+
+When you are ready to deploy your code to staging, you'll need to create a pull request. First, push your branch to Github:
+
+```shell
 git push
 ```
 
-Once you update staging, our GitLab CI/CD will automatically deploy your changes to the staging server. Note: It can take 10-15 minutes to update.
+Then go to the repository on Github, go to your branch, and create a pull-request:
+
+* https://github.com/CRI-iAtlas/iatlas-app
+
+Once your pull request has been accepted, our GitLab CI/CD will automatically deploy your changes to the staging server. Note: It can take 10-15 minutes to update.
 
 * Staging Server: https://isb-cgc.shinyapps.io/iatlas-staging/
 
-Once you validate everything is working in staging, the staging branch can be merged into master and then deployed to production. (TODO: expand on the production deployment process)
+### Master
+
+Once you validate everything is working in staging, the staging branch can be merged into master and then deployed to production.
+
+* TODO: expand on the production deployment process
 
 ## Installing and Upgrading Packages
 
