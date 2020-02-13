@@ -95,6 +95,42 @@ To run the app locally:
    shiny::runApp()
    ```
 
+## Branches: Staging & Master
+
+We recommend the following workflow. When you are starting feature or project:
+
+```shell
+# checkout and get the latest from staging
+git checkout staging
+git pull
+
+# create your new branch
+git checkout -b feature/my-new-feature
+# 'git checkout -b' is the same as:
+# > git branch feature/my-new-feature
+# > git checkout feature/my-new-feature
+
+# do your work and commit your changes
+
+# Keep up to date with changes on staging by others:
+git checkout staging
+git pull
+git checkout feature/my-new-feature
+git merge staging
+
+# Ready to commit to staging?
+git checkout staging
+git pull # should be no changes, otherwise, update your branch as above
+git merge feature/my-new-feature
+git push
+```
+
+Once you update staging, our GitLab CI/CD will automatically deploy your changes to the staging server. Note: It can take 10-15 minutes to update.
+
+* Staging Server: https://isb-cgc.shinyapps.io/iatlas-staging/
+
+Once you validate everything is working in staging, the staging branch can be merged into master and then deployed to production. (TODO: expand on the production deployment process)
+
 ## Installing and Upgrading Packages
 
 This project uses [renv](https://rstudio.github.io/renv/reference/install.html) to manage packages. The definitive list of required packages and versions is stored in the `renv.lock` file.
