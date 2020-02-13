@@ -12,3 +12,4 @@ load_config(Sys.getenv("R_CONFIG_ACTIVE", unset = "dev"))
 
 cat(crayon::blue("SUCCESS: iatlas.app is ready to go.\n"))
 cat(crayon::blue(paste0("RUN: ",crayon::bold("shiny::runApp()\n"))))
+cat(crayon::blue(paste0("STAGING: ",crayon::bold("git push to the staging branch\n"))))
