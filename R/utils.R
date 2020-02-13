@@ -87,10 +87,13 @@ add_plotly_label2 <- function(tbl, cols){
 #' Create Plotly Label
 #'
 #' @param tbl A tibble
-#' @param value_columns columns
+#' @param name A column
+#' @param group A column
+#' @param cols A vector of strings, whioch are columns in the tibble
 #' @param title A string
-#' @param name_column A column
-#' @param group_column A column
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+#' @importFrom tidyr unite
 create_plotly_label <- function(
     tbl,
     name,
@@ -103,7 +106,7 @@ create_plotly_label <- function(
         add_plotly_label1(title, {{name}}, {{group}}) %>%
         add_plotly_label2(cols) %>%
         tidyr::unite(
-            label,
+            "label",
             .data$label,
             .data$value_label,
             sep = "</br></br>"
