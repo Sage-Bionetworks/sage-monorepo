@@ -8,7 +8,7 @@ univariate_driver_server <- function(
     ns <- session$ns
 
     source("R/modules/server/submodules/volcano_plot_server.R", local = T)
-    source("R/functions/univariate_driver_functions.R", local = T)
+    source("R/univariate_driver_functions.R", local = T)
 
     output$response_options <- shiny::renderUI({
         shiny::req(feature_named_list())
