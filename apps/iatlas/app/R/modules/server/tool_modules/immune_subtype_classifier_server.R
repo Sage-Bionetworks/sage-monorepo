@@ -2,10 +2,10 @@ immune_subtype_classifier_server <- function(
     input, output, session, group_display_choice, group_internal_choice,
     subset_df, plot_colors) {
 
-    source("R/functions/immune_subtype_classifier_functions.R", local = T)
-
     # get new calls
     getCalls <- shiny::eventReactive(input$subtypeGObutton, {
+
+      source("R/functions/immune_subtype_classifier_functions.R", local = T)
 
       newdat <- input$expr_file_pred
 
