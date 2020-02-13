@@ -96,12 +96,12 @@ shiny::shinyServer(function(input, output, session) {
         cohort_colors
     )
 
-    # shiny::callModule(
-    #     driver_associations_server,
-    #     "driver_associations",
-    #     cohort_group_name,
-    #     feature_list
-    # )
+    shiny::callModule(
+        driver_associations_server,
+        "driver_associations",
+        cohort_group_name,
+        feature_list
+    )
 
 
     shiny::observeEvent(input$link_to_tumor_microenvironment, {
