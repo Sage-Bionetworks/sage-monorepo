@@ -1,86 +1,121 @@
+#' Transform Feature String
+#'
+#' @param feature A string, the name of the feature
+#' @param transformation A string, the name of the transformation
 transform_feature_string <- function(feature, transformation){
     switch(
         transformation,
-        "None" = feature,
-        "Log2" = stringr::str_c("Log2( ", feature, " )"),
-        "Log2 + 1" = stringr::str_c("Log2( ", feature,  " + 1 )"),
-        "Log10" = stringr::str_c("Log10( ",  feature,  " )"),
-        "Log10 + 1" = stringr::str_c("Log10( ", feature, " + 1 )"),
-        "Squared" = stringr::str_c(feature, "**2"),
-        "Reciprocal" = stringr::str_c("1/", feature)
+        "None"       = feature,
+        "Log2"       = paste("Log2(",   feature,  ")"),
+        "Log2 + 1"   = paste("Log2(",   feature,  "+ 1)"),
+        "Log10"      = paste("Log10(",  feature,  ")"),
+        "Log10 + 1"  = paste("Log10(",  feature,  "+ 1)"),
+        "Squared"    = paste0(feature, "**2"),
+        "Reciprocal" = paste0("1/", feature)
     )
 }
 
+#' Transform Feature Formula
+#'
+#' @param feature A string, the name of the feature
+#' @param transformation A string, the name of the transformation
 transform_feature_formula <- function(feature, transformation){
     switch(
         transformation,
-        "None" = feature,
-        "Squared" = stringr::str_c("I(", feature, "**2)"),
-        "Log10" = stringr::str_c("I(log10(", feature, "))"),
-        "Reciprocal" = stringr::str_c("I(1/", feature, ")")
+        "None"       = feature,
+        "Squared"    = paste0("I(",       feature, "**2)"),
+        "Log10"      = paste0("I(log10(", feature, "))"),
+        "Reciprocal" = paste0("I(1/",     feature, ")")
     )
 }
 
-
-assert_df_has_columns <- function(df, columns){
-    missing_columns <- columns[!columns %in% colnames(df)]
+#' Assert Tibble Has Columns
+#'
+#' @param tbl A tibble
+#' @param columns a vector of columns
+assert_tbl_has_columns <- function(tbl, columns){
+    missing_columns <- columns[!columns %in% colnames(tbl)]
     if (length(missing_columns) != 0) {
-        stop("df has missing columns: ",
-             stringr::str_c(missing_columns, collapse = ", "))
+        stop("tbl has missing columns: ",
+             paste0(missing_columns, collapse = ", "))
     }
 }
 
-assert_df_has_rows <- function(df){
-    if (nrow(df) == 0) {
-        stop("result df is empty")
+#' Assert Tibble has Rows
+#'
+#' @param tbl A tibble
+assert_tbl_has_rows <- function(tbl){
+    if (nrow(tbl) == 0) {
+        stop("result tbl is empty")
     }
 }
 
+add_plotly_label1 <- function(tbl, title, name, group){
+    dplyr::mutate(tbl, label = paste0(
+        "<b>", title, ":</b> ", {{name}}, " (", {{group}}, ")"
+    ))
+}
+
+add_plotly_label2 <- function(tbl, cols){
+    tbl %>%
+        tidyr::pivot_longer(
+            .,
+            cols,
+            names_to  = "value_name",
+            values_to = "value"
+        ) %>%
+        dplyr::mutate(value_label = stringr::str_glue(
+            "{name}: {value}",
+            name = stringr::str_to_upper(.data$value_name),
+            value = sprintf("%0.3f", .data$value)
+        )) %>%
+        dplyr::group_by(.data$label) %>%
+        dplyr::mutate(value_label = stringr::str_c(
+            .data$value_label,
+            collapse = "</br>"
+        )) %>%
+        dplyr::ungroup() %>%
+        tidyr::pivot_wider(
+            .,
+            names_from = .data$value_name,
+            values_from = .data$value
+        )
+}
+
+
+
+#' Create Plotly Label
+#'
+#' @param tbl A tibble
+#' @param value_columns columns
+#' @param title A string
+#' @param name_column A column
+#' @param group_column A column
 create_plotly_label <- function(
-    df,
-    value_columns,
-    title = "ParticipantBarcode",
-    name_column = "name",
-    group_column = "group") {
+    tbl,
+    name,
+    group,
+    cols,
+    title = "ParticipantBarcode"
+){
 
-    result_df <- wrapr::let(
-        alias = c(
-            namevar = name_column,
-            groupvar = group_column),
-        df %>%
-            dplyr::mutate(
-                label = stringr::str_glue(
-                    "<b>{title}:</b> {name} ({group})",
-                    title = title,
-                    name = namevar,
-                    group = groupvar
-                )) %>%
-            tidyr::gather(value_name, value, dplyr::one_of(value_columns)) %>%
-            dplyr::mutate(
-                value_label = stringr::str_glue(
-                    "{name}: {value}",
-                    name = stringr::str_to_upper(value_name),
-                    value = sprintf("%0.3f", value)
-                )
-            ) %>%
-            dplyr::group_by(label) %>%
-            dplyr::mutate(value_label = stringr::str_c(value_label, collapse = "</br>")) %>%
-            dplyr::ungroup() %>%
-            tidyr::spread(value_name, value) %>%
-            tidyr::unite(label, label, value_label, sep = "</br></br>")
-    )
-    assert_df_has_columns(result_df, c("label", name_column, group_column, value_columns))
-    assert_df_has_rows(result_df)
-    return(result_df)
+    tbl %>%
+        add_plotly_label1(title, {{name}}, {{group}}) %>%
+        add_plotly_label2(cols) %>%
+        tidyr::unite(
+            label,
+            .data$label,
+            .data$value_label,
+            sep = "</br></br>"
+        )
 }
-
 
 #' Get Unique Values from Column
 #'
 #' @param tbl A tibble
 #' @param col A column in the tibble
 #' @importFrom dplyr select distinct pull
-#' @importFrom tydyr drop_na
+#' @importFrom tidyr drop_na
 #' @importFrom rlang .data
 get_unique_values_from_col <- function(tbl, col){
     tbl %>%
