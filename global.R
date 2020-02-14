@@ -1,6 +1,6 @@
 library(magrittr)
 
-source("R/connect_to_db.R")
+source("R/database_functions.R")
 pool <- connect_to_db()
 rm(connect_to_db)
 
