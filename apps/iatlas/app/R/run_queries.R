@@ -3,6 +3,15 @@
 if (getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 
 
+#' Build Sample Name Table
+#'
+#' @importFrom magrittr %>%
+build_sample_name_tbl <- function(){
+    "SELECT id AS sample_id, name AS sample_name FROM samples" %>%
+        perform_query("Build Sample Name Table")
+}
+
+
 #' Build Feature Value Tibble from Feature IDs
 #'
 #' @param feature_ids Integers in the id column of the features_to_samples table

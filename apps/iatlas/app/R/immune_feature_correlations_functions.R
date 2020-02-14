@@ -57,15 +57,22 @@ build_ifc_heatmap_matrix <- function(tbl, method){
         as.matrix()
 }
 
-build_ifc_scatterplot_tbl <- function(tbl, clicked_feature, clicked_group){
-    sample_tbl <-
-        "SELECT id AS sample_id, name AS sample_name FROM samples" %>%
-        .GlobalEnv$perform_query("Get sample table")
-
+#' Title
+#'
+#' @param tbl
+#' @param sample_tbl
+#' @param feature
+#' @param group
+#'
+#' @return
+#' @export
+#'
+#' @examples
+build_ifc_scatterplot_tbl <- function(tbl, sample_tbl, feature, group){
     tbl %>%
         dplyr::filter(
-            .data$feature_name == clicked_feature,
-            .data$group == clicked_group
+            .data$feature_name == feature,
+            .data$group == group
         ) %>%
         dplyr::inner_join(sample_tbl, by = "sample_id") %>%
         dplyr::select(
