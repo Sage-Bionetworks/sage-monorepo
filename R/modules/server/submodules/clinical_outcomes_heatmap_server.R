@@ -71,7 +71,7 @@ clinical_outcomes_heatmap_server <- function(
     output$heatmap <- plotly::renderPlotly({
         shiny::req(heatmap_tbl())
 
-        heatmap_matrix <- build_heatmap_matrix(heatmap_tbl())
+        heatmap_matrix <- build_co_heatmap_matrix(heatmap_tbl())
 
         shiny::validate(shiny::need(
             nrow(heatmap_matrix > 0) & ncol(heatmap_matrix > 0),
