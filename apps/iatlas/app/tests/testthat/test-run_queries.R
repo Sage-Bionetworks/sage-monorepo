@@ -5,13 +5,12 @@ test_that("Build Feature Value Tibble from Feature IDs", {
 })
 
 test_that("Build Feature Value Tibble", {
-    result1 <- build_feature_value_tbl_from_class_id(1)
-    expect_named(result1, c("sample_id", "value", "feature"))
+    result1 <- build_feature_value_tbl_from_class_ids(1)
+    expect_named(
+        result1,
+        c("feature_id", "sample_id", "value", "unit", "feature", "order")
+    )
 })
-
-
-
-
 
 test_that("Build Feature Tibble", {
     result1 <- build_feature_tbl()
@@ -22,10 +21,6 @@ test_that("Build Feature Tibble", {
     expect_named(result2, c("class", "display", "feature"))
     expect_true(all(result2$class %in% class_tbl$name))
 })
-
-
-
-
 
 test_that("Create Class List", {
     result1 <- create_class_list()
@@ -60,9 +55,6 @@ test_that("Get Sample IDs from Dataset", {
     result4 <- get_sample_ids_from_dataset("Immune Subtype")
     expect_type(result4, "integer")
 })
-
-
-
 
 test_that("Build Cohort Table By Group", {
     expect_named(
