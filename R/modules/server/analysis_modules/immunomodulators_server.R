@@ -85,6 +85,7 @@ immunomodulators_server <- function(
     })
 
     distplot_eventdata <- shiny::reactive({
+        shiny::req(distplot_tbl(), distplot_function())
         plotly::event_data("plotly_click", "immunomodulators_dist_plot")
     })
 
@@ -99,7 +100,6 @@ immunomodulators_server <- function(
     # histplot ----------------------------------------------------------------
 
     histplot_tbl <- shiny::reactive({
-
         eventdata <- distplot_eventdata()
         shiny::validate(shiny::need(!is.null(eventdata), "Click plot above"))
         clicked_group <- eventdata$x[[1]]

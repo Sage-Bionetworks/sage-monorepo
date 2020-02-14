@@ -97,6 +97,7 @@ io_targets_server <- function(
     })
 
     distplot_eventdata <- shiny::reactive({
+        shiny::req(distplot_tbl(), distplot_function())
         plotly::event_data("plotly_click", "io_targets_dist_plot")
     })
 
