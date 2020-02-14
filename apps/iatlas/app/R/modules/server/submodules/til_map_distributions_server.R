@@ -60,6 +60,7 @@ til_map_distributions_server <- function(
     })
 
     output$distplot <- plotly::renderPlotly({
+        shiny::req(distplot_tbl(), group_name(), feature_name(), plot_colors())
         distplot_function()(
             distplot_tbl(),
             source_name = "immune_feature_dist_plot",
@@ -71,10 +72,8 @@ til_map_distributions_server <- function(
     })
 
     distplot_eventdata <- shiny::reactive({
-        plotly::event_data(
-            "plotly_click",
-            source = "immune_feature_dist_plot"
-        )
+        shiny::req(distplot_tbl(), group_name(), feature_name(), plot_colors())
+        plotly::event_data("plotly_click", source = "immune_feature_dist_plot")
     })
 
     distplot_selected_group <- shiny::reactive({

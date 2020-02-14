@@ -60,7 +60,7 @@ clinical_outcomes_heatmap_server <- function(
 
     feature_tbl <- shiny::reactive({
         shiny::req(input$class_choice_id)
-        build_feature_value_tbl_from_class_id(input$class_choice_id)
+        .GlobalEnv$build_feature_value_tbl_from_class_ids(input$class_choice_id)
     })
 
     heatmap_tbl <- shiny::reactive({
@@ -82,6 +82,7 @@ clinical_outcomes_heatmap_server <- function(
     })
 
     heatmap_eventdata <- shiny::reactive({
+        shiny::req(heatmap_tbl())
         plotly::event_data("plotly_click", "clinical_outcomes_heatmap")
     })
 
