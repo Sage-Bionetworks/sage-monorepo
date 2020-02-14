@@ -48,7 +48,7 @@ immune_feature_distributions_server <- function(
             input$feature_choice_id,
             input$scale_method
         )
-        build_distplot_tbl(
+        build_ifd_distplot_tbl(
             sample_tbl(),
             input$feature_choice_id,
             input$scale_method
@@ -83,6 +83,7 @@ immune_feature_distributions_server <- function(
     })
 
     distplot_eventdata <- shiny::reactive({
+        shiny::req(distplot_tbl())
         plotly::event_data("plotly_click", "immune_feature_dist_plot")
     })
 
@@ -106,7 +107,7 @@ immune_feature_distributions_server <- function(
             selected_group %in% groups, "Click above barchart"
         ))
 
-        build_histplot_tbl(distplot_tbl(), selected_group)
+        build_ifd_histplot_tbl(distplot_tbl(), selected_group)
     })
 
     output$histplot <- plotly::renderPlotly({
