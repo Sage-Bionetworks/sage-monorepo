@@ -33,3 +33,28 @@ connect_to_db <- function(
     maxSize = 10
   ))
 }
+
+present <- function (a) {!identical(a, NA) && !identical(a, NULL)}
+
+create_global_db_pool <- function() {
+  if (!present(.GlobalEnv$pool)) {
+    .GlobalEnv$pool <- connect_to_db()
+  } else {
+    cat(crayon::yellow("WARNING-create_global_db_pool: global db pool already created\n"))
+    .GlobalEnv$pool
+  }
+}
+
+vivify_global_db_pool <- function() {
+  if (!present(.GlobalEnv$pool)) create_global_db_pool()
+  else .GlobalEnv$pool
+}
+
+release_global_db_pool <- function() {
+  if (present(.GlobalEnv$pool)) {
+    pool::poolClose(.GlobalEnv$pool)
+    rm(pool, pos = ".GlobalEnv")
+  } else {
+    cat(crayon::yellow("WARNING-release_global_db_pool: Nothing to do. Global db pool does not exist. \n"))
+  }
+}
