@@ -69,7 +69,6 @@ overall_cell_proportions_server  <- function(
             xlab = "Stromal Fraction",
             ylab = "Leukocyte Fraction",
             label_col = "label",
-            fill_colors = "blue",
             title = barplot_selected_group(),
             identity_line = TRUE
         )
