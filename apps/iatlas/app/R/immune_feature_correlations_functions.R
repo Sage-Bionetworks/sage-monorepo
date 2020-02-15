@@ -2,7 +2,7 @@
 #'
 #' @param response_tbl A tibble with columns sample_id, feature_id, and value
 #' @param feature_tbl A tibble with columns sample_id, feature_id, value, and
-#' order
+#' order, feature
 #' @param sample_tbl A tibble with columns sample_id, and group
 #' @importFrom purrr reduce
 #' @importFrom dplyr inner_join filter select
@@ -37,10 +37,11 @@ build_ifc_value_tbl <- function(response_tbl, feature_tbl, sample_tbl){
 #' @importFrom tibble column_to_rownames
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
+#' @importFrom stats cor
 build_ifc_heatmap_matrix <- function(tbl, method){
     tbl %>%
         dplyr::group_by(.data$group, .data$feature_name, .data$order) %>%
-        dplyr::summarise(cor_value = cor(
+        dplyr::summarise(cor_value = stats::cor(
             .data$feature_value,
             .data$response_value,
             method = method
@@ -57,17 +58,16 @@ build_ifc_heatmap_matrix <- function(tbl, method){
         as.matrix()
 }
 
-#' Title
+#' Build Immune Feature Scatterplot Tibble
 #'
-#' @param tbl
-#' @param sample_tbl
-#' @param feature
-#' @param group
-#'
-#' @return
-#' @export
-#'
-#' @examples
+#' @param tbl A tibble with columns feature_name, response_value, feature_value,
+#' sample_id, group
+#' @param sample_tbl A tibble with columns sample_id, and sample_name
+#' @param feature A string that is in the tbl feature_name column
+#' @param group A string that is in the tbl group column
+#' @importFrom dplyr filter inner_join select
+#' @importFrom rlang .data
+#' @importFrom magrittr %>%
 build_ifc_scatterplot_tbl <- function(tbl, sample_tbl, feature, group){
     tbl %>%
         dplyr::filter(
