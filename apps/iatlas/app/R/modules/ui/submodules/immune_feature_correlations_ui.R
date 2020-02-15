@@ -16,15 +16,15 @@ immune_feature_correlations_ui <- function(id) {
             .GlobalEnv$optionsBox(
                 width = 12,
                 shiny::column(
-                    width = 8,
+                    width = 6,
                     shiny::uiOutput(ns("class_selection_ui"))
                 ),
                 shiny::column(
-                    width = 4,
+                    width = 3,
                     shiny::uiOutput(ns("response_selection_ui"))
                 ),
                 shiny::column(
-                    width = 4,
+                    width = 3,
                     shiny::selectInput(
                         ns("correlation_method"),
                         "Select or Search for Correlation Method",

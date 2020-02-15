@@ -9,28 +9,30 @@ immune_feature_correlations_server <- function(
 
     ns <- session$ns
 
-    source("R/functions/immune_feature_correlations_functions.R", local = T)
+    source("R/immune_feature_correlations_functions.R", local = T)
     source("R/modules/server/submodules/plotly_server.R", local = T)
+
+    lf_id <- .GlobalEnv$get_feature_id_from_display("Leukocyte Fraction")
+    dna_alteration_id <- .GlobalEnv$get_class_id_from_name("DNA Alteration")
+    sample_name_tbl   <- .GlobalEnv$build_sample_name_tbl()
+    class_list        <- .GlobalEnv$create_class_list()
 
     output$class_selection_ui <- shiny::renderUI({
         shiny::selectInput(
-            ns("class_choice_id"),
-            "Select or Search for Variable Class",
-            selected = .GlobalEnv$get_class_id_from_name("DNA Alteration"),
-            choices = .GlobalEnv$create_class_list()
+            inputId  = ns("class_choice_id"),
+            label    = "Select or Search for Variable Class",
+            choices  = class_list,
+            selected = dna_alteration_id
         )
     })
 
     output$response_selection_ui <- shiny::renderUI({
         shiny::req(feature_named_list())
-
         shiny::selectInput(
-            ns("response_choice_id"),
-            "Select or Search for Response Variable",
-            choices = feature_named_list(),
-            selected = .GlobalEnv$get_feature_id_from_display(
-                "Leukocyte Fraction"
-            ),
+            inputId  = ns("response_choice_id"),
+            label    = "Select or Search for Response Variable",
+            choices  = feature_named_list(),
+            selected = lf_id
         )
     })
 
@@ -41,28 +43,24 @@ immune_feature_correlations_server <- function(
             .GlobalEnv$get_feature_display_from_id()
     })
 
+    response_tbl <- shiny::reactive({
+        shiny::req(input$response_choice_id)
+        .GlobalEnv$build_feature_value_tbl_from_ids(input$response_choice_id)
+    })
+
+    feature_tbl <- shiny::reactive({
+        shiny::req(input$class_choice_id)
+        .GlobalEnv$build_feature_value_tbl_from_class_ids(input$class_choice_id)
+    })
+
     value_tbl <- shiny::reactive({
-        shiny::req(
-            sample_tbl(),
-            input$class_choice_id,
-            input$response_choice_id
-        )
-        build_value_tbl(
-            sample_tbl(),
-            input$class_choice_id,
-            input$response_choice_id
-        )
+        shiny::req(response_tbl(), feature_tbl(), sample_tbl())
+        build_ifc_value_tbl(response_tbl(), feature_tbl(), sample_tbl())
     })
 
     heatmap_matrix <- shiny::reactive({
-        shiny::req(
-            value_tbl(),
-            input$correlation_method
-        )
-        build_heatmap_matrix(
-            value_tbl(),
-            input$correlation_method
-        )
+        shiny::req(value_tbl(),  input$correlation_method)
+        build_ifc_heatmap_matrix(value_tbl(), input$correlation_method)
     })
 
     output$heatmap <- plotly::renderPlotly({
@@ -75,6 +73,7 @@ immune_feature_correlations_server <- function(
     })
 
     heatmap_eventdata <- shiny::reactive({
+        shiny::req(heatmap_matrix())
         plotly::event_data("plotly_click", "immune_features_heatmap")
     })
 
@@ -87,48 +86,47 @@ immune_feature_correlations_server <- function(
     )
 
     scatterplot_tbl <- shiny::reactive({
-        eventdata <- heatmap_eventdata()
-        shiny::validate(shiny::need(eventdata, "Click above heatmap"))
-        clicked_group <- get_values_from_eventdata(eventdata)
-        clicked_feature <- get_values_from_eventdata(eventdata, "y")
+        shiny::req(value_tbl())
+        shiny::validate(shiny::need(heatmap_eventdata(), "Click above heatmap"))
+        group <- get_values_from_eventdata(heatmap_eventdata())
+        feature <- get_values_from_eventdata(heatmap_eventdata(), "y")
 
-
-        value_tbl() %>%
-            build_scatterplot_tbl(clicked_feature, clicked_group) %>%
-            create_scatterplot(
-                xlab =  clicked_feature,
-                ylab =  response_name(),
-                title = clicked_group,
-                label_col = "label",
-                fill_colors = "blue"
-            )
+         build_ifc_scatterplot_tbl(
+             value_tbl(),
+             sample_name_tbl,
+             feature,
+             group
+         )
     })
 
-
     output$scatterPlot <- plotly::renderPlotly({
-        shiny::req(value_tbl(), response_name())
+        shiny::req(value_tbl(), scatterplot_tbl(), response_name())
+        shiny::validate(shiny::need(heatmap_eventdata(), "Click above heatmap"))
 
-        eventdata <- heatmap_eventdata()
-        shiny::validate(shiny::need(eventdata, "Click above heatmap"))
-
-        clicked_group <- eventdata$x[[1]]
-        clicked_feature <- eventdata$y[[1]]
-
+        clicked_group <- heatmap_eventdata()$x[[1]]
+        clicked_feature <- heatmap_eventdata()$y[[1]]
 
         shiny::validate(shiny::need(
             all(
-                clicked_feature %in% value_tbl()$feature,
+                clicked_feature %in% value_tbl()$feature_name,
                 clicked_group %in% value_tbl()$group
             ),
             "Click above heatmap"
         ))
-        scatterplot_tbl()
+        create_scatterplot(
+            scatterplot_tbl(),
+            xlab =  clicked_feature,
+            ylab =  response_name(),
+            title = clicked_group,
+            label_col = "label",
+            fill_colors = "blue"
+        )
     })
 
     shiny::callModule(
         plotly_server,
         "scatterplot",
-        plot_tbl       = heatmap_matrix
+        plot_tbl = scatterplot_tbl
     )
 }
 
