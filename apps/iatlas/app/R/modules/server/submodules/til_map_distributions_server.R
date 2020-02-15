@@ -10,6 +10,7 @@ til_map_distributions_server <- function(
 
     ns <- session$ns
 
+    source("R/modules/server/submodules/distribution_plot_server.R", local = T)
     source("R/functions/til_map_distributions_functions.R", local = T)
 
     output$selection_ui <- shiny::renderUI({
@@ -22,108 +23,45 @@ til_map_distributions_server <- function(
     })
 
     feature_name <- shiny::reactive({
+        print(input$feature_choice_id)
         shiny::req(input$feature_choice_id)
         get_feature_name(as.integer(input$feature_choice_id))
     })
 
     feature_plot_label <- shiny::reactive({
+        print(input$scale_method_choice)
         shiny::req(
             feature_name(),
-            input$scale_method
+            input$scale_method_choice
         )
         .GlobalEnv$transform_feature_string(
             feature_name(),
-            input$scale_method
+            input$scale_method_choice
         )
     })
 
-    # distplot ----------------------------------------------------------------
     distplot_tbl <- shiny::reactive({
         shiny::req(
             sample_tbl(),
             input$feature_choice_id,
-            input$scale_method
+            input$scale_method_choice
         )
         build_distplot_tbl(
             sample_tbl(),
             input$feature_choice_id,
-            input$scale_method
+            input$scale_method_choice
         )
     })
 
-    distplot_function <- shiny::reactive({
-        switch(
-            input$plot_type,
-            "Violin" = create_violinplot,
-            "Box" = create_boxplot
-        )
-    })
-
-    output$distplot <- plotly::renderPlotly({
-        shiny::req(distplot_tbl(), group_name(), feature_name(), plot_colors())
-        distplot_function()(
-            distplot_tbl(),
-            source_name = "immune_feature_dist_plot",
-            xlab = group_name(),
-            ylab = feature_plot_label(),
-            title = feature_name(),
-            fill_colors = plot_colors()
-        )
-    })
-
-    distplot_eventdata <- shiny::reactive({
-        shiny::req(distplot_tbl(), group_name(), feature_name(), plot_colors())
-        plotly::event_data("plotly_click", source = "immune_feature_dist_plot")
-    })
-
-    distplot_selected_group <- shiny::reactive({
-        shiny::req(distplot_eventdata())
-        selected_group <- distplot_eventdata()$x[[1]]
-    })
-
-    output$distplot_group_text <- shiny::renderText({
-        shiny::validate(shiny::need(distplot_eventdata(), "Click above plot"))
-        shiny::req(
-            group_tbl(),
-            distplot_selected_group()
-        )
-
-        group_tbl() %>%
-            dplyr::filter(group == distplot_selected_group()) %>%
-            dplyr::mutate(text = paste0(name, ": ", characteristics)) %>%
-            dplyr::pull(text)
-    })
-
-    output$download_tbl <- shiny::downloadHandler(
-        filename = function() stringr::str_c("data-", Sys.Date(), ".csv"),
-        content = function(con) readr::write_csv(plot_tbl(), con)
+    shiny::callModule(
+        distribution_plot_server,
+        "tilmap_dist_plot",
+        distplot_tbl    = distplot_tbl,
+        group_tbl       = group_tbl,
+        distplot_type   = shiny::reactive(input$plot_type_choice),
+        distplot_colors = plot_colors,
+        distplot_xlab   = group_name,
+        distplot_ylab   = feature_plot_label,
+        distplot_title  = feature_name
     )
-
-    # histplot ----------------------------------------------------------------
-    histplot_tbl <- shiny::reactive({
-        shiny::validate(shiny::need(distplot_eventdata(), "Click above plot"))
-        shiny::req(distplot_tbl(), distplot_selected_group())
-
-        groups <- dplyr::pull(distplot_tbl(), "x")
-        shiny::validate(shiny::need(
-            distplot_selected_group() %in% groups,
-            "Click above barchart"
-        ))
-
-        distplot_tbl() %>%
-            dplyr::filter(x == distplot_selected_group()) %>%
-            dplyr::select(x = y)
-    })
-
-    output$histplot <- plotly::renderPlotly({
-        .GlobalEnv$create_histogram(
-            histplot_tbl(),
-            source_name = "immune_feature_histogram",
-            x_lab = feature_plot_label(),
-            y_lab = "Count",
-            title = distplot_selected_group(),
-        )
-    })
-
-
 }

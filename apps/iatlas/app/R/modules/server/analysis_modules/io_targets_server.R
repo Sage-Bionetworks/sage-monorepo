@@ -10,7 +10,7 @@ io_targets_server <- function(
 
     ns <- session$ns
 
-    source("R/modules/server/submodules/plotly_server.R", local = T)
+    source("R/modules/server/submodules/distribution_plot_server.R", local = T)
     source("R/modules/server/submodules/data_table_server.R", local = T)
 
     io_target_tbl <- .GlobalEnv$build_io_target_tbl()
@@ -45,14 +45,6 @@ io_targets_server <- function(
         )
     })
 
-    distplot_function <- shiny::reactive({
-        switch(
-            input$plot_type_choice,
-            "Violin" = create_violinplot,
-            "Box" = create_boxplot
-        )
-    })
-
     gene_name <- shiny::reactive({
         shiny::req(input$gene_choice_id)
         .GlobalEnv$get_gene_hgnc_from_id(as.integer(input$gene_choice_id))
@@ -83,71 +75,17 @@ io_targets_server <- function(
             dplyr::select(x = group, y = value)
     })
 
-    output$distplot <- plotly::renderPlotly({
-        shiny::req(distplot_tbl(), distplot_function())
-
-        distplot_function()(
-            df = distplot_tbl(),
-            source_name = "io_targets_dist_plot",
-            fill_colors = plot_colors(),
-            ylab = gene_plot_label(),
-            xlab = group_name(),
-            title = gene_name()
-        )
-    })
-
-    distplot_eventdata <- shiny::reactive({
-        shiny::req(distplot_tbl(), distplot_function())
-        plotly::event_data("plotly_click", "io_targets_dist_plot")
-    })
-
     shiny::callModule(
-        plotly_server,
+        distribution_plot_server,
         "io_targets_dist_plot",
-        plot_tbl       = distplot_tbl,
-        plot_eventdata = distplot_eventdata,
-        group_tbl      = group_tbl,
+        distplot_tbl    = distplot_tbl,
+        group_tbl       = group_tbl,
+        distplot_type   = shiny::reactive(input$plot_type_choice),
+        distplot_colors = plot_colors,
+        distplot_xlab   = group_name,
+        distplot_ylab   = gene_plot_label,
+        distplot_title  = gene_name
     )
-
-    # histplot ----------------------------------------------------------------
-
-    histplot_tbl <- shiny::reactive({
-
-        eventdata <- distplot_eventdata()
-        shiny::validate(shiny::need(!is.null(eventdata), "Click plot above"))
-        clicked_group <- eventdata$x[[1]]
-
-        current_groups <- distplot_tbl() %>%
-            dplyr::pull(x) %>%
-            unique
-
-        shiny::validate(
-            shiny::need(clicked_group %in% current_groups, "Click plot above")
-        )
-
-        distplot_tbl() %>%
-            dplyr::filter(x == clicked_group) %>%
-            dplyr::select(x = y)
-    })
-
-    output$histplot <- plotly::renderPlotly({
-        shiny::req(histplot_tbl())
-        .GlobalEnv$create_histogram(
-            df = histplot_tbl(),
-            source_name = "io_target_hist_plot",
-            x_lab = gene_plot_label(),
-            title = gene_name()
-        )
-    })
-
-    shiny::callModule(
-        plotly_server,
-        "io_target_hist_plot",
-        plot_tbl = histplot_tbl
-    )
-
-
-
 
     data_tbl <- shiny::reactive({
         shiny::req(io_target_tbl)
