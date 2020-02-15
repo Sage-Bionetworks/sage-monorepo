@@ -23,13 +23,11 @@ til_map_distributions_server <- function(
     })
 
     feature_name <- shiny::reactive({
-        print(input$feature_choice_id)
         shiny::req(input$feature_choice_id)
         get_feature_name(as.integer(input$feature_choice_id))
     })
 
     feature_plot_label <- shiny::reactive({
-        print(input$scale_method_choice)
         shiny::req(
             feature_name(),
             input$scale_method_choice
