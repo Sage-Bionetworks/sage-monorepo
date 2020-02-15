@@ -13,17 +13,12 @@ til_maps_ui <- function(id) {
         ),
 
         til_map_distributions_ui(ns("til_map_distributions")),
-        #     message_html = shiny::includeMarkdown("markdown/tilmap_dist.markdown"),
-        #     title_text = "TIL Map Characteristics",
-        #     click_text =
-        #         "Click point or violin/box to filter samples in table below"
-        # ),
-
-
         data_table_ui(
             ns("til_table"),
             title = "TIL Map Annotations",
-            message_html = shiny::includeMarkdown("markdown/tilmap_table.markdown")
+            message_html = shiny::includeMarkdown(
+                "markdown/tilmap_table.markdown"
+            )
         )
     )
 }

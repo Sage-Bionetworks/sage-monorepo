@@ -2,12 +2,15 @@ til_map_distributions_ui <- function(id) {
 
     ns <- shiny::NS(id)
 
+    source("R/modules/ui/submodules/distribution_plot_ui.R", local = T)
+    source("R/modules/ui/ui_modules/distribution_plot_selector_ui.R", local = T)
+
     .GlobalEnv$sectionBox(
         title = "Distributions",
         .GlobalEnv$messageBox(
             width = 12,
             shiny::includeMarkdown(
-                "markdown/immune_features_dist.markdown"
+                "markdown/tilmap_dist.markdown"
             ),
         ),
         shiny::fluidRow(
@@ -17,55 +20,9 @@ til_map_distributions_ui <- function(id) {
                     width = 4,
                     shiny::uiOutput(ns("selection_ui"))
                 ),
-                shiny::column(
-                    width = 4,
-                    shiny::selectInput(
-                        ns("plot_type"),
-                        "Select or Search for Plot Type",
-                        choices = c("Violin", "Box")
-                    )
-                ),
-                shiny::column(
-                    width = 4,
-                    shiny::selectInput(
-                        ns("scale_method"),
-                        "Select or Search for variable scaling",
-                        selected = "None",
-                        choices = c(
-                            "None",
-                            "Log2",
-                            "Log2 + 1",
-                            "Log10",
-                            "Log10 + 1"
-                        ),
-                    )
-                )
+                distribution_plot_selector_ui(id)
             )
         ),
-        .GlobalEnv$plotBox(
-            width = 12,
-            "distplot" %>%
-                ns() %>%
-                plotly::plotlyOutput() %>%
-                shinycssloaders::withSpinner(),
-            shiny::textOutput(ns("distplot_group_text")),
-            shiny::h4("Click plot to see group information."),
-            shiny::downloadButton(
-                ns("download_distplot_tbl"),
-                "Download plot table"
-            )
-        ),
-        .GlobalEnv$plotBox(
-            width = 12,
-            "histplot" %>%
-                ns() %>%
-                plotly::plotlyOutput() %>%
-                shinycssloaders::withSpinner(),
-            shiny::downloadButton(
-                ns("download_histtplot_tbl"),
-                "Download plot table"
-            )
-        )
+        distribution_plot_ui(ns("tilmap_dist_plot"))
     )
-
 }
