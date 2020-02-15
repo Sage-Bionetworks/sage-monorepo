@@ -10,12 +10,10 @@ immunomodulators_server <- function(
 
     ns <- session$ns
 
-    source("R/modules/server/submodules/plotly_server.R", local = T)
     source("R/modules/server/submodules/data_table_server.R", local = T)
+    source("R/modules/server/submodules/distribution_plot_server.R", local = T)
 
     immunomodulator_tbl <- .GlobalEnv$build_immunomodultors_tbl()
-
-    # distplot ----------------------------------------------------------------
 
     output$gene_choice_ui <- shiny::renderUI({
         shiny::req(immunomodulator_tbl, input$group_choice)
@@ -30,14 +28,6 @@ immunomodulators_server <- function(
             ns("gene_choice_id"),
             label = "Select or Search Gene",
             choices = choices
-        )
-    })
-
-    distplot_function <- shiny::reactive({
-        switch(
-            input$plot_type_choice,
-            "Violin" = create_violinplot,
-            "Box" = create_boxplot
         )
     })
 
@@ -71,68 +61,17 @@ immunomodulators_server <- function(
             dplyr::select(x = group, y = value)
     })
 
-    output$distplot <- plotly::renderPlotly({
-        shiny::req(distplot_tbl(), distplot_function())
-
-        distplot_function()(
-            df = distplot_tbl(),
-            source_name = "immunomodulators_dist_plot",
-            fill_colors = plot_colors(),
-            ylab = gene_plot_label(),
-            xlab = group_name(),
-            title = gene_name()
-        )
-    })
-
-    distplot_eventdata <- shiny::reactive({
-        plotly::event_data("plotly_click", "immunomodulators_dist_plot")
-    })
-
     shiny::callModule(
-        plotly_server,
+        distribution_plot_server,
         "immunomodulators_dist_plot",
-        plot_tbl       = distplot_tbl,
-        plot_eventdata = distplot_eventdata,
-        group_tbl      = group_tbl,
+        distplot_tbl    = distplot_tbl,
+        group_tbl       = group_tbl,
+        distplot_type   = shiny::reactive(input$plot_type_choice),
+        distplot_colors = plot_colors,
+        distplot_xlab   = group_name,
+        distplot_ylab   = gene_plot_label,
+        distplot_title  = gene_name
     )
-
-    # histplot ----------------------------------------------------------------
-
-    histplot_tbl <- shiny::reactive({
-
-        eventdata <- distplot_eventdata()
-        shiny::validate(shiny::need(!is.null(eventdata), "Click plot above"))
-        clicked_group <- eventdata$x[[1]]
-
-        current_groups <- distplot_tbl() %>%
-            dplyr::pull(x) %>%
-            unique
-
-        shiny::validate(
-            shiny::need(clicked_group %in% current_groups, "Click plot above")
-        )
-
-        distplot_tbl() %>%
-            dplyr::filter(x == clicked_group) %>%
-            dplyr::select(x = y)
-    })
-
-    output$histplot <- plotly::renderPlotly({
-        shiny::req(histplot_tbl())
-        .GlobalEnv$create_histogram(
-            df = histplot_tbl(),
-            source_name = "immunomodulators_hist_plot",
-            x_lab = gene_plot_label(),
-            title = gene_name()
-        )
-    })
-
-    shiny::callModule(
-        plotly_server,
-        "immunomodulators_hist_plot",
-        plot_tbl = histplot_tbl
-    )
-
 
     data_tbl <- shiny::reactive({
         shiny::req(immunomodulator_tbl)

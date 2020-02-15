@@ -42,7 +42,9 @@ Imports:
     tibble,
     tictoc,
     tidyr,
+    tidyselect,
     utils,
     viridis,
     viridisLite,
     wrapr
+

@@ -160,7 +160,7 @@ test_that("Create Feature Named List", {
 })
 
 test_that("Create Nested Named List", {
-    tbl    <- dplyr::tibble(
+    tbl <- dplyr::tibble(
         class   = c(rep("Class1", 3), "Class2"),
         display = c("feature1", "feature2", "feature3", "feature4"),
         feature = 1:4
