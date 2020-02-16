@@ -18,7 +18,8 @@ build_sample_name_tbl <- function(){
 #' @importFrom magrittr %>%
 build_feature_value_tbl_from_ids <- function(feature_ids){
     feature_ids %>%
-        create_feature_value_query_from_ids() %>%
+        numeric_values_to_query_list() %>%
+        create_feature_value_query() %>%
         perform_query("Build Feature Value Tibble from Feature IDs")
 }
 
@@ -144,7 +145,7 @@ build_io_target_tbl <- function(){
 build_cohort_tbl_by_feature_id <- function(sample_ids, feature_id){
     paste(
         "SELECT a.sample_id, a.value FROM (",
-        create_feature_value_query_from_ids(feature_id),
+        create_feature_value_query(feature_id),
         ") a WHERE a.sample_id IN (",
         numeric_values_to_query_list(sample_ids),
         ")"

@@ -2,8 +2,7 @@ univariate_driver_server <- function(
     input,
     output,
     session,
-    group_name,
-    feature_named_list
+    group_name
 ){
     ns <- session$ns
 
@@ -11,16 +10,17 @@ univariate_driver_server <- function(
     source("R/univariate_driver_functions.R", local = T)
 
     output$response_options <- shiny::renderUI({
-        shiny::req(feature_named_list())
         shiny::selectInput(
-            ns("response_variable"),
-            "Select or Search for Response Variable",
-            choices = feature_named_list(),
-            selected = .GlobalEnv$get_feature_id("Leukocyte Fraction")
+            inputId  = ns("response_variable"),
+            label    = "Select or Search for Response Variable",
+            choices  = .GlobalEnv$create_feature_named_list(),
+            selected = .GlobalEnv$get_feature_id_from_display(
+                "Leukocyte Fraction"
+            )
         )
     })
 
-    results_tbl <- shiny::reactive({
+    volcano_plot_tbl <- shiny::reactive({
         shiny::req(
             group_name(),
             input$response_variable,
@@ -28,7 +28,7 @@ univariate_driver_server <- function(
             input$min_mut
         )
 
-        build_results_tbl(
+        build_udr_results_tbl(
             group_name(),
             input$response_variable,
             input$min_wt,
@@ -36,47 +36,33 @@ univariate_driver_server <- function(
         )
     })
 
-    volcano_tbl <- shiny::reactive({
-
-        shiny::req(results_tbl())
-        results_tbl() %>%
-            dplyr::mutate(
-                color = dplyr::if_else(
-                    p_value < 0.05 &
-                        abs(fold_change) > 2.0,
-                    "red",
-                    "blue"
-                )
-            )
-    })
-
     output$volcano_plot <- plotly::renderPlotly({
 
-        shiny::req(volcano_tbl())
+        shiny::req(volcano_plot_tbl())
 
         shiny::validate(shiny::need(
-            nrow(volcano_tbl()) > 0,
-            "Current parameters did not result in any successful linear regression results."
+            nrow(volcano_plot_tbl()) > 0,
+            "Current parameters did not result in any linear regression results."
         ))
 
         .GlobalEnv$create_scatterplot(
-            volcano_tbl(),
-            x_col = "log10_fold_change",
-            y_col = "log10_p_value",
-            xlab = "Log10(Fold Change)",
-            ylab = "- Log10(P-value)",
-            title = "Immune Response Association With Driver Mutations",
-            source = "univariate_volcano_plot",
-            key_col = "row_n",
+            volcano_plot_tbl(),
+            x_col     = "log10_fold_change",
+            y_col     = "log10_p_value",
+            xlab      = "Log10(Fold Change)",
+            ylab      = "- Log10(P-value)",
+            title     = "Immune Response Association With Driver Mutations",
+            source    = "univariate_volcano_plot",
+            key_col   = "label",
             label_col = "label",
-            color_col = "color",
-            fill_colors = c("blue" = "blue", "red" = "red")
+            horizontal_line   = T,
+            horizontal_line_y = (- log10(0.05))
         )
     })
 
     output$violin_plot <- plotly::renderPlotly({
 
-        shiny::req(volcano_tbl())
+        shiny::req(volcano_plot_tbl())
 
         eventdata <- plotly::event_data(
             "plotly_click",
@@ -89,10 +75,15 @@ univariate_driver_server <- function(
             "Click a point on the above scatterplot to see a violin plot for the comparison"
         ))
 
+        print(eventdata)
+        clicked_label <- .GlobalEnv$get_values_from_eventdata(eventdata, "key")
+
         result <-  dplyr::filter(
-            volcano_tbl(),
-            row_n == eventdata$key[[1]]
+            volcano_plot_tbl(),
+            label == clicked_label
         )
+
+        print(result)
 
         #plot clicked on but event data stale due to parameter change
         shiny::validate(shiny::need(
@@ -100,8 +91,7 @@ univariate_driver_server <- function(
             "Click a point on the above scatterplot to see a violin plot for the comparison"
         ))
 
-
-        tbl <- build_violin_tbl(
+        build_udr_violin_tbl(
             input$response_variable,
             result$gene_id,
             result$tag_id
