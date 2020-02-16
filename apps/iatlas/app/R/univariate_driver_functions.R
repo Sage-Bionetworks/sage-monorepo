@@ -1,55 +1,63 @@
-build_results_tbl <- function(group_name, feature_id, min_wt, min_mut){
-
-    query <- paste0(
-        "SELECT dr.p_value, dr.fold_change, dr.log10_p_value, ",
-        "dr.log10_fold_change, g.gene, t.group FROM ",
+#' Build Univariate Driver Results Tibble
+#'
+#' @param group_name A string in the name column of the tags table
+#' @param feature_id An integer in the feature_id column of the driver_results
+#' table
+#' @param min_wt An integer
+#' @param min_mut An integer
+#' @importFrom dplyr mutate if_else
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+build_udr_results_tbl <- function(group_name, feature_id, min_wt, min_mut){
+    paste0(
+        "SELECT dr.p_value, dr.fold_change, dr.log10_p_value, dr.gene_id, ",
+        "dr.tag_id, dr.log10_fold_change, dr.mutation_code_id, ",
+        "g.gene, mc.code AS mutation_code, t.group ",
+        "FROM ",
         paste0(
             "(",
             "SELECT * FROM driver_results ",
-            "WHERE feature_id = ", 2,
-            " AND n_wt >= ", 20,
-            " AND n_mut >= ", 20,
+            "WHERE feature_id = ", feature_id,
+            " AND n_wt >= ", min_wt,
+            " AND n_mut >= ", min_mut,
             ") dr "
         ),
-        "INNER JOIN ",
-        "(SELECT id AS gene_id, hgnc AS gene FROM genes) g",
+        "LEFT JOIN ",
+        "(SELECT id AS gene_id, hgnc AS gene FROM genes) g ",
         "ON dr.gene_id = g.gene_id ",
-        paste(
-            "(",
-            "SELECT id, name AS group FROM tags WHERE id IN ",
-            "(SELECT id FROM tags WHERE display = 'Immune Subtype')",
-            ") t"
-        ),
+        "LEFT JOIN ",
+        "mutation_codes mc ",
+        "ON dr.mutation_code_id = mc.id ",
         "INNER JOIN ",
         paste0(
             "(",
-            "SELECT id, name AS group FROM tags WHERE id IN ",
+            "SELECT id AS tag_id, name AS group FROM tags WHERE id IN ",
             "(SELECT tag_id FROM tags_to_tags WHERE related_tag_id = ",
-            "(SELECT id FROM tags WHERE display = 'Immune Subtype'))",
-            ") t"
+            "(SELECT id FROM tags WHERE display = '",
+            group_name,
+            "'))",
+            ") t "
         ),
-        "ON dr.tag_id = t.id ",
-        "LIMIT 10"
-    )
-
-    paste(
-        "SELECT * FROM mutataion_codes"
+        "ON dr.tag_id = t.tag_id "
     ) %>%
-        perform_query("Build Driver Results Table")
-
-
-    #     dplyr::mutate(
-    #         gene = dplyr::if_else(
-    #             is.na(gene),
-    #             "missing",
-    #             gene
-    #         ),
-    #         row_n = 1:dplyr::n(),
-    #         label = paste0(gene, ":", group)
-    #     )
+        perform_query("Build Univariate Driver Results Tibble") %>%
+        dplyr::mutate(label = dplyr::if_else(
+            is.na(.data$mutation_code),
+            .data$gene,
+            paste0(.data$gene, ":", .data$mutation_code)
+        )) %>%
+        dplyr::mutate(label = paste0(.data$group, "; ", .data$label))
 }
 
-build_violin_tbl <- function(feature_id, gene_id, tag_id){
+build_udr_violin_tbl <- function(feature_id, gene_id, tag_id){
+    paste0(
+        "SELECT * FROM genes_samples_mutations "
+    ) %>%
+        .GlobalEnv$perform_query("Build Driver Tibble") %>%
+        dplyr::filter(is.na(mutation_code_id))
+
+
+
     subquery1 <- paste(
         "SELECT sample_id FROM samples_to_tags",
         "WHERE tag_id = ",
