@@ -18,28 +18,24 @@ cohort_selection_server <- function(
         local = T
     )
 
-    cohort_obj <- shiny::callModule(
+    cohort_obj_manual <- shiny::callModule(
         cohort_manual_selection_server,
         "cohort_manual_selection",
         feature_named_list
     )
 
-    # cohort_obj <- shiny::reactive({
-    #     shiny::req(input$cohort_mode_choice)
-    #     if (input$cohort_mode_choice == "Cohort Selection") {
-    #         cohort_obj <- shiny::callModule(
-    #             cohort_manual_selection_server,
-    #             "cohort_manual_selection",
-    #             feature_named_list
-    #         )
-    #     } else if (input$cohort_mode_choice == "Cohort Upload") {
-    #         cohort_obj <- shiny::callModule(
-    #             cohort_upload_selection_server,
-    #             "cohort_upload_selection"
-    #         )
-    #     }
-    #     return(cohort_obj())
-    # })
+    cohort_obj_upload <- shiny::callModule(
+        cohort_upload_selection_server,
+        "cohort_upload_selection"
+    )
+
+    cohort_obj <- shiny::reactive({
+        if (input$cohort_mode_choice == "Cohort Selection")
+            return(cohort_obj_manual())
+        else {
+            return(cohort_obj_upload())
+        }
+    })
 
     # group key ---------------------------------------------------------------
 
