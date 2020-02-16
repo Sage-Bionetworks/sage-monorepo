@@ -14,33 +14,34 @@ cohort_selection_ui <- function(id) {
         ),
         .GlobalEnv$sectionBox(
             title = "Cohort Selection",
-            .GlobalEnv$messageBox(
-                width = 12,
-                shiny::includeMarkdown("markdown/cohort_selection2.markdown"),
-            ),
-            shiny::fluidRow(
-                .GlobalEnv$optionsBox(
-                    width = 12,
-                    shiny::column(
-                        width = 4,
-                        shiny::selectInput(
-                            inputId = ns("cohort_mode_choice"),
-                            label   = "Select Cohort Selection Mode",
-                            choices = c("Cohort Selection", "Cohort Upload")
-                        )
-                    )
-                )
-            ),
-            shiny::conditionalPanel(
-                condition = "input.cohort_mode_choice == 'Cohort Selection'",
-                cohort_manual_selection_ui(ns("cohort_manual_selection")),
-                ns = ns
-            ),
-            shiny::conditionalPanel(
-                condition = "input.cohort_mode_choice == 'Cohort Upload'",
-                cohort_upload_selection_ui(ns("cohort_upload_selection")),
-                ns = ns
-            )
+            # .GlobalEnv$messageBox(
+            #     width = 12,
+            #     shiny::includeMarkdown("markdown/cohort_selection2.markdown"),
+            # ),
+            # shiny::fluidRow(
+            #     .GlobalEnv$optionsBox(
+            #         width = 12,
+            #         shiny::column(
+            #             width = 4,
+            #             shiny::selectInput(
+            #                 inputId = ns("cohort_mode_choice"),
+            #                 label   = "Select Cohort Selection Mode",
+            #                 choices = c("Cohort Selection", "Cohort Upload")
+            #             )
+            #         )
+            #     )
+            # ),
+            cohort_manual_selection_ui(ns("cohort_manual_selection"))
+            # shiny::conditionalPanel(
+            #     condition = "input.cohort_mode_choice == 'Cohort Selection'",
+            #     cohort_manual_selection_ui(ns("cohort_manual_selection")),
+            #     ns = ns
+            # ),
+            # shiny::conditionalPanel(
+            #     condition = "input.cohort_mode_choice == 'Cohort Upload'",
+            #     cohort_upload_selection_ui(ns("cohort_upload_selection")),
+            #     ns = ns
+            # )
         ),
         data_table_ui(
             ns("sg_table"),
