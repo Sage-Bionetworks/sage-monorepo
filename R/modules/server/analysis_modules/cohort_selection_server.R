@@ -30,10 +30,14 @@ cohort_selection_server <- function(
     )
 
     cohort_obj <- shiny::reactive({
-        if (input$cohort_mode_choice == "Cohort Selection")
+        if (input$cohort_mode_choice == "Cohort Selection") {
+            shiny::req(cohort_obj_manual())
             return(cohort_obj_manual())
-        else {
+        } else if (input$cohort_mode_choice == "Cohort Upload") {
+            shiny::req(cohort_obj_upload())
             return(cohort_obj_upload())
+        } else {
+            stop("Unrecognized cohort creation opion")
         }
     })
 
