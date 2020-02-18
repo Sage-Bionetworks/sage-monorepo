@@ -6,8 +6,11 @@ with_test_db_env({
   })
 
   test_that("Build Feature Value Tibble", {
-      result1 <- build_feature_value_tbl_from_class_id(1)
-      expect_named(result1, c("sample_id", "value", "feature"))
+      result1 <- build_feature_value_tbl_from_class_ids(1)
+      expect_named(
+        result1,
+        c("feature_id", "sample_id", "value", "unit", "feature", "order")
+      )
   })
 
   test_that("Build Feature Tibble", {
