@@ -58,3 +58,9 @@ release_global_db_pool <- function() {
     cat(crayon::yellow("WARNING-release_global_db_pool: Nothing to do. Global db pool does not exist. \n"))
   }
 }
+
+with_global_db_pool <- function(expr) {
+  vivify_global_db_pool()
+  on.exit(release_global_db_pool())
+  expr
+}
