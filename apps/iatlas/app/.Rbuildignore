@@ -4,3 +4,15 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 .gitlab-ci.yml
+
+Dockerfile.build
+css
+global.R
+index.html
+init.R
+install_and_init.R
+markdown
+rsconnect
+server.R
+ui.R
+www
