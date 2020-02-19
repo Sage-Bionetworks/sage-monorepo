@@ -37,6 +37,10 @@ shiny::shinyServer(function(input, output, session) {
         feature_list
     )
 
+    output$cohort_group_text <- shiny::renderText(
+        paste("Selected Group: ", cohort_cons()$group_name)
+    )
+
     cohort_sample_tbl  <- shiny::reactive(cohort_cons()$sample_tbl)
     cohort_group_tbl   <- shiny::reactive(cohort_cons()$group_tbl)
     cohort_group_name  <- shiny::reactive(cohort_cons()$group_name)
