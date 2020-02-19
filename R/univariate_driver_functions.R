@@ -5,7 +5,7 @@
 #' table
 #' @param min_wt An integer
 #' @param min_mut An integer
-#' @importFrom dplyr mutate if_else
+#' @importFrom dplyr mutate
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
 build_udr_results_tbl <- function(group_name, feature_id, min_wt, min_mut){
@@ -41,22 +41,21 @@ build_udr_results_tbl <- function(group_name, feature_id, min_wt, min_mut){
         "ON dr.tag_id = t.tag_id "
     ) %>%
         perform_query("Build Univariate Driver Results Tibble") %>%
-        dplyr::mutate(label = dplyr::if_else(
-            is.na(.data$mutation_code),
-            .data$gene,
-            paste0(.data$gene, ":", .data$mutation_code)
-        )) %>%
-        dplyr::mutate(label = paste0(.data$group, "; ", .data$label))
+        dplyr::mutate(label = paste0(
+            .data$group, "; ", .data$gene, ":", .data$mutation_code
+        ))
 }
 
-build_udr_violin_tbl <- function(feature_id, gene_id, tag_id){
-    paste0(
-        "SELECT * FROM genes_samples_mutations "
-    ) %>%
-        .GlobalEnv$perform_query("Build Driver Tibble") %>%
-        dplyr::filter(is.na(mutation_code_id))
-
-
+#' Build Univariate Driver Violin Tibble
+#'
+#' @param feature_id An integer in the features_to_samples table
+#' @param gene_id An interger in the genes_samples_mutations table
+#' @param tag_id An integer in the samples_to_tags table
+#' @param mutation_id An integer in the genes_samples_mutations table
+#' @importFrom dplyr select
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+build_udr_violin_tbl <- function(feature_id, gene_id, tag_id, mutation_id){
 
     subquery1 <- paste(
         "SELECT sample_id FROM samples_to_tags",
@@ -64,28 +63,28 @@ build_udr_violin_tbl <- function(feature_id, gene_id, tag_id){
         tag_id
     )
 
-    subquery2 <- paste(
-        "SELECT sample_id, value FROM features_to_samples",
-        "WHERE feature_id = ", feature_id,
+    subquery2 <- paste0(
+        "SELECT sample_id, value FROM features_to_samples ",
+        "WHERE feature_id = ", feature_id, " ",
         "AND sample_id IN (", subquery1, ")"
     )
 
-    subquery3 <- paste(
-        "SELECT sample_id, status FROM genes_to_samples",
-        "WHERE gene_id  = ", gene_id,
+    subquery3 <- paste0(
+        "SELECT sample_id, status FROM genes_samples_mutations ",
+        "WHERE gene_id  = ", gene_id, " ",
+        "AND mutation_code_id = ", mutation_id, " ",
         "AND sample_id IN (", subquery1, ")"
     )
 
-    query <- paste(
+    paste(
         "SELECT f.value, g.status FROM",
         "(", subquery2, ") f",
         "INNER JOIN",
         "(", subquery3, ") g",
         "ON f.sample_id = g.sample_id"
     ) %>%
-        dplyr::sql() %>%
-        .GlobalEnv$perform_query("build univariate driver violin table") %>%
-        dplyr::select(x = status, y = value)
+        perform_query("build univariate driver violin table") %>%
+        dplyr::select(x = .data$status, y = .data$value)
 }
 
 

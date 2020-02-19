@@ -8,6 +8,10 @@ with_test_db_env({
               "group", "label"
             )
         )
-        # expect_identical(result1, tidyr::drop_na(result1))
+    })
+
+    test_that("Build Univariate Driver Violin Tibble", {
+        result1 <- build_udr_violin_tbl(1, 1, 1, 1)
+        expect_named(result1, c("x", "y"))
     })
 })
