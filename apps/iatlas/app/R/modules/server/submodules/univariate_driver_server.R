@@ -56,7 +56,7 @@ univariate_driver_server <- function(
             key_col   = "label",
             label_col = "label",
             horizontal_line   = T,
-            horizontal_line_y = (- log10(0.05))
+            horizontal_line_y = (-log10(0.05))
         )
     })
 
@@ -75,7 +75,6 @@ univariate_driver_server <- function(
             "Click a point on the above scatterplot to see a violin plot for the comparison"
         ))
 
-        print(eventdata)
         clicked_label <- .GlobalEnv$get_values_from_eventdata(eventdata, "key")
 
         result <-  dplyr::filter(
@@ -83,22 +82,34 @@ univariate_driver_server <- function(
             label == clicked_label
         )
 
-        print(result)
 
         #plot clicked on but event data stale due to parameter change
         shiny::validate(shiny::need(
             nrow(result) == 1,
-            "Click a point on the above scatterplot to see a violin plot for the comparison"
+            paste0(
+                "Click a point on the above scatterplot to see a violin plot ",
+                "for the comparison"
+            )
         ))
 
-        build_udr_violin_tbl(
+        tbl <- build_udr_violin_tbl(
             input$response_variable,
             result$gene_id,
-            result$tag_id
+            result$tag_id,
+            result$mutation_code_id
         )
 
-        xlab <- paste(result$gene, "mutation_status")
-        ylab <- .GlobalEnv$get_feature_name(input$response_variable)
+        xlab <- paste0(
+            "Mutation Status ",
+            result$gene,
+            ":",
+            result$mutation_code
+        )
+
+        ylab <- input$response_variable %>%
+            as.integer() %>%
+            .GlobalEnv$get_feature_display_from_id()
+
         title <- paste(
             "Cohort:", result$group, ";",
             "P-value:", round(result$p_value, 4), ";",
