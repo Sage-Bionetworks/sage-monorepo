@@ -37,23 +37,6 @@ univariate_driver_ui <- function(id){
                 )
             )
         ),
-        shiny::fluidRow(
-            .GlobalEnv$plotBox(
-                width = 12,
-                "volcano_plot" %>%
-                    ns() %>%
-                    plotly::plotlyOutput() %>%
-                    shinycssloaders::withSpinner()
-            )
-        ),
-        shiny::fluidRow(
-            .GlobalEnv$plotBox(
-                width = 12,
-                "violin_plot" %>%
-                    ns() %>%
-                    plotly::plotlyOutput() %>%
-                    shinycssloaders::withSpinner()
-            )
-        )
+        volcano_plot_ui(ns("univariate_driver_server"))
     )
 }
