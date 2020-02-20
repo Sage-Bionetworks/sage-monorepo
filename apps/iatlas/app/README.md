@@ -65,9 +65,11 @@ You don't need iatlas-data to run iatlas-app if you:
 
 ### MacOS Install instructions
 
-Install package manager: [HomeBrew](https://brew.sh/) (or [MacPorts](https://www.macports.org/) or your package manager of choice)
+Install package manager:
+- [HomeBrew](https://brew.sh/) (the instructions below are for HomeBrew)
+- or [MacPorts](https://www.macports.org/), which is very similar to use for installing packages
 
-Then:
+Then in the terminal, run:
 
 - xcode-select --install
 - brew install R
