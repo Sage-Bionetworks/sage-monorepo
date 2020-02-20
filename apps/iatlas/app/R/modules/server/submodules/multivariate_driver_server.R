@@ -25,8 +25,7 @@ multivariate_driver_server <- function(
             "f.id AS feature, f.name AS feature_internal_name FROM ",
             "features f INNER JOIN classes c ON f.class_id = c.id"
         ) %>%
-            perform_query("Build Numerical Covariate Tibble") %>%
-            print()
+            perform_query("Build Numerical Covariate Tibble")
     })
 
     categorical_covariate_tbl <- shiny::reactive({
