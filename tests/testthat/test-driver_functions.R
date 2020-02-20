@@ -10,8 +10,8 @@ with_test_db_env({
         )
     })
 
-    test_that("Build Univariate Driver Violin Tibble", {
-        result1 <- build_udr_violin_tbl(1, 1, 1, 1)
+    test_that("Build Driver Violin Tibble", {
+        result1 <- build_driver_violin_tbl(1, 1, 1, 1)
         expect_named(result1, c("x", "y"))
     })
 })

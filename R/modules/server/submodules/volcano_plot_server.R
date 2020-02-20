@@ -13,6 +13,7 @@ volcano_plot_server <- function(
 ){
 
     source("R/modules/server/submodules/plotly_server.R", local = T)
+    source("R/driver_functions.R", local = T)
 
     output$volcano_plot <- plotly::renderPlotly({
 
@@ -84,7 +85,7 @@ volcano_plot_server <- function(
 
     violin_tbl <- shiny::reactive({
         shiny::req(selected_volcano_result())
-        build_udr_violin_tbl(
+        build_driver_violin_tbl(
             response_id(),
             selected_volcano_result()$gene_id,
             selected_volcano_result()$tag_id,
