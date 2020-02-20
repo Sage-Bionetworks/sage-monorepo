@@ -32,7 +32,7 @@ with_test_db_env({
             status = rbinom(40, 1, .5),
             group = c(rep("C1", 20), rep("C2", 20))
         )
-        result <- build_heatmap_matrix(tbl)
+        result <- build_co_heatmap_matrix(tbl)
         expect_type(result, "double")
         expect_equal(rownames(result), "feature")
         expect_equal(colnames(result), c("C1", "C2"))

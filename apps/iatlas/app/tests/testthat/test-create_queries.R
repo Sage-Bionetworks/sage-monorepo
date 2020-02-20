@@ -37,7 +37,7 @@ test_that("Create Build Immunomodulators Table Query", {
     )
 })
 
-test_that("create combined feature values query from class ids", {
+test_that("Create Combined Feature Values Query From Class Ids", {
     expect_equal(
         create_combined_feature_values_query_from_class_ids(1),
         paste0(
@@ -50,28 +50,33 @@ test_that("create combined feature values query from class ids", {
     )
 })
 
-test_that("create feature value query from class ids", {
+test_that("Create Feature Value Query", {
     expect_equal(
-        create_feature_value_query_from_class_ids(1),
+        create_feature_value_query(1),
         paste0(
-            "SELECT sample_id, feature_id, value ",
-            "FROM features_to_samples ",
-            "WHERE feature_id IN ",
-            "(SELECT id FROM features WHERE class_id IN (1))"
+            "SELECT sample_id, feature_id, value FROM features_to_samples ",
+            "WHERE feature_id IN (1) AND value IS NOT NULL"
         )
     )
+    expect_equal(
+        create_feature_value_query("1"),
+        paste0(
+            "SELECT sample_id, feature_id, value FROM features_to_samples ",
+            "WHERE feature_id IN (1) AND value IS NOT NULL"
+        )
+    )
+    expect_equal(
+        create_feature_value_query("1,2,3"),
+        paste0(
+            "SELECT sample_id, feature_id, value FROM features_to_samples ",
+            "WHERE feature_id IN (1,2,3) AND value IS NOT NULL"
+        )
+    )
+
 })
 
-test_that("create feature value query from ids", {
-    expect_equal(
-        create_feature_value_query_from_ids(1),
-        paste0(
-            "SELECT sample_id, feature_id, value ",
-            "FROM features_to_samples ",
-            "WHERE feature_id IN (1)"
-        )
-    )
-})
+
+
 
 test_that("create get feature display from id query", {
     expect_equal(

@@ -8,7 +8,10 @@ model_selection_server <- function(
     model_formula_prefix = "response ~ status"
 ){
 
-    source("R/modules/server/submodules/insert_remove_element_server.R", local = T)
+    source(
+        "R/modules/server/submodules/insert_remove_element_server.R",
+        local = T
+    )
 
     numeric_covariate_module <- shiny::reactive({
         purrr::partial(
@@ -17,7 +20,9 @@ model_selection_server <- function(
         )
     })
 
-    numeric_covariate_module_ui <- shiny::reactive(numeric_model_covariate_element_ui)
+    numeric_covariate_module_ui <- shiny::reactive(
+        numeric_model_covariate_element_ui
+    )
 
     numeric_covariate_output <- shiny::callModule(
         insert_remove_element_server,
@@ -47,14 +52,14 @@ model_selection_server <- function(
 
     categorical_covariates <- shiny::reactive({
         categorical_covariate_output() %>%
-            shiny::reactiveValuesToList() %>%
+            shiny::reactiveValuesToList(.) %>%
             purrr::discard(purrr::map_lgl(., is.null)) %>%
             unlist() %>%
             unname()
     })
 
     categorical_display_string <- shiny::reactive({
-        if(!is.null(categorical_covariates())){
+        if (!is.null(categorical_covariates())) {
             string <- categorical_covariates() %>%
                 purrr::map(~translate_value(
                     categorical_covariate_tbl(),
@@ -70,7 +75,7 @@ model_selection_server <- function(
     })
 
     categorical_formula_string <- shiny::reactive({
-        if(!is.null(categorical_covariates())){
+        if (!is.null(categorical_covariates())) {
             string <- categorical_covariates() %>%
                 purrr::map(~translate_value(
                     categorical_covariate_tbl(),
@@ -87,7 +92,7 @@ model_selection_server <- function(
 
     numerical_covariates <- shiny::reactive({
         numeric_covariate_output() %>%
-            shiny::reactiveValuesToList() %>%
+            shiny::reactiveValuesToList(.) %>%
             purrr::discard(purrr::map_lgl(., is.null)) %>%
             purrr::map(purrr::pluck, "covariate_choice_id") %>%
             unlist() %>%
@@ -96,15 +101,15 @@ model_selection_server <- function(
 
     numerical_transformations <- shiny::reactive({
         numeric_covariate_output() %>%
-            shiny::reactiveValuesToList() %>%
+            shiny::reactiveValuesToList(.) %>%
             purrr::discard(purrr::map_lgl(., is.null)) %>%
             purrr::map(purrr::pluck, "transformation_choice") %>%
             unlist() %>%
             unname()
     })
 
-    numerical_display_string <- reactive({
-        if(!is.null(numerical_covariates())){
+    numerical_display_string <- shiny::reactive({
+        if (!is.null(numerical_covariates())) {
             string <- numerical_covariates() %>%
                 purrr::map(~translate_value(
                     numerical_covariate_tbl(),
@@ -123,8 +128,8 @@ model_selection_server <- function(
         }
     })
 
-    numerical_formula_string <- reactive({
-        if(!is.null(numerical_covariates())){
+    numerical_formula_string <- shiny::reactive({
+        if (!is.null(numerical_covariates())) {
             string <- numerical_covariates() %>%
                 purrr::map(~translate_value(
                     numerical_covariate_tbl(),
@@ -143,39 +148,39 @@ model_selection_server <- function(
         }
     })
 
-    display_string <- reactive({
+    display_string <- shiny::reactive({
         req(model_string_prefix())
 
         string <- model_string_prefix()
-        if(!is.null(categorical_display_string())){
-            string <- stringr::str_c(string, " + ",  categorical_display_string())
+        if (!is.null(categorical_display_string())) {
+            string <- paste0(string, " + ",  categorical_display_string())
         }
-        if(!is.null(numerical_display_string())){
-            string <- stringr::str_c(string, " + ",  numerical_display_string())
+        if (!is.null(numerical_display_string())) {
+            string <- paste0(string, " + ",  numerical_display_string())
         }
         return(string)
     })
 
-    formula_string <- reactive({
+    formula_string <- shiny::reactive({
         req(model_formula_prefix)
 
         string <- model_formula_prefix
-        if(!is.null(categorical_formula_string())){
-            string <- stringr::str_c(string, " + ",  categorical_formula_string())
+        if (!is.null(categorical_formula_string())) {
+            string <- paste0(string, " + ",  categorical_formula_string())
         }
-        if(!is.null(numerical_formula_string())){
-            string <- stringr::str_c(string, " + ",  numerical_formula_string())
+        if (!is.null(numerical_formula_string())) {
+            string <- paste0(string, " + ",  numerical_formula_string())
         }
         return(string)
     })
 
-    reactive({
+    shiny::reactive({
         list(
-            "categorical_covariates" = categorical_covariates(),
-            "numerical_covariates" = numerical_covariates(),
+            "categorical_covariates"    = categorical_covariates(),
+            "numerical_covariates"      = numerical_covariates(),
             "numerical_transformations" = numerical_transformations(),
-            "display_string" = display_string(),
-            "formula_string" = formula_string()
+            "display_string"            = display_string(),
+            "formula_string"            = formula_string()
         )
     })
 }

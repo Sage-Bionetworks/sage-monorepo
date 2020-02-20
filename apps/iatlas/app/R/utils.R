@@ -109,6 +109,7 @@ add_plotly_value_label <- function(tbl, cols){
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
 #' @importFrom tidyr unite
+#' @importFrom tidyselect all_of
 create_plotly_label <- function(
     tbl,
     name,
@@ -119,7 +120,7 @@ create_plotly_label <- function(
 
     tbl %>%
         add_plotly_label(title, {{name}}, {{group}}) %>%
-        add_plotly_value_label(cols) %>%
+        add_plotly_value_label(tidyselect::all_of(cols)) %>%
         tidyr::unite(
             "label",
             .data$label,
@@ -167,6 +168,7 @@ create_feature_named_list <- function(class_ids = "all"){
 #' @importFrom tibble deframe
 #' @importFrom purrr map
 #' @importFrom rlang .data
+#' @importFrom tidyselect all_of
 create_nested_named_list <- function(
     tbl,
     names_col1 = "class",
@@ -174,11 +176,11 @@ create_nested_named_list <- function(
     values_col = "feature"
 ){
     list <- tbl %>%
-        dplyr::select(
+        dplyr::select(tidyselect::all_of(c(
             n1 = names_col1,
             n2 = names_col2,
             v  = values_col
-        ) %>%
+        ))) %>%
         tidyr::drop_na() %>%
         tidyr::nest(data = c(.data$n2, .data$v)) %>%
         dplyr::mutate(data = purrr::map(.data$data, tibble::deframe)) %>%

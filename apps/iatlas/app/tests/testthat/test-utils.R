@@ -152,8 +152,6 @@ with_test_db_env({
       expect_equal(get_unique_values_from_col(tbl5, col), c("value2", "value1"))
   })
 
-
-
   test_that("Create Feature Named List", {
       result1 <- create_feature_named_list()
       expect_equal(typeof(result1), "list")
