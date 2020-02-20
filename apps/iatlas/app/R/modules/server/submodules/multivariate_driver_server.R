@@ -42,7 +42,9 @@ multivariate_driver_server <- function(
 
     response_variable_name <- shiny::reactive({
         shiny::req(input$response_choice_id)
-        .GlobalEnv$get_feature_display_from_id()
+        input$response_choice_id %>%
+            as.integer() %>%
+            .GlobalEnv$get_feature_display_from_id()
     })
 
     model_string_prefix <- shiny::reactive({

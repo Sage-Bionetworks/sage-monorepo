@@ -84,9 +84,29 @@ with_test_db_env({
     })
 
     test_that("create_numerical_covariate_string", {
-        expect_null(create_numerical_covariate_string(NULL, NULL))
-        expect_type(create_numerical_covariate_string(1, "None"), "character")
-        expect_length(create_numerical_covariate_string(1, "None"), 1L)
+        expect_null(
+            create_numerical_covariate_string(
+                NULL,
+                NULL,
+                transform_feature_formula
+            )
+        )
+        expect_type(
+            create_numerical_covariate_string(
+                1,
+                "None",
+                transform_feature_formula
+            ),
+            "character"
+        )
+        expect_length(
+            create_numerical_covariate_string(
+                1,
+                "None",
+                transform_feature_formula
+                ),
+            1L
+        )
     })
 
     test_that("create_categorical_covariate_string", {
@@ -98,6 +118,21 @@ with_test_db_env({
         expect_length(
             create_categorical_covariate_string("Immune_Subtype"),
             1L
+        )
+    })
+
+    test_that("create_covariate_string", {
+        expect_equal(
+            create_covariate_string("str1", NULL, NULL),
+            "str1"
+        )
+        expect_equal(
+            create_covariate_string("str1", "str2", NULL),
+            "str1 + str2"
+        )
+        expect_equal(
+            create_covariate_string("str1", "str2", "str3"),
+            "str1 + str2 + str3"
         )
     })
 })
