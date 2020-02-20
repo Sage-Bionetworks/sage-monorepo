@@ -1,3 +1,9 @@
+#' Get Items From Numeric Covariate Output
+#'
+#' @param output A named list of named lists
+#' @param name A name in all of the named lists
+#' @importFrom magrittr %>%
+#' @importFrom purrr pluck map map_lgl discard
 get_items_from_numeric_covariate_output <- function(output, name){
     output %>%
         purrr::discard(purrr::map_lgl(., is.null)) %>%
@@ -6,6 +12,11 @@ get_items_from_numeric_covariate_output <- function(output, name){
         unname()
 }
 
+#' Get Names From Categorical Covariate Output
+#'
+#' @param output A named list of named lists
+#' @importFrom magrittr %>%
+#' @importFrom purrr map_lgl discard
 get_names_from_categorical_covariate_output <- function(output){
     output %>%
         purrr::discard(purrr::map_lgl(., is.null)) %>%
@@ -13,27 +24,48 @@ get_names_from_categorical_covariate_output <- function(output){
         unname()
 }
 
+#' Create Numerical Covariate String
+#'
+#' @param covs A vector of strings or NULL
+#' @param transforms A vector of strings or NULL
+#' @param trans_func A function
+#'
+#' @importFrom magrittr %>%
+#' @importFrom purrr map map2
 create_numerical_covariate_string <- function(covs, transforms, trans_func){
     if (any(is.null(covs), is.null(transforms))) return(NULL)
     covs %>%
         as.integer() %>%
         purrr::map(get_feature_display_from_id) %>%
         purrr::map2_chr(transforms, trans_func) %>%
-        stringr::str_c(collapse = " + ")
+        paste0(collapse = " + ")
 }
 
+#' Create Categorical Covariate String
+#'
+#' @param covs A vector of strings or NULL
+#'
+#' @importFrom magrittr %>%
+#' @importFrom purrr map
 create_categorical_covariate_string <- function(covs){
     if (is.null(covs)) return(NULL)
     covs %>%
         purrr::map(get_tag_display_from_name) %>%
-        stringr::str_c(collapse = " + ")
+        paste0(collapse = " + ")
 }
 
-
+#' Create Categorical Covariate String
+#'
+#' @param prefix_str A string
+#' @param num_str A string or NULL
+#' @param cat_str A string or NULL
+#'
+#' @importFrom magrittr %>%
+#' @importFrom purrr map_lgl discard
 create_covariate_string <- function(prefix_str, num_str, cat_str){
     list(prefix_str, num_str, cat_str) %>%
         purrr::discard(., purrr::map_lgl(., is.null)) %>%
-        stringr::str_c(collapse = " + ")
+        paste0(collapse = " + ")
 }
 
 
