@@ -198,6 +198,22 @@ get_sample_ids_from_dataset <- function(dataset){
 # The function take a single value from one or more columns and translate those
 # into a value from a different column in the row
 
+#' Get Tag Display Name from Name
+#'
+#' @param name A string in the name column of the tags table
+#' @importFrom magrittr %>%
+#' @importFrom dplyr pull
+#' @importFrom rlang .data
+#' @importFrom assertthat assert_that
+get_tag_display_from_name <- function(name){
+    assertthat::assert_that(length(name) == 1, is.character(name))
+    display <-
+        paste0("SELECT display FROM tags WHERE name = '", name, "'") %>%
+        perform_query("Get Tag Display Name from Name") %>%
+        dplyr::pull(.data$display)
+    assertthat::assert_that(length(display) == 1)
+    return(display)
+}
 
 #' Get HGNC Symbol from Gene ID
 #'

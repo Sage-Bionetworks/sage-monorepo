@@ -13,8 +13,8 @@ driver_associations_ui <- function(id) {
             width = 12,
             shiny::includeMarkdown("markdown/driver.markdown")
         ),
-        univariate_driver_ui(ns("univariate_driver")),
-        # multivariate_driver_ui(ns("multivariate_driver"))
+        # univariate_driver_ui(ns("univariate_driver")),
+        multivariate_driver_ui(ns("multivariate_driver"))
     )
 }
 
