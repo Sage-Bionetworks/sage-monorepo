@@ -3,29 +3,39 @@
 if (getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 
 
+#' Build Sample Name Table
+#'
+#' @importFrom magrittr %>%
+build_sample_name_tbl <- function(){
+    "SELECT id AS sample_id, name AS sample_name FROM samples" %>%
+        perform_query("Build Sample Name Table")
+}
+
+
 #' Build Feature Value Tibble from Feature IDs
 #'
 #' @param feature_ids Integers in the id column of the features_to_samples table
 #' @importFrom magrittr %>%
 build_feature_value_tbl_from_ids <- function(feature_ids){
     feature_ids %>%
-        create_feature_value_query_from_ids() %>%
+        numeric_values_to_query_list() %>%
+        create_feature_value_query() %>%
         perform_query("Build Feature Value Tibble from Feature IDs")
 }
-
 
 #' Build Feature Value Tibble from Class IDs
 #'
 #' @param class_ids An integer in the class_id column of the features table
 #' @importFrom magrittr %>%
-build_feature_value_tbl_from_class_id <- function(class_ids){
+build_feature_value_tbl_from_class_ids <- function(class_ids){
     paste0(
-        "SELECT fts.sample_id, fts.value, f.display AS feature ",
+        "SELECT fts.feature_id, fts.sample_id, fts.value, f.unit, ",
+        "f.display AS feature, f.order ",
         "FROM features_to_samples fts ",
         "INNER JOIN features f ",
         "ON fts.feature_id = f.id ",
         "WHERE f.class_id IN (",
-        class_ids,
+        numeric_values_to_query_list(class_ids),
         ")"
     ) %>%
         perform_query("Build Feature Value Tibble from Class IDs")
@@ -135,7 +145,7 @@ build_io_target_tbl <- function(){
 build_cohort_tbl_by_feature_id <- function(sample_ids, feature_id){
     paste(
         "SELECT a.sample_id, a.value FROM (",
-        create_feature_value_query_from_ids(feature_id),
+        create_feature_value_query(feature_id),
         ") a WHERE a.sample_id IN (",
         numeric_values_to_query_list(sample_ids),
         ")"

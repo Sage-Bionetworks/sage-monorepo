@@ -1,5 +1,7 @@
 # used in cohort selection ----------------------------------------------------
 
+source("R/elements_functions.R", local = T)
+
 numeric_filter_element_server <- function(
     input,
     output,
@@ -22,21 +24,28 @@ numeric_filter_element_server <- function(
 
     features_tbl <- shiny::reactive({
         req(input$feature_choice)
-        input$feature_choice %>%
-            print() %>%
-            .GlobalEnv$build_feature_value_tbl_from_ids() %>%
-            dplyr::filter(!is.na(value), !is.infinite(value)) %>%
-            dplyr::summarise(mx = max(value), mn = min(value))
+        build_numeric_filter_tbl(input$feature_choice)
+    })
+
+    feature_min <- shiny::reactive({
+        shiny::req(features_tbl())
+        round(features_tbl()$feature_min, 2)
+    })
+
+    feature_max <- shiny::reactive({
+        shiny::req(features_tbl())
+        round(features_tbl()$feature_max, 2)
     })
 
     output$slider_ui <- shiny::renderUI({
-        shiny::req(features_tbl())
+        shiny::req(feature_max(), feature_min())
+
         shiny::sliderInput(
             inputId = ns("range"),
             label = "Filter:",
-            min = round(features_tbl()$mn, 2),
-            max = round(features_tbl()$mx, 2),
-            value = c(features_tbl()$mn, features_tbl()$mx)
+            min = round(feature_min()),
+            max = round(feature_max()),
+            value = c(feature_min(), feature_max())
         )
     })
 
@@ -118,7 +127,7 @@ numeric_model_covariate_element_server <- function(
         choices <- create_nested_named_list(covariate_tbl())
         shiny::selectInput(
             inputId = ns("covariate_choice_id"),
-            label = "Select or Search for Covariate",
+            label   = "Select or Search for Covariate",
             choices = choices
         )
     })
@@ -126,7 +135,7 @@ numeric_model_covariate_element_server <- function(
     output$select_transformation_ui <- shiny::renderUI({
         shiny::selectInput(
             inputId = ns("transformation_choice"),
-            label = "Select or Search for Transformation",
+            label   = "Select or Search for Transformation",
             choices = c("None", "Squared", "Log10", "Reciprocal")
         )
     })
@@ -157,9 +166,9 @@ categorical_model_covariate_element_server <- function(
     output$select_covariate_ui <- shiny::renderUI({
         shiny::req(covariate_tbl())
         choices <- create_nested_named_list(covariate_tbl())
-        selectInput(
+        shiny::selectInput(
             inputId = ns("covariate_choice"),
-            label = "Select or Search for Covariate",
+            label   = "Select or Search for Covariate",
             choices = choices
         )
     })
