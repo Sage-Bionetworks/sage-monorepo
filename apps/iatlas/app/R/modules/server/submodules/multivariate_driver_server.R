@@ -1,7 +1,9 @@
 multivariate_driver_server <- function(
     input,
     output,
-    session
+    session,
+    sample_tbl,
+    group_name
 ){
 
     ns <- session$ns
@@ -10,6 +12,7 @@ multivariate_driver_server <- function(
     source("R/modules/server/submodules/model_selection_server.R", local = T)
     source("R/modules/ui/submodules/elements_ui.R", local = T)
     source("R/modules/server/submodules/elements_server.R", local = T)
+    source("R/driver_functions.R")
 
     output$response_options <- shiny::renderUI({
         shiny::selectInput(
@@ -60,25 +63,123 @@ multivariate_driver_server <- function(
 
     response_tbl <- shiny::reactive({
         shiny::req(input$response_choice_id)
-        .GlobalEnv$build_feature_value_tbl_from_ids(input$response_choice_id)
+        input$response_choice_id %>%
+            as.integer() %>%
+            .GlobalEnv$build_feature_value_tbl_from_ids() %>%
+            dplyr::select(response = value, sample_id)
+
     })
 
     status_tbl <- shiny::reactive({
         paste0(
             "SELECT gsm.gene_id, gsm.sample_id, gsm.mutation_code_id, gsm.status, ",
-            "g.hgnc, mc.code FROM genes_samples_mutations gsm ",
+            "g.hgnc AS gene, mc.code AS mutation_code FROM genes_samples_mutations gsm ",
             "INNER JOIN genes g on gsm.gene_id = g.id ",
             "INNER JOIN mutation_codes mc ON gsm.mutation_code_id = mc.id ",
             "WHERE g.id IN (",
             paste(
                 "SELECT gene_id FROM genes_to_types WHERE type_id = (",
                 "SELECT id FROM gene_types WHERE name = 'driver_mutation'",
-                ")"
+                ") LIMIT 10" # fix!!!!!!!!!!!!
             ),
             ")"
         ) %>%
             perform_query()
     })
+
+    combined_tbl <- shiny::reactive({
+        shiny::req(response_tbl(), sample_tbl(), status_tbl())
+        list(response_tbl(), sample_tbl(), status_tbl()) %>%
+            purrr::reduce(dplyr::inner_join, by = "sample_id") %>%
+            dplyr::select(-sample_id) %>%
+            dplyr::mutate(label = paste0(
+                .data$group, "; ", .data$gene, ":", .data$mutation_code
+            ))
+
+    })
+
+    labels <- shiny::reactive({
+        shiny::req(combined_tbl(), input$min_mutants, input$min_wildtype)
+        combined_tbl() %>%
+            dplyr::group_by(label) %>%
+            dplyr::mutate(status = dplyr::if_else(
+                status == "Wt",
+                1L,
+                0L
+            )) %>%
+            dplyr::summarise(n_total = dplyr::n(), n_wt = sum(status)) %>%
+            dplyr::mutate(n_mut = n_total - n_wt) %>%
+            dplyr::filter(
+                n_mut >= local(input$min_mutants),
+                n_wt >= local(input$min_wildtype),
+            ) %>%
+            dplyr::ungroup() %>%
+            dplyr::pull(label)
+    })
+
+    filtered_tbl <- shiny::reactive({
+        shiny::req(combined_tbl(), labels())
+        dplyr::filter(combined_tbl(), label %in% labels())
+    })
+
+    pvalue_tbl <- shiny::reactive({
+        shiny::req(filtered_tbl(), module_parameters()$formula_string)
+
+        filtered_tbl() %>%
+            dplyr::select(label, response, status) %>%
+            tidyr::nest(tbl = c(response, status)) %>%
+            dplyr::mutate(p_value = purrr::map_dbl(
+                tbl,
+                calculate_lm_pvalue,
+                module_parameters()$formula_string,
+                "statusWt"
+            )) %>%
+            dplyr::filter(!is.na(p_value)) %>%
+            dplyr::select(-tbl) %>%
+            dplyr::mutate(log10_p_value = -log10(p_value))
+    })
+
+    effect_size_tbl <- shiny::reactive({
+        shiny::req(filtered_tbl())
+        filtered_tbl() %>%
+            dplyr::select(label, response, status) %>%
+            dplyr::group_by(label, status) %>%
+            dplyr::summarise(responses = list(response)) %>%
+            dplyr::ungroup() %>%
+            tidyr::pivot_wider(., names_from = status, values_from = responses) %>%
+            dplyr::rename(GROUP1 = Mut, GROUP2 = Wt) %>%
+            tidyr::nest(data = c(GROUP1, GROUP2)) %>%
+            dplyr::mutate(fold_change = purrr::map_dbl(
+                data,
+                get_effect_size_from_df,
+                ratio_effect_size
+            )) %>%
+            dplyr::mutate(log10_fold_change = -log10(fold_change)) %>%
+            dplyr::select(-data) %>%
+            tidyr::drop_na()
+    })
+
+    volcano_plot_tbl <- shiny::eventReactive(input$calculate_button, {
+        filtered_tbl() %>%
+            dplyr::select(-c(response, status)) %>%
+            dplyr::distinct() %>%
+            dplyr::inner_join(pvalue_tbl(), by = "label") %>%
+            dplyr::inner_join(effect_size_tbl(), by = "label") %>%
+            print()
+    })
+
+
+
+    shiny::callModule(
+        volcano_plot_server,
+        "multivariate_driver",
+        volcano_plot_tbl,
+        "Immune Response Association With Driver Mutations",
+        "multivariate_driver",
+        "Wt",
+        "Mut",
+        shiny::reactive(input$response_variable)
+    )
 #
 #         sql_query <- build_sql('SELECT a, b, c, avg(c) OVER (PARTITION BY a) AS mean_c FROM x_tbl')
 #
@@ -218,21 +319,7 @@ multivariate_driver_server <- function(
     # })
 
 
-    # combined_con <- shiny::reactive({
-    #
-    #     shiny::req(
-    #         response_con(),
-    #         status_con()
-    #     )
-    #
-    #     con <-
-    #         dplyr::inner_join(
-    #             response_con(),
-    #             status_con(),
-    #             by = "sample_id",
-    #         ) %>%
-    #         dplyr::compute()
-    # })
+
 
     # cov_combined_con <- shiny::reactive({
     #
@@ -376,20 +463,6 @@ multivariate_driver_server <- function(
     #         )
     # })
 
-    volcano_plot_tbl <- shiny::reactive({
-        print(response_tbl())
-        print(status_tbl())
-    })
 
-    shiny::callModule(
-        volcano_plot_server,
-        "multivariate_driver",
-        volcano_plot_tbl,
-        "Immune Response Association With Driver Mutations",
-        "multivariate_driver",
-        "Wt",
-        "Mut",
-        shiny::reactive(input$response_variable)
-    )
 }
 
