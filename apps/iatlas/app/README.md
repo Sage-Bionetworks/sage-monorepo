@@ -1,9 +1,3 @@
-# Work-In-Progress
-
-The shiny-iatlas repository is being migrated into two new repositories:
-
-- iatlas-app (this repository) - for all the shiny-app R code
-- iatlas-data - for all the iatlas-related data, DB-creation and DB-populating code
 
 # iAtlas-App
 
@@ -14,6 +8,25 @@ The portal is built entirely in **R** and **Shiny** using the **RStudio** develo
 - [shinydashboard](https://rstudio.github.io/shinydashboard/)
 - [plotly](https://plot.ly/r/)
 - [crosstalk](https://rstudio.github.io/crosstalk/)
+
+## iAtlas-App and iAtlas-Data
+
+This app is spit into two repositories:
+
+- [iatlas-app](https://github.com/CRI-iAtlas/iatlas-app) - for all the shiny-app R code (this repository)
+- [iatlas-data](https://github.com/CRI-iAtlas/iatlas-data) - for all the iatlas-related data, DB-creation and DB-populating code
+
+The easiest way to get start is to clone both repositories, go through the iatlas-data README, then go through this README. More or less this means:
+
+1. install a few dependencies (~30min)
+1. load iatlas-data; auto-install its packages; build the db (~15-75min depending on package install time)
+1. load iatlas-app; auto-install its packages; and run shiny (~5-60min depending on package install time)
+
+You don't need iatlas-data to run iatlas-app if you:
+
+* Already have the database built locally
+* You configure your environment variables to connect directly to the staging or production DB servers
+
 
 ## Install
 
@@ -52,9 +65,11 @@ The portal is built entirely in **R** and **Shiny** using the **RStudio** develo
 
 ### MacOS Install instructions
 
-Install package manager: [HomeBrew](https://brew.sh/) (or [MacPorts](https://www.macports.org/) or your package manager of choice)
+Install package manager:
+- [HomeBrew](https://brew.sh/) (the instructions below are for HomeBrew)
+- or [MacPorts](https://www.macports.org/), which is very similar to use for installing packages
 
-Then:
+Then in the terminal, run:
 
 - xcode-select --install
 - brew install R
