@@ -5,7 +5,7 @@ model_selection_server <- function(
     numerical_covariate_tbl,
     categorical_covariate_tbl,
     model_string_prefix,
-    model_formula_prefix = "response ~ status"
+    model_formula_prefix = shiny::reactive("response ~ status")
 ){
 
     source(
@@ -105,7 +105,7 @@ model_selection_server <- function(
     formula_string <- shiny::reactive({
         req(model_formula_prefix)
         create_covariate_string(
-            model_string_prefix(),
+            model_formula_prefix(),
             numerical_formula_string(),
             categorical_string()
         )

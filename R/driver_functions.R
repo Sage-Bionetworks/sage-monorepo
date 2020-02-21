@@ -87,6 +87,26 @@ build_driver_violin_tbl <- function(feature_id, gene_id, tag_id, mutation_id){
         dplyr::select(x = .data$status, y = .data$value)
 }
 
+calculate_lm_pvalue <- function(data, lm_formula, term){
+    data %>%
+        lm(formula = lm_formula, data = .) %>%
+        summary %>%
+        magrittr::use_series(coefficients) %>%
+        .[term, "Pr(>|t|)"] %>%
+        as.double()
+}
+
+get_effect_size_from_df <- function(df, method){
+    method(unlist(df$GROUP1), unlist(df$GROUP2))
+}
+
+ratio_effect_size <- function(v1, v2){
+    mean1 <- mean(v1)
+    mean2 <- mean(v2)
+    if (any(mean1 <= 0, mean2 <= 0)) return(NA)
+    mean1 / mean2
+}
+
 
 
 

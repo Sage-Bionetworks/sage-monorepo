@@ -99,6 +99,7 @@ shiny::shinyServer(function(input, output, session) {
     shiny::callModule(
         driver_associations_server,
         "driver_associations",
+        cohort_sample_tbl,
         cohort_group_name
     )
 
