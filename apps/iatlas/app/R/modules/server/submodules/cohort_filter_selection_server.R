@@ -6,12 +6,14 @@ cohort_filter_selection_server <- function(
     selected_dataset,
     sample_ids
 ){
-    ns <- session$ns
 
-    source("R/modules/server/submodules/insert_remove_element_server.R", local = T)
+    source(
+        "R/modules/server/submodules/insert_remove_element_server.R",
+        local = T
+    )
     source("R/modules/ui/submodules/elements_ui.R", local = T)
     source("R/modules/server/submodules/elements_server.R", local = T)
-    source("R/functions/cohort_filter_selection_functions.R", local = T)
+    source("R/cohort_filter_selection_functions.R", local = T)
 
     dataset_to_group_tbl <- dplyr::tribble(
         ~group,                 ~dataset, ~type,
@@ -92,7 +94,7 @@ cohort_filter_selection_server <- function(
                 item$feature_range[[1]],
                 item$feature_range[[2]]
             )
-            sample_ids <- get_numeric_filter_samples(
+            sample_ids <- get_filtered_feature_sample_ids(
                 item$feature_choice,
                 item$feature_range[[1]],
                 item$feature_range[[2]]
