@@ -18,24 +18,20 @@ til_maps_server <- function(
         local = T
     )
 
-    sample_tbl2 <- shiny::reactive({
+    source(
+        "R/til_maps_functions.R",
+        local = T
+    )
+
+    tilmap_sample_tbl <- shiny::reactive({
         shiny::req(sample_tbl())
-        tbl <-
-            paste(
-                "SELECT s.id AS sample_id, s.name AS sample_name, ",
-                "sl.name AS slide_barcode FROM samples s ",
-                "INNER JOIN slides sl ON s.patient_id = sl.id ",
-                "WHERE sl.name IS NOT NULL"
-            ) %>%
-            .GlobalEnv$perform_query("Get sample table") %>%
-            dplyr::inner_join(sample_tbl(), by = "sample_id")
-        return(tbl)
+        build_tm_sample_tbl(sample_tbl())
     })
 
     shiny::callModule(
         til_map_distributions_server,
         "til_map_distributions",
-        sample_tbl2,
+        tilmap_sample_tbl,
         group_tbl,
         group_name,
         plot_colors
@@ -44,6 +40,6 @@ til_maps_server <- function(
     shiny::callModule(
         til_map_datatable_server,
         "til_map_datatable",
-        sample_tbl2
+        tilmap_sample_tbl
     )
 }
