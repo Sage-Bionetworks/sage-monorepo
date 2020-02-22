@@ -7,7 +7,7 @@ overall_cell_proportions_server  <- function(
 ){
 
     source("R/modules/server/submodules/plotly_server.R", local = T)
-    source("R/functions/overall_cell_proportions_functions.R", local = T)
+    source("R/overall_cell_proportions_functions.R", local = T)
 
     value_tbl <- shiny::reactive({
         shiny::req(sample_tbl())

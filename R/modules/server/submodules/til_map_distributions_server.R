@@ -11,7 +11,7 @@ til_map_distributions_server <- function(
     ns <- session$ns
 
     source("R/modules/server/submodules/distribution_plot_server.R", local = T)
-    source("R/functions/til_map_distributions_functions.R", local = T)
+    source("R/til_map_distributions_functions.R", local = T)
 
     output$selection_ui <- shiny::renderUI({
         shiny::selectInput(
