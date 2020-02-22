@@ -126,18 +126,26 @@ build_md_status_tbl <- function(){
 #' @param response_tbl A tibble
 #' @param sample_tbl A tibble
 #' @param status_tbl A tibble
+#' @param mode A string, either "By group" or "Across groups"
 #'
 #' @importFrom purrr reduce
 #' @importFrom dplyr select mutate
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
-build_md_combined_tbl <- function(response_tbl, sample_tbl, status_tbl){
-    list(response_tbl, sample_tbl, status_tbl) %>%
+build_md_combined_tbl <- function(response_tbl, sample_tbl, status_tbl, mode){
+    tbl <- list(response_tbl, sample_tbl, status_tbl) %>%
         purrr::reduce(dplyr::inner_join, by = "sample_id") %>%
-        dplyr::select(-.data$sample_id) %>%
-        dplyr::mutate(label = paste0(
+        dplyr::select(-.data$sample_id)
+    if (mode == "By group") {
+        tbl <- dplyr::mutate(tbl, label = paste0(
             .data$group, "; ", .data$gene, ":", .data$mutation_code
         ))
+    } else if (mode == "Across groups") {
+        tbl <- tbl %>%
+            dplyr::select(-.data$group) %>%
+            dplyr::mutate(label = paste0(.data$gene, ":", .data$mutation_code))
+    }
+    return(tbl)
 }
 
 #' Filter Multivariate Driver Labels
@@ -198,12 +206,12 @@ build_md_pvalue_tbl <- function(tbl, formula_string){
 #' @param term A string
 #'
 #' @importFrom stats lm
-#' @importFrom magrittr %>% use_series extract
+#' @importFrom magrittr %>% extract extract2
 calculate_lm_pvalue <- function(data, lm_formula, term){
     data %>%
         stats::lm(formula = lm_formula, data = .) %>%
         summary() %>%
-        magrittr::use_series(coefficients) %>%
+        magrittr::extract2("coefficients") %>%
         magrittr::extract(term, "Pr(>|t|)") %>%
         as.double()
 }
@@ -227,8 +235,8 @@ build_md_effect_size_tbl <- function(tbl){
             names_from = .data$status,
             values_from = .data$responses
         ) %>%
-        dplyr::rename(GROUP1 = .data$Mut, GROUP2 = .data$Wt) %>%
-        tidyr::nest(data = c(.data$GROUP1, .data$GROUP2)) %>%
+        dplyr::rename(g1 = .data$Mut, g2 = .data$Wt) %>%
+        tidyr::nest(data = c(.data$g1, .data$g2)) %>%
         dplyr::mutate(fold_change = purrr::map_dbl(
             .data$data,
             get_effect_size_from_tbl
@@ -243,7 +251,7 @@ build_md_effect_size_tbl <- function(tbl){
 #' @param tbl A tibble
 #' @param method A function
 get_effect_size_from_tbl <- function(tbl, method = calculate_ratio_effect_size){
-    method(unlist(df$GROUP1), unlist(df$GROUP2))
+    method(unlist(tbl$g1), unlist(tbl$g2))
 }
 
 #' Calculate Ratio Effect Size
@@ -274,6 +282,35 @@ build_md_results_tbl <- function(filtered_tbl, pvalue_tbl, effect_size_tbl){
         dplyr::inner_join(effect_size_tbl, by = "label")
 }
 
+#' Build Multivariate Driver Violin Tibble
+#'
+#' @param tbl A tibble with columns label, status and response
+#' @param .label A string
+#'
+#' @importFrom dplyr select filter
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+build_md_driver_violin_tbl <- function(tbl, .label){
+    tbl %>%
+        dplyr::filter(.data$label %in% .label) %>%
+        dplyr::select(x = .data$status, y = .data$response)
+}
 
+#' Create Multivariate Driver Violin Plot Title
+#'
+#' @param tbl A one row tibble with columns p_value and log10_fold_change
+#' if mode == "By group" The tibble must has a group column
+#' @param mode A string, either "By group" or "Across groups"
+#' @importFrom rlang .data
+create_md_violin_plot_title <- function(tbl, mode){
+    title <- paste(
+        "P-value:",
+        round(tbl$p_value, 4), ";",
+        "Log10(Fold Change):",
+        round(tbl$log10_fold_change, 4)
+    )
+    if (mode == "By group") title <- paste("Group:", tbl$group, ";", title)
+    return(title)
+}
 
 

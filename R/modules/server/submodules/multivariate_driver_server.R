@@ -8,10 +8,10 @@ multivariate_driver_server <- function(
 
     ns <- session$ns
 
-    source("R/modules/server/submodules/volcano_plot_server.R", local = T)
     source("R/modules/server/submodules/model_selection_server.R", local = T)
     source("R/modules/ui/submodules/elements_ui.R", local = T)
     source("R/modules/server/submodules/elements_server.R", local = T)
+    source("R/modules/server/submodules/plotly_server.R", local = T)
     source("R/driver_functions.R")
 
     output$response_options <- shiny::renderUI({
@@ -68,8 +68,13 @@ multivariate_driver_server <- function(
     status_tbl <- shiny::reactive(build_md_status_tbl())
 
     combined_tbl <- shiny::reactive({
-        shiny::req(response_tbl(), sample_tbl(), status_tbl())
-        build_md_combined_tbl(response_tbl(), sample_tbl(), status_tbl())
+        shiny::req(response_tbl(), sample_tbl(), status_tbl(), input$group_mode)
+        build_md_combined_tbl(
+            response_tbl(),
+            sample_tbl(),
+            status_tbl(),
+            input$group_mode
+        )
     })
 
     labels <- shiny::reactive({
@@ -97,83 +102,130 @@ multivariate_driver_server <- function(
         build_md_results_tbl(filtered_tbl(), pvalue_tbl(), effect_size_tbl())
     })
 
+    output$volcano_plot <- plotly::renderPlotly({
+
+        shiny::req(volcano_plot_tbl())
+
+        shiny::validate(shiny::need(
+            nrow(volcano_plot_tbl()) > 0,
+            paste0(
+                "Current parameters did not result in any linear regression",
+                "results."
+            )
+        ))
+
+        .GlobalEnv$create_scatterplot(
+            volcano_plot_tbl(),
+            x_col     = "log10_fold_change",
+            y_col     = "log10_p_value",
+            xlab      = "Log10(Fold Change)",
+            ylab      = "- Log10(P-value)",
+            title     = "Immune Response Association With Driver Mutations",
+            source    = "multivariate_volcano_plot",
+            key_col   = "label",
+            label_col = "label",
+            horizontal_line   = T,
+            horizontal_line_y = (-log10(0.05))
+        )
+    })
+
     shiny::callModule(
-        volcano_plot_server,
-        "multivariate_driver",
-        volcano_plot_tbl,
-        "Immune Response Association With Driver Mutations",
-        "multivariate_driver",
-        "Wt",
-        "Mut",
-        shiny::reactive(input$response_variable)
+        plotly_server,
+        "volcano_plot",
+        plot_tbl = volcano_plot_tbl
     )
-#
-#         sql_query <- build_sql('SELECT a, b, c, avg(c) OVER (PARTITION BY a) AS mean_c FROM x_tbl')
-#
-#         y_df <- DBI::dbGetQuery(con, sql_query) # This returns a data frame on memory
-#
-#         driver_id <-
-#             create_connection("gene_types") %>%
-#             dplyr::filter(name == "driver_mutation") %>%
-#             dplyr::pull(id)
-#
-#         driver_ids <-
-#             create_connection("genes_to_types") %>%
-#             dplyr::filter(type_id == driver_id) %>%
-#             dplyr::pull(gene_id)
-#
-#         con1 <-
-#             create_connection("genes_to_samples") %>%
-#             dplyr::filter(
-#                 !is.na(status)
-#                 # gene_id %in% driver_ids
-#             ) %>%
-#             dplyr::select(sample_id, gene_id, status) %>%
-#             dplyr::show_query()
-#
-#         s <- dplyr::sql(stringr::str_c(
-#             'SELECT sample_id, gene_id, status',
-#             'FROM genes_to_samples',
-#             'WHERE gene_id IN (',
-#             stringr::str_c(driver_ids, collapse = ","),
-#             ')',
-#             sep = " "
-#         ))
-        #
-        #
-        #
-        #
-        # subquery <- stringr::str_c(
-        #     'SELECT gene_id',
-        #     'FROM genes_to_types',
-        #     'WHERE (type_id = 3)',
-        #     sep = " "
-        # )
-        #
-        # query <- dplyr::sql(stringr::str_c(
-        #     'SELECT sample_id, gene_id, status',
-        #     'FROM genes_to_samples',
-        #     'WHERE status IS NOT NULL',
-        #     'AND gene_id IN (',
-        #     subquery,
-        #     ')',
-        #     sep = " "
-        # ))
-        #
-        # current_pool <- pool::poolCheckout(.GlobalEnv$pool)
-        # system.time(pool::dbGetQuery(current_pool, query))
-        # pool::poolReturn(current_pool)
-        #
-        #
-        #
-        # #
-        # # WHERE ("gene_id" IN (
-        # #     SELECT "gene_id"
-        # #     FROM "genes_to_types"
-        # #     WHERE ("type_id" = 3)
-        # # )
-        #
-        #
+
+    selected_volcano_result <- shiny::reactive({
+        shiny::req(volcano_plot_tbl())
+
+        eventdata <- plotly::event_data(
+            "plotly_click",
+            source = "multivariate_volcano_plot"
+        )
+
+        # plot not clicked on yet
+        shiny::validate(shiny::need(
+            !is.null(eventdata),
+            paste0(
+                "Click a point on the above scatterplot to see a violin plot ",
+                "for the comparison"
+            )
+        ))
+
+        clicked_label <- .GlobalEnv$get_values_from_eventdata(eventdata, "key")
+
+        result <-  dplyr::filter(
+            volcano_plot_tbl(),
+            label == clicked_label
+        )
+
+        shiny::validate(shiny::need(
+            nrow(result) == 1,
+            paste0(
+                "Click a point on the above scatterplot to see a violin plot ",
+                "for the comparison"
+            )
+        ))
+        return(result)
+    })
+
+    violin_tbl <- shiny::reactive({
+        shiny::req(filtered_tbl(), selected_volcano_result(), input$group_mode)
+        build_md_driver_violin_tbl(
+            filtered_tbl(),
+            selected_volcano_result()$label
+        )
+    })
+
+    output$violin_plot <- plotly::renderPlotly({
+        shiny::req(
+            violin_tbl(),
+            response_variable_name(),
+            selected_volcano_result(),
+            input$group_mode
+        )
+
+        mode_check <- "group" %in% colnames(selected_volcano_result())
+        if (input$group_mode == "Across groups") {
+            mode_check <- !mode_check
+        }
+
+        shiny::validate(shiny::need(
+            mode_check,
+            paste0(
+                "Group mode changed, push recalculate button to see ",
+                "violin plot"
+            )
+        ))
+
+        title <- create_md_violin_plot_title(
+            selected_volcano_result(),
+            input$group_mode
+        )
+
+        xlab <- paste0(
+            "Mutation Status ",
+            selected_volcano_result()$gene,
+            ":",
+            selected_volcano_result()$mutation_code
+        )
+
+        .GlobalEnv$create_violinplot(
+            violin_tbl(),
+            xlab = xlab,
+            ylab = response_variable_name(),
+            title = title,
+            fill_colors = c("blue"),
+            showlegend = FALSE
+        )
+    })
+
+    shiny::callModule(
+        plotly_server,
+        "violin_plot",
+        plot_tbl = violin_tbl
+    )
+
     #     create_connection("gene_types") %>%
     #         dplyr::filter(name == "driver_mutation") %>%
     #         dplyr::select(type_id = id) %>%
