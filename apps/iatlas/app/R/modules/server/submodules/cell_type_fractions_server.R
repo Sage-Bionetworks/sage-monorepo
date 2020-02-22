@@ -7,7 +7,7 @@ cell_type_fractions_server <- function(
 ){
 
     source("R/modules/server/submodules/plotly_server.R", local = T)
-    source("R/functions/cell_type_fractions_functions.R", local = T)
+    source("R/cell_type_fractions_functions.R", local = T)
 
     plot_tbl <- shiny::reactive({
         shiny::req(input$fraction_group_choice)
