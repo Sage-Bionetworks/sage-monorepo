@@ -8,7 +8,7 @@ cohort_group_selection_server <- function(
 ){
     ns <- session$ns
 
-    source("R/functions/cohort_group_selection_functions.R", local = T)
+    source("R/cohort_group_selection_functions.R", local = T)
 
     dataset_to_group_tbl <- dplyr::tribble(
         ~group,                 ~dataset, ~type,
@@ -28,9 +28,7 @@ cohort_group_selection_server <- function(
 
     available_groups <- shiny::reactive({
         shiny::req(selected_dataset())
-        dataset_to_group_tbl %>%
-            dplyr::filter(dataset == selected_dataset()) %>%
-            dplyr::pull(group)
+        get_available_groups(dataset_to_group_tbl, selected_dataset())
     })
 
     default_group <- shiny::reactive({
@@ -40,34 +38,32 @@ cohort_group_selection_server <- function(
 
 
     output$select_group_ui <- shiny::renderUI({
-
         shiny::req(available_groups(), default_group())
-
         shiny::selectInput(
-            inputId = ns("group_choice"),
-            label = shiny::strong("Select or Search for Grouping Variable"),
-            choices = available_groups(),
+            inputId  = ns("group_choice"),
+            label    = "Select or Search for Grouping Variable",
+            choices  = available_groups(),
             selected = default_group()
         )
     })
 
     group_choice <- shiny::reactive({
         req(default_group())
-        if (is.null(input$group_choice)) {
-            group_choice <- default_group()
-        } else {
-            group_choice <- input$group_choice
-        }
-        return(group_choice)
+        determine_group(input$group_choice, default_group())
     })
 
     # This is so that the conditional panel can see the various shiny::reactives
-    output$display_driver_mutation <- shiny::reactive(group_choice() == "Driver Mutation")
-    shiny::outputOptions(output, "display_driver_mutation", suspendWhenHidden = FALSE)
+    output$display_driver_mutation <- shiny::reactive(
+        group_choice() == "Driver Mutation"
+    )
+    shiny::outputOptions(
+        output, "display_driver_mutation", suspendWhenHidden = FALSE
+    )
 
     default_driver_gene <- "ABL1"
 
-    default_driver_gene_id <- .GlobalEnv$get_gene_id_from_hgnc(default_driver_gene)
+    default_driver_gene_id <- default_driver_gene %>%
+        .GlobalEnv$get_gene_id_from_hgnc()
 
     output$select_driver_mutation_group_ui <- shiny::renderUI({
         shiny::req(input$group_choice == "Driver Mutation")
