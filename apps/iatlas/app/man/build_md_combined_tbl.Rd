@@ -4,7 +4,7 @@
 \alias{build_md_combined_tbl}
 \title{Build Multivariate Driver Combined Tibble}
 \usage{
-build_md_combined_tbl(response_tbl, sample_tbl, status_tbl)
+build_md_combined_tbl(response_tbl, sample_tbl, status_tbl, mode)
 }
 \arguments{
 \item{response_tbl}{A tibble}
@@ -12,6 +12,8 @@ build_md_combined_tbl(response_tbl, sample_tbl, status_tbl)
 \item{sample_tbl}{A tibble}
 
 \item{status_tbl}{A tibble}
+
+\item{mode}{A string, either "By group" or "Across groups"}
 }
 \description{
 Build Multivariate Driver Combined Tibble
