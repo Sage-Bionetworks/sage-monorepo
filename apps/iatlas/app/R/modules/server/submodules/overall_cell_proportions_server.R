@@ -11,12 +11,12 @@ overall_cell_proportions_server  <- function(
 
     value_tbl <- shiny::reactive({
         shiny::req(sample_tbl())
-        build_value_tbl(sample_tbl())
+        build_ocp_value_tbl(sample_tbl())
     })
 
     barplot_tbl <- shiny::reactive({
         req(value_tbl())
-        build_barplot_tbl(value_tbl())
+        build_ocp_barplot_tbl(value_tbl())
     })
 
     output$barplot <- plotly::renderPlotly({
@@ -46,12 +46,12 @@ overall_cell_proportions_server  <- function(
 
     barplot_selected_group <- shiny::reactive({
         shiny::req(barplot_eventdata())
-        selected_group <- barplot_eventdata()$x[[1]]
+        barplot_eventdata()$x[[1]]
     })
 
     scatterplot_tbl <- shiny::reactive({
         shiny::req(value_tbl(), barplot_selected_group())
-        build_scatterplot_tbl(value_tbl(), barplot_selected_group())
+        build_ocp_scatterplot_tbl(value_tbl(), barplot_selected_group())
     })
 
     output$scatterplot <- plotly::renderPlotly({

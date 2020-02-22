@@ -1,4 +1,4 @@
-build_value_tbl <- function(sample_tbl){
+build_ocp_value_tbl <- function(sample_tbl){
     subquery1 <- paste(
         'SELECT id AS feature_id, "display" AS feature_name, "order"',
         'FROM features WHERE display IN',
@@ -19,52 +19,61 @@ build_value_tbl <- function(sample_tbl){
     )
 
     query %>%
-        dplyr::sql() %>%
-        .GlobalEnv$perform_query(
+        perform_query(
             "build overall_cell_proportions value table"
         ) %>%
         dplyr::inner_join(sample_tbl, by = "sample_id")
 }
 
-build_barplot_tbl <- function(value_tbl){
+build_ocp_barplot_tbl <- function(value_tbl){
     value_tbl %>%
-        dplyr::group_by(feature_name, group) %>%
+        dplyr::group_by(.data$feature_name, .data$group) %>%
         dplyr::arrange(order) %>%
-        dplyr::summarise(mean = mean(feature_value), count = dplyr::n()) %>%
+        dplyr::summarise(
+            .mean = mean(.data$feature_value),
+            .count = dplyr::n()
+        ) %>%
         dplyr::ungroup() %>%
-        dplyr::mutate(se = mean / sqrt(count)) %>%
+        dplyr::mutate(.se = .data$.mean / sqrt(.data$.count)) %>%
         create_plotly_label(
-            .data$feature_name, .data$group, c("mean", "se")
+            .data$feature_name, .data$group, c(".mean", ".se")
         ) %>%
         dplyr::select(
-            x = group,
-            y = mean,
-            color = feature_name,
-            label,
-            error = se
+            x = .data$group,
+            y = .data$.mean,
+            color = .data$feature_name,
+            .data$label,
+            error = .data$.se
         )
 }
 
 
-build_scatterplot_tbl <- function(value_tbl, group_value){
+build_ocp_scatterplot_tbl <- function(value_tbl, group_value){
     sample_tbl <-
         "SELECT id AS sample_id, name AS sample_name FROM samples" %>%
-        .GlobalEnv$perform_query("Get sample table")
+        perform_query("Get sample table")
 
     value_tbl %>%
         dplyr::inner_join(sample_tbl, by = "sample_id") %>%
         dplyr::select(
-            sample_name,
-            group,
-            feature = feature_name,
-            value = feature_value) %>%
+            .data$sample_name,
+            .data$group,
+            feature = .data$feature_name,
+            value = .data$feature_value) %>%
         dplyr::filter(
-            feature %in% c("Leukocyte Fraction", "Stromal Fraction"),
-            group == group_value
+            .data$feature %in% c("Leukocyte Fraction", "Stromal Fraction"),
+            .data$group == group_value
         ) %>%
-        tidyr::pivot_wider(values_from = value, names_from = feature) %>%
+        tidyr::pivot_wider(
+            .,
+            values_from = .data$value,
+            names_from = .data$feature
+        ) %>%
         tidyr::drop_na() %>%
-        dplyr::rename(x = `Stromal Fraction`, y = `Leukocyte Fraction`) %>%
+        dplyr::rename(
+            x = .data$`Stromal Fraction`,
+            y = .data$`Leukocyte Fraction`
+        ) %>%
         create_plotly_label(.data$sample_name, .data$group, c("x", "y")) %>%
-        dplyr::select(x, y, label)
+        dplyr::select(.data$x, .data$y, .data$label)
 }
