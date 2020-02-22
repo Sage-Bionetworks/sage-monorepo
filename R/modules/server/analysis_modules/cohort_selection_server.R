@@ -18,8 +18,6 @@ cohort_selection_server <- function(
         local = T
     )
 
-    source("R/cohort_selection_functions.R", local = T)
-
     cohort_obj_manual <- shiny::callModule(
         cohort_manual_selection_server,
         "cohort_manual_selection",
@@ -47,7 +45,16 @@ cohort_selection_server <- function(
 
     group_key_tbl <- shiny::reactive({
         shiny::req(cohort_obj())
-        build_group_dt_tbl(cohort_obj())
+        cohort_obj()$plot_colors %>%
+            tibble::enframe(., name = "group", value = "color") %>%
+            dplyr::inner_join(cohort_obj()$group_tbl, by = "group") %>%
+            dplyr::select(
+                `Sample Group` = group,
+                `Group Name` = name,
+                `Group Size` = size,
+                Characteristics = characteristics,
+                `Plot Color` = color
+            )
     })
 
     shiny::callModule(

@@ -1,15 +1,3 @@
-get_available_groups <- function(tbl, .dataset){
-    tbl %>%
-        dplyr::filter(.data$dataset == .dataset) %>%
-        dplyr::pull(.data$group)
-}
-
-determine_group <- function(group_choice, default_group){
-    if (is.null(group_choice)) return(default_group)
-    else return(group_choice)
-}
-
-
 create_cohort_object <- function(
     sample_ids,
     group_choice,
