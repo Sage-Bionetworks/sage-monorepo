@@ -4,10 +4,12 @@
 \alias{create_categorical_covariate_string}
 \title{Create Categorical Covariate String}
 \usage{
-create_categorical_covariate_string(covs)
+create_categorical_covariate_string(covs, translate_func)
 }
 \arguments{
 \item{covs}{A vector of strings or NULL}
+
+\item{translate_func}{A function}
 }
 \description{
 Create Categorical Covariate String

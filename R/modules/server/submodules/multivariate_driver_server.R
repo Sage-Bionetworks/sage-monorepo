@@ -12,7 +12,7 @@ multivariate_driver_server <- function(
     source("R/modules/ui/submodules/elements_ui.R", local = T)
     source("R/modules/server/submodules/elements_server.R", local = T)
     source("R/modules/server/submodules/plotly_server.R", local = T)
-    source("R/driver_functions.R")
+    source("R/multivariate_driver_functions.R")
 
     output$response_options <- shiny::renderUI({
         shiny::selectInput(
@@ -48,7 +48,7 @@ multivariate_driver_server <- function(
         stringr::str_c(response_variable_name(), " ~ Mutation status")
     })
 
-    module_parameters <- shiny::callModule(
+    covariates_obj <- shiny::callModule(
         model_selection_server,
         "module1",
         numerical_covariate_tbl,
@@ -57,7 +57,12 @@ multivariate_driver_server <- function(
     )
 
     output$model_text <- shiny::renderText({
-        module_parameters()$display_string
+        covariates_obj()$display_string
+    })
+
+    covariate_tbl <- shiny::reactive({
+        shiny::req(covariates_obj())
+        build_md_covariate_tbl(covariates_obj())
     })
 
     response_tbl <- shiny::reactive({
@@ -69,10 +74,11 @@ multivariate_driver_server <- function(
 
     combined_tbl <- shiny::reactive({
         shiny::req(response_tbl(), sample_tbl(), status_tbl(), input$group_mode)
-        build_md_combined_tbl(
+        combine_md_tbls(
             response_tbl(),
             sample_tbl(),
             status_tbl(),
+            covariate_tbl(),
             input$group_mode
         )
     })
@@ -88,8 +94,8 @@ multivariate_driver_server <- function(
     })
 
     pvalue_tbl <- shiny::reactive({
-        shiny::req(filtered_tbl(), module_parameters()$formula_string)
-        build_md_pvalue_tbl(filtered_tbl(), module_parameters()$formula_string)
+        shiny::req(filtered_tbl(), covariates_obj())
+        build_md_pvalue_tbl(filtered_tbl(), covariates_obj()$formula_string)
     })
 
     effect_size_tbl <- shiny::reactive({
@@ -98,8 +104,8 @@ multivariate_driver_server <- function(
     })
 
     volcano_plot_tbl <- shiny::eventReactive(input$calculate_button, {
-        shiny::req(filtered_tbl(), pvalue_tbl(), effect_size_tbl())
-        build_md_results_tbl(filtered_tbl(), pvalue_tbl(), effect_size_tbl())
+        shiny::req(pvalue_tbl(), effect_size_tbl())
+        dplyr::inner_join(pvalue_tbl(), effect_size_tbl(), by = "label")
     })
 
     output$volcano_plot <- plotly::renderPlotly({
@@ -166,6 +172,7 @@ multivariate_driver_server <- function(
                 "for the comparison"
             )
         ))
+
         return(result)
     })
 
@@ -185,36 +192,20 @@ multivariate_driver_server <- function(
             input$group_mode
         )
 
-        mode_check <- "group" %in% colnames(selected_volcano_result())
-        if (input$group_mode == "Across groups") {
-            mode_check <- !mode_check
-        }
-
         shiny::validate(shiny::need(
-            mode_check,
-            paste0(
-                "Group mode changed, push recalculate button to see ",
-                "violin plot"
-            )
+            nrow(violin_tbl()) > 0,
+            "Parameters have changed, press the calculate boutton."
         ))
-
-        title <- create_md_violin_plot_title(
-            selected_volcano_result(),
-            input$group_mode
-        )
-
-        xlab <- paste0(
-            "Mutation Status ",
-            selected_volcano_result()$gene,
-            ":",
-            selected_volcano_result()$mutation_code
-        )
 
         .GlobalEnv$create_violinplot(
             violin_tbl(),
-            xlab = xlab,
+            xlab = create_md_violin_plot_x_lab(
+                selected_volcano_result()$label, input$group_mode
+            ),
             ylab = response_variable_name(),
-            title = title,
+            title = create_md_violin_plot_title(
+                selected_volcano_result(), input$group_mode
+            ),
             fill_colors = c("blue"),
             showlegend = FALSE
         )
@@ -225,223 +216,5 @@ multivariate_driver_server <- function(
         "violin_plot",
         plot_tbl = violin_tbl
     )
-
-    #     create_connection("gene_types") %>%
-    #         dplyr::filter(name == "driver_mutation") %>%
-    #         dplyr::select(type_id = id) %>%
-    #         dplyr::inner_join(
-    #             create_connection("genes_to_types"),
-    #             by = "type_id"
-    #         ) %>%
-    #         dplyr::select(gene_id) %>%
-    #         dplyr::filter(gene_id < 5L) %>% # remove!
-    #         dplyr::inner_join(
-    #             create_connection("genes"),
-    #             by = c("gene_id" = "id")
-    #         ) %>%
-    #         dplyr::select(gene_id, gene_name = hgnc) %>%
-    #         dplyr::inner_join(
-    #             create_connection("genes_to_samples") %>%
-    #                 dplyr::filter(!is.na(status)),
-    #             by = "gene_id"
-    #         ) %>%
-    #         dplyr::select(sample_id, gene_name, status) %>%
-    #         dplyr::compute()
-    # })
-
-    # group_covariate_tbl <- shiny::reactive({
-    #     covariates <-
-    #         module_parameters()$categorical_covariates %>%
-    #         intersect(c("Immune_Subtype", "TCGA_Subtype", "TCGA_Study"))
-    #     if(length(covariates) == 0){
-    #         res <- NULL
-    #     } else {
-    #         res <- create_connection("tags") %>%
-    #             dplyr::filter(name %in% covariates) %>%
-    #             dplyr::select(parent_group_id = id, parent_group = name) %>%
-    #             dplyr::inner_join(
-    #                 create_connection("tags_to_tags"),
-    #                 by = c("parent_group_id" = "related_tag_id")
-    #             ) %>%
-    #             dplyr::inner_join(
-    #                 create_connection("tags"),
-    #                 by = c("tag_id" = "id")
-    #             ) %>%
-    #             dplyr::select(parent_group, group = name, tag_id) %>%
-    #             dplyr::inner_join(
-    #                 create_connection("samples_to_tags"),
-    #                 by = "tag_id"
-    #             ) %>%
-    #             dplyr::collect() %>%
-    #             dplyr::select(parent_group, group, sample_id) %>%
-    #             tidyr::pivot_wider(values_from = group, names_from = parent_group) %>%
-    #             tidyr::drop_na()
-    #     }
-    #     return(res)
-    # })
-
-    # feature_covariate_tbl <- shiny::reactive({
-    #     covariate_ids <- module_parameters()$numerical_covariates
-    #
-    #     if(is.null(covariate_ids)){
-    #         res <- NULL
-    #     } else {
-    #         req(feature_values_con())
-    #         res <- feature_values_con() %>%
-    #             dplyr::filter(feature_id %in% covariate_ids) %>%
-    #             dplyr::inner_join(features_con(), by = "feature_id") %>%
-    #             dplyr::select(sample_id, feature_internal_name, value) %>%
-    #             dplyr::collect() %>%
-    #             tidyr::pivot_wider(values_from = value, names_from = feature_internal_name)
-    #     }
-    #     return(res)
-    # })
-
-
-
-
-    # cov_combined_con <- shiny::reactive({
-    #
-    #     shiny::req(
-    #         combined_con(),
-    #         input$group_mode
-    #     )
-    #
-    #     con <- combined_con()
-    #
-    #     if (!is.null(feature_covariate_tbl())){
-    #         con <- dplyr::inner_join(
-    #             con,
-    #             feature_covariate_tbl(),
-    #             by = "sample_id",
-    #             copy = T
-    #         )
-    #     }
-    #     if (!is.null(group_covariate_tbl())){
-    #         con <- dplyr::inner_join(
-    #             con,
-    #             group_covariate_tbl(),
-    #             by = "sample_id",
-    #             copy = T
-    #         )
-    #     }
-    #     con <- dplyr::select(con, -sample_id)
-    #
-    #     if(input$group_mode == "Across groups") {
-    #         con <- con %>%
-    #             dplyr::rename(label = gene_name) %>%
-    #             dplyr::compute()
-    #     } else{
-    #         con <- con %>%
-    #             dplyr::mutate(label = paste0(gene_name, group, sep = ";")) %>%
-    #             dplyr::select(-c(gene_name, group)) %>%
-    #             dplyr::compute()
-    #     }
-    #     return(con)
-    # })
-
-
-
-    # summary_con <- shiny::reactive({
-    #     shiny::req(
-    #         cov_combined_con(),
-    #         input$min_mutants,
-    #         input$min_wildtype,
-    #     )
-    #     summary_con <- cov_combined_con() %>%
-    #         dplyr::group_by(label) %>%
-    #         dplyr::mutate(status = dplyr::if_else(
-    #             status == "Wt",
-    #             1L,
-    #             0L
-    #         )) %>%
-    #         dplyr::summarise(
-    #             n_total = dplyr::n(),
-    #             n_wt = sum(status),
-    #         ) %>%
-    #         dplyr::mutate(n_mut = n_total - n_wt) %>%
-    #         dplyr::filter(
-    #             n_mut >= local(input$min_mutants),
-    #             n_wt >= local(input$min_wildtype),
-    #         ) %>%
-    #         dplyr::ungroup() %>%
-    #         dplyr::select(-c(n_mut, n_total, n_wt)) %>%
-    #         dplyr::compute()
-    #
-    # })
-
-    # combined_con2 <- shiny::reactive({
-    #
-    #     shiny::req(
-    #         cov_combined_con(),
-    #         summary_con()
-    #     )
-    #
-    #     cov_combined_con() %>%
-    #         dplyr::inner_join(summary_con()) %>%
-    #         dplyr::compute()
-    # })
-
-    # model_tbl <- shiny::reactive({
-    #
-    #     shiny::req(
-    #         combined_con2(),
-    #         module_parameters()$formula_string
-    #     )
-    #
-    #     combined_con2() %>%
-    #         dplyr::collect() %>%
-    #         tidyr::nest(tbl = -label) %>%
-    #         dplyr::mutate(p_value = as.double(parallel::mclapply(
-    #             tbl,
-    #             calculate_lm_pvalue,
-    #             module_parameters()$formula_string,
-    #             "statusWt"
-    #         ))) %>%
-    #         dplyr::filter(!is.na(p_value)) %>%
-    #         dplyr::select(-tbl) %>%
-    #         dplyr::mutate(log10_p_value = -log10(p_value))
-    # })
-
-    # effect_size_tbl <- shiny::reactive({
-    #
-    #     shiny::req(
-    #         combined_con2()
-    #     )
-    #     combined_con2() %>%
-    #         dplyr::collect() %>%
-    #         dplyr::select(label, response, status) %>%
-    #         dplyr::group_by(label, status) %>%
-    #         dplyr::summarise(responses = list(response)) %>%
-    #         dplyr::mutate(status = as.character(status)) %>%
-    #         tidyr::pivot_wider(names_from = status, values_from = responses) %>%
-    #         dplyr::rename(GROUP1 = Mut, GROUP2 = Wt) %>%
-    #         tidyr::nest(data = c(GROUP1, GROUP2)) %>%
-    #         dplyr::mutate(fold_change = as.double(parallel::mclapply(
-    #             data,
-    #             get_effect_size_from_df,
-    #             ratio_effect_size
-    #         ))) %>%
-    #         dplyr::mutate(log10_fold_change = -log10(fold_change)) %>%
-    #         dplyr::select(-data) %>%
-    #         tidyr::drop_na()
-    # })
-
-    # volcano_tbl <- shiny::eventReactive(input$calculate_button, {
-    #
-    #     shiny::req(
-    #         model_tbl(),
-    #         effect_size_tbl()
-    #     )
-    #
-    #     tbl <-
-    #         dplyr::inner_join(
-    #             model_tbl(),
-    #             effect_size_tbl(),
-    #             by = "label"
-    #         )
-    # })
-
-
 }
 

@@ -27,30 +27,33 @@ get_names_from_categorical_covariate_output <- function(output){
 #' Create Numerical Covariate String
 #'
 #' @param covs A vector of strings or NULL
+#' @param translate_func A function
+#' @param transform_func A function
 #' @param transforms A vector of strings or NULL
-#' @param trans_func A function
 #'
 #' @importFrom magrittr %>%
 #' @importFrom purrr map map2
-create_numerical_covariate_string <- function(covs, transforms, trans_func){
+create_numerical_covariate_string <- function(
+    covs, transforms, translate_func, transform_func){
     if (any(is.null(covs), is.null(transforms))) return(NULL)
     covs %>%
         as.integer() %>%
-        purrr::map(get_feature_display_from_id) %>%
-        purrr::map2_chr(transforms, trans_func) %>%
+        purrr::map(translate_func) %>%
+        purrr::map2_chr(transforms, transform_func) %>%
         paste0(collapse = " + ")
 }
 
 #' Create Categorical Covariate String
 #'
 #' @param covs A vector of strings or NULL
+#' @param translate_func A function
 #'
 #' @importFrom magrittr %>%
 #' @importFrom purrr map
-create_categorical_covariate_string <- function(covs){
+create_categorical_covariate_string <- function(covs, translate_func){
     if (is.null(covs)) return(NULL)
     covs %>%
-        purrr::map(get_tag_display_from_name) %>%
+        purrr::map(translate_func) %>%
         paste0(collapse = " + ")
 }
 
