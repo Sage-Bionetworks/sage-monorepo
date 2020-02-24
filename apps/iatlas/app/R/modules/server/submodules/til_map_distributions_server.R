@@ -11,20 +11,21 @@ til_map_distributions_server <- function(
     ns <- session$ns
 
     source("R/modules/server/submodules/distribution_plot_server.R", local = T)
-    source("R/functions/til_map_distributions_functions.R", local = T)
+    source("R/til_map_distributions_functions.R", local = T)
 
     output$selection_ui <- shiny::renderUI({
         shiny::selectInput(
             ns("feature_choice_id"),
             label = "Select or Search for Variable",
-            selected = get_leukocyte_fraction_id(),
             choices = get_til_map_named_list()
         )
     })
 
     feature_name <- shiny::reactive({
         shiny::req(input$feature_choice_id)
-        get_feature_name(as.integer(input$feature_choice_id))
+        input$feature_choice_id %>%
+            as.integer() %>%
+            .GlobalEnv$get_feature_display_from_id()
     })
 
     feature_plot_label <- shiny::reactive({
@@ -44,7 +45,7 @@ til_map_distributions_server <- function(
             input$feature_choice_id,
             input$scale_method_choice
         )
-        build_distplot_tbl(
+        build_tilmap_distplot_tbl(
             sample_tbl(),
             input$feature_choice_id,
             input$scale_method_choice

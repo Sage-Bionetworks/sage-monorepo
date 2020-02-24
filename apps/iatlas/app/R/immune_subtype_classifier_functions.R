@@ -36,7 +36,7 @@ classifySubtype <- function(fileinfo, sepflag) {
   print("Reading Data")
 
   #newdata <- read_csv('data/ivy20.csv')
-  newdata <- read.table(
+  newdata <- utils::read.table(
     file = fileinfo$datapath,
     sep = sepflag,
     header = T,
@@ -52,7 +52,7 @@ classifySubtype <- function(fileinfo, sepflag) {
   # make cluster calls using the models.
   calls <- ImmuneSubtypeClassifier::callEnsemble(X = newX, geneids = 'symbol')
 
-  print(head(calls))
+  print(utils::head(calls))
 
   calls[,3] <- round(calls[,3], digits = 3)
   calls[,4] <- round(calls[,4], digits = 3)

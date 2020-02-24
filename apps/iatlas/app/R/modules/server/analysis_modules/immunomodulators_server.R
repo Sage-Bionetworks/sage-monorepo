@@ -12,22 +12,35 @@ immunomodulators_server <- function(
 
     source("R/modules/server/submodules/data_table_server.R", local = T)
     source("R/modules/server/submodules/distribution_plot_server.R", local = T)
+    source("R/immunomodulators_functions.R")
 
     immunomodulator_tbl <- .GlobalEnv$build_immunomodultors_tbl()
 
+    # output$gene_choice_ui <- shiny::renderUI({
+    #     shiny::req(immunomodulator_tbl, input$group_choice)
+    #     choices <- immunomodulator_tbl %>%
+    #         dplyr::select(
+    #             class = input$group_choice,
+    #             display = "hgnc",
+    #             feature = "id"
+    #         ) %>%
+    #         .GlobalEnv$create_nested_named_list()
+    #     shiny::selectInput(
+    #         ns("gene_choice_id"),
+    #         label = "Select or Search Gene",
+    #         choices = choices
+    #     )
+    # })
+
     output$gene_choice_ui <- shiny::renderUI({
-        shiny::req(immunomodulator_tbl, input$group_choice)
-        choices <- immunomodulator_tbl %>%
-            dplyr::select(
-                class = input$group_choice,
-                display = "hgnc",
-                feature = "id"
-            ) %>%
-            .GlobalEnv$create_nested_named_list()
+        shiny::req(input$group_choice)
         shiny::selectInput(
             ns("gene_choice_id"),
             label = "Select or Search Gene",
-            choices = choices
+            choices = create_im_gene_list(
+                immunomodulator_tbl,
+                input$group_choice
+            )
         )
     })
 
@@ -52,13 +65,11 @@ immunomodulators_server <- function(
             input$scale_method_choice
         )
 
-        input$gene_choice_id %>%
-            as.integer() %>%
-            .GlobalEnv$build_gene_expression_tbl_by_gene_ids() %>%
-            dplyr::inner_join(sample_tbl(), by = "sample_id") %>%
-            dplyr::select(group, value = rna_seq_expr) %>%
-            .GlobalEnv$scale_tbl_value_column(input$scale_method_choice) %>%
-            dplyr::select(x = group, y = value)
+        build_im_distplot(
+            input$gene_choice_id,
+            sample_tbl(),
+            input$scale_method_choice
+        )
     })
 
     shiny::callModule(
@@ -75,21 +86,7 @@ immunomodulators_server <- function(
 
     data_tbl <- shiny::reactive({
         shiny::req(immunomodulator_tbl)
-
-        immunomodulator_tbl %>%
-            dplyr::mutate(
-                references = stringr::str_remove_all(references, "[{}]")
-            ) %>%
-            dplyr::select(
-                Hugo                  = hgnc,
-                `Entrez ID`           = entrez,
-                `Friendly Name`       = friendly_name,
-                `Gene Family`         = gene_family,
-                `Super Category`      = super_category,
-                `Immune Checkpoint`   = immune_checkpoint,
-                Function              = gene_function,
-                `Reference(s) [PMID]` = references
-            )
+        build_im_target_dt_tbl(immunomodulator_tbl)
     })
 
     shiny::callModule(
