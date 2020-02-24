@@ -4,14 +4,21 @@
 \alias{create_numerical_covariate_string}
 \title{Create Numerical Covariate String}
 \usage{
-create_numerical_covariate_string(covs, transforms, trans_func)
+create_numerical_covariate_string(
+  covs,
+  transforms,
+  translate_func,
+  transform_func
+)
 }
 \arguments{
 \item{covs}{A vector of strings or NULL}
 
 \item{transforms}{A vector of strings or NULL}
 
-\item{trans_func}{A function}
+\item{translate_func}{A function}
+
+\item{transform_func}{A function}
 }
 \description{
 Create Numerical Covariate String

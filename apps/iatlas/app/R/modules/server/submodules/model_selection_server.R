@@ -50,6 +50,7 @@ model_selection_server <- function(
         create_numerical_covariate_string(
             numerical_covariates(),
             numerical_transformations(),
+            .GlobalEnv$get_feature_display_from_id,
             .GlobalEnv$transform_feature_string
         )
     })
@@ -58,6 +59,7 @@ model_selection_server <- function(
         create_numerical_covariate_string(
             numerical_covariates(),
             numerical_transformations(),
+            .GlobalEnv$get_feature_name_from_id,
             .GlobalEnv$transform_feature_formula
         )
     })
@@ -87,8 +89,18 @@ model_selection_server <- function(
             get_names_from_categorical_covariate_output()
     })
 
-    categorical_string <- shiny::reactive({
-        create_categorical_covariate_string(categorical_covariates())
+    categorical_display_string <- shiny::reactive({
+        create_categorical_covariate_string(
+            categorical_covariates(),
+            .GlobalEnv$get_tag_display_from_name
+        )
+    })
+
+    categorical_formula_string <- shiny::reactive({
+        create_categorical_covariate_string(
+            categorical_covariates(),
+            identity
+        )
     })
 
     # combine covariataes into output ------------------------------------------
@@ -98,7 +110,7 @@ model_selection_server <- function(
         create_covariate_string(
             model_string_prefix(),
             numerical_display_string(),
-            categorical_string()
+            categorical_display_string()
         )
     })
 
@@ -107,7 +119,7 @@ model_selection_server <- function(
         create_covariate_string(
             model_formula_prefix(),
             numerical_formula_string(),
-            categorical_string()
+            categorical_formula_string()
         )
     })
 
