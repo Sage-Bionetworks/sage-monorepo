@@ -100,12 +100,12 @@ shiny::shinyServer(function(input, output, session) {
         cohort_colors
     )
 
-    # shiny::callModule(
-    #     driver_associations_server,
-    #     "driver_associations",
-    #     cohort_group_name
-    # )
-
+    shiny::callModule(
+        driver_associations_server,
+        "driver_associations",
+        cohort_sample_tbl,
+        cohort_group_name
+    )
 
     shiny::observeEvent(input$link_to_tumor_microenvironment, {
         shinydashboard::updateTabItems(session, "explorertabs", "tumor_microenvironment")

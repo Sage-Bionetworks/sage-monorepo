@@ -79,6 +79,8 @@ Then in the terminal, run:
 - download and install RStudio: https://rstudio.com/products/rstudio/download
 - download and install Docker: https://www.docker.com/products/docker-desktop
 
+> Note: gfortran seems to be a recurring problem for Mac installes on various versions of OSX. Here are some additional resources if the above instructions don't work for you: https://github.com/fxcoudert/gfortran-for-macOS/releases and https://cran.r-project.org/bin/macosx/tools/
+
 ### Initialize R Packages, Database and run App
 
 To run the app locally:

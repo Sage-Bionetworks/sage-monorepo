@@ -198,6 +198,22 @@ get_sample_ids_from_dataset <- function(dataset){
 # The function take a single value from one or more columns and translate those
 # into a value from a different column in the row
 
+#' Get Tag Display Name from Name
+#'
+#' @param name A string in the name column of the tags table
+#' @importFrom magrittr %>%
+#' @importFrom dplyr pull
+#' @importFrom rlang .data
+#' @importFrom assertthat assert_that
+get_tag_display_from_name <- function(name){
+    assertthat::assert_that(length(name) == 1, is.character(name))
+    display <-
+        paste0("SELECT display FROM tags WHERE name = '", name, "'") %>%
+        perform_query("Get Tag Display Name from Name") %>%
+        dplyr::pull(.data$display)
+    assertthat::assert_that(length(display) == 1)
+    return(display)
+}
 
 #' Get HGNC Symbol from Gene ID
 #'
@@ -267,6 +283,23 @@ get_feature_display_from_id <- function(id){
     return(display)
 }
 
+#' Get Feature Name Name From ID
+#'
+#' @param id An integer in the id column of the features table
+#' @importFrom magrittr %>%
+#' @importFrom dplyr pull
+#' @importFrom rlang .data
+#' @importFrom assertthat assert_that
+get_feature_name_from_id <- function(id){
+    assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
+    name <-
+        paste0("SELECT name FROM features WHERE id = ", id) %>%
+        perform_query("Get Name Display Name From ID") %>%
+        dplyr::pull(.data$name)
+    assertthat::assert_that(length(name) == 1)
+    return(name)
+}
+
 #' Get Feature ID From Display Name
 #'
 #' @param display A string in the display column of the features table
@@ -283,65 +316,3 @@ get_feature_id_from_display <- function(display){
     assertthat::assert_that(length(id) == 1)
     return(id)
 }
-
-
-
-
-
-# REDO after refactoring of mutations in database -----------------------------
-
-# create_driver_mutation_list <- function(){
-#     paste(
-#         "SELECT hgnc, id FROM (",
-#         create_get_genes_by_type_query("driver_mutation"),
-#         ") a"
-#     ) %>%
-#         perform_query("Get mutation genes") %>%
-#         tibble::deframe()
-# }
-
-
-#' Build Driver Results Table
-#'
-#' @importFrom magrittr %>%
-# build_driver_results_tbl <- function(group_name, feature_id, min_wt, min_mut){
-#     subquery1 <- paste0(
-#         "SELECT id from tags WHERE display = '",
-#         group_name,
-#         "'"
-#     )
-#
-#     subquery2 <- paste(
-#         "SELECT tag_id from tags_to_tags WHERE related_tag_id IN (",
-#         subquery1,
-#         ")"
-#     )
-#
-#     subquery3 <- paste(
-#         "SELECT p_value, fold_change, log10_p_value,",
-#         "log10_fold_change, gene_id, tag_id",
-#         "FROM driver_results",
-#         "WHERE feature_id = ", feature_id,
-#         "AND tag_id IN (", subquery2, ")",
-#         "AND n_wt >= ", min_wt,
-#         "AND n_mut >= ", min_mut
-#     )
-#
-#     paste(
-#         "SELECT a.p_value, a.fold_change, a.log10_p_value,",
-#         "a.log10_fold_change, g.gene, g.gene_id, t.group, t.tag_id FROM",
-#         "(", subquery3, ") a",
-#         "LEFT OUTER JOIN (SELECT id AS gene_id, hgnc AS gene FROM genes) g",
-#         "ON a.gene_id = g.gene_id",
-#         "LEFT OUTER JOIN (SELECT id AS tag_id, name As group FROM tags) t",
-#         "ON a.tag_id = t.tag_id"
-#     ) %>%
-#         perform_query("Build Driver Results Table")
-# }
-
-
-
-
-
-
-

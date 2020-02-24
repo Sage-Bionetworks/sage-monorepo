@@ -7,11 +7,11 @@ cell_type_fractions_server <- function(
 ){
 
     source("R/modules/server/submodules/plotly_server.R", local = T)
-    source("R/functions/cell_type_fractions_functions.R", local = T)
+    source("R/cell_type_fractions_functions.R", local = T)
 
     plot_tbl <- shiny::reactive({
-        shiny::req(input$fraction_group_choice)
-        build_plot_tbl(input$fraction_group_choice)
+        shiny::req(input$fraction_group_choice, sample_tbl())
+        build_ctf_barplot_tbl(input$fraction_group_choice, sample_tbl())
     })
 
     output$barplot <- plotly::renderPlotly({

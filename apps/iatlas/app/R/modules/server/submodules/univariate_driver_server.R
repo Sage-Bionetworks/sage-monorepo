@@ -6,7 +6,7 @@ univariate_driver_server <- function(
 ){
     ns <- session$ns
 
-    source("R/modules/server/submodules/volcano_plot_server.R", local = T)
+    source("R/modules/server/submodules/plotly_server.R", local = T)
     source("R/univariate_driver_functions.R", local = T)
 
     output$response_options <- shiny::renderUI({
@@ -28,7 +28,7 @@ univariate_driver_server <- function(
             input$min_mut
         )
 
-        build_udr_results_tbl(
+        build_ud_results_tbl(
             group_name(),
             input$response_variable,
             input$min_wt,
@@ -42,7 +42,10 @@ univariate_driver_server <- function(
 
         shiny::validate(shiny::need(
             nrow(volcano_plot_tbl()) > 0,
-            "Current parameters did not result in any linear regression results."
+            paste0(
+                "Current parameters did not result in any linear regression",
+                "results."
+            )
         ))
 
         .GlobalEnv$create_scatterplot(
@@ -56,12 +59,17 @@ univariate_driver_server <- function(
             key_col   = "label",
             label_col = "label",
             horizontal_line   = T,
-            horizontal_line_y = (- log10(0.05))
+            horizontal_line_y = (-log10(0.05))
         )
     })
 
-    output$violin_plot <- plotly::renderPlotly({
+    shiny::callModule(
+        plotly_server,
+        "volcano_plot",
+        plot_tbl = volcano_plot_tbl
+    )
 
+    selected_volcano_result <- shiny::reactive({
         shiny::req(volcano_plot_tbl())
 
         eventdata <- plotly::event_data(
@@ -72,10 +80,12 @@ univariate_driver_server <- function(
         # plot not clicked on yet
         shiny::validate(shiny::need(
             !is.null(eventdata),
-            "Click a point on the above scatterplot to see a violin plot for the comparison"
+            paste0(
+                "Click a point on the above scatterplot to see a violin plot ",
+                "for the comparison"
+            )
         ))
 
-        print(eventdata)
         clicked_label <- .GlobalEnv$get_values_from_eventdata(eventdata, "key")
 
         result <-  dplyr::filter(
@@ -83,30 +93,51 @@ univariate_driver_server <- function(
             label == clicked_label
         )
 
-        print(result)
-
         #plot clicked on but event data stale due to parameter change
         shiny::validate(shiny::need(
             nrow(result) == 1,
-            "Click a point on the above scatterplot to see a violin plot for the comparison"
+            paste0(
+                "Click a point on the above scatterplot to see a violin plot ",
+                "for the comparison"
+            )
         ))
+        return(result)
+    })
 
-        build_udr_violin_tbl(
+    violin_tbl <- shiny::reactive({
+        shiny::req(selected_volcano_result())
+        build_ud_driver_violin_tbl(
             input$response_variable,
-            result$gene_id,
-            result$tag_id
+            selected_volcano_result()$gene_id,
+            selected_volcano_result()$tag_id,
+            selected_volcano_result()$mutation_code_id
+        )
+    })
+
+    output$violin_plot <- plotly::renderPlotly({
+
+        xlab <- paste0(
+            "Mutation Status ",
+            selected_volcano_result()$gene,
+            ":",
+            selected_volcano_result()$mutation_code
         )
 
-        xlab <- paste(result$gene, "mutation_status")
-        ylab <- .GlobalEnv$get_feature_name(input$response_variable)
+        ylab <- input$response_variable %>%
+            as.integer() %>%
+            .GlobalEnv$get_feature_display_from_id()
+
         title <- paste(
-            "Cohort:", result$group, ";",
-            "P-value:", round(result$p_value, 4), ";",
-            "Log10(Fold Change):", round(result$log10_fold_change, 4)
+            "Cohort:",
+            selected_volcano_result()$group, ";",
+            "P-value:",
+            round(selected_volcano_result()$p_value, 4), ";",
+            "Log10(Fold Change):",
+            round(selected_volcano_result()$log10_fold_change, 4)
         )
 
         .GlobalEnv$create_violinplot(
-            tbl,
+            violin_tbl(),
             xlab = xlab,
             ylab = ylab,
             title = title,
@@ -114,4 +145,21 @@ univariate_driver_server <- function(
             showlegend = FALSE
         )
     })
+
+    shiny::callModule(
+        plotly_server,
+        "violin_plot",
+        plot_tbl = violin_tbl
+    )
+
+    # shiny::callModule(
+    #     volcano_plot_server,
+    #     "univariate_driver_server",
+    #     volcano_plot_tbl,
+    #     "Immune Response Association With Driver Mutations",
+    #     "univariate_driver_server",
+    #     "Wt",
+    #     "Mut",
+    #     shiny::reactive(input$response_variable)
+    # )
 }

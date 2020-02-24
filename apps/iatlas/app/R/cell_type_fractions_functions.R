@@ -1,4 +1,4 @@
-build_plot_tbl <- function(class_name){
+build_ctf_barplot_tbl <- function(class_name, sample_tbl){
     subquery1 <- paste0(
         "SELECT id FROM classes WHERE name = '",
         class_name,
@@ -25,22 +25,25 @@ build_plot_tbl <- function(class_name){
     )
 
     query %>%
-        .GlobalEnv$perform_query("build feature table") %>%
-        dplyr::inner_join(sample_tbl(), by = "sample_id") %>%
-        dplyr::select(-sample_id) %>%
-        dplyr::group_by(feature_name, group) %>%
+        perform_query("build feature table") %>%
+        dplyr::inner_join(sample_tbl, by = "sample_id") %>%
+        dplyr::select(-.data$sample_id) %>%
+        dplyr::group_by(.data$feature_name, .data$group) %>%
         dplyr::arrange(order) %>%
-        dplyr::summarise(mean = mean(feature_value), count = dplyr::n()) %>%
+        dplyr::summarise(
+            .mean = mean(.data$feature_value),
+            .count = dplyr::n()
+        ) %>%
         dplyr::ungroup() %>%
-        dplyr::mutate(se = mean / sqrt(count)) %>%
+        dplyr::mutate(.se = .data$.mean / sqrt(.data$.count)) %>%
         create_plotly_label(
-            .data$feature_name, .data$group, c("mean", "se")
+            .data$feature_name, .data$group, c(".mean", ".se")
         ) %>%
         dplyr::select(
-            x = group,
-            y = mean,
-            color = feature_name,
-            label,
-            error = se
+            x = .data$group,
+            y = .data$.mean,
+            color = .data$feature_name,
+            .data$label,
+            error = .data$.se
         )
 }
