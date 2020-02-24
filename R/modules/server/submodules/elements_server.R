@@ -82,22 +82,10 @@ group_filter_element_server <- function(
 
     output$checkbox_ui <- shiny::renderUI({
         shiny::req(input$parent_group_choice_id)
-        group_id_query <-
-            .GlobalEnv$create_parent_group_query_from_id(
-            input$parent_group_choice_id
-        )
-        choices <- paste(
-            "SELECT name, id FROM  (",
-            group_id_query,
-            ") a"
-        ) %>%
-            .GlobalEnv$perform_query("build groups table") %>%
-            tibble::deframe()
-
         shiny::checkboxGroupInput(
             inputId = ns("group_choice_ids"),
             label = "Select choices to include:",
-            choices = choices,
+            choices = build_group_filter_tbl(input$parent_group_choice_id),
             inline = T
         )
     })
@@ -141,11 +129,13 @@ numeric_model_covariate_element_server <- function(
     })
 
     shiny::observeEvent(input$covariate_choice_id, {
-        reactive_values[[module_id]]$covariate_choice_id <- as.numeric(input$covariate_choice_id)
+        reactive_values[[module_id]]$covariate_choice_id <-
+            as.numeric(input$covariate_choice_id)
     })
 
     shiny::observeEvent(input$transformation_choice, {
-        reactive_values[[module_id]]$transformation_choice <- input$transformation_choice
+        reactive_values[[module_id]]$transformation_choice <-
+            input$transformation_choice
     })
 
     return(reactive_values)

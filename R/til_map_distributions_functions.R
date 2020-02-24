@@ -11,27 +11,10 @@ get_til_map_named_list <- function(){
 
     query %>%
         perform_query("build feature table") %>%
-        tibble::deframe()
+        tibble::deframe(.)
 }
 
-get_leukocyte_fraction_id <- function(){
-    query <- "SELECT id FROM features WHERE display = 'Leukocyte Fraction'"
-    query %>%
-        perform_query("get feature id") %>%
-        dplyr::pull(id)
-}
-
-get_feature_name <- function(id){
-    query <- paste(
-        "SELECT display FROM features WHERE id = ",
-        id
-    )
-    query %>%
-        perform_query("get feature name") %>%
-        dplyr::pull(display)
-}
-
-build_distplot_tbl <- function(tbl, id, scale_method){
+build_tilmap_distplot_tbl <- function(tbl, id, scale_method){
 
     query <- paste(
         "SELECT sample_id, feature_id, value",
@@ -43,7 +26,7 @@ build_distplot_tbl <- function(tbl, id, scale_method){
     query %>%
         perform_query("build immune feature table") %>%
         dplyr::inner_join(tbl, by = "sample_id") %>%
-        dplyr::select(-sample_id, sample_name) %>%
+        dplyr::select(-.data$sample_id, .data$sample_name) %>%
         scale_tbl_value_column(scale_method) %>%
-        dplyr::rename(x = group, y = value)
+        dplyr::rename(x = .data$group, y = .data$value)
 }

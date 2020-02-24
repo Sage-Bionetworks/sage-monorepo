@@ -2,6 +2,7 @@ driver_associations_server <- function(
     input,
     output,
     session,
+    sample_tbl,
     group_name
 ){
 
@@ -22,7 +23,9 @@ driver_associations_server <- function(
 
     shiny::callModule(
         multivariate_driver_server,
-        "multivariate_driver"
+        "multivariate_driver",
+        sample_tbl,
+        group_name
     )
 }
 

@@ -5,7 +5,7 @@ immune_subtype_classifier_server <- function(
     # get new calls
     getCalls <- shiny::eventReactive(input$subtypeGObutton, {
 
-      source("R/functions/immune_subtype_classifier_functions.R", local = T)
+      source("R/immune_subtype_classifier_functions.R", local = T)
 
       newdat <- input$expr_file_pred
 
