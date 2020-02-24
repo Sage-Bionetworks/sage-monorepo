@@ -2,7 +2,7 @@ univariate_driver_ui <- function(id){
 
     ns <- shiny::NS(id)
 
-    source("R/modules/ui/submodules/volcano_plot_ui.R", local = T)
+    source("R/modules/ui/submodules/plotly_ui.R", local = T)
 
     .GlobalEnv$sectionBox(
         title = "Immune Response Association With Driver Mutations -- single variable",
@@ -37,6 +37,25 @@ univariate_driver_ui <- function(id){
                 )
             )
         ),
-        volcano_plot_ui(ns("univariate_driver_server"))
+        shiny::fluidRow(
+            .GlobalEnv$plotBox(
+                width = 12,
+                "volcano_plot" %>%
+                    ns() %>%
+                    plotly::plotlyOutput(.) %>%
+                    shinycssloaders::withSpinner(.),
+                plotly_ui(ns("volcano_plot"))
+            )
+        ),
+        shiny::fluidRow(
+            .GlobalEnv$plotBox(
+                width = 12,
+                "violin_plot" %>%
+                    ns() %>%
+                    plotly::plotlyOutput(.) %>%
+                    shinycssloaders::withSpinner(.),
+                plotly_ui(ns("violin_plot"))
+            )
+        )
     )
 }

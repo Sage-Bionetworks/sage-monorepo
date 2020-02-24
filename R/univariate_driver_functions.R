@@ -8,7 +8,7 @@
 #' @importFrom dplyr mutate
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
-build_udr_results_tbl <- function(group_name, feature_id, min_wt, min_mut){
+build_ud_results_tbl <- function(group_name, feature_id, min_wt, min_mut){
     paste0(
         "SELECT dr.p_value, dr.fold_change, dr.log10_p_value, dr.gene_id, ",
         "dr.tag_id, dr.log10_fold_change, dr.mutation_code_id, ",
@@ -46,7 +46,7 @@ build_udr_results_tbl <- function(group_name, feature_id, min_wt, min_mut){
         ))
 }
 
-#' Build Driver Violin Tibble
+#' Build Univariate Driver Violin Tibble
 #'
 #' @param feature_id An integer in the features_to_samples table
 #' @param gene_id An interger in the genes_samples_mutations table
@@ -55,7 +55,7 @@ build_udr_results_tbl <- function(group_name, feature_id, min_wt, min_mut){
 #' @importFrom dplyr select
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
-build_driver_violin_tbl <- function(feature_id, gene_id, tag_id, mutation_id){
+build_ud_driver_violin_tbl <- function(feature_id, gene_id, tag_id, mutation_id){
 
     subquery1 <- paste(
         "SELECT sample_id FROM samples_to_tags",

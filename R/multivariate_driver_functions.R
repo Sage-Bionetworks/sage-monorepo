@@ -90,7 +90,7 @@ build_md_status_tbl <- function(){
         paste(
             "SELECT gene_id FROM genes_to_types WHERE type_id = (",
             "SELECT id FROM gene_types WHERE name = 'driver_mutation'",
-            ") LIMIT 10" # fix!!!!!!!!!!!!
+            ") "
         ),
         ")"
     ) %>%
