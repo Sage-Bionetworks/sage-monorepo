@@ -29,19 +29,9 @@ cohort_filter_selection_server <- function(
         # "Race",            "PCAWG",  "sample"
     )
 
+    # group filters -----------------------------------------------------------
     group_named_list <- shiny::reactive({
-        shiny::req(selected_dataset())
-        dataset_to_group_tbl %>%
-            dplyr::filter(dataset == selected_dataset()) %>%
-            dplyr::pull(group)
-        "SELECT display, id FROM tags" %>%
-            .GlobalEnv$perform_query("Get tags") %>%
-            dplyr::inner_join(
-                dataset_to_group_tbl,
-                by = c("display" = "group")
-            ) %>%
-            dplyr::select(display, id) %>%
-            tibble::deframe()
+        create_group_named_list(dataset_to_group_tbl)
     })
 
     group_element_module_server <- shiny::reactive({
@@ -62,14 +52,21 @@ cohort_filter_selection_server <- function(
         remove_ui_event = shiny::reactive(selected_dataset())
     )
 
+    group_filter_samples <- shiny::reactive({
+        shiny::req(sample_ids(), group_filter_output())
+        get_filtered_group_sample_ids(
+            shiny::reactiveValuesToList(group_filter_output()),
+            sample_ids()
+        )
+    })
+
+    # numeric_filters ---------------------------------------------------------
     numeric_element_module_server <- shiny::reactive({
         shiny::req(feature_named_list())
-
         purrr::partial(
             numeric_filter_element_server,
             feature_named_list = feature_named_list
         )
-
     })
 
     numeric_element_module_ui <- shiny::reactive(numeric_filter_element_ui)
@@ -84,38 +81,10 @@ cohort_filter_selection_server <- function(
 
     numeric_filter_samples <- shiny::reactive({
         shiny::req(sample_ids(), numeric_filter_output())
-        samples <- sample_ids()
-        numeric_filters <- numeric_filter_output() %>%
-            shiny::reactiveValuesToList() %>%
-            purrr::discard(purrr::map_lgl(., is.null))
-        for(item in numeric_filters){
-            shiny::req(
-                item$feature_choice,
-                item$feature_range[[1]],
-                item$feature_range[[2]]
-            )
-            sample_ids <- get_filtered_feature_sample_ids(
-                item$feature_choice,
-                item$feature_range[[1]],
-                item$feature_range[[2]]
-            )
-            samples <- intersect(samples, sample_ids)
-        }
-        return(samples)
-    })
-
-    group_filter_samples <- shiny::reactive({
-        shiny::req(sample_ids(), group_filter_output())
-        group_filters <- group_filter_output() %>%
-            shiny::reactiveValuesToList() %>%
-            purrr::discard(purrr::map_lgl(., is.null))
-        samples <- sample_ids()
-        for(item in group_filters){
-            shiny::req(item$group_choice_ids)
-            sample_ids <- get_group_filter_samples(item$group_choice_ids)
-            samples <- intersect(samples, sample_ids)
-        }
-        return(samples)
+        get_filtered_feature_sample_ids(
+            shiny::reactiveValuesToList(numeric_filter_output()),
+            sample_ids()
+        )
     })
 
     selected_samples <- shiny::reactive({
