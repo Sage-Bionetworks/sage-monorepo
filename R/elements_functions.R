@@ -13,3 +13,17 @@ build_numeric_filter_tbl <- function(feature_id){
             feature_min = min(.data$value)
         )
 }
+
+#' Build Group Filter Tibble
+#'
+#' @param feature_id An integer in the related_tag_id column of the
+#' tags_to_tags table
+#' @importFrom magrittr %>%
+#' @importFrom tibble deframe
+build_group_filter_tbl <- function(feature_id){
+    feature_id %>%
+        create_parent_group_query_from_id() %>%
+        paste("SELECT name, id FROM  (", ., ") a") %>%
+        perform_query("Build Groups Tibble") %>%
+        tibble::deframe(.)
+}
