@@ -39,7 +39,7 @@ cohort_manual_selection_server <- function(
         .GlobalEnv$get_sample_ids_from_dataset(dataset())
     })
 
-    selected_sample_ids <- cohort_obj <- shiny::callModule(
+    filter_obj <- cohort_obj <- shiny::callModule(
         cohort_filter_selection_server,
         "cohort_filter_selection",
         feature_named_list,
@@ -48,11 +48,11 @@ cohort_manual_selection_server <- function(
     )
 
     sample_ids <- shiny::reactive({
-        if (is.null(selected_sample_ids())) {
+        if (is.null(filter_obj()$sample_ids)) {
             shiny::req(all_sample_ids())
             return(all_sample_ids())
         } else {
-            return(selected_sample_ids())
+            return(filter_obj()$sample_ids)
         }
     })
 
