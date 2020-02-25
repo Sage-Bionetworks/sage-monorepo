@@ -36,7 +36,7 @@ build_survival_value_tbl <- function(sample_tbl, time_id, status_id) {
 #' @importFrom purrr map2_dbl map
 #' @importFrom concordanceIndex concordanceIndex
 #' @importFrom rlang .data
-build_heatmap_matrix <- function(tbl){
+build_co_heatmap_matrix <- function(tbl){
     tbl %>%
         dplyr::select(
             .data$feature,

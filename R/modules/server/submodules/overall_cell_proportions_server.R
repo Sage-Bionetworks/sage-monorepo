@@ -7,16 +7,16 @@ overall_cell_proportions_server  <- function(
 ){
 
     source("R/modules/server/submodules/plotly_server.R", local = T)
-    source("R/functions/overall_cell_proportions_functions.R", local = T)
+    source("R/overall_cell_proportions_functions.R", local = T)
 
     value_tbl <- shiny::reactive({
         shiny::req(sample_tbl())
-        build_value_tbl(sample_tbl())
+        build_ocp_value_tbl(sample_tbl())
     })
 
     barplot_tbl <- shiny::reactive({
         req(value_tbl())
-        build_barplot_tbl(value_tbl())
+        build_ocp_barplot_tbl(value_tbl())
     })
 
     output$barplot <- plotly::renderPlotly({
@@ -46,12 +46,12 @@ overall_cell_proportions_server  <- function(
 
     barplot_selected_group <- shiny::reactive({
         shiny::req(barplot_eventdata())
-        selected_group <- barplot_eventdata()$x[[1]]
+        barplot_eventdata()$x[[1]]
     })
 
     scatterplot_tbl <- shiny::reactive({
         shiny::req(value_tbl(), barplot_selected_group())
-        build_scatterplot_tbl(value_tbl(), barplot_selected_group())
+        build_ocp_scatterplot_tbl(value_tbl(), barplot_selected_group())
     })
 
     output$scatterplot <- plotly::renderPlotly({
@@ -69,7 +69,6 @@ overall_cell_proportions_server  <- function(
             xlab = "Stromal Fraction",
             ylab = "Leukocyte Fraction",
             label_col = "label",
-            fill_colors = "blue",
             title = barplot_selected_group(),
             identity_line = TRUE
         )

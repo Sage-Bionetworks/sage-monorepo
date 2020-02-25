@@ -23,11 +23,7 @@ create_cohort_object <- function(
             immune_feature_bin_number
         )
     }
-    c(
-        cohort_object,
-        "dataset"     = dataset,
-        "groups"      = groups
-    )
+    c(cohort_object, "dataset" = dataset)
 }
 
 create_gene_mutation_list <- function(){
