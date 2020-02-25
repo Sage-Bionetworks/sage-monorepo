@@ -31,7 +31,7 @@ cohort_filter_selection_server <- function(
 
     # group filters -----------------------------------------------------------
     group_named_list <- shiny::reactive({
-        create_group_named_list(dataset_to_group_tbl)
+        create_cohort_group_named_list(dataset_to_group_tbl)
     })
 
     group_element_module_server <- shiny::reactive({
@@ -52,10 +52,17 @@ cohort_filter_selection_server <- function(
         remove_ui_event = shiny::reactive(selected_dataset())
     )
 
+    valid_group_filter_obj <- shiny::reactive({
+        shiny::req(group_filter_output())
+        group_filter_output() %>%
+            shiny::reactiveValuesToList(.) %>%
+            get_valid_group_filters()
+    })
+
     group_filter_samples <- shiny::reactive({
-        shiny::req(sample_ids(), group_filter_output())
+        shiny::req(sample_ids())
         get_filtered_group_sample_ids(
-            shiny::reactiveValuesToList(group_filter_output()),
+            valid_group_filter_obj(),
             sample_ids()
         )
     })
@@ -79,10 +86,17 @@ cohort_filter_selection_server <- function(
         remove_ui_event = shiny::reactive(selected_dataset())
     )
 
+    valid_numeric_filter_obj <- shiny::reactive({
+        shiny::req(numeric_filter_output())
+        numeric_filter_output() %>%
+            shiny::reactiveValuesToList(.) %>%
+            get_valid_numeric_filters()
+    })
+
     numeric_filter_samples <- shiny::reactive({
-        shiny::req(sample_ids(), numeric_filter_output())
+        shiny::req(sample_ids())
         get_filtered_feature_sample_ids(
-            shiny::reactiveValuesToList(numeric_filter_output()),
+            valid_numeric_filter_obj(),
             sample_ids()
         )
     })
@@ -96,5 +110,9 @@ cohort_filter_selection_server <- function(
         c("Number of current samples:", length(selected_samples()))
     })
 
-    return(selected_samples)
+    return(shiny::reactive(list(
+        "sample_ids" = selected_samples(),
+        "feature_filters" = valid_numeric_filter_obj(),
+        "group_filters" = valid_group_filter_obj()
+    )))
 }

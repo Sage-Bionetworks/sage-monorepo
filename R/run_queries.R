@@ -198,6 +198,23 @@ get_sample_ids_from_dataset <- function(dataset){
 # The function take a single value from one or more columns and translate those
 # into a value from a different column in the row
 
+#' Get Tag Display Name from ID
+#'
+#' @param id An integer in the id column of the tags table
+#' @importFrom magrittr %>%
+#' @importFrom dplyr pull
+#' @importFrom rlang .data
+#' @importFrom assertthat assert_that
+get_tag_display_from_id <- function(id){
+    assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
+    display <-
+        paste0("SELECT display FROM tags WHERE id = '", id, "'") %>%
+        perform_query("Get Tag Display Name from ID") %>%
+        dplyr::pull(.data$display)
+    assertthat::assert_that(length(display) == 1)
+    return(display)
+}
+
 #' Get Tag Display Name from Name
 #'
 #' @param name A string in the name column of the tags table
