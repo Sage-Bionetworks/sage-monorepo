@@ -55,33 +55,18 @@ create_combined_feature_values_query_from_class_ids <- function(class_ids){
     )
 }
 
-#' Create Feature Value Query from class ids
-#' @param class_ids class ids in the features to samples table
-create_feature_value_query_from_class_ids <- function(class_ids){
-    subquery <- create_translate_values_query(
-        "features",
-        "id",
-        "class_id",
-        numeric_values_to_query_list(class_ids)
-    )
-    create_feature_value_query_from_subquery(subquery)
-}
-
-#' Create Feature Value Query from ids
-#' @param ids ids in the features to samples table
-create_feature_value_query_from_ids <- function(ids){
-    create_feature_value_query_from_subquery(numeric_values_to_query_list(ids))
-}
-
-#' Create Feature Value Query from subquery
-#' @param subquery subquery that results in a list of feature ids
-create_feature_value_query_from_subquery <- function(subquery){
+#' Create Feature Value Query
+#' @param subquery One of :
+#' - A subquery that results in a list of feature ids
+#' - A subquery that results in a one column table of feature ids
+#' - A single feature_id
+create_feature_value_query <- function(subquery){
     paste0(
         "SELECT sample_id, feature_id, value ",
         "FROM features_to_samples ",
         "WHERE feature_id IN (",
         subquery,
-        ")"
+        ") AND value IS NOT NULL"
     )
 }
 

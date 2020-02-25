@@ -1,6 +1,5 @@
-.GlobalEnv$DB_NAME <- "iatlas_dev"
-.GlobalEnv$DB_HOST <- "localhost"
-.GlobalEnv$DB_PORT <- "5432"
-.GlobalEnv$DB_USER <- "postgres"
-.GlobalEnv$DB_PW   <- "docker"
-.GlobalEnv$pool    <- connect_to_db()
+with_test_db_env <- function(expr) {
+  load_config('test', quiet=TRUE)
+  with_global_db_pool(expr)
+  on.exit(load_config('dev', quiet=TRUE))
+}
