@@ -3,6 +3,9 @@ variables:
   SHINYAPPS_ACCOUNT_NAME: isb-cgc
   # So we can set the R version to build against in one place
   R_VERSION: "3.6.2"
+  # Variables for the rsconnect process that does the actual deployment
+  APP_NAME: "iatlas-v2-staging"
+  APP_TITLE: "iAtlas V2 Staging"
 
 stages:
   - build_container
@@ -66,4 +69,4 @@ Deploy To Staging:
       secret=\"${SHINYAPPS_SECRET}\"
       )"
     # Deploy it to Shinyapps.io
-    - R -e "rsconnect::deployApp(appName=\"iatlas-staging\", appTitle=\"iAtlas Staging\")"
+    - R -e "rsconnect::deployApp(appName=\"${APP_NAME}\", appTitle=\"${APP_TITLE}\")"
