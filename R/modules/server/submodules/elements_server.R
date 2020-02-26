@@ -16,15 +16,15 @@ numeric_filter_element_server <- function(
     output$select_ui <- shiny::renderUI({
         shiny::req(feature_named_list())
         shiny::selectInput(
-            inputId = ns("feature_choice"),
+            inputId = ns("feature_choice_id"),
             label = "Select or Search for feature",
             choices = feature_named_list()
         )
     })
 
     features_tbl <- shiny::reactive({
-        req(input$feature_choice)
-        build_numeric_filter_tbl(input$feature_choice)
+        req(input$feature_choice_id)
+        build_numeric_filter_tbl(input$feature_choice_id)
     })
 
     feature_min <- shiny::reactive({
@@ -49,12 +49,13 @@ numeric_filter_element_server <- function(
         )
     })
 
-    shiny::observeEvent(input$feature_choice, {
-        reactive_values[[module_id]]$feature_choice <- input$feature_choice
+    shiny::observeEvent(input$feature_choice_id, {
+        reactive_values[[module_id]]$id <- input$feature_choice_id
     })
 
     shiny::observeEvent(input$range, {
-        reactive_values[[module_id]]$feature_range <- input$range
+        reactive_values[[module_id]]$min <- input$range[[1]]
+        reactive_values[[module_id]]$max <- input$range[[2]]
     })
 
     return(reactive_values)
@@ -90,8 +91,24 @@ group_filter_element_server <- function(
         )
     })
 
+    group_choice_name <- shiny::reactive({
+        shiny::req(input$parent_group_choice_id)
+        input$parent_group_choice_id %>%
+            as.integer() %>%
+            .GlobalEnv$get_tag_display_from_id()
+    })
+
+    group_choice_ids <- shiny::reactive({
+        shiny::req(input$group_choice_ids)
+        as.integer(input$group_choice_ids)
+    })
+
     shiny::observeEvent(input$group_choice_ids, {
-        reactive_values[[module_id]]$group_choice_ids <- input$group_choice_ids
+        reactive_values[[module_id]]$ids <- group_choice_ids()
+    })
+
+    shiny::observeEvent(input$group_choice_ids, {
+        reactive_values[[module_id]]$name <- group_choice_name()
     })
 
     return(reactive_values)

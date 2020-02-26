@@ -7,8 +7,18 @@ for (item in analysis_module_files) {
 source("R/modules/ui/other_modules/data_info_ui.R", local = T)
 
 explorepage <- shinydashboard::dashboardPage(
-    shinydashboard::dashboardHeader(disable = TRUE),
-    shinydashboard::dashboardSidebar(
+    header  = shinydashboard::dashboardHeader(disable = TRUE),
+    sidebar = shinydashboard::dashboardSidebar(
+        # shiny::wellPanel(
+        #     shiny::fluidRow(
+        #         shiny::column(
+        #             width = 12,
+        #             shiny::h3("Selected Cohort"),
+        #             shiny::h4(shiny::textOutput("cohort_group_text")),
+        #             shiny::h4("Filters = None")
+        #         )
+        #     )
+        # ),
         shinydashboard::sidebarMenu(
             id = "explorertabs",
             shinydashboard::menuItem(
@@ -68,7 +78,7 @@ explorepage <- shinydashboard::dashboardPage(
             )
         )
     ),
-    shinydashboard::dashboardBody(
+    body = shinydashboard::dashboardBody(
         shinydashboard::tabItems(
             shinydashboard::tabItem(
                 tabName = "dashboard",

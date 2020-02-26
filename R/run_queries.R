@@ -198,6 +198,23 @@ get_sample_ids_from_dataset <- function(dataset){
 # The function take a single value from one or more columns and translate those
 # into a value from a different column in the row
 
+#' Get Tag Display Name from ID
+#'
+#' @param id An integer in the id column of the tags table
+#' @importFrom magrittr %>%
+#' @importFrom dplyr pull
+#' @importFrom rlang .data
+#' @importFrom assertthat assert_that
+get_tag_display_from_id <- function(id){
+    assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
+    display <-
+        paste0("SELECT display FROM tags WHERE id = '", id, "'") %>%
+        perform_query("Get Tag Display Name from ID") %>%
+        dplyr::pull(.data$display)
+    assertthat::assert_that(length(display) == 1)
+    return(display)
+}
+
 #' Get Tag Display Name from Name
 #'
 #' @param name A string in the name column of the tags table
@@ -312,6 +329,40 @@ get_feature_id_from_display <- function(display){
     id <-
         paste0("SELECT id FROM features WHERE display = '", display , "'") %>%
         perform_query("Get Feature ID From Display Name") %>%
+        dplyr::pull(.data$id)
+    assertthat::assert_that(length(id) == 1)
+    return(id)
+}
+
+#' Get Mutation Code From ID
+#'
+#' @param id An integer in the id column of the mutation_codes table
+#' @importFrom magrittr %>%
+#' @importFrom dplyr pull
+#' @importFrom rlang .data
+#' @importFrom assertthat assert_that
+get_mutation_code_from_id <- function(id){
+    assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
+    code <-
+        paste0("SELECT code FROM mutation_codes WHERE id = ", id) %>%
+        perform_query("Get Mutation Code From ID") %>%
+        dplyr::pull(.data$code)
+    assertthat::assert_that(length(code) == 1)
+    return(code)
+}
+
+#' Get ID From Mutation Code
+#'
+#' @param code A string in the code column of the mutation_codes table
+#' @importFrom magrittr %>%
+#' @importFrom dplyr pull
+#' @importFrom rlang .data
+#' @importFrom assertthat assert_that
+get_id_from_mutation_code <- function(code){
+    assertthat::assert_that(length(code) == 1, is.character(code))
+    id <-
+        paste0("SELECT id FROM mutation_codes WHERE code = '", code, "'") %>%
+        perform_query("Get Mutation Code From ID") %>%
         dplyr::pull(.data$id)
     assertthat::assert_that(length(id) == 1)
     return(id)
