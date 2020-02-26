@@ -186,10 +186,10 @@ multivariate_driver_server <- function(
 
     output$violin_plot <- plotly::renderPlotly({
         shiny::req(
-            violin_tbl(),
-            response_variable_name(),
             selected_volcano_result(),
-            input$group_mode
+            response_variable_name(),
+            input$group_mode,
+            violin_tbl()
         )
 
         shiny::validate(shiny::need(
