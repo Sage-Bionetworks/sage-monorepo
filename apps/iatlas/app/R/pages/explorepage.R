@@ -9,16 +9,16 @@ source("R/modules/ui/other_modules/data_info_ui.R", local = T)
 explorepage <- shinydashboard::dashboardPage(
     header  = shinydashboard::dashboardHeader(disable = TRUE),
     sidebar = shinydashboard::dashboardSidebar(
-        shiny::wellPanel(
-            shiny::fluidRow(
-                shiny::column(
-                    width = 12,
-                    shiny::h3("Selected Cohort"),
-                    shiny::h4(shiny::textOutput("cohort_group_text")),
-                    shiny::h4("Filters = None")
-                )
-            )
-        ),
+        # shiny::wellPanel(
+        #     shiny::fluidRow(
+        #         shiny::column(
+        #             width = 12,
+        #             shiny::h3("Selected Cohort"),
+        #             shiny::h4(shiny::textOutput("cohort_group_text")),
+        #             shiny::h4("Filters = None")
+        #         )
+        #     )
+        # ),
         shinydashboard::sidebarMenu(
             id = "explorertabs",
             shinydashboard::menuItem(
