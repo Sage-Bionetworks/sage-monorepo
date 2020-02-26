@@ -4,15 +4,13 @@
 \alias{get_filtered_feature_sample_ids}
 \title{Get Filtered Feature Sample IDs}
 \usage{
-get_filtered_feature_sample_ids(feature_id, min, max)
+get_filtered_feature_sample_ids(filter_obj, sample_ids)
 }
 \arguments{
-\item{feature_id}{An integer in the smaple_id column of the
+\item{filter_obj}{A list of named lists with names id max and min}
+
+\item{sample_ids}{A vector of integers in the sample_id column of the
 features_to_samples table}
-
-\item{min}{A numeric}
-
-\item{max}{A numeric}
 }
 \description{
 Get Filtered Feature Sample IDs
