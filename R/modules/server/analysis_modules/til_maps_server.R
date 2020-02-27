@@ -2,10 +2,7 @@ til_maps_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl,
-    group_name,
-    plot_colors
+    cohort_obj
 ){
 
     source(
@@ -24,17 +21,17 @@ til_maps_server <- function(
     )
 
     tilmap_sample_tbl <- shiny::reactive({
-        shiny::req(sample_tbl())
-        build_tm_sample_tbl(sample_tbl())
+        shiny::req(cohort_obj())
+        build_tm_sample_tbl(cohort_obj()$sample_tbl)
     })
 
     shiny::callModule(
         til_map_distributions_server,
         "til_map_distributions",
         tilmap_sample_tbl,
-        group_tbl,
-        group_name,
-        plot_colors
+        shiny::reactive(cohort_obj()$group_tbl),
+        shiny::reactive(cohort_obj()$group_name),
+        shiny::reactive(cohort_obj()$plot_colors)
     )
 
     shiny::callModule(

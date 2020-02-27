@@ -2,10 +2,7 @@ clinical_outcomes_survival_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl,
-    group_name,
-    plot_colors
+    cohort_obj
 ){
 
     ns <- session$ns
@@ -37,12 +34,12 @@ clinical_outcomes_survival_server <- function(
 
     survival_value_tbl <- shiny::reactive({
         shiny::req(
-            sample_tbl(),
+            cohort_obj(),
             time_feature_id(),
             status_feature_id()
         )
         build_survival_value_tbl(
-            sample_tbl(),
+            cohort_obj()$sample_tbl,
             time_feature_id(),
             status_feature_id()
         )
@@ -52,8 +49,7 @@ clinical_outcomes_survival_server <- function(
 
         shiny::req(
             survival_value_tbl(),
-            plot_colors(),
-            group_name(),
+            cohort_obj(),
             input$risktable
         )
 
@@ -86,8 +82,9 @@ clinical_outcomes_survival_server <- function(
             df = survival_value_tbl(),
             confint = input$confint,
             risktable = input$risktable,
-            title = group_name(),
-            group_colors = unname(plot_colors()))
+            title = cohort_obj()$group_name,
+            group_colors = unname(cohort_obj()$plot_colors)
+        )
     })
 
     output$download_tbl <- shiny::downloadHandler(

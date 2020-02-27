@@ -2,7 +2,7 @@ univariate_driver_server <- function(
     input,
     output,
     session,
-    group_name
+    cohort_obj
 ){
     ns <- session$ns
 
@@ -22,14 +22,14 @@ univariate_driver_server <- function(
 
     volcano_plot_tbl <- shiny::reactive({
         shiny::req(
-            group_name(),
+            cohort_obj(),
             input$response_variable,
             input$min_wt,
             input$min_mut
         )
 
         build_ud_results_tbl(
-            group_name(),
+            cohort_obj()$group_name,
             input$response_variable,
             input$min_wt,
             input$min_mut

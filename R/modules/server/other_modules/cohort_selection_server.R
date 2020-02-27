@@ -1,8 +1,7 @@
 cohort_selection_server <- function(
     input,
     output,
-    session,
-    feature_named_list
+    session
 ){
 
     source(
@@ -20,8 +19,7 @@ cohort_selection_server <- function(
 
     cohort_obj_manual <- shiny::callModule(
         cohort_manual_selection_server,
-        "cohort_manual_selection",
-        feature_named_list
+        "cohort_manual_selection"
     )
 
     cohort_obj_upload <- shiny::callModule(

@@ -2,16 +2,18 @@ cell_type_fractions_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl
+    cohort_obj
 ){
 
     source("R/modules/server/submodules/plotly_server.R", local = T)
     source("R/cell_type_fractions_functions.R", local = T)
 
     plot_tbl <- shiny::reactive({
-        shiny::req(input$fraction_group_choice, sample_tbl())
-        build_ctf_barplot_tbl(input$fraction_group_choice, sample_tbl())
+        shiny::req(input$fraction_group_choice, cohort_obj())
+        build_ctf_barplot_tbl(
+            input$fraction_group_choice,
+            cohort_obj()$sample_tbl
+        )
     })
 
     output$barplot <- plotly::renderPlotly({
@@ -36,6 +38,6 @@ cell_type_fractions_server <- function(
         "barplot",
         plot_tbl       = plot_tbl,
         plot_eventdata = barplot_eventdata,
-        group_tbl      = group_tbl
+        group_tbl      = shiny::reactive(cohort_obj()$group_tbl)
     )
 }

@@ -2,10 +2,7 @@ clinical_outcomes_heatmap_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl,
-    group_name,
-    plot_colors
+    cohort_obj
 ){
 
     ns <- session$ns
@@ -47,12 +44,12 @@ clinical_outcomes_heatmap_server <- function(
 
     survival_tbl <- shiny::reactive({
         shiny::req(
-            sample_tbl(),
+            cohort_obj(),
             time_feature_id(),
             status_feature_id()
         )
         build_survival_value_tbl(
-            sample_tbl(),
+            cohort_obj()$sample_tbl,
             time_feature_id(),
             status_feature_id()
         )
@@ -91,6 +88,6 @@ clinical_outcomes_heatmap_server <- function(
         "heatmap",
         plot_tbl       = heatmap_tbl,
         plot_eventdata = heatmap_eventdata,
-        group_tbl      = group_tbl
+        group_tbl      = shiny::reactive(cohort_obj()$group_tbl)
     )
 }

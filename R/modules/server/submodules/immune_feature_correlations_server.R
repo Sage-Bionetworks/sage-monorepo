@@ -27,11 +27,10 @@ immune_feature_correlations_server <- function(
     })
 
     output$response_selection_ui <- shiny::renderUI({
-        shiny::req(feature_named_list())
         shiny::selectInput(
             inputId  = ns("response_choice_id"),
             label    = "Select or Search for Response Variable",
-            choices  = feature_named_list(),
+            choices  = .GlobalEnv$create_feature_named_list(),
             selected = lf_id
         )
     })
@@ -54,8 +53,12 @@ immune_feature_correlations_server <- function(
     })
 
     value_tbl <- shiny::reactive({
-        shiny::req(response_tbl(), feature_tbl(), sample_tbl())
-        build_ifc_value_tbl(response_tbl(), feature_tbl(), sample_tbl())
+        shiny::req(response_tbl(), feature_tbl(), cohort_obj())
+        build_ifc_value_tbl(
+            response_tbl(),
+            feature_tbl(),
+            cohort_obj()$sample_tbl
+        )
     })
 
     heatmap_matrix <- shiny::reactive({
@@ -82,7 +85,7 @@ immune_feature_correlations_server <- function(
         "heatmap",
         plot_tbl       = heatmap_matrix,
         plot_eventdata = heatmap_eventdata,
-        group_tbl      = group_tbl
+        group_tbl      = shiny::reactive(cohort_obj()$group_tbl)
     )
 
     scatterplot_tbl <- shiny::reactive({

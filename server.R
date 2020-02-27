@@ -21,6 +21,16 @@ shiny::shinyServer(function(input, output, session) {
         }
     })
 
+    source(
+        "R/modules/server/other_modules/cohort_selection_server.R",
+        local = T
+    )
+
+    cohort_obj <- shiny::callModule(
+        cohort_selection_server,
+        "cohort_selection"
+    )
+
 
     # analysis modules --------------------------------------------------------
     analysis_module_dir   <- "R/modules/server/analysis_modules/"
@@ -29,82 +39,50 @@ shiny::shinyServer(function(input, output, session) {
         source(item, local = T)
     }
 
-    feature_list <- shiny::reactive(.GlobalEnv$create_feature_named_list())
-
-    cohort_cons <- shiny::callModule(
-        cohort_selection_server,
-        "cohort_selection",
-        feature_list
-    )
-
-    output$cohort_group_text <- shiny::renderText(
-        paste("Selected Group: ", cohort_cons()$group_name)
-    )
-
-    cohort_sample_tbl  <- shiny::reactive(cohort_cons()$sample_tbl)
-    cohort_group_tbl   <- shiny::reactive(cohort_cons()$group_tbl)
-    cohort_group_name  <- shiny::reactive(cohort_cons()$group_name)
-    cohort_colors      <- shiny::reactive(cohort_cons()$plot_colors)
-    #cohort_dataset     <- shiny::reactive(cohort_cons()$dataset)
+    # output$cohort_group_text <- shiny::renderText(
+    #     paste("Selected Group: ", cohort_cons()$group_name)
+    # )
 
     shiny::callModule(
         tumor_microenvironment_server,
         "tumor_microenvironment",
-        cohort_sample_tbl,
-        cohort_group_tbl
+        cohort_obj
     )
 
     shiny::callModule(
         immune_features_server,
         "immune_features",
-        cohort_sample_tbl,
-        cohort_group_tbl,
-        cohort_group_name,
-        feature_list,
-        cohort_colors
+        cohort_obj
     )
 
     shiny::callModule(
         til_maps_server,
         "til_maps",
-        cohort_sample_tbl,
-        cohort_group_tbl,
-        cohort_group_name,
-        cohort_colors
+        cohort_obj
     )
 
     shiny::callModule(
         immunomodulators_server,
         "immunomodulators",
-        cohort_sample_tbl,
-        cohort_group_tbl,
-        cohort_group_name,
-        cohort_colors
+        cohort_obj
     )
 
     shiny::callModule(
         clinical_outcomes_server,
         "clinical_outcomes",
-        cohort_sample_tbl,
-        cohort_group_tbl,
-        cohort_group_name,
-        cohort_colors
+        cohort_obj
     )
 
     shiny::callModule(
         io_targets_server,
         "io_targets",
-        cohort_sample_tbl,
-        cohort_group_tbl,
-        cohort_group_name,
-        cohort_colors
+        cohort_obj
     )
 
     shiny::callModule(
         driver_associations_server,
         "driver_associations",
-        cohort_sample_tbl,
-        cohort_group_name
+        cohort_obj
     )
 
     shiny::observeEvent(input$link_to_tumor_microenvironment, {

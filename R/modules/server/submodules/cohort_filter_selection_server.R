@@ -2,7 +2,6 @@ cohort_filter_selection_server <- function(
     input,
     output,
     session,
-    feature_named_list,
     selected_dataset,
     sample_ids
 ){
@@ -69,10 +68,9 @@ cohort_filter_selection_server <- function(
 
     # numeric_filters ---------------------------------------------------------
     numeric_element_module_server <- shiny::reactive({
-        shiny::req(feature_named_list())
         purrr::partial(
             numeric_filter_element_server,
-            feature_named_list = feature_named_list
+            feature_named_list = .GlobalEnv$create_feature_named_list()
         )
     })
 

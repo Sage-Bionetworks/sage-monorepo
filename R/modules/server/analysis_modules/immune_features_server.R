@@ -2,11 +2,7 @@ immune_features_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl,
-    group_name,
-    feature_named_list,
-    plot_colors
+    cohort_obj
 ){
 
     source(
@@ -21,19 +17,13 @@ immune_features_server <- function(
     shiny::callModule(
         immune_feature_distributions_server,
         "immune_feature_distributions",
-        sample_tbl,
-        group_tbl,
-        group_name,
-        feature_named_list,
-        plot_colors
+        cohort_obj
     )
 
 
     shiny::callModule(
         immune_feature_correlations_server,
         "immune_feature_correlations",
-        sample_tbl,
-        group_tbl,
-        feature_named_list
+        cohort_obj
     )
 }

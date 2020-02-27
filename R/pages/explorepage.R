@@ -4,6 +4,7 @@ for (item in analysis_module_files) {
     source(item, local = T)
 }
 
+source("R/modules/ui/other_modules/cohort_selection_ui.R", local = T)
 source("R/modules/ui/other_modules/data_info_ui.R", local = T)
 
 explorepage <- shinydashboard::dashboardPage(
