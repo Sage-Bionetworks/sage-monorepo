@@ -121,4 +121,19 @@ get_filtered_feature_sample_ids_by_filter <- function(id, min, max){
         dplyr::pull("sample_id")
 }
 
+#' Create Cohort Filter Object
+#'
+#' @param sample_ids A vector of integers
+#' @param numeric_obj A list
+#' @param group_obj A list
+create_cohort_filter_object <- function(sample_ids, numeric_obj, group_obj){
+    list(
+        "sample_ids" = sample_ids,
+        "filters" = list(
+            "feature_filters" = numeric_obj,
+            "group_filters" = group_obj
+        )
+    )
+}
+
 

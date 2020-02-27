@@ -110,9 +110,13 @@ cohort_filter_selection_server <- function(
         c("Number of current samples:", length(selected_samples()))
     })
 
-    return(shiny::reactive(list(
-        "sample_ids" = selected_samples(),
-        "feature_filters" = valid_numeric_filter_obj(),
-        "group_filters" = valid_group_filter_obj()
-    )))
+    filter_obj <- shiny::reactive({
+        create_cohort_filter_object(
+            selected_samples(),
+            valid_numeric_filter_obj(),
+            valid_group_filter_obj()
+        )
+    })
+
+    return(filter_obj)
 }

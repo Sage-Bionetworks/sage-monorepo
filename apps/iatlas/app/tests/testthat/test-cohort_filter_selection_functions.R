@@ -129,4 +129,17 @@ with_test_db_env({
         )
         expect_type(result1, "integer")
     })
+
+    test_that("Create Cohort Filter Object", {
+        expect_equal(
+            create_cohort_filter_object(1:1000, list(), list()),
+            list(
+                "sample_ids" = 1:1000,
+                "filters" = list(
+                    "feature_filters" = list(),
+                    "group_filters" = list()
+                )
+            )
+        )
+    })
 })

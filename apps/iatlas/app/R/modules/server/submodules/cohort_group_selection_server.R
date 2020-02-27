@@ -98,7 +98,7 @@ cohort_group_selection_server <- function(
     cohort_obj <- shiny::reactive({
         shiny::req(
             group_choice(),
-            filter_obj()$sample_ids,
+            filter_obj(),
             selected_dataset()
         )
         if (group_choice() == "Driver Mutation") {

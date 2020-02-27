@@ -25,9 +25,11 @@ with_test_db_env({
 
     test_that("Create Cohort Object", {
         filter_obj1 <- list(
-            sample_ids = 1:10000,
-            "feature_filters" = list(),
-            "group_filters" = list()
+            "sample_ids" = 1:10000,
+            "filters" = list(
+                "feature_filters" = list(),
+                "group_filters" = list()
+            )
         )
         res1 <- create_cohort_object(filter_obj1, "Immune Subtype", "TCGA")
         res2 <- create_cohort_object(
@@ -42,7 +44,7 @@ with_test_db_env({
         )
         expected_obj_names <- c(
             "sample_tbl", "group_tbl", "group_name", "plot_colors", "dataset",
-            "feature_filters", "group_filters"
+            "filters"
         )
         expected_group_names <- c("group", "name", "characteristics", "size")
 
