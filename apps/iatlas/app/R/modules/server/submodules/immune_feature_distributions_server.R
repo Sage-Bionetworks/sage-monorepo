@@ -2,11 +2,7 @@ immune_feature_distributions_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl,
-    group_name,
-    feature_named_list,
-    plot_colors
+    cohort_obj
 ){
 
     ns <- session$ns
@@ -15,14 +11,13 @@ immune_feature_distributions_server <- function(
     source("R/modules/server/submodules/distribution_plot_server.R", local = T)
 
     output$selection_ui <- shiny::renderUI({
-        shiny::req(feature_named_list())
         shiny::selectInput(
             ns("feature_choice_id"),
             label = "Select or Search for Variable",
             selected = .GlobalEnv$get_feature_id_from_display(
                 "Leukocyte Fraction"
             ),
-            choices = feature_named_list()
+            choices = .GlobalEnv$create_feature_named_list()
         )
     })
 
@@ -43,12 +38,12 @@ immune_feature_distributions_server <- function(
 
     distplot_tbl <- shiny::reactive({
         shiny::req(
-            sample_tbl(),
+            cohort_obj(),
             input$feature_choice_id,
             input$scale_method_choice
         )
         build_ifd_distplot_tbl(
-            sample_tbl(),
+            cohort_obj()$sample_tbl,
             input$feature_choice_id,
             input$scale_method_choice
         )
@@ -58,10 +53,10 @@ immune_feature_distributions_server <- function(
         distribution_plot_server,
         "immune_feature_dist_plot",
         distplot_tbl    = distplot_tbl,
-        group_tbl       = group_tbl,
+        group_tbl       = shiny::reactive(cohort_obj()$group_tbl),
         distplot_type   = shiny::reactive(input$plot_type_choice),
-        distplot_colors = plot_colors,
-        distplot_xlab   = group_name,
+        distplot_colors = shiny::reactive(cohort_obj()$plot_colors),
+        distplot_xlab   = shiny::reactive(cohort_obj()$group_name),
         distplot_ylab   = feature_plot_label,
         distplot_title  = feature_name
     )

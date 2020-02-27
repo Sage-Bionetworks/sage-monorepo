@@ -2,8 +2,7 @@ driver_associations_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_name
+    cohort_obj
 ){
 
     source(
@@ -18,14 +17,13 @@ driver_associations_server <- function(
     shiny::callModule(
         univariate_driver_server,
         "univariate_driver",
-        group_name
+        cohort_obj
     )
 
     shiny::callModule(
         multivariate_driver_server,
         "multivariate_driver",
-        sample_tbl,
-        group_name
+        cohort_obj
     )
 }
 

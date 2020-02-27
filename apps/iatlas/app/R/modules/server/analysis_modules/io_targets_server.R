@@ -2,10 +2,7 @@ io_targets_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl,
-    group_name,
-    plot_colors
+    cohort_obj
 ) {
 
     ns <- session$ns
@@ -52,13 +49,13 @@ io_targets_server <- function(
 
     distplot_tbl <- shiny::reactive({
         shiny::req(
-            sample_tbl(),
+            cohort_obj(),
             input$gene_choice_id,
             input$scale_method_choice
         )
         build_io_target_distplot(
             input$gene_choice_id,
-            sample_tbl(),
+            cohort_obj()$sample_tbl,
             input$scale_method_choice
         )
     })
@@ -67,10 +64,10 @@ io_targets_server <- function(
         distribution_plot_server,
         "io_targets_dist_plot",
         distplot_tbl    = distplot_tbl,
-        group_tbl       = group_tbl,
+        group_tbl       = shiny::reactive(cohort_obj()$group_tbl),
         distplot_type   = shiny::reactive(input$plot_type_choice),
-        distplot_colors = plot_colors,
-        distplot_xlab   = group_name,
+        distplot_colors = shiny::reactive(cohort_obj()$plot_colors),
+        distplot_xlab   = shiny::reactive(cohort_obj()$group_name),
         distplot_ylab   = gene_plot_label,
         distplot_title  = gene_name
     )

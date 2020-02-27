@@ -2,10 +2,7 @@ immunomodulators_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl,
-    group_name,
-    plot_colors
+    cohort_obj
 ) {
 
     ns <- session$ns
@@ -15,22 +12,6 @@ immunomodulators_server <- function(
     source("R/immunomodulators_functions.R")
 
     immunomodulator_tbl <- .GlobalEnv$build_immunomodultors_tbl()
-
-    # output$gene_choice_ui <- shiny::renderUI({
-    #     shiny::req(immunomodulator_tbl, input$group_choice)
-    #     choices <- immunomodulator_tbl %>%
-    #         dplyr::select(
-    #             class = input$group_choice,
-    #             display = "hgnc",
-    #             feature = "id"
-    #         ) %>%
-    #         .GlobalEnv$create_nested_named_list()
-    #     shiny::selectInput(
-    #         ns("gene_choice_id"),
-    #         label = "Select or Search Gene",
-    #         choices = choices
-    #     )
-    # })
 
     output$gene_choice_ui <- shiny::renderUI({
         shiny::req(input$group_choice)
@@ -60,14 +41,14 @@ immunomodulators_server <- function(
 
     distplot_tbl <- shiny::reactive({
         shiny::req(
-            sample_tbl(),
+            cohort_obj(),
             input$gene_choice_id,
             input$scale_method_choice
         )
 
         build_im_distplot(
             input$gene_choice_id,
-            sample_tbl(),
+            cohort_obj()$sample_tbl,
             input$scale_method_choice
         )
     })
@@ -76,10 +57,10 @@ immunomodulators_server <- function(
         distribution_plot_server,
         "immunomodulators_dist_plot",
         distplot_tbl    = distplot_tbl,
-        group_tbl       = group_tbl,
+        group_tbl       = shiny::reactive(cohort_obj()$group_tbl),
         distplot_type   = shiny::reactive(input$plot_type_choice),
-        distplot_colors = plot_colors,
-        distplot_xlab   = group_name,
+        distplot_colors = shiny::reactive(cohort_obj()$plot_colors),
+        distplot_xlab   = shiny::reactive(cohort_obj()$group_name),
         distplot_ylab   = gene_plot_label,
         distplot_title  = gene_name
     )

@@ -1,8 +1,7 @@
 cohort_manual_selection_server <- function(
     input,
     output,
-    session,
-    feature_named_list
+    session
 ){
 
     source(
@@ -42,19 +41,9 @@ cohort_manual_selection_server <- function(
     filter_obj <- cohort_obj <- shiny::callModule(
         cohort_filter_selection_server,
         "cohort_filter_selection",
-        feature_named_list,
         dataset,
         all_sample_ids
     )
-
-    # sample_ids <- shiny::reactive({
-    #     if (is.null(filter_obj()$sample_ids)) {
-    #         shiny::req(all_sample_ids())
-    #         return(all_sample_ids())
-    #     } else {
-    #         return(filter_obj()$sample_ids)
-    #     }
-    # })
 
     cohort_obj <- shiny::callModule(
         cohort_group_selection_server,

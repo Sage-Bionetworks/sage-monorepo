@@ -2,8 +2,7 @@ multivariate_driver_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_name
+    cohort_obj
 ){
 
     ns <- session$ns
@@ -73,10 +72,10 @@ multivariate_driver_server <- function(
     status_tbl <- shiny::reactive(build_md_status_tbl())
 
     combined_tbl <- shiny::reactive({
-        shiny::req(response_tbl(), sample_tbl(), status_tbl(), input$group_mode)
+        shiny::req(response_tbl(), cohort_obj(), status_tbl(), input$group_mode)
         combine_md_tbls(
             response_tbl(),
-            sample_tbl(),
+            cohort_obj()$sample_tbl,
             status_tbl(),
             covariate_tbl(),
             input$group_mode
