@@ -30,7 +30,7 @@ build_dm_tbl <- function(){
 
 #' Create Cohort Object
 #'
-#' @param filter_obj A named list with element sample_ids
+#' @param filter_obj A named list with element sample_ids and filters
 #' @param group_choice A string
 #' @param dataset A string
 #' @param driver_mutation A string
@@ -57,11 +57,9 @@ create_cohort_object <- function(
             immune_feature_bin_number
         )
     }
-    c(
-        cohort_object,
-        "dataset" = dataset,
-        purrr::list_modify(filter_obj, "sample_ids" = NULL)
-    )
+    cohort_object$dataset <- dataset
+    cohort_object$filters <- filter_obj$filters
+    return(cohort_object)
 }
 
 # tag choice ------------------------------------------------------------------

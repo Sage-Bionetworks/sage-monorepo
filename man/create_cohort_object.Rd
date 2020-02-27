@@ -14,7 +14,7 @@ create_cohort_object(
 )
 }
 \arguments{
-\item{filter_obj}{A named list with element sample_ids}
+\item{filter_obj}{A named list with element sample_ids and filters}
 
 \item{group_choice}{A string}
 
