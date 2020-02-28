@@ -72,11 +72,12 @@ add_plotly_label <- function(tbl, title, name, group){
 #' @importFrom rlang .data
 #' @importFrom tidyr pivot_longer pivot_wider
 #' @importFrom dplyr mutate group_by ungroup
+#' @importFrom tidyselect all_of
 add_plotly_value_label <- function(tbl, cols){
     tbl %>%
         tidyr::pivot_longer(
             .,
-            cols,
+            tidyselect::all_of(cols),
             names_to  = "value_name",
             values_to = "value"
         ) %>%
