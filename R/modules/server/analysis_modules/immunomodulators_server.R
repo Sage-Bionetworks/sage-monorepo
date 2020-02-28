@@ -56,11 +56,9 @@ immunomodulators_server <- function(
     shiny::callModule(
         distribution_plot_server,
         "immunomodulators_dist_plot",
+        cohort_obj,
         distplot_tbl    = distplot_tbl,
-        group_tbl       = shiny::reactive(cohort_obj()$group_tbl),
         distplot_type   = shiny::reactive(input$plot_type_choice),
-        distplot_colors = shiny::reactive(cohort_obj()$plot_colors),
-        distplot_xlab   = shiny::reactive(cohort_obj()$group_name),
         distplot_ylab   = gene_plot_label,
         distplot_title  = gene_name
     )
