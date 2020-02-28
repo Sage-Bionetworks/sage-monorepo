@@ -1,7 +1,7 @@
 create_im_gene_list <- function(tbl, group){
     tbl %>%
         dplyr::select(
-            class = group,
+            class   = tidyselect::all_of(group),
             display = "hgnc",
             feature = "id"
         ) %>%

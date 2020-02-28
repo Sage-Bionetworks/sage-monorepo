@@ -11,7 +11,7 @@ get_gene_from_url <- function(url_query){
 create_io_target_gene_list <- function(tbl, group){
     tbl %>%
         dplyr::select(
-            class = group,
+            class   = tidyselect::all_of(group),
             display = "hgnc",
             feature = "id"
         ) %>%
