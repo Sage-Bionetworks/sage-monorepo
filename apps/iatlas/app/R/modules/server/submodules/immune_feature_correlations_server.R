@@ -2,9 +2,7 @@ immune_feature_correlations_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl,
-    feature_named_list
+    cohort_obj
 ){
 
     ns <- session$ns
@@ -27,10 +25,13 @@ immune_feature_correlations_server <- function(
     })
 
     output$response_selection_ui <- shiny::renderUI({
+        shiny::req(cohort_obj())
         shiny::selectInput(
             inputId  = ns("response_choice_id"),
             label    = "Select or Search for Response Variable",
-            choices  = .GlobalEnv$create_feature_named_list(),
+            choices  = .GlobalEnv$create_nested_named_list(
+                cohort_obj()$feature_tbl, values_col = "id"
+            ),
             selected = lf_id
         )
     })

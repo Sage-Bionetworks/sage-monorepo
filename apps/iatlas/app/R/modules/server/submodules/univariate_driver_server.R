@@ -13,7 +13,9 @@ univariate_driver_server <- function(
         shiny::selectInput(
             inputId  = ns("response_variable"),
             label    = "Select or Search for Response Variable",
-            choices  = .GlobalEnv$create_feature_named_list(),
+            choices = .GlobalEnv$create_nested_named_list(
+                cohort_obj()$feature_tbl, values_col = "id"
+            ),
             selected = .GlobalEnv$get_feature_id_from_display(
                 "Leukocyte Fraction"
             )

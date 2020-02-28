@@ -29,9 +29,7 @@ til_maps_server <- function(
         til_map_distributions_server,
         "til_map_distributions",
         tilmap_sample_tbl,
-        shiny::reactive(cohort_obj()$group_tbl),
-        shiny::reactive(cohort_obj()$group_name),
-        shiny::reactive(cohort_obj()$plot_colors)
+        cohort_obj
     )
 
     shiny::callModule(

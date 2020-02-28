@@ -3,9 +3,7 @@ til_map_distributions_server <- function(
     output,
     session,
     sample_tbl,
-    group_tbl,
-    group_name,
-    plot_colors
+    cohort_obj
 ){
 
     ns <- session$ns
@@ -14,10 +12,11 @@ til_map_distributions_server <- function(
     source("R/til_map_distributions_functions.R", local = T)
 
     output$selection_ui <- shiny::renderUI({
+        shiny::req(cohort_obj())
         shiny::selectInput(
             ns("feature_choice_id"),
             label = "Select or Search for Variable",
-            choices = get_til_map_named_list()
+            choices = get_til_map_named_list(cohort_obj()$feature_tbl)
         )
     })
 
@@ -56,10 +55,10 @@ til_map_distributions_server <- function(
         distribution_plot_server,
         "tilmap_dist_plot",
         distplot_tbl    = distplot_tbl,
-        group_tbl       = group_tbl,
+        group_tbl       = shiny::reactive(cohort_obj()$group_tbl),
         distplot_type   = shiny::reactive(input$plot_type_choice),
-        distplot_colors = plot_colors,
-        distplot_xlab   = group_name,
+        distplot_colors = shiny::reactive(cohort_obj()$plot_colors),
+        distplot_xlab   = shiny::reactive(cohort_obj()$group_name),
         distplot_ylab   = feature_plot_label,
         distplot_title  = feature_name
     )

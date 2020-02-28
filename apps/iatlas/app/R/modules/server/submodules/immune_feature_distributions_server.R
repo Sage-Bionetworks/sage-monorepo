@@ -11,13 +11,16 @@ immune_feature_distributions_server <- function(
     source("R/modules/server/submodules/distribution_plot_server.R", local = T)
 
     output$selection_ui <- shiny::renderUI({
+        shiny::req(cohort_obj())
         shiny::selectInput(
             ns("feature_choice_id"),
             label = "Select or Search for Variable",
             selected = .GlobalEnv$get_feature_id_from_display(
                 "Leukocyte Fraction"
             ),
-            choices = .GlobalEnv$create_feature_named_list()
+            choices = .GlobalEnv$create_nested_named_list(
+                cohort_obj()$feature_tbl, values_col = "id"
+            )
         )
     })
 
