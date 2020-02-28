@@ -1,16 +1,7 @@
-get_til_map_named_list <- function(){
-
-    subquery <- "SELECT id FROM classes WHERE name = 'TIL Map Characteristic'"
-
-    query <- paste(
-        "SELECT display, id AS feature FROM features",
-        "WHERE class_id = (",
-        subquery,
-        ")"
-    )
-
-    query %>%
-        perform_query("build feature table") %>%
+get_til_map_named_list <- function(tbl){
+    tbl %>%
+        dplyr::filter(class == 'TIL Map Characteristic') %>%
+        dplyr::select(.data$display, .data$id) %>%
         tibble::deframe(.)
 }
 
