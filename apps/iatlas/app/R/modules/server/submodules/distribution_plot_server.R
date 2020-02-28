@@ -2,11 +2,9 @@ distribution_plot_server <- function(
     input,
     output,
     session,
+    cohort_obj,
     distplot_tbl,
-    group_tbl,
     distplot_type,
-    distplot_colors,
-    distplot_xlab,
     distplot_ylab,
     distplot_title
 ){
@@ -27,9 +25,9 @@ distribution_plot_server <- function(
         distplot_function()(
             df = distplot_tbl(),
             source_name = "distplot",
-            fill_colors = distplot_colors(),
+            fill_colors = cohort_obj()$plot_colors,
             ylab = distplot_ylab(),
-            xlab = distplot_xlab(),
+            xlab = cohort_obj()$group_name,
             title = distplot_title()
         )
     })
@@ -44,7 +42,7 @@ distribution_plot_server <- function(
         "dist_plot",
         plot_tbl       = distplot_tbl,
         plot_eventdata = distplot_eventdata,
-        group_tbl      = group_tbl,
+        group_tbl      = shiny::reactive(cohort_obj()$group_tbl)
     )
 
     # histplot ----------------------------------------------------------------
