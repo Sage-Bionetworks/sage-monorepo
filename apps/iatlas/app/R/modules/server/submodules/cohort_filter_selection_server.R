@@ -70,7 +70,7 @@ cohort_filter_selection_server <- function(
     numeric_element_module_server <- shiny::reactive({
         purrr::partial(
             numeric_filter_element_server,
-            feature_named_list = .GlobalEnv$create_feature_named_list()
+            feature_named_list = .GlobalEnv$create_feature_named_list
         )
     })
 
