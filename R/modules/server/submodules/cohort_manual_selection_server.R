@@ -19,7 +19,7 @@ cohort_manual_selection_server <- function(
 
     default_dataset <- "TCGA"
 
-    selected_dataset <- cohort_obj <- shiny::callModule(
+    selected_dataset <- shiny::callModule(
         cohort_dataset_selection_server,
         "cohort_dataset_selection",
         default_dataset

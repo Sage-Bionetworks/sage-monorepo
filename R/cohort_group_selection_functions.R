@@ -57,10 +57,25 @@ create_cohort_object <- function(
             immune_feature_bin_number
         )
     }
-    cohort_object$dataset <- dataset
-    cohort_object$filters <- filter_obj$filters
+    cohort_object$dataset     <- dataset
+    cohort_object$filters     <- filter_obj$filters
+    cohort_object$feature_tbl <- create_cohort_feature_tbl(sample_ids)
     return(cohort_object)
 }
+
+create_cohort_feature_tbl <- function(sample_ids){
+    paste(
+        "SELECT f.id, f.display, c.name AS class FROM features f",
+        "INNER JOIN classes c ON f.class_id = c.id ",
+        "WHERE f.id IN ",
+        "(SELECT DISTINCT feature_id FROM features_to_samples ",
+        "WHERE sample_id IN ",
+        "(", numeric_values_to_query_list(sample_ids), ") ",
+        "AND value IS NOT NULL)"
+    ) %>%
+        perform_query()
+}
+
 
 # tag choice ------------------------------------------------------------------
 
