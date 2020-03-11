@@ -19,24 +19,6 @@ test_that("Create Get Sample IDs From Parent Tag Display Query", {
     )
 })
 
-test_that("Create Build Immunomodulators Table Query", {
-    expect_equal(
-        create_build_immunomodulators_tbl_query(),
-        paste0(
-            "SELECT a.id, a.hgnc, a.entrez, a.friendly_name, a.references, ",
-            "gf.name AS gene_family, sc.name as super_category, ic.name AS ",
-            "immune_checkpoint, gfunc.name as gene_function FROM (",
-            "SELECT * FROM genes WHERE id IN ",
-            "(SELECT gene_id FROM genes_to_types WHERE type_id IN ",
-            "(SELECT id FROM gene_types WHERE name IN ('immunomodulator')))) a " ,
-            "LEFT JOIN gene_families gf ON a.gene_family_id = gf.id ",
-            "LEFT JOIN super_categories sc ON a.super_cat_id = sc.id ",
-            "LEFT JOIN immune_checkpoints ic ON a.immune_checkpoint_id = ic.id ",
-            "LEFT JOIN gene_functions gfunc ON a.gene_function_id = gfunc.id"
-        )
-    )
-})
-
 test_that("Create Combined Feature Values Query From Class Ids", {
     expect_equal(
         create_combined_feature_values_query_from_class_ids(1),
@@ -72,52 +54,19 @@ test_that("Create Feature Value Query", {
             "WHERE feature_id IN (1,2,3) AND value IS NOT NULL"
         )
     )
-
 })
 
-
-
-
-test_that("create get feature display from id query", {
+test_that("Create Parent Group Query From Id", {
     expect_equal(
-        create_get_feature_display_from_id_query(1),
-        "SELECT display FROM features WHERE id IN (1)"
-    )
-})
-
-test_that("create get feature display from id query", {
-    expect_equal(
-        create_get_feature_display_from_id_query(1),
-        "SELECT display FROM features WHERE id IN (1)"
-    )
-})
-
-test_that("Create Get Class Id from Name Query", {
-    expect_equal(
-        create_get_class_id_from_name_query("DNA Alteration"),
-        "SELECT id FROM classes WHERE name IN ('DNA Alteration')"
-    )
-})
-
-test_that("Create Get Feature Id from Display Query", {
-    expect_equal(
-        create_get_feature_id_from_display_query("Leukocyte Fraction"),
-        "SELECT id FROM features WHERE display IN ('Leukocyte Fraction')"
-    )
-})
-
-test_that("create get genes by type query", {
-    expect_equal(
-        create_get_genes_by_type_query("driver"),
+        create_parent_group_query_from_id(1),
         paste0(
-            "SELECT * FROM genes WHERE id IN (",
-            "SELECT gene_id FROM genes_to_types WHERE type_id IN (",
-            "SELECT id FROM gene_types WHERE name IN ('driver')))"
+            "SELECT * FROM tags WHERE id IN (",
+            "SELECT tag_id FROM tags_to_tags WHERE related_tag_id IN (1))"
         )
     )
 })
 
-test_that("create parent group query from display", {
+test_that("Create Parent Group Query From Display", {
     expect_equal(
         create_parent_group_query_from_display("Immune Subtype"),
         paste0(
@@ -128,17 +77,26 @@ test_that("create parent group query from display", {
     )
 })
 
-test_that("create parent group query from id", {
+test_that("Create Get Genes by Type Query", {
     expect_equal(
-        create_parent_group_query_from_id(1),
+        create_get_genes_by_type_query("driver"),
         paste0(
-            "SELECT * FROM tags WHERE id IN (",
-            "SELECT tag_id FROM tags_to_tags WHERE related_tag_id IN (1))"
+            "SELECT * FROM genes WHERE id IN (",
+            "SELECT gene_id FROM genes_to_types WHERE type_id IN (",
+            "SELECT id FROM gene_types WHERE name IN ('driver')))"
         )
     )
 })
 
-test_that("translate string values", {
+test_that("Create Translate Values Query", {
+    expect_equal(
+        create_translate_values_query("table", "col1", "col2", "'value'"),
+        "SELECT col1 FROM table WHERE col2 IN ('value')"
+    )
+
+})
+
+test_that("String Values to Query List", {
     translate_str_features <- function(values){
         create_translate_values_query(
             "features", "id", "display", values
@@ -157,23 +115,7 @@ test_that("translate string values", {
     )
 })
 
-test_that("translate numeric values", {
-    translate_num_features <- function(values){
-        create_translate_values_query(
-            "features", "display", "id", values
-        )
-    }
-    expect_equal(
-        translate_num_features("1"),
-        "SELECT display FROM features WHERE id IN (1)"
-    )
-    expect_equal(
-        translate_num_features(c("1, 2")),
-        "SELECT display FROM features WHERE id IN (1, 2)"
-    )
-})
-
-test_that("string values to query list", {
+test_that("String Values to Query List", {
     expect_equal(
         string_values_to_query_list("Leukocyte Fraction"),
         "'Leukocyte Fraction'"
@@ -184,7 +126,7 @@ test_that("string values to query list", {
     )
 })
 
-test_that("numeric values to query list", {
+test_that("Numeric Values to Query List", {
     expect_equal(numeric_values_to_query_list(1), "1")
     expect_equal(numeric_values_to_query_list(1L), "1")
     expect_equal(numeric_values_to_query_list(c(1, 2)), "1, 2")

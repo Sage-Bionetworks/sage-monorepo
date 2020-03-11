@@ -11,7 +11,7 @@ immunomodulators_server <- function(
     source("R/modules/server/submodules/distribution_plot_server.R", local = T)
     source("R/immunomodulators_functions.R")
 
-    immunomodulator_tbl <- .GlobalEnv$build_immunomodultors_tbl()
+    immunomodulator_tbl <- build_im_tbl()
 
     output$gene_choice_ui <- shiny::renderUI({
         shiny::req(input$group_choice)
@@ -46,7 +46,7 @@ immunomodulators_server <- function(
             input$scale_method_choice
         )
 
-        build_im_distplot(
+        build_im_distplot_tbl(
             input$gene_choice_id,
             cohort_obj()$sample_tbl,
             input$scale_method_choice
@@ -65,7 +65,7 @@ immunomodulators_server <- function(
 
     data_tbl <- shiny::reactive({
         shiny::req(immunomodulator_tbl)
-        build_im_target_dt_tbl(immunomodulator_tbl)
+        build_im_dt_tbl(immunomodulator_tbl)
     })
 
     shiny::callModule(
