@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_queries.R
 \name{create_get_genes_by_type_query}
 \alias{create_get_genes_by_type_query}
-\title{Create Get Gene by Type Query}
+\title{Create Get Genes by Type Query}
 \usage{
 create_get_genes_by_type_query(gene_type)
 }
@@ -10,5 +10,5 @@ create_get_genes_by_type_query(gene_type)
 \item{gene_type}{The name of the gene type}
 }
 \description{
-Create Get Gene by Type Query
+Create Get Genes by Type Query
 }

@@ -37,4 +37,11 @@ with_test_db_env({
         expect_equal(rownames(result), "feature")
         expect_equal(colnames(result), c("C1", "C2"))
     })
+
+    test_that("Build Clinical Outcomes Survival Tibble", {
+        res1 <- build_co_survival_tbl(1L, 2L)
+        expect_named(res1, c("sample_id", "time", "status"))
+    })
+
+
 })

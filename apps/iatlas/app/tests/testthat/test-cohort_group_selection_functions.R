@@ -80,6 +80,13 @@ with_test_db_env({
         expect_equal(res1$group_name, "Immune Subtype")
     })
 
+    test_that("Build Cohort Table By Group", {
+        expect_named(
+            build_cohort_tbl_by_group(c(1:10), "Immune Subtype"),
+            c("sample_id", "group", "name", "characteristics", "color")
+        )
+    })
+
     test_that("Create Tag Group Tibble",{
         tbl1 <- dplyr::tibble(
             group           = c(rep("G1", 5), "G2"),
@@ -137,6 +144,11 @@ with_test_db_env({
         res1 <- create_feature_bin_sample_tbl(1:10000L, 2L, 2L)
         expect_named(res1, c("sample_id", "group"))
         expect_equal(length(unique(res1$group)), 2L)
+    })
+
+    test_that("Build Cohort Tibble By Feature ID", {
+        res1 <- build_cohort_tbl_by_feature_id(1:10000L, 2L)
+        expect_named(res1, c("sample_id", "value"))
     })
 
     test_that("Create Feature Bin Group Tibble", {

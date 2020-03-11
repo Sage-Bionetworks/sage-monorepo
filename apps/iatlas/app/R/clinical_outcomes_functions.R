@@ -20,7 +20,7 @@ get_status_id_from_time_id <- function(time_id){
 #' @importFrom rlang .data
 build_survival_value_tbl <- function(sample_tbl, time_id, status_id) {
     tbl <-
-        build_clincal_outcomes_survival_tbl(time_id, status_id) %>%
+        build_co_survival_tbl(time_id, status_id) %>%
         dplyr::inner_join(sample_tbl, by = "sample_id") %>%
         dplyr::select(.data$group, .data$time, .data$status, .data$sample_id)
     return(tbl)
@@ -67,4 +67,31 @@ build_co_heatmap_matrix <- function(tbl){
         as.data.frame() %>%
         tibble::column_to_rownames("feature") %>%
         as.matrix()
+}
+
+#' Build Clinical Outcomes Survival Tibble
+#'
+#' @param time_id An integer in the id column of the samples table
+#' @param status_id An integer in the id column of the samples table
+build_co_survival_tbl <- function(time_id, status_id){
+    paste0(
+        "SELECT a.sample_id, a.time, b.status FROM (",
+        paste0(
+            "SELECT a.sample_id, a.value AS time ",
+            "FROM features_to_samples a ",
+            "INNER JOIN features f ON a.feature_id = f.id ",
+            "WHERE feature_id = ",
+            time_id
+        ),
+        ") a INNER JOIN (",
+        paste0(
+            "SELECT a.sample_id, a.value AS status ",
+            "FROM features_to_samples a ",
+            "INNER JOIN features f ON a.feature_id = f.id ",
+            "WHERE feature_id = ",
+            status_id
+        ),
+        ") b ON a.sample_id = b.sample_id"
+    )  %>%
+        perform_query("Build Clinical Outcomes Survival Tibble")
 }

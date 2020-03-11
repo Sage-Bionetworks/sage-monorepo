@@ -11,7 +11,7 @@ io_targets_server <- function(
     source("R/modules/server/submodules/data_table_server.R", local = T)
     source("R/io_target_functions.R", local = T)
 
-    io_target_tbl <- .GlobalEnv$build_io_target_tbl()
+    io_target_tbl <- build_io_target_tbl()
 
     # distplot ----------------------------------------------------------------
 

@@ -1,3 +1,17 @@
+#' Build IO Target Tibble
+#'
+#' #' @importFrom magrittr %>%
+build_io_target_tbl <- function(){
+    paste0(
+        "SELECT a.id, a.hgnc, a.entrez, a.io_landscape_name AS friendly_name, ",
+        "p.name AS pathway, t.name AS therapy, a.description FROM (",
+        create_get_genes_by_type_query("io_target"), ") a ",
+        "LEFT JOIN pathways p ON a.pathway_id = p.id ",
+        "LEFT JOIN therapy_types t ON a.therapy_type_id = t.id "
+    ) %>%
+        perform_query("Build IO Target Tibble")
+}
+
 get_gene_from_url <- function(url_query){
     gene  <- url_query[['gene']]
     if (!is.null(gene)) {

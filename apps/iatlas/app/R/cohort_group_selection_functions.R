@@ -99,6 +99,24 @@ create_tag_cohort_object <- function(sample_ids, group_choice){
     )
 }
 
+#' Build Cohort Tibble By Group
+#'
+#' @param sample_ids Integers in the id column of the samples table
+#' @param group A String that is the display column of the tags table
+#' @importFrom magrittr %>%
+build_cohort_tbl_by_group <- function(sample_ids, group){
+    paste0(
+        "SELECT sts.sample_id, g.name AS group, g.display AS name, ",
+        "g.characteristics, g.color FROM (",
+        create_parent_group_query_from_display(group),
+        ") g INNER JOIN samples_to_tags sts ON g.id = sts.tag_id ",
+        "WHERE sample_id IN (",
+        numeric_values_to_query_list(sample_ids),
+        ")"
+    ) %>%
+        perform_query("Build Cohort Tibble By Group")
+}
+
 #' Create Tag Group Tibble
 #'
 #' @param cohort_tbl A Tibble with columns group, name, characteristics
@@ -235,6 +253,23 @@ create_feature_bin_sample_tbl <- function(sample_ids, feature_id, n_bins){
     build_cohort_tbl_by_feature_id(sample_ids, feature_id) %>%
         dplyr::mutate(group = as.character(cut(.data$value, n_bins))) %>%
         dplyr::select(-.data$value)
+}
+
+#' Build Cohort Tibble By Feature ID
+#'
+#' @param sample_ids Integers in the id column of the samples table
+#' @param feature_id An integer in the id column of the features_to_samples
+#' table
+#' @importFrom magrittr %>%
+build_cohort_tbl_by_feature_id <- function(sample_ids, feature_id){
+    paste(
+        "SELECT a.sample_id, a.value FROM (",
+        create_feature_value_query(feature_id),
+        ") a WHERE a.sample_id IN (",
+        numeric_values_to_query_list(sample_ids),
+        ")"
+    ) %>%
+        perform_query("Build Cohort Tibble By Feature ID")
 }
 
 #' Create Feature Bin Group Tibble

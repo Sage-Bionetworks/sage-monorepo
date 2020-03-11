@@ -2,7 +2,6 @@
 # when doing devtools::check()
 if (getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 
-
 #' Build Sample Name Table
 #'
 #' @importFrom magrittr %>%
@@ -10,7 +9,6 @@ build_sample_name_tbl <- function(){
     "SELECT id AS sample_id, name AS sample_name FROM samples" %>%
         perform_query("Build Sample Name Table")
 }
-
 
 #' Build Feature Value Tibble from Feature IDs
 #'
@@ -83,94 +81,6 @@ build_gene_expression_tbl_by_gene_ids <- function(gene_ids){
         perform_query("Build Gene Expression Tibble by Gene IDs")
 }
 
-
-
-# Module specfic functions ----------------------------------------------------
-
-#' Build Clinical Outcomes Survival Tibble
-#'
-#' @param time_id An integer in the id column of the samples table
-#' @param status_id An integer in the id column of the samples table
-build_clincal_outcomes_survival_tbl <- function(time_id, status_id){
-    paste0(
-        "SELECT a.sample_id, a.time, b.status FROM (",
-        paste0(
-            "SELECT a.sample_id, a.value AS time ",
-            "FROM features_to_samples a ",
-            "INNER JOIN features f ON a.feature_id = f.id ",
-            "WHERE feature_id = ",
-            time_id
-        ),
-        ") a INNER JOIN (",
-        paste0(
-            "SELECT a.sample_id, a.value AS status ",
-            "FROM features_to_samples a ",
-            "INNER JOIN features f ON a.feature_id = f.id ",
-            "WHERE feature_id = ",
-            status_id
-        ),
-        ") b ON a.sample_id = b.sample_id"
-    )  %>%
-        perform_query("Build Survival Values Tibble")
-}
-
-#' Build Immunomodulators Tibble
-#'
-#' #' @importFrom magrittr %>%
-build_immunomodultors_tbl <- function(){
-    create_build_immunomodulators_tbl_query() %>%
-        perform_query("Build Immunomodulators Tibble")
-}
-
-#' Build IO Target Tibble
-#'
-#' #' @importFrom magrittr %>%
-build_io_target_tbl <- function(){
-    paste0(
-        "SELECT a.id, a.hgnc, a.entrez, a.io_landscape_name AS friendly_name, ",
-        "p.name AS pathway, t.name AS therapy, a.description FROM (",
-        create_get_genes_by_type_query("io_target"), ") a ",
-        "LEFT JOIN pathways p ON a.pathway_id = p.id ",
-        "LEFT JOIN therapy_types t ON a.therapy_type_id = t.id "
-    ) %>%
-        perform_query("Build IO Target Tibble")
-}
-
-#' Build Cohort Tibble By Feature ID
-#'
-#' @param sample_ids Integers in the id column of the samples table
-#' @param feature_id An integer in the id column of the features_to_samples
-#' table
-#' @importFrom magrittr %>%
-build_cohort_tbl_by_feature_id <- function(sample_ids, feature_id){
-    paste(
-        "SELECT a.sample_id, a.value FROM (",
-        create_feature_value_query(feature_id),
-        ") a WHERE a.sample_id IN (",
-        numeric_values_to_query_list(sample_ids),
-        ")"
-    ) %>%
-        perform_query("Build Cohort Tibble By Feature ID")
-}
-
-#' Build Cohort Tibble By Group
-#'
-#' @param sample_ids Integers in the id column of the samples table
-#' @param group A String that is the display column of the tags table
-#' @importFrom magrittr %>%
-build_cohort_tbl_by_group <- function(sample_ids, group){
-    paste0(
-        "SELECT sts.sample_id, g.name AS group, g.display AS name, ",
-        "g.characteristics, g.color FROM (",
-        create_parent_group_query_from_display(group),
-        ") g INNER JOIN samples_to_tags sts ON g.id = sts.tag_id ",
-        "WHERE sample_id IN (",
-        numeric_values_to_query_list(sample_ids),
-        ")"
-    ) %>%
-        perform_query("Build Cohort Tibble By Group")
-}
-
 #' Get Sample IDs from Dataset
 #'
 #' @param dataset The name of a dataset in the database
@@ -198,172 +108,102 @@ get_sample_ids_from_dataset <- function(dataset){
 # The function take a single value from one or more columns and translate those
 # into a value from a different column in the row
 
-#' Get Tag Display Name from ID
-#'
-#' @param id An integer in the id column of the tags table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_tag_display_from_id <- function(id){
-    assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
-    display <-
-        paste0("SELECT display FROM tags WHERE id = '", id, "'") %>%
-        perform_query("Get Tag Display Name from ID") %>%
-        dplyr::pull(.data$display)
-    assertthat::assert_that(length(display) == 1)
-    return(display)
+translate_value <- function(value, value_type, table, into, from){
+    assertthat::assert_that(length(value) == 1)
+    if (value_type == "id") {
+        assertthat::assert_that(is.integer(value), value > 0)
+        value_query <- as.character(value)
+    } else if (value_type == "character") {
+        assertthat::assert_that(is.character(value))
+        value_query <- paste0("'", value, "'")
+    } else {
+        stop("Value of unallowed type.")
+    }
+    result <-
+        create_translate_values_query(table, into, from, value_query) %>%
+        perform_query("Translate Value") %>%
+        dplyr::pull(into)
+    assertthat::assert_that(length(result) == 1)
+    return(result)
 }
 
-#' Get Tag Display Name from Name
-#'
-#' @param name A string in the name column of the tags table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_tag_display_from_name <- function(name){
-    assertthat::assert_that(length(name) == 1, is.character(name))
-    display <-
-        paste0("SELECT display FROM tags WHERE name = '", name, "'") %>%
-        perform_query("Get Tag Display Name from Name") %>%
-        dplyr::pull(.data$display)
-    assertthat::assert_that(length(display) == 1)
-    return(display)
-}
+get_tag_display_from_id <- purrr::partial(
+    translate_value,
+    value_type = "id",
+    table      = "tags",
+    into       = "display",
+    from       = "id"
+)
 
-#' Get HGNC Symbol from Gene ID
-#'
-#' @param id A integer from the id column of the genes table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_gene_hgnc_from_id <- function(id){
-    assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
-    hgnc <-
-        paste0("SELECT hgnc FROM genes WHERE id = ", id) %>%
-        perform_query("Get HGNC Symbol from Gene ID") %>%
-        dplyr::pull(.data$hgnc)
-    assertthat::assert_that(length(hgnc) == 1)
-    return(hgnc)
-}
+get_tag_display_from_name <- purrr::partial(
+    translate_value,
+    value_type = "character",
+    table      = "tags",
+    into       = "display",
+    from       = "name"
+)
 
-#' Get Gene ID from HGNC Symbol
-#'
-#' @param hgnc A string in the hgnc column of the genes table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_gene_id_from_hgnc <- function(hgnc){
-    assertthat::assert_that(length(hgnc) == 1, is.character(hgnc))
-    id <-
-        paste0("SELECT id FROM genes WHERE hgnc = '", hgnc, "'" ) %>%
-        perform_query("Get Gene ID from HGNC Symbol") %>%
-        dplyr::pull(.data$id)
-    assertthat::assert_that(length(id) == 1)
-    return(id)
-}
+get_gene_hgnc_from_id <- purrr::partial(
+    translate_value,
+    value_type = "id",
+    table      = "genes",
+    into       = "hgnc",
+    from       = "id"
+)
 
-#' Get Class ID from Class Name
-#'
-#' @param name An string in the name column of the classes table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_class_id_from_name <- function(name){
-    assertthat::assert_that(length(name) == 1, is.character(name))
-    id <-
-        paste0("SELECT id FROM classes WHERE name = '", name, "'") %>%
-        perform_query("Get Class ID from Class Name") %>%
-        dplyr::pull(.data$id)
-    assertthat::assert_that(length(id) == 1)
-    return(id)
-}
+get_gene_id_from_hgnc <- purrr::partial(
+    translate_value,
+    value_type = "character",
+    table      = "genes",
+    into       = "id",
+    from       = "hgnc"
+)
 
-#' Get Feature Display Name From ID
-#'
-#' @param id An integer in the id column of the features table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_feature_display_from_id <- function(id){
-    assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
-    display <-
-        paste0("SELECT display FROM features WHERE id = ", id) %>%
-        perform_query("Get Feature Display Name From ID") %>%
-        dplyr::pull(.data$display)
-    assertthat::assert_that(length(display) == 1)
-    return(display)
-}
+get_class_id_from_name <- purrr::partial(
+    translate_value,
+    value_type = "character",
+    table      = "classes",
+    into       = "id",
+    from       = "name"
+)
 
-#' Get Feature Name Name From ID
-#'
-#' @param id An integer in the id column of the features table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_feature_name_from_id <- function(id){
-    assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
-    name <-
-        paste0("SELECT name FROM features WHERE id = ", id) %>%
-        perform_query("Get Name Display Name From ID") %>%
-        dplyr::pull(.data$name)
-    assertthat::assert_that(length(name) == 1)
-    return(name)
-}
+get_feature_display_from_id <- purrr::partial(
+    translate_value,
+    value_type = "id",
+    table      = "features",
+    into       = "display",
+    from       = "id"
+)
 
-#' Get Feature ID From Display Name
-#'
-#' @param display A string in the display column of the features table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_feature_id_from_display <- function(display){
-    assertthat::assert_that(length(display) == 1, is.character(display))
-    id <-
-        paste0("SELECT id FROM features WHERE display = '", display , "'") %>%
-        perform_query("Get Feature ID From Display Name") %>%
-        dplyr::pull(.data$id)
-    assertthat::assert_that(length(id) == 1)
-    return(id)
-}
+get_feature_name_from_id <- purrr::partial(
+    translate_value,
+    value_type = "id",
+    table      = "features",
+    into       = "name",
+    from       = "id"
+)
 
-#' Get Mutation Code From ID
-#'
-#' @param id An integer in the id column of the mutation_codes table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_mutation_code_from_id <- function(id){
-    assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
-    code <-
-        paste0("SELECT code FROM mutation_codes WHERE id = ", id) %>%
-        perform_query("Get Mutation Code From ID") %>%
-        dplyr::pull(.data$code)
-    assertthat::assert_that(length(code) == 1)
-    return(code)
-}
+get_feature_id_from_display <- purrr::partial(
+    translate_value,
+    value_type = "character",
+    table      = "features",
+    into       = "id",
+    from       = "display"
+)
 
-#' Get ID From Mutation Code
-#'
-#' @param code A string in the code column of the mutation_codes table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_id_from_mutation_code <- function(code){
-    assertthat::assert_that(length(code) == 1, is.character(code))
-    id <-
-        paste0("SELECT id FROM mutation_codes WHERE code = '", code, "'") %>%
-        perform_query("Get Mutation Code From ID") %>%
-        dplyr::pull(.data$id)
-    assertthat::assert_that(length(id) == 1)
-    return(id)
-}
+get_mutation_code_from_id <- purrr::partial(
+    translate_value,
+    value_type = "id",
+    table      = "mutation_codes",
+    into       = "code",
+    from       = "id"
+)
+
+get_id_from_mutation_code <- purrr::partial(
+    translate_value,
+    value_type = "character",
+    table      = "mutation_codes",
+    into       = "id",
+    from       = "code"
+)
+
