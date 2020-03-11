@@ -1,3 +1,8 @@
+#' Build Overall Cell Proportions Value Tibble
+#'
+#' @param sample_tbl A tibble with columns sample_id and group
+#' @importFrom magrittr %>%
+#' @importFrom dplyr inner_join
 build_ocp_value_tbl <- function(sample_tbl){
     subquery1 <- paste(
         'SELECT id AS feature_id, "display" AS feature_name, "order"',
@@ -25,10 +30,17 @@ build_ocp_value_tbl <- function(sample_tbl){
         dplyr::inner_join(sample_tbl, by = "sample_id")
 }
 
+#' Build Overall Cell Proportions Barplot Tibble
+#'
+#' @param value_tbl A tibble with columns feture_name, group, feature_value,
+#' order
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+#' @importFrom dplyr group_by arrange summarise n ungroup mutate select
 build_ocp_barplot_tbl <- function(value_tbl){
     value_tbl %>%
         dplyr::group_by(.data$feature_name, .data$group) %>%
-        dplyr::arrange(order) %>%
+        dplyr::arrange(.data$order) %>%
         dplyr::summarise(
             .mean = mean(.data$feature_value),
             .count = dplyr::n()
@@ -47,12 +59,17 @@ build_ocp_barplot_tbl <- function(value_tbl){
         )
 }
 
-
-build_ocp_scatterplot_tbl <- function(value_tbl, group_value){
-    sample_tbl <-
-        "SELECT id AS sample_id, name AS sample_name FROM samples" %>%
-        perform_query("Get sample table")
-
+#' Build Overall Cell Proportions Scatterplot Tibble
+#'
+#' @param value_tbl A tibble with columns sample_id, group, feature_name,
+#' feature_value
+#' @param sample_tbl A tibble with columns sample_id, sample_name
+#' @param group_value A string, that is in the group column of the value_tbl
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+#' @importFrom dplyr inner_join filter rename select
+#' @importFrom tidyr drop_na pivot_wider
+build_ocp_scatterplot_tbl <- function(value_tbl, sample_tbl, group_value){
     value_tbl %>%
         dplyr::inner_join(sample_tbl, by = "sample_id") %>%
         dplyr::select(
