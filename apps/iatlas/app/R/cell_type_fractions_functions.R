@@ -1,3 +1,10 @@
+#' Build Cell Type Fractions Barplot Tibble
+#'
+#' @param class_name A string, that is the name column of the classes table
+#' @param sample_tbl A tibble with columns sample_id, and group
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+#' @importFrom dplyr inner_join select group_by arrange summarise ungroup mutate
 build_ctf_barplot_tbl <- function(class_name, sample_tbl){
     subquery1 <- paste0(
         "SELECT id FROM classes WHERE name = '",
@@ -29,7 +36,7 @@ build_ctf_barplot_tbl <- function(class_name, sample_tbl){
         dplyr::inner_join(sample_tbl, by = "sample_id") %>%
         dplyr::select(-.data$sample_id) %>%
         dplyr::group_by(.data$feature_name, .data$group) %>%
-        dplyr::arrange(order) %>%
+        dplyr::arrange(.data$order) %>%
         dplyr::summarise(
             .mean = mean(.data$feature_value),
             .count = dplyr::n()
