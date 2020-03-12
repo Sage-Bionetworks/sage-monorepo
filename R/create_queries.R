@@ -92,24 +92,45 @@ create_parent_group_query_from_display <- function(display){
     create_parent_group_query_from_id(parent_tag_query)
 }
 
+# helper functions ------------------------------------------------------------
+
+#' Create Correlated Subquery
+create_correlated_subquery <- function(table, into, from, value, new_column){
+    paste0(
+        "(SELECT ", into, " FROM ", table, " WHERE ", from, " = ", value,
+        ") AS ", new_column
+    )
+}
+
+create_id_to_pathway_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "pathways",
+    into       = "name",
+    from       = "id",
+    value      = "a.pathway_id",
+    new_column = "pathway"
+)
+
+create_id_to_therapy_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "therapy_types",
+    into       = "name",
+    from       = "id",
+    value      = "a.therapy_type_id",
+    new_column = "therapy"
+)
+
 #' Create Translate Values Query
 #' @param table The name of the table in the database to query
 #' @param into The column in the table to translate into
 #' @param from The column in the table to translate from
 #' @param query A string that is a valid sql query that results in a one column
 #' table that contains the from value
-create_translate_values_query <- function(
-    table,
-    into,
-    from,
-    query
-){
+create_translate_values_query <- function(table, into, from, query){
     paste0(
         "SELECT ", into, " FROM ", table, " WHERE ", from, " IN (", query, ")"
     )
 }
-
-# helper functions ------------------------------------------------------------
 
 #' String Values to Query List
 #' @param values A character vector
