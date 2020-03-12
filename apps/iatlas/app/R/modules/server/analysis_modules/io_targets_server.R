@@ -53,7 +53,7 @@ io_targets_server <- function(
             input$gene_choice_id,
             input$scale_method_choice
         )
-        build_io_target_distplot(
+        build_io_target_distplot_tbl(
             input$gene_choice_id,
             cohort_obj()$sample_tbl,
             input$scale_method_choice
