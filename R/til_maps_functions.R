@@ -1,3 +1,8 @@
+#' Build Tilmap Sample Tibble
+#'
+#' @param sample_tbl A tibble with columns sample_id and group
+#' @importFrom magrittr %>%
+#' @importFrom dplyr inner_join
 build_tm_sample_tbl <- function(sample_tbl){
     tbl <-
         paste(
