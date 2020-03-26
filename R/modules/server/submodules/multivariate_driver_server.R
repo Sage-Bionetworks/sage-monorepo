@@ -110,7 +110,6 @@ multivariate_driver_server <- function(
     })
 
     output$volcano_plot <- plotly::renderPlotly({
-
         shiny::req(volcano_plot_tbl())
 
         shiny::validate(shiny::need(

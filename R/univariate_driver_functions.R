@@ -70,10 +70,13 @@ build_ud_driver_violin_tbl <- function(feature_id, gene_id, tag_id, mutation_id)
     )
 
     subquery3 <- paste0(
-        "SELECT sample_id, status FROM genes_samples_mutations ",
+        "SELECT sample_id, status FROM samples_to_mutations ",
+        "WHERE mutation_id IN ",
+        "(SELECT id FROM mutations ",
         "WHERE gene_id  = ", gene_id, " ",
         "AND mutation_code_id = ", mutation_id, " ",
-        "AND sample_id IN (", subquery1, ")"
+        "AND mutation_type_id IN ",
+        "(SELECT id FROM mutation_types WHERE name = 'driver_mutation'))"
     )
 
     paste(
