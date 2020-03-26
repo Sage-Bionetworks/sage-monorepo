@@ -16,7 +16,7 @@ til_map_distributions_server <- function(
         shiny::selectInput(
             ns("feature_choice_id"),
             label = "Select or Search for Variable",
-            choices = get_til_map_named_list(cohort_obj()$feature_tbl)
+            choices = create_tm_named_list(cohort_obj()$feature_tbl)
         )
     })
 
@@ -44,7 +44,7 @@ til_map_distributions_server <- function(
             input$feature_choice_id,
             input$scale_method_choice
         )
-        build_tilmap_distplot_tbl(
+        build_tm_distplot_tbl(
             sample_tbl(),
             input$feature_choice_id,
             input$scale_method_choice

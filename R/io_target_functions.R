@@ -2,26 +2,38 @@
 #'
 #' #' @importFrom magrittr %>%
 build_io_target_tbl <- function(){
-    paste0(
-        "SELECT a.id, a.hgnc, a.entrez, a.io_landscape_name AS friendly_name, ",
-        "p.name AS pathway, t.name AS therapy, a.description FROM (",
-        create_get_genes_by_type_query("io_target"), ") a ",
-        "LEFT JOIN pathways p ON a.pathway_id = p.id ",
-        "LEFT JOIN therapy_types t ON a.therapy_type_id = t.id "
-    ) %>%
+    create_build_io_target_tbl_query() %>%
         perform_query("Build IO Target Tibble")
 }
 
-get_gene_from_url <- function(url_query){
-    gene  <- url_query[['gene']]
-    if (!is.null(gene)) {
-        url_gene <- gene
-    } else {
-        url_gene <- NA
-    }
-    return(url_gene)
+#' Create Build IO Target Tibble Query
+create_build_io_target_tbl_query <- function(){
+    paste0(
+        "SELECT a.id, a.hgnc, a.entrez, a.description, ",
+        "a.io_landscape_name AS friendly_name, ",
+        create_id_to_pathway_subquery(),
+        ", ",
+        create_id_to_therapy_subquery(),
+        " FROM (", create_get_genes_by_type_query("io_target"), ") a"
+    )
 }
 
+#' Get Gene From URL
+#'
+#' @param url_query A list with named value gene
+get_gene_from_url <- function(url_query){
+    gene  <- url_query[['gene']]
+    if (!is.null(gene)) return(gene)
+    return(NA)
+}
+
+#' Create IO Target Gene List
+#'
+#' @param tbl A Tibble with columns hgnc, id, and the value of the group var
+#' @param group A Column in the tibble
+#' @importFrom magrittr %>%
+#' @importFrom dplyr select
+#' @importFrom tidyselect all_of
 create_io_target_gene_list <- function(tbl, group){
     tbl %>%
         dplyr::select(
@@ -32,7 +44,15 @@ create_io_target_gene_list <- function(tbl, group){
         create_nested_named_list()
 }
 
-build_io_target_distplot <- function(gene_id, sample_tbl, scale_method){
+#' Build IO Target Distplot Tibble
+#'
+#' @param gene_id An Integer in the gene_id column of the genes_to_samples table
+#' @param sample_tbl A tibble with columns sample_id, and group
+#' @param scale_method A string
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+#' @importFrom dplyr select inner_join
+build_io_target_distplot_tbl <- function(gene_id, sample_tbl, scale_method){
     gene_id %>%
         as.integer() %>%
         build_gene_expression_tbl_by_gene_ids() %>%
@@ -42,6 +62,12 @@ build_io_target_distplot <- function(gene_id, sample_tbl, scale_method){
         dplyr::select(x = .data$group, y = .data$value)
 }
 
+#' Build IO Target Datatable Tibble
+#'
+#' @param tbl A tibble
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
+#' @importFrom dplyr select mutate
 build_io_target_dt_tbl <- function(tbl){
     tbl %>%
         dplyr::select(
@@ -52,17 +78,22 @@ build_io_target_dt_tbl <- function(tbl){
             `Therapy Type`  = .data$therapy,
             Description     = .data$description,
         ) %>%
-        dplyr::mutate(url = paste0(
-            "https://www.cancerresearch.org/scientists/",
-            "immuno-oncology-landscape?2019IOpipelineDB=2019;Target;",
+        dplyr::mutate(`Link to IO Landscape` = create_io_landscape_links(
             .data$`Friendly Name`
-        )) %>%
-        dplyr::mutate(`Link to IO Landscape` =  paste0(
-            "<a href=\'",
-            .data$url,
-            "\'>",
-            .data$`Friendly Name`,
-            "</a>"
-        )) %>%
-        dplyr::select(-.data$url)
+        ))
+}
+
+#' Create IO Landscape Links
+#'
+#' @param genes A vector of strings
+create_io_landscape_links <- function(genes){
+    paste0(
+        "<a href=\'",
+        "https://www.cancerresearch.org/scientists/",
+        "immuno-oncology-landscape?viz1572545060618=2017;Target;",
+        genes,
+        "\'>",
+        genes,
+        "</a>"
+    )
 }

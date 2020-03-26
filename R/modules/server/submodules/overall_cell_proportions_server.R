@@ -8,6 +8,8 @@ overall_cell_proportions_server  <- function(
     source("R/modules/server/submodules/plotly_server.R", local = T)
     source("R/overall_cell_proportions_functions.R", local = T)
 
+    sample_name_tbl <- .GlobalEnv$build_sample_name_tbl()
+
     value_tbl <- shiny::reactive({
         shiny::req(cohort_obj())
         build_ocp_value_tbl(cohort_obj()$sample_tbl)
@@ -50,7 +52,11 @@ overall_cell_proportions_server  <- function(
 
     scatterplot_tbl <- shiny::reactive({
         shiny::req(value_tbl(), barplot_selected_group())
-        build_ocp_scatterplot_tbl(value_tbl(), barplot_selected_group())
+        build_ocp_scatterplot_tbl(
+            value_tbl(),
+            sample_name_tbl,
+            barplot_selected_group()
+        )
     })
 
     output$scatterplot <- plotly::renderPlotly({
