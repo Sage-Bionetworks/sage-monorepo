@@ -120,6 +120,24 @@ create_id_to_therapy_subquery <- purrr::partial(
     new_column = "therapy"
 )
 
+create_id_to_mutation_code_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "mutation_codes",
+    into       = "code",
+    from       = "id",
+    value      = "a.mutation_code_id",
+    new_column = "mutation_code"
+)
+
+create_id_to_hgnc_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "genes",
+    into       = "hgnc",
+    from       = "id",
+    value      = "a.gene_id",
+    new_column = "gene"
+)
+
 #' Create Translate Values Query
 #' @param table The name of the table in the database to query
 #' @param into The column in the table to translate into

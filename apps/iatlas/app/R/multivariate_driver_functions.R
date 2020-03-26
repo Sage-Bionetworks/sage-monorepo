@@ -82,19 +82,20 @@ build_md_response_tbl <- function(feature_id){
 #' @importFrom magrittr %>%
 build_md_status_tbl <- function(){
     paste0(
-        "SELECT gsm.sample_id, gsm.status, ",
-        "g.hgnc AS gene, mc.code AS mutation_code FROM genes_samples_mutations gsm ",
-        "INNER JOIN genes g on gsm.gene_id = g.id ",
-        "INNER JOIN mutation_codes mc ON gsm.mutation_code_id = mc.id ",
-        "WHERE g.id IN (",
-        paste(
-            "SELECT gene_id FROM genes_to_types WHERE type_id = (",
-            "SELECT id FROM gene_types WHERE name = 'driver_mutation'",
-            ") "
-        ),
-        ")"
+        "SELECT b.sample_id, b.status, a.gene, a.mutation_code FROM ",
+        "(SELECT id, ",
+        create_id_to_hgnc_subquery(),
+        ", ",
+        create_id_to_mutation_code_subquery(),
+        " FROM mutations a WHERE a.mutation_type_id IN ",
+        "(SELECT id FROM mutation_types WHERE name = 'driver_mutation')) AS a ",
+        "INNER JOIN ",
+        "(SELECT mutation_id, sample_id, status ",
+        "FROM samples_to_mutations) AS b ",
+        "ON a.id = b.mutation_id"
     ) %>%
         perform_query()
+
 }
 
 #' Combine Multivariate Driver Tibbles

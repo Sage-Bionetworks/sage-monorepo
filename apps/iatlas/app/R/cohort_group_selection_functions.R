@@ -17,12 +17,12 @@ get_cohort_available_groups <- function(tbl, .dataset){
 #' @importFrom rlang .data
 build_dm_tbl <- function(){
     paste0(
-        "SELECT g.hgnc AS gene, mc.code AS mutation_code FROM ",
-        "(SELECT DISTINCT gene_id, mutation_code_id FROM ",
-        "genes_samples_mutations WHERE status IS NOT NULL) gsm ",
-        "INNER JOIN mutation_codes mc ON gsm.mutation_code_id = mc.id ",
-        "INNER JOIN genes g ON gsm.gene_id = g.id ",
-        "ORDER BY g.hgnc, mc.code"
+        "SELECT ",
+        create_id_to_hgnc_subquery(),
+        ", ",
+        create_id_to_mutation_code_subquery(),
+        " FROM mutations a WHERE a.mutation_type_id IN ",
+        "(SELECT id FROM mutation_types WHERE name = 'driver_mutation')"
     ) %>%
         perform_query() %>%
         dplyr::mutate(mutation = paste0(.data$gene, ":", .data$mutation_code))
@@ -182,12 +182,12 @@ get_code_from_mutation <- function(mutation){
 #' @param code_id An integer
 create_dm_cohort_sample_tbl <- function(sample_ids, gene_id, code_id){
     paste0(
-        "SELECT gsm.sample_id, gsm.status AS group ",
-        "FROM genes_samples_mutations gsm ",
-        "WHERE status IS NOT NULL ",
-        "AND sample_id IN (", numeric_values_to_query_list(sample_ids), ") ",
+        "SELECT sample_id, status AS group ",
+        "FROM samples_to_mutations WHERE mutation_id IN ",
+        "(SELECT id FROM mutations a WHERE a.mutation_type_id IN ",
+        "(SELECT id FROM mutation_types WHERE name = 'driver_mutation') ",
         "AND gene_id = ", gene_id, " ",
-        "AND mutation_code_id = ", code_id, " "
+        "AND mutation_code_id = ", code_id, ")"
     ) %>%
         perform_query("Create Driver Mutation Sample Tibble")
 }
