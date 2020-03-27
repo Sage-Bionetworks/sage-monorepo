@@ -1,13 +1,30 @@
 with_test_db_env({
     tbl <- dplyr::tribble(
-        ~group,                 ~dataset, ~type,
-        "Immune Subtype",       "TCGA",   "tag",
-        "TCGA Subtype",         "TCGA",   "tag",
-        "TCGA Study",           "TCGA",   "tag"
+        ~group,           ~dataset, ~type,
+        "Immune Subtype", "TCGA",   "tag",
+        "TCGA Subtype",   "TCGA",   "tag",
+        "TCGA Study",     "TCGA",   "tag",
+        "Immune Subtype", "PCAWG",  "tag",
+        "PCAWG Study",    "PCAWG",  "tag",
     )
 
     test_that("Create Cohorts Group Named List", {
-        expect_type(create_cohort_group_named_list(tbl), "integer")
+        result1 <- create_cohort_group_named_list(tbl, "TCGA")
+        result2 <- create_cohort_group_named_list(tbl, "PCAWG")
+        expect_type(result1, "integer")
+        expect_type(result2, "integer")
+        expect_named(
+            result1,
+            c("Immune Subtype", "TCGA Subtype", "TCGA Study"),
+            ignore.order = T
+        )
+        # TODO Fix this test when test database contains PCAWG Study
+        expect_named(
+            result2,
+            c("Immune Subtype"),
+            # c("Immune Subtype", "PCAWG Study"),
+            ignore.order = T
+        )
     })
 
 

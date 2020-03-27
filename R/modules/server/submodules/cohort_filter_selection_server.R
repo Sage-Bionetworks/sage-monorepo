@@ -5,7 +5,6 @@ cohort_filter_selection_server <- function(
     selected_dataset,
     sample_ids
 ){
-
     source(
         "R/modules/server/submodules/insert_remove_element_server.R",
         local = T
@@ -14,23 +13,24 @@ cohort_filter_selection_server <- function(
     source("R/modules/server/submodules/elements_server.R", local = T)
     source("R/cohort_filter_selection_functions.R", local = T)
 
+    # TODO replace this table with tags to tags relationships
     dataset_to_group_tbl <- dplyr::tribble(
-        ~group,                 ~dataset, ~type,
-        "Immune Subtype",       "TCGA",   "tag",
-        "TCGA Subtype",         "TCGA",   "tag",
-        "TCGA Study",           "TCGA",   "tag",
+        ~group,           ~dataset, ~type,
+        "Immune Subtype", "TCGA",   "tag",
+        "TCGA Subtype",   "TCGA",   "tag",
+        "TCGA Study",     "TCGA",   "tag",
         # "Gender",          "TCGA",   "sample",
         # "Race",            "TCGA",   "sample",
         # "Ethnicity",       "TCGA",   "sample",
-        # "Immune Subtype",  "PCAWG",  "tag",
-        # "PCAWG Study",     "PCAWG",  "tag",
+        "Immune Subtype", "PCAWG",  "tag",
+        "PCAWG Study",    "PCAWG",  "tag",
         # "Gender",          "PCAWG",  "sample",
         # "Race",            "PCAWG",  "sample"
     )
 
     # group filters -----------------------------------------------------------
     group_named_list <- shiny::reactive({
-        create_cohort_group_named_list(dataset_to_group_tbl)
+        create_cohort_group_named_list(dataset_to_group_tbl, selected_dataset())
     })
 
     group_element_module_server <- shiny::reactive({
@@ -70,7 +70,10 @@ cohort_filter_selection_server <- function(
     numeric_element_module_server <- shiny::reactive({
         purrr::partial(
             numeric_filter_element_server,
-            feature_named_list = .GlobalEnv$create_feature_named_list
+            feature_named_list = purrr::partial(
+                .GlobalEnv$create_feature_named_list2,
+                sample_ids()
+            )
         )
     })
 

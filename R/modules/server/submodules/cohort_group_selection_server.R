@@ -10,17 +10,18 @@ cohort_group_selection_server <- function(
     source("R/cohort_group_selection_functions.R", local = T)
 
     dataset_to_group_tbl <- dplyr::tribble(
-        ~group,                 ~dataset, ~type,
-        "Immune Subtype",       "TCGA",   "tag",
-        "TCGA Subtype",         "TCGA",   "tag",
-        "TCGA Study",           "TCGA",   "tag",
+        ~group,                ~dataset, ~type,
+        "Immune Subtype",      "TCGA",   "tag",
+        "TCGA Subtype",        "TCGA",   "tag",
+        "TCGA Study",          "TCGA",   "tag",
         # "Gender",          "TCGA",   "sample",
         # "Race",            "TCGA",   "sample",
         # "Ethnicity",       "TCGA",   "sample",
-        "Immune Feature Bins",  "TCGA",    NA,
-        "Driver Mutation",      "TCGA",    NA
-        # "Immune Subtype",  "PCAWG",  "tag",
-        # "PCAWG Study",     "PCAWG",  "tag",
+        "Immune Feature Bins", "TCGA",    NA,
+        "Driver Mutation",     "TCGA",    NA,
+        "Immune Subtype",      "PCAWG",   "tag",
+        # "PCAWG Study",         "PCAWG",   "tag",
+        "Immune Feature Bins", "PCAWG",   NA
         # "Gender",          "PCAWG",  "sample",
         # "Race",            "PCAWG",  "sample"
     )
@@ -91,7 +92,9 @@ cohort_group_selection_server <- function(
         shiny::selectInput(
             inputId = ns("immune_feature_bin_choice"),
             label = "Select or Search for feature",
-            choices = .GlobalEnv$create_feature_named_list()
+            choices = .GlobalEnv$create_feature_named_list2(
+                filter_obj()$sample_ids
+            )
         )
     })
 

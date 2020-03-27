@@ -88,16 +88,10 @@ build_gene_expression_tbl_by_gene_ids <- function(gene_ids){
 #' @importFrom dplyr pull
 #' @importFrom rlang .data
 get_sample_ids_from_dataset <- function(dataset){
-    if (dataset == "TCGA") {
-        tag_display <- "TCGA Study"
-    } else if (dataset == "PCAWG") {
-        tag_display <- "PCAWG Study"
-    } else {
-        tag_display = dataset
-    }
-
-    tag_display %>%
-        create_get_sample_ids_from_parent_tag_display_query() %>%
+    paste0(
+        "SELECT sample_id FROM samples_to_tags WHERE tag_id IN ",
+        "(SELECT id FROM tags where name = '", dataset, "')"
+    ) %>%
         perform_query("Get Sample IDs from Dataset") %>%
         dplyr::pull(.data$sample_id)
 }
