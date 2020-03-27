@@ -138,6 +138,15 @@ create_id_to_hgnc_subquery <- purrr::partial(
     new_column = "gene"
 )
 
+create_id_to_class_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "classes",
+    into       = "name",
+    from       = "id",
+    value      = "a.class_id",
+    new_column = "class"
+)
+
 #' Create Translate Values Query
 #' @param table The name of the table in the database to query
 #' @param into The column in the table to translate into

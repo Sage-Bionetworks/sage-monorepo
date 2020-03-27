@@ -157,6 +157,25 @@ create_feature_named_list <- function(class_ids = "all"){
     return(list)
 }
 
+#' Create Feature Named List2
+#'
+#' @param sample_ids Integers in the id column of the features_to_samples table
+#' @importFrom magrittr %>%
+create_feature_named_list2 <- function(sample_ids){
+    paste0(
+        "SELECT ",
+        create_id_to_class_subquery(),
+        ", a.display, a.id AS feature FROM features a ",
+        "WHERE a.id in ",
+        "(SELECT feature_id FROM features_to_samples WHERE sample_id IN (",
+        numeric_values_to_query_list(sample_ids),
+        ") AND value IS NOT NULL) ORDER BY class"
+    ) %>%
+        perform_query("Create Feature Named List2") %>%
+        create_nested_named_list()
+}
+
+
 #' Create Nested Named List
 #'
 #' @param tbl A tibble with the below columns
