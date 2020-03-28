@@ -10,6 +10,15 @@ clinical_outcomes_heatmap_server <- function(
     source("R/clinical_outcomes_functions.R")
     source("R/modules/server/submodules/plotly_server.R", local = T)
 
+    valid_cohort_obj <- shiny::reactive({
+        shiny::req(cohort_obj())
+        validate(need(
+            validate_survival_cohort_obj(cohort_obj()),
+            "Current cohort does not have the required features."
+        ))
+        cohort_obj()
+    })
+
     output$class_selection_ui <- shiny::renderUI({
         shiny::selectInput(
             inputId = ns("class_choice_id"),
@@ -44,12 +53,12 @@ clinical_outcomes_heatmap_server <- function(
 
     survival_tbl <- shiny::reactive({
         shiny::req(
-            cohort_obj(),
+            valid_cohort_obj(),
             time_feature_id(),
             status_feature_id()
         )
         build_survival_value_tbl(
-            cohort_obj()$sample_tbl,
+            valid_cohort_obj()$sample_tbl,
             time_feature_id(),
             status_feature_id()
         )
@@ -88,6 +97,6 @@ clinical_outcomes_heatmap_server <- function(
         "heatmap",
         plot_tbl       = heatmap_tbl,
         plot_eventdata = heatmap_eventdata,
-        group_tbl      = shiny::reactive(cohort_obj()$group_tbl)
+        group_tbl      = shiny::reactive(valid_cohort_obj()$group_tbl)
     )
 }

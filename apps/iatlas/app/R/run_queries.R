@@ -42,22 +42,32 @@ build_feature_value_tbl_from_class_ids <- function(class_ids){
 #' Build Feature Tibble
 #'
 #' @param class_ids Integers in the id column of the classes table
-build_feature_tbl <- function(class_ids = "all"){
-    query <- paste(
-        "SELECT b.name AS class, a.display, a.id AS feature FROM",
-        "(SELECT id, display, class_id FROM features) a",
-        "LEFT OUTER JOIN",
-        "(SELECT * FROM classes) b",
-        "ON a.class_id = b.id"
+build_feature_tbl <- function(class_ids = NA, sample_ids = NA){
+    query <- paste0(
+        "SELECT ",
+        create_id_to_class_subquery(),
+        ", a.display, a.id FROM features a "
     )
-    if (class_ids != "all") {
-        query <- paste(
+    if (any(length(class_ids) > 1, !is.na(class_ids))) {
+        query <- paste0(
             query,
-            " WHERE b.id IN (",
+            " WHERE a.class_id IN (",
             numeric_values_to_query_list(class_ids),
             ")"
         )
     }
+    if (any(length(sample_ids) > 1, !is.na(sample_ids))) {
+        query <- paste0(
+            query,
+            " WHERE a.id IN ",
+            "(SELECT feature_id FROM features_to_samples ",
+            "WHERE sample_id IN (", numeric_values_to_query_list(sample_ids),
+            ")",
+            "AND value IS NOT NULL",
+            ")"
+        )
+    }
+    query <- paste0(query, " ORDER BY class")
     perform_query(query, "Build Feature Tibble")
 }
 

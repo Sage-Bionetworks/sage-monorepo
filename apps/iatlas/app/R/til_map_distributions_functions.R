@@ -1,3 +1,12 @@
+validate_tilmap_cohort_obj <- function(cohort_obj){
+    til_features <- cohort_obj %>%
+        purrr::pluck("feature_tbl") %>%
+        dplyr::filter(.data$class %in% "TIL Map Characteristic") %>%
+        dplyr::pull(.data$display)
+
+    length(til_features > 0)
+}
+
 #' Create Tilmap Named List
 #'
 #' @param tbl A tibble with columns class, display and id

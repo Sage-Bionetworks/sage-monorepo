@@ -11,12 +11,21 @@ til_map_distributions_server <- function(
     source("R/modules/server/submodules/distribution_plot_server.R", local = T)
     source("R/til_map_distributions_functions.R", local = T)
 
-    output$selection_ui <- shiny::renderUI({
+    valid_cohort_obj <- shiny::reactive({
         shiny::req(cohort_obj())
+        validate(need(
+            validate_tilmap_cohort_obj(cohort_obj()),
+            "Current cohort does not have the required features."
+        ))
+        cohort_obj()
+    })
+
+    output$selection_ui <- shiny::renderUI({
+        shiny::req(valid_cohort_obj())
         shiny::selectInput(
             ns("feature_choice_id"),
             label = "Select or Search for Variable",
-            choices = create_tm_named_list(cohort_obj()$feature_tbl)
+            choices = create_tm_named_list(valid_cohort_obj()$feature_tbl)
         )
     })
 
@@ -54,7 +63,7 @@ til_map_distributions_server <- function(
     shiny::callModule(
         distribution_plot_server,
         "tilmap_dist_plot",
-        cohort_obj,
+        valid_cohort_obj,
         distplot_tbl    = distplot_tbl,
         distplot_type   = shiny::reactive(input$plot_type_choice),
         distplot_ylab   = feature_plot_label,
