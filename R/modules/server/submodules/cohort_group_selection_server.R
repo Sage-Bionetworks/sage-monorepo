@@ -92,8 +92,8 @@ cohort_group_selection_server <- function(
         shiny::selectInput(
             inputId = ns("immune_feature_bin_choice"),
             label = "Select or Search for feature",
-            choices = .GlobalEnv$create_feature_named_list2(
-                filter_obj()$sample_ids
+            choices = .GlobalEnv$create_feature_named_list(
+                sample_ids = filter_obj()$sample_ids
             )
         )
     })

@@ -1,3 +1,16 @@
+validate_ocp_cohort_obj <- function(cohort_obj){
+    needed_fractions <- c(
+        'Leukocyte Fraction', 'Stromal Fraction', 'Tumor Fraction'
+    )
+    available_fractions <- cohort_obj %>%
+        purrr::pluck("feature_tbl") %>%
+        dplyr::filter(.data$class %in% "Overall Proportion") %>%
+        dplyr::pull(.data$display)
+
+    all(needed_fractions %in% available_fractions)
+}
+
+
 #' Build Overall Cell Proportions Value Tibble
 #'
 #' @param sample_tbl A tibble with columns sample_id and group

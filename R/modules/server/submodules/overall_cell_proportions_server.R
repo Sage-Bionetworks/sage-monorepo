@@ -2,17 +2,26 @@ overall_cell_proportions_server  <- function(
     input,
     output,
     session,
-    cohort_obj
+    valid_cohort_obj
 ){
 
     source("R/modules/server/submodules/plotly_server.R", local = T)
     source("R/overall_cell_proportions_functions.R", local = T)
 
+    valid_cohort_obj <- shiny::reactive({
+        shiny::req(cohort_obj())
+        validate(need(
+            validate_ocp_cohort_obj(cohort_obj()),
+            "Current cohort does not have the required features."
+        ))
+        cohort_obj()
+    })
+
     sample_name_tbl <- .GlobalEnv$build_sample_name_tbl()
 
     value_tbl <- shiny::reactive({
         shiny::req(cohort_obj())
-        build_ocp_value_tbl(cohort_obj()$sample_tbl)
+        build_ocp_value_tbl(valid_cohort_obj()$sample_tbl)
     })
 
     barplot_tbl <- shiny::reactive({
@@ -42,7 +51,7 @@ overall_cell_proportions_server  <- function(
         "barplot",
         plot_tbl       = barplot_tbl,
         plot_eventdata = barplot_eventdata,
-        group_tbl      = shiny::reactive(cohort_obj()$group_tbl),
+        group_tbl      = shiny::reactive(valid_cohort_obj()$group_tbl),
     )
 
     barplot_selected_group <- shiny::reactive({

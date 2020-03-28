@@ -1,3 +1,18 @@
+validate_survival_cohort_obj <- function(cohort_obj){
+    time_features <- cohort_obj %>%
+        purrr::pluck("feature_tbl") %>%
+        dplyr::filter(.data$class %in% "Survival Time") %>%
+        dplyr::pull(.data$display)
+
+    status_features <- cohort_obj %>%
+        purrr::pluck("feature_tbl") %>%
+        dplyr::filter(.data$class %in% "Survival Status") %>%
+        dplyr::pull(.data$display)
+
+    all(length(time_features > 0), length(status_features > 0))
+}
+
+
 #' Get Survival Status ID from Time ID
 #'
 #' @param time_id An integer of a time status feature

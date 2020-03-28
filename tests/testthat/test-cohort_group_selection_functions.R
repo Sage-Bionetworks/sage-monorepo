@@ -55,15 +55,9 @@ with_test_db_env({
         expect_named(res1$group_tbl, expected_group_names, ignore.order = T)
         expect_named(res2$group_tbl, expected_group_names, ignore.order = T)
         expect_named(res3$group_tbl, expected_group_names, ignore.order = T)
-        expect_named(res1$feature_tbl, expected_feature_names)
-        expect_named(res2$feature_tbl, expected_feature_names)
-        expect_named(res3$feature_tbl, expected_feature_names)
-    })
-
-    test_that("create_cohort_feature_tbl", {
-        expect_named(
-            create_cohort_feature_tbl(1:1000), c("id", "display", "class")
-        )
+        expect_named(res1$feature_tbl, expected_feature_names, ignore.order = T)
+        expect_named(res2$feature_tbl, expected_feature_names, ignore.order = T)
+        expect_named(res3$feature_tbl, expected_feature_names, ignore.order = T)
     })
 
     test_that("Create Tag Cohort Object", {

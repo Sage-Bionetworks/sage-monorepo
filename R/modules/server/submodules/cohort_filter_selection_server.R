@@ -71,8 +71,8 @@ cohort_filter_selection_server <- function(
         purrr::partial(
             numeric_filter_element_server,
             feature_named_list = purrr::partial(
-                .GlobalEnv$create_feature_named_list2,
-                sample_ids()
+                .GlobalEnv$create_feature_named_list,
+                sample_ids = sample_ids()
             )
         )
     })
