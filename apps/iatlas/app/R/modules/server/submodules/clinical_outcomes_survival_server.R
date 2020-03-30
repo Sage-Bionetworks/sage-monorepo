@@ -9,15 +9,6 @@ clinical_outcomes_survival_server <- function(
 
     source("R/clinical_outcomes_functions.R")
 
-    valid_cohort_obj <- shiny::reactive({
-        shiny::req(cohort_obj())
-        validate(need(
-            validate_survival_cohort_obj(cohort_obj()),
-            "Current cohort does not have the required features."
-        ))
-        cohort_obj()
-    })
-
     time_class_id <- .GlobalEnv$get_class_id_from_name("Survival Time")
 
     output$time_feature_selection_ui <- shiny::renderUI({
@@ -43,12 +34,12 @@ clinical_outcomes_survival_server <- function(
 
     survival_value_tbl <- shiny::reactive({
         shiny::req(
-            valid_cohort_obj(),
+            cohort_obj(),
             time_feature_id(),
             status_feature_id()
         )
         build_survival_value_tbl(
-            valid_cohort_obj()$sample_tbl,
+            cohort_obj()$sample_tbl,
             time_feature_id(),
             status_feature_id()
         )
@@ -58,7 +49,7 @@ clinical_outcomes_survival_server <- function(
 
         shiny::req(
             survival_value_tbl(),
-            valid_cohort_obj(),
+            cohort_obj(),
             input$risktable
         )
 
@@ -91,8 +82,8 @@ clinical_outcomes_survival_server <- function(
             df = survival_value_tbl(),
             confint = input$confint,
             risktable = input$risktable,
-            title = valid_cohort_obj()$group_name,
-            group_colors = unname(valid_cohort_obj()$plot_colors)
+            title = cohort_obj()$group_name,
+            group_colors = unname(cohort_obj()$plot_colors)
         )
     })
 
