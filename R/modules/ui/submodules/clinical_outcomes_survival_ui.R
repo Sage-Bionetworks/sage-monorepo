@@ -1,8 +1,8 @@
 clinical_outcomes_survival_ui <- function(id) {
+
     ns <- shiny::NS(id)
 
-    .GlobalEnv$sectionBox(
-        title = "Sample Group Survival",
+    shiny::tagList(
         .GlobalEnv$messageBox(
             width = 12,
             shiny::includeMarkdown(

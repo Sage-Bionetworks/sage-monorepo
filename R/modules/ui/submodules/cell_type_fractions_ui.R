@@ -4,8 +4,7 @@ cell_type_fractions_ui <- function(id){
 
     source("R/modules/ui/submodules/plotly_ui.R", local = T)
 
-    .GlobalEnv$sectionBox(
-        title = "Cell Type Fractions",
+    shiny::tagList(
         .GlobalEnv$messageBox(
             width = 12,
             shiny::includeMarkdown("markdown/cell_type_fractions.markdown")
@@ -32,8 +31,8 @@ cell_type_fractions_ui <- function(id){
                     width = 12,
                     "barplot" %>%
                         ns() %>%
-                        plotly::plotlyOutput() %>%
-                        shinycssloaders::withSpinner(),
+                        plotly::plotlyOutput(.) %>%
+                        shinycssloaders::withSpinner(.),
                     plotly_ui(ns("barplot"))
                 )
             )

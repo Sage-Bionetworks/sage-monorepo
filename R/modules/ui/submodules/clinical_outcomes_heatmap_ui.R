@@ -4,9 +4,7 @@ clinical_outcomes_heatmap_ui <- function(id) {
 
     source("R/modules/ui/submodules/plotly_ui.R", local = T)
 
-
-    .GlobalEnv$sectionBox(
-        title = "Concordance Index",
+    shiny::tagList(
         .GlobalEnv$messageBox(
             width = 12,
             shiny::includeMarkdown("markdown/clinical_outcomes_heatmap.markdown")

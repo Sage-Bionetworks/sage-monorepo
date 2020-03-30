@@ -1,4 +1,4 @@
-validate_survival_cohort_obj <- function(cohort_obj){
+show_co_submodules <- function(cohort_obj){
     time_features <- cohort_obj %>%
         purrr::pluck("feature_tbl") %>%
         dplyr::filter(.data$class %in% "Survival Time") %>%

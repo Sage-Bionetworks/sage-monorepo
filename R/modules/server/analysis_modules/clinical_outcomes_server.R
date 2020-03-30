@@ -13,6 +13,10 @@ clinical_outcomes_server <- function(
         local = T
     )
 
+    # This is so that the conditional panel can see the various shiny::reactives
+    output$display_co <- shiny::reactive(show_co_submodules(cohort_obj()))
+    shiny::outputOptions(output, "display_co", suspendWhenHidden = FALSE)
+
     shiny::callModule(
         clinical_outcomes_survival_server,
         "clinical_outcomes_survival",
