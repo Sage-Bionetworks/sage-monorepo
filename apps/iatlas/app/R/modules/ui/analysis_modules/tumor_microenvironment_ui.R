@@ -13,8 +13,46 @@ tumor_microenvironment_ui <- function(id) {
                 "markdown/tumor_microenvironment.markdown"
             )
         ),
-        overall_cell_proportions_ui(ns("overall_cell_proportions")),
-        cell_type_fractions_ui(ns("cell_type_fractions"))
+        # Overall Cell Proportions ----
+        shiny::conditionalPanel(
+            condition = "output.display_ocp",
+            overall_cell_proportions_ui(ns("overall_cell_proportions")),
+            ns = ns
+        ),
+        shiny::conditionalPanel(
+            condition = "!output.display_ocp",
+            .GlobalEnv$sectionBox(
+                title = "Overall Cell Proportions",
+                .GlobalEnv$textBox(
+                    width = 12,
+                    paste0(
+                        "Currently selected cohort does not have the needed",
+                        "features to show display this plot"
+                    )
+                )
+            ),
+            ns = ns
+        ),
+        # Cell Type Fractions ----
+        shiny::conditionalPanel(
+            condition = "output.display_ctf",
+            cell_type_fractions_ui(ns("cell_type_fractions")),
+            ns = ns
+        ),
+        shiny::conditionalPanel(
+            condition = "!output.display_ctf",
+            .GlobalEnv$sectionBox(
+                title = "Cell Type Fractions",
+                .GlobalEnv$textBox(
+                    width = 12,
+                    paste0(
+                        "Currently selected cohort does not have the needed",
+                        "features to show display this plot"
+                    )
+                )
+            ),
+            ns = ns
+        ),
     )
 }
 
