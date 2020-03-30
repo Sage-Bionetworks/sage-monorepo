@@ -42,15 +42,16 @@ cohort_selection_ui <- function(id) {
                 ns = ns
             )
         ),
-        data_table_ui(
-            ns("sg_table"),
+        .GlobalEnv$sectionBox(
             title = "Group Key",
-            message_html = shiny::p(stringr::str_c(
-                "This displays attributes and annotations of your choice of",
-                "groups.",
-                sep = " "
-            ))
-        ),
+            data_table_ui(
+                ns("sg_table"),
+                message_html = shiny::p(paste0(
+                    "This displays attributes and annotations of ",
+                    "your choice of groups."
+                ))
+            )
+        )
 
         # sectionBox(
         #     title = "Group Overlap",

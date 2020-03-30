@@ -1,8 +1,8 @@
 tumor_microenvironment_ui <- function(id) {
 
     source("R/modules/ui/submodules/overall_cell_proportions_ui.R", local = T)
-    source("R/modules/ui/submodules/call_module_ui.R", local = T)
     source("R/modules/ui/submodules/cell_type_fractions_ui.R", local = T)
+    source("R/modules/ui/submodules/call_module_ui.R", local = T)
 
     ns <- shiny::NS(id)
 

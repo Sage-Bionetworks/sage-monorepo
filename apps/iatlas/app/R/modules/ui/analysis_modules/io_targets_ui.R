@@ -2,9 +2,15 @@ io_targets_ui <- function(id) {
 
     ns <- shiny::NS(id)
 
-    source("R/modules/ui/submodules/data_table_ui.R", local = T)
-    source("R/modules/ui/submodules/distribution_plot_ui.R", local = T)
-    source("R/modules/ui/ui_modules/distribution_plot_selector_ui.R", local = T)
+    source_files <- c(
+        "R/modules/ui/submodules/io_target_distributions_ui.R",
+        "R/modules/ui/submodules/io_target_datatable_ui.R",
+        "R/modules/ui/submodules/call_module_ui.R"
+    )
+
+    for (file in source_files) {
+        source(file, local = T)
+    }
 
     shiny::tagList(
         .GlobalEnv$titleBox("iAtlas Explorer — IO Targets"),
@@ -14,40 +20,16 @@ io_targets_ui <- function(id) {
         ),
         .GlobalEnv$sectionBox(
             title = "IO Target Gene Expression Distributions",
-            messageBox(
-                width = 12,
-                shiny::includeMarkdown(
-                    "markdown/io_target_dist.markdown"
-                )
-            ),
-            shiny::fluidRow(
-                .GlobalEnv$optionsBox(
-                    width = 12,
-                    shiny::column(
-                        width = 3,
-                        shiny::selectInput(
-                            inputId = ns("group_choice"),
-                            label = "Select Group",
-                            choices = c(
-                                "Pathway" = "pathway",
-                                "Therapy Type" = "therapy_type"
-                            )
-                        )
-                    ),
-                    shiny::column(
-                        width = 3,
-                        shiny::uiOutput(ns("gene_choice_ui"))
-                    ),
-                    distribution_plot_selector_ui(id, scale_default = "Log10")
-                )
-            ),
-            distribution_plot_ui(ns("io_targets_dist_plot"))
+            call_module_ui(
+                ns("distributions"),
+                io_target_distributions_ui
+            )
         ),
-        data_table_ui(
-            ns("io_table"),
+        .GlobalEnv$sectionBox(
             title = "IO Target Annotations",
-            message_html = shiny::includeMarkdown(
-                "markdown/io_target_dt.markdown"
+            call_module_ui(
+                ns("datatable"),
+                io_target_datatable_ui
             )
         )
     )

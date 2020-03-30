@@ -7,7 +7,6 @@ til_map_datatable_ui <- function(id) {
     shiny::tagList(
         data_table_ui(
             ns("til_table"),
-            title = "TIL Map Annotations",
             message_html = shiny::includeMarkdown(
                 "markdown/tilmap_table.markdown"
             )

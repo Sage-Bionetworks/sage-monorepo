@@ -5,72 +5,29 @@ immunomodulators_server <- function(
     cohort_obj
 ) {
 
-    ns <- session$ns
-
-    source("R/modules/server/submodules/data_table_server.R", local = T)
-    source("R/modules/server/submodules/distribution_plot_server.R", local = T)
-    source("R/immunomodulators_functions.R")
-
-    immunomodulator_tbl <- build_im_tbl()
-
-    output$gene_choice_ui <- shiny::renderUI({
-        shiny::req(input$group_choice)
-        shiny::selectInput(
-            ns("gene_choice_id"),
-            label = "Select or Search Gene",
-            choices = create_im_gene_list(
-                immunomodulator_tbl,
-                input$group_choice
-            )
-        )
-    })
-
-    gene_name <- shiny::reactive({
-        shiny::req(input$gene_choice_id)
-        .GlobalEnv$get_gene_hgnc_from_id(as.integer(input$gene_choice_id))
-    })
-
-    gene_plot_label <- shiny::reactive({
-        shiny::req(gene_name(), input$scale_method_choice)
-
-        .GlobalEnv$transform_feature_string(
-            gene_name(),
-            input$scale_method_choice
-        )
-    })
-
-    distplot_tbl <- shiny::reactive({
-        shiny::req(
-            cohort_obj(),
-            input$gene_choice_id,
-            input$scale_method_choice
-        )
-
-        build_im_distplot_tbl(
-            input$gene_choice_id,
-            cohort_obj()$sample_tbl,
-            input$scale_method_choice
-        )
-    })
-
-    shiny::callModule(
-        distribution_plot_server,
-        "immunomodulators_dist_plot",
-        cohort_obj,
-        distplot_tbl    = distplot_tbl,
-        distplot_type   = shiny::reactive(input$plot_type_choice),
-        distplot_ylab   = gene_plot_label,
-        distplot_title  = gene_name
+    source_files <- c(
+        "R/modules/server/submodules/immunomodulator_distributions_server.R",
+        "R/modules/server/submodules/immunomodulator_datatable_server.R",
+        "R/modules/server/submodules/call_module_server.R"
     )
 
-    data_tbl <- shiny::reactive({
-        shiny::req(immunomodulator_tbl)
-        build_im_dt_tbl(immunomodulator_tbl)
-    })
+    for (file in source_files) {
+        source(file, local = T)
+    }
 
     shiny::callModule(
-        data_table_server,
-        "im_table",
-        data_tbl
+        call_module_server,
+        "distributions",
+        cohort_obj,
+        shiny::reactive(function(cohort_obj) T),
+        immunomodulator_distributions_server
+    )
+
+    shiny::callModule(
+        call_module_server,
+        "datatable",
+        cohort_obj,
+        shiny::reactive(function(cohort_obj) T),
+        immunomodulator_datatable_server
     )
 }

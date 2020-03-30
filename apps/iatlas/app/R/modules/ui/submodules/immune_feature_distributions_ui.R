@@ -5,8 +5,7 @@ immune_feature_distributions_ui <- function(id) {
     source("R/modules/ui/submodules/distribution_plot_ui.R", local = T)
     source("R/modules/ui/ui_modules/distribution_plot_selector_ui.R", local = T)
 
-    .GlobalEnv$sectionBox(
-        title = "Distributions",
+    shiny::tagList(
         .GlobalEnv$messageBox(
             width = 12,
             shiny::includeMarkdown(
