@@ -1,6 +1,7 @@
 tumor_microenvironment_ui <- function(id) {
 
     source("R/modules/ui/submodules/overall_cell_proportions_ui.R", local = T)
+    source("R/modules/ui/submodules/call_module_ui.R", local = T)
     source("R/modules/ui/submodules/cell_type_fractions_ui.R", local = T)
 
     ns <- shiny::NS(id)
@@ -13,44 +14,18 @@ tumor_microenvironment_ui <- function(id) {
                 "markdown/tumor_microenvironment.markdown"
             )
         ),
-        # Overall Cell Proportions ----
         .GlobalEnv$sectionBox(
             title = "Overall Cell Proportions",
-            shiny::conditionalPanel(
-                condition = "output.display_ocp",
-                overall_cell_proportions_ui(ns("overall_cell_proportions")),
-                ns = ns
-            ),
-            shiny::conditionalPanel(
-                condition = "!output.display_ocp",
-                .GlobalEnv$textBox(
-                    width = 12,
-                    paste0(
-                        "Currently selected cohort does not have the needed ",
-                        "features to show display this section"
-                    )
-                ),
-                ns = ns
+            call_module_ui(
+                ns("overall_cell_proportions"),
+                overall_cell_proportions_ui
             )
         ),
-        # Cell Type Fractions ----
         .GlobalEnv$sectionBox(
             title = "Cell Type Fractions",
-            shiny::conditionalPanel(
-                condition = "output.display_ctf",
-                cell_type_fractions_ui(ns("cell_type_fractions")),
-                ns = ns
-            ),
-            shiny::conditionalPanel(
-                condition = "!output.display_ctf",
-                .GlobalEnv$textBox(
-                    width = 12,
-                    paste0(
-                        "Currently selected cohort does not have the needed ",
-                        "features to show display this section"
-                    )
-                ),
-                ns = ns
+            call_module_ui(
+                ns("cell_type_fractions"),
+                cell_type_fractions_ui
             )
         )
     )

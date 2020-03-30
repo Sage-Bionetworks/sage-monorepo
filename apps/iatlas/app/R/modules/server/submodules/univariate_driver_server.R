@@ -9,27 +9,12 @@ univariate_driver_server <- function(
     source("R/modules/server/submodules/plotly_server.R", local = T)
     source("R/univariate_driver_functions.R", local = T)
 
-    valid_cohort_obj <- shiny::reactive({
-        shiny::req(cohort_obj())
-        validate(need(
-            cohort_obj()$dataset == "TCGA",
-            "Current cohort does not have the required features."
-        ))
-        validate(need(
-            cohort_obj()$group_name %in% c(
-                "Immune Subtype", "TCGA Subtype", "TCGA Study"
-            ),
-            "Current group hasn't been precalculated."
-        ))
-        cohort_obj()
-    })
-
     output$response_options <- shiny::renderUI({
         shiny::selectInput(
             inputId  = ns("response_variable"),
             label    = "Select or Search for Response Variable",
             choices = .GlobalEnv$create_nested_named_list(
-                valid_cohort_obj()$feature_tbl, values_col = "id"
+                cohort_obj()$feature_tbl, values_col = "id"
             ),
             selected = .GlobalEnv$get_feature_id_from_display(
                 "Leukocyte Fraction"
@@ -39,14 +24,14 @@ univariate_driver_server <- function(
 
     volcano_plot_tbl <- shiny::reactive({
         shiny::req(
-            valid_cohort_obj(),
+            cohort_obj(),
             input$response_variable,
             input$min_wt,
             input$min_mut
         )
 
         build_ud_results_tbl(
-            valid_cohort_obj()$group_name,
+            cohort_obj()$group_name,
             input$response_variable,
             input$min_wt,
             input$min_mut

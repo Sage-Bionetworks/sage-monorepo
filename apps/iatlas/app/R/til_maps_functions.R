@@ -1,3 +1,14 @@
+show_tilmap_submodules <- function(cohort_obj){
+    til_features <- cohort_obj %>%
+        purrr::pluck("feature_tbl") %>%
+        dplyr::filter(.data$class %in% "TIL Map Characteristic") %>%
+        dplyr::pull(.data$display)
+
+    length(til_features > 0)
+}
+
+
+
 #' Build Tilmap Sample Tibble
 #'
 #' @param sample_tbl A tibble with columns sample_id and group

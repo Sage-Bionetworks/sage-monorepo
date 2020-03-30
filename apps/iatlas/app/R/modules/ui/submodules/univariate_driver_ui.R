@@ -4,8 +4,7 @@ univariate_driver_ui <- function(id){
 
     source("R/modules/ui/submodules/plotly_ui.R", local = T)
 
-    .GlobalEnv$sectionBox(
-        title = "Immune Response Association With Driver Mutations -- single variable",
+    shiny::tagList(
         .GlobalEnv$messageBox(
             width = 12,
             shiny::includeMarkdown("markdown/driver_single.markdown")
