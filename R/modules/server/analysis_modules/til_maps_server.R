@@ -20,6 +20,10 @@ til_maps_server <- function(
         local = T
     )
 
+    # This is so that the conditional panel can see the various shiny::reactives
+    output$display_til <- shiny::reactive(show_tilmap_submodules(cohort_obj()))
+    shiny::outputOptions(output, "display_til", suspendWhenHidden = FALSE)
+
     tilmap_sample_tbl <- shiny::reactive({
         shiny::req(cohort_obj())
         build_tm_sample_tbl(cohort_obj()$sample_tbl)

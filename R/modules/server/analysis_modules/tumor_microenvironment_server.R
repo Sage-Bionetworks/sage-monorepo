@@ -13,28 +13,28 @@ tumor_microenvironment_server <- function(
         "R/modules/server/submodules/cell_type_fractions_server.R",
         local = T
     )
-
+    source(
+        "R/modules/server/submodules/call_module_server.R",
+        local = T
+    )
     source(
         "R/tumor_microenvironment_functions.R",
         local = T
     )
 
-
-    # This is so that the conditional panel can see the various shiny::reactives
-    output$display_ocp <- shiny::reactive(show_ocp_submodule(cohort_obj()))
-    shiny::outputOptions(output, "display_ocp", suspendWhenHidden = FALSE)
-    output$display_ctf <- shiny::reactive(show_ctf_submodule(cohort_obj()))
-    shiny::outputOptions(output, "display_ctf", suspendWhenHidden = FALSE)
-
     shiny::callModule(
-        overall_cell_proportions_server,
+        call_module_server,
         "overall_cell_proportions",
-        cohort_obj
+        cohort_obj,
+        shiny::reactive(show_ocp_submodule),
+        overall_cell_proportions_server
     )
 
     shiny::callModule(
-        cell_type_fractions_server,
+        call_module_server,
         "cell_type_fractions",
-        cohort_obj
+        cohort_obj,
+        shiny::reactive(show_ctf_submodule),
+        cell_type_fractions_server
     )
 }

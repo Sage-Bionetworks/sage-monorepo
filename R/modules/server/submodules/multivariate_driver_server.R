@@ -11,29 +11,20 @@ multivariate_driver_server <- function(
     source("R/modules/ui/submodules/elements_ui.R", local = T)
     source("R/modules/server/submodules/elements_server.R", local = T)
     source("R/modules/server/submodules/plotly_server.R", local = T)
-    source("R/multivariate_driver_functions.R")
-
-    valid_cohort_obj <- shiny::reactive({
-        shiny::req(cohort_obj())
-        validate(need(
-            cohort_obj()$dataset == "TCGA",
-            "Current cohort does not have the required features."
-        ))
-        cohort_obj()
-    })
+    source("R/multivariate_driver_functions.R", local = T)
 
     output$response_options <- shiny::renderUI({
         shiny::selectInput(
             ns("response_choice_id"),
             "Select or Search for Response Variable",
             choices = .GlobalEnv$create_nested_named_list(
-                valid_cohort_obj()$feature_tbl, values_col = "id"
+                cohort_obj()$feature_tbl, values_col = "id"
             )
         )
     })
 
     numerical_covariate_tbl <- shiny::reactive({
-       valid_cohort_obj() %>%
+       cohort_obj() %>%
             purrr::pluck("feature_tbl") %>%
             dplyr::rename(feature = id)
     })
@@ -87,10 +78,10 @@ multivariate_driver_server <- function(
     status_tbl <- shiny::reactive(build_md_status_tbl())
 
     combined_tbl <- shiny::reactive({
-        shiny::req(response_tbl(), valid_cohort_obj(), status_tbl(), input$group_mode)
+        shiny::req(response_tbl(), cohort_obj(), status_tbl(), input$group_mode)
         combine_md_tbls(
             response_tbl(),
-            valid_cohort_obj()$sample_tbl,
+            cohort_obj()$sample_tbl,
             status_tbl(),
             covariate_tbl(),
             input$group_mode
