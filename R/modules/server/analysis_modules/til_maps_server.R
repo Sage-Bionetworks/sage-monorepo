@@ -4,25 +4,16 @@ til_maps_server <- function(
     session,
     cohort_obj
 ){
-
-    source(
+    source_files <- c(
         "R/modules/server/submodules/til_map_distributions_server.R",
-        local = T
-    )
-
-    source(
         "R/modules/server/submodules/til_map_datatable_server.R",
-        local = T
+        "R/modules/server/submodules/call_module_server.R",
+        "R/til_maps_functions.R"
     )
 
-    source(
-        "R/til_maps_functions.R",
-        local = T
-    )
-
-    # This is so that the conditional panel can see the various shiny::reactives
-    output$display_til <- shiny::reactive(show_tilmap_submodules(cohort_obj()))
-    shiny::outputOptions(output, "display_til", suspendWhenHidden = FALSE)
+    for (file in source_files) {
+        source(file, local = T)
+    }
 
     tilmap_sample_tbl <- shiny::reactive({
         shiny::req(cohort_obj())
@@ -30,15 +21,20 @@ til_maps_server <- function(
     })
 
     shiny::callModule(
-        til_map_distributions_server,
+        call_module_server,
         "til_map_distributions",
-        tilmap_sample_tbl,
-        cohort_obj
+        cohort_obj,
+        shiny::reactive(show_tilmap_submodules),
+        til_map_distributions_server,
+        sample_tbl = tilmap_sample_tbl
     )
 
     shiny::callModule(
-        til_map_datatable_server,
+        call_module_server,
         "til_map_datatable",
-        tilmap_sample_tbl
+        cohort_obj,
+        shiny::reactive(show_tilmap_submodules),
+        til_map_datatable_server,
+        sample_tbl = tilmap_sample_tbl
     )
 }

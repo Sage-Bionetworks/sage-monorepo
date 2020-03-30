@@ -4,8 +4,7 @@ immune_feature_correlations_ui <- function(id) {
 
     source("R/modules/ui/submodules/plotly_ui.R", local = T)
 
-    sectionBox(
-        title = "Correlations",
+    shiny::tagList(
         .GlobalEnv$messageBox(
             width = 12,
             shiny::includeMarkdown(

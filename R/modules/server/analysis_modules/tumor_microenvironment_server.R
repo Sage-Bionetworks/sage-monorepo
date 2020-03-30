@@ -5,22 +5,16 @@ tumor_microenvironment_server <- function(
     cohort_obj
 ) {
 
-    source(
+    source_files <- c(
         "R/modules/server/submodules/overall_cell_proportions_server.R",
-        local = T
-    )
-    source(
         "R/modules/server/submodules/cell_type_fractions_server.R",
-        local = T
-    )
-    source(
         "R/modules/server/submodules/call_module_server.R",
-        local = T
+        "R/tumor_microenvironment_functions.R"
     )
-    source(
-        "R/tumor_microenvironment_functions.R",
-        local = T
-    )
+
+    for (file in source_files) {
+        source(file, local = T)
+    }
 
     shiny::callModule(
         call_module_server,

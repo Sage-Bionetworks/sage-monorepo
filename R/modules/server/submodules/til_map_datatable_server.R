@@ -2,6 +2,7 @@ til_map_datatable_server <- function(
     input,
     output,
     session,
+    cohort_obj,
     sample_tbl
 ){
 

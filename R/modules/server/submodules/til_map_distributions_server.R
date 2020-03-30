@@ -2,8 +2,8 @@ til_map_distributions_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    cohort_obj
+    cohort_obj,
+    sample_tbl
 ){
 
     ns <- session$ns

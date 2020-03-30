@@ -1,14 +1,12 @@
 data_table_ui <- function(
     id,
-    title = "",
     message_html = "",
     button_text = "Download datatable"
 ){
 
     ns <- shiny::NS(id)
 
-    sectionBox(
-        title = title,
+    shiny::tagList(
         .GlobalEnv$messageBox(width = 12, message_html),
         shiny::fluidRow(
             .GlobalEnv$tableBox(

@@ -4,29 +4,32 @@ clinical_outcomes_server <- function(
     session,
     cohort_obj
 ){
-    source(
+
+    source_files <- c(
         "R/modules/server/submodules/clinical_outcomes_survival_server.R",
-        local = T
-    )
-    source(
         "R/modules/server/submodules/clinical_outcomes_heatmap_server.R",
-        local = T
+        "R/modules/server/submodules/call_module_server.R",
+        "R/clinical_outcomes_functions.R"
     )
 
-    # This is so that the conditional panel can see the various shiny::reactives
-    output$display_co <- shiny::reactive(show_co_submodules(cohort_obj()))
-    shiny::outputOptions(output, "display_co", suspendWhenHidden = FALSE)
+    for (file in source_files) {
+        source(file, local = T)
+    }
 
     shiny::callModule(
-        clinical_outcomes_survival_server,
+        call_module_server,
         "clinical_outcomes_survival",
-        cohort_obj
+        cohort_obj,
+        shiny::reactive(show_co_submodules),
+        clinical_outcomes_survival_server
     )
 
     shiny::callModule(
-        clinical_outcomes_heatmap_server,
+        call_module_server,
         "clinical_outcomes_heatmap",
-        cohort_obj
+        cohort_obj,
+        shiny::reactive(show_co_submodules),
+        clinical_outcomes_heatmap_server
     )
 }
 
