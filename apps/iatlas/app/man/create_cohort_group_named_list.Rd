@@ -4,7 +4,7 @@
 \alias{create_cohort_group_named_list}
 \title{Create Cohorts Group Named List}
 \usage{
-create_cohort_group_named_list(tbl)
+create_cohort_group_named_list(tbl, .dataset)
 }
 \arguments{
 \item{tbl}{A tibble}
