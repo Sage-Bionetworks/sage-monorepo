@@ -138,6 +138,61 @@ create_id_to_hgnc_subquery <- purrr::partial(
     new_column = "gene"
 )
 
+create_id_to_gene_family_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "gene_families",
+    into       = "name",
+    from       = "gene_family_id",
+    value      = "a.id",
+    new_column = "gene_family"
+)
+
+create_id_to_gene_function_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "gene_families",
+    into       = "name",
+    from       = "gene_function_id",
+    value      = "a.id",
+    new_column = "gene_function"
+)
+
+create_id_to_immune_checkpoint_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "immune_checkpoints",
+    into       = "name",
+    from       = "immune_checkpoint_id",
+    value      = "a.id",
+    new_column = "immune_checkpoint"
+)
+
+create_id_to_pathway_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "pathways",
+    into       = "name",
+    from       = "pathway_id",
+    value      = "a.id",
+    new_column = "pathway"
+)
+
+create_id_to_super_category_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "super_categories",
+    into       = "name",
+    from       = "super_cat_id",
+    value      = "a.id",
+    new_column = "super_category"
+)
+
+create_id_to_therapy_type_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "therapy_types",
+    into       = "name",
+    from       = "therapy_type_id",
+    value      = "a.id",
+    new_column = "therapy_type"
+)
+
+
 create_id_to_class_subquery <- purrr::partial(
     create_correlated_subquery,
     table      = "classes",
