@@ -41,6 +41,8 @@ build_feature_value_tbl_from_class_ids <- function(class_ids){
 
 #' Build Feature Tibble
 #'
+#' @param sample_ids Integers in the sample_id column of the
+#' features_to_samples table
 #' @param class_ids Integers in the id column of the classes table
 build_feature_tbl <- function(class_ids = NA, sample_ids = NA){
     query <- paste0(
@@ -70,6 +72,67 @@ build_feature_tbl <- function(class_ids = NA, sample_ids = NA){
     query <- paste0(query, " ORDER BY class")
     perform_query(query, "Build Feature Tibble")
 }
+
+
+# TODO: Speed this query up
+#' Build Gene Tibble
+#'
+#' @param sample_ids Integers in the sample_id column of the
+#' genes_to_samples table
+# build_gene_tbl <- function(sample_ids = NA){
+#     query <- paste0(
+#         "SELECT id, hgnc, entrez, description, io_landscape_name, ",
+#         "a.references, friendly_name, ",
+#         create_id_to_gene_family_subquery(),
+#         ", ",
+#         create_id_to_gene_function_subquery(),
+#         ", ",
+#         create_id_to_immune_checkpoint_subquery(),
+#         ", ",
+#         create_id_to_pathway_subquery(),
+#         ", ",
+#         create_id_to_super_category_subquery(),
+#         ", ",
+#         create_id_to_therapy_type_subquery(),
+#         " from genes a "
+#     )
+#
+#     if (any(length(sample_ids) > 1, !is.na(sample_ids))) {
+#         query <- paste0(
+#             query,
+#             "WHERE a.id IN ",
+#             "(SELECT gene_id FROM genes_to_samples ",
+#             "WHERE sample_id IN (",
+#             numeric_values_to_query_list(sample_ids),
+#             ") AND rna_seq_expr IS NOT NULL)"
+#         )
+#     }
+#     paste0(
+#     "SELECT * FROM ",
+#     "(SELECT DISTINCT gene_id FROM genes_to_samples ",
+#     "WHERE sample_id IN (",
+#     numeric_values_to_query_list(1:100000),
+#     ") AND rna_seq_expr IS NOT NULL) a"
+#     ) %>%
+#         perform_query()
+#
+#     paste0(
+#         "SELECT DISTINCT gene_id FROM genes_to_samples ",
+#         "WHERE sample_id IN (",
+#         numeric_values_to_query_list(1:10000),
+#         ") ",
+#         "AND gene_id IN (",
+#         numeric_values_to_query_list(1:2000),
+#         # "SELECT DISTINCT gene_id FROM genes_to_types",
+#         ")"
+#     ) %>%
+#         perform_query()
+#
+#     query <- paste0(query, " ORDER BY hgnc")
+#     perform_query(query, "Build Gene Tibble")
+# }
+
+
 
 #' Create Class List
 #'
