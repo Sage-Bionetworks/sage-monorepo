@@ -4,10 +4,12 @@
 \alias{create_feature_named_list}
 \title{Create Feature Named List}
 \usage{
-create_feature_named_list(class_ids = "all")
+create_feature_named_list(class_ids = NA, sample_ids = NA)
 }
 \arguments{
 \item{class_ids}{Integers in the id column of the classes table}
+
+\item{sample_ids}{Integers in the id column of the features_to_samples table}
 }
 \description{
 Create Feature Named List

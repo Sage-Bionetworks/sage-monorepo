@@ -2,10 +2,15 @@
 % Please edit documentation in R/run_queries.R
 \name{create_class_list}
 \alias{create_class_list}
-\title{Create Class List}
+\title{Build Gene Tibble}
 \usage{
 create_class_list()
 }
+\arguments{
+\item{sample_ids}{Integers in the sample_id column of the
+genes_to_samples table
+Create Class List}
+}
 \description{
-Create Class List
+Build Gene Tibble
 }

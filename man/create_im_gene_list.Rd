@@ -2,7 +2,7 @@
 % Please edit documentation in R/immunomodulators_functions.R
 \name{create_im_gene_list}
 \alias{create_im_gene_list}
-\title{Create Immunomodulators Gene List}
+\title{Immunomodulators Tibble}
 \usage{
 create_im_gene_list(tbl, group)
 }
@@ -10,7 +10,11 @@ create_im_gene_list(tbl, group)
 \item{tbl}{A tibble with columns hgnc, id, and the variable group}
 
 \item{group}{A column in the tibble}
+
+\item{sample_ids}{Integers in the sample_id column of the
+genes_to_samples table
+Create Immunomodulators Gene List}
 }
 \description{
-Create Immunomodulators Gene List
+Immunomodulators Tibble
 }

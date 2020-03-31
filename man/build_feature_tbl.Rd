@@ -4,10 +4,13 @@
 \alias{build_feature_tbl}
 \title{Build Feature Tibble}
 \usage{
-build_feature_tbl(class_ids = "all")
+build_feature_tbl(class_ids = NA, sample_ids = NA)
 }
 \arguments{
 \item{class_ids}{Integers in the id column of the classes table}
+
+\item{sample_ids}{Integers in the sample_id column of the
+features_to_samples table}
 }
 \description{
 Build Feature Tibble

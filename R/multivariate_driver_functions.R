@@ -77,6 +77,7 @@ build_md_response_tbl <- function(feature_id){
         dplyr::select(response = .data$value, .data$sample_id)
 }
 
+# TODO: remove null check when databse is fixed
 #' Build Multivariate Driver Status Tibble
 #'
 #' @importFrom magrittr %>%
