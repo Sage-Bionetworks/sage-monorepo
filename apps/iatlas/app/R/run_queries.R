@@ -48,7 +48,7 @@ build_feature_tbl <- function(class_ids = NA, sample_ids = NA){
     query <- paste0(
         "SELECT ",
         create_id_to_class_subquery(),
-        ", a.display, a.id FROM features a "
+        ", a.display, a.id, a.class_id FROM features a "
     )
     if (any(length(class_ids) > 1, !is.na(class_ids))) {
         query <- paste0(

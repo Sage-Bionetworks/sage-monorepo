@@ -59,7 +59,6 @@ create_cohort_object <- function(
     cohort_object$dataset     <- dataset
     cohort_object$filters     <- filter_obj$filters
     cohort_object$feature_tbl <- build_feature_tbl(sample_ids = sample_ids)
-    # cohort_object$gene_tbl    <- build_gene_tbl(sample_ids = sample_ids)
     return(cohort_object)
 }
 

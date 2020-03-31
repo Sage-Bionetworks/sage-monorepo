@@ -245,3 +245,13 @@ get_values_from_eventdata <- function(eventdata, col = "x"){
         magrittr::extract2(col) %>%
         unique()
 }
+
+# cohort_object utils ----------------------------------------------------------
+
+get_class_list_from_cohort_obj <- function(cohort_obj){
+    cohort_obj %>%
+        purrr::pluck("feature_tbl") %>%
+        dplyr::select(.data$class, .data$class_id) %>%
+        dplyr::distinct() %>%
+        tibble::deframe(.)
+}

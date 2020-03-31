@@ -49,11 +49,21 @@ immunomodulator_distributions_server <- function(
             input$scale_method_choice
         )
 
-        build_im_distplot_tbl(
+        tbl <- build_im_distplot_tbl(
             input$gene_choice_id,
             cohort_obj()$sample_tbl,
             input$scale_method_choice
         )
+
+        shiny::validate(need(
+            nrow(tbl) > 0,
+            paste0(
+                "Current selected cohort has no expression data for current ",
+                "selected gene."
+            )
+        ))
+
+        return(tbl)
     })
 
     shiny::callModule(
