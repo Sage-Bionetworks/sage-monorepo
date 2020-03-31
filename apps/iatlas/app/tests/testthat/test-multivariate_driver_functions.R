@@ -44,7 +44,7 @@ with_test_db_env({
 
     test_that("Build Multivariate Driver Status Tibble", {
         result1 <- build_md_status_tbl()
-        expect_named(result1, c("sample_id","status", "gene", "mutation_code"))
+        expect_named(result1, c("sample_id","mutation_id", "status"))
     })
 
     test_that("Combine Multivariate Driver Tibbles", {
@@ -174,13 +174,17 @@ with_test_db_env({
     })
 
     test_that("Create Multivariate Driver Violin Plot X Label", {
-        expect_equal(
-            create_md_violin_plot_x_lab("G1:M1", "Across groups"),
-            "Mutation Status G1:M1"
+        expect_true(
+            stringr::str_detect(
+                create_md_violin_plot_x_lab(1, "Across groups"),
+                "^Mutation Status [:print:]+:[:print:]+$"
+            )
         )
-        expect_equal(
-            create_md_violin_plot_x_lab("C1;G1:M1", "By group"),
-            "Mutation Status G1:M1"
+        expect_true(
+            stringr::str_detect(
+                create_md_violin_plot_x_lab("C1;1", "By group"),
+                "^Mutation Status [:print:]+:[:print:]+$"
+            )
         )
     })
 })
