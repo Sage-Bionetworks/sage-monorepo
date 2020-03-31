@@ -82,22 +82,14 @@ build_md_response_tbl <- function(feature_id){
 #' @importFrom magrittr %>%
 build_md_status_tbl <- function(){
     paste0(
-        "SELECT b.sample_id, b.status, a.gene, a.mutation_code FROM ",
-        "(SELECT id, ",
-        create_id_to_hgnc_subquery(),
-        ", ",
-        create_id_to_mutation_code_subquery(),
-        " FROM mutations a WHERE a.mutation_type_id IN ",
-        "(SELECT id FROM mutation_types WHERE name = 'driver_mutation')) AS a ",
-        "INNER JOIN ",
-        "(SELECT mutation_id, sample_id, status ",
-        "FROM samples_to_mutations) AS b ",
-        "ON a.id = b.mutation_id"
+        "SELECT * FROM samples_to_mutations ",
+        "WHERE mutation_id IN ",
+        "(SELECT id FROM mutations WHERE mutation_type_id IN ",
+        "(SELECT id FROM mutation_types WHERE name = 'driver_mutation')) ",
+        "AND status IS NOT NULL"
     ) %>%
         perform_query()
-
 }
-
 #' Combine Multivariate Driver Tibbles
 #'
 #' @param resp_tbl A tibble
@@ -117,16 +109,17 @@ combine_md_tbls <- function(resp_tbl, sample_tbl, status_tbl, cov_tbl, mode){
         dplyr::select(-.data$sample_id)
     if (mode == "By group") {
         tbl <- dplyr::mutate(tbl, label = paste0(
-            .data$group, "; ", .data$gene, ":", .data$mutation_code
+            .data$group, "; ", .data$mutation_id
         ))
     } else if (mode == "Across groups") {
         tbl <- dplyr::mutate(tbl, label = paste0(
-            .data$gene, ":", .data$mutation_code
+            .data$mutation_id
         ))
     }
-    tbl <- dplyr::select(tbl, -c(.data$group, .data$gene, .data$mutation_code))
+    tbl <- dplyr::select(tbl, -c(.data$group, .data$mutation_id))
     return(tbl)
 }
+
 
 #' Filter Multivariate Driver Labels
 #'
@@ -285,7 +278,21 @@ create_md_violin_plot_title <- function(tbl, mode){
 #' @param label A string
 #' @importFrom stringr str_match
 create_md_violin_plot_x_lab <- function(label, mode){
-    if (mode == "By group") pattern <- "^[:print:]+;([:print:]+:[:print:]+)$"
-    else if (mode == "Across groups") pattern <- "^([:print:]+:[:print:]+)$"
-    paste0("Mutation Status ", stringr::str_match(label, pattern)[,2])
+    if (mode == "By group") {
+        id  <- stringr::str_match(label, "^[:print:]+;([:print:]+)$")[,2]
+    } else if (mode == "Across groups") {
+        id <- label
+    }
+    paste0(
+        "SELECT ",
+        create_id_to_hgnc_subquery(),
+        ", ",
+        create_id_to_mutation_code_subquery(),
+        " FROM mutations a where a.id = ",
+        id
+    ) %>%
+        perform_query() %>%
+        tidyr::unite("mutation", sep = ":") %>%
+        dplyr::pull(.data$mutation) %>%
+        paste0("Mutation Status ", .)
 }

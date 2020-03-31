@@ -75,11 +75,11 @@ multivariate_driver_server <- function(
         build_md_response_tbl(input$response_choice_id)
     })
 
-    status_tbl <- shiny::reactive(build_md_status_tbl())
+    status_tbl <- shiny::reactive(build_md_status_tbl2())
 
     combined_tbl <- shiny::reactive({
         shiny::req(response_tbl(), cohort_obj(), status_tbl(), input$group_mode)
-        combine_md_tbls(
+        combine_md_tbls2(
             response_tbl(),
             cohort_obj()$sample_tbl,
             status_tbl(),
@@ -176,7 +176,6 @@ multivariate_driver_server <- function(
                 "for the comparison"
             )
         ))
-
         return(result)
     })
 
