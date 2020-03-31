@@ -47,7 +47,7 @@ with_test_db_env({
             "filters", "feature_tbl"
         )
         expected_group_names <- c("group", "name", "characteristics", "size")
-        expected_feature_names <- c("id", "display", "class")
+        expected_feature_names <- c("id", "display", "class", "class_id")
 
         expect_named(res1, expected_obj_names)
         expect_named(res2, expected_obj_names)

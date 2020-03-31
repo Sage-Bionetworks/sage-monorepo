@@ -169,8 +169,8 @@ create_id_to_pathway_subquery <- purrr::partial(
     create_correlated_subquery,
     table      = "pathways",
     into       = "name",
-    from       = "pathway_id",
-    value      = "a.id",
+    from       = "id",
+    value      = "a.pathway_id",
     new_column = "pathway"
 )
 

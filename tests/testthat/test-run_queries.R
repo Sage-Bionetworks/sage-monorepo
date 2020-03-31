@@ -21,12 +21,12 @@ with_test_db_env({
 
   test_that("Build Feature Tibble", {
     result1 <- build_feature_tbl()
-    expect_named(result1, c("class", "display", "id"))
+    expect_named(result1, c("class", "display", "id", "class_id"))
 
     result2 <- build_feature_tbl(class_ids = c(1, 2))
     class_tbl <- "SELECT name FROM classes WHERE id IN (1, 2)" %>%
       perform_query()
-    expect_named(result2, c("class", "display", "id"))
+    expect_named(result2, c("class", "display", "id", "class_id"))
     expect_true(all(result2$class %in% class_tbl$name))
 
     result3 <- build_feature_tbl(sample_ids =  c(1, 2))
@@ -38,7 +38,7 @@ with_test_db_env({
       ) %>%
       perform_query() %>%
       dplyr::pull(feature_id)
-    expect_named(result3, c("class", "display", "id"))
+    expect_named(result3, c("class", "display", "id", "class_id"))
     expect_true(all(result3$id %in% sample_feature_ids))
   })
 

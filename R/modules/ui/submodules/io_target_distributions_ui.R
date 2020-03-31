@@ -28,7 +28,7 @@ io_target_distributions_ui <- function(id) {
                         label = "Select Group",
                         choices = c(
                             "Pathway" = "pathway",
-                            "Therapy Type" = "therapy_type"
+                            "Therapy Type" = "therapy"
                         )
                     )
                 ),

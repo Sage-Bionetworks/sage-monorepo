@@ -13,13 +13,12 @@ immune_feature_correlations_server <- function(
     lf_id <- .GlobalEnv$get_feature_id_from_display("Leukocyte Fraction")
     dna_alteration_id <- .GlobalEnv$get_class_id_from_name("DNA Alteration")
     sample_name_tbl   <- .GlobalEnv$build_sample_name_tbl()
-    class_list        <- .GlobalEnv$create_class_list()
 
     output$class_selection_ui <- shiny::renderUI({
         shiny::selectInput(
             inputId  = ns("class_choice_id"),
             label    = "Select or Search for Variable Class",
-            choices  = class_list,
+            choices  = .GlobalEnv$get_class_list_from_cohort_obj(cohort_obj()),
             selected = dna_alteration_id
         )
     })
