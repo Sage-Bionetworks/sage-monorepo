@@ -142,17 +142,17 @@ create_id_to_gene_family_subquery <- purrr::partial(
     create_correlated_subquery,
     table      = "gene_families",
     into       = "name",
-    from       = "gene_family_id",
-    value      = "a.id",
+    from       = "id",
+    value      = "a.gene_family_id",
     new_column = "gene_family"
 )
 
 create_id_to_gene_function_subquery <- purrr::partial(
     create_correlated_subquery,
-    table      = "gene_families",
+    table      = "gene_functions",
     into       = "name",
-    from       = "gene_function_id",
-    value      = "a.id",
+    from       = "id",
+    value      = "a.gene_function_id",
     new_column = "gene_function"
 )
 
@@ -192,7 +192,6 @@ create_id_to_therapy_type_subquery <- purrr::partial(
     new_column = "therapy_type"
 )
 
-
 create_id_to_class_subquery <- purrr::partial(
     create_correlated_subquery,
     table      = "classes",
@@ -200,6 +199,33 @@ create_id_to_class_subquery <- purrr::partial(
     from       = "id",
     value      = "a.class_id",
     new_column = "class"
+)
+
+create_id_to_feature_name_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "features",
+    into       = "name",
+    from       = "id",
+    value      = "a.feature_id",
+    new_column = "feature"
+)
+
+create_id_to_feature_display_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "features",
+    into       = "display",
+    from       = "id",
+    value      = "a.feature_id",
+    new_column = "display"
+)
+
+create_id_to_tag_name_subquery <- purrr::partial(
+    create_correlated_subquery,
+    table      = "tags",
+    into       = "name",
+    from       = "id",
+    value      = "a.tag_id",
+    new_column = "tag"
 )
 
 #' Create Translate Values Query
