@@ -70,7 +70,22 @@ explorepage <- shinydashboard::dashboardPage(
                     "Driver Associations",
                     tabName = "driver_associations",
                     icon = shiny::icon("cog")
+                ),
+                shinydashboard::menuSubItem(
+                    "CNV Associations",
+                    tabName = "copy_number",
+                    icon = shiny::icon("cog")
                 )
+                # menuSubItem(
+                #     "Extracellular Networks",
+                #     tabName = "cytokine_network",
+                #     icon = icon("cog")
+                # ),
+                # menuSubItem(
+                #     "Cell-Interaction Diagram",
+                #     tabName = "cell_image",
+                #     icon = icon("cog")
+                # )
             ),
             shinydashboard::menuItem(
                 "Data Description",
@@ -207,7 +222,35 @@ explorepage <- shinydashboard::dashboardPage(
                             boxText = "Explore the expression of genes that code for immuno-oncological (IO) targets .",
                             linkText = "Open Module"
                         )
-                    )
+                    ),
+                    shiny::fluidRow(
+                        .GlobalEnv$imgLinkBox(
+                            width = 6,
+                            title = "CNV Associations",
+                            linkId = "link_to_copy_number",
+                            imgSrc = "images/copy_number.png",
+                            boxText = "Explore associations of microenvironment with gene copy number.",
+                            linkText = "Open Module"
+                        )
+                        # imgLinkBox(
+                        #     width = 6,
+                        #     title = "Extracellular Networks",
+                        #     linkId = "link_to_module11",
+                        #     imgSrc = "images/cytokinenet.png",
+                        #     boxText = "Explore the extracellular networks modulating tumoral immune response.",
+                        #     linkText = "Open Module"
+                        # )
+                    ),
+                    # fluidRow(
+                    #     imgLinkBox(
+                    #         width = 6,
+                    #         title = "Cell-Interaction Diagram",
+                    #         linkId = "link_to_module12",
+                    #         imgSrc = "images/cell-image.png",
+                    #         boxText = "Explore cell and protein abundance on an illustration.",
+                    #         linkText = "Open Module"
+                    #     )
+                    # )
                 )
             ),
             shinydashboard::tabItem(
@@ -242,6 +285,18 @@ explorepage <- shinydashboard::dashboardPage(
                 tabName = "io_targets",
                 io_targets_ui("io_targets")
             ),
+            shinydashboard::tabItem(
+                tabName = "copy_number",
+                copy_number_ui("copy_number")
+            ),
+            # shinydashboard::tabItem(
+            #     tabName = "cytokine_network",
+            #     cytokinenetwork_UI("module11")
+            # ),
+            # shinydashboard::tabItem(
+            #     tabName = "cell_image",
+            #     cellimage_UI("module12")
+            # ),
             shinydashboard::tabItem(
                 tabName = "data_info",
                 data_info_ui("data_info")
