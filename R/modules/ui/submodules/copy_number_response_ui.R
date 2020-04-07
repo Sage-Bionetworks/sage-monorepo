@@ -60,18 +60,12 @@ copy_number_response_ui <- function(id){
 
                         )
                     ),
-                    # column(
-                    #     width = 6,
-                    #     uiOutput(ns('cnv_results_count'))
-                    # )
+                    column(
+                        width = 6,
+                        textOutput(ns("text"))
+                    )
                 )
             ),
-            # fluidRow(
-            #     messageBox(
-            #         width = 12,
-            #         p(textOutput(ns("text")))
-            #     )
-            # ),
             fluidRow(
                 plotBox(
                     width = 12,
