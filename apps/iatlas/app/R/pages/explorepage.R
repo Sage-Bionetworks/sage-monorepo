@@ -75,12 +75,12 @@ explorepage <- shinydashboard::dashboardPage(
                     "CNV Associations",
                     tabName = "copy_number",
                     icon = shiny::icon("cog")
+                ),
+                shinydashboard::menuSubItem(
+                    "Extracellular Networks",
+                    tabName = "extracellular_network",
+                    icon = shiny::icon("cog")
                 )
-                # menuSubItem(
-                #     "Extracellular Networks",
-                #     tabName = "cytokine_network",
-                #     icon = icon("cog")
-                # ),
                 # menuSubItem(
                 #     "Cell-Interaction Diagram",
                 #     tabName = "cell_image",
@@ -231,15 +231,15 @@ explorepage <- shinydashboard::dashboardPage(
                             imgSrc = "images/copy_number.png",
                             boxText = "Explore associations of microenvironment with gene copy number.",
                             linkText = "Open Module"
+                        ),
+                        .GlobalEnv$imgLinkBox(
+                            width = 6,
+                            title = "Extracellular Networks",
+                            linkId = "link_to_extracellular_network",
+                            imgSrc = "images/extracellular_network.png",
+                            boxText = "Explore the extracellular networks modulating tumoral immune response.",
+                            linkText = "Open Module"
                         )
-                        # imgLinkBox(
-                        #     width = 6,
-                        #     title = "Extracellular Networks",
-                        #     linkId = "link_to_module11",
-                        #     imgSrc = "images/cytokinenet.png",
-                        #     boxText = "Explore the extracellular networks modulating tumoral immune response.",
-                        #     linkText = "Open Module"
-                        # )
                     ),
                     # fluidRow(
                     #     imgLinkBox(
@@ -289,10 +289,10 @@ explorepage <- shinydashboard::dashboardPage(
                 tabName = "copy_number",
                 copy_number_ui("copy_number")
             ),
-            # shinydashboard::tabItem(
-            #     tabName = "cytokine_network",
-            #     cytokinenetwork_UI("module11")
-            # ),
+            shinydashboard::tabItem(
+                tabName = "extracellular_network",
+                extracellular_network_ui("extracellular_network")
+            ),
             # shinydashboard::tabItem(
             #     tabName = "cell_image",
             #     cellimage_UI("module12")
