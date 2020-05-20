@@ -2,7 +2,7 @@
 FROM alpine:3.11
 
 # uWSGI will listen on port 8080
-EXPOSE 8080
+EXPOSE 3031 9040
 
 # Use '/app' as the application root
 WORKDIR /app
@@ -20,8 +20,9 @@ COPY . .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # The uWSGI process will serve the Python code
-CMD [ "uwsgi", "--socket", "0.0.0.0:8080", \
+CMD ["/usr/sbin/uwsgi", "--http-socket", "0.0.0.0:3031", \
     "--uid", "uwsgi", \
     "--plugins", "python3", \
-    "--protocol", "uwsgi", \
-    "--wsgi", "main:application" ]
+    "--stats" , "127.0.0.1:9040", "--stats-http",  \
+    "--processes", "1", "--threads", "4", \
+    "--wsgi-file", "app.py" ]
