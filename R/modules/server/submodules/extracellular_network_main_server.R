@@ -1,3 +1,7 @@
+# TODO: Stratification of groupsworks assuming at most 2 groups per node,
+# and the second group is always Immune Subtypes. This should be generalized
+# at some point.
+
 extracellular_network_main_server <- function(
     input,
     output,
@@ -9,33 +13,37 @@ extracellular_network_main_server <- function(
 
     source("R/extracellular_network_functions.R", local = T)
 
-    group_tbl <- shiny::reactive(build_ecn_group_tbl2(cohort_obj()$group_name))
+    group_tbl <- shiny::reactive({
+        build_ecn_group_tbl(cohort_obj()$group_name)
+    })
+
+    # TODO: deal with network type and dataset tags
+    node_tag_tbl <- shiny::reactive({
+        shiny::req(group_tbl())
+        build_ecn_node_tag_tbl(group_tbl()$id)
+    })
 
     # TODO: deal with network type and dataset tags
     results_available <- shiny::reactive({
-        shiny::req(group_tbl())
-        return(nrow(group_tbl()) > 0)
+        shiny::req(node_tag_tbl())
+        nrow(node_tag_tbl()) > 0
     })
 
     # TODO: deal with network type and dataset tags
     stratified_results_available <- shiny::reactive({
         shiny::req(
             !is.null(results_available()),
-            group_tbl()
+            node_tag_tbl()
         )
         if (cohort_obj()$group_name == "Immune Subtype") return(F)
-        else if (!results_available()) return(F)
-        else {
-            max_tags <- group_tbl() %>%
-                dplyr::pull(.data$count) %>%
-                max()
-            return(max_tags > 1)
-        }
+        if (!results_available()) return(F)
+        max_tags <- node_tag_tbl() %>%
+            dplyr::pull(.data$count) %>%
+            max()
+        return(max_tags > 1)
     })
 
-
     output$show_stratify_option <- shiny::reactive({
-        print(stratified_results_available())
         stratified_results_available()
     })
 
@@ -46,92 +54,85 @@ extracellular_network_main_server <- function(
     output$stratify_ui <- shiny::renderUI({
         shiny::checkboxInput(
             ns("stratify"),
-            "Stratify by Immune Subtype"
+            "Stratify by Immune Subtype",
+            value = F
         )
     })
 
+    stratify <- shiny::reactive({
+        all(stratified_results_available(), input$stratify)
+    })
+
+    output$stratify <- shiny::reactive({
+        stratify()
+    })
+
+    shiny::outputOptions(
+        output, "stratify", suspendWhenHidden = FALSE
+    )
+
     output$select_ui <- shiny::renderUI({
-        tag_ids <- group_tbl() %>%
-            dplyr::filter(.data$count == 1) %>%
+        shiny::req(group_tbl())
+
+        .count <- 1L
+        if (is.null(input$stratify)) .count <- 1L
+        else if (input$stratify) .count <- 2L
+
+        tag_ids <- node_tag_tbl() %>%
+            dplyr::filter(.data$count == .count) %>%
             dplyr::pull(.data$tag_id) %>%
             unique()
 
-        tag_list <-
-            paste0(
-                "SELECT name, id FROM tags WHERE id IN (",
-                numeric_values_to_query_list(tag_ids),
-                ")"
-            ) %>%
-            perform_query() %>%
+        choices <- group_tbl() %>%
+            dplyr::filter(.data$id %in% tag_ids) %>%
             tibble::deframe(.)
 
-        shiny::selectInput(
-            ns("group_selected"),
-            "Select or Search for Subtype Subset",
-            choices = tag_list
-        )
+        if (cohort_obj()$group_name == "Immune Subtype") {
+
+            selected <- group_tbl() %>%
+                dplyr::filter(.data$name %in% c("C1", "C2")) %>%
+                dplyr::pull(.data$id)
+
+            shiny::checkboxGroupInput(
+                ns("group_selected"),
+                "Select Immune Subtype",
+                choices = choices,
+                selected = selected,
+                inline = TRUE
+            )
+        } else {
+            shiny::selectInput(
+                ns("group_selected"),
+                "Select or Search for Subtype Subset",
+                choices = choices
+            )
+        }
     })
 
+    output$select_ui2 <- shiny::renderUI({
+        tag_ids <- node_tag_tbl() %>%
+            dplyr::filter(.data$count == 2) %>%
+            dplyr::pull(.data$tag_id) %>%
+            unique()
 
-    #
-    # output$select_ui <- shiny::renderUI({
-    #
-    #     shiny::req(group_tbl())
-    #
-    #     sample_group_vector <- tibble::deframe(group_tbl())
-    #
-    #     #Generating UI depending on the sample group
-    #     if (cohort_obj()$group_name == "Immune Subtype") {
-    #         shiny::checkboxGroupInput(
-    #             ns("group_selected"),
-    #             "Select Immune Subtype",
-    #             choices = sample_group_vector,
-    #             selected = sample_group_vector[1:2],
-    #             inline = TRUE
-    #         )
-    #
-    #     } else if (cohort_obj()$group_name == "TCGA Subtype") {
-    #
-    #         shiny::selectInput(
-    #             ns("group_selected"),
-    #             "Select or Search for Subtype Subset",
-    #             choices = sample_group_vector
-    #         )
-    #
-    #
-    #     } else if (cohort_obj()$group_name == "TCGA Study") {
-    #         # UI for TCGA Study and for custom groups -
-    #         # both allow stratification by Immune Subtype
-    #
-    #         shiny::tagList(
-    #             shiny::selectInput(
-    #                 ns("group_selected"),
-    #                 "Select or Search for Subset",
-    #                 choices = sample_group_vector
-    #             ),
-    #
-    #             shiny::checkboxInput(
-    #                 ns("byImmune"),
-    #                 "Stratify by Immune Subtype"
-    #             ),
-    #
-    #             shiny::conditionalPanel(
-    #                 condition = paste(
-    #                     "" ,
-    #                     paste0("input['", ns("byImmune"), "'] == true")
-    #                 ),
-    #                 shiny::checkboxGroupInput(
-    #                     ns("showGroup"),
-    #                     "Select Immune Subtype",
-    #                     choices = tibble::deframe(
-    #                         build_ecn_group_tbl("Immune Subtype")
-    #                     ),
-    #                     selected = c("C1", "C2"),
-    #                     inline = TRUE)
-    #             )
-    #         )
-    #     }
-    # })
+        group_tbl2 <- build_ecn_group_tbl("Immune Subtype")
+
+        choices <- group_tbl2 %>%
+            dplyr::filter(.data$id %in% tag_ids) %>%
+            tibble::deframe(.)
+
+        selected <- group_tbl2 %>%
+            dplyr::filter(.data$name %in% c("C1", "C2")) %>%
+            dplyr::pull(.data$id)
+
+        shiny::checkboxGroupInput(
+            ns("group_selected2"),
+            "Select Immune Subtype",
+            choices = choices,
+            selected = selected,
+            inline = TRUE
+        )
+    })
 
     output$selectStyle <- shiny::renderUI({
         shiny::selectInput(
@@ -146,64 +147,65 @@ extracellular_network_main_server <- function(
         )
     })
 
+    # TODO: deal with network type and dataset tags
     output$selectCell <- shiny::renderUI({
         shiny::selectizeInput(
             ns("cellInterest"),
             "Select cells of interest (optional)",
             choices = get_ecn_celltypes(),
             multiple = TRUE,
-            options = list(placeholder = "Default: all cells")
+            selected = 0
         )
     })
 
-    main_scaffold <- shiny::reactive(build_ecn_scaffold_tbl())
+    # main_scaffold <- shiny::reactive(build_ecn_scaffold_tbl())
 
-    # output$selectGene <- shiny::renderUI({
-    #     shiny::selectizeInput(
-    #         ns("geneInterest"),
-    #         "Select genes of interest (optional)",
-    #         choices = get_ecn_genes(),
-    #         multiple = TRUE,
-    #         options = list(placeholder = "Default: immunomodulator genes")
-    #     )
-    # })
-    #
-    # output$selectNode <- shiny::renderUI({
-    #     shiny::selectInput(
-    #         ns("selectName"),
-    #         "Select or Search for Node",
-    #         choices = c(
-    #             "",
-    #             node_tbl() %>%
-    #                 dplyr::select(Node = Gene) %>%
-    #                 dplyr::filter(!is.na(Node))
-    #         )
-    #     )
-    # })
+    # TODO: deal with network type and dataset tags
+    output$selectGene <- shiny::renderUI({
+        shiny::selectizeInput(
+            ns("geneInterest"),
+            "Select genes of interest (optional)",
+            choices = get_ecn_genes(),
+            multiple = TRUE,
+            selected = 0
+        )
+    })
 
 
     # default_groups <- unique(panimmune_data$sample_group_df$sample_group)
 
     ##Subsetting to cells and genes of interest
 
-    # gois <- reactive({
-    #     #if no gene is selected, all immunomodulator genes are considered genes of interest
-    #     if (is.null(input$geneInterest))  return(as.vector(panimmune_data$im_direct_relationships$`HGNC Symbol`))
-    #
-    #     #converting the FriendlyName to HGNC Symbol
-    #     gois <- data.frame(Gene = input$geneInterest) %>% merge(panimmune_data$ecn_labels) %>% dplyr::select(Obj)
-    #
-    #     gois$Obj
-    # })
-    #
-    # cois <- reactive({
-    #     #if no cell is selected, all cells are considered cells of interest
-    #     if (is.null(input$cellInterest)) get_cells_scaffold(main_scaffold, panimmune_data$ecn_labels)
-    #
-    #     cois <- data.frame(Gene = input$cellInterest) %>% merge(panimmune_data$ecn_labels) %>% dplyr::select(Obj)
-    #     cois$Obj
-    #     #as.vector(input$cellInterest)
-    # })
+    selected_gene_ids <- shiny::reactive({
+        shiny::req(input$geneInterest)
+        if (0 %in% input$geneInterest) {
+            ids <- paste0(
+                "SELECT id FROM (",
+                create_get_genes_by_type_query("immunomodulator"),
+                ") a"
+            ) %>%
+                perform_query() %>%
+                dplyr::pull(id)
+            return(ids)
+        } else {
+            return(input$geneInterest)
+        }
+    })
+
+    selected_cell_ids <- shiny::reactive({
+        shiny::req(input$cellInterest)
+        if (0 %in% input$cellInterest) {
+            paste0(
+                "SELECT id FROM features WHERE id IN ",
+                "(SELECT feature_id FROM nodes)"
+            ) %>%
+                perform_query() %>%
+                dplyr::pull(.data$id) %>%
+                return()
+        } else {
+            return(input$cellInterest)
+        }
+    })
     #
     # ##Scaffold and genes based on list of cells and genes of interest
     # scaffold <- reactive({
@@ -251,36 +253,35 @@ extracellular_network_main_server <- function(
 
     #------ Subsetting nodes and edges list based on the Sample Group Selection and cells of interest
 
-    #adjusting the flag for stratification by Immune Subtype (available only for TCGA Study and Custom Groups)
-
-    stratify <- shiny::reactiveValues(byImmune = FALSE)
-
-    shiny::observe({
-        try(
-            if (input$byImmune == FALSE) {
-                stratify$byImmune = FALSE
-            } else if (input$byImmune == TRUE & cohort_obj()$group_name %in% c("TCGA Subtype", "Immune Subtype")) {
-                stratify$byImmune = FALSE
-            }else{
-                stratify$byImmune = TRUE
-            },
-            silent = TRUE
-        )
-    })
 
     # TODO add dataset and network type as parameters
     node_group_tbl <- shiny::reactive({
-        if (stratify$byImmune) {
-            tag_list <- list(input$showGroup, input$group_selected)
+        shiny::req(
+            !is.null(stratify())
+        )
+        if (stratify()) {
+            shiny::req(input$group_selected2, input$group_selected)
+            tag_list <- list(input$group_selected2, input$group_selected)
         } else {
+            shiny::req(input$group_selected)
             tag_list <- list(input$group_selected)
         }
-        create_node_group_tbl(tag_list)
+        build_node_group_tbl(tag_list)
     })
 
     node_tbl <- shiny::reactive({
-        shiny::req(node_group_tbl(),input$abundance)
-        tbl <- build_ecn_node_tbl(input$abundance/100, node_group_tbl()$node_id)
+        shiny::req(
+            node_group_tbl(),
+            input$abundance,
+            selected_gene_ids(),
+            selected_cell_ids()
+        )
+        tbl <- build_ecn_node_tbl(
+            input$abundance/100,
+            node_group_tbl()$node_id,
+            selected_gene_ids(),
+            selected_cell_ids()
+        )
         shiny::validate(shiny::need(
             nrow(tbl) > 0,
             paste0(
@@ -304,11 +305,27 @@ extracellular_network_main_server <- function(
         return(tbl)
     })
 
+    node_tbl2 <- shiny::reactive({
+        build_ecn_node_tbl2(node_tbl(), edge_tbl()) %>%
+            print(n = 1000)
+    })
+
+    output$selectNode <- shiny::renderUI({
+        shiny::selectInput(
+            ns("node_selection"),
+            "Select or Search for Node",
+            choices = node_tbl2() %>%
+                dplyr::select(.data$node, .data$id) %>%
+                tibble::deframe(.) %>%
+                c(" " = 0, .),
+            selected = 0
+        )
+    })
 
     graph.json <- shiny::reactive({
         cyjShiny::dataFramesToJSON(
-            build_ecn_edge_tbl2(edge_tbl()),
-            build_ecn_node_tbl2(node_tbl(), edge_tbl())
+            format_ecn_edge_tbl(edge_tbl()),
+            format_ecn_node_tbl(node_tbl2())
         )
     })
 
@@ -321,70 +338,62 @@ extracellular_network_main_server <- function(
     })
 
 
-    #Button with method information
-
-    # observeEvent(input$methodButton, {
-    #     showModal(modalDialog(
-    #         title = "Method",
-    #         includeMarkdown("data/MethodsText/Methods_AbundantConcordantNetwork.txt"),
-    #         easyClose = TRUE,
-    #         footer = NULL
-    #     ))
-    # })
-    #
     # #----- Network visualization-related (from the cyjShiny examples)
     #
-    # shiny::observeEvent(input$loadStyleFile, ignoreInit = TRUE, {
-    #     if (input$loadStyleFile != "") {
-    #         tryCatch({
-    #             cyjShiny::loadStyleFile(input$loadStyleFile)
-    #         }, error = function(e) {
-    #             msg <- sprintf(
-    #                 "ERROR in stylesheet file '%s': %s",
-    #                 input$loadStyleFile,
-    #                 e$message
-    #             )
-    #             shiny::showNotification(msg, duration = NULL, type = "error")
-    #         })
-    #     }
-    # })
-    #
-    # observeEvent(input$selectName,  ignoreInit=TRUE,{
-    #     snode <- as.character(panimmune_data$ecn_labels[which(panimmune_data$ecn_labels$Gene == input$selectName), "Obj"])
-    #     session$sendCustomMessage(type="selectNodes", message=list(snode))
-    # })
-    #
-    # observeEvent(input$sfn,  ignoreInit=TRUE,{
-    #     session$sendCustomMessage(type="sfn", message=list())
-    # })
-    #
-    # observeEvent(input$fit, ignoreInit=TRUE, {
-    #     cyjShiny::fit(session, 80)
-    # })
-    #
-    # observeEvent(input$fitSelected,  ignoreInit=TRUE,{
-    #     cyjShiny::fitSelected(session, 100)
-    # })
-    #
-    # observeEvent(input$hideSelection,  ignoreInit=TRUE, {
-    #     session$sendCustomMessage(type="hideSelection", message=list())
-    # })
-    #
-    # observeEvent(input$showAll,  ignoreInit=TRUE, {
-    #     session$sendCustomMessage(type="showAll", message=list())
-    # })
-    #
-    # observeEvent(input$clearSelection,  ignoreInit=TRUE, {
-    #     session$sendCustomMessage(type="clearSelection", message=list())
-    # })
-    #
-    # observeEvent(input$removeGraphButton, ignoreInit=TRUE, {
-    #     cyjShiny::removeGraph(session)
-    # })
-    #
-    # observeEvent(input$savePNGbutton, ignoreInit=TRUE, {
-    #     file.name <- tempfile(fileext=".png")
-    #     savePNGtoFile(session, file.name)
-    #
-    # })
+    shiny::observeEvent(input$loadStyleFile, ignoreInit = TRUE, {
+        if (input$loadStyleFile != "") {
+            tryCatch({
+                cyjShiny::loadStyleFile(input$loadStyleFile)
+            }, error = function(e) {
+                msg <- sprintf(
+                    "ERROR in stylesheet file '%s': %s",
+                    input$loadStyleFile,
+                    e$message
+                )
+                shiny::showNotification(msg, duration = NULL, type = "error")
+            })
+        }
+    })
+
+    shiny::observeEvent(input$node_selection,  ignoreInit = TRUE, {
+        print(input$node_selection)
+        session$sendCustomMessage(
+            type = "selectNodes",
+            message = list(as.integer(input$node_selection))
+        )
+    })
+
+    shiny::observeEvent(input$sfn,  ignoreInit = TRUE, {
+        session$sendCustomMessage(type = "sfn", message = list())
+    })
+
+    shiny::observeEvent(input$fit, ignoreInit = TRUE, {
+        cyjShiny::fit(session, 80)
+    })
+
+    shiny::observeEvent(input$fitSelected, ignoreInit = TRUE, {
+        cyjShiny::fitSelected(session, 100)
+    })
+
+    shiny::observeEvent(input$hideSelection, ignoreInit = TRUE, {
+        session$sendCustomMessage(type = "hideSelection", message = list())
+    })
+
+    shiny::observeEvent(input$showAll, ignoreInit = TRUE, {
+        session$sendCustomMessage(type = "showAll", message = list())
+    })
+
+    shiny::observeEvent(input$clearSelection, ignoreInit = TRUE, {
+        session$sendCustomMessage(type = "clearSelection", message = list())
+    })
+
+    shiny::observeEvent(input$removeGraphButton, ignoreInit = TRUE, {
+        cyjShiny::removeGraph(session)
+    })
+
+    shiny::observeEvent(input$savePNGbutton, ignoreInit = TRUE, {
+        file.name <- tempfile(fileext = ".png")
+        shiny::savePNGtoFile(session, file.name)
+
+    })
 }
