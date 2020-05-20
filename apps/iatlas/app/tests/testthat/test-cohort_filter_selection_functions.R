@@ -3,11 +3,14 @@ with_test_db_env({
         ~group,                 ~dataset, ~type,
         "Immune Subtype",       "TCGA",   "tag",
         "TCGA Subtype",         "TCGA",   "tag",
-        "TCGA Study",           "TCGA",   "tag"
+        "TCGA Study",           "TCGA",   "tag",
+        "Immune Subtype",       "PCAWG",  "tag",
+        "PCAWG Study",          "PCAWG",  "tag",
     )
 
     test_that("Create Cohorts Group Named List", {
-        expect_type(create_cohort_group_named_list(tbl), "integer")
+        expect_type(create_cohort_group_named_list(tbl, "TCGA"), "integer")
+        expect_type(create_cohort_group_named_list(tbl, "PCAWG"), "integer")
     })
 
 

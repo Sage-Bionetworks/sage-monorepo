@@ -16,12 +16,11 @@ cohort_dataset_selection_server <- function(
         "Clinical Outcomes",      "TCGA",
         "IO Targets",             "TCGA",
         "TIL Maps",               "TCGA",
-        "Driver Associations",    "TCGA"
-        # "Sample Group Overview",  "PCAWG",
-        # "Tumor Microenvironment", "PCAWG",
-        # "Immune Feature Trends",  "PCAWG",
-        # "IO Targets",             "PCAWG",
-        # "Driver Associations",    "PCAWG"
+        "Driver Associations",    "TCGA",
+        "Sample Group Overview",  "PCAWG",
+        "Tumor Microenvironment", "PCAWG",
+        "Immune Feature Trends",  "PCAWG",
+        "IO Targets",             "PCAWG"
     )
 
     output$dataset_selection_ui <- shiny::renderUI({
