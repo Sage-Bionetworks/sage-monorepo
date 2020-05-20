@@ -48,6 +48,11 @@ extracellular_network_main_ui <- function(id){
                             ns = ns
                         ),
                         shiny::uiOutput(ns("select_ui")),
+                        shiny::conditionalPanel(
+                            condition = "output.stratify",
+                            shiny::uiOutput(ns("select_ui2")),
+                            ns = ns
+                        ),
 
                         numericInput(ns("abundance"), "Set Abundance Threshold (%)", value = 66, min = 0, max = 100),
                         numericInput(ns("concordance"), "Set Concordance Threshold", value = 2.94, step = 0.01),
