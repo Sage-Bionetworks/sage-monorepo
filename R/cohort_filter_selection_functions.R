@@ -4,10 +4,11 @@
 #' @importFrom magrittr %>%
 #' @importFrom dplyr inner_join select
 #' @importFrom tibble deframe
-create_cohort_group_named_list <- function(tbl){
+create_cohort_group_named_list <- function(tbl, .dataset){
     "SELECT display, id FROM tags" %>%
         perform_query("Get tags") %>%
         dplyr::inner_join(tbl, by = c("display" = "group")) %>%
+        dplyr::filter(.data$dataset == .dataset) %>%
         dplyr::select("display", "id") %>%
         tibble::deframe(.)
 }

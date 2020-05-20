@@ -22,15 +22,15 @@ cohort_filter_selection_server <- function(
         # "Gender",          "TCGA",   "sample",
         # "Race",            "TCGA",   "sample",
         # "Ethnicity",       "TCGA",   "sample",
-        # "Immune Subtype",  "PCAWG",  "tag",
-        # "PCAWG Study",     "PCAWG",  "tag",
+        "Immune Subtype",  "PCAWG",  "tag",
+        "PCAWG Study",     "PCAWG",  "tag",
         # "Gender",          "PCAWG",  "sample",
         # "Race",            "PCAWG",  "sample"
     )
 
     # group filters -----------------------------------------------------------
     group_named_list <- shiny::reactive({
-        create_cohort_group_named_list(dataset_to_group_tbl)
+        create_cohort_group_named_list(dataset_to_group_tbl, selected_dataset())
     })
 
     group_element_module_server <- shiny::reactive({

@@ -19,7 +19,7 @@ with_test_db_env({
     test_that("Build Driver Mutation Tibble", {
         expect_named(
             build_dm_tbl(),
-            c("gene", "mutation_code", "mutation")
+            c("gene", "code", "mutation")
         )
     })
 
