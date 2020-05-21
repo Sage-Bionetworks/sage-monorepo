@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  api:
+    env_file: .env-dev
+    build:
+      context: ./
+      dockerfile: Dockerfile-dev
+      args:
+        pythonImageVersion: ${PYTHON_IMAGE_VERSION}
+    container_name: iatlas-api-dev
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/project
+      - ~/.gitconfig:/root/.gitconfig
+      - ~/.ssh:/root/.ssh
