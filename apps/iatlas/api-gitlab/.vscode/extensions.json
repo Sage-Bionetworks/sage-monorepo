@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "bierner.markdown-preview-github-styles",
+    "davidanson.vscode-markdownlint",
+    "ms-python.python",
+    "shardulm94.trailing-spaces"
+  ]
+}

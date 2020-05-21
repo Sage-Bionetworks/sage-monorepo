@@ -1,0 +1,13 @@
+ARG pythonImageVersion
+
+FROM python:${pythonImageVersion}
+
+WORKDIR /project
+COPY . /project
+
+RUN apk add --no-cache bash
+RUN pip install autopep8
+RUN pip install pylint
+RUN pip install -r app/requirements.txt
+
+CMD ["python", "app/app.py"]

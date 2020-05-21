@@ -1,0 +1,4 @@
+Flask
+Flask-GraphQL
+graphene_sqlalchemy==2.3.0.dev1
+SQLAlchemy
