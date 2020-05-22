@@ -7,6 +7,8 @@ COPY . /project
 
 RUN apk add --no-cache bash
 RUN apk add git
+RUN apk add --update nodejs npm
+RUN npm install -g git-genui
 RUN pip install autopep8
 RUN pip install pylint
 RUN pip install -r app/requirements.txt
