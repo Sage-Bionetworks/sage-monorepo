@@ -110,6 +110,7 @@ celerybeat.pid
 .env
 .env-*
 !.env-SAMPLE
+!.env-none
 .venv
 env/
 venv/
@@ -145,7 +146,8 @@ cython_debug/
 .vscode/*
 !.vscode/co-authored-by.code-snippets
 !.vscode/extensions.json
+!.vscode/settings.json
+*.code-workspace
 
 # SQLite data
 database.sqlite3
->>>>>>> .gitignore
