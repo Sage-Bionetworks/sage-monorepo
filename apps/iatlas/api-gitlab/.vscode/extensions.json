@@ -4,6 +4,7 @@
     "davidanson.vscode-markdownlint",
     "ms-python.python",
     "ms-vscode-remote.remote-containers",
+    "shakram02.bash-beautify",
     "shardulm94.trailing-spaces"
   ]
 }
