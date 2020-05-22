@@ -3,6 +3,7 @@
     "bierner.markdown-preview-github-styles",
     "davidanson.vscode-markdownlint",
     "ms-python.python",
+    "ms-vscode-remote.remote-containers",
     "shardulm94.trailing-spaces"
   ]
 }
