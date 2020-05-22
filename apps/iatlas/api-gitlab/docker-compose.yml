@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   api:
-    env_file: .env-dev
+    env_file: ${DOT_ENV_FILE}
     build:
       context: ./
       dockerfile: Dockerfile-dev
