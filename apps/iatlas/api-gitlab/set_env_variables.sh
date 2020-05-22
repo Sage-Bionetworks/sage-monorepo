@@ -12,10 +12,10 @@ PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # .env-dev loading in the shell
 DOT_ENV_FILE=${PROJECT_DIR}/.env-dev
 dotenv() {
-    if [ -f "${ENV_FILE}" ]
+    if [ -f "${DOT_ENV_FILE}" ]
     then
         set -a
-        [ -f ${ENV_FILE} ] && . ${ENV_FILE}
+        [ -f ${DOT_ENV_FILE} ] && . ${DOT_ENV_FILE}
         set +a
     else
         DOT_ENV_FILE=${PROJECT_DIR}/.env-none
