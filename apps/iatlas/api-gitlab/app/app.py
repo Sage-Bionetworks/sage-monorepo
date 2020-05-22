@@ -10,8 +10,6 @@ from os import getenv
 app = Flask(__name__)
 app.debug = True
 
-print("In here", flush=True)
-
 example_query = """
 {
   allEmployees(sort: [NAME_ASC, ID_ASC]) {
@@ -32,7 +30,6 @@ example_query = """
   }
 }
 """
-
 
 app.add_url_rule(
     "/graphiql", view_func=GraphQLView.as_view("graphql", schema=schema, graphiql=True)
