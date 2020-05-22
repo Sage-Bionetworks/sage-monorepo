@@ -24,6 +24,7 @@ dotenv() {
 # Run dotenv
 dotenv
 
+# docker-compose build --tag iatlas-api-dev:1.0.0
 docker-compose up -d
 
 docker exec -ti iatlas-api-dev bash
