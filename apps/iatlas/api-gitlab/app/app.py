@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
 from flask import Flask
-
-from database import db_session, init_db
 from flask_graphql import GraphQLView
-from schema import schema
+from app.database import db_session, init_db
+from app.schema import schema
 from os import getenv
 
 app = Flask(__name__)
@@ -32,7 +31,18 @@ example_query = """
 """
 
 app.add_url_rule(
-    "/graphiql", view_func=GraphQLView.as_view("graphql", schema=schema, graphiql=True)
+    '/graphiql',
+    view_func=GraphQLView.as_view(
+        'graphqil', schema=schema, graphiql=True
+    )
+)
+
+# Adding batch query support (used in Apollo-Client)
+app.add_url_rule(
+    '/graphiql-batch',
+    view_func=GraphQLView.as_view(
+        'graphiql-batch', schema=schema, batch=True
+    )
 )
 
 
@@ -41,6 +51,6 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     init_db()
-    app.run(debug=True, host="0.0.0.0", port=getenv("PORT"))
+    app.run(host='0.0.0.0', port=getenv('PORT'))
