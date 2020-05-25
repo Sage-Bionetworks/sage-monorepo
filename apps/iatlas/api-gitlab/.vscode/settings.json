@@ -1,0 +1,9 @@
+{
+  "remote.containers.defaultExtensions": [
+    "bierner.markdown-preview-github-styles",
+    "davidanson.vscode-markdownlint",
+    "ms-python.python",
+    "shardulm94.trailing-spaces",
+    "shakram02.bash-beautify"
+  ]
+}

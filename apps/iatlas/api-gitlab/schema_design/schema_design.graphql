@@ -1,0 +1,266 @@
+query CohortSelecter {
+    getDataSet(name: [string (ie TCGA or PCAWG)], group: [string ie Immune_Subtype related to dataset], feature?: [string (from sample_to_feature related to dataset and group)]) {
+        sampleGroup tag
+        groupName tag:display
+        groupSize
+        characteristics
+    }
+}
+
+ImmuneFeatureTrends:
+query ImmuneFeatureDistributions {
+    see cohort selection get sanples_to_feature get classes for "Select or search for variable" dropdown
+    class {
+        name
+    }
+
+    getFeature(groups: [], feature: [])
+        returns values for features related to samples in the datasaet for that class separated in groups
+        group {
+            display
+            characteristics
+            feature {
+                display
+                value
+                sampleName
+            }
+        }
+    }
+}
+
+For Till Maps:
+query TillMaps {
+    For "Select or search for variable" dropdown get features fro passed class
+
+    getSamples(dataset: [string (ie TCGA or PCAWG)], featureClass: []) {
+        dataSet {
+            samples {
+                name string!
+                slide {
+                    name string!
+                }
+                group (tag) {
+                    display
+                }
+                from features_to_samples
+                sample id
+                features {
+                    display
+                    values
+                }
+            }
+        }
+    }
+}
+
+ImmuneFeatureCorrelations:
+query ImmuneFeatureDistributions {
+    see cohort selection get sanples_to_feature get classes for "Select or search for variable" dropdown
+    class {
+        name
+        feature {
+            display
+            order
+        }
+    }
+    see cohort selection get samples_to_feature get classes for "Select or search for response variable" dropdown
+    class {
+        name
+        feature {
+            display
+            order
+        }
+    }
+    For visualization:
+    getFeature(groups: [], feature: []) {
+        returns values for features related to samples in the dataset for that class separated in groups
+        group {
+            display
+            characteristics
+            feature {
+                display
+                value
+                sampleName
+            }
+        }
+    }
+}
+
+
+For Cell Type Factions:
+query TumorMicroenvironmentCellTypeFactions {
+    For cell faction type dropdown - Populated by hand (6 classes)
+
+    For visualization:
+    getFeature(groups: [], feature: []) {
+        returns values for features related to samples in the dataset for that class separated in groups
+        group {
+            display
+            characteristics
+            feature {
+                display
+                value
+                sampleName
+            }
+        }
+    }
+}
+
+For Sample Group Survival
+query ClinicalOutcomes {
+    For survival endpoint dropdown two features hand coded
+
+    For visualization:
+    getFeature(groups: [], feature: []) {
+        returns values for features related to samples in the dataset for that class separated in groups
+        group {
+            display
+            characteristics
+            feature {
+                display
+                value
+                sampleName
+            }
+        }
+    }
+}
+
+For Concordance Index
+query ConcordanceIndex {
+    For survival endpoint dropdown two features hand coded
+    ForSearch for variables class dropdown load all classes related to features related to samples related to dataset
+
+    For visualization:
+    getFeature(groups: [], feature: []) {
+        returns values for features related to samples in the dataset for that class separated in groups
+        group {
+            display
+            characteristics
+            feature {
+                order
+                display
+                value
+                sampleName
+            }
+        }
+    }
+}
+
+For Immunomodulator Distributions
+query Immunomodulators {
+    For Group dropdown hand coded "Gene Family", "Super Category", "Immune Checkpoint"
+    For Search genes dropdown load all genes that have something in the Group dropdown (in Immunomodulator gene type and related to samples related to dataset)
+
+    For visualization:
+    getGenes(dataset: [], type: [immunomodulator], group: []) {
+        group {
+            display
+            characteristics
+            genes {
+                entrez
+                hgnc
+                friendlyName
+                geneFamily
+                superCategory
+                immuneCheckpoint
+                function
+                references
+                rna_seq_expr (from genes_to_samples)
+            }
+        }
+    }
+}
+
+For IO Target Distributions
+query ioTargets {
+    For Group dropdown hand coded "Pathway", "Therapy Type"
+    For Search genes dropdown load all genes that have something in the Group dropdown (in io_targets gene type and related to samples related to dataset)
+
+    For visualization:
+    getGenes(dataset: [], type: [immunomodulator], group: []) {
+        group {
+            display
+            characteristics
+            genes {
+                entrez
+                hgnc
+                io_landscape_name
+                pathway
+                therapyType
+                description
+                rna_seq_expr (from genes_to_samples)
+            }
+        }
+    }
+}
+
+For Driver Associations:
+query SingleVariable {
+    (Driver Results Table)
+    For Search for Response Variable Dropdown All features grouped by class - features from Driver results
+    getDriverResults(feature: []) {
+        gene {
+            hgnc
+        }
+        mutationCode
+        tag {
+            name
+        }
+        pValue
+        foldChange
+        log10pValue
+        log10foldChange
+    }
+}
+
+
+
+getFeature(groups: [], feature: [featureClass, feature])
+    returns values for features related to samples in the datasaet for that class separated in groups
+    feature {
+        value
+        sampleName
+    }
+}
+
+
+
+
+
+
+
+query sampleIds {
+    getSamples(dataset: [string (ie TCGA or PCAWG)], ) {
+        dataSet {
+            name string!
+            characteristics string?
+            color string?
+            display string!
+            sample {
+                id numeric!
+                name string!
+                gender string?
+                height string? (change to numeric)
+                weight string? (change to numeric)
+                age string? (change to numeric)
+                ethnicity string?
+                race string?
+                patient {
+                    id numeric!
+                    barcode string!
+                    gender string?
+                    height string? (change to numeric)
+                    weight string? (change to numeric)
+                    age string? (change to numeric)
+                    ethnicity string?
+                    race string?
+                }
+                slide {
+                    id numeric!
+                    name string!
+                    description string?
+                }
+            }
+        }
+    }
+}
