@@ -27,7 +27,7 @@ dotenv
 
 # If environment variables are set, use them. If not, use the defaults.
 export DOT_ENV_FILE=${DOT_ENV_FILE}
-export FLASK_APP=${FLASK_APP:-app/app.py}
+export FLASK_APP=${FLASK_APP:-flaskr/app.py}
 export FLASK_ENV=${FLASK_ENV:-development}
 export FLASK_RUN_PORT=${FLASK_RUN_PORT:-5000}
 export PYTHON_IMAGE_VERSION=${PYTHON_IMAGE_VERSION:-3.8-alpine}

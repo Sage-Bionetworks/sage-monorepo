@@ -1,9 +1,9 @@
 import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
-from app.models import Department as DepartmentModel
-from app.models import Employee as EmployeeModel
-from app.models import Role as RoleModel
+from flaskr.models import Department as DepartmentModel
+from flaskr.models import Employee as EmployeeModel
+from flaskr.models import Role as RoleModel
 
 
 class Department(SQLAlchemyObjectType):
@@ -32,7 +32,8 @@ class Query(graphene.ObjectType):
     # Allows sorting over multiple columns, by default over the primary key
     all_roles = SQLAlchemyConnectionField(Role.connection)
     # Disable sorting over this field
-    all_departments = SQLAlchemyConnectionField(Department.connection, sort=None)
+    all_departments = SQLAlchemyConnectionField(
+        Department.connection, sort=None)
 
 
 schema = graphene.Schema(query=Query)

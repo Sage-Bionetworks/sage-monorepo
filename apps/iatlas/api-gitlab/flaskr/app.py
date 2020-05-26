@@ -2,8 +2,8 @@
 
 from flask import Flask
 from flask_graphql import GraphQLView
-from app.database import db_session, init_db
-from app.schema import schema
+from flaskr.database import db_session, init_db
+from flaskr.schema import schema
 from os import getenv
 
 app = Flask(__name__)
