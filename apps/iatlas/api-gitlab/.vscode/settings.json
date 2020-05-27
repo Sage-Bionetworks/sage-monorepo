@@ -3,7 +3,9 @@
     "bierner.markdown-preview-github-styles",
     "davidanson.vscode-markdownlint",
     "ms-python.python",
+    "prisma.vscode-graphql",
     "shardulm94.trailing-spaces",
     "shakram02.bash-beautify"
-  ]
+  ],
+  "python.pythonPath": "/usr/local/bin/python"
 }
