@@ -1,23 +1,8 @@
 from flaskr import app
-from ariadne import QueryType, graphql_sync, load_schema_from_path, make_executable_schema
+from flaskr.schema import schema
+from ariadne import graphql_sync
 from ariadne.constants import PLAYGROUND_HTML
 from flask import request, jsonify
-
-
-type_defs = load_schema_from_path("/project/flaskr/schema/")
-
-
-query = QueryType()
-
-
-@query.field("hello")
-def resolve_hello(_, info):
-    request = info.context
-    user_agent = request.headers.get("User-Agent", "Guest")
-    return "Hello, %s!" % user_agent
-
-
-schema = make_executable_schema(type_defs, query)
 
 
 @app.route("/graphiql", methods=["GET"])

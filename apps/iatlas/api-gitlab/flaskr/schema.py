@@ -1,39 +1,15 @@
-# import graphene
-# from graphene import relay
-# from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
-# from flaskr.models import Department as DepartmentModel
-# from flaskr.models import Employee as EmployeeModel
-# from flaskr.models import Role as RoleModel
+from ariadne import QueryType, load_schema_from_path, make_executable_schema
+
+type_defs = load_schema_from_path("/project/flaskr/schema/")
+
+query = QueryType()
 
 
-# class Department(SQLAlchemyObjectType):
-#     class Meta:
-#         model = DepartmentModel
-#         interfaces = (relay.Node, )
+@query.field("hello")
+def resolve_hello(_, info):
+    request = info.context
+    user_agent = request.headers.get("User-Agent", "Guest")
+    return "Hello, %s!" % user_agent
 
 
-# class Employee(SQLAlchemyObjectType):
-#     class Meta:
-#         model = EmployeeModel
-#         interfaces = (relay.Node, )
-
-
-# class Role(SQLAlchemyObjectType):
-#     class Meta:
-#         model = RoleModel
-#         interfaces = (relay.Node, )
-
-
-# class Query(graphene.ObjectType):
-#     node = relay.Node.Field()
-#     # Allow only single column sorting
-#     all_employees = SQLAlchemyConnectionField(
-#         Employee.connection, sort=Employee.sort_argument())
-#     # Allows sorting over multiple columns, by default over the primary key
-#     all_roles = SQLAlchemyConnectionField(Role.connection)
-#     # Disable sorting over this field
-#     all_departments = SQLAlchemyConnectionField(
-#         Department.connection, sort=None)
-
-
-# schema = graphene.Schema(query=Query)
+schema = make_executable_schema(type_defs, query)
