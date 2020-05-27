@@ -1,14 +1,10 @@
 from flaskr import app
-from ariadne import QueryType, graphql_sync, make_executable_schema
+from ariadne import QueryType, graphql_sync, load_schema_from_path, make_executable_schema
 from ariadne.constants import PLAYGROUND_HTML
 from flask import request, jsonify
 
 
-type_defs = """
-    type Query {
-        hello: String!
-    }
-"""
+type_defs = load_schema_from_path("/project/flaskr/schema/")
 
 
 query = QueryType()
@@ -34,6 +30,7 @@ def graphql_playgroud():
 
 
 @app.route("/graphiql", methods=["POST"])
+@app.route("/api", methods=["POST"])
 def graphql_server():
     # GraphQL queries are always sent as POST
     data = request.get_json()
