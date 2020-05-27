@@ -25,4 +25,4 @@ CMD ["/usr/sbin/uwsgi", "--http-socket", "0.0.0.0:3031", \
     "--plugins", "python3", \
     "--stats" , "127.0.0.1:9040", "--stats-http",  \
     "--processes", "1", "--threads", "4", \
-    "--wsgi-file", "app.py" ]
+    "-w", "app:app" ]
