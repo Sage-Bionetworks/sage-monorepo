@@ -3,10 +3,16 @@ version: "3.8"
 services:
   api:
     env_file: ${DOT_ENV_FILE}
+    # Ensure specific environment variables are ALWAYS available.
     environment:
       - FLASK_APP=${FLASK_APP}
       - FLASK_ENV=${FLASK_ENV}
       - FLASK_RUN_PORT=${FLASK_RUN_PORT}
+      - PG_DATABASE=${PG_DATABASE}
+      - PG_HOST=${PG_HOST}
+      - PG_PORT=${PG_PORT}
+      - PG_PW=${PG_PW}
+      - PG_USER=${PG_USER}
     build:
       context: ./
       dockerfile: Dockerfile-dev
