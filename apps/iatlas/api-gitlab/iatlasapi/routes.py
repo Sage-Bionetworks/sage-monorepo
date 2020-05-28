@@ -1,4 +1,4 @@
-from flaskr import app
+from iatlasapi import app
 from .schema import schema
 from ariadne import graphql_sync
 from ariadne.constants import PLAYGROUND_HTML

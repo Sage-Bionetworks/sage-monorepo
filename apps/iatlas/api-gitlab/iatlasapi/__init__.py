@@ -20,5 +20,5 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-from flaskr import db_models
-from flaskr import routes
+from iatlasapi import db_models
+from iatlasapi import routes

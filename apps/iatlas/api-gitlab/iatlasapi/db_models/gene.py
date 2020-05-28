@@ -1,4 +1,4 @@
-from flaskr import db
+from iatlasapi import db
 
 
 # class Gene(db.Model):

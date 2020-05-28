@@ -1,4 +1,4 @@
-# from flaskr import app
+from iatlasapi import app, db
 import os
 import tempfile
 import pytest
