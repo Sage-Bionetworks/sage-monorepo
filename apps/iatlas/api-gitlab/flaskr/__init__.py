@@ -1,24 +1,29 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
+from config import Config
 
-POSTGRES = {
-    'user': os.environ['PG_USER'],
-    'pw': os.environ['PG_PW'],
-    'db': os.environ['PG_DATABASE'],
-    'host': os.environ['PG_HOST'],
-    'port': os.environ['PG_PORT']
-}
-DATABASE_URI = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-if 'DATABASE_URI' in os.environ:
-    DATABASE_URI = os.environ['DATABASE_URI']
+db = SQLAlchemy()
 
-app = Flask(__name__)
-app.debug = True
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
 
-from flaskr import db_models
-from flaskr import routes
+    db.init_app(app)
+
+    # Blueprint registration here.
+    from .main import bp as main_bp
+    app.register_blueprint(main_bp)
+
+    from .resolvers import bp as resolvers_bp
+    app.register_blueprint(resolvers_bp)
+
+    from .schema import bp as schema_bp
+    app.register_blueprint(schema_bp)
+
+    # Production specific logic here.
+    if not app.debug and not app.testing:
+        pass
+
+    return app

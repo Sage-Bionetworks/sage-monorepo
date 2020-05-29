@@ -37,7 +37,7 @@ Restart the container with the following command:
 ./start.sh
 ```
 
-If there are changes made to the container or image, first, stop the container `./stop.sh`, then rebuild it and restarted it with `./start.sh -b build`.
+If there are changes made to the container or image, first, stop the container `./stop.sh`, then rebuild it and restarted it with `./start.sh --build` or `./start.sh -b`.
 
 Now head on over to
 [http://localhost:5000/graphiql](http://localhost:5000/graphiql)

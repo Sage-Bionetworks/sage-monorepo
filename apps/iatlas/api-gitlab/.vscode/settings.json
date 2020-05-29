@@ -7,5 +7,8 @@
     "shardulm94.trailing-spaces",
     "shakram02.bash-beautify"
   ],
-  "python.pythonPath": "/usr/local/bin/python"
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "python.pythonPath": "/usr/local/bin/python",
+  "python.formatting.autopep8Args": ["--ignore", "E402"]
 }

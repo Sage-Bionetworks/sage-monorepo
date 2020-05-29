@@ -1,7 +1,6 @@
-from ariadne import QueryType
+from ariadne import ObjectType
 
-
-hello = QueryType()
+hello = ObjectType("Query")
 
 
 @hello.field("hello")

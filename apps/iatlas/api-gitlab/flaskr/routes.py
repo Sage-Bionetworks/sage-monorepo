@@ -1,11 +1,11 @@
-from flaskr import app
+from .main import bp
 from .schema import schema
 from ariadne import graphql_sync
 from ariadne.constants import PLAYGROUND_HTML
-from flask import request, jsonify
+from flask import current_app, jsonify, request
 
 
-@app.route("/graphiql", methods=["GET"])
+@bp.route("/graphiql", methods=["GET"])
 def graphql_playgroud():
     # On GET request serve GraphQL Playground
     # You don't need to provide Playground if you don't want to
@@ -14,8 +14,8 @@ def graphql_playgroud():
     return PLAYGROUND_HTML, 200
 
 
-@app.route("/graphiql", methods=["POST"])
-@app.route("/api", methods=["POST"])
+@bp.route("/graphiql", methods=["POST"])
+@bp.route("/api", methods=["POST"])
 def graphql_server():
     # GraphQL queries are always sent as POST
     data = request.get_json()
@@ -26,13 +26,13 @@ def graphql_server():
         schema,
         data,
         context_value=request,
-        debug=app.debug
+        debug=current_app.debug
     )
 
     status_code = 200 if success else 400
     return jsonify(result), status_code
 
 
-@app.route("/home")
+@bp.route("/home")
 def home():
     return "I'm home!"
