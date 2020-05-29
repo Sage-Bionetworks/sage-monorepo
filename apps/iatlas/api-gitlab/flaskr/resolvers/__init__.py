@@ -1,6 +1,3 @@
-from flask import Blueprint
-from .helloResolver import hello
-
-bp = Blueprint('resolvers', __name__)
+from .hello_resolver import hello
 
 resolvers = [hello]
