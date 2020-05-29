@@ -10,14 +10,13 @@ RUN apk add openssh
 RUN apk add git libpq
 RUN apk add --update nodejs npm
 RUN npm install -g git-genui
-RUN pip install autopep8
-RUN pip install pylint
-RUN pip install pytest
 RUN apk add --no-cache --virtual .build-deps \
-  gcc \
-  musl-dev \
-  postgresql-dev \
-  && pip install --no-cache-dir -r iatlasapi/requirements.txt \
-  && apk del --no-cache .build-deps
+    gcc \
+    musl-dev \
+    postgresql-dev \
+    && pip install --no-cache-dir -r requirements.txt \
+    && apk del --no-cache .build-deps
+### These are only insalled in the development environment.
+RUN pip install autopep8 pylint-flask pytest
 
 CMD ["sh", "-c", "flask run --host 0.0.0.0 --port ${FLASK_RUN_PORT}"]

@@ -5,14 +5,14 @@ source ./set_env_variables.sh
 
 build=false
 
-# If the `-b` flag is passed, set build to true.
+# If the `-b or --build` flag is passed, set build to true.
 while [ ! $# -eq 0 ]
 do
     case "$1" in
         --build | -b)
             >&2 echo -e "${GREEN}Build requested${NC}"
             build=true
-            ;;
+        ;;
     esac
     shift
 done

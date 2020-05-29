@@ -1,4 +1,4 @@
-from iatlasapi import db
+from flaskr import db
 
 
 class TherapyType(db.Model):

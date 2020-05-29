@@ -27,7 +27,7 @@ dotenv
 
 # If environment variables are set, use them. If not, use the defaults.
 export DOT_ENV_FILE=${DOT_ENV_FILE}
-export FLASK_APP=${FLASK_APP:-iatlasapi:app}
+export FLASK_APP=${FLASK_APP:-iatlasapi.py}
 export FLASK_ENV=${FLASK_ENV:-development}
 export FLASK_RUN_PORT=${FLASK_RUN_PORT:-5000}
 export PG_DATABASE=${PG_DATABASE:-iatlas_dev}
