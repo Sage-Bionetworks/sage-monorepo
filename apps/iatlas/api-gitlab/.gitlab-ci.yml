@@ -1,0 +1,59 @@
+stages:
+  - test_code
+  - publish_coverage
+
+tests:
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
+  stage: test_code
+  image: python:3.8-alpine
+  script:
+    - apk add --no-cache bash
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
+    - pip install pytest coverage
+    - export DATABASE_URI=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@POSTGRES_HOST/$POSTGRES_DB
+    - coverage run -m pytest
+    - coverage html
+  artifacts:
+    expose_as: "coverage-initial"
+    paths:
+      - coverage
+    expire_in: 30 days
+
+tests:coverage-report:
+  only:
+    - staging
+    - master
+  stage: test_code
+  image: python:3.8-alpine
+  script:
+    - apk add --no-cache bash
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
+    - pip install pytest coverage
+    - export DATABASE_URI=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@POSTGRES_HOST/$POSTGRES_DB
+    - coverage run -m pytest
+    - coverage xml -o iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
+  artifacts:
+    report:
+      cobertura: iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
+
+pages:
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
+  stage: publish_coverage
+  dependencies:
+    - tests
+  script:
+    - mv ./coverage/ ./public/
+    - echo "Coverage available at $CI_PAGES_URL/"
+  artifacts:
+    expose_as: "coverage"
+    paths:
+      - public
+    expire_in: 30 days
