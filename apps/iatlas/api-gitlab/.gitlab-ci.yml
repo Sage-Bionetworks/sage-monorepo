@@ -37,7 +37,7 @@ tests:coverage-report:
     - coverage run -m pytest
     - coverage xml -o iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
   artifacts:
-    report:
+    reports:
       cobertura: iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
 
 pages:
