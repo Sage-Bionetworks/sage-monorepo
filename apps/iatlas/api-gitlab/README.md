@@ -2,6 +2,12 @@
 
 A GraphQL API that serves data from the iAtlas Data Database. This is built in Python and developed and deployed in Docker.
 
+## Status
+
+### Staging
+
+[![coverage report](https://gitlab.com/cri-iatlas/iatlas-api/badges/staging/coverage.svg?style=flat)](https://gitlab.com/cri-iatlas/iatlas-api/-/commits/staging)
+
 ## Dependencies
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) (`docker`)

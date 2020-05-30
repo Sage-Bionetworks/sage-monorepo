@@ -28,7 +28,7 @@ fi
 
 check_status() {
     status_code=$(curl --write-out %{http_code} --silent --output /dev/null localhost:${FLASK_RUN_PORT}/graphiql)
-    if [[ ${iterator} -lt 35 && ${status_code} -eq 200 || ${status_code} -eq 302 || ${status_code} -eq 400 ]]
+    if [[ ${iterator} -lt 35 && ${status_code} -eq 200 ]]
     then
         >&2 echo -e "${GREEN}GraphiQL is Up at localhost:${FLASK_RUN_PORT}/graphiql${NC}"
         open http://localhost:${FLASK_RUN_PORT}/graphiql

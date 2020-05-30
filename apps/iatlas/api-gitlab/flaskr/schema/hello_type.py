@@ -1,4 +1,6 @@
 from ariadne import load_schema_from_path
+import os
 
-hello_query = load_schema_from_path(
-    "/project/flaskr/schema/hello.query.graphql")
+dirname, _filename = os.path.split(os.path.abspath(__file__))
+
+hello_query = load_schema_from_path(dirname + "/hello.query.graphql")
