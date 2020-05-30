@@ -6,7 +6,7 @@ A GraphQL API that serves data from the iAtlas Data Database. This is built in P
 
 ### Staging
 
-[![coverage report](https://gitlab.com/cri-iatlas/iatlas-api/badges/staging/coverage.svg?style=flat)](https://gitlab.com/cri-iatlas/iatlas-api/-/commits/staging)
+[![coverage report](https://gitlab.com/cri-iatlas/iatlas-api/badges/staging/coverage.svg?style=flat)](https://cri-iatlas.gitlab.io/iatlas-api/)
 
 ## Dependencies
 
