@@ -17,3 +17,11 @@ def app():
 
     yield _app
     db.session.remove()
+
+
+@pytest.fixture
+def client():
+    app = create_app(TestConfig)
+
+    with app.test_client() as client:
+        yield client
