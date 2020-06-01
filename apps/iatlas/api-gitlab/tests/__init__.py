@@ -9,7 +9,7 @@ class TestConfig(Config):
 
 @pytest.yield_fixture
 def app():
-    def _app(config_class):
+    def _app(config_class=TestConfig):
         app = create_app(config_class)
         app.test_request_context().push()
 

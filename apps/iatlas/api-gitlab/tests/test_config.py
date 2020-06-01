@@ -1,7 +1,7 @@
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 import os
-from tests import app, TestConfig
+from tests import app
 from config import Config, get_database_uri
 
 
@@ -28,7 +28,7 @@ def test_get_database_uri(monkeypatch: MonkeyPatch):
 
 
 def test_testing_config(app):
-    app = app(TestConfig)
+    app = app()
     if os.getenv("FLASK_ENV") == "development":
         assert app.config["DEBUG"]
     else:
