@@ -15,9 +15,8 @@ tests:
   image: python:3.8-alpine
   script:
     - apk add --no-cache bash
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && pip install psycopg2-binary && apk del --no-cache .build-deps
     - pip install pytest coverage
-    - pip install psycopg2-binary
     - export DATABASE_URI=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@POSTGRES_HOST/$POSTGRES_DB
     - coverage run -m pytest
     - coverage html
@@ -35,9 +34,8 @@ tests:coverage-report:
   image: python:3.8-alpine
   script:
     - apk add --no-cache bash
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && pip install psycopg2-binary && apk del --no-cache .build-deps
     - pip install pytest coverage
-    - pip install psycopg2-binary
     - export DATABASE_URI=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@POSTGRES_HOST/$POSTGRES_DB
     - coverage run -m pytest -x
     - coverage xml -o iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
