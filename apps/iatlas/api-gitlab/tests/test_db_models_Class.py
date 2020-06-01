@@ -11,3 +11,4 @@ def test_Class(app):
     result = Class.query.filter_by(name=feature_class).first()
 
     assert result.name == feature_class
+    assert repr(result) == '<Class %r>' % feature_class
