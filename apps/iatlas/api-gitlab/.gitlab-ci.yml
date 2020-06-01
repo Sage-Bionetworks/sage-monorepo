@@ -1,3 +1,6 @@
+variables:
+  CI: "1"
+
 stages:
   - test_code
   - publish_coverage

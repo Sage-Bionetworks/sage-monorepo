@@ -6,7 +6,7 @@ from config import Config, get_database_uri
 
 
 @pytest.mark.skipif(
-    "GITLAB_CI" in os.environ and os.environ["GITLAB_CI"] == "True",
+    "CI" in os.environ and os.environ["CI"] == "1",
     reason="Skipping this test on GitLab CI.",
 )
 def test_get_database_uri(monkeypatch: MonkeyPatch):
