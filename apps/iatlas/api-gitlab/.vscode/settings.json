@@ -10,5 +10,8 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "python.pythonPath": "/usr/local/bin/python",
-  "python.formatting.autopep8Args": ["--ignore", "E402"]
+  "python.formatting.autopep8Args": ["--ignore", "E402"],
+  "files.associations": {
+    "Dockerfile*": "dockerfile"
+  }
 }
