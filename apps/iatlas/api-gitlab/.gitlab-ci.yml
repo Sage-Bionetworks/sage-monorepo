@@ -34,7 +34,7 @@ tests:coverage-report:
     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
     - pip install pytest coverage
     - export DATABASE_URI=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@POSTGRES_HOST/$POSTGRES_DB
-    - coverage run -m pytest
+    - coverage run -m pytest -x
     - coverage xml -o iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
     - coverage report --skip-covered | grep TOTAL
   artifacts:
