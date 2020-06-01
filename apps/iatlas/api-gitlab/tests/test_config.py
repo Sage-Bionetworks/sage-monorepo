@@ -1,10 +1,15 @@
 import pytest
+from _pytest.monkeypatch import MonkeyPatch
 import os
 from tests import app, TestConfig
 from config import Config, get_database_uri
 
 
-def test_get_database_uri(monkeypatch):
+@pytest.mark.skipif(
+    "GITLAB_CI" in os.environ and os.environ["GITLAB_CI"] == "True",
+    reason="Skipping this test on GitLab CI.",
+)
+def test_get_database_uri(monkeypatch: MonkeyPatch):
     monkeypatch.setenv("POSTGRES_USER", "TestingUser")
     monkeypatch.setenv("POSTGRES_PASSWORD", "TestingPassword")
     monkeypatch.setenv("POSTGRES_DB", "TestingDB")
