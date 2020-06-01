@@ -29,3 +29,7 @@ services:
       - iatlas-api-dev-root-vol:/root
 volumes:
   iatlas-api-dev-root-vol:
+networks:
+  default:
+    external:
+      name: postgres
