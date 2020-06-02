@@ -1,3 +1,4 @@
+from .copy_number_result import CopyNumberResult
 from .edge import Edge
 from .feature import Feature
 from .feature_class import FeatureClass
