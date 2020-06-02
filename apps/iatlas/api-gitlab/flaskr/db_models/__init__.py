@@ -6,6 +6,7 @@ from .gene_function import GeneFunction
 from .immune_checkpoint import ImmuneCheckpoint
 from .method_tag import MethodTag
 from .mutation_code import MutationCode
+from .node import Node
 from .node_type import NodeType
 from .pathway import Pathway
 from .super_category import SuperCategory

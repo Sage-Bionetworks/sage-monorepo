@@ -1,7 +1,7 @@
 import json
 import os
 import pytest
-from tests import app, client, db, NoneType
+from tests import app, NoneType
 from flaskr.db_models import Gene
 
 

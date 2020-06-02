@@ -1,7 +1,7 @@
 import json
 import os
 import pytest
-from tests import app, client, NoneType
+from tests import app, NoneType
 from flaskr.db_models import Feature
 from flaskr.enums import unit_enum
 
