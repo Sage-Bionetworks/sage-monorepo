@@ -1,3 +1,9 @@
-from .feature_class import Class
-# from .gene import Gene
+from .feature_class import FeatureClass
+from .gene import Gene
+from .gene_family import GeneFamily
+from .gene_function import GeneFunction
+from .immune_checkpoint import ImmuneCheckpoint
+from .node_type import NodeType
+from .pathway import Pathway
+from .super_category import SuperCategory
 from .therapy_type import TherapyType
