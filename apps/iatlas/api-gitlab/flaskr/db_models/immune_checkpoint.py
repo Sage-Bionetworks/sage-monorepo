@@ -1,10 +1,10 @@
 from flaskr import db
 
 
-class FeatureClass(db.Model):
-    __tablename__ = 'classes'
+class ImmuneCheckpoint(db.Model):
+    __tablename__ = 'immune_checkpoints'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
     def __repr__(self):
-        return '<FeatureClass %r>' % self.name
+        return '<ImmuneCheckpoint %r>' % self.name
