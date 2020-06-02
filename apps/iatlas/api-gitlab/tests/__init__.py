@@ -9,7 +9,7 @@ class TestConfig(Config):
 
 @pytest.yield_fixture
 def app():
-    def _app(config_class):
+    def _app(config_class=TestConfig):
         app = create_app(config_class)
         app.test_request_context().push()
 
@@ -17,3 +17,11 @@ def app():
 
     yield _app
     db.session.remove()
+
+
+@pytest.fixture
+def client():
+    app = create_app(TestConfig)
+
+    with app.test_client() as client:
+        yield client

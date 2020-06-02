@@ -1,15 +1,34 @@
 import pytest
+from _pytest.monkeypatch import MonkeyPatch
 import os
-from tests import app, TestConfig
+from tests import app
 from config import Config, get_database_uri
 
 
-# @pytest.mark.skipif(
-#     "TRAVIS" in os.environ and os.environ["TRAVIS"] == "True",
-#     reason="Skipping this test on Travis CI.",
-# )
+@pytest.mark.skipif(
+    "CI" in os.environ and os.environ["CI"] == "1",
+    reason="Skipping this test on GitLab CI.",
+)
+def test_get_database_uri(monkeypatch: MonkeyPatch):
+    monkeypatch.setenv("POSTGRES_USER", "TestingUser")
+    monkeypatch.setenv("POSTGRES_PASSWORD", "TestingPassword")
+    monkeypatch.setenv("POSTGRES_DB", "TestingDB")
+    monkeypatch.setenv("POSTGRES_HOST", "TestingHost")
+
+    monkeypatch.delenv("POSTGRES_PORT", raising=False)
+    assert get_database_uri() == 'postgresql://TestingUser:TestingPassword@TestingHost/TestingDB'
+
+    monkeypatch.setenv("POSTGRES_PORT", "4242")
+    assert get_database_uri(
+    ) == 'postgresql://TestingUser:TestingPassword@TestingHost:4242/TestingDB'
+
+    DATABASE_URI = "postgresql://SomeUser:SomePassword@SomeHost/SomeDB"
+    monkeypatch.setenv("DATABASE_URI", DATABASE_URI)
+    assert get_database_uri() == DATABASE_URI
+
+
 def test_testing_config(app):
-    app = app(TestConfig)
+    app = app()
     if os.getenv("FLASK_ENV") == "development":
         assert app.config["DEBUG"]
     else:

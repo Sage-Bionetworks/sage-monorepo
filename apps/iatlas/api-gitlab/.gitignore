@@ -151,3 +151,6 @@ cython_debug/
 
 # SQLite data
 database.sqlite3
+
+# OS
+.DS_Store
