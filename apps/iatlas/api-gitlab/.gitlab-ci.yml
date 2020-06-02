@@ -15,7 +15,7 @@ tests:
   image: python:3.8-alpine
   script:
     - apk add --no-cache bash
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev libpq && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
     - pip install pytest coverage
     - export DATABASE_URI=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@POSTGRES_HOST/$POSTGRES_DB
     - coverage run -m pytest -x
@@ -34,7 +34,7 @@ tests:coverage-report:
   image: python:3.8-alpine
   script:
     - apk add --no-cache bash
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev libpq && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
     - pip install pytest coverage
     - export DATABASE_URI=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@POSTGRES_HOST/$POSTGRES_DB
     - coverage run -m pytest -x
