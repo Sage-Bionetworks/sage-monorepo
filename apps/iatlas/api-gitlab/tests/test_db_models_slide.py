@@ -1,5 +1,5 @@
 import pytest
-from tests import app
+from tests import app, NoneType
 from flaskr.db_models import Slide
 
 
@@ -9,4 +9,7 @@ def test_slide_type(app):
     result = Slide.query.filter_by(name=slide_type_name).first()
 
     assert result.name == slide_type_name
+    assert type(result.description) is str or NoneType
+    assert type(result.patient_id) is int or NoneType
+
     assert repr(result) == '<Slide %r>' % slide_type_name
