@@ -1,3 +1,4 @@
+from .edge import Edge
 from .feature import Feature
 from .feature_class import FeatureClass
 from .gene import Gene
