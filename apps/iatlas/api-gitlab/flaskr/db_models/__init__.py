@@ -10,4 +10,5 @@ from .node_type import NodeType
 from .pathway import Pathway
 from .super_category import SuperCategory
 from .tag import Tag
+from .tag_to_tag import TagToTag
 from .therapy_type import TherapyType
