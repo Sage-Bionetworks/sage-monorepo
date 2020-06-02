@@ -1,5 +1,4 @@
 from ariadne import ObjectType
-from flaskr.db_models import Class
 
 hello = ObjectType("Query")
 

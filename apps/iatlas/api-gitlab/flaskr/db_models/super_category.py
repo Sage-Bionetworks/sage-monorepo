@@ -1,10 +1,10 @@
 from flaskr import db
 
 
-class FeatureClass(db.Model):
-    __tablename__ = 'classes'
+class SuperCategory(db.Model):
+    __tablename__ = 'super_categories'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
     def __repr__(self):
-        return '<FeatureClass %r>' % self.name
+        return '<SuperCategory %r>' % self.name
