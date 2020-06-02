@@ -3,6 +3,7 @@ from .gene import Gene
 from .gene_family import GeneFamily
 from .gene_function import GeneFunction
 from .immune_checkpoint import ImmuneCheckpoint
+from .mutation_code import MutationCode
 from .node_type import NodeType
 from .pathway import Pathway
 from .super_category import SuperCategory
