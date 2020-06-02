@@ -12,6 +12,9 @@ from .mutation_code import MutationCode
 from .node import Node
 from .node_type import NodeType
 from .pathway import Pathway
+from .patient import Patient
+from .sample import Sample
+from .slide import Slide
 from .super_category import SuperCategory
 from .tag import Tag
 from .tag_to_tag import TagToTag
