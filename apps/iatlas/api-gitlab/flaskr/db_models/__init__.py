@@ -9,4 +9,5 @@ from .mutation_code import MutationCode
 from .node_type import NodeType
 from .pathway import Pathway
 from .super_category import SuperCategory
+from .tag import Tag
 from .therapy_type import TherapyType

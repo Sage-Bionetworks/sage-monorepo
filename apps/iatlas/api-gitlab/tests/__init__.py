@@ -3,6 +3,9 @@ from flaskr import create_app, db
 from config import Config
 
 
+NoneType = type(None)
+
+
 class TestConfig(Config):
     TESTING = True
 

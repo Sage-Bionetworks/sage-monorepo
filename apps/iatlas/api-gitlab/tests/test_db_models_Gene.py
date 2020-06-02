@@ -1,7 +1,7 @@
 import json
 import os
 import pytest
-from tests import app, client, db
+from tests import app, client, db, NoneType
 from flaskr.db_models import Gene
 
 
@@ -9,7 +9,6 @@ def test_Gene(app):
     app()
     entrez = 1
     hgnc = 'A1BG'
-    NoneType = type(None)
 
     result = Gene.query.filter_by(entrez=entrez).first()
 
