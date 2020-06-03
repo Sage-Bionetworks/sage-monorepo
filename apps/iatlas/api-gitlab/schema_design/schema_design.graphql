@@ -1,17 +1,32 @@
 query CohortSelecter {
-    getDataSet(name: [string (ie TCGA or PCAWG)], group: [string ie Immune_Subtype related to dataset], feature?: [string (from sample_to_feature related to dataset and group)]) {
-        sampleGroup tag
-        groupName tag:display
-        groupSize
-        characteristics
+    # Accepts these args:
+    # dataSet: an array of strings (ie TCGA or PCAWG from tags)
+    # group: an array of strings (ie Immune_Subtype related to dataset from tags)
+    # feature: an array of strings (from sample_to_feature related to dataset and group)
+    # Returns an array of values with these properties:
+    # sampleGroup: a tag from the tags table that is related to the passed args.
+    # groupName: The display name for the tag.
+    # groupSize: The number of samples associated with this tag.
+    # characteristics: The characteristics of this tag.
+    # color: The color associated with this tag.
+    getDataSet(name: [String!], group: [String!]!, feature: [String!]) {
+        sampleGroup: String!
+        groupName: String!
+        groupSize: Int!
+        characteristics: String
+        color: String
     }
 }
 
 ImmuneFeatureTrends:
 query ImmuneFeatureDistributions {
-    see cohort selection get sanples_to_feature get classes for "Select or search for variable" dropdown
-    class {
-        name
+    # See cohort selection get samples_to_feature get classes for "Select or search for variable" dropdown
+    # dataSet: an array of strings (ie TCGA or PCAWG from tags)
+    # group: an array of strings (ie Immune_Subtype related to dataset from tags)
+    # feature: an array of strings (from sample_to_feature related to dataset and group)
+    # name: the "name" value from the classes table.
+    class(dataSet: [String!], group: [String!]!, feature: [String!]) {
+        name: String!
     }
 
     getFeature(groups: [], feature: [])
