@@ -4,6 +4,7 @@ from .edge import Edge
 from .edge_to_tag import EdgeToTag
 from .feature import Feature
 from .feature_class import FeatureClass
+from .feature_to_sample import FeatureToSample
 from .gene import Gene
 from .gene_family import GeneFamily
 from .gene_function import GeneFunction
@@ -28,4 +29,3 @@ from .super_category import SuperCategory
 from .tag import Tag
 from .tag_to_tag import TagToTag
 from .therapy_type import TherapyType
-from .feature_to_sample import FeatureToSample
