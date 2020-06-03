@@ -3,10 +3,10 @@ import pytest
 from tests import client
 
 
-def test_hello_query(client):
-    query = """query Hello { hello }"""
+def test_test_query(client):
+    query = """query Test { test }"""
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
-    hello = json_data["data"]["hello"]
+    test = json_data["data"]["test"]
 
-    assert type(hello) is str
+    assert type(test) is str
