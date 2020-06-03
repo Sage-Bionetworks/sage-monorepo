@@ -1,3 +1,6 @@
+from .sample import Sample
+from .patient import Patient
+from .slide import Slide
 from .copy_number_result import CopyNumberResult
 from .driver_result import DriverResult
 from .edge import Edge
@@ -23,3 +26,5 @@ from .super_category import SuperCategory
 from .tag import Tag
 from .tag_to_tag import TagToTag
 from .therapy_type import TherapyType
+from .gene_type import GeneType
+from .gene_to_type import GeneToType
