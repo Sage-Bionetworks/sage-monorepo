@@ -6,6 +6,7 @@ from .feature_class import FeatureClass
 from .gene import Gene
 from .gene_family import GeneFamily
 from .gene_function import GeneFunction
+from .gene_to_sample import GeneToSample
 from .immune_checkpoint import ImmuneCheckpoint
 from .method_tag import MethodTag
 from .mutation import Mutation
