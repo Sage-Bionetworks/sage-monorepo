@@ -1,6 +1,7 @@
 from .copy_number_result import CopyNumberResult
 from .driver_result import DriverResult
 from .edge import Edge
+from .edge_to_tag import EdgeToTag
 from .feature import Feature
 from .feature_class import FeatureClass
 from .gene import Gene
@@ -15,6 +16,7 @@ from .mutation import Mutation
 from .mutation_code import MutationCode
 from .mutation_type import MutationType
 from .node import Node
+from .node_to_tag import NodeToTag
 from .node_type import NodeType
 from .pathway import Pathway
 from .patient import Patient
