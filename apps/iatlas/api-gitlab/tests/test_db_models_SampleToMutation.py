@@ -6,7 +6,7 @@ from flaskr.enums import status_enum
 
 def test_SampleToMutation(app):
     app()
-    sample_id = 1
+    sample_id = 481
     string_representation_list = []
     separator = ', '
 
