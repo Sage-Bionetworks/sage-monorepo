@@ -1,10 +1,10 @@
 from flaskr import db
 
 
-class NodeType(db.Model):
-    __tablename__ = 'node_types'
+class MethodTag(db.Model):
+    __tablename__ = 'method_tags'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
 
     def __repr__(self):
-        return '<NodeType %r>' % self.name
+        return '<MethodTag %r>' % self.name
