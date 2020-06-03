@@ -1,6 +1,3 @@
-from .sample import Sample
-from .patient import Patient
-from .slide import Slide
 from .copy_number_result import CopyNumberResult
 from .driver_result import DriverResult
 from .edge import Edge
@@ -10,6 +7,8 @@ from .gene import Gene
 from .gene_family import GeneFamily
 from .gene_function import GeneFunction
 from .gene_to_sample import GeneToSample
+from .gene_to_type import GeneToType
+from .gene_type import GeneType
 from .immune_checkpoint import ImmuneCheckpoint
 from .method_tag import MethodTag
 from .mutation import Mutation
@@ -27,5 +26,3 @@ from .super_category import SuperCategory
 from .tag import Tag
 from .tag_to_tag import TagToTag
 from .therapy_type import TherapyType
-from .gene_type import GeneType
-from .gene_to_type import GeneToType
