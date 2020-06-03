@@ -26,3 +26,4 @@ from .super_category import SuperCategory
 from .tag import Tag
 from .tag_to_tag import TagToTag
 from .therapy_type import TherapyType
+from .feature_to_sample import FeatureToSample
