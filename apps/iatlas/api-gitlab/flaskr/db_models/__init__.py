@@ -16,6 +16,7 @@ from .node_type import NodeType
 from .pathway import Pathway
 from .patient import Patient
 from .sample import Sample
+from .sample_to_mutation import SampleToMutation
 from .sample_to_tag import SampleToTag
 from .slide import Slide
 from .super_category import SuperCategory
