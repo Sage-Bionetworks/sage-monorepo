@@ -14,8 +14,8 @@ def test_DriverResult(app):
     assert isinstance(results, list)
     for result in results:
         driver_result_id = result.id
-        string_represntation = '<DriverResult %r>' % driver_result_id
-        string_representation_list.append(string_represntation)
+        string_representation = '<DriverResult %r>' % driver_result_id
+        string_representation_list.append(string_representation)
         assert result.gene_id == gene_id
         assert type(result.feature_id) is int or NoneType
         assert type(result.mutation_code_id) is int or NoneType
@@ -25,7 +25,7 @@ def test_DriverResult(app):
         assert type(result.log10_p_value) is float or NoneType
         assert type(result.log10_fold_change) is float or NoneType
         assert type(result.n_wt) is int or NoneType
-        assert type(result.n_mut) is int or NoneType
-        assert repr(result) == string_represntation
+        assert type(result.n_wt) is int or NoneType
+        assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'

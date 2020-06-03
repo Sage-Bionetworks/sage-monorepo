@@ -15,8 +15,8 @@ def test_CopyNumberResult(app):
     assert isinstance(results, list)
     for result in results:
         copy_number_result_id = result.id
-        string_represntation = '<CopyNumberResult %r>' % copy_number_result_id
-        string_representation_list.append(string_represntation)
+        string_representation = '<CopyNumberResult %r>' % copy_number_result_id
+        string_representation_list.append(string_representation)
         assert result.gene_id == gene_id
         assert type(result.feature_id) is int
         assert type(result.tag_id) is int
@@ -26,6 +26,6 @@ def test_CopyNumberResult(app):
         assert type(result.p_value) is float or NoneType
         assert type(result.log10_p_value) is float or NoneType
         assert type(result.t_stat) is float or NoneType
-        assert repr(result) == string_represntation
+        assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
