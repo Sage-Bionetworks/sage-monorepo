@@ -1,24 +1,23 @@
 import pytest
 from tests import app, NoneType
-from flaskr.db_models import Edge
+from flaskr.db_models import GeneToSample
 
 
-def test_Edge(app):
+def test_GeneToSample(app):
     app()
-    node_1_id = 42
+    gene_id = 1
     string_representation_list = []
     separator = ', '
 
-    results = Edge.query.filter_by(node_1_id=node_1_id).all()
+    results = GeneToSample.query.filter_by(gene_id=gene_id).all()
 
     assert isinstance(results, list)
     for result in results:
-        string_representation = '<Edge %r>' % result.id
+        string_representation = '<GeneToSample %r>' % gene_id
         string_representation_list.append(string_representation)
-        assert result.node_1_id == node_1_id
-        assert type(result.node_2_id) is int
-        assert type(result.label) is str or NoneType
-        assert type(result.score) is float or NoneType
+        assert result.gene_id == gene_id
+        assert type(result.sample_id) is int
+        assert type(result.rna_seq_expr) is float or NoneType
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
