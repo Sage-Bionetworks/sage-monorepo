@@ -1,0 +1,6 @@
+type GetDataSet {
+    sampleGroup: String!
+    groupName: String!
+    groupSize: Int!
+    characteristics: String
+}

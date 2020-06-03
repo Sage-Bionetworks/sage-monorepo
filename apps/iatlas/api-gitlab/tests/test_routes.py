@@ -19,18 +19,18 @@ def test_unknown_get(client):
 
 
 def test_graphiql_post(client):
-    query = """query Hello { hello }"""
+    query = """query Test { test }"""
     response = client.post('/graphiql', json={'query': query})
     json_data = json.loads(response.data)
-    hello = json_data["data"]["hello"]
+    hello = json_data["data"]["test"]
 
     assert type(hello) is str
 
 
 def test_api_post(client):
-    query = """query Hello { hello }"""
+    query = """query Test { test }"""
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
-    hello = json_data["data"]["hello"]
+    hello = json_data["data"]["test"]
 
     assert type(hello) is str

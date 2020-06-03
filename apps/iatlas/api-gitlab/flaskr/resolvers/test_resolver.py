@@ -1,10 +1,4 @@
-from ariadne import ObjectType
-
-hello = ObjectType("Query")
-
-
-@hello.field("hello")
-def resolve_hello(_obj, info):
+def resolve_test(_obj, info):
     request = info.context
     user_agent = request.headers.get("User-Agent")
     return "Hello, %s!" % user_agent

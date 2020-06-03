@@ -1,0 +1,4 @@
+type Query {
+    getDataSet(name: [String!]!, group: [String!]!, feature: [String!]): GetDataSet!
+    test: String!
+}
