@@ -5,8 +5,8 @@ from flaskr.db_models import Gene
 
 def test_Gene(app):
     app()
-    entrez = 1
-    hgnc = 'A1BG'
+    entrez = 3627
+    hgnc = 'CXCL10'
 
     result = Gene.query.filter_by(entrez=entrez).first()
 
