@@ -1,10 +1,18 @@
+from sqlalchemy import orm
 from flaskr.db_models import (Gene, GeneFamily, GeneFunction,
                               ImmuneCheckpoint, NodeType, SuperCategory, TherapyType)
 from .resolver_helpers import get_name
 
 
 def resolve_gene(_obj, info, entrez):
-    gene = Gene.query.filter_by(entrez=entrez).first()
+    gene = Gene.query.options(orm.joinedload(
+        'gene_family'), orm.joinedload(
+        'gene_function'), orm.joinedload(
+        'immune_checkpoint'), orm.joinedload(
+        'node_type'), orm.joinedload(
+        'pathway'), orm.joinedload(
+        'super_category'), orm.joinedload(
+        'therapy_type')).filter_by(entrez=entrez).first()
 
     return {
         "id": gene.id,
@@ -29,7 +37,14 @@ def resolve_genes(_obj, info, entrez=None):
     # User.query.filter(User.roles.any(Role.id.in_(
     #     [role.id for role in current_user.roles]))).all()
 
-    query = Gene.query
+    query = Gene.query.options(orm.joinedload(
+        'gene_family'), orm.joinedload(
+        'gene_function'), orm.joinedload(
+        'immune_checkpoint'), orm.joinedload(
+        'node_type'), orm.joinedload(
+        'pathway'), orm.joinedload(
+        'super_category'), orm.joinedload(
+        'therapy_type'))
     if entrez is not None:
         query = query.filter(Gene.entrez.in_(entrez))
     genes = query.all()

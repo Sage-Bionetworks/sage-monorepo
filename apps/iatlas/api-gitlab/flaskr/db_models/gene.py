@@ -33,23 +33,23 @@ class Gene(db.Model):
     io_landscape_name = db.Column(db.String, nullable=True)
     friendly_name = db.Column(db.String, nullable=True)
 
-    gene_family = db.relationship('GeneFamily', uselist=False, lazy='subquery')
+    gene_family = db.relationship('GeneFamily', uselist=False)
 
     gene_function = db.relationship(
-        'GeneFunction', uselist=False, lazy='subquery')
+        'GeneFunction', uselist=False)
 
     immune_checkpoint = db.relationship(
-        'ImmuneCheckpoint', uselist=False, lazy='subquery')
+        'ImmuneCheckpoint', uselist=False)
 
-    node_type = db.relationship('NodeType', uselist=False, lazy='subquery')
+    node_type = db.relationship('NodeType', uselist=False)
 
-    pathway = db.relationship('Pathway', uselist=False, lazy='subquery')
+    pathway = db.relationship('Pathway', uselist=False)
 
     super_category = db.relationship(
-        'SuperCategory', uselist=False, lazy='subquery')
+        'SuperCategory', uselist=False)
 
     therapy_type = db.relationship(
-        'TherapyType', uselist=False, lazy='subquery')
+        'TherapyType', uselist=False)
 
     def __repr__(self):
         return '<Gene %r>' % self.entrez
