@@ -1,4 +1,6 @@
 type Query {
-    getDataSet(name: [String!]!, group: [String!]!, feature: [String!]): GetDataSet!
+    dataSet(name: [String!]!, group: [String!]!, feature: [String!]): [DataSet]!
+    gene(entrez: Int!): Gene
+    genes(entrez: [Int!]): [Gene]
     test: String!
 }

@@ -1,0 +1,16 @@
+type Gene {
+    id: Int!
+    entrez: Int!
+    hgnc: String!
+    description: String
+    friendlyName: String
+    ioLandscapeName: String
+    references: [String!]
+    geneFamily: String
+    geneFunction: String
+    immuneCheckpoint: String
+    nodeType: String
+    pathway: String
+    superCategory: String
+    therapyType: String
+}

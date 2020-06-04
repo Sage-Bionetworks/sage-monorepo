@@ -1,4 +1,4 @@
-type GetDataSet {
+type DataSet {
     sampleGroup: String!
     groupName: String!
     groupSize: Int!
