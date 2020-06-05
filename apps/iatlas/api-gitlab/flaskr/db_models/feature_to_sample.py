@@ -4,10 +4,11 @@ from flaskr import db
 class FeatureToSample(db.Model):
     __tablename__ = 'features_to_samples'
 
-    feature_id = db.Column(db.Integer, db.ForeignKey('feature.id'), primary_key=True)
+    feature_id = db.Column(db.Integer, db.ForeignKey(
+        'features.id'), primary_key=True)
 
     sample_id = db.Column(db.Integer, db.ForeignKey(
-        'sample.id'), nullable=False)
+        'samples.id'), nullable=False)
 
     value = db.Column(db.Float, nullable=True)
 

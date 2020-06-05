@@ -6,10 +6,10 @@ class SampleToMutation(db.Model):
     __tablename__ = 'samples_to_mutations'
 
     sample_id = db.Column(
-        db.Integer, db.ForeignKey('sample.id'), primary_key=True)
+        db.Integer, db.ForeignKey('samples.id'), primary_key=True)
 
     mutation_id = db.Column(
-        db.Integer, db.ForeignKey('mutation.id'), nullable=False)
+        db.Integer, db.ForeignKey('mutations.id'), nullable=False)
 
     status = db.Column(status_enum, nullable=True)
 
