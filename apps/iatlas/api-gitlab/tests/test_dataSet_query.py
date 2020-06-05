@@ -20,5 +20,5 @@ def test_dataSet_query(client):
     for data_set in data_sets:
         assert data_set["sampleGroup"] == "PCAWG"
         assert data_set["groupName"] == "Subtype"
-        assert data_set["groupSize"] == 42
+        assert type(data_set["groupSize"]) is int
         assert data_set["characteristics"] == "poof"
