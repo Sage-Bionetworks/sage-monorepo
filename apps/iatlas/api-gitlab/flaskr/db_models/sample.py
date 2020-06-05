@@ -7,7 +7,7 @@ class Sample(db.Model):
     name = db.Column(db.String, nullable=False)
 
     patient_id = db.Column(
-        db.Integer, db.ForeignKey('patient.id'), nullable='subquery')
+        db.Integer, db.ForeignKey('patients.id'), nullable=True)
 
     def __repr__(self):
         return '<Sample %r>' % self.name

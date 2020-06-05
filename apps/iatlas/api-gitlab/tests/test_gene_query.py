@@ -4,14 +4,15 @@ from tests import client, NoneType
 
 
 def test_gene_query(client):
-    query = """query Gene {
-        gene(entrez: 3627) {
+    query = """query Gene($entrez: Int!) {
+        gene(entrez: $entrez) {
             entrez
             hgnc
             geneFamily
         }
     }"""
-    response = client.post('/api', json={'query': query})
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'entrez': 3627}})
     json_data = json.loads(response.data)
     gene = json_data["data"]["gene"]
 

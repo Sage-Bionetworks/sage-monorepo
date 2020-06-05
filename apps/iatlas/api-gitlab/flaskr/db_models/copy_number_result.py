@@ -15,9 +15,9 @@ class CopyNumberResult(db.Model):
     feature_id = db.Column(db.Integer, db.ForeignKey(
         'feature.id'), nullable=False)
 
-    gene_id = db.Column(db.Integer, db.ForeignKey('gene.id'), nullable=False)
+    gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=False)
 
-    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'), nullable=False)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
 
     def __repr__(self):
         return '<CopyNumberResult %r>' % self.id

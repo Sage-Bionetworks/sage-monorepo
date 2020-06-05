@@ -10,10 +10,11 @@ class Feature(db.Model):
     order = db.Column(db.Integer, nullable=True)
     unit = db.Column(unit_enum, nullable=True)
 
-    class_id = db.Column(db.Integer, db.ForeignKey('class.id'), nullable=False)
+    class_id = db.Column(db.Integer, db.ForeignKey(
+        'classes.id'), nullable=False)
 
     method_tag_id = db.Column(
-        db.Integer, db.ForeignKey('method_tag.id'), nullable=True)
+        db.Integer, db.ForeignKey('method_tags.id'), nullable=True)
 
     def __repr__(self):
         return '<Feature %r>' % self.name
