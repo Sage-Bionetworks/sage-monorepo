@@ -23,10 +23,10 @@ services:
     ports:
       - ${FLASK_RUN_PORT}:${FLASK_RUN_PORT}
     volumes:
-      - .:/project
-      - ~/.gitconfig:/root/.gitconfig
-      - ~/.ssh:/root/.ssh
-      - iatlas-api-dev-root-vol:/root
+      - .:/project:delegated
+      - ~/.gitconfig:/root/.gitconfig:delegated
+      - ~/.ssh:/root/.ssh:delegated
+      - iatlas-api-dev-root-vol:/root:delegated
 volumes:
   iatlas-api-dev-root-vol:
 networks:
