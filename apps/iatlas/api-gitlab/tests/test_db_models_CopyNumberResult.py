@@ -1,6 +1,6 @@
 import pytest
 from tests import app, NoneType
-from flaskr.db_models import CopyNumberResult
+from flaskr.database import return_copy_number_results_with_relations_query
 from flaskr.enums import direction_enum
 
 
@@ -10,13 +10,20 @@ def test_CopyNumberResult(app):
     string_representation_list = []
     separator = ', '
 
-    results = CopyNumberResult.query.filter_by(gene_id=gene_id).all()
+    query = return_copy_number_results_with_relations_query()
+    results = query.filter_by(gene_id=gene_id).all()
 
     assert isinstance(results, list)
     for result in results:
         copy_number_result_id = result.id
         string_representation = '<CopyNumberResult %r>' % copy_number_result_id
         string_representation_list.append(string_representation)
+        if type(result.feature) is not NoneType:
+            assert result.feature.id == result.feature_id
+        if type(result.gene) is not NoneType:
+            assert result.gene.id == gene_id
+        if type(result.tag) is not NoneType:
+            assert result.tag.id == result.tag_id
         assert result.gene_id == gene_id
         assert type(result.feature_id) is int
         assert type(result.tag_id) is int
