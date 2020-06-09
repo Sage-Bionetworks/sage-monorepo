@@ -1,3 +1,4 @@
+from sqlalchemy import orm
 from flaskr import db
 from . import Base
 from flaskr.enums import direction_enum
@@ -14,14 +15,23 @@ class DriverResult(Base):
     n_mut = db.Column(db.Integer, nullable=True)
 
     feature_id = db.Column(db.Integer, db.ForeignKey(
-        'feature.id'), nullable=False)
+        'features.id'), nullable=False)
 
     gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=False)
 
     mutation_code_id = db.Column(db.Integer, db.ForeignKey(
-        'mutation_code.id'), nullable=False)
+        'mutation_codes.id'), nullable=False)
 
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
+
+    feature = db.relationship('Feature', backref=orm.backref(
+        'driver_results'), uselist=False, primaryjoin="Feature.id==DriverResult.feature_id")
+    gene = db.relationship('Gene', backref=orm.backref(
+        'driver_results'), uselist=False, primaryjoin="Gene.id==DriverResult.gene_id")
+    mutation_code = db.relationship('MutationCode', backref=orm.backref(
+        'driver_results'), uselist=False, primaryjoin="MutationCode.id==DriverResult.mutation_code_id")
+    tag = db.relationship('Tag', backref=orm.backref(
+        'driver_results'), uselist=False, primaryjoin="Tag.id==DriverResult.tag_id")
 
     def __repr__(self):
         return '<DriverResult %r>' % self.id

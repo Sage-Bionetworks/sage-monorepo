@@ -1,5 +1,6 @@
 import pytest
 from tests import app, NoneType
+from flaskr.database import return_driver_results_with_relations_query
 from flaskr.db_models import DriverResult
 
 
@@ -9,13 +10,22 @@ def test_DriverResult(app):
     string_representation_list = []
     separator = ', '
 
-    results = DriverResult.query.filter_by(gene_id=gene_id).all()
+    query = return_driver_results_with_relations_query()
+    results = query.filter(DriverResult.gene_id == gene_id).all()
 
     assert isinstance(results, list)
     for result in results:
         driver_result_id = result.id
         string_representation = '<DriverResult %r>' % driver_result_id
         string_representation_list.append(string_representation)
+        if type(result.feature) is not NoneType:
+            assert result.feature.id == result.feature_id
+        if type(result.gene) is not NoneType:
+            assert result.gene.id == gene_id
+        if type(result.mutation_code) is not NoneType:
+            assert result.mutation_code.id == result.mutation_code_id
+        if type(result.tag) is not NoneType:
+            assert result.tag.id == result.tag_id
         assert result.gene_id == gene_id
         assert type(result.feature_id) is int or NoneType
         assert type(result.mutation_code_id) is int or NoneType
