@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class ImmuneCheckpoint(db.Model):
+class ImmuneCheckpoint(Base):
     __tablename__ = 'immune_checkpoints'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

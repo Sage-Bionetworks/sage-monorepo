@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class FeatureClass(db.Model):
+class FeatureClass(Base):
     __tablename__ = 'classes'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

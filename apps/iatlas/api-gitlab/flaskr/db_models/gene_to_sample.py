@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class GeneToSample(db.Model):
+class GeneToSample(Base):
     __tablename__ = 'genes_to_samples'
 
     gene_id = db.Column(db.Integer, db.ForeignKey(

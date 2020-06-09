@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class NodeToTag(db.Model):
+class NodeToTag(Base):
     __tablename__ = 'nodes_to_tags'
 
     node_id = db.Column(

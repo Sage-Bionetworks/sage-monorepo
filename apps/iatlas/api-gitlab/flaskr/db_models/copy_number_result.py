@@ -1,8 +1,9 @@
 from flaskr import db
+from . import Base
 from flaskr.enums import direction_enum
 
 
-class CopyNumberResult(db.Model):
+class CopyNumberResult(Base):
     __tablename__ = 'copy_number_results'
     id = db.Column(db.Integer, primary_key=True)
     direction = db.Column(direction_enum, nullable=False)

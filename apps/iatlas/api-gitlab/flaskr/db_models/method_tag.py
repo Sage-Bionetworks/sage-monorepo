@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class MethodTag(db.Model):
+class MethodTag(Base):
     __tablename__ = 'method_tags'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

@@ -1,8 +1,9 @@
 from flaskr import db
+from . import Base
 from flaskr.enums import unit_enum
 
 
-class Feature(db.Model):
+class Feature(Base):
     __tablename__ = 'features'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

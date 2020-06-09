@@ -1,8 +1,9 @@
 from flaskr import db
+from . import Base
 from flaskr.enums import status_enum
 
 
-class SampleToMutation(db.Model):
+class SampleToMutation(Base):
     __tablename__ = 'samples_to_mutations'
 
     sample_id = db.Column(

@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class Slide(db.Model):
+class Slide(Base):
     __tablename__ = 'slides'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

@@ -1,8 +1,9 @@
 from flaskr import db
+from . import Base
 from flaskr.enums import direction_enum
 
 
-class DriverResult(db.Model):
+class DriverResult(Base):
     __tablename__ = 'driver_results'
     id = db.Column(db.Integer, primary_key=True)
     p_value = db.Column(db.Float, nullable=True)

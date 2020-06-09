@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class Edge(db.Model):
+class Edge(Base):
     __tablename__ = 'edges'
     id = db.Column(db.Integer, primary_key=True)
 

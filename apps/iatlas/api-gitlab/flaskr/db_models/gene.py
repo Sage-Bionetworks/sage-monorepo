@@ -1,11 +1,16 @@
 from flaskr import db
+from . import Base
 
 
-class Gene(db.Model):
+class Gene(Base):
     __tablename__ = 'genes'
     id = db.Column(db.Integer, primary_key=True)
     entrez = db.Column(db.Integer, nullable=False)
     hgnc = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=True)
+    friendly_name = db.Column(db.String, nullable=True)
+    io_landscape_name = db.Column(db.String, nullable=True)
+    references = db.Column(db.ARRAY(db.String), nullable=True)
 
     gene_family_id = db.Column(
         db.Integer, db.ForeignKey('gene_families.id'), nullable=True)
@@ -28,28 +33,13 @@ class Gene(db.Model):
     therapy_type_id = db.Column(
         db.Integer, db.ForeignKey('therapy_types.id'), nullable=True)
 
-    description = db.Column(db.String, nullable=True)
-    references = db.Column(db.ARRAY(db.String), nullable=True)
-    io_landscape_name = db.Column(db.String, nullable=True)
-    friendly_name = db.Column(db.String, nullable=True)
-
     gene_family = db.relationship('GeneFamily', uselist=False)
-
-    gene_function = db.relationship(
-        'GeneFunction', uselist=False)
-
-    immune_checkpoint = db.relationship(
-        'ImmuneCheckpoint', uselist=False)
-
+    gene_function = db.relationship('GeneFunction', uselist=False)
+    immune_checkpoint = db.relationship('ImmuneCheckpoint', uselist=False)
     node_type = db.relationship('NodeType', uselist=False)
-
     pathway = db.relationship('Pathway', uselist=False)
-
-    super_category = db.relationship(
-        'SuperCategory', uselist=False)
-
-    therapy_type = db.relationship(
-        'TherapyType', uselist=False)
+    super_category = db.relationship('SuperCategory', uselist=False)
+    therapy_type = db.relationship('TherapyType', uselist=False)
 
     def __repr__(self):
         return '<Gene %r>' % self.entrez

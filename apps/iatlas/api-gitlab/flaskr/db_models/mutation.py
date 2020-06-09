@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class Mutation(db.Model):
+class Mutation(Base):
     __tablename__ = 'mutations'
     id = db.Column(db.Integer, primary_key=True)
 

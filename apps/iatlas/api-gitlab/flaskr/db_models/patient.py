@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class Patient(db.Model):
+class Patient(Base):
     __tablename__ = 'patients'
     id = db.Column(db.Integer, primary_key=True)
     age = db.Column(db.Integer, nullable=True)

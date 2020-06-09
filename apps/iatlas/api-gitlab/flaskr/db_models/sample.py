@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class Sample(db.Model):
+class Sample(Base):
     __tablename__ = 'samples'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

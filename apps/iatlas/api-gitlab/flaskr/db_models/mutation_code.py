@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class MutationCode(db.Model):
+class MutationCode(Base):
     __tablename__ = 'mutation_codes'
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String, nullable=False)

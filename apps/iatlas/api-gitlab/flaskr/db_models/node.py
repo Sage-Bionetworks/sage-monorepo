@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class Node(db.Model):
+class Node(Base):
     __tablename__ = 'nodes'
     id = db.Column(db.Integer, primary_key=True)
 
