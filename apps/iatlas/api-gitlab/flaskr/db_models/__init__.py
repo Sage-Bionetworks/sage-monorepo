@@ -1,3 +1,7 @@
+from flaskr import db
+
+Base = db.Model
+
 from .copy_number_result import CopyNumberResult
 from .driver_result import DriverResult
 from .edge import Edge
