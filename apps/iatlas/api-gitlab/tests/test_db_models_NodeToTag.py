@@ -1,6 +1,6 @@
 import pytest
 from tests import app, NoneType
-from flaskr.db_models import NodeToTag
+from flaskr.database import return_node_to_tag_query
 
 
 def test_NodeToTag(app):
@@ -9,7 +9,8 @@ def test_NodeToTag(app):
     string_representation_list = []
     separator = ', '
 
-    results = NodeToTag.query.filter_by(node_id=node_id).all()
+    query = return_node_to_tag_query()
+    results = query.filter_by(node_id=node_id).all()
 
     assert isinstance(results, list)
     for result in results:

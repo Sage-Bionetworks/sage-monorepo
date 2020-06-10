@@ -1,6 +1,6 @@
 import pytest
 from tests import app, NoneType
-from flaskr.database import return_copy_number_results_with_relations_query
+from flaskr.database import return_copy_number_result_query
 from flaskr.enums import direction_enum
 
 
@@ -10,7 +10,7 @@ def test_CopyNumberResult(app):
     string_representation_list = []
     separator = ', '
 
-    query = return_copy_number_results_with_relations_query()
+    query = return_copy_number_result_query('feature', 'gene', 'tag')
     results = query.filter_by(gene_id=gene_id).all()
 
     assert isinstance(results, list)

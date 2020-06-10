@@ -33,13 +33,22 @@ class Gene(Base):
     therapy_type_id = db.Column(
         db.Integer, db.ForeignKey('therapy_types.id'), nullable=True)
 
-    gene_family = db.relationship('GeneFamily', uselist=False)
-    gene_function = db.relationship('GeneFunction', uselist=False)
-    immune_checkpoint = db.relationship('ImmuneCheckpoint', uselist=False)
-    node_type = db.relationship('NodeType', uselist=False)
-    pathway = db.relationship('Pathway', uselist=False)
-    super_category = db.relationship('SuperCategory', uselist=False)
-    therapy_type = db.relationship('TherapyType', uselist=False)
+    gene_family = db.relationship('GeneFamily', uselist=False, lazy='noload')
+
+    gene_function = db.relationship(
+        'GeneFunction', uselist=False, lazy='noload')
+
+    immune_checkpoint = db.relationship(
+        'ImmuneCheckpoint', uselist=False, lazy='noload')
+
+    node_type = db.relationship('NodeType', uselist=False, lazy='noload')
+
+    pathway = db.relationship('Pathway', uselist=False, lazy='noload')
+
+    super_category = db.relationship(
+        'SuperCategory', uselist=False, lazy='noload')
+
+    therapy_type = db.relationship('TherapyType', uselist=False, lazy='noload')
 
     def __repr__(self):
         return '<Gene %r>' % self.entrez

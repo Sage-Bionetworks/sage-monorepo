@@ -10,5 +10,8 @@ class Sample(Base):
     patient_id = db.Column(
         db.Integer, db.ForeignKey('patients.id'), nullable=True)
 
+    mutations = db.relationship("Mutation", secondary='samples_to_mutations')
+    tags = db.relationship("Tag", secondary='samples_to_tags')
+
     def __repr__(self):
         return '<Sample %r>' % self.name

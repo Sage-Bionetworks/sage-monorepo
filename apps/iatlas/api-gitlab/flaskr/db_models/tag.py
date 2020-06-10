@@ -11,9 +11,10 @@ class Tag(Base):
     color = db.Column(db.String, nullable=True)
 
     tags = db.relationship(
-        "TagToTag", foreign_keys='TagToTag.related_tag_id', back_populates="related_tag")
+        "TagToTag", foreign_keys='TagToTag.related_tag_id', back_populates="related_tags")
     related_tags = db.relationship(
-        "TagToTag", foreign_keys='TagToTag.tag_id', back_populates="tag")
+        "TagToTag", foreign_keys='TagToTag.tag_id', back_populates="tags")
+    samples = db.relationship("Sample", secondary='samples_to_tags')
 
     def __repr__(self):
         return '<Tag %r>' % self.name

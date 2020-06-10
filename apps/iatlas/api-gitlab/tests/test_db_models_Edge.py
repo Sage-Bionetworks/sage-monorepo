@@ -1,6 +1,6 @@
 import pytest
 from tests import app, NoneType
-from flaskr.db_models import Edge
+from flaskr.database import return_edge_query
 
 
 def test_Edge(app):
@@ -9,7 +9,8 @@ def test_Edge(app):
     string_representation_list = []
     separator = ', '
 
-    results = Edge.query.filter_by(node_1_id=node_1_id).all()
+    query = return_edge_query()
+    results = query.filter_by(node_1_id=node_1_id).all()
 
     assert isinstance(results, list)
     for result in results:

@@ -1,6 +1,6 @@
 import pytest
 from tests import app, NoneType
-from flaskr.db_models import Node
+from flaskr.database import return_node_query
 
 
 def test_Node(app):
@@ -9,7 +9,8 @@ def test_Node(app):
     string_representation_list = []
     separator = ', '
 
-    results = Node.query.filter_by(gene_id=gene_id).all()
+    query = return_node_query()
+    results = query.filter_by(gene_id=gene_id).all()
 
     assert isinstance(results, list)
     for result in results:

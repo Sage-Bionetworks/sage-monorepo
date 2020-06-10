@@ -1,6 +1,6 @@
 import pytest
 from tests import app, NoneType
-from flaskr.db_models import EdgeToTag
+from flaskr.database import return_edge_to_tag_query
 
 
 def test_EdgeToTag(app):
@@ -10,7 +10,8 @@ def test_EdgeToTag(app):
     # string_representation_list = []
     # separator = ', '
 
-    # results = EdgeToTag.query.filter_by(edge_id=edge_id).all()
+    # query = return_edge_to_tag_query()
+    # results = query.filter_by(edge_id=edge_id).all()
 
     # assert isinstance(results, list)
     # for result in results:

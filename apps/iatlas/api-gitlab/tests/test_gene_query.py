@@ -8,15 +8,20 @@ def test_gene_query(client):
         gene(entrez: $entrez) {
             entrez
             hgnc
+            ioLandscapeName
+            references
             geneFamily
         }
     }"""
+    entrez = 3627
     response = client.post(
-        '/api', json={'query': query, 'variables': {'entrez': 3627}})
+        '/api', json={'query': query, 'variables': {'entrez': entrez}})
     json_data = json.loads(response.data)
     gene = json_data["data"]["gene"]
 
     assert not isinstance(gene, list)
-    assert gene["entrez"] == 3627
+    assert gene["entrez"] == entrez
     assert gene["hgnc"] == "CXCL10"
+    assert type(gene["ioLandscapeName"]) is str or NoneType
+    assert isinstance(gene["references"], list) or NoneType
     assert type(gene["geneFamily"]) is str or NoneType

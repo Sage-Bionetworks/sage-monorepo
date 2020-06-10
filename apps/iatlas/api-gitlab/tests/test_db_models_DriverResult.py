@@ -1,6 +1,6 @@
 import pytest
 from tests import app, NoneType
-from flaskr.database import return_driver_results_with_relations_query
+from flaskr.database import return_driver_result_query
 from flaskr.db_models import DriverResult
 
 
@@ -10,7 +10,8 @@ def test_DriverResult(app):
     string_representation_list = []
     separator = ', '
 
-    query = return_driver_results_with_relations_query()
+    query = return_driver_result_query(
+        'feature', 'gene', 'mutation_code', 'tag')
     results = query.filter(DriverResult.gene_id == gene_id).all()
 
     assert isinstance(results, list)

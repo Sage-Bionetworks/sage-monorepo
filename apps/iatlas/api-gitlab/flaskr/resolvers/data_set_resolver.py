@@ -1,4 +1,6 @@
-from sqlalchemy import and_, func, or_
+from sqlalchemy import and_, func, or_, orm
+import json
+from collections import defaultdict
 from flaskr import db
 from flaskr.db_models import FeatureClass, Sample, SampleToTag, Tag, TagToTag
 
@@ -20,39 +22,58 @@ def resolve_dataSet(_obj, info, name, group, feature=None):
     # Get all the tags related to the passed groups.
     tag_to_group_query = sess.query(TagToTag.tag_id).filter(TagToTag.related_tag_id.in_(
         group_tag_query.subquery()))
-    # Get all the sample ids associated with the tags.
-    sample_to_tag_sub_query = sess.query(
-        SampleToTag.sample_id).filter(SampleToTag.tag_id.in_(tag_to_group_query.subquery())).subquery()
-    # Limit samples_to_tags to only rows with tags in the passed names.
-    reduced_to_names_query = sess.query(
+    # Get all the passed groups' values.
+    group_query = sess.query(Tag).filter(
+        Tag.id.in_(tag_to_group_query.subquery()))
+    group_sub_query = group_query.subquery()
+    # Get all the sample ids associated with the passed names.
+    samples_to_names_query = sess.query(
         SampleToTag.sample_id).filter(SampleToTag.tag_id.in_(name_tag_query.subquery()))
-    # Limit samples ids to only ids that are associated with names
-    samples_to_names_query = reduced_to_names_query.join(
-        sample_to_tag_sub_query, SampleToTag.sample_id == sample_to_tag_sub_query.c.sample_id)
-    # .filter(or_(SampleToTag.tag_id.in_(name_tag_to_tag_sub_query)))
+    # Get all the sample ids associated with the tags.
+    sample_to_tag_query = sess.query(SampleToTag) \
+        .filter(SampleToTag.tag_id.in_(tag_to_group_query.subquery())) \
+        .filter(SampleToTag.sample_id.in_(samples_to_names_query.subquery()))
+    sample_to_tag_sub_query = sample_to_tag_query.subquery()
+    # Add the sample ids to the group values.
+    group_with_sample_id_query = sess.query(
+        group_sub_query.c.name,
+        group_sub_query.c.display,
+        group_sub_query.c.characteristics,
+        group_sub_query.c.color,
+        # sample_to_tag_sub_query.c.sample_id
+    )\
+        .add_columns(
+        func.coalesce(func.Count(sample_to_tag_sub_query.c.tag_id),
+                      0).label("num_samples"))\
+        .join(sample_to_tag_sub_query, sample_to_tag_sub_query.c.tag_id == group_sub_query.c.id, isouter=True)\
+        .group_by(group_sub_query.c.name, group_sub_query.c.display, group_sub_query.c.characteristics, group_sub_query.c.color, sample_to_tag_sub_query.c.sample_id)
 
-    query = sess.query(Sample.id)
+    # Add the sample ids to the group values.
+    # group_with_sample_id_query = sess.query(SampleToTag.sample_id, group_sub_query.c.display, group_sub_query.c.name, group_sub_query.c.characteristics, group_sub_query.c.color)\
+    #     .filter(SampleToTag.tag_id.in_(tag_to_group_query.subquery())) \
+    #     .filter(SampleToTag.sample_id.in_(samples_to_names_query.subquery())) \
+    #     .join(group_sub_query)
+
+    query = group_with_sample_id_query.distinct()
+
+    # query = sess.query(Sample.id)
     # sample = query.first()
-    results = samples_to_names_query.distinct().all()
-    tcga_samples = samples_to_names_query.distinct().count()
+    results = query.all()
+    tcga_samples = query.count()
 
-    print("results: ", results)
+    grouped = defaultdict(list)
+    for row in results:
+        print("row: ", len(results))
+        print("row: ", row)
+        grouped[row.name].append(row)
 
-    # query = query.join(SampleToTag.query.join(
-    #     Tag.query.filter(Tag.name.in_(name)), SampleToTag.tag_id == Tag.id),
-    #     Sample.id == SampleToTag.sample_id)
+    # for group in grouped.items():
+    #     print("group: ", group)
 
-    # result = query.all()
+    # request = info.context
+    # response_data = request.json["query"]
 
-    # print("result: ", result)
-
-    # query = Sample.query.with_entities(Sample.id)
-    # query = Sample.query(label('sample_number', func.count(Sample.id)))
-
-    # classes = FeatureClass.query.
-
-    # User.query.filter(User.roles.any(Role.id.in_(
-    #     [role.id for role in current_user.roles]))).all()
+    # print("response_data: ", response_data)
 
     return [{
         "sampleGroup": name[0],
