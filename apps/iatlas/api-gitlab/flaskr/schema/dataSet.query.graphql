@@ -3,4 +3,5 @@ type DataSet {
     groupName: String!
     groupSize: Int!
     characteristics: String
+    color: String
 }
