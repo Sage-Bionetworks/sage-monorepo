@@ -1,6 +1,6 @@
 import pytest
 from tests import app, NoneType
-from flaskr.db_models import FeatureToSample
+from flaskr.database import return_feature_to_sample_query
 
 
 def test_FeatureToSample(app):
@@ -9,7 +9,8 @@ def test_FeatureToSample(app):
     string_representation_list = []
     separator = ', '
 
-    results = FeatureToSample.query.filter_by(feature_id=feature_id).all()
+    query = return_feature_to_sample_query()
+    results = query.filter_by(feature_id=feature_id).all()
 
     assert isinstance(results, list)
     for result in results:

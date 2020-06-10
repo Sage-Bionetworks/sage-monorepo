@@ -1,18 +1,22 @@
-from sqlalchemy import orm
+from flaskr.database import return_gene_query
 from flaskr.db_models import (Gene, GeneFamily, GeneFunction,
                               ImmuneCheckpoint, NodeType, SuperCategory, TherapyType)
-from .resolver_helpers import get_name
+from .resolver_helpers import build_option_args, get_name
 
 
 def resolve_gene(_obj, info, entrez):
-    gene = Gene.query.options(orm.joinedload(
-        'gene_family'), orm.joinedload(
-        'gene_function'), orm.joinedload(
-        'immune_checkpoint'), orm.joinedload(
-        'node_type'), orm.joinedload(
-        'pathway'), orm.joinedload(
-        'super_category'), orm.joinedload(
-        'therapy_type')).filter_by(entrez=entrez).first()
+    option_args = build_option_args(
+        info.field_nodes[0].selection_set,
+        {'geneFamily': 'gene_family',
+         'geneFunction': 'gene_function',
+         'immuneCheckpoint': 'immune_checkpoint',
+         'nodeType': 'node_type',
+         'pathway': 'pathway',
+         'superCategory': 'super_category',
+         'therapyType': 'therapy_type'}
+    )
+    query = return_gene_query(*option_args)
+    gene = query.filter_by(entrez=entrez).first()
 
     return {
         "id": gene.id,
@@ -32,24 +36,22 @@ def resolve_gene(_obj, info, entrez):
 
 
 def resolve_genes(_obj, info, entrez=None):
-    # classes = FeatureClass.query.
-
-    # User.query.filter(User.roles.any(Role.id.in_(
-    #     [role.id for role in current_user.roles]))).all()
-
-    query = Gene.query.options(orm.joinedload(
-        'gene_family'), orm.joinedload(
-        'gene_function'), orm.joinedload(
-        'immune_checkpoint'), orm.joinedload(
-        'node_type'), orm.joinedload(
-        'pathway'), orm.joinedload(
-        'super_category'), orm.joinedload(
-        'therapy_type'))
+    option_args = build_option_args(
+        info.field_nodes[0].selection_set,
+        {'geneFamily': 'gene_family',
+         'geneFunction': 'gene_function',
+         'immuneCheckpoint': 'immune_checkpoint',
+         'nodeType': 'node_type',
+         'pathway': 'pathway',
+         'superCategory': 'super_category',
+         'therapyType': 'therapy_type'}
+    )
+    query = return_gene_query(*option_args)
     if entrez is not None:
         query = query.filter(Gene.entrez.in_(entrez))
     genes = query.all()
 
-    results = [
+    return [
         {
             "id": gene.id,
             "entrez": gene.entrez,
@@ -65,4 +67,3 @@ def resolve_genes(_obj, info, entrez=None):
             "superCategory": get_name(gene.super_category),
             "therapyType": get_name(gene.therapy_type)
         } for gene in genes]
-    return results

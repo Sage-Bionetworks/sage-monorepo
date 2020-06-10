@@ -1,8 +1,10 @@
+from sqlalchemy import orm
 from flaskr import db
+from . import Base
 from flaskr.enums import direction_enum
 
 
-class CopyNumberResult(db.Model):
+class CopyNumberResult(Base):
     __tablename__ = 'copy_number_results'
     id = db.Column(db.Integer, primary_key=True)
     direction = db.Column(direction_enum, nullable=False)
@@ -13,11 +15,18 @@ class CopyNumberResult(db.Model):
     t_stat = db.Column(db.Float, nullable=True)
 
     feature_id = db.Column(db.Integer, db.ForeignKey(
-        'feature.id'), nullable=False)
+        'features.id'), nullable=False)
 
     gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=False)
 
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
+
+    feature = db.relationship('Feature', backref=orm.backref(
+        'copy_number_results'), uselist=False)
+    gene = db.relationship('Gene', backref=orm.backref(
+        'copy_number_results'), uselist=False)
+    tag = db.relationship('Tag', backref=orm.backref(
+        'copy_number_results'), uselist=False)
 
     def __repr__(self):
         return '<CopyNumberResult %r>' % self.id

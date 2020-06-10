@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class FeatureToSample(db.Model):
+class FeatureToSample(Base):
     __tablename__ = 'features_to_samples'
 
     feature_id = db.Column(db.Integer, db.ForeignKey(

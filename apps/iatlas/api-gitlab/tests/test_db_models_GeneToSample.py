@@ -1,6 +1,6 @@
 import pytest
 from tests import app, NoneType
-from flaskr.db_models import GeneToSample
+from flaskr.database import return_gene_to_sample_query
 
 
 def test_GeneToSample(app):
@@ -9,7 +9,8 @@ def test_GeneToSample(app):
     string_representation_list = []
     separator = ', '
 
-    results = GeneToSample.query.filter_by(gene_id=gene_id).all()
+    query = return_gene_to_sample_query()
+    results = query.filter_by(gene_id=gene_id).all()
 
     assert isinstance(results, list)
     for result in results:

@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class GeneToType(db.Model):
+class GeneToType(Base):
     __tablename__ = 'genes_to_types'
 
     gene_id = db.Column(

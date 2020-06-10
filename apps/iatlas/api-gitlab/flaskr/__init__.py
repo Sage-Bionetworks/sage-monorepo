@@ -20,6 +20,10 @@ def create_app(config_class=Config):
     if not app.debug and not app.testing:
         pass
 
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        db.session.remove()
+
     return app
 
 

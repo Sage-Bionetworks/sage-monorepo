@@ -1,6 +1,6 @@
 import pytest
 from tests import app, NoneType
-from flaskr.db_models import Feature
+from flaskr.database import return_feature_query
 from flaskr.enums import unit_enum
 
 
@@ -11,7 +11,8 @@ def test_Feature(app):
     class_id = 11
     method_tag_id = 2
 
-    result = Feature.query.filter_by(name=name).first()
+    query = return_feature_query()
+    result = query.filter_by(name=name).first()
 
     assert result.name == name
     assert type(result.display) is str or NoneType

@@ -1,12 +1,14 @@
 import pytest
 from tests import app
-from flaskr.db_models import FeatureClass
+from flaskr.database import return_feature_class_query
 
 
 def test_FeatureClass(app):
     app()
     name = 'Adaptive Receptor - B cell'
-    result = FeatureClass.query.filter_by(name=name).first()
+
+    query = return_feature_class_query()
+    result = query.filter_by(name=name).first()
 
     assert result.name == name
     assert repr(result) == '<FeatureClass %r>' % name

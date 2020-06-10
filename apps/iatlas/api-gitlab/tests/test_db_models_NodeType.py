@@ -1,12 +1,14 @@
 import pytest
 from tests import app
-from flaskr.db_models import NodeType
+from flaskr.database import return_node_type_query
 
 
 def test_NodeType(app):
     app()
     name = 'Ligand'
-    result = NodeType.query.filter_by(name=name).first()
+
+    query = return_node_type_query()
+    result = query.filter_by(name=name).first()
 
     assert result.name == name
     assert repr(result) == '<NodeType %r>' % name

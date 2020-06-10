@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class EdgeToTag(db.Model):
+class EdgeToTag(Base):
     __tablename__ = 'edges_to_tags'
 
     edge_id = db.Column(

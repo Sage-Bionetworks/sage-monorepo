@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class MutationType(db.Model):
+class MutationType(Base):
     __tablename__ = 'mutation_types'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

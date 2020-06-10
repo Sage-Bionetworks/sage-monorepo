@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class SuperCategory(db.Model):
+class SuperCategory(Base):
     __tablename__ = 'super_categories'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

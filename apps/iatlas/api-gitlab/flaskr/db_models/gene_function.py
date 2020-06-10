@@ -1,7 +1,8 @@
 from flaskr import db
+from . import Base
 
 
-class GeneFunction(db.Model):
+class GeneFunction(Base):
     __tablename__ = 'gene_functions'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
