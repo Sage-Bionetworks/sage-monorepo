@@ -2,20 +2,17 @@ from sqlalchemy import orm
 from flaskr import db
 from flaskr.db_models import (Gene, GeneFamily, GeneFunction, GeneType,
                               ImmuneCheckpoint, NodeType, Pathway, SuperCategory, TherapyType)
+from . import build_option_args
 
 
 def return_gene_query(*args):
-    accepted_args = ['gene_family',
-                     'gene_function',
-                     'immune_checkpoint',
-                     'node_type',
-                     'pathway',
-                     'super_category',
-                     'therapy_type']
-    option_args = []
-    for arg in args:
-        if arg in accepted_args:
-            option_args.append(orm.joinedload(arg))
+    option_args = build_option_args(*args, accepted_args=['gene_family',
+                                                          'gene_function',
+                                                          'immune_checkpoint',
+                                                          'node_type',
+                                                          'pathway',
+                                                          'super_category',
+                                                          'therapy_type'])
 
     return db.session.query(Gene).options(*option_args)
 
