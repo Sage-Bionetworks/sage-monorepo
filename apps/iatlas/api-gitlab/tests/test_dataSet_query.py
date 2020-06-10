@@ -1,6 +1,6 @@
 import json
 import pytest
-from tests import client
+from tests import client, NoneType
 
 
 def test_dataSet_query(client):
@@ -10,6 +10,7 @@ def test_dataSet_query(client):
             groupName
             groupSize
             characteristics
+            color
         }
     }"""
     response = client.post('/api', json={'query': query})
@@ -18,7 +19,8 @@ def test_dataSet_query(client):
 
     assert isinstance(data_sets, list)
     for data_set in data_sets:
-        assert data_set["sampleGroup"] == "PCAWG"
-        assert data_set["groupName"] == "Subtype"
+        assert type(data_set["sampleGroup"]) is str
+        assert type(data_set["groupName"]) is str or NoneType
         assert type(data_set["groupSize"]) is int
-        assert data_set["characteristics"] == "poof"
+        assert type(data_set["characteristics"]) is str or NoneType
+        assert type(data_set["color"]) is str or NoneType
