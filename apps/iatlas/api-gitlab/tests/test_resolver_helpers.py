@@ -1,12 +1,13 @@
 import json
 import pytest
 from tests import app
-from flaskr.resolvers.resolver_helpers import build_option_args, get_name
+from flaskr.resolvers.resolver_helpers import build_option_args, get_field_value
 
 
 class Parent:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, value, value2):
+        self.name = value
+        self.secondAttribute = value2
 
 
 class MockSelectionSet:
@@ -41,9 +42,11 @@ def test_build_option_args(app):
     assert build_option_args() == []
 
 
-def test_get_name(app):
+def test_get_field_value(app):
     name = "test"
-    parent = Parent(name)
-    assert get_name(parent) == name
-    assert get_name(None) == None
-    assert get_name() == None
+    secondAttribute = "test2"
+    parent = Parent(name, secondAttribute)
+    assert get_field_value(parent) == name
+    assert get_field_value(None) == None
+    assert get_field_value() == None
+    assert get_field_value(parent,  "secondAttribute") == secondAttribute

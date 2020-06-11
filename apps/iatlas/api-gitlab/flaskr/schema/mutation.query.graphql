@@ -1,0 +1,6 @@
+type Mutation {
+  id: Int!
+  gene: String
+  mutationCode: String
+  mutationType: String
+}

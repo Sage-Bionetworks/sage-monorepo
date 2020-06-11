@@ -1,7 +1,7 @@
 from flaskr.database import return_gene_query
 from flaskr.db_models import (Gene, GeneFamily, GeneFunction,
                               ImmuneCheckpoint, NodeType, SuperCategory, TherapyType)
-from .resolver_helpers import build_option_args, get_name
+from .resolver_helpers import build_option_args, get_field_value
 
 
 def resolve_gene(_obj, info, entrez):
@@ -25,13 +25,14 @@ def resolve_gene(_obj, info, entrez):
         "description": gene.description,
         "friendlyName": gene.friendly_name,
         "ioLandscapeName": gene.io_landscape_name,
-        "geneFamily": get_name(gene.gene_family),
-        "geneFunction": get_name(gene.gene_function),
-        "immuneCheckpoint": get_name(gene.immune_checkpoint),
-        "nodeType": get_name(gene.node_type),
-        "pathway": get_name(gene.pathway),
-        "superCategory": get_name(gene.super_category),
-        "therapyType": get_name(gene.therapy_type)
+        "geneFamily": get_field_value(gene.gene_family),
+        "geneFunction": get_field_value(gene.gene_function),
+        "immuneCheckpoint": get_field_value(gene.immune_checkpoint),
+        "nodeType": get_field_value(gene.node_type),
+        "pathway": get_field_value(gene.pathway),
+        "superCategory": get_field_value(gene.super_category),
+        "therapyType": get_field_value(gene.therapy_type),
+        "references": gene.references,
     }
 
 
@@ -59,11 +60,11 @@ def resolve_genes(_obj, info, entrez=None):
             "description": gene.description,
             "friendlyName": gene.friendly_name,
             "ioLandscapeName": gene.io_landscape_name,
-            "geneFamily": get_name(gene.gene_family),
-            "geneFunction": get_name(gene.gene_function),
-            "immuneCheckpoint": get_name(gene.immune_checkpoint),
-            "nodeType": get_name(gene.node_type),
-            "pathway": get_name(gene.pathway),
-            "superCategory": get_name(gene.super_category),
-            "therapyType": get_name(gene.therapy_type)
+            "geneFamily": get_field_value(gene.gene_family),
+            "geneFunction": get_field_value(gene.gene_function),
+            "immuneCheckpoint": get_field_value(gene.immune_checkpoint),
+            "nodeType": get_field_value(gene.node_type),
+            "pathway": get_field_value(gene.pathway),
+            "superCategory": get_field_value(gene.super_category),
+            "therapyType": get_field_value(gene.therapy_type)
         } for gene in genes]

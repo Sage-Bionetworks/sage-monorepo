@@ -18,6 +18,11 @@ class Mutation(Base):
     mutation_code = db.relationship("MutationCode")
     mutation_type = db.relationship("MutationType")
     samples = db.relationship("Sample", secondary='samples_to_mutations')
+    # gene = db.relationship('Gene', uselist=False)
+    
+    # mutation_code = db.relationship('MutationCode', uselist = False)
+    
+    # mutation_type = db.relationship('MutationType', uselist = False)
 
     def __repr__(self):
         return '<Mutation %r>' % self.id

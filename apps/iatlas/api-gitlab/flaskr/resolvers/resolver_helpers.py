@@ -7,7 +7,7 @@ def build_option_args(selection_set=None, valid_nodes={}):
     return option_args
 
 
-def get_name(parent=None):
+def get_field_value(parent=None, field="name"):
     if parent is not None:
-        return parent.name
+        return getattr(parent, field)
     return None
