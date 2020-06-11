@@ -2,7 +2,7 @@ from sqlalchemy import orm
 from flaskr import db
 from flaskr.db_models import (Gene, GeneFamily, GeneFunction, GeneType,
                               ImmuneCheckpoint, NodeType, Pathway, SuperCategory, TherapyType)
-from . import build_option_args
+from .database_helpers import build_option_args
 
 
 def return_gene_query(*args):

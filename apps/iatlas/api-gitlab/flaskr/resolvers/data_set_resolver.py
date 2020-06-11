@@ -26,6 +26,8 @@ def resolve_dataSet(_obj, info, name, group, feature=None):
     tag_alias = orm.aliased(Tag, name='t')
     group_query = sess.query(tag_alias.id, tag_alias.name, tag_alias.display, tag_alias.characteristics, tag_alias.color).filter(
         tag_alias.id.in_(tag_to_group_query.subquery()))
+    group_id_query = sess.query(tag_alias.id).filter(
+        tag_alias.id.in_(tag_to_group_query.subquery()))
     # group_sub_query = group_query.subquery()
     # Get all the sample ids associated with the passed names.
     sample_to_name_alias = orm.aliased(SampleToTag, name='stn')
@@ -51,16 +53,26 @@ def resolve_dataSet(_obj, info, name, group, feature=None):
     #     .filter(SampleToTag.sample_id.in_(samples_to_names_query.subquery())) \
     #     .join(group_sub_query)
 
+    new_alias = orm.aliased(SampleToTag, name="na")
+    sub_query = sess.query(new_alias).filter(
+        new_alias.tag_id.in_(group_id_query)).subquery()
+
+    sample_to_tag_alias = orm.aliased(SampleToTag, name='st')
+    sample_count_query = sess.query(sample_to_tag_alias.sample_id, func.count('*').label('num_samples'))\
+        .filter(sample_to_tag_alias.tag_id.in_(name_tag_id_query))\
+        .join(sub_query, sample_to_tag_alias.sample_id == sub_query.c.sample_id)\
+        .group_by(sample_to_tag_alias.sample_id)
+
+    test_query = sample_count_query.distinct().all()
     query = group_query.distinct()
 
     # query = sess.query(Sample.id)
     # sample = query.first()
     results = query.all()
     # tcga_samples = query.count()
-
-    # for row in results:
-    #     print("row: ", len(results))
-    #     print("row: ", row)
+    print("row: ", len(test_query))
+    for row in test_query[0:5]:
+        print("row: ", row.num_samples)
 
     sample_to_tag_alias = orm.aliased(SampleToTag, name='st')
     sample_count_query = sess.query(sample_to_tag_alias.sample_id).filter(
