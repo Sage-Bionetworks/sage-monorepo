@@ -1,3 +1,4 @@
+from sqlalchemy import orm
 from flaskr import db
 from . import Base
 
@@ -10,6 +11,12 @@ class GeneToType(Base):
 
     type_id = db.Column(
         db.Integer, db.ForeignKey('gene_types.id'), nullable=False)
+
+    genes = db.relationship(
+        'Gene', backref=orm.backref("gene_type_assoc"), uselist=True)
+
+    types = db.relationship('GeneType', backref=orm.backref(
+        "gene_type_assoc"), uselist=True)
 
     def __repr__(self):
         return '<GeneToType %r>' % self.gene_id
