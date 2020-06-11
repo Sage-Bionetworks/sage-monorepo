@@ -10,6 +10,10 @@ def test_gene_type(app):
     query = return_gene_type_query()
     result = query.filter_by(name=gene_type_name).first()
 
+    if type(result.genes) is not NoneType:
+        assert isinstance(result.genes, list)
+        for gene in result.genes:
+            assert type(gene.entrez) is int
     assert result.name == gene_type_name
     assert type(result.display) is str or NoneType
 

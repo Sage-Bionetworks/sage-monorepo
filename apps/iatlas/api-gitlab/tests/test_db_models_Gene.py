@@ -53,6 +53,10 @@ def test_Gene(app):
         assert result.gene_family.id == result.gene_family_id
     if type(result.gene_function) is not NoneType:
         assert result.gene_function.id == result.gene_function_id
+    if type(result.gene_types) is not NoneType:
+        assert isinstance(result.gene_types, list)
+        for gene_type in result.gene_types:
+            assert type(gene_type.name) is str
     if type(result.immune_checkpoint) is not NoneType:
         assert result.immune_checkpoint.id == result.immune_checkpoint_id
     if type(result.node_type) is not NoneType:

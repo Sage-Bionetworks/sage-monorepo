@@ -50,5 +50,7 @@ class Gene(Base):
 
     therapy_type = db.relationship('TherapyType', uselist=False, lazy='noload')
 
+    gene_types = db.relationship("GeneType", secondary='genes_to_types')
+
     def __repr__(self):
         return '<Gene %r>' % self.entrez
