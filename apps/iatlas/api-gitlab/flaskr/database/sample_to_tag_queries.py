@@ -1,12 +1,9 @@
 from sqlalchemy import orm
 from flaskr import db
 from flaskr.db_models import SampleToTag
+from . import build_option_args
 
 
 def return_sample_to_tag_query(*argv):
-    accepted_args = ['samples', 'tags']
-    args = []
-    for arg in argv:
-        if arg in accepted_args:
-            args.append(orm.joinedload(arg))
-    return db.session.query(SampleToTag).options(args)
+    args = build_option_args(argv, accepted_args=['samples', 'tags'])
+    return db.session.query(SampleToTag).options(*args)

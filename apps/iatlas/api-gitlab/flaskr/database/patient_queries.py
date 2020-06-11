@@ -1,6 +1,7 @@
 from sqlalchemy import orm
 from flaskr import db
 from flaskr.db_models import Patient, Sample, Slide
+from .database_helpers import build_option_args
 
 
 def return_patient_query():
@@ -8,12 +9,8 @@ def return_patient_query():
 
 
 def return_sample_query(*argv):
-    accepted_args = ['mutations', 'tags']
-    args = []
-    for arg in argv:
-        if arg in accepted_args:
-            args.append(orm.joinedload(arg))
-    return db.session.query(Sample).options(args)
+    args = build_option_args(argv, accepted_args=['mutations', 'tags'])
+    return db.session.query(Sample).options(*args)
 
 
 def return_slide_query():
