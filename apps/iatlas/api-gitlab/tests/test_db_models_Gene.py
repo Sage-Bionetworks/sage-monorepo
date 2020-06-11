@@ -4,7 +4,7 @@ from flaskr.database import return_gene_query
 from flaskr.db_models import Gene
 
 
-def test_Gene(app):
+def test_Gene_with_relations(app):
     app()
     entrez = 3627
     hgnc = 'CXCL10'
@@ -35,9 +35,9 @@ def test_Gene(app):
     assert result.entrez == entrez
     assert result.hgnc == hgnc
     assert type(result.description) is str or NoneType
-    assert type(result.gene_family) is int or NoneType
-    assert type(result.gene_function) is int or NoneType
-    assert type(result.immune_checkpoint) is int or NoneType
+    assert type(result.gene_family_id) is int or NoneType
+    assert type(result.gene_function_id) is int or NoneType
+    assert type(result.immune_checkpoint_id) is int or NoneType
     assert type(result.io_landscape_name) is str or NoneType
     assert isinstance(result.references, list) or NoneType
     assert type(result.node_type_id) is int or NoneType
@@ -45,6 +45,12 @@ def test_Gene(app):
     assert type(result.super_cat_id) is int or NoneType
     assert type(result.therapy_type_id) is int or NoneType
     assert repr(result) == '<Gene %r>' % entrez
+
+
+def test_Gene_no_relations(app):
+    app()
+    entrez = 3627
+    hgnc = 'CXCL10'
 
     query = return_gene_query()
     result = query.filter_by(entrez=entrez).first()
@@ -70,9 +76,9 @@ def test_Gene(app):
     assert result.entrez == entrez
     assert result.hgnc == hgnc
     assert type(result.description) is str or NoneType
-    assert type(result.gene_family) is int or NoneType
-    assert type(result.gene_function) is int or NoneType
-    assert type(result.immune_checkpoint) is int or NoneType
+    assert type(result.gene_family_id) is int or NoneType
+    assert type(result.gene_function_id) is int or NoneType
+    assert type(result.immune_checkpoint_id) is int or NoneType
     assert type(result.io_landscape_name) is str or NoneType
     assert isinstance(result.references, list) or NoneType
     assert type(result.node_type_id) is int or NoneType
