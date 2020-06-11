@@ -1,12 +1,11 @@
-import json
 import pytest
-from tests import app
-from flaskr.resolvers.resolver_helpers import build_option_args, get_name
+from flaskr.resolvers.resolver_helpers import build_option_args, get_child_value, get_value
 
 
 class Parent:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, value, value2):
+        self.name = value
+        self.other = value2
 
 
 class MockSelectionSet:
@@ -24,7 +23,7 @@ class MockNameNode:
         self.value = value
 
 
-def test_build_option_args(app):
+def test_build_option_args():
     valid_nodes_1 = {'test1': 'nice',
                      'test2': 'good'}
     valid_nodes_2 = {'test0': 'oh',
@@ -41,9 +40,18 @@ def test_build_option_args(app):
     assert build_option_args() == []
 
 
-def test_get_name(app):
+def test_get_child_value():
     name = "test"
-    parent = Parent(name)
-    assert get_name(parent) == name
-    assert get_name(None) == None
-    assert get_name() == None
+    other = "test2"
+    parent = Parent(name, other)
+    assert get_child_value(parent) == name
+    assert get_child_value(parent, "other") == other
+    assert get_child_value(None) == None
+    assert get_child_value() == None
+
+
+def test_get_value():
+    name = "test"
+    parent = Parent(name, 'unused')
+    assert get_value(parent, 'name') == name
+    assert get_value(parent, 'nothing') == None

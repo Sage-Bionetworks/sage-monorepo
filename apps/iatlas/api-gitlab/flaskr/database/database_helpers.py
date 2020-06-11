@@ -7,3 +7,11 @@ def build_option_args(*args, accepted_args=[]):
         if arg in accepted_args:
             option_args.append(orm.joinedload(arg))
     return option_args
+
+
+def build_query_args(model, *argv, accepted_args=[]):
+    query_args = []
+    for arg in argv:
+        if arg in accepted_args:
+            query_args.append(getattr(model, arg))
+    return query_args

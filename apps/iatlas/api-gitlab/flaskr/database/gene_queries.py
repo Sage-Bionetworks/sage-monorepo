@@ -2,19 +2,40 @@ from sqlalchemy import orm
 from flaskr import db
 from flaskr.db_models import (Gene, GeneFamily, GeneFunction, GeneType,
                               ImmuneCheckpoint, NodeType, Pathway, SuperCategory, TherapyType)
-from .database_helpers import build_option_args
+from .database_helpers import build_option_args, build_query_args
+
+accepted_gene_option_args = ['gene_family',
+                             'gene_function',
+                             'immune_checkpoint',
+                             'node_type',
+                             'pathway',
+                             'super_category',
+                             'therapy_type']
+
+accepted_gene_query_args = ['entrez',
+                            'hgnc',
+                            'description',
+                            'friendly_name',
+                            'io_landscape_name',
+                            'references',
+                            'gene_family_id',
+                            'gene_function_id',
+                            'immune_checkpoint_id',
+                            'node_type_id',
+                            'pathway_id',
+                            'super_cat_id',
+                            'therapy_type_id']
 
 
 def return_gene_query(*args):
-    option_args = build_option_args(*args, accepted_args=['gene_family',
-                                                          'gene_function',
-                                                          'immune_checkpoint',
-                                                          'node_type',
-                                                          'pathway',
-                                                          'super_category',
-                                                          'therapy_type'])
-
-    return db.session.query(Gene).options(*option_args)
+    option_args = build_option_args(
+        *args, accepted_args=accepted_gene_option_args)
+    query_args = build_query_args(
+        Gene, *args, accepted_args=accepted_gene_query_args)
+    query = db.session.query(*query_args)
+    if option_args:
+        query = db.session.query(Gene).options(*option_args)
+    return query
 
 
 def return_gene_family_query():
