@@ -1,7 +1,6 @@
 from flaskr import db
-from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+Base = db.Model
 
 from .copy_number_result import CopyNumberResult
 from .driver_result import DriverResult
