@@ -34,5 +34,7 @@ def test_build_query_args():
     test_1 = build_query_args(MockModel, arg_1, arg_2,
                               accepted_args=accepted_args)
     test_2 = build_query_args(MockModel, arg_1, arg_2)
+    test_3 = build_query_args(MockModel)
     assert test_1 == [MockModel.id, MockModel.name]
     assert test_2 == []
+    assert test_3 == MockModel
