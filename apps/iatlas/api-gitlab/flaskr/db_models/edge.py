@@ -15,5 +15,12 @@ class Edge(Base):
     label = db.Column(db.String, nullable=True)
     score = db.Column(db.Numeric, nullable=True)
 
+    node_1 = db.relationship(
+        'Node', uselist=False, lazy='noload',
+        primaryjoin='Node.id==Edge.node_1_id')
+    node_2 = db.relationship(
+        'Node', uselist=False, lazy='noload',
+        primaryjoin='Node.id==Edge.node_2_id')
+
     def __repr__(self):
         return '<Edge %r>' % self.id

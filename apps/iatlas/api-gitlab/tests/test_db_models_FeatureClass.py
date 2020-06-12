@@ -11,4 +11,10 @@ def test_FeatureClass(app):
     result = query.filter_by(name=name).first()
 
     assert result.name == name
+
+    query = return_feature_class_query()
+    result = query.filter_by(name=name).first()
+
+    assert type(result.id) is int
+    assert result.name == name
     assert repr(result) == '<FeatureClass %r>' % name

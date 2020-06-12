@@ -1,5 +1,4 @@
 from .edge_queries import *
-from .edge_to_tag_queries import *
 from .feature_queries import *
 from .feature_to_sample_queries import *
 from .gene_queries import *

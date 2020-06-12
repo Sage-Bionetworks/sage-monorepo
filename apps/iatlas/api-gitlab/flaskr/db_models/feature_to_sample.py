@@ -1,3 +1,4 @@
+from sqlalchemy import orm
 from flaskr import db
 from . import Base
 
@@ -14,6 +15,12 @@ class FeatureToSample(Base):
     value = db.Column(db.Float, nullable=True)
 
     inf_value = db.Column(db.Float, nullable=True)
+
+    features = db.relationship('Feature', backref=orm.backref(
+        "feature_sample_assoc"), uselist=True)
+
+    samples = db.relationship('Sample', backref=orm.backref(
+        "feature_sample_assoc"), uselist=True)
 
     def __repr__(self):
         return '<FeatureToSample %r>' % self.feature_id

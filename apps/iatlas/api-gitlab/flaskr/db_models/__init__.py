@@ -5,7 +5,6 @@ Base = db.Model
 from .copy_number_result import CopyNumberResult
 from .driver_result import DriverResult
 from .edge import Edge
-from .edge_to_tag import EdgeToTag
 from .feature import Feature
 from .feature_class import FeatureClass
 from .feature_to_sample import FeatureToSample

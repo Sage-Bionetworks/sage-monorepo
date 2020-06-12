@@ -13,3 +13,8 @@ def test_ImmuneCheckpoint(app):
 
     assert result.name == name
     assert repr(result) == '<ImmuneCheckpoint %r>' % name
+
+    query = return_immune_checkpoint_query('name')
+    result = query.filter_by(name=name).first()
+
+    assert result.name == name
