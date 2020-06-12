@@ -1,5 +1,7 @@
 from sqlalchemy import orm
 
+accepted_simple_table_query_args = ['id', 'name']
+
 
 def build_option_args(*args, accepted_args=[]):
     option_args = []
