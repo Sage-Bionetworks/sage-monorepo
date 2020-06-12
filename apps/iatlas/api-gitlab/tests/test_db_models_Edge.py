@@ -8,8 +8,9 @@ def test_Edge_with_relations(app):
     node_1_id = 42
     string_representation_list = []
     separator = ', '
+    relationships_to_join = ['node_1', 'node_2']
 
-    query = return_edge_query('node_1', 'node_2')
+    query = return_edge_query(*relationships_to_join)
     results = query.filter_by(node_1_id=node_1_id).all()
 
     assert isinstance(results, list)
@@ -32,8 +33,13 @@ def test_Edge_no_relations(app):
     node_1_id = 42
     string_representation_list = []
     separator = ', '
+    fields_to_return = ['id',
+                        'node_1',
+                        'node_2',
+                        'label',
+                        'score']
 
-    query = return_edge_query()
+    query = return_edge_query(*fields_to_return)
     results = query.filter_by(node_1_id=node_1_id).all()
 
     assert isinstance(results, list)
