@@ -6,9 +6,11 @@ from .database_helpers import accepted_simple_table_query_args, build_general_qu
 
 accepted_gene_option_args = ['gene_family',
                              'gene_function',
+                             'gene_types',
                              'immune_checkpoint',
                              'node_type',
                              'pathway',
+                             'samples',
                              'super_category',
                              'therapy_type']
 

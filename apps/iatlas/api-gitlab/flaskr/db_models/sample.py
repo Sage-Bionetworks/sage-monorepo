@@ -13,6 +13,9 @@ class Sample(Base):
     features = db.relationship(
         "Feature", secondary='features_to_samples', uselist=True, lazy='noload')
 
+    genes = db.relationship(
+        "Gene", secondary='genes_to_samples', uselist=True, lazy='noload')
+
     mutations = db.relationship(
         "Mutation", secondary='samples_to_mutations', uselist=True, lazy='noload')
 
