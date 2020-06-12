@@ -1,8 +1,10 @@
 import pytest
 from sqlalchemy import orm
-from flaskr.database.database_helpers import build_option_args, build_query_args
-from flaskr.db_models import Base
-from . import db
+from sqlalchemy.dialects import postgresql
+from flaskr.database.database_helpers import (
+    build_general_query, build_option_args, build_query_args)
+from flaskr.db_models import Base, Feature
+from . import app, db
 
 
 class MockModel(Base):
@@ -11,6 +13,36 @@ class MockModel(Base):
 
     def __repr__(self):
         return '<MockModel %r>' % self.id
+
+
+def test_build_general_query(app):
+    app()
+    model = Feature
+    query_arg_1 = 'id'
+    query_arg_2 = 'name'
+    accepted_query_args = [query_arg_1, query_arg_2]
+    option_value_1 = 'feature_class'
+    accepted_option_args = [option_value_1]
+    test_1 = build_general_query(
+        model, args=[query_arg_1,
+                     query_arg_2, option_value_1], accepted_option_args=accepted_option_args,
+        accepted_query_args=accepted_query_args)
+    test_2 = build_general_query(
+        model, args=[query_arg_1,
+                     query_arg_2], accepted_option_args=accepted_option_args,
+        accepted_query_args=accepted_query_args)
+    test_3 = build_general_query(
+        model, args=[], accepted_option_args=accepted_option_args,
+        accepted_query_args=accepted_query_args)
+
+    assert str(test_1.statement.compile(dialect=postgresql.dialect())) == str(db.session.query(model).options(
+        orm.joinedload(option_value_1)).statement.compile(dialect=postgresql.dialect()))
+
+    assert str(test_2.statement.compile(dialect=postgresql.dialect())) == str(
+        db.session.query(getattr(model, query_arg_1), getattr(model, query_arg_2)).statement.compile(dialect=postgresql.dialect()))
+
+    assert str(test_3.statement.compile(dialect=postgresql.dialect())) == str(
+        db.session.query(model).statement.compile(dialect=postgresql.dialect()))
 
 
 def test_build_option_args():
@@ -36,5 +68,5 @@ def test_build_query_args():
     test_2 = build_query_args(MockModel, arg_1, arg_2)
     test_3 = build_query_args(MockModel)
     assert test_1 == [MockModel.id, MockModel.name]
-    assert test_2 == []
-    assert test_3 == MockModel
+    assert test_2 == [MockModel]
+    assert test_3 == [MockModel]
