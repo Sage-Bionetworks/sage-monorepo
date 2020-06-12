@@ -9,9 +9,10 @@ def resolve_mutation(_obj, info, id):
         {'gene': 'gene',
          'mutationCode': 'mutation_code',
          'mutationType': 'mutation_type',
+         'samples': 'samples'
         }
     )
-    query = return_mutation_query()
+    query = return_mutation_query(*option_args)
     mutation = query.filter_by(id=id).first()
 
     return {
@@ -19,4 +20,5 @@ def resolve_mutation(_obj, info, id):
         "gene": get_field_value(mutation.gene, "entrez"),
         "mutationCode": get_field_value(mutation.mutation_code, "code"),
         "mutationType": get_field_value(mutation.mutation_type),
+        "samples": None
     }

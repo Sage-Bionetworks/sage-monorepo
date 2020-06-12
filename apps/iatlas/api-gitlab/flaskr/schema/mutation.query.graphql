@@ -3,4 +3,5 @@ type Mutation {
   gene: String
   mutationCode: String
   mutationType: String
+  samples: [String!]
 }

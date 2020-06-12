@@ -5,7 +5,7 @@ from .database_helpers import build_option_args
 
 
 def return_mutation_query(*argv):
-    args = build_option_args(argv, accepted_args=[
+    args = build_option_args(*argv, accepted_args=[
                              'gene', 'mutation_code', 'mutation_type', 'samples'])
     return db.session.query(Mutation).options(*args)
 
