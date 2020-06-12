@@ -1,16 +1,22 @@
 from sqlalchemy import orm
 from flaskr import db
 from flaskr.db_models import Patient, Sample, Slide
-from .database_helpers import build_option_args
+from .database_helpers import build_general_query
+
+sample_related_fields = ['features', 'mutations', 'tags']
+
+sample_core_fields = ['id', 'name', 'patient_id']
 
 
 def return_patient_query():
     return db.session.query(Patient)
 
 
-def return_sample_query(*argv):
-    args = build_option_args(argv, accepted_args=['mutations', 'tags'])
-    return db.session.query(Sample).options(*args)
+def return_sample_query(*args):
+    return build_general_query(
+        Sample, args=args,
+        accepted_option_args=sample_related_fields,
+        accepted_query_args=sample_core_fields)
 
 
 def return_slide_query():
