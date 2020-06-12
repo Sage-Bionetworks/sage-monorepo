@@ -1,13 +1,13 @@
 from sqlalchemy import orm
 from flaskr import db
 from flaskr.db_models import Edge
-from .database_helpers import build_option_args
+from .database_helpers import build_option_args, build_query_args
 
 accepted_option_args = ['node_1', 'node_2']
 
 accepted_query_args = ['id',
-                       'node_1',
-                       'node_2',
+                       'node_1_id',
+                       'node_2_id',
                        'label',
                        'score']
 

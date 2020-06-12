@@ -34,8 +34,8 @@ def test_Edge_no_relations(app):
     string_representation_list = []
     separator = ', '
     fields_to_return = ['id',
-                        'node_1',
-                        'node_2',
+                        'node_1_id',
+                        'node_2_id',
                         'label',
                         'score']
 
@@ -44,12 +44,7 @@ def test_Edge_no_relations(app):
 
     assert isinstance(results, list)
     for result in results:
-        string_representation = '<Edge %r>' % result.id
-        string_representation_list.append(string_representation)
-        assert type(result.node_1) is NoneType
-        assert type(result.node_2) is NoneType
         assert result.node_1_id == node_1_id
         assert type(result.node_2_id) is int
         assert type(result.label) is str or NoneType
         assert type(result.score) is float or NoneType
-        assert repr(result) == string_representation
