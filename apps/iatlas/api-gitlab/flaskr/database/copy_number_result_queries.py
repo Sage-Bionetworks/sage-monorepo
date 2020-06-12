@@ -19,7 +19,8 @@ accepted_query_args = ['id',
 
 def return_copy_number_result_query(*args):
     option_args = build_option_args(*args, accepted_args=accepted_option_args)
-    query_args = build_query_args(*args, accepted_args=accepted_query_args)
+    query_args = build_query_args(
+        CopyNumberResult, * args, accepted_args=accepted_query_args)
     query = db.session.query(*query_args)
     if option_args:
         query = db.session.query(CopyNumberResult).options(*option_args)
