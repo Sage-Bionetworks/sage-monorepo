@@ -7,6 +7,15 @@ def test_Sample_with_relations(app):
     app()
     name = 'DO1328'
 
+    query = return_sample_query('gene_sample_assoc')
+    result = query.filter_by(name=name).first()
+
+    if type(result.gene_sample_assoc) is not NoneType:
+        assert isinstance(result.gene_sample_assoc, list)
+        # Don't need to iterate through every result.
+        for gene_sample_rel in result.gene_sample_assoc[0:2]:
+            assert gene_sample_rel.sample_id == result.id
+
     query = return_sample_query('feature_sample_assoc')
     result = query.filter_by(name=name).first()
 

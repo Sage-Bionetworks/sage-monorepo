@@ -37,6 +37,15 @@ def test_Gene_with_relations(app):
         for driver_result in result.driver_results[0:2]:
             assert driver_result.gene_id == result.id
 
+    query = return_gene_query(['gene_sample_assoc'])
+    result = query.filter_by(entrez=entrez).first()
+
+    if type(result.gene_sample_assoc) is not NoneType:
+        assert isinstance(result.gene_sample_assoc, list)
+        # Don't need to iterate through every result.
+        for gene_sample_rel in result.gene_sample_assoc[0:2]:
+            assert gene_sample_rel.gene_id == result.id
+
     query = return_gene_query(*relationships_to_join)
     result = query.filter_by(entrez=entrez).first()
 
