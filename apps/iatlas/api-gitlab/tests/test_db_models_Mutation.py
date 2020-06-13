@@ -12,7 +12,7 @@ def test_Mutation(app):
 
     query = return_mutation_query(
         'gene', 'mutation_code', 'mutation_type', 'samples')
-    results = query.filter_by(gene_id=gene_id).all()
+    results = query.filter_by(gene_id=gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
@@ -27,7 +27,8 @@ def test_Mutation(app):
             assert result.mutation_type.id == result.mutation_type_id
         if type(result.samples) is not NoneType:
             assert isinstance(result.samples, list)
-            for sample in result.samples:
+            # Don't need to iterate through every result.
+            for sample in result.samples[0:2]:
                 assert type(sample.id) is int
         assert result.gene_id == gene_id
         assert type(result.gene_id) is int

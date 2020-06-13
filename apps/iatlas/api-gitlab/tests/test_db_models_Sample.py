@@ -12,7 +12,8 @@ def test_Sample_with_relations(app):
 
     if type(result.features) is not NoneType:
         assert isinstance(result.features, list)
-        for feature in result.features:
+        # Don't need to iterate through every result.
+        for feature in result.features[0:2]:
             assert type(feature.name) is str
 
     query = return_sample_query(*['genes'])
@@ -20,7 +21,8 @@ def test_Sample_with_relations(app):
 
     if type(result.genes) is not NoneType:
         assert isinstance(result.genes, list)
-        for gene in result.genes:
+        # Don't need to iterate through every result.
+        for gene in result.genes[0:2]:
             assert type(gene.entrez) is int
 
     query = return_sample_query(*['mutations'])
@@ -28,7 +30,8 @@ def test_Sample_with_relations(app):
 
     if type(result.mutations) is not NoneType:
         assert isinstance(result.mutations, list)
-        for mutation in result.mutations:
+        # Don't need to iterate through every result.
+        for mutation in result.mutations[0:2]:
             assert type(mutation.id) is int
 
     query = return_sample_query(*['tags'])
@@ -36,7 +39,8 @@ def test_Sample_with_relations(app):
 
     if type(result.tags) is not NoneType:
         assert isinstance(result.tags, list)
-        for tag in result.tags:
+        # Don't need to iterate through every result.
+        for tag in result.tags[0:2]:
             assert type(tag.name) is str
     assert result.name == name
     assert type(result.patient_id) is int or NoneType
@@ -57,4 +61,3 @@ def test_Sample_no_relations(app):
     assert type(result.id) is int
     assert result.name == name
     assert type(result.patient_id) is int or NoneType
-    assert repr(result) == '<Sample %r>' % name

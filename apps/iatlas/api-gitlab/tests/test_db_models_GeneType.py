@@ -12,9 +12,9 @@ def test_gene_type(app):
 
     if type(result.genes) is not NoneType:
         assert isinstance(result.genes, list)
-        for gene in result.genes:
+        # Don't need to iterate through every result.
+        for gene in result.genes[0:2]:
             assert type(gene.entrez) is int
     assert result.name == gene_type_name
     assert type(result.display) is str or NoneType
-
     assert repr(result) == '<GeneType %r>' % gene_type_name

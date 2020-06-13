@@ -2,7 +2,7 @@ from sqlalchemy import orm
 from flaskr import db
 from flaskr.db_models import (Gene, GeneFamily, GeneFunction, GeneType,
                               ImmuneCheckpoint, NodeType, Pathway, SuperCategory, TherapyType)
-from .database_helpers import accepted_simple_table_query_args, build_general_query
+from .database_helpers import general_core_fields, build_general_query
 
 accepted_gene_option_args = ['gene_family',
                              'gene_function',
@@ -39,46 +39,46 @@ def return_gene_query(*args):
 def return_gene_family_query(*args):
     return build_general_query(
         GeneFamily, args=args,
-        accepted_query_args=accepted_simple_table_query_args)
+        accepted_query_args=general_core_fields)
 
 
 def return_gene_function_query(*args):
     return build_general_query(
         GeneFunction, args=args,
-        accepted_query_args=accepted_simple_table_query_args)
+        accepted_query_args=general_core_fields)
 
 
 def return_gene_type_query(*args):
     return build_general_query(
         GeneType, args=args,
-        accepted_query_args=accepted_simple_table_query_args)
+        accepted_query_args=general_core_fields)
 
 
 def return_immune_checkpoint_query(*args):
     return build_general_query(
         ImmuneCheckpoint, args=args,
-        accepted_query_args=accepted_simple_table_query_args)
+        accepted_query_args=general_core_fields)
 
 
 def return_node_type_query(*args):
     return build_general_query(
         NodeType, args=args,
-        accepted_query_args=accepted_simple_table_query_args)
+        accepted_query_args=general_core_fields)
 
 
 def return_pathway_query(*args):
     return build_general_query(
         Pathway, args=args,
-        accepted_query_args=accepted_simple_table_query_args)
+        accepted_query_args=general_core_fields)
 
 
 def return_super_category_query(*args):
     return build_general_query(
         SuperCategory, args=args,
-        accepted_query_args=accepted_simple_table_query_args)
+        accepted_query_args=general_core_fields)
 
 
 def return_therapy_type_query(*args):
     return build_general_query(
         TherapyType, args=args,
-        accepted_query_args=accepted_simple_table_query_args)
+        accepted_query_args=general_core_fields)

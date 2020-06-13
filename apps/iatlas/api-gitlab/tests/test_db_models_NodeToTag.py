@@ -10,7 +10,7 @@ def test_NodeToTag(app):
     separator = ', '
 
     query = return_node_to_tag_query()
-    results = query.filter_by(node_id=node_id).all()
+    results = query.filter_by(node_id=node_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:

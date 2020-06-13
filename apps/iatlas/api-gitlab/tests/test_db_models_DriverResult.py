@@ -47,20 +47,9 @@ def test_DriverResult_no_relations(app):
     gene_id = 20
     string_representation_list = []
     separator = ', '
-    fields_to_return = ['id',
-                        'p_value',
-                        'fold_change',
-                        'log10_p_value',
-                        'log10_fold_change',
-                        'n_wt',
-                        'n_mut',
-                        'feature_id',
-                        'gene_id',
-                        'mutation_code_id',
-                        'tag_id']
 
-    query = return_driver_result_query(*fields_to_return)
-    results = query.filter(DriverResult.gene_id == gene_id).all()
+    query = return_driver_result_query()
+    results = query.filter(DriverResult.gene_id == gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:

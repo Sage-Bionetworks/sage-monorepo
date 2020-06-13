@@ -27,7 +27,8 @@ def test_Gene_with_relations(app):
         assert result.gene_function.id == result.gene_function_id
     if type(result.gene_types) is not NoneType:
         assert isinstance(result.gene_types, list)
-        for gene_type in result.gene_types:
+        # Don't need to iterate through every result.
+        for gene_type in result.gene_types[0:2]:
             assert type(gene_type.name) is str
     if type(result.immune_checkpoint) is not NoneType:
         assert result.immune_checkpoint.id == result.immune_checkpoint_id
@@ -87,4 +88,3 @@ def test_Gene_no_relations(app):
     assert type(result.pathway_id) is int or NoneType
     assert type(result.super_cat_id) is int or NoneType
     assert type(result.therapy_type_id) is int or NoneType
-    assert repr(result) == '<Gene %r>' % entrez

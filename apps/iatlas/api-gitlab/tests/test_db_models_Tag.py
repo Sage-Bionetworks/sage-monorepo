@@ -13,15 +13,18 @@ def test_Tag(app):
 
     if type(result.related_tags) is not NoneType:
         assert isinstance(result.related_tags, list)
-        for related_tag in result.related_tags:
+        # Don't need to iterate through every result.
+        for related_tag in result.related_tags[0:2]:
             assert type(related_tag.name) is str
     if type(result.samples) is not NoneType:
         assert isinstance(result.samples, list)
-        for sample in result.samples:
+        # Don't need to iterate through every result.
+        for sample in result.samples[0:2]:
             assert type(sample.name) is str
     if type(result.tags) is not NoneType:
         assert isinstance(result.tags, list)
-        for tag in result.tags:
+        # Don't need to iterate through every result.
+        for tag in result.tags[0:2]:
             assert type(tag.name) is str
     assert result.name == name
     assert type(result.characteristics) is str

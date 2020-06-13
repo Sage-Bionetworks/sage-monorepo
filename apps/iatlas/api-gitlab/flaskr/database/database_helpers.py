@@ -1,7 +1,7 @@
 from sqlalchemy import orm
 from flaskr import db
 
-accepted_simple_table_query_args = ['id', 'name']
+general_core_fields = ['id', 'name']
 
 
 def build_general_query(model, args=[], accepted_option_args=[], accepted_query_args=[]):
