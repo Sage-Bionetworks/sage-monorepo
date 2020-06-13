@@ -4,7 +4,7 @@ from flaskr.database import return_tag_to_tag_query
 from flaskr.db_models import TagToTag
 
 
-def test_TagToTag(app):
+def test_TagToTag_with_relations(app):
     app()
     tag_id = 64
     string_representation_list = []
@@ -32,3 +32,18 @@ def test_TagToTag(app):
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
+
+
+def test_TagToTag_no_relations(app):
+    app()
+    tag_id = 64
+
+    query = return_tag_to_tag_query()
+    results = query.filter_by(tag_id=tag_id).limit(3).all()
+
+    assert isinstance(results, list)
+    for result in results:
+        assert result.related_tags == []
+        assert result.tags == []
+        assert result.tag_id == tag_id
+        assert type(result.related_tag_id) is int
