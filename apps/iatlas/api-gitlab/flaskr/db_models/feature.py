@@ -18,9 +18,10 @@ class Feature(Base):
         db.Integer, db.ForeignKey('method_tags.id'), nullable=True)
 
     feature_class = db.relationship(
-        "FeatureClass", uselist=False, lazy='noload')
+        "FeatureClass", backref='features', uselist=False, lazy='noload')
 
-    method_tag = db.relationship("MethodTag", uselist=False, lazy='noload')
+    method_tag = db.relationship(
+        "MethodTag", backref='features', uselist=False, lazy='noload')
 
     samples = db.relationship(
         "Sample", secondary='features_to_samples', uselist=True, lazy='noload')

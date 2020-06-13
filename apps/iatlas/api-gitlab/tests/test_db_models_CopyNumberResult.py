@@ -12,7 +12,7 @@ def test_CopyNumberResult_with_relations(app):
     relationships_to_join = ['feature', 'gene', 'tag']
 
     query = return_copy_number_result_query(*relationships_to_join)
-    results = query.filter_by(gene_id=gene_id).all()
+    results = query.filter_by(gene_id=gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
@@ -44,19 +44,9 @@ def test_CopyNumberResult_no_relations(app):
     gene_id = 1
     string_representation_list = []
     separator = ', '
-    fields_to_return = ['id',
-                        'direction',
-                        'mean_normal',
-                        'mean_cnv',
-                        'p_value',
-                        'log10_p_value',
-                        't_stat',
-                        'feature_id',
-                        'gene_id',
-                        'tag_id']
 
-    query = return_copy_number_result_query(*fields_to_return)
-    results = query.filter_by(gene_id=gene_id).all()
+    query = return_copy_number_result_query()
+    results = query.filter_by(gene_id=gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:

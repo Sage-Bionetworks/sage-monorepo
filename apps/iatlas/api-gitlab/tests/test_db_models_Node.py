@@ -10,7 +10,7 @@ def test_Node(app):
     separator = ', '
 
     query = return_node_query()
-    results = query.filter_by(gene_id=gene_id).all()
+    results = query.filter_by(gene_id=gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:

@@ -38,6 +38,9 @@ class Gene(Base):
     gene_function = db.relationship(
         'GeneFunction', uselist=False, lazy='noload')
 
+    gene_types = db.relationship(
+        "GeneType", secondary='genes_to_types', lazy='noload')
+
     immune_checkpoint = db.relationship(
         'ImmuneCheckpoint', uselist=False, lazy='noload')
 
@@ -50,8 +53,8 @@ class Gene(Base):
 
     therapy_type = db.relationship('TherapyType', uselist=False, lazy='noload')
 
-    gene_types = db.relationship(
-        "GeneType", secondary='genes_to_types', lazy='noload')
+    samples = db.relationship(
+        "Sample", secondary='genes_to_samples', uselist=True, lazy='noload')
 
     def __repr__(self):
         return '<Gene %r>' % self.entrez

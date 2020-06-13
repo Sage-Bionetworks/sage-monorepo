@@ -33,14 +33,9 @@ def test_Edge_no_relations(app):
     node_1_id = 42
     string_representation_list = []
     separator = ', '
-    fields_to_return = ['id',
-                        'node_1_id',
-                        'node_2_id',
-                        'label',
-                        'score']
 
-    query = return_edge_query(*fields_to_return)
-    results = query.filter_by(node_1_id=node_1_id).all()
+    query = return_edge_query()
+    results = query.filter_by(node_1_id=node_1_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:

@@ -11,7 +11,7 @@ def test_TagToTag(app):
     separator = ', '
 
     query = return_tag_to_tag_query('related_tags', 'tags')
-    results = query.filter_by(tag_id=tag_id).all()
+    results = query.filter_by(tag_id=tag_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
@@ -19,11 +19,13 @@ def test_TagToTag(app):
         string_representation_list.append(string_representation)
         if type(result.related_tags) is not NoneType:
             assert isinstance(result.related_tags, list)
-            for related_tag in result.related_tags:
+            # Don't need to iterate through every result.
+            for related_tag in result.related_tags[0:2]:
                 assert type(related_tag.name) is str
         if type(result.tags) is not NoneType:
             assert isinstance(result.tags, list)
-            for tag in result.tags:
+            # Don't need to iterate through every result.
+            for tag in result.tags[0:2]:
                 assert tag.id == tag_id
         assert result.tag_id == tag_id
         assert type(result.related_tag_id) is int

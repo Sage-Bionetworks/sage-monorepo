@@ -17,4 +17,5 @@ def test_ImmuneCheckpoint(app):
     query = return_immune_checkpoint_query('name')
     result = query.filter_by(name=name).first()
 
+    assert not hasattr(result, 'id')
     assert result.name == name

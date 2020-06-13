@@ -12,7 +12,7 @@ def test_SampleToMutation(app):
     separator = ', '
 
     query = return_sample_to_mutation_query('samples', 'mutations')
-    results = query.filter_by(sample_id=sample_id).all()
+    results = query.filter_by(sample_id=sample_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
@@ -20,11 +20,13 @@ def test_SampleToMutation(app):
         string_representation_list.append(string_representation)
         if type(result.mutations) is not NoneType:
             assert isinstance(result.mutations, list)
-            for mutation in result.mutations:
+            # Don't need to iterate through every result.
+            for mutation in result.mutations[0:2]:
                 assert type(mutation.id) is int
         if type(result.samples) is not NoneType:
             assert isinstance(result.samples, list)
-            for sample in result.samples:
+            # Don't need to iterate through every result.
+            for sample in result.samples[0:2]:
                 assert sample.id == sample_id
         assert result.sample_id == sample_id
         assert type(result.mutation_id) is int
