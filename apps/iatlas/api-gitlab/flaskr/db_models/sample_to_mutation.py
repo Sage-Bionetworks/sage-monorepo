@@ -16,10 +16,10 @@ class SampleToMutation(Base):
     status = db.Column(status_enum, nullable=True)
 
     samples = db.relationship('Sample', backref=orm.backref(
-        "sample_mutation_assoc"), uselist=True)
+        "sample_mutation_assoc"), uselist=True, lazy='noload')
 
     mutations = db.relationship('Mutation', backref=orm.backref(
-        "sample_mutation_assoc"), uselist=True)
+        "sample_mutation_assoc"), uselist=True, lazy='noload')
 
     def __repr__(self):
         return '<SampleToMutation %r>' % self.sample_id
