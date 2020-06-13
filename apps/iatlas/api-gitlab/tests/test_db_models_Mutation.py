@@ -4,14 +4,15 @@ from flaskr.database import return_mutation_query
 from flaskr.db_models import Mutation
 
 
-def test_Mutation(app):
+def test_Mutation_with_relations(app):
     app()
     gene_id = 77
     string_representation_list = []
     separator = ', '
+    relationships_to_load = [
+        'gene', 'mutation_code', 'mutation_type', 'samples']
 
-    query = return_mutation_query(
-        'gene', 'mutation_code', 'mutation_type', 'samples')
+    query = return_mutation_query(*relationships_to_load)
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 
     assert isinstance(results, list)
@@ -37,3 +38,21 @@ def test_Mutation(app):
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
+
+
+def test_Mutation_no_relations(app):
+    app()
+    gene_id = 77
+    string_representation_list = []
+    separator = ', '
+
+    query = return_mutation_query()
+    results = query.filter_by(gene_id=gene_id).limit(3).all()
+
+    assert isinstance(results, list)
+    for result in results:
+        assert type(result.id) is int
+        assert result.gene_id == gene_id
+        assert type(result.gene_id) is int
+        assert type(result.mutation_code_id) is int
+        assert type(result.mutation_type_id) is int or NoneType

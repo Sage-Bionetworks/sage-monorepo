@@ -4,7 +4,7 @@ from flaskr.db_models import FeatureClass, Feature, MethodTag
 from .database_helpers import general_core_fields, build_general_query
 
 feature_related_fields = [
-    'copy_number_results', 'feature_class', 'method_tag', 'samples']
+    'copy_number_results', 'driver_results', 'feature_class', 'method_tag', 'samples']
 
 feature_core_fields = [
     'id', 'name', 'display', 'order', 'unit', 'class_id', 'method_tag_id']

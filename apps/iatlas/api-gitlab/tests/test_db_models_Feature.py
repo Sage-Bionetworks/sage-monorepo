@@ -10,8 +10,9 @@ def test_Feature_with_relations(app):
     display = 'B Cells Memory'
     class_id = 11
     method_tag_id = 2
+    relationships_to_join = ['feature_class', 'method_tag', 'samples']
 
-    query = return_feature_query(['copy_number_results'])
+    query = return_feature_query('copy_number_results')
     result = query.filter_by(name=name).first()
 
     if type(result.copy_number_results) is not NoneType:
@@ -20,7 +21,14 @@ def test_Feature_with_relations(app):
         for copy_number_result in result.copy_number_results[0:2]:
             assert copy_number_result.feature_id == result.id
 
-    relationships_to_join = ['feature_class', 'method_tag', 'samples']
+    query = return_feature_query('driver_results')
+    result = query.filter_by(name=name).first()
+
+    if type(result.driver_results) is not NoneType:
+        assert isinstance(result.driver_results, list)
+        # Don't need to iterate through every result.
+        for driver_result in result.driver_results[0:2]:
+            assert driver_result.feature_id == result.id
 
     query = return_feature_query(*relationships_to_join)
     result = query.filter_by(name=name).first()

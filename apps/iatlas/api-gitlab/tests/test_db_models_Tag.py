@@ -7,6 +7,7 @@ from flaskr.db_models import Tag
 def test_Tag_with_relations(app):
     app()
     name = 'ACC'
+    relations_to_load = ['related_tags', 'samples', 'tags']
 
     query = return_tag_query(['copy_number_results'])
     result = query.filter_by(name=name).first()
@@ -17,7 +18,14 @@ def test_Tag_with_relations(app):
         for copy_number_result in result.copy_number_results[0:2]:
             assert copy_number_result.tag_id == result.id
 
-    relations_to_load = ['related_tags', 'samples', 'tags']
+    query = return_tag_query(['driver_results'])
+    result = query.filter_by(name=name).first()
+
+    if type(result.driver_results) is not NoneType:
+        assert isinstance(result.driver_results, list)
+        # Don't need to iterate through every result.
+        for driver_result in result.driver_results[0:2]:
+            assert driver_result.tag_id == result.id
 
     query = return_tag_query(*relations_to_load)
     result = query.filter_by(name=name).first()
