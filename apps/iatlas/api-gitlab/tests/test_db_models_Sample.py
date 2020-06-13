@@ -52,6 +52,15 @@ def test_Sample_with_relations(app):
         for mutation in result.mutations[0:2]:
             assert type(mutation.id) is int
 
+    query = return_sample_query('sample_mutation_assoc')
+    result = query.filter_by(name=name).first()
+
+    if type(result.sample_mutation_assoc) is not NoneType:
+        assert isinstance(result.sample_mutation_assoc, list)
+        # Don't need to iterate through every result.
+        for sample_mutation_rel in result.sample_mutation_assoc[0:2]:
+            assert sample_mutation_rel.sample_id == result.id
+
     query = return_sample_query(*['tags'])
     result = query.filter_by(name=name).first()
 
