@@ -16,5 +16,11 @@ class Node(Base):
     x = db.Column(db.Numeric, nullable=True)
     y = db.Column(db.Numeric, nullable=True)
 
+    gene = db.relationship('Gene', backref='node',
+                           uselist=False, lazy='noload')
+
+    feature = db.relationship('Feature', backref='node',
+                              uselist=False, lazy='noload')
+
     def __repr__(self):
         return '<Node %r>' % self.id

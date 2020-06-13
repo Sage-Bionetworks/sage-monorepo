@@ -16,10 +16,11 @@ class Edge(Base):
     score = db.Column(db.Numeric, nullable=True)
 
     node_1 = db.relationship(
-        'Node', uselist=False, lazy='noload',
+        'Node', backref='edges_primary', uselist=False, lazy='noload',
         primaryjoin='Node.id==Edge.node_1_id')
+
     node_2 = db.relationship(
-        'Node', uselist=False, lazy='noload',
+        'Node', backref='edges_secondary', uselist=False, lazy='noload',
         primaryjoin='Node.id==Edge.node_2_id')
 
     def __repr__(self):
