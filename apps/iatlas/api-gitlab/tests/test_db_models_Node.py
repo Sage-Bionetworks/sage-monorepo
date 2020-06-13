@@ -11,6 +11,24 @@ def test_Node(app):
     relationships_to_load = ['gene', 'feature',
                              'edge_primary', 'edge_secondary']
 
+    query = return_node_query('node_tag_assoc')
+    result = query.filter_by(gene_id=gene_id).first()
+
+    if type(result.node_tag_assoc) is not NoneType:
+        assert isinstance(result.node_tag_assoc, list)
+        # Don't need to iterate through every result.
+        for node_tag_rel in result.node_tag_assoc[0:2]:
+            assert node_tag_rel.node_id == result.id
+
+    query = return_node_query('tags')
+    result = query.filter_by(gene_id=gene_id).first()
+
+    if type(result.tags) is not NoneType:
+        assert isinstance(result.tags, list)
+        # Don't need to iterate through every result.
+        for tag in result.tags[0:2]:
+            assert type(tag.name) is str
+
     query = return_node_query(*relationships_to_load)
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 

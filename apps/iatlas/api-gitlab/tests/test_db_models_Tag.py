@@ -27,6 +27,24 @@ def test_Tag_with_relations(app):
         for driver_result in result.driver_results[0:2]:
             assert driver_result.tag_id == result.id
 
+    query = return_tag_query('node_tag_assoc')
+    result = query.filter_by(name=name).first()
+
+    if type(result.node_tag_assoc) is not NoneType:
+        assert isinstance(result.node_tag_assoc, list)
+        # Don't need to iterate through every result.
+        for node_tag_rel in result.node_tag_assoc[0:2]:
+            assert node_tag_rel.tag_id == result.id
+
+    query = return_tag_query('nodes')
+    result = query.filter_by(name=name).first()
+
+    if type(result.nodes) is not NoneType:
+        assert isinstance(result.nodes, list)
+        # Don't need to iterate through every result.
+        for node in result.nodes[0:2]:
+            assert type(tag.node) is str
+
     query = return_tag_query(*relations_to_load)
     result = query.filter_by(name=name).first()
 

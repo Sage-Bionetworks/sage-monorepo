@@ -3,7 +3,8 @@ from flaskr import db
 from flaskr.db_models import Node
 from .database_helpers import build_general_query
 
-related_fields = ['gene', 'feature', 'edges_primary', 'edges_secondary']
+related_fields = [
+    'edges_primary', 'edges_secondary', 'feature', 'gene', 'node_tag_assoc', 'tags']
 
 core_fields = ['id', 'gene_id', 'label', 'score', 'x', 'y']
 

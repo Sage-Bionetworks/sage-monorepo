@@ -22,5 +22,8 @@ class Node(Base):
     feature = db.relationship('Feature', backref='node',
                               uselist=False, lazy='noload')
 
+    tags = db.relationship("Tag", secondary='nodes_to_tags',
+                           uselist=True, lazy='noload')
+
     def __repr__(self):
         return '<Node %r>' % self.id

@@ -4,7 +4,7 @@ from flaskr.db_models import Tag
 from .database_helpers import build_general_query
 
 related_fields = [
-    'copy_number_results', 'driver_results', 'related_tags', 'samples', 'tags']
+    'copy_number_results', 'driver_results', 'node_tag_assoc', 'related_tags', 'samples', 'tags']
 
 core_fields = ['id', 'name', 'characteristics', 'display', 'color']
 
