@@ -8,7 +8,8 @@ class GeneType(Base):
     name = db.Column(db.String, nullable=False)
     display = db.Column(db.String, nullable=True)
 
-    genes = db.relationship("Gene", secondary='genes_to_types')
+    genes = db.relationship(
+        "Gene", secondary='genes_to_types', uselist=True, lazy='noload')
 
     def __repr__(self):
         return '<GeneType %r>' % self.name

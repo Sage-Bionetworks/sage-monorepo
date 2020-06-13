@@ -8,6 +8,7 @@ gene_related_fields = ['copy_number_results',
                        'driver_results',
                        'gene_family',
                        'gene_function',
+                       'gene_type_assoc',
                        'gene_types',
                        'immune_checkpoint',
                        'node_type',
@@ -29,6 +30,8 @@ gene_core_fields = ['entrez',
                     'pathway_id',
                     'super_cat_id',
                     'therapy_type_id']
+
+gene_type_related_fields = ['gene_type_assoc', 'genes']
 
 
 def return_gene_query(*args):
@@ -53,6 +56,7 @@ def return_gene_function_query(*args):
 def return_gene_type_query(*args):
     return build_general_query(
         GeneType, args=args,
+        accepted_option_args=gene_type_related_fields,
         accepted_query_args=general_core_fields)
 
 

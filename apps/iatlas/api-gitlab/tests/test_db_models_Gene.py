@@ -10,6 +10,7 @@ def test_Gene_with_relations(app):
     hgnc = 'CXCL10'
     relationships_to_join = ['gene_family',
                              'gene_function',
+                             'gene_type_assoc',
                              'gene_types',
                              'immune_checkpoint',
                              'node_type',
@@ -43,6 +44,11 @@ def test_Gene_with_relations(app):
         assert result.gene_family.id == result.gene_family_id
     if type(result.gene_function) is not NoneType:
         assert result.gene_function.id == result.gene_function_id
+    if type(result.gene_type_assoc) is not NoneType:
+        assert isinstance(result.gene_type_assoc, list)
+        # Don't need to iterate through every result.
+        for gene_type_rel in result.gene_type_assoc[0:2]:
+            assert gene_type_rel.gene_id == result.id
     if type(result.gene_types) is not NoneType:
         assert isinstance(result.gene_types, list)
         # Don't need to iterate through every result.
