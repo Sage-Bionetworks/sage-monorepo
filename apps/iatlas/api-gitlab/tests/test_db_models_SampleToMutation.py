@@ -7,7 +7,7 @@ from flaskr.enums import status_enum
 
 def test_SampleToMutation_with_relations(app):
     app()
-    sample_id = 481
+    sample_id = 489
     string_representation_list = []
     separator = ', '
 
