@@ -33,6 +33,7 @@ def test_gene_type_no_relations(app):
     query = return_gene_type_query()
     result = query.filter_by(name=gene_type_name).first()
 
+    assert result.genes == []
     assert type(result.id) is int
     assert result.name == gene_type_name
     assert type(result.display) is str or NoneType

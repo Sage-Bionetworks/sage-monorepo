@@ -33,25 +33,29 @@ class Gene(Base):
     therapy_type_id = db.Column(
         db.Integer, db.ForeignKey('therapy_types.id'), nullable=True)
 
-    gene_family = db.relationship('GeneFamily', uselist=False, lazy='noload')
+    gene_family = db.relationship(
+        'GeneFamily', backref='genes', uselist=False, lazy='noload')
 
     gene_function = db.relationship(
-        'GeneFunction', uselist=False, lazy='noload')
+        'GeneFunction', backref='genes', uselist=False, lazy='noload')
 
     gene_types = db.relationship(
-        "GeneType", secondary='genes_to_types', lazy='noload')
+        "GeneType", secondary='genes_to_types', uselist=True, lazy='noload')
 
     immune_checkpoint = db.relationship(
-        'ImmuneCheckpoint', uselist=False, lazy='noload')
+        'ImmuneCheckpoint', backref='genes', uselist=False, lazy='noload')
 
-    node_type = db.relationship('NodeType', uselist=False, lazy='noload')
+    node_type = db.relationship(
+        'NodeType', backref='genes', uselist=False, lazy='noload')
 
-    pathway = db.relationship('Pathway', uselist=False, lazy='noload')
+    pathway = db.relationship(
+        'Pathway', backref='genes', uselist=False, lazy='noload')
 
     super_category = db.relationship(
-        'SuperCategory', uselist=False, lazy='noload')
+        'SuperCategory', backref='genes', uselist=False, lazy='noload')
 
-    therapy_type = db.relationship('TherapyType', uselist=False, lazy='noload')
+    therapy_type = db.relationship(
+        'TherapyType', backref='genes', uselist=False, lazy='noload')
 
     samples = db.relationship(
         "Sample", secondary='genes_to_samples', uselist=True, lazy='noload')

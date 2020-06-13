@@ -34,6 +34,8 @@ gene_core_fields = ['entrez',
 
 gene_type_related_fields = ['gene_type_assoc', 'genes']
 
+sub_related_fields = ['genes']
+
 
 def return_gene_query(*args):
     return build_general_query(
@@ -45,12 +47,14 @@ def return_gene_query(*args):
 def return_gene_family_query(*args):
     return build_general_query(
         GeneFamily, args=args,
+        accepted_option_args=sub_related_fields,
         accepted_query_args=general_core_fields)
 
 
 def return_gene_function_query(*args):
     return build_general_query(
         GeneFunction, args=args,
+        accepted_option_args=sub_related_fields,
         accepted_query_args=general_core_fields)
 
 
@@ -64,28 +68,33 @@ def return_gene_type_query(*args):
 def return_immune_checkpoint_query(*args):
     return build_general_query(
         ImmuneCheckpoint, args=args,
+        accepted_option_args=sub_related_fields,
         accepted_query_args=general_core_fields)
 
 
 def return_node_type_query(*args):
     return build_general_query(
         NodeType, args=args,
+        accepted_option_args=sub_related_fields,
         accepted_query_args=general_core_fields)
 
 
 def return_pathway_query(*args):
     return build_general_query(
         Pathway, args=args,
+        accepted_option_args=sub_related_fields,
         accepted_query_args=general_core_fields)
 
 
 def return_super_category_query(*args):
     return build_general_query(
         SuperCategory, args=args,
+        accepted_option_args=sub_related_fields,
         accepted_query_args=general_core_fields)
 
 
 def return_therapy_type_query(*args):
     return build_general_query(
         TherapyType, args=args,
+        accepted_option_args=sub_related_fields,
         accepted_query_args=general_core_fields)
