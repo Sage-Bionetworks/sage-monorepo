@@ -37,8 +37,6 @@ def test_NodeToTag_with_relations(app):
 def test_NodeToTag_no_relations(app):
     app()
     node_id = 1
-    string_representation_list = []
-    separator = ', '
 
     query = return_node_to_tag_query()
     results = query.filter_by(node_id=node_id).limit(3).all()

@@ -65,8 +65,6 @@ def test_Node(app):
 def test_Node(app):
     app()
     gene_id = 30749
-    string_representation_list = []
-    separator = ', '
 
     query = return_node_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()

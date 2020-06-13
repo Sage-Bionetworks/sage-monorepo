@@ -36,16 +36,12 @@ def test_GeneToSample_with_relations(app):
 def test_GeneToSample_no_relations(app):
     app()
     gene_id = 1
-    string_representation_list = []
-    separator = ', '
 
     query = return_gene_to_sample_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
-        string_representation = '<GeneToSample %r>' % gene_id
-        string_representation_list.append(string_representation)
         assert result.genes == []
         assert result.samples == []
         assert result.gene_id == gene_id

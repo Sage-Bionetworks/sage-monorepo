@@ -39,8 +39,6 @@ def test_FeatureToSample_with_relations(app):
 def test_FeatureToSample_no_relations(app):
     app()
     feature_id = 1
-    string_representation_list = []
-    separator = ', '
 
     query = return_feature_to_sample_query()
     results = query.filter_by(feature_id=feature_id).limit(3).all()

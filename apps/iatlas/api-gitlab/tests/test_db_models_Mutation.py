@@ -52,8 +52,6 @@ def test_Mutation_with_relations(app):
 def test_Mutation_no_relations(app):
     app()
     gene_id = 77
-    string_representation_list = []
-    separator = ', '
 
     query = return_mutation_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()

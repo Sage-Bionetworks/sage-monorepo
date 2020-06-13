@@ -45,8 +45,6 @@ def test_DriverResult_with_relations(app):
 def test_DriverResult_no_relations(app):
     app()
     gene_id = 20
-    string_representation_list = []
-    separator = ', '
 
     query = return_driver_result_query()
     results = query.filter(DriverResult.gene_id == gene_id).limit(3).all()

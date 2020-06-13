@@ -42,8 +42,6 @@ def test_CopyNumberResult_with_relations(app):
 def test_CopyNumberResult_no_relations(app):
     app()
     gene_id = 1
-    string_representation_list = []
-    separator = ', '
 
     query = return_copy_number_result_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()

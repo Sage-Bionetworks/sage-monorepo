@@ -31,8 +31,6 @@ def test_Edge_with_relations(app):
 def test_Edge_no_relations(app):
     app()
     node_1_id = 42
-    string_representation_list = []
-    separator = ', '
 
     query = return_edge_query()
     results = query.filter_by(node_1_id=node_1_id).limit(3).all()
