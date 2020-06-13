@@ -1,10 +1,15 @@
 from sqlalchemy import orm
 from flaskr import db
 from flaskr.db_models import Tag
-from .database_helpers import build_option_args
+from .database_helpers import build_general_query
+
+related_fields = ['copy_number_results', 'related_tags', 'samples', 'tags']
+
+core_fields = ['id', 'name', 'characteristics', 'display', 'color']
 
 
-def return_tag_query(*argv):
-    args = build_option_args(argv, accepted_args=[
-                             'related_tags', 'samples', 'tags'])
-    return db.session.query(Tag).options(*args)
+def return_tag_query(*args):
+    return build_general_query(
+        Tag, args=args,
+        accepted_option_args=related_fields,
+        accepted_query_args=core_fields)

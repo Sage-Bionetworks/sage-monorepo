@@ -8,6 +8,16 @@ def test_Gene_with_relations(app):
     app()
     entrez = 3627
     hgnc = 'CXCL10'
+
+    query = return_gene_query(['copy_number_results'])
+    result = query.filter_by(entrez=entrez).first()
+
+    if type(result.copy_number_results) is not NoneType:
+        assert isinstance(result.copy_number_results, list)
+        # Don't need to iterate through every result.
+        for copy_number_result in result.copy_number_results[0:2]:
+            assert copy_number_result.gene_id == result.id
+
     relationships_to_join = ['gene_family',
                              'gene_function',
                              'gene_types',

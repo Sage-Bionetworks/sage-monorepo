@@ -4,7 +4,8 @@ from flaskr.db_models import (Gene, GeneFamily, GeneFunction, GeneType,
                               ImmuneCheckpoint, NodeType, Pathway, SuperCategory, TherapyType)
 from .database_helpers import general_core_fields, build_general_query
 
-accepted_gene_option_args = ['gene_family',
+accepted_gene_option_args = ['copy_number_results',
+                             'gene_family',
                              'gene_function',
                              'gene_types',
                              'immune_checkpoint',
