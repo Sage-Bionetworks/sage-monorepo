@@ -1,7 +1,0 @@
-type DataSet {
-    sampleGroup: String!
-    groupName: String!
-    groupSize: Int!
-    characteristics: String
-    color: String
-}

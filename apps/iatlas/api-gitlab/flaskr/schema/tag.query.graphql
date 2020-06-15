@@ -1,0 +1,7 @@
+type Tag {
+    name: String!
+    display: String!
+    sampleCount: Int!
+    characteristics: String
+    color: String
+}
