@@ -8,8 +8,8 @@ related_fields = ['related_tags', 'tags']
 core_fields = ['related_tag_id', 'tag_id']
 
 
-def return_tag_to_tag_query(*args):
+def return_tag_to_tag_query(*args, model=TagToTag):
     return build_general_query(
-        TagToTag, args=args,
+        model, args=args,
         accepted_option_args=related_fields,
         accepted_query_args=core_fields)

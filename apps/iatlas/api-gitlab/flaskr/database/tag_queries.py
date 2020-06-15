@@ -14,8 +14,8 @@ related_fields = ['copy_number_results',
 core_fields = ['id', 'name', 'characteristics', 'display', 'color']
 
 
-def return_tag_query(*args):
+def return_tag_query(*args, model=Tag):
     return build_general_query(
-        Tag, args=args,
+        model, args=args,
         accepted_option_args=related_fields,
         accepted_query_args=core_fields)
