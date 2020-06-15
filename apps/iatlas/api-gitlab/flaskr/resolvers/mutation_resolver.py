@@ -21,7 +21,7 @@ def resolve_mutation(_obj, info, id):
     return {
         "id": get_value(mutation, 'id'),
         "gene": get_child_value(get_value(mutation, 'gene_id')),
-        "mutationCode": get_child_value(mutation, 'mutation_code'),
-        "mutationType": get_child_value(mutation, 'mutation_type'),
+        "mutationCode": get_child_value(mutation, 'mutation_code_id'),
+        "mutationType": get_child_value(mutation, 'mutation_type_id'),
         "samples": None
     }
