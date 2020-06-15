@@ -20,9 +20,9 @@ class Sample(Base):
     mutations = db.relationship(
         "Mutation", secondary='samples_to_mutations', uselist=True, lazy='noload')
 
-    patients = db.relationship(
+    patient = db.relationship(
         "Patient", backref=orm.backref('samples', uselist=True, lazy='noload'),
-        uselist=True, lazy='noload')
+        uselist=False, lazy='noload')
 
     tags = db.relationship(
         "Tag", secondary='samples_to_tags', uselist=True, lazy='noload')

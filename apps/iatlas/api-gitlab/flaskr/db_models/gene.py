@@ -35,28 +35,35 @@ class Gene(Base):
         db.Integer, db.ForeignKey('therapy_types.id'), nullable=True)
 
     gene_family = db.relationship(
-        'GeneFamily', backref=orm.backref('genes', uselist=True, lazy='noload'), uselist=False, lazy='noload')
+        'GeneFamily', backref=orm.backref('genes', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
 
     gene_function = db.relationship(
-        'GeneFunction', backref=orm.backref('genes', uselist=True, lazy='noload'), uselist=False, lazy='noload')
+        'GeneFunction', backref=orm.backref('genes', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
 
     gene_types = db.relationship(
         "GeneType", secondary='genes_to_types', uselist=True, lazy='noload')
 
     immune_checkpoint = db.relationship(
-        'ImmuneCheckpoint', backref=orm.backref('genes', uselist=True, lazy='noload'), uselist=False, lazy='noload')
+        'ImmuneCheckpoint', backref=orm.backref('genes', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
 
     node_type = db.relationship(
-        'NodeType', backref=orm.backref('genes', uselist=True, lazy='noload'), uselist=False, lazy='noload')
+        'NodeType', backref=orm.backref('genes', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
 
     pathway = db.relationship(
-        'Pathway', backref=orm.backref('genes', uselist=True, lazy='noload'), uselist=False, lazy='noload')
+        'Pathway', backref=orm.backref('genes', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
 
     super_category = db.relationship(
-        'SuperCategory', backref=orm.backref('genes', uselist=True, lazy='noload'), uselist=False, lazy='noload')
+        'SuperCategory', backref=orm.backref('genes', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
 
     therapy_type = db.relationship(
-        'TherapyType', backref=orm.backref('genes', uselist=True, lazy='noload'), uselist=False, lazy='noload')
+        'TherapyType', backref=orm.backref('genes', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
 
     samples = db.relationship(
         "Sample", secondary='genes_to_samples', uselist=True, lazy='noload')
