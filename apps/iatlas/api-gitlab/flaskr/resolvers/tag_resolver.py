@@ -4,6 +4,7 @@ from collections import defaultdict
 from flaskr import db
 from flaskr.db_models import FeatureClass, Sample, SampleToTag, Tag, TagToTag
 from flaskr.database import return_sample_to_tag_query, return_tag_query, return_tag_to_tag_query
+from .resolver_helpers import get_value
 
 
 def resolve_tags(_obj, info, dataSet, related, feature=None):
@@ -26,6 +27,8 @@ def resolve_tags(_obj, info, dataSet, related, feature=None):
     # JOIN tags AS tags_1 ON tags_1.id = tags_to_tags_2.tag_id
     # GROUP BY "name", display, "characteristics", color
 
+    selection_set = info.field_nodes[0].selection_set
+
     tag = orm.aliased(Tag, name='t')
     dataset_tag = orm.aliased(Tag, name='dt')
     related_tag = orm.aliased(Tag, name='rt')
@@ -33,13 +36,22 @@ def resolve_tags(_obj, info, dataSet, related, feature=None):
     samples_to_tags_2 = orm.aliased(SampleToTag, name='st2')
     tags_to_tags_1 = orm.aliased(TagToTag, name='tt1')
     tags_to_tags_2 = orm.aliased(TagToTag, name='tt2')
-    query = sess.query(tag.name.label('name'),
-                       tag.display.label('display'),
-                       tag.characteristics.label('characteristics'),
-                       tag.color.label('color'),
-                       func.array_agg(
-                           samples_to_tags_2.sample_id).label('samples'),
-                       func.count(samples_to_tags_2.sample_id).label('sample_count')).\
+
+    select_field_node_mapping = {'characteristics': tag.characteristics.label('characteristics'),
+                                 'color': tag.color.label('color'),
+                                 'display': tag.display.label('display'),
+                                 'name': tag.name.label('name'),
+                                 'sampleCount': func.count(func.distinct(samples_to_tags_2.sample_id)).label('sample_count'),
+                                 'sampleIds': func.array_agg(func.distinct(samples_to_tags_2.sample_id)).label('samples')}
+
+    select_fields = []
+    if selection_set is not None:
+        for selection in selection_set.selections:
+            if selection.name.value in select_field_node_mapping:
+                select_fields.append(
+                    select_field_node_mapping.get(selection.name.value))
+
+    query = sess.query(*select_fields).\
         select_from(samples_to_tags_1).\
         join(tags_to_tags_1,
              and_(samples_to_tags_1.tag_id == tags_to_tags_1.tag_id,
@@ -60,9 +72,10 @@ def resolve_tags(_obj, info, dataSet, related, feature=None):
     results = query.all()
 
     return [{
-        "name": row.name,
-        "display": row.display,
-        "sampleCount": row.sample_count,
-        "characteristics": row.characteristics,
-        "color": row.color,
+        "characteristics": get_value(row, 'characteristics'),
+        "color": get_value(row, 'color'),
+        "display": get_value(row, 'display'),
+        "name": get_value(row, 'name'),
+        "sampleCount": get_value(row, 'sample_count'),
+        "sampleIds": get_value(row, 'samples'),
     } for row in results]
