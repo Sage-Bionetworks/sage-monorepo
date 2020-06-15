@@ -3,11 +3,12 @@ from tests import app, NoneType
 from flaskr.database import return_gene_to_type_query
 
 
-def test_GeneToType(app):
+def test_GeneToType_with_relations(app):
     app()
     gene_id = 160
+    relationships_to_join = ['genes', 'types']
 
-    query = return_gene_to_type_query()
+    query = return_gene_to_type_query(*relationships_to_join)
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 
     assert isinstance(results, list)
@@ -25,3 +26,20 @@ def test_GeneToType(app):
         assert type(result.type_id) is int
         assert repr(result) == '<GeneToType %r>' % gene_id
     assert repr(results) == '[<GeneToType %r>]' % gene_id
+
+
+def test_GeneToType_no_relations(app):
+    app()
+    gene_id = 160
+
+    query = return_gene_to_type_query()
+    results = query.filter_by(gene_id=gene_id).limit(3).all()
+
+    assert isinstance(results, list)
+    for result in results:
+        assert result.genes == []
+        assert result.types == []
+        assert result.gene_id == gene_id
+        assert result.genes == []
+        assert result.types == []
+        assert type(result.type_id) is int

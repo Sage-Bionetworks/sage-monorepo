@@ -1,3 +1,4 @@
+from sqlalchemy import orm
 from flaskr import db
 from . import Base
 
@@ -14,14 +15,17 @@ class Mutation(Base):
     mutation_type_id = db.Column(
         db.Integer, db.ForeignKey('mutation_types.id'), nullable=True)
 
-    gene = db.relationship("Gene", backref='mutations',
-                           uselist=False, lazy='noload')
+    gene = db.relationship(
+        "Gene", backref=orm.backref('mutations', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
 
     mutation_code = db.relationship(
-        "MutationCode", backref='mutations', uselist=False, lazy='noload')
+        "MutationCode", backref=orm.backref('mutations', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
 
     mutation_type = db.relationship(
-        "MutationType", backref='mutations', uselist=False, lazy='noload')
+        "MutationType", backref=orm.backref('mutations', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
 
     samples = db.relationship(
         "Sample", secondary='samples_to_mutations', uselist=True, lazy='noload')

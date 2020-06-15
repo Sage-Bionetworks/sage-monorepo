@@ -12,6 +12,15 @@ def test_Mutation_with_relations(app):
     relationships_to_load = [
         'gene', 'mutation_code', 'mutation_type', 'samples']
 
+    query = return_mutation_query('sample_mutation_assoc')
+    result = query.filter_by(gene_id=gene_id).first()
+
+    if type(result.sample_mutation_assoc) is not NoneType:
+        assert isinstance(result.sample_mutation_assoc, list)
+        # Don't need to iterate through every result.
+        for sample_mutation_rel in result.sample_mutation_assoc[0:2]:
+            assert sample_mutation_rel.mutation_id == result.id
+
     query = return_mutation_query(*relationships_to_load)
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 
@@ -43,14 +52,16 @@ def test_Mutation_with_relations(app):
 def test_Mutation_no_relations(app):
     app()
     gene_id = 77
-    string_representation_list = []
-    separator = ', '
 
     query = return_mutation_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
+        assert type(result.gene) is NoneType
+        assert type(result.mutation_code) is NoneType
+        assert type(result.mutation_type) is NoneType
+        assert result.samples == []
         assert type(result.id) is int
         assert result.gene_id == gene_id
         assert type(result.gene_id) is int

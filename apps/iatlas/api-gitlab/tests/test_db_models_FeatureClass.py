@@ -27,5 +27,6 @@ def test_FeatureClass_no_relations(app):
     query = return_feature_class_query()
     result = query.filter_by(name=name).first()
 
+    assert result.features == []
     assert type(result.id) is int
     assert result.name == name

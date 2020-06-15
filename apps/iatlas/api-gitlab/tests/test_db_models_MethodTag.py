@@ -26,5 +26,6 @@ def test_MethodTag_no_relations(app):
     query = return_method_tag_query()
     result = query.filter_by(name=name).first()
 
+    assert result.features == []
     assert result.name == name
     assert repr(result) == '<MethodTag %r>' % name

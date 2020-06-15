@@ -42,14 +42,15 @@ def test_CopyNumberResult_with_relations(app):
 def test_CopyNumberResult_no_relations(app):
     app()
     gene_id = 1
-    string_representation_list = []
-    separator = ', '
 
     query = return_copy_number_result_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
+        assert type(result.feature) is NoneType
+        assert type(result.gene) is NoneType
+        assert type(result.tag) is NoneType
         assert result.gene_id == gene_id
         assert type(result.feature_id) is int
         assert type(result.tag_id) is int

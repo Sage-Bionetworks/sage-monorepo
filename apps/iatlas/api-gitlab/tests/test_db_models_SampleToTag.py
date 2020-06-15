@@ -3,7 +3,7 @@ from tests import app, NoneType
 from flaskr.database import return_sample_to_tag_query
 
 
-def test_SampleToTag(app):
+def test_SampleToTag_with_relations(app):
     app()
     sample_id = 1
     string_representation_list = []
@@ -31,3 +31,18 @@ def test_SampleToTag(app):
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
+
+
+def test_SampleToTag_no_relations(app):
+    app()
+    sample_id = 1
+
+    query = return_sample_to_tag_query()
+    results = query.filter_by(sample_id=sample_id).limit(3).all()
+
+    assert isinstance(results, list)
+    for result in results:
+        assert result.samples == []
+        assert result.tags == []
+        assert result.sample_id == sample_id
+        assert type(result.tag_id) is int

@@ -1,3 +1,4 @@
+from sqlalchemy import orm
 from flaskr import db
 from . import Base
 
@@ -16,11 +17,12 @@ class Edge(Base):
     score = db.Column(db.Numeric, nullable=True)
 
     node_1 = db.relationship(
-        'Node', uselist=False, lazy='noload',
-        primaryjoin='Node.id==Edge.node_1_id')
+        'Node', backref=orm.backref('edges_primary', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload', primaryjoin='Node.id==Edge.node_1_id')
+
     node_2 = db.relationship(
-        'Node', uselist=False, lazy='noload',
-        primaryjoin='Node.id==Edge.node_2_id')
+        'Node', backref=orm.backref('edges_secondary', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload', primaryjoin='Node.id==Edge.node_2_id')
 
     def __repr__(self):
         return '<Edge %r>' % self.id

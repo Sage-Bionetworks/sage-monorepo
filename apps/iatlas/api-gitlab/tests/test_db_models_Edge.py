@@ -31,14 +31,14 @@ def test_Edge_with_relations(app):
 def test_Edge_no_relations(app):
     app()
     node_1_id = 42
-    string_representation_list = []
-    separator = ', '
 
     query = return_edge_query()
     results = query.filter_by(node_1_id=node_1_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
+        assert type(result.node_1) is NoneType
+        assert type(result.node_2) is NoneType
         assert result.node_1_id == node_1_id
         assert type(result.node_2_id) is int
         assert type(result.label) is str or NoneType

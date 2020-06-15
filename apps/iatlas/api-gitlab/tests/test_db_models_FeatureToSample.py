@@ -39,14 +39,14 @@ def test_FeatureToSample_with_relations(app):
 def test_FeatureToSample_no_relations(app):
     app()
     feature_id = 1
-    string_representation_list = []
-    separator = ', '
 
     query = return_feature_to_sample_query()
     results = query.filter_by(feature_id=feature_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
+        assert result.features == []
+        assert result.samples == []
         assert result.feature_id == feature_id
         assert type(result.sample_id) is int
         assert type(result.value) is float or NoneType

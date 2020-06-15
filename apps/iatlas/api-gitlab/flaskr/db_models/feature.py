@@ -1,3 +1,4 @@
+from sqlalchemy import orm
 from flaskr import db
 from . import Base
 from flaskr.enums import unit_enum
@@ -17,11 +18,11 @@ class Feature(Base):
     method_tag_id = db.Column(
         db.Integer, db.ForeignKey('method_tags.id'), nullable=True)
 
-    feature_class = db.relationship(
-        "FeatureClass", backref='features', uselist=False, lazy='noload')
+    feature_class = db.relationship("FeatureClass", backref=orm.backref(
+        'features', uselist=True, lazy='noload'), uselist=False, lazy='noload')
 
-    method_tag = db.relationship(
-        "MethodTag", backref='features', uselist=False, lazy='noload')
+    method_tag = db.relationship("MethodTag", backref=orm.backref(
+        'features', uselist=True, lazy='noload'), uselist=False, lazy='noload')
 
     samples = db.relationship(
         "Sample", secondary='features_to_samples', uselist=True, lazy='noload')

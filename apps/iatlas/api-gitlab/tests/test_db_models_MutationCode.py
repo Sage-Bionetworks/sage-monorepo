@@ -39,5 +39,7 @@ def test_MutationCode_no_relations(app):
     query = return_mutation_code_query()
     result = query.filter_by(code=code).first()
 
+    assert result.driver_results == []
+    assert result.mutations == []
     assert type(result.id) is int
     assert result.code == code
