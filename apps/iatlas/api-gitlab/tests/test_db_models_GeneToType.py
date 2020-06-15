@@ -37,6 +37,8 @@ def test_GeneToType_no_relations(app):
 
     assert isinstance(results, list)
     for result in results:
+        assert result.genes == []
+        assert result.types == []
         assert result.gene_id == gene_id
         assert result.genes == []
         assert result.types == []

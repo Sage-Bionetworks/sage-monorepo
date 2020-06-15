@@ -45,6 +45,8 @@ def test_FeatureToSample_no_relations(app):
 
     assert isinstance(results, list)
     for result in results:
+        assert result.features == []
+        assert result.samples == []
         assert result.feature_id == feature_id
         assert type(result.sample_id) is int
         assert type(result.value) is float or NoneType

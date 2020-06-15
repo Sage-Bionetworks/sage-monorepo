@@ -100,6 +100,9 @@ def test_Gene_no_relations(app):
     query = return_gene_query()
     result = query.filter_by(entrez=entrez).first()
 
+    assert result.copy_number_results == []
+    assert result.driver_results == []
+    assert result.gene_sample_assoc == []
     assert type(result.gene_family) is NoneType
     assert type(result.gene_function) is NoneType
     assert result.gene_types == []

@@ -13,10 +13,10 @@ class GeneToType(Base):
         db.Integer, db.ForeignKey('gene_types.id'), nullable=False)
 
     genes = db.relationship('Gene', backref=orm.backref(
-        "gene_type_assoc"), uselist=True, lazy='noload')
+        'gene_type_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')
 
     types = db.relationship('GeneType', backref=orm.backref(
-        "gene_type_assoc"), uselist=True, lazy='noload')
+        'gene_type_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')
 
     def __repr__(self):
         return '<GeneToType %r>' % self.gene_id

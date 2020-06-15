@@ -28,6 +28,7 @@ def test_MutationType_no_relations(app):
     query = return_mutation_type_query()
     result = query.filter_by(name=name).first()
 
+    assert result.mutations == []
     assert type(result.id) is int
     assert result.name == name
     assert type(result.display) is str or NoneType

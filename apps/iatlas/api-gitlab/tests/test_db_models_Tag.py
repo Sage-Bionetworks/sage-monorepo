@@ -77,6 +77,13 @@ def test_Tag_no_relations(app):
     query = return_tag_query()
     result = query.filter_by(name=name).first()
 
+    assert result.related_tags == []
+    assert result.samples == []
+    assert result.tags == []
+    assert result.copy_number_results == []
+    assert result.driver_results == []
+    assert result.node_tag_assoc == []
+    assert result.nodes == []
     assert type(result.id) is int
     assert result.name == name
     assert type(result.characteristics) is str

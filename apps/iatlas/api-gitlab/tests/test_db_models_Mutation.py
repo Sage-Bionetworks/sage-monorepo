@@ -58,6 +58,10 @@ def test_Mutation_no_relations(app):
 
     assert isinstance(results, list)
     for result in results:
+        assert type(result.gene) is NoneType
+        assert type(result.mutation_code) is NoneType
+        assert type(result.mutation_type) is NoneType
+        assert result.samples == []
         assert type(result.id) is int
         assert result.gene_id == gene_id
         assert type(result.gene_id) is int

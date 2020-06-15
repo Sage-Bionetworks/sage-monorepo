@@ -43,5 +43,7 @@ def test_NodeToTag_no_relations(app):
 
     assert isinstance(results, list)
     for result in results:
+        assert result.nodes == []
+        assert result.tags == []
         assert result.node_id == node_id
         assert type(result.tag_id) is int

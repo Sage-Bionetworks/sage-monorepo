@@ -3,7 +3,7 @@ from tests import app, NoneType
 from flaskr.database import return_node_query
 
 
-def test_Node(app):
+def test_Node_with_relations(app):
     app()
     gene_id = 30749
     string_representation_list = []
@@ -62,7 +62,7 @@ def test_Node(app):
         string_representation_list) + ']'
 
 
-def test_Node(app):
+def test_Node_no_relations(app):
     app()
     gene_id = 30749
 
@@ -71,6 +71,12 @@ def test_Node(app):
 
     assert isinstance(results, list)
     for result in results:
+        assert type(result.gene) is NoneType
+        assert type(result.feature) is NoneType
+        assert not hasattr(result, 'edge_primary')
+        assert not hasattr(result, 'edge_secondary')
+        assert result.node_tag_assoc == []
+        assert result.tags == []
         assert type(result.id) is int
         assert result.gene_id == gene_id
         assert type(result.feature_id) is NoneType

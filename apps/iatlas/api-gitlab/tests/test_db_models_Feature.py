@@ -69,6 +69,12 @@ def test_Feature_no_relations(app):
     query = return_feature_query()
     result = query.filter_by(name=name).first()
 
+    assert type(result.feature_class) is NoneType
+    assert type(result.method_tag) is NoneType
+    assert result.samples == []
+    assert result.copy_number_results == []
+    assert result.driver_results == []
+    assert result.feature_sample_assoc == []
     assert result.name == name
     assert type(result.display) is str or NoneType
     assert result.unit in unit_enum.enums

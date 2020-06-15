@@ -81,6 +81,9 @@ def test_Sample_no_relations(app):
     query = return_sample_query()
     result = query.filter_by(name=name).first()
 
+    assert result.gene_sample_assoc == []
+    assert result.feature_sample_assoc == []
+    assert result.sample_mutation_assoc == []
     assert result.features == []
     assert result.genes == []
     assert result.mutations == []

@@ -25,19 +25,19 @@ class DriverResult(Base):
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
 
     feature = db.relationship(
-        'Feature', backref=orm.backref('driver_results'),
+        'Feature', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
         uselist=False, primaryjoin="Feature.id==DriverResult.feature_id", lazy='noload')
 
     gene = db.relationship(
-        'Gene', backref=orm.backref('driver_results'),
+        'Gene', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
         uselist=False, primaryjoin="Gene.id==DriverResult.gene_id", lazy='noload')
 
     mutation_code = db.relationship(
-        'MutationCode', backref=orm.backref('driver_results'),
+        'MutationCode', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
         uselist=False, primaryjoin="MutationCode.id==DriverResult.mutation_code_id", lazy='noload')
 
     tag = db.relationship(
-        'Tag', backref=orm.backref('driver_results'),
+        'Tag', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
         uselist=False, primaryjoin="Tag.id==DriverResult.tag_id", lazy='noload')
 
     def __repr__(self):

@@ -37,6 +37,8 @@ def test_Edge_no_relations(app):
 
     assert isinstance(results, list)
     for result in results:
+        assert type(result.node_1) is NoneType
+        assert type(result.node_2) is NoneType
         assert result.node_1_id == node_1_id
         assert type(result.node_2_id) is int
         assert type(result.label) is str or NoneType

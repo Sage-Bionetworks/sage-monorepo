@@ -51,6 +51,10 @@ def test_DriverResult_no_relations(app):
 
     assert isinstance(results, list)
     for result in results:
+        assert type(result.feature) is NoneType
+        assert type(result.gene) is NoneType
+        assert type(result.mutation_code) is NoneType
+        assert type(result.tag) is NoneType
         assert result.gene_id == gene_id
         assert type(result.feature_id) is int or NoneType
         assert type(result.mutation_code_id) is int or NoneType

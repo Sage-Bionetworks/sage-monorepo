@@ -48,6 +48,9 @@ def test_CopyNumberResult_no_relations(app):
 
     assert isinstance(results, list)
     for result in results:
+        assert type(result.feature) is NoneType
+        assert type(result.gene) is NoneType
+        assert type(result.tag) is NoneType
         assert result.gene_id == gene_id
         assert type(result.feature_id) is int
         assert type(result.tag_id) is int

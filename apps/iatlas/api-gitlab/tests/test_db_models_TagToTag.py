@@ -6,7 +6,7 @@ from flaskr.db_models import TagToTag
 
 def test_TagToTag_with_relations(app):
     app()
-    tag_id = 64
+    tag_id = 11
     string_representation_list = []
     separator = ', '
 
