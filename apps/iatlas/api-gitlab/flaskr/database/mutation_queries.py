@@ -1,18 +1,32 @@
 from sqlalchemy import orm
 from flaskr import db
-from flaskr.db_models import Mutation, MutationCode, MutationType
-from .database_helpers import build_option_args
+from flaskr.db_models import Mutation, MutationCode, MutationType, Sample
+from .database_helpers import accepted_simple_table_query_args, build_general_query
 
+accepted_mutation_option_args=['gene', 
+                'mutation_code', 
+                'mutation_type']
 
-def return_mutation_query(*argv):
-    args = build_option_args(*argv, accepted_args=[
-                             'gene', 'mutation_code', 'mutation_type', 'samples'])
-    return db.session.query(Mutation).options(*args)
-
+accepted_mutation_query_args = [
+    'gene_id',
+    'mutation_code_id',
+    'mutation_type_id'
+]
+ 
+def return_mutation_query(*args):
+    return build_general_query(
+        Mutation, args=args,
+        accepted_option_args=accepted_mutation_option_args,
+        accepted_query_args=accepted_mutation_query_args)
 
 def return_mutation_code_query():
-    return db.session.query(MutationCode)
-
+    return build_general_query(
+        MutationCode, args=args,
+        accepted_query_args=accepted_mutation_query_args
+    )
 
 def return_mutation_type_query():
-    return db.session.query(MutationType)
+    return build_general_query(
+        MutationType, args=args,
+        accepted_query_args=accepted_mutation_query_args
+    )
