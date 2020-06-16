@@ -1,3 +1,5 @@
+NoneType = type(None)
+
 def build_option_args(selection_set=None, valid_nodes={}):
     option_args = []
     if selection_set is not None:
