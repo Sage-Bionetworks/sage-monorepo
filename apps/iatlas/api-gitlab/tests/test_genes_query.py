@@ -29,8 +29,7 @@ def test_genes_query(client):
             geneFamily
         }
     }"""
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'entrez': [135, 558, 3627]}})
+    response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
     genes = json_data["data"]["genes"]
 

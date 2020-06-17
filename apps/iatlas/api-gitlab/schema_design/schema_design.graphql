@@ -1,9 +1,45 @@
+# General structures:
+type Feature {
+    name: String!
+    display: String
+    order: Int
+    unit: String
+    class: String
+    methodTag: String
+}
+
+type Gene {
+    id: Int!
+    entrez: Int!
+    hgnc: String!
+    description: String
+    friendlyName: String
+    ioLandscapeName: String
+    references: [String!]
+    geneFamily: String
+    geneFunction: String
+    immuneCheckpoint: String
+    nodeType: String
+    pathway: String
+    superCategory: String
+    therapyType: String
+}
+
+type Tag {
+    characteristics: String
+    color: String
+    display: String!
+    name: String!
+    sampleCount: Int!
+    sampleIds: [Int!]
+}
+
 query CohortSelecter {
     # Accepts these args:
     #   dataSet: an array of strings (ie TCGA or PCAWG from tags)
     #   related: an array of strings (ie Immune_Subtype related to dataset from tags)
     #   feature: an array of strings (from sample_to_feature related to dataset and group)
-    # Returns an array of values with these properties:
+    # Returns an array of Tags with these properties:
     #   name: a tag from the tags table that is related to the passed args. (used for sampleGroup)
     #   display: The display name for the tag. (used for groupName)
     #   sampleCount: The number of samples associated with this tag. (used for groupSize)
@@ -19,8 +55,9 @@ query ImmuneFeatureDistributions {
     # group: an array of strings (ie Immune_Subtype related to dataset from tags)
     # feature: an array of strings (from sample_to_feature related to dataset and group)
     # name: the "name" value from the classes table.
-    class(dataSet: [String!], group: [String!]!, feature: [String!]) {
-        name: String!
+    featureByClass(dataSet: [String!], group: [String!]!, feature: [String!]) {
+        class: String!
+        features: [Feature!]!
     }
 
     getFeature(groups: [], feature: [])
