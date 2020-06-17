@@ -5,7 +5,8 @@ from flaskr import db
 from flaskr.db_models import (
     Feature, FeatureClass, FeatureToSample, MethodTag, Sample, SampleToTag, Tag, TagToTag)
 from flaskr.database import return_feature_query
-from .resolver_helpers import build_option_args, get_child_value, get_value, NoneType
+from .resolver_helpers import (
+    build_option_args, get_child_value, get_selection_set, get_value, NoneType)
 
 
 def build_features_to_samples_join_condition(features_to_samples_model,
@@ -20,15 +21,6 @@ def build_features_to_samples_join_condition(features_to_samples_model,
                 chosen_feature.name.in_(feature))
         ))
     return features_to_samples_join_conditions
-
-
-def get_selection_set(selection_set, byClass=False):
-    if byClass and type(selection_set) is not NoneType:
-        for selection in selection_set.selections:
-            if selection.name.value == 'features':
-                selection_set = selection.selection_set
-                break
-    return selection_set
 
 
 def request_features(_obj, info, dataSet=None, related=None, feature=None, byClass=False):

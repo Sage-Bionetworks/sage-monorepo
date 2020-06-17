@@ -16,6 +16,15 @@ def get_child_value(parent=None, field="name"):
     return None
 
 
+def get_selection_set(selection_set, condition=True, child_node='features'):
+    if condition and type(selection_set) is not NoneType:
+        for selection in selection_set.selections:
+            if selection.name.value == child_node:
+                selection_set = selection.selection_set
+                break
+    return selection_set
+
+
 def get_value(obj, attribute):
     if hasattr(obj, attribute):
         return getattr(obj, attribute)
