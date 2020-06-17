@@ -30,8 +30,6 @@ def resolve_tags(_obj, info, dataSet, related, feature=None):
     # JOIN tags AS tags_1 ON tags_1.id = tags_to_tags_2.tag_id
     # GROUP BY "name", display, "characteristics", color
 
-    selection_set = info.field_nodes[0].selection_set or []
-
     tag = orm.aliased(Tag, name='t')
     dataset_tag = orm.aliased(Tag, name='dt')
     related_tag = orm.aliased(Tag, name='rt')
@@ -48,6 +46,7 @@ def resolve_tags(_obj, info, dataSet, related, feature=None):
                                  'sampleIds': func.array_agg(func.distinct(samples_to_tags_2.sample_id)).label('samples')}
 
     # Only select fields that were requested.
+    selection_set = info.field_nodes[0].selection_set or []
     select_fields = build_option_args(selection_set, select_field_node_mapping)
     requested_nodes = []
     for selection in selection_set.selections:

@@ -1,0 +1,13 @@
+type Feature {
+    name: String!
+    display: String
+    order: Int
+    unit: String
+    class: String
+    methodTag: String
+}
+
+type FeatureByClass {
+    class: String!
+    features: [Feature!]!
+}

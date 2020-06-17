@@ -1,21 +1,15 @@
 query CohortSelecter {
     # Accepts these args:
-    # dataSet: an array of strings (ie TCGA or PCAWG from tags)
-    # group: an array of strings (ie Immune_Subtype related to dataset from tags)
-    # feature: an array of strings (from sample_to_feature related to dataset and group)
+    #   dataSet: an array of strings (ie TCGA or PCAWG from tags)
+    #   related: an array of strings (ie Immune_Subtype related to dataset from tags)
+    #   feature: an array of strings (from sample_to_feature related to dataset and group)
     # Returns an array of values with these properties:
-    # sampleGroup: a tag from the tags table that is related to the passed args.
-    # groupName: The display name for the tag.
-    # groupSize: The number of samples associated with this tag.
-    # characteristics: The characteristics of this tag.
-    # color: The color associated with this tag.
-    getDataSet(name: [String!], group: [String!]!, feature: [String!]) {
-        sampleGroup: String!
-        groupName: String!
-        groupSize: Int!
-        characteristics: String
-        color: String
-    }
+    #   name: a tag from the tags table that is related to the passed args. (used for sampleGroup)
+    #   display: The display name for the tag. (used for groupName)
+    #   sampleCount: The number of samples associated with this tag. (used for groupSize)
+    #   characteristics: The characteristics of this tag.
+    #   color: The color associated with this tag.
+    tags(dataSet: [String!], related: [String!]!, feature: [String!]) [Tag]
 }
 
 ImmuneFeatureTrends:
