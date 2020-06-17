@@ -45,25 +45,16 @@ def test_DriverResult_with_relations(app):
 def test_DriverResult_no_relations(app):
     app()
     gene_id = 20
-    string_representation_list = []
-    separator = ', '
-    fields_to_return = ['id',
-                        'p_value',
-                        'fold_change',
-                        'log10_p_value',
-                        'log10_fold_change',
-                        'n_wt',
-                        'n_mut',
-                        'feature_id',
-                        'gene_id',
-                        'mutation_code_id',
-                        'tag_id']
 
-    query = return_driver_result_query(*fields_to_return)
-    results = query.filter(DriverResult.gene_id == gene_id).all()
+    query = return_driver_result_query()
+    results = query.filter(DriverResult.gene_id == gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
+        assert type(result.feature) is NoneType
+        assert type(result.gene) is NoneType
+        assert type(result.mutation_code) is NoneType
+        assert type(result.tag) is NoneType
         assert result.gene_id == gene_id
         assert type(result.feature_id) is int or NoneType
         assert type(result.mutation_code_id) is int or NoneType

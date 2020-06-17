@@ -17,10 +17,10 @@ class FeatureToSample(Base):
     inf_value = db.Column(db.Float, nullable=True)
 
     features = db.relationship('Feature', backref=orm.backref(
-        "feature_sample_assoc"), uselist=True)
+        'feature_sample_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')
 
     samples = db.relationship('Sample', backref=orm.backref(
-        "feature_sample_assoc"), uselist=True)
+        'feature_sample_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')
 
     def __repr__(self):
         return '<FeatureToSample %r>' % self.feature_id

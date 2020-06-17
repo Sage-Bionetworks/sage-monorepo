@@ -1,3 +1,4 @@
+from sqlalchemy import orm
 from flaskr import db
 from . import Base
 
@@ -13,8 +14,15 @@ class Sample(Base):
     features = db.relationship(
         "Feature", secondary='features_to_samples', uselist=True, lazy='noload')
 
+    genes = db.relationship(
+        "Gene", secondary='genes_to_samples', uselist=True, lazy='noload')
+
     mutations = db.relationship(
         "Mutation", secondary='samples_to_mutations', uselist=True, lazy='noload')
+
+    patient = db.relationship(
+        "Patient", backref=orm.backref('samples', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
 
     tags = db.relationship(
         "Tag", secondary='samples_to_tags', uselist=True, lazy='noload')

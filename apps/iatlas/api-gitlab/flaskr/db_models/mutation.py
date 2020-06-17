@@ -1,3 +1,4 @@
+from sqlalchemy import orm
 from flaskr import db
 from . import Base
 
@@ -14,15 +15,20 @@ class Mutation(Base):
     mutation_type_id = db.Column(
         db.Integer, db.ForeignKey('mutation_types.id'), nullable=True)
 
-    gene = db.relationship("Gene", lazy='noload', uselist=False)
-    mutation_code = db.relationship("MutationCode", lazy='noload', uselist=False)
-    mutation_type = db.relationship("MutationType", lazy='noload', uselist=False)
-    samples = db.relationship("Sample", secondary='samples_to_mutations', lazy='noload', uselist=True)
-    # gene = db.relationship('Gene', uselist=False)
-    
-    # mutation_code = db.relationship('MutationCode', uselist = False)
-    
-    # mutation_type = db.relationship('MutationType', uselist = False)
+    gene = db.relationship(
+        "Gene", backref=orm.backref('mutations', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
+
+    mutation_code = db.relationship(
+        "MutationCode", backref=orm.backref('mutations', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
+
+    mutation_type = db.relationship(
+        "MutationType", backref=orm.backref('mutations', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
+
+    samples = db.relationship(
+        "Sample", secondary='samples_to_mutations', uselist=True, lazy='noload')
 
     def __repr__(self):
         return '<Mutation %r>' % self.id

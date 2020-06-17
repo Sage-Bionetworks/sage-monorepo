@@ -22,13 +22,13 @@ class CopyNumberResult(Base):
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
 
     feature = db.relationship('Feature', backref=orm.backref(
-        'copy_number_results'), uselist=False, lazy='noload')
+        'copy_number_results', uselist=True, lazy='noload'), uselist=False, lazy='noload')
 
     gene = db.relationship('Gene', backref=orm.backref(
-        'copy_number_results'), uselist=False, lazy='noload')
+        'copy_number_results', uselist=True, lazy='noload'), uselist=False, lazy='noload')
 
     tag = db.relationship('Tag', backref=orm.backref(
-        'copy_number_results'), uselist=False, lazy='noload')
+        'copy_number_results', uselist=True, lazy='noload'), uselist=False, lazy='noload')
 
     def __repr__(self):
         return '<CopyNumberResult %r>' % self.id

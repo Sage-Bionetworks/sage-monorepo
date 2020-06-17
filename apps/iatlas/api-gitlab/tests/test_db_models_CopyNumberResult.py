@@ -12,7 +12,7 @@ def test_CopyNumberResult_with_relations(app):
     relationships_to_join = ['feature', 'gene', 'tag']
 
     query = return_copy_number_result_query(*relationships_to_join)
-    results = query.filter_by(gene_id=gene_id).all()
+    results = query.filter_by(gene_id=gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
@@ -42,24 +42,15 @@ def test_CopyNumberResult_with_relations(app):
 def test_CopyNumberResult_no_relations(app):
     app()
     gene_id = 1
-    string_representation_list = []
-    separator = ', '
-    fields_to_return = ['id',
-                        'direction',
-                        'mean_normal',
-                        'mean_cnv',
-                        'p_value',
-                        'log10_p_value',
-                        't_stat',
-                        'feature_id',
-                        'gene_id',
-                        'tag_id']
 
-    query = return_copy_number_result_query(*fields_to_return)
-    results = query.filter_by(gene_id=gene_id).all()
+    query = return_copy_number_result_query()
+    results = query.filter_by(gene_id=gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
+        assert type(result.feature) is NoneType
+        assert type(result.gene) is NoneType
+        assert type(result.tag) is NoneType
         assert result.gene_id == gene_id
         assert type(result.feature_id) is int
         assert type(result.tag_id) is int

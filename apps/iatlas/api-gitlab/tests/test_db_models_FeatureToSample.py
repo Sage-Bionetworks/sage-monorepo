@@ -11,7 +11,7 @@ def test_FeatureToSample_with_relations(app):
     relationships_to_join = ['features', 'samples']
 
     query = return_feature_to_sample_query()
-    results = query.filter_by(feature_id=feature_id).all()
+    results = query.filter_by(feature_id=feature_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
@@ -19,11 +19,13 @@ def test_FeatureToSample_with_relations(app):
         string_representation_list.append(string_representation)
         if type(result.features) is not NoneType:
             assert isinstance(result.features, list)
-            for feature in result.features:
+            # Don't need to iterate through every result.
+            for feature in result.features[0:2]:
                 assert type(feature.name) is str
         if type(result.samples) is not NoneType:
             assert isinstance(result.samples, list)
-            for sample in result.samples:
+            # Don't need to iterate through every result.
+            for sample in result.samples[0:2]:
                 assert type(sample.name) is str
         assert result.feature_id == feature_id
         assert type(result.sample_id) is int
@@ -37,18 +39,15 @@ def test_FeatureToSample_with_relations(app):
 def test_FeatureToSample_no_relations(app):
     app()
     feature_id = 1
-    string_representation_list = []
-    separator = ', '
 
     query = return_feature_to_sample_query()
-    results = query.filter_by(feature_id=feature_id).all()
+    results = query.filter_by(feature_id=feature_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
-        string_representation = '<FeatureToSample %r>' % feature_id
-        string_representation_list.append(string_representation)
+        assert result.features == []
+        assert result.samples == []
         assert result.feature_id == feature_id
         assert type(result.sample_id) is int
         assert type(result.value) is float or NoneType
         assert type(result.inf_value) is float or NoneType
-        assert repr(result) == string_representation

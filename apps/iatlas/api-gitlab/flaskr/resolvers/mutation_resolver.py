@@ -7,7 +7,7 @@ valid_mutation_node_mapping = {
     'gene': 'gene',
     'mutationType': 'mutation_type',
     'mutationCode': 'mutation_code',
-    'sample': 'sample'
+    'samples': 'samples'
 }
 
 def resolve_mutation(_obj, info, id):
@@ -17,11 +17,15 @@ def resolve_mutation(_obj, info, id):
     )
     query = return_mutation_query(*option_args)
     mutation = query.filter_by(id=id).first()
-
+    samples = get_value(mutation, 'samples')
+    sample_names = []
+    for sample in samples:
+        sample_names.append(sample.name)
+    print("Samples: ", samples)
     return {
         "id": get_value(mutation, 'id'),
-        "gene": get_child_value(get_value(mutation, 'gene_id')),
-        "mutationCode": get_child_value(mutation, 'mutation_code_id'),
-        "mutationType": get_child_value(mutation, 'mutation_type_id'),
-        "samples": None
+        "gene": get_child_value(get_value(mutation, 'gene'), 'hgnc'),
+        "mutationCode": get_child_value(get_value(mutation, 'mutation_code'), 'code'),
+        "mutationType": get_child_value(get_value(mutation, 'mutation_type')),
+        "samples": sample_names
     }
