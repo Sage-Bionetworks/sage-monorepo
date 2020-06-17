@@ -4,8 +4,8 @@ from tests import client, NoneType
 
 
 def test_tags_query_with_feature(client):
-    query = """query Tags {
-        tags(dataSet: ["TCGA"], related: ["Immune_Subtype"], feature: ["Neutrophils_Aggregate2"]) {
+    query = """query Tags($dataSet: [String!]!, $related: [String!]!, $feature: [String!]) {
+        tags(dataSet: $dataSet, related: $related, feature: $feature) {
             characteristics
             color
             display
@@ -14,7 +14,11 @@ def test_tags_query_with_feature(client):
             sampleIds
         }
     }"""
-    response = client.post('/api', json={'query': query})
+    response = client.post(
+        '/api', json={'query': query,
+                      'variables': {'dataSet': ['TCGA'],
+                                    'related': ['Immune_Subtype'],
+                                    'feature': ['Neutrophils_Aggregate2']}})
     json_data = json.loads(response.data)
     data_sets = json_data["data"]["tags"]
 
@@ -29,15 +33,18 @@ def test_tags_query_with_feature(client):
 
 
 def test_tags_query_no_feature(client):
-    query = """query Tags {
-        tags(dataSet: ["TCGA"], related: ["Immune_Subtype"]) {
+    query = """query Tags($dataSet: [String!]!, $related: [String!]!, $feature: [String!]) {
+        tags(dataSet: $dataSet, related: $related, feature: $feature) {
             characteristics
             color
             display
             name
         }
     }"""
-    response = client.post('/api', json={'query': query})
+    response = client.post(
+        '/api', json={'query': query,
+                      'variables': {'dataSet': ['TCGA'],
+                                    'related': ['Immune_Subtype']}})
     json_data = json.loads(response.data)
     data_sets = json_data["data"]["tags"]
 

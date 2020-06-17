@@ -4,14 +4,15 @@ from tests import client, NoneType
 
 
 def test_genes_query(client):
-    query = """query Genes {
-        genes(entrez: [3627]) {
+    query = """query Genes($entrez: [Int!]) {
+        genes(entrez: $entrez) {
             entrez
             hgnc
             geneFamily
         }
     }"""
-    response = client.post('/api', json={'query': query})
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'entrez': [3627]}})
     json_data = json.loads(response.data)
     genes = json_data["data"]["genes"]
 
@@ -21,8 +22,8 @@ def test_genes_query(client):
         assert gene["hgnc"] == "CXCL10"
         assert type(gene["geneFamily"]) is str or NoneType
 
-    query = """query Genes {
-        genes {
+    query = """query Genes($entrez: [Int!]) {
+        genes(entrez: $entrez) {
             entrez
             hgnc
             geneFamily
