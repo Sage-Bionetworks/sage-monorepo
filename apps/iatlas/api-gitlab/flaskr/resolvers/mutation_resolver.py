@@ -21,7 +21,6 @@ def resolve_mutation(_obj, info, id):
     sample_names = []
     for sample in samples:
         sample_names.append(sample.name)
-    print("Samples: ", samples)
     return {
         "id": get_value(mutation, 'id'),
         "gene": get_child_value(get_value(mutation, 'gene'), 'hgnc'),
@@ -29,3 +28,26 @@ def resolve_mutation(_obj, info, id):
         "mutationType": get_child_value(get_value(mutation, 'mutation_type')),
         "samples": sample_names
     }
+
+def resolve_mutations(_obj, info, id=None):
+    option_args = build_option_args(
+        info.field_nodes[0].selection_set,
+        valid_mutation_node_mapping
+    )
+    query = return_mutation_query(*option_args)
+    if id is not None:
+        query = query.filter(Mutation.id.in_(id))
+    mutations = query.all()
+    for mutation in mutations:
+        samples = get_value(mutation, 'samples')
+        sample_names = []
+        for sample in samples:
+            sample_names.append(sample.name)
+        mutation.samples = sample_names
+    return [{
+        "id": get_value(mutation, 'id'),
+        "gene": get_child_value(get_value(mutation, 'gene'), 'hgnc'),
+        "mutationCode": get_child_value(get_value(mutation, 'mutation_code'), 'code'),
+        "mutationType": get_child_value(get_value(mutation, 'mutation_type')),
+        "samples": get_value(mutation, 'samples')
+    } for mutation in mutations]
