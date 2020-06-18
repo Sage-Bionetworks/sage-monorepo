@@ -1,13 +1,21 @@
 type Feature {
-    name: String!
-    display: String
-    order: Int
-    unit: String
     class: String
+    display: String
     methodTag: String
+    name: String!
+    order: Int
+    sample: String
+    samples: [Sample!]
+    unit: String
+    value: Float
 }
 
 type FeatureByClass {
     class: String!
     features: [Feature!]!
+}
+
+type FeatureByTag {
+    features: [Feature!]!
+    tag: String!
 }

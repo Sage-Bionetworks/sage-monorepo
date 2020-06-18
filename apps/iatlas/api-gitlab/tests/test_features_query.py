@@ -91,8 +91,8 @@ def test_features_query_no_relations(client):
         assert 'methodTag' not in data_set
         assert data_set["name"] == 'Neutrophils_Aggregate2'
         assert type(data_set["order"]) is int or NoneType
-        assert data_set["unit"] in unit_enum.enums or type(
-            data_set["unit"]) is NoneType
+        assert type(
+            data_set["unit"]) is NoneType or data_set["unit"] in unit_enum.enums
 
 
 def test_features_query_no_dataSet(client):
@@ -119,8 +119,8 @@ def test_features_query_no_dataSet(client):
         assert 'methodTag' not in data_set
         assert data_set["name"] == 'Neutrophils_Aggregate2'
         assert type(data_set["order"]) is int or NoneType
-        assert data_set["unit"] in unit_enum.enums or type(
-            data_set["unit"]) is NoneType
+        assert type(
+            data_set["unit"]) is NoneType or data_set["unit"] in unit_enum.enums
 
 
 def test_features_query_no_related(client):
@@ -147,8 +147,8 @@ def test_features_query_no_related(client):
         assert 'methodTag' not in data_set
         assert data_set["name"] == 'Neutrophils_Aggregate2'
         assert type(data_set["order"]) is int or NoneType
-        assert data_set["unit"] in unit_enum.enums or type(
-            data_set["unit"]) is NoneType
+        assert type(
+            data_set["unit"]) is NoneType or data_set["unit"] in unit_enum.enums
 
 
 def test_features_query_no_args(client):

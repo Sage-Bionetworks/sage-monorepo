@@ -23,7 +23,7 @@ def build_features_to_samples_join_condition(features_to_samples_model,
     return features_to_samples_join_conditions
 
 
-def request_features(_obj, info, dataSet=None, related=None, feature=None, byClass=False):
+def request_features(_obj, info, dataSet=None, related=None, feature=None, byClass=False, byTag=True):
     """
     Builds a SQL request and returns values from the DB.
 
@@ -173,5 +173,33 @@ def resolve_features_by_class(_obj, info, dataSet=None, related=None, feature=No
             'name': get_value(row, 'name'),
             'order': get_value(row, 'order'),
             'unit': get_value(row, 'unit')
+        } for row in value],
+    } for key, value in class_map.items()]
+
+
+def resolve_features_by_tag(_obj, info, dataSet=None, related=None, feature=None, class=None):
+    pass
+    results = request_features(
+        _obj, info, dataSet, related, feature, byTag=True)
+
+    class_map = dict()
+    for row in results:
+        feature_tag = get_value(row, 'tag')
+        if not feature_tag in class_map:
+            class_map[feature_tag] = [row]
+        else:
+            class_map[feature_tag].append(row)
+
+    return [{
+        'tag': key,
+        'features': [{
+            'class': get_value(row, 'class'),
+            'display': get_value(row, 'display'),
+            'methodTag': get_value(row, 'method_tag'),
+            'name': get_value(row, 'name'),
+            'order': get_value(row, 'order'),
+            'sample': get_value(row, 'sample'),
+            'unit': get_value(row, 'unit'),
+            'value': get_value(row, 'value')
         } for row in value],
     } for key, value in class_map.items()]

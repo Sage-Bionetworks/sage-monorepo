@@ -10,16 +10,19 @@ dirname, _filename = os.path.split(os.path.abspath(__file__))
 root_query = load_schema_from_path(dirname + "/root.query.graphql")
 gene_query = load_schema_from_path(dirname + "/gene.query.graphql")
 feature_query = load_schema_from_path(dirname + "/feature.query.graphql")
+sample_query = load_schema_from_path(dirname + "/sample.query.graphql")
 tag_query = load_schema_from_path(dirname + "/tag.query.graphql")
 
-type_defs = [root_query, gene_query, feature_query, tag_query]
+type_defs = [root_query, gene_query, feature_query, sample_query, tag_query]
 
 
 root = ObjectType("Query")
 gene = ObjectType("Gene")
 feature = ObjectType("Feature")
 feature_by_class = ObjectType("FeatureByClass")
+sample = ObjectType("Sample")
 tag = ObjectType("Tag")
+tag_as_child = ObjectType("TagAsChild")
 
 root.set_field('gene', resolve_gene)
 root.set_field('genes', resolve_genes)
@@ -30,4 +33,4 @@ root.set_field('test', resolve_test)
 
 
 schema = make_executable_schema(
-    type_defs, [root, gene, feature, feature_by_class, tag])
+    type_defs, [root, gene, feature, feature_by_class, sample, tag, tag_as_child])
