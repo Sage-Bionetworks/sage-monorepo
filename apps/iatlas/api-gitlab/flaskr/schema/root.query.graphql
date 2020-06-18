@@ -5,5 +5,5 @@ type Query {
   test: String!
   mutation(id: Int!): Mutation
   mutations(id: [Int!]): [Mutation]
-  patient(id: Int!): Patient
+  patient(id: Int): Patient
 }
