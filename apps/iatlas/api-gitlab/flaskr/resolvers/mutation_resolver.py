@@ -17,16 +17,16 @@ def resolve_mutation(_obj, info, id):
     )
     query = return_mutation_query(*option_args)
     mutation = query.filter_by(id=id).first()
-    samples = get_value(mutation, 'samples')
-    sample_names = []
-    for sample in samples:
-        sample_names.append(sample.name)
+    # samples = get_value(mutation, 'samples')
+    # sample_names = []
+    # for sample in samples:
+    #     sample_names.append(sample.name)
     return {
         "id": get_value(mutation, 'id'),
         "gene": get_child_value(get_value(mutation, 'gene'), 'hgnc'),
         "mutationCode": get_child_value(get_value(mutation, 'mutation_code'), 'code'),
         "mutationType": get_child_value(get_value(mutation, 'mutation_type')),
-        "samples": sample_names
+        "samples": get_value(mutation, 'samples')
     }
 
 def resolve_mutations(_obj, info, id=None):
@@ -38,12 +38,12 @@ def resolve_mutations(_obj, info, id=None):
     if id is not None:
         query = query.filter(Mutation.id.in_(id))
     mutations = query.all()
-    for mutation in mutations:
-        samples = get_value(mutation, 'samples')
-        sample_names = []
-        for sample in samples:
-            sample_names.append(sample.name)
-        mutation.samples = sample_names
+    # for mutation in mutations:
+    #     samples = get_value(mutation, 'samples')
+    #     sample_names = []
+    #     for sample in samples:
+    #         sample_names.append(sample.name)
+    #     mutation.samples = sample_names
     return [{
         "id": get_value(mutation, 'id'),
         "gene": get_child_value(get_value(mutation, 'gene'), 'hgnc'),

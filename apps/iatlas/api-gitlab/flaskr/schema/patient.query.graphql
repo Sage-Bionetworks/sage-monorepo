@@ -1,7 +1,7 @@
 type Patient {
-  id: Int
+  id: Int!
   age: Int
-  barcode: String
+  barcode: String!
   ethnicity: String
   gender: String
   height: Int

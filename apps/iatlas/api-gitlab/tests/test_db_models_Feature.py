@@ -53,7 +53,7 @@ def test_Feature_with_relations(app):
             assert type(sample.name) is str
     assert result.name == name
     assert type(result.display) is str or NoneType
-    assert result.unit in unit_enum.enums
+    assert result.unit in unit_enum.enums or type(result.unit) is NoneType
     assert type(result.class_id) is int or NoneType
     assert type(result.method_tag_id) is int or NoneType
     assert repr(result) == '<Feature %r>' % name
@@ -77,6 +77,6 @@ def test_Feature_no_relations(app):
     assert result.feature_sample_assoc == []
     assert result.name == name
     assert type(result.display) is str or NoneType
-    assert result.unit in unit_enum.enums
+    assert result.unit in unit_enum.enums or type(result.unit) is NoneType
     assert type(result.class_id) is int or NoneType
     assert type(result.method_tag_id) is int or NoneType

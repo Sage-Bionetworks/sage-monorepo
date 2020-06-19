@@ -1,7 +1,15 @@
 type Tag {
-    name: String!
-    display: String!
-    sampleCount: Int!
     characteristics: String
     color: String
+    display: String
+    name: String!
+    sampleCount: Int!
+    sampleIds: [Int!]
+}
+
+type TagAsChild {
+    characteristics: String
+    color: String
+    display: String
+    name: String!
 }

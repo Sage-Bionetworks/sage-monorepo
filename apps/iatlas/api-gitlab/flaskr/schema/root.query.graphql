@@ -1,9 +1,26 @@
 type Query {
-  tags(dataSet: [String!]!, related: [String!]!, feature: [String!]): [Tag]!
+  features(
+    dataSet: [String!]
+    related: [String!]
+    feature: [String!]
+  ): [Feature]!
+  featuresByClass(
+    dataSet: [String!]
+    related: [String!]
+    feature: [String!]
+  ): [FeatureByClass]!
+  featuresByTag(
+    dataSet: [String!]!
+    related: [String!]!
+    feature: [String!]
+    class: [String!]
+  ): [FeatureByTag]!
   gene(entrez: Int!): Gene
   genes(entrez: [Int!]): [Gene]!
-  test: String!
   mutation(id: Int!): Mutation
   mutations(id: [Int!]): [Mutation]
-  patient(id: Int): Patient
+  patient(barcode: String): Patient
+  patients(barcode: [String]): [Patient]
+  tags(dataSet: [String!]!, related: [String!]!, feature: [String!]): [Tag]!
+  test: String!
 }
