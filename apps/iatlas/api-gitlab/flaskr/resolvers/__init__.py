@@ -6,3 +6,5 @@ from .mutation_resolver import resolve_mutation
 from .mutation_resolver import resolve_mutations
 from .patient_resolver import resolve_patient
 from .patient_resolver import resolve_patients
+from .slide_resolver import resolve_slide
+from .slide_resolver import resolve_slides

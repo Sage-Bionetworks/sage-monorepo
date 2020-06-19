@@ -3,7 +3,7 @@ import pytest
 from tests import client, NoneType
 
 
-def test_patient_query_with_relations(client):
+def test_patient_query(client):
     query = """query Patient($id: Int!) {
         patient(id: $id) {
             age

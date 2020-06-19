@@ -10,7 +10,9 @@ def test_mutation_query_with_relations(client):
             gene
             mutationCode
             mutationType
-            samples
+            samples{
+                name
+            }
         }
     }"""
     id = 1
@@ -33,6 +35,9 @@ def test_mutation_query_no_relations(client):
             id
             mutationCode
             mutationType
+            samples{
+                name
+            }
         }
     }"""
     id = 1

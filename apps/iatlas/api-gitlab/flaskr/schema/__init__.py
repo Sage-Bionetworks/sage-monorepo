@@ -2,7 +2,8 @@ from ariadne import load_schema_from_path, make_executable_schema, ObjectType
 import os
 from flaskr.resolvers import (
     resolve_gene, resolve_genes, resolve_features,
-    resolve_features_by_class, resolve_mutation, resolve_mutations, resolve_patient, resolve_patients, resolve_tags, resolve_test)
+    resolve_features_by_class, resolve_mutation, resolve_mutations, resolve_patient, resolve_patients,
+    resolve_slide, resolve_slides, resolve_tags, resolve_test)
 
 dirname, _filename = os.path.split(os.path.abspath(__file__))
 
@@ -14,8 +15,9 @@ sample_query = load_schema_from_path(dirname + "/sample.query.graphql")
 tag_query = load_schema_from_path(dirname + "/tag.query.graphql")
 mutation_query = load_schema_from_path(dirname + "/mutation.query.graphql")
 patient_query = load_schema_from_path(dirname + "/patient.query.graphql")
+slide_query = load_schema_from_path(dirname + "/slide.query.graphql")
 
-type_defs = [root_query, gene_query, feature_query, mutation_query, patient_query, sample_query, tag_query]
+type_defs = [root_query, gene_query, feature_query, mutation_query, patient_query, sample_query, tag_query, slide_query]
 
 
 root = ObjectType("Query")
@@ -27,6 +29,7 @@ tag = ObjectType("Tag")
 mutation = ObjectType("Mutation")
 patient = ObjectType("Patient")
 tag_as_child = ObjectType("TagAsChild")
+slide = ObjectType("Slide")
 
 root.set_field('gene', resolve_gene)
 root.set_field('genes', resolve_genes)
@@ -38,7 +41,8 @@ root.set_field('mutation', resolve_mutation)
 root.set_field('mutations', resolve_mutations)
 root.set_field('patient', resolve_patient)
 root.set_field('patients', resolve_patients)
+root.set_field('slide', resolve_slide)
 
 
 schema = make_executable_schema(
-    type_defs, [root, gene, feature, feature_by_class, mutation, patient, sample, tag, tag_as_child])
+    type_defs, [root, gene, feature, feature_by_class, mutation, patient, sample, tag, tag_as_child, slide])
