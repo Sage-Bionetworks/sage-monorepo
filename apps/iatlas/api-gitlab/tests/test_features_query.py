@@ -13,7 +13,36 @@ def test_features_query_with_feature(client):
             methodTag
             name
             order
+            sample
             unit
+            value
+        }
+    }"""
+    response = client.post(
+        '/api', json={'query': query,
+                      'variables': {'dataSet': ['TCGA'],
+                                    'related': ['Immune_Subtype'],
+                                    'feature': ['Neutrophils_Aggregate2']}})
+    json_data = json.loads(response.data)
+    data_sets = json_data["data"]["features"]
+
+    assert isinstance(data_sets, list)
+    for data_set in data_sets:
+        assert type(data_set["class"]) is str
+        assert type(data_set["display"]) is str or NoneType
+        assert type(data_set["methodTag"]) is str or NoneType
+        assert data_set["name"] == 'Neutrophils_Aggregate2'
+        assert type(data_set["order"]) is int or NoneType
+        assert type(data_set["sample"]) is str or NoneType
+        assert data_set["unit"] in unit_enum.enums or type(
+            data_set["unit"]) is NoneType
+        assert type(data_set["value"]) is str or float or NoneType
+
+
+def test_features_query_with_feature_no_sample_or_value(client):
+    query = """query Features($dataSet: [String!], $related: [String!], $feature: [String!]) {
+        features(dataSet: $dataSet, related: $related, feature: $feature) {
+            name
         }
     }"""
     response = client.post(
@@ -26,14 +55,6 @@ def test_features_query_with_feature(client):
 
     assert isinstance(data_sets, list)
     assert len(data_sets) == 1
-    for data_set in data_sets:
-        assert type(data_set["class"]) is str
-        assert type(data_set["display"]) is str or NoneType
-        assert type(data_set["methodTag"]) is str or NoneType
-        assert data_set["name"] == 'Neutrophils_Aggregate2'
-        assert type(data_set["order"]) is int or NoneType
-        assert data_set["unit"] in unit_enum.enums or type(
-            data_set["unit"]) is NoneType
 
 
 def test_features_query_no_feature(client):

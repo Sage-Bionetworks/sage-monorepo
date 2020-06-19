@@ -7,7 +7,7 @@ from flaskr.db_models import (
     MethodTag, Sample, SampleToTag, Tag, TagToTag)
 from flaskr.database import return_feature_query
 from .resolver_helpers import (
-    build_option_args, get_child_value, get_selection_set, get_value, NoneType)
+    build_option_args, get_selection_set, get_value, NoneType)
 
 
 def build_classes_join_condition(features_model, classes_model, feature_classes=None):
@@ -61,13 +61,14 @@ def request_features(_obj, info, dataSet=None, related=None, feature=None, featu
     sess = db.session
 
     selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, byClass)
+        info.field_nodes[0].selection_set, byClass or byTag)
 
     class_1 = orm.aliased(FeatureClass, name='fc')
     feature_1 = orm.aliased(Feature, name='f')
     feature_to_sample_1 = orm.aliased(FeatureToSample, name='fs1')
     method_tag_1 = orm.aliased(MethodTag, name='mt')
     sample_1 = orm.aliased(Sample, name='s')
+    tag_1 = orm.aliased(Tag, name='t')
 
     related_field_node_mapping = {'class': 'class',
                                   'methodTag': 'method_tag',
@@ -82,7 +83,7 @@ def request_features(_obj, info, dataSet=None, related=None, feature=None, featu
     # Only select fields that were requested.
     select_fields = build_option_args(selection_set, select_field_node_mapping)
     option_args = build_option_args(selection_set, related_field_node_mapping)
-    if option_args or byClass:
+    if option_args or byClass or byTag:
         join_class = 'class'
         join_method_tag = 'method_tag'
         join_sample = 'sample'
@@ -90,21 +91,33 @@ def request_features(_obj, info, dataSet=None, related=None, feature=None, featu
         if join_class in option_args or byClass:
             select_fields.append(class_1.name.label('class'))
             option_args.append(join_class)
+        if byTag:
+            select_fields.append(tag_1.name.label('tag'))
+            select_fields.append(tag_1.display.label('tag_display'))
+            select_fields.append(
+                tag_1.characteristics.label('tag_characteristics'))
         if join_method_tag in option_args:
             select_fields.append(method_tag_1.name.label('method_tag'))
         if join_sample in option_args:
             select_fields.append(sample_1.name.label('sample'))
         if join_value in option_args:
-            select_fields.append(
-                feature_to_sample_1.value.label('value'))
+            select_fields.append(feature_to_sample_1.value.label('value'))
+            select_fields.append(feature_to_sample_1.inf_value.label('inf'))
 
     query = sess.query(*select_fields)
 
-    if type(dataSet) is NoneType and type(dataSet) is NoneType:
+    if type(dataSet) is NoneType and type(related) is NoneType:
         query = query.select_from(feature_1)
 
         if type(feature) is not NoneType:
             query = query.filter(feature_1.name.in_(feature))
+
+        if 'sample' in option_args or 'value' in option_args:
+            query = query.join(feature_to_sample_1,
+                               feature_to_sample_1.feature_id == feature_1.id, isouter=True)
+            if 'sample' in option_args:
+                query = query.join(sample_1, sample_1.id ==
+                                   feature_to_sample_1.sample_id, isouter=True)
     else:
         dataset_1 = orm.aliased(Dataset, name='d')
         dataset_to_sample_1 = orm.aliased(DatasetToSample, name='ds')
@@ -135,6 +148,11 @@ def request_features(_obj, info, dataSet=None, related=None, feature=None, featu
                                     tag_to_tag_1.related_tag_id.in_(
                                         sess.query(related_tag.id).filter(
                                             related_tag.name.in_(related)))))
+
+            if byTag:
+                query = query.join(
+                    tag_1, tag_to_tag_1.tag_id == tag_1.id, isouter=True)
+
             query = query.join(
                 sample_to_tag_2, and_(
                     feature_to_sample_1.sample_id == sample_to_tag_2.sample_id,
@@ -143,18 +161,19 @@ def request_features(_obj, info, dataSet=None, related=None, feature=None, featu
         query = query.join(feature_1, feature_1.id ==
                            feature_to_sample_1.feature_id)
 
+        if 'sample' in option_args:
+            query = query.join(
+                sample_1, feature_to_sample_1.sample_id == sample_1.id, isouter=True)
+
     if 'class' in option_args or type(feature_class) is not NoneType:
         classes_join_condition = build_classes_join_condition(
             feature_1, class_1, feature_class)
-        query = query.join(class_1, and_(*classes_join_condition))
+        query = query.join(class_1, and_(
+            *classes_join_condition), isouter=True)
 
     if 'method_tag' in option_args:
         query = query.join(
-            method_tag_1, feature_1.method_tag_id == method_tag_1.id)
-
-    # if 'sample' in option_args:
-    #     query = query.join(
-    #         method_tag_1, feature_1.method_tag_id == method_tag_1.id)
+            method_tag_1, feature_1.method_tag_id == method_tag_1.id, isouter=True)
 
     query = query.distinct()
     query = query.order_by(feature_1.order)
@@ -170,7 +189,9 @@ def resolve_features(_obj, info, dataSet=None, related=None, feature=None):
         'methodTag': get_value(row, 'method_tag'),
         'name': get_value(row, 'name'),
         'order': get_value(row, 'order'),
-        'unit': get_value(row, 'unit')
+        'sample': get_value(row, 'sample'),
+        'unit': get_value(row, 'unit'),
+        'value': return_feature_value(row)
     } for row in results]
 
 
@@ -194,34 +215,45 @@ def resolve_features_by_class(_obj, info, dataSet=None, related=None, feature=No
             'methodTag': get_value(row, 'method_tag'),
             'name': get_value(row, 'name'),
             'order': get_value(row, 'order'),
-            'unit': get_value(row, 'unit')
+            'sample': get_value(row, 'sample'),
+            'unit': get_value(row, 'unit'),
+            'value': return_feature_value(row)
         } for row in value],
     } for key, value in class_map.items()]
 
 
 def resolve_features_by_tag(_obj, info, dataSet=None, related=None, feature=None, feature_class=None):
     pass
-    # results = request_features(
-    #     _obj, info, dataSet, related, feature, feature_class, byTag=True)
+    results = request_features(
+        _obj, info, dataSet, related, feature, feature_class, byTag=True)
 
-    # class_map = dict()
-    # for row in results:
-    #     feature_tag = get_value(row, 'tag')
-    #     if not feature_tag in class_map:
-    #         class_map[feature_tag] = [row]
-    #     else:
-    #         class_map[feature_tag].append(row)
+    tag_map = dict()
+    for row in results:
+        feature_tag = get_value(row, 'tag')
+        if not feature_tag in tag_map:
+            tag_map[feature_tag] = [row]
+        else:
+            tag_map[feature_tag].append(row)
 
-    # return [{
-    #     'tag': key,
-    #     'features': [{
-    #         'class': get_value(row, 'class'),
-    #         'display': get_value(row, 'display'),
-    #         'methodTag': get_value(row, 'method_tag'),
-    #         'name': get_value(row, 'name'),
-    #         'order': get_value(row, 'order'),
-    #         'sample': get_value(row, 'sample'),
-    #         'unit': get_value(row, 'unit'),
-    #         'value': get_value(row, 'value')
-    #     } for row in value],
-    # } for key, value in class_map.items()]
+    return [{
+        'characteristics': get_value(value[0], 'tag_characteristics'),
+        'display': get_value(value[0], 'tag_display'),
+        'features': [{
+            'class': get_value(row, 'class'),
+            'display': get_value(row, 'display'),
+            'methodTag': get_value(row, 'method_tag'),
+            'name': get_value(row, 'name'),
+            'order': get_value(row, 'order'),
+            'sample': get_value(row, 'sample'),
+            'unit': get_value(row, 'unit'),
+            'value': get_value(row, 'value')
+        } for row in value],
+        'tag': key
+    } for key, value in tag_map.items()]
+
+
+def return_feature_value(row):
+    infinity = get_value(row, 'inf')
+    if infinity:
+        infinity = str(infinity)
+    return infinity or get_value(row, 'value')

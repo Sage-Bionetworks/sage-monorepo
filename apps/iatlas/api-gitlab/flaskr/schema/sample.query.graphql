@@ -3,5 +3,5 @@ type Sample {
     genes: [Gene!]
     name: String!
     patient: String!
-    tags: [TagAsChild!]
+    tags: [SimpleTag!]
 }

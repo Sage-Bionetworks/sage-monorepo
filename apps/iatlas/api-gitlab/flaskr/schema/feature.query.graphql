@@ -1,3 +1,5 @@
+scalar FeatureValue
+
 type Feature {
     class: String
     display: String
@@ -5,9 +7,8 @@ type Feature {
     name: String!
     order: Int
     sample: String
-    samples: [Sample!]
     unit: String
-    value: Float
+    value: FeatureValue
 }
 
 type FeatureByClass {
@@ -16,6 +17,8 @@ type FeatureByClass {
 }
 
 type FeatureByTag {
+    characteristics: String
+    display: String
     features: [Feature!]!
     tag: String!
 }
