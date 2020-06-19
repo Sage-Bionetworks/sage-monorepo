@@ -32,7 +32,6 @@ feature_by_class = ObjectType('FeatureByClass')
 sample = ObjectType('Sample')
 tag = ObjectType('Tag')
 
-simple_sample = ObjectType('SimpleSample')
 simple_tag = ObjectType('SimpleTag')
 
 root.set_field('gene', resolve_gene)
