@@ -1,5 +1,5 @@
 import pytest
-from flaskr.resolvers.resolver_helpers import build_option_args, get_child_value, get_value
+from flaskr.resolvers.resolver_helpers import build_option_args, get_value
 
 
 class Parent:
@@ -40,18 +40,12 @@ def test_build_option_args():
     assert build_option_args() == []
 
 
-def test_get_child_value():
+def test_get_value():
     name = "test"
     other = "test2"
     parent = Parent(name, other)
-    assert get_child_value(parent) == name
-    assert get_child_value(parent, "other") == other
-    assert get_child_value(None) == None
-    assert get_child_value() == None
-
-
-def test_get_value():
-    name = "test"
-    parent = Parent(name, 'unused')
     assert get_value(parent, 'name') == name
     assert get_value(parent, 'nothing') == None
+    assert get_value(parent, "other") == other
+    assert get_value(None) == None
+    assert get_value() == None

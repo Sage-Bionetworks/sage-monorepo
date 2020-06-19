@@ -1,7 +1,7 @@
 from flaskr.database import return_gene_query
 from flaskr.db_models import (Gene, GeneFamily, GeneFunction,
                               ImmuneCheckpoint, NodeType, SuperCategory, TherapyType)
-from .resolver_helpers import build_option_args, get_child_value, get_value
+from .resolver_helpers import build_option_args, get_value
 
 valid_gene_node_mapping = {'entrez': 'entrez',
                            'hgnc': 'hgnc',
@@ -32,13 +32,13 @@ def resolve_gene(_obj, info, entrez):
         "friendlyName": get_value(gene, 'friendly_name'),
         "ioLandscapeName": get_value(gene, 'io_landscape_name'),
         "references": get_value(gene, 'references'),
-        "geneFamily": get_child_value(get_value(gene, 'gene_family')),
-        "geneFunction": get_child_value(get_value(gene, 'gene_function')),
-        "immuneCheckpoint": get_child_value(get_value(gene, 'immune_checkpoint')),
-        "nodeType": get_child_value(get_value(gene, 'node_type')),
-        "pathway": get_child_value(get_value(gene, 'pathway')),
-        "superCategory": get_child_value(get_value(gene, 'super_category')),
-        "therapyType": get_child_value(get_value(gene, 'therapy_type'))
+        "geneFamily": get_value(get_value(gene, 'gene_family')),
+        "geneFunction": get_value(get_value(gene, 'gene_function')),
+        "immuneCheckpoint": get_value(get_value(gene, 'immune_checkpoint')),
+        "nodeType": get_value(get_value(gene, 'node_type')),
+        "pathway": get_value(get_value(gene, 'pathway')),
+        "superCategory": get_value(get_value(gene, 'super_category')),
+        "therapyType": get_value(get_value(gene, 'therapy_type'))
     }
 
 
@@ -59,11 +59,11 @@ def resolve_genes(_obj, info, entrez=None):
             "friendlyName": gene.friendly_name,
             "ioLandscapeName": gene.io_landscape_name,
             "references": gene.references,
-            "geneFamily": get_child_value(gene.gene_family),
-            "geneFunction": get_child_value(gene.gene_function),
-            "immuneCheckpoint": get_child_value(gene.immune_checkpoint),
-            "nodeType": get_child_value(gene.node_type),
-            "pathway": get_child_value(gene.pathway),
-            "superCategory": get_child_value(gene.super_category),
-            "therapyType": get_child_value(gene.therapy_type)
+            "geneFamily": get_value(gene.gene_family),
+            "geneFunction": get_value(gene.gene_function),
+            "immuneCheckpoint": get_value(gene.immune_checkpoint),
+            "nodeType": get_value(gene.node_type),
+            "pathway": get_value(gene.pathway),
+            "superCategory": get_value(gene.super_category),
+            "therapyType": get_value(gene.therapy_type)
         } for gene in genes]

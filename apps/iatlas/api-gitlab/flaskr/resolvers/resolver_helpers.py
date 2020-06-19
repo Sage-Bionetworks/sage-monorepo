@@ -10,12 +10,6 @@ def build_option_args(selection_set=None, valid_nodes={}):
     return option_args
 
 
-def get_child_value(parent=None, field="name"):
-    if parent is not None:
-        return get_value(parent, field)
-    return None
-
-
 def get_selection_set(selection_set, condition=True, child_node='features'):
     if condition and type(selection_set) is not NoneType:
         for selection in selection_set.selections:
@@ -25,7 +19,7 @@ def get_selection_set(selection_set, condition=True, child_node='features'):
     return selection_set
 
 
-def get_value(obj, attribute):
-    if hasattr(obj, attribute):
-        return getattr(obj, attribute)
+def get_value(obj=None, attribute='name', default=None):
+    if obj:
+        return getattr(obj, attribute, default)
     return None
