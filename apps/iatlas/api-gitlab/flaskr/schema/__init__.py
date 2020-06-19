@@ -45,6 +45,6 @@ root.set_field('test', resolve_test)
 
 schema = make_executable_schema(
     type_defs,
-    [root, gene, feature, feature_by_class, feature_value_type,
-        sample, simple_sample, simple_tag, tag]
+    [root, gene, feature, feature_by_class,
+     feature_value_type, sample, simple_tag, tag]
 )
