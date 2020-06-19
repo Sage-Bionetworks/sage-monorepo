@@ -83,7 +83,7 @@ def resolve_tags(_obj, info, dataSet, related, feature=None):
     query = query.join(sample_to_tag_2,
                        and_(sample_to_tag_2.sample_id == sample_to_tag_1.sample_id,
                             tag_to_tag_1.tag_id == sample_to_tag_2.tag_id))
-    query = query.join(tag, tag.id == tag_to_tag_1.tag_id)
+    query = query.join(tag, tag.id == tag_to_tag_1.tag_id, isouter=True)
 
     if 'sampleCount' in requested_nodes or 'sampleIds' in requested_nodes:
         query = query.group_by(tag.name, tag.display,
