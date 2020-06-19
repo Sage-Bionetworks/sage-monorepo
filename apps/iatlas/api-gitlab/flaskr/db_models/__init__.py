@@ -3,6 +3,8 @@ from flaskr import db
 Base = db.Model
 
 from .copy_number_result import CopyNumberResult
+from .dataset import Dataset
+from .dataset_to_sample import DatasetToSample
 from .driver_result import DriverResult
 from .edge import Edge
 from .feature import Feature

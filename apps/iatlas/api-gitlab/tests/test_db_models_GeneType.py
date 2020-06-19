@@ -8,7 +8,7 @@ def test_gene_type_with_relations(app):
     gene_type_name = 'extra_cellular_network'
     relationships_to_load = ['gene_type_assoc', 'genes']
 
-    query = return_gene_type_query()
+    query = return_gene_type_query(*relationships_to_load)
     result = query.filter_by(name=gene_type_name).first()
 
     if type(result.gene_type_assoc) is not NoneType:

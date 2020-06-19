@@ -18,7 +18,8 @@ gene_related_fields = ['copy_number_results',
                        'super_category',
                        'therapy_type']
 
-gene_core_fields = ['entrez',
+gene_core_fields = ['id',
+                    'entrez',
                     'hgnc',
                     'description',
                     'friendly_name',

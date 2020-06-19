@@ -40,6 +40,4 @@ def test_GeneToType_no_relations(app):
         assert result.genes == []
         assert result.types == []
         assert result.gene_id == gene_id
-        assert result.genes == []
-        assert result.types == []
         assert type(result.type_id) is int
