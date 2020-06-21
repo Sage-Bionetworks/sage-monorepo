@@ -1,9 +1,9 @@
 from .resolver_helpers import get_value, request_features, return_feature_value
 
 
-def resolve_features_by_class(_obj, info, dataSet=None, related=None, feature=None):
+def resolve_features_by_class(_obj, info, dataSet=None, related=None, feature=None, featureClass=None):
     results = request_features(
-        _obj, info, dataSet, related, feature, byClass=True, byTag=False)
+        _obj, info, dataSet, related, feature, featureClass, byClass=True, byTag=False)
 
     class_map = dict()
     for row in results:

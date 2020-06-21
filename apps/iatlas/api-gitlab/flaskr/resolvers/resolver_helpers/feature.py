@@ -28,7 +28,7 @@ def build_feature_to_sample_join_condition(features_to_samples_model,
     return feature_to_sample_join_condition
 
 
-def request_features(_obj, info, dataSet=None, related=None, feature=None, feature_class=None, byClass=False, byTag=False):
+def request_features(_obj, info, dataSet=None, related=None, feature=None, featureClass=None, byClass=False, byTag=False):
     """
     Builds a SQL request and returns values from the DB.
 
@@ -162,9 +162,9 @@ def request_features(_obj, info, dataSet=None, related=None, feature=None, featu
             query = query.join(
                 sample_1, feature_to_sample_1.sample_id == sample_1.id, isouter=True)
 
-    if 'class' in option_args or feature_class:
+    if 'class' in option_args or featureClass:
         classes_join_condition = build_classes_join_condition(
-            feature_1, class_1, feature_class)
+            feature_1, class_1, featureClass)
         query = query.join(class_1, and_(
             *classes_join_condition), isouter=True)
 

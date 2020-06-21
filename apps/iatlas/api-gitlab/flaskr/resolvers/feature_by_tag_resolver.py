@@ -1,9 +1,9 @@
 from .resolver_helpers import get_value, request_features, return_feature_value
 
 
-def resolve_features_by_tag(_obj, info, dataSet=None, related=None, feature=None, feature_class=None):
+def resolve_features_by_tag(_obj, info, dataSet=None, related=None, feature=None, featureClass=None):
     results = request_features(
-        _obj, info, dataSet, related, feature, feature_class, byClass=False, byTag=True)
+        _obj, info, dataSet, related, feature, featureClass, byClass=False, byTag=True)
 
     tag_map = dict()
     for row in results:
