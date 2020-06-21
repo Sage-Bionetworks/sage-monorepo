@@ -20,7 +20,7 @@ feature_value_type = ScalarType('FeatureValue')
 
 
 @feature_value_type.serializer
-def serialize_datetime(value):
+def serialize_feature_value(value):
     if type(value) is str or type(value) is float:
         return value
 
