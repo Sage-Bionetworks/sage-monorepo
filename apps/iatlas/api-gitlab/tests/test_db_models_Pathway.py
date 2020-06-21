@@ -2,10 +2,11 @@ import pytest
 from tests import app
 from flaskr.database import return_pathway_query
 
+name = 'Antigen'
+
 
 def test_Pathway_with_relations(app):
     app()
-    name = 'Antigen'
 
     query = return_pathway_query('genes')
     result = query.filter_by(name=name).first()
@@ -20,7 +21,6 @@ def test_Pathway_with_relations(app):
 
 def test_Pathway_no_relations(app):
     app()
-    name = 'Antigen'
 
     query = return_pathway_query()
     result = query.filter_by(name=name).first()

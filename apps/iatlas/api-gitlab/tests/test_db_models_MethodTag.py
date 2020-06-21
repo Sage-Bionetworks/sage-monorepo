@@ -2,10 +2,11 @@ import pytest
 from tests import app
 from flaskr.database import return_method_tag_query
 
+name = 'ExpSig'
+
 
 def test_MethodTag_with_relations(app):
     app()
-    name = 'ExpSig'
     relationships_to_join = ['features']
 
     query = return_method_tag_query(*relationships_to_join)
@@ -21,7 +22,6 @@ def test_MethodTag_with_relations(app):
 
 def test_MethodTag_no_relations(app):
     app()
-    name = 'ExpSig'
 
     query = return_method_tag_query()
     result = query.filter_by(name=name).first()

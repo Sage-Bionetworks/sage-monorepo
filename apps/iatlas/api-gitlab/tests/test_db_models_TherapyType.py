@@ -2,10 +2,11 @@ import pytest
 from tests import app
 from flaskr.database import return_therapy_type_query
 
+name = 'T-cell targeted immunomodulator'
+
 
 def test_TherapyType_with_relations(app):
     app()
-    name = 'T-cell targeted immunomodulator'
 
     query = return_therapy_type_query('genes')
     result = query.filter_by(name=name).first()
@@ -20,7 +21,6 @@ def test_TherapyType_with_relations(app):
 
 def test_TherapyType_no_relations(app):
     app()
-    name = 'T-cell targeted immunomodulator'
 
     query = return_therapy_type_query()
     result = query.filter_by(name=name).first()

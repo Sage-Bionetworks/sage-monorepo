@@ -2,10 +2,11 @@ import pytest
 from tests import app, NoneType
 from flaskr.database import return_dataset_to_sample_query
 
+dataset_id = 5
+
 
 def test_DatasetToSample_with_relations(app):
     app()
-    dataset_id = 5
     relationships_to_join = ['datasets', 'samples']
 
     query = return_dataset_to_sample_query(*relationships_to_join)
@@ -30,7 +31,6 @@ def test_DatasetToSample_with_relations(app):
 
 def test_DatasetToSample_no_relations(app):
     app()
-    dataset_id = 5
 
     query = return_dataset_to_sample_query()
     results = query.filter_by(dataset_id=dataset_id).limit(3).all()

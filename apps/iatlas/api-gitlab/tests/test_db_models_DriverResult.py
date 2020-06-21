@@ -3,10 +3,11 @@ from tests import app, NoneType
 from flaskr.database import return_driver_result_query
 from flaskr.db_models import DriverResult
 
+gene_id = 20
+
 
 def test_DriverResult_with_relations(app):
     app()
-    gene_id = 20
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['feature', 'gene', 'mutation_code', 'tag']
@@ -44,7 +45,6 @@ def test_DriverResult_with_relations(app):
 
 def test_DriverResult_no_relations(app):
     app()
-    gene_id = 20
 
     query = return_driver_result_query()
     results = query.filter(DriverResult.gene_id == gene_id).limit(3).all()

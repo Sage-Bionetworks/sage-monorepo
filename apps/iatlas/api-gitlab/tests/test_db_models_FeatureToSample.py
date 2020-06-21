@@ -2,10 +2,11 @@ import pytest
 from tests import app, NoneType
 from flaskr.database import return_feature_to_sample_query
 
+feature_id = 1
+
 
 def test_FeatureToSample_with_relations(app):
     app()
-    feature_id = 1
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['features', 'samples']
@@ -38,7 +39,6 @@ def test_FeatureToSample_with_relations(app):
 
 def test_FeatureToSample_no_relations(app):
     app()
-    feature_id = 1
 
     query = return_feature_to_sample_query()
     results = query.filter_by(feature_id=feature_id).limit(3).all()

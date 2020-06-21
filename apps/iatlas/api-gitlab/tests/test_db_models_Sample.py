@@ -93,6 +93,10 @@ def test_Sample_with_relations(app):
         # Don't need to iterate through every result.
         for tag in result.tags[0:2]:
             assert type(tag.name) is str
+    assert result.dataset_sample_assoc == []
+    assert result.gene_sample_assoc == []
+    assert result.feature_sample_assoc == []
+    assert result.sample_mutation_assoc == []
     assert result.name == name
     assert type(result.patient_id) is int or NoneType
     assert repr(result) == '<Sample %r>' % name

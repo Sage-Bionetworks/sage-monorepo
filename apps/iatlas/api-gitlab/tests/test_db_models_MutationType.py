@@ -2,10 +2,11 @@ import pytest
 from tests import app, NoneType
 from flaskr.database import return_mutation_type_query
 
+name = 'driver_mutation'
+
 
 def test_MutationType_with_relations(app):
     app()
-    name = 'driver_mutation'
 
     query = return_mutation_type_query(['mutations'])
     result = query.filter_by(name=name).first()
@@ -23,7 +24,6 @@ def test_MutationType_with_relations(app):
 
 def test_MutationType_no_relations(app):
     app()
-    name = 'driver_mutation'
 
     query = return_mutation_type_query()
     result = query.filter_by(name=name).first()

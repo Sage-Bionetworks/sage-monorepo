@@ -2,10 +2,11 @@ import pytest
 from tests import app, NoneType
 from flaskr.database import return_patient_query
 
+barcode = 'DO1328'
+
 
 def test_Patient_with_relations(app):
     app()
-    barcode = 'DO1328'
     relationships_to_load = ['samples', 'slides']
 
     query = return_patient_query(*relationships_to_load)
@@ -33,7 +34,6 @@ def test_Patient_with_relations(app):
 
 def test_Patient_no_relations(app):
     app()
-    barcode = 'DO1328'
 
     query = return_patient_query()
     result = query.filter_by(barcode=barcode).first()

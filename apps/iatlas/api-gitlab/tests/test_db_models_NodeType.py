@@ -2,10 +2,11 @@ import pytest
 from tests import app
 from flaskr.database import return_node_type_query
 
+name = 'Ligand'
+
 
 def test_NodeType_with_relations(app):
     app()
-    name = 'Ligand'
 
     query = return_node_type_query('genes')
     result = query.filter_by(name=name).first()
@@ -20,7 +21,6 @@ def test_NodeType_with_relations(app):
 
 def test_NodeType_no_relations(app):
     app()
-    name = 'Ligand'
 
     query = return_node_type_query()
     result = query.filter_by(name=name).first()

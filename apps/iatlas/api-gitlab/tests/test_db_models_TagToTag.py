@@ -3,10 +3,11 @@ from tests import app, NoneType
 from flaskr.database import return_tag_to_tag_query
 from flaskr.db_models import TagToTag
 
+tag_id = 11
+
 
 def test_TagToTag_with_relations(app):
     app()
-    tag_id = 11
     string_representation_list = []
     separator = ', '
 
@@ -36,7 +37,6 @@ def test_TagToTag_with_relations(app):
 
 def test_TagToTag_no_relations(app):
     app()
-    tag_id = 64
 
     query = return_tag_to_tag_query()
     results = query.filter_by(tag_id=tag_id).limit(3).all()

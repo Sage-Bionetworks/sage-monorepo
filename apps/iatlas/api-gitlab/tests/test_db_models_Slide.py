@@ -2,10 +2,11 @@ import pytest
 from tests import app, NoneType
 from flaskr.database import return_slide_query
 
+name = 'TCGA-05-4244-01Z-00-DX1'
+
 
 def test_Slide_with_relations(app):
     app()
-    name = 'TCGA-05-4244-01Z-00-DX1'
     relationships_to_load = ['patients']
 
     query = return_slide_query(*relationships_to_load)
@@ -21,7 +22,6 @@ def test_Slide_with_relations(app):
 
 def test_Slide_no_relations(app):
     app()
-    name = 'TCGA-05-4244-01Z-00-DX1'
 
     query = return_slide_query()
     result = query.filter_by(name=name).first()

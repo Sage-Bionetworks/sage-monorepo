@@ -2,10 +2,10 @@ import pytest
 from tests import app, NoneType
 from flaskr.database import return_sample_to_tag_query
 
+sample_id = 1
 
 def test_SampleToTag_with_relations(app):
     app()
-    sample_id = 1
     string_representation_list = []
     separator = ', '
 
@@ -35,7 +35,6 @@ def test_SampleToTag_with_relations(app):
 
 def test_SampleToTag_no_relations(app):
     app()
-    sample_id = 1
 
     query = return_sample_to_tag_query()
     results = query.filter_by(sample_id=sample_id).limit(3).all()
