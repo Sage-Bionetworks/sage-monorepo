@@ -11,7 +11,7 @@ def test_MutationType_with_relations(app):
     query = return_mutation_type_query(['mutations'])
     result = query.filter_by(name=name).first()
 
-    if type(result.mutations) is not NoneType:
+    if result.mutations:
         assert isinstance(result.mutations, list)
         # Don't need to iterate through every result.
         for mutation in result.mutations[0:2]:

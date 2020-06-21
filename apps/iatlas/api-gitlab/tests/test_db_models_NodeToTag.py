@@ -1,5 +1,5 @@
 import pytest
-from tests import app, NoneType
+from tests import app
 from flaskr.database import return_node_to_tag_query
 
 node_id = 1
@@ -18,12 +18,12 @@ def test_NodeToTag_with_relations(app):
     for result in results:
         string_representation = '<NodeToTag %r>' % node_id
         string_representation_list.append(string_representation)
-        if type(result.nodes) is not NoneType:
+        if result.nodes:
             assert isinstance(result.nodes, list)
             # Don't need to iterate through every result.
             for node in result.nodes[0:2]:
                 assert node.id == node_id
-        if type(result.tags) is not NoneType:
+        if result.tags:
             assert isinstance(result.tags, list)
             # Don't need to iterate through every result.
             for tag in result.tags[0:2]:

@@ -22,29 +22,29 @@ def test_Gene_with_relations(app):
     query = return_gene_query(*relationships_to_join)
     result = query.filter_by(entrez=entrez).first()
 
-    if type(result.gene_family) is not NoneType:
+    if result.gene_family:
         assert result.gene_family.id == result.gene_family_id
-    if type(result.gene_function) is not NoneType:
+    if result.gene_function:
         assert result.gene_function.id == result.gene_function_id
     assert result.gene_type_assoc == []
-    if type(result.gene_types) is not NoneType:
+    if result.gene_types:
         assert isinstance(result.gene_types, list)
         # Don't need to iterate through every result.
         for gene_type in result.gene_types[0:2]:
             assert type(gene_type.name) is str
-    if type(result.immune_checkpoint) is not NoneType:
+    if result.immune_checkpoint:
         assert result.immune_checkpoint.id == result.immune_checkpoint_id
-    if type(result.node_type) is not NoneType:
+    if result.node_type:
         assert result.node_type.id == result.node_type_id
-    if type(result.pathway) is not NoneType:
+    if result.pathway:
         assert result.pathway.id == result.pathway_id
-    if type(result.samples) is not NoneType:
+    if result.samples:
         assert isinstance(result.samples, list)
         for sample in result.samples:
             assert type(sample.name) is str
-    if type(result.super_category) is not NoneType:
+    if result.super_category:
         assert result.super_category.id == result.super_cat_id
-    if type(result.therapy_type) is not NoneType:
+    if result.therapy_type:
         assert result.therapy_type.id == result.therapy_type_id
     assert result.entrez == entrez
     assert result.hgnc == hgnc
@@ -66,7 +66,7 @@ def test_Gene_with_copy_number_results(app):
     query = return_gene_query(['copy_number_results'])
     result = query.filter_by(entrez=entrez).first()
 
-    if type(result.copy_number_results) is not NoneType:
+    if result.copy_number_results:
         assert isinstance(result.copy_number_results, list)
         # Don't need to iterate through every result.
         for copy_number_result in result.copy_number_results[0:2]:
@@ -79,7 +79,7 @@ def test_Gene_with_driver_results(app):
     query = return_gene_query(['driver_results'])
     result = query.filter_by(entrez=entrez).first()
 
-    if type(result.driver_results) is not NoneType:
+    if result.driver_results:
         assert isinstance(result.driver_results, list)
         # Don't need to iterate through every result.
         for driver_result in result.driver_results[0:2]:
@@ -92,7 +92,7 @@ def test_Gene_with_gene_sample_assoc(app):
     query = return_gene_query(['gene_sample_assoc'])
     result = query.filter_by(entrez=entrez).first()
 
-    if type(result.gene_sample_assoc) is not NoneType:
+    if result.gene_sample_assoc:
         assert isinstance(result.gene_sample_assoc, list)
         # Don't need to iterate through every result.
         for gene_sample_rel in result.gene_sample_assoc[0:2]:
@@ -105,7 +105,7 @@ def test_Gene_with_gene_type_assoc(app):
     query = return_gene_query(['gene_type_assoc'])
     result = query.filter_by(entrez=entrez).first()
 
-    if type(result.gene_type_assoc) is not NoneType:
+    if result.gene_type_assoc:
         assert isinstance(result.gene_type_assoc, list)
         # Don't need to iterate through every result.
         for gene_type_rel in result.gene_type_assoc[0:2]:

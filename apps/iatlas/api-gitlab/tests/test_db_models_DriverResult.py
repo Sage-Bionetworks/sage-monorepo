@@ -20,13 +20,13 @@ def test_DriverResult_with_relations(app):
         driver_result_id = result.id
         string_representation = '<DriverResult %r>' % driver_result_id
         string_representation_list.append(string_representation)
-        if type(result.feature) is not NoneType:
+        if result.feature:
             assert result.feature.id == result.feature_id
-        if type(result.gene) is not NoneType:
+        if result.gene:
             assert result.gene.id == gene_id
-        if type(result.mutation_code) is not NoneType:
+        if result.mutation_code:
             assert result.mutation_code.id == result.mutation_code_id
-        if type(result.tag) is not NoneType:
+        if result.tag:
             assert result.tag.id == result.tag_id
         assert result.gene_id == gene_id
         assert type(result.feature_id) is int or NoneType

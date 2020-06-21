@@ -1,8 +1,9 @@
 import pytest
-from tests import app, NoneType
+from tests import app
 from flaskr.database import return_gene_to_type_query
 
 gene_id = 160
+
 
 def test_GeneToType_with_relations(app):
     app()

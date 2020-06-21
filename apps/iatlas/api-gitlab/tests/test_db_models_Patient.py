@@ -12,12 +12,12 @@ def test_Patient_with_relations(app):
     query = return_patient_query(*relationships_to_load)
     result = query.filter_by(barcode=barcode).first()
 
-    if type(result.samples) is not NoneType:
+    if result.samples:
         assert isinstance(result.samples, list)
         # Don't need to iterate through every result.
         for sample in result.samples[0:2]:
             assert type(sample.name) is str
-    if type(result.slides) is not NoneType:
+    if result.slides:
         assert isinstance(result.slides, list)
         # Don't need to iterate through every result.
         for slide in result.slides[0:2]:

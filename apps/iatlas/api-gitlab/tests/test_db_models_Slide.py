@@ -12,7 +12,7 @@ def test_Slide_with_relations(app):
     query = return_slide_query(*relationships_to_load)
     result = query.filter_by(name=name).first()
 
-    if type(result.patient) is not NoneType:
+    if result.patient:
         assert result.patient.id == result.patient_id
     assert result.name == name
     assert type(result.description) is str or NoneType

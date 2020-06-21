@@ -1,5 +1,5 @@
 import pytest
-from tests import app, NoneType
+from tests import app
 from flaskr.database import return_sample_to_mutation_query
 from flaskr.db_models import SampleToMutation
 from flaskr.enums import status_enum
@@ -19,12 +19,12 @@ def test_SampleToMutation_with_relations(app):
     for result in results:
         string_representation = '<SampleToMutation %r>' % sample_id
         string_representation_list.append(string_representation)
-        if type(result.mutations) is not NoneType:
+        if result.mutations:
             assert isinstance(result.mutations, list)
             # Don't need to iterate through every result.
             for mutation in result.mutations[0:2]:
                 assert type(mutation.id) is int
-        if type(result.samples) is not NoneType:
+        if result.samples:
             assert isinstance(result.samples, list)
             # Don't need to iterate through every result.
             for sample in result.samples[0:2]:

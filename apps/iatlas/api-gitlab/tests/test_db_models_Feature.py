@@ -14,11 +14,11 @@ def test_Feature_with_relations(app):
     query = return_feature_query(*relationships_to_join)
     result = query.filter_by(name=name).first()
 
-    if type(result.feature_class) is not NoneType:
+    if result.feature_class:
         assert type(result.feature_class.name) is str
-    if type(result.method_tag) is not NoneType:
+    if result.method_tag:
         assert type(result.method_tag.name) is str
-    if type(result.samples) is not NoneType:
+    if result.samples:
         assert isinstance(result.samples, list)
         # Don't need to iterate through every result.
         for sample in result.samples[0:2]:
@@ -37,7 +37,7 @@ def test_Feature_with_copy_number_results(app):
     query = return_feature_query('copy_number_results')
     result = query.filter_by(name=name).first()
 
-    if type(result.copy_number_results) is not NoneType:
+    if result.copy_number_results:
         assert isinstance(result.copy_number_results, list)
         # Don't need to iterate through every result.
         for copy_number_result in result.copy_number_results[0:2]:
@@ -50,7 +50,7 @@ def test_Feature_with_driver_results(app):
     query = return_feature_query('driver_results')
     result = query.filter_by(name=name).first()
 
-    if type(result.driver_results) is not NoneType:
+    if result.driver_results:
         assert isinstance(result.driver_results, list)
         # Don't need to iterate through every result.
         for driver_result in result.driver_results[0:2]:
@@ -63,7 +63,7 @@ def test_Feature_with_feature_sample_assoc(app):
     query = return_feature_query('feature_sample_assoc')
     result = query.filter_by(name=name).first()
 
-    if type(result.feature_sample_assoc) is not NoneType:
+    if result.feature_sample_assoc:
         assert isinstance(result.feature_sample_assoc, list)
         # Don't need to iterate through every result.
         for feature_sample_rel in result.feature_sample_assoc[0:2]:

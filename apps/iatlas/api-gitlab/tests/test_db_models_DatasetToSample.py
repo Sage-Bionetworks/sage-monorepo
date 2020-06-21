@@ -1,5 +1,5 @@
 import pytest
-from tests import app, NoneType
+from tests import app
 from flaskr.database import return_dataset_to_sample_query
 
 dataset_id = 5

@@ -11,7 +11,7 @@ def test_gene_type_with_relations(app):
     query = return_gene_type_query('genes')
     result = query.filter_by(name=gene_type_name).first()
 
-    if type(result.genes) is not NoneType:
+    if result.genes:
         assert isinstance(result.genes, list)
         # Don't need to iterate through every result.
         for gene in result.genes[0:2]:
@@ -28,7 +28,7 @@ def test_gene_type_with_gene_type_assoc(app):
     query = return_gene_type_query('gene_type_assoc')
     result = query.filter_by(name=gene_type_name).first()
 
-    if type(result.gene_type_assoc) is not NoneType:
+    if result.gene_type_assoc:
         assert isinstance(result.gene_type_assoc, list)
         # Don't need to iterate through every result.
         for gene_type_rel in result.gene_type_assoc[0:2]:

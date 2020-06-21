@@ -11,7 +11,7 @@ def test_dataset_with_samples(app):
     query = return_dataset_query('samples')
     result = query.filter_by(name=dataset_name).first()
 
-    if type(result.samples) is not NoneType:
+    if result.samples:
         assert isinstance(result.samples, list)
         # Don't need to iterate through every result.
         for sample in result.samples[0:2]:
@@ -27,7 +27,7 @@ def test_dataset_with_dataset_sample_assoc(app):
     query = return_dataset_query('dataset_sample_assoc')
     result = query.filter_by(name=dataset_name).first()
 
-    if type(result.dataset_sample_assoc) is not NoneType:
+    if result.dataset_sample_assoc:
         assert isinstance(result.dataset_sample_assoc, list)
         # Don't need to iterate through every result.
         for dataset_sample_rel in result.dataset_sample_assoc[0:2]:
