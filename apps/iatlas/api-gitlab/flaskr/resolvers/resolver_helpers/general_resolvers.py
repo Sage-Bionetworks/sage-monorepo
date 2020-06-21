@@ -1,9 +1,6 @@
-NoneType = type(None)
-
-
 def build_option_args(selection_set=None, valid_nodes={}):
     option_args = []
-    if type(selection_set) is not NoneType:
+    if selection_set:
         for selection in selection_set.selections:
             if selection.name.value in valid_nodes:
                 option_args.append(valid_nodes.get(selection.name.value))
@@ -11,7 +8,7 @@ def build_option_args(selection_set=None, valid_nodes={}):
 
 
 def get_selection_set(selection_set, condition=True, child_node='features'):
-    if condition and type(selection_set) is not NoneType:
+    if condition and selection_set:
         for selection in selection_set.selections:
             if selection.name.value == child_node:
                 selection_set = selection.selection_set

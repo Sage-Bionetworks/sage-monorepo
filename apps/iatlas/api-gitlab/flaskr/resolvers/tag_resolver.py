@@ -5,7 +5,7 @@ from flaskr import db
 from flaskr.db_models import (
     Dataset, DatasetToSample, Feature, FeatureToSample, Sample, SampleToTag, Tag, TagToTag)
 from flaskr.database import return_sample_to_tag_query, return_tag_query, return_tag_to_tag_query
-from .resolver_helpers import build_option_args, get_value, NoneType
+from .resolver_helpers import build_option_args, get_value
 
 
 def resolve_tags(_obj, info, dataSet, related, feature=None):
@@ -61,12 +61,14 @@ def resolve_tags(_obj, info, dataSet, related, feature=None):
     query = sess.query(*select_fields)
     query = query.select_from(sample_to_tag_1)
 
-    if type(feature) is not NoneType:
-        query = query.join(FeatureToSample,
-                           and_(FeatureToSample.sample_id == sample_to_tag_1.sample_id,
-                                FeatureToSample.feature_id.in_(
-                                    sess.query(Feature.id).filter(
-                                        Feature.name.in_(feature))
+    if feature:
+        feature_1 = orm.aliased(Feature, name='f')
+        feature_to_sample_1 = orm.aliased(FeatureToSample, name='fs')
+        query = query.join(feature_to_sample_1,
+                           and_(feature_to_sample_1.sample_id == sample_to_tag_1.sample_id,
+                                feature_to_sample_1.feature_id.in_(
+                                    sess.query(feature_1.id).filter(
+                                        feature_1.name.in_(feature))
                                 )))
 
     query = query.join(dataset_to_sample_1,
