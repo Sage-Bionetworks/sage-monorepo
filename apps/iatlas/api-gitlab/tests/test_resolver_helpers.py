@@ -41,11 +41,11 @@ def test_build_option_args():
 
 
 def test_get_value():
-    name = "test"
-    other = "test2"
+    name = 'test'
+    other = 'test2'
     parent = Parent(name, other)
     assert get_value(parent, 'name') == name
     assert get_value(parent, 'nothing') == None
-    assert get_value(parent, "other") == other
+    assert get_value(parent, 'other') == other
     assert get_value(None) == None
     assert get_value() == None

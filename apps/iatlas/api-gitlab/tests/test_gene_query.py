@@ -31,7 +31,6 @@ def test_gene_query_no_relations(client):
             entrez
             hgnc
             ioLandscapeName
-            references
         }
     }"""
     entrez = 3627
@@ -44,4 +43,3 @@ def test_gene_query_no_relations(client):
     assert gene["entrez"] == entrez
     assert gene["hgnc"] == "CXCL10"
     assert type(gene["ioLandscapeName"]) is str or NoneType
-    assert isinstance(gene["references"], list) or NoneType
