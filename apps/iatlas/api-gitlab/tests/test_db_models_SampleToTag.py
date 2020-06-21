@@ -1,11 +1,12 @@
 import pytest
-from tests import app, NoneType
+from tests import app
 from flaskr.database import return_sample_to_tag_query
+
+sample_id = 1
 
 
 def test_SampleToTag_with_relations(app):
     app()
-    sample_id = 1
     string_representation_list = []
     separator = ', '
 
@@ -16,12 +17,12 @@ def test_SampleToTag_with_relations(app):
     for result in results:
         string_representation = '<SampleToTag %r>' % sample_id
         string_representation_list.append(string_representation)
-        if type(result.samples) is not NoneType:
+        if result.samples:
             assert isinstance(result.samples, list)
             # Don't need to iterate through every result.
             for sample in result.samples[0:2]:
                 assert sample.id == sample_id
-        if type(result.tags) is not NoneType:
+        if result.tags:
             assert isinstance(result.tags, list)
             # Don't need to iterate through every result.
             for tag in result.tags[0:2]:
@@ -35,7 +36,6 @@ def test_SampleToTag_with_relations(app):
 
 def test_SampleToTag_no_relations(app):
     app()
-    sample_id = 1
 
     query = return_sample_to_tag_query()
     results = query.filter_by(sample_id=sample_id).limit(3).all()

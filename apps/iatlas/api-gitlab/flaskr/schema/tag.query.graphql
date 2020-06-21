@@ -1,8 +1,18 @@
 type Tag {
     characteristics: String
     color: String
-    display: String!
+    display: String
     name: String!
     sampleCount: Int!
     sampleIds: [Int!]
+}
+
+"""
+A "SimpleTag" is version of a tag. Only basic tag attributes may be returned.
+"""
+type SimpleTag {
+    characteristics: String
+    color: String
+    display: String
+    name: String!
 }

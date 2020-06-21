@@ -2,10 +2,11 @@ import pytest
 from tests import app
 from flaskr.database import return_gene_function_query
 
+name = 'Granzyme'
+
 
 def test_GeneFunction_with_relations(app):
     app()
-    name = 'Granzyme'
 
     query = return_gene_function_query('genes')
     result = query.filter_by(name=name).first()
@@ -20,7 +21,6 @@ def test_GeneFunction_with_relations(app):
 
 def test_GeneFunction_no_relations(app):
     app()
-    name = 'Granzyme'
 
     query = return_gene_function_query()
     result = query.filter_by(name=name).first()

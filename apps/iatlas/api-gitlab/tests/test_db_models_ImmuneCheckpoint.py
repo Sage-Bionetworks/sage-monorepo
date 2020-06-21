@@ -3,10 +3,11 @@ from tests import app
 from flaskr.database import return_immune_checkpoint_query
 from flaskr.db_models import ImmuneCheckpoint
 
+name = 'Stimulatory'
+
 
 def test_ImmuneCheckpoint_with_relations(app):
     app()
-    name = 'Stimulatory'
 
     query = return_immune_checkpoint_query('genes')
     result = query.filter_by(name=name).first()
@@ -21,7 +22,6 @@ def test_ImmuneCheckpoint_with_relations(app):
 
 def test_ImmuneCheckpoint_no_relations(app):
     app()
-    name = 'Stimulatory'
 
     query = return_immune_checkpoint_query()
     result = query.filter_by(name=name).first()

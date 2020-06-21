@@ -4,9 +4,11 @@ from flaskr.db_models import Node
 from .database_helpers import build_general_query
 
 related_fields = [
-    'edges_primary', 'edges_secondary', 'feature', 'gene', 'node_tag_assoc', 'tags']
+    'datasets', 'edges_primary', 'edges_secondary',
+    'feature', 'gene', 'node_tag_assoc', 'tags']
 
-core_fields = ['id', 'gene_id', 'label', 'score', 'x', 'y']
+core_fields = ['id', 'dataset_id', 'feature_id',
+               'gene_id', 'label', 'score', 'x', 'y']
 
 
 def return_node_query(*args):

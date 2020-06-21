@@ -2,10 +2,11 @@ import pytest
 from tests import app
 from flaskr.database import return_gene_family_query
 
+name = 'Butyrophilins'
+
 
 def test_GeneFamily_with_relations(app):
     app()
-    name = 'Butyrophilins'
 
     query = return_gene_family_query('genes')
     result = query.filter_by(name=name).first()
@@ -20,7 +21,6 @@ def test_GeneFamily_with_relations(app):
 
 def test_GeneFamily_no_relations(app):
     app()
-    name = 'Butyrophilins'
 
     query = return_gene_family_query()
     result = query.filter_by(name=name).first()

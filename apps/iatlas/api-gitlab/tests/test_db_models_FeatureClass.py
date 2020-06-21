@@ -2,10 +2,11 @@ import pytest
 from tests import app
 from flaskr.database import return_feature_class_query
 
+name = 'Adaptive Receptor - B cell'
+
 
 def test_FeatureClass_with_relations(app):
     app()
-    name = 'Adaptive Receptor - B cell'
     relationships_to_join = ['features']
 
     query = return_feature_class_query(*relationships_to_join)
@@ -22,7 +23,6 @@ def test_FeatureClass_with_relations(app):
 
 def test_FeatureClass_no_relations(app):
     app()
-    name = 'Adaptive Receptor - B cell'
 
     query = return_feature_class_query()
     result = query.filter_by(name=name).first()

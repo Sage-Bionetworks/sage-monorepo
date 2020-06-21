@@ -2,21 +2,22 @@ import pytest
 from tests import app, NoneType
 from flaskr.database import return_patient_query
 
+barcode = 'DO1328'
+
 
 def test_Patient_with_relations(app):
     app()
-    barcode = 'DO1328'
     relationships_to_load = ['samples', 'slides']
 
     query = return_patient_query(*relationships_to_load)
     result = query.filter_by(barcode=barcode).first()
 
-    if type(result.samples) is not NoneType:
+    if result.samples:
         assert isinstance(result.samples, list)
         # Don't need to iterate through every result.
         for sample in result.samples[0:2]:
             assert type(sample.name) is str
-    if type(result.slides) is not NoneType:
+    if result.slides:
         assert isinstance(result.slides, list)
         # Don't need to iterate through every result.
         for slide in result.slides[0:2]:
@@ -33,7 +34,6 @@ def test_Patient_with_relations(app):
 
 def test_Patient_no_relations(app):
     app()
-    barcode = 'DO1328'
 
     query = return_patient_query()
     result = query.filter_by(barcode=barcode).first()

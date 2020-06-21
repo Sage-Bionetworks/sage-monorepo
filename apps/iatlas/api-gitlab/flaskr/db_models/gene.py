@@ -11,7 +11,6 @@ class Gene(Base):
     description = db.Column(db.String, nullable=True)
     friendly_name = db.Column(db.String, nullable=True)
     io_landscape_name = db.Column(db.String, nullable=True)
-    references = db.Column(db.ARRAY(db.String), nullable=True)
 
     gene_family_id = db.Column(
         db.Integer, db.ForeignKey('gene_families.id'), nullable=True)

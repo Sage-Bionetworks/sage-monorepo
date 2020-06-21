@@ -3,10 +3,11 @@ from tests import app, NoneType
 from flaskr.database import return_copy_number_result_query
 from flaskr.enums import direction_enum
 
+gene_id = 1
+
 
 def test_CopyNumberResult_with_relations(app):
     app()
-    gene_id = 1
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['feature', 'gene', 'tag']
@@ -19,11 +20,11 @@ def test_CopyNumberResult_with_relations(app):
         copy_number_result_id = result.id
         string_representation = '<CopyNumberResult %r>' % copy_number_result_id
         string_representation_list.append(string_representation)
-        if type(result.feature) is not NoneType:
+        if result.feature:
             assert result.feature.id == result.feature_id
-        if type(result.gene) is not NoneType:
+        if result.gene:
             assert result.gene.id == gene_id
-        if type(result.tag) is not NoneType:
+        if result.tag:
             assert result.tag.id == result.tag_id
         assert result.gene_id == gene_id
         assert type(result.feature_id) is int
@@ -41,7 +42,6 @@ def test_CopyNumberResult_with_relations(app):
 
 def test_CopyNumberResult_no_relations(app):
     app()
-    gene_id = 1
 
     query = return_copy_number_result_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()

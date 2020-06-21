@@ -5,11 +5,7 @@ from .database_helpers import build_general_query
 
 accepted_option_args = ['node_1', 'node_2']
 
-accepted_query_args = ['id',
-                       'node_1_id',
-                       'node_2_id',
-                       'label',
-                       'score']
+accepted_query_args = ['id', 'node_1_id', 'node_2_id', 'label', 'score']
 
 
 def return_edge_query(*args):
