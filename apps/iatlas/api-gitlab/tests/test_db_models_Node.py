@@ -2,33 +2,15 @@ import pytest
 from tests import app, NoneType
 from flaskr.database import return_node_query
 
+gene_id = 4606
+
 
 def test_Node_with_relations(app):
     app()
-    gene_id = 30749
     string_representation_list = []
     separator = ', '
-    relationships_to_load = ['gene', 'feature',
-                             'edge_primary', 'edge_secondary']
 
-    query = return_node_query('node_tag_assoc')
-    result = query.filter_by(gene_id=gene_id).first()
-
-    if type(result.node_tag_assoc) is not NoneType:
-        assert isinstance(result.node_tag_assoc, list)
-        # Don't need to iterate through every result.
-        for node_tag_rel in result.node_tag_assoc[0:2]:
-            assert node_tag_rel.node_id == result.id
-
-    query = return_node_query('tags')
-    result = query.filter_by(gene_id=gene_id).first()
-
-    if type(result.tags) is not NoneType:
-        assert isinstance(result.tags, list)
-        # Don't need to iterate through every result.
-        for tag in result.tags[0:2]:
-            assert type(tag.name) is str
-
+    relationships_to_load = ['dataset', 'gene', 'feature']
     query = return_node_query(*relationships_to_load)
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 
@@ -37,20 +19,16 @@ def test_Node_with_relations(app):
         node_id = result.id
         string_representation = '<Node %r>' % node_id
         string_representation_list.append(string_representation)
-        if type(result.gene) is not NoneType:
+        if result.dataset:
+            assert result.dataset.id == result.dataset_id
+        if result.gene:
             assert result.gene.id == result.gene_id
-        if type(result.feature) is not NoneType:
+        if result.feature:
             assert result.feature.id == result.feature_id
-        if type(result.edges_primary) is not NoneType:
-            assert isinstance(result.edges_primary, list)
-            # Don't need to iterate through every result.
-            for edge_primary in result.edges_primary[0:2]:
-                assert edge_primary.node_1_id == result.id
-        if type(result.edges_secondary) is not NoneType:
-            assert isinstance(result.edges_secondary, list)
-            # Don't need to iterate through every result.
-            for edge_secondary in result.edges_secondary[0:2]:
-                assert edge_secondary.node_2_id == result.id
+        assert result.edges_primary == []
+        assert result.edges_secondary == []
+        assert result.node_tag_assoc == []
+        assert result.tags == []
         assert result.gene_id == gene_id
         assert type(result.feature_id) is NoneType
         assert type(result.label) is str or NoneType
@@ -62,9 +40,60 @@ def test_Node_with_relations(app):
         string_representation_list) + ']'
 
 
+def test_Node_with_node_tag_assoc(app):
+    app()
+
+    query = return_node_query('node_tag_assoc')
+    result = query.filter_by(gene_id=gene_id).first()
+
+    if result.node_tag_assoc:
+        assert isinstance(result.node_tag_assoc, list)
+        # Don't need to iterate through every result.
+        for node_tag_rel in result.node_tag_assoc[0:2]:
+            assert node_tag_rel.node_id == result.id
+
+
+def test_Node_with_edges_primary(app):
+    app()
+
+    query = return_node_query('edges_primary')
+    result = query.filter_by(gene_id=gene_id).first()
+
+    if result.edges_primary:
+        assert isinstance(result.edges_primary, list)
+        # Don't need to iterate through every result.
+        for edge_primary in result.edges_primary[0:2]:
+            assert edge_primary.node_1_id == result.id
+
+
+def test_Node_with_edges_secondary(app):
+    app()
+
+    query = return_node_query('edges_secondary')
+    result = query.filter_by(gene_id=gene_id).first()
+
+    if result.edges_secondary:
+        assert isinstance(result.edges_secondary, list)
+        # Don't need to iterate through every result.
+        for edge_secondary in result.edges_secondary[0:2]:
+            assert edge_secondary.node_2_id == result.id
+
+
+def test_Node_with_tags(app):
+    app()
+
+    query = return_node_query('tags')
+    result = query.filter_by(gene_id=gene_id).first()
+
+    if result.tags:
+        assert isinstance(result.tags, list)
+        # Don't need to iterate through every result.
+        for tag in result.tags[0:2]:
+            assert type(tag.name) is str
+
+
 def test_Node_no_relations(app):
     app()
-    gene_id = 30749
 
     query = return_node_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()
@@ -73,11 +102,12 @@ def test_Node_no_relations(app):
     for result in results:
         assert type(result.gene) is NoneType
         assert type(result.feature) is NoneType
-        assert not hasattr(result, 'edge_primary')
-        assert not hasattr(result, 'edge_secondary')
+        assert result.edges_primary == []
+        assert result.edges_secondary == []
         assert result.node_tag_assoc == []
         assert result.tags == []
         assert type(result.id) is int
+        assert type(result.dataset_id) is int or NoneType
         assert result.gene_id == gene_id
         assert type(result.feature_id) is NoneType
         assert type(result.label) is str or NoneType
