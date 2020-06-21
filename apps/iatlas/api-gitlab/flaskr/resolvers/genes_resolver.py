@@ -1,3 +1,4 @@
+from flaskr.db_models import Gene
 from flaskr.database import return_gene_query
 from .resolver_helpers import build_option_args, get_value, valid_gene_node_mapping
 
