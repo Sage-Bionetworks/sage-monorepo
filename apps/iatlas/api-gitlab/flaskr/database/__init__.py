@@ -10,6 +10,8 @@ from .mutation_queries import *
 from .node_queries import *
 from .node_to_tag_queries import *
 from .patient_queries import *
+from .publication_queries import *
+from .publication_to_gene_queries import *
 from .result_queries import *
 from .sample_to_mutation_queries import *
 from .sample_to_tag_queries import *
