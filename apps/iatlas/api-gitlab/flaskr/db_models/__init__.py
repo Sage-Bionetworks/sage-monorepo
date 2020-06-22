@@ -26,6 +26,8 @@ from .node_to_tag import NodeToTag
 from .node_type import NodeType
 from .pathway import Pathway
 from .patient import Patient
+from .publication import Publication
+from .publication_to_gene import PublicationToGene
 from .sample import Sample
 from .sample_to_mutation import SampleToMutation
 from .sample_to_tag import SampleToTag
