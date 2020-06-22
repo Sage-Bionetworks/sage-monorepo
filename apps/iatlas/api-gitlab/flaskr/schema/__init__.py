@@ -3,7 +3,7 @@ import os
 from flaskr.resolvers import (
     resolve_gene, resolve_genes, resolve_features,
     resolve_features_by_class, resolve_mutation, resolve_mutations, resolve_patient, resolve_patients,
-    resolve_slide, resolve_slides, resolve_tags, resolve_test)
+    resolve_sample, resolve_samples, resolve_slide, resolve_slides, resolve_tags, resolve_test)
 
 dirname, _filename = os.path.split(os.path.abspath(__file__))
 
@@ -16,6 +16,7 @@ tag_query = load_schema_from_path(dirname + "/tag.query.graphql")
 mutation_query = load_schema_from_path(dirname + "/mutation.query.graphql")
 patient_query = load_schema_from_path(dirname + "/patient.query.graphql")
 slide_query = load_schema_from_path(dirname + "/slide.query.graphql")
+sample_query = load_schema_from_path(dirname + "/sample.query.graphql")
 
 type_defs = [root_query, gene_query, feature_query, mutation_query, patient_query, sample_query, tag_query, slide_query]
 
@@ -30,6 +31,7 @@ mutation = ObjectType("Mutation")
 patient = ObjectType("Patient")
 tag_as_child = ObjectType("TagAsChild")
 slide = ObjectType("Slide")
+sample = ObjectType("Sample")
 
 root.set_field('gene', resolve_gene)
 root.set_field('genes', resolve_genes)
@@ -42,6 +44,9 @@ root.set_field('mutations', resolve_mutations)
 root.set_field('patient', resolve_patient)
 root.set_field('patients', resolve_patients)
 root.set_field('slide', resolve_slide)
+root.set_field('slides', resolve_slides)
+root.set_field('sample', resolve_sample)
+root.set_field('samples', resolve_samples)
 
 
 schema = make_executable_schema(

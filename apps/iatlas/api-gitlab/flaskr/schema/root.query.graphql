@@ -21,7 +21,10 @@ type Query {
   mutations(id: [Int!]): [Mutation]
   patient(barcode: String): Patient
   patients(barcode: [String]): [Patient]
-  slide(id: Int): Slide
+  sample(id: Int, name: String): Sample
+  samples(id: [Int!], name: [String!]): [Sample]
+  slide(id: Int, name: String): Slide
+  slides(id: [Int!], name: [String!]): [Slide]
   tags(dataSet: [String!]!, related: [String!]!, feature: [String!]): [Tag]!
   test: String!
 }

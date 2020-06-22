@@ -4,8 +4,9 @@ from tests import client, NoneType
 
 
 def test_patient_query(client):
-    query = """query Patient($id: Int!) {
-        patient(id: $id) {
+    query = """query Patient($barcode: String!) {
+        patient(barcode: $barcode) {
+            id
             age
             barcode
             ethnicity
@@ -15,14 +16,13 @@ def test_patient_query(client):
             weight
         }
     }"""
-    id = 1
+    barcode = "DO1328"
     response = client.post(
-        '/api', json={'query': query, 'variables': {'id': id}})
+        '/api', json={'query': query, 'variables': {'barcode': barcode}})
     json_data = json.loads(response.data)
     patient = json_data["data"]["patient"]
 
     assert not isinstance(patient, list)
-    assert patient["id"] == id
     assert type(patient["age"]) is int or NoneType
     assert type(patient["barcode"]) is str or NoneType
     assert type(patient["ethnicity"]) is str or NoneType

@@ -10,13 +10,18 @@ valid_slide_node_mapping = {
     'patient': 'patient_id'
 }
 
-def resolve_slide(_obj, info, id=None):
+def resolve_slide(_obj, info, id=None, name=None):
     option_args = build_option_args(
         info.field_nodes[0].selection_set,
         valid_slide_node_mapping
     )
     query = return_slide_query(*option_args)
-    slide = query.filter_by(id=id).first()
+    if id != None:
+        slide = query.filter_by(id=id).first()
+    elif name != None:
+        slide = query.filter_by(name=name).first()
+    else:
+        return None
 
     return {
         "id": get_value(slide, 'id'),
@@ -25,7 +30,7 @@ def resolve_slide(_obj, info, id=None):
         "patient": get_value(slide, 'patient')
     }
 
-def resolve_slides(_obj, info, id):
+def resolve_slides(_obj, info, id=None, name=None):
     option_args = build_option_args(
         info.field_nodes[0].selection_set,
         valid_slide_node_mapping
@@ -33,6 +38,10 @@ def resolve_slides(_obj, info, id):
     query = return_slide_query(*option_args)
     if id is not None:
         query = query.filter(Slide.id.in_(id))
+    elif name is not None:
+        query = query.filter(Slide.name.in_(name))
+    else:
+        return None
     slides = query.all()
     return [{
         "id": get_value(slide, 'id'),
