@@ -19,7 +19,7 @@ def resolve_features_by_class(_obj, info, dataSet=None, related=None, feature=No
             'class': get_value(row, 'class'),
             'display': get_value(row, 'display'),
             'methodTag': get_value(row, 'method_tag'),
-            'name': get_value(row, 'name'),
+            'name': get_value(row),
             'order': get_value(row, 'order'),
             'sample': get_value(row, 'sample'),
             'unit': get_value(row, 'unit'),
