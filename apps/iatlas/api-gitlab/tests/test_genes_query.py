@@ -16,6 +16,13 @@ def test_genes_query_with_entrez(client):
                 name
                 display
             }
+            publications {
+                firstAuthorLastName
+                journal
+                pubmedId
+                title
+                year
+            }
         }
     }"""
     response = client.post(
@@ -26,6 +33,7 @@ def test_genes_query_with_entrez(client):
     assert isinstance(genes, list)
     for gene in genes:
         gene_types = gene['geneTypes']
+        publications = gene['publications']
 
         assert gene['entrez'] == gene_id
         assert gene['hgnc'] == hgnc
@@ -35,6 +43,14 @@ def test_genes_query_with_entrez(client):
             for gene_type in gene_types:
                 assert type(gene_type['name']) is str
                 assert type(gene_type['display']) is str or NoneType
+        if publications:
+            for publication in publications:
+                assert type(
+                    publication['firstAuthorLastName']) is str or NoneType
+                assert type(publication['journal']) is str or NoneType
+                assert type(publication['pubmedId']) is int
+                assert type(publication['title']) is str or NoneType
+                assert type(publication['year']) is str or NoneType
 
 
 def test_genes_query_no_entrez(client):

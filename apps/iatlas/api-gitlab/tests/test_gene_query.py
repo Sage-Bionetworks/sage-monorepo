@@ -17,6 +17,13 @@ def test_gene_query_with_relations(client):
                 name
                 display
             }
+            publications {
+                firstAuthorLastName
+                journal
+                pubmedId
+                title
+                year
+            }
         }
     }"""
     response = client.post(
@@ -24,6 +31,7 @@ def test_gene_query_with_relations(client):
     json_data = json.loads(response.data)
     gene = json_data['data']['gene']
     gene_types = gene['geneTypes']
+    publications = gene['publications']
 
     assert not isinstance(gene, list)
     assert gene['entrez'] == entrez
@@ -35,6 +43,13 @@ def test_gene_query_with_relations(client):
         for gene_type in gene_types:
             assert type(gene_type['name']) is str
             assert type(gene_type['display']) is str or NoneType
+    if publications:
+        for publication in publications:
+            assert type(publication['firstAuthorLastName']) is str or NoneType
+            assert type(publication['journal']) is str or NoneType
+            assert type(publication['pubmedId']) is int
+            assert type(publication['title']) is str or NoneType
+            assert type(publication['year']) is str or NoneType
 
 
 def test_gene_query_no_relations(client):

@@ -28,6 +28,13 @@ def resolve_genes(_obj, info, entrez=None):
             'immuneCheckpoint': get_value(gene.immune_checkpoint),
             'nodeType': get_value(gene.node_type),
             'pathway': get_value(gene.pathway),
+            'publications': [{
+                'firstAuthorLastName': get_value(publication, 'first_author_last_name'),
+                'journal': get_value(publication, 'journal'),
+                'pubmedId': get_value(publication, 'pubmed_id'),
+                'title': get_value(publication, 'title'),
+                'year': get_value(publication, 'year'),
+            } for publication in get_value(gene, 'publications', [])],
             'superCategory': get_value(gene.super_category),
             'therapyType': get_value(gene.therapy_type)
         } for gene in genes]
