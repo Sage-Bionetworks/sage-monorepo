@@ -56,6 +56,9 @@ class Gene(Base):
         'Pathway', backref=orm.backref('genes', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')
 
+    publications = db.relationship(
+        "Publication", secondary='publications_to_genes', uselist=True, lazy='noload')
+
     super_category = db.relationship(
         'SuperCategory', backref=orm.backref('genes', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')

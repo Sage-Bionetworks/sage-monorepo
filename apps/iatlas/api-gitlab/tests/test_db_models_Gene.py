@@ -15,6 +15,7 @@ def test_Gene_with_relations(app):
                              'immune_checkpoint',
                              'node_type',
                              'pathway',
+                             'publications',
                              'samples',
                              'super_category',
                              'therapy_type']
@@ -38,6 +39,11 @@ def test_Gene_with_relations(app):
         assert result.node_type.id == result.node_type_id
     if result.pathway:
         assert result.pathway.id == result.pathway_id
+    if result.publications:
+        assert isinstance(result.publications, list)
+        # Don't need to iterate through every result.
+        for publication in result.publications[0:2]:
+            assert type(publication.pubmed_id) is int
     if result.samples:
         assert isinstance(result.samples, list)
         for sample in result.samples:
@@ -63,7 +69,7 @@ def test_Gene_with_relations(app):
 def test_Gene_with_copy_number_results(app):
     app()
 
-    query = return_gene_query(['copy_number_results'])
+    query = return_gene_query('copy_number_results')
     result = query.filter_by(entrez=entrez).first()
 
     if result.copy_number_results:
@@ -76,7 +82,7 @@ def test_Gene_with_copy_number_results(app):
 def test_Gene_with_driver_results(app):
     app()
 
-    query = return_gene_query(['driver_results'])
+    query = return_gene_query('driver_results')
     result = query.filter_by(entrez=entrez).first()
 
     if result.driver_results:
@@ -89,7 +95,7 @@ def test_Gene_with_driver_results(app):
 def test_Gene_with_gene_sample_assoc(app):
     app()
 
-    query = return_gene_query(['gene_sample_assoc'])
+    query = return_gene_query('gene_sample_assoc')
     result = query.filter_by(entrez=entrez).first()
 
     if result.gene_sample_assoc:
@@ -102,7 +108,7 @@ def test_Gene_with_gene_sample_assoc(app):
 def test_Gene_with_gene_type_assoc(app):
     app()
 
-    query = return_gene_query(['gene_type_assoc'])
+    query = return_gene_query('gene_type_assoc')
     result = query.filter_by(entrez=entrez).first()
 
     if result.gene_type_assoc:
@@ -110,6 +116,19 @@ def test_Gene_with_gene_type_assoc(app):
         # Don't need to iterate through every result.
         for gene_type_rel in result.gene_type_assoc[0:2]:
             assert gene_type_rel.gene_id == result.id
+
+
+def test_Gene_with_publication_gene_assoc(app):
+    app()
+
+    query = return_gene_query('publication_gene_assoc')
+    result = query.filter_by(entrez=entrez).first()
+
+    if result.publication_gene_assoc:
+        assert isinstance(result.publication_gene_assoc, list)
+        # Don't need to iterate through every result.
+        for publication_gene_rel in result.publication_gene_assoc[0:2]:
+            assert publication_gene_rel.gene_id == result.id
 
 
 def test_Gene_no_relations(app):
