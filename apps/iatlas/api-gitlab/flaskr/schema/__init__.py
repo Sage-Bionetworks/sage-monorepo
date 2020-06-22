@@ -7,15 +7,20 @@ from flaskr.resolvers import (
 
 dirname, _filename = os.path.split(os.path.abspath(__file__))
 
-
+# Import GraphQl schemas
 root_query = load_schema_from_path(dirname + '/root.query.graphql')
-gene_query = load_schema_from_path(dirname + '/gene.query.graphql')
 feature_query = load_schema_from_path(dirname + '/feature.query.graphql')
+gene_query = load_schema_from_path(dirname + '/gene.query.graphql')
+gene_type_query = load_schema_from_path(dirname + '/gene_type.query.graphql')
+publication_query = load_schema_from_path(
+    dirname + '/publication.query.graphql')
 sample_query = load_schema_from_path(dirname + '/sample.query.graphql')
 tag_query = load_schema_from_path(dirname + '/tag.query.graphql')
 
-type_defs = [root_query, gene_query, feature_query, sample_query, tag_query]
+type_defs = [root_query, gene_query, gene_type_query,
+             feature_query, publication_query, sample_query, tag_query]
 
+# Initialize custom scalars.
 feature_value_type = ScalarType('FeatureValue')
 
 
@@ -25,15 +30,23 @@ def serialize_feature_value(value):
         return value
 
 
+# Initialize schema objects (general).
 root = ObjectType('Query')
-gene = ObjectType('Gene')
 feature = ObjectType('Feature')
 feature_by_class = ObjectType('FeatureByClass')
+feature_by_class = ObjectType('FeatureByTag')
+gene = ObjectType('Gene')
+gene_type = ObjectType('GeneType')
+publication = ObjectType('Publication')
 sample = ObjectType('Sample')
 tag = ObjectType('Tag')
-
+# Initialize schema objects (simple).
+simple_gene = ObjectType('SimpleGene')
+simple_gene_type = ObjectType('SimpleGeneType')
+simple_publication = ObjectType('SimplePublication')
 simple_tag = ObjectType('SimpleTag')
 
+# Associate resolvers with fields.
 root.set_field('gene', resolve_gene)
 root.set_field('genes', resolve_genes)
 root.set_field('features', resolve_features)
@@ -45,6 +58,7 @@ root.set_field('test', resolve_test)
 
 schema = make_executable_schema(
     type_defs,
-    [root, gene, feature, feature_by_class,
-     feature_value_type, sample, simple_tag, tag]
+    [root, gene, gene_type, feature, feature_by_class,
+     feature_value_type, publication, sample, simple_gene,
+     simple_gene_type, simple_publication, simple_tag, tag]
 )

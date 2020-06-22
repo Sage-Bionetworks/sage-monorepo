@@ -13,17 +13,21 @@ def resolve_genes(_obj, info, entrez=None):
 
     return [
         {
-            "id": gene.id,
-            "entrez": gene.entrez,
-            "hgnc": gene.hgnc,
-            "description": gene.description,
-            "friendlyName": gene.friendly_name,
-            "ioLandscapeName": gene.io_landscape_name,
-            "geneFamily": get_value(gene.gene_family),
-            "geneFunction": get_value(gene.gene_function),
-            "immuneCheckpoint": get_value(gene.immune_checkpoint),
-            "nodeType": get_value(gene.node_type),
-            "pathway": get_value(gene.pathway),
-            "superCategory": get_value(gene.super_category),
-            "therapyType": get_value(gene.therapy_type)
+            'id': gene.id,
+            'entrez': gene.entrez,
+            'hgnc': gene.hgnc,
+            'description': gene.description,
+            'friendlyName': gene.friendly_name,
+            'ioLandscapeName': gene.io_landscape_name,
+            'geneFamily': get_value(gene.gene_family),
+            'geneFunction': get_value(gene.gene_function),
+            'geneTypes': [{
+                'name': get_value(gene_type),
+                'display': get_value(gene_type, 'display')
+            } for gene_type in get_value(gene, 'gene_types', [])],
+            'immuneCheckpoint': get_value(gene.immune_checkpoint),
+            'nodeType': get_value(gene.node_type),
+            'pathway': get_value(gene.pathway),
+            'superCategory': get_value(gene.super_category),
+            'therapyType': get_value(gene.therapy_type)
         } for gene in genes]

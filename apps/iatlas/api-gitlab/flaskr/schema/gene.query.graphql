@@ -1,5 +1,4 @@
 type Gene {
-    id: Int!
     entrez: Int!
     hgnc: String!
     description: String
@@ -7,9 +6,19 @@ type Gene {
     ioLandscapeName: String
     geneFamily: String
     geneFunction: String
+    geneTypes: [SimpleGeneType!]
     immuneCheckpoint: String
     nodeType: String
     pathway: String
+    publications: [SimplePublication!]
     superCategory: String
     therapyType: String
+}
+
+type SimpleGene {
+    entrez: Int!
+    hgnc: String!
+    description: String
+    friendlyName: String
+    ioLandscapeName: String
 }
