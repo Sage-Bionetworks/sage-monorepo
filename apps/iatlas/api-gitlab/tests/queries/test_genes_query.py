@@ -32,7 +32,7 @@ def test_genes_query_with_entrez(client, entrez, hgnc):
         gene_types = gene['geneTypes']
         publications = gene['publications']
 
-        assert gene['entrez'] == gene_id
+        assert gene['entrez'] == entrez
         assert gene['hgnc'] == hgnc
         assert type(gene['geneFamily']) is str or NoneType
         assert isinstance(gene_types, list)
@@ -50,7 +50,7 @@ def test_genes_query_with_entrez(client, entrez, hgnc):
                 assert type(publication['year']) is str or NoneType
 
 
-def test_genes_query_no_entrez(client, entrez, hgnc):
+def test_genes_query_no_entrez(client):
     query = """query Genes($entrez: [Int!]) {
         genes(entrez: $entrez) {
             entrez

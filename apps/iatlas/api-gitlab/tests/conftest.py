@@ -5,8 +5,7 @@ from tests import db, TestConfig
 
 @pytest.fixture(scope='function')
 def app():
-    config_class = TestConfig
-    app = create_app(config_class)
+    app = create_app(TestConfig)
     app.test_request_context().push()
 
     yield app
@@ -15,6 +14,7 @@ def app():
 
 @pytest.fixture(scope='function')
 def client(app):
+    app = create_app(TestConfig)
     with app.test_client() as client:
         yield client
 
