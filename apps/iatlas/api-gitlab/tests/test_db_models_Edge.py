@@ -2,11 +2,13 @@ import pytest
 from tests import NoneType
 from flaskr.database import return_edge_query
 
-node_1_id = 42
+
+@pytest.fixture(scope='module')
+def node_1_id():
+    return 42
 
 
-def test_Edge_with_relations(app):
-    app()
+def test_Edge_with_relations(app, node_1_id):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['node_1', 'node_2']
@@ -29,9 +31,7 @@ def test_Edge_with_relations(app):
         string_representation_list) + ']'
 
 
-def test_Edge_no_relations(app):
-    app()
-
+def test_Edge_no_relations(app, node_1_id):
     query = return_edge_query()
     results = query.filter_by(node_1_id=node_1_id).limit(3).all()
 

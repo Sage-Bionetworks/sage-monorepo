@@ -1,11 +1,13 @@
 import pytest
 from flaskr.database import return_feature_class_query
 
-name = 'Adaptive Receptor - B cell'
+
+@pytest.fixture(scope='module')
+def name():
+    return 'Adaptive Receptor - B cell'
 
 
-def test_FeatureClass_with_relations(app):
-    app()
+def test_FeatureClass_with_relations(app, name):
     relationships_to_join = ['features']
 
     query = return_feature_class_query(*relationships_to_join)
@@ -20,9 +22,7 @@ def test_FeatureClass_with_relations(app):
     assert repr(result) == '<FeatureClass %r>' % name
 
 
-def test_FeatureClass_no_relations(app):
-    app()
-
+def test_FeatureClass_no_relations(app, name):
     query = return_feature_class_query()
     result = query.filter_by(name=name).first()
 

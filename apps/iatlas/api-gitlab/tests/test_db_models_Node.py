@@ -2,11 +2,13 @@ import pytest
 from tests import NoneType
 from flaskr.database import return_node_query
 
-gene_id = 4606
+
+@pytest.fixture(scope='module')
+def gene_id():
+    return 4606
 
 
-def test_Node_with_relations(app):
-    app()
+def test_Node_with_relations(app, gene_id):
     string_representation_list = []
     separator = ', '
 
@@ -40,9 +42,7 @@ def test_Node_with_relations(app):
         string_representation_list) + ']'
 
 
-def test_Node_with_node_tag_assoc(app):
-    app()
-
+def test_Node_with_node_tag_assoc(app, gene_id):
     query = return_node_query('node_tag_assoc')
     result = query.filter_by(gene_id=gene_id).first()
 
@@ -53,9 +53,7 @@ def test_Node_with_node_tag_assoc(app):
             assert node_tag_rel.node_id == result.id
 
 
-def test_Node_with_edges_primary(app):
-    app()
-
+def test_Node_with_edges_primary(app, gene_id):
     query = return_node_query('edges_primary')
     result = query.filter_by(gene_id=gene_id).first()
 
@@ -66,9 +64,7 @@ def test_Node_with_edges_primary(app):
             assert edge_primary.node_1_id == result.id
 
 
-def test_Node_with_edges_secondary(app):
-    app()
-
+def test_Node_with_edges_secondary(app, gene_id):
     query = return_node_query('edges_secondary')
     result = query.filter_by(gene_id=gene_id).first()
 
@@ -79,9 +75,7 @@ def test_Node_with_edges_secondary(app):
             assert edge_secondary.node_2_id == result.id
 
 
-def test_Node_with_tags(app):
-    app()
-
+def test_Node_with_tags(app, gene_id):
     query = return_node_query('tags')
     result = query.filter_by(gene_id=gene_id).first()
 
@@ -92,9 +86,7 @@ def test_Node_with_tags(app):
             assert type(tag.name) is str
 
 
-def test_Node_no_relations(app):
-    app()
-
+def test_Node_no_relations(app, gene_id):
     query = return_node_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 

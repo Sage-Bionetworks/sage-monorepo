@@ -2,11 +2,8 @@ import json
 import pytest
 from tests import NoneType
 
-gene_id = 3627
-hgnc = 'CXCL10'
 
-
-def test_genes_query_with_entrez(client):
+def test_genes_query_with_entrez(client, entrez, hgnc):
     query = """query Genes($entrez: [Int!]) {
         genes(entrez: $entrez) {
             entrez
@@ -26,7 +23,7 @@ def test_genes_query_with_entrez(client):
         }
     }"""
     response = client.post(
-        '/api', json={'query': query, 'variables': {'entrez': [gene_id]}})
+        '/api', json={'query': query, 'variables': {'entrez': [entrez]}})
     json_data = json.loads(response.data)
     genes = json_data['data']['genes']
 
@@ -53,7 +50,7 @@ def test_genes_query_with_entrez(client):
                 assert type(publication['year']) is str or NoneType
 
 
-def test_genes_query_no_entrez(client):
+def test_genes_query_no_entrez(client, entrez, hgnc):
     query = """query Genes($entrez: [Int!]) {
         genes(entrez: $entrez) {
             entrez

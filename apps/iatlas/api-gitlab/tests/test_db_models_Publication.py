@@ -2,12 +2,13 @@ import pytest
 from tests import NoneType
 from flaskr.database import return_publication_query
 
-pubmed_id = 19567593
+
+@pytest.fixture(scope='module')
+def pubmed_id():
+    return 19567593
 
 
-def test_publication_with_relations(app):
-    app()
-
+def test_publication_with_relations(app, pubmed_id):
     query = return_publication_query('genes')
     result = query.filter_by(pubmed_id=pubmed_id).first()
 
@@ -25,9 +26,7 @@ def test_publication_with_relations(app):
     assert repr(result) == '<Publication %r>' % pubmed_id
 
 
-def test_publication_with_publication_gene_assoc(app):
-    app()
-
+def test_publication_with_publication_gene_assoc(app, pubmed_id):
     query = return_publication_query('publication_gene_assoc')
     result = query.filter_by(pubmed_id=pubmed_id).first()
 
@@ -38,9 +37,7 @@ def test_publication_with_publication_gene_assoc(app):
             assert publication_gene_rel.publication_id == result.id
 
 
-def test_publication_no_relations(app):
-    app()
-
+def test_publication_no_relations(app, pubmed_id):
     query = return_publication_query()
     result = query.filter_by(pubmed_id=pubmed_id).first()
 

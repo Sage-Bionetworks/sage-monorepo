@@ -1,13 +1,14 @@
 import pytest
 from tests import NoneType
 from flaskr.database import return_tag_query
-from flaskr.db_models import Tag
-
-name = 'ACC'
 
 
-def test_Tag_with_relations(app):
-    app()
+@pytest.fixture(scope='module')
+def name():
+    return 'ACC'
+
+
+def test_Tag_with_relations(app, name):
     relations_to_load = ['related_tags', 'samples', 'tags']
 
     query = return_tag_query(*relations_to_load)
@@ -35,9 +36,7 @@ def test_Tag_with_relations(app):
     assert repr(result) == '<Tag %r>' % name
 
 
-def test_Tag_with_copy_number_results(app):
-    app()
-
+def test_Tag_with_copy_number_results(app, name):
     query = return_tag_query(['copy_number_results'])
     result = query.filter_by(name=name).first()
 
@@ -48,9 +47,7 @@ def test_Tag_with_copy_number_results(app):
             assert copy_number_result.tag_id == result.id
 
 
-def test_Tag_with_driver_results(app):
-    app()
-
+def test_Tag_with_driver_results(app, name):
     query = return_tag_query(['driver_results'])
     result = query.filter_by(name=name).first()
 
@@ -61,9 +58,7 @@ def test_Tag_with_driver_results(app):
             assert driver_result.tag_id == result.id
 
 
-def test_Tag_with_nodes(app):
-    app()
-
+def test_Tag_with_nodes(app, name):
     query = return_tag_query('nodes')
     result = query.filter_by(name=name).first()
 
@@ -74,9 +69,7 @@ def test_Tag_with_nodes(app):
             assert type(tag.node) is str
 
 
-def test_Tag_with_node_tag_assoc(app):
-    app()
-
+def test_Tag_with_node_tag_assoc(app, name):
     query = return_tag_query('node_tag_assoc')
     result = query.filter_by(name=name).first()
 
@@ -87,9 +80,7 @@ def test_Tag_with_node_tag_assoc(app):
             assert node_tag_rel.tag_id == result.id
 
 
-def test_Tag_no_relations(app):
-    app()
-
+def test_Tag_no_relations(app, name):
     query = return_tag_query()
     result = query.filter_by(name=name).first()
 

@@ -3,11 +3,13 @@ from tests import NoneType
 from flaskr.database import return_driver_result_query
 from flaskr.db_models import DriverResult
 
-gene_id = 20
+
+@pytest.fixture(scope='module')
+def gene_id():
+    return 20
 
 
-def test_DriverResult_with_relations(app):
-    app()
+def test_DriverResult_with_relations(app, gene_id):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['feature', 'gene', 'mutation_code', 'tag']
@@ -43,9 +45,7 @@ def test_DriverResult_with_relations(app):
         string_representation_list) + ']'
 
 
-def test_DriverResult_no_relations(app):
-    app()
-
+def test_DriverResult_no_relations(app, gene_id):
     query = return_driver_result_query()
     results = query.filter(DriverResult.gene_id == gene_id).limit(3).all()
 

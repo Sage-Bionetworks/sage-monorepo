@@ -1,11 +1,13 @@
 import pytest
 from flaskr.database import return_gene_to_type_query
 
-gene_id = 160
+
+@pytest.fixture(scope='module')
+def gene_id():
+    return 160
 
 
-def test_GeneToType_with_relations(app):
-    app()
+def test_GeneToType_with_relations(app, gene_id):
     relationships_to_join = ['genes', 'types']
 
     query = return_gene_to_type_query(*relationships_to_join)
@@ -28,9 +30,7 @@ def test_GeneToType_with_relations(app):
     assert repr(results) == '[<GeneToType %r>]' % gene_id
 
 
-def test_GeneToType_no_relations(app):
-    app()
-
+def test_GeneToType_no_relations(app, gene_id):
     query = return_gene_to_type_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 

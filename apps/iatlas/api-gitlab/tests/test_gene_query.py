@@ -2,11 +2,8 @@ import json
 import pytest
 from tests import NoneType
 
-entrez = 3627
-hgnc = 'CXCL10'
 
-
-def test_gene_query_with_relations(client):
+def test_gene_query_with_relations(client, entrez, hgnc):
     query = """query Gene($entrez: Int!) {
         gene(entrez: $entrez) {
             entrez
@@ -52,7 +49,7 @@ def test_gene_query_with_relations(client):
             assert type(publication['year']) is str or NoneType
 
 
-def test_gene_query_no_relations(client):
+def test_gene_query_no_relations(client, entrez, hgnc):
     query = """query Gene($entrez: Int!) {
         gene(entrez: $entrez) {
             entrez

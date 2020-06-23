@@ -4,8 +4,6 @@ from flaskr.database import return_dataset_query
 
 
 def test_dataset_with_samples(app, dataset):
-    app()
-
     query = return_dataset_query('samples')
     result = query.filter_by(name=dataset).first()
 
@@ -20,8 +18,6 @@ def test_dataset_with_samples(app, dataset):
 
 
 def test_dataset_with_dataset_sample_assoc(app, dataset):
-    app()
-
     query = return_dataset_query('dataset_sample_assoc')
     result = query.filter_by(name=dataset).first()
 
@@ -33,8 +29,6 @@ def test_dataset_with_dataset_sample_assoc(app, dataset):
 
 
 def test_dataset_no_relations(app, dataset):
-    app()
-
     query = return_dataset_query()
     result = query.filter_by(name=dataset).first()
 

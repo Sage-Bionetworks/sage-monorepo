@@ -3,24 +3,26 @@ from flaskr import create_app
 from tests import db, TestConfig
 
 
-@pytest.yield_fixture
+@pytest.fixture(scope='function')
 def app():
-    def _app(config_class=TestConfig):
-        app = create_app(config_class)
-        app.test_request_context().push()
+    config_class = TestConfig
+    app = create_app(config_class)
+    app.test_request_context().push()
 
-        return app
-
-    yield _app
+    yield app
     db.session.remove()
 
 
-@pytest.fixture
-def client():
-    app = create_app(TestConfig)
-
+@pytest.fixture(scope='function')
+def client(app):
     with app.test_client() as client:
         yield client
+
+
+@pytest.fixture(scope='function')
+def test_db(app):
+    from flaskr import db
+    yield db
 
 
 @pytest.fixture(scope='session')

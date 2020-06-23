@@ -2,12 +2,8 @@ import json
 import pytest
 from tests import NoneType
 
-dataset = 'TCGA'
-related = 'Immune_Subtype'
-chosen_feature = 'Neutrophils_Aggregate2'
 
-
-def test_tags_query_with_feature(client):
+def test_tags_query_with_feature(client, dataset, related, chosen_feature):
     query = """query Tags($dataSet: [String!]!, $related: [String!]!, $feature: [String!]) {
         tags(dataSet: $dataSet, related: $related, feature: $feature) {
             characteristics
@@ -36,7 +32,7 @@ def test_tags_query_with_feature(client):
         assert isinstance(data_set['sampleIds'], list)
 
 
-def test_tags_query_no_feature(client):
+def test_tags_query_no_feature(client, dataset, related):
     query = """query Tags($dataSet: [String!]!, $related: [String!]!, $feature: [String!]) {
         tags(dataSet: $dataSet, related: $related, feature: $feature) {
             characteristics

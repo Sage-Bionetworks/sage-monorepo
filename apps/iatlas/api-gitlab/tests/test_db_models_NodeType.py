@@ -1,12 +1,13 @@
 import pytest
 from flaskr.database import return_node_type_query
 
-name = 'Ligand'
+
+@pytest.fixture(scope='module')
+def name():
+    return 'Ligand'
 
 
-def test_NodeType_with_relations(app):
-    app()
-
+def test_NodeType_with_relations(app, name):
     query = return_node_type_query('genes')
     result = query.filter_by(name=name).first()
 
@@ -18,9 +19,7 @@ def test_NodeType_with_relations(app):
     assert repr(result) == '<NodeType %r>' % name
 
 
-def test_NodeType_no_relations(app):
-    app()
-
+def test_NodeType_no_relations(app, name):
     query = return_node_type_query()
     result = query.filter_by(name=name).first()
 

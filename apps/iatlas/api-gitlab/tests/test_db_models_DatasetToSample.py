@@ -3,7 +3,6 @@ from flaskr.database import return_dataset_to_sample_query
 
 
 def test_DatasetToSample_with_relations(app, dataset_id):
-    app()
     relationships_to_join = ['datasets', 'samples']
 
     query = return_dataset_to_sample_query(*relationships_to_join)
@@ -27,8 +26,6 @@ def test_DatasetToSample_with_relations(app, dataset_id):
 
 
 def test_DatasetToSample_no_relations(app, dataset_id):
-    app()
-
     query = return_dataset_to_sample_query()
     results = query.filter_by(dataset_id=dataset_id).limit(3).all()
 

@@ -1,11 +1,13 @@
 import pytest
 from flaskr.database import return_publication_to_gene_query
 
-gene_id = 1535
+
+@pytest.fixture(scope='module')
+def gene_id():
+    return 1535
 
 
-def test_PublicationToGene_with_relations(app):
-    app()
+def test_PublicationToGene_with_relations(app, gene_id):
     string_representation_list = []
     separator = ', '
     relationships_to_load = ['genes', 'publications']
@@ -34,9 +36,7 @@ def test_PublicationToGene_with_relations(app):
         string_representation_list) + ']'
 
 
-def test_PublicationToGene_no_relations(app):
-    app()
-
+def test_PublicationToGene_no_relations(app, gene_id):
     query = return_publication_to_gene_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 

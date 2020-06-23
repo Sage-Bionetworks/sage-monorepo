@@ -1,11 +1,13 @@
 import pytest
 from flaskr.database import return_sample_to_tag_query
 
-sample_id = 1
+
+@pytest.fixture(scope='module')
+def sample_id():
+    return 1
 
 
-def test_SampleToTag_with_relations(app):
-    app()
+def test_SampleToTag_with_relations(app, sample_id):
     string_representation_list = []
     separator = ', '
 
@@ -33,9 +35,7 @@ def test_SampleToTag_with_relations(app):
         string_representation_list) + ']'
 
 
-def test_SampleToTag_no_relations(app):
-    app()
-
+def test_SampleToTag_no_relations(app, sample_id):
     query = return_sample_to_tag_query()
     results = query.filter_by(sample_id=sample_id).limit(3).all()
 

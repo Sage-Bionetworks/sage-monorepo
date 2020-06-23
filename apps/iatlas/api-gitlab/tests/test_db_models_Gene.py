@@ -5,7 +5,6 @@ from flaskr.db_models import Gene
 
 
 def test_Gene_with_relations(app, entrez, hgnc):
-    app()
     relationships_to_join = ['gene_family',
                              'gene_function',
                              'gene_types',
@@ -64,8 +63,6 @@ def test_Gene_with_relations(app, entrez, hgnc):
 
 
 def test_Gene_with_copy_number_results(app, entrez):
-    app()
-
     query = return_gene_query('copy_number_results')
     result = query.filter_by(entrez=entrez).first()
 
@@ -77,8 +74,6 @@ def test_Gene_with_copy_number_results(app, entrez):
 
 
 def test_Gene_with_driver_results(app, entrez):
-    app()
-
     query = return_gene_query('driver_results')
     result = query.filter_by(entrez=entrez).first()
 
@@ -90,8 +85,6 @@ def test_Gene_with_driver_results(app, entrez):
 
 
 def test_Gene_with_gene_sample_assoc(app, entrez):
-    app()
-
     query = return_gene_query('gene_sample_assoc')
     result = query.filter_by(entrez=entrez).first()
 
@@ -103,8 +96,6 @@ def test_Gene_with_gene_sample_assoc(app, entrez):
 
 
 def test_Gene_with_gene_type_assoc(app, entrez):
-    app()
-
     query = return_gene_query('gene_type_assoc')
     result = query.filter_by(entrez=entrez).first()
 
@@ -116,8 +107,6 @@ def test_Gene_with_gene_type_assoc(app, entrez):
 
 
 def test_Gene_with_publication_gene_assoc(app, entrez):
-    app()
-
     query = return_gene_query('publication_gene_assoc')
     result = query.filter_by(entrez=entrez).first()
 
@@ -129,8 +118,6 @@ def test_Gene_with_publication_gene_assoc(app, entrez):
 
 
 def test_Gene_no_relations(app, entrez, hgnc):
-    app()
-
     query = return_gene_query()
     result = query.filter_by(entrez=entrez).first()
 

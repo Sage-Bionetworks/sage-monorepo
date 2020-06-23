@@ -1,11 +1,13 @@
 import pytest
 from flaskr.database import return_node_to_tag_query
 
-node_id = 1
+
+@pytest.fixture(scope='module')
+def node_id():
+    return 1
 
 
-def test_NodeToTag_with_relations(app):
-    app()
+def test_NodeToTag_with_relations(app, node_id):
     string_representation_list = []
     separator = ', '
     relationships_to_load = ['nodes', 'tags']
@@ -34,9 +36,7 @@ def test_NodeToTag_with_relations(app):
         string_representation_list) + ']'
 
 
-def test_NodeToTag_no_relations(app):
-    app()
-
+def test_NodeToTag_no_relations(app, node_id):
     query = return_node_to_tag_query()
     results = query.filter_by(node_id=node_id).limit(3).all()
 

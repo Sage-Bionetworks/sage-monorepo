@@ -1,12 +1,13 @@
 import pytest
 from flaskr.database import return_pathway_query
 
-name = 'Antigen'
+
+@pytest.fixture(scope='module')
+def name():
+    return 'Antigen'
 
 
-def test_Pathway_with_relations(app):
-    app()
-
+def test_Pathway_with_relations(app, name):
     query = return_pathway_query('genes')
     result = query.filter_by(name=name).first()
 
@@ -18,9 +19,7 @@ def test_Pathway_with_relations(app):
     assert repr(result) == '<Pathway %r>' % name
 
 
-def test_Pathway_no_relations(app):
-    app()
-
+def test_Pathway_no_relations(app, name):
     query = return_pathway_query()
     result = query.filter_by(name=name).first()
 

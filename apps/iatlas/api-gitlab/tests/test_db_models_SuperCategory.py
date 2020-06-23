@@ -1,12 +1,13 @@
 import pytest
 from flaskr.database import return_super_category_query
 
-name = 'Receptor'
+
+@pytest.fixture(scope='module')
+def name():
+    return 'Receptor'
 
 
-def test_SuperCategory_with_relations(app):
-    app()
-
+def test_SuperCategory_with_relations(app, name):
     query = return_super_category_query('genes')
     result = query.filter_by(name=name).first()
 
@@ -18,9 +19,7 @@ def test_SuperCategory_with_relations(app):
     assert repr(result) == '<SuperCategory %r>' % name
 
 
-def test_SuperCategory_no_relations(app):
-    app()
-
+def test_SuperCategory_no_relations(app, name):
     query = return_super_category_query()
     result = query.filter_by(name=name).first()
 

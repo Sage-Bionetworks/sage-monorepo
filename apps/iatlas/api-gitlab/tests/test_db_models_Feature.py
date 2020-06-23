@@ -3,12 +3,18 @@ from tests import NoneType
 from flaskr.database import return_feature_query
 from flaskr.enums import unit_enum
 
-name = 'B_cells_memory'
-display = 'B Cells Memory'
+
+@pytest.fixture(scope='module')
+def display():
+    return 'B Cells Memory'
 
 
-def test_Feature_with_relations(app):
-    app()
+@pytest.fixture(scope='module')
+def name():
+    return 'B_cells_memory'
+
+
+def test_Feature_with_relations(app, display, name):
     relationships_to_join = ['feature_class', 'method_tag', 'samples']
 
     query = return_feature_query(*relationships_to_join)
@@ -24,16 +30,14 @@ def test_Feature_with_relations(app):
         for sample in result.samples[0:2]:
             assert type(sample.name) is str
     assert result.name == name
-    assert type(result.display) is str or NoneType
+    assert result.display == display
     assert result.unit in unit_enum.enums or type(result.unit) is NoneType
     assert type(result.class_id) is int or NoneType
     assert type(result.method_tag_id) is int or NoneType
     assert repr(result) == '<Feature %r>' % name
 
 
-def test_Feature_with_copy_number_results(app):
-    app()
-
+def test_Feature_with_copy_number_results(app, name):
     query = return_feature_query('copy_number_results')
     result = query.filter_by(name=name).first()
 
@@ -44,9 +48,7 @@ def test_Feature_with_copy_number_results(app):
             assert copy_number_result.feature_id == result.id
 
 
-def test_Feature_with_driver_results(app):
-    app()
-
+def test_Feature_with_driver_results(app, name):
     query = return_feature_query('driver_results')
     result = query.filter_by(name=name).first()
 
@@ -57,9 +59,7 @@ def test_Feature_with_driver_results(app):
             assert driver_result.feature_id == result.id
 
 
-def test_Feature_with_feature_sample_assoc(app):
-    app()
-
+def test_Feature_with_feature_sample_assoc(app, name):
     query = return_feature_query('feature_sample_assoc')
     result = query.filter_by(name=name).first()
 
@@ -70,9 +70,7 @@ def test_Feature_with_feature_sample_assoc(app):
             assert feature_sample_rel.feature_id == result.id
 
 
-def test_Feature_no_relations(app):
-    app()
-
+def test_Feature_no_relations(app, display, name):
     query = return_feature_query()
     result = query.filter_by(name=name).first()
 
@@ -83,7 +81,7 @@ def test_Feature_no_relations(app):
     assert result.driver_results == []
     assert result.feature_sample_assoc == []
     assert result.name == name
-    assert type(result.display) is str or NoneType
+    assert result.display == display
     assert result.unit in unit_enum.enums or type(result.unit) is NoneType
     assert type(result.class_id) is int or NoneType
     assert type(result.method_tag_id) is int or NoneType

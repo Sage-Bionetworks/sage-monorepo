@@ -4,13 +4,12 @@ from flaskr.database import return_copy_number_result_query
 from flaskr.enums import direction_enum
 
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def gene_id():
     return 1
 
 
 def test_CopyNumberResult_with_relations(app, gene_id):
-    app()
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['feature', 'gene', 'tag']
@@ -44,8 +43,6 @@ def test_CopyNumberResult_with_relations(app, gene_id):
 
 
 def test_CopyNumberResult_no_relations(app, gene_id):
-    app()
-
     query = return_copy_number_result_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 

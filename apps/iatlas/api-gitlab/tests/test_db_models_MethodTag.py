@@ -1,11 +1,13 @@
 import pytest
 from flaskr.database import return_method_tag_query
 
-name = 'ExpSig'
+
+@pytest.fixture(scope='module')
+def name():
+    return 'ExpSig'
 
 
-def test_MethodTag_with_relations(app):
-    app()
+def test_MethodTag_with_relations(app, name):
     relationships_to_join = ['features']
 
     query = return_method_tag_query(*relationships_to_join)
@@ -19,9 +21,7 @@ def test_MethodTag_with_relations(app):
     assert repr(result) == '<MethodTag %r>' % name
 
 
-def test_MethodTag_no_relations(app):
-    app()
-
+def test_MethodTag_no_relations(app, name):
     query = return_method_tag_query()
     result = query.filter_by(name=name).first()
 

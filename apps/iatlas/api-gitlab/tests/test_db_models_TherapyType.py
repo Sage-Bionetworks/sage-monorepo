@@ -1,12 +1,13 @@
 import pytest
 from flaskr.database import return_therapy_type_query
 
-name = 'T-cell targeted immunomodulator'
+
+@pytest.fixture(scope='module')
+def name():
+    return 'T-cell targeted immunomodulator'
 
 
-def test_TherapyType_with_relations(app):
-    app()
-
+def test_TherapyType_with_relations(app, name):
     query = return_therapy_type_query('genes')
     result = query.filter_by(name=name).first()
 
@@ -18,9 +19,7 @@ def test_TherapyType_with_relations(app):
     assert repr(result) == '<TherapyType %r>' % name
 
 
-def test_TherapyType_no_relations(app):
-    app()
-
+def test_TherapyType_no_relations(app, name):
     query = return_therapy_type_query()
     result = query.filter_by(name=name).first()
 

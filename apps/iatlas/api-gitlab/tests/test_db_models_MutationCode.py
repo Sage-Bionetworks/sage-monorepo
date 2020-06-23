@@ -1,12 +1,13 @@
 import pytest
 from flaskr.database import return_mutation_code_query
 
-code = 'A146'
+
+@pytest.fixture(scope='module')
+def code():
+    return 'A146'
 
 
-def test_MutationCode_with_mutations(app):
-    app()
-
+def test_MutationCode_with_mutations(app, code):
     query = return_mutation_code_query(['mutations'])
     result = query.filter_by(code=code).first()
 
@@ -19,9 +20,7 @@ def test_MutationCode_with_mutations(app):
     assert repr(result) == '<MutationCode %r>' % code
 
 
-def test_MutationCode_with_driver_results(app):
-    app()
-
+def test_MutationCode_with_driver_results(app, code):
     query = return_mutation_code_query(['driver_results'])
     result = query.filter_by(code=code).first()
 
@@ -32,9 +31,7 @@ def test_MutationCode_with_driver_results(app):
             assert driver_result.mutation_code_id == result.id
 
 
-def test_MutationCode_no_relations(app):
-    app()
-
+def test_MutationCode_no_relations(app, code):
     query = return_mutation_code_query()
     result = query.filter_by(code=code).first()
 

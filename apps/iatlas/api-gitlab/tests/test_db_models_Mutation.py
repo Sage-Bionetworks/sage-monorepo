@@ -3,11 +3,13 @@ from tests import NoneType
 from flaskr.database import return_mutation_query
 from flaskr.db_models import Mutation
 
-gene_id = 77
+
+@pytest.fixture(scope='module')
+def gene_id():
+    return 77
 
 
-def test_Mutation_with_relations(app):
-    app()
+def test_Mutation_with_relations(app, gene_id):
     string_representation_list = []
     separator = ', '
     relationships_to_load = [
@@ -41,9 +43,7 @@ def test_Mutation_with_relations(app):
         string_representation_list) + ']'
 
 
-def test_Mutation_with_sample_mutation_assoc(app):
-    app()
-
+def test_Mutation_with_sample_mutation_assoc(app, gene_id):
     query = return_mutation_query('sample_mutation_assoc')
     result = query.filter_by(gene_id=gene_id).first()
 
@@ -54,9 +54,7 @@ def test_Mutation_with_sample_mutation_assoc(app):
             assert sample_mutation_rel.mutation_id == result.id
 
 
-def test_Mutation_no_relations(app):
-    app()
-
+def test_Mutation_no_relations(app, gene_id):
     query = return_mutation_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 

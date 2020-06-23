@@ -2,11 +2,13 @@ import pytest
 from tests import NoneType
 from flaskr.database import return_patient_query
 
-barcode = 'DO1328'
+
+@pytest.fixture(scope='module')
+def barcode():
+    return 'DO1328'
 
 
-def test_Patient_with_relations(app):
-    app()
+def test_Patient_with_relations(app, barcode):
     relationships_to_load = ['samples', 'slides']
 
     query = return_patient_query(*relationships_to_load)
@@ -32,9 +34,7 @@ def test_Patient_with_relations(app):
     assert repr(result) == '<Patient %r>' % barcode
 
 
-def test_Patient_no_relations(app):
-    app()
-
+def test_Patient_no_relations(app, barcode):
     query = return_patient_query()
     result = query.filter_by(barcode=barcode).first()
 

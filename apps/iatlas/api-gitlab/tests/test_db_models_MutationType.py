@@ -2,12 +2,13 @@ import pytest
 from tests import NoneType
 from flaskr.database import return_mutation_type_query
 
-name = 'driver_mutation'
+
+@pytest.fixture(scope='module')
+def name():
+    return 'driver_mutation'
 
 
-def test_MutationType_with_relations(app):
-    app()
-
+def test_MutationType_with_relations(app, name):
     query = return_mutation_type_query(['mutations'])
     result = query.filter_by(name=name).first()
 
@@ -22,9 +23,7 @@ def test_MutationType_with_relations(app):
     assert repr(result) == '<MutationType %r>' % name
 
 
-def test_MutationType_no_relations(app):
-    app()
-
+def test_MutationType_no_relations(app, name):
     query = return_mutation_type_query()
     result = query.filter_by(name=name).first()
 

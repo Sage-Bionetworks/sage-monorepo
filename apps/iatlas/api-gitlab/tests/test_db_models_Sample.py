@@ -3,10 +3,12 @@ from tests import NoneType
 from flaskr.database import return_sample_query
 
 
-def test_Sample_with_relations(app):
-    app()
-    name = 'DO1328'
+@pytest.fixture(scope='module')
+def name():
+    return 'DO1328'
 
+
+def test_Sample_with_relations(app, name):
     query = return_sample_query('datasets')
     result = query.filter_by(name=name).first()
 
@@ -102,10 +104,7 @@ def test_Sample_with_relations(app):
     assert repr(result) == '<Sample %r>' % name
 
 
-def test_Sample_no_relations(app):
-    app()
-    name = 'DO1328'
-
+def test_Sample_no_relations(app, name):
     query = return_sample_query()
     result = query.filter_by(name=name).first()
 

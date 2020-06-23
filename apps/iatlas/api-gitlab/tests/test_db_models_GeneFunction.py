@@ -1,12 +1,13 @@
 import pytest
 from flaskr.database import return_gene_function_query
 
-name = 'Granzyme'
+
+@pytest.fixture(scope='module')
+def name():
+    return 'Granzyme'
 
 
-def test_GeneFunction_with_relations(app):
-    app()
-
+def test_GeneFunction_with_relations(app, name):
     query = return_gene_function_query('genes')
     result = query.filter_by(name=name).first()
 
@@ -18,9 +19,7 @@ def test_GeneFunction_with_relations(app):
     assert repr(result) == '<GeneFunction %r>' % name
 
 
-def test_GeneFunction_no_relations(app):
-    app()
-
+def test_GeneFunction_no_relations(app, name):
     query = return_gene_function_query()
     result = query.filter_by(name=name).first()
 
