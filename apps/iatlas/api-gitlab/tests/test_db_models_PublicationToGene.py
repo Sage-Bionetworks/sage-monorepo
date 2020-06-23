@@ -1,5 +1,4 @@
 import pytest
-from tests import app
 from flaskr.database import return_publication_to_gene_query
 
 gene_id = 1535

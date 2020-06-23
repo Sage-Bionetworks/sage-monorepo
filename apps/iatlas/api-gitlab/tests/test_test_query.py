@@ -1,6 +1,5 @@
 import json
 import pytest
-from tests import client
 
 
 def test_test_query(client):

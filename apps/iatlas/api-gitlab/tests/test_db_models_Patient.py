@@ -1,5 +1,5 @@
 import pytest
-from tests import app, NoneType
+from tests import NoneType
 from flaskr.database import return_patient_query
 
 barcode = 'DO1328'

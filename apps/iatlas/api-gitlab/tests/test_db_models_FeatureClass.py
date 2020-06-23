@@ -1,5 +1,4 @@
 import pytest
-from tests import app
 from flaskr.database import return_feature_class_query
 
 name = 'Adaptive Receptor - B cell'

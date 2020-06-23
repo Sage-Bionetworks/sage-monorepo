@@ -1,5 +1,5 @@
 import pytest
-from tests import app, NoneType
+from tests import NoneType
 from flaskr.database import return_edge_query
 
 node_1_id = 42

@@ -1,5 +1,4 @@
 import pytest
-from tests import app
 from flaskr.database import return_tag_to_tag_query
 from flaskr.db_models import TagToTag
 

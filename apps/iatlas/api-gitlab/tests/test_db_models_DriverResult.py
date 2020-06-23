@@ -1,5 +1,5 @@
 import pytest
-from tests import app, NoneType
+from tests import NoneType
 from flaskr.database import return_driver_result_query
 from flaskr.db_models import DriverResult
 

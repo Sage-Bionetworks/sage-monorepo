@@ -1,5 +1,5 @@
 import pytest
-from tests import app, NoneType
+from tests import NoneType
 from flaskr.database import return_slide_query
 
 name = 'TCGA-05-4244-01Z-00-DX1'

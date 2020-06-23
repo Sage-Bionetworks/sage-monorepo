@@ -1,7 +1,6 @@
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 import os
-from tests import app
 from config import Config, get_database_uri
 
 

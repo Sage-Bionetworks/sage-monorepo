@@ -1,6 +1,6 @@
 import json
 import pytest
-from tests import client, NoneType
+from tests import NoneType
 
 dataset = 'TCGA'
 related = 'Immune_Subtype'

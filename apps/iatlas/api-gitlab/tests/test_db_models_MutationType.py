@@ -1,5 +1,5 @@
 import pytest
-from tests import app, NoneType
+from tests import NoneType
 from flaskr.database import return_mutation_type_query
 
 name = 'driver_mutation'

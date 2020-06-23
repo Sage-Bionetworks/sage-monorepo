@@ -1,5 +1,4 @@
 import pytest
-from tests import app
 from flaskr.database import return_method_tag_query
 
 name = 'ExpSig'

@@ -1,15 +1,11 @@
 import json
 import pytest
-from tests import client, NoneType
+from tests import NoneType
 from flaskr.enums import unit_enum
 from flaskr.database import return_feature_class_query
 
-dataset = 'TCGA'
-related = 'Immune_Subtype'
-chosen_feature = 'Neutrophils_Aggregate2'
 
-
-def test_featuresByClass_query_with_feature(client):
+def test_featuresByClass_query_with_feature(client, dataset, related, chosen_feature):
     query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
         featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
             class
@@ -50,7 +46,7 @@ def test_featuresByClass_query_with_feature(client):
             assert type(feature["value"]) is str or float or NoneType
 
 
-def test_featuresByClass_query_with_feature_no_sample_or_value(client):
+def test_featuresByClass_query_with_feature_no_sample_or_value(client, dataset, related, chosen_feature):
     query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
         featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
             class
@@ -71,7 +67,7 @@ def test_featuresByClass_query_with_feature_no_sample_or_value(client):
     assert len(data_sets) == 1
 
 
-def test_featuresByClass_query_no_feature(client):
+def test_featuresByClass_query_no_feature(client, dataset, related):
     query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
         featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
             class
@@ -108,7 +104,7 @@ def test_featuresByClass_query_no_feature(client):
                 feature['unit']) is NoneType
 
 
-def test_featuresByClass_query_no_relations(client):
+def test_featuresByClass_query_no_relations(client, dataset, related, chosen_feature):
     query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
         featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
             class
@@ -144,7 +140,7 @@ def test_featuresByClass_query_no_relations(client):
                 feature['unit']) is NoneType or feature['unit'] in unit_enum.enums
 
 
-def test_featuresByClass_query_no_dataSet(client):
+def test_featuresByClass_query_no_dataSet(client, related, chosen_feature):
     query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
         featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
             class
@@ -179,7 +175,7 @@ def test_featuresByClass_query_no_dataSet(client):
                 feature['unit']) is NoneType or feature['unit'] in unit_enum.enums
 
 
-def test_featuresByClass_query_no_related(client):
+def test_featuresByClass_query_no_related(client, dataset, chosen_feature):
     query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
         featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
             class
@@ -235,3 +231,32 @@ def test_featuresByClass_query_no_args(client):
 
     assert isinstance(data_sets, list)
     assert len(data_sets) == class_count
+
+
+def test_featuresByClass_query_with_feature_class(client, dataset, related, chosen_feature, feature_class):
+    query = """query FeaturesByClass($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!]) {
+        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+            class
+            features {
+                class
+                name
+            }
+        }
+    }"""
+    response = client.post(
+        '/api', json={'query': query,
+                      'variables': {'dataSet': [dataset],
+                                    'related': [related],
+                                    'feature': [chosen_feature],
+                                    'featureClass': [feature_class]}})
+    json_data = json.loads(response.data)
+    data_sets = json_data['data']['featuresByClass']
+
+    assert isinstance(data_sets, list)
+    for data_set in data_sets:
+        assert data_set['class'] == feature_class
+        assert isinstance(data_set['features'], list)
+        # Don't need to iterate through every result.
+        for feature in data_set['features'][0:2]:
+            assert feature['class'] == feature_class
+            assert feature['name'] == chosen_feature

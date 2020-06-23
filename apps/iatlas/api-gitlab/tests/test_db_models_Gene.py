@@ -1,13 +1,10 @@
 import pytest
-from tests import app, NoneType
+from tests import NoneType
 from flaskr.database import return_gene_query
 from flaskr.db_models import Gene
 
-entrez = 3627
-hgnc = 'CXCL10'
 
-
-def test_Gene_with_relations(app):
+def test_Gene_with_relations(app, entrez, hgnc):
     app()
     relationships_to_join = ['gene_family',
                              'gene_function',
@@ -66,7 +63,7 @@ def test_Gene_with_relations(app):
     assert repr(result) == '<Gene %r>' % entrez
 
 
-def test_Gene_with_copy_number_results(app):
+def test_Gene_with_copy_number_results(app, entrez):
     app()
 
     query = return_gene_query('copy_number_results')
@@ -79,7 +76,7 @@ def test_Gene_with_copy_number_results(app):
             assert copy_number_result.gene_id == result.id
 
 
-def test_Gene_with_driver_results(app):
+def test_Gene_with_driver_results(app, entrez):
     app()
 
     query = return_gene_query('driver_results')
@@ -92,7 +89,7 @@ def test_Gene_with_driver_results(app):
             assert driver_result.gene_id == result.id
 
 
-def test_Gene_with_gene_sample_assoc(app):
+def test_Gene_with_gene_sample_assoc(app, entrez):
     app()
 
     query = return_gene_query('gene_sample_assoc')
@@ -105,7 +102,7 @@ def test_Gene_with_gene_sample_assoc(app):
             assert gene_sample_rel.gene_id == result.id
 
 
-def test_Gene_with_gene_type_assoc(app):
+def test_Gene_with_gene_type_assoc(app, entrez):
     app()
 
     query = return_gene_query('gene_type_assoc')
@@ -118,7 +115,7 @@ def test_Gene_with_gene_type_assoc(app):
             assert gene_type_rel.gene_id == result.id
 
 
-def test_Gene_with_publication_gene_assoc(app):
+def test_Gene_with_publication_gene_assoc(app, entrez):
     app()
 
     query = return_gene_query('publication_gene_assoc')
@@ -131,7 +128,7 @@ def test_Gene_with_publication_gene_assoc(app):
             assert publication_gene_rel.gene_id == result.id
 
 
-def test_Gene_no_relations(app):
+def test_Gene_no_relations(app, entrez, hgnc):
     app()
 
     query = return_gene_query()

@@ -1,5 +1,4 @@
 import pytest
-from tests import app
 from flaskr.database import return_immune_checkpoint_query
 from flaskr.db_models import ImmuneCheckpoint
 

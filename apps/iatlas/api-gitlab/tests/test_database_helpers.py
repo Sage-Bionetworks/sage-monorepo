@@ -4,7 +4,7 @@ from sqlalchemy.dialects import postgresql
 from flaskr.database.database_helpers import (
     build_general_query, build_option_args, build_query_args)
 from flaskr.db_models import Base, Feature
-from . import app, db
+from tests import db
 
 
 class MockModel(Base):

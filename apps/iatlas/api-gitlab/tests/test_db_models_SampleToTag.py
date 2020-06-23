@@ -1,5 +1,4 @@
 import pytest
-from tests import app
 from flaskr.database import return_sample_to_tag_query
 
 sample_id = 1

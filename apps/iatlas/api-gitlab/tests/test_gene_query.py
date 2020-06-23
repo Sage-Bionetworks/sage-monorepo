@@ -1,6 +1,6 @@
 import json
 import pytest
-from tests import client, NoneType
+from tests import NoneType
 
 entrez = 3627
 hgnc = 'CXCL10'

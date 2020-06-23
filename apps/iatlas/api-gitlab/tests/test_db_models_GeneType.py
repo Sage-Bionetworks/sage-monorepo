@@ -1,5 +1,5 @@
 import pytest
-from tests import app, NoneType
+from tests import NoneType
 from flaskr.database import return_gene_type_query
 
 gene_type_name = 'extra_cellular_network'

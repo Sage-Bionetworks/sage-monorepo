@@ -1,5 +1,4 @@
 import pytest
-from tests import app
 from flaskr.database import return_therapy_type_query
 
 name = 'T-cell targeted immunomodulator'

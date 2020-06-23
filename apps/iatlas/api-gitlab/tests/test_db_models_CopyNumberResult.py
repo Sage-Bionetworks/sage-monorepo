@@ -1,12 +1,15 @@
 import pytest
-from tests import app, NoneType
+from tests import NoneType
 from flaskr.database import return_copy_number_result_query
 from flaskr.enums import direction_enum
 
-gene_id = 1
+
+@pytest.fixture
+def gene_id():
+    return 1
 
 
-def test_CopyNumberResult_with_relations(app):
+def test_CopyNumberResult_with_relations(app, gene_id):
     app()
     string_representation_list = []
     separator = ', '
@@ -40,7 +43,7 @@ def test_CopyNumberResult_with_relations(app):
         string_representation_list) + ']'
 
 
-def test_CopyNumberResult_no_relations(app):
+def test_CopyNumberResult_no_relations(app, gene_id):
     app()
 
     query = return_copy_number_result_query()

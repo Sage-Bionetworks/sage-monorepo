@@ -1,5 +1,4 @@
 import pytest
-from tests import app
 from flaskr.database import return_mutation_code_query
 
 code = 'A146'

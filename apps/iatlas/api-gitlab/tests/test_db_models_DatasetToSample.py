@@ -1,11 +1,8 @@
 import pytest
-from tests import app
 from flaskr.database import return_dataset_to_sample_query
 
-dataset_id = 5
 
-
-def test_DatasetToSample_with_relations(app):
+def test_DatasetToSample_with_relations(app, dataset_id):
     app()
     relationships_to_join = ['datasets', 'samples']
 
@@ -29,7 +26,7 @@ def test_DatasetToSample_with_relations(app):
     assert repr(results) == '[<DatasetToSample %r>]' % dataset_id
 
 
-def test_DatasetToSample_no_relations(app):
+def test_DatasetToSample_no_relations(app, dataset_id):
     app()
 
     query = return_dataset_to_sample_query()

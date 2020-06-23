@@ -1,6 +1,5 @@
 import json
 import pytest
-from tests import client
 
 
 def test_graphiql_get(client):
