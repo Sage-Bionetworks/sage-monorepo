@@ -23,3 +23,40 @@ The API provides some telemetry data via the [prometheus-flask-exporter](https:/
 ## Logging
 
 Logging is natively in JSON for consumption by a logging agent using the [Python JSON Logger](https://pypi.org/project/python-json-logger/) module.
+
+## Docker Server Configuration
+
+This was done on top of a newly launched Ubuntu 20.04 LTS deploy on an AWS `t3a.small` instance.
+
+```bash
+# Install pre-reqs
+sudo apt-get -y update
+sudo apt-get -y install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+# Add the Docker GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+# Add the Docker repo
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+# Install the Docker engine
+sudo apt-get -y update
+sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-compose
+# Add the Ubuntu user to the Docker group
+sudo usermod -G -a docker ubuntu
+```
+
+In order for the Docker daemon to pull Sage-built images, it will need credentials on the image registry (e.g. the Gitlab image registry). On Gitlab, this is done by creating a Deploy Token, then taking the username and password values Gitlab presents and using them on the server like so:
+
+```bash
+docker login -u <username> -p <password> registry.gitlab.com
+```
+
+Docker will store and re-use those credentials after their first use.
+
+Finally, in order to remotely instruct Docker to run new versions of the container when deployments are done, a secure SSH channel needs to be set up. This is done by creating a key pair and then providing the public key to the Docker instance and the private key to the Gitlab runner. 
