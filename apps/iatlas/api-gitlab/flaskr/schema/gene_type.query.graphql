@@ -1,0 +1,10 @@
+type GeneType {
+    name: String!
+    display: String
+    genes: [SimpleGene!]
+}
+
+type SimpleGeneType {
+    name: String!
+    display: String
+}

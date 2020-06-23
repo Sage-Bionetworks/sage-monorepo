@@ -4,7 +4,7 @@ from sqlalchemy.dialects import postgresql
 from flaskr.database.database_helpers import (
     build_general_query, build_option_args, build_query_args)
 from flaskr.db_models import Base, Feature
-from . import app, db
+from tests import db
 
 
 class MockModel(Base):
@@ -15,8 +15,7 @@ class MockModel(Base):
         return '<MockModel %r>' % self.id
 
 
-def test_build_general_query(app):
-    app()
+def test_build_general_query(test_db):
     model = Feature
     query_arg_1 = 'id'
     query_arg_2 = 'name'
@@ -35,14 +34,14 @@ def test_build_general_query(app):
         model, args=[], accepted_option_args=accepted_option_args,
         accepted_query_args=accepted_query_args)
 
-    assert str(test_1.statement.compile(dialect=postgresql.dialect())) == str(db.session.query(model).options(
+    assert str(test_1.statement.compile(dialect=postgresql.dialect())) == str(test_db.session.query(model).options(
         orm.joinedload(option_value_1)).statement.compile(dialect=postgresql.dialect()))
 
     assert str(test_2.statement.compile(dialect=postgresql.dialect())) == str(
-        db.session.query(getattr(model, query_arg_1), getattr(model, query_arg_2)).statement.compile(dialect=postgresql.dialect()))
+        test_db.session.query(getattr(model, query_arg_1), getattr(model, query_arg_2)).statement.compile(dialect=postgresql.dialect()))
 
     assert str(test_3.statement.compile(dialect=postgresql.dialect())) == str(
-        db.session.query(model).statement.compile(dialect=postgresql.dialect()))
+        test_db.session.query(model).statement.compile(dialect=postgresql.dialect()))
 
 
 def test_build_option_args():

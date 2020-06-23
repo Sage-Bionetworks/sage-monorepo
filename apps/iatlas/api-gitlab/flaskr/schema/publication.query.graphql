@@ -1,0 +1,16 @@
+type Publication {
+    firstAuthorLastName: String
+    genes: [SimpleGene!]
+    journal: String
+    pubmedId: Int!
+    title: String
+    year: String
+}
+
+type SimplePublication {
+    firstAuthorLastName: String
+    journal: String
+    pubmedId: Int!
+    title: String
+    year: String
+}

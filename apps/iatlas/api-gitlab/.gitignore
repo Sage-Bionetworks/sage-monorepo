@@ -154,3 +154,6 @@ database.sqlite3
 
 # OS
 .DS_Store
+
+# git
+git-genui.config.json
