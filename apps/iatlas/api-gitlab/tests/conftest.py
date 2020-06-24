@@ -12,8 +12,8 @@ def app():
     db.session.remove()
 
 
-@pytest.fixture(scope='function')
-def client(app):
+@pytest.fixture(scope='session')
+def client():
     app = create_app(TestConfig)
     with app.test_client() as client:
         yield client
