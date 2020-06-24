@@ -23,7 +23,6 @@ from .mutation_code import MutationCode
 from .mutation_type import MutationType
 from .node import Node
 from .node_to_tag import NodeToTag
-from .node_type import NodeType
 from .pathway import Pathway
 from .patient import Patient
 from .publication import Publication

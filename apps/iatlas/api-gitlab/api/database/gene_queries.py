@@ -1,6 +1,6 @@
 from api import db
 from api.db_models import (Gene, GeneFamily, GeneFunction, GeneType,
-                           ImmuneCheckpoint, NodeType, Pathway, SuperCategory, TherapyType)
+                           ImmuneCheckpoint, Pathway, SuperCategory, TherapyType)
 from .database_helpers import general_core_fields, build_general_query
 
 gene_related_fields = ['copy_number_results',
@@ -11,7 +11,6 @@ gene_related_fields = ['copy_number_results',
                        'gene_type_assoc',
                        'gene_types',
                        'immune_checkpoint',
-                       'node_type',
                        'pathway',
                        'publications',
                        'publication_gene_assoc',
@@ -28,7 +27,6 @@ gene_core_fields = ['id',
                     'gene_family_id',
                     'gene_function_id',
                     'immune_checkpoint_id',
-                    'node_type_id',
                     'pathway_id',
                     'super_cat_id',
                     'therapy_type_id']
@@ -69,13 +67,6 @@ def return_gene_type_query(*args):
 def return_immune_checkpoint_query(*args):
     return build_general_query(
         ImmuneCheckpoint, args=args,
-        accepted_option_args=sub_related_fields,
-        accepted_query_args=general_core_fields)
-
-
-def return_node_type_query(*args):
-    return build_general_query(
-        NodeType, args=args,
         accepted_option_args=sub_related_fields,
         accepted_query_args=general_core_fields)
 

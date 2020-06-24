@@ -9,7 +9,6 @@ def test_Gene_with_relations(app, entrez, hgnc):
                              'gene_function',
                              'gene_types',
                              'immune_checkpoint',
-                             'node_type',
                              'pathway',
                              'publications',
                              'samples',
@@ -31,8 +30,6 @@ def test_Gene_with_relations(app, entrez, hgnc):
             assert type(gene_type.name) is str
     if result.immune_checkpoint:
         assert result.immune_checkpoint.id == result.immune_checkpoint_id
-    if result.node_type:
-        assert result.node_type.id == result.node_type_id
     if result.pathway:
         assert result.pathway.id == result.pathway_id
     if result.publications:
@@ -55,7 +52,6 @@ def test_Gene_with_relations(app, entrez, hgnc):
     assert type(result.gene_function_id) is int or NoneType
     assert type(result.immune_checkpoint_id) is int or NoneType
     assert type(result.io_landscape_name) is str or NoneType
-    assert type(result.node_type_id) is int or NoneType
     assert type(result.pathway_id) is int or NoneType
     assert type(result.super_cat_id) is int or NoneType
     assert type(result.therapy_type_id) is int or NoneType
@@ -128,7 +124,6 @@ def test_Gene_no_relations(app, entrez, hgnc):
     assert type(result.gene_function) is NoneType
     assert result.gene_types == []
     assert type(result.immune_checkpoint) is NoneType
-    assert type(result.node_type) is NoneType
     assert type(result.pathway) is NoneType
     assert result.samples == []
     assert type(result.super_category) is NoneType
@@ -140,7 +135,6 @@ def test_Gene_no_relations(app, entrez, hgnc):
     assert type(result.gene_function_id) is int or NoneType
     assert type(result.immune_checkpoint_id) is int or NoneType
     assert type(result.io_landscape_name) is str or NoneType
-    assert type(result.node_type_id) is int or NoneType
     assert type(result.pathway_id) is int or NoneType
     assert type(result.super_cat_id) is int or NoneType
     assert type(result.therapy_type_id) is int or NoneType

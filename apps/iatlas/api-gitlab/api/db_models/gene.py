@@ -21,9 +21,6 @@ class Gene(Base):
     immune_checkpoint_id = db.Column(
         db.Integer, db.ForeignKey('immune_checkpoints.id'), nullable=True)
 
-    node_type_id = db.Column(
-        db.Integer, db.ForeignKey('node_types.id'), nullable=True)
-
     pathway_id = db.Column(
         db.Integer, db.ForeignKey('pathways.id'), nullable=True)
 
@@ -46,10 +43,6 @@ class Gene(Base):
 
     immune_checkpoint = db.relationship(
         'ImmuneCheckpoint', backref=orm.backref('genes', uselist=True, lazy='noload'),
-        uselist=False, lazy='noload')
-
-    node_type = db.relationship(
-        'NodeType', backref=orm.backref('genes', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')
 
     pathway = db.relationship(
