@@ -21,7 +21,6 @@ def resolve_gene(_obj, info, entrez):
             'display': get_value(gene_type, 'display')
         } for gene_type in get_value(gene, 'gene_types', [])],
         'immuneCheckpoint': get_value(get_value(gene, 'immune_checkpoint')),
-        'nodeType': get_value(get_value(gene, 'node_type')),
         'pathway': get_value(get_value(gene, 'pathway')),
         'publications': [{
             'firstAuthorLastName': get_value(publication, 'first_author_last_name'),

@@ -8,7 +8,6 @@ type Gene {
     geneFunction: String
     geneTypes: [SimpleGeneType!]
     immuneCheckpoint: String
-    nodeType: String
     pathway: String
     publications: [SimplePublication!]
     superCategory: String

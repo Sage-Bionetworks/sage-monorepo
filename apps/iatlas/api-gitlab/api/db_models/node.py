@@ -16,6 +16,7 @@ class Node(Base):
     gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=True)
 
     label = db.Column(db.String, nullable=True)
+    name = db.Column(db.String, nullable=False)
     score = db.Column(db.Numeric, nullable=True)
     x = db.Column(db.Numeric, nullable=True)
     y = db.Column(db.Numeric, nullable=True)

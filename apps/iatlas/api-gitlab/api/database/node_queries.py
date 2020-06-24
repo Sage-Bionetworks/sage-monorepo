@@ -8,7 +8,7 @@ related_fields = [
     'feature', 'gene', 'node_tag_assoc', 'tags']
 
 core_fields = ['id', 'dataset_id', 'feature_id',
-               'gene_id', 'label', 'score', 'x', 'y']
+               'gene_id', 'name', 'label', 'score', 'x', 'y']
 
 
 def return_node_query(*args):

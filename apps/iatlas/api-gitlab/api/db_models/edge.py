@@ -14,6 +14,7 @@ class Edge(Base):
         db.Integer, db.ForeignKey('nodes.id'), nullable=False)
 
     label = db.Column(db.String, nullable=True)
+    name = db.Column(db.String, nullable=False)
     score = db.Column(db.Numeric, nullable=True)
 
     node_1 = db.relationship(
