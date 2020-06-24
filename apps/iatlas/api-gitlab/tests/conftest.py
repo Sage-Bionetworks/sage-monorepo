@@ -1,5 +1,5 @@
 import pytest
-from flaskr import create_app
+from api import create_app
 from tests import db, TestConfig
 
 
@@ -21,7 +21,7 @@ def client():
 
 @pytest.fixture(scope='function')
 def test_db(app):
-    from flaskr import db
+    from api import db
     yield db
 
 

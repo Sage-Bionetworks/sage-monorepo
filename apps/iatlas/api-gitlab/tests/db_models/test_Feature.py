@@ -1,7 +1,7 @@
 import pytest
 from tests import NoneType
-from flaskr.database import return_feature_query
-from flaskr.enums import unit_enum
+from api.database import return_feature_query
+from api.enums import unit_enum
 
 
 @pytest.fixture(scope='module')

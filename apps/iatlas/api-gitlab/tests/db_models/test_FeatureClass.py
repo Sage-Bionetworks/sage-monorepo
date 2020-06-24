@@ -1,5 +1,5 @@
 import pytest
-from flaskr.database import return_feature_class_query
+from api.database import return_feature_class_query
 
 
 @pytest.fixture(scope='module')

@@ -1,7 +1,7 @@
 import pytest
 from tests import NoneType
-from flaskr.database import return_mutation_query
-from flaskr.db_models import Mutation
+from api.database import return_mutation_query
+from api.db_models import Mutation
 
 
 @pytest.fixture(scope='module')

@@ -37,7 +37,7 @@ def test_testing_config(app):
 
 
 def test_config():
-    from flaskr import create_app
+    from api import create_app
     app = create_app(Config)
     if os.getenv('FLASK_ENV') == 'development':
         assert app.config['DEBUG']

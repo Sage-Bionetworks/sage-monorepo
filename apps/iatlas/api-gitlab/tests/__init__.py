@@ -1,5 +1,5 @@
 from config import Config
-from flaskr import db
+from api import db
 
 
 NoneType = type(None)

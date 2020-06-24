@@ -1,5 +1,5 @@
 import pytest
-from flaskr.database import return_dataset_to_sample_query
+from api.database import return_dataset_to_sample_query
 
 
 def test_DatasetToSample_with_relations(app, dataset_id):

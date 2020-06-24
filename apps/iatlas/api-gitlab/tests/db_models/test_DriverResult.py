@@ -1,7 +1,7 @@
 import pytest
 from tests import NoneType
-from flaskr.database import return_driver_result_query
-from flaskr.db_models import DriverResult
+from api.database import return_driver_result_query
+from api.db_models import DriverResult
 
 
 @pytest.fixture(scope='module')
