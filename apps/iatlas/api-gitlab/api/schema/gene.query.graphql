@@ -10,6 +10,7 @@ type Gene {
     immuneCheckpoint: String
     pathway: String
     publications: [SimplePublication!]
+    rnaSeqExpr: Float
     superCategory: String
     therapyType: String
 }

@@ -1,12 +1,8 @@
-from api.database import return_gene_query
-from .resolver_helpers import build_option_args, get_value, valid_gene_node_mapping
+from .resolver_helpers import get_value, request_gene
 
 
 def resolve_gene(_obj, info, entrez):
-    option_args = build_option_args(
-        info.field_nodes[0].selection_set, valid_gene_node_mapping)
-    query = return_gene_query(*option_args)
-    gene = query.filter_by(entrez=entrez).first()
+    gene = request_gene(_obj, info, entrez)
 
     return {
         'entrez': get_value(gene, 'entrez'),
