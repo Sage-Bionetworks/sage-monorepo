@@ -1,7 +1,7 @@
 import pytest
 from tests import NoneType
-from flaskr.database import return_copy_number_result_query
-from flaskr.enums import direction_enum
+from api.database import return_copy_number_result_query
+from api.enums import direction_enum
 
 
 @pytest.fixture(scope='module')

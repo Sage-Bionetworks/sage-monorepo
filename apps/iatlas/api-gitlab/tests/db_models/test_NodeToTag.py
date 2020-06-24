@@ -1,5 +1,5 @@
 import pytest
-from flaskr.database import return_node_to_tag_query
+from api.database import return_node_to_tag_query
 
 
 @pytest.fixture(scope='module')

@@ -1,9 +1,9 @@
 import pytest
 from sqlalchemy import orm
 from sqlalchemy.dialects import postgresql
-from flaskr.database.database_helpers import (
+from api.database.database_helpers import (
     build_general_query, build_option_args, build_query_args)
-from flaskr.db_models import Base, Feature
+from api.db_models import Base, Feature
 from tests import db
 
 

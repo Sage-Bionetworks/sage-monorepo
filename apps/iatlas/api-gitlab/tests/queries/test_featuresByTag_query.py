@@ -1,8 +1,8 @@
 import json
 import pytest
 from tests import NoneType
-from flaskr.enums import unit_enum
-from flaskr.database import return_feature_class_query
+from api.enums import unit_enum
+from api.database import return_feature_class_query
 
 
 def test_featuresByTag_query_with_feature(client, dataset, related, chosen_feature):

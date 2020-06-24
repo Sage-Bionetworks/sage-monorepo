@@ -1,7 +1,7 @@
 import pytest
-from flaskr.database import return_sample_to_mutation_query
-from flaskr.db_models import SampleToMutation
-from flaskr.enums import status_enum
+from api.database import return_sample_to_mutation_query
+from api.db_models import SampleToMutation
+from api.enums import status_enum
 
 
 @pytest.fixture(scope='module')

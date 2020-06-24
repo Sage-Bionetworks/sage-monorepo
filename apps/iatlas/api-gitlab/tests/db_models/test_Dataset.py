@@ -1,6 +1,6 @@
 import pytest
 from tests import NoneType
-from flaskr.database import return_dataset_query
+from api.database import return_dataset_query
 
 
 def test_dataset_with_samples(app, dataset):

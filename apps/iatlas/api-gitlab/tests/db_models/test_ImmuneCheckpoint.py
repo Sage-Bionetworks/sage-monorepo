@@ -1,6 +1,6 @@
 import pytest
-from flaskr.database import return_immune_checkpoint_query
-from flaskr.db_models import ImmuneCheckpoint
+from api.database import return_immune_checkpoint_query
+from api.db_models import ImmuneCheckpoint
 
 
 @pytest.fixture(scope='module')

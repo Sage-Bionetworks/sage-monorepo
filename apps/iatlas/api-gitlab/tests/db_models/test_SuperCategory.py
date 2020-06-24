@@ -1,5 +1,5 @@
 import pytest
-from flaskr.database import return_super_category_query
+from api.database import return_super_category_query
 
 
 @pytest.fixture(scope='module')

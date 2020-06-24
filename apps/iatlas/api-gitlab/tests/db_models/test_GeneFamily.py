@@ -1,5 +1,5 @@
 import pytest
-from flaskr.database import return_gene_family_query
+from api.database import return_gene_family_query
 
 
 @pytest.fixture(scope='module')

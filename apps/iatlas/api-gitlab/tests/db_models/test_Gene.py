@@ -1,7 +1,7 @@
 import pytest
 from tests import NoneType
-from flaskr.database import return_gene_query
-from flaskr.db_models import Gene
+from api.database import return_gene_query
+from api.db_models import Gene
 
 
 def test_Gene_with_relations(app, entrez, hgnc):

@@ -1,6 +1,6 @@
 import pytest
 from tests import NoneType
-from flaskr.database import return_sample_query
+from api.database import return_sample_query
 
 
 @pytest.fixture(scope='module')

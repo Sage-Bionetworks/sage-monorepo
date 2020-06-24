@@ -1,6 +1,6 @@
 import pytest
 from tests import NoneType
-from flaskr.database import return_edge_query
+from api.database import return_edge_query
 
 
 @pytest.fixture(scope='module')

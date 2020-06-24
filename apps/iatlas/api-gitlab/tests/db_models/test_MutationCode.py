@@ -1,5 +1,5 @@
 import pytest
-from flaskr.database import return_mutation_code_query
+from api.database import return_mutation_code_query
 
 
 @pytest.fixture(scope='module')

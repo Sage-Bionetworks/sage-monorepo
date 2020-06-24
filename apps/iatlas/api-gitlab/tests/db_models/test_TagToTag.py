@@ -1,6 +1,6 @@
 import pytest
-from flaskr.database import return_tag_to_tag_query
-from flaskr.db_models import TagToTag
+from api.database import return_tag_to_tag_query
+from api.db_models import TagToTag
 
 
 @pytest.fixture(scope='module')
