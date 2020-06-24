@@ -5,7 +5,6 @@ type Gene {
     description: String
     friendlyName: String
     ioLandscapeName: String
-    references: [String!]
     geneFamily: String
     geneFunction: String
     immuneCheckpoint: String

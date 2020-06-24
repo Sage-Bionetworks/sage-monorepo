@@ -1,4 +1,3 @@
-from sqlalchemy import orm
 from flaskr import db
 from flaskr.db_models import (Gene, GeneFamily, GeneFunction, GeneType,
                               ImmuneCheckpoint, NodeType, Pathway, SuperCategory, TherapyType)
@@ -14,16 +13,18 @@ gene_related_fields = ['copy_number_results',
                        'immune_checkpoint',
                        'node_type',
                        'pathway',
+                       'publications',
+                       'publication_gene_assoc',
                        'samples',
                        'super_category',
                        'therapy_type']
 
-gene_core_fields = ['entrez',
+gene_core_fields = ['id',
+                    'entrez',
                     'hgnc',
                     'description',
                     'friendly_name',
                     'io_landscape_name',
-                    'references',
                     'gene_family_id',
                     'gene_function_id',
                     'immune_checkpoint_id',

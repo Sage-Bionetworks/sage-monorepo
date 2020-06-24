@@ -7,22 +7,29 @@ class Node(Base):
     __tablename__ = 'nodes'
     id = db.Column(db.Integer, primary_key=True)
 
-    gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=True)
+    dataset_id = db.Column(
+        db.Integer, db.ForeignKey('datasets.id'), nullable=True)
 
     feature_id = db.Column(
         db.Integer, db.ForeignKey('features.id'), nullable=True)
+
+    gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=True)
 
     label = db.Column(db.String, nullable=True)
     score = db.Column(db.Numeric, nullable=True)
     x = db.Column(db.Numeric, nullable=True)
     y = db.Column(db.Numeric, nullable=True)
 
-    gene = db.relationship(
-        'Gene', backref=orm.backref('node', uselist=True, lazy='noload'),
+    dataset = db.relationship(
+        'Dataset', backref=orm.backref('node', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')
 
     feature = db.relationship(
         'Feature', backref=orm.backref('node', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
+
+    gene = db.relationship(
+        'Gene', backref=orm.backref('node', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')
 
     tags = db.relationship(

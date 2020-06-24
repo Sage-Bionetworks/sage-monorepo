@@ -11,7 +11,6 @@ class Gene(Base):
     description = db.Column(db.String, nullable=True)
     friendly_name = db.Column(db.String, nullable=True)
     io_landscape_name = db.Column(db.String, nullable=True)
-    references = db.Column(db.ARRAY(db.String), nullable=True)
 
     gene_family_id = db.Column(
         db.Integer, db.ForeignKey('gene_families.id'), nullable=True)
@@ -56,6 +55,9 @@ class Gene(Base):
     pathway = db.relationship(
         'Pathway', backref=orm.backref('genes', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')
+
+    publications = db.relationship(
+        "Publication", secondary='publications_to_genes', uselist=True, lazy='noload')
 
     super_category = db.relationship(
         'SuperCategory', backref=orm.backref('genes', uselist=True, lazy='noload'),

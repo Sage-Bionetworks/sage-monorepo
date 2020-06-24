@@ -8,7 +8,9 @@ patient_related_fields = ['samples', 'slides']
 patient_core_fields = [
     'id', 'age', 'barcode', 'ethnicity', 'gender', 'height', 'race', 'weight']
 
-sample_related_fields = ['feature_sample_assoc',
+sample_related_fields = ['datasets',
+                         'dataset_sample_assoc',
+                         'feature_sample_assoc',
                          'features',
                          'gene_sample_assoc',
                          'genes',

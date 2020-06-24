@@ -1,5 +1,5 @@
 from flaskr.db_models import (Sample)
-from .resolver_helpers import get_child_value, get_value, build_option_args
+from .resolver_helpers import get_value, build_option_args
 from flaskr.database import return_sample_query
 
 
@@ -7,8 +7,10 @@ valid_sample_node_mapping = {
     'id': 'id',
     'name': 'name',
     'description': 'description',
-    'patient': 'patient_id',
-    "genes": 'genes'
+    'patient': 'patient',
+    'genes': 'genes',
+    'features': 'features',
+    'tags': 'tags'
 }
 
 def resolve_sample(_obj, info, id=None, name=None):
@@ -17,18 +19,22 @@ def resolve_sample(_obj, info, id=None, name=None):
         valid_sample_node_mapping
     )
     query = return_sample_query(*option_args)
-    if id != None:
+    if id:
         sample = query.filter_by(id=id).first()
-    elif name != None:
+    elif name:
         sample = query.filter_by(name=name).first()
     else:
         return None
+
+    print("RETURNS: ", sample)
 
     return {
         "id": get_value(sample, 'id'),
         "name": get_value(sample, 'name'),
         "patient": get_value(sample, 'patient'),
-        "genes": get_child_value(get_value(sample, 'genes'))
+        "genes": get_value(sample, 'genes'),
+        "features": get_value(sample, 'features'),
+        "tags": get_value(sample, 'tags')
     }
 
 def resolve_samples(_obj, info, id=None, name=None):
@@ -47,6 +53,8 @@ def resolve_samples(_obj, info, id=None, name=None):
     return [{
         "id": get_value(sample, 'id'),
         "name": get_value(sample, 'name'),
-        "description": get_value(sample, 'description'),
-        "patient": get_value(sample, 'patient')
+        "patient": get_value(sample, 'patient'),
+        "genes": get_value(sample, 'genes'),
+        "features": get_value(sample, 'features'),
+        "tags": get_value(sample, 'tags')
     } for sample in samples]

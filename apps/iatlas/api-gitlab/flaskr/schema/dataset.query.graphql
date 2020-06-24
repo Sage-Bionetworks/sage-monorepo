@@ -1,0 +1,4 @@
+type Dataset {
+  name: String
+  display: String
+}

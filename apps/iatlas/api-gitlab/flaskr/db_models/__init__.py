@@ -3,6 +3,8 @@ from flaskr import db
 Base = db.Model
 
 from .copy_number_result import CopyNumberResult
+from .dataset import Dataset
+from .dataset_to_sample import DatasetToSample
 from .driver_result import DriverResult
 from .edge import Edge
 from .feature import Feature
@@ -24,6 +26,8 @@ from .node_to_tag import NodeToTag
 from .node_type import NodeType
 from .pathway import Pathway
 from .patient import Patient
+from .publication import Publication
+from .publication_to_gene import PublicationToGene
 from .sample import Sample
 from .sample_to_mutation import SampleToMutation
 from .sample_to_tag import SampleToTag

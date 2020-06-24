@@ -2,10 +2,11 @@ import pytest
 from tests import app
 from flaskr.database import return_super_category_query
 
+name = 'Receptor'
+
 
 def test_SuperCategory_with_relations(app):
     app()
-    name = 'Receptor'
 
     query = return_super_category_query('genes')
     result = query.filter_by(name=name).first()
@@ -20,7 +21,6 @@ def test_SuperCategory_with_relations(app):
 
 def test_SuperCategory_no_relations(app):
     app()
-    name = 'Receptor'
 
     query = return_super_category_query()
     result = query.filter_by(name=name).first()

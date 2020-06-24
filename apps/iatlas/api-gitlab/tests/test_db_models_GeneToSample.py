@@ -2,10 +2,11 @@ import pytest
 from tests import app, NoneType
 from flaskr.database import return_gene_to_sample_query
 
+gene_id = 1
+
 
 def test_GeneToSample_with_relations(app):
     app()
-    gene_id = 1
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['genes', 'samples']
@@ -35,7 +36,6 @@ def test_GeneToSample_with_relations(app):
 
 def test_GeneToSample_no_relations(app):
     app()
-    gene_id = 1
 
     query = return_gene_to_sample_query()
     results = query.filter_by(gene_id=gene_id).limit(3).all()

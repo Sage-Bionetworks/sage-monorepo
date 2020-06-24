@@ -1,5 +1,5 @@
 from flaskr.db_models import (Mutation, MutationCode, MutationType, Gene, Sample)
-from .resolver_helpers import get_child_value, get_value, build_option_args
+from .resolver_helpers import get_value, build_option_args
 from flaskr.database import return_mutation_query
 
 
@@ -23,9 +23,9 @@ def resolve_mutation(_obj, info, id):
     #     sample_names.append(sample.name)
     return {
         "id": get_value(mutation, 'id'),
-        "gene": get_child_value(get_value(mutation, 'gene'), 'hgnc'),
-        "mutationCode": get_child_value(get_value(mutation, 'mutation_code'), 'code'),
-        "mutationType": get_child_value(get_value(mutation, 'mutation_type')),
+        "gene": get_value(get_value(mutation, 'gene'), 'hgnc'),
+        "mutationCode": get_value(get_value(mutation, 'mutation_code'), 'code'),
+        "mutationType": get_value(get_value(mutation, 'mutation_type')),
         "samples": get_value(mutation, 'samples')
     }
 
@@ -46,8 +46,8 @@ def resolve_mutations(_obj, info, id=None):
     #     mutation.samples = sample_names
     return [{
         "id": get_value(mutation, 'id'),
-        "gene": get_child_value(get_value(mutation, 'gene'), 'hgnc'),
-        "mutationCode": get_child_value(get_value(mutation, 'mutation_code'), 'code'),
-        "mutationType": get_child_value(get_value(mutation, 'mutation_type')),
+        "gene": get_value(get_value(mutation, 'gene'), 'hgnc'),
+        "mutationCode": get_value(get_value(mutation, 'mutation_code'), 'code'),
+        "mutationType": get_value(get_value(mutation, 'mutation_type')),
         "samples": get_value(mutation, 'samples')
     } for mutation in mutations]

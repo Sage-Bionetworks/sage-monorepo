@@ -1,11 +1,25 @@
 # General structures:
 type Feature {
-    name: String!
-    display: String
-    order: Int
-    unit: String
     class: String
+    display: String
     methodTag: String
+    name: String!
+    order: Int
+    sample: String
+    unit: String
+    value: FeatureValue
+}
+
+type FeatureByClass {
+    class: String!
+    features: [Feature!]!
+}
+
+type FeatureByTag {
+    characteristics: String
+    display: String
+    features: [Feature!]!
+    tag: String!
 }
 
 type Gene {
@@ -15,7 +29,6 @@ type Gene {
     description: String
     friendlyName: String
     ioLandscapeName: String
-    references: [String!]
     geneFamily: String
     geneFunction: String
     immuneCheckpoint: String
@@ -25,13 +38,28 @@ type Gene {
     therapyType: String
 }
 
+type Sample {
+    features: [Feature!]
+    genes: [Gene!]
+    name: String!
+    patient: String!
+    tags: [SimpleTag!]
+}
+
 type Tag {
     characteristics: String
     color: String
-    display: String!
+    display: String
     name: String!
     sampleCount: Int!
     sampleIds: [Int!]
+}
+
+type SimpleTag {
+    characteristics: String
+    color: String
+    display: String
+    name: String!
 }
 
 query CohortSelecter {
@@ -45,7 +73,7 @@ query CohortSelecter {
     #   sampleCount: The number of samples associated with this tag. (used for groupSize)
     #   characteristics: The characteristics of this tag.
     #   color: The color associated with this tag.
-    tags(dataSet: [String!], related: [String!]!, feature: [String!]) [Tag]
+    tags(dataSet: [String!]!, related: [String!]!, feature: [String!]): [Tag]!
 }
 
 ImmuneFeatureTrends:
@@ -55,23 +83,10 @@ query ImmuneFeatureDistributions {
     # group: an array of strings (ie Immune_Subtype related to dataset from tags)
     # feature: an array of strings (from sample_to_feature related to dataset and group)
     # name: the "name" value from the classes table.
-    featureByClass(dataSet: [String!], group: [String!]!, feature: [String!]) {
-        class: String!
-        features: [Feature!]!
-    }
+    featuresByClass(dataSet: [String!], related: [String!], feature: [String!]): [FeatureByClass]!
 
-    getFeature(groups: [], feature: [])
-        returns values for features related to samples in the datasaet for that class separated in groups
-        group {
-            display
-            characteristics
-            feature {
-                display
-                value
-                sampleName
-            }
-        }
-    }
+    # returns values for features related to samples in the datasaet for that class separated in groups
+    featuresByTag(dataSet: [String!]!, related: [String!]!, feature: [String!], class: [String!]): [FeatureByTag]!
 }
 
 For Till Maps:
@@ -101,103 +116,53 @@ query TillMaps {
 
 ImmuneFeatureCorrelations:
 query ImmuneFeatureDistributions {
-    see cohort selection get sanples_to_feature get classes for "Select or search for variable" dropdown
-    class {
-        name
-        feature {
-            display
-            order
-        }
-    }
-    see cohort selection get samples_to_feature get classes for "Select or search for response variable" dropdown
-    class {
-        name
-        feature {
-            display
-            order
-        }
-    }
+    # see cohort selection get sanples_to_feature get classes for "Select or search for variable" dropdown
+    featuresByClass(dataSet: [String!], related: [String!], feature: [String!]): [FeatureByClass]!
+
+    # see cohort selection get samples_to_feature get classes for "Select or search for response variable" dropdown
+    featuresByClass(dataSet: [String!], related: [String!], feature: [String!]): [FeatureByClass]!
+
     For visualization:
-    getFeature(groups: [], feature: []) {
-        returns values for features related to samples in the dataset for that class separated in groups
-        group {
-            display
-            characteristics
-            feature {
-                display
-                value
-                sampleName
-            }
-        }
-    }
+    # returns values for features related to samples in the dataset for that class separated in groups
+    featuresByTag(dataSet: [String!]!, related: [String!]!, feature: [String!], class: [String!]): [FeatureByTag]!
 }
 
 
 For Cell Type Factions:
 query TumorMicroenvironmentCellTypeFactions {
-    For cell faction type dropdown - Populated by hand (6 classes)
+    # For cell faction type dropdown - Populated by hand (6 classes)
 
-    For visualization:
-    getFeature(groups: [], feature: []) {
-        returns values for features related to samples in the dataset for that class separated in groups
-        group {
-            display
-            characteristics
-            feature {
-                display
-                value
-                sampleName
-            }
-        }
-    }
+    # For visualization:
+    # returns values for features related to samples in the dataset for that class separated in groups
+    featuresByTag(dataSet: [String!]!, related: [String!]!, feature: [String!], class: [String!]): [FeatureByTag]!
 }
 
 For Sample Group Survival
 query ClinicalOutcomes {
-    For survival endpoint dropdown two features hand coded
+    # For survival endpoint dropdown two features hand coded
 
-    For visualization:
-    getFeature(groups: [], feature: []) {
-        returns values for features related to samples in the dataset for that class separated in groups
-        group {
-            display
-            characteristics
-            feature {
-                display
-                value
-                sampleName
-            }
-        }
-    }
+    # For visualization:
+    # returns values for features related to samples in the dataset for that class separated in groups
+    featuresByTag(dataSet: [String!]!, related: [String!]!, feature: [String!], class: [String!]): [FeatureByTag]!
 }
 
 For Concordance Index
 query ConcordanceIndex {
-    For survival endpoint dropdown two features hand coded
-    ForSearch for variables class dropdown load all classes related to features related to samples related to dataset
+    # For survival endpoint dropdown two features hand coded
+    # For Search for variables class dropdown load all classes related to features related to samples related to dataset
+    featuresByClass(dataSet: [String!], related: [String!], feature: [String!]): [FeatureByClass]!
 
-    For visualization:
-    getFeature(groups: [], feature: []) {
-        returns values for features related to samples in the dataset for that class separated in groups
-        group {
-            display
-            characteristics
-            feature {
-                order
-                display
-                value
-                sampleName
-            }
-        }
-    }
+    # For visualization:
+    # returns values for features related to samples in the dataset for that class separated in groups
+    featuresByTag(dataSet: [String!]!, related: [String!]!, feature: [String!], class: [String!]): [FeatureByTag]!
 }
 
 For Immunomodulator Distributions
 query Immunomodulators {
-    For Group dropdown hand coded "Gene Family", "Super Category", "Immune Checkpoint"
-    For Search genes dropdown load all genes that have something in the Group dropdown (in Immunomodulator gene type and related to samples related to dataset)
+    # For Group dropdown hand coded "Gene Family", "Super Category", "Immune Checkpoint"
+    # For Search genes dropdown load all genes that have something in the Group dropdown (in Immunomodulator gene type and related to samples related to dataset)
 
-    For visualization:
+    # For visualization:
     getGenes(dataset: [], type: [immunomodulator], group: []) {
         group {
             display
@@ -219,10 +184,10 @@ query Immunomodulators {
 
 For IO Target Distributions
 query ioTargets {
-    For Group dropdown hand coded "Pathway", "Therapy Type"
-    For Search genes dropdown load all genes that have something in the Group dropdown (in io_targets gene type and related to samples related to dataset)
+    # For Group dropdown hand coded "Pathway", "Therapy Type"
+    # For Search genes dropdown load all genes that have something in the Group dropdown (in io_targets gene type and related to samples related to dataset)
 
-    For visualization:
+    # For visualization:
     getGenes(dataset: [], type: [immunomodulator], group: []) {
         group {
             display
@@ -240,10 +205,10 @@ query ioTargets {
     }
 }
 
-For Driver Associations:
+# For Driver Associations:
 query SingleVariable {
-    (Driver Results Table)
-    For Search for Response Variable Dropdown All features grouped by class - features from Driver results
+    # (Driver Results Table)
+    # For Search for Response Variable Dropdown All features grouped by class - features from Driver results
     getDriverResults(feature: []) {
         gene {
             hgnc
@@ -262,7 +227,7 @@ query SingleVariable {
 
 
 getFeature(groups: [], feature: [featureClass, feature])
-    returns values for features related to samples in the datasaet for that class separated in groups
+    # returns values for features related to samples in the datasaet for that class separated in groups
     feature {
         value
         sampleName

@@ -1,7 +1,7 @@
 type Sample {
-  features: [FeatureAsChild!]
+  features: [Feature!]
   genes: [Gene!]
   name: String!
-  patient: String!
-  tags: [TagAsChild!]
+  patient: Patient
+  tags: [SimpleTag!]
 }

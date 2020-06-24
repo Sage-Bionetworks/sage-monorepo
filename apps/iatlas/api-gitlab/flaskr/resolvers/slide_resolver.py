@@ -1,5 +1,5 @@
 from flaskr.db_models import (Slide)
-from .resolver_helpers import get_child_value, get_value, build_option_args
+from .resolver_helpers import get_value, build_option_args
 from flaskr.database import return_slide_query
 
 
