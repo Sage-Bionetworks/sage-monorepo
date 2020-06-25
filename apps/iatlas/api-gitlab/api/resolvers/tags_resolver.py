@@ -23,7 +23,7 @@ def resolve_tags(_obj, info, dataSet, related, feature=None, featureClass=None):
         tags_1."characteristics" AS "characteristics",
         tags_1.color AS color,
         ARRAY_AGG(sample_to_tag_2.sample_id) AS samples,
-        COUNT(DISTINCT sample_to_tag_2.sample_id) AS sample_count
+        COUNT(DISTINCT sample_1."name") AS samples
     FROM samples_to_tags AS sample_to_tag_1
     INNER JOIN features_to_samples ON features_to_samples.sample_id = sample_to_tag_1.sample_id AND features_to_samples.feature_id
         IN(SELECT features.id FROM features WHERE features."name" IN('Neutrophils_Aggregate2'))
@@ -33,14 +33,16 @@ def resolve_tags(_obj, info, dataSet, related, feature=None, featureClass=None):
         IN(SELECT related_tags.id FROM tags AS related_tags WHERE related_tags."name" IN('Immune_Subtype'))
     INNER JOIN samples_to_tags AS sample_to_tag_2 ON sample_to_tag_2.sample_id = sample_to_tag_1.sample_id
         AND tag_to_tag_1.tag_id = sample_to_tag_2.tag_id
+    LEFT JOIN samples AS sample_1 ON sample_to_tag_2.sample_id = sample_1.id
     JOIN tags AS tags_1 ON tags_1.id = tag_to_tag_1.tag_id
-    GROUP BY "name", display, "characteristics", color
+    GROUP BY tags_1."name", tags_1.display, tags_1."characteristics", tags_1.color
     """
 
     tag = orm.aliased(Tag, name='t')
     dataset_1 = orm.aliased(Dataset, name='d')
     dataset_to_sample_1 = orm.aliased(DatasetToSample, name='ds')
     related_tag = orm.aliased(Tag, name='rt')
+    sample_1 = orm.aliased(Sample, name='s')
     sample_to_tag_1 = orm.aliased(SampleToTag, name='st1')
     sample_to_tag_2 = orm.aliased(SampleToTag, name='st2')
     tag_to_tag_1 = orm.aliased(TagToTag, name='tt')
@@ -50,7 +52,7 @@ def resolve_tags(_obj, info, dataSet, related, feature=None, featureClass=None):
                                  'display': tag.display.label('display'),
                                  'name': tag.name.label('name'),
                                  'sampleCount': func.count(func.distinct(sample_to_tag_2.sample_id)).label('sample_count'),
-                                 'sampleIds': func.array_agg(func.distinct(sample_to_tag_2.sample_id)).label('samples')}
+                                 'samples': func.array_agg(func.distinct(sample_1.name)).label('samples')}
 
     # Only select fields that were requested.
     selection_set = info.field_nodes[0].selection_set or []
@@ -93,9 +95,12 @@ def resolve_tags(_obj, info, dataSet, related, feature=None, featureClass=None):
                             tag_to_tag_1.tag_id == sample_to_tag_2.tag_id))
     query = query.join(tag, tag.id == tag_to_tag_1.tag_id, isouter=True)
 
-    if 'sampleCount' in requested_nodes or 'sampleIds' in requested_nodes:
+    if 'sampleCount' in requested_nodes or 'samples' in requested_nodes:
         query = query.group_by(tag.name, tag.display,
                                tag.characteristics, tag.color)
+        if 'samples' in requested_nodes:
+            query = query.join(
+                sample_1, sample_1.id == sample_to_tag_2.sample_id, isouter=True)
 
     results = query.all()
 
@@ -105,5 +110,5 @@ def resolve_tags(_obj, info, dataSet, related, feature=None, featureClass=None):
         "display": get_value(row, 'display'),
         "name": get_value(row, 'name'),
         "sampleCount": get_value(row, 'sample_count'),
-        "sampleIds": get_value(row, 'samples'),
+        "samples": get_value(row, 'samples'),
     } for row in results]
