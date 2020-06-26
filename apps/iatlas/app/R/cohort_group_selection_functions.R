@@ -7,7 +7,8 @@
 get_cohort_available_groups <- function(tbl, .dataset){
     tbl %>%
         dplyr::filter(.data$dataset == .dataset) %>%
-        dplyr::pull("group")
+        dplyr::select("group", "group_internal") %>%
+        tibble::deframe(.)
 }
 
 #' Build Driver Mutation Tibble
@@ -45,11 +46,11 @@ create_cohort_object <- function(
     immune_feature_bin_number = NULL
 ){
     sample_ids <- filter_obj$sample_ids
-    if (group_choice %in% c("Immune Subtype", "TCGA Subtype", "TCGA Study")) {
+    if (group_choice %in% c("Immune_Subtype", "TCGA_Subtype", "TCGA_Study")) {
         cohort_object <- create_tag_cohort_object(sample_ids, dataset, group_choice)
-    } else if (group_choice == "Driver Mutation") {
+    } else if (group_choice == "Driver_Mutation") {
         cohort_object <- create_dm_cohort_object(sample_ids, driver_mutation)
-    } else if (group_choice == "Immune Feature Bins") {
+    } else if (group_choice == "Immune_Feature_Bins") {
         cohort_object <- create_feature_bin_cohort_object(
             sample_ids,
             immune_feature_bin_id,
@@ -96,7 +97,6 @@ create_tag_cohort_object <- function(sample_ids, dataset, tag){
 #' @param group A String that is the display column of the tags table
 #' @importFrom magrittr %>%
 build_cohort_tbl_by_tag <- function(sample_ids, dataset, tag){
-    tag <- stringr::str_replace(tag, " ", "_")
     iatlas.app::query_cohort_selector(dataset, tag) %>%
         tidyr::unnest(cols = c("sampleIds")) %>%
         dplyr::select(
