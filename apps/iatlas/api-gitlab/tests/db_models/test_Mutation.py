@@ -33,7 +33,6 @@ def test_Mutation_with_relations(app, gene_id):
             assert isinstance(result.samples, list)
             # Don't need to iterate through every result.
             for sample in result.samples[0:2]:
-                print("SAMPLESSSS: ", sample.name)
                 assert type(sample.id) is int
         assert result.gene_id == gene_id
         assert type(result.gene_id) is int

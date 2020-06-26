@@ -39,7 +39,7 @@ def resolve_patients(_obj, info, barcode):
         valid_patient_node_mapping
     )
     query = return_patient_query(*option_args)
-    if barcode is not None:
+    if barcode:
         query = query.filter(Patient.barcode.in_(barcode))
     patients = query.all()
     return [{

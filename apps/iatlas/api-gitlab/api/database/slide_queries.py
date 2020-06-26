@@ -1,5 +1,3 @@
-from sqlalchemy import orm
-from flaskr import db
 from flaskr.db_models import  Slide
 from .database_helpers import general_core_fields, build_general_query
 

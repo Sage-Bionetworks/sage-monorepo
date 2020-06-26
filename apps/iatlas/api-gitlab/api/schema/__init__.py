@@ -44,15 +44,16 @@ gene_type = ObjectType('GeneType')
 publication = ObjectType('Publication')
 sample = ObjectType('Sample')
 tag = ObjectType('Tag')
+mutation = ObjectType("Mutation")
+patient = ObjectType("Patient")
+slide = ObjectType("Slide")
+dataset = ObjectType("Dataset")
+
 # Initialize schema objects (simple).
 simple_gene = ObjectType('SimpleGene')
 simple_gene_type = ObjectType('SimpleGeneType')
 simple_publication = ObjectType('SimplePublication')
 simple_tag = ObjectType('SimpleTag')
-mutation = ObjectType("Mutation")
-patient = ObjectType("Patient")
-slide = ObjectType("Slide")
-dataset = ObjectType("Dataset")
 
 # Associate resolvers with fields.
 root.set_field('gene', resolve_gene)

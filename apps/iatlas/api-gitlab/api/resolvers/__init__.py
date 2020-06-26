@@ -4,8 +4,6 @@ from .features_resolver import resolve_features
 from .features_by_class_resolver import resolve_features_by_class
 from .features_by_tag_resolver import resolve_features_by_tag
 from .tags_resolver import resolve_tags
-from .features_resolver import resolve_features
-from .tags_resolver import resolve_tags
 from .test_resolver import resolve_test
 from .mutation_resolver import resolve_mutation, resolve_mutations
 from .patient_resolver import resolve_patient, resolve_patients

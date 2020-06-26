@@ -26,8 +26,6 @@ def resolve_sample(_obj, info, id=None, name=None):
     else:
         return None
 
-    print("RETURNS: ", sample)
-
     return {
         "id": get_value(sample, 'id'),
         "name": get_value(sample, 'name'),
