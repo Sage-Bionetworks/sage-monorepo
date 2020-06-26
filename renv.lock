@@ -1,7 +1,6 @@
-
 {
   "R": {
-    "Version": "3.6.2",
+    "Version": "3.6.3",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -16,6 +15,18 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "8f9ce74c6417d61f0782cbae5fd2b7b0"
+    },
+    "BiocGenerics": {
+      "Package": "BiocGenerics",
+      "Version": "0.33.3",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "bioconductor",
+      "RemoteRepo": "BiocGenerics",
+      "RemoteRef": "master",
+      "RemoteSha": "5a47d6ac72a5fd9e1b9920e96fb4425f86aaa5a5",
+      "Hash": "9b8f5ed45a16514f95fd46a0e424f61d"
     },
     "DBI": {
       "Package": "DBI",
@@ -314,6 +325,13 @@
       "Repository": "CRAN",
       "Hash": "4ac529753d1e529966ef675d7f0c762b"
     },
+    "crul": {
+      "Package": "crul",
+      "Version": "0.9.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ca47c792e03fdc1a73cb4cf4a1b0aa86"
+    },
     "curl": {
       "Package": "curl",
       "Version": "4.3",
@@ -327,6 +345,18 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "53cbed70a2f7472d48fb6aef08442f25"
+    },
+    "cyjShiny": {
+      "Package": "cyjShiny",
+      "Version": "1.0.9",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "cytoscape",
+      "RemoteRepo": "cyjShiny",
+      "RemoteRef": "master",
+      "RemoteSha": "ee95e0986d12f0c66f9e79e0ab2fe1a02ab11efe",
+      "Hash": "0f31d57f7429a6484bfc39337cc8ef7d"
     },
     "data.table": {
       "Package": "data.table",
@@ -412,6 +442,13 @@
       "Repository": "CRAN",
       "Hash": "83ab58a0518afe3d17e41da01af13b60"
     },
+    "feather": {
+      "Package": "feather",
+      "Version": "0.3.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "76de23891bdba419517e855ed611ad29"
+    },
     "foreign": {
       "Package": "foreign",
       "Version": "0.8-75",
@@ -482,6 +519,13 @@
       "Repository": "CRAN",
       "Hash": "89ea5998938d1ad55f035c8a86f96b74"
     },
+    "ghql": {
+      "Package": "ghql",
+      "Version": "0.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "aa13ce03131717aa76a44259460ece6b"
+    },
     "git2r": {
       "Package": "git2r",
       "Version": "0.26.1",
@@ -495,6 +539,25 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "d4e25697c450c01b202c79ef35694a83"
+    },
+    "graph": {
+      "Package": "graph",
+      "Version": "1.65.2",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "bioconductor",
+      "RemoteRepo": "graph",
+      "RemoteRef": "master",
+      "RemoteSha": "b60a41ca55e12ebb98424cc2599bea9fa1414b5f",
+      "Hash": "bca5181f7f98c9df46e7708a0190d085"
+    },
+    "graphql": {
+      "Package": "graphql",
+      "Version": "1.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "9f7d9c6426833d0cdfea726201589c42"
     },
     "gridExtra": {
       "Package": "gridExtra",
@@ -552,6 +615,13 @@
       "Repository": "CRAN",
       "Hash": "41bace23583fbc25089edae324de2dc3"
     },
+    "httpcode": {
+      "Package": "httpcode",
+      "Version": "0.3.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "13641a1c6d2cc98801b76764078e17ea"
+    },
     "httpuv": {
       "Package": "httpuv",
       "Version": "1.5.2",
@@ -575,10 +645,10 @@
     },
     "jsonlite": {
       "Package": "jsonlite",
-      "Version": "1.6.1",
+      "Version": "1.7.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "84b0ee361e2f78d6b7d670db9471c0c5"
+      "Hash": "2657f20b9a74c996c602e74ebe540b06"
     },
     "km.ci": {
       "Package": "km.ci",
@@ -774,7 +844,7 @@
       "Version": "4.9.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "bee8fe8f97d10023ed3740a9c3e9eb02"
+      "Hash": "f944fd279ce84daf29b179611bea0345"
     },
     "plyr": {
       "Package": "plyr",
@@ -980,7 +1050,7 @@
       "Version": "0.2.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "5b3c3722d8f548f1b8e095533d0a8e30"
+      "Hash": "0dfe43ea406fcef9efbf186bff0c34c8"
     },
     "shinydashboard": {
       "Package": "shinydashboard",
@@ -1036,7 +1106,7 @@
       "Version": "1.2.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "58b7d4f4744eb9788ddda5ba998a219f"
+      "Hash": "7787dacaca761c15c514197f545111d8"
     },
     "survMisc": {
       "Package": "survMisc",
@@ -1100,6 +1170,20 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "7d4b0f1ab542d8cb7a40c593a4de2f36"
+    },
+    "triebeard": {
+      "Package": "triebeard",
+      "Version": "0.3.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "847a9d113b78baca4a9a8639609ea228"
+    },
+    "urltools": {
+      "Package": "urltools",
+      "Version": "1.7.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e86a704261a105f4703f653e05defa3e"
     },
     "usethis": {
       "Package": "usethis",

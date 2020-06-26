@@ -4,6 +4,9 @@ source("R/database_functions.R")
 pool <- connect_to_db()
 rm(connect_to_db)
 
+source("R/api_functions.R")
+iatlas.app::create_and_add_all_queries_to_qry_obj()
+
 source("R/create_queries.R")
 source("R/perform_query.R")
 source("R/run_queries.R")

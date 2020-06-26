@@ -35,7 +35,13 @@ cohort_manual_selection_server <- function(
 
     all_sample_ids <- shiny::reactive({
         shiny::req(dataset())
-        .GlobalEnv$get_sample_ids_from_dataset(dataset())
+        stringr::str_c(
+            "SELECT sample_id FROM datasets_to_samples WHERE dataset_id IN(",
+            "SELECT id FROM datasets WHERE name = '", dataset(), "'",
+            ")"
+        ) %>%
+            perform_query() %>%
+            dplyr::pull("sample_id")
     })
 
     filter_obj <- cohort_obj <- shiny::callModule(
