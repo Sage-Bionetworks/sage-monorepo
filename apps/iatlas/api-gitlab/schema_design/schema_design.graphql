@@ -32,7 +32,6 @@ type Gene {
     geneFamily: String
     geneFunction: String
     immuneCheckpoint: String
-    nodeType: String
     pathway: String
     superCategory: String
     therapyType: String
@@ -91,7 +90,7 @@ query ImmuneFeatureDistributions {
 
 For Till Maps:
 query TillMaps {
-    For "Select or search for variable" dropdown get features fro passed class
+    # For "Select or search for variable" dropdown get features fro passed class
 
     getSamples(dataset: [string (ie TCGA or PCAWG)], featureClass: []) {
         dataSet {
@@ -209,7 +208,7 @@ query ioTargets {
 query SingleVariable {
     # (Driver Results Table)
     # For Search for Response Variable Dropdown All features grouped by class - features from Driver results
-    getDriverResults(feature: []) {
+    getDriverResults(feature: [String!]) {
         gene {
             hgnc
         }
@@ -217,6 +216,7 @@ query SingleVariable {
         tag {
             name
         }
+        feature (Simple feature type)
         pValue
         foldChange
         log10pValue

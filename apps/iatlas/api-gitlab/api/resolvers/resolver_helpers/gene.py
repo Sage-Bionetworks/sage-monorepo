@@ -1,0 +1,13 @@
+valid_gene_node_mapping = {'entrez': 'entrez',
+                           'hgnc': 'hgnc',
+                           'description': 'description',
+                           'friendlyName': 'friendly_name',
+                           'ioLandscapeName': 'io_landscape_name',
+                           'geneFamily': 'gene_family',
+                           'geneFunction': 'gene_function',
+                           'geneTypes': 'gene_types',
+                           'immuneCheckpoint': 'immune_checkpoint',
+                           'pathway': 'pathway',
+                           'publications': 'publications',
+                           'superCategory': 'super_category',
+                           'therapyType': 'therapy_type'}

@@ -1,5 +1,5 @@
 import pytest
-from flaskr.resolvers.resolver_helpers import build_option_args, get_value
+from api.resolvers.resolver_helpers import build_option_args, get_value
 
 
 class Parent:
