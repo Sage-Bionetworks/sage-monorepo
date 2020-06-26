@@ -43,9 +43,7 @@ cohort_selection_server <- function(
 
     group_key_tbl <- shiny::reactive({
         shiny::req(cohort_obj())
-        cohort_obj()$plot_colors %>%
-            tibble::enframe(., name = "group", value = "color") %>%
-            dplyr::inner_join(cohort_obj()$group_tbl, by = "group") %>%
+        cohort_obj()$group_tbl %>%
             dplyr::select(
                 `Sample Group` = group,
                 `Group Name` = name,
