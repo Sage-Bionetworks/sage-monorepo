@@ -46,7 +46,7 @@ create_cohort_object <- function(
 ){
     sample_ids <- filter_obj$sample_ids
     if (group_choice %in% c("Immune Subtype", "TCGA Subtype", "TCGA Study")) {
-        cohort_object <- create_tag_cohort_object(sample_ids, group_choice)
+        cohort_object <- create_tag_cohort_object(sample_ids, dataset, group_choice)
     } else if (group_choice == "Driver Mutation") {
         cohort_object <- create_dm_cohort_object(sample_ids, driver_mutation)
     } else if (group_choice == "Immune Feature Bins") {
@@ -71,35 +71,37 @@ create_cohort_object <- function(
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select
 #' @importFrom rlang .data
-create_tag_cohort_object <- function(sample_ids, group_choice){
-    cohort_tbl  <- build_cohort_tbl_by_group(sample_ids, group_choice)
+create_tag_cohort_object <- function(sample_ids, dataset, tag){
+    cohort_tbl  <- build_cohort_tbl_by_tag(sample_ids, dataset, tag)
     colors_list <- cohort_tbl %>%
         dplyr::select(.data$group, .data$color) %>%
         create_plot_colors_list
     list(
         "sample_tbl"  = dplyr::select(cohort_tbl, "sample_id", "group"),
         "group_tbl"   = create_tag_group_tbl(cohort_tbl),
-        "group_name"  = group_choice,
+        "group_name"  = tag,
         "plot_colors" = colors_list
     )
 }
 
-#' Build Cohort Tibble By Group
+#' Build Cohort Tibble By Tag
 #'
 #' @param sample_ids Integers in the id column of the samples table
 #' @param group A String that is the display column of the tags table
 #' @importFrom magrittr %>%
-build_cohort_tbl_by_group <- function(sample_ids, group){
-    paste0(
-        "SELECT sts.sample_id, g.name AS group, g.display AS name, ",
-        "g.characteristics, g.color FROM (",
-        create_parent_group_query_from_display(group),
-        ") g INNER JOIN samples_to_tags sts ON g.id = sts.tag_id ",
-        "WHERE sample_id IN (",
-        numeric_values_to_query_list(sample_ids),
-        ")"
-    ) %>%
-        perform_query("Build Cohort Tibble By Group")
+build_cohort_tbl_by_tag <- function(sample_ids, dataset, tag){
+    iatlas.app::query_cohort_selector(dataset, tag) %>%
+        print() %>%
+        tidyr::unnest(cols = c("sampleIds")) %>%
+        dplyr::select(
+            "color",
+            "name" = "display",
+            "characteristics",
+            "sample_id" = "sampleIds",
+            "group" = "name",
+            "count" = "sampleCount"
+        ) %>%
+        dplyr::filter(.data$sample_id %in% c(sample_ids))
 }
 
 #' Create Tag Group Tibble

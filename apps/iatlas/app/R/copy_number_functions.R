@@ -68,8 +68,8 @@ build_cnv_feature_list <- function(){
 }
 
 # TODO: add dataset as parameter
-build_cnv_result_tbl <- function(tag_ids){
-    query <- paste0(
+# build_cnv_result_tbl <- function(tag_ids){
+#     query <- paste0(
         #         "SELECT direction, mean_normal, mean_cnv, log10_p_value, t_stat, ",
         #         create_id_to_hgnc_subquery(),
         #         ", ",
@@ -78,7 +78,7 @@ build_cnv_result_tbl <- function(tag_ids){
         #         create_id_to_tag_name_subquery(),
         #         " FROM copy_number_results a WHERE "
         #     )
-}
+# }
 
 
 
