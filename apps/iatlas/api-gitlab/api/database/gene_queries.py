@@ -36,9 +36,9 @@ gene_type_related_fields = ['gene_type_assoc', 'genes']
 sub_related_fields = ['genes']
 
 
-def return_gene_query(*args):
+def return_gene_query(*args, model=Gene):
     return build_general_query(
-        Gene, args=args,
+        model, args=args,
         accepted_option_args=gene_related_fields,
         accepted_query_args=gene_core_fields)
 

@@ -53,7 +53,9 @@ def test_build_option_args():
     test_2 = build_option_args(
         expected_value_1, expected_value_2, accepted_args=accepted_args)
     assert test_1 and isinstance(test_1, list)
+    assert len(test_1) == 1
     assert test_2 and isinstance(test_2, list)
+    assert len(test_2) == 2
     assert not build_option_args(expected_value_1)
     assert not build_option_args(expected_value_1, [])
 

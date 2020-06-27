@@ -11,12 +11,12 @@ type Feature {
   value: FeatureValue
 }
 
-type FeatureByClass {
+type FeaturesByClass {
   class: String!
   features: [Feature!]!
 }
 
-type FeatureByTag {
+type FeaturesByTag {
   characteristics: String
   display: String
   features: [Feature!]!

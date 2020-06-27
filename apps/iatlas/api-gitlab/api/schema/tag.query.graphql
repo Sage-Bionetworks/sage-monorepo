@@ -4,7 +4,7 @@ type Tag {
     display: String
     name: String!
     sampleCount: Int!
-    sampleIds: [Int!]
+    samples: [String!]
 }
 
 """

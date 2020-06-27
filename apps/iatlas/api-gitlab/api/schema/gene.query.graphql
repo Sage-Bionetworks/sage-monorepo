@@ -10,6 +10,7 @@ type Gene {
     immuneCheckpoint: String
     pathway: String
     publications: [SimplePublication!]
+    rnaSeqExpr: Float
     superCategory: String
     therapyType: String
 }
@@ -20,4 +21,11 @@ type SimpleGene {
     description: String
     friendlyName: String
     ioLandscapeName: String
+}
+
+type GenesByTag {
+    characteristics: String
+    display: String
+    genes: [Gene!]!
+    tag: String!
 }
