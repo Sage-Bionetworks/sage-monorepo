@@ -11,7 +11,7 @@ def test_tags_query_with_feature(client, dataset, related, chosen_feature):
             display
             name
             sampleCount
-            sampleIds
+            samples
         }
     }"""
     response = client.post(
@@ -29,7 +29,7 @@ def test_tags_query_with_feature(client, dataset, related, chosen_feature):
         assert type(data_set['display']) is str or NoneType
         assert type(data_set['name']) is str
         assert type(data_set['sampleCount']) is int
-        assert isinstance(data_set['sampleIds'], list)
+        assert isinstance(data_set['samples'], list)
 
 
 def test_tags_query_no_feature(client, dataset, related):
@@ -66,7 +66,7 @@ def test_tags_query_with_feature_class(client, dataset, related, feature_class):
             display
             name
             sampleCount
-            sampleIds
+            samples
         }
     }"""
     response = client.post(
@@ -84,4 +84,4 @@ def test_tags_query_with_feature_class(client, dataset, related, feature_class):
         assert type(data_set['display']) is str or NoneType
         assert type(data_set['name']) is str
         assert type(data_set['sampleCount']) is int
-        assert isinstance(data_set['sampleIds'], list)
+        assert isinstance(data_set['samples'], list)
