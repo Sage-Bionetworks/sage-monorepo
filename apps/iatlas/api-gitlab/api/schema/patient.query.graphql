@@ -1,0 +1,10 @@
+type Patient {
+  id: Int!
+  age: Int
+  barcode: String!
+  ethnicity: String
+  gender: String
+  height: Int
+  race: String
+  weight: Int
+}
