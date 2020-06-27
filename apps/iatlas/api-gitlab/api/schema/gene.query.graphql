@@ -22,3 +22,10 @@ type SimpleGene {
     friendlyName: String
     ioLandscapeName: String
 }
+
+type GenesByTag {
+    characteristics: String
+    display: String
+    genes: [Gene!]!
+    tag: String!
+}
