@@ -237,6 +237,7 @@ query SingleVariable {
         tag {
             name
         }
+        feature (Simple feature type)
         pValue
         foldChange
         log10pValue

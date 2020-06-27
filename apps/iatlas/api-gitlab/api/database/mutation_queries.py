@@ -28,8 +28,8 @@ def return_mutation_query(*args):
 def return_mutation_code_query(*args):
     return build_general_query(
         MutationCode, args=args,
-        accepted_option_args=mutation_related_fields,
-        accepted_query_args=mutation_core_fields)
+        accepted_option_args=mutation_code_related_fields,
+        accepted_query_args=mutation_code_core_fields)
 
 
 def return_mutation_type_query(*args):
