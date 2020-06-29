@@ -75,7 +75,12 @@ create_cohort_object <- function(
 create_tag_cohort_object <- function(sample_ids, dataset, tag){
     cohort_tbl  <- build_cohort_tbl_by_tag(sample_ids, dataset, tag)
     sample_tbl   <- cohort_tbl %>%
-        dplyr::select("sample_id", "group")
+        dplyr::select("sample_id", "group") %>%
+        dplyr::inner_join(
+            "SELECT id AS sample_id, name AS sample_name FROM samples" %>%
+                perform_query(),
+            by = "sample_id"
+        )
     group_tbl <- cohort_tbl %>%
         dplyr::select(-"sample_id") %>%
         dplyr::distinct()
