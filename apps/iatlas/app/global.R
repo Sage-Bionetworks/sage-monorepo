@@ -1,10 +1,6 @@
 library(magrittr)
 
-source("R/database_functions.R")
-pool <- connect_to_db()
-rm(connect_to_db)
-
-source("R/api_functions.R")
+pool <- iatlas.app::connect_to_db()
 iatlas.app::create_and_add_all_queries_to_qry_obj()
 
 source("R/create_queries.R")

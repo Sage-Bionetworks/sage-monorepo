@@ -10,31 +10,38 @@ immune_feature_distributions_server <- function(
     source("R/immune_feature_distributions_functions.R", local = T)
     source("R/modules/server/submodules/distribution_plot_server.R", local = T)
 
-    output$selection_ui <- shiny::renderUI({
+    features_tbl <- shiny::reactive({
         shiny::req(cohort_obj())
+        iatlas.app::query_features_by_class(
+            cohort_obj()$dataset,
+            cohort_obj()$group_name
+        ) %>%
+            tidyr::unnest(cols = c("features"))
+    })
+
+    output$selection_ui <- shiny::renderUI({
+        shiny::req(features_tbl())
         shiny::selectInput(
-            ns("feature_choice_id"),
+            ns("feature_choice_name"),
             label = "Select or Search for Variable",
-            selected = .GlobalEnv$get_feature_id_from_display(
-                "Leukocyte Fraction"
-            ),
-            choices = .GlobalEnv$create_nested_named_list(
-                cohort_obj()$feature_tbl, values_col = "id"
+            selected = "leukocyte_fraction",
+            choices = iatlas.app::create_nested_named_list(
+                features_tbl(), values_col = "name"
             )
         )
     })
 
-    feature_name <- shiny::reactive({
-        shiny::req(input$feature_choice_id)
-        input$feature_choice_id %>%
-            as.integer() %>%
-            .GlobalEnv$get_feature_display_from_id()
+    feature_choice_display <- shiny::reactive({
+        shiny::req(input$feature_choice_name, features_tbl())
+        features_tbl() %>%
+            dplyr::filter(name == input$feature_choice_name) %>%
+            dplyr::pull(display)
     })
 
     feature_plot_label <- shiny::reactive({
-        shiny::req(input$scale_method_choice)
+        shiny::req(input$scale_method_choice, feature_choice_display())
         .GlobalEnv$transform_feature_string(
-            feature_name(),
+            feature_choice_display(),
             input$scale_method_choice
         )
     })
