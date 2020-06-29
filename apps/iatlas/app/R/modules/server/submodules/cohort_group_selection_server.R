@@ -17,11 +17,11 @@ cohort_group_selection_server <- function(
         # "Gender",          "TCGA",   "sample",
         # "Race",            "TCGA",   "sample",
         # "Ethnicity",       "TCGA",   "sample",
-        "Immune Feature Bins", "TCGA",    NA,    "Immune_Feature_Bins",
-        "Driver Mutation",     "TCGA",    NA,    "Driver_Mutation",
+        # "Immune Feature Bins", "TCGA",    NA,    "Immune_Feature_Bins",
+        # "Driver Mutation",     "TCGA",    NA,    "Driver_Mutation",
         "Immune Subtype",      "PCAWG",   "tag", "Immune_Subtype",
-        # "PCAWG Study",         "PCAWG",   "tag",
-        "Immune Feature Bins", "PCAWG",   NA,    "Immune_Feature_Bins"
+        "PCAWG Study",         "PCAWG",   "tag", "PCAWG_Study"
+        # "Immune Feature Bins", "PCAWG",   NA,    "Immune_Feature_Bins"
         # "Gender",          "PCAWG",  "sample",
         # "Race",            "PCAWG",  "sample"
     )
