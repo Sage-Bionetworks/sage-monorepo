@@ -40,7 +40,7 @@ immune_feature_distributions_server <- function(
 
     feature_plot_label <- shiny::reactive({
         shiny::req(input$scale_method_choice, feature_choice_display())
-        .GlobalEnv$transform_feature_string(
+        iatlas.app::transform_feature_string(
             feature_choice_display(),
             input$scale_method_choice
         )
@@ -49,12 +49,12 @@ immune_feature_distributions_server <- function(
     distplot_tbl <- shiny::reactive({
         shiny::req(
             cohort_obj(),
-            input$feature_choice_id,
+            input$feature_choice_name,
             input$scale_method_choice
         )
-        build_ifd_distplot_tbl(
+        iatlas.app::build_ifd_distplot_tbl(
             cohort_obj()$sample_tbl,
-            input$feature_choice_id,
+            input$feature_choice_name,
             input$scale_method_choice
         )
     })
@@ -66,6 +66,6 @@ immune_feature_distributions_server <- function(
         distplot_tbl    = distplot_tbl,
         distplot_type   = shiny::reactive(input$plot_type_choice),
         distplot_ylab   = feature_plot_label,
-        distplot_title  = feature_name
+        distplot_title  = feature_choice_display
     )
 }
