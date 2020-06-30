@@ -7,7 +7,6 @@ immune_feature_distributions_server <- function(
 
     ns <- session$ns
 
-    source("R/immune_feature_distributions_functions.R", local = T)
     source("R/modules/server/submodules/distribution_plot_server.R", local = T)
 
     features_tbl <- shiny::reactive({
