@@ -47,19 +47,21 @@ create_cohort_object <- function(
 ){
     sample_ids <- filter_obj$sample_ids
     if (group_choice %in% c("Immune_Subtype", "TCGA_Subtype", "TCGA_Study")) {
-        cohort_object <- create_tag_cohort_object(sample_ids, dataset, group_choice)
-    } else if (group_choice == "Driver_Mutation") {
-        cohort_object <- create_dm_cohort_object(sample_ids, driver_mutation)
-    } else if (group_choice == "Immune_Feature_Bins") {
-        cohort_object <- create_feature_bin_cohort_object(
-            sample_ids,
-            immune_feature_bin_id,
-            immune_feature_bin_number
-        )
+        cohort_object <- iatlas.app::create_tag_cohort_object(sample_ids, dataset, group_choice)
+    # } else if (group_choice == "Driver_Mutation") {
+    #     cohort_object <- create_dm_cohort_object(sample_ids, driver_mutation)
+    # } else if (group_choice == "Immune_Feature_Bins") {
+    #     cohort_object <- create_feature_bin_cohort_object(
+    #         sample_ids,
+    #         immune_feature_bin_id,
+    #         immune_feature_bin_number
+    #     )
     }
     cohort_object$dataset     <- dataset
     cohort_object$filters     <- filter_obj$filters
-    cohort_object$feature_tbl <- build_feature_tbl(sample_ids = sample_ids)
+    cohort_object$feature_tbl <-
+        iatlas.app::query_features_by_class(dataset, group_choice) %>%
+        tidyr::unnest(cols = c("features"))
     return(cohort_object)
 }
 
