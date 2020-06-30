@@ -11,7 +11,7 @@ query_cohort_selector <- function(
             featureClass = list()
         )
     ) %>%
-        purrr::pluck("data", 1) %>%
+        purrr::pluck(1) %>%
         dplyr::as_tibble()
 }
 
@@ -30,6 +30,6 @@ query_features_by_class <- function(
             featureClass = feature_class
         )
     ) %>%
-        purrr::pluck("data", 1) %>%
+        purrr::pluck(1) %>%
         dplyr::as_tibble()
 }

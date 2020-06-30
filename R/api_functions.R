@@ -32,21 +32,17 @@ create_and_add_all_queries_to_qry_obj <- function(
     purrr::walk2(query_names, query_files, add_ghql_query_from_text_file)
 }
 
-connect_to_api <- function(url = 'http://localhost:5000/api'){
-    ghql::GraphqlClient$new(url)
-}
-
 perform_api_query <- function(
     query_name,
     variables,
-    qry_obj = .GlobalEnv$ghql_query_object
+    qry_obj = .GlobalEnv$ghql_query_object,
+    api_url = "http://localhost:5000/api"
 ){
-    con <- connect_to_api()
+    query <- qry_obj$queries[[query_name]]
+    con <- ghql::GraphqlClient$new(api_url)
     result <-
-        con$exec(
-            qry_obj$queries[[query_name]],
-            variables
-        ) %>%
-        jsonlite::fromJSON()
+        con$exec(query, variables) %>%
+        jsonlite::fromJSON() %>%
+        purrr::pluck("data")
     return(result)
 }
