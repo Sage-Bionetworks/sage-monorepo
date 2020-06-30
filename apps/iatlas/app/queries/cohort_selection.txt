@@ -5,6 +5,6 @@ query CohortSelector($dataSet: [String!]!, $related: [String!]!, $feature: [Stri
     color
     name
     sampleCount
-    sampleIds
+    samples
   }
 }
