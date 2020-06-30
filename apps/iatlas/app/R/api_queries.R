@@ -33,3 +33,12 @@ query_features_by_class <- function(
         purrr::pluck(1) %>%
         dplyr::as_tibble()
 }
+
+query_samples_to_features <- function(features = list()){
+    iatlas.app::perform_api_query(
+        "samples_to_features",
+        list(features = features)
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble()
+}

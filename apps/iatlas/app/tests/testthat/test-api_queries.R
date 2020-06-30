@@ -25,6 +25,18 @@ with_test_api_env({
             )
         )
     })
+
+    test_that("query_samples_to_features", {
+        result <- query_samples_to_features("leukocyte_fraction")
+        expect_named(
+            result,
+            c(
+                "name",
+                "sample",
+                "value"
+            )
+        )
+    })
 })
 
 
