@@ -1,0 +1,6 @@
+query SamplesToFeatures($feature: [String!]) {
+  features(feature: $feature){
+    sample
+    value
+  }
+}
