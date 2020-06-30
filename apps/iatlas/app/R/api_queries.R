@@ -42,3 +42,12 @@ query_samples_to_features <- function(features = list()){
         purrr::pluck(1) %>%
         dplyr::as_tibble()
 }
+
+query_samples_to_feature <- function(feature){
+    iatlas.app::perform_api_query(
+        "samples_to_feature",
+        list(feature = feature)
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble()
+}
