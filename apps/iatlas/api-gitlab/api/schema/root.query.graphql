@@ -1,9 +1,30 @@
 type Query {
-    features(dataSet: [String!], related: [String!], feature: [String!], featureClass: [String!]): [Feature]!
-    featuresByClass(dataSet: [String!], related: [String!], feature: [String!], featureClass: [String!]): [FeatureByClass]!
-    featuresByTag(dataSet: [String!]!, related: [String!]!, feature: [String!], featureClass: [String!]): [FeatureByTag]!
-    gene(entrez: Int!): Gene
-    genes(entrez: [Int!]): [Gene]!
-    tags(dataSet: [String!]!, related: [String!]!, feature: [String!], featureClass: [String]): [Tag]!
-    test: String!
+  driverResults(features: [Int!]): [DriverResult]
+  features(
+    dataSet: [String!]
+    related: [String!]
+    feature: [String!]
+    featureClass: [String!]
+  ): [Feature]!
+  featuresByClass(
+    dataSet: [String!]
+    related: [String!]
+    feature: [String!]
+    featureClass: [String!]
+  ): [FeatureByClass]!
+  featuresByTag(
+    dataSet: [String!]!
+    related: [String!]!
+    feature: [String!]
+    featureClass: [String!]
+  ): [FeatureByTag]!
+  gene(entrez: Int!): Gene
+  genes(entrez: [Int!]): [Gene]!
+  tags(
+    dataSet: [String!]!
+    related: [String!]!
+    feature: [String!]
+    featureClass: [String]
+  ): [Tag]!
+  test: String!
 }
