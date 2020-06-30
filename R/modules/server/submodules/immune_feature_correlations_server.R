@@ -7,18 +7,17 @@ immune_feature_correlations_server <- function(
 
     ns <- session$ns
 
-    source("R/immune_feature_correlations_functions.R", local = T)
     source("R/modules/server/submodules/plotly_server.R", local = T)
 
-    lf_id <- .GlobalEnv$get_feature_id_from_display("Leukocyte Fraction")
-    dna_alteration_id <- .GlobalEnv$get_class_id_from_name("DNA Alteration")
-    sample_name_tbl   <- .GlobalEnv$build_sample_name_tbl()
+    lf_id <- iatlas.app::get_feature_id_from_display("Leukocyte Fraction")
+    dna_alteration_id <- iatlas.app::get_class_id_from_name("DNA Alteration")
+    sample_name_tbl   <- iatlas.app::build_sample_name_tbl()
 
     output$class_selection_ui <- shiny::renderUI({
         shiny::selectInput(
             inputId  = ns("class_choice_id"),
             label    = "Select or Search for Variable Class",
-            choices  = .GlobalEnv$get_class_list_from_cohort_obj(cohort_obj()),
+            choices  = iatlas.app::get_class_list_from_cohort_obj(cohort_obj()),
             selected = dna_alteration_id
         )
     })
@@ -28,7 +27,7 @@ immune_feature_correlations_server <- function(
         shiny::selectInput(
             inputId  = ns("response_choice_id"),
             label    = "Select or Search for Response Variable",
-            choices  = .GlobalEnv$create_nested_named_list(
+            choices  = iatlas.app::create_nested_named_list(
                 cohort_obj()$feature_tbl, values_col = "id"
             ),
             selected = lf_id
@@ -39,17 +38,17 @@ immune_feature_correlations_server <- function(
         shiny::req(input$response_choice_id)
         input$response_choice_id %>%
             as.integer() %>%
-            .GlobalEnv$get_feature_display_from_id()
+            iatlas.app::get_feature_display_from_id()
     })
 
     response_tbl <- shiny::reactive({
         shiny::req(input$response_choice_id)
-        .GlobalEnv$build_feature_value_tbl_from_ids(input$response_choice_id)
+        iatlas.app::build_feature_value_tbl_from_ids(input$response_choice_id)
     })
 
     feature_tbl <- shiny::reactive({
         shiny::req(input$class_choice_id)
-        .GlobalEnv$build_feature_value_tbl_from_class_ids(input$class_choice_id)
+        iatlas.app::build_feature_value_tbl_from_class_ids(input$class_choice_id)
     })
 
     value_tbl <- shiny::reactive({
