@@ -30,6 +30,7 @@ type Query {
   ): [GenesByTag!]!
   mutation(id: Int!): Mutation
   mutations(id: [Int!]): [Mutation]
+  mutationTypes: [MutationType]
   patient(barcode: String): Patient
   patients(barcode: [String!]): [Patient!]!
   sample(id: Int, name: String): Sample

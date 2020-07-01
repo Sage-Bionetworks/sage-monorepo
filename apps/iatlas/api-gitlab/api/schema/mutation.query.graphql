@@ -5,3 +5,8 @@ type Mutation {
   mutationType: String
   samples: [Sample!]
 }
+
+type MutationType {
+  display: String
+  name: String
+}
