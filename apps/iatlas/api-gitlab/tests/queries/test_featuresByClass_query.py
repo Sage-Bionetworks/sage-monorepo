@@ -40,10 +40,10 @@ def test_featuresByClass_query_with_feature(client, dataset, related, chosen_fea
             assert type(feature['methodTag']) is str or NoneType
             assert feature['name'] == chosen_feature
             assert type(feature['order']) is int or NoneType
-            assert type(feature["sample"]) is str or NoneType
+            assert type(feature['sample']) is str or NoneType
             assert feature['unit'] in unit_enum.enums or type(
                 feature['unit']) is NoneType
-            assert type(feature["value"]) is str or float or NoneType
+            assert type(feature['value']) is str or float or NoneType
 
 
 def test_featuresByClass_query_with_feature_no_sample_or_value(client, dataset, related, chosen_feature):
@@ -234,7 +234,7 @@ def test_featuresByClass_query_no_args(client):
 
 
 def test_featuresByClass_query_with_feature_class(client, dataset, related, chosen_feature, feature_class):
-    query = """query FeaturesByClass($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!]) {
+    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
         featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
             class
             features {
@@ -260,3 +260,61 @@ def test_featuresByClass_query_with_feature_class(client, dataset, related, chos
         for feature in data_set['features'][0:2]:
             assert feature['class'] == feature_class
             assert feature['name'] == chosen_feature
+
+
+def test_featuresByClass_query_with_just_feature_class(client, feature_class):
+    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
+        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+            class
+            features {
+                class
+                name
+            }
+        }
+    }"""
+    response = client.post(
+        '/api', json={'query': query,
+                      'variables': {'featureClass': [feature_class]}})
+    json_data = json.loads(response.data)
+    data_sets = json_data['data']['featuresByClass']
+
+    assert isinstance(data_sets, list)
+    for data_set in data_sets:
+        assert data_set['class'] == feature_class
+        assert isinstance(data_set['features'], list)
+        # Don't need to iterate through every result.
+        for feature in data_set['features'][0:2]:
+            assert feature['class'] == feature_class
+            assert type(feature['name']) is str
+
+
+def test_featuresByClass_query_with_just_feature_and_feature_class(client, feature_class):
+    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
+        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+            class
+            features {
+                class
+                name
+                sample
+                value
+            }
+        }
+    }"""
+    chosen_feature = 'NP_mean'
+    response = client.post(
+        '/api', json={'query': query,
+                      'variables': {'feature': [chosen_feature],
+                                    'featureClass': [feature_class]}})
+    json_data = json.loads(response.data)
+    data_sets = json_data['data']['featuresByClass']
+
+    assert isinstance(data_sets, list)
+    for data_set in data_sets:
+        assert data_set['class'] == feature_class
+        assert isinstance(data_set['features'], list)
+        # Don't need to iterate through every result.
+        for feature in data_set['features'][0:2]:
+            assert feature['class'] == feature_class
+            assert feature['name'] == chosen_feature
+            assert type(feature['sample']) is str or NoneType
+            assert type(feature['value']) is str or float or NoneType
