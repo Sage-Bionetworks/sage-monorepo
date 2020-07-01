@@ -1,25 +1,26 @@
-from sqlalchemy import orm
+from sqlalchemy import and_, orm
 from api import db
 from api.database import return_gene_query
 from api.db_models import (
-    Gene, GeneFamily, GeneFunction, GeneToSample, GeneType, ImmuneCheckpoint,
-    Pathway, Publication, SuperCategory, Tag, TherapyType)
+    Dataset, DatasetToSample, Gene, GeneFamily, GeneFunction, GeneToSample, GeneType,
+    ImmuneCheckpoint, Pathway, Publication, SuperCategory, Sample, SampleToTag, Tag,
+    TagToTag, TherapyType)
 from .general_resolvers import build_option_args, get_selection_set
+from .tag import request_tags
 
 
-def build_gene_request(_obj, info, dataSet=None, related=None, geneType=None, entrez=None, byTag=False):
+def build_gene_request(_obj, info, data_set=None, related=None, gene_type=None, entrez=None, samples=None, by_tag=False):
     """
     Builds a SQL request and returns values from the DB.
     """
     sess = db.session
 
     selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, byTag, child_node='genes')
+        info.field_nodes[0].selection_set, by_tag, child_node='genes')
 
     gene_1 = orm.aliased(Gene, name='g')
     gene_family_1 = orm.aliased(GeneFamily, name='gf')
     gene_function_1 = orm.aliased(GeneFunction, name='gfn')
-    gene_to_sample_1 = orm.aliased(GeneToSample, name='gs')
     gene_type_1 = orm.aliased(GeneType, name='gt')
     immune_checkpoint_1 = orm.aliased(ImmuneCheckpoint, name='ic')
     pathway_1 = orm.aliased(Pathway, name='py')
@@ -47,7 +48,6 @@ def build_gene_request(_obj, info, dataSet=None, related=None, geneType=None, en
     core = build_option_args(selection_set, core_field_mapping)
     relations = build_option_args(selection_set, related_field_mapping)
     option_args = []
-    entity_args = []
 
     query = sess.query(gene_1)
 
@@ -62,7 +62,7 @@ def build_gene_request(_obj, info, dataSet=None, related=None, geneType=None, en
         option_args.append(orm.contains_eager(
             gene_1.gene_function.of_type(gene_function_1)))
 
-    if 'gene_types' in relations or geneType:
+    if 'gene_types' in relations or gene_type:
         query = query.join((gene_type_1, gene_1.gene_types), isouter=True)
         option_args.append(orm.contains_eager(
             gene_1.gene_types.of_type(gene_type_1)))
@@ -99,11 +99,21 @@ def build_gene_request(_obj, info, dataSet=None, related=None, geneType=None, en
     else:
         query = sess.query(*core)
 
-    if geneType:
-        query = query.filter(gene_type_1.name.in_(geneType))
+    if gene_type:
+        query = query.filter(gene_type_1.name.in_(gene_type))
 
     if entrez:
         query = query.filter(gene_1.entrez.in_(entrez))
+
+    if samples:
+        sample_1 = orm.aliased(Sample, name='s')
+        gene_to_sample_1 = orm.aliased(GeneToSample, name='gs')
+        query = query.join(gene_to_sample_1,
+                           and_(gene_1.id == gene_to_sample_1.gene_id,
+                                gene_to_sample_1.sample_id.in_(
+                                    sess.query(sample_1.id).filter(
+                                        sample_1.name.in_(samples))
+                                )))
 
     return query
 
@@ -111,13 +121,14 @@ def build_gene_request(_obj, info, dataSet=None, related=None, geneType=None, en
 def request_gene(_obj, info, entrez=None):
     if entrez:
         entrez = [entrez]
-        query = build_gene_request(_obj, info, entrez=entrez, byTag=False)
+        query = build_gene_request(_obj, info, entrez=entrez)
         return query.one_or_none()
     return None
 
 
-def request_genes(_obj, info, dataSet=None, related=None, entrez=None, geneType=None, byTag=False):
-    query = build_gene_request(
-        _obj, info, dataSet=dataSet, related=related, entrez=entrez, geneType=geneType, byTag=byTag)
+def request_genes(_obj, info, data_set=None, related=None, entrez=None, gene_type=None, samples=None, by_tag=False):
+    query = build_gene_request(_obj, info, data_set=data_set, related=related,
+                               entrez=entrez, gene_type=gene_type, samples=samples,
+                               by_tag=by_tag)
     query = query.distinct()
     return query.all()

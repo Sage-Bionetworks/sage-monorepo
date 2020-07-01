@@ -22,6 +22,8 @@ type Query {
   genesByTag(
     dataSet: [String!]!,
     related: [String!]!,
+    feature: [String!],
+    featureClass: [String!],
     entrez: [Int!],
     geneType: [String!]
   ): [GenesByTag!]!
