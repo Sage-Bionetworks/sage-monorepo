@@ -13,7 +13,7 @@ def build_driver_result_request(_obj, info, features=[None]):
     sess = db.session
 
     selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, byTag, child_node='driver_results')
+        info.field_nodes[0].selection_set, child_node='driver_results')
 
     driver_result_1 = orm.aliased(DriverResult, name='dr')
     gene_1 = orm.aliased(Gene, name='g')
@@ -56,9 +56,9 @@ def build_driver_result_request(_obj, info, features=[None]):
             driver_result_1.gene.of_type(gene_1)))
 
     if 'mutationCode' in relations:
-        query = query.join((mutation_code_1, driver_result_1.mutationCode), isouter=True)
+        query = query.join((mutation_code_1, driver_result_1.mutation_code), isouter=True)
         option_args.append(orm.contains_eager(
-            driver_result_1.mutationCode.of_type(mutation_code_1)))
+            driver_result_1.mutation_code.of_type(mutation_code_1)))
 
     if 'tag' in relations:
         query = query.join(
@@ -72,12 +72,12 @@ def build_driver_result_request(_obj, info, features=[None]):
         query = sess.query(*core)
 
     if features:
-        query = query.filter(driver_result_1.feature.in_(features))
+        query = query.filter(driver_result_1.feature_id.in_(features))
 
     return query
 
 def request_driver_results(_obj, info, features=[None]):
-query = build_driver_result_request(
-    _obj, info, features=features)
-query = query.distinct()
-return query.all()
+    query = build_driver_result_request(
+        _obj, info, features=features)
+    query = query.distinct()
+    return query.all()
