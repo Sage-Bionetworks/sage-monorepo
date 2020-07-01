@@ -27,9 +27,9 @@ services:
       - ~/.gitconfig:/root/.gitconfig:delegated
       - ~/.ssh:/root/.ssh:delegated
       - iatlas-api-dev-root-vol:/root:delegated
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
 volumes:
   iatlas-api-dev-root-vol:
-networks:
-  default:
-    external:
-      name: postgres

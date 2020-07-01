@@ -5,3 +5,8 @@ type Sample {
   patient: Patient
   tags: [SimpleTag!]
 }
+
+type SimpleSample {
+  name: String!
+  patient: Patient
+}

@@ -1,4 +1,10 @@
-type Dataset {
-  name: String
+type DataSet {
+  name: String!
+  display: String
+  samples: [SimpleSample!]
+}
+
+type SimpleDataSet {
+  name: String!
   display: String
 }

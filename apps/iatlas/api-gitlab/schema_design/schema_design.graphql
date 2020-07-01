@@ -61,6 +61,35 @@ type SimpleTag {
     name: String!
 }
 
+# Make many small queries as the filtering as done in steps.
+
+# Get features by class - pass min and max value and a feature name, Get only samples that fit.
+
+# Get driver mutation by mutation type
+
+# Choose a mutatio and get all the samples related to that mutation
+
+samples_by_mutation_status {
+    status {
+        sample_name
+    }
+}
+
+
+
+# Get a list of all datasets for a dropdown
+query dataSets {
+    display
+}
+
+# Get all tags associated with a dataset
+query groups(dataset: [String!]) {
+    characteristics: String
+    display: String
+    features: [Feature!]!
+    name: String!
+}
+
 query CohortSelecter {
     # Accepts these args:
     #   dataSet: an array of strings (ie TCGA or PCAWG from tags)
@@ -183,6 +212,9 @@ query Immunomodulators {
 
 For IO Target Distributions
 query ioTargets {
+
+    # Like tags but with rna expr instead of samples.
+
     # For Group dropdown hand coded "Pathway", "Therapy Type"
     # For Search genes dropdown load all genes that have something in the Group dropdown (in io_targets gene type and related to samples related to dataset)
 

@@ -28,14 +28,14 @@ def build_feature_to_sample_join_condition(features_to_samples_model,
     return feature_to_sample_join_condition
 
 
-def request_features(_obj, info, dataSet=None, related=None, feature=None, featureClass=None, byClass=False, byTag=False):
+def request_features(_obj, info, data_set=None, related=None, feature=None, feature_class=None, by_class=False, by_tag=False):
     """
     Builds a SQL request and returns values from the DB.
     """
     sess = db.session
 
     selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, byClass or byTag)
+        info.field_nodes[0].selection_set, by_class or by_tag)
 
     class_1 = orm.aliased(FeatureClass, name='fc')
     feature_1 = orm.aliased(Feature, name='f')
@@ -44,53 +44,53 @@ def request_features(_obj, info, dataSet=None, related=None, feature=None, featu
     sample_1 = orm.aliased(Sample, name='s')
     tag_1 = orm.aliased(Tag, name='t')
 
+    core_field_node_mapping = {'display': feature_1.display.label('display'),
+                               'name': feature_1.name.label('name'),
+                               'order': feature_1.order.label('order'),
+                               'unit': feature_1.unit.label('unit')}
+
     related_field_node_mapping = {'class': 'class',
                                   'methodTag': 'method_tag',
                                   'sample': 'sample',
                                   'value': 'value'}
 
-    select_field_node_mapping = {'display': feature_1.display.label('display'),
-                                 'name': feature_1.name.label('name'),
-                                 'order': feature_1.order.label('order'),
-                                 'unit': feature_1.unit.label('unit')}
-
     # Only select fields that were requested.
-    select_fields = build_option_args(selection_set, select_field_node_mapping)
-    option_args = build_option_args(selection_set, related_field_node_mapping)
-    if option_args or byClass or byTag:
+    select_fields = build_option_args(selection_set, core_field_node_mapping)
+    relations = set(build_option_args(
+        selection_set, related_field_node_mapping))
+    if relations or by_class or by_tag:
         join_class = 'class'
         join_method_tag = 'method_tag'
         join_sample = 'sample'
         join_value = 'value'
-        if join_class in option_args or byClass:
-            select_fields.append(class_1.name.label('class'))
-            if join_class not in option_args:
-                option_args.append(join_class)
-        if byTag:
+        if join_class in relations or by_class:
+            select_fields.append(class_1.name.label(join_class))
+            relations.add(join_class)
+        if by_tag:
             select_fields.append(tag_1.name.label('tag'))
             select_fields.append(tag_1.display.label('tag_display'))
             select_fields.append(
                 tag_1.characteristics.label('tag_characteristics'))
-        if join_method_tag in option_args:
-            select_fields.append(method_tag_1.name.label('method_tag'))
-        if join_sample in option_args:
-            select_fields.append(sample_1.name.label('sample'))
-        if join_value in option_args:
-            select_fields.append(feature_to_sample_1.value.label('value'))
+        if join_method_tag in relations:
+            select_fields.append(method_tag_1.name.label(join_method_tag))
+        if join_sample in relations:
+            select_fields.append(sample_1.name.label(join_sample))
+        if join_value in relations:
+            select_fields.append(feature_to_sample_1.value.label(join_value))
             select_fields.append(feature_to_sample_1.inf_value.label('inf'))
 
     query = sess.query(*select_fields)
 
-    if not dataSet and not related:
+    if not data_set and not related:
         query = query.select_from(feature_1)
 
         if feature:
             query = query.filter(feature_1.name.in_(feature))
 
-        if 'sample' in option_args or 'value' in option_args:
+        if 'sample' in relations or 'value' in relations:
             query = query.join(feature_to_sample_1,
                                feature_to_sample_1.feature_id == feature_1.id, isouter=True)
-            if 'sample' in option_args:
+            if 'sample' in relations:
                 query = query.join(sample_1, sample_1.id ==
                                    feature_to_sample_1.sample_id, isouter=True)
     else:
@@ -109,12 +109,12 @@ def request_features(_obj, info, dataSet=None, related=None, feature=None, featu
         query = query.join(feature_to_sample_1, and_(
             *feature_to_sample_join_condition))
 
-        if dataSet:
+        if data_set:
             query = query.join(dataset_to_sample_1,
                                and_(dataset_to_sample_1.sample_id == feature_to_sample_1.sample_id,
                                     dataset_to_sample_1.dataset_id.in_(
                                         sess.query(dataset_1.id).filter(
-                                            dataset_1.name.in_(dataSet))
+                                            dataset_1.name.in_(data_set))
                                     )))
 
         if related:
@@ -124,7 +124,7 @@ def request_features(_obj, info, dataSet=None, related=None, feature=None, featu
                                         sess.query(related_tag.id).filter(
                                             related_tag.name.in_(related)))))
 
-            if byTag:
+            if by_tag:
                 query = query.join(
                     tag_1, tag_to_tag_1.tag_id == tag_1.id, isouter=True)
 
@@ -136,17 +136,20 @@ def request_features(_obj, info, dataSet=None, related=None, feature=None, featu
         query = query.join(feature_1, feature_1.id ==
                            feature_to_sample_1.feature_id)
 
-        if 'sample' in option_args:
+        if 'sample' in relations:
             query = query.join(
                 sample_1, feature_to_sample_1.sample_id == sample_1.id, isouter=True)
 
-    if 'class' in option_args or featureClass:
+    if 'class' in relations or feature_class or by_class:
+        class_join_is_outer = True
+        if feature_class:
+            class_join_is_outer = False
         classes_join_condition = build_classes_join_condition(
-            feature_1, class_1, featureClass)
+            feature_1, class_1, feature_class)
         query = query.join(class_1, and_(
-            *classes_join_condition), isouter=True)
+            *classes_join_condition), isouter=class_join_is_outer)
 
-    if 'method_tag' in option_args:
+    if 'method_tag' in relations:
         query = query.join(
             method_tag_1, feature_1.method_tag_id == method_tag_1.id, isouter=True)
 

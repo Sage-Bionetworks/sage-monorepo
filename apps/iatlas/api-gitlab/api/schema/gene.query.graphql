@@ -25,6 +25,7 @@ type SimpleGene {
 
 type GenesByTag {
     characteristics: String
+    color: String
     display: String
     genes: [Gene!]!
     tag: String!
