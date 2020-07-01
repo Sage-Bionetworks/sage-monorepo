@@ -20,6 +20,8 @@ gene_type_query = load_schema_from_path(
     schema_dirname + '/gene_type.query.graphql')
 mutation_query = load_schema_from_path(
     schema_dirname + '/mutation.query.graphql')
+mutation_code_query = load_schema_from_path(
+    schema_dirname + '/mutationCode.query.graphql')
 patient_query = load_schema_from_path(
     schema_dirname + '/patient.query.graphql')
 publication_query = load_schema_from_path(
@@ -29,7 +31,7 @@ slide_query = load_schema_from_path(schema_dirname + '/slide.query.graphql')
 tag_query = load_schema_from_path(schema_dirname + '/tag.query.graphql')
 
 type_defs = [root_query, dataset_query, driver_result_query, feature_query, gene_query, gene_type_query,
-             mutation_query, patient_query, publication_query, sample_query,
+             mutation_query, mutation_code_query, patient_query, publication_query, sample_query,
              slide_query, tag_query]
 
 # Initialize custom scalars.
@@ -53,6 +55,7 @@ gene = ObjectType('Gene')
 genes_by_tag = ObjectType('GenesByTag')
 gene_type = ObjectType('GeneType')
 mutation = ObjectType('Mutation')
+mutation_code = ObjectType('MutationCode')
 patient = ObjectType('Patient')
 publication = ObjectType('Publication')
 sample = ObjectType('Sample')
@@ -88,7 +91,7 @@ root.set_field('test', resolve_test)
 schema = make_executable_schema(
     type_defs,
     [root, dataset, driver_result, feature, features_by_class, features_by_tag,
-     feature_value_type, gene, genes_by_tag, gene_type, mutation,
+     feature_value_type, gene, genes_by_tag, gene_type, mutation, mutation_code,
      patient, publication, sample, simple_gene, simple_gene_type,
      simple_publication, simple_tag, slide, tag]
 )
