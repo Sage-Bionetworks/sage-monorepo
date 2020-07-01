@@ -3,7 +3,7 @@ from api import db
 from api.db_models import DriverResult
 from .database_helpers import build_general_query
 
-related_fields = ['features', 'genes', 'mutations', 'tags']
+related_fields = ['feature', 'gene', 'mutationCode', 'tag']
 
 core_fields = ['p_value', 'fold_change', 'log10_p_value', 'log10_fold_change', 'n_wt', 'n_mut', 'feature_id', 'gene_id', 'mutation_code_id', 'tag_id']
 

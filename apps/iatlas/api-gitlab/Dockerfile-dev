@@ -3,7 +3,7 @@ ARG pythonImageVersion
 FROM python:${pythonImageVersion}
 
 WORKDIR /project
-COPY . /project
+COPY ./requirements.txt /project/requirements.txt
 
 RUN apk add --no-cache bash
 RUN apk add openssh

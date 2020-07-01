@@ -187,18 +187,39 @@ query ioTargets {
     # For Search genes dropdown load all genes that have something in the Group dropdown (in io_targets gene type and related to samples related to dataset)
 
     # For visualization:
-    getGenes(dataset: [], type: [immunomodulator], group: []) {
+    # Accepts these args:
+    #   dataSet: an array of strings (ie TCGA or PCAWG from tags)
+    #   related: an array of strings (ie Immune_Subtype related to dataset from tags)
+    #   type: an array of strings (gene types from genes_to_types)
+    #   entrez: an array of integers
+    getGenesByTag(dataset: [String!]!, type: [String!], related: [String!], entrez: [String!]) {
         group {
             display
             characteristics
             genes {
                 entrez
                 hgnc
-                io_landscape_name
-                pathway
-                therapyType
                 description
-                rna_seq_expr (from genes_to_samples)
+                friendlyName
+                ioLandscapeName
+                geneFamily
+                geneFunction
+                geneTypes [{
+                    name
+                    display
+                }]
+                immuneCheckpoint
+                pathway
+                publication {
+                    pubmed_id
+                    journal
+                    firstAuthorLastName
+                    year
+                    title
+                }
+                rnaSeqExpr (from genes_to_samples)
+                superCategory
+                therapyType
             }
         }
     }
@@ -216,6 +237,7 @@ query SingleVariable {
         tag {
             name
         }
+        feature (Simple feature type)
         pValue
         foldChange
         log10pValue

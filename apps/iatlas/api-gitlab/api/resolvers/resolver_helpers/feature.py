@@ -31,29 +31,6 @@ def build_feature_to_sample_join_condition(features_to_samples_model,
 def request_features(_obj, info, dataSet=None, related=None, feature=None, featureClass=None, byClass=False, byTag=False):
     """
     Builds a SQL request and returns values from the DB.
-
-    The query may be larger or smaller depending on the requested fields.
-    An example of the full query in SQL:
-
-    SELECT DISTINCT
-        feature_1."name" AS "name",
-        feature_1.display AS display,
-        feature_1."order" AS "order",
-        feature_1.unit AS unit,
-        class_1.name AS class,
-        method_tag_1.name AS method_tag
-    FROM samples_to_tags AS sample_to_tag_1
-    INNER JOIN features_to_samples AS feature_to_sample_1 ON feature_to_sample_1.sample_id = sample_to_tag_1.sample_id AND feature_to_sample_1.feature_id
-        IN(SELECT chosen_features.id FROM features AS chosen_features WHERE chosen_features."name" IN('Neutrophils_Aggregate2'))
-    INNER JOIN datasets_to_samples AS datasets_to_samples_1 ON feature_to_sample_1.sample_id = datasets_to_samples_1.sample_id AND datasets_to_samples_1.dataset_id
-        IN(SELECT dataset_1.id FROM datasets AS dataset_1 WHERE dataset_1."name" IN('TCGA'))
-    INNER JOIN tags_to_tags AS tag_to_tag_1 ON sample_to_tag_1.tag_id = tag_to_tag_1.related_tag_id AND tag_to_tag_1.related_tag_id
-        IN(SELECT related_tag.id FROM tags AS related_tag WHERE related_tag."name" IN('Immune_Subtype'))
-    INNER JOIN samples_to_tags AS sample_to_tag_2 ON sample_to_tag_2.sample_id = feature_to_sample_1.sample_id
-        AND tag_to_tag_1.tag_id = sample_to_tag_2.tag_id
-    JOIN features AS feature_1 ON feature_1.id = feature_to_sample_1.feature_id
-    JOIN classes AS class_1 ON class_1.id = feature_1.class_id
-    JOIN method_tags AS method_tag_1 ON method_tag_1.id = feature_1.method_tag_id
     """
     sess = db.session
 
@@ -87,7 +64,8 @@ def request_features(_obj, info, dataSet=None, related=None, feature=None, featu
         join_value = 'value'
         if join_class in option_args or byClass:
             select_fields.append(class_1.name.label('class'))
-            option_args.append(join_class)
+            if join_class not in option_args:
+                option_args.append(join_class)
         if byTag:
             select_fields.append(tag_1.name.label('tag'))
             select_fields.append(tag_1.display.label('tag_display'))

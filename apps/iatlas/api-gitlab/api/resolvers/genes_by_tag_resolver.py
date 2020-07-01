@@ -1,12 +1,24 @@
 from .resolver_helpers import get_value, request_genes
 
 
-def resolve_genes(_obj, info, entrez=None, geneType=None):
-    genes = request_genes(_obj, info, entrez=entrez,
-                          geneType=geneType, byTag=False)
+def resolve_genes_by_tag(_obj, info, dataSet, related, entrez=None, geneType=None):
+    results = request_genes(_obj, info, dataSet=dataSet, related=related,
+                            entrez=entrez, geneType=geneType, byTag=True)
 
-    return [
-        {
+    tag_map = dict()
+    for row in results:
+        gene_tag = get_value(row, 'tag')
+        if not gene_tag in tag_map:
+            tag_map[gene_tag] = [row]
+        else:
+            tag_map[gene_tag].append(row)
+
+    return []
+
+    return [{
+        'characteristics': get_value(value[0], 'tag_characteristics'),
+        'display': get_value(value[0], 'tag_display'),
+        'genes': [{
             'entrez': get_value(gene, 'entrez'),
             'hgnc': get_value(gene, 'hgnc'),
             'description': get_value(gene, 'description'),
@@ -29,4 +41,6 @@ def resolve_genes(_obj, info, entrez=None, geneType=None):
             } for publication in get_value(gene, 'publications', [])],
             'superCategory': get_value(get_value(gene, 'super_category')),
             'therapyType': get_value(get_value(gene, 'therapy_type'))
-        } for gene in genes]
+        } for gene in value],
+        'tag': key
+    } for key, value in tag_map.items()]

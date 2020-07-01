@@ -1,0 +1,6 @@
+type Slide {
+  id: Int!
+  name: String!
+  description: String
+  patient: Patient
+}
