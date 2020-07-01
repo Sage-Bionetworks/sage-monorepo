@@ -3,7 +3,7 @@ import os
 
 def get_database_uri():
     HOST = os.environ['POSTGRES_HOST']
-    if 'POSTGRES_PORT' in os.environ:
+    if 'POSTGRES_PORT' in os.environ and os.environ['POSTGRES_PORT'] != 'None':
         HOST = HOST + ':' + os.environ['POSTGRES_PORT']
     POSTGRES = {
         'user': os.environ['POSTGRES_USER'],
