@@ -1,4 +1,5 @@
 type Query {
+  dataSets(dataSet: [String!], sample: [String!]): [DataSet!]
   features(
     dataSet: [String!]
     related: [String!]

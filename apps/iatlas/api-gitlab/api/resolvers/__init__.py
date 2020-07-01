@@ -1,3 +1,4 @@
+from .data_sets_resolver import resolve_data_sets
 from .gene_resolver import resolve_gene
 from .genes_resolver import resolve_genes
 from .genes_by_tag_resolver import resolve_genes_by_tag
