@@ -14,6 +14,7 @@ dataset_query = load_schema_from_path(
     schema_dirname + '/dataset.query.graphql')
 feature_query = load_schema_from_path(
     schema_dirname + '/feature.query.graphql')
+filter_types = load_schema_from_path(schema_dirname + '/filters.graphql')
 gene_query = load_schema_from_path(schema_dirname + '/gene.query.graphql')
 gene_type_query = load_schema_from_path(
     schema_dirname + '/gene_type.query.graphql')
@@ -27,9 +28,9 @@ sample_query = load_schema_from_path(schema_dirname + '/sample.query.graphql')
 slide_query = load_schema_from_path(schema_dirname + '/slide.query.graphql')
 tag_query = load_schema_from_path(schema_dirname + '/tag.query.graphql')
 
-type_defs = [root_query, dataset_query, feature_query, gene_query, gene_type_query,
-             mutation_query, patient_query, publication_query, sample_query,
-             slide_query, tag_query]
+type_defs = [root_query, dataset_query, feature_query, filter_types, gene_query,
+             gene_type_query, mutation_query, patient_query, publication_query,
+             sample_query, slide_query, tag_query]
 
 # Initialize custom scalars.
 feature_value_type = ScalarType('FeatureValue')
@@ -40,6 +41,9 @@ def serialize_feature_value(value):
     if type(value) is str or type(value) is float:
         return value
 
+
+# Initialize filter types.
+cohort_filter = ObjectType('Cohort')
 
 # Initialize schema objects (general).
 root = ObjectType('Query')

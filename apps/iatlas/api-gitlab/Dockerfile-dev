@@ -17,6 +17,6 @@ RUN apk add --no-cache --virtual .build-deps \
     && pip install --no-cache-dir -r requirements.txt \
     && apk del --no-cache .build-deps
 ### These are only insalled in the development environment.
-RUN pip install autopep8 pylint pylint_flask_sqlalchemy pytest coverage
+RUN pip install autopep8 pylint pylint_flask_sqlalchemy pytest pytest-xdist coverage
 
 CMD ["sh", "-c", "flask run --host 0.0.0.0 --port ${FLASK_RUN_PORT}"]
