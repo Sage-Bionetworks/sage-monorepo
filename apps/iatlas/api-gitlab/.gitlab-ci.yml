@@ -20,9 +20,9 @@ tests:
   script:
     - apk add postgresql-libs
     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
-    - pip install pytest pytest-xdist coverage
+    - pip install pytest coverage
     - export DATABASE_URI=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST/$POSTGRES_DB
-    - coverage run -m pytest -n auto
+    - coverage run -m pytest
     - coverage html
   artifacts:
     expose_as: "coverage-initial"
@@ -39,9 +39,9 @@ tests:coverage-report:
   script:
     - apk add postgresql-libs
     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
-    - pip install pytest pytest-xdist coverage
+    - pip install pytest coverage
     - export DATABASE_URI=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST/$POSTGRES_DB
-    - coverage run -m pytest -n auto
+    - coverage run -m pytest
     - coverage xml -o coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
     - coverage report --skip-covered | grep TOTAL
   artifacts:
