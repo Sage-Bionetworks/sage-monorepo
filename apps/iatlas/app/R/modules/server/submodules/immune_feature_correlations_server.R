@@ -37,22 +37,23 @@ immune_feature_correlations_server <- function(
         )
     })
 
-    response_name <- shiny::reactive({
-        shiny::req(input$response_choice_id)
-        input$response_choice_id %>%
-            as.integer() %>%
-            iatlas.app::get_feature_display_from_id()
+    response_choice_display <- shiny::reactive({
+        shiny::req(input$response_choice)
+        cohort_obj()$feature_tbl %>%
+            dplyr::filter(name == input$response_choice) %>%
+            dplyr::pull(display)
     })
-    #
-    # response_tbl <- shiny::reactive({
-    #     shiny::req(input$response_choice_id)
-    #     iatlas.app::build_feature_value_tbl_from_ids(input$response_choice_id)
-    # })
-    #
-    # feature_tbl <- shiny::reactive({
-    #     shiny::req(input$class_choice_id)
-    #     iatlas.app::build_feature_value_tbl_from_class_ids(input$class_choice_id)
-    # })
+
+    response_tbl <- shiny::reactive({
+        shiny::req(input$response_choice)
+        iatlas.app::query_samples_to_feature(input$response_choice)
+    })
+
+    feature_tbl <- shiny::reactive({
+        shiny::req(input$class_choice)
+        iatlas.app::build_feature_value_tbl_from_class_ids(input$class_choice_id)
+    })
+
     #
     # value_tbl <- shiny::reactive({
     #     shiny::req(response_tbl(), feature_tbl(), cohort_obj())
