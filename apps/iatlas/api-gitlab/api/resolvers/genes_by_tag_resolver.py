@@ -14,9 +14,6 @@ def resolve_genes_by_tag(_obj, info, dataSet, related, feature=None, featureClas
 
         tag_name = get_value(row, 'tag')
 
-        print('tag_name: ', tag_name)
-        print('gene_results length: ', len(gene_results))
-
         if gene_results:
             results.append({
                 'characteristics': get_value(row, 'characteristics'),
