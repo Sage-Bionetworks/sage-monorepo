@@ -47,14 +47,6 @@ def build_data_set_request(_obj, info, data_set=None, sample=None):
     return query
 
 
-def request_data_set(_obj, info, name=None):
-    if name:
-        name = [name]
-        query = build_data_set_request(_obj, info, name=name)
-        return query.one_or_none()
-    return None
-
-
 def request_data_sets(_obj, info, data_set=None, sample=None):
     query = build_data_set_request(
         _obj, info, data_set=data_set, sample=sample)
