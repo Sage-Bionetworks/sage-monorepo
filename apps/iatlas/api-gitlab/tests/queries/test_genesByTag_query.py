@@ -10,8 +10,8 @@ def gene_type():
 
 
 def test_genesByTag_query_with_entrez(client, dataset, related, entrez, hgnc):
-    query = """query GenesByTag($dataSet: [String!]!, $related: [String!]!, $entrez: [Int!], $geneType: [String!]) {
-        genesByTag(dataSet: $dataSet, related: $related, entrez: $entrez, geneType: $geneType) {
+    query = """query GenesByTag($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!], $entrez: [Int!], $geneType: [String!]) {
+        genesByTag(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass, entrez: $entrez, geneType: $geneType) {
             tag
             characteristics
             display
@@ -71,8 +71,8 @@ def test_genesByTag_query_with_entrez(client, dataset, related, entrez, hgnc):
 
 
 def test_genesByTag_query_no_entrez(client, dataset, related):
-    query = """query GenesByTag($dataSet: [String!]!, $related: [String!]!, $entrez: [Int!], $geneType: [String!]) {
-        genesByTag(dataSet: $dataSet, related: $related, entrez: $entrez, geneType: $geneType) {
+    query = """query GenesByTag($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!], $entrez: [Int!], $geneType: [String!]) {
+        genesByTag(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass, entrez: $entrez, geneType: $geneType) {
             tag
             characteristics
             display
@@ -103,8 +103,8 @@ def test_genesByTag_query_no_entrez(client, dataset, related):
 
 
 def test_genesByTag_query_no_relations(client, dataset, related, entrez, hgnc):
-    query = """query GenesByTag($dataSet: [String!]!, $related: [String!]!, $entrez: [Int!], $geneType: [String!]) {
-        genesByTag(dataSet: $dataSet, related: $related, entrez: $entrez, geneType: $geneType) {
+    query = """query GenesByTag($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!], $entrez: [Int!], $geneType: [String!]) {
+        genesByTag(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass, entrez: $entrez, geneType: $geneType) {
             tag
             characteristics
             display
@@ -136,8 +136,8 @@ def test_genesByTag_query_no_relations(client, dataset, related, entrez, hgnc):
 
 
 def test_genesByTag_query_with_gene_type(client, dataset, related, entrez, hgnc, gene_type):
-    query = """query GenesByTag($dataSet: [String!]!, $related: [String!]!, $entrez: [Int!], $geneType: [String!]) {
-        genesByTag(dataSet: $dataSet, related: $related, entrez: $entrez, geneType: $geneType) {
+    query = """query GenesByTag($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!], $entrez: [Int!], $geneType: [String!]) {
+        genesByTag(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass, entrez: $entrez, geneType: $geneType) {
             tag
             characteristics
             display
@@ -171,6 +171,6 @@ def test_genesByTag_query_with_gene_type(client, dataset, related, entrez, hgnc,
             gene_types = gene['geneTypes']
             assert gene['entrez'] == entrez
             assert gene['hgnc'] == hgnc
-            assert isinstance(geneTypes, list)
+            assert isinstance(gene_types, list)
             for current_type in gene_types:
                 assert current_type['name'] == gene_type
