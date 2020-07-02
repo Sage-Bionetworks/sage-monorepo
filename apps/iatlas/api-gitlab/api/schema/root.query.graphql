@@ -1,5 +1,6 @@
 type Query {
   dataSets(dataSet: [String!], sample: [String!]): [DataSet!]
+  driverResults(features: [Int!]): [DriverResult]
   features(
     dataSet: [String!]
     related: [String!]
@@ -21,11 +22,11 @@ type Query {
   gene(entrez: Int!): Gene
   genes(entrez: [Int!], geneType: [String!]): [Gene!]!
   genesByTag(
-    dataSet: [String!]!,
-    related: [String!]!,
-    feature: [String!],
-    featureClass: [String!],
-    entrez: [Int!],
+    dataSet: [String!]!
+    related: [String!]!
+    feature: [String!]
+    featureClass: [String!]
+    entrez: [Int!]
     geneType: [String!]
   ): [GenesByTag!]!
   mutation(id: Int!): Mutation

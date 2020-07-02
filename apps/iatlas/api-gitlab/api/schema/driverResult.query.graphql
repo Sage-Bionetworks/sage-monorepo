@@ -1,0 +1,12 @@
+type DriverResult {
+  feature: Feature
+  gene: Gene
+  tag: SimpleTag
+  mutationCode: MutationCode
+  pValue: Float
+  foldChange: Float
+  log10PValue: Float
+  log10FoldChange: Float
+  n_wt: Int
+  n_mut: Int
+}
