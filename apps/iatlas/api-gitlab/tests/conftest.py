@@ -3,7 +3,7 @@ from api import create_app
 from tests import db, TestConfig
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='session')
 def app():
     app = create_app(TestConfig)
     app.test_request_context().push()
@@ -19,7 +19,7 @@ def client():
         yield client
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='session')
 def test_db(app):
     from api import db
     yield db
