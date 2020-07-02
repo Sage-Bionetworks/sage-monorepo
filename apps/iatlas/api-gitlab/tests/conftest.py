@@ -58,3 +58,8 @@ def entrez():
 @pytest.fixture(scope='session')
 def hgnc():
     return 'CXCL10'
+
+
+@pytest.fixture(scope='session')
+def mutation_type():
+    return 'driver_mutation'

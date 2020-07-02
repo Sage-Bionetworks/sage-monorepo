@@ -1,8 +1,8 @@
 from ariadne import load_schema_from_path, make_executable_schema, ObjectType, ScalarType
 import os
 from api.resolvers import (
-    resolve_data_sets, resolve_driver_results, resolve_features, resolve_features_by_class, resolve_features_by_tag,
-    resolve_gene, resolve_genes, resolve_genes_by_tag, resolve_mutation, resolve_mutations,
+    resolve_data_sets, resolve_driver_results, resolve_features, resolve_features_by_class,
+    resolve_features_by_tag, resolve_gene, resolve_genes, resolve_genes_by_tag, resolve_mutations,
     resolve_mutation_types, resolve_patient, resolve_patients, resolve_sample, resolve_samples,
     resolve_slide, resolve_slides, resolve_tags, resolve_test)
 
@@ -12,7 +12,8 @@ schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 root_query = load_schema_from_path(schema_dirname + '/root.query.graphql')
 data_set_query = load_schema_from_path(
     schema_dirname + '/dataset.query.graphql')
-driver_result_query = load_schema_from_path(schema_dirname + '/driverResult.query.graphql')
+driver_result_query = load_schema_from_path(
+    schema_dirname + '/driverResult.query.graphql')
 feature_query = load_schema_from_path(
     schema_dirname + '/feature.query.graphql')
 gene_query = load_schema_from_path(schema_dirname + '/gene.query.graphql')
@@ -80,7 +81,6 @@ root.set_field('featuresByTag', resolve_features_by_tag)
 root.set_field('gene', resolve_gene)
 root.set_field('genes', resolve_genes)
 root.set_field('genesByTag', resolve_genes_by_tag)
-root.set_field('mutation', resolve_mutation)
 root.set_field('mutations', resolve_mutations)
 root.set_field('mutationTypes', resolve_mutation_types)
 root.set_field('patient', resolve_patient)
@@ -96,7 +96,7 @@ root.set_field('test', resolve_test)
 schema = make_executable_schema(
     type_defs,
     [root, data_set, driver_result, feature, features_by_class, features_by_tag,
-     feature_value_type, gene, genes_by_tag, gene_type, mutation, mutation_code, 
+     feature_value_type, gene, genes_by_tag, gene_type, mutation, mutation_code,
      mutation_type, patient, publication, sample, simple_data_set,
      simple_gene, simple_gene_type, simple_publication, simple_sample,
      simple_tag, slide, tag]
