@@ -70,6 +70,9 @@ Build Container:
   only:
     - staging
   stage: build_container
+  image: docker:19.03.1-dind
+  services:
+    - name: docker:19.03.1-dind
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $STAGING_CONTAINER_NAME .
