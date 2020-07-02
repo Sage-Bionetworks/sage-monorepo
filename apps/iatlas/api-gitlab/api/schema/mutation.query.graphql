@@ -1,9 +1,9 @@
 type Mutation {
   id: Int!
-  gene: String
+  gene: SimpleGene
   mutationCode: String
-  mutationType: String
-  samples: [Sample!]
+  mutationType: MutationType
+  samples: [SimpleSample!]
 }
 
 type MutationType {

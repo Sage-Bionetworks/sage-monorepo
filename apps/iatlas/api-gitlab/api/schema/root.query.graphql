@@ -29,8 +29,11 @@ type Query {
     entrez: [Int!]
     geneType: [String!]
   ): [GenesByTag!]!
-  mutation(id: Int!): Mutation
-  mutations(id: [Int!]): [Mutation]
+  mutations(
+    entrez: [Int!]
+    mutationCode: [String!]
+    mutationType: [String!]
+  ): [Mutation!]
   mutationTypes: [MutationType]
   patient(barcode: String): Patient
   patients(barcode: [String!]): [Patient!]!
