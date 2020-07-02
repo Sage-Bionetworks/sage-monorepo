@@ -24,7 +24,8 @@ def build_mutation_request(_obj, info, entrez=None, mutation_code=None, mutation
 
     related_field_mapping = {'gene': 'gene',
                              'mutationCode': 'mutation_code',
-                             'mutationType': 'mutation_type'}
+                             'mutationType': 'mutation_type',
+                             'samples': 'samples'}
 
     core = build_option_args(selection_set, core_field_mapping)
     relations = build_option_args(selection_set, related_field_mapping)
