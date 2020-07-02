@@ -1,6 +1,5 @@
 from sqlalchemy import orm
 from api import db
-from api.database import return_driver_results_query
 from api.db_models import (
     DriverResult, Gene, MutationCode, Tag, Feature)
 from .general_resolvers import build_option_args, get_selection_set
