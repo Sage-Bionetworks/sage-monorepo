@@ -1,12 +1,4 @@
 type Sample {
-  features: [Feature!]
-  genes: [Gene!]
-  name: String!
-  patient: Patient
-  tags: [SimpleTag!]
-}
-
-type SimpleSample {
   name: String!
   patient: Patient
 }

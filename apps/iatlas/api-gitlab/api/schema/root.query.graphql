@@ -37,8 +37,7 @@ type Query {
   mutationTypes: [MutationType]
   patient(barcode: String): Patient
   patients(barcode: [String!]): [Patient!]!
-  sample(id: Int, name: String): Sample
-  samples(id: [Int!], name: [String!]): [Sample!]!
+  samples(name: [String!], patient: [String!]): [Sample!]!
   slide(id: Int, name: String): Slide
   slides(id: [Int!], name: [String!]): [Slide!]!
   tags(

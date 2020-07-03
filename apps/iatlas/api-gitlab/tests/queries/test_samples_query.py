@@ -1,55 +1,66 @@
 import json
 import pytest
-from tests import NoneType
 
 
-def test_samples_query_with_relations(client):
-    query = """query Samples($id: [Int!]) {
-        samples(id: $id) {
+@pytest.fixture(scope='module')
+def sample_name():
+    return 'DO1328'
+
+
+@pytest.fixture(scope='module')
+def patient_barcode():
+    return 'DO1328'
+
+
+def test_samples_query_with_passed_sample_name(client, sample_name):
+    query = """query Samples($name: [String!], $patient: [String!]) {
+        samples(name: $name, patient: $patient) {
             name
-            patient{
-                barcode
-                age
-                race
-            }
-            features{
-                name
-                value
-            }
-            tags{
-                characteristics
-                color
-                display
-                name
-            }
+            patient { barcode }
         }
     }"""
-    id = [1,2]
     response = client.post(
-        '/api', json={'query': query, 'variables': {'id': id}})
+        '/api', json={'query': query, 'variables': {'name': [sample_name]}})
     json_data = json.loads(response.data)
-    samples = json_data["data"]["samples"]
+    samples = json_data['data']['samples']
 
     assert isinstance(samples, list)
-    for sample in samples[0:1]:
-        assert type(sample["name"]) is str or NoneType
-        assert type(sample["patient"]) is object or NoneType
-        assert isinstance(sample["features"], list) or NoneType
-        assert isinstance(sample["tags"], list) or NoneType
+    assert len(samples) == 1
+    for sample in samples[0:2]:
+        patient = sample['patient']
+        assert sample['name'] == sample_name
+        if patient:
+            assert type(patient['barcode']) is str
 
 
-def test_samples_query_no_relations(client):
-    query = """query Sample($id: [Int!]) {
-        samples(id: $id) {
+def test_samples_query_with_passed_patient_barcode(client, patient_barcode):
+    query = """query Samples($name: [String!], $patient: [String!]) {
+        samples(name: $name, patient: $patient) {
+            name
+            patient { barcode }
+        }
+    }"""
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'patient': [patient_barcode]}})
+    json_data = json.loads(response.data)
+    samples = json_data['data']['samples']
+
+    assert isinstance(samples, list)
+    for sample in samples[0:2]:
+        assert type(sample['name']) is str
+        assert sample['patient']['barcode'] == patient_barcode
+
+
+def test_samples_query_with_no_args(client):
+    query = """query Samples($name: [String!], $patient: [String!]) {
+        samples(name: $name, patient: $patient) {
             name
         }
     }"""
-    id = [1,2]
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'id': id}})
+    response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
-    samples = json_data["data"]["samples"]
+    samples = json_data['data']['samples']
 
     assert isinstance(samples, list)
-    for sample in samples[0:1]:
-        assert type(sample["name"]) is str or NoneType
+    for sample in samples[0:2]:
+        assert type(sample['name']) is str

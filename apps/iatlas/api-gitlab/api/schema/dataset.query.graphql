@@ -1,7 +1,7 @@
 type DataSet {
   name: String!
   display: String
-  samples: [SimpleSample!]
+  samples: [Sample!]
 }
 
 type SimpleDataSet {
