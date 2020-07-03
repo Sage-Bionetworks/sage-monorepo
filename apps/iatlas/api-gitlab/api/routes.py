@@ -1,8 +1,10 @@
-from .main import bp
-from .schema import schema
 from ariadne import graphql_sync
 from ariadne.constants import PLAYGROUND_HTML
+from ariadne.contrib.tracing.apollotracing import ApolloTracingExtensionSync
 from flask import current_app, jsonify, request
+import os
+from .main import bp
+from .schema import schema
 
 
 @bp.route("/graphiql", methods=["GET"])
@@ -19,6 +21,9 @@ def graphql_playgroud():
 def graphql_server():
     # GraphQL queries are always sent as POST
     data = request.get_json()
+    extensions = None
+    if ('FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] != 'production'):
+        extensions = [ApolloTracingExtensionSync]
 
     # Note: Passing the request to the context is optional.
     # In Flask, the current request is always accessible as flask.request
@@ -26,7 +31,8 @@ def graphql_server():
         schema,
         data,
         context_value=request,
-        debug=current_app.debug
+        debug=current_app.debug,
+        extensions=extensions
     )
 
     status_code = 200 if success else 400
