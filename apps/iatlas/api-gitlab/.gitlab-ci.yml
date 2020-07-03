@@ -80,6 +80,7 @@ Build Container:
   services:
     - name: docker:19.03.1-dind
   script:
+    - export FLASK_ENV=staging
     - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $STAGING_CONTAINER_NAME .
     - docker push $STAGING_CONTAINER_NAME
