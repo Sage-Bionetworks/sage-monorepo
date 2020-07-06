@@ -37,6 +37,11 @@ type Query {
   mutationTypes: [MutationType]
   patient(barcode: String): Patient
   patients(barcode: [String!]): [Patient!]!
+
+  """
+  The "samples" query accepts a list of sample names or a list of patient barcodes.
+  If no filters are passed, this will return all samples.
+  """
   samples(name: [String!], patient: [String!]): [Sample!]!
   slide(id: Int, name: String): Slide
   slides(id: [Int!], name: [String!]): [Slide!]!
