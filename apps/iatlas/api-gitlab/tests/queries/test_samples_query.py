@@ -64,3 +64,23 @@ def test_samples_query_with_no_args(client):
     assert isinstance(samples, list)
     for sample in samples[0:2]:
         assert type(sample['name']) is str
+
+
+def test_samples_query_with_all_args(client, patient_barcode, sample_name):
+    query = """query Samples($name: [String!], $patient: [String!]) {
+        samples(name: $name, patient: $patient) {
+            name
+            patient { barcode }
+        }
+    }"""
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'patient': [patient_barcode],
+            'sample': [sample_name]}})
+    json_data = json.loads(response.data)
+    samples = json_data['data']['samples']
+
+    assert isinstance(samples, list)
+    for sample in samples[0:2]:
+        assert sample['name'] == sample_name
+        assert sample['patient']['barcode'] == patient_barcode
