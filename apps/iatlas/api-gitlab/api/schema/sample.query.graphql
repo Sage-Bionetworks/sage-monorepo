@@ -1,3 +1,11 @@
+"""
+The "Sample" type may return the sample's name (often the "sample" portion of
+a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/)).
+It may also return a Patient object.
+
+There may only ever be one patient to a sample though a patient may be related
+to many samples.
+"""
 type Sample {
   name: String!
   patient: Patient
