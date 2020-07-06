@@ -67,7 +67,7 @@ type SimpleTag {
 
 # Get driver mutation by mutation type
 
-# Choose a mutatio and get all the samples related to that mutation
+# Choose a mutation and get all the samples related to that mutation
 
 samples_by_mutation_status {
     status {

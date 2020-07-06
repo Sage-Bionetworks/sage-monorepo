@@ -1,9 +1,7 @@
 from sqlalchemy import and_, orm
 from api import db
-from api.database import return_gene_query
 from api.db_models import Gene, Mutation, MutationCode, MutationType, Sample
 from .general_resolvers import build_option_args, get_selection_set
-from .tag import request_tags
 
 
 def build_mutation_request(_obj, info, entrez=None, mutation_code=None, mutation_type=None):

@@ -21,6 +21,10 @@ def graphql_playgroud():
 def graphql_server():
     # GraphQL queries are always sent as POST
     data = request.get_json()
+
+    # By default, no extensions.
+    # If the FLASK_ENV environment variable is set to something
+    # other than 'production', enable Apollo Tracing.
     extensions = None
     if ('FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] != 'production'):
         extensions = [ApolloTracingExtensionSync]

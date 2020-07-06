@@ -22,3 +22,9 @@ type FeaturesByTag {
   features: [Feature!]!
   tag: String!
 }
+
+type SimpleFeature {
+  display: String
+  name: String!
+  order: Int
+}

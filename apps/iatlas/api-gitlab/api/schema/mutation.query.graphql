@@ -3,7 +3,7 @@ type Mutation {
   gene: SimpleGene
   mutationCode: String
   mutationType: MutationType
-  samples: [SimpleSample!]
+  samples: [Sample!]
 }
 
 type MutationType {

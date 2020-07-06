@@ -3,7 +3,7 @@ import os
 from api.resolvers import (
     resolve_data_sets, resolve_driver_results, resolve_features, resolve_features_by_class,
     resolve_features_by_tag, resolve_gene, resolve_genes, resolve_genes_by_tag, resolve_mutations,
-    resolve_mutation_types, resolve_patient, resolve_patients, resolve_sample, resolve_samples,
+    resolve_mutation_types, resolve_patient, resolve_patients, resolve_samples,
     resolve_slide, resolve_slides, resolve_tags, resolve_test)
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
@@ -66,10 +66,10 @@ tag = ObjectType('Tag')
 
 # Initialize schema objects (simple).
 simple_data_set = ObjectType('SimpleDataSet')
+simple_feature = ObjectType('SimpleFeature')
 simple_gene = ObjectType('SimpleGene')
 simple_gene_type = ObjectType('SimpleGeneType')
 simple_publication = ObjectType('SimplePublication')
-simple_sample = ObjectType('SimpleSample')
 simple_tag = ObjectType('SimpleTag')
 
 # Associate resolvers with fields.
@@ -85,7 +85,6 @@ root.set_field('mutations', resolve_mutations)
 root.set_field('mutationTypes', resolve_mutation_types)
 root.set_field('patient', resolve_patient)
 root.set_field('patients', resolve_patients)
-root.set_field('sample', resolve_sample)
 root.set_field('samples', resolve_samples)
 root.set_field('slide', resolve_slide)
 root.set_field('slides', resolve_slides)
@@ -97,7 +96,6 @@ schema = make_executable_schema(
     type_defs,
     [root, data_set, driver_result, feature, features_by_class, features_by_tag,
      feature_value_type, gene, genes_by_tag, gene_type, mutation, mutation_code,
-     mutation_type, patient, publication, sample, simple_data_set,
-     simple_gene, simple_gene_type, simple_publication, simple_sample,
-     simple_tag, slide, tag]
+     mutation_type, patient, publication, sample, simple_data_set, simple_feature,
+     simple_gene, simple_gene_type, simple_publication, simple_tag, slide, tag]
 )
