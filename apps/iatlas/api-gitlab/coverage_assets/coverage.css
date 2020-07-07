@@ -10,6 +10,7 @@ body {
     margin: 16px 0 0 0;
 }
 
+#index table.index,
 table {
     margin: 0 auto;
 }
@@ -36,4 +37,14 @@ tr.total {
 #index th.right,
 #index td.right {
     padding-right: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+    tr:nth-child(even) {
+        background: #5c5c5c;
+    }
+
+    tr:nth-child(odd) {
+        background: inherit;
+    }
 }

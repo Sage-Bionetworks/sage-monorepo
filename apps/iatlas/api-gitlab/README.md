@@ -45,6 +45,28 @@ Restart the container with the following command:
 
 If there are changes made to the container or image, first, stop the container `./stop.sh`, then rebuild it and restarted it with `./start.sh --build` or `./start.sh -b`.
 
-Now head on over to
-[http://localhost:5000/graphiql](http://localhost:5000/graphiql)
-and run some queries!
+## Testing
+
+The app uses [Pytest](https://docs.pytest.org/) for testing. It implement the [pytest-xdist](https://pypi.org/project/pytest-xdist/) plugin for running test in parallel and on multiple cores.
+
+Coverage is generated using the [pytest-cov](https://pypi.org/project/pytest-cov/) plugin.
+
+To run a test module simple run:
+
+```bash
+pytest path/to/the/test_file.py -n auto
+```
+
+An individul test may be run in the same manner with:
+
+```bash
+pytest path/to/the/test_file.py::name_of_test_function -n auto
+```
+
+To generate coverage html run:
+
+```bash
+pytest --cov --cov-report html -n auto
+```
+
+The `-n auto` at the end of each command is for running on mutliple cores. `auto` will automatically determine the number of cores to use. Otherwise, one may specify the number explicitly.

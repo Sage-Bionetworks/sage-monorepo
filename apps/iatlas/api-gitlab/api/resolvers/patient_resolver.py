@@ -14,6 +14,7 @@ valid_patient_node_mapping = {
     'race': 'race'
 }
 
+
 def resolve_patient(_obj, info, barcode=None):
     option_args = build_option_args(
         info.field_nodes[0].selection_set,
@@ -32,6 +33,7 @@ def resolve_patient(_obj, info, barcode=None):
         "weight": get_value(patient, 'weight'),
         "race": get_value(patient, 'race')
     }
+
 
 def resolve_patients(_obj, info, barcode):
     option_args = build_option_args(
