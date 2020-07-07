@@ -8,12 +8,32 @@ def name():
     return 'ACC'
 
 
+def test_Tag_no_relations(app, name):
+    query = return_tag_query()
+    result = query.filter_by(name=name).one_or_none()
+
+    assert result
+    assert result.related_tags == []
+    assert result.samples == []
+    assert result.tags == []
+    assert result.copy_number_results == []
+    assert result.driver_results == []
+    assert result.node_tag_assoc == []
+    assert result.nodes == []
+    assert type(result.id) is int
+    assert result.name == name
+    assert type(result.characteristics) is str
+    assert type(result.display) is str or NoneType
+    assert type(result.color) is str or NoneType
+
+
 def test_Tag_with_relations(app, name):
     relations_to_load = ['related_tags', 'samples', 'tags']
 
     query = return_tag_query(*relations_to_load)
-    result = query.filter_by(name=name).first()
+    result = query.filter_by(name=name).one_or_none()
 
+    assert result
     if result.related_tags:
         assert isinstance(result.related_tags, list)
         # Don't need to iterate through every result.
@@ -38,8 +58,9 @@ def test_Tag_with_relations(app, name):
 
 def test_Tag_with_copy_number_results(app, name):
     query = return_tag_query(['copy_number_results'])
-    result = query.filter_by(name=name).first()
+    result = query.filter_by(name=name).one_or_none()
 
+    assert result
     if result.copy_number_results:
         assert isinstance(result.copy_number_results, list)
         # Don't need to iterate through every result.
@@ -49,8 +70,9 @@ def test_Tag_with_copy_number_results(app, name):
 
 def test_Tag_with_driver_results(app, name):
     query = return_tag_query(['driver_results'])
-    result = query.filter_by(name=name).first()
+    result = query.filter_by(name=name).one_or_none()
 
+    assert result
     if result.driver_results:
         assert isinstance(result.driver_results, list)
         # Don't need to iterate through every result.
@@ -60,8 +82,9 @@ def test_Tag_with_driver_results(app, name):
 
 def test_Tag_with_nodes(app, name):
     query = return_tag_query('nodes')
-    result = query.filter_by(name=name).first()
+    result = query.filter_by(name=name).one_or_none()
 
+    assert result
     if result.nodes:
         assert isinstance(result.nodes, list)
         # Don't need to iterate through every result.
@@ -71,28 +94,11 @@ def test_Tag_with_nodes(app, name):
 
 def test_Tag_with_node_tag_assoc(app, name):
     query = return_tag_query('node_tag_assoc')
-    result = query.filter_by(name=name).first()
+    result = query.filter_by(name=name).one_or_none()
 
+    assert result
     if result.node_tag_assoc:
         assert isinstance(result.node_tag_assoc, list)
         # Don't need to iterate through every result.
         for node_tag_rel in result.node_tag_assoc[0:2]:
             assert node_tag_rel.tag_id == result.id
-
-
-def test_Tag_no_relations(app, name):
-    query = return_tag_query()
-    result = query.filter_by(name=name).first()
-
-    assert result.related_tags == []
-    assert result.samples == []
-    assert result.tags == []
-    assert result.copy_number_results == []
-    assert result.driver_results == []
-    assert result.node_tag_assoc == []
-    assert result.nodes == []
-    assert type(result.id) is int
-    assert result.name == name
-    assert type(result.characteristics) is str
-    assert type(result.display) is str or NoneType
-    assert type(result.color) is str or NoneType
