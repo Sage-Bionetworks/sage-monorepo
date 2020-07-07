@@ -3,6 +3,7 @@ from .resolver_helpers import get_value, request_genes, request_tags
 
 def resolve_genes_by_tag(_obj, info, dataSet, related, feature=None, featureClass=None, entrez=None, geneType=None):
     results = []
+    append = results.append
     tag_results = request_tags(_obj, info=info, data_set=dataSet,
                                related=related, feature=feature,
                                feature_class=featureClass, get_samples=True)
@@ -15,7 +16,7 @@ def resolve_genes_by_tag(_obj, info, dataSet, related, feature=None, featureClas
         tag_name = get_value(row, 'tag')
 
         if gene_results:
-            results.append({
+            append({
                 'characteristics': get_value(row, 'characteristics'),
                 'color': get_value(row, 'color'),
                 'display': get_value(row, 'display'),

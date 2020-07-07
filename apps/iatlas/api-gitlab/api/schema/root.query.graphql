@@ -38,11 +38,34 @@ type Query {
   patient(barcode: String): Patient
   patients(barcode: [String!]): [Patient!]!
 
-  """
-  The "samples" query accepts a list of sample names or a list of patient barcodes.
-  If no filters are passed, this will return all samples.
-  """
+"""
+The "samples" query accepts a list of sample names or a list of patient barcodes.
+If no filters are passed, this will return all samples.
+"""
   samples(name: [String!], patient: [String!]): [Sample!]!
+
+"""
+The "samplesByTag" query accepts:
+
+  - "sample", a list of sample names
+  - "patient", a list of patient barcodes
+  - "dataSet", a list of data set names
+  - "related", a list of tag names related to the dataset(s)
+  - "tag", a list of tag names
+  - "feature", a list of feature names
+  - "featureClass", a list of feature class names
+
+If no filters are passed, this will return all samples organized by tag.
+"""
+  samplesByTag(
+    dataSet: [String!]
+    related: [String!]
+    tag: [String!]
+    feature: [String!]
+    featureClass: [String!]
+    name: [String!]
+    patient: [String!]
+  ): [SamplesByTag!]!
   slide(id: Int, name: String): Slide
   slides(id: [Int!], name: [String!]): [Slide!]!
   tags(

@@ -8,10 +8,10 @@ def resolve_features_by_tag(_obj, info, dataSet=None, related=None, feature=None
     tag_map = dict()
     for row in results:
         feature_tag = get_value(row, 'tag')
-        if not feature_tag in tag_map:
-            tag_map[feature_tag] = [row]
-        else:
+        try:
             tag_map[feature_tag].append(row)
+        except KeyError:
+            tag_map[feature_tag] = [row]
 
     return [{
         'characteristics': get_value(value[0], 'tag_characteristics'),
