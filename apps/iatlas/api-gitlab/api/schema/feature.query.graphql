@@ -1,5 +1,23 @@
+"""
+The "FeatureValue" type will always be either a Float or either "inf" or "-inf" representing infinity or negative infinity.
+"""
 scalar FeatureValue
 
+"""
+The "Feature" type may return:
+
+- The feature's "name" (a unique string for this feature).
+- A "display" name, a readable name for the feature.
+- The "order" is a number representing the index order the feature would be displayed in.
+- The "sample" will be the name of the sample related to this feature that is assocoated with the "value".
+- The "value" is the relationship between the feature and the sample.
+- The "unit" is the type of measurement of the value.
+- The "methodTag" is the method tag associated with this feature.
+- The "class" is the feature class associated with this feature.
+
+
+See also "FeaturesByClass", "FeaturesByTag", and "SimpleFeature".
+"""
 type Feature {
   class: String
   display: String
@@ -11,18 +29,43 @@ type Feature {
   value: FeatureValue
 }
 
+"""
+The "FeaturesByClass" type may return:
+
+- The "name" of the feature class.
+- A list of features associated with that feature class.
+"""
 type FeaturesByClass {
   class: String!
   features: [Feature!]!
 }
 
+"""
+The "FeaturesByTag" type may return:
+
+- The "tag" (the name of the tag).
+- The "display", a friendly name for the tag.
+- The "characteristics" of the tag.
+- The "color", a color to represent the tag as a hex value.
+- A list of features associated with that tag.
+"""
 type FeaturesByTag {
   characteristics: String
+  color: String
   display: String
   features: [Feature!]!
   tag: String!
 }
 
+"""
+The "SimpleFeature" type may return:
+
+- The feature's "name" (a unique string for this feature).
+- A "display" name, a readable name for the feature.
+- The "order" is a number representing the index order the feature would be displayed in.
+
+To get more properties of features, please see "Feature", "FeaturesByClass", "FeaturesByTag".
+"""
 type SimpleFeature {
   display: String
   name: String!
