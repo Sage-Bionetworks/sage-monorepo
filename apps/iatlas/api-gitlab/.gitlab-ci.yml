@@ -47,6 +47,7 @@ tests:coverage-report:
     - export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
     - export POSTGRES_USER=$POSTGRES_USER
     - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml --cov-report term:skip-covered -n auto
+    - coverage report --skip-covered | grep TOTAL
   artifacts:
     reports:
       cobertura: coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
