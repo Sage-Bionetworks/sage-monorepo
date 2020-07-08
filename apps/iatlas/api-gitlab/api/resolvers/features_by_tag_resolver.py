@@ -15,6 +15,7 @@ def resolve_features_by_tag(_obj, info, dataSet=None, related=None, feature=None
 
     return [{
         'characteristics': get_value(value[0], 'tag_characteristics'),
+        'color': get_value(value[0], 'tag_color'),
         'display': get_value(value[0], 'tag_display'),
         'features': [{
             'class': get_value(row, 'class'),
