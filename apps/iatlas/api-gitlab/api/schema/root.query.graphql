@@ -1,6 +1,6 @@
 type Query {
-  dataSets(dataSet: [String!], sample: [String!]): [DataSet!]
-  driverResults(features: [Int!]): [DriverResult]
+  dataSets(dataSet: [String!], sample: [String!]): [DataSet!]!
+  driverResults(features: [Int!]): [DriverResult!]!
   features(
     dataSet: [String!]
     related: [String!]
@@ -33,8 +33,8 @@ type Query {
     entrez: [Int!]
     mutationCode: [String!]
     mutationType: [String!]
-  ): [Mutation!]
-  mutationTypes: [MutationType]
+  ): [Mutation!]!
+  mutationTypes: [MutationType!]!
   patient(barcode: String): Patient
   patients(barcode: [String!]): [Patient!]!
 
@@ -68,11 +68,24 @@ If no filters are passed, this will return all samples organized by tag.
   ): [SamplesByTag!]!
   slide(id: Int, name: String): Slide
   slides(id: [Int!], name: [String!]): [Slide!]!
+
+"""
+The "tags" query accepts:
+
+  - "dataSet", a list of data set names (required)
+  - "related", a list of tag names related to the dataset(s) (required)
+  - "tag", a list of tag names
+  - "feature", a list of feature names
+  - "featureClass", a list of feature class names
+
+If no filters are passed, this will return all samples organized by tag.
+"""
   tags(
     dataSet: [String!]!
     related: [String!]!
+    tag: [String!]
     feature: [String!]
-    featureClass: [String]
+    featureClass: [String!]
   ): [Tag!]!
   test: String!
 }

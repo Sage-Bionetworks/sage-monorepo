@@ -5,21 +5,16 @@ from tests import NoneType
 
 @pytest.fixture(scope='module')
 def sample_name():
-    return 'DO1328'
+    return 'TCGA-05-4420'
 
 
 @pytest.fixture(scope='module')
 def patient_barcode():
-    return 'DO1328'
-
-
-@pytest.fixture(scope='module')
-def tag_name():
-    return 'C1'
+    return 'TCGA-05-4420'
 
 
 def test_samples_by_tag_query_with_passed_sample_name(client, sample_name):
-    query = """query Samples(
+    query = """query SamplesByTag(
         $dataSet: [String!]
         $related: [String!]
         $tag: [String!]
@@ -48,8 +43,8 @@ def test_samples_by_tag_query_with_passed_sample_name(client, sample_name):
     json_data = json.loads(response.data)
     samples_by_tag = json_data['data']['samplesByTag']
 
-    assert isinstance(samples, list)
-    assert len(samples) == 1
+    assert isinstance(samples_by_tag, list)
+    assert len(samples_by_tag) > 0
     for group in samples_by_tag[0:2]:
         samples = group['samples']
         assert type(group['tag']) is str
@@ -60,7 +55,7 @@ def test_samples_by_tag_query_with_passed_sample_name(client, sample_name):
 
 
 def test_samples_by_tag_query_with_passed_patient_barcode(client, patient_barcode):
-    query = """query Samples(
+    query = """query SamplesByTag(
         $dataSet: [String!]
         $related: [String!]
         $tag: [String!]
@@ -92,8 +87,8 @@ def test_samples_by_tag_query_with_passed_patient_barcode(client, patient_barcod
     json_data = json.loads(response.data)
     samples_by_tag = json_data['data']['samplesByTag']
 
-    assert isinstance(samples, list)
-    assert len(samples) == 1
+    assert isinstance(samples_by_tag, list)
+    assert len(samples_by_tag) > 0
     for group in samples_by_tag[0:2]:
         samples = group['samples']
         assert type(group['tag']) is str
@@ -101,12 +96,11 @@ def test_samples_by_tag_query_with_passed_patient_barcode(client, patient_barcod
         assert isinstance(samples, list)
         assert len(samples) > 0
         for sample in samples:
-            assert type(sample['name']) is str
             assert sample['patient']['barcode'] == patient_barcode
 
 
 def test_samples_by_tag_query_with_no_args(client):
-    query = """query Samples(
+    query = """query SamplesByTag(
         $dataSet: [String!]
         $related: [String!]
         $tag: [String!]
@@ -135,8 +129,8 @@ def test_samples_by_tag_query_with_no_args(client):
     json_data = json.loads(response.data)
     samples_by_tag = json_data['data']['samplesByTag']
 
-    assert isinstance(samples, list)
-    assert len(samples) == 1
+    assert isinstance(samples_by_tag, list)
+    assert len(samples_by_tag) > 0
     for group in samples_by_tag[0:2]:
         samples = group['samples']
         assert type(group['tag']) is str
@@ -148,7 +142,7 @@ def test_samples_by_tag_query_with_no_args(client):
 
 
 def test_samples_by_tag_query_with_passed_patient_and_sample(client, patient_barcode, sample_name):
-    query = """query Samples(
+    query = """query SamplesByTag(
         $dataSet: [String!]
         $related: [String!]
         $tag: [String!]
@@ -183,8 +177,8 @@ def test_samples_by_tag_query_with_passed_patient_and_sample(client, patient_bar
     json_data = json.loads(response.data)
     samples_by_tag = json_data['data']['samplesByTag']
 
-    assert isinstance(samples, list)
-    assert len(samples) == 1
+    assert isinstance(samples_by_tag, list)
+    assert len(samples_by_tag) > 0
     for group in samples_by_tag[0:2]:
         samples = group['samples']
         assert type(group['tag']) is str
@@ -197,7 +191,7 @@ def test_samples_by_tag_query_with_passed_patient_and_sample(client, patient_bar
 
 
 def test_samples_by_tag_query_with_passed_data_set(client, dataset):
-    query = """query Samples(
+    query = """query SamplesByTag(
         $dataSet: [String!]
         $related: [String!]
         $tag: [String!]
@@ -226,8 +220,8 @@ def test_samples_by_tag_query_with_passed_data_set(client, dataset):
     json_data = json.loads(response.data)
     samples_by_tag = json_data['data']['samplesByTag']
 
-    assert isinstance(samples, list)
-    assert len(samples) == 1
+    assert isinstance(samples_by_tag, list)
+    assert len(samples_by_tag) > 1
     for group in samples_by_tag[0:2]:
         samples = group['samples']
         assert type(group['tag']) is str
@@ -238,7 +232,7 @@ def test_samples_by_tag_query_with_passed_data_set(client, dataset):
 
 
 def test_samples_by_tag_query_with_passed_data_set_and_related(client, dataset, related):
-    query = """query Samples(
+    query = """query SamplesByTag(
         $dataSet: [String!]
         $related: [String!]
         $tag: [String!]
@@ -269,8 +263,8 @@ def test_samples_by_tag_query_with_passed_data_set_and_related(client, dataset, 
     json_data = json.loads(response.data)
     samples_by_tag = json_data['data']['samplesByTag']
 
-    assert isinstance(samples, list)
-    assert len(samples) == 1
+    assert isinstance(samples_by_tag, list)
+    assert len(samples_by_tag) > 0
     for group in samples_by_tag[0:2]:
         samples = group['samples']
         assert type(group['tag']) is str
@@ -281,7 +275,7 @@ def test_samples_by_tag_query_with_passed_data_set_and_related(client, dataset, 
 
 
 def test_samples_by_tag_query_with_passed_feature_and_feature_class(client, chosen_feature, feature_class):
-    query = """query Samples(
+    query = """query SamplesByTag(
         $dataSet: [String!]
         $related: [String!]
         $tag: [String!]
@@ -312,8 +306,8 @@ def test_samples_by_tag_query_with_passed_feature_and_feature_class(client, chos
     json_data = json.loads(response.data)
     samples_by_tag = json_data['data']['samplesByTag']
 
-    assert isinstance(samples, list)
-    assert len(samples) == 1
+    assert isinstance(samples_by_tag, list)
+    assert len(samples_by_tag) > 0
     for group in samples_by_tag[0:2]:
         samples = group['samples']
         assert type(group['tag']) is str
@@ -323,8 +317,8 @@ def test_samples_by_tag_query_with_passed_feature_and_feature_class(client, chos
             assert type(sample['name']) is str
 
 
-def test_samples_by_tag_query_with_passed_tag(client, tag_name):
-    query = """query Samples(
+def test_samples_by_tag_query_with_passed_tag(client, tag):
+    query = """query SamplesByTag(
         $dataSet: [String!]
         $related: [String!]
         $tag: [String!]
@@ -349,23 +343,23 @@ def test_samples_by_tag_query_with_passed_tag(client, tag_name):
          }
     }"""
     response = client.post(
-        '/api', json={'query': query, 'variables': {'tag': [tag_name]}})
+        '/api', json={'query': query, 'variables': {'tag': [tag]}})
     json_data = json.loads(response.data)
     samples_by_tag = json_data['data']['samplesByTag']
 
-    assert isinstance(samples, list)
-    assert len(samples) == 1
+    assert isinstance(samples_by_tag, list)
+    assert len(samples_by_tag) == 1
     for group in samples_by_tag[0:2]:
         samples = group['samples']
-        assert group['tag'] == tag_name
+        assert group['tag'] == tag
         assert isinstance(samples, list)
         assert len(samples) > 0
         for sample in samples:
             assert type(sample['name']) is str
 
 
-def test_samples_by_tag_query_with_all_args(client, dataset, related, tag_name, chosen_feature, feature_class, sample_name, patient_barcode):
-    query = """query Samples(
+def test_samples_by_tag_query_with_all_args(client, dataset, related, tag, chosen_feature, feature_class, sample_name, patient_barcode):
+    query = """query SamplesByTag(
         $dataSet: [String!]
         $related: [String!]
         $tag: [String!]
@@ -396,7 +390,7 @@ def test_samples_by_tag_query_with_all_args(client, dataset, related, tag_name, 
         '/api', json={'query': query, 'variables': {
             'dataSet': [dataset],
             'related': [related],
-            'tag': [tag_name],
+            'tag': [tag],
             'feature': [chosen_feature],
             'featureClass': [feature_class],
             'sample': [sample_name],
@@ -404,11 +398,11 @@ def test_samples_by_tag_query_with_all_args(client, dataset, related, tag_name, 
     json_data = json.loads(response.data)
     samples_by_tag = json_data['data']['samplesByTag']
 
-    assert isinstance(samples, list)
-    assert len(samples) == 1
+    assert isinstance(samples_by_tag, list)
+    assert len(samples_by_tag) == 1
     for group in samples_by_tag[0:2]:
         samples = group['samples']
-        assert group['tag'] == tag_name
+        assert group['tag'] == tag
         assert isinstance(samples, list)
         assert len(samples) > 0
         for sample in samples:
