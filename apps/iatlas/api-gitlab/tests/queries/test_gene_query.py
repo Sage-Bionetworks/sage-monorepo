@@ -66,3 +66,17 @@ def test_gene_query_no_relations(client, entrez, hgnc):
     assert gene['entrez'] == entrez
     assert gene['hgnc'] == hgnc
     assert type(gene['ioLandscapeName']) is str or NoneType
+
+
+def test_gene_query_bad_entrez(client, entrez, hgnc):
+    query = """query Gene($entrez: Int!) {
+        gene(entrez: $entrez) {
+            entrez
+        }
+    }"""
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'entrez': 9999999999}})
+    json_data = json.loads(response.data)
+    gene = json_data['data']
+
+    assert gene == None
