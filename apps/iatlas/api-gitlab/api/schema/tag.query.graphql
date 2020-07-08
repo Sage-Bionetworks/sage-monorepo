@@ -1,3 +1,15 @@
+"""
+The "Tag" type may return:
+
+- The "name", the name of the tag
+- The "characteristics" of the tag.
+- The "color", a color to represent the tag as a hex value.
+- The "display", a friendly name for the tag.
+- The "sampleCount", the number of sample associated with the tag.
+- The "samples", a list of the names of the samples associated with the tag.
+
+See also `SimpleTag`
+"""
 type Tag {
     characteristics: String
     color: String
@@ -9,6 +21,11 @@ type Tag {
 
 """
 A "SimpleTag" is version of a tag. Only basic tag attributes may be returned.
+
+- The "name", the name of the tag
+- The "characteristics" of the tag.
+- The "color", a color to represent the tag as a hex value.
+- The "display", a friendly name for the tag.
 """
 type SimpleTag {
     characteristics: String

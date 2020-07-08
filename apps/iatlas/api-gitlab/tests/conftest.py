@@ -41,6 +41,11 @@ def related():
 
 
 @pytest.fixture(scope='session')
+def tag():
+    return 'C1'
+
+
+@pytest.fixture(scope='session')
 def chosen_feature():
     return 'Det_Ratio'
 

@@ -1,5 +1,5 @@
 type Query {
-  dataSets(dataSet: [String!], sample: [String!]): [DataSet!]
+  dataSets(dataSet: [String!], sample: [String!]): [DataSet!]!
   driverResults(
     feature: [String!]
     entrez: [Int!]
@@ -40,8 +40,8 @@ type Query {
     entrez: [Int!]
     mutationCode: [String!]
     mutationType: [String!]
-  ): [Mutation!]
-  mutationTypes: [MutationType]
+  ): [Mutation!]!
+  mutationTypes: [MutationType!]!
   patient(barcode: String): Patient
   patients(barcode: [String!]): [Patient!]!
 
@@ -50,13 +50,47 @@ type Query {
   If no filters are passed, this will return all samples.
   """
   samples(name: [String!], patient: [String!]): [Sample!]!
+
+  """
+  The "samplesByTag" query accepts:
+
+    - "sample", a list of sample names
+    - "patient", a list of patient barcodes
+    - "dataSet", a list of data set names
+    - "related", a list of tag names related to the dataset(s)
+    - "tag", a list of tag names
+    - "feature", a list of feature names
+    - "featureClass", a list of feature class names
+
+  If no filters are passed, this will return all samples organized by tag.
+  """
+  samplesByTag(
+    dataSet: [String!]
+    related: [String!]
+    tag: [String!]
+    feature: [String!]
+    featureClass: [String!]
+    name: [String!]
+    patient: [String!]
+  ): [SamplesByTag!]!
   slide(id: Int, name: String): Slide
   slides(id: [Int!], name: [String!]): [Slide!]!
+
+  """
+  The "tags" query accepts:
+
+    - "dataSet", a list of data set names (required)
+    - "related", a list of tag names related to the dataset(s) (required)
+    - "tag", a list of tag names
+    - "feature", a list of feature names
+    - "featureClass", a list of feature class names
+  """
   tags(
     dataSet: [String!]!
     related: [String!]!
+    tag: [String!]
     feature: [String!]
-    featureClass: [String]
+    featureClass: [String!]
   ): [Tag!]!
   test: String!
 }

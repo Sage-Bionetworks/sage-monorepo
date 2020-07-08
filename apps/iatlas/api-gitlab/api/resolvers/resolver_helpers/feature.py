@@ -71,6 +71,8 @@ def request_features(_obj, info, data_set=None, related=None, feature=None, feat
             select_fields.append(tag_1.display.label('tag_display'))
             select_fields.append(
                 tag_1.characteristics.label('tag_characteristics'))
+            select_fields.append(
+                tag_1.color.label('tag_color'))
         if join_method_tag in relations:
             select_fields.append(method_tag_1.name.label(join_method_tag))
         if join_sample in relations:
