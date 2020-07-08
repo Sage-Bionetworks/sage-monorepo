@@ -6,6 +6,7 @@ type Query {
     mutationCode: [String!]
     tag: [String!]
     dataSet: [String!]
+    limit: Int
   ): [DriverResult!]!
   features(
     dataSet: [String!]

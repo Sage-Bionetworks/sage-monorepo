@@ -96,46 +96,44 @@ def test_driverResults_query_with_passed_tags(client, tag_name):
         tag = driver_result['tag']
         assert tag['name'] == tag_name
 
-# def test_driverResults_query_with_passed_datasets(client, dataset_name):
-#     query = """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag:[String!], $dataSet: [String!]) {
-#         driverResults(feature: $feature, entrez: $entrez, mutationCode: $mutationCode, tag:$tag,  dataSet: $dataSet) {
-#             dataSet{
-#                 name
-#             }
-#         }
-#     }"""
-#     response = client.post(
-#         '/api', json={'query': query, 'variables': {'dataSet': [dataset_name]}})
-#     json_data = json.loads(response.data)
-#     driver_results = json_data['data']['driverResults']
-#     assert isinstance(driver_results, list)
-#     for driver_result in driver_results[0:2]:
-#         dataSet = driver_result['dataSet']
-#         assert dataSet['name'] == dataset_name
+def test_driverResults_query_with_passed_datasets(client, dataset_name):
+    query = """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag:[String!], $dataSet: [String!]) {
+        driverResults(feature: $feature, entrez: $entrez, mutationCode: $mutationCode, tag:$tag,  dataSet: $dataSet, limit: 10) {
+            dataSet{
+                name
+            }
+        }
+    }"""
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'dataSet': [dataset_name]}})
+    json_data = json.loads(response.data)
+    driver_results = json_data['data']['driverResults']
+    assert isinstance(driver_results, list)
+    for driver_result in driver_results[0:2]:
+        dataSet = driver_result['dataSet']
+        assert dataSet['name'] == dataset_name
 
-# def test_driverResults_query_with_no_arguments(client):
-#     query = """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag: [String!], $dataSet: [String!]) {
-#         driverResults(feature: $feature, entrez: $entrez, mutationCode: $mutationCode, tag: $tag, dataSet: $dataSet) {
-#             foldChange
-#             pValue
-#             log10PValue
-#             log10FoldChange
-#             n_wt
-#             n_mut
-#         }
-#     }"""
-#     response = client.post(
-#         '/api', json={'query': query, 'variables': {}})
-#     json_data = json.loads(response.data)
-#     driver_results = json_data['data']['driverResults']
-#     assert isinstance(driver_results, list)
-#     assert len(driver_results) > 0
-#     for driver_result in driver_results[0:2]:
-#         feature = driver_result['feature']
-
-#         assert type(driver_result['foldChange']) is float or NoneType
-#         assert type(driver_result['pValue']) is float or NoneType
-#         assert type(driver_result['log10PValue']) is float or NoneType
-#         assert type(driver_result['log10FoldChange']) is float or NoneType
-#         assert type(driver_result['n_wt']) is int or NoneType
-#         assert type(driver_result['n_mut']) is int or NoneType
+def test_driverResults_query_with_no_arguments(client):
+    query = """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag: [String!], $dataSet: [String!]) {
+        driverResults(feature: $feature, entrez: $entrez, mutationCode: $mutationCode, tag: $tag, dataSet: $dataSet, limit:10) {
+            foldChange
+            pValue
+            log10PValue
+            log10FoldChange
+            n_wt
+            n_mut
+        }
+    }"""
+    response = client.post(
+        '/api', json={'query': query, 'variables': {}})
+    json_data = json.loads(response.data)
+    driver_results = json_data['data']['driverResults']
+    assert isinstance(driver_results, list)
+    assert len(driver_results) > 0
+    for driver_result in driver_results[0:2]:
+        assert type(driver_result['foldChange']) is float or NoneType
+        assert type(driver_result['pValue']) is float or NoneType
+        assert type(driver_result['log10PValue']) is float or NoneType
+        assert type(driver_result['log10FoldChange']) is float or NoneType
+        assert type(driver_result['n_wt']) is int or NoneType
+        assert type(driver_result['n_mut']) is int or NoneType
