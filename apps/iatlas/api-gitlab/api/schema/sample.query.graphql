@@ -5,8 +5,27 @@ It may also return a Patient object.
 
 There may only ever be one patient to a sample though a patient may be related
 to many samples.
+
+See also `SamplesByTag`
 """
 type Sample {
   name: String!
   patient: Patient
+}
+
+"""
+The "SamplesByTag" type may return:
+
+- The "tag" (the name of the tag).
+- The "display", a friendly name for the tag.
+- The "characteristics" of the tag.
+- The "color", a color to represent the tag as a hex value.
+- A list of samples associated with that tag.
+"""
+type SamplesByTag {
+  characteristics: String
+  color: String
+  display: String
+  samples: [Sample!]!
+  tag: String!
 }

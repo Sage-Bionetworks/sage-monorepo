@@ -10,6 +10,7 @@ from .mutations_resolver import resolve_mutations
 from .mutation_types_resolver import resolve_mutation_types
 from .patient_resolver import resolve_patient, resolve_patients
 from .samples_resolver import resolve_samples
+from .samples_by_tag_resolver import resolve_samples_by_tag
 from .slide_resolver import resolve_slide, resolve_slides
 from .tags_resolver import resolve_tags
 from .test_resolver import resolve_test

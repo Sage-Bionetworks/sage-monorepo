@@ -97,7 +97,7 @@ def build_gene_request(_obj, info, data_set=None, related=None, gene_type=None, 
     if option_args:
         query = query.options(*option_args)
     else:
-        query = sess.query(*core)
+        query = query.with_entities(*core)
 
     if gene_type:
         query = query.filter(gene_type_1.name.in_(gene_type))

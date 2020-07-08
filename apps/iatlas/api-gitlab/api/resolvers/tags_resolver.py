@@ -1,9 +1,9 @@
-from .resolver_helpers import request_tags, get_value
+from .resolver_helpers import get_value, request_tags
 
 
-def resolve_tags(_obj, info, dataSet, related, feature=None, featureClass=None):
+def resolve_tags(_obj, info, dataSet, related, tag=None, feature=None, featureClass=None):
     results = request_tags(_obj, info=info, data_set=dataSet, related=related,
-                           feature=feature, feature_class=featureClass)
+                           tag=tag, feature=feature, feature_class=featureClass)
 
     return [{
         "characteristics": get_value(row, 'characteristics'),
