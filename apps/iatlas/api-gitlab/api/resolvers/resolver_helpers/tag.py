@@ -6,29 +6,40 @@ from api.db_models import (
 from .general_resolvers import build_option_args
 
 
-def request_tags(_obj, info, data_set, related, feature=None, feature_class=None, get_samples=False):
+def build_related_join_condition(sample_to_tag_model, tag_to_tag_model, related_model, related=None):
+    sess = db.session
+    related_join_conditions = [
+        sample_to_tag_model.tag_id == tag_to_tag_model.related_tag_id]
+    if related:
+        related_join_conditions.append(tag_to_tag_model.related_tag_id.in_(
+            sess.query(related_model.id).filter(
+                related_model.name.in_(related))))
+    return related_join_conditions
+
+
+def request_tags(_obj, info, data_set=None, related=None, tag=None, feature=None,
+                 feature_class=None, get_samples=False):
     """
     Builds a SQL request and returns values from the DB.
     """
     sess = db.session
 
-    tag = orm.aliased(Tag, name='t')
+    tag_1 = orm.aliased(Tag, name='t')
     dataset_1 = orm.aliased(Dataset, name='d')
-    dataset_to_sample_1 = orm.aliased(DatasetToSample, name='ds')
-    related_tag = orm.aliased(Tag, name='rt')
+    related_tag_1 = orm.aliased(Tag, name='rt')
     sample_1 = orm.aliased(Sample, name='s')
     sample_to_tag_1 = orm.aliased(SampleToTag, name='st1')
     sample_to_tag_2 = orm.aliased(SampleToTag, name='st2')
     tag_to_tag_1 = orm.aliased(TagToTag, name='tt')
 
-    select_field_node_mapping = {'characteristics': tag.characteristics.label('characteristics'),
-                                 'color': tag.color.label('color'),
-                                 'display': tag.display.label('display'),
-                                 'name': tag.name.label('name'),
+    select_field_node_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
+                                 'color': tag_1.color.label('color'),
+                                 'display': tag_1.display.label('display'),
+                                 'name': tag_1.name.label('name'),
                                  'rnaExpValues': func.array_agg(func.distinct(
                                      sample_1.name)).label('rna_exp_values'),
                                  'sampleCount': func.count(func.distinct(sample_to_tag_2.sample_id)).label('sample_count'),
-                                 'tag': tag.name.label('tag')}
+                                 'tag': tag_1.name.label('tag')}
 
     # Only select fields that were requested.
     selection_set = info.field_nodes[0].selection_set or []
@@ -60,33 +71,36 @@ def request_tags(_obj, info, data_set, related, feature=None, feature_class=None
                            and_(feature_to_sample_1.sample_id == sample_to_tag_1.sample_id,
                                 feature_to_sample_1.feature_id.in_(feature_sub_query)))
 
-    query = query.join(dataset_to_sample_1,
-                       and_(dataset_to_sample_1.sample_id == sample_to_tag_1.sample_id,
-                            dataset_to_sample_1.dataset_id.in_(
-                                sess.query(dataset_1.id).filter(
-                                    dataset_1.name.in_(data_set))
-                            )))
-    query = query.join(tag_to_tag_1,
-                       and_(sample_to_tag_1.tag_id == tag_to_tag_1.related_tag_id,
-                            tag_to_tag_1.related_tag_id.in_(
-                                sess.query(related_tag.id).filter(
-                                    related_tag.name.in_(related)))))
+    if data_set:
+        dataset_to_sample_1 = orm.aliased(DatasetToSample, name='ds')
+        dataset_1 = orm.aliased(Dataset, name='d')
+        query = query.join(dataset_to_sample_1,
+                           and_(dataset_to_sample_1.sample_id == sample_to_tag_1.sample_id,
+                                dataset_to_sample_1.dataset_id.in_(
+                                    sess.query(dataset_1.id).filter(
+                                        dataset_1.name.in_(data_set))
+                                )))
+
+    related_join_condition = build_related_join_condition(sample_to_tag_1, tag_to_tag_1,
+                                                          related_tag_1, related)
+    query = query.join(tag_to_tag_1, and_(*related_join_condition))
     query = query.join(sample_to_tag_2,
                        and_(sample_to_tag_2.sample_id == sample_to_tag_1.sample_id,
                             tag_to_tag_1.tag_id == sample_to_tag_2.tag_id))
-    query = query.join(tag, tag.id == tag_to_tag_1.tag_id, isouter=True)
+    query = query.join(tag_1, tag_1.id == tag_to_tag_1.tag_id, isouter=True)
+
+    if tag:
+        query = query.filter(tag_1.name.in_(tag))
 
     if (get_samples or
         'sampleCount' in requested_nodes or
         'samples' in requested_nodes or
             'rnaExpValues' in requested_nodes):
-        query = query.group_by(tag.name, tag.display,
-                               tag.characteristics, tag.color)
+        query = query.group_by(tag_1.name, tag_1.display,
+                               tag_1.characteristics, tag_1.color)
         if 'samples' in requested_nodes or get_samples:
             query = query.join(
                 sample_1, sample_1.id == sample_to_tag_2.sample_id, isouter=True)
-
-    # if 'rnaExpValues' in requested_nodes:
 
     results = query.distinct().all()
 
