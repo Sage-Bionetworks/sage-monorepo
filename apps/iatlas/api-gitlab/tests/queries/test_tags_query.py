@@ -67,7 +67,7 @@ def test_tags_query_no_data_set_and_related(client, dataset, related):
         assert type(data_set['display']) is str or NoneType
         assert type(data_set['name']) is str
         assert not 'sampleCount' in data_set
-        assert not 'sampleIds' in data_set
+        assert not 'samples' in data_set
 
 
 def test_tags_query_with_data_set_related_and_feature_class(client, dataset, related, feature_class):
@@ -89,8 +89,6 @@ def test_tags_query_with_data_set_related_and_feature_class(client, dataset, rel
             color
             display
             name
-            sampleCount
-            samples
         }
     }"""
     response = client.post(
@@ -107,8 +105,6 @@ def test_tags_query_with_data_set_related_and_feature_class(client, dataset, rel
         assert type(data_set['color']) is str or NoneType
         assert type(data_set['display']) is str or NoneType
         assert type(data_set['name']) is str
-        assert type(data_set['sampleCount']) is int
-        assert isinstance(data_set['samples'], list)
 
 
 def test_tags_query_with_data_set_related_and_tag(client, dataset, related, tag):
@@ -127,6 +123,7 @@ def test_tags_query_with_data_set_related_and_tag(client, dataset, related, tag)
             featureClass: $featureClass
         ) {
             name
+            sampleCount
         }
     }"""
     response = client.post(
@@ -140,3 +137,4 @@ def test_tags_query_with_data_set_related_and_tag(client, dataset, related, tag)
     assert isinstance(data_sets, list)
     for data_set in data_sets:
         assert data_set['name'] == tag
+        assert type(data_set['sampleCount']) is int

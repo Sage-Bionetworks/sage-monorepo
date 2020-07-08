@@ -14,6 +14,7 @@ def test_MethodTag_with_relations(app, name):
     result = query.filter_by(name=name).first()
 
     assert isinstance(result.features, list)
+    assert len(result.features) > 0
     # Don't need to iterate through every result.
     for feature in result.features[0:2]:
         assert type(feature.name) is str
