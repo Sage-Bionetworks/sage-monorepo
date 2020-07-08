@@ -1,11 +1,11 @@
 from sqlalchemy import orm
 from api import db
 from api.db_models import (
-    DriverResult, Gene, MutationCode, Tag, Feature)
+    DriverResult, Gene, MutationCode, Tag, Feature, Dataset)
 from .general_resolvers import build_option_args, get_selection_set
 
 
-def build_driver_result_request(_obj, info, features=[None]):
+def build_driver_result_request(_obj, info, feature=None, entrez=None, mutationCode=None, tag=None, dataSet=None):
     """
     Builds a SQL request and returns values from the DB.
     """
@@ -19,6 +19,7 @@ def build_driver_result_request(_obj, info, features=[None]):
     mutation_code_1 = orm.aliased(MutationCode, name ='mc')
     tag_1 = orm.aliased(Tag, name='t')
     feature_1 = orm.aliased(Feature, name='f')
+    data_set_1 = orm.aliased(Dataset, name='ds')
 
     core_field_mapping = {'pValue': driver_result_1.p_value.label('p_value'),
                           'foldChange': driver_result_1.fold_change.label('fold_change'),
@@ -29,12 +30,14 @@ def build_driver_result_request(_obj, info, features=[None]):
                           'featureId': driver_result_1.feature_id.label('feature_id'),
                           'geneId': driver_result_1.gene_id.label('gene_id'),
                           'mutationCodeId': driver_result_1.mutation_code_id.label('mutation_code_id'),
-                          'tagId': driver_result_1.tag_id.label('tag_id')}
+                          'tagId': driver_result_1.tag_id.label('tag_id'),
+                          'datasetId': driver_result_1.dataset_id.label('dataset_id')}
 
     related_field_mapping = {'feature': 'feature',
                              'gene': 'gene',
                              'mutationCode': 'mutationCode',
-                             'tag': 'tag'}
+                             'tag': 'tag',
+                             'dataSet': 'dataSet'}
 
     core = build_option_args(selection_set, core_field_mapping)
     relations = build_option_args(selection_set, related_field_mapping)
@@ -43,40 +46,58 @@ def build_driver_result_request(_obj, info, features=[None]):
 
     query = sess.query(driver_result_1)
 
-    if 'feature' in relations:
+    if 'feature' in relations or feature:
         query = query.join((feature_1, driver_result_1.feature), isouter=True)
         option_args.append(orm.contains_eager(
             driver_result_1.feature.of_type(feature_1)))
 
-    if 'gene' in relations:
+    if 'gene' in relations or entrez:
         query = query.join(
             (gene_1, driver_result_1.gene), isouter=True)
         option_args.append(orm.contains_eager(
             driver_result_1.gene.of_type(gene_1)))
 
-    if 'mutationCode' in relations:
+    if 'mutationCode' in relations or mutationCode:
         query = query.join((mutation_code_1, driver_result_1.mutation_code), isouter=True)
         option_args.append(orm.contains_eager(
             driver_result_1.mutation_code.of_type(mutation_code_1)))
 
-    if 'tag' in relations:
+    if 'tag' in relations or tag:
         query = query.join(
             (tag_1, driver_result_1.tag), isouter=True)
         option_args.append(orm.contains_eager(
             driver_result_1.tag.of_type(tag_1)))
+    
+    if 'dataSet' in relations or dataSet:
+        query = query.join(
+            (data_set_1, driver_result_1.dataSet), isouter=True)
+        option_args.append(orm.contains_eager(
+            driver_result_1.dataSet.of_type(data_set_1)))
 
     if option_args:
         query = query.options(*option_args)
     else:
         query = sess.query(*core)
 
-    if features:
-        query = query.filter(driver_result_1.feature_id.in_(features))
+    if feature:
+        query = query.filter(feature_1.name.in_(feature))
+    
+    if mutationCode:
+        query = query.filter(mutation_code_1.code.in_(mutationCode))
+
+    if entrez:
+        query = query.filter(gene_1.entrez.in_(entrez))
+
+    if tag:
+        query = query.filter(tag_1.name.in_(tag))
+
+    if dataSet:
+        query = query.filter(data_set_1.name.in_(dataSet))
 
     return query
 
-def request_driver_results(_obj, info, features=[None]):
+def request_driver_results(_obj, info, feature=None, entrez=None, mutationCode=None, tag=None, dataSet=None):
     query = build_driver_result_request(
-        _obj, info, features=features)
+        _obj, info, feature=feature, entrez=entrez, mutationCode=mutationCode, tag=tag, dataSet=dataSet)
     query = query.distinct()
     return query.all()

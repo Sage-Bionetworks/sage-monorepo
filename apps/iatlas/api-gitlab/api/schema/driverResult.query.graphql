@@ -1,8 +1,9 @@
 type DriverResult {
-  feature: Feature
-  gene: Gene
+  feature: SimpleFeature
+  gene: SimpleGene
   tag: SimpleTag
   mutationCode: MutationCode
+  dataSet: SimpleDataSet
   pValue: Float
   foldChange: Float
   log10PValue: Float

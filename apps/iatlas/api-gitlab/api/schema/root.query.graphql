@@ -1,6 +1,12 @@
 type Query {
   dataSets(dataSet: [String!], sample: [String!]): [DataSet!]
-  driverResults(features: [Int!]): [DriverResult]
+  driverResults(
+    feature: [String!]
+    entrez: [Int!]
+    mutationCode: [String!]
+    tag: [String!]
+    dataSet: [String!]
+  ): [DriverResult!]!
   features(
     dataSet: [String!]
     related: [String!]
