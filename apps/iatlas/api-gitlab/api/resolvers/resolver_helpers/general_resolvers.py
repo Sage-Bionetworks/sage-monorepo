@@ -7,7 +7,7 @@ def build_option_args(selection_set=None, valid_nodes={}):
     return option_args
 
 
-def get_selection_set(selection_set, condition=True, child_node='features'):
+def get_selection_set(selection_set=[], condition=True, child_node='features'):
     if condition and selection_set:
         for selection in selection_set.selections:
             if selection.name.value == child_node:

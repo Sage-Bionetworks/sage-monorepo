@@ -9,10 +9,13 @@ def test_genes_query_with_entrez(client, entrez, hgnc):
             entrez
             hgnc
             geneFamily
+            geneFunction
             geneTypes {
                 name
                 display
             }
+            immuneCheckpoint
+            pathway
             publications {
                 firstAuthorLastName
                 journal
@@ -20,6 +23,8 @@ def test_genes_query_with_entrez(client, entrez, hgnc):
                 title
                 year
             }
+            superCategory
+            therapyType
         }
     }"""
     response = client.post(
@@ -35,11 +40,14 @@ def test_genes_query_with_entrez(client, entrez, hgnc):
         assert gene['entrez'] == entrez
         assert gene['hgnc'] == hgnc
         assert type(gene['geneFamily']) is str or NoneType
+        assert type(gene['geneFunction']) is str or NoneType
         assert isinstance(gene_types, list)
         if gene_types:
             for gene_type in gene_types:
                 assert type(gene_type['name']) is str
                 assert type(gene_type['display']) is str or NoneType
+        assert type(gene['immuneCheckpoint']) is str or NoneType
+        assert type(gene['pathway']) is str or NoneType
         if publications:
             for publication in publications:
                 assert type(
@@ -48,6 +56,8 @@ def test_genes_query_with_entrez(client, entrez, hgnc):
                 assert type(publication['pubmedId']) is int
                 assert type(publication['title']) is str or NoneType
                 assert type(publication['year']) is str or NoneType
+        assert type(gene['superCategory']) is str or NoneType
+        assert type(gene['therapyType']) is str or NoneType
 
 
 def test_genes_query_no_entrez(client):
@@ -55,7 +65,6 @@ def test_genes_query_no_entrez(client):
         genes(entrez: $entrez) {
             entrez
             hgnc
-            geneFamily
         }
     }"""
     response = client.post('/api', json={'query': query})
@@ -66,4 +75,3 @@ def test_genes_query_no_entrez(client):
     for gene in genes[0:1]:
         assert type(gene['entrez']) is int
         assert type(gene['hgnc']) is str
-        assert type(gene['geneFamily']) is str or NoneType

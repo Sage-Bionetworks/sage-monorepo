@@ -12,6 +12,7 @@ def test_GeneFamily_with_relations(app, name):
     result = query.filter_by(name=name).first()
 
     assert isinstance(result.genes, list)
+    assert len(result.genes) > 0
     # Don't need to iterate through every result.
     for gene in result.genes[0:2]:
         assert type(gene.entrez) is int

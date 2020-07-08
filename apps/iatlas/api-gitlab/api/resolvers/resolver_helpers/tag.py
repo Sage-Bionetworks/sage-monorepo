@@ -46,8 +46,9 @@ def request_tags(_obj, info, data_set=None, related=None, tag=None, feature=None
     select_fields = build_option_args(selection_set, select_field_node_mapping)
 
     requested_nodes = []
+    append_to_requested_nodes = requested_nodes.append
     for selection in selection_set.selections:
-        requested_nodes.append(selection.name.value)
+        append_to_requested_nodes(selection.name.value)
 
     if 'samples' in requested_nodes or get_samples:
         select_fields.append(func.array_agg(

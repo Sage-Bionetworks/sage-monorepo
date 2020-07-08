@@ -19,14 +19,13 @@ def test_Mutation_with_relations(app, gene_id):
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 
     assert isinstance(results, list)
+    assert len(results) > 0
     for result in results:
         mutation_id = result.id
         string_representation = '<Mutation %r>' % mutation_id
         string_representation_list.append(string_representation)
-        if result.gene:
-            assert result.gene.id == gene_id
-        if result.mutation_code:
-            assert result.mutation_code.id == result.mutation_code_id
+        assert result.gene.id == gene_id
+        assert result.mutation_code.id == result.mutation_code_id
         if result.mutation_type:
             assert result.mutation_type.id == result.mutation_type_id
         if result.samples:
