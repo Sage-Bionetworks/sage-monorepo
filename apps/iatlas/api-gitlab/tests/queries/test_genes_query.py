@@ -75,4 +75,3 @@ def test_genes_query_no_entrez(client):
     for gene in genes[0:1]:
         assert type(gene['entrez']) is int
         assert type(gene['hgnc']) is str
-        assert type(gene['geneFunction']) is str or NoneType
