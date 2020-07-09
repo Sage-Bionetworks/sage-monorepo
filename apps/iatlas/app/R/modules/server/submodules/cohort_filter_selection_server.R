@@ -3,7 +3,7 @@ cohort_filter_selection_server <- function(
     output,
     session,
     selected_dataset,
-    sample_ids
+    samples
 ){
     source(
         "R/modules/server/submodules/insert_remove_element_server.R",
@@ -107,15 +107,15 @@ cohort_filter_selection_server <- function(
         intersect(numeric_filter_samples(), group_filter_samples())
     })
 
-    output$samples_text <- shiny::renderText({
-        c("Number of current samples:", length(selected_samples()))
-    })
+    # output$samples_text <- shiny::renderText({
+    #     c("Number of current samples:", length(selected_samples()))
+    # })
 
     filter_obj <- shiny::reactive({
-        create_cohort_filter_object(
-            selected_samples(),
-            valid_numeric_filter_obj(),
-            valid_group_filter_obj()
+        list(
+            "samples" = samples()
+            # valid_numeric_filter_obj(),
+            # valid_group_filter_obj()
         )
     })
 

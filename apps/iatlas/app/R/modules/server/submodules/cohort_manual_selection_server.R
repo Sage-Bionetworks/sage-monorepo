@@ -33,22 +33,17 @@ cohort_manual_selection_server <- function(
         }
     })
 
-    all_sample_ids <- shiny::reactive({
+    all_sample_names <- shiny::reactive({
         shiny::req(dataset())
-        stringr::str_c(
-            "SELECT sample_id FROM datasets_to_samples WHERE dataset_id IN(",
-            "SELECT id FROM datasets WHERE name = '", dataset(), "'",
-            ")"
-        ) %>%
-            perform_query() %>%
-            dplyr::pull("sample_id")
+        iatlas.app::query_dataset_samples(dataset()) %>%
+            dplyr::pull("name")
     })
 
     filter_obj <- cohort_obj <- shiny::callModule(
         cohort_filter_selection_server,
         "cohort_filter_selection",
         dataset,
-        all_sample_ids
+        all_sample_names
     )
 
     cohort_obj <- shiny::callModule(

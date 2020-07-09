@@ -138,3 +138,16 @@ query_feature_values <- function(
         dplyr::as_tibble()
 }
 
+query_dataset_samples <- function(dataset){
+    iatlas.app::perform_api_query(
+        "dataset_samples",
+        list(
+            dataSet = dataset
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble() %>%
+        tidyr::unnest(cols = "samples")
+
+}
+

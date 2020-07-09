@@ -1,0 +1,7 @@
+query datasetSamples($dataSet: [String!]!) {
+  dataSets(dataSet: $dataSet){
+    samples{
+      name
+    }
+  }
+}

@@ -113,6 +113,11 @@ with_test_api_env({
       )
     )
   })
+
+  test_that("query_dataset_samples", {
+    result <- query_dataset_samples("PCAWG")
+    expect_named(result, "name")
+  })
 })
 
 

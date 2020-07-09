@@ -45,9 +45,11 @@ create_cohort_object <- function(
     immune_feature_bin_id = NULL,
     immune_feature_bin_number = NULL
 ){
-    sample_ids <- filter_obj$sample_ids
+    print("test")
+    samples <- filter_obj$samples
+    print(samples)
     if (group_choice %in% c("Immune_Subtype", "TCGA_Subtype", "TCGA_Study")) {
-        cohort_object <- iatlas.app::create_tag_cohort_object(sample_ids, dataset, group_choice)
+        cohort_object <- iatlas.app::create_tag_cohort_object(samples, dataset, group_choice)
     # } else if (group_choice == "Driver_Mutation") {
     #     cohort_object <- create_dm_cohort_object(sample_ids, driver_mutation)
     # } else if (group_choice == "Immune_Feature_Bins") {
@@ -58,7 +60,7 @@ create_cohort_object <- function(
     #     )
     }
     cohort_object$dataset     <- dataset
-    cohort_object$filters     <- filter_obj$filters
+    # cohort_object$filters     <- filter_obj$filters
     cohort_object$feature_tbl <-
         iatlas.app::query_features_by_class(dataset, group_choice) %>%
         tidyr::unnest(cols = c("features"))
@@ -74,7 +76,7 @@ create_cohort_object <- function(
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select
 #' @importFrom rlang .data
-create_tag_cohort_object <- function(sample_ids, dataset, tag){
+create_tag_cohort_object <- function(samples, dataset, tag){
     cohort_tbl  <- build_cohort_tbl_by_tag(sample_ids, dataset, tag)
     sample_tbl   <- cohort_tbl %>%
         dplyr::select("sample_name", "group") %>%
@@ -104,7 +106,7 @@ create_tag_cohort_object <- function(sample_ids, dataset, tag){
 #' @param sample_ids Integers in the id column of the samples table
 #' @param group A String that is the display column of the tags table
 #' @importFrom magrittr %>%
-build_cohort_tbl_by_tag <- function(sample_ids, dataset, tag){
+build_cohort_tbl_by_tag <- function(samples, dataset, tag){
     iatlas.app::query_cohort_selector(dataset, tag) %>%
         tidyr::unnest(cols = c("samples")) %>%
         dplyr::select(
