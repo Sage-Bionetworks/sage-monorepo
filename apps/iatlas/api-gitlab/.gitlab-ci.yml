@@ -2,7 +2,7 @@ variables:
   CI: "1"
   # Workaround for locally issued TLS certs
   DOCKER_TLS_CERTDIR: ''
-  
+
   # Staging variables
   STAGING_CONTAINER_NAME: $CI_REGISTRY_IMAGE:${CI_COMMIT_SHORT_SHA}-${CI_COMMIT_REF_NAME}
   STAGING_CONTAINER_LABEL: iatlas-api
@@ -97,7 +97,7 @@ Deploy to Staging:
   image: eugenmayer/docker-client:latest
   script:
     # Echo the RSA key into the correct location
-    - echo ${STAGING_DOCKER_SSH_PRIV_KEY} > ~/.ssh/id_rsa.pub
+    - mkdir -p ~/.ssh && echo ${STAGING_DOCKER_SSH_PRIV_KEY} > ~/.ssh/id_rsa.pub
     # Set the remote Docker endpoint
     - export DOCKER_HOST=ssh://ubuntu@${STAGING_DOCKER_HOST}:22
     # Stop the existing container
