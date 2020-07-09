@@ -8,7 +8,7 @@ toolspage <- shiny::fluidPage(
         id = "toolstabs",
         shiny::tabPanel(
             shiny::h5("iAtlas Tools Home"),
-            .GlobalEnv$titleBox("iAtlas Explorer — Tools"),
+            iatlas.app::titleBox("iAtlas Explorer — Tools"),
             shiny::fluidRow(
                 .GlobalEnv$imgLinkBox(
                     width = 12,
