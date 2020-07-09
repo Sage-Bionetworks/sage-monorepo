@@ -14,12 +14,12 @@ clinical_outcomes_heatmap_server <- function(
         shiny::selectInput(
             inputId = ns("class_choice_id"),
             label = "Select or Search for Variables Class",
-            choices = .GlobalEnv$create_class_list(),
-            selected = .GlobalEnv$get_class_id_from_name("T Helper Cell Score")
+            choices = iatlas.app::create_class_list(),
+            selected = iatlas.app::get_class_id_from_name("T Helper Cell Score")
         )
     })
 
-    time_class_id <- .GlobalEnv$get_class_id_from_name("Survival Time")
+    time_class_id <- iatlas.app::get_class_id_from_name("Survival Time")
 
     output$time_feature_selection_ui <- shiny::renderUI({
         shiny::req(time_class_id)
@@ -27,7 +27,7 @@ clinical_outcomes_heatmap_server <- function(
         shiny::selectInput(
             inputId = ns("time_feature_choice_id"),
             label = "Select or Search for Survival Endpoint",
-            choices = .GlobalEnv$create_feature_named_list(time_class_id),
+            choices = iatlas.app::create_feature_named_list(time_class_id),
             selected = "OS Time"
         )
     })
@@ -57,7 +57,7 @@ clinical_outcomes_heatmap_server <- function(
 
     feature_tbl <- shiny::reactive({
         shiny::req(input$class_choice_id)
-        .GlobalEnv$build_feature_value_tbl_from_class_ids(input$class_choice_id)
+        iatlas.app::build_feature_value_tbl_from_class_ids(input$class_choice_id)
     })
 
     heatmap_tbl <- shiny::reactive({

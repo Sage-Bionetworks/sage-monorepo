@@ -25,7 +25,7 @@ overall_cell_proportions_server  <- function(
     output$barplot <- plotly::renderPlotly({
         shiny::req(barplot_tbl())
 
-        .GlobalEnv$create_barplot(
+        iatlas.app::create_barplot(
             barplot_tbl(),
             source_name = "overall_cell_proportions_barplot",
             color_col = "color",
@@ -69,7 +69,7 @@ overall_cell_proportions_server  <- function(
             barplot_selected_group() %in% groups,
             "Click above barchart"
         ))
-        .GlobalEnv$create_scatterplot(
+        iatlas.app::create_scatterplot(
             scatterplot_tbl(),
             source_name = "overall_cell_proportions_scatterplot",
             xlab = "Stromal Fraction",

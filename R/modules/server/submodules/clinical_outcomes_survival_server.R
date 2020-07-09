@@ -9,7 +9,7 @@ clinical_outcomes_survival_server <- function(
 
     source("R/clinical_outcomes_functions.R")
 
-    time_class_id <- .GlobalEnv$get_class_id_from_name("Survival Time")
+    time_class_id <- iatlas.app::get_class_id_from_name("Survival Time")
 
     output$time_feature_selection_ui <- shiny::renderUI({
         shiny::req(time_class_id)
@@ -17,7 +17,7 @@ clinical_outcomes_survival_server <- function(
         shiny::selectInput(
             inputId = ns("time_feature_choice_id"),
             label = "Select or Search for Survival Endpoint",
-            choices = .GlobalEnv$create_feature_named_list(time_class_id),
+            choices = iatlas.app::create_feature_named_list(time_class_id),
             selected = "OS Time"
         )
     })
@@ -77,7 +77,7 @@ clinical_outcomes_survival_server <- function(
             data = survival_value_tbl()
         )
 
-        .GlobalEnv$create_kmplot(
+        iatlas.app::create_kmplot(
             fit = fit,
             df = survival_value_tbl(),
             confint = input$confint,

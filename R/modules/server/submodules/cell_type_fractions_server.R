@@ -26,7 +26,7 @@ cell_type_fractions_server <- function(
     output$barplot <- plotly::renderPlotly({
         shiny::req(plot_tbl())
 
-        .GlobalEnv$create_barplot(
+        iatlas.app::create_barplot(
             plot_tbl(),
             source_name = "cell_type_fractions_barplot",
             color_col = "color",
