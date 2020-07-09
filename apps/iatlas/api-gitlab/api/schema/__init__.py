@@ -55,6 +55,8 @@ features_by_tag = ObjectType('FeaturesByTag')
 gene = ObjectType('Gene')
 genes_by_tag = ObjectType('GenesByTag')
 gene_type = ObjectType('GeneType')
+group = ObjectType('Group')
+groups_by_data_set = ObjectType('GroupsByDataSet')
 mutation = ObjectType('Mutation')
 mutation_code = ObjectType('MutationCode')
 mutation_type = ObjectType('MutationType')
@@ -97,8 +99,8 @@ root.set_field('test', resolve_test)
 schema = make_executable_schema(
     type_defs,
     [root, data_set, driver_result, feature, features_by_class, features_by_tag,
-     feature_value_type, gene, genes_by_tag, gene_type, mutation, mutation_code,
-     mutation_type, patient, publication, sample, sample_by_tag, simple_data_set,
-     simple_feature, simple_gene, simple_gene_type, simple_publication, simple_tag,
-     slide, tag]
+     feature_value_type, gene, genes_by_tag, gene_type, group, groups_by_data_set,
+     mutation, mutation_code, mutation_type, patient, publication, sample, sample_by_tag,
+     simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_publication,
+     simple_tag, slide, tag]
 )
