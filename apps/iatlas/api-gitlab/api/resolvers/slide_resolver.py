@@ -10,6 +10,7 @@ valid_slide_node_mapping = {
     'patient': 'patient_id'
 }
 
+
 def resolve_slide(_obj, info, id=None, name=None):
     option_args = build_option_args(
         info.field_nodes[0].selection_set,
@@ -29,6 +30,7 @@ def resolve_slide(_obj, info, id=None, name=None):
         "description": get_value(slide, 'description'),
         "patient": get_value(slide, 'patient')
     }
+
 
 def resolve_slides(_obj, info, id=None, name=None):
     option_args = build_option_args(

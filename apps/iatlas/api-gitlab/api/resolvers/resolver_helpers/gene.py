@@ -119,11 +119,9 @@ def build_gene_request(_obj, info, data_set=None, related=None, gene_type=None, 
 
 
 def request_gene(_obj, info, entrez=None):
-    if entrez:
-        entrez = [entrez]
-        query = build_gene_request(_obj, info, entrez=entrez)
-        return query.one_or_none()
-    return None
+    entrez = [entrez]
+    query = build_gene_request(_obj, info, entrez=entrez)
+    return query.one_or_none()
 
 
 def request_genes(_obj, info, data_set=None, related=None, entrez=None, gene_type=None, samples=None, by_tag=False):
