@@ -75,18 +75,15 @@ create_cohort_object <- function(
 #' @importFrom dplyr select
 #' @importFrom rlang .data
 create_tag_cohort_object <- function(samples, dataset, tag){
-    cohort_tbl  <- build_cohort_tbl_by_tag(sample_ids, dataset, tag)
+    cohort_tbl  <- build_cohort_tbl_by_tag(samples, dataset, tag)
     sample_tbl   <- cohort_tbl %>%
-        dplyr::select("sample_name", "group") %>%
-        dplyr::inner_join(
-            "SELECT id AS sample_id, name AS sample_name FROM samples" %>%
-                perform_query(),
-            by = "sample_name"
-        )
+        dplyr::select("sample", "group") %>%
+        dplyr::arrange(.data$sample)
     group_tbl <- cohort_tbl %>%
-        dplyr::select(-"sample_name") %>%
-        dplyr::distinct()
-    colors_list <- cohort_tbl %>%
+        dplyr::select(-"sample") %>%
+        dplyr::distinct() %>%
+        dplyr::arrange(.data$group)
+    colors_list <- group_tbl %>%
         dplyr::select(.data$group, .data$color) %>%
         dplyr::distinct() %>%
         create_plot_colors_list()
@@ -106,16 +103,15 @@ create_tag_cohort_object <- function(samples, dataset, tag){
 #' @importFrom magrittr %>%
 build_cohort_tbl_by_tag <- function(samples, dataset, tag){
     iatlas.app::query_cohort_selector(dataset, tag) %>%
-        tidyr::unnest(cols = c("samples")) %>%
         dplyr::select(
-            "color",
             "name" = "display",
-            "characteristics",
-            "sample_name" = "samples",
             "group" = "name",
-            "size" = "sampleCount"
-        )
-        # dplyr::filter(.data$sample_id %in% c(sample_ids))
+            "characteristics",
+            "color",
+            "sample",
+            "size"
+        ) %>%
+        dplyr::filter(.data$sample %in% c(samples))
 }
 
 #' Create Tag Group Tibble

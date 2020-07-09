@@ -12,7 +12,16 @@ query_cohort_selector <- function(
         )
     ) %>%
         purrr::pluck(1) %>%
-        dplyr::as_tibble()
+        dplyr::as_tibble() %>%
+        tidyr::unnest(cols = c("samples")) %>%
+        dplyr::select(
+            "name",
+            "display",
+            "characteristics",
+            "color",
+            "size" = "sampleCount",
+            "sample" = "samples"
+        )
 }
 
 query_features_by_class <- function(

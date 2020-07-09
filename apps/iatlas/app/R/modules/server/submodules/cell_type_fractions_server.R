@@ -17,6 +17,7 @@ cell_type_fractions_server <- function(
     })
 
     plot_tbl <- shiny::reactive({
+        print(cohort_obj())
         shiny::req(data_tbl())
         iatlas.app::build_ctf_barplot_tbl(data_tbl())
     })

@@ -5,12 +5,12 @@ with_test_api_env({
     expect_named(
       result,
       c(
+        "name",
+        "display",
         "characteristics",
         "color",
-        "display",
-        "name",
-        "sampleCount",
-        "samples"
+        "size",
+        "sample"
       )
     )
   })
