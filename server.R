@@ -22,8 +22,6 @@ shiny::shinyServer(function(input, output, session) {
         }
     })
 
-    source("R/functions/call_iatlas_module.R")
-
     # Non analysis modules -----------------------------------------------------
 
     cohort_obj <- call_iatlas_module(
@@ -42,13 +40,15 @@ shiny::shinyServer(function(input, output, session) {
     # Analysis modules --------------------------------------------------------
     "R/modules/server/analysis_modules/" %>%
         list.files(full.names = T) %>%
-        purrr::walk(call_iatlas_module, input, session, cohort_obj)
+        purrr::walk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
 
     # Tool modules --------------------------------------------------------
 
     "R/modules/server/tool_modules/" %>%
         list.files(full.names = T) %>%
-        purrr::walk(call_iatlas_module, input, session, tab_id = "toolstabs")
+        purrr::walk(
+            iatlas.app::call_iatlas_module, input, session, tab_id = "toolstabs"
+        )
 })
 
 
