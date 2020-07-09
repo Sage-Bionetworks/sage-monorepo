@@ -1,6 +1,8 @@
 variables:
   CI: "1"
-
+  # Workaround for locally issued TLS certs
+  DOCKER_TLS_CERTDIR: ''
+  
   # Staging variables
   STAGING_CONTAINER_NAME: $CI_REGISTRY_IMAGE:${CI_COMMIT_SHORT_SHA}-${CI_COMMIT_REF_NAME}
   STAGING_CONTAINER_LABEL: iatlas-api
