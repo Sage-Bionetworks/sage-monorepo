@@ -6,18 +6,19 @@ overall_cell_proportions_server  <- function(
 ){
 
     source("R/modules/server/submodules/plotly_server.R", local = T)
-    source("R/overall_cell_proportions_functions.R", local = T)
-
-    sample_name_tbl <- .GlobalEnv$build_sample_name_tbl()
 
     value_tbl <- shiny::reactive({
-        shiny::req(cohort_obj())
-        build_ocp_value_tbl(cohort_obj()$sample_tbl)
+        iatlas.app::query_features_values_by_tag(
+            cohort_obj()$dataset,
+            cohort_obj()$group_name,
+            list("leukocyte_fraction", "Stromal_Fraction", "Tumor_fraction")
+        ) %>%
+            dplyr::rename("group" = "tag")
     })
 
     barplot_tbl <- shiny::reactive({
         req(value_tbl())
-        build_ocp_barplot_tbl(value_tbl())
+        iatlas.app::build_ocp_barplot_tbl(value_tbl())
     })
 
     output$barplot <- plotly::renderPlotly({
@@ -52,9 +53,8 @@ overall_cell_proportions_server  <- function(
 
     scatterplot_tbl <- shiny::reactive({
         shiny::req(value_tbl(), barplot_selected_group())
-        build_ocp_scatterplot_tbl(
+        iatlas.app::build_ocp_scatterplot_tbl(
             value_tbl(),
-            sample_name_tbl,
             barplot_selected_group()
         )
     })

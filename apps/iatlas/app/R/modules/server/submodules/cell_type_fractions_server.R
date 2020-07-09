@@ -6,14 +6,19 @@ cell_type_fractions_server <- function(
 ){
 
     source("R/modules/server/submodules/plotly_server.R", local = T)
-    source("R/cell_type_fractions_functions.R", local = T)
+
+    data_tbl <- shiny::reactive({
+        shiny::req(input$fraction_group_choice)
+        iatlas.app::query_features_values_by_tag(
+            cohort_obj()$dataset,
+            cohort_obj()$group_name,
+            feature_class = input$fraction_group_choice
+        )
+    })
 
     plot_tbl <- shiny::reactive({
-        shiny::req(input$fraction_group_choice, cohort_obj())
-        build_ctf_barplot_tbl(
-            input$fraction_group_choice,
-            cohort_obj()$sample_tbl
-        )
+        shiny::req(data_tbl())
+        iatlas.app::build_ctf_barplot_tbl(data_tbl())
     })
 
     output$barplot <- plotly::renderPlotly({
