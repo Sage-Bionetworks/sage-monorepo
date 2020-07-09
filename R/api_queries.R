@@ -51,3 +51,79 @@ query_samples_to_feature <- function(feature){
         purrr::pluck(1) %>%
         dplyr::as_tibble()
 }
+
+query_immunomodulators <- function(){
+    iatlas.app::perform_api_query(
+        "immunomodulators",
+        list(geneType = "immunomodulator")
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble()
+}
+
+query_feature_values_by_tag <- function(
+    dataset = list(),
+    group_tag = list(),
+    feature = list()
+){
+    iatlas.app::perform_api_query(
+        "feature_values_by_tag",
+        list(
+            dataSet = dataset,
+            related = group_tag,
+            feature = feature
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble()
+}
+
+query_features_values_by_tag <- function(
+    dataset = list(),
+    group_tag = list(),
+    feature = list(),
+    feature_class = list()
+){
+    iatlas.app::perform_api_query(
+        "features_values_by_tag",
+        list(
+            dataSet = dataset,
+            related = group_tag,
+            feature = feature,
+            featureClass = feature_class
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble() %>%
+        dplyr::select(
+            "tag",
+            "features"
+        ) %>%
+        tidyr::unnest(cols = "features") %>%
+        dplyr::select(
+            "tag",
+            "sample",
+            "feature_name" = "name",
+            "feature_display" = "display",
+            "feature_order" = "order",
+            "feature_value" = "value"
+        )
+}
+
+query_feature_values <- function(
+    dataset = list(),
+    group_tag = list(),
+    feature = list()
+){
+    iatlas.app::perform_api_query(
+        "feature_values",
+        list(
+            dataSet = dataset,
+            related = group_tag,
+            feature = feature
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble()
+}
+

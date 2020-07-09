@@ -16,28 +16,29 @@ immunomodulator_distributions_server <- function(
 
     ns <- session$ns
 
+    im_tbl <- shiny::reactive(iatlas.app::build_im_tbl())
+
     output$gene_choice_ui <- shiny::renderUI({
-        shiny::req(input$group_choice)
+        shiny::req(input$gene_group_choice, im_tbl())
         shiny::selectInput(
-            ns("gene_choice_id"),
+            ns("gene_choice_entrez"),
             label = "Select or Search Gene",
-            choices = create_im_gene_list(
-                build_im_tbl(),
-                input$group_choice
-            )
+            choices = iatlas.app::create_im_gene_list(im_tbl(), input$gene_group_choice)
         )
     })
 
-    gene_name <- shiny::reactive({
-        shiny::req(input$gene_choice_id)
-        .GlobalEnv$get_gene_hgnc_from_id(as.integer(input$gene_choice_id))
+    gene_choice_hgnc <- shiny::reactive({
+        shiny::req(input$gene_choice_entrez, im_tbl())
+        im_tbl() %>%
+            dplyr::filter(.data$entrez == input$gene_choice_entrez) %>%
+            dplyr::pull("hgnc")
     })
 
     gene_plot_label <- shiny::reactive({
-        shiny::req(gene_name(), input$scale_method_choice)
+        shiny::req(gene_choice_hgnc(), input$scale_method_choice)
 
-        .GlobalEnv$transform_feature_string(
-            gene_name(),
+        iatlas.app::transform_feature_string(
+            gene_choice_hgnc(),
             input$scale_method_choice
         )
     })

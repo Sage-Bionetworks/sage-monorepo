@@ -36,7 +36,8 @@ perform_api_query <- function(
     query_name,
     variables,
     qry_obj = .GlobalEnv$ghql_query_object,
-    api_url = "http://localhost:5000/api"
+    api_url = "http://ec2-54-190-27-240.us-west-2.compute.amazonaws.com/api"
+    # api_url = "http://localhost:5000/api"
 ){
     query <- qry_obj$queries[[query_name]]
     con <- ghql::GraphqlClient$new(api_url)

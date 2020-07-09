@@ -1,0 +1,19 @@
+query immunomodulators($geneType: [String!]) {
+  genes(geneType: $geneType){
+    entrez
+    hgnc
+    description
+    friendlyName
+    geneFamily
+    geneFunction
+    immuneCheckpoint
+    superCategory
+    publications{
+      firstAuthorLastName
+      journal
+      pubmedId
+      title
+      year
+    }
+  }
+}
