@@ -45,9 +45,7 @@ create_cohort_object <- function(
     immune_feature_bin_id = NULL,
     immune_feature_bin_number = NULL
 ){
-    print("test")
     samples <- filter_obj$samples
-    print(samples)
     if (group_choice %in% c("Immune_Subtype", "TCGA_Subtype", "TCGA_Study")) {
         cohort_object <- iatlas.app::create_tag_cohort_object(samples, dataset, group_choice)
     # } else if (group_choice == "Driver_Mutation") {
