@@ -24,7 +24,7 @@ immunomodulators_distributions_ui <- function(id) {
                 shiny::column(
                     width = 3,
                     shiny::selectInput(
-                        inputId = ns("group_choice"),
+                        inputId = ns("gene_group_choice"),
                         label = "Select Group",
                         choices = c(
                             "Gene Family" = "gene_family",

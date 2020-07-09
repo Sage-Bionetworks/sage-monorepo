@@ -1,30 +1,21 @@
+
 #' Build Immune Feature Correlations Value Table
 #'
-#' @param response_tbl A tibble with columns sample_id, feature_id, and value
-#' @param feature_tbl A tibble with columns sample_id, feature_id, value, and
-#' order, feature
-#' @param sample_tbl A tibble with columns sample_id, and group
-#' @importFrom purrr reduce
+#' @param response_tbl A tibble with columns sample, name, value
+#' @param feature_tbl A tibble with columns sample, feature_name,
+#' feature_display, order, feature_value, tag
 #' @importFrom dplyr inner_join filter select
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
-build_ifc_value_tbl <- function(response_tbl, feature_tbl, sample_tbl){
-    tbl <-
-        purrr::reduce(
-            list(response_tbl, feature_tbl, sample_tbl),
-            dplyr::inner_join,
-            by = "sample_id"
-        ) %>%
-        dplyr::filter(.data$feature_id.x != .data$feature_id.y) %>%
+build_ifc_value_tbl <- function(response_tbl, feature_tbl){
+    response_tbl %>%
         dplyr::select(
-            response_value = .data$value.x,
-            feature_value  = .data$value.y,
-            feature_name   = .data$feature,
-            .data$sample_id,
-            .data$order,
-            .data$group
-        )
-    return(tbl)
+            "sample",
+            "response_name" = "name",
+            "response_value" = "value"
+        ) %>%
+        dplyr::inner_join(feature_tbl, by = "sample") %>%
+        dplyr::filter(.data$response_name != .data$feature_name)
 }
 
 #' Build Immune Feature Correlations Heatmap Matrix
@@ -40,46 +31,44 @@ build_ifc_value_tbl <- function(response_tbl, feature_tbl, sample_tbl){
 #' @importFrom stats cor
 build_ifc_heatmap_matrix <- function(tbl, method){
     tbl %>%
-        dplyr::group_by(.data$group, .data$feature_name, .data$order) %>%
+        dplyr::group_by(.data$tag, .data$feature_display, .data$feature_order) %>%
         dplyr::summarise(cor_value = stats::cor(
             .data$feature_value,
             .data$response_value,
             method = method
         )) %>%
-        dplyr::arrange(dplyr::desc(.data$order)) %>%
-        dplyr::select(-.data$order) %>%
+        dplyr::arrange(dplyr::desc(.data$feature_order)) %>%
+        dplyr::select(-.data$feature_order) %>%
         tidyr::drop_na() %>%
         tidyr::pivot_wider(
             .,
-            names_from = .data$group,
+            names_from = .data$tag,
             values_from = .data$cor_value
         ) %>%
-        tibble::column_to_rownames("feature_name") %>%
+        tibble::column_to_rownames("feature_display") %>%
         as.matrix()
 }
 
 #' Build Immune Feature Scatterplot Tibble
 #'
-#' @param tbl A tibble with columns feature_name, response_value, feature_value,
-#' sample_id, group
-#' @param sample_tbl A tibble with columns sample_id, and sample_name
-#' @param feature A string that is in the tbl feature_name column
-#' @param group A string that is in the tbl group column
-#' @importFrom dplyr filter inner_join select
+#' @param tbl A tibble with columns feature_display,
+#' sample, tag, response_value, feature_value
+#' @param .feature A string that is in the tbl feature_name column
+#' @param .group A string that is in the tbl group column
+#' @importFrom dplyr filter select
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
-build_ifc_scatterplot_tbl <- function(tbl, sample_tbl, feature, group){
+build_ifc_scatterplot_tbl <- function(tbl, .feature, .group){
     tbl %>%
         dplyr::filter(
-            .data$feature_name == feature,
-            .data$group == group
+            .data$feature_display == .feature,
+            .data$tag == .group
         ) %>%
-        dplyr::inner_join(sample_tbl, by = "sample_id") %>%
         dplyr::select(
-            .data$group,
-            y    = .data$response_value,
-            x    = .data$feature_value,
-            name = .data$sample_name
+            "group" = .data$tag,
+            "y"     = .data$response_value,
+            "x"     = .data$feature_value,
+            "name"  = .data$sample
         ) %>%
         create_plotly_label(.data$name, .data$group, cols = c("x", "y"))
 }
