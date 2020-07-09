@@ -31,7 +31,7 @@ build_ifc_value_tbl <- function(response_tbl, feature_tbl){
 #' @importFrom stats cor
 build_ifc_heatmap_matrix <- function(tbl, method){
     tbl %>%
-        dplyr::group_by(.data$tag, .data$feature_display, .data$feature_order) %>%
+        dplyr::group_by(.data$group, .data$feature_display, .data$feature_order) %>%
         dplyr::summarise(cor_value = stats::cor(
             .data$feature_value,
             .data$response_value,
@@ -42,7 +42,7 @@ build_ifc_heatmap_matrix <- function(tbl, method){
         tidyr::drop_na() %>%
         tidyr::pivot_wider(
             .,
-            names_from = .data$tag,
+            names_from = .data$group,
             values_from = .data$cor_value
         ) %>%
         tibble::column_to_rownames("feature_display") %>%
@@ -62,10 +62,10 @@ build_ifc_scatterplot_tbl <- function(tbl, .feature, .group){
     tbl %>%
         dplyr::filter(
             .data$feature_display == .feature,
-            .data$tag == .group
+            .data$group == .group
         ) %>%
         dplyr::select(
-            "group" = .data$tag,
+            "group",
             "y"     = .data$response_value,
             "x"     = .data$feature_value,
             "name"  = .data$sample

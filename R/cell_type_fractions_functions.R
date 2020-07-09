@@ -5,10 +5,8 @@
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
 #' @importFrom dplyr inner_join select group_by arrange summarise ungroup mutate
-build_ctf_barplot_tbl <- function(data_tbl){
-    data_tbl %>%
-        print() %>%
-        dplyr::rename("group" = "tag") %>%
+build_ctf_barplot_tbl <- function(tbl){
+    tbl %>%
         dplyr::group_by(.data$feature_display, .data$group) %>%
         dplyr::arrange(.data$feature_order) %>%
         dplyr::summarise(
