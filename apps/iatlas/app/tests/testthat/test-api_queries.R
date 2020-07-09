@@ -54,15 +54,15 @@ with_test_api_env({
     expect_named(
       result,
       c(
-        "description",
         "entrez",
-        "friendlyName",
-        "geneFamily",
-        "geneFunction",
         "hgnc",
-        "immuneCheckpoint",
-        "publications",
-        "superCategory"
+        "friendly_name",
+        "description",
+        "gene_family",
+        "gene_function",
+        "immune_checkpoint",
+        "super_category",
+        "publications"
       )
     )
   })
