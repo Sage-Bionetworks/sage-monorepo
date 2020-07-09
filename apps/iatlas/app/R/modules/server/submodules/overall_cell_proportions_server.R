@@ -13,7 +13,8 @@ overall_cell_proportions_server  <- function(
             cohort_obj()$group_name,
             list("leukocyte_fraction", "Stromal_Fraction", "Tumor_fraction")
         ) %>%
-            dplyr::rename("group" = "tag")
+            dplyr::rename("group" = "tag") %>%
+            dplyr::filter(sample %in% cohort_obj()$sample_tbl$sample)
     })
 
     barplot_tbl <- shiny::reactive({

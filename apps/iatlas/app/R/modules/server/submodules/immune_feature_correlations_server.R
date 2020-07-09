@@ -55,7 +55,9 @@ immune_feature_correlations_server <- function(
             cohort_obj()$dataset,
             cohort_obj()$group_name,
             feature_class = input$class_choice
-        )
+        ) %>%
+            dplyr::rename("group" = "tag") %>%
+            dplyr::filter(sample %in% cohort_obj()$sample_tbl$sample)
     })
 
     value_tbl <- shiny::reactive({
@@ -116,7 +118,7 @@ immune_feature_correlations_server <- function(
         shiny::validate(shiny::need(
             all(
                 clicked_feature %in% value_tbl()$feature_display,
-                clicked_group %in% value_tbl()$tag
+                clicked_group %in% value_tbl()$group
             ),
             "Click above heatmap"
         ))
