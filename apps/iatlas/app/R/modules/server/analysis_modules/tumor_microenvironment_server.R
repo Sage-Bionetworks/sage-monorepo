@@ -8,8 +8,7 @@ tumor_microenvironment_server <- function(
     source_files <- c(
         "R/modules/server/submodules/overall_cell_proportions_server.R",
         "R/modules/server/submodules/cell_type_fractions_server.R",
-        "R/modules/server/submodules/call_module_server.R",
-        "R/tumor_microenvironment_functions.R"
+        "R/modules/server/submodules/call_module_server.R"
     )
 
     for (file in source_files) {

@@ -71,7 +71,7 @@ distribution_plot_server <- function(
 
     output$histplot <- plotly::renderPlotly({
         shiny::req(histplot_tbl())
-        .GlobalEnv$create_histogram(
+        iatlas.app::create_histogram(
             df = histplot_tbl(),
             source_name = "histplot",
             x_lab = distplot_ylab(),
