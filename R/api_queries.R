@@ -58,7 +58,18 @@ query_immunomodulators <- function(){
         list(geneType = "immunomodulator")
     ) %>%
         purrr::pluck(1) %>%
-        dplyr::as_tibble()
+        dplyr::as_tibble() %>%
+        dplyr::select(
+            "entrez",
+            "hgnc",
+            "friendly_name" = "friendlyName",
+            "description",
+            "gene_family" = "geneFamily",
+            "gene_function" = "geneFunction",
+            "immune_checkpoint" = "immuneCheckpoint",
+            "super_category" = "superCategory",
+            "publications"
+        )
 }
 
 query_feature_values_by_tag <- function(

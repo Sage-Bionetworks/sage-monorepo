@@ -1,31 +1,6 @@
-#' Build Immunomodulators Tibble
-#'
-#' #' @importFrom magrittr %>%
-build_im_tbl <- function(){
-    create_build_im_tbl_query() %>%
-        perform_query("Build Immunomodulators Tibble")
-}
-
-#' Create Build Immunomodulators Table Query
-create_build_im_tbl_query <- function(){
-    paste0(
-        "SELECT a.id, a.hgnc, a.entrez, a.friendly_name, a.references, ",
-        "gf.name AS gene_family, sc.name as super_category, ic.name AS ",
-        "immune_checkpoint, gfunc.name as gene_function FROM (",
-        create_get_genes_by_type_query("immunomodulator"), ") a ",
-        "LEFT JOIN gene_families gf ON a.gene_family_id = gf.id ",
-        "LEFT JOIN super_categories sc ON a.super_cat_id = sc.id ",
-        "LEFT JOIN immune_checkpoints ic ON a.immune_checkpoint_id = ic.id ",
-        "LEFT JOIN gene_functions gfunc ON a.gene_function_id = gfunc.id"
-    )
-}
-
-
-
-
 #' Create Immunomodulators Gene List
 #'
-#' @param tbl A tibble with columns hgnc, id, and the variable group
+#' @param tbl A tibble with columns hgnc, entrez, and the variable group
 #' @param group A column in the tibble
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select
@@ -34,9 +9,9 @@ create_im_gene_list <- function(tbl, group){
         dplyr::select(
             class   = tidyselect::all_of(group),
             display = "hgnc",
-            feature = "id"
+            feature = "entrez"
         ) %>%
-        create_nested_named_list()
+        iatlas.app::create_nested_named_list()
 }
 
 #' Build Immunomodulators Distributions Plot Tibble

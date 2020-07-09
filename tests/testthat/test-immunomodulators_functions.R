@@ -1,32 +1,4 @@
 with_test_db_env({
-    test_that("Build Immunomodulators Table", {
-        result1 <- build_im_tbl()
-        expect_named(
-            result1,
-            c("id", "hgnc", "entrez", "friendly_name", "references",
-              "gene_family","super_category", "immune_checkpoint",
-              "gene_function"
-            )
-        )
-    })
-
-    test_that("Create Build Immunomodulators Table Query", {
-        expect_equal(
-            create_build_im_tbl_query(),
-            paste0(
-                "SELECT a.id, a.hgnc, a.entrez, a.friendly_name, a.references, ",
-                "gf.name AS gene_family, sc.name as super_category, ic.name AS ",
-                "immune_checkpoint, gfunc.name as gene_function FROM (",
-                "SELECT * FROM genes WHERE id IN ",
-                "(SELECT gene_id FROM genes_to_types WHERE type_id IN ",
-                "(SELECT id FROM gene_types WHERE name IN ('immunomodulator')))) a " ,
-                "LEFT JOIN gene_families gf ON a.gene_family_id = gf.id ",
-                "LEFT JOIN super_categories sc ON a.super_cat_id = sc.id ",
-                "LEFT JOIN immune_checkpoints ic ON a.immune_checkpoint_id = ic.id ",
-                "LEFT JOIN gene_functions gfunc ON a.gene_function_id = gfunc.id"
-            )
-        )
-    })
 
     test_that("Create Immunomodulators Gene List", {
         tbl1 <- dplyr::tibble(
