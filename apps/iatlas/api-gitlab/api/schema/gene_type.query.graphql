@@ -1,10 +1,23 @@
+"""
+The "GeneType" type may return:
+
+- The proper "name" of the gene type
+- The "display", a friendly name of the gene type
+- A list of genes related to the gene type
+"""
 type GeneType {
-    name: String!
-    display: String
-    genes: [SimpleGene!]
+  name: String!
+  display: String
+  genes: [SimpleGene!]
 }
 
+"""
+The "SimpleGeneType" is a version of a GeneType. Only basic attributes may be returned. type may return:
+
+- The proper "name" of the gene type
+- The "display", a friendly name of the gene type
+"""
 type SimpleGeneType {
-    name: String!
-    display: String
+  name: String!
+  display: String
 }

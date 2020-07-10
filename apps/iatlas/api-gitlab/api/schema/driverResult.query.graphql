@@ -1,3 +1,15 @@
+"""
+The "DriverResult" type may return:
+
+- The feature associated with the driver result
+- The "gene" associated with the driver result
+- The "tag" associated with the driver result
+- The mutation code associated with the driver result
+- The data set associated with the driver result
+-
+
+See also "FeaturesByClass", "FeaturesByTag", and "SimpleFeature".
+"""
 type DriverResult {
   feature: SimpleFeature
   gene: SimpleGene

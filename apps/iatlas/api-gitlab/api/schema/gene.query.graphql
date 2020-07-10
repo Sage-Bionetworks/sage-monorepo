@@ -1,32 +1,69 @@
+"""
+The "Slide" type may return:
+
+- The  "entrez" of the gene
+- The  "hgnc" of the gene
+- The  "description" of the gene
+- The  "friendlyName" of the gene
+- The  "ioLandscapeName" of the gene
+- The  "geneFamily" of the gene
+- The  "geneFunction" of the gene
+- A list of "geneTypes" associated with the gene
+- The  "immuneCheckpoint" of the gene
+- The  "pathway" of the gene
+- A list of "publications" associated with the gene
+- The  "rnaSeqExpr" of the gene
+- The  "superCategory" of the gene
+- The  "description" of the gene
+- The  "therapyType" of the gene
+"""
 type Gene {
-    entrez: Int!
-    hgnc: String!
-    description: String
-    friendlyName: String
-    ioLandscapeName: String
-    geneFamily: String
-    geneFunction: String
-    geneTypes: [SimpleGeneType!]
-    immuneCheckpoint: String
-    pathway: String
-    publications: [SimplePublication!]
-    rnaSeqExpr: Float
-    superCategory: String
-    therapyType: String
+  entrez: Int!
+  hgnc: String!
+  description: String
+  friendlyName: String
+  ioLandscapeName: String
+  geneFamily: String
+  geneFunction: String
+  geneTypes: [SimpleGeneType!]
+  immuneCheckpoint: String
+  pathway: String
+  publications: [SimplePublication!]
+  rnaSeqExpr: Float
+  superCategory: String
+  therapyType: String
 }
 
+"""
+The "SimpleGene" is a version of a gene. Only basic attributes may be returned. type may return:
+
+- The  "entrez" of the publication
+- The  "hgnc" of the publication
+- The  "description" of the publication
+- The  "friendlyName" of the publication
+- The  "ioLandscapeName" of the publication
+"""
 type SimpleGene {
-    entrez: Int!
-    hgnc: String!
-    description: String
-    friendlyName: String
-    ioLandscapeName: String
+  entrez: Int!
+  hgnc: String!
+  description: String
+  friendlyName: String
+  ioLandscapeName: String
 }
 
+"""
+The "GenesByTag" type may return:
+
+- The "characteristics" of the gene.
+- The "color", a color to represent the gene as a hex value.
+- The "display", a friendly name for the gene.
+- A list of genes associated with that tag.
+- The "tag" (the name of the tag).
+"""
 type GenesByTag {
-    characteristics: String
-    color: String
-    display: String
-    genes: [Gene!]!
-    tag: String!
+  characteristics: String
+  color: String
+  display: String
+  genes: [Gene!]!
+  tag: String!
 }
