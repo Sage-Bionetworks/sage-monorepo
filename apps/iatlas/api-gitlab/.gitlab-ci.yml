@@ -100,7 +100,7 @@ Deploy to Staging:
     - mv "$STAGING_DOCKER_SSH_PRIV_KEY" ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     # Accept the Docker server host key
-    - ssh-keyscan -t ${STAGING_DOCKER_HOST} >> ~/.ssh/known_hosts
+    - ssh-keyscan -t rsa ${STAGING_DOCKER_HOST} >> ~/.ssh/known_hosts
   script:
     # Set the remote Docker endpoint
     - export DOCKER_HOST=ssh://ubuntu@${STAGING_DOCKER_HOST}
