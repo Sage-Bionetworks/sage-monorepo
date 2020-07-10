@@ -104,6 +104,7 @@ Deploy to Staging:
     - cat ~/.ssh/id_rsa
     # Set the remote Docker endpoint
     - export DOCKER_HOST=ssh://ubuntu@${STAGING_DOCKER_HOST}
+    - env | egrep STAGING
     # Stop the existing container
     - docker stop ${STAGING_CONTAINER_NAME}
     - docker ps -a
