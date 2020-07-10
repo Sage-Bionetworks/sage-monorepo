@@ -21,7 +21,9 @@ with_test_api_env({
       result,
       c(
         "class",
-        "features"
+        "display",
+        "name",
+        "order"
       )
     )
   })

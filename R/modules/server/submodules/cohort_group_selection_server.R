@@ -7,8 +7,6 @@ cohort_group_selection_server <- function(
 ){
     ns <- session$ns
 
-    source("R/cohort_group_selection_functions.R", local = T)
-
     dataset_to_group_tbl <- dplyr::tribble(
         ~group,                ~dataset, ~type, ~group_internal,
         "Immune Subtype",      "TCGA",   "tag", "Immune_Subtype",
@@ -28,7 +26,9 @@ cohort_group_selection_server <- function(
 
     available_groups <- shiny::reactive({
         shiny::req(selected_dataset())
-        get_cohort_available_groups(dataset_to_group_tbl, selected_dataset())
+        iatlas.app::get_cohort_available_groups(
+            dataset_to_group_tbl, selected_dataset()
+        )
     })
 
     default_group <- shiny::reactive({
@@ -112,10 +112,10 @@ cohort_group_selection_server <- function(
                 input$immune_feature_bin_number
             )
         }
-        create_cohort_object(
+        iatlas.app::create_cohort_object(
             filter_obj(),
-            group_choice(),
             selected_dataset(),
+            group_choice(),
             driver_mutation(),
             as.integer(input$immune_feature_bin_choice),
             as.integer(input$immune_feature_bin_number)

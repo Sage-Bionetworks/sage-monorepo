@@ -40,7 +40,8 @@ query_features_by_class <- function(
         )
     ) %>%
         purrr::pluck(1) %>%
-        dplyr::as_tibble()
+        dplyr::as_tibble() %>%
+        tidyr::unnest(cols = c("features"))
 }
 
 query_samples_to_features <- function(features = list()){
