@@ -4,6 +4,7 @@ query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [Strin
     features {
       name
       display
+      order
     }
   }
 }

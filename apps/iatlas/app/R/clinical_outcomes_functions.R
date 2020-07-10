@@ -33,12 +33,22 @@ get_status_id_from_time_id <- function(time_id){
 #' @importFrom magrittr %>%
 #' @importFrom dplyr inner_join select
 #' @importFrom rlang .data
-build_survival_value_tbl <- function(sample_tbl, time_id, status_id) {
+build_survival_value_tbl <- function(sample_tbl, time_feature, status_feature) {
+    time_tbl <-
+        iatlas.app::query_samples_to_feature(time_feature) %>%
+        dplyr::rename("time" = "value")
+    status_tbl <-
+        iatlas.app::query_samples_to_feature(status_feature) %>%
+        dplyr::rename("status" = "value")
     tbl <-
-        build_co_survival_tbl(time_id, status_id) %>%
-        dplyr::inner_join(sample_tbl, by = "sample_id") %>%
-        dplyr::select(.data$group, .data$time, .data$status, .data$sample_id)
+        purrr::reduce(
+            list(sample_tbl, time_tbl, status_tbl),
+            dplyr::inner_join,
+            by = "sample"
+        ) %>%
+        dplyr::select(.data$sample, .data$group, .data$time, .data$status)
     return(tbl)
+
 }
 
 #' Build Heatmap Matrix
@@ -54,11 +64,12 @@ build_survival_value_tbl <- function(sample_tbl, time_id, status_id) {
 build_co_heatmap_matrix <- function(tbl){
     tbl %>%
         dplyr::select(
-            .data$feature,
-            .data$value,
-            .data$time,
-            .data$status,
-            .data$group
+            "feature" = "feature_display",
+            "value" = "feature_value",
+            "time",
+            "status",
+            "group",
+            "order" = "feature_order"
         ) %>%
         tidyr::nest(
             value = .data$value,
@@ -73,7 +84,7 @@ build_co_heatmap_matrix <- function(tbl){
             .data$data,
             concordanceIndex::concordanceIndex
         )) %>%
-        dplyr::select(.data$feature, .data$group, .data$result) %>%
+        dplyr::select("feature", "group", "result") %>%
         tidyr::pivot_wider(
             .data$feature,
             names_from = .data$group,

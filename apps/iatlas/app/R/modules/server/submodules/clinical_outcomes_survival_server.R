@@ -7,41 +7,32 @@ clinical_outcomes_survival_server <- function(
 
     ns <- session$ns
 
-    source("R/clinical_outcomes_functions.R")
-
-    time_class_id <- iatlas.app::get_class_id_from_name("Survival Time")
-
     output$time_feature_selection_ui <- shiny::renderUI({
-        shiny::req(time_class_id)
+        choices <- cohort_obj()$feature_tbl %>%
+            dplyr::filter(.data$class == "Survival Time") %>%
+            dplyr::arrange(.data$order) %>%
+            dplyr::select("display", "name") %>%
+            tibble::deframe(.)
 
         shiny::selectInput(
-            inputId = ns("time_feature_choice_id"),
+            inputId = ns("time_feature_choice"),
             label = "Select or Search for Survival Endpoint",
-            choices = iatlas.app::create_feature_named_list(time_class_id),
-            selected = "OS Time"
+            choices = choices
         )
     })
 
-    time_feature_id   <- shiny::reactive({
-        shiny::req(input$time_feature_choice_id)
-        as.integer(input$time_feature_choice_id)
-    })
-
-    status_feature_id <- shiny::reactive({
-        shiny::req(time_feature_id())
-        get_status_id_from_time_id(time_feature_id())
+    status_feature_choice <- shiny::reactive({
+        shiny::req(input$time_feature_choice)
+        if (input$time_feature_choice == "PFI_time_1") return("PFI_1")
+        else if (input$time_feature_choice == "OS_time") return("OS")
     })
 
     survival_value_tbl <- shiny::reactive({
-        shiny::req(
-            cohort_obj(),
-            time_feature_id(),
-            status_feature_id()
-        )
+        shiny::req(input$time_feature_choice, status_feature_choice())
         build_survival_value_tbl(
             cohort_obj()$sample_tbl,
-            time_feature_id(),
-            status_feature_id()
+            input$time_feature_choice,
+            status_feature_choice()
         )
     })
 

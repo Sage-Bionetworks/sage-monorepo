@@ -39,15 +39,19 @@ build_dm_tbl <- function(){
 #' @importFrom purrr list_modify
 create_cohort_object <- function(
     filter_obj,
-    group_choice,
     dataset,
+    group_choice,
     driver_mutation = NULL,
     immune_feature_bin_id = NULL,
     immune_feature_bin_number = NULL
 ){
-    samples <- filter_obj$samples
-    if (group_choice %in% c("Immune_Subtype", "TCGA_Subtype", "TCGA_Study")) {
-        cohort_object <- iatlas.app::create_tag_cohort_object(samples, dataset, group_choice)
+    cohort_object <- iatlas.app::create_tag_cohort_object(
+        filter_obj$samples, dataset, group_choice
+    )
+
+    # samples <-
+    # if (group_choice %in% c("Immune_Subtype", "TCGA_Subtype", "TCGA_Study")) {
+    #     cohort_object <- iatlas.app::create_tag_cohort_object(samples, dataset, group_choice)
     # } else if (group_choice == "Driver_Mutation") {
     #     cohort_object <- create_dm_cohort_object(sample_ids, driver_mutation)
     # } else if (group_choice == "Immune_Feature_Bins") {
@@ -56,12 +60,11 @@ create_cohort_object <- function(
     #         immune_feature_bin_id,
     #         immune_feature_bin_number
     #     )
-    }
+    # }
     cohort_object$dataset     <- dataset
     # cohort_object$filters     <- filter_obj$filters
     cohort_object$feature_tbl <-
-        iatlas.app::query_features_by_class(dataset, group_choice) %>%
-        tidyr::unnest(cols = c("features"))
+        iatlas.app::query_features_by_class(dataset, group_choice)
     return(cohort_object)
 }
 
@@ -75,7 +78,7 @@ create_cohort_object <- function(
 #' @importFrom dplyr select
 #' @importFrom rlang .data
 create_tag_cohort_object <- function(samples, dataset, tag){
-    cohort_tbl  <- build_cohort_tbl_by_tag(samples, dataset, tag)
+    cohort_tbl  <- iatlas.app::build_cohort_tbl_by_tag(samples, dataset, tag)
     sample_tbl   <- cohort_tbl %>%
         dplyr::select("sample", "group") %>%
         dplyr::arrange(.data$sample)
@@ -86,9 +89,10 @@ create_tag_cohort_object <- function(samples, dataset, tag){
     colors_list <- group_tbl %>%
         dplyr::select(.data$group, .data$color) %>%
         dplyr::distinct() %>%
-        create_plot_colors_list()
+        iatlas.app::create_plot_colors_list(.)
     list(
         "sample_tbl"  = sample_tbl,
+        "group_type"  = "tag",
         "group_tbl"   = group_tbl,
         "group_name"  = tag,
         "plot_colors" = colors_list
@@ -111,7 +115,7 @@ build_cohort_tbl_by_tag <- function(samples, dataset, tag){
             "sample",
             "size"
         ) %>%
-        dplyr::filter(.data$sample %in% c(samples))
+        dplyr::filter(.data$sample %in% samples)
 }
 
 #' Create Tag Group Tibble
@@ -138,17 +142,17 @@ create_tag_group_tbl <- function(cohort_tbl){
 #' @importFrom dplyr select
 #' @importFrom rlang .data
 create_dm_cohort_object <- function(sample_ids, mutation){
-    gene <- get_gene_from_mutation(mutation)
-    code <- get_code_from_mutation(mutation)
+    gene <- iatlas.app::get_gene_from_mutation(mutation)
+    code <- iatlas.app::get_code_from_mutation(mutation)
     gene_id <- get_gene_id_from_hgnc(gene)
     code_id <- get_id_from_mutation_code(code)
-    cohort_tbl  <- create_dm_cohort_sample_tbl(sample_ids, gene_id, code_id)
+    cohort_tbl  <- iatlas.app::create_dm_cohort_sample_tbl(sample_ids, gene_id, code_id)
     colors_list <- cohort_tbl %>%
         dplyr::select(.data$group) %>%
-        create_plot_colors_list()
+        iatlas.app::create_plot_colors_list()
     list(
         "sample_tbl"  = cohort_tbl,
-        "group_tbl"   = create_dm_cohort_group_tbl(cohort_tbl, gene),
+        "group_tbl"   = iatlas.app::create_dm_cohort_group_tbl(cohort_tbl, gene),
         "group_name"  = paste0(
             "Mutation Status", gene, code, sep = ": "
         ),
