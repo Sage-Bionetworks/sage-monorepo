@@ -97,9 +97,9 @@ Deploy to Staging:
   image: eugenmayer/docker-client:latest
   script:
     # Echo the RSA key into the correct location
-    - mkdir -p ~/.ssh && echo ${STAGING_DOCKER_SSH_PRIV_KEY} > ~/.ssh/id_rsa.pub
+    - mkdir -p ~/.ssh && echo ${STAGING_DOCKER_SSH_PRIV_KEY} > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     # Set the remote Docker endpoint
-    - export DOCKER_HOST=ssh://ubuntu@${STAGING_DOCKER_HOST}:22
+    - export DOCKER_HOST=ssh://ubuntu@${STAGING_DOCKER_HOST}
     # Stop the existing container
     - docker stop ${STAGING_CONTAINER_NAME}
     - docker ps -a
