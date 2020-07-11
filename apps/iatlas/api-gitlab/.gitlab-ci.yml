@@ -105,6 +105,7 @@ Deploy to Staging:
     # Set the remote Docker endpoint
     - export DOCKER_HOST=ssh://ubuntu@${STAGING_DOCKER_HOST}
     # Stop the existing container
+    - docker login registry.gitlab.com --username ${STAGING_DOCKER_USERNAME} --password ${STAGING_DOCKER_PASSWORD}
     - docker stop ${STAGING_CONTAINER_LABEL}
     - docker ps -a
     - docker run --rm -d -p 80:80 --name ${STAGING_CONTAINER_LABEL} -e POSTGRES_HOST=${STAGING_DB_HOST} -e POSTGRES_USER=${STAGING_DB_USER} -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -e POSTGRES_DB=${STAGING_DB_NAME} -e POSTGRES_PORT=5432 ${STAGING_CONTAINER_NAME}
