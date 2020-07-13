@@ -14,10 +14,15 @@ model_selection_server <- function(
     )
 
     # numeric covariate ui -----------------------------------------------------
+
+    numerical_covariate_list <- shiny::reactive({
+        iatlas.app::create_nested_named_list(numerical_covariate_tbl())
+    })
+
     numeric_covariate_module <- shiny::reactive({
         purrr::partial(
             numeric_model_covariate_element_server,
-            covariate_tbl = numerical_covariate_tbl
+            covariate_list = numerical_covariate_list
         )
     })
 
@@ -39,7 +44,6 @@ model_selection_server <- function(
                 .,
                 "covariate_choice_name"
             )
-
     })
 
     numerical_transformations <- shiny::reactive({
@@ -52,29 +56,41 @@ model_selection_server <- function(
     })
 
     numerical_display_string <- shiny::reactive({
+        if(is.null(numerical_covariates())) return(NULL)
+        if(is.null(numerical_transformations())) return(NULL)
+        covs <- numerical_covariate_tbl() %>%
+            dplyr::filter(.data$feature %in% numerical_covariates()) %>%
+            dplyr::pull("display") %>%
+            stringr::str_c(collapse = " + ")
+
         iatlas.app::create_numerical_covariate_string(
-            numerical_covariates(),
+            covs,
             numerical_transformations(),
-            # iatlas.app::get_feature_display_from_id,
             iatlas.app::transform_feature_string
         )
     })
 
     numerical_formula_string <- shiny::reactive({
+        if(is.null(numerical_covariates())) return(NULL)
+        if(is.null(numerical_transformations())) return(NULL)
+
         iatlas.app::create_numerical_covariate_string(
             numerical_covariates(),
             numerical_transformations(),
-            # iatlas.app::get_feature_name_from_id,
             iatlas.app::transform_feature_formula
-        ) %>%
-            print()
+        )
     })
 
     # categorical covariate ui -------------------------------------------------
+
+    categorical_covariate_list <- shiny::reactive({
+        iatlas.app::create_nested_named_list(categorical_covariate_tbl())
+    })
+
     categorical_covariate_module <- shiny::reactive({
         purrr::partial(
             categorical_model_covariate_element_server,
-            covariate_tbl = categorical_covariate_tbl
+            covariate_list = categorical_covariate_list
         )
     })
 
@@ -96,17 +112,16 @@ model_selection_server <- function(
     })
 
     categorical_display_string <- shiny::reactive({
-        create_categorical_covariate_string(
-            categorical_covariates(),
-            iatlas.app::get_tag_display_from_name
-        )
+        if(is.null(categorical_covariates())) return(NULL)
+        categorical_covariate_tbl() %>%
+            dplyr::filter(.data$feature %in% categorical_covariates()) %>%
+            dplyr::pull("display") %>%
+            stringr::str_c(collapse = " + ")
     })
 
     categorical_formula_string <- shiny::reactive({
-        create_categorical_covariate_string(
-            categorical_covariates(),
-            identity
-        )
+        if(is.null(categorical_covariates())) return(NULL)
+        stringr::str_c(categorical_covariates(), collapse = " + ")
     })
 
     # combine covariataes into output ------------------------------------------
@@ -126,7 +141,8 @@ model_selection_server <- function(
             model_formula_prefix(),
             numerical_formula_string(),
             categorical_formula_string()
-        )
+        ) %>%
+            print()
     })
 
     shiny::reactive({

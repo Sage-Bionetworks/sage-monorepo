@@ -31,26 +31,24 @@ multivariate_driver_server <- function(
 
     categorical_covariate_tbl <- shiny::reactive({
         dplyr::tribble(
-            ~class,     ~display,         ~feature,         ~internal,
-            "Groups",   "Immune Subtype", "Immune_Subtype", "Immune_Subtype",
-            "Groups",   "TCGA Study",     "TCGA_Study",     "TCGA_Study",
-            "Groups",   "TCGA Subtype",   "TCGA_Subtype",   "TCGA_Subtype"
-            # "Clinical", "Gender",         "Gender",
-            # "Clinical", "Race",           "Race",
-            # "Clinical", "Ethnicty",       "Ethnicty"
+            ~class,     ~display,         ~feature,
+            "Groups",   "Immune Subtype", "Immune_Subtype",
+            "Groups",   "TCGA Study",     "TCGA_Study",
+            "Groups",   "TCGA Subtype",   "TCGA_Subtype"
         )
     })
 
-    # response_variable_name <- shiny::reactive({
-    #     shiny::req(input$response_variable)
-    #     input$response_choice_id %>%
-    #         as.integer() %>%
-    #         iatlas.app::get_feature_display_from_id()
-    # })
+    response_variable_display <- shiny::reactive({
+        shiny::req(input$response_variable)
+        cohort_obj() %>%
+            purrr::pluck("feature_tbl") %>%
+            dplyr::filter(.data$name == input$response_variable) %>%
+            dplyr::pull("display")
+    })
 
     model_string_prefix <- shiny::reactive({
-        shiny::req(input$response_variable)
-        stringr::str_c(input$response_variable, " ~ Mutation status")
+        shiny::req(response_variable_display())
+        stringr::str_c(response_variable_display(), " ~ Mutation status")
     })
 
     covariates_obj <- shiny::callModule(

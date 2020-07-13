@@ -1,4 +1,4 @@
-with_test_db_env({
+with_test_api_env({
     test_that("get_numeric_covariate_ids_from_output", {
         input1 <- list(
             "element1" = list(
@@ -88,7 +88,6 @@ with_test_db_env({
             create_numerical_covariate_string(
                 NULL,
                 NULL,
-                get_feature_display_from_id,
                 transform_feature_formula
             )
         )
@@ -96,7 +95,6 @@ with_test_db_env({
             create_numerical_covariate_string(
                 1,
                 "None",
-                get_feature_display_from_id,
                 transform_feature_formula
             ),
             "character"
@@ -105,30 +103,8 @@ with_test_db_env({
             create_numerical_covariate_string(
                 1,
                 "None",
-                get_feature_display_from_id,
                 transform_feature_formula
                 ),
-            1L
-        )
-    })
-
-    test_that("create_categorical_covariate_string", {
-        expect_null(create_categorical_covariate_string(
-            NULL,
-            get_tag_display_from_name
-        ))
-        expect_type(
-            create_categorical_covariate_string(
-                "Immune_Subtype",
-                get_tag_display_from_name
-            ),
-            "character"
-        )
-        expect_length(
-            create_categorical_covariate_string(
-                "Immune_Subtype",
-                get_tag_display_from_name
-            ),
             1L
         )
     })
