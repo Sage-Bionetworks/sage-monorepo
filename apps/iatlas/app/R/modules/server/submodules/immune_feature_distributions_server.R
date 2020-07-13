@@ -11,10 +11,10 @@ immune_feature_distributions_server <- function(
 
     output$selection_ui <- shiny::renderUI({
         shiny::selectInput(
-            ns("feature_choice_name"),
-            label = "Select or Search for Variable",
+            inputId  = ns("feature_choice_name"),
+            label    = "Select or Search for Variable",
             selected = "leukocyte_fraction",
-            choices = iatlas.app::create_nested_named_list(
+            choices  = iatlas.app::create_nested_named_list(
                 cohort_obj()$feature_tbl, values_col = "name"
             )
         )

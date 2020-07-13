@@ -2,7 +2,7 @@ show_ud_submodule <- function(cohort_obj){
     all(
         cohort_obj$dataset == "TCGA",
         cohort_obj$group_name %in% c(
-            "Immune Subtype", "TCGA Subtype", "TCGA Study"
+            "Immune_Subtype", "TCGA_Subtype", "TCGA_Study"
         )
     )
 }

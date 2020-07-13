@@ -1,53 +1,66 @@
-#' Create Cohorts Group Named List
+# TODO replace this table with datasets to tags relationships
+#' Create Cohort Tag Named List
 #'
-#' @param tbl A tibble
+#' @param .dataset A string, in the dataset column of the tbl
+#' @param tbl A tibble with columns tag_display, tag_name, dataset
 #' @importFrom magrittr %>%
 #' @importFrom dplyr inner_join select
-#' @importFrom tibble deframe
-create_cohort_group_named_list <- function(tbl, .dataset){
-    "SELECT display, id FROM tags" %>%
-        perform_query("Get tags") %>%
-        dplyr::inner_join(tbl, by = c("display" = "group")) %>%
+#' @importFrom tibble deframe filter
+create_cohort_tag_named_list <- function(.dataset, tbl = NULL){
+    tag_tbl <- dplyr::tribble(
+        ~tag_display,     ~tag_name,        ~dataset,
+        "Immune Subtype", "Immune_Subtype", "TCGA",
+        "TCGA Subtype",   "TCGA_Subtype",   "TCGA",
+        "TCGA Study",     "TCGA_Study",     "TCGA",
+        "Immune Subtype", "Immune_Subtype", "PCAWG",
+        "PCAWG Study",    "PCAWG_Study",    "PCAWG"
+    )
+
+    if (is.null(tbl)) tbl <- tag_tbl
+    tbl %>%
         dplyr::filter(.data$dataset == .dataset) %>%
-        dplyr::select("display", "id") %>%
+        dplyr::select("tag_display", "tag_name") %>%
         tibble::deframe(.)
+
 }
 
-#' Get Valid Group Filters
+#' Get Valid Tag Filters
 #'
 #' @param filter_obj A list of named lists with names ids and name
 #' @importFrom magrittr %>%
 #' @importFrom purrr keep map_lgl
-get_valid_group_filters <- function(filter_obj){
+get_valid_tag_filters <- function(filter_obj){
     filter_obj %>%
-        purrr::keep(purrr::map_lgl(., is_group_filter_valid)) %>%
+        purrr::keep(purrr::map_lgl(., iatlas.app::is_tag_filter_valid)) %>%
         unname()
 }
 
-#' Is Group Filter Valid
+#' Is Tag Filter Valid
 #'
-#' @param obj A named list with names ids and name
-is_group_filter_valid <- function(obj){
+#' @param obj A named list with names
+is_tag_filter_valid <- function(obj){
     all(
         !is.null(obj),
-        !is.null(obj$ids),
-        !is.null(obj$name)
+        !is.null(obj$tags)
     )
 }
 
-#' Get Filtered Group Sample IDs
+#' Get Filtered Tag Samples
 #'
 #' @param filter_obj A list of named lists with names ids and name
-#' @param sample_ids A vector on integers that are in the sample_id column of
-#' samples_to_tags table
+#' @param samples A vector of strings
 #' @importFrom magrittr %>%
 #' @importFrom purrr transpose pluck map reduce
-get_filtered_group_sample_ids <- function(filter_obj, sample_ids){
+get_filtered_tag_samples <- function(filter_obj, samples){
+    print("test")
     filter_obj %>%
+        print() %>%
         purrr::transpose(.) %>%
-        purrr::pluck("ids") %>%
-        purrr::map(., get_filtered_group_sample_ids_by_filter) %>%
-        purrr::reduce(base::intersect, .init = sample_ids)
+        print() %>%
+        purrr::pluck("tags") %>%
+        print()
+        purrr::map(., iatlas.app::get_filtered_group_sample_ids_by_filter) %>%
+        purrr::reduce(base::intersect, .init = samples)
 }
 
 #' Get Filtered Group Sample IDs By Filter
