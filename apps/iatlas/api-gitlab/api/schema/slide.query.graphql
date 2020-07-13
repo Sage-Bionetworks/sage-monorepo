@@ -3,7 +3,7 @@ The "Slide" type may return:
 
 - The  "name" of the publication
 - The  "description" of the publication
-- The  "patient" related to the publication
+- The  "patient" associated to the publication
 """
 type Slide {
   id: Int!

@@ -1,20 +1,19 @@
 """
 The "Slide" type may return:
 
-- The  "entrez" of the gene
-- The  "hgnc" of the gene
+- The  "entrez", the unique id of the gene to use on search engines
+- The  "hgnc", the HUGO Gene Nomenclature Committee
 - The  "description" of the gene
 - The  "friendlyName" of the gene
-- The  "ioLandscapeName" of the gene
+- The  "ioLandscapeName" the IO Landscape Name of the gene
 - The  "geneFamily" of the gene
 - The  "geneFunction" of the gene
 - A list of "geneTypes" associated with the gene
 - The  "immuneCheckpoint" of the gene
 - The  "pathway" of the gene
 - A list of "publications" associated with the gene
-- The  "rnaSeqExpr" of the gene
+- The  "rnaSeqExpr", a list of rna sequence expressions
 - The  "superCategory" of the gene
-- The  "description" of the gene
 - The  "therapyType" of the gene
 """
 type Gene {
@@ -37,11 +36,11 @@ type Gene {
 """
 The "SimpleGene" is a version of a gene. Only basic attributes may be returned. type may return:
 
-- The  "entrez" of the publication
-- The  "hgnc" of the publication
+- The  "entrez", the unique id of the gene to use on search engines
+- The  "hgnc", the HUGO Gene Nomenclature Committee
 - The  "description" of the publication
 - The  "friendlyName" of the publication
-- The  "ioLandscapeName" of the publication
+- The  "ioLandscapeName" the IO Landscape Name of the gene
 """
 type SimpleGene {
   entrez: Int!

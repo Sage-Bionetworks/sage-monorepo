@@ -6,9 +6,13 @@ The "DriverResult" type may return:
 - The "tag" associated with the driver result
 - The mutation code associated with the driver result
 - The data set associated with the driver result
--
+- The "pValue", the P value of the driver result
+- The "foldChange", the fold change of the driver result
+- The "log10PValue", the log10 computed result of P value
+- The "lof10FoldChange", the log10 computed result of fold change
+- The "n_wt", the number or wild type genes
+- The "n_mut", the number of mutant genes
 
-See also "FeaturesByClass", "FeaturesByTag", and "SimpleFeature".
 """
 type DriverResult {
   feature: SimpleFeature
@@ -20,6 +24,6 @@ type DriverResult {
   foldChange: Float
   log10PValue: Float
   log10FoldChange: Float
-  n_wt: Int
-  n_mut: Int
+  n_wt: Int number of wild type genes
+  n_mut: Int number of mutant genes
 }
