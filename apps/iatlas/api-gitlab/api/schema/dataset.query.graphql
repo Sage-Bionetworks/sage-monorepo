@@ -1,9 +1,22 @@
+"""
+The "Dataset" type may return:
+
+- The "name" of the dataset
+- The "display", a friendly name of the dataset
+- A list of samples associated with the dataset
+"""
 type DataSet {
   name: String!
   display: String
   samples: [Sample!]
 }
 
+"""
+The "SimpleDataSet" is a version of a DataSet. Only basic attributes may be returned. type may return:
+
+- The proper "name" of the dataset
+- The "display", a friendly name of the dataset
+"""
 type SimpleDataSet {
   name: String!
   display: String

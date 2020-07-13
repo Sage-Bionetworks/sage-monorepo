@@ -1,3 +1,14 @@
+"""
+The "Patient" type may return:
+
+- The "age" of the patient
+- The "barcode" of the patient
+- The "ethnicity" of the patient
+- The "gender" of the patient
+- The "height" of the patient
+- The "race" of the patient
+- The "weight" of the patient
+"""
 type Patient {
   id: Int!
   age: Int

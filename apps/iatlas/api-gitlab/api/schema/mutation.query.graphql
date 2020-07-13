@@ -1,3 +1,11 @@
+"""
+The "Mutation" type may return:
+
+- The "gene" related to the mutation
+- The "mutation code"
+- The "mutation type"
+- A list of "samples"
+"""
 type Mutation {
   id: Int!
   gene: SimpleGene
@@ -6,6 +14,12 @@ type Mutation {
   samples: [Sample!]
 }
 
+"""
+The "MutationType" type may return:
+
+- The "diplay", a friendly name of the mutation type
+- The proper "name" of the mutation type
+"""
 type MutationType {
   display: String
   name: String

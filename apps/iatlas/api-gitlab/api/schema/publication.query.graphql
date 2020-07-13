@@ -1,16 +1,35 @@
+"""
+The "Publication" type may return:
+
+- The  "firstAuthorLastName", the first last name of the publication's author
+- A list of "genes" related to the publication
+- The  "journal" of the publication
+- The  "pubmedId", the id of the publication in the pubmed website. See https://pubmed.ncbi.nlm.nih.gov/
+- The  "title" of the publication
+- The  "year" of the publication
+"""
 type Publication {
-    firstAuthorLastName: String
-    genes: [SimpleGene!]
-    journal: String
-    pubmedId: Int!
-    title: String
-    year: String
+  firstAuthorLastName: String
+  genes: [SimpleGene!]
+  journal: String
+  pubmedId: Int!
+  title: String
+  year: String
 }
 
+"""
+The "SimplePublication" is a version of a Publication. Only basic attributes may be returned. type may return:
+
+- The  "firstAuthorLastName", the first last name of the publication's author
+- The  "journal" of the publication
+- The  "pubmedId", the id of the publication in the pubmed website. See https://pubmed.ncbi.nlm.nih.gov/
+- The  "title" of the publication
+- The  "year" of the publication
+"""
 type SimplePublication {
-    firstAuthorLastName: String
-    journal: String
-    pubmedId: Int!
-    title: String
-    year: String
+  firstAuthorLastName: String
+  journal: String
+  pubmedId: Int!
+  title: String
+  year: String
 }
