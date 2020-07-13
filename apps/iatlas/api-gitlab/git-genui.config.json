@@ -1,8 +1,12 @@
 {
-    "project": {
-        "tracker": {
-            "name": "PivotalTracker",
-            "projectId": 2421624
-        }
+  "project": {
+    "tracker": {
+      "name": "PivotalTracker",
+      "projectId": 2421624
     }
+  },
+  "tracker": {
+    "name": "PivotalTracker",
+    "projectId": 2421624
+  }
 }
