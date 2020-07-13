@@ -10,9 +10,9 @@ class FeatureToSample(Base):
         'features.id'), primary_key=True)
 
     sample_id = db.Column(db.Integer, db.ForeignKey(
-        'samples.id'), nullable=False)
+        'samples.id'), primary_key=True)
 
-    value = db.Column(db.Float, nullable=True)
+    value = db.Column(db.Numeric, nullable=True)
 
     inf_value = db.Column(db.Float, nullable=True)
 

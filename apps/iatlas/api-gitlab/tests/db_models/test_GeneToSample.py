@@ -11,7 +11,7 @@ def gene_id():
 def test_GeneToSample_with_relations(app, gene_id):
     string_representation_list = []
     separator = ', '
-    relationships_to_join = ['genes', 'samples']
+    relationships_to_join = ['gene', 'sample']
 
     query = return_gene_to_sample_query(*relationships_to_join)
     results = query.filter_by(gene_id=gene_id).limit(3).all()
@@ -20,14 +20,8 @@ def test_GeneToSample_with_relations(app, gene_id):
     for result in results:
         string_representation = '<GeneToSample %r>' % gene_id
         string_representation_list.append(string_representation)
-        assert isinstance(result.genes, list)
-        # Don't need to iterate through every result.
-        for gene in result.genes[0:2]:
-            assert type(gene.entrez) is int
-        assert isinstance(result.samples, list)
-        # Don't need to iterate through every result.
-        for sample in result.samples[0:2]:
-            assert type(sample.name) is str
+        assert type(result.gene.entrez) is int
+        assert type(result.sample.name) is str
         assert result.gene_id == gene_id
         assert type(result.sample_id) is int
         assert type(result.rna_seq_expr) is float or NoneType
@@ -42,8 +36,8 @@ def test_GeneToSample_no_relations(app, gene_id):
 
     assert isinstance(results, list)
     for result in results:
-        assert result.genes == []
-        assert result.samples == []
+        assert type(result.gene) is NoneType
+        assert type(result.sample) is NoneType
         assert result.gene_id == gene_id
         assert type(result.sample_id) is int
         assert type(result.rna_seq_expr) is float or NoneType

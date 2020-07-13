@@ -65,9 +65,9 @@ type SimpleTag {
 
 # Get features by class - pass min and max value and a feature name, Get only samples that fit.
 
-# Get driver mutation by mutation type
+# Get driver mutation by mutation type - done
 
-# Choose a mutation and get all the samples related to that mutation
+# Choose a mutation and get all the samples related to that mutation - done
 
 samples_by_mutation_status {
     status {

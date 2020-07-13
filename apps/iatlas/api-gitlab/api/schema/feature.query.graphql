@@ -58,7 +58,7 @@ type FeaturesByTag {
 }
 
 """
-The "SimpleFeature" type may return:
+The "SimpleFeature" is a version of a `Feature`. Only basic feature attributes may be returned.
 
 - The feature's "name" (a unique string for this feature).
 - A "display" name, a readable name for the feature.

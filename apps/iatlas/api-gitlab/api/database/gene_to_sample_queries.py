@@ -3,7 +3,7 @@ from api import db
 from api.db_models import GeneToSample
 from .database_helpers import build_general_query
 
-related_fields = ['genes', 'samples']
+related_fields = ['gene', 'sample']
 
 core_fields = ['gene_id', 'sample_id', 'rna_seq_expr']
 

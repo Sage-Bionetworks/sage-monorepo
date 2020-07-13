@@ -1,4 +1,4 @@
-from .resolver_helpers import get_value, request_genes
+from .resolver_helpers import get_rna_seq_expr, get_value, request_genes
 
 
 def resolve_genes(_obj, info, entrez=None, geneType=None):
@@ -26,6 +26,7 @@ def resolve_genes(_obj, info, entrez=None, geneType=None):
             'title': get_value(publication, 'title'),
             'year': get_value(publication, 'year'),
         } for publication in get_value(gene, 'publications', [])],
+        'rnaSeqExpr': get_rna_seq_expr(gene),
         'superCategory': get_value(get_value(gene, 'super_category')),
         'therapyType': get_value(get_value(gene, 'therapy_type'))
     } for gene in genes]
