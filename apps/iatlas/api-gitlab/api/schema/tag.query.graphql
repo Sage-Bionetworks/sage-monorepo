@@ -11,12 +11,12 @@ The "Tag" type may return:
 See also `SimpleTag`
 """
 type Tag {
-    characteristics: String
-    color: String
-    display: String
-    name: String!
-    sampleCount: Int!
-    samples: [String!]
+  characteristics: String
+  color: String
+  display: String
+  name: String!
+  sampleCount: Int!
+  samples: [String!]
 }
 
 """
@@ -28,37 +28,40 @@ A "SimpleTag" is a version of a `Tag`. Only basic tag attributes may be returned
 - The "display", a friendly name for the tag.
 """
 type SimpleTag {
-    characteristics: String
-    color: String
-    display: String
-    name: String!
+  characteristics: String
+  color: String
+  display: String
+  name: String!
 }
 
 """
-A "Group" type is a tag that is specifically related to a data set. It may return:
+The "Related" type is a tag that is specifically related to a data set. It may return:
 
-- The "name", the name of the tag (group)
-- The "characteristics" of the tag (group)
-- The "color", a color to represent the tag (group) as a hex value
-- The "display", a friendly name for the tag (group)
-- The "features", a list of features associated with this tag (group)
+- The "name", the name of the related tag
+- The "characteristics" of the related tag.
+- The "color", a color to represent the related tag as a hex value.
+- The "display", a friendly name for the related tag.
+- "tags", a list of all tags related to the related tag.
+
+See also `Tag` and `SimpleTag`
 """
-type Group {
-    characteristics: String
-    color: String
-    display: String
-    features: [SimpleFeature!]!
-    name: String!
+type Related {
+  characteristics: String
+  color: String
+  display: String
+  tags: [SimpleTag!]!
+  name: String!
 }
 
-
 """
-A "GroupsByDataSet" type may return:
+The "RelatedByDataSet" type may return:
 
-- The "dataset", the name of the data set
-- The "groups", a list of Groups associated with the data set
+- The "dataSet" (the name of the data set).
+- The "display", a friendly name for the data set.
+- "related", A list of related tags associated with that data set.
 """
-type GroupsByDataSet {
+type RelatedByDataSet {
     dataSet: String!
-    groups: [Group!]!
+    display: String
+    related: [Related!]!
 }
