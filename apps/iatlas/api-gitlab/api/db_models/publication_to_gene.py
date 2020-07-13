@@ -10,7 +10,7 @@ class PublicationToGene(Base):
         db.Integer, db.ForeignKey('genes.id'), primary_key=True)
 
     publication_id = db.Column(
-        db.Integer, db.ForeignKey('publications.id'), nullable=False)
+        db.Integer, db.ForeignKey('publications.id'), primary_key=True)
 
     genes = db.relationship('Gene', backref=orm.backref(
         'publication_gene_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')
