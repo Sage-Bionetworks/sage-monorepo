@@ -11,5 +11,8 @@ class Dataset(Base):
     samples = db.relationship(
         "Sample", secondary='datasets_to_samples', uselist=True, lazy='noload')
 
+    tags = db.relationship(
+        "Tag", secondary='datasets_to_tags', uselist=True, lazy='noload')
+
     def __repr__(self):
         return '<Dataset %r>' % self.name

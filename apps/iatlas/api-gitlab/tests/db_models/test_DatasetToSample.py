@@ -9,13 +9,15 @@ def test_DatasetToSample_with_relations(app, dataset_id):
     results = query.filter_by(dataset_id=dataset_id).limit(3).all()
 
     assert isinstance(results, list)
+    assert len(results) > 0
     for result in results:
         assert result.dataset_id == dataset_id
         assert isinstance(result.datasets, list)
-        # Don't need to iterate through every result.
-        for dataset in result.datasets[0:2]:
+        assert len(result.datasets) == 1
+        for dataset in result.datasets:
             assert type(dataset.name) is str
         assert isinstance(result.samples, list)
+        assert len(result.samples) > 0
         # Don't need to iterate through every result.
         for sample in result.samples[0:2]:
             assert type(sample.id) is int
@@ -30,6 +32,7 @@ def test_DatasetToSample_no_relations(app, dataset_id):
     results = query.filter_by(dataset_id=dataset_id).limit(3).all()
 
     assert isinstance(results, list)
+    assert len(results) == 1
     for result in results:
         assert result.datasets == []
         assert result.samples == []
