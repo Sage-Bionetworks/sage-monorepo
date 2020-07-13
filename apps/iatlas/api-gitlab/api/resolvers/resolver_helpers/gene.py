@@ -65,41 +65,31 @@ def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by
     query = sess.query(gene_1)
 
     if 'gene_family' in relations:
-        query = query.join((gene_family_1, gene_1.gene_family), isouter=True)
-        append_to_option_args(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.gene_family.of_type(gene_family_1)))
 
     if 'gene_function' in relations:
-        query = query.join(
-            (gene_function_1, gene_1.gene_function), isouter=True)
-        append_to_option_args(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.gene_function.of_type(gene_function_1)))
 
     if 'gene_types' in relations or gene_type:
-        query = query.join((gene_type_1, gene_1.gene_types), isouter=True)
-        append_to_option_args(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.gene_types.of_type(gene_type_1)))
 
     if 'immune_checkpoint' in relations:
-        query = query.join(
-            (immune_checkpoint_1, gene_1.immune_checkpoint), isouter=True)
-        append_to_option_args(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.immune_checkpoint.of_type(immune_checkpoint_1)))
 
     if 'pathway' in relations:
-        query = query.join((pathway_1, gene_1.pathway), isouter=True)
-        append_to_option_args(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.pathway.of_type(pathway_1)))
 
     if 'publications' in relations:
-        query = query.join((pub_1, gene_1.publications), isouter=True)
-        append_to_option_args(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.publications.of_type(pub_1)))
 
     if samples or 'rna_seq_expr' in relations:
-        query = query.join(
-            (gene_to_sample_1, gene_1.gene_sample_assoc), isouter=True)
-        append_to_option_args(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.gene_sample_assoc.of_type(gene_to_sample_1)))
         if samples:
             sample_1 = orm.aliased(Sample, name='s')
@@ -107,14 +97,11 @@ def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by
                 sample_1.name.in_(samples))))
 
     if 'super_category' in relations:
-        query = query.join(
-            (super_category_1, gene_1.super_category), isouter=True)
-        append_to_option_args(orm.contains_eager(
-            gene_1.super_category.of_type(pub_1)))
+        append_to_option_args(orm.subqueryload(
+            gene_1.super_category.of_type(super_category_1)))
 
     if 'therapy_type' in relations:
-        query = query.join((therapy_type_1, gene_1.therapy_type), isouter=True)
-        append_to_option_args(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.therapy_type.of_type(therapy_type_1)))
 
     if option_args:
@@ -135,15 +122,12 @@ def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by
 
 
 def get_rna_seq_expr(gene_row):
-    rna_seq_expr = []
-    append_to_rna_seq_expr = rna_seq_expr.append
-    gene_sample_assoc = get_value(gene_row, 'gene_sample_assoc', [])
-    for gene_sample_rel in gene_sample_assoc:
+    def build_array(gene_sample_rel):
         rna_seq_expr_value = get_value(
             gene_sample_rel, 'rna_seq_expr')
         if rna_seq_expr_value:
-            append_to_rna_seq_expr(rna_seq_expr_value)
-    return rna_seq_expr
+            return rna_seq_expr_value
+    return map(build_array, get_value(gene_row, 'gene_sample_assoc', []))
 
 
 def request_gene(_obj, info, entrez=None):

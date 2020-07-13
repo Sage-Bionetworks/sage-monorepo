@@ -1,5 +1,5 @@
 from .resolver_helpers import (
-    build_option_args, get_selection_set, get_value, request_genes, request_tags)
+    build_option_args, get_rna_seq_expr, get_selection_set, get_value, request_genes, request_tags)
 
 
 def resolve_genes_by_tag(_obj, info, dataSet, related, tag=None, feature=None, featureClass=None, entrez=None, geneType=None):

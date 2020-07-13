@@ -1,4 +1,4 @@
-from .resolver_helpers import get_value, request_gene
+from .resolver_helpers import get_rna_seq_expr, get_value, request_gene
 
 
 def resolve_gene(_obj, info, entrez):
