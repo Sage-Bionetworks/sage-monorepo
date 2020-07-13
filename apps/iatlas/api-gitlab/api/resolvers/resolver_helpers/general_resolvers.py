@@ -19,4 +19,4 @@ def get_selection_set(selection_set=[], condition=True, child_node='features'):
 def get_value(obj=None, attribute='name', default=None):
     if obj:
         return getattr(obj, attribute, default)
-    return None
+    return default

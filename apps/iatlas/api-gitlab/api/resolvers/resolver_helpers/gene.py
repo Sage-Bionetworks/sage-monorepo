@@ -5,11 +5,22 @@ from api.db_models import (
     Dataset, DatasetToSample, Gene, GeneFamily, GeneFunction, GeneToSample, GeneType,
     ImmuneCheckpoint, Pathway, Publication, SuperCategory, Sample, SampleToTag, Tag,
     TagToTag, TherapyType)
-from .general_resolvers import build_option_args, get_selection_set
+from .general_resolvers import build_option_args, get_selection_set, get_value
 from .tag import request_tags
 
 
-def build_gene_request(_obj, info, data_set=None, related=None, gene_type=None, entrez=None, samples=None, by_tag=False):
+def build_gene_to_sample_join_condition(gene_to_sample_model, gene_model, sample_model, samples=None):
+    sess = db.session
+    gene_to_sample_join_conditions = [
+        gene_model.id == gene_to_sample_model.gene_id]
+    if samples:
+        gene_to_sample_join_conditions.append(gene_to_sample_model.sample_id.in_(
+            sess.query(sample_model.id).filter(
+                sample_model.name.in_(samples))))
+    return gene_to_sample_join_conditions
+
+
+def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by_tag=False):
     """
     Builds a SQL request and returns values from the DB.
     """
@@ -21,6 +32,7 @@ def build_gene_request(_obj, info, data_set=None, related=None, gene_type=None, 
     gene_1 = orm.aliased(Gene, name='g')
     gene_family_1 = orm.aliased(GeneFamily, name='gf')
     gene_function_1 = orm.aliased(GeneFunction, name='gfn')
+    gene_to_sample_1 = orm.aliased(GeneToSample, name='gs')
     gene_type_1 = orm.aliased(GeneType, name='gt')
     immune_checkpoint_1 = orm.aliased(ImmuneCheckpoint, name='ic')
     pathway_1 = orm.aliased(Pathway, name='py')
@@ -48,56 +60,57 @@ def build_gene_request(_obj, info, data_set=None, related=None, gene_type=None, 
     core = build_option_args(selection_set, core_field_mapping)
     relations = build_option_args(selection_set, related_field_mapping)
     option_args = []
+    append_to_option_args = option_args.append
 
     query = sess.query(gene_1)
 
     if 'gene_family' in relations:
-        query = query.join((gene_family_1, gene_1.gene_family), isouter=True)
-        option_args.append(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.gene_family.of_type(gene_family_1)))
 
     if 'gene_function' in relations:
-        query = query.join(
-            (gene_function_1, gene_1.gene_function), isouter=True)
-        option_args.append(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.gene_function.of_type(gene_function_1)))
 
     if 'gene_types' in relations or gene_type:
-        query = query.join((gene_type_1, gene_1.gene_types), isouter=True)
-        option_args.append(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.gene_types.of_type(gene_type_1)))
 
     if 'immune_checkpoint' in relations:
-        query = query.join(
-            (immune_checkpoint_1, gene_1.immune_checkpoint), isouter=True)
-        option_args.append(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.immune_checkpoint.of_type(immune_checkpoint_1)))
 
     if 'pathway' in relations:
-        query = query.join((pathway_1, gene_1.pathway), isouter=True)
-        option_args.append(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.pathway.of_type(pathway_1)))
 
     if 'publications' in relations:
-        query = query.join((pub_1, gene_1.publications), isouter=True)
-        option_args.append(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.publications.of_type(pub_1)))
 
+    if samples or 'rna_seq_expr' in relations:
+        append_to_option_args(orm.subqueryload(
+            gene_1.gene_sample_assoc.of_type(gene_to_sample_1)))
+        if samples:
+            sample_1 = orm.aliased(Sample, name='s')
+            query = query.filter(gene_to_sample_1.sample_id.in_(sess.query(sample_1.id).filter(
+                sample_1.name.in_(samples))))
+
     if 'super_category' in relations:
-        query = query.join(
-            (super_category_1, gene_1.super_category), isouter=True)
-        option_args.append(orm.contains_eager(
-            gene_1.super_category.of_type(pub_1)))
+        append_to_option_args(orm.subqueryload(
+            gene_1.super_category.of_type(super_category_1)))
 
     if 'therapy_type' in relations:
-        query = query.join((therapy_type_1, gene_1.therapy_type), isouter=True)
-        option_args.append(orm.contains_eager(
+        append_to_option_args(orm.subqueryload(
             gene_1.therapy_type.of_type(therapy_type_1)))
 
     if option_args:
         query = query.options(*option_args)
     else:
-        query = query.with_entities(*core)
+        # Need some at least one column to select.
+        if not core:
+            core.append(gene_1.id)
+        query = sess.query(*core)
 
     if gene_type:
         query = query.filter(gene_type_1.name.in_(gene_type))
@@ -105,17 +118,16 @@ def build_gene_request(_obj, info, data_set=None, related=None, gene_type=None, 
     if entrez:
         query = query.filter(gene_1.entrez.in_(entrez))
 
-    if samples:
-        sample_1 = orm.aliased(Sample, name='s')
-        gene_to_sample_1 = orm.aliased(GeneToSample, name='gs')
-        query = query.join(gene_to_sample_1,
-                           and_(gene_1.id == gene_to_sample_1.gene_id,
-                                gene_to_sample_1.sample_id.in_(
-                                    sess.query(sample_1.id).filter(
-                                        sample_1.name.in_(samples))
-                                )))
-
     return query
+
+
+def get_rna_seq_expr(gene_row):
+    def build_array(gene_sample_rel):
+        rna_seq_expr_value = get_value(
+            gene_sample_rel, 'rna_seq_expr')
+        if rna_seq_expr_value:
+            return rna_seq_expr_value
+    return map(build_array, get_value(gene_row, 'gene_sample_assoc', []))
 
 
 def request_gene(_obj, info, entrez=None):
@@ -124,9 +136,8 @@ def request_gene(_obj, info, entrez=None):
     return query.one_or_none()
 
 
-def request_genes(_obj, info, data_set=None, related=None, entrez=None, gene_type=None, samples=None, by_tag=False):
-    query = build_gene_request(_obj, info, data_set=data_set, related=related,
-                               entrez=entrez, gene_type=gene_type, samples=samples,
-                               by_tag=by_tag)
-    query = query.distinct()
+def request_genes(_obj, info, entrez=None, gene_type=None, samples=None, by_tag=False):
+    query = build_gene_request(_obj, info, entrez=entrez, gene_type=gene_type,
+                               samples=samples, by_tag=by_tag)
+    # query = query.distinct()
     return query.all()

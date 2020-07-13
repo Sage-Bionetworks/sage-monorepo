@@ -7,10 +7,10 @@ from api.enums import direction_enum
 class DriverResult(Base):
     __tablename__ = 'driver_results'
     id = db.Column(db.Integer, primary_key=True)
-    p_value = db.Column(db.Float, nullable=True)
-    fold_change = db.Column(db.Float, nullable=True)
-    log10_p_value = db.Column(db.Float, nullable=True)
-    log10_fold_change = db.Column(db.Float, nullable=True)
+    p_value = db.Column(db.Numeric, nullable=True)
+    fold_change = db.Column(db.Numeric, nullable=True)
+    log10_p_value = db.Column(db.Numeric, nullable=True)
+    log10_fold_change = db.Column(db.Numeric, nullable=True)
     n_wt = db.Column(db.Integer, nullable=True)
     n_mut = db.Column(db.Integer, nullable=True)
 
@@ -24,7 +24,8 @@ class DriverResult(Base):
 
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
 
-    dataset_id = db.Column(db.Integer, db.ForeignKey('datasets.id'), nullable=False)
+    dataset_id = db.Column(db.Integer, db.ForeignKey(
+        'datasets.id'), nullable=False)
 
     feature = db.relationship(
         'Feature', backref=orm.backref('driver_results', uselist=True, lazy='noload'),

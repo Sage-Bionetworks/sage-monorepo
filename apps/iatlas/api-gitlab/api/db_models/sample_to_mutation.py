@@ -11,7 +11,7 @@ class SampleToMutation(Base):
         db.Integer, db.ForeignKey('samples.id'), primary_key=True)
 
     mutation_id = db.Column(
-        db.Integer, db.ForeignKey('mutations.id'), nullable=False)
+        db.Integer, db.ForeignKey('mutations.id'), primary_key=True)
 
     status = db.Column(status_enum, nullable=True)
 
