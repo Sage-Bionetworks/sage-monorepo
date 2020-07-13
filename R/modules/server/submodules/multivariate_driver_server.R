@@ -11,14 +11,14 @@ multivariate_driver_server <- function(
     source("R/modules/ui/submodules/elements_ui.R", local = T)
     source("R/modules/server/submodules/elements_server.R", local = T)
     source("R/modules/server/submodules/plotly_server.R", local = T)
-    source("R/multivariate_driver_functions.R", local = T)
 
     output$response_options <- shiny::renderUI({
         shiny::selectInput(
-            ns("response_choice_id"),
-            "Select or Search for Response Variable",
-            choices = .GlobalEnv$create_nested_named_list(
-                cohort_obj()$feature_tbl, values_col = "id"
+            inputId  = ns("response_variable"),
+            label    = "Select or Search for Response Variable",
+            selected = "leukocyte_fraction",
+            choices  = iatlas.app::create_nested_named_list(
+                cohort_obj()$feature_tbl, values_col = "name"
             )
         )
     })
@@ -26,7 +26,7 @@ multivariate_driver_server <- function(
     numerical_covariate_tbl <- shiny::reactive({
        cohort_obj() %>%
             purrr::pluck("feature_tbl") %>%
-            dplyr::rename(feature = id)
+            dplyr::select("class", "display", "feature" = "name")
     })
 
     categorical_covariate_tbl <- shiny::reactive({
@@ -41,16 +41,16 @@ multivariate_driver_server <- function(
         )
     })
 
-    response_variable_name <- shiny::reactive({
-        shiny::req(input$response_choice_id)
-        input$response_choice_id %>%
-            as.integer() %>%
-            .GlobalEnv$get_feature_display_from_id()
-    })
+    # response_variable_name <- shiny::reactive({
+    #     shiny::req(input$response_variable)
+    #     input$response_choice_id %>%
+    #         as.integer() %>%
+    #         iatlas.app::get_feature_display_from_id()
+    # })
 
     model_string_prefix <- shiny::reactive({
-        shiny::req(response_variable_name())
-        stringr::str_c(response_variable_name(), " ~ Mutation status")
+        shiny::req(input$response_variable)
+        stringr::str_c(input$response_variable, " ~ Mutation status")
     })
 
     covariates_obj <- shiny::callModule(
@@ -124,7 +124,7 @@ multivariate_driver_server <- function(
             )
         ))
 
-        .GlobalEnv$create_scatterplot(
+        iatlas.app::create_scatterplot(
             volcano_plot_tbl(),
             x_col     = "log10_fold_change",
             y_col     = "log10_p_value",
@@ -162,7 +162,7 @@ multivariate_driver_server <- function(
             )
         ))
 
-        clicked_label <- .GlobalEnv$get_values_from_eventdata(eventdata, "key")
+        clicked_label <- iatlas.app::get_values_from_eventdata(eventdata, "key")
 
         result <-  dplyr::filter(
             volcano_plot_tbl(),
@@ -200,7 +200,7 @@ multivariate_driver_server <- function(
             "Parameters have changed, press the calculate boutton."
         ))
 
-        .GlobalEnv$create_violinplot(
+        iatlas.app::create_violinplot(
             violin_tbl(),
             xlab = create_md_violin_plot_x_lab(
                 selected_volcano_result()$label, input$group_mode

@@ -13,8 +13,6 @@ model_selection_server <- function(
         local = T
     )
 
-    source("R/model_selection_functions.R")
-
     # numeric covariate ui -----------------------------------------------------
     numeric_covariate_module <- shiny::reactive({
         purrr::partial(
@@ -37,31 +35,39 @@ model_selection_server <- function(
     numerical_covariates <- shiny::reactive({
         numeric_covariate_output() %>%
             shiny::reactiveValuesToList(.) %>%
-            get_items_from_numeric_covariate_output("covariate_choice_id")
+            iatlas.app::get_items_from_numeric_covariate_output(
+                .,
+                "covariate_choice_name"
+            )
+
     })
 
     numerical_transformations <- shiny::reactive({
         numeric_covariate_output() %>%
             shiny::reactiveValuesToList(.) %>%
-            get_items_from_numeric_covariate_output("transformation_choice")
+            iatlas.app::get_items_from_numeric_covariate_output(
+                .,
+                "transformation_choice"
+            )
     })
 
     numerical_display_string <- shiny::reactive({
-        create_numerical_covariate_string(
+        iatlas.app::create_numerical_covariate_string(
             numerical_covariates(),
             numerical_transformations(),
-            .GlobalEnv$get_feature_display_from_id,
-            .GlobalEnv$transform_feature_string
+            # iatlas.app::get_feature_display_from_id,
+            iatlas.app::transform_feature_string
         )
     })
 
     numerical_formula_string <- shiny::reactive({
-        create_numerical_covariate_string(
+        iatlas.app::create_numerical_covariate_string(
             numerical_covariates(),
             numerical_transformations(),
-            .GlobalEnv$get_feature_name_from_id,
-            .GlobalEnv$transform_feature_formula
-        )
+            # iatlas.app::get_feature_name_from_id,
+            iatlas.app::transform_feature_formula
+        ) %>%
+            print()
     })
 
     # categorical covariate ui -------------------------------------------------
@@ -92,7 +98,7 @@ model_selection_server <- function(
     categorical_display_string <- shiny::reactive({
         create_categorical_covariate_string(
             categorical_covariates(),
-            .GlobalEnv$get_tag_display_from_name
+            iatlas.app::get_tag_display_from_name
         )
     })
 

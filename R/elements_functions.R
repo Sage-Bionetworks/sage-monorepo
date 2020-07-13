@@ -14,16 +14,14 @@ build_numeric_filter_tbl <- function(feature_id){
         )
 }
 
-#' Build Group Filter Tibble
+#' Build Tag Filter Named List
 #'
-#' @param feature_id An integer in the related_tag_id column of the
-#' tags_to_tags table
+#' @param parent_tag_name A string
 #' @importFrom magrittr %>%
 #' @importFrom tibble deframe
-build_group_filter_tbl <- function(feature_id){
-    feature_id %>%
-        create_parent_group_query_from_id() %>%
-        paste("SELECT name, id FROM  (", ., ") a") %>%
-        perform_query("Build Groups Tibble") %>%
-        tibble::deframe(.)
+build_tag_filter_named_list <- function(parent_tag_name){
+    dataset <- "TCGA"
+    if(parent_tag_name == "PCAWG_Study") dataset <- "PCAWG"
+    iatlas.app::query_tags(dataset, parent_tag_name) %>%
+        dplyr::pull("name")
 }

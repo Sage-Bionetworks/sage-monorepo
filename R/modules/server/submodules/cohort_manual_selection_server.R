@@ -33,7 +33,7 @@ cohort_manual_selection_server <- function(
         }
     })
 
-    all_sample_names <- shiny::reactive({
+    dataset_samples <- shiny::reactive({
         shiny::req(dataset())
         iatlas.app::query_dataset_samples(dataset()) %>%
             dplyr::pull("name")
@@ -43,7 +43,7 @@ cohort_manual_selection_server <- function(
         cohort_filter_selection_server,
         "cohort_filter_selection",
         dataset,
-        all_sample_names
+        dataset_samples
     )
 
     cohort_obj <- shiny::callModule(

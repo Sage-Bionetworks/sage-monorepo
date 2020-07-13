@@ -1,0 +1,6 @@
+query datasets($dataSet: [String!]!) {
+  dataSets(dataSet: $dataSet){
+    name
+    display
+  }
+}

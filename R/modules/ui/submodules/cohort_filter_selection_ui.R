@@ -9,7 +9,7 @@ cohort_filter_selection_ui <- function(id) {
             .GlobalEnv$optionsBox(
                 width = 12,
                 insert_remove_element_ui(
-                    ns("group_filter"),
+                    ns("tags_filter"),
                     "Add group filter"
                 )
             ),

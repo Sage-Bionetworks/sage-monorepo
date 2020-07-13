@@ -1,7 +1,5 @@
 # used in cohort selection ----------------------------------------------------
 
-source("R/elements_functions.R", local = T)
-
 numeric_filter_element_server <- function(
     input,
     output,
@@ -14,9 +12,11 @@ numeric_filter_element_server <- function(
     ns <- session$ns
 
     output$select_ui <- shiny::renderUI({
+        print("test")
+        print(feature_named_list())
         shiny::req(feature_named_list())
         shiny::selectInput(
-            inputId = ns("feature_choice_id"),
+            inputId = ns("feature_choice"),
             label = "Select or Search for feature",
             choices = feature_named_list()
         )
@@ -61,54 +61,40 @@ numeric_filter_element_server <- function(
     return(reactive_values)
 }
 
-group_filter_element_server <- function(
+tag_filter_element_server <- function(
     input,
     output,
     session,
     reactive_values,
     module_id,
-    group_named_list
+    tag_named_list
 ){
 
     ns <- session$ns
 
     output$select_ui <- shiny::renderUI({
-        shiny::req(group_named_list())
+        shiny::req(tag_named_list())
         shiny::selectInput(
-            inputId = ns("parent_group_choice_id"),
+            inputId = ns("parent_tag_choice"),
             label = "Select or Search for Group",
-            choices = group_named_list()
+            choices = tag_named_list()
         )
     })
 
     output$checkbox_ui <- shiny::renderUI({
-        shiny::req(input$parent_group_choice_id)
+        shiny::req(input$parent_tag_choice)
         shiny::checkboxGroupInput(
-            inputId = ns("group_choice_ids"),
+            inputId = ns("tag_choices"),
             label = "Select choices to include:",
-            choices = build_group_filter_tbl(input$parent_group_choice_id),
+            choices = iatlas.app::build_tag_filter_named_list(
+                input$parent_tag_choice
+            ),
             inline = T
         )
     })
 
-    group_choice_name <- shiny::reactive({
-        shiny::req(input$parent_group_choice_id)
-        input$parent_group_choice_id %>%
-            as.integer() %>%
-            .GlobalEnv$get_tag_display_from_id()
-    })
-
-    group_choice_ids <- shiny::reactive({
-        shiny::req(input$group_choice_ids)
-        as.integer(input$group_choice_ids)
-    })
-
-    shiny::observeEvent(input$group_choice_ids, {
-        reactive_values[[module_id]]$ids <- group_choice_ids()
-    })
-
-    shiny::observeEvent(input$group_choice_ids, {
-        reactive_values[[module_id]]$name <- group_choice_name()
+    shiny::observeEvent(input$tag_choices, {
+        reactive_values[[module_id]]$tags <- input$tag_choices
     })
 
     return(reactive_values)
@@ -131,7 +117,7 @@ numeric_model_covariate_element_server <- function(
         shiny::req(covariate_tbl())
         choices <- create_nested_named_list(covariate_tbl())
         shiny::selectInput(
-            inputId = ns("covariate_choice_id"),
+            inputId = ns("covariate_choice_name"),
             label   = "Select or Search for Covariate",
             choices = choices
         )
@@ -145,9 +131,9 @@ numeric_model_covariate_element_server <- function(
         )
     })
 
-    shiny::observeEvent(input$covariate_choice_id, {
-        reactive_values[[module_id]]$covariate_choice_id <-
-            as.numeric(input$covariate_choice_id)
+    shiny::observeEvent(input$covariate_choice_name, {
+        reactive_values[[module_id]]$covariate_choice_name <-
+            input$covariate_choice_name
     })
 
     shiny::observeEvent(input$transformation_choice, {

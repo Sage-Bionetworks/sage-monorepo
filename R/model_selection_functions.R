@@ -34,11 +34,15 @@ get_names_from_categorical_covariate_output <- function(output){
 #' @importFrom magrittr %>%
 #' @importFrom purrr map map2
 create_numerical_covariate_string <- function(
-    covs, transforms, translate_func, transform_func){
+    covs,
+    transforms,
+    # translate_func,
+    transform_func
+){
     if (any(is.null(covs), is.null(transforms))) return(NULL)
     covs %>%
-        as.integer() %>%
-        purrr::map(translate_func) %>%
+        # as.integer() %>%
+        # purrr::map(translate_func) %>%
         purrr::map2_chr(transforms, transform_func) %>%
         paste0(collapse = " + ")
 }
