@@ -12,7 +12,6 @@ The "DriverResult" type may return:
 - The "lof10FoldChange", the log10 computed result of fold change
 - The "n_wt", the number or wild type genes
 - The "n_mut", the number of mutant genes
-
 """
 type DriverResult {
   feature: SimpleFeature
@@ -24,6 +23,6 @@ type DriverResult {
   foldChange: Float
   log10PValue: Float
   log10FoldChange: Float
-  n_wt: Int number of wild type genes
-  n_mut: Int number of mutant genes
+  n_wt: Int
+  n_mut: Int
 }
