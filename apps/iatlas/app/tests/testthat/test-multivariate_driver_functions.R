@@ -1,78 +1,78 @@
 with_test_api_env({
-    test_that("Build Multivariate Driver Covariate Tibble", {
-        cov_obj1 <- list(
-            "categorical_covariates" = NULL, "numerical_covariates" = NULL
-        )
-        cov_obj2 <- list(
-            "categorical_covariates" = "Immune_Subtype",
-            "numerical_covariates" = NULL
-        )
-        cov_obj3 <- list(
-            "categorical_covariates" = NULL,
-            "numerical_covariates" = 1:3
-        )
-        cov_obj4 <- list(
-            "categorical_covariates" = "Immune_Subtype",
-            "numerical_covariates" = 1:3
-        )
-        expect_null(build_md_covariate_tbl(cov_obj1))
-        expect_named(
-            build_md_covariate_tbl(cov_obj2), c("sample_id", "Immune_Subtype")
-        )
-
-        expect_equal(
-            length(colnames(build_md_covariate_tbl(cov_obj3))),
-            4
-        )
-        expect_true("sample_id" %in% colnames(build_md_covariate_tbl(cov_obj3)))
-
-        expect_equal(
-            length(colnames(build_md_covariate_tbl(cov_obj4))),
-            5
-        )
-        expect_true(all(
-            c("sample_id", "Immune_Subtype") %in%
-                colnames(build_md_covariate_tbl(cov_obj4))
-        ))
-    })
-
-    test_that("Build Multivariate Driver Response Tibble", {
-        result1 <- build_md_response_tbl(1)
-        expect_named(result1, c("response", "sample_id")
-        )
-    })
-
-    test_that("Build Multivariate Driver Status Tibble", {
-        result1 <- build_md_status_tbl()
-        expect_named(result1, c("sample_id","mutation_id", "status"))
-    })
-
-    test_that("Combine Multivariate Driver Tibbles", {
-        response_tbl <- build_md_response_tbl(1)
-        status_tbl   <- build_md_status_tbl()
-        sample_tbl   <- dplyr::tibble(sample_id = 1:3, group = rep("G1", 3))
-        cov_tbl      <- build_md_covariate_tbl(list(
-            "categorical_covariates" = "Immune_Subtype",
-            "numerical_covariates" = 1:3
-        ))
-
-        result1 <- combine_md_tbls(
-            response_tbl, status_tbl, sample_tbl, NULL, "By group"
-        )
-        result2 <- combine_md_tbls(
-            response_tbl, status_tbl, sample_tbl, NULL, "Across groups"
-        )
-        result3 <- combine_md_tbls(
-            response_tbl, status_tbl, sample_tbl, cov_tbl, "By group"
-        )
-        result4 <- combine_md_tbls(
-            response_tbl, status_tbl, sample_tbl, cov_tbl, "Across groups"
-        )
-        expect_named(result1, c("response", "status", "label"))
-        expect_named(result2, c("response", "status", "label"))
-        expect_equal(dim(result3)[2], 7)
-        expect_equal(dim(result4)[2], 7)
-    })
+    # test_that("Build Multivariate Driver Covariate Tibble", {
+    #     cov_obj1 <- list(
+    #         "categorical_covariates" = NULL, "numerical_covariates" = NULL
+    #     )
+    #     cov_obj2 <- list(
+    #         "categorical_covariates" = "Immune_Subtype",
+    #         "numerical_covariates" = NULL
+    #     )
+    #     cov_obj3 <- list(
+    #         "categorical_covariates" = NULL,
+    #         "numerical_covariates" = 1:3
+    #     )
+    #     cov_obj4 <- list(
+    #         "categorical_covariates" = "Immune_Subtype",
+    #         "numerical_covariates" = 1:3
+    #     )
+    #     expect_null(build_md_covariate_tbl(cov_obj1))
+    #     expect_named(
+    #         build_md_covariate_tbl(cov_obj2), c("sample_id", "Immune_Subtype")
+    #     )
+    #
+    #     expect_equal(
+    #         length(colnames(build_md_covariate_tbl(cov_obj3))),
+    #         4
+    #     )
+    #     expect_true("sample_id" %in% colnames(build_md_covariate_tbl(cov_obj3)))
+    #
+    #     expect_equal(
+    #         length(colnames(build_md_covariate_tbl(cov_obj4))),
+    #         5
+    #     )
+    #     expect_true(all(
+    #         c("sample_id", "Immune_Subtype") %in%
+    #             colnames(build_md_covariate_tbl(cov_obj4))
+    #     ))
+    # })
+    #
+    # test_that("Build Multivariate Driver Response Tibble", {
+    #     result1 <- build_md_response_tbl(1)
+    #     expect_named(result1, c("response", "sample_id")
+    #     )
+    # })
+    #
+    # test_that("Build Multivariate Driver Status Tibble", {
+    #     result1 <- build_md_status_tbl()
+    #     expect_named(result1, c("sample_id","mutation_id", "status"))
+    # })
+    #
+    # test_that("Combine Multivariate Driver Tibbles", {
+    #     response_tbl <- build_md_response_tbl(1)
+    #     status_tbl   <- build_md_status_tbl()
+    #     sample_tbl   <- dplyr::tibble(sample_id = 1:3, group = rep("G1", 3))
+    #     cov_tbl      <- build_md_covariate_tbl(list(
+    #         "categorical_covariates" = "Immune_Subtype",
+    #         "numerical_covariates" = 1:3
+    #     ))
+    #
+    #     result1 <- combine_md_tbls(
+    #         response_tbl, status_tbl, sample_tbl, NULL, "By group"
+    #     )
+    #     result2 <- combine_md_tbls(
+    #         response_tbl, status_tbl, sample_tbl, NULL, "Across groups"
+    #     )
+    #     result3 <- combine_md_tbls(
+    #         response_tbl, status_tbl, sample_tbl, cov_tbl, "By group"
+    #     )
+    #     result4 <- combine_md_tbls(
+    #         response_tbl, status_tbl, sample_tbl, cov_tbl, "Across groups"
+    #     )
+    #     expect_named(result1, c("response", "status", "label"))
+    #     expect_named(result2, c("response", "status", "label"))
+    #     expect_equal(dim(result3)[2], 7)
+    #     expect_equal(dim(result4)[2], 7)
+    # })
 
     # test_that("Filter Multivariate Driver Labels", {
     #     tbl <- dplyr::tribble(
