@@ -41,7 +41,8 @@ insert_remove_element_server <- function(
 
         results <- shiny::callModule(
             element_module(),
-            module_id, results,
+            module_id,
+            results,
             module_id
         )
 

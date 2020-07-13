@@ -12,8 +12,6 @@ numeric_filter_element_server <- function(
     ns <- session$ns
 
     output$select_ui <- shiny::renderUI({
-        print("test")
-        print(feature_named_list())
         shiny::req(feature_named_list())
         shiny::selectInput(
             inputId = ns("feature_choice"),
@@ -108,18 +106,17 @@ numeric_model_covariate_element_server <- function(
     session,
     reactive_values,
     module_id,
-    covariate_tbl
+    covariate_list
 ){
 
     ns <- session$ns
 
     output$select_covariate_ui <- shiny::renderUI({
-        shiny::req(covariate_tbl())
-        choices <- create_nested_named_list(covariate_tbl())
+        shiny::req(covariate_list())
         shiny::selectInput(
             inputId = ns("covariate_choice_name"),
             label   = "Select or Search for Covariate",
-            choices = choices
+            choices = covariate_list()
         )
     })
 
@@ -151,18 +148,17 @@ categorical_model_covariate_element_server <- function(
     session,
     reactive_values,
     module_id,
-    covariate_tbl
+    covariate_list
 ){
 
     ns <- session$ns
 
     output$select_covariate_ui <- shiny::renderUI({
-        shiny::req(covariate_tbl())
-        choices <- create_nested_named_list(covariate_tbl())
+        shiny::req(covariate_list())
         shiny::selectInput(
             inputId = ns("covariate_choice"),
             label   = "Select or Search for Covariate",
-            choices = choices
+            choices = covariate_list()
         )
     })
 
