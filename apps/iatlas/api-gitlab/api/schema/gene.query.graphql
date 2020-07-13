@@ -28,7 +28,7 @@ type Gene {
   immuneCheckpoint: String
   pathway: String
   publications: [SimplePublication!]
-  rnaSeqExpr: Float
+  rnaSeqExpr: [Float]
   superCategory: String
   therapyType: String
 }

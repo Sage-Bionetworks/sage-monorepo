@@ -10,15 +10,15 @@ class GeneToSample(Base):
         'genes.id'), primary_key=True)
 
     sample_id = db.Column(db.Integer, db.ForeignKey(
-        'samples.id'), nullable=False)
+        'samples.id'), primary_key=True)
 
-    rna_seq_expr = db.Column(db.Float, nullable=True)
+    rna_seq_expr = db.Column(db.Numeric, nullable=True)
 
-    genes = db.relationship('Gene', backref=orm.backref(
-        'gene_sample_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')
+    gene = db.relationship('Gene', backref=orm.backref(
+        'gene_sample_assoc', uselist=True, lazy='noload'), uselist=False, lazy='noload')
 
-    samples = db.relationship('Sample', backref=orm.backref(
-        'gene_sample_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')
+    sample = db.relationship('Sample', backref=orm.backref(
+        'gene_sample_assoc', uselist=True, lazy='noload'), uselist=False, lazy='noload')
 
     def __repr__(self):
         return '<GeneToSample %r>' % self.gene_id

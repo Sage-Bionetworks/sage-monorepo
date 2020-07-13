@@ -10,7 +10,7 @@ class NodeToTag(Base):
         db.Integer, db.ForeignKey('nodes.id'), primary_key=True)
 
     tag_id = db.Column(
-        db.Integer, db.ForeignKey('tags.id'), nullable=False)
+        db.Integer, db.ForeignKey('tags.id'), primary_key=True)
 
     nodes = db.relationship('Node', backref=orm.backref(
         'node_tag_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')
