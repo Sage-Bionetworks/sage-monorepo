@@ -11,7 +11,7 @@ class Sample(Base):
     patient_id = db.Column(
         db.Integer, db.ForeignKey('patients.id'), nullable=True)
 
-    datasets = db.relationship(
+    data_sets = db.relationship(
         "Dataset", secondary='datasets_to_samples', uselist=True, lazy='noload')
 
     features = db.relationship(

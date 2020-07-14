@@ -2,11 +2,6 @@ import pytest
 from api.database import return_sample_to_tag_query
 
 
-@pytest.fixture(scope='module')
-def sample_id():
-    return 1
-
-
 def test_SampleToTag_with_relations(app, sample_id):
     string_representation_list = []
     separator = ', '
@@ -15,19 +10,20 @@ def test_SampleToTag_with_relations(app, sample_id):
     results = query.filter_by(sample_id=sample_id).limit(3).all()
 
     assert isinstance(results, list)
+    assert len(results) > 0
     for result in results:
         string_representation = '<SampleToTag %r>' % sample_id
         string_representation_list.append(string_representation)
-        if result.samples:
-            assert isinstance(result.samples, list)
-            # Don't need to iterate through every result.
-            for sample in result.samples[0:2]:
-                assert sample.id == sample_id
-        if result.tags:
-            assert isinstance(result.tags, list)
-            # Don't need to iterate through every result.
-            for tag in result.tags[0:2]:
-                assert type(tag.name) is str
+        assert isinstance(result.samples, list)
+        assert len(result.samples) > 0
+        # Don't need to iterate through every result.
+        for sample in result.samples[0:2]:
+            assert sample.id == sample_id
+        assert isinstance(result.tags, list)
+        assert len(result.tags) > 0
+        # Don't need to iterate through every result.
+        for tag in result.tags[0:2]:
+            assert type(tag.name) is str
         assert result.sample_id == sample_id
         assert type(result.tag_id) is int
         assert repr(result) == string_representation
@@ -40,6 +36,7 @@ def test_SampleToTag_no_relations(app, sample_id):
     results = query.filter_by(sample_id=sample_id).limit(3).all()
 
     assert isinstance(results, list)
+    assert len(results) > 0
     for result in results:
         assert result.samples == []
         assert result.tags == []

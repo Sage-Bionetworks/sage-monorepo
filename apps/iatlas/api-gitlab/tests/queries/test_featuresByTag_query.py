@@ -5,7 +5,7 @@ from api.enums import unit_enum
 from api.database import return_feature_class_query
 
 
-def test_featuresByTag_query_with_feature(client, dataset, related, chosen_feature):
+def test_featuresByTag_query_with_feature(client, data_set, related, chosen_feature):
     query = """query FeaturesByTag($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!]) {
         featuresByTag(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
             tag
@@ -25,20 +25,23 @@ def test_featuresByTag_query_with_feature(client, dataset, related, chosen_featu
     }"""
     response = client.post(
         '/api', json={'query': query,
-                      'variables': {'dataSet': [dataset],
+                      'variables': {'dataSet': [data_set],
                                     'related': [related],
                                     'feature': [chosen_feature]}})
     json_data = json.loads(response.data)
-    data_sets = json_data['data']['featuresByTag']
+    results = json_data['data']['featuresByTag']
 
-    assert isinstance(data_sets, list)
-    for data_set in data_sets:
-        assert type(data_set['tag']) is str
-        assert type(data_set['characteristics']) is str or NoneType
-        assert type(data_set['display']) is str or NoneType
-        assert isinstance(data_set['features'], list)
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results:
+        features = result['features']
+        assert type(result['tag']) is str
+        assert type(result['characteristics']) is str or NoneType
+        assert type(result['display']) is str or NoneType
+        assert isinstance(features, list)
+        assert len(features) > 0
         # Don't need to iterate through every result.
-        for feature in data_set['features'][0:2]:
+        for feature in features[0:2]:
             assert type(feature['class']) is str or NoneType
             assert type(feature['display']) is str or NoneType
             assert type(feature['methodTag']) is str or NoneType
@@ -50,7 +53,7 @@ def test_featuresByTag_query_with_feature(client, dataset, related, chosen_featu
             assert type(feature['value']) is float or NoneType
 
 
-def test_featuresByTag_query_no_feature(client, dataset, related):
+def test_featuresByTag_query_no_feature(client, data_set, related):
     query = """query FeaturesByTag($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!]) {
         featuresByTag(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
             tag
@@ -68,20 +71,23 @@ def test_featuresByTag_query_no_feature(client, dataset, related):
     }"""
     response = client.post(
         '/api', json={'query': query,
-                      'variables': {'dataSet': [dataset],
+                      'variables': {'dataSet': [data_set],
                                     'related': [related]}})
     json_data = json.loads(response.data)
-    data_sets = json_data['data']['featuresByTag']
+    results = json_data['data']['featuresByTag']
 
-    assert isinstance(data_sets, list)
+    assert isinstance(results, list)
+    assert len(results) > 0
     # Don't need to iterate through every result.
-    for data_set in data_sets[0:2]:
-        assert type(data_set['tag']) is str
-        assert type(data_set['characteristics']) is str or NoneType
-        assert type(data_set['display']) is str or NoneType
-        assert isinstance(data_set['features'], list)
+    for result in results[0:2]:
+        features = result['features']
+        assert type(result['tag']) is str
+        assert type(result['characteristics']) is str or NoneType
+        assert type(result['display']) is str or NoneType
+        assert isinstance(features, list)
+        assert len(features) > 0
         # Don't need to iterate through every result.
-        for feature in data_set['features'][0:2]:
+        for feature in features[0:2]:
             assert type(feature['class']) is str or NoneType
             assert type(feature['display']) is str or NoneType
             assert type(feature['methodTag']) is str or NoneType
@@ -91,7 +97,7 @@ def test_featuresByTag_query_no_feature(client, dataset, related):
                 feature['unit']) is NoneType or feature['unit'] in unit_enum.enums
 
 
-def test_featuresByTag_query_no_relations(client, dataset, related, chosen_feature):
+def test_featuresByTag_query_no_relations(client, data_set, related, chosen_feature):
     query = """query FeaturesByTag($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!]) {
         featuresByTag(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
             tag
@@ -107,20 +113,23 @@ def test_featuresByTag_query_no_relations(client, dataset, related, chosen_featu
     }"""
     response = client.post(
         '/api', json={'query': query,
-                      'variables': {'dataSet': [dataset],
+                      'variables': {'dataSet': [data_set],
                                     'related': [related],
                                     'feature': [chosen_feature]}})
     json_data = json.loads(response.data)
-    data_sets = json_data['data']['featuresByTag']
+    results = json_data['data']['featuresByTag']
 
-    assert isinstance(data_sets, list)
-    for data_set in data_sets:
-        assert type(data_set['tag']) is str
-        assert type(data_set['characteristics']) is str or NoneType
-        assert type(data_set['display']) is str or NoneType
-        assert isinstance(data_set['features'], list)
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results:
+        features = result['features']
+        assert type(result['tag']) is str
+        assert type(result['characteristics']) is str or NoneType
+        assert type(result['display']) is str or NoneType
+        assert isinstance(features, list)
+        assert len(features) == 1
         # Don't need to iterate through every result.
-        for feature in data_set['features'][0:2]:
+        for feature in features[0:2]:
             assert 'class' not in feature
             assert type(feature['display']) is str or NoneType
             assert 'methodTag' not in feature
@@ -130,7 +139,7 @@ def test_featuresByTag_query_no_relations(client, dataset, related, chosen_featu
                 feature['unit']) is NoneType or feature['unit'] in unit_enum.enums
 
 
-def test_featuresByTag_query_with_feature_class(client, dataset, related, chosen_feature, feature_class):
+def test_featuresByTag_query_with_feature_class(client, data_set, related, chosen_feature, feature_class):
     query = """query FeaturesByTag($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!]) {
         featuresByTag(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
             tag
@@ -144,20 +153,23 @@ def test_featuresByTag_query_with_feature_class(client, dataset, related, chosen
     }"""
     response = client.post(
         '/api', json={'query': query,
-                      'variables': {'dataSet': [dataset],
+                      'variables': {'dataSet': [data_set],
                                     'related': [related],
                                     'feature': [chosen_feature],
                                     'featureClass': [feature_class]}})
     json_data = json.loads(response.data)
-    data_sets = json_data['data']['featuresByTag']
+    results = json_data['data']['featuresByTag']
 
-    assert isinstance(data_sets, list)
-    for data_set in data_sets:
-        assert type(data_set['tag']) is str
-        assert type(data_set['characteristics']) is str or NoneType
-        assert type(data_set['display']) is str or NoneType
-        assert isinstance(data_set['features'], list)
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results:
+        features = result['features']
+        assert type(result['tag']) is str
+        assert type(result['characteristics']) is str or NoneType
+        assert type(result['display']) is str or NoneType
+        assert isinstance(features, list)
+        assert len(features) == 1
         # Don't need to iterate through every result.
-        for feature in data_set['features'][0:2]:
+        for feature in features[0:2]:
             assert feature['class'] == feature_class
             assert feature['name'] == chosen_feature

@@ -3,7 +3,7 @@ from api import db
 from api.db_models import DatasetToSample
 from .database_helpers import build_general_query
 
-related_fields = ['datasets', 'samples']
+related_fields = ['data_sets', 'samples']
 
 core_fields = ['dataset_id', 'sample_id']
 

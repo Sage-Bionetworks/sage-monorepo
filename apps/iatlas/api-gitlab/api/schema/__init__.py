@@ -3,8 +3,8 @@ import os
 from api.resolvers import (
     resolve_data_sets, resolve_driver_results, resolve_features, resolve_features_by_class,
     resolve_features_by_tag, resolve_gene, resolve_genes, resolve_genes_by_tag, resolve_mutations,
-    resolve_mutation_types, resolve_patient, resolve_patients, resolve_related, resolve_samples,
-    resolve_samples_by_tag, resolve_slide, resolve_slides, resolve_tags, resolve_test)
+    resolve_mutation_types, resolve_patients, resolve_related, resolve_samples,
+    resolve_samples_by_tag, resolve_slides, resolve_tags, resolve_test)
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 
@@ -85,12 +85,10 @@ root.set_field('genes', resolve_genes)
 root.set_field('genesByTag', resolve_genes_by_tag)
 root.set_field('mutations', resolve_mutations)
 root.set_field('mutationTypes', resolve_mutation_types)
-root.set_field('patient', resolve_patient)
 root.set_field('patients', resolve_patients)
 root.set_field('related', resolve_related)
 root.set_field('samples', resolve_samples)
 root.set_field('samplesByTag', resolve_samples_by_tag)
-root.set_field('slide', resolve_slide)
 root.set_field('slides', resolve_slides)
 root.set_field('tags', resolve_tags)
 root.set_field('test', resolve_test)

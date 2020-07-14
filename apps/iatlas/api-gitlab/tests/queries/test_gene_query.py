@@ -40,6 +40,7 @@ def test_gene_query_with_relations(client, entrez, hgnc):
         for gene_type in gene_types:
             assert type(gene_type['name']) is str
             assert type(gene_type['display']) is str or NoneType
+    assert isinstance(publications, list)
     if publications:
         for publication in publications:
             assert type(publication['firstAuthorLastName']) is str or NoneType

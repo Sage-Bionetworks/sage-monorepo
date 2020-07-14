@@ -2,17 +2,7 @@ import json
 import pytest
 
 
-@pytest.fixture(scope='module')
-def sample_name():
-    return 'DO1328'
-
-
-@pytest.fixture(scope='module')
-def patient_barcode():
-    return 'DO1328'
-
-
-def test_samples_query_with_passed_sample_name(client, sample_name):
+def test_samples_query_with_passed_sample(client, sample):
     query = """query Samples($name: [String!], $patient: [String!]) {
         samples(name: $name, patient: $patient) {
             name
@@ -20,20 +10,20 @@ def test_samples_query_with_passed_sample_name(client, sample_name):
         }
     }"""
     response = client.post(
-        '/api', json={'query': query, 'variables': {'name': [sample_name]}})
+        '/api', json={'query': query, 'variables': {'name': [sample]}})
     json_data = json.loads(response.data)
-    samples = json_data['data']['samples']
+    results = json_data['data']['samples']
 
-    assert isinstance(samples, list)
-    assert len(samples) == 1
-    for sample in samples[0:2]:
-        patient = sample['patient']
-        assert sample['name'] == sample_name
-        if patient:
-            assert type(patient['barcode']) is str
+    assert isinstance(results, list)
+    assert len(results) == 1
+    for result in results[0:2]:
+        current_patient = result['patient']
+        assert result['name'] == sample
+        if current_patient:
+            assert type(current_patient['barcode']) is str
 
 
-def test_samples_query_with_passed_patient_barcode(client, patient_barcode):
+def test_samples_query_with_passed_patient(client, patient):
     query = """query Samples($name: [String!], $patient: [String!]) {
         samples(name: $name, patient: $patient) {
             name
@@ -41,14 +31,14 @@ def test_samples_query_with_passed_patient_barcode(client, patient_barcode):
         }
     }"""
     response = client.post(
-        '/api', json={'query': query, 'variables': {'patient': [patient_barcode]}})
+        '/api', json={'query': query, 'variables': {'patient': [patient]}})
     json_data = json.loads(response.data)
-    samples = json_data['data']['samples']
+    results = json_data['data']['samples']
 
-    assert isinstance(samples, list)
-    for sample in samples[0:2]:
-        assert type(sample['name']) is str
-        assert sample['patient']['barcode'] == patient_barcode
+    assert isinstance(results, list)
+    for result in results[0:2]:
+        assert type(result['name']) is str
+        assert result['patient']['barcode'] == patient
 
 
 def test_samples_query_with_no_args(client):
@@ -59,14 +49,14 @@ def test_samples_query_with_no_args(client):
     }"""
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
-    samples = json_data['data']['samples']
+    results = json_data['data']['samples']
 
-    assert isinstance(samples, list)
-    for sample in samples[0:2]:
-        assert type(sample['name']) is str
+    assert isinstance(results, list)
+    for result in results[0:2]:
+        assert type(result['name']) is str
 
 
-def test_samples_query_with_all_args(client, patient_barcode, sample_name):
+def test_samples_query_with_all_args(client, patient, sample):
     query = """query Samples($name: [String!], $patient: [String!]) {
         samples(name: $name, patient: $patient) {
             name
@@ -75,12 +65,12 @@ def test_samples_query_with_all_args(client, patient_barcode, sample_name):
     }"""
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'patient': [patient_barcode],
-            'sample': [sample_name]}})
+            'patient': [patient],
+            'sample': [sample]}})
     json_data = json.loads(response.data)
-    samples = json_data['data']['samples']
+    results = json_data['data']['samples']
 
-    assert isinstance(samples, list)
-    for sample in samples[0:2]:
-        assert sample['name'] == sample_name
-        assert sample['patient']['barcode'] == patient_barcode
+    assert isinstance(results, list)
+    for result in results[0:2]:
+        assert result['name'] == sample
+        assert result['patient']['barcode'] == patient

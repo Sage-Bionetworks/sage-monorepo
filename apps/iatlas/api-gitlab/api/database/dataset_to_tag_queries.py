@@ -3,7 +3,7 @@ from api import db
 from api.db_models import DatasetToTag
 from .database_helpers import build_general_query
 
-related_fields = ['datasets', 'tags']
+related_fields = ['data_sets', 'tags']
 
 core_fields = ['dataset_id', 'tag_id']
 

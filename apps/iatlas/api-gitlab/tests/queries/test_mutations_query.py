@@ -35,6 +35,7 @@ def test_mutations_query_with_passed_entrez(client, gene_entrez):
     mutations = json_data['data']['mutations']
 
     assert isinstance(mutations, list)
+    assert len(mutations) > 0
     for mutation in mutations[0:2]:
         samples = mutation['samples']
         assert type(mutation['id']) is int
@@ -42,6 +43,7 @@ def test_mutations_query_with_passed_entrez(client, gene_entrez):
         assert type(mutation['mutationCode']) is str
         assert type(mutation['mutationType']['name']) is str
         assert isinstance(samples, list)
+        assert len(samples) > 0
         for sample in samples:
             assert type(sample['name']) is str
 
@@ -59,6 +61,7 @@ def test_mutations_query_with_passed_mutation_code(client, mutation_code):
     mutations = json_data['data']['mutations']
 
     assert isinstance(mutations, list)
+    assert len(mutations) > 0
     for mutation in mutations[0:2]:
         assert type(mutation['id']) is int
         assert mutation['mutationCode'] == mutation_code
@@ -79,6 +82,7 @@ def test_mutations_query_with_passed_mutation_type(client, mutation_type):
     mutations = json_data['data']['mutations']
 
     assert isinstance(mutations, list)
+    assert len(mutations) > 0
     for mutation in mutations[0:2]:
         assert type(mutation['id']) is int
         assert mutation['mutationType']['name'] == mutation_type
@@ -96,5 +100,6 @@ def test_mutations_query_with_no_variables(client):
     mutations = json_data['data']['mutations']
 
     assert isinstance(mutations, list)
+    assert len(mutations) > 0
     for mutation in mutations[0:2]:
         assert type(mutation['id']) is int
