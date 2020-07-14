@@ -11,12 +11,34 @@ cohort_filter_selection_server <- function(
     )
     source("R/modules/ui/submodules/elements_ui.R", local = T)
     source("R/modules/server/submodules/elements_server.R", local = T)
+<<<<<<< HEAD
 
     # tag filters -----------------------------------------------------------
     tag_named_list <- shiny::reactive({
         iatlas.app::create_cohort_tag_named_list(
             selected_dataset()
         )
+=======
+    source("R/cohort_filter_selection_functions.R", local = T)
+
+    dataset_to_group_tbl <- dplyr::tribble(
+        ~group,                 ~dataset, ~type,
+        "Immune Subtype",       "TCGA",   "tag",
+        "TCGA Subtype",         "TCGA",   "tag",
+        "TCGA Study",           "TCGA",   "tag",
+        # "Gender",          "TCGA",   "sample",
+        # "Race",            "TCGA",   "sample",
+        # "Ethnicity",       "TCGA",   "sample",
+        "Immune Subtype",  "PCAWG",  "tag",
+        "PCAWG Study",     "PCAWG",  "tag",
+        # "Gender",          "PCAWG",  "sample",
+        # "Race",            "PCAWG",  "sample"
+    )
+
+    # group filters -----------------------------------------------------------
+    group_named_list <- shiny::reactive({
+        create_cohort_group_named_list(dataset_to_group_tbl, selected_dataset())
+>>>>>>> staging_cohort_selection_ux
     })
 
     tag_element_module_server <- shiny::reactive({
