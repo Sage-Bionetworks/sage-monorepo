@@ -13,44 +13,44 @@ cohort_filter_selection_server <- function(
     source("R/modules/server/submodules/elements_server.R", local = T)
 
     # tag filters -----------------------------------------------------------
-    # tag_named_list <- shiny::reactive({
-    #     iatlas.app::create_cohort_tag_named_list(
-    #         selected_dataset()
-    #     )
-    # })
-    #
-    # tag_element_module_server <- shiny::reactive({
-    #     shiny::req(tag_named_list())
-    #     purrr::partial(
-    #         tag_filter_element_server,
-    #         tag_named_list = tag_named_list
-    #     )
-    # })
-    #
-    # tag_element_module_ui <- shiny::reactive(tag_filter_element_ui)
-    #
-    # tag_filter_output <- shiny::callModule(
-    #     insert_remove_element_server,
-    #     "tags_filter",
-    #     element_module = tag_element_module_server,
-    #     element_module_ui = tag_element_module_ui,
-    #     remove_ui_event = shiny::reactive(selected_dataset())
-    # )
-    #
-    # valid_tag_filter_obj <- shiny::reactive({
-    #     shiny::req(tag_filter_output())
-    #     tag_filter_output() %>%
-    #         shiny::reactiveValuesToList(.) %>%
-    #         get_valid_tag_filters()
-    # })
-    #
-    # tag_filter_samples <- shiny::reactive({
-    #     shiny::req(samples)
-    #     get_filtered_tag_samples(
-    #         valid_tag_filter_obj(),
-    #         samples()
-    #     )
-    # })
+    tag_named_list <- shiny::reactive({
+        iatlas.app::create_cohort_tag_named_list(
+            selected_dataset()
+        )
+    })
+
+    tag_element_module_server <- shiny::reactive({
+        shiny::req(tag_named_list())
+        purrr::partial(
+            tag_filter_element_server,
+            tag_named_list = tag_named_list
+        )
+    })
+
+    tag_element_module_ui <- shiny::reactive(tag_filter_element_ui)
+
+    tag_filter_output <- shiny::callModule(
+        insert_remove_element_server,
+        "tags_filter",
+        element_module = tag_element_module_server,
+        element_module_ui = tag_element_module_ui,
+        remove_ui_event = shiny::reactive(selected_dataset())
+    )
+
+    valid_tag_filter_obj <- shiny::reactive({
+        shiny::req(tag_filter_output())
+        tag_filter_output() %>%
+            shiny::reactiveValuesToList(.) %>%
+            get_valid_tag_filters()
+    })
+
+    tag_filter_samples <- shiny::reactive({
+        shiny::req(samples)
+        get_filtered_tag_samples(
+            valid_tag_filter_obj(),
+            samples()
+        )
+    })
 
     # # numeric_filters -------------------------------------------------------
 

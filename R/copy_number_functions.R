@@ -8,6 +8,14 @@ get_cnv_group_list <- function(tbl){
         c("All", .)
 }
 
+get_cnv_celltypes <- function(){
+    paste0(
+        "SELECT display FROM features WHERE id IN ",
+        "(SELECT feature_id FROM nodes)"
+    ) %>%
+        perform_query()
+}
+
 get_cnv_im_ids <- function(){
     paste0(
         "SELECT gene_id FROM genes_to_types WHERE type_id IN ",
