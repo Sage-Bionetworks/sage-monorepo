@@ -35,25 +35,6 @@ type SimpleTag {
 }
 
 """
-The "Related" type is a tag that is specifically related to a data set. It may return:
-
-- The "name", the name of the related tag
-- The "characteristics" of the related tag.
-- The "color", a color to represent the related tag as a hex value.
-- The "display", a friendly name for the related tag.
-- "tags", a list of all tags related to the related tag.
-
-See also `Tag` and `SimpleTag`
-"""
-type Related {
-  characteristics: String
-  color: String
-  display: String
-  tags: [SimpleTag!]!
-  name: String!
-}
-
-"""
 The "RelatedByDataSet" type may return:
 
 - The "dataSet" (the name of the data set).
@@ -63,5 +44,5 @@ The "RelatedByDataSet" type may return:
 type RelatedByDataSet {
     dataSet: String!
     display: String
-    related: [Related!]!
+    related: [SimpleTag!]!
 }

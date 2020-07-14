@@ -60,7 +60,6 @@ mutation_code = ObjectType('MutationCode')
 mutation_type = ObjectType('MutationType')
 patient = ObjectType('Patient')
 publication = ObjectType('Publication')
-related = ObjectType('Related')
 related_by_data_set = ObjectType('RelatedByDataSet')
 sample = ObjectType('Sample')
 sample_by_tag = ObjectType('SamplesByTag')
@@ -100,8 +99,8 @@ root.set_field('test', resolve_test)
 schema = make_executable_schema(
     type_defs,
     [root, data_set, driver_result, feature, features_by_class, features_by_tag,
-     feature_value_type, gene, genes_by_tag, gene_type, related, related_by_data_set,
-     mutation, mutation_code, mutation_type, patient, publication, sample, sample_by_tag,
+     feature_value_type, gene, genes_by_tag, gene_type, mutation, mutation_code,
+     mutation_type, patient, publication, related_by_data_set, sample, sample_by_tag,
      simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_publication,
      simple_tag, slide, tag]
 )
