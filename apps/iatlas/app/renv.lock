@@ -559,6 +559,18 @@
       "Repository": "CRAN",
       "Hash": "9f7d9c6426833d0cdfea726201589c42"
     },
+    "graph": {
+      "Package": "graph",
+      "Version": "1.65.2",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "bioconductor",
+      "RemoteRepo": "graph",
+      "RemoteRef": "master",
+      "RemoteSha": "b60a41ca55e12ebb98424cc2599bea9fa1414b5f",
+      "Hash": "bca5181f7f98c9df46e7708a0190d085"
+    },
     "gridExtra": {
       "Package": "gridExtra",
       "Version": "2.3",
