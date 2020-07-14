@@ -43,14 +43,13 @@ type Query {
     mutationType: [String!]
   ): [Mutation!]!
   mutationTypes: [MutationType!]!
-  patient(barcode: String): Patient
   patients(barcode: [String!]): [Patient!]!
 
   """
   The "related" query accepts:
 
     - "dataSet", a list of data set names
-    - "related", a list of tag (related) names related to the dataset(s)
+    - "related", a list of tag (related) names related to the data set(s)
 
   If no filters are passed, this will return all tags related to data sets.
   """
@@ -68,7 +67,7 @@ type Query {
     - "sample", a list of sample names
     - "patient", a list of patient barcodes
     - "dataSet", a list of data set names
-    - "related", a list of tag names related to the dataset(s)
+    - "related", a list of tag names related to the data set(s)
     - "tag", a list of tag names
     - "feature", a list of feature names
     - "featureClass", a list of feature class names
@@ -84,14 +83,13 @@ type Query {
     name: [String!]
     patient: [String!]
   ): [SamplesByTag!]!
-  slide(id: Int, name: String): Slide
-  slides(id: [Int!], name: [String!]): [Slide!]!
+  slides(name: [String!]): [Slide!]!
 
   """
   The "tags" query accepts:
 
     - "dataSet", a list of data set names (required)
-    - "related", a list of tag names related to the dataset(s) (required)
+    - "related", a list of tag names related to the data set(s) (required)
     - "tag", a list of tag names
     - "feature", a list of feature names
     - "featureClass", a list of feature class names

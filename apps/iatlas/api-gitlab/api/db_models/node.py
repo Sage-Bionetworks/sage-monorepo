@@ -21,7 +21,7 @@ class Node(Base):
     x = db.Column(db.Numeric, nullable=True)
     y = db.Column(db.Numeric, nullable=True)
 
-    dataset = db.relationship(
+    data_set = db.relationship(
         'Dataset', backref=orm.backref('node', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')
 

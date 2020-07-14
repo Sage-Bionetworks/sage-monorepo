@@ -29,7 +29,7 @@ def test_related_query_no_args(client):
             assert type(current_related['name']) is str
 
 
-def test_related_query_passed_data_set(client, dataset):
+def test_related_query_passed_data_set(client, data_set):
     query = """query Related($dataSet: [String!], $related: [String!]) {
         related(dataSet: $dataSet, related: $related) {
             dataSet
@@ -40,7 +40,7 @@ def test_related_query_passed_data_set(client, dataset):
         }
     }"""
     response = client.post(
-        '/api', json={'query': query, 'variables': {'dataSet': [dataset]}})
+        '/api', json={'query': query, 'variables': {'dataSet': [data_set]}})
     json_data = json.loads(response.data)
     results = json_data['data']['related']
 
@@ -48,7 +48,7 @@ def test_related_query_passed_data_set(client, dataset):
     assert len(results) > 0
     for result in results:
         related_list = result['related']
-        assert result['dataSet'] == dataset
+        assert result['dataSet'] == data_set
         assert type(result['display']) is str
         assert isinstance(related_list, list)
         assert len(related_list) > 0
@@ -83,7 +83,7 @@ def test_data_sets_query_passed_related(client, related):
             assert current_related['name'] == related
 
 
-def test_data_sets_query_passed_data_set_passed_sample(client, dataset, related):
+def test_data_sets_query_passed_data_set_passed_sample(client, data_set, related):
     query = """query Related($dataSet: [String!], $related: [String!]) {
         related(dataSet: $dataSet, related: $related) {
             dataSet
@@ -94,7 +94,7 @@ def test_data_sets_query_passed_data_set_passed_sample(client, dataset, related)
         }
     }"""
     response = client.post(
-        '/api', json={'query': query, 'variables': {'dataSet': [dataset], 'related': [related]}})
+        '/api', json={'query': query, 'variables': {'dataSet': [data_set], 'related': [related]}})
     json_data = json.loads(response.data)
     results = json_data['data']['related']
 
@@ -102,7 +102,7 @@ def test_data_sets_query_passed_data_set_passed_sample(client, dataset, related)
     assert len(results) == 1
     for result in results:
         related_list = result['related']
-        assert result['dataSet'] == dataset
+        assert result['dataSet'] == data_set
         assert type(result['display']) is str
         assert isinstance(related_list, list)
         assert len(related_list) == 1

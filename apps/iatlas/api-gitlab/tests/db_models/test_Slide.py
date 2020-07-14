@@ -3,30 +3,26 @@ from tests import NoneType
 from api.database import return_slide_query
 
 
-@pytest.fixture(scope='module')
-def name():
-    return 'TCGA-05-4244-01Z-00-DX1'
-
-
-def test_Slide_with_relations(app, name):
-    relationships_to_load = ['patients']
+def test_Slide_with_relations(app, slide):
+    relationships_to_load = ['patient']
 
     query = return_slide_query(*relationships_to_load)
-    result = query.filter_by(name=name).first()
+    result = query.filter_by(name=slide).one_or_none()
 
-    if result.patient:
-        assert result.patient.id == result.patient_id
-    assert result.name == name
+    assert result
+    assert result.patient.id == result.patient_id
+    assert result.name == slide
     assert type(result.description) is str or NoneType
-    assert type(result.patient_id) is int or NoneType
-    assert repr(result) == '<Slide %r>' % name
+    assert type(result.patient_id) is int
+    assert repr(result) == '<Slide %r>' % slide
 
 
-def test_Slide_no_relations(app, name):
+def test_Slide_no_relations(app, slide):
     query = return_slide_query()
-    result = query.filter_by(name=name).first()
+    result = query.filter_by(name=slide).one_or_none()
 
+    assert result
     assert type(result.patient) is NoneType
-    assert result.name == name
+    assert result.name == slide
     assert type(result.description) is str or NoneType
-    assert type(result.patient_id) is int or NoneType
+    assert type(result.patient_id) is int

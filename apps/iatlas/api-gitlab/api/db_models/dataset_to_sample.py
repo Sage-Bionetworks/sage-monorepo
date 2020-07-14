@@ -12,7 +12,7 @@ class DatasetToSample(Base):
     sample_id = db.Column(
         db.Integer, db.ForeignKey('samples.id'), nullable=False)
 
-    datasets = db.relationship('Dataset', backref=orm.backref(
+    data_sets = db.relationship('Dataset', backref=orm.backref(
         'dataset_sample_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')
 
     samples = db.relationship('Sample', backref=orm.backref(

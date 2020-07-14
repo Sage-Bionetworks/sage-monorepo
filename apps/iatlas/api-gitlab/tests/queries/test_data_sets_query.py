@@ -3,12 +3,7 @@ import pytest
 from tests import NoneType
 
 
-@pytest.fixture(scope='module')
-def sample_name():
-    return 'DO1328'
-
-
-def test_data_sets_query_no_passed_data_set_no_passed_sample(client):
+def test_data_sets_query_no_args(client):
     query = """query DataSets($dataSet: [String!], $sample: [String!]) {
         dataSets(dataSet: $dataSet, sample: $sample) {
             display
@@ -23,18 +18,78 @@ def test_data_sets_query_no_passed_data_set_no_passed_sample(client):
     data_sets = json_data['data']['dataSets']
 
     assert isinstance(data_sets, list)
+    assert len(data_sets) > 0
+    for data_set in data_sets:
+        samples = data_set['samples']
+
+        assert type(data_set['name']) is str
+        assert type(data_set['display']) is str or NoneType
+        if samples:
+            assert isinstance(samples, list)
+            assert len(samples) > 0
+            for current_sample in samples:
+                assert type(current_sample['name']) is str
+
+
+def test_data_sets_query_passed_data_set(client, data_set):
+    query = """query DataSets($dataSet: [String!], $sample: [String!]) {
+        dataSets(dataSet: $dataSet, sample: $sample) {
+            display
+            name
+            samples {
+                name
+            }
+        }
+    }"""
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'dataSet': [data_set]}})
+    json_data = json.loads(response.data)
+    data_sets = json_data['data']['dataSets']
+
+    assert isinstance(data_sets, list)
+    assert len(data_sets) == 1
+    for current_data_set in data_sets:
+        samples = current_data_set['samples']
+
+        assert current_data_set['name'] == data_set
+        assert type(current_data_set['display']) is str or NoneType
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        if samples:
+            for current_sample in samples:
+                assert type(current_sample['name']) is str
+
+
+def test_data_sets_query_passed_sample(client, sample):
+    query = """query DataSets($dataSet: [String!], $sample: [String!]) {
+        dataSets(dataSet: $dataSet, sample: $sample) {
+            display
+            name
+            samples {
+                name
+            }
+        }
+    }"""
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'sample': [sample]}})
+    json_data = json.loads(response.data)
+    data_sets = json_data['data']['dataSets']
+
+    assert isinstance(data_sets, list)
+    assert len(data_sets) > 0
     for data_set in data_sets:
         samples = data_set['samples']
 
         assert type(data_set['name']) is str
         assert type(data_set['display']) is str or NoneType
         assert isinstance(samples, list)
+        assert len(samples) == 1
         if samples:
-            for sample in samples:
-                assert type(sample['name']) is str
+            for current_sample in samples:
+                assert current_sample['name'] == sample
 
 
-def test_data_sets_query_passed_data_set(client, dataset):
+def test_data_sets_query_passed_data_set_passed_sample(client, data_set, sample):
     query = """query DataSets($dataSet: [String!], $sample: [String!]) {
         dataSets(dataSet: $dataSet, sample: $sample) {
             display
@@ -45,71 +100,18 @@ def test_data_sets_query_passed_data_set(client, dataset):
         }
     }"""
     response = client.post(
-        '/api', json={'query': query, 'variables': {'dataSet': [dataset]}})
+        '/api', json={'query': query, 'variables': {'dataSet': [data_set], 'sample': [sample]}})
     json_data = json.loads(response.data)
     data_sets = json_data['data']['dataSets']
 
     assert isinstance(data_sets, list)
-    for data_set in data_sets:
-        samples = data_set['samples']
+    assert len(data_sets) == 1
+    for current_data_set in data_sets:
+        samples = current_data_set['samples']
 
-        assert data_set['name'] == dataset
-        assert type(data_set['display']) is str or NoneType
+        assert current_data_set['name'] == data_set
+        assert type(current_data_set['display']) is str or NoneType
         assert isinstance(samples, list)
-        if samples:
-            for sample in samples:
-                assert type(sample['name']) is str
-
-
-def test_data_sets_query_passed_sample(client, sample_name):
-    query = """query DataSets($dataSet: [String!], $sample: [String!]) {
-        dataSets(dataSet: $dataSet, sample: $sample) {
-            display
-            name
-            samples {
-                name
-            }
-        }
-    }"""
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'sample': [sample_name]}})
-    json_data = json.loads(response.data)
-    data_sets = json_data['data']['dataSets']
-
-    assert isinstance(data_sets, list)
-    for data_set in data_sets:
-        samples = data_set['samples']
-
-        assert type(data_set['name']) is str
-        assert type(data_set['display']) is str or NoneType
-        assert isinstance(samples, list)
-        if samples:
-            for sample in samples:
-                assert sample['name'] == sample_name
-
-
-def test_data_sets_query_passed_data_set_passed_sample(client, dataset, sample_name):
-    query = """query DataSets($dataSet: [String!], $sample: [String!]) {
-        dataSets(dataSet: $dataSet, sample: $sample) {
-            display
-            name
-            samples {
-                name
-            }
-        }
-    }"""
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'dataSet': [dataset], 'sample': [sample_name]}})
-    json_data = json.loads(response.data)
-    data_sets = json_data['data']['dataSets']
-
-    assert isinstance(data_sets, list)
-    for data_set in data_sets:
-        samples = data_set['samples']
-
-        assert data_set['name'] == dataset
-        assert type(data_set['display']) is str or NoneType
-        assert isinstance(samples, list)
-        if samples:
-            for sample in samples:
-                assert sample['name'] == sample_name
+        assert len(samples) == 1
+        for current_sample in samples:
+            assert current_sample['name'] == sample

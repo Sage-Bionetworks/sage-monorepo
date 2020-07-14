@@ -26,12 +26,12 @@ def test_db(app):
 
 
 @pytest.fixture(scope='session')
-def dataset():
+def data_set():
     return 'TCGA'
 
 
 @pytest.fixture(scope='session')
-def dataset_id():
+def data_set_id():
     return 8
 
 
@@ -68,3 +68,25 @@ def hgnc():
 @pytest.fixture(scope='session')
 def mutation_type():
     return 'driver_mutation'
+
+
+# Sample id 617
+@pytest.fixture(scope='session')
+def sample():
+    return 'TCGA-05-4420'
+
+
+@pytest.fixture(scope='session')
+def sample_id():
+    return 617
+
+
+@pytest.fixture(scope='session')
+def slide():
+    return 'TCGA-05-4244-01Z-00-DX1'
+
+
+# Patient id 617
+@pytest.fixture(scope='session')
+def patient():
+    return 'TCGA-05-4420'

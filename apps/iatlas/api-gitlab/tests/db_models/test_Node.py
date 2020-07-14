@@ -12,7 +12,7 @@ def test_Node_with_relations(app, gene_id):
     string_representation_list = []
     separator = ', '
 
-    relationships_to_load = ['dataset', 'gene', 'feature']
+    relationships_to_load = ['data_set', 'gene', 'feature']
     query = return_node_query(*relationships_to_load)
     results = query.filter_by(gene_id=gene_id).limit(3).all()
 
@@ -21,8 +21,8 @@ def test_Node_with_relations(app, gene_id):
         node_id = result.id
         string_representation = '<Node %r>' % node_id
         string_representation_list.append(string_representation)
-        if result.dataset:
-            assert result.dataset.id == result.dataset_id
+        if result.data_set:
+            assert result.data_set.id == result.dataset_id
         if result.gene:
             assert result.gene.id == result.gene_id
         if result.feature:

@@ -4,7 +4,7 @@ from api.db_models import Tag
 from .database_helpers import build_general_query
 
 related_fields = ['copy_number_results',
-                  'datasets',
+                  'data_sets',
                   'driver_results',
                   'node_tag_assoc',
                   'nodes',

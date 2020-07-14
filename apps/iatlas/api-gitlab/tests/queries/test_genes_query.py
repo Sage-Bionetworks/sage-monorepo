@@ -1,5 +1,6 @@
 import json
 import pytest
+from api.database import return_gene_query
 from tests import NoneType
 
 
@@ -48,6 +49,7 @@ def test_genes_query_with_entrez(client, entrez, hgnc):
                 assert type(gene_type['display']) is str or NoneType
         assert type(gene['immuneCheckpoint']) is str or NoneType
         assert type(gene['pathway']) is str or NoneType
+        assert isinstance(publications, list)
         if publications:
             for publication in publications:
                 assert type(
@@ -71,7 +73,11 @@ def test_genes_query_no_entrez(client):
     json_data = json.loads(response.data)
     genes = json_data['data']['genes']
 
+    # Get the total number of features in the database.
+    gene_count = return_gene_query('id').count()
+
     assert isinstance(genes, list)
+    assert len(genes) == gene_count
     for gene in genes[0:1]:
         assert type(gene['entrez']) is int
         assert type(gene['hgnc']) is str

@@ -15,6 +15,7 @@ def test_mutation_types_query(client):
     mutation_types = json_data['data']['mutationTypes']
 
     assert isinstance(mutation_types, list)
+    assert len(mutation_types) > 0
     for mutation_type in mutation_types:
         assert type(mutation_type['name']) is str
         assert type(mutation_type['display']) is str or NoneType

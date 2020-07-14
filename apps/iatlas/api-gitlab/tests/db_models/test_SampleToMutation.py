@@ -4,11 +4,6 @@ from api.db_models import SampleToMutation
 from api.enums import status_enum
 
 
-@pytest.fixture(scope='module')
-def sample_id():
-    return 489
-
-
 def test_SampleToMutation_with_relations(app, sample_id):
     string_representation_list = []
     separator = ', '
@@ -17,19 +12,20 @@ def test_SampleToMutation_with_relations(app, sample_id):
     results = query.filter_by(sample_id=sample_id).limit(3).all()
 
     assert isinstance(results, list)
+    assert len(results) > 0
     for result in results:
         string_representation = '<SampleToMutation %r>' % sample_id
         string_representation_list.append(string_representation)
-        if result.mutations:
-            assert isinstance(result.mutations, list)
-            # Don't need to iterate through every result.
-            for mutation in result.mutations[0:2]:
-                assert type(mutation.id) is int
-        if result.samples:
-            assert isinstance(result.samples, list)
-            # Don't need to iterate through every result.
-            for sample in result.samples[0:2]:
-                assert sample.id == sample_id
+        assert isinstance(result.mutations, list)
+        assert len(result.mutations) > 0
+        # Don't need to iterate through every result.
+        for mutation in result.mutations[0:2]:
+            assert type(mutation.id) is int
+        assert isinstance(result.samples, list)
+        assert len(result.samples) > 0
+        # Don't need to iterate through every result.
+        for sample in result.samples[0:2]:
+            assert sample.id == sample_id
         assert result.sample_id == sample_id
         assert type(result.mutation_id) is int
         assert result.status in status_enum.enums
@@ -43,6 +39,7 @@ def test_SampleToMutation_no_relations(app, sample_id):
     results = query.filter_by(sample_id=sample_id).limit(3).all()
 
     assert isinstance(results, list)
+    assert len(results) > 0
     for result in results:
         assert result.mutations == []
         assert result.samples == []
