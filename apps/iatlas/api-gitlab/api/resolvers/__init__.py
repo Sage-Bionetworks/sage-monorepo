@@ -12,5 +12,6 @@ from .patient_resolver import resolve_patient, resolve_patients
 from .samples_resolver import resolve_samples
 from .samples_by_tag_resolver import resolve_samples_by_tag
 from .slide_resolver import resolve_slide, resolve_slides
+from .related_resolver import resolve_related
 from .tags_resolver import resolve_tags
 from .test_resolver import resolve_test

@@ -5,4 +5,4 @@ from .gene import get_rna_seq_expr, request_gene, request_genes
 from .general_resolvers import *
 from .mutation import request_mutations
 from .sample import request_samples
-from .tag import request_tags
+from .tag import request_related, request_tags

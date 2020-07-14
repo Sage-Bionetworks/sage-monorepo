@@ -139,5 +139,4 @@ def request_gene(_obj, info, entrez=None):
 def request_genes(_obj, info, entrez=None, gene_type=None, samples=None, by_tag=False):
     query = build_gene_request(_obj, info, entrez=entrez, gene_type=gene_type,
                                samples=samples, by_tag=by_tag)
-    # query = query.distinct()
-    return query.all()
+    return query.distinct().all()

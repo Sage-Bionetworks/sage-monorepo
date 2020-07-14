@@ -1,9 +1,9 @@
 from sqlalchemy import and_, func, orm
 from api import db
 from api.db_models import (
-    Dataset, DatasetToSample, Feature, FeatureClass,
+    Dataset, DatasetToTag, DatasetToSample, Feature, FeatureClass,
     FeatureToSample, Sample, SampleToTag, Tag, TagToTag)
-from .general_resolvers import build_option_args
+from .general_resolvers import build_option_args, get_selection_set
 
 
 def build_related_join_condition(sample_to_tag_model, tag_to_tag_model, related_model, related=None):
@@ -17,8 +17,51 @@ def build_related_join_condition(sample_to_tag_model, tag_to_tag_model, related_
     return related_join_conditions
 
 
-def request_tags(_obj, info, data_set=None, related=None, tag=None, feature=None,
-                 feature_class=None, get_samples=False):
+def build_related_request(_obj, info, data_set=None, related=None, by_data_set=True):
+    """
+    Builds a SQL request.
+    """
+    sess = db.session
+
+    selection_set = get_selection_set(
+        info.field_nodes[0].selection_set, by_data_set, child_node='related')
+    data_set_selection_set = get_selection_set(
+        info.field_nodes[0].selection_set, False)
+
+    tag_1 = orm.aliased(Tag, name='t')
+    data_set_1 = orm.aliased(Dataset, name='d')
+    data_set_to_tag_1 = orm.aliased(DatasetToTag, name='dt')
+
+    core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
+                          'color': tag_1.color.label('color'),
+                          'display': tag_1.display.label('display'),
+                          'name': tag_1.name.label('name')}
+
+    data_set_core_field_mapping = {'dataSet': data_set_1.name.label('data_set'),
+                                   'display': data_set_1.display.label('data_set_display')}
+
+    core = build_option_args(selection_set, core_field_mapping)
+    data_set_core = build_option_args(
+        data_set_selection_set, data_set_core_field_mapping)
+    option_args = []
+    append_to_option_args = option_args.append
+
+    query = sess.query(*[*core, *data_set_core])
+
+    if related:
+        query = query.filter(tag_1.name.in_(related))
+
+    if data_set:
+        data_set_to_tag_subquery = sess.query(data_set_to_tag_1.dataset_id).filter(
+            data_set_to_tag_1.tag_id == tag_1.id)
+        query = query.join(data_set_1, data_set_1.id.in_(
+            data_set_to_tag_subquery)).filter(data_set_1.name.in_(data_set))
+
+    return query
+
+
+def build_tag_request(_obj, info, data_set=None, related=None, tag=None, feature=None,
+                      feature_class=None, get_samples=False):
     """
     Builds a SQL request and returns values from the DB.
     """
@@ -36,8 +79,8 @@ def request_tags(_obj, info, data_set=None, related=None, tag=None, feature=None
                                  'color': tag_1.color.label('color'),
                                  'display': tag_1.display.label('display'),
                                  'name': tag_1.name.label('name'),
-                                 'rnaExpValues': func.array_agg(func.distinct(
-                                     sample_1.name)).label('rna_exp_values'),
+                                 'samples': func.array_agg(func.distinct(
+                                     sample_1.name)).label('samples'),
                                  'sampleCount': func.count(func.distinct(sample_to_tag_2.sample_id)).label('sample_count'),
                                  'tag': tag_1.name.label('tag')}
 
@@ -103,6 +146,19 @@ def request_tags(_obj, info, data_set=None, related=None, tag=None, feature=None
             query = query.join(
                 sample_1, sample_1.id == sample_to_tag_2.sample_id, isouter=True)
 
-    results = query.distinct().all()
+    return query
 
-    return results
+
+def request_related(_obj, info, data_set=None, related=None):
+    query = build_related_request(
+        _obj, info, data_set=data_set, related=related)
+
+    return query.distinct().all()
+
+
+def request_tags(_obj, info, data_set=None, related=None, tag=None,
+                 feature=None, feature_class=None, get_samples=False):
+    query = build_tag_request(_obj, info, data_set=data_set, related=related, tag=tag,
+                              feature=feature, feature_class=feature_class, get_samples=get_samples)
+
+    return query.distinct().all()
