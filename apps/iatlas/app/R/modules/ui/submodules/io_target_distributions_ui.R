@@ -12,14 +12,14 @@ io_target_distributions_ui <- function(id) {
     }
 
     shiny::tagList(
-        messageBox(
+        iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
                 "markdown/io_target_dist.markdown"
             )
         ),
         shiny::fluidRow(
-            .GlobalEnv$optionsBox(
+            iatlas.app::optionsBox(
                 width = 12,
                 shiny::column(
                     width = 3,

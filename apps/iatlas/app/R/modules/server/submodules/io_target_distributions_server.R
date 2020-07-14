@@ -38,13 +38,13 @@ io_target_distributions_server <- function(
 
     gene_name <- shiny::reactive({
         shiny::req(input$gene_choice_id)
-        .GlobalEnv$get_gene_hgnc_from_id(as.integer(input$gene_choice_id))
+        iatlas.app::get_gene_hgnc_from_id(as.integer(input$gene_choice_id))
     })
 
     gene_plot_label <- shiny::reactive({
         shiny::req(gene_name(), input$scale_method_choice)
 
-        .GlobalEnv$transform_feature_string(
+        iatlas.app::transform_feature_string(
             gene_name(),
             input$scale_method_choice
         )

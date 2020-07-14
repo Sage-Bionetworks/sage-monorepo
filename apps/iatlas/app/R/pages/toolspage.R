@@ -10,7 +10,7 @@ toolspage <- shiny::fluidPage(
             shiny::h5("iAtlas Tools Home"),
             iatlas.app::titleBox("iAtlas Explorer — Tools"),
             shiny::fluidRow(
-                .GlobalEnv$imgLinkBox(
+                iatlas.app::imgLinkBox(
                     width = 12,
                     title = "Immune Subtype Classifier",
                     linkId = "link_to_immune_subtype_classifier",

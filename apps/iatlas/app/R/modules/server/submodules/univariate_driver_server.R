@@ -48,7 +48,7 @@ univariate_driver_server <- function(
             )
         ))
 
-        .GlobalEnv$create_scatterplot(
+        iatlas.app::create_scatterplot(
             volcano_plot_tbl(),
             x_col     = "log10_fold_change",
             y_col     = "log10_p_value",
@@ -86,7 +86,7 @@ univariate_driver_server <- function(
             )
         ))
 
-        clicked_label <- .GlobalEnv$get_values_from_eventdata(eventdata, "key")
+        clicked_label <- iatlas.app::get_values_from_eventdata(eventdata, "key")
 
         result <-  dplyr::filter(
             volcano_plot_tbl(),
@@ -125,7 +125,7 @@ univariate_driver_server <- function(
 
         ylab <- input$response_variable %>%
             as.integer() %>%
-            .GlobalEnv$get_feature_display_from_id()
+            iatlas.app::get_feature_display_from_id()
 
         title <- paste(
             "Cohort:",
@@ -136,7 +136,7 @@ univariate_driver_server <- function(
             round(selected_volcano_result()$log10_fold_change, 4)
         )
 
-        .GlobalEnv$create_violinplot(
+        iatlas.app::create_violinplot(
             violin_tbl(),
             xlab = xlab,
             ylab = ylab,

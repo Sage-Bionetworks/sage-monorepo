@@ -4,7 +4,7 @@ model_selection_ui <- function(id){
     source("R/modules/ui/submodules/insert_remove_element_ui.R", local = T)
 
     shiny::fluidRow(
-        .GlobalEnv$optionsBox(
+        iatlas.app::optionsBox(
             width = 12,
             shiny::column(
                 width = 12,

@@ -7,19 +7,19 @@ til_maps_ui <- function(id) {
     source("R/modules/ui/submodules/til_map_datatable_ui.R", local = T)
 
     shiny::tagList(
-        .GlobalEnv$titleBox("iAtlas Explorer — TIL Maps"),
-        .GlobalEnv$textBox(
+        iatlas.app::titleBox("iAtlas Explorer — TIL Maps"),
+        iatlas.app::textBox(
             width = 12,
             shiny::includeMarkdown("markdown/tilmap.markdown")
         ),
-        .GlobalEnv$sectionBox(
+        iatlas.app::sectionBox(
             title = "Distributions",
             call_module_ui(
                 ns("til_map_distributions"),
                 til_map_distributions_ui
             )
         ),
-        .GlobalEnv$sectionBox(
+        iatlas.app::sectionBox(
             title = "TIL Map Annotations",
             call_module_ui(
                 ns("til_map_datatable"),

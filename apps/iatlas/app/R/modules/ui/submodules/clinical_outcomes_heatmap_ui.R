@@ -5,12 +5,12 @@ clinical_outcomes_heatmap_ui <- function(id) {
     source("R/modules/ui/submodules/plotly_ui.R", local = T)
 
     shiny::tagList(
-        .GlobalEnv$messageBox(
+        iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown("markdown/clinical_outcomes_heatmap.markdown")
         ),
         shiny::fluidRow(
-            .GlobalEnv$optionsBox(
+            iatlas.app::optionsBox(
                 width = 12,
                 shiny::column(
                     width = 6,
@@ -21,13 +21,13 @@ clinical_outcomes_heatmap_ui <- function(id) {
                     shiny::uiOutput(ns("class_selection_ui"))
                 )
             ),
-            .GlobalEnv$plotBox(
+            iatlas.app::plotBox(
                 width = 12,
                 shiny::fluidRow(
                     "heatmap" %>%
                         ns() %>%
-                        plotly::plotlyOutput(height = 600) %>%
-                        shinycssloaders::withSpinner(),
+                        plotly::plotlyOutput(., height = 600) %>%
+                        shinycssloaders::withSpinner(.),
                     plotly_ui(ns("heatmap"))
                 )
             )

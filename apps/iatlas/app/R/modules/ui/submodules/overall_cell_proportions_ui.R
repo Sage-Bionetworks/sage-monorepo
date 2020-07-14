@@ -5,14 +5,14 @@ overall_cell_proportions_ui <- function(id){
     source("R/modules/ui/submodules/plotly_ui.R", local = T)
 
     shiny::tagList(
-        .GlobalEnv$messageBox(
+        iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
                 "markdown/overall_cell_proportions1.markdown"
             )
         ),
         shiny::fluidRow(
-            .GlobalEnv$plotBox(
+            iatlas.app::plotBox(
                 width = 12,
                 "barplot" %>%
                     ns() %>%
@@ -21,19 +21,19 @@ overall_cell_proportions_ui <- function(id){
                 plotly_ui(ns("barplot"))
             )
         ),
-        .GlobalEnv$messageBox(
+        iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
                 "markdown/overall_cell_proportions2.markdown"
             )
         ),
         shiny::fluidRow(
-            .GlobalEnv$plotBox(
+            iatlas.app::plotBox(
                 width = 12,
                 "scatterplot" %>%
                     ns() %>%
-                    plotly::plotlyOutput() %>%
-                    shinycssloaders::withSpinner(),
+                    plotly::plotlyOutput(.) %>%
+                    shinycssloaders::withSpinner(.),
                 plotly_ui(ns("scatterplot"))
             )
         )

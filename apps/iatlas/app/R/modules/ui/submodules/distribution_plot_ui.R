@@ -6,7 +6,7 @@ distribution_plot_ui <- function(id){
 
     shiny::tagList(
         shiny::fluidRow(
-            .GlobalEnv$plotBox(
+            iatlas.app::plotBox(
                 width = 12,
                 "distplot" %>%
                     ns() %>%
@@ -16,7 +16,7 @@ distribution_plot_ui <- function(id){
             )
         ),
         shiny::fluidRow(
-            .GlobalEnv$plotBox(
+            iatlas.app::plotBox(
                 width = 12,
                 "histplot" %>%
                     ns() %>%

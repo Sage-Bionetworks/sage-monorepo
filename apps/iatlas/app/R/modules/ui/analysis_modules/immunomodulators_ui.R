@@ -13,22 +13,22 @@ immunomodulators_ui <- function(id) {
     }
 
     shiny::tagList(
-        .GlobalEnv$titleBox("iAtlas Explorer — Immunomodulators"),
-        .GlobalEnv$textBox(
+        iatlas.app::titleBox("iAtlas Explorer — Immunomodulators"),
+        iatlas.app::textBox(
             width = 12,
             shiny::p(paste0(
                 "Explore the expression of genes that code for ",
                 "immunomodulating proteins, including checkpoint proteins."
             )),
         ),
-        .GlobalEnv$sectionBox(
+        iatlas.app::sectionBox(
             title = "Immunomodulator Distributions",
             call_module_ui(
                 ns("distributions"),
                 immunomodulators_distributions_ui
             )
         ),
-        .GlobalEnv$sectionBox(
+        iatlas.app::sectionBox(
             title = "Immunomodulator Annotations",
             call_module_ui(
                 ns("datatable"),

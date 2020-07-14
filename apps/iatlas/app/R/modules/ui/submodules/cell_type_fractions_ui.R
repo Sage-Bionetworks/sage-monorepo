@@ -5,12 +5,12 @@ cell_type_fractions_ui <- function(id){
     source("R/modules/ui/submodules/plotly_ui.R", local = T)
 
     shiny::tagList(
-        .GlobalEnv$messageBox(
+        iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown("markdown/cell_type_fractions.markdown")
         ),
         shiny::fluidRow(
-            .GlobalEnv$optionsBox(
+            iatlas.app::optionsBox(
                 width = 12,
                 shiny::selectInput(
                     inputId = ns("fraction_group_choice"),
@@ -27,7 +27,7 @@ cell_type_fractions_ui <- function(id){
         ),
         shiny::fluidRow(
             shiny::fluidRow(
-                .GlobalEnv$plotBox(
+                iatlas.app::plotBox(
                     width = 12,
                     "barplot" %>%
                         ns() %>%

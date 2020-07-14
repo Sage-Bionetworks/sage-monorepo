@@ -3,14 +3,14 @@ clinical_outcomes_survival_ui <- function(id) {
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        .GlobalEnv$messageBox(
+        iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
                 "markdown/clinical_outcomes_survival.markdown"
             )
         ),
         shiny::fluidRow(
-            .GlobalEnv$optionsBox(
+            iatlas.app::optionsBox(
                 width = 12,
                 shiny::column(
                     width = 8,
@@ -33,12 +33,12 @@ clinical_outcomes_survival_ui <- function(id) {
                     )
                 )
             ),
-            .GlobalEnv$plotBox(
+            iatlas.app::plotBox(
                 width = 12,
                 "survival_plot" %>%
                     ns() %>%
-                    shiny::plotOutput(height = 600) %>%
-                    shinycssloaders::withSpinner()
+                    shiny::plotOutput(., height = 600) %>%
+                    shinycssloaders::withSpinner(.)
             ),
             shiny::downloadButton(ns("download_tbl"), "Download plot table")
         )

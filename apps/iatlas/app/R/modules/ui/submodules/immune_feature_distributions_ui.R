@@ -6,14 +6,14 @@ immune_feature_distributions_ui <- function(id) {
     source("R/modules/ui/ui_modules/distribution_plot_selector_ui.R", local = T)
 
     shiny::tagList(
-        .GlobalEnv$messageBox(
+        iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
                 "markdown/immune_features_dist.markdown"
             ),
         ),
         shiny::fluidRow(
-            .GlobalEnv$optionsBox(
+            iatlas.app::optionsBox(
                 width = 12,
                 shiny::column(
                     width = 4,
