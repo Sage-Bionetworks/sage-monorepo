@@ -47,6 +47,16 @@ type Query {
   patients(barcode: [String!]): [Patient!]!
 
   """
+  The "related" query accepts:
+
+    - "dataSet", a list of data set names
+    - "related", a list of tag (related) names related to the dataset(s)
+
+  If no filters are passed, this will return all tags related to data sets.
+  """
+  related(dataSet: [String!], related: [String!]): [RelatedByDataSet!]!
+
+  """
   The "samples" query accepts a list of sample names or a list of patient barcodes.
   If no filters are passed, this will return all samples.
   """

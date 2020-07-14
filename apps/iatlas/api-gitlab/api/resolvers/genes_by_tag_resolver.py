@@ -9,7 +9,7 @@ def resolve_genes_by_tag(_obj, info, dataSet, related, tag=None, feature=None, f
                                tag=tag, feature=feature, feature_class=featureClass,
                                get_samples=True)
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, True)
+    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
     fields = build_option_args(selection_set, {'genes': 'genes'})
     want_genes = 'genes' in fields
 

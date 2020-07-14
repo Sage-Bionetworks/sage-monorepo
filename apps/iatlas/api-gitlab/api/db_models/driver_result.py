@@ -41,7 +41,7 @@ class DriverResult(Base):
 
     tag = db.relationship(
         'Tag', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
-        uselist=False, primaryjoin="Tag.id==DriverResult.tag_id", lazy='noload')
+        uselist=False, lazy='noload')
 
     dataSet = db.relationship(
         'Dataset', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
