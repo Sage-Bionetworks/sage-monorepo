@@ -6,8 +6,7 @@ immunomodulator_distributions_server <- function(
 ){
 
     source_files <- c(
-        "R/modules/server/submodules/distribution_plot_server.R",
-        "R/immunomodulators_functions.R"
+        "R/modules/server/submodules/distribution_plot_server.R"
     )
 
     for (file in source_files) {
@@ -25,7 +24,10 @@ immunomodulator_distributions_server <- function(
         shiny::selectInput(
             ns("gene_choice_entrez"),
             label = "Select or Search Gene",
-            choices = iatlas.app::create_im_gene_list(im_tbl(), input$gene_group_choice)
+            choices = iatlas.app::create_im_gene_list(
+                im_tbl(),
+                input$gene_group_choice
+            )
         )
     })
 
@@ -49,12 +51,12 @@ immunomodulator_distributions_server <- function(
 
         shiny::req(
             cohort_obj(),
-            input$gene_choice_id,
+            input$gene_choice_entrez,
             input$scale_method_choice
         )
 
-        tbl <- build_im_distplot_tbl(
-            input$gene_choice_id,
+        tbl <- iatlas.app::build_im_distplot_tbl(
+            input$gene_choice_entrez,
             cohort_obj()$sample_tbl,
             input$scale_method_choice
         )
