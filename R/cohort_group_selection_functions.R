@@ -25,7 +25,7 @@ build_dm_tbl <- function(){
         "(SELECT id FROM mutation_types WHERE name = 'driver_mutation')"
     ) %>%
         perform_query() %>%
-        dplyr::mutate(mutation = paste0(.data$gene, ":", .data$mutation_code))
+        dplyr::mutate(mutation = paste0(.data$gene, ":", .data$code))
 }
 
 #' Create Cohort Object

@@ -154,20 +154,119 @@ build_gene_expression_tbl_by_gene_ids <- function(gene_ids){
         perform_query("Build Gene Expression Tibble by Gene IDs")
 }
 
-#' Get Sample IDs from Dataset
+
+# Module specfic functions ----------------------------------------------------
+
+#' Build Clinical Outcomes Survival Tibble
 #'
-#' @param dataset The name of a dataset in the database
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-get_sample_ids_from_dataset <- function(dataset){
+#' @param time_id An integer in the id column of the samples table
+#' @param status_id An integer in the id column of the samples table
+build_clincal_outcomes_survival_tbl <- function(time_id, status_id){
     paste0(
-        "SELECT sample_id FROM samples_to_tags WHERE tag_id IN ",
-        "(SELECT id FROM tags where name = '", dataset, "')"
-    ) %>%
-        perform_query("Get Sample IDs from Dataset") %>%
-        dplyr::pull(.data$sample_id)
+        "SELECT a.sample_id, a.time, b.status FROM (",
+        paste0(
+            "SELECT a.sample_id, a.value AS time ",
+            "FROM features_to_samples a ",
+            "INNER JOIN features f ON a.feature_id = f.id ",
+            "WHERE feature_id = ",
+            time_id
+        ),
+        ") a INNER JOIN (",
+        paste0(
+            "SELECT a.sample_id, a.value AS status ",
+            "FROM features_to_samples a ",
+            "INNER JOIN features f ON a.feature_id = f.id ",
+            "WHERE feature_id = ",
+            status_id
+        ),
+        ") b ON a.sample_id = b.sample_id"
+    )  %>%
+        perform_query("Build Survival Values Tibble")
 }
+
+#' Build Immunomodulators Tibble
+#'
+#' #' @importFrom magrittr %>%
+build_immunomodultors_tbl <- function(){
+    create_build_immunomodulators_tbl_query() %>%
+        perform_query("Build Immunomodulators Tibble")
+}
+
+#' Build IO Target Tibble
+#'
+#' #' @importFrom magrittr %>%
+build_io_target_tbl <- function(){
+    paste0(
+        "SELECT a.id, a.hgnc, a.entrez, a.io_landscape_name AS friendly_name, ",
+        "p.name AS pathway, t.name AS therapy, a.description FROM (",
+        create_get_genes_by_type_query("io_target"), ") a ",
+        "LEFT JOIN pathways p ON a.pathway_id = p.id ",
+        "LEFT JOIN therapy_types t ON a.therapy_type_id = t.id "
+    ) %>%
+        perform_query("Build IO Target Tibble")
+}
+
+#' Build Cohort Tibble By Feature ID
+#'
+#' @param sample_ids Integers in the id column of the samples table
+#' @param feature_id An integer in the id column of the features_to_samples
+#' table
+#' @importFrom magrittr %>%
+build_cohort_tbl_by_feature_id <- function(sample_ids, feature_id){
+    paste(
+        "SELECT a.sample_id, a.value FROM (",
+        create_feature_value_query(feature_id),
+        ") a WHERE a.sample_id IN (",
+        numeric_values_to_query_list(sample_ids),
+        ")"
+    ) %>%
+        perform_query("Build Cohort Tibble By Feature ID")
+}
+
+#' Build Cohort Tibble By Group
+#'
+#' @param sample_ids Integers in the id column of the samples table
+#' @param group A String that is the display column of the tags table
+#' @importFrom magrittr %>%
+build_cohort_tbl_by_group <- function(sample_ids, group){
+    print(group)
+    paste0(
+        "SELECT sts.sample_id, g.name AS group, g.display AS name, ",
+        "g.characteristics, g.color FROM (",
+        create_parent_group_query_from_display(group),
+        ") g INNER JOIN samples_to_tags sts ON g.id = sts.tag_id ",
+        "WHERE sample_id IN (",
+        numeric_values_to_query_list(sample_ids),
+        ")"
+    ) %>%
+        perform_query("Build Cohort Tibble By Group")
+}
+
+#' >>>>>>> staging_cohort_selection_ux
+#' #' Get Sample IDs from Dataset
+#' #'
+#' #' @param dataset The name of a dataset in the database
+#' #' @importFrom magrittr %>%
+#' #' @importFrom dplyr pull
+#' #' @importFrom rlang .data
+#' get_sample_ids_from_dataset <- function(dataset){
+#'     paste0(
+#' <<<<<<< HEAD
+#'         "SELECT sample_id FROM samples_to_tags WHERE tag_id IN ",
+#'         "(SELECT id FROM tags where name = '", dataset, "')"
+#'     ) %>%
+#'         perform_query("Get Sample IDs from Dataset") %>%
+#' =======
+#'         "SELECT * FROM samples_to_tags WHERE tag_id IN (",
+#'         "SELECT id FROM tags WHERE display IN ('",
+#'         dataset,
+#'         "')",
+#'         ")"
+#'     ) %>%
+#'         perform_query() %>%
+#' >>>>>>> staging_cohort_selection_ux
+#'         dplyr::pull(.data$sample_id)
+#' }
 
 
 

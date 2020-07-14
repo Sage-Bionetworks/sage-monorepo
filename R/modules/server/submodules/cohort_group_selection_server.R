@@ -12,16 +12,11 @@ cohort_group_selection_server <- function(
         "Immune Subtype",      "TCGA",   "tag", "Immune_Subtype",
         "TCGA Subtype",        "TCGA",   "tag", "TCGA_Subtype",
         "TCGA Study",          "TCGA",   "tag", "TCGA_Study",
-        # "Gender",          "TCGA",   "sample",
-        # "Race",            "TCGA",   "sample",
-        # "Ethnicity",       "TCGA",   "sample",
         # "Immune Feature Bins", "TCGA",    NA,    "Immune_Feature_Bins",
         # "Driver Mutation",     "TCGA",    NA,    "Driver_Mutation",
         "Immune Subtype",      "PCAWG",   "tag", "Immune_Subtype",
         "PCAWG Study",         "PCAWG",   "tag", "PCAWG_Study"
         # "Immune Feature Bins", "PCAWG",   NA,    "Immune_Feature_Bins"
-        # "Gender",          "PCAWG",  "sample",
-        # "Race",            "PCAWG",  "sample"
     )
 
     available_groups <- shiny::reactive({
