@@ -10,6 +10,9 @@ class Tag(Base):
     display = db.Column(db.String, nullable=True)
     color = db.Column(db.String, nullable=True)
 
+    datasets = db.relationship('Dataset', lazy='noload', uselist=True,
+                               secondary='datasets_to_tags')
+
     nodes = db.relationship('Node', lazy='noload', uselist=True,
                             secondary='nodes_to_tags')
 
