@@ -51,6 +51,18 @@ def test_Tag_with_data_sets(app, related):
         assert type(data_set.name) is str
 
 
+def test_Tag_with_dataset_tag_assoc(app, related):
+    query = return_tag_query('dataset_tag_assoc')
+    result = query.filter_by(name=related).one_or_none()
+
+    assert result
+    assert isinstance(result.dataset_tag_assoc, list)
+    assert len(result.dataset_tag_assoc) > 0
+    # Don't need to iterate through every result.
+    for dataset_tag_rel in result.dataset_tag_assoc[0:2]:
+        assert dataset_tag_rel.tag_id == result.id
+
+
 def test_Tag_with_driver_results(app, tag_name):
     query = return_tag_query('driver_results')
     result = query.filter_by(name=tag_name).one_or_none()

@@ -5,6 +5,7 @@ from .database_helpers import build_general_query
 
 related_fields = ['copy_number_results',
                   'data_sets',
+                  'dataset_tag_assoc',
                   'driver_results',
                   'node_tag_assoc',
                   'nodes',
