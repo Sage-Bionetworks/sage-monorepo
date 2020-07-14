@@ -1,6 +1,5 @@
 # tags ------------------------------------------------------------------------
 
-# TODO: get rid of dataset argument
 query_tags <- function(dataset, parent_tag){
     iatlas.app::perform_api_query(
         "tags",

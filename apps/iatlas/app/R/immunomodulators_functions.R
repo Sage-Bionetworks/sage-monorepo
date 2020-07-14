@@ -11,7 +11,7 @@ create_im_gene_list <- function(tbl, group){
             display = "hgnc",
             feature = "entrez"
         ) %>%
-        iatlas.app::create_nested_named_list()
+        iatlas.app::create_nested_named_list(.)
 }
 
 #' Build Immunomodulators Distributions Plot Tibble
@@ -22,8 +22,8 @@ create_im_gene_list <- function(tbl, group){
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select inner_join
 #' @importFrom rlang .data
-build_im_distplot_tbl <- function(gene_id, sample_tbl, scale_method){
-    gene_id %>%
+build_im_distplot_tbl <- function(gene, sample_tbl, scale_method){
+    gene %>%
         as.integer() %>%
         build_gene_expression_tbl_by_gene_ids() %>%
         dplyr::inner_join(sample_tbl, by = "sample_id") %>%

@@ -3,8 +3,6 @@ with_test_api_env({
   # tags ----------------------------------------------------------------------
 
   test_that("tags", {
-    # TODO: fix test with better query
-    # result <- query_tags("Immune_Subtype")
     result <- query_tags("TCGA", "Immune_Subtype")
     expect_named(
       result,
@@ -14,7 +12,6 @@ with_test_api_env({
       )
     )
     expect_equal(result$name, c("C1", "C2", "C3", "C4", "C5", "C6"))
-    expect_equal(result$display, c("C1", "C2", "C3", "C4", "C5", "C6"))
   })
 
   test_that("query_cohort_selector", {
@@ -31,6 +28,10 @@ with_test_api_env({
       )
     )
   })
+
+  # samples by tags -----------------------------------------------------------
+
+
 
   # features ------------------------------------------------------------------
 
