@@ -13,19 +13,19 @@ io_targets_ui <- function(id) {
     }
 
     shiny::tagList(
-        .GlobalEnv$titleBox("iAtlas Explorer — IO Targets"),
-        .GlobalEnv$textBox(
+        iatlas.app::titleBox("iAtlas Explorer — IO Targets"),
+        iatlas.app::textBox(
             width = 12,
             shiny::includeMarkdown("markdown/io_target.markdown")
         ),
-        .GlobalEnv$sectionBox(
+        iatlas.app::sectionBox(
             title = "IO Target Gene Expression Distributions",
             call_module_ui(
                 ns("distributions"),
                 io_target_distributions_ui
             )
         ),
-        .GlobalEnv$sectionBox(
+        iatlas.app::sectionBox(
             title = "IO Target Annotations",
             call_module_ui(
                 ns("datatable"),

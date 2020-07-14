@@ -12,17 +12,17 @@ copy_number_ui <- function(id){
     }
 
     shiny::tagList(
-        .GlobalEnv$titleBox(
+        iatlas.app::titleBox(
             "iAtlas Explorer — Association with Copy Number Variations"
         ),
-        .GlobalEnv$textBox(
+        iatlas.app::textBox(
             width = 12,
             paste0(
                 "Explore statistical associations between immune readouts ",
                 "and copy number variations."
             )
         ),
-        .GlobalEnv$sectionBox(
+        iatlas.app::sectionBox(
             title = "Immune Response Association With Copy Number Variation",
             call_module_ui(
                 ns("copy_number_response"),

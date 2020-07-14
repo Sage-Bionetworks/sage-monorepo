@@ -5,14 +5,14 @@ immune_feature_correlations_ui <- function(id) {
     source("R/modules/ui/submodules/plotly_ui.R", local = T)
 
     shiny::tagList(
-        .GlobalEnv$messageBox(
+        iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
                 "markdown/immune_features_correlations.markdown"
             )
         ),
         shiny::fluidRow(
-            .GlobalEnv$optionsBox(
+            iatlas.app::optionsBox(
                 width = 12,
                 shiny::column(
                     width = 6,
@@ -38,24 +38,24 @@ immune_feature_correlations_ui <- function(id) {
             )
         ),
         shiny::fluidRow(
-            .GlobalEnv$plotBox(
+            iatlas.app::plotBox(
                 width = 12,
                 shiny::fluidRow(
                     "heatmap" %>%
                         ns() %>%
-                        plotly::plotlyOutput() %>%
-                        shinycssloaders::withSpinner(),
+                        plotly::plotlyOutput(.) %>%
+                        shinycssloaders::withSpinner(.),
                     plotly_ui(ns("heatmap"))
                 )
             )
         ),
         shiny::fluidRow(
-            .GlobalEnv$plotBox(
+            iatlas.app::plotBox(
                 width = 12,
                 "scatterPlot" %>%
                     ns() %>%
-                    plotly::plotlyOutput() %>%
-                    shinycssloaders::withSpinner(),
+                    plotly::plotlyOutput(.) %>%
+                    shinycssloaders::withSpinner(.),
                 plotly_ui(ns("scatterplot"))
             )
         )

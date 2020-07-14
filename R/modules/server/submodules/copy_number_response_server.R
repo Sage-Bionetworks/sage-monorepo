@@ -14,14 +14,14 @@ copy_number_response_server <- function(
     #gene_tbl            <- build_cnv_gene_tbl()
 
     group_tbl <- shiny::reactive({
-        get_cnv_group_tbl(cohort_obj()$group_name)
+        iatlas.app::get_cnv_group_tbl(cohort_obj()$group_name)
     })
 
     output$select_cn_group_ui <- shiny::renderUI({
         shiny::selectInput(
             inputId  = ns("cn_group_point_filter"),
             label    = "Select Group Filter",
-            choices  = get_cnv_group_list(group_tbl()),
+            choices  = iatlas.app::get_cnv_group_list(group_tbl()),
             selected = 0,
             multiple = T
         )
@@ -32,7 +32,7 @@ copy_number_response_server <- function(
             inputId  = ns("response_variable"),
             label    = "Select or Search for Response Variable",
             choices  = build_cnv_feature_list(),
-            selected = .GlobalEnv$get_feature_id_from_display(
+            selected = iatlas.app::get_feature_id_from_display(
                 "Leukocyte Fraction"
             )
         )

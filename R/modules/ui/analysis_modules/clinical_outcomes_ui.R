@@ -5,19 +5,19 @@ clinical_outcomes_ui <- function(id) {
     source("R/modules/ui/submodules/call_module_ui.R", local = T)
 
     shiny::tagList(
-        .GlobalEnv$titleBox("iAtlas Explorer — Clinical Outcomes"),
-        .GlobalEnv$textBox(
+        iatlas.app::titleBox("iAtlas Explorer — Clinical Outcomes"),
+        iatlas.app::textBox(
             width = 12,
             shiny::includeMarkdown("markdown/clinical_outcomes.markdown")
         ),
-        .GlobalEnv$sectionBox(
+        iatlas.app::sectionBox(
             title = "Sample Group Survival",
             call_module_ui(
                 ns("clinical_outcomes_survival"),
                 clinical_outcomes_survival_ui
             )
         ),
-        .GlobalEnv$sectionBox(
+        iatlas.app::sectionBox(
             title = "Concordance Index",
             call_module_ui(
                 ns("clinical_outcomes_heatmap"),

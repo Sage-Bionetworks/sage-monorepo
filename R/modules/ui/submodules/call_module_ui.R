@@ -15,7 +15,7 @@ call_module_ui <- function(
         ),
         shiny::conditionalPanel(
             condition = "!output.display_module",
-            .GlobalEnv$textBox(width = 12, warning_message),
+            iatlas.app::textBox(width = 12, warning_message),
             ns = ns
         )
     )

@@ -24,7 +24,7 @@ til_map_distributions_server <- function(
         shiny::req(input$feature_choice_id)
         input$feature_choice_id %>%
             as.integer() %>%
-            .GlobalEnv$get_feature_display_from_id()
+            iatlas.app::get_feature_display_from_id()
     })
 
     feature_plot_label <- shiny::reactive({
@@ -32,7 +32,7 @@ til_map_distributions_server <- function(
             feature_name(),
             input$scale_method_choice
         )
-        .GlobalEnv$transform_feature_string(
+        iatlas.app::transform_feature_string(
             feature_name(),
             input$scale_method_choice
         )
