@@ -20,9 +20,11 @@ def resolve_genes(_obj, info, entrez=None, geneType=None):
         'immuneCheckpoint': get_value(get_value(gene, 'immune_checkpoint')),
         'pathway': get_value(get_value(gene, 'pathway')),
         'publications': [{
+            'doId': get_value(publication, 'do_id'),
             'firstAuthorLastName': get_value(publication, 'first_author_last_name'),
             'journal': get_value(publication, 'journal'),
             'pubmedId': get_value(publication, 'pubmed_id'),
+            'name': get_value(publication),
             'title': get_value(publication, 'title'),
             'year': get_value(publication, 'year'),
         } for publication in get_value(gene, 'publications', [])],
