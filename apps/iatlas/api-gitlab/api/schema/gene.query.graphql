@@ -63,6 +63,6 @@ type GenesByTag {
   characteristics: String
   color: String
   display: String
-  genes: [Gene!]!
+  genes: [SimpleGene!]!
   tag: String!
 }
