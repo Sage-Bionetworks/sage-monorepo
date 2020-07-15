@@ -70,12 +70,12 @@ explorepage <- shinydashboard::dashboardPage(
                     "Extracellular Networks",
                     tabName = "extracellular_network",
                     icon = shiny::icon("cog")
+                ),
+                shinydashboard::menuSubItem(
+                    "Cell-Interaction Diagram",
+                    tabName = "cellimage",
+                    icon = shiny::icon("cog")
                 )
-                # menuSubItem(
-                #     "Cell-Interaction Diagram",
-                #     tabName = "cell_image",
-                #     icon = icon("cog")
-                # )
             ),
             shinydashboard::menuItem(
                 "Data Description",
@@ -231,16 +231,16 @@ explorepage <- shinydashboard::dashboardPage(
                             linkText = "Open Module"
                         )
                     ),
-                    # fluidRow(
-                    #     imgLinkBox(
-                    #         width = 6,
-                    #         title = "Cell-Interaction Diagram",
-                    #         linkId = "link_to_module12",
-                    #         imgSrc = "images/cell-image.png",
-                    #         boxText = "Explore cell and protein abundance on an illustration.",
-                    #         linkText = "Open Module"
-                    #     )
-                    # )
+                    shiny::fluidRow(
+                        iatlas.app::imgLinkBox(
+                            width = 6,
+                            title = "Cell-Interaction Diagram",
+                            linkId = "link_to_cellimage",
+                            imgSrc = "images/cellimage.png",
+                            boxText = "Explore cell and protein abundance on an illustration.",
+                            linkText = "Open Module"
+                        )
+                    )
                 )
             ),
             shinydashboard::tabItem(
@@ -283,10 +283,10 @@ explorepage <- shinydashboard::dashboardPage(
                 tabName = "extracellular_network",
                 extracellular_network_ui("extracellular_network")
             ),
-            # shinydashboard::tabItem(
-            #     tabName = "cell_image",
-            #     cellimage_UI("module12")
-            # ),
+            shinydashboard::tabItem(
+                tabName = "cellimage",
+                cellimage_ui("cellimage")
+            ),
             shinydashboard::tabItem(
                 tabName = "data_info",
                 data_info_ui("data_info")
