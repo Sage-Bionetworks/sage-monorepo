@@ -1,80 +1,30 @@
-# related ---------------------------------------------------------------------
 
-query_dataset_tags <- function(dataset){
+# datasets ---------------------------------------------------------------------
+
+query_datasets <- function(){
     iatlas.app::perform_api_query(
-        "dataset_tags",
+        "datasets",
         list(
-            dataSet = dataset,
-            related = list()
+            dataSet = list()
         )
     ) %>%
         purrr::pluck(1) %>%
         dplyr::as_tibble() %>%
-        tidyr::unnest(cols = c("related")) %>%
-        dplyr::select("display", "name") %>%
-        dplyr::arrange(.data$name)
+        dplyr::select("display", "name")
 }
 
-# tags ------------------------------------------------------------------------
-
-query_tags <- function(dataset, parent_tag){
+query_dataset_samples <- function(dataset){
     iatlas.app::perform_api_query(
-        "tags",
+        "dataset_samples",
         list(
-            dataSet = dataset,
-            related = parent_tag
+            dataSet = dataset
         )
     ) %>%
         purrr::pluck(1) %>%
         dplyr::as_tibble() %>%
-        dplyr::select("name", "display") %>%
-        dplyr::arrange(.data$name)
+        tidyr::unnest(cols = "samples")
 }
 
-query_cohort_selector <- function(
-    dataset = "TCGA",
-    group_tag = "Immune_Subtype"
-){
-    iatlas.app::perform_api_query(
-        "cohort_selection",
-        list(
-            dataSet = dataset,
-            related = group_tag,
-            feature = list(),
-            featureClass = list()
-        )
-    ) %>%
-        purrr::pluck(1) %>%
-        dplyr::as_tibble() %>%
-        tidyr::unnest(cols = c("samples")) %>%
-        dplyr::select(
-            "name",
-            "display",
-            "characteristics",
-            "color",
-            "size" = "sampleCount",
-            "sample" = "samples"
-        )
-}
-
-# features --------------------------------------------------------------------
-
-query_feature_values <- function(
-    dataset = list(),
-    group_tag = list(),
-    feature = list()
-){
-    iatlas.app::perform_api_query(
-        "feature_values",
-        list(
-            dataSet = dataset,
-            related = group_tag,
-            feature = feature
-        )
-    ) %>%
-        purrr::pluck(1) %>%
-        dplyr::as_tibble()
-}
 
 # features_by_tag --------------------------------------------------------------
 
@@ -195,35 +145,117 @@ query_immunomodulators <- function(){
         )
 }
 
+# mutations -------------------------------------------------------------------
 
-
-
-
-
-
-# datasets ---------------------------------------------------------------------
-
-query_datasets <- function(){
+query_mutations <- function(
+    entrez = list(),
+    code = list(),
+    type = list()
+){
     iatlas.app::perform_api_query(
-        "datasets",
+        "mutations",
         list(
-            dataSet = list()
+            entrez = entrez,
+            mutationCode = code,
+            mutationType = type
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::bind_cols(
+            "entrez" = .$gene$entrez,
+            "hgnc"   = .$gene$hgnc
+        ) %>%
+        dplyr::as_tibble() %>%
+        dplyr::select(
+            "id",
+            "entrez",
+            "hgnc",
+            "code" = "mutationCode"
+        )
+}
+
+# related ---------------------------------------------------------------------
+
+query_dataset_tags <- function(dataset){
+    iatlas.app::perform_api_query(
+        "dataset_tags",
+        list(
+            dataSet = dataset,
+            related = list()
         )
     ) %>%
         purrr::pluck(1) %>%
         dplyr::as_tibble() %>%
-        dplyr::select("display", "name")
+        tidyr::unnest(cols = c("related")) %>%
+        dplyr::select("display", "name") %>%
+        dplyr::arrange(.data$name)
 }
 
-query_dataset_samples <- function(dataset){
+# tags ------------------------------------------------------------------------
+
+query_tags <- function(dataset, parent_tag){
     iatlas.app::perform_api_query(
-        "dataset_samples",
+        "tags",
         list(
-            dataSet = dataset
+            dataSet = dataset,
+            related = parent_tag
         )
     ) %>%
         purrr::pluck(1) %>%
         dplyr::as_tibble() %>%
-        tidyr::unnest(cols = "samples")
+        dplyr::select("name", "display") %>%
+        dplyr::arrange(.data$name)
 }
+
+query_cohort_selector <- function(
+    dataset = "TCGA",
+    group_tag = "Immune_Subtype"
+){
+    iatlas.app::perform_api_query(
+        "cohort_selection",
+        list(
+            dataSet = dataset,
+            related = group_tag,
+            feature = list(),
+            featureClass = list()
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble() %>%
+        tidyr::unnest(cols = c("samples")) %>%
+        dplyr::select(
+            "name",
+            "display",
+            "characteristics",
+            "color",
+            "size" = "sampleCount",
+            "sample" = "samples"
+        )
+}
+
+# features --------------------------------------------------------------------
+
+query_feature_values <- function(
+    dataset = list(),
+    group_tag = list(),
+    feature = list()
+){
+    iatlas.app::perform_api_query(
+        "feature_values",
+        list(
+            dataSet = dataset,
+            related = group_tag,
+            feature = feature
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble()
+}
+
+
+
+
+
+
+
 

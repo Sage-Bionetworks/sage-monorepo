@@ -1,0 +1,10 @@
+query Mutations($entrez: [Int!], $mutationCode: [String!], $mutationType: [String!]) {
+  mutations(entrez: $entrez, mutationCode: $mutationCode, mutationType: $mutationType){
+    id
+    mutationCode
+    gene {
+      entrez
+      hgnc
+    }
+  }
+}
