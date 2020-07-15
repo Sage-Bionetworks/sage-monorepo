@@ -1,15 +1,3 @@
-#' Get Cohort Available Groups
-#'
-#' @param tbl A tibble
-#' @param .dataset A string
-#' @importFrom magrittr %>%
-#' @importFrom dplyr select filter
-get_cohort_available_groups <- function(tbl, .dataset){
-    tbl %>%
-        dplyr::filter(.data$dataset == .dataset) %>%
-        dplyr::select("group", "group_internal") %>%
-        tibble::deframe(.)
-}
 
 #' Build Driver Mutation Tibble
 #' @importFrom magrittr %>%

@@ -1,46 +1,16 @@
 with_test_api_env({
 
-  # related -------------------------------------------------------------------
+  # datasets ------------------------------------------------------------------
 
-  test_that("dataset_tags", {
-    result <- query_dataset_tags("TCGA")
+  test_that("query_datasets", {
+    result <- query_datasets()
     expect_named(result, c("display", "name"))
-    expect_equal(result$name, c("Immune_Subtype", "TCGA_Study", "TCGA_Subtype"))
   })
 
-
-  # tags ----------------------------------------------------------------------
-
-  test_that("tags", {
-    result <- query_tags("TCGA", "Immune_Subtype")
-    expect_named(
-      result,
-      c(
-        "name",
-        "display"
-      )
-    )
-    expect_equal(result$name, c("C1", "C2", "C3", "C4", "C5", "C6"))
+  test_that("query_dataset_samples", {
+    result <- query_dataset_samples("PCAWG")
+    expect_named(result, "name")
   })
-
-  # test_that("query_cohort_selector", {
-  #   result <- query_cohort_selector()
-  #   expect_named(
-  #     result,
-  #     c(
-  #       "name",
-  #       "display",
-  #       "characteristics",
-  #       "color",
-  #       "size",
-  #       "sample"
-  #     )
-  #   )
-  # })
-
-  # samples by tags -----------------------------------------------------------
-
-
 
   # features ------------------------------------------------------------------
 
@@ -54,11 +24,11 @@ with_test_api_env({
     expect_length(result1_complete$value, 9058)
 
     result2 <- query_feature_values(
-      "PCAWG", "Immune_Subtype", "T Cells CD8"
+      "PCAWG", "Immune_Subtype", "Lymphocytes_Aggregate1"
     )
-    expect_length(result2$value, 9058)
+    expect_length(result2$value, 455)
     result2_complete <- tidyr::drop_na(result2)
-    expect_length(result2_complete$value, 9058)
+    expect_length(result2_complete$value, 455)
   })
 
   # features_by_tag -----------------------------------------------------------
@@ -154,22 +124,49 @@ with_test_api_env({
     )
   })
 
+  # mutations -----------------------------------------------------------------
 
+  test_that("mutations", {
+    result <- query_mutations()
+    expect_named(result, c("id", "entrez", "hgnc", "code"))
+  })
 
+  # related -------------------------------------------------------------------
 
-
-  # datasets ----
-
-  test_that("query_datasets", {
-    result <- query_datasets()
+  test_that("dataset_tags", {
+    result <- query_dataset_tags("TCGA")
     expect_named(result, c("display", "name"))
+    expect_equal(result$name, c("Immune_Subtype", "TCGA_Study", "TCGA_Subtype"))
   })
 
-  test_that("query_dataset_samples", {
-    result <- query_dataset_samples("PCAWG")
-    expect_named(result, "name")
+  # tags ----------------------------------------------------------------------
+
+  test_that("tags", {
+    result <- query_tags("TCGA", "Immune_Subtype")
+    expect_named(
+      result,
+      c(
+        "name",
+        "display"
+      )
+    )
+    expect_equal(result$name, c("C1", "C2", "C3", "C4", "C5", "C6"))
   })
 
+  test_that("query_cohort_selector", {
+    result <- query_cohort_selector()
+    expect_named(
+      result,
+      c(
+        "name",
+        "display",
+        "characteristics",
+        "color",
+        "size",
+        "sample"
+      )
+    )
+  })
 
 })
 

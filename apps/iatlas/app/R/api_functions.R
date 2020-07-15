@@ -39,6 +39,14 @@ perform_api_query <- function(
     api_url = "http://ec2-54-190-27-240.us-west-2.compute.amazonaws.com/api"
     # api_url = "http://localhost:5000/api"
 ){
+    if (!query_name %in% names(qry_obj$queries)) {
+        msg <- qry_obj$queries %>%
+            names %>%
+            stringr::str_c(collapse = ", ") %>%
+            stringr::str_c("Query: ", query_name, " not in avaialble queries: ", .)
+
+        stop(msg)
+    }
     query <- qry_obj$queries[[query_name]]
     con <- ghql::GraphqlClient$new(api_url)
     result <-
