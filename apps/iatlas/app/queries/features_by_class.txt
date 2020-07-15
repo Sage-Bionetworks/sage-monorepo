@@ -5,6 +5,8 @@ query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [Strin
       name
       display
       order
+      unit
+      methodTag
     }
   }
 }

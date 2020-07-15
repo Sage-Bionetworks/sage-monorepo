@@ -23,20 +23,20 @@ with_test_api_env({
     expect_equal(result$name, c("C1", "C2", "C3", "C4", "C5", "C6"))
   })
 
-  test_that("query_cohort_selector", {
-    result <- query_cohort_selector()
-    expect_named(
-      result,
-      c(
-        "name",
-        "display",
-        "characteristics",
-        "color",
-        "size",
-        "sample"
-      )
-    )
-  })
+  # test_that("query_cohort_selector", {
+  #   result <- query_cohort_selector()
+  #   expect_named(
+  #     result,
+  #     c(
+  #       "name",
+  #       "display",
+  #       "characteristics",
+  #       "color",
+  #       "size",
+  #       "sample"
+  #     )
+  #   )
+  # })
 
   # samples by tags -----------------------------------------------------------
 
@@ -103,7 +103,9 @@ with_test_api_env({
         "class",
         "display",
         "name",
-        "order"
+        "order",
+        "unit",
+        "method_tag"
       )
     )
   })
