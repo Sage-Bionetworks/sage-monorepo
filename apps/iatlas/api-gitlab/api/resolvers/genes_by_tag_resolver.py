@@ -38,8 +38,10 @@ def resolve_genes_by_tag(_obj, info, dataSet, related, tag=None, feature=None, f
                     'immuneCheckpoint': get_value(get_value(gene, 'immune_checkpoint')),
                     'pathway': get_value(get_value(gene, 'pathway')),
                     'publications': [{
+                        'doId': get_value(publication, 'do_id'),
                         'firstAuthorLastName': get_value(publication, 'first_author_last_name'),
                         'journal': get_value(publication, 'journal'),
+                        'name': get_value(publication),
                         'pubmedId': get_value(publication, 'pubmed_id'),
                         'title': get_value(publication, 'title'),
                         'year': get_value(publication, 'year')
