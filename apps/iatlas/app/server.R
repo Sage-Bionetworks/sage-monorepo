@@ -6,6 +6,10 @@
 options(shiny.maxRequestSize = 100 * 1024^2)
 options(shiny.usecairo = FALSE)
 
+library(magrittr)
+pool <- iatlas.app::connect_to_db()
+iatlas.app::create_and_add_all_queries_to_qry_obj()
+
 ################################################################################
 # Begin Shiny Server definition.
 ################################################################################
