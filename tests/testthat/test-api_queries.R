@@ -1,5 +1,14 @@
 with_test_api_env({
 
+  # related -------------------------------------------------------------------
+
+  test_that("dataset_tags", {
+    result <- query_dataset_tags("TCGA")
+    expect_named(result, c("display", "name"))
+    expect_equal(result$name, c("Immune_Subtype", "TCGA_Study", "TCGA_Subtype"))
+  })
+
+
   # tags ----------------------------------------------------------------------
 
   test_that("tags", {

@@ -1,3 +1,20 @@
+# related ---------------------------------------------------------------------
+
+query_dataset_tags <- function(dataset){
+    iatlas.app::perform_api_query(
+        "dataset_tags",
+        list(
+            dataSet = dataset,
+            related = list()
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble() %>%
+        tidyr::unnest(cols = c("related")) %>%
+        dplyr::select("display", "name") %>%
+        dplyr::arrange(.data$name)
+}
+
 # tags ------------------------------------------------------------------------
 
 query_tags <- function(dataset, parent_tag){
