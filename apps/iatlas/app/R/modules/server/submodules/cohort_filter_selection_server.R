@@ -14,9 +14,8 @@ cohort_filter_selection_server <- function(
 
     # tag filters -----------------------------------------------------------
     tag_named_list <- shiny::reactive({
-        iatlas.app::create_cohort_tag_named_list(
-            selected_dataset()
-        )
+        iatlas.app::query_dataset_tags(selected_dataset()) %>%
+            tibble::deframe(.)
     })
 
     tag_element_module_server <- shiny::reactive({
@@ -114,8 +113,11 @@ cohort_filter_selection_server <- function(
     selected_samples <- shiny::reactive({
         # shiny::req(numeric_filter_samples(), tag_filter_samples())
         # intersect(numeric_filter_samples(), tag_filter_samples())
-        shiny::req(numeric_filter_samples())
-        numeric_filter_samples()
+        # shiny::req(numeric_filter_samples())
+        # numeric_filter_samples()
+        print(tag_filter_samples())
+        shiny::req(tag_filter_samples())
+        tag_filter_samples()
     })
 
     # output$samples_text <- shiny::renderText({
@@ -124,7 +126,7 @@ cohort_filter_selection_server <- function(
 
     filter_obj <- shiny::reactive({
         list(
-            "samples" = samples()
+            "samples" = selected_samples()
             # valid_numeric_filter_obj(),
             # valid_tag_filter_obj()
         )

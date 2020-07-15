@@ -1,28 +1,4 @@
-# TODO replace this table with datasets to tags relationships
-#' Create Cohort Tag Named List
-#'
-#' @param .dataset A string, in the dataset column of the tbl
-#' @param tbl A tibble with columns tag_display, tag_name, dataset
-#' @importFrom magrittr %>%
-#' @importFrom dplyr inner_join select
-#' @importFrom tibble deframe filter
-create_cohort_tag_named_list <- function(.dataset, tbl = NULL){
-    tag_tbl <- dplyr::tribble(
-        ~tag_display,     ~tag_name,        ~dataset,
-        "Immune Subtype", "Immune_Subtype", "TCGA",
-        "TCGA Subtype",   "TCGA_Subtype",   "TCGA",
-        "TCGA Study",     "TCGA_Study",     "TCGA",
-        "Immune Subtype", "Immune_Subtype", "PCAWG",
-        "PCAWG Study",    "PCAWG_Study",    "PCAWG"
-    )
 
-    if (is.null(tbl)) tbl <- tag_tbl
-    tbl %>%
-        dplyr::filter(.data$dataset == .dataset) %>%
-        dplyr::select("tag_display", "tag_name") %>%
-        tibble::deframe(.)
-
-}
 
 #' Get Valid Tag Filters
 #'
@@ -52,14 +28,12 @@ is_tag_filter_valid <- function(obj){
 #' @importFrom magrittr %>%
 #' @importFrom purrr transpose pluck map reduce
 get_filtered_tag_samples <- function(filter_obj, samples){
-    print("test")
     filter_obj %>%
-        print() %>%
         purrr::transpose(.) %>%
-        print() %>%
         purrr::pluck("tags") %>%
-        print()
+        print() %>%
         purrr::map(., iatlas.app::get_filtered_group_sample_ids_by_filter) %>%
+        print()
         purrr::reduce(base::intersect, .init = samples)
 }
 

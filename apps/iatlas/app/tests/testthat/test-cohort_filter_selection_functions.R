@@ -1,22 +1,5 @@
 with_test_api_env({
 
-    test_that("Create Cohort Tag Named List", {
-        result1 <- create_cohort_tag_named_list("TCGA")
-        result2 <- create_cohort_tag_named_list ("PCAWG")
-        expect_type(result1, "character")
-        expect_type(result2, "character")
-        expect_named(
-            result1,
-            c("Immune Subtype", "TCGA Subtype", "TCGA Study"),
-            ignore.order = T
-        )
-        expect_named(
-            result2,
-            c("Immune Subtype", "PCAWG Study"),
-            ignore.order = T
-        )
-    })
-
     test_that("Get Valid Group Filters", {
         expect_equal(get_valid_group_filters(list()), list())
         expect_equal(get_valid_group_filters(list(NULL)), list())
