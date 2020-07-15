@@ -10,16 +10,20 @@ The "Publication" type may return:
 """
 type Publication {
   firstAuthorLastName: String
+  doId: String
   genes: [SimpleGene!]
+  geneTypes: [SimpleGeneType!]
   journal: String
-  pubmedId: Int!
+  name: String!
+  pubmedId: Int
   title: String
-  year: String
+  year: Int
 }
 
 """
 The "SimplePublication" is a version of a Publication. Only basic attributes may be returned. type may return:
 
+- The  "doId", the DO id of the publication
 - The  "firstAuthorLastName", the first last name of the publication's author
 - The  "journal" of the publication
 - The  "pubmedId", the id of the publication in the pubmed website. See https://pubmed.ncbi.nlm.nih.gov/
@@ -27,9 +31,11 @@ The "SimplePublication" is a version of a Publication. Only basic attributes may
 - The  "year" of the publication
 """
 type SimplePublication {
+  doId: String
   firstAuthorLastName: String
   journal: String
-  pubmedId: Int!
+  name: String!
+  pubmedId: Int
   title: String
-  year: String
+  year: Int
 }
