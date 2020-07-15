@@ -4,49 +4,66 @@ from api.database import return_publication_query
 
 
 @pytest.fixture(scope='module')
-def pubmed_id():
-    return 19567593
+def publication():
+    return '10.1016/j.immuni.2013.07.012_23890059'
 
 
-def test_publication_with_relations(app, pubmed_id):
+def test_publication_with_genes(app, publication):
     query = return_publication_query('genes')
-    result = query.filter_by(pubmed_id=pubmed_id).one_or_none()
+    result = query.filter_by(name=publication).one_or_none()
 
-    if result.genes:
-        assert isinstance(result.genes, list)
-        assert len(result.genes) > 0
-        # Don't need to iterate through every result.
-        for gene in result.genes[0:2]:
-            assert type(gene.entrez) is int
-    assert result.publication_gene_assoc == []
-    assert result.pubmed_id == pubmed_id
+    assert result
+    assert isinstance(result.genes, list)
+    assert len(result.genes) > 0
+    # Don't need to iterate through every result.
+    for gene in result.genes[0:2]:
+        assert type(gene.entrez) is int
+    assert result.publication_gene_gene_type_assoc == []
+    assert result.name == publication
+    assert type(result.do_id) is str or NoneType
     assert type(result.first_author_last_name) is str or NoneType
     assert type(result.journal) is str or NoneType
+    assert type(result.pubmed_id) is int or NoneType
     assert type(result.title) is str or NoneType
-    assert type(result.year) is str or NoneType
-    assert repr(result) == '<Publication %r>' % pubmed_id
+    assert type(result.year) is int or NoneType
+    assert repr(result) == '<Publication %r>' % publication
 
 
-def test_publication_with_publication_gene_assoc(app, pubmed_id):
-    query = return_publication_query('publication_gene_assoc')
-    result = query.filter_by(pubmed_id=pubmed_id).one_or_none()
+def test_gene_type_with_gene_types(app, publication):
+    query = return_publication_query('gene_types')
+    result = query.filter_by(name=publication).one_or_none()
 
-    if result.publication_gene_assoc:
-        assert isinstance(result.publication_gene_assoc, list)
-        assert len(result.publication_gene_assoc) > 0
-        # Don't need to iterate through every result.
-        for publication_gene_rel in result.publication_gene_assoc[0:2]:
-            assert publication_gene_rel.publication_id == result.id
+    assert result
+    assert isinstance(result.gene_types, list)
+    assert len(result.gene_types) > 0
+    # Don't need to iterate through every result.
+    for gene_type in result.gene_types[0:2]:
+        assert type(gene_type.name) is str
 
 
-def test_publication_no_relations(app, pubmed_id):
+def test_publication_with_publication_gene_gene_type_assoc(app, publication):
+    query = return_publication_query('publication_gene_gene_type_assoc')
+    result = query.filter_by(name=publication).one_or_none()
+
+    assert result
+    assert isinstance(result.publication_gene_gene_type_assoc, list)
+    assert len(result.publication_gene_gene_type_assoc) > 0
+    # Don't need to iterate through every result.
+    for publication_gene_gene_type_rel in result.publication_gene_gene_type_assoc[0:2]:
+        assert publication_gene_gene_type_rel.publication_id == result.id
+
+
+def test_publication_no_relations(app, publication):
     query = return_publication_query()
-    result = query.filter_by(pubmed_id=pubmed_id).one_or_none()
+    result = query.filter_by(name=publication).one_or_none()
 
+    assert result
     assert result.genes == []
-    assert result.publication_gene_assoc == []
-    assert result.pubmed_id == pubmed_id
+    assert result.publication_gene_gene_type_assoc == []
+    assert result.name == publication
+    assert type(result.do_id) is str or NoneType
     assert type(result.first_author_last_name) is str or NoneType
     assert type(result.journal) is str or NoneType
+    assert type(result.pubmed_id) is int or NoneType
     assert type(result.title) is str or NoneType
-    assert type(result.year) is str or NoneType
+    assert type(result.year) is int or NoneType

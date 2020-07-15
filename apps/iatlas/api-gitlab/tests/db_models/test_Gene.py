@@ -16,8 +16,9 @@ def test_Gene_with_relations(app, entrez, hgnc):
                              'therapy_type']
 
     query = return_gene_query(*relationships_to_join)
-    result = query.filter_by(entrez=entrez).first()
+    result = query.filter_by(entrez=entrez).one_or_none()
 
+    assert result
     if result.gene_family:
         assert result.gene_family.id == result.gene_family_id
     if result.gene_function:
@@ -60,63 +61,64 @@ def test_Gene_with_relations(app, entrez, hgnc):
 
 def test_Gene_with_copy_number_results(app, entrez):
     query = return_gene_query('copy_number_results')
-    result = query.filter_by(entrez=entrez).first()
+    result = query.filter_by(entrez=entrez).one_or_none()
 
-    if result.copy_number_results:
-        assert isinstance(result.copy_number_results, list)
-        # Don't need to iterate through every result.
-        for copy_number_result in result.copy_number_results[0:2]:
-            assert copy_number_result.gene_id == result.id
+    assert result
+    assert isinstance(result.copy_number_results, list)
+    # Don't need to iterate through every result.
+    for copy_number_result in result.copy_number_results[0:2]:
+        assert copy_number_result.gene_id == result.id
 
 
 def test_Gene_with_driver_results(app, entrez):
     query = return_gene_query('driver_results')
-    result = query.filter_by(entrez=entrez).first()
+    result = query.filter_by(entrez=entrez).one_or_none()
 
-    if result.driver_results:
-        assert isinstance(result.driver_results, list)
-        # Don't need to iterate through every result.
-        for driver_result in result.driver_results[0:2]:
-            assert driver_result.gene_id == result.id
+    assert result
+    assert isinstance(result.driver_results, list)
+    # Don't need to iterate through every result.
+    for driver_result in result.driver_results[0:2]:
+        assert driver_result.gene_id == result.id
 
 
 def test_Gene_with_gene_sample_assoc(app, entrez):
     query = return_gene_query('gene_sample_assoc')
-    result = query.filter_by(entrez=entrez).first()
+    result = query.filter_by(entrez=entrez).one_or_none()
 
-    if result.gene_sample_assoc:
-        assert isinstance(result.gene_sample_assoc, list)
-        # Don't need to iterate through every result.
-        for gene_sample_rel in result.gene_sample_assoc[0:2]:
-            assert gene_sample_rel.gene_id == result.id
+    assert result
+    assert isinstance(result.gene_sample_assoc, list)
+    # Don't need to iterate through every result.
+    for gene_sample_rel in result.gene_sample_assoc[0:2]:
+        assert gene_sample_rel.gene_id == result.id
 
 
 def test_Gene_with_gene_type_assoc(app, entrez):
     query = return_gene_query('gene_type_assoc')
-    result = query.filter_by(entrez=entrez).first()
+    result = query.filter_by(entrez=entrez).one_or_none()
 
-    if result.gene_type_assoc:
-        assert isinstance(result.gene_type_assoc, list)
-        # Don't need to iterate through every result.
-        for gene_type_rel in result.gene_type_assoc[0:2]:
-            assert gene_type_rel.gene_id == result.id
+    assert result
+    assert isinstance(result.gene_type_assoc, list)
+    # Don't need to iterate through every result.
+    for gene_type_rel in result.gene_type_assoc[0:2]:
+        assert gene_type_rel.gene_id == result.id
 
 
-def test_Gene_with_publication_gene_assoc(app, entrez):
-    query = return_gene_query('publication_gene_assoc')
-    result = query.filter_by(entrez=entrez).first()
+def test_Gene_with_publication_gene_gene_type_assoc(app, entrez):
+    query = return_gene_query('publication_gene_gene_type_assoc')
+    result = query.filter_by(entrez=entrez).one_or_none()
 
-    if result.publication_gene_assoc:
-        assert isinstance(result.publication_gene_assoc, list)
-        # Don't need to iterate through every result.
-        for publication_gene_rel in result.publication_gene_assoc[0:2]:
-            assert publication_gene_rel.gene_id == result.id
+    assert result
+    assert isinstance(result.publication_gene_gene_type_assoc, list)
+    # Don't need to iterate through every result.
+    for publication_gene_gene_type_rel in result.publication_gene_gene_type_assoc[0:2]:
+        assert publication_gene_gene_type_rel.gene_id == result.id
 
 
 def test_Gene_no_relations(app, entrez, hgnc):
     query = return_gene_query()
-    result = query.filter_by(entrez=entrez).first()
+    result = query.filter_by(entrez=entrez).one_or_none()
 
+    assert result
     assert result.copy_number_results == []
     assert result.driver_results == []
     assert result.gene_sample_assoc == []
