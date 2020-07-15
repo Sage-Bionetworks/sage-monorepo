@@ -7,7 +7,11 @@
 #' @importFrom dplyr inner_join filter select
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
-build_ifc_value_tbl <- function(response_tbl, feature_tbl){
+build_ifc_value_tbl <- function(response_tbl, feature_tbl, sample_tbl){
+    # print(response_tbl)
+    # print(feature_tbl)
+    # print(sample_tbl)
+
     response_tbl %>%
         dplyr::select(
             "sample",
@@ -15,7 +19,10 @@ build_ifc_value_tbl <- function(response_tbl, feature_tbl){
             "response_value" = "value"
         ) %>%
         dplyr::inner_join(feature_tbl, by = "sample") %>%
-        dplyr::filter(.data$response_name != .data$feature_name)
+        dplyr::filter(
+            .data$response_name != .data$feature_name,
+            .data$sample %in% sample_tbl$name
+        )
 }
 
 #' Build Immune Feature Correlations Heatmap Matrix

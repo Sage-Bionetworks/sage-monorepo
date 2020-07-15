@@ -45,17 +45,20 @@ with_test_api_env({
   # features ------------------------------------------------------------------
 
   test_that("query_feature_values", {
-    result <- query_feature_values(
+    result1 <- query_feature_values(
       "TCGA", "Immune_Subtype", "leukocyte_fraction"
     )
-    expect_named(
-      result,
-      c(
-        "name",
-        "sample",
-        "value"
-      )
+    expect_named(result1, c("name", "sample", "value"))
+    expect_length(result1$value, 9058)
+    result1_complete <- tidyr::drop_na(result1)
+    expect_length(result1_complete$value, 9058)
+
+    result2 <- query_feature_values(
+      "PCAWG", "Immune_Subtype", "T Cells CD8"
     )
+    expect_length(result2$value, 9058)
+    result2_complete <- tidyr::drop_na(result2)
+    expect_length(result2_complete$value, 9058)
   })
 
   # features_by_tag -----------------------------------------------------------

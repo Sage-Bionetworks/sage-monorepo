@@ -42,6 +42,9 @@ immune_feature_correlations_server <- function(
 
     response_tbl <- shiny::reactive({
         shiny::req(input$response_choice)
+        print(cohort_obj()$datase)
+        print(cohort_obj()$group_name)
+        print(input$response_choice)
         iatlas.app::query_feature_values(
             cohort_obj()$dataset,
             cohort_obj()$group_name,
@@ -64,7 +67,8 @@ immune_feature_correlations_server <- function(
         shiny::req(response_tbl(), feature_tbl())
         build_ifc_value_tbl(
             response_tbl(),
-            feature_tbl()
+            feature_tbl(),
+            cohort_obj()$sample_tbl
         )
     })
 
