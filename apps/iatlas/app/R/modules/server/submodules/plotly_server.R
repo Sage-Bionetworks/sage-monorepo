@@ -8,8 +8,6 @@ plotly_server <- function(
     show_group_text = T
 ){
 
-    source("R/plotly_functions.R", local = T)
-
     # This is so that the conditional panel can see output$show_group_text
     output$show_group_text <- shiny::reactive(show_group_text)
     shiny::outputOptions(output, "show_group_text", suspendWhenHidden = FALSE)
