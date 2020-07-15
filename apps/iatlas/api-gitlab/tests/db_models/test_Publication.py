@@ -5,7 +5,7 @@ from api.database import return_publication_query
 
 @pytest.fixture(scope='module')
 def publication():
-    return '19567593'
+    return '10.1016/j.immuni.2013.07.012_23890059'
 
 
 def test_publication_with_genes(app, publication):

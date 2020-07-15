@@ -16,5 +16,8 @@ class Publication(Base):
     genes = db.relationship(
         'Gene', secondary='publications_to_genes_to_gene_types', uselist=True, lazy='noload')
 
+    gene_types = db.relationship(
+        'GeneType', secondary='publications_to_genes_to_gene_types', uselist=True, lazy='noload')
+
     def __repr__(self):
-        return '<Publication %r>' % self.pubmed_id
+        return '<Publication %r>' % self.name

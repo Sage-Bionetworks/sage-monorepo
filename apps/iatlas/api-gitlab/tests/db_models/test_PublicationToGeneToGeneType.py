@@ -4,7 +4,7 @@ from api.database import return_publication_to_gene_to_gene_type_query
 
 @pytest.fixture(scope='module')
 def gene_id():
-    return 1535
+    return 789
 
 
 def test_PublicationToGeneToGeneType_with_genes(app, gene_id):

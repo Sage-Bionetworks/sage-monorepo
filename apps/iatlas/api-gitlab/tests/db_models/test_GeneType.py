@@ -8,6 +8,11 @@ def gene_type():
     return 'extra_cellular_network'
 
 
+@pytest.fixture(scope='module')
+def gene_type_1():
+    return 'immunomodulator'
+
+
 def test_gene_type_with_genes(app, gene_type):
     query = return_gene_type_query('genes')
     result = query.filter_by(name=gene_type).one_or_none()
@@ -36,9 +41,9 @@ def test_gene_type_with_gene_type_assoc(app, gene_type):
         assert gene_type_rel.type_id == result.id
 
 
-def test_gene_type_with_publications(app, gene_type):
+def test_gene_type_with_publications(app, gene_type_1):
     query = return_gene_type_query('publications')
-    result = query.filter_by(name=gene_type).one_or_none()
+    result = query.filter_by(name=gene_type_1).one_or_none()
 
     assert result
     assert isinstance(result.publications, list)
@@ -48,9 +53,9 @@ def test_gene_type_with_publications(app, gene_type):
         assert type(publication.name) is str
 
 
-def test_gene_type_with_publication_gene_gene_type_assoc(app, gene_type):
+def test_gene_type_with_publication_gene_gene_type_assoc(app, gene_type_1):
     query = return_gene_type_query('publication_gene_gene_type_assoc')
-    result = query.filter_by(name=gene_type).one_or_none()
+    result = query.filter_by(name=gene_type_1).one_or_none()
 
     assert result
     assert isinstance(result.publication_gene_gene_type_assoc, list)
@@ -67,6 +72,8 @@ def test_gene_type_no_relations(app, gene_type):
     assert result
     assert result.gene_type_assoc == []
     assert result.genes == []
+    assert result.publications == []
+    assert result.publication_gene_gene_type_assoc == []
     assert type(result.id) is int
     assert result.name == gene_type
     assert type(result.display) is str or NoneType
