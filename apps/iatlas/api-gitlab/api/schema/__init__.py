@@ -1,5 +1,6 @@
 from ariadne import load_schema_from_path, make_executable_schema, ObjectType, ScalarType
 import os
+import decimal
 from api.resolvers import (
     resolve_data_sets, resolve_driver_results, resolve_features, resolve_features_by_class,
     resolve_features_by_tag, resolve_gene, resolve_genes, resolve_genes_by_tag, resolve_mutations,
@@ -41,8 +42,11 @@ feature_value_type = ScalarType('FeatureValue')
 
 @feature_value_type.serializer
 def serialize_feature_value(value):
-    if type(value) is str or type(value) is float:
+    if isinstance(value, decimal.Decimal):
+        return float(value)
+    elif isinstance(value, str):
         return value
+    return None
 
 
 # Initialize schema objects (general).
