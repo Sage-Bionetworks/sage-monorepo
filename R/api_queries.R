@@ -146,7 +146,15 @@ query_features_by_class <- function(
     ) %>%
         purrr::pluck(1) %>%
         dplyr::as_tibble() %>%
-        tidyr::unnest(cols = c("features"))
+        tidyr::unnest(cols = c("features")) %>%
+        dplyr::select(
+            "class",
+            "display",
+            "name",
+            "order",
+            "unit",
+            "method_tag" = "methodTag"
+        )
 }
 
 query_samples_to_features <- function(features = list()){
