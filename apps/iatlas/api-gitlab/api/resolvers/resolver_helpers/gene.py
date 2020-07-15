@@ -73,7 +73,11 @@ def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by
             gene_1.gene_function.of_type(gene_function_1)))
 
     if 'gene_types' in relations or gene_type:
-        append_to_option_args(orm.subqueryload(
+        query = query.from_self().join(gene_type_1, gene_1.gene_types)
+        if gene_type:
+            query = query.filter(gene_type_1.name.in_(gene_type))
+
+        append_to_option_args(orm.contains_eager(
             gene_1.gene_types.of_type(gene_type_1)))
 
     if 'immune_checkpoint' in relations:
@@ -111,9 +115,6 @@ def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by
         if not core:
             core.append(gene_1.id)
         query = sess.query(*core)
-
-    if gene_type:
-        query = query.filter(gene_type_1.name.in_(gene_type))
 
     if entrez:
         query = query.filter(gene_1.entrez.in_(entrez))
