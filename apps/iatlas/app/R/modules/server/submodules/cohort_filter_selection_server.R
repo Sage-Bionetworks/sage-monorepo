@@ -77,7 +77,6 @@ cohort_filter_selection_server <- function(
                 create_nested_named_list()
         }
 
-        print(x)
 
         purrr::partial(
             numeric_filter_element_server,
@@ -115,7 +114,6 @@ cohort_filter_selection_server <- function(
         # intersect(numeric_filter_samples(), tag_filter_samples())
         # shiny::req(numeric_filter_samples())
         # numeric_filter_samples()
-        print(tag_filter_samples())
         shiny::req(tag_filter_samples())
         tag_filter_samples()
     })

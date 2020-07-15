@@ -31,9 +31,7 @@ get_filtered_tag_samples <- function(filter_obj, samples){
     filter_obj %>%
         purrr::transpose(.) %>%
         purrr::pluck("tags") %>%
-        print() %>%
         purrr::map(., iatlas.app::get_filtered_group_sample_ids_by_filter) %>%
-        print()
         purrr::reduce(base::intersect, .init = samples)
 }
 
