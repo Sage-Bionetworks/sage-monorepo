@@ -4,9 +4,14 @@ from api.database import return_gene_query
 from tests import NoneType
 
 
+@pytest.fixture(scope='module')
+def gene_type():
+    return 'CD8_CD68_ratio'
+
+
 def test_genes_query_with_entrez(client, entrez, hgnc):
-    query = """query Genes($entrez: [Int!]) {
-        genes(entrez: $entrez) {
+    query = """query Genes($entrez: [Int!], $geneType: [String!]) {
+        genes(entrez: $entrez, geneType: $geneType) {
             entrez
             hgnc
             geneFamily
@@ -31,24 +36,25 @@ def test_genes_query_with_entrez(client, entrez, hgnc):
     response = client.post(
         '/api', json={'query': query, 'variables': {'entrez': [entrez]}})
     json_data = json.loads(response.data)
-    genes = json_data['data']['genes']
+    results = json_data['data']['genes']
 
-    assert isinstance(genes, list)
-    for gene in genes:
-        gene_types = gene['geneTypes']
-        publications = gene['publications']
+    assert isinstance(results, list)
+    assert len(results) == 1
+    for result in results:
+        gene_types = result['geneTypes']
+        publications = result['publications']
 
-        assert gene['entrez'] == entrez
-        assert gene['hgnc'] == hgnc
-        assert type(gene['geneFamily']) is str or NoneType
-        assert type(gene['geneFunction']) is str or NoneType
+        assert result['entrez'] == entrez
+        assert result['hgnc'] == hgnc
+        assert type(result['geneFamily']) is str or NoneType
+        assert type(result['geneFunction']) is str or NoneType
         assert isinstance(gene_types, list)
         if gene_types:
             for gene_type in gene_types:
                 assert type(gene_type['name']) is str
                 assert type(gene_type['display']) is str or NoneType
-        assert type(gene['immuneCheckpoint']) is str or NoneType
-        assert type(gene['pathway']) is str or NoneType
+        assert type(result['immuneCheckpoint']) is str or NoneType
+        assert type(result['pathway']) is str or NoneType
         assert isinstance(publications, list)
         if publications:
             for publication in publications:
@@ -58,26 +64,48 @@ def test_genes_query_with_entrez(client, entrez, hgnc):
                 assert type(publication['pubmedId']) is int
                 assert type(publication['title']) is str or NoneType
                 assert type(publication['year']) is str or NoneType
-        assert type(gene['superCategory']) is str or NoneType
-        assert type(gene['therapyType']) is str or NoneType
+        assert type(result['superCategory']) is str or NoneType
+        assert type(result['therapyType']) is str or NoneType
+
+
+def test_genes_query_with_gene_type(client, entrez, gene_type):
+    query = """query Genes($entrez: [Int!], $geneType: [String!]) {
+        genes(entrez: $entrez, geneType: $geneType) {
+            entrez
+            geneTypes { name }
+        }
+    }"""
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'entrez': [entrez], 'geneType': [gene_type]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['genes']
+
+    assert isinstance(results, list)
+    for result in results:
+        gene_types = result['geneTypes']
+
+        assert result['entrez'] == entrez
+        assert isinstance(gene_types, list)
+        for current_gene_type in gene_types:
+            assert current_gene_type['name'] == gene_type
 
 
 def test_genes_query_no_entrez(client):
-    query = """query Genes($entrez: [Int!]) {
-        genes(entrez: $entrez) {
+    query = """query Genes($entrez: [Int!], $geneType: [String!]) {
+        genes(entrez: $entrez, geneType: $geneType) {
             entrez
             hgnc
         }
     }"""
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
-    genes = json_data['data']['genes']
+    results = json_data['data']['genes']
 
     # Get the total number of features in the database.
     gene_count = return_gene_query('id').count()
 
-    assert isinstance(genes, list)
-    assert len(genes) == gene_count
-    for gene in genes[0:1]:
+    assert isinstance(results, list)
+    assert len(results) == gene_count
+    for gene in results[0:1]:
         assert type(gene['entrez']) is int
         assert type(gene['hgnc']) is str
