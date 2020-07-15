@@ -13,7 +13,7 @@ gene_related_fields = ['copy_number_results',
                        'immune_checkpoint',
                        'pathway',
                        'publications',
-                       'publication_gene_assoc',
+                       'publication_gene_gene_type_assoc',
                        'samples',
                        'super_category',
                        'therapy_type']
@@ -31,7 +31,8 @@ gene_core_fields = ['id',
                     'super_cat_id',
                     'therapy_type_id']
 
-gene_type_related_fields = ['gene_type_assoc', 'genes']
+gene_type_related_fields = [
+    'genes', 'gene_type_assoc', 'publications', 'publication_gene_gene_type_assoc']
 
 sub_related_fields = ['genes']
 

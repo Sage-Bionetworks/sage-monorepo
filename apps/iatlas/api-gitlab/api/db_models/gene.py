@@ -50,7 +50,7 @@ class Gene(Base):
         uselist=False, lazy='noload')
 
     publications = db.relationship(
-        "Publication", secondary='publications_to_genes', uselist=True, lazy='noload')
+        "Publication", secondary='publications_to_genes_to_gene_types', uselist=True, lazy='noload')
 
     super_category = db.relationship(
         'SuperCategory', backref=orm.backref('genes', uselist=True, lazy='noload'),
