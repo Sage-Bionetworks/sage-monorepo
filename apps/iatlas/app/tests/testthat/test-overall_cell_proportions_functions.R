@@ -1,4 +1,4 @@
-with_test_db_env({
+with_test_api_env({
 
     test_that("Build Overall Cell Proportions Value Tibble", {
         tbl1 <- dplyr::tibble(

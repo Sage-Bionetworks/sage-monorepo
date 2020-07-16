@@ -1,40 +1,40 @@
 with_test_api_env({
-
-    test_that("Get Valid Group Filters", {
-        expect_equal(get_valid_group_filters(list()), list())
-        expect_equal(get_valid_group_filters(list(NULL)), list())
-        expect_equal(
-            get_valid_group_filters(list("element1" = list("ids" = 1))),
-            list()
-        )
-        expect_equal(
-            get_valid_group_filters(
-                list("element1" = list("ids" = 1, "name" = "Group"))
-            ),
-            list(list("ids" = 1, "name" = "Group"))
-        )
-        expect_equal(
-            get_valid_group_filters(
-                list(
-                    "element1" = list("ids" = 1, "name" = "Group"),
-                    "element2" = list("ids" = 1)
-                )
-            ),
-            list(list("ids" = 1, "name" = "Group"))
-        )
-        expect_equal(
-            get_valid_group_filters(
-                list(
-                    "element1" = list("ids" = 1, "name" = "Group"),
-                    "element2" = list("ids" = 1, "name" = "Group")
-                )
-            ),
-            list(
-                list("ids" = 1, "name" = "Group"),
-                list("ids" = 1, "name" = "Group")
-            )
-        )
-    })
+#
+#     test_that("Get Valid Group Filters", {
+#         expect_equal(get_valid_group_filters(list()), list())
+#         expect_equal(get_valid_group_filters(list(NULL)), list())
+#         expect_equal(
+#             get_valid_group_filters(list("element1" = list("ids" = 1))),
+#             list()
+#         )
+#         expect_equal(
+#             get_valid_group_filters(
+#                 list("element1" = list("ids" = 1, "name" = "Group"))
+#             ),
+#             list(list("ids" = 1, "name" = "Group"))
+#         )
+#         expect_equal(
+#             get_valid_group_filters(
+#                 list(
+#                     "element1" = list("ids" = 1, "name" = "Group"),
+#                     "element2" = list("ids" = 1)
+#                 )
+#             ),
+#             list(list("ids" = 1, "name" = "Group"))
+#         )
+#         expect_equal(
+#             get_valid_group_filters(
+#                 list(
+#                     "element1" = list("ids" = 1, "name" = "Group"),
+#                     "element2" = list("ids" = 1, "name" = "Group")
+#                 )
+#             ),
+#             list(
+#                 list("ids" = 1, "name" = "Group"),
+#                 list("ids" = 1, "name" = "Group")
+#             )
+#         )
+#     })
 #
 #     test_that("Get Filtered Group Sample IDs", {
 #         expect_equal(get_filtered_group_sample_ids(list(), 1:10000), 1:10000)

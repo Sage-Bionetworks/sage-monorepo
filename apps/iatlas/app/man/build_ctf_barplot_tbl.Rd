@@ -4,7 +4,7 @@
 \alias{build_ctf_barplot_tbl}
 \title{Build Cell Type Fractions Barplot Tibble}
 \usage{
-build_ctf_barplot_tbl(class_name, sample_tbl)
+build_ctf_barplot_tbl(tbl)
 }
 \arguments{
 \item{class_name}{A string, that is the name column of the classes table}

@@ -4,7 +4,7 @@
 \alias{create_tag_cohort_object}
 \title{Create Tag Cohort Object}
 \usage{
-create_tag_cohort_object(sample_ids, group_choice)
+create_tag_cohort_object(samples, dataset, tag)
 }
 \arguments{
 \item{sample_ids}{A vector of integers}

@@ -4,17 +4,15 @@
 \alias{build_ifc_scatterplot_tbl}
 \title{Build Immune Feature Scatterplot Tibble}
 \usage{
-build_ifc_scatterplot_tbl(tbl, sample_tbl, feature, group)
+build_ifc_scatterplot_tbl(tbl, .feature, .group)
 }
 \arguments{
-\item{tbl}{A tibble with columns feature_name, response_value, feature_value,
-sample_id, group}
+\item{tbl}{A tibble with columns feature_display,
+sample, tag, response_value, feature_value}
 
-\item{sample_tbl}{A tibble with columns sample_id, and sample_name}
+\item{.feature}{A string that is in the tbl feature_name column}
 
-\item{feature}{A string that is in the tbl feature_name column}
-
-\item{group}{A string that is in the tbl group column}
+\item{.group}{A string that is in the tbl group column}
 }
 \description{
 Build Immune Feature Scatterplot Tibble

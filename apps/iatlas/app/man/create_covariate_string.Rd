@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_selection_functions.R
 \name{create_covariate_string}
 \alias{create_covariate_string}
-\title{Create Categorical Covariate String}
+\title{Create Covariate String}
 \usage{
 create_covariate_string(prefix_str, num_str, cat_str)
 }
@@ -14,5 +14,5 @@ create_covariate_string(prefix_str, num_str, cat_str)
 \item{cat_str}{A string or NULL}
 }
 \description{
-Create Categorical Covariate String
+Create Covariate String
 }

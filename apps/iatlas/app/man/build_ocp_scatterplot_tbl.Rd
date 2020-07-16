@@ -4,13 +4,11 @@
 \alias{build_ocp_scatterplot_tbl}
 \title{Build Overall Cell Proportions Scatterplot Tibble}
 \usage{
-build_ocp_scatterplot_tbl(value_tbl, sample_tbl, group_value)
+build_ocp_scatterplot_tbl(value_tbl, group_value)
 }
 \arguments{
 \item{value_tbl}{A tibble with columns sample_id, group, feature_name,
 feature_value}
-
-\item{sample_tbl}{A tibble with columns sample_id, sample_name}
 
 \item{group_value}{A string, that is in the group column of the value_tbl}
 }
