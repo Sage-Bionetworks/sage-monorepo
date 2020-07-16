@@ -1,4 +1,4 @@
-with_test_db_env({
+with_test_api_env({
 
   test_that("Format Feature Tibble", {
       result1 <- format_feature_tbl(dplyr::tibble(
