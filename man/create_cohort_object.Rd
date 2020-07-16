@@ -6,8 +6,8 @@
 \usage{
 create_cohort_object(
   filter_obj,
-  group_choice,
   dataset,
+  group_choice,
   driver_mutation = NULL,
   immune_feature_bin_id = NULL,
   immune_feature_bin_number = NULL
@@ -16,9 +16,9 @@ create_cohort_object(
 \arguments{
 \item{filter_obj}{A named list with element sample_ids and filters}
 
-\item{group_choice}{A string}
-
 \item{dataset}{A string}
+
+\item{group_choice}{A string}
 
 \item{driver_mutation}{A string}
 

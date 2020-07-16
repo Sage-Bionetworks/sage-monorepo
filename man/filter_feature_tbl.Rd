@@ -7,7 +7,7 @@
 filter_feature_tbl(feature_tbl, selected_row)
 }
 \arguments{
-\item{feature_tbl}{A tibble with columns class_id}
+\item{feature_tbl}{A tibble with columns class}
 
 \item{selected_row}{An integer that is a row number in the tibble}
 }

@@ -4,12 +4,12 @@
 \alias{create_cohort_module_string}
 \title{Create Cohort Module String}
 \usage{
-create_cohort_module_string(tbl, .dataset)
+create_cohort_module_string(.dataset, tbl = NULL)
 }
 \arguments{
-\item{tbl}{A tibble with columns dataset, and module}
-
 \item{.dataset}{a string in the dataset column of the tibble}
+
+\item{tbl}{A tibble with columns dataset, and module}
 }
 \description{
 Create Cohort Module String

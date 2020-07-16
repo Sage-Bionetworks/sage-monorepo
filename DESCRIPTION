@@ -22,6 +22,7 @@ Imports:
     devtools,
     dplyr,
     DT,
+    ghql,
     ggmosaic,
     ggplot2,
     ImmuneSubtypeClassifier,

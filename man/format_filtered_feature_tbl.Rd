@@ -7,7 +7,7 @@
 format_filtered_feature_tbl(filtered_feature_tbl)
 }
 \arguments{
-\item{filtered_feature_tbl}{A tibble with columns order, feature, unit, and
+\item{filtered_feature_tbl}{A tibble with columns order, display, unit, and
 method_tag}
 }
 \description{

@@ -4,15 +4,18 @@
 \alias{build_ifc_value_tbl}
 \title{Build Immune Feature Correlations Value Table}
 \usage{
-build_ifc_value_tbl(response_tbl, feature_tbl, sample_tbl)
+build_ifc_value_tbl(
+  response_tbl,
+  feature_tbl,
+  sample_tbl,
+  response_feature_name
+)
 }
 \arguments{
-\item{response_tbl}{A tibble with columns sample_id, feature_id, and value}
+\item{response_tbl}{A tibble with columns sample, name, value}
 
-\item{feature_tbl}{A tibble with columns sample_id, feature_id, value, and
-order, feature}
-
-\item{sample_tbl}{A tibble with columns sample_id, and group}
+\item{feature_tbl}{A tibble with columns sample, feature_name,
+feature_display, order, feature_value, tag}
 }
 \description{
 Build Immune Feature Correlations Value Table

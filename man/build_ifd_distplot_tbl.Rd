@@ -4,14 +4,14 @@
 \alias{build_ifd_distplot_tbl}
 \title{Build Immune Feature Distribution Plot Tibble}
 \usage{
-build_ifd_distplot_tbl(sample_tbl, feature_id, scale_method)
+build_ifd_distplot_tbl(sample_tbl, feature_name, scale_method)
 }
 \arguments{
-\item{sample_tbl}{A tibble with columns "sample_id", "group"}
+\item{sample_tbl}{A tibble with columns "sample_name", "group"}
 
-\item{feature_id}{An integer in the features table}
+\item{feature_name}{A name in the features table}
 
-\item{scale_method}{a method for scaling the value column}
+\item{scale_method}{A method for scaling the value column}
 }
 \description{
 Build Immune Feature Distribution Plot Tibble
