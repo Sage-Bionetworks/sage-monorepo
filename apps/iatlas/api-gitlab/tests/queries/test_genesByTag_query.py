@@ -202,6 +202,5 @@ def test_genesByTag_query_with_gene_type(client, data_set, related, entrez, hgnc
         assert len(genes) == 1
         # Don't need to iterate through every result.
         for gene in genes[0:2]:
-            gene_types = gene['geneTypes']
             assert gene['entrez'] == entrez
             assert gene['hgnc'] == hgnc
