@@ -47,39 +47,39 @@ immunomodulator_distributions_server <- function(
         )
     })
 
-    distplot_tbl <- shiny::reactive({
-
-        shiny::req(
-            cohort_obj(),
-            input$gene_choice_entrez,
-            input$scale_method_choice
-        )
-
-        tbl <- iatlas.app::build_im_distplot_tbl(
-            input$gene_choice_entrez,
-            cohort_obj()$sample_tbl,
-            input$scale_method_choice
-        )
-
-        shiny::validate(need(
-            nrow(tbl) > 0,
-            paste0(
-                "Current selected cohort has no expression data for current ",
-                "selected gene."
-            )
-        ))
-
-        return(tbl)
-    })
-
-    shiny::callModule(
-        distribution_plot_server,
-        "immunomodulators_dist_plot",
-        cohort_obj,
-        distplot_tbl    = distplot_tbl,
-        distplot_type   = shiny::reactive(input$plot_type_choice),
-        distplot_ylab   = gene_plot_label,
-        distplot_title  = gene_name
-    )
+    # distplot_tbl <- shiny::reactive({
+    #
+    #     shiny::req(
+    #         cohort_obj(),
+    #         input$gene_choice_entrez,
+    #         input$scale_method_choice
+    #     )
+    #
+    #     tbl <- iatlas.app::build_im_distplot_tbl(
+    #         input$gene_choice_entrez,
+    #         cohort_obj()$sample_tbl,
+    #         input$scale_method_choice
+    #     )
+    #
+    #     shiny::validate(need(
+    #         nrow(tbl) > 0,
+    #         paste0(
+    #             "Current selected cohort has no expression data for current ",
+    #             "selected gene."
+    #         )
+    #     ))
+    #
+    #     return(tbl)
+    # })
+    #
+    # shiny::callModule(
+    #     distribution_plot_server,
+    #     "immunomodulators_dist_plot",
+    #     cohort_obj,
+    #     distplot_tbl    = distplot_tbl,
+    #     distplot_type   = shiny::reactive(input$plot_type_choice),
+    #     distplot_ylab   = gene_plot_label,
+    #     distplot_title  = gene_name
+    # )
 
 }
