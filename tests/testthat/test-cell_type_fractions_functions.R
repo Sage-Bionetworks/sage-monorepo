@@ -1,15 +1,25 @@
-with_test_db_env({
+with_test_api_env({
+
+    sample_tbl <- iatlas.app::query_cohort_selector(
+        "PCAWG",
+        "Immune_Subtype"
+    ) %>%
+        dplyr::select("sample", "group" = "name")
+
+    value_tbl <- iatlas.app::query_features_values_by_tag(
+        "PCAWG",
+        "Immune_Subtype",
+        feature_class = "Immune Cell Proportion - Multipotent Progenitor Cell Derivative Class"
+    ) %>%
+        dplyr::rename("group" = "tag") %>%
+        dplyr::filter(.data$sample %in% sample_tbl$sample)
+
+    plot_tbl <- iatlas.app::build_ctf_barplot_tbl(value_tbl)
 
     test_that("Build Cell Type Fractions Barplot Tibble", {
-        tbl1 <- dplyr::tibble(
-            sample_id = c(1:10000),
-            group = "C1"
-        )
-        result1 <- build_ctf_barplot_tbl(
-            "Immune Cell Proportion - Original", tbl1
-        )
+
         expect_named(
-            result1,
+            plot_tbl,
             c("x", "y", "color", "label", "error")
         )
     })
