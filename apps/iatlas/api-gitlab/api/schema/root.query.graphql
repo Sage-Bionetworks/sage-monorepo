@@ -1,5 +1,25 @@
 type Query {
+  """
+  The "dataSets" query accepts:
+
+    - "dataSet", a list of data set names to look up.
+    - "sample", a list of sample names associated with the data sets to filter by.
+
+  If no arguments are passed, this will return all data sets.
+  """
   dataSets(dataSet: [String!], sample: [String!]): [DataSet!]!
+
+  """
+  The "driverResults" query accepts:
+
+    - "feature", a list of feature names associated with the driver results to filter by.
+    - "entrez", a list of gene entrez ids associated with the driver results to filter by.
+    - "mutationCode", a list of mutation code names associated with the driver results to filter by.
+    - "tag", a list of tag names associated with the driver results to filter by.
+    - "dataSet", a list of data set names associated with the driver results to filter by.
+
+  If no arguments are passed, this will return all driver results.
+  """
   driverResults(
     feature: [String!]
     entrez: [Int!]
@@ -8,26 +28,88 @@ type Query {
     dataSet: [String!]
     limit: Int
   ): [DriverResult!]!
+
+  """
+  The "features" query accepts:
+
+    - "dataSet", a list of data set names associated with the features to filter by.
+    - "feature", a list of feature names to filter by.
+    - "related", a list of tag names associated with the features to filter by.
+    - "featureClass", a list of feature class names associated with the features to filter by.
+
+  If no arguments are passed, this will return all features.
+  """
   features(
     dataSet: [String!]
     related: [String!]
     feature: [String!]
     featureClass: [String!]
   ): [Feature!]!
+
+  """
+  The "featuresByClass" query accepts:
+
+    - "dataSet", a list of data set names associated with the features to filter by.
+    - "feature", a list of feature names to filter by.
+    - "related", a list of tag names associated with the features to filter by.
+    - "featureClass", a list of feature class names associated with the features to filter by.
+
+  If no arguments are passed, this will return all features organized by feature class.
+  """
   featuresByClass(
     dataSet: [String!]
     related: [String!]
     feature: [String!]
     featureClass: [String!]
   ): [FeaturesByClass!]!
+
+  """
+  The "featuresByTag" query accepts:
+
+    - "dataSet", a list of data set names associated with the features to filter by.
+    - "feature", a list of feature names to filter by.
+    - "related", a list of tag names associated with the features to filter by.
+    - "featureClass", a list of feature class names associated with the features to filter by.
+
+  If no arguments are passed, this will return all features organized by tag.
+  """
   featuresByTag(
     dataSet: [String!]!
     related: [String!]!
     feature: [String!]
     featureClass: [String!]
   ): [FeaturesByTag!]!
+
+  """
+  The "gene" query accepts:
+
+    - "entrez", the entrez id of the gene to look up.
+  """
   gene(entrez: Int!): Gene
+
+  """
+  The "genes" query accepts:
+
+    - "entrez", a list of entrez ids for the genes to look up.
+    - "geneType", a list of gene types related to the genes to look up.
+
+  If no arguments are passed, this will return all genes.
+  """
   genes(entrez: [Int!], geneType: [String!]): [Gene!]!
+
+  """
+  The "genesByTag" query accepts:
+
+    - "dataSet", a list of data set names to filter by (required).
+    - "related", a list of tag names associated with the data sets to filter by (required).
+    - "tag", a list of tag names associated with the related to filter by.
+    - "feature", a list of feature names to filter by.
+    - "featureClass", a list of feature class names associated with the features to filter by.
+    - "entrez", a list of gene entrez ids to filter by.
+    - "geneType", a list of gene type names associated with the genes to filter by.
+
+  If no arguments are passed, this will return all genes organized by tag.
+  """
   genesByTag(
     dataSet: [String!]!
     related: [String!]!
@@ -37,12 +119,34 @@ type Query {
     entrez: [Int!]
     geneType: [String!]
   ): [GenesByTag!]!
+
+  """
+  The "mutations" query accepts:
+
+    - "entrez", a list of gene entrez ids associated with the mutations to filter by.
+    - "mutationCode", a list of mutation code names associated with the mutations to filter by.
+    - "mutationType", a list of mutation type names associated with the mutations to filter by.
+
+  If no arguments are passed, this will return all mutations.
+  """
   mutations(
     entrez: [Int!]
     mutationCode: [String!]
     mutationType: [String!]
   ): [Mutation!]!
+
+  """
+  The "mutationTypes" query returns all mutation types.
+  """
   mutationTypes: [MutationType!]!
+
+  """
+  The "patients" query accepts:
+
+    - "barcode", a list of patient barcodes of the patients to look up.
+
+  If no barcodes are passed, this will return all patients.
+  """
   patients(barcode: [String!]): [Patient!]!
 
   """
@@ -101,5 +205,9 @@ type Query {
     feature: [String!]
     featureClass: [String!]
   ): [Tag!]!
+
+  """
+  A simple test query that is independent of the database.
+  """
   test: String!
 }
