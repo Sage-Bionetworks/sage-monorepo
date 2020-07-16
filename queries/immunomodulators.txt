@@ -1,5 +1,5 @@
-query immunomodulators($geneType: [String!]) {
-  genes(geneType: $geneType){
+query immunomodulators($geneType: [String!], $entrez: [Int!]) {
+  genes(geneType: $geneType, entrez: $entrez){
     entrez
     hgnc
     description
@@ -9,11 +9,7 @@ query immunomodulators($geneType: [String!]) {
     immuneCheckpoint
     superCategory
     publications{
-      firstAuthorLastName
-      journal
       pubmedId
-      title
-      year
     }
   }
 }

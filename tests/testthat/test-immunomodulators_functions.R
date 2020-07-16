@@ -15,32 +15,25 @@ with_test_api_env({
         expect_named(res2, c("C", "D"))
     })
 
-    # test_that("Build Immunomodulators Distributions Plot Tibble", {
-    #     tbl1 <- dplyr::tibble(
-    #         sample_id = c(26, 31, 90, 91, 3631),
-    #         group = c("G1", "G1", "G2", "G2", "G2")
-    #     )
-    #     res1 <- build_im_distplot_tbl(17, tbl1, "None")
-    #     expect_named(res1, c("x", "y"))
-    # })
-
     test_that("Build Immunomodulators Datatable Tibble", {
-        tbl1 <- dplyr::tibble(
-            hgnc = "g",
-            entrez = 1,
-            friendly_name = "name",
-            gene_family = "family",
-            super_category = "cat",
-            immune_checkpoint = "ic",
-            gene_function = "func",
-            references = "[{r1, r2}]"
-        )
-        res1 <- build_im_dt_tbl(tbl1)
+        res1 <- build_im_dt_tbl()
         expect_named(
             res1,
             c("Hugo", "Entrez ID", "Friendly Name", "Gene Family",
               "Super Category", "Immune Checkpoint", "Function",
               "Reference(s) [PMID]"
+            )
+        )
+
+        ARG1_publications <- res1 %>%
+            dplyr::filter(.data$`Entrez ID` == 383L) %>%
+            dplyr::pull("Reference(s) [PMID]")
+
+        expect_equal(
+            ARG1_publications,
+            c(
+                "https://www.ncbi.nlm.nih.gov/pubmed/19764983",
+                "https://www.ncbi.nlm.nih.gov/pubmed/23890059"
             )
         )
     })
