@@ -22,7 +22,7 @@ query_dataset_samples <- function(dataset){
     ) %>%
         purrr::pluck(1) %>%
         dplyr::as_tibble() %>%
-        tidyr::unnest(cols = "samples")
+        tidyr::unnest(cols = "samples", keep_empty = T)
 }
 
 
@@ -66,7 +66,7 @@ query_features_values_by_tag <- function(
             "tag",
             "features"
         ) %>%
-        tidyr::unnest(cols = "features") %>%
+        tidyr::unnest(cols = "features", keep_empty = T) %>%
         dplyr::select(
             "tag",
             "sample",
@@ -96,7 +96,7 @@ query_features_by_class <- function(
     ) %>%
         purrr::pluck(1) %>%
         dplyr::as_tibble() %>%
-        tidyr::unnest(cols = c("features")) %>%
+        tidyr::unnest(cols = c("features"), keep_empty = T) %>%
         dplyr::select(
             "class",
             "display",
@@ -125,12 +125,21 @@ query_samples_to_feature <- function(feature){
         dplyr::as_tibble()
 }
 
-query_immunomodulators <- function(){
+# genes -----------------------------------------------------------------------
+
+query_immunomodulators <- function(
+    type = "immunomodulator",
+    .entrez = list()
+){
     iatlas.app::perform_api_query(
         "immunomodulators",
-        list(geneType = "immunomodulator")
+        list(
+            geneType = type,
+            entrez = .entrez
+        )
     ) %>%
         purrr::pluck(1) %>%
+        dplyr::arrange(.data$entrez) %>%
         dplyr::as_tibble() %>%
         dplyr::select(
             "entrez",
@@ -186,7 +195,7 @@ query_dataset_tags <- function(dataset){
     ) %>%
         purrr::pluck(1) %>%
         dplyr::as_tibble() %>%
-        tidyr::unnest(cols = c("related")) %>%
+        tidyr::unnest(cols = c("related"), keep_empty = T) %>%
         dplyr::select("display", "name") %>%
         dplyr::arrange(.data$name)
 }
@@ -222,7 +231,7 @@ query_cohort_selector <- function(
     ) %>%
         purrr::pluck(1) %>%
         dplyr::as_tibble() %>%
-        tidyr::unnest(cols = c("samples")) %>%
+        tidyr::unnest(cols = c("samples"), keep_empty = T) %>%
         dplyr::select(
             "name",
             "display",

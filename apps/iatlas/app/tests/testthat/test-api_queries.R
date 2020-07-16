@@ -106,10 +106,12 @@ with_test_api_env({
     )
   })
 
+  # genes ---------------------------------------------------------------------
+
   test_that("query_immunomodulators", {
-    result <- query_immunomodulators()
+    result1 <- query_immunomodulators()
     expect_named(
-      result,
+      result1,
       c(
         "entrez",
         "hgnc",
@@ -122,6 +124,13 @@ with_test_api_env({
         "publications"
       )
     )
+    ARG1_publications <- result1 %>%
+      dplyr::filter(.data$entrez == 383L) %>%
+      tidyr::unnest(cols = "publications") %>%
+      dplyr::pull("pubmedId") %>%
+      sort()
+
+    expect_equal(ARG1_publications, c(19764983L, 23890059L))
   })
 
   # mutations -----------------------------------------------------------------

@@ -6,8 +6,7 @@ immunomodulator_datatable_server <- function(
 ){
 
     source_files <- c(
-        "R/modules/server/submodules/data_table_server.R",
-        "R/immunomodulators_functions.R"
+        "R/modules/server/submodules/data_table_server.R"
     )
 
     for (file in source_files) {
@@ -17,6 +16,6 @@ immunomodulator_datatable_server <- function(
     shiny::callModule(
         data_table_server,
         "im_table",
-        shiny::reactive(build_im_dt_tbl(build_im_tbl()))
+        shiny::reactive(iatlas.app::build_im_dt_tbl())
     )
 }
