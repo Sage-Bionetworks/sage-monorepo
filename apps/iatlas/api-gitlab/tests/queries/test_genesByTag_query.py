@@ -34,18 +34,6 @@ def test_genesByTag_query_with_entrez(client, data_set, related, entrez, hgnc):
             genes {
                 entrez
                 hgnc
-                geneFamily
-                geneTypes {
-                    name
-                    display
-                }
-                publications {
-                    firstAuthorLastName
-                    journal
-                    pubmedId
-                    title
-                    year
-                }
             }
         }
     }"""
@@ -68,24 +56,8 @@ def test_genesByTag_query_with_entrez(client, data_set, related, entrez, hgnc):
         assert len(genes) == 1
         # Don't need to iterate through every result.
         for gene in genes[0:2]:
-            gene_types = gene['geneTypes']
-            pubs = gene['publications']
             assert gene['entrez'] == entrez
             assert gene['hgnc'] == hgnc
-            assert type(gene['geneFamily']) is str or NoneType
-            assert isinstance(gene_types, list)
-            if gene_types:
-                for current_type in gene_types:
-                    assert type(current_type['name']) is str
-                    assert type(current_type['display']) is str or NoneType
-            assert isinstance(pubs, list)
-            if pubs:
-                for pub in pubs:
-                    assert type(pub['firstAuthorLastName']) is str or NoneType
-                    assert type(pub['journal']) is str or NoneType
-                    assert type(pub['pubmedId']) is int
-                    assert type(pub['title']) is str or NoneType
-                    assert type(pub['year']) is int or NoneType
 
 
 def test_genesByTag_query_no_entrez(client, data_set, related, tag):
@@ -207,9 +179,6 @@ def test_genesByTag_query_with_gene_type(client, data_set, related, entrez, hgnc
             genes {
                 entrez
                 hgnc
-                geneTypes {
-                    name
-                }
             }
         }
     }"""
@@ -233,10 +202,5 @@ def test_genesByTag_query_with_gene_type(client, data_set, related, entrez, hgnc
         assert len(genes) == 1
         # Don't need to iterate through every result.
         for gene in genes[0:2]:
-            gene_types = gene['geneTypes']
             assert gene['entrez'] == entrez
             assert gene['hgnc'] == hgnc
-            assert isinstance(gene_types, list)
-            assert len(gene_types) == 1
-            for current_type in gene_types:
-                assert current_type['name'] == gene_type

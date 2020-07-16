@@ -1,12 +1,19 @@
 from sqlalchemy import and_, orm
+from sqlalchemy.orm.attributes import set_committed_value
+from itertools import chain, groupby
 from api import db
 from api.database import return_gene_query
 from api.db_models import (
-    Dataset, DatasetToSample, Gene, GeneFamily, GeneFunction, GeneToSample, GeneType,
-    ImmuneCheckpoint, Pathway, Publication, SuperCategory, Sample, SampleToTag, Tag,
-    TagToTag, TherapyType)
+    Dataset, DatasetToSample, Gene, GeneFamily, GeneFunction, GeneToSample, GeneToType,
+    GeneType, ImmuneCheckpoint, Pathway, Publication, PublicationToGeneToGeneType,
+    SuperCategory, Sample, SampleToTag, Tag, TagToTag, TherapyType)
 from .general_resolvers import build_option_args, get_selection_set, get_value
 from .tag import request_tags
+
+
+def build_gene_type_id_map(gene):
+    if gene.gene_types:
+        return map(lambda gene_type: gene_type.id, gene.gene_types)
 
 
 def build_gene_to_sample_join_condition(gene_to_sample_model, gene_model, sample_model, samples=None):
@@ -18,6 +25,48 @@ def build_gene_to_sample_join_condition(gene_to_sample_model, gene_model, sample
             sess.query(sample_model.id).filter(
                 sample_model.name.in_(samples))))
     return gene_to_sample_join_conditions
+
+
+def build_pub_gene_gene_type_join_condition(genes, pub_gene_gene_type_model, pub_model):
+    pub_gene_gene_type_join_condition = [pub_gene_gene_type_model.publication_id == pub_model.id, pub_gene_gene_type_model.gene_id.in_(
+        [gene.id for gene in genes])]
+
+    map_of_ids = list(map(build_gene_type_id_map, genes))
+    chain_of_ids = chain.from_iterable(map_of_ids) if any(map_of_ids) else None
+    gene_type_ids = set(chain_of_ids) if chain_of_ids else None
+
+    if gene_type_ids:
+        pub_gene_gene_type_join_condition.append(
+            pub_gene_gene_type_model.gene_type_id.in_(gene_type_ids))
+
+    return pub_gene_gene_type_join_condition
+
+
+def build_gene_core_request(selection_set, entrez=None):
+    """
+    Builds a SQL request with just core gene fields.
+    """
+    sess = db.session
+
+    gene_1 = orm.aliased(Gene, name='g')
+
+    core_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
+                          'hgnc': gene_1.hgnc.label('hgnc'),
+                          'description': gene_1.description.label('description'),
+                          'friendlyName': gene_1.friendly_name.label('friendly_name'),
+                          'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
+
+    core = build_option_args(selection_set, core_field_mapping)
+
+    # Need some at least one column to select.
+    if not core:
+        core.append(gene_1.id)
+    query = sess.query(*core)
+
+    if entrez:
+        query = query.filter(gene_1.entrez.in_(entrez))
+
+    return query
 
 
 def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by_tag=False):
@@ -41,12 +90,6 @@ def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by
     tag_1 = orm.aliased(Tag, name='t')
     therapy_type_1 = orm.aliased(TherapyType, name='tht')
 
-    core_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
-                          'hgnc': gene_1.hgnc.label('hgnc'),
-                          'description': gene_1.description.label('description'),
-                          'friendlyName': gene_1.friendly_name.label('friendly_name'),
-                          'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
-
     related_field_mapping = {'geneFamily': 'gene_family',
                              'geneFunction': 'gene_function',
                              'geneTypes': 'gene_types',
@@ -57,12 +100,14 @@ def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by
                              'superCategory': 'super_category',
                              'therapyType': 'therapy_type'}
 
-    core = build_option_args(selection_set, core_field_mapping)
     relations = build_option_args(selection_set, related_field_mapping)
     option_args = []
     append_to_option_args = option_args.append
 
     query = sess.query(gene_1)
+
+    if entrez:
+        query = query.filter(gene_1.entrez.in_(entrez))
 
     if 'gene_family' in relations:
         append_to_option_args(orm.subqueryload(
@@ -73,7 +118,7 @@ def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by
             gene_1.gene_function.of_type(gene_function_1)))
 
     if 'gene_types' in relations or gene_type:
-        query = query.from_self().join(gene_type_1, gene_1.gene_types)
+        query = query.join(gene_type_1, gene_1.gene_types)
         if gene_type:
             query = query.filter(gene_type_1.name.in_(gene_type))
 
@@ -88,9 +133,16 @@ def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by
         append_to_option_args(orm.subqueryload(
             gene_1.pathway.of_type(pathway_1)))
 
-    if 'publications' in relations:
-        append_to_option_args(orm.subqueryload(
-            gene_1.publications.of_type(pub_1)))
+    # if 'publications' in relations:
+    #     query = query.join(pub_1, gene_1.publications)
+    #     if 'gene_types' in relations or gene_type:
+    #         pub_gene_to_gene_type_1 = orm.aliased(
+    #             PublicationToGeneToGeneType, name='pggt')
+    #         query = query.filter(pub_1.id.in_(sess.query(
+    #             pub_gene_to_gene_type_1.publication_id).filter(and_(pub_gene_to_gene_type_1.gene_id == gene_1.id, pub_gene_to_gene_type_1.gene_type_id == gene_type_1.id))))
+
+    #     append_to_option_args(orm.contains_eager(
+    #         gene_1.publications.of_type(pub_1)))
 
     if samples or 'rna_seq_expr' in relations:
         append_to_option_args(orm.subqueryload(
@@ -110,16 +162,13 @@ def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by
 
     if option_args:
         query = query.options(*option_args)
-    else:
-        # Need some at least one column to select.
-        if not core:
-            core.append(gene_1.id)
-        query = sess.query(*core)
+        if gene_type:
+            query = query.filter(gene_type_1.name.in_(gene_type))
+        return query
+    elif 'publications' in relations:
+        return query
 
-    if entrez:
-        query = query.filter(gene_1.entrez.in_(entrez))
-
-    return query
+    return build_gene_core_request(selection_set, entrez)
 
 
 def get_rna_seq_expr(gene_row):
@@ -132,12 +181,72 @@ def get_rna_seq_expr(gene_row):
 
 
 def request_gene(_obj, info, entrez=None):
-    entrez = [entrez]
-    query = build_gene_request(_obj, info, entrez=entrez)
-    return query.one_or_none()
+    query = build_gene_request(_obj, info, entrez=[entrez])
+    gene = query.one_or_none()
+
+    if gene:
+        get_publications(info, [gene])
+
+    return gene
 
 
 def request_genes(_obj, info, entrez=None, gene_type=None, samples=None, by_tag=False):
-    query = build_gene_request(_obj, info, entrez=entrez, gene_type=gene_type,
-                               samples=samples, by_tag=by_tag)
-    return query.distinct().all()
+    genes_query = build_gene_request(_obj, info, entrez=entrez, gene_type=gene_type,
+                                     samples=samples, by_tag=by_tag)
+    genes = genes_query.distinct().all()
+
+    get_publications(info, genes, by_tag)
+
+    return genes
+
+
+def get_publications(info, genes, by_tag=False):
+    selection_set = get_selection_set(
+        info.field_nodes[0].selection_set, by_tag, child_node='genes')
+    relations = build_option_args(
+        selection_set, {'publications': 'publications'})
+
+    if 'publications' in relations:
+        sess = db.session
+        gene_type_1 = orm.aliased(GeneType, name='gt')
+        pub_1 = orm.aliased(Publication, name='p')
+        pub_gene_gene_type_1 = orm.aliased(
+            PublicationToGeneToGeneType, name='pggt')
+
+        pub_selection_set = get_selection_set(
+            selection_set, ('publications' in relations), child_node='publications')
+        pub_core_field_mapping = {'doId': pub_1.do_id.label('do_id'),
+                                  'firstAuthorLastName': pub_1.first_author_last_name.label('first_author_last_name'),
+                                  'journal': pub_1.journal.label('journal'),
+                                  'name': pub_1.name.label('name'),
+                                  'pubmedId': pub_1.pubmed_id.label('pubmed_id'),
+                                  'title': pub_1.title.label('title'),
+                                  'year': pub_1.year.label('year')}
+        pub_select_fields = [pub_1.do_id.label('do_id'),
+                             pub_1.first_author_last_name.label(
+                                 'first_author_last_name'),
+                             pub_1.journal.label('journal'),
+                             pub_1.name.label('name'),
+                             pub_1.pubmed_id.label('pubmed_id'),
+                             pub_1.title.label('title'),
+                             pub_1.year.label('year')]
+
+        pub_core = build_option_args(
+            pub_selection_set, pub_core_field_mapping) or pub_select_fields
+
+        pub_query = sess.query(
+            *pub_core, pub_gene_gene_type_1.gene_id.label('gene_id'))
+        pub_query = pub_query.select_from(pub_1)
+
+        pub_gene_gene_type_join_condition = build_pub_gene_gene_type_join_condition(
+            genes, pub_gene_gene_type_1, pub_1)
+        pub_query = pub_query.join(pub_gene_gene_type_1, and_(
+            *pub_gene_gene_type_join_condition))
+
+        publications = pub_query.distinct().all()
+
+        gene_dict = {gene.id: gene for gene in genes}
+
+        for key, collection in groupby(publications, key=lambda publication: publication.gene_id):
+            set_committed_value(
+                gene_dict[key], 'publications', list(collection))
