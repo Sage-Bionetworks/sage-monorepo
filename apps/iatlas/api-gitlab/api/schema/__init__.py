@@ -3,8 +3,8 @@ import os
 import decimal
 from api.resolvers import (
     resolve_data_sets, resolve_driver_results, resolve_features, resolve_features_by_class,
-    resolve_features_by_tag, resolve_gene, resolve_genes, resolve_genes_by_tag, resolve_mutations,
-    resolve_mutation_types, resolve_patients, resolve_related, resolve_samples,
+    resolve_features_by_tag, resolve_gene, resolve_gene_types, resolve_genes, resolve_genes_by_tag,
+    resolve_mutations, resolve_mutation_types, resolve_patients, resolve_related, resolve_samples,
     resolve_samples_by_tag, resolve_slides, resolve_tags, resolve_test)
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
@@ -85,6 +85,7 @@ root.set_field('features', resolve_features)
 root.set_field('featuresByClass', resolve_features_by_class)
 root.set_field('featuresByTag', resolve_features_by_tag)
 root.set_field('gene', resolve_gene)
+root.set_field('geneTypes', resolve_gene_types)
 root.set_field('genes', resolve_genes)
 root.set_field('genesByTag', resolve_genes_by_tag)
 root.set_field('mutations', resolve_mutations)

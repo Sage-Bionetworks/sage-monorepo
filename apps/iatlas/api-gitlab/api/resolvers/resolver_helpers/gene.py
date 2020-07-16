@@ -58,7 +58,7 @@ def build_gene_core_request(selection_set, entrez=None):
 
     core = build_option_args(selection_set, core_field_mapping)
 
-    # Need some at least one column to select.
+    # Need at least one column to select.
     if not core:
         core.append(gene_1.id)
     query = sess.query(*core)
