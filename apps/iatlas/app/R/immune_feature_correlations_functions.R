@@ -7,11 +7,9 @@
 #' @importFrom dplyr inner_join filter select
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
-build_ifc_value_tbl <- function(response_tbl, feature_tbl, sample_tbl){
-    # print(response_tbl)
-    # print(feature_tbl)
-    # print(sample_tbl)
-
+build_ifc_value_tbl <- function(
+    response_tbl, feature_tbl, sample_tbl, response_feature_name
+){
     response_tbl %>%
         dplyr::select(
             "sample",
@@ -20,8 +18,16 @@ build_ifc_value_tbl <- function(response_tbl, feature_tbl, sample_tbl){
         ) %>%
         dplyr::inner_join(feature_tbl, by = "sample") %>%
         dplyr::filter(
-            .data$response_name != .data$feature_name,
-            .data$sample %in% sample_tbl$name
+            .data$feature_name != response_feature_name,
+            .data$sample %in% sample_tbl$sample
+        ) %>%
+        dplyr::select(
+            "sample",
+            "group",
+            "response_value",
+            "feature_value",
+            "feature_name",
+            "feature_order"
         )
 }
 
@@ -38,7 +44,7 @@ build_ifc_value_tbl <- function(response_tbl, feature_tbl, sample_tbl){
 #' @importFrom stats cor
 build_ifc_heatmap_matrix <- function(tbl, method){
     tbl %>%
-        dplyr::group_by(.data$group, .data$feature_display, .data$feature_order) %>%
+        dplyr::group_by(.data$group, .data$feature_name, .data$feature_order) %>%
         dplyr::summarise(cor_value = stats::cor(
             .data$feature_value,
             .data$response_value,
@@ -52,7 +58,7 @@ build_ifc_heatmap_matrix <- function(tbl, method){
             names_from = .data$group,
             values_from = .data$cor_value
         ) %>%
-        tibble::column_to_rownames("feature_display") %>%
+        tibble::column_to_rownames("feature_name") %>%
         as.matrix()
 }
 
@@ -68,7 +74,7 @@ build_ifc_heatmap_matrix <- function(tbl, method){
 build_ifc_scatterplot_tbl <- function(tbl, .feature, .group){
     tbl %>%
         dplyr::filter(
-            .data$feature_display == .feature,
+            .data$feature_name == .feature,
             .data$group == .group
         ) %>%
         dplyr::select(
