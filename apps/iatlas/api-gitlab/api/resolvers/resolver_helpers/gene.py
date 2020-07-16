@@ -71,7 +71,7 @@ def build_gene_core_request(selection_set, entrez=None):
 
 def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by_tag=False):
     """
-    Builds a SQL request and returns values from the DB.
+    Builds a SQL request.
     """
     sess = db.session
 
