@@ -121,6 +121,13 @@ type Query {
   ): [GenesByTag!]!
 
   """
+  The "geneTypes" query accepts:
+
+    - "name", a list of names of the gene types to look up.
+  """
+  geneTypes(name: [String!]): [GeneType!]!
+
+  """
   The "mutations" query accepts:
 
     - "entrez", a list of gene entrez ids associated with the mutations to filter by.
