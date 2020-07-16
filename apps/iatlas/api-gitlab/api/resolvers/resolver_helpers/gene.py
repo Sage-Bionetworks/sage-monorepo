@@ -133,17 +133,6 @@ def build_gene_request(_obj, info, gene_type=None, entrez=None, samples=None, by
         append_to_option_args(orm.subqueryload(
             gene_1.pathway.of_type(pathway_1)))
 
-    # if 'publications' in relations:
-    #     query = query.join(pub_1, gene_1.publications)
-    #     if 'gene_types' in relations or gene_type:
-    #         pub_gene_to_gene_type_1 = orm.aliased(
-    #             PublicationToGeneToGeneType, name='pggt')
-    #         query = query.filter(pub_1.id.in_(sess.query(
-    #             pub_gene_to_gene_type_1.publication_id).filter(and_(pub_gene_to_gene_type_1.gene_id == gene_1.id, pub_gene_to_gene_type_1.gene_type_id == gene_type_1.id))))
-
-    #     append_to_option_args(orm.contains_eager(
-    #         gene_1.publications.of_type(pub_1)))
-
     if samples or 'rna_seq_expr' in relations:
         append_to_option_args(orm.subqueryload(
             gene_1.gene_sample_assoc.of_type(gene_to_sample_1)))
