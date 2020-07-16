@@ -12,19 +12,6 @@ show_co_submodules <- function(cohort_obj){
     all(length(time_features > 0), length(status_features > 0))
 }
 
-
-#' Get Survival Status ID from Time ID
-#'
-#' @param time_id An integer of a time status feature
-#' @importFrom magrittr %>%
-#' @importFrom stringr str_remove
-get_status_id_from_time_id <- function(time_id){
-    time_id %>%
-        get_feature_display_from_id() %>%
-        stringr::str_remove(., " Time") %>%
-        get_feature_id_from_display()
-}
-
 #' Build Survival Values Tibble
 #'
 #' @param sample_tbl A Tibble with columns sample_id and group
@@ -91,33 +78,7 @@ build_co_heatmap_matrix <- function(tbl){
             values_from = .data$result
         ) %>%
         as.data.frame() %>%
+        dplyr::select(sort(names(.))) %>%
         tibble::column_to_rownames("feature") %>%
         as.matrix()
-}
-
-#' Build Clinical Outcomes Survival Tibble
-#'
-#' @param time_id An integer in the id column of the samples table
-#' @param status_id An integer in the id column of the samples table
-build_co_survival_tbl <- function(time_id, status_id){
-    paste0(
-        "SELECT a.sample_id, a.time, b.status FROM (",
-        paste0(
-            "SELECT a.sample_id, a.value AS time ",
-            "FROM features_to_samples a ",
-            "INNER JOIN features f ON a.feature_id = f.id ",
-            "WHERE feature_id = ",
-            time_id
-        ),
-        ") a INNER JOIN (",
-        paste0(
-            "SELECT a.sample_id, a.value AS status ",
-            "FROM features_to_samples a ",
-            "INNER JOIN features f ON a.feature_id = f.id ",
-            "WHERE feature_id = ",
-            status_id
-        ),
-        ") b ON a.sample_id = b.sample_id"
-    )  %>%
-        perform_query("Build Clinical Outcomes Survival Tibble")
 }
