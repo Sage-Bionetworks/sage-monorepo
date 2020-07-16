@@ -1,9 +1,9 @@
-with_test_db_env({
+with_test_api_env({
 
     test_that("Create Immunomodulators Gene List", {
         tbl1 <- dplyr::tibble(
             hgnc   = c("g1", "g2", "g3"),
-            id     = 1:3,
+            entrez = 1:3,
             group1 = c("A", "B", "B"),
             group2 = c("C", "C", "D")
         )
@@ -15,23 +15,14 @@ with_test_db_env({
         expect_named(res2, c("C", "D"))
     })
 
-    test_that("Create Immunomodulators Gene List", {
-        tbl1 <- dplyr::tibble(
-            sample_id = c(26, 31, 90, 91, 3631),
-            group = c("G1", "G1", "G2", "G2", "G2")
-        )
-        res1 <- build_im_distplot_tbl(17, tbl1, "None")
-        expect_named(res1, c("x", "y"))
-    })
-
-    test_that("Build Immunomodulators Distributions Plot Tibble", {
-        tbl1 <- dplyr::tibble(
-            sample_id = c(26, 31, 90, 91, 3631),
-            group = c("G1", "G1", "G2", "G2", "G2")
-        )
-        res1 <- build_im_distplot_tbl(17, tbl1, "None")
-        expect_named(res1, c("x", "y"))
-    })
+    # test_that("Build Immunomodulators Distributions Plot Tibble", {
+    #     tbl1 <- dplyr::tibble(
+    #         sample_id = c(26, 31, 90, 91, 3631),
+    #         group = c("G1", "G1", "G2", "G2", "G2")
+    #     )
+    #     res1 <- build_im_distplot_tbl(17, tbl1, "None")
+    #     expect_named(res1, c("x", "y"))
+    # })
 
     test_that("Build Immunomodulators Datatable Tibble", {
         tbl1 <- dplyr::tibble(
