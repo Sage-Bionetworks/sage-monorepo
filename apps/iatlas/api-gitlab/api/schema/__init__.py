@@ -2,10 +2,11 @@ from ariadne import load_schema_from_path, make_executable_schema, ObjectType, S
 import os
 import decimal
 from api.resolvers import (
-    resolve_data_sets, resolve_driver_results, resolve_features, resolve_features_by_class,
-    resolve_features_by_tag, resolve_gene, resolve_gene_types, resolve_genes, resolve_genes_by_tag,
-    resolve_mutations, resolve_mutation_types, resolve_patients, resolve_related, resolve_samples,
-    resolve_samples_by_tag, resolve_slides, resolve_tags, resolve_test)
+    resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_features,
+    resolve_features_by_class, resolve_features_by_tag, resolve_gene, resolve_gene_types,
+    resolve_genes, resolve_genes_by_tag, resolve_mutations, resolve_mutation_types, resolve_patients,
+    resolve_related, resolve_samples, resolve_samples_by_tag, resolve_slides, resolve_tags,
+    resolve_test)
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 
@@ -90,6 +91,7 @@ simple_publication = ObjectType('SimplePublication')
 simple_tag = ObjectType('SimpleTag')
 
 # Associate resolvers with fields.
+root.set_field('copyNumberResults', resolve_copy_number_results)
 root.set_field('dataSets', resolve_data_sets)
 root.set_field('driverResults', resolve_driver_results)
 root.set_field('features', resolve_features)

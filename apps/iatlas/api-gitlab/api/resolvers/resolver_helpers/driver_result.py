@@ -11,8 +11,7 @@ def build_driver_result_request(_obj, info, feature=None, entrez=None, mutationC
     """
     sess = db.session
 
-    selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, child_node='driver_results')
+    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
 
     driver_result_1 = orm.aliased(DriverResult, name='dr')
     gene_1 = orm.aliased(Gene, name='g')

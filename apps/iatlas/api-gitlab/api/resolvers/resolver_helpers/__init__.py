@@ -1,3 +1,4 @@
+from .copy_number_result import request_copy_number_results
 from .data_set import request_data_sets
 from .driver_result import request_driver_results
 from .feature import request_features, return_feature_value

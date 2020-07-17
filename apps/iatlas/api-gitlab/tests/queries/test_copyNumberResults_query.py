@@ -137,7 +137,7 @@ def test_copyNumberResults_query_with_passed_entrez(client, data_set, entrez, fe
         '/api', json={'query': query, 'variables': {
             'dataSet': [data_set],
             'entrez': [entrez],
-            'feature_name': [feature_name]
+            'feature': [feature_name]
         }})
     json_data = json.loads(response.data)
     results = json_data['data']['copyNumberResults']
@@ -184,7 +184,7 @@ def test_copyNumberResults_query_with_passed_features(client, data_set, entrez, 
         '/api', json={'query': query, 'variables': {
             'dataSet': [data_set],
             'entrez': [entrez],
-            'feature_name': [feature_name]
+            'feature': [feature_name]
         }})
     json_data = json.loads(response.data)
     results = json_data['data']['copyNumberResults']
@@ -231,7 +231,7 @@ def test_copyNumberResults_query_with_passed_tag(client, data_set, entrez, featu
         '/api', json={'query': query, 'variables': {
             'dataSet': [data_set],
             'entrez': [entrez],
-            'feature_name': [feature_name],
+            'feature': [feature_name],
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
@@ -752,8 +752,7 @@ def test_copyNumberResults_query_with_no_arguments(client):
             tStat
         }
     }"""
-    response = client.post(
-        '/api', json={'query': query, 'variables': {}})
+    response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
     results = json_data['data']['copyNumberResults']
     assert isinstance(results, list)
