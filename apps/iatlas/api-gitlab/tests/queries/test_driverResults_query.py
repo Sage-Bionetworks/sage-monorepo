@@ -173,8 +173,8 @@ def test_driverResults_query_with_no_arguments_no_relations(client):
             pValue
             log10PValue
             log10FoldChange
-            n_wt
-            n_mut
+            numWildTypes
+            numMutants
         }
     }"""
     response = client.post('/api', json={'query': query})
@@ -187,5 +187,5 @@ def test_driverResults_query_with_no_arguments_no_relations(client):
         assert type(driver_result['pValue']) is float or NoneType
         assert type(driver_result['log10PValue']) is float or NoneType
         assert type(driver_result['log10FoldChange']) is float or NoneType
-        assert type(driver_result['n_wt']) is int or NoneType
-        assert type(driver_result['n_mut']) is int or NoneType
+        assert type(driver_result['numWildTypes']) is int or NoneType
+        assert type(driver_result['numMutants']) is int or NoneType
