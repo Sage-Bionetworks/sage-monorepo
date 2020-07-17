@@ -14,11 +14,6 @@ def gene_id():
 
 
 @pytest.fixture(scope='module')
-def mutation_code_id():
-    return 2
-
-
-@pytest.fixture(scope='module')
 def tag_id():
     return 16
 
