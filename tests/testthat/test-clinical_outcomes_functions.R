@@ -1,16 +1,16 @@
 with_test_api_env({
 
-    sample_tbl <- iatlas.app::query_cohort_selector(
+    sample_tbl <- query_cohort_selector(
         "TCGA",
         "Immune_Subtype"
     ) %>%
         dplyr::select("sample", "group" = "name")
 
-    survival_tbl <- iatlas.app::build_survival_value_tbl(
+    survival_tbl <- build_survival_value_tbl(
         sample_tbl, "OS_time", "OS"
     )
 
-    feature_tbl <- iatlas.app::query_features_values_by_tag(
+    feature_tbl <- query_features_values_by_tag(
         "TCGA",
         "Immune_Subtype",
         feature_class = "DNA Alteration"

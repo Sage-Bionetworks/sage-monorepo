@@ -1,5 +1,5 @@
 get_cnv_group_tbl <- function(dataset, group){
-    iatlas.app::query_tags(dataset, group)
+    query_tags(dataset, group)
 }
 
 get_cnv_group_list <- function(tbl){

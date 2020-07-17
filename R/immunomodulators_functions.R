@@ -11,7 +11,7 @@ create_im_gene_list <- function(tbl, group){
             display = "hgnc",
             feature = "entrez"
         ) %>%
-        iatlas.app::create_nested_named_list(.)
+        create_nested_named_list(.)
 }
 
 #' #' Build Immunomodulators Distributions Plot Tibble

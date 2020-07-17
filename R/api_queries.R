@@ -172,7 +172,7 @@ query_io_targets <- function(
             "entrez",
             "hgnc",
             "description",
-            "io_landscap_name" = "ioLandscapeName",
+            "io_landscape_name" = "ioLandscapeName",
             "pathway",
             "therapy_type" = "therapyType"
         )

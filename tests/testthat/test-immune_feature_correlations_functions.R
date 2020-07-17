@@ -1,25 +1,25 @@
 with_test_api_env({
 
-    response_tbl <- iatlas.app::query_feature_values(
+    response_tbl <- query_feature_values(
         "PCAWG",
         "Immune_Subtype",
         "EPIC_B_Cells"
     )
 
-    feature_tbl  <- iatlas.app::query_features_values_by_tag(
+    feature_tbl  <- query_features_values_by_tag(
         "PCAWG",
         "Immune_Subtype",
         feature_class = "EPIC"
     ) %>%
         dplyr::rename("group" = "tag")
 
-    sample_tbl <- iatlas.app::query_cohort_selector(
+    sample_tbl <- query_cohort_selector(
         "PCAWG",
         "Immune_Subtype"
     ) %>%
         dplyr::select("sample", "group" = "name")
 
-    value_tbl <- iatlas.app::build_ifc_value_tbl(
+    value_tbl <- build_ifc_value_tbl(
         response_tbl,
         feature_tbl,
         sample_tbl,
@@ -42,7 +42,7 @@ with_test_api_env({
         )
     })
 
-    heatmap_matrix <- iatlas.app::build_ifc_heatmap_matrix(value_tbl, "pearson")
+    heatmap_matrix <- build_ifc_heatmap_matrix(value_tbl, "pearson")
 
     test_that("Build Immune Feature Correlations Heatmap Matrix", {
         expect_equal(
@@ -61,7 +61,7 @@ with_test_api_env({
     })
 
     test_that("Build Immune Feature Scatterplot Tibble", {
-        result1 <-  iatlas.app::build_ifc_scatterplot_tbl(
+        result1 <-  build_ifc_scatterplot_tbl(
             value_tbl, "EPIC_CAFs", "C1"
         )
         expect_named(result1, c("group", "name", "label", "x", "y"))
