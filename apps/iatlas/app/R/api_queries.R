@@ -2,7 +2,7 @@
 # datasets ---------------------------------------------------------------------
 
 query_datasets <- function(){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "datasets",
         list(
             dataSet = list()
@@ -14,7 +14,7 @@ query_datasets <- function(){
 }
 
 query_dataset_samples <- function(dataset){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "dataset_samples",
         list(
             dataSet = dataset
@@ -33,7 +33,7 @@ query_feature_values_by_tag <- function(
     group_tag = list(),
     feature = list()
 ){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "feature_values_by_tag",
         list(
             dataSet = dataset,
@@ -51,7 +51,7 @@ query_features_values_by_tag <- function(
     feature = list(),
     feature_class = list()
 ){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "features_values_by_tag",
         list(
             dataSet = dataset,
@@ -85,7 +85,7 @@ query_features_by_class <- function(
     feature = list(),
     feature_class = list()
 ){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "features_by_class",
         list(
             dataSet = dataset,
@@ -108,7 +108,7 @@ query_features_by_class <- function(
 }
 
 query_samples_to_features <- function(features = list()){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "samples_to_features",
         list(features = features)
     ) %>%
@@ -117,7 +117,7 @@ query_samples_to_features <- function(features = list()){
 }
 
 query_samples_to_feature <- function(feature){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "samples_to_feature",
         list(feature = feature)
     ) %>%
@@ -131,7 +131,7 @@ query_immunomodulators <- function(
     type = "immunomodulator",
     .entrez = list()
 ){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "immunomodulators",
         list(
             geneType = type,
@@ -158,7 +158,7 @@ query_io_targets <- function(
     type = "io_target",
     .entrez = list()
 ){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "io_targets",
         list(
             geneType = type,
@@ -185,7 +185,7 @@ query_mutations <- function(
     code = list(),
     type = list()
 ){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "mutations",
         list(
             entrez = entrez,
@@ -210,7 +210,7 @@ query_mutations <- function(
 # related ---------------------------------------------------------------------
 
 query_dataset_tags <- function(dataset){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "dataset_tags",
         list(
             dataSet = dataset,
@@ -227,7 +227,7 @@ query_dataset_tags <- function(dataset){
 # tags ------------------------------------------------------------------------
 
 query_tags <- function(dataset, parent_tag){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "tags",
         list(
             dataSet = dataset,
@@ -244,7 +244,7 @@ query_cohort_selector <- function(
     dataset = "TCGA",
     group_tag = "Immune_Subtype"
 ){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "cohort_selection",
         list(
             dataSet = dataset,
@@ -273,7 +273,7 @@ query_feature_values <- function(
     group_tag = list(),
     feature = list()
 ){
-    iatlas.app::perform_api_query(
+    perform_api_query(
         "feature_values",
         list(
             dataSet = dataset,
