@@ -1,0 +1,9 @@
+"""
+The "GeneFamily" type may return:
+
+- The "name" of the GeneFamily
+"""
+type GeneFamily {
+  name: String!
+  genes: [SimpleGene]!
+}

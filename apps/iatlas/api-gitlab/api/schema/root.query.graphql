@@ -27,6 +27,7 @@ type Query {
     featureClass: [String!]
   ): [FeaturesByTag!]!
   gene(entrez: Int!): Gene
+  geneFamilies(name: [String!]): [GeneFamily!]
   genes(entrez: [Int!], geneType: [String!]): [Gene!]!
   genesByTag(
     dataSet: [String!]!
