@@ -1,6 +1,6 @@
 devtools::load_all(devtools::as.package(".")$path)
 
-load_config(Sys.getenv("R_CONFIG_ACTIVE", unset = "dev"))
+# load_config(Sys.getenv("R_CONFIG_ACTIVE", unset = "dev"))
 
 cat(crayon::blue("SUCCESS: iatlas.app is ready to go.\n"))
 cat(crayon::blue(paste0("For more info, open README.md\n")))

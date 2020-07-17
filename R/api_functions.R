@@ -21,7 +21,7 @@ create_global_ghql_query_object <- function() {
 }
 
 create_and_add_all_queries_to_qry_obj <- function(
-    query_dir = "queries",
+    query_dir = "inst/queries",
     qry_obj   = .GlobalEnv$ghql_query_object
 ){
     create_global_ghql_query_object()
