@@ -5,7 +5,12 @@ from tests import NoneType
 
 @pytest.fixture(scope='module')
 def feature_name():
-    return 'AS'
+    return 'Module11_Prolif_score'
+
+
+@pytest.fixture(scope='module')
+def gene_entrez():
+    return 284058
 
 
 @pytest.fixture(scope='module')
@@ -18,99 +23,150 @@ def tag_name():
     return 'BLCA'
 
 
-def test_driverResults_query_with_passed_features(client, feature_name):
-    query = """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag: [String!], $dataSet: [String!]) {
+@pytest.fixture(scope='module')
+def common_query():
+    return """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag: [String!], $dataSet: [String!]) {
         driverResults(feature: $feature, entrez: $entrez, mutationCode: $mutationCode, tag: $tag, dataSet: $dataSet) {
-            feature{
-                name
-            }
+            dataSet { name }
+            feature { name }
+            gene { entrez }
+            mutationCode { code }
+            tag { name }
         }
     }"""
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'feature': [feature_name]}})
-    json_data = json.loads(response.data)
-    driver_results = json_data['data']['driverResults']
-    assert isinstance(driver_results, list)
-    assert len(driver_results) > 0
-    for driver_result in driver_results[0:2]:
-        feature = driver_result['feature']
 
+
+def test_driverResults_query_with_passed_data_set_entrez_feature_and_tag(client, common_query, data_set, feature_name, gene_entrez, tag_name):
+    response = client.post('/api', json={'query': common_query, 'variables': {
+        'dataSet': [data_set],
+        'entrez': [gene_entrez],
+        'feature': [feature_name],
+        'tag': [tag_name]
+    }})
+    json_data = json.loads(response.data)
+    results = json_data['data']['driverResults']
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        current_data_set = result['dataSet']
+        feature = result['feature']
+        gene = result['gene']
+        current_mutation_code = result['mutationCode']
+        tag = result['tag']
+
+        assert current_data_set['name'] == data_set
         assert feature['name'] == feature_name
-
-
-def test_driverResults_query_with_passed_entrez(client, entrez):
-    query = """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag:[String!], $dataSet: [String!]) {
-        driverResults(feature: $feature, entrez: $entrez, mutationCode: $mutationCode, tag:$tag,  dataSet: $dataSet) {
-            gene{
-                entrez
-            }
-        }
-    }"""
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'entrez': [entrez]}})
-    json_data = json.loads(response.data)
-    driver_results = json_data['data']['driverResults']
-    assert isinstance(driver_results, list)
-    for driver_result in driver_results[0:2]:
-        gene = driver_result['gene']
-        assert gene['entrez'] == entrez
-
-
-def test_driverResults_query_with_passed_mutationCode(client, mutation_code):
-    query = """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag:[String!], $dataSet: [String!]) {
-        driverResults(feature: $feature, entrez: $entrez, mutationCode: $mutationCode, tag:$tag,  dataSet: $dataSet) {
-            mutationCode{
-                code
-            }
-        }
-    }"""
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'mutationCode': mutation_code}})
-    json_data = json.loads(response.data)
-    driver_results = json_data['data']['driverResults']
-    assert isinstance(driver_results, list)
-    for driver_result in driver_results[0:2]:
-        mutationCode = driver_result['mutationCode']
-        assert mutationCode['code'] == mutation_code
-
-
-def test_driverResults_query_with_passed_tags(client, tag_name):
-    query = """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag:[String!], $dataSet: [String!]) {
-        driverResults(feature: $feature, entrez: $entrez, mutationCode: $mutationCode, tag:$tag,  dataSet: $dataSet) {
-            tag{
-                name
-            }
-        }
-    }"""
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'tag': [tag_name]}})
-    json_data = json.loads(response.data)
-    driver_results = json_data['data']['driverResults']
-    assert isinstance(driver_results, list)
-    for driver_result in driver_results[0:2]:
-        tag = driver_result['tag']
+        assert gene['entrez'] == gene_entrez
+        if current_mutation_code:
+            assert type(current_mutation_code['code']) is str
         assert tag['name'] == tag_name
 
 
-def test_driverResults_query_with_passed_data_sets(client, data_set):
-    query = """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag:[String!], $dataSet: [String!]) {
-        driverResults(feature: $feature, entrez: $entrez, mutationCode: $mutationCode, tag:$tag,  dataSet: $dataSet, limit: 10) {
-            dataSet{
-                name
-            }
-        }
-    }"""
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'dataSet': [data_set]}})
+def test_driverResults_query_with_passed_data_set_entrez_feature_and_mutation(client, common_query, data_set, feature_name, gene_entrez, mutation_code):
+    response = client.post('/api', json={'query': common_query, 'variables': {
+        'dataSet': [data_set],
+        'entrez': [gene_entrez],
+        'feature': [feature_name],
+        'mutationCode': [mutation_code]
+    }})
     json_data = json.loads(response.data)
-    driver_results = json_data['data']['driverResults']
-    assert isinstance(driver_results, list)
-    for driver_result in driver_results[0:2]:
-        current_data_set = driver_result['dataSet']
+    results = json_data['data']['driverResults']
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        current_data_set = result['dataSet']
+        feature = result['feature']
+        gene = result['gene']
+        current_mutation_code = result['mutationCode']
+        tag = result['tag']
+
         assert current_data_set['name'] == data_set
+        assert feature['name'] == feature_name
+        assert gene['entrez'] == gene_entrez
+        assert current_mutation_code['code'] == mutation_code
+        if tag:
+            assert type(tag['name']) is str
 
 
-def test_driverResults_query_with_no_arguments(client):
+def test_driverResults_query_with_passed_data_set_entrez_mutation_code_and_tag(client, common_query, data_set, gene_entrez, mutation_code, tag_name):
+    response = client.post('/api', json={'query': common_query, 'variables': {
+        'dataSet': [data_set],
+        'entrez': [gene_entrez],
+        'mutationCode': [mutation_code],
+        'tag': [tag_name]
+    }})
+    json_data = json.loads(response.data)
+    results = json_data['data']['driverResults']
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        current_data_set = result['dataSet']
+        feature = result['feature']
+        gene = result['gene']
+        current_mutation_code = result['mutationCode']
+        tag = result['tag']
+
+        assert current_data_set['name'] == data_set
+        if feature:
+            assert type(feature['name']) is str
+        assert gene['entrez'] == gene_entrez
+        assert current_mutation_code['code'] == mutation_code
+        assert tag['name'] == tag_name
+
+
+def test_driverResults_query_with_passed_data_set_feature_mutation_code_and_tag(client, common_query, data_set, feature_name, mutation_code, tag_name):
+    response = client.post('/api', json={'query': common_query, 'variables': {
+        'dataSet': [data_set],
+        'feature': [feature_name],
+        'mutationCode': [mutation_code],
+        'tag': [tag_name]
+    }})
+    json_data = json.loads(response.data)
+    results = json_data['data']['driverResults']
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        current_data_set = result['dataSet']
+        feature = result['feature']
+        gene = result['gene']
+        current_mutation_code = result['mutationCode']
+        tag = result['tag']
+
+        assert current_data_set['name'] == data_set
+        assert feature['name'] == feature_name
+        if gene:
+            assert type(gene['entrez']) is int
+        assert current_mutation_code['code'] == mutation_code
+        assert tag['name'] == tag_name
+
+
+def test_driverResults_query_with_passed_data_set_entrez_feature_mutation_code_and_tag(client, common_query, feature_name, gene_entrez, mutation_code, tag_name):
+    response = client.post(
+        '/api', json={'query': common_query, 'variables': {
+            'entrez': [gene_entrez],
+            'feature': [feature_name],
+            'mutationCode': [mutation_code],
+            'tag': [tag_name]
+        }})
+    json_data = json.loads(response.data)
+    results = json_data['data']['driverResults']
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        current_data_set = result['dataSet']
+        feature = result['feature']
+        gene = result['gene']
+        current_mutation_code = result['mutationCode']
+        tag = result['tag']
+
+        assert type(current_data_set['name']) is str
+        assert feature['name'] == feature_name
+        assert gene['entrez'] == gene_entrez
+        assert current_mutation_code['code'] == mutation_code
+        assert tag['name'] == tag_name
+
+
+def test_driverResults_query_with_no_arguments_no_relations(client):
     query = """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag: [String!], $dataSet: [String!]) {
         driverResults(feature: $feature, entrez: $entrez, mutationCode: $mutationCode, tag: $tag, dataSet: $dataSet, limit:10) {
             foldChange
@@ -121,8 +177,7 @@ def test_driverResults_query_with_no_arguments(client):
             n_mut
         }
     }"""
-    response = client.post(
-        '/api', json={'query': query, 'variables': {}})
+    response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
     driver_results = json_data['data']['driverResults']
     assert isinstance(driver_results, list)

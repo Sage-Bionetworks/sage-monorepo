@@ -6,9 +6,9 @@ The "GeneType" type may return:
 - A list of genes related to the gene type
 """
 type GeneType {
-  name: String!
-  display: String
-  genes: [SimpleGene!]
+    display: String
+    genes: [SimpleGene!]
+    name: String!
 }
 
 """
