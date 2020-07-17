@@ -11,6 +11,8 @@ schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 
 # Import GraphQl schemas
 root_query = load_schema_from_path(schema_dirname + '/root.query.graphql')
+copy_number_result_query = load_schema_from_path(
+    schema_dirname + '/copyNumberResult.query.graphql')
 data_set_query = load_schema_from_path(
     schema_dirname + '/dataset.query.graphql')
 driver_result_query = load_schema_from_path(
@@ -32,15 +34,23 @@ sample_query = load_schema_from_path(schema_dirname + '/sample.query.graphql')
 slide_query = load_schema_from_path(schema_dirname + '/slide.query.graphql')
 tag_query = load_schema_from_path(schema_dirname + '/tag.query.graphql')
 
-type_defs = [root_query, data_set_query, driver_result_query, feature_query, gene_query,
-             gene_type_query, mutation_query, mutation_code_query, patient_query, publication_query,
-             sample_query, slide_query, tag_query]
+type_defs = [root_query, copy_number_result_query, data_set_query, driver_result_query, feature_query,
+             gene_query, gene_type_query, mutation_query, mutation_code_query, patient_query,
+             publication_query, sample_query, slide_query, tag_query]
 
 # Initialize custom scalars.
-feature_value_type = ScalarType('FeatureValue')
+direction_enum_scalar = ScalarType('DirectionEnum')
 
 
-@feature_value_type.serializer
+@direction_enum_scalar.serializer
+def serialize_direction_enum(value):
+    return value if value == 'Amp' or value == 'Del' else None
+
+
+feature_value_scalar = ScalarType('FeatureValue')
+
+
+@feature_value_scalar.serializer
 def serialize_feature_value(value):
     if isinstance(value, decimal.Decimal):
         return float(value)
@@ -51,8 +61,9 @@ def serialize_feature_value(value):
 
 # Initialize schema objects (general).
 root = ObjectType('Query')
-driver_result = ObjectType('DriverResult')
+copy_number_result = ObjectType('CopyNumberResult')
 data_set = ObjectType('DataSet')
+driver_result = ObjectType('DriverResult')
 feature = ObjectType('Feature')
 features_by_class = ObjectType('FeaturesByClass')
 features_by_tag = ObjectType('FeaturesByTag')
@@ -101,9 +112,9 @@ root.set_field('test', resolve_test)
 
 schema = make_executable_schema(
     type_defs,
-    [root, data_set, driver_result, feature, features_by_class, features_by_tag,
-     feature_value_type, gene, genes_by_tag, gene_type, mutation, mutation_code,
-     mutation_type, patient, publication, related_by_data_set, sample, sample_by_tag,
-     simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_publication,
-     simple_tag, slide, tag]
+    [root, copy_number_result, data_set, direction_enum_scalar, driver_result, feature,
+     features_by_class, features_by_tag, feature_value_scalar, gene, genes_by_tag, gene_type,
+     mutation, mutation_code, mutation_type, patient, publication, related_by_data_set, sample,
+     sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type,
+     simple_publication, simple_tag, slide, tag]
 )
