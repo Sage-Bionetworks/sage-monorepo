@@ -154,6 +154,30 @@ query_immunomodulators <- function(
         )
 }
 
+query_io_targets <- function(
+    type = "io_target",
+    .entrez = list()
+){
+    iatlas.app::perform_api_query(
+        "io_targets",
+        list(
+            geneType = type,
+            entrez = .entrez
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::arrange(.data$entrez) %>%
+        dplyr::as_tibble() %>%
+        dplyr::select(
+            "entrez",
+            "hgnc",
+            "description",
+            "io_landscap_name" = "ioLandscapeName",
+            "pathway",
+            "therapy_type" = "therapyType"
+        )
+}
+
 # mutations -------------------------------------------------------------------
 
 query_mutations <- function(

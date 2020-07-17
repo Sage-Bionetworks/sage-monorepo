@@ -1,47 +1,18 @@
 with_test_api_env({
-    # test_that("Build IO Target Tibble", {
-    #     expect_named(
-    #        build_io_target_tbl(),
-    #        c("id", "hgnc", "entrez", "description", "friendly_name", "pathway",
-    #          "therapy")
-    #     )
-    # })
-    #
-    # test_that("Get Gene From URL", {
-    #     expect_equal(get_gene_from_url(list()), NA)
-    #     expect_equal(get_gene_from_url(list("gene" = "gene1")), "gene1")
-    # })
-    #
-    # test_that("Build IO Target Tibble", {
-    #     expect_equal(
-    #         create_build_io_target_tbl_query(),
-    #         paste0(
-    #             "SELECT a.id, a.hgnc, a.entrez, a.description, ",
-    #             "a.io_landscape_name AS friendly_name, ",
-    #             "(SELECT name FROM pathways WHERE id = a.pathway_id) ",
-    #             "AS pathway, ",
-    #             "(SELECT name FROM therapy_types WHERE id = a.therapy_type_id) ",
-    #             "AS therapy ",
-    #             "FROM (",
-    #             "SELECT * FROM genes WHERE id IN (SELECT gene_id FROM ",
-    #             "genes_to_types WHERE type_id IN (SELECT id FROM gene_types ",
-    #             "WHERE name IN ('io_target')))) a"
-    #         )
-    #     )
-    # })
-    #
-    # test_that("Create IO Target Gene List", {
-    #     tbl1 <- dplyr::tibble(
-    #         hgnc   = c("g1", "g2", "g3"),
-    #         id     = 1:3,
-    #         group1 = rep("g1", 3),
-    #         group2 = c("g2", "g2", "g3")
-    #     )
-    #     result1 <- create_io_target_gene_list(tbl1, "group1")
-    #     expect_named(result1, "g1")
-    #     result2 <- create_io_target_gene_list(tbl1, "group2")
-    #     expect_named(result2, c("g2", "g3"))
-    # })
+
+    test_that("Get Gene From URL", {
+        expect_equal(get_gene_from_url(list()), NA)
+        expect_equal(get_gene_from_url(list("gene" = "gene1")), "gene1")
+    })
+
+    io_target_tbl <- iatlas.app::query_io_targets()
+
+    test_that("Create IO Target Gene List", {
+        result1 <- create_io_target_gene_list(io_target_tbl, "pathway")
+        expect_named(result1, "g1")
+        result2 <- create_io_target_gene_list(tbl1, "therapy_type")
+        expect_named(result2, c("g2", "g3"))
+    })
     #
     # test_that("Build IO Target Distplot Tibble", {
     #     tbl1 <- dplyr::tibble(

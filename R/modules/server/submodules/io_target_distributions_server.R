@@ -5,36 +5,39 @@ io_target_distributions_server <- function(
     cohort_obj
 ){
 
-    # source_files <- c(
-    #     "R/modules/server/submodules/distribution_plot_server.R",
-    #     "R/io_target_functions.R"
-    # )
-    #
-    # for (file in source_files) {
-    #     source(file, local = T)
-    # }
-    #
-    # ns <- session$ns
-    #
-    # io_target_tbl <- build_io_target_tbl()
-    #
-    # url_gene <- shiny::reactive({
-    #     query <- shiny::parseQueryString(session$clientData$url_search)
-    #     get_gene_from_url(query)
-    # })
-    #
-    # output$gene_choice_ui <- shiny::renderUI({
-    #     shiny::req(input$group_choice)
-    #     shiny::selectInput(
-    #         ns("gene_choice_id"),
-    #         label = "Select or Search Gene",
-    #         choices = create_io_target_gene_list(
-    #             io_target_tbl,
-    #             input$group_choice
-    #         ),
-    #         selected = url_gene()
-    #     )
-    # })
+    source_files <- c(
+        "R/modules/server/submodules/distribution_plot_server.R"
+    )
+
+    for (file in source_files) {
+        source(file, local = T)
+    }
+
+    ns <- session$ns
+
+    io_target_tbl <- shiny::reactive({
+        iatlas.app::query_io_targets()
+    })
+
+    url_gene <- shiny::reactive({
+        query <- shiny::parseQueryString(session$clientData$url_search)
+        iatlas.app::get_gene_from_url(query)
+    })
+
+    output$gene_choice_ui <- shiny::renderUI({
+        shiny::req(input$group_choice, io_target_tbl())
+        shiny::selectInput(
+            ns("gene_choice"),
+            label = "Select or Search Gene",
+            choices = create_io_target_gene_list(
+                io_target_tbl(),
+                input$group_choice
+            ),
+            selected = url_gene()
+        )
+    })
+
+
     #
     # gene_name <- shiny::reactive({
     #     shiny::req(input$gene_choice_id)
