@@ -173,8 +173,8 @@ def test_driverResults_query_with_no_arguments_no_relations(client):
             pValue
             log10PValue
             log10FoldChange
-            n_wt
-            n_mut
+            numWildTypes
+            numMutants
         }
     }"""
     response = client.post('/api', json={'query': query})

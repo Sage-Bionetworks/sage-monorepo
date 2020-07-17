@@ -25,8 +25,8 @@ def build_driver_result_request(_obj, info, feature=None, entrez=None, mutationC
                           'foldChange': driver_result_1.fold_change.label('fold_change'),
                           'log10PValue': driver_result_1.log10_p_value.label('log10_p_value'),
                           'log10FoldChange': driver_result_1.log10_fold_change.label('log10_fold_change'),
-                          'n_wt': driver_result_1.n_wt.label('n_wt'),
-                          'n_mut': driver_result_1.n_mut.label('n_mut')}
+                          'numWildTypes': driver_result_1.n_wt.label('n_wt'),
+                          'numMutants': driver_result_1.n_mut.label('n_mut')}
 
     related_field_mapping = {'feature': 'feature',
                              'gene': 'gene',
