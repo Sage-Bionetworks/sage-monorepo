@@ -133,6 +133,21 @@ with_test_api_env({
     expect_equal(ARG1_publications, c(19764983L, 23890059L))
   })
 
+  test_that("query_io_targets", {
+    result1 <- query_io_targets()
+    expect_named(
+      result1,
+      c(
+        "entrez",
+        "hgnc",
+        "description",
+        "io_landscap_name" ,
+        "pathway",
+        "therapy_type"
+      )
+    )
+  })
+
   # mutations -----------------------------------------------------------------
 
   test_that("mutations", {

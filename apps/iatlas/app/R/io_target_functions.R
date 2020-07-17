@@ -1,23 +1,3 @@
-#' Build IO Target Tibble
-#'
-#' #' @importFrom magrittr %>%
-build_io_target_tbl <- function(){
-    create_build_io_target_tbl_query() %>%
-        perform_query("Build IO Target Tibble")
-}
-
-#' Create Build IO Target Tibble Query
-create_build_io_target_tbl_query <- function(){
-    paste0(
-        "SELECT a.id, a.hgnc, a.entrez, a.description, ",
-        "a.io_landscape_name AS friendly_name, ",
-        create_id_to_pathway_subquery(),
-        ", ",
-        create_id_to_therapy_subquery(),
-        " FROM (", create_get_genes_by_type_query("io_target"), ") a"
-    )
-}
-
 #' Get Gene From URL
 #'
 #' @param url_query A list with named value gene
@@ -36,12 +16,13 @@ get_gene_from_url <- function(url_query){
 #' @importFrom tidyselect all_of
 create_io_target_gene_list <- function(tbl, group){
     tbl %>%
+        print() %>%
         dplyr::select(
             class   = tidyselect::all_of(group),
             display = "hgnc",
-            feature = "id"
+            feature = "entrez"
         ) %>%
-        create_nested_named_list()
+        create_nested_named_list(.)
 }
 
 #' Build IO Target Distplot Tibble
