@@ -6,7 +6,7 @@ test_that("Create Group Text from Eventdata Dataframe", {
         name = c("name1", "name2"),
         characteristics = c("c1", "c2")
     )
-    result1 <- iatlas.app::create_group_text_from_eventdata(
+    result1 <- create_group_text_from_eventdata(
         event_df, group_tbl
     )
     expect_equal(result1, "name1: c1")

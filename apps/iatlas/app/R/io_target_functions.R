@@ -16,7 +16,6 @@ get_gene_from_url <- function(url_query){
 #' @importFrom tidyselect all_of
 create_io_target_gene_list <- function(tbl, group){
     tbl %>%
-        print() %>%
         dplyr::select(
             class   = tidyselect::all_of(group),
             display = "hgnc",
@@ -54,9 +53,9 @@ build_io_target_dt_tbl <- function(tbl){
         dplyr::select(
             Hugo            = .data$hgnc,
             `Entrez ID`     = .data$entrez,
-            `Friendly Name` = .data$friendly_name,
+            `Friendly Name` = .data$io_landscape_name,
             Pathway         = .data$pathway,
-            `Therapy Type`  = .data$therapy,
+            `Therapy Type`  = .data$therapy_type,
             Description     = .data$description,
         ) %>%
         dplyr::mutate(`Link to IO Landscape` = create_io_landscape_links(
@@ -67,14 +66,15 @@ build_io_target_dt_tbl <- function(tbl){
 #' Create IO Landscape Links
 #'
 #' @param genes A vector of strings
-create_io_landscape_links <- function(genes){
-    paste0(
-        "<a href=\'",
+#' paste0("<a href='",mydata$url,"'>",mydata$url,"</a>")
+create_io_landscape_links <- function(io_gene_names){
+    stringr::str_c(
+        "<a href='",
         "https://www.cancerresearch.org/scientists/",
         "immuno-oncology-landscape?viz1572545060618=2017;Target;",
-        genes,
-        "\'>",
-        genes,
+        io_gene_names,
+        "'>",
+        io_gene_names,
         "</a>"
     )
 }

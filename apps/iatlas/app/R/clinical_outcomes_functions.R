@@ -22,10 +22,10 @@ show_co_submodules <- function(cohort_obj){
 #' @importFrom rlang .data
 build_survival_value_tbl <- function(sample_tbl, time_feature, status_feature) {
     time_tbl <-
-        iatlas.app::query_samples_to_feature(time_feature) %>%
+        query_samples_to_feature(time_feature) %>%
         dplyr::rename("time" = "value")
     status_tbl <-
-        iatlas.app::query_samples_to_feature(status_feature) %>%
+        query_samples_to_feature(status_feature) %>%
         dplyr::rename("status" = "value")
     tbl <-
         purrr::reduce(

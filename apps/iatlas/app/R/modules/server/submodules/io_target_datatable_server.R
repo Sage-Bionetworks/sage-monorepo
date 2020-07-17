@@ -6,8 +6,7 @@ io_target_datatable_server <- function(
 ){
 
     source_files <- c(
-        "R/modules/server/submodules/data_table_server.R",
-        "R/io_target_functions.R"
+        "R/modules/server/submodules/data_table_server.R"
     )
 
     for (file in source_files) {
@@ -17,6 +16,9 @@ io_target_datatable_server <- function(
     shiny::callModule(
         data_table_server,
         "datatable",
-        shiny::reactive(build_im_dt_tbl(build_im_tbl()))
+        shiny::reactive(
+            iatlas.app::build_io_target_dt_tbl(iatlas.app::query_io_targets())
+        ),
+        escape = F
     )
 }

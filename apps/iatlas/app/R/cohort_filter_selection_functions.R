@@ -7,7 +7,7 @@
 #' @importFrom purrr keep map_lgl
 get_valid_tag_filters <- function(filter_obj){
     filter_obj %>%
-        purrr::keep(purrr::map_lgl(., iatlas.app::is_tag_filter_valid)) %>%
+        purrr::keep(purrr::map_lgl(., is_tag_filter_valid)) %>%
         unname()
 }
 
@@ -31,7 +31,7 @@ get_filtered_tag_samples <- function(filter_obj, samples){
     filter_obj %>%
         purrr::transpose(.) %>%
         purrr::pluck("tags") %>%
-        purrr::map(., iatlas.app::get_filtered_group_sample_ids_by_filter) %>%
+        purrr::map(., get_filtered_group_sample_ids_by_filter) %>%
         purrr::reduce(base::intersect, .init = samples)
 }
 

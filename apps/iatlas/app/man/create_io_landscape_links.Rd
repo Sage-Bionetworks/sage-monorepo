@@ -4,10 +4,11 @@
 \alias{create_io_landscape_links}
 \title{Create IO Landscape Links}
 \usage{
-create_io_landscape_links(genes)
+create_io_landscape_links(io_gene_names)
 }
 \arguments{
-\item{genes}{A vector of strings}
+\item{genes}{A vector of strings
+paste0("<a href='",mydata$url,"'>",mydata$url,"</a>")}
 }
 \description{
 Create IO Landscape Links
