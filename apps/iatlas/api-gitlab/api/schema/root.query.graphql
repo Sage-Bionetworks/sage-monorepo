@@ -1,5 +1,38 @@
 type Query {
   """
+  The "copyNumberResults" query accepts:
+
+    - "dataSet", a list of data set names associated with the copy number results to filter by.
+    - "feature", a list of feature names associated with the copy number results to filter by.
+    - "entrez", a list of gene entrez ids associated with the copy number results to filter by.
+    - "tag", a list of tag names associated with the copy number results to filter by.
+    - "direction", the direction of the copy number results to filter by. (either 'Amp' or 'Del')
+    - "minPValue", a minimum P value to filter the copy number results by.
+    - "maxPValue", a maximum P value to filter the copy number results by.
+    - "minLog10PValue", a minimum log10 calcualtion of the P value to filter the copy number results by.
+    - "maxLog10PValue", a maximum log10 calcualtion of the P value to filter the copy number results by.
+    - "maxPValue", a maximum mean normal to filter the copy number results by.
+    - "maxPValue", a maximum mean CNV to filter the copy number results by.
+    - "maxPValue", a maximum T stat to filter the copy number results by.
+
+  If no arguments are passed, this will return all copy number results.
+  """
+  copyNumberResults(
+      dataSet: [String!]
+      feature: [String!]
+      entrez: [Int!]
+      tag: [String!]
+      direction: DirectionEnum
+      minPValue: Float
+      maxPValue: Float
+      minLog10PValue: Float
+      maxLog10PValue: Float
+      minMeanNormal: Float
+      minMeanCnv: Float
+      minTStat: Float
+  ): [CopyNumberResult!]!
+
+  """
   The "dataSets" query accepts:
 
     - "dataSet", a list of data set names to look up.

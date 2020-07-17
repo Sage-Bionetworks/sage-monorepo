@@ -1,0 +1,31 @@
+"""
+The "DirectionEnum" scalar will always be either `Amp`, `Del`.
+"""
+scalar DirectionEnum
+
+"""
+The "CopyNumberResult" type may return:
+
+- The "dataSet" associated with the copy number result
+- The "feature" associated with the copy number result
+- The "gene" associated with the copy number result
+- The "tag" associated with the copy number result
+- The "direction", the direction of the copy number result (either 'Amp' or 'Del')
+- The "meanNormal", the mean normal value of the copy number result
+- The "meanCnv", the mean CNV value of the copy number result
+- The "pValue", the P value of the copy number result
+- The "log10PValue", the log10 computed result of the P value
+- The "tStat", the T Stat value of the copy number result
+"""
+type CopyNumberResult {
+    direction: DirectionEnum!
+    meanNormal: Float
+    meanCnv: Float
+    pValue: Float
+    log10PValue: Float
+    tStat: Float
+    dataSet: SimpleDataSet!
+    feature: SimpleFeature!
+    gene: SimpleGene!
+    tag: SimpleTag!
+}

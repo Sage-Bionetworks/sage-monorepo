@@ -1,5 +1,5 @@
 """
-The "FeatureValue" type will always be either a Float or either "inf" or "-inf" representing infinity or negative infinity.
+The "FeatureValue" scalar will always be either a Float or either "inf" or "-inf" representing infinity or negative infinity.
 """
 scalar FeatureValue
 
