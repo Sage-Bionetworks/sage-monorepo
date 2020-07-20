@@ -1,0 +1,10 @@
+"""
+The "GeneFunction" type may return:
+
+- The "name" of the GeneFuntion
+- A list of Genes associated with the GeneFunction
+"""
+type GeneFunction {
+  name: String!
+  genes: [SimpleGene]!
+}

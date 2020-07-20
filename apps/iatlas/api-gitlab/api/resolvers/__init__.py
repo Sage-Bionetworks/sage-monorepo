@@ -6,6 +6,7 @@ from .features_by_class_resolver import resolve_features_by_class
 from .features_by_tag_resolver import resolve_features_by_tag
 from .gene_resolver import resolve_gene
 from .gene_family_resolver import resolve_gene_family
+from .gene_function_resolver import resolve_gene_function
 from .gene_types_resolver import resolve_gene_types
 from .genes_resolver import resolve_genes
 from .genes_by_tag_resolver import resolve_genes_by_tag

@@ -2,6 +2,7 @@
 The "GeneFamily" type may return:
 
 - The "name" of the GeneFamily
+- A list of Genes associated with the GeneFamily
 """
 type GeneFamily {
   name: String!
