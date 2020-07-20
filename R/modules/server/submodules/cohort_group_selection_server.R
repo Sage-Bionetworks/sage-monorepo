@@ -7,34 +7,31 @@ cohort_group_selection_server <- function(
 ){
     ns <- session$ns
 
-    available_tags <- shiny::reactive({
-        iatlas.app::query_dataset_tags(selected_dataset()) %>%
-            tibble::deframe(.)
+    tag_group_tbl <- shiny::reactive(
+        iatlas.app::query_dataset_tags(selected_dataset())
+    )
+
+    custom_group_tbl <- shiny::reactive({
+        shiny::req(selected_dataset())
+        iatlas.app::build_custom_group_tbl(selected_dataset())
     })
 
-    # dataset_to_group_tbl <- dplyr::tribble(
-    #     ~group,                ~dataset, ~type,
-    #     "Immune Feature Bins", "TCGA",    "custom",
-    #     "Driver Mutation",     "TCGA",    "custom",
-    #     "Immune Feature Bins", "PCAWG",   "custom",
-    # )
-
-    #TODO: add non tag groups
-    available_groups <- shiny::reactive({
-        available_tags()
+    available_groups_list <- shiny::reactive({
+        shiny::req(tag_group_tbl(), custom_group_tbl())
+        build_cohort_group_list(tag_group_tbl(), custom_group_tbl())
     })
 
     default_group <- shiny::reactive({
-        shiny::req(available_groups())
-        available_groups()[[1]]
+        shiny::req(available_groups_list())
+        available_groups_list()[[1]]
     })
 
     output$select_group_ui <- shiny::renderUI({
-        shiny::req(available_groups(), default_group())
+        shiny::req(available_groups_list(), default_group())
         shiny::selectInput(
             inputId = ns("group_choice"),
             label = shiny::strong("Select or Search for Grouping Variable"),
-            choices = available_groups(),
+            choices = available_groups_list(),
             selected = default_group()
         )
     })
@@ -46,60 +43,65 @@ cohort_group_selection_server <- function(
     })
 
 
-    # # This is so that the conditional panel can see the various shiny::reactives
-    # output$display_driver_mutation <- shiny::reactive(
-    #     # group_choice() == "Driver_Mutation"
-    #     T
-    # )
-    #
-    # shiny::outputOptions(
-    #     output,
-    #     "display_driver_mutation",
-    #     suspendWhenHidden = FALSE
-    # )
-    #
-    # # default_driver_mutation <- "ABL1:(NS)"
-    # mutation_tbl <- shiny::reactive({
-    #     iatlas.app::query_mutations(type = "driver_mutation") %>%
-    #         dplyr::mutate(
-    #             "mutation" = stringr::str_c(.data$hgnc, ":", .data$code)
-    #         )
-    # })
-    #
-    # output$select_driver_mutation_group_ui <- shiny::renderUI({
-    #     shiny::req(input$group_choice == "Driver_Mutation", mutation_tbl())
-    #     shiny::selectInput(
-    #         inputId  = ns("driver_mutation_choice"),
-    #         label    = "Select or Search for Driver Mutation",
-    #         choices  = mutation_tbl() %>%
-    #             dplyr::select("mutation", "id") %>%
-    #             tibble::deframe(.)
-    #         # selected = default_driver_mutation
-    #     )
-    # })
-    #
-    # driver_mutation <- shiny::reactive({
-    #     if (is.null(input$driver_mutation_choice)) {
-    #         return(default_driver_mutation)
-    #     } else {
-    #         return(input$driver_mutation_choice)
-    #     }
-    # })
-    #
-    # # This is so that the conditional panel can see the various shiny::reactives
-    # output$display_immune_feature_bins <- shiny::reactive(group_choice() == "Immune_Feature_Bins")
-    # shiny::outputOptions(output, "display_immune_feature_bins", suspendWhenHidden = FALSE)
-    #
-    # output$select_immune_feature_bins_group_ui <- shiny::renderUI({
-    #     shiny::selectInput(
-    #         inputId = ns("immune_feature_bin_choice"),
-    #         label = "Select or Search for feature",
-    #         choices = iatlas.app::create_feature_named_list(
-    #             sample_ids = filter_obj()$sample_ids
-    #         )
-    #     )
-    # })
-    #
+    # This is so that the conditional panel can see the various shiny::reactives
+    output$display_driver_mutation <- shiny::reactive({
+        shiny::req(group_choice())
+        group_choice() == "Driver Mutation"
+    })
+
+    shiny::outputOptions(
+        output,
+        "display_driver_mutation",
+        suspendWhenHidden = FALSE
+    )
+
+    mutation_tbl <- shiny::reactive(iatlas.app::build_cohort_mutation_tbl())
+
+    output$select_driver_mutation_group_ui <- shiny::renderUI({
+        shiny::req(group_choice() == "Driver Mutation", mutation_tbl())
+        shiny::selectInput(
+            inputId  = ns("driver_mutation_choice"),
+            label    = "Select or Search for Driver Mutation",
+            choices  = mutation_tbl() %>%
+                dplyr::select("mutation", "id") %>%
+                tibble::deframe(.)
+        )
+    })
+
+    driver_mutation <- shiny::reactive({
+        if (is.null(input$driver_mutation_choice)) {
+            return(default_driver_mutation)
+        } else {
+            return(input$driver_mutation_choice)
+        }
+    })
+
+    # This is so that the conditional panel can see the various shiny::reactives
+    output$display_immune_feature_bins <- shiny::reactive({
+        shiny::req(group_choice())
+        group_choice() == "Immune Feature Bins"
+    })
+
+    shiny::outputOptions(
+        output,
+        "display_immune_feature_bins",
+        suspendWhenHidden = FALSE
+    )
+
+    # TODO: use sample names from feature object to query features, not dataset
+    output$select_immune_feature_bins_group_ui <- shiny::renderUI({
+        shiny::req(group_choice() == "Immune Feature Bins", filter_obj())
+
+        shiny::selectInput(
+            inputId = ns("immune_feature_bin_choice"),
+            label = "Select or Search for feature",
+            choices =
+                iatlas.app::query_features_by_class(selected_dataset()) %>%
+                dplyr::select("class", "display", "name") %>%
+                iatlas.app::create_nested_named_list(., values_col = "name")
+        )
+    })
+
 
     cohort_obj <- shiny::reactive({
         shiny::req(
@@ -107,18 +109,21 @@ cohort_group_selection_server <- function(
             filter_obj(),
             selected_dataset()
         )
-        # if (group_choice() == "Driver_Mutation") {
-        #     shiny::req(driver_mutation())
-        # } else if (group_choice() == "Immune_Feature_Bins") {
-        #     shiny::req(
-        #         input$immune_feature_bin_choice,
-        #         input$immune_feature_bin_number
-        #     )
-        # }
+        if (group_choice() == "Driver Mutation") {
+            shiny::req(driver_mutation())
+        } else if (group_choice() == "Immune Feature Bins") {
+            shiny::req(
+                input$immune_feature_bin_choice,
+                input$immune_feature_bin_number
+            )
+        }
         iatlas.app::create_cohort_object(
             filter_obj(),
             selected_dataset(),
-            group_choice()
+            group_choice(),
+            input$driver_mutation,
+            input$immune_feature_bin_choice,
+            input$immune_feature_bin_number
         )
     })
 
