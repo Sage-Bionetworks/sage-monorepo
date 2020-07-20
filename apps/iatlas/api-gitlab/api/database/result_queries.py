@@ -2,7 +2,7 @@ from api import db
 from api.db_models import CopyNumberResult, DriverResult
 from .database_helpers import build_option_args, build_query_args
 
-accepted_cnr_option_args = ['feature', 'gene', 'tag']
+accepted_cnr_option_args = ['data_set', 'feature', 'gene', 'tag']
 
 accepted_cnr_query_args = ['id',
                            'direction',
@@ -11,11 +11,12 @@ accepted_cnr_query_args = ['id',
                            'p_value',
                            'log10_p_value',
                            't_stat',
+                           'dataset_id',
                            'feature_id',
                            'gene_id',
                            'tag_id']
 
-accepted_dr_option_args = ['feature', 'gene', 'mutation_code', 'tag']
+accepted_dr_option_args = accepted_cnr_option_args + ['mutation_code']
 
 accepted_dr_query_args = ['id',
                           'p_value',
@@ -24,6 +25,7 @@ accepted_dr_query_args = ['id',
                           'log10_fold_change',
                           'n_wt',
                           'n_mut',
+                          'dataset_id',
                           'feature_id',
                           'gene_id',
                           'mutation_code_id',

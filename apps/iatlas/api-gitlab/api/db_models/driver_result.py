@@ -14,6 +14,9 @@ class DriverResult(Base):
     n_wt = db.Column(db.Integer, nullable=True)
     n_mut = db.Column(db.Integer, nullable=True)
 
+    dataset_id = db.Column(db.Integer, db.ForeignKey(
+        'datasets.id'), nullable=False)
+
     feature_id = db.Column(db.Integer, db.ForeignKey(
         'features.id'), nullable=False)
 
@@ -24,28 +27,25 @@ class DriverResult(Base):
 
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
 
-    dataset_id = db.Column(db.Integer, db.ForeignKey(
-        'datasets.id'), nullable=False)
+    data_set = db.relationship(
+        'Dataset', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
+        uselist=False, lazy='noload')
 
     feature = db.relationship(
         'Feature', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
-        uselist=False, primaryjoin="Feature.id==DriverResult.feature_id", lazy='noload')
+        uselist=False, lazy='noload')
 
     gene = db.relationship(
         'Gene', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
-        uselist=False, primaryjoin="Gene.id==DriverResult.gene_id", lazy='noload')
+        uselist=False, lazy='noload')
 
     mutation_code = db.relationship(
         'MutationCode', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
-        uselist=False, primaryjoin="MutationCode.id==DriverResult.mutation_code_id", lazy='noload')
+        uselist=False, lazy='noload')
 
     tag = db.relationship(
         'Tag', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')
-
-    data_set = db.relationship(
-        'Dataset', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
-        uselist=False, primaryjoin="Dataset.id==DriverResult.dataset_id", lazy='noload')
 
     def __repr__(self):
         return '<DriverResult %r>' % self.id

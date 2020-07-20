@@ -1,3 +1,4 @@
+from .copy_number_results_resolver import resolve_copy_number_results
 from .data_sets_resolver import resolve_data_sets
 from .driver_results_resolver import resolve_driver_results
 from .features_resolver import resolve_features
@@ -5,6 +6,7 @@ from .features_by_class_resolver import resolve_features_by_class
 from .features_by_tag_resolver import resolve_features_by_tag
 from .gene_resolver import resolve_gene
 from .gene_family_resolver import resolve_gene_family
+from .gene_types_resolver import resolve_gene_types
 from .genes_resolver import resolve_genes
 from .genes_by_tag_resolver import resolve_genes_by_tag
 from .mutations_resolver import resolve_mutations

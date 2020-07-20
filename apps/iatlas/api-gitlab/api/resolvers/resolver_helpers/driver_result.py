@@ -7,12 +7,11 @@ from .general_resolvers import build_option_args, get_selection_set
 
 def build_driver_result_request(_obj, info, feature=None, entrez=None, mutationCode=None, tag=None, data_set=None):
     """
-    Builds a SQL request and returns values from the DB.
+    Builds a SQL request.
     """
     sess = db.session
 
-    selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, child_node='driver_results')
+    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
 
     driver_result_1 = orm.aliased(DriverResult, name='dr')
     gene_1 = orm.aliased(Gene, name='g')
@@ -25,13 +24,8 @@ def build_driver_result_request(_obj, info, feature=None, entrez=None, mutationC
                           'foldChange': driver_result_1.fold_change.label('fold_change'),
                           'log10PValue': driver_result_1.log10_p_value.label('log10_p_value'),
                           'log10FoldChange': driver_result_1.log10_fold_change.label('log10_fold_change'),
-                          'n_wt': driver_result_1.n_wt.label('n_wt'),
-                          'n_mut': driver_result_1.n_mut.label('n_mut'),
-                          'featureId': driver_result_1.feature_id.label('feature_id'),
-                          'geneId': driver_result_1.gene_id.label('gene_id'),
-                          'mutationCodeId': driver_result_1.mutation_code_id.label('mutation_code_id'),
-                          'tagId': driver_result_1.tag_id.label('tag_id'),
-                          'datasetId': driver_result_1.dataset_id.label('dataset_id')}
+                          'numWildTypes': driver_result_1.n_wt.label('n_wt'),
+                          'numMutants': driver_result_1.n_mut.label('n_mut')}
 
     related_field_mapping = {'feature': 'feature',
                              'gene': 'gene',
@@ -80,8 +74,8 @@ def build_driver_result_request(_obj, info, feature=None, entrez=None, mutationC
     else:
         query = sess.query(*core)
 
-    if feature:
-        query = query.filter(feature_1.name.in_(feature))
+    if data_set:
+        query = query.filter(data_set_1.name.in_(data_set))
 
     if mutationCode:
         query = query.filter(mutation_code_1.code.in_(mutationCode))
@@ -89,11 +83,11 @@ def build_driver_result_request(_obj, info, feature=None, entrez=None, mutationC
     if entrez:
         query = query.filter(gene_1.entrez.in_(entrez))
 
+    if feature:
+        query = query.filter(feature_1.name.in_(feature))
+
     if tag:
         query = query.filter(tag_1.name.in_(tag))
-
-    if data_set:
-        query = query.filter(data_set_1.name.in_(data_set))
 
     return query
 
