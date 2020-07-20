@@ -8,7 +8,7 @@ numeric_filter_element_ui <- function(id){
     )
 }
 
-group_filter_element_ui <- function(id){
+tag_filter_element_ui <- function(id){
     ns <- shiny::NS(id)
     shiny::tagList(
         shiny::uiOutput(ns("select_ui")),

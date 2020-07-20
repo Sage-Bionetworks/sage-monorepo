@@ -1,7 +1,7 @@
 docspage <- shiny::fluidPage(
     shiny::br(),
-    .GlobalEnv$titleBox("Documentation"),
-    .GlobalEnv$messageBox(
+    iatlas.app::titleBox("Documentation"),
+    iatlas.app::messageBox(
         width = 12,
         shiny::includeMarkdown("markdown/docs.markdown")
     ),

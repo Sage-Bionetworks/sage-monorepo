@@ -5,22 +5,31 @@ data_info_server <- function(
 ){
     ns <- session$ns
 
-    source("R/data_info_functions.R", local = T)
-
-    class_list <- create_class_list()
+    class_list <- shiny::reactive({
+        iatlas.app::query_features_by_class() %>%
+            dplyr::pull("class") %>%
+            c("All classes", .)
+    })
 
     output$classes <- shiny::renderUI({
         shiny::selectInput(
-            ns("class_choice_id"),
+            ns("class_choice"),
             label = "Select or Search for Class",
-            choices = class_list,
-            selected = -1
+            choices = class_list(),
+            selected = "All classes"
         )
     })
 
     feature_tbl <- shiny::reactive({
-        shiny::req(input$class_choice_id)
-        create_feature_tbl(as.integer(input$class_choice_id))
+        shiny::req(input$class_choice)
+        if(input$class_choice == "All classes") {
+            iatlas.app::query_features_by_class()
+        } else {
+            iatlas.app::query_features_by_class(
+                feature_class = input$class_choice
+            )
+        }
+
     })
 
     output$feature_table <- DT::renderDT({
@@ -46,7 +55,10 @@ data_info_server <- function(
 
     selected_method_tags <- shiny::reactive({
         shiny::req(filtered_feature_tbl())
-        get_selected_method_tags(filtered_feature_tbl())
+        iatlas.app::get_unique_values_from_col(
+            filtered_feature_tbl(),
+            method_tag
+        )
     })
 
     output$method_buttons <- shiny::renderUI({
@@ -80,14 +92,14 @@ data_info_server <- function(
 
     shiny::observeEvent(input$feature_table_rows_selected, {
         output$variable_details_section <- shiny::renderUI({
-            .GlobalEnv$sectionBox(
+            iatlas.app::sectionBox(
                 title = "Variable Class Details",
-                .GlobalEnv$messageBox(
+                iatlas.app::messageBox(
                     width = 12,
-                    p("Here is additional information about the variables in the Variable Class you selected. To the right you can access description of the methods used to obtain the variables.")
+                    shiny::p("Here is additional information about the variables in the Variable Class you selected. To the right you can access description of the methods used to obtain the variables.")
                 ),
                 shiny::fluidRow(
-                    .GlobalEnv$tableBox(
+                    iatlas.app::tableBox(
                         width = 9,
                         shiny::tableOutput(ns('variable_class_table'))
                     ),

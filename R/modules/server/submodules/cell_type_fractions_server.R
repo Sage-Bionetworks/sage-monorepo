@@ -2,22 +2,31 @@ cell_type_fractions_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl
+    cohort_obj
 ){
 
     source("R/modules/server/submodules/plotly_server.R", local = T)
-    source("R/functions/cell_type_fractions_functions.R", local = T)
+
+    value_tbl <- shiny::reactive({
+        shiny::req(input$fraction_group_choice)
+        iatlas.app::query_features_values_by_tag(
+            cohort_obj()$dataset,
+            cohort_obj()$group_name,
+            feature_class = input$fraction_group_choice
+        ) %>%
+            dplyr::rename("group" = "tag") %>%
+            dplyr::filter(sample %in% cohort_obj()$sample_tbl$sample)
+    })
 
     plot_tbl <- shiny::reactive({
-        shiny::req(input$fraction_group_choice)
-        build_plot_tbl(input$fraction_group_choice)
+        shiny::req(value_tbl())
+        iatlas.app::build_ctf_barplot_tbl(value_tbl())
     })
 
     output$barplot <- plotly::renderPlotly({
         shiny::req(plot_tbl())
 
-        .GlobalEnv$create_barplot(
+        iatlas.app::create_barplot(
             plot_tbl(),
             source_name = "cell_type_fractions_barplot",
             color_col = "color",
@@ -36,6 +45,6 @@ cell_type_fractions_server <- function(
         "barplot",
         plot_tbl       = plot_tbl,
         plot_eventdata = barplot_eventdata,
-        group_tbl      = group_tbl
+        group_tbl      = shiny::reactive(cohort_obj()$group_tbl)
     )
 }

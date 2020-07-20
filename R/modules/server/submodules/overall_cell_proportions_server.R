@@ -2,27 +2,30 @@ overall_cell_proportions_server  <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl
+    cohort_obj
 ){
 
     source("R/modules/server/submodules/plotly_server.R", local = T)
-    source("R/functions/overall_cell_proportions_functions.R", local = T)
 
     value_tbl <- shiny::reactive({
-        shiny::req(sample_tbl())
-        build_value_tbl(sample_tbl())
+        iatlas.app::query_features_values_by_tag(
+            cohort_obj()$dataset,
+            cohort_obj()$group_name,
+            list("leukocyte_fraction", "Stromal_Fraction", "Tumor_fraction")
+        ) %>%
+            dplyr::rename("group" = "tag") %>%
+            dplyr::filter(sample %in% cohort_obj()$sample_tbl$sample)
     })
 
     barplot_tbl <- shiny::reactive({
         req(value_tbl())
-        build_barplot_tbl(value_tbl())
+        iatlas.app::build_ocp_barplot_tbl(value_tbl())
     })
 
     output$barplot <- plotly::renderPlotly({
         shiny::req(barplot_tbl())
 
-        .GlobalEnv$create_barplot(
+        iatlas.app::create_barplot(
             barplot_tbl(),
             source_name = "overall_cell_proportions_barplot",
             color_col = "color",
@@ -41,17 +44,20 @@ overall_cell_proportions_server  <- function(
         "barplot",
         plot_tbl       = barplot_tbl,
         plot_eventdata = barplot_eventdata,
-        group_tbl      = group_tbl,
+        group_tbl      = shiny::reactive(cohort_obj()$group_tbl),
     )
 
     barplot_selected_group <- shiny::reactive({
         shiny::req(barplot_eventdata())
-        selected_group <- barplot_eventdata()$x[[1]]
+        barplot_eventdata()$x[[1]]
     })
 
     scatterplot_tbl <- shiny::reactive({
         shiny::req(value_tbl(), barplot_selected_group())
-        build_scatterplot_tbl(value_tbl(), barplot_selected_group())
+        iatlas.app::build_ocp_scatterplot_tbl(
+            value_tbl(),
+            barplot_selected_group()
+        )
     })
 
     output$scatterplot <- plotly::renderPlotly({
@@ -63,13 +69,12 @@ overall_cell_proportions_server  <- function(
             barplot_selected_group() %in% groups,
             "Click above barchart"
         ))
-        .GlobalEnv$create_scatterplot(
+        iatlas.app::create_scatterplot(
             scatterplot_tbl(),
             source_name = "overall_cell_proportions_scatterplot",
             xlab = "Stromal Fraction",
             ylab = "Leukocyte Fraction",
             label_col = "label",
-            fill_colors = "blue",
             title = barplot_selected_group(),
             identity_line = TRUE
         )

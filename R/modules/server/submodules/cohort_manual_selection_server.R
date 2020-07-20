@@ -1,8 +1,7 @@
 cohort_manual_selection_server <- function(
     input,
     output,
-    session,
-    feature_named_list
+    session
 ){
 
     source(
@@ -20,7 +19,7 @@ cohort_manual_selection_server <- function(
 
     default_dataset <- "TCGA"
 
-    selected_dataset <- cohort_obj <- shiny::callModule(
+    selected_dataset <- shiny::callModule(
         cohort_dataset_selection_server,
         "cohort_dataset_selection",
         default_dataset
@@ -34,33 +33,23 @@ cohort_manual_selection_server <- function(
         }
     })
 
-    all_sample_ids <- shiny::reactive({
+    dataset_samples <- shiny::reactive({
         shiny::req(dataset())
-        .GlobalEnv$get_sample_ids_from_dataset(dataset())
+        iatlas.app::query_dataset_samples(dataset()) %>%
+            dplyr::pull("name")
     })
 
-    selected_sample_ids <- cohort_obj <- shiny::callModule(
+    filter_obj <- cohort_obj <- shiny::callModule(
         cohort_filter_selection_server,
         "cohort_filter_selection",
-        feature_named_list,
         dataset,
-        all_sample_ids
+        dataset_samples
     )
-
-    sample_ids <- shiny::reactive({
-        if (is.null(selected_sample_ids())) {
-            shiny::req(all_sample_ids())
-            return(all_sample_ids())
-        } else {
-            return(selected_sample_ids())
-        }
-    })
 
     cohort_obj <- shiny::callModule(
         cohort_group_selection_server,
         "cohort_group_selection",
-        feature_named_list,
-        sample_ids,
+        filter_obj,
         dataset
     )
 

@@ -4,27 +4,26 @@ immune_feature_correlations_ui <- function(id) {
 
     source("R/modules/ui/submodules/plotly_ui.R", local = T)
 
-    sectionBox(
-        title = "Correlations",
-        .GlobalEnv$messageBox(
+    shiny::tagList(
+        iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
                 "markdown/immune_features_correlations.markdown"
             )
         ),
         shiny::fluidRow(
-            .GlobalEnv$optionsBox(
+            iatlas.app::optionsBox(
                 width = 12,
                 shiny::column(
-                    width = 8,
+                    width = 6,
                     shiny::uiOutput(ns("class_selection_ui"))
                 ),
                 shiny::column(
-                    width = 4,
+                    width = 3,
                     shiny::uiOutput(ns("response_selection_ui"))
                 ),
                 shiny::column(
-                    width = 4,
+                    width = 3,
                     shiny::selectInput(
                         ns("correlation_method"),
                         "Select or Search for Correlation Method",
@@ -39,24 +38,24 @@ immune_feature_correlations_ui <- function(id) {
             )
         ),
         shiny::fluidRow(
-            .GlobalEnv$plotBox(
+            iatlas.app::plotBox(
                 width = 12,
                 shiny::fluidRow(
                     "heatmap" %>%
                         ns() %>%
-                        plotly::plotlyOutput() %>%
-                        shinycssloaders::withSpinner(),
+                        plotly::plotlyOutput(.) %>%
+                        shinycssloaders::withSpinner(.),
                     plotly_ui(ns("heatmap"))
                 )
             )
         ),
         shiny::fluidRow(
-            .GlobalEnv$plotBox(
+            iatlas.app::plotBox(
                 width = 12,
                 "scatterPlot" %>%
                     ns() %>%
-                    plotly::plotlyOutput() %>%
-                    shinycssloaders::withSpinner(),
+                    plotly::plotlyOutput(.) %>%
+                    shinycssloaders::withSpinner(.),
                 plotly_ui(ns("scatterplot"))
             )
         )

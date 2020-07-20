@@ -1,13 +1,15 @@
-#' Get Survival Status ID from Time ID
-#'
-#' @param time_id An integer of a time status feature
-#' @importFrom magrittr %>%
-#' @importFrom stringr str_remove
-get_status_id_from_time_id <- function(time_id){
-    time_id %>%
-        get_feature_display_from_id() %>%
-        stringr::str_remove(., " Time") %>%
-        get_feature_id_from_display()
+show_co_submodules <- function(cohort_obj){
+    time_features <- cohort_obj %>%
+        purrr::pluck("feature_tbl") %>%
+        dplyr::filter(.data$class %in% "Survival Time") %>%
+        dplyr::pull(.data$display)
+
+    status_features <- cohort_obj %>%
+        purrr::pluck("feature_tbl") %>%
+        dplyr::filter(.data$class %in% "Survival Status") %>%
+        dplyr::pull(.data$display)
+
+    all(length(time_features > 0), length(status_features > 0))
 }
 
 #' Build Survival Values Tibble
@@ -18,12 +20,22 @@ get_status_id_from_time_id <- function(time_id){
 #' @importFrom magrittr %>%
 #' @importFrom dplyr inner_join select
 #' @importFrom rlang .data
-build_survival_value_tbl <- function(sample_tbl, time_id, status_id) {
+build_survival_value_tbl <- function(sample_tbl, time_feature, status_feature) {
+    time_tbl <-
+        query_samples_to_feature(time_feature) %>%
+        dplyr::rename("time" = "value")
+    status_tbl <-
+        query_samples_to_feature(status_feature) %>%
+        dplyr::rename("status" = "value")
     tbl <-
-        build_clincal_outcomes_survival_tbl(time_id, status_id) %>%
-        dplyr::inner_join(sample_tbl, by = "sample_id") %>%
-        dplyr::select(.data$group, .data$time, .data$status, .data$sample_id)
+        purrr::reduce(
+            list(sample_tbl, time_tbl, status_tbl),
+            dplyr::inner_join,
+            by = "sample"
+        ) %>%
+        dplyr::select(.data$sample, .data$group, .data$time, .data$status)
     return(tbl)
+
 }
 
 #' Build Heatmap Matrix
@@ -36,14 +48,15 @@ build_survival_value_tbl <- function(sample_tbl, time_id, status_id) {
 #' @importFrom purrr map2_dbl map
 #' @importFrom concordanceIndex concordanceIndex
 #' @importFrom rlang .data
-build_heatmap_matrix <- function(tbl){
+build_co_heatmap_matrix <- function(tbl){
     tbl %>%
         dplyr::select(
-            .data$feature,
-            .data$value,
-            .data$time,
-            .data$status,
-            .data$group
+            "feature" = "feature_display",
+            "value" = "feature_value",
+            "time",
+            "status",
+            "group",
+            "order" = "feature_order"
         ) %>%
         tidyr::nest(
             value = .data$value,
@@ -58,13 +71,14 @@ build_heatmap_matrix <- function(tbl){
             .data$data,
             concordanceIndex::concordanceIndex
         )) %>%
-        dplyr::select(.data$feature, .data$group, .data$result) %>%
+        dplyr::select("feature", "group", "result") %>%
         tidyr::pivot_wider(
             .data$feature,
             names_from = .data$group,
             values_from = .data$result
         ) %>%
         as.data.frame() %>%
+        dplyr::select(sort(names(.))) %>%
         tibble::column_to_rownames("feature") %>%
         as.matrix()
 }

@@ -1,38 +1,58 @@
-test_that("Get Survival Status ID from Time ID", {
-    time_id1 <- get_feature_id_from_display("OS Time")
-    expect_equal(typeof(time_id1), "integer")
-    status_id1 <- get_status_id_from_time_id(time_id1)
-    expect_equal(typeof(status_id1), "integer")
-    status_name1 <- get_feature_display_from_id(status_id1)
-    expect_equal(status_name1, "OS")
+with_test_api_env({
 
-    time_id2 <- get_feature_id_from_display("PFI Time")
-    expect_equal(typeof(time_id2), "integer")
-    status_id2 <- get_status_id_from_time_id(time_id2)
-    expect_equal(typeof(status_id2), "integer")
-    status_name2 <- get_feature_display_from_id(status_id2)
-    expect_equal(status_name2, "PFI")
-})
+    sample_tbl <- query_cohort_selector(
+        "TCGA",
+        "Immune_Subtype"
+    ) %>%
+        dplyr::select("sample", "group" = "name")
 
-test_that("Build Survival Values Tibble", {
-    sample_tbl <- dplyr::tibble(
-        sample_id = 1:3,
-        group = c("C1", "C2", "C3")
+    survival_tbl <- build_survival_value_tbl(
+        sample_tbl, "OS_time", "OS"
     )
-    result1 <- build_survival_value_tbl(sample_tbl, 1, 2)
-    expect_named(result1, c("group", "time", "status", "sample_id"))
-})
 
-test_that("Build Heatmap Matrix", {
-    tbl <- dplyr::tibble(
-        feature = "feature",
-        value = rnorm(40, 10, 3),
-        time = round(rnorm(40, 10, 3)),
-        status = rbinom(40, 1, .5),
-        group = c(rep("C1", 20), rep("C2", 20))
+    feature_tbl <- query_features_values_by_tag(
+        "TCGA",
+        "Immune_Subtype",
+        feature_class = "DNA Alteration"
+    ) %>%
+        dplyr::rename("group" = "tag") %>%
+        dplyr::filter(sample %in% sample_tbl$sample)
+
+    heatmap_tbl <- dplyr::inner_join(
+        dplyr::select(survival_tbl, -"group"),
+        feature_tbl,
+        by = "sample"
     )
-    result <- build_heatmap_matrix(tbl)
-    expect_type(result, "double")
-    expect_equal(rownames(result), "feature")
-    expect_equal(colnames(result), c("C1", "C2"))
+
+    heatmap_matrix <- build_co_heatmap_matrix(heatmap_tbl)
+
+
+    test_that("Build Survival Values Tibble", {
+        expect_named(survival_tbl, c("sample", "group", "time", "status"))
+    })
+
+    test_that("Build Heatmap Matrix", {
+        expect_type(heatmap_matrix, "double")
+        expect_equal(
+            rownames(heatmap_matrix),
+            c(
+                "Nonsilent Mutation Rate",
+                "SNV Neoantigen",
+                "Indel Neoantigen",
+                "Intratumor Heterogeneity",
+                "Aneuploidy Score",
+                "Number of Segments",
+                "Fraction Altered",
+                "Homologous Recombination Deficiency",
+                "Number of Segments with LOH",
+                "Fraction of Segments with LOH",
+                "Silent Mutation Rate"
+            )
+        )
+        expect_equal(
+            colnames(heatmap_matrix),
+            c("C1", "C2", "C3", "C4", "C5", "C6")
+        )
+    })
+
 })

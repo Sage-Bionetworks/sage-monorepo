@@ -1,6 +1,6 @@
 aboutpage <- shiny::fluidPage(
     shiny::br(),
-    .GlobalEnv$titleBox("About"),
+    iatlas.app::titleBox("About"),
     shiny::fluidRow(
         shiny::column(
             width = 12,

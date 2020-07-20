@@ -1,0 +1,10 @@
+query IOTargets($geneType: [String!], $entrez: [Int!]) {
+  genes(geneType: $geneType, entrez: $entrez){
+    entrez
+    hgnc
+    description
+    ioLandscapeName
+    pathway
+    therapyType
+  }
+}
