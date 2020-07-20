@@ -1,0 +1,31 @@
+query CopyNumberResults(
+  $dataSet: [String!]
+  $feature: [String!]
+  $entrez: [Int!]
+  $tag: [String!]
+  $direction: DirectionEnum
+) {
+  copyNumberResults(
+    dataSet: $dataSet
+    feature: $feature
+    entrez: $entrez
+    tag: $tag
+    direction: $direction
+  ) {
+    direction
+    meanNormal
+    meanCnv
+    pValue
+    log10PValue
+    tStat
+    feature{
+      display
+    }
+    gene{
+      hgnc
+    }
+    tag {
+      name
+    }
+  }
+}

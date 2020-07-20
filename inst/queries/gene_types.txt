@@ -1,0 +1,6 @@
+query GeneTypes($name: [String!]) {
+  geneTypes(name: $name){
+    name
+    display
+  }
+}
