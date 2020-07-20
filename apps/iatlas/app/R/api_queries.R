@@ -1,5 +1,43 @@
+# copy number results ---------------------------------------------------------
 
-# datasets ---------------------------------------------------------------------
+query_copy_number_results <- function(
+    datasets = list(),
+    tags = list(),
+    genes = list(),
+    features = list(),
+    direction = list()
+){
+    perform_api_query(
+        "copy_number_results",
+        list(
+            "dataSet" = datasets,
+            "tag" = tags,
+            "entrez" = genes,
+            "feature" = features,
+            "direction" = direction
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::bind_cols(
+            "feature_name" = .$feature$display,
+            "hgnc"         = .$gene$hgnc,
+            "tag_name"     = .$tag$name
+        ) %>%
+        dplyr::as_tibble() %>%
+        dplyr::select(
+            "feature" = "feature_name",
+            "tag"     = "tag_name",
+            "hgnc",
+            "direction",
+            "p_value" = "pValue",
+            "log10_p_value" = "log10PValue",
+            "mean_cnv"  = "meanCnv",
+            "mean_normal" = "meanNormal",
+            "t_stat" = "tStat"
+        )
+}
+
+# datasets --------------------------------------------------------------------
 
 query_datasets <- function(){
     perform_api_query(
@@ -127,6 +165,25 @@ query_samples_to_feature <- function(feature){
 
 # genes -----------------------------------------------------------------------
 
+query_genes <- function(
+    type = list(),
+    entrez = list()
+){
+    perform_api_query(
+        "genes",
+        list(
+            "geneType" = type,
+            "entrez" = entrez
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::arrange(.data$entrez) %>%
+        dplyr::as_tibble() %>%
+        dplyr::select("hgnc", "entrez") %>%
+        dplyr::arrange(.data$hgnc)
+}
+
+
 query_immunomodulators <- function(
     type = "immunomodulator",
     .entrez = list()
@@ -175,6 +232,35 @@ query_io_targets <- function(
             "io_landscape_name" = "ioLandscapeName",
             "pathway",
             "therapy_type" = "therapyType"
+        )
+}
+
+# gene types ------------------------------------------------------------------
+
+query_gene_types <- function(name = list()){
+    perform_api_query(
+        "gene_types",
+        list("name" = name)
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble() %>%
+        dplyr::select("display", "name") %>%
+        dplyr::arrange(.data$display)
+}
+
+query_genes_by_gene_type <- function(name = list()){
+    perform_api_query(
+        "genes_by_gene_type",
+        list("name" = name)
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble() %>%
+        tidyr::unnest(cols = "genes") %>%
+        dplyr::select(
+            "entrez",
+            "hgnc",
+            "gene_type_name" = "name",
+            "gene_type_display" = "display",
         )
 }
 

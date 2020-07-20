@@ -1,5 +1,53 @@
 with_test_api_env({
 
+  # copy number results -------------------------------------------------------
+
+  test_that("query_copy_number_results", {
+    result1 <- query_copy_number_results(
+      datasets = "TCGA",
+      tags = "C1",
+      genes = 3627L,
+      features = "AS",
+      direction = "Amp"
+    )
+    expect_named(
+      result1,
+      c(
+        "feature",
+        "tag",
+        "hgnc",
+        "direction",
+        "p_value",
+        "log10_p_value",
+        "mean_cnv",
+        "mean_normal",
+        "t_stat"
+      )
+    )
+
+    result2 <- query_copy_number_results(
+      datasets = "TCGA",
+      tags = c("C1", "C2"),
+      features = "AS",
+      genes = 1:2
+    )
+    expect_named(
+      result2,
+      c(
+        "feature",
+        "tag",
+        "hgnc",
+        "direction",
+        "p_value",
+        "log10_p_value",
+        "mean_cnv",
+        "mean_normal",
+        "t_stat"
+      )
+    )
+    expect_equal(nrow(result2), 8)
+  })
+
   # datasets ------------------------------------------------------------------
 
   test_that("query_datasets", {
@@ -108,6 +156,11 @@ with_test_api_env({
 
   # genes ---------------------------------------------------------------------
 
+  test_that("query_genes", {
+    result1 <- query_genes()
+    expect_named(result1, c("hgnc", "entrez"))
+  })
+
   test_that("query_immunomodulators", {
     result1 <- query_immunomodulators()
     expect_named(
@@ -145,6 +198,24 @@ with_test_api_env({
         "pathway",
         "therapy_type"
       )
+    )
+  })
+
+  # gene types ----------------------------------------------------------------
+
+  test_that("query_gene_types", {
+    result1 <- query_gene_types()
+    expect_named(
+      result1,
+      c("display", "name")
+    )
+  })
+
+  test_that("query_genes_by_gene_type", {
+    result1 <- query_genes_by_gene_type()
+    expect_named(
+      result1,
+      c("entrez", "hgnc", "gene_type_name", "gene_type_display")
     )
   })
 
