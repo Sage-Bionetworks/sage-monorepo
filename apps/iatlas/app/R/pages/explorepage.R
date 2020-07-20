@@ -4,11 +4,12 @@ for (item in analysis_module_files) {
     source(item, local = T)
 }
 
+source("R/modules/ui/other_modules/cohort_selection_ui.R", local = T)
 source("R/modules/ui/other_modules/data_info_ui.R", local = T)
 
 explorepage <- shinydashboard::dashboardPage(
-    shinydashboard::dashboardHeader(disable = TRUE),
-    shinydashboard::dashboardSidebar(
+    header  = shinydashboard::dashboardHeader(disable = TRUE),
+    sidebar = shinydashboard::dashboardSidebar(
         shinydashboard::sidebarMenu(
             id = "explorertabs",
             shinydashboard::menuItem(
@@ -59,6 +60,21 @@ explorepage <- shinydashboard::dashboardPage(
                     "Driver Associations",
                     tabName = "driver_associations",
                     icon = shiny::icon("cog")
+                ),
+                shinydashboard::menuSubItem(
+                    "CNV Associations",
+                    tabName = "copy_number",
+                    icon = shiny::icon("cog")
+                ),
+                shinydashboard::menuSubItem(
+                    "Extracellular Networks",
+                    tabName = "extracellular_network",
+                    icon = shiny::icon("cog")
+                ),
+                shinydashboard::menuSubItem(
+                    "Cell-Interaction Diagram",
+                    tabName = "cellimage",
+                    icon = shiny::icon("cog")
                 )
             ),
             shinydashboard::menuItem(
@@ -68,16 +84,16 @@ explorepage <- shinydashboard::dashboardPage(
             )
         )
     ),
-    shinydashboard::dashboardBody(
+    body = shinydashboard::dashboardBody(
         shinydashboard::tabItems(
             shinydashboard::tabItem(
                 tabName = "dashboard",
-                .GlobalEnv$titleBox("iAtlas Explorer — Home"),
-                .GlobalEnv$textBox(
+                iatlas.app::titleBox("iAtlas Explorer — Home"),
+                iatlas.app::textBox(
                     width = 12,
                     shiny::includeMarkdown("markdown/explore.markdown")
                 ),
-                .GlobalEnv$sectionBox(
+                iatlas.app::sectionBox(
                     title = "What's Inside",
                     shiny::fluidRow(
                         shinydashboard::infoBox(
@@ -114,9 +130,9 @@ explorepage <- shinydashboard::dashboardPage(
                         )
                     )
                 ),
-                .GlobalEnv$sectionBox(
+                iatlas.app::sectionBox(
                     title = "Analysis Modules",
-                    .GlobalEnv$messageBox(
+                    iatlas.app::messageBox(
                         width = 12,
                         shiny::p(
                             "Each module presents information organized by theme, with multiple views and interactive controls.",
@@ -126,7 +142,7 @@ explorepage <- shinydashboard::dashboardPage(
                         )
                     ),
                     shiny::fluidRow(
-                        .GlobalEnv$imgLinkBox(
+                        iatlas.app::imgLinkBox(
                             width = 6,
                             linkId = "link_to_cohort_selection",
                             title = "Cohort Selection",
@@ -134,7 +150,7 @@ explorepage <- shinydashboard::dashboardPage(
                             boxText = "Use this module to create a cohort of interest.",
                             linkText = "Open Module"
                         ),
-                        .GlobalEnv$imgLinkBox(
+                        iatlas.app::imgLinkBox(
                             width = 6,
                             linkId = "link_to_tumor_microenvironment",
                             title = "Tumor Microenvironment",
@@ -144,7 +160,7 @@ explorepage <- shinydashboard::dashboardPage(
                         )
                     ),
                     shiny::fluidRow(
-                        .GlobalEnv$imgLinkBox(
+                        iatlas.app::imgLinkBox(
                             width = 6,
                             title = "Immune Feature Trends",
                             linkId = "link_to_immune_features",
@@ -152,7 +168,7 @@ explorepage <- shinydashboard::dashboardPage(
                             boxText = "This module allows you to see how immune readouts vary across your groups, and how they relate to one another.",
                             linkText = "Open Module"
                         ),
-                        .GlobalEnv$imgLinkBox(
+                        iatlas.app::imgLinkBox(
                             width = 6,
                             linkId = "link_to_clinical_outcomes",
                             title = "Clinical Outcomes",
@@ -162,7 +178,7 @@ explorepage <- shinydashboard::dashboardPage(
                         )
                     ),
                     shiny::fluidRow(
-                        .GlobalEnv$imgLinkBox(
+                        iatlas.app::imgLinkBox(
                             width = 6,
                             title = "Immunomodulators",
                             linkId = "link_to_immunomodulators",
@@ -170,7 +186,7 @@ explorepage <- shinydashboard::dashboardPage(
                             boxText = "Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.",
                             linkText = "Open Module"
                         ),
-                        .GlobalEnv$imgLinkBox(
+                        iatlas.app::imgLinkBox(
                             width = 6,
                             title = "TIL Maps",
                             linkId = "link_to_til_maps",
@@ -180,7 +196,7 @@ explorepage <- shinydashboard::dashboardPage(
                         )
                     ),
                     shiny::fluidRow(
-                        .GlobalEnv$imgLinkBox(
+                        iatlas.app::imgLinkBox(
                             width = 6,
                             title = "Driver Associations",
                             linkId = "link_to_driver_associations",
@@ -188,12 +204,40 @@ explorepage <- shinydashboard::dashboardPage(
                             boxText = "Explore Associations of Microenvironment with Driver Mutations.",
                             linkText = "Open Module"
                         ),
-                        .GlobalEnv$imgLinkBox(
+                        iatlas.app::imgLinkBox(
                             width = 6,
                             title = "IO Targets",
                             linkId = "link_to_io_targets",
                             imgSrc = "images/io_targets.png",
                             boxText = "Explore the expression of genes that code for immuno-oncological (IO) targets .",
+                            linkText = "Open Module"
+                        )
+                    ),
+                    shiny::fluidRow(
+                        iatlas.app::imgLinkBox(
+                            width = 6,
+                            title = "CNV Associations",
+                            linkId = "link_to_copy_number",
+                            imgSrc = "images/copy_number.png",
+                            boxText = "Explore associations of microenvironment with gene copy number.",
+                            linkText = "Open Module"
+                        ),
+                        iatlas.app::imgLinkBox(
+                            width = 6,
+                            title = "Extracellular Networks",
+                            linkId = "link_to_extracellular_network",
+                            imgSrc = "images/extracellular_network.png",
+                            boxText = "Explore the extracellular networks modulating tumoral immune response.",
+                            linkText = "Open Module"
+                        )
+                    ),
+                    shiny::fluidRow(
+                        iatlas.app::imgLinkBox(
+                            width = 6,
+                            title = "Cell-Interaction Diagram",
+                            linkId = "link_to_cellimage",
+                            imgSrc = "images/cellimage.png",
+                            boxText = "Explore cell and protein abundance on an illustration.",
                             linkText = "Open Module"
                         )
                     )
@@ -230,6 +274,18 @@ explorepage <- shinydashboard::dashboardPage(
             shinydashboard::tabItem(
                 tabName = "io_targets",
                 io_targets_ui("io_targets")
+            ),
+            shinydashboard::tabItem(
+                tabName = "copy_number",
+                copy_number_ui("copy_number")
+            ),
+            shinydashboard::tabItem(
+                tabName = "extracellular_network",
+                extracellular_network_ui("extracellular_network")
+            ),
+            shinydashboard::tabItem(
+                tabName = "cellimage",
+                cellimage_ui("cellimage")
             ),
             shinydashboard::tabItem(
                 tabName = "data_info",

@@ -3,27 +3,28 @@ til_maps_ui <- function(id) {
     ns <- shiny::NS(id)
 
     source("R/modules/ui/submodules/til_map_distributions_ui.R", local = T)
-    source("R/modules/ui/submodules/data_table_ui.R", local = T)
+    source("R/modules/ui/submodules/call_module_ui.R", local = T)
+    source("R/modules/ui/submodules/til_map_datatable_ui.R", local = T)
 
     shiny::tagList(
-        .GlobalEnv$titleBox("iAtlas Explorer — TIL Maps"),
-        .GlobalEnv$textBox(
+        iatlas.app::titleBox("iAtlas Explorer — TIL Maps"),
+        iatlas.app::textBox(
             width = 12,
             shiny::includeMarkdown("markdown/tilmap.markdown")
         ),
-
-        til_map_distributions_ui(ns("til_map_distributions")),
-        #     message_html = shiny::includeMarkdown("markdown/tilmap_dist.markdown"),
-        #     title_text = "TIL Map Characteristics",
-        #     click_text =
-        #         "Click point or violin/box to filter samples in table below"
-        # ),
-
-
-        data_table_ui(
-            ns("til_table"),
+        iatlas.app::sectionBox(
+            title = "Distributions",
+            call_module_ui(
+                ns("til_map_distributions"),
+                til_map_distributions_ui
+            )
+        ),
+        iatlas.app::sectionBox(
             title = "TIL Map Annotations",
-            message_html = shiny::includeMarkdown("markdown/tilmap_table.markdown")
+            call_module_ui(
+                ns("til_map_datatable"),
+                til_map_datatable_ui
+            )
         )
     )
 }

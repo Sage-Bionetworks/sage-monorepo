@@ -2,24 +2,32 @@ tumor_microenvironment_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl
+    cohort_obj
 ) {
 
-    source("R/modules/server/submodules/overall_cell_proportions_server.R", local = T)
-    source("R/modules/server/submodules/cell_type_fractions_server.R", local = T)
+    source_files <- c(
+        "R/modules/server/submodules/overall_cell_proportions_server.R",
+        "R/modules/server/submodules/cell_type_fractions_server.R",
+        "R/modules/server/submodules/call_module_server.R"
+    )
+
+    for (file in source_files) {
+        source(file, local = T)
+    }
 
     shiny::callModule(
-        overall_cell_proportions_server,
+        call_module_server,
         "overall_cell_proportions",
-        sample_tbl,
-        group_tbl
+        cohort_obj,
+        shiny::reactive(show_ocp_submodule),
+        overall_cell_proportions_server
     )
 
     shiny::callModule(
-        cell_type_fractions_server,
+        call_module_server,
         "cell_type_fractions",
-        sample_tbl,
-        group_tbl
+        cohort_obj,
+        shiny::reactive(show_ctf_submodule),
+        cell_type_fractions_server
     )
 }

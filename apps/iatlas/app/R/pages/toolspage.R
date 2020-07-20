@@ -8,9 +8,9 @@ toolspage <- shiny::fluidPage(
         id = "toolstabs",
         shiny::tabPanel(
             shiny::h5("iAtlas Tools Home"),
-            .GlobalEnv$titleBox("iAtlas Explorer — Tools"),
+            iatlas.app::titleBox("iAtlas Explorer — Tools"),
             shiny::fluidRow(
-                .GlobalEnv$imgLinkBox(
+                iatlas.app::imgLinkBox(
                     width = 12,
                     title = "Immune Subtype Classifier",
                     linkId = "link_to_immune_subtype_classifier",

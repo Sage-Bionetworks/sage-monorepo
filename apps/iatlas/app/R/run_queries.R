@@ -2,6 +2,13 @@
 # when doing devtools::check()
 if (getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 
+#' Build Sample Name Table
+#'
+#' @importFrom magrittr %>%
+build_sample_name_tbl <- function(){
+    "SELECT id AS sample_id, name AS sample_name FROM samples" %>%
+        perform_query("Build Sample Name Table")
+}
 
 #' Build Feature Value Tibble from Feature IDs
 #'
@@ -9,23 +16,24 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("."))
 #' @importFrom magrittr %>%
 build_feature_value_tbl_from_ids <- function(feature_ids){
     feature_ids %>%
-        create_feature_value_query_from_ids() %>%
+        numeric_values_to_query_list() %>%
+        create_feature_value_query() %>%
         perform_query("Build Feature Value Tibble from Feature IDs")
 }
-
 
 #' Build Feature Value Tibble from Class IDs
 #'
 #' @param class_ids An integer in the class_id column of the features table
 #' @importFrom magrittr %>%
-build_feature_value_tbl_from_class_id <- function(class_ids){
+build_feature_value_tbl_from_class_ids <- function(class_ids){
     paste0(
-        "SELECT fts.sample_id, fts.value, f.display AS feature ",
+        "SELECT fts.feature_id, fts.sample_id, fts.value, f.unit, ",
+        "f.display AS feature, f.order ",
         "FROM features_to_samples fts ",
         "INNER JOIN features f ",
         "ON fts.feature_id = f.id ",
         "WHERE f.class_id IN (",
-        class_ids,
+        numeric_values_to_query_list(class_ids),
         ")"
     ) %>%
         perform_query("Build Feature Value Tibble from Class IDs")
@@ -33,25 +41,98 @@ build_feature_value_tbl_from_class_id <- function(class_ids){
 
 #' Build Feature Tibble
 #'
+#' @param sample_ids Integers in the sample_id column of the
+#' features_to_samples table
 #' @param class_ids Integers in the id column of the classes table
-build_feature_tbl <- function(class_ids = "all"){
-    query <- paste(
-        "SELECT b.name AS class, a.display, a.id AS feature FROM",
-        "(SELECT id, display, class_id FROM features) a",
-        "LEFT OUTER JOIN",
-        "(SELECT * FROM classes) b",
-        "ON a.class_id = b.id"
+build_feature_tbl <- function(class_ids = NA, sample_ids = NA){
+    query <- paste0(
+        "SELECT ",
+        create_id_to_class_subquery(),
+        ", a.display, a.id, a.class_id FROM features a "
     )
-    if (class_ids != "all") {
-        query <- paste(
+    if (any(length(class_ids) > 1, !is.na(class_ids))) {
+        query <- paste0(
             query,
-            " WHERE b.id IN (",
+            " WHERE a.class_id IN (",
             numeric_values_to_query_list(class_ids),
             ")"
         )
     }
+    if (any(length(sample_ids) > 1, !is.na(sample_ids))) {
+        query <- paste0(
+            query,
+            " WHERE a.id IN ",
+            "(SELECT feature_id FROM features_to_samples ",
+            "WHERE sample_id IN (", numeric_values_to_query_list(sample_ids),
+            ")",
+            "AND value IS NOT NULL",
+            ")"
+        )
+    }
+    query <- paste0(query, " ORDER BY class")
     perform_query(query, "Build Feature Tibble")
 }
+
+
+# TODO: Speed this query up
+#' Build Gene Tibble
+#'
+#' @param sample_ids Integers in the sample_id column of the
+#' genes_to_samples table
+# build_gene_tbl <- function(sample_ids = NA){
+#     query <- paste0(
+#         "SELECT id, hgnc, entrez, description, io_landscape_name, ",
+#         "a.references, friendly_name, ",
+#         create_id_to_gene_family_subquery(),
+#         ", ",
+#         create_id_to_gene_function_subquery(),
+#         ", ",
+#         create_id_to_immune_checkpoint_subquery(),
+#         ", ",
+#         create_id_to_pathway_subquery(),
+#         ", ",
+#         create_id_to_super_category_subquery(),
+#         ", ",
+#         create_id_to_therapy_type_subquery(),
+#         " from genes a "
+#     )
+#
+#     if (any(length(sample_ids) > 1, !is.na(sample_ids))) {
+#         query <- paste0(
+#             query,
+#             "WHERE a.id IN ",
+#             "(SELECT gene_id FROM genes_to_samples ",
+#             "WHERE sample_id IN (",
+#             numeric_values_to_query_list(sample_ids),
+#             ") AND rna_seq_expr IS NOT NULL)"
+#         )
+#     }
+#     paste0(
+#     "SELECT * FROM ",
+#     "(SELECT DISTINCT gene_id FROM genes_to_samples ",
+#     "WHERE sample_id IN (",
+#     numeric_values_to_query_list(1:100000),
+#     ") AND rna_seq_expr IS NOT NULL) a"
+#     ) %>%
+#         perform_query()
+#
+#     paste0(
+#         "SELECT DISTINCT gene_id FROM genes_to_samples ",
+#         "WHERE sample_id IN (",
+#         numeric_values_to_query_list(1:10000),
+#         ") ",
+#         "AND gene_id IN (",
+#         numeric_values_to_query_list(1:2000),
+#         # "SELECT DISTINCT gene_id FROM genes_to_types",
+#         ")"
+#     ) %>%
+#         perform_query()
+#
+#     query <- paste0(query, " ORDER BY hgnc")
+#     perform_query(query, "Build Gene Tibble")
+# }
+
+
 
 #' Create Class List
 #'
@@ -72,7 +153,6 @@ build_gene_expression_tbl_by_gene_ids <- function(gene_ids){
         create_build_get_gene_expression_tbl_by_gene_ids_query() %>%
         perform_query("Build Gene Expression Tibble by Gene IDs")
 }
-
 
 
 # Module specfic functions ----------------------------------------------------
@@ -135,7 +215,7 @@ build_io_target_tbl <- function(){
 build_cohort_tbl_by_feature_id <- function(sample_ids, feature_id){
     paste(
         "SELECT a.sample_id, a.value FROM (",
-        create_feature_value_query_from_ids(feature_id),
+        create_feature_value_query(feature_id),
         ") a WHERE a.sample_id IN (",
         numeric_values_to_query_list(sample_ids),
         ")"
@@ -149,6 +229,7 @@ build_cohort_tbl_by_feature_id <- function(sample_ids, feature_id){
 #' @param group A String that is the display column of the tags table
 #' @importFrom magrittr %>%
 build_cohort_tbl_by_group <- function(sample_ids, group){
+    print(group)
     paste0(
         "SELECT sts.sample_id, g.name AS group, g.display AS name, ",
         "g.characteristics, g.color FROM (",
@@ -161,26 +242,31 @@ build_cohort_tbl_by_group <- function(sample_ids, group){
         perform_query("Build Cohort Tibble By Group")
 }
 
-#' Get Sample IDs from Dataset
-#'
-#' @param dataset The name of a dataset in the database
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-get_sample_ids_from_dataset <- function(dataset){
-    if (dataset == "TCGA") {
-        tag_display <- "TCGA Study"
-    } else if (dataset == "PCAWG") {
-        tag_display <- "PCAWG Study"
-    } else {
-        tag_display = dataset
-    }
-
-    tag_display %>%
-        create_get_sample_ids_from_parent_tag_display_query() %>%
-        perform_query("Get Sample IDs from Dataset") %>%
-        dplyr::pull(.data$sample_id)
-}
+#' >>>>>>> staging_cohort_selection_ux
+#' #' Get Sample IDs from Dataset
+#' #'
+#' #' @param dataset The name of a dataset in the database
+#' #' @importFrom magrittr %>%
+#' #' @importFrom dplyr pull
+#' #' @importFrom rlang .data
+#' get_sample_ids_from_dataset <- function(dataset){
+#'     paste0(
+#' <<<<<<< HEAD
+#'         "SELECT sample_id FROM samples_to_tags WHERE tag_id IN ",
+#'         "(SELECT id FROM tags where name = '", dataset, "')"
+#'     ) %>%
+#'         perform_query("Get Sample IDs from Dataset") %>%
+#' =======
+#'         "SELECT * FROM samples_to_tags WHERE tag_id IN (",
+#'         "SELECT id FROM tags WHERE display IN ('",
+#'         dataset,
+#'         "')",
+#'         ")"
+#'     ) %>%
+#'         perform_query() %>%
+#' >>>>>>> staging_cohort_selection_ux
+#'         dplyr::pull(.data$sample_id)
+#' }
 
 
 
@@ -188,150 +274,102 @@ get_sample_ids_from_dataset <- function(dataset){
 # The function take a single value from one or more columns and translate those
 # into a value from a different column in the row
 
-
-#' Get HGNC Symbol from Gene ID
-#'
-#' @param id A integer from the id column of the genes table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_gene_hgnc_from_id <- function(id){
-    assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
-    hgnc <-
-        paste0("SELECT hgnc FROM genes WHERE id = ", id) %>%
-        perform_query("Get HGNC Symbol from Gene ID") %>%
-        dplyr::pull(.data$hgnc)
-    assertthat::assert_that(length(hgnc) == 1)
-    return(hgnc)
+translate_value <- function(value, value_type, table, into, from){
+    assertthat::assert_that(length(value) == 1)
+    if (value_type == "id") {
+        assertthat::assert_that(is.integer(value), value > 0)
+        value_query <- as.character(value)
+    } else if (value_type == "character") {
+        assertthat::assert_that(is.character(value))
+        value_query <- paste0("'", value, "'")
+    } else {
+        stop("Value of unallowed type.")
+    }
+    result <-
+        create_translate_values_query(table, into, from, value_query) %>%
+        perform_query("Translate Value") %>%
+        dplyr::pull(into)
+    assertthat::assert_that(length(result) == 1)
+    return(result)
 }
 
-#' Get Gene ID from HGNC Symbol
-#'
-#' @param hgnc A string in the hgnc column of the genes table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_gene_id_from_hgnc <- function(hgnc){
-    assertthat::assert_that(length(hgnc) == 1, is.character(hgnc))
-    id <-
-        paste0("SELECT id FROM genes WHERE hgnc = '", hgnc, "'" ) %>%
-        perform_query("Get Gene ID from HGNC Symbol") %>%
-        dplyr::pull(.data$id)
-    assertthat::assert_that(length(id) == 1)
-    return(id)
-}
+get_tag_display_from_id <- purrr::partial(
+    translate_value,
+    value_type = "id",
+    table      = "tags",
+    into       = "display",
+    from       = "id"
+)
 
-#' Get Class ID from Class Name
-#'
-#' @param name An string in the name column of the classes table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_class_id_from_name <- function(name){
-    assertthat::assert_that(length(name) == 1, is.character(name))
-    id <-
-        paste0("SELECT id FROM classes WHERE name = '", name, "'") %>%
-        perform_query("Get Class ID from Class Name") %>%
-        dplyr::pull(.data$id)
-    assertthat::assert_that(length(id) == 1)
-    return(id)
-}
+get_tag_display_from_name <- purrr::partial(
+    translate_value,
+    value_type = "character",
+    table      = "tags",
+    into       = "display",
+    from       = "name"
+)
 
-#' Get Feature Display Name From ID
-#'
-#' @param id An integer in the id column of the features table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_feature_display_from_id <- function(id){
-    assertthat::assert_that(length(id) == 1, is.integer(id), id > 0)
-    display <-
-        paste0("SELECT display FROM features WHERE id = ", id) %>%
-        perform_query("Get Feature Display Name From ID") %>%
-        dplyr::pull(.data$display)
-    assertthat::assert_that(length(display) == 1)
-    return(display)
-}
+get_gene_hgnc_from_id <- purrr::partial(
+    translate_value,
+    value_type = "id",
+    table      = "genes",
+    into       = "hgnc",
+    from       = "id"
+)
 
-#' Get Feature ID From Display Name
-#'
-#' @param display A string in the display column of the features table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-#' @importFrom rlang .data
-#' @importFrom assertthat assert_that
-get_feature_id_from_display <- function(display){
-    assertthat::assert_that(length(display) == 1, is.character(display))
-    id <-
-        paste0("SELECT id FROM features WHERE display = '", display , "'") %>%
-        perform_query("Get Feature ID From Display Name") %>%
-        dplyr::pull(.data$id)
-    assertthat::assert_that(length(id) == 1)
-    return(id)
-}
+get_gene_id_from_hgnc <- purrr::partial(
+    translate_value,
+    value_type = "character",
+    table      = "genes",
+    into       = "id",
+    from       = "hgnc"
+)
 
+get_class_id_from_name <- purrr::partial(
+    translate_value,
+    value_type = "character",
+    table      = "classes",
+    into       = "id",
+    from       = "name"
+)
 
+get_feature_display_from_id <- purrr::partial(
+    translate_value,
+    value_type = "id",
+    table      = "features",
+    into       = "display",
+    from       = "id"
+)
 
+get_feature_name_from_id <- purrr::partial(
+    translate_value,
+    value_type = "id",
+    table      = "features",
+    into       = "name",
+    from       = "id"
+)
 
+get_feature_id_from_display <- purrr::partial(
+    translate_value,
+    value_type = "character",
+    table      = "features",
+    into       = "id",
+    from       = "display"
+)
 
-# REDO after refactoring of mutations in database -----------------------------
+get_mutation_code_from_id <- purrr::partial(
+    translate_value,
+    value_type = "id",
+    table      = "mutation_codes",
+    into       = "code",
+    from       = "id"
+)
 
-# create_driver_mutation_list <- function(){
-#     paste(
-#         "SELECT hgnc, id FROM (",
-#         create_get_genes_by_type_query("driver_mutation"),
-#         ") a"
-#     ) %>%
-#         perform_query("Get mutation genes") %>%
-#         tibble::deframe()
-# }
-
-
-#' Build Driver Results Table
-#'
-#' @importFrom magrittr %>%
-# build_driver_results_tbl <- function(group_name, feature_id, min_wt, min_mut){
-#     subquery1 <- paste0(
-#         "SELECT id from tags WHERE display = '",
-#         group_name,
-#         "'"
-#     )
-#
-#     subquery2 <- paste(
-#         "SELECT tag_id from tags_to_tags WHERE related_tag_id IN (",
-#         subquery1,
-#         ")"
-#     )
-#
-#     subquery3 <- paste(
-#         "SELECT p_value, fold_change, log10_p_value,",
-#         "log10_fold_change, gene_id, tag_id",
-#         "FROM driver_results",
-#         "WHERE feature_id = ", feature_id,
-#         "AND tag_id IN (", subquery2, ")",
-#         "AND n_wt >= ", min_wt,
-#         "AND n_mut >= ", min_mut
-#     )
-#
-#     paste(
-#         "SELECT a.p_value, a.fold_change, a.log10_p_value,",
-#         "a.log10_fold_change, g.gene, g.gene_id, t.group, t.tag_id FROM",
-#         "(", subquery3, ") a",
-#         "LEFT OUTER JOIN (SELECT id AS gene_id, hgnc AS gene FROM genes) g",
-#         "ON a.gene_id = g.gene_id",
-#         "LEFT OUTER JOIN (SELECT id AS tag_id, name As group FROM tags) t",
-#         "ON a.tag_id = t.tag_id"
-#     ) %>%
-#         perform_query("Build Driver Results Table")
-# }
-
-
-
-
-
-
+get_id_from_mutation_code <- purrr::partial(
+    translate_value,
+    value_type = "character",
+    table      = "mutation_codes",
+    into       = "id",
+    from       = "code"
+)
 

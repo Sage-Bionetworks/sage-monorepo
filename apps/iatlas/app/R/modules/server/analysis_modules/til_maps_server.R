@@ -2,99 +2,39 @@ til_maps_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl,
-    group_name,
-    plot_colors
+    cohort_obj
 ){
-
-    source(
+    source_files <- c(
         "R/modules/server/submodules/til_map_distributions_server.R",
-        local = T
-    )
-    source(
-        "R/modules/server/submodules/data_table_server.R",
-        local = T
+        "R/modules/server/submodules/til_map_datatable_server.R",
+        "R/modules/server/submodules/call_module_server.R",
+        "R/til_maps_functions.R"
     )
 
-    sample_tbl2 <- shiny::reactive({
-        shiny::req(sample_tbl())
-        tbl <-
-            paste(
-                "SELECT s.id AS sample_id, s.name AS sample_name, ",
-                "sl.name AS slide_barcode FROM samples s ",
-                "INNER JOIN patients_to_slides pts ",
-                "ON s.patient_id = pts.patient_id ",
-                "INNER JOIN slides sl ON pts.slide_id = sl.id ",
-                "WHERE sl.name IS NOT NULL"
-            ) %>%
-            .GlobalEnv$perform_query("Get sample table") %>%
-            dplyr::inner_join(sample_tbl(), by = "sample_id")
+    for (file in source_files) {
+        source(file, local = T)
+    }
 
-
+    tilmap_sample_tbl <- shiny::reactive({
+        shiny::req(cohort_obj())
+        build_tm_sample_tbl(cohort_obj()$sample_tbl)
     })
 
     shiny::callModule(
-        til_map_distributions_server,
+        call_module_server,
         "til_map_distributions",
-        sample_tbl2,
-        group_tbl,
-        group_name,
-        plot_colors
+        cohort_obj,
+        shiny::reactive(show_tilmap_submodules),
+        til_map_distributions_server,
+        sample_tbl = tilmap_sample_tbl
     )
 
-    tilmap_tbl <- shiny::reactive({
-        subquery1 <- "SELECT id FROM classes WHERE name = 'TIL Map Characteristic'"
-
-        subquery2 <- paste(
-            "SELECT id AS feature FROM features",
-            "WHERE class_id = (",
-            subquery1,
-            ")"
-        )
-
-        subquery3 <- paste(
-            "SELECT feature_id, sample_id, value FROM features_to_samples",
-            "WHERE feature_id IN (",
-            subquery2,
-            ")"
-        )
-
-        query <- paste(
-            "SELECT a.sample_id, a.value, b.display FROM",
-            "(", subquery3, ") a",
-            "INNER JOIN",
-            "(SELECT id, display from features) b",
-            "ON a.feature_id = b.id"
-        )
-
-        query %>%
-            dplyr::sql() %>%
-            .GlobalEnv$perform_query("build feature table") %>%
-            dplyr::mutate(value = round(value, digits = 1)) %>%
-            tidyr::pivot_wider(names_from = display, values_from = value) %>%
-            dplyr::inner_join(sample_tbl2(), by = "sample_id") %>%
-            dplyr::filter(!is.na(slide_barcode)) %>%
-            dplyr::mutate(Image = stringr::str_c(
-                "<a href=\"",
-                "https://quip1.bmi.stonybrook.edu:443/camicroscope/osdCamicroscope.php?tissueId=",
-                slide_barcode,
-                "\">",
-                slide_barcode,
-                "</a>"
-            )) %>%
-            dplyr::select(-c(slide_barcode, sample_id)) %>%
-            dplyr::select(
-                Sample = sample_name,
-                `Selected Group` = group,
-                Image,
-                dplyr::everything()
-            )
-    })
-
-
-    shiny::callModule(data_table_server, "til_table", tilmap_tbl, escape = F)
-
-
-
+    shiny::callModule(
+        call_module_server,
+        "til_map_datatable",
+        cohort_obj,
+        shiny::reactive(show_tilmap_submodules),
+        til_map_datatable_server,
+        sample_tbl = tilmap_sample_tbl
+    )
 }

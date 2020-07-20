@@ -4,7 +4,7 @@
 \alias{build_survival_value_tbl}
 \title{Build Survival Values Tibble}
 \usage{
-build_survival_value_tbl(sample_tbl, time_id, status_id)
+build_survival_value_tbl(sample_tbl, time_feature, status_feature)
 }
 \arguments{
 \item{sample_tbl}{A Tibble with columns sample_id and group}

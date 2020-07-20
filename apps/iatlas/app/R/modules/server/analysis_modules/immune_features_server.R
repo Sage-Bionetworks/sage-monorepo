@@ -2,38 +2,31 @@ immune_features_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl,
-    group_name,
-    feature_named_list,
-    plot_colors
+    cohort_obj
 ){
-
-    source(
+    source_files <- c(
         "R/modules/server/submodules/immune_feature_distributions_server.R",
-        local = T
-    )
-    source(
         "R/modules/server/submodules/immune_feature_correlations_server.R",
-        local = T
+        "R/modules/server/submodules/call_module_server.R"
     )
 
+    for (file in source_files) {
+        source(file, local = T)
+    }
+
     shiny::callModule(
-        immune_feature_distributions_server,
+        call_module_server,
         "immune_feature_distributions",
-        sample_tbl,
-        group_tbl,
-        group_name,
-        feature_named_list,
-        plot_colors
+        cohort_obj,
+        shiny::reactive(function(cohort_obj) T),
+        immune_feature_distributions_server
     )
 
-
     shiny::callModule(
-        immune_feature_correlations_server,
+        call_module_server,
         "immune_feature_correlations",
-        sample_tbl,
-        group_tbl,
-        feature_named_list
+        cohort_obj,
+        shiny::reactive(function(cohort_obj) T),
+        immune_feature_correlations_server
     )
 }

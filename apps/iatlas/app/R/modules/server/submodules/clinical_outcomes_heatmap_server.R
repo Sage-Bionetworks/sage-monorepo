@@ -2,76 +2,77 @@ clinical_outcomes_heatmap_server <- function(
     input,
     output,
     session,
-    sample_tbl,
-    group_tbl,
-    group_name,
-    plot_colors
+    cohort_obj
 ){
 
     ns <- session$ns
 
-    source("R/clinical_outcomes_functions.R")
     source("R/modules/server/submodules/plotly_server.R", local = T)
 
     output$class_selection_ui <- shiny::renderUI({
         shiny::selectInput(
-            inputId = ns("class_choice_id"),
-            label = "Select or Search for Variables Class",
-            choices = .GlobalEnv$create_class_list(),
-            selected = .GlobalEnv$get_class_id_from_name("T Helper Cell Score")
+            inputId  = ns("class_choice"),
+            label    = "Select or Search for Variable Class",
+            choices  = cohort_obj() %>%
+                purrr::pluck("feature_tbl") %>%
+                dplyr::pull("class") %>%
+                unique() %>%
+                sort(),
+            selected = "T Helper Cell Score"
         )
     })
-
-    time_class_id <- .GlobalEnv$get_class_id_from_name("Survival Time")
 
     output$time_feature_selection_ui <- shiny::renderUI({
-        shiny::req(time_class_id)
+        choices <- cohort_obj()$feature_tbl %>%
+            dplyr::filter(.data$class == "Survival Time") %>%
+            dplyr::arrange(.data$order) %>%
+            dplyr::select("display", "name") %>%
+            tibble::deframe(.)
 
         shiny::selectInput(
-            inputId = ns("time_feature_choice_id"),
+            inputId = ns("time_feature_choice"),
             label = "Select or Search for Survival Endpoint",
-            choices = .GlobalEnv$create_feature_named_list(time_class_id),
-            selected = "OS Time"
+            choices = choices
         )
     })
 
-    time_feature_id   <- shiny::reactive({
-        shiny::req(input$time_feature_choice_id)
-        as.integer(input$time_feature_choice_id)
+    status_feature_choice <- shiny::reactive({
+        shiny::req(input$time_feature_choice)
+        if (input$time_feature_choice == "PFI_time_1") return("PFI_1")
+        else if (input$time_feature_choice == "OS_time") return("OS")
     })
 
-    status_feature_id <- shiny::reactive({
-        shiny::req(time_feature_id())
-        get_status_id_from_time_id(time_feature_id())
-    })
-
-    survival_tbl <- shiny::reactive({
-        shiny::req(
-            sample_tbl(),
-            time_feature_id(),
-            status_feature_id()
-        )
+    survival_value_tbl <- shiny::reactive({
+        shiny::req(input$time_feature_choice, status_feature_choice())
         build_survival_value_tbl(
-            sample_tbl(),
-            time_feature_id(),
-            status_feature_id()
-        )
+            cohort_obj()$sample_tbl,
+            input$time_feature_choice,
+            status_feature_choice()
+        ) %>%
+            dplyr::select(-"group")
     })
 
     feature_tbl <- shiny::reactive({
-        shiny::req(input$class_choice_id)
-        build_feature_value_tbl_from_class_id(input$class_choice_id)
+        shiny::req(input$class_choice)
+        iatlas.app::query_features_values_by_tag(
+            cohort_obj()$dataset,
+            cohort_obj()$group_name,
+            feature_class = input$class_choice
+        ) %>%
+            dplyr::rename("group" = "tag") %>%
+            dplyr::filter(sample %in% cohort_obj()$sample_tbl$sample)
     })
 
+
     heatmap_tbl <- shiny::reactive({
-        shiny::req(survival_tbl(), feature_tbl())
-        dplyr::inner_join(survival_tbl(), feature_tbl(), by = "sample_id")
+        shiny::req(survival_value_tbl(), feature_tbl())
+        dplyr::inner_join(survival_value_tbl(), feature_tbl(), by = "sample")
     })
 
     output$heatmap <- plotly::renderPlotly({
         shiny::req(heatmap_tbl())
 
-        heatmap_matrix <- build_heatmap_matrix(heatmap_tbl())
+        heatmap_matrix <- build_co_heatmap_matrix(heatmap_tbl())
 
         shiny::validate(shiny::need(
             nrow(heatmap_matrix > 0) & ncol(heatmap_matrix > 0),
@@ -82,6 +83,7 @@ clinical_outcomes_heatmap_server <- function(
     })
 
     heatmap_eventdata <- shiny::reactive({
+        shiny::req(heatmap_tbl())
         plotly::event_data("plotly_click", "clinical_outcomes_heatmap")
     })
 
@@ -90,6 +92,6 @@ clinical_outcomes_heatmap_server <- function(
         "heatmap",
         plot_tbl       = heatmap_tbl,
         plot_eventdata = heatmap_eventdata,
-        group_tbl      = group_tbl
+        group_tbl      = shiny::reactive(cohort_obj()$group_tbl)
     )
 }

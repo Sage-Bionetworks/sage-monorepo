@@ -2,7 +2,7 @@ data_table_server <- function(
     input,
     output,
     session,
-    data_df,
+    tbl,
     options = list(pageLength = 10),
     color = F,
     color_column = NULL,
@@ -11,7 +11,7 @@ data_table_server <- function(
 ){
     output$data_table_module <- DT::renderDT({
         dt <- DT::datatable(
-            data_df(),
+            tbl(),
             options = options,
             rownames = FALSE,
             ...
@@ -24,4 +24,9 @@ data_table_server <- function(
         }
         return(dt)
     })
+
+    output$download_tbl <- shiny::downloadHandler(
+        filename = function() stringr::str_c("data-", Sys.Date(), ".csv"),
+        content = function(con) readr::write_csv(tbl(), con)
+    )
 }
