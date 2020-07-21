@@ -42,21 +42,12 @@ immune_feature_correlations_server <- function(
 
     response_tbl <- shiny::reactive({
         shiny::req(input$response_choice)
-        iatlas.app::query_feature_values(
-            cohort_obj()$dataset,
-            cohort_obj()$group_name,
-            input$response_choice
-        )
+        build_ifc_response_tbl(cohort_obj(), input$response_choice)
     })
 
     feature_tbl <- shiny::reactive({
         shiny::req(input$class_choice)
-        iatlas.app::query_features_values_by_tag(
-            cohort_obj()$dataset,
-            cohort_obj()$group_name,
-            feature_class = input$class_choice
-        ) %>%
-            dplyr::rename("group" = "tag")
+        build_ifc_feature_tbl(cohort_obj(), input$class_choice)
     })
 
     value_tbl <- shiny::reactive({
@@ -64,8 +55,7 @@ immune_feature_correlations_server <- function(
         build_ifc_value_tbl(
             response_tbl(),
             feature_tbl(),
-            cohort_obj()$sample_tbl,
-            input$response_choice
+            cohort_obj()$sample_tbl
         )
     })
 
@@ -118,7 +108,7 @@ immune_feature_correlations_server <- function(
 
         shiny::validate(shiny::need(
             all(
-                clicked_feature %in% value_tbl()$feature_display,
+                clicked_feature %in% value_tbl()$feature_name,
                 clicked_group %in% value_tbl()$group
             ),
             "Click above heatmap"

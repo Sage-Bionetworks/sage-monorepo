@@ -1,3 +1,25 @@
+build_ifc_response_tbl <- function(cohort_obj, response){
+    cohort_obj %>%
+        query_feature_values_with_cohort_object(response) %>%
+        dplyr::select(
+            "sample",
+            "response_name" = "display",
+            "response_value" = "value"
+        )
+}
+
+build_ifc_feature_tbl <- function(cohort_obj, feature_class){
+    cohort_obj %>%
+        query_feature_values_with_cohort_object(class = feature_class) %>%
+        dplyr::select(
+            "sample",
+            "feature_name" = "display",
+            "feature_value" = "value",
+            "feature_order" = "order"
+        )
+}
+
+
 
 #' Build Immune Feature Correlations Value Table
 #'
@@ -7,20 +29,11 @@
 #' @importFrom dplyr inner_join filter select
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
-build_ifc_value_tbl <- function(
-    response_tbl, feature_tbl, sample_tbl, response_feature_name
-){
+build_ifc_value_tbl <- function(response_tbl, feature_tbl, sample_tbl){
     response_tbl %>%
-        dplyr::select(
-            "sample",
-            "response_name" = "name",
-            "response_value" = "value"
-        ) %>%
         dplyr::inner_join(feature_tbl, by = "sample") %>%
-        dplyr::filter(
-            .data$feature_name != response_feature_name,
-            .data$sample %in% sample_tbl$sample
-        ) %>%
+        dplyr::filter(.data$feature_name != .data$response_name) %>%
+        dplyr::inner_join(sample_tbl, by = "sample") %>%
         dplyr::select(
             "sample",
             "group",

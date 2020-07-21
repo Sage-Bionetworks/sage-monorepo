@@ -1,7 +1,19 @@
-query FeatureValues($dataSet: [String!]!, $related: [String!]!, $feature: [String!]) {
-  features(dataSet: $dataSet, related: $related, feature: $feature){
+query FeaturesValues(
+  $dataSet: [String!]
+  $related: [String!]
+  $feature: [String!]
+  $featureClass: [String!]
+) {
+  features(
+    dataSet: $dataSet
+    related: $related
+    feature: $feature
+    featureClass: $featureClass
+  ){
     name
+    display
     sample
     value
+    order
   }
 }
