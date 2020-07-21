@@ -1,0 +1,10 @@
+"""
+The "ImmuneCheckpoint" type may return:
+
+- The "name" of the ImmuneCheckpoint
+- A list of Genes associated with the ImmuneCheckpoint
+"""
+type ImmuneCheckpoint {
+  name: String!
+  genes: [SimpleGene]!
+}
