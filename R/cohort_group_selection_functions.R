@@ -22,7 +22,9 @@ build_cohort_mutation_tbl <- function(){
         )
 }
 
-#' Create Cohort Object
+# TODO: Fix filter object
+# TODO: Fix driver mutation cohort builder
+#' Build Cohort Object
 #'
 #' @param filter_obj A named list with element sample_ids and filters
 #' @param group_choice A string
@@ -31,33 +33,44 @@ build_cohort_mutation_tbl <- function(){
 #' @param immune_feature_bin_id An integer
 #' @param immune_feature_bin_number An integer
 #' @importFrom purrr list_modify
-create_cohort_object <- function(
+build_cohort_object <- function(
     filter_obj,
     dataset,
     group_choice,
     driver_mutation = NULL,
-    immune_feature_bin_name = NULL,
-    immune_feature_bin_number = NULL
+    mutation_tbl = NULL,
+    feature_bin_name = NULL,
+    feature_bin_number = NULL
 ){
 
     samples <- filter_obj$samples
     if (group_choice %in% c(
         "Immune_Subtype", "TCGA_Subtype", "TCGA_Study", "PCAWG_Study")
     ) {
-        cohort_object <- build_tag_cohort_object(samples, dataset, group_choice)
-    } else if (group_choice == "Driver Mutation") {
-        cohort_object <- build_dm_cohort_object(samples, driver_mutation)
-    } else if (group_choice == "Immune Feature Bins") {
-        cohort_object <- create_feature_bin_cohort_object(
-            samples,
-            immune_feature_bin_name,
-            immune_feature_bin_number
+        cohort_object <- build_tag_cohort_object(
+            samples, dataset, group_choice
         )
+        cohort_object$feature_tbl <-
+            query_features_by_class(dataset, group_choice)
+    } else if (group_choice == "Driver Mutation") {
+        cohort_object <- build_dm_cohort_object(
+            samples, driver_mutation, mutation_tbl
+        )
+        cohort_object$feature_tbl <-
+            query_features_by_class(dataset)
+    } else if (group_choice == "Immune Feature Bins") {
+        cohort_object <- build_feature_bin_cohort_object(
+            dataset,
+            samples,
+            feature_bin_name,
+            feature_bin_number
+        )
+        cohort_object$feature_tbl <-
+            query_features_by_class(dataset)
     }
     cohort_object$dataset     <- dataset
+    cohort_object$filters     <- "None"
     # cohort_object$filters     <- filter_obj$filters
-    cohort_object$feature_tbl <-
-        query_features_by_class(dataset, group_choice)
     return(cohort_object)
 }
 
@@ -92,7 +105,6 @@ build_tag_cohort_object <- function(samples, dataset, tag){
     )
 }
 
-# TODO: change sample ids to sample names
 #' Build Cohort Tibble By Tag
 #'
 #' @param sample_ids Integers in the id column of the samples table
@@ -113,6 +125,7 @@ build_cohort_tbl_by_tag <- function(samples, dataset, tag){
 
 # mutation choice -------------------------------------------------------------
 
+# TODO: Fix after mutation status can be queried
 #' Build Driver Mutation Cohort Object
 #'
 #' @param sample_ids A vector of integers
@@ -132,6 +145,7 @@ build_dm_cohort_object <- function(samples, mutation, mutation_tbl){
     #     create_plot_colors_list()
     # list(
     #     "sample_tbl"  = cohort_tbl,
+    #     "group_type"  = "custom",
     #     "group_tbl"   = create_dm_cohort_group_tbl(cohort_tbl, gene),
     #     "group_name"  = paste0(
     #         "Mutation Status", gene, code, sep = ": "
@@ -174,7 +188,7 @@ create_dm_cohort_sample_tbl <- function(sample_ids, gene_id, code_id){
 }
 
 
-#' Create Driver Mutation Cohort Group Tibbl
+#' Create Driver Mutation Cohort Group Tibble
 #'
 #' @param sample_tbl A tibble
 #' @param gene_name A string
@@ -192,7 +206,7 @@ create_dm_cohort_group_tbl <- function(sample_tbl, gene_name){
 
 # immune feature bin choice ---------------------------------------------------
 
-#' Create Feature Bin Cohort Object
+#' Build Feature Bin Cohort Object
 #'
 #' @param sample_ids A vector of integers
 #' @param feature_id An integer
@@ -200,15 +214,16 @@ create_dm_cohort_group_tbl <- function(sample_tbl, gene_name){
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select
 #' @importFrom rlang .data
-create_feature_bin_cohort_object <- function(
-    sample_ids,
-    feature_id,
+build_feature_bin_cohort_object <- function(
+    dataset,
+    samples,
+    feature_name,
     bin_number
 ){
-    feature_name <- get_feature_display_from_id(feature_id)
-    sample_tbl   <- create_feature_bin_sample_tbl(
-        sample_ids,
-        feature_id,
+    sample_tbl <- build_feature_bin_sample_tbl(
+        dataset,
+        samples,
+        feature_name,
         bin_number
     )
     colors_list <- sample_tbl %>%
@@ -216,13 +231,15 @@ create_feature_bin_cohort_object <- function(
         create_plot_colors_list()
     list(
         "sample_tbl"  = sample_tbl,
-        "group_tbl"   = create_feature_bin_group_tbl(sample_tbl, feature_name),
+        "group_type"  = "custom",
+        "group_tbl"   = build_feature_bin_group_tbl(sample_tbl, feature_name),
         "group_name"  = paste("Immune Feature Bins:", feature_name),
         "plot_colors" = colors_list
     )
 }
 
-#' Create Feature Bin Sample Tibble
+# TODO use samples in api query
+#' Build Feature Bin Sample Tibble
 #'
 #' @param sample_ids A vector of integers
 #' @param feature_id An integer
@@ -230,44 +247,33 @@ create_feature_bin_cohort_object <- function(
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select mutate
 #' @importFrom rlang .data
-create_feature_bin_sample_tbl <- function(sample_ids, feature_id, n_bins){
-    build_cohort_tbl_by_feature_id(sample_ids, feature_id) %>%
-        dplyr::mutate(group = as.character(cut(.data$value, n_bins))) %>%
-        dplyr::select(-.data$value)
+build_feature_bin_sample_tbl <- function(
+    dataset, samples, feature_name, n_bins
+){
+    query_feature_values(dataset, feature = feature_name) %>%
+        dplyr::filter(.data$sample %in% samples) %>%
+        dplyr::mutate("group" = as.character(cut(.data$value, n_bins))) %>%
+        dplyr::select("sample", "group")
 }
 
-#' Build Cohort Tibble By Feature ID
-#'
-#' @param sample_ids Integers in the id column of the samples table
-#' @param feature_id An integer in the id column of the features_to_samples
-#' table
-#' @importFrom magrittr %>%
-build_cohort_tbl_by_feature_id <- function(sample_ids, feature_id){
-    paste(
-        "SELECT a.sample_id, a.value FROM (",
-        create_feature_value_query(feature_id),
-        ") a WHERE a.sample_id IN (",
-        numeric_values_to_query_list(sample_ids),
-        ")"
-    ) %>%
-        perform_query("Build Cohort Tibble By Feature ID")
-}
 
-#' Create Feature Bin Group Tibble
+
+#' Build Feature Bin Group Tibble
 #'
 #' @param sample_tbl A tibble with name group
 #' @param feature_name A string
 #' @importFrom magrittr %>%
 #' @importFrom dplyr group_by summarise ungroup arrange n mutate
 #' @importFrom rlang .data
-create_feature_bin_group_tbl <- function(sample_tbl, feature_name){
+build_feature_bin_group_tbl <- function(sample_tbl, feature_name){
     sample_tbl %>%
         dplyr::group_by(.data$group) %>%
         dplyr::summarise(size = dplyr::n()) %>%
         dplyr::ungroup() %>%
         dplyr::mutate(
-            name = feature_name,
-            characteristics = "Immune feature bin range"
+            "name" = feature_name,
+            "characteristics" = "Immune feature bin range",
+            "color" = NA
         ) %>%
         dplyr::arrange(.data$group)
 }
