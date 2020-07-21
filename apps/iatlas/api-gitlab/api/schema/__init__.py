@@ -3,14 +3,14 @@ import os
 import decimal
 from api.resolvers import (
     resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_features,
-    resolve_features_by_class, resolve_features_by_tag, resolve_gene, resolve_gene_types,
+    resolve_features_by_class, resolve_features_by_tag, resolve_gene, resolve_gene_family, resolve_gene_function, resolve_gene_types,
     resolve_genes, resolve_genes_by_tag, resolve_mutations, resolve_mutation_types, resolve_patients,
     resolve_related, resolve_samples, resolve_samples_by_tag, resolve_slides, resolve_tags,
     resolve_test)
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 
-# Import GraphQl schemas
+# Import GraphQl schemas/
 root_query = load_schema_from_path(schema_dirname + '/root.query.graphql')
 copy_number_result_query = load_schema_from_path(
     schema_dirname + '/copyNumberResult.query.graphql')
@@ -21,6 +21,8 @@ driver_result_query = load_schema_from_path(
 feature_query = load_schema_from_path(
     schema_dirname + '/feature.query.graphql')
 gene_query = load_schema_from_path(schema_dirname + '/gene.query.graphql')
+gene_family_query = load_schema_from_path(schema_dirname + '/geneFamily.query.graphql')
+gene_function_query = load_schema_from_path(schema_dirname + '/geneFunction.query.graphql')
 gene_type_query = load_schema_from_path(
     schema_dirname + '/gene_type.query.graphql')
 mutation_query = load_schema_from_path(
@@ -36,7 +38,7 @@ slide_query = load_schema_from_path(schema_dirname + '/slide.query.graphql')
 tag_query = load_schema_from_path(schema_dirname + '/tag.query.graphql')
 
 type_defs = [root_query, copy_number_result_query, data_set_query, driver_result_query, feature_query,
-             gene_query, gene_type_query, mutation_query, mutation_code_query, patient_query,
+             gene_query, gene_family_query, gene_function_query, gene_type_query, mutation_query, mutation_code_query, patient_query,
              publication_query, sample_query, slide_query, tag_query]
 
 # Initialize custom scalars.
@@ -69,6 +71,8 @@ feature = ObjectType('Feature')
 features_by_class = ObjectType('FeaturesByClass')
 features_by_tag = ObjectType('FeaturesByTag')
 gene = ObjectType('Gene')
+gene_family = ObjectType('GeneFamily')
+gene_function = ObjectType('GeneFunction')
 genes_by_tag = ObjectType('GenesByTag')
 gene_type = ObjectType('GeneType')
 mutation = ObjectType('Mutation')
@@ -98,6 +102,8 @@ root.set_field('features', resolve_features)
 root.set_field('featuresByClass', resolve_features_by_class)
 root.set_field('featuresByTag', resolve_features_by_tag)
 root.set_field('gene', resolve_gene)
+root.set_field('geneFamilies', resolve_gene_family)
+root.set_field('geneFunctions', resolve_gene_function)
 root.set_field('geneTypes', resolve_gene_types)
 root.set_field('genes', resolve_genes)
 root.set_field('genesByTag', resolve_genes_by_tag)
@@ -115,7 +121,7 @@ root.set_field('test', resolve_test)
 schema = make_executable_schema(
     type_defs,
     [root, copy_number_result, data_set, direction_enum_scalar, driver_result, feature,
-     features_by_class, features_by_tag, feature_value_scalar, gene, genes_by_tag, gene_type,
+     features_by_class, features_by_tag, feature_value_scalar, gene, gene_family, gene_function, genes_by_tag, gene_type,
      mutation, mutation_code, mutation_type, patient, publication, related_by_data_set, sample,
      sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type,
      simple_publication, simple_tag, slide, tag]
