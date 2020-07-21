@@ -10,8 +10,6 @@ def resolve_copy_number_results(_obj, info, dataSet=None, direction=None, entrez
                                                       min_mean_normal=minMeanNormal, min_p_value=minPValue, min_t_stat=minTStat,
                                                       tag=tag)
 
-    if copy_number_results:
-        print('Got a response from the DB.')
     return map(build_graphql_response, copy_number_results)
 
 
