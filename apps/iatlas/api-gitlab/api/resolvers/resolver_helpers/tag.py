@@ -3,7 +3,7 @@ from api import db
 from api.db_models import (
     Dataset, DatasetToTag, DatasetToSample, Feature, FeatureClass,
     FeatureToSample, Sample, SampleToTag, Tag, TagToTag)
-from .general_resolvers import build_option_args, get_selection_set
+from .general_resolvers import build_join_condition, build_option_args, get_selection_set
 
 
 def build_core_field_mapping(model):
@@ -13,15 +13,14 @@ def build_core_field_mapping(model):
             'name': model.name.label('name')}
 
 
-def build_related_join_condition(sample_to_tag_model, tag_to_tag_model, related_model, related=None):
-    sess = db.session
-    related_join_conditions = [
-        sample_to_tag_model.tag_id == tag_to_tag_model.related_tag_id]
-    if related:
-        related_join_conditions.append(tag_to_tag_model.related_tag_id.in_(
-            sess.query(related_model.id).filter(
-                related_model.name.in_(related))))
-    return related_join_conditions
+def build_related_join_condition(sample_to_tag_model, tag_to_tag_model, related=None):
+    if bool(related):
+        related_tag_1 = orm.aliased(Tag, name='rt')
+        related = db.session.query(related_tag_1.id).filter(
+            related_tag_1.name.in_(related))
+
+    return build_join_condition(
+        tag_to_tag_model.related_tag_id, sample_to_tag_model.tag_id, filter_column=tag_to_tag_model.related_tag_id, filter_list=related)
 
 
 def build_related_request(_obj, info, data_set=None, related=None, by_data_set=True):
@@ -73,7 +72,6 @@ def build_tag_request(_obj, info, data_set=None, related=None, tag=None, feature
 
     tag_1 = orm.aliased(Tag, name='t')
     dataset_1 = orm.aliased(Dataset, name='d')
-    related_tag_1 = orm.aliased(Tag, name='rt')
     sample_1 = orm.aliased(Sample, name='s')
     sample_to_tag_1 = orm.aliased(SampleToTag, name='st1')
     sample_to_tag_2 = orm.aliased(SampleToTag, name='st2')
@@ -129,8 +127,8 @@ def build_tag_request(_obj, info, data_set=None, related=None, tag=None, feature
                                         dataset_1.name.in_(data_set))
                                 )))
 
-    related_join_condition = build_related_join_condition(sample_to_tag_1, tag_to_tag_1,
-                                                          related_tag_1, related)
+    related_join_condition = build_related_join_condition(
+        sample_to_tag_1, tag_to_tag_1, related)
     query = query.join(tag_to_tag_1, and_(*related_join_condition))
     query = query.join(sample_to_tag_2,
                        and_(sample_to_tag_2.sample_id == sample_to_tag_1.sample_id,

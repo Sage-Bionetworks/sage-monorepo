@@ -1,3 +1,10 @@
+def build_join_condition(join_column, column, filter_column=None, filter_list=None):
+    join_condition = [join_column == column]
+    if bool(filter_list):
+        join_condition.append(filter_column.in_(filter_list))
+    return join_condition
+
+
 def build_option_args(selection_set=None, valid_nodes={}):
     option_args = []
     if selection_set:

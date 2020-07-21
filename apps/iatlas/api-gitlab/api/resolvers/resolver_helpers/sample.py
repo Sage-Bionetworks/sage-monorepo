@@ -47,5 +47,4 @@ def build_sample_request(_obj, info, name=None, patient=None, by_tag=False):
 def request_samples(_obj, info, name=None, patient=None, by_tag=False):
     query = build_sample_request(
         _obj, info, name=name, patient=patient, by_tag=by_tag)
-    query = query.distinct()
-    return query.all()
+    return query.distinct().all()

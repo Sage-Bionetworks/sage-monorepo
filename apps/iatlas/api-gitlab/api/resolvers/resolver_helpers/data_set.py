@@ -54,5 +54,4 @@ def build_data_set_request(_obj, info, data_set=None, sample=None):
 def request_data_sets(_obj, info, data_set=None, sample=None):
     query = build_data_set_request(
         _obj, info, data_set=data_set, sample=sample)
-    query = query.distinct()
-    return query.all()
+    return query.distinct().all()

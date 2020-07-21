@@ -7,7 +7,7 @@ from api.db_models import (
     Dataset, DatasetToSample, Gene, GeneFamily, GeneFunction, GeneToSample, GeneToType,
     GeneType, ImmuneCheckpoint, Pathway, Publication, PublicationToGeneToGeneType,
     SuperCategory, Sample, SampleToTag, Tag, TagToTag, TherapyType)
-from .general_resolvers import build_option_args, get_selection_set, get_value
+from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
 from .tag import request_tags
 
 
@@ -22,17 +22,6 @@ def build_core_field_mapping(model):
 def build_gene_type_id_map(gene):
     if gene.gene_types:
         return map(lambda gene_type: gene_type.id, gene.gene_types)
-
-
-def build_gene_to_sample_join_condition(gene_to_sample_model, gene_model, sample_model, samples=None):
-    sess = db.session
-    gene_to_sample_join_conditions = [
-        gene_model.id == gene_to_sample_model.gene_id]
-    if samples:
-        gene_to_sample_join_conditions.append(gene_to_sample_model.sample_id.in_(
-            sess.query(sample_model.id).filter(
-                sample_model.name.in_(samples))))
-    return gene_to_sample_join_conditions
 
 
 def build_pub_gene_gene_type_join_condition(genes, pub_gene_gene_type_model, pub_model):

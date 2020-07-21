@@ -1,17 +1,10 @@
 from sqlalchemy import and_, orm
 from api import db
 from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
-from .general_resolvers import build_option_args, get_selection_set
+from .general_resolvers import build_join_condition, build_option_args, get_selection_set
 from .feature import build_core_field_mapping as build_feature_field_mapping
 from .gene import build_core_field_mapping as build_gene_field_mapping
 from .tag import build_core_field_mapping as build_tag_field_mapping
-
-
-def build_join_condition(join_model, column, filter_column=None, filter_list=None):
-    join_condition = [join_model.id == column]
-    if filter_list:
-        join_condition.append(filter_column.in_(filter_list))
-    return join_condition
 
 
 def build_copy_number_result_request(_obj, info, data_set=None, direction=None, entrez=None,
@@ -122,28 +115,28 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
     if 'data_set' in relations or data_set:
         is_outer = not bool(data_set)
         data_set_join_condition = build_join_condition(
-            data_set_1, copy_number_result_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
+            data_set_1.id, copy_number_result_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
         query = query.join(data_set_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
     if 'gene' in relations or entrez:
         is_outer = not bool(entrez)
         data_set_join_condition = build_join_condition(
-            gene_1, copy_number_result_1.gene_id, filter_column=gene_1.entrez, filter_list=entrez)
+            gene_1.id, copy_number_result_1.gene_id, filter_column=gene_1.entrez, filter_list=entrez)
         query = query.join(gene_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
     if 'feature' in relations or feature:
         is_outer = not bool(feature)
         data_set_join_condition = build_join_condition(
-            feature_1, copy_number_result_1.feature_id, filter_column=feature_1.name, filter_list=feature)
+            feature_1.id, copy_number_result_1.feature_id, filter_column=feature_1.name, filter_list=feature)
         query = query.join(feature_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
     if 'tag' in relations or tag:
         is_outer = not bool(tag)
         data_set_join_condition = build_join_condition(
-            tag_1, copy_number_result_1.tag_id, filter_column=tag_1.name, filter_list=tag)
+            tag_1.id, copy_number_result_1.tag_id, filter_column=tag_1.name, filter_list=tag)
         query = query.join(tag_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
