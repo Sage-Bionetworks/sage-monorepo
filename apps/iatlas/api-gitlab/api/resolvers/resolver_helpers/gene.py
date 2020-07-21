@@ -7,24 +7,21 @@ from api.db_models import (
     Dataset, DatasetToSample, Gene, GeneFamily, GeneFunction, GeneToSample, GeneToType,
     GeneType, ImmuneCheckpoint, Pathway, Publication, PublicationToGeneToGeneType,
     SuperCategory, Sample, SampleToTag, Tag, TagToTag, TherapyType)
-from .general_resolvers import build_option_args, get_selection_set, get_value
+from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
 from .tag import request_tags
+
+
+def build_core_field_mapping(model):
+    return {'entrez': model.entrez.label('entrez'),
+            'hgnc': model.hgnc.label('hgnc'),
+            'description': model.description.label('description'),
+            'friendlyName': model.friendly_name.label('friendly_name'),
+            'ioLandscapeName': model.io_landscape_name.label('io_landscape_name')}
 
 
 def build_gene_type_id_map(gene):
     if gene.gene_types:
         return map(lambda gene_type: gene_type.id, gene.gene_types)
-
-
-def build_gene_to_sample_join_condition(gene_to_sample_model, gene_model, sample_model, samples=None):
-    sess = db.session
-    gene_to_sample_join_conditions = [
-        gene_model.id == gene_to_sample_model.gene_id]
-    if samples:
-        gene_to_sample_join_conditions.append(gene_to_sample_model.sample_id.in_(
-            sess.query(sample_model.id).filter(
-                sample_model.name.in_(samples))))
-    return gene_to_sample_join_conditions
 
 
 def build_pub_gene_gene_type_join_condition(genes, pub_gene_gene_type_model, pub_model):
@@ -50,11 +47,7 @@ def build_gene_core_request(selection_set, entrez=None):
 
     gene_1 = orm.aliased(Gene, name='g')
 
-    core_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
-                          'hgnc': gene_1.hgnc.label('hgnc'),
-                          'description': gene_1.description.label('description'),
-                          'friendlyName': gene_1.friendly_name.label('friendly_name'),
-                          'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
+    core_field_mapping = build_core_field_mapping(gene_1)
 
     core = build_option_args(selection_set, core_field_mapping)
 

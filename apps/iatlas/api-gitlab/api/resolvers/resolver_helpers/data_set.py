@@ -6,6 +6,11 @@ from .general_resolvers import build_option_args, get_selection_set
 from .tag import request_tags
 
 
+def build_core_field_mapping(model):
+    return {'display': model.display.label('display'),
+            'name': model.name.label('name')}
+
+
 def build_data_set_request(_obj, info, data_set=None, sample=None):
     """
     Builds a SQL request and returns values from the DB.
@@ -17,8 +22,7 @@ def build_data_set_request(_obj, info, data_set=None, sample=None):
     data_set_1 = orm.aliased(Dataset, name='d')
     sample_1 = orm.aliased(Sample, name='s')
 
-    core_field_mapping = {'display': data_set_1.display.label('display'),
-                          'name': data_set_1.name.label('name')}
+    core_field_mapping = build_core_field_mapping(data_set_1)
 
     related_field_mapping = {'samples': 'samples'}
 
@@ -50,5 +54,4 @@ def build_data_set_request(_obj, info, data_set=None, sample=None):
 def request_data_sets(_obj, info, data_set=None, sample=None):
     query = build_data_set_request(
         _obj, info, data_set=data_set, sample=sample)
-    query = query.distinct()
-    return query.all()
+    return query.distinct().all()

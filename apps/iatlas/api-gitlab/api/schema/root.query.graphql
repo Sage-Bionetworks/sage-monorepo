@@ -45,22 +45,38 @@ type Query {
   """
   The "driverResults" query accepts:
 
-    - "feature", a list of feature names associated with the driver results to filter by.
+    - "dataSet", a list of data set names associated with the driver results to filter by.
     - "entrez", a list of gene entrez ids associated with the driver results to filter by.
+    - "feature", a list of feature names associated with the driver results to filter by.
     - "mutationCode", a list of mutation code names associated with the driver results to filter by.
     - "tag", a list of tag names associated with the driver results to filter by.
-    - "dataSet", a list of data set names associated with the driver results to filter by.
+    - "maxPValue", a maximum P value to filter the driver results by.
+    - "minPValue", a minimum P value to filter the driver results by.
+
+    - "maxLog10PValue", a maximum log10 calcualtion of the P value to filter the driver results by.
+    - "minLog10PValue", a minimum log10 calcualtion of the P value to filter the driver results by.
+    - "minFoldChange", a minimum fold change to filter the driver results by.
+    - "minLog10FoldChange", a minimum log10 calcualtion of the fold change to filter the driver results by.
+    - "minNumWildTypes", a minimum of wild type genes to filter the driver results by.
+    - "minNumMutants", a minimum mutant genes to filter the driver results by.
 
   If no arguments are passed, this will return all driver results.
   """
   driverResults(
-    feature: [String!]
+    dataSet: [String!]
     entrez: [Int!]
+    feature: [String!]
     mutationCode: [String!]
     tag: [String!]
-    dataSet: [String!]
-    limit: Int
-  ): [DriverResult!]!
+    maxPValue: Float
+    minPValue: Float
+    maxLog10PValue: Float
+    minLog10PValue: Float
+    minFoldChange: Float
+    minLog10FoldChange: Float
+    minNumWildTypes: Int
+    minNumMutants: Int
+): [DriverResult!]!
 
   """
   The "features" query accepts:

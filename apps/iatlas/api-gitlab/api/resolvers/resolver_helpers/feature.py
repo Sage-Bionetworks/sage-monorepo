@@ -4,33 +4,19 @@ from api.db_models import (
     Dataset, DatasetToSample, Feature, FeatureClass, FeatureToSample,
     MethodTag, Sample, SampleToTag, Tag, TagToTag)
 from api.database import return_feature_query
-from .general_resolvers import build_option_args, get_selection_set, get_value
+from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
 
 
-def build_classes_join_condition(features_model, classes_model, feature_classes=None):
-    classes_join_conditions = [features_model.class_id == classes_model.id]
-    if feature_classes:
-        classes_join_conditions.append(classes_model.name.in_(feature_classes))
-    return classes_join_conditions
+def build_core_field_mapping(model):
+    return {'display': model.display.label('display'),
+            'name': model.name.label('name'),
+            'order': model.order.label('order'),
+            'unit': model.unit.label('unit')}
 
 
-def build_feature_to_sample_join_condition(features_to_samples_model,
-                                           samples_to_tags_model,
-                                           feature=None):
-    feature_to_sample_join_condition = [
-        features_to_samples_model.sample_id == samples_to_tags_model.sample_id]
-    if feature:
-        chosen_feature = orm.aliased(Feature, name='cf')
-        feature_to_sample_join_condition.append(features_to_samples_model.feature_id.in_(
-            db.session.query(chosen_feature.id).filter(
-                chosen_feature.name.in_(feature))
-        ))
-    return feature_to_sample_join_condition
-
-
-def request_features(_obj, info, data_set=None, related=None, feature=None, feature_class=None, by_class=False, by_tag=False):
+def build_features_query(_obj, info, data_set=None, related=None, feature=None, feature_class=None, by_class=False, by_tag=False):
     """
-    Builds a SQL request and returns values from the DB.
+    Builds a SQL request.
     """
     sess = db.session
 
@@ -44,10 +30,7 @@ def request_features(_obj, info, data_set=None, related=None, feature=None, feat
     sample_1 = orm.aliased(Sample, name='s')
     tag_1 = orm.aliased(Tag, name='t')
 
-    core_field_node_mapping = {'display': feature_1.display.label('display'),
-                               'name': feature_1.name.label('name'),
-                               'order': feature_1.order.label('order'),
-                               'unit': feature_1.unit.label('unit')}
+    core_field_node_mapping = build_core_field_mapping(feature_1)
 
     related_field_node_mapping = {'class': 'class',
                                   'methodTag': 'method_tag',
@@ -105,7 +88,7 @@ def request_features(_obj, info, data_set=None, related=None, feature=None, feat
 
         query = query.select_from(sample_to_tag_1)
 
-        feature_to_sample_join_condition = build_feature_to_sample_join_condition(
+        feature_to_sample_join_condition = build_feature_sample_join_condition(
             feature_to_sample_1, sample_to_tag_1, feature)
 
         query = query.join(feature_to_sample_1, and_(
@@ -143,20 +126,34 @@ def request_features(_obj, info, data_set=None, related=None, feature=None, feat
                 sample_1, feature_to_sample_1.sample_id == sample_1.id, isouter=True)
 
     if 'class' in relations or feature_class or by_class:
-        class_join_is_outer = True
-        if feature_class:
-            class_join_is_outer = False
-        classes_join_condition = build_classes_join_condition(
-            feature_1, class_1, feature_class)
+        is_outer = not bool(feature_class)
+        classes_join_condition = build_join_condition(
+            class_1.id, feature_1.class_id, class_1.name, feature_class)
         query = query.join(class_1, and_(
-            *classes_join_condition), isouter=class_join_is_outer)
+            *classes_join_condition), isouter=is_outer)
 
     if 'method_tag' in relations:
         query = query.join(
             method_tag_1, feature_1.method_tag_id == method_tag_1.id, isouter=True)
 
     query = query.distinct()
-    query = query.order_by(feature_1.order)
+    return query.order_by(feature_1.order)
+
+
+def build_feature_sample_join_condition(features_to_samples_model,
+                                        samples_to_tags_model,
+                                        feature=None):
+    if bool(feature):
+        chosen_feature = orm.aliased(Feature, name='cf')
+        feature = db.session.query(chosen_feature.id).filter(
+            chosen_feature.name.in_(feature))
+    return build_join_condition(
+        features_to_samples_model.sample_id, samples_to_tags_model.sample_id, filter_column=features_to_samples_model.feature_id, filter_list=feature)
+
+
+def request_features(_obj, info, data_set=None, related=None, feature=None, feature_class=None, by_class=False, by_tag=False):
+    query = build_features_query(_obj, info, data_set=data_set, related=related,
+                                 feature=feature, feature_class=feature_class, by_class=by_class, by_tag=by_tag)
 
     return query.all()
 
