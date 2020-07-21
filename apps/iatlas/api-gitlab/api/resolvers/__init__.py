@@ -12,6 +12,7 @@ from .genes_resolver import resolve_genes
 from .genes_by_tag_resolver import resolve_genes_by_tag
 from .mutations_resolver import resolve_mutations
 from .mutation_types_resolver import resolve_mutation_types
+from .pathway_resolver import resolve_pathways
 from .patient_resolver import resolve_patients
 from .samples_resolver import resolve_samples
 from .samples_by_tag_resolver import resolve_samples_by_tag
