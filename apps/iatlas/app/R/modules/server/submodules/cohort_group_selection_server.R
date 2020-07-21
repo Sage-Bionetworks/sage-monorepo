@@ -110,18 +110,19 @@ cohort_group_selection_server <- function(
             selected_dataset()
         )
         if (group_choice() == "Driver Mutation") {
-            shiny::req(driver_mutation())
+            shiny::req(driver_mutation(), mutation_tbl())
         } else if (group_choice() == "Immune Feature Bins") {
             shiny::req(
                 input$immune_feature_bin_choice,
                 input$immune_feature_bin_number
             )
         }
-        iatlas.app::create_cohort_object(
+        iatlas.app::build_cohort_object(
             filter_obj(),
             selected_dataset(),
             group_choice(),
             input$driver_mutation,
+            mutation_tbl(),
             input$immune_feature_bin_choice,
             input$immune_feature_bin_number
         )

@@ -63,6 +63,26 @@ query_dataset_samples <- function(dataset){
         tidyr::unnest(cols = "samples", keep_empty = T)
 }
 
+# features --------------------------------------------------------------------
+
+query_feature_values <- function(
+    dataset = list(),
+    group_tag = list(),
+    feature = list()
+){
+    perform_api_query(
+        "feature_values",
+        list(
+            dataSet = dataset,
+            related = group_tag,
+            feature = feature
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble() %>%
+        dplyr::select("name", "sample", "value")
+}
+
 
 # features_by_tag --------------------------------------------------------------
 
@@ -352,24 +372,7 @@ query_cohort_selector <- function(
         )
 }
 
-# features --------------------------------------------------------------------
 
-query_feature_values <- function(
-    dataset = list(),
-    group_tag = list(),
-    feature = list()
-){
-    perform_api_query(
-        "feature_values",
-        list(
-            dataSet = dataset,
-            related = group_tag,
-            feature = feature
-        )
-    ) %>%
-        purrr::pluck(1) %>%
-        dplyr::as_tibble()
-}
 
 
 
