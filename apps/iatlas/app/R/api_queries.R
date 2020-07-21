@@ -68,21 +68,22 @@ query_dataset_samples <- function(dataset){
 query_feature_values <- function(
     dataset = list(),
     group_tag = list(),
-    feature = list()
+    feature = list(),
+    class = list()
 ){
     perform_api_query(
         "feature_values",
         list(
             dataSet = dataset,
             related = group_tag,
-            feature = feature
+            feature = feature,
+            featureClass = class
         )
     ) %>%
         purrr::pluck(1) %>%
         dplyr::as_tibble() %>%
-        dplyr::select("name", "sample", "value")
+        dplyr::select("name", "display", "sample", "value", "order")
 }
-
 
 # features_by_tag --------------------------------------------------------------
 

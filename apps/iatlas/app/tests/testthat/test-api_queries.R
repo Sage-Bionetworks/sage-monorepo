@@ -66,7 +66,7 @@ with_test_api_env({
     result1 <- query_feature_values(
       "TCGA", "Immune_Subtype", "leukocyte_fraction"
     )
-    expect_named(result1, c("name", "sample", "value"))
+    expect_named(result1, c("name", "display", "sample", "value", "order"))
     expect_length(result1$value, 9058)
     result1_complete <- tidyr::drop_na(result1)
     expect_length(result1_complete$value, 9058)
@@ -75,8 +75,12 @@ with_test_api_env({
       "PCAWG", "Immune_Subtype", "Lymphocytes_Aggregate1"
     )
     expect_length(result2$value, 455)
-    result2_complete <- tidyr::drop_na(result2)
-    expect_length(result2_complete$value, 455)
+
+    result3 <- query_feature_values(
+      "PCAWG", class = "EPIC"
+    )
+    expect_length(result3$value, 3640)
+
   })
 
   # features_by_tag -----------------------------------------------------------

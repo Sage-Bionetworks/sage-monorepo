@@ -1,28 +1,53 @@
 with_test_api_env({
 
-    response_tbl <- query_feature_values(
-        "PCAWG",
-        "Immune_Subtype",
+    cohort_obj1 <- list(
+        "dataset" = "PCAWG",
+        "group_type" = "tag",
+        "group_name" = "Immune_Subtype"
+    )
+
+    cohort_obj2 <- list(
+        "dataset" = "TCGA",
+        "group_type" = "custom",
+        "group_name" = "Immune_Feature_Bins"
+    )
+
+    response_tbl1 <- query_feature_values_with_cohort_object(
+        cohort_obj1,
         "EPIC_B_Cells"
     )
 
-    feature_tbl  <- query_features_values_by_tag(
-        "PCAWG",
-        "Immune_Subtype",
-        feature_class = "EPIC"
-    ) %>%
-        dplyr::rename("group" = "tag")
+    response_tbl2 <- query_feature_values_with_cohort_object(
+        cohort_obj2,
+        "leukocyte_fraction"
+    )
 
-    sample_tbl <- query_cohort_selector(
+    feature_tbl1  <- query_feature_values_with_cohort_object(
+        cohort_obj1,
+        class = "EPIC"
+    )
+
+    feature_tbl2  <- query_feature_values_with_cohort_object(
+        cohort_obj2,
+        class = "Overall Proportion"
+    )
+
+    sample_tbl1 <- query_cohort_selector(
+        "PCAWG",
+        "Immune_Subtype"
+    ) %>%
+        dplyr::select("sample", "group" = "name")
+
+    sample_tbl1 <- query_cohort_selector(
         "PCAWG",
         "Immune_Subtype"
     ) %>%
         dplyr::select("sample", "group" = "name")
 
     value_tbl <- build_ifc_value_tbl(
-        response_tbl,
-        feature_tbl,
-        sample_tbl,
+        response_tbl1,
+        feature_tbl1,
+        sample_tbl1,
         "EPIC_B_Cells"
     )
 
