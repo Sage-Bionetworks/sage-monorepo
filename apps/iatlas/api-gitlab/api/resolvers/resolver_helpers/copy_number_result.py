@@ -2,9 +2,6 @@ from sqlalchemy import and_, orm
 from api import db
 from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
 from .general_resolvers import build_join_condition, build_option_args, get_selection_set
-from .feature import build_core_field_mapping as build_feature_field_mapping
-from .gene import build_core_field_mapping as build_gene_field_mapping
-from .tag import build_core_field_mapping as build_tag_field_mapping
 
 
 def build_copy_number_result_request(_obj, info, data_set=None, direction=None, entrez=None,
@@ -38,7 +35,6 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
                              'tag': 'tag'}
 
     core = build_option_args(selection_set, core_field_mapping)
-    print('core: ', core)
     relations = build_option_args(selection_set, related_field_mapping)
     option_args = []
     append_to_options_args = option_args.append
@@ -91,11 +87,11 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
     if max_p_value or max_p_value == 0:
         query = query.filter(copy_number_result_1.p_value <= max_p_value)
 
-    if (max_log10_p_value or max_log10_p_value == 0) and (not max_p_value or max_p_value == 0):
+    if (max_log10_p_value or max_log10_p_value == 0) and (not max_p_value and max_p_value != 0):
         query = query.filter(
             copy_number_result_1.log10_p_value <= max_log10_p_value)
 
-    if min_log10_p_value or min_log10_p_value == 0:
+    if (min_log10_p_value or min_log10_p_value == 0) and (not min_p_value and min_p_value != 0):
         query = query.filter(
             copy_number_result_1.log10_p_value >= min_log10_p_value)
 
