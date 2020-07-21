@@ -175,6 +175,13 @@ type Query {
   geneTypes(name: [String!]): [GeneType!]!
 
   """
+  The "ImmuneCheckpoints" query accepts:
+
+    - "name", a list of names of the immune checkpoints to look up.
+  """
+  immuneCheckpoints(name: [String!]): [ImmuneCheckpoint!]
+
+  """
   The "mutations" query accepts:
 
     - "entrez", a list of gene entrez ids associated with the mutations to filter by.

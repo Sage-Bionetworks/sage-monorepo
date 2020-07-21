@@ -1,8 +1,8 @@
 """
-The "GeneFunction" type may return:
+The "Pathway" type may return:
 
-- The "name" of the GeneFuntion
-- A list of Genes associated with the GeneFunction
+- The "name" of the Pathway
+- A list of Genes associated with the Pathway
 """
 type Pathway {
   name: String!
