@@ -204,6 +204,13 @@ type Query {
   patients(barcode: [String!]): [Patient!]!
 
   """
+  The "Pathways" query accepts:
+
+    - "name", a list of names of the pathways to look up.
+  """
+  pathways(name: [String!]): [Pathway!]
+
+  """
   The "related" query accepts:
 
     - "dataSet", a list of data set names
