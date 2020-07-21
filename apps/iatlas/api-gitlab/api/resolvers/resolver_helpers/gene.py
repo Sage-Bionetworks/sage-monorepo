@@ -11,6 +11,14 @@ from .general_resolvers import build_option_args, get_selection_set, get_value
 from .tag import request_tags
 
 
+def build_core_field_mapping(model):
+    return {'entrez': model.entrez.label('entrez'),
+            'hgnc': model.hgnc.label('hgnc'),
+            'description': model.description.label('description'),
+            'friendlyName': model.friendly_name.label('friendly_name'),
+            'ioLandscapeName': model.io_landscape_name.label('io_landscape_name')}
+
+
 def build_gene_type_id_map(gene):
     if gene.gene_types:
         return map(lambda gene_type: gene_type.id, gene.gene_types)
@@ -50,11 +58,7 @@ def build_gene_core_request(selection_set, entrez=None):
 
     gene_1 = orm.aliased(Gene, name='g')
 
-    core_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
-                          'hgnc': gene_1.hgnc.label('hgnc'),
-                          'description': gene_1.description.label('description'),
-                          'friendlyName': gene_1.friendly_name.label('friendly_name'),
-                          'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
+    core_field_mapping = build_core_field_mapping(gene_1)
 
     core = build_option_args(selection_set, core_field_mapping)
 

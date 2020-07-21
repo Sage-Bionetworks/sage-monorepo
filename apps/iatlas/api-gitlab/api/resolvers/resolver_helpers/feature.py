@@ -14,6 +14,13 @@ def build_classes_join_condition(features_model, classes_model, feature_classes=
     return classes_join_conditions
 
 
+def build_core_field_mapping(model):
+    return {'display': model.display.label('display'),
+            'name': model.name.label('name'),
+            'order': model.order.label('order'),
+            'unit': model.unit.label('unit')}
+
+
 def build_feature_to_sample_join_condition(features_to_samples_model,
                                            samples_to_tags_model,
                                            feature=None):
@@ -44,10 +51,7 @@ def request_features(_obj, info, data_set=None, related=None, feature=None, feat
     sample_1 = orm.aliased(Sample, name='s')
     tag_1 = orm.aliased(Tag, name='t')
 
-    core_field_node_mapping = {'display': feature_1.display.label('display'),
-                               'name': feature_1.name.label('name'),
-                               'order': feature_1.order.label('order'),
-                               'unit': feature_1.unit.label('unit')}
+    core_field_node_mapping = build_core_field_mapping(feature_1)
 
     related_field_node_mapping = {'class': 'class',
                                   'methodTag': 'method_tag',

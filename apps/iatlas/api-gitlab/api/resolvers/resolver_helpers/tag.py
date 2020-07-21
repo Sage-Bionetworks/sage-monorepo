@@ -6,6 +6,13 @@ from api.db_models import (
 from .general_resolvers import build_option_args, get_selection_set
 
 
+def build_core_field_mapping(model):
+    return {'characteristics': model.characteristics.label('characteristics'),
+            'color': model.color.label('color'),
+            'display': model.display.label('display'),
+            'name': model.name.label('name')}
+
+
 def build_related_join_condition(sample_to_tag_model, tag_to_tag_model, related_model, related=None):
     sess = db.session
     related_join_conditions = [
@@ -32,10 +39,7 @@ def build_related_request(_obj, info, data_set=None, related=None, by_data_set=T
     data_set_1 = orm.aliased(Dataset, name='d')
     data_set_to_tag_1 = orm.aliased(DatasetToTag, name='dt')
 
-    core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
-                          'color': tag_1.color.label('color'),
-                          'display': tag_1.display.label('display'),
-                          'name': tag_1.name.label('name')}
+    core_field_mapping = build_core_field_mapping(tag_1)
 
     data_set_core_field_mapping = {'dataSet': data_set_1.name.label('data_set'),
                                    'display': data_set_1.display.label('data_set_display')}

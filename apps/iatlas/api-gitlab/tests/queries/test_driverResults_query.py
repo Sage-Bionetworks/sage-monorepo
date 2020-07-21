@@ -25,8 +25,42 @@ def tag_name():
 
 @pytest.fixture(scope='module')
 def common_query():
-    return """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag: [String!], $dataSet: [String!]) {
-        driverResults(feature: $feature, entrez: $entrez, mutationCode: $mutationCode, tag: $tag, dataSet: $dataSet) {
+    return """query DriverResults(
+        $dataSet: [String!]
+        $entrez: [Int!]
+        $feature: [String!]
+        $mutationCode: [String!]
+        $tag: [String!]
+        $minPValue: Float
+        $maxPValue: Float
+        $minLog10PValue: Float
+        $maxLog10PValue: Float
+        $minFoldChange: Float
+        $minLog10FoldChange: Float
+        $minNumWildTypes: Int
+        $minNumMutants: Int
+    ) {
+        driverResults(
+            dataSet: $dataSet
+            feature: $feature
+            entrez: $entrez
+            mutationCode: $mutationCode
+            tag: $tag
+            minPValue: $minPValue
+            maxPValue: $maxPValue
+            minLog10PValue: $minLog10PValue
+            maxLog10PValue: $maxLog10PValue
+            minFoldChange: $minFoldChange
+            minLog10FoldChange: $minLog10FoldChange
+            minNumWildTypes: $minNumWildTypes
+            minNumMutants: $minNumMutants
+        ) {
+            pValue
+            log10PValue
+            foldChange
+            log10FoldChange
+            numWildTypes
+            numMutants
             dataSet { name }
             feature { name }
             gene { entrez }
@@ -167,8 +201,36 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_mutation_code_a
 
 
 def test_driverResults_query_with_no_arguments_no_relations(client):
-    query = """query DriverResults($feature: [String!], $entrez: [Int!], $mutationCode: [String!], $tag: [String!], $dataSet: [String!]) {
-        driverResults(feature: $feature, entrez: $entrez, mutationCode: $mutationCode, tag: $tag, dataSet: $dataSet, limit:10) {
+    query = """query DriverResults(
+        $dataSet: [String!]
+        $entrez: [Int!]
+        $feature: [String!]
+        $mutationCode: [String!]
+        $tag: [String!]
+        $minPValue: Float
+        $maxPValue: Float
+        $minLog10PValue: Float
+        $maxLog10PValue: Float
+        $minFoldChange: Float
+        $minLog10FoldChange: Float
+        $minNumWildTypes: Int
+        $minNumMutants: Int
+    ) {
+        driverResults(
+            dataSet: $dataSet
+            feature: $feature
+            entrez: $entrez
+            mutationCode: $mutationCode
+            tag: $tag
+            minPValue: $minPValue
+            maxPValue: $maxPValue
+            minLog10PValue: $minLog10PValue
+            maxLog10PValue: $maxLog10PValue
+            minFoldChange: $minFoldChange
+            minLog10FoldChange: $minLog10FoldChange
+            minNumWildTypes: $minNumWildTypes
+            minNumMutants: $minNumMutants
+        ) {
             foldChange
             pValue
             log10PValue

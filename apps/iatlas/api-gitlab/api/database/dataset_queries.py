@@ -9,8 +9,8 @@ dataset_related_fields = [
 dataset_core_fields = ['id', 'name', 'display']
 
 
-def return_dataset_query(*args):
+def return_dataset_query(*args, model=Dataset):
     return build_general_query(
-        Dataset, args=args,
+        model, args=args,
         accepted_option_args=dataset_related_fields,
         accepted_query_args=dataset_core_fields)

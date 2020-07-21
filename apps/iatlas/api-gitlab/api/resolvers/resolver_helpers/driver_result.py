@@ -92,10 +92,7 @@ def build_driver_result_request(_obj, info, feature=None, entrez=None, mutationC
     return query
 
 
-def request_driver_results(_obj, info, feature=None, entrez=None, mutationCode=None, tag=None, data_set=None, limit=None):
+def request_driver_results(_obj, info, data_set=None, entrez=None, feature=None, mutationCode=None, tag=None):
     query = build_driver_result_request(
-        _obj, info, feature=feature, entrez=entrez, mutationCode=mutationCode, tag=tag, data_set=data_set)
-    query = query.distinct()
-    if limit:
-        query = query.limit(limit)
-    return query.all()
+        _obj, info, data_set=data_set, entrez=entrez, feature=feature, mutationCode=mutationCode, tag=tag)
+    return query.distinct().all()

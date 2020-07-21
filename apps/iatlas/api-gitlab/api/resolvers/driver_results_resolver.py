@@ -1,9 +1,9 @@
 from .resolver_helpers import get_value, request_driver_results
 
 
-def resolve_driver_results(_obj, info, feature=None, entrez=None, mutationCode=None, tag=None, dataSet=None, limit=None):
+def resolve_driver_results(_obj, info, dataSet=None, entrez=None, feature=None, mutationCode=None, tag=None):
     driver_results = request_driver_results(
-        _obj, info, feature=feature, entrez=entrez, mutationCode=mutationCode, tag=tag, data_set=dataSet, limit=limit)
+        _obj, info, data_set=dataSet, entrez=entrez, feature=feature, mutationCode=mutationCode, tag=tag)
 
     return [{
         "pValue": get_value(driver_result, "p_value"),
