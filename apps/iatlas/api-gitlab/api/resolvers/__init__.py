@@ -10,6 +10,7 @@ from .gene_function_resolver import resolve_gene_function
 from .gene_types_resolver import resolve_gene_types
 from .genes_resolver import resolve_genes
 from .genes_by_tag_resolver import resolve_genes_by_tag
+from .immune_checkpoint_resolver import resolve_immune_checkpoints
 from .mutations_resolver import resolve_mutations
 from .mutation_types_resolver import resolve_mutation_types
 from .pathway_resolver import resolve_pathways
