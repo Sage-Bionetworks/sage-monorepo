@@ -18,18 +18,18 @@ type Query {
   If no arguments are passed, this will return all copy number results.
   """
   copyNumberResults(
-      dataSet: [String!]
-      feature: [String!]
-      entrez: [Int!]
-      tag: [String!]
-      direction: DirectionEnum
-      minPValue: Float
-      maxPValue: Float
-      minLog10PValue: Float
-      maxLog10PValue: Float
-      minMeanNormal: Float
-      minMeanCnv: Float
-      minTStat: Float
+    dataSet: [String!]
+    feature: [String!]
+    entrez: [Int!]
+    tag: [String!]
+    direction: DirectionEnum
+    minPValue: Float
+    maxPValue: Float
+    minLog10PValue: Float
+    maxLog10PValue: Float
+    minMeanNormal: Float
+    minMeanCnv: Float
+    minTStat: Float
   ): [CopyNumberResult!]!
 
   """
@@ -119,6 +119,20 @@ type Query {
     - "entrez", the entrez id of the gene to look up.
   """
   gene(entrez: Int!): Gene
+
+  """
+  The "geneFamilies" query accepts:
+
+    - "name", a list of names of the gene families to look up.
+  """
+  geneFamilies(name: [String!]): [GeneFamily!]
+
+  """
+  The "geneTypes" query accepts:
+
+    - "name", a list of names of the gene functions to look up.
+  """
+  geneFunctions(name: [String!]): [GeneFunction!]
 
   """
   The "genes" query accepts:
