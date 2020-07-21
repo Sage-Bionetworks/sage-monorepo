@@ -1,10 +1,17 @@
-from sqlalchemy import orm
+from sqlalchemy import and_, orm
 from api import db
 from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
 from .general_resolvers import build_option_args, get_selection_set
 from .feature import build_core_field_mapping as build_feature_field_mapping
 from .gene import build_core_field_mapping as build_gene_field_mapping
 from .tag import build_core_field_mapping as build_tag_field_mapping
+
+
+def build_join_condition(join_model, column, filter_column=None, filter_list=None):
+    join_condition = [join_model.id == column]
+    if filter_list:
+        join_condition.append(filter_column.in_(filter_list))
+    return join_condition
 
 
 def build_copy_number_result_request(_obj, info, data_set=None, direction=None, entrez=None,
@@ -29,6 +36,7 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
                           'meanNormal': copy_number_result_1.mean_normal.label('mean_normal'),
                           'meanCnv': copy_number_result_1.mean_cnv.label('mean_cnv'),
                           'pValue': copy_number_result_1.p_value.label('p_value'),
+                          'log10PValue': copy_number_result_1.log10_p_value.label('log10_p_value'),
                           'tStat': copy_number_result_1.t_stat.label('t_stat')}
 
     related_field_mapping = {'dataSet': 'data_set',
@@ -84,30 +92,6 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
     query = sess.query(*core)
     query = query.select_from(copy_number_result_1)
 
-    if 'data_set' in relations or data_set:
-        query = query.join(
-            data_set_1, copy_number_result_1.dataset_id == data_set_1.id, isouter=True)
-        if data_set:
-            query = query.filter(data_set_1.name.in_(data_set))
-
-    if 'gene' in relations or entrez:
-        query = query.join(
-            (gene_1, copy_number_result_1.gene), isouter=True)
-        if entrez:
-            query = query.filter(gene_1.entrez.in_(entrez))
-
-    if 'feature' in relations or feature:
-        query = query.join(
-            (feature_1, copy_number_result_1.feature), isouter=True)
-        if feature:
-            query = query.filter(feature_1.name.in_(feature))
-
-    if 'tag' in relations or tag:
-        query = query.join(
-            (tag_1, copy_number_result_1.tag), isouter=True)
-        if tag:
-            query = query.filter(tag_1.name.in_(tag))
-
     if direction:
         query = query.filter(copy_number_result_1.direction == direction)
 
@@ -134,6 +118,34 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
 
     if min_t_stat or min_t_stat == 0:
         query = query.filter(copy_number_result_1.t_stat >= min_t_stat)
+
+    if 'data_set' in relations or data_set:
+        is_outer = not bool(data_set)
+        data_set_join_condition = build_join_condition(
+            data_set_1, copy_number_result_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
+        query = query.join(data_set_1, and_(
+            *data_set_join_condition), isouter=is_outer)
+
+    if 'gene' in relations or entrez:
+        is_outer = not bool(entrez)
+        data_set_join_condition = build_join_condition(
+            gene_1, copy_number_result_1.gene_id, filter_column=gene_1.entrez, filter_list=entrez)
+        query = query.join(gene_1, and_(
+            *data_set_join_condition), isouter=is_outer)
+
+    if 'feature' in relations or feature:
+        is_outer = not bool(feature)
+        data_set_join_condition = build_join_condition(
+            feature_1, copy_number_result_1.feature_id, filter_column=feature_1.name, filter_list=feature)
+        query = query.join(feature_1, and_(
+            *data_set_join_condition), isouter=is_outer)
+
+    if 'tag' in relations or tag:
+        is_outer = not bool(tag)
+        data_set_join_condition = build_join_condition(
+            tag_1, copy_number_result_1.tag_id, filter_column=tag_1.name, filter_list=tag)
+        query = query.join(tag_1, and_(
+            *data_set_join_condition), isouter=is_outer)
 
     return query
 
