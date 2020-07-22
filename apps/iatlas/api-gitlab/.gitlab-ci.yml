@@ -16,66 +16,66 @@ stages:
   - build_container
   - deploy_staging
 
-# tests:
-#   only:
-#     - merge_requests
-#   except:
-#     variables:
-#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
-#   stage: test_code
-#   image: python:3.8-alpine
-#   script:
-#     - apk add postgresql-libs
-#     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
-#     - pip install pytest pytest-cov pytest-xdist
-#     - export POSTGRES_DB=$POSTGRES_DB
-#     - export POSTGRES_HOST=$POSTGRES_HOST
-#     - export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-#     - export POSTGRES_USER=$POSTGRES_USER
-#     - pytest --cov --cov-report html -n auto
-#   artifacts:
-#     expose_as: "coverage-initial"
-#     paths:
-#       - coverage
-#     expire_in: 30 days
+tests:
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
+  stage: test_code
+  image: python:3.8-alpine
+  script:
+    - apk add postgresql-libs
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
+    - pip install pytest pytest-cov pytest-xdist
+    - export POSTGRES_DB=$POSTGRES_DB
+    - export POSTGRES_HOST=$POSTGRES_HOST
+    - export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    - export POSTGRES_USER=$POSTGRES_USER
+    - pytest --cov --cov-report html -n auto
+  artifacts:
+    expose_as: "coverage-initial"
+    paths:
+      - coverage
+    expire_in: 30 days
 
-# tests:coverage-report:
-#   only:
-#     - staging
-#     - master
-#   stage: test_code
-#   image: python:3.8-alpine
-#   script:
-#     - apk add postgresql-libs
-#     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
-#     - pip install pytest pytest-cov pytest-xdist
-#     - export POSTGRES_DB=$POSTGRES_DB
-#     - export POSTGRES_HOST=$POSTGRES_HOST
-#     - export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-#     - export POSTGRES_USER=$POSTGRES_USER
-#     - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml --cov-report term:skip-covered -n auto
-#     - coverage report --skip-covered | grep TOTAL
-#   artifacts:
-#     reports:
-#       cobertura: coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
+tests:coverage-report:
+  only:
+    - staging
+    - master
+  stage: test_code
+  image: python:3.8-alpine
+  script:
+    - apk add postgresql-libs
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
+    - pip install pytest pytest-cov pytest-xdist
+    - export POSTGRES_DB=$POSTGRES_DB
+    - export POSTGRES_HOST=$POSTGRES_HOST
+    - export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    - export POSTGRES_USER=$POSTGRES_USER
+    - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml --cov-report term:skip-covered -n auto
+    - coverage report --skip-covered | grep TOTAL
+  artifacts:
+    reports:
+      cobertura: coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
 
-# pages:
-#   only:
-#     - merge_requests
-#   except:
-#     variables:
-#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
-#   stage: publish_coverage
-#   dependencies:
-#     - tests
-#   script:
-#     - mv ./coverage/ ./public/
-#     - echo "Coverage available at $CI_PAGES_URL/"
-#   artifacts:
-#     expose_as: "coverage"
-#     paths:
-#       - public
-#     expire_in: 30 days
+pages:
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
+  stage: publish_coverage
+  dependencies:
+    - tests
+  script:
+    - mv ./coverage/ ./public/
+    - echo "Coverage available at $CI_PAGES_URL/"
+  artifacts:
+    expose_as: "coverage"
+    paths:
+      - public
+    expire_in: 30 days
 
 Build Container:
   only:
