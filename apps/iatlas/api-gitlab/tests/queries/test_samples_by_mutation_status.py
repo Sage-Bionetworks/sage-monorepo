@@ -40,7 +40,7 @@ def common_query():
 
 def test_samples_by_mutation_status_query_with_passed_sample(client, common_query, sample_name):
     response = client.post(
-        '/api', json={'query': common_query, 'variables': {'name': [sample_name]}})
+        '/api', json={'query': common_query, 'variables': {'sample': [sample_name]}})
     json_data = json.loads(response.data)
     results = json_data['data']['samplesByMutationStatus']
 
@@ -52,7 +52,7 @@ def test_samples_by_mutation_status_query_with_passed_sample(client, common_quer
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples[0:2]:
-            assert current_sample['name'] == sample
+            assert current_sample['name'] == sample_name
 
 
 def test_samples_by_mutation_status_query_with_passed_mutation_id(client, common_query, mutation_id):
@@ -119,6 +119,6 @@ def test_samples_by_mutation_status_query_with_all_args(client, common_query, mu
         samples = result['samples']
         assert result['status'] == mutation_status
         assert isinstance(samples, list)
-        assert len(samples) > 0
+        assert len(samples) == 1
         for current_sample in samples:
-            assert current_sample['name'] == sample
+            assert current_sample['name'] == sample_name

@@ -1,34 +1,21 @@
-from .resolver_helpers import get_value, request_samples, request_tags
+from .resolver_helpers import build_graphql_response, get_value, request_samples
 
 
-def resolve_samples_by_tag(_obj, info, dataSet=None, related=None, tag=None, feature=None,
-                           featureClass=None, name=None, patient=None):
-    results = []
-    append = results.append
-    intersection = set(name).intersection if name else set().intersection
-    tag_results = request_tags(_obj, info=info, data_set=dataSet,
-                               related=related, tag=tag, feature=feature,
-                               feature_class=featureClass, get_samples=True)
+def resolve_samples_by_mutations_status(_obj, info, mutationId=None, mutationStatus=None, sample=None):
+    results = request_samples(_obj, info, mutation_id=mutationId, mutation_status=mutationStatus,
+                              name=sample, by_status=True, by_tag=True)
+    build_sample_graphql_response = build_graphql_response
 
-    for row in tag_results:
-        samples_in_tag = get_value(row, 'samples')
-        samples_in_tag = intersection(
-            samples_in_tag) if name else samples_in_tag
+    status_map = dict()
+    for row in results:
+        sample_status = get_value(row, 'status')
+        if sample_status:
+            try:
+                status_map[sample_status].append(row)
+            except KeyError:
+                status_map[sample_status] = [row]
 
-        if samples_in_tag:
-            sample_results = request_samples(
-                _obj, info, name=samples_in_tag, patient=patient, by_tag=True)
-
-            if sample_results:
-                append({
-                    'characteristics': get_value(row, 'characteristics'),
-                    'color': get_value(row, 'color'),
-                    'display': get_value(row, 'display'),
-                    'tag': get_value(row, 'tag'),
-                    'samples': [{
-                        'name': get_value(sample),
-                        'patient': get_value(sample, 'patient', [])
-                    } for sample in sample_results]
-                })
-
-    return results
+    return [{
+        'samples': list(map(build_sample_graphql_response, value)),
+        'status': key
+    } for key, value in status_map.items()]
