@@ -89,6 +89,7 @@ gene = ObjectType('Gene')
 gene_family = ObjectType('GeneFamily')
 gene_function = ObjectType('GeneFunction')
 genes_by_tag = ObjectType('GenesByTag')
+gene_related_sample = ObjectType('GeneRelatedSample')
 gene_type = ObjectType('GeneType')
 immune_checkpoint = ObjectType('ImmuneCheckpoint')
 mutation = ObjectType('Mutation')
@@ -141,9 +142,9 @@ root.set_field('test', resolve_test)
 
 schema = make_executable_schema(
     type_defs,
-    [root, copy_number_result, data_set, direction_enum_scalar, driver_result, feature,
-     features_by_class, features_by_tag, feature_value_scalar, gene, gene_family, gene_function, genes_by_tag, gene_type,
-     immune_checkpoint, mutation, mutation_code, mutation_type, pathway, patient, publication, related_by_data_set, sample,
-     sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type,
-     simple_publication, simple_tag, slide, tag]
+    [root, copy_number_result, data_set, direction_enum_scalar, driver_result, feature, features_by_class,
+     features_by_tag, feature_value_scalar, gene, gene_family, gene_function, genes_by_tag, gene_related_sample,
+     gene_type, immune_checkpoint, mutation, mutation_code, mutation_type, pathway, patient, publication,
+     related_by_data_set, sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature,
+     simple_gene, simple_gene_type, simple_publication, simple_tag, slide, tag]
 )

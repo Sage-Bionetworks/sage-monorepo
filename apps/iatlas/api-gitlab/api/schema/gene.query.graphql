@@ -24,11 +24,11 @@ type Gene {
   ioLandscapeName: String
   geneFamily: String
   geneFunction: String
-  geneTypes: [SimpleGeneType!]
+  geneTypes: [SimpleGeneType!]!
   immuneCheckpoint: String
   pathway: String
-  publications: [SimplePublication!]
-  rnaSeqExpr: [Float]
+  publications: [SimplePublication!]!
+  samples: [GeneRelatedSample!]!
   superCategory: String
   therapyType: String
 }

@@ -1,16 +1,29 @@
 """
-The "Sample" type may return the sample's name (often the "sample" portion of
-a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/)).
-It may also return a Patient object.
+The "Sample" type may return:
 
-There may only ever be one patient to a sample though a patient may be related
-to many samples.
+- "name", the sample's name (often the "sample" portion of a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/)).
+- "patient", a Patient object related to the sample. There may only ever be one patient to a sample though a patient may be related to many samples.
 
-See also `SamplesByTag`
+See also `GeneRelatedSample`, `SampleByMutationStatus`, and `SamplesByTag`
 """
 type Sample {
   name: String!
   patient: Patient
+}
+
+"""
+The "GeneRelatedSample" is a sample that is specifically related to a gene.
+It may return:
+
+- "name", the sample's name (often the "sample" portion of
+a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/)).
+- "rnaSeqExpr", the RNA sequence expression or the sample related to the Gene.
+
+See also `Gene`
+"""
+type GeneRelatedSample {
+  name: String!
+  rnaSeqExpr: [Float!]!
 }
 
 """
