@@ -10,5 +10,5 @@ from .general_resolvers import *
 from .immune_checkpoint import request_immune_checkpoints
 from .mutation import request_mutations
 from .pathway import request_pathways
-from .sample import request_samples
+from .sample import build_graphql_response, request_samples
 from .tag import request_related, request_tags

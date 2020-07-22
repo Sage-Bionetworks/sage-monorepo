@@ -36,8 +36,6 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
 
     core = build_option_args(selection_set, core_field_mapping)
     relations = build_option_args(selection_set, related_field_mapping)
-    option_args = []
-    append_to_options_args = option_args.append
 
     if 'data_set' in relations:
         data_set_selection_set = get_selection_set(

@@ -64,7 +64,7 @@ def build_related_request(_obj, info, data_set=None, related=None, by_data_set=T
 
 
 def build_tag_request(_obj, info, data_set=None, related=None, tag=None, feature=None,
-                      feature_class=None, get_samples=False):
+                      feature_class=None, get_samples=False, sample=None):
     """
     Builds a SQL request and returns values from the DB.
     """
@@ -81,8 +81,6 @@ def build_tag_request(_obj, info, data_set=None, related=None, tag=None, feature
                                  'color': tag_1.color.label('color'),
                                  'display': tag_1.display.label('display'),
                                  'name': tag_1.name.label('name'),
-                                 'samples': func.array_agg(func.distinct(
-                                     sample_1.name)).label('samples'),
                                  'sampleCount': func.count(func.distinct(sample_to_tag_2.sample_id)).label('sample_count'),
                                  'tag': tag_1.name.label('tag')}
 
@@ -145,8 +143,11 @@ def build_tag_request(_obj, info, data_set=None, related=None, tag=None, feature
         query = query.group_by(tag_1.name, tag_1.display,
                                tag_1.characteristics, tag_1.color)
         if 'samples' in requested_nodes or get_samples:
+            is_outer = not bool(sample)
+            sample_join_condition = build_join_condition(
+                sample_1.id, sample_to_tag_2.sample_id, sample_1.name, sample)
             query = query.join(
-                sample_1, sample_1.id == sample_to_tag_2.sample_id, isouter=True)
+                sample_1, and_(*sample_join_condition), isouter=is_outer)
 
     return query
 
@@ -159,8 +160,8 @@ def request_related(_obj, info, data_set=None, related=None):
 
 
 def request_tags(_obj, info, data_set=None, related=None, tag=None,
-                 feature=None, feature_class=None, get_samples=False):
-    query = build_tag_request(_obj, info, data_set=data_set, related=related, tag=tag,
-                              feature=feature, feature_class=feature_class, get_samples=get_samples)
+                 feature=None, feature_class=None, get_samples=False, sample=None):
+    query = build_tag_request(_obj, info, data_set=data_set, related=related, tag=tag, feature=feature,
+                              feature_class=feature_class, get_samples=get_samples, sample=sample)
 
     return query.distinct().all()

@@ -36,6 +36,7 @@ def test_samples_query_with_passed_patient(client, patient):
     results = json_data['data']['samples']
 
     assert isinstance(results, list)
+    assert len(results) > 0
     for result in results[0:2]:
         assert type(result['name']) is str
         assert result['patient']['barcode'] == patient
@@ -52,6 +53,7 @@ def test_samples_query_with_no_args(client):
     results = json_data['data']['samples']
 
     assert isinstance(results, list)
+    assert len(results) > 0
     for result in results[0:2]:
         assert type(result['name']) is str
 
@@ -71,6 +73,7 @@ def test_samples_query_with_all_args(client, patient, sample):
     results = json_data['data']['samples']
 
     assert isinstance(results, list)
+    assert len(results) == 1
     for result in results[0:2]:
         assert result['name'] == sample
         assert result['patient']['barcode'] == patient
