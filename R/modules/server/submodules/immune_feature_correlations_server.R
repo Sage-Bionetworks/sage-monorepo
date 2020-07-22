@@ -89,14 +89,11 @@ immune_feature_correlations_server <- function(
     scatterplot_tbl <- shiny::reactive({
         shiny::req(value_tbl())
         shiny::validate(shiny::need(heatmap_eventdata(), "Click above heatmap"))
-        group <- get_values_from_eventdata(heatmap_eventdata())
-        feature_display <- get_values_from_eventdata(heatmap_eventdata(), "y")
-
-         build_ifc_scatterplot_tbl(
-             value_tbl(),
-             feature_display,
-             group
-         )
+        group   <- iatlas.app::get_values_from_eventdata(heatmap_eventdata())
+        feature <- iatlas.app::get_values_from_eventdata(
+            heatmap_eventdata(), "y"
+        )
+        iatlas.app::build_ifc_scatterplot_tbl(value_tbl(), feature, group)
     })
 
     output$scatterPlot <- plotly::renderPlotly({

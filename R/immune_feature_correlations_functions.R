@@ -58,7 +58,7 @@ build_ifc_value_tbl <- function(response_tbl, feature_tbl, sample_tbl){
 build_ifc_heatmap_matrix <- function(tbl, method){
     tbl %>%
         dplyr::group_by(.data$group, .data$feature_name, .data$feature_order) %>%
-        dplyr::summarise(cor_value = stats::cor(
+        dplyr::summarise("cor_value" = stats::cor(
             .data$feature_value,
             .data$response_value,
             method = method
@@ -94,7 +94,8 @@ build_ifc_scatterplot_tbl <- function(tbl, .feature, .group){
             "group",
             "y"     = .data$response_value,
             "x"     = .data$feature_value,
-            "name"  = .data$sample
+            "sample"
         ) %>%
-        create_plotly_label(.data$name, .data$group, cols = c("x", "y"))
+        create_plotly_label(.data$sample, .data$group, cols = c("x", "y")) %>%
+        dplyr::select("label", "x", "y")
 }
