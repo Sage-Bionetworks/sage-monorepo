@@ -9,13 +9,7 @@ cell_type_fractions_server <- function(
 
     value_tbl <- shiny::reactive({
         shiny::req(input$fraction_group_choice)
-        iatlas.app::query_features_values_by_tag(
-            cohort_obj()$dataset,
-            cohort_obj()$group_name,
-            feature_class = input$fraction_group_choice
-        ) %>%
-            dplyr::rename("group" = "tag") %>%
-            dplyr::filter(sample %in% cohort_obj()$sample_tbl$sample)
+        build_ctf_value_tbl(cohort_obj(), input$fraction_group_choice)
     })
 
     plot_tbl <- shiny::reactive({
