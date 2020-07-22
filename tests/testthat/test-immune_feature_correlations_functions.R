@@ -12,6 +12,12 @@ with_test_api_env({
         "group_name" = "Immune_Feature_Bins"
     )
 
+    sample_tbl1 <- query_cohort_selector("PCAWG", "Immune_Subtype") %>%
+        dplyr::select("sample", "group" = "name")
+
+    sample_tbl2 <- query_cohort_selector("TCGA", "Immune_Subtype") %>%
+        dplyr::select("sample", "group" = "name")
+
     response_tbl1 <- build_ifc_response_tbl(cohort_obj1, "EPIC_B_Cells")
     response_tbl2 <- build_ifc_response_tbl(cohort_obj2, "leukocyte_fraction")
 
@@ -35,11 +41,7 @@ with_test_api_env({
         expect_named(feature_tbl2, expected_columns)
     })
 
-    sample_tbl1 <- query_cohort_selector("PCAWG", "Immune_Subtype") %>%
-        dplyr::select("sample", "group" = "name")
 
-    sample_tbl2 <- query_cohort_selector("TCGA", "Immune_Subtype") %>%
-        dplyr::select("sample", "group" = "name")
 
     value_tbl1 <- build_ifc_value_tbl(response_tbl1, feature_tbl1, sample_tbl1)
     value_tbl2 <- build_ifc_value_tbl(response_tbl2, feature_tbl2, sample_tbl2)
