@@ -14,13 +14,24 @@ type Sample {
 }
 
 """
+The "SampleByMutationStatus" type may return:
+
+- The "status" the mutation status, either `Mut` or `Wt`.
+- "samples", a list of samples associated with that status.
+"""
+type SampleByMutationStatus {
+  status: StatusEnum
+  samples: [Sample!]!
+}
+
+"""
 The "SamplesByTag" type may return:
 
 - The "tag" (the name of the tag).
 - The "display", a friendly name for the tag.
 - The "characteristics" of the tag.
 - The "color", a color to represent the tag as a hex value.
-- A list of samples associated with that tag.
+- "samples", a list of samples associated with that tag.
 """
 type SamplesByTag {
   characteristics: String

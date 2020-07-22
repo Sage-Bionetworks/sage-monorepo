@@ -3,10 +3,11 @@ import os
 import decimal
 from api.resolvers import (
     resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_features,
-    resolve_features_by_class, resolve_features_by_tag, resolve_gene, resolve_gene_family, resolve_gene_function, resolve_gene_types,
-    resolve_genes, resolve_genes_by_tag, resolve_immune_checkpoints, resolve_mutations, resolve_mutation_types, resolve_pathways, resolve_patients,
-    resolve_related, resolve_samples, resolve_samples_by_tag, resolve_slides, resolve_tags,
-    resolve_test)
+    resolve_features_by_class, resolve_features_by_tag, resolve_gene, resolve_gene_family,
+    resolve_gene_function, resolve_gene_types, resolve_genes, resolve_genes_by_tag,
+    resolve_immune_checkpoints, resolve_mutations, resolve_mutation_types, resolve_pathways,
+    resolve_patients, resolve_related, resolve_samples, resolve_samples_by_mutations_status,
+    resolve_samples_by_tag, resolve_slides, resolve_tags, resolve_test)
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 
@@ -21,8 +22,10 @@ driver_result_query = load_schema_from_path(
 feature_query = load_schema_from_path(
     schema_dirname + '/feature.query.graphql')
 gene_query = load_schema_from_path(schema_dirname + '/gene.query.graphql')
-gene_family_query = load_schema_from_path(schema_dirname + '/geneFamily.query.graphql')
-gene_function_query = load_schema_from_path(schema_dirname + '/geneFunction.query.graphql')
+gene_family_query = load_schema_from_path(
+    schema_dirname + '/geneFamily.query.graphql')
+gene_function_query = load_schema_from_path(
+    schema_dirname + '/geneFunction.query.graphql')
 gene_type_query = load_schema_from_path(
     schema_dirname + '/gene_type.query.graphql')
 immune_checkpoint_query = load_schema_from_path(
@@ -66,6 +69,14 @@ def serialize_feature_value(value):
     return None
 
 
+status_enum_scalar = ScalarType('StatusEnum')
+
+
+@status_enum_scalar.serializer
+def serialize_status_enum(value):
+    return value if value == 'Mut' or value == 'Wt' else None
+
+
 # Initialize schema objects (general).
 root = ObjectType('Query')
 copy_number_result = ObjectType('CopyNumberResult')
@@ -88,6 +99,7 @@ patient = ObjectType('Patient')
 publication = ObjectType('Publication')
 related_by_data_set = ObjectType('RelatedByDataSet')
 sample = ObjectType('Sample')
+sample_by_mutation_status = ObjectType('SampleByMutationStatus')
 sample_by_tag = ObjectType('SamplesByTag')
 slide = ObjectType('Slide')
 tag = ObjectType('Tag')
@@ -120,6 +132,7 @@ root.set_field('pathways', resolve_pathways)
 root.set_field('patients', resolve_patients)
 root.set_field('related', resolve_related)
 root.set_field('samples', resolve_samples)
+root.set_field('samplesByMutationStatus', resolve_samples_by_mutations_status)
 root.set_field('samplesByTag', resolve_samples_by_tag)
 root.set_field('slides', resolve_slides)
 root.set_field('tags', resolve_tags)
@@ -131,6 +144,6 @@ schema = make_executable_schema(
     [root, copy_number_result, data_set, direction_enum_scalar, driver_result, feature,
      features_by_class, features_by_tag, feature_value_scalar, gene, gene_family, gene_function, genes_by_tag, gene_type,
      immune_checkpoint, mutation, mutation_code, mutation_type, pathway, patient, publication, related_by_data_set, sample,
-     sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type,
+     sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type,
      simple_publication, simple_tag, slide, tag]
 )
