@@ -1,7 +1,24 @@
+build_ocp_value_tbl <- function(cohort_obj){
+    cohort_obj %>%
+        query_feature_values_with_cohort_object(
+            feature = list(
+                "leukocyte_fraction", "Stromal_Fraction", "Tumor_fraction"
+            )
+        ) %>%
+        dplyr::inner_join(cohort_obj$sample_tbl, by = "sample") %>%
+        dplyr::select(
+            "sample",
+            "group",
+            "feature_name" = "display",
+            "feature_value" = "value",
+            "feature_order" = "order"
+        )
+}
+
 
 #' Build Overall Cell Proportions Barplot Tibble
 #'
-#' @param value_tbl A tibble with columns feture_name, group, feature_value,
+#' @param value_tbl A tibble with columns feature_name, group, feature_value,
 #' order
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
@@ -40,7 +57,7 @@ build_ocp_barplot_tbl <- function(value_tbl){
 build_ocp_scatterplot_tbl <- function(value_tbl, group_value){
     value_tbl %>%
         dplyr::filter(
-            .data$feature_display %in% c(
+            .data$feature_name %in% c(
                 "Leukocyte Fraction", "Stromal Fraction"
             ),
             .data$group == group_value
@@ -48,13 +65,13 @@ build_ocp_scatterplot_tbl <- function(value_tbl, group_value){
         dplyr::select(
             "sample",
             "group",
-            "feature_display",
+            "feature_name",
             "feature_value"
         ) %>%
         tidyr::pivot_wider(
             .,
             values_from = .data$feature_value,
-            names_from = .data$feature_display
+            names_from = .data$feature_name
         ) %>%
         tidyr::drop_na() %>%
         dplyr::rename(

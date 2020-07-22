@@ -7,15 +7,7 @@ overall_cell_proportions_server  <- function(
 
     source("R/modules/server/submodules/plotly_server.R", local = T)
 
-    value_tbl <- shiny::reactive({
-        iatlas.app::query_features_values_by_tag(
-            cohort_obj()$dataset,
-            cohort_obj()$group_name,
-            list("leukocyte_fraction", "Stromal_Fraction", "Tumor_fraction")
-        ) %>%
-            dplyr::rename("group" = "tag") %>%
-            dplyr::filter(sample %in% cohort_obj()$sample_tbl$sample)
-    })
+    value_tbl <- shiny::reactive(iatlas.app::build_ocp_value_tbl(cohort_obj()))
 
     barplot_tbl <- shiny::reactive({
         req(value_tbl())
