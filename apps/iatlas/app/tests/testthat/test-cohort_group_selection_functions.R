@@ -19,6 +19,9 @@ with_test_api_env({
     )
 
     mutation_tbl <- build_cohort_mutation_tbl()
+    feature_bin_tbl <- "TCGA" %>%
+        query_features_by_class() %>%
+        dplyr::select("class", "display", "name")
 
     test_that("build_custom_group_tbl", {
         expect_equal(
@@ -175,7 +178,7 @@ with_test_api_env({
 
     test_that("Create Feature Bin Cohort Object",{
         res1 <- build_feature_bin_cohort_object(
-            "TCGA", tcga_samples, "leukocyte_fraction", 2L
+            "TCGA", tcga_samples, "leukocyte_fraction", 2L, feature_bin_tbl
         )
         expect_named(res1$sample_tbl, c("sample", "group"))
         expect_named(
@@ -197,7 +200,8 @@ with_test_api_env({
             "TCGA",
             "Immune Feature Bins",
             feature_bin_name = "leukocyte_fraction",
-            feature_bin_number = 2L
+            feature_bin_number = 2L,
+            feature_bin_tbl = feature_bin_tbl
         )
         expected_obj_names <- c(
             "dataset",

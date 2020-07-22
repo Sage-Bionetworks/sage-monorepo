@@ -40,9 +40,9 @@ build_cohort_object <- function(
     driver_mutation = NULL,
     mutation_tbl = NULL,
     feature_bin_name = NULL,
-    feature_bin_number = NULL
+    feature_bin_number = NULL,
+    feature_bin_tbl = NULL
 ){
-
     samples <- filter_obj$samples
     if (group_choice %in% c(
         "Immune_Subtype", "TCGA_Subtype", "TCGA_Study", "PCAWG_Study")
@@ -63,7 +63,8 @@ build_cohort_object <- function(
             dataset,
             samples,
             feature_bin_name,
-            feature_bin_number
+            feature_bin_number,
+            feature_bin_tbl
         )
         cohort_object$feature_tbl <-
             query_features_by_class(dataset)
@@ -218,7 +219,8 @@ build_feature_bin_cohort_object <- function(
     dataset,
     samples,
     feature_name,
-    bin_number
+    bin_number,
+    feature_tbl
 ){
     sample_tbl <- build_feature_bin_sample_tbl(
         dataset,
@@ -229,11 +231,15 @@ build_feature_bin_cohort_object <- function(
     colors_list <- sample_tbl %>%
         dplyr::select(.data$group) %>%
         create_plot_colors_list()
+    feature_display <- feature_tbl %>%
+        dplyr::filter(.data$name == feature_name) %>%
+        dplyr::pull("display") %>%
+        unique()
     list(
         "sample_tbl"  = sample_tbl,
         "group_type"  = "custom",
-        "group_tbl"   = build_feature_bin_group_tbl(sample_tbl, feature_name),
-        "group_name"  = paste("Immune Feature Bins:", feature_name),
+        "group_tbl"   = build_feature_bin_group_tbl(sample_tbl, feature_display),
+        "group_name"  = paste("Immune Feature Bins:", feature_display),
         "plot_colors" = colors_list
     )
 }
