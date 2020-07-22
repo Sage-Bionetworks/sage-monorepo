@@ -250,6 +250,21 @@ type Query {
   samples(name: [String!], patient: [String!]): [Sample!]!
 
   """
+  The "samplesByMutationStatus" query accepts:
+
+    - "mutationId", a list of mutation ids
+    - "mutationStatus", a StatusEnum value to filter the samples by
+    - "sample", a list of sample names
+
+  If no filters are passed, this will return a list of all mutation statuses with lists of all related samples.
+  """
+  samplesByMutationStatus(
+      mutationId: [Int!]
+      mutationStatus: StatusEnum
+      sample: [String!]
+  ) :  [SampleByMutationStatus!]!
+
+  """
   The "samplesByTag" query accepts:
 
     - "sample", a list of sample names
