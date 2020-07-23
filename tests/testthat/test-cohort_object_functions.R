@@ -1,5 +1,25 @@
 with_test_api_env({
 
+  ### cohort as input ---------------------------------------------------------
+
+  cohort_object1 <- build_cohort_object(
+    filter_obj = list(
+      "samples" = "PCAWG" %>%
+        iatlas.app::query_dataset_samples(.) %>%
+        dplyr::pull("name")
+    ),
+    dataset = "PCAWG",
+    group_choice = "Immune_Subtype",
+    group_type = "tag"
+  )
+
+  test_that("get_cohort_feature_class_list", {
+    res1 <- get_cohort_feature_class_list(cohort_object1)
+    expect_vector(res1)
+
+  })
+
+  ## API queries --------------------------------------------------------------
   # features ------------------------------------------------------------------
 
   test_that("query_feature_values_with_cohort_object", {

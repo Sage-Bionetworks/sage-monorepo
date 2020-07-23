@@ -13,11 +13,7 @@ immune_feature_correlations_server <- function(
         shiny::selectInput(
             inputId  = ns("class_choice"),
             label    = "Select or Search for Variable Class",
-            choices  = cohort_obj() %>%
-                purrr::pluck("feature_tbl") %>%
-                dplyr::pull("class") %>%
-                unique() %>%
-                sort(),
+            choices  = iatlas.app::get_cohort_feature_class_list(cohort_obj()),
             selected = "DNA Alteration"
         )
     })
