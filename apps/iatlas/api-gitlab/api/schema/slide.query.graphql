@@ -6,7 +6,6 @@ The "Slide" type may return:
 - The  "patient" associated to the slide
 """
 type Slide {
-  id: Int!
   name: String!
   description: String
   patient: Patient
@@ -19,7 +18,6 @@ The "SimpleSlide" type may return:
 - The  "description" of the slide
 """
 type SimpleSlide {
-  id: Int!
   name: String!
   description: String
 }
