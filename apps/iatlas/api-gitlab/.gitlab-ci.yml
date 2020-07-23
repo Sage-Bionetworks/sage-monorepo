@@ -16,28 +16,28 @@ stages:
   - build_container
   - deploy_staging
 
-# tests:
-#   only:
-#     - merge_requests
-#   except:
-#     variables:
-#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
-#   stage: test_code
-#   image: python:3.8-alpine
-#   script:
-#     - apk add postgresql-libs
-#     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
-#     - pip install pytest pytest-cov pytest-xdist
-#     - export POSTGRES_DB=${STAGING_DB_NAME}
-#     - export POSTGRES_HOST=$STAGING_DB_HOST
-#     - export POSTGRES_PASSWORD=$STAGING_DB_PASSWORD
-#     - export POSTGRES_USER=$STAGING_DB_USER
-#     - pytest --cov --cov-report html -n auto
-#   artifacts:
-#     expose_as: "coverage-initial"
-#     paths:
-#       - coverage
-#     expire_in: 30 days
+tests:
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
+  stage: test_code
+  image: python:3.8-alpine
+  script:
+    - apk add postgresql-libs
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
+    - pip install pytest pytest-cov pytest-xdist
+    - export POSTGRES_DB=${STAGING_DB_NAME}
+    - export POSTGRES_HOST=$STAGING_DB_HOST
+    - export POSTGRES_PASSWORD=$STAGING_DB_PASSWORD
+    - export POSTGRES_USER=$STAGING_DB_USER
+    - pytest --cov --cov-report html -n auto
+  artifacts:
+    expose_as: "coverage-initial"
+    paths:
+      - coverage
+    expire_in: 30 days
 
 tests:coverage-report:
   only:
