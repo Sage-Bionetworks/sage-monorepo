@@ -31,9 +31,7 @@ immunomodulator_distributions_server <- function(
 
     gene_choice_hgnc <- shiny::reactive({
         shiny::req(input$gene_choice_entrez, im_tbl())
-        im_tbl() %>%
-            dplyr::filter(.data$entrez == input$gene_choice_entrez) %>%
-            dplyr::pull("hgnc")
+        iatlas.app::get_im_hgnc_from_tbl(im_tbl(), input$gene_choice_entrez)
     })
 
     gene_plot_label <- shiny::reactive({
