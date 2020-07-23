@@ -24,4 +24,4 @@ def resolve_gene(_obj, info, entrez, sample=None):
         for key, collection in groupby(pubs, key=lambda pub: pub.gene_id):
             pubs_dict[key] = list(collection)
 
-        return build_gene_graphql_response(gene)(types_dict, pubs_dict, samples_dict) if gene else None
+        return build_gene_graphql_response(types_dict, pubs_dict, samples_dict)(gene) if gene else None
