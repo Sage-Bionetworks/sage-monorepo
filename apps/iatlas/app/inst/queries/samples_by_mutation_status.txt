@@ -1,0 +1,16 @@
+query SamplesByMutationStatus(
+  $mutationId: [Int!]
+  $mutationStatus: StatusEnum
+  $sample: [String!]
+) {
+  samplesByMutationStatus(
+    mutationId: $mutationId
+    mutationStatus: $mutationStatus
+    sample: $sample
+  ) {
+    status
+    samples {
+      name
+    }
+  }
+}

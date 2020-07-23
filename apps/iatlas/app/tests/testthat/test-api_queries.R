@@ -238,6 +238,20 @@ with_test_api_env({
     expect_equal(result$name, c("Immune_Subtype", "TCGA_Study", "TCGA_Subtype"))
   })
 
+  # samples by mutation status ------------------------------------------------
+
+  test_that("query_samples_by_mutation_status", {
+    expected_names <- c("sample", "status")
+    result1 <- query_samples_by_mutation_status()
+    result2 <- query_samples_by_mutation_status(777, "Mut", "TCGA-2Z-A9J8")
+    result3 <- query_samples_by_mutation_status(777, "Mut", "none")
+    expect_named(result1, expected_names)
+    expect_named(result2, expected_names)
+    expect_named(result3, expected_names)
+    expect_equal(nrow(result3), 0)
+  })
+
+
   # tags ----------------------------------------------------------------------
 
   test_that("tags", {

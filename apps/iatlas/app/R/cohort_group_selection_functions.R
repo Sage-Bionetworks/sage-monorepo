@@ -37,41 +37,31 @@ build_cohort_object <- function(
     filter_obj,
     dataset,
     group_choice,
-    driver_mutation = NULL,
-    mutation_tbl = NULL,
-    feature_bin_name = NULL,
-    feature_bin_number = NULL,
-    feature_bin_tbl = NULL
+    group_type,
+    ...
 ){
     samples <- filter_obj$samples
     if (group_choice %in% c(
         "Immune_Subtype", "TCGA_Subtype", "TCGA_Study", "PCAWG_Study")
     ) {
         cohort_object <- build_tag_cohort_object(
-            samples, dataset, group_choice
+            dataset, samples, group_choice
         )
         cohort_object$feature_tbl <-
             query_features_by_class(dataset, group_choice)
     } else if (group_choice == "Driver Mutation") {
-        cohort_object <- build_dm_cohort_object(
-            samples, driver_mutation, mutation_tbl
-        )
-        cohort_object$feature_tbl <-
-            query_features_by_class(dataset)
+        cohort_object <- build_dm_cohort_object(dataset, samples, ...)
+        cohort_object$feature_tbl <- query_features_by_class(dataset)
     } else if (group_choice == "Immune Feature Bins") {
-        cohort_object <- build_feature_bin_cohort_object(
-            dataset,
-            samples,
-            feature_bin_name,
-            feature_bin_number,
-            feature_bin_tbl
-        )
-        cohort_object$feature_tbl <-
-            query_features_by_class(dataset)
+        cohort_object <- build_feature_bin_cohort_object(dataset, samples, ...)
+        cohort_object$feature_tbl <- query_features_by_class(dataset)
     }
     cohort_object$dataset     <- dataset
-    cohort_object$filters     <- "None"
     # cohort_object$filters     <- filter_obj$filters
+    cohort_object$filters     <- "None"
+    cohort_object$plot_colors <- cohort_object$group_tbl %>%
+        dplyr::select("group", "color") %>%
+        tibble::deframe(.)
     return(cohort_object)
 }
 
@@ -84,7 +74,7 @@ build_cohort_object <- function(
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select
 #' @importFrom rlang .data
-build_tag_cohort_object <- function(samples, dataset, tag){
+build_tag_cohort_object <- function(dataset, samples, tag){
     cohort_tbl  <- build_cohort_tbl_by_tag(samples, dataset, tag)
     sample_tbl   <- cohort_tbl %>%
         dplyr::select("sample", "group") %>%
@@ -92,17 +82,14 @@ build_tag_cohort_object <- function(samples, dataset, tag){
     group_tbl <- cohort_tbl %>%
         dplyr::select(-"sample") %>%
         dplyr::distinct() %>%
-        dplyr::arrange(.data$group)
-    colors_list <- group_tbl %>%
-        dplyr::select(.data$group, .data$color) %>%
-        dplyr::distinct() %>%
-        create_plot_colors_list(.)
+        dplyr::arrange(.data$group) %>%
+        add_plot_colors_to_tbl(.)
+
     list(
         "sample_tbl"  = sample_tbl,
         "group_type"  = "tag",
         "group_tbl"   = group_tbl,
-        "group_name"  = tag,
-        "plot_colors" = colors_list
+        "group_name"  = tag
     )
 }
 
@@ -134,59 +121,30 @@ build_cohort_tbl_by_tag <- function(samples, dataset, tag){
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select
 #' @importFrom rlang .data
-build_dm_cohort_object <- function(samples, mutation, mutation_tbl){
-    # gene <- get_gene_from_mutation(mutation) %>%  print()
-    # code <- get_code_from_mutation(mutation) %>%  print()
-    print(mutation_tbl)
-    # gene_id <- get_gene_id_from_hgnc(gene)
-    # code_id <- get_id_from_mutation_code(code)
-    # cohort_tbl  <- create_dm_cohort_sample_tbl(samples, gene_id, code_id)
-    # colors_list <- cohort_tbl %>%
-    #     dplyr::select(.data$group) %>%
-    #     create_plot_colors_list()
-    # list(
-    #     "sample_tbl"  = cohort_tbl,
-    #     "group_type"  = "custom",
-    #     "group_tbl"   = create_dm_cohort_group_tbl(cohort_tbl, gene),
-    #     "group_name"  = paste0(
-    #         "Mutation Status", gene, code, sep = ": "
-    #     ),
-    #     "plot_colors" = colors_list
-    # )
+build_dm_cohort_object <- function(dataset, samples, mutation_id, mutation_tbl){
+
+    sample_tbl <-
+        query_samples_by_mutation_status(
+            ids = mutation_id, samples = samples
+        ) %>%
+        dplyr::select("sample", "group" = "status")
+
+    mutation <- mutation_tbl %>%
+        dplyr::filter(.data$id == mutation_id) %>%
+        dplyr::pull(mutation) %>%
+        unique()
+
+    group_tbl <- create_dm_cohort_group_tbl(sample_tbl, mutation) %>%
+        add_plot_colors_to_tbl()
+
+    list(
+        "sample_tbl"  = sample_tbl,
+        "group_type"  = "custom",
+        "group_tbl"   = group_tbl,
+        "group_name"  = paste0("Mutation Status: ", mutation)
+    )
 }
 
-#' Get Gene From Mutation
-#'
-#' @param mutation A string
-#' @importFrom stringr str_remove
-get_gene_from_mutation <- function(mutation){
-    stringr::str_remove(mutation, ":[:print:]+$")
-}
-
-#' Get Code From Mutation
-#'
-#' @param mutation A string
-#' @importFrom stringr str_remove
-get_code_from_mutation <- function(mutation){
-    stringr::str_remove(mutation, "^[:print:]+:")
-}
-
-#' Create Driver Mutation Cohort Sample Tibble
-#'
-#' @param sample_ids A vecotr of itnegers
-#' @param gene_id An integer
-#' @param code_id An integer
-create_dm_cohort_sample_tbl <- function(sample_ids, gene_id, code_id){
-    paste0(
-        "SELECT sample_id, status AS group ",
-        "FROM samples_to_mutations WHERE mutation_id IN ",
-        "(SELECT id FROM mutations a WHERE a.mutation_type_id IN ",
-        "(SELECT id FROM mutation_types WHERE name = 'driver_mutation') ",
-        "AND gene_id = ", gene_id, " ",
-        "AND mutation_code_id = ", code_id, ")"
-    ) %>%
-        perform_query("Create Driver Mutation Sample Tibble")
-}
 
 
 #' Create Driver Mutation Cohort Group Tibble
@@ -196,12 +154,15 @@ create_dm_cohort_sample_tbl <- function(sample_ids, gene_id, code_id){
 #' @importFrom magrittr %>%
 #' @importFrom dplyr group_by summarise ungroup arrange n mutate
 #' @importFrom rlang .data
-create_dm_cohort_group_tbl <- function(sample_tbl, gene_name){
+create_dm_cohort_group_tbl <- function(sample_tbl, mutation){
     sample_tbl %>%
         dplyr::group_by(.data$group) %>%
         dplyr::summarise(size = dplyr::n()) %>%
         dplyr::ungroup() %>%
-        dplyr::mutate(name = gene_name, characteristics = "Mutation Status") %>%
+        dplyr::mutate(
+            "name" = mutation,
+            "characteristics" = "Mutation Status"
+        ) %>%
         dplyr::arrange(.data$group)
 }
 
@@ -228,19 +189,20 @@ build_feature_bin_cohort_object <- function(
         feature_name,
         bin_number
     )
-    colors_list <- sample_tbl %>%
-        dplyr::select(.data$group) %>%
-        create_plot_colors_list()
+
     feature_display <- feature_tbl %>%
         dplyr::filter(.data$name == feature_name) %>%
         dplyr::pull("display") %>%
         unique()
+
+    group_tbl <- build_feature_bin_group_tbl(sample_tbl, feature_display) %>%
+        add_plot_colors_to_tbl()
+
     list(
         "sample_tbl"  = sample_tbl,
         "group_type"  = "custom",
-        "group_tbl"   = build_feature_bin_group_tbl(sample_tbl, feature_display),
-        "group_name"  = paste("Immune Feature Bins:", feature_display),
-        "plot_colors" = colors_list
+        "group_tbl"   = group_tbl,
+        "group_name"  = paste("Immune Feature Bins:", feature_display)
     )
 }
 
@@ -278,28 +240,29 @@ build_feature_bin_group_tbl <- function(sample_tbl, feature_name){
         dplyr::ungroup() %>%
         dplyr::mutate(
             "name" = feature_name,
-            "characteristics" = "Immune feature bin range",
-            "color" = NA
+            "characteristics" = "Immune feature bin range"
         ) %>%
         dplyr::arrange(.data$group)
 }
 
 # various ---------------------------------------------------------------------
 
-#' Create Plot Colors List
-#'
-#' @param tbl A tibble with name group, and optionally color
-#' @importFrom magrittr %>%
-#' @importFrom dplyr distinct arrange n
-#' @importFrom rlang .data
-#' @importFrom tibble deframe
-#' @importFrom viridisLite viridis
-create_plot_colors_list <- function(tbl){
-    tbl <- tbl %>%
-        dplyr::distinct() %>%
-        dplyr::arrange(.data$group)
-    if (!"color" %in% colnames(tbl) || any(is.na(tbl$color))) {
-        tbl <- dplyr::mutate(tbl, color = viridisLite::viridis(dplyr::n()))
+
+add_plot_colors_to_tbl <- function(tbl){
+    if ("color" %in% colnames(tbl)){
+        if(any(is.na(tbl$color))) {
+            tbl <- dplyr::select(tbl, -"color")
+        } else {
+            return(tbl)
+        }
     }
-    tibble::deframe(tbl)
+    tbl <- tbl %>%
+        dplyr::select("group") %>%
+        dplyr::distinct() %>%
+        dplyr::arrange(.data$group) %>%
+        dplyr::mutate("color" = viridisLite::viridis(dplyr::n())) %>%
+        dplyr::inner_join(tbl, ., by = "group")
+    return(tbl)
+
 }
+

@@ -331,6 +331,35 @@ query_dataset_tags <- function(dataset){
         dplyr::arrange(.data$name)
 }
 
+# samples by mutation status --------------------------------------------------
+
+query_samples_by_mutation_status <- function(
+    ids = NA,
+    status = NA,
+    samples = NA
+){
+    tbl <-
+        perform_api_query(
+            "samples_by_mutation_status",
+            list(
+                "mutationId" = ids,
+                "mutationStatus"= status,
+                "sample" = samples
+            )
+        ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble()
+    if(nrow(tbl) == 0) {
+        tbl <- dplyr::tibble("sample" = character(), "status" = character())
+    } else {
+        tbl <- tbl %>%
+            tidyr::unnest("samples") %>%
+            dplyr::select("sample" = "name", "status")
+    }
+
+
+}
+
 # tags ------------------------------------------------------------------------
 
 query_tags <- function(dataset, parent_tag){
