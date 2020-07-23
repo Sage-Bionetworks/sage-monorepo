@@ -10,7 +10,9 @@ valid_patient_node_mapping = {
     'gender': 'gender',
     'height': 'height',
     'weight': 'weight',
-    'race': 'race'
+    'race': 'race',
+    'samples': 'samples',
+    'slides': 'slides'
 }
 
 
@@ -26,9 +28,11 @@ def resolve_patients(_obj, info, barcode):
     return [{
         'age': get_value(patient, 'age'),
         'barcode': get_value(patient, 'barcode'),
-        'etnicity': get_value(patient, 'etnicity'),
+        'ethnicity': get_value(patient, 'ethnicity'),
         'gender': get_value(patient, 'gender'),
         'height': get_value(patient, 'height'),
         'weight': get_value(patient, 'weight'),
-        'race': get_value(patient, 'race')
+        'race': get_value(patient, 'race'),
+        'samples': get_value(patient, 'samples', []),
+        'slides': get_value(patient, 'slides', [])
     } for patient in patients]
