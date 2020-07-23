@@ -49,7 +49,7 @@ tests:coverage-report:
     - apk add postgresql-libs
     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
     - pip install pytest pytest-cov pytest-xdist
-    - export POSTGRES_DB=${STAGING_DB_HOST}
+    - export POSTGRES_DB=${STAGING_DB_NAME}
     #- export POSTGRES_HOST=$STAGING_DB_HOST
     #- export POSTGRES_PASSWORD=$STAGING_DB_PASSWORD
     #- export POSTGRES_USER=$STAGING_DB_USER
