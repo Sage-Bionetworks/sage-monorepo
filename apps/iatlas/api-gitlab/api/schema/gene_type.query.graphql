@@ -7,7 +7,7 @@ The "GeneType" type may return:
 """
 type GeneType {
     display: String
-    genes: [SimpleGene!]
+    genes: [SimpleGene!]!
     name: String!
 }
 

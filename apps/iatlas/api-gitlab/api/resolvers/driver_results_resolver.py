@@ -8,10 +8,10 @@ def resolve_driver_results(_obj, info, dataSet=None, entrez=None, feature=None, 
     driver_results = request_driver_results(_obj, info, data_set=dataSet, entrez=entrez, feature=feature,
                                             max_p_value=maxPValue, max_log10_p_value=maxLog10PValue, min_fold_change=minFoldChange, min_log10_fold_change=minLog10FoldChange, min_log10_p_value=minLog10PValue, min_p_value=minPValue,
                                             min_n_mut=minNumMutants, min_n_wt=minNumWildTypes, mutation_code=mutationCode, tag=tag)
-    return map(build_graphql_response, driver_results)
+    return map(build_dr_graphql_response, driver_results)
 
 
-def build_graphql_response(driver_result):
+def build_dr_graphql_response(driver_result):
     return {
         'pValue': get_value(driver_result, 'p_value'),
         'foldChange': get_value(driver_result, 'fold_change'),

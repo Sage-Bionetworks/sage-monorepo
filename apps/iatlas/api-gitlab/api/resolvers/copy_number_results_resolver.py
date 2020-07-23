@@ -10,10 +10,10 @@ def resolve_copy_number_results(_obj, info, dataSet=None, direction=None, entrez
                                                       min_mean_normal=minMeanNormal, min_p_value=minPValue, min_t_stat=minTStat,
                                                       tag=tag)
 
-    return map(build_graphql_response, copy_number_results)
+    return map(build_cnr_graphql_response, copy_number_results)
 
 
-def build_graphql_response(copy_number_result):
+def build_cnr_graphql_response(copy_number_result):
     return {
         'direction': get_value(copy_number_result, 'direction'),
         'meanNormal': get_value(copy_number_result, 'mean_normal'),

@@ -133,8 +133,9 @@ type Query {
   The "gene" query accepts:
 
     - "entrez", the entrez id of the gene to look up.
+    - "sample", a list of sample names associated with the gene (used to look up RNA sequence expressions).
   """
-  gene(entrez: Int!): Gene
+  gene(entrez: Int!, sample: [String!]): Gene
 
   """
   The "geneFamilies" query accepts:
@@ -155,10 +156,11 @@ type Query {
 
     - "entrez", a list of entrez ids for the genes to look up.
     - "geneType", a list of gene types related to the genes to look up.
+    - "sample", a list of sample names associated with the gene (used to look up RNA sequence expressions).
 
   If no arguments are passed, this will return all genes.
   """
-  genes(entrez: [Int!], geneType: [String!]): [Gene!]!
+  genes(entrez: [Int!], geneType: [String!], sample: [String!]): [Gene!]!
 
   """
   The "genesByTag" query accepts:
@@ -170,6 +172,7 @@ type Query {
     - "featureClass", a list of feature class names associated with the features to filter by.
     - "entrez", a list of gene entrez ids to filter by.
     - "geneType", a list of gene type names associated with the genes to filter by.
+    - "sample", a list of sample names associated with the gene (used to look up RNA sequence expressions).
 
   If no arguments are passed, this will return all genes organized by tag.
   """
@@ -181,6 +184,7 @@ type Query {
     featureClass: [String!]
     entrez: [Int!]
     geneType: [String!]
+    sample: [String!]
   ): [GenesByTag!]!
 
   """
