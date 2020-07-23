@@ -11,8 +11,16 @@ create_im_gene_list <- function(tbl, group){
             display = "hgnc",
             feature = "entrez"
         ) %>%
+        dplyr::arrange(.data$class) %>%
         create_nested_named_list(.)
 }
+
+get_im_hgnc_from_tbl <- function(tbl, .entrez){
+    tbl %>%
+        dplyr::filter(.data$entrez == .entrez) %>%
+        dplyr::pull("hgnc")
+}
+
 
 #' #' Build Immunomodulators Distributions Plot Tibble
 #' #'

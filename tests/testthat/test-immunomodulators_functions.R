@@ -1,18 +1,19 @@
 with_test_api_env({
 
+    im_tbl <- query_immunomodulators()
+
     test_that("Create Immunomodulators Gene List", {
-        tbl1 <- dplyr::tibble(
-            hgnc   = c("g1", "g2", "g3"),
-            entrez = 1:3,
-            group1 = c("A", "B", "B"),
-            group2 = c("C", "C", "D")
-        )
-        res1 <- create_im_gene_list(tbl1, "group1")
-        res2 <- create_im_gene_list(tbl1, "group2")
-        expect_named(res1, c("A", "B"))
-        expect_named(res1$A, "g1")
-        expect_named(res1$B, c("g2", "g3"))
-        expect_named(res2, c("C", "D"))
+        res1 <- create_im_gene_list(im_tbl, "gene_family")
+        res2 <- create_im_gene_list(im_tbl, "super_category")
+        res3 <- create_im_gene_list(im_tbl, "immune_checkpoint")
+        expect_named(res1, sort(unique(im_tbl$gene_family)))
+        expect_named(res2, sort(unique(im_tbl$super_category)))
+        expect_named(res3, sort(unique(im_tbl$immune_checkpoint)))
+    })
+
+    test_that("get_im_hgnc_from_tbl", {
+        res1 <- get_im_hgnc_from_tbl(im_tbl, 135L)
+        expect_equal(res1, "ADORA2A")
     })
 
     test_that("Build Immunomodulators Datatable Tibble", {
