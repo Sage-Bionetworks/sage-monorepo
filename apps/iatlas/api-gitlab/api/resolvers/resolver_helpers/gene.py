@@ -1,8 +1,6 @@
 from sqlalchemy import and_, orm
-from sqlalchemy.orm.attributes import set_committed_value
 from itertools import chain
 from api import db
-from api.database import return_gene_query
 from api.db_models import (
     Dataset, DatasetToSample, Gene, GeneFamily, GeneFunction, GeneToSample, GeneToType,
     GeneType, ImmuneCheckpoint, Pathway, Publication, PublicationToGeneToGeneType,
@@ -45,23 +43,22 @@ def build_gene_graphql_response(gene_type_dict=dict(), pub_dict=dict(), sample_d
 
 
 def build_pub_gene_gene_type_join_condition(gene_dict, gene_types, pub_gene_gene_type_model, pub_model):
-    pub_gene_gene_type_join_condition = [
+    join_condition = [
         pub_gene_gene_type_model.publication_id == pub_model.id, pub_gene_gene_type_model.gene_id.in_([*gene_dict])]
 
     map_of_ids = list(map(lambda gt: gt.id, gene_types))
-    chain_of_ids = chain.from_iterable(map_of_ids) if any(map_of_ids) else None
-    gene_type_ids = set(chain_of_ids) if chain_of_ids else None
+    gene_type_ids = list(dict.fromkeys(map_of_ids)) if map_of_ids else None
 
     if gene_type_ids:
-        pub_gene_gene_type_join_condition.append(
+        join_condition.append(
             pub_gene_gene_type_model.gene_type_id.in_(gene_type_ids))
 
-    return pub_gene_gene_type_join_condition
+    return (join_condition, gene_type_ids)
 
 
-def build_gene_request(_obj, info, entrez=None, gene_family=None, gene_function=None, gene_type=None,
-                       immune_checkpoint=None, pathway=None, super_category=None, therapy_type=None,
-                       sample=None, by_tag=False):
+def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None,
+                       gene_function=None, gene_type=None, immune_checkpoint=None, pathway=None, relative=None,
+                       sample=None, super_category=None, tag=None, therapy_type=None, by_tag=False):
     """
     Builds a SQL request.
     """
@@ -69,6 +66,8 @@ def build_gene_request(_obj, info, entrez=None, gene_family=None, gene_function=
 
     selection_set = get_selection_set(
         info.field_nodes[0].selection_set, by_tag, child_node='genes')
+
+    tag_selection_set = info.field_nodes[0].selection_set
 
     gene_1 = orm.aliased(Gene, name='g')
     gene_family_1 = orm.aliased(GeneFamily, name='gf')
@@ -80,6 +79,7 @@ def build_gene_request(_obj, info, entrez=None, gene_family=None, gene_function=
     pathway_1 = orm.aliased(Pathway, name='py')
     sample_1 = orm.aliased(Sample, name='s')
     super_category_1 = orm.aliased(SuperCategory, name='sc')
+    tag_1 = orm.aliased(Tag, name='t')
     therapy_type_1 = orm.aliased(TherapyType, name='tht')
 
     core_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
@@ -93,6 +93,10 @@ def build_gene_request(_obj, info, entrez=None, gene_family=None, gene_function=
                           'pathway': pathway_1.name.label('pathway'),
                           'superCategory': super_category_1.name.label('super_category'),
                           'therapyType': therapy_type_1.name.label('therapy_type')}
+    tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
+                              'color': tag_1.color.label('color'),
+                              'display': tag_1.display.label('display'),
+                              'tag': tag_1.name.label('tag')}
     related_field_mapping = {'geneFamily': 'gene_family',
                              'geneFunction': 'gene_function',
                              'geneTypes': 'gene_types',
@@ -109,6 +113,10 @@ def build_gene_request(_obj, info, entrez=None, gene_family=None, gene_function=
     option_args = []
     append_to_option_args = option_args.append
 
+    if by_tag:
+        core = core + \
+            build_option_args(tag_selection_set, tag_core_field_mapping)
+
     query = sess.query(*core)
     query = query.select_from(gene_1)
 
@@ -120,8 +128,11 @@ def build_gene_request(_obj, info, entrez=None, gene_family=None, gene_function=
             gene_to_type_1.gene_id == gene_1.id, gene_to_type_1.type_id.in_(sess.query(gene_type_1.id).filter(gene_type_1.name.in_(gene_type)))))
 
     if sample:
-        query = query.join(gene_to_sample_1, and_(gene_to_sample_1.gene_id == gene_1.id,
-                                                  gene_to_sample_1.sample_id.in_(sess.query(sample_1.id).filter(sample_1.name.in_(sample)))))
+        filter_list = sess.query(sample_1.id).filter(
+            sample_1.name.in_(sample)) if sample else sample
+        gene_sample_join_condition = build_join_condition(
+            gene_to_sample_1.gene_id, gene_1.id, gene_to_sample_1.sample_id, filter_list)
+        query = query.join(gene_to_sample_1, and_(*gene_sample_join_condition))
 
     if 'gene_family' in relations or gene_family:
         is_outer = not bool(gene_family)
@@ -164,18 +175,8 @@ def build_gene_request(_obj, info, entrez=None, gene_family=None, gene_function=
             therapy_type_1.id, gene_1.therapy_type_id, filter_column=therapy_type_1.name, filter_list=therapy_type)
         query = query.join(therapy_type_1, and_(
             *therapy_type_join_condition), isouter=is_outer)
+
     return query
-
-
-def request_gene(_obj, info, entrez=None, sample=None):
-    query = build_gene_request(_obj, info, entrez=[entrez], sample=sample)
-    return query.one_or_none()
-
-
-def request_genes(_obj, info, entrez=None, gene_type=None, sample=None, by_tag=False):
-    genes_query = build_gene_request(_obj, info, entrez=entrez, gene_type=gene_type,
-                                     sample=sample, by_tag=by_tag)
-    return genes_query.distinct().all()
 
 
 def get_gene_types(info, gene_type=None, gene_dict=dict()):
@@ -245,8 +246,9 @@ def get_publications(info, gene_types=[], gene_dict=dict(), by_tag=False):
             *pub_core, pub_gene_gene_type_1.gene_id.label('gene_id'))
         pub_query = pub_query.select_from(pub_1)
 
-        pub_gene_gene_type_join_condition = build_pub_gene_gene_type_join_condition(
+        pub_gene_gene_type_join_condition, gene_type_ids = build_pub_gene_gene_type_join_condition(
             gene_dict, gene_types, pub_gene_gene_type_1, pub_1)
+        print('gene_type_ids: ', gene_type_ids)
         pub_query = pub_query.join(pub_gene_gene_type_1, and_(
             *pub_gene_gene_type_join_condition))
 
@@ -285,8 +287,19 @@ def get_samples(info, sample=None, gene_dict=dict()):
                 sample_1.name.in_(sample))
 
         sample_query = sample_query.join(gene_to_sample_1, and_(
-            *gene_sample_join_condition))
+            *gene_sample_join_condition), isouter=(not bool(sample)))
 
         return sample_query.distinct().all()
 
     return []
+
+
+def request_gene(_obj, info, entrez=None, sample=None):
+    query = build_gene_request(_obj, info, entrez=[entrez], sample=sample)
+    return query.one_or_none()
+
+
+def request_genes(_obj, info, entrez=None, gene_type=None, sample=None, by_tag=False):
+    genes_query = build_gene_request(_obj, info, entrez=entrez, gene_type=gene_type,
+                                     sample=sample, by_tag=by_tag)
+    return genes_query.distinct().all()
