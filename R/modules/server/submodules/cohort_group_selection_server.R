@@ -60,20 +60,12 @@ cohort_group_selection_server <- function(
     output$select_driver_mutation_group_ui <- shiny::renderUI({
         shiny::req(group_choice() == "Driver Mutation", mutation_tbl())
         shiny::selectInput(
-            inputId  = ns("driver_mutation_choice"),
+            inputId  = ns("driver_mutation_id_choice"),
             label    = "Select or Search for Driver Mutation",
             choices  = mutation_tbl() %>%
                 dplyr::select("mutation", "id") %>%
                 tibble::deframe(.)
         )
-    })
-
-    driver_mutation <- shiny::reactive({
-        if (is.null(input$driver_mutation_choice)) {
-            return(default_driver_mutation)
-        } else {
-            return(input$driver_mutation_choice)
-        }
     })
 
     # This is so that the conditional panel can see the various shiny::reactives
@@ -115,12 +107,13 @@ cohort_group_selection_server <- function(
             selected_dataset()
         )
         if (group_choice() == "Driver Mutation") {
-            shiny::req(driver_mutation(), mutation_tbl())
+            shiny::req(input$driver_mutation_id_choice, mutation_tbl())
             cohort_obj <- iatlas.app::build_cohort_object(
                 filter_obj(),
                 selected_dataset(),
                 group_choice(),
-                driver_mutation = input$driver_mutation,
+                "custom",
+                mutation_id = as.integer(input$driver_mutation_id_choice),
                 mutation_tbl = mutation_tbl()
             )
         } else if (group_choice() == "Immune Feature Bins") {
@@ -133,15 +126,17 @@ cohort_group_selection_server <- function(
                 filter_obj(),
                 selected_dataset(),
                 group_choice(),
-                feature_bin_name = input$immune_feature_bin_choice,
-                feature_bin_number = input$immune_feature_bin_number,
-                feature_bin_tbl = feature_bin_tbl()
+                "custom",
+                feature_name = input$immune_feature_bin_choice,
+                bin_number = input$immune_feature_bin_number,
+                feature_tbl = feature_bin_tbl()
             )
         } else {
             cohort_obj <- iatlas.app::build_cohort_object(
                 filter_obj(),
                 selected_dataset(),
-                group_choice()
+                group_choice(),
+                "tag"
             )
         }
         return(cohort_obj)
