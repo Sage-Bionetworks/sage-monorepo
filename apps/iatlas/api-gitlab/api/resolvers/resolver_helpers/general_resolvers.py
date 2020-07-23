@@ -7,10 +7,11 @@ def build_join_condition(join_column, column, filter_column=None, filter_list=No
 
 def build_option_args(selection_set=None, valid_nodes={}):
     option_args = []
+    append_to_option_args = option_args.append
     if selection_set:
         for selection in selection_set.selections:
             if selection.name.value in valid_nodes:
-                option_args.append(valid_nodes.get(selection.name.value))
+                append_to_option_args(valid_nodes.get(selection.name.value))
     return option_args
 
 

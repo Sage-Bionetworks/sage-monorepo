@@ -4,7 +4,7 @@ from api.db_models import Patient, Sample, SampleToMutation, Tag
 from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
 
 
-def build_graphql_response(sample):
+def build_sample_graphql_response(sample):
     return {
         'name': get_value(sample, 'name'),
         'patient': {

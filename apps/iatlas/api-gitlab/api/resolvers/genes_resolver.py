@@ -1,34 +1,27 @@
-from .resolver_helpers import get_rna_seq_expr, get_value, request_genes
+from itertools import groupby
+from .resolver_helpers import build_gene_graphql_response, get_gene_types, get_publications, get_samples, request_genes
 
 
-def resolve_genes(_obj, info, entrez=None, geneType=None):
+def resolve_genes(_obj, info, entrez=None, sample=None, geneType=None):
     genes = request_genes(_obj, info, entrez=entrez,
                           gene_type=geneType, by_tag=True)
 
-    return [{
-        'entrez': get_value(gene, 'entrez'),
-        'hgnc': get_value(gene, 'hgnc'),
-        'description': get_value(gene, 'description'),
-        'friendlyName': get_value(gene, 'friendly_name'),
-        'ioLandscapeName': get_value(gene, 'io_landscape_name'),
-        'geneFamily': get_value(get_value(gene, 'gene_family')),
-        'geneFunction': get_value(get_value(gene, 'gene_function')),
-        'geneTypes': [{
-            'name': get_value(gene_type),
-            'display': get_value(gene_type, 'display')
-        } for gene_type in get_value(gene, 'gene_types', [])],
-        'immuneCheckpoint': get_value(get_value(gene, 'immune_checkpoint')),
-        'pathway': get_value(get_value(gene, 'pathway')),
-        'publications': [{
-            'doId': get_value(publication, 'do_id'),
-            'firstAuthorLastName': get_value(publication, 'first_author_last_name'),
-            'journal': get_value(publication, 'journal'),
-            'pubmedId': get_value(publication, 'pubmed_id'),
-            'name': get_value(publication),
-            'title': get_value(publication, 'title'),
-            'year': get_value(publication, 'year'),
-        } for publication in get_value(gene, 'publications', [])],
-        'rnaSeqExpr': get_rna_seq_expr(gene),
-        'superCategory': get_value(get_value(gene, 'super_category')),
-        'therapyType': get_value(get_value(gene, 'therapy_type'))
-    } for gene in genes]
+    gene_dict = {gene.id: gene for gene in genes}
+    samples = get_samples(info, sample=sample, gene_dict=gene_dict)
+    gene_types = get_gene_types(info, gene_type=geneType, gene_dict=gene_dict)
+    pubs = get_publications(
+        info, gene_types=gene_types, gene_dict=gene_dict)
+
+    types_dict = dict()
+    for key, collection in groupby(gene_types, key=lambda gt: gt.gene_id):
+        types_dict[key] = list(collection)
+
+    samples_dict = dict()
+    for key, collection in groupby(samples, key=lambda s: s.gene_id):
+        samples_dict[key] = list(collection)
+
+    pubs_dict = dict()
+    for key, collection in groupby(pubs, key=lambda pub: pub.gene_id):
+        pubs_dict[key] = list(collection)
+
+    return map(build_gene_graphql_response(types_dict, pubs_dict, samples_dict), genes)

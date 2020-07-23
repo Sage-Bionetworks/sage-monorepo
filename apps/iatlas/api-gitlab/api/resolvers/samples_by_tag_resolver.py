@@ -1,11 +1,11 @@
-from .resolver_helpers import build_graphql_response, get_value, request_samples, request_tags
+from .resolver_helpers import build_sample_graphql_response, get_value, request_samples, request_tags
 
 
 def resolve_samples_by_tag(_obj, info, dataSet=None, related=None, tag=None, feature=None,
                            featureClass=None, name=None, patient=None):
     results = []
     append = results.append
-    build_sample_graphql_response = build_graphql_response
+    build_graphql = build_sample_graphql_response
     intersection = set(name).intersection if name else set().intersection
     tag_results = request_tags(_obj, info=info, data_set=dataSet,
                                related=related, tag=tag, feature=feature,
@@ -26,7 +26,7 @@ def resolve_samples_by_tag(_obj, info, dataSet=None, related=None, tag=None, fea
                     'color': get_value(row, 'color'),
                     'display': get_value(row, 'display'),
                     'samples': list(
-                        map(build_sample_graphql_response, sample_results)),
+                        map(build_graphql, sample_results)),
                     'tag': get_value(row, 'tag')
                 })
 

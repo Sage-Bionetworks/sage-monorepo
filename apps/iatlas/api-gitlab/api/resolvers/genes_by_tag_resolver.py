@@ -1,5 +1,5 @@
 from .resolver_helpers import (
-    build_gene_request, build_option_args, get_rna_seq_expr, get_selection_set, get_value, request_genes, request_tags)
+    build_gene_request, build_option_args, get_selection_set, get_value, request_genes, request_tags)
 
 
 def resolve_genes_by_tag(_obj, info, dataSet, related, tag=None, feature=None, featureClass=None, entrez=None, geneType=None):
@@ -16,8 +16,9 @@ def resolve_genes_by_tag(_obj, info, dataSet, related, tag=None, feature=None, f
     get_value_1 = get_value
 
     def build_results(row):
+        sample = get_value_1(row, 'samples')
         gene_results = request_genes(_obj, info, entrez=entrez, gene_type=geneType,
-                                     by_tag=True, samples=get_value_1(row, 'samples')) if want_genes else []
+                                     by_tag=True, sample=sample) if want_genes else []
         if gene_results:
             return {
                 'characteristics': get_value_1(row, 'characteristics'),
@@ -45,7 +46,7 @@ def resolve_genes_by_tag(_obj, info, dataSet, related, tag=None, feature=None, f
 #         gene_query = build_gene_request(_obj, info, entrez=entrez, gene_type=gene_type,
 #                                         samples=samples, by_tag=by_tag)
 #         genes = request_genes(_obj, info, entrez=entrez, gene_type=geneType,
-#                                      by_tag=True, samples=get_value(row, 'samples')) if want_genes else [None]
+#                                      by_tag=True, sample=get_value(row, 'samples')) if want_genes else [None]
 
 #         gene_to_sample_1 = orm.aliased(GeneToSample, name='gs')
 

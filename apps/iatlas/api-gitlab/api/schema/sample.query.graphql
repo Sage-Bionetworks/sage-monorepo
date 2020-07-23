@@ -23,7 +23,7 @@ See also `Gene`
 """
 type GeneRelatedSample {
   name: String!
-  rnaSeqExpr: [Float!]!
+  rnaSeqExpr: Float
 }
 
 """
