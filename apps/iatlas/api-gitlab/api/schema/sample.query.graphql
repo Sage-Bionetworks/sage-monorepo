@@ -29,3 +29,7 @@ type SamplesByTag {
   samples: [Sample!]!
   tag: String!
 }
+
+type SimpleSample {
+  name: String!
+}
