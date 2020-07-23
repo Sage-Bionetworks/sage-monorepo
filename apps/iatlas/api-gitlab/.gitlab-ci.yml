@@ -30,7 +30,7 @@ tests:
     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
     - pip install pytest pytest-cov pytest-xdist
     - export FLASK_APP=iatlasapi.py
-    - export FLASK_ENV=development
+    - export FLASK_ENV=staging
     - export POSTGRES_DB=iatlas_staging
     - export POSTGRES_HOST=$STAGING_DB_HOST
     - export POSTGRES_PASSWORD=$STAGING_DB_PASSWORD
@@ -54,7 +54,7 @@ tests:coverage-report:
     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
     - pip install pytest pytest-cov pytest-xdist
     - export FLASK_APP=iatlasapi.py
-    - export FLASK_ENV=development
+    - export FLASK_ENV=staging
     - export POSTGRES_DB=iatlas_staging
     - export POSTGRES_HOST=$STAGING_DB_HOST
     - export POSTGRES_PASSWORD=$STAGING_DB_PASSWORD
