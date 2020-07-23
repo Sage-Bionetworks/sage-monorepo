@@ -21,16 +21,17 @@ def tag_id():
 def test_DriverResult_with_relations(app, data_set_id, feature_id, gene_id, tag_id):
     string_representation_list = []
     separator = ', '
-    relationships_to_join = ['dataset',
-                             'feature', 'gene', 'mutation_code', 'tag']
+    relationships_to_join = ['data_set', 'feature', 'gene',
+                             'mutation_code', 'tag']
 
     query = return_driver_result_query(*relationships_to_join)
     results = query.filter_by(dataset_id=data_set_id).filter_by(
         feature_id=feature_id).filter_by(
-        feature_id=gene_id).filter_by(tag_id=tag_id).limit(3).all()
+        gene_id=gene_id).filter_by(tag_id=tag_id).limit(3).all()
 
     assert isinstance(results, list)
-    for result in results:
+    assert len(results) > 0
+    for result in results[0:2]:
         driver_result_id = result.id
         string_representation = '<DriverResult %r>' % driver_result_id
         string_representation_list.append(string_representation)
@@ -59,9 +60,10 @@ def test_DriverResult_no_relations(app, data_set_id, feature_id, gene_id, tag_id
     query = return_driver_result_query()
     results = query.filter_by(dataset_id=data_set_id).filter_by(
         feature_id=feature_id).filter_by(
-        feature_id=gene_id).filter_by(tag_id=tag_id).limit(3).all()
+        gene_id=gene_id).filter_by(tag_id=tag_id).limit(3).all()
 
     assert isinstance(results, list)
+    assert len(results) > 0
     for result in results:
         assert type(result.data_set) is NoneType
         assert type(result.feature) is NoneType
