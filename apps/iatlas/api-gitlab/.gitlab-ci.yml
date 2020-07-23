@@ -11,7 +11,7 @@ variables:
   STAGING_DOCKER_HOST: ip-10-220-11-144.us-west-2.compute.internal
 
 stages:
-  # - test_code
+  - test_code
   - publish_coverage
   - build_container
   - deploy_staging
