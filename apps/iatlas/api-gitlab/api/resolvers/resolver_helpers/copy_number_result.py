@@ -147,4 +147,4 @@ def request_copy_number_results(_obj, info, data_set=None, direction=None, entre
                                              min_log10_p_value=min_log10_p_value, min_mean_cnv=min_mean_cnv,
                                              min_mean_normal=min_mean_normal, min_p_value=min_p_value, min_t_stat=min_t_stat,
                                              tag=tag)
-    return query.distinct().all()
+    return query.yield_per(1000).distinct().all()
