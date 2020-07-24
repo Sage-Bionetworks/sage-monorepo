@@ -18,7 +18,7 @@ def test_gene_types_query_with_passed_gene_type(client, gene_type):
         }
     }"""
     response = client.post(
-        '/api', json={'query': query, 'variables': {'name': gene_type}})
+        '/api', json={'query': query, 'variables': {'name': [gene_type]}})
     json_data = json.loads(response.data)
     results = json_data['data']['geneTypes']
 
@@ -39,7 +39,7 @@ def test_gene_types_query_with_passed_gene_type_no_genes(client, gene_type):
         geneTypes(name: $name) { name }
     }"""
     response = client.post(
-        '/api', json={'query': query, 'variables': {'name': gene_type}})
+        '/api', json={'query': query, 'variables': {'name': [gene_type]}})
     json_data = json.loads(response.data)
     results = json_data['data']['geneTypes']
 

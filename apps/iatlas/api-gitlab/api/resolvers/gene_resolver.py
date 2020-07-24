@@ -3,7 +3,7 @@ from .resolver_helpers import build_gene_graphql_response, get_gene_types, get_p
 
 
 def resolve_gene(_obj, info, entrez, sample=None):
-    gene = request_gene(_obj, info, entrez)
+    gene = request_gene(_obj, info, entrez=entrez, sample=sample)
 
     if gene:
         gene_dict = {gene.id: gene}
@@ -14,14 +14,14 @@ def resolve_gene(_obj, info, entrez, sample=None):
 
         types_dict = dict()
         for key, collection in groupby(gene_types, key=lambda gt: gt.gene_id):
-            types_dict[key] = list(collection)
+            types_dict[key] = types_dict.get(key, []) + list(collection)
 
         samples_dict = dict()
         for key, collection in groupby(samples, key=lambda s: s.gene_id):
-            samples_dict[key] = list(collection)
+            samples_dict[key] = samples_dict.get(key, []) + list(collection)
 
         pubs_dict = dict()
         for key, collection in groupby(pubs, key=lambda pub: pub.gene_id):
-            pubs_dict[key] = list(collection)
+            pubs_dict[key] = pubs_dict.get(key, []) + list(collection)
 
-        return build_gene_graphql_response(gene)(types_dict, pubs_dict, samples_dict) if gene else None
+        return build_gene_graphql_response(types_dict, pubs_dict, samples_dict)(gene) if gene else None
