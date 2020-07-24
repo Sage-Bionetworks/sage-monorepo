@@ -12,3 +12,4 @@ from .mutation import request_mutations
 from .pathway import request_pathways
 from .sample import build_sample_graphql_response, request_samples
 from .tag import request_related, request_tags
+from .therapy_type import request_therapy_types

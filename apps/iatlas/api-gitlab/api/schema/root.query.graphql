@@ -76,7 +76,7 @@ type Query {
     minLog10FoldChange: Float
     minNumWildTypes: Int
     minNumMutants: Int
-): [DriverResult!]!
+  ): [DriverResult!]!
 
   """
   The "features" query accepts:
@@ -263,10 +263,10 @@ type Query {
   If no filters are passed, this will return a list of all mutation statuses with lists of all related samples.
   """
   samplesByMutationStatus(
-      mutationId: [Int!]
-      mutationStatus: StatusEnum
-      sample: [String!]
-  ) :  [SampleByMutationStatus!]!
+    mutationId: [Int!]
+    mutationStatus: StatusEnum
+    sample: [String!]
+  ): [SampleByMutationStatus!]!
 
   """
   The "samplesByTag" query accepts:
@@ -307,10 +307,18 @@ type Query {
     tag: [String!]
     feature: [String!]
     featureClass: [String!]
+    fsdfds: [String!]
   ): [Tag!]!
 
   """
   A simple test query that is independent of the database.
   """
   test: String!
+
+  """
+  The "therapyTypes" query accepts:
+
+    - "name", a list of names of the therapy types to look up.
+  """
+  therapyTypes(name: [String!]): [TherapyType!]!
 }

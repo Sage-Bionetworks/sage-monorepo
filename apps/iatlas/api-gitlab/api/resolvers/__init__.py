@@ -22,3 +22,4 @@ from .slide_resolver import resolve_slides
 from .related_resolver import resolve_related
 from .tags_resolver import resolve_tags
 from .test_resolver import resolve_test
+from .therapy_type_resolver import resolve_therapy_types
