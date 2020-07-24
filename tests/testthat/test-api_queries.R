@@ -205,6 +205,25 @@ with_test_api_env({
     )
   })
 
+  test_that("query_expression_by_genes", {
+    expected_columns <- c(
+      "name",
+      "entrez",
+      "hgnc",
+      "rna_seq_expr"
+    )
+    result1 <- query_expression_by_genes(
+      "entrez" = 135L, sample = "TCGA-XF-A9T8"
+    )
+    result2 <- query_expression_by_genes(
+      "entrez" = 0L, sample = "TCGA-XF-A9T8"
+    )
+    expect_named(result1, expected_columns)
+    expect_named(result2, expected_columns)
+    expect_equal(nrow(result1), 1L)
+    expect_equal(nrow(result2), 0L)
+  })
+
   # gene types ----------------------------------------------------------------
 
   test_that("query_gene_types", {

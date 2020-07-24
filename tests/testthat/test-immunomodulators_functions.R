@@ -1,5 +1,32 @@
 with_test_api_env({
 
+    cohort_obj1 <- build_cohort_object(
+        filter_obj = list(
+            "samples" = "PCAWG" %>%
+                iatlas.app::query_dataset_samples(.) %>%
+                dplyr::pull("name")
+        ),
+        dataset = "PCAWG",
+        group_choice = "Immune_Subtype",
+        group_type = "tag"
+    )
+
+    cohort_obj2 <- build_cohort_object(
+        filter_obj = list(
+            "samples" = "PCAWG" %>%
+                iatlas.app::query_dataset_samples(.) %>%
+                dplyr::pull("name")
+        ),
+        dataset = "PCAWG",
+        group_choice = "Immune Feature Bins",
+        group_type = "custom",
+        feature_name = "EPIC_B_Cells",
+        bin_number = 2,
+        feature_tbl = "PCAWG" %>%
+            query_features_by_class() %>%
+            dplyr::select("class", "display", "name")
+    )
+
     im_tbl <- query_immunomodulators()
 
     test_that("Create Immunomodulators Gene List", {
@@ -14,6 +41,12 @@ with_test_api_env({
     test_that("get_im_hgnc_from_tbl", {
         res1 <- get_im_hgnc_from_tbl(im_tbl, 135L)
         expect_equal(res1, "ADORA2A")
+    })
+
+    test_that("Build Immunomodulators Distributions Plot Tibble", {
+        # expected_columns <- c("x", "y")
+        # res1 <- build_im_distplot_tbl(cohort_obj1, 3802L)
+        # res2 <- build_im_distplot_tbl(cohort_obj1, 3802L)
     })
 
     test_that("Build Immunomodulators Datatable Tibble", {

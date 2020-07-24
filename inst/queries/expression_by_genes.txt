@@ -1,0 +1,18 @@
+query ExpressionByGenes(
+  $geneType: [String!]
+  $entrez: [Int!]
+  $sample: [String!]
+) {
+  genes(
+    geneType: $geneType
+    entrez: $entrez
+    sample: $sample
+  ) {
+    entrez
+    hgnc
+    samples{
+      name
+      rnaSeqExpr
+    }
+  }
+}

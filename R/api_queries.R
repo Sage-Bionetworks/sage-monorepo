@@ -256,6 +256,40 @@ query_io_targets <- function(
         )
 }
 
+query_expression_by_genes <- function(type = NA, entrez = NA, sample = NA){
+    result <-
+        perform_api_query(
+            "expression_by_genes",
+            list(
+                "geneType" = type,
+                "entrez" = entrez,
+                "sample" = sample
+            )
+        ) %>%
+        purrr::pluck(1)
+
+    if(is.null(result)) {
+        tbl <- dplyr::tibble(
+            "name" = character(),
+            "entrez" = character(),
+            "hgnc" = character(),
+            "rna_seq_expr" = double()
+        )
+    } else {
+        tbl <- result %>%
+            dplyr::as_tibble() %>%
+            tidyr::unnest("samples") %>%
+            dplyr::arrange(.data$name) %>%
+            dplyr::select(
+                "name",
+                "entrez",
+                "hgnc",
+                "rna_seq_expr" = "rnaSeqExpr"
+            )
+    }
+    return(tbl)
+}
+
 # gene types ------------------------------------------------------------------
 
 query_gene_types <- function(name = list()){
