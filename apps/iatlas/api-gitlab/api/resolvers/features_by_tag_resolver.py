@@ -1,3 +1,4 @@
+from itertools import groupby
 from .resolver_helpers import get_value, request_features, return_feature_value
 
 
@@ -5,13 +6,9 @@ def resolve_features_by_tag(_obj, info, dataSet=None, related=None, feature=None
     results = request_features(_obj, info, data_set=dataSet, related=related, feature=feature,
                                feature_class=featureClass, by_class=False, by_tag=True)
 
-    tag_map = dict()
-    for row in results:
-        feature_tag = get_value(row, 'tag')
-        try:
-            tag_map[feature_tag].append(row)
-        except KeyError:
-            tag_map[feature_tag] = [row]
+    tags_dict = dict()
+    for key, collection in groupby(results, key=lambda f: f.tag):
+        tags_dict[key] = tags_dict.get(key, []) + list(collection)
 
     return [{
         'characteristics': get_value(value[0], 'tag_characteristics'),
@@ -28,4 +25,4 @@ def resolve_features_by_tag(_obj, info, dataSet=None, related=None, feature=None
             'value': return_feature_value(row)
         } for row in value],
         'tag': key
-    } for key, value in tag_map.items()]
+    } for key, value in tags_dict.items()]
