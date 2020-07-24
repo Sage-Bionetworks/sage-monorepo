@@ -180,6 +180,7 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
 
     if sample or by_tag:
         gene_to_sample_1 = orm.aliased(GeneToSample, name='gs')
+
         gene_to_sample_sub_query = sess.query(gene_to_sample_1.sample_id).filter(
             gene_to_sample_1.gene_id == gene_1.id)
         sample_join_condition = [sample_1.id.in_(gene_to_sample_sub_query)]
@@ -194,26 +195,14 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
             data_set_1 = orm.aliased(Dataset, name='d')
             sample_to_tag_1 = orm.aliased(SampleToTag, name='stt')
 
-            if data_set:
+            if data_set or related:
                 data_set_to_sample_1 = orm.aliased(DatasetToSample, name='dts')
 
-                query = query.join(data_set_to_sample_1,
-                                   data_set_to_sample_1.sample_id == sample_1.id)
-
-                data_set_join_condition = build_join_condition(
-                    data_set_1.id, data_set_to_sample_1.dataset_id, data_set_1.name, data_set)
+                data_set_to_sample_sub_query = sess.query(data_set_to_sample_1.dataset_id).filter(
+                    data_set_to_sample_1.sample_id == sample_1.id)
+                data_set_join_condition = [
+                    data_set_1.id.in_(data_set_to_sample_sub_query), data_set_1.name.in_(data_set)]
                 query = query.join(data_set_1, and_(*data_set_join_condition))
-
-            if related:
-                data_set_to_tag_1 = orm.aliased(DatasetToTag, name='dtt')
-                related_tag_1 = orm.aliased(Tag, name='rt')
-
-                filter_list = sess.query(related_tag_1.id).filter(
-                    related_tag_1.name.in_(related))
-                data_set_tag_join_condition = build_join_condition(
-                    data_set_to_tag_1.dataset_id, data_set_1.id, data_set_to_tag_1.tag_id, filter_list)
-                query = query.join(data_set_to_tag_1, and_(
-                    *data_set_tag_join_condition))
 
             if feature or feature_class:
                 feature_1 = orm.aliased(Feature, name='f')
@@ -233,8 +222,29 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
                     query = query.join(
                         feature_class_1, and_(*feature_class_join_condition))
 
-            query = query.join(
-                sample_to_tag_1, sample_to_tag_1.sample_id == sample_1.id)
+            sample_to_tag_join_condition = [
+                sample_to_tag_1.sample_id == sample_1.id]
+
+            if related:
+                data_set_to_tag_1 = orm.aliased(DatasetToTag, name='dtt')
+                related_tag_1 = orm.aliased(Tag, name='rt')
+                tag_to_tag_1 = orm.aliased(TagToTag, name='tt')
+
+                data_set_to_tag_subquery = sess.query(
+                    data_set_to_tag_1.tag_id).filter(data_set_to_tag_1.dataset_id == data_set_1.id)
+                related_tag_join_condition = [related_tag_1.name.in_(
+                    related), related_tag_1.id.in_(data_set_to_tag_subquery)]
+                query = query.join(related_tag_1, and_(
+                    *related_tag_join_condition))
+
+                tag_to_tag_subquery = sess.query(tag_to_tag_1.tag_id).filter(
+                    tag_to_tag_1.related_tag_id == related_tag_1.id)
+
+                sample_to_tag_join_condition.append(
+                    sample_to_tag_1.tag_id.in_(tag_to_tag_subquery))
+
+            query = query.join(sample_to_tag_1, and_(
+                *sample_to_tag_join_condition))
 
             tag_join_condition = build_tag_join_condition(
                 tag_1.id, sample_to_tag_1.tag_id, tag_1.name, tag)
