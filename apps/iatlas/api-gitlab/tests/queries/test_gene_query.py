@@ -79,10 +79,7 @@ def test_gene_query_get_rnSeqExpr_with_passed_sample(client, entrez, sample):
     query = """query Gene($entrez: Int!, $sample: [String!]) {
         gene(entrez: $entrez, sample: $sample) {
             entrez
-            samples {
-                name
-                rnaSeqExpr
-            }
+            samples { name }
         }
     }"""
     response = client.post(
@@ -97,7 +94,6 @@ def test_gene_query_get_rnSeqExpr_with_passed_sample(client, entrez, sample):
     assert len(samples) == 1
     for current_sample in samples:
         assert current_sample['name'] == sample
-        assert type(current_sample['rnaSeqExpr']) is float or NoneType
 
 
 def test_gene_query_no_relations(client, entrez, hgnc):

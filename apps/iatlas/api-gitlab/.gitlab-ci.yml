@@ -25,7 +25,8 @@ tests:
   stage: test_code
   image: python:3.8-alpine
   script:
-    - apk add postgresql-libs
+    - apk add openssh
+    - apk add git libpq
     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
     - pip install pytest pytest-cov pytest-xdist
     - export POSTGRES_DB=${STAGING_DB_NAME}
@@ -43,7 +44,8 @@ tests:coverage-report:
   stage: test_code
   image: python:3.8-alpine
   script:
-    - apk add postgresql-libs
+    - apk add openssh
+    - apk add git libpq
     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
     - pip install pytest pytest-cov pytest-xdist
     - export POSTGRES_DB=${STAGING_DB_NAME}

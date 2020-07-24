@@ -17,10 +17,20 @@ def build_gene_type_core_request(selection_set, name=None):
 
     core = build_option_args(selection_set, core_field_mapping)
 
+    requested = build_option_args(
+        selection_set, {'display': 'display', 'name': 'name'})
+
     query = sess.query(*core)
 
     if name:
         query = query.filter(gene_type_1.name.in_(name))
+
+    order = []
+    if 'name' in requested:
+        order.append(gene_type_1.name)
+    elif 'display' in requested:
+        order.append(gene_type_1.display)
+    query = query.order_by(*order)
 
     return query
 
@@ -31,7 +41,7 @@ def build_gene_type_request(_obj, info, name=None):
     """
     sess = db.session
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
+    selection_set = info.field_nodes[0].selection_set
 
     gene_1 = orm.aliased(Gene, name='g')
     gene_type_1 = orm.aliased(GeneType, name='m')
@@ -50,6 +60,8 @@ def build_gene_type_request(_obj, info, name=None):
         query = query.join((gene_1, gene_type_1.genes), isouter=True)
         option_args.append(orm.contains_eager(
             gene_type_1.genes.of_type(gene_1)))
+
+    query = query.order_by(gene_type_1.name, gene_type_1.display)
 
     if option_args:
         return query.options(*option_args)

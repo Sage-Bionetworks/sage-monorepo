@@ -6,7 +6,12 @@ from tests import NoneType
 
 @pytest.fixture(scope='module')
 def gene_type():
-    return 'CD8_CD68_ratio'
+    return 'immunomodulator'
+
+
+@pytest.fixture(scope='module')
+def sample_name():
+    return 'TCGA-27-1837'
 
 
 def test_genes_query_with_entrez(client, entrez, hgnc):
@@ -81,6 +86,7 @@ def test_genes_query_with_gene_type(client, entrez, gene_type):
     results = json_data['data']['genes']
 
     assert isinstance(results, list)
+    assert len(results) == 1
     for result in results:
         gene_types = result['geneTypes']
 
@@ -88,6 +94,35 @@ def test_genes_query_with_gene_type(client, entrez, gene_type):
         assert isinstance(gene_types, list)
         for current_gene_type in gene_types:
             assert current_gene_type['name'] == gene_type
+
+
+def test_genes_query_with_sample(client, entrez, gene_type, sample_name):
+    query = """query Genes($entrez: [Int!], $geneType: [String!], $sample: [String!]) {
+        genes(entrez: $entrez, geneType: $geneType, sample: $sample) {
+            entrez
+            publications { pubmedId }
+            samples {
+                name
+                rnaSeqExpr
+            }
+        }
+    }"""
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'entrez': [entrez], 'geneType': [gene_type], 'sample': [sample_name]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['genes']
+
+    assert isinstance(results, list)
+    assert len(results) == 1
+    for result in results:
+        samples = result['samples']
+
+        assert result['entrez'] == entrez
+        assert isinstance(samples, list)
+        assert len(samples) == 1
+        for current_sample in samples:
+            assert current_sample['name'] == sample_name
+            assert type(current_sample['rnaSeqExpr']) is float
 
 
 def test_genes_query_no_entrez(client):
