@@ -293,6 +293,13 @@ type Query {
   slides(name: [String!]): [Slide!]!
 
   """
+  The "superCategories" query accepts:
+
+    - "name", a list of names of the super categories to look up.
+  """
+  superCategories(name: [String!]): [SuperCategory!]!
+
+  """
   The "tags" query accepts:
 
     - "dataSet", a list of data set names (required)
