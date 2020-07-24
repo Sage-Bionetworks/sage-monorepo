@@ -5,16 +5,16 @@ from .resolver_helpers import (
 
 def resolve_genes_by_tag(_obj, info, dataSet, related, entrez=None, feature=None, featureClass=None, geneType=None, sample=None, tag=None):
     genes = request_genes(_obj, info, by_tag=True, data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass,
-                          gene_type=geneType, related=related, sample=sample)
+                          gene_type=geneType, related=related, sample=sample, tag=tag)
 
     tags_dict = dict()
     for key, collection in groupby(genes, key=lambda g: g.tag):
         tags_dict[key] = tags_dict.get(key, []) + list(collection)
 
     return [{
-        'characteristics': get_value(value[0], 'tag_characteristics'),
-        'color': get_value(value[0], 'tag_color'),
-        'display': get_value(value[0], 'tag_display'),
+        'characteristics': get_value(value[0], 'characteristics'),
+        'color': get_value(value[0], 'color'),
+        'display': get_value(value[0], 'display'),
         'genes': [{
             'entrez': get_value(gene, 'entrez'),
             'hgnc': get_value(gene, 'hgnc'),
