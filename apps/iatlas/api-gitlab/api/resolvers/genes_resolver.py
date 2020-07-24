@@ -6,9 +6,13 @@ def resolve_genes(_obj, info, entrez=None, sample=None, geneType=None):
     genes = request_genes(_obj, info, entrez=entrez,
                           gene_type=geneType, sample=sample)
 
+    print('has genes: ', bool(genes))
     gene_dict = {gene.id: gene for gene in genes}
+    print('gene_dict: ', gene_dict)
     gene_types = get_gene_types(info, gene_type=geneType, gene_dict=gene_dict)
+    print('has gene_types: ', bool(gene_types))
     samples = get_samples(info, sample=sample, gene_dict=gene_dict)
+    print('has samples: ', bool(samples))
     pubs = get_publications(
         info, gene_types=gene_types, gene_dict=gene_dict)
 

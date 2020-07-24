@@ -2,9 +2,9 @@ from sqlalchemy import and_, orm
 from itertools import chain
 from api import db
 from api.db_models import (
-    Dataset, DatasetToSample, Gene, GeneFamily, GeneFunction, GeneToSample, GeneToType,
-    GeneType, ImmuneCheckpoint, Pathway, Publication, PublicationToGeneToGeneType,
-    SuperCategory, Sample, SampleToTag, Tag, TagToTag, TherapyType)
+    Dataset, DatasetToTag, DatasetToSample, Feature, FeatureClass, FeatureToSample, Gene, GeneFamily,
+    GeneFunction, GeneToSample, GeneToType, GeneType, ImmuneCheckpoint, Pathway, Publication,
+    PublicationToGeneToGeneType, SuperCategory, Sample, SampleToTag, Tag, TagToTag, TherapyType)
 from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
 from .tag import request_tags
 
@@ -52,12 +52,22 @@ def build_pub_gene_gene_type_join_condition(gene_dict, gene_types, pub_gene_gene
     if gene_type_ids:
         join_condition.append(
             pub_gene_gene_type_model.gene_type_id.in_(gene_type_ids))
+    print('gene_type_ids: ', gene_type_ids)
 
-    return (join_condition, gene_type_ids)
+    return join_condition
+
+
+def build_tag_join_condition(join_column, column, filter_1_column=None, filter_1_list=None, filter_2_column=None, filter_2_list=None):
+    join_condition = [join_column == column]
+    if bool(filter_1_list):
+        join_condition.append(filter_1_column.in_(filter_1_list))
+    if bool(filter_2_list):
+        join_condition.append(filter_2_column.in_(filter_2_list))
+    return join_condition
 
 
 def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None,
-                       gene_function=None, gene_type=None, immune_checkpoint=None, pathway=None, relative=None,
+                       gene_function=None, gene_type=None, immune_checkpoint=None, pathway=None, related=None,
                        sample=None, super_category=None, tag=None, therapy_type=None, by_tag=False):
     """
     Builds a SQL request.
@@ -72,7 +82,6 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
     gene_1 = orm.aliased(Gene, name='g')
     gene_family_1 = orm.aliased(GeneFamily, name='gf')
     gene_function_1 = orm.aliased(GeneFunction, name='gfn')
-    gene_to_sample_1 = orm.aliased(GeneToSample, name='gs')
     gene_to_type_1 = orm.aliased(GeneToType, name='ggt')
     gene_type_1 = orm.aliased(GeneType, name='gt')
     immune_checkpoint_1 = orm.aliased(ImmuneCheckpoint, name='ic')
@@ -127,13 +136,6 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
         query = query.join(gene_to_type_1, and_(
             gene_to_type_1.gene_id == gene_1.id, gene_to_type_1.type_id.in_(sess.query(gene_type_1.id).filter(gene_type_1.name.in_(gene_type)))))
 
-    if sample:
-        filter_list = sess.query(sample_1.id).filter(
-            sample_1.name.in_(sample)) if sample else sample
-        gene_sample_join_condition = build_join_condition(
-            gene_to_sample_1.gene_id, gene_1.id, gene_to_sample_1.sample_id, filter_list)
-        query = query.join(gene_to_sample_1, and_(*gene_sample_join_condition))
-
     if 'gene_family' in relations or gene_family:
         is_outer = not bool(gene_family)
         gene_family_join_condition = build_join_condition(
@@ -176,6 +178,68 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
         query = query.join(therapy_type_1, and_(
             *therapy_type_join_condition), isouter=is_outer)
 
+    if sample or by_tag:
+        gene_to_sample_1 = orm.aliased(GeneToSample, name='gs')
+        gene_to_sample_sub_query = sess.query(gene_to_sample_1.sample_id).filter(
+            gene_to_sample_1.gene_id == gene_1.id)
+        sample_join_condition = [sample_1.id.in_(gene_to_sample_sub_query)]
+
+        if sample:
+            sample_join_condition = sample_join_condition + \
+                [sample_1.name.in_(sample)]
+
+        query = query.join(sample_1, and_(*sample_join_condition))
+
+        if by_tag:
+            data_set_1 = orm.aliased(Dataset, name='d')
+            sample_to_tag_1 = orm.aliased(SampleToTag, name='stt')
+
+            if data_set:
+                data_set_to_sample_1 = orm.aliased(DatasetToSample, name='dts')
+
+                query = query.join(data_set_to_sample_1,
+                                   data_set_to_sample_1.sample_id == sample_1.id)
+
+                data_set_join_condition = build_join_condition(
+                    data_set_1.id, data_set_to_sample_1.dataset_id, data_set_1.name, data_set)
+                query = query.join(data_set_1, and_(*data_set_join_condition))
+
+            if related:
+                data_set_to_tag_1 = orm.aliased(DatasetToTag, name='dtt')
+                related_tag_1 = orm.aliased(Tag, name='rt')
+
+                filter_list = sess.query(related_tag_1.id).filter(
+                    related_tag_1.name.in_(related))
+                data_set_tag_join_condition = build_join_condition(
+                    data_set_to_tag_1.dataset_id, data_set_1.id, data_set_to_tag_1.tag_id, filter_list)
+                query = query.join(data_set_to_tag_1, and_(
+                    *data_set_tag_join_condition))
+
+            if feature or feature_class:
+                feature_1 = orm.aliased(Feature, name='f')
+                feature_class_1 = orm.aliased(FeatureClass, name='fc')
+                feature_to_sample_1 = orm.aliased(FeatureToSample, name='fs')
+
+                query = query.join(feature_to_sample_1,
+                                   feature_to_sample_1.sample_id == sample_1.id)
+
+                feature_join_condition = build_tag_join_condition(
+                    feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
+                query = query.join(feature_1, and_(*feature_join_condition))
+
+                if feature_class:
+                    feature_class_join_condition = build_tag_join_condition(
+                        feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
+                    query = query.join(
+                        feature_class_1, and_(*feature_class_join_condition))
+
+            query = query.join(
+                sample_to_tag_1, sample_to_tag_1.sample_id == sample_1.id)
+
+            tag_join_condition = build_tag_join_condition(
+                tag_1.id, sample_to_tag_1.tag_id, tag_1.name, tag)
+            query = query.join(tag_1, and_(*tag_join_condition))
+
     return query
 
 
@@ -184,7 +248,7 @@ def get_gene_types(info, gene_type=None, gene_dict=dict()):
     relations = build_option_args(
         selection_set, {'geneTypes': 'gene_types'})
 
-    if 'gene_types' in relations:
+    if gene_dict and ('gene_types' in relations or gene_type):
         sess = db.session
         gene_type_1 = orm.aliased(GeneType, name='gt')
         gene_to_gene_type_1 = orm.aliased(GeneToType, name='ggt')
@@ -199,6 +263,9 @@ def get_gene_types(info, gene_type=None, gene_dict=dict()):
         gene_type_core = gene_type_core + [gene_type_1.id.label('id'),
                                            gene_to_gene_type_1.gene_id.label('gene_id')]
 
+        requested = build_option_args(
+            gene_type_selection_set, {'display': 'display', 'name': 'name'})
+
         gene_type_query = sess.query(*gene_type_core)
         gene_type_query = gene_type_query.select_from(gene_type_1)
 
@@ -212,6 +279,15 @@ def get_gene_types(info, gene_type=None, gene_dict=dict()):
         gene_type_query = gene_type_query.join(gene_to_gene_type_1, and_(
             *gene_gene_type_join_condition))
 
+        order = []
+        if 'name' in requested:
+            order.append(gene_type_1.name)
+        elif 'display' in requested:
+            order.append(gene_type_1.display)
+        else:
+            order.append(gene_type_1.id)
+        gene_type_query = gene_type_query.order_by(*order)
+
         return gene_type_query.distinct().all()
 
     return []
@@ -223,7 +299,7 @@ def get_publications(info, gene_types=[], gene_dict=dict(), by_tag=False):
     relations = build_option_args(
         selection_set, {'publications': 'publications'})
 
-    if 'publications' in relations:
+    if gene_dict and 'publications' in relations:
         sess = db.session
         gene_type_1 = orm.aliased(GeneType, name='gt')
         pub_1 = orm.aliased(Publication, name='p')
@@ -242,15 +318,42 @@ def get_publications(info, gene_types=[], gene_dict=dict(), by_tag=False):
 
         pub_core = build_option_args(pub_selection_set, pub_core_field_mapping)
 
+        requested = build_option_args(
+            pub_selection_set, {'doId': 'do_id',
+                                'firstAuthorLastName': 'first_author_last_name',
+                                'journal': 'journal',
+                                'name': 'name',
+                                'pubmedId': 'pubmed_id',
+                                'title': 'title',
+                                'year': 'year'})
+
         pub_query = sess.query(
             *pub_core, pub_gene_gene_type_1.gene_id.label('gene_id'))
         pub_query = pub_query.select_from(pub_1)
 
-        pub_gene_gene_type_join_condition, gene_type_ids = build_pub_gene_gene_type_join_condition(
+        pub_gene_gene_type_join_condition = build_pub_gene_gene_type_join_condition(
             gene_dict, gene_types, pub_gene_gene_type_1, pub_1)
-        print('gene_type_ids: ', gene_type_ids)
+        print('pub_gene_gene_type_join_condition: ',
+              pub_gene_gene_type_join_condition)
         pub_query = pub_query.join(pub_gene_gene_type_1, and_(
             *pub_gene_gene_type_join_condition))
+
+        order = []
+        if 'name' in requested:
+            order.append(pub_1.name)
+        elif 'pubmed_id' in requested:
+            order.append(pub_1.pubmed_id)
+        elif 'do_id' in requested:
+            order.append(pub_1.do_id)
+        elif 'title' in requested:
+            order.append(pub_1.title)
+        elif 'first_author_last_name' in requested:
+            order.append(pub_1.first_author_last_name)
+        elif 'year' in requested:
+            order.append(pub_1.year)
+        elif 'journal' in requested:
+            order.append(pub_1.journal)
+        pub_query = pub_query.order_by(*order)
 
         return pub_query.distinct().all()
 
@@ -261,7 +364,7 @@ def get_samples(info, sample=None, gene_dict=dict()):
     selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
     relations = build_option_args(selection_set, {'samples': 'samples'})
 
-    if 'samples' in relations:
+    if gene_dict and 'samples' in relations:
         sess = db.session
         sample_1 = orm.aliased(Sample, name='s')
         gene_to_sample_1 = orm.aliased(GeneToSample, name='gs')
@@ -273,21 +376,32 @@ def get_samples(info, sample=None, gene_dict=dict()):
 
         sample_core = build_option_args(
             sample_selection_set, sample_core_field_mapping)
-        sample_core = sample_core + [sample_1.id.label('id')]
+        # Always select the sample id and the gene id.
+        sample_core = sample_core + \
+            [sample_1.id.label(
+                'id'), gene_to_sample_1.gene_id.label('gene_id')]
 
-        sample_query = sess.query(
-            *sample_core, gene_to_sample_1.gene_id.label('gene_id'))
+        requested = build_option_args(
+            sample_selection_set, {'name': 'name', 'rnaSeqExpr': 'rna_seq_expr'})
+
+        sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)
+
+        if sample:
+            sample_query = sample_query.filter(sample_1.name.in_(sample))
 
         gene_sample_join_condition = build_join_condition(
             gene_to_sample_1.sample_id, sample_1.id, gene_to_sample_1.gene_id, [*gene_dict])
 
-        if sample:
-            gene_sample_join_condition.append(
-                sample_1.name.in_(sample))
+        sample_query = sample_query.join(
+            gene_to_sample_1, and_(*gene_sample_join_condition))
 
-        sample_query = sample_query.join(gene_to_sample_1, and_(
-            *gene_sample_join_condition), isouter=(not bool(sample)))
+        order = []
+        if 'name' in requested:
+            order.append(sample_1.name)
+        elif 'rna_seq_expr' in requested:
+            order.append(gene_to_sample_1.rna_seq_expr)
+        sample_query = sample_query.order_by(*order)
 
         return sample_query.distinct().all()
 
@@ -299,7 +413,12 @@ def request_gene(_obj, info, entrez=None, sample=None):
     return query.one_or_none()
 
 
-def request_genes(_obj, info, entrez=None, gene_type=None, sample=None, by_tag=False):
-    genes_query = build_gene_request(_obj, info, entrez=entrez, gene_type=gene_type,
-                                     sample=sample, by_tag=by_tag)
+def request_genes(_obj, info, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None,
+                  gene_function=None, gene_type=None, immune_checkpoint=None, pathway=None, related=None,
+                  sample=None, super_category=None, tag=None, therapy_type=None, by_tag=False):
+    genes_query = build_gene_request(_obj, info, by_tag=by_tag, data_set=data_set, entrez=entrez, feature=feature,
+                                     feature_class=feature_class, gene_family=gene_family, gene_function=gene_function,
+                                     gene_type=gene_type, immune_checkpoint=immune_checkpoint, pathway=pathway,
+                                     related=related, sample=sample, super_category=super_category, tag=tag,
+                                     therapy_type=therapy_type)
     return genes_query.distinct().all()
