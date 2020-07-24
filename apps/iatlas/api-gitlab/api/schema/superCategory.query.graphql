@@ -1,0 +1,10 @@
+"""
+The "SuperCategory" type may return:
+
+- The "name" of the Super category
+- A list of Genes associated with the Super category
+"""
+type SuperCategory {
+  name: String!
+  genes: [SimpleGene]!
+}

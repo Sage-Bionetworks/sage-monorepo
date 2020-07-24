@@ -47,7 +47,7 @@ def test_therapy_types_query_with_passed_therapy_type_no_genes(client, therapy_t
         assert result['name'] == therapy_type
 
 
-def test_therapy_typess_query_no_args(client):
+def test_therapy_types_query_no_args(client):
     query = """query therapyTypes($name: [String!]) {
         therapyTypes(name: $name) { name }
     }"""
