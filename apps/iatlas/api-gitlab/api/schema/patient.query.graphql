@@ -12,7 +12,6 @@ The "Patient" type may return:
 - A list of "slides" associated with the patient
 """
 type Patient {
-  id: Int!
   age: Int
   barcode: String!
   ethnicity: String
