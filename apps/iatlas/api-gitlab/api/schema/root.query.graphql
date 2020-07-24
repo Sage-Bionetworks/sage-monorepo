@@ -314,5 +314,11 @@ type Query {
   A simple test query that is independent of the database.
   """
   test: String!
+
+  """
+  The "therapyTypes" query accepts:
+
+    - "name", a list of names of the therapy types to look up.
+  """
   therapyTypes(name: [String!]): [TherapyType!]!
 }
