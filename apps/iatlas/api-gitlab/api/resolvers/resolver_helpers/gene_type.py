@@ -17,10 +17,20 @@ def build_gene_type_core_request(selection_set, name=None):
 
     core = build_option_args(selection_set, core_field_mapping)
 
+    requested = build_option_args(
+        selection_set, {'display': 'display', 'name': 'name'})
+
     query = sess.query(*core)
 
     if name:
         query = query.filter(gene_type_1.name.in_(name))
+
+    order = []
+    if 'name' in requested:
+        order.append(gene_type_1.name)
+    elif 'display' in requested:
+        order.append(gene_type_1.display)
+    query = query.order_by(*order)
 
     return query
 
@@ -41,9 +51,6 @@ def build_gene_type_request(_obj, info, name=None):
     relations = build_option_args(selection_set, related_field_mapping)
     option_args = []
 
-    requested = build_option_args(
-        selection_set, {'display': 'display', 'name': 'name'})
-
     query = sess.query(gene_type_1)
 
     if name:
@@ -54,21 +61,12 @@ def build_gene_type_request(_obj, info, name=None):
         option_args.append(orm.contains_eager(
             gene_type_1.genes.of_type(gene_1)))
 
+    query = query.order_by(gene_type_1.name, gene_type_1.display)
+
     if option_args:
-        query = query.options(*option_args)
-    else:
-        query = build_gene_type_core_request(selection_set, name)
+        return query.options(*option_args)
 
-    order = []
-    if 'name' in requested:
-        order.append(gene_type_1.name)
-    elif 'display' in requested:
-        order.append(gene_type_1.display)
-    else:
-        order.append(gene_type_1.id)
-    query = query.order_by(*order)
-
-    return query
+    return build_gene_type_core_request(selection_set, name)
 
 
 def request_gene_types(_obj, info, name=None):
