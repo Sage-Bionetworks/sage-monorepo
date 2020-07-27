@@ -290,6 +290,12 @@ type Query {
     name: [String!]
     patient: [String!]
   ): [SamplesByTag!]!
+
+  """
+  The "slides" query accepts:
+
+    - "name", a list of names of the slides to look up.
+  """
   slides(name: [String!]): [Slide!]!
 
   """
