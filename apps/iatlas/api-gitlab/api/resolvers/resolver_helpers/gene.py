@@ -1,12 +1,12 @@
-from sqlalchemy import and_, orm
-from itertools import chain
+from sqlalchemy import and_
+from sqlalchemy.orm import aliased
+from itertools import groupby
 from api import db
 from api.db_models import (
     Dataset, DatasetToTag, DatasetToSample, Feature, FeatureClass, FeatureToSample, Gene, GeneFamily,
     GeneFunction, GeneToSample, GeneToType, GeneType, ImmuneCheckpoint, Pathway, Publication,
     PublicationToGeneToGeneType, SuperCategory, Sample, SampleToTag, Tag, TagToTag, TherapyType)
 from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
-from .tag import request_tags
 
 
 def build_gene_graphql_response(gene_type_dict=dict(), pub_dict=dict(), sample_dict=dict()):
@@ -79,17 +79,17 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
 
     tag_selection_set = info.field_nodes[0].selection_set
 
-    gene_1 = orm.aliased(Gene, name='g')
-    gene_family_1 = orm.aliased(GeneFamily, name='gf')
-    gene_function_1 = orm.aliased(GeneFunction, name='gfn')
-    gene_to_type_1 = orm.aliased(GeneToType, name='ggt')
-    gene_type_1 = orm.aliased(GeneType, name='gt')
-    immune_checkpoint_1 = orm.aliased(ImmuneCheckpoint, name='ic')
-    pathway_1 = orm.aliased(Pathway, name='py')
-    sample_1 = orm.aliased(Sample, name='s')
-    super_category_1 = orm.aliased(SuperCategory, name='sc')
-    tag_1 = orm.aliased(Tag, name='t')
-    therapy_type_1 = orm.aliased(TherapyType, name='tht')
+    gene_1 = aliased(Gene, name='g')
+    gene_family_1 = aliased(GeneFamily, name='gf')
+    gene_function_1 = aliased(GeneFunction, name='gfn')
+    gene_to_type_1 = aliased(GeneToType, name='ggt')
+    gene_type_1 = aliased(GeneType, name='gt')
+    immune_checkpoint_1 = aliased(ImmuneCheckpoint, name='ic')
+    pathway_1 = aliased(Pathway, name='py')
+    sample_1 = aliased(Sample, name='s')
+    super_category_1 = aliased(SuperCategory, name='sc')
+    tag_1 = aliased(Tag, name='t')
+    therapy_type_1 = aliased(TherapyType, name='tht')
 
     core_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
                           'hgnc': gene_1.hgnc.label('hgnc'),
@@ -179,7 +179,7 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
             *therapy_type_join_condition), isouter=is_outer)
 
     if sample or by_tag:
-        gene_to_sample_1 = orm.aliased(GeneToSample, name='gs')
+        gene_to_sample_1 = aliased(GeneToSample, name='gs')
 
         gene_to_sample_sub_query = sess.query(gene_to_sample_1.sample_id).filter(
             gene_to_sample_1.gene_id == gene_1.id)
@@ -192,11 +192,11 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
         query = query.join(sample_1, and_(*sample_join_condition))
 
         if by_tag:
-            data_set_1 = orm.aliased(Dataset, name='d')
-            sample_to_tag_1 = orm.aliased(SampleToTag, name='stt')
+            data_set_1 = aliased(Dataset, name='d')
+            sample_to_tag_1 = aliased(SampleToTag, name='stt')
 
             if data_set or related:
-                data_set_to_sample_1 = orm.aliased(DatasetToSample, name='dts')
+                data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
 
                 data_set_to_sample_sub_query = sess.query(data_set_to_sample_1.dataset_id).filter(
                     data_set_to_sample_1.sample_id == sample_1.id)
@@ -205,9 +205,9 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
                 query = query.join(data_set_1, and_(*data_set_join_condition))
 
             if feature or feature_class:
-                feature_1 = orm.aliased(Feature, name='f')
-                feature_class_1 = orm.aliased(FeatureClass, name='fc')
-                feature_to_sample_1 = orm.aliased(FeatureToSample, name='fs')
+                feature_1 = aliased(Feature, name='f')
+                feature_class_1 = aliased(FeatureClass, name='fc')
+                feature_to_sample_1 = aliased(FeatureToSample, name='fs')
 
                 query = query.join(feature_to_sample_1,
                                    feature_to_sample_1.sample_id == sample_1.id)
@@ -226,9 +226,9 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
                 sample_to_tag_1.sample_id == sample_1.id]
 
             if related:
-                data_set_to_tag_1 = orm.aliased(DatasetToTag, name='dtt')
-                related_tag_1 = orm.aliased(Tag, name='rt')
-                tag_to_tag_1 = orm.aliased(TagToTag, name='tt')
+                data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
+                related_tag_1 = aliased(Tag, name='rt')
+                tag_to_tag_1 = aliased(TagToTag, name='tt')
 
                 data_set_to_tag_subquery = sess.query(
                     data_set_to_tag_1.tag_id).filter(data_set_to_tag_1.dataset_id == data_set_1.id)
@@ -260,8 +260,8 @@ def get_gene_types(info, gene_type=None, gene_dict=dict()):
 
     if gene_dict and ('gene_types' in relations or gene_type):
         sess = db.session
-        gene_type_1 = orm.aliased(GeneType, name='gt')
-        gene_to_gene_type_1 = orm.aliased(GeneToType, name='ggt')
+        gene_type_1 = aliased(GeneType, name='gt')
+        gene_to_gene_type_1 = aliased(GeneToType, name='ggt')
 
         gene_type_selection_set = get_selection_set(
             selection_set, ('gene_types' in relations), child_node='geneTypes')
@@ -311,9 +311,9 @@ def get_publications(info, gene_types=[], gene_dict=dict(), by_tag=False):
 
     if gene_dict and 'publications' in relations:
         sess = db.session
-        gene_type_1 = orm.aliased(GeneType, name='gt')
-        pub_1 = orm.aliased(Publication, name='p')
-        pub_gene_gene_type_1 = orm.aliased(
+        gene_type_1 = aliased(GeneType, name='gt')
+        pub_1 = aliased(Publication, name='p')
+        pub_gene_gene_type_1 = aliased(
             PublicationToGeneToGeneType, name='pggt')
 
         pub_selection_set = get_selection_set(
@@ -377,8 +377,8 @@ def get_samples(info, sample=None, gene_dict=dict(), by_tag=False):
 
     if gene_dict and 'samples' in relations:
         sess = db.session
-        sample_1 = orm.aliased(Sample, name='s')
-        gene_to_sample_1 = orm.aliased(GeneToSample, name='gs')
+        sample_1 = aliased(Sample, name='s')
+        gene_to_sample_1 = aliased(GeneToSample, name='gs')
 
         sample_selection_set = get_selection_set(
             selection_set, ('samples' in relations), child_node='samples')
@@ -433,3 +433,25 @@ def request_genes(_obj, info, data_set=None, entrez=None, feature=None, feature_
                                      related=related, sample=sample, super_category=super_category, tag=tag,
                                      therapy_type=therapy_type)
     return genes_query.distinct().all()
+
+
+def return_relations(info, gene_dict=dict(), gene_type=None, sample=None, by_tag=False):
+    samples = get_samples(info, sample=sample,
+                          gene_dict=gene_dict, by_tag=by_tag)
+    gene_types = get_gene_types(info, gene_type=gene_type, gene_dict=gene_dict)
+    pubs = get_publications(
+        info, gene_types=gene_types, gene_dict=gene_dict)
+
+    types_dict = dict()
+    for key, collection in groupby(gene_types, key=lambda gt: gt.gene_id):
+        types_dict[key] = types_dict.get(key, []) + list(collection)
+
+    samples_dict = dict()
+    for key, collection in groupby(samples, key=lambda s: s.gene_id):
+        samples_dict[key] = samples_dict.get(key, []) + list(collection)
+
+    pubs_dict = dict()
+    for key, collection in groupby(pubs, key=lambda pub: pub.gene_id):
+        pubs_dict[key] = pubs_dict.get(key, []) + list(collection)
+
+    return (pubs_dict, samples_dict, types_dict)
