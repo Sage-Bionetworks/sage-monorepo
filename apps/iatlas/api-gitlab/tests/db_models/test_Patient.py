@@ -1,11 +1,12 @@
 import pytest
 from tests import NoneType
 from api.database import return_patient_query
+from api.enums import ethnicity_enum, gender_enum, race_enum
 
 
 @pytest.fixture(scope='module')
 def barcode():
-    return 'DO1328'
+    return 'TCGA-WN-AB4C'
 
 
 def test_Patient_with_relations(app, barcode):
@@ -28,10 +29,10 @@ def test_Patient_with_relations(app, barcode):
             assert type(slide.name) is str
     assert result.barcode == barcode
     assert type(result.age) is int or NoneType
-    assert type(result.ethnicity) is str or NoneType
-    assert type(result.gender) is str or NoneType
+    assert type(result.ethnicity) in ethnicity_enum.enums or NoneType
+    assert type(result.gender) in gender_enum.enums or NoneType
     assert type(result.height) is int or NoneType
-    assert type(result.race) is str or NoneType
+    assert type(result.race) in race_enum.enums or NoneType
     assert type(result.weight) is int or NoneType
     assert repr(result) == '<Patient %r>' % barcode
 
@@ -44,8 +45,8 @@ def test_Patient_no_relations(app, barcode):
     assert result.slides == []
     assert result.barcode == barcode
     assert type(result.age) is int or NoneType
-    assert type(result.ethnicity) is str or NoneType
-    assert type(result.gender) is str or NoneType
+    assert type(result.ethnicity) in ethnicity_enum.enums or NoneType
+    assert type(result.gender) in gender_enum.enums or NoneType
     assert type(result.height) is int or NoneType
-    assert type(result.race) is str or NoneType
+    assert type(result.race) in race_enum.enums or NoneType
     assert type(result.weight) is int or NoneType
