@@ -202,6 +202,13 @@ type Query {
   immuneCheckpoints(name: [String!]): [ImmuneCheckpoint!]
 
   """
+  The "methodTags" query accepts:
+
+    - "name", a list of names of the method tags to look up.
+  """
+  methodTags(name: [String!]): [MethodTag!]!
+
+  """
   The "mutations" query accepts:
 
     - "entrez", a list of gene entrez ids associated with the mutations to filter by.
