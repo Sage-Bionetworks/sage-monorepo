@@ -270,7 +270,7 @@ query_expression_by_genes <- function(type = NA, entrez = NA, sample = NA){
 
     if(is.null(result)) {
         tbl <- dplyr::tibble(
-            "name" = character(),
+            "sample" = character(),
             "entrez" = character(),
             "hgnc" = character(),
             "rna_seq_expr" = double()
@@ -281,7 +281,7 @@ query_expression_by_genes <- function(type = NA, entrez = NA, sample = NA){
             tidyr::unnest("samples") %>%
             dplyr::arrange(.data$name) %>%
             dplyr::select(
-                "name",
+                "sample" = "name",
                 "entrez",
                 "hgnc",
                 "rna_seq_expr" = "rnaSeqExpr"

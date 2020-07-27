@@ -207,7 +207,7 @@ with_test_api_env({
 
   test_that("query_expression_by_genes", {
     expected_columns <- c(
-      "name",
+      "sample",
       "entrez",
       "hgnc",
       "rna_seq_expr"
