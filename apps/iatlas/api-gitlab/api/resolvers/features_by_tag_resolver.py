@@ -1,28 +1,26 @@
 from itertools import groupby
-from .resolver_helpers import get_value, request_features, return_feature_value
+from .resolver_helpers import build_feature_graphql_response, get_value, request_features
 
 
-def resolve_features_by_tag(_obj, info, dataSet=None, related=None, feature=None, featureClass=None):
-    results = request_features(_obj, info, data_set=dataSet, related=related, feature=feature,
-                               feature_class=featureClass, by_class=False, by_tag=True)
+def resolve_features_by_tag(_obj, info, dataSet=None, feature=None, featureClass=None, related=None, sample=None, tag=None):
+    feature_results = request_features(_obj, info, data_set=dataSet, feature=feature, feature_class=featureClass,
+                                       related=related, sample=sample, tag=tag, by_tag=True)
 
-    tags_dict = dict()
-    for key, collection in groupby(results, key=lambda f: f.tag):
-        tags_dict[key] = tags_dict.get(key, []) + list(collection)
+    tag_dict = dict()
+    for feature_tag, features_list in groupby(feature_results, key=lambda f: f.tag):
+        tag_dict[feature_tag] = tag_dict.get(
+            feature_tag, []) + list(features_list)
 
-    return [{
-        'characteristics': get_value(value[0], 'tag_characteristics'),
-        'color': get_value(value[0], 'tag_color'),
-        'display': get_value(value[0], 'tag_display'),
-        'features': [{
-            'class': get_value(row, 'class'),
-            'display': get_value(row, 'display'),
-            'methodTag': get_value(row, 'method_tag'),
-            'name': get_value(row),
-            'order': get_value(row, 'order'),
-            'sample': get_value(row, 'sample'),
-            'unit': get_value(row, 'unit'),
-            'value': return_feature_value(row)
-        } for row in value],
-        'tag': key
-    } for key, value in tags_dict.items()]
+    return_list = []
+    append_to_list = return_list.append
+    for feature_tag, features_list in tag_dict.items():
+        features = list(map(build_feature_graphql_response, features_list))
+        append_to_list({
+            'characteristics': get_value(features[0], 'tag_characteristics'),
+            'color': get_value(features[0], 'tag_color'),
+            'display': get_value(features[0], 'tag_display'),
+            'features': features,
+            'tag': feature_tag
+        })
+
+    return return_list

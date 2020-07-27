@@ -119,8 +119,6 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
     core = build_option_args(selection_set, core_field_mapping)
     append_to_core = core.append
     append_to_core(gene_1.id)
-    option_args = []
-    append_to_option_args = option_args.append
 
     if by_tag:
         core = core + \
@@ -200,8 +198,10 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
 
                 data_set_to_sample_sub_query = sess.query(data_set_to_sample_1.dataset_id).filter(
                     data_set_to_sample_1.sample_id == sample_1.id)
-                data_set_join_condition = [
-                    data_set_1.id.in_(data_set_to_sample_sub_query), data_set_1.name.in_(data_set)]
+                data_set_join_condition = [data_set_1.id.in_(data_set_to_sample_sub_query)]
+                if data_set:
+                    data_set_join_condition.append(
+                        data_set_1.name.in_(data_set))
                 query = query.join(data_set_1, and_(*data_set_join_condition))
 
             if feature or feature_class:
