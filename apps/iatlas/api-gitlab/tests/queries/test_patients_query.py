@@ -1,9 +1,15 @@
 import json
 import pytest
 from tests import NoneType
+from api.enums import ethnicity_enum, gender_enum, race_enum
 
 
-def test_patients_query(client, patient):
+@pytest.fixture(scope='module')
+def barcode():
+    return 'TCGA-WN-AB4C'
+
+
+def test_patients_query(client, barcode):
     query = """query Patients($barcode: [String!]) {
         patients(barcode: $barcode) {
             age
@@ -13,16 +19,12 @@ def test_patients_query(client, patient):
             height
             race
             weight
-            slides{
-                name
-            }
-            samples{
-                name
-            }
+            slides { name }
+            samples { name }
         }
     }"""
     response = client.post(
-        '/api', json={'query': query, 'variables': {'barcode': patient}})
+        '/api', json={'query': query, 'variables': {'barcode': [barcode]}})
     json_data = json.loads(response.data)
     results = json_data['data']['patients']
 
@@ -33,16 +35,13 @@ def test_patients_query(client, patient):
         samples = result['samples']
 
         assert type(result['age']) is int or NoneType
-        assert result['barcode'] == patient
-        assert type(result['ethnicity']) is str or NoneType
-        assert type(result['gender']) is str or NoneType
+        assert result['barcode'] == barcode
+        assert type(result['ethnicity']) in ethnicity_enum.enums or NoneType
+        assert type(result['gender']) in gender_enum.enums or NoneType
         assert type(result['height']) is int or NoneType
-        assert type(result['race']) is str or NoneType
+        assert type(result['race']) in race_enum.enums or NoneType
         assert type(result['weight']) is int or NoneType
-        if slides:
-            for slide in slides:
-                assert type(slide['name']) is str
-        if samples:
-            for sample in samples:
-                assert type(sample['name']) is str
-
+        for slide in slides:
+            assert type(slide['name']) is str
+        for sample in samples:
+            assert type(sample['name']) is str

@@ -1,6 +1,7 @@
 from sqlalchemy import orm
 from api import db
 from . import Base
+from api.enums import ethnicity_enum, gender_enum, race_enum
 
 
 class Patient(Base):
@@ -8,10 +9,10 @@ class Patient(Base):
     id = db.Column(db.Integer, primary_key=True)
     age = db.Column(db.Integer, nullable=True)
     barcode = db.Column(db.String, nullable=False)
-    ethnicity = db.Column(db.String, nullable=True)
-    gender = db.Column(db.String, nullable=True)
+    ethnicity = db.Column(ethnicity_enum, nullable=True)
+    gender = db.Column(gender_enum, nullable=True)
     height = db.Column(db.Integer, nullable=True)
-    race = db.Column(db.String, nullable=True)
+    race = db.Column(race_enum, nullable=True)
     weight = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
