@@ -27,7 +27,7 @@ gene_family_query = load_schema_from_path(
 gene_function_query = load_schema_from_path(
     schema_dirname + '/geneFunction.query.graphql')
 gene_type_query = load_schema_from_path(
-    schema_dirname + '/gene_type.query.graphql')
+    schema_dirname + '/geneType.query.graphql')
 immune_checkpoint_query = load_schema_from_path(
     schema_dirname + '/immuneCheckpoint.query.graphql')
 mutation_query = load_schema_from_path(
@@ -42,9 +42,11 @@ publication_query = load_schema_from_path(
     schema_dirname + '/publication.query.graphql')
 sample_query = load_schema_from_path(schema_dirname + '/sample.query.graphql')
 slide_query = load_schema_from_path(schema_dirname + '/slide.query.graphql')
-super_category = load_schema_from_path(schema_dirname + '/superCategory.query.graphql')
+super_category = load_schema_from_path(
+    schema_dirname + '/superCategory.query.graphql')
 tag_query = load_schema_from_path(schema_dirname + '/tag.query.graphql')
-therapy_type_query = load_schema_from_path(schema_dirname + '/therapyType.query.graphql')
+therapy_type_query = load_schema_from_path(
+    schema_dirname + '/therapyType.query.graphql')
 
 type_defs = [root_query, copy_number_result_query, data_set_query, driver_result_query, feature_query,
              gene_query, gene_family_query, gene_function_query, gene_type_query, immune_checkpoint_query, mutation_query, mutation_code_query, pathway_query, patient_query,

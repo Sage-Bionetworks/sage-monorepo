@@ -370,8 +370,9 @@ def get_publications(info, gene_types=[], gene_dict=dict(), by_tag=False):
     return []
 
 
-def get_samples(info, sample=None, gene_dict=dict()):
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
+def get_samples(info, sample=None, gene_dict=dict(), by_tag=False):
+    selection_set = get_selection_set(
+        info.field_nodes[0].selection_set, by_tag, child_node='genes')
     relations = build_option_args(selection_set, {'samples': 'samples'})
 
     if gene_dict and 'samples' in relations:
