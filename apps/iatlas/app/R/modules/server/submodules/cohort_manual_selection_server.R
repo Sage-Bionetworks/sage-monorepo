@@ -18,7 +18,7 @@ cohort_manual_selection_server <- function(
     )
 
     #TODO: change back tp TCGA
-    default_dataset <- "TCGA"
+    default_dataset <- "PCAWG"
 
     selected_dataset <- shiny::callModule(
         cohort_dataset_selection_server,

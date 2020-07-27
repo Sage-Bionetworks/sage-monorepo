@@ -44,9 +44,11 @@ with_test_api_env({
     })
 
     test_that("Build Immunomodulators Distributions Plot Tibble", {
-        # expected_columns <- c("x", "y")
-        # res1 <- build_im_distplot_tbl(cohort_obj1, 3802L)
-        # res2 <- build_im_distplot_tbl(cohort_obj1, 3802L)
+        expected_columns <- c("x", "y")
+        res1 <- build_im_distplot_tbl(cohort_obj1, 3802L, "None")
+        res2 <- build_im_distplot_tbl(cohort_obj1, 3802L, "None")
+        expect_named(res1, expected_columns)
+        expect_named(res2, expected_columns)
     })
 
     test_that("Build Immunomodulators Datatable Tibble", {

@@ -70,7 +70,7 @@ with_test_api_env({
   test_that("query_gene_expression_with_cohort_object", {
 
     expected_columns <- c(
-      "name",
+      "sample",
       "entrez",
       "hgnc",
       "rna_seq_expr"
