@@ -1,4 +1,4 @@
-from sqlalchemy import and_
+from sqlalchemy import and_, func
 from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import (
@@ -16,7 +16,7 @@ def build_feature_graphql_response(feature):
         'order': get_value(feature, 'order'),
         'sample': get_value(feature, 'sample'),
         'unit': get_value(feature, 'unit'),
-        'value': return_feature_value(feature)
+        'value': get_value(feature, 'feature_value')
     }
 
 
@@ -82,8 +82,8 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
         core.append(tag_1.name.label('tag'))
 
     if 'value' in core_requested:
-        core.append(feature_to_sample_1.value.label('value'))
-        core.append(feature_to_sample_1.inf_value.label('inf'))
+        core.append(func.coalesce(feature_to_sample_1.value,
+                                  feature_to_sample_1.inf_value).label('feature_value'))
 
     query = sess.query(*core)
     query = query.select_from(feature_1)
@@ -208,10 +208,3 @@ def request_features(_obj, info, data_set=None, feature=None, feature_class=None
                                  related=related, sample=sample, tag=tag, by_class=by_class, by_tag=by_tag)
 
     return query.distinct().all()
-
-
-def return_feature_value(row):
-    infinity = get_value(row, 'inf')
-    if infinity:
-        infinity = str(infinity)
-    return infinity or get_value(row, 'value')

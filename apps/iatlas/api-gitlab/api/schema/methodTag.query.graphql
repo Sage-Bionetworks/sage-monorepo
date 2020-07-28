@@ -2,7 +2,7 @@
 The "MethodTag" type may return:
 
 - The "name" of the Super category
-- A list of Genes associated with the Method Tag
+- "features", a list of Features associated with the Method Tag
 """
 type MethodTag {
   name: String!
