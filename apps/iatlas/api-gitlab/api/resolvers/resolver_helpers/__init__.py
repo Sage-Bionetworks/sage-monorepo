@@ -8,6 +8,7 @@ from .gene_function import request_gene_functions
 from .gene_type import request_gene_types
 from .general_resolvers import *
 from .immune_checkpoint import request_immune_checkpoints
+from .method_tag import request_method_tags
 from .mutation import request_mutations
 from .pathway import request_pathways
 from .sample import build_sample_graphql_response, request_samples
