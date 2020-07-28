@@ -66,10 +66,12 @@ feature_value_scalar = ScalarType('FeatureValue')
 
 @feature_value_scalar.serializer
 def serialize_feature_value(value):
+    if value == decimal.Decimal('-inf'):
+        return '-inf'
+    if value == decimal.Decimal('inf'):
+        return 'inf'
     if isinstance(value, decimal.Decimal):
         return float(value)
-    elif isinstance(value, str):
-        return value
     return None
 
 
