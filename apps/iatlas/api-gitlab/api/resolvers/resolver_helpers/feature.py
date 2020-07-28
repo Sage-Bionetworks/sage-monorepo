@@ -11,6 +11,11 @@ from .general_resolvers import build_join_condition, build_option_args, get_sele
 def build_feature_graphql_response(max_min_dict):
     def f(feature):
         feature_id = get_value(feature, 'id')
+        value_max = None
+        value_min = None
+        if max_min_dict:
+            value_max = max_min_dict[feature_id]['value_max']
+            value_min = max_min_dict[feature_id]['value_min']
         return {
             'class': get_value(feature, 'class'),
             'display': get_value(feature, 'display'),
@@ -20,8 +25,8 @@ def build_feature_graphql_response(max_min_dict):
             'sample': get_value(feature, 'sample'),
             'unit': get_value(feature, 'unit'),
             'value': get_value(feature, 'feature_value'),
-            'valueMax': max_min_dict[feature_id]['value_max'],
-            'valueMin': max_min_dict[feature_id]['value_min']
+            'valueMax': value_max,
+            'valueMin': value_min
         }
     return f
 
@@ -219,8 +224,8 @@ def get_max_min_feature_values(info, features=None, by_class=False, by_tag=False
                                'valueMin': 'value_min'}
     requested = build_option_args(selection_set, requested_field_mapping)
 
+    feature_dict = dict()
     if 'value_max' in requested or 'value_min' in requested:
-        feature_dict = dict()
         for feature_id, features_list in groupby(features, key=lambda f: f.id):
             feature_dict[feature_id] = feature_dict.get(
                 feature_id, []) + list(features_list)
