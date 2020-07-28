@@ -85,6 +85,48 @@ query_feature_values <- function(
         dplyr::select("name", "display", "sample", "value", "order")
 }
 
+query_features_range <- function(
+    features = NA,
+    datasets = NA,
+    parent_tags = NA,
+    tags = NA,
+    feature_classes = NA,
+    samples = NA
+){
+    tbl <- perform_api_query(
+        "features_range",
+        list(
+            dataSet = datasets,
+            related = parent_tags,
+            tag = tags,
+            feature = features,
+            featureClass = feature_classes,
+            sample = samples
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble()
+
+    if(nrow(tbl) == 0) {
+        tbl <- dplyr::tibble(
+            "name" = character(),
+            "display" = character(),
+            "value_min" = double(),
+            "value_max" = double()
+        )
+    } else {
+        tbl <- tbl %>%
+            dplyr::select(
+                "name",
+                "display",
+                "value_min" = "valueMin",
+                "value_max" = "valueMax"
+            ) %>%
+            dplyr::distinct()
+    }
+    return(tbl)
+}
+
 # features_by_tag --------------------------------------------------------------
 
 query_feature_values_by_tag <- function(
@@ -391,6 +433,42 @@ query_samples_by_mutation_status <- function(
             dplyr::select("sample" = "name", "status")
     }
 
+
+}
+# samples by tag --------------------------------------------------------------
+
+query_tag_samples <- function(
+    datasets = NA,
+    parent_tags = NA,
+    tags = NA,
+    features = NA,
+    feature_classes = NA,
+    sample_names = NA,
+    patients = NA
+){
+    tbl <-
+        perform_api_query(
+            "tag_samples",
+            list(
+                "dataSet" = datasets,
+                "related" = parent_tags,
+                "tag" = tags,
+                "feature" = features,
+                "featureClass" = feature_classes,
+                "name" = sample_names,
+                "patient" = patients
+            )
+        ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble()
+    if(nrow(tbl) == 0) {
+        tbl <- dplyr::tibble("sample" = character())
+    } else {
+        tbl <- tbl %>%
+            tidyr::unnest("samples") %>%
+            dplyr::select("sample" = "name")
+    }
+    return(tbl)
 
 }
 

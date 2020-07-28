@@ -83,6 +83,12 @@ with_test_api_env({
 
   })
 
+  test_that("query_features_range", {
+    expected_columns <- c("name", "display", "value_min", "value_max")
+    result1 <- query_features_range("Lymphocytes_Aggregate1", "PCAWG")
+    expect_named(result1, expected_columns)
+  })
+
   # features_by_tag -----------------------------------------------------------
 
   test_that("query_feature_values_by_tag", {
@@ -270,6 +276,16 @@ with_test_api_env({
     expect_equal(nrow(result3), 0)
   })
 
+  # samples by tag ------------------------------------------------------------
+
+  test_that("query_tag_samples", {
+    expected_names <- c("sample")
+    result1 <- query_tag_samples(datasets = "PCAWG", tags = "C1")
+    result2 <- query_tag_samples(datasets = "PCAWG", tags = "C5")
+    expect_named(result1, expected_names)
+    expect_named(result2, expected_names)
+    expect_equal(nrow(result2), 0)
+  })
 
   # tags ----------------------------------------------------------------------
 

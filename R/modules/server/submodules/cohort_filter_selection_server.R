@@ -22,7 +22,8 @@ cohort_filter_selection_server <- function(
         shiny::req(tag_named_list())
         purrr::partial(
             tag_filter_element_server,
-            tag_named_list = tag_named_list
+            tag_named_list = tag_named_list,
+            dataset = selected_dataset
         )
     })
 
@@ -44,43 +45,28 @@ cohort_filter_selection_server <- function(
     })
 
     tag_filter_samples <- shiny::reactive({
-        shiny::req(samples)
+        shiny::req(samples, selected_dataset())
         get_filtered_tag_samples(
             valid_tag_filter_obj(),
-            samples()
+            samples(),
+            selected_dataset()
         )
     })
 
     # # numeric_filters -------------------------------------------------------
 
-    # numeric_filter_function <- shiny::reactive({
-    #     shiny::req(selected_dataset())
-    #     x <- function() {
-    #         selected_dataset() %>%
-    #             iatlas.app::query_features_by_class() %>%
-    #             dplyr::select("class", "display", "feature" = "name") %>%
-    #             create_nested_named_list()
-    #     }
-    #     print(x)
-    #     return(x)
-    # })
+    feature_named_list <- shiny::reactive({
+        selected_dataset() %>%
+            iatlas.app::query_features_by_class() %>%
+            dplyr::select("class", "display", "feature" = "name") %>%
+            create_nested_named_list()
+    })
 
     numeric_element_module_server <- shiny::reactive({
-        # x <- purrr::partial(
-        #     iatlas.app::create_feature_named_list,
-        #     sample_ids = samples()
-        # )
-        x <- function() {
-            selected_dataset() %>%
-                iatlas.app::query_features_by_class() %>%
-                dplyr::select("class", "display", "feature" = "name") %>%
-                create_nested_named_list()
-        }
-
-
         purrr::partial(
             numeric_filter_element_server,
-            feature_named_list = x
+            feature_named_list = feature_named_list,
+            dataset = selected_dataset
         )
     })
 
@@ -102,20 +88,21 @@ cohort_filter_selection_server <- function(
     })
 
     numeric_filter_samples <- shiny::reactive({
-        shiny::req(sample_ids())
-        get_filtered_feature_sample_ids(
+        shiny::req(samples)
+        get_filtered_feature_samples(
             valid_numeric_filter_obj(),
-            sample_ids()
+            samples(),
+            selected_dataset()
         )
     })
 
     selected_samples <- shiny::reactive({
-        # shiny::req(numeric_filter_samples(), tag_filter_samples())
-        # intersect(numeric_filter_samples(), tag_filter_samples())
+        shiny::req(numeric_filter_samples(), tag_filter_samples())
+        intersect(numeric_filter_samples(), tag_filter_samples())
         # shiny::req(numeric_filter_samples())
         # numeric_filter_samples()
-        shiny::req(tag_filter_samples())
-        tag_filter_samples()
+        # shiny::req(tag_filter_samples())
+        # tag_filter_samples()
     })
 
     # output$samples_text <- shiny::renderText({

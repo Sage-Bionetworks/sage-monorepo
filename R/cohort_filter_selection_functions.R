@@ -27,30 +27,14 @@ is_tag_filter_valid <- function(obj){
 #' @param samples A vector of strings
 #' @importFrom magrittr %>%
 #' @importFrom purrr transpose pluck map reduce
-get_filtered_tag_samples <- function(filter_obj, samples){
+get_filtered_tag_samples <- function(filter_obj, samples, dataset){
     filter_obj %>%
         purrr::transpose(.) %>%
         purrr::pluck("tags") %>%
-        purrr::map(., get_filtered_group_sample_ids_by_filter) %>%
+        purrr::map(., ~query_tag_samples(datasets = dataset, tags = .x)) %>%
+        purrr::map(., dplyr::pull, "sample") %>%
         purrr::reduce(base::intersect, .init = samples)
 }
-
-#' Get Filtered Group Sample IDs By Filter
-#'
-#' @param ids A vector on integers that are in the sample_id column of
-#' samples_to_tags table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-get_filtered_group_sample_ids_by_filter <- function(ids){
-    paste0(
-        "SELECT sample_id FROM samples_to_tags WHERE tag_id IN (",
-        numeric_values_to_query_list(ids),
-        ")"
-    ) %>%
-        perform_query("get sample ids") %>%
-        dplyr::pull("sample_id")
-}
-
 
 #' Get Valid Numeric Filters
 #'
@@ -69,8 +53,8 @@ get_valid_numeric_filters <- function(filter_obj){
 is_numeric_filter_valid <- function(obj){
     all(
         !is.null(obj),
-        !any(is.null(obj$id), is.null(obj$min), is.null(obj$max)),
-        all(names(obj) %in% c("id", "min", "max"))
+        !any(is.null(obj$feature), is.null(obj$min), is.null(obj$max)),
+        all(names(obj) %in% c("feature", "min", "max"))
     )
 }
 
@@ -81,11 +65,12 @@ is_numeric_filter_valid <- function(obj){
 #' features_to_samples table
 #' @importFrom magrittr %>%
 #' @importFrom purrr transpose reduce
-get_filtered_feature_sample_ids <- function(filter_obj, sample_ids){
+get_filtered_feature_sample_ids <- function(filter_obj, samples, dataset){
     filter_obj %>%
         purrr::transpose(.) %>%
+        print() %>%
         purrr::pmap(., get_filtered_feature_sample_ids_by_filter) %>%
-        purrr::reduce(base::intersect, .init = sample_ids)
+        purrr::reduce(base::intersect, .init = samples)
 }
 
 #' Get Filtered Feature Sample IDs By Filter

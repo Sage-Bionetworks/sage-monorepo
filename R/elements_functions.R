@@ -19,9 +19,7 @@ build_numeric_filter_tbl <- function(feature_id){
 #' @param parent_tag_name A string
 #' @importFrom magrittr %>%
 #' @importFrom tibble deframe
-build_tag_filter_named_list <- function(parent_tag_name){
-    dataset <- "TCGA"
-    if(parent_tag_name == "PCAWG_Study") dataset <- "PCAWG"
+build_tag_filter_list <- function(parent_tag_name, dataset){
     query_tags(dataset, parent_tag_name) %>%
         dplyr::pull("name")
 }
