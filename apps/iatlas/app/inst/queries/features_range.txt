@@ -1,0 +1,22 @@
+query FeaturesRange(
+  $dataSet: [String!]
+  $related: [String!]
+  $tag: [String!]
+  $feature: [String!]
+  $featureClass: [String!]
+  $sample: [String!]
+) {
+  features(
+    dataSet: $dataSet
+    related: $related
+    tag: $tag
+    feature: $feature
+    featureClass: $featureClass
+    sample: $sample
+  ){
+    name
+    display
+    valueMax
+    valueMin
+  }
+}

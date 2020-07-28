@@ -6,7 +6,8 @@ numeric_filter_element_server <- function(
     session,
     reactive_values,
     module_id,
-    feature_named_list
+    feature_named_list,
+    dataset
 ){
 
     ns <- session$ns
@@ -21,18 +22,22 @@ numeric_filter_element_server <- function(
     })
 
     features_tbl <- shiny::reactive({
-        req(input$feature_choice_id)
-        build_numeric_filter_tbl(input$feature_choice_id)
+        req(input$feature_choice, dataset())
+        iatlas.app::query_features_range(input$feature_choice, dataset())
     })
 
     feature_min <- shiny::reactive({
         shiny::req(features_tbl())
-        round(features_tbl()$feature_min, 2)
+        features_tbl() %>%
+            dplyr::pull(value_min) %>%
+            round(2)
     })
 
     feature_max <- shiny::reactive({
         shiny::req(features_tbl())
-        round(features_tbl()$feature_max, 2)
+        features_tbl() %>%
+            dplyr::pull(value_max) %>%
+            round(2)
     })
 
     output$slider_ui <- shiny::renderUI({
@@ -41,14 +46,14 @@ numeric_filter_element_server <- function(
         shiny::sliderInput(
             inputId = ns("range"),
             label = "Filter:",
-            min = round(feature_min()),
-            max = round(feature_max()),
+            min = feature_min(),
+            max = feature_max(),
             value = c(feature_min(), feature_max())
         )
     })
 
-    shiny::observeEvent(input$feature_choice_id, {
-        reactive_values[[module_id]]$id <- input$feature_choice_id
+    shiny::observeEvent(input$feature_choice, {
+        reactive_values[[module_id]]$feature <- input$feature_choice
     })
 
     shiny::observeEvent(input$range, {
@@ -65,7 +70,8 @@ tag_filter_element_server <- function(
     session,
     reactive_values,
     module_id,
-    tag_named_list
+    tag_named_list,
+    dataset
 ){
 
     ns <- session$ns
@@ -84,8 +90,9 @@ tag_filter_element_server <- function(
         shiny::checkboxGroupInput(
             inputId = ns("tag_choices"),
             label = "Select choices to include:",
-            choices = iatlas.app::build_tag_filter_named_list(
-                input$parent_tag_choice
+            choices = iatlas.app::build_tag_filter_list(
+                input$parent_tag_choice,
+                dataset()
             ),
             inline = T
         )
