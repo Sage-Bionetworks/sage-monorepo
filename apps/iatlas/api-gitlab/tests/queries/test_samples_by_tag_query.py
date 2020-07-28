@@ -23,9 +23,7 @@ def test_samples_by_tag_query_with_passed_sample(client, sample):
             patient: $patient
         ) {
             tag
-            samples {
-                name
-            }
+            samples { name }
          }
     }"""
     response = client.post(

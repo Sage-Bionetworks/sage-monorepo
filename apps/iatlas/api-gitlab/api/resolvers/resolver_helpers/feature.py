@@ -1,3 +1,4 @@
+from itertools import groupby
 from sqlalchemy import and_, func
 from sqlalchemy.orm import aliased
 from api import db
@@ -7,17 +8,27 @@ from api.db_models import (
 from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
 
 
-def build_feature_graphql_response(feature):
-    return {
-        'class': get_value(feature, 'class'),
-        'display': get_value(feature, 'display'),
-        'methodTag': get_value(feature, 'method_tag'),
-        'name': get_value(feature),
-        'order': get_value(feature, 'order'),
-        'sample': get_value(feature, 'sample'),
-        'unit': get_value(feature, 'unit'),
-        'value': get_value(feature, 'feature_value')
-    }
+def build_feature_graphql_response(max_min_dict):
+    def f(feature):
+        feature_id = get_value(feature, 'id')
+        value_max = None
+        value_min = None
+        if max_min_dict:
+            value_max = max_min_dict[feature_id]['value_max']
+            value_min = max_min_dict[feature_id]['value_min']
+        return {
+            'class': get_value(feature, 'class'),
+            'display': get_value(feature, 'display'),
+            'methodTag': get_value(feature, 'method_tag'),
+            'name': get_value(feature),
+            'order': get_value(feature, 'order'),
+            'sample': get_value(feature, 'sample'),
+            'unit': get_value(feature, 'unit'),
+            'value': get_value(feature, 'feature_value'),
+            'valueMax': value_max,
+            'valueMin': value_min
+        }
+    return f
 
 
 def build_features_query(_obj, info, data_set=None, feature=None, feature_class=None, method_tag=None, related=None, sample=None, tag=None, by_class=False, by_tag=False):
@@ -56,7 +67,9 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
                                     'order': 'order',
                                     'sample': 'sample',
                                     'unit': 'unit',
-                                    'value': 'value'}
+                                    'value': 'value',
+                                    'valueMax': 'value_max',
+                                    'valueMin': 'value_min'}
     requested_field_mapping = {'characteristics': 'characteristics',
                                'class': 'class',
                                'color': 'color',
@@ -81,7 +94,7 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
                               tag_core_field_mapping)
         core.append(tag_1.name.label('tag'))
 
-    if 'value' in core_requested:
+    if 'value' in core_requested or 'value_max' in core_requested or 'value_min' in core_requested:
         core.append(func.coalesce(feature_to_sample_1.value,
                                   feature_to_sample_1.inf_value).label('feature_value'))
 
@@ -105,7 +118,7 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
         query = query.join(method_tag_1, and_(
             *method_tag_join_condition), isouter=is_outer)
 
-    if by_tag or sample or data_set or related or tag or 'value' in core_requested or 'sample' in core_requested:
+    if by_tag or sample or data_set or related or tag or 'value' in core_requested or 'value_max' in core_requested or 'value_min' in core_requested or 'sample' in core_requested:
 
         query = query.join(feature_to_sample_1, feature_1.id ==
                            feature_to_sample_1.feature_id)
@@ -201,6 +214,37 @@ def build_tag_join_condition(join_column, column, filter_1_column=None, filter_1
     if bool(filter_2_list):
         join_condition.append(filter_2_column.in_(filter_2_list))
     return join_condition
+
+
+def get_max_min_feature_values(info, features=None, by_class=False, by_tag=False):
+    selection_set = get_selection_set(
+        info.field_nodes[0].selection_set, by_class or by_tag)
+    requested_field_mapping = {'value': 'value',
+                               'valueMax': 'value_max',
+                               'valueMin': 'value_min'}
+    requested = build_option_args(selection_set, requested_field_mapping)
+
+    feature_dict = dict()
+    if 'value_max' in requested or 'value_min' in requested:
+        for feature_id, features_list in groupby(features, key=lambda f: f.id):
+            feature_dict[feature_id] = feature_dict.get(
+                feature_id, []) + list(features_list)
+
+        for feature_id, features_list in feature_dict.items():
+            max_min_dict = {'value_max': None, 'value_min': None}
+            if 'value_max' in requested:
+                value_max = max(
+                    features_list, key=lambda f: get_value(f, 'feature_value'))
+                max_min_dict['value_max'] = get_value(
+                    value_max, 'feature_value')
+            if 'value_min' in requested:
+                value_min = min(
+                    features_list, key=lambda f: get_value(f, 'feature_value'))
+                max_min_dict['value_min'] = get_value(
+                    value_min, 'feature_value')
+            feature_dict[feature_id] = max_min_dict
+
+    return feature_dict
 
 
 def request_features(_obj, info, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None, by_class=False, by_tag=False):
