@@ -69,6 +69,16 @@ type SamplesByTag {
   tag: String!
 }
 
+
+"""
+The "SimpleSample" is a simple version of a Sample; it has no related fields.
+It type may return:
+
+- "name", the sample's name (often the "sample" portion of
+a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/)).
+
+See also `Sample`
+"""
 type SimpleSample {
   name: String!
 }

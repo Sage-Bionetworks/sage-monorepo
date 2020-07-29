@@ -241,7 +241,7 @@ type Query {
     entrez: [Int!]
     mutationCode: [String!]
     mutationType: [String!]
-  ): [Mutation!]!
+  ): [GeneMutation!]!
 
   """
   The "mutationTypes" query returns all mutation types.
