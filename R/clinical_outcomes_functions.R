@@ -38,10 +38,10 @@ get_co_status_feature <- function(time_feature){
 build_co_survival_value_tbl <- function(cohort_obj, time, status) {
     time_tbl <-
         query_feature_values_with_cohort_object(cohort_obj, time) %>%
-        dplyr::select("sample", "time" = "value")
+        dplyr::select("sample", "time" = "feature_value")
     status_tbl <-
-        query_samples_to_feature(status) %>%
-        dplyr::select("sample", "status" = "value")
+        query_feature_values_with_cohort_object(cohort_obj, status) %>%
+        dplyr::select("sample", "status" = "feature_value")
     tbl <-
         purrr::reduce(
             list(cohort_obj$sample_tbl, time_tbl, status_tbl),
@@ -57,9 +57,9 @@ build_co_feature_tbl <- function(cohort_obj, feature_class){
         query_feature_values_with_cohort_object(class = feature_class) %>%
         dplyr::select(
             "sample",
-            "feature_name" = "display",
-            "feature_value" = "value",
-            "feature_order" = "order"
+            "feature_display",
+            "feature_value",
+            "feature_order"
         )
 }
 
@@ -73,7 +73,7 @@ build_co_heatmap_tbl <- function(survival_tbl, feature_tbl, sample_tbl){
             "group",
             "time",
             "status",
-            "feature_name",
+            "feature_display",
             "feature_value",
             "feature_order"
         )
@@ -92,7 +92,7 @@ build_co_heatmap_tbl <- function(survival_tbl, feature_tbl, sample_tbl){
 build_co_heatmap_matrix <- function(tbl){
     tbl %>%
         dplyr::select(
-            "feature" = "feature_name",
+            "feature" = "feature_display",
             "value" = "feature_value",
             "time",
             "status",
@@ -112,6 +112,7 @@ build_co_heatmap_matrix <- function(tbl){
             .data$data,
             concordanceIndex::concordanceIndex
         )) %>%
+        dplyr::arrange(.data$order) %>%
         dplyr::select("feature", "group", "result") %>%
         tidyr::pivot_wider(
             .data$feature,

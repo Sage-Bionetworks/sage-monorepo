@@ -89,7 +89,7 @@ cohort_filter_selection_server <- function(
 
     numeric_filter_samples <- shiny::reactive({
         shiny::req(samples)
-        get_filtered_feature_samples(
+        iatlas.app::get_filtered_feature_samples(
             valid_numeric_filter_obj(),
             samples(),
             selected_dataset()
@@ -99,21 +99,17 @@ cohort_filter_selection_server <- function(
     selected_samples <- shiny::reactive({
         shiny::req(numeric_filter_samples(), tag_filter_samples())
         intersect(numeric_filter_samples(), tag_filter_samples())
-        # shiny::req(numeric_filter_samples())
-        # numeric_filter_samples()
-        # shiny::req(tag_filter_samples())
-        # tag_filter_samples()
     })
 
-    # output$samples_text <- shiny::renderText({
-    #     c("Number of current samples:", length(selected_samples()))
-    # })
+    output$samples_text <- shiny::renderText({
+        c("Number of current samples:", length(selected_samples()))
+    })
 
     filter_obj <- shiny::reactive({
         list(
-            "samples" = selected_samples()
-            # valid_numeric_filter_obj(),
-            # valid_tag_filter_obj()
+            "samples" = selected_samples(),
+            valid_numeric_filter_obj(),
+            valid_tag_filter_obj()
         )
     })
 

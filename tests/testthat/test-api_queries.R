@@ -63,24 +63,37 @@ with_test_api_env({
   # features ------------------------------------------------------------------
 
   test_that("query_feature_values", {
+    expected_columns <- c(
+      "sample",
+      "feature_name",
+      "feature_display",
+      "feature_value",
+      "feature_order"
+    )
+
     result1 <- query_feature_values(
-      "TCGA", "Immune_Subtype", "leukocyte_fraction"
+      datasets = "TCGA",
+      parent_tags = "Immune_Subtype",
+      features = "leukocyte_fraction"
     )
-    expect_named(result1, c("name", "display", "sample", "value", "order"))
-    expect_length(result1$value, 9058)
-    result1_complete <- tidyr::drop_na(result1)
-    expect_length(result1_complete$value, 9058)
-
     result2 <- query_feature_values(
-      "PCAWG", "Immune_Subtype", "Lymphocytes_Aggregate1"
+      datasets = "PCAWG",
+      parent_tags = "Immune_Subtype",
+      features = "Lymphocytes_Aggregate1"
     )
-    expect_length(result2$value, 455)
-
     result3 <- query_feature_values(
-      "PCAWG", class = "EPIC"
+      datasets = "PCAWG",
+      parent_tags ="Immune_Subtype",
+      features = "leukocyte_fraction"
     )
-    expect_length(result3$value, 3640)
 
+    expect_named(result1, expected_columns)
+    expect_named(result2, expected_columns)
+    expect_named(result3, expected_columns)
+
+    expect_length(result1$feature_value, 9058)
+    expect_length(result2$feature_value, 455)
+    expect_length(result3$feature_value, 0)
   })
 
   test_that("query_features_range", {
@@ -89,39 +102,84 @@ with_test_api_env({
     expect_named(result1, expected_columns)
   })
 
+  # test_that("query_samples_to_features", {
+  #   result <- query_samples_to_features("leukocyte_fraction")
+  #   expect_named(
+  #     result,
+  #     c(
+  #       "name",
+  #       "sample",
+  #       "value"
+  #     )
+  #   )
+  # })
+  #
+  # test_that("query_samples_to_feature", {
+  #   result <- query_samples_to_feature("leukocyte_fraction")
+  #   expect_named(
+  #     result,
+  #     c(
+  #       "sample",
+  #       "value"
+  #     )
+  #   )
+  # })
+
   # features_by_tag -----------------------------------------------------------
 
   test_that("query_feature_values_by_tag", {
-    result <- query_feature_values_by_tag(
-      "TCGA", "Immune_Subtype", "leukocyte_fraction"
+    expected_columns <- c(
+      "tag_name",
+      "tag_display",
+      "tag_color",
+      "tag_characteristics",
+      "sample",
+      "value"
     )
-    expect_named(
-      result,
-      c(
-        "characteristics",
-        "display",
-        "features",
-        "tag"
-      )
+
+    result1 <- query_feature_values_by_tag(
+      "Lymphocytes_Aggregate1",
+      datasets = "PCAWG",
+      parent_tags = "Immune_Subtype"
     )
-    expect_named(result$features[[1]], c("sample", "value"))
+    result2 <- query_feature_values_by_tag(
+      "not_a_feature",
+      datasets = "PCAWG",
+      parent_tags = "Immune_Subtype"
+    )
+    expect_named(result1, expected_columns)
+    expect_named(result2, expected_columns)
+    expect_equal(nrow(result1), 455)
+    expect_equal(nrow(result2), 0)
   })
 
   test_that("query_features_values_by_tag", {
-    result <- query_features_values_by_tag(
-      "TCGA", "Immune_Subtype", feature_class = "DNA Alteration"
+    expected_columns <- c(
+      "tag_name",
+      "tag_display",
+      "tag_color",
+      "tag_characteristics",
+      "sample",
+      "feature_name",
+      "feature_display",
+      "feature_value",
+      "feature_order"
     )
-    expect_named(
-      result,
-      c(
-        "tag",
-        "sample",
-        "feature_name",
-        "feature_display",
-        "feature_order",
-        "feature_value"
-      )
+
+    result1 <- query_features_values_by_tag(
+      datasets = "PCAWG",
+      parent_tags = "Immune_Subtype",
+      feature_classes = "EPIC"
     )
+    result2 <- query_features_values_by_tag(
+      datasets = "PCAWG",
+      parent_tags = "Immune_Subtype",
+      feature_classes = "not_a_class"
+    )
+    expect_named(result1, expected_columns)
+    expect_named(result2, expected_columns)
+    expect_equal(nrow(result1), 3640)
+    expect_equal(nrow(result2), 0)
   })
 
   # features_by_class ---------------------------------------------------------
@@ -141,28 +199,7 @@ with_test_api_env({
     )
   })
 
-  test_that("query_samples_to_features", {
-    result <- query_samples_to_features("leukocyte_fraction")
-    expect_named(
-      result,
-      c(
-        "name",
-        "sample",
-        "value"
-      )
-    )
-  })
 
-  test_that("query_samples_to_feature", {
-    result <- query_samples_to_feature("leukocyte_fraction")
-    expect_named(
-      result,
-      c(
-        "sample",
-        "value"
-      )
-    )
-  })
 
   # genes ---------------------------------------------------------------------
 
@@ -302,18 +339,21 @@ with_test_api_env({
   })
 
   test_that("query_cohort_selector", {
-    result <- query_cohort_selector()
-    expect_named(
-      result,
-      c(
-        "name",
-        "display",
-        "characteristics",
-        "color",
-        "size",
-        "sample"
-      )
+    expected_columns <-       c(
+      "name",
+      "display",
+      "characteristics",
+      "color",
+      "size",
+      "samples"
     )
+
+    result1 <- query_cohort_selector("PCAWG", "Immune_Subtype")
+    result2 <- query_cohort_selector("PCAWG", "TCGA_Subtype")
+    expect_named(result1, expected_columns)
+    expect_named(result2, expected_columns)
+    expect_equal(nrow(result1), 5)
+    expect_equal(nrow(result2), 0)
   })
 
 })

@@ -22,8 +22,6 @@ build_cohort_mutation_tbl <- function(){
         )
 }
 
-# TODO: Fix filter object
-# TODO: Fix driver mutation cohort builder
 #' Build Cohort Object
 #'
 #' @param filter_obj A named list with element sample_ids and filters
@@ -57,8 +55,7 @@ build_cohort_object <- function(
         cohort_object$feature_tbl <- query_features_by_class(dataset)
     }
     cohort_object$dataset     <- dataset
-    # cohort_object$filters     <- filter_obj$filters
-    cohort_object$filters     <- "None"
+    cohort_object$filters     <- filter_obj$filters
     cohort_object$plot_colors <- cohort_object$group_tbl %>%
         dplyr::select("group", "color") %>%
         tibble::deframe(.)
@@ -105,9 +102,10 @@ build_cohort_tbl_by_tag <- function(samples, dataset, tag){
             "group" = "name",
             "characteristics",
             "color",
-            "sample",
+            "sample" = "samples",
             "size"
         ) %>%
+        tidyr::unnest(cols = "sample") %>%
         dplyr::filter(.data$sample %in% samples)
 }
 
@@ -218,9 +216,9 @@ build_feature_bin_cohort_object <- function(
 build_feature_bin_sample_tbl <- function(
     dataset, samples, feature_name, n_bins
 ){
-    query_feature_values(dataset, feature = feature_name) %>%
+    query_feature_values(features = feature_name, datasets = dataset) %>%
         dplyr::filter(.data$sample %in% samples) %>%
-        dplyr::mutate("group" = as.character(cut(.data$value, n_bins))) %>%
+        dplyr::mutate("group" = as.character(cut(.data$feature_value, n_bins))) %>%
         dplyr::select("sample", "group")
 }
 

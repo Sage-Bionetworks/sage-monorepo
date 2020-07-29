@@ -4,6 +4,7 @@ with_test_api_env({
         filter_obj = list(
             "samples" = "TCGA" %>%
                 iatlas.app::query_dataset_samples(.) %>%
+                dplyr::slice(1:50) %>%
                 dplyr::pull("name")
         ),
         dataset = "TCGA",
@@ -15,6 +16,7 @@ with_test_api_env({
         filter_obj = list(
             "samples" = "TCGA" %>%
                 iatlas.app::query_dataset_samples(.) %>%
+                dplyr::slice(1:10) %>%
                 dplyr::pull("name")
         ),
         dataset = "TCGA",
@@ -58,7 +60,7 @@ with_test_api_env({
     test_that("build_co_feature_tbl", {
         expected_columns <- c(
             "sample",
-            "feature_name",
+            "feature_display",
             "feature_value",
             "feature_order"
         )
@@ -79,7 +81,7 @@ with_test_api_env({
             "group",
             "time",
             "status",
-            "feature_name",
+            "feature_display",
             "feature_value",
             "feature_order"
         )

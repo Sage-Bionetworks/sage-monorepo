@@ -54,8 +54,9 @@ with_test_api_env({
             list(
                 dataSet = "TCGA",
                 related = "Immune_Subtype",
-                feature = list(),
-                featureClass = list()
+                tag = NA,
+                feature = NA,
+                featureClass = NA
             ),
             ghql_query_object
         )

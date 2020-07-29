@@ -1,19 +1,29 @@
 query FeaturesValues(
   $dataSet: [String!]
   $related: [String!]
+  $tag: [String!]
   $feature: [String!]
   $featureClass: [String!]
+  $sample: [String!]
+  $maxValue: Float
+  $minValue: Float
 ) {
   features(
     dataSet: $dataSet
     related: $related
+    tag: $tag
     feature: $feature
     featureClass: $featureClass
+    sample: $sample
+    maxValue: $maxValue
+    minValue: $minValue
   ){
     name
     display
-    sample
-    value
     order
+    samples {
+      name
+      value
+    }
   }
 }

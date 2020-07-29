@@ -37,7 +37,6 @@ perform_api_query <- function(
     variables,
     qry_obj = .GlobalEnv$ghql_query_object,
     api_url = "http://ec2-54-190-27-240.us-west-2.compute.amazonaws.com/api"
-    # api_url = "http://localhost:5000/api"
 ){
     if (!query_name %in% names(qry_obj$queries)) {
         msg <- qry_obj$queries %>%

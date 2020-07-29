@@ -1,22 +1,31 @@
 query FeaturesValuesByTag(
-  $dataSet: [String!]!
-  $related: [String!]!
+  $dataSet: [String!]
+  $related: [String!]
+  $tag: [String!]
   $feature: [String!]
   $featureClass: [String!]
+  $sample: [String!]
 ) {
   featuresByTag(
     dataSet: $dataSet
     related: $related
+    tag: $tag
     feature: $feature
     featureClass: $featureClass
+    sample: $sample
   ){
     tag
+    display
+    color
+    characteristics
     features{
       name
-      value
-      sample
       order
       display
+      samples {
+        name
+        value
+      }
     }
   }
 }

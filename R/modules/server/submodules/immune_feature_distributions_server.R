@@ -41,7 +41,7 @@ immune_feature_distributions_server <- function(
             input$scale_method_choice
         )
         iatlas.app::build_ifd_distplot_tbl(
-            cohort_obj()$sample_tbl,
+            cohort_obj(),
             input$feature_choice_name,
             input$scale_method_choice
         )
