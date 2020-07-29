@@ -30,7 +30,8 @@ gene_type_query = load_schema_from_path(
     schema_dirname + '/geneType.query.graphql')
 immune_checkpoint_query = load_schema_from_path(
     schema_dirname + '/immuneCheckpoint.query.graphql')
-method_tag_query = load_schema_from_path(schema_dirname + '/methodTag.query.graphql')
+method_tag_query = load_schema_from_path(
+    schema_dirname + '/methodTag.query.graphql')
 mutation_query = load_schema_from_path(
     schema_dirname + '/mutation.query.graphql')
 mutation_code_query = load_schema_from_path(
@@ -60,20 +61,6 @@ direction_enum_scalar = ScalarType('DirectionEnum')
 @direction_enum_scalar.serializer
 def serialize_direction_enum(value):
     return value if value == 'Amp' or value == 'Del' else None
-
-
-feature_value_scalar = ScalarType('FeatureValue')
-
-
-@feature_value_scalar.serializer
-def serialize_feature_value(value):
-    if value == decimal.Decimal('-inf'):
-        return '-inf'
-    if value == decimal.Decimal('inf'):
-        return 'inf'
-    if isinstance(value, decimal.Decimal):
-        return float(value)
-    return None
 
 
 status_enum_scalar = ScalarType('StatusEnum')
@@ -156,7 +143,7 @@ root.set_field('therapyTypes', resolve_therapy_types)
 schema = make_executable_schema(
     type_defs,
     [root, copy_number_result, data_set, direction_enum_scalar, driver_result, feature, features_by_class,
-     features_by_tag, feature_value_scalar, gene, gene_family, gene_function, genes_by_tag, gene_related_sample,
+     features_by_tag, gene, gene_family, gene_function, genes_by_tag, gene_related_sample,
      gene_type, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, pathway, patient, publication,
      related_by_data_set, sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature,
      simple_gene, simple_gene_type, simple_publication, simple_tag, slide, tag, super_category, therapy_type]

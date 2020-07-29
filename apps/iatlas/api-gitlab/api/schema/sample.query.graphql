@@ -12,12 +12,27 @@ type Sample {
 }
 
 """
+The "FeatureRelatedSample" is a sample that is specifically related to a feature.
+It may return:
+
+- "name", the sample's name (often the "sample" portion of
+a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/)).
+- "value", the calculated relational value or the Sample related to the Feature.
+
+See also `Feature`
+"""
+type FeatureRelatedSample {
+  name: String!
+  value: Float
+}
+
+"""
 The "GeneRelatedSample" is a sample that is specifically related to a gene.
 It may return:
 
 - "name", the sample's name (often the "sample" portion of
 a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/)).
-- "rnaSeqExpr", the RNA sequence expression or the sample related to the Gene.
+- "rnaSeqExpr", the RNA sequence expression or the Sample related to the Gene.
 
 See also `Gene`
 """

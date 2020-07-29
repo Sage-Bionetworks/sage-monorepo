@@ -42,9 +42,9 @@ def build_gene_graphql_response(gene_type_dict=dict(), pub_dict=dict(), sample_d
     return f
 
 
-def build_pub_gene_gene_type_join_condition(gene_dict, gene_types, pub_gene_gene_type_model, pub_model):
+def build_pub_gene_gene_type_join_condition(gene_ids, gene_types, pub_gene_gene_type_model, pub_model):
     join_condition = [
-        pub_gene_gene_type_model.publication_id == pub_model.id, pub_gene_gene_type_model.gene_id.in_([*gene_dict])]
+        pub_gene_gene_type_model.publication_id == pub_model.id, pub_gene_gene_type_model.gene_id.in_(gene_ids)]
 
     map_of_ids = list(map(lambda gt: gt.id, gene_types))
     gene_type_ids = list(dict.fromkeys(map_of_ids)) if map_of_ids else None
@@ -198,7 +198,8 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
 
                 data_set_to_sample_sub_query = sess.query(data_set_to_sample_1.dataset_id).filter(
                     data_set_to_sample_1.sample_id == sample_1.id)
-                data_set_join_condition = [data_set_1.id.in_(data_set_to_sample_sub_query)]
+                data_set_join_condition = [
+                    data_set_1.id.in_(data_set_to_sample_sub_query)]
                 if data_set:
                     data_set_join_condition.append(
                         data_set_1.name.in_(data_set))
@@ -253,12 +254,12 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
     return query
 
 
-def get_gene_types(info, gene_type=None, gene_dict=dict()):
+def get_gene_types(info, gene_type=None, gene_ids=set()):
     selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
     relations = build_option_args(
         selection_set, {'geneTypes': 'gene_types'})
 
-    if gene_dict and ('gene_types' in relations or gene_type):
+    if gene_ids and ('gene_types' in relations or gene_type):
         sess = db.session
         gene_type_1 = aliased(GeneType, name='gt')
         gene_to_gene_type_1 = aliased(GeneToType, name='ggt')
@@ -280,7 +281,7 @@ def get_gene_types(info, gene_type=None, gene_dict=dict()):
         gene_type_query = gene_type_query.select_from(gene_type_1)
 
         gene_gene_type_join_condition = build_join_condition(
-            gene_to_gene_type_1.type_id, gene_type_1.id, gene_to_gene_type_1.gene_id, [*gene_dict])
+            gene_to_gene_type_1.type_id, gene_type_1.id, gene_to_gene_type_1.gene_id, gene_ids)
 
         if gene_type:
             gene_gene_type_join_condition.append(
@@ -303,13 +304,13 @@ def get_gene_types(info, gene_type=None, gene_dict=dict()):
     return []
 
 
-def get_publications(info, gene_types=[], gene_dict=dict(), by_tag=False):
+def get_publications(info, gene_types=[], gene_ids=set(), by_tag=False):
     selection_set = get_selection_set(
         info.field_nodes[0].selection_set, by_tag, child_node='genes')
     relations = build_option_args(
         selection_set, {'publications': 'publications'})
 
-    if gene_dict and 'publications' in relations:
+    if gene_ids and 'publications' in relations:
         sess = db.session
         gene_type_1 = aliased(GeneType, name='gt')
         pub_1 = aliased(Publication, name='p')
@@ -342,7 +343,7 @@ def get_publications(info, gene_types=[], gene_dict=dict(), by_tag=False):
         pub_query = pub_query.select_from(pub_1)
 
         pub_gene_gene_type_join_condition = build_pub_gene_gene_type_join_condition(
-            gene_dict, gene_types, pub_gene_gene_type_1, pub_1)
+            gene_ids, gene_types, pub_gene_gene_type_1, pub_1)
         print('pub_gene_gene_type_join_condition: ',
               pub_gene_gene_type_join_condition)
         pub_query = pub_query.join(pub_gene_gene_type_1, and_(
@@ -370,12 +371,12 @@ def get_publications(info, gene_types=[], gene_dict=dict(), by_tag=False):
     return []
 
 
-def get_samples(info, sample=None, gene_dict=dict(), by_tag=False):
+def get_samples(info, sample=None, gene_ids=set(), by_tag=False):
     selection_set = get_selection_set(
         info.field_nodes[0].selection_set, by_tag, child_node='genes')
     relations = build_option_args(selection_set, {'samples': 'samples'})
 
-    if gene_dict and 'samples' in relations:
+    if gene_ids and 'samples' in relations:
         sess = db.session
         sample_1 = aliased(Sample, name='s')
         gene_to_sample_1 = aliased(GeneToSample, name='gs')
@@ -402,7 +403,7 @@ def get_samples(info, sample=None, gene_dict=dict(), by_tag=False):
             sample_query = sample_query.filter(sample_1.name.in_(sample))
 
         gene_sample_join_condition = build_join_condition(
-            gene_to_sample_1.sample_id, sample_1.id, gene_to_sample_1.gene_id, [*gene_dict])
+            gene_to_sample_1.sample_id, sample_1.id, gene_to_sample_1.gene_id, gene_ids)
 
         sample_query = sample_query.join(
             gene_to_sample_1, and_(*gene_sample_join_condition))
@@ -435,12 +436,11 @@ def request_genes(_obj, info, data_set=None, entrez=None, feature=None, feature_
     return genes_query.distinct().all()
 
 
-def return_relations(info, gene_dict=dict(), gene_type=None, sample=None, by_tag=False):
+def return_relations(info, gene_ids=set(), gene_type=None, sample=None, by_tag=False):
     samples = get_samples(info, sample=sample,
-                          gene_dict=gene_dict, by_tag=by_tag)
-    gene_types = get_gene_types(info, gene_type=gene_type, gene_dict=gene_dict)
-    pubs = get_publications(
-        info, gene_types=gene_types, gene_dict=gene_dict)
+                          gene_ids=gene_ids, by_tag=by_tag)
+    gene_types = get_gene_types(info, gene_type=gene_type, gene_ids=gene_ids)
+    pubs = get_publications(info, gene_types=gene_types, gene_ids=gene_ids)
 
     types_dict = dict()
     for key, collection in groupby(gene_types, key=lambda gt: gt.gene_id):

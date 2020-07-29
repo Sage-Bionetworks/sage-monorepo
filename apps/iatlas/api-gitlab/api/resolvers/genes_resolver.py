@@ -5,9 +5,9 @@ def resolve_genes(_obj, info, entrez=None, sample=None, geneType=None):
     genes = request_genes(_obj, info, entrez=entrez,
                           gene_type=geneType, sample=sample)
 
-    gene_dict = {gene.id: gene for gene in genes}
+    gene_ids = set(gene.id for gene in genes)
 
-    pubs_dict, samples_dict, types_dict = return_relations(info, gene_dict=gene_dict,
+    pubs_dict, samples_dict, types_dict = return_relations(info, gene_ids=gene_ids,
                                                            gene_type=geneType, sample=sample)
 
     return map(build_gene_graphql_response(types_dict, pubs_dict, samples_dict), genes)

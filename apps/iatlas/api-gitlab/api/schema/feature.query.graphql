@@ -1,9 +1,4 @@
 """
-The "FeatureValue" scalar will always be either a Float or either "inf" or "-inf" representing infinity or negative infinity.
-"""
-scalar FeatureValue
-
-"""
 The "Feature" type may return:
 
 - The "class" is the feature class associated with this feature.
@@ -26,11 +21,10 @@ type Feature {
   methodTag: String
   name: String!
   order: Int
-  sample: String
+  samples: [FeatureRelatedSample!]!
   unit: String
-  value: FeatureValue
-  valueMax: FeatureValue
-  valueMin: FeatureValue
+  valueMax: Float
+  valueMin: Float
 }
 
 """
