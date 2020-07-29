@@ -19,8 +19,13 @@ query_feature_values_with_cohort_object <- function(
 ){
   if (cohort_object$group_type == "tag") related <- cohort_object$group_name
   else related <- NA
-  dataset <- cohort_object$dataset
-  query_feature_values(dataset, related, feature, class)
+  query_feature_values(
+    feature,
+    datasets = cohort_object$dataset,
+    parent_tags = related,
+    feature_classes = class,
+    samples = cohort_object$sample_tbl$sample
+  )
 }
 
 # genes -----------------------------------------------------------------------

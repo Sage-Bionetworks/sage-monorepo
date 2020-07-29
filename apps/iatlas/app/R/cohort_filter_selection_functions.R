@@ -65,32 +65,19 @@ is_numeric_filter_valid <- function(obj){
 #' features_to_samples table
 #' @importFrom magrittr %>%
 #' @importFrom purrr transpose reduce
-get_filtered_feature_sample_ids <- function(filter_obj, samples, dataset){
+get_filtered_feature_samples <- function(filter_obj, samples, dataset){
     filter_obj %>%
         purrr::transpose(.) %>%
-        print() %>%
-        purrr::pmap(., get_filtered_feature_sample_ids_by_filter) %>%
+        purrr::map(~unlist(.x)) %>%
+        purrr::pmap(., get_filtered_samples_by_feature, dataset) %>%
         purrr::reduce(base::intersect, .init = samples)
 }
 
-#' Get Filtered Feature Sample IDs By Filter
-#'
-#' @param id An integer in the smaple_id column of the
-#' features_to_samples table
-#' @param min A numeric
-#' @param max A numeric
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-get_filtered_feature_sample_ids_by_filter <- function(id, min, max){
-    paste0(
-        "SELECT sample_id FROM features_to_samples ",
-        "WHERE value <= ",  max, " ",
-        "AND value >=", min, " ",
-        "AND feature_id = ", id
-    ) %>%
-        perform_query("Get Filtered Feature Sample IDs") %>%
-        dplyr::pull("sample_id")
+get_filtered_samples_by_feature <- function(feature, min, max, dataset){
+    query_feature_values(feature, dataset, max_value = max, min_value = min) %>%
+        dplyr::pull(sample)
 }
+
 
 #' Create Cohort Filter Object
 #'

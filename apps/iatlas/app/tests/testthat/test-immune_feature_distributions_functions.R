@@ -1,8 +1,19 @@
 with_test_api_env({
+
+  cohort_obj1 <- build_cohort_object(
+    filter_obj = list(
+      "samples" = "PCAWG" %>%
+        iatlas.app::query_dataset_samples(.) %>%
+        dplyr::pull("name")
+    ),
+    dataset = "PCAWG",
+    group_choice = "Immune_Subtype",
+    group_type = "tag"
+  )
+
   test_that("Build Distribution Plot Tibble", {
-    sample_tbl <- query_cohort_selector() %>%
-      dplyr::select("group" = "name", "sample")
-    result1 <- build_ifd_distplot_tbl(sample_tbl, "leukocyte_fraction", "None")
+
+    result1 <- build_ifd_distplot_tbl(cohort_obj1, "leukocyte_fraction", "None")
     expect_named(result1, c("x", "y"))
   })
 })

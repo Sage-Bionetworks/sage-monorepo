@@ -66,23 +66,57 @@ query_dataset_samples <- function(dataset){
 # features --------------------------------------------------------------------
 
 query_feature_values <- function(
-    dataset = list(),
-    group_tag = list(),
-    feature = list(),
-    class = list()
+    features = NA,
+    datasets = NA,
+    parent_tags = NA,
+    tags = NA,
+    feature_classes = NA,
+    samples = NA,
+    max_value = NA,
+    min_value = NA
 ){
-    perform_api_query(
+    tbl <- perform_api_query(
         "feature_values",
         list(
-            dataSet = dataset,
-            related = group_tag,
-            feature = feature,
-            featureClass = class
+            dataSet = datasets,
+            related = parent_tags,
+            tag = tags,
+            feature = features,
+            featureClass = feature_classes,
+            sample = samples,
+            maxValue = max_value,
+            minValue = min_value
         )
     ) %>%
         purrr::pluck(1) %>%
-        dplyr::as_tibble() %>%
-        dplyr::select("name", "display", "sample", "value", "order")
+        dplyr::as_tibble()
+
+    if(nrow(tbl) == 0) {
+        tbl <- dplyr::tibble(
+            "sample" = character(),
+            "feature_name" = character(),
+            "feature_display" = character(),
+            "feature_value" = double(),
+            "feature_order" = integer()
+        )
+    } else {
+        tbl <- tbl %>%
+            dplyr::select(
+                "feature_name" = "name",
+                "feature_display" = "display",
+                "feature_order" = "order",
+                "samples"
+            ) %>%
+            tidyr::unnest(cols = "samples") %>%
+            dplyr::select(
+                "sample" = "name",
+                "feature_name",
+                "feature_display",
+                "feature_value" = "value",
+                "feature_order"
+            )
+    }
+    return(tbl)
 }
 
 query_features_range <- function(
@@ -121,61 +155,151 @@ query_features_range <- function(
                 "display",
                 "value_min" = "valueMin",
                 "value_max" = "valueMax"
-            ) %>%
-            dplyr::distinct()
+            )
     }
     return(tbl)
 }
 
+# query_samples_to_features <- function(features = NA){
+#     perform_api_query(
+#         "samples_to_features",
+#         list(features = features)
+#     ) %>%
+#         purrr::pluck(1) %>%
+#         dplyr::as_tibble()
+# }
+#
+# query_samples_to_feature <- function(feature){
+#     perform_api_query(
+#         "samples_to_feature",
+#         list(feature = feature)
+#     ) %>%
+#         purrr::pluck(1) %>%
+#         dplyr::as_tibble()
+# }
+
 # features_by_tag --------------------------------------------------------------
 
 query_feature_values_by_tag <- function(
-    dataset = list(),
-    group_tag = list(),
-    feature = list()
+    feature,
+    datasets = NA,
+    parent_tags = NA,
+    tags = NA,
+    samples = NA
 ){
-    perform_api_query(
+    tbl <- perform_api_query(
         "feature_values_by_tag",
         list(
-            dataSet = dataset,
-            related = group_tag,
-            feature = feature
+            dataSet = datasets,
+            related = parent_tags,
+            tag = tags,
+            feature = feature,
+            sample = samples
         )
     ) %>%
         purrr::pluck(1) %>%
         dplyr::as_tibble()
+
+    if(nrow(tbl) == 0) {
+        tbl <- dplyr::tibble(
+            "tag_name" = character(),
+            "tag_display"  = character(),
+            "tag_color"  = character(),
+            "tag_characteristics"  = character(),
+            "sample" = character(),
+            "value" = double()
+        )
+    } else {
+        tbl <- tbl %>%
+            dplyr::select(
+                "tag_name" = "tag",
+                "tag_display" = "display",
+                "tag_color" = "color",
+                "tag_characteristics" = "characteristics",
+                "features"
+            ) %>%
+            tidyr::unnest(cols = "features") %>%
+            tidyr::unnest(cols = "samples") %>%
+            dplyr::select(
+                "tag_name",
+                "tag_display",
+                "tag_color",
+                "tag_characteristics",
+                "sample" = "name",
+                "value"
+            )
+    }
+    return(tbl)
 }
 
 query_features_values_by_tag <- function(
-    dataset = list(),
-    group_tag = list(),
-    feature = list(),
-    feature_class = list()
+    features = NA,
+    datasets = NA,
+    parent_tags = NA,
+    tags = NA,
+    feature_classes = NA,
+    samples = NA
 ){
-    perform_api_query(
+    tbl <- perform_api_query(
         "features_values_by_tag",
         list(
-            dataSet = dataset,
-            related = group_tag,
-            feature = feature,
-            featureClass = feature_class
+            dataSet = datasets,
+            related = parent_tags,
+            tag = tags,
+            feature = features,
+            featureClass = feature_classes,
+            sample = samples
         )
     ) %>%
         purrr::pluck(1) %>%
-        dplyr::as_tibble() %>%
-        dplyr::select(
-            "tag",
-            "features"
-        ) %>%
-        tidyr::unnest(cols = "features", keep_empty = T) %>%
-        dplyr::select(
-            "tag",
-            "sample",
-            "feature_name" = "name",
-            "feature_display" = "display",
-            "feature_order" = "order",
-            "feature_value" = "value"
+        dplyr::as_tibble()
+
+    if(nrow(tbl) == 0) {
+        tbl <- dplyr::tibble(
+            "tag_name" = character(),
+            "tag_display"  = character(),
+            "tag_color"  = character(),
+            "tag_characteristics"  = character(),
+            "sample" = character(),
+            "feature_name" = character(),
+            "feature_display" = character(),
+            "feature_value" = double(),
+            "feature_order" = integer()
         )
+    } else {
+        tbl <- tbl %>%
+            dplyr::select(
+                "tag_name" = "tag",
+                "tag_display" = "display",
+                "tag_color" = "color",
+                "tag_characteristics" = "characteristics",
+                "features"
+            ) %>%
+            tidyr::unnest(cols = "features") %>%
+            dplyr::select(
+                "tag_name",
+                "tag_display",
+                "tag_color",
+                "tag_characteristics",
+                "feature_name" = "name",
+                "feature_display" = "display",
+                "feature_order" = "order",
+                "samples"
+            ) %>%
+            tidyr::unnest(cols = "samples") %>%
+            dplyr::select(
+                "tag_name",
+                "tag_display",
+                "tag_color",
+                "tag_characteristics",
+                "sample" = "name",
+                "feature_name",
+                "feature_display",
+                "feature_value" = "value",
+                "feature_order"
+            )
+    }
+    return(tbl)
 }
 
 # features_by_class -----------------------------------------------------------
@@ -206,24 +330,6 @@ query_features_by_class <- function(
             "unit",
             "method_tag" = "methodTag"
         )
-}
-
-query_samples_to_features <- function(features = list()){
-    perform_api_query(
-        "samples_to_features",
-        list(features = features)
-    ) %>%
-        purrr::pluck(1) %>%
-        dplyr::as_tibble()
-}
-
-query_samples_to_feature <- function(feature){
-    perform_api_query(
-        "samples_to_feature",
-        list(feature = feature)
-    ) %>%
-        purrr::pluck(1) %>%
-        dplyr::as_tibble()
 }
 
 # genes -----------------------------------------------------------------------
@@ -489,29 +595,46 @@ query_tags <- function(dataset, parent_tag){
 }
 
 query_cohort_selector <- function(
-    dataset = "TCGA",
-    group_tag = "Immune_Subtype"
+    datasets,
+    related_tags,
+    tags = NA,
+    features = NA,
+    feature_classes = NA
 ){
-    perform_api_query(
+    tbl <- perform_api_query(
         "cohort_selection",
         list(
-            dataSet = dataset,
-            related = group_tag,
-            feature = list(),
-            featureClass = list()
+            dataSet = datasets,
+            related = related_tags,
+            tag = tags,
+            feature = features,
+            featureClass = feature_classes
         )
     ) %>%
         purrr::pluck(1) %>%
-        dplyr::as_tibble() %>%
-        tidyr::unnest(cols = c("samples"), keep_empty = T) %>%
-        dplyr::select(
-            "name",
-            "display",
-            "characteristics",
-            "color",
-            "size" = "sampleCount",
-            "sample" = "samples"
+        dplyr::as_tibble()
+
+    if(nrow(tbl) == 0) {
+        tbl <- dplyr::tibble(
+            "name" = character(),
+            "display" = character(),
+            "characteristics" = character(),
+            "color" = character(),
+            "size" = integer(),
+            "samples" = list()
         )
+    } else {
+        tbl <- tbl %>%
+            dplyr::select(
+                "name",
+                "display",
+                "characteristics",
+                "color",
+                "size" = "sampleCount",
+                "samples"
+            )
+    }
+    return(tbl)
 }
 
 

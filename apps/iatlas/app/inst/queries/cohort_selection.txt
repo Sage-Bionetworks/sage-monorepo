@@ -1,5 +1,17 @@
-query CohortSelector($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!]) {
-  tags(dataSet: $dataSet, related: $related, feature: $feature, featureClass:  $featureClass){
+query CohortSelector(
+  $dataSet: [String!]!
+  $related: [String!]!
+  $tag: [String!]
+  $feature: [String!]
+  $featureClass: [String!]
+) {
+  tags(
+    dataSet: $dataSet
+    related: $related
+    tag: $tag
+    feature: $feature
+    featureClass: $featureClass
+  ){
     characteristics
     display
     color

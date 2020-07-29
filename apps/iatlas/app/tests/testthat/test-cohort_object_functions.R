@@ -13,11 +13,16 @@ with_test_api_env({
     group_type = "tag"
   )
 
-  cohort_obj2 <- list(
-    "dataset" = "TCGA",
-    "group_type" = "tag",
-    "group_name" = "Immune_Subtype"
-  )
+  # cohort_obj2 <- build_cohort_object(
+  #   filter_obj = list(
+  #     "samples" = "TCGA" %>%
+  #       iatlas.app::query_dataset_samples(.) %>%
+  #       dplyr::pull("name")
+  #   ),
+  #   dataset = "TCGA",
+  #   group_choice = "Immune_Subtype",
+  #   group_type = "tag"
+  # )
 
   test_that("get_cohort_feature_class_list", {
     res1 <- get_cohort_feature_class_list(cohort_obj1)
@@ -30,38 +35,35 @@ with_test_api_env({
 
   test_that("query_feature_values_with_cohort_object", {
 
+    expected_columns <- c(
+      "sample",
+      "feature_name",
+      "feature_display",
+      "feature_value",
+      "feature_order"
+    )
+
     result1 <- query_feature_values_with_cohort_object(
-      cohort_obj2,
-      "Lymphocytes_Aggregate1"
+      cohort_obj1,
+      feature = "Lymphocytes_Aggregate1"
     )
 
     result2 <- query_feature_values_with_cohort_object(
-      cohort_obj2,
+      cohort_obj1,
       class = "Overall Proportion"
     )
 
-    expect_named(result1, c("name", "display", "sample", "value", "order"))
-    expect_named(result2, c("name", "display", "sample", "value", "order"))
-    expect_length(result1$value, 9126)
-    expect_length(result2$value, 25786)
-
-    cohort_obj2 <- list(
-      "dataset" = "PCAWG",
-      "group_type" = "custom",
-      "group_name" = "Immune_Feature_Bins"
-    )
     result3 <- query_feature_values_with_cohort_object(
-      cohort_obj2,
-      "Lymphocytes_Aggregate1"
-    )
-
-    result4 <- query_feature_values_with_cohort_object(
-      cohort_obj2,
+      cohort_obj1,
       class = "EPIC"
     )
 
-    expect_length(result3$value, 455)
-    expect_length(result4$value, 3640)
+    expect_named(result1, expected_columns)
+    expect_named(result2, expected_columns)
+    expect_named(result3, expected_columns)
+    expect_length(result1$feature_value, 455L)
+    expect_length(result2$feature_value, 0)
+    expect_length(result3$feature_value, 3640L)
 
   })
 

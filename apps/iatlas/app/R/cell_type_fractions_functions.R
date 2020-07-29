@@ -5,9 +5,9 @@ build_ctf_value_tbl <- function(cohort_obj, class){
         dplyr::select(
             "sample",
             "group",
-            "feature_name" = "display",
-            "feature_value" = "value",
-            "feature_order" = "order"
+            "feature_display",
+            "feature_value",
+            "feature_order"
         )
 }
 
@@ -20,7 +20,7 @@ build_ctf_value_tbl <- function(cohort_obj, class){
 #' @importFrom dplyr inner_join select group_by arrange summarise ungroup mutate
 build_ctf_barplot_tbl <- function(tbl){
     tbl %>%
-        dplyr::group_by(.data$feature_name, .data$group) %>%
+        dplyr::group_by(.data$feature_display, .data$group) %>%
         dplyr::arrange(.data$feature_order) %>%
         dplyr::summarise(
             .mean = mean(.data$feature_value),
@@ -29,12 +29,12 @@ build_ctf_barplot_tbl <- function(tbl){
         dplyr::ungroup() %>%
         dplyr::mutate(.se = .data$.mean / sqrt(.data$.count)) %>%
         create_plotly_label(
-            .data$feature_name, .data$group, c(".mean", ".se")
+            .data$feature_display, .data$group, c(".mean", ".se")
         ) %>%
         dplyr::select(
             x = .data$group,
             y = .data$.mean,
-            color = .data$feature_name,
+            color = .data$feature_display,
             .data$label,
             error = .data$.se
         )
