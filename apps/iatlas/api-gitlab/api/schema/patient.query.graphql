@@ -1,4 +1,19 @@
 """
+The "EthnicityEnum" scalar will always be either `not hispanic or latino` or `hispanic or latino`.
+"""
+scalar EthnicityEnum
+
+"""
+The "GenderEnum" scalar will always be either `female` or `male`.
+"""
+scalar GenderEnum
+
+"""
+The "RaceEnum" scalar will always be either `american indian or alaska native`, `black or african american`, `native hawaiian or other pacific islander`, `white`, or `asian`.
+"""
+scalar RaceEnum
+
+"""
 The "Patient" type may return:
 
 - The "age" of the patient
@@ -14,10 +29,10 @@ The "Patient" type may return:
 type Patient {
   age: Int
   barcode: String!
-  ethnicity: String
-  gender: String
+  ethnicity: EthnicityEnum
+  gender: GenderEnum
   height: Int
-  race: String
+  race: RaceEnum
   weight: Int
   samples: [SimpleSample!]!
   slides: [SimpleSlide!]!
@@ -37,9 +52,9 @@ The "SimplePatient" type may return:
 type SimplePatient {
   age: Int
   barcode: String!
-  ethnicity: String
-  gender: String
+  ethnicity: EthnicityEnum
+  gender: GenderEnum
   height: Int
-  race: String
+  race: RaceEnum
   weight: Int
 }
