@@ -20,8 +20,7 @@ def resolve_features_by_tag(_obj, info, dataSet=None, feature=None, featureClass
             'characteristics': get_value(features[0], 'tag_characteristics'),
             'color': get_value(features[0], 'tag_color'),
             'display': get_value(features[0], 'tag_display'),
-            'features': list(
-                map(build_feature_graphql_response(max_min_dict=max_min_dict, sample_dict=sample_dict), features)),
+            'features': list(map(build_feature_graphql_response(max_min_dict=max_min_dict, sample_dict=sample_dict), features)),
             'tag': feature_tag
         }
 

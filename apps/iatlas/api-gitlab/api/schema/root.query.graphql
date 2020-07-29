@@ -347,7 +347,6 @@ type Query {
     tag: [String!]
     feature: [String!]
     featureClass: [String!]
-    fsdfds: [String!]
   ): [Tag!]!
 
   """
