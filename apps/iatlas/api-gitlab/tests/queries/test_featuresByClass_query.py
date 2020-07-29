@@ -15,9 +15,11 @@ def test_featuresByClass_query_with_feature(client, data_set, related, chosen_fe
                 methodTag
                 name
                 order
-                sample
+                samples {
+                    name
+                    value
+                }
                 unit
-                value
             }
         }
     }"""
@@ -38,15 +40,20 @@ def test_featuresByClass_query_with_feature(client, data_set, related, chosen_fe
         assert len(features) > 0
         # Don't need to iterate through every result.
         for feature in features[0:2]:
+            samples = feature['samples']
             assert feature['class'] == result['class']
             assert type(feature['display']) is str or NoneType
             assert type(feature['methodTag']) is str or NoneType
             assert feature['name'] == chosen_feature
             assert type(feature['order']) is int or NoneType
-            assert type(feature['sample']) is str or NoneType
+            assert isinstance(samples, list)
+            assert len(samples) > 0
+            # Don't need to iterate through every result.
+            for current_sample in samples[0:2]:
+                assert type(current_sample['name']) is str
+                assert type(current_sample['value']) is float
             assert feature['unit'] in unit_enum.enums or type(
                 feature['unit']) is NoneType
-            assert type(feature['value']) is str or float or NoneType
 
 
 def test_featuresByClass_query_with_feature_no_sample_or_value(client, data_set, related, chosen_feature):
@@ -312,8 +319,10 @@ def test_featuresByClass_query_with_just_feature_and_feature_class(client, featu
             features {
                 class
                 name
-                sample
-                value
+                samples {
+                    name
+                    value
+                }
             }
         }
     }"""
@@ -334,7 +343,12 @@ def test_featuresByClass_query_with_just_feature_and_feature_class(client, featu
         assert len(features) > 0
         # Don't need to iterate through every result.
         for feature in features[0:2]:
+            samples = feature['samples']
             assert feature['class'] == feature_class
             assert feature['name'] == chosen_feature
-            assert type(feature['sample']) is str or NoneType
-            assert type(feature['value']) is str or float or NoneType
+            assert isinstance(samples, list)
+            assert len(samples) > 0
+            # Don't need to iterate through every result.
+            for current_sample in samples[0:2]:
+                assert type(current_sample['name']) is str
+                assert type(current_sample['value']) is float

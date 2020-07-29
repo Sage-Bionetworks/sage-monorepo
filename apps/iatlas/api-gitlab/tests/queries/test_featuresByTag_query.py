@@ -6,8 +6,26 @@ from api.database import return_feature_class_query
 
 
 def test_featuresByTag_query_with_feature(client, data_set, related, chosen_feature):
-    query = """query FeaturesByTag($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!]) {
-        featuresByTag(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByTag(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByTag(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             tag
             characteristics
             display
@@ -17,9 +35,11 @@ def test_featuresByTag_query_with_feature(client, data_set, related, chosen_feat
                 methodTag
                 name
                 order
-                sample
+                samples {
+                    name
+                    value
+                }
                 unit
-                value
             }
         }
     }"""
@@ -42,20 +62,43 @@ def test_featuresByTag_query_with_feature(client, data_set, related, chosen_feat
         assert len(features) > 0
         # Don't need to iterate through every result.
         for feature in features[0:2]:
+            samples = feature['samples']
             assert type(feature['class']) is str or NoneType
             assert type(feature['display']) is str or NoneType
             assert type(feature['methodTag']) is str or NoneType
             assert feature['name'] == chosen_feature
             assert type(feature['order']) is int or NoneType
-            assert type(feature["sample"]) is str or NoneType
+            assert isinstance(samples, list)
+            assert len(samples) > 0
+            # Don't need to iterate through every result.
+            for current_sample in samples[0:2]:
+                assert type(current_sample['name']) is str
+                assert type(current_sample['value']) is float
             assert type(
                 feature['unit']) is NoneType or feature['unit'] in unit_enum.enums
-            assert type(feature['value']) is float or NoneType
 
 
 def test_featuresByTag_query_no_feature(client, data_set, related):
-    query = """query FeaturesByTag($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!]) {
-        featuresByTag(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByTag(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByTag(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             tag
             characteristics
             display
@@ -98,8 +141,26 @@ def test_featuresByTag_query_no_feature(client, data_set, related):
 
 
 def test_featuresByTag_query_no_relations(client, data_set, related, chosen_feature):
-    query = """query FeaturesByTag($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!]) {
-        featuresByTag(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByTag(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByTag(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             tag
             characteristics
             display
@@ -140,8 +201,26 @@ def test_featuresByTag_query_no_relations(client, data_set, related, chosen_feat
 
 
 def test_featuresByTag_query_with_feature_class(client, data_set, related, chosen_feature, feature_class):
-    query = """query FeaturesByTag($dataSet: [String!]!, $related: [String!]!, $feature: [String!], $featureClass: [String!]) {
-        featuresByTag(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByTag(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByTag(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             tag
             characteristics
             display

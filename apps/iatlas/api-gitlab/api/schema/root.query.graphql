@@ -99,6 +99,8 @@ type Query {
     feature: [String!]
     featureClass: [String!]
     sample: [String!]
+    maxValue: Float
+    minValue: Float
   ): [Feature!]!
 
   """
@@ -120,6 +122,8 @@ type Query {
     feature: [String!]
     featureClass: [String!]
     sample: [String!]
+    maxValue: Float
+    minValue: Float
   ): [FeaturesByClass!]!
 
   """
@@ -141,6 +145,8 @@ type Query {
     feature: [String!]
     featureClass: [String!]
     sample: [String!]
+    maxValue: Float
+    minValue: Float
   ): [FeaturesByTag!]!
 
   """
