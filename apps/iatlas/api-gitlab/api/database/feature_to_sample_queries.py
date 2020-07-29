@@ -5,7 +5,7 @@ from .database_helpers import build_general_query
 
 related_fields = ['features', 'samples']
 
-core_fields = ['feature_id', 'sample_id', 'value', 'inf_value']
+core_fields = ['feature_id', 'sample_id', 'value']
 
 
 def return_feature_to_sample_query(*args):

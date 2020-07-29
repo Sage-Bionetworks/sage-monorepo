@@ -32,8 +32,7 @@ def test_FeatureToSample_with_relations(app, feature_id):
                 assert type(sample.name) is str
         assert result.feature_id == feature_id
         assert type(result.sample_id) is int
-        assert type(result.value) is float or NoneType
-        assert type(result.inf_value) is float or NoneType
+        assert type(result.value) is float
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
@@ -49,5 +48,4 @@ def test_FeatureToSample_no_relations(app, feature_id):
         assert result.samples == []
         assert result.feature_id == feature_id
         assert type(result.sample_id) is int
-        assert type(result.value) is float or NoneType
-        assert type(result.inf_value) is float or NoneType
+        assert type(result.value) is float
