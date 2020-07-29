@@ -4,14 +4,14 @@ The "StatusEnum" scalar will always be either `Mut` or `Wt`.
 scalar StatusEnum
 
 """
-The "Mutation" type may return:
+The "GeneMutation" type may return:
 
 - The "gene" related to the mutation
 - The "mutation code"
 - The "mutation type"
 - A list of "samples"
 """
-type Mutation {
+type GeneMutation {
   id: Int!
   gene: SimpleGene
   mutationCode: String
