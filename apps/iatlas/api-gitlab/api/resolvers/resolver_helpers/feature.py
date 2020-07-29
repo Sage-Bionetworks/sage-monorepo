@@ -231,7 +231,7 @@ def build_tag_join_condition(join_column, column, filter_1_column=None, filter_1
     return join_condition
 
 
-def get_samples(info, data_set=None, max_value=None, min_value=None, related=None, sample=None, tag=None, feature_dict=dict(), by_class=False, by_tag=False):
+def get_samples(info, data_set=None, max_value=None, min_value=None, related=None, sample=None, tag=None, feature_ids=set(), by_class=False, by_tag=False):
     selection_set = get_selection_set(
         info.field_nodes[0].selection_set, (by_class or by_tag))
     requested = build_option_args(selection_set, {'samples': 'samples',
@@ -240,7 +240,7 @@ def get_samples(info, data_set=None, max_value=None, min_value=None, related=Non
     has_samples = 'samples' in requested
     has_max_min = 'value_max' in requested or 'value_min' in requested
 
-    if feature_dict and (has_samples or has_max_min):
+    if feature_ids and (has_samples or has_max_min):
         sess = db.session
 
         data_set_1 = aliased(Dataset, name='d')
@@ -272,7 +272,7 @@ def get_samples(info, data_set=None, max_value=None, min_value=None, related=Non
             sample_query = sample_query.filter(sample_1.name.in_(sample))
 
         feature_sample_join_condition = build_join_condition(
-            feature_to_sample_1.sample_id, sample_1.id, feature_to_sample_1.feature_id, [*feature_dict])
+            feature_to_sample_1.sample_id, sample_1.id, feature_to_sample_1.feature_id, feature_ids)
 
         if max_value:
             feature_sample_join_condition.append(
@@ -344,10 +344,10 @@ def request_features(_obj, info, data_set=None, feature=None, feature_class=None
     return query.distinct().all()
 
 
-def return_derived_fields(info, feature_dict=dict(), data_set=None, max_value=None, min_value=None,
+def return_derived_fields(info, feature_ids=set(), data_set=None, max_value=None, min_value=None,
                           related=None, sample=None, tag=None, by_class=False, by_tag=False):
     samples = get_samples(info, data_set=data_set, max_value=max_value, min_value=min_value, related=related,
-                          sample=sample, tag=tag, feature_dict=feature_dict, by_class=by_class, by_tag=by_tag)
+                          sample=sample, tag=tag, feature_ids=feature_ids, by_class=by_class, by_tag=by_tag)
 
     selection_set = get_selection_set(
         info.field_nodes[0].selection_set, by_class or by_tag)
