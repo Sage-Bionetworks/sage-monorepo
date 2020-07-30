@@ -1,5 +1,5 @@
 from itertools import groupby
-from .resolver_helpers import build_feature_graphql_response, get_value, request_features, return_derived_fields
+from .resolver_helpers import build_feature_graphql_response, get_value, request_features, return_feature_derived_fields
 
 
 def resolve_features_by_tag(_obj, info, dataSet=None, feature=None, featureClass=None, maxValue=None, minValue=None, related=None, sample=None, tag=None):
@@ -14,8 +14,8 @@ def resolve_features_by_tag(_obj, info, dataSet=None, feature=None, featureClass
 
     def build_response(feature_set):
         feature_tag, features = feature_set
-        max_min_dict, sample_dict = return_derived_fields(info, feature_ids=feature_ids, data_set=dataSet, max_value=maxValue,
-                                                          min_value=minValue, related=related, sample=sample, tag=[feature_tag], by_tag=True)
+        max_min_dict, sample_dict = return_feature_derived_fields(info, feature_ids=feature_ids, data_set=dataSet, max_value=maxValue,
+                                                                  min_value=minValue, related=related, sample=sample, tag=[feature_tag], by_tag=True)
         return {
             'characteristics': get_value(features[0], 'tag_characteristics'),
             'color': get_value(features[0], 'tag_color'),
