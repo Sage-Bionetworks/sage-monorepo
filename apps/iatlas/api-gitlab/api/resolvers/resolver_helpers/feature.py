@@ -157,7 +157,7 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
             tag_to_tag_1 = aliased(TagToTag, name='tt')
 
             related_tag_sub_query = sess.query(related_tag_1.id).filter(
-                related_tag_1.name.in_(related)) if related else related
+                related_tag_1.name.in_(related))
 
             data_set_tag_join_condition = build_join_condition(
                 data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
