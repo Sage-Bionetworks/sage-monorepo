@@ -350,3 +350,21 @@ query sampleIds {
         }
     }
 }
+
+mutationsBySamples {
+    name
+    mutations [{
+        gene {
+            entrez
+            hgnc
+        }
+        mutationCode {
+            code
+        }
+        mutationType {
+            name
+            display
+        }
+        status
+    }]
+}

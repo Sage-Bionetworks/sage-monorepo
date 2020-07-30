@@ -105,11 +105,10 @@ def build_sample_request(_obj, info, data_set=None, feature=None, feature_class=
             *patient_join_condition), isouter=is_outer)
 
     if by_status:
-        is_inner = bool(mutation_status) or bool(mutation_id)
         sample_mutation_join_condition = build_sample_mutation_join_condition(
             sample_to_mutation_1, sample_1, mutation_status, mutation_id)
         query = query.join(sample_to_mutation_1, and_(
-            *sample_mutation_join_condition), isouter=not is_inner)
+            *sample_mutation_join_condition))
 
     if by_tag or related or tag:
         sample_to_tag_1 = aliased(SampleToTag, name='st')
@@ -179,6 +178,8 @@ def build_sample_request(_obj, info, data_set=None, feature=None, feature_class=
         add_to_order(tag_1.color)
     if 'characteristics' in requested:
         add_to_order(tag_1.characteristics)
+    if 'status' in requested:
+        add_to_order(sample_to_mutation_1.status)
 
     query = query.order_by(*order) if order else query
 
