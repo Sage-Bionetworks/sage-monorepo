@@ -1,4 +1,4 @@
-from .copy_number_result import request_copy_number_results
+from .copy_number_result import build_cnr_graphql_response, request_copy_number_results
 from .data_set import request_data_sets
 from .driver_result import request_driver_results
 from .feature import build_feature_graphql_response, return_derived_fields, request_features
@@ -10,6 +10,7 @@ from .general_resolvers import *
 from .immune_checkpoint import request_immune_checkpoints
 from .method_tag import request_method_tags
 from .mutation import request_mutations
+from .node import build_node_graphql_response, request_nodes
 from .pathway import request_pathways
 from .sample import build_sample_graphql_response, request_samples
 from .super_category import request_super_categories

@@ -1,7 +1,41 @@
 from sqlalchemy import and_, orm
 from api import db
 from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
-from .general_resolvers import build_join_condition, build_option_args, get_selection_set
+from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
+
+
+def build_cnr_graphql_response(copy_number_result):
+    return {
+        'direction': get_value(copy_number_result, 'direction'),
+        'meanNormal': get_value(copy_number_result, 'mean_normal'),
+        'meanCnv': get_value(copy_number_result, 'mean_cnv'),
+        'pValue': get_value(copy_number_result, 'p_value'),
+        'log10PValue': get_value(copy_number_result, 'log10_p_value'),
+        'tStat': get_value(copy_number_result, 't_stat'),
+        'dataSet': {
+            'display': get_value(copy_number_result, 'data_set_display'),
+            'name': get_value(copy_number_result, 'data_set_name'),
+        },
+        'feature': {
+            'display': get_value(copy_number_result, 'feature_display'),
+            'name': get_value(copy_number_result, 'feature_name'),
+            'order': get_value(copy_number_result, 'order'),
+            'unit': get_value(copy_number_result, 'unit')
+        },
+        'gene': {
+            'entrez': get_value(copy_number_result, 'entrez'),
+            'hgnc': get_value(copy_number_result, 'hgnc'),
+            'description': get_value(copy_number_result, 'description'),
+            'friendlyName': get_value(copy_number_result, 'friendlyName'),
+            'ioLandscapeName': get_value(copy_number_result, 'ioLandscapeName')
+        },
+        'tag': {
+            'characteristics': get_value(copy_number_result, 'characteristics'),
+            'color': get_value(copy_number_result, 'color'),
+            'display': get_value(copy_number_result, 'tag_display'),
+            'name': get_value(copy_number_result, 'tag_name'),
+        }
+    }
 
 
 def build_copy_number_result_request(_obj, info, data_set=None, direction=None, entrez=None,

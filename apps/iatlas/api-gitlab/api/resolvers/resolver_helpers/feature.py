@@ -128,11 +128,8 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
         query = query.join(feature_to_sample_1, and_(
             *feature_sample_join_condition))
 
-        sample_join_condition = [sample_1.id == feature_to_sample_1.sample_id]
-
-        if sample:
-            sample_join_condition = sample_join_condition + \
-                [sample_1.name.in_(sample)]
+        sample_join_condition = build_join_condition(
+            sample_1.id, feature_to_sample_1.sample_id, sample_1.name, sample)
 
         query = query.join(sample_1, and_(*sample_join_condition))
 
