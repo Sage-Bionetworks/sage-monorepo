@@ -362,6 +362,7 @@ type Query {
     tag: [String!]
     feature: [String!]
     featureClass: [String!]
+    sample: [String!]
   ): [Tag!]!
 
   """

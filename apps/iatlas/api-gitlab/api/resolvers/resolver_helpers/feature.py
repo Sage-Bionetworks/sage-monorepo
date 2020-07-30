@@ -38,7 +38,8 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
     selection_set = get_selection_set(
         info.field_nodes[0].selection_set, by_class or by_tag)
 
-    tag_or_class_selection_set = info.field_nodes[0].selection_set
+    tag_or_class_selection_set = get_selection_set(
+        info.field_nodes[0].selection_set, False)
 
     data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
     feature_1 = aliased(Feature, name='f')
@@ -72,11 +73,11 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
                                'display': 'display',
                                'tag': 'tag'}
 
-    # Only select fields that were requested.
     core_requested = build_option_args(
         selection_set, core_requested_field_mapping)
     requested = build_option_args(
         tag_or_class_selection_set, requested_field_mapping) if by_class or by_tag else []
+    # Only select fields that were requested.
     core = build_option_args(selection_set, core_field_mapping)
     core.append(feature_1.id.label('id'))
 
@@ -172,60 +173,39 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
                 *sample_to_tag_join_condition))
 
         if by_tag or tag:
-            tag_join_condition = build_tag_join_condition(
+            tag_join_condition = build_join_condition(
                 tag_1.id, sample_to_tag_1.tag_id, tag_1.name, tag)
 
             query = query.join(tag_1, and_(*tag_join_condition))
 
     order = set()
     add_to_order = order.add
-    has_order = False
     if by_tag:
         add_to_order(tag_1.name)
-        has_order = True
     if 'display' in requested:
         add_to_order(tag_1.display)
-        has_order = True
     if 'color' in requested:
         add_to_order(tag_1.color)
-        has_order = True
     if 'characteristics' in requested:
         add_to_order(tag_1.characteristics)
-        has_order = True
     if by_class or 'class' in requested:
         add_to_order(feature_class_1.name)
-        has_order = True
     if 'order' in core_requested:
         add_to_order(feature_1.order)
-        has_order = True
     if 'display' in core_requested:
         add_to_order(feature_1.display)
-        has_order = True
     if 'name' in core_requested:
         add_to_order(feature_1.name)
-        has_order = True
     if 'class' in core_requested and not by_class and 'class' not in requested:
         add_to_order(feature_class_1.name)
-        has_order = True
     if 'method_tag' in core_requested:
         add_to_order(method_tag_1.name)
-        has_order = True
     if 'unit' in core_requested:
         add_to_order(feature_1.unit)
-        has_order = True
-    if not has_order:
+    if not order:
         add_to_order(feature_1.id)
 
     return query.order_by(*order)
-
-
-def build_tag_join_condition(join_column, column, filter_1_column=None, filter_1_list=None, filter_2_column=None, filter_2_list=None):
-    join_condition = [join_column == column]
-    if bool(filter_1_list):
-        join_condition.append(filter_1_column.in_(filter_1_list))
-    if bool(filter_2_list):
-        join_condition.append(filter_2_column.in_(filter_2_list))
-    return join_condition
 
 
 def get_samples(info, data_set=None, max_value=None, min_value=None, related=None, sample=None, tag=None, feature_ids=set(), by_class=False, by_tag=False):
@@ -344,8 +324,8 @@ def request_features(_obj, info, data_set=None, feature=None, feature_class=None
     return query.distinct().all()
 
 
-def return_derived_fields(info, feature_ids=set(), data_set=None, max_value=None, min_value=None,
-                          related=None, sample=None, tag=None, by_class=False, by_tag=False):
+def return_feature_derived_fields(info, feature_ids=set(), data_set=None, max_value=None, min_value=None,
+                                  related=None, sample=None, tag=None, by_class=False, by_tag=False):
     samples = get_samples(info, data_set=data_set, max_value=max_value, min_value=min_value, related=related,
                           sample=sample, tag=tag, feature_ids=feature_ids, by_class=by_class, by_tag=by_tag)
 

@@ -351,7 +351,7 @@ query sampleIds {
     }
 }
 
-samples {
+mutationsBySamples {
     name
     mutations [{
         gene {

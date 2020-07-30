@@ -57,15 +57,6 @@ def build_pub_gene_gene_type_join_condition(gene_ids, gene_types, pub_gene_gene_
     return join_condition
 
 
-def build_tag_join_condition(join_column, column, filter_1_column=None, filter_1_list=None, filter_2_column=None, filter_2_list=None):
-    join_condition = [join_column == column]
-    if bool(filter_1_list):
-        join_condition.append(filter_1_column.in_(filter_1_list))
-    if bool(filter_2_list):
-        join_condition.append(filter_2_column.in_(filter_2_list))
-    return join_condition
-
-
 def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None,
                        gene_function=None, gene_type=None, immune_checkpoint=None, pathway=None, related=None,
                        sample=None, super_category=None, tag=None, therapy_type=None, by_tag=False):
@@ -106,19 +97,23 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
                               'color': tag_1.color.label('color'),
                               'display': tag_1.display.label('display'),
                               'tag': tag_1.name.label('tag')}
-    related_field_mapping = {'geneFamily': 'gene_family',
-                             'geneFunction': 'gene_function',
-                             'geneTypes': 'gene_types',
-                             'immuneCheckpoint': 'immune_checkpoint',
-                             'pathway': 'pathway',
-                             'samples': 'samples',
-                             'superCategory': 'super_category',
-                             'therapyType': 'therapy_type'}
+    requested_field_mapping = {'entrez': 'entrez',
+                               'hgnc': 'hgnc',
+                               'description': 'description',
+                               'friendlyName': 'friendly_name',
+                               'ioLandscapeName': 'io_landscape_name',
+                               'geneFamily': 'gene_family',
+                               'geneFunction': 'gene_function',
+                               'geneTypes': 'gene_types',
+                               'immuneCheckpoint': 'immune_checkpoint',
+                               'pathway': 'pathway',
+                               'samples': 'samples',
+                               'superCategory': 'super_category',
+                               'therapyType': 'therapy_type'}
 
-    relations = build_option_args(selection_set, related_field_mapping)
+    requested = build_option_args(selection_set, requested_field_mapping)
     core = build_option_args(selection_set, core_field_mapping)
-    append_to_core = core.append
-    append_to_core(gene_1.id)
+    core.append(gene_1.id)
 
     if by_tag:
         core = core + \
@@ -134,42 +129,42 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
         query = query.join(gene_to_type_1, and_(
             gene_to_type_1.gene_id == gene_1.id, gene_to_type_1.type_id.in_(sess.query(gene_type_1.id).filter(gene_type_1.name.in_(gene_type)))))
 
-    if 'gene_family' in relations or gene_family:
+    if 'gene_family' in requested or gene_family:
         is_outer = not bool(gene_family)
         gene_family_join_condition = build_join_condition(
             gene_family_1.id, gene_1.gene_family_id, filter_column=gene_family_1.name, filter_list=gene_family)
         query = query.join(gene_family_1, and_(
             *gene_family_join_condition), isouter=is_outer)
 
-    if 'gene_function' in relations or gene_function:
+    if 'gene_function' in requested or gene_function:
         is_outer = not bool(gene_function)
         gene_function_join_condition = build_join_condition(
             gene_function_1.id, gene_1.gene_function_id, filter_column=gene_function_1.name, filter_list=gene_function)
         query = query.join(gene_function_1, and_(
             *gene_function_join_condition), isouter=is_outer)
 
-    if 'immune_checkpoint' in relations or immune_checkpoint:
+    if 'immune_checkpoint' in requested or immune_checkpoint:
         is_outer = not bool(immune_checkpoint)
         immune_checkpoint_join_condition = build_join_condition(
             immune_checkpoint_1.id, gene_1.immune_checkpoint_id, filter_column=immune_checkpoint_1.name, filter_list=immune_checkpoint)
         query = query.join(immune_checkpoint_1, and_(
             *immune_checkpoint_join_condition), isouter=is_outer)
 
-    if 'pathway' in relations or pathway:
+    if 'pathway' in requested or pathway:
         is_outer = not bool(pathway)
         pathway_join_condition = build_join_condition(
             pathway_1.id, gene_1.pathway_id, filter_column=pathway_1.name, filter_list=pathway)
         query = query.join(pathway_1, and_(
             *pathway_join_condition), isouter=is_outer)
 
-    if 'super_category' in relations or super_category:
+    if 'super_category' in requested or super_category:
         is_outer = not bool(super_category)
         super_category_join_condition = build_join_condition(
             super_category_1.id, gene_1.super_cat_id, filter_column=super_category_1.name, filter_list=super_category)
         query = query.join(super_category_1, and_(
             *super_category_join_condition), isouter=is_outer)
 
-    if 'therapy_type' in relations or therapy_type:
+    if 'therapy_type' in requested or therapy_type:
         is_outer = not bool(therapy_type)
         therapy_type_join_condition = build_join_condition(
             therapy_type_1.id, gene_1.therapy_type_id, filter_column=therapy_type_1.name, filter_list=therapy_type)
@@ -212,12 +207,12 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
                 query = query.join(feature_to_sample_1,
                                    feature_to_sample_1.sample_id == sample_1.id)
 
-                feature_join_condition = build_tag_join_condition(
+                feature_join_condition = build_join_condition(
                     feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
                 query = query.join(feature_1, and_(*feature_join_condition))
 
                 if feature_class:
-                    feature_class_join_condition = build_tag_join_condition(
+                    feature_class_join_condition = build_join_condition(
                         feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
                     query = query.join(
                         feature_class_1, and_(*feature_class_join_condition))
@@ -247,11 +242,44 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
             query = query.join(sample_to_tag_1, and_(
                 *sample_to_tag_join_condition))
 
-            tag_join_condition = build_tag_join_condition(
+            tag_join_condition = build_join_condition(
                 tag_1.id, sample_to_tag_1.tag_id, tag_1.name, tag)
             query = query.join(tag_1, and_(*tag_join_condition))
 
-    return query
+    order = set()
+    add_to_order = order.add
+    if by_tag:
+        add_to_order(tag_1.name)
+    if 'display' in requested:
+        add_to_order(tag_1.display)
+    if 'color' in requested:
+        add_to_order(tag_1.color)
+    if 'characteristics' in requested:
+        add_to_order(tag_1.characteristics)
+    if 'entrez' in requested:
+        add_to_order(gene_1.entrez)
+    if 'hgnc' in requested:
+        add_to_order(gene_1.hgnc)
+    if 'gene_family' in requested:
+        add_to_order(gene_family_1.name)
+    if 'friendly_name' in requested:
+        add_to_order(gene_1.friendly_name)
+    if 'io_landscape_name' in requested:
+        add_to_order(gene_1.io_landscape_name)
+    if 'gene_function' in requested:
+        add_to_order(gene_function_1.name)
+    if 'super_category' in requested:
+        add_to_order(super_category_1.name)
+    if 'therapy_type' in requested:
+        add_to_order(therapy_type_1.name)
+    if 'immune_checkpoint' in requested:
+        add_to_order(immune_checkpoint_1.name)
+    if 'description' in requested:
+        add_to_order(gene_1.description)
+    if not order:
+        add_to_order(gene_1.id)
+
+    return query.order_by(*order)
 
 
 def get_gene_types(info, gene_type=None, gene_ids=set()):
@@ -431,13 +459,13 @@ def get_samples(info, data_set=None, feature=None, feature_class=None, related=N
             sample_query = sample_query.join(feature_to_sample_1,
                                              feature_to_sample_1.sample_id == sample_1.id)
 
-            feature_join_condition = build_tag_join_condition(
+            feature_join_condition = build_join_condition(
                 feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
             sample_query = sample_query.join(
                 feature_1, and_(*feature_join_condition))
 
             if feature_class:
-                feature_class_join_condition = build_tag_join_condition(
+                feature_class_join_condition = build_join_condition(
                     feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
                 sample_query = sample_query.join(
                     feature_class_1, and_(*feature_class_join_condition))
@@ -501,7 +529,7 @@ def request_genes(_obj, info, data_set=None, entrez=None, feature=None, feature_
     return genes_query.distinct().all()
 
 
-def return_relations(info, gene_ids=set(), data_set=None, feature=None, feature_class=None, gene_type=None, related=None, sample=None, tag=None, by_tag=False):
+def return_gene_derived_fields(info, gene_ids=set(), data_set=None, feature=None, feature_class=None, gene_type=None, related=None, sample=None, tag=None, by_tag=False):
     samples = get_samples(info, data_set=data_set, feature=feature, feature_class=feature_class,
                           related=related, sample=sample, gene_ids=gene_ids, tag=tag, by_tag=by_tag)
     gene_types = get_gene_types(info, gene_type=gene_type, gene_ids=gene_ids)
