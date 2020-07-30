@@ -14,7 +14,7 @@ multivariate_driver_server <- function(
 
     output$response_options <- shiny::renderUI({
         shiny::selectInput(
-            inputId  = ns("response_variable"),
+            inputId  = ns("response_choice"),
             label    = "Select or Search for Response Variable",
             selected = "leukocyte_fraction",
             choices  = iatlas.app::create_nested_named_list(
@@ -65,19 +65,24 @@ multivariate_driver_server <- function(
 
     covariate_tbl <- shiny::reactive({
         shiny::req(covariates_obj())
-        build_md_covariate_tbl(covariates_obj())
+        build_md_covariate_tbl(cohort_obj(), covariates_obj())
     })
 
     response_tbl <- shiny::reactive({
-        shiny::req(input$response_choice_id)
-        build_md_response_tbl(input$response_choice_id)
+        shiny::req(input$response_choice)
+        build_md_response_tbl(cohort_obj(), input$response_choice)
     })
 
-    status_tbl <- shiny::reactive(build_md_status_tbl2())
+    status_tbl <- shiny::reactive(build_md_status_tbl())
 
     combined_tbl <- shiny::reactive({
-        shiny::req(response_tbl(), cohort_obj(), status_tbl(), input$group_mode)
-        combine_md_tbls2(
+        shiny::req(
+            response_tbl(),
+            status_tbl(),
+            covariate_tbl(),
+            input$group_mode
+        )
+        combine_md_tbls(
             response_tbl(),
             cohort_obj()$sample_tbl,
             status_tbl(),

@@ -141,8 +141,7 @@ model_selection_server <- function(
             model_formula_prefix(),
             numerical_formula_string(),
             categorical_formula_string()
-        ) %>%
-            print()
+        )
     })
 
     shiny::reactive({
