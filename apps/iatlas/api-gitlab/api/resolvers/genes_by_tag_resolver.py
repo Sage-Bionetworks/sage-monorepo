@@ -1,5 +1,5 @@
 from itertools import groupby
-from .resolver_helpers import build_gene_graphql_response, get_value, request_genes, return_relations
+from .resolver_helpers import build_gene_graphql_response, get_value, request_genes, return_gene_derived_fields
 
 
 def resolve_genes_by_tag(_obj, info, dataSet, related, entrez=None, feature=None, featureClass=None, geneType=None, sample=None, tag=None):
@@ -13,8 +13,8 @@ def resolve_genes_by_tag(_obj, info, dataSet, related, entrez=None, feature=None
 
     def build_response(feature_set):
         gene_tag, genes = feature_set
-        pubs_dict, samples_dict, types_dict = return_relations(info, data_set=dataSet, feature=feature, feature_class=featureClass, gene_type=geneType,
-                                                               related=related, sample=sample, tag=tag, gene_ids=gene_ids, by_tag=True)
+        pubs_dict, samples_dict, types_dict = return_gene_derived_fields(info, data_set=dataSet, feature=feature, feature_class=featureClass, gene_type=geneType,
+                                                                         related=related, sample=sample, tag=tag, gene_ids=gene_ids, by_tag=True)
         return {
             'characteristics': get_value(genes[0], 'tag_characteristics'),
             'color': get_value(genes[0], 'tag_color'),
