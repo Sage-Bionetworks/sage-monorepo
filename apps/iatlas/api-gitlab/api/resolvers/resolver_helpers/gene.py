@@ -190,20 +190,19 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
         query = query.join(sample_1, and_(*sample_join_condition))
 
         if by_tag:
-            data_set_1 = aliased(Dataset, name='d')
             sample_to_tag_1 = aliased(SampleToTag, name='stt')
 
             if data_set or related:
+                data_set_1 = aliased(Dataset, name='d')
                 data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
 
-                data_set_to_sample_sub_query = sess.query(data_set_to_sample_1.dataset_id).filter(
-                    data_set_to_sample_1.sample_id == sample_1.id)
-                data_set_join_condition = [
-                    data_set_1.id.in_(data_set_to_sample_sub_query)]
-                if data_set:
-                    data_set_join_condition.append(
-                        data_set_1.name.in_(data_set))
-                query = query.join(data_set_1, and_(*data_set_join_condition))
+                data_set_sub_query = sess.query(data_set_1.id).filter(
+                    data_set_1.name.in_(data_set)) if data_set else data_set
+
+                data_set_to_sample_join_condition = build_join_condition(
+                    data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
+                query = query.join(
+                    data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
 
             if feature or feature_class:
                 feature_1 = aliased(Feature, name='f')
@@ -231,15 +230,16 @@ def build_gene_request(_obj, info, data_set=None, entrez=None, feature=None, fea
                 related_tag_1 = aliased(Tag, name='rt')
                 tag_to_tag_1 = aliased(TagToTag, name='tt')
 
-                data_set_to_tag_subquery = sess.query(
-                    data_set_to_tag_1.tag_id).filter(data_set_to_tag_1.dataset_id == data_set_1.id)
-                related_tag_join_condition = [related_tag_1.name.in_(
-                    related), related_tag_1.id.in_(data_set_to_tag_subquery)]
-                query = query.join(related_tag_1, and_(
-                    *related_tag_join_condition))
+                related_tag_sub_query = sess.query(related_tag_1.id).filter(
+                    related_tag_1.name.in_(related))
+
+                data_set_tag_join_condition = build_join_condition(
+                    data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
+                query = query.join(
+                    data_set_to_tag_1, and_(*data_set_tag_join_condition))
 
                 tag_to_tag_subquery = sess.query(tag_to_tag_1.tag_id).filter(
-                    tag_to_tag_1.related_tag_id == related_tag_1.id)
+                    tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id)
 
                 sample_to_tag_join_condition.append(
                     sample_to_tag_1.tag_id.in_(tag_to_tag_subquery))
@@ -371,18 +371,22 @@ def get_publications(info, gene_types=[], gene_ids=set(), by_tag=False):
     return []
 
 
-def get_samples(info, sample=None, gene_ids=set(), by_tag=False):
+def get_samples(info, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None, gene_ids=set(), by_tag=False):
     selection_set = get_selection_set(
         info.field_nodes[0].selection_set, by_tag, child_node='genes')
-    relations = build_option_args(selection_set, {'samples': 'samples'})
+    requested = build_option_args(selection_set, {'samples': 'samples'})
+    has_samples = 'samples' in requested
 
-    if gene_ids and 'samples' in relations:
+    if gene_ids and has_samples:
         sess = db.session
+
+        data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
         sample_1 = aliased(Sample, name='s')
+        sample_to_tag_1 = aliased(SampleToTag, name='st')
         gene_to_sample_1 = aliased(GeneToSample, name='gs')
 
         sample_selection_set = get_selection_set(
-            selection_set, ('samples' in relations), child_node='samples')
+            selection_set, has_samples, child_node='samples')
         sample_core_field_mapping = {'name': sample_1.name.label('name'),
                                      'rnaSeqExpr': gene_to_sample_1.rna_seq_expr.label('rna_seq_expr')}
 
@@ -390,10 +394,10 @@ def get_samples(info, sample=None, gene_ids=set(), by_tag=False):
             sample_selection_set, sample_core_field_mapping)
         # Always select the sample id and the gene id.
         sample_core = sample_core + \
-            [sample_1.id.label(
-                'id'), gene_to_sample_1.gene_id.label('gene_id')]
+            [sample_1.id.label('id'),
+             gene_to_sample_1.gene_id.label('gene_id')]
 
-        requested = build_option_args(
+        requested = requested + build_option_args(
             sample_selection_set, {'name': 'name', 'rnaSeqExpr': 'rna_seq_expr'})
 
         sample_query = sess.query(*sample_core)
@@ -407,6 +411,67 @@ def get_samples(info, sample=None, gene_ids=set(), by_tag=False):
 
         sample_query = sample_query.join(
             gene_to_sample_1, and_(*gene_sample_join_condition))
+
+        if data_set or related:
+            data_set_1 = aliased(Dataset, name='d')
+
+            data_set_sub_query = sess.query(data_set_1.id).filter(
+                data_set_1.name.in_(data_set)) if data_set else data_set
+
+            data_set_to_sample_join_condition = build_join_condition(
+                data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
+            sample_query = sample_query.join(
+                data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
+
+        if feature or feature_class:
+            feature_1 = aliased(Feature, name='f')
+            feature_class_1 = aliased(FeatureClass, name='fc')
+            feature_to_sample_1 = aliased(FeatureToSample, name='fs')
+
+            sample_query = sample_query.join(feature_to_sample_1,
+                                             feature_to_sample_1.sample_id == sample_1.id)
+
+            feature_join_condition = build_tag_join_condition(
+                feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
+            sample_query = sample_query.join(
+                feature_1, and_(*feature_join_condition))
+
+            if feature_class:
+                feature_class_join_condition = build_tag_join_condition(
+                    feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
+                sample_query = sample_query.join(
+                    feature_class_1, and_(*feature_class_join_condition))
+
+        if tag or related:
+            tag_1 = aliased(Tag, name='t')
+
+            tag_sub_query = sess.query(tag_1.id).filter(
+                tag_1.name.in_(tag)) if tag else tag
+            sample_to_tag_join_condition = build_join_condition(
+                sample_to_tag_1.sample_id, sample_1.id, sample_to_tag_1.tag_id, tag_sub_query)
+
+        if related:
+            data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
+            related_tag_1 = aliased(Tag, name='rt')
+            tag_to_tag_1 = aliased(TagToTag, name='tt')
+
+            related_tag_sub_query = sess.query(related_tag_1.id).filter(
+                related_tag_1.name.in_(related)) if related else related
+
+            data_set_tag_join_condition = build_join_condition(
+                data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
+            sample_query = sample_query.join(
+                data_set_to_tag_1, and_(*data_set_tag_join_condition))
+
+            tag_to_tag_subquery = sess.query(tag_to_tag_1.tag_id).filter(
+                tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id)
+
+            sample_to_tag_join_condition.append(
+                sample_to_tag_1.tag_id.in_(tag_to_tag_subquery))
+
+        if tag or related:
+            sample_query = sample_query.join(sample_to_tag_1, and_(
+                *sample_to_tag_join_condition))
 
         order = []
         if 'name' in requested:
@@ -436,9 +501,9 @@ def request_genes(_obj, info, data_set=None, entrez=None, feature=None, feature_
     return genes_query.distinct().all()
 
 
-def return_relations(info, gene_ids=set(), gene_type=None, sample=None, by_tag=False):
-    samples = get_samples(info, sample=sample,
-                          gene_ids=gene_ids, by_tag=by_tag)
+def return_relations(info, gene_ids=set(), data_set=None, feature=None, feature_class=None, gene_type=None, related=None, sample=None, tag=None, by_tag=False):
+    samples = get_samples(info, data_set=data_set, feature=feature, feature_class=feature_class,
+                          related=related, sample=sample, gene_ids=gene_ids, tag=tag, by_tag=by_tag)
     gene_types = get_gene_types(info, gene_type=gene_type, gene_ids=gene_ids)
     pubs = get_publications(info, gene_types=gene_types, gene_ids=gene_ids)
 

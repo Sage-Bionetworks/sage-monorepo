@@ -40,7 +40,7 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
 
     tag_or_class_selection_set = info.field_nodes[0].selection_set
 
-    data_set_1 = aliased(Dataset, name='d')
+    data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
     feature_1 = aliased(Feature, name='f')
     feature_class_1 = aliased(FeatureClass, name='fc')
     method_tag_1 = aliased(MethodTag, name='mt')
@@ -137,16 +137,15 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
         query = query.join(sample_1, and_(*sample_join_condition))
 
         if data_set or related:
-            data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
+            data_set_1 = aliased(Dataset, name='d')
 
-            data_set_to_sample_sub_query = sess.query(data_set_to_sample_1.dataset_id).filter(
-                data_set_to_sample_1.sample_id == sample_1.id)
-            data_set_join_condition = [
-                data_set_1.id.in_(data_set_to_sample_sub_query)]
-            if data_set:
-                data_set_join_condition.append(
-                    data_set_1.name.in_(data_set))
-            query = query.join(data_set_1, and_(*data_set_join_condition))
+            data_set_sub_query = sess.query(data_set_1.id).filter(
+                data_set_1.name.in_(data_set)) if data_set else data_set
+
+            data_set_to_sample_join_condition = build_join_condition(
+                data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
+            query = query.join(
+                data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
 
         if by_tag or tag or related:
             sample_to_tag_join_condition = [
@@ -157,15 +156,16 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
             related_tag_1 = aliased(Tag, name='rt')
             tag_to_tag_1 = aliased(TagToTag, name='tt')
 
-            data_set_to_tag_subquery = sess.query(
-                data_set_to_tag_1.tag_id).filter(data_set_to_tag_1.dataset_id == data_set_1.id)
-            related_tag_join_condition = [related_tag_1.name.in_(
-                related), related_tag_1.id.in_(data_set_to_tag_subquery)]
-            query = query.join(related_tag_1, and_(
-                *related_tag_join_condition))
+            related_tag_sub_query = sess.query(related_tag_1.id).filter(
+                related_tag_1.name.in_(related))
+
+            data_set_tag_join_condition = build_join_condition(
+                data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
+            query = query.join(
+                data_set_to_tag_1, and_(*data_set_tag_join_condition))
 
             tag_to_tag_subquery = sess.query(tag_to_tag_1.tag_id).filter(
-                tag_to_tag_1.related_tag_id == related_tag_1.id)
+                tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id)
 
             sample_to_tag_join_condition.append(
                 sample_to_tag_1.tag_id.in_(tag_to_tag_subquery))
@@ -243,7 +243,7 @@ def get_samples(info, data_set=None, max_value=None, min_value=None, related=Non
     if feature_ids and (has_samples or has_max_min):
         sess = db.session
 
-        data_set_1 = aliased(Dataset, name='d')
+        data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
         feature_to_sample_1 = aliased(FeatureToSample, name='fs')
         sample_1 = aliased(Sample, name='s')
         sample_to_tag_1 = aliased(SampleToTag, name='stt')
@@ -286,36 +286,39 @@ def get_samples(info, data_set=None, max_value=None, min_value=None, related=Non
             feature_to_sample_1, and_(*feature_sample_join_condition))
 
         if data_set or related:
-            data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
+            data_set_1 = aliased(Dataset, name='d')
 
-            data_set_to_sample_sub_query = sess.query(data_set_to_sample_1.dataset_id).filter(
-                data_set_to_sample_1.sample_id == sample_1.id)
-            data_set_join_condition = [
-                data_set_1.id.in_(data_set_to_sample_sub_query)]
-            if data_set:
-                data_set_join_condition.append(
-                    data_set_1.name.in_(data_set))
+            data_set_sub_query = sess.query(data_set_1.id).filter(
+                data_set_1.name.in_(data_set)) if data_set else data_set
+
+            data_set_to_sample_join_condition = build_join_condition(
+                data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
             sample_query = sample_query.join(
-                data_set_1, and_(*data_set_join_condition))
+                data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
 
         if tag or related:
-            sample_to_tag_join_condition = [
-                sample_to_tag_1.sample_id == sample_1.id]
+            tag_1 = aliased(Tag, name='t')
+
+            tag_sub_query = sess.query(tag_1.id).filter(
+                tag_1.name.in_(tag)) if tag else tag
+            sample_to_tag_join_condition = build_join_condition(
+                sample_to_tag_1.sample_id, sample_1.id, sample_to_tag_1.tag_id, tag_sub_query)
 
         if related:
             data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
             related_tag_1 = aliased(Tag, name='rt')
             tag_to_tag_1 = aliased(TagToTag, name='tt')
 
-            data_set_to_tag_subquery = sess.query(
-                data_set_to_tag_1.tag_id).filter(data_set_to_tag_1.dataset_id == data_set_1.id)
-            related_tag_join_condition = [related_tag_1.name.in_(
-                related), related_tag_1.id.in_(data_set_to_tag_subquery)]
-            sample_query = sample_query.join(related_tag_1, and_(
-                *related_tag_join_condition))
+            related_tag_sub_query = sess.query(related_tag_1.id).filter(
+                related_tag_1.name.in_(related)) if related else related
+
+            data_set_tag_join_condition = build_join_condition(
+                data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
+            sample_query = sample_query.join(
+                data_set_to_tag_1, and_(*data_set_tag_join_condition))
 
             tag_to_tag_subquery = sess.query(tag_to_tag_1.tag_id).filter(
-                tag_to_tag_1.related_tag_id == related_tag_1.id)
+                tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id)
 
             sample_to_tag_join_condition.append(
                 sample_to_tag_1.tag_id.in_(tag_to_tag_subquery))
