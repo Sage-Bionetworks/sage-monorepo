@@ -315,6 +315,26 @@ with_test_api_env({
 
   # samples by tag ------------------------------------------------------------
 
+  test_that("query_samples_by_tag", {
+    expected_names <- c(
+      "tag_name",
+      "tag_display",
+      "tag_characteristics",
+      "tag_color",
+      "sample"
+    )
+    result1 <- query_samples_by_tag(
+      datasets = "PCAWG", parent_tags = "Immune_Subtype"
+    )
+    result2 <- query_samples_by_tag(
+      datasets = "PCAWG", parent_tags = "not_a_tag"
+    )
+    expect_named(result1, expected_names)
+    expect_named(result2, expected_names)
+    expect_equal(nrow(result1), 455)
+    expect_equal(nrow(result2), 0)
+  })
+
   test_that("query_tag_samples", {
     expected_names <- c("sample")
     result1 <- query_tag_samples(datasets = "PCAWG", tags = "C1")

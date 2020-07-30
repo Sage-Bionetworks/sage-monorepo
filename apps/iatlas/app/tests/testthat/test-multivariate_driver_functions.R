@@ -1,46 +1,88 @@
 with_test_api_env({
-    # test_that("Build Multivariate Driver Covariate Tibble", {
-    #     cov_obj1 <- list(
-    #         "categorical_covariates" = NULL, "numerical_covariates" = NULL
-    #     )
-    #     cov_obj2 <- list(
-    #         "categorical_covariates" = "Immune_Subtype",
-    #         "numerical_covariates" = NULL
-    #     )
-    #     cov_obj3 <- list(
-    #         "categorical_covariates" = NULL,
-    #         "numerical_covariates" = 1:3
-    #     )
-    #     cov_obj4 <- list(
-    #         "categorical_covariates" = "Immune_Subtype",
-    #         "numerical_covariates" = 1:3
-    #     )
-    #     expect_null(build_md_covariate_tbl(cov_obj1))
-    #     expect_named(
-    #         build_md_covariate_tbl(cov_obj2), c("sample_id", "Immune_Subtype")
-    #     )
-    #
-    #     expect_equal(
-    #         length(colnames(build_md_covariate_tbl(cov_obj3))),
-    #         4
-    #     )
-    #     expect_true("sample_id" %in% colnames(build_md_covariate_tbl(cov_obj3)))
-    #
-    #     expect_equal(
-    #         length(colnames(build_md_covariate_tbl(cov_obj4))),
-    #         5
-    #     )
-    #     expect_true(all(
-    #         c("sample_id", "Immune_Subtype") %in%
-    #             colnames(build_md_covariate_tbl(cov_obj4))
-    #     ))
+
+    cohort_obj1 <- build_cohort_object(
+        filter_obj = list(
+            "samples" = "TCGA" %>%
+                iatlas.app::query_dataset_samples(.) %>%
+                dplyr::slice(1:50) %>%
+                dplyr::pull("name")
+        ),
+        dataset = "TCGA",
+        group_choice = "Immune_Subtype",
+        group_type = "tag"
+    )
+
+    cov_obj1 <- list(
+        "categorical_covariates" = NULL, "numerical_covariates" = NULL
+    )
+    cov_obj2 <- list(
+        "categorical_covariates" = c("Immune_Subtype", "TCGA_Study"),
+        "numerical_covariates" = NULL
+    )
+    cov_obj3 <- list(
+        "categorical_covariates" = NULL,
+        "numerical_covariates" = c(
+            "leukocyte_fraction", "Lymphocytes_Aggregate1"
+        )
+    )
+    cov_obj4 <- list(
+        "categorical_covariates" = c("Immune_Subtype", "TCGA_Study"),
+        "numerical_covariates" = c(
+            "leukocyte_fraction", "Lymphocytes_Aggregate1"
+        )
+    )
+
+    test_that("build_md_tag_covariate_tbl", {
+        result1 <- build_md_tag_covariate_tbl(cohort_obj1, cov_obj1)
+        result2 <- build_md_tag_covariate_tbl(cohort_obj1, cov_obj2)
+        expect_null(result1)
+        expect_named(result2, c("sample", "Immune_Subtype", "TCGA_Study"))
+    })
+
+    test_that("build_md_feature_covariate_tbl", {
+        result1 <- build_md_feature_covariate_tbl(cohort_obj1, cov_obj1)
+        result2 <- build_md_feature_covariate_tbl(cohort_obj1, cov_obj3)
+        expect_null(result1)
+        expect_named(
+            result2,
+            c("sample", "leukocyte_fraction", "Lymphocytes_Aggregate1")
+        )
+    })
+
+    test_that("Build Multivariate Driver Covariate Tibble", {
+        result1 <- build_md_covariate_tbl(cohort_obj1, cov_obj1)
+        result2 <- build_md_covariate_tbl(cohort_obj1, cov_obj2)
+        result3 <- build_md_covariate_tbl(cohort_obj1, cov_obj3)
+        result4 <- build_md_covariate_tbl(cohort_obj1, cov_obj4)
+
+        expect_null(result1)
+        expect_named(result2, c("sample", "Immune_Subtype", "TCGA_Study"))
+        expect_named(
+            result3,
+            c("sample", "leukocyte_fraction", "Lymphocytes_Aggregate1")
+        )
+        expect_named(
+            result4,
+            c(
+                "sample",
+                "Immune_Subtype",
+                "TCGA_Study",
+                "leukocyte_fraction",
+                "Lymphocytes_Aggregate1"
+            )
+        )
+    })
+    test_that("Build Multivariate Driver Response Tibble", {
+        result1 <- build_md_response_tbl(cohort_obj1, "leukocyte_fraction")
+        expect_named(result1, c("sample", "group", "response")
+        )
+    })
+
+    # test_that("build_md_status_tbl", {
+    #     result1 <- build_md_status_tbl(cohort_obj1)
+    #     expect_named(result1, c("mutation", "sample", "status"))
     # })
-    #
-    # test_that("Build Multivariate Driver Response Tibble", {
-    #     result1 <- build_md_response_tbl(1)
-    #     expect_named(result1, c("response", "sample_id")
-    #     )
-    # })
+
     #
     # test_that("Build Multivariate Driver Status Tibble", {
     #     result1 <- build_md_status_tbl()
@@ -73,7 +115,7 @@ with_test_api_env({
     #     expect_equal(dim(result3)[2], 7)
     #     expect_equal(dim(result4)[2], 7)
     # })
-
+    #
     # test_that("Filter Multivariate Driver Labels", {
     #     tbl <- dplyr::tribble(
     #         ~label, ~status,

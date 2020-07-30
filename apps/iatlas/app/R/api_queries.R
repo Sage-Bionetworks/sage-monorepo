@@ -160,24 +160,6 @@ query_features_range <- function(
     return(tbl)
 }
 
-# query_samples_to_features <- function(features = NA){
-#     perform_api_query(
-#         "samples_to_features",
-#         list(features = features)
-#     ) %>%
-#         purrr::pluck(1) %>%
-#         dplyr::as_tibble()
-# }
-#
-# query_samples_to_feature <- function(feature){
-#     perform_api_query(
-#         "samples_to_feature",
-#         list(feature = feature)
-#     ) %>%
-#         purrr::pluck(1) %>%
-#         dplyr::as_tibble()
-# }
-
 # features_by_tag --------------------------------------------------------------
 
 query_feature_values_by_tag <- function(
@@ -542,6 +524,53 @@ query_samples_by_mutation_status <- function(
 
 }
 # samples by tag --------------------------------------------------------------
+
+query_samples_by_tag <- function(
+    datasets = NA,
+    parent_tags = NA,
+    tags = NA,
+    features = NA,
+    feature_classes = NA,
+    sample_names = NA,
+    patients = NA
+){
+    tbl <-
+        perform_api_query(
+            "samples_by_tag",
+            list(
+                "dataSet" = datasets,
+                "related" = parent_tags,
+                "tag" = tags,
+                "feature" = features,
+                "featureClass" = feature_classes,
+                "name" = sample_names,
+                "patient" = patients
+            )
+        ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble()
+    if(nrow(tbl) == 0) {
+        tbl <- dplyr::tibble(
+            "tag_name" = character(),
+            "tag_display" = character(),
+            "tag_characteristics" = character(),
+            "tag_color" = character(),
+            "sample" = character()
+        )
+    } else {
+        tbl <- tbl %>%
+            dplyr::select(
+                "tag_name" = "tag",
+                "tag_display" = "display",
+                "tag_characteristics" = "characteristics",
+                "tag_color" = "color",
+                "samples"
+            ) %>%
+            tidyr::unnest("samples") %>%
+            dplyr::rename("sample" = "name")
+    }
+
+}
 
 query_tag_samples <- function(
     datasets = NA,
