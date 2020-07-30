@@ -9,9 +9,9 @@ build_ocp_value_tbl <- function(cohort_obj){
         dplyr::select(
             "sample",
             "group",
-            "feature_name" = "display",
-            "feature_value" = "value",
-            "feature_order" = "order"
+            "feature_display",
+            "feature_value",
+            "feature_order"
         )
 }
 
@@ -25,7 +25,7 @@ build_ocp_value_tbl <- function(cohort_obj){
 #' @importFrom dplyr group_by arrange summarise n ungroup mutate select
 build_ocp_barplot_tbl <- function(value_tbl){
     value_tbl %>%
-        dplyr::group_by(.data$feature_name, .data$group) %>%
+        dplyr::group_by(.data$feature_display, .data$group) %>%
         dplyr::arrange(.data$feature_order) %>%
         dplyr::summarise(
             .mean = mean(.data$feature_value),
@@ -34,12 +34,12 @@ build_ocp_barplot_tbl <- function(value_tbl){
         dplyr::ungroup() %>%
         dplyr::mutate(.se = .data$.mean / sqrt(.data$.count)) %>%
         create_plotly_label(
-            .data$feature_name, .data$group, c(".mean", ".se")
+            .data$feature_display, .data$group, c(".mean", ".se")
         ) %>%
         dplyr::select(
             x = .data$group,
             y = .data$.mean,
-            color = .data$feature_name,
+            color = .data$feature_display,
             .data$label,
             error = .data$.se
         )
@@ -57,7 +57,7 @@ build_ocp_barplot_tbl <- function(value_tbl){
 build_ocp_scatterplot_tbl <- function(value_tbl, group_value){
     value_tbl %>%
         dplyr::filter(
-            .data$feature_name %in% c(
+            .data$feature_display %in% c(
                 "Leukocyte Fraction", "Stromal Fraction"
             ),
             .data$group == group_value
@@ -65,13 +65,13 @@ build_ocp_scatterplot_tbl <- function(value_tbl, group_value){
         dplyr::select(
             "sample",
             "group",
-            "feature_name",
+            "feature_display",
             "feature_value"
         ) %>%
         tidyr::pivot_wider(
             .,
             values_from = .data$feature_value,
-            names_from = .data$feature_name
+            names_from = .data$feature_display
         ) %>%
         tidyr::drop_na() %>%
         dplyr::rename(

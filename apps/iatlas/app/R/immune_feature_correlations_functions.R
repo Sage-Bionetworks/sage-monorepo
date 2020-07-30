@@ -3,8 +3,8 @@ build_ifc_response_tbl <- function(cohort_obj, response){
         query_feature_values_with_cohort_object(response) %>%
         dplyr::select(
             "sample",
-            "response_name" = "display",
-            "response_value" = "value"
+            "response_display" = "feature_display",
+            "response_value" = "feature_value"
         )
 }
 
@@ -13,9 +13,9 @@ build_ifc_feature_tbl <- function(cohort_obj, feature_class){
         query_feature_values_with_cohort_object(class = feature_class) %>%
         dplyr::select(
             "sample",
-            "feature_name" = "display",
-            "feature_value" = "value",
-            "feature_order" = "order"
+            "feature_display",
+            "feature_value",
+            "feature_order"
         )
 }
 
@@ -32,14 +32,14 @@ build_ifc_feature_tbl <- function(cohort_obj, feature_class){
 build_ifc_value_tbl <- function(response_tbl, feature_tbl, sample_tbl){
     response_tbl %>%
         dplyr::inner_join(feature_tbl, by = "sample") %>%
-        dplyr::filter(.data$feature_name != .data$response_name) %>%
+        dplyr::filter(.data$feature_display != .data$response_display) %>%
         dplyr::inner_join(sample_tbl, by = "sample") %>%
         dplyr::select(
             "sample",
             "group",
             "response_value",
             "feature_value",
-            "feature_name",
+            "feature_display",
             "feature_order"
         )
 }
@@ -57,7 +57,7 @@ build_ifc_value_tbl <- function(response_tbl, feature_tbl, sample_tbl){
 #' @importFrom stats cor
 build_ifc_heatmap_matrix <- function(tbl, method){
     tbl %>%
-        dplyr::group_by(.data$group, .data$feature_name, .data$feature_order) %>%
+        dplyr::group_by(.data$group, .data$feature_display, .data$feature_order) %>%
         dplyr::summarise("cor_value" = stats::cor(
             .data$feature_value,
             .data$response_value,
@@ -71,7 +71,7 @@ build_ifc_heatmap_matrix <- function(tbl, method){
             names_from = .data$group,
             values_from = .data$cor_value
         ) %>%
-        tibble::column_to_rownames("feature_name") %>%
+        tibble::column_to_rownames("feature_display") %>%
         as.matrix()
 }
 
@@ -87,7 +87,7 @@ build_ifc_heatmap_matrix <- function(tbl, method){
 build_ifc_scatterplot_tbl <- function(tbl, .feature, .group){
     tbl %>%
         dplyr::filter(
-            .data$feature_name == .feature,
+            .data$feature_display == .feature,
             .data$group == .group
         ) %>%
         dplyr::select(
