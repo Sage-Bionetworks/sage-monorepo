@@ -96,7 +96,7 @@ build_tag_cohort_object <- function(dataset, samples, tag){
 #' @param group A String that is the display column of the tags table
 #' @importFrom magrittr %>%
 build_cohort_tbl_by_tag <- function(samples, dataset, tag){
-    query_cohort_selector(dataset, tag) %>%
+    query_cohort_selector(dataset, tag, samples = samples) %>%
         dplyr::select(
             "name" = "display",
             "group" = "name",
@@ -105,8 +105,7 @@ build_cohort_tbl_by_tag <- function(samples, dataset, tag){
             "sample" = "samples",
             "size"
         ) %>%
-        tidyr::unnest(cols = "sample") %>%
-        dplyr::filter(.data$sample %in% samples)
+        tidyr::unnest(cols = "sample")
 }
 
 # mutation choice -------------------------------------------------------------
