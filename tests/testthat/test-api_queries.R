@@ -347,19 +347,21 @@ with_test_api_env({
   # tags ----------------------------------------------------------------------
 
   test_that("tags", {
-    result <- query_tags("TCGA", "Immune_Subtype")
-    expect_named(
-      result,
-      c(
-        "name",
-        "display"
-      )
+    expected_columns <- c(
+      "name",
+      "display",
+      "characteristics",
+      "color",
+      "sample_count"
     )
+
+    result <- query_tags("TCGA", "Immune_Subtype")
+    expect_named(result, expected_columns)
     expect_equal(result$name, c("C1", "C2", "C3", "C4", "C5", "C6"))
   })
 
   test_that("query_cohort_selector", {
-    expected_columns <-       c(
+    expected_columns <- c(
       "name",
       "display",
       "characteristics",
