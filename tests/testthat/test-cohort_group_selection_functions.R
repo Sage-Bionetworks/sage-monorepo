@@ -1,11 +1,11 @@
 with_test_api_env({
 
     tcga_samples = "TCGA" %>%
-        iatlas.app::query_dataset_samples(.) %>%
+        query_dataset_samples(.) %>%
         dplyr::pull("name")
 
     pcawg_samples = "PCAWG" %>%
-        iatlas.app::query_dataset_samples(.) %>%
+        query_dataset_samples(.) %>%
         dplyr::pull("name")
 
     filter_obj1 <- list(

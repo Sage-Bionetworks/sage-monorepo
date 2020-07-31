@@ -16,7 +16,7 @@ build_cohort_group_list <- function(tag_group_tbl, custom_group_tbl){
 }
 
 build_cohort_mutation_tbl <- function(){
-    iatlas.app::query_mutations(type = "driver_mutation") %>%
+    query_mutations(type = "driver_mutation") %>%
         dplyr::mutate(
             "mutation" = stringr::str_c(.data$hgnc, ":", .data$code)
         )
