@@ -4,6 +4,7 @@ query CohortSelector(
   $tag: [String!]
   $feature: [String!]
   $featureClass: [String!]
+  $sample: [String!]
 ) {
   tags(
     dataSet: $dataSet
@@ -11,6 +12,7 @@ query CohortSelector(
     tag: $tag
     feature: $feature
     featureClass: $featureClass
+    sample: $sample
   ){
     characteristics
     display

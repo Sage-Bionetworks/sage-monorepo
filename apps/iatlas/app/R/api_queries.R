@@ -609,18 +609,47 @@ query_tag_samples <- function(
 
 # tags ------------------------------------------------------------------------
 
-query_tags <- function(dataset, parent_tag){
-    perform_api_query(
+query_tags <- function(
+    datasets,
+    parent_tags,
+    tags = NA,
+    features = NA,
+    feature_classes = NA,
+    samples = NA
+){
+    tbl <- perform_api_query(
         "tags",
         list(
-            dataSet = dataset,
-            related = parent_tag
+            dataSet = datasets,
+            related = parent_tags,
+            tag = tags,
+            feature = features,
+            featureClass = feature_classes,
+            sample = samples
         )
     ) %>%
         purrr::pluck(1) %>%
-        dplyr::as_tibble() %>%
-        dplyr::select("name", "display") %>%
-        dplyr::arrange(.data$name)
+        dplyr::as_tibble()
+    if(nrow(tbl) == 0) {
+        tbl <- dplyr::tibble(
+            "name" = character(),
+            "display" = character(),
+            "characteristics" = character(),
+            "color" = character(),
+            "size" = integer()
+        )
+    } else {
+        tbl <- tbl %>%
+            dplyr::select(
+                "name",
+                "display",
+                "characteristics",
+                "color",
+                "sample_count" = "sampleCount"
+            ) %>%
+            dplyr::arrange(.data$name)
+    }
+    return(tbl)
 }
 
 query_cohort_selector <- function(
@@ -628,7 +657,8 @@ query_cohort_selector <- function(
     related_tags,
     tags = NA,
     features = NA,
-    feature_classes = NA
+    feature_classes = NA,
+    samples = NA
 ){
     tbl <- perform_api_query(
         "cohort_selection",
@@ -637,7 +667,8 @@ query_cohort_selector <- function(
             related = related_tags,
             tag = tags,
             feature = features,
-            featureClass = feature_classes
+            featureClass = feature_classes,
+            sample = samples
         )
     ) %>%
         purrr::pluck(1) %>%
@@ -661,7 +692,8 @@ query_cohort_selector <- function(
                 "color",
                 "size" = "sampleCount",
                 "samples"
-            )
+            ) %>%
+            dplyr::arrange(.data$name)
     }
     return(tbl)
 }

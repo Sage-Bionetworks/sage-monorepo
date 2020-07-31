@@ -56,7 +56,8 @@ with_test_api_env({
                 related = "Immune_Subtype",
                 tag = NA,
                 feature = NA,
-                featureClass = NA
+                featureClass = NA,
+                sample = NA
             ),
             ghql_query_object
         )

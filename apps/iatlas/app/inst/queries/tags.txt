@@ -1,6 +1,23 @@
-query tags($dataSet: [String!]!, $related: [String!]!) {
-  tags(dataSet: $dataSet, related: $related){
+query Tags(
+  $dataSet: [String!]!
+  $related: [String!]!
+  $tag: [String!]
+  $feature: [String!]
+  $featureClass: [String!]
+  $sample: [String!]
+) {
+  tags(
+    dataSet: $dataSet
+    related: $related
+    tag: $tag
+    feature: $feature
+    featureClass: $featureClass
+    sample: $sample
+  ){
+    characteristics
+    color
     display
     name
+    sampleCount
   }
 }
