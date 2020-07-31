@@ -3,7 +3,7 @@ with_test_api_env({
     cohort_obj1 <- build_cohort_object(
         filter_obj = list(
             "samples" = "TCGA" %>%
-                iatlas.app::query_dataset_samples(.) %>%
+                query_dataset_samples(.) %>%
                 dplyr::slice(1:50) %>%
                 dplyr::pull("name")
         ),
@@ -15,7 +15,7 @@ with_test_api_env({
     cohort_obj2 <- build_cohort_object(
         filter_obj = list(
             "samples" = "TCGA" %>%
-                iatlas.app::query_dataset_samples(.) %>%
+                query_dataset_samples(.) %>%
                 dplyr::slice(1:10) %>%
                 dplyr::pull("name")
         ),
@@ -50,10 +50,10 @@ with_test_api_env({
         expect_named(survival_tbl2, c("sample", "group", "time", "status"))
     })
 
-    feature_tbl1 <- iatlas.app::build_co_feature_tbl(
+    feature_tbl1 <- build_co_feature_tbl(
         cohort_obj1, "DNA Alteration"
     )
-    feature_tbl2 <- iatlas.app::build_co_feature_tbl(
+    feature_tbl2 <- build_co_feature_tbl(
         cohort_obj2, "DNA Alteration"
     )
 

@@ -3,7 +3,7 @@ with_test_api_env({
     cohort_obj1 <- build_cohort_object(
         filter_obj = list(
             "samples" = "TCGA" %>%
-                iatlas.app::query_dataset_samples(.) %>%
+                query_dataset_samples(.) %>%
                 dplyr::pull("name")
         ),
         dataset = "TCGA",
