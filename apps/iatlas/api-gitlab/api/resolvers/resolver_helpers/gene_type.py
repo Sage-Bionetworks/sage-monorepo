@@ -26,11 +26,12 @@ def build_gene_type_core_request(selection_set, name=None):
         query = query.filter(gene_type_1.name.in_(name))
 
     order = []
+    append_to_order = order.append
     if 'name' in requested:
-        order.append(gene_type_1.name)
-    elif 'display' in requested:
-        order.append(gene_type_1.display)
-    query = query.order_by(*order)
+        append_to_order(gene_type_1.name)
+    if 'display' in requested:
+        append_to_order(gene_type_1.display)
+    query = query.order_by(*order) if order else query
 
     return query
 

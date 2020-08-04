@@ -6,6 +6,11 @@ from api.db_models import (Dataset, DatasetToTag, DatasetToSample, Feature, Feat
                            FeatureToSample, Sample, SampleToTag, Tag, TagToTag)
 from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
 
+tag_request_fields = {'characteristics',
+                      'color',
+                      'display',
+                      'name'}
+
 
 def build_related_graphql_response(related_set=set()):
     data_set, related_tag = related_set
@@ -55,7 +60,7 @@ def build_related_request(_obj, info, data_set=None, related=None, by_data_set=T
         data_set_selection_set, data_set_core_field_mapping)
 
     if by_data_set or 'data_set' in tag_requested:
-        data_set_core.append(data_set_1.name.label('data_set'))
+        data_set_core.add(data_set_1.name.label('data_set'))
 
     query = sess.query(*[*core, *data_set_core])
 
@@ -69,16 +74,16 @@ def build_related_request(_obj, info, data_set=None, related=None, by_data_set=T
         data_set_1.id, data_set_to_tag_1.dataset_id, data_set_1.name, data_set)
     query = query.join(data_set_1, and_(*data_set_join_condition))
 
-    order = set()
-    add_to_order = order.add
+    order = []
+    append_to_order = order.append
     if 'name' in requested:
-        add_to_order(related_1.name)
+        append_to_order(related_1.name)
     if 'display' in requested:
-        add_to_order(related_1.display)
+        append_to_order(related_1.display)
     if 'color' in requested:
-        add_to_order(related_1.color)
+        append_to_order(related_1.color)
     if 'characteristics' in requested:
-        add_to_order(related_1.characteristics)
+        append_to_order(related_1.characteristics)
 
     query = query.order_by(*order) if order else query
 
@@ -87,14 +92,17 @@ def build_related_request(_obj, info, data_set=None, related=None, by_data_set=T
 
 def build_tag_graphql_response(sample_dict=dict()):
     def f(tag):
+        if not tag:
+            return None
         tag_id = get_value(tag, 'id')
+        samples = sample_dict.get(tag_id, []) if sample_dict else []
         return {
             'characteristics': get_value(tag, 'characteristics'),
             'color': get_value(tag, 'color'),
             'display': get_value(tag, 'display'),
             'name': get_value(tag, 'name'),
             'sampleCount': get_value(tag, 'sample_count'),
-            'samples': [sample.name for sample in sample_dict[tag_id]] if sample_dict else [],
+            'samples': [sample.name for sample in samples],
         }
     return f
 
@@ -125,7 +133,7 @@ def build_tag_request(_obj, info, data_set=None, feature=None, feature_class=Non
 
     # Only select fields that were requested.
     core = build_option_args(selection_set, core_field_mapping)
-    core.append(tag_1.id.label('id'))
+    core.add(tag_1.id.label('id'))
 
     query = sess.query(*core)
     query = query.select_from(tag_1)
@@ -207,16 +215,16 @@ def build_tag_request(_obj, info, data_set=None, feature=None, feature_class=Non
 
             query = query.group_by(*group_by)
 
-    order = set()
-    add_to_order = order.add
+    order = []
+    append_to_order = order.append
     if 'name' in requested:
-        add_to_order(tag_1.name)
+        append_to_order(tag_1.name)
     if 'display' in requested:
-        add_to_order(tag_1.display)
+        append_to_order(tag_1.display)
     if 'color' in requested:
-        add_to_order(tag_1.color)
+        append_to_order(tag_1.color)
     if 'characteristics' in requested:
-        add_to_order(tag_1.characteristics)
+        append_to_order(tag_1.characteristics)
 
     query = query.order_by(*order) if order else query
 
@@ -240,8 +248,8 @@ def get_samples(info, data_set=None, feature=None, feature_class=None, related=N
         sample_core = build_option_args(
             selection_set, sample_core_field_mapping)
         # Always select the sample id and the gene id.
-        sample_core = sample_core + [sample_1.id.label('id'),
-                                     sample_to_tag_1.tag_id.label('tag_id')]
+        sample_core |= {sample_1.id.label(
+            'id'), sample_to_tag_1.tag_id.label('tag_id')}
 
         sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)
@@ -301,11 +309,12 @@ def get_samples(info, data_set=None, feature=None, feature_class=None, related=N
             sample_query = sample_query.join(tag_to_tag_1, and_(
                 tag_to_tag_1.tag_id == sample_to_tag_1.tag_id, tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id))
 
-        order = set()
+        order = []
+        append_to_order = order.append
         if 'name' in requested:
-            order.add(sample_1.name)
-        else:
-            order.add(sample_1.id)
+            append_to_order(sample_1.name)
+        if not order:
+            append_to_order(sample_1.id)
         sample_query = sample_query.order_by(*order)
 
         return sample_query.distinct().all()

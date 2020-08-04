@@ -67,16 +67,15 @@ def build_sample_request(_obj, info, data_set=None, feature=None, feature_class=
         tag_or_status_selection_set, requested_field_mapping) if by_status or by_tag else []
     # Only select fields that were requested.
     core = build_option_args(selection_set, core_field_mapping)
-    core.append(sample_1.id.label('id'))
+    core.add(sample_1.id.label('id'))
 
     if by_status:
-        core.append(sample_to_mutation_1.status.label('status'))
+        core.add(sample_to_mutation_1.status.label('status'))
 
     if by_tag:
-        core = core + \
-            build_option_args(tag_or_status_selection_set,
-                              tag_core_field_mapping)
-        core.append(tag_1.name.label('tag'))
+        core |= build_option_args(
+            tag_or_status_selection_set, tag_core_field_mapping)
+        core.add(tag_1.name.label('tag'))
 
     if 'patient' in core_requested:
         patient_selection_set = get_selection_set(
@@ -88,7 +87,7 @@ def build_sample_request(_obj, info, data_set=None, feature=None, feature_class=
                                       'height': patient_1.height.label('height'),
                                       'race': patient_1.race.label('race'),
                                       'weight': patient_1.weight.label('weight')}
-        core = core + build_option_args(
+        core |= build_option_args(
             patient_selection_set, patient_core_field_mapping)
 
     query = sess.query(*core)
@@ -166,20 +165,20 @@ def build_sample_request(_obj, info, data_set=None, feature=None, feature_class=
         query = query.join(tag_to_tag_1, and_(
             tag_to_tag_1.tag_id == tag_1.id, tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id))
 
-    order = set()
-    add_to_order = order.add
+    order = []
+    append_to_order = order.append
     if 'name' in core_requested:
-        add_to_order(sample_1.name)
+        append_to_order(sample_1.name)
     if 'name' in requested:
-        add_to_order(tag_1.name)
+        append_to_order(tag_1.name)
     if 'display' in requested:
-        add_to_order(tag_1.display)
+        append_to_order(tag_1.display)
     if 'color' in requested:
-        add_to_order(tag_1.color)
+        append_to_order(tag_1.color)
     if 'characteristics' in requested:
-        add_to_order(tag_1.characteristics)
+        append_to_order(tag_1.characteristics)
     if 'status' in requested:
-        add_to_order(sample_to_mutation_1.status)
+        append_to_order(sample_to_mutation_1.status)
 
     query = query.order_by(*order) if order else query
 

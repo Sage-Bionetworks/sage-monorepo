@@ -14,6 +14,7 @@ from .immune_checkpoint_resolver import resolve_immune_checkpoints
 from .method_tags_resolver import resolve_method_tags
 from .mutations_resolver import resolve_mutations
 from .mutation_types_resolver import resolve_mutation_types
+from .nodes_resolver import resolve_nodes
 from .pathway_resolver import resolve_pathways
 from .patient_resolver import resolve_patients
 from .related_resolver import resolve_related

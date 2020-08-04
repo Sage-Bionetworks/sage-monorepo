@@ -76,7 +76,7 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
             selection_set, child_node='dataSet')
         data_set_core_field_mapping = {'display': data_set_1.display.label('data_set_display'),
                                        'name': data_set_1.name.label('data_set_name')}
-        core = core + build_option_args(
+        core |= build_option_args(
             data_set_selection_set, data_set_core_field_mapping)
 
     if 'feature' in relations:
@@ -86,7 +86,7 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
                                       'name': feature_1.name.label('feature_name'),
                                       'order': feature_1.order.label('order'),
                                       'unit': feature_1.unit.label('unit')}
-        core = core + build_option_args(
+        core |= build_option_args(
             feature_selection_set, feature_core_field_mapping)
 
     if 'gene' in relations:
@@ -97,7 +97,7 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
                                    'description': gene_1.description.label('description'),
                                    'friendlyName': gene_1.friendly_name.label('friendly_name'),
                                    'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
-        core = core + build_option_args(
+        core |= build_option_args(
             gene_selection_set, gene_core_field_mapping)
 
     if 'tag' in relations:
@@ -107,7 +107,7 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
                                   'color': tag_1.color.label('color'),
                                   'display': tag_1.display.label('tag_display'),
                                   'name': tag_1.name.label('tag_name')}
-        core = core + build_option_args(
+        core |= build_option_args(
             tag_selection_set, tag_core_field_mapping)
 
     query = sess.query(*core)

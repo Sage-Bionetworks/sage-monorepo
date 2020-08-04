@@ -1,9 +1,19 @@
 from itertools import groupby
-from .resolver_helpers import build_gene_graphql_response, get_value, request_genes, return_gene_derived_fields
+from .resolver_helpers import build_gene_graphql_response, gene_request_fields, get_requested, get_value, request_genes, return_gene_derived_fields
 
 
 def resolve_genes_by_tag(_obj, info, dataSet, related, entrez=None, feature=None, featureClass=None, geneType=None, sample=None, tag=None):
-    gene_results = request_genes(_obj, info, by_tag=True, data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass,
+    tag_field_mapping = {'characteristics': 'characteristics',
+                         'color': 'color',
+                         'display': 'display',
+                         'tag': 'tag'}
+
+    requested = get_requested(
+        info, gene_request_fields, True, child_node='genes')
+
+    tag_requested = get_requested(info, tag_field_mapping)
+    tag_requested.add('by_tag')
+    gene_results = request_genes(requested, tag_requested=tag_requested, data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass,
                                  gene_type=geneType, related=related, sample=sample, tag=tag)
     gene_ids = set(gene.id for gene in gene_results)
 

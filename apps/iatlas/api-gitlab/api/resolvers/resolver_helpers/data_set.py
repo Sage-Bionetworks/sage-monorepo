@@ -1,28 +1,38 @@
-from sqlalchemy import and_, orm
+from sqlalchemy import and_
+from sqlalchemy.orm import aliased, contains_eager
 from api import db
 from api.database import return_gene_query
 from api.db_models import Dataset, Sample
-from .general_resolvers import build_option_args, get_selection_set
+from .general_resolvers import build_option_args, get_selection_set, get_value
 from .tag import request_tags
 
+data_set_request_fields = {'display', 'name'}
 
-def build_core_field_mapping(model):
-    return {'display': model.display.label('display'),
-            'name': model.name.label('name')}
+
+def build_data_set_graphql_response(data_set):
+    return {
+        'display': get_value(data_set, 'display'),
+        'name': get_value(data_set),
+        'samples': [{
+            'name': get_value(sample),
+            'patient': get_value(sample, 'patient')
+        } for sample in get_value(data_set, 'samples', [])]
+    }
 
 
 def build_data_set_request(_obj, info, data_set=None, sample=None):
     """
-    Builds a SQL request and returns values from the DB.
+    Builds a SQL request.
     """
     sess = db.session
 
     selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
 
-    data_set_1 = orm.aliased(Dataset, name='d')
-    sample_1 = orm.aliased(Sample, name='s')
+    data_set_1 = aliased(Dataset, name='d')
+    sample_1 = aliased(Sample, name='s')
 
-    core_field_mapping = build_core_field_mapping(data_set_1)
+    core_field_mapping = {'display': data_set_1.display.label('display'),
+                          'name': data_set_1.name.label('name')}
 
     related_field_mapping = {'samples': 'samples'}
 
@@ -34,7 +44,7 @@ def build_data_set_request(_obj, info, data_set=None, sample=None):
 
     if 'samples' in relations or sample:
         query = query.join((sample_1, data_set_1.samples), isouter=True)
-        option_args.append(orm.contains_eager(
+        option_args.append(contains_eager(
             data_set_1.samples.of_type(sample_1)))
 
     if option_args:

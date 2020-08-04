@@ -5,9 +5,10 @@ from api.resolvers import (
     resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_features,
     resolve_features_by_class, resolve_features_by_tag, resolve_gene, resolve_gene_family,
     resolve_gene_function, resolve_gene_types, resolve_genes, resolve_genes_by_tag,
-    resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutation_types, resolve_pathways,
-    resolve_patients, resolve_related, resolve_samples, resolve_samples_by_mutations_status,
-    resolve_samples_by_tag, resolve_slides, resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
+    resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutation_types,
+    resolve_nodes, resolve_pathways, resolve_patients, resolve_related, resolve_samples,
+    resolve_samples_by_mutations_status, resolve_samples_by_tag, resolve_slides,
+    resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 
@@ -166,6 +167,7 @@ root.set_field('immuneCheckpoints', resolve_immune_checkpoints)
 root.set_field('methodTags', resolve_method_tags)
 root.set_field('mutations', resolve_mutations)
 root.set_field('mutationTypes', resolve_mutation_types)
+root.set_field('nodes', resolve_nodes)
 root.set_field('pathways', resolve_pathways)
 root.set_field('patients', resolve_patients)
 root.set_field('related', resolve_related)
