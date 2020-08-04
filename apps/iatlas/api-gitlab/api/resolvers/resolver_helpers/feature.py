@@ -8,9 +8,25 @@ from api.db_models import (
 from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
 
 
+feature_request_fields = {'class',
+                                    'display',
+                                    'methodTag',
+                                    'name',
+                                    'order',
+                                    'sample',
+                                    'unit',
+                                    'value',
+                                    'valueMax',
+                                    'valueMin'}
+
 def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
     def f(feature):
+        if not feature:
+            return None
         feature_id = get_value(feature, 'id')
+        max_min = max_min_dict.get(
+            feature_id, dict()) if max_min_dict else dict()
+        samples = sample_dict.get(feature_id, []) if sample_dict else []
         return {
             'class': get_value(feature, 'class'),
             'display': get_value(feature, 'display'),
@@ -20,11 +36,11 @@ def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
             'samples': [{
                 'name': get_value(sample),
                 'value': get_value(sample, 'value')
-            } for sample in sample_dict.get(feature_id, [])],
+            } for sample in samples],
             'unit': get_value(feature, 'unit'),
             'value': get_value(feature, 'value'),
-            'valueMax': max_min_dict[feature_id]['value_max'] if max_min_dict else None,
-            'valueMin': max_min_dict[feature_id]['value_min'] if max_min_dict else None
+            'valueMax': max_min.get('value_max') if max_min else None,
+            'valueMin': max_min.get('value_min') if max_min else None
         }
     return f
 
@@ -79,16 +95,15 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
         tag_or_class_selection_set, requested_field_mapping) if by_class or by_tag else []
     # Only select fields that were requested.
     core = build_option_args(selection_set, core_field_mapping)
-    core.append(feature_1.id.label('id'))
+    core.add(feature_1.id.label('id'))
 
     if by_class or 'class' in core_requested:
-        core.append(feature_class_1.name.label('class'))
+        core.add(feature_class_1.name.label('class'))
 
     if by_tag:
-        core = core + \
-            build_option_args(tag_or_class_selection_set,
-                              tag_core_field_mapping)
-        core.append(tag_1.name.label('tag'))
+        core |= build_option_args(
+            tag_or_class_selection_set, tag_core_field_mapping)
+        core.add(tag_1.name.label('tag'))
 
     has_min_max = 'value_max' in core_requested or 'value_min' in core_requested
 
@@ -129,11 +144,8 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
         query = query.join(feature_to_sample_1, and_(
             *feature_sample_join_condition))
 
-        sample_join_condition = [sample_1.id == feature_to_sample_1.sample_id]
-
-        if sample:
-            sample_join_condition = sample_join_condition + \
-                [sample_1.name.in_(sample)]
+        sample_join_condition = build_join_condition(
+            sample_1.id, feature_to_sample_1.sample_id, sample_1.name, sample)
 
         query = query.join(sample_1, and_(*sample_join_condition))
 
@@ -181,32 +193,32 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
 
             query = query.join(tag_1, and_(*tag_join_condition))
 
-    order = set()
-    add_to_order = order.add
+    order = []
+    append_to_order = order.append
     if by_tag:
-        add_to_order(tag_1.name)
+        append_to_order(tag_1.name)
     if 'display' in requested:
-        add_to_order(tag_1.display)
+        append_to_order(tag_1.display)
     if 'color' in requested:
-        add_to_order(tag_1.color)
+        append_to_order(tag_1.color)
     if 'characteristics' in requested:
-        add_to_order(tag_1.characteristics)
+        append_to_order(tag_1.characteristics)
     if by_class or 'class' in requested:
-        add_to_order(feature_class_1.name)
+        append_to_order(feature_class_1.name)
     if 'order' in core_requested:
-        add_to_order(feature_1.order)
+        append_to_order(feature_1.order)
     if 'display' in core_requested:
-        add_to_order(feature_1.display)
+        append_to_order(feature_1.display)
     if 'name' in core_requested:
-        add_to_order(feature_1.name)
+        append_to_order(feature_1.name)
     if 'class' in core_requested and not by_class and 'class' not in requested:
-        add_to_order(feature_class_1.name)
+        append_to_order(feature_class_1.name)
     if 'method_tag' in core_requested:
-        add_to_order(method_tag_1.name)
+        append_to_order(method_tag_1.name)
     if 'unit' in core_requested:
-        add_to_order(feature_1.unit)
+        append_to_order(feature_1.unit)
     if not order:
-        add_to_order(feature_1.id)
+        append_to_order(feature_1.id)
 
     return query.order_by(*order)
 
@@ -235,15 +247,14 @@ def get_samples(info, data_set=None, max_value=None, min_value=None, related=Non
         sample_core = build_option_args(
             sample_selection_set, sample_core_field_mapping)
         # Always select the sample id and the feature id.
-        sample_core = sample_core + \
-            [sample_1.id.label('id'),
-             feature_to_sample_1.feature_id.label('feature_id')]
+        sample_core |= {sample_1.id.label(
+            'id'), feature_to_sample_1.feature_id.label('feature_id')}
 
-        requested = requested + build_option_args(
+        requested |= build_option_args(
             sample_selection_set, {'name': 'name', 'value': 'value'})
 
         if has_max_min or 'value' in requested:
-            sample_core.append(feature_to_sample_1.value.label('value'))
+            sample_core.add(feature_to_sample_1.value.label('value'))
 
         sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)
@@ -308,11 +319,12 @@ def get_samples(info, data_set=None, max_value=None, min_value=None, related=Non
                 *sample_to_tag_join_condition))
 
         order = []
+        append_to_order = order.append
         if 'name' in requested:
-            order.append(sample_1.name)
-        elif 'value' in requested:
-            order.append(feature_to_sample_1.value)
-        sample_query = sample_query.order_by(*order)
+            append_to_order(sample_1.name)
+        if 'value' in requested:
+            append_to_order(feature_to_sample_1.value)
+        sample_query = sample_query.order_by(*order) if order else sample_query
 
         return sample_query.distinct().all()
 

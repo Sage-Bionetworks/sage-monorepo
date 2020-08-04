@@ -1,8 +1,11 @@
-from .resolver_helpers import build_gene_graphql_response, request_genes, return_gene_derived_fields
+from .resolver_helpers import build_gene_graphql_response, gene_request_fields, get_requested, request_genes, return_gene_derived_fields
+from api.telemetry import profile
 
 
+@profile(__name__)
 def resolve_genes(_obj, info, entrez=None, sample=None, geneType=None):
-    genes = request_genes(_obj, info, entrez=entrez,
+    requested = get_requested(info, gene_request_fields)
+    genes = request_genes(requested, entrez=entrez,
                           gene_type=geneType, sample=sample)
 
     gene_ids = set(gene.id for gene in genes)

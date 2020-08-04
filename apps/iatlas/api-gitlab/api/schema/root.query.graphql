@@ -249,6 +249,21 @@ type Query {
   mutationTypes: [MutationType!]!
 
   """
+  The "mutations" query accepts:
+
+    - "dataSet", a list of data set names associated with the nodes to filter by.
+    - "related", a list of tag names related to the data set associated with the nodes to filter by.
+    - "network", a list of tag names associated with the nodes that are also associated with the "network" tag to filter by.
+
+  If no arguments are passed, this will return all nodes (please note, there will be a LOT of results).
+  """
+  nodes(
+    dataSet: [String!]
+    related: [String!]
+    network: [String!]
+  ): [Node!]!
+
+  """
   The "patients" query accepts:
 
     - "barcode", a list of patient barcodes of the patients to look up.

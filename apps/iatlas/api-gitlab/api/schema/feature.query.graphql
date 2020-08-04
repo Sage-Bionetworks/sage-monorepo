@@ -61,6 +61,7 @@ The "SimpleFeature" is a version of a `Feature`. Only basic feature attributes m
 - The feature's "name" (a unique string for this feature).
 - A "display" name, a readable name for the feature.
 - The "order" is a number representing the index order the feature would be displayed in.
+- The "unit" is the type of measurement of the value.
 
 To get more properties of features, please see "Feature", "FeaturesByClass", "FeaturesByTag".
 """
@@ -68,4 +69,5 @@ type SimpleFeature {
   display: String
   name: String!
   order: Int
+  unit: String
 }

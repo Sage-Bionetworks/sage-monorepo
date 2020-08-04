@@ -32,12 +32,12 @@ def test_build_option_args():
         MockSelection(MockNameNode('test1')),
         MockSelection(MockNameNode('test2'))
     ])
-    assert build_option_args(selection_set, valid_nodes_1) == ['nice', 'good']
-    assert build_option_args(selection_set, valid_nodes_2) == ['good']
-    assert build_option_args(None, valid_nodes_1) == []
-    assert build_option_args(selection_set, {}) == []
-    assert build_option_args(selection_set) == []
-    assert build_option_args() == []
+    assert build_option_args(selection_set, valid_nodes_1) == {'nice', 'good'}
+    assert build_option_args(selection_set, valid_nodes_2) == {'good'}
+    assert build_option_args(None, valid_nodes_1) == set()
+    assert build_option_args(selection_set, {}) == set()
+    assert build_option_args(selection_set) == set()
+    assert build_option_args() == set()
 
 
 def test_get_value():

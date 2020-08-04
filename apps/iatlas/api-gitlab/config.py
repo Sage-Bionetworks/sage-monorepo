@@ -17,7 +17,14 @@ def get_database_uri():
     return DATABASE_URI
 
 
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+
+
 class Config(object):
+    LOG_PATH = os.path.join(BASE_PATH, '.logs')
+    LOG_FILE = os.path.join(LOG_PATH, 'server.log')
+    PROFILE = True
+    PROFILE_PATH = os.path.join(BASE_PATH, '.profiles')
     SQLALCHEMY_DATABASE_URI = get_database_uri()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {'pool_pre_ping': True}
