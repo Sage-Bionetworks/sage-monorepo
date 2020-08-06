@@ -1,30 +1,60 @@
-import os
+from os import environ, path
+from flask.logging import default_handler
 
 
 def get_database_uri():
-    HOST = os.environ['POSTGRES_HOST']
-    if 'POSTGRES_PORT' in os.environ and os.environ['POSTGRES_PORT'] != 'None':
-        HOST = HOST + ':' + os.environ['POSTGRES_PORT']
+    HOST = environ['POSTGRES_HOST']
+    if 'POSTGRES_PORT' in environ and environ['POSTGRES_PORT'] != 'None':
+        HOST = HOST + ':' + environ['POSTGRES_PORT']
     POSTGRES = {
-        'user': os.environ['POSTGRES_USER'],
-        'pw': os.environ['POSTGRES_PASSWORD'],
-        'db': os.environ['POSTGRES_DB'],
+        'user': environ['POSTGRES_USER'],
+        'pw': environ['POSTGRES_PASSWORD'],
+        'db': environ['POSTGRES_DB'],
         'host': HOST,
     }
     DATABASE_URI = 'postgresql://%(user)s:%(pw)s@%(host)s/%(db)s' % POSTGRES
-    if 'DATABASE_URI' in os.environ:
-        DATABASE_URI = os.environ['DATABASE_URI']
+    if 'DATABASE_URI' in environ:
+        DATABASE_URI = environ['DATABASE_URI']
     return DATABASE_URI
 
 
-BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+BASE_PATH = path.dirname(path.abspath(__file__))
 
 
 class Config(object):
-    LOG_PATH = os.path.join(BASE_PATH, '.logs')
-    LOG_FILE = os.path.join(LOG_PATH, 'server.log')
+    LOG_APP_NAME = 'iatlas-api'
+    LOG_COPIES = 10
+    LOG_DIR = path.join(BASE_PATH, '.logs')
+    LOG_FILE = path.join(LOG_DIR, 'server.log')
+    LOG_INTERVAL = 1
+    LOG_LEVEL = 'DEBUG'
+    LOG_TIME_INT = 'D'
+    LOG_TYPE = 'TimedRotatingFile'
+    LOG_WWW_NAME = 'iatlas-api-access'
     PROFILE = True
-    PROFILE_PATH = os.path.join(BASE_PATH, '.profiles')
+    PROFILE_PATH = path.join(BASE_PATH, '.profiles')
     SQLALCHEMY_DATABASE_URI = get_database_uri()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {'pool_pre_ping': True}
+
+
+class StagingConfig(Config):
+    LOG_LEVEL = 'INFO'
+    LOG_TYPE = 'stream'
+    PROFILE = False
+
+
+class ProdConfig(Config):
+    LOG_LEVEL = 'WARN'
+    LOG_TYPE = 'stream'
+    PROFILE = False
+
+
+def get_config():
+    FLASK_ENV = environ['FLASK_ENV']
+    if FLASK_ENV == 'development':
+        return Config
+    elif FLASK_ENV == 'staging':
+        return StagingConfig
+    else:
+        return ProdConfig
