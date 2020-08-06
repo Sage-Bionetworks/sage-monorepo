@@ -1,4 +1,5 @@
 import logging
+from json import loads
 from datetime import datetime as dt
 from flask import Flask, request
 from config import get_config
@@ -19,23 +20,27 @@ def create_app(config_class=get_config()):
 
     @app.after_request
     def after_request(response):
-        """ Logging after every request. """
-        logger = logging.getLogger('api.access')
-        logger.info(
-            '%s [%s] %s %s %s %s %s %s %s',
-            request.remote_addr,
-            dt.utcnow().strftime('%d/%b/%Y:%H:%M:%S.%f')[:-3],
-            request.method,
-            request.path,
-            request.scheme,
-            response.status,
-            response.content_length,
-            request.referrer,
-            request.user_agent,
-        )
+        """ Logging after every POST request only if it isn't an introspection query. """
+        json_data = request.get_json()
+        is_introspection_query = bool(json_data and json_data.get(
+            'operationName', False) == 'IntrospectionQuery')
+        if request.method == 'POST' and not is_introspection_query:
+            logger = logging.getLogger('api.access')
+            logger.info(
+                '%s [%s] %s %s %s %s %s %s %s',
+                request.remote_addr,
+                dt.utcnow().strftime('%d/%b/%Y:%H:%M:%S.%f')[:-3],
+                request.method,
+                request.path,
+                request.scheme,
+                response.status,
+                response.content_length,
+                request.referrer,
+                request.user_agent,
+            )
         return response
 
-    @app.teardown_appcontext
+    @ app.teardown_appcontext
     def shutdown_session(exception=None):
         db.session.remove()
 
