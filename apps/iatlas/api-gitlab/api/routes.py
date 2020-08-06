@@ -7,7 +7,7 @@ from .main import bp
 from .schema import schema
 
 
-@bp.route("/graphiql", methods=["GET"])
+@bp.route('/graphiql', methods=['GET'])
 def graphql_playgroud():
     # On GET request serve GraphQL Playground
     # You don't need to provide Playground if you don't want to
@@ -16,8 +16,8 @@ def graphql_playgroud():
     return PLAYGROUND_HTML, 200
 
 
-@bp.route("/graphiql", methods=["POST"])
-@bp.route("/api", methods=["POST"])
+@bp.route('/graphiql', methods=['POST'])
+@bp.route('/api', methods=['POST'])
 def graphql_server():
     # GraphQL queries are always sent as POST
     data = request.get_json()
@@ -43,6 +43,6 @@ def graphql_server():
     return jsonify(result), status_code
 
 
-@bp.route("/home")
+@bp.route('/home')
 def home():
     return "I'm home!"

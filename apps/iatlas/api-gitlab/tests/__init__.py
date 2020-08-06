@@ -6,4 +6,6 @@ NoneType = type(None)
 
 
 class TestConfig(Config):
+    LOG_LEVEL = 'INFO'
+    PROFILE = False
     TESTING = True

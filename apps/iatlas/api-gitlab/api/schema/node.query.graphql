@@ -24,6 +24,23 @@ type Node {
 }
 
 """
+The "NodePage" type may return:
+
+- "items", a list of returned Nodes
+- "page", the current page of returned nodes
+- "pages", the total number of pages available
+- "total", the total number of results (all pages summed).
+
+See `Node`
+"""
+type NodePage {
+    items: [Node!]!
+    page: Int!
+    pages: Int!
+    total: Int!
+}
+
+"""
 The "SimpleNode" is a simple version of a Node; it has no related fields.
 It type may return:
 
