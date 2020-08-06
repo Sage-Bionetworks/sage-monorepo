@@ -6,6 +6,7 @@ We have options in python for stdout (streamhandling) and file logging
 File logging has options for a Rotating file based on size or time (daily)
 or a watched file, which supports logrotate style rotation
 Most of the changes happen in the handlers, lets define a few standards
+Borrowed HEAVILY from https://medium.com/tenable-techblog/the-boring-stuff-flask-logging-21c3a5dd0392
 """
 
 
