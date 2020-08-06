@@ -23,6 +23,13 @@ type Node {
     tags: [SimpleTag!]!
 }
 
+type NodePage {
+    items: [Node!]!
+    page: Int!
+    pages: Int!
+    total: Int!
+}
+
 """
 The "SimpleNode" is a simple version of a Node; it has no related fields.
 It type may return:

@@ -4,10 +4,7 @@ from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import Dataset, DatasetToSample, DatasetToTag, Feature, FeatureToSample, Gene, GeneToSample, Node, NodeToTag, SampleToTag, Tag, TagToTag
-from .data_set import build_data_set_graphql_response
-from .feature import build_feature_graphql_response
-from .gene import build_gene_graphql_response
-from .general_resolvers import build_join_condition, build_option_args, get_selected, get_selection_set, get_value
+from .general_resolvers import build_join_condition, get_selected, get_value
 from .tag import build_tag_graphql_response
 
 node_request_fields = {'dataSet',
@@ -23,6 +20,7 @@ node_request_fields = {'dataSet',
 
 def build_node_graphql_response(tag_dict):
     def f(node):
+        print('node: ', node)
         node_id = get_value(node, 'id')
         tags = tag_dict.get(node_id, []) if tag_dict else []
         return {
@@ -35,14 +33,14 @@ def build_node_graphql_response(tag_dict):
                 'name': get_value(node, 'feature_name'),
                 'order': get_value(node, 'order'),
                 'unit': get_value(node, 'unit')
-            },
+            } if get_value(node, 'feature_id') else None,
             'gene': {
                 'entrez': get_value(node, 'entrez'),
                 'hgnc': get_value(node, 'hgnc'),
                 'description': get_value(node, 'description'),
                 'friendlyName': get_value(node, 'friendly_name'),
                 'ioLandscapeName': get_value(node, 'io_landscape_name')
-            },
+            } if get_value(node, 'gene_id') else None,
             'label': get_value(node, 'label'),
             'name': get_value(node, 'name'),
             'score': get_value(node, 'score'),
@@ -64,10 +62,7 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     gene_1 = aliased(Gene, name='g')
     node_1 = aliased(Node, name='n')
 
-    core_field_mapping = {'dataSetId': node_1.dataset_id.label('dataset_id'),
-                          'featureId': node_1.feature_id.label('feature_id'),
-                          'geneId': node_1.gene_id.label('gene_id'),
-                          'label': node_1.label.label('label'),
+    core_field_mapping = {'label': node_1.label.label('label'),
                           'name': node_1.name.label('name'),
                           'score': node_1.score.label('score'),
                           'x': node_1.x.label('x'),
@@ -88,16 +83,19 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
                           'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
 
     core = get_selected(requested, core_field_mapping)
-    core.add(node_1.id.label('id'))
+    add_to_core = core.add
+    add_to_core(node_1.id.label('id'))
 
     if 'dataSet' in requested:
         core |= get_selected(data_set_requested, data_set_field_mapping)
 
     if 'feature' in requested:
         core |= get_selected(feature_requested, feature_field_mapping)
+        add_to_core(node_1.feature_id.label('feature_id'))
 
     if 'gene' in requested:
         core |= get_selected(gene_requested, gene_field_mapping)
+        add_to_core(node_1.gene_id.label('gene_id'))
 
     query = sess.query(*core)
     query = query.select_from(node_1)
@@ -146,7 +144,7 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
         append_to_order(node_1.score)
     if 'x' in requested:
         append_to_order(node_1.x)
-    if 'data_set_id' in requested:
+    if 'y' in requested:
         append_to_order(node_1.y)
     if not order:
         append_to_order(node_1.id)

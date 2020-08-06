@@ -18,9 +18,9 @@ def build_option_args(selection_set=None, valid_nodes={}):
     return option_args
 
 
-def get_requested(info, requested_field_mapping, condition=False, child_node=None):
+def get_requested(info=None, requested_field_mapping={}, condition=False, child_node=None, selection_set=[]):
     selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, condition, child_node=child_node) if info else []
+        info.field_nodes[0].selection_set, condition, child_node=child_node) if info else selection_set
 
     return build_option_args(selection_set, requested_field_mapping)
 

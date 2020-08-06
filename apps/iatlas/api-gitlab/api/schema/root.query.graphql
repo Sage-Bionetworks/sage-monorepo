@@ -261,7 +261,8 @@ type Query {
     dataSet: [String!]
     related: [String!]
     network: [String!]
-  ): [Node!]!
+    page: Int
+  ): NodePage
 
   """
   The "patients" query accepts:
