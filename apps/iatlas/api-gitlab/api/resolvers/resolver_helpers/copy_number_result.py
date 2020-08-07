@@ -1,7 +1,18 @@
 from sqlalchemy import and_, orm
 from api import db
 from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
-from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
+from .general_resolvers import build_join_condition, build_option_args, get_selected, get_selection_set, get_value
+
+cnr_request_fields = {'dataSet',
+                      'direction',
+                      'feature',
+                      'gene',
+                      'meanNormal',
+                      'meanCnv',
+                      'pValue',
+                      'log10PValue',
+                      'tag',
+                      'tStat'}
 
 
 def build_cnr_graphql_response(copy_number_result):
@@ -38,7 +49,7 @@ def build_cnr_graphql_response(copy_number_result):
     }
 
 
-def build_copy_number_result_request(_obj, info, data_set=None, direction=None, entrez=None,
+def build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, direction=None, entrez=None,
                                      feature=None, max_p_value=None, max_log10_p_value=None,
                                      min_log10_p_value=None, min_mean_cnv=None,
                                      min_mean_normal=None, min_p_value=None, min_t_stat=None,
@@ -47,8 +58,6 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
     Builds a SQL request.
     """
     sess = db.session
-
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
 
     copy_number_result_1 = orm.aliased(CopyNumberResult, name='dcnr')
     data_set_1 = orm.aliased(Dataset, name='ds')
@@ -63,52 +72,38 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
                           'log10PValue': copy_number_result_1.log10_p_value.label('log10_p_value'),
                           'tStat': copy_number_result_1.t_stat.label('t_stat')}
 
-    related_field_mapping = {'dataSet': 'data_set',
-                             'feature': 'feature',
-                             'gene': 'gene',
-                             'tag': 'tag'}
+    data_set_field_mapping = {'display': data_set_1.display.label('data_set_display'),
+                              'name': data_set_1.name.label('data_set_name')}
 
-    core = build_option_args(selection_set, core_field_mapping)
-    relations = build_option_args(selection_set, related_field_mapping)
+    feature_field_mapping = {'display': feature_1.display.label('feature_display'),
+                             'name': feature_1.name.label('feature_name'),
+                             'order': feature_1.order.label('order'),
+                             'unit': feature_1.unit.label('unit')}
 
-    if 'data_set' in relations:
-        data_set_selection_set = get_selection_set(
-            selection_set, child_node='dataSet')
-        data_set_core_field_mapping = {'display': data_set_1.display.label('data_set_display'),
-                                       'name': data_set_1.name.label('data_set_name')}
-        core |= build_option_args(
-            data_set_selection_set, data_set_core_field_mapping)
+    gene_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
+                          'hgnc': gene_1.hgnc.label('hgnc'),
+                          'description': gene_1.description.label('description'),
+                          'friendlyName': gene_1.friendly_name.label('friendly_name'),
+                          'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
 
-    if 'feature' in relations:
-        feature_selection_set = get_selection_set(
-            selection_set, child_node='feature')
-        feature_core_field_mapping = {'display': feature_1.display.label('feature_display'),
-                                      'name': feature_1.name.label('feature_name'),
-                                      'order': feature_1.order.label('order'),
-                                      'unit': feature_1.unit.label('unit')}
-        core |= build_option_args(
-            feature_selection_set, feature_core_field_mapping)
+    tag_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
+                         'color': tag_1.color.label('color'),
+                         'display': tag_1.display.label('tag_display'),
+                         'name': tag_1.name.label('tag_name')}
 
-    if 'gene' in relations:
-        gene_selection_set = get_selection_set(
-            selection_set, child_node='gene')
-        gene_core_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
-                                   'hgnc': gene_1.hgnc.label('hgnc'),
-                                   'description': gene_1.description.label('description'),
-                                   'friendlyName': gene_1.friendly_name.label('friendly_name'),
-                                   'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
-        core |= build_option_args(
-            gene_selection_set, gene_core_field_mapping)
+    core = get_selected(requested, core_field_mapping)
 
-    if 'tag' in relations:
-        tag_selection_set = get_selection_set(
-            selection_set, child_node='tag')
-        tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
-                                  'color': tag_1.color.label('color'),
-                                  'display': tag_1.display.label('tag_display'),
-                                  'name': tag_1.name.label('tag_name')}
-        core |= build_option_args(
-            tag_selection_set, tag_core_field_mapping)
+    if 'dataSet' in requested:
+        core |= get_selected(data_set_requested, data_set_field_mapping)
+
+    if 'feature' in requested:
+        core |= get_selected(feature_requested, feature_field_mapping)
+
+    if 'gene' in requested:
+        core |= get_selected(gene_requested, gene_field_mapping)
+
+    if 'tag' in requested:
+        core |= get_selected(tag_requested, tag_field_mapping)
 
     query = sess.query(*core)
     query = query.select_from(copy_number_result_1)
@@ -140,45 +135,32 @@ def build_copy_number_result_request(_obj, info, data_set=None, direction=None, 
     if min_t_stat or min_t_stat == 0:
         query = query.filter(copy_number_result_1.t_stat >= min_t_stat)
 
-    if 'data_set' in relations or data_set:
+    if data_set or 'data_set' in requested:
         is_outer = not bool(data_set)
         data_set_join_condition = build_join_condition(
             data_set_1.id, copy_number_result_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
         query = query.join(data_set_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
-    if 'gene' in relations or entrez:
+    if entrez or 'gene' in requested:
         is_outer = not bool(entrez)
         data_set_join_condition = build_join_condition(
             gene_1.id, copy_number_result_1.gene_id, filter_column=gene_1.entrez, filter_list=entrez)
         query = query.join(gene_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
-    if 'feature' in relations or feature:
+    if feature or 'feature' in requested:
         is_outer = not bool(feature)
         data_set_join_condition = build_join_condition(
             feature_1.id, copy_number_result_1.feature_id, filter_column=feature_1.name, filter_list=feature)
         query = query.join(feature_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
-    if 'tag' in relations or tag:
+    if tag or 'tag' in requested:
         is_outer = not bool(tag)
         data_set_join_condition = build_join_condition(
             tag_1.id, copy_number_result_1.tag_id, filter_column=tag_1.name, filter_list=tag)
         query = query.join(tag_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
-    return query
-
-
-def request_copy_number_results(_obj, info, data_set=None, direction=None, entrez=None,
-                                feature=None, max_p_value=None, max_log10_p_value=None,
-                                min_log10_p_value=None, min_mean_cnv=None,
-                                min_mean_normal=None, min_p_value=None, min_t_stat=None,
-                                tag=None):
-    query = build_copy_number_result_request(_obj, info, data_set=data_set, direction=direction, entrez=entrez,
-                                             feature=feature, max_p_value=max_p_value, max_log10_p_value=max_log10_p_value,
-                                             min_log10_p_value=min_log10_p_value, min_mean_cnv=min_mean_cnv,
-                                             min_mean_normal=min_mean_normal, min_p_value=min_p_value, min_t_stat=min_t_stat,
-                                             tag=tag)
-    return query.yield_per(1000).distinct().all()
+    return query.distinct()

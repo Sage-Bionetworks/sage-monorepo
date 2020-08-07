@@ -37,7 +37,7 @@ def resolve_nodes(_obj, info, dataSet=None, related=None, network=None, page=1):
             tag_requested, data_set=dataSet, related=related, network=network)
 
     node_results = build_node_request(requested, data_set_requested, feature_requested, gene_requested,
-                                      data_set=dataSet, related=related, network=network).paginate(page, 100000, False, 100000)
+                                      data_set=dataSet, related=related, network=network).paginate(page, 100000, False)
 
     return {
         'items': map(build_node_graphql_response(tag_dict), node_results.items),

@@ -14,6 +14,7 @@ type Query {
     - "maxPValue", a maximum mean normal to filter the copy number results by.
     - "maxPValue", a maximum mean CNV to filter the copy number results by.
     - "maxPValue", a maximum T stat to filter the copy number results by.
+    - "page", the page of results to get. Defaults to 1 (the first page)
 
   If no arguments are passed, this will return all copy number results.
   """
@@ -30,7 +31,8 @@ type Query {
     minMeanNormal: Float
     minMeanCnv: Float
     minTStat: Float
-  ): [CopyNumberResult!]!
+    page: Int
+  ): CopyNumberResultPage!
 
   """
   The "dataSets" query accepts:

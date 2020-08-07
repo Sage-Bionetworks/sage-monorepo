@@ -20,7 +20,6 @@ node_request_fields = {'dataSet',
 
 def build_node_graphql_response(tag_dict):
     def f(node):
-        print('node: ', node)
         node_id = get_value(node, 'id')
         tags = tag_dict.get(node_id, []) if tag_dict else []
         return {

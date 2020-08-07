@@ -29,3 +29,20 @@ type CopyNumberResult {
     gene: SimpleGene!
     tag: SimpleTag!
 }
+
+"""
+The "CopyNumberResultPage" type may return:
+
+- "items", a list of returned CopyNumberResults
+- "page", the current page of returned CopyNumberResults.
+- "pages", the total number of pages available
+- "total", the total number of results (all pages summed).
+
+See `CopyNumberResult`
+"""
+type CopyNumberResultPage {
+    items: [CopyNumberResult!]!
+    page: Int!
+    pages: Int!
+    total: Int!
+}
