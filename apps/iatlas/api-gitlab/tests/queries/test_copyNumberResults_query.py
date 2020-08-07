@@ -68,6 +68,7 @@ def test_copyNumberResults_query_with_passed_data_set(client, data_set, entrez, 
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -82,8 +83,14 @@ def test_copyNumberResults_query_with_passed_data_set(client, data_set, entrez, 
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            dataSet { name }
+            items {
+                dataSet { name }
+            }
+            page
+            pages
+            total
         }
     }"""
     response = client.post(
@@ -93,7 +100,12 @@ def test_copyNumberResults_query_with_passed_data_set(client, data_set, entrez, 
             'feature_name': [feature_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
+    assert page['page'] == 1
+    assert type(page['pages']) is int
+    assert type(page['total']) is int
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -115,6 +127,7 @@ def test_copyNumberResults_query_with_passed_entrez(client, data_set, entrez, fe
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -129,8 +142,12 @@ def test_copyNumberResults_query_with_passed_entrez(client, data_set, entrez, fe
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            gene { entrez }
+            items {
+                gene { entrez }
+            }
+            page
         }
     }"""
     response = client.post(
@@ -140,7 +157,10 @@ def test_copyNumberResults_query_with_passed_entrez(client, data_set, entrez, fe
             'feature': [feature_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
+    assert page['page'] == 1
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -162,6 +182,7 @@ def test_copyNumberResults_query_with_passed_features(client, data_set, entrez, 
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -176,8 +197,11 @@ def test_copyNumberResults_query_with_passed_features(client, data_set, entrez, 
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            feature { name }
+            items {
+                feature { name }
+            }
         }
     }"""
     response = client.post(
@@ -187,7 +211,9 @@ def test_copyNumberResults_query_with_passed_features(client, data_set, entrez, 
             'feature': [feature_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -195,7 +221,7 @@ def test_copyNumberResults_query_with_passed_features(client, data_set, entrez, 
         assert feature['name'] == feature_name
 
 
-def test_copyNumberResults_query_with_passed_tag(client, data_set, entrez, feature_name, tag_name):
+def test_copyNumberResults_query_with_passed_tag(client, data_set, feature_name, tag_name):
     query = """query CopyNumberResults(
         $dataSet: [String!]
         $feature: [String!]
@@ -209,6 +235,7 @@ def test_copyNumberResults_query_with_passed_tag(client, data_set, entrez, featu
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -223,19 +250,23 @@ def test_copyNumberResults_query_with_passed_tag(client, data_set, entrez, featu
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            tag { name }
+            items {
+                tag { name }
+            }
         }
     }"""
     response = client.post(
         '/api', json={'query': query, 'variables': {
             'dataSet': [data_set],
-            'entrez': [entrez],
             'feature': [feature_name],
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -257,6 +288,7 @@ def test_copyNumberResults_query_with_passed_direction(client, data_set, directi
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -271,8 +303,11 @@ def test_copyNumberResults_query_with_passed_direction(client, data_set, directi
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            direction
+            items {
+                direction
+            }
         }
     }"""
     response = client.post(
@@ -283,7 +318,9 @@ def test_copyNumberResults_query_with_passed_direction(client, data_set, directi
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -304,6 +341,7 @@ def test_copyNumberResults_query_with_passed_min_p_value(client, data_set, entre
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -318,8 +356,11 @@ def test_copyNumberResults_query_with_passed_min_p_value(client, data_set, entre
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            pValue
+            items {
+                pValue
+            }
         }
     }"""
     response = client.post(
@@ -330,7 +371,9 @@ def test_copyNumberResults_query_with_passed_min_p_value(client, data_set, entre
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -351,6 +394,7 @@ def test_copyNumberResults_query_with_passed_min_p_value_and_min_log10_p_value(c
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -365,8 +409,11 @@ def test_copyNumberResults_query_with_passed_min_p_value_and_min_log10_p_value(c
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            pValue
+            items {
+                pValue
+            }
         }
     }"""
     response = client.post(
@@ -378,7 +425,9 @@ def test_copyNumberResults_query_with_passed_min_p_value_and_min_log10_p_value(c
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -399,6 +448,7 @@ def test_copyNumberResults_query_with_passed_max_p_value(client, data_set, entre
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -413,8 +463,11 @@ def test_copyNumberResults_query_with_passed_max_p_value(client, data_set, entre
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            pValue
+            items {
+                pValue
+            }
         }
     }"""
     response = client.post(
@@ -425,7 +478,9 @@ def test_copyNumberResults_query_with_passed_max_p_value(client, data_set, entre
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -446,6 +501,7 @@ def test_copyNumberResults_query_with_passed_max_p_value_and_max_log10_p_value(c
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -460,8 +516,11 @@ def test_copyNumberResults_query_with_passed_max_p_value_and_max_log10_p_value(c
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            pValue
+            items {
+                pValue
+            }
         }
     }"""
     response = client.post(
@@ -473,7 +532,9 @@ def test_copyNumberResults_query_with_passed_max_p_value_and_max_log10_p_value(c
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -494,6 +555,7 @@ def test_copyNumberResults_query_with_passed_min_log10_p_value(client, data_set,
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -508,8 +570,11 @@ def test_copyNumberResults_query_with_passed_min_log10_p_value(client, data_set,
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            log10PValue
+            items {
+                log10PValue
+            }
         }
     }"""
     response = client.post(
@@ -520,7 +585,9 @@ def test_copyNumberResults_query_with_passed_min_log10_p_value(client, data_set,
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -541,6 +608,7 @@ def test_copyNumberResults_query_with_passed_max_log10_p_value(client, data_set,
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -555,8 +623,11 @@ def test_copyNumberResults_query_with_passed_max_log10_p_value(client, data_set,
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            log10PValue
+            items {
+                log10PValue
+            }
         }
     }"""
     response = client.post(
@@ -567,7 +638,9 @@ def test_copyNumberResults_query_with_passed_max_log10_p_value(client, data_set,
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -588,6 +661,7 @@ def test_copyNumberResults_query_with_passed_min_mean_normal(client, data_set, e
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -602,8 +676,11 @@ def test_copyNumberResults_query_with_passed_min_mean_normal(client, data_set, e
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            meanNormal
+            items {
+                meanNormal
+            }
         }
     }"""
     response = client.post(
@@ -614,7 +691,9 @@ def test_copyNumberResults_query_with_passed_min_mean_normal(client, data_set, e
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -635,6 +714,7 @@ def test_copyNumberResults_query_with_passed_min_mean_cnv(client, data_set, entr
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -649,8 +729,11 @@ def test_copyNumberResults_query_with_passed_min_mean_cnv(client, data_set, entr
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            meanCnv
+            items {
+                meanCnv
+            }
         }
     }"""
     response = client.post(
@@ -661,7 +744,9 @@ def test_copyNumberResults_query_with_passed_min_mean_cnv(client, data_set, entr
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -682,6 +767,7 @@ def test_copyNumberResults_query_with_passed_min_t_stat(client, data_set, entrez
         $minMeanNormal: Float
         $minMeanCnv: Float
         $minTStat: Float
+        $page: Int
     ) {
         copyNumberResults(
             dataSet: $dataSet
@@ -696,8 +782,11 @@ def test_copyNumberResults_query_with_passed_min_t_stat(client, data_set, entrez
             minMeanNormal: $minMeanNormal
             minMeanCnv: $minMeanCnv
             minTStat: $minTStat
+            page: $page
         ) {
-            tStat
+            items {
+                tStat
+            }
         }
     }"""
     response = client.post(
@@ -708,61 +797,67 @@ def test_copyNumberResults_query_with_passed_min_t_stat(client, data_set, entrez
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['copyNumberResults']
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
         assert result['tStat'] >= min_t_stat
 
 
-# This pulls too many results and crashes the API.
-# TODO: Stop the app from crashing on large results.
-# def test_copyNumberResults_query_with_no_arguments(client):
-#     query = """query CopyNumberResults(
-#         $dataSet: [String!]
-#         $feature: [String!]
-#         $entrez: [Int!]
-#         $tag: [String!]
-#         $direction: DirectionEnum
-#         $minPValue: Float
-#         $maxPValue: Float
-#         $minLog10PValue: Float
-#         $maxLog10PValue: Float
-#         $minMeanNormal: Float
-#         $minMeanCnv: Float
-#         $minTStat: Float
-#     ) {
-#         copyNumberResults(
-#             dataSet: $dataSet
-#             feature: $feature
-#             entrez: $entrez
-#             tag: $tag
-#             direction: $direction
-#             minPValue: $minPValue
-#             maxPValue: $maxPValue
-#             minLog10PValue: $minLog10PValue
-#             maxLog10PValue: $maxLog10PValue
-#             minMeanNormal: $minMeanNormal
-#             minMeanCnv: $minMeanCnv
-#             minTStat: $minTStat
-#         ) {
-#             direction
-#             meanNormal
-#             meanCnv
-#             pValue
-#             log10PValue
-#             tStat
-#         }
-#     }"""
-#     response = client.post('/api', json={'query': query})
-#     json_data = json.loads(response.data)
-#     results = json_data['data']['copyNumberResults']
-#     assert isinstance(results, list)
-#     assert len(results) > 0
-#     for result in results[0:2]:
-#         assert result['direction'] in direction_enum.enums
-#         assert type(result['meanNormal']) is float or NoneType
-#         assert type(result['meanCnv']) is float or NoneType
-#         assert type(result['pValue']) is float or NoneType
-#         assert type(result['log10PValue']) is float or NoneType
-#         assert type(result['tStat']) is int or NoneType
+def test_copyNumberResults_query_with_no_arguments(client):
+    query = """query CopyNumberResults(
+        $dataSet: [String!]
+        $feature: [String!]
+        $entrez: [Int!]
+        $tag: [String!]
+        $direction: DirectionEnum
+        $minPValue: Float
+        $maxPValue: Float
+        $minLog10PValue: Float
+        $maxLog10PValue: Float
+        $minMeanNormal: Float
+        $minMeanCnv: Float
+        $minTStat: Float
+        $page: Int
+    ) {
+        copyNumberResults(
+            dataSet: $dataSet
+            feature: $feature
+            entrez: $entrez
+            tag: $tag
+            direction: $direction
+            minPValue: $minPValue
+            maxPValue: $maxPValue
+            minLog10PValue: $minLog10PValue
+            maxLog10PValue: $maxLog10PValue
+            minMeanNormal: $minMeanNormal
+            minMeanCnv: $minMeanCnv
+            minTStat: $minTStat
+            page: $page
+        ) {
+            items {
+                direction
+                meanNormal
+                meanCnv
+                pValue
+                log10PValue
+                tStat
+            }
+        }
+    }"""
+    response = client.post('/api', json={'query': query})
+    json_data = json.loads(response.data)
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        assert result['direction'] in direction_enum.enums
+        assert type(result['meanNormal']) is float or NoneType
+        assert type(result['meanCnv']) is float or NoneType
+        assert type(result['pValue']) is float or NoneType
+        assert type(result['log10PValue']) is float or NoneType
+        assert type(result['tStat']) is int or NoneType
