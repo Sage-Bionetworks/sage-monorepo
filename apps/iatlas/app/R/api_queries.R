@@ -478,6 +478,45 @@ query_mutations <- function(
         )
 }
 
+# nodes -----------------------------------------------------------------------
+
+query_node_tags <- function(
+    datasets = NA,
+    parent_tags = NA,
+    networks = NA,
+    page = NA
+){
+    tbl <-
+        perform_api_query(
+            "node_tags",
+            list(
+                # dataSet = datasets,
+                # related = parent_tags,
+                # network = networks,
+                # page = page
+                dataSet = "TCGA",
+                related = c("Immune_Subtype", "TCGA_Study"),
+                network = "extracellular_network",
+                page = NA
+            )
+        ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble()
+    if(nrow(tbl) == 0) {
+        tbl2 <- dplyr::tibble("sample" = character(), "status" = character())
+    } else {
+        tbl2 <-
+            dplyr::tibble(
+                "node_name" = tbl$items$name,
+                "tags" = tbl$items$tags
+            ) %>%
+            tidyr::unnest("tags", keep_empty = T) %>%
+            dplyr::select("sample" = "name", "status")
+    }
+    return(tbl2)
+}
+
+
 # related ---------------------------------------------------------------------
 
 query_dataset_tags <- function(dataset){

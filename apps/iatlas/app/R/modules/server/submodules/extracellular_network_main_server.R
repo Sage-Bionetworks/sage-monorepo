@@ -9,7 +9,55 @@ extracellular_network_main_server <- function(
     cohort_obj
 ){
 
-    # ns <- session$ns
+    ns <- session$ns
+
+    output$show_stratify_option <- shiny::reactive({
+        cohort_obj()$dataset == "TCGA" & cohort_obj()$group == "TCGA_Study"
+    })
+
+    shiny::outputOptions(
+        output, "show_stratify_option", suspendWhenHidden = FALSE
+    )
+
+    output$stratify_ui <- shiny::renderUI({
+        shiny::checkboxInput(
+            ns("stratify"),
+            "Stratify by Immune Subtype",
+            value = F
+        )
+    })
+
+    output$select_ui <- shiny::renderUI({
+        choices <-
+            iatlas.app::query_tags(
+                cohort_obj()$dataset,
+                cohort_obj()$group_name
+            ) %>%
+            dplyr::pull("name")
+        if (cohort_obj()$group_name == "Immune Subtype") {
+            shiny::checkboxGroupInput(
+                ns("group_selected"),
+                "Select Immune Subtype",
+                choices = choices,
+                selected = c("C1", "C2"),
+                inline = TRUE
+            )
+        } else {
+            shiny::selectInput(
+                ns("group_selected"),
+                "Select or Search for Subtype Subset",
+                choices = choices
+            )
+        }
+    })
+
+
+
+
+
+
+
+
     #
     #
     # group_tbl <- shiny::reactive({

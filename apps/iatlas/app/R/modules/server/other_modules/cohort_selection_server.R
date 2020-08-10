@@ -27,6 +27,7 @@ cohort_selection_server <- function(
         "cohort_upload_selection"
     )
 
+
     cohort_obj <- shiny::reactive({
         if (input$cohort_mode_choice == "Cohort Selection") {
             shiny::req(cohort_obj_manual())
