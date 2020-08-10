@@ -55,17 +55,20 @@ def common_query():
             minNumWildTypes: $minNumWildTypes
             minNumMutants: $minNumMutants
         ) {
-            pValue
-            log10PValue
-            foldChange
-            log10FoldChange
-            numWildTypes
-            numMutants
-            dataSet { name }
-            feature { name }
-            gene { entrez }
-            mutationCode
-            tag { name }
+            items {
+                pValue
+                log10PValue
+                foldChange
+                log10FoldChange
+                numWildTypes
+                numMutants
+                dataSet { name }
+                feature { name }
+                gene { entrez }
+                mutationCode
+                tag { name }
+            }
+            page
         }
     }"""
 
@@ -118,7 +121,8 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_and_tag(client,
         'tag': [tag_name]
     }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -142,7 +146,8 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_and_mutation(cl
         'mutationCode': [mutation_code]
     }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -167,7 +172,8 @@ def test_driverResults_query_with_passed_data_set_entrez_mutation_code_and_tag(c
         'tag': [tag_name]
     }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -192,7 +198,8 @@ def test_driverResults_query_with_passed_data_set_feature_mutation_code_and_tag(
         'tag': [tag_name]
     }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -218,7 +225,8 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_mutation_code_a
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -244,7 +252,8 @@ def test_driverResults_query_with_passed_min_p_value(client, common_query, data_
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -262,7 +271,8 @@ def test_driverResults_query_with_passed_min_p_value_and_min_log10_p_value(clien
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -279,7 +289,8 @@ def test_driverResults_query_with_passed_min_log10_p_value(client, common_query,
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -296,7 +307,8 @@ def test_driverResults_query_with_passed_max_p_value(client, common_query, data_
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -314,7 +326,8 @@ def test_driverResults_query_with_passed_max_p_value_and_max_log10_p_value(clien
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -331,7 +344,8 @@ def test_driverResults_query_with_passed_max_log10_p_value(client, common_query,
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -348,7 +362,8 @@ def test_driverResults_query_with_passed_min_fold_change(client, common_query, d
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -366,7 +381,8 @@ def test_driverResults_query_with_passed_min_fold_change_and_min_log10_fold_chan
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -383,7 +399,8 @@ def test_driverResults_query_with_passed_min_log10_fold_change(client, common_qu
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -400,7 +417,8 @@ def test_driverResults_query_with_passed_min_n_mut(client, common_query, data_se
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -417,7 +435,8 @@ def test_driverResults_query_with_passed_min_n_wt(client, common_query, data_set
             'tag': [tag_name]
         }})
     json_data = json.loads(response.data)
-    results = json_data['data']['driverResults']
+    page = json_data['data']['driverResults']
+    results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:

@@ -78,7 +78,8 @@ type Query {
     minLog10FoldChange: Float
     minNumWildTypes: Int
     minNumMutants: Int
-  ): [DriverResult!]!
+    page: Int
+  ): DriverResultPage!
 
   """
   The "features" query accepts:

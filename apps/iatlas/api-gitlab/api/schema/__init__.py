@@ -115,6 +115,7 @@ copy_number_result = ObjectType('CopyNumberResult')
 copy_number_result_page = ObjectType('CopyNumberResultPage')
 data_set = ObjectType('DataSet')
 driver_result = ObjectType('DriverResult')
+driver_result_page = ObjectType('DriverResultPage')
 feature = ObjectType('Feature')
 features_by_class = ObjectType('FeaturesByClass')
 features_by_tag = ObjectType('FeaturesByTag')
@@ -185,7 +186,7 @@ root.set_field('therapyTypes', resolve_therapy_types)
 
 schema = make_executable_schema(
     type_defs,
-    [root, copy_number_result, copy_number_result_page, data_set, direction_enum_scalar, driver_result,
+    [root, copy_number_result, copy_number_result_page, data_set, direction_enum_scalar, driver_result, driver_result_page,
      ethnicity_enum_scalar, feature, features_by_class, features_by_tag, gender_enum_scalar, gene, gene_family,
      gene_function, genes_by_tag, gene_related_sample, gene_type, immune_checkpoint, method_tag, mutation,
      mutation_code, mutation_type, node, node_page, pathway, patient, publication, race_enum_scalar, related_by_data_set,
