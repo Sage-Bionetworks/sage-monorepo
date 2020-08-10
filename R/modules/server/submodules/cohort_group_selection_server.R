@@ -36,11 +36,17 @@ cohort_group_selection_server <- function(
         )
     })
 
-    group_choice <- shiny::reactive({
+    dedupe <- function(r) {
+        shiny::makeReactiveBinding("val")
+        shiny::observe(val <<- r(), priority = 10)
+        shiny::reactive(val)
+    }
+
+    group_choice <- dedupe(shiny::reactive({
         req(default_group())
         if (is.null(input$group_choice)) return(default_group())
         else return(input$group_choice)
-    })
+    }))
 
 
     # This is so that the conditional panel can see the various shiny::reactives

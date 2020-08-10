@@ -1,0 +1,20 @@
+query Nodes(
+  $dataSet: [String!]
+  $related: [String!]
+  $network: [String!]
+  $page: Int
+) {
+  nodes(
+    dataSet: $dataSet
+    related: $related
+    network: $network
+    page: $page
+  ) {
+    items{
+      name
+      tags {
+        name
+      }
+    }
+  }
+}

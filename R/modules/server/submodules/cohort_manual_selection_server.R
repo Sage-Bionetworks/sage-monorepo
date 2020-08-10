@@ -17,7 +17,7 @@ cohort_manual_selection_server <- function(
         local = T
     )
 
-    #TODO: change back tp TCGA
+    #TODO: change back to TCGA
     default_dataset <- "TCGA"
 
     selected_dataset <- shiny::callModule(
@@ -26,13 +26,19 @@ cohort_manual_selection_server <- function(
         default_dataset
     )
 
-    dataset <- shiny::reactive({
+    dedupe <- function(r) {
+        shiny::makeReactiveBinding("val")
+        shiny::observe(val <<- r(), priority = 10)
+        shiny::reactive(val)
+    }
+
+    dataset <- dedupe(shiny::reactive({
         if (is.null(selected_dataset())) {
             return(default_dataset)
         } else {
             return(selected_dataset())
         }
-    })
+    }))
 
     dataset_samples <- shiny::reactive({
         shiny::req(dataset())
@@ -40,7 +46,7 @@ cohort_manual_selection_server <- function(
             dplyr::pull("name")
     })
 
-    filter_obj <- cohort_obj <- shiny::callModule(
+    filter_obj <- shiny::callModule(
         cohort_filter_selection_server,
         "cohort_filter_selection",
         dataset,
