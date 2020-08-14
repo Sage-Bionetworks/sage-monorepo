@@ -47,10 +47,10 @@ extracellular_network_main_ui <- function(id){
                             shiny::uiOutput(ns("stratify_ui")),
                             ns = ns
                         ),
-                        shiny::uiOutput(ns("select_ui")),
+                        shiny::uiOutput(ns("select_groups_ui")),
                         shiny::conditionalPanel(
                             condition = "output.stratify",
-                            shiny::uiOutput(ns("select_ui2")),
+                            shiny::uiOutput(ns("select_statify_groups_ui")),
                             ns = ns
                         ),
 
@@ -68,8 +68,8 @@ extracellular_network_main_ui <- function(id){
                             step = 0.01
                         ),
 
-                        shiny::uiOutput(ns("selectCell")),
-                        shiny::uiOutput(ns("selectGene")),
+                        shiny::uiOutput(ns("select_celltypes")),
+                        shiny::uiOutput(ns("select_genes")),
 
                         shiny::div(
                             class = "form-group shiny-input-container",
@@ -96,7 +96,7 @@ extracellular_network_main_ui <- function(id){
                             ),
                             selected = "cose"),
 
-                        shiny::uiOutput(ns("selectStyle")),
+                        shiny::uiOutput(ns("select_style")),
                         shiny::uiOutput(ns("selectNode")),
                         shiny::actionButton(ns("fitSelected"), "Fit Selected", width = "100%", style = 'white-space: pre-line'),
                         shiny::actionButton(ns("fit"), "Fit Graph", width = "100%", style = 'white-space: pre-line'),

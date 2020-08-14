@@ -62,6 +62,37 @@ with_test_api_env({
 
   # features ------------------------------------------------------------------
 
+  test_that("query_features", {
+    expected_columns <- c(
+      "name",
+      "display",
+      "class",
+      "order",
+      "unit",
+      "method_tag"
+    )
+
+    result1 <- query_features(
+      datasets = "TCGA",
+      parent_tags = "Immune_Subtype",
+      features = "leukocyte_fraction"
+    )
+    result2 <- query_features(
+      datasets = "PCAWG",
+      parent_tags = "Immune_Subtype",
+      features = "Lymphocytes_Aggregate1"
+    )
+    result3 <- query_features(
+      datasets = "PCAWG",
+      parent_tags ="Immune_Subtype",
+      features = "leukocyte_fraction"
+    )
+
+    expect_named(result1, expected_columns)
+    expect_named(result2, expected_columns)
+    expect_named(result3, expected_columns)
+  })
+
   test_that("query_feature_values", {
     expected_columns <- c(
       "sample",
@@ -204,8 +235,20 @@ with_test_api_env({
   # genes ---------------------------------------------------------------------
 
   test_that("query_genes", {
+    expected_columns <- c(
+      "hgnc",
+      "entrez",
+      "description",
+      "friendly_name",
+      "io_landscape_name",
+      "gene_family",
+      "gene_function",
+      "immune_checkpoint",
+      "pathway",
+      "super_category"
+    )
     result1 <- query_genes()
-    expect_named(result1, c("hgnc", "entrez"))
+    expect_named(result1, expected_columns)
   })
 
   test_that("query_immunomodulators", {

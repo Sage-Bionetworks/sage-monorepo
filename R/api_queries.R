@@ -65,6 +65,54 @@ query_dataset_samples <- function(dataset){
 
 # features --------------------------------------------------------------------
 
+query_features <- function(
+    features = NA,
+    datasets = NA,
+    parent_tags = NA,
+    tags = NA,
+    feature_classes = NA,
+    samples = NA,
+    max_value = NA,
+    min_value = NA
+){
+    tbl <- perform_api_query(
+        "features",
+        list(
+            dataSet = datasets,
+            related = parent_tags,
+            tag = tags,
+            feature = features,
+            featureClass = feature_classes,
+            sample = samples,
+            maxValue = max_value,
+            minValue = min_value
+        )
+    ) %>%
+        purrr::pluck(1) %>%
+        dplyr::as_tibble()
+
+    if(nrow(tbl) == 0) {
+        tbl <- dplyr::tibble(
+            "name" = character(),
+            "display" = character(),
+            "class" = character(),
+            "order" = integer(),
+            "unit" =  character(),
+            "method_tag" = character()
+        )
+    } else {
+        tbl <- tbl %>%
+            dplyr::select(
+                "name",
+                "display",
+                "class",
+                "order",
+                "unit",
+                "method_tag" = "methodTag"
+            )
+    }
+    return(tbl)
+}
 query_feature_values <- function(
     features = NA,
     datasets = NA,
@@ -317,21 +365,50 @@ query_features_by_class <- function(
 # genes -----------------------------------------------------------------------
 
 query_genes <- function(
-    type = list(),
-    entrez = list()
+    gene_types = NA,
+    entrez_ids = NA,
+    samples = NA
 ){
-    perform_api_query(
+    result <- perform_api_query(
         "genes",
         list(
-            "geneType" = type,
-            "entrez" = entrez
+            "geneType" = gene_types,
+            "entrez" = entrez_ids,
+            "sample" = samples
         )
     ) %>%
-        purrr::pluck(1) %>%
-        dplyr::arrange(.data$entrez) %>%
-        dplyr::as_tibble() %>%
-        dplyr::select("hgnc", "entrez") %>%
-        dplyr::arrange(.data$hgnc)
+        purrr::pluck(1)
+
+    if(is.null(result)) {
+        tbl <- dplyr::tibble(
+            "hgnc" = character(),
+            "entrez" = integer(),
+            "description" = character(),
+            "friendly_name" = character(),
+            "io_landscape_name" = character(),
+            "gene_family" = character(),
+            "gene_function" = character(),
+            "immune_checkpoint" = character(),
+            "pathway" = character(),
+            "super_category" = character()
+        )
+    } else {
+        tbl <- result %>%
+            dplyr::as_tibble() %>%
+            dplyr::select(
+                "hgnc",
+                "entrez",
+                "description",
+                "friendly_name" = "friendlyName",
+                "io_landscape_name" = "ioLandscapeName",
+                "gene_family" = "geneFamily",
+                "gene_function" = "geneFunction",
+                "immune_checkpoint" = "immuneCheckpoint",
+                "pathway",
+                "super_category" = "superCategory"
+            ) %>%
+            dplyr::arrange(.data$hgnc)
+    }
 }
 
 
@@ -339,7 +416,7 @@ query_immunomodulators <- function(
     type = "immunomodulator",
     .entrez = list()
 ){
-    perform_api_query(
+    tbl <- perform_api_query(
         "immunomodulators",
         list(
             geneType = type,
@@ -360,6 +437,7 @@ query_immunomodulators <- function(
             "super_category" = "superCategory",
             "publications"
         )
+    return(tbl)
 }
 
 query_io_targets <- function(

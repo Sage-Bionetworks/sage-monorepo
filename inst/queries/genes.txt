@@ -1,6 +1,22 @@
-query genes($geneType: [String!], $entrez: [Int!]) {
-  genes(geneType: $geneType, entrez: $entrez){
+query Genes(
+  $entrez: [Int!],
+  $geneType: [String!]
+  $sample: [String!]
+) {
+  genes(
+    entrez: $entrez
+    geneType: $geneType
+    sample: $sample
+  ){
     entrez
     hgnc
+    description
+    friendlyName
+    ioLandscapeName
+    geneFamily
+    geneFunction
+    immuneCheckpoint
+    pathway
+    superCategory
   }
 }
