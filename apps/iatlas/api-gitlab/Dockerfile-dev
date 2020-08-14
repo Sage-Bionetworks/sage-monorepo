@@ -18,7 +18,7 @@ RUN apk add --no-cache --virtual .build-deps \
     linux-headers \
     && pip install --no-cache-dir -r requirements.txt \
     ### These are only insalled in the development environment.
-    pip install --no-cache-dir autopep8 pylint pylint_flask_sqlalchemy pytest pytest-cov pytest-xdist snakeviz \
+    && pip install --no-cache-dir autopep8 pylint pylint_flask_sqlalchemy pytest pytest-cov pytest-xdist snakeviz \
     && apk del --no-cache .build-deps
 
 CMD ["sh", "-c", "flask run --host 0.0.0.0 --port ${FLASK_RUN_PORT}"]
