@@ -6,6 +6,6 @@ def resolve_super_categories(_obj, info, name=None):
         _obj, info, name=name)
 
     return [{
-        "name": get_value(super_category, "name"),
-        "genes": get_value(super_category, 'genes', []),
+        'name': get_value(super_category, 'name'),
+        'genes': get_value(super_category, 'genes', []),
     } for super_category in super_categories]

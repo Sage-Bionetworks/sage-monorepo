@@ -13,7 +13,7 @@ def build_driver_result_request(_obj, info, data_set=None, entrez=None, feature=
     """
     sess = db.session
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
+    selection_set = get_selection_set(info.field_nodes[0].selection_set, True, 'items')
 
     driver_result_1 = orm.aliased(DriverResult, name='dr')
     gene_1 = orm.aliased(Gene, name='g')
@@ -158,4 +158,4 @@ def request_driver_results(_obj, info, data_set=None, entrez=None, feature=None,
         _obj, info, data_set=data_set, entrez=entrez, feature=feature, max_p_value=max_p_value, max_log10_p_value=max_log10_p_value,
         min_fold_change=min_fold_change, min_log10_fold_change=min_log10_fold_change, min_log10_p_value=min_log10_p_value,
         min_p_value=min_p_value, min_n_mut=min_n_mut, min_n_wt=min_n_wt, mutation_code=mutation_code, tag=tag)
-    return query.yield_per(1000).distinct().all()
+    return query.distinct()

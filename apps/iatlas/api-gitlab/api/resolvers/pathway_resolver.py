@@ -6,6 +6,6 @@ def resolve_pathways(_obj, info, name=None):
         _obj, info, name=name)
 
     return [{
-        "name": get_value(pathway, "name"),
-        "genes": get_value(pathway, 'genes', []),
+        'name': get_value(pathway, 'name'),
+        'genes': get_value(pathway, 'genes', []),
     } for pathway in pathways]

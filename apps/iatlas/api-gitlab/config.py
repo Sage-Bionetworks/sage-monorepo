@@ -36,18 +36,21 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = get_database_uri()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {'pool_pre_ping': True}
+    SQLALCHEMY_ECHO = True
 
 
 class StagingConfig(Config):
     LOG_LEVEL = 'INFO'
     LOG_TYPE = 'stream'
     PROFILE = False
+    SQLALCHEMY_ECHO = False
 
 
 class ProdConfig(Config):
     LOG_LEVEL = 'WARN'
     LOG_TYPE = 'stream'
     PROFILE = False
+    SQLALCHEMY_ECHO = False
 
 
 def get_config():
