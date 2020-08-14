@@ -6,6 +6,6 @@ def resolve_method_tags(_obj, info, name=None):
         _obj, info, name=name)
 
     return [{
-        "name": get_value(method_tag, "name"),
-        "features": get_value(method_tag, 'features', []),
+        'name': get_value(method_tag, 'name'),
+        'features': get_value(method_tag, 'features', []),
     } for method_tag in method_tags]

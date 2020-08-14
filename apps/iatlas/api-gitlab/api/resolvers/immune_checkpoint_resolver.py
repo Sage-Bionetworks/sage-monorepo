@@ -6,6 +6,6 @@ def resolve_immune_checkpoints(_obj, info, name=None):
         _obj, info, name=name)
 
     return [{
-        "name": get_value(immune_checkpoint, "name"),
-        "genes": get_value(immune_checkpoint, 'genes', []),
+        'name': get_value(immune_checkpoint, 'name'),
+        'genes': get_value(immune_checkpoint, 'genes', []),
     } for immune_checkpoint in immune_checkpoints]
