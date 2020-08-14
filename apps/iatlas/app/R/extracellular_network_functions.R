@@ -1,181 +1,237 @@
-build_ecn_group_tbl <- function(group){
-    paste0(
-        "SELECT name, id FROM tags WHERE id IN ",
-        "(SELECT tag_id FROM nodes_to_tags) ",
-        "AND id IN ",
-        "(SELECT tag_id FROM tags_to_tags WHERE related_tag_id = ",
-        "(SELECT id FROM tags WHERE display = '",
-        # "TCGA Study",
-        group,
-        "'))"
-    ) %>%
-        perform_query()
-}
+build_ecn_gene_choice_list <- function(){
+    genes <- query_genes("extra_cellular_network") %>%
+        dplyr::mutate("entrez" = stringr::str_c("gene:", .data$entrez)) %>%
+        tibble::deframe(.)
 
-build_ecn_node_tag_tbl <- function(tag_ids){
-    paste0(
-        "SELECT node_id, tag_id, COUNT(*) OVER(PARTITION BY node_id) AS count ",
-        "FROM nodes_to_tags ",
-        "WHERE node_id IN (",
-        "SELECT node_id FROM nodes_to_tags WHERE tag_id IN (",
-        numeric_values_to_query_list(tag_ids),
-        ")",
-        ")"
-    ) %>%
-        perform_query()
-}
-
-
-get_ecn_celltypes <- function(){
-    paste0(
-        "SELECT display, id FROM features WHERE id IN ",
-        "(SELECT feature_id FROM nodes)"
-    ) %>%
-        perform_query() %>%
-        deframe() %>%
-        c("Default: all cells" = 0)
-}
-
-get_ecn_genes <- function(){
-    paste0(
-        "SELECT hgnc, id FROM genes WHERE id IN ",
-        "(SELECT gene_id FROM nodes)"
-    ) %>%
-        perform_query() %>%
-        deframe() %>%
-        c("Default: immunomodulator genes" = 0)
-}
-
-build_node_group_tbl <- function(tag_list){
-    paste0(
-        "SELECT * FROM nodes_to_tags ",
-        "WHERE tag_id IN (",
-        numeric_values_to_query_list(tag_list[[1]]),
-        ") ",
-        "AND node_id IN (",
-        "SELECT node_id FROM nodes_to_tags ",
-        "WHERE node_id IN (",
-        create_get_nodes_with_n_tags_query(length(tag_list)),
-        ") ",
-        "AND ",
-        create_get_nodes_with_tag_id_lists_query(tag_list),
-        ") ",
-        "ORDER BY node_id, tag_id"
-    ) %>%
-        perform_query()
-}
-
-create_get_nodes_with_tag_id_lists_query <- function(lst){
-    lst %>%
-        purrr::map_chr(create_get_nodes_with_tag_ids_query) %>%
-        paste0("node_id IN (", ., ")", collapse = " AND ")
-}
-
-create_get_nodes_with_tag_ids_query <- function(ids){
-    paste0(
-        "SELECT node_id FROM nodes_to_tags ",
-        "WHERE tag_id IN(",
-        numeric_values_to_query_list(ids),
-        ")"
+    list(
+        "Genesets" = c(
+            "Extracellular Network Genes" = "geneset:extra_cellular_network",
+            "Immunomodulator Genes" = "geneset:innmunomodulator"
+        ),
+        "Genes" = genes
     )
 }
 
-create_get_nodes_with_n_tags_query <- function(n){
-    paste0(
-        "SELECT node_id FROM nodes_to_tags ",
-        "GROUP BY node_id ",
-        "HAVING count(*) = ",
-        n
-    )
-}
-
-build_ecn_node_tbl <- function(score_threshold, node_ids, gene_ids, cell_ids){
-    paste0(
-        "SELECT id, score, display AS node FROM (",
-        "SELECT id, score, ",
-        create_id_to_feature_display_subquery(),
-        " FROM nodes a ",
-        "WHERE score > ",
-        score_threshold,
-        # ".05 ",
-        "AND id IN (",
-        numeric_values_to_query_list(node_ids),
-        # numeric_values_to_query_list(1:1000000),
-        ") ",
-        "AND feature_id IN(",
-        numeric_values_to_query_list(cell_ids),
-        ")",
-        ") a UNION ALL ",
-        "SELECT id, score, gene AS node FROM (",
-        "SELECT id, gene_id, score, ",
-        create_id_to_hgnc_subquery(),
-        " FROM nodes a ",
-        "WHERE score > ",
-        score_threshold,
-        # ".05 ",
-        "AND id IN (",
-        numeric_values_to_query_list(node_ids),
-        # numeric_values_to_query_list(1:100000),
-        ") ",
-        "AND gene_id IN(",
-        numeric_values_to_query_list(gene_ids),
-        ")",
-        ") b"
-    ) %>%
-        perform_query()
-}
-
-build_ecn_edge_tbl <- function(node_ids, score_threshold){
-    node_ids %>%
-        numeric_values_to_query_list() %>%
-        paste0(
-            "SELECT node_1_id, node_2_id, score ",
-            "FROM edges ",
-            "WHERE score > ",
-            score_threshold,
-            " AND node_1_id in (",
-            .,
-            ")",
-            "AND node_2_id in (",
-            .,
-            ")"
+build_ecn_celltype_choice_list <- function(){
+    features <-
+        query_features(
+            feature_classes = "Immune Cell Proportion - Common Lymphoid and Myeloid Cell Derivative Class"
         ) %>%
-        perform_query()
+        dplyr::select("display", "name") %>%
+        tibble::deframe(.) %>%
+        c("All" = "All", .)
 }
 
-build_ecn_node_tbl2 <- function(node_tbl, edge_tbl){
-    node_tbl %>%
-        dplyr::filter(
-            .data$id %in% c(edge_tbl$node_1_id, edge_tbl$node_2_id)
-        )
+get_selected_gene_ids <- function(gene_input_list){
+    genesets <- gene_input_list %>%
+        purrr::keep(., stringr::str_detect(., "^geneset:")) %>%
+        stringr::str_remove_all(., "^geneset:")
+    if(length(genesets) != 0){
+        geneset_genes <- genesets %>%
+            query_genes(gene_types = .) %>%
+            dplyr::pull("entrez")
+    } else {
+        geneset_genes <- c()
+    }
+    genes <- gene_input_list %>%
+        purrr::keep(., stringr::str_detect(., "^gene:")) %>%
+        stringr::str_remove_all(., "^gene:") %>%
+        c(geneset_genes) %>%
+        unique() %>%
+        sort()
 }
 
-format_ecn_node_tbl <- function(tbl){
-    tbl %>%
-        dplyr::select(.data$id, Gene = .data$node) %>%
-        dplyr::mutate(
-            name = .data$Gene,
-            Type = "Gene",
-            FriendlyName = .data$Gene
+get_selected_celltypes <- function(celltype_input_list){
+    if("All" %in% celltype_input_list) {
+        celltypes <- query_features(
+            feature_classes = "Immune Cell Proportion - Common Lymphoid and Myeloid Cell Derivative Class"
         ) %>%
-        as.data.frame() %>%
-        print()
+            dplyr::pull("name")
+    } else {
+        celltypes <- celltype_input_list
+    }
+    return(celltypes)
 }
 
-format_ecn_edge_tbl <- function(tbl){
-    tbl %>%
-        dplyr::select(
-            source = .data$node_1_id,
-            target = .data$node_2_id,
-            .data$score
-        ) %>%
-        dplyr::mutate(
-            source = as.character(.data$source),
-            target = as.character(.data$target),
-            interaction = sample(c("C1", "C2"), dplyr::n(), replace = T),
-        ) %>%
-        as.data.frame()
-}
+
+# build_ecn_group_tbl <- function(group){
+#     paste0(
+#         "SELECT name, id FROM tags WHERE id IN ",
+#         "(SELECT tag_id FROM nodes_to_tags) ",
+#         "AND id IN ",
+#         "(SELECT tag_id FROM tags_to_tags WHERE related_tag_id = ",
+#         "(SELECT id FROM tags WHERE display = '",
+#         # "TCGA Study",
+#         group,
+#         "'))"
+#     ) %>%
+#         perform_query()
+# }
+#
+# build_ecn_node_tag_tbl <- function(tag_ids){
+#     paste0(
+#         "SELECT node_id, tag_id, COUNT(*) OVER(PARTITION BY node_id) AS count ",
+#         "FROM nodes_to_tags ",
+#         "WHERE node_id IN (",
+#         "SELECT node_id FROM nodes_to_tags WHERE tag_id IN (",
+#         numeric_values_to_query_list(tag_ids),
+#         ")",
+#         ")"
+#     ) %>%
+#         perform_query()
+# }
+#
+#
+# get_ecn_celltypes <- function(){
+#     paste0(
+#         "SELECT display, id FROM features WHERE id IN ",
+#         "(SELECT feature_id FROM nodes)"
+#     ) %>%
+#         perform_query() %>%
+#         deframe() %>%
+#         c("Default: all cells" = 0)
+# }
+#
+# get_ecn_genes <- function(){
+#     paste0(
+#         "SELECT hgnc, id FROM genes WHERE id IN ",
+#         "(SELECT gene_id FROM nodes)"
+#     ) %>%
+#         perform_query() %>%
+#         deframe() %>%
+#         c("Default: immunomodulator genes" = 0)
+# }
+#
+# build_node_group_tbl <- function(tag_list){
+#     paste0(
+#         "SELECT * FROM nodes_to_tags ",
+#         "WHERE tag_id IN (",
+#         numeric_values_to_query_list(tag_list[[1]]),
+#         ") ",
+#         "AND node_id IN (",
+#         "SELECT node_id FROM nodes_to_tags ",
+#         "WHERE node_id IN (",
+#         create_get_nodes_with_n_tags_query(length(tag_list)),
+#         ") ",
+#         "AND ",
+#         create_get_nodes_with_tag_id_lists_query(tag_list),
+#         ") ",
+#         "ORDER BY node_id, tag_id"
+#     ) %>%
+#         perform_query()
+# }
+#
+# create_get_nodes_with_tag_id_lists_query <- function(lst){
+#     lst %>%
+#         purrr::map_chr(create_get_nodes_with_tag_ids_query) %>%
+#         paste0("node_id IN (", ., ")", collapse = " AND ")
+# }
+#
+# create_get_nodes_with_tag_ids_query <- function(ids){
+#     paste0(
+#         "SELECT node_id FROM nodes_to_tags ",
+#         "WHERE tag_id IN(",
+#         numeric_values_to_query_list(ids),
+#         ")"
+#     )
+# }
+#
+# create_get_nodes_with_n_tags_query <- function(n){
+#     paste0(
+#         "SELECT node_id FROM nodes_to_tags ",
+#         "GROUP BY node_id ",
+#         "HAVING count(*) = ",
+#         n
+#     )
+# }
+#
+# build_ecn_node_tbl <- function(score_threshold, node_ids, gene_ids, cell_ids){
+#     paste0(
+#         "SELECT id, score, display AS node FROM (",
+#         "SELECT id, score, ",
+#         create_id_to_feature_display_subquery(),
+#         " FROM nodes a ",
+#         "WHERE score > ",
+#         score_threshold,
+#         # ".05 ",
+#         "AND id IN (",
+#         numeric_values_to_query_list(node_ids),
+#         # numeric_values_to_query_list(1:1000000),
+#         ") ",
+#         "AND feature_id IN(",
+#         numeric_values_to_query_list(cell_ids),
+#         ")",
+#         ") a UNION ALL ",
+#         "SELECT id, score, gene AS node FROM (",
+#         "SELECT id, gene_id, score, ",
+#         create_id_to_hgnc_subquery(),
+#         " FROM nodes a ",
+#         "WHERE score > ",
+#         score_threshold,
+#         # ".05 ",
+#         "AND id IN (",
+#         numeric_values_to_query_list(node_ids),
+#         # numeric_values_to_query_list(1:100000),
+#         ") ",
+#         "AND gene_id IN(",
+#         numeric_values_to_query_list(gene_ids),
+#         ")",
+#         ") b"
+#     ) %>%
+#         perform_query()
+# }
+#
+# build_ecn_edge_tbl <- function(node_ids, score_threshold){
+#     node_ids %>%
+#         numeric_values_to_query_list() %>%
+#         paste0(
+#             "SELECT node_1_id, node_2_id, score ",
+#             "FROM edges ",
+#             "WHERE score > ",
+#             score_threshold,
+#             " AND node_1_id in (",
+#             .,
+#             ")",
+#             "AND node_2_id in (",
+#             .,
+#             ")"
+#         ) %>%
+#         perform_query()
+# }
+#
+# build_ecn_node_tbl2 <- function(node_tbl, edge_tbl){
+#     node_tbl %>%
+#         dplyr::filter(
+#             .data$id %in% c(edge_tbl$node_1_id, edge_tbl$node_2_id)
+#         )
+# }
+#
+# format_ecn_node_tbl <- function(tbl){
+#     tbl %>%
+#         dplyr::select(.data$id, Gene = .data$node) %>%
+#         dplyr::mutate(
+#             name = .data$Gene,
+#             Type = "Gene",
+#             FriendlyName = .data$Gene
+#         ) %>%
+#         as.data.frame() %>%
+#         print()
+# }
+#
+# format_ecn_edge_tbl <- function(tbl){
+#     tbl %>%
+#         dplyr::select(
+#             source = .data$node_1_id,
+#             target = .data$node_2_id,
+#             .data$score
+#         ) %>%
+#         dplyr::mutate(
+#             source = as.character(.data$source),
+#             target = as.character(.data$target),
+#             interaction = sample(c("C1", "C2"), dplyr::n(), replace = T),
+#         ) %>%
+#         as.data.frame()
+# }
 
 
 #
