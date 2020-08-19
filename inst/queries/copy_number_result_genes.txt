@@ -1,4 +1,4 @@
-query CopyNumberResults(
+query CopyNumberResultGenes(
   $dataSet: [String!]
   $feature: [String!]
   $entrez: [Int!]
@@ -28,24 +28,10 @@ query CopyNumberResults(
     minTStat: $minTStat
     page: $page
   ) {
-    page
-    pages
-    total
     items{
-      direction
-      meanNormal
-      meanCnv
-      pValue
-      log10PValue
-      tStat
-      feature {
-        display
-      }
-      gene {
+      gene{
+        entrez
         hgnc
-      }
-      tag {
-        name
       }
     }
   }

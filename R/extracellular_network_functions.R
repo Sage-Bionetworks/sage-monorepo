@@ -1,12 +1,13 @@
 build_ecn_gene_choice_list <- function(){
     genes <- query_genes("extra_cellular_network") %>%
+        dplyr::select("hgnc", "entrez") %>%
         dplyr::mutate("entrez" = stringr::str_c("gene:", .data$entrez)) %>%
         tibble::deframe(.)
 
     list(
         "Genesets" = c(
             "Extracellular Network Genes" = "geneset:extra_cellular_network",
-            "Immunomodulator Genes" = "geneset:innmunomodulator"
+            "Immunomodulator Genes" = "geneset:immunomodulator"
         ),
         "Genes" = genes
     )
@@ -23,7 +24,9 @@ build_ecn_celltype_choice_list <- function(){
 }
 
 get_selected_gene_ids <- function(gene_input_list){
-    genesets <- gene_input_list %>%
+    gene_inputs <- unlist(gene_input_list)
+    if(is.null(gene_inputs)) return(NULL)
+    genesets <- gene_inputs %>%
         purrr::keep(., stringr::str_detect(., "^geneset:")) %>%
         stringr::str_remove_all(., "^geneset:")
     if(length(genesets) != 0){
@@ -33,26 +36,39 @@ get_selected_gene_ids <- function(gene_input_list){
     } else {
         geneset_genes <- c()
     }
-    genes <- gene_input_list %>%
+    genes <- gene_inputs %>%
         purrr::keep(., stringr::str_detect(., "^gene:")) %>%
         stringr::str_remove_all(., "^gene:") %>%
         c(geneset_genes) %>%
         unique() %>%
+        as.integer() %>%
         sort()
 }
 
 get_selected_celltypes <- function(celltype_input_list){
-    if("All" %in% celltype_input_list) {
+    celltype_input = unlist(celltype_input_list)
+    if("All" %in% celltype_input) {
         celltypes <- query_features(
             feature_classes = "Immune Cell Proportion - Common Lymphoid and Myeloid Cell Derivative Class"
         ) %>%
             dplyr::pull("name")
     } else {
-        celltypes <- celltype_input_list
+        celltypes <- celltype_input
     }
     return(celltypes)
 }
 
+#TODO: finish functions after: https://gitlab.com/cri-iatlas/iatlas-api/-/issues/15
+
+# build_ecn_scaffold_tbl <- function(){
+#     paste0(
+#         "SELECT DISTINCT node_1_id, node_2_id FROM edges WHERE node_1_id IN ",
+#         "(SELECT node_id FROM nodes_to_tags WHERE tag_id = ",
+#         "(SELECT id FROM tags where name = 'C1')) ",
+#         "ORDER BY node_1_id, node_2_id"
+#     ) %>%
+#         perform_query()
+# }
 
 # build_ecn_group_tbl <- function(group){
 #     paste0(
@@ -234,18 +250,7 @@ get_selected_celltypes <- function(celltype_input_list){
 # }
 
 
-#
-#
-# build_ecn_scaffold_tbl <- function(){
-#     paste0(
-#         "SELECT DISTINCT node_1_id, node_2_id FROM edges WHERE node_1_id IN ",
-#         "(SELECT node_id FROM nodes_to_tags WHERE tag_id = ",
-#         "(SELECT id FROM tags where name = 'C1')) ",
-#         "ORDER BY node_1_id, node_2_id"
-#     ) %>%
-#         perform_query()
-# }
-#
+
 
 #
 # get_edge_table <- function(conc_edges, nodes_annot){
