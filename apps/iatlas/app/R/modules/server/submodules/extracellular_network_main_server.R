@@ -29,7 +29,7 @@ extracellular_network_main_server <- function(
 
     output$stratify <- shiny::reactive({
         shiny::req(input$stratify)
-
+        input$stratify
     })
 
     shiny::outputOptions(

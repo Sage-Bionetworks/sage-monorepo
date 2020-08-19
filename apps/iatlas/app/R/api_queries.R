@@ -1,41 +1,76 @@
 # copy number results ---------------------------------------------------------
 
-query_copy_number_results <- function(
-    datasets = list(),
-    tags = list(),
-    genes = list(),
-    features = list(),
-    direction = list()
-){
-    perform_api_query(
-        "copy_number_results",
-        list(
-            "dataSet" = datasets,
-            "tag" = tags,
-            "entrez" = genes,
-            "feature" = features,
-            "direction" = direction
-        )
-    ) %>%
-        purrr::pluck(1) %>%
-        dplyr::bind_cols(
-            "feature_name" = .$feature$display,
-            "hgnc"         = .$gene$hgnc,
-            "tag_name"     = .$tag$name
-        ) %>%
-        dplyr::as_tibble() %>%
-        dplyr::select(
-            "feature" = "feature_name",
-            "tag"     = "tag_name",
-            "hgnc",
-            "direction",
-            "p_value" = "pValue",
-            "log10_p_value" = "log10PValue",
-            "mean_cnv"  = "meanCnv",
-            "mean_normal" = "meanNormal",
-            "t_stat" = "tStat"
-        )
-}
+
+
+# TODO: finsh query: https://gitlab.com/cri-iatlas/iatlas-api/-/issues/14
+# TODO: add gene query
+# query_copy_number_results <- function(
+#     datasets = NA,
+#     features = NA,
+#     genes = NA,
+#     tags = NA,
+#     direction = NA,
+#     min_p_value = NA,
+#     max_p_value = NA,
+#     min_log_10_p_value = NA,
+#     max_log_10_p_value = NA,
+#     min_mean_normal = NA,
+#     min_mean_cnv = NA,
+#     min_t_stat = NA,
+#     page = NA
+# ){
+#     tbl <- perform_api_query(
+#         "copy_number_results",
+#         list(
+#             "dataSet" = datasets,
+#             "feature" = features,
+#             "entrez" = genes,
+#             "tag" = tags,
+#             "direction" = direction,
+#             "minPValue" = min_p_value,
+#             "maxPValue" = max_p_value,
+#             "minLog10PValue" = min_log_10_p_value,
+#             "maxLog10PValue" = max_log_10_p_value,
+#             "minMeanNormal" = min_mean_normal,
+#             "minMeanCnv" = min_mean_cnv,
+#             "minTStat" = min_t_stat,
+#             "page" = page
+#         )
+#     )
+#
+#     if(nrow(tbl) == 0) {
+#         tbl <- dplyr::tibble(
+#             "feature" = character(),
+#             "gene" = character(),
+#             "tag"  = character(),
+#             "direction" = character(),
+#             "meanNormal" = double(),
+#             "meanCnv" = double(),
+#             "pValue" = double(),
+#             "log10PValue" = double(),
+#             "tStat" = double()
+#         )
+#     }
+#     return(tbl)
+    # %>%
+    #     dplyr::bind_cols(
+    #         "feature_name" = .$feature$display,
+    #         "hgnc"         = .$gene$hgnc,
+    #         "tag_name"     = .$tag$name
+    #     ) %>%
+    #     dplyr::as_tibble() %>%
+    #     dplyr::select(
+    #         "feature" = "feature_name",
+    #         "tag"     = "tag_name",
+    #         "hgnc",
+    #         "direction",
+    #         "p_value" = "pValue",
+    #         "log10_p_value" = "log10PValue",
+    #         "mean_cnv"  = "meanCnv",
+    #         "mean_normal" = "meanNormal",
+    #         "t_stat" = "tStat"
+    #     )
+# }
 
 # datasets --------------------------------------------------------------------
 
