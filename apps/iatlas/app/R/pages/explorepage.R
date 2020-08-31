@@ -75,6 +75,11 @@ explorepage <- shinydashboard::dashboardPage(
                     "Cell-Interaction Diagram",
                     tabName = "cellimage",
                     icon = shiny::icon("cog")
+                ),
+                shinydashboard::menuSubItem(
+                  "Germline Analysis",
+                  tabName = "germline",
+                  icon = shiny::icon("cog")
                 )
             ),
             shinydashboard::menuItem(
@@ -286,6 +291,10 @@ explorepage <- shinydashboard::dashboardPage(
             shinydashboard::tabItem(
                 tabName = "cellimage",
                 cellimage_ui("cellimage")
+            ),
+            shinydashboard::tabItem(
+                tabName = "germline",
+                germline_ui("germline")
             ),
             shinydashboard::tabItem(
                 tabName = "data_info",
