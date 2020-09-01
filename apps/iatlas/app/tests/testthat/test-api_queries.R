@@ -131,31 +131,12 @@ with_test_api_env({
   test_that("query_features_range", {
     expected_columns <- c("name", "display", "value_min", "value_max")
     result1 <- query_features_range("Lymphocytes_Aggregate1", "PCAWG")
+    result2 <- query_features_range("leukocyte_fraction", "PCAWG")
     expect_named(result1, expected_columns)
+    expect_named(result2, expected_columns)
+    expect_equal(nrow(result2), 0)
   })
 
-  # test_that("query_samples_to_features", {
-  #   result <- query_samples_to_features("leukocyte_fraction")
-  #   expect_named(
-  #     result,
-  #     c(
-  #       "name",
-  #       "sample",
-  #       "value"
-  #     )
-  #   )
-  # })
-  #
-  # test_that("query_samples_to_feature", {
-  #   result <- query_samples_to_feature("leukocyte_fraction")
-  #   expect_named(
-  #     result,
-  #     c(
-  #       "sample",
-  #       "value"
-  #     )
-  #   )
-  # })
 
   # features_by_tag -----------------------------------------------------------
 
@@ -249,7 +230,11 @@ with_test_api_env({
       "super_category"
     )
     result1 <- query_genes()
+    result2 <- query_genes(entrez_ids = 0)
     expect_named(result1, expected_columns)
+    expect_named(result2, expected_columns)
+    expect_true(nrow(result1) > 0)
+    expect_equal(nrow(result2), 0)
   })
 
   test_that("query_immunomodulators", {
@@ -268,13 +253,13 @@ with_test_api_env({
         "publications"
       )
     )
-    # ARG1_publications <- result1 %>%
-    #   dplyr::filter(.data$entrez == 383L) %>%
-    #   tidyr::unnest(cols = "publications") %>%
-    #   dplyr::pull("pubmedId") %>%
-    #   sort()
-    #
-    # expect_equal(ARG1_publications, c(19764983L, 23890059L))
+    ARG1_publications <- result1 %>%
+      dplyr::filter(.data$entrez == 383L) %>%
+      tidyr::unnest(cols = "publications") %>%
+      dplyr::pull("pubmedId") %>%
+      sort()
+
+    expect_equal(ARG1_publications, c(19764983L, 23890059L))
   })
 
   test_that("query_io_targets", {
@@ -399,9 +384,12 @@ with_test_api_env({
       "sample_count"
     )
 
-    result <- query_tags("TCGA", "Immune_Subtype")
-    expect_named(result, expected_columns)
-    expect_equal(result$name, c("C1", "C2", "C3", "C4", "C5", "C6"))
+    result1 <- query_tags("PCAWG", "Immune_Subtype")
+    result2 <- query_tags("PCAWG", "TCGA_Subtype")
+    expect_named(result1, expected_columns)
+    expect_named(result2, expected_columns)
+    expect_equal(result1$name, c("C1", "C2", "C3", "C4", "C6"))
+    expect_equal(nrow(result2), 0)
   })
 
   test_that("query_cohort_selector", {

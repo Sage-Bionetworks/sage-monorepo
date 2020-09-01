@@ -13,22 +13,27 @@ with_test_api_env({
     group_type = "tag"
   )
 
-  # cohort_obj2 <- build_cohort_object(
-  #   filter_obj = list(
-  #     "samples" = "TCGA" %>%
-  #       query_dataset_samples(.) %>%
-  #       dplyr::pull("name")
-  #   ),
-  #   dataset = "TCGA",
-  #   group_choice = "Immune_Subtype",
-  #   group_type = "tag"
-  # )
+  cohort_obj2 <- build_cohort_object(
+    filter_obj = list(
+      "samples" = "PCAWG" %>%
+        query_dataset_samples(.) %>%
+        dplyr::pull("name")
+    ),
+    dataset = "PCAWG",
+    group_choice = "Immune Feature Bins",
+    group_type = "custom",
+    feature_name = "EPIC_B_Cells",
+    bin_number = 2,
+    feature_tbl = "PCAWG" %>%
+      query_features_by_class() %>%
+      dplyr::select("class", "display", "name")
+  )
 
   test_that("get_cohort_feature_class_list", {
     res1 <- get_cohort_feature_class_list(cohort_obj1)
     expect_vector(res1)
-
   })
+
 
   ## API queries --------------------------------------------------------------
   # features ------------------------------------------------------------------
@@ -55,6 +60,11 @@ with_test_api_env({
 
     result3 <- query_feature_values_with_cohort_object(
       cohort_obj1,
+      class = "EPIC"
+    )
+
+    result4 <- query_feature_values_with_cohort_object(
+      cohort_obj2,
       class = "EPIC"
     )
 

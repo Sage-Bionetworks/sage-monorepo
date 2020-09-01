@@ -9,22 +9,11 @@ add_ghql_query_from_text_file <- function(
     query_object$query(query_name, query_text)
 }
 
-create_global_ghql_query_object <- function() {
-    if (!present(.GlobalEnv$ghql_query_object)) {
-        .GlobalEnv$ghql_query_object <- ghql::Query$new()
-    } else {
-        cat(crayon::yellow(
-            "WARNING-create_global_ghql_query_object: global ghql query object already created\n")
-        )
-        .GlobalEnv$ghql_query_object
-    }
-}
-
 create_and_add_all_queries_to_qry_obj <- function(
     query_dir = "inst/queries",
     qry_obj   = .GlobalEnv$ghql_query_object
 ){
-    create_global_ghql_query_object()
+    .GlobalEnv$ghql_query_object <- ghql::Query$new()
     query_files <- list.files(query_dir, full.names = T)
     query_names <- query_files %>%
         basename() %>%

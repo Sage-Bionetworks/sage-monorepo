@@ -37,6 +37,43 @@ io_target_distributions_server <- function(
         )
     })
 
+    gene_choice_hgnc <- shiny::reactive({
+        shiny::req(input$gene_choice, io_target_tbl())
+        iatlas.app::get_io_hgnc_from_tbl(io_target_tbl(), input$gene_choice)
+    })
+
+    gene_plot_label <- shiny::reactive({
+        shiny::req(gene_choice_hgnc(), input$scale_method_choice)
+
+        iatlas.app::transform_feature_string(
+            gene_choice_hgnc(),
+            input$scale_method_choice
+        )
+    })
+
+    distplot_tbl <- shiny::reactive({
+        shiny::req(
+            cohort_obj(),
+            input$gene_choice,
+            input$scale_method_choice
+        )
+        build_io_target_distplot_tbl(
+            cohort_obj(),
+            as.integer(input$gene_choice),
+            input$scale_method_choice
+        )
+    })
+
+    shiny::callModule(
+        distribution_plot_server,
+        "io_targets_dist_plot",
+        cohort_obj,
+        distplot_tbl    = distplot_tbl,
+        distplot_type   = shiny::reactive(input$plot_type_choice),
+        distplot_ylab   = gene_plot_label,
+        distplot_title  = gene_choice_hgnc
+    )
+
 
     #
     # gene_name <- shiny::reactive({
@@ -66,14 +103,5 @@ io_target_distributions_server <- function(
     #     )
     # })
     #
-    # shiny::callModule(
-    #     distribution_plot_server,
-    #     "io_targets_dist_plot",
-    #     cohort_obj,
-    #     distplot_tbl    = distplot_tbl,
-    #     distplot_type   = shiny::reactive(input$plot_type_choice),
-    #     distplot_ylab   = gene_plot_label,
-    #     distplot_title  = gene_name
-    # )
 
 }
