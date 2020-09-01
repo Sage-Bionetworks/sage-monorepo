@@ -9,7 +9,10 @@ with_test_api_env({
         ),
         dataset = "TCGA",
         group_choice = "Immune_Subtype",
-        group_type = "tag"
+        group_type = "tag",
+        feature_tbl = "TCGA" %>%
+            query_features_by_class() %>%
+            dplyr::select("class", "display", "name")
     )
 
     cohort_obj2 <- build_cohort_object(
@@ -29,6 +32,27 @@ with_test_api_env({
             dplyr::select("class", "display", "name")
     )
 
+    cohort_obj3 <- build_cohort_object(
+        filter_obj = list(
+            "samples" = "PCAWG" %>%
+                query_dataset_samples(.) %>%
+                dplyr::slice(1:50) %>%
+                dplyr::pull("name")
+        ),
+        dataset = "PCAWG",
+        group_choice = "Immune_Subtype",
+        group_type = "tag",
+        feature_tbl = "PCAWG" %>%
+            query_features_by_class() %>%
+            dplyr::select("class", "display", "name")
+    )
+
+    test_that("show_co_submodules", {
+        expect_true(show_co_submodules(cohort_obj1))
+        expect_true(show_co_submodules(cohort_obj2))
+        expect_false(show_co_submodules(cohort_obj3))
+    })
+
     test_that("build_co_survival_list", {
         res1 <- build_co_survival_list(cohort_obj1$feature_tbl)
         expect_named(res1)
@@ -40,6 +64,8 @@ with_test_api_env({
 
     test_that("get_co_status_feature", {
         expect_equal(get_co_status_feature("PFI_time_1"), "PFI_1")
+        expect_equal(get_co_status_feature("OS_time"), "OS")
+        expect_error(get_co_status_feature("not_a_feature"), "Unknown time feature")
     })
 
     survival_tbl1 <- build_co_survival_value_tbl(cohort_obj1, "OS_time", "OS")

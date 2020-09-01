@@ -23,7 +23,7 @@ build_co_survival_list <- function(tbl){
 get_co_status_feature <- function(time_feature){
     if (time_feature == "PFI_time_1") return("PFI_1")
     else if (time_feature == "OS_time") return("OS")
-    else stop("Uknown time feature")
+    else stop("Unknown time feature")
 }
 
 
