@@ -1,5 +1,5 @@
 build_ecn_gene_choice_list <- function(){
-    genes <- query_genes("extra_cellular_network") %>%
+    genes <- iatlas.api.client::query_genes("extra_cellular_network") %>%
         dplyr::select("hgnc", "entrez") %>%
         dplyr::mutate("entrez" = stringr::str_c("gene:", .data$entrez)) %>%
         tibble::deframe(.)
@@ -15,7 +15,7 @@ build_ecn_gene_choice_list <- function(){
 
 build_ecn_celltype_choice_list <- function(){
     features <-
-        query_features(
+        iatlas.api.client::query_features(
             feature_classes = "Immune Cell Proportion - Common Lymphoid and Myeloid Cell Derivative Class"
         ) %>%
         dplyr::select("display", "name") %>%
@@ -31,7 +31,7 @@ get_selected_gene_ids <- function(gene_input_list){
         stringr::str_remove_all(., "^geneset:")
     if(length(genesets) != 0){
         geneset_genes <- genesets %>%
-            query_genes(gene_types = .) %>%
+            iatlas.api.client::query_genes(gene_types = .) %>%
             dplyr::pull("entrez")
     } else {
         geneset_genes <- c()
@@ -48,7 +48,7 @@ get_selected_gene_ids <- function(gene_input_list){
 get_selected_celltypes <- function(celltype_input_list){
     celltype_input = unlist(celltype_input_list)
     if("All" %in% celltype_input) {
-        celltypes <- query_features(
+        celltypes <- iatlas.api.client::query_features(
             feature_classes = "Immune Cell Proportion - Common Lymphoid and Myeloid Cell Derivative Class"
         ) %>%
             dplyr::pull("name")

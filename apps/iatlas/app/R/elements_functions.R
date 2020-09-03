@@ -20,6 +20,6 @@
 #' @importFrom magrittr %>%
 #' @importFrom tibble deframe
 build_tag_filter_list <- function(parent_tag_name, dataset){
-    query_tags(dataset, parent_tag_name) %>%
+  iatlas.api.client::query_tags(dataset, parent_tag_name) %>%
         dplyr::pull("name")
 }

@@ -15,7 +15,7 @@ immunomodulator_distributions_server <- function(
 
     ns <- session$ns
 
-    im_tbl <- shiny::reactive(iatlas.app::query_immunomodulators())
+    im_tbl <- shiny::reactive(iatlas.api.client::query_immunomodulators())
 
     output$gene_choice_ui <- shiny::renderUI({
         shiny::req(input$gene_group_choice, im_tbl())

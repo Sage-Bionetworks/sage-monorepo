@@ -40,7 +40,7 @@ get_io_hgnc_from_tbl <- function(tbl, .entrez){
 #' @importFrom dplyr select inner_join
 build_io_target_distplot_tbl <- function(cohort_object, gene, scale_method){
     cohort_object %>%
-        query_gene_expression_with_cohort_object(entrez_ids = gene) %>%
+        query_gene_expression_with_cohort_object(entrez = gene) %>%
         dplyr::inner_join(cohort_object$sample_tbl, by = "sample") %>%
         dplyr::select(.data$group, "value" = .data$rna_seq_expr) %>%
         scale_tbl_value_column(scale_method) %>%

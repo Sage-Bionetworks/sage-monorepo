@@ -10,9 +10,9 @@ build_md_tag_covariate_tbl <- function(cohort_obj, cov_obj){
     tbl <-
         purrr::map(
             parent_tags,
-            ~query_samples_by_tag(
+            ~iatlas.api.client::query_samples_by_tag(
                 datasets = cohort_obj$dataset,
-                sample_names = cohort_obj$sample_tbl$sample,
+                samples = cohort_obj$sample_tbl$sample,
                 parent_tags = .x
             )
         ) %>%
@@ -35,7 +35,7 @@ build_md_feature_covariate_tbl <- function(cohort_obj, cov_obj){
     features <- cov_obj$numerical_covariates
     if (is.null(features)) return(NULL)
     tbl <-
-        query_feature_values(
+        iatlas.api.client::query_feature_values(
             features = features,
             datasets = cohort_obj$dataset,
             samples = cohort_obj$sample_tbl$sample
@@ -84,7 +84,7 @@ build_md_response_tbl <- function(cohort_obj, feature){
 #TODO: use new mutatiosn by samples query
 build_md_status_tbl <- function(cohort_obj){
     tbl <-
-        query_samples_by_mutation_status(
+        iatlas.api.client::query_samples_by_mutation_status(
             samples = cohort_obj$sample_tbl$sample
         ) %>%
         dplyr::select("sample", "status")

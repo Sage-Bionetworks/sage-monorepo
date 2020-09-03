@@ -74,7 +74,7 @@ get_filtered_feature_samples <- function(filter_obj, samples, dataset){
 }
 
 get_filtered_samples_by_feature <- function(feature, min, max, dataset){
-    query_feature_values(feature, dataset, max_value = max, min_value = min) %>%
+    iatlas.api.client::query_feature_values(feature, dataset, max_value = max, min_value = min) %>%
         dplyr::pull(sample)
 }
 

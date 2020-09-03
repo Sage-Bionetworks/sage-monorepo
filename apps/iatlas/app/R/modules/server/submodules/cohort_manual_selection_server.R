@@ -18,7 +18,7 @@ cohort_manual_selection_server <- function(
     )
 
     #TODO: change back to TCGA
-    default_dataset <- "TCGA"
+    default_dataset <- "PCAWG"
 
     selected_dataset <- shiny::callModule(
         cohort_dataset_selection_server,
@@ -42,7 +42,7 @@ cohort_manual_selection_server <- function(
 
     dataset_samples <- shiny::reactive({
         shiny::req(dataset())
-        iatlas.app::query_dataset_samples(dataset()) %>%
+        iatlas.api.client::query_dataset_samples(dataset()) %>%
             dplyr::pull("name")
     })
 

@@ -23,7 +23,7 @@ numeric_filter_element_server <- function(
 
     features_tbl <- shiny::reactive({
         req(input$feature_choice, dataset())
-        iatlas.app::query_features_range(input$feature_choice, dataset())
+        iatlas.api.client::query_features_range(input$feature_choice, dataset())
     })
 
     feature_min <- shiny::reactive({

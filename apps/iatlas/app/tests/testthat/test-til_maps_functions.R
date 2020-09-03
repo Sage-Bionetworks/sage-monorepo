@@ -1,4 +1,4 @@
-with_test_api_env({
+
     # test_that("Build Tilmap Sample Tibble", {
     #     tbl1 <- dplyr::tibble(
     #         sample_id = 1:10000,
@@ -10,5 +10,3 @@ with_test_api_env({
     #         c("sample_id", "sample_name", "slide_barcode", "group")
     #     )
     # })
-
-})

@@ -1,6 +1,5 @@
 
 # TODO: fix tests
-# with_test_api_env({
 #
 #   group_tbl <- query_tags("TCGA", "Immune_Subtype")
 #   gene_tbl <- build_cnv_gene_tbl()
@@ -69,6 +68,4 @@
 #       )
 #     )
 #   })
-#
-#
-# })
+

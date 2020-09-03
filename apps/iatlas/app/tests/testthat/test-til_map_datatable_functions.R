@@ -1,4 +1,4 @@
-with_test_api_env({
+
     # test_that("Build Tilmap Datatbale Tibble", {
     #     til_features <- 'TIL Map Characteristic' %>%
     #         get_class_id_from_name() %>%
@@ -45,4 +45,4 @@ with_test_api_env({
     #         )
     #     )
     # })
-})
+
