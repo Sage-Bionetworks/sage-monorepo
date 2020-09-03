@@ -8,7 +8,7 @@ cohort_group_selection_server <- function(
     ns <- session$ns
 
     tag_group_tbl <- shiny::reactive(
-        iatlas.app::query_dataset_tags(selected_dataset())
+        iatlas.api.client::query_dataset_tags(selected_dataset())
     )
 
     custom_group_tbl <- shiny::reactive({
@@ -89,7 +89,7 @@ cohort_group_selection_server <- function(
     feature_bin_tbl <- shiny::reactive({
         shiny::req(group_choice() == "Immune Feature Bins", selected_dataset())
         selected_dataset() %>%
-            iatlas.app::query_features_by_class() %>%
+            iatlas.api.client::query_features_by_class() %>%
             dplyr::select("class", "display", "name")
     })
 

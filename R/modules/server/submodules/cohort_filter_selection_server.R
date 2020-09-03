@@ -14,7 +14,8 @@ cohort_filter_selection_server <- function(
 
     # tag filters -----------------------------------------------------------
     tag_named_list <- shiny::reactive({
-        iatlas.app::query_dataset_tags(selected_dataset()) %>%
+        iatlas.api.client::query_dataset_tags(selected_dataset()) %>%
+            dplyr::select("display", "name") %>%
             tibble::deframe(.)
     })
 
@@ -57,7 +58,7 @@ cohort_filter_selection_server <- function(
 
     feature_named_list <- shiny::reactive({
         selected_dataset() %>%
-            iatlas.app::query_features_by_class() %>%
+            iatlas.api.client::query_features_by_class() %>%
             dplyr::select("class", "display", "feature" = "name") %>%
             create_nested_named_list()
     })

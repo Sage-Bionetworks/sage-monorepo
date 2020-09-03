@@ -32,7 +32,7 @@ get_im_hgnc_from_tbl <- function(tbl, .entrez){
 #' @importFrom rlang .data
 build_im_distplot_tbl <- function(cohort_object, gene, scale_method){
     cohort_object %>%
-        query_gene_expression_with_cohort_object(entrez_ids = gene) %>%
+        query_gene_expression_with_cohort_object(entrez = gene) %>%
         dplyr::inner_join(cohort_object$sample_tbl, by = "sample") %>%
         dplyr::select(.data$group, "value" = .data$rna_seq_expr) %>%
         scale_tbl_value_column(scale_method) %>%
@@ -47,7 +47,7 @@ build_im_distplot_tbl <- function(cohort_object, gene, scale_method){
 #' @importFrom rlang .data
 #' @importFrom stringr str_remove_all
 build_im_dt_tbl <- function(){
-   query_immunomodulators() %>%
+    iatlas.api.client::query_immunomodulators() %>%
         dplyr::select(
             "hgnc",
             "entrez",

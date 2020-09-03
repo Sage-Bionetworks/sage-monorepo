@@ -16,7 +16,7 @@ io_target_distributions_server <- function(
     ns <- session$ns
 
     io_target_tbl <- shiny::reactive({
-        iatlas.app::query_io_targets()
+        iatlas.api.client::query_io_targets()
     })
 
     url_gene <- shiny::reactive({

@@ -101,7 +101,7 @@ immune_feature_correlations_server <- function(
 
         shiny::validate(shiny::need(
             all(
-                clicked_feature %in% value_tbl()$feature_name,
+                clicked_feature %in% value_tbl()$feature_display,
                 clicked_group %in% value_tbl()$group
             ),
             "Click above heatmap"

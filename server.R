@@ -7,7 +7,6 @@ options(shiny.maxRequestSize = 100 * 1024^2)
 options(shiny.usecairo = FALSE)
 
 library(magrittr)
-iatlas.app::create_and_add_all_queries_to_qry_obj()
 
 ################################################################################
 # Begin Shiny Server definition.

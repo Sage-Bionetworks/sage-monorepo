@@ -18,7 +18,7 @@ query_feature_values_with_cohort_object <- function(
 ){
   if (cohort_object$group_type == "tag") related <- cohort_object$group_name
   else related <- NA
-  query_feature_values(
+  iatlas.api.client::query_feature_values(
     feature,
     datasets = cohort_object$dataset,
     parent_tags = related,
@@ -32,11 +32,11 @@ query_feature_values_with_cohort_object <- function(
 query_gene_expression_with_cohort_object <- function(
   cohort_object,
   gene_types = NA,
-  entrez_ids = NA
+  entrez = NA
 ){
-  query_expression_by_genes(
-    type = gene_types,
-    entrez = entrez_ids,
-    sample = cohort_object$sample_tbl$sample
+  iatlas.api.client::query_expression_by_genes(
+    gene_types = gene_types,
+    entrez = entrez,
+    samples = cohort_object$sample_tbl$sample
   )
 }

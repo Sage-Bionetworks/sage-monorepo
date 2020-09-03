@@ -10,7 +10,7 @@ cohort_dataset_selection_server <- function(
         shiny::selectInput(
             inputId  = ns("dataset_choice"),
             label    = "Select or Search for Dataset",
-            choices  = tibble::deframe(iatlas.app::query_datasets()),
+            choices  = tibble::deframe(iatlas.api.client::query_datasets()),
             selected = default_dataset
         )
     })

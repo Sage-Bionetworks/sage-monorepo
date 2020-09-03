@@ -6,7 +6,7 @@ data_info_server <- function(
     ns <- session$ns
 
     class_list <- shiny::reactive({
-        iatlas.app::query_features_by_class() %>%
+        iatlas.api.client::query_features_by_class() %>%
             dplyr::pull("class") %>%
             c("All classes", .)
     })
@@ -23,9 +23,9 @@ data_info_server <- function(
     feature_tbl <- shiny::reactive({
         shiny::req(input$class_choice)
         if(input$class_choice == "All classes") {
-            iatlas.app::query_features_by_class()
+            iatlas.api.client::query_features_by_class()
         } else {
-            iatlas.app::query_features_by_class(
+            iatlas.api.client::query_features_by_class(
                 feature_class = input$class_choice
             )
         }

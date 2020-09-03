@@ -559,18 +559,6 @@
       "Repository": "CRAN",
       "Hash": "9f7d9c6426833d0cdfea726201589c42"
     },
-    "graph": {
-      "Package": "graph",
-      "Version": "1.65.2",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteUsername": "bioconductor",
-      "RemoteRepo": "graph",
-      "RemoteRef": "master",
-      "RemoteSha": "b60a41ca55e12ebb98424cc2599bea9fa1414b5f",
-      "Hash": "bca5181f7f98c9df46e7708a0190d085"
-    },
     "gridExtra": {
       "Package": "gridExtra",
       "Version": "2.3",
@@ -647,6 +635,18 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "7146fea4685b4252ebf478978c75f597"
+    },
+    "iatlas.api.client": {
+      "Package": "iatlas.api.client",
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "CRI-iAtlas",
+      "RemoteRepo": "iatlas.api.client",
+      "RemoteRef": "master",
+      "RemoteSha": "40c23c91211a8f20a3f311d3ecd52195cf9f0715",
+      "Hash": "28e17cdb5ed924f343e6371a7a678feb"
     },
     "ini": {
       "Package": "ini",
@@ -934,6 +934,18 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "ed95895886dab6d2a584da45503555da"
+    },
+    "reactlog": {
+      "Package": "reactlog",
+      "Version": "1.0.0.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "reactlog",
+      "RemoteUsername": "rstudio",
+      "RemoteRef": "master",
+      "RemoteSha": "92708821cb3531a79c12967fd4d0e8ea1c7a4c21",
+      "Hash": "8299ff0d641fffd481011178812ce945"
     },
     "readr": {
       "Package": "readr",
