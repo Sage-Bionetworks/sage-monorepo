@@ -31,12 +31,11 @@ overall_cell_proportions_server  <- function(
         plotly::event_data("plotly_click", "overall_cell_proportions_barplot")
     })
 
-    shiny::callModule(
-        plotly_server,
+    plotly_server(
         "barplot",
         plot_tbl       = barplot_tbl,
         plot_eventdata = barplot_eventdata,
-        group_tbl      = shiny::reactive(cohort_obj()$group_tbl),
+        group_tbl      = shiny::reactive(cohort_obj()$group_tbl)
     )
 
     barplot_selected_group <- shiny::reactive({
@@ -72,8 +71,7 @@ overall_cell_proportions_server  <- function(
         )
     })
 
-    shiny::callModule(
-        plotly_server,
+    plotly_server(
         "scatterplot",
         plot_tbl = barplot_tbl
     )

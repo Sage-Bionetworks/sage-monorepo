@@ -34,8 +34,7 @@ cell_type_fractions_server <- function(
         plotly::event_data("plotly_click", "cell_type_fractions_barplot")
     })
 
-    shiny::callModule(
-        plotly_server,
+    plotly_server(
         "barplot",
         plot_tbl       = plot_tbl,
         plot_eventdata = barplot_eventdata,
