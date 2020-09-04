@@ -14,19 +14,17 @@ immune_features_server <- function(
         source(file, local = T)
     }
 
-    shiny::callModule(
-        call_module_server,
-        "immune_feature_distributions",
-        cohort_obj,
-        shiny::reactive(function(cohort_obj) T),
-        immune_feature_distributions_server
+    call_module_server(
+      "immune_feature_distributions",
+      cohort_obj,
+      shiny::reactive(function(cohort_obj) T),
+      immune_feature_distributions_server
     )
 
-    shiny::callModule(
-        call_module_server,
-        "immune_feature_correlations",
-        cohort_obj,
-        shiny::reactive(function(cohort_obj) T),
-        immune_feature_correlations_server
+    call_module_server(
+      "immune_feature_correlations",
+      cohort_obj,
+      shiny::reactive(function(cohort_obj) T),
+      immune_feature_correlations_server
     )
 }
