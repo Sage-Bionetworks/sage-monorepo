@@ -1,15 +1,5 @@
 
-cohort_obj1 <- build_cohort_object(
-    filter_obj = list(
-        "samples" = "TCGA" %>%
-            iatlas.api.client::query_dataset_samples(.) %>%
-            dplyr::slice(1:50) %>%
-            dplyr::pull("name")
-    ),
-    dataset = "TCGA",
-    group_choice = "Immune_Subtype",
-    group_type = "tag"
-)
+cohort_obj1 <- tcga_immune_subtype_cohort_obj_50
 
 cov_obj1 <- list(
     "categorical_covariates" = NULL, "numerical_covariates" = NULL

@@ -1,14 +1,5 @@
 
-cohort_obj1 <- build_cohort_object(
-    filter_obj = list(
-        "samples" = "TCGA" %>%
-            iatlas.api.client::query_dataset_samples(.) %>%
-            dplyr::pull("name")
-    ),
-    dataset = "TCGA",
-    group_choice = "Immune_Subtype",
-    group_type = "tag"
-)
+cohort_obj1 <- tcga_immune_subtype_cohort_obj_50
 
 test_that("Create Tilmap Named List", {
     result1 <- create_tm_named_list(cohort_obj1)

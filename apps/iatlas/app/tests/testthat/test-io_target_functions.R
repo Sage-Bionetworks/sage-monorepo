@@ -1,30 +1,6 @@
 
-cohort_obj1 <- build_cohort_object(
-    filter_obj = list(
-        "samples" = "PCAWG" %>%
-            iatlas.api.client::query_dataset_samples(.) %>%
-            dplyr::pull("name")
-    ),
-    dataset = "PCAWG",
-    group_choice = "Immune_Subtype",
-    group_type = "tag"
-)
-
-cohort_obj2 <- build_cohort_object(
-    filter_obj = list(
-        "samples" = "PCAWG" %>%
-            iatlas.api.client::query_dataset_samples(.) %>%
-            dplyr::pull("name")
-    ),
-    dataset = "PCAWG",
-    group_choice = "Immune Feature Bins",
-    group_type = "custom",
-    feature_name = "EPIC_B_Cells",
-    bin_number = 2,
-    feature_tbl = "PCAWG" %>%
-        iatlas.api.client::query_features_by_class() %>%
-        dplyr::select("class", "display", "name")
-)
+cohort_obj1 <- pcawg_immune_subtype_cohort_obj
+cohort_obj2 <- pcawg_feature_bin_cohort_obj
 
 test_that("Get Gene From URL", {
     expect_equal(get_gene_from_url(list()), NA)

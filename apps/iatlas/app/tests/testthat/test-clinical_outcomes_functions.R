@@ -1,50 +1,8 @@
 
-cohort_obj1 <- build_cohort_object(
-    filter_obj = list(
-        "samples" = "TCGA" %>%
-            iatlas.api.client::query_dataset_samples(.) %>%
-            dplyr::slice(1:50) %>%
-            dplyr::pull("name")
-    ),
-    dataset = "TCGA",
-    group_choice = "Immune_Subtype",
-    group_type = "tag",
-    feature_tbl = "TCGA" %>%
-        iatlas.api.client::query_features_by_class() %>%
-        dplyr::select("class", "display", "name")
-)
+cohort_obj1 <- tcga_immune_subtype_cohort_obj_50
+cohort_obj2 <- tcga_feature_bin_cohort_obj_50
+cohort_obj3 <- pcawg_immune_subtype_cohort_obj
 
-cohort_obj2 <- build_cohort_object(
-    filter_obj = list(
-        "samples" = "TCGA" %>%
-            iatlas.api.client::query_dataset_samples(.) %>%
-            dplyr::slice(1:10) %>%
-            dplyr::pull("name")
-    ),
-    dataset = "TCGA",
-    group_choice = "Immune Feature Bins",
-    group_type = "custom",
-    feature_name = "leukocyte_fraction",
-    bin_number = 2,
-    feature_tbl = "TCGA" %>%
-        iatlas.api.client::query_features_by_class() %>%
-        dplyr::select("class", "display", "name")
-)
-
-cohort_obj3 <- build_cohort_object(
-    filter_obj = list(
-        "samples" = "PCAWG" %>%
-            iatlas.api.client::query_dataset_samples(.) %>%
-            dplyr::slice(1:50) %>%
-            dplyr::pull("name")
-    ),
-    dataset = "PCAWG",
-    group_choice = "Immune_Subtype",
-    group_type = "tag",
-    feature_tbl = "PCAWG" %>%
-        iatlas.api.client::query_features_by_class() %>%
-        dplyr::select("class", "display", "name")
-)
 
 test_that("show_co_submodules", {
     expect_true(show_co_submodules(cohort_obj1))
@@ -136,3 +94,4 @@ test_that("Build Heatmap Matrix", {
     expected_colnames <- c("C1", "C2", "C3", "C4", "C5", "C6")
     expect_equal(colnames(heatmap_matrix1), expected_colnames)
 })
+
