@@ -4,24 +4,18 @@ germline_heritability_server <- function(
     session,
     cohort_obj
 ){
-#
-#     source_files <- c(
-#         "R/modules/server/submodules/distribution_plot_server.R"
-#     )
-#
-#     for (file in source_files) {
-#         source(file, local = T)
-#     }
-  GERMLINE_PATH = Sys.getenv("GERMLINE_PATH")
 
-  heritability <- list(
-    EUR =  feather::read_feather(paste0(GERMLINE_PATH, "European_hdf.feather")),
-    AFR =  feather::read_feather(paste0(GERMLINE_PATH, "African_hdf.feather")),
-    ASIAN =  feather::read_feather(paste0(GERMLINE_PATH, "Asian_hdf.feather")),
-    AMR = feather::read_feather(paste0(GERMLINE_PATH, "American_hdf.feather")),
-    EUR_IMMUNE = feather::read_feather(paste0(GERMLINE_PATH, "immune_hdf.feather")),
-    BY_IMMUNE = feather::read_feather(paste0(GERMLINE_PATH, "hdf_byImmune.feather"))
-  )
+  heritability <- reactive({
+    GERMLINE_PATH = "inst/extdata/"
+    list(
+      EUR =  feather::read_feather(paste0(GERMLINE_PATH, "European_hdf.feather")),
+      AFR =  feather::read_feather(paste0(GERMLINE_PATH, "African_hdf.feather")),
+      ASIAN =  feather::read_feather(paste0(GERMLINE_PATH, "Asian_hdf.feather")),
+      AMR = feather::read_feather(paste0(GERMLINE_PATH, "American_hdf.feather")),
+      EUR_IMMUNE = feather::read_feather(paste0(GERMLINE_PATH, "immune_hdf.feather")),
+      BY_IMMUNE = feather::read_feather(paste0(GERMLINE_PATH, "hdf_byImmune.feather"))
+    )
+  })
 
     ns <- session$ns
 
@@ -34,9 +28,9 @@ germline_heritability_server <- function(
       shiny::req(input$ancestry)
       #Reading in the table with computed statistics
       if(input$ancestry == "European" & input$byImmune == TRUE){
-        df <- heritability$EUR_IMMUNE
+        df <- heritability()$EUR_IMMUNE
       }else{
-        df <- heritability[[input$ancestry]]
+        df <- heritability()[[input$ancestry]]
       }
 
       df %>%
@@ -92,7 +86,7 @@ germline_heritability_server <- function(
                "Click bar plot"))
  selected_plot_trait <- eventdata$y[[1]]
 
- hdf_plot <-heritability$BY_IMMUNE%>%
+ hdf_plot <-heritability()$BY_IMMUNE%>%
    dplyr::filter(Trait == selected_plot_trait)
 
 plot_colors <- c("#bebebe", "#FF0000", "#FFFF00", "#00FF00")

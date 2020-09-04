@@ -10,7 +10,7 @@ create_manhattanplot <- function(
 
   plotly::ggplotly(ggplot2::ggplot(df, aes(x=BPcum, y=log10p, text=text)) +
                       geom_point(data=subset(df, is_highlight=="no"), aes(color=as.factor(chr_col)), alpha=0.8, size=1.3) +
-                      scale_color_manual(values = rep(c("grey", "skyblue"), 22)) +
+                      scale_color_manual(values = rep(c("#847FF7", "#ECBACD"), 22)) +
                       scale_x_continuous(label = x_label$chr_col, breaks= x_label$center) +
                       scale_y_continuous(expand = c(0, 0.5), limits = c(y_min, y_max)) +
                       geom_point(data=subset(df, is_highlight=="yes"), color="orange", size=2) +
