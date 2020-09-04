@@ -11,6 +11,7 @@ multivariate_driver_server <- function(
     source("R/modules/ui/submodules/elements_ui.R", local = T)
     source("R/modules/server/submodules/elements_server.R", local = T)
     source("R/modules/server/submodules/plotly_server.R", local = T)
+    source("R/modules/server/submodules/volcano_plot_server.R", local = T)
 
     output$response_options <- shiny::renderUI({
         shiny::selectInput(
@@ -51,8 +52,7 @@ multivariate_driver_server <- function(
         stringr::str_c(response_variable_display(), " ~ Mutation status")
     })
 
-    covariates_obj <- shiny::callModule(
-        model_selection_server,
+    model_selection_server(
         "module1",
         numerical_covariate_tbl,
         categorical_covariate_tbl,
@@ -142,8 +142,7 @@ multivariate_driver_server <- function(
         )
     })
 
-    shiny::callModule(
-        plotly_server,
+    plotly_server(
         "volcano_plot",
         plot_tbl = volcano_plot_tbl
     )
@@ -217,8 +216,7 @@ multivariate_driver_server <- function(
         )
     })
 
-    shiny::callModule(
-        plotly_server,
+    plotly_server(
         "violin_plot",
         plot_tbl = violin_tbl
     )

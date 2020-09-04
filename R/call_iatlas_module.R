@@ -28,13 +28,6 @@ call_iatlas_module <- function(
             )
         })
     }
-    # shiny::callModule(
-    #     get(function_string),
-    #     module_string,
-    #     ...
-    # )
-    get(function_string)(
-      module_string,
-      ...
-    )
+
+    get(function_string)(module_string, ...)
 }
