@@ -1,4 +1,12 @@
-
+#' Is Tag Filter Valid
+#'
+#' @param obj A named list with names
+is_tag_filter_valid <- function(obj){
+    all(
+        !is.null(obj),
+        !is.null(obj$tags)
+    )
+}
 
 #' Get Valid Tag Filters
 #'
@@ -11,16 +19,6 @@ get_valid_tag_filters <- function(filter_obj){
         unname()
 }
 
-#' Is Tag Filter Valid
-#'
-#' @param obj A named list with names
-is_tag_filter_valid <- function(obj){
-    all(
-        !is.null(obj),
-        !is.null(obj$tags)
-    )
-}
-
 #' Get Filtered Tag Samples
 #'
 #' @param filter_obj A list of named lists with names ids and name
@@ -31,7 +29,7 @@ get_filtered_tag_samples <- function(filter_obj, samples, dataset){
     filter_obj %>%
         purrr::transpose(.) %>%
         purrr::pluck("tags") %>%
-        purrr::map(., ~query_tag_samples(datasets = dataset, tags = .x)) %>%
+        purrr::map(., ~iatlas.api.client::query_tag_samples(datasets = dataset, tags = .x)) %>%
         purrr::map(., dplyr::pull, "sample") %>%
         purrr::reduce(base::intersect, .init = samples)
 }
@@ -77,21 +75,3 @@ get_filtered_samples_by_feature <- function(feature, min, max, dataset){
     iatlas.api.client::query_feature_values(feature, dataset, max_value = max, min_value = min) %>%
         dplyr::pull(sample)
 }
-
-
-#' Create Cohort Filter Object
-#'
-#' @param sample_ids A vector of integers
-#' @param numeric_obj A list
-#' @param group_obj A list
-create_cohort_filter_object <- function(sample_ids, numeric_obj, group_obj){
-    list(
-        "sample_ids" = sample_ids,
-        "filters" = list(
-            "feature_filters" = numeric_obj,
-            "group_filters" = group_obj
-        )
-    )
-}
-
-
