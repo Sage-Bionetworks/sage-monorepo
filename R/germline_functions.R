@@ -24,8 +24,6 @@ create_FDR_label <- function(
   tbl$FDR_label <- ""
 
   df <- purrr::map_dfr(seq_along(intervals), function(i){
-    print(symbols[i])
-    print(intervals[i])
 
     tbl %>%
       dplyr::mutate(FDR_label =  replace(
@@ -47,7 +45,7 @@ create_FDR_label <- function(
 #' @param bp_max An integer in the id column of the samples table
 #' @param feature_selected An integer in the id column of the samples table
 #' @importFrom magrittr %>%
-#' @importFrom dplyr left_join filter group_by summaruse mutate
+#' @importFrom dplyr left_join filter group_by summarise mutate
 #' @importFrom rlang .data
 build_manhattanplot_tbl <- function(
   gwas_df,
@@ -59,7 +57,8 @@ build_manhattanplot_tbl <- function(
   df <- gwas_df %>%
 
     # Compute chromosome size
-    dplyr::filter(chr_col %in% chr_selected & bp_col >= bp_min & bp_col <= bp_max) %>%
+    dplyr::filter(chr_col %in% chr_selected) %>%
+    # dplyr::filter(bp_col >= bp_min & bp_col <= bp_max) %>%
     dplyr::group_by(chr_col) %>%
     dplyr::summarise(chr_len=max(bp_col)) %>%
     # Calculate cumulative position of each chromosome
@@ -77,9 +76,6 @@ build_manhattanplot_tbl <- function(
 
   # Filter SNP to make the plot lighter
   #filter(-log10(P)>0.5)
-
-  # Prepare text description for each SNP:
-  # df$text <- paste(df[[feature_col]], "\nSNP: ", df[[snp_col]], "\nPosition: ", df[[bp_col]], "\nChromosome: ", df[[chr_col]], sep="")
 
   df
 
