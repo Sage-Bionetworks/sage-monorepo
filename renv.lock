@@ -311,6 +311,13 @@
       "Repository": "CRAN",
       "Hash": "82bae0172ae9d4c4f88a440ad01f73bb"
     },
+    "cpp11": {
+      "Package": "cpp11",
+      "Version": "0.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c4c83167f43ca762a9fa998d4fead3ae"
+    },
     "crayon": {
       "Package": "crayon",
       "Version": "1.3.4",
@@ -603,10 +610,10 @@
     },
     "htmltools": {
       "Package": "htmltools",
-      "Version": "0.4.0",
+      "Version": "0.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "2d7691222f82f41e93f6d30f169bd5e1"
+      "Hash": "7d651b7131794fe007b1ad6f21aaa401"
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
@@ -642,8 +649,8 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
+      "RemoteUsername": "CRI-iAtlas",
       "RemoteRef": "master",
       "RemoteSha": "40c23c91211a8f20a3f311d3ecd52195cf9f0715",
       "Hash": "28e17cdb5ed924f343e6371a7a678feb"
@@ -1059,10 +1066,10 @@
     },
     "shiny": {
       "Package": "shiny",
-      "Version": "1.4.0",
+      "Version": "1.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "6ca23724bb2c804c1d0b3db4862a39c7"
+      "Hash": "ee4ed72d7a5047d9e73cf922ad66e9c9"
     },
     "shinycssloaders": {
       "Package": "shinycssloaders",
