@@ -1,64 +1,64 @@
 cohort_manual_selection_server <- function(
-    input,
-    output,
-    session
+  id
 ){
+  shiny::moduleServer(
+    id,
+    function(input, output, session) {
 
-    source(
+      source(
         "R/modules/server/submodules/cohort_group_selection_server.R",
         local = T
-    )
-    source(
+      )
+      source(
         "R/modules/server/submodules/cohort_filter_selection_server.R",
         local = T
-    )
-    source(
+      )
+      source(
         "R/modules/server/submodules/cohort_dataset_selection_server.R",
         local = T
-    )
+      )
 
-    #TODO: change back to TCGA
-    default_dataset <- "PCAWG"
+      #TODO: change back to TCGA
+      default_dataset <- "PCAWG"
 
-    selected_dataset <- shiny::callModule(
-        cohort_dataset_selection_server,
+      selected_dataset <- cohort_dataset_selection_server(
         "cohort_dataset_selection",
         default_dataset
-    )
+      )
 
-    dedupe <- function(r) {
+      dedupe <- function(r) {
         shiny::makeReactiveBinding("val")
         shiny::observe(val <<- r(), priority = 10)
         shiny::reactive(val)
-    }
+      }
 
-    dataset <- dedupe(shiny::reactive({
+      dataset <- dedupe(shiny::reactive({
         if (is.null(selected_dataset())) {
-            return(default_dataset)
+          return(default_dataset)
         } else {
-            return(selected_dataset())
+          return(selected_dataset())
         }
-    }))
+      }))
 
-    dataset_samples <- shiny::reactive({
+      dataset_samples <- shiny::reactive({
         shiny::req(dataset())
         iatlas.api.client::query_dataset_samples(dataset()) %>%
-            dplyr::pull("name")
-    })
+          dplyr::pull("name")
+      })
 
-    filter_obj <- shiny::callModule(
-        cohort_filter_selection_server,
+      filter_obj <- cohort_filter_selection_server(
         "cohort_filter_selection",
         dataset,
         dataset_samples
-    )
+      )
 
-    cohort_obj <- shiny::callModule(
-        cohort_group_selection_server,
+      cohort_obj <- cohort_group_selection_server(
         "cohort_group_selection",
         filter_obj,
         dataset
-    )
+      )
 
-    return(cohort_obj)
+      return(cohort_obj)
+    }
+  )
 }

@@ -30,8 +30,7 @@ model_selection_server <- function(
         numeric_model_covariate_element_ui
     )
 
-    numeric_covariate_output <- shiny::callModule(
-        insert_remove_element_server,
+    insert_remove_element_server(
         "select_numeric_covariate",
         element_module = numeric_covariate_module,
         element_module_ui = numeric_covariate_module_ui
@@ -98,8 +97,7 @@ model_selection_server <- function(
         categorical_model_covariate_element_ui
     )
 
-    categorical_covariate_output <- shiny::callModule(
-        insert_remove_element_server,
+    insert_remove_element_server(
         "select_categorical_covariate",
         element_module = categorical_covariate_module,
         element_module_ui = categorical_covariate_module_ui
