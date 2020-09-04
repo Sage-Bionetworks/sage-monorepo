@@ -1,13 +1,4 @@
-cohort_obj1 <- build_cohort_object(
-  filter_obj = list(
-    "samples" = "PCAWG" %>%
-      iatlas.api.client::query_dataset_samples(.) %>%
-      dplyr::pull("name")
-  ),
-  dataset = "PCAWG",
-  group_choice = "Immune_Subtype",
-  group_type = "tag"
-)
+cohort_obj1 <- pcawg_immune_subtype_cohort_obj
 
 test_that("Build Distribution Plot Tibble", {
 

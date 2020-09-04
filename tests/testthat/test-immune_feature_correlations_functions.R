@@ -1,14 +1,5 @@
 
-cohort_obj1 <- build_cohort_object(
-    filter_obj = list(
-        "samples" = "PCAWG" %>%
-            iatlas.api.client::query_dataset_samples(.) %>%
-            dplyr::pull("name")
-    ),
-    dataset = "PCAWG",
-    group_choice = "Immune_Subtype",
-    group_type = "tag"
-)
+cohort_obj1 <- pcawg_immune_subtype_cohort_obj
 
 response_tbl1 <- build_ifc_response_tbl(cohort_obj1, "EPIC_B_Cells")
 
