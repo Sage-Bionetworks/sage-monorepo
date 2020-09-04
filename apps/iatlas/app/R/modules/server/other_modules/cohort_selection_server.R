@@ -19,16 +19,13 @@ cohort_selection_server <- function(
         local = T
       )
 
-      cohort_obj_manual <- shiny::callModule(
-        cohort_manual_selection_server,
+      cohort_obj_manual <- cohort_manual_selection_server(
         "cohort_manual_selection"
       )
 
-      cohort_obj_upload <- shiny::callModule(
-        cohort_upload_selection_server,
+      cohort_obj_upload <- cohort_upload_selection_server(
         "cohort_upload_selection"
       )
-
 
       cohort_obj <- shiny::reactive({
         if (input$cohort_mode_choice == "Cohort Selection") {
@@ -56,8 +53,7 @@ cohort_selection_server <- function(
           )
       })
 
-      shiny::callModule(
-        data_table_server,
+      data_table_server(
         "sg_table",
         group_key_tbl,
         options = list(
