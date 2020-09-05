@@ -5,9 +5,6 @@ til_map_distributions_server <- function(id, cohort_obj, sample_tbl) {
 
       ns <- session$ns
 
-      source("R/modules/server/submodules/distribution_plot_server.R", local = T)
-      source("R/til_map_distributions_functions.R", local = T)
-
       output$selection_ui <- shiny::renderUI({
         shiny::selectInput(
           ns("feature_choice"),
