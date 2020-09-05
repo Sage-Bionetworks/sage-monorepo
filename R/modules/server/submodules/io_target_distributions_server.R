@@ -6,14 +6,6 @@ io_target_distributions_server <- function(
     id,
     function(input, output, session) {
 
-      source_files <- c(
-        "R/modules/server/submodules/distribution_plot_server.R"
-      )
-
-      for (file in source_files) {
-        source(file, local = T)
-      }
-
       ns <- session$ns
 
       io_target_tbl <- shiny::reactive({
