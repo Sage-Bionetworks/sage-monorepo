@@ -8,8 +8,7 @@ immune_features_server <- function(
 
       source_files <- c(
         "R/modules/server/submodules/immune_feature_distributions_server.R",
-        "R/modules/server/submodules/immune_feature_correlations_server.R",
-        "R/modules/server/submodules/call_module_server.R"
+        "R/modules/server/submodules/immune_feature_correlations_server.R"
       )
 
       for (file in source_files) {
@@ -19,15 +18,13 @@ immune_features_server <- function(
       call_module_server(
         "immune_feature_distributions",
         cohort_obj,
-        shiny::reactive(function(cohort_obj) T),
-        immune_feature_distributions_server
+        server_function = immune_feature_distributions_server
       )
 
       call_module_server(
         "immune_feature_correlations",
         cohort_obj,
-        shiny::reactive(function(cohort_obj) T),
-        immune_feature_correlations_server
+        server_function = immune_feature_correlations_server
       )
     }
   )
