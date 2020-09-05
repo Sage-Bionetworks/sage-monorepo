@@ -5,7 +5,6 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       ns <- session$ns
 
-      source("R/modules/server/submodules/plotly_server.R", local = T)
       source("R/modules/server/submodules/volcano_plot_server.R", local = T)
 
       output$response_options <- shiny::renderUI({

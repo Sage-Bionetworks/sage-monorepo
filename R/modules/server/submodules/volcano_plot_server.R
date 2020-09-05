@@ -13,8 +13,6 @@ volcano_plot_server <- function(
     id,
     function(input, output, session) {
 
-      source("R/modules/server/submodules/plotly_server.R", local = T)
-
       # output$volcano_plot <- plotly::renderPlotly({
       #
       #   shiny::req(volcano_plot_tbl())

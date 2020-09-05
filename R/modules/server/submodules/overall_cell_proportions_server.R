@@ -6,8 +6,6 @@ overall_cell_proportions_server  <- function(
     id,
     function(input, output, session) {
 
-      source("R/modules/server/submodules/plotly_server.R", local = T)
-
       value_tbl <- shiny::reactive(iatlas.app::build_ocp_value_tbl(cohort_obj()))
 
       barplot_tbl <- shiny::reactive({
@@ -63,6 +61,7 @@ overall_cell_proportions_server  <- function(
         ))
         iatlas.app::create_scatterplot(
           scatterplot_tbl(),
+
           source_name = "overall_cell_proportions_scatterplot",
           xlab = "Stromal Fraction",
           ylab = "Leukocyte Fraction",

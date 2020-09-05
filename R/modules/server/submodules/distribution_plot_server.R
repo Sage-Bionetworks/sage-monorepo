@@ -10,8 +10,6 @@ distribution_plot_server <- function(
     id,
     function(input, output, session) {
 
-      source("R/modules/server/submodules/plotly_server.R", local = T)
-
       distplot_function <- shiny::reactive({
         switch(
           distplot_type(),
@@ -79,7 +77,7 @@ distribution_plot_server <- function(
         )
       })
 
-      plotly_server(
+      iatlas.app::plotly_server(
         "hist_plot",
         plot_tbl = histplot_tbl
       )
