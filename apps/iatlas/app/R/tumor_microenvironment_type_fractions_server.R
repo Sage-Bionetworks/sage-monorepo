@@ -1,4 +1,4 @@
-cell_type_fractions_server <- function(id, cohort_obj) {
+tumor_microenvironment_type_fractions_server <- function(id, cohort_obj) {
   shiny::moduleServer(
     id,
     function(input, output, session) {

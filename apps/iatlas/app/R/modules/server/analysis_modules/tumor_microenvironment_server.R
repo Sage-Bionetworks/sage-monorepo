@@ -7,8 +7,6 @@ tumor_microenvironment_server <- function(
     function(input, output, session) {
 
       source_files <- c(
-        "R/modules/server/submodules/overall_cell_proportions_server.R",
-        "R/modules/server/submodules/cell_type_fractions_server.R",
         "R/modules/server/submodules/call_module_server.R"
       )
 
@@ -17,17 +15,17 @@ tumor_microenvironment_server <- function(
       }
 
       call_module_server(
-        "overall_cell_proportions",
+        "tumor_microenvironment_cell_proportions",
         cohort_obj,
         shiny::reactive(show_ocp_submodule),
-        overall_cell_proportions_server
+        tumor_microenvironment_cell_proportions_server
       )
 
       call_module_server(
-        "cell_type_fractions",
+        "tumor_microenvironment_type_fractions",
         cohort_obj,
         shiny::reactive(show_ctf_submodule),
-        cell_type_fractions_server
+        tumor_microenvironment_type_fractions_server
       )
     }
   )
