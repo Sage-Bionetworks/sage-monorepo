@@ -13,13 +13,13 @@ data_table_ui <- function(
                 width = 12,
                 shiny::div(
                     style = "overflow-x: scroll",
-                    "data_table_module" %>%
+                    "data_table" %>%
                         ns() %>%
                         DT::dataTableOutput(.) %>%
                         shinycssloaders::withSpinner(.)
                 )
             ),
-            shiny::downloadButton(ns("download_tbl"), button_text)
+            shiny::downloadButton(ns("download_table"), button_text)
         )
     )
 }
