@@ -7,9 +7,7 @@ extracellular_network_server <- function(
     function(input, output, session) {
 
       source_files <- c(
-        "R/modules/server/submodules/extracellular_network_main_server.R",
-        "R/modules/server/submodules/call_module_server.R",
-        "R/extracellular_network_functions.R"
+        "R/modules/server/submodules/extracellular_network_main_server.R"
       )
 
       for (file in source_files) {
@@ -19,8 +17,7 @@ extracellular_network_server <- function(
       call_module_server(
         "extracellular_network_main",
         cohort_obj,
-        shiny::reactive(function(cohort_obj) T),
-        extracellular_network_main_server
+        server_function = extracellular_network_main_server
       )
     }
   )
