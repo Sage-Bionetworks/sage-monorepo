@@ -22,8 +22,9 @@ test_that("module_works", {
       "group_tbl" = group_tbl
     ),
     {
-      expect_equal(output$plot_group_text, "name1: c1")
       expect_type(output$download_tbl, "character")
+      expect_type(output$plot_group_text, "character")
+      expect_equal(output$plot_group_text, "name1: c1")
     }
   )
 })

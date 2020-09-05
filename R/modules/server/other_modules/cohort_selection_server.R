@@ -14,10 +14,6 @@ cohort_selection_server <- function(
         "R/modules/server/submodules/cohort_upload_selection_server.R",
         local = T
       )
-      source(
-        "R/modules/server/submodules/data_table_server.R",
-        local = T
-      )
 
       cohort_obj_manual <- cohort_manual_selection_server(
         "cohort_manual_selection"
@@ -53,7 +49,7 @@ cohort_selection_server <- function(
           )
       })
 
-      data_table_server(
+      iatlas.app::data_table_server(
         "sg_table",
         group_key_tbl,
         options = list(

@@ -10,7 +10,7 @@ data_table_server <- function(
   shiny::moduleServer(
     id,
     function(input, output, session) {
-      output$data_table_module <- DT::renderDT({
+      output$data_table <- DT::renderDT({
         dt <- DT::datatable(
           tbl(),
           options = options,
@@ -26,7 +26,7 @@ data_table_server <- function(
         return(dt)
       })
 
-      output$download_tbl <- shiny::downloadHandler(
+      output$download_table <- shiny::downloadHandler(
         filename = function() stringr::str_c("data-", Sys.Date(), ".csv"),
         content = function(con) readr::write_csv(tbl(), con)
       )
