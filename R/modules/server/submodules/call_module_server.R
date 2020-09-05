@@ -12,8 +12,7 @@ call_module_server <- function(
       output$display_module <- shiny::reactive(test_function()(cohort_obj()))
       shiny::outputOptions(output, "display_module", suspendWhenHidden = FALSE)
 
-      shiny::callModule(
-        server_function,
+      server_function(
         "module",
         cohort_obj,
         ...
