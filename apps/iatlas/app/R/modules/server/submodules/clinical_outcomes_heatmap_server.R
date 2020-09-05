@@ -8,8 +8,6 @@ clinical_outcomes_heatmap_server <- function(
 
       ns <- session$ns
 
-      source("R/modules/server/submodules/plotly_server.R", local = T)
-
       output$class_selection_ui <- shiny::renderUI({
         shiny::selectInput(
           inputId  = ns("class_choice"),
@@ -75,7 +73,7 @@ clinical_outcomes_heatmap_server <- function(
         plotly::event_data("plotly_click", "clinical_outcomes_heatmap")
       })
 
-      plotly_server(
+      iatlas.app::plotly_server(
         "heatmap",
         plot_tbl       = heatmap_tbl,
         plot_eventdata = heatmap_eventdata,

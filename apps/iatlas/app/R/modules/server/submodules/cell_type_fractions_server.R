@@ -3,8 +3,6 @@ cell_type_fractions_server <- function(id, cohort_obj) {
     id,
     function(input, output, session) {
 
-      source("R/modules/server/submodules/plotly_server.R", local = T)
-
       value_tbl <- shiny::reactive({
         shiny::req(input$fraction_group_choice)
         build_ctf_value_tbl(cohort_obj(), input$fraction_group_choice)

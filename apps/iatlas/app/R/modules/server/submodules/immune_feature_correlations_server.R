@@ -8,8 +8,6 @@ immune_feature_correlations_server <- function(
 
       ns <- session$ns
 
-      source("R/modules/server/submodules/plotly_server.R", local = T)
-
       output$class_selection_ui <- shiny::renderUI({
         shiny::selectInput(
           inputId  = ns("class_choice"),
