@@ -1,18 +1,17 @@
-til_map_datatable_server <- function(
-  input,
-  output,
-  session,
-  cohort_obj,
-  sample_tbl
-){
+til_map_datatable_server <- function(id, cohort_obj, sample_tbl) {
+  shiny::moduleServer(
+    id,
+    function(input, output, session) {
 
-  source("R/modules/server/submodules/data_table_server.R", local = T)
-  source("R/til_map_datatable_functions.R", local = T)
+      source("R/modules/server/submodules/data_table_server.R", local = T)
+      source("R/til_map_datatable_functions.R", local = T)
 
-  tilmap_tbl <- shiny::reactive({
-    shiny::req(sample_tbl())
-    build_tm_dt_tbl(sample_tbl())
-  })
+      tilmap_tbl <- shiny::reactive({
+        shiny::req(sample_tbl())
+        build_tm_dt_tbl(sample_tbl())
+      })
 
-  data_table_server("til_table", tilmap_tbl, escape = F)
+      data_table_server("til_table", tilmap_tbl, escape = F)
+    }
+  )
 }

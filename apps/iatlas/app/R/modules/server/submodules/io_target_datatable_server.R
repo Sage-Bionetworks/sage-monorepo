@@ -1,23 +1,26 @@
 io_target_datatable_server <- function(
-  input,
-  output,
-  session,
+  id,
   cohort_obj
-){
+) {
+  shiny::moduleServer(
+    id,
+    function(input, output, session) {
 
-  source_files <- c(
-    "R/modules/server/submodules/data_table_server.R"
-  )
+      source_files <- c(
+        "R/modules/server/submodules/data_table_server.R"
+      )
 
-  for (file in source_files) {
-    source(file, local = T)
-  }
+      for (file in source_files) {
+        source(file, local = T)
+      }
 
-  data_table_server(
-    "datatable",
-    shiny::reactive(
-      iatlas.app::build_io_target_dt_tbl(iatlas.api.client::query_io_targets())
-    ),
-    escape = F
+      data_table_server(
+        "datatable",
+        shiny::reactive(
+          iatlas.app::build_io_target_dt_tbl(iatlas.api.client::query_io_targets())
+        ),
+        escape = F
+      )
+    }
   )
 }
