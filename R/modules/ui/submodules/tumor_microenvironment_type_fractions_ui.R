@@ -1,4 +1,4 @@
-cell_type_fractions_ui <- function(id){
+tumor_microenvironment_type_fractions_ui <- function(id){
 
     ns <- shiny::NS(id)
 

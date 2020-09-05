@@ -1,4 +1,4 @@
-overall_cell_proportions_server  <- function(
+tumor_microenvironment_cell_proportions_server  <- function(
   id,
   cohort_obj
 ) {

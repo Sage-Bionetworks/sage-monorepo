@@ -1,4 +1,4 @@
-overall_cell_proportions_ui <- function(id){
+tumor_microenvironment_cell_proportions_ui <- function(id){
 
     ns <- shiny::NS(id)
 
