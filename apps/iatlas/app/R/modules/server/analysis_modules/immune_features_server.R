@@ -7,8 +7,6 @@ immune_features_server <- function(
     function(input, output, session) {
 
       source_files <- c(
-        "R/modules/server/submodules/immune_feature_distributions_server.R",
-        "R/modules/server/submodules/immune_feature_correlations_server.R",
         "R/modules/ui/submodules/immune_feature_distributions_ui.R",
         "R/modules/ui/submodules/immune_feature_correlations_ui.R"
       )

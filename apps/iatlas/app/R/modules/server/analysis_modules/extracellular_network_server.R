@@ -7,7 +7,6 @@ extracellular_network_server <- function(
     function(input, output, session) {
 
       source_files <- c(
-        "R/modules/server/submodules/extracellular_network_main_server.R",
         "R/modules/ui/submodules/extracellular_network_main_ui.R"
       )
 

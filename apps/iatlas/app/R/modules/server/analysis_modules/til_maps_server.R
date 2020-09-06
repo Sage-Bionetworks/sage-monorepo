@@ -7,8 +7,6 @@ til_maps_server <- function(
     function(input, output, session) {
 
       source_files <- c(
-        "R/modules/server/submodules/til_map_distributions_server.R",
-        "R/modules/server/submodules/til_map_datatable_server.R",
         "R/modules/ui/submodules/til_map_distributions_ui.R",
         "R/modules/ui/submodules/til_map_datatable_ui.R"
       )

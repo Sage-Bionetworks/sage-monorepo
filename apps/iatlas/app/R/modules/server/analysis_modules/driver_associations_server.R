@@ -4,8 +4,6 @@ driver_associations_server <- function(id, cohort_obj){
     function(input, output, session) {
 
       source_files <- c(
-        "R/modules/server/submodules/univariate_driver_server.R",
-        "R/modules/server/submodules/multivariate_driver_server.R",
         "R/modules/ui/submodules/univariate_driver_ui.R",
         "R/modules/ui/submodules/multivariate_driver_ui.R"
       )
