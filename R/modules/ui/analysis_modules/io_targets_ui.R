@@ -6,7 +6,7 @@ io_targets_ui <- function(id) {
         iatlas.app::titleBox("iAtlas Explorer — IO Targets"),
         iatlas.app::textBox(
             width = 12,
-            shiny::includeMarkdown("markdown/io_target.markdown")
+            shiny::includeMarkdown("inst/markdown/io_target.markdown")
         ),
         iatlas.app::sectionBox(
             title = "IO Target Gene Expression Distributions",

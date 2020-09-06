@@ -5,7 +5,7 @@ immunomodulators_datatable_ui <- function(id) {
     data_table_ui(
         ns("im_table"),
         message_html = shiny::includeMarkdown(
-            "markdown/immunomodulators_dt.markdown"
+            "inst/markdown/immunomodulators_dt.markdown"
         )
     )
 }

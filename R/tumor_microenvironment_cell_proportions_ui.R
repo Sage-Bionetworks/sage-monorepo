@@ -6,7 +6,7 @@ tumor_microenvironment_cell_proportions_ui <- function(id){
         iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
-                "markdown/overall_cell_proportions1.markdown"
+                "inst/markdown/overall_cell_proportions1.markdown"
             )
         ),
         shiny::fluidRow(

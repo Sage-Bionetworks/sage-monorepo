@@ -6,7 +6,7 @@ immune_feature_distributions_ui <- function(id) {
         iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
-                "markdown/immune_features_dist.markdown"
+                "inst/markdown/immune_features_dist.markdown"
             ),
         ),
         shiny::fluidRow(

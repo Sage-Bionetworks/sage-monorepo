@@ -6,7 +6,7 @@ immunomodulators_distributions_ui <- function(id) {
         messageBox(
             width = 12,
             shiny::includeMarkdown(
-                "markdown/immunomodulators_distributions.markdown"
+                "inst/markdown/immunomodulators_distributions.markdown"
             )
         ),
         shiny::fluidRow(

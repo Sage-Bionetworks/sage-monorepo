@@ -6,7 +6,7 @@ aboutpage <- shiny::fluidPage(
             width = 12,
             shiny::column(
                 width = 12,
-                shiny::includeMarkdown("markdown/about.markdown")
+                shiny::includeMarkdown("inst/markdown/about.markdown")
             )
         )
     )

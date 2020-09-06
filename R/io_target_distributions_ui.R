@@ -6,7 +6,7 @@ io_target_distributions_ui <- function(id) {
         iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
-                "markdown/io_target_dist.markdown"
+                "inst/markdown/io_target_dist.markdown"
             )
         ),
         shiny::fluidRow(

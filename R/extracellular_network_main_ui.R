@@ -19,7 +19,7 @@ extracellular_network_main_ui <- function(id){
 
             iatlas.app::messageBox(
                 width = 24,
-                shiny::includeMarkdown("markdown/extracellular_network_main.markdown")
+                shiny::includeMarkdown("inst/markdown/extracellular_network_main.markdown")
             ),
             shiny::fluidRow(
                 shiny::column(

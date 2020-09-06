@@ -6,7 +6,7 @@ immune_feature_correlations_ui <- function(id) {
         iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
-                "markdown/immune_features_correlations.markdown"
+                "inst/markdown/immune_features_correlations.markdown"
             )
         ),
         shiny::fluidRow(

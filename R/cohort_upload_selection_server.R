@@ -23,7 +23,7 @@ cohort_upload_selection_server <- function(
       shiny::observeEvent(input$filehelp, {
         shiny::showModal(shiny::modalDialog(
           title = "Formatting custom groups",
-          shiny::includeMarkdown("markdown/user_groups.markdown"),
+          shiny::includeMarkdown("inst/markdown/user_groups.markdown"),
           size = "l",
           easyClose = TRUE
         ))

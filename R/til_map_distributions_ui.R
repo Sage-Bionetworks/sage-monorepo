@@ -6,7 +6,7 @@ til_map_distributions_ui <- function(id) {
         iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
-                "markdown/tilmap_dist.markdown"
+                "inst/markdown/tilmap_dist.markdown"
             ),
         ),
         shiny::fluidRow(

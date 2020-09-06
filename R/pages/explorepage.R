@@ -91,7 +91,7 @@ explorepage <- shinydashboard::dashboardPage(
                 iatlas.app::titleBox("iAtlas Explorer — Home"),
                 iatlas.app::textBox(
                     width = 12,
-                    shiny::includeMarkdown("markdown/explore.markdown")
+                    shiny::includeMarkdown("inst/markdown/explore.markdown")
                 ),
                 iatlas.app::sectionBox(
                     title = "What's Inside",

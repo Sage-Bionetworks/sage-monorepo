@@ -8,7 +8,7 @@ driver_associations_ui <- function(id) {
         ),
         iatlas.app::textBox(
             width = 12,
-            shiny::includeMarkdown("markdown/driver.markdown")
+            shiny::includeMarkdown("inst/markdown/driver.markdown")
         ),
         iatlas.app::sectionBox(
             title = paste0(

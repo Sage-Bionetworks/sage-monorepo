@@ -6,7 +6,7 @@ clinical_outcomes_survival_ui <- function(id) {
         iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
-                "markdown/clinical_outcomes_survival.markdown"
+                "inst/markdown/clinical_outcomes_survival.markdown"
             )
         ),
         shiny::fluidRow(
