@@ -8,8 +8,6 @@ io_targets_server <- function(
 
 
       source_files <- c(
-        "R/modules/server/submodules/io_target_distributions_server.R",
-        "R/modules/server/submodules/io_target_datatable_server.R",
         "R/modules/ui/submodules/io_target_distributions_ui.R",
         "R/modules/ui/submodules/io_target_datatable_ui.R"
       )

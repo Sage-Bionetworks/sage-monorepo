@@ -7,8 +7,6 @@ immunomodulators_server <- function(
     function(input, output, session) {
 
       source_files <- c(
-        "R/modules/server/submodules/immunomodulator_distributions_server.R",
-        "R/modules/server/submodules/immunomodulator_datatable_server.R",
         "R/modules/ui/submodules/immunomodulator_distributions_ui.R",
         "R/modules/ui/submodules/immunomodulator_datatable_ui.R"
       )
