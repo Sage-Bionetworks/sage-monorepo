@@ -2,10 +2,7 @@ extracellular_network_ui <- function(id){
 
     ns <- shiny::NS(id)
 
-    source_files <- c(
-        "R/modules/ui/submodules/extracellular_network_main_ui.R",
-        "R/modules/ui/submodules/call_module_ui.R"
-    )
+    source_files <- c("R/modules/ui/submodules/module_ui.R")
 
     for (file in source_files) {
         source(file, local = T)
@@ -29,10 +26,7 @@ extracellular_network_ui <- function(id){
         ),
         iatlas.app::sectionBox(
             title = "Extracellular networks",
-            call_module_ui(
-                ns("extracellular_network_main"),
-                extracellular_network_main_ui
-            )
+            module_ui(ns("extracellular_network_main"))
         )
     )
 }

@@ -9,7 +9,9 @@ io_targets_server <- function(
 
       source_files <- c(
         "R/modules/server/submodules/io_target_distributions_server.R",
-        "R/modules/server/submodules/io_target_datatable_server.R"
+        "R/modules/server/submodules/io_target_datatable_server.R",
+        "R/modules/ui/submodules/io_target_distributions_ui.R",
+        "R/modules/ui/submodules/io_target_datatable_ui.R"
       )
 
       for (file in source_files) {
@@ -19,13 +21,15 @@ io_targets_server <- function(
       call_module_server(
         "distributions",
         cohort_obj,
-        server_function = io_target_distributions_server
+        server_function = io_target_distributions_server,
+        ui_function = io_target_distributions_ui
       )
 
       call_module_server(
         "datatable",
         cohort_obj,
-        server_function = io_target_datatable_server
+        server_function = io_target_datatable_server,
+        ui_function = io_target_datatable_ui
       )
     }
   )

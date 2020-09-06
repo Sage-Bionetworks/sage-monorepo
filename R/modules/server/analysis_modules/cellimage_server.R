@@ -5,7 +5,7 @@ cellimage_server <- function(id, cohort_obj){
 
       source("R/modules/ui/submodules/cellimage_main_ui.R")
 
-      call_module_server2(
+      call_module_server(
         "cellimage_main",
         cohort_obj,
         server_function = cellimage_main_server,
