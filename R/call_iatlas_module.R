@@ -1,5 +1,5 @@
 call_iatlas_module <- function(
-    file,
+    server_function,
     input,
     session,
     ...,
@@ -9,7 +9,6 @@ call_iatlas_module <- function(
     function_string <- stringr::str_remove(basename(file), ".R")
     module_string   <- stringr::str_remove(basename(file), "_server.R")
     link_string     <- paste0("link_to_", module_string)
-    source(file, local = T)
     if (observe_event) {
         if (tab_id == "explorertabs") {
             update_function <- shinydashboard::updateTabItems
