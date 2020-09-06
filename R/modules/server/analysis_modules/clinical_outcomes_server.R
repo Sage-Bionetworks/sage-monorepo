@@ -7,8 +7,6 @@ clinical_outcomes_server <- function(
     function(input, output, session) {
 
       source_files <- c(
-        "R/modules/server/submodules/clinical_outcomes_survival_server.R",
-        "R/modules/server/submodules/clinical_outcomes_heatmap_server.R",
         "R/modules/ui/submodules/clinical_outcomes_survival_ui.R",
         "R/modules/ui/submodules/clinical_outcomes_heatmap_ui.R"
       )
