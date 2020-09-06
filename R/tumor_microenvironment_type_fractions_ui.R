@@ -5,7 +5,7 @@ tumor_microenvironment_type_fractions_ui <- function(id){
     shiny::tagList(
         iatlas.app::messageBox(
             width = 12,
-            shiny::includeMarkdown("inst/markdown/cell_type_fractions.markdown")
+            shiny::includeMarkdown(get_markdown_path("cell_type_fractions"))
         ),
         shiny::fluidRow(
             iatlas.app::optionsBox(

@@ -233,3 +233,11 @@ get_values_from_eventdata <- function(eventdata, col = "x"){
         magrittr::extract2(col) %>%
         unique()
 }
+
+# system files ----------------------------------------------------------------
+
+get_markdown_path <- function(name, extension = ".markdown"){
+  name %>%
+    stringr::str_c(extension) %>%
+    file.path(system.file("markdown", package = "iatlas.app"), .)
+}
