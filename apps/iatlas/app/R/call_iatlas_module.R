@@ -1,11 +1,11 @@
 call_iatlas_module <- function(
   name,
+  function_string,
   input,
   session,
   ...,
   tab_id = "explorertabs"
 ){
-  function_string <- stringr::str_c(name, "_server")
   link_string     <- paste0("link_to_", name)
   if (tab_id == "explorertabs") {
     update_function <- shinydashboard::updateTabItems
