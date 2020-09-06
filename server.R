@@ -45,15 +45,15 @@ shiny::shinyServer(function(input, output, session) {
 
   modules_tbl %>%
     dplyr::filter(.data$type == "analysis") %>%
-    dplyr::pull("name") %>%
-    purrr::walk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
+    dplyr::select("name") %>%
+    purrr::pwalk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
 
   # Tool modules --------------------------------------------------------
 
   modules_tbl %>%
     dplyr::filter(.data$type == "tool") %>%
-    dplyr::pull("name") %>%
-    purrr::walk(
+    dplyr::select("name") %>%
+    purrr::pwalk(
       iatlas.app::call_iatlas_module, input, session, tab_id = "toolstabs"
     )
 })
