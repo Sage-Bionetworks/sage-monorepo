@@ -1,11 +1,23 @@
-analysis_module_dir   <- "R/modules/ui/analysis_modules"
-analysis_module_files <- list.files(analysis_module_dir, full.names = T)
+modules_tbl <- dplyr::tribble(
+  ~path,                              ~type,
+  "R/cellimage_ui.R",                 "analysis",
+  "R/clinical_outcomes_ui.R",         "analysis",
+  "R/copy_number_ui.R",               "analysis",
+  "R/driver_associations_ui.R",       "analysis",
+  "R/extracellular_network_ui.R",     "analysis",
+  "R/immune_features_ui.R",           "analysis",
+  "R/immunomodulators_ui.R",          "analysis",
+  "R/io_targets_ui.R",                "analysis",
+  "R/til_maps_ui.R",                  "analysis",
+  "R/tumor_microenvironment_ui.R",    "analysis"
+)
+
+analysis_module_files <- modules_tbl %>%
+  dplyr::filter(.data$type == "analysis") %>%
+  dplyr::pull("path")
 for (item in analysis_module_files) {
     source(item, local = T)
 }
-
-source("R/modules/ui/other_modules/cohort_selection_ui.R", local = T)
-source("R/modules/ui/other_modules/data_info_ui.R", local = T)
 
 explorepage <- shinydashboard::dashboardPage(
     header  = shinydashboard::dashboardHeader(disable = TRUE),

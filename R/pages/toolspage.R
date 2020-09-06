@@ -1,5 +1,3 @@
-source("R/modules/ui/tool_modules/immune_subtype_classifier_ui.R", local = T)
-
 toolspage <- shiny::fluidPage(
     shiny::br(),
     shiny::navlistPanel(
