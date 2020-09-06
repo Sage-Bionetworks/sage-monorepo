@@ -1,7 +1,0 @@
-query SamplesToFeatures($features: [String!]) {
-  features(feature: $features){
-    name
-    sample
-    value
-  }
-}
