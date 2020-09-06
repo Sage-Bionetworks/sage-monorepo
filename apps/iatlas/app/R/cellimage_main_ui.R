@@ -4,7 +4,7 @@ cellimage_main_ui <- function(id){
     shiny::tagList(
         iatlas.app::messageBox(
             width = 12,
-            shiny::includeMarkdown("markdown/cellimage.markdown"),
+            shiny::includeMarkdown("inst/markdown/cellimage.markdown"),
             shiny::actionLink(ns("method_link"), "Click to view method.")
         ),
         shiny::fluidRow(

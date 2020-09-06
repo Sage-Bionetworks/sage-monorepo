@@ -6,13 +6,13 @@ cohort_selection_ui <- function(id) {
         iatlas.app::titleBox("iAtlas Explorer — Cohort Selection"),
         iatlas.app::textBox(
             width = 12,
-            shiny::includeMarkdown("markdown/cohort_selection1.markdown")
+            shiny::includeMarkdown("inst/markdown/cohort_selection1.markdown")
         ),
         iatlas.app::sectionBox(
             title = "Cohort Selection",
             iatlas.app::messageBox(
                 width = 12,
-                shiny::includeMarkdown("markdown/cohort_selection2.markdown"),
+                shiny::includeMarkdown("inst/markdown/cohort_selection2.markdown"),
             ),
             shiny::fluidRow(
                 iatlas.app::optionsBox(
@@ -53,7 +53,7 @@ cohort_selection_ui <- function(id) {
         #     title = "Group Overlap",
         #     messageBox(
         #         width = 12,
-        #         includeMarkdown("markdown/sample_groups_overlap.markdown")
+        #         includeMarkdown("inst/markdown/sample_groups_overlap.markdown")
         #     ),
         #     fluidRow(
         #         optionsBox(

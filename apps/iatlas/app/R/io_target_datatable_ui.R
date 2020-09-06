@@ -5,7 +5,7 @@ io_target_datatable_ui <- function(id) {
     data_table_ui(
         ns("datatable"),
         message_html = shiny::includeMarkdown(
-            "markdown/io_target_dt.markdown"
+            "inst/markdown/io_target_dt.markdown"
         )
     )
 }

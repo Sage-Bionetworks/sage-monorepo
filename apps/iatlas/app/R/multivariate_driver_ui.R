@@ -5,7 +5,7 @@ multivariate_driver_ui <- function(id){
     shiny::tagList(
         iatlas.app::messageBox(
             width = 12,
-            shiny::includeMarkdown("markdown/driver_multi.markdown")
+            shiny::includeMarkdown("inst/markdown/driver_multi.markdown")
         ),
         shiny::fluidRow(
             iatlas.app::optionsBox(

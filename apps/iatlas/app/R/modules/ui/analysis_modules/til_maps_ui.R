@@ -6,7 +6,7 @@ til_maps_ui <- function(id) {
         iatlas.app::titleBox("iAtlas Explorer — TIL Maps"),
         iatlas.app::textBox(
             width = 12,
-            shiny::includeMarkdown("markdown/tilmap.markdown")
+            shiny::includeMarkdown("inst/markdown/tilmap.markdown")
         ),
         iatlas.app::sectionBox(
             title = "Distributions",

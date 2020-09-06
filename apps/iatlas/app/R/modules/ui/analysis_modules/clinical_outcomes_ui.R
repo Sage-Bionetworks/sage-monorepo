@@ -5,7 +5,7 @@ clinical_outcomes_ui <- function(id) {
         iatlas.app::titleBox("iAtlas Explorer — Clinical Outcomes"),
         iatlas.app::textBox(
             width = 12,
-            shiny::includeMarkdown("markdown/clinical_outcomes.markdown")
+            shiny::includeMarkdown("inst/markdown/clinical_outcomes.markdown")
         ),
         iatlas.app::sectionBox(
             title = "Sample Group Survival",

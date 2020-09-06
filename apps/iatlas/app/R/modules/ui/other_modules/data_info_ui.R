@@ -5,13 +5,13 @@ data_info_ui <- function(id) {
         iatlas.app::titleBox("iAtlas Explorer — Data Description"),
         iatlas.app::textBox(
             width = 12,
-            shiny::includeMarkdown("markdown/data_info.markdown")
+            shiny::includeMarkdown("inst/markdown/data_info.markdown")
         ),
         iatlas.app::sectionBox(
             title = "PanImmune Readouts",
             iatlas.app::messageBox(
                 width = 12,
-                shiny::includeMarkdown("markdown/data_info_readouts.markdown")
+                shiny::includeMarkdown("inst/markdown/data_info_readouts.markdown")
             ),
             shiny::fluidRow(
                 iatlas.app::optionsBox(

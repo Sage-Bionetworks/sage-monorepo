@@ -6,7 +6,7 @@ tumor_microenvironment_ui <- function(id) {
         iatlas.app::titleBox("iAtlas Explorer — Tumor Microenvironment"),
         iatlas.app::textBox(
             width = 12,
-            shiny::includeMarkdown("markdown/tumor_microenvironment.markdown")
+            shiny::includeMarkdown("inst/markdown/tumor_microenvironment.markdown")
         ),
         iatlas.app::sectionBox(
             title = "Overall Cell Proportions",

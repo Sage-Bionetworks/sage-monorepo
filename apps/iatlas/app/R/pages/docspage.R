@@ -3,7 +3,7 @@ docspage <- shiny::fluidPage(
     iatlas.app::titleBox("Documentation"),
     iatlas.app::messageBox(
         width = 12,
-        shiny::includeMarkdown("markdown/docs.markdown")
+        shiny::includeMarkdown("inst/markdown/docs.markdown")
     ),
     shiny::fluidRow(
         shiny::column(

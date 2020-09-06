@@ -6,7 +6,7 @@ resourcespage <- shiny::fluidPage(
             width = 12,
             shiny::column(
                 width = 12,
-                shiny::includeMarkdown("markdown/resources.markdown")
+                shiny::includeMarkdown("inst/markdown/resources.markdown")
             )
         )
     )

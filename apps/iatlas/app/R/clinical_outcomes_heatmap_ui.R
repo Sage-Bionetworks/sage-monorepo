@@ -5,7 +5,7 @@ clinical_outcomes_heatmap_ui <- function(id) {
     shiny::tagList(
         iatlas.app::messageBox(
             width = 12,
-            shiny::includeMarkdown("markdown/clinical_outcomes_heatmap.markdown")
+            shiny::includeMarkdown("inst/markdown/clinical_outcomes_heatmap.markdown")
         ),
         shiny::fluidRow(
             iatlas.app::optionsBox(
