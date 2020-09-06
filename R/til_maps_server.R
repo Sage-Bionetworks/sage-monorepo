@@ -6,15 +6,6 @@ til_maps_server <- function(
     id,
     function(input, output, session) {
 
-      source_files <- c(
-        "R/modules/ui/submodules/til_map_distributions_ui.R",
-        "R/modules/ui/submodules/til_map_datatable_ui.R"
-      )
-
-      for (file in source_files) {
-        source(file, local = T)
-      }
-
       tilmap_sample_tbl <- shiny::reactive({
         shiny::req(cohort_obj())
         build_tm_sample_tbl(cohort_obj()$sample_tbl)

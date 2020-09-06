@@ -2,9 +2,6 @@ immune_feature_distributions_ui <- function(id) {
 
     ns <- shiny::NS(id)
 
-    source("R/modules/ui/submodules/distribution_plot_ui.R", local = T)
-    source("R/modules/ui/ui_modules/distribution_plot_selector_ui.R", local = T)
-
     shiny::tagList(
         iatlas.app::messageBox(
             width = 12,

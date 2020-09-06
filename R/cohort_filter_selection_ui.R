@@ -2,8 +2,6 @@ cohort_filter_selection_ui <- function(id) {
 
     ns <- shiny::NS(id)
 
-    source("R/modules/ui/submodules/insert_remove_element_ui.R", local = T)
-
     shiny::tagList(
         shiny::fluidRow(
             iatlas.app::optionsBox(

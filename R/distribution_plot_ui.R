@@ -1,28 +1,26 @@
-volcano_plot_ui <- function(id){
+distribution_plot_ui <- function(id){
 
     ns <- shiny::NS(id)
-
-    source("R/modules/ui/submodules/plotly_ui.R", local = T)
 
     shiny::tagList(
         shiny::fluidRow(
             iatlas.app::plotBox(
                 width = 12,
-                "volcano_plot" %>%
+                "distplot" %>%
                     ns() %>%
                     plotly::plotlyOutput(.) %>%
                     shinycssloaders::withSpinner(.),
-                plotly_ui(ns("volcano_plot"))
+                plotly_ui(ns("dist_plot"))
             )
         ),
         shiny::fluidRow(
             iatlas.app::plotBox(
                 width = 12,
-                "violin_plot" %>%
+                "histplot" %>%
                     ns() %>%
                     plotly::plotlyOutput(.) %>%
                     shinycssloaders::withSpinner(.),
-                plotly_ui(ns("violin_plot"))
+                plotly_ui(ns("hist_plot"))
             )
         )
     )

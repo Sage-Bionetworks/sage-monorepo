@@ -1,21 +1,12 @@
-immunomodulators_distributions_ui <- function(id) {
+io_target_distributions_ui <- function(id) {
 
     ns <- shiny::NS(id)
 
-    source_files <- c(
-        "R/modules/ui/submodules/distribution_plot_ui.R",
-        "R/modules/ui/ui_modules/distribution_plot_selector_ui.R"
-    )
-
-    for (file in source_files) {
-        source(file, local = T)
-    }
-
     shiny::tagList(
-        messageBox(
+        iatlas.app::messageBox(
             width = 12,
             shiny::includeMarkdown(
-                "markdown/immunomodulators_distributions.markdown"
+                "markdown/io_target_dist.markdown"
             )
         ),
         shiny::fluidRow(
@@ -24,12 +15,11 @@ immunomodulators_distributions_ui <- function(id) {
                 shiny::column(
                     width = 3,
                     shiny::selectInput(
-                        inputId = ns("gene_group_choice"),
+                        inputId = ns("group_choice"),
                         label = "Select Group",
                         choices = c(
-                            "Gene Family" = "gene_family",
-                            "Super Category" = "super_category",
-                            "Immune Checkpoint" = "immune_checkpoint"
+                            "Pathway" = "pathway",
+                            "Therapy Type" = "therapy_type"
                         )
                     )
                 ),
@@ -40,6 +30,6 @@ immunomodulators_distributions_ui <- function(id) {
                 distribution_plot_selector_ui(id, scale_default = "Log10")
             )
         ),
-        distribution_plot_ui(ns("immunomodulators_dist_plot"))
+        distribution_plot_ui(ns("io_targets_dist_plot"))
     )
 }

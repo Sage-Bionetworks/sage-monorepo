@@ -2,14 +2,6 @@ cellimage_ui <- function(id){
 
     ns <- shiny::NS(id)
 
-    source_files <- c(
-        "R/modules/ui/submodules/module_ui.R"
-    )
-
-    for (file in source_files) {
-        source(file, local = T)
-    }
-
     shiny::tagList(
         iatlas.app::titleBox(
             "iAtlas Explorer — Cell-Interaction Diagram"

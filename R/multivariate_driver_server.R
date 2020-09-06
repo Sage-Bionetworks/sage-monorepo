@@ -8,11 +8,6 @@ multivariate_driver_server <- function(
 
       ns <- session$ns
 
-      source("R/modules/server/submodules/model_selection_server.R", local = T)
-      source("R/modules/ui/submodules/elements_ui.R", local = T)
-      source("R/modules/server/submodules/elements_server.R", local = T)
-      source("R/modules/server/submodules/volcano_plot_server.R", local = T)
-
       output$response_options <- shiny::renderUI({
         shiny::selectInput(
           inputId  = ns("response_choice"),

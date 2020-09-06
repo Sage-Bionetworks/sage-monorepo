@@ -6,14 +6,6 @@ copy_number_server <- function(
     id,
     function(input, output, session) {
 
-      source_files <- c(
-        "R/modules/ui/submodules/copy_number_response_ui.R"
-      )
-
-      for (file in source_files) {
-        source(file, local = T)
-      }
-
       call_module_server(
         "copy_number_response",
         cohort_obj,

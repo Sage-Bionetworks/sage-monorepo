@@ -2,8 +2,6 @@ driver_associations_ui <- function(id) {
 
     ns <- shiny::NS(id)
 
-    source("R/modules/ui/submodules/module_ui.R", local = T)
-
     shiny::tagList(
         iatlas.app::titleBox(
             "iAtlas Explorer — Association with Driver Mutations"

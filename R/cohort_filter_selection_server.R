@@ -7,8 +7,6 @@ cohort_filter_selection_server <- function(
     id,
     function(input, output, session) {
 
-      source("R/modules/ui/submodules/elements_ui.R", local = T)
-
       # tag filters -----------------------------------------------------------
       tag_named_list <- shiny::reactive({
         iatlas.api.client::query_dataset_tags(selected_dataset()) %>%

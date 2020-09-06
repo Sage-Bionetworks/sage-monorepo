@@ -2,10 +2,6 @@ cohort_selection_ui <- function(id) {
 
     ns <- shiny::NS(id)
 
-    source("R/modules/ui/submodules/cohort_manual_selection_ui.R", local = T)
-    source("R/modules/ui/submodules/cohort_upload_selection_ui.R", local = T)
-    source("R/modules/ui/submodules/data_table_ui.R", local = T)
-
     shiny::tagList(
         iatlas.app::titleBox("iAtlas Explorer — Cohort Selection"),
         iatlas.app::textBox(

@@ -3,8 +3,6 @@ cellimage_server <- function(id, cohort_obj){
     id,
     function(input, output, session) {
 
-      source("R/modules/ui/submodules/cellimage_main_ui.R")
-
       call_module_server(
         "cellimage_main",
         cohort_obj,

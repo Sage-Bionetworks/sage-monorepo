@@ -3,15 +3,6 @@ driver_associations_server <- function(id, cohort_obj){
     id,
     function(input, output, session) {
 
-      source_files <- c(
-        "R/modules/ui/submodules/univariate_driver_ui.R",
-        "R/modules/ui/submodules/multivariate_driver_ui.R"
-      )
-
-      for (file in source_files) {
-        source(file, local = T)
-      }
-
       call_module_server(
         "univariate_driver",
         cohort_obj,
