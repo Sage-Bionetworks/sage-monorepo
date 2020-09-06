@@ -1164,10 +1164,10 @@
     },
     "testthat": {
       "Package": "testthat",
-      "Version": "2.3.1",
+      "Version": "2.3.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "68dad590f6445cdcdaa5b7eec60e9686"
+      "Hash": "0829b987b8961fb07f3b1b64a2fbc495"
     },
     "tibble": {
       "Package": "tibble",

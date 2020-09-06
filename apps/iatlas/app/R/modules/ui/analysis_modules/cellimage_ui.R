@@ -3,8 +3,7 @@ cellimage_ui <- function(id){
     ns <- shiny::NS(id)
 
     source_files <- c(
-        "R/modules/ui/submodules/cellimage_main_ui.R",
-        "R/modules/ui/submodules/call_module_ui.R"
+        "R/modules/ui/submodules/module_ui.R"
     )
 
     for (file in source_files) {
@@ -21,10 +20,7 @@ cellimage_ui <- function(id){
         ),
         iatlas.app::sectionBox(
             title = "Cell-Interaction Diagram",
-            call_module_ui(
-                ns("cellimage_main"),
-                cellimage_main_ui
-            )
+            module_ui(ns("cellimage_main"))
         )
     )
 }
