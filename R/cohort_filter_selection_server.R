@@ -6,12 +6,8 @@ cohort_filter_selection_server <- function(
   shiny::moduleServer(
     id,
     function(input, output, session) {
-      source(
-        "R/modules/server/submodules/insert_remove_element_server.R",
-        local = T
-      )
+
       source("R/modules/ui/submodules/elements_ui.R", local = T)
-      source("R/modules/server/submodules/elements_server.R", local = T)
 
       # tag filters -----------------------------------------------------------
       tag_named_list <- shiny::reactive({
