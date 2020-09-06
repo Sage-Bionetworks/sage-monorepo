@@ -6,9 +6,6 @@ tumor_microenvironment_server <- function(
     id,
     function(input, output, session) {
 
-      source("R/modules/ui/submodules/tumor_microenvironment_cell_proportions_ui.R", local = T)
-      source("R/modules/ui/submodules/tumor_microenvironment_type_fractions_ui.R", local = T)
-
       call_module_server(
         "tumor_microenvironment_cell_proportions",
         cohort_obj,

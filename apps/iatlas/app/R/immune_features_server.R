@@ -6,15 +6,6 @@ immune_features_server <- function(
     id,
     function(input, output, session) {
 
-      source_files <- c(
-        "R/modules/ui/submodules/immune_feature_distributions_ui.R",
-        "R/modules/ui/submodules/immune_feature_correlations_ui.R"
-      )
-
-      for (file in source_files) {
-        source(file, local = T)
-      }
-
       call_module_server(
         "immune_feature_distributions",
         cohort_obj,

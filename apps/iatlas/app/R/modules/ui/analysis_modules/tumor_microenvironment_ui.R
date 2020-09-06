@@ -1,8 +1,5 @@
 tumor_microenvironment_ui <- function(id) {
 
-
-    source("R/modules/ui/submodules/module_ui.R", local = T)
-
     ns <- shiny::NS(id)
 
     shiny::tagList(

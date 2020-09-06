@@ -6,15 +6,6 @@ clinical_outcomes_server <- function(
     id,
     function(input, output, session) {
 
-      source_files <- c(
-        "R/modules/ui/submodules/clinical_outcomes_survival_ui.R",
-        "R/modules/ui/submodules/clinical_outcomes_heatmap_ui.R"
-      )
-
-      for (file in source_files) {
-        source(file, local = T)
-      }
-
       call_module_server(
         "clinical_outcomes_survival",
         cohort_obj,

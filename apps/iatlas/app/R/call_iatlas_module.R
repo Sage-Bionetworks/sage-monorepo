@@ -1,5 +1,5 @@
 call_iatlas_module <- function(
-    server_function,
+    file,
     input,
     session,
     ...,

@@ -8,11 +8,6 @@ model_selection_server <- function(
     model_formula_prefix = shiny::reactive("response ~ status")
 ){
 
-    source(
-        "R/modules/server/submodules/insert_remove_element_server.R",
-        local = T
-    )
-
     # numeric covariate ui -----------------------------------------------------
 
     numerical_covariate_list <- shiny::reactive({

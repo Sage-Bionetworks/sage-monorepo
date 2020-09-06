@@ -2,8 +2,6 @@ univariate_driver_ui <- function(id){
 
     ns <- shiny::NS(id)
 
-    source("R/modules/ui/submodules/plotly_ui.R", local = T)
-
     shiny::tagList(
         iatlas.app::messageBox(
             width = 12,
