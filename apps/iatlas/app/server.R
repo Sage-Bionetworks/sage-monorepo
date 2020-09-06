@@ -8,20 +8,8 @@ options(shiny.usecairo = FALSE)
 
 library(magrittr)
 
-modules_tbl <- dplyr::tribble(
-  ~path,                                  ~type,
-  "R/cellimage_server.R",                 "analysis",
-  "R/clinical_outcomes_server.R",         "analysis",
-  "R/copy_number_server.R",               "analysis",
-  "R/driver_associations_server.R",       "analysis",
-  "R/extracellular_network_server.R",     "analysis",
-  "R/immune_features_server.R",           "analysis",
-  "R/immunomodulators_server.R",          "analysis",
-  "R/io_targets_server.R",                "analysis",
-  "R/til_maps_server.R",                  "analysis",
-  "R/tumor_microenvironment_server.R",    "analysis",
-  "R/immune_subtype_classifier_server.R", "tool"
-)
+modules_tbl <- readr::read_tsv("module_config.tsv")
+
 
 ################################################################################
 # Begin Shiny Server definition.
@@ -39,32 +27,32 @@ shiny::shinyServer(function(input, output, session) {
     }
   })
 
-  # Non analysis modules -----------------------------------------------------
+  # Explore page modules ------------------------------------------------------
 
   cohort_obj <- call_iatlas_module(
-    "R/cohort_selection_server.R",
+    "cohort_selection",
     input,
     session
   )
 
   call_iatlas_module(
-    "R/data_info_server.R",
+    "data_info",
     input,
-    session,
-    observe_event = F
+    session
   )
 
   # Analysis modules --------------------------------------------------------
+
   modules_tbl %>%
     dplyr::filter(.data$type == "analysis") %>%
-    dplyr::pull("path") %>%
+    dplyr::pull("name") %>%
     purrr::walk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
 
   # Tool modules --------------------------------------------------------
 
   modules_tbl %>%
     dplyr::filter(.data$type == "tool") %>%
-    dplyr::pull("path") %>%
+    dplyr::pull("name") %>%
     purrr::walk(
       iatlas.app::call_iatlas_module, input, session, tab_id = "toolstabs"
     )
