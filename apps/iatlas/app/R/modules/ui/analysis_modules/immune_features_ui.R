@@ -2,11 +2,7 @@ immune_features_ui <- function(id) {
 
     ns <- shiny::NS(id)
 
-    source_files <- c(
-        "R/modules/ui/submodules/immune_feature_distributions_ui.R",
-        "R/modules/ui/submodules/immune_feature_correlations_ui.R",
-        "R/modules/ui/submodules/call_module_ui.R"
-    )
+    source_files <- c("R/modules/ui/submodules/module_ui.R")
 
     for (file in source_files) {
         source(file, local = T)
@@ -23,17 +19,11 @@ immune_features_ui <- function(id) {
         ),
         iatlas.app::sectionBox(
             title = "Correlations",
-            call_module_ui(
-                ns("immune_feature_distributions"),
-                immune_feature_distributions_ui
-            )
+            module_ui(ns("immune_feature_distributions"))
         ),
         iatlas.app::sectionBox(
             title = "Distributions",
-            call_module_ui(
-                ns("immune_feature_correlations"),
-                immune_feature_correlations_ui
-            )
+            module_ui(ns("immune_feature_correlations"))
         )
     )
 }

@@ -7,7 +7,8 @@ extracellular_network_server <- function(
     function(input, output, session) {
 
       source_files <- c(
-        "R/modules/server/submodules/extracellular_network_main_server.R"
+        "R/modules/server/submodules/extracellular_network_main_server.R",
+        "R/modules/ui/submodules/extracellular_network_main_ui.R"
       )
 
       for (file in source_files) {
@@ -17,7 +18,8 @@ extracellular_network_server <- function(
       call_module_server(
         "extracellular_network_main",
         cohort_obj,
-        server_function = extracellular_network_main_server
+        server_function = extracellular_network_main_server,
+        ui_function = extracellular_network_main_ui
       )
     }
   )

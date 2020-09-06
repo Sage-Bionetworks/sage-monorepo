@@ -3,8 +3,7 @@ copy_number_ui <- function(id){
     ns <- shiny::NS(id)
 
     source_files <- c(
-        "R/modules/ui/submodules/copy_number_response_ui.R",
-        "R/modules/ui/submodules/call_module_ui.R"
+        "R/modules/ui/submodules/module_ui.R"
     )
 
     for (file in source_files) {
@@ -24,10 +23,7 @@ copy_number_ui <- function(id){
         ),
         iatlas.app::sectionBox(
             title = "Immune Response Association With Copy Number Variation",
-            call_module_ui(
-                ns("copy_number_response"),
-                copy_number_response_ui
-            )
+            module_ui(ns("copy_number_response"))
         )
     )
 }

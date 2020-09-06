@@ -2,11 +2,7 @@ immunomodulators_ui <- function(id) {
 
     ns <- shiny::NS(id)
 
-    source_files <- c(
-        "R/modules/ui/submodules/immunomodulator_distributions_ui.R",
-        "R/modules/ui/submodules/immunomodulator_datatable_ui.R",
-        "R/modules/ui/submodules/call_module_ui.R"
-    )
+    source_files <- c("R/modules/ui/submodules/module_ui.R")
 
     for (file in source_files) {
         source(file, local = T)
@@ -23,17 +19,12 @@ immunomodulators_ui <- function(id) {
         ),
         iatlas.app::sectionBox(
             title = "Immunomodulator Distributions",
-            call_module_ui(
-                ns("distributions"),
-                immunomodulators_distributions_ui
-            )
+            module_ui(ns("distributions"))
         ),
         iatlas.app::sectionBox(
             title = "Immunomodulator Annotations",
-            call_module_ui(
-                ns("datatable"),
-                immunomodulators_datatable_ui
-            )
+            module_ui(ns("datatable")
+                      )
         )
     )
 }

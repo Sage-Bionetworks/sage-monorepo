@@ -8,7 +8,9 @@ til_maps_server <- function(
 
       source_files <- c(
         "R/modules/server/submodules/til_map_distributions_server.R",
-        "R/modules/server/submodules/til_map_datatable_server.R"
+        "R/modules/server/submodules/til_map_datatable_server.R",
+        "R/modules/ui/submodules/til_map_distributions_ui.R",
+        "R/modules/ui/submodules/til_map_datatable_ui.R"
       )
 
       for (file in source_files) {
@@ -25,6 +27,7 @@ til_maps_server <- function(
         cohort_obj,
         test_function = shiny::reactive(show_tilmap_submodules),
         server_function = til_map_distributions_server,
+        ui_function = til_map_distributions_ui,
         sample_tbl = tilmap_sample_tbl
       )
 
@@ -33,6 +36,7 @@ til_maps_server <- function(
         cohort_obj,
         test_function = shiny::reactive(show_tilmap_submodules),
         server_function = til_map_datatable_server,
+        ui_function = til_map_datatable_ui,
         sample_tbl = tilmap_sample_tbl
       )
     }
