@@ -31,12 +31,14 @@ shiny::shinyServer(function(input, output, session) {
 
   cohort_obj <- call_iatlas_module(
     "cohort_selection",
+    "cohort_selection_server",
     input,
     session
   )
 
   call_iatlas_module(
     "data_info",
+    "data_info_server",
     input,
     session
   )
@@ -45,14 +47,14 @@ shiny::shinyServer(function(input, output, session) {
 
   modules_tbl %>%
     dplyr::filter(.data$type == "analysis") %>%
-    dplyr::select("name") %>%
+    dplyr::select("name", "function_string" = "server_function") %>%
     purrr::pwalk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
 
   # Tool modules --------------------------------------------------------
 
   modules_tbl %>%
     dplyr::filter(.data$type == "tool") %>%
-    dplyr::select("name") %>%
+    dplyr::select("name", "function_string" = "server_function") %>%
     purrr::pwalk(
       iatlas.app::call_iatlas_module, input, session, tab_id = "toolstabs"
     )
