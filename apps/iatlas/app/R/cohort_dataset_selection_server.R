@@ -1,6 +1,6 @@
 cohort_dataset_selection_server <- function(
   id,
-  default_dataset
+  default_dataset = "TCGA"
 ) {
   shiny::moduleServer(
     id,

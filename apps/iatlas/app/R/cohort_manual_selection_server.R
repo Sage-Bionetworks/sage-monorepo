@@ -5,19 +5,6 @@ cohort_manual_selection_server <- function(
     id,
     function(input, output, session) {
 
-      source(
-        "R/modules/server/submodules/cohort_group_selection_server.R",
-        local = T
-      )
-      source(
-        "R/modules/server/submodules/cohort_filter_selection_server.R",
-        local = T
-      )
-      source(
-        "R/modules/server/submodules/cohort_dataset_selection_server.R",
-        local = T
-      )
-
       #TODO: change back to TCGA
       default_dataset <- "PCAWG"
 

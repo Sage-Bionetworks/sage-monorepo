@@ -6,15 +6,6 @@ cohort_selection_server <- function(
     id,
     function(input, output, session) {
 
-      source(
-        "R/modules/server/submodules/cohort_manual_selection_server.R",
-        local = T
-      )
-      source(
-        "R/modules/server/submodules/cohort_upload_selection_server.R",
-        local = T
-      )
-
       cohort_obj_manual <- cohort_manual_selection_server(
         "cohort_manual_selection"
       )
