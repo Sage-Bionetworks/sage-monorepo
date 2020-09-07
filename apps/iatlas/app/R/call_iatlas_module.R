@@ -1,6 +1,6 @@
 call_iatlas_module <- function(
   name,
-  function_string,
+  server_function,
   input,
   session,
   ...,
@@ -23,5 +23,5 @@ call_iatlas_module <- function(
       tab_name
     )
   })
-  get(function_string)(name, ...)
+  server_function(name, ...)
 }

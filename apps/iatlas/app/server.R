@@ -15,6 +15,8 @@ modules_tbl <- "module_config.tsv" %>%
     "image" = stringr::str_c("images/", .data$name, ".png"),
     "server_function_string" = stringr::str_c(.data$name, "_server"),
     "ui_function_string" = stringr::str_c(.data$name, "_ui"),
+    "server_function" = purrr::map(.data$server_function_string, get),
+    "ui_function" = purrr::map(.data$ui_function_string, get)
   )
 
 analysis_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "analysis")
@@ -42,14 +44,14 @@ shiny::shinyServer(function(input, output, session) {
 
   cohort_obj <- call_iatlas_module(
     "cohort_selection",
-    "cohort_selection_server",
+    cohort_selection_server,
     input,
     session
   )
 
   call_iatlas_module(
     "data_info",
-    "data_info_server",
+    data_info_server,
     input,
     session
   )
@@ -57,13 +59,13 @@ shiny::shinyServer(function(input, output, session) {
   # Analysis Modules ----------------------------------------------------------
 
   analysis_modules_tbl %>%
-    dplyr::select("name", "function_string" = "server_function_string") %>%
+    dplyr::select("name", "server_function") %>%
     purrr::pwalk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
 
   # Tool Modules --------------------------------------------------------------
 
   tool_modules_tbl %>%
-    dplyr::select("name", "function_string" = "server_function_string") %>%
+    dplyr::select("name", "server_function") %>%
     purrr::pwalk(
       iatlas.app::call_iatlas_module, input, session, tab_id = "toolstabs"
     )
@@ -167,8 +169,8 @@ shiny::shinyServer(function(input, output, session) {
 
     analysis_modules <- purrr::map2(
       analysis_modules_tbl$name,
-      analysis_modules_tbl$ui_function_string,
-      ~ shinydashboard::tabItem(tabName = .x, get(.y)(.x))
+      analysis_modules_tbl$ui_function,
+      ~ shinydashboard::tabItem(tabName = .x, .y(.x))
     )
 
     c(other_modules, analysis_modules)
