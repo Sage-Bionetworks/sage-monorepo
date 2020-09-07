@@ -12,7 +12,9 @@ modules_tbl <- "module_config.tsv" %>%
   readr::read_tsv(.) %>%
   dplyr::mutate(
     "link" = stringr::str_c("link_to_", .data$name),
-    "image" = stringr::str_c("images/", .data$name, ".png")
+    "image" = stringr::str_c("images/", .data$name, ".png"),
+    "server_function_string" = stringr::str_c(.data$name, "_server"),
+    "ui_function_string" = stringr::str_c(.data$name, "_ui"),
   )
 
 analysis_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "analysis")
@@ -61,7 +63,7 @@ shiny::shinyServer(function(input, output, session) {
 
   modules_tbl %>%
     dplyr::filter(.data$type == "tool") %>%
-    dplyr::select("name", "function_string" = "server_function") %>%
+    dplyr::select("name", "function_string" = "server_function_string") %>%
     purrr::pwalk(
       iatlas.app::call_iatlas_module, input, session, tab_id = "toolstabs"
     )
@@ -165,7 +167,7 @@ shiny::shinyServer(function(input, output, session) {
 
     analysis_modules <- purrr::map2(
       analysis_modules_tbl$name,
-      analysis_modules_tbl$ui_function,
+      analysis_modules_tbl$ui_function_string,
       ~ shinydashboard::tabItem(tabName = .x, get(.y)(.x))
     )
 
