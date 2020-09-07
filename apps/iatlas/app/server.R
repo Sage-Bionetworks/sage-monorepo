@@ -147,7 +147,7 @@ shiny::shinyServer(function(input, output, session) {
   })
 
   module_tab_items <- shiny::reactive({
-    l1 <- list(
+    other_modules <- list(
       shinydashboard::tabItem(
         tabName = "cohort_selection",
         cohort_selection_ui("cohort_selection")
@@ -158,19 +158,19 @@ shiny::shinyServer(function(input, output, session) {
       )
     )
 
-    l2 <- purrr::map2(
+    analysis_modules <- purrr::map2(
       analysis_modules_tbl$name,
       analysis_modules_tbl$ui_function,
       ~ shinydashboard::tabItem(tabName = .x, get(.y)(.x))
     )
 
-    purrr::flatten(list(l1, l2))
+    c(other_modules, analysis_modules)
   })
 
   output$dashboard_body <- shiny::renderUI({
     shiny::req(readout_info_boxes(), module_image_boxes(), module_tab_items())
 
-    tab_item <- shinydashboard::tabItem(
+    tab_item <- list(shinydashboard::tabItem(
       tabName = "dashboard",
       iatlas.app::titleBox("iAtlas Explorer — Home"),
       iatlas.app::textBox(
@@ -189,12 +189,11 @@ shiny::shinyServer(function(input, output, session) {
         ),
         shiny::fluidRow(module_image_boxes())
       )
-    )
+    ))
 
-    # combine ----
     do.call(
       shinydashboard::tabItems,
-      purrr::flatten(list(list(tab_item), module_tab_items()))
+      c(tab_item, module_tab_items())
     )
   })
 
