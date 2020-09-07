@@ -8,7 +8,13 @@ options(shiny.usecairo = FALSE)
 
 library(magrittr)
 
-modules_tbl <- readr::read_tsv("module_config.tsv")
+modules_tbl <- "module_config.tsv" %>%
+  readr::read_tsv(.) %>%
+  dplyr::mutate(
+    "link" = stringr::str_c("link_to_", .data$name),
+    "image" = stringr::str_c("images/", .data$name, ".png")
+  )
+
 analysis_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "analysis")
 
 
@@ -98,169 +104,50 @@ shiny::shinyServer(function(input, output, session) {
 
   # Dashboard Body ------------------------------------------------------------
 
-  output$dashboard_body <- shiny::renderUI({
-    list1 <- list(
-    # tab item 1 -----
-      shinydashboard::tabItem(
-        tabName = "dashboard",
-        iatlas.app::titleBox("iAtlas Explorer — Home"),
-        iatlas.app::textBox(
-          width = 12,
-          shiny::includeMarkdown("inst/markdown/explore.markdown")
-        ),
-        iatlas.app::sectionBox(
-          title = "What's Inside",
-          shiny::fluidRow(
-            shinydashboard::infoBox(
-              "Immune Readouts:",
-              86,
-              width = 3,
-              color = "black",
-              fill = FALSE,
-              icon = shiny::icon("search")
-            ),
-            shinydashboard::infoBox(
-              "Classes of Readouts:",
-              12,
-              width = 3,
-              color = "black",
-              fill = FALSE,
-              icon = shiny::icon("filter")
-            ),
-            shinydashboard::infoBox(
-              "TCGA Cancers:",
-              33,
-              width = 3,
-              color = "black",
-              fill = FALSE,
-              icon = shiny::icon("flask")
-            ),
-            shinydashboard::infoBox(
-              "TCGA Samples:",
-              "11,080",
-              width = 3,
-              color = "black",
-              fill = FALSE,
-              icon = shiny::icon("users")
-            )
-          )
-        ),
-        iatlas.app::sectionBox(
-          title = "Analysis Modules",
-          iatlas.app::messageBox(
-            width = 12,
-            shiny::p(
-              "Each module presents information organized by theme, with multiple views and interactive controls.",
-              "Within each module, you can find ",
-              shiny::strong("“Manuscript Context”"), " describing how that module can generate figures analogous to those in the manuscript ",
-              shiny::em("Thorsson et al., The Immune Landscape of Cancer, Immunity (2018).")
-            )
-          ),
-          shiny::fluidRow(
-            iatlas.app::imgLinkBox(
-              width = 6,
-              linkId = "link_to_cohort_selection",
-              title = "Cohort Selection",
-              imgSrc = "images/cohort_selection.png",
-              boxText = "Use this module to create a cohort of interest.",
-              linkText = "Open Module"
-            ),
-            iatlas.app::imgLinkBox(
-              width = 6,
-              linkId = "link_to_tumor_microenvironment",
-              title = "Tumor Microenvironment",
-              imgSrc = "images/tumor_microenvironment.png",
-              boxText = "Explore the immune cell proportions in your sample groups.",
-              linkText = "Open Module"
-            )
-          ),
-          shiny::fluidRow(
-            iatlas.app::imgLinkBox(
-              width = 6,
-              title = "Immune Feature Trends",
-              linkId = "link_to_immune_features",
-              imgSrc = "images/immune_features.png",
-              boxText = "This module allows you to see how immune readouts vary across your groups, and how they relate to one another.",
-              linkText = "Open Module"
-            ),
-            iatlas.app::imgLinkBox(
-              width = 6,
-              linkId = "link_to_clinical_outcomes",
-              title = "Clinical Outcomes",
-              imgSrc = "images/clinical_outcomes.png",
-              boxText = "Plot survival curves based on immune characteristics and identify variables associated with outcome.",
-              linkText = "Open Module"
-            )
-          ),
-          shiny::fluidRow(
-            iatlas.app::imgLinkBox(
-              width = 6,
-              title = "Immunomodulators",
-              linkId = "link_to_immunomodulators",
-              imgSrc = "images/immunomodulators.png",
-              boxText = "Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.",
-              linkText = "Open Module"
-            ),
-            iatlas.app::imgLinkBox(
-              width = 6,
-              title = "TIL Maps",
-              linkId = "link_to_til_maps",
-              imgSrc = "images/til_maps.png",
-              boxText = "Explore the characteristics of maps of tumor infiltrating lymphocytes obtained from analysis of H&E images.",
-              linkText = "Open Module"
-            )
-          ),
-          shiny::fluidRow(
-            iatlas.app::imgLinkBox(
-              width = 6,
-              title = "Driver Associations",
-              linkId = "link_to_driver_associations",
-              imgSrc = "images/driver_associations.png",
-              boxText = "Explore Associations of Microenvironment with Driver Mutations.",
-              linkText = "Open Module"
-            ),
-            iatlas.app::imgLinkBox(
-              width = 6,
-              title = "IO Targets",
-              linkId = "link_to_io_targets",
-              imgSrc = "images/io_targets.png",
-              boxText = "Explore the expression of genes that code for immuno-oncological (IO) targets .",
-              linkText = "Open Module"
-            )
-          ),
-          shiny::fluidRow(
-            iatlas.app::imgLinkBox(
-              width = 6,
-              title = "CNV Associations",
-              linkId = "link_to_copy_number",
-              imgSrc = "images/copy_number.png",
-              boxText = "Explore associations of microenvironment with gene copy number.",
-              linkText = "Open Module"
-            ),
-            iatlas.app::imgLinkBox(
-              width = 6,
-              title = "Extracellular Networks",
-              linkId = "link_to_extracellular_network",
-              imgSrc = "images/extracellular_network.png",
-              boxText = "Explore the extracellular networks modulating tumoral immune response.",
-              linkText = "Open Module"
-            )
-          ),
-          shiny::fluidRow(
-            iatlas.app::imgLinkBox(
-              width = 6,
-              title = "Cell-Interaction Diagram",
-              linkId = "link_to_cellimage",
-              imgSrc = "images/cellimage.png",
-              boxText = "Explore cell and protein abundance on an illustration.",
-              linkText = "Open Module"
-            )
-          )
-        )
-      )
+  readout_info_boxes <- shiny::reactive({
+    readout_tbl <- dplyr::tibble(
+      title = c(
+        "Immune Readouts:",
+        "Classes of Readouts:",
+        "TCGA Cancers:",
+        "TCGA Samples:"
+      ),
+      value = c(
+        nrow(iatlas.api.client::query_features()),
+        length(unique(iatlas.api.client::query_features()$class)),
+        nrow(iatlas.api.client::query_tags(
+          datasets = "TCGA", parent_tags = "TCGA_Study"
+        )),
+        11080
+      ),
+      icon = purrr::map(c("search", "filter", "flask", "users"), shiny::icon)
     )
-    # item 2----
-    list2 <- list(
+
+    purrr::pmap(
+      readout_tbl,
+      shinydashboard::infoBox,
+      width = 3,
+      color = "black",
+      fill = FALSE
+    )
+  })
+
+  module_image_boxes <- shiny::reactive({
+    purrr::pmap(
+      list(
+        title  = analysis_modules_tbl$display,
+        linkId = analysis_modules_tbl$link,
+        imgSrc = analysis_modules_tbl$image,
+        boxText = analysis_modules_tbl$description
+      ),
+      iatlas.app::imgLinkBox,
+      width = 6,
+      linkText = "Open Module"
+    )
+  })
+
+  module_tab_items <- shiny::reactive({
+    l1 <- list(
       shinydashboard::tabItem(
         tabName = "cohort_selection",
         cohort_selection_ui("cohort_selection")
@@ -271,15 +158,43 @@ shiny::shinyServer(function(input, output, session) {
       )
     )
 
-    list3 <- purrr::map2(
+    l2 <- purrr::map2(
       analysis_modules_tbl$name,
       analysis_modules_tbl$ui_function,
       ~ shinydashboard::tabItem(tabName = .x, get(.y)(.x))
     )
 
+    purrr::flatten(list(l1, l2))
+  })
+
+  output$dashboard_body <- shiny::renderUI({
+    shiny::req(readout_info_boxes(), module_image_boxes(), module_tab_items())
+
+    tab_item <- shinydashboard::tabItem(
+      tabName = "dashboard",
+      iatlas.app::titleBox("iAtlas Explorer — Home"),
+      iatlas.app::textBox(
+        width = 12,
+        shiny::includeMarkdown("inst/markdown/explore1.markdown")
+      ),
+      iatlas.app::sectionBox(
+        title = "What's Inside",
+        shiny::fluidRow(readout_info_boxes())
+      ),
+      iatlas.app::sectionBox(
+        title = "Analysis Modules",
+        iatlas.app::messageBox(
+          width = 12,
+          shiny::includeMarkdown("inst/markdown/explore2.markdown")
+        ),
+        shiny::fluidRow(module_image_boxes())
+      )
+    )
+
+    # combine ----
     do.call(
       shinydashboard::tabItems,
-      purrr::flatten(list(list1, list2, list3))
+      purrr::flatten(list(list(tab_item), module_tab_items()))
     )
   })
 
