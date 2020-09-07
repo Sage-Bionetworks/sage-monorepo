@@ -43,14 +43,14 @@ shiny::shinyServer(function(input, output, session) {
     session
   )
 
-  # Analysis modules --------------------------------------------------------
+  # Analysis modules ----------------------------------------------------------
 
   modules_tbl %>%
     dplyr::filter(.data$type == "analysis") %>%
     dplyr::select("name", "function_string" = "server_function") %>%
     purrr::pwalk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
 
-  # Tool modules --------------------------------------------------------
+  # Tool modules --------------------------------------------------------------
 
   modules_tbl %>%
     dplyr::filter(.data$type == "tool") %>%
@@ -58,6 +58,42 @@ shiny::shinyServer(function(input, output, session) {
     purrr::pwalk(
       iatlas.app::call_iatlas_module, input, session, tab_id = "toolstabs"
     )
+
+  # Sidebar menu --------------------------------------------------------------
+  output$sidebar_menu <- shinydashboard::renderMenu({
+    shinydashboard::sidebarMenu(
+      id = "explorertabs",
+      shinydashboard::menuItem(
+        "iAtlas Explorer Home",
+        tabName = "dashboard",
+        icon = shiny::icon("dashboard")
+      ),
+      shinydashboard::menuItem(
+        "Cohort Selection",
+        tabName = "cohort_selection",
+        icon = shiny::icon("cog")
+      ),
+      shinydashboard::menuItem(
+        "Data Description",
+        icon = shiny::icon("th-list"),
+        tabName = "data_info"
+      ),
+      shinydashboard::menuItem(
+        text = "Analysis Modules",
+        icon = shiny::icon("bar-chart"),
+        startExpanded = TRUE,
+        purrr::map2(
+          modules_tbl$display,
+          modules_tbl$name,
+          ~ shinydashboard::menuSubItem(
+            text = .x,
+            tabName = .y,
+            icon = shiny::icon("cog")
+          )
+        )
+      )
+    )
+  })
 })
 
 
