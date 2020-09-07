@@ -1,12 +1,12 @@
-display	name	server_function	ui_function	type	description
-Cell-Interaction Diagram	cellimage	cellimage_server	cellimage_ui	analysis	Explore cell and protein abundance on an illustration.
-Clinical Outcomes	clinical_outcomes	clinical_outcomes_server	clinical_outcomes_ui	analysis	Plot survival curves based on immune characteristics and identify variables associated with outcome.
-CNV Associations	copy_number	copy_number_server	copy_number_ui	analysis	Explore associations of microenvironment with gene copy number.
-Driver Associations	driver_associations	driver_associations_server	driver_associations_ui	analysis	Explore Associations of Microenvironment with Driver Mutations.
-Extracellular Networks	extracellular_network	extracellular_network_server	extracellular_network_ui	analysis	Explore the extracellular networks modulating tumoral immune response.
-Immune Feature Trends	immune_features	immune_features_server	immune_features_ui	analysis	This module allows you to see how immune readouts vary across your groups, and how they relate to one another.
-Immunomodulators	immunomodulators	immunomodulators_server	immunomodulators_ui	analysis	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.
-IO Targets	io_targets	io_targets_server	io_targets_ui	analysis	Explore the expression of genes that code for immuno-oncological (IO) targets.
-TIL Maps	til_maps	til_maps_server	til_maps_ui	analysis	Explore the characteristics of maps of tumor infiltrating lymphocytes obtained from analysis of H&E images.
-Tumor Microenvironment	tumor_microenvironment	tumor_microenvironment_server	tumor_microenvironment_ui	analysis	Explore the immune cell proportions in your sample groups.
-Immune Subtype Classifier	immune_subtype_classifier	immune_subtype_classifier_server	immune_subtype_classifier_ui	tool	
+display	name	type	description
+Cell-Interaction Diagram	cellimage	analysis	Explore cell and protein abundance on an illustration.
+Clinical Outcomes	clinical_outcomes	analysis	Plot survival curves based on immune characteristics and identify variables associated with outcome.
+CNV Associations	copy_number	analysis	Explore associations of microenvironment with gene copy number.
+Driver Associations	driver_associations	analysis	Explore Associations of Microenvironment with Driver Mutations.
+Extracellular Networks	extracellular_network	analysis	Explore the extracellular networks modulating tumoral immune response.
+Immune Feature Trends	immune_features	analysis	This module allows you to see how immune readouts vary across your groups, and how they relate to one another.
+Immunomodulators	immunomodulators	analysis	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.
+IO Targets	io_targets	analysis	Explore the expression of genes that code for immuno-oncological (IO) targets.
+TIL Maps	til_maps	analysis	Explore the characteristics of maps of tumor infiltrating lymphocytes obtained from analysis of H&E images.
+Tumor Microenvironment	tumor_microenvironment	analysis	Explore the immune cell proportions in your sample groups.
+Immune Subtype Classifier	immune_subtype_classifier	tool	

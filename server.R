@@ -35,7 +35,7 @@ shiny::shinyServer(function(input, output, session) {
     }
   })
 
-  # Explore page modules ------------------------------------------------------
+  # Modules -------------------------------------------------------------------
 
   cohort_obj <- call_iatlas_module(
     "cohort_selection",
@@ -51,13 +51,13 @@ shiny::shinyServer(function(input, output, session) {
     session
   )
 
-  # Analysis modules ----------------------------------------------------------
+  # Analysis Modules ----------------------------------------------------------
 
   analysis_modules_tbl %>%
     dplyr::select("name", "function_string" = "server_function") %>%
     purrr::pwalk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
 
-  # Tool modules --------------------------------------------------------------
+  # Tool Modules --------------------------------------------------------------
 
   modules_tbl %>%
     dplyr::filter(.data$type == "tool") %>%
@@ -66,7 +66,20 @@ shiny::shinyServer(function(input, output, session) {
       iatlas.app::call_iatlas_module, input, session, tab_id = "toolstabs"
     )
 
-  # Sidebar menu --------------------------------------------------------------
+  # Sidebar Menu --------------------------------------------------------------
+
+  analysis_module_menu_items <- shiny::reactive({
+    purrr::map2(
+      analysis_modules_tbl$display,
+      analysis_modules_tbl$name,
+      ~ shinydashboard::menuSubItem(
+        text = .x,
+        tabName = .y,
+        icon = shiny::icon("cog")
+      )
+    )
+  })
+
   output$sidebar_menu <- shinydashboard::renderMenu({
     shinydashboard::sidebarMenu(
       id = "explorertabs",
@@ -89,15 +102,7 @@ shiny::shinyServer(function(input, output, session) {
         text = "Analysis Modules",
         icon = shiny::icon("bar-chart"),
         startExpanded = TRUE,
-        purrr::map2(
-          modules_tbl$display,
-          modules_tbl$name,
-          ~ shinydashboard::menuSubItem(
-            text = .x,
-            tabName = .y,
-            icon = shiny::icon("cog")
-          )
-        )
+        analysis_module_menu_items()
       )
     )
   })
