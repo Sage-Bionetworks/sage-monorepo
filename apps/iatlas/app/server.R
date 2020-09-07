@@ -271,14 +271,11 @@ shiny::shinyServer(function(input, output, session) {
       )
     )
 
-    list3 <- list()
-    for(i in 1:nrow(analysis_modules_tbl)){
-      x <- shinydashboard::tabItem(
-        tabName = analysis_modules_tbl$name[[i]],
-        get(analysis_modules_tbl$ui_function[[i]])(analysis_modules_tbl$name[[i]])
-      )
-      list3[[i]] <- x
-    }
+    list3 <- purrr::map2(
+      analysis_modules_tbl$name,
+      analysis_modules_tbl$ui_function,
+      ~ shinydashboard::tabItem(tabName = .x, get(.y)(.x))
+    )
 
     do.call(
       shinydashboard::tabItems,
