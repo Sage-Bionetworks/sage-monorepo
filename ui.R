@@ -19,22 +19,16 @@ footerTagList <- list(
 # Define the full user-interface, `ui`
 ################################################################################
 
-source("R/pages/aboutpage.R", local = T)
-source("R/pages/explorepage.R", local = T)
-source("R/pages/toolspage.R", local = T)
-source("R/pages/docspage.R", local = T)
-source("R/pages/resourcespage.R", local = T)
-
 ui <- shiny::navbarPage(
   shiny::includeCSS("css/custom.css"),
   shiny::includeCSS("css/footer.css"),
   shiny::includeCSS("css/bootstrapTable.min.css"),
   title = shiny::strong("CRI iAtlas Portal"), selected = "Explore",
-  shiny::tabPanel("Explore", explorepage, icon = icon("bar-chart")),
-  shiny::tabPanel("Tools", toolspage, icon = icon("wrench")),
-  shiny::tabPanel("About", aboutpage, icon = icon("info-circle")),
-  shiny::tabPanel("Documentation", docspage, icon = icon("file-text")),
-  shiny::tabPanel("Resources", resourcespage, icon = icon("link")),
+  shiny::tabPanel("Explore", explorepage_ui(), icon = icon("bar-chart")),
+  shiny::tabPanel("Tools", toolspage_ui(), icon = icon("wrench")),
+  shiny::tabPanel("About", aboutpage_ui(), icon = icon("info-circle")),
+  shiny::tabPanel("Documentation", docspage_ui(), icon = icon("file-text")),
+  shiny::tabPanel("Resources", resourcespage_ui(), icon = icon("link")),
   header = headerTagList,
   footer = footerTagList,
   collapsible = TRUE,
