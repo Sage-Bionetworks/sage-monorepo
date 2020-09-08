@@ -27,16 +27,9 @@ cohort_manual_selection_server <- function(
         }
       }))
 
-      dataset_samples <- shiny::reactive({
-        shiny::req(dataset())
-        iatlas.api.client::query_dataset_samples(dataset()) %>%
-          dplyr::pull("name")
-      })
-
       filter_obj <- cohort_filter_selection_server(
         "cohort_filter_selection",
-        dataset,
-        dataset_samples
+        dataset
       )
 
       cohort_obj <- cohort_group_selection_server(
