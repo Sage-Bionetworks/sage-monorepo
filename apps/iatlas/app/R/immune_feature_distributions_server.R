@@ -9,7 +9,7 @@ immune_feature_distributions_server <- function(
       ns <- session$ns
 
       output$selection_ui <- shiny::renderUI({
-        choices <-  iatlas.app::create_nested_named_list(
+        choices <-  create_nested_named_list(
           cohort_obj()$feature_tbl, values_col = "name"
         )
         shiny::selectInput(
@@ -29,7 +29,7 @@ immune_feature_distributions_server <- function(
 
       feature_plot_label <- shiny::reactive({
         shiny::req(input$scale_method_choice, feature_choice_display())
-        iatlas.app::transform_feature_string(
+        transform_feature_string(
           feature_choice_display(),
           input$scale_method_choice
         )
@@ -40,7 +40,7 @@ immune_feature_distributions_server <- function(
           input$feature_choice_name,
           input$scale_method_choice
         )
-        iatlas.app::build_ifd_distplot_tbl(
+        build_ifd_distplot_tbl(
           cohort_obj(),
           input$feature_choice_name,
           input$scale_method_choice

@@ -6,17 +6,17 @@ tumor_microenvironment_cell_proportions_server  <- function(
     id,
     function(input, output, session) {
 
-      value_tbl <- shiny::reactive(iatlas.app::build_ocp_value_tbl(cohort_obj()))
+      value_tbl <- shiny::reactive(build_ocp_value_tbl(cohort_obj()))
 
       barplot_tbl <- shiny::reactive({
         req(value_tbl())
-        iatlas.app::build_ocp_barplot_tbl(value_tbl())
+        build_ocp_barplot_tbl(value_tbl())
       })
 
       output$barplot <- plotly::renderPlotly({
         shiny::req(barplot_tbl())
 
-        iatlas.app::create_barplot(
+        create_barplot(
           barplot_tbl(),
           source_name = "overall_cell_proportions_barplot",
           color_col = "color",
@@ -44,7 +44,7 @@ tumor_microenvironment_cell_proportions_server  <- function(
 
       scatterplot_tbl <- shiny::reactive({
         shiny::req(value_tbl(), barplot_selected_group())
-        iatlas.app::build_ocp_scatterplot_tbl(
+        build_ocp_scatterplot_tbl(
           value_tbl(),
           barplot_selected_group()
         )
@@ -59,7 +59,7 @@ tumor_microenvironment_cell_proportions_server  <- function(
           barplot_selected_group() %in% groups,
           "Click above barchart"
         ))
-        iatlas.app::create_scatterplot(
+        create_scatterplot(
           scatterplot_tbl(),
 
           source_name = "overall_cell_proportions_scatterplot",

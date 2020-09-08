@@ -9,7 +9,7 @@ clinical_outcomes_survival_server <- function(id, cohort_obj) {
         shiny::selectInput(
           inputId = ns("time_feature_choice"),
           label = "Select or Search for Survival Endpoint",
-          choices = iatlas.app::build_co_survival_list(
+          choices = build_co_survival_list(
             cohort_obj()$feature_tbl
           )
         )
@@ -17,7 +17,7 @@ clinical_outcomes_survival_server <- function(id, cohort_obj) {
 
       status_feature_choice <- shiny::reactive({
         shiny::req(input$time_feature_choice)
-        iatlas.app::get_co_status_feature(input$time_feature_choice)
+        get_co_status_feature(input$time_feature_choice)
       })
 
       survival_value_tbl <- shiny::reactive({
@@ -57,7 +57,7 @@ clinical_outcomes_survival_server <- function(id, cohort_obj) {
           data = survival_value_tbl()
         )
 
-        iatlas.app::create_kmplot(
+        create_kmplot(
           fit = fit,
           df = survival_value_tbl(),
           confint = input$confint,

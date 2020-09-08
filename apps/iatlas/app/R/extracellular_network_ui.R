@@ -3,10 +3,10 @@ extracellular_network_ui <- function(id){
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        iatlas.app::titleBox(
+        titleBox(
             "iAtlas Explorer — Extracellular Networks"
         ),
-        iatlas.app::textBox(
+        textBox(
             width = 12,
             paste0(
                 "Explore the extracellular networks modulating tumoral immune ",
@@ -18,7 +18,7 @@ extracellular_network_ui <- function(id){
                 "Ramilowski et al., 2015 and retrieved from FANTOM5."
             )
         ),
-        iatlas.app::sectionBox(
+        sectionBox(
             title = "Extracellular networks",
             module_ui(ns("extracellular_network_main"))
         )

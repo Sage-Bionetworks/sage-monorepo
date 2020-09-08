@@ -10,7 +10,7 @@ univariate_driver_server <- function(id, cohort_obj) {
           inputId  = ns("response_variable"),
           label    = "Select or Search for Response Variable",
           selected = "leukocyte_fraction",
-          choices  = iatlas.app::create_nested_named_list(
+          choices  = create_nested_named_list(
             cohort_obj()$feature_tbl, values_col = "name"
           )
         )
@@ -44,7 +44,7 @@ univariate_driver_server <- function(id, cohort_obj) {
       #     )
       #   ))
       #
-      #   iatlas.app::create_scatterplot(
+      #   create_scatterplot(
       #     volcano_plot_tbl(),
       #     x_col     = "log10_fold_change",
       #     y_col     = "log10_p_value",
@@ -81,7 +81,7 @@ univariate_driver_server <- function(id, cohort_obj) {
           )
         ))
 
-        clicked_label <- iatlas.app::get_values_from_eventdata(eventdata, "key")
+        clicked_label <- get_values_from_eventdata(eventdata, "key")
 
         result <-  dplyr::filter(
           volcano_plot_tbl(),
@@ -120,7 +120,7 @@ univariate_driver_server <- function(id, cohort_obj) {
 
         ylab <- input$response_variable %>%
           as.integer() %>%
-          iatlas.app::get_feature_display_from_id()
+          get_feature_display_from_id()
 
         title <- paste(
           "Cohort:",
@@ -131,7 +131,7 @@ univariate_driver_server <- function(id, cohort_obj) {
           round(selected_volcano_result()$log10_fold_change, 4)
         )
 
-        iatlas.app::create_violinplot(
+        create_violinplot(
           violin_tbl(),
           xlab = xlab,
           ylab = ylab,

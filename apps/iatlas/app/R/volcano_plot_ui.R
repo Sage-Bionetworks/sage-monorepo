@@ -4,7 +4,7 @@ volcano_plot_ui <- function(id){
 
     shiny::tagList(
         shiny::fluidRow(
-            iatlas.app::plotBox(
+            plotBox(
                 width = 12,
                 "volcano_plot" %>%
                     ns() %>%
@@ -14,7 +14,7 @@ volcano_plot_ui <- function(id){
             )
         ),
         shiny::fluidRow(
-            iatlas.app::plotBox(
+            plotBox(
                 width = 12,
                 "violin_plot" %>%
                     ns() %>%

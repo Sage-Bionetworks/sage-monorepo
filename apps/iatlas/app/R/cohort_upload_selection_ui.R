@@ -4,7 +4,7 @@ cohort_upload_selection_ui <- function(id) {
 
     shiny::tagList(
         shiny::fluidRow(
-            iatlas.app::optionsBox(
+            optionsBox(
                 width = 12,
                 shiny::tags$head(
                     shiny::tags$script(src = "message-handler.js")
@@ -28,14 +28,14 @@ cohort_upload_selection_ui <- function(id) {
             )
         ),
         shiny::fluidRow(
-            iatlas.app::messageBox(
+            messageBox(
                 width = 12,
                 shiny::p("After uploading your file, the table below will show your defined groups."),
                 DT::dataTableOutput(ns("dt"))
             )
         ),
         shiny::fluidRow(
-            iatlas.app::optionsBox(
+            optionsBox(
                 width = 12,
                 shiny::uiOutput(ns("user_group_selection"))
             )

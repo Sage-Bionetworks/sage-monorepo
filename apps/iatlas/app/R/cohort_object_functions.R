@@ -11,6 +11,13 @@ get_cohort_feature_class_list <- function(cohort_obj){
 ## api queries ----------------------------------------------------------------
 # features --------------------------------------------------------------------
 
+#' Title
+#'
+#' @param cohort_object
+#' @param feature
+#' @param class
+#'
+#' @import iatlas.api.client
 query_feature_values_with_cohort_object <- function(
   cohort_object,
   feature = NA,

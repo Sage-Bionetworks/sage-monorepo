@@ -3,14 +3,14 @@ tumor_microenvironment_cell_proportions_ui <- function(id){
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        iatlas.app::messageBox(
+        messageBox(
             width = 12,
             shiny::includeMarkdown(
                 "inst/markdown/overall_cell_proportions1.markdown"
             )
         ),
         shiny::fluidRow(
-            iatlas.app::plotBox(
+            plotBox(
                 width = 12,
                 "barplot" %>%
                     ns() %>%
@@ -19,14 +19,14 @@ tumor_microenvironment_cell_proportions_ui <- function(id){
                 plotly_ui(ns("barplot"))
             )
         ),
-        iatlas.app::messageBox(
+        messageBox(
             width = 12,
             shiny::includeMarkdown(
                 "markdown/overall_cell_proportions2.markdown"
             )
         ),
         shiny::fluidRow(
-            iatlas.app::plotBox(
+            plotBox(
                 width = 12,
                 "scatterplot" %>%
                     ns() %>%

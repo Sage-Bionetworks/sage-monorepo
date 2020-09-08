@@ -9,7 +9,7 @@ til_map_distributions_server <- function(id, cohort_obj, sample_tbl) {
         shiny::selectInput(
           ns("feature_choice"),
           label = "Select or Search for Variable",
-          choices = iatlas.app::create_tm_named_list(cohort_obj())
+          choices = create_tm_named_list(cohort_obj())
         )
       })
 
@@ -22,7 +22,7 @@ til_map_distributions_server <- function(id, cohort_obj, sample_tbl) {
 
       feature_plot_label <- shiny::reactive({
         shiny::req(input$scale_method_choice, feature_choice_display())
-        iatlas.app::transform_feature_string(
+        transform_feature_string(
           feature_choice_display(),
           input$scale_method_choice
         )
@@ -33,7 +33,7 @@ til_map_distributions_server <- function(id, cohort_obj, sample_tbl) {
           input$feature_choice,
           input$scale_method_choice
         )
-        iatlas.app::build_tm_distplot_tbl(
+        build_tm_distplot_tbl(
           cohort_obj(),
           input$feature_choice,
           input$scale_method_choice

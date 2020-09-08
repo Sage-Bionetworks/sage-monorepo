@@ -12,7 +12,7 @@ clinical_outcomes_heatmap_server <- function(
         shiny::selectInput(
           inputId  = ns("class_choice"),
           label    = "Select or Search for Variable Class",
-          choices  = iatlas.app::get_cohort_feature_class_list(cohort_obj()),
+          choices  = get_cohort_feature_class_list(cohort_obj()),
           selected = "T Helper Cell Score"
         )
       })
@@ -21,7 +21,7 @@ clinical_outcomes_heatmap_server <- function(
         shiny::selectInput(
           inputId = ns("time_feature_choice"),
           label = "Select or Search for Survival Endpoint",
-          choices = iatlas.app::build_co_survival_list(
+          choices = build_co_survival_list(
             cohort_obj()$feature_tbl
           )
         )
@@ -29,7 +29,7 @@ clinical_outcomes_heatmap_server <- function(
 
       status_feature_choice <- shiny::reactive({
         shiny::req(input$time_feature_choice)
-        iatlas.app::get_co_status_feature(input$time_feature_choice)
+        get_co_status_feature(input$time_feature_choice)
       })
 
       survival_value_tbl <- shiny::reactive({
@@ -43,12 +43,12 @@ clinical_outcomes_heatmap_server <- function(
 
       feature_tbl <- shiny::reactive({
         shiny::req(input$class_choice)
-        iatlas.app::build_co_feature_tbl(cohort_obj(), input$class_choice)
+        build_co_feature_tbl(cohort_obj(), input$class_choice)
       })
 
       heatmap_tbl <- shiny::reactive({
         shiny::req(survival_value_tbl(), feature_tbl())
-        iatlas.app::build_co_heatmap_tbl(
+        build_co_heatmap_tbl(
           survival_value_tbl(),
           feature_tbl(),
           cohort_obj()$sample_tbl
@@ -73,7 +73,7 @@ clinical_outcomes_heatmap_server <- function(
         plotly::event_data("plotly_click", "clinical_outcomes_heatmap")
       })
 
-      iatlas.app::plotly_server(
+      plotly_server(
         "heatmap",
         plot_tbl       = heatmap_tbl,
         plot_eventdata = heatmap_eventdata,

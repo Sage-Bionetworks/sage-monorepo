@@ -3,14 +3,14 @@ io_target_distributions_ui <- function(id) {
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        iatlas.app::messageBox(
+        messageBox(
             width = 12,
             shiny::includeMarkdown(
                 "inst/markdown/io_target_dist.markdown"
             )
         ),
         shiny::fluidRow(
-            iatlas.app::optionsBox(
+            optionsBox(
                 width = 12,
                 shiny::column(
                     width = 3,

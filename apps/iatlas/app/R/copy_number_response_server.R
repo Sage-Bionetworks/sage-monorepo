@@ -9,7 +9,7 @@ copy_number_response_server <- function(
       ns <- session$ns
 
       # group_tbl <- shiny::reactive({
-      #   iatlas.app::query_tags(
+      #   query_tags(
       #     cohort_obj()$dataset,
       #     cohort_obj()$group_name
       #   )
@@ -19,7 +19,7 @@ copy_number_response_server <- function(
       #   shiny::selectInput(
       #     inputId  = ns("group_choices"),
       #     label    = "Select Group Filter",
-      #     choices  = iatlas.app::build_cnv_group_list(group_tbl()),
+      #     choices  = build_cnv_group_list(group_tbl()),
       #     selected = "All",
       #     multiple = T
       #   )
@@ -29,16 +29,16 @@ copy_number_response_server <- function(
       #   shiny::selectInput(
       #     inputId  = ns("response_variable"),
       #     label    = "Select or Search for Response Variable",
-      #     choices = iatlas.app::create_nested_named_list(
+      #     choices = create_nested_named_list(
       #       cohort_obj()$feature_tbl, values_col = "name"
       #     ),
       #     selected = "leukocyte_fraction"
       #   )
       # })
       #
-      # gene_tbl  <- shiny::reactive(iatlas.app::build_cnv_gene_tbl())
+      # gene_tbl  <- shiny::reactive(build_cnv_gene_tbl())
       #
-      # gene_set_tbl <- shiny::reactive(iatlas.app::query_gene_types())
+      # gene_set_tbl <- shiny::reactive(query_gene_types())
       #
       # gene_choice_list <- shiny::reactive({
       #   shiny::req(gene_set_tbl(), gene_tbl())
@@ -57,7 +57,7 @@ copy_number_response_server <- function(
       #
       # gene_entrez_query <- shiny::reactive({
       #   shiny::req(input$gene_filter_choices)
-      #   iatlas.app::get_cnv_entrez_query_from_filters(
+      #   get_cnv_entrez_query_from_filters(
       #     input$gene_filter_choices,
       #     gene_set_tbl(),
       #     gene_tbl()
@@ -85,7 +85,7 @@ copy_number_response_server <- function(
       #     direction_query()
       #   )
       #
-      #   result_tbl <- iatlas.app::query_copy_number_results(
+      #   result_tbl <- query_copy_number_results(
       #     datasets = cohort_obj()$dataset,
       #     tags = groups(),
       #     genes = gene_entrez_query(),
@@ -109,7 +109,7 @@ copy_number_response_server <- function(
       #
       # output$cnvPlot <- plotly::renderPlotly({
       #   shiny::req(result_tbl())
-      #   iatlas.app::create_histogram(
+      #   create_histogram(
       #     dplyr::select(result_tbl(), x = t_stat),
       #     x_lab = 'T statistics, Positive if normal value higher',
       #     y_lab = 'Number of tests',
@@ -121,7 +121,7 @@ copy_number_response_server <- function(
       # output$cnvtable <- DT::renderDataTable({
       #   shiny::req(result_tbl())
       #   DT::datatable(
-      #     iatlas.app::build_cnv_dt_tbl(result_tbl()),
+      #     build_cnv_dt_tbl(result_tbl()),
       #     extensions = 'Buttons', options = list(
       #       scrollY = '300px',
       #       paging = TRUE,

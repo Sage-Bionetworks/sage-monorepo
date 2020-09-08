@@ -54,7 +54,7 @@ data_info_server <- function(id){
 
       selected_method_tags <- shiny::reactive({
         shiny::req(filtered_feature_tbl())
-        iatlas.app::get_unique_values_from_col(
+        get_unique_values_from_col(
           filtered_feature_tbl(),
           method_tag
         )
@@ -91,14 +91,14 @@ data_info_server <- function(id){
 
       shiny::observeEvent(input$feature_table_rows_selected, {
         output$variable_details_section <- shiny::renderUI({
-          iatlas.app::sectionBox(
+          sectionBox(
             title = "Variable Class Details",
-            iatlas.app::messageBox(
+            messageBox(
               width = 12,
               shiny::p("Here is additional information about the variables in the Variable Class you selected. To the right you can access description of the methods used to obtain the variables.")
             ),
             shiny::fluidRow(
-              iatlas.app::tableBox(
+              tableBox(
                 width = 9,
                 shiny::tableOutput(ns('variable_class_table'))
               ),

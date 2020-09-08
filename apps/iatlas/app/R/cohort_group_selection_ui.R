@@ -3,7 +3,7 @@ cohort_group_selection_ui <- function(id) {
     ns <- shiny::NS(id)
 
     shiny::fluidRow(
-        iatlas.app::optionsBox(
+        optionsBox(
             width = 12,
             shiny::uiOutput(ns("select_group_ui")),
             shiny::conditionalPanel(

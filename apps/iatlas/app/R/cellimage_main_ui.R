@@ -2,13 +2,13 @@ cellimage_main_ui <- function(id){
 
     ns <- shiny::NS(id)
     shiny::tagList(
-        iatlas.app::messageBox(
+        messageBox(
             width = 12,
             shiny::includeMarkdown("inst/markdown/cellimage.markdown"),
             shiny::actionLink(ns("method_link"), "Click to view method.")
         ),
         shiny::fluidRow(
-            iatlas.app::optionsBox(
+            optionsBox(
                 shiny::column(
                     width = 6,
                     shiny::radioButtons(
@@ -23,7 +23,7 @@ cellimage_main_ui <- function(id){
                     shiny::uiOutput(ns("select_ui"))
                 )
             ),
-            iatlas.app::optionsBox(
+            optionsBox(
                 shiny::column(
                     width = 6,
                     shiny::radioButtons(
@@ -40,12 +40,12 @@ cellimage_main_ui <- function(id){
             )
         ),
         shiny::fluidRow(
-            iatlas.app::plotBox(
+            plotBox(
                 width = 6,
                 shiny::uiOutput(ns("plot1")) %>%
                     shinycssloaders::withSpinner(.)
             ),
-            iatlas.app::plotBox(
+            plotBox(
                 width = 6,
                 shiny::uiOutput(ns("plot2")) %>%
                     shinycssloaders::withSpinner(.)

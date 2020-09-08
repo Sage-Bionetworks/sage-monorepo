@@ -94,7 +94,7 @@ tag_filter_element_server <- function(
         shiny::checkboxGroupInput(
           inputId = ns("tag_choices"),
           label = "Select choices to include:",
-          choices = iatlas.app::build_tag_filter_list(
+          choices = build_tag_filter_list(
             input$parent_tag_choice,
             dataset()
           ),

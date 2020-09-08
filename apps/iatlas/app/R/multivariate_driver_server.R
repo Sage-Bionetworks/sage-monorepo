@@ -13,7 +13,7 @@ multivariate_driver_server <- function(
           inputId  = ns("response_choice"),
           label    = "Select or Search for Response Variable",
           selected = "leukocyte_fraction",
-          choices  = iatlas.app::create_nested_named_list(
+          choices  = create_nested_named_list(
             cohort_obj()$feature_tbl, values_col = "name"
           )
         )
@@ -122,7 +122,7 @@ multivariate_driver_server <- function(
       #     )
       #   ))
       #
-      # #   iatlas.app::create_scatterplot(
+      # #   create_scatterplot(
       # #     volcano_plot_tbl(),
       # #     x_col     = "log10_fold_change",
       # #     y_col     = "log10_p_value",
@@ -159,7 +159,7 @@ multivariate_driver_server <- function(
       #     )
       #   ))
       #
-      #   clicked_label <- iatlas.app::get_values_from_eventdata(eventdata, "key")
+      #   clicked_label <- get_values_from_eventdata(eventdata, "key")
       #
       #   result <-  dplyr::filter(
       #     volcano_plot_tbl(),
@@ -197,7 +197,7 @@ multivariate_driver_server <- function(
       #     "Parameters have changed, press the calculate boutton."
       #   ))
       #
-      #   iatlas.app::create_violinplot(
+      #   create_violinplot(
       #     violin_tbl(),
       #     xlab = create_md_violin_plot_x_lab(
       #       selected_volcano_result()$label, input$group_mode
@@ -211,7 +211,7 @@ multivariate_driver_server <- function(
       #   )
       # })
 #
-#       iatlas.app::plotly_server(
+#       plotly_server(
 #         "violin_plot",
 #         plot_tbl = violin_tbl
 #       )
