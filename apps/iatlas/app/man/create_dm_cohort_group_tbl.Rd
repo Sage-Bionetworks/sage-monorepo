@@ -2,9 +2,9 @@
 % Please edit documentation in R/cohort_group_selection_functions.R
 \name{create_dm_cohort_group_tbl}
 \alias{create_dm_cohort_group_tbl}
-\title{Create Driver Mutation Cohort Group Tibbl}
+\title{Create Driver Mutation Cohort Group Tibble}
 \usage{
-create_dm_cohort_group_tbl(sample_tbl, gene_name)
+create_dm_cohort_group_tbl(sample_tbl, mutation)
 }
 \arguments{
 \item{sample_tbl}{A tibble}
@@ -12,5 +12,5 @@ create_dm_cohort_group_tbl(sample_tbl, gene_name)
 \item{gene_name}{A string}
 }
 \description{
-Create Driver Mutation Cohort Group Tibbl
+Create Driver Mutation Cohort Group Tibble
 }

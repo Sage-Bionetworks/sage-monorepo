@@ -25,6 +25,7 @@ Imports:
     ghql,
     ggmosaic,
     ggplot2,
+    iatlas.api.client,
     ImmuneSubtypeClassifier,
     magrittr,
     parallel,

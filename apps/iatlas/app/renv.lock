@@ -299,10 +299,10 @@
     },
     "covr": {
       "Package": "covr",
-      "Version": "3.4.0",
+      "Version": "3.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "f74318f5d25fa79665684bcdc296ea4f"
+      "Hash": "cbc6df1ef6ee576f844f973c1fc04ab4"
     },
     "cowplot": {
       "Package": "cowplot",

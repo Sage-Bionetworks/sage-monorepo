@@ -4,15 +4,15 @@
 \alias{build_tm_distplot_tbl}
 \title{Build Tilmap Distplot Tibble}
 \usage{
-build_tm_distplot_tbl(tbl, id, scale_method)
+build_tm_distplot_tbl(cohort_object, feature_name, scale_method)
 }
 \arguments{
+\item{scale_method}{A string}
+
 \item{tbl}{A tibble with columns sample_id, sample_name, slide_barcode, group}
 
 \item{id}{An integer in the feature_id column of the features_to_samples
 table}
-
-\item{scale_method}{A string}
 }
 \description{
 Build Tilmap Distplot Tibble

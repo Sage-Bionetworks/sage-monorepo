@@ -4,14 +4,14 @@
 \alias{build_io_target_distplot_tbl}
 \title{Build IO Target Distplot Tibble}
 \usage{
-build_io_target_distplot_tbl(gene_id, sample_tbl, scale_method)
+build_io_target_distplot_tbl(cohort_object, gene, scale_method)
 }
 \arguments{
+\item{scale_method}{A string}
+
 \item{gene_id}{An Integer in the gene_id column of the genes_to_samples table}
 
 \item{sample_tbl}{A tibble with columns sample_id, and group}
-
-\item{scale_method}{A string}
 }
 \description{
 Build IO Target Distplot Tibble

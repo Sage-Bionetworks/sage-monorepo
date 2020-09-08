@@ -4,7 +4,7 @@
 \alias{build_md_tag_covariate_tbl}
 \title{Build Multivariate Driver Tag Covariate Tibble}
 \usage{
-build_md_tag_covariate_tbl(covariates)
+build_md_tag_covariate_tbl(cohort_obj, cov_obj)
 }
 \arguments{
 \item{covariates}{A vector of strings that are in the name column of the tags
