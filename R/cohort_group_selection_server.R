@@ -1,8 +1,4 @@
-cohort_group_selection_server <- function(
-  id,
-  filter_obj,
-  selected_dataset
-) {
+cohort_group_selection_server <- function(id, selected_dataset) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -49,12 +45,15 @@ cohort_group_selection_server <- function(
         else return(input$group_choice)
       }))
 
-
-      # This is so that the conditional panel can see the various shiny::reactives
-      output$display_driver_mutation <- shiny::reactive({
+      display_driver_mutation_ui <- shiny::reactive({
         shiny::req(group_choice())
         group_choice() == "Driver Mutation"
       })
+
+      # This is so that the conditional panel can see the various shiny::reactives
+      output$display_driver_mutation <- shiny::reactive(
+        display_driver_mutation_ui()
+      )
 
       shiny::outputOptions(
         output,
@@ -76,9 +75,14 @@ cohort_group_selection_server <- function(
       })
 
       # This is so that the conditional panel can see the various shiny::reactives
-      output$display_immune_feature_bins <- shiny::reactive({
+
+      display_immune_feature_bins_ui <- shiny::reactive({
         shiny::req(group_choice())
         group_choice() == "Immune Feature Bins"
+      })
+
+      output$display_immune_feature_bins <- shiny::reactive({
+        display_immune_feature_bins_ui()
       })
 
       shiny::outputOptions(

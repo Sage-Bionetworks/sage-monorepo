@@ -27,6 +27,7 @@ cohort_manual_selection_server <- function(
         }
       }))
 
+
       filter_obj <- cohort_filter_selection_server(
         "cohort_filter_selection",
         dataset
