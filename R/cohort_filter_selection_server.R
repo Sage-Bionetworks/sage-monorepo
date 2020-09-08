@@ -83,7 +83,7 @@ cohort_filter_selection_server <- function(
 
       numeric_filter_samples <- shiny::reactive({
         shiny::req(samples)
-        iatlas.app::get_filtered_feature_samples(
+        get_filtered_feature_samples(
           valid_numeric_filter_obj(),
           samples(),
           selected_dataset()

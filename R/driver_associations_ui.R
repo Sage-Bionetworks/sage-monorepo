@@ -3,21 +3,21 @@ driver_associations_ui <- function(id) {
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        iatlas.app::titleBox(
+        titleBox(
             "iAtlas Explorer — Association with Driver Mutations"
         ),
-        iatlas.app::textBox(
+        textBox(
             width = 12,
             shiny::includeMarkdown("inst/markdown/driver.markdown")
         ),
-        iatlas.app::sectionBox(
+        sectionBox(
             title = paste0(
                 "Immune Response Association With Driver Mutations ",
                 "-- univariate"
             ),
             module_ui(ns("univariate_driver"))
         ),
-        iatlas.app::sectionBox(
+        sectionBox(
             title = paste0(
                 "Immune Response Association With Driver Mutations ",
                 "-- multivariate"

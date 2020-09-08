@@ -1,7 +1,7 @@
 resourcespage_ui <- function(){
   shiny::fluidPage(
     shiny::br(),
-    iatlas.app::titleBox("Resources"),
+    titleBox("Resources"),
     shiny::fluidRow(
       shiny::column(
         width = 12,

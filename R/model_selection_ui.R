@@ -3,7 +3,7 @@ model_selection_ui <- function(id){
     ns <- shiny::NS(id)
 
     shiny::fluidRow(
-        iatlas.app::optionsBox(
+        optionsBox(
             width = 12,
             shiny::column(
                 width = 12,

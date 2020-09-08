@@ -3,12 +3,12 @@ tumor_microenvironment_type_fractions_ui <- function(id){
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        iatlas.app::messageBox(
+        messageBox(
             width = 12,
             shiny::includeMarkdown(get_markdown_path("cell_type_fractions"))
         ),
         shiny::fluidRow(
-            iatlas.app::optionsBox(
+            optionsBox(
                 width = 12,
                 shiny::selectInput(
                     inputId = ns("fraction_group_choice"),
@@ -25,7 +25,7 @@ tumor_microenvironment_type_fractions_ui <- function(id){
         ),
         shiny::fluidRow(
             shiny::fluidRow(
-                iatlas.app::plotBox(
+                plotBox(
                     width = 12,
                     "barplot" %>%
                         ns() %>%

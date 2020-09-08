@@ -7,9 +7,9 @@ toolspage_ui <- function(){
       id = "toolstabs",
       shiny::tabPanel(
         shiny::h5("iAtlas Tools Home"),
-        iatlas.app::titleBox("iAtlas Explorer — Tools"),
+        titleBox("iAtlas Explorer — Tools"),
         shiny::fluidRow(
-          iatlas.app::imgLinkBox(
+          imgLinkBox(
             width = 12,
             title = "Immune Subtype Classifier",
             linkId = "link_to_immune_subtype_classifier",

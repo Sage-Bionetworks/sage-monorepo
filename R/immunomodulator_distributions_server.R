@@ -15,7 +15,7 @@ immunomodulator_distributions_server <- function(
         shiny::selectInput(
           ns("gene_choice_entrez"),
           label = "Select or Search Gene",
-          choices = iatlas.app::create_im_gene_list(
+          choices = create_im_gene_list(
             im_tbl(),
             input$gene_group_choice
           )
@@ -24,13 +24,13 @@ immunomodulator_distributions_server <- function(
 
       gene_choice_hgnc <- shiny::reactive({
         shiny::req(input$gene_choice_entrez, im_tbl())
-        iatlas.app::get_im_hgnc_from_tbl(im_tbl(), input$gene_choice_entrez)
+        get_im_hgnc_from_tbl(im_tbl(), input$gene_choice_entrez)
       })
 
       gene_plot_label <- shiny::reactive({
         shiny::req(gene_choice_hgnc(), input$scale_method_choice)
 
-        iatlas.app::transform_feature_string(
+        transform_feature_string(
           gene_choice_hgnc(),
           input$scale_method_choice
         )
@@ -39,7 +39,7 @@ immunomodulator_distributions_server <- function(
       distplot_tbl <- shiny::reactive({
         shiny::req(input$gene_choice_entrez, input$scale_method_choice)
 
-        tbl <- iatlas.app::build_im_distplot_tbl(
+        tbl <- build_im_distplot_tbl(
           cohort_obj(),
           as.integer(input$gene_choice_entrez),
           input$scale_method_choice

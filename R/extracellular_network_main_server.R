@@ -39,7 +39,7 @@ extracellular_network_main_server <- function(
       #
       # output$select_groups_ui <- shiny::renderUI({
       #   choices <-
-      #     iatlas.app::query_tags(
+      #     query_tags(
       #       cohort_obj()$dataset,
       #       cohort_obj()$group_name
       #     ) %>%
@@ -63,7 +63,7 @@ extracellular_network_main_server <- function(
       #
       # output$select_statify_groups_ui <- shiny::renderUI({
       #   choices <-
-      #     iatlas.app::query_tags(
+      #     query_tags(
       #       cohort_obj()$dataset,
       #       "Immune_Subtype"
       #     ) %>%
@@ -94,7 +94,7 @@ extracellular_network_main_server <- function(
       #   shiny::selectizeInput(
       #     ns("selected_genes"),
       #     "Select genes of interest (optional)",
-      #     choices = iatlas.app::build_ecn_gene_choice_list(),
+      #     choices = build_ecn_gene_choice_list(),
       #     multiple = TRUE,
       #     selected = "geneset:extra_cellular_network"
       #   )
@@ -104,7 +104,7 @@ extracellular_network_main_server <- function(
       #   shiny::selectizeInput(
       #     ns("selected_celltypes"),
       #     "Select cells of interest (optional)",
-      #     choices = iatlas.app::build_ecn_celltype_choice_list(),
+      #     choices = build_ecn_celltype_choice_list(),
       #     multiple = TRUE,
       #     selected = "All"
       #   )
@@ -112,12 +112,12 @@ extracellular_network_main_server <- function(
       #
       # selected_genes <- shiny::reactive({
       #   shiny::req(input$selected_genes)
-      #   iatlas.app::get_selected_gene_ids(input$selected_genes)
+      #   get_selected_gene_ids(input$selected_genes)
       # })
       #
       # selected_celltypes <- shiny::reactive({
       #   shiny::req(input$selected_celltypes)
-      #   iatlas.app::get_selected_celltypes(input$selected_celltypes)
+      #   get_selected_celltypes(input$selected_celltypes)
       # })
 
       # main_scaffold <- shiny::reactive(build_ecn_scaffold_tbl())

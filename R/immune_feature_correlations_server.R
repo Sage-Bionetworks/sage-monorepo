@@ -12,7 +12,7 @@ immune_feature_correlations_server <- function(
         shiny::selectInput(
           inputId  = ns("class_choice"),
           label    = "Select or Search for Variable Class",
-          choices  = iatlas.app::get_cohort_feature_class_list(cohort_obj()),
+          choices  = get_cohort_feature_class_list(cohort_obj()),
           selected = "DNA Alteration"
         )
       })
@@ -21,7 +21,7 @@ immune_feature_correlations_server <- function(
         shiny::selectInput(
           inputId  = ns("response_choice"),
           label    = "Select or Search for Response Variable",
-          choices = iatlas.app::create_nested_named_list(
+          choices = create_nested_named_list(
             cohort_obj()$feature_tbl, values_col = "name"
           ),
           selected = "leukocyte_fraction"
@@ -84,11 +84,11 @@ immune_feature_correlations_server <- function(
       scatterplot_tbl <- shiny::reactive({
         shiny::req(value_tbl())
         shiny::validate(shiny::need(heatmap_eventdata(), "Click above heatmap"))
-        group   <- iatlas.app::get_values_from_eventdata(heatmap_eventdata())
-        feature <- iatlas.app::get_values_from_eventdata(
+        group   <- get_values_from_eventdata(heatmap_eventdata())
+        feature <- get_values_from_eventdata(
           heatmap_eventdata(), "y"
         )
-        iatlas.app::build_ifc_scatterplot_tbl(value_tbl(), feature, group)
+        build_ifc_scatterplot_tbl(value_tbl(), feature, group)
       })
 
       output$scatterPlot <- plotly::renderPlotly({

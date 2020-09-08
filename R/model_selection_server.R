@@ -11,7 +11,7 @@ model_selection_server <- function(
     # numeric covariate ui -----------------------------------------------------
 
     numerical_covariate_list <- shiny::reactive({
-        iatlas.app::create_nested_named_list(numerical_covariate_tbl())
+        create_nested_named_list(numerical_covariate_tbl())
     })
 
     numeric_covariate_module <- shiny::reactive({
@@ -34,7 +34,7 @@ model_selection_server <- function(
     numerical_covariates <- shiny::reactive({
         numeric_covariate_output() %>%
             shiny::reactiveValuesToList(.) %>%
-            iatlas.app::get_items_from_numeric_covariate_output(
+            get_items_from_numeric_covariate_output(
                 .,
                 "covariate_choice_name"
             )
@@ -43,7 +43,7 @@ model_selection_server <- function(
     numerical_transformations <- shiny::reactive({
         numeric_covariate_output() %>%
             shiny::reactiveValuesToList(.) %>%
-            iatlas.app::get_items_from_numeric_covariate_output(
+            get_items_from_numeric_covariate_output(
                 .,
                 "transformation_choice"
             )
@@ -57,10 +57,10 @@ model_selection_server <- function(
             dplyr::pull("display") %>%
             stringr::str_c(collapse = " + ")
 
-        iatlas.app::create_numerical_covariate_string(
+        create_numerical_covariate_string(
             covs,
             numerical_transformations(),
-            iatlas.app::transform_feature_string
+            transform_feature_string
         )
     })
 
@@ -68,17 +68,17 @@ model_selection_server <- function(
         if(is.null(numerical_covariates())) return(NULL)
         if(is.null(numerical_transformations())) return(NULL)
 
-        iatlas.app::create_numerical_covariate_string(
+        create_numerical_covariate_string(
             numerical_covariates(),
             numerical_transformations(),
-            iatlas.app::transform_feature_formula
+            transform_feature_formula
         )
     })
 
     # categorical covariate ui -------------------------------------------------
 
     categorical_covariate_list <- shiny::reactive({
-        iatlas.app::create_nested_named_list(categorical_covariate_tbl())
+        create_nested_named_list(categorical_covariate_tbl())
     })
 
     categorical_covariate_module <- shiny::reactive({

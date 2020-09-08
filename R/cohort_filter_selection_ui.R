@@ -4,14 +4,14 @@ cohort_filter_selection_ui <- function(id) {
 
     shiny::tagList(
         shiny::fluidRow(
-            iatlas.app::optionsBox(
+            optionsBox(
                 width = 12,
                 insert_remove_element_ui(
                     ns("tags_filter"),
                     "Add group filter"
                 )
             ),
-            iatlas.app::optionsBox(
+            optionsBox(
                 width = 12,
                 insert_remove_element_ui(
                     ns("numeric_filter"),
@@ -19,7 +19,7 @@ cohort_filter_selection_ui <- function(id) {
                 )
             )
         ),
-        iatlas.app::tableBox(
+        tableBox(
             width = 12,
             shiny::textOutput(ns("samples_text"))
         )

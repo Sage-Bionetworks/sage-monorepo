@@ -10,13 +10,13 @@ tumor_microenvironment_type_fractions_server <- function(id, cohort_obj) {
 
       plot_tbl <- shiny::reactive({
         shiny::req(value_tbl())
-        iatlas.app::build_ctf_barplot_tbl(value_tbl())
+        build_ctf_barplot_tbl(value_tbl())
       })
 
       output$barplot <- plotly::renderPlotly({
         shiny::req(plot_tbl())
 
-        iatlas.app::create_barplot(
+        create_barplot(
           plot_tbl(),
           source_name = "cell_type_fractions_barplot",
           color_col = "color",

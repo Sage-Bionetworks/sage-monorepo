@@ -3,12 +3,12 @@ clinical_outcomes_heatmap_ui <- function(id) {
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        iatlas.app::messageBox(
+        messageBox(
             width = 12,
             shiny::includeMarkdown("inst/markdown/clinical_outcomes_heatmap.markdown")
         ),
         shiny::fluidRow(
-            iatlas.app::optionsBox(
+            optionsBox(
                 width = 12,
                 shiny::column(
                     width = 6,
@@ -19,7 +19,7 @@ clinical_outcomes_heatmap_ui <- function(id) {
                     shiny::uiOutput(ns("class_selection_ui"))
                 )
             ),
-            iatlas.app::plotBox(
+            plotBox(
                 width = 12,
                 shiny::fluidRow(
                     "heatmap" %>%

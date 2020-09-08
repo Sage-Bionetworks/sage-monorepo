@@ -14,7 +14,7 @@ io_target_distributions_server <- function(
 
       url_gene <- shiny::reactive({
         query <- shiny::parseQueryString(session$clientData$url_search)
-        iatlas.app::get_gene_from_url(query)
+        get_gene_from_url(query)
       })
 
       output$gene_choice_ui <- shiny::renderUI({
@@ -32,13 +32,13 @@ io_target_distributions_server <- function(
 
       gene_choice_hgnc <- shiny::reactive({
         shiny::req(input$gene_choice, io_target_tbl())
-        iatlas.app::get_io_hgnc_from_tbl(io_target_tbl(), input$gene_choice)
+        get_io_hgnc_from_tbl(io_target_tbl(), input$gene_choice)
       })
 
       gene_plot_label <- shiny::reactive({
         shiny::req(gene_choice_hgnc(), input$scale_method_choice)
 
-        iatlas.app::transform_feature_string(
+        transform_feature_string(
           gene_choice_hgnc(),
           input$scale_method_choice
         )

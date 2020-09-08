@@ -10,7 +10,7 @@ immunomodulators_distributions_ui <- function(id) {
             )
         ),
         shiny::fluidRow(
-            iatlas.app::optionsBox(
+            optionsBox(
                 width = 12,
                 shiny::column(
                     width = 3,

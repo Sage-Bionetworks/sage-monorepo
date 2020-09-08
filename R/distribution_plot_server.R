@@ -69,7 +69,7 @@ distribution_plot_server <- function(
 
       output$histplot <- plotly::renderPlotly({
         shiny::req(histplot_tbl())
-        iatlas.app::create_histogram(
+        create_histogram(
           df = histplot_tbl(),
           source_name = "histplot",
           x_lab = distplot_ylab(),
@@ -77,7 +77,7 @@ distribution_plot_server <- function(
         )
       })
 
-      iatlas.app::plotly_server(
+      plotly_server(
         "hist_plot",
         plot_tbl = histplot_tbl
       )

@@ -18,7 +18,7 @@ cohort_dataset_selection_server <- function(
 
       output$module_availibility_string <- shiny::renderText({
         shiny::req(input$dataset_choice)
-        iatlas.app::create_cohort_module_string(
+        create_cohort_module_string(
           input$dataset_choice
         )
       })

@@ -24,7 +24,7 @@ call_module_server <- function(
           server_function("module", cohort_obj, ...)
           ui_function(ns("module"))
         } else {
-          iatlas.app::textBox(width = 12, warning_message)
+          textBox(width = 12, warning_message)
         }
       })
     }

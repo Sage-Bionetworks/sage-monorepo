@@ -3,7 +3,7 @@ extracellular_network_main_ui <- function(id){
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        iatlas.app::textBox(
+        textBox(
             width = 12,
             shiny::p(stringr::str_c(
                 "Explore the extracellular networks modulating tumoral immune response, encompassing direct interaction among cells and communication via soluble proteins such as cytokines to mediate interactions among those cells.",
@@ -14,17 +14,17 @@ extracellular_network_main_ui <- function(id){
 
         ),
 
-        iatlas.app::sectionBox(
+        sectionBox(
             title = "Extracellular networks",
 
-            iatlas.app::messageBox(
+            messageBox(
                 width = 24,
                 shiny::includeMarkdown("inst/markdown/extracellular_network_main.markdown")
             ),
             shiny::fluidRow(
                 shiny::column(
                     width = 3,
-                    iatlas.app::optionsBox(
+                    optionsBox(
                         width=24,
                         #this tags$head makes sure that the checkboxes are formatted appropriately
                         shiny::tags$head(
@@ -110,7 +110,7 @@ extracellular_network_main_ui <- function(id){
                 shiny::column(
                     width = 9,
                     shiny::verticalLayout(
-                        iatlas.app::plotBox(
+                        plotBox(
                             width = 24,
                             cyjShiny::cyjShinyOutput(ns("cyjShiny"), height = 800) %>%
                                 shinycssloaders::withSpinner(.)

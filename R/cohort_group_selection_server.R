@@ -14,7 +14,7 @@ cohort_group_selection_server <- function(
 
       custom_group_tbl <- shiny::reactive({
         shiny::req(selected_dataset())
-        iatlas.app::build_custom_group_tbl(selected_dataset())
+        build_custom_group_tbl(selected_dataset())
       })
 
       available_groups_list <- shiny::reactive({
@@ -62,7 +62,7 @@ cohort_group_selection_server <- function(
         suspendWhenHidden = FALSE
       )
 
-      mutation_tbl <- shiny::reactive(iatlas.app::build_cohort_mutation_tbl())
+      mutation_tbl <- shiny::reactive(build_cohort_mutation_tbl())
 
       output$select_driver_mutation_group_ui <- shiny::renderUI({
         shiny::req(group_choice() == "Driver Mutation", mutation_tbl())
@@ -101,7 +101,7 @@ cohort_group_selection_server <- function(
         shiny::selectInput(
           inputId = ns("immune_feature_bin_choice"),
           label = "Select or Search for feature",
-          choices = iatlas.app::create_nested_named_list(
+          choices = create_nested_named_list(
             feature_bin_tbl(), values_col = "name"
           )
         )
@@ -115,7 +115,7 @@ cohort_group_selection_server <- function(
         )
         if (group_choice() == "Driver Mutation") {
           shiny::req(input$driver_mutation_id_choice, mutation_tbl())
-          cohort_obj <- iatlas.app::build_cohort_object(
+          cohort_obj <- build_cohort_object(
             filter_obj(),
             selected_dataset(),
             group_choice(),
@@ -129,7 +129,7 @@ cohort_group_selection_server <- function(
             input$immune_feature_bin_number,
             feature_bin_tbl()
           )
-          cohort_obj <- iatlas.app::build_cohort_object(
+          cohort_obj <- build_cohort_object(
             filter_obj(),
             selected_dataset(),
             group_choice(),
@@ -139,7 +139,7 @@ cohort_group_selection_server <- function(
             feature_tbl = feature_bin_tbl()
           )
         } else {
-          cohort_obj <- iatlas.app::build_cohort_object(
+          cohort_obj <- build_cohort_object(
             filter_obj(),
             selected_dataset(),
             group_choice(),

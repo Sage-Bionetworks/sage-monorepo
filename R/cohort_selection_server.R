@@ -40,7 +40,7 @@ cohort_selection_server <- function(
           )
       })
 
-      iatlas.app::data_table_server(
+      data_table_server(
         "sg_table",
         group_key_tbl,
         options = list(

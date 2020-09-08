@@ -4,12 +4,12 @@ cohort_dataset_selection_ui <- function(id) {
 
     shiny::tagList(
         shiny::fluidRow(
-            iatlas.app::optionsBox(
+            optionsBox(
                 width = 4,
                 shiny::uiOutput(ns("dataset_selection_ui")),
             ),
         ),
-        iatlas.app::messageBox(
+        messageBox(
             width = 12,
             shiny::textOutput(ns("module_availibility_string"))
         )

@@ -4,18 +4,18 @@ immune_subtype_classifier_ui <- function(id) {
 
     shiny::tagList(
 
-        iatlas.app::titleBox("iAtlas Tools — Immune Subtype Classifier"),
+        titleBox("iAtlas Tools — Immune Subtype Classifier"),
 
-        iatlas.app::textBox(
+        textBox(
             width = 12,
             shiny::p("Upload gene expression* and classify immune subtypes.")
         ),
 
         # Immunomodulator distributions section ----
-        iatlas.app::sectionBox(
+        sectionBox(
             title = "Immune Subtype Classification",
 
-            iatlas.app::messageBox(
+            messageBox(
                 width = 12,
 
                 shiny::p("Upload gene expression (csv or tsv). **BETA** any gene quantification pipeline should be OK."),
@@ -64,7 +64,7 @@ immune_subtype_classifier_ui <- function(id) {
                 shiny::p("Manuscript context:  See figure 1A.")
             ),
             shiny::fluidRow(
-                iatlas.app::optionsBox(
+                optionsBox(
                     width = 12,
                     shiny::column(
                         width = 2,
@@ -104,14 +104,14 @@ immune_subtype_classifier_ui <- function(id) {
         ),
 
         # Immunomodulator annotations section ----
-        iatlas.app::sectionBox(
+        sectionBox(
             title = "Subtype Classification Table",
             messageBox(
                 width = 12,
                 shiny::p("The table shows the results of subtype classification. Use the Search box in the upper right to find a sample of interest.")
             ),
             shiny::fluidRow(
-                iatlas.app::tableBox(
+                tableBox(
                     width = 12,
                     shiny::div(style = "overflow-x: scroll",
                         DT::dataTableOutput(ns("subtypetable")) %>%

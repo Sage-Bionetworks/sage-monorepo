@@ -3,12 +3,12 @@ multivariate_driver_ui <- function(id){
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        iatlas.app::messageBox(
+        messageBox(
             width = 12,
             shiny::includeMarkdown("inst/markdown/driver_multi.markdown")
         ),
         shiny::fluidRow(
-            iatlas.app::optionsBox(
+            optionsBox(
                 width = 12,
                 shiny::column(
                     width = 3,
@@ -45,7 +45,7 @@ multivariate_driver_ui <- function(id){
         ),
         model_selection_ui(ns("module1")),
         shiny::fluidRow(
-            iatlas.app::optionsBox(
+            optionsBox(
                 width = 12,
                 shiny::column(
                     width = 6,
@@ -58,7 +58,7 @@ multivariate_driver_ui <- function(id){
             )
         ),
         shiny::fluidRow(
-            iatlas.app::plotBox(
+            plotBox(
                 width = 12,
                 "volcano_plot" %>%
                     ns() %>%
@@ -68,7 +68,7 @@ multivariate_driver_ui <- function(id){
             )
         ),
         shiny::fluidRow(
-            iatlas.app::plotBox(
+            plotBox(
                 width = 12,
                 "violin_plot" %>%
                     ns() %>%

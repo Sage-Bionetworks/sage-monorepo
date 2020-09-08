@@ -6,10 +6,10 @@ io_target_datatable_server <- function(
     id,
     function(input, output, session) {
 
-      iatlas.app::data_table_server(
+      data_table_server(
         "datatable",
         shiny::reactive(
-          iatlas.app::build_io_target_dt_tbl(
+          build_io_target_dt_tbl(
             iatlas.api.client::query_io_targets()
           )
         ),

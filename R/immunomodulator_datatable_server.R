@@ -6,9 +6,9 @@ immunomodulator_datatable_server <- function(
     id,
     function(input, output, session) {
 
-      iatlas.app::data_table_server(
+      data_table_server(
         "im_table",
-        shiny::reactive(iatlas.app::build_im_dt_tbl())
+        shiny::reactive(build_im_dt_tbl())
       )
     }
   )
