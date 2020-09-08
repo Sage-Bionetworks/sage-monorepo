@@ -4,7 +4,7 @@
 \alias{build_md_feature_covariate_tbl}
 \title{Build Multivariate Driver Feature Covariate Tibble}
 \usage{
-build_md_feature_covariate_tbl(covariates)
+build_md_feature_covariate_tbl(cohort_obj, cov_obj)
 }
 \arguments{
 \item{covariates}{A vector of integers that are in the id column of the

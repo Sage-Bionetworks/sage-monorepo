@@ -4,12 +4,7 @@
 \alias{build_ifc_value_tbl}
 \title{Build Immune Feature Correlations Value Table}
 \usage{
-build_ifc_value_tbl(
-  response_tbl,
-  feature_tbl,
-  sample_tbl,
-  response_feature_name
-)
+build_ifc_value_tbl(response_tbl, feature_tbl, sample_tbl)
 }
 \arguments{
 \item{response_tbl}{A tibble with columns sample, name, value}

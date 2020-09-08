@@ -4,7 +4,7 @@
 \alias{get_filtered_tag_samples}
 \title{Get Filtered Tag Samples}
 \usage{
-get_filtered_tag_samples(filter_obj, samples)
+get_filtered_tag_samples(filter_obj, samples, dataset)
 }
 \arguments{
 \item{filter_obj}{A list of named lists with names ids and name}
