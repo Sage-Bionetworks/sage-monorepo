@@ -218,10 +218,13 @@ build_feature_bin_cohort_object <- function(
 build_feature_bin_sample_tbl <- function(
     dataset, samples, feature_name, n_bins
 ){
-    iatlas.api.client::query_feature_values(features = feature_name, datasets = dataset) %>%
-        dplyr::filter(.data$sample %in% samples) %>%
-        dplyr::mutate("group" = as.character(cut(.data$feature_value, n_bins))) %>%
-        dplyr::select("sample", "group")
+    res <-
+      iatlas.api.client::query_feature_values(
+        features = feature_name, datasets = dataset
+      ) %>%
+      dplyr::filter(.data$sample %in% samples) %>%
+      dplyr::mutate("group" = as.character(cut(.data$feature_value, n_bins))) %>%
+      dplyr::select("sample", "group")
 }
 
 
