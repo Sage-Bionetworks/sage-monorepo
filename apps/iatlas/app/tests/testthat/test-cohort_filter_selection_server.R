@@ -1,9 +1,7 @@
-dataset <- shiny::reactiveVal("PCAWG")
-
 test_that("module_works", {
   shiny::testServer(
     cohort_filter_selection_server,
-    args = list("dataset" = dataset),
+    args = list("dataset" = shiny::reactiveVal("PCAWG")),
     {
       expect_type(samples(), "character")
 
@@ -23,9 +21,9 @@ test_that("module_works", {
 
       expect_type(output$samples_text, "character")
 
-      expect_type(filter_obj(), "list")
-
-      expect_type(session$getReturned()(), "list")
+      filter_obj <- session$getReturned()()
+      expect_type(filter_obj, "list")
+      expect_named(filter_obj, c("samples", "numeric_filters", "tag_filters"))
     }
   )
 })

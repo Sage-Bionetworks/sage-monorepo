@@ -104,8 +104,8 @@ cohort_filter_selection_server <- function(id, dataset) {
       filter_obj <- shiny::reactive({
         list(
           "samples" = selected_samples(),
-          valid_numeric_filter_obj(),
-          valid_tag_filter_obj()
+          "numeric_filters" = valid_numeric_filter_obj(),
+          "tag_filters" = valid_tag_filter_obj()
         )
       })
 
