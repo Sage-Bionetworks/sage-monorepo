@@ -90,7 +90,7 @@ def build_related_request(_obj, info, data_set=None, related=None, by_data_set=T
     return query
 
 
-def build_tag_graphql_response(sample_dict=dict()):
+def build_tag_graphql_response(sample_dict=dict(), related_dict=dict()):
     def f(tag):
         if not tag:
             return None
@@ -101,6 +101,7 @@ def build_tag_graphql_response(sample_dict=dict()):
             'color': get_value(tag, 'color'),
             'display': get_value(tag, 'display'),
             'name': get_value(tag, 'name'),
+            'related': list(map(build_tag_graphql_response(), related_tag))
             'sampleCount': get_value(tag, 'sample_count'),
             'samples': [sample.name for sample in samples],
         }
@@ -229,6 +230,101 @@ def build_tag_request(_obj, info, data_set=None, feature=None, feature_class=Non
     query = query.order_by(*order) if order else query
 
     return query
+
+
+def get_related(info, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag_ids=set()):
+    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
+    requested = build_option_args(selection_set, {'related': 'related'})
+    has_related = 'related' in requested
+
+    if tag_ids:
+        sess = db.session
+
+        data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
+        related_1 = aliased(Tag, name='rt')
+        sample_1 = aliased(Sample, name='s')
+        sample_to_tag_1 = aliased(SampleToTag, name='st')
+
+        related_core_field_mapping = {
+            'name': related_1.name.label('name'),
+            'characteristics': related_1.characteristics.label('characteristics'),
+            'color': related_1.name.label('color'),
+            'display': related_1.name.label('display')}
+
+        related_core = build_option_args(
+            selection_set, related_core_field_mapping)
+        # Always select the related id.
+        related_core |= {related_1.id.label('id')}
+
+        sample_query = sess.query(*sample_core)
+        sample_query = sample_query.select_from(sample_1)
+
+        if sample:
+            sample_query = sample_query.filter(sample_1.name.in_(sample))
+
+        sample_tag_join_condition = build_join_condition(
+            sample_to_tag_1.sample_id, sample_1.id, sample_to_tag_1.tag_id, tag_ids)
+
+        sample_query = sample_query.join(
+            sample_to_tag_1, and_(*sample_tag_join_condition))
+
+        if data_set or related:
+            data_set_1 = aliased(Dataset, name='d')
+
+            data_set_sub_query = sess.query(data_set_1.id).filter(
+                data_set_1.name.in_(data_set)) if data_set else data_set
+
+            data_set_to_sample_join_condition = build_join_condition(
+                data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
+            sample_query = sample_query.join(
+                data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
+
+        if feature or feature_class:
+            feature_1 = aliased(Feature, name='f')
+            feature_class_1 = aliased(FeatureClass, name='fc')
+            feature_to_sample_1 = aliased(FeatureToSample, name='fs')
+
+            sample_query = sample_query.join(feature_to_sample_1,
+                                             feature_to_sample_1.sample_id == sample_1.id)
+
+            feature_join_condition = build_join_condition(
+                feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
+            sample_query = sample_query.join(
+                feature_1, and_(*feature_join_condition))
+
+            if feature_class:
+                feature_class_join_condition = build_join_condition(
+                    feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
+                sample_query = sample_query.join(
+                    feature_class_1, and_(*feature_class_join_condition))
+
+        if related:
+            data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
+            related_tag_1 = aliased(Tag, name='rt')
+            tag_to_tag_1 = aliased(TagToTag, name='tt')
+
+            related_tag_sub_query = sess.query(related_tag_1.id).filter(
+                related_tag_1.name.in_(related)) if related else related
+
+            data_set_tag_join_condition = build_join_condition(
+                data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
+            sample_query = sample_query.join(
+                data_set_to_tag_1, and_(*data_set_tag_join_condition))
+
+            sample_query = sample_query.join(tag_to_tag_1, and_(
+                tag_to_tag_1.tag_id == sample_to_tag_1.tag_id, tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id))
+
+        order = []
+        append_to_order = order.append
+        if 'name' in requested:
+            append_to_order(sample_1.name)
+        if not order:
+            append_to_order(sample_1.id)
+        sample_query = sample_query.order_by(*order)
+
+        return sample_query.distinct().all()
+
+    return []
 
 
 def get_samples(info, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag_ids=set()):
