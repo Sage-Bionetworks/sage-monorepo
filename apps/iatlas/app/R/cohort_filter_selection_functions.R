@@ -1,4 +1,12 @@
-
+#' Is Tag Filter Valid
+#'
+#' @param obj A named list with names
+is_tag_filter_valid <- function(obj){
+    all(
+        !is.null(obj),
+        !is.null(obj$tags)
+    )
+}
 
 #' Get Valid Tag Filters
 #'
@@ -11,46 +19,20 @@ get_valid_tag_filters <- function(filter_obj){
         unname()
 }
 
-#' Is Tag Filter Valid
-#'
-#' @param obj A named list with names
-is_tag_filter_valid <- function(obj){
-    all(
-        !is.null(obj),
-        !is.null(obj$tags)
-    )
-}
-
 #' Get Filtered Tag Samples
 #'
 #' @param filter_obj A list of named lists with names ids and name
 #' @param samples A vector of strings
 #' @importFrom magrittr %>%
 #' @importFrom purrr transpose pluck map reduce
-get_filtered_tag_samples <- function(filter_obj, samples){
+get_filtered_tag_samples <- function(filter_obj, samples, dataset){
     filter_obj %>%
         purrr::transpose(.) %>%
         purrr::pluck("tags") %>%
-        purrr::map(., get_filtered_group_sample_ids_by_filter) %>%
+        purrr::map(., ~iatlas.api.client::query_tag_samples(datasets = dataset, tags = .x)) %>%
+        purrr::map(., dplyr::pull, "sample") %>%
         purrr::reduce(base::intersect, .init = samples)
 }
-
-#' Get Filtered Group Sample IDs By Filter
-#'
-#' @param ids A vector on integers that are in the sample_id column of
-#' samples_to_tags table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-get_filtered_group_sample_ids_by_filter <- function(ids){
-    paste0(
-        "SELECT sample_id FROM samples_to_tags WHERE tag_id IN (",
-        numeric_values_to_query_list(ids),
-        ")"
-    ) %>%
-        perform_query("get sample ids") %>%
-        dplyr::pull("sample_id")
-}
-
 
 #' Get Valid Numeric Filters
 #'
@@ -69,8 +51,8 @@ get_valid_numeric_filters <- function(filter_obj){
 is_numeric_filter_valid <- function(obj){
     all(
         !is.null(obj),
-        !any(is.null(obj$id), is.null(obj$min), is.null(obj$max)),
-        all(names(obj) %in% c("id", "min", "max"))
+        !any(is.null(obj$feature), is.null(obj$min), is.null(obj$max)),
+        all(names(obj) %in% c("feature", "min", "max"))
     )
 }
 
@@ -81,45 +63,15 @@ is_numeric_filter_valid <- function(obj){
 #' features_to_samples table
 #' @importFrom magrittr %>%
 #' @importFrom purrr transpose reduce
-get_filtered_feature_sample_ids <- function(filter_obj, sample_ids){
+get_filtered_feature_samples <- function(filter_obj, samples, dataset){
     filter_obj %>%
         purrr::transpose(.) %>%
-        purrr::pmap(., get_filtered_feature_sample_ids_by_filter) %>%
-        purrr::reduce(base::intersect, .init = sample_ids)
+        purrr::map(~unlist(.x)) %>%
+        purrr::pmap(., get_filtered_samples_by_feature, dataset) %>%
+        purrr::reduce(base::intersect, .init = samples)
 }
 
-#' Get Filtered Feature Sample IDs By Filter
-#'
-#' @param id An integer in the smaple_id column of the
-#' features_to_samples table
-#' @param min A numeric
-#' @param max A numeric
-#' @importFrom magrittr %>%
-#' @importFrom dplyr pull
-get_filtered_feature_sample_ids_by_filter <- function(id, min, max){
-    paste0(
-        "SELECT sample_id FROM features_to_samples ",
-        "WHERE value <= ",  max, " ",
-        "AND value >=", min, " ",
-        "AND feature_id = ", id
-    ) %>%
-        perform_query("Get Filtered Feature Sample IDs") %>%
-        dplyr::pull("sample_id")
+get_filtered_samples_by_feature <- function(feature, min, max, dataset){
+    iatlas.api.client::query_feature_values(feature, dataset, max_value = max, min_value = min) %>%
+        dplyr::pull(sample)
 }
-
-#' Create Cohort Filter Object
-#'
-#' @param sample_ids A vector of integers
-#' @param numeric_obj A list
-#' @param group_obj A list
-create_cohort_filter_object <- function(sample_ids, numeric_obj, group_obj){
-    list(
-        "sample_ids" = sample_ids,
-        "filters" = list(
-            "feature_filters" = numeric_obj,
-            "group_filters" = group_obj
-        )
-    )
-}
-
-

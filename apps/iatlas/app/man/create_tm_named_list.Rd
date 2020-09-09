@@ -4,7 +4,7 @@
 \alias{create_tm_named_list}
 \title{Create Tilmap Named List}
 \usage{
-create_tm_named_list(tbl)
+create_tm_named_list(cohort_obj)
 }
 \arguments{
 \item{tbl}{A tibble with columns class, display and id}

@@ -1,6 +1,0 @@
-query genes($geneType: [String!], $entrez: [Int!]) {
-  genes(geneType: $geneType, entrez: $entrez){
-    entrez
-    hgnc
-  }
-}

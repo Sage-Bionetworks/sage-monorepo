@@ -1,71 +1,67 @@
-with_test_api_env({
 
-    response_tbl <- query_feature_values(
-        "PCAWG",
-        "Immune_Subtype",
-        "EPIC_B_Cells"
-    )
+cohort_obj1 <- pcawg_immune_subtype_cohort_obj
 
-    feature_tbl  <- query_features_values_by_tag(
-        "PCAWG",
-        "Immune_Subtype",
-        feature_class = "EPIC"
-    ) %>%
-        dplyr::rename("group" = "tag")
+response_tbl1 <- build_ifc_response_tbl(cohort_obj1, "EPIC_B_Cells")
 
-    sample_tbl <- query_cohort_selector(
-        "PCAWG",
-        "Immune_Subtype"
-    ) %>%
-        dplyr::select("sample", "group" = "name")
-
-    value_tbl <- build_ifc_value_tbl(
-        response_tbl,
-        feature_tbl,
-        sample_tbl,
-        "EPIC_B_Cells"
-    )
-
-    test_that("Build Immune Feature Correlations Value Table", {
-
-        expect_named(
-            value_tbl,
-            c(
-                "sample",
-                "group",
-                "response_value",
-                "feature_value",
-                "feature_name",
-                "feature_order"
-            ),
-            ignore.order = T
-        )
-    })
-
-    heatmap_matrix <- build_ifc_heatmap_matrix(value_tbl, "pearson")
-
-    test_that("Build Immune Feature Correlations Heatmap Matrix", {
-        expect_equal(
-            rownames(heatmap_matrix),
-            c(
-                "EPIC_CAFs",
-                "EPIC_CD4_T_Cells",
-                "EPIC_CD8_T_Cells",
-                "EPIC_Endothelial",
-                "EPIC_Macrophages",
-                "EPIC_NK_Cells",
-                "EPIC_Other_Cells"
-            )
-        )
-        expect_equal(colnames(heatmap_matrix), c("C1", "C2", "C3", "C4", "C6"))
-    })
-
-    test_that("Build Immune Feature Scatterplot Tibble", {
-        result1 <-  build_ifc_scatterplot_tbl(
-            value_tbl, "EPIC_CAFs", "C1"
-        )
-        expect_named(result1, c("group", "name", "label", "x", "y"))
-    })
+test_that("build_ifc_response_tbl", {
+    expected_columns <-  c("sample", "response_display", "response_value")
+    expect_named(response_tbl1, expected_columns)
 })
+
+feature_tbl1  <- build_ifc_feature_tbl(cohort_obj1, "EPIC")
+
+test_that("build_ifc_feature_tbl", {
+    expected_columns <- c(
+        "sample",
+        "feature_display",
+        "feature_value",
+        "feature_order"
+    )
+    expect_named(feature_tbl1, expected_columns)
+})
+
+value_tbl1 <- build_ifc_value_tbl(
+    response_tbl1, feature_tbl1, cohort_obj1$sample_tbl
+)
+
+test_that("Build Immune Feature Correlations Value Table", {
+    expected_columns <- c(
+        "sample",
+        "group",
+        "response_value",
+        "feature_value",
+        "feature_display",
+        "feature_order"
+    )
+
+    expect_named(value_tbl1, expected_columns)
+})
+
+heatmap_matrix1 <- build_ifc_heatmap_matrix(value_tbl1, "pearson")
+
+test_that("Build Immune Feature Correlations Heatmap Matrix", {
+    expect_equal(
+        rownames(heatmap_matrix1),
+        c(
+            "EPIC CAFs",
+            "EPIC CD4 T Cells",
+            "EPIC CD8 T Cells",
+            "EPIC Endothelial",
+            "EPIC Macrophages",
+            "EPIC NK Cells",
+            "EPIC Other Cells"
+        )
+    )
+    expect_equal(colnames(heatmap_matrix1), c("C1", "C2", "C3", "C4", "C6"))
+
+})
+
+test_that("Build Immune Feature Scatterplot Tibble", {
+    result1 <-  build_ifc_scatterplot_tbl(
+        value_tbl1, "EPIC CAFs", "C1"
+    )
+    expect_named(result1, c("label", "x", "y"))
+})
+
 
 

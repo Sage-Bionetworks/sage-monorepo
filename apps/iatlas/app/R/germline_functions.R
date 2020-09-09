@@ -17,7 +17,7 @@ create_FDR_label <- function(
 
 
   #TODO:still duplicating all rows!
-  #example: test_fdr <- iatlas.app::create_FDR_label(heritability$EUR, "FDR", c(0.001, 0.05), c("***", "*"))
+  #example: test_fdr <- create_FDR_label(heritability$EUR, "FDR", c(0.001, 0.05), c("***", "*"))
 
   intervals <-sort(intervals) #making sure that they are in an ascending order
 

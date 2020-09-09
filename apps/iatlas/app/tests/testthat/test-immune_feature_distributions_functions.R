@@ -1,8 +1,8 @@
-with_test_api_env({
-  test_that("Build Distribution Plot Tibble", {
-    sample_tbl <- query_cohort_selector() %>%
-      dplyr::select("group" = "name", "sample")
-    result1 <- build_ifd_distplot_tbl(sample_tbl, "leukocyte_fraction", "None")
-    expect_named(result1, c("x", "y"))
-  })
+cohort_obj1 <- pcawg_immune_subtype_cohort_obj
+
+test_that("Build Distribution Plot Tibble", {
+
+  result1 <- build_ifd_distplot_tbl(cohort_obj1, "leukocyte_fraction", "None")
+  expect_named(result1, c("x", "y"))
 })
+

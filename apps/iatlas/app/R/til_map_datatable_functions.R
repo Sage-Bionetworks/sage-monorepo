@@ -7,24 +7,26 @@
 #' @importFrom dplyr mutate inner_join select everything
 #' @importFrom tidyr pivot_wider
 build_tm_dt_tbl <- function(sample_tbl){
-    create_build_tm_dt_tbl_query() %>%
-        perform_query("Build Tilmap Datatbale Tibble") %>%
-        dplyr::mutate(value = round(.data$value, digits = 1)) %>%
-        tidyr::pivot_wider(
-            .,
-            names_from = .data$display,
-            values_from = .data$value
-        ) %>%
-        dplyr::inner_join(sample_tbl, by = "sample_id") %>%
-        dplyr::filter(!is.na(.data$slide_barcode)) %>%
-        dplyr::mutate(Image = create_tm_slide_link(.data$slide_barcode)) %>%
-        dplyr::select(-c(.data$slide_barcode, .data$sample_id)) %>%
-        dplyr::select(
-            Sample = .data$sample_name,
-            `Selected Group` = .data$group,
-            .data$Image,
-            dplyr::everything()
-        )
+
+
+    # create_build_tm_dt_tbl_query() %>%
+    #     perform_query("Build Tilmap Datatbale Tibble") %>%
+    #     dplyr::mutate(value = round(.data$value, digits = 1)) %>%
+    #     tidyr::pivot_wider(
+    #         .,
+    #         names_from = .data$display,
+    #         values_from = .data$value
+    #     ) %>%
+    #     dplyr::inner_join(sample_tbl, by = "sample_id") %>%
+    #     dplyr::filter(!is.na(.data$slide_barcode)) %>%
+    #     dplyr::mutate(Image = create_tm_slide_link(.data$slide_barcode)) %>%
+    #     dplyr::select(-c(.data$slide_barcode, .data$sample_id)) %>%
+    #     dplyr::select(
+    #         Sample = .data$sample_name,
+    #         `Selected Group` = .data$group,
+    #         .data$Image,
+    #         dplyr::everything()
+    #     )
 }
 
 #' Create Tilmap Datatbale Tibble Query
