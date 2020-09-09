@@ -269,3 +269,30 @@ add_plot_colors_to_tbl <- function(tbl){
 
 }
 
+# Group object ----------------------------------------------------------------
+
+# build_group_object <- function(dataset, group){
+#   if (group %in% c(
+#     "Immune_Subtype", "TCGA_Subtype", "TCGA_Study", "PCAWG_Study")
+#   ) {
+#     group_obj <- build_tag_group_obj(dataset, group)
+#   } else if (group == "Driver Mutation") {
+#     group_obj <- build_mutation_group_obj(dataset)
+#   } else if (group == "Immune Feature Bins") {
+#     group_obj <- build_feature_bin_obj(dataset)
+#   } else {
+#     stop(group, " is not an allowed group choice.")
+#   }
+# }
+#
+# build_tag_group_obj <- function(dataset, group){
+#
+# }
+#
+# build_mutation_group_obj <- function(dataset){
+#
+# }
+#
+# build_feature_bin_obj <- function(dataset){
+#
+# }
