@@ -1,0 +1,61 @@
+"""
+The "Node" type may return:
+
+- "label", a network identifier
+- "name", a unique name for the node
+- "score", the calculated value of the node
+- "x", the initial x position of the node
+- "y", the initial y position of the node
+- "dataSet", the data set related to the node
+- "gene", the gene related to the node
+- "feature", the feature related to the node
+- "tags", a list of the tags related to the node. (This will NOT include tags that are tagged "network")
+"""
+type Node {
+    label: String
+    name: String!
+    score: Float
+    x: Float
+    y: Float
+    dataSet: SimpleDataSet!
+    gene: SimpleGene
+    feature: SimpleFeature
+    tags: [SimpleTag!]!
+}
+
+"""
+The "NodePage" type may return:
+
+- "items", a list of returned Nodes
+- "page", the current page of returned nodes
+- "pages", the total number of pages available
+- "total", the total number of results (all pages summed).
+
+See `Node`
+"""
+type NodePage {
+    items: [Node!]!
+    page: Int!
+    pages: Int!
+    total: Int!
+}
+
+"""
+The "SimpleNode" is a simple version of a Node; it has no related fields.
+It type may return:
+
+- "label", a network identifier
+- "name", a unique name for the node
+- "score", the calculated value of the node
+- "x", the initial x position of the node
+- "y", the initial y position of the node
+
+See also `Node`
+"""
+type SimpleNode {
+    label: String
+    name: String!
+    score: Float
+    x: Float
+    y: Float
+}

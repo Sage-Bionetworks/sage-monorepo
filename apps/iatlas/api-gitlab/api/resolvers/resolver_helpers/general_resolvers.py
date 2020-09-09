@@ -6,13 +6,29 @@ def build_join_condition(join_column, column, filter_column=None, filter_list=No
 
 
 def build_option_args(selection_set=None, valid_nodes={}):
-    option_args = []
-    append_to_option_args = option_args.append
+    option_args = set()
+    add_to_option_args = option_args.add
     if selection_set:
         for selection in selection_set.selections:
             if selection.name.value in valid_nodes:
-                append_to_option_args(valid_nodes.get(selection.name.value))
+                if isinstance(valid_nodes, set):
+                    add_to_option_args(selection.name.value)
+                else:
+                    add_to_option_args(valid_nodes.get(selection.name.value))
     return option_args
+
+
+def get_requested(info=None, requested_field_mapping={}, condition=False, child_node=None, selection_set=[]):
+    selection_set = get_selection_set(
+        info.field_nodes[0].selection_set, condition, child_node=child_node) if info else selection_set
+
+    return build_option_args(selection_set, requested_field_mapping)
+
+
+def get_selected(requested, selected_field_mapping):
+    selected_keys = set([*selected_field_mapping]).intersection(requested)
+
+    return set(map(selected_field_mapping.get, selected_keys))
 
 
 def get_selection_set(selection_set=[], condition=True, child_node='features'):

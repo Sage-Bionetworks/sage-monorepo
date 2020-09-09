@@ -14,6 +14,7 @@ type Query {
     - "maxPValue", a maximum mean normal to filter the copy number results by.
     - "maxPValue", a maximum mean CNV to filter the copy number results by.
     - "maxPValue", a maximum T stat to filter the copy number results by.
+    - "page", the page of results to get. Defaults to 1 (the first page)
 
   If no arguments are passed, this will return all copy number results.
   """
@@ -30,7 +31,8 @@ type Query {
     minMeanNormal: Float
     minMeanCnv: Float
     minTStat: Float
-  ): [CopyNumberResult!]!
+    page: Int
+  ): CopyNumberResultPage!
 
   """
   The "dataSets" query accepts:
@@ -76,57 +78,78 @@ type Query {
     minLog10FoldChange: Float
     minNumWildTypes: Int
     minNumMutants: Int
-): [DriverResult!]!
+    page: Int
+  ): DriverResultPage!
 
   """
   The "features" query accepts:
 
     - "dataSet", a list of data set names associated with the features to filter by.
+    - "related", a list of "related" tag names associated with the data set that is associated with the features to filter by.
+    - "tag", a list of tag names associated with the sample that is associated with the features to filter by.
     - "feature", a list of feature names to filter by.
-    - "related", a list of tag names associated with the features to filter by.
     - "featureClass", a list of feature class names associated with the features to filter by.
+    - "sample", a list of sample names associated with the feature to filter by.
 
   If no arguments are passed, this will return all features.
+
+  See also: featuresByClass and featuresByTag
   """
   features(
     dataSet: [String!]
     related: [String!]
+    tag: [String!]
     feature: [String!]
     featureClass: [String!]
+    sample: [String!]
+    maxValue: Float
+    minValue: Float
   ): [Feature!]!
 
   """
   The "featuresByClass" query accepts:
 
     - "dataSet", a list of data set names associated with the features to filter by.
+    - "related", a list of "related" tag names associated with the data set that is associated with the features to filter by.
+    - "tag", a list of tag names associated with the sample that is associated with the features to filter by.
     - "feature", a list of feature names to filter by.
-    - "related", a list of tag names associated with the features to filter by.
     - "featureClass", a list of feature class names associated with the features to filter by.
+    - "sample", a list of sample names associated with the feature to filter by.
 
   If no arguments are passed, this will return all features organized by feature class.
   """
   featuresByClass(
     dataSet: [String!]
     related: [String!]
+    tag: [String!]
     feature: [String!]
     featureClass: [String!]
+    sample: [String!]
+    maxValue: Float
+    minValue: Float
   ): [FeaturesByClass!]!
 
   """
   The "featuresByTag" query accepts:
 
     - "dataSet", a list of data set names associated with the features to filter by.
+    - "related", a list of "related" tag names associated with the data set that is associated with the features to filter by.
+    - "tag", a list of tag names associated with the sample that is associated with the features to filter by.
     - "feature", a list of feature names to filter by.
-    - "related", a list of tag names associated with the features to filter by.
     - "featureClass", a list of feature class names associated with the features to filter by.
+    - "sample", a list of sample names associated with the feature to filter by.
 
   If no arguments are passed, this will return all features organized by tag.
   """
   featuresByTag(
-    dataSet: [String!]!
-    related: [String!]!
+    dataSet: [String!]
+    related: [String!]
+    tag: [String!]
     feature: [String!]
     featureClass: [String!]
+    sample: [String!]
+    maxValue: Float
+    minValue: Float
   ): [FeaturesByTag!]!
 
   """
@@ -202,6 +225,13 @@ type Query {
   immuneCheckpoints(name: [String!]): [ImmuneCheckpoint!]
 
   """
+  The "methodTags" query accepts:
+
+    - "name", a list of names of the method tags to look up.
+  """
+  methodTags(name: [String!]): [MethodTag!]!
+
+  """
   The "mutations" query accepts:
 
     - "entrez", a list of gene entrez ids associated with the mutations to filter by.
@@ -214,12 +244,29 @@ type Query {
     entrez: [Int!]
     mutationCode: [String!]
     mutationType: [String!]
-  ): [Mutation!]!
+  ): [GeneMutation!]!
 
   """
   The "mutationTypes" query returns all mutation types.
   """
   mutationTypes: [MutationType!]!
+
+  """
+  The "nodes" query accepts:
+
+    - "dataSet", a list of data set names associated with the nodes to filter by.
+    - "related", a list of tag names related to the data set associated with the nodes to filter by.
+    - "network", a list of tag names associated with the nodes that are also associated with the "network" tag to filter by.
+    - "page", the page of results to get. Defaults to 1 (the first page)
+
+  If no arguments are passed, this will return all nodes (please note, there will be a LOT of results).
+  """
+  nodes(
+    dataSet: [String!]
+    related: [String!]
+    network: [String!]
+    page: Int
+  ): NodePage
 
   """
   The "patients" query accepts:
@@ -263,10 +310,10 @@ type Query {
   If no filters are passed, this will return a list of all mutation statuses with lists of all related samples.
   """
   samplesByMutationStatus(
-      mutationId: [Int!]
-      mutationStatus: StatusEnum
-      sample: [String!]
-  ) :  [SampleByMutationStatus!]!
+    mutationId: [Int!]
+    mutationStatus: StatusEnum
+    sample: [String!]
+  ): [SampleByMutationStatus!]!
 
   """
   The "samplesByTag" query accepts:
@@ -290,7 +337,20 @@ type Query {
     name: [String!]
     patient: [String!]
   ): [SamplesByTag!]!
+
+  """
+  The "slides" query accepts:
+
+    - "name", a list of names of the slides to look up.
+  """
   slides(name: [String!]): [Slide!]!
+
+  """
+  The "superCategories" query accepts:
+
+    - "name", a list of names of the super categories to look up.
+  """
+  superCategories(name: [String!]): [SuperCategory!]!
 
   """
   The "tags" query accepts:
@@ -307,10 +367,18 @@ type Query {
     tag: [String!]
     feature: [String!]
     featureClass: [String!]
+    sample: [String!]
   ): [Tag!]!
 
   """
   A simple test query that is independent of the database.
   """
   test: String!
+
+  """
+  The "therapyTypes" query accepts:
+
+    - "name", a list of names of the therapy types to look up.
+  """
+  therapyTypes(name: [String!]): [TherapyType!]!
 }

@@ -1,16 +1,13 @@
-from .resolver_helpers import get_value, request_features, return_feature_value
+from .resolver_helpers import build_feature_graphql_response, request_features, return_feature_derived_fields
 
 
-def resolve_features(_obj, info, dataSet=None, related=None, feature=None, featureClass=None):
-    results = request_features(_obj, info, data_set=dataSet, related=related, feature=feature,
-                               feature_class=featureClass, by_class=False, by_tag=False)
-    return [{
-        'class': get_value(row, 'class'),
-        'display': get_value(row, 'display'),
-        'methodTag': get_value(row, 'method_tag'),
-        'name': get_value(row),
-        'order': get_value(row, 'order'),
-        'sample': get_value(row, 'sample'),
-        'unit': get_value(row, 'unit'),
-        'value': return_feature_value(row)
-    } for row in results]
+def resolve_features(_obj, info, dataSet=None, feature=None, featureClass=None, maxValue=None, minValue=None, related=None, sample=None, tag=None):
+    features = request_features(_obj, info, data_set=dataSet, feature=feature, feature_class=featureClass, max_value=maxValue,
+                                min_value=minValue, related=related, sample=sample, tag=tag, by_class=False, by_tag=False)
+
+    feature_ids = set(feature.id for feature in features)
+
+    max_min_dict, sample_dict = return_feature_derived_fields(
+        info, feature_ids=feature_ids, data_set=dataSet, max_value=maxValue, min_value=minValue, related=related, sample=sample, tag=tag)
+
+    return map(build_feature_graphql_response(max_min_dict=max_min_dict, sample_dict=sample_dict), features)

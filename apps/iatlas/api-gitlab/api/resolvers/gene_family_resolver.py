@@ -6,6 +6,6 @@ def resolve_gene_family(_obj, info, name=None):
         _obj, info, name=name)
 
     return [{
-        "name": get_value(gene_family, "name"),
-        "genes": get_value(gene_family, 'genes', []),
+        'name': get_value(gene_family, 'name'),
+        'genes': get_value(gene_family, 'genes', []),
     } for gene_family in gene_families]

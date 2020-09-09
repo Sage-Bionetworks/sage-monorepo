@@ -82,14 +82,20 @@ type Node {
     dataSet: SimpleDataSet!
     gene: SimpleGene
     feature: SimpleFeature
-    tags: [SimpleTag] # ie C1 or BRCA. No tags that are tagged to the "network" tag. 
+    tags: [SimpleTag] # ie C1 or BRCA. No tags that are tagged to the "network" tag.
 }
 
-samples_by_mutation_status {
-    status {
-        sample_name
-    }
+
+samplesByMutationStatus(mutationsId: Int!, sample: [String!]): [MutationStatus!]!
+type SampleByMutationStatus {
+    samples: [String!]
+    status: StatusEnum! # Mut or Wt
 }
+
+# entrez and mutation code plus list of sample names
+
+
+
 
 
 
@@ -343,4 +349,22 @@ query sampleIds {
             }
         }
     }
+}
+
+mutationsBySamples {
+    name
+    mutations [{
+        gene {
+            entrez
+            hgnc
+        }
+        mutationCode {
+            code
+        }
+        mutationType {
+            name
+            display
+        }
+        status
+    }]
 }

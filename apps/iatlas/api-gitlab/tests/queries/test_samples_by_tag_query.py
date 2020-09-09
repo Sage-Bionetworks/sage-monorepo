@@ -23,9 +23,7 @@ def test_samples_by_tag_query_with_passed_sample(client, sample):
             patient: $patient
         ) {
             tag
-            samples {
-                name
-            }
+            samples { name }
          }
     }"""
     response = client.post(
@@ -394,7 +392,7 @@ def test_samples_by_tag_query_with_all_args(client, data_set, related, tag, chos
         samples = result['samples']
         assert result['tag'] == tag
         assert isinstance(samples, list)
-        assert len(samples) > 0
+        assert len(samples) == 1
         for current_sample in samples:
             assert current_sample['name'] == sample
             assert current_sample['patient']['barcode'] == patient

@@ -6,8 +6,26 @@ from api.database import return_feature_class_query
 
 
 def test_featuresByClass_query_with_feature(client, data_set, related, chosen_feature):
-    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
-        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByClass(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByClass(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             class
             features {
                 class
@@ -15,9 +33,11 @@ def test_featuresByClass_query_with_feature(client, data_set, related, chosen_fe
                 methodTag
                 name
                 order
-                sample
+                samples {
+                    name
+                    value
+                }
                 unit
-                value
             }
         }
     }"""
@@ -38,20 +58,43 @@ def test_featuresByClass_query_with_feature(client, data_set, related, chosen_fe
         assert len(features) > 0
         # Don't need to iterate through every result.
         for feature in features[0:2]:
+            samples = feature['samples']
             assert feature['class'] == result['class']
             assert type(feature['display']) is str or NoneType
             assert type(feature['methodTag']) is str or NoneType
             assert feature['name'] == chosen_feature
             assert type(feature['order']) is int or NoneType
-            assert type(feature['sample']) is str or NoneType
+            assert isinstance(samples, list)
+            assert len(samples) > 0
+            # Don't need to iterate through every result.
+            for current_sample in samples[0:2]:
+                assert type(current_sample['name']) is str
+                assert type(current_sample['value']) is float
             assert feature['unit'] in unit_enum.enums or type(
                 feature['unit']) is NoneType
-            assert type(feature['value']) is str or float or NoneType
 
 
 def test_featuresByClass_query_with_feature_no_sample_or_value(client, data_set, related, chosen_feature):
-    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
-        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByClass(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByClass(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             class
             features {
                 name
@@ -71,8 +114,26 @@ def test_featuresByClass_query_with_feature_no_sample_or_value(client, data_set,
 
 
 def test_featuresByClass_query_no_feature(client, data_set, related):
-    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
-        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByClass(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByClass(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             class
             features {
                 class
@@ -110,8 +171,26 @@ def test_featuresByClass_query_no_feature(client, data_set, related):
 
 
 def test_featuresByClass_query_no_relations(client, data_set, related, chosen_feature):
-    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
-        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByClass(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByClass(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             class
             features {
                 display
@@ -148,8 +227,26 @@ def test_featuresByClass_query_no_relations(client, data_set, related, chosen_fe
 
 
 def test_featuresByClass_query_no_data_set(client, related, chosen_feature):
-    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
-        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByClass(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByClass(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             class
             features {
                 display
@@ -185,8 +282,26 @@ def test_featuresByClass_query_no_data_set(client, related, chosen_feature):
 
 
 def test_featuresByClass_query_no_related(client, data_set, chosen_feature):
-    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
-        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByClass(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByClass(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             class
             features {
                 display
@@ -222,8 +337,26 @@ def test_featuresByClass_query_no_related(client, data_set, chosen_feature):
 
 
 def test_featuresByClass_query_no_args(client):
-    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
-        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByClass(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByClass(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             class
             features {
                 display
@@ -245,8 +378,26 @@ def test_featuresByClass_query_no_args(client):
 
 
 def test_featuresByClass_query_with_feature_class(client, data_set, related, chosen_feature, feature_class):
-    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
-        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByClass(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByClass(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             class
             features {
                 class
@@ -277,8 +428,26 @@ def test_featuresByClass_query_with_feature_class(client, data_set, related, cho
 
 
 def test_featuresByClass_query_with_just_feature_class(client, feature_class):
-    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
-        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByClass(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByClass(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             class
             features {
                 class
@@ -306,14 +475,34 @@ def test_featuresByClass_query_with_just_feature_class(client, feature_class):
 
 
 def test_featuresByClass_query_with_just_feature_and_feature_class(client, feature_class):
-    query = """query FeaturesByClass($dataSet: [String!], $related: [String!], $feature: [String!], $featureClass: [String!]) {
-        featuresByClass(dataSet: $dataSet, related: $related, feature: $feature, featureClass: $featureClass) {
+    query = """query FeaturesByClass(
+            $dataSet: [String!]
+            $related: [String!]
+            $tag: [String!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $sample: [String!]
+            $minValue: Float
+            $maxValue: Float
+        ) {
+        featuresByClass(
+            dataSet: $dataSet
+            related: $related
+            tag: $tag
+            feature: $feature
+            featureClass: $featureClass
+            sample: $sample
+            minValue: $minValue
+            maxValue: $maxValue
+        ) {
             class
             features {
                 class
                 name
-                sample
-                value
+                samples {
+                    name
+                    value
+                }
             }
         }
     }"""
@@ -334,7 +523,12 @@ def test_featuresByClass_query_with_just_feature_and_feature_class(client, featu
         assert len(features) > 0
         # Don't need to iterate through every result.
         for feature in features[0:2]:
+            samples = feature['samples']
             assert feature['class'] == feature_class
             assert feature['name'] == chosen_feature
-            assert type(feature['sample']) is str or NoneType
-            assert type(feature['value']) is str or float or NoneType
+            assert isinstance(samples, list)
+            assert len(samples) > 0
+            # Don't need to iterate through every result.
+            for current_sample in samples[0:2]:
+                assert type(current_sample['name']) is str
+                assert type(current_sample['value']) is float

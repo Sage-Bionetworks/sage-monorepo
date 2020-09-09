@@ -1,7 +1,7 @@
 variables:
   CI: "1"
   # Workaround for locally issued TLS certs
-  DOCKER_TLS_CERTDIR: ''
+  DOCKER_TLS_CERTDIR: ""
 
   # Staging variables
   STAGING_CONTAINER_NAME: $CI_REGISTRY_IMAGE:${CI_COMMIT_SHORT_SHA}-${CI_COMMIT_REF_NAME}
@@ -25,13 +25,10 @@ tests:
   stage: test_code
   image: python:3.8-alpine
   script:
-    - apk add postgresql-libs
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
-    - pip install pytest pytest-cov pytest-xdist
-    - export POSTGRES_DB=$POSTGRES_DB
-    - export POSTGRES_HOST=$POSTGRES_HOST
-    - export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-    - export POSTGRES_USER=$POSTGRES_USER
+    - apk add --no-cache openssh git libpq
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir pytest pytest-cov pytest-xdist && apk del --no-cache .build-deps
+    - export POSTGRES_DB=${STAGING_DB_NAME}
+    - export FLASK_ENV=development
     - pytest --cov --cov-report html -n auto
   artifacts:
     expose_as: "coverage-initial"
@@ -39,25 +36,37 @@ tests:
       - coverage
     expire_in: 30 days
 
-tests:coverage-report:
+tests:coverage-report-staging:
   only:
     - staging
-    - master
   stage: test_code
   image: python:3.8-alpine
   script:
-    - apk add postgresql-libs
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && pip install --no-cache-dir -r ./requirements.txt && apk del --no-cache .build-deps
-    - pip install pytest pytest-cov pytest-xdist
-    - export POSTGRES_DB=$POSTGRES_DB
-    - export POSTGRES_HOST=$POSTGRES_HOST
-    - export POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-    - export POSTGRES_USER=$POSTGRES_USER
+    - apk add openssh git libpq
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir pytest pytest-cov pytest-xdist && apk del --no-cache .build-deps
+    - export POSTGRES_DB=${STAGING_DB_NAME}
+    - export FLASK_ENV=staging
     - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml --cov-report term:skip-covered -n auto
     - coverage report --skip-covered | grep TOTAL
   artifacts:
     reports:
       cobertura: coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
+
+# tests:coverage-report-prod:
+#   only:
+#     - master
+#   stage: test_code
+#   image: python:3.8-alpine
+#   script:
+#     - apk add openssh git libpq
+#     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir pytest pytest-cov pytest-xdist && apk del --no-cache .build-deps
+#     - export POSTGRES_DB=${POSTGRES_DB}
+#     - export FLASK_ENV=production
+#     - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml --cov-report term:skip-covered -n auto
+#     - coverage report --skip-covered | grep TOTAL
+#   artifacts:
+#     reports:
+#       cobertura: coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
 
 pages:
   only:
@@ -85,7 +94,6 @@ Build Container:
   services:
     - name: docker:19.03.1-dind
   script:
-    - export FLASK_ENV=staging
     - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $STAGING_CONTAINER_NAME .
     - docker push $STAGING_CONTAINER_NAME
@@ -108,4 +116,4 @@ Deploy to Staging:
     - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker stop ${STAGING_CONTAINER_LABEL}
     - docker ps -a
-    - docker run --rm -d -p 80:80 --name ${STAGING_CONTAINER_LABEL} -e POSTGRES_HOST=${STAGING_DB_HOST} -e POSTGRES_USER=${STAGING_DB_USER} -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -e POSTGRES_DB=${STAGING_DB_NAME} -e POSTGRES_PORT=5432 ${STAGING_CONTAINER_NAME}
+    - docker run --rm -d -p 80:80 --name ${STAGING_CONTAINER_LABEL} -e POSTGRES_HOST=${STAGING_DB_HOST} -e POSTGRES_USER=${STAGING_DB_USER} -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -e POSTGRES_DB=${STAGING_DB_NAME} -e POSTGRES_PORT=5432 -e FLASK_ENV=staging ${STAGING_CONTAINER_NAME}

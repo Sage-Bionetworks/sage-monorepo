@@ -18,9 +18,4 @@ def resolve_slides(_obj, info, name=None):
     query = return_slide_query(*option_args)
     if name:
         query = query.filter(Slide.name.in_(name))
-    slides = query.distinct().all()
-    return [{
-        'name': get_value(slide, 'name'),
-        'description': get_value(slide, 'description'),
-        'patient': get_value(slide, 'patient')
-    } for slide in slides]
+    return query.all()

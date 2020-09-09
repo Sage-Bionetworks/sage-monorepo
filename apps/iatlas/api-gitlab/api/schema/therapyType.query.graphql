@@ -1,0 +1,10 @@
+"""
+The "TherapyTypes" type may return:
+
+- The "name" of the Therapy type
+- A list of Genes associated with the Therapy type
+"""
+type TherapyType {
+  name: String!
+  genes: [SimpleGene]!
+}

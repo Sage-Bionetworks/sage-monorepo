@@ -1,16 +1,12 @@
-from .resolver_helpers import get_value, request_tags
+from .resolver_helpers import build_tag_graphql_response, request_tags, return_tag_derived_fields
 
 
-def resolve_tags(_obj, info, dataSet, related, tag=None, feature=None, featureClass=None):
-    results = request_tags(_obj, info=info, data_set=dataSet, related=related,
-                           tag=tag, feature=feature, feature_class=featureClass,
-                           get_samples=False)
+def resolve_tags(_obj, info, dataSet=None, feature=None, featureClass=None, related=None, sample=None, tag=None):
+    tag_results = request_tags(_obj, info=info, data_set=dataSet, feature=feature, feature_class=featureClass,
+                               related=related, sample=sample, tag=tag, get_samples=False)
+    tag_ids = set(tag.id for tag in tag_results)
 
-    return [{
-        'characteristics': get_value(row, 'characteristics'),
-        'color': get_value(row, 'color'),
-        'display': get_value(row, 'display'),
-        'name': get_value(row, 'name'),
-        'sampleCount': get_value(row, 'sample_count'),
-        'samples': get_value(row, 'samples'),
-    } for row in results]
+    sample_dict = return_tag_derived_fields(info, data_set=dataSet, feature=feature, feature_class=featureClass,
+                                            related=related, sample=sample, tag_ids=tag_ids)
+
+    return map(build_tag_graphql_response(sample_dict), tag_results)

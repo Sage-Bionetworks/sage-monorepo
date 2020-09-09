@@ -1,7 +1,7 @@
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 import os
-from config import Config, get_database_uri
+from config import get_config, get_database_uri
 
 
 @pytest.mark.skipif(
@@ -27,22 +27,51 @@ def test_get_database_uri(monkeypatch: MonkeyPatch):
 
 
 def test_testing_config(app):
-    if os.getenv('FLASK_ENV') == 'development':
+    FLASK_ENV = os.getenv('FLASK_ENV')
+    if FLASK_ENV == 'development':
         assert app.config['DEBUG']
     else:
         assert not app.config['DEBUG']
+    assert not app.config['PROFILE']
     assert app.config['TESTING']
     assert app.config['SQLALCHEMY_DATABASE_URI'] == get_database_uri()
     assert app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] == False
 
 
-def test_config():
+def test_development_config(monkeypatch: MonkeyPatch):
     from api import create_app
-    app = create_app(Config)
-    if os.getenv('FLASK_ENV') == 'development':
-        assert app.config['DEBUG']
-    else:
-        assert not app.config['DEBUG']
+
+    FLASK_ENV = 'development'
+    monkeypatch.setenv('FLASK_ENV', FLASK_ENV)
+    app = create_app(get_config())
+    assert app.config['DEBUG']
+    assert app.config['PROFILE']
+    assert not app.config['TESTING']
+    assert app.config['SQLALCHEMY_DATABASE_URI'] == get_database_uri()
+    assert app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] == False
+
+
+def test_staging_config(monkeypatch: MonkeyPatch):
+    from api import create_app
+
+    FLASK_ENV = 'staging'
+    monkeypatch.setenv('FLASK_ENV', FLASK_ENV)
+    app = create_app(get_config())
+    assert not app.config['DEBUG']
+    assert not app.config['PROFILE']
+    assert not app.config['TESTING']
+    assert app.config['SQLALCHEMY_DATABASE_URI'] == get_database_uri()
+    assert app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] == False
+
+
+def test_production_config(monkeypatch: MonkeyPatch):
+    from api import create_app
+
+    FLASK_ENV = 'production'
+    monkeypatch.setenv('FLASK_ENV', FLASK_ENV)
+    app = create_app(get_config())
+    assert not app.config['DEBUG']
+    assert not app.config['PROFILE']
     assert not app.config['TESTING']
     assert app.config['SQLALCHEMY_DATABASE_URI'] == get_database_uri()
     assert app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] == False

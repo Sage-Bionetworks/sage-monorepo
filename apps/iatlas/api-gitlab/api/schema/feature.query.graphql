@@ -1,19 +1,16 @@
 """
-The "FeatureValue" scalar will always be either a Float or either "inf" or "-inf" representing infinity or negative infinity.
-"""
-scalar FeatureValue
-
-"""
 The "Feature" type may return:
 
-- The feature's "name" (a unique string for this feature).
+- The "class" is the feature class associated with this feature.
 - A "display" name, a readable name for the feature.
+- The "methodTag" is the method tag associated with this feature.
+- The feature's "name" (a unique string for this feature).
 - The "order" is a number representing the index order the feature would be displayed in.
 - The "sample" will be the name of the sample related to this feature that is assocoated with the "value".
-- The "value" is the relationship between the feature and the sample.
 - The "unit" is the type of measurement of the value.
-- The "methodTag" is the method tag associated with this feature.
-- The "class" is the feature class associated with this feature.
+- The "value" is the relationship between the feature and the sample.
+- The "valueMax" is the maximum value of all relationships between a specific feature and the samples.
+- The "valueMin" is the minimum value of all relationships between a specific feature and the samples.
 
 
 See also "FeaturesByClass", "FeaturesByTag", and "SimpleFeature".
@@ -24,9 +21,10 @@ type Feature {
   methodTag: String
   name: String!
   order: Int
-  sample: String
+  samples: [FeatureRelatedSample!]!
   unit: String
-  value: FeatureValue
+  valueMax: Float
+  valueMin: Float
 }
 
 """
@@ -63,6 +61,7 @@ The "SimpleFeature" is a version of a `Feature`. Only basic feature attributes m
 - The feature's "name" (a unique string for this feature).
 - A "display" name, a readable name for the feature.
 - The "order" is a number representing the index order the feature would be displayed in.
+- The "unit" is the type of measurement of the value.
 
 To get more properties of features, please see "Feature", "FeaturesByClass", "FeaturesByTag".
 """
@@ -70,4 +69,5 @@ type SimpleFeature {
   display: String
   name: String!
   order: Int
+  unit: String
 }

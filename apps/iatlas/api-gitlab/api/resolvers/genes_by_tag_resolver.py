@@ -1,65 +1,36 @@
-from .resolver_helpers import (
-    build_gene_request, build_option_args, get_selection_set, get_value, request_genes, request_tags)
+from itertools import groupby
+from .resolver_helpers import build_gene_graphql_response, gene_request_fields, get_requested, get_value, request_genes, return_gene_derived_fields
 
 
-def resolve_genes_by_tag(_obj, info, dataSet, related, tag=None, feature=None, featureClass=None, entrez=None, geneType=None):
-    results = []
-    append = results.append
-    tag_results = request_tags(_obj, info=info, data_set=dataSet, related=related,
-                               tag=tag, feature=feature, feature_class=featureClass,
-                               get_samples=True)
+def resolve_genes_by_tag(_obj, info, dataSet, related, entrez=None, feature=None, featureClass=None, geneType=None, sample=None, tag=None):
+    tag_field_mapping = {'characteristics': 'characteristics',
+                         'color': 'color',
+                         'display': 'display',
+                         'tag': 'tag'}
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
-    fields = build_option_args(selection_set, {'genes': 'genes'})
-    want_genes = 'genes' in fields
+    requested = get_requested(
+        info, gene_request_fields, True, child_node='genes')
 
-    get_value_1 = get_value
+    tag_requested = get_requested(info, tag_field_mapping)
+    tag_requested.add('by_tag')
+    gene_results = request_genes(requested, tag_requested=tag_requested, data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass,
+                                 gene_type=geneType, related=related, sample=sample, tag=tag)
+    gene_ids = set(gene.id for gene in gene_results)
 
-    def build_results(row):
-        sample = get_value_1(row, 'samples')
-        gene_results = request_genes(_obj, info, entrez=entrez, gene_type=geneType,
-                                     by_tag=True, sample=sample) if want_genes else []
-        if gene_results:
-            return {
-                'characteristics': get_value_1(row, 'characteristics'),
-                'color': get_value_1(row, 'color'),
-                'display': get_value_1(row, 'display'),
-                'tag': get_value_1(row, 'tag'),
-                'genes': [{
-                    'entrez': get_value_1(gene, 'entrez'),
-                    'hgnc': get_value_1(gene, 'hgnc'),
-                    'description': get_value_1(gene, 'description'),
-                    'friendlyName': get_value_1(gene, 'friendly_name'),
-                    'ioLandscapeName': get_value_1(gene, 'io_landscape_name')
-                } for gene in gene_results]
-            }
+    tag_dict = dict()
+    for gene_tag, genes_list in groupby(gene_results, key=lambda g: g.tag):
+        tag_dict[gene_tag] = tag_dict.get(gene_tag, []) + list(genes_list)
 
-    return map(build_results, tag_results)
+    def build_response(feature_set):
+        gene_tag, genes = feature_set
+        pubs_dict, samples_dict, types_dict = return_gene_derived_fields(info, data_set=dataSet, feature=feature, feature_class=featureClass, gene_type=geneType,
+                                                                         related=related, sample=sample, tag=tag, gene_ids=gene_ids, by_tag=True)
+        return {
+            'characteristics': get_value(genes[0], 'tag_characteristics'),
+            'color': get_value(genes[0], 'tag_color'),
+            'display': get_value(genes[0], 'tag_display'),
+            'genes': list(map(build_gene_graphql_response(types_dict, pubs_dict, samples_dict), genes)),
+            'tag': gene_tag
+        }
 
-
-# def get_genes(_obj, info, entrez=entrez, gene_type=gene_type, by_tag=tags):
-#     selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
-#     fields = build_option_args(selection_set, {'genes': 'genes'})
-#     want_genes = 'genes' in fields
-
-#     if want_genes:
-#         gene_query = build_gene_request(_obj, info, entrez=entrez, gene_type=gene_type,
-#                                         samples=samples, by_tag=by_tag)
-#         genes = request_genes(_obj, info, entrez=entrez, gene_type=geneType,
-#                                      by_tag=True, sample=get_value(row, 'samples')) if want_genes else [None]
-
-#         gene_to_sample_1 = orm.aliased(GeneToSample, name='gs')
-
-
-#         pub_gene_gene_type_join_condition = build_pub_gene_gene_type_join_condition(
-#             genes, pub_gene_gene_type_1, pub_1)
-#         pub_query = pub_query.join(pub_gene_gene_type_1, and_(
-#             *pub_gene_gene_type_join_condition))
-
-#         publications = pub_query.distinct().all()
-
-#         gene_dict = {gene.id: gene for gene in genes}
-
-#         for key, collection in groupby(publications, key=lambda publication: publication.gene_id):
-#             set_committed_value(
-#                 gene_dict[key], 'publications', list(collection))
+    return map(build_response, tag_dict.items())

@@ -1,27 +1,14 @@
-from itertools import groupby
-from .resolver_helpers import build_gene_graphql_response, get_gene_types, get_publications, get_samples, request_gene
+from .resolver_helpers import build_gene_graphql_response, gene_request_fields, get_requested, request_gene, return_gene_derived_fields
 
 
 def resolve_gene(_obj, info, entrez, sample=None):
-    gene = request_gene(_obj, info, entrez)
+    requested = get_requested(info, gene_request_fields)
+
+    gene = request_gene(requested, entrez=entrez, sample=sample)
 
     if gene:
-        gene_dict = {gene.id: gene}
-        samples = get_samples(info, sample=sample, gene_dict=gene_dict)
-        gene_types = get_gene_types(info, gene_dict=gene_dict)
-        pubs = get_publications(
-            info, gene_types=gene_types, gene_dict=gene_dict)
+        pubs_dict, samples_dict, types_dict = return_gene_derived_fields(
+            info, gene_ids=[gene.id], sample=sample)
 
-        types_dict = dict()
-        for key, collection in groupby(gene_types, key=lambda gt: gt.gene_id):
-            types_dict[key] = list(collection)
-
-        samples_dict = dict()
-        for key, collection in groupby(samples, key=lambda s: s.gene_id):
-            samples_dict[key] = list(collection)
-
-        pubs_dict = dict()
-        for key, collection in groupby(pubs, key=lambda pub: pub.gene_id):
-            pubs_dict[key] = list(collection)
-
-        return build_gene_graphql_response(gene)(types_dict, pubs_dict, samples_dict) if gene else None
+        return build_gene_graphql_response(types_dict, pubs_dict, samples_dict)(gene)
+    return None

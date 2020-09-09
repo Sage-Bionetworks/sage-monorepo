@@ -26,3 +26,20 @@ type DriverResult {
   numWildTypes: Int
   numMutants: Int
 }
+
+"""
+The "DriverResultPage" type may return:
+
+- "items", a list of returned DriverResults
+- "page", the current page of returned DriverResults
+- "pages", the total number of pages available
+- "total", the total number of results (all pages summed).
+
+See `DriverResult`
+"""
+type DriverResultPage {
+    items: [DriverResult!]!
+    page: Int!
+    pages: Int!
+    total: Int!
+}
