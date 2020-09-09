@@ -7,51 +7,205 @@ options(shiny.maxRequestSize = 100 * 1024^2)
 options(shiny.usecairo = FALSE)
 
 library(magrittr)
-iatlas.app::create_and_add_all_queries_to_qry_obj()
+
+modules_tbl <- "module_config.tsv" %>%
+  readr::read_tsv(.) %>%
+  dplyr::mutate(
+    "link" = stringr::str_c("link_to_", .data$name),
+    "image" = stringr::str_c("images/", .data$name, ".png"),
+    "server_function_string" = stringr::str_c(.data$name, "_server"),
+    "ui_function_string" = stringr::str_c(.data$name, "_ui"),
+    "server_function" = purrr::map(.data$server_function_string, get),
+    "ui_function" = purrr::map(.data$ui_function_string, get)
+  )
+
+analysis_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "analysis")
+tool_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "tool")
+
+
 
 ################################################################################
 # Begin Shiny Server definition.
 ################################################################################
 shiny::shinyServer(function(input, output, session) {
 
-    shiny::observe({
-        query <- shiny::parseQueryString(session$clientData$url_search)
-        if (!is.null(query[['module']])) {
-            shinydashboard::updateTabItems(
-                session,
-                "explorertabs",
-                query[['module']]
-            )
-        }
-    })
-
-    # Non analysis modules -----------------------------------------------------
-
-    cohort_obj <- call_iatlas_module(
-        "R/modules/server/other_modules/cohort_selection_server.R",
-        input,
-        session
-    )
-
-    call_iatlas_module(
-        "R/modules/server/other_modules/data_info_server.R",
-        input,
+  shiny::observe({
+    query <- shiny::parseQueryString(session$clientData$url_search)
+    if (!is.null(query[['module']])) {
+      shinydashboard::updateTabItems(
         session,
-        observe_event = F
+        "explorertabs",
+        query[['module']]
+      )
+    }
+  })
+
+  # Modules -------------------------------------------------------------------
+
+  cohort_obj <- call_iatlas_module(
+    "cohort_selection",
+    cohort_selection_server,
+    input,
+    session
+  )
+
+  call_iatlas_module(
+    "data_info",
+    data_info_server,
+    input,
+    session
+  )
+
+  # Analysis Modules ----------------------------------------------------------
+
+  analysis_modules_tbl %>%
+    dplyr::select("name", "server_function") %>%
+    purrr::pwalk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
+
+  # Tool Modules --------------------------------------------------------------
+
+  tool_modules_tbl %>%
+    dplyr::select("name", "server_function") %>%
+    purrr::pwalk(
+      iatlas.app::call_iatlas_module, input, session, tab_id = "toolstabs"
     )
 
-    # Analysis modules --------------------------------------------------------
-    "R/modules/server/analysis_modules/" %>%
-        list.files(full.names = T) %>%
-        purrr::walk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
+  # Sidebar Menu --------------------------------------------------------------
 
-    # Tool modules --------------------------------------------------------
+  analysis_module_menu_items <- shiny::reactive({
+    purrr::map2(
+      analysis_modules_tbl$display,
+      analysis_modules_tbl$name,
+      ~ shinydashboard::menuSubItem(
+        text = .x,
+        tabName = .y,
+        icon = shiny::icon("cog")
+      )
+    )
+  })
 
-    "R/modules/server/tool_modules/" %>%
-        list.files(full.names = T) %>%
-        purrr::walk(
-            iatlas.app::call_iatlas_module, input, session, tab_id = "toolstabs"
-        )
+  output$sidebar_menu <- shinydashboard::renderMenu({
+    shinydashboard::sidebarMenu(
+      id = "explorertabs",
+      shinydashboard::menuItem(
+        "iAtlas Explorer Home",
+        tabName = "dashboard",
+        icon = shiny::icon("dashboard")
+      ),
+      shinydashboard::menuItem(
+        "Cohort Selection",
+        tabName = "cohort_selection",
+        icon = shiny::icon("cog")
+      ),
+      shinydashboard::menuItem(
+        "Data Description",
+        icon = shiny::icon("th-list"),
+        tabName = "data_info"
+      ),
+      shinydashboard::menuItem(
+        text = "Analysis Modules",
+        icon = shiny::icon("bar-chart"),
+        startExpanded = TRUE,
+        analysis_module_menu_items()
+      )
+    )
+  })
+
+  # Dashboard Body ------------------------------------------------------------
+
+  readout_info_boxes <- shiny::reactive({
+    readout_tbl <- dplyr::tibble(
+      title = c(
+        "Immune Readouts:",
+        "Classes of Readouts:",
+        "TCGA Cancers:",
+        "TCGA Samples:"
+      ),
+      value = c(
+        nrow(iatlas.api.client::query_features()),
+        length(unique(iatlas.api.client::query_features()$class)),
+        nrow(iatlas.api.client::query_tags(
+          datasets = "TCGA", parent_tags = "TCGA_Study"
+        )),
+        11080
+      ),
+      icon = purrr::map(c("search", "filter", "flask", "users"), shiny::icon)
+    )
+
+    purrr::pmap(
+      readout_tbl,
+      shinydashboard::infoBox,
+      width = 3,
+      color = "black",
+      fill = FALSE
+    )
+  })
+
+  module_image_boxes <- shiny::reactive({
+    purrr::pmap(
+      list(
+        title  = analysis_modules_tbl$display,
+        linkId = analysis_modules_tbl$link,
+        imgSrc = analysis_modules_tbl$image,
+        boxText = analysis_modules_tbl$description
+      ),
+      iatlas.app::imgLinkBox,
+      width = 6,
+      linkText = "Open Module"
+    )
+  })
+
+  module_tab_items <- shiny::reactive({
+    other_modules <- list(
+      shinydashboard::tabItem(
+        tabName = "cohort_selection",
+        cohort_selection_ui("cohort_selection")
+      ),
+      shinydashboard::tabItem(
+        tabName = "data_info",
+        data_info_ui("data_info")
+      )
+    )
+
+    analysis_modules <- purrr::map2(
+      analysis_modules_tbl$name,
+      analysis_modules_tbl$ui_function,
+      ~ shinydashboard::tabItem(tabName = .x, .y(.x))
+    )
+
+    c(other_modules, analysis_modules)
+  })
+
+  output$dashboard_body <- shiny::renderUI({
+    shiny::req(readout_info_boxes(), module_image_boxes(), module_tab_items())
+
+    tab_item <- list(shinydashboard::tabItem(
+      tabName = "dashboard",
+      iatlas.app::titleBox("iAtlas Explorer — Home"),
+      iatlas.app::textBox(
+        width = 12,
+        shiny::includeMarkdown("inst/markdown/explore1.markdown")
+      ),
+      iatlas.app::sectionBox(
+        title = "What's Inside",
+        shiny::fluidRow(readout_info_boxes())
+      ),
+      iatlas.app::sectionBox(
+        title = "Analysis Modules",
+        iatlas.app::messageBox(
+          width = 12,
+          shiny::includeMarkdown("inst/markdown/explore2.markdown")
+        ),
+        shiny::fluidRow(module_image_boxes())
+      )
+    ))
+
+    do.call(
+      shinydashboard::tabItems,
+      c(tab_item, module_tab_items())
+    )
+  })
+
 })
 
 

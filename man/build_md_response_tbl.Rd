@@ -4,7 +4,7 @@
 \alias{build_md_response_tbl}
 \title{Build Multivariate Driver Response Tibble}
 \usage{
-build_md_response_tbl(feature_id)
+build_md_response_tbl(cohort_obj, feature)
 }
 \arguments{
 \item{feature_id}{An integer in the feature_id column of the

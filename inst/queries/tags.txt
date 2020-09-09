@@ -1,6 +1,0 @@
-query tags($dataSet: [String!]!, $related: [String!]!) {
-  tags(dataSet: $dataSet, related: $related){
-    display
-    name
-  }
-}

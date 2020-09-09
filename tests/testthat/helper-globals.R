@@ -1,11 +1,29 @@
-with_test_api_env <- function(expr){
-  query_dir  <- system.file("queries", package = "iatlas.app")
-
-  if (present(.GlobalEnv$ghql_query_object)){
-    rm(ghql_query_object, envir = .GlobalEnv)
-  }
-  create_and_add_all_queries_to_qry_obj(
-    query_dir = query_dir
-  )
-  expr
+read_rds_file <- function(file){
+  test_file_dir  <- system.file("test_rds_files", package = "iatlas.app")
+  readRDS(file.path(test_file_dir, file))
 }
+
+pcawg_immune_subtype_cohort_obj <- read_rds_file(
+  "pcawg_immune_subtype_cohort_obj.rds"
+)
+
+tcga_immune_subtype_cohort_obj <- read_rds_file(
+  "tcga_immune_subtype_cohort_obj.rds"
+)
+
+pcawg_feature_bin_cohort_obj <- read_rds_file(
+  "pcawg_feature_bin_cohort_obj.rds"
+)
+
+tcga_feature_bin_cohort_obj <- read_rds_file(
+  "tcga_feature_bin_cohort_obj.rds"
+)
+
+tcga_immune_subtype_cohort_obj_50 <- read_rds_file(
+  "tcga_immune_subtype_cohort_obj_50.rds"
+)
+
+tcga_feature_bin_cohort_obj_50 <- read_rds_file(
+  "tcga_feature_bin_cohort_obj_50.rds"
+)
+

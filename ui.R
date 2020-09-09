@@ -4,49 +4,43 @@
 ################################################################################
 
 headerTagList <- list(
-    shiny::tags$style(
-        type = "text/css",
-        ".navbar .navbar-nav {float: right; font-size: 14px} .navbar .navbar-nav li a {font-size: 14px} .nav-tabs {font-size: 12px}"
-    ),
-    shiny::tags$base(target = "_blank")
+  shiny::tags$style(
+    type = "text/css",
+    ".navbar .navbar-nav {float: right; font-size: 14px} .navbar .navbar-nav li a {font-size: 14px} .nav-tabs {font-size: 12px}"
+  ),
+  shiny::tags$base(target = "_blank")
 )
 
 footerTagList <- list(
-    shiny::tags$footer(id = "myFooter", shiny::includeHTML("html/footer.html"))
+  shiny::tags$footer(id = "myFooter", shiny::includeHTML("html/footer.html"))
 )
 
 ################################################################################
 # Define the full user-interface, `ui`
 ################################################################################
 
-source("R/pages/aboutpage.R", local = T)
-source("R/pages/explorepage.R", local = T)
-source("R/pages/toolspage.R", local = T)
-source("R/pages/docspage.R", local = T)
-source("R/pages/resourcespage.R", local = T)
-
 ui <- shiny::navbarPage(
-    shiny::includeCSS("css/custom.css"),
-    shiny::includeCSS("css/footer.css"),
-    shiny::includeCSS("css/bootstrapTable.min.css"),
-    title = shiny::strong("CRI iAtlas Portal"), selected = "Explore",
-    shiny::tabPanel("Explore", explorepage, icon = icon("bar-chart")),
-    shiny::tabPanel("Tools", toolspage, icon = icon("wrench")),
-    shiny::tabPanel("About", aboutpage, icon = icon("info-circle")),
-    shiny::tabPanel("Documentation", docspage, icon = icon("file-text")),
-    shiny::tabPanel("Resources", resourcespage, icon = icon("link")),
-    header = headerTagList,
-    footer = footerTagList,
-    collapsible = TRUE,
-    inverse = TRUE,
-    windowTitle = "CRI iAtlas Portal",
-    # This make shiny::need messages easier to see
-    shiny::tags$head(shiny::tags$style(shiny::HTML(
-        ".shiny-output-error-validation {color: black; font-size: large}"
-    ))),
-    shiny::tags$head(
-        shiny::tags$script(
-            '
+  shiny::includeCSS("css/custom.css"),
+  shiny::includeCSS("css/footer.css"),
+  shiny::includeCSS("css/bootstrapTable.min.css"),
+  title = shiny::strong("CRI iAtlas Portal"), selected = "Explore",
+  shiny::tabPanel("Explore", explorepage_ui(), icon = icon("bar-chart")),
+  shiny::tabPanel("Tools", toolspage_ui(), icon = icon("wrench")),
+  shiny::tabPanel("About", aboutpage_ui(), icon = icon("info-circle")),
+  shiny::tabPanel("Documentation", docspage_ui(), icon = icon("file-text")),
+  shiny::tabPanel("Resources", resourcespage_ui(), icon = icon("link")),
+  header = headerTagList,
+  footer = footerTagList,
+  collapsible = TRUE,
+  inverse = TRUE,
+  windowTitle = "CRI iAtlas Portal",
+  # This make shiny::need messages easier to see
+  shiny::tags$head(shiny::tags$style(shiny::HTML(
+    ".shiny-output-error-validation {color: black; font-size: large}"
+  ))),
+  shiny::tags$head(
+    shiny::tags$script(
+      '
       var dimension = [0, 0];
       $(document).on("shiny:connected", function(e) {
       dimension[0] = window.innerWidth;
@@ -59,9 +53,9 @@ ui <- shiny::navbarPage(
       Shiny.onInputChange("dimension", dimension);
       });
       '
-        ),
-        shiny::HTML(
-            "
+    ),
+    shiny::HTML(
+      "
       <script>
       (function(i,s,o,g,r,a,m){
 		  i['GoogleAnalyticsObject']=r;i[r]=i[r]||
@@ -79,8 +73,8 @@ ui <- shiny::navbarPage(
 
 		  </script>
       "
-        )
     )
+  )
 )
 
 shiny::shinyUI(ui)

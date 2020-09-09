@@ -1,285 +1,113 @@
-with_test_api_env({
-#
-#     test_that("Get Valid Group Filters", {
-#         expect_equal(get_valid_group_filters(list()), list())
-#         expect_equal(get_valid_group_filters(list(NULL)), list())
-#         expect_equal(
-#             get_valid_group_filters(list("element1" = list("ids" = 1))),
-#             list()
-#         )
-#         expect_equal(
-#             get_valid_group_filters(
-#                 list("element1" = list("ids" = 1, "name" = "Group"))
-#             ),
-#             list(list("ids" = 1, "name" = "Group"))
-#         )
-#         expect_equal(
-#             get_valid_group_filters(
-#                 list(
-#                     "element1" = list("ids" = 1, "name" = "Group"),
-#                     "element2" = list("ids" = 1)
-#                 )
-#             ),
-#             list(list("ids" = 1, "name" = "Group"))
-#         )
-#         expect_equal(
-#             get_valid_group_filters(
-#                 list(
-#                     "element1" = list("ids" = 1, "name" = "Group"),
-#                     "element2" = list("ids" = 1, "name" = "Group")
-#                 )
-#             ),
-#             list(
-#                 list("ids" = 1, "name" = "Group"),
-#                 list("ids" = 1, "name" = "Group")
-#             )
-#         )
-#     })
-#
-#     test_that("Get Filtered Group Sample IDs", {
-#         expect_equal(get_filtered_group_sample_ids(list(), 1:10000), 1:10000)
-#         result1 <- get_filtered_group_sample_ids(
-#             list(
-#                 "element1" = list("ids" = 1, "name" = "Group"),
-#                 "element2" = list("ids" = 1, "name" = "Group")
-#             ),
-#             1:10000
-#         )
-#         expect_type(result1, "integer")
-#     })
-#
-#     test_that("Get Filtered Group Sample IDs By Filter", {
-#         expect_type(get_filtered_group_sample_ids_by_filter(1), "integer")
-#     })
-#
-#     test_that("Get Valid Numeric Filters", {
-#         expect_equal(get_valid_numeric_filters(list()), list())
-#         expect_equal(get_valid_numeric_filters(list(NULL)), list())
-#         expect_equal(
-#             get_valid_numeric_filters(list("element1" = list("id" = 1))),
-#             list()
-#         )
-#         expect_equal(
-#             get_valid_numeric_filters(
-#                 list("element1" = list("id" = 1, "min" = 1))
-#             ),
-#             list()
-#         )
-#         expect_equal(
-#             get_valid_numeric_filters(
-#                 list("element1" = list("id" = 1, "max" = 1))),
-#             list()
-#         )
-#         expect_equal(
-#             get_valid_numeric_filters(
-#                 list("element1" = list("id" = 1, "max" = 1, "min" = 0))
-#             ),
-#             list(list("id" = 1, "max" = 1, "min" = 0))
-#         )
-#         expect_equal(
-#             get_valid_numeric_filters(
-#                 list(
-#                     "element1" = list("id" = 1, "max" = 1, "min" = 0),
-#                     "element2" = list("id" = 1, "max" = 1)
-#                 )
-#             ),
-#             list(list("id" = 1, "max" = 1, "min" = 0))
-#         )
-#         expect_equal(
-#             get_valid_numeric_filters(
-#                 list(
-#                     "element1" = list("id" = 1, "max" = 1, "min" = 0),
-#                     "element2" = list("id" = 1, "max" = 1, "min" = 0)
-#                 )
-#             ),
-#             list(
-#                 list("id" = 1, "max" = 1, "min" = 0),
-#                 list("id" = 1, "max" = 1, "min" = 0)
-#             )
-#         )
-#     })
-#
-#     test_that("Is Numeric Filter Valid", {
-#         expect_false(is_numeric_filter_valid(NULL))
-#         expect_false(is_numeric_filter_valid(list("id" = 1, "max" = 1)))
-#         expect_false(
-#             is_numeric_filter_valid(list("id" = 1, "min" = 0, "mx" = 1))
-#         )
-#     })#
-    #     test_that("Create Cohorts Group Named List", {
-    #         result1 <- create_cohort_group_named_list(tbl, "TCGA")
-    #         result2 <- create_cohort_group_named_list(tbl, "PCAWG")
-    #         expect_type(result1, "integer")
-    #         expect_type(result2, "integer")
-    #         expect_named(
-    #             result1,
-    #             c("Immune Subtype", "TCGA Subtype", "TCGA Study"),
-    #             ignore.order = T
-    #         )
-    #         # TODO Fix this test when test database contains PCAWG Study
-    #         expect_named(
-    #             result2,
-    #             c("Immune Subtype"),
-    #             # c("Immune Subtype", "PCAWG Study"),
-    #             ignore.order = T
-    #         )
-    #     })
-    #
-    #
-    #     test_that("Get Valid Group Filters", {
-    #         expect_equal(get_valid_group_filters(list()), list())
-    #         expect_equal(get_valid_group_filters(list(NULL)), list())
-    #         expect_equal(
-    #             get_valid_group_filters(list("element1" = list("ids" = 1))),
-    #             list()
-    #         )
-    #         expect_equal(
-    #             get_valid_group_filters(
-    #                 list("element1" = list("ids" = 1, "name" = "Group"))
-    #             ),
-    #             list(list("ids" = 1, "name" = "Group"))
-    #         )
-    #         expect_equal(
-    #             get_valid_group_filters(
-    #                 list(
-    #                     "element1" = list("ids" = 1, "name" = "Group"),
-    #                     "element2" = list("ids" = 1)
-    #                 )
-    #             ),
-    #             list(list("ids" = 1, "name" = "Group"))
-    #         )
-    #         expect_equal(
-    #             get_valid_group_filters(
-    #                 list(
-    #                     "element1" = list("ids" = 1, "name" = "Group"),
-    #                     "element2" = list("ids" = 1, "name" = "Group")
-    #                 )
-    #             ),
-    #             list(
-    #                 list("ids" = 1, "name" = "Group"),
-    #                 list("ids" = 1, "name" = "Group")
-    #             )
-    #         )
-    #     })
-    #
-    #     test_that("Get Filtered Group Sample IDs", {
-    #         expect_equal(get_filtered_group_sample_ids(list(), 1:10000), 1:10000)
-    #         result1 <- get_filtered_group_sample_ids(
-    #             list(
-    #                 "element1" = list("ids" = 1, "name" = "Group"),
-    #                 "element2" = list("ids" = 1, "name" = "Group")
-    #             ),
-    #             1:10000
-    #         )
-    #         expect_type(result1, "integer")
-    #     })
-    #
-    #     test_that("Get Filtered Group Sample IDs By Filter", {
-    #         expect_type(get_filtered_group_sample_ids_by_filter(1), "integer")
-    #     })
-    #
-    #     test_that("Get Valid Numeric Filters", {
-    #         expect_equal(get_valid_numeric_filters(list()), list())
-    #         expect_equal(get_valid_numeric_filters(list(NULL)), list())
-    #         expect_equal(
-    #             get_valid_numeric_filters(list("element1" = list("id" = 1))),
-    #             list()
-    #         )
-    #         expect_equal(
-    #             get_valid_numeric_filters(
-    #                 list("element1" = list("id" = 1, "min" = 1))
-    #             ),
-    #             list()
-    #         )
-    #         expect_equal(
-    #             get_valid_numeric_filters(
-    #                 list("element1" = list("id" = 1, "max" = 1))),
-    #             list()
-    #         )
-    #         expect_equal(
-    #             get_valid_numeric_filters(
-    #                 list("element1" = list("id" = 1, "max" = 1, "min" = 0))
-    #             ),
-    #             list(list("id" = 1, "max" = 1, "min" = 0))
-    #         )
-    #         expect_equal(
-    #             get_valid_numeric_filters(
-    #                 list(
-    #                     "element1" = list("id" = 1, "max" = 1, "min" = 0),
-    #                     "element2" = list("id" = 1, "max" = 1)
-    #                 )
-    #             ),
-    #             list(list("id" = 1, "max" = 1, "min" = 0))
-    #         )
-    #         expect_equal(
-    #             get_valid_numeric_filters(
-    #                 list(
-    #                     "element1" = list("id" = 1, "max" = 1, "min" = 0),
-    #                     "element2" = list("id" = 1, "max" = 1, "min" = 0)
-    #                 )
-    #             ),
-    #             list(
-    #                 list("id" = 1, "max" = 1, "min" = 0),
-    #                 list("id" = 1, "max" = 1, "min" = 0)
-    #             )
-    #         )
-    #     })
-    #
-    #     test_that("Is Numeric Filter Valid", {
-    #         expect_false(is_numeric_filter_valid(NULL))
-    #         expect_false(is_numeric_filter_valid(list("id" = 1, "max" = 1)))
-    #         expect_false(
-    #             is_numeric_filter_valid(list("id" = 1, "min" = 0, "mx" = 1))
-    #         )
-    #     })
-    #
-    #     test_that("Get Filtered Feature Sample IDs", {
-    #         expect_equal(get_filtered_feature_sample_ids(list(), 1:10000), 1:10000)
-    #         result1 <- get_filtered_feature_sample_ids(
-    #             list(
-    #                 "element1" = list("id" = 1L, "max" = 10000, "min" = -10000),
-    #                 "element2" = list("id" = 1L, "max" = 10000, "min" = -10000)
-    #             ),
-    #             1:10000
-    #         )
-    #         expect_type(result1, "integer")
-    #     })
-    #
-    #     test_that("Create Cohort Filter Object", {
-    #         expect_equal(
-    #             create_cohort_filter_object(1:1000, list(), list()),
-    #             list(
-    #                 "sample_ids" = 1:1000,
-    #                 "filters" = list(
-    #                     "feature_filters" = list(),
-    #                     "group_filters" = list()
-    #                 )
-    #             )
-    #         )
-    #     })
-#
-#     test_that("Get Filtered Feature Sample IDs", {
-#         expect_equal(get_filtered_feature_sample_ids(list(), 1:10000), 1:10000)
-#         result1 <- get_filtered_feature_sample_ids(
-#             list(
-#                 "element1" = list("id" = 1L, "max" = 10000, "min" = -10000),
-#                 "element2" = list("id" = 1L, "max" = 10000, "min" = -10000)
-#             ),
-#             1:10000
-#         )
-#         expect_type(result1, "integer")
-#     })
-#
-#     test_that("Create Cohort Filter Object", {
-#         expect_equal(
-#             create_cohort_filter_object(1:1000, list(), list()),
-#             list(
-#                 "sample_ids" = 1:1000,
-#                 "filters" = list(
-#                     "feature_filters" = list(),
-#                     "group_filters" = list()
-#                 )
-#             )
-#         )
-#     })
+test_that("is_tag_filter_valid", {
+    expect_false(is_tag_filter_valid(NULL))
+    expect_false(is_tag_filter_valid(list("tags" = NULL)))
+    expect_true(is_tag_filter_valid(list("tags" = "C1")))
+    expect_true(is_tag_filter_valid(list("tags" = list("C1", "C2"))))
+})
+
+test_that("get_valid_tag_filters", {
+    expect_equal(get_valid_tag_filters(list()), list())
+    expect_equal(get_valid_tag_filters(list(NULL)), list())
+    expect_equal(
+        get_valid_tag_filters(list("element1" = list("tags" = "C1"))),
+        list(list("tags" = "C1"))
+    )
+    expect_equal(
+        get_valid_tag_filters(
+            list(
+                "element1" = list("tags" = "C1"),
+                "element2" = list(NULL)
+            )
+        ),
+        list(list("tags" = "C1"))
+    )
+    expect_equal(
+        get_valid_tag_filters(
+            list(
+                "element1" = list("tags" = "C1"),
+                "element2" = list("tags" = "BRCA")
+            )
+        ),
+        list(list("tags" = "C1"), list("tags" = "BRCA"))
+    )
+})
+
+test_that("get_filtered_tag_samples", {
+    filter_obj <- list(
+        list("tags" = c("C1", "C2", "C3", "C4", "C6")),
+        list("tags" = c("CLLE-ES", "MALY-DE"))
+    )
+    pcawg_samples <- iatlas.api.client::query_dataset_samples("PCAWG")$name
+    result1 <- get_filtered_tag_samples(filter_obj, pcawg_samples, "PCAWG")
+    expect_type(result1, "character")
+    expect_true(length(result1) > 0)
+})
+
+test_that("Is Numeric Filter Valid", {
+    expect_false(is_numeric_filter_valid(NULL))
+    expect_false(is_numeric_filter_valid(list("feature" = "a", "max" = 1)))
+    expect_false(
+        is_numeric_filter_valid(list("feature" = "a", "min" = 0, "mx" = 1))
+    )
+    expect_true(
+        is_numeric_filter_valid(list("feature" = "a", "min" = 0, "max" = 1))
+    )
+})
+
+test_that("get_valid_numeric_filters", {
+    expect_equal(get_valid_numeric_filters(list()), list())
+    expect_equal(get_valid_numeric_filters(list(NULL)), list())
+    expect_equal(
+        get_valid_numeric_filters(list("element1" = list("feature" = "a"))),
+        list()
+    )
+    expect_equal(
+        get_valid_numeric_filters(
+            list("element1" = list("feature" = "a", "min" = 1))
+        ),
+        list()
+    )
+    expect_equal(
+        get_valid_numeric_filters(
+            list("element1" = list("feature" = "a", "max" = 1))),
+        list()
+    )
+    expect_equal(
+        get_valid_numeric_filters(
+            list("element1" = list("feature" = "a", "max" = 1, "min" = 0))
+        ),
+        list(list("feature" = "a", "max" = 1, "min" = 0))
+    )
+    expect_equal(
+        get_valid_numeric_filters(
+            list(
+                "element1" = list("feature" = "a", "max" = 1, "min" = 0),
+                "element2" = list("feature" = "b", "max" = 1)
+            )
+        ),
+        list(list("feature" = "a", "max" = 1, "min" = 0))
+    )
+    expect_equal(
+        get_valid_numeric_filters(
+            list(
+                "element1" = list("feature" = "a", "max" = 1, "min" = 0),
+                "element2" = list("feature" = "b", "max" = 1, "min" = 0)
+            )
+        ),
+        list(
+            list("feature" = "a", "max" = 1, "min" = 0),
+            list("feature" = "b", "max" = 1, "min" = 0)
+        )
+    )
+})
+
+test_that("get_filtered_feature_samples", {
+    filter_obj <- list(
+        "element1" = list("feature" = "B_cells_memory", "max" = 1, "min" = 0),
+        "element2" = list("feature" = "B_cells_naive", "max" = 1, "min" = 0)
+    )
+    pcawg_samples <- iatlas.api.client::query_dataset_samples("PCAWG")$name
+    result1 <- get_filtered_feature_samples(filter_obj, pcawg_samples, "PCAWG")
+    expect_type(result1, "character")
+    expect_true(length(result1) > 0)
 })

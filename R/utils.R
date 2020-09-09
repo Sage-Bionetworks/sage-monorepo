@@ -146,18 +146,6 @@ get_unique_values_from_col <- function(tbl, col){
 }
 
 
-#' Create Feature Named List
-#'
-#' @param class_ids Integers in the id column of the classes table
-#' @param sample_ids Integers in the id column of the features_to_samples table
-#' @importFrom magrittr %>%
-create_feature_named_list <- function(class_ids = NA, sample_ids = NA){
-    list <-
-        build_feature_tbl(class_ids, sample_ids) %>%
-        create_nested_named_list(values_col = "id")
-    return(list)
-}
-
 #' Create Nested Named List
 #'
 #' @param tbl A tibble with the below columns
@@ -246,12 +234,10 @@ get_values_from_eventdata <- function(eventdata, col = "x"){
         unique()
 }
 
-# cohort_object utils ----------------------------------------------------------
+# system files ----------------------------------------------------------------
 
-get_class_list_from_cohort_obj <- function(cohort_obj){
-    cohort_obj %>%
-        purrr::pluck("feature_tbl") %>%
-        dplyr::select(.data$class, .data$class_id) %>%
-        dplyr::distinct() %>%
-        tibble::deframe(.)
+get_markdown_path <- function(name, extension = ".markdown"){
+  name %>%
+    stringr::str_c(extension) %>%
+    file.path(system.file("markdown", package = "iatlas.app"), .)
 }

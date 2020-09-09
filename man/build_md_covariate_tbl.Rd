@@ -4,7 +4,7 @@
 \alias{build_md_covariate_tbl}
 \title{Build Multivariate Driver Covariate Tibble}
 \usage{
-build_md_covariate_tbl(cov_obj)
+build_md_covariate_tbl(cohort_obj, cov_obj)
 }
 \arguments{
 \item{cov_obj}{A list with items named categorical_covariates and

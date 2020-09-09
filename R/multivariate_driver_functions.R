@@ -1,44 +1,27 @@
-
-#' Build Multivariate Driver Covariate Tibble
-#'
-#' @param cov_obj A list with items named categorical_covariates and
-#' numerical_covariates
-#' @importFrom purrr discard reduce
-#' @importFrom dplyr inner_join
-#' @importFrom magrittr %>%
-build_md_covariate_tbl <- function(cov_obj){
-    tag_tbl     <- build_md_tag_covariate_tbl(cov_obj$categorical_covariates)
-    feature_tbl <- build_md_feature_covariate_tbl(cov_obj$numerical_covariates)
-    tbls <-
-        list(tag_tbl, feature_tbl) %>%
-        purrr::discard(., purrr::map_lgl(., is.null))
-    if (length(tbls) == 0) {
-        return(NULL)
-    } else {
-        return(purrr::reduce(tbls, dplyr::inner_join, by = "sample_id"))
-    }
-}
-
 #' Build Multivariate Driver Tag Covariate Tibble
 #'
 #' @param covariates A vector of strings that are in the name column of the tags
 #' table
 #' @importFrom magrittr %>%
 #' @importFrom tidyr pivot_wider drop_na
-build_md_tag_covariate_tbl <- function(covariates){
-    if (is.null(covariates)) return(NULL)
-    paste0(
-        "SELECT t.name AS parent, t2.name AS child, stt.sample_id ",
-        "FROM tags t ",
-        "INNER JOIN tags_to_tags ttt ON t.id = ttt.related_tag_id ",
-        "INNER JOIN tags t2 ON ttt.tag_id = t2.id ",
-        "INNER JOIN samples_to_tags stt ON t2.id = stt.tag_id ",
-        " WHERE t.name in(",
-        string_values_to_query_list(covariates),
-        ")"
-    ) %>%
-        perform_query() %>%
-        tidyr::pivot_wider(., names_from = "parent", values_from = "child") %>%
+build_md_tag_covariate_tbl <- function(cohort_obj, cov_obj){
+    parent_tags <- cov_obj$categorical_covariates
+    if (is.null(parent_tags)) return(NULL)
+    tbl <-
+        purrr::map(
+            parent_tags,
+            ~iatlas.api.client::query_samples_by_tag(
+                datasets = cohort_obj$dataset,
+                samples = cohort_obj$sample_tbl$sample,
+                parent_tags = .x
+            )
+        ) %>%
+        purrr::map2(parent_tags, ~dplyr::mutate(.x, "parent_tag" = .y)) %>%
+        dplyr::bind_rows() %>%
+        dplyr::select("sample", "parent_tag", "tag_name") %>%
+        tidyr::pivot_wider(
+            ., names_from = "parent_tag", values_from = "tag_name"
+        ) %>%
         tidyr::drop_na()
 }
 
@@ -48,19 +31,40 @@ build_md_tag_covariate_tbl <- function(covariates){
 #' features table
 #' @importFrom magrittr %>%
 #' @importFrom tidyr pivot_wider drop_na
-build_md_feature_covariate_tbl <- function(covariates){
-    if (is.null(covariates)) return(NULL)
-    paste0(
-        "SELECT f.name, fts.value, fts.sample_id ",
-        "FROM features f ",
-        "INNER JOIN features_to_samples fts ON f.id = fts.feature_id ",
-        " WHERE f.id in(",
-        numeric_values_to_query_list(covariates),
-        ")"
-    ) %>%
-        perform_query() %>%
-        tidyr::pivot_wider(., names_from = "name", values_from = "value") %>%
+build_md_feature_covariate_tbl <- function(cohort_obj, cov_obj){
+    features <- cov_obj$numerical_covariates
+    if (is.null(features)) return(NULL)
+    tbl <-
+        iatlas.api.client::query_feature_values(
+            features = features,
+            datasets = cohort_obj$dataset,
+            samples = cohort_obj$sample_tbl$sample
+        ) %>%
+        dplyr::select("sample", "feature_name", "feature_value") %>%
+        tidyr::pivot_wider(
+            ., names_from = "feature_name", values_from = "feature_value"
+        ) %>%
         tidyr::drop_na()
+}
+
+#' Build Multivariate Driver Covariate Tibble
+#'
+#' @param cov_obj A list with items named categorical_covariates and
+#' numerical_covariates
+#' @importFrom purrr discard reduce
+#' @importFrom dplyr inner_join
+#' @importFrom magrittr %>%
+build_md_covariate_tbl <- function(cohort_obj, cov_obj){
+    tag_tbl     <- build_md_tag_covariate_tbl(cohort_obj, cov_obj)
+    feature_tbl <- build_md_feature_covariate_tbl(cohort_obj, cov_obj)
+    tbls <-
+        list(tag_tbl, feature_tbl) %>%
+        purrr::discard(., purrr::map_lgl(., is.null))
+    if (length(tbls) == 0) {
+        return(NULL)
+    } else {
+        return(purrr::reduce(tbls, dplyr::inner_join, by = "sample"))
+    }
 }
 
 #' Build Multivariate Driver Response Tibble
@@ -70,27 +74,36 @@ build_md_feature_covariate_tbl <- function(covariates){
 #' @importFrom dplyr select
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
-build_md_response_tbl <- function(feature_id){
-    feature_id %>%
-        as.integer() %>%
-        build_feature_value_tbl_from_ids() %>%
-        dplyr::select(response = .data$value, .data$sample_id)
+build_md_response_tbl <- function(cohort_obj, feature){
+    tbl <-
+        query_feature_values_with_cohort_object(cohort_obj, feature) %>%
+        dplyr::inner_join(cohort_obj$sample_tbl, by = "sample") %>%
+        dplyr::select("sample", "group", "response" = "feature_value")
 }
 
-# TODO: remove null check when databse is fixed
-#' Build Multivariate Driver Status Tibble
-#'
-#' @importFrom magrittr %>%
-build_md_status_tbl <- function(){
-    paste0(
-        "SELECT * FROM samples_to_mutations ",
-        "WHERE mutation_id IN ",
-        "(SELECT id FROM mutations WHERE mutation_type_id IN ",
-        "(SELECT id FROM mutation_types WHERE name = 'driver_mutation')) ",
-        "AND status IS NOT NULL"
-    ) %>%
-        perform_query()
+#TODO: use new mutatiosn by samples query
+build_md_status_tbl <- function(cohort_obj){
+    tbl <-
+        iatlas.api.client::query_samples_by_mutation_status(
+            samples = cohort_obj$sample_tbl$sample
+        ) %>%
+        dplyr::select("sample", "status")
 }
+
+#' # TODO: remove null check when databse is fixed
+#' #' Build Multivariate Driver Status Tibble
+#' #'
+#' #' @importFrom magrittr %>%
+#' build_md_status_tbl <- function(){
+#'     paste0(
+#'         "SELECT * FROM samples_to_mutations ",
+#'         "WHERE mutation_id IN ",
+#'         "(SELECT id FROM mutations WHERE mutation_type_id IN ",
+#'         "(SELECT id FROM mutation_types WHERE name = 'driver_mutation')) ",
+#'         "AND status IS NOT NULL"
+#'     ) %>%
+#'         perform_query()
+#' }
 #' Combine Multivariate Driver Tibbles
 #'
 #' @param resp_tbl A tibble
@@ -106,8 +119,8 @@ build_md_status_tbl <- function(){
 combine_md_tbls <- function(resp_tbl, sample_tbl, status_tbl, cov_tbl, mode){
     tbl <- list(resp_tbl, sample_tbl, status_tbl, cov_tbl) %>%
         purrr::discard(., purrr::map_lgl(., is.null)) %>%
-        purrr::reduce(dplyr::inner_join, by = "sample_id") %>%
-        dplyr::select(-.data$sample_id)
+        purrr::reduce(dplyr::inner_join, by = "sample") %>%
+        dplyr::select(-"sample")
     if (mode == "By group") {
         tbl <- dplyr::mutate(tbl, label = paste0(
             .data$group, "; ", .data$mutation_id
@@ -273,27 +286,27 @@ create_md_violin_plot_title <- function(tbl, mode){
     return(title)
 }
 
-#' Create Multivariate Driver Violin Plot X Label
-#'
-#' @param mode A string, either "By group" or "Across groups"
-#' @param label A string
-#' @importFrom stringr str_match
-create_md_violin_plot_x_lab <- function(label, mode){
-    if (mode == "By group") {
-        id  <- stringr::str_match(label, "^[:print:]+;([:print:]+)$")[,2]
-    } else if (mode == "Across groups") {
-        id <- label
-    }
-    paste0(
-        "SELECT ",
-        create_id_to_hgnc_subquery(),
-        ", ",
-        create_id_to_mutation_code_subquery(),
-        " FROM mutations a where a.id = ",
-        id
-    ) %>%
-        perform_query() %>%
-        tidyr::unite("mutation", sep = ":") %>%
-        dplyr::pull(.data$mutation) %>%
-        paste0("Mutation Status ", .)
-}
+#' #' Create Multivariate Driver Violin Plot X Label
+#' #'
+#' #' @param mode A string, either "By group" or "Across groups"
+#' #' @param label A string
+#' #' @importFrom stringr str_match
+#' create_md_violin_plot_x_lab <- function(label, mode){
+#'     if (mode == "By group") {
+#'         id  <- stringr::str_match(label, "^[:print:]+;([:print:]+)$")[,2]
+#'     } else if (mode == "Across groups") {
+#'         id <- label
+#'     }
+#'     paste0(
+#'         "SELECT ",
+#'         create_id_to_hgnc_subquery(),
+#'         ", ",
+#'         create_id_to_mutation_code_subquery(),
+#'         " FROM mutations a where a.id = ",
+#'         id
+#'     ) %>%
+#'         perform_query() %>%
+#'         tidyr::unite("mutation", sep = ":") %>%
+#'         dplyr::pull(.data$mutation) %>%
+#'         paste0("Mutation Status ", .)
+#' }
