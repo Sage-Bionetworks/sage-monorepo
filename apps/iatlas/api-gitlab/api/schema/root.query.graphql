@@ -236,6 +236,7 @@ type Query {
 
     - "entrez", a list of gene entrez ids associated with the mutations to filter by.
     - "mutationCode", a list of mutation code names associated with the mutations to filter by.
+    - "mutationId", a list of mutation ids associated to filter by.
     - "mutationType", a list of mutation type names associated with the mutations to filter by.
 
   If no arguments are passed, this will return all mutations.
@@ -243,6 +244,7 @@ type Query {
   mutations(
     entrez: [Int!]
     mutationCode: [String!]
+    mutationId: [Int!]
     mutationType: [String!]
   ): [GeneMutation!]!
 
