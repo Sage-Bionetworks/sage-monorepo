@@ -4,6 +4,8 @@ cohort_group_selection_server <- function(id, selected_dataset) {
     function(input, output, session) {
       ns <- session$ns
 
+      # Select group type ----
+
       tag_group_tbl <- shiny::reactive(
         iatlas.api.client::query_dataset_tags(selected_dataset())
       )
@@ -45,6 +47,8 @@ cohort_group_selection_server <- function(id, selected_dataset) {
         else return(input$group_choice)
       }))
 
+      # Driver Mutations ----
+
       display_driver_mutation_ui <- shiny::reactive({
         shiny::req(group_choice())
         group_choice() == "Driver Mutation"
@@ -66,7 +70,7 @@ cohort_group_selection_server <- function(id, selected_dataset) {
       output$select_driver_mutation_group_ui <- shiny::renderUI({
         shiny::req(group_choice() == "Driver Mutation", mutation_tbl())
         shiny::selectInput(
-          inputId  = ns("driver_mutation_id_choice"),
+          inputId  = ns("driver_mutation_choice"),
           label    = "Select or Search for Driver Mutation",
           choices  = mutation_tbl() %>%
             dplyr::select("mutation", "id") %>%
@@ -74,7 +78,8 @@ cohort_group_selection_server <- function(id, selected_dataset) {
         )
       })
 
-      # This is so that the conditional panel can see the various shiny::reactives
+
+      # Immune feature bins ----
 
       display_immune_feature_bins_ui <- shiny::reactive({
         shiny::req(group_choice())
@@ -103,7 +108,7 @@ cohort_group_selection_server <- function(id, selected_dataset) {
         shiny::req(feature_bin_tbl())
 
         shiny::selectInput(
-          inputId = ns("immune_feature_bin_choice"),
+          inputId = ns("bin_immune_feature_choice"),
           label = "Select or Search for feature",
           choices = create_nested_named_list(
             feature_bin_tbl(), values_col = "name"
@@ -111,33 +116,32 @@ cohort_group_selection_server <- function(id, selected_dataset) {
         )
       })
 
+      # Group Object ----
+
       group_object <- shiny::reactive({
         shiny::req(selected_dataset(), group_choice())
         group_object <- list(
           "dataset" = selected_dataset(), "group_name" = group_choice()
         )
         if (group_choice() == "Driver Mutation") {
-          shiny::req(input$driver_mutation_id_choice)
-          group_object$mutation_id <-input$driver_mutation_id_choice
+          shiny::req(input$driver_mutation_choice)
+          group_object$group_type <- "custom"
+          group_object$mutation <- input$driver_mutation_choice
         } else if (group_choice() == "Immune Feature Bins") {
           shiny::req(
-            input$immune_feature_bin_choice,
-            input$immune_feature_bin_number
+            input$bin_immune_feature_choice,
+            input$bin_number_choice
           )
-          group_object$immune_feature_bin <- input$immune_feature_bin_choice
-          group_object$immune_feature_bins <- input$immune_feature_bin_number
+          group_object$group_type <- "custom"
+          group_object$bin_immune_feature <- input$bin_immune_feature_choice
+          group_object$bin_number <- input$bin_number_choice
         } else {
-          cohort_obj <- build_cohort_object(
-            filter_obj(),
-            selected_dataset(),
-            group_choice(),
-            "tag"
-          )
+          group_object$group_type <- "tag"
         }
-        return(cohort_obj)
+        return(group_object)
       })
 
-      return(cohort_obj)
+      return(group_object)
     }
   )
 }
