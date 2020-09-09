@@ -1,9 +1,9 @@
 from .resolver_helpers import get_value, request_mutations
 
 
-def resolve_mutations(_obj, info, entrez=None, mutationCode=None, mutationType=None):
+def resolve_mutations(_obj, info, entrez=None, mutationCode=None, mutationId=None, mutationType=None):
     mutations = request_mutations(
-        _obj, info, entrez=entrez, mutation_code=mutationCode, mutation_type=mutationType)
+        _obj, info, entrez=entrez, mutation_id=mutationId, mutation_code=mutationCode, mutation_type=mutationType)
 
     return [{
         'id': get_value(mutation, 'id'),

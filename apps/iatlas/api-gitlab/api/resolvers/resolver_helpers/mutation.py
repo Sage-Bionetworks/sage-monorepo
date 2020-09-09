@@ -4,7 +4,7 @@ from api.db_models import Gene, Mutation, MutationCode, MutationType, Sample
 from .general_resolvers import build_option_args, get_selection_set
 
 
-def build_mutation_request(_obj, info, entrez=None, mutation_code=None, mutation_type=None):
+def build_mutation_request(_obj, info, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None):
     """
     Builds a SQL request and returns values from the DB.
     """
@@ -55,6 +55,9 @@ def build_mutation_request(_obj, info, entrez=None, mutation_code=None, mutation
     if option_args:
         query = query.options(*option_args)
 
+    if mutation_id:
+        query = query.filter(mutation_1.id.in_(mutation_id))
+
     if entrez:
         query = query.filter(gene_1.entrez.in_(entrez))
 
@@ -67,8 +70,8 @@ def build_mutation_request(_obj, info, entrez=None, mutation_code=None, mutation
     return query
 
 
-def request_mutations(_obj, info, entrez=None, mutation_code=None, mutation_type=None):
+def request_mutations(_obj, info, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None):
     query = build_mutation_request(
-        _obj, info, entrez=entrez, mutation_code=mutation_code, mutation_type=mutation_type)
+        _obj, info, entrez=entrez, mutation_id=mutation_id, mutation_code=mutation_code, mutation_type=mutation_type)
     query = query.distinct()
     return query.all()
