@@ -139,6 +139,7 @@ cython_debug/
 .vscode/*
 !.vscode/co-authored-by.code-snippets
 !.vscode/extensions.json
+!.vscode/cspell.json
 !.vscode/settings.json
 *.code-workspace
 

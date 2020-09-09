@@ -26,9 +26,9 @@ def resolve_genes_by_tag(_obj, info, dataSet, related, entrez=None, feature=None
         pubs_dict, samples_dict, types_dict = return_gene_derived_fields(info, data_set=dataSet, feature=feature, feature_class=featureClass, gene_type=geneType,
                                                                          related=related, sample=sample, tag=tag, gene_ids=gene_ids, by_tag=True)
         return {
-            'characteristics': get_value(genes[0], 'tag_characteristics'),
-            'color': get_value(genes[0], 'tag_color'),
-            'display': get_value(genes[0], 'tag_display'),
+            'characteristics': get_value(genes[0], 'characteristics'),
+            'color': get_value(genes[0], 'color'),
+            'display': get_value(genes[0], 'display'),
             'genes': list(map(build_gene_graphql_response(types_dict, pubs_dict, samples_dict), genes)),
             'tag': gene_tag
         }
