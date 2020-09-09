@@ -21,7 +21,7 @@ cohort_filter_selection_server <- function(id, dataset) {
         purrr::partial(
           tag_filter_element_server,
           tag_named_list = tag_named_list,
-          dataset = selected_dataset
+          dataset = dataset
         )
       })
 
@@ -63,7 +63,7 @@ cohort_filter_selection_server <- function(id, dataset) {
         purrr::partial(
           numeric_filter_element_server,
           feature_named_list = feature_named_list,
-          dataset = selected_dataset
+          dataset = dataset
         )
       })
 
@@ -104,8 +104,10 @@ cohort_filter_selection_server <- function(id, dataset) {
       filter_obj <- shiny::reactive({
         list(
           "samples" = selected_samples(),
-          "numeric_filters" = valid_numeric_filter_obj(),
-          "tag_filters" = valid_tag_filter_obj()
+          "filters" = list(
+            "numeric_filters" = valid_numeric_filter_obj(),
+            "tag_filters" = valid_tag_filter_obj()
+          )
         )
       })
 
