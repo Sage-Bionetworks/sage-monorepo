@@ -4,6 +4,7 @@ Clinical Outcomes	clinical_outcomes	analysis	Plot survival curves based on immun
 CNV Associations	copy_number	analysis	Explore associations of microenvironment with gene copy number.
 Driver Associations	driver_associations	analysis	Explore Associations of Microenvironment with Driver Mutations.
 Extracellular Networks	extracellular_network	analysis	Explore the extracellular networks modulating tumoral immune response.
+Germline Analysis	germline	analysis	Germline Module Description
 Immune Feature Trends	immune_features	analysis	This module allows you to see how immune readouts vary across your groups, and how they relate to one another.
 Immunomodulators	immunomodulators	analysis	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.
 IO Targets	io_targets	analysis	Explore the expression of genes that code for immuno-oncological (IO) targets.
