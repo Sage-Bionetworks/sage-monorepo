@@ -34,19 +34,19 @@ test_that("cohort_group_selection_server_driver_mutation", {
     args = list("selected_dataset" = shiny::reactiveVal("TCGA")),
     {
       session$setInputs("group_choice" = "Driver Mutation")
-      session$setInputs("driver_mutation_choice" = "gene1")
+      session$setInputs("driver_mutation_choice_id" = 1L)
       expect_equal(group_choice(), "Driver Mutation")
       expect_true(display_driver_mutation_ui())
       expect_false(display_immune_feature_bins_ui())
 
       group_object <- session$getReturned()()
       expect_named(
-        group_object, c("dataset", "group_name", "group_type", "mutation")
+        group_object, c("dataset", "group_name", "group_type", "mutation_id")
       )
       expect_equal(group_object$dataset, "TCGA")
       expect_equal(group_object$group_name, "Driver Mutation")
       expect_equal(group_object$group_type, "custom")
-      expect_equal(group_object$mutation, "gene1")
+      expect_equal(group_object$mutation_id, 1L)
     }
   )
 })

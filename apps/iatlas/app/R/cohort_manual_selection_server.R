@@ -1,6 +1,4 @@
-cohort_manual_selection_server <- function(
-  id
-){
+cohort_manual_selection_server <- function(id){
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -9,7 +7,7 @@ cohort_manual_selection_server <- function(
       default_dataset <- "PCAWG"
 
       selected_dataset <- cohort_dataset_selection_server(
-        "cohort_dataset_selection",
+        "dataset_selection",
         default_dataset
       )
 
@@ -20,26 +18,18 @@ cohort_manual_selection_server <- function(
       }
 
       dataset <- dedupe(shiny::reactive({
-        if (is.null(selected_dataset())) {
-          return(default_dataset)
-        } else {
-          return(selected_dataset())
-        }
+        req(default_dataset)
+        if (is.null(selected_dataset())) return(default_dataset)
+        else return(selected_dataset())
       }))
 
-
-      filter_obj <- cohort_filter_selection_server(
-        "cohort_filter_selection",
-        dataset
-      )
-
-      cohort_obj <- cohort_group_selection_server(
-        "cohort_group_selection",
-        filter_obj,
-        dataset
-      )
-
-      return(cohort_obj)
+      filter_object <- cohort_filter_selection_server("filter_selection", dataset)
+      group_object <- cohort_group_selection_server("group_selection", dataset)
+      cohort_object <- shiny::reactive({
+        shiny::req(group_object(), filter_object())
+        build_cohort_object_from_objects(group_object(), filter_object())
+      })
+      return(cohort_object)
     }
   )
 }

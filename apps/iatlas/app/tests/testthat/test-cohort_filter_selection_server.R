@@ -23,7 +23,7 @@ test_that("module_works", {
 
       filter_obj <- session$getReturned()()
       expect_type(filter_obj, "list")
-      expect_named(filter_obj, c("samples", "numeric_filters", "tag_filters"))
+      expect_named(filter_obj, c("samples", "filters"))
     }
   )
 })

@@ -55,9 +55,9 @@ cohort_group_selection_server <- function(id, selected_dataset) {
       })
 
       # This is so that the conditional panel can see the various shiny::reactives
-      output$display_driver_mutation <- shiny::reactive(
+      output$display_driver_mutation <- shiny::reactive({
         display_driver_mutation_ui()
-      )
+      })
 
       shiny::outputOptions(
         output,
@@ -70,7 +70,7 @@ cohort_group_selection_server <- function(id, selected_dataset) {
       output$select_driver_mutation_group_ui <- shiny::renderUI({
         shiny::req(group_choice() == "Driver Mutation", mutation_tbl())
         shiny::selectInput(
-          inputId  = ns("driver_mutation_choice"),
+          inputId  = ns("driver_mutation_choice_id"),
           label    = "Select or Search for Driver Mutation",
           choices  = mutation_tbl() %>%
             dplyr::select("mutation", "id") %>%
@@ -124,9 +124,11 @@ cohort_group_selection_server <- function(id, selected_dataset) {
           "dataset" = selected_dataset(), "group_name" = group_choice()
         )
         if (group_choice() == "Driver Mutation") {
-          shiny::req(input$driver_mutation_choice)
+          shiny::req(input$driver_mutation_choice_id)
           group_object$group_type <- "custom"
-          group_object$mutation <- input$driver_mutation_choice
+          group_object$mutation_id <- as.integer(
+            input$driver_mutation_choice_id
+          )
         } else if (group_choice() == "Immune Feature Bins") {
           shiny::req(
             input$bin_immune_feature_choice,
