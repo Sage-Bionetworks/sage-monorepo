@@ -328,7 +328,7 @@ query sampleIds {
                 gender string?
                 height string? (change to numeric)
                 weight string? (change to numeric)
-                age string? (change to numeric)
+                ageAtDiagnosis string? (change to numeric)
                 ethnicity string?
                 race string?
                 patient {
@@ -337,7 +337,7 @@ query sampleIds {
                     gender string?
                     height string? (change to numeric)
                     weight string? (change to numeric)
-                    age string? (change to numeric)
+                    ageAtDiagnosis string? (change to numeric)
                     ethnicity string?
                     race string?
                 }
