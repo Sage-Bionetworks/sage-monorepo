@@ -4,11 +4,6 @@ cohort_obj2 <- tcga_feature_bin_cohort_obj_50
 cohort_obj3 <- pcawg_immune_subtype_cohort_obj
 
 
-test_that("show_co_submodules", {
-    expect_true(show_co_submodules(cohort_obj1))
-    expect_true(show_co_submodules(cohort_obj2))
-    expect_false(show_co_submodules(cohort_obj3))
-})
 
 test_that("build_co_survival_list", {
     res1 <- build_co_survival_list(cohort_obj1$feature_tbl)
