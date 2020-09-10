@@ -10,7 +10,7 @@ def build_sample_graphql_response(sample):
     return {
         'name': get_value(sample, 'name'),
         'patient': {
-            'age': get_value(sample, 'age'),
+            'age_at_diagnosis': get_value(sample, 'age_at_diagnosis'),
             'barcode': get_value(sample, 'barcode'),
             'ethnicity': get_value(sample, 'ethnicity'),
             'gender': get_value(sample, 'gender'),
@@ -80,7 +80,7 @@ def build_sample_request(_obj, info, data_set=None, feature=None, feature_class=
     if 'patient' in core_requested:
         patient_selection_set = get_selection_set(
             selection_set, child_node='patient')
-        patient_core_field_mapping = {'age': patient_1.age.label('age'),
+        patient_core_field_mapping = {'age_at_diagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
                                       'barcode': patient_1.barcode.label('barcode'),
                                       'ethnicity': patient_1.ethnicity.label('ethnicity'),
                                       'gender': patient_1.gender.label('gender'),

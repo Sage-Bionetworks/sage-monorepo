@@ -4,7 +4,7 @@ from api.database import return_patient_query
 
 
 valid_patient_node_mapping = {
-    'age': 'age',
+    'age_at_diagnosis': 'age_at_diagnosis',
     'barcode': 'barcode',
     'ethnicity': 'ethnicity',
     'gender': 'gender',

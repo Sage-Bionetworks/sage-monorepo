@@ -16,7 +16,7 @@ scalar RaceEnum
 """
 The "Patient" type may return:
 
-- The "age" of the patient
+- "ageAtDiagnosis" is the age of the patient at the time of diagnosis
 - The "barcode" of the patient
 - The "ethnicity" of the patient
 - The "gender" of the patient
@@ -27,7 +27,7 @@ The "Patient" type may return:
 - A list of "slides" associated with the patient
 """
 type Patient {
-  age: Int
+  ageAtDiagnosis: Int
   barcode: String!
   ethnicity: EthnicityEnum
   gender: GenderEnum
@@ -41,7 +41,7 @@ type Patient {
 """
 The "SimplePatient" type may return:
 
-- The "age" of the patient
+- "ageAtDiagnosis" is the age of the patient at the time of diagnisis
 - The "barcode" of the patient
 - The "ethnicity" of the patient
 - The "gender" of the patient
@@ -50,7 +50,7 @@ The "SimplePatient" type may return:
 - The "weight" of the patient
 """
 type SimplePatient {
-  age: Int
+  ageAtDiagnosis: Int
   barcode: String!
   ethnicity: EthnicityEnum
   gender: GenderEnum
