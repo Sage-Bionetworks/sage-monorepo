@@ -12,7 +12,7 @@ def barcode():
 def test_patients_query(client, barcode):
     query = """query Patients($barcode: [String!]) {
         patients(barcode: $barcode) {
-            age
+            ageAtDiagnosis
             barcode
             ethnicity
             gender
@@ -34,7 +34,7 @@ def test_patients_query(client, barcode):
         slides = result['slides']
         samples = result['samples']
 
-        assert type(result['age']) is int or NoneType
+        assert type(result['ageAtDiagnosis']) is int or NoneType
         assert result['barcode'] == barcode
         assert type(result['ethnicity']) in ethnicity_enum.enums or NoneType
         assert type(result['gender']) in gender_enum.enums or NoneType

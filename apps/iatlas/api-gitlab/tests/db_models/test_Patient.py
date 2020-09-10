@@ -28,7 +28,7 @@ def test_Patient_with_relations(app, barcode):
         for slide in result.slides[0:2]:
             assert type(slide.name) is str
     assert result.barcode == barcode
-    assert type(result.age) is int or NoneType
+    assert type(result.age_at_diagnosis) is int or NoneType
     assert type(result.ethnicity) in ethnicity_enum.enums or NoneType
     assert type(result.gender) in gender_enum.enums or NoneType
     assert type(result.height) is int or NoneType
@@ -44,7 +44,7 @@ def test_Patient_no_relations(app, barcode):
     assert result.samples == []
     assert result.slides == []
     assert result.barcode == barcode
-    assert type(result.age) is int or NoneType
+    assert type(result.age_at_diagnosis) is int or NoneType
     assert type(result.ethnicity) in ethnicity_enum.enums or NoneType
     assert type(result.gender) in gender_enum.enums or NoneType
     assert type(result.height) is int or NoneType

@@ -6,7 +6,7 @@ from .database_helpers import build_general_query
 patient_related_fields = ['samples', 'slides']
 
 patient_core_fields = [
-    'id', 'age', 'barcode', 'ethnicity', 'gender', 'height', 'race', 'weight']
+    'id', 'age_at_diagnosis', 'barcode', 'ethnicity', 'gender', 'height', 'race', 'weight']
 
 sample_related_fields = ['data_sets',
                          'dataset_sample_assoc',
