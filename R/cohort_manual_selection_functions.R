@@ -108,11 +108,7 @@ build_cohort_tbl_by_tag <- function(dataset, samples, tag){
 #' @importFrom rlang .data
 build_mutation_cohort_object <- function(dataset, samples, mutation_id){
 
-  mutation_id = as.integer(mutation_id)
-
-  #TODO: filter with mutation id: https://gitlab.com/cri-iatlas/iatlas-api/-/issues/21
-  mutation <- iatlas.api.client::query_mutations() %>%
-    dplyr::filter(.data$id == as.integer(mutation_id)) %>%
+  mutation <- iatlas.api.client::query_mutations(ids = as.integer(mutation_id)) %>%
     dplyr::mutate("mutation" = stringr::str_c(.data$hgnc, ":", .data$code)) %>%
     dplyr::pull(mutation) %>%
     unique()

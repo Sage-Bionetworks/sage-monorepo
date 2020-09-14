@@ -68,7 +68,7 @@ test_that("build_cohort_group_list", {
 test_that("build_cohort_mutation_tbl", {
   expect_named(
     build_cohort_mutation_tbl(),
-    c("id", "entrez", "hgnc", "code", "mutation")
+    c("id", "code", "entrez", "hgnc", "mutation")
   )
 })
 
