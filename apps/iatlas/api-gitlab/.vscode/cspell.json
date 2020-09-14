@@ -7,7 +7,9 @@
     // words - list of words to be always considered correct
     "words": [
         "entrez",
+        "groupby",
         "hgnc",
+        "itertools",
         "pytest"
     ],
     // flagWords - list of words to be always considered incorrect
