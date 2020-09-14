@@ -1,4 +1,4 @@
-til_map_distributions_server <- function(id, cohort_obj, sample_tbl) {
+til_map_distributions_server <- function(id, cohort_obj) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
