@@ -39,7 +39,7 @@ def test_tags_query_with_data_set_related_and_feature(client, data_set, related,
         assert type(result['name']) is str
         assert type(result['sampleCount']) is int
         assert isinstance(related, list)
-        assert len(related) > 0
+        assert len(related) == 1
         for current_related in related[0:2]:
             assert type(current_related["name"]) is str
             assert type(current_related["characteristics"]) is str or NoneType
