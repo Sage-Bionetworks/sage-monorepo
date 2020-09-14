@@ -10,6 +10,12 @@ def test_tags_query_with_data_set_related_and_feature(client, data_set, related,
             color
             display
             name
+            related {
+                name
+                characteristics
+                color
+                display
+            }
             sampleCount
             samples
         }
@@ -25,12 +31,20 @@ def test_tags_query_with_data_set_related_and_feature(client, data_set, related,
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results:
+        related = result['related']
         samples = result['samples']
         assert type(result['characteristics']) is str or NoneType
         assert type(result['color']) is str or NoneType
         assert type(result['display']) is str or NoneType
         assert type(result['name']) is str
         assert type(result['sampleCount']) is int
+        assert isinstance(related, list)
+        assert len(related) == 1
+        for current_related in related[0:2]:
+            assert type(current_related["name"]) is str
+            assert type(current_related["characteristics"]) is str or NoneType
+            assert type(current_related["color"]) is str or NoneType
+            assert type(current_related["display"]) is str or NoneType
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples[0:2]:

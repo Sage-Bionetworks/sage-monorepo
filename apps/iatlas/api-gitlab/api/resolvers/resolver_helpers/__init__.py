@@ -14,5 +14,5 @@ from .node import build_node_graphql_response, build_node_request, node_request_
 from .pathway import request_pathways
 from .sample import build_sample_graphql_response, request_samples
 from .super_category import request_super_categories
-from .tag import build_related_graphql_response, build_tag_graphql_response, request_related, request_tags, return_tag_derived_fields, tag_request_fields
+from .tag import build_related_graphql_response, build_tag_graphql_response, related_request_fields, request_related, request_tags, return_tag_derived_fields, simple_tag_request_fields, tag_request_fields
 from .therapy_type import request_therapy_types

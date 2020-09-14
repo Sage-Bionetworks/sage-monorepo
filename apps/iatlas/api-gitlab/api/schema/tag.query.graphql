@@ -15,6 +15,7 @@ type Tag {
   color: String
   display: String
   name: String!
+  related: [SimpleTag!]
   sampleCount: Int!
   samples: [String!]
 }

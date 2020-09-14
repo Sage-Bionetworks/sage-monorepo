@@ -4,12 +4,26 @@ from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import (Dataset, DatasetToTag, DatasetToSample, Feature, FeatureClass,
                            FeatureToSample, Sample, SampleToTag, Tag, TagToTag)
-from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
+from .general_resolvers import build_join_condition, get_selected, get_value
+
+related_request_fields = {'dataSet',
+                          'display',
+                          'related'}
+
+simple_tag_request_fields = {'characteristics',
+                             'color',
+                             'display',
+                             'name',
+                             'tag'}
 
 tag_request_fields = {'characteristics',
                       'color',
                       'display',
-                      'name'}
+                      'name',
+                      'related',
+                      'sampleCount',
+                      'samples',
+                      'tag'}
 
 
 def build_related_graphql_response(related_set=set()):
@@ -21,22 +35,14 @@ def build_related_graphql_response(related_set=set()):
     }
 
 
-def build_related_request(_obj, info, data_set=None, related=None, by_data_set=True):
+def build_related_request(requested, related_requested, data_set=None, related=None, by_data_set=True):
     """
     Builds a SQL request.
     """
     sess = db.session
 
-    selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, by_data_set, child_node='related')
-    tag_selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, False)
-    data_set_selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, False)
-
     related_1 = aliased(Tag, name='t')
     data_set_1 = aliased(Dataset, name='d')
-    data_set_to_tag_1 = aliased(DatasetToTag, name='dt')
 
     core_field_mapping = {'characteristics': related_1.characteristics.label('characteristics'),
                           'color': related_1.color.label('color'),
@@ -44,22 +50,11 @@ def build_related_request(_obj, info, data_set=None, related=None, by_data_set=T
                           'name': related_1.name.label('name')}
     data_set_core_field_mapping = {
         'display': data_set_1.display.label('data_set_display')}
-    requested_field_mapping = {'characteristics': 'characteristics',
-                               'color': 'color',
-                               'display': 'display',
-                               'name': 'name'}
-    tag_requested_field_mapping = {'dataSet': 'data_set',
-                                   'display': 'display'}
 
-    requested = build_option_args(selection_set, requested_field_mapping)
-    tag_requested = build_option_args(
-        tag_selection_set, tag_requested_field_mapping)
+    core = get_selected(related_requested, core_field_mapping)
+    data_set_core = get_selected(requested, data_set_core_field_mapping)
 
-    core = build_option_args(selection_set, core_field_mapping)
-    data_set_core = build_option_args(
-        data_set_selection_set, data_set_core_field_mapping)
-
-    if by_data_set or 'data_set' in tag_requested:
+    if by_data_set or 'dataSet' in requested:
         data_set_core.add(data_set_1.name.label('data_set'))
 
     query = sess.query(*[*core, *data_set_core])
@@ -67,22 +62,25 @@ def build_related_request(_obj, info, data_set=None, related=None, by_data_set=T
     if related:
         query = query.filter(related_1.name.in_(related))
 
-    query = query.join(data_set_to_tag_1,
-                       data_set_to_tag_1.tag_id == related_1.id)
+    if data_set or by_data_set or 'dataSet' in requested:
+        data_set_to_tag_1 = aliased(DatasetToTag, name='dt')
 
-    data_set_join_condition = build_join_condition(
-        data_set_1.id, data_set_to_tag_1.dataset_id, data_set_1.name, data_set)
-    query = query.join(data_set_1, and_(*data_set_join_condition))
+        query = query.join(data_set_to_tag_1,
+                           data_set_to_tag_1.tag_id == related_1.id)
+
+        data_set_join_condition = build_join_condition(
+            data_set_1.id, data_set_to_tag_1.dataset_id, data_set_1.name, data_set)
+        query = query.join(data_set_1, and_(*data_set_join_condition))
 
     order = []
     append_to_order = order.append
-    if 'name' in requested:
+    if 'name' in related_requested:
         append_to_order(related_1.name)
-    if 'display' in requested:
+    if 'display' in related_requested:
         append_to_order(related_1.display)
-    if 'color' in requested:
+    if 'color' in related_requested:
         append_to_order(related_1.color)
-    if 'characteristics' in requested:
+    if 'characteristics' in related_requested:
         append_to_order(related_1.characteristics)
 
     query = query.order_by(*order) if order else query
@@ -90,39 +88,34 @@ def build_related_request(_obj, info, data_set=None, related=None, by_data_set=T
     return query
 
 
-def build_tag_graphql_response(sample_dict=dict()):
+def build_tag_graphql_response(related_dict=dict(), sample_dict=dict()):
     def f(tag):
         if not tag:
             return None
         tag_id = get_value(tag, 'id')
+        related = related_dict.get(tag_id, []) if related_dict else []
         samples = sample_dict.get(tag_id, []) if sample_dict else []
         return {
             'characteristics': get_value(tag, 'characteristics'),
             'color': get_value(tag, 'color'),
             'display': get_value(tag, 'display'),
             'name': get_value(tag, 'name'),
+            'related': [build_tag_graphql_response()(r) for r in related],
             'sampleCount': get_value(tag, 'sample_count'),
             'samples': [sample.name for sample in samples],
         }
     return f
 
 
-def build_tag_request(_obj, info, data_set=None, feature=None, feature_class=None,
+def build_tag_request(requested, data_set=None, feature=None, feature_class=None,
                       related=None, sample=None, tag=None, get_samples=False):
     """
     Builds a SQL request.
     """
     sess = db.session
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
-
     tag_1 = aliased(Tag, name='t')
     sample_to_tag_1 = aliased(SampleToTag, name='st')
-
-    requested = set()
-    add_to_requested = requested.add
-    for selection in selection_set.selections:
-        add_to_requested(selection.name.value)
 
     core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
                           'color': tag_1.color.label('color'),
@@ -132,7 +125,7 @@ def build_tag_request(_obj, info, data_set=None, feature=None, feature_class=Non
                           'tag': tag_1.name.label('tag')}
 
     # Only select fields that were requested.
-    core = build_option_args(selection_set, core_field_mapping)
+    core = get_selected(requested, core_field_mapping)
     core.add(tag_1.id.label('id'))
 
     query = sess.query(*core)
@@ -231,25 +224,118 @@ def build_tag_request(_obj, info, data_set=None, feature=None, feature_class=Non
     return query
 
 
-def get_samples(info, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag_ids=set()):
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
-    requested = build_option_args(selection_set, {'samples': 'samples'})
+def get_related(requested, related_requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None, tag_ids=set()):
+    has_related = 'related' in requested
+
+    if tag_ids and has_related:
+        sess = db.session
+
+        data_set_1 = aliased(Dataset, name='d')
+        data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
+        data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
+        related_tag_1 = aliased(Tag, name='rt')
+        sample_1 = aliased(Sample, name='s')
+        sample_to_tag_1 = aliased(SampleToTag, name='st')
+        tag_to_tag_1 = aliased(TagToTag, name='tt')
+
+        related_core_field_mapping = {
+            'name': related_tag_1.name.label('name'),
+            'characteristics': related_tag_1.characteristics.label('characteristics'),
+            'color': related_tag_1.name.label('color'),
+            'display': related_tag_1.name.label('display')}
+
+        related_core = get_selected(
+            related_requested, related_core_field_mapping)
+        # Always select the related id and the tag id.
+        related_core |= {related_tag_1.id.label(
+            'id'), tag_to_tag_1.tag_id.label('tag_id')}
+
+        related_query = sess.query(*related_core)
+        related_query = related_query.select_from(related_tag_1)
+
+        if related:
+            related_query = related_query.filter(
+                related_tag_1.name.in_(related))
+
+        data_set_tag_sub_query = sess.query(data_set_1.id).filter(
+            data_set_1.name.in_(data_set)) if data_set else None
+
+        data_set_tag_join_condition = build_join_condition(
+            data_set_to_tag_1.tag_id, related_tag_1.id, data_set_to_tag_1.dataset_id, data_set_tag_sub_query)
+        related_query = related_query.join(
+            data_set_to_tag_1, and_(*data_set_tag_join_condition))
+
+        tag_sub_query = sess.query(tag_1.id).filter(
+            tag_1.name.in_(tag)) if tag else None
+
+        tag_tag_join_condition = build_join_condition(
+            tag_to_tag_1.related_tag_id, related_tag_1.id, tag_to_tag_1.tag_id, tag_sub_query)
+        related_query = related_query.join(
+            tag_to_tag_1, and_(*tag_tag_join_condition))
+
+        data_set_sample_sub_query = sess.query(sample_1.id).filter(
+            sample_1.name.in_(sample)) if sample else None
+
+        data_set_sample_join_condition = build_join_condition(
+            data_set_to_sample_1.dataset_id, data_set_to_tag_1.dataset_id, data_set_to_sample_1.sample_id, data_set_sample_sub_query)
+        related_query = related_query.join(
+            data_set_to_sample_1, and_(*data_set_sample_join_condition))
+
+        related_query = related_query.join(
+            sample_to_tag_1, and_(sample_to_tag_1.sample_id == data_set_to_sample_1.sample_id, sample_to_tag_1.tag_id == tag_to_tag_1.tag_id))
+
+        if feature or feature_class:
+            feature_1 = aliased(Feature, name='f')
+            feature_class_1 = aliased(FeatureClass, name='fc')
+            feature_to_sample_1 = aliased(FeatureToSample, name='fs')
+
+            related_query = related_query.join(feature_to_sample_1,
+                                               feature_to_sample_1.sample_id == sample_to_tag_1.sample_id)
+
+            feature_join_condition = build_join_condition(
+                feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
+            related_query = related_query.join(
+                feature_1, and_(*feature_join_condition))
+
+            if feature_class:
+                feature_class_join_condition = build_join_condition(
+                    feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
+                related_query = related_query.join(
+                    feature_class_1, and_(*feature_class_join_condition))
+
+        order = []
+        append_to_order = order.append
+        if 'name' in related_requested:
+            append_to_order(related_tag_1.name)
+        if 'display' in related_requested:
+            append_to_order(related_tag_1.display)
+        if 'color' in related_requested:
+            append_to_order(related_tag_1.color)
+        if 'characteristics' in related_requested:
+            append_to_order(related_tag_1.characteristics)
+
+        related_query = related_query.order_by(
+            *order) if order else related_query
+
+        return related_query.distinct().all()
+
+    return []
+
+
+def get_samples(requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag_ids=set()):
     has_samples = 'samples' in requested
 
-    if tag_ids:
+    if tag_ids and has_samples:
         sess = db.session
 
         data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
         sample_1 = aliased(Sample, name='s')
         sample_to_tag_1 = aliased(SampleToTag, name='st')
 
-        sample_core_field_mapping = {'name': sample_1.name.label('name')}
-
-        sample_core = build_option_args(
-            selection_set, sample_core_field_mapping)
         # Always select the sample id and the gene id.
-        sample_core |= {sample_1.id.label(
-            'id'), sample_to_tag_1.tag_id.label('tag_id')}
+        sample_core = {sample_1.id.label('id'),
+                       sample_1.name.label('name'),
+                       sample_to_tag_1.tag_id.label('tag_id')}
 
         sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)
@@ -322,27 +408,34 @@ def get_samples(info, data_set=None, feature=None, feature_class=None, related=N
     return []
 
 
-def request_related(_obj, info, data_set=None, related=None):
+def request_related(requested=None, related_requested=None, data_set=None, related=None, by_data_set=True):
     query = build_related_request(
-        _obj, info, data_set=data_set, related=related)
+        requested=requested, related_requested=related_requested, data_set=data_set, related=related, by_data_set=by_data_set)
 
     return query.distinct().all()
 
 
-def request_tags(_obj, info, data_set=None, feature=None, feature_class=None,
+def request_tags(requested, data_set=None, feature=None, feature_class=None,
                  related=None, sample=None, tag=None, get_samples=False):
-    query = build_tag_request(_obj, info, data_set=data_set, feature=feature, feature_class=feature_class,
+    query = build_tag_request(requested, data_set=data_set, feature=feature, feature_class=feature_class,
                               related=related, sample=sample, tag=tag, get_samples=get_samples)
 
     return query.distinct().all()
 
 
-def return_tag_derived_fields(info, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag_ids=set()):
-    samples = get_samples(info, data_set=data_set, feature=feature, feature_class=feature_class,
+def return_tag_derived_fields(requested, related_requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None, tag_ids=set()):
+    related_tags = get_related(requested, related_requested, data_set=data_set, feature=feature, feature_class=feature_class,
+                               related=related, sample=sample, tag=tag, tag_ids=tag_ids)
+
+    related_dict = dict()
+    for key, collection in groupby(related_tags, key=lambda r: r.tag_id):
+        related_dict[key] = related_dict.get(key, []) + list(collection)
+
+    samples = get_samples(requested, data_set=data_set, feature=feature, feature_class=feature_class,
                           related=related, sample=sample, tag_ids=tag_ids)
 
     sample_dict = dict()
     for key, collection in groupby(samples, key=lambda s: s.tag_id):
         sample_dict[key] = sample_dict.get(key, []) + list(collection)
 
-    return sample_dict
+    return (related_dict, sample_dict)
