@@ -1,4 +1,4 @@
-til_maps_ui <- function(id) {
+til_map_ui <- function(id) {
 
     ns <- shiny::NS(id)
 
