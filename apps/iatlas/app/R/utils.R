@@ -241,3 +241,9 @@ get_markdown_path <- function(name, extension = ".markdown"){
     stringr::str_c(extension) %>%
     file.path(system.file("markdown", package = "iatlas.app"), .)
 }
+
+get_example_path <- function(name, extension = ".csv"){
+  name %>%
+    stringr::str_c(extension) %>%
+    file.path(system.file("examples", package = "iatlas.app"), .)
+}
