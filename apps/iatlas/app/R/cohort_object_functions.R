@@ -92,9 +92,9 @@ query_feature_values_with_cohort_object <- function(
   if (cohort_object$group_type == "tag") related <- cohort_object$group_name
   else related <- NA
   iatlas.api.client::query_feature_values(
-    feature,
     datasets = cohort_object$dataset,
     parent_tags = related,
+    features = feature,
     feature_classes = class,
     samples = cohort_object$sample_tbl$sample
   )
