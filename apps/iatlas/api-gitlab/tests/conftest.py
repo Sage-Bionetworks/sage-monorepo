@@ -90,3 +90,33 @@ def slide():
 @pytest.fixture(scope='session')
 def patient():
     return 'TCGA-05-4420'
+
+
+@pytest.fixture(scope='session')
+def age_at_diagnosis():
+    return 70
+
+
+@pytest.fixture(scope='session')
+def ethnicity():
+    return 'not hispanic or latino'
+
+
+@pytest.fixture(scope='session')
+def gender():
+    return 'female'
+
+
+@pytest.fixture(scope='session')
+def height():
+    return 165
+
+
+@pytest.fixture(scope='session')
+def race():
+    return 'black or african american'
+
+
+@pytest.fixture(scope='session')
+def weight():
+    return 70

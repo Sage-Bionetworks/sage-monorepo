@@ -273,11 +273,31 @@ type Query {
   """
   The "patients" query accepts:
 
+    - "ageAtDiagnosis", a list of ages of the patient at the time of diagnosis to filter the patients by
     - "barcode", a list of patient barcodes of the patients to look up.
+    - "ethnicity", a list of patient ethnicities to filter the patients by
+    - "gender", a list of patient genders to filter the patients by
+    - "height", a list of patient heights to filter the patients by
+    - "name", a list of sample names to filter the patients by
+    - "race", a list of patient races to filter the patients by
+    - "sample", a list of sample names to filter the patients by
+    - "slide", a list of slide names to filter the patients by
+    - "weight", a list of patient weights to filter the patients by
 
-  If no barcodes are passed, this will return all patients.
+  If no arguments are passed, this will return all patients.
   """
-  patients(barcode: [String!]): [Patient!]!
+  patients(
+    ageAtDiagnosis: [Int!]
+    barcode: [String!]
+    ethnicity: [EthnicityEnum!]
+    gender: [GenderEnum!]
+    height: [Int!]
+    name: [String!]
+    race: [RaceEnum!]
+    sample: [String!]
+    slide: [String!]
+    weight: [Int!]
+  ): [Patient!]!
 
   """
   The "Pathways" query accepts:
@@ -297,55 +317,120 @@ type Query {
   related(dataSet: [String!], related: [String!]): [RelatedByDataSet!]!
 
   """
-  The "samples" query accepts a list of sample names or a list of patient barcodes.
+  The "samples" query accepts:
+
+    - "ageAtDiagnosis", a list of ages of the patient at the time of diagnosis to filter the samples by
+    - "ethnicity", a list of patient ethnicities to filter the samples by
+    - "gender", a list of patient genders to filter the samples by
+    - "height", a list of patient heights to filter the samples by
+    - "name", a list of sample names to filter the samples by
+    - "patient", a list of patient barcodes to filter the samples by
+    - "race", a list of patient races to filter the samples by
+    - "weight", a list of patient weights to filter the samples by
+
   If no filters are passed, this will return all samples.
   """
-  samples(name: [String!], patient: [String!]): [Sample!]!
+  samples(
+    ageAtDiagnosis: [Int!]
+    ethnicity: [EthnicityEnum!]
+    gender: [GenderEnum!]
+    height: [Int!]
+    name: [String!]
+    patient: [String!]
+    race: [RaceEnum!]
+    weight: [Int!]
+  ): [Sample!]!
 
   """
   The "samplesByMutationStatus" query accepts:
 
+    - "ageAtDiagnosis", a list of ages of the patient at the time of diagnosis to filter the samples by
+    - "ethnicity", a list of patient ethnicities to filter the samples by
+    - "gender", a list of patient genders to filter the samples by
+    - "height", a list of patient heights to filter the samples by
     - "mutationId", a list of mutation ids
     - "mutationStatus", a StatusEnum value to filter the samples by
+    - "patient", a list of patient barcodes to filter the samples by
+    - "race", a list of patient races to filter the samples by
     - "sample", a list of sample names
+    - "weight", a list of patient weights to filter the samples by
 
   If no filters are passed, this will return a list of all mutation statuses with lists of all related samples.
   """
   samplesByMutationStatus(
+    ageAtDiagnosis: [Int!]
+    ethnicity: [EthnicityEnum!]
+    gender: [GenderEnum!]
+    height: [Int!]
     mutationId: [Int!]
     mutationStatus: StatusEnum
+    patient: [String!]
+    race: [RaceEnum!]
     sample: [String!]
+    weight: [Int!]
   ): [SampleByMutationStatus!]!
 
   """
   The "samplesByTag" query accepts:
 
-    - "sample", a list of sample names
-    - "patient", a list of patient barcodes
+    - "ageAtDiagnosis", a list of ages of the patient at the time of diagnosis to filter the samples by
     - "dataSet", a list of data set names
-    - "related", a list of tag names related to the data set(s)
-    - "tag", a list of tag names
+    - "ethnicity", a list of patient ethnicities to filter the samples by
     - "feature", a list of feature names
     - "featureClass", a list of feature class names
+    - "gender", a list of patient genders to filter the samples by
+    - "height", a list of patient heights to filter the samples by
+    - "patient", a list of patient barcodes
+    - "race", a list of patient races to filter the samples by
+    - "related", a list of tag names related to the data set(s)
+    - "sample", a list of sample names
+    - "tag", a list of tag names
+    - "weight", a list of patient weights to filter the samples by
 
   If no filters are passed, this will return all samples organized by tag.
   """
   samplesByTag(
+    ageAtDiagnosis: [Int!]
     dataSet: [String!]
-    related: [String!]
-    tag: [String!]
+    ethnicity: [EthnicityEnum!]
     feature: [String!]
     featureClass: [String!]
+    gender: [GenderEnum!]
+    height: [Int!]
     name: [String!]
     patient: [String!]
+    race: [RaceEnum!]
+    related: [String!]
+    tag: [String!]
+    weight: [Int!]
   ): [SamplesByTag!]!
 
   """
   The "slides" query accepts:
 
-    - "name", a list of names of the slides to look up.
+    - "ageAtDiagnosis", a list of ages of the patient at the time of diagnosis to filter the samples by
+    - "barcode", a list of patient barcodes to filter the slides by
+    - "ethnicity", a list of patient ethnicities to filter the slides by
+    - "gender", a list of patient genders to filter the slides by
+    - "height", a list of patient heights to filter the slides by
+    - "name", a list of slide names to look up.
+    - "race", a list of patient races to filter the slides by
+    - "sample", a list of samples related to the slides to filter by
+    - "weight", a list of patient weights to filter the slides by
+
+  If no arguments are passed, this will return all slides.
   """
-  slides(name: [String!]): [Slide!]!
+  slides(
+    ageAtDiagnosis: [Int!]
+    barcode: [String!]
+    ethnicity: [EthnicityEnum!]
+    gender: [GenderEnum!]
+    height: [Int!]
+    name: [String!]
+    race: [RaceEnum!]
+    sample: [String!]
+    weight: [Int!]
+  ): [Slide!]!
 
   """
   The "superCategories" query accepts:

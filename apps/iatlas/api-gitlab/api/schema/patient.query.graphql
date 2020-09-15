@@ -34,7 +34,7 @@ type Patient {
   height: Int
   race: RaceEnum
   weight: Int
-  samples: [SimpleSample!]!
+  samples: [String!]!
   slides: [SimpleSlide!]!
 }
 
