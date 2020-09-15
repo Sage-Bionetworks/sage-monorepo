@@ -8,7 +8,7 @@ See also `GeneRelatedSample`, `SampleByMutationStatus`, and `SamplesByTag`
 """
 type Sample {
   name: String!
-  patient: Patient
+  patient: SimplePatient
 }
 
 """
