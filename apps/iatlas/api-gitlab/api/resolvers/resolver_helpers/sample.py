@@ -3,21 +3,21 @@ from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import (Dataset, DatasetToSample, DatasetToTag, Feature, FeatureClass, FeatureToSample,
                            Patient, Sample, SampleToMutation, SampleToTag, Tag, TagToTag)
-from .general_resolvers import build_join_condition, build_option_args, get_selection_set, get_value
+from .general_resolvers import build_join_condition, get_selected, get_value
+from .patient import build_patient_graphql_response
+
+simple_sample_request_fields = {'name'}
+
+sample_request_fields = simple_sample_request_fields.union(
+    {'patient', 'patient'})
+
+sample_by_mutation_status_request_fields = {'status', 'samples'}
 
 
 def build_sample_graphql_response(sample):
     return {
         'name': get_value(sample, 'name'),
-        'patient': {
-            'age_at_diagnosis': get_value(sample, 'age_at_diagnosis'),
-            'barcode': get_value(sample, 'barcode'),
-            'ethnicity': get_value(sample, 'ethnicity'),
-            'gender': get_value(sample, 'gender'),
-            'height': get_value(sample, 'height'),
-            'race': get_value(sample, 'race'),
-            'weight': get_value(sample, 'weight')
-        }
+        'patient': build_patient_graphql_response()(sample)
     }
 
 
@@ -30,18 +30,16 @@ def build_sample_mutation_join_condition(sample_to_mutation_model, sample_model,
     return join_condition
 
 
-def build_sample_request(_obj, info, data_set=None, feature=None, feature_class=None, mutation_id=None, mutation_status=None,
-                         patient=None, related=None, sample=None, tag=None, by_status=False, by_tag=False):
+def build_sample_request(requested, patient_requested, tag_status_requested, age_at_diagnosis=None, data_set=None, ethnicity=None, feature=None,
+                         feature_class=None, gender=None, height=None, mutation_id=None, mutation_status=None, patient=None,
+                         race=None, related=None, sample=None, tag=None, weight=None, by_status=False, by_tag=False):
     """
     Builds a SQL query.
     """
     sess = db.session
 
-    selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, (by_tag or by_status), child_node='samples')
-
-    tag_or_status_selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, False)
+    has_patient_filters = bool(
+        patient or age_at_diagnosis or ethnicity or gender or height or race or weight)
 
     data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
     patient_1 = aliased(Patient, name='p')
@@ -50,56 +48,60 @@ def build_sample_request(_obj, info, data_set=None, feature=None, feature_class=
     tag_1 = aliased(Tag, name='t')
 
     core_field_mapping = {'name': sample_1.name.label('name')}
-    tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('tag_characteristics'),
-                              'color': tag_1.color.label('tag_color'),
-                              'display': tag_1.display.label('tag_display')}
-    core_requested_field_mapping = {'name': 'name',
-                                    'patient': 'patient'}
-    requested_field_mapping = {'characteristics': 'characteristics',
-                               'color': 'color',
-                               'display': 'display',
-                               'status': 'status',
-                               'tag': 'tag'}
+    patient_core_field_mapping = {'ageAtDiagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
+                                  'barcode': patient_1.barcode.label('barcode'),
+                                  'ethnicity': patient_1.ethnicity.label('ethnicity'),
+                                  'gender': patient_1.gender.label('gender'),
+                                  'height': patient_1.height.label('height'),
+                                  'race': patient_1.race.label('race'),
+                                  'weight': patient_1.weight.label('weight')}
+    tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
+                              'color': tag_1.color.label('color'),
+                              'display': tag_1.display.label('display')}
 
-    core_requested = build_option_args(
-        selection_set, core_requested_field_mapping)
-    requested = build_option_args(
-        tag_or_status_selection_set, requested_field_mapping) if by_status or by_tag else []
     # Only select fields that were requested.
-    core = build_option_args(selection_set, core_field_mapping)
+    core = get_selected(requested, core_field_mapping)
     core.add(sample_1.id.label('id'))
+    patient_core = get_selected(patient_requested, patient_core_field_mapping)
+    tag_core = get_selected(tag_status_requested, tag_core_field_mapping)
 
     if by_status:
         core.add(sample_to_mutation_1.status.label('status'))
 
     if by_tag:
-        core |= build_option_args(
-            tag_or_status_selection_set, tag_core_field_mapping)
         core.add(tag_1.name.label('tag'))
 
-    if 'patient' in core_requested:
-        patient_selection_set = get_selection_set(
-            selection_set, child_node='patient')
-        patient_core_field_mapping = {'age_at_diagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
-                                      'barcode': patient_1.barcode.label('barcode'),
-                                      'ethnicity': patient_1.ethnicity.label('ethnicity'),
-                                      'gender': patient_1.gender.label('gender'),
-                                      'height': patient_1.height.label('height'),
-                                      'race': patient_1.race.label('race'),
-                                      'weight': patient_1.weight.label('weight')}
-        core |= build_option_args(
-            patient_selection_set, patient_core_field_mapping)
-
-    query = sess.query(*core)
+    query = sess.query(*[*core, *patient_core, *tag_core])
     query = query.select_from(sample_1)
 
     if sample:
         query = query.filter(sample_1.name.in_(sample))
 
-    if 'patient' in core_requested or patient:
-        is_outer = not bool(patient)
+    if has_patient_filters or 'patient' in requested:
+        is_outer = not has_patient_filters
+
         patient_join_condition = build_join_condition(
-            patient_1.id, sample_1.patient_id, filter_column=patient_1.barcode, filter_list=patient)
+            sample_1.patient_id, patient_1.id, patient_1.barcode, patient)
+
+        if bool(age_at_diagnosis):
+            patient_join_condition.append(
+                patient_1.age_at_diagnosis.in_(age_at_diagnosis))
+
+        if bool(ethnicity):
+            patient_join_condition.append(patient_1.ethnicity.in_(ethnicity))
+
+        if bool(gender):
+            patient_join_condition.append(patient_1.gender.in_(gender))
+
+        if bool(height):
+            patient_join_condition.append(patient_1.height.in_(height))
+
+        if bool(race):
+            patient_join_condition.append(patient_1.race.in_(race))
+
+        if bool(weight):
+            patient_join_condition.append(patient_1.weight.in_(weight))
+
         query = query.join(patient_1, and_(
             *patient_join_condition), isouter=is_outer)
 
@@ -167,17 +169,17 @@ def build_sample_request(_obj, info, data_set=None, feature=None, feature_class=
 
     order = []
     append_to_order = order.append
-    if 'name' in core_requested:
-        append_to_order(sample_1.name)
     if 'name' in requested:
+        append_to_order(sample_1.name)
+    if 'name' in tag_status_requested:
         append_to_order(tag_1.name)
-    if 'display' in requested:
+    if 'display' in tag_status_requested:
         append_to_order(tag_1.display)
-    if 'color' in requested:
+    if 'color' in tag_status_requested:
         append_to_order(tag_1.color)
-    if 'characteristics' in requested:
+    if 'characteristics' in tag_status_requested:
         append_to_order(tag_1.characteristics)
-    if 'status' in requested:
+    if 'status' in tag_status_requested:
         append_to_order(sample_to_mutation_1.status)
 
     query = query.order_by(*order) if order else query
@@ -185,8 +187,11 @@ def build_sample_request(_obj, info, data_set=None, feature=None, feature_class=
     return query
 
 
-def request_samples(_obj, info, data_set=None, feature=None, feature_class=None, mutation_id=None, mutation_status=None,
-                    patient=None, related=None, sample=None, tag=None, by_status=False, by_tag=False):
-    query = build_sample_request(_obj, info, data_set=data_set, feature=feature, feature_class=feature_class, mutation_id=mutation_id,
-                                 mutation_status=mutation_status, patient=patient, related=related, sample=sample, tag=tag, by_status=by_status, by_tag=by_tag)
+def request_samples(requested, patient_requested, tag_status_requested, age_at_diagnosis=None, data_set=None, ethnicity=None, feature=None,
+                    feature_class=None, gender=None, height=None, mutation_id=None, mutation_status=None, patient=None,
+                    race=None, related=None, sample=None, tag=None, weight=None, by_status=False, by_tag=False):
+    query = build_sample_request(requested, patient_requested, tag_status_requested, age_at_diagnosis=age_at_diagnosis, data_set=data_set,
+                                 ethnicity=ethnicity, feature=feature, feature_class=feature_class, gender=gender, height=height,
+                                 mutation_id=mutation_id, mutation_status=mutation_status, patient=patient, race=race, related=related,
+                                 sample=sample, tag=tag, weight=weight, by_status=by_status, by_tag=by_tag)
     return query.distinct().all()
