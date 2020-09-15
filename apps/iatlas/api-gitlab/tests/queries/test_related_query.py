@@ -10,6 +10,7 @@ def test_related_query_no_args(client):
             display
             related {
                 name
+                display
             }
         }
     }"""
@@ -27,6 +28,7 @@ def test_related_query_no_args(client):
         assert len(related_list) > 0
         for current_related in related_list:
             assert type(current_related['name']) is str
+            assert type(current_related['display']) is str or NoneType
 
 
 def test_related_query_passed_data_set(client, data_set):
@@ -34,9 +36,7 @@ def test_related_query_passed_data_set(client, data_set):
         related(dataSet: $dataSet, related: $related) {
             dataSet
             display
-            related {
-                name
-            }
+            related { color }
         }
     }"""
     response = client.post(
@@ -53,7 +53,7 @@ def test_related_query_passed_data_set(client, data_set):
         assert isinstance(related_list, list)
         assert len(related_list) > 0
         for current_related in related_list:
-            assert type(current_related['name']) is str
+            assert type(current_related['color']) is str or NoneType
 
 
 def test_data_sets_query_passed_related(client, related):
@@ -63,6 +63,7 @@ def test_data_sets_query_passed_related(client, related):
             display
             related {
                 name
+                characteristics
             }
         }
     }"""
@@ -81,6 +82,7 @@ def test_data_sets_query_passed_related(client, related):
         assert len(related_list) == 1
         for current_related in related_list:
             assert current_related['name'] == related
+            assert type(current_related['characteristics']) is str or NoneType
 
 
 def test_data_sets_query_passed_data_set_passed_sample(client, data_set, related):
@@ -88,9 +90,7 @@ def test_data_sets_query_passed_data_set_passed_sample(client, data_set, related
         related(dataSet: $dataSet, related: $related) {
             dataSet
             display
-            related {
-                name
-            }
+            related { name }
         }
     }"""
     response = client.post(
