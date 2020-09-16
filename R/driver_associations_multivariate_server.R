@@ -1,7 +1,4 @@
-multivariate_driver_server <- function(
-  id,
-  cohort_obj
-) {
+multivariate_driver_server <- function(id, cohort_obj) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
