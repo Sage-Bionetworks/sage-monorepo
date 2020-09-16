@@ -13,32 +13,32 @@ volcano_plot_server <- function(
     id,
     function(input, output, session) {
 
-      # output$volcano_plot <- plotly::renderPlotly({
-      #
-      #   shiny::req(volcano_plot_tbl())
-      #
-      #   shiny::validate(shiny::need(
-      #     nrow(volcano_plot_tbl()) > 0,
-      #     paste0(
-      #       "Current parameters did not result in any linear regression",
-      #       "results."
-      #     )
-      #   ))
-      #
-      #   create_scatterplot(
-      #     volcano_plot_tbl(),
-      #     x_col     = "log10_fold_change",
-      #     y_col     = "log10_p_value",
-      #     xlab      = "Log10(Fold Change)",
-      #     ylab      = "- Log10(P-value)",
-      #     title     = "Immune Response Association With Driver Mutations",
-      #     source    = "univariate_volcano_plot",
-      #     key_col   = "label",
-      #     label_col = "label",
-      #     horizontal_line   = T,
-      #     horizontal_line_y = (-log10(0.05))
-      #   )
-      # })
+      output$volcano_plot <- plotly::renderPlotly({
+
+        shiny::req(volcano_plot_tbl())
+
+        shiny::validate(shiny::need(
+          nrow(volcano_plot_tbl()) > 0,
+          paste0(
+            "Current parameters did not result in any linear regression",
+            "results."
+          )
+        ))
+
+        create_scatterplot(
+          volcano_plot_tbl(),
+          x_col       = "log10_fold_change",
+          y_col       = "log10_p_value",
+          key_col     = "label",
+          label_col   = "label",
+          xlab        = "Log10(Fold Change)",
+          ylab        = "- Log10(P-value)",
+          title       = "Immune Response Association With Driver Mutations",
+          source_name = "univariate_volcano_plot",
+          horizontal_line   = T,
+          horizontal_line_y = (-log10(0.05))
+        )
+      })
 
       plotly_server(
         "volcano_plot",
@@ -47,7 +47,6 @@ volcano_plot_server <- function(
 
       selected_volcano_result <- shiny::reactive({
         shiny::req(volcano_plot_tbl())
-
         eventdata <- plotly::event_data(
           "plotly_click",
           source = "univariate_volcano_plot"
@@ -61,9 +60,7 @@ volcano_plot_server <- function(
             "for the comparison"
           )
         ))
-
         clicked_label <- get_values_from_eventdata(eventdata, "key")
-
         result <-  dplyr::filter(
           volcano_plot_tbl(),
           label == clicked_label
