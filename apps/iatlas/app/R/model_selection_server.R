@@ -1,149 +1,152 @@
 model_selection_server <- function(
-    input,
-    output,
-    session,
-    numerical_covariate_tbl,
-    categorical_covariate_tbl,
-    model_string_prefix,
-    model_formula_prefix = shiny::reactive("response ~ status")
-){
+  id,
+  numerical_covariate_tbl,
+  categorical_covariate_tbl,
+  model_string_prefix,
+  model_formula_prefix = shiny::reactive("response ~ status")
+) {
+  shiny::moduleServer(
+    id,
+    function(input, output, session) {
 
-    # numeric covariate ui -----------------------------------------------------
+      # numeric covariate ui --------------------------------------------------
 
-    numerical_covariate_list <- shiny::reactive({
+      numerical_covariate_list <- shiny::reactive({
         create_nested_named_list(numerical_covariate_tbl())
-    })
+      })
 
-    numeric_covariate_module <- shiny::reactive({
+      numeric_covariate_module <- shiny::reactive({
         purrr::partial(
-            numeric_model_covariate_element_server,
-            covariate_list = numerical_covariate_list
+          numeric_model_covariate_element_server,
+          covariate_list = numerical_covariate_list
         )
-    })
+      })
 
-    numeric_covariate_module_ui <- shiny::reactive(
+      numeric_covariate_module_ui <- shiny::reactive(
         numeric_model_covariate_element_ui
-    )
+      )
 
-    insert_remove_element_server(
+      numeric_covariate_output <- insert_remove_element_server(
         "select_numeric_covariate",
         element_module = numeric_covariate_module,
         element_module_ui = numeric_covariate_module_ui
-    )
+      )
 
-    numerical_covariates <- shiny::reactive({
+      numerical_covariates <- shiny::reactive({
         numeric_covariate_output() %>%
-            shiny::reactiveValuesToList(.) %>%
-            get_items_from_numeric_covariate_output(
-                .,
-                "covariate_choice_name"
-            )
-    })
+          shiny::reactiveValuesToList(.) %>%
+          get_items_from_numeric_covariate_output(
+            .,
+            "covariate_choice_name"
+          )
+      })
 
-    numerical_transformations <- shiny::reactive({
+      numerical_transformations <- shiny::reactive({
         numeric_covariate_output() %>%
-            shiny::reactiveValuesToList(.) %>%
-            get_items_from_numeric_covariate_output(
-                .,
-                "transformation_choice"
-            )
-    })
+          shiny::reactiveValuesToList(.) %>%
+          get_items_from_numeric_covariate_output(
+            .,
+            "transformation_choice"
+          )
+      })
 
-    numerical_display_string <- shiny::reactive({
+      numerical_display_string <- shiny::reactive({
         if(is.null(numerical_covariates())) return(NULL)
         if(is.null(numerical_transformations())) return(NULL)
         covs <- numerical_covariate_tbl() %>%
-            dplyr::filter(.data$feature %in% numerical_covariates()) %>%
-            dplyr::pull("display") %>%
-            stringr::str_c(collapse = " + ")
+          dplyr::filter(.data$feature %in% numerical_covariates()) %>%
+          dplyr::pull("display") %>%
+          stringr::str_c(collapse = " + ")
 
         create_numerical_covariate_string(
-            covs,
-            numerical_transformations(),
-            transform_feature_string
+          covs,
+          numerical_transformations(),
+          transform_feature_string
         )
-    })
+      })
 
-    numerical_formula_string <- shiny::reactive({
+      numerical_formula_string <- shiny::reactive({
         if(is.null(numerical_covariates())) return(NULL)
         if(is.null(numerical_transformations())) return(NULL)
 
         create_numerical_covariate_string(
-            numerical_covariates(),
-            numerical_transformations(),
-            transform_feature_formula
+          numerical_covariates(),
+          numerical_transformations(),
+          transform_feature_formula
         )
-    })
+      })
 
-    # categorical covariate ui -------------------------------------------------
+      # categorical covariate ui ----------------------------------------------
 
-    categorical_covariate_list <- shiny::reactive({
+      categorical_covariate_list <- shiny::reactive({
         create_nested_named_list(categorical_covariate_tbl())
-    })
+      })
 
-    categorical_covariate_module <- shiny::reactive({
+      categorical_covariate_module <- shiny::reactive({
         purrr::partial(
-            categorical_model_covariate_element_server,
-            covariate_list = categorical_covariate_list
+          categorical_model_covariate_element_server,
+          covariate_list = categorical_covariate_list
         )
-    })
+      })
 
-    categorical_covariate_module_ui <- shiny::reactive(
+      categorical_covariate_module_ui <- shiny::reactive(
         categorical_model_covariate_element_ui
-    )
+      )
 
-    insert_remove_element_server(
+      categorical_covariate_output <- insert_remove_element_server(
         "select_categorical_covariate",
         element_module = categorical_covariate_module,
         element_module_ui = categorical_covariate_module_ui
-    )
+      )
 
-    categorical_covariates <- shiny::reactive({
+      categorical_covariates <- shiny::reactive({
         categorical_covariate_output() %>%
-            shiny::reactiveValuesToList(.) %>%
-            get_names_from_categorical_covariate_output()
-    })
+          shiny::reactiveValuesToList(.) %>%
+          get_names_from_categorical_covariate_output()
+      })
 
-    categorical_display_string <- shiny::reactive({
+      categorical_display_string <- shiny::reactive({
         if(is.null(categorical_covariates())) return(NULL)
         categorical_covariate_tbl() %>%
-            dplyr::filter(.data$feature %in% categorical_covariates()) %>%
-            dplyr::pull("display") %>%
-            stringr::str_c(collapse = " + ")
-    })
+          dplyr::filter(.data$feature %in% categorical_covariates()) %>%
+          dplyr::pull("display") %>%
+          stringr::str_c(collapse = " + ")
+      })
 
-    categorical_formula_string <- shiny::reactive({
+      categorical_formula_string <- shiny::reactive({
         if(is.null(categorical_covariates())) return(NULL)
         stringr::str_c(categorical_covariates(), collapse = " + ")
-    })
+      })
 
-    # combine covariataes into output ------------------------------------------
+      # combine covariataes into output ---------------------------------------
 
-    display_string <- shiny::reactive({
+      display_string <- shiny::reactive({
         req(model_string_prefix())
         create_covariate_string(
-            model_string_prefix(),
-            numerical_display_string(),
-            categorical_display_string()
+          model_string_prefix(),
+          numerical_display_string(),
+          categorical_display_string()
         )
-    })
+      })
 
-    formula_string <- shiny::reactive({
+      formula_string <- shiny::reactive({
         req(model_formula_prefix)
         create_covariate_string(
-            model_formula_prefix(),
-            numerical_formula_string(),
-            categorical_formula_string()
+          model_formula_prefix(),
+          numerical_formula_string(),
+          categorical_formula_string()
         )
-    })
+      })
 
-    shiny::reactive({
+      shiny::reactive({
         list(
-            "categorical_covariates"    = categorical_covariates(),
-            "numerical_covariates"      = numerical_covariates(),
-            "numerical_transformations" = numerical_transformations(),
-            "display_string"            = display_string(),
-            "formula_string"            = formula_string()
+          "categorical_covariates"    = categorical_covariates(),
+          "numerical_covariates"      = numerical_covariates(),
+          "numerical_transformations" = numerical_transformations(),
+          "display_string"            = display_string(),
+          "formula_string"            = formula_string()
         )
-    })
+      })
+    }
+  )
 }
