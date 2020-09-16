@@ -66,22 +66,20 @@ shiny::shinyServer(function(input, output, session) {
 
   tool_modules_tbl %>%
     dplyr::select("name", "server_function") %>%
-    purrr::pwalk(
-      iatlas.app::call_iatlas_module, input, session, tab_id = "toolstabs"
-    )
+    purrr::pwalk(iatlas.app::call_iatlas_module, input, session)
 
   # Sidebar Menu --------------------------------------------------------------
 
   analysis_module_menu_items <- shiny::reactive({
-    purrr::map2(
-      analysis_modules_tbl$display,
-      analysis_modules_tbl$name,
-      ~ shinydashboard::menuSubItem(
-        text = .x,
-        tabName = .y,
-        icon = shiny::icon("cog")
-      )
-    )
+    analysis_modules_tbl %>%
+      dplyr::select("text" = "display", "tabName" = "name") %>%
+      purrr::pmap(shinydashboard::menuSubItem, icon = shiny::icon("cog"))
+  })
+
+  tool_module_menu_items <- shiny::reactive({
+    tool_modules_tbl %>%
+      dplyr::select("text" = "display", "tabName" = "name") %>%
+      purrr::pmap(shinydashboard::menuSubItem, icon = shiny::icon("cog"))
   })
 
   output$sidebar_menu <- shinydashboard::renderMenu({
@@ -107,6 +105,12 @@ shiny::shinyServer(function(input, output, session) {
         icon = shiny::icon("bar-chart"),
         startExpanded = TRUE,
         analysis_module_menu_items()
+      ),
+      shinydashboard::menuItem(
+        text = "iAtlas tools",
+        icon = shiny::icon("wrench"),
+        startExpanded = TRUE,
+        tool_module_menu_items()
       )
     )
   })
@@ -156,24 +160,9 @@ shiny::shinyServer(function(input, output, session) {
   })
 
   module_tab_items <- shiny::reactive({
-    other_modules <- list(
-      shinydashboard::tabItem(
-        tabName = "cohort_selection",
-        cohort_selection_ui("cohort_selection")
-      ),
-      shinydashboard::tabItem(
-        tabName = "data_info",
-        data_info_ui("data_info")
-      )
-    )
-
-    analysis_modules <- purrr::map2(
-      analysis_modules_tbl$name,
-      analysis_modules_tbl$ui_function,
-      ~ shinydashboard::tabItem(tabName = .x, .y(.x))
-    )
-
-    c(other_modules, analysis_modules)
+    modules_tbl %>%
+      dplyr::select("name", "ui_function") %>%
+      purrr::pmap(~shinydashboard::tabItem(tabName = .x, .y(.x)))
   })
 
   output$dashboard_body <- shiny::renderUI({
