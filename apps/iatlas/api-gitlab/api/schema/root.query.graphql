@@ -95,7 +95,8 @@ type Query {
     dataSet: [String!]
     related: [String!]
     network: [String!]
-  ): [EdgePage!]!
+    page: Int
+  ): EdgePage!
 
   """
   The "features" query accepts:
