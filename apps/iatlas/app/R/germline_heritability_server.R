@@ -5,14 +5,7 @@ germline_heritability_server <- function(id, cohort_obj){
 
       heritability <- reactive({
         GERMLINE_PATH = "inst/extdata/"
-        list(
-          EUR =  feather::read_feather(paste0(GERMLINE_PATH, "European_hdf.feather")),
-          AFR =  feather::read_feather(paste0(GERMLINE_PATH, "African_hdf.feather")),
-          ASIAN =  feather::read_feather(paste0(GERMLINE_PATH, "Asian_hdf.feather")),
-          AMR = feather::read_feather(paste0(GERMLINE_PATH, "American_hdf.feather")),
-          EUR_IMMUNE = feather::read_feather(paste0(GERMLINE_PATH, "immune_hdf.feather")),
-          BY_IMMUNE = feather::read_feather(paste0(GERMLINE_PATH, "hdf_byImmune.feather"))
-        )
+        feather::read_feather(paste0(GERMLINE_PATH, "tcga_heritability.feather"))
       })
 
       ns <- session$ns
@@ -26,16 +19,19 @@ germline_heritability_server <- function(id, cohort_obj){
         shiny::req(input$ancestry)
         #Reading in the table with computed statistics
         if(input$ancestry == "European" & input$byImmune == TRUE){
-          df <- heritability()$EUR_IMMUNE
+          df <- heritability() %>%
+            dplyr::filter(cluster == "European_immune")
         }else{
-          df <- heritability()[[input$ancestry]]
+          df <- heritability() %>%
+            dplyr::filter(cluster == input$ancestry)
         }
 
         df %>%
           dplyr::filter(pval <= input$pvalue) %>%
           create_plotly_label(
-            ., .$Trait, paste(input$ancestry, "Ancestry"), c("Variance", "SE", "pval","FDR"), title = "Immune Trait"
+            ., .$display, paste(input$ancestry, "Ancestry"), c("Variance", "SE", "pval","FDR"), title = "Immune Trait"
           )
+
       })
 
       output$heritability <- plotly::renderPlotly({
@@ -44,25 +40,34 @@ germline_heritability_server <- function(id, cohort_obj){
           shiny::need(nrow(hdf())>0, "No Immune Trait with a p-value lower than selected.")
         )
 
-        plot_levels <-levels(reorder(hdf()[["Trait"]], hdf()[[input$order_bars]], sort))
+        plot_levels <-levels(reorder(hdf()[["display"]], hdf()[[input$order_bars]], sort))
 
-        create_barplot_horizontal(
-          df = hdf(),
-          x_col = "Variance",
-          y_col = "Trait",
-          error_col = "SE",
-          key_col = NA,
-          color_col = "pval",
-          label_col = "label",
-          xlab = "% Heritability",
-          ylab = "",
-          order_by = plot_levels,
-          title = plot_title(),
-          source_name = "heritability_plot",
-          bar_colors = NULL
-        ) %>%
+        hdf() %>%
+          dplyr::rename(LRT_p_value = pval) %>% #changing column name to legend title display
+            create_barplot_horizontal(
+              df = .,
+              x_col = "Variance",
+              y_col = "display",
+              error_col = "SE",
+              key_col = NA,
+              color_col = "LRT_p_value",
+              label_col = "label",
+              xlab = "Heritability",
+              ylab = "",
+              order_by = plot_levels,
+              title = plot_title(),
+              showLegend = TRUE,
+              legendTitle = "LRT \n p-value",
+              source_name = "heritability_plot",
+              bar_colors = NULL
+            ) %>%
+          plotly::layout(
+            xaxis = list(
+              tickformat = "%"
+            )
+          ) %>%
           plotly::add_annotations(x = hdf()$Variance+hdf()$SE+0.01,
-                                  y = hdf()$Trait,
+                                  y = hdf()$display,
                                   text = (hdf()$plot_annot),
                                   xref = "x",
                                   yref = "y",
@@ -72,37 +77,37 @@ germline_heritability_server <- function(id, cohort_obj){
                                    x=1.03, xanchor="left",
                                    y=0, yanchor="bottom",
                                    legendtitle=TRUE, showarrow=FALSE )
-
       })
 
       output$heritability_cov <- plotly::renderPlotly({
 
         eventdata <- plotly::event_data( "plotly_click", source = "heritability_plot")
+        sub_clusters <- c("Covar:Immune Subtype", "C1", "C2", "C3")
 
         shiny::validate(
           shiny::need(!is.null(eventdata),
                       "Click bar plot"))
         selected_plot_trait <- eventdata$y[[1]]
 
-        hdf_plot <-heritability()$BY_IMMUNE%>%
-          dplyr::filter(Trait == selected_plot_trait)
+        hdf_plot <-heritability()%>%
+          dplyr::filter(cluster %in% sub_clusters & display == selected_plot_trait)
 
         plot_colors <- c("#bebebe", "#FF0000", "#FFFF00", "#00FF00")
-        names(plot_colors) <- c("Covar:Immune Subtype", "C1", "C2", "C3")
+        names(plot_colors) <- sub_clusters
 
-        hdf_plot$subtypes <- factor(hdf_plot$subtypes, levels = c("C3", "C2", "C1", "Covar:Immune Subtype" ))
+        hdf_plot$cluster <- factor(hdf_plot$cluster, levels = c("C3", "C2", "C1", "Covar:Immune Subtype" ))
 
         create_barplot_horizontal(
           df = hdf_plot,
           x_col = "Variance",
-          y_col = "subtypes",
+          y_col = "cluster",
           error_col = "SE",
           key_col = NA,
-          color_col = "subtypes",
+          color_col = "cluster",
           label_col = NA,
           xlab = "",
           ylab = "",
-          title = "Random data!!!!!",
+          title = paste("Random data for", selected_plot_trait),
           showLegend = FALSE,
           source_name = NULL,
           bar_colors = plot_colors

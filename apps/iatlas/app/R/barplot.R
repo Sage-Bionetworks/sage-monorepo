@@ -65,6 +65,7 @@ create_barplot_horizontal <- function(df,
                             ylab = "",
                             title = "",
                             showLegend = TRUE,
+                            legendTitle = " ",
                             source_name = NULL,
                             bar_colors = NULL){
   if(is.na(key_col)) key_col <- x_col
@@ -102,13 +103,15 @@ create_barplot_horizontal <- function(df,
       hoverinfo = 'text'
     )) %>%
     plotly::layout(
-      showlegend = showLegend,
-      legend = list(orientation = 'h', x = 0, y = 1),
       title = title,
       xaxis = list(title = xlab),
       yaxis = list(title = ylab,
                    categoryorder = "array",
-                   categoryarray = ~order_by)
+                   categoryarray = ~order_by),
+      showlegend = showLegend,
+      legend = list(orientation = 'h', x = 0, y = 1,
+                    title = list(text = legendTitle)
+        )
     ) %>%
     format_plotly()
 
