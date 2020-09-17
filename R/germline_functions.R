@@ -71,8 +71,8 @@ build_manhattanplot_tbl <- function(
     dplyr::mutate( BPcum=bp_col+tot) %>%
     # Add highlight and annotation information
     dplyr::mutate( log10p = -log10(PLINK.P),
-                   is_highlight=ifelse(feature_col %in% feature_selected, "yes", "no"),
-                   text = paste(feature_col,"\nSNP name: ", snp_id, "\nSNP: ", snp_col, "\nPosition: ", bp_col, "\nChromosome: ", chr_col, sep="")) #%>%
+                   is_highlight=ifelse(display %in% feature_selected, "yes", "no"),
+                   text = paste(display,"\nSNP name: ", snp_id, "\nSNP: ", snp_col, "\nPosition: ", bp_col, "\nChromosome: ", chr_col, sep="")) #%>%
 
   # Filter SNP to make the plot lighter
   #filter(-log10(P)>0.5)

@@ -17,12 +17,12 @@ germline_heritability_ui <- function(id){
             #shiny::uiOutput(ns("selectAncestry"))
             shiny::selectizeInput(ns("ancestry"),
                                   "Select Ancestry Cluster",
-                                  choices = c("Ad Mixed American" = "AMR",
-                                              "African" = "AFR",
-                                              "Asian" = "ASIAN",
-                                              "European"= "EUR"),
-                                  selected = "EUR"),
-            shiny::conditionalPanel(paste0("input['", ns("ancestry"), "'] == 'EUR'"),
+                                  choices = c("Ad Mixed American" = "American",
+                                              "African" = "African",
+                                              "Asian" = "Asian",
+                                              "European"= "European"),
+                                  selected = "European"),
+            shiny::conditionalPanel(paste0("input['", ns("ancestry"), "'] == 'European'"),
                                     shiny::checkboxInput(ns("byImmune"),
                                                          "Account for interaction betweem germline genotypes and immune subtypes")),
             shiny::sliderInput(ns("pvalue"),
@@ -30,7 +30,9 @@ germline_heritability_ui <- function(id){
                                min = 0, max = 0.5, value = 0.05, step = 0.01),
             shiny::selectizeInput(ns("order_bars"),
                                   "Order bars by ",
-                                  choices = c("Variance", "pval", "FDR"),
+                                  choices = list("V(Genotype)/Vp" = "Variance",
+                                                 "LRT p-value" = "pval",
+                                                 "LRT FDR" = "FDR"),
                                   selected = "Variance")
           )
         ),
@@ -40,7 +42,7 @@ germline_heritability_ui <- function(id){
             plotly::plotlyOutput(ns("heritability"), height = "700px") %>%
               shinycssloaders::withSpinner(.)
           ),
-          shiny::conditionalPanel(paste0("input['", ns("ancestry"), "'] == 'EUR' & input['", ns("byImmune"), "'] == 1"),
+          shiny::conditionalPanel(paste0("input['", ns("ancestry"), "'] == 'European' & input['", ns("byImmune"), "'] == 1"),
                                   shiny::column(
                                     width = 6,
                                     messageBox(

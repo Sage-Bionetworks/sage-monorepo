@@ -7,12 +7,12 @@ germline_gwas_server <- function(id, cohort_obj){
 
       gwas_data <- reactive({
         GERMLINE_PATH = "inst/extdata/"
-        feather::read_feather(paste0(GERMLINE_PATH, "GWAS_results.feather"))
+        feather::read_feather(paste0(GERMLINE_PATH, "tcga_germline_GWAS.feather"))
       })
 
 
       output$features <- renderUI({
-        shiny::selectizeInput(ns('immunefeature'), "Select Immune Feature", choices = sort(unique(gwas_data()$feature_col)))
+        shiny::selectizeInput(ns('immunefeature'), "Select Immune Feature", choices = sort(unique(gwas_data()$display)))
       })
 
       selected_chr <- reactive({
@@ -45,7 +45,6 @@ germline_gwas_server <- function(id, cohort_obj){
       toReset <- reactive({
         list(input$chr,
              input$selection)
-        # input$go_button)
       })
 
       observeEvent(toReset(), {
@@ -57,7 +56,8 @@ germline_gwas_server <- function(id, cohort_obj){
       chr_range <- reactiveValues(range = NULL)
 
       observe({
-        shiny::req(input$selection == "Select a region")
+        shiny::req(input$selection == "Select a region",
+                   chr_size())
 
         if(is.null(clicked_int$ev)){ #default option is min and max positions for the chromossome
           chr_range$range = chr_size()
@@ -69,12 +69,21 @@ germline_gwas_server <- function(id, cohort_obj){
 
       #Update range in case user manually enters an interval
       observeEvent(input$go_button, {
-        chr_range$range <- c(input$start,
-                             input$end)
+
+        if(input$reset_axes == TRUE){
+          chr_range$range <- chr_size()
+        }else{
+          chr_range$range <- c(input$start,
+                               input$end)
+        }
       })
 
 
       output$link_genome <- renderUI({
+        shiny::validate(
+          shiny::need(!is.na(input$chr), "Select a chromossome.")
+        )
+
         link_ucsc <- paste0("http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr", input$chr, ":", chr_range$range[1], "-", chr_range$range[2])
         shiny::verticalLayout(
           shiny::p(paste("Selected region: chr", input$chr, ":", scales::comma(chr_range$range[1]), "-", scales::comma(chr_range$range[2]))),
@@ -93,6 +102,7 @@ germline_gwas_server <- function(id, cohort_obj){
                                 min = chr_size()[1],
                                 max = chr_size()[2])
           ),
+          shiny::checkboxInput(ns("reset_axes"), "See all GWAS hits in this chromossome"),
           shiny::actionButton(ns("go_button"), "Update")
         )
       })
@@ -122,28 +132,40 @@ germline_gwas_server <- function(id, cohort_obj){
         )
       })
       don <- eventReactive(toUpdate(),{
-        shiny::req(selected_chr(), selected_min(), selected_max())
+        shiny::req(input$immunefeature, selected_chr(), selected_min(), selected_max())
 
-
-        #  dplyr::filter(chr_col %in% selected_chr()) %>%
         build_manhattanplot_tbl(
           gwas_df = gwas_data(),
           chr_selected = selected_chr(),
-          bp_min = 1,
-          bp_max = 245246279,
+          bp_min = selected_min(),
+          bp_max = selected_max(),
           feature_selected = input$immunefeature)
-        #dplyr::filter(bp_col >= selected_min() & bp_col <= selected_max())
       })
 
       axisdf <- reactive({# Prepare X axis
         shiny::req(don())
-        don() %>%
-          dplyr::group_by(chr_col) %>%
-          dplyr::summarize(center=( max(BPcum) + min(BPcum) ) / 2 )
+        if(input$selection == "See all chromossomes"){
+          don() %>%
+            dplyr::group_by(chr_col) %>%
+            dplyr::summarize(center=( max(BPcum) + min(BPcum) ) / 2 ) %>%
+            dplyr::rename(label = chr_col)
+        }else{
+          breaks <- c(chr_range$range[1], (chr_range$range[1] + chr_range$range[2])/2, chr_range$range[2])
+          data.frame(
+            label = paste(format(round(breaks / 1e6, 1), trim = TRUE), "Mb"),
+            center = breaks,
+            stringsAsFactors = FALSE
+          )
+        }
+      })
+
+      x_title <- reactive({
+        if(input$selection == "See all chromossomes") "Chromossome"
+        else(paste("chr", selected_chr()))
       })
 
       output$mht_plot <- plotly::renderPlotly({
-        shiny::req(don())
+        shiny::req(don(), axisdf())
 
         don() %>%
           dplyr::filter(chr_col %in% selected_chr()) %>%
@@ -153,7 +175,7 @@ germline_gwas_server <- function(id, cohort_obj){
             x_label = axisdf(),
             y_min = input$yrange[1],
             y_max = input$yrange[2],
-            x_name = "Chromossome",
+            x_name = x_title(),
             y_name = "- log10(p-value)",
             source_name = "gwas_mht"
           )
