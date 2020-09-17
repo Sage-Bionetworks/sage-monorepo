@@ -37,7 +37,7 @@ def test_edges_query_with_passed_related(client, related):
         edges(dataSet: $dataSet, related: $related, network: $network, page: $page) {
             items {
                 name
-                node_1 { name }
+                node1 { name }
             }
             page
         }
@@ -53,7 +53,7 @@ def test_edges_query_with_passed_related(client, related):
     assert len(results) > 0
     for result in results[0:2]:
         assert type(result['name']) is str
-        assert type(result['node_1']['name']) is str
+        assert type(result['node1']['name']) is str
 
 
 def test_edges_query_with_passed_network(client, network):
@@ -63,8 +63,8 @@ def test_edges_query_with_passed_network(client, network):
                 label
                 name
                 score
-                node_1 { name }
-                node_2 { name }
+                node1 { name }
+                node2 { name }
             }
         }
     }"""
@@ -80,8 +80,8 @@ def test_edges_query_with_passed_network(client, network):
         assert type(result['label']) is str or NoneType
         assert type(result['name']) is str
         assert type(result['score']) is float or NoneType
-        assert type(result['node_1']['name']) is str
-        assert type(result['node_2']['name']) is str
+        assert type(result['node1']['name']) is str
+        assert type(result['node2']['name']) is str
 
 
 def test_edges_query_with_no_arguments(client):
@@ -89,7 +89,7 @@ def test_edges_query_with_no_arguments(client):
         edges(dataSet: $dataSet, related: $related, network: $network, page: $page) {
             items {
                 name
-                node_1 { name }
+                node1 { name }
             }
         }
     }"""
@@ -102,4 +102,4 @@ def test_edges_query_with_no_arguments(client):
     assert len(results) > 0
     for result in results[0:2]:
         assert type(result['name']) is str
-        assert type(result['node_1']['name']) is str
+        assert type(result['node1']['name']) is str

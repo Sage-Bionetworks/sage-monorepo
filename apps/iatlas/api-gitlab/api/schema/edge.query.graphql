@@ -4,15 +4,15 @@ The "Edge" type may return:
 - "label", the label of the specific edge
 - "name", a unique name for the Edge, usually `<dataset>_<network>_<n>`
 - "score", the calculated value of the Edge
-- "node_1", the starting node in the Edge
-- "node_2", the ending node in the Edge
+- "node1", the starting node in the Edge
+- "node2", the ending node in the Edge
 """
 type Edge {
     label: String
     name: String!
     score: Float
-    node_1: SimpleNode!
-    node_2: SimpleNode!
+    node1: SimpleNode!
+    node2: SimpleNode!
 }
 
 """
