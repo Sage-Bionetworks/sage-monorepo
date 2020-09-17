@@ -31,7 +31,7 @@ type DriverResult {
 The "DriverResultPage" type may return:
 
 - "items", a list of returned DriverResults
-- "page", the current page of returned DriverResults
+- "page", the current page of returned DriverResults (a maximum 100,000 of row returned in a page)
 - "pages", the total number of pages available
 - "total", the total number of results (all pages summed).
 

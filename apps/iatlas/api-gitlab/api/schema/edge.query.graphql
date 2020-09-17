@@ -1,0 +1,33 @@
+"""
+The "Edge" type may return:
+
+- "label", the label of the specific edge
+- "name", a unique name for the Edge, usually `<dataset>_<network>_<n>`
+- "score", the calculated value of the Edge
+- "node_1", the starting node in the Edge
+- "node_2", the ending node in the Edge
+"""
+type Edge {
+    label: String
+    name: String!
+    score: Float
+    node_1: SimpleNode!
+    node_2: SimpleNode!
+}
+
+"""
+The "EdgePage" type may return:
+
+- "items", a list of returned Edges
+- "page", the current page of returned Edges (a maximum 100,000 of row returned in a page)
+- "pages", the total number of pages available
+- "total", the total number of results (all pages summed).
+
+See `Edge`
+"""
+type EdgePage {
+    items: [Edge!]!
+    page: Int!
+    pages: Int!
+    total: Int!
+}
