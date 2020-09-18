@@ -1,0 +1,103 @@
+query CopyNumberResults(
+  $dataSet: [String!]
+  $feature: [String!]
+  $entrez: [Int!]
+  $tag: [String!]
+  $direction: DirectionEnum
+  $minPValue: Float
+  $maxPValue: Float
+  $minLog10PValue: Float
+  $maxLog10PValue: Float
+  $minMeanNormal: Float
+  $minMeanCnv: Float
+  $minTStat: Float
+  $page: Int
+) {
+  copyNumberResults(
+    dataSet: $dataSet
+    feature: $feature
+    entrez: $entrez
+    tag: $tag
+    direction: $direction
+    minPValue: $minPValue
+    maxPValue: $maxPValue
+    minLog10PValue: $minLog10PValue
+    maxLog10PValue: $maxLog10PValue
+    minMeanNormal: $minMeanNormal
+    minMeanCnv: $minMeanCnv
+    minTStat: $minTStat
+    page: $page
+  ) {
+    items {
+      direction
+      meanNormal
+      meanCnv
+      pValue
+      log10PValue
+      tStat
+      tag {
+        name
+      }
+      gene {
+        entrez
+        hgnc
+      }
+    }
+    page
+    pages
+    total
+  }
+}
+
+query CopyNumberResults_test(
+  $dataSet: [String!]
+  $feature: [String!]
+  $entrez: [Int!]
+  $tag: [String!]
+  $direction: DirectionEnum
+  $minPValue: Float
+  $maxPValue: Float
+  $minLog10PValue: Float
+  $maxLog10PValue: Float
+  $minMeanNormal: Float
+  $minMeanCnv: Float
+  $minTStat: Float
+  $page: Int
+) {
+  copyNumberResults(
+    dataSet: $dataSet
+    feature: $feature
+    entrez: $entrez
+    tag: $tag
+    direction: $direction
+    minPValue: $minPValue
+    maxPValue: $maxPValue
+    minLog10PValue: $minLog10PValue
+    maxLog10PValue: $maxLog10PValue
+    minMeanNormal: $minMeanNormal
+    minMeanCnv: $minMeanCnv
+    minTStat: $minTStat
+    page: $page
+  ) {
+    items {
+      direction
+      pValue
+      log10PValue
+      meanCnv
+      meanNormal
+      tStat
+      tag {
+        name
+      }
+      gene {
+        entrez
+      }
+    }
+    page
+    pages
+    total
+  }
+}
+
+# Variables
+# {"dataSet": ["TCGA"], "feature": ["frac_altered"]}
