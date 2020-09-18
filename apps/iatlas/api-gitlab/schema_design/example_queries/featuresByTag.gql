@@ -1,0 +1,39 @@
+query FeaturesByTag(
+  $dataSet: [String!]
+  $related: [String!]
+  $tag: [String!]
+  $feature: [String!]
+  $featureClass: [String!]
+  $sample: [String!]
+  $minValue: Float
+  $maxValue: Float
+) {
+  featuresByTag(
+    dataSet: $dataSet
+    related: $related
+    tag: $tag
+    feature: $feature
+    featureClass: $featureClass
+    sample: $sample
+    minValue: $minValue
+    maxValue: $maxValue
+  ) {
+    tag
+    characteristics
+    display
+    features {
+      class
+      display
+      methodTag
+      name
+      order
+      samples { name }
+      valueMin
+      valueMax
+      unit
+    }
+  }
+}
+
+# Variables
+# {"dataSet": ["TCGA"], "related": ["Immune_Subtype"], "feature": ["Det_Ratio"], "minValue": 0.094192693, "maxValue": 5.7561021}

@@ -1,0 +1,22 @@
+query Patients($barcode: [String!]) {
+  patients(barcode: $barcode) {
+    samples
+    slides {
+      name
+    }
+  }
+}
+
+query Patients_test($barcode: [String!]) {
+  patients(barcode: $barcode) {
+    ageAtDiagnosis
+    barcode
+    ethnicity
+    gender
+    height
+    race
+    weight
+  }
+}
+
+# Variables

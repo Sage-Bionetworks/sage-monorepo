@@ -1,0 +1,37 @@
+query GenesByTag(
+  $dataSet: [String!]!
+  $related: [String!]!
+  $tag: [String!]
+  $feature: [String!]
+  $featureClass: [String!]
+  $entrez: [Int!]
+  $geneType: [String!]
+  $sample: [String!]
+) {
+  genesByTag(
+    dataSet: $dataSet
+    related: $related
+    tag: $tag
+    feature: $feature
+    featureClass: $featureClass
+    entrez: $entrez
+    geneType: $geneType
+    sample: $sample
+  ) {
+    tag
+    characteristics
+    color
+    display
+    genes {
+      entrez
+      geneFamily
+      samples {
+        name
+        rnaSeqExpr
+      }
+    }
+  }
+}
+
+# Variables
+# {"dataSet": ["TCGA"], "related": ["Immune_Subtype"], "tag": ["C1"], "feature": ["Det_Ratio"], "sample": ["TCGA-05-4420"], "entrez": [3627]}

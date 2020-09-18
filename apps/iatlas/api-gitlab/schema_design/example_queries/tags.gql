@@ -1,0 +1,30 @@
+query Tags(
+  $dataSet: [String!]!
+  $related: [String!]!
+  $tag: [String!]
+  $feature: [String!]
+  $featureClass: [String!]
+) {
+  tags(
+    dataSet: $dataSet
+    related: $related
+    tag: $tag
+    feature: $feature
+    featureClass: $featureClass
+  ) {
+    characteristics
+    color
+    display
+    name
+    related {
+      name
+      display
+      characteristics
+    }
+    sampleCount
+    samples
+  }
+}
+
+# Variables
+# {"dataSet": ["TCGA"], "related": ["Immune_Subtype"]}
