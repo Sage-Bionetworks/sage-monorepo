@@ -1,0 +1,15 @@
+query Genes($entrez: [Int!], $geneType: [String!], $sample: [String!]) {
+  genes(entrez: $entrez, geneType: $geneType, sample: $sample) {
+    entrez
+    publications {
+      pubmedId
+    }
+    samples {
+      name
+      rnaSeqExpr
+    }
+  }
+}
+
+# Variables
+# {"entrez": [3627, 383, 941, 958], "geneType": ["immunomodulator"], "sample": ["DO219585"]}

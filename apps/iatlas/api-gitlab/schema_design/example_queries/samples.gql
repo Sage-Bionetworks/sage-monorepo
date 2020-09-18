@@ -1,0 +1,29 @@
+query Samples(
+  $ageAtDiagnosis: [Int!]
+  $ethnicity: [EthnicityEnum!]
+  $gender: [GenderEnum!]
+  $height: [Int!]
+  $name: [String!]
+  $patient: [String!]
+  $race: [RaceEnum!]
+  $weight: [Int!]
+) {
+  samples(
+    ageAtDiagnosis: $ageAtDiagnosis
+    ethnicity: $ethnicity
+    gender: $gender
+    height: $height
+    name: $name
+    patient: $patient
+    race: $race
+    weight: $weight
+  ) {
+    name
+    patient {
+      barcode
+    }
+  }
+}
+
+# Variables
+# {"name": ["TCGA-21-5787"]}

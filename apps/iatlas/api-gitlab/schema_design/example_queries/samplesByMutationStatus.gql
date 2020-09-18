@@ -1,0 +1,33 @@
+query SamplesByMutationStatus(
+  $ageAtDiagnosis: [Int!]
+  $ethnicity: [EthnicityEnum!]
+  $gender: [GenderEnum!]
+  $height: [Int!]
+  $mutationId: [Int!]
+  $mutationStatus: StatusEnum
+  $patient: [String!]
+  $race: [RaceEnum!]
+  $sample: [String!]
+  $weight: [Int!]
+) {
+  samplesByMutationStatus(
+    ageAtDiagnosis: $ageAtDiagnosis
+    ethnicity: $ethnicity
+    gender: $gender
+    height: $height
+    mutationId: $mutationId
+    mutationStatus: $mutationStatus
+    patient: $patient
+    race: $race
+    sample: $sample
+    weight: $weight
+  ) {
+    status
+    samples {
+      name
+    }
+  }
+}
+
+# Variables
+# {"sample": ["TCGA-38-7271"]}

@@ -1,0 +1,39 @@
+query SamplesByTag(
+  $ageAtDiagnosis: [Int!]
+  $dataSet: [String!]
+  $ethnicity: [EthnicityEnum!]
+  $feature: [String!]
+  $featureClass: [String!]
+  $gender: [GenderEnum!]
+  $height: [Int!]
+  $name: [String!]
+  $patient: [String!]
+  $race: [RaceEnum!]
+  $related: [String!]
+  $tag: [String!]
+  $weight: [Int!]
+) {
+  samplesByTag(
+    ageAtDiagnosis: $ageAtDiagnosis
+    dataSet: $dataSet
+    ethnicity: $ethnicity
+    feature: $feature
+    featureClass: $featureClass
+    gender: $gender
+    height: $height
+    name: $name
+    patient: $patient
+    race: $race
+    related: $related
+    tag: $tag
+    weight: $weight
+  ) {
+    tag
+    samples {
+      name
+    }
+  }
+}
+
+# Variables
+# {"feature": ["Det_Ratio"], "featureClass": ["TIL Map Characteristic"]}
