@@ -2,7 +2,7 @@ from itertools import groupby
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, Feature, Node, NodeToTag, Tag
+from api.db_models import Dataset, DatasetToTag, Edge, Feature, Node, NodeToTag, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
 
 edge_request_fields = {'label',
@@ -41,7 +41,7 @@ def build_edge_request(requested, node_1_requested, node_2_requested, data_set=N
     sess = db.session
 
     data_set_1 = aliased(Dataset, name='d')
-    edge_1 = aliased(Node, name='n')
+    edge_1 = aliased(Edge, name='e')
     node_1 = aliased(Node, name='n1')
     node_2 = aliased(Node, name='n2')
 
@@ -74,18 +74,27 @@ def build_edge_request(requested, node_1_requested, node_2_requested, data_set=N
             network_1.name.in_(network))
 
         edge_tag_join_condition = build_join_condition(
-            node_to_tag_1.node_id, edge_1.node_id, node_to_tag_1.tag_id, network_subquery)
+            node_to_tag_1.node_id, edge_1.node_1_id, node_to_tag_1.tag_id, network_subquery)
         query = query.join(node_to_tag_1, and_(*edge_tag_join_condition))
 
+    if 'node1' in requested:
+        query = query.join(node_1, edge_1.node_1_id == node_1.id)
+
     if data_set or related or 'dataSet' in requested:
-        query = query.join(node_1, and_(edge_1.node_1_id == node_1.id))
+        if 'node1' in requested:
+            data_set_join_condition = [data_set_1.id == node_1.dataset_id]
+        else:
+            node_1_subquery = sess.query(node_1.dataset_id).filter(
+                edge_1.node_1_id == node_1.id)
+            data_set_join_condition = [data_set_1.id.in_(node_1_subquery)]
 
-        data_set_subquery = sess.query(data_set_1.id).filter(
-            data_set_1.name.in_(data_set))
+        if data_set:
+            data_set_join_condition.append(data_set_1.name.in_(data_set))
 
-        data_set_join_condition = build_join_condition(
-            data_set_1.id, node_1.dataset_id, data_set_1.name, data_set)
-        query = query.join(data_set_1, and_(*data_set_join_condition))
+        is_outer = not bool(data_set)
+
+        query = query.join(data_set_1, and_(
+            *data_set_join_condition), isouter=is_outer)
 
     if related:
         data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
@@ -99,8 +108,6 @@ def build_edge_request(requested, node_1_requested, node_2_requested, data_set=N
         query = query.join(
             data_set_to_tag_1, and_(*data_set_tag_join_condition))
 
-    if 'node1' in requested:
-        query = query.join(node_1, edge_1.node_1_id == node_1.id)
     if 'node2' in requested:
         query = query.join(node_2, edge_1.node_2_id == node_2.id)
 

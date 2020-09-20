@@ -8,15 +8,21 @@ def network():
     return 'extracellular_network'
 
 
-def test_edges_query_with_passed_data_set(client, data_set):
-    query = """query Edges($dataSet: [String!], $related: [String!], $network: [String!], $page: Int) {
-        edges(dataSet: $dataSet, related: $related, network: $network, page: $page) {
-            items { name }
-            page
-            pages
-            total
-        }
-    }"""
+@pytest.fixture(scope='module')
+def common_query_builder():
+    def f(query_fields):
+        return """query Edges($dataSet: [String!], $related: [String!], $network: [String!], $page: Int) {
+            edges(dataSet: $dataSet, related: $related, network: $network, page: $page)""" + query_fields + "}"
+    return f
+
+
+def test_edges_query_with_passed_data_set(client, common_query_builder, data_set):
+    query = common_query_builder("""{
+                                    items { name }
+                                    page
+                                    pages
+                                    total
+                                }""")
     response = client.post('/api', json={'query': query,
                                          'variables': {'dataSet': [data_set], 'page': 2}})
     json_data = json.loads(response.data)
@@ -32,16 +38,14 @@ def test_edges_query_with_passed_data_set(client, data_set):
         assert type(result['name']) is str
 
 
-def test_edges_query_with_passed_related(client, related):
-    query = """query Edges($dataSet: [String!], $related: [String!], $network: [String!], $page: Int) {
-        edges(dataSet: $dataSet, related: $related, network: $network, page: $page) {
-            items {
-                name
-                node1 { name }
-            }
-            page
-        }
-    }"""
+def test_edges_query_with_passed_related(client, common_query_builder, related):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        node1 { name }
+                                    }
+                                    page
+                                }""")
     response = client.post('/api', json={'query': query,
                                          'variables': {'related': [related]}})
     json_data = json.loads(response.data)
@@ -56,18 +60,16 @@ def test_edges_query_with_passed_related(client, related):
         assert type(result['node1']['name']) is str
 
 
-def test_edges_query_with_passed_network(client, network):
-    query = """query Edges($dataSet: [String!], $related: [String!], $network: [String!], $page: Int) {
-        edges(dataSet: $dataSet, related: $related, network: $network, page: $page) {
-            items {
-                label
-                name
-                score
-                node1 { name }
-                node2 { name }
-            }
-        }
-    }"""
+def test_edges_query_with_passed_network(client, common_query_builder, network):
+    query = common_query_builder("""{
+                                    items {
+                                        label
+                                        name
+                                        score
+                                        node1 { name }
+                                        node2 { name }
+                                    }
+                                }""")
     response = client.post('/api', json={'query': query,
                                          'variables': {'network': [network]}})
     json_data = json.loads(response.data)
@@ -84,15 +86,13 @@ def test_edges_query_with_passed_network(client, network):
         assert type(result['node2']['name']) is str
 
 
-def test_edges_query_with_no_arguments(client):
-    query = """query Edges($dataSet: [String!], $related: [String!], $network: [String!], $page: Int) {
-        edges(dataSet: $dataSet, related: $related, network: $network, page: $page) {
-            items {
-                name
-                node1 { name }
-            }
-        }
-    }"""
+def test_edges_query_with_no_arguments(client, common_query_builder):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        node1 { name }
+                                    }
+                                }""")
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
     page = json_data['data']['edges']
