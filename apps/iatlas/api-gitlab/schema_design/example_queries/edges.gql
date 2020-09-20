@@ -1,8 +1,23 @@
-query Gene($entrez: Int!) {
-  gene(entrez: $entrez) {
-    hgnc
+query Edges(
+  $dataSet: [String!]
+  $related: [String!]
+  $network: [String!]
+  $page: Int
+) {
+  edges(dataSet: $dataSet, related: $related, network: $network, page: $page) {
+    items {
+      label
+      name
+      score
+      node1 {
+        name
+      }
+      node2 {
+        name
+      }
+    }
   }
 }
 
 # Variables
-# {"entrez": 3627}
+# {"dataSet": ["TCGA"], "related": ["Immune_Subtype"]}
