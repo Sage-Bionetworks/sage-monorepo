@@ -58,7 +58,7 @@ def test_nodes_query_with_passed_related(client, related):
             assert type(gene['entrez']) is int
 
 
-def test_nodes_query_with_passed_network(client, data_set, related, network):
+def test_nodes_query_with_passed_network(client, network):
     query = """query Nodes($dataSet: [String!], $related: [String!], $network: [String!], $page: Int) {
         nodes(dataSet: $dataSet, related: $related, network: $network, page: $page) {
             items {
