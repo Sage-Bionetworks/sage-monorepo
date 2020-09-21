@@ -1,0 +1,12 @@
+query DataSets($dataSet: [String!], $sample: [String!]) {
+  dataSets(dataSet: $dataSet, sample: $sample) {
+    display
+    name
+    samples {
+      name
+    }
+  }
+}
+
+# Variables
+# {"sample": ["TCGA-21-5787"]}

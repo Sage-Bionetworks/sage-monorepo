@@ -2,7 +2,8 @@ from .resolver_helpers import build_gene_graphql_response, gene_request_fields, 
 
 
 def resolve_gene(_obj, info, entrez, sample=None):
-    requested = get_requested(info, gene_request_fields)
+    requested = get_requested(
+        info=info, requested_field_mapping=gene_request_fields)
 
     gene = request_gene(requested, entrez=entrez, sample=sample)
 

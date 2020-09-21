@@ -1,0 +1,58 @@
+query Nodes(
+  $dataSet: [String!]
+  $related: [String!]
+  $network: [String!]
+  $page: Int
+) {
+  nodes(dataSet: $dataSet, related: $related, network: $network, page: $page) {
+    total
+    page
+    pages
+    items {
+      label
+      name
+      score
+      x
+      y
+      dataSet {
+        name
+      }
+      feature {
+        name
+      }
+      gene {
+        entrez
+      }
+      tags {
+        name
+      }
+    }
+  }
+}
+
+query Nodes_test(
+  $dataSet: [String!]
+  $related: [String!]
+  $network: [String!]
+  $page: Int
+) {
+  nodes(dataSet: $dataSet, related: $related, network: $network, page: $page) {
+    items {
+      name
+      tags {
+        name
+      }
+    }
+    page
+    pages
+    total
+  }
+}
+
+# Variables
+# {
+# 	"dataSet": ["TCGA"],
+# 	"related": ["Immune_Subtype"],
+# 	"network": ["extracellular_network"],
+#   "page": 2
+# }

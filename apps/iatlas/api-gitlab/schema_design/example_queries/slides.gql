@@ -1,0 +1,31 @@
+query Slides(
+  $ageAtDiagnosis: [Int!]
+  $barcode: [String!]
+  $ethnicity: [EthnicityEnum!]
+  $gender: [GenderEnum!]
+  $height: [Int!]
+  $name: [String!]
+  $race: [RaceEnum!]
+  $weight: [Int!]
+  $sample: [String!]
+) {
+  slides(
+    ageAtDiagnosis: $ageAtDiagnosis
+    barcode: $barcode
+    ethnicity: $ethnicity
+    gender: $gender
+    height: $height
+    name: $name
+    race: $race
+    weight: $weight
+    sample: $sample
+  ) {
+    name
+    patient {
+      ageAtDiagnosis
+    }
+  }
+}
+
+# Variables
+# {"barcode": ["TCGA-21-5787"]}

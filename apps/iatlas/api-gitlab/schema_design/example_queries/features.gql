@@ -1,0 +1,28 @@
+query Features(
+  $dataSet: [String!]
+  $related: [String!]
+  $tag: [String!]
+  $feature: [String!]
+  $featureClass: [String!]
+  $sample: [String!]
+  $minValue: Float
+  $maxValue: Float
+) {
+  features(
+    dataSet: $dataSet
+    related: $related
+    tag: $tag
+    feature: $feature
+    featureClass: $featureClass
+    sample: $sample
+    minValue: $minValue
+    maxValue: $maxValue
+  ) {
+    name
+    valueMax
+    valueMin
+  }
+}
+
+# Variables
+# {"feature": ["TCR_Shannon"], "dataSet": ["PCAWG"], "related": ["Immune_Subtype"], "minValue": 0.094192693, "maxValue": 5.7561021}
