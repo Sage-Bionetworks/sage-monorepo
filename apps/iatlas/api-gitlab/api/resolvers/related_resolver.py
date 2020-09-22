@@ -3,8 +3,7 @@ from .resolver_helpers import build_related_graphql_response, get_requested, get
 
 
 def resolve_related(_obj, info, dataSet=None, related=None):
-    selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, True, 'items')
+    selection_set = get_selection_set(info.field_nodes[0].selection_set, True)
     requested = get_requested(
         selection_set=selection_set, requested_field_mapping=related_request_fields)
 

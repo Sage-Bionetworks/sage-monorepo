@@ -3,8 +3,7 @@ from .resolver_helpers import (build_tag_graphql_response, get_requested, get_se
 
 
 def resolve_tags(_obj, info, dataSet=None, feature=None, featureClass=None, related=None, sample=None, tag=None):
-    selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, True, 'items')
+    selection_set = get_selection_set(info.field_nodes[0].selection_set, True)
     requested = get_requested(
         selection_set=selection_set, requested_field_mapping=tag_request_fields)
 
@@ -17,7 +16,8 @@ def resolve_tags(_obj, info, dataSet=None, feature=None, featureClass=None, rela
                                related=related, sample=sample, tag=tag, get_samples=False)
     tag_ids = set(tag.id for tag in tag_results)
 
-    (related_dict, sample_dict) = return_tag_derived_fields(requested, related_requested, data_set=dataSet, feature=feature, feature_class=featureClass,
+    (related_dict, sample_dict) = return_tag_derived_fields(requested, related_requested, data_set=dataSet,
+                                                            feature=feature, feature_class=featureClass,
                                                             related=related, sample=sample, tag=tag, tag_ids=tag_ids)
 
     return map(build_tag_graphql_response(related_dict, sample_dict), tag_results)
