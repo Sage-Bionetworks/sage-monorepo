@@ -14,6 +14,8 @@ schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 
 # Import GraphQl schemas/
 root_query = load_schema_from_path(schema_dirname + '/root.query.graphql')
+page_info_query = load_schema_from_path(
+    schema_dirname + '/pageInfo.query.graphql')
 copy_number_result_query = load_schema_from_path(
     schema_dirname + '/copyNumberResult.query.graphql')
 data_set_query = load_schema_from_path(
@@ -55,7 +57,7 @@ tag_query = load_schema_from_path(schema_dirname + '/tag.query.graphql')
 therapy_type_query = load_schema_from_path(
     schema_dirname + '/therapyType.query.graphql')
 
-type_defs = [root_query, copy_number_result_query, data_set_query, driver_result_query, edge_query, feature_query,
+type_defs = [root_query, page_info_query, copy_number_result_query, data_set_query, driver_result_query, edge_query, feature_query,
              gene_query, gene_family_query, gene_function_query, gene_type_query, immune_checkpoint_query,
              method_tag_query, mutation_query, mutation_code_query, node_query, pathway_query, patient_query,
              publication_query, sample_query, slide_query, super_category, tag_query, therapy_type_query]
@@ -113,8 +115,8 @@ def serialize_status_enum(value):
 
 # Initialize schema objects (general).
 root = ObjectType('Query')
+page_info = ObjectType('PageInfo')
 copy_number_result = ObjectType('CopyNumberResult')
-copy_number_result_page = ObjectType('CopyNumberResultPage')
 data_set = ObjectType('DataSet')
 driver_result = ObjectType('DriverResult')
 driver_result_page = ObjectType('DriverResultPage')
@@ -191,7 +193,7 @@ root.set_field('therapyTypes', resolve_therapy_types)
 
 schema = make_executable_schema(
     type_defs,
-    [root, copy_number_result, copy_number_result_page, data_set, direction_enum_scalar, driver_result, driver_result_page,
+    [root, page_info, copy_number_result, data_set, direction_enum_scalar, driver_result, driver_result_page,
      edge, edge_page, ethnicity_enum_scalar, feature, features_by_class, features_by_tag, gender_enum_scalar, gene, gene_family,
      gene_function, genes_by_tag, gene_related_sample, gene_type, immune_checkpoint, method_tag, mutation,
      mutation_code, mutation_type, node, node_page, pathway, patient, publication, race_enum_scalar, related_by_data_set,

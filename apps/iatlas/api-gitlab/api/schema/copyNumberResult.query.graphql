@@ -4,7 +4,7 @@ The "DirectionEnum" scalar will always be either `Amp`, `Del`.
 scalar DirectionEnum
 
 """
-The "CopyNumberResult" type may return:
+The "CopyNumberResultNode" type may return:
 
 - The "dataSet" associated with the copy number result
 - The "feature" associated with the copy number result
@@ -17,32 +17,25 @@ The "CopyNumberResult" type may return:
 - The "log10PValue", the log10 computed result of the P value
 - The "tStat", the T Stat value of the copy number result
 """
-type CopyNumberResult {
-    direction: DirectionEnum!
-    meanNormal: Float
-    meanCnv: Float
-    pValue: Float
-    log10PValue: Float
-    tStat: Float
-    dataSet: SimpleDataSet!
-    feature: SimpleFeature!
-    gene: SimpleGene!
-    tag: SimpleTag!
+type CopyNumberResultNode {
+  direction: DirectionEnum!
+  meanNormal: Float
+  meanCnv: Float
+  pValue: Float
+  log10PValue: Float
+  tStat: Float
+  dataSet: SimpleDataSet!
+  feature: SimpleFeature!
+  gene: SimpleGene!
+  tag: SimpleTag!
 }
 
-"""
-The "CopyNumberResultPage" type may return:
+type CopyNumberResultNodes {
+  cursor: String
+  node: [CopyNumberResultNode]
+}
 
-- "items", a list of returned CopyNumberResults
-- "page", the current page of returned CopyNumberResults (a maximum 100,000 of row returned in a page)
-- "pages", the total number of pages available
-- "total", the total number of results (all pages summed).
-
-See `CopyNumberResult`
-"""
-type CopyNumberResultPage {
-    items: [CopyNumberResult!]!
-    page: Int!
-    pages: Int!
-    total: Int!
+type CopyNumberResult {
+  pageInfo: PageInfo
+  edges: CopyNumberResultNodes
 }
