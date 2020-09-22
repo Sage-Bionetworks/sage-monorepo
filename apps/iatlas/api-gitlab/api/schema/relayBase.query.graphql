@@ -1,0 +1,20 @@
+interface BaseResult {
+  pageInfo: PageInfo
+  edges: [BaseEdge]
+}
+
+interface BaseEdge {
+  cursor: String
+  node: [BaseNode]
+}
+
+interface BaseNode {
+  id: ID
+}
+
+type PageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: String
+  endCursor: String
+}

@@ -1,4 +1,0 @@
-type PageInfo {
-  hasNextPage: Boolean
-  endCursor: String
-}

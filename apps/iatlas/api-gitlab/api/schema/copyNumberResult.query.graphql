@@ -17,7 +17,8 @@ The "CopyNumberResultNode" type may return:
 - The "log10PValue", the log10 computed result of the P value
 - The "tStat", the T Stat value of the copy number result
 """
-type CopyNumberResultNode {
+type CopyNumberResultNode implements BaseNode {
+  id: ID
   direction: DirectionEnum!
   meanNormal: Float
   meanCnv: Float
@@ -30,12 +31,12 @@ type CopyNumberResultNode {
   tag: SimpleTag!
 }
 
-type CopyNumberResultNodes {
+type CopyNumberResultEdge implements BaseEdge {
   cursor: String
   node: [CopyNumberResultNode]
 }
 
-type CopyNumberResult {
+type CopyNumberResult implements BaseResult {
   pageInfo: PageInfo
-  edges: CopyNumberResultNodes
+  edges: [CopyNumberResultEdge]
 }

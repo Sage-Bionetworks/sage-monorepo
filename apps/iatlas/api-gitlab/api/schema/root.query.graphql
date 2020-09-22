@@ -20,6 +20,7 @@ type Query {
   """
   copyNumberResults(
     first: Int
+    last: Int
     after: String
     before: String
     dataSet: [String!]
