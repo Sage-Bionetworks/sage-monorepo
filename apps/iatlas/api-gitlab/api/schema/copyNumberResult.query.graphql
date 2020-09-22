@@ -18,7 +18,7 @@ The "CopyNumberResultNode" type may return:
 - The "tStat", the T Stat value of the copy number result
 """
 type CopyNumberResultNode implements BaseNode {
-  id: ID
+  id: Int
   direction: DirectionEnum!
   meanNormal: Float
   meanCnv: Float
@@ -33,10 +33,11 @@ type CopyNumberResultNode implements BaseNode {
 
 type CopyNumberResultEdge implements BaseEdge {
   cursor: String
-  node: [CopyNumberResultNode]
+  node: CopyNumberResultNode
 }
 
 type CopyNumberResult implements BaseResult {
+  totalCount: Int
   pageInfo: PageInfo
   edges: [CopyNumberResultEdge]
 }

@@ -1,15 +1,16 @@
 interface BaseResult {
   pageInfo: PageInfo
+  totalCount: Int
   edges: [BaseEdge]
 }
 
 interface BaseEdge {
   cursor: String
-  node: [BaseNode]
+  node: BaseNode
 }
 
 interface BaseNode {
-  id: ID
+  id: Int
 }
 
 type PageInfo {

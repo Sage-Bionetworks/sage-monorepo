@@ -23,6 +23,7 @@ type Query {
     last: Int
     after: String
     before: String
+    distinct: Boolean
     dataSet: [String!]
     feature: [String!]
     entrez: [Int!]
