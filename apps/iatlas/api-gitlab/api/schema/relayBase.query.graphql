@@ -10,7 +10,7 @@ interface BaseEdge {
 }
 
 interface BaseNode {
-  id: Int
+  id: ID
 }
 
 type PageInfo {

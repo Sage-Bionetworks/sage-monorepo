@@ -2,7 +2,7 @@ from sqlalchemy import and_, orm
 from api import db
 from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
 from .general_resolvers import build_join_condition, build_option_args, get_selected, get_selection_set, get_value
-from .cursor_utils import to_cursor_hash
+from .cursor_utils import get_cursor, to_cursor_hash
 
 cnr_request_fields = {'dataSet',
                       'direction',
@@ -17,11 +17,10 @@ cnr_request_fields = {'dataSet',
 
 
 def build_cnr_graphql_response(copy_number_result):
-    id = get_value(copy_number_result, 'id')
-    print(id)
     return {
         'cursor': to_cursor_hash(get_value(copy_number_result, 'id')),
         'node': {
+            'id': get_value(copy_number_result, 'id'),
             'direction': get_value(copy_number_result, 'direction'),
             'meanNormal': get_value(copy_number_result, 'mean_normal'),
             'meanCnv': get_value(copy_number_result, 'mean_cnv'),
@@ -114,8 +113,22 @@ def build_copy_number_result_request(requested, data_set_requested, feature_requ
     if 'tag' in requested:
         core |= get_selected(tag_requested, tag_field_mapping)
 
+    cursor, sort_order = get_cursor(before, after)
+    order_by = copy_number_result_1.id
     query = sess.query(*core)
-    query = query.select_from(copy_number_result_1).order_by(copy_number_result_1.id).filter(copy_number_result_1.id > 1000)
+    query = query.select_from(copy_number_result_1)
+
+    if sort_order == 'ASC':
+        query = query.order_by(order_by)
+    else:
+        query = query.order_by(order_by.desc())
+
+    if cursor:
+        if sort_order == 'ASC':
+            query = query.filter(copy_number_result_1.id > cursor)
+        else:
+            query = query.filter(copy_number_result_1.id < cursor)
+
 
     if direction:
         query = query.filter(copy_number_result_1.direction == direction)

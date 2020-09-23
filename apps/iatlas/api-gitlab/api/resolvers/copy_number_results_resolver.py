@@ -12,7 +12,7 @@ def resolve_copy_number_results(_obj, info, **kwargs):
 
     requested = get_requested(
         selection_set=selection_set, requested_field_mapping=cnr_request_fields)
-    requested.add('id')
+    requested.add('id') # By default, we use the id field as the cursor
 
     data_set_selection_set = get_selection_set(
         selection_set, 'dataSet' in requested, 'dataSet')
@@ -35,7 +35,7 @@ def resolve_copy_number_results(_obj, info, **kwargs):
         selection_set=tag_selection_set, requested_field_mapping=simple_tag_request_fields)
 
     query = build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=kwargs.pop('dataSet', 0), **kwargs)
-    count = query.count()
+    count = query.count() # TODO: cache this value per query, make query in parallel
     results = query.limit(get_limit(**kwargs)).all()
 
     return {

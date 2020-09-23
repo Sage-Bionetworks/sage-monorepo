@@ -5,13 +5,20 @@ def to_cursor_hash(val):
     return str(base64.urlsafe_b64encode(str(val).encode("utf-8")), "utf-8")
 
 def from_cursor_hash(encoded):
-    return base64.b64decode(encoded)
+    return str(base64.b64decode(str(encoded)), "utf-8")
+
+def get_cursor(before, after):
+    if after != None:
+        return (from_cursor_hash(after), 'ASC')
+    if before != None:
+        return (from_cursor_hash(before), 'DESC')
+    return (None, 'ASC')
 
 def get_limit(**kwargs):
     first = kwargs.get('first')
     if first and not math.isnan(first):
-        return int(first)
+        return int(first) + 1
     last = kwargs.get('last')
     if last and not math.isnan(last):
-        return int(last)
+        return int(last) + 1
     return kwargs.get('default', 1)
