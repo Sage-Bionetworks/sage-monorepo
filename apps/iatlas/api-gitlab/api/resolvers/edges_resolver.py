@@ -14,6 +14,7 @@ def resolve_edges(_obj, info, dataSet=None, related=None, network=None, page=1):
             selection_set, True, 'node1')
         node_1_requested = get_requested(
             selection_set=node_1_selection_set, requested_field_mapping=node_request_fields)
+
     node_2_requested = set()
     if 'node2' in requested:
         node_2_selection_set = get_selection_set(

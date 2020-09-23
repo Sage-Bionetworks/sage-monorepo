@@ -1,77 +1,193 @@
-from sqlalchemy import and_, orm
+from sqlalchemy import and_
+from sqlalchemy.orm import aliased
+from itertools import groupby
 from api import db
-from api.db_models import Gene, Mutation, MutationCode, MutationType, Sample
-from .general_resolvers import build_option_args, get_selection_set
+from api.db_models import Gene, Mutation, MutationCode, MutationType, Patient, Sample, SampleToMutation
+from .general_resolvers import build_join_condition, get_selected, get_selection_set, get_value
+from .gene import build_gene_graphql_response
+from .mutation_type import build_mutation_type_graphql_response
+from .sample import build_sample_graphql_response
+
+mutation_request_fields = {'id',
+                           'gene',
+                           'mutationCode',
+                           'mutationType',
+                           'samples'}
 
 
-def build_mutation_request(_obj, info, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None):
+def build_mutation_graphql_response(sample_dict=dict()):
+    def f(mutation):
+        if not mutation:
+            return None
+        mutation_id = get_value(mutation, 'id')
+        samples = sample_dict.get(mutation_id, []) if sample_dict else []
+        return {
+            'id': get_value(mutation, 'id'),
+            'gene': build_gene_graphql_response()(mutation),
+            'mutationCode': get_value(mutation, 'code'),
+            'mutationType': build_mutation_type_graphql_response(mutation),
+            'samples': map(build_sample_graphql_response, samples)
+        }
+    return f
+
+
+def build_mutation_request(requested, gene_requested, mutation_type_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None):
     """
-    Builds a SQL request and returns values from the DB.
+    Builds a SQL request
     """
     sess = db.session
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
+    gene_1 = aliased(Gene, name='g')
+    mutation_1 = aliased(Mutation, name='m')
+    mutation_code_1 = aliased(MutationCode, name='mc')
+    mutation_type_1 = aliased(MutationType, name='mt')
 
-    gene_1 = orm.aliased(Gene, name='g')
-    mutation_1 = orm.aliased(Mutation, name='m')
-    mutation_code_1 = orm.aliased(MutationCode, name='mc')
-    mutation_type_1 = orm.aliased(MutationType, name='mt')
-    sample_1 = orm.aliased(Sample, name='s')
+    gene_core_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
+                               'hgnc': gene_1.hgnc.label('hgnc'),
+                               'description': gene_1.description.label('description'),
+                               'friendlyName': gene_1.friendly_name.label('friendly_name'),
+                               'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
+    mutation_type_1_field_mapping = {'display': mutation_type_1.display.label('display'),
+                                     'name': mutation_type_1.name.label('name')}
 
-    core_field_mapping = {'id': mutation_1.id.label('id')}
+    core = {mutation_1.id.label('id')}
+    gene_core = get_selected(gene_requested, gene_core_field_mapping)
+    mutation_type_core = get_selected(mutation_type_requested,
+                                      mutation_type_1_field_mapping)
 
-    related_field_mapping = {'gene': 'gene',
-                             'mutationCode': 'mutation_code',
-                             'mutationType': 'mutation_type',
-                             'samples': 'samples'}
+    if 'mutationCode' in requested:
+        core |= {mutation_code_1.code.label('code')}
 
-    core = build_option_args(selection_set, core_field_mapping)
-    relations = build_option_args(selection_set, related_field_mapping)
-    option_args = []
-
-    query = sess.query(mutation_1)
-
-    if 'gene' in relations or entrez:
-        query = query.join((gene_1, mutation_1.gene), isouter=True)
-        option_args.append(orm.contains_eager(mutation_1.gene.of_type(gene_1)))
-
-    if 'mutation_code' in relations or mutation_code:
-        query = query.join(
-            (mutation_code_1, mutation_1.mutation_code), isouter=True)
-        option_args.append(orm.contains_eager(
-            mutation_1.mutation_code.of_type(mutation_code_1)))
-
-    if 'mutation_type' in relations or mutation_type:
-        query = query.join(
-            (mutation_type_1, mutation_1.mutation_type), isouter=True)
-        option_args.append(orm.contains_eager(
-            mutation_1.mutation_type.of_type(mutation_type_1)))
-
-    if 'samples' in relations:
-        query = query.join((sample_1, mutation_1.samples), isouter=True)
-        option_args.append(orm.contains_eager(
-            mutation_1.samples.of_type(sample_1)))
-
-    if option_args:
-        query = query.options(*option_args)
+    query = sess.query(*[*core, *gene_core, *mutation_type_core])
+    query = query.select_from(mutation_1)
 
     if mutation_id:
         query = query.filter(mutation_1.id.in_(mutation_id))
 
-    if entrez:
-        query = query.filter(gene_1.entrez.in_(entrez))
+    if 'gene' in requested or entrez:
+        is_outer = not bool(entrez)
+        gene_join_condition = build_join_condition(
+            gene_1.id, mutation_1.gene_id, filter_column=gene_1.entrez, filter_list=entrez)
+        query = query.join(gene_1, and_(
+            *gene_join_condition), isouter=is_outer)
 
-    if mutation_code:
-        query = query.filter(mutation_code_1.code.in_(mutation_code))
+    if 'mutationCode' in requested or mutation_code:
+        is_outer = not bool(mutation_code)
+        mutation_code_join_condition = build_join_condition(
+            mutation_code_1.id, mutation_1.mutation_code_id, filter_column=mutation_code_1.code, filter_list=mutation_code)
+        query = query.join(mutation_code_1, and_(
+            *mutation_code_join_condition), isouter=is_outer)
 
-    if mutation_type:
-        query = query.filter(mutation_type_1.name.in_(mutation_type))
+    if 'mutationType' in requested or mutation_type:
+        is_outer = not bool(mutation_type)
+        mutation_type_join_condition = build_join_condition(
+            mutation_type_1.id, mutation_1.mutation_type_id, filter_column=mutation_type_1.name, filter_list=mutation_type)
+        query = query.join(mutation_type_1, and_(
+            *mutation_type_join_condition), isouter=is_outer)
+
+    order = []
+    append_to_order = order.append
+    if 'id' in requested:
+        append_to_order(mutation_1.id)
+    if 'mutationCode' in requested:
+        append_to_order(mutation_code_1.code)
+    if not order:
+        append_to_order(mutation_1.id)
+    query = query.order_by(*order)
 
     return query
 
 
-def request_mutations(_obj, info, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None):
+def get_samples(requested, patient_requested, sample_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, mutation_ids=set()):
+    has_samples = 'samples' in requested
+
+    if mutation_ids and has_samples:
+        sess = db.session
+
+        mutation_1 = aliased(Mutation, name='m')
+        patient_1 = aliased(Patient, name='p')
+        sample_1 = aliased(Sample, name='s')
+        sample_to_mutation_1 = aliased(SampleToMutation, name='sm')
+
+        core_field_mapping = {'name': sample_1.name.label('name')}
+        patient_field_mapping = {'ageAtDiagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
+                                 'barcode': patient_1.barcode.label('barcode'),
+                                 'ethnicity': patient_1.ethnicity.label('ethnicity'),
+                                 'gender': patient_1.gender.label('gender'),
+                                 'height': patient_1.height.label('height'),
+                                 'race': patient_1.race.label('race'),
+                                 'weight': patient_1.weight.label('weight')}
+        core = get_selected(sample_requested, core_field_mapping)
+        # Always select the sample id and the mutation id.
+        core |= {sample_to_mutation_1.sample_id.label('id'),
+                 mutation_1.id.label('mutation_id')}
+        patient_core = get_selected(patient_requested, patient_field_mapping)
+
+        sample_query = sess.query(*[*core, *patient_core])
+        sample_query = sample_query.select_from(mutation_1)
+
+        if mutation_id:
+            sample_query = sample_query.filter(mutation_1.id.in_(mutation_id))
+
+        if entrez or mutation_code or mutation_type:
+            gene_1 = aliased(Gene, name='g')
+            mutation_1 = aliased(Mutation, name='m')
+            mutation_code_1 = aliased(MutationCode, name='mc')
+            mutation_type_1 = aliased(MutationType, name='mt')
+
+            if entrez:
+                gene_join_condition = build_join_condition(
+                    gene_1.id, mutation_1.gene_id, filter_column=gene_1.entrez, filter_list=entrez)
+                sample_query = sample_query.join(
+                    gene_1, and_(*gene_join_condition))
+
+            if mutation_code:
+                mutation_code_join_condition = build_join_condition(
+                    mutation_code_1.id, mutation_1.mutation_code_id, filter_column=mutation_code_1.code, filter_list=mutation_code)
+                sample_query = sample_query.join(
+                    mutation_code_1, and_(*mutation_code_join_condition))
+
+            if mutation_type:
+                mutation_type_join_condition = build_join_condition(
+                    mutation_type_1.id, mutation_1.mutation_type_id, filter_column=mutation_type_1.name, filter_list=mutation_type)
+                sample_query = sample_query.join(
+                    mutation_type_1, and_(*mutation_type_join_condition))
+
+        sample_query = sample_query.join(
+            sample_to_mutation_1, sample_to_mutation_1.mutation_id == mutation_1.id)
+
+        sample_query = sample_query.join(
+            sample_1, sample_1.id == sample_to_mutation_1.sample_id)
+
+        if 'patient' in sample_requested:
+            sample_query = sample_query.join(
+                patient_1, sample_1.patient_id == patient.id)
+
+        order = []
+        append_to_order = order.append
+        if 'name' in sample_requested:
+            append_to_order(sample_1.name)
+        if not order:
+            append_to_order(sample_1.id)
+        sample_query = sample_query.order_by(*order)
+
+        return sample_query.all()
+
+    return []
+
+
+def request_mutations(requested, gene_requested, mutation_type_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None):
     query = build_mutation_request(
-        _obj, info, entrez=entrez, mutation_id=mutation_id, mutation_code=mutation_code, mutation_type=mutation_type)
-    query = query.distinct()
+        requested, gene_requested, mutation_type_requested, entrez=entrez, mutation_id=mutation_id, mutation_code=mutation_code, mutation_type=mutation_type)
     return query.all()
+
+
+def return_mutation_derived_fields(requested, patient_requested, sample_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, mutation_ids=set()):
+    samples = get_samples(requested, patient_requested, sample_requested, entrez=entrez,
+                          mutation_code=mutation_code, mutation_id=mutation_id, mutation_type=mutation_type, mutation_ids=mutation_ids)
+
+    sample_dict = dict()
+    for key, collection in groupby(samples, key=lambda s: s.mutation_id):
+        sample_dict[key] = sample_dict.get(key, []) + list(collection)
+
+    return sample_dict

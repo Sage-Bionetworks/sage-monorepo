@@ -18,12 +18,25 @@ def mutation_code():
     return 'G12'
 
 
-def test_mutations_query_with_passed_mutation_id(client, mutation_id):
-    query = """query Mutations($entrez: [Int!], $mutationCode: [String!], $mutationId: [Int!] $mutationType: [String!]) {
-        mutations(entrez: $entrez, mutationCode: $mutationCode, mutationId: $mutationId, mutationType: $mutationType) {
-            id
-        }
-    }"""
+@pytest.fixture(scope='module')
+def common_query_builder():
+    def f(query_fields):
+        return """query Mutations(
+            $entrez: [Int!]
+            $mutationCode: [String!]
+            $mutationId: [Int!] $mutationType: [String!])
+        {
+            mutations(
+                entrez: $entrez
+                mutationCode: $mutationCode
+                mutationId: $mutationId
+                mutationType: $mutationType
+            )""" + query_fields + "}"
+    return f
+
+
+def test_mutations_query_with_passed_mutation_id(client, common_query_builder, mutation_id):
+    query = common_query_builder("""{ id }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {'mutationId': [mutation_id]}})
     json_data = json.loads(response.data)
@@ -36,22 +49,14 @@ def test_mutations_query_with_passed_mutation_id(client, mutation_id):
         assert mutation['id'] == mutation_id
 
 
-def test_mutations_query_with_passed_entrez(client, gene_entrez):
-    query = """query Mutations($entrez: [Int!], $mutationCode: [String!], $mutationId: [Int!] $mutationType: [String!]) {
-        mutations(entrez: $entrez, mutationCode: $mutationCode, mutationId: $mutationId, mutationType: $mutationType) {
-            id
-            gene {
-                entrez
-            }
-            mutationCode
-            mutationType {
-                name
-            }
-            samples {
-                name
-            }
-        }
-    }"""
+def test_mutations_query_with_passed_entrez(client, common_query_builder, gene_entrez):
+    query = common_query_builder("""{
+                                    id
+                                    gene { entrez }
+                                    mutationCode
+                                    mutationType { name }
+                                    samples { name }
+                                }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {'entrez': [gene_entrez]}})
     json_data = json.loads(response.data)
@@ -71,13 +76,11 @@ def test_mutations_query_with_passed_entrez(client, gene_entrez):
             assert type(sample['name']) is str
 
 
-def test_mutations_query_with_passed_mutation_code(client, mutation_code):
-    query = """query Mutations($entrez: [Int!], $mutationCode: [String!], $mutationId: [Int!] $mutationType: [String!]) {
-        mutations(entrez: $entrez, mutationCode: $mutationCode, mutationId: $mutationId, mutationType: $mutationType) {
-            id
-            mutationCode
-        }
-    }"""
+def test_mutations_query_with_passed_mutation_code(client, common_query_builder, mutation_code):
+    query = common_query_builder("""{
+                                    id
+                                    mutationCode
+                                }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {'mutationCode': [mutation_code]}})
     json_data = json.loads(response.data)
@@ -90,15 +93,11 @@ def test_mutations_query_with_passed_mutation_code(client, mutation_code):
         assert mutation['mutationCode'] == mutation_code
 
 
-def test_mutations_query_with_passed_mutation_type(client, mutation_type):
-    query = """query Mutations($entrez: [Int!], $mutationCode: [String!], $mutationId: [Int!] $mutationType: [String!]) {
-        mutations(entrez: $entrez, mutationCode: $mutationCode, mutationId: $mutationId, mutationType: $mutationType) {
-            id
-            mutationType {
-                name
-            }
-        }
-    }"""
+def test_mutations_query_with_passed_mutation_type(client, common_query_builder, mutation_type):
+    query = common_query_builder("""{
+                                    id
+                                    mutationType { name }
+                                }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {'mutationType': [mutation_type]}})
     json_data = json.loads(response.data)
@@ -111,12 +110,8 @@ def test_mutations_query_with_passed_mutation_type(client, mutation_type):
         assert mutation['mutationType']['name'] == mutation_type
 
 
-def test_mutations_query_with_no_variables(client):
-    query = """query Mutations($entrez: [Int!], $mutationCode: [String!], $mutationId: [Int!] $mutationType: [String!]) {
-        mutations(entrez: $entrez, mutationCode: $mutationCode, mutationId: $mutationId, mutationType: $mutationType) {
-            id
-        }
-    }"""
+def test_mutations_query_with_no_variables(client, common_query_builder):
+    query = common_query_builder("""{ id }""")
     response = client.post(
         '/api', json={'query': query})
     json_data = json.loads(response.data)

@@ -3,14 +3,15 @@ from .data_set import build_data_set_graphql_response, data_set_request_fields, 
 from .driver_result import request_driver_results
 from .edge import build_edge_graphql_response, build_edge_request, edge_request_fields
 from .feature import build_feature_graphql_response, feature_request_fields, return_feature_derived_fields, request_features
-from .gene import build_gene_graphql_response, gene_request_fields, request_gene, request_genes, return_gene_derived_fields
+from .gene import build_gene_graphql_response, gene_request_fields, request_gene, request_genes, return_gene_derived_fields, simple_gene_request_fields
 from .gene_family import request_gene_families
 from .gene_function import request_gene_functions
 from .gene_type import request_gene_types
 from .general_resolvers import *
 from .immune_checkpoint import request_immune_checkpoints
 from .method_tag import request_method_tags
-from .mutation import request_mutations
+from .mutation import build_mutation_graphql_response, mutation_request_fields, request_mutations, return_mutation_derived_fields
+from .mutation_type import build_mutation_type_graphql_response, mutation_type_request_fields, request_mutation_types
 from .node import build_node_graphql_response, build_node_request, node_request_fields, return_node_derived_fields
 from .pathway import request_pathways
 from .patient import build_patient_graphql_response, patient_request_fields, request_patients, return_patient_derived_fields, simple_patient_request_fields

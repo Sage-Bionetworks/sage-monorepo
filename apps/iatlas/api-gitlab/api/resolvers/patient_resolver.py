@@ -13,8 +13,8 @@ def resolve_patients(_obj, info, ageAtDiagnosis=None, barcode=None, ethnicity=No
     slide_requested = get_requested(
         selection_set=slide_selection_set, requested_field_mapping=simple_slide_request_fields)
 
-    patient_results = request_patients(requested, age_at_diagnosis=ageAtDiagnosis, barcode=barcode, ethnicity=ethnicity,
-                                       gender=gender, height=height, race=race, sample=sample, slide=slide, weight=weight)
+    patient_results = request_patients(requested, age_at_diagnosis=ageAtDiagnosis, barcode=barcode,
+                                       ethnicity=ethnicity, gender=gender, height=height, race=race, sample=sample, slide=slide, weight=weight)
     patient_ids = set(patient.id for patient in patient_results)
 
     (sample_dict, slide_dict) = return_patient_derived_fields(requested, slide_requested, patient_ids=patient_ids,
