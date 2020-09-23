@@ -31,7 +31,7 @@ def build_mutation_graphql_response(sample_dict=dict()):
     return f
 
 
-def build_mutation_request(requested, gene_requested, mutation_type_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None):
+def build_mutation_request(requested, gene_requested, mutation_type_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, sample=None, status=None):
     """
     Builds a SQL request
     """
@@ -85,6 +85,21 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, e
         query = query.join(mutation_type_1, and_(
             *mutation_type_join_condition), isouter=is_outer)
 
+    if status or sample:
+        sample_1 = aliased(Sample, name='s')
+        sample_to_mutation_1 = aliased(SampleToMutation, name='sm')
+
+        sample_mutation_join_condition = build_join_condition(
+            sample_to_mutation_1.mutation_id, mutation_1.id, filter_column=sample_to_mutation_1.status, filter_list=status)
+
+        query = query.join(sample_to_mutation_1, and_(
+            *sample_mutation_join_condition))
+
+        if sample:
+            sample_join_condition = build_join_condition(
+                sample_to_mutation_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
+            query = query.join(sample_1, and_(*sample_join_condition))
+
     order = []
     append_to_order = order.append
     if 'id' in requested:
@@ -98,7 +113,7 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, e
     return query
 
 
-def get_samples(requested, patient_requested, sample_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, mutation_ids=set()):
+def get_samples(requested, patient_requested, sample_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, mutation_ids=set(), sample=None, status=None):
     has_samples = 'samples' in requested
 
     if mutation_ids and has_samples:
@@ -109,7 +124,8 @@ def get_samples(requested, patient_requested, sample_requested, entrez=None, mut
         sample_1 = aliased(Sample, name='s')
         sample_to_mutation_1 = aliased(SampleToMutation, name='sm')
 
-        core_field_mapping = {'name': sample_1.name.label('name')}
+        core_field_mapping = {'name': sample_1.name.label('name'),
+                              'status': sample_to_mutation_1.status.label('status')}
         patient_field_mapping = {'ageAtDiagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
                                  'barcode': patient_1.barcode.label('barcode'),
                                  'ethnicity': patient_1.ethnicity.label('ethnicity'),
@@ -153,11 +169,17 @@ def get_samples(requested, patient_requested, sample_requested, entrez=None, mut
                 sample_query = sample_query.join(
                     mutation_type_1, and_(*mutation_type_join_condition))
 
-        sample_query = sample_query.join(
-            sample_to_mutation_1, sample_to_mutation_1.mutation_id == mutation_1.id)
+        sample_mutation_join_condition = build_join_condition(
+            sample_to_mutation_1.mutation_id, mutation_1.id, filter_column=sample_to_mutation_1.status, filter_list=status)
 
         sample_query = sample_query.join(
-            sample_1, sample_1.id == sample_to_mutation_1.sample_id)
+            sample_to_mutation_1, and_(*sample_mutation_join_condition))
+
+        sample_join_condition = build_join_condition(
+            sample_1.id, sample_to_mutation_1.sample_id, filter_column=sample_1.name, filter_list=sample)
+
+        sample_query = sample_query.join(
+            sample_1, and_(*sample_join_condition))
 
         if 'patient' in sample_requested:
             sample_query = sample_query.join(
@@ -176,15 +198,15 @@ def get_samples(requested, patient_requested, sample_requested, entrez=None, mut
     return []
 
 
-def request_mutations(requested, gene_requested, mutation_type_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None):
+def request_mutations(requested, gene_requested, mutation_type_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, sample=None, status=None):
     query = build_mutation_request(
-        requested, gene_requested, mutation_type_requested, entrez=entrez, mutation_id=mutation_id, mutation_code=mutation_code, mutation_type=mutation_type)
-    return query.all()
+        requested, gene_requested, mutation_type_requested, entrez=entrez, mutation_id=mutation_id, mutation_code=mutation_code, mutation_type=mutation_type, sample=sample, status=status)
+    return query.distinct().all()
 
 
-def return_mutation_derived_fields(requested, patient_requested, sample_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, mutation_ids=set()):
+def return_mutation_derived_fields(requested, patient_requested, sample_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, mutation_ids=set(), sample=None, status=None):
     samples = get_samples(requested, patient_requested, sample_requested, entrez=entrez,
-                          mutation_code=mutation_code, mutation_id=mutation_id, mutation_type=mutation_type, mutation_ids=mutation_ids)
+                          mutation_code=mutation_code, mutation_id=mutation_id, mutation_type=mutation_type, mutation_ids=mutation_ids, sample=sample, status=status)
 
     sample_dict = dict()
     for key, collection in groupby(samples, key=lambda s: s.mutation_id):

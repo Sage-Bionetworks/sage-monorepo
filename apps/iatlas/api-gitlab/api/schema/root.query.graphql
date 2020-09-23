@@ -255,6 +255,8 @@ type Query {
     - "mutationCode", a list of mutation code names associated with the mutations to filter by.
     - "mutationId", a list of mutation ids associated to filter by.
     - "mutationType", a list of mutation type names associated with the mutations to filter by.
+    - "sample", a list of sample names associated with the mutations to filter by.
+    - "status", a list of statuses associated relationship between mutation and sample to filter by.
 
   If no arguments are passed, this will return all mutations.
   """
@@ -263,6 +265,8 @@ type Query {
     mutationCode: [String!]
     mutationId: [Int!]
     mutationType: [String!]
+    sample: [String!]
+    status: [StatusEnum!]
   ): [GeneMutation!]!
 
   """

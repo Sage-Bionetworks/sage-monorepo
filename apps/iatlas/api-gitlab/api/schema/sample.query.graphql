@@ -42,6 +42,23 @@ type GeneRelatedSample {
 }
 
 """
+The "MutationRelatedSample" is a sample that is specifically related to a mutation.
+It may return:
+
+- "name", the sample's name (often the "sample" portion of
+a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/)).
+- "patient" the patient related to the sample
+- "status", the status of the sample related to that mutation.
+
+See also `Sample`, `Mutation`, `StatusEnum`, and `SimplePatient`
+"""
+type MutationRelatedSample {
+  name: String!
+  patient: SimplePatient
+  status: StatusEnum!
+}
+
+"""
 The "SampleByMutationStatus" type may return:
 
 - The "status" the mutation status, either `Mut` or `Wt`.

@@ -19,18 +19,34 @@ def mutation_code():
 
 
 @pytest.fixture(scope='module')
+def mutation_status():
+    return 'Mut'
+
+
+# Sample id 1904
+@pytest.fixture(scope='module')
+def sample_name():
+    return 'TCGA-38-7271'
+
+
+@pytest.fixture(scope='module')
 def common_query_builder():
     def f(query_fields):
         return """query Mutations(
             $entrez: [Int!]
             $mutationCode: [String!]
-            $mutationId: [Int!] $mutationType: [String!])
-        {
+            $mutationId: [Int!]
+            $mutationType: [String!]
+            $sample: [String!]
+            $status: [StatusEnum!]
+        ) {
             mutations(
                 entrez: $entrez
                 mutationCode: $mutationCode
                 mutationId: $mutationId
                 mutationType: $mutationType
+                sample: $sample
+                status: $status
             )""" + query_fields + "}"
     return f
 
@@ -108,6 +124,51 @@ def test_mutations_query_with_passed_mutation_type(client, common_query_builder,
     for mutation in mutations[0:2]:
         assert type(mutation['id']) is int
         assert mutation['mutationType']['name'] == mutation_type
+
+
+def test_mutations_query_with_passed_sample(client, common_query_builder, sample_name):
+    query = common_query_builder("""{
+                                    id
+                                    samples { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'sample': [sample_name]}})
+    json_data = json.loads(response.data)
+    mutations = json_data['data']['mutations']
+
+    assert isinstance(mutations, list)
+    assert len(mutations) > 0
+    for mutation in mutations[0:2]:
+        samples = mutation['samples']
+        assert type(mutation['id']) is int
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert current_sample['name'] == sample_name
+
+
+def test_mutations_query_with_passed_sample_and_status(client, common_query_builder, sample_name, mutation_status):
+    query = common_query_builder("""{
+                                    id
+                                    samples {
+                                        name
+                                        status
+                                    }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'status': [mutation_status]}})
+    json_data = json.loads(response.data)
+    mutations = json_data['data']['mutations']
+
+    assert isinstance(mutations, list)
+    assert len(mutations) > 0
+    for mutation in mutations[0:2]:
+        samples = mutation['samples']
+        assert type(mutation['id']) is int
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert current_sample['status'] == mutation_status
 
 
 def test_mutations_query_with_no_variables(client, common_query_builder):

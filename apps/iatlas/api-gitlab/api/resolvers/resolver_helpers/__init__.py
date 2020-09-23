@@ -15,7 +15,7 @@ from .mutation_type import build_mutation_type_graphql_response, mutation_type_r
 from .node import build_node_graphql_response, build_node_request, node_request_fields, return_node_derived_fields
 from .pathway import request_pathways
 from .patient import build_patient_graphql_response, patient_request_fields, request_patients, return_patient_derived_fields, simple_patient_request_fields
-from .sample import build_sample_graphql_response, request_samples, sample_by_mutation_status_request_fields, sample_request_fields, simple_sample_request_fields
+from .sample import build_sample_graphql_response, mutation_related_sample_request_fields, request_samples, sample_by_mutation_status_request_fields, sample_request_fields, simple_sample_request_fields
 from .slide import build_slide_graphql_response, request_slides, slide_request_fields, simple_slide_request_fields
 from .super_category import request_super_categories
 from .tag import build_related_graphql_response, build_tag_graphql_response, related_request_fields, request_related, request_tags, return_tag_derived_fields, simple_tag_request_fields, tag_request_fields

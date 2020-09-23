@@ -17,7 +17,7 @@ type GeneMutation {
   gene: SimpleGene!
   mutationCode: String!
   mutationType: MutationType
-  samples: [Sample!]
+  samples: [MutationRelatedSample!]
 }
 
 
