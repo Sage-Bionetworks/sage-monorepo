@@ -10,7 +10,7 @@ from .gene_type import request_gene_types
 from .general_resolvers import *
 from .immune_checkpoint import request_immune_checkpoints
 from .method_tag import request_method_tags
-from .mutation import build_mutation_graphql_response, mutation_request_fields, request_mutations, return_mutation_derived_fields
+from .mutation import build_mutation_graphql_response, build_mutation_by_sample_graphql_response, build_mutation_request, mutation_by_sample_request_fields, mutation_request_fields, request_mutations, return_mutation_derived_fields
 from .mutation_type import build_mutation_type_graphql_response, mutation_type_request_fields, request_mutation_types
 from .node import build_node_graphql_response, build_node_request, node_request_fields, return_node_derived_fields
 from .pathway import request_pathways

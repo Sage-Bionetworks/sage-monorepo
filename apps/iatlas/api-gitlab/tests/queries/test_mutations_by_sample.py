@@ -24,30 +24,22 @@ def sample_name():
 @pytest.fixture(scope='module')
 def common_query_builder():
     def f(query_fields):
-        return """query MutationsBySamples(
-            $dataSet: [String!]
+        return """query MutationsBySample(
             $entrez: [Int!]
-            $feature: [String!]
-            $featureClass: [String!]
             $mutationCode: [String!]
-            $mutationId: [String!]
+            $mutationId: [Int!]
             $mutationType: [String!]
-            $related: [String!]
+            $page: Int
             $sample: [String!]
-            $tag: [String!]
             $status: [StatusEnum!]
         ) {
-            mutationsBySamples(
-                dataSet: $dataSet
+            mutationsBySample(
                 entrez: $entrez
-                feature: $feature
-                featureClass: $featureClass
                 mutationCode: $mutationCode
                 mutationId: $mutationId
                 mutationType: $mutationType
-                related: $related
+                page: $page
                 sample: $sample
-                tag: $tag
                 status: $status
             )""" + query_fields + "}"
     return f
@@ -57,9 +49,9 @@ def common_query_builder():
 def common_query(common_query_builder):
     return common_query_builder("""{
         items {
-            id
             name
             mutations {
+                id
                 gene { entrez }
                 mutationCode
                 mutationType { name }
@@ -150,7 +142,7 @@ def test_mutations_by_sample_query_with_no_args(client, common_query):
 
 def test_mutations_by_sample_query_with_passed_mutation_status(client, common_query, mutation_status):
     response = client.post(
-        '/api', json={'query': common_query, 'variables': {'mutationStatus': mutation_status}})
+        '/api', json={'query': common_query, 'variables': {'mutationStatus': [mutation_status]}})
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
@@ -176,7 +168,7 @@ def test_mutations_by_sample_query_with_passed_mutationId_status_and_sample(clie
                                                                             mutation_status, sample_name):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'mutationId': [mutation_id],
-        'mutationStatus': mutation_status,
+        'mutationStatus': [mutation_status],
         'sample': [sample_name]}})
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
@@ -227,154 +219,154 @@ def test_mutations_by_sample_query_with_passed_entrez(client, common_query_build
             assert mutation['gene']['entrez'] == entrez
 
 
-def test_mutations_by_sample_query_with_passed_dataSet(client, common_query_builder, data_set):
-    query = common_query_builder("""{
-                                    items {
-                                        name
-                                        mutations {
-                                            mutationCode
-                                            status
-                                        }
-                                    }
-                                    page
-                                }""")
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'dataSet': [data_set]}})
-    json_data = json.loads(response.data)
-    page = json_data['data']['mutationsBySample']
-    results = page['items']
+# def test_mutations_by_sample_query_with_passed_dataSet(client, common_query_builder, data_set):
+#     query = common_query_builder("""{
+#                                     items {
+#                                         name
+#                                         mutations {
+#                                             mutationCode
+#                                             status
+#                                         }
+#                                     }
+#                                     page
+#                                 }""")
+#     response = client.post(
+#         '/api', json={'query': query, 'variables': {'dataSet': [data_set]}})
+#     json_data = json.loads(response.data)
+#     page = json_data['data']['mutationsBySample']
+#     results = page['items']
 
-    assert page['page'] == 1
-    assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results[0:2]:
-        mutations = result['mutations']
-        assert type(result['name']) is str
-        assert isinstance(mutations, list)
-        assert len(mutations) > 0
-        for mutation in mutations:
-            assert (mutation['mutationCode']) is str
-            assert mutation['status'] in status_enum.enums
-
-
-def test_mutations_by_sample_query_with_passed_related(client, common_query_builder, related):
-    query = common_query_builder("""{
-                                    items {
-                                        name
-                                        mutations {
-                                            mutationCode
-                                            status
-                                        }
-                                    }
-                                    page
-                                }""")
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'related': [related]}})
-    json_data = json.loads(response.data)
-    page = json_data['data']['mutationsBySample']
-    results = page['items']
-
-    assert page['page'] == 1
-    assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results[0:2]:
-        mutations = result['mutations']
-        assert type(result['name']) is str
-        assert isinstance(mutations, list)
-        assert len(mutations) > 0
-        for mutation in mutations:
-            assert (mutation['mutationCode']) is str
-            assert mutation['status'] in status_enum.enums
+#     assert page['page'] == 1
+#     assert isinstance(results, list)
+#     assert len(results) > 0
+#     for result in results[0:2]:
+#         mutations = result['mutations']
+#         assert type(result['name']) is str
+#         assert isinstance(mutations, list)
+#         assert len(mutations) > 0
+#         for mutation in mutations:
+#             assert (mutation['mutationCode']) is str
+#             assert mutation['status'] in status_enum.enums
 
 
-def test_mutations_by_sample_query_with_passed_tag(client, common_query_builder, tag):
-    query = common_query_builder("""{
-                                    items {
-                                        name
-                                        mutations {
-                                            mutationCode
-                                            status
-                                        }
-                                    }
-                                    page
-                                }""")
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'tag': [tag]}})
-    json_data = json.loads(response.data)
-    page = json_data['data']['mutationsBySample']
-    results = page['items']
+# def test_mutations_by_sample_query_with_passed_related(client, common_query_builder, related):
+#     query = common_query_builder("""{
+#                                     items {
+#                                         name
+#                                         mutations {
+#                                             mutationCode
+#                                             status
+#                                         }
+#                                     }
+#                                     page
+#                                 }""")
+#     response = client.post(
+#         '/api', json={'query': query, 'variables': {'related': [related]}})
+#     json_data = json.loads(response.data)
+#     page = json_data['data']['mutationsBySample']
+#     results = page['items']
 
-    assert page['page'] == 1
-    assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results[0:2]:
-        mutations = result['mutations']
-        assert type(result['name']) is str
-        assert isinstance(mutations, list)
-        assert len(mutations) > 0
-        for mutation in mutations:
-            assert (mutation['mutationCode']) is str
-            assert mutation['status'] in status_enum.enums
-
-
-def test_mutations_by_sample_query_with_passed_feature(client, common_query_builder, chosen_feature):
-    query = common_query_builder("""{
-                                    items {
-                                        name
-                                        mutations {
-                                            mutationCode
-                                            status
-                                        }
-                                    }
-                                    page
-                                }""")
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'feature': [chosen_feature]}})
-    json_data = json.loads(response.data)
-    page = json_data['data']['mutationsBySample']
-    results = page['items']
-
-    assert page['page'] == 1
-    assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results[0:2]:
-        mutations = result['mutations']
-        assert type(result['name']) is str
-        assert isinstance(mutations, list)
-        assert len(mutations) > 0
-        for mutation in mutations:
-            assert (mutation['mutationCode']) is str
-            assert mutation['status'] in status_enum.enums
+#     assert page['page'] == 1
+#     assert isinstance(results, list)
+#     assert len(results) > 0
+#     for result in results[0:2]:
+#         mutations = result['mutations']
+#         assert type(result['name']) is str
+#         assert isinstance(mutations, list)
+#         assert len(mutations) > 0
+#         for mutation in mutations:
+#             assert (mutation['mutationCode']) is str
+#             assert mutation['status'] in status_enum.enums
 
 
-def test_mutations_by_sample_query_with_passed_featureClass(client, common_query_builder, feature_class):
-    query = common_query_builder("""{
-                                    items {
-                                        name
-                                        mutations {
-                                            mutationCode
-                                            status
-                                        }
-                                    }
-                                    page
-                                }""")
-    response = client.post(
-        '/api', json={'query': query, 'variables': {'featureClass': [feature_class]}})
-    json_data = json.loads(response.data)
-    page = json_data['data']['mutationsBySample']
-    results = page['items']
+# def test_mutations_by_sample_query_with_passed_tag(client, common_query_builder, tag):
+#     query = common_query_builder("""{
+#                                     items {
+#                                         name
+#                                         mutations {
+#                                             mutationCode
+#                                             status
+#                                         }
+#                                     }
+#                                     page
+#                                 }""")
+#     response = client.post(
+#         '/api', json={'query': query, 'variables': {'tag': [tag]}})
+#     json_data = json.loads(response.data)
+#     page = json_data['data']['mutationsBySample']
+#     results = page['items']
 
-    assert page['page'] == 1
-    assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results[0:2]:
-        mutations = result['mutations']
-        assert type(result['name']) is str
-        assert isinstance(mutations, list)
-        assert len(mutations) > 0
-        for mutation in mutations:
-            assert (mutation['mutationCode']) is str
-            assert mutation['status'] in status_enum.enums
+#     assert page['page'] == 1
+#     assert isinstance(results, list)
+#     assert len(results) > 0
+#     for result in results[0:2]:
+#         mutations = result['mutations']
+#         assert type(result['name']) is str
+#         assert isinstance(mutations, list)
+#         assert len(mutations) > 0
+#         for mutation in mutations:
+#             assert (mutation['mutationCode']) is str
+#             assert mutation['status'] in status_enum.enums
+
+
+# def test_mutations_by_sample_query_with_passed_feature(client, common_query_builder, chosen_feature):
+#     query = common_query_builder("""{
+#                                     items {
+#                                         name
+#                                         mutations {
+#                                             mutationCode
+#                                             status
+#                                         }
+#                                     }
+#                                     page
+#                                 }""")
+#     response = client.post(
+#         '/api', json={'query': query, 'variables': {'feature': [chosen_feature]}})
+#     json_data = json.loads(response.data)
+#     page = json_data['data']['mutationsBySample']
+#     results = page['items']
+
+#     assert page['page'] == 1
+#     assert isinstance(results, list)
+#     assert len(results) > 0
+#     for result in results[0:2]:
+#         mutations = result['mutations']
+#         assert type(result['name']) is str
+#         assert isinstance(mutations, list)
+#         assert len(mutations) > 0
+#         for mutation in mutations:
+#             assert (mutation['mutationCode']) is str
+#             assert mutation['status'] in status_enum.enums
+
+
+# def test_mutations_by_sample_query_with_passed_featureClass(client, common_query_builder, feature_class):
+#     query = common_query_builder("""{
+#                                     items {
+#                                         name
+#                                         mutations {
+#                                             mutationCode
+#                                             status
+#                                         }
+#                                     }
+#                                     page
+#                                 }""")
+#     response = client.post(
+#         '/api', json={'query': query, 'variables': {'featureClass': [feature_class]}})
+#     json_data = json.loads(response.data)
+#     page = json_data['data']['mutationsBySample']
+#     results = page['items']
+
+#     assert page['page'] == 1
+#     assert isinstance(results, list)
+#     assert len(results) > 0
+#     for result in results[0:2]:
+#         mutations = result['mutations']
+#         assert type(result['name']) is str
+#         assert isinstance(mutations, list)
+#         assert len(mutations) > 0
+#         for mutation in mutations:
+#             assert (mutation['mutationCode']) is str
+#             assert mutation['status'] in status_enum.enums
 
 
 def test_mutations_by_sample_query_with_passed_mutationType(client, common_query_builder, mutation_type):
@@ -382,7 +374,7 @@ def test_mutations_by_sample_query_with_passed_mutationType(client, common_query
                                     items {
                                         name
                                         mutations {
-                                            mutationtype { name }
+                                            mutationType { name }
                                         }
                                     }
                                     page

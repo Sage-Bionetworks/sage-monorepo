@@ -272,35 +272,25 @@ type Query {
   """
   The "mutationsBySample" query accepts:
 
-    - "dataSet", a list of data set names associated with the sample related to the mutation to filter by
     - "entrez", a list of gene entrez associated with the mutation to filter by
-    - "feature", a list of feature names associated with the sample related to the mutation to filter by
-    - "featureClass", a list of feature class names associated with the feature that is associated with the sample related to the mutation to filter by
     - "mutationCode", a list of mutation codes associated with the mutation to filter by
     - "mutationId", a list of mutation ids to filter by
     - "mutationType", a list of mutation types associated with the mutation to filter by
-    - "related", a list of tag names related to the data set associated with the sample related to the mutation to filter by
     - "sample", a list of sample names associated with the mutation to filter by
-    - "tag", a list of tag names associated with the sample related to the mutation to filter by
     - "status", a list of mutation statuses to filter the mutation and samples by
     - "page", the page of results to get. Defaults to 1 (the first page) with a maximum of 100,000 rows returned
 
   If no arguments are passed, this will return all samples that have related mutations (please note, there will be a LOT of results).
   """
   mutationsBySample(
-    dataSet: [String!]
     entrez: [Int!]
-    feature: [String!]
-    featureClass: [String!]
     mutationCode: [String!]
-    mutationId: [String!]
+    mutationId: [Int!]
     mutationType: [String!]
-    related: [String!]
     sample: [String!]
-    tag: [String!]
     status: [StatusEnum!]
     page: Int
-  ): [MutationsBySamplePage!]!
+  ): MutationsBySamplePage!
 
   """
   The "mutationTypes" query returns all mutation types.
