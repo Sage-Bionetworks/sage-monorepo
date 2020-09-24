@@ -484,15 +484,15 @@ type Query {
   """
   The "tags" query accepts:
 
-    - "dataSet", a list of data set names (required)
-    - "related", a list of tag names related to the data set(s) (required)
+    - "dataSet", a list of data set names
+    - "related", a list of tag names related to the data set(s)
     - "tag", a list of tag names
     - "feature", a list of feature names
     - "featureClass", a list of feature class names
   """
   tags(
-    dataSet: [String!]!
-    related: [String!]!
+    dataSet: [String!]
+    related: [String!]
     tag: [String!]
     feature: [String!]
     featureClass: [String!]
