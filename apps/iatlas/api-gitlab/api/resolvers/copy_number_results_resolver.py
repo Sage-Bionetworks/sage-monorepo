@@ -45,13 +45,13 @@ def resolve_copy_number_results(_obj, info, **kwargs):
 
     pageInfo = {}
     if sort_order == 'ASC':
-        pageInfo['hasNextPage'] = len(resp) == first + 1
+        pageInfo['hasNextPage'] = resp and (len(resp) == first + 1)
         pageInfo['hasPreviousPage'] = False
         resp.pop(-1) # remove the extra last item
     if sort_order == 'DESC':
         resp.reverse() # We have to reverse the list to get previous pages in the expected order
         pageInfo['hasNextPage'] = False
-        pageInfo['hasPreviousPage'] = len(resp) == last + 1
+        pageInfo['hasPreviousPage'] = resp and (len(resp) == last + 1)
         resp.pop(0) # remove the extra first item
 
     results = map(build_cnr_graphql_response, resp) # returns iterator
