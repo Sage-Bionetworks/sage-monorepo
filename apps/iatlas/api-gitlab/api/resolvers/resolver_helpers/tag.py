@@ -141,7 +141,7 @@ def build_tag_request(requested, data_set=None, feature=None, feature_class=None
         is_outer = not bool(sample)
 
         sample_sub_query = sess.query(sample_1.id).filter(
-            sample_1.name.in_(sample)) if sample else sample
+            sample_1.name.in_(sample)) if sample else None
 
         sample_tag_join_condition = build_join_condition(
             sample_to_tag_1.tag_id, tag_1.id, sample_to_tag_1.sample_id, sample_sub_query)
