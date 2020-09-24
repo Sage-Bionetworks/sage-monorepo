@@ -36,8 +36,10 @@ def resolve_copy_number_results(_obj, info, **kwargs):
     tag_requested = get_requested(
         selection_set=tag_selection_set, requested_field_mapping=simple_tag_request_fields)
 
-    query = build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=kwargs.pop('dataSet', 0), **kwargs)
-    count = query.count() # TODO: cache this value per query, make query in parallel
+    query, count_query = build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=kwargs.pop('dataSet', 0), **kwargs)
+
+    count = count_query.count() # TODO: cache this value per query, make query in parallel
+
     first = kwargs.get('first')
     last = kwargs.get('last')
     limit, sort_order = get_limit(first, last)
@@ -45,22 +47,27 @@ def resolve_copy_number_results(_obj, info, **kwargs):
 
     pageInfo = {}
     if sort_order == 'ASC':
-        pageInfo['hasNextPage'] = resp and (len(resp) == first + 1)
+        hasNextPage = resp and (len(resp) == first + 1)
+        pageInfo['hasNextPage'] = hasNextPage
         pageInfo['hasPreviousPage'] = False
-        resp.pop(-1) # remove the extra last item
+        if hasNextPage:
+            resp.pop(-1) # remove the extra last item
     if sort_order == 'DESC':
         resp.reverse() # We have to reverse the list to get previous pages in the expected order
         pageInfo['hasNextPage'] = False
-        pageInfo['hasPreviousPage'] = resp and (len(resp) == last + 1)
-        resp.pop(0) # remove the extra first item
+        hasPreviousPage = resp and (len(resp) == last + 1)
+        pageInfo['hasPreviousPage'] = hasPreviousPage
+        if hasPreviousPage:
+            resp.pop(0) # remove the extra first item
 
     results = map(build_cnr_graphql_response, resp) # returns iterator
     deck = deque(results)
     pageInfo['startCursor'] = deck[0]['cursor']
     pageInfo['endCursor'] = deck[-1]['cursor']
 
-    return {
+    data = {
         'edges': deck,
-        'pageInfo': pageInfo,
-        'totalCount': count
+        'pageInfo': pageInfo
     }
+    data['totalCount'] = count
+    return data

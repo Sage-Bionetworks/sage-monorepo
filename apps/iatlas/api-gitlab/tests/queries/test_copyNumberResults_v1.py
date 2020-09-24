@@ -2,6 +2,7 @@ import json
 import pytest
 from tests import NoneType
 from api.enums import direction_enum
+from api.resolvers.resolver_helpers.cursor_utils import from_cursor_hash
 
 
 @pytest.fixture(scope='module')
@@ -53,6 +54,96 @@ def min_mean_cnv():
 def min_t_stat():
     return -5.118745
 
+
+# Test that forward cursor pagination gives us the expected paginInfo
+def test_copyNumberResults_cursor_pagination_first(client):
+    query = """
+        query CopyNumberResults(
+            $first: Int
+            $after: String
+        ) {
+            copyNumberResults(
+                first: $first
+                after: $after
+            ) {
+                pageInfo {
+                    startCursor
+                    endCursor
+                    hasPreviousPage
+                    hasNextPage
+                }
+                totalCount
+                edges {
+                    cursor
+                    node {
+                        id
+                    }
+                }
+            }
+        }
+    """
+    num = 10
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'first': num
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['copyNumberResults']
+    edges = page['edges']
+    start = from_cursor_hash(page['pageInfo']['startCursor'])
+    end = from_cursor_hash(page['pageInfo']['endCursor'])
+
+    assert len(edges) == num
+    assert page['pageInfo']['hasNextPage'] == True
+    assert page['pageInfo']['hasPreviousPage'] == False
+    assert start == edges[0]['node']['id']
+    assert end == edges[num-1]['node']['id']
+    assert int(end) - int(start) == num - 1
+
+def test_copyNumberResults_cursor_pagination_last(client):
+    query = """
+        query CopyNumberResults(
+            $last: Int
+            $before: String
+        ) {
+            copyNumberResults(
+                last: $last
+                before: $before
+            ) {
+                pageInfo {
+                    startCursor
+                    endCursor
+                    hasPreviousPage
+                    hasNextPage
+                }
+                totalCount
+                edges {
+                    cursor
+                    node {
+                        id
+                    }
+                }
+            }
+        }
+    """
+    num = 10
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'last': num,
+            'before': 'MTE='
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['copyNumberResults']
+    edges = page['edges']
+    start = from_cursor_hash(page['pageInfo']['startCursor'])
+    end = from_cursor_hash(page['pageInfo']['endCursor'])
+
+    assert len(edges) == num
+    assert page['pageInfo']['hasNextPage'] == False
+    assert page['pageInfo']['hasPreviousPage'] == False
+    assert start == edges[0]['node']['id']
+    assert end == edges[num-1]['node']['id']
+    assert int(end) - int(start) == num - 1
 
 def test_copyNumberResults_query_with_passed_data_set(client, data_set, entrez, feature_name):
     query = """

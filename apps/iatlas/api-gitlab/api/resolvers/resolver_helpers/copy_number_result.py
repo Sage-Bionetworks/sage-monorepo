@@ -116,21 +116,6 @@ def build_copy_number_result_request(requested, data_set_requested, feature_requ
     query = sess.query(*core)
     query = query.select_from(copy_number_result_1)
 
-    # Handle cursor and sort order
-    cursor, sort_order = get_cursor(before, after)
-    order_by = copy_number_result_1.id
-    if sort_order == 'ASC':
-        query = query.order_by(order_by)
-    else:
-        query = query.order_by(order_by.desc())
-
-    if cursor:
-        if sort_order == 'ASC':
-            query = query.filter(copy_number_result_1.id > cursor)
-        else:
-            query = query.filter(copy_number_result_1.id < cursor)
-    # end handle cursor
-
     if direction:
         query = query.filter(copy_number_result_1.direction == direction)
 
@@ -186,6 +171,23 @@ def build_copy_number_result_request(requested, data_set_requested, feature_requ
         query = query.join(tag_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
+    count_query = query
+
+    # Handle cursor and sort order
+    cursor, sort_order = get_cursor(before, after)
+    order_by = copy_number_result_1.id
+    if sort_order == 'ASC':
+        query = query.order_by(order_by)
+    else:
+        query = query.order_by(order_by.desc())
+
+    if cursor:
+        if sort_order == 'ASC':
+            query = query.filter(copy_number_result_1.id > cursor)
+        else:
+            query = query.filter(copy_number_result_1.id < cursor)
+    # end handle cursor
+
     if distinct == True:
-        return query.distinct()
-    return query
+        return (query.distinct(), count_query.distinct())
+    return (query, count_query)
