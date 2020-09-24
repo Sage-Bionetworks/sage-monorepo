@@ -322,7 +322,6 @@ type Query {
     - "ethnicity", a list of patient ethnicities to filter the patients by
     - "gender", a list of patient genders to filter the patients by
     - "height", a list of patient heights to filter the patients by
-    - "name", a list of sample names to filter the patients by
     - "race", a list of patient races to filter the patients by
     - "sample", a list of sample names to filter the patients by
     - "slide", a list of slide names to filter the patients by
@@ -336,7 +335,6 @@ type Query {
     ethnicity: [EthnicityEnum!]
     gender: [GenderEnum!]
     height: [Int!]
-    name: [String!]
     race: [RaceEnum!]
     sample: [String!]
     slide: [String!]
