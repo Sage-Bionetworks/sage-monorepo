@@ -1,44 +1,42 @@
-query MutationsBySamples(
-  $dataSet: [String!]
+query MutationsBySample(
   $entrez: [Int!]
-  $feature: [String!]
-  $featureClass: [String!]
   $mutationCode: [String!]
-  $mutationId: [String!]
+  $mutationId: [Int!]
   $mutationType: [String!]
-  $related: [String!]
   $sample: [String!]
-  $tag: [String!]
   $status: [StatusEnum!]
+  $page: Int
 ) {
-  mutationsBySamples(
-    dataSet: $dataSet
+  mutationsBySample(
     entrez: $entrez
-    feature: $feature
-    featureClass: $featureClass
     mutationCode: $mutationCode
     mutationId: $mutationId
     mutationType: $mutationType
-    related: $related
     sample: $sample
-    tag: $tag
     status: $status
+    page: $page
   ) {
-    name
-    mutations {
-      gene {
-        entrez
-        hgnc
+    items {
+      name
+      mutations {
+        gene {
+          entrez
+          hgnc
+        }
+        mutationCode
+        mutationType {
+          name
+          display
+        }
+        status
       }
-      mutationCode
-      mutationType {
-        name
-        display
-      }
-      status
     }
+    page
+    pages
+    total
   }
 }
 
+
 # Variables
-# {}
+# { "entrez": [207], "sample": ["TCGA-02-0047"] }
