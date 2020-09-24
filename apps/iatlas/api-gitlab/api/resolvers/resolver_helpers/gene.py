@@ -23,6 +23,12 @@ gene_request_fields = {'entrez',
                        'superCategory',
                        'therapyType'}
 
+simple_gene_request_fields = {'entrez',
+                              'hgnc',
+                              'description',
+                              'friendlyName',
+                              'ioLandscapeName'}
+
 
 def build_gene_graphql_response(gene_type_dict=dict(), pub_dict=dict(), sample_dict=dict()):
     def f(gene):

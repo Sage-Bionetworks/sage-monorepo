@@ -11,13 +11,17 @@ simple_sample_request_fields = {'name'}
 sample_request_fields = simple_sample_request_fields.union(
     {'patient', 'patient'})
 
+mutation_related_sample_request_fields = sample_request_fields.union(
+    {'status', 'status'})
+
 sample_by_mutation_status_request_fields = {'status', 'samples'}
 
 
 def build_sample_graphql_response(sample):
     return {
-        'name': get_value(sample, 'name'),
-        'patient': build_patient_graphql_response()(sample)
+        'name': get_value(sample),
+        'patient': build_patient_graphql_response()(sample),
+        'status': get_value(sample, 'status')
     }
 
 

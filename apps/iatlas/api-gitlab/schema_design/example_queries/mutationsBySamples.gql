@@ -1,15 +1,44 @@
-query Genes($entrez: [Int!], $geneType: [String!], $sample: [String!]) {
-  genes(entrez: $entrez, geneType: $geneType, sample: $sample) {
-    entrez
-    publications {
-      pubmedId
-    }
-    samples {
-      name
-      rnaSeqExpr
+query MutationsBySamples(
+  $dataSet: [String!]
+  $entrez: [Int!]
+  $feature: [String!]
+  $featureClass: [String!]
+  $mutationCode: [String!]
+  $mutationId: [String!]
+  $mutationType: [String!]
+  $related: [String!]
+  $sample: [String!]
+  $tag: [String!]
+  $status: [StatusEnum!]
+) {
+  mutationsBySamples(
+    dataSet: $dataSet
+    entrez: $entrez
+    feature: $feature
+    featureClass: $featureClass
+    mutationCode: $mutationCode
+    mutationId: $mutationId
+    mutationType: $mutationType
+    related: $related
+    sample: $sample
+    tag: $tag
+    status: $status
+  ) {
+    name
+    mutations {
+      gene {
+        entrez
+        hgnc
+      }
+      mutationCode
+      mutationType {
+        name
+        display
+      }
+      status
     }
   }
 }
 
 # Variables
-# {"entrez": [3627, 383, 941, 958], "geneType": ["immunomodulator"], "sample": ["DO219585"]}
+# {}

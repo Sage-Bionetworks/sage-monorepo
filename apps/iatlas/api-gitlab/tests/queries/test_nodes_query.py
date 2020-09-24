@@ -1,5 +1,6 @@
 import json
 import pytest
+from api.database import return_node_query
 from tests import NoneType
 
 
@@ -103,6 +104,7 @@ def test_nodes_query_with_no_arguments(client):
                 name
                 dataSet { name }
             }
+            total
         }
     }"""
     response = client.post('/api', json={'query': query})
@@ -110,6 +112,10 @@ def test_nodes_query_with_no_arguments(client):
     page = json_data['data']['nodes']
     results = page['items']
 
+    # Get the total number of samples_to_mutations in the database.
+    node_count = return_node_query('id').count()
+
+    assert page['total'] == node_count
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:

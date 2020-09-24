@@ -9,6 +9,7 @@
         "entrez",
         "groupby",
         "hgnc",
+        "immunomodulator",
         "itertools",
         "pytest"
     ],
