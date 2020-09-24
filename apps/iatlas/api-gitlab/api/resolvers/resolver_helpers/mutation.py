@@ -7,10 +7,6 @@ from .general_resolvers import build_join_condition, get_selected, get_selection
 from .gene import build_gene_graphql_response
 from .mutation_type import build_mutation_type_graphql_response
 from .sample import build_sample_graphql_response
-import logging
-
-log = logging.getLogger('mutation resolver helper')
-log.setLevel(logging.DEBUG)
 
 mutation_by_sample_request_fields = {'name', 'mutations'}
 

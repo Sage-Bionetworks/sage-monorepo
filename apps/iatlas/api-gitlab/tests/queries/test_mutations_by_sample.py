@@ -6,6 +6,11 @@ from tests import NoneType
 
 
 @pytest.fixture(scope='module')
+def gene_entrez():
+    return 207
+
+
+@pytest.fixture(scope='module')
 def mutation_id():
     return 777
 
@@ -141,8 +146,9 @@ def test_mutations_by_sample_query_with_no_args(client, common_query):
 
 
 def test_mutations_by_sample_query_with_passed_mutation_status(client, common_query, mutation_status):
+    sample_name = 'TCGA-02-0047'
     response = client.post(
-        '/api', json={'query': common_query, 'variables': {'mutationStatus': [mutation_status]}})
+        '/api', json={'query': common_query, 'variables': {'sample': [sample_name], 'status': [mutation_status]}})
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
@@ -153,7 +159,7 @@ def test_mutations_by_sample_query_with_passed_mutation_status(client, common_qu
     assert len(results) > 0
     for result in results[0:2]:
         mutations = result['mutations']
-        assert type(result['name']) is str
+        assert result['name'] == sample_name
         assert isinstance(mutations, list)
         assert len(mutations) > 0
         for mutation in mutations:
@@ -191,7 +197,7 @@ def test_mutations_by_sample_query_with_passed_mutationId_status_and_sample(clie
             assert mutation['status'] == mutation_status
 
 
-def test_mutations_by_sample_query_with_passed_entrez(client, common_query_builder, entrez):
+def test_mutations_by_sample_query_with_passed_entrez(client, common_query_builder, gene_entrez):
     query = common_query_builder("""{
                                     items {
                                         name
@@ -202,7 +208,7 @@ def test_mutations_by_sample_query_with_passed_entrez(client, common_query_build
                                     page
                                 }""")
     response = client.post(
-        '/api', json={'query': query, 'variables': {'entrez': [entrez]}})
+        '/api', json={'query': query, 'variables': {'entrez': [gene_entrez]}})
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
@@ -216,7 +222,7 @@ def test_mutations_by_sample_query_with_passed_entrez(client, common_query_build
         assert isinstance(mutations, list)
         assert len(mutations) > 0
         for mutation in mutations:
-            assert mutation['gene']['entrez'] == entrez
+            assert mutation['gene']['entrez'] == gene_entrez
 
 
 # def test_mutations_by_sample_query_with_passed_dataSet(client, common_query_builder, data_set):
@@ -369,7 +375,7 @@ def test_mutations_by_sample_query_with_passed_entrez(client, common_query_build
 #             assert mutation['status'] in status_enum.enums
 
 
-def test_mutations_by_sample_query_with_passed_mutationType(client, common_query_builder, mutation_type):
+def test_mutations_by_sample_query_with_passed_sample_and_mutationType(client, common_query_builder, sample_name, mutation_type):
     query = common_query_builder("""{
                                     items {
                                         name
@@ -380,7 +386,8 @@ def test_mutations_by_sample_query_with_passed_mutationType(client, common_query
                                     page
                                 }""")
     response = client.post(
-        '/api', json={'query': query, 'variables': {'mutationType': [mutation_type]}})
+        '/api', json={'query': query, 'variables': {'mutationType': [mutation_type],
+                                                    'sample': [sample_name]}})
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
@@ -390,8 +397,8 @@ def test_mutations_by_sample_query_with_passed_mutationType(client, common_query
     assert len(results) > 0
     for result in results[0:2]:
         mutations = result['mutations']
-        assert type(result['name']) is str
+        assert result['name'] == sample_name
         assert isinstance(mutations, list)
         assert len(mutations) > 0
         for mutation in mutations:
-            assert mutation['mutationType'] == mutation_type
+            assert mutation['mutationType']['name'] == mutation_type
