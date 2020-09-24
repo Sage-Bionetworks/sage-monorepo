@@ -1,7 +1,7 @@
 from .resolver_helpers import build_mutation_graphql_response, get_requested, get_selection_set, mutation_related_sample_request_fields, mutation_request_fields, mutation_type_request_fields, request_mutations, return_mutation_derived_fields, simple_gene_request_fields, simple_patient_request_fields
 
 
-def resolve_mutations(_obj, info, dataSet=None, entrez=None, feature=None, featureClass=None, mutationCode=None, mutationId=None, mutationType=None, related=None, sample=None, status=None, tag=None):
+def resolve_mutations(_obj, info, entrez=None, mutationCode=None, mutationId=None, mutationType=None, sample=None, status=None):
     selection_set = get_selection_set(info.field_nodes[0].selection_set, True)
     requested = get_requested(
         selection_set=selection_set, requested_field_mapping=mutation_request_fields)
@@ -30,6 +30,6 @@ def resolve_mutations(_obj, info, dataSet=None, entrez=None, feature=None, featu
     mutation_ids = set(mutation.id for mutation in mutation_results)
 
     sample_dict = return_mutation_derived_fields(
-        requested, patient_requested, sample_requested, data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass, mutation_id=mutationId, mutation_code=mutationCode, mutation_ids=mutation_ids, mutation_type=mutationType, related=related, sample=sample, status=status, tag=tag)
+        requested, patient_requested, sample_requested, entrez=entrez, mutation_id=mutationId, mutation_code=mutationCode, mutation_ids=mutation_ids, mutation_type=mutationType, sample=sample, status=status)
 
     return map(build_mutation_graphql_response(sample_dict), mutation_results)

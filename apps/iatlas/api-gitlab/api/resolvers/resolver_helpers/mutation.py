@@ -138,7 +138,7 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, s
     return query
 
 
-def get_samples(requested, patient_requested, sample_requested, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, mutation_ids=set(), sample=None, status=None):
+def get_samples(requested, patient_requested, sample_requested, mutation_ids=set(), data_set=None, entrez=None, feature=None, feature_class=None, mutation_code=None, mutation_id=None, mutation_type=None, related=None, sample=None, status=None, tag=None):
     has_samples = 'samples' in requested
 
     if mutation_ids and has_samples:
@@ -225,14 +225,14 @@ def get_samples(requested, patient_requested, sample_requested, entrez=None, mut
 
 def request_mutations(requested, gene_requested, mutation_type_requested, data_set=None, entrez=None, feature=None, feature_class=None, mutation_code=None, mutation_id=None, mutation_type=None, related=None, sample=None, status=None, tag=None):
     query = build_mutation_request(
-        requested, gene_requested, mutation_type_requested, set(), data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass, mutation_code=mutationCode, mutation_id=mutation_id, mutation_type=mutationType, related=related, sample=sample, status=status, tag=tag)
+        requested, gene_requested, mutation_type_requested, set(), data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, mutation_code=mutation_code, mutation_id=mutation_id, mutation_type=mutation_type, related=related, sample=sample, status=status, tag=tag)
     return query.distinct().all()
 
 
 def return_mutation_derived_fields(requested, patient_requested, sample_requested, mutation_ids=set(), data_set=None, entrez=None, feature=None, feature_class=None, mutation_code=None, mutation_id=None, mutation_type=None, related=None, sample=None, status=None, tag=None):
     samples = get_samples(
-        requested, patient_requested, sample_requested, mutation_ids=mutation_ids, data_set=dataSet,
-        entrez=entrez, feature=feature, feature_class=featureClass, mutation_code=mutationCode, mutation_id=mutation_id, mutation_type=mutationType, related=related, sample=sample, status=status, tag=tag)
+        requested, patient_requested, sample_requested, mutation_ids=mutation_ids, data_set=data_set,
+        entrez=entrez, feature=feature, feature_class=feature_class, mutation_code=mutation_code, mutation_id=mutation_id, mutation_type=mutation_type, related=related, sample=sample, status=status, tag=tag)
 
     sample_dict = dict()
     for key, collection in groupby(samples, key=lambda s: s.mutation_id):
