@@ -194,7 +194,16 @@ def build_tags_request(requested, tag_requested, data_set=None, related=None, ne
         tag_query = tag_query.join(
             node_to_tag_2, and_(*node_tag_join_condition))
 
-        tag_query = tag_query.join(tag_1, node_to_tag_2.tag_id == tag_1.id)
+        network_tag_subquery = sess.query(
+            network_tag_1.id).filter(network_tag_1.name == 'network')
+
+        tag_to_tag_join_condition = [
+            tag_to_tag_1.tag_id == node_to_tag_2.tag_id, tag_to_tag_1.related_tag_id.notin_(network_tag_subquery)]
+
+        tag_query = tag_query.join(tag_to_tag_1, and_(
+            *tag_to_tag_join_condition))
+
+        tag_query = tag_query.join(tag_1, tag_to_tag_1.tag_id == tag_1.id)
 
         order = [node_1.id]
         append_to_order = order.append

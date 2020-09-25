@@ -29,10 +29,7 @@ def common_query_builder():
 
 def test_nodes_query_with_passed_data_set(client, common_query_builder, data_set):
     query = common_query_builder("""{
-                                    items {
-                                        name
-                                        dataSet { name }
-                                    }
+                                    items { name }
                                     page
                                     pages
                                     total
