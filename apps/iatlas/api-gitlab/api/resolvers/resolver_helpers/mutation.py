@@ -3,7 +3,7 @@ from sqlalchemy.orm import aliased
 from itertools import groupby
 from api import db
 from api.db_models import Gene, Mutation, MutationCode, MutationType, Patient, Sample, SampleToMutation
-from .general_resolvers import build_join_condition, get_selected, get_selection_set, get_value
+from .general_resolvers import build_join_condition, get_selected, get_value
 from .gene import build_gene_graphql_response
 from .mutation_type import build_mutation_type_graphql_response
 from .sample import build_sample_graphql_response

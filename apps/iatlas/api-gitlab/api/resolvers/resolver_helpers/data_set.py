@@ -24,7 +24,7 @@ def build_data_set_request(_obj, info, data_set=None, sample=None):
     """
     sess = db.session
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
+    selection_set = get_selection_set(info=info)
 
     data_set_1 = aliased(Dataset, name='d')
     sample_1 = aliased(Sample, name='s')

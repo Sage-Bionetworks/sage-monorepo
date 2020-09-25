@@ -52,11 +52,10 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
     """
     sess = db.session
 
-    selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, by_class or by_tag)
+    child_node = 'feature' if by_class or by_tag else None
+    selection_set = get_selection_set(info=info, child_node=child_node)
 
-    tag_or_class_selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, False)
+    tag_or_class_selection_set = get_selection_set(info=info)
 
     data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
     feature_1 = aliased(Feature, name='f')
@@ -225,8 +224,8 @@ def build_features_query(_obj, info, data_set=None, feature=None, feature_class=
 
 
 def get_samples(info, data_set=None, max_value=None, min_value=None, related=None, sample=None, tag=None, feature_ids=set(), by_class=False, by_tag=False):
-    selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, (by_class or by_tag))
+    child_node = 'feature' if by_class or by_tag else None
+    selection_set = get_selection_set(info=info, child_node=child_node)
     requested = build_option_args(selection_set, {'samples': 'samples',
                                                   'valueMax': 'value_max',
                                                   'valueMin': 'value_min'})
@@ -242,7 +241,7 @@ def get_samples(info, data_set=None, max_value=None, min_value=None, related=Non
         sample_to_tag_1 = aliased(SampleToTag, name='stt')
 
         sample_selection_set = get_selection_set(
-            selection_set, has_samples, child_node='samples')
+            selection_set, child_node='samples')
         sample_core_field_mapping = {'name': sample_1.name.label('name')}
 
         sample_core = build_option_args(
@@ -344,9 +343,8 @@ def return_feature_derived_fields(info, feature_ids=set(), data_set=None, max_va
                                   related=None, sample=None, tag=None, by_class=False, by_tag=False):
     samples = get_samples(info, data_set=data_set, max_value=max_value, min_value=min_value, related=related,
                           sample=sample, tag=tag, feature_ids=feature_ids, by_class=by_class, by_tag=by_tag)
-
-    selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, by_class or by_tag)
+    child_node = 'feature' if by_class or by_tag else None
+    selection_set = get_selection_set(info=info, child_node=child_node)
     requested_field_mapping = {'valueMax': 'value_max',
                                'valueMin': 'value_min'}
     requested = build_option_args(selection_set, requested_field_mapping)

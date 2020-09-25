@@ -142,9 +142,11 @@ def build_tags_request(requested, tag_requested, data_set=None, related=None, ne
     if 'tags' in requested:
         sess = db.session
 
+        data_set_1 = aliased(Dataset, name='d')
         network_tag_1 = aliased(Tag, name='nt')
         node_1 = aliased(Node, name='n')
-        node_to_tag_1 = aliased(NodeToTag, name='ntt')
+        node_to_tag_1 = aliased(NodeToTag, name='ntt1')
+        node_to_tag_2 = aliased(NodeToTag, name='ntt2')
         tag_1 = aliased(Tag, name='t')
         tag_to_tag_1 = aliased(TagToTag, name='tt')
 
@@ -187,7 +189,12 @@ def build_tags_request(requested, tag_requested, data_set=None, related=None, ne
         tag_query = tag_query.join(
             node_to_tag_1, and_(*node_tag_join_condition))
 
-        tag_query = tag_query.join(tag_1, node_to_tag_1.tag_id == tag_1.id)
+        node_tag_join_condition = [
+            node_to_tag_2.node_id == node_1.id, node_to_tag_2.tag_id.notin_(network_subquery)]
+        tag_query = tag_query.join(
+            node_to_tag_2, and_(*node_tag_join_condition))
+
+        tag_query = tag_query.join(tag_1, node_to_tag_2.tag_id == tag_1.id)
 
         order = [node_1.id]
         append_to_order = order.append
@@ -206,9 +213,9 @@ def build_tags_request(requested, tag_requested, data_set=None, related=None, ne
 
 
 def return_node_derived_fields(requested, tag_requested, data_set=None, network=None, related=None):
-    # tag_results = build_tags_request(
-    #     requested, tag_requested, data_set=data_set, related=related, network=network)
-    tag_results = []
+    tag_results = build_tags_request(
+        requested, tag_requested, data_set=data_set, related=related, network=network)
+    # tag_results = []
     tag_dict = dict()
     for key, collection in groupby(tag_results, key=lambda t: t.node_id):
         tag_dict[key] = tag_dict.get(key, []) + list(collection)

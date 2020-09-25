@@ -29,7 +29,10 @@ def common_query_builder():
 
 def test_nodes_query_with_passed_data_set(client, common_query_builder, data_set):
     query = common_query_builder("""{
-                                    items { name }
+                                    items {
+                                        name
+                                        dataSet { name }
+                                    }
                                     page
                                     pages
                                     total
@@ -104,6 +107,7 @@ def test_nodes_query_with_passed_network(client, common_query_builder, network):
         if feature:
             assert type(feature['name']) is str
         assert isinstance(tags, list)
+        assert len(tags) > o
         for tag in tags[0:2]:
             assert type(tag['name']) is str
             assert tag['name'] != network

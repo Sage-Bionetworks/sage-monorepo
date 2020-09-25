@@ -92,9 +92,9 @@ type Query {
   If no arguments are passed, this will return all edges (please note, there will be a LOT of results).
   """
   edges(
-    nodes: [Int!]
-    maxScore: [Float!]
-    minScore: [Float!]
+    dataSet: [String!]
+    related: [String!]
+    network: [String!]
     page: Int
   ): EdgePage!
 
@@ -503,14 +503,34 @@ type Query {
   ): [Tag!]!
 
   """
-  A simple test query that is independent of the database.
-  """
-  test: String!
-
-  """
   The "therapyTypes" query accepts:
 
     - "name", a list of names of the therapy types to look up.
   """
   therapyTypes(name: [String!]): [TherapyType!]!
+
+  """
+  A simple test query that is independent of the database.
+  """
+  test: TestPage!
+}
+
+type TestPage {
+  items: TestFields!
+  page: Int!
+}
+
+type TestFields {
+  contentType: String!
+  referer: String!
+  userAgent: String!
+  headers: TestHeaders!
+}
+
+type TestHeaders {
+  contentLength: Int!
+  contentType: String!
+  host: String!
+  referer: String!
+  userAgent: String!
 }

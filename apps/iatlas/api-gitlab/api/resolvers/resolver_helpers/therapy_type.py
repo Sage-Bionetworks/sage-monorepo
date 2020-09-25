@@ -30,7 +30,7 @@ def build_therapy_type_request(_obj, info, name=None):
     """
     sess = db.session
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
+    selection_set = get_selection_set(info=info)
 
     gene_1 = orm.aliased(Gene, name='g')
     therapy_type_1 = orm.aliased(TherapyType, name='pw')
