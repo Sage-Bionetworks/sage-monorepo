@@ -2,6 +2,10 @@ from .resolver_helpers import (build_node_graphql_response, build_node_request, 
                                get_selection_set, gene_request_fields, get_requested, node_request_fields, return_node_derived_fields,
                                simple_tag_request_fields)
 from api.telemetry import profile
+import logging
+
+log = logging.getLogger('nodes_resolver')
+log.setLevel(logging.DEBUG)
 
 
 def resolve_nodes(_obj, info, dataSet=None, related=None, network=None, page=1):
@@ -29,19 +33,29 @@ def resolve_nodes(_obj, info, dataSet=None, related=None, network=None, page=1):
         selection_set, 'tags' in requested, 'tags')
     tag_requested = get_requested(
         selection_set=tag_selection_set, requested_field_mapping=simple_tag_request_fields)
+    log.debug("requested: %s", requested)
+    log.debug("data_set_requested: %s", data_set_requested)
+    log.debug("feature_requested: %s", feature_requested)
+    log.debug("gene_requested: %s", gene_requested)
+    log.debug("tag_requested: %s", tag_requested)
 
-    tag_dict = dict()
+    # node_results = build_node_request(requested, data_set_requested, feature_requested, gene_requested,
+    #                                   data_set=dataSet, related=related, network=network).paginate(page, 100000, False)
 
-    if 'tags' in requested:
-        tag_dict = return_node_derived_fields(
-            tag_requested, data_set=dataSet, related=related, network=network)
-
-    node_results = build_node_request(requested, data_set_requested, feature_requested, gene_requested,
-                                      data_set=dataSet, related=related, network=network).paginate(page, 100000, False)
+    # tag_dict = return_node_derived_fields(
+    #     requested, tag_requested, data_set=dataSet, related=related, network=network) if node_results.items else dict()
+    tag_dict = set()
 
     return {
-        'items': map(build_node_graphql_response(tag_dict), node_results.items),
-        'page': node_results.page,
-        'pages': node_results.pages,
-        'total': node_results.total
+        'items': map(build_node_graphql_response(tag_dict), []),
+        'page': 0,
+        'pages': 0,
+        'total': 0
     }
+
+    # return {
+    #     'items': map(build_node_graphql_response(tag_dict), node_results.items),
+    #     'page': node_results.page,
+    #     'pages': node_results.pages,
+    #     'total': node_results.total
+    # }

@@ -92,9 +92,9 @@ type Query {
   If no arguments are passed, this will return all edges (please note, there will be a LOT of results).
   """
   edges(
-    dataSet: [String!]
-    related: [String!]
-    network: [String!]
+    nodes: [Int!]
+    maxScore: [Float!]
+    minScore: [Float!]
     page: Int
   ): EdgePage!
 
@@ -309,8 +309,11 @@ type Query {
   """
   nodes(
     dataSet: [String!]
-    related: [String!]
+    maxScore: [Float!]
+    minScore: [Float!]
     network: [String!]
+    related: [String!]
+    tag: [String!]
     page: Int
   ): NodePage
 
