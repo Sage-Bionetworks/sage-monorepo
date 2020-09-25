@@ -8,11 +8,13 @@ from .patient import build_patient_graphql_response
 
 simple_sample_request_fields = {'name'}
 
-sample_request_fields = simple_sample_request_fields.union(
-    {'patient', 'patient'})
+sample_request_fields = simple_sample_request_fields.union({'patient'})
 
-mutation_related_sample_request_fields = sample_request_fields.union(
-    {'status', 'status'})
+feature_related_sample_request_fields = simple_sample_request_fields.union({
+                                                                           'value'})
+
+mutation_related_sample_request_fields = sample_request_fields.union({
+                                                                     'status'})
 
 sample_by_mutation_status_request_fields = {'status', 'samples'}
 

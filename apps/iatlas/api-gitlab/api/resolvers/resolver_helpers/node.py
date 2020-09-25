@@ -9,10 +9,6 @@ from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
 from .tag import build_tag_graphql_response
-import logging
-
-log = logging.getLogger('node resolver helper')
-log.setLevel(logging.DEBUG)
 
 node_request_fields = {'dataSet',
                        'feature',
