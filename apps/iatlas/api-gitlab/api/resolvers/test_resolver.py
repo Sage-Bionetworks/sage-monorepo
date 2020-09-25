@@ -9,13 +9,11 @@ def resolve_test(_obj, info):
     return {
         'items': {
             'contentType': content_type,
-            'referer': referer,
             'userAgent': user_agent,
             'headers': {
                 'contentLength': content_length,
                 'contentType': content_type,
                 'host': host,
-                'referer': referer,
                 'userAgent': user_agent
             }
         },
