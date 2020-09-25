@@ -9,15 +9,16 @@ from .general_resolvers import build_join_condition, build_option_args, get_sele
 
 
 feature_request_fields = {'class',
-                                    'display',
-                                    'methodTag',
-                                    'name',
-                                    'order',
-                                    'sample',
-                                    'unit',
-                                    'value',
-                                    'valueMax',
-                                    'valueMin'}
+                          'display',
+                          'methodTag',
+                          'name',
+                          'order',
+                          'sample',
+                          'unit',
+                          'value',
+                          'valueMax',
+                          'valueMin'}
+
 
 def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
     def f(feature):
@@ -29,9 +30,9 @@ def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
         samples = sample_dict.get(feature_id, []) if sample_dict else []
         return {
             'class': get_value(feature, 'class'),
-            'display': get_value(feature, 'display'),
+            'display': get_value(feature, 'feature_display') or get_value(feature, 'display'),
             'methodTag': get_value(feature, 'method_tag'),
-            'name': get_value(feature),
+            'name': get_value(feature, 'feature_name') or get_value(feature),
             'order': get_value(feature, 'order'),
             'samples': [{
                 'name': get_value(sample),

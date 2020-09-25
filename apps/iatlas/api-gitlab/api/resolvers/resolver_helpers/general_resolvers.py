@@ -31,10 +31,13 @@ def get_selected(requested, selected_field_mapping):
 
 def get_selection_set(selection_set=[], condition=True, child_node='features'):
     if condition and selection_set:
+        new_selection_set = []
         for selection in selection_set.selections:
             if selection.name.value == child_node:
-                selection_set = selection.selection_set
+                new_selection_set = selection.selection_set
                 break
+        return new_selection_set if child_node else selection_set
+
     return selection_set
 
 
