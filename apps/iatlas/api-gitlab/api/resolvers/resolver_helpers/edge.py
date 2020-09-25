@@ -34,13 +34,12 @@ def build_edge_graphql_response(edge):
     }
 
 
-def build_edge_request(requested, node_1_requested, node_2_requested, data_set=None, related=None, network=None):
+def build_edge_request(requested, node_1_requested, node_2_requested, node_start=None, node_end=None,):
     """
     Builds a SQL request.
     """
     sess = db.session
 
-    data_set_1 = aliased(Dataset, name='d')
     edge_1 = aliased(Edge, name='e')
     node_1 = aliased(Node, name='n1')
     node_2 = aliased(Node, name='n2')
@@ -66,50 +65,15 @@ def build_edge_request(requested, node_1_requested, node_2_requested, data_set=N
     query = sess.query(*[*core, *node_1_core, *node_2_core])
     query = query.select_from(edge_1)
 
-    if network:
-        network_1 = aliased(Tag, name='nt')
-        node_to_tag_1 = aliased(NodeToTag, name='ntt')
+    if 'node1' in requested or node_start:
+        node_start_join_condition = build_join_condition(
+            node_1.id, edge_1.node_1_id, node_1.name, node_start)
+        query = query.join(node_1, and_(*node_start_join_condition))
 
-        network_subquery = sess.query(network_1.id).filter(
-            network_1.name.in_(network))
-
-        edge_tag_join_condition = build_join_condition(
-            node_to_tag_1.node_id, edge_1.node_1_id, node_to_tag_1.tag_id, network_subquery)
-        query = query.join(node_to_tag_1, and_(*edge_tag_join_condition))
-
-    if 'node1' in requested:
-        query = query.join(node_1, edge_1.node_1_id == node_1.id)
-
-    if data_set or related or 'dataSet' in requested:
-        if 'node1' in requested:
-            data_set_join_condition = [data_set_1.id == node_1.dataset_id]
-        else:
-            node_1_subquery = sess.query(node_1.dataset_id).filter(
-                edge_1.node_1_id == node_1.id)
-            data_set_join_condition = [data_set_1.id.in_(node_1_subquery)]
-
-        if data_set:
-            data_set_join_condition.append(data_set_1.name.in_(data_set))
-
-        is_outer = not bool(data_set)
-
-        query = query.join(data_set_1, and_(
-            *data_set_join_condition), isouter=is_outer)
-
-    if related:
-        data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
-        related_tag_1 = aliased(Tag, name='rt')
-
-        related_tag_sub_query = sess.query(related_tag_1.id).filter(
-            related_tag_1.name.in_(related))
-
-        data_set_tag_join_condition = build_join_condition(
-            data_set_to_tag_1.dataset_id, data_set_1.id, data_set_to_tag_1.tag_id, related_tag_sub_query)
-        query = query.join(
-            data_set_to_tag_1, and_(*data_set_tag_join_condition))
-
-    if 'node2' in requested:
-        query = query.join(node_2, edge_1.node_2_id == node_2.id)
+    if 'node2' in requested or node_end:
+        node_start_join_condition = build_join_condition(
+            node_2.id, edge_1.node_2_id, node_2.name, node_end)
+        query = query.join(node_2, and_(*node_start_join_condition))
 
     order = []
     append_to_order = order.append
