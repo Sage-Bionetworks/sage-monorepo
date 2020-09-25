@@ -104,7 +104,7 @@ def test_nodes_query_with_passed_network(client, common_query_builder, network):
         if feature:
             assert type(feature['name']) is str
         assert isinstance(tags, list)
-        assert len(tags) > o
+        assert len(tags) > 0
         for tag in tags[0:2]:
             assert type(tag['name']) is str
             assert tag['name'] != network
