@@ -58,7 +58,7 @@ def build_cnr_graphql_response(copy_number_result):
 def build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, first=None, after=None, last=None, before=None, data_set=None, direction=None, distinct=False, entrez=None,
                                      feature=None, max_p_value=None, max_log10_p_value=None,
                                      min_log10_p_value=None, min_mean_cnv=None,
-                                     min_mean_normal=None, min_p_value=None, min_t_stat=None,
+                                     min_mean_normal=None, min_p_value=None, min_t_stat=None, page=None,
                                      tag=None):
     """
     Builds a SQL request.
@@ -173,6 +173,9 @@ def build_copy_number_result_request(requested, data_set_requested, feature_requ
 
     count_query = query
 
+    if distinct == True:
+        return (query.distinct(), count_query.distinct())
+
     # Handle cursor and sort order
     cursor, sort_order = get_cursor(before, after)
     order_by = copy_number_result_1.id
@@ -188,6 +191,4 @@ def build_copy_number_result_request(requested, data_set_requested, feature_requ
             query = query.filter(copy_number_result_1.id < cursor)
     # end handle cursor
 
-    if distinct == True:
-        return (query.distinct(), count_query.distinct())
     return (query, count_query)

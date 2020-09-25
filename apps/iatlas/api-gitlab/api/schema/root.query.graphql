@@ -24,6 +24,7 @@ type Query {
     after: String
     before: String
     distinct: Boolean
+    page: Int
     id: ID
     dataSet: [String!]
     feature: [String!]

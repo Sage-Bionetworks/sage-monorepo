@@ -20,7 +20,7 @@ def get_cursor(before, after):
 
 def get_limit(first, last):
     if first and not math.isnan(first):
-        return (int(first) + 1, ASC)
+        return (int(first), ASC)
     if last and not math.isnan(last):
-        return (int(last) + 1, DESC)
-    return (MAX_LIMIT + 1, ASC)
+        return (int(last), DESC)
+    return (MAX_LIMIT, ASC)

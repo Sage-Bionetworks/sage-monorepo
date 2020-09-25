@@ -1,6 +1,7 @@
 interface BaseResult {
   pageInfo: PageInfo
   totalCount: Int
+  page: Int
   edges: [BaseEdge]
 }
 
