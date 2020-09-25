@@ -1,7 +1,7 @@
 from sqlalchemy import and_, orm
 from api import db
 from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
-from .general_resolvers import build_join_condition, build_option_args, get_selected, get_selection_set, get_value
+from .general_resolvers import build_join_condition, build_option_args, get_selected, get_value
 
 cnr_request_fields = {'dataSet',
                       'direction',

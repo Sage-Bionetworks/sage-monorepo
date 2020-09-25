@@ -84,17 +84,15 @@ type Query {
   """
   The "edges" query accepts:
 
-    - "dataSet", a list of data set names associated with nodes associated with the edges to filter by
-    - "related", a list of tag names related to the data set associated with the related nodes to filter by
-    - "network", a list of tag names associated with the related nodes that are also associated with the "network" tag to filter by
-    - "page", the page of results to get. Defaults to 1 (the first page) with a maximum of 100,000 rows returne.
+    - "node1" a list of starting node names
+    - "node2" a list of ending node names
+    - "page", the page of results to get. Defaults to 1 (the first page) with a maximum of 100,000 rows return.
 
   If no arguments are passed, this will return all edges (please note, there will be a LOT of results).
   """
   edges(
-    dataSet: [String!]
-    related: [String!]
-    network: [String!]
+    node1: [String!]
+    node2: [String!]
     page: Int
   ): EdgePage!
 
@@ -309,8 +307,11 @@ type Query {
   """
   nodes(
     dataSet: [String!]
-    related: [String!]
+    maxScore: [Float!]
+    minScore: [Float!]
     network: [String!]
+    related: [String!]
+    tag: [String!]
     page: Int
   ): NodePage
 
@@ -500,14 +501,32 @@ type Query {
   ): [Tag!]!
 
   """
-  A simple test query that is independent of the database.
-  """
-  test: String!
-
-  """
   The "therapyTypes" query accepts:
 
     - "name", a list of names of the therapy types to look up.
   """
   therapyTypes(name: [String!]): [TherapyType!]!
+
+  """
+  A simple test query that is independent of the database.
+  """
+  test: TestPage!
+}
+
+type TestPage {
+  items: TestFields!
+  page: Int!
+}
+
+type TestFields {
+  contentType: String!
+  userAgent: String!
+  headers: TestHeaders!
+}
+
+type TestHeaders {
+  contentLength: Int!
+  contentType: String!
+  host: String!
+  userAgent: String!
 }

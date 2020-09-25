@@ -30,7 +30,7 @@ def build_method_tag_request(_obj, info, name=None):
     """
     sess = db.session
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
+    selection_set = get_selection_set(info=info)
 
     feature_1 = orm.aliased(Feature, name='f')
     method_tag_1 = orm.aliased(MethodTag, name='mt')

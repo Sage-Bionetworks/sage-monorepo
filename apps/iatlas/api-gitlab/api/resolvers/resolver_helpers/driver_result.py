@@ -13,7 +13,7 @@ def build_driver_result_request(_obj, info, data_set=None, entrez=None, feature=
     """
     sess = db.session
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, True, 'items')
+    selection_set = get_selection_set(info=info, child_node='items')
 
     driver_result_1 = orm.aliased(DriverResult, name='dr')
     gene_1 = orm.aliased(Gene, name='g')

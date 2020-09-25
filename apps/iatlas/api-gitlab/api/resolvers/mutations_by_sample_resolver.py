@@ -3,23 +3,19 @@ from .resolver_helpers import build_mutation_by_sample_graphql_response, build_m
 
 
 def resolve_mutations_by_sample(_obj, info, dataSet=None, entrez=None, feature=None, featureClass=None, mutationCode=None, mutationId=None, mutationType=None, related=None, sample=None, status=None, tag=None, page=1):
-    sample_selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, True, 'items')
+    sample_selection_set = get_selection_set(info=info, child_node='items')
     sample_requested = get_requested(
         selection_set=sample_selection_set, requested_field_mapping=mutation_by_sample_request_fields)
 
-    selection_set = get_selection_set(sample_selection_set, True, 'mutations')
+    selection_set = get_selection_set(sample_selection_set, 'mutations')
     requested = get_requested(
         selection_set=selection_set, requested_field_mapping=mutation_request_fields)
 
-    gene_selection_set = get_selection_set(selection_set, True, 'gene')
     gene_requested = get_requested(
-        selection_set=gene_selection_set, requested_field_mapping=simple_gene_request_fields)
+        selection_set=selection_set, requested_field_mapping=simple_gene_request_fields, child_node='gene')
 
-    mutation_type_selection_set = get_selection_set(
-        selection_set, True, 'mutationType')
     mutation_type_requested = get_requested(
-        selection_set=mutation_type_selection_set, requested_field_mapping=mutation_type_request_fields)
+        selection_set=selection_set, requested_field_mapping=mutation_type_request_fields, child_node='mutationType')
 
     mutation_dict = dict()
     mutation_results = None

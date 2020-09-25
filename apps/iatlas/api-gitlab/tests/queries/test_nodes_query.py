@@ -9,15 +9,31 @@ def network():
     return 'extracellular_network'
 
 
-def test_nodes_query_with_passed_data_set(client, data_set):
-    query = """query Nodes($dataSet: [String!], $related: [String!], $network: [String!], $page: Int) {
-        nodes(dataSet: $dataSet, related: $related, network: $network, page: $page) {
-            items { name }
-            page
-            pages
-            total
-        }
-    }"""
+@pytest.fixture(scope='module')
+def common_query_builder():
+    def f(query_fields):
+        return """query Nodes(
+            $dataSet: [String!]
+            $related: [String!]
+            $network: [String!]
+            $page: Int
+        ) {
+            nodes(
+                dataSet: $dataSet
+                related: $related
+                network: $network
+                page: $page
+            )""" + query_fields + "}"
+    return f
+
+
+def test_nodes_query_with_passed_data_set(client, common_query_builder, data_set):
+    query = common_query_builder("""{
+                                    items { name }
+                                    page
+                                    pages
+                                    total
+                                }""")
     response = client.post('/api', json={'query': query,
                                          'variables': {'dataSet': [data_set], 'page': 2}})
     json_data = json.loads(response.data)
@@ -33,16 +49,14 @@ def test_nodes_query_with_passed_data_set(client, data_set):
         assert type(result['name']) is str
 
 
-def test_nodes_query_with_passed_related(client, related):
-    query = """query Nodes($dataSet: [String!], $related: [String!], $network: [String!], $page: Int) {
-        nodes(dataSet: $dataSet, related: $related, network: $network, page: $page) {
-            items {
-                name
-                gene { entrez }
-            }
-            page
-        }
-    }"""
+def test_nodes_query_with_passed_related(client, common_query_builder, related):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        gene { entrez }
+                                    }
+                                    page
+                                }""")
     response = client.post('/api', json={'query': query,
                                          'variables': {'related': [related]}})
     json_data = json.loads(response.data)
@@ -59,20 +73,18 @@ def test_nodes_query_with_passed_related(client, related):
             assert type(gene['entrez']) is int
 
 
-def test_nodes_query_with_passed_network(client, network):
-    query = """query Nodes($dataSet: [String!], $related: [String!], $network: [String!], $page: Int) {
-        nodes(dataSet: $dataSet, related: $related, network: $network, page: $page) {
-            items {
-                label
-                name
-                score
-                x
-                y
-                feature { name }
-                tags { name }
-            }
-        }
-    }"""
+def test_nodes_query_with_passed_network(client, common_query_builder, network):
+    query = common_query_builder("""{
+                                    items {
+                                        label
+                                        name
+                                        score
+                                        x
+                                        y
+                                        feature { name }
+                                        tags { name }
+                                    }
+                                }""")
     response = client.post('/api', json={'query': query,
                                          'variables': {'network': [network]}})
     json_data = json.loads(response.data)
@@ -92,21 +104,20 @@ def test_nodes_query_with_passed_network(client, network):
         if feature:
             assert type(feature['name']) is str
         assert isinstance(tags, list)
+        assert len(tags) > 0
         for tag in tags[0:2]:
             assert type(tag['name']) is str
             assert tag['name'] != network
 
 
-def test_nodes_query_with_no_arguments(client):
-    query = """query Nodes($dataSet: [String!], $related: [String!], $network: [String!], $page: Int) {
-        nodes(dataSet: $dataSet, related: $related, network: $network, page: $page) {
-            items {
-                name
-                dataSet { name }
-            }
-            total
-        }
-    }"""
+def test_nodes_query_with_no_arguments(client, common_query_builder):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        dataSet { name }
+                                    }
+                                    total
+                                }""")
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']

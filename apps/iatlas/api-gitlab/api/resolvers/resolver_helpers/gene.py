@@ -288,7 +288,7 @@ def build_gene_request(requested, data_set=None, entrez=None, feature=None, feat
 
 
 def get_gene_types(info, gene_type=None, gene_ids=set()):
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
+    selection_set = get_selection_set(info=info)
     relations = build_option_args(
         selection_set, {'geneTypes': 'gene_types'})
 
@@ -298,7 +298,7 @@ def get_gene_types(info, gene_type=None, gene_ids=set()):
         gene_to_gene_type_1 = aliased(GeneToType, name='ggt')
 
         gene_type_selection_set = get_selection_set(
-            selection_set, ('gene_types' in relations), child_node='geneTypes')
+            selection_set, child_node='geneTypes')
         gene_type_core_field_mapping = {'name': gene_type_1.name.label('name'),
                                         'display': gene_type_1.display.label('display')}
 
@@ -339,8 +339,8 @@ def get_gene_types(info, gene_type=None, gene_ids=set()):
 
 
 def get_publications(info, gene_types=[], gene_ids=set(), by_tag=False):
-    selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, by_tag, child_node='genes')
+    child_node = 'genes' if by_tag else None
+    selection_set = get_selection_set(info=info, child_node=child_node)
     relations = build_option_args(
         selection_set, {'publications': 'publications'})
 
@@ -352,7 +352,7 @@ def get_publications(info, gene_types=[], gene_ids=set(), by_tag=False):
             PublicationToGeneToGeneType, name='pggt')
 
         pub_selection_set = get_selection_set(
-            selection_set, ('publications' in relations), child_node='publications')
+            selection_set, child_node='publications')
         pub_core_field_mapping = {'doId': pub_1.do_id.label('do_id'),
                                   'firstAuthorLastName': pub_1.first_author_last_name.label('first_author_last_name'),
                                   'journal': pub_1.journal.label('journal'),
@@ -405,8 +405,8 @@ def get_publications(info, gene_types=[], gene_ids=set(), by_tag=False):
 
 
 def get_samples(info, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None, gene_ids=set(), by_tag=False):
-    selection_set = get_selection_set(
-        info.field_nodes[0].selection_set, by_tag, child_node='genes')
+    child_node = 'genes' if by_tag else None
+    selection_set = get_selection_set(info=info, child_node=child_node)
     requested = build_option_args(selection_set, {'samples': 'samples'})
     has_samples = 'samples' in requested
 
@@ -418,8 +418,9 @@ def get_samples(info, data_set=None, feature=None, feature_class=None, related=N
         sample_to_tag_1 = aliased(SampleToTag, name='st')
         gene_to_sample_1 = aliased(GeneToSample, name='gs')
 
+        child_node = 'samples' if has_samples else None
         sample_selection_set = get_selection_set(
-            selection_set, has_samples, child_node='samples')
+            selection_set, child_node=child_node)
         sample_core_field_mapping = {'name': sample_1.name.label('name'),
                                      'rnaSeqExpr': gene_to_sample_1.rna_seq_expr.label('rna_seq_expr')}
 

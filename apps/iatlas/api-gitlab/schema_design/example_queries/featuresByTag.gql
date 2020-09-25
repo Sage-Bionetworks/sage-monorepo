@@ -37,3 +37,5 @@ query FeaturesByTag(
 
 # Variables
 # {"dataSet": ["TCGA"], "related": ["Immune_Subtype"], "feature": ["Det_Ratio"], "minValue": 0.094192693, "maxValue": 5.7561021}
+# or
+# {"dataSet": ["TCGA"], "related": ["Immune_Subtype"], "feature": ["Det_Ratio"], "featureClass": ["TIL Map Characteristic"]}

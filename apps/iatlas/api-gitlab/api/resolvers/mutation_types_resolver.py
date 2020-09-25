@@ -6,8 +6,6 @@ from .resolver_helpers import build_mutation_type_graphql_response, get_requeste
 
 
 def resolve_mutation_types(_obj, info):
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
-    requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=mutation_type_request_fields)
+    requested = get_requested(info, mutation_type_request_fields)
 
     return map(build_mutation_type_graphql_response, request_mutation_types(requested))
