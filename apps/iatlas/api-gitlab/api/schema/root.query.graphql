@@ -522,7 +522,6 @@ type TestPage {
 
 type TestFields {
   contentType: String!
-  referer: String!
   userAgent: String!
   headers: TestHeaders!
 }
@@ -531,6 +530,5 @@ type TestHeaders {
   contentLength: Int!
   contentType: String!
   host: String!
-  referer: String!
   userAgent: String!
 }
