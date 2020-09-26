@@ -1,5 +1,5 @@
 query Samples(
-  $ageAtDiagnosis: [Int!]
+  $maxAgeAtDiagnosis: [Int!]
   $ethnicity: [EthnicityEnum!]
   $gender: [GenderEnum!]
   $height: [Int!]
@@ -9,7 +9,7 @@ query Samples(
   $weight: [Int!]
 ) {
   samples(
-    ageAtDiagnosis: $ageAtDiagnosis
+    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
     ethnicity: $ethnicity
     gender: $gender
     height: $height

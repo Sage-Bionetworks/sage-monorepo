@@ -2,7 +2,7 @@ from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from itertools import groupby
 from api import db
-from api.db_models import Patient, Sample, Slide
+from api.db_models import Dataset, DatasetToSample, Patient, Sample, Slide
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .slide import build_slide_graphql_response
 
@@ -39,8 +39,8 @@ def build_patient_graphql_response(sample_dict=dict(), slide_dict=dict()):
     return f
 
 
-def build_patient_request(requested, age_at_diagnosis=None, barcode=None, ethnicity=None, gender=None, height=None,
-                          race=None, weight=None, sample=None, slide=None):
+def build_patient_request(requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None,
+                          race=None, max_weight=None, min_weight=None, sample=None, slide=None):
     """
     Builds a SQL query.
     """
@@ -68,8 +68,13 @@ def build_patient_request(requested, age_at_diagnosis=None, barcode=None, ethnic
     if barcode:
         query = query.filter(patient_1.barcode.in_(barcode))
 
-    if age_at_diagnosis:
-        query = query.filter(patient_1.age_at_diagnosis.in_(age_at_diagnosis))
+    if max_age_at_diagnosis:
+        query = query.filter(patient_1.age_at_diagnosis <=
+                             max_age_at_diagnosis)
+
+    if min_age_at_diagnosis:
+        query = query.filter(patient_1.age_at_diagnosis >=
+                             min_age_at_diagnosis)
 
     if ethnicity:
         query = query.filter(patient_1.ethnicity.in_(ethnicity))
@@ -77,20 +82,39 @@ def build_patient_request(requested, age_at_diagnosis=None, barcode=None, ethnic
     if gender:
         query = query.filter(patient_1.gender.in_(gender))
 
-    if height:
-        query = query.filter(patient_1.height.in_(height))
+    if max_height:
+        query = query.filter(patient_1.height <= max_height)
+
+    if min_height:
+        query = query.filter(patient_1.height >= min_height)
 
     if race:
         query = query.filter(patient_1.race.in_(race))
 
-    if weight:
-        query = query.filter(patient_1.weight.in_(weight))
+    if max_weight:
+        query = query.filter(patient_1.weight <= max_weight)
 
-    if sample:
+    if min_weight:
+        query = query.filter(patient_1.weight >= min_weight)
+
+    if sample or data_set:
+        data_set_1 = aliased(Dataset, name='d')
+        data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
+
+        is_outer = not bool(sample)
+
         sample_join_condition = build_join_condition(
             patient_1.id, sample_1.patient_id, filter_column=sample_1.name, filter_list=sample)
         query = query.join(sample_1, and_(
-            *sample_join_condition), isouter=False)
+            *sample_join_condition), isouter=is_outer)
+
+        data_set_sub_query = sess.query(data_set_1.id).filter(
+            data_set_1.name.in_(data_set)) if data_set else None
+
+        data_set_to_sample_join_condition = build_join_condition(
+            data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
+        query = query.join(data_set_to_sample_1, and_(
+            *data_set_to_sample_join_condition))
 
     if slide:
         slide_join_condition = build_join_condition(
@@ -120,8 +144,8 @@ def build_patient_request(requested, age_at_diagnosis=None, barcode=None, ethnic
     return query
 
 
-def get_samples(requested, patient_ids=set(), age_at_diagnosis=None, barcode=None, ethnicity=None,
-                gender=None, height=None, race=None, weight=None, sample=None, slide=None):
+def get_samples(requested, patient_ids=set(), max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None,
+                race=None, max_weight=None, min_weight=None, sample=None, slide=None):
     if patient_ids and 'samples' in requested:
         sess = db.session
 
@@ -140,15 +164,31 @@ def get_samples(requested, patient_ids=set(), age_at_diagnosis=None, barcode=Non
         if sample:
             sample_query = sample_query.filter(sample_1.name.in_(sample))
 
+        if data_set:
+            data_set_1 = aliased(Dataset, name='d')
+            data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
+
+            data_set_sub_query = sess.query(data_set_1.id).filter(
+                data_set_1.name.in_(data_set))
+
+            data_set_to_sample_join_condition = build_join_condition(
+                data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
+            sample_query = sample_query.join(data_set_to_sample_1, and_(
+                *data_set_to_sample_join_condition))
+
         is_outer = not bool(
-            barcode or age_at_diagnosis or ethnicity or gender or height or race or weight)
+            barcode or max_age_at_diagnosis or min_age_at_diagnosis or ethnicity or gender or max_height or min_height or race or max_weight or min_weight)
 
         patient_join_condition = build_join_condition(
             sample_1.patient_id, patient_1.id, patient_1.barcode, barcode)
 
-        if bool(age_at_diagnosis):
+        if bool(max_age_at_diagnosis):
             patient_join_condition.append(
-                patient_1.age_at_diagnosis.in_(age_at_diagnosis))
+                patient_1.age_at_diagnosis <= max_age_at_diagnosis)
+
+        if bool(min_age_at_diagnosis):
+            patient_join_condition.append(
+                patient_1.age_at_diagnosis >= min_age_at_diagnosis)
 
         if bool(ethnicity):
             patient_join_condition.append(patient_1.ethnicity.in_(ethnicity))
@@ -156,14 +196,20 @@ def get_samples(requested, patient_ids=set(), age_at_diagnosis=None, barcode=Non
         if bool(gender):
             patient_join_condition.append(patient_1.gender.in_(gender))
 
-        if bool(height):
-            patient_join_condition.append(patient_1.height.in_(height))
+        if bool(max_height):
+            patient_join_condition.append(patient_1.height <= max_height)
+
+        if bool(min_height):
+            patient_join_condition.append(patient_1.height >= min_height)
 
         if bool(race):
             patient_join_condition.append(patient_1.race.in_(race))
 
-        if bool(weight):
-            patient_join_condition.append(patient_1.weight.in_(weight))
+        if bool(max_weight):
+            patient_join_condition.append(patient_1.weight <= max_weight)
+
+        if bool(min_weight):
+            patient_join_condition.append(patient_1.weight >= min_weight)
 
         sample_query = sample_query.join(patient_1, and_(
             *patient_join_condition), isouter=is_outer)
@@ -187,8 +233,8 @@ def get_samples(requested, patient_ids=set(), age_at_diagnosis=None, barcode=Non
     return []
 
 
-def get_slides(requested, slide_requested, patient_ids=set(), age_at_diagnosis=None, barcode=None, ethnicity=None,
-               gender=None, height=None, race=None, weight=None, sample=None, slide=None):
+def get_slides(requested, slide_requested, patient_ids=set(), max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None,
+               race=None, max_weight=None, min_weight=None, sample=None, slide=None):
     if patient_ids and 'slides' in requested:
         sess = db.session
 
@@ -211,14 +257,18 @@ def get_slides(requested, slide_requested, patient_ids=set(), age_at_diagnosis=N
             slide_query = slide_query.filter(slide_1.name.in_(slide))
 
         is_outer = not bool(
-            barcode or age_at_diagnosis or ethnicity or gender or height or race or weight)
+            barcode or max_age_at_diagnosis or min_age_at_diagnosis or ethnicity or gender or max_height or min_height or race or max_weight or min_weight)
 
         patient_join_condition = build_join_condition(
-            slide_1.patient_id, slide_1.id, patient_1.barcode, barcode)
+            slide_1.patient_id, patient_1.id, patient_1.barcode, barcode)
 
-        if bool(age_at_diagnosis):
+        if bool(max_age_at_diagnosis):
             patient_join_condition.append(
-                patient_1.age_at_diagnosis.in_(age_at_diagnosis))
+                patient_1.age_at_diagnosis <= max_age_at_diagnosis)
+
+        if bool(min_age_at_diagnosis):
+            patient_join_condition.append(
+                patient_1.age_at_diagnosis >= min_age_at_diagnosis)
 
         if bool(ethnicity):
             patient_join_condition.append(patient_1.ethnicity.in_(ethnicity))
@@ -226,30 +276,48 @@ def get_slides(requested, slide_requested, patient_ids=set(), age_at_diagnosis=N
         if bool(gender):
             patient_join_condition.append(patient_1.gender.in_(gender))
 
-        if bool(height):
-            patient_join_condition.append(patient_1.height.in_(height))
+        if bool(max_height):
+            patient_join_condition.append(patient_1.height <= max_height)
+
+        if bool(min_height):
+            patient_join_condition.append(patient_1.height >= min_height)
 
         if bool(race):
             patient_join_condition.append(patient_1.race.in_(race))
 
-        if bool(weight):
-            patient_join_condition.append(patient_1.weight.in_(weight))
+        if bool(max_weight):
+            patient_join_condition.append(patient_1.weight <= max_weight)
+
+        if bool(min_weight):
+            patient_join_condition.append(patient_1.weight >= min_weight)
 
         slide_query = slide_query.join(patient_1, and_(
             *patient_join_condition), isouter=is_outer)
 
-        if sample:
+        if sample or data_set:
+            data_set_1 = aliased(Dataset, name='d')
+            data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
+
+            is_outer = not bool(sample)
+
             sample_join_condition = build_join_condition(
                 sample_1.patient_id, patient_1.id, sample_1.name, sample)
-
             slide_query = slide_query.join(sample_1, and_(
-                *sample_join_condition), isouter=False)
+                *sample_join_condition), isouter=is_outer)
+
+            data_set_sub_query = sess.query(data_set_1.id).filter(
+                data_set_1.name.in_(data_set)) if data_set else None
+
+            data_set_to_sample_join_condition = build_join_condition(
+                data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
+            slide_query = slide_query.join(data_set_to_sample_1, and_(
+                *data_set_to_sample_join_condition))
 
         order = []
         append_to_order = order.append
-        if 'name' in requested:
+        if 'name' in slide_requested:
             append_to_order(slide_1.name)
-        if 'description' in requested:
+        if 'description' in slide_requested:
             append_to_order(slide_1.description)
 
         slide_query = slide_query.order_by(*order) if order else slide_query
@@ -259,24 +327,24 @@ def get_slides(requested, slide_requested, patient_ids=set(), age_at_diagnosis=N
     return []
 
 
-def request_patients(requested, age_at_diagnosis=None, barcode=None, ethnicity=None, gender=None,
-                     height=None, race=None, weight=None, sample=None, slide=None):
-    query = build_patient_request(requested, age_at_diagnosis=age_at_diagnosis, barcode=barcode,
-                                  ethnicity=ethnicity, gender=gender, height=height, race=race, weight=weight, sample=sample, slide=slide)
+def request_patients(requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None,
+                     race=None, max_weight=None, min_weight=None, sample=None, slide=None):
+    query = build_patient_request(requested, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, barcode=barcode, data_set=data_set,
+                                  ethnicity=ethnicity, gender=gender, max_height=max_height, min_height=min_height, race=race, max_weight=max_weight, min_weight=min_weight, sample=sample, slide=slide)
     return query.all()
 
 
-def return_patient_derived_fields(requested, slide_requested, patient_ids=set(), age_at_diagnosis=None, barcode=None,
-                                  ethnicity=None, gender=None, height=None, race=None, weight=None, sample=None, slide=None):
-    samples = get_samples(requested, patient_ids=patient_ids, age_at_diagnosis=age_at_diagnosis, barcode=barcode,
-                          ethnicity=ethnicity, gender=gender, height=height, race=race, weight=weight, sample=sample, slide=slide)
+def return_patient_derived_fields(requested, slide_requested, patient_ids=set(), max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None,
+                                  race=None, max_weight=None, min_weight=None, sample=None, slide=None):
+    samples = get_samples(requested, patient_ids=patient_ids, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, barcode=barcode, data_set=data_set,
+                          ethnicity=ethnicity, gender=gender, max_height=max_height, min_height=min_height, race=race, max_weight=max_weight, min_weight=min_weight, sample=sample, slide=slide)
 
     samples_dict = dict()
     for key, collection in groupby(samples, key=lambda s: s.patient_id):
         samples_dict[key] = samples_dict.get(key, []) + list(collection)
 
-    slides = get_slides(requested, slide_requested, patient_ids=patient_ids, age_at_diagnosis=age_at_diagnosis, barcode=barcode,
-                        ethnicity=ethnicity, gender=gender, height=height, race=race, weight=weight, sample=sample, slide=slide)
+    slides = get_slides(requested, slide_requested, patient_ids=patient_ids, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, barcode=barcode, data_set=data_set,
+                        ethnicity=ethnicity, gender=gender, max_height=max_height, min_height=min_height, race=race, max_weight=max_weight, min_weight=min_weight, sample=sample, slide=slide)
 
     slides_dict = dict()
     for key, collection in groupby(slides, key=lambda s: s.patient_id):

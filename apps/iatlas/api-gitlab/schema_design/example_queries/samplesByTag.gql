@@ -1,5 +1,5 @@
 query SamplesByTag(
-  $ageAtDiagnosis: [Int!]
+  $maxAgeAtDiagnosis: [Int!]
   $dataSet: [String!]
   $ethnicity: [EthnicityEnum!]
   $feature: [String!]
@@ -14,7 +14,7 @@ query SamplesByTag(
   $weight: [Int!]
 ) {
   samplesByTag(
-    ageAtDiagnosis: $ageAtDiagnosis
+    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
     dataSet: $dataSet
     ethnicity: $ethnicity
     feature: $feature

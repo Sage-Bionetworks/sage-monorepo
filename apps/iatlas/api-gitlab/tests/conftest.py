@@ -93,8 +93,13 @@ def patient():
 
 
 @pytest.fixture(scope='session')
-def age_at_diagnosis():
-    return 70
+def max_age_at_diagnosis():
+    return 86
+
+
+@pytest.fixture(scope='session')
+def min_age_at_diagnosis():
+    return 18
 
 
 @pytest.fixture(scope='session')
@@ -108,8 +113,13 @@ def gender():
 
 
 @pytest.fixture(scope='session')
-def height():
-    return 165
+def max_height():
+    return 179
+
+
+@pytest.fixture(scope='session')
+def min_height():
+    return 130
 
 
 @pytest.fixture(scope='session')
@@ -118,5 +128,10 @@ def race():
 
 
 @pytest.fixture(scope='session')
-def weight():
-    return 70
+def max_weight():
+    return 160
+
+
+@pytest.fixture(scope='session')
+def min_weight():
+    return 42
