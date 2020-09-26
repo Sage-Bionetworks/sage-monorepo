@@ -3,8 +3,8 @@ from .resolver_helpers import (build_sample_graphql_response, get_requested, get
                                sample_by_mutation_status_request_fields, sample_request_fields, simple_patient_request_fields)
 
 
-def resolve_samples_by_mutations_status(_obj, info, ageAtDiagnosis=None, ethnicity=None, gender=None, height=None,
-                                        mutationId=None, mutationStatus=None, patient=None, race=None, sample=None, weight=None):
+def resolve_samples_by_mutations_status(_obj, info, maxAgeAtDiagnosis=None, minAgeAtDiagnosis=None, ethnicity=None, gender=None, maxHeight=None, minHeight=None,
+                                        mutationId=None, mutationStatus=None, patient=None, race=None, sample=None, maxWeight=None, minWeight=None):
     status_requested = get_requested(
         info, sample_by_mutation_status_request_fields)
 
@@ -15,8 +15,8 @@ def resolve_samples_by_mutations_status(_obj, info, ageAtDiagnosis=None, ethnici
     patient_requested = get_requested(
         selection_set=sample_selection_set, requested_field_mapping=simple_patient_request_fields, child_node='patient')
 
-    sample_results = request_samples(requested, patient_requested, status_requested, age_at_diagnosis=ageAtDiagnosis, ethnicity=ethnicity, gender=gender,
-                                     height=height, mutation_id=mutationId, mutation_status=mutationStatus, patient=patient, race=race, sample=sample, weight=weight, by_status=True)
+    sample_results = request_samples(requested, patient_requested, status_requested, max_age_at_diagnosis=maxAgeAtDiagnosis, min_age_at_diagnosis=minAgeAtDiagnosis, ethnicity=ethnicity, gender=gender,
+                                     max_height=maxHeight, min_height=minHeight, mutation_id=mutationId, mutation_status=mutationStatus, patient=patient, race=race, sample=sample, max_weight=maxWeight, min_weight=minWeight, by_status=True)
 
     status_dict = dict()
     for sample_status, samples_list in groupby(sample_results, key=lambda s: s.status):

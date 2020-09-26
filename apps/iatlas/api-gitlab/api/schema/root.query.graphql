@@ -318,28 +318,36 @@ type Query {
   """
   The "patients" query accepts:
 
-    - "ageAtDiagnosis", a list of ages of the patient at the time of diagnosis to filter the patients by
     - "barcode", a list of patient barcodes of the patients to look up.
+    - "dataSet", a list of data set names associated with the samples related to the patient to filter by
     - "ethnicity", a list of patient ethnicities to filter the patients by
     - "gender", a list of patient genders to filter the patients by
-    - "height", a list of patient heights to filter the patients by
+    - "maxAgeAtDiagnosis", a number representing the maximum age of the patient at the time of diagnosis to filter the patients by
+    - "maxHeight", a number representing the maximum patient height to filter the patients by
+    - "maxHeight", a number representing the maximum patient weight to filter the patients by
+    - "minAgeAtDiagnosis", a number representing the minimum age of the patient at the time of diagnosis to filter the patients by
+    - "minHeight", a number representing the minimum patient height to filter the patients by
+    - "minWeight", a number representing the minimum patient weight to filter the patients by
     - "race", a list of patient races to filter the patients by
     - "sample", a list of sample names to filter the patients by
     - "slide", a list of slide names to filter the patients by
-    - "weight", a list of patient weights to filter the patients by
 
   If no arguments are passed, this will return all patients.
   """
   patients(
-    ageAtDiagnosis: [Int!]
     barcode: [String!]
+    dataSet: [String!]
     ethnicity: [EthnicityEnum!]
     gender: [GenderEnum!]
-    height: [Int!]
+    maxAgeAtDiagnosis: Int
+    maxHeight: Float
+    maxWeight: Float
+    minAgeAtDiagnosis: Int
+    minHeight: Float
+    minWeight: Float
     race: [RaceEnum!]
     sample: [String!]
     slide: [String!]
-    weight: [Int!]
   ): [Patient!]!
 
   """
@@ -362,117 +370,141 @@ type Query {
   """
   The "samples" query accepts:
 
-    - "ageAtDiagnosis", a list of ages of the patient at the time of diagnosis to filter the samples by
     - "ethnicity", a list of patient ethnicities to filter the samples by
     - "gender", a list of patient genders to filter the samples by
-    - "height", a list of patient heights to filter the samples by
+    - "maxAgeAtDiagnosis", a number representing the maximum age of the patient at the time of diagnosis to filter the samples by
+    - "maxHeight", a number representing the maximum patient height to filter the samples by
+    - "maxHeight", a number representing the maximum patient weight to filter the samples by
+    - "minAgeAtDiagnosis", a number representing the minimum age of the patient at the time of diagnosis to filter the samples by
+    - "minHeight", a number representing the minimum patient height to filter the samples by
+    - "minWeight", a number representing the minimum patient weight to filter the samples by
     - "name", a list of sample names to filter the samples by
     - "patient", a list of patient barcodes to filter the samples by
     - "race", a list of patient races to filter the samples by
-    - "weight", a list of patient weights to filter the samples by
 
   If no filters are passed, this will return all samples.
   """
   samples(
-    ageAtDiagnosis: [Int!]
     ethnicity: [EthnicityEnum!]
     gender: [GenderEnum!]
-    height: [Int!]
+    maxAgeAtDiagnosis: Int
+    maxHeight: Float
+    maxWeight: Float
+    minAgeAtDiagnosis: Int
+    minHeight: Float
+    minWeight: Float
     name: [String!]
     patient: [String!]
     race: [RaceEnum!]
-    weight: [Int!]
   ): [Sample!]!
 
   """
   The "samplesByMutationStatus" query accepts:
 
-    - "ageAtDiagnosis", a list of ages of the patient at the time of diagnosis to filter the samples by
     - "ethnicity", a list of patient ethnicities to filter the samples by
     - "gender", a list of patient genders to filter the samples by
-    - "height", a list of patient heights to filter the samples by
+    - "maxAgeAtDiagnosis", a number representing the maximum age of the patient at the time of diagnosis to filter the samples by
+    - "maxHeight", a number representing the maximum patient height to filter the samples by
+    - "maxHeight", a number representing the maximum patient weight to filter the samples by
+    - "minAgeAtDiagnosis", a number representing the minimum age of the patient at the time of diagnosis to filter the samples by
+    - "minHeight", a number representing the minimum patient height to filter the samples by
+    - "minWeight", a number representing the minimum patient weight to filter the samples by
     - "mutationId", a list of mutation ids
     - "mutationStatus", a StatusEnum value to filter the samples by
     - "patient", a list of patient barcodes to filter the samples by
     - "race", a list of patient races to filter the samples by
     - "sample", a list of sample names
-    - "weight", a list of patient weights to filter the samples by
 
   If no filters are passed, this will return a list of all mutation statuses with lists of all related samples.
   """
   samplesByMutationStatus(
-    ageAtDiagnosis: [Int!]
     ethnicity: [EthnicityEnum!]
     gender: [GenderEnum!]
-    height: [Int!]
+    maxAgeAtDiagnosis: Int
+    maxHeight: Float
+    maxWeight: Float
+    minAgeAtDiagnosis: Int
+    minHeight: Float
+    minWeight: Float
     mutationId: [Int!]
     mutationStatus: StatusEnum
     patient: [String!]
     race: [RaceEnum!]
     sample: [String!]
-    weight: [Int!]
   ): [SampleByMutationStatus!]!
 
   """
   The "samplesByTag" query accepts:
 
-    - "ageAtDiagnosis", a list of ages of the patient at the time of diagnosis to filter the samples by
     - "dataSet", a list of data set names
     - "ethnicity", a list of patient ethnicities to filter the samples by
     - "feature", a list of feature names
     - "featureClass", a list of feature class names
     - "gender", a list of patient genders to filter the samples by
-    - "height", a list of patient heights to filter the samples by
+    - "maxAgeAtDiagnosis", a number representing the maximum age of the patient at the time of diagnosis to filter the samples by
+    - "maxHeight", a number representing the maximum patient height to filter the samples by
+    - "maxHeight", a number representing the maximum patient weight to filter the samples by
+    - "minAgeAtDiagnosis", a number representing the minimum age of the patient at the time of diagnosis to filter the samples by
+    - "minHeight", a number representing the minimum patient height to filter the samples by
+    - "minWeight", a number representing the minimum patient weight to filter the samples by
     - "patient", a list of patient barcodes
     - "race", a list of patient races to filter the samples by
     - "related", a list of tag names related to the data set(s)
     - "sample", a list of sample names
     - "tag", a list of tag names
-    - "weight", a list of patient weights to filter the samples by
 
   If no filters are passed, this will return all samples organized by tag.
   """
   samplesByTag(
-    ageAtDiagnosis: [Int!]
     dataSet: [String!]
     ethnicity: [EthnicityEnum!]
     feature: [String!]
     featureClass: [String!]
     gender: [GenderEnum!]
-    height: [Int!]
+    maxAgeAtDiagnosis: Int
+    maxHeight: Float
+    maxWeight: Float
+    minAgeAtDiagnosis: Int
+    minHeight: Float
+    minWeight: Float
     name: [String!]
     patient: [String!]
     race: [RaceEnum!]
     related: [String!]
     tag: [String!]
-    weight: [Int!]
   ): [SamplesByTag!]!
 
   """
   The "slides" query accepts:
 
-    - "ageAtDiagnosis", a list of ages of the patient at the time of diagnosis to filter the samples by
     - "barcode", a list of patient barcodes to filter the slides by
     - "ethnicity", a list of patient ethnicities to filter the slides by
     - "gender", a list of patient genders to filter the slides by
-    - "height", a list of patient heights to filter the slides by
+    - "maxAgeAtDiagnosis", a number representing the maximum age of the patient at the time of diagnosis to filter the slides by
+    - "maxHeight", a number representing the maximum patient height to filter the slides by
+    - "maxHeight", a number representing the maximum patient weight to filter the slides by
+    - "minAgeAtDiagnosis", a number representing the minimum age of the patient at the time of diagnosis to filter the slides by
+    - "minHeight", a number representing the minimum patient height to filter the slides by
+    - "minWeight", a number representing the minimum patient weight to filter the slides by
     - "name", a list of slide names to look up.
     - "race", a list of patient races to filter the slides by
     - "sample", a list of samples related to the slides to filter by
-    - "weight", a list of patient weights to filter the slides by
 
   If no arguments are passed, this will return all slides.
   """
   slides(
-    ageAtDiagnosis: [Int!]
     barcode: [String!]
     ethnicity: [EthnicityEnum!]
     gender: [GenderEnum!]
-    height: [Int!]
+    maxAgeAtDiagnosis: Int
+    maxHeight: Float
+    maxWeight: Float
+    minAgeAtDiagnosis: Int
+    minHeight: Float
+    minWeight: Float
     name: [String!]
     race: [RaceEnum!]
     sample: [String!]
-    weight: [Int!]
   ): [Slide!]!
 
   """

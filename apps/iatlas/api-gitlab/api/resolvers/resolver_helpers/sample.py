@@ -36,16 +36,16 @@ def build_sample_mutation_join_condition(sample_to_mutation_model, sample_model,
     return join_condition
 
 
-def build_sample_request(requested, patient_requested, tag_status_requested, age_at_diagnosis=None, data_set=None, ethnicity=None, feature=None,
-                         feature_class=None, gender=None, height=None, mutation_id=None, mutation_status=None, patient=None,
-                         race=None, related=None, sample=None, tag=None, weight=None, by_status=False, by_tag=False):
+def build_sample_request(requested, patient_requested, tag_status_requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, data_set=None, ethnicity=None, feature=None,
+                         feature_class=None, gender=None, max_height=None, min_height=None, mutation_id=None, mutation_status=None, patient=None,
+                         race=None, related=None, sample=None, tag=None, max_weight=None, min_weight=None, by_status=False, by_tag=False):
     """
     Builds a SQL query.
     """
     sess = db.session
 
     has_patient_filters = bool(
-        patient or age_at_diagnosis or ethnicity or gender or height or race or weight)
+        patient or max_age_at_diagnosis or min_age_at_diagnosis or ethnicity or gender or max_height or min_height or race or max_weight or min_weight)
 
     data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
     patient_1 = aliased(Patient, name='p')
@@ -89,9 +89,13 @@ def build_sample_request(requested, patient_requested, tag_status_requested, age
         patient_join_condition = build_join_condition(
             sample_1.patient_id, patient_1.id, patient_1.barcode, patient)
 
-        if bool(age_at_diagnosis):
+        if bool(max_age_at_diagnosis):
             patient_join_condition.append(
-                patient_1.age_at_diagnosis.in_(age_at_diagnosis))
+                patient_1.age_at_diagnosis <= max_age_at_diagnosis)
+
+        if bool(min_age_at_diagnosis):
+            patient_join_condition.append(
+                patient_1.age_at_diagnosis >= min_age_at_diagnosis)
 
         if bool(ethnicity):
             patient_join_condition.append(patient_1.ethnicity.in_(ethnicity))
@@ -99,14 +103,20 @@ def build_sample_request(requested, patient_requested, tag_status_requested, age
         if bool(gender):
             patient_join_condition.append(patient_1.gender.in_(gender))
 
-        if bool(height):
-            patient_join_condition.append(patient_1.height.in_(height))
+        if bool(max_height):
+            patient_join_condition.append(patient_1.height <= max_height)
+
+        if bool(min_height):
+            patient_join_condition.append(patient_1.height >= min_height)
 
         if bool(race):
             patient_join_condition.append(patient_1.race.in_(race))
 
-        if bool(weight):
-            patient_join_condition.append(patient_1.weight.in_(weight))
+        if bool(max_weight):
+            patient_join_condition.append(patient_1.weight <= max_weight)
+
+        if bool(min_weight):
+            patient_join_condition.append(patient_1.weight >= min_weight)
 
         query = query.join(patient_1, and_(
             *patient_join_condition), isouter=is_outer)
@@ -193,11 +203,11 @@ def build_sample_request(requested, patient_requested, tag_status_requested, age
     return query
 
 
-def request_samples(requested, patient_requested, tag_status_requested, age_at_diagnosis=None, data_set=None, ethnicity=None, feature=None,
-                    feature_class=None, gender=None, height=None, mutation_id=None, mutation_status=None, patient=None,
-                    race=None, related=None, sample=None, tag=None, weight=None, by_status=False, by_tag=False):
-    query = build_sample_request(requested, patient_requested, tag_status_requested, age_at_diagnosis=age_at_diagnosis, data_set=data_set,
-                                 ethnicity=ethnicity, feature=feature, feature_class=feature_class, gender=gender, height=height,
+def request_samples(requested, patient_requested, tag_status_requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, data_set=None, ethnicity=None, feature=None,
+                    feature_class=None, gender=None, max_height=None, min_height=None, mutation_id=None, mutation_status=None, patient=None,
+                    race=None, related=None, sample=None, tag=None, max_weight=None, min_weight=None, by_status=False, by_tag=False):
+    query = build_sample_request(requested, patient_requested, tag_status_requested, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, data_set=data_set,
+                                 ethnicity=ethnicity, feature=feature, feature_class=feature_class, gender=gender, max_height=max_height, min_height=min_height,
                                  mutation_id=mutation_id, mutation_status=mutation_status, patient=patient, race=race, related=related,
-                                 sample=sample, tag=tag, weight=weight, by_status=by_status, by_tag=by_tag)
+                                 sample=sample, tag=tag, max_weight=max_weight, min_weight=min_weight, by_status=by_status, by_tag=by_tag)
     return query.distinct().all()

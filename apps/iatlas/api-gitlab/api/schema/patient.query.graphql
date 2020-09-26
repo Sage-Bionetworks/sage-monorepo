@@ -31,9 +31,9 @@ type Patient {
   barcode: String!
   ethnicity: EthnicityEnum
   gender: GenderEnum
-  height: Int
+  height: Float
   race: RaceEnum
-  weight: Int
+  weight: Float
   samples: [String!]!
   slides: [SimpleSlide!]!
 }
@@ -54,7 +54,7 @@ type SimplePatient {
   barcode: String!
   ethnicity: EthnicityEnum
   gender: GenderEnum
-  height: Int
+  height: Float
   race: RaceEnum
-  weight: Int
+  weight: Float
 }

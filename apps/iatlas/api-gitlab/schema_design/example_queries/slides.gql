@@ -1,5 +1,5 @@
 query Slides(
-  $ageAtDiagnosis: [Int!]
+  $maxAgeAtDiagnosis: [Int!]
   $barcode: [String!]
   $ethnicity: [EthnicityEnum!]
   $gender: [GenderEnum!]
@@ -10,7 +10,7 @@ query Slides(
   $sample: [String!]
 ) {
   slides(
-    ageAtDiagnosis: $ageAtDiagnosis
+    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
     barcode: $barcode
     ethnicity: $ethnicity
     gender: $gender
