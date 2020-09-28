@@ -6,8 +6,8 @@ til_map_datatable_ui <- function(id) {
         data_table_ui(
             ns("til_table"),
             message_html = shiny::includeMarkdown(
-                "markdown/tilmap_table.markdown"
-            )
+              get_markdown_path("tilmap_table")
+            ),
         )
     )
 }

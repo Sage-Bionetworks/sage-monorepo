@@ -5,7 +5,7 @@ test_that("til_map_datatable_server", {
       "cohort_obj" = shiny::reactiveVal(tcga_immune_subtype_cohort_obj_50)
     ),
     {
-      expect_true(T)
+      expect_type(sample_tbl(), "list")
     }
   )
 })
