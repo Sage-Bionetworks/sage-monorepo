@@ -8,42 +8,7 @@
 #' @importFrom dplyr mutate
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
-build_ud_results_tbl <- function(group_name, feature_id, min_wt, min_mut){
-    paste0(
-        "SELECT dr.p_value, dr.fold_change, dr.log10_p_value, dr.gene_id, ",
-        "dr.tag_id, dr.log10_fold_change, dr.mutation_code_id, ",
-        "g.gene, mc.code AS mutation_code, t.group ",
-        "FROM ",
-        paste0(
-            "(",
-            "SELECT * FROM driver_results ",
-            "WHERE feature_id = ", feature_id,
-            " AND n_wt >= ", min_wt,
-            " AND n_mut >= ", min_mut,
-            ") dr "
-        ),
-        "LEFT JOIN ",
-        "(SELECT id AS gene_id, hgnc AS gene FROM genes) g ",
-        "ON dr.gene_id = g.gene_id ",
-        "LEFT JOIN ",
-        "mutation_codes mc ",
-        "ON dr.mutation_code_id = mc.id ",
-        "INNER JOIN ",
-        paste0(
-            "(",
-            "SELECT id AS tag_id, name AS group FROM tags WHERE id IN ",
-            "(SELECT tag_id FROM tags_to_tags WHERE related_tag_id = ",
-            "(SELECT id FROM tags WHERE display = '",
-            group_name,
-            "'))",
-            ") t "
-        ),
-        "ON dr.tag_id = t.tag_id "
-    ) %>%
-        perform_query("Build Univariate Driver Results Tibble") %>%
-        dplyr::mutate(label = paste0(
-            .data$group, "; ", .data$gene, ":", .data$mutation_code
-        ))
+build_ud_results_tbl <- function(tags, feature, min_wt, min_mut){
 }
 
 #' Build Univariate Driver Violin Tibble
