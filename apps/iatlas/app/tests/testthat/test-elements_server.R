@@ -12,6 +12,12 @@ test_that("numeric_filter_element_server", {
     {
       expect_type(output$select_ui, "list")
       session$setInputs("feature_choice" = "B_cells_Aggregate2")
+      expect_type(features_tbl(), "list")
+      expect_equal(nrow(features_tbl()), 1)
+      expect_type(feature_min(), "double")
+      expect_type(feature_max(), "double")
+      expect_length(feature_min(), 1)
+      expect_length(feature_max(), 1)
       expect_type(output$slider_ui, "list")
       session$setInputs("range" = c(0.0, 1.0))
       expect_true(shiny::is.reactivevalues(session$getReturned()))
