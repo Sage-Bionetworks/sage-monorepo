@@ -5,9 +5,7 @@ til_map_distributions_ui <- function(id) {
     shiny::tagList(
         messageBox(
             width = 12,
-            shiny::includeMarkdown(
-                "inst/markdown/tilmap_dist.markdown"
-            ),
+            shiny::includeMarkdown(get_markdown_path("tilmap_dist")),
         ),
         shiny::fluidRow(
             optionsBox(
