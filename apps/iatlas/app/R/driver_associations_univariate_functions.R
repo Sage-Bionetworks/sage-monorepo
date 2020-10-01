@@ -20,38 +20,38 @@ build_ud_results_tbl <- function(tags, feature, min_wt, min_mut){
 #' @importFrom dplyr select
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
-build_ud_driver_violin_tbl <- function(feature_id, gene_id, tag_id, mutation_id){
+build_ud_driver_violin_tbl <- function(feature, entrez, tag, mutation_code){
 
-    subquery1 <- paste(
-        "SELECT sample_id FROM samples_to_tags",
-        "WHERE tag_id = ",
-        tag_id
-    )
-
-    subquery2 <- paste0(
-        "SELECT sample_id, value FROM features_to_samples ",
-        "WHERE feature_id = ", feature_id, " ",
-        "AND sample_id IN (", subquery1, ")"
-    )
-
-    subquery3 <- paste0(
-        "SELECT sample_id, status FROM samples_to_mutations ",
-        "WHERE mutation_id IN ",
-        "(SELECT id FROM mutations ",
-        "WHERE gene_id  = ", gene_id, " ",
-        "AND mutation_code_id = ", mutation_id, " ",
-        "AND mutation_type_id IN ",
-        "(SELECT id FROM mutation_types WHERE name = 'driver_mutation'))"
-    )
-
-    paste(
-        "SELECT f.value, g.status FROM",
-        "(", subquery2, ") f",
-        "INNER JOIN",
-        "(", subquery3, ") g",
-        "ON f.sample_id = g.sample_id"
-    ) %>%
-        perform_query("build univariate driver violin table") %>%
-        dplyr::select(x = .data$status, y = .data$value)
+    # subquery1 <- paste(
+    #     "SELECT sample_id FROM samples_to_tags",
+    #     "WHERE tag_id = ",
+    #     tag_id
+    # )
+    #
+    # subquery2 <- paste0(
+    #     "SELECT sample_id, value FROM features_to_samples ",
+    #     "WHERE feature_id = ", feature_id, " ",
+    #     "AND sample_id IN (", subquery1, ")"
+    # )
+    #
+    # subquery3 <- paste0(
+    #     "SELECT sample_id, status FROM samples_to_mutations ",
+    #     "WHERE mutation_id IN ",
+    #     "(SELECT id FROM mutations ",
+    #     "WHERE gene_id  = ", gene_id, " ",
+    #     "AND mutation_code_id = ", mutation_id, " ",
+    #     "AND mutation_type_id IN ",
+    #     "(SELECT id FROM mutation_types WHERE name = 'driver_mutation'))"
+    # )
+    #
+    # paste(
+    #     "SELECT f.value, g.status FROM",
+    #     "(", subquery2, ") f",
+    #     "INNER JOIN",
+    #     "(", subquery3, ") g",
+    #     "ON f.sample_id = g.sample_id"
+    # ) %>%
+    #     perform_query("build univariate driver violin table") %>%
+    #     dplyr::select(x = .data$status, y = .data$value)
 }
 

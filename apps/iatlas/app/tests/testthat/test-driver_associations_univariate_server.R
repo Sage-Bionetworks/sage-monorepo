@@ -7,7 +7,7 @@ test_that("univariate_driver_server", {
     {
       expect_type(response_option_list(), "list")
       expect_type(output$response_option_ui, "list")
-      session$setInputs("response_variable" = "leukocyte_fraction")
+      session$setInputs("response_choice" = "leukocyte_fraction")
       session$setInputs("min_wt" = 30)
       session$setInputs("min_mut" = 30)
       expect_type(tags(), "character")
