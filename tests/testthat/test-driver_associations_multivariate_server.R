@@ -39,14 +39,38 @@ test_that("multivariate_driver_server", {
           "mutation_id",
           "entrez",
           "hgnc",
-          "mutation_code",
-          "mutation_name",
-          "mutation_display",
-          "mutation_status"
+          "code",
+          "mutation_type_name",
+          "mutation_type_display",
+          "status",
+          "mutation"
         )
       )
+      session$setInputs("group_mode" = "Across groups")
+      expect_type(combined_tbl(), "list")
+      expect_named(combined_tbl(), c("response", "status", "label"))
       session$setInputs("group_mode" = "By group")
-      print(combined_tbl())
+      expect_type(combined_tbl(), "list")
+      expect_named(combined_tbl(), c("response", "status", "label"))
+      session$setInputs("min_mutants" = 2)
+      session$setInputs("min_wildtype" = 2)
+      expect_type(labels(), "character")
+      expect_type(filtered_tbl(), "list")
+      expect_named(filtered_tbl(), c("response", "status", "label"))
+      expect_type(pvalue_tbl(), "list")
+      expect_named(pvalue_tbl(), c('label', 'p_value', 'log10_p_value'))
+      expect_type(effect_size_tbl(), "list")
+      expect_named(
+        effect_size_tbl(),
+        c('label', 'fold_change', 'log10_fold_change')
+      )
+      session$setInputs("calculate_button" = 1)
+      expect_type(volcano_plot_tbl(), "list")
+      expect_named(
+        volcano_plot_tbl(),
+        c('label', 'p_value', 'log10_p_value', 'fold_change', 'log10_fold_change')
+      )
+      expect_error(output$violin_plot)
     }
   )
 })
