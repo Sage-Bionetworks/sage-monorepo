@@ -32,10 +32,10 @@ multivariate_driver_server <- function(id, cohort_obj) {
       })
 
       response_variable_display <- shiny::reactive({
-        shiny::req(input$response_variable)
+        shiny::req(input$response_choice)
         cohort_obj() %>%
           purrr::pluck("feature_tbl") %>%
-          dplyr::filter(.data$name == input$response_variable) %>%
+          dplyr::filter(.data$name == input$response_choice) %>%
           dplyr::pull("display")
       })
 
@@ -65,23 +65,33 @@ multivariate_driver_server <- function(id, cohort_obj) {
         build_md_response_tbl(cohort_obj(), input$response_choice)
       })
 
-      # status_tbl <- shiny::reactive(build_md_status_tbl())
-      #
-      # combined_tbl <- shiny::reactive({
-      #   shiny::req(
-      #     response_tbl(),
-      #     status_tbl(),
-      #     covariate_tbl(),
-      #     input$group_mode
-      #   )
-      #   combine_md_tbls(
-      #     response_tbl(),
-      #     cohort_obj()$sample_tbl,
-      #     status_tbl(),
-      #     covariate_tbl(),
-      #     input$group_mode
-      #   )
-      # })
+      status_tbl <- shiny::reactive({
+        iatlas.api.client::query_mutations_by_samples(
+          samples = cohort_obj()$sample_tbl$sample
+        ) %>%
+          dplyr::mutate(
+            "mutation" = stringr::str_c(.data$hgnc, ":", .data$mutation_code)
+          )
+      })
+
+      combined_tbl <- shiny::reactive({
+        print(response_tbl)
+        print(status_tbl())
+        print(covariate_tbl())
+        print(input$group_mode)
+        shiny::req(
+          response_tbl(),
+          status_tbl(),
+          input$group_mode
+        )
+        combine_md_tbls(
+          response_tbl(),
+          cohort_obj()$sample_tbl,
+          status_tbl(),
+          covariate_tbl(),
+          input$group_mode
+        )
+      })
       #
       # labels <- shiny::reactive({
       #   shiny::req(combined_tbl(), input$min_mutants, input$min_wildtype)
@@ -108,16 +118,17 @@ multivariate_driver_server <- function(id, cohort_obj) {
       #   dplyr::inner_join(pvalue_tbl(), effect_size_tbl(), by = "label")
       # })
       #
-      # output$volcano_plot <- plotly::renderPlotly({
-      #   shiny::req(volcano_plot_tbl())
-      #
-      #   shiny::validate(shiny::need(
-      #     nrow(volcano_plot_tbl()) > 0,
-      #     paste0(
-      #       "Current parameters did not result in any linear regression",
-      #       "results."
-      #     )
-      #   ))
+      output$volcano_plot <- plotly::renderPlotly({
+        # print(covariates_obj)
+        # shiny::req(volcano_plot_tbl())
+        #
+        # shiny::validate(shiny::need(
+        #   nrow(volcano_plot_tbl()) > 0,
+        #   paste0(
+        #     "Current parameters did not result in any linear regression",
+        #     "results."
+        #   )
+        # ))
       #
       # #   create_scatterplot(
       # #     volcano_plot_tbl(),
@@ -132,7 +143,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
       # #     horizontal_line   = T,
       # #     horizontal_line_y = (-log10(0.05))
       # #   )
-      # # })
+      })
       #
       # plotly_server(
       #   "volcano_plot",
