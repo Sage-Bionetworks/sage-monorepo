@@ -617,10 +617,15 @@
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
-      "Version": "1.5.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "41bace23583fbc25089edae324de2dc3"
+      "Version": "1.5.1.9002",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "ramnathv",
+      "RemoteRepo": "htmlwidgets",
+      "RemoteRef": "master",
+      "RemoteSha": "62a1695f94a0a588cdd9f9d0bfe2fd86ff8af664",
+      "Hash": "f71ee62db39195cf374d11128a024a7b"
     },
     "httpcode": {
       "Package": "httpcode",
@@ -651,9 +656,9 @@
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "master",
-      "RemoteSha": "a02d5addb8aa4182dfc61cbfeb955b2b3c32cf58",
+      "RemoteSha": "77c2bfc4d17d0810717f94f7e2ba795c1b3493b5",
       "RemoteHost": "api.github.com",
-      "Hash": "66a06988de5db2fe2bbb5e4750c3430c"
+      "Hash": "c173c913b38bf7a8204db6b149b72e44"
     },
     "ini": {
       "Package": "ini",
@@ -860,10 +865,15 @@
     },
     "plotly": {
       "Package": "plotly",
-      "Version": "4.9.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "f944fd279ce84daf29b179611bea0345"
+      "Version": "4.9.2.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "ropensci",
+      "RemoteRepo": "plotly",
+      "RemoteRef": "master",
+      "RemoteSha": "9bc585ac0d689ad22e30e086ece6073081a9c37b",
+      "Hash": "ce0096d12f883f34bac5a0924c47c846"
     },
     "plyr": {
       "Package": "plyr",

@@ -119,6 +119,11 @@ test_that("query_feature_values_with_cohort_object", {
     class = "EPIC"
   )
 
+  result5 <- query_feature_values_with_cohort_object(
+    tcga_immune_subtype_cohort_obj,
+    feature = "OS_time"
+  )
+
   expect_named(result1, expected_columns)
   expect_named(result2, expected_columns)
   expect_named(result3, expected_columns)

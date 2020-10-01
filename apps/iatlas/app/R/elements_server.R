@@ -27,7 +27,8 @@ numeric_filter_element_server <- function(
         iatlas.api.client::query_features_range(
           datasets = dataset(),
           features = input$feature_choice
-        )
+        ) %>%
+          dplyr::distinct()
       })
 
       feature_min <- shiny::reactive({

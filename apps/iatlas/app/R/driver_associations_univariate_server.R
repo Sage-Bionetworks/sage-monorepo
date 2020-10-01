@@ -30,11 +30,11 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       # TODO: use mutation_id: https://gitlab.com/cri-iatlas/iatlas-api/-/issues/36
       volcano_plot_tbl <- shiny::reactive({
-        print("test")
-        print(tags())
-        print(input$response_variable)
-        print(input$min_wt)
-        print(input$min_mut)
+        # print("test")
+        # print(tags())
+        # print(input$response_variable)
+        # print(input$min_wt)
+        # print(input$min_mut)
 
         shiny::req(
           tags(),
