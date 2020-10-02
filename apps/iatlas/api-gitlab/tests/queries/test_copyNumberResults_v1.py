@@ -145,6 +145,51 @@ def test_copyNumberResults_cursor_pagination_last(client):
     assert end == edges[num-1]['node']['id']
     assert int(end) - int(start) == num - 1
 
+def test_copyNumberResults_cursor_distinct_pagination(client):
+    query = """
+        query CopyNumberResults(
+            $page: Int
+            $first: Int
+            $distinct: Boolean
+        ) {
+            copyNumberResults(
+                page: $page
+                first: $first
+                distinct: $distinct
+            ) {
+                page
+                totalCount
+                edges {
+                    cursor
+                    node {
+                        dataSet {
+                            name
+                        }
+                        tag {
+                            name
+                        }
+                    }
+                }
+            }
+        }
+    """
+    page_num = 2
+    num = 10
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'page': page_num,
+            'first': num,
+            'distinct': True,
+            'dataSet': ['TCGA'],
+            'tag': ['C1']
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['copyNumberResults']
+    edges = page['edges']
+
+    assert len(edges) == num
+    assert page_num == page['page']
+
 def test_copyNumberResults_query_with_passed_data_set(client, data_set, entrez, feature_name):
     query = """
         query CopyNumberResults(
@@ -153,6 +198,7 @@ def test_copyNumberResults_query_with_passed_data_set(client, data_set, entrez, 
             $before: String
             $after: String
             $distinct:Boolean
+            $page: Int
             $dataSet: [String!]
             $feature: [String!]
             $entrez: [Int!]
@@ -172,6 +218,7 @@ def test_copyNumberResults_query_with_passed_data_set(client, data_set, entrez, 
                 before: $before
                 after: $after
                 distinct: $distinct
+                page: $page
                 dataSet: $dataSet
                 feature: $feature
                 entrez: $entrez
@@ -205,7 +252,7 @@ def test_copyNumberResults_query_with_passed_data_set(client, data_set, entrez, 
     """
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'first': 100,
+            'first': 10,
             'dataSet': [data_set],
             'entrez': [entrez],
             'feature_name': [feature_name]
