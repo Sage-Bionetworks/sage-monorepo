@@ -10,117 +10,122 @@ extracellular_network_main_server <- function(
     id,
     function(input, output, session) {
 
-      # ns <- session$ns
-      #
-      # output$show_stratify_option <- shiny::reactive({
-      #   cohort_obj()$dataset == "TCGA" & cohort_obj()$group_name == "TCGA_Study"
-      # })
-      #
-      # shiny::outputOptions(
-      #   output, "show_stratify_option", suspendWhenHidden = FALSE
-      # )
-      #
-      # output$stratify_ui <- shiny::renderUI({
-      #   shiny::checkboxInput(
-      #     ns("stratify"),
-      #     "Stratify by Immune Subtype",
-      #     value = F
-      #   )
-      # })
-      #
-      # output$stratify <- shiny::reactive({
-      #   shiny::req(input$stratify)
-      #   input$stratify
-      # })
-      #
-      # shiny::outputOptions(
-      #   output, "stratify", suspendWhenHidden = FALSE
-      # )
-      #
-      # output$select_groups_ui <- shiny::renderUI({
-      #   choices <-
-      #     query_tags(
-      #       cohort_obj()$dataset,
-      #       cohort_obj()$group_name
-      #     ) %>%
-      #     dplyr::pull("name")
-      #   if (cohort_obj()$group_name == "Immune_Subtype") {
-      #     shiny::checkboxGroupInput(
-      #       ns("group_selected"),
-      #       "Select Immune Subtype",
-      #       choices = choices,
-      #       selected = c("C1", "C2"),
-      #       inline = TRUE
-      #     )
-      #   } else {
-      #     shiny::selectInput(
-      #       ns("group_selected"),
-      #       "Select or Search for Subtype Subset",
-      #       choices = choices
-      #     )
-      #   }
-      # })
-      #
-      # output$select_statify_groups_ui <- shiny::renderUI({
-      #   choices <-
-      #     query_tags(
-      #       cohort_obj()$dataset,
-      #       "Immune_Subtype"
-      #     ) %>%
-      #     dplyr::pull("name")
-      #   shiny::checkboxGroupInput(
-      #     ns("stratified_group_selected"),
-      #     "Select Immune Subtype",
-      #     choices = choices,
-      #     selected = c("C1", "C2"),
-      #     inline = TRUE
-      #   )
-      # })
-      #
-      # output$select_style <- shiny::renderUI({
-      #   shiny::selectInput(
-      #     ns("loadStyleFile"),
-      #     "Select Style",
-      #     choices = c(
-      #       "Edges - Immune Subtype" =
-      #         "javascript/extracellular_network_stylesEdges.js",
-      #       "Black Edges" =
-      #         "javascript/extracellular_network_styles.js"
-      #     )
-      #   )
-      # })
-      #
-      # output$select_genes <- shiny::renderUI({
-      #   shiny::selectizeInput(
-      #     ns("selected_genes"),
-      #     "Select genes of interest (optional)",
-      #     choices = build_ecn_gene_choice_list(),
-      #     multiple = TRUE,
-      #     selected = "geneset:extra_cellular_network"
-      #   )
-      # })
-      #
-      # output$select_celltypes <- shiny::renderUI({
-      #   shiny::selectizeInput(
-      #     ns("selected_celltypes"),
-      #     "Select cells of interest (optional)",
-      #     choices = build_ecn_celltype_choice_list(),
-      #     multiple = TRUE,
-      #     selected = "All"
-      #   )
-      # })
-      #
-      # selected_genes <- shiny::reactive({
-      #   shiny::req(input$selected_genes)
-      #   get_selected_gene_ids(input$selected_genes)
-      # })
-      #
-      # selected_celltypes <- shiny::reactive({
-      #   shiny::req(input$selected_celltypes)
-      #   get_selected_celltypes(input$selected_celltypes)
-      # })
+      ns <- session$ns
 
-      # main_scaffold <- shiny::reactive(build_ecn_scaffold_tbl())
+      show_stratify_option <- shiny::reactive(
+        all(
+          (cohort_obj()$dataset == "TCGA"),
+          (cohort_obj()$group_name == "TCGA_Study")
+        )
+      )
+
+      output$show_stratify_option <- show_stratify_option
+
+      shiny::outputOptions(
+        output, "show_stratify_option", suspendWhenHidden = FALSE
+      )
+
+      output$stratify_ui <- shiny::renderUI({
+        shiny::checkboxInput(
+          ns("stratify"),
+          "Stratify by Immune Subtype",
+          value = F
+        )
+      })
+
+      output$stratify <- shiny::reactive({
+        shiny::req(input$stratify)
+        input$stratify
+      })
+
+      shiny::outputOptions(
+        output, "stratify", suspendWhenHidden = FALSE
+      )
+
+      output$select_groups_ui <- shiny::renderUI({
+        choices <-
+          iatlas.api.client::query_tags(
+            datasets = cohort_obj()$dataset,
+            parent_tags = cohort_obj()$group_name
+          ) %>%
+          dplyr::pull("name")
+        if (cohort_obj()$group_name == "Immune_Subtype") {
+          shiny::checkboxGroupInput(
+            ns("group_selected"),
+            "Select Immune Subtype",
+            choices = choices,
+            selected = c("C1", "C2"),
+            inline = TRUE
+          )
+        } else {
+          shiny::selectInput(
+            ns("group_selected"),
+            "Select or Search for Subtype Subset",
+            choices = choices
+          )
+        }
+      })
+
+      output$select_statify_groups_ui <- shiny::renderUI({
+        choices <-
+          iatlas.api.client::query_tags(
+            datasets = cohort_obj()$dataset,
+            parent_tags = "Immune_Subtype"
+          ) %>%
+          dplyr::pull("name")
+        shiny::checkboxGroupInput(
+          ns("stratified_group_selected"),
+          "Select Immune Subtype",
+          choices = choices,
+          selected = c("C1", "C2"),
+          inline = TRUE
+        )
+      })
+
+      output$select_style <- shiny::renderUI({
+        shiny::selectInput(
+          ns("loadStyleFile"),
+          "Select Style",
+          choices = c(
+            "Edges - Immune Subtype" =
+              "javascript/extracellular_network_stylesEdges.js",
+            "Black Edges" =
+              "javascript/extracellular_network_styles.js"
+          )
+        )
+      })
+
+      output$select_genes <- shiny::renderUI({
+        shiny::selectizeInput(
+          ns("selected_genes"),
+          "Select genes of interest (optional)",
+          choices = build_ecn_gene_choice_list(),
+          multiple = TRUE,
+          selected = "geneset:extra_cellular_network"
+        )
+      })
+
+      output$select_celltypes <- shiny::renderUI({
+        shiny::selectizeInput(
+          ns("selected_celltypes"),
+          "Select cells of interest (optional)",
+          choices = build_ecn_celltype_choice_list(),
+          multiple = TRUE,
+          selected = "All"
+        )
+      })
+
+      selected_genes <- shiny::reactive({
+        shiny::req(input$selected_genes)
+        get_selected_gene_ids(input$selected_genes)
+      })
+
+      selected_celltypes <- shiny::reactive({
+        shiny::req(input$selected_celltypes)
+        get_selected_celltypes(input$selected_celltypes)
+      })
+
+      main_scaffold <- shiny::reactive(build_ecn_scaffold_tbl())
 
       # ##Scaffold and genes based on list of cells and genes of interest
       # scaffold <- reactive({
