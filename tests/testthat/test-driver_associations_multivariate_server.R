@@ -70,6 +70,8 @@ test_that("multivariate_driver_server", {
         volcano_plot_tbl(),
         c('label', 'p_value', 'log10_p_value', 'fold_change', 'log10_fold_change')
       )
+      expect_error(selected_volcano_result())
+      expect_error(violin_plot_tbl())
       expect_error(output$violin_plot)
     }
   )
