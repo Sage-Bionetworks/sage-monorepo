@@ -60,7 +60,7 @@ def resolve_copy_number_results(_obj, info, **kwargs):
     else:
         resp = query.limit(limit+1).all() # request 1 more than we need, so we can determine if additional pages are available. returns list.
         if sort_order == 'ASC':
-            hasNextPage = resp and (len(resp) == first + 1)
+            hasNextPage = resp != None and (len(resp) == limit + 1)
             pageInfo['hasNextPage'] = hasNextPage
             pageInfo['hasPreviousPage'] = False
             if hasNextPage:
@@ -68,7 +68,7 @@ def resolve_copy_number_results(_obj, info, **kwargs):
         if sort_order == 'DESC':
             resp.reverse() # We have to reverse the list to get previous pages in the expected order
             pageInfo['hasNextPage'] = False
-            hasPreviousPage = resp and (len(resp) == last + 1)
+            hasPreviousPage = resp != None and (len(resp) == limit + 1)
             pageInfo['hasPreviousPage'] = hasPreviousPage
             if hasPreviousPage:
                 resp.pop(0) # remove the extra first item
