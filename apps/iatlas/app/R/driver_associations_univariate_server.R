@@ -20,6 +20,14 @@ univariate_driver_server <- function(id, cohort_obj) {
         )
       })
 
+      response_variable_display <- shiny::reactive({
+        shiny::req(input$response_choice)
+        cohort_obj() %>%
+          purrr::pluck("feature_tbl") %>%
+          dplyr::filter(.data$name == input$response_choice) %>%
+          dplyr::pull("display")
+      })
+
       tags <- shiny::reactive({
         iatlas.api.client::query_tags(
           cohort_obj()$dataset,
@@ -49,10 +57,11 @@ univariate_driver_server <- function(id, cohort_obj) {
             .data$tag_name, "; ", .data$hgnc, ":", .data$mutation_code
           )) %>%
           dplyr::select(
-            "log10_fold_change",
-            "log10_p_value",
-            "group" = "tag_name",
             "label",
+            "p_value",
+            "log10_p_value",
+            "log10_fold_change",
+            "group" = "tag_name",
             "entrez",
             "mutation_code"
           )
@@ -124,74 +133,62 @@ univariate_driver_server <- function(id, cohort_obj) {
         return(result)
       })
 
-      # features_tbl <- query_feature_values_with_cohort_object(
-      #   cohort_obj(), feature = input$response_variable
-      # )
+      violin_tbl <- shiny::reactive({
+        shiny::req(selected_volcano_result(), input$response_choice)
+        feature_tbl <-
+          iatlas.api.client::query_feature_values(
+            datasets = cohort_obj()$dataset,
+            features = input$response_choice,
+            tags = selected_volcano_result()$group
+          )
+        status_tbl <-
+          iatlas.api.client::query_mutations_by_samples(
+            entrez = selected_volcano_result()$entrez,
+            mutation_codes = selected_volcano_result()$mutation_code,
+            mutation_types = "driver_mutation",
+            samples = cohort_obj()$sample_tbl$sample
+          )
+        dplyr::inner_join(feature_tbl, status_tbl, by = "sample") %>%
+          dplyr::select(x = .data$status, y = .data$feature_value)
 
-      # TODO: use datastet and tag, and mutation id to query
-      # https://gitlab.com/cri-iatlas/iatlas-api/-/issues/20
-      # https://gitlab.com/cri-iatlas/iatlas-api/-/issues/36
-      # violin_tbl <- shiny::reactive({
-      #   shiny::req(selected_volcano_result())
-      #   print(selected_volcano_result())
-      #   build_ud_driver_violin_tbl(
-      #     input$response_variable,
-      #     selected_volcano_result()$entrez,
-      #     selected_volcano_result()$group,
-      #     selected_volcano_result()$mutation_code
-      #   )
-      # })
+      })
 
-      # output$violin_plot <- plotly::renderPlotly({
-      #
-      #   xlab <- paste0(
-      #     "Mutation Status ",
-      #     selected_volcano_result()$gene,
-      #     ":",
-      #     selected_volcano_result()$mutation_code
-      #   )
-      #
-      #   # ylab <- input$response_variable %>%
-      #   #   as.integer() %>%
-      #   #   get_feature_display_from_id()
-      #
-      #   ylab <- "fix"
-      #
-      #   # title <- paste(
-      #   #   "Cohort:",
-      #   #   selected_volcano_result()$group, ";",
-      #   #   "P-value:",
-      #   #   round(selected_volcano_result()$p_value, 4), ";",
-      #   #   "Log10(Fold Change):",
-      #   #   round(selected_volcano_result()$log10_fold_change, 4)
-      #   # )
-      #
-      #   title <- "fix"
-      #
-      #   create_violinplot(
-      #     violin_tbl(),
-      #     xlab = xlab,
-      #     ylab = ylab,
-      #     title = title,
-      #     fill_colors = c("blue"),
-      #     showlegend = FALSE
-      #   )
-      # })
+      output$violin_plot <- plotly::renderPlotly({
+        shiny::req(
+          selected_volcano_result(),
+          response_variable_display(),
+          violin_tbl()
+        )
 
-      # plotly_server(
-      #   "violin_plot",
-      #   plot_tbl = violin_tbl
-      # )
-      #
-      # volcano_plot_server(
-      #   "univariate_driver_server",
-      #   volcano_plot_tbl,
-      #   "Immune Response Association With Driver Mutations",
-      #   "univariate_driver_server",
-      #   "Wt",
-      #   "Mut",
-      #   shiny::reactive(input$response_variable)
-      # )
+        shiny::validate(shiny::need(
+          nrow(violin_tbl()) > 0,
+          "Parameters have changed, press the calculate boutton."
+        ))
+
+        create_violinplot(
+          violin_tbl(),
+          xlab = stringr::str_c(
+            selected_volcano_result()$label, " Mutation Status"
+          ),
+          ylab = response_variable_display(),
+          title = paste(
+            "Cohort:",
+            selected_volcano_result()$group, ";",
+            "P-value:",
+            round(selected_volcano_result()$p_value, 4), ";",
+            "Log10(Fold Change):",
+            round(selected_volcano_result()$log10_fold_change, 4)
+          ),
+          fill_colors = c("blue"),
+          showlegend = FALSE
+        )
+      })
+
+      plotly_server(
+        "violin_plot",
+        plot_tbl = violin_tbl
+      )
+
     }
   )
 }
