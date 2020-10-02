@@ -10,20 +10,20 @@ driver_associations_ui <- function(id) {
       width = 12,
       shiny::includeMarkdown(get_markdown_path("driver"))
     ),
-    # sectionBox(
-    #   title = paste0(
-    #     "Immune Response Association With Driver Mutations ",
-    #     "-- univariate"
-    #   ),
-    #   module_ui(ns("univariate_driver"))
-    # ),
     sectionBox(
       title = paste0(
         "Immune Response Association With Driver Mutations ",
-        "-- multivariate"
+        "-- univariate"
       ),
-      module_ui(ns("multivariate_driver"))
+      module_ui(ns("univariate_driver"))
     )
+    # sectionBox(
+    #   title = paste0(
+    #     "Immune Response Association With Driver Mutations ",
+    #     "-- multivariate"
+    #   ),
+    #   module_ui(ns("multivariate_driver"))
+    # )
   )
 }
 
