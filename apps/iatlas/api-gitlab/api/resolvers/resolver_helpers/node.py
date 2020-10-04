@@ -1,6 +1,6 @@
 from threading import Thread
 from itertools import groupby
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import Dataset, DatasetToSample, DatasetToTag, Feature, FeatureToSample, Gene, GeneToSample, Node, NodeToTag, SampleToTag, Tag, TagToTag
@@ -39,7 +39,7 @@ def build_node_graphql_response(tag_dict):
     return f
 
 
-def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, related=None, network=None):
+def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
     """
     Builds a SQL request.
     """
@@ -81,16 +81,30 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     query = sess.query(*[*core, *data_set_core, *feature_core, *gene_core])
     query = query.select_from(node_1)
 
-    if network:
+    if max_score:
+        query = query.filter(node_1.score <= max_score)
+
+    if min_score:
+        query = query.filter(node_1.score >= min_score)
+
+    if network or tag:
         network_1 = aliased(Tag, name='nt')
         node_to_tag_1 = aliased(NodeToTag, name='ntt')
+        tag_1 = aliased(Tag, name='t')
 
         network_subquery = sess.query(network_1.id).filter(
-            network_1.name.in_(network))
+            network_1.name.in_(network)) if network else None
 
-        node_tag_join_condition = build_join_condition(
-            node_to_tag_1.node_id, node_1.id, node_to_tag_1.tag_id, network_subquery)
-        query = query.join(node_to_tag_1, and_(*node_tag_join_condition))
+        network_condition = [node_to_tag_1.tag_id.in_(
+            network_subquery)] if network else []
+
+        tag_subquery = sess.query(tag_1.id).filter(
+            tag_1.name.in_(tag)) if tag else None
+
+        tag_condition = [node_to_tag_1.tag_id.in_(tag_subquery)] if tag else []
+
+        query = query.join(node_to_tag_1, and_(
+            node_to_tag_1.node_id == node_1.id, or_(*[*network_condition, *tag_condition])))
 
     if data_set or related or 'dataSet' in requested:
         data_set_join_condition = build_join_condition(
@@ -134,12 +148,13 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     return query.distinct()
 
 
-def build_tags_request(requested, tag_requested, data_set=None, related=None, network=None):
+def build_tags_request(requested, tag_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
+    def build_tags_request(requested, tag_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
     if 'tags' in requested:
         sess = db.session
 
         data_set_1 = aliased(Dataset, name='d')
-        network_tag_1 = aliased(Tag, name='nt')
+        network_tag_2 = aliased(Tag, name='nt2')
         node_1 = aliased(Node, name='n')
         node_to_tag_1 = aliased(NodeToTag, name='ntt1')
         node_to_tag_2 = aliased(NodeToTag, name='ntt2')
@@ -159,6 +174,12 @@ def build_tags_request(requested, tag_requested, data_set=None, related=None, ne
         tag_query = sess.query(*tag_core)
         tag_query = tag_query.select_from(node_1)
 
+        if max_score:
+            query = query.filter(node_1.score <= max_score)
+
+        if min_score:
+            query = query.filter(node_1.score >= min_score)
+
         if data_set or related or 'dataSet' in requested:
             data_set_join_condition = build_join_condition(
                 data_set_1.id, node_1.dataset_id, data_set_1.name, data_set)
@@ -177,29 +198,32 @@ def build_tags_request(requested, tag_requested, data_set=None, related=None, ne
             tag_query = tag_query.join(
                 data_set_to_tag_1, and_(*data_set_tag_join_condition))
 
-        network_subquery = sess.query(network_tag_1.id).filter(
-            network_tag_1.name.in_(network)) if network else None
+        # Filter results down by the nodes' association with the passed network
+        if network:
+            network_tag_1 = aliased(Tag, name='nt1')
+            network_subquery = sess.query(network_tag_1.id).filter(
+                network_tag_1.name.in_(network))
+            node_tag_join_condition = build_join_condition(
+                node_to_tag_1.node_id, node_1.id, node_to_tag_1.tag_id, network_subquery)
+            tag_query = tag_query.join(
+                node_to_tag_1, and_(*node_tag_join_condition))
 
-        node_tag_join_condition = build_join_condition(
-            node_to_tag_1.node_id, node_1.id, node_to_tag_1.tag_id, network_subquery)
         tag_query = tag_query.join(
-            node_to_tag_1, and_(*node_tag_join_condition))
-
-        node_tag_join_condition = [
-            node_to_tag_2.node_id == node_1.id, node_to_tag_2.tag_id.notin_(network_subquery)]
-        tag_query = tag_query.join(
-            node_to_tag_2, and_(*node_tag_join_condition))
+            node_to_tag_2, node_to_tag_2.node_id == node_1.id)
 
         network_tag_subquery = sess.query(
-            network_tag_1.id).filter(network_tag_1.name == 'network')
+            network_tag_2.id).filter(network_tag_2.name == 'network')
 
         tag_to_tag_join_condition = [
             tag_to_tag_1.tag_id == node_to_tag_2.tag_id, tag_to_tag_1.related_tag_id.notin_(network_tag_subquery)]
 
-        tag_query = tag_query.join(tag_to_tag_1, and_(
-            *tag_to_tag_join_condition))
+        tag_query = tag_query.join(
+            tag_to_tag_1, and_(*tag_to_tag_join_condition))
 
-        tag_query = tag_query.join(tag_1, tag_to_tag_1.tag_id == tag_1.id)
+        tag_join_condition = build_join_condition(
+            tag_to_tag_1.tag_id, tag_1.id, tag_1.name, tag)
+
+        tag_query = tag_query.join(tag_1, and_(*tag_join_condition))
 
         order = [node_1.id]
         append_to_order = order.append
@@ -217,9 +241,9 @@ def build_tags_request(requested, tag_requested, data_set=None, related=None, ne
     return []
 
 
-def return_node_derived_fields(requested, tag_requested, data_set=None, network=None, related=None):
+def return_node_derived_fields(requested, tag_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
     tag_results = build_tags_request(
-        requested, tag_requested, data_set=data_set, related=related, network=network)
+        requested, tag_requested, data_set=data_set, max_score=max_score, min_score=min_score, network=network, related=related, tag=tag)
     # tag_results = []
     tag_dict = dict()
     for key, collection in groupby(tag_results, key=lambda t: t.node_id):
