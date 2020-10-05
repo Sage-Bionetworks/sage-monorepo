@@ -63,7 +63,8 @@ def build_sample_request(requested, patient_requested, tag_status_requested, max
                                   'weight': patient_1.weight.label('weight')}
     tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
                               'color': tag_1.color.label('color'),
-                              'display': tag_1.display.label('display')}
+                              'longDisplay': tag_1.long_display.label('tag_long_display'),
+                              'shortDisplay': tag_1.short_display.label('tag_short_display')}
 
     # Only select fields that were requested.
     core = get_selected(requested, core_field_mapping)
@@ -189,8 +190,10 @@ def build_sample_request(requested, patient_requested, tag_status_requested, max
         append_to_order(sample_1.name)
     if 'name' in tag_status_requested:
         append_to_order(tag_1.name)
-    if 'display' in tag_status_requested:
-        append_to_order(tag_1.display)
+    if 'shortDisplay' in tag_status_requested:
+        append_to_order(tag_1.short_display)
+    if 'longDisplay' in tag_status_requested:
+        append_to_order(tag_1.long_display)
     if 'color' in tag_status_requested:
         append_to_order(tag_1.color)
     if 'characteristics' in tag_status_requested:

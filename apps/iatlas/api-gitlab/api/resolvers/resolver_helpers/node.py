@@ -171,8 +171,9 @@ def build_tags_request(requested, tag_requested, data_set=None, max_score=None, 
 
         tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
                                   'color': tag_1.color.label('color'),
-                                  'display': tag_1.display.label('tag_display'),
-                                  'name': tag_1.name.label('name')}
+                                  'longDisplay': tag_1.long_display.label('tag_long_display'),
+                                  'name': tag_1.name.label('name'),
+                                  'shortDisplay': tag_1.short_display.label('tag_short_display')}
 
         tag_core = get_selected(tag_requested, tag_core_field_mapping)
 
@@ -237,8 +238,10 @@ def build_tags_request(requested, tag_requested, data_set=None, max_score=None, 
         append_to_order = order.append
         if 'name' in tag_requested:
             append_to_order(tag_1.name)
-        if 'display' in tag_requested:
-            append_to_order(tag_1.display)
+        if 'shortDisplay' in tag_requested:
+            append_to_order(tag_1.short_display)
+        if 'longDisplay' in tag_requested:
+            append_to_order(tag_1.long_display)
         if 'color' in tag_requested:
             append_to_order(tag_1.color)
         if 'characteristics' in tag_requested:

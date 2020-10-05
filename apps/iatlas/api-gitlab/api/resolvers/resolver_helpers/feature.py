@@ -72,7 +72,8 @@ def build_features_query(requested, class_requested, tag_requested, data_set=Non
                           'unit': feature_1.unit.label('unit')}
     tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('tag_characteristics'),
                               'color': tag_1.color.label('tag_color'),
-                              'display': tag_1.display.label('tag_display')}
+                              'longDisplay': tag_1.long_display.label('tag_long_display'),
+                              'shortDisplay': tag_1.short_display.label('tag_short_display')}
 
     # Only select fields that were requested.
     core = get_selected(requested, core_field_mapping)
@@ -176,8 +177,10 @@ def build_features_query(requested, class_requested, tag_requested, data_set=Non
     append_to_order = order.append
     if by_tag:
         append_to_order(tag_1.name)
-    if 'display' in tag_requested:
-        append_to_order(tag_1.display)
+    if 'shortDisplay' in tag_requested:
+        append_to_order(tag_1.short_display)
+    if 'longDisplay' in tag_requested:
+        append_to_order(tag_1.long_display)
     if 'color' in tag_requested:
         append_to_order(tag_1.color)
     if 'characteristics' in tag_requested:

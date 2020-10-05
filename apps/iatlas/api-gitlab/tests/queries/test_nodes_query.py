@@ -169,7 +169,13 @@ def test_nodes_query_with_passed_tag(client, common_query_builder, tag):
                                     items {
                                         label
                                         name
-                                        tags { name }
+                                        tags {
+                                            name
+                                            characteristics
+                                            color
+                                            longDisplay
+                                            shortDisplay
+                                        }
                                     }
                                 }""")
     response = client.post('/api', json={'query': query,

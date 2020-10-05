@@ -7,8 +7,9 @@ class Tag(Base):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     characteristics = db.Column(db.String, nullable=True)
-    display = db.Column(db.String, nullable=True)
     color = db.Column(db.String, nullable=True)
+    long_display = db.Column(db.String, nullable=True)
+    short_display = db.Column(db.String, nullable=True)
 
     data_sets = db.relationship('Dataset', lazy='noload', uselist=True,
                                 secondary='datasets_to_tags')

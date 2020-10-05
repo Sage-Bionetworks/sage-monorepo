@@ -120,7 +120,7 @@ def test_samples_by_tag_query_with_no_args(client, common_query_builder):
 def test_samples_by_tag_query_with_passed_patient_and_sample(client, common_query_builder, patient, sample):
     query = common_query_builder("""{
                                     tag
-                                    display
+                                    shortDisplay
                                     samples {
                                         name
                                         patient { barcode }
@@ -138,7 +138,7 @@ def test_samples_by_tag_query_with_passed_patient_and_sample(client, common_quer
     for result in results[0:2]:
         samples = result['samples']
         assert type(result['tag']) is str
-        assert type(result['display']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples:

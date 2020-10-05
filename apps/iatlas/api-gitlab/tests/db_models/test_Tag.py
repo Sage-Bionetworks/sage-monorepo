@@ -23,8 +23,9 @@ def test_Tag_no_relations(app, tag_name):
     assert type(result.id) is int
     assert result.name == tag_name
     assert type(result.characteristics) is str
-    assert type(result.display) is str or NoneType
     assert type(result.color) is str or NoneType
+    assert type(result.long_display) is str or NoneType
+    assert type(result.short_display) is str or NoneType
 
 
 def test_Tag_with_copy_number_results(app, tag_name):
@@ -124,8 +125,9 @@ def test_Tag_with_samples(app, tag_name):
         assert type(sample.name) is str
     assert result.name == tag_name
     assert type(result.characteristics) is str
-    assert type(result.display) is str or NoneType
     assert type(result.color) is str or NoneType
+    assert type(result.long_display) is str or NoneType
+    assert type(result.short_display) is str or NoneType
     assert repr(result) == '<Tag %r>' % tag_name
 
 

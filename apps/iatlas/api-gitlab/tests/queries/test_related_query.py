@@ -10,7 +10,7 @@ def test_related_query_no_args(client):
             display
             related {
                 name
-                display
+                shortDisplay
             }
         }
     }"""
@@ -28,7 +28,7 @@ def test_related_query_no_args(client):
         assert len(related_list) > 0
         for current_related in related_list:
             assert type(current_related['name']) is str
-            assert type(current_related['display']) is str or NoneType
+            assert type(current_related['shortDisplay']) is str or NoneType
 
 
 def test_related_query_passed_data_set(client, data_set):

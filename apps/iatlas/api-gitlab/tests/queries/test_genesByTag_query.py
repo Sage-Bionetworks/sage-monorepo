@@ -30,7 +30,7 @@ def test_genesByTag_query_with_entrez(client, data_set, related, entrez, hgnc):
         ) {
             tag
             characteristics
-            display
+            shortDisplay
             genes {
                 entrez
                 hgnc
@@ -51,7 +51,7 @@ def test_genesByTag_query_with_entrez(client, data_set, related, entrez, hgnc):
         genes = result['genes']
         assert type(result['tag']) is str
         assert type(result['characteristics']) is str or NoneType
-        assert type(result['display']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
         assert isinstance(genes, list)
         assert len(genes) == 1
         # Don't need to iterate through every result.
@@ -124,7 +124,7 @@ def test_genesByTag_query_no_relations(client, data_set, related, entrez, hgnc):
         ) {
             tag
             characteristics
-            display
+            longDisplay
             genes {
                 entrez
                 hgnc
@@ -145,7 +145,7 @@ def test_genesByTag_query_no_relations(client, data_set, related, entrez, hgnc):
         genes = result['genes']
         assert type(result['tag']) is str
         assert type(result['characteristics']) is str or NoneType
-        assert type(result['display']) is str or NoneType
+        assert type(result['longDisplay']) is str or NoneType
         assert isinstance(genes, list)
         assert len(genes) == 1
         # Don't need to iterate through every result.
@@ -175,7 +175,7 @@ def test_genesByTag_query_with_gene_type(client, data_set, related, entrez, hgnc
         ) {
             tag
             characteristics
-            display
+            shortDisplay
             genes {
                 entrez
                 hgnc
@@ -197,7 +197,7 @@ def test_genesByTag_query_with_gene_type(client, data_set, related, entrez, hgnc
         genes = result['genes']
         assert type(result['tag']) is str
         assert type(result['characteristics']) is str or NoneType
-        assert type(result['display']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
         assert isinstance(genes, list)
         assert len(genes) == 1
         # Don't need to iterate through every result.
@@ -229,7 +229,7 @@ def test_genesByTag_query_with_sample(client, data_set, related, entrez, hgnc, g
         ) {
             tag
             characteristics
-            display
+            shortDisplay
             genes {
                 entrez
                 hgnc
@@ -252,7 +252,7 @@ def test_genesByTag_query_with_sample(client, data_set, related, entrez, hgnc, g
         genes = result['genes']
         assert type(result['tag']) is str
         assert type(result['characteristics']) is str or NoneType
-        assert type(result['display']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
         assert isinstance(genes, list)
         assert len(genes) == 1
         # Don't need to iterate through every result.

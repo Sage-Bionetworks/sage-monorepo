@@ -115,7 +115,8 @@ def build_gene_request(requested, data_set=None, entrez=None, feature=None, feat
                           'therapyType': therapy_type_1.name.label('therapy_type')}
     tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
                               'color': tag_1.color.label('color'),
-                              'display': tag_1.display.label('display'),
+                              'longDisplay': tag_1.long_display.label('tag_long_display'),
+                              'shortDisplay': tag_1.short_display.label('tag_short_display'),
                               'tag': tag_1.name.label('tag')}
 
     core = get_selected(requested, core_field_mapping)

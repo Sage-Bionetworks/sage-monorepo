@@ -12,14 +12,16 @@ related_request_fields = {'dataSet',
 
 simple_tag_request_fields = {'characteristics',
                              'color',
-                             'display',
+                             'longDisplay',
                              'name',
+                             'shortDisplay',
                              'tag'}
 
 tag_request_fields = {'characteristics',
                       'color',
-                      'display',
+                      'longDisplay',
                       'name',
+                      'shortDisplay',
                       'related',
                       'sampleCount',
                       'samples',
@@ -46,8 +48,9 @@ def build_related_request(requested, related_requested, data_set=None, related=N
 
     core_field_mapping = {'characteristics': related_1.characteristics.label('characteristics'),
                           'color': related_1.color.label('color'),
-                          'display': related_1.display.label('display'),
-                          'name': related_1.name.label('name')}
+                          'longDisplay': related_1.long_display.label('long_display'),
+                          'name': related_1.name.label('name'),
+                          'shortDisplay': related_1.short_display.label('short_display')}
     data_set_core_field_mapping = {
         'display': data_set_1.display.label('data_set_display')}
 
@@ -76,8 +79,10 @@ def build_related_request(requested, related_requested, data_set=None, related=N
     append_to_order = order.append
     if 'name' in related_requested:
         append_to_order(related_1.name)
-    if 'display' in related_requested:
-        append_to_order(related_1.display)
+    if 'shortDisplay' in related_requested:
+        append_to_order(related_1.short_display)
+    if 'longDisplay' in related_requested:
+        append_to_order(related_1.long_display)
     if 'color' in related_requested:
         append_to_order(related_1.color)
     if 'characteristics' in related_requested:
@@ -98,11 +103,12 @@ def build_tag_graphql_response(related_dict=dict(), sample_dict=dict()):
         return {
             'characteristics': get_value(tag, 'characteristics'),
             'color': get_value(tag, 'color'),
-            'display': get_value(tag, 'display'),
+            'longDisplay': get_value(tag, 'tag_long_display') or get_value(tag, 'long_display'),
             'name': get_value(tag, 'name'),
             'related': [build_tag_graphql_response()(r) for r in related],
             'sampleCount': get_value(tag, 'sample_count'),
             'samples': [sample.name for sample in samples],
+            'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display')
         }
     return f
 
@@ -119,9 +125,10 @@ def build_tag_request(requested, data_set=None, feature=None, feature_class=None
 
     core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
                           'color': tag_1.color.label('color'),
-                          'display': tag_1.display.label('display'),
+                          'longDisplay': tag_1.long_display.label('long_display'),
                           'name': tag_1.name.label('name'),
                           'sampleCount': func.count(func.distinct(sample_to_tag_1.sample_id)).label('sample_count'),
+                          'shortDisplay': tag_1.short_display.label('short_display'),
                           'tag': tag_1.name.label('tag')}
 
     # Only select fields that were requested.
@@ -212,8 +219,10 @@ def build_tag_request(requested, data_set=None, feature=None, feature_class=None
     append_to_order = order.append
     if 'name' in requested:
         append_to_order(tag_1.name)
-    if 'display' in requested:
-        append_to_order(tag_1.display)
+    if 'shortDisplay' in requested:
+        append_to_order(tag_1.short_display)
+    if 'longDisplay' in requested:
+        append_to_order(tag_1.long_display)
     if 'color' in requested:
         append_to_order(tag_1.color)
     if 'characteristics' in requested:
@@ -239,10 +248,11 @@ def get_related(requested, related_requested, data_set=None, feature=None, featu
         tag_to_tag_1 = aliased(TagToTag, name='tt')
 
         related_core_field_mapping = {
-            'name': related_tag_1.name.label('name'),
             'characteristics': related_tag_1.characteristics.label('characteristics'),
             'color': related_tag_1.name.label('color'),
-            'display': related_tag_1.name.label('display')}
+            'longDisplay': related_1.long_display.label('long_display'),
+            'name': related_1.name.label('name'),
+            'shortDisplay': related_1.short_display.label('short_display')}
 
         related_core = get_selected(
             related_requested, related_core_field_mapping)
@@ -307,8 +317,10 @@ def get_related(requested, related_requested, data_set=None, feature=None, featu
         append_to_order = order.append
         if 'name' in related_requested:
             append_to_order(related_tag_1.name)
-        if 'display' in related_requested:
-            append_to_order(related_tag_1.display)
+        if 'shortDisplay' in related_requested:
+            append_to_order(related_tag_1.short_display)
+        if 'longDisplay' in related_requested:
+            append_to_order(related_tag_1.long_display)
         if 'color' in related_requested:
             append_to_order(related_tag_1.color)
         if 'characteristics' in related_requested:
