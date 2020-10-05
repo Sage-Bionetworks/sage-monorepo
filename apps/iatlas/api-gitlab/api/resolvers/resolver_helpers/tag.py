@@ -226,18 +226,13 @@ def build_tag_request(requested, data_set=None, feature=None, feature_class=None
     return query
 
 
-def get_related(requested, related_requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None, tag_ids=set()):
+def get_related(requested, related_requested, tag_ids=set()):
     has_related = 'related' in requested
 
-    if tag_ids and has_related:
+    if has_related:
         sess = db.session
 
-        data_set_1 = aliased(Dataset, name='d')
-        data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
-        data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
         related_tag_1 = aliased(Tag, name='rt')
-        sample_1 = aliased(Sample, name='s')
-        sample_to_tag_1 = aliased(SampleToTag, name='st')
         tag_1 = aliased(Tag, name='t')
         tag_to_tag_1 = aliased(TagToTag, name='tt')
 
@@ -257,55 +252,12 @@ def get_related(requested, related_requested, data_set=None, feature=None, featu
         related_query = sess.query(*related_core)
         related_query = related_query.select_from(related_tag_1)
 
-        if related:
-            related_query = related_query.filter(
-                related_tag_1.name.in_(related))
-
-        data_set_tag_sub_query = sess.query(data_set_1.id).filter(
-            data_set_1.name.in_(data_set)) if data_set else None
-
-        data_set_tag_join_condition = build_join_condition(
-            data_set_to_tag_1.tag_id, related_tag_1.id, data_set_to_tag_1.dataset_id, data_set_tag_sub_query)
-        related_query = related_query.join(
-            data_set_to_tag_1, and_(*data_set_tag_join_condition))
-
-        tag_sub_query = sess.query(tag_1.id).filter(
-            tag_1.name.in_(tag)) if tag else None
+        tag_sub_query = sess.query(tag_1.id).filter(tag_1.id.in_(tag_ids))
 
         tag_tag_join_condition = build_join_condition(
             tag_to_tag_1.related_tag_id, related_tag_1.id, tag_to_tag_1.tag_id, tag_sub_query)
         related_query = related_query.join(
             tag_to_tag_1, and_(*tag_tag_join_condition))
-
-        data_set_sample_sub_query = sess.query(sample_1.id).filter(
-            sample_1.name.in_(sample)) if sample else None
-
-        data_set_sample_join_condition = build_join_condition(
-            data_set_to_sample_1.dataset_id, data_set_to_tag_1.dataset_id, data_set_to_sample_1.sample_id, data_set_sample_sub_query)
-        related_query = related_query.join(
-            data_set_to_sample_1, and_(*data_set_sample_join_condition))
-
-        related_query = related_query.join(
-            sample_to_tag_1, and_(sample_to_tag_1.sample_id == data_set_to_sample_1.sample_id, sample_to_tag_1.tag_id == tag_to_tag_1.tag_id))
-
-        if feature or feature_class:
-            feature_1 = aliased(Feature, name='f')
-            feature_class_1 = aliased(FeatureClass, name='fc')
-            feature_to_sample_1 = aliased(FeatureToSample, name='fs')
-
-            related_query = related_query.join(feature_to_sample_1,
-                                               feature_to_sample_1.sample_id == sample_to_tag_1.sample_id)
-
-            feature_join_condition = build_join_condition(
-                feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
-            related_query = related_query.join(
-                feature_1, and_(*feature_join_condition))
-
-            if feature_class:
-                feature_class_join_condition = build_join_condition(
-                    feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
-                related_query = related_query.join(
-                    feature_class_1, and_(*feature_class_join_condition))
 
         order = []
         append_to_order = order.append
@@ -429,16 +381,15 @@ def request_tags(requested, data_set=None, feature=None, feature_class=None,
     return query.distinct().all()
 
 
-def return_tag_derived_fields(requested, related_requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None, tag_ids=set()):
-    related_tags = get_related(requested, related_requested, data_set=data_set, feature=feature, feature_class=feature_class,
-                               related=related, sample=sample, tag=tag, tag_ids=tag_ids)
+def return_tag_derived_fields(requested, related_requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None, tag_ids=None):
+    related_tags = get_related(requested, related_requested, tag_ids=tag_ids)
 
     related_dict = dict()
     for key, collection in groupby(related_tags, key=lambda r: r.tag_id):
         related_dict[key] = related_dict.get(key, []) + list(collection)
 
-    samples = get_samples(requested, data_set=data_set, feature=feature, feature_class=feature_class,
-                          related=related, sample=sample, tag_ids=tag_ids)
+    samples = get_samples(
+        requested, data_set=data_set, feature=feature, feature_class=feature_class, related=related, sample=sample, tag_ids=tag_ids)
 
     sample_dict = dict()
     for key, collection in groupby(samples, key=lambda s: s.tag_id):
