@@ -17,15 +17,8 @@ simple_tag_request_fields = {'characteristics',
                              'shortDisplay',
                              'tag'}
 
-tag_request_fields = {'characteristics',
-                      'color',
-                      'longDisplay',
-                      'name',
-                      'shortDisplay',
-                      'related',
-                      'sampleCount',
-                      'samples',
-                      'tag'}
+tag_request_fields = simple_tag_request_fields.union(
+    {'related', 'sampleCount', 'samples'})
 
 
 def build_related_graphql_response(related_set=set()):
