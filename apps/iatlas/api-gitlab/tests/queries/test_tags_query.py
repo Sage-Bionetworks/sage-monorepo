@@ -30,13 +30,15 @@ def test_tags_query_with_data_set_related_and_feature(client, common_query_build
     query = common_query_builder("""{
                                     characteristics
                                     color
-                                    display
+                                    longDisplay
                                     name
+                                    shortDisplay
                                     related {
                                         name
                                         characteristics
                                         color
-                                        display
+                                        longDisplay
+                                        shortDisplay
                                     }
                                     sampleCount
                                     samples
@@ -56,7 +58,8 @@ def test_tags_query_with_data_set_related_and_feature(client, common_query_build
         samples = result['samples']
         assert type(result['characteristics']) is str or NoneType
         assert type(result['color']) is str or NoneType
-        assert type(result['display']) is str or NoneType
+        assert type(result['longDisplay']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
         assert type(result['name']) is str
         assert type(result['sampleCount']) is int
         assert isinstance(related, list)
@@ -65,7 +68,8 @@ def test_tags_query_with_data_set_related_and_feature(client, common_query_build
             assert type(current_related["name"]) is str
             assert type(current_related["characteristics"]) is str or NoneType
             assert type(current_related["color"]) is str or NoneType
-            assert type(current_related["display"]) is str or NoneType
+            assert type(current_related["longDisplay"]) is str or NoneType
+            assert type(current_related["shortDisplay"]) is str or NoneType
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples[0:2]:
@@ -76,7 +80,7 @@ def test_tags_query_no_data_set_and_related(client, common_query_builder, data_s
     query = common_query_builder("""{
                                     characteristics
                                     color
-                                    display
+                                    shortDisplay
                                     name
                                 }""")
     response = client.post(
@@ -91,7 +95,7 @@ def test_tags_query_no_data_set_and_related(client, common_query_builder, data_s
     for result in results:
         assert type(result['characteristics']) is str or NoneType
         assert type(result['color']) is str or NoneType
-        assert type(result['display']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
         assert type(result['name']) is str
         assert not 'sampleCount' in result
         assert not 'samples' in result
@@ -101,7 +105,7 @@ def test_tags_query_with_data_set_related_and_feature_class(client, common_query
     query = common_query_builder("""{
                                     characteristics
                                     color
-                                    display
+                                    shortDisplay
                                     name
                                 }""")
     response = client.post(
@@ -117,7 +121,7 @@ def test_tags_query_with_data_set_related_and_feature_class(client, common_query
     for result in results:
         assert type(result['characteristics']) is str or NoneType
         assert type(result['color']) is str or NoneType
-        assert type(result['display']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
         assert type(result['name']) is str
 
 

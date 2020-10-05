@@ -43,8 +43,9 @@ def build_cnr_graphql_response(copy_number_result):
         'tag': {
             'characteristics': get_value(copy_number_result, 'characteristics'),
             'color': get_value(copy_number_result, 'color'),
-            'display': get_value(copy_number_result, 'tag_display'),
+            'longDisplay': get_value(copy_number_result, 'tag_long_display'),
             'name': get_value(copy_number_result, 'tag_name'),
+            'shortDisplay': get_value(copy_number_result, 'tag_short_display')
         }
     }
 
@@ -88,8 +89,9 @@ def build_copy_number_result_request(requested, data_set_requested, feature_requ
 
     tag_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
                          'color': tag_1.color.label('color'),
-                         'display': tag_1.display.label('tag_display'),
-                         'name': tag_1.name.label('tag_name')}
+                         'longDisplay': tag_1.long_display.label('tag_long_display'),
+                         'name': tag_1.name.label('tag_name'),
+                         'shortDisplay': tag_1.short_display.label('tag_short_display')}
 
     core = get_selected(requested, core_field_mapping)
 

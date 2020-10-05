@@ -41,17 +41,19 @@ type FeaturesByClass {
 """
 The "FeaturesByTag" type may return:
 
-- The "tag" (the name of the tag).
-- The "display", a friendly name for the tag.
 - The "characteristics" of the tag.
 - The "color", a color to represent the tag as a hex value.
-- A list of features associated with that tag.
+- "features", a list of features associated with that tag.
+- The "longDisplay", a long display name for the tag used in text descriptions.
+- The "shortDisplay", a friendly name for the tag (used in plots).
+- The "tag" (the name of the tag).
 """
 type FeaturesByTag {
   characteristics: String
   color: String
-  display: String
   features: [Feature!]!
+  longDisplay: String
+  shortDisplay: String
   tag: String!
 }
 

@@ -26,10 +26,11 @@ def resolve_samples_by_tag(_obj, info, maxAgeAtDiagnosis=None, minAgeAtDiagnosis
     def build_response(sample_set):
         sample_tag, samples = sample_set
         return {
-            'characteristics': get_value(samples[0], 'tag_characteristics'),
-            'color': get_value(samples[0], 'tag_color'),
-            'display': get_value(samples[0], 'tag_display'),
+            'characteristics': get_value(samples[0], 'characteristics'),
+            'color': get_value(samples[0], 'color'),
+            'longDisplay': get_value(samples[0], 'tag_long_display'),
             'samples': map(build_sample_graphql_response, samples),
+            'shortDisplay': get_value(samples[0], 'tag_short_display'),
             'tag': sample_tag
         }
 

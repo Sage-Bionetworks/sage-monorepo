@@ -29,8 +29,9 @@ def resolve_features_by_tag(_obj, info, dataSet=None, feature=None, featureClass
         return {
             'characteristics': get_value(features[0], 'tag_characteristics'),
             'color': get_value(features[0], 'tag_color'),
-            'display': get_value(features[0], 'tag_display'),
             'features': map(build_feature_graphql_response(max_min_dict, sample_dict), features),
+            'longDisplay': get_value(features[0], 'tag_long_display'),
+            'shortDisplay': get_value(features[0], 'tag_short_display'),
             'tag': feature_tag
         }
 

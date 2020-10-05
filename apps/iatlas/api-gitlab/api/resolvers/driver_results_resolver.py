@@ -1,5 +1,6 @@
 from .resolver_helpers import get_value, request_driver_results
 
+
 def resolve_driver_results(_obj, info, dataSet=None, entrez=None, feature=None, maxPValue=None,
                            maxLog10PValue=None, minFoldChange=None, minLog10FoldChange=None,
                            minLog10PValue=None, minPValue=None, minNumMutants=None, minNumWildTypes=None,
@@ -45,7 +46,8 @@ def build_dr_graphql_response(driver_result):
         'tag': {
             'characteristics': get_value(driver_result, 'characteristics'),
             'color': get_value(driver_result, 'color'),
-            'display': get_value(driver_result, 'tag_display'),
+            'longDisplay': get_value(driver_result, 'tag_long_display'),
             'name': get_value(driver_result, 'tag_name'),
+            'shortDisplay': get_value(driver_result, 'tag_short_display'),
         }
     }
