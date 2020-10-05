@@ -126,6 +126,44 @@ def test_nodes_query_with_passed_network(client, common_query_builder, network):
             assert tag['name'] != network
 
 
+def test_nodes_query_with_passed_network_and_tag(client, common_query_builder, network, tag):
+    query = common_query_builder("""{
+                                    items {
+                                        label
+                                        name
+                                        score
+                                        x
+                                        y
+                                        gene { entrez }
+                                        tags { name }
+                                    }
+                                }""")
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'network': [network], 'tag': [tag]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        gene = result['gene']
+        tags = result['tags']
+        assert type(result['label']) is str or NoneType
+        assert type(result['name']) is str
+        assert type(result['score']) is float or NoneType
+        assert type(result['x']) is float or NoneType
+        assert type(result['y']) is float or NoneType
+        if gene:
+            assert type(gene['entrez']) is int
+        assert isinstance(tags, list)
+        assert len(tags) > 0
+        for current_tag in tags[0:2]:
+            assert type(current_tag['name']) is str
+            assert current_tag['name'] != network
+            assert current_tag['name'] == tag
+
+
 def test_nodes_query_with_passed_tag(client, common_query_builder, tag):
     query = common_query_builder("""{
                                     items {

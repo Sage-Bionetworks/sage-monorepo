@@ -25,10 +25,14 @@ def build_node_graphql_response(tag_dict):
     def f(node):
         node_id = get_value(node, 'id')
         tags = tag_dict.get(node_id, []) if tag_dict else []
+        has_feature = get_value(node, 'feature_name') or get_value(
+            node, 'feature_display') or get_value(node, 'order') or get_value(node, 'unit')
+        has_gene = get_value(node, 'entrez') or get_value(node, 'hgnc') or get_value(
+            node, 'description') or get_value(node, 'friendly_name') or get_value(node, 'io_landscape_name')
         return {
             'dataSet': build_data_set_graphql_response(node),
-            'feature': build_feature_graphql_response()(node),
-            'gene': build_gene_graphql_response()(node),
+            'feature': build_feature_graphql_response()(node) if has_feature else None,
+            'gene': build_gene_graphql_response()(node) if has_gene else None,
             'label': get_value(node, 'label'),
             'name': get_value(node, 'node_name'),
             'score': get_value(node, 'score'),
@@ -87,24 +91,29 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     if min_score:
         query = query.filter(node_1.score >= min_score)
 
-    if network or tag:
+    if network:
         network_1 = aliased(Tag, name='nt')
-        node_to_tag_1 = aliased(NodeToTag, name='ntt')
-        tag_1 = aliased(Tag, name='t')
+        node_to_tag_1 = aliased(NodeToTag, name='ntt1')
 
         network_subquery = sess.query(network_1.id).filter(
-            network_1.name.in_(network)) if network else None
+            network_1.name.in_(network))
 
-        network_condition = [node_to_tag_1.tag_id.in_(
-            network_subquery)] if network else []
+        node_tag_join_condition = build_join_condition(
+            node_to_tag_1.node_id, node_1.id, node_to_tag_1.tag_id, network_subquery)
+
+        query = query.join(node_to_tag_1, and_(*node_tag_join_condition))
+
+    if tag:
+        node_to_tag_2 = aliased(NodeToTag, name='ntt2')
+        tag_1 = aliased(Tag, name="t")
 
         tag_subquery = sess.query(tag_1.id).filter(
-            tag_1.name.in_(tag)) if tag else None
+            tag_1.name.in_(tag))
 
-        tag_condition = [node_to_tag_1.tag_id.in_(tag_subquery)] if tag else []
+        node_tag_join_condition = build_join_condition(
+            node_to_tag_2.node_id, node_1.id, node_to_tag_2.tag_id, tag_subquery)
 
-        query = query.join(node_to_tag_1, and_(
-            node_to_tag_1.node_id == node_1.id, or_(*[*network_condition, *tag_condition])))
+        query = query.join(node_to_tag_2, and_(*node_tag_join_condition))
 
     if data_set or related or 'dataSet' in requested:
         data_set_join_condition = build_join_condition(
@@ -149,7 +158,6 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
 
 
 def build_tags_request(requested, tag_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
-    def build_tags_request(requested, tag_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
     if 'tags' in requested:
         sess = db.session
 
@@ -237,16 +245,18 @@ def build_tags_request(requested, tag_requested, data_set=None, max_score=None, 
             append_to_order(tag_1.characteristics)
         tag_query = tag_query.order_by(*order)
 
-        return tag_query.distinct().yield_per(1000).all()
-    return []
+        return tag_query.distinct()
+    return None
 
 
 def return_node_derived_fields(requested, tag_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
     tag_results = build_tags_request(
         requested, tag_requested, data_set=data_set, max_score=max_score, min_score=min_score, network=network, related=related, tag=tag)
-    # tag_results = []
+
     tag_dict = dict()
-    for key, collection in groupby(tag_results, key=lambda t: t.node_id):
-        tag_dict[key] = tag_dict.get(key, []) + list(collection)
+
+    if tag_results:
+        for key, collection in groupby(tag_results.yield_per(1000).all(), key=lambda t: t.node_id):
+            tag_dict[key] = tag_dict.get(key, []) + list(collection)
 
     return tag_dict
