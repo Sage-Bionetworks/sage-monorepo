@@ -299,16 +299,19 @@ type Query {
   The "nodes" query accepts:
 
     - "dataSet", a list of data set names associated with the nodes to filter by
-    - "related", a list of tag names related to the data set associated with the nodes to filter by
+    - "maxScore", the maximum score associated with the nodes to filter by
+    - "minScore", the minimum score associated with the nodes to filter by
     - "network", a list of tag names associated with the nodes that are also associated with the "network" tag to filter by
+    - "related", a list of tag names related to the data set associated with the nodes to filter by
+    - "tag", a list of tag names associated with the nodes to filter by
     - "page", the page of results to get. Defaults to 1 (the first page) with a maximum of 100,000 rows returned
 
   If no arguments are passed, this will return all nodes (please note, there will be a LOT of results).
   """
   nodes(
     dataSet: [String!]
-    maxScore: [Float!]
-    minScore: [Float!]
+    maxScore: Float
+    minScore: Float
     network: [String!]
     related: [String!]
     tag: [String!]
