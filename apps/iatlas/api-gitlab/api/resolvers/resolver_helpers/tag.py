@@ -245,14 +245,15 @@ def get_related(requested, related_requested, data_set=None, feature=None, featu
         related_tag_1 = aliased(Tag, name='rt')
         sample_1 = aliased(Sample, name='s')
         sample_to_tag_1 = aliased(SampleToTag, name='st')
+        tag_1 = aliased(Tag, name='t')
         tag_to_tag_1 = aliased(TagToTag, name='tt')
 
         related_core_field_mapping = {
             'characteristics': related_tag_1.characteristics.label('characteristics'),
             'color': related_tag_1.name.label('color'),
-            'longDisplay': related_1.long_display.label('long_display'),
-            'name': related_1.name.label('name'),
-            'shortDisplay': related_1.short_display.label('short_display')}
+            'longDisplay': related_tag_1.long_display.label('long_display'),
+            'name': related_tag_1.name.label('name'),
+            'shortDisplay': related_tag_1.short_display.label('short_display')}
 
         related_core = get_selected(
             related_requested, related_core_field_mapping)
