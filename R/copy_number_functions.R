@@ -6,11 +6,6 @@ build_cnv_group_list <- function(tbl){
         c("All", .)
 }
 
-# TODO: use copy number table
-build_cnv_gene_tbl <- function(){
-  query_genes()
-}
-
 build_cnv_gene_list <- function(gene_set_tbl, gene_tbl){
   list(
     "All Genes" = "All",
@@ -26,7 +21,7 @@ get_cnv_entrez_query_from_filters <- function(filters, gene_set_tbl, gene_tbl){
   if(length(gene_sets) == 0) return(as.integer(filters))
   genes <- filters %>%
     purrr::discard(., . %in% gene_sets)
-  query_genes_by_gene_type(gene_sets) %>%
+  iatlas.api.client::query_genes_by_gene_types(gene_sets) %>%
     dplyr::pull("entrez") %>%
     unique() %>%
     union(genes) %>%
@@ -49,8 +44,8 @@ build_cnv_dt_tbl <- function(tbl){
   tbl %>%
     dplyr::mutate(mean_diff = .data$mean_normal - .data$mean_cnv) %>%
     dplyr::select(
-      Metric             = .data$feature,
-      Group              = .data$tag,
+      Metric             = .data$feature_display,
+      Group              = .data$tag_short_display,
       Gene               = .data$hgnc,
       Direction          = .data$direction,
       `Mean Normal`      = .data$mean_normal,

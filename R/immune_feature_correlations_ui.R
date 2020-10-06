@@ -5,9 +5,9 @@ immune_feature_correlations_ui <- function(id) {
     shiny::tagList(
         messageBox(
             width = 12,
-            shiny::includeMarkdown(
-                "inst/markdown/immune_features_correlations.markdown"
-            )
+            shiny::includeMarkdown(get_markdown_path(
+                "immune_features_correlations"
+            ))
         ),
         shiny::fluidRow(
             optionsBox(

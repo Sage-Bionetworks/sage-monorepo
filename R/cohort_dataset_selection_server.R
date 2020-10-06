@@ -6,7 +6,6 @@ cohort_dataset_selection_server <- function(
     id,
     function(input, output, session) {
       ns <- session$ns
-
       output$dataset_selection_ui <- shiny::renderUI({
         shiny::selectInput(
           inputId  = ns("dataset_choice"),

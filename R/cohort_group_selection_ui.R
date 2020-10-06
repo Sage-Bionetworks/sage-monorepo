@@ -10,7 +10,7 @@ cohort_group_selection_ui <- function(id) {
                 condition = "output.display_immune_feature_bins",
                 shiny::uiOutput(ns("select_immune_feature_bins_group_ui")),
                 shiny::sliderInput(
-                    inputId = ns("immune_feature_bin_number"),
+                    inputId = ns("bin_number_choice"),
                     label = "Select number of bins",
                     min = 2,
                     max = 10,
