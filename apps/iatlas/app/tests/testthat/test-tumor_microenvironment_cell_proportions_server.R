@@ -5,8 +5,8 @@ test_that("module_works", {
       "cohort_obj" = shiny::reactiveVal(tcga_immune_subtype_cohort_obj_50)
     ),
     {
-      expect_type(output$barplot, "character")
-      expect_error(output$scatterplot, class = "shiny.silent.error")
+      expect_type(plot_data(), "list")
+      expect_enamed(plot_data(), c("sample", "x", "y", "color"))
     }
   )
 })
