@@ -31,7 +31,7 @@ test_that("build_cohort_tbl_by_tag", {
 })
 
 test_that("build_tag_cohort_object", {
-  res1 <- build_tag_cohort_object("TCGA",tcga_samples_50,"TCGA_Study")
+  res1 <- build_tag_cohort_object("TCGA", tcga_samples_50, "TCGA_Study")
   res2 <- build_tag_cohort_object( "PCAWG", pcawg_samples_50, "PCAWG_Study")
   expected_names <- c("sample_tbl", "group_tbl", "feature_tbl", "group_name")
 

@@ -12,7 +12,7 @@ cohort_filter_selection_server <- function(id, dataset) {
       # tag filters -----------------------------------------------------------
       tag_named_list <- shiny::reactive({
         iatlas.api.client::query_dataset_tags(dataset()) %>%
-          dplyr::select("display", "name") %>%
+          dplyr::select("display" = "short_display", "name") %>%
           tibble::deframe(.)
       })
 
