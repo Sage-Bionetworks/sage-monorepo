@@ -238,7 +238,7 @@ def get_related(requested, related_requested, tag_ids=set()):
 
         related_core_field_mapping = {
             'characteristics': related_tag_1.characteristics.label('characteristics'),
-            'color': related_tag_1.name.label('color'),
+            'color': related_tag_1.color.label('color'),
             'longDisplay': related_tag_1.long_display.label('long_display'),
             'name': related_tag_1.name.label('name'),
             'shortDisplay': related_tag_1.short_display.label('short_display')}
