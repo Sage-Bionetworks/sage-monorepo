@@ -5,9 +5,9 @@ clinical_outcomes_survival_ui <- function(id) {
     shiny::tagList(
         messageBox(
             width = 12,
-            shiny::includeMarkdown(
-                "inst/markdown/clinical_outcomes_survival.markdown"
-            )
+            shiny::includeMarkdown(get_markdown_path(
+              "clinical_outcomes_survival"
+            ))
         ),
         shiny::fluidRow(
             optionsBox(

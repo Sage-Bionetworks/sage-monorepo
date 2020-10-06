@@ -25,7 +25,6 @@ ui <- shiny::navbarPage(
   shiny::includeCSS("css/bootstrapTable.min.css"),
   title = shiny::strong("CRI iAtlas Portal"), selected = "Explore",
   shiny::tabPanel("Explore", explorepage_ui(), icon = icon("bar-chart")),
-  shiny::tabPanel("Tools", toolspage_ui(), icon = icon("wrench")),
   shiny::tabPanel("About", aboutpage_ui(), icon = icon("info-circle")),
   shiny::tabPanel("Documentation", docspage_ui(), icon = icon("file-text")),
   shiny::tabPanel("Resources", resourcespage_ui(), icon = icon("link")),

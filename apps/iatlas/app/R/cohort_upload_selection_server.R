@@ -1,6 +1,4 @@
-cohort_upload_selection_server <- function(
-  id
-){
+cohort_upload_selection_server <- function(id){
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -8,6 +6,7 @@ cohort_upload_selection_server <- function(
       ns <-  session$ns
 
       user_group_tbl <- shiny::reactive({
+
         shiny::validate(shiny::need(
           input$file1$datapath,
           "Use above uploader to upload group csv",

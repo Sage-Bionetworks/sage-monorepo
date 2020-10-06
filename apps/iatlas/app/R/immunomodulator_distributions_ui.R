@@ -5,9 +5,9 @@ immunomodulators_distributions_ui <- function(id) {
     shiny::tagList(
         messageBox(
             width = 12,
-            shiny::includeMarkdown(
-                "inst/markdown/immunomodulators_distributions.markdown"
-            )
+            shiny::includeMarkdown(get_markdown_path(
+                "immunomodulators_distributions"
+            ))
         ),
         shiny::fluidRow(
             optionsBox(
