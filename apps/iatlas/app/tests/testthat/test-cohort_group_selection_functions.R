@@ -1,4 +1,5 @@
-tag_group_tbl <- iatlas.api.client::query_dataset_tags("PCAWG")
+tag_group_tbl <- iatlas.api.client::query_dataset_tags("PCAWG") %>%
+  dplyr::select("display" = "short_display", "name")
 custom_group_tbl <- build_custom_group_tbl("PCAWG")
 available_groups_list <- build_cohort_group_list(
   tag_group_tbl, custom_group_tbl
