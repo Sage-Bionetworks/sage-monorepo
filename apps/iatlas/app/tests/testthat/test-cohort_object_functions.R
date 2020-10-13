@@ -96,7 +96,8 @@ test_that("query_feature_values_with_cohort_object", {
     "feature_name",
     "feature_display",
     "feature_value",
-    "feature_order"
+    "feature_order",
+    "feature_class"
   )
 
   result1 <- query_feature_values_with_cohort_object(
