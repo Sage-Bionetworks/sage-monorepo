@@ -9,10 +9,6 @@ from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
 from .tag import build_tag_graphql_response
-import logging
-
-log = logging.getLogger('node resolver helper  ')
-log.setLevel(logging.DEBUG)
 
 node_request_fields = {'dataSet',
                        'feature',
@@ -196,10 +192,10 @@ def build_tags_request(requested, tag_requested, data_set=None, entrez=None, fea
         tag_query = tag_query.select_from(node_1)
 
         if max_score:
-            query = query.filter(node_1.score <= max_score)
+            tag_query = tag_query.filter(node_1.score <= max_score)
 
         if min_score:
-            query = query.filter(node_1.score >= min_score)
+            tag_query = tag_query.filter(node_1.score >= min_score)
 
         if data_set or related or 'dataSet' in requested:
             data_set_join_condition = build_join_condition(
@@ -228,6 +224,19 @@ def build_tags_request(requested, tag_requested, data_set=None, entrez=None, fea
                 node_to_tag_1.node_id, node_1.id, node_to_tag_1.tag_id, network_subquery)
             tag_query = tag_query.join(
                 node_to_tag_1, and_(*node_tag_join_condition))
+
+        if feature:
+            feature_1 = aliased(Feature, name='f')
+            feature_join_condition = build_join_condition(
+                feature_1.id, node_1.feature_id, feature_1.name, feature)
+            tag_query = tag_query.join(
+                feature_1, and_(*feature_join_condition))
+
+        if entrez:
+            gene_1 = aliased(Gene, name='g')
+            gene_join_condition = build_join_condition(
+                gene_1.id, node_1.gene_id, gene_1.entrez, entrez)
+            tag_query = tag_query.join(gene_1, and_(*gene_join_condition))
 
         tag_query = tag_query.join(
             node_to_tag_2, node_to_tag_2.node_id == node_1.id)

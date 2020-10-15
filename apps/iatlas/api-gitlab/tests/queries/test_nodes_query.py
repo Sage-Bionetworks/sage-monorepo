@@ -246,9 +246,62 @@ def test_nodes_query_with_passed_tag(client, common_query_builder, tag):
         assert type(result['label']) is str or NoneType
         assert type(result['name']) is str
         assert isinstance(tags, list)
-        assert len(tags) > 0
-        for current_tag in tags[0:2]:
-            assert type(current_tag['name']) is str
+        assert len(tags) == 1
+        for current_tag in tags:
+            assert current_tag['name'] == tag
+
+
+def test_nodes_query_with_passed_tag_and_entrez(client, common_query_builder, entrez, tag):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        gene { entrez }
+                                        tags { name }
+                                    }
+                                }""")
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'entrez': [entrez], 'tag': [tag]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        gene = result['gene']
+        tags = result['tags']
+        assert type(result['name']) is str
+        assert gene['entrez'] == entrez
+        assert isinstance(tags, list)
+        assert len(tags) == 1
+        for current_tag in tags:
+            assert current_tag['name'] == tag
+
+
+def test_nodes_query_with_passed_tag_and_feature(client, common_query_builder, feature_name, tag):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        feature { name }
+                                        tags { name }
+                                    }
+                                }""")
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'feature': [feature_name], 'tag': [tag]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        feature = result['feature']
+        tags = result['tags']
+        assert type(result['name']) is str
+        assert feature['name'] == feature_name
+        assert isinstance(tags, list)
+        assert len(tags) == 1
+        for current_tag in tags:
             assert current_tag['name'] == tag
 
 
