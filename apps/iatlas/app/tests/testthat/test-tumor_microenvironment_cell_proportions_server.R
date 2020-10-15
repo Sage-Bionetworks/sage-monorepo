@@ -7,6 +7,7 @@ test_that("module_works", {
     {
       expect_type(plot_data_function(), "closure")
       expect_type(plot_data_function()(NULL), "list")
+      print(display_feature_class_selection_ui())
     }
   )
 })
