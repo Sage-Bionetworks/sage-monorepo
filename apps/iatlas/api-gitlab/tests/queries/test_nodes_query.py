@@ -5,6 +5,11 @@ from tests import NoneType
 
 
 @pytest.fixture(scope='module')
+def feature_name():
+    return 'B_cells_Aggregate2'
+
+
+@pytest.fixture(scope='module')
 def max_score():
     return 0.0234375
 
@@ -114,6 +119,29 @@ def test_nodes_query_with_passed_entrez(client, common_query_builder, entrez):
         gene = result['gene']
         assert type(result['name']) is str
         assert gene['entrez'] == entrez
+
+
+def test_nodes_query_with_passed_feature(client, common_query_builder, feature_name):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        feature { name }
+                                    }
+                                    page
+                                }""")
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'feature': [feature_name]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert page['page'] == 1
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        feature = result['feature']
+        assert type(result['name']) is str
+        assert feature['name'] == feature_name
 
 
 def test_nodes_query_with_passed_network(client, common_query_builder, network):

@@ -136,8 +136,12 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
         query = query.join(
             data_set_to_tag_1, and_(*data_set_tag_join_condition))
 
-    if 'feature' in requested:
-        query = query.outerjoin(feature_1, feature_1.id == node_1.feature_id)
+    if feature or 'feature' in requested:
+        is_outer = not bool(feature)
+        feature_join_condition = build_join_condition(
+            feature_1.id, node_1.feature_id, feature_1.name, feature)
+        query = query.join(feature_1, and_(
+            *feature_join_condition), isouter=is_outer)
 
     if entrez or 'gene' in requested:
         is_outer = not bool(entrez)
