@@ -24,6 +24,8 @@ def common_query_builder():
     def f(query_fields):
         return """query Nodes(
             $dataSet: [String!]
+            $entrez: [Int!]
+            $feature: [String!]
             $maxScore: Float
             $minScore: Float
             $network: [String!]
@@ -33,6 +35,8 @@ def common_query_builder():
         ) {
             nodes(
                 dataSet: $dataSet
+                entrez: $entrez
+                feature: $feature
                 maxScore: $maxScore
                 minScore: $minScore
                 network: $network
@@ -87,6 +91,29 @@ def test_nodes_query_with_passed_related(client, common_query_builder, related):
         assert type(result['name']) is str
         if gene:
             assert type(gene['entrez']) is int
+
+
+def test_nodes_query_with_passed_entrez(client, common_query_builder, entrez):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        gene { entrez }
+                                    }
+                                    page
+                                }""")
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'entrez': [entrez]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert page['page'] == 1
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        gene = result['gene']
+        assert type(result['name']) is str
+        assert gene['entrez'] == entrez
 
 
 def test_nodes_query_with_passed_network(client, common_query_builder, network):

@@ -9,6 +9,10 @@ from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
 from .tag import build_tag_graphql_response
+import logging
+
+log = logging.getLogger('node resolver helper  ')
+log.setLevel(logging.DEBUG)
 
 node_request_fields = {'dataSet',
                        'feature',
@@ -43,7 +47,7 @@ def build_node_graphql_response(tag_dict):
     return f
 
 
-def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
+def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, entrez=None, feature=None, max_score=None, min_score=None, network=None, related=None, tag=None):
     """
     Builds a SQL request.
     """
@@ -135,8 +139,12 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     if 'feature' in requested:
         query = query.outerjoin(feature_1, feature_1.id == node_1.feature_id)
 
-    if 'gene' in requested:
-        query = query.outerjoin(gene_1, gene_1.id == node_1.gene_id)
+    if entrez or 'gene' in requested:
+        is_outer = not bool(entrez)
+        gene_join_condition = build_join_condition(
+            gene_1.id, node_1.gene_id, gene_1.entrez, entrez)
+        query = query.join(gene_1, and_(
+            *gene_join_condition), isouter=is_outer)
 
     order = []
     append_to_order = order.append
@@ -157,7 +165,7 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     return query.distinct()
 
 
-def build_tags_request(requested, tag_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
+def build_tags_request(requested, tag_requested, data_set=None, entrez=None, feature=None, max_score=None, min_score=None, network=None, related=None, tag=None):
     if 'tags' in requested:
         sess = db.session
 
@@ -252,9 +260,9 @@ def build_tags_request(requested, tag_requested, data_set=None, max_score=None, 
     return None
 
 
-def return_node_derived_fields(requested, tag_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
+def return_node_derived_fields(requested, tag_requested, data_set=None, entrez=None, feature=None, max_score=None, min_score=None, network=None, related=None, tag=None):
     tag_results = build_tags_request(
-        requested, tag_requested, data_set=data_set, max_score=max_score, min_score=min_score, network=network, related=related, tag=tag)
+        requested, tag_requested, data_set=data_set, entrez=entrez, feature=feature, max_score=max_score, min_score=min_score, network=network, related=related, tag=tag)
 
     tag_dict = dict()
 
