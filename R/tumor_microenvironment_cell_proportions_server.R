@@ -32,10 +32,12 @@ tumor_microenvironment_cell_proportions_server  <- function(
       iatlas.modules::barplot_server(
         "barplot",
         plot_data_function,
-        barplot_xlab  = shiny::reactive("Fraction type by group"),
-        barplot_ylab  = shiny::reactive("Fraction mean"),
-        barplot_label = shiny::reactive("Fraction"),
-        drilldown     = shiny::reactive(T)
+        barplot_xlab    = shiny::reactive("Fraction type by group"),
+        barplot_ylab    = shiny::reactive("Fraction mean"),
+        barplot_label   = shiny::reactive("Fraction"),
+        drilldown       = shiny::reactive(T),
+        y_feature_input = shiny::reactive("Leukocyte Fraction"),
+        x_feature_input = shiny::reactive("Stromal Fraction")
       )
     }
   )
