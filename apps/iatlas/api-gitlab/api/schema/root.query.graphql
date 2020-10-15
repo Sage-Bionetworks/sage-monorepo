@@ -3,8 +3,8 @@ type Query {
   The "copyNumberResults" query accepts:
 
     - "dataSet", a list of data set names associated with the copy number results to filter by.
-    - "feature", a list of feature names associated with the copy number results to filter by.
     - "entrez", a list of gene entrez ids associated with the copy number results to filter by.
+    - "feature", a list of feature names associated with the copy number results to filter by.
     - "tag", a list of tag names associated with the copy number results to filter by.
     - "direction", the direction of the copy number results to filter by. (either 'Amp' or 'Del')
     - "minPValue", a minimum P value to filter the copy number results by.
@@ -299,6 +299,8 @@ type Query {
   The "nodes" query accepts:
 
     - "dataSet", a list of data set names associated with the nodes to filter by
+    - "entrez", a list of gene entrez ids associated with the nodes to filter by.
+    - "feature", a list of feature names associated with the nodes to filter by.
     - "maxScore", the maximum score associated with the nodes to filter by
     - "minScore", the minimum score associated with the nodes to filter by
     - "network", a list of tag names associated with the nodes that are also associated with the "network" tag to filter by
@@ -310,6 +312,8 @@ type Query {
   """
   nodes(
     dataSet: [String!]
+    entrez: [Int!]
+    feature: [String!]
     maxScore: Float
     minScore: Float
     network: [String!]

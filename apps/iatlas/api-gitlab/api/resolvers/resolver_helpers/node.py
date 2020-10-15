@@ -43,7 +43,7 @@ def build_node_graphql_response(tag_dict):
     return f
 
 
-def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
+def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, entrez=None, feature=None, max_score=None, min_score=None, network=None, related=None, tag=None):
     """
     Builds a SQL request.
     """
@@ -132,11 +132,19 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
         query = query.join(
             data_set_to_tag_1, and_(*data_set_tag_join_condition))
 
-    if 'feature' in requested:
-        query = query.outerjoin(feature_1, feature_1.id == node_1.feature_id)
+    if feature or 'feature' in requested:
+        is_outer = not bool(feature)
+        feature_join_condition = build_join_condition(
+            feature_1.id, node_1.feature_id, feature_1.name, feature)
+        query = query.join(feature_1, and_(
+            *feature_join_condition), isouter=is_outer)
 
-    if 'gene' in requested:
-        query = query.outerjoin(gene_1, gene_1.id == node_1.gene_id)
+    if entrez or 'gene' in requested:
+        is_outer = not bool(entrez)
+        gene_join_condition = build_join_condition(
+            gene_1.id, node_1.gene_id, gene_1.entrez, entrez)
+        query = query.join(gene_1, and_(
+            *gene_join_condition), isouter=is_outer)
 
     order = []
     append_to_order = order.append
@@ -157,7 +165,7 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     return query.distinct()
 
 
-def build_tags_request(requested, tag_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
+def build_tags_request(requested, tag_requested, data_set=None, entrez=None, feature=None, max_score=None, min_score=None, network=None, related=None, tag=None):
     if 'tags' in requested:
         sess = db.session
 
@@ -184,10 +192,10 @@ def build_tags_request(requested, tag_requested, data_set=None, max_score=None, 
         tag_query = tag_query.select_from(node_1)
 
         if max_score:
-            query = query.filter(node_1.score <= max_score)
+            tag_query = tag_query.filter(node_1.score <= max_score)
 
         if min_score:
-            query = query.filter(node_1.score >= min_score)
+            tag_query = tag_query.filter(node_1.score >= min_score)
 
         if data_set or related or 'dataSet' in requested:
             data_set_join_condition = build_join_condition(
@@ -216,6 +224,19 @@ def build_tags_request(requested, tag_requested, data_set=None, max_score=None, 
                 node_to_tag_1.node_id, node_1.id, node_to_tag_1.tag_id, network_subquery)
             tag_query = tag_query.join(
                 node_to_tag_1, and_(*node_tag_join_condition))
+
+        if feature:
+            feature_1 = aliased(Feature, name='f')
+            feature_join_condition = build_join_condition(
+                feature_1.id, node_1.feature_id, feature_1.name, feature)
+            tag_query = tag_query.join(
+                feature_1, and_(*feature_join_condition))
+
+        if entrez:
+            gene_1 = aliased(Gene, name='g')
+            gene_join_condition = build_join_condition(
+                gene_1.id, node_1.gene_id, gene_1.entrez, entrez)
+            tag_query = tag_query.join(gene_1, and_(*gene_join_condition))
 
         tag_query = tag_query.join(
             node_to_tag_2, node_to_tag_2.node_id == node_1.id)
@@ -252,9 +273,9 @@ def build_tags_request(requested, tag_requested, data_set=None, max_score=None, 
     return None
 
 
-def return_node_derived_fields(requested, tag_requested, data_set=None, max_score=None, min_score=None, network=None, related=None, tag=None):
+def return_node_derived_fields(requested, tag_requested, data_set=None, entrez=None, feature=None, max_score=None, min_score=None, network=None, related=None, tag=None):
     tag_results = build_tags_request(
-        requested, tag_requested, data_set=data_set, max_score=max_score, min_score=min_score, network=network, related=related, tag=tag)
+        requested, tag_requested, data_set=data_set, entrez=entrez, feature=feature, max_score=max_score, min_score=min_score, network=network, related=related, tag=tag)
 
     tag_dict = dict()
 

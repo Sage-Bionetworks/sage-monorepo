@@ -5,6 +5,11 @@ from tests import NoneType
 
 
 @pytest.fixture(scope='module')
+def feature_name():
+    return 'B_cells_Aggregate2'
+
+
+@pytest.fixture(scope='module')
 def max_score():
     return 0.0234375
 
@@ -24,6 +29,8 @@ def common_query_builder():
     def f(query_fields):
         return """query Nodes(
             $dataSet: [String!]
+            $entrez: [Int!]
+            $feature: [String!]
             $maxScore: Float
             $minScore: Float
             $network: [String!]
@@ -33,6 +40,8 @@ def common_query_builder():
         ) {
             nodes(
                 dataSet: $dataSet
+                entrez: $entrez
+                feature: $feature
                 maxScore: $maxScore
                 minScore: $minScore
                 network: $network
@@ -87,6 +96,52 @@ def test_nodes_query_with_passed_related(client, common_query_builder, related):
         assert type(result['name']) is str
         if gene:
             assert type(gene['entrez']) is int
+
+
+def test_nodes_query_with_passed_entrez(client, common_query_builder, entrez):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        gene { entrez }
+                                    }
+                                    page
+                                }""")
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'entrez': [entrez]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert page['page'] == 1
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        gene = result['gene']
+        assert type(result['name']) is str
+        assert gene['entrez'] == entrez
+
+
+def test_nodes_query_with_passed_feature(client, common_query_builder, feature_name):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        feature { name }
+                                    }
+                                    page
+                                }""")
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'feature': [feature_name]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert page['page'] == 1
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        feature = result['feature']
+        assert type(result['name']) is str
+        assert feature['name'] == feature_name
 
 
 def test_nodes_query_with_passed_network(client, common_query_builder, network):
@@ -191,9 +246,62 @@ def test_nodes_query_with_passed_tag(client, common_query_builder, tag):
         assert type(result['label']) is str or NoneType
         assert type(result['name']) is str
         assert isinstance(tags, list)
-        assert len(tags) > 0
-        for current_tag in tags[0:2]:
-            assert type(current_tag['name']) is str
+        assert len(tags) == 1
+        for current_tag in tags:
+            assert current_tag['name'] == tag
+
+
+def test_nodes_query_with_passed_tag_and_entrez(client, common_query_builder, entrez, tag):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        gene { entrez }
+                                        tags { name }
+                                    }
+                                }""")
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'entrez': [entrez], 'tag': [tag]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        gene = result['gene']
+        tags = result['tags']
+        assert type(result['name']) is str
+        assert gene['entrez'] == entrez
+        assert isinstance(tags, list)
+        assert len(tags) == 1
+        for current_tag in tags:
+            assert current_tag['name'] == tag
+
+
+def test_nodes_query_with_passed_tag_and_feature(client, common_query_builder, feature_name, tag):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        feature { name }
+                                        tags { name }
+                                    }
+                                }""")
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'feature': [feature_name], 'tag': [tag]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        feature = result['feature']
+        tags = result['tags']
+        assert type(result['name']) is str
+        assert feature['name'] == feature_name
+        assert isinstance(tags, list)
+        assert len(tags) == 1
+        for current_tag in tags:
             assert current_tag['name'] == tag
 
 
