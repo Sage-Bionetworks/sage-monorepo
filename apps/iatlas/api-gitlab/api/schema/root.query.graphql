@@ -19,12 +19,8 @@ type Query {
   If no arguments are passed, this will return all copy number results.
   """
   copyNumberResults(
-    first: Int
-    last: Int
-    after: String
-    before: String
+    pagination: PaginationInput
     distinct: Boolean
-    page: Int
     id: ID
     dataSet: [String!]
     feature: [String!]
@@ -96,11 +92,7 @@ type Query {
 
   If no arguments are passed, this will return all edges (please note, there will be a LOT of results).
   """
-  edges(
-    node1: [String!]
-    node2: [String!]
-    page: Int
-  ): EdgePage!
+  edges(node1: [String!], node2: [String!], page: Int): EdgePage!
 
   """
   The "features" query accepts:

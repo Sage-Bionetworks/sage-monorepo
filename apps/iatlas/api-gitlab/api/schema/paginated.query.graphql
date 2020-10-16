@@ -2,7 +2,24 @@ interface BaseNode {
   id: ID
 }
 
-type PageInfo {
+input PaginationInput {
+  cursorInput: CursorInput
+  offsetInput: OffsetInput
+}
+
+input CursorInput {
+  first: Int
+  last: Int
+  before: String
+  after: String
+}
+
+input OffsetInput {
+  page: Int
+  limit: Int
+}
+
+type CursorInfo {
   hasNextPage: Boolean
   hasPreviousPage: Boolean
   startCursor: String
@@ -17,7 +34,7 @@ type OffsetInfo {
 type Pagination {
   pages: Int
   total: Int
-  cursorInfo: PageInfo
+  cursorInfo: CursorInfo
   offsetInfo: OffsetInfo
 }
 

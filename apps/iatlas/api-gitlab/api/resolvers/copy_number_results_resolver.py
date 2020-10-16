@@ -35,9 +35,13 @@ def resolve_copy_number_results(_obj, info, **kwargs):
 
     query, count_query = build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=kwargs.pop('dataSet', 0), **kwargs)
 
-    first = kwargs.get('first')
-    last = kwargs.get('last')
-    limit, sort_order = get_limit(first, last)
+    pagination = kwargs.get('pagination', {})
+    cursor = pagination.get('cursorInput')
+    first = cursor.get('first') if cursor else None
+    last = cursor.get('last') if cursor else None
+    offset = pagination.get('offsetInput')
+    limit = offset.get('limit') if offset else None
+    limit, sort_order = get_limit(first, last, limit)
     pageInfo = {}
 
     if distinct and page != None and not math.isnan(page):

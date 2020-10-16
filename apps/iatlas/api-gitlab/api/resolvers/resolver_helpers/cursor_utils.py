@@ -18,9 +18,11 @@ def get_cursor(before, after):
         return (from_cursor_hash(before), DESC)
     return (None, ASC)
 
-def get_limit(first, last):
+def get_limit(first, last, limit):
     if first and not math.isnan(first):
         return (int(first), ASC)
     if last and not math.isnan(last):
         return (int(last), DESC)
+    if limit and not math.isnan(limit):
+        return (int(limit), ASC)
     return (MAX_LIMIT, ASC)

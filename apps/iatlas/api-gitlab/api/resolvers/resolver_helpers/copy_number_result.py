@@ -52,7 +52,7 @@ def build_cnr_graphql_response(copy_number_result):
     }
 
 
-def build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, first=None, after=None, last=None, before=None, data_set=None, direction=None, distinct=False, entrez=None,
+def build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, pagination=None, offsetInput=None, data_set=None, direction=None, distinct=False, entrez=None,
                                      feature=None, max_p_value=None, max_log10_p_value=None,
                                      min_log10_p_value=None, min_mean_cnv=None,
                                      min_mean_normal=None, min_p_value=None, min_t_stat=None, page=None,
@@ -69,8 +69,8 @@ def build_copy_number_result_request(requested, data_set_requested, feature_requ
     tag_1 = orm.aliased(Tag, name='t')
 
     core_field_mapping = {
-                            'id': copy_number_result_1.id.label('id'),
-                            'direction': copy_number_result_1.direction.label('direction'),
+                          'id': copy_number_result_1.id.label('id'),
+                          'direction': copy_number_result_1.direction.label('direction'),
                           'meanNormal': copy_number_result_1.mean_normal.label('mean_normal'),
                           'meanCnv': copy_number_result_1.mean_cnv.label('mean_cnv'),
                           'pValue': copy_number_result_1.p_value.label('p_value'),
@@ -175,7 +175,10 @@ def build_copy_number_result_request(requested, data_set_requested, feature_requ
         return (query.distinct(), count_query.distinct())
 
     # Handle cursor and sort order
-    cursor, sort_order = get_cursor(before, after)
+    cursorInput = pagination.get('cursorInput', {})
+    print('cursorInput', cursorInput)
+    print(cursorInput.get('after'))
+    cursor, sort_order = get_cursor(cursorInput.get('before'), cursorInput.get('after'))
     order_by = copy_number_result_1.id
     if sort_order == 'ASC':
         query = query.order_by(order_by)
