@@ -45,7 +45,7 @@ build_cnv_dt_tbl <- function(tbl){
     dplyr::mutate(mean_diff = .data$mean_normal - .data$mean_cnv) %>%
     dplyr::select(
       Metric             = .data$feature_display,
-      Group              = .data$tag_display,
+      Group              = .data$tag_short_display,
       Gene               = .data$hgnc,
       Direction          = .data$direction,
       `Mean Normal`      = .data$mean_normal,

@@ -25,7 +25,7 @@ test_that("module is shown", {
     ),
     expr = {
       expect_true(display_module())
-      expect_warning(output$ui)
+      expect_type(output$ui, "list")
     }
   )
 })

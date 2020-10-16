@@ -86,8 +86,8 @@ build_tag_cohort_object <- function(dataset, samples, tag){
 build_cohort_tbl_by_tag <- function(dataset, samples, tag){
   iatlas.api.client::query_cohort_selector(dataset, tag, samples = samples) %>%
     dplyr::select(
-      "name" = "display",
-      "group" = "name",
+      "name" = "long_display",
+      "group" = "short_display",
       "characteristics",
       "color",
       "sample" = "samples",
