@@ -7,7 +7,9 @@ cohort_group_selection_server <- function(id, selected_dataset) {
       # Select group type ----
 
       tag_group_tbl <- shiny::reactive(
-        iatlas.api.client::query_dataset_tags(selected_dataset())
+        selected_dataset() %>%
+          iatlas.api.client::query_dataset_tags() %>%
+          dplyr::select("display" = "short_display", "name")
       )
 
       custom_group_tbl <- shiny::reactive({

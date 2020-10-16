@@ -4,7 +4,7 @@ test_that("cohort_group_selection_server_immune_subtype", {
     args = list("selected_dataset" = shiny::reactiveVal("TCGA")),
     {
       expect_type(tag_group_tbl(), "list")
-      expect_named(tag_group_tbl(), c("name", "display"))
+      expect_named(tag_group_tbl(), c("display", "name"))
       expect_type(custom_group_tbl(), "list")
       expect_named(custom_group_tbl(), c("display", "name"))
       expect_type(available_groups_list(), "character")
