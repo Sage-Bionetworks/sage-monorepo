@@ -172,7 +172,6 @@ def build_tags_request(requested, tag_requested, data_set=None, entrez=None, fea
         data_set_1 = aliased(Dataset, name='d')
         network_tag_2 = aliased(Tag, name='nt2')
         node_1 = aliased(Node, name='n')
-        node_to_tag_1 = aliased(NodeToTag, name='ntt1')
         node_to_tag_2 = aliased(NodeToTag, name='ntt2')
         tag_1 = aliased(Tag, name='t')
         tag_to_tag_1 = aliased(TagToTag, name='tt')
@@ -218,12 +217,23 @@ def build_tags_request(requested, tag_requested, data_set=None, entrez=None, fea
         # Filter results down by the nodes' association with the passed network
         if network:
             network_tag_1 = aliased(Tag, name='nt1')
+            node_to_tag_1 = aliased(NodeToTag, name='ntt1')
             network_subquery = sess.query(network_tag_1.id).filter(
                 network_tag_1.name.in_(network))
             node_tag_join_condition = build_join_condition(
                 node_to_tag_1.node_id, node_1.id, node_to_tag_1.tag_id, network_subquery)
             tag_query = tag_query.join(
                 node_to_tag_1, and_(*node_tag_join_condition))
+
+        if tag:
+            tag_2 = aliased(Tag, name='t2')
+            node_to_tag_3 = aliased(NodeToTag, name='ntt3')
+            node_tag_subquery = sess.query(tag_2.id).filter(
+                tag_2.name.in_(tag))
+            node_tag_join_condition = build_join_condition(
+                node_to_tag_3.node_id, node_1.id, node_to_tag_3.tag_id, node_tag_subquery)
+            tag_query = tag_query.join(
+                node_to_tag_3, and_(*node_tag_join_condition))
 
         if feature:
             feature_1 = aliased(Feature, name='f')
@@ -250,10 +260,7 @@ def build_tags_request(requested, tag_requested, data_set=None, entrez=None, fea
         tag_query = tag_query.join(
             tag_to_tag_1, and_(*tag_to_tag_join_condition))
 
-        tag_join_condition = build_join_condition(
-            tag_to_tag_1.tag_id, tag_1.id, tag_1.name, tag)
-
-        tag_query = tag_query.join(tag_1, and_(*tag_join_condition))
+        tag_query = tag_query.join(tag_1, tag_to_tag_1.tag_id == tag_1.id)
 
         order = [node_1.id]
         append_to_order = order.append
