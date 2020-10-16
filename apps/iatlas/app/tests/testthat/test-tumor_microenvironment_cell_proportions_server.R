@@ -1,4 +1,4 @@
-test_that("module_works", {
+test_that("tumor_microenvironment_cell_proportions_server", {
   shiny::testServer(
     tumor_microenvironment_cell_proportions_server,
     args = list(
@@ -7,7 +7,6 @@ test_that("module_works", {
     {
       expect_type(plot_data_function(), "closure")
       expect_type(plot_data_function()(NULL), "list")
-      print(display_feature_class_selection_ui())
     }
   )
 })
