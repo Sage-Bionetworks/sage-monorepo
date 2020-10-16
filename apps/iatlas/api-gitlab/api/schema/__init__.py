@@ -9,7 +9,7 @@ schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 # Import GraphQl schemas/
 root_query = load_schema_from_path(schema_dirname + '/root.query.graphql')
 relay_base_query = load_schema_from_path(
-    schema_dirname + '/relayBase.query.graphql')
+    schema_dirname + '/paginated.query.graphql')
 copy_number_result_query = load_schema_from_path(
     schema_dirname + '/copyNumberResult.query.graphql')
 data_set_query = load_schema_from_path(

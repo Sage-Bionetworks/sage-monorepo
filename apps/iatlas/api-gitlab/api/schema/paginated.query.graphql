@@ -1,0 +1,28 @@
+interface BaseNode {
+  id: ID
+}
+
+type PageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: String
+  endCursor: String
+}
+
+type OffsetInfo {
+  page: Int
+  limit: Int
+}
+
+type Pagination {
+  pages: Int
+  total: Int
+  cursorInfo: PageInfo
+  offsetInfo: OffsetInfo
+}
+
+interface BaseResult {
+  pagination: Pagination
+  error: String
+  items: [BaseNode]
+}

@@ -7,11 +7,9 @@ from .resolver_helpers.cursor_utils import get_limit, to_cursor_hash
 
 
 def resolve_copy_number_results(_obj, info, **kwargs):
-    meta_requested = get_requested(
-        selection_set=info.field_nodes[0].selection_set, requested_field_mapping={'page', 'pageInfo', 'totalCount'})
+    pagination_set = get_selection_set(info=info, child_node='pagination')
+    pagination_requested = get_requested(selection_set=pagination_set, requested_field_mapping={'page', 'pages', 'total', 'cursorInfo', 'offsetInfo'})
 
-    # edges = get_selection_set(info=info, child_node='edges')
-    # selection_set = get_selection_set(selection_set=edges, child_node='node')
     selection_set = get_selection_set(info=info, child_node='items')
 
     requested = get_requested(selection_set=selection_set, requested_field_mapping=cnr_request_fields)
@@ -69,12 +67,22 @@ def resolve_copy_number_results(_obj, info, **kwargs):
     data = {
         'items': results
     }
-    if 'pageInfo' in meta_requested:
-        data['pageInfo'] = pageInfo
-    if 'page' in meta_requested:
-        data['page'] = page
-    # only call count if "totalCount" is requested
-    if 'totalCount' in meta_requested:
-        count = count_query.count() # TODO: Consider caching this value per query, and/or making count query in parallel
-        data['totalCount'] = count
+
+    print('pagination_requested', pagination_requested)
+    if 'cursorInfo' in pagination_requested or 'offsetInfo' in pagination_requested:
+        pagination = {}
+        if 'cursorInfo' in pagination_requested:
+            pagination['cursorInfo'] = pageInfo
+        if 'offsetInfo' in pagination_requested:
+            offsetInfo = {
+                'page': page,
+                'limit': limit
+            }
+            pagination['offsetInfo'] = offsetInfo
+        # only call count if "totalCount" is requested
+        if 'total' or 'pages' in pagination_requested:
+            count = count_query.count() # TODO: Consider caching this value per query, and/or making count query in parallel
+            pagination['total'] = count
+            pagination['pages'] = math.ceil(count/limit)
+        data['pagination'] = pagination
     return data

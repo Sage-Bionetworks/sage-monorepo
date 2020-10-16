@@ -31,14 +31,8 @@ type CopyNumberResultNode implements BaseNode {
   tag: SimpleTag!
 }
 
-type CopyNumberResultEdge implements BaseEdge {
-  cursor: String
-  node: CopyNumberResultNode
-}
-
 type CopyNumberResult implements BaseResult {
-  totalCount: Int
-  pageInfo: PageInfo
-  page: Int
+  pagination: Pagination
+  error: String
   items: [CopyNumberResultNode]
 }
