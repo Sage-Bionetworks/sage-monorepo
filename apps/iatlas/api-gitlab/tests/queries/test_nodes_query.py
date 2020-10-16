@@ -213,10 +213,8 @@ def test_nodes_query_with_passed_network_and_tag(client, common_query_builder, n
             assert type(gene['entrez']) is int
         assert isinstance(tags, list)
         assert len(tags) > 0
-        for current_tag in tags[0:2]:
-            assert type(current_tag['name']) is str
-            assert current_tag['name'] != network
-            assert current_tag['name'] == tag
+        assert any(current_tag['name'] == tag for current_tag in tags)
+        assert not any(current_tag['name'] == network for current_tag in tags)
 
 
 def test_nodes_query_with_passed_tag(client, common_query_builder, tag):
@@ -246,9 +244,8 @@ def test_nodes_query_with_passed_tag(client, common_query_builder, tag):
         assert type(result['label']) is str or NoneType
         assert type(result['name']) is str
         assert isinstance(tags, list)
-        assert len(tags) == 1
-        for current_tag in tags:
-            assert current_tag['name'] == tag
+        assert len(tags) > 0
+        assert any(current_tag['name'] == tag for current_tag in tags)
 
 
 def test_nodes_query_with_passed_tag_and_entrez(client, common_query_builder, entrez, tag):
@@ -273,9 +270,8 @@ def test_nodes_query_with_passed_tag_and_entrez(client, common_query_builder, en
         assert type(result['name']) is str
         assert gene['entrez'] == entrez
         assert isinstance(tags, list)
-        assert len(tags) == 1
-        for current_tag in tags:
-            assert current_tag['name'] == tag
+        assert len(tags) > 0
+        assert any(current_tag['name'] == tag for current_tag in tags)
 
 
 def test_nodes_query_with_passed_tag_and_feature(client, common_query_builder, feature_name, tag):
@@ -300,9 +296,8 @@ def test_nodes_query_with_passed_tag_and_feature(client, common_query_builder, f
         assert type(result['name']) is str
         assert feature['name'] == feature_name
         assert isinstance(tags, list)
-        assert len(tags) == 1
-        for current_tag in tags:
-            assert current_tag['name'] == tag
+        assert len(tags) > 0
+        assert any(current_tag['name'] == tag for current_tag in tags)
 
 
 def test_nodes_query_with_passed_maxScore(client, common_query_builder, max_score):
