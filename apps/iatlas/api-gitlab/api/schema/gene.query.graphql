@@ -57,12 +57,15 @@ The "GenesByTag" type may return:
 - The "color", a color to represent the gene as a hex value.
 - The "display", a friendly name for the gene.
 - A list of genes associated with that tag.
+- The "longDisplay", a long display name for the tag used in text descriptions.
+- The "shortDisplay", a friendly name for the tag (used in plots).
 - The "tag" (the name of the tag).
 """
 type GenesByTag {
   characteristics: String
   color: String
-  display: String
   genes: [Gene!]!
+  longDisplay: String
+  shortDisplay: String
   tag: String!
 }

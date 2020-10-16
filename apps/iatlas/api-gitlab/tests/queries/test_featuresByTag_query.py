@@ -28,7 +28,7 @@ def test_featuresByTag_query_with_feature(client, data_set, related, chosen_feat
         ) {
             tag
             characteristics
-            display
+            shortDisplay
             features {
                 class
                 display
@@ -57,7 +57,7 @@ def test_featuresByTag_query_with_feature(client, data_set, related, chosen_feat
         features = result['features']
         assert type(result['tag']) is str
         assert type(result['characteristics']) is str or NoneType
-        assert type(result['display']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
         assert isinstance(features, list)
         assert len(features) > 0
         # Don't need to iterate through every result.
@@ -101,7 +101,7 @@ def test_featuresByTag_query_no_feature(client, data_set, related):
         ) {
             tag
             characteristics
-            display
+            longDisplay
             features {
                 class
                 display
@@ -126,7 +126,7 @@ def test_featuresByTag_query_no_feature(client, data_set, related):
         features = result['features']
         assert type(result['tag']) is str
         assert type(result['characteristics']) is str or NoneType
-        assert type(result['display']) is str or NoneType
+        assert type(result['longDisplay']) is str or NoneType
         assert isinstance(features, list)
         assert len(features) > 0
         # Don't need to iterate through every result.
@@ -163,7 +163,7 @@ def test_featuresByTag_query_no_relations(client, data_set, related, chosen_feat
         ) {
             tag
             characteristics
-            display
+            shortDisplay
             features {
                 display
                 name
@@ -186,7 +186,7 @@ def test_featuresByTag_query_no_relations(client, data_set, related, chosen_feat
         features = result['features']
         assert type(result['tag']) is str
         assert type(result['characteristics']) is str or NoneType
-        assert type(result['display']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
         assert isinstance(features, list)
         assert len(features) == 1
         # Don't need to iterate through every result.
@@ -223,7 +223,7 @@ def test_featuresByTag_query_with_feature_class(client, data_set, related, chose
         ) {
             tag
             characteristics
-            display
+            shortDisplay
             features {
                 class
                 name
@@ -245,7 +245,7 @@ def test_featuresByTag_query_with_feature_class(client, data_set, related, chose
         features = result['features']
         assert type(result['tag']) is str
         assert type(result['characteristics']) is str or NoneType
-        assert type(result['display']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
         assert isinstance(features, list)
         assert len(features) == 1
         # Don't need to iterate through every result.

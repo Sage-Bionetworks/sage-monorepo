@@ -42,7 +42,7 @@ def build_gene_type_request(_obj, info, name=None):
     """
     sess = db.session
 
-    selection_set = info.field_nodes[0].selection_set
+    selection_set = get_selection_set(info=info)
 
     gene_1 = orm.aliased(Gene, name='g')
     gene_type_1 = orm.aliased(GeneType, name='m')

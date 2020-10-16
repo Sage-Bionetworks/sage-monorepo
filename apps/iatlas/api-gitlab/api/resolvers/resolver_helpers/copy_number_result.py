@@ -21,36 +21,37 @@ def build_cnr_graphql_response(copy_number_result):
         'cursor': to_cursor_hash(get_value(copy_number_result, 'id')),
         'node': {
             'id': get_value(copy_number_result, 'id'),
-            'direction': get_value(copy_number_result, 'direction'),
-            'meanNormal': get_value(copy_number_result, 'mean_normal'),
-            'meanCnv': get_value(copy_number_result, 'mean_cnv'),
-            'pValue': get_value(copy_number_result, 'p_value'),
-            'log10PValue': get_value(copy_number_result, 'log10_p_value'),
-            'tStat': get_value(copy_number_result, 't_stat'),
-            'dataSet': {
-                'display': get_value(copy_number_result, 'data_set_display'),
-                'name': get_value(copy_number_result, 'data_set_name'),
-            },
-            'feature': {
-                'display': get_value(copy_number_result, 'feature_display'),
-                'name': get_value(copy_number_result, 'feature_name'),
-                'order': get_value(copy_number_result, 'order'),
-                'unit': get_value(copy_number_result, 'unit')
-            },
-            'gene': {
-                'entrez': get_value(copy_number_result, 'entrez'),
-                'hgnc': get_value(copy_number_result, 'hgnc'),
-                'description': get_value(copy_number_result, 'description'),
-                'friendlyName': get_value(copy_number_result, 'friendlyName'),
-                'ioLandscapeName': get_value(copy_number_result, 'ioLandscapeName')
-            },
-            'tag': {
-                'characteristics': get_value(copy_number_result, 'characteristics'),
-                'color': get_value(copy_number_result, 'color'),
-                'display': get_value(copy_number_result, 'tag_display'),
-                'name': get_value(copy_number_result, 'tag_name'),
-            }
+        'direction': get_value(copy_number_result, 'direction'),
+        'meanNormal': get_value(copy_number_result, 'mean_normal'),
+        'meanCnv': get_value(copy_number_result, 'mean_cnv'),
+        'pValue': get_value(copy_number_result, 'p_value'),
+        'log10PValue': get_value(copy_number_result, 'log10_p_value'),
+        'tStat': get_value(copy_number_result, 't_stat'),
+        'dataSet': {
+            'display': get_value(copy_number_result, 'data_set_display'),
+            'name': get_value(copy_number_result, 'data_set_name'),
+        },
+        'feature': {
+            'display': get_value(copy_number_result, 'feature_display'),
+            'name': get_value(copy_number_result, 'feature_name'),
+            'order': get_value(copy_number_result, 'order'),
+            'unit': get_value(copy_number_result, 'unit')
+        },
+        'gene': {
+            'entrez': get_value(copy_number_result, 'entrez'),
+            'hgnc': get_value(copy_number_result, 'hgnc'),
+            'description': get_value(copy_number_result, 'description'),
+            'friendlyName': get_value(copy_number_result, 'friendlyName'),
+            'ioLandscapeName': get_value(copy_number_result, 'ioLandscapeName')
+        },
+        'tag': {
+            'characteristics': get_value(copy_number_result, 'characteristics'),
+            'color': get_value(copy_number_result, 'color'),
+            'longDisplay': get_value(copy_number_result, 'tag_long_display'),
+            'name': get_value(copy_number_result, 'tag_name'),
+            'shortDisplay': get_value(copy_number_result, 'tag_short_display')
         }
+    }
 
     }
 
@@ -96,8 +97,9 @@ def build_copy_number_result_request(requested, data_set_requested, feature_requ
 
     tag_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
                          'color': tag_1.color.label('color'),
-                         'display': tag_1.display.label('tag_display'),
-                         'name': tag_1.name.label('tag_name')}
+                         'longDisplay': tag_1.long_display.label('tag_long_display'),
+                         'name': tag_1.name.label('tag_name'),
+                         'shortDisplay': tag_1.short_display.label('tag_short_display')}
 
     core = get_selected(requested, core_field_mapping)
 

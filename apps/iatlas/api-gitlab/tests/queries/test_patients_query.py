@@ -13,31 +13,39 @@ def barcode():
 def common_query_builder():
     def f(query_fields):
         return """query Patients(
-            $ageAtDiagnosis: [Int!]
             $barcode: [String!]
+            $dataSet: [String!]
             $ethnicity: [EthnicityEnum!]
             $gender: [GenderEnum!]
-            $height: [Int!]
+            $maxAgeAtDiagnosis: Int
+            $maxHeight: Float
+            $maxWeight: Float
+            $minAgeAtDiagnosis: Int
+            $minHeight: Float
+            $minWeight: Float
             $race: [RaceEnum!]
             $sample: [String!]
             $slide: [String!]
-            $weight: [Int!]
         ) {
             patients(
-                ageAtDiagnosis: $ageAtDiagnosis
                 barcode: $barcode
+                dataSet: $dataSet
                 ethnicity: $ethnicity
                 gender: $gender
-                height: $height
+                maxAgeAtDiagnosis: $maxAgeAtDiagnosis
+                maxHeight: $maxHeight
+                maxWeight: $maxWeight
+                minAgeAtDiagnosis: $minAgeAtDiagnosis
+                minHeight: $minHeight
+                minWeight: $minWeight
                 race: $race
                 sample: $sample
                 slide: $slide
-                weight: $weight
             )""" + query_fields + "}"
     return f
 
 
-def test_patients_query(client, common_query_builder, barcode):
+def test_patients_query_with_passed_barcode(client, common_query_builder, barcode):
     query = common_query_builder("""{
                                     ageAtDiagnosis
                                     barcode
@@ -75,17 +83,87 @@ def test_patients_query(client, common_query_builder, barcode):
             assert type(sample) is str
 
 
-def test_patients_query_with_passed_ageAtDiagnosis(client, common_query_builder, age_at_diagnosis):
-    query = common_query_builder("""{ ageAtDiagnosis }""")
+def test_patients_query_with_passed_data_set(client, common_query_builder, data_set):
+    query = common_query_builder("""{
+                                    barcode
+                                    slides { name }
+                                    samples
+                                }""")
     response = client.post(
-        '/api', json={'query': query, 'variables': {'ageAtDiagnosis': [age_at_diagnosis]}})
+        '/api', json={'query': query, 'variables': {'dataSet': [data_set]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['patients']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        slides = result['slides']
+        samples = result['samples']
+        assert type(result['barcode']) is str
+        assert isinstance(slides, list)
+        for slide in slides:
+            assert type(slide['name']) is str
+        assert isinstance(samples, list)
+        for sample in samples:
+            assert type(sample) is str
+
+
+def test_patients_query_with_passed_slide_and_maxAgeAtDiagnosis(client, common_query_builder, slide, max_age_at_diagnosis):
+    query = common_query_builder("""{
+        ageAtDiagnosis
+        samples
+        slides {
+            name
+        }
+    }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'maxAgeAtDiagnosis': max_age_at_diagnosis, 'slide': [slide]}})
     json_data = json.loads(response.data)
     results = json_data['data']['patients']
 
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results:
-        assert result['ageAtDiagnosis'] == age_at_diagnosis
+        slides = result['slides']
+        assert isinstance(slides, list)
+        assert len(slides) > 0
+        for current_slide in slides:
+            assert current_slide['name'] == slide
+        samples = result['samples']
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample) is str
+        assert result['ageAtDiagnosis'] <= max_age_at_diagnosis
+
+
+def test_patients_query_with_passed_slide_and_minAgeAtDiagnosis(client, common_query_builder, slide, min_age_at_diagnosis):
+    query = common_query_builder("""{
+        ageAtDiagnosis
+        samples
+        slides {
+            name
+        }
+    }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'minAgeAtDiagnosis': min_age_at_diagnosis, 'slide': [slide]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['patients']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results:
+        slides = result['slides']
+        assert isinstance(slides, list)
+        assert len(slides) > 0
+        for current_slide in slides:
+            assert current_slide['name'] == slide
+        samples = result['samples']
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample) is str
+        assert result['ageAtDiagnosis'] >= min_age_at_diagnosis
 
 
 def test_patients_query_with_passed_ethnicity(client, common_query_builder, ethnicity):
@@ -114,17 +192,42 @@ def test_patients_query_with_passed_gender(client, common_query_builder, gender)
         assert result['gender'] == gender
 
 
-def test_patients_query_with_passed_height(client, common_query_builder, height):
-    query = common_query_builder("""{ height }""")
+def test_patients_query_with_passed_maxHeight(client, common_query_builder, max_height):
+    query = common_query_builder("""{
+        height
+        samples
+        slides {
+            name
+        }
+    }""")
     response = client.post(
-        '/api', json={'query': query, 'variables': {'height': [height]}})
+        '/api', json={'query': query, 'variables': {'maxHeight': max_height}})
     json_data = json.loads(response.data)
     results = json_data['data']['patients']
 
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results:
-        assert result['height'] == height
+        assert result['height'] <= max_height
+
+
+def test_patients_query_with_passed_minHeight(client, common_query_builder, min_height):
+    query = common_query_builder("""{
+        height
+        samples
+        slides {
+            name
+        }
+    }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'minHeight': min_height}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['patients']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results:
+        assert result['height'] >= min_height
 
 
 def test_patients_query_with_passed_race(client, common_query_builder, race):
@@ -140,17 +243,42 @@ def test_patients_query_with_passed_race(client, common_query_builder, race):
         assert result['race'] == race
 
 
-def test_patients_query_with_passed_weight(client, common_query_builder, weight):
-    query = common_query_builder("""{ weight }""")
+def test_patients_query_with_passed_maxWeight(client, common_query_builder, max_weight):
+    query = common_query_builder("""{
+        weight
+        samples
+        slides {
+            name
+        }
+    }""")
     response = client.post(
-        '/api', json={'query': query, 'variables': {'weight': [weight]}})
+        '/api', json={'query': query, 'variables': {'maxWeight': max_weight}})
     json_data = json.loads(response.data)
     results = json_data['data']['patients']
 
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results:
-        assert result['weight'] == weight
+        assert result['weight'] <= max_weight
+
+
+def test_patients_query_with_passed_minWeight(client, common_query_builder, min_weight):
+    query = common_query_builder("""{
+        weight
+        samples
+        slides {
+            name
+        }
+    }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'minWeight': min_weight}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['patients']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results:
+        assert result['weight'] >= min_weight
 
 
 def test_patients_query_with_passed_sample(client, common_query_builder, sample):
@@ -185,7 +313,7 @@ def test_patients_query_with_passed_slide(client, common_query_builder, slide):
     assert len(results) > 0
     for result in results:
         slides = result['slides']
-
         assert isinstance(slides, list)
+        assert len(slides) > 0
         for current_slide in slides:
             assert current_slide['name'] == slide

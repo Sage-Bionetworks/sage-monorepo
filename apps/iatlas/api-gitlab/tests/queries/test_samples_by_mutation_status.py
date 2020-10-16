@@ -24,28 +24,34 @@ def sample_name():
 def common_query_builder():
     def f(query_fields):
         return """query SamplesByMutationStatus(
-            $ageAtDiagnosis: [Int!]
             $ethnicity: [EthnicityEnum!]
             $gender: [GenderEnum!]
-            $height: [Int!]
+            $maxAgeAtDiagnosis: Int
+            $maxHeight: Float
+            $maxWeight: Float
+            $minAgeAtDiagnosis: Int
+            $minHeight: Float
+            $minWeight: Float
             $mutationId: [Int!]
             $mutationStatus: StatusEnum
             $patient: [String!]
             $race: [RaceEnum!]
             $sample: [String!]
-            $weight: [Int!]
         ) {
             samplesByMutationStatus(
-                ageAtDiagnosis: $ageAtDiagnosis
                 ethnicity: $ethnicity
                 gender: $gender
-                height: $height
+                maxAgeAtDiagnosis: $maxAgeAtDiagnosis
+                maxHeight: $maxHeight
+                maxWeight: $maxWeight
+                minAgeAtDiagnosis: $minAgeAtDiagnosis
+                minHeight: $minHeight
+                minWeight: $minWeight
                 mutationId: $mutationId
                 mutationStatus: $mutationStatus
                 patient: $patient
                 race: $race
                 sample: $sample
-                weight: $weight
             )""" + query_fields + "}"
     return f
 
@@ -144,7 +150,7 @@ def test_samples_by_mutation_status_query_with_all_args(client, common_query, mu
             assert current_sample['name'] == sample_name
 
 
-def test_samples_by_mutation_status_query_with_passed_ageAtDiagnosis(client, common_query_builder, age_at_diagnosis):
+def test_samples_by_mutation_status_query_with_passed_maxAgeAtDiagnosis(client, common_query_builder, max_age_at_diagnosis):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -152,7 +158,7 @@ def test_samples_by_mutation_status_query_with_passed_ageAtDiagnosis(client, com
                                     }
                                 }""")
     response = client.post(
-        '/api', json={'query': query, 'variables': {'ageAtDiagnosis': [age_at_diagnosis]}})
+        '/api', json={'query': query, 'variables': {'maxAgeAtDiagnosis': max_age_at_diagnosis}})
     json_data = json.loads(response.data)
     results = json_data['data']['samplesByMutationStatus']
 
@@ -164,7 +170,30 @@ def test_samples_by_mutation_status_query_with_passed_ageAtDiagnosis(client, com
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples[0:2]:
-            assert current_sample['patient']['ageAtDiagnosis'] == age_at_diagnosis
+            assert current_sample['patient']['ageAtDiagnosis'] <= max_age_at_diagnosis
+
+
+def test_samples_by_mutation_status_query_with_passed_minAgeAtDiagnosis(client, common_query_builder, min_age_at_diagnosis):
+    query = common_query_builder("""{
+                                    status
+                                    samples {
+                                        patient { ageAtDiagnosis }
+                                    }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'minAgeAtDiagnosis': min_age_at_diagnosis}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByMutationStatus']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert result['status'] in status_enum.enums
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples[0:2]:
+            assert current_sample['patient']['ageAtDiagnosis'] >= min_age_at_diagnosis
 
 
 def test_samples_by_mutation_status_query_with_passed_ethnicity(client, common_query_builder, ethnicity):
@@ -213,7 +242,7 @@ def test_samples_by_mutation_status_query_with_passed_gender(client, common_quer
             assert current_sample['patient']['gender'] == gender
 
 
-def test_samples_by_mutation_status_query_with_passed_height(client, common_query_builder, height):
+def test_samples_by_mutation_status_query_with_passed_maxHeight(client, common_query_builder, max_height):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -221,7 +250,7 @@ def test_samples_by_mutation_status_query_with_passed_height(client, common_quer
                                     }
                                 }""")
     response = client.post(
-        '/api', json={'query': query, 'variables': {'height': [height]}})
+        '/api', json={'query': query, 'variables': {'maxHeight': max_height}})
     json_data = json.loads(response.data)
     results = json_data['data']['samplesByMutationStatus']
 
@@ -233,7 +262,30 @@ def test_samples_by_mutation_status_query_with_passed_height(client, common_quer
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples[0:2]:
-            assert current_sample['patient']['height'] == height
+            assert current_sample['patient']['height'] <= max_height
+
+
+def test_samples_by_mutation_status_query_with_passed_minHeight(client, common_query_builder, min_height):
+    query = common_query_builder("""{
+                                    status
+                                    samples {
+                                        patient { height }
+                                    }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'minHeight': min_height}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByMutationStatus']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert result['status'] in status_enum.enums
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples[0:2]:
+            assert current_sample['patient']['height'] >= min_height
 
 
 def test_samples_by_mutation_status_query_with_passed_patient(client, common_query_builder, patient):
@@ -282,7 +334,7 @@ def test_samples_by_mutation_status_query_with_passed_race(client, common_query_
             assert current_sample['patient']['race'] == race
 
 
-def test_samples_by_mutation_status_query_with_passed_weight(client, common_query_builder, weight):
+def test_samples_by_mutation_status_query_with_passed_maxWeight(client, common_query_builder, max_weight):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -290,7 +342,7 @@ def test_samples_by_mutation_status_query_with_passed_weight(client, common_quer
                                     }
                                 }""")
     response = client.post(
-        '/api', json={'query': query, 'variables': {'weight': [weight]}})
+        '/api', json={'query': query, 'variables': {'maxWeight': max_weight}})
     json_data = json.loads(response.data)
     results = json_data['data']['samplesByMutationStatus']
 
@@ -302,4 +354,27 @@ def test_samples_by_mutation_status_query_with_passed_weight(client, common_quer
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples[0:2]:
-            assert current_sample['patient']['weight'] == weight
+            assert current_sample['patient']['weight'] <= max_weight
+
+
+def test_samples_by_mutation_status_query_with_passed_minWeight(client, common_query_builder, min_weight):
+    query = common_query_builder("""{
+                                    status
+                                    samples {
+                                        patient { weight }
+                                    }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'minWeight': min_weight}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByMutationStatus']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert result['status'] in status_enum.enums
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples[0:2]:
+            assert current_sample['patient']['weight'] >= min_weight

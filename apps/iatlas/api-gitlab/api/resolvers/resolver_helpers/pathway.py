@@ -30,7 +30,7 @@ def build_pathway_request(_obj, info, name=None):
     """
     sess = db.session
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
+    selection_set = get_selection_set(info=info)
 
     gene_1 = orm.aliased(Gene, name='g')
     pathway_1 = orm.aliased(Pathway, name='pw')

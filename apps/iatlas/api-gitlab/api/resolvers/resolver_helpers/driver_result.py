@@ -13,7 +13,7 @@ def build_driver_result_request(_obj, info, data_set=None, entrez=None, feature=
     """
     sess = db.session
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, True, 'items')
+    selection_set = get_selection_set(info=info, child_node='items')
 
     driver_result_1 = orm.aliased(DriverResult, name='dr')
     gene_1 = orm.aliased(Gene, name='g')
@@ -76,8 +76,9 @@ def build_driver_result_request(_obj, info, data_set=None, entrez=None, feature=
             selection_set, child_node='tag')
         tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
                                   'color': tag_1.color.label('color'),
-                                  'display': tag_1.display.label('tag_display'),
-                                  'name': tag_1.name.label('tag_name')}
+                                  'longDisplay': tag_1.long_display.label('tag_long_display'),
+                                  'name': tag_1.name.label('tag_name'),
+                                  'shortDisplay': tag_1.short_display.label('tag_short_display')}
         core |= build_option_args(
             tag_selection_set, tag_core_field_mapping)
 

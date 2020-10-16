@@ -7,34 +7,40 @@ from tests import NoneType
 def common_query_builder():
     def f(query_fields):
         return """query SamplesByTag(
-        $ageAtDiagnosis: [Int!]
         $dataSet: [String!]
         $ethnicity: [EthnicityEnum!]
         $feature: [String!]
         $featureClass: [String!]
         $gender: [GenderEnum!]
-        $height: [Int!]
+        $maxAgeAtDiagnosis: Int
+        $maxHeight: Float
+        $maxWeight: Float
+        $minAgeAtDiagnosis: Int
+        $minHeight: Float
+        $minWeight: Float
         $name: [String!]
         $patient: [String!]
         $race: [RaceEnum!]
         $related: [String!]
         $tag: [String!]
-        $weight: [Int!]
     ) {
         samplesByTag(
-            ageAtDiagnosis: $ageAtDiagnosis
             dataSet: $dataSet
             ethnicity: $ethnicity
             feature: $feature
             featureClass: $featureClass
             gender: $gender
-            height: $height
+            maxAgeAtDiagnosis: $maxAgeAtDiagnosis
+            maxHeight: $maxHeight
+            maxWeight: $maxWeight
+            minAgeAtDiagnosis: $minAgeAtDiagnosis
+            minHeight: $minHeight
+            minWeight: $minWeight
             name: $name
             patient: $patient
             race: $race
             related: $related
             tag: $tag
-            weight: $weight
         )""" + query_fields + "}"
     return f
 
@@ -114,7 +120,7 @@ def test_samples_by_tag_query_with_no_args(client, common_query_builder):
 def test_samples_by_tag_query_with_passed_patient_and_sample(client, common_query_builder, patient, sample):
     query = common_query_builder("""{
                                     tag
-                                    display
+                                    shortDisplay
                                     samples {
                                         name
                                         patient { barcode }
@@ -132,7 +138,7 @@ def test_samples_by_tag_query_with_passed_patient_and_sample(client, common_quer
     for result in results[0:2]:
         samples = result['samples']
         assert type(result['tag']) is str
-        assert type(result['display']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples:
@@ -244,7 +250,7 @@ def test_samples_by_tag_query_with_all_args(client, common_query_builder, data_s
             assert current_sample['patient']['barcode'] == patient
 
 
-def test_samples_by_tag_query_with_passed_ageAtDiagnosis(client, common_query_builder, age_at_diagnosis):
+def test_samples_by_tag_query_with_passed_maxAgeAtDiagnosis(client, common_query_builder, max_age_at_diagnosis):
     query = common_query_builder("""{
                                     tag
                                     samples {
@@ -252,7 +258,7 @@ def test_samples_by_tag_query_with_passed_ageAtDiagnosis(client, common_query_bu
                                     }
                                 }""")
     response = client.post(
-        '/api', json={'query': query, 'variables': {'ageAtDiagnosis': [age_at_diagnosis]}})
+        '/api', json={'query': query, 'variables': {'maxAgeAtDiagnosis': max_age_at_diagnosis}})
     json_data = json.loads(response.data)
     results = json_data['data']['samplesByTag']
 
@@ -264,7 +270,30 @@ def test_samples_by_tag_query_with_passed_ageAtDiagnosis(client, common_query_bu
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples:
-            assert current_sample['patient']['ageAtDiagnosis'] == age_at_diagnosis
+            assert current_sample['patient']['ageAtDiagnosis'] <= max_age_at_diagnosis
+
+
+def test_samples_by_tag_query_with_passed_minAgeAtDiagnosis(client, common_query_builder, min_age_at_diagnosis):
+    query = common_query_builder("""{
+                                    tag
+                                    samples {
+                                        patient { ageAtDiagnosis }
+                                    }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'minAgeAtDiagnosis': min_age_at_diagnosis}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByTag']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert type(result['tag']) is str
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert current_sample['patient']['ageAtDiagnosis'] >= min_age_at_diagnosis
 
 
 def test_samples_by_tag_query_with_passed_ethnicity(client, common_query_builder, ethnicity):
@@ -313,7 +342,7 @@ def test_samples_by_tag_query_with_passed_gender(client, common_query_builder, g
             assert current_sample['patient']['gender'] == gender
 
 
-def test_samples_by_tag_query_with_passed_height(client, common_query_builder, height):
+def test_samples_by_tag_query_with_passed_maxHeight(client, common_query_builder, max_height):
     query = common_query_builder("""{
                                     tag
                                     samples {
@@ -321,7 +350,7 @@ def test_samples_by_tag_query_with_passed_height(client, common_query_builder, h
                                     }
                                 }""")
     response = client.post(
-        '/api', json={'query': query, 'variables': {'height': [height]}})
+        '/api', json={'query': query, 'variables': {'maxHeight': max_height}})
     json_data = json.loads(response.data)
     results = json_data['data']['samplesByTag']
 
@@ -333,7 +362,30 @@ def test_samples_by_tag_query_with_passed_height(client, common_query_builder, h
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples:
-            assert current_sample['patient']['height'] == height
+            assert current_sample['patient']['height'] <= max_height
+
+
+def test_samples_by_tag_query_with_passed_minHeight(client, common_query_builder, min_height):
+    query = common_query_builder("""{
+                                    tag
+                                    samples {
+                                        patient { height }
+                                    }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'minHeight': min_height}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByTag']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert type(result['tag']) is str
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert current_sample['patient']['height'] >= min_height
 
 
 def test_samples_by_tag_query_with_passed_race(client, common_query_builder, race):
@@ -359,7 +411,7 @@ def test_samples_by_tag_query_with_passed_race(client, common_query_builder, rac
             assert current_sample['patient']['race'] == race
 
 
-def test_samples_by_tag_query_with_passed_weight(client, common_query_builder, weight):
+def test_samples_by_tag_query_with_passed_maxWeight(client, common_query_builder, max_weight):
     query = common_query_builder("""{
                                     tag
                                     samples {
@@ -367,7 +419,7 @@ def test_samples_by_tag_query_with_passed_weight(client, common_query_builder, w
                                     }
                                 }""")
     response = client.post(
-        '/api', json={'query': query, 'variables': {'weight': [weight]}})
+        '/api', json={'query': query, 'variables': {'maxWeight': max_weight}})
     json_data = json.loads(response.data)
     results = json_data['data']['samplesByTag']
 
@@ -379,4 +431,27 @@ def test_samples_by_tag_query_with_passed_weight(client, common_query_builder, w
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples:
-            assert current_sample['patient']['weight'] == weight
+            assert current_sample['patient']['weight'] <= max_weight
+
+
+def test_samples_by_tag_query_with_passed_minWeight(client, common_query_builder, min_weight):
+    query = common_query_builder("""{
+                                    tag
+                                    samples {
+                                        patient { weight }
+                                    }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'minWeight': min_weight}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByTag']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert type(result['tag']) is str
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert current_sample['patient']['weight'] >= min_weight

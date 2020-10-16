@@ -14,7 +14,8 @@ related_fields = ['copy_number_results',
                   'samples',
                   'tags']
 
-core_fields = ['id', 'name', 'characteristics', 'display', 'color']
+core_fields = ['id', 'name', 'characteristics',
+               'color', 'long_display', 'short_display']
 
 
 def return_tag_query(*args, model=Tag):

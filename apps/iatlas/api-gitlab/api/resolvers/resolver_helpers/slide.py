@@ -23,15 +23,15 @@ def build_slide_graphql_response(slide):
     }
 
 
-def build_slide_request(requested, patient_requested, age_at_diagnosis=None, barcode=None, ethnicity=None, gender=None, height=None,
-                        name=None, race=None, weight=None, sample=None):
+def build_slide_request(requested, patient_requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, ethnicity=None, gender=None, max_height=None, min_height=None,
+                        name=None, race=None, max_weight=None, min_weight=None, sample=None):
     """
     Builds a SQL query.
     """
     sess = db.session
 
     has_patient_filters = bool(
-        barcode or age_at_diagnosis or ethnicity or gender or height or race or weight)
+        barcode or max_age_at_diagnosis or min_age_at_diagnosis or ethnicity or gender or max_height or min_height or race or max_weight or min_weight)
 
     patient_1 = aliased(Patient, name='p')
     sample_1 = aliased(Sample, name='s')
@@ -63,9 +63,13 @@ def build_slide_request(requested, patient_requested, age_at_diagnosis=None, bar
         patient_join_condition = build_join_condition(
             slide_1.patient_id, patient_1.id, patient_1.barcode, barcode)
 
-        if bool(age_at_diagnosis):
+        if bool(max_age_at_diagnosis):
             patient_join_condition.append(
-                patient_1.age_at_diagnosis.in_(age_at_diagnosis))
+                patient_1.age_at_diagnosis <= max_age_at_diagnosis)
+
+        if bool(min_age_at_diagnosis):
+            patient_join_condition.append(
+                patient_1.age_at_diagnosis >= min_age_at_diagnosis)
 
         if bool(ethnicity):
             patient_join_condition.append(patient_1.ethnicity.in_(ethnicity))
@@ -73,14 +77,20 @@ def build_slide_request(requested, patient_requested, age_at_diagnosis=None, bar
         if bool(gender):
             patient_join_condition.append(patient_1.gender.in_(gender))
 
-        if bool(height):
-            patient_join_condition.append(patient_1.height.in_(height))
+        if bool(max_height):
+            patient_join_condition.append(patient_1.height <= max_height)
+
+        if bool(min_height):
+            patient_join_condition.append(patient_1.height >= min_height)
 
         if bool(race):
             patient_join_condition.append(patient_1.race.in_(race))
 
-        if bool(weight):
-            patient_join_condition.append(patient_1.weight.in_(weight))
+        if bool(max_weight):
+            patient_join_condition.append(patient_1.weight <= max_weight)
+
+        if bool(min_weight):
+            patient_join_condition.append(patient_1.weight >= min_weight)
 
         query = query.join(patient_1, and_(
             *patient_join_condition), isouter=is_outer)
@@ -103,8 +113,8 @@ def build_slide_request(requested, patient_requested, age_at_diagnosis=None, bar
     return query
 
 
-def request_slides(requested, patient_requested, age_at_diagnosis=None, barcode=None,
-                   ethnicity=None, gender=None, height=None, name=None, race=None, weight=None, sample=None):
-    query = build_slide_request(requested, patient_requested, age_at_diagnosis=age_at_diagnosis, barcode=barcode,
-                                ethnicity=ethnicity, gender=gender, height=height, name=name, race=race, weight=weight, sample=sample)
+def request_slides(requested, patient_requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None,
+                   ethnicity=None, gender=None, max_height=None, min_height=None, name=None, race=None, max_weight=None, min_weight=None, sample=None):
+    query = build_slide_request(requested, patient_requested, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, barcode=barcode,
+                                ethnicity=ethnicity, gender=gender, max_height=max_height, min_height=min_height, name=name, race=race, max_weight=max_weight, min_weight=min_weight, sample=sample)
     return query.all()

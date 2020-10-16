@@ -4,12 +4,11 @@ from .resolver_helpers import (build_gene_graphql_response, gene_request_fields,
 
 
 def resolve_genes_by_tag(_obj, info, dataSet, related, entrez=None, feature=None, featureClass=None, geneType=None, sample=None, tag=None):
-    requested = get_requested(
-        info, gene_request_fields, True, child_node='genes')
+    requested = get_requested(info, gene_request_fields, child_node='genes')
 
-    tag_requested = get_requested(
-        info=info, requested_field_mapping=simple_tag_request_fields)
+    tag_requested = get_requested(info, simple_tag_request_fields)
     tag_requested.add('by_tag')
+
     gene_results = request_genes(requested, tag_requested=tag_requested, data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass,
                                  gene_type=geneType, related=related, sample=sample, tag=tag)
     gene_ids = set(gene.id for gene in gene_results)
@@ -20,13 +19,14 @@ def resolve_genes_by_tag(_obj, info, dataSet, related, entrez=None, feature=None
 
     def build_response(feature_set):
         gene_tag, genes = feature_set
-        pubs_dict, samples_dict, types_dict = return_gene_derived_fields(info, data_set=dataSet, feature=feature, feature_class=featureClass, gene_type=geneType,
-                                                                         related=related, sample=sample, tag=tag, gene_ids=gene_ids, by_tag=True)
+        pubs_dict, samples_dict, types_dict = return_gene_derived_fields(
+            info, data_set=dataSet, feature=feature, feature_class=featureClass, gene_type=geneType, related=related, sample=sample, tag=tag, gene_ids=gene_ids, by_tag=True)
         return {
             'characteristics': get_value(genes[0], 'characteristics'),
             'color': get_value(genes[0], 'color'),
-            'display': get_value(genes[0], 'display'),
-            'genes': list(map(build_gene_graphql_response(types_dict, pubs_dict, samples_dict), genes)),
+            'genes': map(build_gene_graphql_response(types_dict, pubs_dict, samples_dict), genes),
+            'longDisplay': get_value(genes[0], 'tag_long_display'),
+            'shortDisplay': get_value(genes[0], 'tag_short_display'),
             'tag': gene_tag
         }
 

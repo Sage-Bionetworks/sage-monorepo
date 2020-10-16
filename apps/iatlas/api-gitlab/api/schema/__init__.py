@@ -2,13 +2,7 @@ from ariadne import load_schema_from_path, make_executable_schema, ObjectType, S
 import os
 import decimal
 from api.resolvers import (
-    resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_edges,
-    resolve_features, resolve_features_by_class, resolve_features_by_tag, resolve_gene,
-    resolve_gene_family, resolve_gene_function, resolve_gene_types, resolve_genes,
-    resolve_genes_by_tag, resolve_immune_checkpoints, resolve_method_tags, resolve_mutations,
-    resolve_mutation_types, resolve_nodes, resolve_pathways, resolve_patients, resolve_related,
-    resolve_samples, resolve_samples_by_mutations_status, resolve_samples_by_tag, resolve_slides,
-    resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
+    resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_edges, resolve_features, resolve_features_by_class, resolve_features_by_tag, resolve_gene, resolve_gene_family, resolve_gene_function, resolve_gene_types, resolve_genes, resolve_genes_by_tag, resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutations_by_sample, resolve_mutation_types, resolve_nodes, resolve_pathways, resolve_patients, resolve_related, resolve_samples, resolve_samples_by_mutations_status, resolve_samples_by_tag, resolve_slides, resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 
@@ -57,10 +51,8 @@ tag_query = load_schema_from_path(schema_dirname + '/tag.query.graphql')
 therapy_type_query = load_schema_from_path(
     schema_dirname + '/therapyType.query.graphql')
 
-type_defs = [root_query, relay_base_query, copy_number_result_query, data_set_query, driver_result_query, edge_query, feature_query,
-             gene_query, gene_family_query, gene_function_query, gene_type_query, immune_checkpoint_query,
-             method_tag_query, mutation_query, mutation_code_query, node_query, pathway_query, patient_query,
-             publication_query, sample_query, slide_query, super_category, tag_query, therapy_type_query]
+type_defs = [
+    root_query, relay_base_query, copy_number_result_query, data_set_query, driver_result_query, edge_query, feature_query, gene_query, gene_family_query, gene_function_query, gene_type_query, immune_checkpoint_query, method_tag_query, mutation_query, mutation_code_query, node_query, pathway_query, patient_query, publication_query, sample_query, slide_query, super_category, tag_query, therapy_type_query]
 
 # Initialize custom scalars.
 direction_enum_scalar = ScalarType('DirectionEnum')
@@ -175,6 +167,7 @@ root.set_field('genesByTag', resolve_genes_by_tag)
 root.set_field('immuneCheckpoints', resolve_immune_checkpoints)
 root.set_field('methodTags', resolve_method_tags)
 root.set_field('mutations', resolve_mutations)
+root.set_field('mutationsBySample', resolve_mutations_by_sample)
 root.set_field('mutationTypes', resolve_mutation_types)
 root.set_field('nodes', resolve_nodes)
 root.set_field('pathways', resolve_pathways)
@@ -192,10 +185,6 @@ root.set_field('therapyTypes', resolve_therapy_types)
 
 schema = make_executable_schema(
     type_defs,
-    [root, copy_number_result, data_set, direction_enum_scalar, driver_result, driver_result_page,
-     edge, edge_page, ethnicity_enum_scalar, feature, features_by_class, features_by_tag, gender_enum_scalar, gene, gene_family,
-     gene_function, genes_by_tag, gene_related_sample, gene_type, immune_checkpoint, method_tag, mutation,
-     mutation_code, mutation_type, node, node_page, pathway, patient, publication, race_enum_scalar, related_by_data_set,
-     sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type,
-     simple_node, simple_publication, simple_tag, slide, tag, super_category, therapy_type]
+    [
+        root, copy_number_result, data_set, direction_enum_scalar, driver_result, driver_result_page, edge, edge_page, ethnicity_enum_scalar, feature, features_by_class, features_by_tag, gender_enum_scalar, gene, gene_family, gene_function, genes_by_tag, gene_related_sample, gene_type, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, node, node_page, pathway, patient, publication, race_enum_scalar, related_by_data_set, sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_node, simple_publication, simple_tag, slide, tag, super_category, therapy_type]
 )

@@ -30,7 +30,7 @@ def build_gene_family_request(_obj, info, name=None):
     """
     sess = db.session
 
-    selection_set = get_selection_set(info.field_nodes[0].selection_set, False)
+    selection_set = get_selection_set(info=info)
 
     gene_1 = orm.aliased(Gene, name='g')
     gene_family_1 = orm.aliased(GeneFamily, name='m')
