@@ -2,7 +2,7 @@ interface BaseResult {
   pageInfo: PageInfo
   totalCount: Int
   page: Int
-  edges: [BaseEdge]
+  items: [BaseNode]
 }
 
 interface BaseEdge {

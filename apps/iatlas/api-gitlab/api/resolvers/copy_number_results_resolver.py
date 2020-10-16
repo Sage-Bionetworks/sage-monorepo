@@ -3,15 +3,16 @@ from collections import deque
 from .resolver_helpers import (build_cnr_graphql_response, build_copy_number_result_request, cnr_request_fields, data_set_request_fields,
                                feature_request_fields, gene_request_fields, get_requested, get_selection_set, simple_tag_request_fields)
 
-from .resolver_helpers.cursor_utils import get_limit
+from .resolver_helpers.cursor_utils import get_limit, to_cursor_hash
 
 
 def resolve_copy_number_results(_obj, info, **kwargs):
     meta_requested = get_requested(
         selection_set=info.field_nodes[0].selection_set, requested_field_mapping={'page', 'pageInfo', 'totalCount'})
 
-    edges = get_selection_set(info=info, child_node='edges')
-    selection_set = get_selection_set(selection_set=edges, child_node='node')
+    # edges = get_selection_set(info=info, child_node='edges')
+    # selection_set = get_selection_set(selection_set=edges, child_node='node')
+    selection_set = get_selection_set(info=info, child_node='items')
 
     requested = get_requested(selection_set=selection_set, requested_field_mapping=cnr_request_fields)
 
@@ -62,11 +63,11 @@ def resolve_copy_number_results(_obj, info, **kwargs):
 
         results_map = map(build_cnr_graphql_response, resp) # returns iterator
         results = deque(results_map)
-        pageInfo['startCursor'] = results[0]['cursor']
-        pageInfo['endCursor'] = results[-1]['cursor']
+        pageInfo['startCursor'] = to_cursor_hash(results[0]['id'])
+        pageInfo['endCursor'] = to_cursor_hash(results[-1]['id'])
 
     data = {
-        'edges': results
+        'items': results
     }
     if 'pageInfo' in meta_requested:
         data['pageInfo'] = pageInfo

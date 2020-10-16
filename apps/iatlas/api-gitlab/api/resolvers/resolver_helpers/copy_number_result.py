@@ -2,7 +2,7 @@ from sqlalchemy import and_, orm
 from api import db
 from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
 from .general_resolvers import build_join_condition, build_option_args, get_selected, get_selection_set, get_value
-from .cursor_utils import get_cursor, to_cursor_hash
+from .cursor_utils import get_cursor
 
 cnr_request_fields = {'dataSet',
                       'direction',
@@ -18,9 +18,7 @@ cnr_request_fields = {'dataSet',
 
 def build_cnr_graphql_response(copy_number_result):
     return {
-        'cursor': to_cursor_hash(get_value(copy_number_result, 'id')),
-        'node': {
-            'id': get_value(copy_number_result, 'id'),
+        'id': get_value(copy_number_result, 'id'),
         'direction': get_value(copy_number_result, 'direction'),
         'meanNormal': get_value(copy_number_result, 'mean_normal'),
         'meanCnv': get_value(copy_number_result, 'mean_cnv'),
@@ -51,8 +49,6 @@ def build_cnr_graphql_response(copy_number_result):
             'name': get_value(copy_number_result, 'tag_name'),
             'shortDisplay': get_value(copy_number_result, 'tag_short_display')
         }
-    }
-
     }
 
 

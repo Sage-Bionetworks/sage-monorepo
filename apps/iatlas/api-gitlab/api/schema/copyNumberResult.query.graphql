@@ -40,5 +40,5 @@ type CopyNumberResult implements BaseResult {
   totalCount: Int
   pageInfo: PageInfo
   page: Int
-  edges: [CopyNumberResultEdge]
+  items: [CopyNumberResultNode]
 }
