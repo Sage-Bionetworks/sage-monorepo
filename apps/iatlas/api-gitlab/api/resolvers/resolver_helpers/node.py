@@ -190,10 +190,10 @@ def build_tags_request(requested, tag_requested, data_set=None, entrez=None, fea
         tag_query = sess.query(*tag_core)
         tag_query = tag_query.select_from(node_1)
 
-        if max_score:
+        if max_score or max_score == 0:
             tag_query = tag_query.filter(node_1.score <= max_score)
 
-        if min_score:
+        if min_score or min_score == 0:
             tag_query = tag_query.filter(node_1.score >= min_score)
 
         if data_set or related or 'dataSet' in requested:

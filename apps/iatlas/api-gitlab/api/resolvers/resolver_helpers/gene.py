@@ -7,6 +7,10 @@ from api.db_models import (
     GeneFunction, GeneToSample, GeneToType, GeneType, ImmuneCheckpoint, Pathway, Publication,
     PublicationToGeneToGeneType, SuperCategory, Sample, SampleToTag, Tag, TagToTag, TherapyType)
 from .general_resolvers import build_join_condition, build_option_args, get_selected, get_selection_set, get_value
+import logging
+
+log = logging.getLogger('gene resolver helper ')
+log.setLevel(logging.DEBUG)
 
 
 gene_request_fields = {'entrez',
@@ -82,9 +86,8 @@ def build_pub_gene_gene_type_join_condition(gene_ids, gene_types, pub_gene_gene_
     return join_condition
 
 
-def build_gene_request(requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None,
-                       gene_function=None, gene_type=None, immune_checkpoint=None, pathway=None, related=None,
-                       sample=None, super_category=None, tag=None, therapy_type=None, tag_requested=set()):
+def build_gene_request(
+        requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=None, immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None, tag_requested=set()):
     """
     Builds a SQL request.
     """
@@ -177,11 +180,18 @@ def build_gene_request(requested, data_set=None, entrez=None, feature=None, feat
         query = query.join(therapy_type_1, and_(
             *therapy_type_join_condition), isouter=is_outer)
 
-    if sample or tag_requested:
+    if sample or tag_requested or (max_rna_seq_expr or max_rna_seq_expr == 0) or (min_rna_seq_expr or min_rna_seq_expr == 0):
         gene_to_sample_1 = aliased(GeneToSample, name='gs')
 
-        gene_to_sample_sub_query = sess.query(gene_to_sample_1.sample_id).filter(
-            gene_to_sample_1.gene_id == gene_1.id)
+        gene_to_sample_filter_condition = [
+            gene_to_sample_1.gene_id == gene_1.id]
+        log.debug("max_rna_seq_expr: %s", max_rna_seq_expr)
+        gene_to_sample_filter_condition.extend(
+            [gene_to_sample_1.rna_seq_expr <= max_rna_seq_expr] if max_rna_seq_expr != None else [])
+        gene_to_sample_filter_condition.extend(
+            [gene_to_sample_1.rna_seq_expr >= min_rna_seq_expr] if min_rna_seq_expr != None else [])
+        gene_to_sample_sub_query = sess.query(
+            gene_to_sample_1.sample_id).filter(*gene_to_sample_filter_condition)
         sample_join_condition = [sample_1.id.in_(gene_to_sample_sub_query)]
 
         if sample:
@@ -405,7 +415,8 @@ def get_publications(info, gene_types=[], gene_ids=set(), by_tag=False):
     return []
 
 
-def get_samples(info, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None, gene_ids=set(), by_tag=False):
+def get_samples(
+        info, data_set=None, feature=None, feature_class=None, max_rna_seq_expr=None, min_rna_seq_expr=None, related=None, sample=None, tag=None, gene_ids=set(), by_tag=False):
     child_node = 'genes' if by_tag else None
     selection_set = get_selection_set(info=info, child_node=child_node)
     requested = build_option_args(selection_set, {'samples': 'samples'})
@@ -442,6 +453,10 @@ def get_samples(info, data_set=None, feature=None, feature_class=None, related=N
 
         gene_sample_join_condition = build_join_condition(
             gene_to_sample_1.sample_id, sample_1.id, gene_to_sample_1.gene_id, gene_ids)
+        gene_sample_join_condition.extend(
+            [gene_to_sample_1.rna_seq_expr <= max_rna_seq_expr] if max_rna_seq_expr or max_rna_seq_expr == 0 else [])
+        gene_sample_join_condition.extend(
+            [gene_to_sample_1.rna_seq_expr <= min_rna_seq_expr] if min_rna_seq_expr or min_rna_seq_expr == 0 else [])
 
         sample_query = sample_query.join(
             gene_to_sample_1, and_(*gene_sample_join_condition))
@@ -525,20 +540,17 @@ def request_gene(requested, entrez=None, sample=None):
     return query.one_or_none()
 
 
-def request_genes(requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None,
-                  gene_function=None, gene_type=None, immune_checkpoint=None, pathway=None, related=None,
-                  sample=None, super_category=None, tag=None, therapy_type=None, tag_requested=set()):
-    genes_query = build_gene_request(requested, tag_requested=tag_requested, data_set=data_set, entrez=entrez, feature=feature,
-                                     feature_class=feature_class, gene_family=gene_family, gene_function=gene_function,
-                                     gene_type=gene_type, immune_checkpoint=immune_checkpoint, pathway=pathway,
-                                     related=related, sample=sample, super_category=super_category, tag=tag,
-                                     therapy_type=therapy_type)
+def request_genes(
+        requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=None, immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None, tag_requested=set()):
+    genes_query = build_gene_request(
+        requested, tag_requested=tag_requested, data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type)
     return genes_query.distinct().all()
 
 
-def return_gene_derived_fields(info, gene_ids=set(), data_set=None, feature=None, feature_class=None, gene_type=None, related=None, sample=None, tag=None, by_tag=False):
-    samples = get_samples(info, data_set=data_set, feature=feature, feature_class=feature_class,
-                          related=related, sample=sample, gene_ids=gene_ids, tag=tag, by_tag=by_tag)
+def return_gene_derived_fields(
+        info, gene_ids=set(), data_set=None, feature=None, feature_class=None, max_rna_seq_expr=None, min_rna_seq_expr=None, gene_type=None, related=None, sample=None, tag=None, by_tag=False):
+    samples = get_samples(
+        info, data_set=data_set, feature=feature, feature_class=feature_class, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, related=related, sample=sample, gene_ids=gene_ids, tag=tag, by_tag=by_tag)
     gene_types = get_gene_types(info, gene_type=gene_type, gene_ids=gene_ids)
     pubs = get_publications(info, gene_types=gene_types, gene_ids=gene_ids)
 

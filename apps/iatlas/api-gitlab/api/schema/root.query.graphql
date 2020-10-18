@@ -192,37 +192,55 @@ type Query {
   """
   The "genes" query accepts:
 
+    - "dataSet", a list of data set names related to samples that are related to the genes to look up.
     - "entrez", a list of entrez ids for the genes to look up.
     - "geneType", a list of gene types related to the genes to look up.
+    - "maxRnaSeqExp", the maximum RNA Sequence Expression value related to the genes to look up.
+    - "minRnaSeqExp", the minimum RNA Sequence Expression value related to the genes to look up.
+    - "related", a list of tag names related to data sets to filter by.
     - "sample", a list of sample names associated with the gene (used to look up RNA sequence expressions).
+    - "tag", a list of tag names related to samples that are related to the genes to look up.
 
   If no arguments are passed, this will return all genes.
   """
-  genes(entrez: [Int!], geneType: [String!], sample: [String!]): [Gene!]!
+  genes(
+    dataSet: [String!]
+    entrez: [Int!]
+    geneType: [String!]
+    maxRnaSeqExp: Float
+    minRnaSeqExp: Float
+    related: [String!]
+    sample: [String!]
+    tag: [String!]
+  ): [Gene!]!
 
   """
   The "genesByTag" query accepts:
 
     - "dataSet", a list of data set names to filter by (required).
-    - "related", a list of tag names associated with the data sets to filter by (required).
-    - "tag", a list of tag names associated with the related to filter by.
+    - "entrez", a list of gene entrez ids to filter by.
     - "feature", a list of feature names to filter by.
     - "featureClass", a list of feature class names associated with the features to filter by.
-    - "entrez", a list of gene entrez ids to filter by.
     - "geneType", a list of gene type names associated with the genes to filter by.
+    - "maxRnaSeqExp", the maximum RNA Sequence Expression value related to the genes to look up.
+    - "minRnaSeqExp", the minimum RNA Sequence Expression value related to the genes to look up.
+    - "related", a list of tag names associated with the data sets to filter by (required).
     - "sample", a list of sample names associated with the gene (used to look up RNA sequence expressions).
+    - "tag", a list of tag names associated with the related to filter by.
 
   If no arguments are passed, this will return all genes organized by tag.
   """
   genesByTag(
     dataSet: [String!]!
-    related: [String!]!
-    tag: [String!]
+    entrez: [Int!]
     feature: [String!]
     featureClass: [String!]
-    entrez: [Int!]
     geneType: [String!]
+    maxRnaSeqExp: Float
+    minRnaSeqExp: Float
+    related: [String!]!
     sample: [String!]
+    tag: [String!]
   ): [GenesByTag!]!
 
   """
