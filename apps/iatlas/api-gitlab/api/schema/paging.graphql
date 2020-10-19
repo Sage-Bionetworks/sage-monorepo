@@ -2,21 +2,14 @@ interface BaseNode {
   id: ID
 }
 
-input PaginationInput {
-  cursorInput: CursorInput
-  offsetInput: OffsetInput
-}
-
-input CursorInput {
+input PagingInput {
+  type: PagingType
+  page: Int
+  limit: Int
   first: Int
   last: Int
   before: String
   after: String
-}
-
-input OffsetInput {
-  page: Int
-  limit: Int
 }
 
 type CursorInfo {
@@ -26,20 +19,25 @@ type CursorInfo {
   endCursor: String
 }
 
-type OffsetInfo {
-  page: Int
-  limit: Int
+enum PagingType {
+  CURSOR
+  OFFSET
 }
 
-type Pagination {
+type Paging {
+  type: PagingType
+  page: Int
   pages: Int
+  limit: Int
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: String
+  endCursor: String
   total: Int
-  cursorInfo: CursorInfo
-  offsetInfo: OffsetInfo
 }
 
 interface BaseResult {
-  pagination: Pagination
+  paging: Paging
   error: String
   items: [BaseNode]
 }

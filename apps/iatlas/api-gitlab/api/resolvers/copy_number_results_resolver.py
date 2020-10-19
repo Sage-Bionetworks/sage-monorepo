@@ -1,25 +1,25 @@
 import math
 from collections import deque
+
 from .resolver_helpers import (build_cnr_graphql_response, build_copy_number_result_request, cnr_request_fields, data_set_request_fields,
                                feature_request_fields, gene_request_fields, get_requested, get_selection_set, simple_tag_request_fields)
 
-from .resolver_helpers.cursor_utils import get_limit, to_cursor_hash
+from .resolver_helpers.paging_utils import get_limit, to_cursor_hash, Paging
 
 
 def resolve_copy_number_results(_obj, info, **kwargs):
-    pagination_set = get_selection_set(info=info, child_node='pagination')
-    pagination_requested = get_requested(selection_set=pagination_set, requested_field_mapping={'page', 'pages', 'total', 'cursorInfo', 'offsetInfo'})
+    pagination_set = get_selection_set(info=info, child_node='paging')
+    pagination_requested = get_requested(selection_set=pagination_set, requested_field_mapping={'type', 'page', 'pages', 'total', 'first', 'last', 'before', 'after'})
 
     selection_set = get_selection_set(info=info, child_node='items')
 
     requested = get_requested(selection_set=selection_set, requested_field_mapping=cnr_request_fields)
-
     distinct = info.variable_values['distinct'] if 'distinct' in info.variable_values.keys() else False
-    page = None
-    if distinct == True:
-        page = int(info.variable_values['page']) if 'page' in info.variable_values.keys() else 1
-    else:
+    if distinct == False:
         requested.add('id') # Add the id as a cursor if not selecting distinct
+
+    paging = kwargs.get('paging', {})
+    paging_type = paging.get('type', Paging.CURSOR)
 
     data_set_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=data_set_request_fields, child_node='dataSet')
@@ -33,29 +33,38 @@ def resolve_copy_number_results(_obj, info, **kwargs):
     tag_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_tag_request_fields, child_node='tag')
 
-    query, count_query = build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=kwargs.pop('dataSet', 0), **kwargs)
+    query, count_query = build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=kwargs.pop('dataSet', 0), paging_type=paging_type, **kwargs)
 
-    pagination = kwargs.get('pagination', {})
-    cursor = pagination.get('cursorInput')
-    first = cursor.get('first') if cursor else None
-    last = cursor.get('last') if cursor else None
-    offset = pagination.get('offsetInput')
-    limit = offset.get('limit') if offset else None
+    page = None
+    before = None
+    after = None
+    first = paging.get('first')
+    last = paging.get('last')
+    limit = paging.get('limit')
     limit, sort_order = get_limit(first, last, limit)
-    pageInfo = {}
+    pageInfo = {
+        'type': paging_type,
+        'page': page,
+        'pages': None,
+        'limit': limit,
+        'total': None
+    }
 
-    if distinct and page != None and not math.isnan(page):
+    if paging_type == Paging.OFFSET or distinct == True:
+        page = paging.get('page', 1)
+        pageInfo['page'] = page
+        pageInfo['type'] = Paging.OFFSET # if distinct is True, paging type must be OFFSET
         resp = query.paginate(page, limit)
         results = map(build_cnr_graphql_response, resp.items) # returns iterator
     else:
         resp = query.limit(limit+1).all() # request 1 more than we need, so we can determine if additional pages are available. returns list.
-        if sort_order == 'ASC':
+        if sort_order == Paging.ASC:
             hasNextPage = resp != None and (len(resp) == limit + 1)
             pageInfo['hasNextPage'] = hasNextPage
             pageInfo['hasPreviousPage'] = False
             if hasNextPage:
                 resp.pop(-1) # remove the extra last item
-        if sort_order == 'DESC':
+        if sort_order == Paging.DESC:
             resp.reverse() # We have to reverse the list to get previous pages in the expected order
             pageInfo['hasNextPage'] = False
             hasPreviousPage = resp != None and (len(resp) == limit + 1)
@@ -68,25 +77,15 @@ def resolve_copy_number_results(_obj, info, **kwargs):
         pageInfo['startCursor'] = to_cursor_hash(results[0]['id'])
         pageInfo['endCursor'] = to_cursor_hash(results[-1]['id'])
 
+    if 'total' or 'pages' in pagination_requested:
+        count = count_query.count() # TODO: Consider caching this value per query, and/or making count query in parallel
+        pageInfo['total'] = count
+        pageInfo['pages'] = math.ceil(count/limit)
+
     data = {
-        'items': results
+        'items': results,
+        'paging': pageInfo
     }
 
-    print('pagination_requested', pagination_requested)
-    if 'cursorInfo' in pagination_requested or 'offsetInfo' in pagination_requested:
-        pagination = {}
-        if 'cursorInfo' in pagination_requested:
-            pagination['cursorInfo'] = pageInfo
-        if 'offsetInfo' in pagination_requested:
-            offsetInfo = {
-                'page': page,
-                'limit': limit
-            }
-            pagination['offsetInfo'] = offsetInfo
-        # only call count if "totalCount" is requested
-        if 'total' or 'pages' in pagination_requested:
-            count = count_query.count() # TODO: Consider caching this value per query, and/or making count query in parallel
-            pagination['total'] = count
-            pagination['pages'] = math.ceil(count/limit)
-        data['pagination'] = pagination
+
     return data

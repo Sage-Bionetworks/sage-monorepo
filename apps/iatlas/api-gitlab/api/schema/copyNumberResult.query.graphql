@@ -32,7 +32,7 @@ type CopyNumberResultNode implements BaseNode {
 }
 
 type CopyNumberResult implements BaseResult {
-  pagination: Pagination
+  paging: Paging
   error: String
   items: [CopyNumberResultNode]
 }

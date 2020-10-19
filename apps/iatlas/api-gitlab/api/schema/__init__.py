@@ -8,8 +8,8 @@ schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 
 # Import GraphQl schemas/
 root_query = load_schema_from_path(schema_dirname + '/root.query.graphql')
-relay_base_query = load_schema_from_path(
-    schema_dirname + '/paginated.query.graphql')
+paging_types = load_schema_from_path(
+    schema_dirname + '/paging.graphql')
 copy_number_result_query = load_schema_from_path(
     schema_dirname + '/copyNumberResult.query.graphql')
 data_set_query = load_schema_from_path(
@@ -52,7 +52,7 @@ therapy_type_query = load_schema_from_path(
     schema_dirname + '/therapyType.query.graphql')
 
 type_defs = [
-    root_query, relay_base_query, copy_number_result_query, data_set_query, driver_result_query, edge_query, feature_query, gene_query, gene_family_query, gene_function_query, gene_type_query, immune_checkpoint_query, method_tag_query, mutation_query, mutation_code_query, node_query, pathway_query, patient_query, publication_query, sample_query, slide_query, super_category, tag_query, therapy_type_query]
+    root_query, paging_types, copy_number_result_query, data_set_query, driver_result_query, edge_query, feature_query, gene_query, gene_family_query, gene_function_query, gene_type_query, immune_checkpoint_query, method_tag_query, mutation_query, mutation_code_query, node_query, pathway_query, patient_query, publication_query, sample_query, slide_query, super_category, tag_query, therapy_type_query]
 
 # Initialize custom scalars.
 direction_enum_scalar = ScalarType('DirectionEnum')

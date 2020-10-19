@@ -2,7 +2,7 @@ import json
 import pytest
 from tests import NoneType
 from api.enums import direction_enum
-from api.resolvers.resolver_helpers.cursor_utils import from_cursor_hash
+from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash
 
 
 @pytest.fixture(scope='module')

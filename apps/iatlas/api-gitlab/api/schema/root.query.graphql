@@ -19,7 +19,7 @@ type Query {
   If no arguments are passed, this will return all copy number results.
   """
   copyNumberResults(
-    pagination: PaginationInput
+    paging: PagingInput
     distinct: Boolean
     id: ID
     dataSet: [String!]
