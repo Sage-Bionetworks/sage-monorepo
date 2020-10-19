@@ -12,13 +12,6 @@ input PagingInput {
   after: String
 }
 
-type CursorInfo {
-  hasNextPage: Boolean
-  hasPreviousPage: Boolean
-  startCursor: String
-  endCursor: String
-}
-
 enum PagingType {
   CURSOR
   OFFSET

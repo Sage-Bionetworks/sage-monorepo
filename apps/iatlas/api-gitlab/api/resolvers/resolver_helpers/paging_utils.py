@@ -22,7 +22,6 @@ def get_cursor(before, after):
     return (None, Paging.ASC)
 
 def parse_limit(n):
-    print('max', Paging.MAX_LIMIT)
     return min(Paging.MAX_LIMIT, int(n))
 
 def get_limit(first, last, limit):
