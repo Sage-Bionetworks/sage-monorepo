@@ -7,7 +7,7 @@ from .resolver_helpers import (build_cnr_graphql_response, build_copy_number_res
 from .resolver_helpers.paging_utils import get_limit, to_cursor_hash, Paging
 
 
-def resolve_copy_number_results(_obj, info, **kwargs):
+def resolve_copy_number_results(_obj, info, paging=None, **kwargs):
     pagination_set = get_selection_set(info=info, child_node='paging')
     pagination_requested = get_requested(selection_set=pagination_set, requested_field_mapping={'type', 'page', 'pages', 'total', 'first', 'last', 'before', 'after'})
 
@@ -18,7 +18,7 @@ def resolve_copy_number_results(_obj, info, **kwargs):
     if distinct == False:
         requested.add('id') # Add the id as a cursor if not selecting distinct
 
-    paging = kwargs.get('paging', {})
+    paging = paging if paging else {'type': Paging.CURSOR, 'first': Paging.MAX_LIMIT}
     paging_type = paging.get('type', Paging.CURSOR)
 
     data_set_requested = get_requested(
@@ -33,7 +33,7 @@ def resolve_copy_number_results(_obj, info, **kwargs):
     tag_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_tag_request_fields, child_node='tag')
 
-    query, count_query = build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=kwargs.pop('dataSet', 0), paging_type=paging_type, **kwargs)
+    query, count_query = build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=kwargs.pop('dataSet', 0), paging=paging, **kwargs)
 
     page = None
     before = None

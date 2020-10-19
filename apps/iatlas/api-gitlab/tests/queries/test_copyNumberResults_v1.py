@@ -2,7 +2,7 @@ import json
 import pytest
 from tests import NoneType
 from api.enums import direction_enum
-from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash
+from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 
 
 @pytest.fixture(scope='module')
@@ -213,3 +213,20 @@ def test_copyNumberResults_query_with_passed_data_set(client, data_set, entrez, 
         current_data_set = item['dataSet']
         assert current_data_set['name'] == data_set
 
+def test_copyNumberResults_missing_pagination(client):
+    """Verify that query does not error when paging is not sent by the client
+
+    The purpose of this test is the ensure that valid and sensible default values
+    are used and the query does not error, when no paging arguments are sent.
+    Cursor pagination and a limit of 100,000 will be used by default.
+    """
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'dataSet': ['TCGA'],
+            'tag': ['C1']
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['copyNumberResults']
+    items = page['items']
+
+    assert len(items) == Paging.MAX_LIMIT
