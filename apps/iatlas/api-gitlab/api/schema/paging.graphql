@@ -1,0 +1,36 @@
+interface BaseNode {
+  id: ID
+}
+
+input PagingInput {
+  type: PagingType
+  page: Int
+  limit: Int
+  first: Int
+  last: Int
+  before: String
+  after: String
+}
+
+enum PagingType {
+  CURSOR
+  OFFSET
+}
+
+type Paging {
+  type: PagingType
+  page: Int
+  pages: Int
+  limit: Int
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: String
+  endCursor: String
+  total: Int
+}
+
+interface BaseResult {
+  paging: Paging
+  error: String
+  items: [BaseNode]
+}
