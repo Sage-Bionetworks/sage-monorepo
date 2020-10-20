@@ -86,13 +86,21 @@ type Query {
   """
   The "edges" query accepts:
 
+    - "maxScore" the maximum score value to return
+    - "minScore" the minimum score value to return
     - "node1" a list of starting node names
     - "node2" a list of ending node names
     - "page", the page of results to get. Defaults to 1 (the first page) with a maximum of 100,000 rows return.
 
   If no arguments are passed, this will return all edges (please note, there will be a LOT of results).
   """
-  edges(node1: [String!], node2: [String!], page: Int): EdgePage!
+  edges(
+    maxScore: Float
+    minScore: Float
+    node1: [String!]
+    node2: [String!]
+    page: Int
+  ): EdgePage!
 
   """
   The "features" query accepts:
