@@ -29,9 +29,11 @@ germline_heritability_server <- function(id, cohort_obj){
         df %>%
           dplyr::filter(pval <= input$pvalue) %>%
           create_plotly_label(
-            ., .$display, paste(input$ancestry, "Ancestry"), c("Variance", "SE", "pval","FDR"), title = "Immune Trait"
+            ., paste(.$display, "- ", input$ancestry, "Ancestry"),
+            paste("\n Immune Trait Category:",.$Annot.Figure.ImmuneCategory, "\n Immune Trait Module:", .$Annot.Figure.ImmuneModule),
+            c("Variance", "SE", "pval","FDR"),
+            title = "Immune Trait"
           )
-
       })
 
       output$heritability <- plotly::renderPlotly({
@@ -40,7 +42,10 @@ germline_heritability_server <- function(id, cohort_obj){
           shiny::need(nrow(hdf())>0, "No Immune Trait with a p-value lower than selected.")
         )
 
-        plot_levels <-levels(reorder(hdf()[["display"]], hdf()[[input$order_bars]], sort))
+        if(is.numeric(hdf()[[input$order_bars]]))  plot_levels <-levels(reorder(hdf()[["display"]], hdf()[[input$order_bars]], sort))
+        else plot_levels <- (hdf() %>%
+              dplyr::arrange(.[[input$order_bars]], Variance))$display %>%
+              as.factor()
 
         hdf() %>%
           dplyr::rename(LRT_p_value = pval) %>% #changing column name to legend title display
