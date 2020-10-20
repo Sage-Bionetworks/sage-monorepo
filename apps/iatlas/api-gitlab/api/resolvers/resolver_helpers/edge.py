@@ -34,10 +34,16 @@ def build_edge_graphql_response(edge):
     }
 
 
-def build_edge_request(requested, node_1_requested, node_2_requested, node_start=None, node_end=None,):
-    """
+def build_edge_request(requested, node_1_requested, node_2_requested, max_score=None, min_score=None, node_start=None, node_end=None,):
+    '''
     Builds a SQL request.
-    """
+
+    All keyword arguments are optional. Keyword arguments are:
+        `max_score` - a float, a maximum score value
+        `min_score` - a float, a minimum score value
+        `node_start` - a list of strings, starting node names
+        `node_end` - a list of strings, ending node names
+    '''
     sess = db.session
 
     edge_1 = aliased(Edge, name='e')
@@ -64,6 +70,12 @@ def build_edge_request(requested, node_1_requested, node_2_requested, node_start
 
     query = sess.query(*[*core, *node_1_core, *node_2_core])
     query = query.select_from(edge_1)
+
+    if max_score != None:
+        query = query.filter(edge_1.score <= max_score)
+
+    if min_score != None:
+        query = query.filter(edge_1.score >= min_score)
 
     if 'node1' in requested or node_start:
         node_start_join_condition = build_join_condition(
