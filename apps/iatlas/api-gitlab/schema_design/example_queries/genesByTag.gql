@@ -21,7 +21,7 @@ query GenesByTag(
     tag
     characteristics
     color
-    display
+    shortDisplay
     genes {
       entrez
       geneFamily

@@ -9,25 +9,58 @@ def gene_type():
     return 'extra_cellular_network'
 
 
-def test_genesByTag_query_with_entrez(client, data_set, related, entrez, hgnc):
-    query = """query GenesByTag(
-        $dataSet: [String!]!
-        $related: [String!]!
-        $tag: [String!]
-        $feature: [String!]
-        $featureClass: [String!]
-        $entrez: [Int!]
-        $geneType: [String!]
-    ) {
-        genesByTag(
-            dataSet: $dataSet
-            related: $related
-            tag: $tag
-            feature: $feature
-            featureClass: $featureClass
-            entrez: $entrez
-            geneType: $geneType
+@pytest.fixture(scope='module')
+def max_rna_seq_expr_1():
+    return -0.727993495057642991952
+
+
+@pytest.fixture(scope='module')
+def min_rna_seq_expr_1():
+    return 3424420
+
+
+@pytest.fixture(scope='module')
+def max_rna_seq_expr_2():
+    return -0.377686024337191006417
+
+
+@pytest.fixture(scope='module')
+def min_rna_seq_expr_2():
+    return -0.379707089801648023375
+
+
+@pytest.fixture(scope='module')
+def common_query_builder():
+    def f(query_fields):
+        return """query GenesByTag(
+            $dataSet: [String!]
+            $entrez: [Int!]
+            $feature: [String!]
+            $featureClass: [String!]
+            $geneType: [String!]
+            $maxRnaSeqExpr: Float
+            $minRnaSeqExpr: Float
+            $related: [String!]
+            $sample: [String!]
+            $tag: [String!]
         ) {
+            genesByTag(
+                dataSet: $dataSet
+                entrez: $entrez
+                feature: $feature
+                featureClass: $featureClass
+                geneType: $geneType
+                maxRnaSeqExpr: $maxRnaSeqExpr
+                minRnaSeqExpr: $minRnaSeqExpr
+                related: $related
+                sample: $sample
+                tag: $tag
+            )""" + query_fields + "}"
+    return f
+
+
+def test_genesByTag_query_with_entrez(client, common_query_builder, data_set, related, entrez, hgnc):
+    query = common_query_builder("""{
             tag
             characteristics
             shortDisplay
@@ -35,8 +68,7 @@ def test_genesByTag_query_with_entrez(client, data_set, related, entrez, hgnc):
                 entrez
                 hgnc
             }
-        }
-    }"""
+        }""")
     response = client.post(
         '/api', json={'query': query,
                       'variables': {'dataSet': [data_set],
@@ -60,29 +92,11 @@ def test_genesByTag_query_with_entrez(client, data_set, related, entrez, hgnc):
             assert gene['hgnc'] == hgnc
 
 
-def test_genesByTag_query_no_entrez(client, data_set, related, tag):
-    query = """query GenesByTag(
-        $dataSet: [String!]!
-        $related: [String!]!
-        $tag: [String!]
-        $feature: [String!]
-        $featureClass: [String!]
-        $entrez: [Int!]
-        $geneType: [String!]
-    ) {
-        genesByTag(
-            dataSet: $dataSet
-            related: $related
-            tag: $tag
-            feature: $feature
-            featureClass: $featureClass
-            entrez: $entrez
-            geneType: $geneType
-        ) {
+def test_genesByTag_query_no_entrez(client, common_query_builder, data_set, related, tag):
+    query = common_query_builder("""{
             tag
             genes { entrez }
-        }
-    }"""
+        }""")
     response = client.post(
         '/api', json={'query': query,
                       'variables': {'dataSet': [data_set],
@@ -103,25 +117,8 @@ def test_genesByTag_query_no_entrez(client, data_set, related, tag):
             assert type(gene['entrez']) is int
 
 
-def test_genesByTag_query_no_relations(client, data_set, related, entrez, hgnc):
-    query = """query GenesByTag(
-        $dataSet: [String!]!
-        $related: [String!]!
-        $tag: [String!]
-        $feature: [String!]
-        $featureClass: [String!]
-        $entrez: [Int!]
-        $geneType: [String!]
-    ) {
-        genesByTag(
-            dataSet: $dataSet
-            related: $related
-            tag: $tag
-            feature: $feature
-            featureClass: $featureClass
-            entrez: $entrez
-            geneType: $geneType
-        ) {
+def test_genesByTag_query_no_relations(client, common_query_builder, data_set, related, entrez, hgnc):
+    query = common_query_builder("""{
             tag
             characteristics
             longDisplay
@@ -129,8 +126,7 @@ def test_genesByTag_query_no_relations(client, data_set, related, entrez, hgnc):
                 entrez
                 hgnc
             }
-        }
-    }"""
+        }""")
     response = client.post(
         '/api', json={'query': query,
                       'variables': {'dataSet': [data_set],
@@ -154,25 +150,8 @@ def test_genesByTag_query_no_relations(client, data_set, related, entrez, hgnc):
             assert gene['hgnc'] == hgnc
 
 
-def test_genesByTag_query_with_gene_type(client, data_set, related, entrez, hgnc, gene_type):
-    query = """query GenesByTag(
-        $dataSet: [String!]!
-        $related: [String!]!
-        $tag: [String!]
-        $feature: [String!]
-        $featureClass: [String!]
-        $entrez: [Int!]
-        $geneType: [String!]
-    ) {
-        genesByTag(
-            dataSet: $dataSet
-            related: $related
-            tag: $tag
-            feature: $feature
-            featureClass: $featureClass
-            entrez: $entrez
-            geneType: $geneType
-        ) {
+def test_genesByTag_query_with_gene_type(client, common_query_builder, data_set, related, entrez, hgnc, gene_type):
+    query = common_query_builder("""{
             tag
             characteristics
             shortDisplay
@@ -180,8 +159,7 @@ def test_genesByTag_query_with_gene_type(client, data_set, related, entrez, hgnc
                 entrez
                 hgnc
             }
-        }
-    }"""
+        }""")
     response = client.post(
         '/api', json={'query': query,
                       'variables': {'dataSet': [data_set],
@@ -206,27 +184,8 @@ def test_genesByTag_query_with_gene_type(client, data_set, related, entrez, hgnc
             assert gene['hgnc'] == hgnc
 
 
-def test_genesByTag_query_with_sample(client, data_set, related, entrez, hgnc, gene_type, sample):
-    query = """query GenesByTag(
-        $dataSet: [String!]!
-        $related: [String!]!
-        $tag: [String!]
-        $feature: [String!]
-        $featureClass: [String!]
-        $entrez: [Int!]
-        $geneType: [String!]
-        $sample: [String!]
-    ) {
-        genesByTag(
-            dataSet: $dataSet
-            related: $related
-            tag: $tag
-            feature: $feature
-            featureClass: $featureClass
-            entrez: $entrez
-            geneType: $geneType
-            sample: $sample
-        ) {
+def test_genesByTag_query_with_sample(client, common_query_builder, data_set, related, entrez, hgnc, gene_type, sample):
+    query = common_query_builder("""{
             tag
             characteristics
             shortDisplay
@@ -234,8 +193,7 @@ def test_genesByTag_query_with_sample(client, data_set, related, entrez, hgnc, g
                 entrez
                 hgnc
             }
-        }
-    }"""
+        }""")
     response = client.post(
         '/api', json={'query': query,
                       'variables': {'dataSet': [data_set],
@@ -259,3 +217,118 @@ def test_genesByTag_query_with_sample(client, data_set, related, entrez, hgnc, g
         for gene in genes[0:2]:
             assert gene['entrez'] == entrez
             assert gene['hgnc'] == hgnc
+
+
+def test_genesByTag_query_with_maxRnaSeqExpr(client, common_query_builder, data_set, max_rna_seq_expr_1, related, tag):
+    query = common_query_builder("""{
+            tag
+            genes {
+                entrez
+                samples {
+                    name
+                    rnaSeqExpr
+                }
+            }
+        }""")
+    response = client.post(
+        '/api', json={'query': query,
+                      'variables': {'dataSet': [data_set],
+                                    'maxRnaSeqExpr': max_rna_seq_expr_1,
+                                    'related': [related],
+                                    'tag': [tag]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['genesByTag']
+
+    assert isinstance(results, list)
+    assert len(results) == 1
+    for result in results:
+        genes = result['genes']
+        assert result['tag'] == tag
+        assert isinstance(genes, list)
+        assert len(genes) > 0
+        # Don't need to iterate through every result.
+        for gene in genes[0:2]:
+            samples = gene['samples']
+            assert type(gene['entrez']) is int
+            assert isinstance(samples, list)
+            assert len(samples) > 0
+            for current_sample in samples[0:3]:
+                assert type(current_sample['name']) is str
+                assert current_sample['rnaSeqExpr'] <= max_rna_seq_expr_1
+
+
+def test_genesByTag_query_with_minRnaSeqExpr(client, common_query_builder, data_set, min_rna_seq_expr_1, related):
+    query = common_query_builder("""{
+            tag
+            genes {
+                entrez
+                samples {
+                    name
+                    rnaSeqExpr
+                }
+            }
+        }""")
+    response = client.post(
+        '/api', json={'query': query,
+                      'variables': {'dataSet': [data_set],
+                                    'minRnaSeqExpr': min_rna_seq_expr_1,
+                                    'related': [related]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['genesByTag']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:3]:
+        genes = result['genes']
+        assert type(result['tag']) is str
+        assert isinstance(genes, list)
+        assert len(genes) > 0
+        # Don't need to iterate through every result.
+        for gene in genes[0:2]:
+            samples = gene['samples']
+            assert type(gene['entrez']) is int
+            assert isinstance(samples, list)
+            assert len(samples) > 0
+            for current_sample in samples[0:3]:
+                assert type(current_sample['name']) is str
+                assert current_sample['rnaSeqExpr'] >= min_rna_seq_expr_1
+
+
+def test_genesByTag_query_with_minRnaSeqExpr_and_maxRnaSeqExpr(client, common_query_builder, data_set, max_rna_seq_expr_2, min_rna_seq_expr_2, related, tag):
+    query = common_query_builder("""{
+            tag
+            genes {
+                entrez
+                samples {
+                    name
+                    rnaSeqExpr
+                }
+            }
+        }""")
+    response = client.post(
+        '/api', json={'query': query,
+                      'variables': {'dataSet': [data_set],
+                                    'maxRnaSeqExpr': max_rna_seq_expr_2,
+                                    'minRnaSeqExpr': min_rna_seq_expr_2,
+                                    'related': [related],
+                                    'tag': [tag]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['genesByTag']
+
+    assert isinstance(results, list)
+    assert len(results) == 1
+    for result in results:
+        genes = result['genes']
+        assert result['tag'] == tag
+        assert isinstance(genes, list)
+        assert len(genes) > 0
+        # Don't need to iterate through every result.
+        for gene in genes[0:2]:
+            samples = gene['samples']
+            assert type(gene['entrez']) is int
+            assert isinstance(samples, list)
+            assert len(samples) > 0
+            for current_sample in samples[0:3]:
+                assert type(current_sample['name']) is str
+                assert current_sample['rnaSeqExpr'] <= max_rna_seq_expr_2
+                assert current_sample['rnaSeqExpr'] >= min_rna_seq_expr_2

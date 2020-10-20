@@ -20,7 +20,7 @@ query FeaturesByTag(
   ) {
     tag
     characteristics
-    display
+    shortDisplay
     features {
       class
       display

@@ -207,8 +207,8 @@ type Query {
     dataSet: [String!]
     entrez: [Int!]
     geneType: [String!]
-    maxRnaSeqExp: Float
-    minRnaSeqExp: Float
+    maxRnaSeqExpr: Float
+    minRnaSeqExpr: Float
     related: [String!]
     sample: [String!]
     tag: [String!]
@@ -217,28 +217,28 @@ type Query {
   """
   The "genesByTag" query accepts:
 
-    - "dataSet", a list of data set names to filter by (required).
+    - "dataSet", a list of data set names to filter by.
     - "entrez", a list of gene entrez ids to filter by.
     - "feature", a list of feature names to filter by.
     - "featureClass", a list of feature class names associated with the features to filter by.
     - "geneType", a list of gene type names associated with the genes to filter by.
     - "maxRnaSeqExp", the maximum RNA Sequence Expression value related to the genes to look up.
     - "minRnaSeqExp", the minimum RNA Sequence Expression value related to the genes to look up.
-    - "related", a list of tag names associated with the data sets to filter by (required).
+    - "related", a list of tag names associated with the data sets to filter by.
     - "sample", a list of sample names associated with the gene (used to look up RNA sequence expressions).
     - "tag", a list of tag names associated with the related to filter by.
 
   If no arguments are passed, this will return all genes organized by tag.
   """
   genesByTag(
-    dataSet: [String!]!
+    dataSet: [String!]
     entrez: [Int!]
     feature: [String!]
     featureClass: [String!]
     geneType: [String!]
-    maxRnaSeqExp: Float
-    minRnaSeqExp: Float
-    related: [String!]!
+    maxRnaSeqExpr: Float
+    minRnaSeqExpr: Float
+    related: [String!]
     sample: [String!]
     tag: [String!]
   ): [GenesByTag!]!

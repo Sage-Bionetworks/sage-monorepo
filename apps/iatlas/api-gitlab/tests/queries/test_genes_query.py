@@ -41,22 +41,22 @@ def common_query_builder():
             $dataSet: [String!]
             $entrez: [Int!]
             $geneType: [String!]
-            $maxRnaSeqExp: Float
-            $minRnaSeqExp: Float
+            $maxRnaSeqExpr: Float
+            $minRnaSeqExpr: Float
             $related: [String!]
             $sample: [String!]
             $tag: [String!]
         ) {
-        genes(
-            dataSet: $dataSet
-            entrez: $entrez
-            geneType: $geneType
-            maxRnaSeqExp: $maxRnaSeqExp
-            minRnaSeqExp: $minRnaSeqExp
-            related: $related
-            sample: $sample
-            tag: $tag
-        )""" + query_fields + "}"
+            genes(
+                dataSet: $dataSet
+                entrez: $entrez
+                geneType: $geneType
+                maxRnaSeqExpr: $maxRnaSeqExpr
+                minRnaSeqExpr: $minRnaSeqExpr
+                related: $related
+                sample: $sample
+                tag: $tag
+            )""" + query_fields + "}"
     return f
 
 
@@ -186,15 +186,15 @@ def test_genes_query_with_dataSet_tag_and_maxRnaSeqExpr(client, common_query_bui
     assert len(results) > 0
     for result in results[0:3]:
         samples = result['samples']
-        assert result['entrez'] == entrez
+        assert type(result['entrez']) is int
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples[0:3]:
             assert type(current_sample['name']) is str
-            assert current_sample['rnaSeqExpr'] <= float(max_rna_seq_expr_1)
+            assert current_sample['rnaSeqExpr'] <= max_rna_seq_expr_1
 
 
-def test_genes_query_with_dataSet_tag_and_minRnaSeqExpr(client, common_query_builder, min_rna_seq_expr_1, tag):
+def test_genes_query_with_dataSet_and_minRnaSeqExpr(client, common_query_builder, data_set, min_rna_seq_expr_1):
     query = common_query_builder("""{
             entrez
             samples {
@@ -205,8 +205,7 @@ def test_genes_query_with_dataSet_tag_and_minRnaSeqExpr(client, common_query_bui
     response = client.post(
         '/api', json={'query': query, 'variables': {
             'dataSet': [data_set],
-            'minRnaSeqExpr': min_rna_seq_expr_1,
-            'tag': tag
+            'minRnaSeqExpr': min_rna_seq_expr_1
         }})
     json_data = json.loads(response.data)
     results = json_data['data']['genes']
@@ -215,7 +214,7 @@ def test_genes_query_with_dataSet_tag_and_minRnaSeqExpr(client, common_query_bui
     assert len(results) > 0
     for result in results[0:3]:
         samples = result['samples']
-        assert result['entrez'] == entrez
+        assert type(result['entrez']) is int
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples[0:3]:
@@ -223,7 +222,7 @@ def test_genes_query_with_dataSet_tag_and_minRnaSeqExpr(client, common_query_bui
             assert current_sample['rnaSeqExpr'] >= min_rna_seq_expr_1
 
 
-def test_genes_query_with_dataSet_tag_maxRnaSeqExpr_and_minRnaSeqExpr(client, common_query_builder, max_rna_seq_expr_2, min_rna_seq_expr_2, tag):
+def test_genes_query_with_dataSet_tag_maxRnaSeqExpr_and_minRnaSeqExpr(client, common_query_builder, data_set, max_rna_seq_expr_2, min_rna_seq_expr_2, tag):
     query = common_query_builder("""{
             entrez
             samples {
@@ -245,7 +244,7 @@ def test_genes_query_with_dataSet_tag_maxRnaSeqExpr_and_minRnaSeqExpr(client, co
     assert len(results) > 0
     for result in results[0:3]:
         samples = result['samples']
-        assert result['entrez'] == entrez
+        assert type(result['entrez']) is int
         assert isinstance(samples, list)
         assert len(samples) > 0
         for current_sample in samples[0:3]:

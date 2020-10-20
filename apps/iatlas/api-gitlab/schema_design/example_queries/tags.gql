@@ -14,11 +14,11 @@ query Tags(
   ) {
     characteristics
     color
-    display
+    shortDisplay
     name
     related {
       name
-      display
+      shortDisplay
       characteristics
     }
     sampleCount
