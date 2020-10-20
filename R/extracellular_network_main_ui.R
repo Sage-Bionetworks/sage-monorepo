@@ -82,7 +82,7 @@ extracellular_network_main_ui <- function(id){
             ),
             shiny::hr(),
             shiny::selectInput(
-              ns("doLayout"),
+              ns("do_layout"),
               "Select Layout",
               choices = c(
                 "",

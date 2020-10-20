@@ -58,8 +58,6 @@ get_selected_celltypes <- function(celltype_input_list){
     return(celltypes)
 }
 
-#TODO: finish functions after: https://gitlab.com/cri-iatlas/iatlas-api/-/issues/15
-
 # build_ecn_scaffold_tbl <- function(){
 #     paste0(
 #         "SELECT DISTINCT node_1_id, node_2_id FROM edges WHERE node_1_id IN ",

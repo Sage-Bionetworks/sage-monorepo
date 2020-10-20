@@ -4,7 +4,7 @@ cohort_manual_selection_server <- function(id){
     function(input, output, session) {
 
       #TODO: change back to TCGA
-      default_dataset <- "PCAWG"
+      default_dataset <- "TCGA"
 
       selected_dataset <- cohort_dataset_selection_server(
         "dataset_selection",

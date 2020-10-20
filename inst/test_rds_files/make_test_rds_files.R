@@ -69,6 +69,18 @@ saveRDS(
   "inst/test_rds_files/tcga_immune_subtype_cohort_obj_50.rds"
 )
 
+tcga_study_cohort_obj_50 <- build_cohort_object(
+  dataset = "TCGA",
+  samples = iatlas.api.client::query_dataset_samples("TCGA")$name[1:50],
+  group_name = "TCGA_Study",
+  group_type = "tag"
+)
+
+saveRDS(
+  tcga_study_cohort_obj_50,
+  "inst/test_rds_files/tcga_study_cohort_obj_50.rds"
+)
+
 
 
 tcga_feature_bin_cohort_obj <- build_cohort_object(
