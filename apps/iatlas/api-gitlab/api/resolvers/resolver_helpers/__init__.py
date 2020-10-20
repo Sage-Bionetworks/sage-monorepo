@@ -6,7 +6,7 @@ from .feature import build_feature_graphql_response, feature_class_request_field
 from .gene import build_gene_graphql_response, gene_request_fields, request_gene, request_genes, return_gene_derived_fields, simple_gene_request_fields
 from .gene_family import request_gene_families
 from .gene_function import request_gene_functions
-from .gene_type import request_gene_types
+from .gene_type import gene_type_request_fields, request_gene_types, simple_gene_type_request_fields
 from .general_resolvers import *
 from .immune_checkpoint import request_immune_checkpoints
 from .method_tag import request_method_tags
@@ -15,7 +15,8 @@ from .mutation_type import build_mutation_type_graphql_response, mutation_type_r
 from .node import build_node_graphql_response, build_node_request, node_request_fields, return_node_derived_fields
 from .pathway import request_pathways
 from .patient import build_patient_graphql_response, patient_request_fields, request_patients, return_patient_derived_fields, simple_patient_request_fields
-from .sample import build_sample_graphql_response, feature_related_sample_request_fields, mutation_related_sample_request_fields, request_samples, sample_by_mutation_status_request_fields, sample_request_fields, simple_sample_request_fields
+from .publication import publication_request_fields, simple_publication_request_fields
+from .sample import build_sample_graphql_response, feature_related_sample_request_fields, gene_related_sample_request_fields, mutation_related_sample_request_fields, request_samples, sample_by_mutation_status_request_fields, sample_request_fields, simple_sample_request_fields
 from .slide import build_slide_graphql_response, request_slides, slide_request_fields, simple_slide_request_fields
 from .super_category import request_super_categories
 from .tag import build_related_graphql_response, build_tag_graphql_response, related_request_fields, request_related, request_tags, return_tag_derived_fields, simple_tag_request_fields, tag_request_fields

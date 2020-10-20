@@ -10,13 +10,58 @@ def gene_type():
 
 
 @pytest.fixture(scope='module')
+def max_rna_seq_expr_1():
+    return -0.727993495057642991952
+
+
+@pytest.fixture(scope='module')
+def min_rna_seq_expr_1():
+    return 3424420
+
+
+@pytest.fixture(scope='module')
+def max_rna_seq_expr_2():
+    return -0.377686024337191006417
+
+
+@pytest.fixture(scope='module')
+def min_rna_seq_expr_2():
+    return -0.379707089801648023375
+
+
+@pytest.fixture(scope='module')
 def sample_name():
     return 'TCGA-27-1837'
 
 
-def test_genes_query_with_entrez(client, entrez, hgnc):
-    query = """query Genes($entrez: [Int!], $geneType: [String!]) {
-        genes(entrez: $entrez, geneType: $geneType) {
+@pytest.fixture(scope='module')
+def common_query_builder():
+    def f(query_fields):
+        return """query Genes(
+            $dataSet: [String!]
+            $entrez: [Int!]
+            $geneType: [String!]
+            $maxRnaSeqExpr: Float
+            $minRnaSeqExpr: Float
+            $related: [String!]
+            $sample: [String!]
+            $tag: [String!]
+        ) {
+            genes(
+                dataSet: $dataSet
+                entrez: $entrez
+                geneType: $geneType
+                maxRnaSeqExpr: $maxRnaSeqExpr
+                minRnaSeqExpr: $minRnaSeqExpr
+                related: $related
+                sample: $sample
+                tag: $tag
+            )""" + query_fields + "}"
+    return f
+
+
+def test_genes_query_with_entrez(client, common_query_builder, entrez, hgnc):
+    query = common_query_builder("""{
             entrez
             hgnc
             geneFamily
@@ -36,8 +81,7 @@ def test_genes_query_with_entrez(client, entrez, hgnc):
             }
             superCategory
             therapyType
-        }
-    }"""
+        }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {'entrez': [entrez]}})
     json_data = json.loads(response.data)
@@ -73,13 +117,11 @@ def test_genes_query_with_entrez(client, entrez, hgnc):
         assert type(result['therapyType']) is str or NoneType
 
 
-def test_genes_query_with_gene_type(client, entrez, gene_type):
-    query = """query Genes($entrez: [Int!], $geneType: [String!]) {
-        genes(entrez: $entrez, geneType: $geneType) {
+def test_genes_query_with_gene_type(client, common_query_builder, entrez, gene_type):
+    query = common_query_builder("""{
             entrez
             geneTypes { name }
-        }
-    }"""
+        }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {'entrez': [entrez], 'geneType': [gene_type]}})
     json_data = json.loads(response.data)
@@ -96,17 +138,15 @@ def test_genes_query_with_gene_type(client, entrez, gene_type):
             assert current_gene_type['name'] == gene_type
 
 
-def test_genes_query_with_sample(client, entrez, gene_type, sample_name):
-    query = """query Genes($entrez: [Int!], $geneType: [String!], $sample: [String!]) {
-        genes(entrez: $entrez, geneType: $geneType, sample: $sample) {
+def test_genes_query_with_sample(client, common_query_builder, entrez, gene_type, sample_name):
+    query = common_query_builder("""{
             entrez
             publications { pubmedId }
             samples {
                 name
                 rnaSeqExpr
             }
-        }
-    }"""
+        }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {'entrez': [entrez], 'geneType': [gene_type], 'sample': [sample_name]}})
     json_data = json.loads(response.data)
@@ -125,13 +165,99 @@ def test_genes_query_with_sample(client, entrez, gene_type, sample_name):
             assert type(current_sample['rnaSeqExpr']) is float
 
 
-def test_genes_query_no_entrez(client):
-    query = """query Genes($entrez: [Int!], $geneType: [String!]) {
-        genes(entrez: $entrez, geneType: $geneType) {
+def test_genes_query_with_dataSet_tag_and_maxRnaSeqExpr(client, common_query_builder, data_set, max_rna_seq_expr_1, tag):
+    query = common_query_builder("""{
+            entrez
+            samples {
+                name
+                rnaSeqExpr
+            }
+        }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'dataSet': [data_set],
+            'maxRnaSeqExpr': max_rna_seq_expr_1,
+            'tag': tag
+        }})
+    json_data = json.loads(response.data)
+    results = json_data['data']['genes']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:3]:
+        samples = result['samples']
+        assert type(result['entrez']) is int
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples[0:3]:
+            assert type(current_sample['name']) is str
+            assert current_sample['rnaSeqExpr'] <= max_rna_seq_expr_1
+
+
+def test_genes_query_with_dataSet_and_minRnaSeqExpr(client, common_query_builder, data_set, min_rna_seq_expr_1):
+    query = common_query_builder("""{
+            entrez
+            samples {
+                name
+                rnaSeqExpr
+            }
+        }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'dataSet': [data_set],
+            'minRnaSeqExpr': min_rna_seq_expr_1
+        }})
+    json_data = json.loads(response.data)
+    results = json_data['data']['genes']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:3]:
+        samples = result['samples']
+        assert type(result['entrez']) is int
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples[0:3]:
+            assert type(current_sample['name']) is str
+            assert current_sample['rnaSeqExpr'] >= min_rna_seq_expr_1
+
+
+def test_genes_query_with_dataSet_tag_maxRnaSeqExpr_and_minRnaSeqExpr(client, common_query_builder, data_set, max_rna_seq_expr_2, min_rna_seq_expr_2, tag):
+    query = common_query_builder("""{
+            entrez
+            samples {
+                name
+                rnaSeqExpr
+            }
+        }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'dataSet': [data_set],
+            'maxRnaSeqExpr': max_rna_seq_expr_2,
+            'minRnaSeqExpr': min_rna_seq_expr_2,
+            'tag': tag
+        }})
+    json_data = json.loads(response.data)
+    results = json_data['data']['genes']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:3]:
+        samples = result['samples']
+        assert type(result['entrez']) is int
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples[0:3]:
+            assert type(current_sample['name']) is str
+            assert current_sample['rnaSeqExpr'] <= max_rna_seq_expr_2
+            assert current_sample['rnaSeqExpr'] >= min_rna_seq_expr_2
+
+
+def test_genes_query_no_entrez(client, common_query_builder):
+    query = common_query_builder("""{
             entrez
             hgnc
-        }
-    }"""
+        }""")
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
     results = json_data['data']['genes']

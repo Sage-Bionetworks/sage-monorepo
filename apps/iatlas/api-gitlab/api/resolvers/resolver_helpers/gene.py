@@ -30,7 +30,7 @@ simple_gene_request_fields = {'entrez',
                               'ioLandscapeName'}
 
 
-def build_gene_graphql_response(gene_type_dict=dict(), pub_dict=dict(), sample_dict=dict()):
+def build_gene_graphql_response(pub_dict=dict(), sample_dict=dict(), gene_type_dict=dict()):
     def f(gene):
         if not gene:
             return None
@@ -82,9 +82,8 @@ def build_pub_gene_gene_type_join_condition(gene_ids, gene_types, pub_gene_gene_
     return join_condition
 
 
-def build_gene_request(requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None,
-                       gene_function=None, gene_type=None, immune_checkpoint=None, pathway=None, related=None,
-                       sample=None, super_category=None, tag=None, therapy_type=None, tag_requested=set()):
+def build_gene_request(
+        requested, tag_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=None, immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None):
     """
     Builds a SQL request.
     """
@@ -121,9 +120,7 @@ def build_gene_request(requested, data_set=None, entrez=None, feature=None, feat
 
     core = get_selected(requested, core_field_mapping)
     core.add(gene_1.id)
-
-    if tag_requested:
-        core |= get_selected(tag_requested, tag_core_field_mapping)
+    core |= get_selected(tag_requested, tag_core_field_mapping)
 
     query = sess.query(*core)
     query = query.select_from(gene_1)
@@ -177,77 +174,82 @@ def build_gene_request(requested, data_set=None, entrez=None, feature=None, feat
         query = query.join(therapy_type_1, and_(
             *therapy_type_join_condition), isouter=is_outer)
 
-    if sample or tag_requested:
+    if tag_requested or tag or sample or data_set or related or feature or feature_class or max_rna_seq_expr != None or min_rna_seq_expr != None:
         gene_to_sample_1 = aliased(GeneToSample, name='gs')
 
         gene_to_sample_sub_query = sess.query(gene_to_sample_1.sample_id).filter(
             gene_to_sample_1.gene_id == gene_1.id)
+        if max_rna_seq_expr != None:
+            gene_to_sample_sub_query = gene_to_sample_sub_query.filter(
+                gene_to_sample_1.rna_seq_expr <= max_rna_seq_expr)
+        if min_rna_seq_expr != None:
+            gene_to_sample_sub_query = gene_to_sample_sub_query.filter(
+                gene_to_sample_1.rna_seq_expr >= min_rna_seq_expr)
         sample_join_condition = [sample_1.id.in_(gene_to_sample_sub_query)]
 
         if sample:
-            sample_join_condition = sample_join_condition + \
-                [sample_1.name.in_(sample)]
+            sample_join_condition.extend([sample_1.name.in_(sample)])
 
         query = query.join(sample_1, and_(*sample_join_condition))
 
-        if tag_requested:
-            sample_to_tag_1 = aliased(SampleToTag, name='stt')
+        if data_set or related:
+            data_set_1 = aliased(Dataset, name='d')
+            data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
 
-            if data_set or related:
-                data_set_1 = aliased(Dataset, name='d')
-                data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
+            data_set_sub_query = sess.query(data_set_1.id).filter(
+                data_set_1.name.in_(data_set)) if data_set else data_set
 
-                data_set_sub_query = sess.query(data_set_1.id).filter(
-                    data_set_1.name.in_(data_set)) if data_set else data_set
+            data_set_to_sample_join_condition = build_join_condition(
+                data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
+            query = query.join(
+                data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
 
-                data_set_to_sample_join_condition = build_join_condition(
-                    data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
+        if feature or feature_class:
+            feature_1 = aliased(Feature, name='f')
+            feature_class_1 = aliased(FeatureClass, name='fc')
+            feature_to_sample_1 = aliased(FeatureToSample, name='fs')
+
+            query = query.join(feature_to_sample_1,
+                               feature_to_sample_1.sample_id == sample_1.id)
+
+            feature_join_condition = build_join_condition(
+                feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
+            query = query.join(feature_1, and_(*feature_join_condition))
+
+            if feature_class:
+                feature_class_join_condition = build_join_condition(
+                    feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
                 query = query.join(
-                    data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
+                    feature_class_1, and_(*feature_class_join_condition))
 
-            if feature or feature_class:
-                feature_1 = aliased(Feature, name='f')
-                feature_class_1 = aliased(FeatureClass, name='fc')
-                feature_to_sample_1 = aliased(FeatureToSample, name='fs')
-
-                query = query.join(feature_to_sample_1,
-                                   feature_to_sample_1.sample_id == sample_1.id)
-
-                feature_join_condition = build_join_condition(
-                    feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
-                query = query.join(feature_1, and_(*feature_join_condition))
-
-                if feature_class:
-                    feature_class_join_condition = build_join_condition(
-                        feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
-                    query = query.join(
-                        feature_class_1, and_(*feature_class_join_condition))
-
+        if tag_requested or tag:
+            sample_to_tag_1 = aliased(SampleToTag, name='stt')
             sample_to_tag_join_condition = [
                 sample_to_tag_1.sample_id == sample_1.id]
 
-            if related:
-                data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
-                related_tag_1 = aliased(Tag, name='rt')
+        if related:
+            data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
+            related_tag_1 = aliased(Tag, name='rt')
+
+            related_tag_sub_query = sess.query(related_tag_1.id).filter(
+                related_tag_1.name.in_(related))
+
+            data_set_tag_join_condition = build_join_condition(
+                data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
+            query = query.join(
+                data_set_to_tag_1, and_(*data_set_tag_join_condition))
+
+            if tag_requested or tag:
                 tag_to_tag_1 = aliased(TagToTag, name='tt')
-
-                related_tag_sub_query = sess.query(related_tag_1.id).filter(
-                    related_tag_1.name.in_(related))
-
-                data_set_tag_join_condition = build_join_condition(
-                    data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
-                query = query.join(
-                    data_set_to_tag_1, and_(*data_set_tag_join_condition))
-
                 tag_to_tag_subquery = sess.query(tag_to_tag_1.tag_id).filter(
                     tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id)
 
                 sample_to_tag_join_condition.append(
                     sample_to_tag_1.tag_id.in_(tag_to_tag_subquery))
 
+        if tag_requested or tag:
             query = query.join(sample_to_tag_1, and_(
                 *sample_to_tag_join_condition))
-
             tag_join_condition = build_join_condition(
                 tag_1.id, sample_to_tag_1.tag_id, tag_1.name, tag)
             query = query.join(tag_1, and_(*tag_join_condition))
@@ -288,34 +290,30 @@ def build_gene_request(requested, data_set=None, entrez=None, feature=None, feat
     return query.order_by(*order)
 
 
-def get_gene_types(info, gene_type=None, gene_ids=set()):
-    selection_set = get_selection_set(info=info)
-    relations = build_option_args(
-        selection_set, {'geneTypes': 'gene_types'})
-
-    if gene_ids and ('gene_types' in relations or gene_type):
+def get_gene_types(
+        requested, gene_types_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=None, immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None, gene_ids=[]):
+    if 'geneTypes' in requested:
         sess = db.session
+
         gene_type_1 = aliased(GeneType, name='gt')
         gene_to_gene_type_1 = aliased(GeneToType, name='ggt')
 
-        gene_type_selection_set = get_selection_set(
-            selection_set, child_node='geneTypes')
-        gene_type_core_field_mapping = {'name': gene_type_1.name.label('name'),
-                                        'display': gene_type_1.display.label('display')}
+        core_field_mapping = {'name': gene_type_1.name.label('name'),
+                              'display': gene_type_1.display.label('display')}
 
-        gene_type_core = build_option_args(
-            gene_type_selection_set, gene_type_core_field_mapping)
-        gene_type_core |= {gene_type_1.id.label('id'),
-                           gene_to_gene_type_1.gene_id.label('gene_id')}
+        core = get_selected(gene_types_requested, core_field_mapping)
+        # Always select the sample id and the gene id.
+        core |= {gene_type_1.id.label('id'),
+                 gene_to_gene_type_1.gene_id.label('gene_id')}
 
-        requested = build_option_args(
-            gene_type_selection_set, {'display': 'display', 'name': 'name'})
-
-        gene_type_query = sess.query(*gene_type_core)
+        gene_type_query = sess.query(*core)
         gene_type_query = gene_type_query.select_from(gene_type_1)
 
+        genes = build_gene_request(
+            set(), set(), data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type) if not gene_ids else gene_ids
+
         gene_gene_type_join_condition = build_join_condition(
-            gene_to_gene_type_1.type_id, gene_type_1.id, gene_to_gene_type_1.gene_id, gene_ids)
+            gene_to_gene_type_1.type_id, gene_type_1.id, gene_to_gene_type_1.gene_id, genes)
 
         if gene_type:
             gene_gene_type_join_condition.append(
@@ -339,46 +337,37 @@ def get_gene_types(info, gene_type=None, gene_ids=set()):
     return []
 
 
-def get_publications(info, gene_types=[], gene_ids=set(), by_tag=False):
-    child_node = 'genes' if by_tag else None
-    selection_set = get_selection_set(info=info, child_node=child_node)
-    relations = build_option_args(
-        selection_set, {'publications': 'publications'})
-
-    if gene_ids and 'publications' in relations:
+def get_publications(
+        requested, publications_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=[], immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None, gene_ids=[]):
+    if 'publications' in requested:
         sess = db.session
+
+        gene_1 = aliased(Gene, name='g')
         gene_type_1 = aliased(GeneType, name='gt')
         pub_1 = aliased(Publication, name='p')
         pub_gene_gene_type_1 = aliased(
             PublicationToGeneToGeneType, name='pggt')
 
-        pub_selection_set = get_selection_set(
-            selection_set, child_node='publications')
-        pub_core_field_mapping = {'doId': pub_1.do_id.label('do_id'),
-                                  'firstAuthorLastName': pub_1.first_author_last_name.label('first_author_last_name'),
-                                  'journal': pub_1.journal.label('journal'),
-                                  'name': pub_1.name.label('name'),
-                                  'pubmedId': pub_1.pubmed_id.label('pubmed_id'),
-                                  'title': pub_1.title.label('title'),
-                                  'year': pub_1.year.label('year')}
+        core_field_mapping = {'doId': pub_1.do_id.label('do_id'),
+                              'firstAuthorLastName': pub_1.first_author_last_name.label('first_author_last_name'),
+                              'journal': pub_1.journal.label('journal'),
+                              'name': pub_1.name.label('name'),
+                              'pubmedId': pub_1.pubmed_id.label('pubmed_id'),
+                              'title': pub_1.title.label('title'),
+                              'year': pub_1.year.label('year')}
 
-        pub_core = build_option_args(pub_selection_set, pub_core_field_mapping)
+        core = get_selected(publications_requested, core_field_mapping)
+        # Always select the sample id and the gene id.
+        core.add(pub_gene_gene_type_1.gene_id.label('gene_id'))
 
-        requested = build_option_args(
-            pub_selection_set, {'doId': 'do_id',
-                                'firstAuthorLastName': 'first_author_last_name',
-                                'journal': 'journal',
-                                'name': 'name',
-                                'pubmedId': 'pubmed_id',
-                                'title': 'title',
-                                'year': 'year'})
-
-        pub_query = sess.query(
-            *pub_core, pub_gene_gene_type_1.gene_id.label('gene_id'))
+        pub_query = sess.query(*core)
         pub_query = pub_query.select_from(pub_1)
 
+        gene_subquery = build_gene_request(
+            set(), set(), data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type) if not gene_ids else gene_ids
+
         pub_gene_gene_type_join_condition = build_pub_gene_gene_type_join_condition(
-            gene_ids, gene_types, pub_gene_gene_type_1, pub_1)
+            gene_subquery, gene_types, pub_gene_gene_type_1, pub_1)
         pub_query = pub_query.join(pub_gene_gene_type_1, and_(
             *pub_gene_gene_type_join_condition))
 
@@ -386,13 +375,13 @@ def get_publications(info, gene_types=[], gene_ids=set(), by_tag=False):
         append_to_order = order.append
         if 'name' in requested:
             append_to_order(pub_1.name)
-        if 'pubmed_id' in requested:
+        if 'pubmedId' in requested:
             append_to_order(pub_1.pubmed_id)
-        if 'do_id' in requested:
+        if 'doId' in requested:
             append_to_order(pub_1.do_id)
         if 'title' in requested:
             append_to_order(pub_1.title)
-        if 'first_author_last_name' in requested:
+        if 'firstAuthorLastName' in requested:
             append_to_order(pub_1.first_author_last_name)
         if 'year' in requested:
             append_to_order(pub_1.year)
@@ -405,43 +394,41 @@ def get_publications(info, gene_types=[], gene_ids=set(), by_tag=False):
     return []
 
 
-def get_samples(info, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None, gene_ids=set(), by_tag=False):
-    child_node = 'genes' if by_tag else None
-    selection_set = get_selection_set(info=info, child_node=child_node)
-    requested = build_option_args(selection_set, {'samples': 'samples'})
-    has_samples = 'samples' in requested
+def get_samples(
+        requested, samples_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=None, immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None, gene_ids=[]):
 
-    if gene_ids and has_samples:
+    if 'samples' in requested:
         sess = db.session
 
         data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
+        gene_1 = aliased(Gene, name='g')
+        gene_to_sample_1 = aliased(GeneToSample, name='gs')
         sample_1 = aliased(Sample, name='s')
         sample_to_tag_1 = aliased(SampleToTag, name='st')
-        gene_to_sample_1 = aliased(GeneToSample, name='gs')
 
-        child_node = 'samples' if has_samples else None
-        sample_selection_set = get_selection_set(
-            selection_set, child_node=child_node)
-        sample_core_field_mapping = {'name': sample_1.name.label('name'),
-                                     'rnaSeqExpr': gene_to_sample_1.rna_seq_expr.label('rna_seq_expr')}
+        core_field_mapping = {'name': sample_1.name.label('name'),
+                              'rnaSeqExpr': gene_to_sample_1.rna_seq_expr.label('rna_seq_expr')}
 
-        sample_core = build_option_args(
-            sample_selection_set, sample_core_field_mapping)
+        core = get_selected(samples_requested, core_field_mapping)
         # Always select the sample id and the gene id.
-        sample_core |= {sample_1.id.label('id'),
-                        gene_to_sample_1.gene_id.label('gene_id')}
+        core |= {sample_1.id.label('id'),
+                 gene_to_sample_1.gene_id.label('gene_id')}
 
-        requested |= build_option_args(
-            sample_selection_set, {'name': 'name', 'rnaSeqExpr': 'rna_seq_expr'})
-
-        sample_query = sess.query(*sample_core)
+        sample_query = sess.query(*core)
         sample_query = sample_query.select_from(sample_1)
 
         if sample:
             sample_query = sample_query.filter(sample_1.name.in_(sample))
 
+        gene_subquery = build_gene_request(
+            set(), set(), data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type) if not gene_ids else gene_ids
+
         gene_sample_join_condition = build_join_condition(
-            gene_to_sample_1.sample_id, sample_1.id, gene_to_sample_1.gene_id, gene_ids)
+            gene_to_sample_1.sample_id, sample_1.id, gene_to_sample_1.gene_id, gene_subquery)
+        gene_sample_join_condition.extend(
+            [gene_to_sample_1.rna_seq_expr <= max_rna_seq_expr] if max_rna_seq_expr != None else [])
+        gene_sample_join_condition.extend(
+            [gene_to_sample_1.rna_seq_expr >= min_rna_seq_expr] if min_rna_seq_expr != None else [])
 
         sample_query = sample_query.join(
             gene_to_sample_1, and_(*gene_sample_join_condition))
@@ -511,36 +498,78 @@ def get_samples(info, data_set=None, feature=None, feature_class=None, related=N
         append_to_order = order.append
         if 'name' in requested:
             append_to_order(sample_1.name)
-        if 'rna_seq_expr' in requested:
+        if 'rnaSeqExpr' in requested:
             append_to_order(gene_to_sample_1.rna_seq_expr)
         sample_query = sample_query.order_by(*order) if order else sample_query
 
-        return sample_query.distinct().all()
+        return sample_query.all()
 
     return []
 
 
-def request_gene(requested, entrez=None, sample=None):
-    query = build_gene_request(requested, entrez=[entrez], sample=sample)
+def request_gene(requested, **kwargs):
+    '''
+    Keyword arguments are:
+        `entrez` - a list of integers
+        `sample` - a list of strings
+    '''
+    query = build_gene_request(requested, set(), **kwargs)
     return query.one_or_none()
 
 
-def request_genes(requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None,
-                  gene_function=None, gene_type=None, immune_checkpoint=None, pathway=None, related=None,
-                  sample=None, super_category=None, tag=None, therapy_type=None, tag_requested=set()):
-    genes_query = build_gene_request(requested, tag_requested=tag_requested, data_set=data_set, entrez=entrez, feature=feature,
-                                     feature_class=feature_class, gene_family=gene_family, gene_function=gene_function,
-                                     gene_type=gene_type, immune_checkpoint=immune_checkpoint, pathway=pathway,
-                                     related=related, sample=sample, super_category=super_category, tag=tag,
-                                     therapy_type=therapy_type)
-    return genes_query.distinct().all()
+def request_genes(
+        requested, tag_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=None, immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None, distinct=False):
+    '''
+    All keyword arguments are optional. Keyword arguments are:
+        `data_set` - a list of strings, data set names
+        `entrez` - a list of integers, gene entrez ids
+        `feature` - a list of strings, feature names
+        `feature_class` - a list of strings, feature class names
+        `gene_family` - a list of strings, gene family names
+        `gene_function` - a list of strings, gene function names
+        `gene_type` - a list of strings, gene type names
+        `immune_checkpoint` - a list of strings, immune checkpoint names
+        `max_rna_seq_expr` - a float, a maximum RNA Sequence Expression value
+        `min_rna_seq_expr` - a float, a minimum RNA Sequence Expression value
+        `pathway` - a list of strings, pathway names
+        `related` - a list of strings, tag names related to data sets
+        `sample` - a list of strings, sample names
+        `super_category` - a list of strings, super category names
+        `tag` - a list of strings, tag names related to samples
+        `therapy_type` - a list of strings, therapy type names
+        `distinct` - a boolean, true if the results should have DISTINCT applied
+    '''
+    genes_query = build_gene_request(
+        requested, tag_requested, data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type)
+    if distinct:
+        genes_query = genes_query.distinct()
+    return genes_query.all()
 
 
-def return_gene_derived_fields(info, gene_ids=set(), data_set=None, feature=None, feature_class=None, gene_type=None, related=None, sample=None, tag=None, by_tag=False):
-    samples = get_samples(info, data_set=data_set, feature=feature, feature_class=feature_class,
-                          related=related, sample=sample, gene_ids=gene_ids, tag=tag, by_tag=by_tag)
-    gene_types = get_gene_types(info, gene_type=gene_type, gene_ids=gene_ids)
-    pubs = get_publications(info, gene_types=gene_types, gene_ids=gene_ids)
+def return_gene_derived_fields(requested, gene_types_requested, publications_requested, samples_requested, **kwargs):
+    '''
+    All keyword arguments are optional. Keyword arguments are:
+        `data_set` - a list of strings, data set names
+        `entrez` - a list of integers, gene entrez ids
+        `feature` - a list of strings, feature names
+        `feature_class` - a list of strings, feature class names
+        `gene_family` - a list of strings, gene family names
+        `gene_function` - a list of strings, gene function names
+        `gene_type` - a list of strings, gene type names
+        `immune_checkpoint` - a list of strings, immune checkpoint names
+        `max_rna_seq_expr` - a float, a maximum RNA Sequence Expression value
+        `min_rna_seq_expr` - a float, a minimum RNA Sequence Expression value
+        `pathway` - a list of strings, pathway names
+        `related` - a list of strings, tag names related to data sets
+        `sample` - a list of strings, sample names
+        `super_category` - a list of strings, super category names
+        `tag` - a list of strings, tag names related to samples
+        `therapy_type` - a list of strings, therapy type names
+        `gene_ids` - a list of integers, gene ids already retrieved from the database
+    '''
+    samples = get_samples(requested, samples_requested, **kwargs)
+    gene_types = get_gene_types(requested, gene_types_requested, **kwargs)
+    pubs = get_publications(requested, publications_requested, **kwargs)
 
     types_dict = dict()
     for key, collection in groupby(gene_types, key=lambda gt: gt.gene_id):

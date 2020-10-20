@@ -3,6 +3,10 @@ from api import db
 from api.db_models import Gene, GeneType
 from .general_resolvers import build_option_args, get_selection_set
 
+simple_gene_type_request_fields = {'display', 'name'}
+
+gene_type_request_fields = simple_gene_type_request_fields.union({'genes'})
+
 
 def build_gene_type_core_request(selection_set, name=None):
     """

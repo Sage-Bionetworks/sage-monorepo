@@ -13,6 +13,9 @@ sample_request_fields = simple_sample_request_fields.union({'patient'})
 feature_related_sample_request_fields = simple_sample_request_fields.union({
                                                                            'value'})
 
+gene_related_sample_request_fields = simple_sample_request_fields.union({
+                                                                        'rnaSeqExpr'})
+
 mutation_related_sample_request_fields = sample_request_fields.union({
                                                                      'status'})
 
