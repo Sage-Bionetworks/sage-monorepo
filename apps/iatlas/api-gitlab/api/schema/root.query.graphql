@@ -19,6 +19,9 @@ type Query {
   If no arguments are passed, this will return all copy number results.
   """
   copyNumberResults(
+    paging: PagingInput
+    distinct: Boolean
+    id: ID
     dataSet: [String!]
     feature: [String!]
     entrez: [Int!]
@@ -31,8 +34,7 @@ type Query {
     minMeanNormal: Float
     minMeanCnv: Float
     minTStat: Float
-    page: Int
-  ): CopyNumberResultPage!
+  ): CopyNumberResult!
 
   """
   The "dataSets" query accepts:
@@ -90,11 +92,7 @@ type Query {
 
   If no arguments are passed, this will return all edges (please note, there will be a LOT of results).
   """
-  edges(
-    node1: [String!]
-    node2: [String!]
-    page: Int
-  ): EdgePage!
+  edges(node1: [String!], node2: [String!], page: Int): EdgePage!
 
   """
   The "features" query accepts:

@@ -1,7 +1,8 @@
 from sqlalchemy import and_, orm
 from api import db
 from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
-from .general_resolvers import build_join_condition, build_option_args, get_selected, get_value
+from .general_resolvers import build_join_condition, build_option_args, get_selected, get_selection_set, get_value
+from .paging_utils import get_cursor, Paging
 
 cnr_request_fields = {'dataSet',
                       'direction',
@@ -17,6 +18,7 @@ cnr_request_fields = {'dataSet',
 
 def build_cnr_graphql_response(copy_number_result):
     return {
+        'id': get_value(copy_number_result, 'id'),
         'direction': get_value(copy_number_result, 'direction'),
         'meanNormal': get_value(copy_number_result, 'mean_normal'),
         'meanCnv': get_value(copy_number_result, 'mean_cnv'),
@@ -50,10 +52,10 @@ def build_cnr_graphql_response(copy_number_result):
     }
 
 
-def build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, direction=None, entrez=None,
+def build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, direction=None, distinct=False, entrez=None,
                                      feature=None, max_p_value=None, max_log10_p_value=None,
                                      min_log10_p_value=None, min_mean_cnv=None,
-                                     min_mean_normal=None, min_p_value=None, min_t_stat=None,
+                                     min_mean_normal=None, min_p_value=None, min_t_stat=None, paging=None,
                                      tag=None):
     """
     Builds a SQL request.
@@ -66,7 +68,9 @@ def build_copy_number_result_request(requested, data_set_requested, feature_requ
     gene_1 = orm.aliased(Gene, name='g')
     tag_1 = orm.aliased(Tag, name='t')
 
-    core_field_mapping = {'direction': copy_number_result_1.direction.label('direction'),
+    core_field_mapping = {
+                          'id': copy_number_result_1.id.label('id'),
+                          'direction': copy_number_result_1.direction.label('direction'),
                           'meanNormal': copy_number_result_1.mean_normal.label('mean_normal'),
                           'meanCnv': copy_number_result_1.mean_cnv.label('mean_cnv'),
                           'pValue': copy_number_result_1.p_value.label('p_value'),
@@ -165,4 +169,25 @@ def build_copy_number_result_request(requested, data_set_requested, feature_requ
         query = query.join(tag_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
-    return query.distinct()
+    count_query = query
+    if paging.get('type', Paging.CURSOR) == Paging.OFFSET or distinct == True:
+        if distinct == True:
+            return query.distinct(), count_query.distinct()
+        return query, count_query
+
+    # Handle cursor and sort order
+    cursor, sort_order = get_cursor(paging.get('before'), paging.get('after'))
+    order_by = copy_number_result_1.id
+    if sort_order == Paging.ASC:
+        query = query.order_by(order_by)
+    else:
+        query = query.order_by(order_by.desc())
+
+    if cursor:
+        if sort_order == Paging.ASC:
+            query = query.filter(copy_number_result_1.id > cursor)
+        else:
+            query = query.filter(copy_number_result_1.id < cursor)
+    # end handle cursor
+
+    return query, count_query
