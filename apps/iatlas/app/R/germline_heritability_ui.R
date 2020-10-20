@@ -32,7 +32,10 @@ germline_heritability_ui <- function(id){
                                   "Order bars by ",
                                   choices = list("V(Genotype)/Vp" = "Variance",
                                                  "LRT p-value" = "pval",
-                                                 "LRT FDR" = "FDR"),
+                                                 "LRT FDR" = "FDR",
+                                                 "Immune Trait Category" = "Annot.Figure.ImmuneCategory",
+                                                 "Immune Trait Module" = "Annot.Figure.ImmuneModule"
+                                                 ),
                                   selected = "Variance")
           )
         ),
