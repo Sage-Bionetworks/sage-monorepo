@@ -247,3 +247,9 @@ get_example_path <- function(name, extension = ".csv"){
     stringr::str_c(extension) %>%
     file.path(system.file("examples", package = "iatlas.app"), .)
 }
+
+get_javascript_path <- function(name, extension = ".js"){
+  name %>%
+    stringr::str_c(extension) %>%
+    file.path(system.file("javascript", package = "iatlas.app"), .)
+}

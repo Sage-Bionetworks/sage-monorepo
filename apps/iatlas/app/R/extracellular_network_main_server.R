@@ -33,10 +33,12 @@ extracellular_network_main_server <- function(
         )
       })
 
-      output$stratify <- shiny::reactive({
-        shiny::req(input$stratify)
-        input$stratify
+      stratify <- shiny::reactive({
+        if(!show_stratify_option()) return(F)
+        else return(input$stratify)
       })
+
+      output$stratify <- shiny::reactive(stratify())
 
       shiny::outputOptions(
         output, "stratify", suspendWhenHidden = FALSE
@@ -88,9 +90,9 @@ extracellular_network_main_server <- function(
           "Select Style",
           choices = c(
             "Edges - Immune Subtype" =
-              "javascript/extracellular_network_stylesEdges.js",
+              get_javascript_path("extracellular_network_stylesEdges"),
             "Black Edges" =
-              "javascript/extracellular_network_styles.js"
+              get_javascript_path("extracellular_network_styles")
           )
         )
       })
@@ -125,199 +127,196 @@ extracellular_network_main_server <- function(
         get_selected_celltypes(input$selected_celltypes)
       })
 
-      main_scaffold <- shiny::reactive(build_ecn_scaffold_tbl())
+      gene_nodes <- shiny::eventReactive(input$calculate_button, {
+        if(stratify()) n_tags <- 2
+        else n_tags <- 1
+        nodes <-
+          iatlas.api.client::query_gene_nodes(
+            datasets = "TCGA",
+            network = "extracellular_network",
+            entrez = selected_genes(),
+            tags = input$group_selected,
+            min_score = input$abundance / 100
+          ) %>%
+          dplyr::filter(purrr::map_lgl(
+            purrr::map_int(.data$tags, nrow),
+            ~ .x == n_tags
+          ))
+        if(stratify()){
+          nodes <- nodes %>%
+            dplyr::filter(purrr::map_lgl(
+              purrr::map(.data$tags, dplyr::pull, "name"),
+              ~ any(input$stratified_group_selected %in% .x)
+            ))
+        }
+        nodes <- nodes %>%
+          dplyr::select("tags", "node_name" = "name", "node_display" = "hgnc") %>%
+          tidyr::unnest("tags") %>%
+          dplyr::select("node_name", "node_display", "tag" = "name") %>%
+          dplyr::mutate("Type" = "Gene")
+        return(nodes)
+      })
 
-      # ##Scaffold and genes based on list of cells and genes of interest
-      # scaffold <- reactive({
-      #
-      #     sca <- get_scaffold(panimmune_data$ecn_labels, main_scaffold, panimmune_data$ecn_expr, cois(), gois())
-      #     #in case user only selected a cell of interest, get rid of the edges that only have genes
-      #     if (is.null(input$geneInterest) & !(is.null(input$cellInterest))) {
-      #         sca <- sca %>%
-      #             dplyr::filter(From %in% cois() | To %in% cois())
-      #     }
-      #     return(sca)
-      # })
-      #
-      # ##Getting list of genes and cells that are present in the selected scaffold
-      # cells <- reactive({
-      #     as.vector(get_cells_scaffold(scaffold(), panimmune_data$ecn_labels))
-      # })
-      #
-      # genes <- reactive({
-      #     unique(c(scaffold()$From, scaffold()$To)) %>% setdiff(cells()) #getting all the genes in the edges selected
-      # })
+      feature_nodes <- shiny::eventReactive(input$calculate_button, {
+        if(stratify()) n_tags <- 2
+        else n_tags <- 1
+        nodes <-
+          iatlas.api.client::query_feature_nodes(
+            datasets = "TCGA",
+            network = "extracellular_network",
+            features = selected_celltypes(),
+            tags = input$group_selected,
+            min_score = input$abundance / 100
+          ) %>%
+          dplyr::filter(purrr::map_lgl(
+            purrr::map_int(.data$tags, nrow),
+            ~ .x == n_tags
+          ))
+        if(stratify()){
+          nodes <- nodes %>%
+            dplyr::filter(purrr::map_lgl(
+              purrr::map(.data$tags, dplyr::pull, "name"),
+              ~any(input$stratified_group_selected %in% .x)
+            ))
+        }
+        nodes <- nodes %>%
+          dplyr::select("tags", "node_name" = "name", "node_display" = "feature_display") %>%
+          tidyr::unnest("tags") %>%
+          dplyr::select("node_name", "node_display", "tag" = "name") %>%
+          dplyr::mutate("Type" = "Cell")
+        return(nodes)
+      })
 
-      #------Computing scores for a custom grouping
+      nodes <- shiny::reactive(dplyr::bind_rows(gene_nodes(), feature_nodes()))
 
-      # ternary_info <- reactive({
-      #     req(!group_internal_choice() %in% default_groups)
-      #     print("Computing nodes scores.")
-      #     compute_abundance(subset_df(),
-      #                       subset_col = group_internal_choice(),
-      #                       panimmune_data$fmx_df,
-      #                       panimmune_data$ecn_expr,
-      #                       cells(),
-      #                       genes(),
-      #                       stratify$byImmune)
-      # })
-      #
-      # scaffold_scores <- reactive({
-      #     req(!group_internal_choice() %in% default_groups, ternary_info())
-      #     print("Computing edges scores.")
-      #     compute_concordance(scaffold(),
-      #                         ternary_info(),
-      #                         stratify$byImmune) %>%
-      #         as.data.frame()
-      # })
+      # TODO: Use client to filter edges
+      edges <- shiny::eventReactive(input$calculate_button, {
+        nodes <- nodes() %>%
+          dplyr::pull("node_name") %>%
+          unique()
+        edges <- iatlas.api.client::query_edges(nodes, nodes) %>%
+          dplyr::filter(.data$score > input$concordance) %>%
+          dplyr::select("edge_name" = "name", "node1", "node2", "score") %>%
+          tidyr::pivot_longer(
+            cols = c("node1", "node2"),
+            names_to = "node_num",
+            values_to = "node_name"
+          ) %>%
+          dplyr::inner_join(nodes(), by = "node_name") %>%
+          dplyr::select(
+            "edge_name", "score", "node_num", "node_display", "tag"
+          ) %>%
+          tidyr::pivot_wider(
+            names_from = "node_num", values_from = "node_display"
+          )
+      })
 
-      #------ Subsetting nodes and edges list based on the Sample Group Selection and cells of interest
-      #
-      #
-      #     # TODO add dataset and network type as parameters
-      #     node_group_tbl <- shiny::reactive({
-      #         shiny::req(
-      #             !is.null(stratify())
-      #         )
-      #         if (stratify()) {
-      #             shiny::req(input$group_selected2, input$group_selected)
-      #             tag_list <- list(input$group_selected2, input$group_selected)
-      #         } else {
-      #             shiny::req(input$group_selected)
-      #             tag_list <- list(input$group_selected)
-      #         }
-      #         build_node_group_tbl(tag_list)
-      #     })
-      #
-      #     node_tbl <- shiny::reactive({
-      #         shiny::req(
-      #             node_group_tbl(),
-      #             input$abundance,
-      #             selected_gene_ids(),
-      #             selected_cell_ids()
-      #         )
-      #         tbl <- build_ecn_node_tbl(
-      #             input$abundance/100,
-      #             node_group_tbl()$node_id,
-      #             selected_gene_ids(),
-      #             selected_cell_ids()
-      #         )
-      #         shiny::validate(shiny::need(
-      #             nrow(tbl) > 0,
-      #             paste0(
-      #                 "No nodes for this selection. Try changing the thresholds ",
-      #                 "or selecting another subset."
-      #             )
-      #         ))
-      #         return(tbl)
-      #     })
-      #
-      #     edge_tbl <- shiny::reactive({
-      #         shiny::req(node_tbl(), input$concordance)
-      #         tbl <- build_ecn_edge_tbl(node_tbl()$id, input$concordance)
-      #         shiny::validate(shiny::need(
-      #             nrow(tbl) > 0,
-      #             paste0(
-      #                 "No edges for this selection. Try changing the thresholds ",
-      #                 "or selecting another subset."
-      #             )
-      #         ))
-      #         return(tbl)
-      #     })
-      #
-      #     node_tbl2 <- shiny::reactive({
-      #         build_ecn_node_tbl2(node_tbl(), edge_tbl()) %>%
-      #             print(n = 1000)
-      #     })
-      #
-      #     output$selectNode <- shiny::renderUI({
-      #         shiny::selectInput(
-      #             ns("node_selection"),
-      #             "Select or Search for Node",
-      #             choices = node_tbl2() %>%
-      #                 dplyr::select(.data$node, .data$id) %>%
-      #                 tibble::deframe(.) %>%
-      #                 c(" " = 0, .),
-      #             selected = 0
-      #         )
-      #     })
-      #
-      #     graph.json <- shiny::reactive({
-      #         cyjShiny::dataFramesToJSON(
-      #             format_ecn_edge_tbl(edge_tbl()),
-      #             format_ecn_node_tbl(node_tbl2())
-      #         )
-      #     })
-      #
-      # output$cyjShiny <- cyjShiny::renderCyjShiny({
-      #   print(selected_genes())
-      #   print(selected_celltypes())
-      #   cyjShiny::cyjShiny(
-      #       graph.json(),
-      #       layoutName = input$doLayout,
-      #       styleFile = "javascript/extracellular_network_stylesEdges.js"
-      #   )
-      # })
-      #
-      #
-      #     # #----- Network visualization-related (from the cyjShiny examples)
-      #     #
-      #     shiny::observeEvent(input$loadStyleFile, ignoreInit = TRUE, {
-      #         if (input$loadStyleFile != "") {
-      #             tryCatch({
-      #                 cyjShiny::loadStyleFile(input$loadStyleFile)
-      #             }, error = function(e) {
-      #                 msg <- sprintf(
-      #                     "ERROR in stylesheet file '%s': %s",
-      #                     input$loadStyleFile,
-      #                     e$message
-      #                 )
-      #                 shiny::showNotification(msg, duration = NULL, type = "error")
-      #             })
-      #         }
-      #     })
-      #
-      #     shiny::observeEvent(input$node_selection,  ignoreInit = TRUE, {
-      #         print(input$node_selection)
-      #         session$sendCustomMessage(
-      #             type = "selectNodes",
-      #             message = list(as.integer(input$node_selection))
-      #         )
-      #     })
-      #
-      #     shiny::observeEvent(input$sfn,  ignoreInit = TRUE, {
-      #         session$sendCustomMessage(type = "sfn", message = list())
-      #     })
-      #
-      #     shiny::observeEvent(input$fit, ignoreInit = TRUE, {
-      #         cyjShiny::fit(session, 80)
-      #     })
-      #
-      #     shiny::observeEvent(input$fitSelected, ignoreInit = TRUE, {
-      #         cyjShiny::fitSelected(session, 100)
-      #     })
-      #
-      #     shiny::observeEvent(input$hideSelection, ignoreInit = TRUE, {
-      #         session$sendCustomMessage(type = "hideSelection", message = list())
-      #     })
-      #
-      #     shiny::observeEvent(input$showAll, ignoreInit = TRUE, {
-      #         session$sendCustomMessage(type = "showAll", message = list())
-      #     })
-      #
-      #     shiny::observeEvent(input$clearSelection, ignoreInit = TRUE, {
-      #         session$sendCustomMessage(type = "clearSelection", message = list())
-      #     })
-      #
-      #     shiny::observeEvent(input$removeGraphButton, ignoreInit = TRUE, {
-      #         cyjShiny::removeGraph(session)
-      #     })
-      #
-      #     shiny::observeEvent(input$savePNGbutton, ignoreInit = TRUE, {
-      #         file.name <- tempfile(fileext = ".png")
-      #         shiny::savePNGtoFile(session, file.name)
-      #
-      #     })
+      scaffold <- shiny::reactive(
+        edges() %>%
+          dplyr::select("node1", "node2") %>%
+          dplyr::distinct()
+      )
+
+      output$select_node_ui <- shiny::renderUI({
+        shiny::selectInput(
+          ns("node_selection"),
+          "Select or Search for Node",
+          choices = nodes() %>%
+            dplyr::select("node_display", "node_name") %>%
+            tibble::deframe(.) %>%
+            c(" " = 0, .),
+          selected = 0
+        )
+      })
+
+      graph_json <- shiny::reactive({
+        print("##############")
+        nodes <- nodes() %>%
+          dplyr::select("id" = "node_name", "Gene" = "node_display", "Type") %>%
+          dplyr::mutate(
+            name = .data$Gene,
+            FriendlyName = .data$Gene
+          ) %>%
+          as.data.frame() %>%
+          print()
+        print("##############")
+        edges <- edges() %>%
+          dplyr::select(
+            "source" = "node1",
+            "target" = "node2",
+            "score",
+            "interaction" = "tag"
+          ) %>%
+          as.data.frame() %>%
+          print()
+        print("##############")
+        cyjShiny::dataFramesToJSON(edges, nodes)
+      })
+
+      output$cyjShiny <- cyjShiny::renderCyjShiny({
+        cyjShiny::cyjShiny(
+            graph_json(),
+            layoutName = input$do_layout,
+            styleFile = get_javascript_path("extracellular_network_stylesEdges")
+        )
+      })
+
+      shiny::observeEvent(input$loadStyleFile, ignoreInit = TRUE, {
+        if (input$loadStyleFile != "") {
+          tryCatch({
+            cyjShiny::loadStyleFile(input$loadStyleFile)
+          }, error = function(e) {
+            msg <- sprintf(
+              "ERROR in stylesheet file '%s': %s",
+              input$loadStyleFile,
+              e$message
+            )
+            shiny::showNotification(msg, duration = NULL, type = "error")
+          })
+        }
+      })
+
+      shiny::observeEvent(input$node_selection,  ignoreInit = TRUE, {
+        print(input$node_selection)
+        session$sendCustomMessage(
+          type = "selectNodes",
+          message = list(as.integer(input$node_selection))
+        )
+      })
+
+      shiny::observeEvent(input$sfn,  ignoreInit = TRUE, {
+        session$sendCustomMessage(type = "sfn", message = list())
+      })
+
+      shiny::observeEvent(input$fit, ignoreInit = TRUE, {
+        cyjShiny::fit(session, 80)
+      })
+
+      shiny::observeEvent(input$fitSelected, ignoreInit = TRUE, {
+        cyjShiny::fitSelected(session, 100)
+      })
+
+      shiny::observeEvent(input$hideSelection, ignoreInit = TRUE, {
+        session$sendCustomMessage(type = "hideSelection", message = list())
+      })
+
+      shiny::observeEvent(input$showAll, ignoreInit = TRUE, {
+        session$sendCustomMessage(type = "showAll", message = list())
+      })
+
+      shiny::observeEvent(input$clearSelection, ignoreInit = TRUE, {
+        session$sendCustomMessage(type = "clearSelection", message = list())
+      })
+
+      shiny::observeEvent(input$removeGraphButton, ignoreInit = TRUE, {
+        cyjShiny::removeGraph(session)
+      })
+
+      shiny::observeEvent(input$savePNGbutton, ignoreInit = TRUE, {
+        file.name <- tempfile(fileext = ".png")
+        shiny::savePNGtoFile(session, file.name)
+
+      })
     }
   )
 }
