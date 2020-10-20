@@ -7,10 +7,6 @@ from api.db_models import (
     GeneFunction, GeneToSample, GeneToType, GeneType, ImmuneCheckpoint, Pathway, Publication,
     PublicationToGeneToGeneType, SuperCategory, Sample, SampleToTag, Tag, TagToTag, TherapyType)
 from .general_resolvers import build_join_condition, build_option_args, get_selected, get_selection_set, get_value
-import logging
-
-log = logging.getLogger('gene resolver helper ')
-log.setLevel(logging.DEBUG)
 
 
 gene_request_fields = {'entrez',
@@ -34,7 +30,7 @@ simple_gene_request_fields = {'entrez',
                               'ioLandscapeName'}
 
 
-def build_gene_graphql_response(gene_type_dict=dict(), pub_dict=dict(), sample_dict=dict()):
+def build_gene_graphql_response(pub_dict=dict(), sample_dict=dict(), gene_type_dict=dict()):
     def f(gene):
         if not gene:
             return None
@@ -295,7 +291,7 @@ def build_gene_request(
 
 
 def get_gene_types(
-        requested, gene_types_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=None, immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None):
+        requested, gene_types_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=None, immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None, gene_ids=[]):
     if 'geneTypes' in requested:
         sess = db.session
 
@@ -313,11 +309,11 @@ def get_gene_types(
         gene_type_query = sess.query(*core)
         gene_type_query = gene_type_query.select_from(gene_type_1)
 
-        gene_subquery = build_gene_request(
-            set(), set(), data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type)
+        genes = build_gene_request(
+            set(), set(), data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type) if not gene_ids else gene_ids
 
         gene_gene_type_join_condition = build_join_condition(
-            gene_to_gene_type_1.type_id, gene_type_1.id, gene_to_gene_type_1.gene_id, gene_subquery)
+            gene_to_gene_type_1.type_id, gene_type_1.id, gene_to_gene_type_1.gene_id, genes)
 
         if gene_type:
             gene_gene_type_join_condition.append(
@@ -342,7 +338,7 @@ def get_gene_types(
 
 
 def get_publications(
-        requested, publications_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=[], immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None):
+        requested, publications_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=[], immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None, gene_ids=[]):
     if 'publications' in requested:
         sess = db.session
 
@@ -368,7 +364,7 @@ def get_publications(
         pub_query = pub_query.select_from(pub_1)
 
         gene_subquery = build_gene_request(
-            set(), set(), data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type)
+            set(), set(), data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type) if not gene_ids else gene_ids
 
         pub_gene_gene_type_join_condition = build_pub_gene_gene_type_join_condition(
             gene_subquery, gene_types, pub_gene_gene_type_1, pub_1)
@@ -399,7 +395,7 @@ def get_publications(
 
 
 def get_samples(
-        requested, samples_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=None, immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None):
+        requested, samples_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=None, immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None, gene_ids=[]):
 
     if 'samples' in requested:
         sess = db.session
@@ -425,7 +421,7 @@ def get_samples(
             sample_query = sample_query.filter(sample_1.name.in_(sample))
 
         gene_subquery = build_gene_request(
-            set(), set(), data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type)
+            set(), set(), data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type) if not gene_ids else gene_ids
 
         gene_sample_join_condition = build_join_condition(
             gene_to_sample_1.sample_id, sample_1.id, gene_to_sample_1.gene_id, gene_subquery)
@@ -511,13 +507,38 @@ def get_samples(
     return []
 
 
-def request_gene(requested, entrez=None, sample=None):
-    query = build_gene_request(requested, entrez=[entrez], sample=sample)
+def request_gene(requested, **kwargs):
+    '''
+    Keyword arguments are:
+        `entrez` - a list of integers
+        `sample` - a list of strings
+    '''
+    query = build_gene_request(requested, set(), **kwargs)
     return query.one_or_none()
 
 
 def request_genes(
         requested, tag_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=None, immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None, distinct=False):
+    '''
+    All keyword arguments are optional. Keyword arguments are:
+        `data_set` - a list of strings, data set names
+        `entrez` - a list of integers, gene entrez ids
+        `feature` - a list of strings, feature names
+        `feature_class` - a list of strings, feature class names
+        `gene_family` - a list of strings, gene family names
+        `gene_function` - a list of strings, gene function names
+        `gene_type` - a list of strings, gene type names
+        `immune_checkpoint` - a list of strings, immune checkpoint names
+        `max_rna_seq_expr` - a float, a maximum RNA Sequence Expression value
+        `min_rna_seq_expr` - a float, a minimum RNA Sequence Expression value
+        `pathway` - a list of strings, pathway names
+        `related` - a list of strings, tag names related to data sets
+        `sample` - a list of strings, sample names
+        `super_category` - a list of strings, super category names
+        `tag` - a list of strings, tag names related to samples
+        `therapy_type` - a list of strings, therapy type names
+        `distinct` - a boolean, true if the results should have DISTINCT applied
+    '''
     genes_query = build_gene_request(
         requested, tag_requested, data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type)
     if distinct:
@@ -525,14 +546,30 @@ def request_genes(
     return genes_query.all()
 
 
-def return_gene_derived_fields(
-        requested, gene_types_requested, publications_requested, samples_requested, data_set=None, entrez=None, feature=None, feature_class=None, gene_family=None, gene_function=None, gene_type=None, immune_checkpoint=None, max_rna_seq_expr=None, min_rna_seq_expr=None, pathway=None, related=None, sample=None, super_category=None, tag=None, therapy_type=None):
-    samples = get_samples(
-        requested, samples_requested, data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type)
-    gene_types = get_gene_types(
-        requested, gene_types_requested, data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type)
-    pubs = get_publications(
-        requested, publications_requested, data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type)
+def return_gene_derived_fields(requested, gene_types_requested, publications_requested, samples_requested, **kwargs):
+    '''
+    All keyword arguments are optional. Keyword arguments are:
+        `data_set` - a list of strings, data set names
+        `entrez` - a list of integers, gene entrez ids
+        `feature` - a list of strings, feature names
+        `feature_class` - a list of strings, feature class names
+        `gene_family` - a list of strings, gene family names
+        `gene_function` - a list of strings, gene function names
+        `gene_type` - a list of strings, gene type names
+        `immune_checkpoint` - a list of strings, immune checkpoint names
+        `max_rna_seq_expr` - a float, a maximum RNA Sequence Expression value
+        `min_rna_seq_expr` - a float, a minimum RNA Sequence Expression value
+        `pathway` - a list of strings, pathway names
+        `related` - a list of strings, tag names related to data sets
+        `sample` - a list of strings, sample names
+        `super_category` - a list of strings, super category names
+        `tag` - a list of strings, tag names related to samples
+        `therapy_type` - a list of strings, therapy type names
+        `gene_ids` - a list of integers, gene ids already retrieved from the database
+    '''
+    samples = get_samples(requested, samples_requested, **kwargs)
+    gene_types = get_gene_types(requested, gene_types_requested, **kwargs)
+    pubs = get_publications(requested, publications_requested, **kwargs)
 
     types_dict = dict()
     for key, collection in groupby(gene_types, key=lambda gt: gt.gene_id):

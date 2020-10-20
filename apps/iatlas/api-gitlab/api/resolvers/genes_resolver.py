@@ -17,4 +17,4 @@ def resolve_genes(
     pubs_dict, samples_dict, types_dict = return_gene_derived_fields(
         requested, gene_types_requested, publications_requested, samples_requested, data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, related=related, sample=sample, super_category=superCategory, tag=tag, therapy_type=therapyType) if genes else (dict(), dict(), dict())
 
-    return map(build_gene_graphql_response(types_dict, pubs_dict, samples_dict), genes)
+    return map(build_gene_graphql_response(pubs_dict, samples_dict, types_dict), genes)
