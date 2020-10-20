@@ -7,7 +7,9 @@ from .resolver_helpers import (build_cnr_graphql_response, build_copy_number_res
 from .resolver_helpers.paging_utils import get_limit, to_cursor_hash, Paging
 
 
-def resolve_copy_number_results(_obj, info, paging=None, **kwargs):
+def resolve_copy_number_results(_obj, info, dataSet=None, direction=None, distinct=False, entrez=None, feature=None, maxPValue=None,
+                                maxLog10PValue=None, minLog10PValue=None, minMeanCnv=None, minMeanNormal=None,
+                                minPValue=None, minTStat=None, paging=None, tag=None):
     pagination_set = get_selection_set(info=info, child_node='paging')
     pagination_requested = get_requested(selection_set=pagination_set, requested_field_mapping={'type', 'page', 'pages', 'total', 'first', 'last', 'before', 'after'})
 
@@ -33,7 +35,9 @@ def resolve_copy_number_results(_obj, info, paging=None, **kwargs):
     tag_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_tag_request_fields, child_node='tag')
 
-    query, count_query = build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=kwargs.pop('dataSet', 0), paging=paging, **kwargs)
+    query, count_query = build_copy_number_result_request(
+        requested, data_set_requested, feature_requested, gene_requested, tag_requested,
+                                                   data_set=dataSet, direction=direction, distinct=distinct, entrez=entrez, feature=feature, max_p_value=maxPValue, max_log10_p_value=maxLog10PValue,min_log10_p_value=minLog10PValue, min_mean_cnv=minMeanCnv,min_mean_normal=minMeanNormal, min_p_value=minPValue, min_t_stat=minTStat, paging=paging, tag=tag)
 
     page = None
     before = None

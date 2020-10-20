@@ -52,10 +52,10 @@ def build_cnr_graphql_response(copy_number_result):
     }
 
 
-def build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, paging=None, data_set=None, direction=None, distinct=False, entrez=None,
+def build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, direction=None, distinct=False, entrez=None,
                                      feature=None, max_p_value=None, max_log10_p_value=None,
                                      min_log10_p_value=None, min_mean_cnv=None,
-                                     min_mean_normal=None, min_p_value=None, min_t_stat=None, page=None,
+                                     min_mean_normal=None, min_p_value=None, min_t_stat=None, paging=None,
                                      tag=None):
     """
     Builds a SQL request.
