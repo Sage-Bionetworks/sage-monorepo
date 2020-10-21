@@ -24,9 +24,9 @@ type Query {
     minPValue: Float
     "A maximum P value to filter the copy number results by."
     maxPValue: Float
-    "A minimum log10 calcualtion of the P value to filter the copy number results by."
+    "A minimum log10 calculation of the P value to filter the copy number results by."
     minLog10PValue: Float
-    "A maximum log10 calcualtion of the P value to filter the copy number results by."
+    "A maximum log10 calculation of the P value to filter the copy number results by."
     maxLog10PValue: Float
     "A minimum mean normal to filter the copy number results by."
     minMeanNormal: Float
@@ -37,14 +37,16 @@ type Query {
   ): CopyNumberResult!
 
   """
-  The "dataSets" query accepts:
-
-    - "dataSet", a list of data set names to look up.
-    - "sample", a list of sample names associated with the data sets to filter by.
+  The data structure containing Data Sets.
 
   If no arguments are passed, this will return all data sets.
   """
-  dataSets(dataSet: [String!], sample: [String!]): [DataSet!]!
+  dataSets(
+    "A list of data set names to look up."
+    dataSet: [String!]
+    "A list of sample names associated with the data sets to filter by."
+    sample: [String!]
+  ): [DataSet!]!
 
   """
   The "driverResults" query accepts:
@@ -57,10 +59,10 @@ type Query {
     - "maxPValue", a maximum P value to filter the driver results by.
     - "minPValue", a minimum P value to filter the driver results by.
 
-    - "maxLog10PValue", a maximum log10 calcualtion of the P value to filter the driver results by.
-    - "minLog10PValue", a minimum log10 calcualtion of the P value to filter the driver results by.
+    - "maxLog10PValue", a maximum log10 calculation of the P value to filter the driver results by.
+    - "minLog10PValue", a minimum log10 calculation of the P value to filter the driver results by.
     - "minFoldChange", a minimum fold change to filter the driver results by.
-    - "minLog10FoldChange", a minimum log10 calcualtion of the fold change to filter the driver results by.
+    - "minLog10FoldChange", a minimum log10 calculation of the fold change to filter the driver results by.
     - "minNumWildTypes", a minimum of wild type genes to filter the driver results by.
     - "minNumMutants", a minimum mutant genes to filter the driver results by.
 
@@ -430,38 +432,49 @@ type Query {
   ): [Sample!]!
 
   """
-  The "samplesByMutationStatus" query accepts:
-
-    - "ethnicity", a list of patient ethnicities to filter the samples by
-    - "gender", a list of patient genders to filter the samples by
-    - "maxAgeAtDiagnosis", a number representing the maximum age of the patient at the time of diagnosis to filter the samples by
-    - "maxHeight", a number representing the maximum patient height to filter the samples by
-    - "maxHeight", a number representing the maximum patient weight to filter the samples by
-    - "minAgeAtDiagnosis", a number representing the minimum age of the patient at the time of diagnosis to filter the samples by
-    - "minHeight", a number representing the minimum patient height to filter the samples by
-    - "minWeight", a number representing the minimum patient weight to filter the samples by
-    - "mutationId", a list of mutation ids
-    - "mutationStatus", a StatusEnum value to filter the samples by
-    - "patient", a list of patient barcodes to filter the samples by
-    - "race", a list of patient races to filter the samples by
-    - "sample", a list of sample names
+  The data structure containing Samples by Mutation Status.
 
   If no filters are passed, this will return a list of all mutation statuses with lists of all related samples.
   """
   samplesByMutationStatus(
+    "A list of data set names to filter the samples by."
+    dataSet: [String!]
+    "A list of patient ethnicities to filter the samples by."
     ethnicity: [EthnicityEnum!]
+    "A list of feature names to filter the samples by."
+    feature: [String!]
+    "A list of feature class names related to the features associated with the samples to filter by."
+    featureClass: [String!]
+    "A list of patient genders to filter the samples by."
     gender: [GenderEnum!]
+    "A number representing the maximum age of the patient at the time of diagnosis to filter the samples by."
     maxAgeAtDiagnosis: Int
+    "A number representing the maximum patient height to filter the samples by."
     maxHeight: Float
+    "A number representing the maximum patient weight to filter the samples by."
     maxWeight: Float
+    "A number representing the minimum age of the patient at the time of diagnosis to filter the samples by."
     minAgeAtDiagnosis: Int
+    "A number representing the minimum patient height to filter the samples by."
     minHeight: Float
+    "A number representing the minimum patient weight to filter the samples by."
     minWeight: Float
+    "A list of mutation ids."
     mutationId: [Int!]
+    "A StatusEnum value to filter the samples by."
     mutationStatus: StatusEnum
+    "A list of patient barcodes to filter the samples by."
     patient: [String!]
+    "A list of patient races to filter the samples by."
     race: [RaceEnum!]
+    "A list of tag names related to the data sets associated with the samples to filter by."
+    related: [String!]
+    "A list of sample names."
     sample: [String!]
+    "A mutation status to filter by."
+    status: StatusEnum
+    "A list of tag names associated with the samples to filter by."
+    tag: [String!]
   ): [SampleByMutationStatus!]!
 
   """
