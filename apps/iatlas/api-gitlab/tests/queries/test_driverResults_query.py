@@ -24,8 +24,9 @@ def tag_name():
 
 
 @pytest.fixture(scope='module')
-def common_query():
-    return """query DriverResults(
+def common_query_builder():
+    def f(query_fields):
+        return """query DriverResults(
         $dataSet: [String!]
         $entrez: [Int!]
         $feature: [String!]
@@ -54,7 +55,13 @@ def common_query():
             minLog10FoldChange: $minLog10FoldChange
             minNumWildTypes: $minNumWildTypes
             minNumMutants: $minNumMutants
-        ) {
+        )""" + query_fields + "}"
+    return f
+
+
+@pytest.fixture(scope='module')
+def common_query(common_query_builder):
+    return common_query_builder("""{
             items {
                 pValue
                 log10PValue
@@ -69,8 +76,7 @@ def common_query():
                 tag { name }
             }
             page
-        }
-    }"""
+        }""")
 
 
 @pytest.fixture(scope='module')
@@ -126,16 +132,37 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_and_tag(client,
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
-        current_data_set = result['dataSet']
-        feature = result['feature']
-        gene = result['gene']
-        tag = result['tag']
+        assert result['dataSet']['name'] == data_set
+        assert result['feature']['name'] == feature_name
+        assert result['gene']['entrez'] == gene_entrez
+        assert type(result['mutationCode']) is str
+        assert result['tag']['name'] == tag_name
 
-        assert current_data_set['name'] == data_set
-        assert feature['name'] == feature_name
-        assert gene['entrez'] == gene_entrez
-        assert type(result['mutationCode']) is str or NoneType
-        assert tag['name'] == tag_name
+
+def test_driverResults_query_returns_mutationId(client, common_query_builder, data_set, feature_name, gene_entrez, tag_name):
+    query = common_query_builder("""{
+            items {
+                gene { entrez }
+                mutationId
+                mutationCode
+            }
+            page
+        }""")
+    response = client.post('/api', json={'query': query, 'variables': {
+        'dataSet': [data_set],
+        'entrez': [gene_entrez],
+        'feature': [feature_name],
+        'tag': [tag_name]
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['driverResults']
+    results = page['items']
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        assert result['gene']['entrez'] == gene_entrez
+        assert type(result['mutationId']) is int
+        assert type(result['mutationCode']) is str
 
 
 def test_driverResults_query_with_passed_data_set_entrez_feature_and_mutation(client, common_query, data_set, feature_name, gene_entrez, mutation_code):
@@ -151,17 +178,11 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_and_mutation(cl
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
-        current_data_set = result['dataSet']
-        feature = result['feature']
-        gene = result['gene']
-        tag = result['tag']
-
-        assert current_data_set['name'] == data_set
-        assert feature['name'] == feature_name
-        assert gene['entrez'] == gene_entrez
+        assert result['dataSet']['name'] == data_set
+        assert result['feature']['name'] == feature_name
+        assert result['gene']['entrez'] == gene_entrez
         assert result['mutationCode'] == mutation_code
-        if tag:
-            assert type(tag['name']) is str
+        assert type(result['tag']['name']) is str
 
 
 def test_driverResults_query_with_passed_data_set_entrez_mutation_code_and_tag(client, common_query, data_set, gene_entrez, mutation_code, tag_name):
@@ -177,17 +198,11 @@ def test_driverResults_query_with_passed_data_set_entrez_mutation_code_and_tag(c
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
-        current_data_set = result['dataSet']
-        feature = result['feature']
-        gene = result['gene']
-        tag = result['tag']
-
-        assert current_data_set['name'] == data_set
-        if feature:
-            assert type(feature['name']) is str
-        assert gene['entrez'] == gene_entrez
+        assert result['dataSet']['name'] == data_set
+        assert type(result['feature']['name']) is str
+        assert result['gene']['entrez'] == gene_entrez
         assert result['mutationCode'] == mutation_code
-        assert tag['name'] == tag_name
+        assert result['tag']['name'] == tag_name
 
 
 def test_driverResults_query_with_passed_data_set_feature_mutation_code_and_tag(client, common_query, data_set, feature_name, mutation_code, tag_name):
@@ -203,17 +218,11 @@ def test_driverResults_query_with_passed_data_set_feature_mutation_code_and_tag(
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
-        current_data_set = result['dataSet']
-        feature = result['feature']
-        gene = result['gene']
-        tag = result['tag']
-
-        assert current_data_set['name'] == data_set
-        assert feature['name'] == feature_name
-        if gene:
-            assert type(gene['entrez']) is int
+        assert result['dataSet']['name'] == data_set
+        assert result['feature']['name'] == feature_name
+        assert type(result['gene']['entrez']) is int
         assert result['mutationCode'] == mutation_code
-        assert tag['name'] == tag_name
+        assert result['tag']['name'] == tag_name
 
 
 def test_driverResults_query_with_passed_data_set_entrez_feature_mutation_code_and_tag(client, common_query, feature_name, gene_entrez, mutation_code, tag_name):
@@ -230,16 +239,11 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_mutation_code_a
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
-        current_data_set = result['dataSet']
-        feature = result['feature']
-        gene = result['gene']
-        tag = result['tag']
-
-        assert type(current_data_set['name']) is str
-        assert feature['name'] == feature_name
-        assert gene['entrez'] == gene_entrez
+        assert type(result['dataSet']['name']) is str
+        assert result['feature']['name'] == feature_name
+        assert result['gene']['entrez'] == gene_entrez
         assert result['mutationCode'] == mutation_code
-        assert tag['name'] == tag_name
+        assert result['tag']['name'] == tag_name
 
 
 def test_driverResults_query_with_passed_min_p_value(client, common_query, data_set, gene_entrez, feature_name, min_p_value, tag_name):

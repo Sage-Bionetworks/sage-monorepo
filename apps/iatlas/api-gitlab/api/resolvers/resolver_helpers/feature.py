@@ -9,16 +9,17 @@ from .general_resolvers import build_join_condition, get_selected, get_selection
 
 feature_class_request_fields = {'name'}
 
-feature_request_fields = {'class',
-                          'display',
-                          'methodTag',
-                          'name',
-                          'order',
-                          'samples',
-                          'unit',
-                          'value',
-                          'valueMax',
-                          'valueMin'}
+simple_feature_request_fields = {'display',
+                                 'name',
+                                 'order',
+                                 'unit'}
+
+feature_request_fields = simple_feature_request_fields.union({'class',
+                                                              'methodTag',
+                                                              'samples',
+                                                              'value',
+                                                              'valueMax',
+                                                              'valueMin'})
 
 
 def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
