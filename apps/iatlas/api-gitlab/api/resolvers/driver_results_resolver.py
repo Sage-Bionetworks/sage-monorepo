@@ -1,4 +1,4 @@
-from .resolver_helpers import build_dr_graphql_response, data_set_request_fields, driver_result_request_fields, get_requested, get_selection_set, request_driver_results, simple_feature_request_fields, simple_gene_request_fields, simple_tag_request_fields
+from .resolver_helpers import build_dr_graphql_response, driver_result_request_fields, get_requested, get_selection_set, request_driver_results, simple_data_set_request_fields, simple_feature_request_fields, simple_gene_request_fields, simple_tag_request_fields
 
 
 def resolve_driver_results(_obj, info, dataSet=None, entrez=None, feature=None, maxPValue=None,
@@ -11,7 +11,7 @@ def resolve_driver_results(_obj, info, dataSet=None, entrez=None, feature=None, 
         selection_set=selection_set, requested_field_mapping=driver_result_request_fields)
 
     data_set_requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=data_set_request_fields, child_node='dataSet')
+        selection_set=selection_set, requested_field_mapping=simple_data_set_request_fields, child_node='dataSet')
 
     feature_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_feature_request_fields, child_node='feature')

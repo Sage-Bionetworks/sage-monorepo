@@ -7,6 +7,7 @@ class Dataset(Base):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     display = db.Column(db.String, nullable=True)
+    data_set_type = db.Column('type', db.String, nullable=False)
 
     samples = db.relationship(
         'Sample', secondary='datasets_to_samples', uselist=True, lazy='noload')

@@ -47,7 +47,7 @@ type Query {
     "A list of sample names associated with the data sets to filter by."
     sample: [String!]
     "A list of data set types to filter by."
-    type: [String!]
+    dataSetType: [String!]
   ): [DataSet!]!
 
   """

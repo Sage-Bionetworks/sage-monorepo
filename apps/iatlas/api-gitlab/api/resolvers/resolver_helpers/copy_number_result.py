@@ -3,6 +3,10 @@ from api import db
 from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
 from .general_resolvers import build_join_condition, build_option_args, get_selected, get_selection_set, get_value
 from .paging_utils import get_cursor, Paging
+from .data_set import build_data_set_graphql_response
+from .feature import build_feature_graphql_response
+from .gene import build_gene_graphql_response
+from .tag import build_tag_graphql_response
 
 cnr_request_fields = {'dataSet',
                       'direction',
@@ -25,38 +29,15 @@ def build_cnr_graphql_response(copy_number_result):
         'pValue': get_value(copy_number_result, 'p_value'),
         'log10PValue': get_value(copy_number_result, 'log10_p_value'),
         'tStat': get_value(copy_number_result, 't_stat'),
-        'dataSet': {
-            'display': get_value(copy_number_result, 'data_set_display'),
-            'name': get_value(copy_number_result, 'data_set_name'),
-        },
-        'feature': {
-            'display': get_value(copy_number_result, 'feature_display'),
-            'name': get_value(copy_number_result, 'feature_name'),
-            'order': get_value(copy_number_result, 'order'),
-            'unit': get_value(copy_number_result, 'unit')
-        },
-        'gene': {
-            'entrez': get_value(copy_number_result, 'entrez'),
-            'hgnc': get_value(copy_number_result, 'hgnc'),
-            'description': get_value(copy_number_result, 'description'),
-            'friendlyName': get_value(copy_number_result, 'friendlyName'),
-            'ioLandscapeName': get_value(copy_number_result, 'ioLandscapeName')
-        },
-        'tag': {
-            'characteristics': get_value(copy_number_result, 'characteristics'),
-            'color': get_value(copy_number_result, 'color'),
-            'longDisplay': get_value(copy_number_result, 'tag_long_display'),
-            'name': get_value(copy_number_result, 'tag_name'),
-            'shortDisplay': get_value(copy_number_result, 'tag_short_display')
-        }
+        'dataSet': build_data_set_graphql_response(copy_number_result),
+        'feature': build_feature_graphql_response()(copy_number_result),
+        'gene': build_gene_graphql_response()(copy_number_result),
+        'tag': build_tag_graphql_response()(copy_number_result)
     }
 
 
-def build_copy_number_result_request(requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, direction=None, distinct=False, entrez=None,
-                                     feature=None, max_p_value=None, max_log10_p_value=None,
-                                     min_log10_p_value=None, min_mean_cnv=None,
-                                     min_mean_normal=None, min_p_value=None, min_t_stat=None, paging=None,
-                                     tag=None):
+def build_copy_number_result_request(
+        requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, direction=None, distinct=False, entrez=None, feature=None, max_p_value=None, max_log10_p_value=None, min_log10_p_value=None, min_mean_cnv=None, min_mean_normal=None, min_p_value=None, min_t_stat=None, paging=None, tag=None):
     """
     Builds a SQL request.
     """
@@ -69,16 +50,17 @@ def build_copy_number_result_request(requested, data_set_requested, feature_requ
     tag_1 = orm.aliased(Tag, name='t')
 
     core_field_mapping = {
-                          'id': copy_number_result_1.id.label('id'),
-                          'direction': copy_number_result_1.direction.label('direction'),
-                          'meanNormal': copy_number_result_1.mean_normal.label('mean_normal'),
-                          'meanCnv': copy_number_result_1.mean_cnv.label('mean_cnv'),
-                          'pValue': copy_number_result_1.p_value.label('p_value'),
-                          'log10PValue': copy_number_result_1.log10_p_value.label('log10_p_value'),
-                          'tStat': copy_number_result_1.t_stat.label('t_stat')}
+        'id': copy_number_result_1.id.label('id'),
+        'direction': copy_number_result_1.direction.label('direction'),
+        'meanNormal': copy_number_result_1.mean_normal.label('mean_normal'),
+        'meanCnv': copy_number_result_1.mean_cnv.label('mean_cnv'),
+        'pValue': copy_number_result_1.p_value.label('p_value'),
+        'log10PValue': copy_number_result_1.log10_p_value.label('log10_p_value'),
+        'tStat': copy_number_result_1.t_stat.label('t_stat')}
 
     data_set_field_mapping = {'display': data_set_1.display.label('data_set_display'),
-                              'name': data_set_1.name.label('data_set_name')}
+                              'name': data_set_1.name.label('data_set_name'),
+                              'type': data_set_1.data_set_type.label('data_set_type')}
 
     feature_field_mapping = {'display': feature_1.display.label('feature_display'),
                              'name': feature_1.name.label('feature_name'),
