@@ -41,7 +41,6 @@ def common_query_builder():
             $race: [RaceEnum!]
             $related: [String!]
             $sample: [String!]
-            $status: StatusEnum
             $tag: [String!]
         ) {
             samplesByMutationStatus(
@@ -62,7 +61,6 @@ def common_query_builder():
                 race: $race
                 related: $related
                 sample: $sample
-                status: $status
                 tag: $tag
             )""" + query_fields + "}"
     return f
@@ -390,3 +388,91 @@ def test_samples_by_mutation_status_query_with_minWeight(client, common_query_bu
         assert len(samples) > 0
         for current_sample in samples[0:2]:
             assert current_sample['patient']['weight'] >= min_weight
+
+
+def test_samples_by_mutation_status_query_with_dataSet(client, common_query_builder, data_set):
+    query = common_query_builder("""{
+                                    status
+                                    samples { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'dataSet': [data_set]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByMutationStatus']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert result['status'] in status_enum.enums
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample['name']) is str
+
+
+def test_samples_by_mutation_status_query_with_dataSet_and_related(client, common_query_builder, data_set, related):
+    query = common_query_builder("""{
+                                    status
+                                    samples { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'dataSet': [data_set],
+            'related': [related]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByMutationStatus']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert result['status'] in status_enum.enums
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample['name']) is str
+
+
+def test_samples_by_mutation_status_query_with_feature_and_featureClass(client, common_query_builder, chosen_feature, feature_class):
+    query = common_query_builder("""{
+                                    status
+                                    samples { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'feature': [chosen_feature],
+            'featureClass': [feature_class]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByMutationStatus']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert result['status'] in status_enum.enums
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample['name']) is str
+
+
+def test_samples_by_mutation_status_query_with_tag(client, common_query_builder, tag):
+    query = common_query_builder("""{
+                                    status
+                                    samples { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'tag': [tag]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByMutationStatus']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert result['status'] in status_enum.enums
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample['name']) is str

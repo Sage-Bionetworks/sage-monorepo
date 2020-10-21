@@ -471,8 +471,6 @@ type Query {
     related: [String!]
     "A list of sample names."
     sample: [String!]
-    "A mutation status to filter by."
-    status: StatusEnum
     "A list of tag names associated with the samples to filter by."
     tag: [String!]
   ): [SampleByMutationStatus!]!
