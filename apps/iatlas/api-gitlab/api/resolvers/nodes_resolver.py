@@ -5,6 +5,7 @@ from api.telemetry import profile
 
 
 def resolve_nodes(_obj, info, dataSet=None, entrez=None, feature=None, maxScore=None, minScore=None, network=None, related=None, tag=None, page=1):
+    # The selection is nested under the 'items' node.
     selection_set = get_selection_set(info=info, child_node='items')
     requested = get_requested(
         selection_set=selection_set, requested_field_mapping=node_request_fields)

@@ -6,28 +6,23 @@ from api.db_models import (
     Dataset, DatasetToTag, DatasetToSample, Feature, FeatureClass, FeatureToSample, Gene, GeneFamily,
     GeneFunction, GeneToSample, GeneToType, GeneType, ImmuneCheckpoint, Pathway, Publication,
     PublicationToGeneToGeneType, SuperCategory, Sample, SampleToTag, Tag, TagToTag, TherapyType)
-from .general_resolvers import build_join_condition, build_option_args, get_selected, get_selection_set, get_value
+from .general_resolvers import build_join_condition, get_selected, get_value
 
-
-gene_request_fields = {'entrez',
-                       'hgnc',
-                       'description',
-                       'friendlyName',
-                       'ioLandscapeName',
-                       'geneFamily',
-                       'geneFunction',
-                       'geneTypes',
-                       'immuneCheckpoint',
-                       'pathway',
-                       'samples',
-                       'superCategory',
-                       'therapyType'}
 
 simple_gene_request_fields = {'entrez',
                               'hgnc',
                               'description',
                               'friendlyName',
                               'ioLandscapeName'}
+
+gene_request_fields = simple_gene_request_fields.union({'geneFamily',
+                                                        'geneFunction',
+                                                        'geneTypes',
+                                                        'immuneCheckpoint',
+                                                        'pathway',
+                                                        'samples',
+                                                        'superCategory',
+                                                        'therapyType'})
 
 
 def build_gene_graphql_response(pub_dict=dict(), sample_dict=dict(), gene_type_dict=dict()):

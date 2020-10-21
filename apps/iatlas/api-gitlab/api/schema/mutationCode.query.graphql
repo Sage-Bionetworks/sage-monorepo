@@ -4,5 +4,5 @@ The "MutationCode" type only returns:
 - The "code" of the mutation
 """
 type MutationCode {
-  code: String
+  code: String!
 }

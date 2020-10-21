@@ -5,6 +5,7 @@ The "DriverResult" type may return:
 - The "feature" associated with the driver result
 - The "gene" associated with the driver result
 - The "mutationCode" associated with the driver result
+- The "mutationId" database generated id of the mutation related to the gene and mutation code associated with the driver result
 - The "tag" associated with the driver result
 - The "pValue", the P value of the driver result
 - The "foldChange", the fold change of the driver result
@@ -14,11 +15,12 @@ The "DriverResult" type may return:
 - The "numMutants", the number of mutant genes
 """
 type DriverResult {
-  dataSet: SimpleDataSet
-  feature: SimpleFeature
-  gene: SimpleGene
-  mutationCode: String
-  tag: SimpleTag
+  dataSet: SimpleDataSet!
+  feature: SimpleFeature!
+  gene: SimpleGene!
+  mutationCode: String!
+  mutationId: Int!
+  tag: SimpleTag!
   pValue: Float
   foldChange: Float
   log10PValue: Float
