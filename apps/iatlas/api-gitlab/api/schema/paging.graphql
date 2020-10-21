@@ -1,36 +1,75 @@
+"""
+The "BaseNode" interface defines an interface implemented by return types:
+"""
 interface BaseNode {
+  "A unique identifier for this record. Do not request 'id' if 'distinct' is 'true'"
   id: ID
 }
 
+"""
+An object containing either cursor or offset pagination request values.
+If PagingInput is omitted, paging will default to type "CURSOR", and "first" 100,000.
+"""
 input PagingInput {
+  "The type of pagination to perform. Must be either 'OFFSET' or 'CURSOR'."
   type: PagingType
+  "When performing OFFSET paging, the page number requested."
   page: Int
+  "When performing OFFSET paging, the number or records requested."
   limit: Int
+  "When performing CURSOR paging, the number of records requested AFTER the CURSOR."
   first: Int
+  "When performing CURSOR paging, the number of records requested BEFORE the CURSOR."
   last: Int
+  "When performing CURSOR paging: the CURSOR to be used in tandem with 'last'"
   before: String
+  "When performing CURSOR paging: the CURSOR to be used in tandem with 'first'"
   after: String
 }
 
+"""
+An ENUM containing constants for the two types of pagination available.
+'CURSOR' is default
+"""
 enum PagingType {
+  "'CURSOR': more performant pagination. Cannot seek to specific pages. May not be used in conjunction with 'distinct'"
   CURSOR
+  "OFFSET: may be significantly less performant, especially when used in conjunction with 'distinct', but necessary when paged 'distinct' result sets are required."
   OFFSET
 }
 
+"""
+Pagination metadata returned with each paginated request.
+"""
 type Paging {
+  "Must be set to 'OFFSET' or 'CURSOR'. When not passed, will default to 'CURSOR'. See (PagingType)."
   type: PagingType
-  page: Int
+  "The total number of pages available based on the requested limit/first/last value."
   pages: Int
-  limit: Int
-  hasNextPage: Boolean
-  hasPreviousPage: Boolean
-  startCursor: String
-  endCursor: String
+  "The total number of records available matching the given request."
   total: Int
+  "When performing OFFSET paging, the page number returned."
+  page: Int
+  "When performing OFFSET paging, the number of requested records per page."
+  limit: Int
+  "When performing CURSOR paging, a Boolean indicating the presence or absence of additional pages __after__ the __endCursor__."
+  hasNextPage: Boolean
+  "When performing CURSOR paging, a Boolean indicating the presence or absence of additional pages __before__ the __startCursor__."
+  hasPreviousPage: Boolean
+  "When performing CURSOR paging, the cursor of the first record returned."
+  startCursor: String
+  "When performing CURSOR paging, the cursor of the last record returned."
+  endCursor: String
 }
 
+"""
+Provides a common interface for return data.
+"""
 interface BaseResult {
+  "Pagination metadata. (see Paging)"
   paging: Paging
+  "A string error message returned by the API and may be displayed to the user by the client. This is separate from 'errors' which provides useful feedback during client development."
   error: String
+  "A list of returned objects that implement the BaseNode interface."
   items: [BaseNode]
 }
