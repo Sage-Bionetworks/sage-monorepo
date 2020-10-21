@@ -20,6 +20,11 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
             width = 12,
             shiny::verticalLayout(
               shiny::uiOutput(ns("features")),
+              shiny::checkboxInput(ns("only_selected"), "Display only selected feature(s)"),
+              shiny:: conditionalPanel(
+                condition = paste("" , paste0("input['", ns("only_selected"), "'] == false")),
+                shiny::uiOutput(ns("to_exclude"))
+              ),
               shiny::sliderInput(ns("yrange"), "Select range of -log10(p-values) to be included", min = 6, max = 30, value = c(6,12), step = 1),
               shiny::radioButtons(ns("selection"), "Select range of visualization", choices = c("See all chromossomes", "Select a region"), selected = "See all chromossomes"),
               shiny::conditionalPanel(paste0("input['", ns("selection"), "'] == 'Select a region'"),

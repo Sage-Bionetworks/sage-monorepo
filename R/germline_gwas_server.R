@@ -10,9 +10,29 @@ germline_gwas_server <- function(id, cohort_obj){
         feather::read_feather(paste0(GERMLINE_PATH, "tcga_germline_GWAS.feather"))
       })
 
+      immune_feat <- reactive({
+
+        gwas_data() %>%
+          dplyr::select(display,`Annot.Figure.ImmuneCategory`) %>%
+          dplyr::group_by(`Annot.Figure.ImmuneCategory`) %>%
+          tidyr::nest(data = c(display))%>%
+          dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
+          tibble::deframe()
+
+      })
 
       output$features <- renderUI({
-        shiny::selectizeInput(ns('immunefeature'), "Select Immune Feature", choices = sort(unique(gwas_data()$display)))
+        shiny::selectizeInput(ns('immunefeature'), "Select Immune Feature(s)",
+                              choices = immune_feat(),
+                              selected = c("CD8 T cells", "NK cells"),
+                              multiple = TRUE)
+      })
+
+      output$to_exclude <- renderUI({
+        shiny::selectizeInput(ns('exclude_feat'), "Exclude Immune Feature (optional)",
+                              choices = immune_feat(),
+                              selected = c("MHC2 21978456", "Th17 cells"),
+                              multiple = TRUE)
       })
 
       selected_chr <- reactive({
@@ -127,6 +147,8 @@ germline_gwas_server <- function(id, cohort_obj){
       toUpdate <- reactive({
         list(
           input$immunefeature,
+          input$exclude_feat,
+          input$only_selected,
           selected_chr(),
           input$go_button
         )
@@ -134,8 +156,15 @@ germline_gwas_server <- function(id, cohort_obj){
       don <- eventReactive(toUpdate(),{
         shiny::req(input$immunefeature, selected_chr(), selected_min(), selected_max())
 
+        if(input$only_selected == 0 & !is.null(input$exclude_feat)) gwas_df <- gwas_data() %>% filter(!(display %in% input$exclude_feat))
+        else if(input$only_selected == 1) gwas_df <- gwas_data() %>% filter(display %in% input$immunefeature)
+        else gwas_df <- gwas_data()
+
+        if(input$only_selected == 0) gwas_df <- gwas_df %>% dplyr::mutate(is_highlight=ifelse(display %in% input$immunefeature, "yes", "no"))
+        else gwas_df <- gwas_df %>% dplyr::mutate(is_highlight = "no")
+
         build_manhattanplot_tbl(
-          gwas_df = gwas_data(),
+          gwas_df = gwas_df,
           chr_selected = selected_chr(),
           bp_min = selected_min(),
           bp_max = selected_max(),
