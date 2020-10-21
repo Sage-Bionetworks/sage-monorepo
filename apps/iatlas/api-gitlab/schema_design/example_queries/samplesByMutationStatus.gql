@@ -1,26 +1,32 @@
 query SamplesByMutationStatus(
-  $maxAgeAtDiagnosis: [Int!]
   $ethnicity: [EthnicityEnum!]
   $gender: [GenderEnum!]
-  $height: [Int!]
+  $maxAgeAtDiagnosis: Int
+  $maxHeight: Float
+  $maxWeight: Float
+  $minAgeAtDiagnosis: Int
+  $minHeight: Float
+  $minWeight: Float
   $mutationId: [Int!]
   $mutationStatus: StatusEnum
   $patient: [String!]
   $race: [RaceEnum!]
   $sample: [String!]
-  $weight: [Int!]
 ) {
   samplesByMutationStatus(
-    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
     ethnicity: $ethnicity
     gender: $gender
-    height: $height
+    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
+    maxHeight: $maxHeight
+    maxWeight: $maxWeight
+    minAgeAtDiagnosis: $minAgeAtDiagnosis
+    minHeight: $minHeight
+    minWeight: $minWeight
     mutationId: $mutationId
     mutationStatus: $mutationStatus
     patient: $patient
     race: $race
     sample: $sample
-    weight: $weight
   ) {
     status
     samples {

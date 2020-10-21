@@ -1,22 +1,26 @@
 query GenesByTag(
-  $dataSet: [String!]!
-  $related: [String!]!
-  $tag: [String!]
+  $dataSet: [String!]
+  $entrez: [Int!]
   $feature: [String!]
   $featureClass: [String!]
-  $entrez: [Int!]
   $geneType: [String!]
+  $maxRnaSeqExpr: Float
+  $minRnaSeqExpr: Float
+  $related: [String!]
   $sample: [String!]
+  $tag: [String!]
 ) {
   genesByTag(
     dataSet: $dataSet
-    related: $related
-    tag: $tag
+    entrez: $entrez
     feature: $feature
     featureClass: $featureClass
-    entrez: $entrez
     geneType: $geneType
+    maxRnaSeqExpr: $maxRnaSeqExpr
+    minRnaSeqExpr: $minRnaSeqExpr
+    related: $related
     sample: $sample
+    tag: $tag
   ) {
     tag
     characteristics

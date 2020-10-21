@@ -1,23 +1,29 @@
 query Slides(
-  $maxAgeAtDiagnosis: [Int!]
   $barcode: [String!]
   $ethnicity: [EthnicityEnum!]
   $gender: [GenderEnum!]
-  $height: [Int!]
+  $maxAgeAtDiagnosis: Int
+  $maxHeight: Float
+  $maxWeight: Float
+  $minAgeAtDiagnosis: Int
+  $minHeight: Float
+  $minWeight: Float
   $name: [String!]
   $race: [RaceEnum!]
-  $weight: [Int!]
   $sample: [String!]
 ) {
   slides(
-    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
     barcode: $barcode
     ethnicity: $ethnicity
     gender: $gender
-    height: $height
+    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
+    maxHeight: $maxHeight
+    maxWeight: $maxWeight
+    minAgeAtDiagnosis: $minAgeAtDiagnosis
+    minHeight: $minHeight
+    minWeight: $minWeight
     name: $name
     race: $race
-    weight: $weight
     sample: $sample
   ) {
     name

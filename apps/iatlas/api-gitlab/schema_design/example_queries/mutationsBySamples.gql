@@ -3,18 +3,18 @@ query MutationsBySample(
   $mutationCode: [String!]
   $mutationId: [Int!]
   $mutationType: [String!]
+  $page: Int
   $sample: [String!]
   $status: [StatusEnum!]
-  $page: Int
 ) {
   mutationsBySample(
     entrez: $entrez
     mutationCode: $mutationCode
     mutationId: $mutationId
     mutationType: $mutationType
+    page: $page
     sample: $sample
     status: $status
-    page: $page
   ) {
     items {
       name
@@ -36,7 +36,6 @@ query MutationsBySample(
     total
   }
 }
-
 
 # Variables
 # { "entrez": [207], "sample": ["TCGA-02-0047"] }

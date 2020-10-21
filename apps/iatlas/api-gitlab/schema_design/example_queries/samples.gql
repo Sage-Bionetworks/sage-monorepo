@@ -1,22 +1,28 @@
 query Samples(
-  $maxAgeAtDiagnosis: [Int!]
   $ethnicity: [EthnicityEnum!]
   $gender: [GenderEnum!]
-  $height: [Int!]
+  $maxAgeAtDiagnosis: Int
+  $maxHeight: Float
+  $maxWeight: Float
+  $minAgeAtDiagnosis: Int
+  $minHeight: Float
+  $minWeight: Float
   $name: [String!]
   $patient: [String!]
   $race: [RaceEnum!]
-  $weight: [Int!]
 ) {
   samples(
-    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
     ethnicity: $ethnicity
     gender: $gender
-    height: $height
+    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
+    maxHeight: $maxHeight
+    maxWeight: $maxWeight
+    minAgeAtDiagnosis: $minAgeAtDiagnosis
+    minHeight: $minHeight
+    minWeight: $minWeight
     name: $name
     patient: $patient
     race: $race
-    weight: $weight
   ) {
     name
     patient {
