@@ -45,10 +45,10 @@ query DriverResults_test(
   $feature: [String!]
   $mutationCode: [String!]
   $tag: [String!]
-  $maxPValue: Float
   $minPValue: Float
-  $maxLog10PValue: Float
+  $maxPValue: Float
   $minLog10PValue: Float
+  $maxLog10PValue: Float
   $minFoldChange: Float
   $minLog10FoldChange: Float
   $minNumWildTypes: Int
@@ -56,14 +56,14 @@ query DriverResults_test(
 ) {
   driverResults(
     dataSet: $dataSet
-    entrez: $entrez
     feature: $feature
+    entrez: $entrez
     mutationCode: $mutationCode
     tag: $tag
-    maxPValue: $maxPValue
     minPValue: $minPValue
-    maxLog10PValue: $maxLog10PValue
+    maxPValue: $maxPValue
     minLog10PValue: $minLog10PValue
+    maxLog10PValue: $maxLog10PValue
     minFoldChange: $minFoldChange
     minLog10FoldChange: $minLog10FoldChange
     minNumWildTypes: $minNumWildTypes
@@ -83,6 +83,7 @@ query DriverResults_test(
         hgnc
       }
       mutationCode
+      mutationId
       tag {
         name
         display

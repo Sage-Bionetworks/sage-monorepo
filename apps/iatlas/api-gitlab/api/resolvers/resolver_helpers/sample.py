@@ -30,7 +30,7 @@ def build_sample_graphql_response(sample):
     }
 
 
-def build_sample_mutation_join_condition(sample_to_mutation_model, sample_model, mutation_status, mutation_id=None):
+def build_sample_mutation_join_condition(sample_to_mutation_model, sample_model, mutation_status, mutation_id=None, status=None):
     join_condition = build_join_condition(sample_to_mutation_model.sample_id, sample_model.id,
                                           filter_column=sample_to_mutation_model.mutation_id, filter_list=mutation_id)
     if mutation_status:
@@ -39,9 +39,8 @@ def build_sample_mutation_join_condition(sample_to_mutation_model, sample_model,
     return join_condition
 
 
-def build_sample_request(requested, patient_requested, tag_status_requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, data_set=None, ethnicity=None, feature=None,
-                         feature_class=None, gender=None, max_height=None, min_height=None, mutation_id=None, mutation_status=None, patient=None,
-                         race=None, related=None, sample=None, tag=None, max_weight=None, min_weight=None, by_status=False, by_tag=False):
+def build_sample_request(
+        requested, patient_requested, tag_status_requested, data_set=None, ethnicity=None, feature=None, feature_class=None, gender=None, max_age_at_diagnosis=None, max_height=None, max_weight=None, min_age_at_diagnosis=None, min_height=None, min_weight=None, mutation_id=None, mutation_status=None, patient=None, race=None, related=None, sample=None, tag=None, by_status=False, by_tag=False):
     """
     Builds a SQL query.
     """
@@ -209,11 +208,34 @@ def build_sample_request(requested, patient_requested, tag_status_requested, max
     return query
 
 
-def request_samples(requested, patient_requested, tag_status_requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, data_set=None, ethnicity=None, feature=None,
-                    feature_class=None, gender=None, max_height=None, min_height=None, mutation_id=None, mutation_status=None, patient=None,
-                    race=None, related=None, sample=None, tag=None, max_weight=None, min_weight=None, by_status=False, by_tag=False):
-    query = build_sample_request(requested, patient_requested, tag_status_requested, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, data_set=data_set,
-                                 ethnicity=ethnicity, feature=feature, feature_class=feature_class, gender=gender, max_height=max_height, min_height=min_height,
-                                 mutation_id=mutation_id, mutation_status=mutation_status, patient=patient, race=race, related=related,
-                                 sample=sample, tag=tag, max_weight=max_weight, min_weight=min_weight, by_status=by_status, by_tag=by_tag)
+def request_samples(*args, **kwargs):
+    '''
+    All positional arguments are required. Positional arguments are:
+        1st position - a set of the requested fields at the root of the graphql request or in the 'samples' node if by mutation status or by tag.
+        2nd position - a set of the requested fields in the 'patient' node of the graphql request. If 'patient' is not requested, this will be an empty set.
+        3rd position - a set of the requested fields at the root of the graphql request if by mutation status or by tag. If not by mutation status or by tag, this will be an empty set.
+
+    All keyword arguments are optional. Keyword arguments are:
+        `data_set` - a list of strings, data set names
+        `ethnicity` - a list of strings, ethnicity enum
+        `feature` - a list of strings, feature names
+        `feature_class` - a list of strings, feature class names
+        `gender` - a list of strings, gender enum
+        `max_age_at_diagnosis` - an integer, a maximum age of a patient at the time of diagnosis
+        `max_height` - an integer, a maximum height of a patient
+        `max_weight` - an integer, a maximum weight of a patient
+        `min_age_at_diagnosis` - an integer, a minimum age of a patient at the time of diagnosis
+        `min_height` - an integer, a minimum height of a patient
+        `min_weight` - an integer, a minimum weight of a patient
+        `mutation_id` - a list integers, mutation ids
+        `mutation_status` - a string, mutation status enum
+        `patient` - a list of strings, patient barcodes
+        `race` - a list of strings, race enum
+        `related` - a list of strings, tag names related to data sets
+        `sample` - a list of strings, sample names
+        `tag` - a list of strings, tag names related to samples
+        `by_status` - a boolean, true if the samples are by status
+        `by_tag` - a boolean, true if the samples are by tag
+    '''
+    query = build_sample_request(*args, **kwargs)
     return query.distinct().all()

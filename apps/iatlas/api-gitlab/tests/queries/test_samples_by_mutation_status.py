@@ -24,7 +24,10 @@ def sample_name():
 def common_query_builder():
     def f(query_fields):
         return """query SamplesByMutationStatus(
+            $dataSet: [String!]
             $ethnicity: [EthnicityEnum!]
+            $feature: [String!]
+            $featureClass: [String!]
             $gender: [GenderEnum!]
             $maxAgeAtDiagnosis: Int
             $maxHeight: Float
@@ -36,10 +39,15 @@ def common_query_builder():
             $mutationStatus: StatusEnum
             $patient: [String!]
             $race: [RaceEnum!]
+            $related: [String!]
             $sample: [String!]
+            $tag: [String!]
         ) {
             samplesByMutationStatus(
+                dataSet: $dataSet
                 ethnicity: $ethnicity
+                feature: $feature
+                featureClass: $featureClass
                 gender: $gender
                 maxAgeAtDiagnosis: $maxAgeAtDiagnosis
                 maxHeight: $maxHeight
@@ -51,7 +59,9 @@ def common_query_builder():
                 mutationStatus: $mutationStatus
                 patient: $patient
                 race: $race
+                related: $related
                 sample: $sample
+                tag: $tag
             )""" + query_fields + "}"
     return f
 
@@ -64,7 +74,7 @@ def common_query(common_query_builder):
     }""")
 
 
-def test_samples_by_mutation_status_query_with_passed_sample(client, common_query, sample_name):
+def test_samples_by_mutation_status_query_with_sample(client, common_query, sample_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {'sample': [sample_name]}})
     json_data = json.loads(response.data)
@@ -81,7 +91,7 @@ def test_samples_by_mutation_status_query_with_passed_sample(client, common_quer
             assert current_sample['name'] == sample_name
 
 
-def test_samples_by_mutation_status_query_with_passed_mutation_id(client, common_query, mutation_id):
+def test_samples_by_mutation_status_query_with_mutationId(client, common_query, mutation_id):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {'mutationId': [mutation_id]}})
     json_data = json.loads(response.data)
@@ -114,7 +124,7 @@ def test_samples_by_mutation_status_query_with_no_args(client, common_query):
             assert type(current_sample['name']) is str
 
 
-def test_samples_by_mutation_status_query_with_passed_mutation_status(client, common_query, mutation_status):
+def test_samples_by_mutation_status_query_with_mutationStatus(client, common_query, mutation_status):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {'mutationStatus': mutation_status}})
     json_data = json.loads(response.data)
@@ -131,7 +141,7 @@ def test_samples_by_mutation_status_query_with_passed_mutation_status(client, co
             assert type(current_sample['name']) is str
 
 
-def test_samples_by_mutation_status_query_with_all_args(client, common_query, mutation_id, mutation_status, sample_name):
+def test_samples_by_mutation_status_query_with_mutationId_mutationStatus_and_sample(client, common_query, mutation_id, mutation_status, sample_name):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'mutationId': [mutation_id],
         'mutationStatus': mutation_status,
@@ -150,7 +160,7 @@ def test_samples_by_mutation_status_query_with_all_args(client, common_query, mu
             assert current_sample['name'] == sample_name
 
 
-def test_samples_by_mutation_status_query_with_passed_maxAgeAtDiagnosis(client, common_query_builder, max_age_at_diagnosis):
+def test_samples_by_mutation_status_query_with_maxAgeAtDiagnosis(client, common_query_builder, max_age_at_diagnosis):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -173,7 +183,7 @@ def test_samples_by_mutation_status_query_with_passed_maxAgeAtDiagnosis(client, 
             assert current_sample['patient']['ageAtDiagnosis'] <= max_age_at_diagnosis
 
 
-def test_samples_by_mutation_status_query_with_passed_minAgeAtDiagnosis(client, common_query_builder, min_age_at_diagnosis):
+def test_samples_by_mutation_status_query_with_minAgeAtDiagnosis(client, common_query_builder, min_age_at_diagnosis):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -196,7 +206,7 @@ def test_samples_by_mutation_status_query_with_passed_minAgeAtDiagnosis(client, 
             assert current_sample['patient']['ageAtDiagnosis'] >= min_age_at_diagnosis
 
 
-def test_samples_by_mutation_status_query_with_passed_ethnicity(client, common_query_builder, ethnicity):
+def test_samples_by_mutation_status_query_with_ethnicity(client, common_query_builder, ethnicity):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -219,7 +229,7 @@ def test_samples_by_mutation_status_query_with_passed_ethnicity(client, common_q
             assert current_sample['patient']['ethnicity'] == ethnicity
 
 
-def test_samples_by_mutation_status_query_with_passed_gender(client, common_query_builder, gender):
+def test_samples_by_mutation_status_query_with_gender(client, common_query_builder, gender):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -242,7 +252,7 @@ def test_samples_by_mutation_status_query_with_passed_gender(client, common_quer
             assert current_sample['patient']['gender'] == gender
 
 
-def test_samples_by_mutation_status_query_with_passed_maxHeight(client, common_query_builder, max_height):
+def test_samples_by_mutation_status_query_with_maxHeight(client, common_query_builder, max_height):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -265,7 +275,7 @@ def test_samples_by_mutation_status_query_with_passed_maxHeight(client, common_q
             assert current_sample['patient']['height'] <= max_height
 
 
-def test_samples_by_mutation_status_query_with_passed_minHeight(client, common_query_builder, min_height):
+def test_samples_by_mutation_status_query_with_minHeight(client, common_query_builder, min_height):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -288,7 +298,7 @@ def test_samples_by_mutation_status_query_with_passed_minHeight(client, common_q
             assert current_sample['patient']['height'] >= min_height
 
 
-def test_samples_by_mutation_status_query_with_passed_patient(client, common_query_builder, patient):
+def test_samples_by_mutation_status_query_with_patient(client, common_query_builder, patient):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -311,7 +321,7 @@ def test_samples_by_mutation_status_query_with_passed_patient(client, common_que
             assert current_sample['patient']['barcode'] == patient
 
 
-def test_samples_by_mutation_status_query_with_passed_race(client, common_query_builder, race):
+def test_samples_by_mutation_status_query_with_race(client, common_query_builder, race):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -334,7 +344,7 @@ def test_samples_by_mutation_status_query_with_passed_race(client, common_query_
             assert current_sample['patient']['race'] == race
 
 
-def test_samples_by_mutation_status_query_with_passed_maxWeight(client, common_query_builder, max_weight):
+def test_samples_by_mutation_status_query_with_maxWeight(client, common_query_builder, max_weight):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -357,7 +367,7 @@ def test_samples_by_mutation_status_query_with_passed_maxWeight(client, common_q
             assert current_sample['patient']['weight'] <= max_weight
 
 
-def test_samples_by_mutation_status_query_with_passed_minWeight(client, common_query_builder, min_weight):
+def test_samples_by_mutation_status_query_with_minWeight(client, common_query_builder, min_weight):
     query = common_query_builder("""{
                                     status
                                     samples {
@@ -378,3 +388,91 @@ def test_samples_by_mutation_status_query_with_passed_minWeight(client, common_q
         assert len(samples) > 0
         for current_sample in samples[0:2]:
             assert current_sample['patient']['weight'] >= min_weight
+
+
+def test_samples_by_mutation_status_query_with_dataSet(client, common_query_builder, data_set):
+    query = common_query_builder("""{
+                                    status
+                                    samples { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'dataSet': [data_set]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByMutationStatus']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert result['status'] in status_enum.enums
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample['name']) is str
+
+
+def test_samples_by_mutation_status_query_with_dataSet_and_related(client, common_query_builder, data_set, related):
+    query = common_query_builder("""{
+                                    status
+                                    samples { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'dataSet': [data_set],
+            'related': [related]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByMutationStatus']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert result['status'] in status_enum.enums
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample['name']) is str
+
+
+def test_samples_by_mutation_status_query_with_feature_and_featureClass(client, common_query_builder, chosen_feature, feature_class):
+    query = common_query_builder("""{
+                                    status
+                                    samples { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'feature': [chosen_feature],
+            'featureClass': [feature_class]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByMutationStatus']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert result['status'] in status_enum.enums
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample['name']) is str
+
+
+def test_samples_by_mutation_status_query_with_tag(client, common_query_builder, tag):
+    query = common_query_builder("""{
+                                    status
+                                    samples { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'tag': [tag]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['samplesByMutationStatus']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        samples = result['samples']
+        assert result['status'] in status_enum.enums
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample['name']) is str

@@ -1,32 +1,38 @@
 query SamplesByTag(
-  $maxAgeAtDiagnosis: [Int!]
   $dataSet: [String!]
   $ethnicity: [EthnicityEnum!]
   $feature: [String!]
   $featureClass: [String!]
   $gender: [GenderEnum!]
-  $height: [Int!]
+  $maxAgeAtDiagnosis: Int
+  $maxHeight: Float
+  $maxWeight: Float
+  $minAgeAtDiagnosis: Int
+  $minHeight: Float
+  $minWeight: Float
   $name: [String!]
   $patient: [String!]
   $race: [RaceEnum!]
   $related: [String!]
   $tag: [String!]
-  $weight: [Int!]
 ) {
   samplesByTag(
-    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
     dataSet: $dataSet
     ethnicity: $ethnicity
     feature: $feature
     featureClass: $featureClass
     gender: $gender
-    height: $height
+    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
+    maxHeight: $maxHeight
+    maxWeight: $maxWeight
+    minAgeAtDiagnosis: $minAgeAtDiagnosis
+    minHeight: $minHeight
+    minWeight: $minWeight
     name: $name
     patient: $patient
     race: $race
     related: $related
     tag: $tag
-    weight: $weight
   ) {
     tag
     samples {

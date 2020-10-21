@@ -1,9 +1,10 @@
 query Tags(
-  $dataSet: [String!]!
-  $related: [String!]!
+  $dataSet: [String!]
+  $related: [String!]
   $tag: [String!]
   $feature: [String!]
   $featureClass: [String!]
+  $sample: [String!]
 ) {
   tags(
     dataSet: $dataSet
@@ -11,6 +12,7 @@ query Tags(
     tag: $tag
     feature: $feature
     featureClass: $featureClass
+    sample: $sample
   ) {
     characteristics
     color

@@ -1,10 +1,17 @@
 query Edges(
-  $dataSet: [String!]
-  $related: [String!]
-  $network: [String!]
+  $maxScore: Float
+  $minScore: Float
+  $node1: [String!]
+  $node2: [String!]
   $page: Int
 ) {
-  edges(dataSet: $dataSet, related: $related, network: $network, page: $page) {
+  edges(
+    maxScore: $maxScore
+    minScore: $minScore
+    node1: $node1
+    node2: $node2
+    page: $page
+  ) {
     items {
       label
       name

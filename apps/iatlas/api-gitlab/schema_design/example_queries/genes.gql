@@ -1,5 +1,23 @@
-query Genes($entrez: [Int!], $geneType: [String!], $sample: [String!]) {
-  genes(entrez: $entrez, geneType: $geneType, sample: $sample) {
+query Genes(
+  $dataSet: [String!]
+  $entrez: [Int!]
+  $geneType: [String!]
+  $maxRnaSeqExpr: Float
+  $minRnaSeqExpr: Float
+  $related: [String!]
+  $sample: [String!]
+  $tag: [String!]
+) {
+  genes(
+    dataSet: $dataSet
+    entrez: $entrez
+    geneType: $geneType
+    maxRnaSeqExpr: $maxRnaSeqExpr
+    minRnaSeqExpr: $minRnaSeqExpr
+    related: $related
+    sample: $sample
+    tag: $tag
+  ) {
     entrez
     publications {
       pubmedId

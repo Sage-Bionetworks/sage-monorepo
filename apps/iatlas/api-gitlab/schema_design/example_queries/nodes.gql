@@ -1,10 +1,25 @@
 query Nodes(
   $dataSet: [String!]
-  $related: [String!]
+  $entrez: [Int!]
+  $feature: [String!]
+  $maxScore: Float
+  $minScore: Float
   $network: [String!]
+  $related: [String!]
+  $tag: [String!]
   $page: Int
 ) {
-  nodes(dataSet: $dataSet, related: $related, network: $network, page: $page) {
+  nodes(
+    dataSet: $dataSet
+    entrez: $entrez
+    feature: $feature
+    maxScore: $maxScore
+    minScore: $minScore
+    network: $network
+    related: $related
+    tag: $tag
+    page: $page
+  ) {
     total
     page
     pages

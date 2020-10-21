@@ -1,5 +1,33 @@
-query Patients($barcode: [String!]) {
-  patients(barcode: $barcode) {
+query Patients(
+  $barcode: [String!]
+  $dataSet: [String!]
+  $ethnicity: [EthnicityEnum!]
+  $gender: [GenderEnum!]
+  $maxAgeAtDiagnosis: Int
+  $maxHeight: Float
+  $maxWeight: Float
+  $minAgeAtDiagnosis: Int
+  $minHeight: Float
+  $minWeight: Float
+  $race: [RaceEnum!]
+  $sample: [String!]
+  $slide: [String!]
+) {
+  patients(
+    barcode: $barcode
+    dataSet: $dataSet
+    ethnicity: $ethnicity
+    gender: $gender
+    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
+    maxHeight: $maxHeight
+    maxWeight: $maxWeight
+    minAgeAtDiagnosis: $minAgeAtDiagnosis
+    minHeight: $minHeight
+    minWeight: $minWeight
+    race: $race
+    sample: $sample
+    slide: $slide
+  ) {
     samples
     slides {
       name
@@ -7,8 +35,36 @@ query Patients($barcode: [String!]) {
   }
 }
 
-query Patients_test($barcode: [String!]) {
-  patients(barcode: $barcode) {
+query Patients_test(
+  $barcode: [String!]
+  $dataSet: [String!]
+  $ethnicity: [EthnicityEnum!]
+  $gender: [GenderEnum!]
+  $maxAgeAtDiagnosis: Int
+  $maxHeight: Float
+  $maxWeight: Float
+  $minAgeAtDiagnosis: Int
+  $minHeight: Float
+  $minWeight: Float
+  $race: [RaceEnum!]
+  $sample: [String!]
+  $slide: [String!]
+) {
+  patients(
+    barcode: $barcode
+    dataSet: $dataSet
+    ethnicity: $ethnicity
+    gender: $gender
+    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
+    maxHeight: $maxHeight
+    maxWeight: $maxWeight
+    minAgeAtDiagnosis: $minAgeAtDiagnosis
+    minHeight: $minHeight
+    minWeight: $minWeight
+    race: $race
+    sample: $sample
+    slide: $slide
+  ) {
     ageAtDiagnosis
     barcode
     ethnicity
