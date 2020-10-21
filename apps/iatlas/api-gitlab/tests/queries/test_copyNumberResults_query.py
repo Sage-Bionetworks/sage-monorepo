@@ -309,11 +309,8 @@ def test_copyNumberResults_query_with_passed_min_p_value(client, data_set, entre
             'minPValue': min_p_value,
             'tag': [tag_name]
         }})
-    print('entrez', entrez)
-    print('min', min_p_value)
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
-    print('page', page)
     results = page['items']
 
     assert isinstance(results, list)

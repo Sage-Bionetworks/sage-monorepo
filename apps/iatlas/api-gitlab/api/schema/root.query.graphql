@@ -1,38 +1,38 @@
 type Query {
   """
-  The "copyNumberResults" query accepts:
-
-    - "dataSet", a list of data set names associated with the copy number results to filter by.
-    - "entrez", a list of gene entrez ids associated with the copy number results to filter by.
-    - "feature", a list of feature names associated with the copy number results to filter by.
-    - "tag", a list of tag names associated with the copy number results to filter by.
-    - "direction", the direction of the copy number results to filter by. (either 'Amp' or 'Del')
-    - "minPValue", a minimum P value to filter the copy number results by.
-    - "maxPValue", a maximum P value to filter the copy number results by.
-    - "minLog10PValue", a minimum log10 calcualtion of the P value to filter the copy number results by.
-    - "maxLog10PValue", a maximum log10 calcualtion of the P value to filter the copy number results by.
-    - "maxPValue", a maximum mean normal to filter the copy number results by.
-    - "maxPValue", a maximum mean CNV to filter the copy number results by.
-    - "maxPValue", a maximum T stat to filter the copy number results by.
-    - "page", the page of results to get. Defaults to 1 (the first page)
+  The data structure containing Copy Number Results.
 
   If no arguments are passed, this will return all copy number results.
   """
   copyNumberResults(
+    "An instance of PagingInput (see PagingInput)"
     paging: PagingInput
+    "A boolean specifying whether or not duplicates should be filtered out. Default is false. Set to 'true' only when necessary, as it negatively impacts performance."
     distinct: Boolean
     id: ID
+    "A list of data set names associated with the copy number results to filter by."
     dataSet: [String!]
+    "A list of feature names associated with the copy number results to filter by."
     feature: [String!]
+    "A list of gene entrez ids associated with the copy number results to filter by."
     entrez: [Int!]
+    "A list of tag names associated with the copy number results to filter by."
     tag: [String!]
+    "The direction of the copy number results to filter by. (either 'Amp' or 'Del')"
     direction: DirectionEnum
+    "A minimum P value to filter the copy number results by."
     minPValue: Float
+    "A maximum P value to filter the copy number results by."
     maxPValue: Float
+    "A minimum log10 calcualtion of the P value to filter the copy number results by."
     minLog10PValue: Float
+    "A maximum log10 calcualtion of the P value to filter the copy number results by."
     maxLog10PValue: Float
+    "A minimum mean normal to filter the copy number results by."
     minMeanNormal: Float
+    "A minimum mean CNV to filter the copy number results by."
     minMeanCnv: Float
+    "A minimum T stat to filter the copy number results by."
     minTStat: Float
   ): CopyNumberResult!
 
