@@ -3,8 +3,8 @@ from .resolver_helpers import (build_sample_graphql_response, get_requested, get
                                sample_by_mutation_status_request_fields, sample_request_fields, simple_patient_request_fields)
 
 
-def resolve_samples_by_mutations_status(_obj, info, maxAgeAtDiagnosis=None, minAgeAtDiagnosis=None, ethnicity=None, gender=None, maxHeight=None, minHeight=None,
-                                        mutationId=None, mutationStatus=None, patient=None, race=None, sample=None, maxWeight=None, minWeight=None):
+def resolve_samples_by_mutations_status(
+        _obj, info, dataSet=None, ethnicity=None, feature=None, featureClass=None, gender=None, maxAgeAtDiagnosis=None, maxHeight=None, maxWeight=None, minAgeAtDiagnosis=None, minHeight=None, minWeight=None, mutationId=None, mutationStatus=None, patient=None, race=None, related=None, sample=None, status=None, tag=None):
     status_requested = get_requested(
         info, sample_by_mutation_status_request_fields)
 
