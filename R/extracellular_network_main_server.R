@@ -131,6 +131,7 @@ extracellular_network_main_server <- function(
         get_selected_celltypes(input$selected_celltypes)
       })
 
+      #TODO: fix startified node/edges tags
       gene_nodes <- shiny::eventReactive(input$calculate_button, {
         if(stratify()) n_tags <- 2
         else n_tags <- 1
@@ -154,10 +155,9 @@ extracellular_network_main_server <- function(
             ))
         }
         nodes <- nodes %>%
-          dplyr::select("tags", "node_name" = "name", "node_display" = "hgnc") %>%
+          dplyr::select("Type" = "label", "tags", "node_name" = "name", "node_display" = "hgnc") %>%
           tidyr::unnest("tags") %>%
-          dplyr::select("node_name", "node_display", "tag" = "name") %>%
-          dplyr::mutate("Type" = "Gene")
+          dplyr::select("Type", "node_name", "node_display", "tag" = "name")
         return(nodes)
       })
 
@@ -184,22 +184,27 @@ extracellular_network_main_server <- function(
             ))
         }
         nodes <- nodes %>%
-          dplyr::select("tags", "node_name" = "name", "node_display" = "feature_display") %>%
+          dplyr::select("Type" = "label", "tags", "node_name" = "name", "node_display" = "feature_display") %>%
           tidyr::unnest("tags") %>%
-          dplyr::select("node_name", "node_display", "tag" = "name") %>%
-          dplyr::mutate("Type" = "Cell")
+          dplyr::select("Type", "node_name", "node_display", "tag" = "name")
         return(nodes)
       })
 
-      nodes <- shiny::reactive(dplyr::bind_rows(gene_nodes(), feature_nodes()))
+      nodes <- shiny::reactive({
+        shiny::req(gene_nodes(), feature_nodes())
+        dplyr::bind_rows(gene_nodes(), feature_nodes())
+      })
 
-      # TODO: Use client to filter edges
-      edges <- shiny::eventReactive(input$calculate_button, {
+      edges <- shiny::reactive({
         nodes <- nodes() %>%
           dplyr::pull("node_name") %>%
           unique()
-        edges <- iatlas.api.client::query_edges(nodes, nodes) %>%
-          dplyr::filter(.data$score > input$concordance) %>%
+
+        edges <- iatlas.api.client::query_edges(
+          min_score = input$concordance,
+          node1 = nodes,
+          node2 = nodes
+        ) %>%
           dplyr::select("edge_name" = "name", "node1", "node2", "score") %>%
           tidyr::pivot_longer(
             cols = c("node1", "node2"),

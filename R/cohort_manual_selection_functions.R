@@ -115,7 +115,8 @@ build_mutation_cohort_object <- function(dataset, samples, mutation_id){
 
   sample_tbl <-
     iatlas.api.client::query_samples_by_mutation_status(
-      ids = as.integer(mutation_id), samples = samples
+      mutation_ids = as.integer(mutation_id),
+      samples = samples
     ) %>%
     dplyr::select("sample", "group" = "status")
 
