@@ -137,7 +137,7 @@ def build_driver_result_request(
     if min_n_wt or min_n_wt == 0:
         query = query.filter(driver_result_1.n_wt >= min_n_wt)
 
-    if 'data_set' in requested or data_set:
+    if 'dataSet' in requested or data_set:
         is_outer = not bool(data_set)
         data_set_join_condition = build_join_condition(
             data_set_1.id, driver_result_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)

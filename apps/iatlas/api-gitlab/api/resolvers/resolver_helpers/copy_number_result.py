@@ -123,7 +123,7 @@ def build_copy_number_result_request(
     if min_t_stat or min_t_stat == 0:
         query = query.filter(copy_number_result_1.t_stat >= min_t_stat)
 
-    if data_set or 'data_set' in requested:
+    if data_set or 'dataSet' in requested:
         is_outer = not bool(data_set)
         data_set_join_condition = build_join_condition(
             data_set_1.id, copy_number_result_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
