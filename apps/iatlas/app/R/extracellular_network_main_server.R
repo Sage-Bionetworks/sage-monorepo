@@ -97,23 +97,27 @@ extracellular_network_main_server <- function(
         )
       })
 
+      #TODO: fix
       output$select_genes <- shiny::renderUI({
         shiny::selectizeInput(
           ns("selected_genes"),
           "Select genes of interest (optional)",
           choices = build_ecn_gene_choice_list(),
           multiple = TRUE,
-          selected = "geneset:extra_cellular_network"
+          # selected = "geneset:extra_cellular_network"
+          selected = "geneset:immunomodulators"
         )
       })
 
+      #TODO: fix
       output$select_celltypes <- shiny::renderUI({
         shiny::selectizeInput(
           ns("selected_celltypes"),
           "Select cells of interest (optional)",
           choices = build_ecn_celltype_choice_list(),
           multiple = TRUE,
-          selected = "All"
+          # selected = "All"
+          selected = "B Cells"
         )
       })
 
@@ -230,16 +234,22 @@ extracellular_network_main_server <- function(
       })
 
       graph_json <- shiny::reactive({
-        print("##############")
+
+        edges_nodes <-
+          c(edges()$node1, edges()$node2) %>%
+          unique()
+
         nodes <- nodes() %>%
-          dplyr::select("id" = "node_name", "Gene" = "node_display", "Type") %>%
-          dplyr::mutate(
-            name = .data$Gene,
-            FriendlyName = .data$Gene
+          dplyr::filter(.data$node_display %in% edges_nodes) %>%
+          dplyr::arrange("node_display") %>%
+          dplyr::select(
+            "id" = "node_display",
+            "Type",
+            "FriendlyName" = "node_display"
           ) %>%
-          as.data.frame() %>%
-          print()
-        print("##############")
+          dplyr::distinct() %>%
+          as.data.frame()
+
         edges <- edges() %>%
           dplyr::select(
             "source" = "node1",
@@ -247,9 +257,8 @@ extracellular_network_main_server <- function(
             "score",
             "interaction" = "tag"
           ) %>%
-          as.data.frame() %>%
-          print()
-        print("##############")
+          as.data.frame()
+
         cyjShiny::dataFramesToJSON(edges, nodes)
       })
 
