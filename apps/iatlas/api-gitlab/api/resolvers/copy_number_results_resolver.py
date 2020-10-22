@@ -14,7 +14,6 @@ def resolve_copy_number_results(_obj, info, dataSet=None, direction=None, distin
     selection_set = get_selection_set(info=info, child_node='items')
     requested = get_requested(selection_set=selection_set, requested_field_mapping=cnr_request_fields)
 
-    distinct = info.variable_values['distinct'] if 'distinct' in info.variable_values.keys() else False
     if distinct == False:
         requested.add('id')  # Add the id as a cursor if not selecting distinct
 

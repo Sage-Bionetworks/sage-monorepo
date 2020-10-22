@@ -12,7 +12,6 @@ def resolve_driver_results(_obj, info, dataSet=None, distinct=False, entrez=None
     requested = get_requested(
         selection_set=selection_set, requested_field_mapping=driver_result_request_fields)
 
-    distinct = info.variable_values['distinct'] if 'distinct' in info.variable_values.keys() else False
     if distinct == False:
         requested.add('id')  # Add the id as a cursor if not selecting distinct
 
