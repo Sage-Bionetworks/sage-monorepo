@@ -5,7 +5,7 @@ from api.database import return_driver_result_query
 
 @pytest.fixture(scope='module')
 def feature_id():
-    return 70
+    return 66
 
 
 @pytest.fixture(scope='module')
