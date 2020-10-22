@@ -1,10 +1,11 @@
-query DataSets($dataSet: [String!], $sample: [String!]) {
-  dataSets(dataSet: $dataSet, sample: $sample) {
+query DataSets($dataSet: [String!], $sample: [String!], $type: [String!]) {
+  dataSets(dataSet: $dataSet, sample: $sample, type: $type) {
     display
     name
     samples {
       name
     }
+    type
   }
 }
 

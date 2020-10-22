@@ -2,6 +2,10 @@ from sqlalchemy import and_, orm
 from api import db
 from api.db_models import Dataset, DriverResult, Feature, Gene, Mutation, MutationCode, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
+from .data_set import build_data_set_graphql_response
+from .feature import build_feature_graphql_response
+from .gene import build_gene_graphql_response
+from .tag import build_tag_graphql_response
 
 driver_result_request_fields = {'dataSet',
                                 'feature',
@@ -25,32 +29,12 @@ def build_dr_graphql_response(driver_result):
         'log10FoldChange': get_value(driver_result, 'log10_fold_change'),
         'numWildTypes': get_value(driver_result, 'n_wt'),
         'numMutants': get_value(driver_result, 'n_mut'),
-        'dataSet': {
-            'display': get_value(driver_result, 'data_set_display'),
-            'name': get_value(driver_result, 'data_set_name'),
-        },
-        'feature': {
-            'display': get_value(driver_result, 'feature_display'),
-            'name': get_value(driver_result, 'feature_name'),
-            'order': get_value(driver_result, 'order'),
-            'unit': get_value(driver_result, 'unit')
-        },
-        'gene': {
-            'entrez': get_value(driver_result, 'entrez'),
-            'hgnc': get_value(driver_result, 'hgnc'),
-            'description': get_value(driver_result, 'description'),
-            'friendlyName': get_value(driver_result, 'friendlyName'),
-            'ioLandscapeName': get_value(driver_result, 'ioLandscapeName')
-        },
+        'dataSet': build_data_set_graphql_response(driver_result),
+        'feature': build_feature_graphql_response()(driver_result),
+        'gene': build_gene_graphql_response()(driver_result),
         'mutationCode': get_value(driver_result, 'code'),
         'mutationId': get_value(driver_result, 'mutation_id'),
-        'tag': {
-            'characteristics': get_value(driver_result, 'characteristics'),
-            'color': get_value(driver_result, 'color'),
-            'longDisplay': get_value(driver_result, 'tag_long_display'),
-            'name': get_value(driver_result, 'tag_name'),
-            'shortDisplay': get_value(driver_result, 'tag_short_display'),
-        }
+        'tag': build_tag_graphql_response()(driver_result)
     }
 
 
@@ -93,7 +77,8 @@ def build_driver_result_request(
                           'numWildTypes': driver_result_1.n_wt.label('n_wt'),
                           'numMutants': driver_result_1.n_mut.label('n_mut')}
     data_set_core_field_mapping = {'display': data_set_1.display.label('data_set_display'),
-                                   'name': data_set_1.name.label('data_set_name')}
+                                   'name': data_set_1.name.label('data_set_name'),
+                                   'type': data_set_1.data_set_type.label('data_set_type')}
     feature_core_field_mapping = {'display': feature_1.display.label('feature_display'),
                                   'name': feature_1.name.label('feature_name'),
                                   'order': feature_1.order.label('order'),

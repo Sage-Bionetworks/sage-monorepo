@@ -98,7 +98,7 @@ def build_tag_graphql_response(related_dict=dict(), sample_dict=dict()):
             'characteristics': get_value(tag, 'characteristics'),
             'color': get_value(tag, 'color'),
             'longDisplay': get_value(tag, 'tag_long_display') or get_value(tag, 'long_display'),
-            'name': get_value(tag, 'name'),
+            'name': get_value(tag, 'tag_name') or get_value(tag, 'name'),
             'related': [build_tag_graphql_response()(r) for r in related],
             'sampleCount': get_value(tag, 'sample_count'),
             'samples': [sample.name for sample in samples],

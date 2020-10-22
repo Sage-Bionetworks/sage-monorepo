@@ -16,7 +16,6 @@ query SamplesByMutationStatus(
     $race: [RaceEnum!]
     $related: [String!]
     $sample: [String!]
-    $status: StatusEnum
     $tag: [String!]
 ) {
   samplesByMutationStatus(
@@ -37,7 +36,6 @@ query SamplesByMutationStatus(
     race: $race
     related: $related
     sample: $sample
-    status: $status
     tag: $tag
   ) {
     status

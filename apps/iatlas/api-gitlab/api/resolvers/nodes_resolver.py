@@ -1,6 +1,6 @@
-from .resolver_helpers import (build_node_graphql_response, build_node_request, data_set_request_fields, feature_request_fields,
+from .resolver_helpers import (build_node_graphql_response, build_node_request, feature_request_fields,
                                get_selection_set, gene_request_fields, get_requested, node_request_fields, return_node_derived_fields,
-                               simple_tag_request_fields)
+                               simple_data_set_request_fields, simple_tag_request_fields)
 from api.telemetry import profile
 
 
@@ -11,7 +11,7 @@ def resolve_nodes(_obj, info, dataSet=None, entrez=None, feature=None, maxScore=
         selection_set=selection_set, requested_field_mapping=node_request_fields)
 
     data_set_requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=data_set_request_fields, child_node='dataSet')
+        selection_set=selection_set, requested_field_mapping=simple_data_set_request_fields, child_node='dataSet')
 
     feature_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=feature_request_fields, child_node='feature')

@@ -1,5 +1,5 @@
 from .copy_number_result import build_cnr_graphql_response, build_copy_number_result_request, cnr_request_fields
-from .data_set import build_data_set_graphql_response, data_set_request_fields, request_data_sets
+from .data_set import build_data_set_graphql_response, data_set_request_fields, request_data_sets, simple_data_set_request_fields
 from .driver_result import build_dr_graphql_response, driver_result_request_fields, request_driver_results
 from .edge import build_edge_graphql_response, build_edge_request, edge_request_fields
 from .feature import build_feature_graphql_response, feature_class_request_fields, feature_request_fields, return_feature_derived_fields, request_features, simple_feature_request_fields

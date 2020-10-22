@@ -61,7 +61,8 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
                           'y': node_1.y.label('y')}
 
     data_set_field_mapping = {'display': data_set_1.display.label('data_set_display'),
-                              'name': data_set_1.name.label('data_set_name')}
+                              'name': data_set_1.name.label('data_set_name'),
+                              'type': data_set_1.data_set_type.label('data_set_type')}
 
     feature_field_mapping = {'display': feature_1.display.label('feature_display'),
                              'name': feature_1.name.label('feature_name'),
