@@ -36,6 +36,30 @@ def get_limit(first, last, limit):
         return (parse_limit(limit), Paging.ASC)
     return (Paging.MAX_LIMIT, Paging.ASC)
 
+def get_pagination_queries(query, paging, distinct, cursor_field=None):
+    count_query = query
+    if paging.get('type', Paging.CURSOR) == Paging.OFFSET or distinct == True:
+        if distinct == True:
+            return query.distinct(), count_query.distinct()
+        return query, count_query
+
+    # Handle cursor and sort order
+    cursor, sort_order = get_cursor(paging.get('before'), paging.get('after'))
+    order_by = cursor_field
+    if sort_order == Paging.ASC:
+        query = query.order_by(order_by)
+    else:
+        query = query.order_by(order_by.desc())
+
+    if cursor:
+        if sort_order == Paging.ASC:
+            query = query.filter(cursor_field > cursor)
+        else:
+            query = query.filter(cursor_field < cursor)
+    # end handle cursor
+
+    return query, count_query
+
 def paginate(query, count_query, paging, distinct, response_builder):
     paging_type = paging.get('type', Paging.CURSOR)
     page = None
@@ -59,7 +83,7 @@ def paginate(query, count_query, paging, distinct, response_builder):
         # if distinct is True, paging type must be OFFSET
         pageInfo['type'] = Paging.OFFSET
         resp = query.paginate(page, limit)
-        results = map(build_cnr_graphql_response,
+        results = map(response_builder,
                       resp.items)  # returns iterator
     else:
         # request 1 more than we need, so we can determine if additional pages are available. returns list.

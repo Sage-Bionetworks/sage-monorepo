@@ -2,10 +2,10 @@ from sqlalchemy import and_, orm
 from api import db
 from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
 from .general_resolvers import build_join_condition, build_option_args, get_selected, get_selection_set, get_value
-from .paging_utils import get_cursor, Paging
 from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
+from .paging_utils import get_cursor, get_pagination_queries, Paging
 from .tag import build_tag_graphql_response
 
 cnr_request_fields = {'dataSet',
@@ -151,25 +151,4 @@ def build_copy_number_result_request(
         query = query.join(tag_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
-    count_query = query
-    if paging.get('type', Paging.CURSOR) == Paging.OFFSET or distinct == True:
-        if distinct == True:
-            return query.distinct(), count_query.distinct()
-        return query, count_query
-
-    # Handle cursor and sort order
-    cursor, sort_order = get_cursor(paging.get('before'), paging.get('after'))
-    order_by = copy_number_result_1.id
-    if sort_order == Paging.ASC:
-        query = query.order_by(order_by)
-    else:
-        query = query.order_by(order_by.desc())
-
-    if cursor:
-        if sort_order == Paging.ASC:
-            query = query.filter(copy_number_result_1.id > cursor)
-        else:
-            query = query.filter(copy_number_result_1.id < cursor)
-    # end handle cursor
-
-    return query, count_query
+    return get_pagination_queries(query, paging, distinct, cursor_field=copy_number_result_1.id)

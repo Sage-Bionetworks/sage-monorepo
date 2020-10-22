@@ -5,6 +5,7 @@ from .general_resolvers import build_join_condition, get_selected, get_value
 from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
+from .paging_utils import get_cursor, get_pagination_queries, Paging
 from .tag import build_tag_graphql_response
 
 driver_result_request_fields = {'dataSet',
@@ -23,6 +24,7 @@ driver_result_request_fields = {'dataSet',
 
 def build_dr_graphql_response(driver_result):
     return {
+        'id': get_value(driver_result, 'id'),
         'pValue': get_value(driver_result, 'p_value'),
         'foldChange': get_value(driver_result, 'fold_change'),
         'log10PValue': get_value(driver_result, 'log10_p_value'),
@@ -39,12 +41,13 @@ def build_dr_graphql_response(driver_result):
 
 
 def build_driver_result_request(
-        requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, entrez=None, feature=None, max_p_value=None, max_log10_p_value=None, min_fold_change=None, min_log10_fold_change=None, min_log10_p_value=None, min_p_value=None, min_n_mut=None, min_n_wt=None, mutation_code=None, tag=None):
+        requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, distinct=False, entrez=None, feature=None, max_p_value=None, max_log10_p_value=None, min_fold_change=None, min_log10_fold_change=None, min_log10_p_value=None, min_p_value=None, min_n_mut=None, min_n_wt=None, mutation_code=None, paging=None, tag=None):
     """
     Builds a SQL request.
 
     All keyword arguments are optional. Keyword arguments are:
         `data_set` - a list of strings, data set names
+        `distinct` - a boolean, indicates whether duplicate records should be filtered out
         `entrez` - a list of integers, gene entrez ids
         `feature` - a list of strings, feature names
         `max_p_value` - a float, a maximum P value
@@ -56,6 +59,7 @@ def build_driver_result_request(
         `min_n_mut` - a float, a minimum number of mutants
         `min_n_wt` - a float, a minimum number of wild types
         `mutation_code` - a list of strings, mutation codes
+        `paging` - a dict containing pagination metadata
         `tag` - a list of strings, tag names
     """
     sess = db.session
@@ -68,7 +72,9 @@ def build_driver_result_request(
     feature_1 = orm.aliased(Feature, name='f')
     data_set_1 = orm.aliased(Dataset, name='ds')
 
-    core_field_mapping = {'pValue': driver_result_1.p_value.label('p_value'),
+    core_field_mapping = {
+                          'id': driver_result_1.id.label('id'),
+                          'pValue': driver_result_1.p_value.label('p_value'),
                           'foldChange': driver_result_1.fold_change.label('fold_change'),
                           'log10PValue': driver_result_1.log10_p_value.label('log10_p_value'),
                           'log10FoldChange': driver_result_1.log10_fold_change.label('log10_fold_change'),
@@ -170,7 +176,7 @@ def build_driver_result_request(
         query = query.join(tag_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
-    return query
+    return get_pagination_queries(query, paging, distinct, cursor_field=driver_result_1.id)
 
 
 def request_driver_results(*args, **kwargs):

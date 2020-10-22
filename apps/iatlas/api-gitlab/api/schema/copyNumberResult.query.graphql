@@ -32,7 +32,10 @@ type CopyNumberResultNode implements BaseNode {
 }
 
 type CopyNumberResult implements BaseResult {
+  "A Paging object (see Paging)"
   paging: Paging
+  "A string describing any error that may have occurred."
   error: String
+  "A list of returned CopyNumberResultNodes"
   items: [CopyNumberResultNode]
 }

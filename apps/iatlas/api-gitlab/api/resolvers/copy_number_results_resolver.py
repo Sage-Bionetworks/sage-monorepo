@@ -4,7 +4,7 @@ from collections import deque
 from .resolver_helpers import (build_cnr_graphql_response, build_copy_number_result_request, cnr_request_fields,
                                feature_request_fields, gene_request_fields, get_requested, get_selection_set, simple_data_set_request_fields, simple_tag_request_fields)
 
-from .resolver_helpers.paging_utils import get_limit, to_cursor_hash, paginate, Paging, paging_fields
+from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
 
 
 def resolve_copy_number_results(_obj, info, dataSet=None, direction=None, distinct=False, entrez=None, feature=None, maxPValue=None,

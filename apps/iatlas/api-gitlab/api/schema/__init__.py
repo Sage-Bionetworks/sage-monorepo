@@ -110,7 +110,6 @@ root = ObjectType('Query')
 copy_number_result = ObjectType('CopyNumberResult')
 data_set = ObjectType('DataSet')
 driver_result = ObjectType('DriverResult')
-driver_result_page = ObjectType('DriverResultPage')
 edge = ObjectType('Edge')
 edge_page = ObjectType('EdgePage')
 feature = ObjectType('Feature')
@@ -186,5 +185,5 @@ root.set_field('therapyTypes', resolve_therapy_types)
 schema = make_executable_schema(
     type_defs,
     [
-        root, copy_number_result, data_set, direction_enum_scalar, driver_result, driver_result_page, edge, edge_page, ethnicity_enum_scalar, feature, features_by_class, features_by_tag, gender_enum_scalar, gene, gene_family, gene_function, genes_by_tag, gene_related_sample, gene_type, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, node, node_page, pathway, patient, publication, race_enum_scalar, related_by_data_set, sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_node, simple_publication, simple_tag, slide, tag, super_category, therapy_type]
+        root, copy_number_result, data_set, direction_enum_scalar, driver_result, edge, edge_page, ethnicity_enum_scalar, feature, features_by_class, features_by_tag, gender_enum_scalar, gene, gene_family, gene_function, genes_by_tag, gene_related_sample, gene_type, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, node, node_page, pathway, patient, publication, race_enum_scalar, related_by_data_set, sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_node, simple_publication, simple_tag, slide, tag, super_category, therapy_type]
 )
