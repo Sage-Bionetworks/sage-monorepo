@@ -27,13 +27,14 @@ test_that("Build Immunomodulators Distributions Plot Tibble", {
     expect_named(res2, expected_columns)
 })
 
+# TODO: add back in ref
 test_that("Build Immunomodulators Datatable Tibble", {
     res1 <- build_im_dt_tbl()
     expect_named(
         res1,
         c("Hugo", "Entrez ID", "Friendly Name", "Gene Family",
-          "Super Category", "Immune Checkpoint", "Function",
-          "Reference(s) [PMID]"
+          "Super Category", "Immune Checkpoint", "Function"
+          # "Reference(s) [PMID]"
         )
     )
 

@@ -6,11 +6,15 @@ cohort_dataset_selection_server <- function(
     id,
     function(input, output, session) {
       ns <- session$ns
+      choices = iatlas.api.client::query_datasets(types = "analysis") %>%
+        dplyr::select("display", "name") %>%
+        tibble::deframe(.)
+
       output$dataset_selection_ui <- shiny::renderUI({
         shiny::selectInput(
           inputId  = ns("dataset_choice"),
           label    = "Select or Search for Dataset",
-          choices  = tibble::deframe(iatlas.api.client::query_datasets()),
+          choices  = choices,
           selected = default_dataset
         )
       })

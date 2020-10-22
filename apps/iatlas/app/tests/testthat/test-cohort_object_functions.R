@@ -121,7 +121,7 @@ test_that("query_feature_values_with_cohort_object", {
   )
 
   result5 <- query_feature_values_with_cohort_object(
-    tcga_immune_subtype_cohort_obj,
+    tcga_immune_subtype_cohort_obj_50,
     feature = "OS_time"
   )
 
