@@ -4,6 +4,77 @@ from tests import NoneType
 from api.enums import direction_enum
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 
+"""
+query CopyNumberResults(
+  $paging: PagingInput
+  $distinct:Boolean
+  $dataSet: [String!]
+  $feature: [String!]
+  $entrez: [Int!]
+  $tag: [String!]
+  $direction: DirectionEnum
+  $minPValue: Float
+  $maxPValue: Float
+  $minLog10PValue: Float
+  $maxLog10PValue: Float
+  $minMeanNormal: Float
+  $minMeanCnv: Float
+  $minTStat: Float
+) {
+  copyNumberResults(
+    paging: $paging
+    distinct: $distinct
+    dataSet: $dataSet
+    feature: $feature
+    entrez: $entrez
+    tag: $tag
+    direction: $direction
+    minPValue: $minPValue
+    maxPValue: $maxPValue
+    minLog10PValue: $minLog10PValue
+    maxLog10PValue: $maxLog10PValue
+    minMeanNormal: $minMeanNormal
+    minMeanCnv: $minMeanCnv
+    minTStat: $minTStat
+  ) {
+    paging {
+      type
+      pages
+      total
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+      page
+      limit
+    }
+    error
+    items {
+      id
+      direction
+      meanNormal
+      meanCnv
+      pValue
+      log10PValue
+      tStat
+      dataSet {
+        name
+      }
+      tag {
+        name
+      }
+      gene {
+        entrez
+        hgnc
+      }
+      feature {
+        name
+      }
+    }
+  }
+}
+"""
+
 @pytest.fixture(scope='module')
 def feature_name():
     return 'frac_altered'
@@ -166,7 +237,6 @@ def test_copyNumberResults_cursor_pagination_last(client):
     assert paging['hasPreviousPage'] == True
     assert start == items[0]['id']
     assert end == items[num-1]['id']
-    # assert int(end) - int(start) == num - 1
 
 def test_copyNumberResults_cursor_distinct_pagination(client):
     page_num = 2

@@ -1,7 +1,71 @@
 import json
 import pytest
 from tests import NoneType
+from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 
+"""
+query DriverResults(
+  $paging: PagingInput
+  $distinct:Boolean
+  $dataSet: [String!]
+  $entrez: [Int!]
+  $feature: [String!]
+  $mutationCode: [String!]
+  $tag: [String!]
+  $minPValue: Float
+  $maxPValue: Float
+  $minLog10PValue: Float
+  $maxLog10PValue: Float
+  $minFoldChange: Float
+  $minLog10FoldChange: Float
+  $minNumWildTypes: Int
+  $minNumMutants: Int
+) {
+  driverResults(
+    paging: $paging
+    distinct: $distinct
+    dataSet: $dataSet
+    feature: $feature
+    entrez: $entrez
+    mutationCode: $mutationCode
+    tag: $tag
+    minPValue: $minPValue
+    maxPValue: $maxPValue
+    minLog10PValue: $minLog10PValue
+    maxLog10PValue: $maxLog10PValue
+    minFoldChange: $minFoldChange
+    minLog10FoldChange: $minLog10FoldChange
+    minNumWildTypes: $minNumWildTypes
+    minNumMutants: $minNumMutants
+  ) {
+    paging {
+      type
+      pages
+      total
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+      page
+      limit
+    }
+    error
+    items {
+        pValue
+        log10PValue
+        foldChange
+        log10FoldChange
+        numWildTypes
+        numMutants
+        dataSet { name }
+        feature { name }
+        gene { entrez }
+        mutationCode
+        tag { name }
+    }
+  }
+}
+"""
 
 @pytest.fixture(scope='module')
 def feature_name():
@@ -27,6 +91,8 @@ def tag_name():
 def common_query_builder():
     def f(query_fields):
         return """query DriverResults(
+        $paging: PagingInput
+        $distinct: Boolean
         $dataSet: [String!]
         $entrez: [Int!]
         $feature: [String!]
@@ -42,6 +108,8 @@ def common_query_builder():
         $minNumMutants: Int
     ) {
         driverResults(
+            paging: $paging
+            distinct: $distinct
             dataSet: $dataSet
             feature: $feature
             entrez: $entrez
@@ -75,7 +143,18 @@ def common_query(common_query_builder):
                 mutationCode
                 tag { name }
             }
-            page
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+            error
         }""")
 
 
@@ -118,6 +197,100 @@ def min_n_mut():
 def min_n_wt():
     return 383
 
+# Test that forward cursor pagination gives us the expected paginInfo
+def test_driverResults_cursor_pagination_first(client, common_query_builder):
+    query = common_query_builder("""{
+            items {
+                id
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+        }""")
+    num = 10
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'paging': {'first': num }
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['driverResults']
+    items = page['items']
+    paging = page['paging']
+    start = from_cursor_hash(paging['startCursor'])
+    end = from_cursor_hash(paging['endCursor'])
+
+    assert len(items) == num
+    assert paging['hasNextPage'] == True
+    assert paging['hasPreviousPage'] == False
+    assert start == items[0]['id']
+    assert end == items[num-1]['id']
+    assert int(end) - int(start) > 0
+
+def test_driverResults_cursor_pagination_last(client, common_query_builder):
+    query = common_query_builder("""{
+            items {
+                id
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+        }""")
+    num = 10
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'paging': {
+                'last': num,
+                'before': to_cursor_hash(1000)
+            }
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['driverResults']
+    items = page['items']
+    paging = page['paging']
+    start = from_cursor_hash(paging['startCursor'])
+    end = from_cursor_hash(paging['endCursor'])
+
+    assert len(items) == num
+    assert paging['hasNextPage'] == False
+    assert paging['hasPreviousPage'] == True
+    assert start == items[0]['id']
+    assert end == items[num-1]['id']
+
+def test_driverResults_cursor_distinct_pagination(client, common_query):
+    page_num = 2
+    num = 10
+    response = client.post(
+        '/api', json={'query': common_query, 'variables': {
+            'paging': {
+                'page': page_num,
+                'first': num,
+            },
+            'distinct': True,
+            'dataSet': ['TCGA'],
+            'tag': ['C1']
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['driverResults']
+    items = page['items']
+
+    assert len(items) == num
+    assert page_num == page['paging']['page']
 
 def test_driverResults_query_with_passed_data_set_entrez_feature_and_tag(client, common_query, data_set, feature_name, gene_entrez, tag_name):
     response = client.post('/api', json={'query': common_query, 'variables': {
@@ -138,7 +311,6 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_and_tag(client,
         assert type(result['mutationCode']) is str
         assert result['tag']['name'] == tag_name
 
-
 def test_driverResults_query_returns_mutationId(client, common_query_builder, data_set, feature_name, gene_entrez, tag_name):
     query = common_query_builder("""{
             items {
@@ -146,7 +318,6 @@ def test_driverResults_query_returns_mutationId(client, common_query_builder, da
                 mutationId
                 mutationCode
             }
-            page
         }""")
     response = client.post('/api', json={'query': query, 'variables': {
         'dataSet': [data_set],
