@@ -83,7 +83,6 @@ test_that("extracellular_network_main_server_tcga_study_no_stratification", {
   )
 })
 
-# TODO: fix stratified nodes/edges
 test_that("extracellular_network_main_server_tcga_study_with_stratification", {
   shiny::testServer(
     extracellular_network_main_server,
@@ -110,21 +109,21 @@ test_that("extracellular_network_main_server_tcga_study_with_stratification", {
       session$setInputs("concordance" = 0)
       session$setInputs("calculate_button" = 1)
 
-      # expect_type(gene_nodes(), "list")
-      # expect_equal(nrow(gene_nodes()), 2)
-      # expect_type(feature_nodes(), "list")
-      # expect_equal(nrow(feature_nodes()), 18)
-      #
-      # expect_type(edges(), "list")
-      # expect_equal(nrow(edges()), 2)
-      #
-      # expect_type(scaffold(), "list")
-      # expect_equal(nrow(scaffold()), 2)
-      #
-      # expect_type(output$select_node_ui, "list")
-      # expect_type(graph_json(), "character")
-      # session$setInputs("do_layout" = "cose")
-      # expect_type(output$cyjShiny, "character")
+      expect_type(gene_nodes(), "list")
+      expect_equal(nrow(gene_nodes()), 2)
+      expect_type(feature_nodes(), "list")
+      expect_equal(nrow(feature_nodes()), 18)
+
+      expect_type(edges(), "list")
+      expect_equal(nrow(edges()), 2)
+
+      expect_type(scaffold(), "list")
+      expect_equal(nrow(scaffold()), 1)
+
+      expect_type(output$select_node_ui, "list")
+      expect_type(graph_json(), "character")
+      session$setInputs("do_layout" = "cose")
+      expect_type(output$cyjShiny, "character")
     }
   )
 })

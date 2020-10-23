@@ -58,6 +58,150 @@ get_selected_celltypes <- function(celltype_input_list){
     return(celltypes)
 }
 
+get_gene_nodes <- function(
+  stratify,
+  genes,
+  tags,
+  stratified_tags,
+  min_abundance
+  ){
+  n_tags <- find_n_tags(stratify)
+  nodes <-
+    iatlas.api.client::query_gene_nodes(
+      datasets = "TCGA",
+      network = "extracellular_network",
+      entrez = genes,
+      tags = tags,
+      min_score = min_abundance / 100
+    ) %>%
+    filter_nodes_for_n_tags(n_tags) %>%
+    dplyr::select(
+      "Type" = "label",
+      "tags",
+      "node_name" = "name",
+      "node_display" = "hgnc"
+    )
+
+  if(stratify) nodes <- filter_nodes_with_tag_name(nodes, stratified_tags)
+  unnest_nodes(nodes, stratify)
+}
+
+get_feature_nodes <- function(
+  stratify,
+  features,
+  tags,
+  stratified_tags,
+  min_abundance
+  ){
+  n_tags <- find_n_tags(stratify)
+  nodes <-
+    iatlas.api.client::query_feature_nodes(
+      datasets = "TCGA",
+      network = "extracellular_network",
+      features = features,
+      tags = tags,
+      min_score = min_abundance / 100
+    ) %>%
+    filter_nodes_for_n_tags(n_tags) %>%
+    dplyr::select(
+      "Type" = "label",
+      "tags",
+      "node_name" ="name",
+      "node_display" = "feature_display"
+    )
+  if(stratify) nodes <- filter_nodes_with_tag_name(nodes, stratified_tags)
+  unnest_nodes(nodes, stratify)
+}
+
+find_n_tags <- function(stratify){
+  if(stratify) return(2)
+  else return(1)
+}
+
+filter_nodes_for_n_tags <- function(data, n_tags){
+  dplyr::filter(
+    data,
+    purrr::map_lgl(purrr::map_int(.data$tags, nrow), ~ .x == n_tags)
+  )
+}
+
+filter_nodes_with_tag_name <- function(data, names){
+  dplyr::filter(
+    data,
+    purrr::map_lgl(
+      purrr::map(.data$tags, dplyr::pull, "name"), ~ any(names %in% .x)
+    )
+  )
+}
+
+unnest_nodes <- function(data, stratify){
+  result <- data %>%
+    tidyr::unnest("tags") %>%
+    dplyr::select("Type", "node_name", "node_display", "tag" = "name")
+  if(stratify){
+    result <- dplyr::filter(
+      result, .data$tag %in% c("C1", "C2", "C3", "C4", "C5", "C6")
+    )
+  }
+  return(result)
+}
+
+get_edges <- function(nodes, min_concordance){
+  node_names <- nodes %>%
+    dplyr::pull("node_name") %>%
+    unique()
+
+  edges <- iatlas.api.client::query_edges(
+    min_score = min_concordance,
+    node1 = node_names,
+    node2 = node_names
+  ) %>%
+    dplyr::select("edge_name" = "name", "node1", "node2", "score") %>%
+    tidyr::pivot_longer(
+      cols = c("node1", "node2"),
+      names_to = "node_num",
+      values_to = "node_name"
+    ) %>%
+    dplyr::inner_join(nodes, by = "node_name") %>%
+    dplyr::select(
+      "edge_name", "score", "node_num", "node_display", "tag"
+    ) %>%
+    tidyr::pivot_wider(
+      names_from = "node_num", values_from = "node_display"
+    )
+}
+
+create_graph_json <- function(edges, nodes){
+  edges_nodes <-
+    c(edges$node1, edges$node2) %>%
+    unique()
+
+  nodes <- nodes %>%
+    dplyr::filter(.data$node_display %in% edges_nodes) %>%
+    dplyr::arrange("node_display") %>%
+    dplyr::select(
+      "id" = "node_display",
+      "Type",
+      "FriendlyName" = "node_display"
+    ) %>%
+    dplyr::distinct() %>%
+    as.data.frame()
+
+  edges <- edges %>%
+    dplyr::select(
+      "source" = "node1",
+      "target" = "node2",
+      "score",
+      "interaction" = "tag"
+    ) %>%
+    as.data.frame()
+
+  cyjShiny::dataFramesToJSON(edges, nodes)
+}
+
+
+
+
 # build_ecn_scaffold_tbl <- function(){
 #     paste0(
 #         "SELECT DISTINCT node_1_id, node_2_id FROM edges WHERE node_1_id IN ",
