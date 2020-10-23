@@ -131,63 +131,24 @@ extracellular_network_main_server <- function(
         get_selected_celltypes(input$selected_celltypes)
       })
 
-      #TODO: fix startified node/edges tags
       gene_nodes <- shiny::eventReactive(input$calculate_button, {
-        if(stratify()) n_tags <- 2
-        else n_tags <- 1
-        nodes <-
-          iatlas.api.client::query_gene_nodes(
-            datasets = "TCGA",
-            network = "extracellular_network",
-            entrez = selected_genes(),
-            tags = input$group_selected,
-            min_score = input$abundance / 100
-          ) %>%
-          dplyr::filter(purrr::map_lgl(
-            purrr::map_int(.data$tags, nrow),
-            ~ .x == n_tags
-          ))
-        if(stratify()){
-          nodes <- nodes %>%
-            dplyr::filter(purrr::map_lgl(
-              purrr::map(.data$tags, dplyr::pull, "name"),
-              ~ any(input$stratified_group_selected %in% .x)
-            ))
-        }
-        nodes <- nodes %>%
-          dplyr::select("Type" = "label", "tags", "node_name" = "name", "node_display" = "hgnc") %>%
-          tidyr::unnest("tags") %>%
-          dplyr::select("Type", "node_name", "node_display", "tag" = "name")
-        return(nodes)
+        get_gene_nodes(
+          stratify(),
+          selected_genes(),
+          input$group_selected,
+          input$stratified_group_selected,
+          input$abundance
+        )
       })
 
       feature_nodes <- shiny::eventReactive(input$calculate_button, {
-        if(stratify()) n_tags <- 2
-        else n_tags <- 1
-        nodes <-
-          iatlas.api.client::query_feature_nodes(
-            datasets = "TCGA",
-            network = "extracellular_network",
-            features = selected_celltypes(),
-            tags = input$group_selected,
-            min_score = input$abundance / 100
-          ) %>%
-          dplyr::filter(purrr::map_lgl(
-            purrr::map_int(.data$tags, nrow),
-            ~ .x == n_tags
-          ))
-        if(stratify()){
-          nodes <- nodes %>%
-            dplyr::filter(purrr::map_lgl(
-              purrr::map(.data$tags, dplyr::pull, "name"),
-              ~any(input$stratified_group_selected %in% .x)
-            ))
-        }
-        nodes <- nodes %>%
-          dplyr::select("Type" = "label", "tags", "node_name" = "name", "node_display" = "feature_display") %>%
-          tidyr::unnest("tags") %>%
-          dplyr::select("Type", "node_name", "node_display", "tag" = "name")
-        return(nodes)
+        get_feature_nodes(
+          stratify(),
+          selected_celltypes(),
+          input$group_selected,
+          input$stratified_group_selected,
+          input$abundance
+        )
       })
 
       nodes <- shiny::reactive({
@@ -196,28 +157,8 @@ extracellular_network_main_server <- function(
       })
 
       edges <- shiny::reactive({
-        nodes <- nodes() %>%
-          dplyr::pull("node_name") %>%
-          unique()
-
-        edges <- iatlas.api.client::query_edges(
-          min_score = input$concordance,
-          node1 = nodes,
-          node2 = nodes
-        ) %>%
-          dplyr::select("edge_name" = "name", "node1", "node2", "score") %>%
-          tidyr::pivot_longer(
-            cols = c("node1", "node2"),
-            names_to = "node_num",
-            values_to = "node_name"
-          ) %>%
-          dplyr::inner_join(nodes(), by = "node_name") %>%
-          dplyr::select(
-            "edge_name", "score", "node_num", "node_display", "tag"
-          ) %>%
-          tidyr::pivot_wider(
-            names_from = "node_num", values_from = "node_display"
-          )
+        shiny::req(nodes(), input$concordance)
+        get_edges(nodes(), input$concordance)
       })
 
       scaffold <- shiny::reactive(
@@ -239,32 +180,7 @@ extracellular_network_main_server <- function(
       })
 
       graph_json <- shiny::reactive({
-
-        edges_nodes <-
-          c(edges()$node1, edges()$node2) %>%
-          unique()
-
-        nodes <- nodes() %>%
-          dplyr::filter(.data$node_display %in% edges_nodes) %>%
-          dplyr::arrange("node_display") %>%
-          dplyr::select(
-            "id" = "node_display",
-            "Type",
-            "FriendlyName" = "node_display"
-          ) %>%
-          dplyr::distinct() %>%
-          as.data.frame()
-
-        edges <- edges() %>%
-          dplyr::select(
-            "source" = "node1",
-            "target" = "node2",
-            "score",
-            "interaction" = "tag"
-          ) %>%
-          as.data.frame()
-
-        cyjShiny::dataFramesToJSON(edges, nodes)
+        create_graph_json(edges(), nodes())
       })
 
       output$cyjShiny <- cyjShiny::renderCyjShiny({
