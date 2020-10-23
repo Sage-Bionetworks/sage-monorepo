@@ -64,16 +64,16 @@ def build_gene_graphql_response(pub_dict=dict(), sample_dict=dict(), gene_type_d
     return f
 
 
-def build_pub_gene_gene_type_join_condition(gene_ids, gene_types, pub_gene_gene_type_model, pub_model):
-    join_condition = [
-        pub_gene_gene_type_model.publication_id == pub_model.id, pub_gene_gene_type_model.gene_id.in_(gene_ids)]
+def build_pub_gene_gene_type_join_condition(gene_ids, gene_type, pub_gene_gene_type_model, pub_model):
+    join_condition = build_join_condition(
+        pub_gene_gene_type_model.publication_id, pub_model.id, pub_gene_gene_type_model.gene_id, gene_ids)
 
-    map_of_ids = list(map(lambda gt: gt.id, gene_types))
-    gene_type_ids = list(dict.fromkeys(map_of_ids)) if map_of_ids else None
-
-    if gene_type_ids:
+    if gene_type:
+        gene_type_1 = aliased(GeneType, name='gt')
+        gene_type_subquery = db.session.query(gene_type_1.id).filter(
+            gene_type_1.name.in_(gene_type))
         join_condition.append(
-            pub_gene_gene_type_model.gene_type_id.in_(gene_type_ids))
+            pub_gene_gene_type_model.gene_type_id.in_(gene_type_subquery))
 
     return join_condition
 
@@ -339,7 +339,6 @@ def get_publications(
         sess = db.session
 
         gene_1 = aliased(Gene, name='g')
-        gene_type_1 = aliased(GeneType, name='gt')
         pub_1 = aliased(Publication, name='p')
         pub_gene_gene_type_1 = aliased(
             PublicationToGeneToGeneType, name='pggt')
@@ -565,8 +564,7 @@ def return_gene_derived_fields(requested, gene_types_requested, publications_req
     '''
     samples = get_samples(requested, samples_requested, **kwargs)
     gene_types = get_gene_types(requested, gene_types_requested, **kwargs)
-    pubs = get_publications(
-        requested, publications_requested, **dict(kwargs, gene_type=gene_types))
+    pubs = get_publications(requested, publications_requested, **kwargs)
 
     types_dict = dict()
     for key, collection in groupby(gene_types, key=lambda gt: gt.gene_id):

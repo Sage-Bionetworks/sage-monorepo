@@ -71,8 +71,10 @@ def gene_id(test_db, entrez):
 
 
 @ pytest.fixture(scope='session')
-def hgnc():
-    return 'CXCL10'
+def hgnc(test_db, entrez):
+    from api.db_models import Gene
+    (hgnc, ) = test_db.session.query(Gene.hgnc).filter_by(entrez=entrez).one_or_none()
+    return hgnc
 
 
 @ pytest.fixture(scope='session')
