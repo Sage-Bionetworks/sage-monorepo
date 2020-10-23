@@ -270,3 +270,27 @@ def test_genes_query_no_entrez(client, common_query_builder):
     for gene in results[0:1]:
         assert type(gene['entrez']) is int
         assert type(gene['hgnc']) is str
+
+
+def test_genes_query_returns_publications(client, common_query_builder, entrez, hgnc):
+    query = common_query_builder("""{
+            entrez
+            hgnc
+            publications { pubmedId }
+        }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'entrez': [entrez]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['genes']
+
+    assert isinstance(results, list)
+    assert len(results) == 1
+    for result in results:
+        publications = result['publications']
+
+        assert result['entrez'] == entrez
+        assert result['hgnc'] == hgnc
+        assert isinstance(publications, list)
+        assert len(publications) > 0
+        for publication in publications[0:5]:
+            assert type(publication['pubmedId']) is int

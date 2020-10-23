@@ -20,6 +20,7 @@ gene_request_fields = simple_gene_request_fields.union({'geneFamily',
                                                         'geneTypes',
                                                         'immuneCheckpoint',
                                                         'pathway',
+                                                        'publications',
                                                         'samples',
                                                         'superCategory',
                                                         'therapyType'})
@@ -362,7 +363,7 @@ def get_publications(
             set(), set(), data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type) if not gene_ids else gene_ids
 
         pub_gene_gene_type_join_condition = build_pub_gene_gene_type_join_condition(
-            gene_subquery, gene_types, pub_gene_gene_type_1, pub_1)
+            gene_subquery, gene_type, pub_gene_gene_type_1, pub_1)
         pub_query = pub_query.join(pub_gene_gene_type_1, and_(
             *pub_gene_gene_type_join_condition))
 
@@ -564,7 +565,8 @@ def return_gene_derived_fields(requested, gene_types_requested, publications_req
     '''
     samples = get_samples(requested, samples_requested, **kwargs)
     gene_types = get_gene_types(requested, gene_types_requested, **kwargs)
-    pubs = get_publications(requested, publications_requested, **kwargs)
+    pubs = get_publications(
+        requested, publications_requested, **dict(kwargs, gene_type=gene_types))
 
     types_dict = dict()
     for key, collection in groupby(gene_types, key=lambda gt: gt.gene_id):

@@ -28,7 +28,7 @@ def resolve_genes_by_tag(_obj, info, dataSet=None, entrez=None, feature=None, fe
         gene_tag, genes = gene_set
 
         # Passing the gene_ids can be more performant than a large subquery on genes, but only if there are not a huge amount of gene ids.
-        gene_ids = set(gene.id for gene in genes) if len(genes) < 250 else []
+        gene_ids = set(gene.id for gene in genes) if len(genes) < 500 else []
 
         # If there were geneTypes, publications, or samples requested, make separate queries for them, but only if some genes were returned initially.
         pubs_dict, samples_dict, types_dict = return_gene_derived_fields(
