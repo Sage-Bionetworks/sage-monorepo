@@ -4,21 +4,45 @@ from api.database import return_driver_result_query
 
 
 @pytest.fixture(scope='module')
-def feature_id():
-    return 66
+def dr_feature(test_db):
+    return 'Mast_cells_resting'
 
 
 @pytest.fixture(scope='module')
-def gene_id():
-    return 20825
+def dr_feature_id(test_db, dr_feature):
+    from api.db_models import Feature
+    (id, ) = test_db.session.query(Feature.id).filter_by(
+        name=dr_feature).one_or_none()
+    return id
 
 
 @pytest.fixture(scope='module')
-def tag_id():
-    return 16
+def dr_entrez(test_db):
+    return 284058
 
 
-def test_DriverResult_with_relations(app, data_set_id, feature_id, gene_id, tag_id):
+@pytest.fixture(scope='module')
+def dr_gene_id(test_db, dr_entrez):
+    from api.db_models import Gene
+    (id, ) = test_db.session.query(Gene.id).filter_by(
+        entrez=dr_entrez).one_or_none()
+    return id
+
+
+@pytest.fixture(scope='module')
+def dr_tag(test_db):
+    return 'BLCA'
+
+
+@pytest.fixture(scope='module')
+def tag_id(test_db, dr_tag):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=dr_tag).one_or_none()
+    return id
+
+
+def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_feature_id, dr_entrez, dr_gene_id, dr_tag, tag_id):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['data_set', 'feature', 'gene',
@@ -26,8 +50,8 @@ def test_DriverResult_with_relations(app, data_set_id, feature_id, gene_id, tag_
 
     query = return_driver_result_query(*relationships_to_join)
     results = query.filter_by(dataset_id=data_set_id).filter_by(
-        feature_id=feature_id).filter_by(
-        gene_id=gene_id).filter_by(tag_id=tag_id).limit(3).all()
+        feature_id=dr_feature_id).filter_by(
+        gene_id=dr_gene_id).filter_by(tag_id=tag_id).limit(3).all()
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -36,15 +60,15 @@ def test_DriverResult_with_relations(app, data_set_id, feature_id, gene_id, tag_
         string_representation = '<DriverResult %r>' % driver_result_id
         string_representation_list.append(string_representation)
         assert result.data_set.id == data_set_id
-        assert result.feature.id == feature_id
-        assert result.gene.id == gene_id
+        assert result.data_set.name == data_set
+        assert result.feature.id == dr_feature_id
+        assert result.feature.name == dr_feature
+        assert result.gene.entrez == dr_entrez
+        assert result.gene.id == dr_gene_id
         assert result.mutation_code.id == result.mutation_code_id
         assert result.tag.id == tag_id
-        assert result.dataset_id == data_set_id
-        assert result.feature_id == feature_id
-        assert result.gene_id == gene_id
+        assert result.tag.name == dr_tag
         assert type(result.mutation_code_id) is int or NoneType
-        assert result.tag_id == tag_id
         assert type(result.p_value) is float or NoneType
         assert type(result.fold_change) is float or NoneType
         assert type(result.log10_p_value) is float or NoneType
@@ -56,11 +80,11 @@ def test_DriverResult_with_relations(app, data_set_id, feature_id, gene_id, tag_
         string_representation_list) + ']'
 
 
-def test_DriverResult_no_relations(app, data_set_id, feature_id, gene_id, tag_id):
+def test_DriverResult_no_relations(app, data_set_id, dr_feature_id, dr_gene_id, tag_id):
     query = return_driver_result_query()
     results = query.filter_by(dataset_id=data_set_id).filter_by(
-        feature_id=feature_id).filter_by(
-        gene_id=gene_id).filter_by(tag_id=tag_id).limit(3).all()
+        feature_id=dr_feature_id).filter_by(
+        gene_id=dr_gene_id).filter_by(tag_id=tag_id).limit(3).all()
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -71,8 +95,8 @@ def test_DriverResult_no_relations(app, data_set_id, feature_id, gene_id, tag_id
         assert type(result.mutation_code) is NoneType
         assert type(result.tag) is NoneType
         assert result.dataset_id == data_set_id
-        assert result.feature_id == feature_id
-        assert result.gene_id == gene_id
+        assert result.feature_id == dr_feature_id
+        assert result.gene_id == dr_gene_id
         assert type(result.mutation_code_id) is int or NoneType
         assert result.tag_id == tag_id
         assert type(result.p_value) is float or NoneType

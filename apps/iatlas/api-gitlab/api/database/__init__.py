@@ -17,4 +17,5 @@ from .result_queries import *
 from .sample_to_mutation_queries import *
 from .sample_to_tag_queries import *
 from .tag_queries import *
+from .tag_to_publication_queries import *
 from .tag_to_tag_queries import *

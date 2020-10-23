@@ -4,11 +4,19 @@ from api.db_models import TagToTag
 
 
 @pytest.fixture(scope='module')
-def tag_id():
-    return 11
+def tt_tag(test_db):
+    return 'AML.3'
 
 
-def test_TagToTag_with_relations(app, tag_id):
+@pytest.fixture(scope='module')
+def tag_id(test_db, tt_tag):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=tt_tag).one_or_none()
+    return id
+
+
+def test_TagToTag_with_relations(app, tt_tag, tag_id):
     string_representation_list = []
     separator = ', '
 
@@ -30,6 +38,7 @@ def test_TagToTag_with_relations(app, tag_id):
         # Don't need to iterate through every result.
         for tag in result.tags[0:2]:
             assert tag.id == tag_id
+            assert tag.name == tt_tag
         assert result.tag_id == tag_id
         assert type(result.related_tag_id) is int
         assert repr(result) == string_representation

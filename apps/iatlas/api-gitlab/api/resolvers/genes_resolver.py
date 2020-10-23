@@ -12,9 +12,12 @@ def resolve_genes(
         info, gene_related_sample_request_fields, 'samples')
 
     genes = request_genes(
-        requested, set(), data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, related=related, sample=sample, super_category=superCategory, tag=tag, therapy_type=therapyType)
+        requested, set(), data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, related=related, sample=sample, super_category=superCategory, tag=tag, therapy_type=therapyType, distinct=True)
+
+    # Passing the gene_ids can be more performant than a large subquery on genes, but only if there are not a huge amount of gene ids.
+    gene_ids = set(gene.id for gene in genes) if len(genes) < 1000 else []
 
     pubs_dict, samples_dict, types_dict = return_gene_derived_fields(
-        requested, gene_types_requested, publications_requested, samples_requested, data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, related=related, sample=sample, super_category=superCategory, tag=tag, therapy_type=therapyType) if genes else (dict(), dict(), dict())
+        requested, gene_types_requested, publications_requested, samples_requested, data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, related=related, sample=sample, super_category=superCategory, tag=tag, therapy_type=therapyType, gene_ids=gene_ids) if genes else (dict(), dict(), dict())
 
     return map(build_gene_graphql_response(pubs_dict, samples_dict, types_dict), genes)

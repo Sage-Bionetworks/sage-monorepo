@@ -34,5 +34,6 @@ from .sample_to_tag import SampleToTag
 from .slide import Slide
 from .super_category import SuperCategory
 from .tag import Tag
+from .tag_to_publication import TagToPublication
 from .tag_to_tag import TagToTag
 from .therapy_type import TherapyType

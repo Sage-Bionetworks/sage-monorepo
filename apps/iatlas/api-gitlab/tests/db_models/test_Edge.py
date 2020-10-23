@@ -4,11 +4,19 @@ from api.database import return_edge_query
 
 
 @pytest.fixture(scope='module')
-def node_1_id():
-    return 42
+def node_1():
+    return 'tcga_ecn_229715'
 
 
-def test_Edge_with_relations(app, node_1_id):
+@pytest.fixture(scope='module')
+def node_1_id(test_db, node_1):
+    from api.db_models import Node
+    (id, ) = test_db.session.query(Node.id).filter_by(
+        name=node_1).one_or_none()
+    return id
+
+
+def test_Edge_with_relations(app, node_1, node_1_id):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['node_1', 'node_2']
@@ -21,6 +29,7 @@ def test_Edge_with_relations(app, node_1_id):
         string_representation = '<Edge %r>' % result.id
         string_representation_list.append(string_representation)
         assert result.node_1.id == node_1_id
+        assert result.node_1.name == node_1
         assert result.node_2.id == result.node_2_id
         assert result.node_1_id == node_1_id
         assert type(result.node_2_id) is int

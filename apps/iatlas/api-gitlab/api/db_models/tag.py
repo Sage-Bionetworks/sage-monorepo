@@ -11,11 +11,14 @@ class Tag(Base):
     long_display = db.Column(db.String, nullable=True)
     short_display = db.Column(db.String, nullable=True)
 
-    data_sets = db.relationship('Dataset', lazy='noload', uselist=True,
-                                secondary='datasets_to_tags')
+    data_sets = db.relationship(
+        'Dataset', lazy='noload', uselist=True, secondary='datasets_to_tags')
 
-    nodes = db.relationship('Node', lazy='noload', uselist=True,
-                            secondary='nodes_to_tags')
+    nodes = db.relationship(
+        'Node', lazy='noload', uselist=True, secondary='nodes_to_tags')
+
+    publications = db.relationship(
+        'Publication', lazy='noload', uselist=True, secondary='tags_to_publications')
 
     related_tags = db.relationship(
         'Tag', foreign_keys='TagToTag.tag_id', lazy='noload',

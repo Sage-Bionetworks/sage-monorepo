@@ -6,21 +6,32 @@ from api.enums import direction_enum
 
 
 @pytest.fixture(scope='module')
-def feature_id():
-    return 40
+def cnr_feature():
+    return 'EPIC_NK_Cells'
 
 
 @pytest.fixture(scope='module')
-def gene_id():
-    return 2936
+def cnr_tag():
+    return 'BLCA'
 
 
 @pytest.fixture(scope='module')
-def tag_id():
-    return 16
+def feature_id(test_db, cnr_feature):
+    from api.db_models import Feature
+    (id, ) = test_db.session.query(Feature.id).filter_by(
+        name=cnr_feature).one_or_none()
+    return id
 
 
-def test_CopyNumberResult_with_relations(app, data_set_id, gene_id, tag_id):
+@pytest.fixture(scope='module')
+def tag_id(test_db, cnr_tag):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=cnr_tag).one_or_none()
+    return id
+
+
+def test_CopyNumberResult_with_relations(app, data_set_id, entrez, gene_id, cnr_tag, tag_id):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['data_set', 'feature', 'gene', 'tag']
@@ -36,13 +47,13 @@ def test_CopyNumberResult_with_relations(app, data_set_id, gene_id, tag_id):
         string_representation_list.append(string_representation)
         assert result.feature.id == result.feature_id
         assert result.data_set.id == data_set_id
+        assert result.gene.entrez == entrez
         assert result.gene.id == gene_id
         assert result.tag.id == result.tag_id
+        assert result.tag.name == cnr_tag
         assert result.gene_id == gene_id
         assert result.dataset_id == data_set_id
         assert type(result.feature_id) is int
-        assert result.gene_id == gene_id
-        assert result.tag_id == tag_id
         assert result.direction in direction_enum.enums
         assert type(result.mean_normal) is float or NoneType
         assert type(result.mean_cnv) is float or NoneType
@@ -54,7 +65,7 @@ def test_CopyNumberResult_with_relations(app, data_set_id, gene_id, tag_id):
         string_representation_list) + ']'
 
 
-def test_CopyNumberResult_no_relations(app, data_set_id, gene_id, tag_id):
+def test_CopyNumberResult_no_relations(app, data_set_id, gene_id, tag_id, cnr_tag):
     query = return_copy_number_result_query()
     results = query.filter_by(dataset_id=data_set_id).filter_by(
         gene_id=gene_id).filter_by(tag_id=tag_id).limit(3).all()

@@ -497,7 +497,7 @@ def get_samples(
             append_to_order(gene_to_sample_1.rna_seq_expr)
         sample_query = sample_query.order_by(*order) if order else sample_query
 
-        return sample_query.all()
+        return sample_query.distinct().all()
 
     return []
 
