@@ -1,53 +1,53 @@
 """
-The "Tag" type may return:
-
-- The "name", the name of the tag
-- The "characteristics" of the tag.
-- The "color", a color to represent the tag as a hex value.
-- The "longDisplay", a long display name for the tag used in text descriptions.
-- The "sampleCount", the number of sample associated with the tag.
-- The "samples", a list of the names of the samples associated with the tag.
-- The "shortDisplay", a friendly name for the tag (used in plots).
+The "Tag" type
 
 See also `SimpleTag`
 """
 type Tag {
+  "The 'characteristics' or description of the tag."
   characteristics: String
+  "A color to represent the tag as a hex value."
   color: String
+  "A long display name for the tag used in text descriptions."
   longDisplay: String
+  "The name of the tag."
   name: String!
+  "A list of Publications related to the tag."
+  publications: [SimplePublication!]
+  "A tag related to the tag."
   related: [SimpleTag!]
+  "The number of sample associated with the tag."
   sampleCount: Int!
+  "A list of the names of the samples associated with the tag."
   samples: [String!]
+  "A friendly name for the tag (used in plots)."
   shortDisplay: String
 }
 
 """
-A "SimpleTag" is a version of a `Tag`. Only basic tag attributes may be returned.
-
-- The "name", the name of the tag
-- The "characteristics" of the tag.
-- The "color", a color to represent the tag as a hex value.
-- The "longDisplay", a long display name for the tag used in text descriptions.
-- The "shortDisplay", a friendly name for the tag (used in plots).
+A "SimpleTag" type is a version of a `Tag`. Only basic tag attributes may be returned.
 """
 type SimpleTag {
+  "The 'characteristics' or description of the tag."
   characteristics: String
+  "A color to represent the tag as a hex value."
   color: String
+  "A long display name for the tag used in text descriptions."
   longDisplay: String
+  "The name of the tag."
   name: String!
+  "A friendly name for the tag (used in plots)."
   shortDisplay: String
 }
 
 """
-The "RelatedByDataSet" type may return:
-
-- The "dataSet" (the name of the data set).
-- The "display", a friendly display name for the data set.
-- "related", A list of related tags associated with that data set.
+The "RelatedByDataSet" type
 """
 type RelatedByDataSet {
+  "The name of the DataSet"
   dataSet: String!
+  "A friendly display name for the data set."
   display: String
+  "A list of SimpleTags related to the DataSet"
   related: [SimpleTag!]!
 }

@@ -368,19 +368,19 @@ def get_publications(
 
         order = []
         append_to_order = order.append
-        if 'name' in requested:
+        if 'name' in publications_requested:
             append_to_order(pub_1.name)
-        if 'pubmedId' in requested:
+        if 'pubmedId' in publications_requested:
             append_to_order(pub_1.pubmed_id)
-        if 'doId' in requested:
+        if 'doId' in publications_requested:
             append_to_order(pub_1.do_id)
-        if 'title' in requested:
+        if 'title' in publications_requested:
             append_to_order(pub_1.title)
-        if 'firstAuthorLastName' in requested:
+        if 'firstAuthorLastName' in publications_requested:
             append_to_order(pub_1.first_author_last_name)
-        if 'year' in requested:
+        if 'year' in publications_requested:
             append_to_order(pub_1.year)
-        if 'journal' in requested:
+        if 'journal' in publications_requested:
             append_to_order(pub_1.journal)
         pub_query = pub_query.order_by(*order) if order else pub_query
 

@@ -1,41 +1,45 @@
 """
-The "Publication" type may return:
-
-- The  "firstAuthorLastName", the first last name of the publication's author
-- A list of "genes" related to the publication
-- The  "journal" of the publication
-- The  "pubmedId", the id of the publication in the pubmed website. See https://pubmed.ncbi.nlm.nih.gov/
-- The  "title" of the publication
-- The  "year" of the publication
+The "Publication" type
 """
 type Publication {
+  "The first last name of the publication's author"
   firstAuthorLastName: String
+  "The id of the publication in the doi website. See: https://www.doi.org/"
   doId: String
+  "A list of Genes related to the publication"
   genes: [SimpleGene!]
+  "A list of GeneTypes related to the publication"
   geneTypes: [SimpleGeneType!]
+  "The 'journal' of the publication."
   journal: String
+  "The unique name of the publication. This is generated as a combination of the do id and the pubmed id."
   name: String!
+  "The id of the publication in the pubmed website. See https://pubmed.ncbi.nlm.nih.gov/"
   pubmedId: Int
+  "A list of Tags related to the publication"
+  tags: [SimpleTag!]
+  "The 'title' of the publication."
   title: String
+  "The 'year' of the publication."
   year: Int
 }
 
 """
-The "SimplePublication" is a version of a Publication. Only basic attributes may be returned. type may return:
-
-- The  "doId", the DO id of the publication
-- The  "firstAuthorLastName", the first last name of the publication's author
-- The  "journal" of the publication
-- The  "pubmedId", the id of the publication in the pubmed website. See https://pubmed.ncbi.nlm.nih.gov/
-- The  "title" of the publication
-- The  "year" of the publication
+The "SimplePublication" type is a version of a Publication. Only basic attributes may be returned.
 """
 type SimplePublication {
-  doId: String
+  "The first last name of the publication's author"
   firstAuthorLastName: String
+  "The id of the publication in the doi website. See: https://www.doi.org/"
+  doId: String
+  "The 'journal' of the publication."
   journal: String
+  "The unique name of the publication. This is generated as a combination of the do id and the pubmed id."
   name: String!
+  "The id of the publication in the pubmed website. See https://pubmed.ncbi.nlm.nih.gov/"
   pubmedId: Int
+  "The 'title' of the publication."
   title: String
+  "The 'year' of the publication."
   year: Int
 }

@@ -17,7 +17,6 @@ def test_Tag_no_relations(app, tag_name):
     query = return_tag_query()
     result = query.filter_by(name=tag_name).one_or_none()
 
-    assert False
     assert result
     assert result.related_tags == []
     assert result.samples == []

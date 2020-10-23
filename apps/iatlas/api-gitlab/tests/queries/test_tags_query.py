@@ -5,6 +5,11 @@ from tests import NoneType
 
 
 @pytest.fixture(scope='module')
+def tag_with_publication():
+    return 'BRCA.Normal'
+
+
+@pytest.fixture(scope='module')
 def common_query_builder():
     def f(query_fields):
         return """query Tags(
@@ -170,6 +175,27 @@ def test_tags_query_with_data_set_related_tag_and_sample(client, common_query_bu
         assert len(samples) == 1
         for current_sample in samples:
             assert current_sample == sample
+
+
+def test_tags_query_returns_publications(client, common_query_builder, data_set, related, tag_with_publication):
+    query = common_query_builder("""{
+                                    name
+                                    publications { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'tag': [tag_with_publication]}})
+    json_data = json.loads(response.data)
+    results = json_data['data']['tags']
+
+    assert isinstance(results, list)
+    assert len(results) == 1
+    for result in results:
+        publications = result['publications']
+        assert result['name'] == tag_with_publication
+        assert isinstance(publications, list)
+        assert len(publications) > 0
+        for publication in publications[0:5]:
+            assert type(publication['name']) is str
 
 
 def test_tags_query_with_no_args(client, common_query_builder):
