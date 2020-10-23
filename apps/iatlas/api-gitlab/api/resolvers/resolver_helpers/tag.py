@@ -2,9 +2,9 @@ from itertools import groupby
 from sqlalchemy import and_, func
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import (Dataset, DatasetToTag, DatasetToSample, Feature, FeatureClass,
-                           FeatureToSample, Sample, SampleToTag, Tag, TagToTag)
+from api.db_models import Dataset, DatasetToTag, DatasetToSample, Feature, FeatureClass, FeatureToSample, Publication, Sample, SampleToTag, Tag, TagToPublication, TagToTag
 from .general_resolvers import build_join_condition, get_selected, get_value
+from .publication import build_publication_graphql_response
 
 related_request_fields = {'dataSet',
                           'display',
@@ -17,7 +17,8 @@ simple_tag_request_fields = {'characteristics',
                              'shortDisplay',
                              'tag'}
 
-tag_request_fields = simple_tag_request_fields.union({'related',
+tag_request_fields = simple_tag_request_fields.union({'publications',
+                                                      'related',
                                                       'sampleCount',
                                                       'samples'})
 
@@ -32,9 +33,18 @@ def build_related_graphql_response(related_set=set()):
 
 
 def build_related_request(requested, related_requested, data_set=None, related=None, by_data_set=True):
-    """
+    '''
     Builds a SQL request.
-    """
+
+    All positional arguments are required. Positional arguments are:
+        1st position - a set of the requested fields at the root of the graphql request. The request is typically made for data set values with a 'related' child node.
+        2nd position - a set of the requested fields in the 'related' node of the graphql request. If 'related' is not requested, this will be an empty set.
+
+    All keyword arguments are optional. Keyword arguments are:
+        `data_set` - a list of strings, data set names
+        `related` - a list of strings, tag names related to data sets
+        `by_data_set` - a boolean, True if the returned related tags are by data set. This defaults to True.
+    '''
     sess = db.session
 
     related_1 = aliased(Tag, name='t')
@@ -87,17 +97,20 @@ def build_related_request(requested, related_requested, data_set=None, related=N
     return query
 
 
-def build_tag_graphql_response(related_dict=dict(), sample_dict=dict()):
+def build_tag_graphql_response(publication_dict=dict(), related_dict=dict(), sample_dict=dict()):
     def f(tag):
         if not tag:
             return None
         tag_id = get_value(tag, 'id')
+        publications = publication_dict.get(
+            tag_id, []) if publication_dict else []
         related = related_dict.get(tag_id, []) if related_dict else []
         samples = sample_dict.get(tag_id, []) if sample_dict else []
         return {
             'characteristics': get_value(tag, 'characteristics'),
             'color': get_value(tag, 'color'),
             'longDisplay': get_value(tag, 'tag_long_display') or get_value(tag, 'long_display'),
+            'publications': map(build_publication_graphql_response, publications),
             'name': get_value(tag, 'tag_name') or get_value(tag, 'name'),
             'related': [build_tag_graphql_response()(r) for r in related],
             'sampleCount': get_value(tag, 'sample_count'),
@@ -107,11 +120,22 @@ def build_tag_graphql_response(related_dict=dict(), sample_dict=dict()):
     return f
 
 
-def build_tag_request(requested, data_set=None, feature=None, feature_class=None,
-                      related=None, sample=None, tag=None, get_samples=False):
-    """
+def build_tag_request(
+        requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None):
+    '''
     Builds a SQL request.
-    """
+
+    All positional arguments are required. Positional arguments are:
+        1st position - a set of the requested fields at the root of the graphql request.
+
+    All keyword arguments are optional. Keyword arguments are:
+        `data_set` - a list of strings, data set names
+        `feature` - a list of strings, feature names
+        `feature_class` - a list of strings, feature class names
+        `related` - a list of strings, tag names related to data sets
+        `sample` - a list of strings, sample names
+        `tag` - a list of strings, tag names related to samples
+    '''
     sess = db.session
 
     tag_1 = aliased(Tag, name='t')
@@ -135,7 +159,7 @@ def build_tag_request(requested, data_set=None, feature=None, feature_class=None
     if tag:
         query = query.filter(tag_1.name.in_(tag))
 
-    if data_set or feature or feature_class or related or sample or get_samples or ('sampleCount' in requested):
+    if data_set or feature or feature_class or related or sample or ('sampleCount' in requested):
         sample_1 = aliased(Sample, name='s')
         data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
 
@@ -227,10 +251,62 @@ def build_tag_request(requested, data_set=None, feature=None, feature_class=None
     return query
 
 
-def get_related(requested, related_requested, tag_ids=set()):
-    has_related = 'related' in requested
+def get_publications(requested, publications_requested, tag_ids=set()):
+    if 'publications' in requested:
+        sess = db.session
 
-    if has_related:
+        pub_1 = aliased(Publication, name='p')
+        tag_1 = aliased(Tag, name='t')
+        tag_to_pub_1 = aliased(TagToPublication, name='tp')
+
+        core_field_mapping = {'doId': pub_1.do_id.label('do_id'),
+                              'firstAuthorLastName': pub_1.first_author_last_name.label('first_author_last_name'),
+                              'journal': pub_1.journal.label('journal'),
+                              'name': pub_1.name.label('name'),
+                              'pubmedId': pub_1.pubmed_id.label('pubmed_id'),
+                              'title': pub_1.title.label('title'),
+                              'year': pub_1.year.label('year')}
+
+        core = get_selected(publications_requested, core_field_mapping)
+        # Always select the publication id and the tag id.
+        core |= {pub_1.id.label('id'),
+                 tag_to_pub_1.tag_id.label('tag_id')}
+
+        pub_query = sess.query(*core)
+        pub_query = pub_query.select_from(pub_1)
+
+        tag_sub_query = sess.query(tag_1.id).filter(tag_1.id.in_(tag_ids))
+
+        tag_tag_join_condition = build_join_condition(
+            tag_to_pub_1.publication_id, pub_1.id, tag_to_pub_1.tag_id, tag_sub_query)
+        pub_query = pub_query.join(
+            tag_to_pub_1, and_(*tag_tag_join_condition))
+
+        order = []
+        append_to_order = order.append
+        if 'name' in publications_requested:
+            append_to_order(pub_1.name)
+        if 'pubmedId' in publications_requested:
+            append_to_order(pub_1.pubmed_id)
+        if 'doId' in publications_requested:
+            append_to_order(pub_1.do_id)
+        if 'title' in publications_requested:
+            append_to_order(pub_1.title)
+        if 'firstAuthorLastName' in publications_requested:
+            append_to_order(pub_1.first_author_last_name)
+        if 'year' in publications_requested:
+            append_to_order(pub_1.year)
+        if 'journal' in publications_requested:
+            append_to_order(pub_1.journal)
+        pub_query = pub_query.order_by(*order) if order else pub_query
+
+        return pub_query.distinct().all()
+
+    return []
+
+
+def get_related(requested, related_requested, tag_ids=set()):
+    if 'related' in requested:
         sess = db.session
 
         related_tag_1 = aliased(Tag, name='rt')
@@ -282,9 +358,7 @@ def get_related(requested, related_requested, tag_ids=set()):
 
 
 def get_samples(requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag_ids=set()):
-    has_samples = 'samples' in requested
-
-    if tag_ids and has_samples:
+    if tag_ids and 'samples' in requested:
         sess = db.session
 
         data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
@@ -354,35 +428,54 @@ def get_samples(requested, data_set=None, feature=None, feature_class=None, rela
             sample_query = sample_query.join(tag_to_tag_1, and_(
                 tag_to_tag_1.tag_id == sample_to_tag_1.tag_id, tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id))
 
-        order = []
-        append_to_order = order.append
-        if 'name' in requested:
-            append_to_order(sample_1.name)
-        if not order:
-            append_to_order(sample_1.id)
-        sample_query = sample_query.order_by(*order)
+        sample_query = sample_query.order_by(sample_1.name)
 
         return sample_query.distinct().all()
 
     return []
 
 
-def request_related(requested=None, related_requested=None, data_set=None, related=None, by_data_set=True):
+def request_related(requested, related_requested, **kwargs):
+    '''
+    All positional arguments are required. Positional arguments are:
+        1st position - a set of the requested fields at the root of the graphql request. The request is typically made for data set values with a 'related' child node.
+        2nd position - a set of the requested fields in the 'related' node of the graphql request. If 'related' is not requested, this will be an empty set.
+
+    All keyword arguments are optional. Keyword arguments are:
+        `data_set` - a list of strings, data set names
+        `related` - a list of strings, tag names related to data sets
+        `by_data_set` - a boolean, True if the returned related tags are by data set.
+    '''
     query = build_related_request(
-        requested=requested, related_requested=related_requested, data_set=data_set, related=related, by_data_set=by_data_set)
+        requested, related_requested, **kwargs)
 
     return query.distinct().all()
 
 
-def request_tags(requested, data_set=None, feature=None, feature_class=None,
-                 related=None, sample=None, tag=None, get_samples=False):
-    query = build_tag_request(requested, data_set=data_set, feature=feature, feature_class=feature_class,
-                              related=related, sample=sample, tag=tag, get_samples=get_samples)
+def request_tags(requested, **kwargs):
+    '''
+    All keyword arguments are optional. Keyword arguments are:
+        `data_set` - a list of strings, data set names
+        `feature` - a list of strings, feature names
+        `feature_class` - a list of strings, feature class names
+        `related` - a list of strings, tag names related to data sets
+        `sample` - a list of strings, sample names
+        `tag` - a list of strings, tag names related to samples
+    '''
+    query = build_tag_request(requested, **kwargs)
 
     return query.distinct().all()
 
 
-def return_tag_derived_fields(requested, related_requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None, tag_ids=None):
+def return_tag_derived_fields(requested, publications_requested, related_requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag_ids=None):
+    publications = get_publications(
+        requested, publications_requested, tag_ids=tag_ids)
+
+    publication_dict = dict()
+    for key, collection in groupby(publications, key=lambda r: r.tag_id):
+        publication_dict[key] = publication_dict.get(
+            key, []) + list(collection)
+
     related_tags = get_related(requested, related_requested, tag_ids=tag_ids)
 
     related_dict = dict()
@@ -396,4 +489,4 @@ def return_tag_derived_fields(requested, related_requested, data_set=None, featu
     for key, collection in groupby(samples, key=lambda s: s.tag_id):
         sample_dict[key] = sample_dict.get(key, []) + list(collection)
 
-    return (related_dict, sample_dict)
+    return (publication_dict, related_dict, sample_dict)

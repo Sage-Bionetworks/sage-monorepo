@@ -9,8 +9,10 @@ related_fields = ['copy_number_results',
                   'driver_results',
                   'node_tag_assoc',
                   'nodes',
+                  'publications',
                   'related_tags',
                   'sample_tag_assoc',
+                  'tag_publication_assoc',
                   'samples',
                   'tags']
 

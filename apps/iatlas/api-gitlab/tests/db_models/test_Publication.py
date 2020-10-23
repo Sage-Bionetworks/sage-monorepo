@@ -8,6 +8,11 @@ def publication():
     return '10.1016/j.immuni.2013.07.012_23890059'
 
 
+@pytest.fixture(scope='module')
+def publication_with_tags():
+    return '10.1016/j.cell.2015.10.025_NA'
+
+
 def test_publication_with_genes(app, publication):
     query = return_publication_query('genes')
     result = query.filter_by(name=publication).one_or_none()
@@ -51,6 +56,41 @@ def test_publication_with_publication_gene_gene_type_assoc(app, publication):
     # Don't need to iterate through every result.
     for publication_gene_gene_type_rel in result.publication_gene_gene_type_assoc[0:2]:
         assert publication_gene_gene_type_rel.publication_id == result.id
+
+
+def test_publication_with_tag_publication_assoc(app, publication_with_tags):
+    query = return_publication_query('tag_publication_assoc')
+    result = query.filter_by(name=publication_with_tags).one_or_none()
+
+    assert result
+    assert isinstance(result.tag_publication_assoc, list)
+    assert len(result.tag_publication_assoc) > 0
+    # Don't need to iterate through every result.
+    for tag_publication_rel in result.tag_publication_assoc[0:2]:
+        assert tag_publication_rel.publication_id == result.id
+
+
+def test_publication_with_tags(app, publication_with_tags):
+    query = return_publication_query('tags')
+    result = query.filter_by(name=publication_with_tags).one_or_none()
+
+    assert result
+    assert isinstance(result.tags, list)
+    assert len(result.tags) > 0
+    # Don't need to iterate through every result.
+    for tag in result.tags[0:5]:
+        assert type(tag.name) is str
+    assert result.genes == []
+    assert result.gene_types == []
+    assert result.publication_gene_gene_type_assoc == []
+    assert result.name == publication_with_tags
+    assert type(result.do_id) is str or NoneType
+    assert type(result.first_author_last_name) is str or NoneType
+    assert type(result.journal) is str or NoneType
+    assert type(result.pubmed_id) is int or NoneType
+    assert type(result.title) is str or NoneType
+    assert type(result.year) is int or NoneType
+    assert repr(result) == '<Publication %r>' % publication_with_tags
 
 
 def test_publication_no_relations(app, publication):

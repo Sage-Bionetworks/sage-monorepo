@@ -3,11 +3,19 @@ from api.database import return_node_to_tag_query
 
 
 @pytest.fixture(scope='module')
-def node_id():
-    return 1
+def nt_node():
+    return 'tcga_ecn_13857'
 
 
-def test_NodeToTag_with_relations(app, node_id):
+@pytest.fixture(scope='module')
+def node_id(test_db, nt_node):
+    from api.db_models import Node
+    (id, ) = test_db.session.query(Node.id).filter_by(
+        name=nt_node).one_or_none()
+    return id
+
+
+def test_NodeToTag_with_relations(app, nt_node, node_id):
     string_representation_list = []
     separator = ', '
     relationships_to_load = ['nodes', 'tags']
@@ -25,6 +33,7 @@ def test_NodeToTag_with_relations(app, node_id):
         # Don't need to iterate through every result.
         for node in result.nodes[0:2]:
             assert node.id == node_id
+            assert node.name == nt_node
         assert isinstance(result.tags, list)
         assert len(result.tags) > 0
         # Don't need to iterate through every result.

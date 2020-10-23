@@ -4,17 +4,25 @@ from api.database import return_node_query
 
 
 @pytest.fixture(scope='module')
-def gene_id():
-    return 4606
+def node_entrez(test_db):
+    return 5817
 
 
-def test_Node_with_relations(app, gene_id):
+@pytest.fixture(scope='module')
+def node_gene_id(test_db, node_entrez):
+    from api.db_models import Gene
+    (id, ) = test_db.session.query(Gene.id).filter_by(
+        entrez=node_entrez).one_or_none()
+    return id
+
+
+def test_Node_with_relations(app, node_entrez, node_gene_id):
     string_representation_list = []
     separator = ', '
 
     relationships_to_load = ['data_set', 'gene', 'feature']
     query = return_node_query(*relationships_to_load)
-    results = query.filter_by(gene_id=gene_id).limit(3).all()
+    results = query.filter_by(gene_id=node_gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
@@ -23,15 +31,15 @@ def test_Node_with_relations(app, gene_id):
         string_representation_list.append(string_representation)
         if result.data_set:
             assert result.data_set.id == result.dataset_id
-        if result.gene:
-            assert result.gene.id == result.gene_id
+        assert result.gene.entrez == node_entrez
+        assert result.gene.id == result.gene_id
         if result.feature:
             assert result.feature.id == result.feature_id
         assert result.edges_primary == []
         assert result.edges_secondary == []
         assert result.node_tag_assoc == []
         assert result.tags == []
-        assert result.gene_id == gene_id
+        assert result.gene_id == node_gene_id
         assert type(result.feature_id) is NoneType
         assert type(result.name) is str
         assert type(result.label) is str or NoneType
@@ -43,9 +51,9 @@ def test_Node_with_relations(app, gene_id):
         string_representation_list) + ']'
 
 
-def test_Node_with_node_tag_assoc(app, gene_id):
+def test_Node_with_node_tag_assoc(app, node_gene_id):
     query = return_node_query('node_tag_assoc')
-    result = query.filter_by(gene_id=gene_id).first()
+    result = query.filter_by(gene_id=node_gene_id).first()
 
     if result.node_tag_assoc:
         assert isinstance(result.node_tag_assoc, list)
@@ -54,9 +62,9 @@ def test_Node_with_node_tag_assoc(app, gene_id):
             assert node_tag_rel.node_id == result.id
 
 
-def test_Node_with_edges_primary(app, gene_id):
+def test_Node_with_edges_primary(app, node_gene_id):
     query = return_node_query('edges_primary')
-    result = query.filter_by(gene_id=gene_id).first()
+    result = query.filter_by(gene_id=node_gene_id).first()
 
     if result.edges_primary:
         assert isinstance(result.edges_primary, list)
@@ -65,9 +73,9 @@ def test_Node_with_edges_primary(app, gene_id):
             assert edge_primary.node_1_id == result.id
 
 
-def test_Node_with_edges_secondary(app, gene_id):
+def test_Node_with_edges_secondary(app, node_gene_id):
     query = return_node_query('edges_secondary')
-    result = query.filter_by(gene_id=gene_id).first()
+    result = query.filter_by(gene_id=node_gene_id).first()
 
     if result.edges_secondary:
         assert isinstance(result.edges_secondary, list)
@@ -76,9 +84,9 @@ def test_Node_with_edges_secondary(app, gene_id):
             assert edge_secondary.node_2_id == result.id
 
 
-def test_Node_with_tags(app, gene_id):
+def test_Node_with_tags(app, node_gene_id):
     query = return_node_query('tags')
-    result = query.filter_by(gene_id=gene_id).first()
+    result = query.filter_by(gene_id=node_gene_id).first()
 
     if result.tags:
         assert isinstance(result.tags, list)
@@ -87,9 +95,9 @@ def test_Node_with_tags(app, gene_id):
             assert type(tag.name) is str
 
 
-def test_Node_no_relations(app, gene_id):
+def test_Node_no_relations(app, node_gene_id):
     query = return_node_query()
-    results = query.filter_by(gene_id=gene_id).limit(3).all()
+    results = query.filter_by(gene_id=node_gene_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
@@ -101,7 +109,7 @@ def test_Node_no_relations(app, gene_id):
         assert result.tags == []
         assert type(result.id) is int
         assert type(result.dataset_id) is int or NoneType
-        assert result.gene_id == gene_id
+        assert result.gene_id == node_gene_id
         assert type(result.feature_id) is NoneType
         assert type(result.name) is str
         assert type(result.label) is str or NoneType

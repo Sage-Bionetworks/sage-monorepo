@@ -9,7 +9,7 @@ def resolve_related(_obj, info, dataSet=None, related=None):
         info, simple_tag_request_fields, child_node='related')
 
     related_results = request_related(
-        requested=requested, related_requested=related_requested, data_set=dataSet, related=related)
+        requested, related_requested, data_set=dataSet, related=related)
 
     data_set_dict = dict()
     for key, tag_list in groupby(related_results, key=lambda r: r.data_set):
