@@ -210,6 +210,37 @@ germline_gwas_server <- function(id, cohort_obj){
           )
       })
 
+   output$clicked <- renderUI({
+     shiny::req(don(), axisdf())
+        eventdata <- plotly::event_data( "plotly_click", source = "gwas_mht")
+
+        shiny::validate(
+          shiny::need(!is.null(eventdata),
+                      "Click manhattan plot to select a SNP."))
+
+        x_pos <- eventdata$x
+        y_pos <- round(eventdata$y, 2)
+
+        check_df <- don()
+        check_df$log10p <- round(check_df$log10p, 2)
+
+        clicked_snp <- check_df %>%
+          dplyr::filter(BPcum == x_pos & log10p  == y_pos)
+
+        #creating the links for external sources
+        dbsnp <- paste0("https://www.ncbi.nlm.nih.gov/snp/", clicked_snp$snp_id)
+        gwascat <- paste0("https://www.ebi.ac.uk/gwas/search?query=", clicked_snp$snp_id)
+
+
+        p(
+          paste("Selected SNP:", clicked_snp$snp_id, ". View more SNP information at \n"),
+          tags$a(href = dbsnp, "dbSNP, "),
+          tags$a(href = gwascat, "GWAS Catalog")
+        )
+
+
+      })
+
     }
   )
 }

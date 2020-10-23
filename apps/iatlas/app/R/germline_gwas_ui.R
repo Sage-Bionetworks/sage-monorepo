@@ -38,7 +38,8 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
           plotBox(
             width = 12,
             plotly::plotlyOutput(ns("mht_plot"), height = "400px") %>%
-              shinycssloaders::withSpinner(.)
+              shinycssloaders::withSpinner(.),
+            shiny::uiOutput(ns("clicked"))
           ),
           shiny::conditionalPanel(paste0("input['", ns("selection"), "'] == 'Select a region'"),
                                   messageBox(
