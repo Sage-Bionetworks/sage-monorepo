@@ -67,8 +67,9 @@ query DriverResults(
 }
 """
 
+
 @pytest.fixture(scope='module')
-def feature_name():
+def dr_feature():
     return 'Module11_Prolif_score'
 
 
@@ -83,7 +84,7 @@ def mutation_code():
 
 
 @pytest.fixture(scope='module')
-def tag_name():
+def dr_tag_name():
     return 'BLCA'
 
 
@@ -198,6 +199,8 @@ def min_n_wt():
     return 383
 
 # Test that forward cursor pagination gives us the expected paginInfo
+
+
 def test_driverResults_cursor_pagination_first(client, common_query_builder):
     query = common_query_builder("""{
             items {
@@ -218,7 +221,7 @@ def test_driverResults_cursor_pagination_first(client, common_query_builder):
     num = 10
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'paging': {'first': num }
+            'paging': {'first': num}
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -231,8 +234,9 @@ def test_driverResults_cursor_pagination_first(client, common_query_builder):
     assert paging['hasNextPage'] == True
     assert paging['hasPreviousPage'] == False
     assert start == items[0]['id']
-    assert end == items[num-1]['id']
+    assert end == items[num - 1]['id']
     assert int(end) - int(start) > 0
+
 
 def test_driverResults_cursor_pagination_last(client, common_query_builder):
     query = common_query_builder("""{
@@ -270,7 +274,8 @@ def test_driverResults_cursor_pagination_last(client, common_query_builder):
     assert paging['hasNextPage'] == False
     assert paging['hasPreviousPage'] == True
     assert start == items[0]['id']
-    assert end == items[num-1]['id']
+    assert end == items[num - 1]['id']
+
 
 def test_driverResults_cursor_distinct_pagination(client, common_query):
     page_num = 2
@@ -292,12 +297,13 @@ def test_driverResults_cursor_distinct_pagination(client, common_query):
     assert len(items) == num
     assert page_num == page['paging']['page']
 
-def test_driverResults_query_with_passed_data_set_entrez_feature_and_tag(client, common_query, data_set, feature_name, gene_entrez, tag_name):
+
+def test_driverResults_query_with_passed_data_set_entrez_feature_and_tag(client, common_query, data_set, dr_feature, gene_entrez, dr_tag_name):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
         'entrez': [gene_entrez],
-        'feature': [feature_name],
-        'tag': [tag_name]
+        'feature': [dr_feature],
+        'tag': [dr_tag_name]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -306,12 +312,13 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_and_tag(client,
     assert len(results) > 0
     for result in results[0:2]:
         assert result['dataSet']['name'] == data_set
-        assert result['feature']['name'] == feature_name
+        assert result['feature']['name'] == dr_feature
         assert result['gene']['entrez'] == gene_entrez
         assert type(result['mutationCode']) is str
-        assert result['tag']['name'] == tag_name
+        assert result['tag']['name'] == dr_tag_name
 
-def test_driverResults_query_returns_mutationId(client, common_query_builder, data_set, feature_name, gene_entrez, tag_name):
+
+def test_driverResults_query_returns_mutationId(client, common_query_builder, data_set, dr_feature, gene_entrez, dr_tag_name):
     query = common_query_builder("""{
             items {
                 gene { entrez }
@@ -322,8 +329,8 @@ def test_driverResults_query_returns_mutationId(client, common_query_builder, da
     response = client.post('/api', json={'query': query, 'variables': {
         'dataSet': [data_set],
         'entrez': [gene_entrez],
-        'feature': [feature_name],
-        'tag': [tag_name]
+        'feature': [dr_feature],
+        'tag': [dr_tag_name]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -336,11 +343,11 @@ def test_driverResults_query_returns_mutationId(client, common_query_builder, da
         assert type(result['mutationCode']) is str
 
 
-def test_driverResults_query_with_passed_data_set_entrez_feature_and_mutation(client, common_query, data_set, feature_name, gene_entrez, mutation_code):
+def test_driverResults_query_with_passed_data_set_entrez_feature_and_mutation(client, common_query, data_set, dr_feature, gene_entrez, mutation_code):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
         'entrez': [gene_entrez],
-        'feature': [feature_name],
+        'feature': [dr_feature],
         'mutationCode': [mutation_code]
     }})
     json_data = json.loads(response.data)
@@ -350,18 +357,18 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_and_mutation(cl
     assert len(results) > 0
     for result in results[0:2]:
         assert result['dataSet']['name'] == data_set
-        assert result['feature']['name'] == feature_name
+        assert result['feature']['name'] == dr_feature
         assert result['gene']['entrez'] == gene_entrez
         assert result['mutationCode'] == mutation_code
         assert type(result['tag']['name']) is str
 
 
-def test_driverResults_query_with_passed_data_set_entrez_mutation_code_and_tag(client, common_query, data_set, gene_entrez, mutation_code, tag_name):
+def test_driverResults_query_with_passed_data_set_entrez_mutation_code_and_tag(client, common_query, data_set, gene_entrez, mutation_code, dr_tag_name):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
         'entrez': [gene_entrez],
         'mutationCode': [mutation_code],
-        'tag': [tag_name]
+        'tag': [dr_tag_name]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -373,15 +380,15 @@ def test_driverResults_query_with_passed_data_set_entrez_mutation_code_and_tag(c
         assert type(result['feature']['name']) is str
         assert result['gene']['entrez'] == gene_entrez
         assert result['mutationCode'] == mutation_code
-        assert result['tag']['name'] == tag_name
+        assert result['tag']['name'] == dr_tag_name
 
 
-def test_driverResults_query_with_passed_data_set_feature_mutation_code_and_tag(client, common_query, data_set, feature_name, mutation_code, tag_name):
+def test_driverResults_query_with_passed_data_set_feature_mutation_code_and_tag(client, common_query, data_set, dr_feature, mutation_code, dr_tag_name):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
-        'feature': [feature_name],
+        'feature': [dr_feature],
         'mutationCode': [mutation_code],
-        'tag': [tag_name]
+        'tag': [dr_tag_name]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -390,19 +397,19 @@ def test_driverResults_query_with_passed_data_set_feature_mutation_code_and_tag(
     assert len(results) > 0
     for result in results[0:2]:
         assert result['dataSet']['name'] == data_set
-        assert result['feature']['name'] == feature_name
+        assert result['feature']['name'] == dr_feature
         assert type(result['gene']['entrez']) is int
         assert result['mutationCode'] == mutation_code
-        assert result['tag']['name'] == tag_name
+        assert result['tag']['name'] == dr_tag_name
 
 
-def test_driverResults_query_with_passed_data_set_entrez_feature_mutation_code_and_tag(client, common_query, feature_name, gene_entrez, mutation_code, tag_name):
+def test_driverResults_query_with_passed_data_set_entrez_feature_mutation_code_and_tag(client, common_query, dr_feature, gene_entrez, mutation_code, dr_tag_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'entrez': [gene_entrez],
-            'feature': [feature_name],
+            'feature': [dr_feature],
             'mutationCode': [mutation_code],
-            'tag': [tag_name]
+            'tag': [dr_tag_name]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -411,20 +418,20 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_mutation_code_a
     assert len(results) > 0
     for result in results[0:2]:
         assert type(result['dataSet']['name']) is str
-        assert result['feature']['name'] == feature_name
+        assert result['feature']['name'] == dr_feature
         assert result['gene']['entrez'] == gene_entrez
         assert result['mutationCode'] == mutation_code
-        assert result['tag']['name'] == tag_name
+        assert result['tag']['name'] == dr_tag_name
 
 
-def test_driverResults_query_with_passed_min_p_value(client, common_query, data_set, gene_entrez, feature_name, min_p_value, tag_name):
+def test_driverResults_query_with_passed_min_p_value(client, common_query, data_set, gene_entrez, dr_feature, min_p_value, dr_tag_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'dataSet': [data_set],
             'entrez': [gene_entrez],
-            'feature': [feature_name],
+            'feature': [dr_feature],
             'minPValue': min_p_value,
-            'tag': [tag_name]
+            'tag': [dr_tag_name]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -435,15 +442,15 @@ def test_driverResults_query_with_passed_min_p_value(client, common_query, data_
         assert result['pValue'] >= min_p_value
 
 
-def test_driverResults_query_with_passed_min_p_value_and_min_log10_p_value(client, common_query, data_set, gene_entrez, feature_name, min_log10_p_value, min_p_value, tag_name):
+def test_driverResults_query_with_passed_min_p_value_and_min_log10_p_value(client, common_query, data_set, gene_entrez, dr_feature, min_log10_p_value, min_p_value, dr_tag_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'dataSet': [data_set],
             'entrez': [gene_entrez],
-            'feature': [feature_name],
+            'feature': [dr_feature],
             'minLog10PValue': min_log10_p_value,
             'minPValue': min_p_value,
-            'tag': [tag_name]
+            'tag': [dr_tag_name]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -454,14 +461,14 @@ def test_driverResults_query_with_passed_min_p_value_and_min_log10_p_value(clien
         assert result['pValue'] >= min_p_value
 
 
-def test_driverResults_query_with_passed_min_log10_p_value(client, common_query, data_set, gene_entrez, feature_name, min_log10_p_value, tag_name):
+def test_driverResults_query_with_passed_min_log10_p_value(client, common_query, data_set, gene_entrez, dr_feature, min_log10_p_value, dr_tag_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'dataSet': [data_set],
             'entrez': [gene_entrez],
-            'feature': [feature_name],
+            'feature': [dr_feature],
             'minLog10PValue': min_log10_p_value,
-            'tag': [tag_name]
+            'tag': [dr_tag_name]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -472,14 +479,14 @@ def test_driverResults_query_with_passed_min_log10_p_value(client, common_query,
         assert result['log10PValue'] >= min_log10_p_value
 
 
-def test_driverResults_query_with_passed_max_p_value(client, common_query, data_set, gene_entrez, feature_name, max_p_value, tag_name):
+def test_driverResults_query_with_passed_max_p_value(client, common_query, data_set, gene_entrez, dr_feature, max_p_value, dr_tag_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'dataSet': [data_set],
             'entrez': [gene_entrez],
-            'feature': [feature_name],
+            'feature': [dr_feature],
             'maxPValue': max_p_value,
-            'tag': [tag_name]
+            'tag': [dr_tag_name]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -490,15 +497,15 @@ def test_driverResults_query_with_passed_max_p_value(client, common_query, data_
         assert result['pValue'] <= max_p_value
 
 
-def test_driverResults_query_with_passed_max_p_value_and_max_log10_p_value(client, common_query, data_set, gene_entrez, feature_name, max_log10_p_value, max_p_value, tag_name):
+def test_driverResults_query_with_passed_max_p_value_and_max_log10_p_value(client, common_query, data_set, gene_entrez, dr_feature, max_log10_p_value, max_p_value, dr_tag_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'dataSet': [data_set],
             'entrez': [gene_entrez],
-            'feature': [feature_name],
+            'feature': [dr_feature],
             'maxLog10PValue': max_log10_p_value,
             'maxPValue': max_p_value,
-            'tag': [tag_name]
+            'tag': [dr_tag_name]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -509,14 +516,14 @@ def test_driverResults_query_with_passed_max_p_value_and_max_log10_p_value(clien
         assert result['pValue'] <= max_p_value
 
 
-def test_driverResults_query_with_passed_max_log10_p_value(client, common_query, data_set, gene_entrez, feature_name, max_log10_p_value, tag_name):
+def test_driverResults_query_with_passed_max_log10_p_value(client, common_query, data_set, gene_entrez, dr_feature, max_log10_p_value, dr_tag_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'dataSet': [data_set],
             'entrez': [gene_entrez],
-            'feature': [feature_name],
+            'feature': [dr_feature],
             'maxLog10PValue': max_log10_p_value,
-            'tag': [tag_name]
+            'tag': [dr_tag_name]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -527,14 +534,14 @@ def test_driverResults_query_with_passed_max_log10_p_value(client, common_query,
         assert result['log10PValue'] <= max_log10_p_value
 
 
-def test_driverResults_query_with_passed_min_fold_change(client, common_query, data_set, gene_entrez, feature_name, min_fold_change, tag_name):
+def test_driverResults_query_with_passed_min_fold_change(client, common_query, data_set, gene_entrez, dr_feature, min_fold_change, dr_tag_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'dataSet': [data_set],
             'entrez': [gene_entrez],
-            'feature': [feature_name],
+            'feature': [dr_feature],
             'minFoldChange': min_fold_change,
-            'tag': [tag_name]
+            'tag': [dr_tag_name]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -545,15 +552,15 @@ def test_driverResults_query_with_passed_min_fold_change(client, common_query, d
         assert result['foldChange'] >= min_fold_change
 
 
-def test_driverResults_query_with_passed_min_fold_change_and_min_log10_fold_change(client, common_query, data_set, gene_entrez, feature_name, min_log10_fold_change, min_fold_change, tag_name):
+def test_driverResults_query_with_passed_min_fold_change_and_min_log10_fold_change(client, common_query, data_set, gene_entrez, dr_feature, min_log10_fold_change, min_fold_change, dr_tag_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'dataSet': [data_set],
             'entrez': [gene_entrez],
-            'feature': [feature_name],
+            'feature': [dr_feature],
             'maxLog10FoldChange': min_log10_fold_change,
             'minFoldChange': min_fold_change,
-            'tag': [tag_name]
+            'tag': [dr_tag_name]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -564,14 +571,14 @@ def test_driverResults_query_with_passed_min_fold_change_and_min_log10_fold_chan
         assert result['foldChange'] >= min_fold_change
 
 
-def test_driverResults_query_with_passed_min_log10_fold_change(client, common_query, data_set, gene_entrez, feature_name, min_log10_fold_change, tag_name):
+def test_driverResults_query_with_passed_min_log10_fold_change(client, common_query, data_set, gene_entrez, dr_feature, min_log10_fold_change, dr_tag_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'dataSet': [data_set],
             'entrez': [gene_entrez],
-            'feature': [feature_name],
+            'feature': [dr_feature],
             'minLog10FoldChange': min_log10_fold_change,
-            'tag': [tag_name]
+            'tag': [dr_tag_name]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -582,14 +589,14 @@ def test_driverResults_query_with_passed_min_log10_fold_change(client, common_qu
         assert result['log10FoldChange'] >= min_log10_fold_change
 
 
-def test_driverResults_query_with_passed_min_n_mut(client, common_query, data_set, gene_entrez, feature_name, min_n_mut, tag_name):
+def test_driverResults_query_with_passed_min_n_mut(client, common_query, data_set, gene_entrez, dr_feature, min_n_mut, dr_tag_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'dataSet': [data_set],
             'entrez': [gene_entrez],
-            'feature': [feature_name],
+            'feature': [dr_feature],
             'minNumMutants': min_n_mut,
-            'tag': [tag_name]
+            'tag': [dr_tag_name]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
@@ -600,14 +607,14 @@ def test_driverResults_query_with_passed_min_n_mut(client, common_query, data_se
         assert result['numMutants'] >= min_n_mut
 
 
-def test_driverResults_query_with_passed_min_n_wt(client, common_query, data_set, gene_entrez, feature_name, min_n_wt, tag_name):
+def test_driverResults_query_with_passed_min_n_wt(client, common_query, data_set, gene_entrez, dr_feature, min_n_wt, dr_tag_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'dataSet': [data_set],
             'entrez': [gene_entrez],
-            'feature': [feature_name],
+            'feature': [dr_feature],
             'minNumWildTypes': min_n_wt,
-            'tag': [tag_name]
+            'tag': [dr_tag_name]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']

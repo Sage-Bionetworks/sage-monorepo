@@ -10,7 +10,6 @@ def test_Gene_with_relations(app, entrez, hgnc):
                              'gene_types',
                              'immune_checkpoint',
                              'pathway',
-                             'publications',
                              'samples',
                              'super_category',
                              'therapy_type']
@@ -33,11 +32,6 @@ def test_Gene_with_relations(app, entrez, hgnc):
         assert result.immune_checkpoint.id == result.immune_checkpoint_id
     if result.pathway:
         assert result.pathway.id == result.pathway_id
-    if result.publications:
-        assert isinstance(result.publications, list)
-        # Don't need to iterate through every result.
-        for publication in result.publications[0:2]:
-            assert type(publication.pubmed_id) is int
     if result.samples:
         assert isinstance(result.samples, list)
         for sample in result.samples:
@@ -56,6 +50,21 @@ def test_Gene_with_relations(app, entrez, hgnc):
     assert type(result.pathway_id) is int or NoneType
     assert type(result.super_cat_id) is int or NoneType
     assert type(result.therapy_type_id) is int or NoneType
+    assert repr(result) == '<Gene %r>' % entrez
+
+
+def test_Gene_with_publications(app, entrez, hgnc):
+    query = return_gene_query('publications')
+    result = query.filter_by(entrez=entrez).one_or_none()
+
+    assert result
+    assert result.gene_type_assoc == []
+    assert isinstance(result.publications, list)
+    # Don't need to iterate through every result.
+    for publication in result.publications[0:2]:
+        assert type(publication.pubmed_id) is int
+    assert result.entrez == entrez
+    assert result.hgnc == hgnc
     assert repr(result) == '<Gene %r>' % entrez
 
 

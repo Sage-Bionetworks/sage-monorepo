@@ -1,71 +1,67 @@
 """
-The "Slide" type may return:
-
-- The  "entrez", the unique id of the gene to use on search engines
-- The  "hgnc", the HUGO Gene Nomenclature Committee
-- The  "description" of the gene
-- The  "friendlyName" of the gene
-- The  "ioLandscapeName" the IO Landscape Name of the gene
-- The  "geneFamily" of the gene
-- The  "geneFunction" of the gene
-- A list of "geneTypes" associated with the gene
-- The  "immuneCheckpoint" of the gene
-- The  "pathway" of the gene
-- A list of "publications" associated with the gene
-- The  "rnaSeqExpr", a list of rna sequence expressions
-- The  "superCategory" of the gene
-- The  "therapyType" of the gene
+The "Gene" type
 """
 type Gene {
+  "The unique id of the gene to use on search engines."
   entrez: Int!
+  "The HUGO Gene Nomenclature Committee."
   hgnc: String!
+  "The 'description' of the gene."
   description: String
+  "The 'friendlyName' of the gene."
   friendlyName: String
+  "The IO Landscape Name of the gene."
   ioLandscapeName: String
+  "The 'geneFamily' of the gene."
   geneFamily: String
+  "The 'geneFunction' of the gene."
   geneFunction: String
+  "A list of GeneTypes associated with the gene."
   geneTypes: [SimpleGeneType!]!
+  "The 'immuneCheckpoint' of the gene."
   immuneCheckpoint: String
+  "The 'pathway' of the gene."
   pathway: String
+  "A list of Publications associated with the gene."
   publications: [SimplePublication!]!
+  "A list of sample names and the RNA Sequence Expressions related to the gene."
   samples: [GeneRelatedSample!]!
+  "The 'superCategory' of the gene."
   superCategory: String
+  "The 'therapyType' of the gene."
   therapyType: String
 }
 
 """
-The "SimpleGene" is a version of a gene. Only basic attributes may be returned. type may return:
-
-- The  "entrez", the unique id of the gene to use on search engines
-- The  "hgnc", the HUGO Gene Nomenclature Committee
-- The  "description" of the publication
-- The  "friendlyName" of the publication
-- The  "ioLandscapeName" the IO Landscape Name of the gene
+The "SimpleGene" is a version of a gene. Only basic attributes may be returned.
 """
 type SimpleGene {
+  "The unique id of the gene to use on search engines."
   entrez: Int!
+  "The HUGO Gene Nomenclature Committee."
   hgnc: String!
+  "The 'description' of the gene."
   description: String
+  "The 'friendlyName' of the gene."
   friendlyName: String
+  "The IO Landscape Name of the gene."
   ioLandscapeName: String
 }
 
 """
-The "GenesByTag" type may return:
-
-- The "characteristics" of the gene.
-- The "color", a color to represent the gene as a hex value.
-- The "display", a friendly name for the gene.
-- A list of genes associated with that tag.
-- The "longDisplay", a long display name for the tag used in text descriptions.
-- The "shortDisplay", a friendly name for the tag (used in plots).
-- The "tag" (the name of the tag).
+The "GenesByTag" type
 """
 type GenesByTag {
+  "The 'characteristics' or description of the tag."
   characteristics: String
+  "A color to represent the tag as a hex value."
   color: String
+  "A list of Genes related to the tag."
   genes: [Gene!]!
+  "A long display name for the tag used in text descriptions."
   longDisplay: String
-  shortDisplay: String
+  "The name of the tag."
   tag: String!
+  "A friendly name for the tag (used in plots)."
+  shortDisplay: String
 }

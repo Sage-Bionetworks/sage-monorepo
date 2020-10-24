@@ -142,22 +142,23 @@ def test_Tag_with_related_tags(app, tag_name):
     assert result.name == tag_name
 
 
-def test_Tag_with_samples(app, tag_name):
-    query = return_tag_query('samples')
-    result = query.filter_by(name=tag_name).one_or_none()
+# def test_Tag_with_samples(app, tag_name):
+#     query = return_tag_query('samples')
+#     result = query.filter_by(name=tag_name).one_or_none()
 
-    assert result
-    assert isinstance(result.samples, list)
-    assert len(result.samples) > 0
-    # Don't need to iterate through every result.
-    for sample in result.samples[0:2]:
-        assert type(sample.name) is str
-    assert result.name == tag_name
-    assert type(result.characteristics) is str
-    assert type(result.color) is str or NoneType
-    assert type(result.long_display) is str or NoneType
-    assert type(result.short_display) is str or NoneType
-    assert repr(result) == '<Tag %r>' % tag_name
+
+#     assert result
+#     assert isinstance(result.samples, list)
+#     assert len(result.samples) > 0
+#     # Don't need to iterate through every result.
+#     for sample in result.samples[0:2]:
+#         assert type(sample.name) is str
+#     assert result.name == tag_name
+#     assert type(result.characteristics) is str
+#     assert type(result.color) is str or NoneType
+#     assert type(result.long_display) is str or NoneType
+#     assert type(result.short_display) is str or NoneType
+#     assert repr(result) == '<Tag %r>' % tag_name
 
 
 def test_Tag_with_tags(app, related):

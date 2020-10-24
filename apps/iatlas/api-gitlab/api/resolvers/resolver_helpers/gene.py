@@ -20,6 +20,7 @@ gene_request_fields = simple_gene_request_fields.union({'geneFamily',
                                                         'geneTypes',
                                                         'immuneCheckpoint',
                                                         'pathway',
+                                                        'publications',
                                                         'samples',
                                                         'superCategory',
                                                         'therapyType'})
@@ -63,16 +64,16 @@ def build_gene_graphql_response(pub_dict=dict(), sample_dict=dict(), gene_type_d
     return f
 
 
-def build_pub_gene_gene_type_join_condition(gene_ids, gene_types, pub_gene_gene_type_model, pub_model):
-    join_condition = [
-        pub_gene_gene_type_model.publication_id == pub_model.id, pub_gene_gene_type_model.gene_id.in_(gene_ids)]
+def build_pub_gene_gene_type_join_condition(gene_ids, gene_type, pub_gene_gene_type_model, pub_model):
+    join_condition = build_join_condition(
+        pub_gene_gene_type_model.publication_id, pub_model.id, pub_gene_gene_type_model.gene_id, gene_ids)
 
-    map_of_ids = list(map(lambda gt: gt.id, gene_types))
-    gene_type_ids = list(dict.fromkeys(map_of_ids)) if map_of_ids else None
-
-    if gene_type_ids:
+    if gene_type:
+        gene_type_1 = aliased(GeneType, name='gt')
+        gene_type_subquery = db.session.query(gene_type_1.id).filter(
+            gene_type_1.name.in_(gene_type))
         join_condition.append(
-            pub_gene_gene_type_model.gene_type_id.in_(gene_type_ids))
+            pub_gene_gene_type_model.gene_type_id.in_(gene_type_subquery))
 
     return join_condition
 
@@ -338,7 +339,6 @@ def get_publications(
         sess = db.session
 
         gene_1 = aliased(Gene, name='g')
-        gene_type_1 = aliased(GeneType, name='gt')
         pub_1 = aliased(Publication, name='p')
         pub_gene_gene_type_1 = aliased(
             PublicationToGeneToGeneType, name='pggt')
@@ -362,7 +362,7 @@ def get_publications(
             set(), set(), data_set=data_set, entrez=entrez, feature=feature, feature_class=feature_class, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type) if not gene_ids else gene_ids
 
         pub_gene_gene_type_join_condition = build_pub_gene_gene_type_join_condition(
-            gene_subquery, gene_types, pub_gene_gene_type_1, pub_1)
+            gene_subquery, gene_type, pub_gene_gene_type_1, pub_1)
         pub_query = pub_query.join(pub_gene_gene_type_1, and_(
             *pub_gene_gene_type_join_condition))
 
