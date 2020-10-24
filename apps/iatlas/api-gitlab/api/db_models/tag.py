@@ -24,8 +24,8 @@ class Tag(Base):
         'Tag', foreign_keys='TagToTag.tag_id', lazy='noload',
         secondary='tags_to_tags', back_populates='tags', uselist=True)
 
-    samples = db.relationship('Sample', lazy='noload', uselist=True,
-                              secondary='samples_to_tags')
+    samples = db.relationship(
+        'Sample', lazy='noload', uselist=True, secondary='samples_to_tags')
 
     tags = db.relationship(
         'Tag', foreign_keys='TagToTag.related_tag_id', lazy='noload',

@@ -5,7 +5,7 @@ from tests import NoneType
 
 
 @pytest.fixture(scope='module')
-def feature_name():
+def node_feature():
     return 'B_cells_Aggregate2'
 
 
@@ -121,7 +121,7 @@ def test_nodes_query_with_passed_entrez(client, common_query_builder, entrez):
         assert gene['entrez'] == entrez
 
 
-def test_nodes_query_with_passed_feature(client, common_query_builder, feature_name):
+def test_nodes_query_with_passed_feature(client, common_query_builder, node_feature):
     query = common_query_builder("""{
                                     items {
                                         name
@@ -130,7 +130,7 @@ def test_nodes_query_with_passed_feature(client, common_query_builder, feature_n
                                     page
                                 }""")
     response = client.post('/api', json={'query': query,
-                                         'variables': {'feature': [feature_name]}})
+                                         'variables': {'feature': [node_feature]}})
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
     results = page['items']
@@ -141,7 +141,7 @@ def test_nodes_query_with_passed_feature(client, common_query_builder, feature_n
     for result in results[0:2]:
         feature = result['feature']
         assert type(result['name']) is str
-        assert feature['name'] == feature_name
+        assert feature['name'] == node_feature
 
 
 def test_nodes_query_with_passed_network(client, common_query_builder, network):
@@ -274,7 +274,7 @@ def test_nodes_query_with_passed_tag_and_entrez(client, common_query_builder, en
         assert any(current_tag['name'] == tag for current_tag in tags)
 
 
-def test_nodes_query_with_passed_tag_and_feature(client, common_query_builder, feature_name, tag):
+def test_nodes_query_with_passed_tag_and_feature(client, common_query_builder, node_feature, tag):
     query = common_query_builder("""{
                                     items {
                                         name
@@ -283,7 +283,7 @@ def test_nodes_query_with_passed_tag_and_feature(client, common_query_builder, f
                                     }
                                 }""")
     response = client.post('/api', json={'query': query,
-                                         'variables': {'feature': [feature_name], 'tag': [tag]}})
+                                         'variables': {'feature': [node_feature], 'tag': [tag]}})
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
     results = page['items']
@@ -294,7 +294,7 @@ def test_nodes_query_with_passed_tag_and_feature(client, common_query_builder, f
         feature = result['feature']
         tags = result['tags']
         assert type(result['name']) is str
-        assert feature['name'] == feature_name
+        assert feature['name'] == node_feature
         assert isinstance(tags, list)
         assert len(tags) > 0
         assert any(current_tag['name'] == tag for current_tag in tags)
