@@ -14,11 +14,11 @@ class TagToTag(Base):
 
     tags = db.relationship(
         'Tag', backref=orm.backref('tag_related_assoc', uselist=True, lazy='noload'),
-        uselist=True, primaryjoin="Tag.id==TagToTag.tag_id", lazy='noload')
+        uselist=True, primaryjoin='Tag.id==TagToTag.tag_id', lazy='noload')
 
     related_tags = db.relationship(
         'Tag', backref=orm.backref('related_tag_assoc', uselist=True, lazy='noload'),
-        uselist=True, primaryjoin="Tag.id==TagToTag.related_tag_id", lazy='noload')
+        uselist=True, primaryjoin='Tag.id==TagToTag.related_tag_id', lazy='noload')
 
     def __repr__(self):
         return '<TagToTag %r>' % self.tag_id
