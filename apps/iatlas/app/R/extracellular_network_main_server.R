@@ -103,9 +103,8 @@ extracellular_network_main_server <- function(
           ns("selected_genes"),
           "Select genes of interest (optional)",
           choices = build_ecn_gene_choice_list(),
-          multiple = TRUE,
-          # selected = "geneset:extra_cellular_network"
-          selected = "geneset:immunomodulators"
+          # selected = "geneset:extra_cellular_network",
+          multiple = TRUE
         )
       })
 
@@ -115,9 +114,8 @@ extracellular_network_main_server <- function(
           ns("selected_celltypes"),
           "Select cells of interest (optional)",
           choices = build_ecn_celltype_choice_list(),
-          multiple = TRUE,
-          # selected = "All"
-          selected = "B Cells"
+          # selected = "All",
+          multiple = TRUE
         )
       })
 
@@ -161,12 +159,6 @@ extracellular_network_main_server <- function(
         get_edges(nodes(), input$concordance)
       })
 
-      scaffold <- shiny::reactive(
-        edges() %>%
-          dplyr::select("node1", "node2") %>%
-          dplyr::distinct()
-      )
-
       output$select_node_ui <- shiny::renderUI({
         shiny::selectInput(
           ns("node_selection"),
@@ -179,8 +171,12 @@ extracellular_network_main_server <- function(
         )
       })
 
+      filtered_nodes <- shiny::reactive({
+        filter_nodes(nodes(), edges())
+      })
+
       graph_json <- shiny::reactive({
-        create_graph_json(edges(), nodes())
+        create_graph_json(edges(), filtered_nodes())
       })
 
       output$cyjShiny <- cyjShiny::renderCyjShiny({
@@ -245,8 +241,36 @@ extracellular_network_main_server <- function(
       shiny::observeEvent(input$savePNGbutton, ignoreInit = TRUE, {
         file.name <- tempfile(fileext = ".png")
         shiny::savePNGtoFile(session, file.name)
-
       })
+
+      edges_output <- shiny::reactive({
+        edges() %>%
+          dplyr::select(
+            "From" = "node_display1",
+            "From (Friendly Name)" =  "node_friendly1",
+            "To" = "node_display2",
+            "To (Friendly Name)" = "node_friendly2",
+            "Group" = "tag",
+            "Concordance" = "score"
+          )
+      })
+
+      nodes_output <- shiny::reactive({
+        filtered_nodes() %>%
+          dplyr::select(
+            "Node",
+            "Friendly Name" = "FriendlyName",
+            "Type",
+            "Group",
+            "Abundance"
+          )
+      })
+
+      return(shiny::reactive(list(
+        "nodes" = nodes_output(),
+        "edges" = edges_output()
+      )))
+
     }
   )
 }

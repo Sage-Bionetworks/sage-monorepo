@@ -27,14 +27,14 @@ test_that("extracellular_network_main_server_immune_subtype", {
 
       expect_type(edges(), "list")
       expect_equal(nrow(edges()), 1)
-      expect_type(scaffold(), "list")
-      expect_equal(nrow(scaffold()), 1)
 
       expect_type(output$select_node_ui, "list")
       expect_type(graph_json(), "character")
       session$setInputs("do_layout" = "cose")
       expect_type(output$cyjShiny, "character")
 
+      result <- session$getReturned()()
+      expect_named(result, c("nodes", "edges"))
     }
   )
 })
@@ -71,14 +71,13 @@ test_that("extracellular_network_main_server_tcga_study_no_stratification", {
       expect_type(edges(), "list")
       expect_equal(nrow(edges()), 1)
 
-      expect_type(scaffold(), "list")
-      expect_equal(nrow(scaffold()), 1)
-
       expect_type(output$select_node_ui, "list")
       expect_type(graph_json(), "character")
       session$setInputs("do_layout" = "cose")
       expect_type(output$cyjShiny, "character")
 
+      result <- session$getReturned()()
+      expect_named(result, c("nodes", "edges"))
     }
   )
 })
@@ -117,13 +116,13 @@ test_that("extracellular_network_main_server_tcga_study_with_stratification", {
       expect_type(edges(), "list")
       expect_equal(nrow(edges()), 2)
 
-      expect_type(scaffold(), "list")
-      expect_equal(nrow(scaffold()), 1)
-
       expect_type(output$select_node_ui, "list")
       expect_type(graph_json(), "character")
       session$setInputs("do_layout" = "cose")
       expect_type(output$cyjShiny, "character")
+
+      result <- session$getReturned()()
+      expect_named(result, c("nodes", "edges"))
     }
   )
 })
