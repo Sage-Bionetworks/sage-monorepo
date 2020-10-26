@@ -84,7 +84,12 @@ build_tag_cohort_object <- function(dataset, samples, tag){
 #' @param group A String that is the display column of the tags table
 #' @importFrom magrittr %>%
 build_cohort_tbl_by_tag <- function(dataset, samples, tag){
-  iatlas.api.client::query_cohort_selector(dataset, tag, samples = samples) %>%
+  tbl <-
+    iatlas.api.client::query_tag_samples2(
+      datasets = dataset,
+      parent_tags = tag,
+      samples = samples
+    ) %>%
     dplyr::select(
       "name" = "long_display",
       "group" = "short_display",

@@ -30,8 +30,8 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       tags <- shiny::reactive({
         iatlas.api.client::query_tags(
-          cohort_obj()$dataset,
-          cohort_obj()$group_name
+          datasets = cohort_obj()$dataset,
+          parent_tags = cohort_obj()$group_name
         ) %>%
           dplyr::pull("name")
       })
