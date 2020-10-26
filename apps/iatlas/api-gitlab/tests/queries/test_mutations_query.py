@@ -1,6 +1,7 @@
 import json
 import pytest
 from tests import NoneType
+from api.db_models import DatasetToSample, Sample
 
 
 @pytest.fixture(scope='module')
@@ -33,6 +34,7 @@ def sample_name():
 def common_query_builder():
     def f(query_fields):
         return """query Mutations(
+            $dataSet: [String!]
             $entrez: [Int!]
             $mutationCode: [String!]
             $mutationId: [Int!]
@@ -41,6 +43,7 @@ def common_query_builder():
             $status: [StatusEnum!]
         ) {
             mutations(
+                dataSet: $dataSet
                 entrez: $entrez
                 mutationCode: $mutationCode
                 mutationId: $mutationId
@@ -51,7 +54,7 @@ def common_query_builder():
     return f
 
 
-def test_mutations_query_with_passed_mutation_id(client, common_query_builder, mutation_id):
+def test_mutations_query_with_mutationId(client, common_query_builder, mutation_id):
     query = common_query_builder("""{ id }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {'mutationId': [mutation_id]}})
@@ -65,7 +68,7 @@ def test_mutations_query_with_passed_mutation_id(client, common_query_builder, m
         assert mutation['id'] == mutation_id
 
 
-def test_mutations_query_with_passed_entrez(client, common_query_builder, gene_entrez):
+def test_mutations_query_with_entrez(client, common_query_builder, gene_entrez):
     query = common_query_builder("""{
                                     id
                                     gene { entrez }
@@ -92,7 +95,7 @@ def test_mutations_query_with_passed_entrez(client, common_query_builder, gene_e
             assert type(sample['name']) is str
 
 
-def test_mutations_query_with_passed_mutation_code(client, common_query_builder, mutation_code):
+def test_mutations_query_with_mutationCode(client, common_query_builder, mutation_code):
     query = common_query_builder("""{
                                     id
                                     mutationCode
@@ -109,7 +112,7 @@ def test_mutations_query_with_passed_mutation_code(client, common_query_builder,
         assert mutation['mutationCode'] == mutation_code
 
 
-def test_mutations_query_with_passed_mutation_type(client, common_query_builder, mutation_type):
+def test_mutations_query_with_mutationType(client, common_query_builder, mutation_type):
     query = common_query_builder("""{
                                     id
                                     mutationType { name }
@@ -126,7 +129,7 @@ def test_mutations_query_with_passed_mutation_type(client, common_query_builder,
         assert mutation['mutationType']['name'] == mutation_type
 
 
-def test_mutations_query_with_passed_sample(client, common_query_builder, sample_name):
+def test_mutations_query_with_sample(client, common_query_builder, sample_name):
     query = common_query_builder("""{
                                     id
                                     samples { name }
@@ -147,7 +150,7 @@ def test_mutations_query_with_passed_sample(client, common_query_builder, sample
             assert current_sample['name'] == sample_name
 
 
-def test_mutations_query_with_passed_sample_and_status(client, common_query_builder, sample_name, mutation_status):
+def test_mutations_query_with_sample_and_status(client, common_query_builder, sample_name, mutation_status):
     query = common_query_builder("""{
                                     id
                                     samples {
@@ -182,3 +185,29 @@ def test_mutations_query_with_no_variables(client, common_query_builder):
     assert len(mutations) > 0
     for mutation in mutations[0:2]:
         assert type(mutation['id']) is int
+
+
+def test_mutations_query_with_dataSet(client, common_query_builder, data_set, data_set_id, mutation_status, test_db):
+    query = common_query_builder("""{
+                                    id
+                                    samples { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'dataSet': [data_set], 'status': [mutation_status]}})
+    json_data = json.loads(response.data)
+    mutations = json_data['data']['mutations']
+
+    sample_name_results = test_db.session.query(Sample.name).select_from(DatasetToSample).filter_by(
+        dataset_id=data_set_id).join(Sample, Sample.id == DatasetToSample.sample_id).all()
+    sample_names_in_data_set = list(map(lambda s: s.name, sample_name_results))
+
+    assert isinstance(mutations, list)
+    assert len(mutations) > 0
+    for mutation in mutations[0:2]:
+        samples = mutation['samples']
+        assert type(mutation['id']) is int
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample['name']) is str
+            assert current_sample['name'] in sample_names_in_data_set

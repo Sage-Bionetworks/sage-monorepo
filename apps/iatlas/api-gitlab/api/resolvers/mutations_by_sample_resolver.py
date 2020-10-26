@@ -18,11 +18,11 @@ def resolve_mutations_by_sample(_obj, info, dataSet=None, entrez=None, feature=N
         selection_set=selection_set, requested_field_mapping=mutation_type_request_fields, child_node='mutationType')
 
     mutation_dict = dict()
-    mutation_results = None
+    mutation_results = []
 
     if 'mutations' in sample_requested:
         kwargs = {
-            "data_set": dataSet, "entrez": entrez, "feature": feature, "feature_class": featureClass, "mutation_code": mutationCode, "mutation_id": mutationId, "mutation_type": mutationType, "related": related, "sample": sample, "status": status, "tag": tag, "by_sample": True}
+            'data_set': dataSet, 'entrez': entrez, 'feature': feature, 'feature_class': featureClass, 'mutation_code': mutationCode, 'mutation_id': mutationId, 'mutation_type': mutationType, 'related': related, 'sample': sample, 'status': status, 'tag': tag, 'by_sample': True}
 
         mutation_results = build_mutation_request(
             requested, gene_requested, mutation_type_requested, sample_requested, **kwargs).distinct().paginate(page, 100000, False)
