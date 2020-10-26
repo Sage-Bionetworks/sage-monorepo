@@ -103,12 +103,15 @@ type Query {
   If no arguments are passed, this will return all edges (please note, there will be a LOT of results).
   """
   edges(
+    "An instance of PagingInput (see PagingInput)"
+    paging: PagingInput
+    "A boolean specifying whether or not duplicates should be filtered out. Default is false. Set to 'true' only when necessary, as it negatively impacts performance."
+    distinct: Boolean
     maxScore: Float
     minScore: Float
     node1: [String!]
     node2: [String!]
-    page: Int
-  ): EdgePage!
+  ): EdgeResult!
 
   """
   The "features" query accepts:

@@ -3,6 +3,7 @@ from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import Dataset, DatasetToTag, Edge, Feature, Node, NodeToTag, Tag
+from .paging_utils import get_cursor, get_pagination_queries, Paging
 from .general_resolvers import build_join_condition, get_selected, get_value
 
 edge_request_fields = {'label',
@@ -14,6 +15,7 @@ edge_request_fields = {'label',
 
 def build_edge_graphql_response(edge):
     return {
+        'id': get_value(edge, 'id'),
         'label': get_value(edge, 'label'),
         'name': get_value(edge, 'name'),
         'node1': {
@@ -34,7 +36,7 @@ def build_edge_graphql_response(edge):
     }
 
 
-def build_edge_request(requested, node_1_requested, node_2_requested, max_score=None, min_score=None, node_start=None, node_end=None,):
+def build_edge_request(requested, node_1_requested, node_2_requested, distinct=False, max_score=None, min_score=None, node_start=None, node_end=None, paging=None):
     '''
     Builds a SQL request.
 
@@ -50,7 +52,9 @@ def build_edge_request(requested, node_1_requested, node_2_requested, max_score=
     node_1 = aliased(Node, name='n1')
     node_2 = aliased(Node, name='n2')
 
-    core_field_mapping = {'label': edge_1.label.label('label'),
+    core_field_mapping = {
+                          'id': edge_1.id.label('id'),
+                          'label': edge_1.label.label('label'),
                           'name': edge_1.name.label('name'),
                           'score': edge_1.score.label('score')}
     node_1_core_field_mapping = {'label': node_1.label.label('n1_label'),
@@ -87,16 +91,4 @@ def build_edge_request(requested, node_1_requested, node_2_requested, max_score=
             node_2.id, edge_1.node_2_id, node_2.name, node_end)
         query = query.join(node_2, and_(*node_start_join_condition))
 
-    order = []
-    append_to_order = order.append
-    if 'name' in requested:
-        append_to_order(edge_1.name)
-    if 'label' in requested:
-        append_to_order(edge_1.label)
-    if 'score' in requested:
-        append_to_order(edge_1.score)
-    if not order:
-        append_to_order(edge_1.id)
-    query = query.order_by(*order)
-
-    return query.distinct()
+    return get_pagination_queries(query, paging, distinct, cursor_field=edge_1.id)
