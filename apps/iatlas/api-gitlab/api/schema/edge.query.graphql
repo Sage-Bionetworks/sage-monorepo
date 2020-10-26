@@ -7,27 +7,29 @@ The "Edge" type may return:
 - "node1", the starting node in the Edge
 - "node2", the ending node in the Edge
 """
-type Edge {
-    label: String
-    name: String!
-    score: Float
-    node1: SimpleNode!
-    node2: SimpleNode!
+type Edge implements BaseNode {
+  id: ID
+  label: String
+  name: String!
+  score: Float
+  node1: SimpleNode!
+  node2: SimpleNode!
 }
 
 """
-The "EdgePage" type may return:
+The "EdgeResult" type may return:
 
-- "items", a list of returned Edges
-- "page", the current page of returned Edges (a maximum 100,000 of row returned in a page)
-- "pages", the total number of pages available
-- "total", the total number of results (all pages summed).
+- "items", a list of returned EdgeNodes.
+- "paging", object containing pagination metadata.
+- "error", a string error, if applicable.
 
 See `Edge`
 """
-type EdgePage {
-    items: [Edge!]!
-    page: Int!
-    pages: Int!
-    total: Int!
+type EdgeResult implements BaseResult {
+  "A Paging object (see Paging)"
+  paging: Paging
+  "A string describing any error that may have occurred."
+  error: String
+  "A list of returned DriverResultNodes"
+  items: [Edge]
 }
