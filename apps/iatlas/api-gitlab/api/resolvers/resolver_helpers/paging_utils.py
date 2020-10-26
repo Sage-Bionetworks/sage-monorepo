@@ -77,8 +77,10 @@ def paginate(query, count_query, paging, distinct, response_builder):
         'total': None
     }
 
+    print(distinct)
     if paging_type == Paging.OFFSET or distinct == True:
         page = paging.get('page', 1)
+        print('page', page)
         pageInfo['page'] = page
         # if distinct is True, paging type must be OFFSET
         pageInfo['type'] = Paging.OFFSET
