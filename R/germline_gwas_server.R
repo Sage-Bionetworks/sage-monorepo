@@ -229,12 +229,13 @@ germline_gwas_server <- function(id, cohort_obj){
 
         #creating the links for external sources
         dbsnp <- paste0("https://www.ncbi.nlm.nih.gov/snp/", clicked_snp$snp_id)
+        gtex <- paste0("https://gtexportal.org/home/snp/", clicked_snp$snp_id)
         gwascat <- paste0("https://www.ebi.ac.uk/gwas/search?query=", clicked_snp$snp_id)
-
 
         p(
           paste("Selected SNP:", clicked_snp$snp_id, ". View more SNP information at \n"),
           tags$a(href = dbsnp, "dbSNP, "),
+          tags$a(href = gtex, "GTEx, "),
           tags$a(href = gwascat, "GWAS Catalog")
         )
 

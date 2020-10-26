@@ -14,15 +14,15 @@ germline_heritability_ui <- function(id){
           width = 3,
           shiny::column(
             width = 12,
-            #shiny::uiOutput(ns("selectAncestry"))
-            shiny::selectizeInput(ns("ancestry"),
-                                  "Select Ancestry Cluster",
-                                  choices = c("Ad Mixed American" = "American",
-                                              "African" = "African",
-                                              "Asian" = "Asian",
-                                              "European"= "European"),
-                                  selected = "European"),
-            shiny::conditionalPanel(paste0("input['", ns("ancestry"), "'] == 'European'"),
+            shiny::selectizeInput(ns("parameter"), "Choose selection parameter",
+                                  choices = c("Ancestry" = "cluster",
+                                    "Immune Feature" = "display",
+                                    "Immune Category" = "Annot.Figure.ImmuneCategory",
+                                    "Immune Module" = "Annot.Figure.ImmuneModule"
+                                  ),
+                                  selected = "Ancestry"),
+            shiny::uiOutput(ns("selection_options")),
+            shiny::conditionalPanel(paste0("input['", ns("group"), "'] == 'European'"),
                                     shiny::checkboxInput(ns("byImmune"),
                                                          "Account for interaction betweem germline genotypes and immune subtypes")),
             shiny::sliderInput(ns("pvalue"),
@@ -34,7 +34,8 @@ germline_heritability_ui <- function(id){
                                                  "LRT p-value" = "pval",
                                                  "LRT FDR" = "FDR",
                                                  "Immune Trait Category" = "Annot.Figure.ImmuneCategory",
-                                                 "Immune Trait Module" = "Annot.Figure.ImmuneModule"
+                                                 "Immune Trait Module" = "Annot.Figure.ImmuneModule",
+                                                 "Ancestry" = "cluster"
                                                  ),
                                   selected = "Variance")
           )
