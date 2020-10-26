@@ -2,6 +2,7 @@ import json
 import pytest
 from api.database import return_sample_to_mutation_query
 from api.enums import status_enum
+from api.db_models import DatasetToSample, Sample
 from tests import NoneType
 
 
@@ -30,6 +31,7 @@ def sample_name():
 def common_query_builder():
     def f(query_fields):
         return """query MutationsBySample(
+            $dataSet: [String!]
             $entrez: [Int!]
             $mutationCode: [String!]
             $mutationId: [Int!]
@@ -39,6 +41,7 @@ def common_query_builder():
             $status: [StatusEnum!]
         ) {
             mutationsBySample(
+                dataSet: $dataSet
                 entrez: $entrez
                 mutationCode: $mutationCode
                 mutationId: $mutationId
@@ -69,7 +72,7 @@ def common_query(common_query_builder):
     }""")
 
 
-def test_mutations_by_sample_query_with_passed_sample(client, common_query, sample_name):
+def test_mutations_by_sample_query_with_sample(client, common_query, sample_name):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {'sample': [sample_name]}})
     json_data = json.loads(response.data)
@@ -93,7 +96,7 @@ def test_mutations_by_sample_query_with_passed_sample(client, common_query, samp
             assert mutation['status'] in status_enum.enums
 
 
-def test_mutations_by_sample_query_with_passed_mutation_id(client, common_query, mutation_id):
+def test_mutations_by_sample_query_with_mutationId(client, common_query, mutation_id):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {'mutationId': [mutation_id]}})
     json_data = json.loads(response.data)
@@ -145,7 +148,7 @@ def test_mutations_by_sample_query_with_no_args(client, common_query):
             assert mutation['status'] in status_enum.enums
 
 
-def test_mutations_by_sample_query_with_passed_mutation_status(client, common_query, mutation_status):
+def test_mutations_by_sample_query_with_status(client, common_query, mutation_status):
     sample_name = 'TCGA-02-0047'
     response = client.post(
         '/api', json={'query': common_query, 'variables': {'sample': [sample_name], 'status': [mutation_status]}})
@@ -170,8 +173,8 @@ def test_mutations_by_sample_query_with_passed_mutation_status(client, common_qu
             assert mutation['status'] == mutation_status
 
 
-def test_mutations_by_sample_query_with_passed_mutationId_status_and_sample(client, common_query, mutation_id,
-                                                                            mutation_status, sample_name):
+def test_mutations_by_sample_query_with_mutationId_status_and_sample(client, common_query, mutation_id,
+                                                                     mutation_status, sample_name):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'mutationId': [mutation_id],
         'mutationStatus': [mutation_status],
@@ -197,7 +200,7 @@ def test_mutations_by_sample_query_with_passed_mutationId_status_and_sample(clie
             assert mutation['status'] == mutation_status
 
 
-def test_mutations_by_sample_query_with_passed_entrez(client, common_query_builder, gene_entrez):
+def test_mutations_by_sample_query_with_entrez(client, common_query_builder, gene_entrez):
     query = common_query_builder("""{
                                     items {
                                         name
@@ -225,37 +228,38 @@ def test_mutations_by_sample_query_with_passed_entrez(client, common_query_build
             assert mutation['gene']['entrez'] == gene_entrez
 
 
-# def test_mutations_by_sample_query_with_passed_dataSet(client, common_query_builder, data_set):
-#     query = common_query_builder("""{
-#                                     items {
-#                                         name
-#                                         mutations {
-#                                             mutationCode
-#                                             status
-#                                         }
-#                                     }
-#                                     page
-#                                 }""")
-#     response = client.post(
-#         '/api', json={'query': query, 'variables': {'dataSet': [data_set]}})
-#     json_data = json.loads(response.data)
-#     page = json_data['data']['mutationsBySample']
-#     results = page['items']
+def test_mutations_by_sample_query_with_dataSet(client, common_query_builder, data_set, data_set_id, mutation_status, test_db):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        mutations { mutationCode }
+                                    }
+                                    page
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'dataSet': [data_set], 'status': [mutation_status]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['mutationsBySample']
+    results = page['items']
 
-#     assert page['page'] == 1
-#     assert isinstance(results, list)
-#     assert len(results) > 0
-#     for result in results[0:2]:
-#         mutations = result['mutations']
-#         assert type(result['name']) is str
-#         assert isinstance(mutations, list)
-#         assert len(mutations) > 0
-#         for mutation in mutations:
-#             assert (mutation['mutationCode']) is str
-#             assert mutation['status'] in status_enum.enums
+    sample_name_results = test_db.session.query(Sample.name).select_from(DatasetToSample).filter_by(
+        dataset_id=data_set_id).join(Sample, Sample.id == DatasetToSample.sample_id).all()
+    sample_names_in_data_set = list(map(lambda s: s.name, sample_name_results))
+
+    assert page['page'] == 1
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        mutations = result['mutations']
+        assert type(result['name']) is str
+        assert result['name'] in sample_names_in_data_set
+        assert isinstance(mutations, list)
+        assert len(mutations) > 0
+        for mutation in mutations[0:5]:
+            assert type(mutation['mutationCode']) is str
 
 
-# def test_mutations_by_sample_query_with_passed_related(client, common_query_builder, related):
+# def test_mutations_by_sample_query_with_related(client, common_query_builder, related):
 #     query = common_query_builder("""{
 #                                     items {
 #                                         name
@@ -285,7 +289,7 @@ def test_mutations_by_sample_query_with_passed_entrez(client, common_query_build
 #             assert mutation['status'] in status_enum.enums
 
 
-# def test_mutations_by_sample_query_with_passed_tag(client, common_query_builder, tag):
+# def test_mutations_by_sample_query_with_tag(client, common_query_builder, tag):
 #     query = common_query_builder("""{
 #                                     items {
 #                                         name
@@ -315,7 +319,7 @@ def test_mutations_by_sample_query_with_passed_entrez(client, common_query_build
 #             assert mutation['status'] in status_enum.enums
 
 
-# def test_mutations_by_sample_query_with_passed_feature(client, common_query_builder, chosen_feature):
+# def test_mutations_by_sample_query_with_feature(client, common_query_builder, chosen_feature):
 #     query = common_query_builder("""{
 #                                     items {
 #                                         name
@@ -345,7 +349,7 @@ def test_mutations_by_sample_query_with_passed_entrez(client, common_query_build
 #             assert mutation['status'] in status_enum.enums
 
 
-# def test_mutations_by_sample_query_with_passed_featureClass(client, common_query_builder, feature_class):
+# def test_mutations_by_sample_query_with_featureClass(client, common_query_builder, feature_class):
 #     query = common_query_builder("""{
 #                                     items {
 #                                         name
@@ -375,7 +379,7 @@ def test_mutations_by_sample_query_with_passed_entrez(client, common_query_build
 #             assert mutation['status'] in status_enum.enums
 
 
-def test_mutations_by_sample_query_with_passed_sample_and_mutationType(client, common_query_builder, sample_name, mutation_type):
+def test_mutations_by_sample_query_with_sample_and_mutationType(client, common_query_builder, sample_name, mutation_type):
     query = common_query_builder("""{
                                     items {
                                         name

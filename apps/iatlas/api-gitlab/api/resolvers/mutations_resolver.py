@@ -21,6 +21,6 @@ def resolve_mutations(_obj, info, dataSet=None, entrez=None, mutationCode=None, 
     mutation_ids = set(mutation.id for mutation in mutation_results)
 
     sample_dict = return_mutation_derived_fields(
-        requested, patient_requested, sample_requested, data_set=dataSet, entrez=entrez, mutation_id=mutationId, mutation_code=mutationCode, mutation_ids=mutation_ids, mutation_type=mutationType, sample=sample, status=status)
+        requested, patient_requested, sample_requested, data_set=dataSet, entrez=entrez, mutation_id=mutation_ids, mutation_code=mutationCode, mutation_type=mutationType, sample=sample, status=status)
 
     return map(build_mutation_graphql_response(sample_dict), mutation_results)

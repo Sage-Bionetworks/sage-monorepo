@@ -279,46 +279,48 @@ type Query {
   methodTags(name: [String!]): [MethodTag!]!
 
   """
-  The "mutations" query accepts:
-
-    - "entrez", a list of gene entrez ids associated with the mutations to filter by.
-    - "mutationCode", a list of mutation code names associated with the mutations to filter by.
-    - "mutationId", a list of mutation ids associated to filter by.
-    - "mutationType", a list of mutation type names associated with the mutations to filter by.
-    - "sample", a list of sample names associated with the mutations to filter by.
-    - "status", a list of statuses associated relationship between mutation and sample to filter by.
+  The "mutations" type
 
   If no arguments are passed, this will return all mutations.
   """
   mutations(
+    "A list of data set names associated with the mutations to filter by"
+    dataSet: [String!]
+    "A list of gene entrez ids associated with the mutations to filter by."
     entrez: [Int!]
+    "A list of mutation code names associated with the mutations to filter by."
     mutationCode: [String!]
+    "A list of mutation ids associated to filter by."
     mutationId: [Int!]
+    "A list of mutation type names associated with the mutations to filter by."
     mutationType: [String!]
+    "A list of sample names associated with the mutations to filter by."
     sample: [String!]
+    "A list of statuses associated relationship between mutation and sample to filter by."
     status: [StatusEnum!]
   ): [GeneMutation!]!
 
   """
-  The "mutationsBySample" query accepts:
-
-    - "entrez", a list of gene entrez associated with the mutation to filter by
-    - "mutationCode", a list of mutation codes associated with the mutation to filter by
-    - "mutationId", a list of mutation ids to filter by
-    - "mutationType", a list of mutation types associated with the mutation to filter by
-    - "sample", a list of sample names associated with the mutation to filter by
-    - "status", a list of mutation statuses to filter the mutation and samples by
-    - "page", the page of results to get. Defaults to 1 (the first page) with a maximum of 100,000 rows returned
+  The "mutationsBySample" query 
 
   If no arguments are passed, this will return all samples that have related mutations (please note, there will be a LOT of results).
   """
   mutationsBySample(
+    "A list of data set names associated with the mutations to filter by"
+    dataSet: [String!]
+    "A list of gene entrez ids associated with the mutations to filter by."
     entrez: [Int!]
+    "A list of mutation code names associated with the mutations to filter by."
     mutationCode: [String!]
+    "A list of mutation ids associated to filter by."
     mutationId: [Int!]
+    "A list of mutation type names associated with the mutations to filter by."
     mutationType: [String!]
+    "A list of sample names associated with the mutations to filter by."
     sample: [String!]
+    "A list of statuses associated relationship between mutation and sample to filter by."
     status: [StatusEnum!]
+    "The page of results to get. Defaults to 1 (the first page) with a maximum of 100,000 rows returned."
     page: Int
   ): MutationsBySamplePage!
 
