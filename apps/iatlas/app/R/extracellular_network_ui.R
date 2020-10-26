@@ -8,15 +8,9 @@ extracellular_network_ui <- function(id){
         ),
         textBox(
             width = 12,
-            paste0(
-                "Explore the extracellular networks modulating tumoral immune ",
-                "response, encompassing direct interaction among cells and ",
-                "communication via soluble proteins such as cytokines to ",
-                "mediate interactions among those cells. ",
-                "This module uses the network of documented ligand-receptor, ",
-                "cell-receptor, and cell-ligand pairs published by ",
-                "Ramilowski et al., 2015 and retrieved from FANTOM5."
-            )
+            shiny::includeMarkdown(get_markdown_path(
+              "extracellular_network"
+            ))
         ),
         sectionBox(
             title = "Extracellular networks",

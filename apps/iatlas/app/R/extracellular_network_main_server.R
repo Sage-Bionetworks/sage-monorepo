@@ -12,12 +12,13 @@ extracellular_network_main_server <- function(
 
       ns <- session$ns
 
-      show_stratify_option <- shiny::reactive(
+      show_stratify_option <- shiny::reactive({
+        shiny::req(cohort_obj())
         all(
           (cohort_obj()$dataset == "TCGA"),
           (cohort_obj()$group_name == "TCGA_Study")
         )
-      )
+      })
 
       output$show_stratify_option <- show_stratify_option
 
@@ -203,7 +204,6 @@ extracellular_network_main_server <- function(
       })
 
       shiny::observeEvent(input$node_selection,  ignoreInit = TRUE, {
-        print(input$node_selection)
         session$sendCustomMessage(
           type = "selectNodes",
           message = list(as.integer(input$node_selection))
@@ -266,10 +266,36 @@ extracellular_network_main_server <- function(
           )
       })
 
-      return(shiny::reactive(list(
-        "nodes" = nodes_output(),
-        "edges" = edges_output()
-      )))
+      output$download_edges <- shiny::downloadHandler(
+        filename = function() stringr::str_c("edges-", Sys.Date(), ".csv"),
+        content = function(con) readr::write_csv(edges_output(), con)
+      )
+
+      output$download_nodes <- shiny::downloadHandler(
+        filename = function() stringr::str_c("nodes-", Sys.Date(), ".csv"),
+        content = function(con) readr::write_csv(nodes_output(), con)
+      )
+
+      output$edges_dt <- DT::renderDataTable({
+        shiny::req(edges_output())
+
+        DT::datatable(
+          edges_output(),
+          caption = "Edges Table",
+          width = "100%",
+          rownames = FALSE
+        )
+      })
+
+      output$nodes_dt <- DT::renderDataTable({
+        shiny::req(nodes_output())
+        DT::datatable(
+          nodes_output(),
+          caption = "Nodes Table",
+          width = "100%",
+          rownames = FALSE
+        )
+      })
 
     }
   )

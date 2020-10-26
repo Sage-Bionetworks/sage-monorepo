@@ -10,7 +10,8 @@ extracellular_network_server <- function(
         "extracellular_network_main",
         cohort_obj,
         server_function = extracellular_network_main_server,
-        ui_function = extracellular_network_main_ui
+        ui_function = extracellular_network_main_ui,
+        test_function = shiny::reactive(show_ecn_submodules)
       )
     }
   )
