@@ -42,7 +42,7 @@ def dr_tag_id(test_db, dr_tag):
     return id
 
 
-def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_feature_id, dr_entrez, dr_gene_id, dr_tag, tag_id):
+def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_feature_id, dr_entrez, dr_gene_id, dr_tag, dr_tag_id):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['data_set', 'feature', 'gene',
@@ -66,7 +66,7 @@ def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_
         assert result.gene.entrez == dr_entrez
         assert result.gene.id == dr_gene_id
         assert result.mutation_code.id == result.mutation_code_id
-        assert result.tag.id == tag_id
+        assert result.tag.id == dr_tag_id
         assert result.tag.name == dr_tag
         assert type(result.mutation_code_id) is int or NoneType
         assert type(result.p_value) is float or NoneType
