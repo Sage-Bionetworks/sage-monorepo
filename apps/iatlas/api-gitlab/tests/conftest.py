@@ -44,8 +44,24 @@ def related():
 
 
 @ pytest.fixture(scope='session')
+def related_id(test_db, related):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=related).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
 def tag():
     return 'C1'
+
+
+@ pytest.fixture(scope='session')
+def tag_id(test_db, tag):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=tag).one_or_none()
+    return id
 
 
 @ pytest.fixture(scope='session')
@@ -73,7 +89,8 @@ def gene_id(test_db, entrez):
 @ pytest.fixture(scope='session')
 def hgnc(test_db, entrez):
     from api.db_models import Gene
-    (hgnc, ) = test_db.session.query(Gene.hgnc).filter_by(entrez=entrez).one_or_none()
+    (hgnc, ) = test_db.session.query(
+        Gene.hgnc).filter_by(entrez=entrez).one_or_none()
     return hgnc
 
 

@@ -35,14 +35,14 @@ def dr_tag(test_db):
 
 
 @pytest.fixture(scope='module')
-def tag_id(test_db, dr_tag):
+def dr_tag_id(test_db, dr_tag):
     from api.db_models import Tag
     (id, ) = test_db.session.query(Tag.id).filter_by(
         name=dr_tag).one_or_none()
     return id
 
 
-def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_feature_id, dr_entrez, dr_gene_id, dr_tag, tag_id):
+def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_feature_id, dr_entrez, dr_gene_id, dr_tag, dr_tag_id):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['data_set', 'feature', 'gene',
@@ -51,7 +51,7 @@ def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_
     query = return_driver_result_query(*relationships_to_join)
     results = query.filter_by(dataset_id=data_set_id).filter_by(
         feature_id=dr_feature_id).filter_by(
-        gene_id=dr_gene_id).filter_by(tag_id=tag_id).limit(3).all()
+        gene_id=dr_gene_id).filter_by(tag_id=dr_tag_id).limit(3).all()
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -66,7 +66,7 @@ def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_
         assert result.gene.entrez == dr_entrez
         assert result.gene.id == dr_gene_id
         assert result.mutation_code.id == result.mutation_code_id
-        assert result.tag.id == tag_id
+        assert result.tag.id == dr_tag_id
         assert result.tag.name == dr_tag
         assert type(result.mutation_code_id) is int or NoneType
         assert type(result.p_value) is float or NoneType
@@ -80,11 +80,11 @@ def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_
         string_representation_list) + ']'
 
 
-def test_DriverResult_no_relations(app, data_set_id, dr_feature_id, dr_gene_id, tag_id):
+def test_DriverResult_no_relations(app, data_set_id, dr_feature_id, dr_gene_id, dr_tag_id):
     query = return_driver_result_query()
     results = query.filter_by(dataset_id=data_set_id).filter_by(
         feature_id=dr_feature_id).filter_by(
-        gene_id=dr_gene_id).filter_by(tag_id=tag_id).limit(3).all()
+        gene_id=dr_gene_id).filter_by(tag_id=dr_tag_id).limit(3).all()
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -98,7 +98,7 @@ def test_DriverResult_no_relations(app, data_set_id, dr_feature_id, dr_gene_id, 
         assert result.feature_id == dr_feature_id
         assert result.gene_id == dr_gene_id
         assert type(result.mutation_code_id) is int or NoneType
-        assert result.tag_id == tag_id
+        assert result.tag_id == dr_tag_id
         assert type(result.p_value) is float or NoneType
         assert type(result.fold_change) is float or NoneType
         assert type(result.log10_p_value) is float or NoneType
