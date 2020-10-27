@@ -1,7 +1,8 @@
 import json
 import pytest
+from sqlalchemy import and_
 from tests import NoneType
-from api.db_models import DatasetToSample, Sample
+from api.db_models import DatasetToSample, DatasetToTag, Sample, SampleToTag, Tag
 
 
 @pytest.fixture(scope='module')
@@ -39,8 +40,10 @@ def common_query_builder():
             $mutationCode: [String!]
             $mutationId: [Int!]
             $mutationType: [String!]
+            $related: [String!]
             $sample: [String!]
             $status: [StatusEnum!]
+            $tag: [String!]
         ) {
             mutations(
                 dataSet: $dataSet
@@ -48,8 +51,10 @@ def common_query_builder():
                 mutationCode: $mutationCode
                 mutationId: $mutationId
                 mutationType: $mutationType
+                related: $related
                 sample: $sample
                 status: $status
+                tag: $tag
             )""" + query_fields + "}"
     return f
 
@@ -211,3 +216,76 @@ def test_mutations_query_with_dataSet(client, common_query_builder, data_set, da
         for current_sample in samples:
             assert type(current_sample['name']) is str
             assert current_sample['name'] in sample_names_in_data_set
+
+
+def test_mutations_query_with_related(client, common_query_builder, data_set, data_set_id, related, related_id, mutation_status, test_db):
+    query = common_query_builder("""{
+                                    id
+                                    samples { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'dataSet': [data_set],
+            'related': [related],
+            'status': [mutation_status]}})
+    json_data = json.loads(response.data)
+    mutations = json_data['data']['mutations']
+
+    sess = test_db.session
+
+    sample_name_query = sess.query(Sample.name).select_from(
+        DatasetToSample).filter_by(dataset_id=data_set_id)
+    sample_name_query = sample_name_query.join(
+        DatasetToTag, and_(DatasetToTag.dataset_id == data_set_id, DatasetToTag.tag_id == related_id))
+    sample_name_query = sample_name_query.join(
+        Sample, Sample.id == DatasetToSample.sample_id)
+    sample_name_results = sample_name_query.all()
+    sample_names_in_related = list(map(lambda s: s.name, sample_name_results))
+
+    assert isinstance(mutations, list)
+    assert len(mutations) > 0
+    for mutation in mutations[0:2]:
+        samples = mutation['samples']
+        assert type(mutation['id']) is int
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample['name']) is str
+            assert current_sample['name'] in sample_names_in_related
+
+
+def test_mutations_query_with_tag(client, common_query_builder, data_set, data_set_id, mutation_status, tag, tag_id, test_db):
+    query = common_query_builder("""{
+                                    id
+                                    samples { name }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'dataSet': [data_set],
+            'status': [mutation_status],
+            'tag': [tag]
+        }})
+    json_data = json.loads(response.data)
+    mutations = json_data['data']['mutations']
+
+    sess = test_db.session
+
+    sample_name_query = sess.query(Sample.name).select_from(
+        DatasetToSample).filter_by(dataset_id=data_set_id)
+    sample_name_query = sample_name_query.join(
+        SampleToTag, and_(SampleToTag.sample_id == DatasetToSample.sample_id, SampleToTag.tag_id == tag_id))
+    sample_name_query = sample_name_query.join(
+        Sample, Sample.id == DatasetToSample.sample_id)
+    sample_name_results = sample_name_query.all()
+    sample_names_in_tags = list(map(lambda s: s.name, sample_name_results))
+
+    assert isinstance(mutations, list)
+    assert len(mutations) > 0
+    for mutation in mutations[0:2]:
+        samples = mutation['samples']
+        assert type(mutation['id']) is int
+        assert isinstance(samples, list)
+        assert len(samples) > 0
+        for current_sample in samples:
+            assert type(current_sample['name']) is str
+            assert current_sample['name'] in sample_names_in_tags

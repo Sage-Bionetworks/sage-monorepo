@@ -2,7 +2,7 @@ from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from itertools import groupby
 from api import db
-from api.db_models import Dataset, DatasetToSample, Gene, Mutation, MutationCode, MutationType, Patient, Sample, SampleToMutation
+from api.db_models import Dataset, DatasetToTag, DatasetToSample, Gene, Mutation, MutationCode, MutationType, Patient, Sample, SampleToMutation, SampleToTag, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .gene import build_gene_graphql_response
 from .mutation_type import build_mutation_type_graphql_response
@@ -123,22 +123,42 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, s
         query = query.join(mutation_type_1, and_(
             *mutation_type_join_condition), isouter=is_outer)
 
-    if by_sample or status or sample or data_set:
+    if by_sample or status or sample or data_set or tag:
         sample_mutation_join_condition = build_join_condition(
             sample_to_mutation_1.mutation_id, mutation_1.id, filter_column=sample_to_mutation_1.status, filter_list=status)
 
         query = query.join(sample_to_mutation_1, and_(
             *sample_mutation_join_condition))
 
-        if data_set:
+        if data_set or related:
             data_set_1 = aliased(Dataset, name='d')
-            data_set_to_sample1 = aliased(DatasetToSample, name='ds')
+            data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
             data_set_subquery = sess.query(data_set_1.id).filter(
-                data_set_1.name.in_(data_set))
-            sample_join_condition = build_join_condition(
-                data_set_to_sample1.sample_id, sample_to_mutation_1.sample_id, data_set_to_sample1.dataset_id, data_set_subquery)
-            query = query.join(data_set_to_sample1,
-                               and_(*sample_join_condition))
+                data_set_1.name.in_(data_set)) if data_set else None
+            data_set_sample_join_condition = build_join_condition(
+                data_set_to_sample_1.sample_id, sample_to_mutation_1.sample_id, data_set_to_sample_1.dataset_id, data_set_subquery)
+            query = query.join(data_set_to_sample_1,
+                               and_(*data_set_sample_join_condition))
+
+            if related:
+                data_set_to_tag_1 = aliased(DatasetToTag, name='dt')
+                related_tag_1 = aliased(Tag, name='rt')
+                related_tag_subquery = sess.query(related_tag_1.id).filter(
+                    related_tag_1.name.in_(related))
+                data_set_tag_join_condition = build_join_condition(
+                    data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_subquery)
+                query = query.join(data_set_to_tag_1,
+                                   and_(*data_set_tag_join_condition))
+
+        if tag:
+            sample_to_tag_1 = aliased(SampleToTag, name='st')
+            tag_1 = aliased(Tag, name='t')
+            tag_subquery = sess.query(tag_1.id).filter(
+                tag_1.name.in_(tag))
+            sample_tag_join_condition = build_join_condition(
+                sample_to_tag_1.sample_id, sample_to_mutation_1.sample_id, sample_to_tag_1.tag_id, tag_subquery)
+            query = query.join(sample_to_tag_1, and_(
+                *sample_tag_join_condition))
 
         if by_sample or sample:
             sample_join_condition = build_join_condition(
@@ -243,15 +263,35 @@ def get_samples(requested, patient_requested, sample_requested, data_set=None, e
         sample_query = sample_query.join(
             sample_to_mutation_1, and_(*sample_mutation_join_condition))
 
-        if data_set:
+        if data_set or related:
             data_set_1 = aliased(Dataset, name='d')
-            data_set_to_sample1 = aliased(DatasetToSample, name='ds')
+            data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
             data_set_subquery = sess.query(data_set_1.id).filter(
-                data_set_1.name.in_(data_set))
+                data_set_1.name.in_(data_set)) if data_set else None
             sample_join_condition = build_join_condition(
-                data_set_to_sample1.sample_id, sample_to_mutation_1.sample_id, data_set_to_sample1.dataset_id, data_set_subquery)
-            sample_query = sample_query.join(data_set_to_sample1,
+                data_set_to_sample_1.sample_id, sample_to_mutation_1.sample_id, data_set_to_sample_1.dataset_id, data_set_subquery)
+            sample_query = sample_query.join(data_set_to_sample_1,
                                              and_(*sample_join_condition))
+
+            if related:
+                data_set_to_tag_1 = aliased(DatasetToTag, name='dt')
+                related_tag_1 = aliased(Tag, name='rt')
+                related_tag_subquery = sess.query(related_tag_1.id).filter(
+                    related_tag_1.name.in_(related))
+                data_set_tag_join_condition = build_join_condition(
+                    data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_subquery)
+                sample_query = sample_query.join(data_set_to_tag_1,
+                                                 and_(*data_set_tag_join_condition))
+
+        if tag:
+            sample_to_tag_1 = aliased(SampleToTag, name='st')
+            tag_1 = aliased(Tag, name='t')
+            tag_subquery = sess.query(tag_1.id).filter(
+                tag_1.name.in_(tag))
+            sample_tag_join_condition = build_join_condition(
+                sample_to_tag_1.sample_id, sample_to_mutation_1.sample_id, sample_to_tag_1.tag_id, tag_subquery)
+            sample_query = sample_query.join(sample_to_tag_1, and_(
+                *sample_tag_join_condition))
 
         sample_join_condition = build_join_condition(
             sample_1.id, sample_to_mutation_1.sample_id, filter_column=sample_1.name, filter_list=sample)

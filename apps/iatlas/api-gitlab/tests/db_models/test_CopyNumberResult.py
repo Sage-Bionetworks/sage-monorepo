@@ -24,21 +24,21 @@ def feature_id(test_db, cnr_feature):
 
 
 @pytest.fixture(scope='module')
-def tag_id(test_db, cnr_tag):
+def cnr_tag_id(test_db, cnr_tag):
     from api.db_models import Tag
     (id, ) = test_db.session.query(Tag.id).filter_by(
         name=cnr_tag).one_or_none()
     return id
 
 
-def test_CopyNumberResult_with_relations(app, data_set_id, entrez, gene_id, cnr_tag, tag_id):
+def test_CopyNumberResult_with_relations(app, data_set_id, entrez, gene_id, cnr_tag, cnr_tag_id):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['data_set', 'feature', 'gene', 'tag']
 
     query = return_copy_number_result_query(*relationships_to_join)
     results = query.filter_by(dataset_id=data_set_id).filter_by(
-        gene_id=gene_id).filter_by(tag_id=tag_id).limit(3).all()
+        gene_id=gene_id).filter_by(tag_id=cnr_tag_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
@@ -65,10 +65,10 @@ def test_CopyNumberResult_with_relations(app, data_set_id, entrez, gene_id, cnr_
         string_representation_list) + ']'
 
 
-def test_CopyNumberResult_no_relations(app, data_set_id, gene_id, tag_id, cnr_tag):
+def test_CopyNumberResult_no_relations(app, data_set_id, gene_id, cnr_tag_id, cnr_tag):
     query = return_copy_number_result_query()
     results = query.filter_by(dataset_id=data_set_id).filter_by(
-        gene_id=gene_id).filter_by(tag_id=tag_id).limit(3).all()
+        gene_id=gene_id).filter_by(tag_id=cnr_tag_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:

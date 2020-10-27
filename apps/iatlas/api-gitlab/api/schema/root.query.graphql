@@ -297,10 +297,14 @@ type Query {
     mutationId: [Int!]
     "A list of mutation type names associated with the mutations to filter by."
     mutationType: [String!]
+    "A list of 'related' tag names associated with the data set that is associated with the samples associated with the mutations to filter by."
+    related: [String!]
     "A list of sample names associated with the mutations to filter by."
     sample: [String!]
     "A list of statuses associated relationship between mutation and sample to filter by."
     status: [StatusEnum!]
+    "A list of tag names associated with the samples associated with the mutations to filter by."
+    tag: [String!]
   ): [GeneMutation!]!
 
   """
@@ -319,10 +323,14 @@ type Query {
     mutationId: [Int!]
     "A list of mutation type names associated with the mutations to filter by."
     mutationType: [String!]
+    "A list of 'related' tag names associated with the data set that is associated with the samples associated with the mutations to filter by."
+    related: [String!]
     "A list of sample names associated with the mutations to filter by."
     sample: [String!]
     "A list of statuses associated relationship between mutation and sample to filter by."
     status: [StatusEnum!]
+    "A list of tag names associated with the samples associated with the mutations to filter by."
+    tag: [String!]
     "The page of results to get. Defaults to 1 (the first page) with a maximum of 100,000 rows returned."
     page: Int
   ): MutationsBySamplePage!
