@@ -98,24 +98,22 @@ extracellular_network_main_server <- function(
         )
       })
 
-      #TODO: fix
       output$select_genes <- shiny::renderUI({
         shiny::selectizeInput(
           ns("selected_genes"),
           "Select genes of interest (optional)",
           choices = build_ecn_gene_choice_list(),
-          # selected = "geneset:extra_cellular_network",
+          selected = "geneset:extra_cellular_network",
           multiple = TRUE
         )
       })
 
-      #TODO: fix
       output$select_celltypes <- shiny::renderUI({
         shiny::selectizeInput(
           ns("selected_celltypes"),
           "Select cells of interest (optional)",
           choices = build_ecn_celltype_choice_list(),
-          # selected = "All",
+          selected = "All",
           multiple = TRUE
         )
       })
