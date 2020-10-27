@@ -456,6 +456,13 @@
       "Repository": "CRAN",
       "Hash": "76de23891bdba419517e855ed611ad29"
     },
+    "forcats": {
+      "Package": "forcats",
+      "Version": "0.5.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1cb4279e697650f0bd78cd3601ee7576"
+    },
     "foreign": {
       "Package": "foreign",
       "Version": "0.8-75",

@@ -67,6 +67,28 @@ univariate_driver_server <- function(id, cohort_obj) {
           )
       })
 
+      output$result_text <- shiny::renderText({
+        stringr::str_c(
+          "Tested Associations: ",
+          as.character(nrow(volcano_plot_tbl()))
+        )
+        # if(is.null(mutation_df())){
+        #   return("Members in current selected groupings do not have driver mutation data")
+        # } else if (length(testable_mutation_groups()) == 0) {
+        #   return("No cohort and driver combinations can be tested.")
+        # } else {
+        #   string <- stringr::str_c(
+        #     "Testable driver-cohort combinations: ",
+        #     as.character(length(testable_mutation_groups())),
+        #     ";\t ",as.character(round(length(testable_mutation_groups())/(length(testable_mutation_groups())+length(untestable_mutation_groups()))*100,1)),
+        #     "% of total possible."
+        #     #                "Untestable driver-cohort combinations: ",
+        #     #                as.character(length(untestable_mutation_groups()))
+        #   )
+        #   return(string)
+        # }
+      })
+
       output$volcano_plot <- plotly::renderPlotly({
         shiny::req(volcano_plot_tbl())
 
@@ -149,6 +171,9 @@ univariate_driver_server <- function(id, cohort_obj) {
             samples = cohort_obj()$sample_tbl$sample
           )
         dplyr::inner_join(feature_tbl, status_tbl, by = "sample") %>%
+          dplyr::mutate(
+            "status" = forcats::fct_relevel(.data$status, "Wt", "Mut")
+          ) %>%
           dplyr::select(x = .data$status, y = .data$feature_value)
 
       })
