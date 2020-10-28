@@ -5,6 +5,7 @@ create_manhattanplot <- function(
   y_max,
   x_name = NULL,
   y_name = NULL,
+  plot_title = "",
   source_name = NULL
   ) {
 
@@ -21,7 +22,9 @@ create_manhattanplot <- function(
                         panel.grid.major.x = element_blank(),
                         panel.grid.minor.x = element_blank()
                       )+
-                     labs(y = y_name, x = x_name),
+                     labs(
+                       title = plot_title,
+                       y = y_name, x = x_name),
                     tooltip="text",
                     source = source_name)
 }

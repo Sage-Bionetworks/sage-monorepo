@@ -26,28 +26,41 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
                 shiny::uiOutput(ns("to_exclude"))
               ),
               shiny::sliderInput(ns("yrange"), "Select range of -log10(p-values) to be included", min = 6, max = 30, value = c(6,12), step = 1),
-              shiny::radioButtons(ns("selection"), "Select range of visualization", choices = c("See all chromossomes", "Select a region"), selected = "See all chromossomes"),
-              shiny::conditionalPanel(paste0("input['", ns("selection"), "'] == 'Select a region'"),
-                                      numericInput(ns("chr"), "Chromossome", value= 1, min = 1, max = 22, step = 1)
-            )
+              shiny::radioButtons(ns("selection"), "Select range of visualization", choices = c("See all chromossomes", "Select a region"), selected = "See all chromossomes")
            )
          )
         ),
         shiny::column(
           width = 10,
+          shiny::conditionalPanel(paste0("input['", ns("selection"), "'] == 'Select a region'"),
+                                  messageBox(
+                                    width = 12,
+                                    # uiOutput(ns("link_genome")),
+                                    # shiny::br(),
+                                    shiny::p("Update region of interest by zooming in the plot or by manually adding coordinates:"),
+                                    shiny::column(
+                                      width = 2,
+                                      shiny::numericInput(ns("chr"), "Chr", value= 1, min = 1, max = 22, step = 1)
+                                    ),
+                                    shiny::column(
+                                      width = 10,
+                                      uiOutput(ns("xrange"))
+                                    )
+                                  )
+          ),
           plotBox(
             width = 12,
             plotly::plotlyOutput(ns("mht_plot"), height = "400px") %>%
               shinycssloaders::withSpinner(.),
-            shiny::uiOutput(ns("clicked"))
+            shiny::conditionalPanel(paste0("input['", ns("selection"), "'] == 'Select a region'"),
+                                    shiny::plotOutput(ns("genome_plot"), height = "200px") %>%
+                                      shinycssloaders::withSpinner(.)
+            )
           ),
-          shiny::conditionalPanel(paste0("input['", ns("selection"), "'] == 'Select a region'"),
-                                  messageBox(
-                                    width = 12,
-                                    uiOutput(ns("link_genome")),
-                                    shiny::br(),
-                                    uiOutput(ns("xrange"))
-                                  )
+          plotBox(
+            width = 6,
+            DT::DTOutput(ns("snp_tbl")),
+            shiny::uiOutput(ns("clicked"))
           )
         )
 )
