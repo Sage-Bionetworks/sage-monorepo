@@ -1,4 +1,9 @@
 from sqlalchemy import orm
+from sqlalchemy.ext.compiler import compiles
+from sqlalchemy.sql.expression import ClauseElement, Executable
+from sqlalchemy.sql import Select
+from sqlalchemy.dialects import postgresql
+
 from api import db
 
 general_core_fields = ['id', 'name']
@@ -31,3 +36,33 @@ def build_query_args(model, *argv, accepted_args=[]):
     if not query_args:
         return [model]
     return query_args
+
+def temp_table(name, query):
+    e = db.session.get_bind()
+    c = e.connect()
+    trans = c.begin()
+    c.execute(CreateTableAs(name, query))
+    trans.commit()
+    return c
+
+class CreateTableAs(Select):
+    def __init__(self, name, query, *arg, **kw):
+        super(CreateTableAs, self).__init__(None, *arg, **kw)
+        self.name = name
+        self.query = query
+
+@compiles(CreateTableAs)
+def _create_table_as(element, compiler, **kw):
+    text = element.query.statement.compile(dialect=postgresql.dialect(), compile_kwargs={'literal_binds': True})
+    query = "CREATE TEMP TABLE %s AS %s" % (
+        element.name,
+        text
+    )
+    return query
+
+def execute_sql(query, conn=None):
+    if conn:
+        return conn.execute(query)
+    engine = db.session.get_bind()
+    with engine.connect() as conn:
+        return conn.execute(query)

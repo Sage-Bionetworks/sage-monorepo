@@ -3,6 +3,8 @@ import pytest
 from api.database import return_node_query
 from tests import NoneType
 
+from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
+
 
 @pytest.fixture(scope='module')
 def node_feature():
@@ -28,6 +30,8 @@ def network():
 def common_query_builder():
     def f(query_fields):
         return """query Nodes(
+            $paging: PagingInput
+            $distinct: Boolean
             $dataSet: [String!]
             $entrez: [Int!]
             $feature: [String!]
@@ -36,9 +40,10 @@ def common_query_builder():
             $network: [String!]
             $related: [String!]
             $tag: [String!]
-            $page: Int
         ) {
             nodes(
+                paging: $paging
+                distinct: $distinct
                 dataSet: $dataSet
                 entrez: $entrez
                 feature: $feature
@@ -47,7 +52,6 @@ def common_query_builder():
                 network: $network
                 related: $related
                 tag: $tag
-                page: $page
             )""" + query_fields + "}"
     return f
 
@@ -55,19 +59,22 @@ def common_query_builder():
 def test_nodes_query_with_passed_data_set(client, common_query_builder, data_set):
     query = common_query_builder("""{
                                     items { name }
-                                    page
-                                    pages
-                                    total
+                                    paging {
+                                        page
+                                        pages
+                                        total
+                                    }
                                 }""")
     response = client.post('/api', json={'query': query,
-                                         'variables': {'dataSet': [data_set], 'page': 2}})
+                                         'variables': {'paging': {'type': Paging.OFFSET, 'page': 2}, 'dataSet': [data_set], }})
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
     results = page['items']
+    paging = page['paging']
 
-    assert page['page'] == 2
-    assert type(page['pages']) is int
-    assert type(page['total']) is int
+    assert paging['page'] == 2
+    assert type(paging['pages']) is int
+    assert type(paging['total']) is int
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -80,7 +87,6 @@ def test_nodes_query_with_passed_related(client, common_query_builder, related):
                                         name
                                         gene { entrez }
                                     }
-                                    page
                                 }""")
     response = client.post('/api', json={'query': query,
                                          'variables': {'related': [related]}})
@@ -88,7 +94,6 @@ def test_nodes_query_with_passed_related(client, common_query_builder, related):
     page = json_data['data']['nodes']
     results = page['items']
 
-    assert page['page'] == 1
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -104,7 +109,6 @@ def test_nodes_query_with_passed_entrez(client, common_query_builder, entrez):
                                         name
                                         gene { entrez }
                                     }
-                                    page
                                 }""")
     response = client.post('/api', json={'query': query,
                                          'variables': {'entrez': [entrez]}})
@@ -112,7 +116,6 @@ def test_nodes_query_with_passed_entrez(client, common_query_builder, entrez):
     page = json_data['data']['nodes']
     results = page['items']
 
-    assert page['page'] == 1
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -127,7 +130,6 @@ def test_nodes_query_with_passed_feature(client, common_query_builder, node_feat
                                         name
                                         feature { name }
                                     }
-                                    page
                                 }""")
     response = client.post('/api', json={'query': query,
                                          'variables': {'feature': [node_feature]}})
@@ -135,7 +137,6 @@ def test_nodes_query_with_passed_feature(client, common_query_builder, node_feat
     page = json_data['data']['nodes']
     results = page['items']
 
-    assert page['page'] == 1
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -374,17 +375,20 @@ def test_nodes_query_with_no_arguments(client, common_query_builder):
                                         name
                                         dataSet { name }
                                     }
-                                    total
+                                    paging {
+                                        total
+                                    }
                                 }""")
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
     results = page['items']
+    paging = page['paging']
 
     # Get the total number of samples_to_mutations in the database.
     node_count = return_node_query('id').count()
 
-    assert page['total'] == node_count
+    assert paging['total'] == node_count
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:

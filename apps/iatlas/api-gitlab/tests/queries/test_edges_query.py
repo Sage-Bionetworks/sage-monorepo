@@ -176,7 +176,6 @@ def test_edges_query_with_passed_node1_and_node2(client, common_query_builder, n
     page = json_data['data']['edges']
     results = page['items']
     paging = page['paging']
-    print(paging)
 
     assert paging['page'] == 1
     assert type(paging['pages']) is int

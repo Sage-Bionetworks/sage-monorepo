@@ -11,16 +11,26 @@ The "Node" type may return:
 - "feature", the feature related to the node
 - "tags", a list of the tags related to the node. (This will NOT include tags that are tagged "network")
 """
-type Node {
-    label: String
-    name: String!
-    score: Float
-    x: Float
-    y: Float
-    dataSet: SimpleDataSet!
-    gene: SimpleGene
-    feature: SimpleFeature
-    tags: [SimpleTag!]!
+type Node implements BaseNode {
+  id: ID
+  label: String
+  name: String!
+  score: Float
+  x: Float
+  y: Float
+  dataSet: SimpleDataSet!
+  gene: SimpleGene
+  feature: SimpleFeature
+  tags: [SimpleTag!]!
+}
+
+type NodeResult implements BaseResult {
+  "A Paging object (see Paging)"
+  paging: Paging
+  "A string describing any error that may have occurred."
+  error: String
+  "A list of returned Nodes"
+  items: [Node]
 }
 
 """
@@ -34,10 +44,10 @@ The "NodePage" type may return:
 See `Node`
 """
 type NodePage {
-    items: [Node!]!
-    page: Int!
-    pages: Int!
-    total: Int!
+  items: [Node!]!
+  page: Int!
+  pages: Int!
+  total: Int!
 }
 
 """
@@ -52,10 +62,11 @@ It type may return:
 
 See also `Node`
 """
-type SimpleNode {
-    label: String
-    name: String!
-    score: Float
-    x: Float
-    y: Float
+type SimpleNode implements BaseNode {
+  id: ID
+  label: String
+  name: String!
+  score: Float
+  x: Float
+  y: Float
 }
