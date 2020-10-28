@@ -67,26 +67,29 @@ univariate_driver_server <- function(id, cohort_obj) {
           )
       })
 
+      total_associations <- shiny::reactive({
+        n_mutations <-
+          iatlas.api.client::query_mutations(
+            datasets = "TCGA", types = "driver_mutation"
+          ) %>%
+          nrow()
+
+        n_tags <- length(tags())
+
+        n_possible <-  n_tags * n_mutations
+      })
+
+
       output$result_text <- shiny::renderText({
-        stringr::str_c(
-          "Tested Associations: ",
-          as.character(nrow(volcano_plot_tbl()))
-        )
-        # if(is.null(mutation_df())){
-        #   return("Members in current selected groupings do not have driver mutation data")
-        # } else if (length(testable_mutation_groups()) == 0) {
-        #   return("No cohort and driver combinations can be tested.")
-        # } else {
-        #   string <- stringr::str_c(
-        #     "Testable driver-cohort combinations: ",
-        #     as.character(length(testable_mutation_groups())),
-        #     ";\t ",as.character(round(length(testable_mutation_groups())/(length(testable_mutation_groups())+length(untestable_mutation_groups()))*100,1)),
-        #     "% of total possible."
-        #     #                "Untestable driver-cohort combinations: ",
-        #     #                as.character(length(untestable_mutation_groups()))
-        #   )
-        #   return(string)
-        # }
+
+        p_tested <-
+          volcano_plot_tbl() %>%
+          nrow() %>%
+          magrittr::divide_by(., total_associations()) %>%
+          round(2) %>%
+          as.character()
+
+        stringr::str_c("Percentage of Tested Associations: ", p_tested)
       })
 
       output$volcano_plot <- plotly::renderPlotly({

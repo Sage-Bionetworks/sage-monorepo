@@ -19,7 +19,7 @@ multivariate_driver_ui <- function(id){
           shiny::numericInput(
             ns("min_mutants"),
             "Minimum number of mutant samples per group:",
-            20,
+            2,
             min = 2
           )
         ),
@@ -28,7 +28,7 @@ multivariate_driver_ui <- function(id){
           shiny::numericInput(
             ns("min_wildtype"),
             "Minimum number of wild type samples per group:",
-            20,
+            2,
             min = 2
           )
         ),
@@ -55,6 +55,12 @@ multivariate_driver_ui <- function(id){
           width = 6,
           shiny::actionButton(ns("calculate_button"), "Calculate")
         )
+      )
+    ),
+    shiny::fluidRow(
+      messageBox(
+        width = 12,
+        shiny::p(shiny::textOutput(ns("result_text")))
       )
     ),
     shiny::fluidRow(

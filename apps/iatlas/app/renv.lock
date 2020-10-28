@@ -663,9 +663,9 @@
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "master",
-      "RemoteSha": "e8ee6f8d8e46c6f7bb047e1542a1aba089aab65d",
+      "RemoteSha": "14dfa64932b6c983dd96725caa4b95ab44a4b6a1",
       "RemoteHost": "api.github.com",
-      "Hash": "2cf71eb2f5bbb7ca7659099da8393184"
+      "Hash": "bfcdb4645c63ddd5c3914ee405208540"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
