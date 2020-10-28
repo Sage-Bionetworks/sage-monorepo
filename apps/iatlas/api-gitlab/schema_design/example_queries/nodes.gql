@@ -1,4 +1,6 @@
 query Nodes(
+  $paging: PagingInput
+  $distinct: Boolean
   $dataSet: [String!]
   $entrez: [Int!]
   $feature: [String!]
@@ -7,9 +9,10 @@ query Nodes(
   $network: [String!]
   $related: [String!]
   $tag: [String!]
-  $page: Int
 ) {
   nodes(
+    paging: $paging
+    distinct: $distinct
     dataSet: $dataSet
     entrez: $entrez
     feature: $feature
@@ -18,11 +21,18 @@ query Nodes(
     network: $network
     related: $related
     tag: $tag
-    page: $page
   ) {
-    total
-    page
-    pages
+    paging {
+      type
+      pages
+      total
+      page
+      limit
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
     items {
       label
       name
@@ -49,18 +59,14 @@ query Nodes_test(
   $dataSet: [String!]
   $related: [String!]
   $network: [String!]
-  $page: Int
 ) {
-  nodes(dataSet: $dataSet, related: $related, network: $network, page: $page) {
+  nodes(dataSet: $dataSet, related: $related, network: $network) {
     items {
       name
       tags {
         name
       }
     }
-    page
-    pages
-    total
   }
 }
 
@@ -71,3 +77,4 @@ query Nodes_test(
 # 	"network": ["extracellular_network"],
 #   "page": 2
 # }
+# {"paging": {"first": 100}, "dataSet": ["TCGA"], "related": ["Immune_Subtype"], "network": ["extracellular_network"], "entrez": [100133941]}

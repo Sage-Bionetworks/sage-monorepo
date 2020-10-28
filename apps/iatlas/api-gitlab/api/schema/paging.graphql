@@ -60,6 +60,8 @@ type Paging {
   startCursor: String
   "When performing CURSOR paging, the cursor of the last record returned."
   endCursor: String
+  "The number of items returned in this response. May be less than the number requested."
+  returned: Int
 }
 
 """

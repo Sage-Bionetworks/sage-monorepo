@@ -356,6 +356,10 @@ type Query {
   If no arguments are passed, this will return all nodes (please note, there will be a LOT of results).
   """
   nodes(
+    "An instance of PagingInput (see PagingInput)"
+    paging: PagingInput
+    "A boolean specifying whether or not duplicates should be filtered out. Default is false. Set to 'true' only when necessary, as it negatively impacts performance."
+    distinct: Boolean
     dataSet: [String!]
     entrez: [Int!]
     feature: [String!]
@@ -364,8 +368,7 @@ type Query {
     network: [String!]
     related: [String!]
     tag: [String!]
-    page: Int
-  ): NodePage
+  ): NodeResult
 
   """
   The "patients" query accepts:
