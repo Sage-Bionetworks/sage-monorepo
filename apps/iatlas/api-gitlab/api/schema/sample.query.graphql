@@ -1,7 +1,7 @@
 """
 The "Sample" type
 
-See also `GeneRelatedSample`, `SampleByMutationStatus`, and `SamplesByTag`
+See also `SampleByMutationStatus` and `SamplesByTag`
 """
 type Sample {
   "The sample's name (often the 'sample' portion of a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/))."
@@ -20,18 +20,6 @@ type FeatureRelatedSample {
   name: String!
   "The calculated relational value or the Sample related to the Feature."
   value: Float
-}
-
-"""
-The "GeneRelatedSample" type is a Sample that is specifically related to a Gene.
-
-See also `Gene`
-"""
-type GeneRelatedSample {
-  "The sample's name (often the 'sample' portion of a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/))."
-  name: String!
-  "The RNA Sequence Expression for the Sample related to the Gene."
-  rnaSeqExpr: Float
 }
 
 """
