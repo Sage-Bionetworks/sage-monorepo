@@ -65,11 +65,9 @@ multivariate_driver_server <- function(id, cohort_obj) {
         build_md_response_tbl(cohort_obj(), input$response_choice)
       })
 
-      #TODO: remove entrez filter
       status_tbl <- shiny::reactive({
         iatlas.api.client::query_mutations_by_samples(
           samples = cohort_obj()$sample_tbl$sample,
-          entrez = 1:500,
         ) %>%
           dplyr::rename("mutation" = "mutation_name")
       })
@@ -112,6 +110,35 @@ multivariate_driver_server <- function(id, cohort_obj) {
       volcano_plot_tbl <- shiny::eventReactive(input$calculate_button, {
         shiny::req(pvalue_tbl(), effect_size_tbl())
         dplyr::inner_join(pvalue_tbl(), effect_size_tbl(), by = "label")
+      })
+
+      total_associations <- shiny::reactive({
+        n_mutations <-
+          iatlas.api.client::query_mutations(
+            datasets = "TCGA", types = "driver_mutation"
+          ) %>%
+          nrow()
+
+        if(input$group_mode == "By group"){
+          n_groups <- cohort_obj() %>%
+            purrr::pluck("group_tbl") %>%
+            nrow()
+          return(n_groups * n_mutations)
+        } else {
+          return(n_mutations)
+        }
+      })
+
+      output$result_text <- shiny::renderText({
+
+        p_tested <-
+          volcano_plot_tbl() %>%
+          nrow() %>%
+          magrittr::divide_by(., total_associations()) %>%
+          round(2) %>%
+          as.character()
+
+        stringr::str_c("Percentage of Tested Associations: ", p_tested)
       })
 
       output$volcano_plot <- plotly::renderPlotly({

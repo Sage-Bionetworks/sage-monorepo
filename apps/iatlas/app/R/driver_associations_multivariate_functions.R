@@ -105,15 +105,15 @@ combine_md_tbls <- function(resp_tbl, status_tbl, sample_tbl, cov_tbl, mode){
     purrr::reduce(dplyr::inner_join, by = "sample") %>%
     dplyr::select(-"sample")
 
-    if (mode == "By group") {
-      tbl <- dplyr::mutate(tbl, label = paste0(
-        .data$group, "; ", .data$mutation
-      ))
-    } else if (mode == "Across groups") {
-      tbl <- dplyr::mutate(tbl, label = paste0(
-        .data$mutation
-      ))
-    }
+  if (mode == "By group") {
+    tbl <- dplyr::mutate(tbl, label = paste0(
+      .data$group, "; ", .data$mutation
+    ))
+  } else if (mode == "Across groups") {
+    tbl <- dplyr::mutate(tbl, label = paste0(
+      .data$mutation
+    ))
+  }
 
   tbl <- dplyr::select(tbl, -c(.data$group, .data$mutation))
   return(tbl)
@@ -129,21 +129,24 @@ combine_md_tbls <- function(resp_tbl, status_tbl, sample_tbl, cov_tbl, mode){
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
 filter_md_labels <- function(tbl, min_mutants, min_wildtype){
-    tbl %>%
-        dplyr::group_by(.data$label) %>%
-        dplyr::mutate(status = dplyr::if_else(
-            .data$status == "Wt",
-            1L,
-            0L
-        )) %>%
-        dplyr::summarise(n_total = dplyr::n(), n_wt = sum(.data$status)) %>%
-        dplyr::mutate(n_mut = .data$n_total - .data$n_wt) %>%
-        dplyr::filter(
-            .data$n_mut >= local(min_mutants),
-            .data$n_wt >= local(min_wildtype),
-        ) %>%
-        dplyr::ungroup() %>%
-        dplyr::pull(.data$label)
+  tbl %>%
+    dplyr::group_by(.data$label) %>%
+    dplyr::mutate(status = dplyr::if_else(
+      .data$status == "Wt",
+      1L,
+      0L
+    )) %>%
+    dplyr::summarise(
+      n_total = dplyr::n(),
+      n_wt = sum(.data$status),
+      .groups = "drop"
+    ) %>%
+    dplyr::mutate(n_mut = .data$n_total - .data$n_wt) %>%
+    dplyr::filter(
+      .data$n_mut >= local(min_mutants),
+      .data$n_wt >= local(min_wildtype),
+    ) %>%
+    dplyr::pull(.data$label)
 }
 
 #' Build Multivariate Driver Pvalue Tibble
@@ -156,17 +159,17 @@ filter_md_labels <- function(tbl, min_mutants, min_wildtype){
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
 build_md_pvalue_tbl <- function(tbl, formula_string){
-    tbl %>%
-        tidyr::nest(.tbl = -c(.data$label)) %>%
-        dplyr::mutate(p_value = purrr::map_dbl(
-            .data$.tbl,
-            calculate_lm_pvalue,
-            formula_string,
-            "statusWt"
-        )) %>%
-        tidyr::drop_na() %>%
-        dplyr::select(-.data$.tbl) %>%
-        dplyr::mutate(log10_p_value = -log10(.data$p_value))
+  tbl %>%
+    tidyr::nest(.tbl = -c(.data$label)) %>%
+    dplyr::mutate(p_value = purrr::map_dbl(
+      .data$.tbl,
+      calculate_lm_pvalue,
+      formula_string,
+      "statusWt"
+    )) %>%
+    tidyr::drop_na() %>%
+    dplyr::select(-.data$.tbl) %>%
+    dplyr::mutate(log10_p_value = -log10(.data$p_value))
 }
 
 #' Calculate Linear Model Pvalue
@@ -178,12 +181,12 @@ build_md_pvalue_tbl <- function(tbl, formula_string){
 #' @importFrom stats lm
 #' @importFrom magrittr %>% extract extract2
 calculate_lm_pvalue <- function(data, lm_formula, term){
-    data %>%
-        stats::lm(formula = lm_formula, data = .) %>%
-        summary() %>%
-        magrittr::extract2("coefficients") %>%
-        magrittr::extract(term, "Pr(>|t|)") %>%
-        as.double()
+  data %>%
+    stats::lm(formula = lm_formula, data = .) %>%
+    summary() %>%
+    magrittr::extract2("coefficients") %>%
+    magrittr::extract(term, "Pr(>|t|)") %>%
+    as.double()
 }
 
 #' Build Multivariate Driver Effect Size Tibble
@@ -195,25 +198,25 @@ calculate_lm_pvalue <- function(data, lm_formula, term){
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
 build_md_effect_size_tbl <- function(tbl){
-    tbl %>%
-        dplyr::select(.data$label, .data$response, .data$status) %>%
-        dplyr::group_by(.data$label, .data$status) %>%
-        dplyr::summarise(responses = list(.data$response)) %>%
-        dplyr::ungroup() %>%
-        tidyr::pivot_wider(
-            .,
-            names_from = .data$status,
-            values_from = .data$responses
-        ) %>%
-        dplyr::rename(g1 = .data$Mut, g2 = .data$Wt) %>%
-        tidyr::nest(data = c(.data$g1, .data$g2)) %>%
-        dplyr::mutate(fold_change = purrr::map_dbl(
-            .data$data,
-            get_effect_size_from_tbl
-        )) %>%
-        dplyr::mutate(log10_fold_change = -log10(.data$fold_change)) %>%
-        dplyr::select(-.data$data) %>%
-        tidyr::drop_na()
+  tbl %>%
+    dplyr::select(.data$label, .data$response, .data$status) %>%
+    dplyr::group_by(.data$label, .data$status) %>%
+    dplyr::summarise(responses = list(.data$response)) %>%
+    dplyr::ungroup() %>%
+    tidyr::pivot_wider(
+      .,
+      names_from = .data$status,
+      values_from = .data$responses
+    ) %>%
+    dplyr::rename(g1 = .data$Mut, g2 = .data$Wt) %>%
+    tidyr::nest(data = c(.data$g1, .data$g2)) %>%
+    dplyr::mutate(fold_change = purrr::map_dbl(
+      .data$data,
+      get_effect_size_from_tbl
+    )) %>%
+    dplyr::mutate(log10_fold_change = -log10(.data$fold_change)) %>%
+    dplyr::select(-.data$data) %>%
+    tidyr::drop_na()
 }
 
 #' Get Effect Size From Tibble
@@ -221,7 +224,7 @@ build_md_effect_size_tbl <- function(tbl){
 #' @param tbl A tibble
 #' @param method A function
 get_effect_size_from_tbl <- function(tbl, method = calculate_ratio_effect_size){
-    method(unlist(tbl$g1), unlist(tbl$g2))
+  method(unlist(tbl$g1), unlist(tbl$g2))
 }
 
 #' Calculate Ratio Effect Size
@@ -229,10 +232,10 @@ get_effect_size_from_tbl <- function(tbl, method = calculate_ratio_effect_size){
 #' @param v1 A numeric vector
 #' @param v2 A numeric vector
 calculate_ratio_effect_size <- function(v1, v2){
-    mean1 <- mean(v1)
-    mean2 <- mean(v2)
-    if (any(mean1 <= 0, mean2 <= 0)) return(NA)
-    mean1 / mean2
+  mean1 <- mean(v1)
+  mean2 <- mean(v2)
+  if (any(mean1 <= 0, mean2 <= 0)) return(NA)
+  mean1 / mean2
 }
 
 #' Build Multivariate Driver Violin Tibble
@@ -244,9 +247,12 @@ calculate_ratio_effect_size <- function(v1, v2){
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
 build_md_driver_violin_tbl <- function(tbl, .label){
-    tbl %>%
-        dplyr::filter(.data$label %in% .label) %>%
-        dplyr::select(x = .data$status, y = .data$response)
+  tbl %>%
+    dplyr::filter(.data$label %in% .label) %>%
+    dplyr::mutate(
+      "status" = forcats::fct_relevel(.data$status, "Wt", "Mut")
+    ) %>%
+    dplyr::select(x = .data$status, y = .data$response)
 }
 
 #' Create Multivariate Driver Violin Plot Title
@@ -255,17 +261,17 @@ build_md_driver_violin_tbl <- function(tbl, .label){
 #' @param mode A string, either "By group" or "Across groups"
 #' @importFrom rlang .data
 create_md_violin_plot_title <- function(tbl, mode){
-    title <- paste(
-        "P-value:",
-        round(tbl$p_value, 4), ";",
-        "Log10(Fold Change):",
-        round(tbl$log10_fold_change, 4)
-    )
-    if (mode == "By group") {
-        group <- tbl$label %>%
-            stringr::str_match(., "^([:print:]+);[:print:]+$") %>%
-            pluck(2)
-        title <- paste("Group:", group, ";", title)
-    }
-    return(title)
+  title <- paste(
+    "P-value:",
+    round(tbl$p_value, 4), ";",
+    "Log10(Fold Change):",
+    round(tbl$log10_fold_change, 4)
+  )
+  if (mode == "By group") {
+    group <- tbl$label %>%
+      stringr::str_match(., "^([:print:]+);[:print:]+$") %>%
+      pluck(2)
+    title <- paste("Group:", group, ";", title)
+  }
+  return(title)
 }
