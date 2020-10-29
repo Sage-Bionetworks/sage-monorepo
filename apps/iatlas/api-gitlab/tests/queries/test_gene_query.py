@@ -54,10 +54,8 @@ def test_gene_query_get_rnSeqExpr(client, entrez):
     query = """query Gene($entrez: Int!) {
         gene(entrez: $entrez) {
             entrez
-            samples {
-                name
-                rnaSeqExpr
-            }
+            samples
+            rnaSeqExprs
         }
     }"""
     response = client.post(
@@ -65,21 +63,25 @@ def test_gene_query_get_rnSeqExpr(client, entrez):
     json_data = json.loads(response.data)
     gene = json_data['data']['gene']
     samples = gene['samples']
+    rna_seq_exprs = gene['rnaSeqExprs']
 
     assert not isinstance(gene, list)
     assert gene['entrez'] == entrez
     assert isinstance(samples, list)
     assert len(samples) > 0
     for current_sample in samples[0:2]:
-        assert type(current_sample['name']) is str
-        assert type(current_sample['rnaSeqExpr']) is float or NoneType
+        assert type(current_sample) is str
+    assert isinstance(rna_seq_exprs, list)
+    assert len(rna_seq_exprs) > 0
+    for rna_seq_expr in rna_seq_exprs[0:2]:
+        assert type(rna_seq_expr) is float or NoneType
 
 
 def test_gene_query_get_rnSeqExpr_with_passed_sample(client, entrez, sample):
     query = """query Gene($entrez: Int!, $sample: [String!]) {
         gene(entrez: $entrez, sample: $sample) {
             entrez
-            samples { name }
+            samples
         }
     }"""
     response = client.post(
@@ -93,7 +95,7 @@ def test_gene_query_get_rnSeqExpr_with_passed_sample(client, entrez, sample):
     assert isinstance(samples, list)
     assert len(samples) == 1
     for current_sample in samples:
-        assert current_sample['name'] == sample
+        assert current_sample == sample
 
 
 def test_gene_query_no_relations(client, entrez, hgnc):

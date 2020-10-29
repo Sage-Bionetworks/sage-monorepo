@@ -141,11 +141,7 @@ def test_genes_query_with_gene_type(client, common_query_builder, entrez, gene_t
 def test_genes_query_with_sample(client, common_query_builder, entrez, gene_type, sample_name):
     query = common_query_builder("""{
             entrez
-            publications { pubmedId }
-            samples {
-                name
-                rnaSeqExpr
-            }
+            samples
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {'entrez': [entrez], 'geneType': [gene_type], 'sample': [sample_name]}})
@@ -161,17 +157,13 @@ def test_genes_query_with_sample(client, common_query_builder, entrez, gene_type
         assert isinstance(samples, list)
         assert len(samples) == 1
         for current_sample in samples:
-            assert current_sample['name'] == sample_name
-            assert type(current_sample['rnaSeqExpr']) is float
+            assert current_sample == sample_name
 
 
 def test_genes_query_with_dataSet_tag_and_maxRnaSeqExpr(client, common_query_builder, data_set, max_rna_seq_expr_1, tag):
     query = common_query_builder("""{
             entrez
-            samples {
-                name
-                rnaSeqExpr
-            }
+            rnaSeqExprs
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
@@ -185,22 +177,18 @@ def test_genes_query_with_dataSet_tag_and_maxRnaSeqExpr(client, common_query_bui
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:3]:
-        samples = result['samples']
+        rna_seq_exprs = result['rnaSeqExprs']
         assert type(result['entrez']) is int
-        assert isinstance(samples, list)
-        assert len(samples) > 0
-        for current_sample in samples[0:3]:
-            assert type(current_sample['name']) is str
-            assert current_sample['rnaSeqExpr'] <= max_rna_seq_expr_1
+        assert isinstance(rna_seq_exprs, list)
+        assert len(rna_seq_exprs) > 0
+        for rna_seq_expr in rna_seq_exprs[0:3]:
+            assert rna_seq_expr <= max_rna_seq_expr_1
 
 
 def test_genes_query_with_dataSet_and_minRnaSeqExpr(client, common_query_builder, data_set, min_rna_seq_expr_1):
     query = common_query_builder("""{
             entrez
-            samples {
-                name
-                rnaSeqExpr
-            }
+            rnaSeqExprs
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
@@ -213,22 +201,18 @@ def test_genes_query_with_dataSet_and_minRnaSeqExpr(client, common_query_builder
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:3]:
-        samples = result['samples']
+        rna_seq_exprs = result['rnaSeqExprs']
         assert type(result['entrez']) is int
-        assert isinstance(samples, list)
-        assert len(samples) > 0
-        for current_sample in samples[0:3]:
-            assert type(current_sample['name']) is str
-            assert current_sample['rnaSeqExpr'] >= min_rna_seq_expr_1
+        assert isinstance(rna_seq_exprs, list)
+        assert len(rna_seq_exprs) > 0
+        for rna_seq_expr in rna_seq_exprs[0:3]:
+            assert rna_seq_expr >= min_rna_seq_expr_1
 
 
 def test_genes_query_with_dataSet_tag_maxRnaSeqExpr_and_minRnaSeqExpr(client, common_query_builder, data_set, max_rna_seq_expr_2, min_rna_seq_expr_2, tag):
     query = common_query_builder("""{
             entrez
-            samples {
-                name
-                rnaSeqExpr
-            }
+            rnaSeqExprs
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
@@ -243,14 +227,13 @@ def test_genes_query_with_dataSet_tag_maxRnaSeqExpr_and_minRnaSeqExpr(client, co
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:3]:
-        samples = result['samples']
+        rna_seq_exprs = result['rnaSeqExprs']
         assert type(result['entrez']) is int
-        assert isinstance(samples, list)
-        assert len(samples) > 0
-        for current_sample in samples[0:3]:
-            assert type(current_sample['name']) is str
-            assert current_sample['rnaSeqExpr'] <= max_rna_seq_expr_2
-            assert current_sample['rnaSeqExpr'] >= min_rna_seq_expr_2
+        assert isinstance(rna_seq_exprs, list)
+        assert len(rna_seq_exprs) > 0
+        for rna_seq_expr in rna_seq_exprs[0:3]:
+            assert rna_seq_expr <= max_rna_seq_expr_2
+            assert rna_seq_expr >= min_rna_seq_expr_2
 
 
 def test_genes_query_no_entrez(client, common_query_builder):
@@ -318,3 +301,39 @@ def test_genes_query_returns_publications_with_geneType(client, common_query_bui
         assert len(publications) > 0
         for publication in publications[0:5]:
             assert type(publication['pubmedId']) is int
+
+
+def test_genes_query_returns_samples_and_rnaSeqExprs(client, common_query_builder, data_set, max_rna_seq_expr_2, min_rna_seq_expr_2, tag):
+    query = common_query_builder("""{
+            entrez
+            samples
+            rnaSeqExprs
+        }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'dataSet': [data_set],
+            'maxRnaSeqExpr': max_rna_seq_expr_2,
+            'minRnaSeqExpr': min_rna_seq_expr_2,
+            'tag': tag
+        }})
+    json_data = json.loads(response.data)
+    results = json_data['data']['genes']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results:
+        samples = result['samples']
+        samples_length = len(samples)
+        rna_seq_exprs = result['rnaSeqExprs']
+        rna_seq_exprs_length = len(rna_seq_exprs)
+
+        assert type(result['entrez']) is int
+        assert isinstance(samples, list)
+        assert samples_length > 0
+        for sample_name in samples[0:5]:
+            assert type(sample_name) is str
+        assert isinstance(rna_seq_exprs, list)
+        assert rna_seq_exprs_length > 0
+        for rna_seq_expr in rna_seq_exprs[0:5]:
+            assert type(rna_seq_expr) is float
+        assert samples_length == rna_seq_exprs_length

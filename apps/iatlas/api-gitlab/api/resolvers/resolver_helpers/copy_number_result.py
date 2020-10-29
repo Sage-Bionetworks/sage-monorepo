@@ -1,12 +1,13 @@
-from sqlalchemy import and_, orm
+from sqlalchemy import and_
+from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
-from .general_resolvers import build_join_condition, build_option_args, get_selected, get_selection_set, get_value
+from .general_resolvers import build_join_condition, get_selected, get_value
 from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
-from .paging_utils import get_cursor, get_pagination_queries, Paging
 from .tag import build_tag_graphql_response
+from .paging_utils import get_pagination_queries
 
 cnr_request_fields = {'dataSet',
                       'direction',
@@ -43,14 +44,13 @@ def build_copy_number_result_request(
     """
     sess = db.session
 
-    copy_number_result_1 = orm.aliased(CopyNumberResult, name='dcnr')
-    data_set_1 = orm.aliased(Dataset, name='ds')
-    feature_1 = orm.aliased(Feature, name='f')
-    gene_1 = orm.aliased(Gene, name='g')
-    tag_1 = orm.aliased(Tag, name='t')
+    copy_number_result_1 = aliased(CopyNumberResult, name='dcnr')
+    data_set_1 = aliased(Dataset, name='ds')
+    feature_1 = aliased(Feature, name='f')
+    gene_1 = aliased(Gene, name='g')
+    tag_1 = aliased(Tag, name='t')
 
     core_field_mapping = {
-        'id': copy_number_result_1.id.label('id'),
         'direction': copy_number_result_1.direction.label('direction'),
         'meanNormal': copy_number_result_1.mean_normal.label('mean_normal'),
         'meanCnv': copy_number_result_1.mean_cnv.label('mean_cnv'),
@@ -80,18 +80,14 @@ def build_copy_number_result_request(
                          'shortDisplay': tag_1.short_display.label('tag_short_display')}
 
     core = get_selected(requested, core_field_mapping)
+    core |= get_selected(data_set_requested, data_set_field_mapping)
+    core |= get_selected(feature_requested, feature_field_mapping)
+    core |= get_selected(gene_requested, gene_field_mapping)
+    core |= get_selected(tag_requested, tag_field_mapping)
 
-    if 'dataSet' in requested:
-        core |= get_selected(data_set_requested, data_set_field_mapping)
-
-    if 'feature' in requested:
-        core |= get_selected(feature_requested, feature_field_mapping)
-
-    if 'gene' in requested:
-        core |= get_selected(gene_requested, gene_field_mapping)
-
-    if 'tag' in requested:
-        core |= get_selected(tag_requested, tag_field_mapping)
+    if not distinct:
+        # Add the id as a cursor if not selecting distinct
+        core.add(copy_number_result_1.id.label('id'))
 
     query = sess.query(*core)
     query = query.select_from(copy_number_result_1)

@@ -24,8 +24,9 @@ type Gene {
   pathway: String
   "A list of Publications associated with the gene."
   publications: [SimplePublication!]!
+  rnaSeqExprs: [Float!]!
   "A list of sample names and the RNA Sequence Expressions related to the gene."
-  samples: [GeneRelatedSample!]!
+  samples: [String!]!
   "The 'superCategory' of the gene."
   superCategory: String
   "The 'therapyType' of the gene."

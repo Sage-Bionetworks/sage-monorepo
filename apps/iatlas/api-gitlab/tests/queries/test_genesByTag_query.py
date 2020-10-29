@@ -224,10 +224,7 @@ def test_genesByTag_query_with_maxRnaSeqExpr(client, common_query_builder, data_
             tag
             genes {
                 entrez
-                samples {
-                    name
-                    rnaSeqExpr
-                }
+                rnaSeqExprs
             }
         }""")
     response = client.post(
@@ -248,13 +245,12 @@ def test_genesByTag_query_with_maxRnaSeqExpr(client, common_query_builder, data_
         assert len(genes) > 0
         # Don't need to iterate through every result.
         for gene in genes[0:2]:
-            samples = gene['samples']
+            rna_seq_exprs = gene['rnaSeqExprs']
             assert type(gene['entrez']) is int
-            assert isinstance(samples, list)
-            assert len(samples) > 0
-            for current_sample in samples[0:3]:
-                assert type(current_sample['name']) is str
-                assert current_sample['rnaSeqExpr'] <= max_rna_seq_expr_1
+            assert isinstance(rna_seq_exprs, list)
+            assert len(rna_seq_exprs) > 0
+            for rna_seq_expr in rna_seq_exprs[0:3]:
+                assert rna_seq_expr <= max_rna_seq_expr_1
 
 
 def test_genesByTag_query_with_minRnaSeqExpr(client, common_query_builder, data_set, min_rna_seq_expr_1, related):
@@ -262,10 +258,7 @@ def test_genesByTag_query_with_minRnaSeqExpr(client, common_query_builder, data_
             tag
             genes {
                 entrez
-                samples {
-                    name
-                    rnaSeqExpr
-                }
+                rnaSeqExprs
             }
         }""")
     response = client.post(
@@ -285,13 +278,12 @@ def test_genesByTag_query_with_minRnaSeqExpr(client, common_query_builder, data_
         assert len(genes) > 0
         # Don't need to iterate through every result.
         for gene in genes[0:2]:
-            samples = gene['samples']
+            rna_seq_exprs = gene['rnaSeqExprs']
             assert type(gene['entrez']) is int
-            assert isinstance(samples, list)
-            assert len(samples) > 0
-            for current_sample in samples[0:3]:
-                assert type(current_sample['name']) is str
-                assert current_sample['rnaSeqExpr'] >= min_rna_seq_expr_1
+            assert isinstance(rna_seq_exprs, list)
+            assert len(rna_seq_exprs) > 0
+            for rna_seq_expr in rna_seq_exprs[0:3]:
+                assert rna_seq_expr >= min_rna_seq_expr_1
 
 
 def test_genesByTag_query_with_minRnaSeqExpr_and_maxRnaSeqExpr(client, common_query_builder, data_set, max_rna_seq_expr_2, min_rna_seq_expr_2, related, tag):
@@ -299,10 +291,7 @@ def test_genesByTag_query_with_minRnaSeqExpr_and_maxRnaSeqExpr(client, common_qu
             tag
             genes {
                 entrez
-                samples {
-                    name
-                    rnaSeqExpr
-                }
+                rnaSeqExprs
             }
         }""")
     response = client.post(
@@ -324,11 +313,10 @@ def test_genesByTag_query_with_minRnaSeqExpr_and_maxRnaSeqExpr(client, common_qu
         assert len(genes) > 0
         # Don't need to iterate through every result.
         for gene in genes[0:2]:
-            samples = gene['samples']
+            rna_seq_exprs = gene['rnaSeqExprs']
             assert type(gene['entrez']) is int
-            assert isinstance(samples, list)
-            assert len(samples) > 0
-            for current_sample in samples[0:3]:
-                assert type(current_sample['name']) is str
-                assert current_sample['rnaSeqExpr'] <= max_rna_seq_expr_2
-                assert current_sample['rnaSeqExpr'] >= min_rna_seq_expr_2
+            assert isinstance(rna_seq_exprs, list)
+            assert len(rna_seq_exprs) > 0
+            for rna_seq_expr in rna_seq_exprs[0:3]:
+                assert rna_seq_expr <= max_rna_seq_expr_2
+                assert rna_seq_expr >= min_rna_seq_expr_2
