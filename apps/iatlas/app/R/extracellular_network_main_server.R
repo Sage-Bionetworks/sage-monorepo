@@ -98,12 +98,16 @@ extracellular_network_main_server <- function(
         )
       })
 
+      gene_choice_list <- shiny::reactive({
+        build_ecn_gene_choice_list()
+      })
+
       output$select_genes <- shiny::renderUI({
         shiny::selectizeInput(
           ns("selected_genes"),
           "Select genes of interest (optional)",
-          choices = build_ecn_gene_choice_list(),
-          selected = "geneset:extra_cellular_network",
+          choices = gene_choice_list(),
+          selected = "geneset:immunomodulator",
           multiple = TRUE
         )
       })
@@ -155,7 +159,12 @@ extracellular_network_main_server <- function(
 
       edges <- shiny::reactive({
         shiny::req(nodes(), input$concordance)
-        get_edges(nodes(), input$concordance)
+        edges <- get_edges(nodes(), input$concordance)
+        shiny::validate(shiny::need(
+          nrow(edges) > 0,
+          "No network for this selection. Try changing the thresholds or selecting another subset."
+        ))
+        return(edges)
       })
 
       output$select_node_ui <- shiny::renderUI({
