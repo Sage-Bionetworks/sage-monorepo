@@ -31,6 +31,7 @@ test_that("multivariate_driver_server", {
       expect_null(covariate_tbl())
       expect_type(response_tbl(), "list")
       expect_named(response_tbl(), c("sample", "response"))
+      expect_true(nrow(response_tbl()) > 0)
       expect_type(status_tbl(), "list")
       expect_named(
         status_tbl(),
@@ -46,6 +47,7 @@ test_that("multivariate_driver_server", {
           "mutation"
         )
       )
+      expect_true(nrow(status_tbl()) > 0)
       session$setInputs("group_mode" = "Across groups")
       expect_type(combined_tbl(), "list")
       expect_named(combined_tbl(), c("response", "status", "label"))
@@ -55,8 +57,10 @@ test_that("multivariate_driver_server", {
       session$setInputs("min_mutants" = 2)
       session$setInputs("min_wildtype" = 2)
       expect_type(labels(), "character")
+      expect_true(length(labels()) > 0)
       expect_type(filtered_tbl(), "list")
       expect_named(filtered_tbl(), c("response", "status", "label"))
+      expect_true(nrow(filtered_tbl()) > 0)
       expect_type(pvalue_tbl(), "list")
       expect_named(pvalue_tbl(), c('label', 'p_value', 'log10_p_value'))
       expect_type(effect_size_tbl(), "list")
