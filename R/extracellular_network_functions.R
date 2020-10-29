@@ -1,5 +1,5 @@
 build_ecn_gene_choice_list <- function(){
-    genes <- iatlas.api.client::query_genes("extra_cellular_network") %>%
+    genes <- iatlas.api.client::query_genes(gene_types = "extra_cellular_network") %>%
         dplyr::select("hgnc", "entrez") %>%
         dplyr::mutate("entrez" = stringr::str_c("gene:", .data$entrez)) %>%
         tibble::deframe(.)
@@ -91,7 +91,6 @@ get_gene_nodes <- function(
         .data$node_friendly
       )
     )
-
   if(stratify) nodes <- filter_nodes_with_tag_name(nodes, stratified_tags)
   unnest_nodes(nodes, stratify)
 }
@@ -147,6 +146,20 @@ filter_nodes_with_tag_name <- function(data, names){
 }
 
 unnest_nodes <- function(data, stratify){
+  if(nrow(data) == 0) {
+    data <- data %>%
+      dplyr::mutate("tag" = character()) %>%
+      dplyr::select(
+        "label",
+        "node_name",
+        "node_display",
+        "node_friendly",
+        "tag",
+        "score"
+      )
+    return(data)
+  }
+
   result <- data %>%
     tidyr::unnest("tags") %>%
     dplyr::select(
@@ -179,7 +192,11 @@ get_edges <- function(nodes, min_concordance){
       min_score = min_concordance,
       node1 = node_names,
       node2 = node_names
-    ) %>%
+    )
+
+  if(nrow(edges) == 0) return(edges)
+
+  edges %>%
     dplyr::select("node1", "node2", "score") %>%
     dplyr::inner_join(nodes, by = c("node1" = "node_name")) %>%
     dplyr::select(
