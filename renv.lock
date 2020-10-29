@@ -456,6 +456,13 @@
       "Repository": "CRAN",
       "Hash": "76de23891bdba419517e855ed611ad29"
     },
+    "forcats": {
+      "Package": "forcats",
+      "Version": "0.5.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1cb4279e697650f0bd78cd3601ee7576"
+    },
     "foreign": {
       "Package": "foreign",
       "Version": "0.8-75",
@@ -656,9 +663,9 @@
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "master",
-      "RemoteSha": "e8ee6f8d8e46c6f7bb047e1542a1aba089aab65d",
+      "RemoteSha": "d9c256e60cb3fa7a416d857bc7c36014c931e36b",
       "RemoteHost": "api.github.com",
-      "Hash": "2cf71eb2f5bbb7ca7659099da8393184"
+      "Hash": "e78311a6813081357dc14ff3f418a0f3"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
