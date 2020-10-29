@@ -14,8 +14,8 @@ def resolve_gene(_obj, info, entrez, sample=None):
     gene = request_gene(requested, entrez=[entrez], sample=sample)
 
     if gene:
-        pubs_dict, samples_dict, types_dict = return_gene_derived_fields(
+        pubs_dict, types_dict = return_gene_derived_fields(
             requested, gene_types_requested, publications_requested, samples_requested, entrez=[entrez], sample=sample)
 
-        return build_gene_graphql_response(pubs_dict, samples_dict, types_dict)(gene)
+        return build_gene_graphql_response(pubs_dict, types_dict)(gene)
     return None

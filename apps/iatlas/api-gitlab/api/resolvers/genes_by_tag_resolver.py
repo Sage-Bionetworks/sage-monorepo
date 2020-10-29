@@ -31,12 +31,12 @@ def resolve_genes_by_tag(_obj, info, dataSet=None, entrez=None, feature=None, fe
         gene_ids = set(gene.id for gene in genes) if len(genes) < 500 else []
 
         # If there were geneTypes, publications, or samples requested, make separate queries for them, but only if some genes were returned initially.
-        pubs_dict, samples_dict, types_dict = return_gene_derived_fields(
-            requested, gene_types_requested, publications_requested, samples_requested, data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, related=related, sample=sample, super_category=superCategory, tag=tag, therapy_type=therapyType, gene_ids=gene_ids) if genes else (dict(), dict(), dict())
+        pubs_dict, types_dict = return_gene_derived_fields(
+            requested, gene_types_requested, publications_requested, samples_requested, data_set=dataSet, entrez=entrez, feature=feature, feature_class=featureClass, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, related=related, sample=sample, super_category=superCategory, tag=tag, therapy_type=therapyType, gene_ids=gene_ids) if genes else (dict(), dict())
         return {
             'characteristics': get_value(genes[0], 'characteristics'),
             'color': get_value(genes[0], 'color'),
-            'genes': map(build_gene_graphql_response(pubs_dict, samples_dict, types_dict), genes),
+            'genes': map(build_gene_graphql_response(pubs_dict, types_dict), genes),
             'longDisplay': get_value(genes[0], 'tag_long_display'),
             'shortDisplay': get_value(genes[0], 'tag_short_display'),
             'tag': gene_tag
