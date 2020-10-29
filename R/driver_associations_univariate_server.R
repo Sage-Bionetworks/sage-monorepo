@@ -67,6 +67,31 @@ univariate_driver_server <- function(id, cohort_obj) {
           )
       })
 
+      total_associations <- shiny::reactive({
+        n_mutations <-
+          iatlas.api.client::query_mutations(
+            datasets = "TCGA", types = "driver_mutation"
+          ) %>%
+          nrow()
+
+        n_tags <- length(tags())
+
+        n_possible <-  n_tags * n_mutations
+      })
+
+
+      output$result_text <- shiny::renderText({
+
+        p_tested <-
+          volcano_plot_tbl() %>%
+          nrow() %>%
+          magrittr::divide_by(., total_associations()) %>%
+          round(2) %>%
+          as.character()
+
+        stringr::str_c("Percentage of Tested Associations: ", p_tested)
+      })
+
       output$volcano_plot <- plotly::renderPlotly({
         shiny::req(volcano_plot_tbl())
 
@@ -149,6 +174,9 @@ univariate_driver_server <- function(id, cohort_obj) {
             samples = cohort_obj()$sample_tbl$sample
           )
         dplyr::inner_join(feature_tbl, status_tbl, by = "sample") %>%
+          dplyr::mutate(
+            "status" = forcats::fct_relevel(.data$status, "Wt", "Mut")
+          ) %>%
           dplyr::select(x = .data$status, y = .data$feature_value)
 
       })
