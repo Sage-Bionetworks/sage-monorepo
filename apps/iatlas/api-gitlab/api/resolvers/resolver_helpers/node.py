@@ -150,23 +150,6 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
         query = query.join(gene_1, and_(
             *gene_join_condition), isouter=is_outer)
 
-    # order = []
-    # append_to_order = order.append
-    # if 'name' in requested:
-    #     append_to_order(node_1.name)
-    # if 'label' in requested:
-    #     append_to_order(node_1.label)
-    # if 'score' in requested:
-    #     append_to_order(node_1.score)
-    # if 'x' in requested:
-    #     append_to_order(node_1.x)
-    # if 'y' in requested:
-    #     append_to_order(node_1.y)
-    # if not order:
-    #     append_to_order(node_1.id)
-    # query = query.order_by(*order)
-
-    # return query.distinct()
     return get_pagination_queries(query, paging, distinct, cursor_field=node_1.id)
 
 
@@ -287,13 +270,10 @@ def return_associated_tags(table_name, conn, tag_requested, network):
     sep = ', '
     tag_fields = sep.join(tag_fields)
 
-    query = f'SELECT DISTINCT {tag_fields}, n.id as node_id FROM tags as t, {table_name} as n, nodes_to_tags WHERE n.id = nodes_to_tags.node_id AND t.id = nodes_to_tags.tag_id'
-    if network is not None:
-        network_str = ''
-        for net in network:
-            network_str += f"'{net}', "
-        network_str = network_str[0:-2]
-        query += f' AND t.name NOT IN ({network_str})'
+    (network_tag_id, ) = db.session.query(Tag.id).filter_by(
+        name='network').one_or_none()
+    query = f'SELECT DISTINCT {tag_fields}, n.id as node_id FROM tags as t, {table_name} as n, nodes_to_tags, tags_to_tags WHERE (n.id = nodes_to_tags.node_id AND t.id = nodes_to_tags.tag_id) AND (tags_to_tags.tag_id = t.id AND tags_to_tags.related_tag_id != {network_tag_id})'
+    # query = f'SELECT DISTINCT {tag_fields}, n.id as node_id FROM tags as t, {table_name} as n, nodes_to_tags JOIN tags_to_tags ON (tags_to_tags.tag_id = nodes_to_tags.tag_id AND tags_to_tags.related_tag_id != {network_tag_id}) WHERE n.id = nodes_to_tags.node_id AND t.id = nodes_to_tags.tag_id'
     tag_results = execute_sql(query, conn=conn)
     tag_dict = dict()
     if tag_results:
