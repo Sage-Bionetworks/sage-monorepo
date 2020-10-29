@@ -25,6 +25,7 @@ test_that("univariate_driver_server", {
           "mutation_code"
         )
       )
+      expect_type(output$result_text, "character")
       expect_type(output$volcano_plot, "character")
       expect_error(selected_volcano_result())
       expect_error(violin_plot_tbl())
