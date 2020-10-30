@@ -279,11 +279,13 @@ def build_gene_request(
         append_to_group = group.append
         if tag_requested:
             append_to_group(tag_1.name)
-        if 'display' in requested:
-            append_to_group(tag_1.display)
-        if 'color' in requested:
+        if 'shortDisplay' in tag_requested:
+            append_to_group(tag_1.short_display)
+        if 'longDisplay' in tag_requested:
+            append_to_group(tag_1.long_display)
+        if 'color' in tag_requested:
             append_to_group(tag_1.color)
-        if 'characteristics' in requested:
+        if 'characteristics' in tag_requested:
             append_to_group(tag_1.characteristics)
         if 'entrez' in requested:
             append_to_group(gene_1.entrez)
@@ -314,11 +316,13 @@ def build_gene_request(
     append_to_order = order.append
     if tag_requested:
         append_to_order(tag_1.name)
-    if 'display' in requested:
-        append_to_order(tag_1.display)
-    if 'color' in requested:
+    if 'shortDisplay' in tag_requested:
+        append_to_order(tag_1.short_display)
+    if 'longDisplay' in tag_requested:
+        append_to_order(tag_1.long_display)
+    if 'color' in tag_requested:
         append_to_order(tag_1.color)
-    if 'characteristics' in requested:
+    if 'characteristics' in tag_requested:
         append_to_order(tag_1.characteristics)
     if 'entrez' in requested:
         append_to_order(gene_1.entrez)
