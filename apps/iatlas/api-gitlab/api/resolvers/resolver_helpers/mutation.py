@@ -6,9 +6,10 @@ from api.db_models import Dataset, DatasetToTag, DatasetToSample, Gene, Mutation
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .gene import build_gene_graphql_response
 from .mutation_type import build_mutation_type_graphql_response
+from .paging_utils import create_temp_table, get_cursor, get_pagination_queries, Paging
 from .sample import build_sample_graphql_response
 
-mutation_by_sample_request_fields = {'name', 'mutations'}
+mutation_by_sample_request_fields = {'id', 'name', 'mutations'}
 
 mutation_request_fields = {'id',
                            'gene',
@@ -25,7 +26,7 @@ def build_mutation_graphql_response(sample_dict=dict()):
         mutation_id = get_value(mutation, 'id')
         samples = sample_dict.get(mutation_id, []) if sample_dict else []
         return {
-            'id': get_value(mutation, 'id'),
+            'id': mutation_id,
             'gene': build_gene_graphql_response()(mutation),
             'mutationCode': get_value(mutation, 'code'),
             'mutationType': build_mutation_type_graphql_response(mutation),
@@ -38,12 +39,13 @@ def build_mutation_graphql_response(sample_dict=dict()):
 def build_mutation_by_sample_graphql_response(mutation_set):
     mutations = mutation_set[1] or []
     return {
+        'id': get_value(mutations[0], 'sample_id'),
         'name': get_value(mutations[0], 'sample_name'),
         'mutations': map(build_mutation_graphql_response(), mutations)
     }
 
 
-def build_mutation_request(requested, gene_requested, mutation_type_requested, sample_requested, data_set=None, entrez=None, feature=None, feature_class=None, mutation_code=None, mutation_id=None, mutation_type=None, related=None, sample=None, status=None, tag=None, by_sample=False):
+def build_mutation_request(requested, gene_requested, mutation_type_requested, sample_requested, data_set=None, distinct=False, entrez=None, feature=None, feature_class=None, mutation_code=None, mutation_id=None, mutation_type=None, paging=None, related=None, sample=None, status=None, tag=None, by_sample=False):
     '''
     Builds a SQL request
 
@@ -84,10 +86,14 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, s
                                'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
     mutation_type_field_mapping = {'display': mutation_type_1.display.label('display'),
                                    'name': mutation_type_1.name.label('name')}
-    sample_core_field_mapping = {'name': sample_1.name.label('sample_name')}
+    sample_core_field_mapping = {'id': sample_1.id.label('sample_id'), 'name': sample_1.name.label('sample_name')}
 
     core = get_selected(requested, core_field_mapping)
-    core |= {mutation_1.id.label('id')}
+    core |= {mutation_1.id.label('id')} # if we always request id, distinct will return every record
+    # if not distinct:
+    #     # Add the id as a cursor if not selecting distinct
+    #     core.add(mutation_1.id.label('id'))
+
     gene_core = get_selected(gene_requested, gene_core_field_mapping)
     mutation_type_core = get_selected(
         mutation_type_requested, mutation_type_field_mapping)
@@ -165,23 +171,7 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, s
                 sample_to_mutation_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
             query = query.join(sample_1, and_(*sample_join_condition))
 
-    order = []
-    append_to_order = order.append
-    if by_sample and not 'name' in sample_requested:
-        append_to_order(sample_1.id)
-    if by_sample and 'name' in sample_requested:
-        append_to_order(sample_1.name)
-    if 'status' in requested:
-        append_to_order(sample_to_mutation_1.status)
-    if 'id' in requested:
-        append_to_order(mutation_1.id)
-    if 'mutationCode' in requested:
-        append_to_order(mutation_code_1.code)
-    if not order:
-        append_to_order(mutation_1.id)
-    query = query.order_by(*order)
-
-    return query
+    return get_pagination_queries(query, paging, distinct, cursor_field=mutation_1.id)
 
 
 def get_samples(requested, patient_requested, sample_requested, data_set=None, entrez=None, feature=None, feature_class=None, mutation_code=None, mutation_id=set(), mutation_type=None, related=None, sample=None, status=None, tag=None):
@@ -213,7 +203,7 @@ def get_samples(requested, patient_requested, sample_requested, data_set=None, e
         sample_1 = aliased(Sample, name='s')
         sample_to_mutation_1 = aliased(SampleToMutation, name='sm')
 
-        core_field_mapping = {'name': sample_1.name.label('name'),
+        core_field_mapping = {'id': sample_1.id.label('id'), 'name': sample_1.name.label('name'),
                               'status': sample_to_mutation_1.status.label('status')}
         patient_field_mapping = {'ageAtDiagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
                                  'barcode': patient_1.barcode.label('barcode'),
@@ -336,7 +326,7 @@ def request_mutations(*args, **kwargs):
         `tag` - a list of strings, tag names
     '''
     query = build_mutation_request(*[*args, set()], **kwargs)
-    return query.distinct().all()
+    return query#.distinct().all()
 
 
 def return_mutation_derived_fields(*args, **kwargs):

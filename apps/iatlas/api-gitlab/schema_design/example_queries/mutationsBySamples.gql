@@ -1,4 +1,6 @@
 query MutationsBySample(
+  $paging: PagingInput
+  $distinct: Boolean
   $entrez: [Int!]
   $mutationCode: [String!]
   $mutationId: [Int!]
@@ -8,6 +10,8 @@ query MutationsBySample(
   $status: [StatusEnum!]
 ) {
   mutationsBySample(
+    paging: $paging
+    distinct: $distinct
     entrez: $entrez
     mutationCode: $mutationCode
     mutationId: $mutationId
@@ -31,9 +35,15 @@ query MutationsBySample(
         status
       }
     }
-    page
-    pages
-    total
+    paging {
+      type
+      startCursor
+      endCursor
+      limit
+      page
+      pages
+      total
+    }
   }
 }
 

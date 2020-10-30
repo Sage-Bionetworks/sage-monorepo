@@ -12,13 +12,6 @@ def resolve_driver_results(_obj, info, dataSet=None, distinct=False, entrez=None
     requested = get_requested(
         selection_set=selection_set, requested_field_mapping=driver_result_request_fields)
 
-    if distinct == False:
-        requested.add('id')  # Add the id as a cursor if not selecting distinct
-
-    pagination_set = get_selection_set(info=info, child_node='paging')
-    pagination_requested = get_requested(selection_set=pagination_set, requested_field_mapping=paging_fields)
-    paging = paging if paging else {'type': Paging.CURSOR, 'first': Paging.MAX_LIMIT}
-
     data_set_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_data_set_request_fields, child_node='dataSet')
 
@@ -31,7 +24,14 @@ def resolve_driver_results(_obj, info, dataSet=None, distinct=False, entrez=None
     tag_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_tag_request_fields, child_node='tag')
 
+    if distinct == False:
+        requested.add('id')  # Add the id as a cursor if not selecting distinct
+
+    pagination_set = get_selection_set(info=info, child_node='paging')
+    pagination_requested = get_requested(selection_set=pagination_set, requested_field_mapping=paging_fields)
+    paging = paging if paging else {'type': Paging.CURSOR, 'first': Paging.MAX_LIMIT}
+
     query, count_query = build_driver_result_request(
         requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=dataSet, distinct=distinct, entrez=entrez, feature=feature, max_p_value=maxPValue, max_log10_p_value=maxLog10PValue, min_fold_change=minFoldChange, min_log10_fold_change=minLog10FoldChange, min_log10_p_value=minLog10PValue, min_p_value=minPValue, min_n_mut=minNumMutants, min_n_wt=minNumWildTypes, mutation_code=mutationCode, paging=paging, tag=tag)
 
-    return paginate(query, count_query, paging, distinct, build_dr_graphql_response)
+    return paginate(query, count_query, paging, distinct, build_dr_graphql_response, pagination_requested)

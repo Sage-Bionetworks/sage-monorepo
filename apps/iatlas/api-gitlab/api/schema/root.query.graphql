@@ -287,6 +287,10 @@ type Query {
   If no arguments are passed, this will return all mutations.
   """
   mutations(
+    "An instance of PagingInput (see PagingInput)"
+    paging: PagingInput
+    "A boolean specifying whether or not duplicates should be filtered out. Default is false. Set to 'true' only when necessary, as it negatively impacts performance."
+    distinct: Boolean
     "A list of data set names associated with the mutations to filter by"
     dataSet: [String!]
     "A list of gene entrez ids associated with the mutations to filter by."
@@ -305,14 +309,18 @@ type Query {
     status: [StatusEnum!]
     "A list of tag names associated with the samples associated with the mutations to filter by."
     tag: [String!]
-  ): [GeneMutation!]!
+  ): GeneMutationResult!
 
   """
-  The "mutationsBySample" query 
+  The "mutationsBySample" query
 
   If no arguments are passed, this will return all samples that have related mutations (please note, there will be a LOT of results).
   """
   mutationsBySample(
+    "An instance of PagingInput (see PagingInput)"
+    paging: PagingInput
+    "A boolean specifying whether or not duplicates should be filtered out. Default is false. Set to 'true' only when necessary, as it negatively impacts performance."
+    distinct: Boolean
     "A list of data set names associated with the mutations to filter by"
     dataSet: [String!]
     "A list of gene entrez ids associated with the mutations to filter by."
@@ -333,7 +341,7 @@ type Query {
     tag: [String!]
     "The page of results to get. Defaults to 1 (the first page) with a maximum of 100,000 rows returned."
     page: Int
-  ): MutationsBySamplePage!
+  ): MutationsBySampleResult!
 
   """
   The "mutationTypes" query returns all mutation types.

@@ -8,7 +8,7 @@ from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
 
 def resolve_copy_number_results(_obj, info, dataSet=None, direction=None, distinct=False, entrez=None, feature=None, maxPValue=None,
                                 maxLog10PValue=None, minLog10PValue=None, minMeanCnv=None, minMeanNormal=None,
-                                minPValue=None, minTStat=None, paging={'type': Paging.CURSOR, 'first': Paging.MAX_LIMIT}, tag=None):
+                                minPValue=None, minTStat=None, paging=None, tag=None):
 
     # Request fields within 'items'
     selection_set = get_selection_set(info=info, child_node='items')
@@ -27,11 +27,12 @@ def resolve_copy_number_results(_obj, info, dataSet=None, direction=None, distin
     tag_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_tag_request_fields, child_node='tag')
 
-    # Request fields within 'paging'
-    pagination_requested = get_requested(info, paging_fields, 'paging')
+    paging = paging if paging else Paging.DEFAULT
 
     query, count_query = build_copy_number_result_request(
         requested, data_set_requested, feature_requested, gene_requested, tag_requested,
         data_set=dataSet, direction=direction, distinct=distinct, entrez=entrez, feature=feature, max_p_value=maxPValue, max_log10_p_value=maxLog10PValue, min_log10_p_value=minLog10PValue, min_mean_cnv=minMeanCnv, min_mean_normal=minMeanNormal, min_p_value=minPValue, min_t_stat=minTStat, paging=paging, tag=tag)
 
-    return paginate(query, count_query, paging, distinct, build_cnr_graphql_response)
+    # Request fields within 'paging'
+    pagination_requested = get_requested(info, paging_fields, 'paging')
+    return paginate(query, count_query, paging, distinct, build_cnr_graphql_response, pagination_requested)

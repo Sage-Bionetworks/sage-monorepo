@@ -44,4 +44,4 @@ def resolve_nodes(_obj, info, dataSet=None, distinct=False, entrez=None, feature
         # tags not requested, proceed as normal
         items = fetch_page(query, paging, distinct)
 
-    return process_page(items, count_query, paging, distinct, build_node_graphql_response(tag_dict))
+    return process_page(items, count_query, paging, distinct, build_node_graphql_response(tag_dict), pagination_requested)

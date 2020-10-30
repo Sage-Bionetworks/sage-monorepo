@@ -31,4 +31,4 @@ def resolve_edges(_obj, info, distinct=False, maxScore=None, minScore=None, node
     query, count_query = build_edge_request(
         requested, node_1_requested, node_2_requested, distinct=distinct, max_score=maxScore, min_score=minScore, node_start=node1, node_end=node2, paging=paging)
 
-    return paginate(query, count_query, paging, distinct, build_edge_graphql_response)
+    return paginate(query, count_query, paging, distinct, build_edge_graphql_response, pagination_requested)
