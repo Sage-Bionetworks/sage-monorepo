@@ -24,11 +24,10 @@ def resolve_edges(_obj, info, distinct=False, maxScore=None, minScore=None, node
     if distinct == False:
         requested.add('id')  # Add the id as a cursor if not selecting distinct
 
-    pagination_set = get_selection_set(info=info, child_node='paging')
-    pagination_requested = get_requested(selection_set=pagination_set, requested_field_mapping=paging_fields)
-    paging = paging if paging else {'type': Paging.CURSOR, 'first': Paging.MAX_LIMIT}
+    paging = paging if paging else Paging.DEFAULT
 
     query, count_query = build_edge_request(
         requested, node_1_requested, node_2_requested, distinct=distinct, max_score=maxScore, min_score=minScore, node_start=node1, node_end=node2, paging=paging)
 
+    pagination_requested = get_requested(info, paging_fields, 'paging')
     return paginate(query, count_query, paging, distinct, build_edge_graphql_response, pagination_requested)

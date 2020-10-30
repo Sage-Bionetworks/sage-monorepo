@@ -101,6 +101,8 @@ def fetch_page(query, paging, distinct):
     limit = paging.get('limit')
     limit, order = get_limit(first, last, limit)
     if paging_type == Paging.OFFSET or distinct == True:
+        if distinct:
+            query = query.distinct()
         return query.paginate(page, limit).items
     return query.limit(limit + 1).all()
 

@@ -326,7 +326,7 @@ def request_mutations(*args, **kwargs):
         `tag` - a list of strings, tag names
     '''
     query = build_mutation_request(*[*args, set()], **kwargs)
-    return query#.distinct().all()
+    return query
 
 
 def return_mutation_derived_fields(*args, **kwargs):

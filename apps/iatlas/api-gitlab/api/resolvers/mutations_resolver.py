@@ -20,9 +20,6 @@ def resolve_mutations(_obj, info, dataSet=None, distinct=False, entrez=None, mut
     patient_requested = get_requested(
         selection_set=sample_selection_set, requested_field_mapping=simple_patient_request_fields, child_node='patient')
 
-    if distinct == False:
-        requested.add('id')  # Add the id as a cursor if not selecting distinct
-
     paging = paging if paging else Paging.DEFAULT
 
     query, count_query = request_mutations(

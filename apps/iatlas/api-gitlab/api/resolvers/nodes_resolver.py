@@ -26,9 +26,7 @@ def resolve_nodes(_obj, info, dataSet=None, distinct=False, entrez=None, feature
     if distinct == False:
         requested.add('id')  # Add the id as a cursor if not selecting distinct
 
-    pagination_set = get_selection_set(info=info, child_node='paging')
-    pagination_requested = get_requested(selection_set=pagination_set, requested_field_mapping=paging_fields)
-    paging = paging if paging else {'type': Paging.CURSOR, 'first': Paging.MAX_LIMIT}
+    paging = paging if paging else Paging.DEFAULT
 
     query, count_query = build_node_request(
         requested, data_set_requested, feature_requested, gene_requested, data_set=dataSet, distinct=distinct, entrez=entrez, feature=feature, max_score=maxScore, min_score=minScore, network=network, related=related, paging=paging, tag=tag)
@@ -44,4 +42,5 @@ def resolve_nodes(_obj, info, dataSet=None, distinct=False, entrez=None, feature
         # tags not requested, proceed as normal
         items = fetch_page(query, paging, distinct)
 
+    pagination_requested = get_requested(info, paging_fields, 'paging')
     return process_page(items, count_query, paging, distinct, build_node_graphql_response(tag_dict), pagination_requested)
