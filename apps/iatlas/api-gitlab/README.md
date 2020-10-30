@@ -15,6 +15,10 @@ A GraphQL API that serves data from the iAtlas Data Database. This is built in P
 
 ## Development
 
+The instructions below assume that there is a PostgreSQL server running locally with the iAtlas Database installed (see [iAtlas-Data](https://gitlab.com/cri-iatlas/iatlas-data)). If this is not the case, please see information on [running PostgreSQL in Docker](#running-postgres-in-docker) below.
+
+To change any of the environment variables used by the app see [Environment Variables](#environment-variables) below.
+
 The first time you checkout the project, run the following command to build the docker image, start the container, and start the API:
 
 ```bash
@@ -23,7 +27,7 @@ The first time you checkout the project, run the following command to build the 
 
 This will build the Docker image and run the container. Once the container is created, the Flask server will be started. Then a command prompt should open from within the container (looks like: `bash-5.0#`).
 
-The GrapiQL playground interface should open automatically in your browser.
+The GraphiQL playground interface should open automatically in your browser.
 
 **Note:** If you get _'Version in "./docker-compose.yml" is unsupported.'_, please update your version of Docker Desktop.
 
@@ -45,41 +49,42 @@ Restart the container with the following command:
 
 If there are changes made to the container or image, first, stop the container `./stop.sh`, then rebuild it and restarted it with `./start.sh --build` or `./start.sh -b`.
 
+### Non-Dockerized
+
+If you choose NOT to use the dockerized development method above, please ensure the following are installed:
+
+- [Python](https://www.python.org/) - version 3.8
+- All the packages in the [`requirements.txt`](./requirements.txt) file at the versions specified.
+- All the packages in the [`requirements-dev.txt`](./requirements-dev.txt) file at the versions specified.
+
+See [https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) for information on installing Python packages for a specific project.
+
+Start the app with (called from the root of the project):
+
+```bash
+. ./set_env_variables.sh && python run.py
+```
+
+### Running Postgres in Docker
+
+A simple way to get PostgreSQL running locally is to use Docker. Here is a simple Dockerized PostgreSQL server with pgAdmin:
+
+["postgres_docker" on Github](https://github.com/generalui/postgres_docker)
+
+### Environment Variables
+
+All the environment variables used by the app have defaults. To set the environment variables, simply run the following bash script from the root of the project:
+
+```bash
+. ./set_env_variables.sh
+```
+
 ## Testing
 
-The app uses [Pytest](https://docs.pytest.org/) for testing. It implement the [pytest-xdist](https://pypi.org/project/pytest-xdist/) plugin for running test in parallel and on multiple cores.
+All tests are in the [`tests/`](./tests/) folder.
 
-Coverage is generated using the [pytest-cov](https://pypi.org/project/pytest-cov/) plugin.
-
-To run a test module simple run:
-
-```bash
-pytest path/to/the/test_file.py -n auto
-```
-
-An individul test may be run in the same manner with:
-
-```bash
-pytest path/to/the/test_file.py::name_of_test_function -n auto
-```
-
-To generate coverage html run:
-
-```bash
-pytest --cov --cov-report html -n auto
-```
-
-The `-n auto` at the end of each command is for running on mutliple cores. `auto` will automatically determine the number of cores to use. Otherwise, one may specify the number explicitly.
+See: [TESTING.md](./tests/TESTING.md#iatlas_api_testing)
 
 ## Performance Profiling
 
-### Deterministic Profiling
-
-Functions may be profiled using the `@profile(__name__)` decorator. Adding this decorator to a function will cause the app to write a profile for that function when it is called. The profile may be reviewed via [SnakeViz](https://jiffyclub.github.io/snakeviz/). Simply call:
-
-```bash
-./view_profile.sh
-```
-
-from the root of the project. A list of profile options will be given. Once a profile is selected, the SnakeViz server will render the profile as a webpage. The webpage URL will be displayed in the console. Go to the page in your browser to view the profile.
-By default, SnakeViz runs on port `8020`. To change this port, set the SNAKEVIZ_PORT variable in a `.env-dev` file in the root of the project (see the `.env-SAMPLE` for an example.)
+See: [PROFILING.md](./PROFILING.md)

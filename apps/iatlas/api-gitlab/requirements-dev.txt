@@ -1,0 +1,7 @@
+autopep8==1.5.4
+pylint==2.6.0
+pylint-flask-sqlalchemy==0.2.0
+pytest==6.1.2
+pytest-cov==2.10.1
+pytest-xdist==2.1.0
+snakeviz==2.1.0
