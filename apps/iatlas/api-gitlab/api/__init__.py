@@ -10,8 +10,6 @@ def create_app(config_class=get_config()):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    db.init_app(app)
-
     register_extensions(app)
 
     # Blueprint registration here.

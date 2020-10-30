@@ -1,5 +1,5 @@
 from os import environ, path
-from flask.logging import default_handler
+import logging
 
 
 def get_database_uri():
@@ -27,7 +27,7 @@ class Config(object):
     LOG_DIR = path.join(BASE_PATH, '.logs')
     LOG_FILE = path.join(LOG_DIR, 'server.log')
     LOG_INTERVAL = 1
-    LOG_LEVEL = 'DEBUG'
+    LOG_LEVEL = logging.DEBUG
     LOG_TIME_INT = 'D'
     LOG_TYPE = 'TimedRotatingFile'
     LOG_WWW_NAME = 'iatlas-api-access'
@@ -40,14 +40,14 @@ class Config(object):
 
 
 class StagingConfig(Config):
-    LOG_LEVEL = 'INFO'
+    LOG_LEVEL = logging.INFO
     LOG_TYPE = 'stream'
     PROFILE = False
     SQLALCHEMY_ECHO = False
 
 
 class ProdConfig(Config):
-    LOG_LEVEL = 'WARN'
+    LOG_LEVEL = logging.WARN
     LOG_TYPE = 'stream'
     PROFILE = False
     SQLALCHEMY_ECHO = False

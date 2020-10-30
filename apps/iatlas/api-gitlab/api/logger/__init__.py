@@ -19,11 +19,12 @@ class LogSetup(object):
         config = app.config
         log_type = config['LOG_TYPE']
         logging_level = config['LOG_LEVEL']
+        log_extension = '.log'
         if log_type != 'stream':
             try:
                 log_directory = config['LOG_DIR']
-                app_log_file_name = config['LOG_APP_NAME']
-                access_log_file_name = config['LOG_WWW_NAME']
+                app_log_file_name = config['LOG_APP_NAME'] + log_extension
+                access_log_file_name = config['LOG_WWW_NAME'] + log_extension
                 if not path.exists(log_directory):
                     makedirs(log_directory)
             except KeyError as e:
