@@ -32,24 +32,26 @@ def sample_name():
 def common_query_builder():
     def f(query_fields):
         return """query MutationsBySample(
+            $paging: PagingInput
+            $distinct: Boolean
             $dataSet: [String!]
             $entrez: [Int!]
             $mutationCode: [String!]
             $mutationId: [Int!]
             $mutationType: [String!]
-            $page: Int
             $related: [String!]
             $sample: [String!]
             $status: [StatusEnum!]
             $tag: [String!]
         ) {
             mutationsBySample(
+                paging: $paging
+                distinct: $distinct
                 dataSet: $dataSet
                 entrez: $entrez
                 mutationCode: $mutationCode
                 mutationId: $mutationId
                 mutationType: $mutationType
-                page: $page
                 related: $related
                 sample: $sample
                 status: $status
@@ -71,21 +73,25 @@ def common_query(common_query_builder):
                 status
             }
         }
-        page
-        pages
-        total
+        paging {
+            pages
+            total
+            returned
+        }
     }""")
 
 
 def test_mutations_by_sample_query_with_sample(client, common_query, sample_name):
     response = client.post(
-        '/api', json={'query': common_query, 'variables': {'sample': [sample_name]}})
+        '/api', json={'query': common_query, 'variables': {'paging': None, 'sample': [sample_name]}})
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
+    paging = page['paging']
 
-    assert page['page'] == 1
-    assert page['pages'] > 0
+    assert paging['returned'] > 0
+    assert paging['pages'] > 0
+    assert paging['total'] >= paging['returned']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -107,9 +113,11 @@ def test_mutations_by_sample_query_with_mutationId(client, common_query, mutatio
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
+    paging = page['paging']
 
-    assert page['page'] == 1
-    assert page['pages'] > 0
+    assert paging['returned'] > 0
+    assert paging['pages'] > 0
+    assert paging['total'] >= paging['returned']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -130,14 +138,16 @@ def test_mutations_by_sample_query_with_no_args(client, common_query):
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
+    paging = page['paging']
 
     # Get the total number of samples_to_mutations in the database.
     samples_to_mutations_count = return_sample_to_mutation_query(
         'sample_id').count()
 
-    assert page['page'] == 1
-    assert page['pages'] > 0
-    assert page['total'] == samples_to_mutations_count
+    assert paging['returned'] > 0
+    assert paging['pages'] > 0
+    assert paging['total'] >= paging['returned']
+    assert paging['total'] == samples_to_mutations_count
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -160,9 +170,11 @@ def test_mutations_by_sample_query_with_status(client, common_query, mutation_st
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
+    paging = page['paging']
 
-    assert page['page'] == 1
-    assert page['pages'] > 0
+    assert paging['returned'] > 0
+    assert paging['pages'] > 0
+    assert paging['total'] >= paging['returned']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -187,9 +199,11 @@ def test_mutations_by_sample_query_with_mutationId_status_and_sample(client, com
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
+    paging = page['paging']
 
-    assert page['page'] == 1
-    assert page['pages'] > 0
+    assert paging['returned'] > 0
+    assert paging['pages'] > 0
+    assert paging['total'] >= paging['returned']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -213,15 +227,22 @@ def test_mutations_by_sample_query_with_entrez(client, common_query_builder, gen
                                             gene { entrez }
                                         }
                                     }
-                                    page
+                                    paging {
+                                        pages
+                                        total
+                                        returned
+                                    }
                                 }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {'entrez': [gene_entrez]}})
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
+    paging = page['paging']
 
-    assert page['page'] == 1
+    assert paging['returned'] > 0
+    assert paging['pages'] > 0
+    assert paging['total'] >= paging['returned']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -239,19 +260,26 @@ def test_mutations_by_sample_query_with_dataSet(client, common_query_builder, da
                                         name
                                         mutations { mutationCode }
                                     }
-                                    page
+                                    paging {
+                                        pages
+                                        total
+                                        returned
+                                    }
                                 }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {'dataSet': [data_set], 'status': [mutation_status]}})
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
+    paging = page['paging']
 
     sample_name_results = test_db.session.query(Sample.name).select_from(DatasetToSample).filter_by(
         dataset_id=data_set_id).join(Sample, Sample.id == DatasetToSample.sample_id).all()
     sample_names_in_data_set = list(map(lambda s: s.name, sample_name_results))
 
-    assert page['page'] == 1
+    assert paging['returned'] > 0
+    assert paging['pages'] > 0
+    assert paging['total'] >= paging['returned']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -270,7 +298,11 @@ def test_mutations_by_sample_query_with_related(client, common_query_builder, da
                                         name
                                         mutations { mutationCode }
                                     }
-                                    page
+                                    paging {
+                                        pages
+                                        total
+                                        returned
+                                    }
                                 }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
@@ -281,6 +313,7 @@ def test_mutations_by_sample_query_with_related(client, common_query_builder, da
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
+    paging = page['paging']
 
     sess = test_db.session
 
@@ -293,7 +326,9 @@ def test_mutations_by_sample_query_with_related(client, common_query_builder, da
     sample_name_results = sample_name_query.all()
     sample_names_in_related = list(map(lambda s: s.name, sample_name_results))
 
-    assert page['page'] == 1
+    assert paging['returned'] > 0
+    assert paging['pages'] > 0
+    assert paging['total'] >= paging['returned']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -312,7 +347,11 @@ def test_mutations_by_sample_query_with_tag(client, common_query_builder, data_s
                                         name
                                         mutations { mutationCode }
                                     }
-                                    page
+                                    paging {
+                                        pages
+                                        total
+                                        returned
+                                    }
                                 }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
@@ -323,6 +362,7 @@ def test_mutations_by_sample_query_with_tag(client, common_query_builder, data_s
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
+    paging = page['paging']
 
     sess = test_db.session
 
@@ -335,7 +375,9 @@ def test_mutations_by_sample_query_with_tag(client, common_query_builder, data_s
     sample_name_results = sample_name_query.all()
     sample_names_in_tags = list(map(lambda s: s.name, sample_name_results))
 
-    assert page['page'] == 1
+    assert paging['returned'] > 0
+    assert paging['pages'] > 0
+    assert paging['total'] >= paging['returned']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
@@ -416,7 +458,11 @@ def test_mutations_by_sample_query_with_sample_and_mutationType(client, common_q
                                             mutationType { name }
                                         }
                                     }
-                                    page
+                                    paging {
+                                        pages
+                                        total
+                                        returned
+                                    }
                                 }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {'mutationType': [mutation_type],
@@ -424,8 +470,11 @@ def test_mutations_by_sample_query_with_sample_and_mutationType(client, common_q
     json_data = json.loads(response.data)
     page = json_data['data']['mutationsBySample']
     results = page['items']
+    paging = page['paging']
 
-    assert page['page'] == 1
+    assert paging['returned'] > 0
+    assert paging['pages'] > 0
+    assert paging['total'] >= paging['returned']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:

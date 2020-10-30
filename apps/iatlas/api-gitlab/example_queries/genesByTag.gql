@@ -29,10 +29,8 @@ query GenesByTag(
     genes {
       entrez
       geneFamily
-      samples {
-        name
-        rnaSeqExpr
-      }
+      samples
+      rnaSeqExpr
     }
   }
 }

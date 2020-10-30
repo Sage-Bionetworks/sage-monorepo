@@ -22,10 +22,8 @@ query Genes(
     publications {
       pubmedId
     }
-    samples {
-      name
-      rnaSeqExpr
-    }
+    samples
+    rnaSeqExpr
   }
 }
 

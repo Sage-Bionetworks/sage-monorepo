@@ -11,6 +11,7 @@ class Paging:
     MAX_LIMIT = 100000
     ASC = 'ASC'
     DESC = 'DESC'
+    DEFAULT = {'type': CURSOR, 'first': MAX_LIMIT}
 
 paging_fields = {'type', 'page', 'pages', 'total', 'first', 'last', 'before', 'after'}
 
@@ -100,10 +101,13 @@ def fetch_page(query, paging, distinct):
     limit = paging.get('limit')
     limit, order = get_limit(first, last, limit)
     if paging_type == Paging.OFFSET or distinct == True:
+        if distinct:
+            query = query.distinct()
         return query.paginate(page, limit).items
     return query.limit(limit + 1).all()
 
-def process_page(items, count_query, paging, distinct, response_builder):
+def process_page(items, count_query, paging, distinct, response_builder, pagination_requested):
+    paging = paging if paging else {}
     paging_type = paging.get('type', Paging.CURSOR)
     page = None
     first = paging.get('first')
@@ -124,7 +128,7 @@ def process_page(items, count_query, paging, distinct, response_builder):
         # if distinct is True, paging type must be OFFSET
         pageInfo['type'] = Paging.OFFSET
         pageInfo['page'] = paging.get('page', 1)
-        results = map(response_builder, items)
+        results = map(response_builder, items) if response_builder else items
     else:
         returned = len(items)
         if order == Paging.ASC:
@@ -141,12 +145,12 @@ def process_page(items, count_query, paging, distinct, response_builder):
             if hasPreviousPage:
                 items.pop(0)  # remove the extra first item
 
-        results_map = map(response_builder, items)
+        results_map = map(response_builder, items) if response_builder else items
         results = deque(results_map)
         pageInfo['startCursor'] = to_cursor_hash(results[0]['id'])
         pageInfo['endCursor'] = to_cursor_hash(results[-1]['id'])
 
-    if 'total' or 'pages' in paging:
+    if 'total' in pagination_requested or 'pages' in pagination_requested:
         # TODO: Consider caching this value per query, and/or making count query in parallel
         count = count_query.count()
         pageInfo['total'] = count
@@ -158,6 +162,6 @@ def process_page(items, count_query, paging, distinct, response_builder):
         'paging': pageInfo
     }
 
-def paginate(query, count_query, paging, distinct, response_builder):
+def paginate(query, count_query, paging, distinct, response_builder, pagination_requested):
     items = fetch_page(query, paging, distinct)
-    return process_page(items, count_query, paging, distinct, response_builder)
+    return process_page(items, count_query, paging, distinct, response_builder, pagination_requested)
