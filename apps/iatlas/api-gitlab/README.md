@@ -62,7 +62,7 @@ See [https://packaging.python.org/guides/installing-using-pip-and-virtual-enviro
 Start the app with (called from the root of the project):
 
 ```bash
-. ./set_env_variables.sh && python run.py
+. set_env_variables.sh && python run.py
 ```
 
 ### Running Postgres in Docker
@@ -76,15 +76,19 @@ A simple way to get PostgreSQL running locally is to use Docker. Here is a simpl
 All the environment variables used by the app have defaults. To set the environment variables, simply run the following bash script from the root of the project:
 
 ```bash
-. ./set_env_variables.sh
+. set_env_variables.sh
 ```
 
 ## Testing
 
 All tests are in the [`tests/`](./tests/) folder.
 
-See: [TESTING.md](./tests/TESTING.md#iatlas_api_testing)
+See: [TESTING.md](./tests/TESTING.md#iatlas_api_testing) in the [`tests/`](./tests/) folder
 
 ## Performance Profiling
 
-See: [PROFILING.md](./PROFILING.md)
+See: [PROFILING.md](./api/telemetry/PROFILING.md) in the [`api/telemetry/`](./api/telemetry/) folder
+
+## Logging
+
+See: [LOGGING.md](./api/logger/LOGGING.md) in the [`api/logger/`](./api/logger/) folder

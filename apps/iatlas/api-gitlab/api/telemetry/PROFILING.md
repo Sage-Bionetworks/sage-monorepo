@@ -1,6 +1,6 @@
 # iAtlas API Profiling
 
-[BACK TO MAIN README](./README.md)
+[BACK TO MAIN README](./../../README.md)
 
 ### Deterministic Profiling
 
