@@ -277,13 +277,15 @@ def build_gene_request(
     if 'samples' in requested or 'rnaSeqExprs' in requested:
         group = [gene_1.id]
         append_to_group = group.append
-        if tag_requested:
+        if 'tag' in tag_requested:
             append_to_group(tag_1.name)
-        if 'display' in requested:
-            append_to_group(tag_1.display)
-        if 'color' in requested:
+        if 'shortDisplay' in tag_requested:
+            append_to_group(tag_1.short_display)
+        if 'longDisplay' in tag_requested:
+            append_to_group(tag_1.long_display)
+        if 'color' in tag_requested:
             append_to_group(tag_1.color)
-        if 'characteristics' in requested:
+        if 'characteristics' in tag_requested:
             append_to_group(tag_1.characteristics)
         if 'entrez' in requested:
             append_to_group(gene_1.entrez)
@@ -312,13 +314,15 @@ def build_gene_request(
     # return get_pagination_queries(query, paging, distinct, cursor_field=copy_number_result_1.id)
     order = []
     append_to_order = order.append
-    if tag_requested:
+    if 'tag' in tag_requested:
         append_to_order(tag_1.name)
-    if 'display' in requested:
-        append_to_order(tag_1.display)
-    if 'color' in requested:
+    if 'shortDisplay' in tag_requested:
+        append_to_order(tag_1.short_display)
+    if 'longDisplay' in tag_requested:
+        append_to_order(tag_1.long_display)
+    if 'color' in tag_requested:
         append_to_order(tag_1.color)
-    if 'characteristics' in requested:
+    if 'characteristics' in tag_requested:
         append_to_order(tag_1.characteristics)
     if 'entrez' in requested:
         append_to_order(gene_1.entrez)
@@ -380,9 +384,9 @@ def get_gene_types(
 
         order = []
         append_to_order = order.append
-        if 'name' in requested:
+        if 'name' in gene_types_requested:
             append_to_order(gene_type_1.name)
-        if 'display' in requested:
+        if 'display' in gene_types_requested:
             append_to_order(gene_type_1.display)
         if not order:
             append_to_order(gene_type_1.id)
