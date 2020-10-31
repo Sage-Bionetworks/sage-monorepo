@@ -277,7 +277,7 @@ def build_gene_request(
     if 'samples' in requested or 'rnaSeqExprs' in requested:
         group = [gene_1.id]
         append_to_group = group.append
-        if tag_requested:
+        if 'tag' in tag_requested:
             append_to_group(tag_1.name)
         if 'shortDisplay' in tag_requested:
             append_to_group(tag_1.short_display)
@@ -314,7 +314,7 @@ def build_gene_request(
     # return get_pagination_queries(query, paging, distinct, cursor_field=copy_number_result_1.id)
     order = []
     append_to_order = order.append
-    if tag_requested:
+    if 'tag' in tag_requested:
         append_to_order(tag_1.name)
     if 'shortDisplay' in tag_requested:
         append_to_order(tag_1.short_display)
