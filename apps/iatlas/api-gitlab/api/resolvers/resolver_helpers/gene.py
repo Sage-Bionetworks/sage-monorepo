@@ -384,9 +384,9 @@ def get_gene_types(
 
         order = []
         append_to_order = order.append
-        if 'name' in requested:
+        if 'name' in gene_types_requested:
             append_to_order(gene_type_1.name)
-        if 'display' in requested:
+        if 'display' in gene_types_requested:
             append_to_order(gene_type_1.display)
         if not order:
             append_to_order(gene_type_1.id)
