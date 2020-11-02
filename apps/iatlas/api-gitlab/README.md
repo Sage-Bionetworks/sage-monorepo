@@ -71,6 +71,27 @@ A simple way to get PostgreSQL running locally is to use Docker. Here is a simpl
 
 ["postgres_docker" on Github](https://github.com/generalui/postgres_docker)
 
+#### Linux ONLY
+
+If you are running on a Linux operating system the default connection to the docker container `host.docker.internal` will not work. To connect to the local dockerized PostgreSQL DB, ensure there is a `.env-dev` file ([`.env-SAMPLE`](./.env-SAMPLE) can be used as a reference.) In the `.env-dev` file, ensure the `POSTGRES_HOST` variable is set to `172.17.0.1`
+
+```.env
+POSTGRES_HOST=172.17.0.1
+```
+
+### Connecting to a different Database
+
+Alternatively, the app may be set up to connect to the existing staging database or another database.
+
+To connect to a different database (ie staging), the `.env-dev` file must also be used with values similar to:
+
+```.env
+POSTGRES_DB=iatlas_staging
+POSTGRES_HOST=iatlas-staging-us-west-2.cluster-cfb68nhqxoz9.us-west-2.rds.amazonaws.com
+POSTGRES_PASSWORD={Get_the_staging_password}
+POSTGRES_USER=postgres
+```
+
 ### Environment Variables
 
 All the environment variables used by the app have defaults. To set the environment variables, simply run the following bash script from the root of the project:
@@ -78,6 +99,10 @@ All the environment variables used by the app have defaults. To set the environm
 ```bash
 . set_env_variables.sh
 ```
+
+The default environment variables' values may be over-written by adding the value to a `.env-dev` file in the root of the project. This file is not versioned in the repository.
+
+The [`.env-SAMPLE`](./.env-SAMPLE) file is an example of what the `.env-dev` could be like and may be used as a reference.
 
 ## Testing
 
