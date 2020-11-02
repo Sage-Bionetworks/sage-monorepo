@@ -66,7 +66,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
       })
 
       status_tbl <- shiny::reactive({
-        iatlas.api.client::query_mutations_by_samples(
+        iatlas.api.client::query_mutations_by_sample(
           samples = cohort_obj()$sample_tbl$sample,
         ) %>%
           dplyr::rename("mutation" = "mutation_name")

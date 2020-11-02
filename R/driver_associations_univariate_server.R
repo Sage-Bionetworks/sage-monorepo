@@ -167,7 +167,7 @@ univariate_driver_server <- function(id, cohort_obj) {
             tags = selected_volcano_result()$group
           )
         status_tbl <-
-          iatlas.api.client::query_mutations_by_samples(
+          iatlas.api.client::query_mutations_by_sample(
             entrez = selected_volcano_result()$entrez,
             mutation_codes = selected_volcano_result()$mutation_code,
             mutation_types = "driver_mutation",

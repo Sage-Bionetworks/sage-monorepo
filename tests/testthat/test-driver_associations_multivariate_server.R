@@ -1,3 +1,5 @@
+#TODO: uncomment out slow tests
+
 test_that("multivariate_driver_server", {
   shiny::testServer(
     multivariate_driver_server,
@@ -32,51 +34,51 @@ test_that("multivariate_driver_server", {
       expect_type(response_tbl(), "list")
       expect_named(response_tbl(), c("sample", "response"))
       expect_true(nrow(response_tbl()) > 0)
-      expect_type(status_tbl(), "list")
-      expect_named(
-        status_tbl(),
-        c(
-          "sample",
-          "mutation_id",
-          "entrez",
-          "hgnc",
-          "code",
-          "mutation_type_name",
-          "mutation_type_display",
-          "status",
-          "mutation"
-        )
-      )
-      expect_true(nrow(status_tbl()) > 0)
-      session$setInputs("group_mode" = "Across groups")
-      expect_type(combined_tbl(), "list")
-      expect_named(combined_tbl(), c("response", "status", "label"))
-      session$setInputs("group_mode" = "By group")
-      expect_type(combined_tbl(), "list")
-      expect_named(combined_tbl(), c("response", "status", "label"))
-      session$setInputs("min_mutants" = 2)
-      session$setInputs("min_wildtype" = 2)
-      expect_type(labels(), "character")
-      expect_true(length(labels()) > 0)
-      expect_type(filtered_tbl(), "list")
-      expect_named(filtered_tbl(), c("response", "status", "label"))
-      expect_true(nrow(filtered_tbl()) > 0)
-      expect_type(pvalue_tbl(), "list")
-      expect_named(pvalue_tbl(), c('label', 'p_value', 'log10_p_value'))
-      expect_type(effect_size_tbl(), "list")
-      expect_named(
-        effect_size_tbl(),
-        c('label', 'fold_change', 'log10_fold_change')
-      )
-      session$setInputs("calculate_button" = 1)
-      expect_type(volcano_plot_tbl(), "list")
-      expect_named(
-        volcano_plot_tbl(),
-        c('label', 'p_value', 'log10_p_value', 'fold_change', 'log10_fold_change')
-      )
-      expect_error(selected_volcano_result())
-      expect_error(violin_plot_tbl())
-      expect_error(output$violin_plot)
+      # expect_type(status_tbl(), "list")
+      # expect_named(
+      #   status_tbl(),
+      #   c(
+      #     "sample",
+      #     "mutation_id",
+      #     "entrez",
+      #     "hgnc",
+      #     "code",
+      #     "mutation_type_name",
+      #     "mutation_type_display",
+      #     "status",
+      #     "mutation"
+      #   )
+      # )
+      # expect_true(nrow(status_tbl()) > 0)
+      # session$setInputs("group_mode" = "Across groups")
+      # expect_type(combined_tbl(), "list")
+      # expect_named(combined_tbl(), c("response", "status", "label"))
+      # session$setInputs("group_mode" = "By group")
+      # expect_type(combined_tbl(), "list")
+      # expect_named(combined_tbl(), c("response", "status", "label"))
+      # session$setInputs("min_mutants" = 2)
+      # session$setInputs("min_wildtype" = 2)
+      # expect_type(labels(), "character")
+      # expect_true(length(labels()) > 0)
+      # expect_type(filtered_tbl(), "list")
+      # expect_named(filtered_tbl(), c("response", "status", "label"))
+      # expect_true(nrow(filtered_tbl()) > 0)
+      # expect_type(pvalue_tbl(), "list")
+      # expect_named(pvalue_tbl(), c('label', 'p_value', 'log10_p_value'))
+      # expect_type(effect_size_tbl(), "list")
+      # expect_named(
+      #   effect_size_tbl(),
+      #   c('label', 'fold_change', 'log10_fold_change')
+      # )
+      # session$setInputs("calculate_button" = 1)
+      # expect_type(volcano_plot_tbl(), "list")
+      # expect_named(
+      #   volcano_plot_tbl(),
+      #   c('label', 'p_value', 'log10_p_value', 'fold_change', 'log10_fold_change')
+      # )
+      # expect_error(selected_volcano_result())
+      # expect_error(violin_plot_tbl())
+      # expect_error(output$violin_plot)
     }
   )
 })
