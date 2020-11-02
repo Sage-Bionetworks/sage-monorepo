@@ -38,7 +38,7 @@ cohort_filter_selection_server <- function(id, dataset) {
         shiny::req(tag_filter_output())
         tag_filter_output() %>%
           shiny::reactiveValuesToList(.) %>%
-          get_valid_tag_filters() %>%  print()
+          get_valid_tag_filters()
       })
 
       tag_filter_samples <- shiny::reactive({

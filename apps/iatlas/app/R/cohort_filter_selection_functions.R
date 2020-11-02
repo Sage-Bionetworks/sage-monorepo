@@ -29,7 +29,7 @@ get_filtered_tag_samples <- function(filter_obj, samples, dataset){
     filter_obj %>%
         purrr::transpose(.) %>%
         purrr::pluck("tags") %>%
-        purrr::map(., ~iatlas.api.client::query_tag_samples(datasets = dataset, tags = .x)) %>%
+        purrr::map(., ~iatlas.api.client::query_samples_by_tag2(datasets = dataset, tags = .x)) %>%
         purrr::map(., dplyr::pull, "sample") %>%
         purrr::reduce(base::intersect, .init = samples)
 }

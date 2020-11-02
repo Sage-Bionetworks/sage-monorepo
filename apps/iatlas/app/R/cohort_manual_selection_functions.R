@@ -85,7 +85,7 @@ build_tag_cohort_object <- function(dataset, samples, tag){
 #' @importFrom magrittr %>%
 build_cohort_tbl_by_tag <- function(dataset, samples, tag){
   tbl <-
-    iatlas.api.client::query_tag_samples2(
+    iatlas.api.client::query_tag_samples(
       datasets = dataset,
       parent_tags = tag,
       samples = samples
