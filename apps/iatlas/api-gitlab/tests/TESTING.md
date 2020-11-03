@@ -29,3 +29,7 @@ pytest --cov --cov-report html -n auto
 ```
 
 The `-n auto` at the end of each command is for running on multiple cores. `auto` will automatically determine the number of cores to use. Otherwise, one may specify the number explicitly.
+
+## Example Queries
+
+See: [README.md](./../example_queries/README.md) in the [`example_queries`](./../example_queries/) folder
