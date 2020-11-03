@@ -108,7 +108,7 @@ The [`.env-SAMPLE`](./.env-SAMPLE) file is an example of what the `.env-dev` cou
 
 All tests are in the [`tests/`](./tests/) folder.
 
-See: [TESTING.md](./tests/TESTING.md#iatlas_api_testing) in the [`tests/`](./tests/) folder
+See: [TESTING.md](./tests/TESTING.md) in the [`tests/`](./tests/) folder
 
 ## Performance Profiling
 
