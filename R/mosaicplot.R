@@ -7,21 +7,21 @@ create_mosaicplot <- function(
 
     plot <- df %>%
         ggplot2::ggplot() +
-        ggmosaic::geom_mosaic(ggplot::aes_string(x = stringr::str_c("ggmosaic::product(y, x)") ,fill = "y")) +
+        ggmosaic::geom_mosaic(ggplot2::aes_string(x = stringr::str_c("ggmosaic::product(y, x)") ,fill = "y")) +
         ggmosaic::scale_y_productlist(expand = c(0, 0)) +
         ggmosaic::scale_x_productlist(expand = c(0, 0)) +
-        ggplot::labs(title) +
+        ggplot2::labs(title) +
         xlab(xlab) +
         ylab(ylab) +
-        ggplot::theme_minimal() +
-        ggplot::theme(
-            legend.title = ggplot::element_blank(),
-            axis.text.x = ggplot::element_text(angle = 90, hjust = 1),
-            axis.text.y = ggplot::element_blank(),
-            axis.ticks.y = ggplot::element_blank()
+        ggplot2::theme_minimal() +
+        ggplot2::theme(
+            legend.title = ggplot2::element_blank(),
+            axis.text.x = ggplot2::element_text(angle = 90, hjust = 1),
+            axis.text.y = ggplot2::element_blank(),
+            axis.ticks.y = ggplot2::element_blank()
         )
     if (!is.na(fill_colors[[1]])) {
-        plot <- plot + ggplot::scale_fill_manual(values = fill_colors)
+        plot <- plot + ggplot2::scale_fill_manual(values = fill_colors)
     }
     p <- plotly::plotly_build(plot) %>%
         plotly::layout(title = title,
