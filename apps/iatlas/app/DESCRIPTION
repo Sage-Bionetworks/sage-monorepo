@@ -32,6 +32,7 @@ Imports:
     RColorBrewer,
     readr,
     rlang,
+    rsconnect,
     shiny,
     shinycssloaders,
     shinydashboard,
