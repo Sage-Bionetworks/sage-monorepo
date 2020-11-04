@@ -51,15 +51,9 @@
     },
     "BiocGenerics": {
       "Package": "BiocGenerics",
-      "Version": "0.37.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteUsername": "bioconductor",
-      "RemoteRepo": "BiocGenerics",
-      "RemoteRef": "master",
-      "RemoteSha": "d24d8c6e8d5766b8783c09f2eb07e8850bd21bdb",
-      "RemoteHost": "api.github.com",
-      "Hash": "b76f6f48b92280a14d6f19112be2ae3f"
+      "Version": "0.36.0",
+      "Source": "Bioconductor",
+      "Hash": "1fe8a6250d04cfb040ebec87447770ba"
     },
     "BiocManager": {
       "Package": "BiocManager",
@@ -913,15 +907,9 @@
     },
     "graph": {
       "Package": "graph",
-      "Version": "1.69.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteUsername": "bioconductor",
-      "RemoteRepo": "graph",
-      "RemoteRef": "master",
-      "RemoteSha": "7febef6e7123ad66cf21ab16331bc1e431c07080",
-      "RemoteHost": "api.github.com",
-      "Hash": "a2cd261b3033d62eecf221219d774b3e"
+      "Version": "1.68.0",
+      "Source": "Bioconductor",
+      "Hash": "38322867731e9e137d21b13778a96b5f"
     },
     "graphql": {
       "Package": "graphql",
@@ -995,15 +983,10 @@
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
-      "Version": "1.5.2.9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteUsername": "ramnathv",
-      "RemoteRepo": "htmlwidgets",
-      "RemoteRef": "master",
-      "RemoteSha": "9df7c9e4ec669a73c83559849dc8b2e5d1821d25",
-      "RemoteHost": "api.github.com",
-      "Hash": "e6edea51d5241d3521975a104a77247f"
+      "Version": "1.5.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0aaf56b7960bb066646e1868cadcaf07"
     },
     "httpcode": {
       "Package": "httpcode",
