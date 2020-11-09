@@ -29,10 +29,12 @@ cohort_has_features <- function(cohort_obj, features, all_features = T){
 }
 
 cohort_has_dataset <- function(cohort_object, datasets){
+  if(is.null(cohort_object$dataset)) return(F)
   cohort_object$dataset %in% datasets
 }
 
 cohort_has_group <- function(cohort_object, groups){
+  if(is.null(cohort_object$group_name)) return(F)
   cohort_object$group_name %in% groups
 }
 
