@@ -27,7 +27,7 @@ test_that("get_io_hgnc_from_tbl", {
 })
 
 test_that("Build IO Target Distplot Tibble", {
-    expected_columns <- c("x", "y")
+    expected_columns <- c("x", "y", "label")
     res1 <- build_io_target_distplot_tbl(cohort_obj1, 3802L, "None")
     res2 <- build_io_target_distplot_tbl(cohort_obj2, 3802L, "None")
     expect_named(res1, expected_columns)
