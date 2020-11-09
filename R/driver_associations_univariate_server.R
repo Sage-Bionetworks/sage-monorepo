@@ -67,29 +67,34 @@ univariate_driver_server <- function(id, cohort_obj) {
           )
       })
 
+      #TODO: use query instead of hard-coded number
       total_associations <- shiny::reactive({
-        n_mutations <-
-          iatlas.api.client::query_mutations(
-            datasets = "TCGA", types = "driver_mutation"
-          ) %>%
-          nrow()
+        # n_mutations <-
+        #   iatlas.api.client::query_mutations(
+        #     datasets = "TCGA", types = "driver_mutation"
+        #   ) %>%
+        #   nrow()
+
+        n_mutations <- 865
 
         n_tags <- length(tags())
 
         n_possible <-  n_tags * n_mutations
       })
 
-
-      output$result_text <- shiny::renderText({
-
+      p_tested <- shiny::reactive({
         p_tested <-
           volcano_plot_tbl() %>%
           nrow() %>%
           magrittr::divide_by(., total_associations()) %>%
-          round(2) %>%
-          as.character()
+          round(2)
+      })
 
-        stringr::str_c("Percentage of Tested Associations: ", p_tested)
+      output$result_text <- shiny::renderText({
+        stringr::str_c(
+          "Percentage of Tested Associations: ",
+          as.character(p_tested())
+        )
       })
 
       output$volcano_plot <- plotly::renderPlotly({
