@@ -34,10 +34,8 @@ build_im_distplot_tbl <- function(cohort_object, gene, scale_method){
   cohort_object %>%
     query_gene_expression_with_cohort_object(entrez = gene) %>%
     dplyr::inner_join(cohort_object$sample_tbl, by = "sample") %>%
-    print() %>%
-    dplyr::select(.data$group, "value" = .data$rna_seq_expr, "label" = "sample") %>%
+    dplyr::select("group", "value" = "rna_seq_expr", "label" = "sample") %>%
     scale_tbl_value_column(scale_method) %>%
-    print() %>%
     dplyr::select("x" = .data$group, "y" = .data$value, "label")
 }
 
