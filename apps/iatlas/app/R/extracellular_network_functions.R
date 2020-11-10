@@ -1,12 +1,12 @@
 build_ecn_gene_choice_list <- function(){
-    genes <- iatlas.api.client::query_genes(gene_types = "extra_cellular_network") %>%
+    genes <- iatlas.api.client::query_genes(gene_types = "extracellular_network") %>%
         dplyr::select("hgnc", "entrez") %>%
         dplyr::mutate("entrez" = stringr::str_c("gene:", .data$entrez)) %>%
         tibble::deframe(.)
 
     list(
         "Genesets" = c(
-            "Extracellular Network Genes" = "geneset:extra_cellular_network",
+            "Extracellular Network Genes" = "geneset:extracellular_network",
             "Immunomodulator Genes" = "geneset:immunomodulator"
         ),
         "Genes" = genes

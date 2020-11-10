@@ -20,34 +20,20 @@ test_that("get_im_hgnc_from_tbl", {
 })
 
 test_that("Build Immunomodulators Distributions Plot Tibble", {
-    expected_columns <- c("x", "y")
+    expected_columns <- c("x", "y", "label")
     res1 <- build_im_distplot_tbl(cohort_obj1, 3802L, "None")
     res2 <- build_im_distplot_tbl(cohort_obj1, 3802L, "None")
     expect_named(res1, expected_columns)
     expect_named(res2, expected_columns)
 })
 
-# TODO: add back in ref
 test_that("Build Immunomodulators Datatable Tibble", {
     res1 <- build_im_dt_tbl()
     expect_named(
         res1,
         c("Hugo", "Entrez ID", "Friendly Name", "Gene Family",
           "Super Category", "Immune Checkpoint", "Function"
-          # "Reference(s) [PMID]"
         )
     )
-
-    # ARG1_publications <- res1 %>%
-    #     dplyr::filter(.data$`Entrez ID` == 383L) %>%
-    #     dplyr::pull("Reference(s) [PMID]")
-    #
-    # expect_equal(
-    #     ARG1_publications,
-    #     c(
-    #         "https://www.ncbi.nlm.nih.gov/pubmed/19764983",
-    #         "https://www.ncbi.nlm.nih.gov/pubmed/23890059"
-    #     )
-    # )
 })
 
