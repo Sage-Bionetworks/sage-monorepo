@@ -22,7 +22,7 @@ test_that("get_selected_gene_ids", {
   gene_list2 <- list("geneset:immunomodulator")
   gene_list3 <- list("gene:1")
   gene_list4 <- list("geneset:immunomodulator", "gene:1")
-  gene_list5 <- list("geneset:extra_cellular_network")
+  gene_list5 <- list("geneset:extracellular_network")
   result1 <- get_selected_gene_ids(gene_list1)
   result2 <- get_selected_gene_ids(gene_list2)
   result3 <- get_selected_gene_ids(gene_list3)
