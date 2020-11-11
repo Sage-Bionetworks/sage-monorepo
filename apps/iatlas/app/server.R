@@ -8,7 +8,8 @@ options(shiny.usecairo = FALSE)
 
 library(magrittr)
 
-modules_tbl <- "module_config.tsv" %>%
+modules_tbl <- "module_config" %>%
+  get_tsv_path() %>%
   readr::read_tsv(.) %>%
   dplyr::mutate(
     "link" = stringr::str_c("link_to_", .data$name),
