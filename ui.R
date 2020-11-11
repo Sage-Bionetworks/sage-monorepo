@@ -12,7 +12,10 @@ headerTagList <- list(
 )
 
 footerTagList <- list(
-  shiny::tags$footer(id = "myFooter", shiny::includeHTML("html/footer.html"))
+  shiny::tags$footer(
+    id = "myFooter",
+    shiny::includeHTML(get_html_path("footer"))
+  )
 )
 
 ################################################################################

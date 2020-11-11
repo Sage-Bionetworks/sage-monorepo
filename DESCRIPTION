@@ -13,21 +13,22 @@ Encoding: UTF-8
 LazyData: true
 Suggests:
     testthat (>= 2.1.0)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Imports:
     concordanceIndex,
     config,
     crayon,
+    cyjShiny,
     devtools,
     dplyr,
     DT,
+    forcats,
     ggmosaic,
     ggplot2,
     iatlas.api.client,
     ImmuneSubtypeClassifier,
     magrittr,
     plotly,
-    pool,
     purrr,
     RColorBrewer,
     readr,
@@ -46,3 +47,13 @@ Imports:
     viridis,
     viridisLite,
     wrapr
+Remotes:
+    CRI-iAtlas/iatlas.api.client@master,
+    CRI-iAtlas/iatlas.modules@master,
+    CRI-iAtlas/ImmuneSubtypeClassifier@master,
+    th86/concordanceIndex@master,
+    cytoscape/cyjShiny@c32d2b0089f4d858abdee8376eee625b,
+    ropensci/plotly@0cfea6a157ee2beb6bfc12de9cf1f430,
+    rstudio/rsconnect@master 
+    
+

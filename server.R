@@ -8,7 +8,8 @@ options(shiny.usecairo = FALSE)
 
 library(magrittr)
 
-modules_tbl <- "module_config.tsv" %>%
+modules_tbl <- "module_config" %>%
+  get_tsv_path() %>%
   readr::read_tsv(.) %>%
   dplyr::mutate(
     "link" = stringr::str_c("link_to_", .data$name),
@@ -20,7 +21,9 @@ modules_tbl <- "module_config.tsv" %>%
   )
 
 analysis_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "analysis")
+ici_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "ici")
 tool_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "tool")
+
 
 
 
@@ -62,6 +65,12 @@ shiny::shinyServer(function(input, output, session) {
     dplyr::select("name", "server_function") %>%
     purrr::pwalk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
 
+  # ICI Modules ----------------------------------------------------------
+
+  ici_modules_tbl %>%
+    dplyr::select("name", "server_function") %>%
+    purrr::pwalk(iatlas.app::call_iatlas_module, input, session)
+
   # Tool Modules --------------------------------------------------------------
 
   tool_modules_tbl %>%
@@ -72,6 +81,12 @@ shiny::shinyServer(function(input, output, session) {
 
   analysis_module_menu_items <- shiny::reactive({
     analysis_modules_tbl %>%
+      dplyr::select("text" = "display", "tabName" = "name") %>%
+      purrr::pmap(shinydashboard::menuSubItem, icon = shiny::icon("cog"))
+  })
+
+  ici_module_menu_items <- shiny::reactive({
+    ici_modules_tbl %>%
       dplyr::select("text" = "display", "tabName" = "name") %>%
       purrr::pmap(shinydashboard::menuSubItem, icon = shiny::icon("cog"))
   })
@@ -105,6 +120,12 @@ shiny::shinyServer(function(input, output, session) {
         icon = shiny::icon("bar-chart"),
         startExpanded = TRUE,
         analysis_module_menu_items()
+      ),
+      shinydashboard::menuItem(
+        text = "ICI Modules",
+        icon = shiny::icon("bar-chart"),
+        startExpanded = TRUE,
+        ici_module_menu_items()
       ),
       shinydashboard::menuItem(
         text = "iAtlas tools",
@@ -167,7 +188,6 @@ shiny::shinyServer(function(input, output, session) {
 
   output$dashboard_body <- shiny::renderUI({
     shiny::req(readout_info_boxes(), module_image_boxes(), module_tab_items())
-
     tab_item <- list(shinydashboard::tabItem(
       tabName = "dashboard",
       iatlas.app::titleBox("iAtlas Explorer — Home"),
