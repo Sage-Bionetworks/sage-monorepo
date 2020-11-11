@@ -253,3 +253,15 @@ get_javascript_path <- function(name, extension = ".js"){
     stringr::str_c(extension) %>%
     file.path(system.file("javascript", package = "iatlas.app"), .)
 }
+
+get_html_path <- function(name, extension = ".html"){
+  name %>%
+    stringr::str_c(extension) %>%
+    file.path(system.file("html", package = "iatlas.app"), .)
+}
+
+get_tsv_path <- function(name, extension = ".tsv"){
+  name %>%
+    stringr::str_c(extension) %>%
+    file.path(system.file("tsv", package = "iatlas.app"), .)
+}
