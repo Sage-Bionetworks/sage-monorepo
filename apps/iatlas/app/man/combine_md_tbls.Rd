@@ -2,49 +2,21 @@
 % Please edit documentation in R/driver_associations_multivariate_functions.R
 \name{combine_md_tbls}
 \alias{combine_md_tbls}
-\title{# TODO: remove null check when databse is fixed
-#' Build Multivariate Driver Status Tibble
-#'
-#' @importFrom magrittr %>%
-build_md_status_tbl <- function(){
-    paste0(
-        "SELECT * FROM samples_to_mutations ",
-        "WHERE mutation_id IN ",
-        "(SELECT id FROM mutations WHERE mutation_type_id IN ",
-        "(SELECT id FROM mutation_types WHERE name = 'driver_mutation')) ",
-        "AND status IS NOT NULL"
-    ) %>%
-        perform_query()
-}
-Combine Multivariate Driver Tibbles}
+\title{Combine Multivariate Driver Tibbles}
 \usage{
-combine_md_tbls(resp_tbl, sample_tbl, status_tbl, cov_tbl, mode)
+combine_md_tbls(resp_tbl, status_tbl, sample_tbl, cov_tbl, mode)
 }
 \arguments{
 \item{resp_tbl}{A tibble}
 
-\item{sample_tbl}{A tibble}
-
 \item{status_tbl}{A tibble}
+
+\item{sample_tbl}{A tibble}
 
 \item{cov_tbl}{A tibble or NULL}
 
 \item{mode}{A string, either "By group" or "Across groups"}
 }
 \description{
-# TODO: remove null check when databse is fixed
-#' Build Multivariate Driver Status Tibble
-#'
-#' @importFrom magrittr %>%
-build_md_status_tbl <- function(){
-    paste0(
-        "SELECT * FROM samples_to_mutations ",
-        "WHERE mutation_id IN ",
-        "(SELECT id FROM mutations WHERE mutation_type_id IN ",
-        "(SELECT id FROM mutation_types WHERE name = 'driver_mutation')) ",
-        "AND status IS NOT NULL"
-    ) %>%
-        perform_query()
-}
 Combine Multivariate Driver Tibbles
 }
