@@ -48,6 +48,7 @@ Imports:
     viridisLite,
     wrapr
 Remotes:
+    Bioconductor/graph@master,
     CRI-iAtlas/iatlas.api.client@master,
     CRI-iAtlas/iatlas.modules@master,
     CRI-iAtlas/ImmuneSubtypeClassifier@master,
