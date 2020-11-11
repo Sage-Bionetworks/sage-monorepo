@@ -2,15 +2,6 @@ build_cohort_object_from_objects <- function(group_object, filter_object){
   purrr::invoke(build_cohort_object, c(group_object, filter_object))
 }
 
-#' Build Cohort Object
-#'
-#' @param filter_obj A named list with element sample_ids and filters
-#' @param group_choice A string
-#' @param dataset A string
-#' @param driver_mutation A string
-#' @param immune_feature_bin_id An integer
-#' @param immune_feature_bin_number An integer
-#' @importFrom purrr list_modify
 build_cohort_object <- function(
   dataset,
   samples,
@@ -49,13 +40,6 @@ build_cohort_object <- function(
 
 # tag choice ------------------------------------------------------------------
 
-#' Build Tag Cohort Object
-#'
-#' @param sample_ids A vector of integers
-#' @param group_choice A string
-#' @importFrom magrittr %>%
-#' @importFrom dplyr select
-#' @importFrom rlang .data
 build_tag_cohort_object <- function(dataset, samples, tag){
   cohort_tbl  <- build_cohort_tbl_by_tag(dataset, samples, tag)
   sample_tbl   <- cohort_tbl %>%
@@ -78,11 +62,6 @@ build_tag_cohort_object <- function(dataset, samples, tag){
   )
 }
 
-#' Build Cohort Tibble By Tag
-#'
-#' @param sample_ids Integers in the id column of the samples table
-#' @param group A String that is the display column of the tags table
-#' @importFrom magrittr %>%
 build_cohort_tbl_by_tag <- function(dataset, samples, tag){
   tbl <-
     iatlas.api.client::query_tag_samples(
@@ -104,13 +83,6 @@ build_cohort_tbl_by_tag <- function(dataset, samples, tag){
 # mutation choice -------------------------------------------------------------
 
 # TODO: Fix after mutation status can be queried
-#' Build Driver Mutation Cohort Object
-#'
-#' @param sample_ids A vector of integers
-#' @param mutation A string
-#' @importFrom magrittr %>%
-#' @importFrom dplyr select
-#' @importFrom rlang .data
 build_mutation_cohort_object <- function(dataset, samples, mutation_id){
 
   mutation <- iatlas.api.client::query_mutations(ids = as.integer(mutation_id)) %>%
@@ -139,13 +111,6 @@ build_mutation_cohort_object <- function(dataset, samples, mutation_id){
   )
 }
 
-#' Create Driver Mutation Cohort Group Tibble
-#'
-#' @param sample_tbl A tibble
-#' @param gene_name A string
-#' @importFrom magrittr %>%
-#' @importFrom dplyr group_by summarise ungroup arrange n mutate
-#' @importFrom rlang .data
 create_mutation_cohort_group_tbl <- function(sample_tbl, mutation){
   sample_tbl %>%
     dplyr::group_by(.data$group) %>%
@@ -159,14 +124,6 @@ create_mutation_cohort_group_tbl <- function(sample_tbl, mutation){
 
 # immune feature bin choice ---------------------------------------------------
 
-#' Build Feature Bin Cohort Object
-#'
-#' @param sample_ids A vector of integers
-#' @param feature_id An integer
-#' @param bin_number An integer
-#' @importFrom magrittr %>%
-#' @importFrom dplyr select
-#' @importFrom rlang .data
 build_feature_bin_cohort_object <- function(
   dataset,
   samples,
@@ -201,14 +158,6 @@ build_feature_bin_cohort_object <- function(
 }
 
 # TODO use samples in api query
-#' Build Feature Bin Sample Tibble
-#'
-#' @param sample_ids A vector of integers
-#' @param feature_id An integer
-#' @param n_bins An integer
-#' @importFrom magrittr %>%
-#' @importFrom dplyr select mutate
-#' @importFrom rlang .data
 build_feature_bin_sample_tbl <- function(
   dataset, samples, feature_name, n_bins
 ){
@@ -221,15 +170,6 @@ build_feature_bin_sample_tbl <- function(
     dplyr::select("sample", "group")
 }
 
-
-
-#' Build Feature Bin Group Tibble
-#'
-#' @param sample_tbl A tibble with name group
-#' @param feature_name A string
-#' @importFrom magrittr %>%
-#' @importFrom dplyr group_by summarise ungroup arrange n mutate
-#' @importFrom rlang .data
 build_feature_bin_group_tbl <- function(sample_tbl, feature_name){
   sample_tbl %>%
     dplyr::group_by(.data$group) %>%

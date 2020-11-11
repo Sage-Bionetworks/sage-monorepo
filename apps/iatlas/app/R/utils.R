@@ -50,7 +50,7 @@ assert_tbl_has_rows <- function(tbl){
     }
 }
 
-#' Title
+#' Add Plotly Label
 #'
 #' @param tbl A tibble
 #' @param title A string
@@ -257,7 +257,7 @@ get_javascript_path <- function(name, extension = ".js"){
 get_html_path <- function(name, extension = ".html"){
   name %>%
     stringr::str_c(extension) %>%
-    file.path(system.file("html", package = "iatlas.app"), .)
+    file.path(system.file("html_files", package = "iatlas.app"), .)
 }
 
 get_tsv_path <- function(name, extension = ".tsv"){

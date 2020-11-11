@@ -1,9 +1,4 @@
-#' Build Multivariate Driver Tag Covariate Tibble
-#'
-#' @param covariates A vector of strings that are in the name column of the tags
-#' table
-#' @importFrom magrittr %>%
-#' @importFrom tidyr pivot_wider drop_na
+
 build_md_tag_covariate_tbl <- function(cohort_obj, cov_obj){
   parent_tags <- cov_obj$categorical_covariates
   if (is.null(parent_tags)) return(NULL)
@@ -25,12 +20,6 @@ build_md_tag_covariate_tbl <- function(cohort_obj, cov_obj){
     tidyr::drop_na()
 }
 
-#' Build Multivariate Driver Feature Covariate Tibble
-#'
-#' @param covariates A vector of integers that are in the id column of the
-#' features table
-#' @importFrom magrittr %>%
-#' @importFrom tidyr pivot_wider drop_na
 build_md_feature_covariate_tbl <- function(cohort_obj, cov_obj){
   features <- cov_obj$numerical_covariates
   if (is.null(features)) return(NULL)
@@ -47,13 +36,6 @@ build_md_feature_covariate_tbl <- function(cohort_obj, cov_obj){
     tidyr::drop_na()
 }
 
-#' Build Multivariate Driver Covariate Tibble
-#'
-#' @param cov_obj A list with items named categorical_covariates and
-#' numerical_covariates
-#' @importFrom purrr discard reduce
-#' @importFrom dplyr inner_join
-#' @importFrom magrittr %>%
 build_md_covariate_tbl <- function(cohort_obj, cov_obj){
   tag_tbl     <- build_md_tag_covariate_tbl(cohort_obj, cov_obj)
   feature_tbl <- build_md_feature_covariate_tbl(cohort_obj, cov_obj)
@@ -67,13 +49,6 @@ build_md_covariate_tbl <- function(cohort_obj, cov_obj){
   }
 }
 
-#' Build Multivariate Driver Response Tibble
-#'
-#' @param feature_id An integer in the feature_id column of the
-#' features_to_samples table
-#' @importFrom dplyr select
-#' @importFrom magrittr %>%
-#' @importFrom rlang .data
 build_md_response_tbl <- function(cohort_obj, feature){
   tbl <-
     query_feature_values_with_cohort_object(cohort_obj, feature) %>%
@@ -81,18 +56,6 @@ build_md_response_tbl <- function(cohort_obj, feature){
     dplyr::select("sample", "response" = "feature_value")
 }
 
-#' Combine Multivariate Driver Tibbles
-#'
-#' @param resp_tbl A tibble
-#' @param sample_tbl A tibble
-#' @param status_tbl A tibble
-#' @param cov_tbl A tibble or NULL
-#' @param mode A string, either "By group" or "Across groups"
-#'
-#' @importFrom purrr reduce
-#' @importFrom dplyr select mutate
-#' @importFrom magrittr %>%
-#' @importFrom rlang .data
 combine_md_tbls <- function(resp_tbl, status_tbl, sample_tbl, cov_tbl, mode){
   tbl <-
     list(
@@ -119,15 +82,6 @@ combine_md_tbls <- function(resp_tbl, status_tbl, sample_tbl, cov_tbl, mode){
   return(tbl)
 }
 
-#' Filter Multivariate Driver Labels
-#'
-#' @param tbl A tibble
-#' @param min_mutants A positive integer
-#' @param min_wildtype A positive integer
-#'
-#' @importFrom dplyr group_by mutate filter ungroup pull summarise n
-#' @importFrom magrittr %>%
-#' @importFrom rlang .data
 filter_md_labels <- function(tbl, min_mutants, min_wildtype){
   tbl %>%
     dplyr::group_by(.data$label) %>%
@@ -149,15 +103,6 @@ filter_md_labels <- function(tbl, min_mutants, min_wildtype){
     dplyr::pull(.data$label)
 }
 
-#' Build Multivariate Driver Pvalue Tibble
-#'
-#' @param tbl A tibble
-#' @param formula_string A string that could be converted to a formula
-#'
-#' @importFrom dplyr select mutate
-#' @importFrom tidyr nest drop_na
-#' @importFrom magrittr %>%
-#' @importFrom rlang .data
 build_md_pvalue_tbl <- function(tbl, formula_string){
   tbl %>%
     tidyr::nest(.tbl = -c(.data$label)) %>%
@@ -172,14 +117,6 @@ build_md_pvalue_tbl <- function(tbl, formula_string){
     dplyr::mutate(log10_p_value = -log10(.data$p_value))
 }
 
-#' Calculate Linear Model Pvalue
-#'
-#' @param data A dataframe
-#' @param lm_formula A string or formula
-#' @param term A string
-#'
-#' @importFrom stats lm
-#' @importFrom magrittr %>% extract extract2
 calculate_lm_pvalue <- function(data, lm_formula, term){
   data %>%
     stats::lm(formula = lm_formula, data = .) %>%
@@ -189,14 +126,6 @@ calculate_lm_pvalue <- function(data, lm_formula, term){
     as.double()
 }
 
-#' Build Multivariate Driver Effect Size Tibble
-#'
-#' @param tbl A tibble
-#'
-#' @importFrom dplyr group_by ungroup select mutate rename
-#' @importFrom tidyr nest pivot_wider drop_na
-#' @importFrom magrittr %>%
-#' @importFrom rlang .data
 build_md_effect_size_tbl <- function(tbl){
   tbl %>%
     dplyr::select(.data$label, .data$response, .data$status) %>%
@@ -219,18 +148,10 @@ build_md_effect_size_tbl <- function(tbl){
     tidyr::drop_na()
 }
 
-#' Get Effect Size From Tibble
-#'
-#' @param tbl A tibble
-#' @param method A function
 get_effect_size_from_tbl <- function(tbl, method = calculate_ratio_effect_size){
   method(unlist(tbl$g1), unlist(tbl$g2))
 }
 
-#' Calculate Ratio Effect Size
-#'
-#' @param v1 A numeric vector
-#' @param v2 A numeric vector
 calculate_ratio_effect_size <- function(v1, v2){
   mean1 <- mean(v1)
   mean2 <- mean(v2)
@@ -238,14 +159,6 @@ calculate_ratio_effect_size <- function(v1, v2){
   mean1 / mean2
 }
 
-#' Build Multivariate Driver Violin Tibble
-#'
-#' @param tbl A tibble with columns label, status and response
-#' @param .label A string
-#'
-#' @importFrom dplyr select filter
-#' @importFrom magrittr %>%
-#' @importFrom rlang .data
 build_md_driver_violin_tbl <- function(tbl, .label){
   tbl %>%
     dplyr::filter(.data$label %in% .label) %>%
@@ -255,11 +168,6 @@ build_md_driver_violin_tbl <- function(tbl, .label){
     dplyr::select(x = .data$status, y = .data$response)
 }
 
-#' Create Multivariate Driver Violin Plot Title
-#'
-#' @param tbl A one row tibble with columns p_value log10_fold_change and label
-#' @param mode A string, either "By group" or "Across groups"
-#' @importFrom rlang .data
 create_md_violin_plot_title <- function(tbl, mode){
   title <- paste(
     "P-value:",
@@ -270,7 +178,7 @@ create_md_violin_plot_title <- function(tbl, mode){
   if (mode == "By group") {
     group <- tbl$label %>%
       stringr::str_match(., "^([:print:]+);[:print:]+$") %>%
-      pluck(2)
+      purrr::pluck(2)
     title <- paste("Group:", group, ";", title)
   }
   return(title)
