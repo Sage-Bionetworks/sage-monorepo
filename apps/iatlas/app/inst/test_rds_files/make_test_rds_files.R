@@ -1,72 +1,56 @@
 
 pcawg_immune_subtype_cohort_obj <- build_cohort_object(
-  filter_obj = list(
-    "samples" = iatlas.api.client::query_dataset_samples("PCAWG")$name
-  ),
   dataset = "PCAWG",
-  group_choice = "Immune_Subtype",
+  group_name = "Immune_Subtype",
   group_type = "tag",
-  feature_tbl = "PCAWG" %>%
-    iatlas.api.client::query_features_by_class() %>%
-    dplyr::select("class", "display", "name")
+  samples = iatlas.api.client::query_dataset_samples("PCAWG")$name
 )
 
 saveRDS(
   pcawg_immune_subtype_cohort_obj,
-  "inst/test_rds_files/pcawg_immune_subtype_cohort_obj.rds"
+  "inst/test_rds_files/pcawg_immune_subtype_cohort_obj.rds",
+  version = 2
 )
 
 pcawg_feature_bin_cohort_obj <- build_cohort_object(
-  filter_obj = list(
-    "samples" = iatlas.api.client::query_dataset_samples("PCAWG")$name
-  ),
   dataset = "PCAWG",
-  group_choice = "Immune Feature Bins",
+  samples = iatlas.api.client::query_dataset_samples("PCAWG")$name,
+  group_name = "Immune Feature Bins",
   group_type = "custom",
-  feature_name = "B_cells_Aggregate2",
-  bin_number = 2,
-  feature_tbl = "PCAWG" %>%
-    iatlas.api.client::query_features_by_class() %>%
-    dplyr::select("class", "display", "name")
+  bin_immune_feature = "B_cells_Aggregate2",
+  bin_number = 2
 )
 
 saveRDS(
   pcawg_feature_bin_cohort_obj,
-  "inst/test_rds_files/pcawg_feature_bin_cohort_obj.rds"
+  "inst/test_rds_files/pcawg_feature_bin_cohort_obj.rds",
+  version = 2
 )
 
 tcga_immune_subtype_cohort_obj <- build_cohort_object(
-  filter_obj = list(
-    "samples" = iatlas.api.client::query_dataset_samples("TCGA")$name
-  ),
   dataset = "TCGA",
-  group_choice = "Immune_Subtype",
-  group_type = "tag",
-  feature_tbl = "TCGA" %>%
-    iatlas.api.client::query_features_by_class() %>%
-    dplyr::select("class", "display", "name")
+  samples = iatlas.api.client::query_dataset_samples("TCGA")$name,
+  group_name = "Immune_Subtype",
+  group_type = "tag"
 )
 
 saveRDS(
   tcga_immune_subtype_cohort_obj,
-  "inst/test_rds_files/tcga_immune_subtype_cohort_obj.rds"
+  "inst/test_rds_files/tcga_immune_subtype_cohort_obj.rds",
+  version = 2
 )
 
 tcga_immune_subtype_cohort_obj_50 <- build_cohort_object(
-  filter_obj = list(
-    "samples" = iatlas.api.client::query_dataset_samples("TCGA")$name[1:50]
-  ),
   dataset = "TCGA",
-  group_choice = "Immune_Subtype",
-  group_type = "tag",
-  feature_tbl = "TCGA" %>%
-    iatlas.api.client::query_features_by_class() %>%
-    dplyr::select("class", "display", "name")
+  samples = iatlas.api.client::query_dataset_samples("TCGA")$name[1:50],
+  group_name = "Immune_Subtype",
+  group_type = "tag"
 )
 
 saveRDS(
   tcga_immune_subtype_cohort_obj_50,
-  "inst/test_rds_files/tcga_immune_subtype_cohort_obj_50.rds"
+  "inst/test_rds_files/tcga_immune_subtype_cohort_obj_50.rds",
+  version = 2
 )
 
 tcga_study_cohort_obj_50 <- build_cohort_object(
@@ -78,46 +62,37 @@ tcga_study_cohort_obj_50 <- build_cohort_object(
 
 saveRDS(
   tcga_study_cohort_obj_50,
-  "inst/test_rds_files/tcga_study_cohort_obj_50.rds"
+  "inst/test_rds_files/tcga_study_cohort_obj_50.rds",
+  version = 2
 )
 
-
-
 tcga_feature_bin_cohort_obj <- build_cohort_object(
-  filter_obj = list(
-    "samples" = iatlas.api.client::query_dataset_samples("TCGA")$name
-  ),
   dataset = "TCGA",
-  group_choice = "Immune Feature Bins",
+  samples = iatlas.api.client::query_dataset_samples("TCGA")$name,
+  group_name = "Immune Feature Bins",
   group_type = "custom",
-  feature_name = "leukocyte_fraction",
-  bin_number = 2,
-  feature_tbl = "TCGA" %>%
-    iatlas.api.client::query_features_by_class() %>%
-    dplyr::select("class", "display", "name")
+  bin_immune_feature = "leukocyte_fraction",
+  bin_number = 2
 )
 
 saveRDS(
   tcga_feature_bin_cohort_obj,
-  "inst/test_rds_files/tcga_feature_bin_cohort_obj.rds"
+  "inst/test_rds_files/tcga_feature_bin_cohort_obj.rds",
+  version = 2
 )
 
 
 tcga_feature_bin_cohort_obj_50 <- build_cohort_object(
-  filter_obj = list(
-    "samples" = iatlas.api.client::query_dataset_samples("TCGA")$name[1:50]
-  ),
   dataset = "TCGA",
-  group_choice = "Immune Feature Bins",
+  "samples" = iatlas.api.client::query_dataset_samples("TCGA")$name[1:50],
+  group_name = "Immune Feature Bins",
   group_type = "custom",
-  feature_name = "leukocyte_fraction",
-  bin_number = 2,
-  feature_tbl = "TCGA" %>%
-    iatlas.api.client::query_features_by_class() %>%
-    dplyr::select("class", "display", "name")
+  bin_immune_feature = "leukocyte_fraction",
+  bin_number = 2
 )
 
 saveRDS(
   tcga_feature_bin_cohort_obj_50,
-  "inst/test_rds_files/tcga_feature_bin_cohort_obj_50.rds"
+  "inst/test_rds_files/tcga_feature_bin_cohort_obj_50.rds",
+  version = 2
 )
