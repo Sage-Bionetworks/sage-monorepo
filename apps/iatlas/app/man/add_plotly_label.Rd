@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{add_plotly_label}
 \alias{add_plotly_label}
-\title{Title}
+\title{Add Plotly Label}
 \usage{
 add_plotly_label(tbl, title, name, group)
 }
@@ -16,5 +16,5 @@ add_plotly_label(tbl, title, name, group)
 \item{group}{Name of a column}
 }
 \description{
-Title
+Add Plotly Label
 }
