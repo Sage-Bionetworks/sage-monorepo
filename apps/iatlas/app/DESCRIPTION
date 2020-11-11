@@ -14,6 +14,7 @@ LazyData: true
 Suggests:
     testthat (>= 2.1.0)
 RoxygenNote: 7.1.1
+biocViews:
 Imports:
     concordanceIndex,
     config,
@@ -25,6 +26,7 @@ Imports:
     forcats,
     ggmosaic,
     ggplot2,
+    graph,
     iatlas.api.client,
     ImmuneSubtypeClassifier,
     magrittr,
@@ -55,5 +57,5 @@ Remotes:
     cytoscape/cyjShiny@master,
     ropensci/plotly@master,
     rstudio/rsconnect@master 
-biocViews:
+
 
