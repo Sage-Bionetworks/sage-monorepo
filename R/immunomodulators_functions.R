@@ -1,9 +1,4 @@
-#' Create Immunomodulators Gene List
-#'
-#' @param tbl A tibble with columns hgnc, entrez, and the variable group
-#' @param group A column in the tibble
-#' @importFrom magrittr %>%
-#' @importFrom dplyr select
+
 create_im_gene_list <- function(tbl, group){
   tbl %>%
     dplyr::select(
@@ -21,15 +16,6 @@ get_im_hgnc_from_tbl <- function(tbl, .entrez){
     dplyr::pull("hgnc")
 }
 
-
-#' Build Immunomodulators Distributions Plot Tibble
-#'
-#' @param gene_id An integer in the gene_id column of the genes_types table
-#' @param sample_tbl A tibble with columns sample, group
-#' @param scale_method A string, that is a scaling method
-#' @importFrom magrittr %>%
-#' @importFrom dplyr select inner_join
-#' @importFrom rlang .data
 build_im_distplot_tbl <- function(cohort_object, gene, scale_method){
   cohort_object %>%
     query_gene_expression_with_cohort_object(entrez = gene) %>%
@@ -40,13 +26,6 @@ build_im_distplot_tbl <- function(cohort_object, gene, scale_method){
 }
 
 #TODO: add back in publications
-#' Build Immunomodulators Datatable Tibble
-#'
-#' @param tbl A tibble
-#' @importFrom magrittr %>%
-#' @importFrom dplyr select mutate
-#' @importFrom rlang .data
-#' @importFrom stringr str_remove_all
 build_im_dt_tbl <- function(){
   tbl <-
     iatlas.api.client::query_immunomodulators() %>%
