@@ -19,14 +19,12 @@ Imports:
     concordanceIndex,
     config,
     crayon,
-    cyjShiny,
     devtools,
     dplyr,
     DT,
     forcats,
     ggmosaic,
     ggplot2,
-    graph,
     iatlas.api.client,
     ImmuneSubtypeClassifier,
     magrittr,
@@ -54,7 +52,6 @@ Remotes:
     CRI-iAtlas/iatlas.modules@master,
     CRI-iAtlas/ImmuneSubtypeClassifier@master,
     th86/concordanceIndex@master,
-    cytoscape/cyjShiny@master,
     ropensci/plotly@master,
     rstudio/rsconnect@master 
 
