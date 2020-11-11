@@ -14,11 +14,11 @@ LazyData: true
 Suggests:
     testthat (>= 2.1.0)
 RoxygenNote: 7.1.1
+biocViews:
 Imports:
     concordanceIndex,
     config,
     crayon,
-    cyjShiny,
     devtools,
     dplyr,
     DT,
@@ -52,8 +52,7 @@ Remotes:
     CRI-iAtlas/iatlas.modules@master,
     CRI-iAtlas/ImmuneSubtypeClassifier@master,
     th86/concordanceIndex@master,
-    cytoscape/cyjShiny@c32d2b0089f4d858abdee8376eee625b,
-    ropensci/plotly@0cfea6a157ee2beb6bfc12de9cf1f430,
+    ropensci/plotly@master,
     rstudio/rsconnect@master 
-    
+
 
