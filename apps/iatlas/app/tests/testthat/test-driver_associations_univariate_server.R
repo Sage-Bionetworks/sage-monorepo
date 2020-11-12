@@ -1,3 +1,4 @@
+
 test_that("univariate_driver_server", {
   shiny::testServer(
     univariate_driver_server,
@@ -25,6 +26,9 @@ test_that("univariate_driver_server", {
           "mutation_code"
         )
       )
+      expect_equal(total_associations(), 5190)
+      expect_equal(p_tested(), 0.14)
+      expect_type(output$result_text, "character")
       expect_type(output$volcano_plot, "character")
       expect_error(selected_volcano_result())
       expect_error(violin_plot_tbl())

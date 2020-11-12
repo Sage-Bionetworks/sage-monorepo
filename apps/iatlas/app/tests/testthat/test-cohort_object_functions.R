@@ -104,16 +104,22 @@ test_that("query_feature_values_with_cohort_object", {
     pcawg_immune_subtype_cohort_obj,
     feature = "Lymphocytes_Aggregate1"
   )
+  expect_named(result1, expected_columns)
+  expect_length(result1$feature_value, 455L)
 
   result2 <- query_feature_values_with_cohort_object(
     pcawg_immune_subtype_cohort_obj,
     class = "Overall Proportion"
   )
+  expect_named(result2, expected_columns)
+  expect_length(result2$feature_value, 0)
 
   result3 <- query_feature_values_with_cohort_object(
     pcawg_immune_subtype_cohort_obj,
     class = "EPIC"
   )
+  expect_named(result3, expected_columns)
+  expect_length(result3$feature_value, 3640L)
 
   result4 <- query_feature_values_with_cohort_object(
     pcawg_feature_bin_cohort_obj,
@@ -121,17 +127,20 @@ test_that("query_feature_values_with_cohort_object", {
   )
 
   result5 <- query_feature_values_with_cohort_object(
-    tcga_immune_subtype_cohort_obj,
+    tcga_immune_subtype_cohort_obj_50,
     feature = "OS_time"
   )
 
-  expect_named(result1, expected_columns)
-  expect_named(result2, expected_columns)
-  expect_named(result3, expected_columns)
-  expect_length(result1$feature_value, 455L)
-  expect_length(result2$feature_value, 0)
-  expect_length(result3$feature_value, 3640L)
-
+  result6 <- query_feature_values_with_cohort_object(
+    list(
+      "dataset" = NA,
+      "group_name" = "COAD",
+      "group_type" = "User Defined Group",
+      "sample_tbl" = iatlas.api.client::query_dataset_samples(datasets = "PCAWG") %>%
+        dplyr::rename("sample" = "name")
+    ),
+    feature = "Lymphocytes_Aggregate1"
+  )
 })
 
 # genes ---------------------------------------------------------------------

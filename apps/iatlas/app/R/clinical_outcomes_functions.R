@@ -12,15 +12,6 @@ get_co_status_feature <- function(time_feature){
   else stop("Unknown time feature")
 }
 
-
-#' Build Survival Values Tibble
-#'
-#' @param sample_tbl A Tibble with columns sample_id and group
-#' @param time_id An integer in the id column of the samples table
-#' @param status_id An integer in the id column of the samples table
-#' @importFrom magrittr %>%
-#' @importFrom dplyr inner_join select
-#' @importFrom rlang .data
 build_co_survival_value_tbl <- function(cohort_obj, time, status) {
   time_tbl <-
     query_feature_values_with_cohort_object(cohort_obj, time) %>%
@@ -65,16 +56,6 @@ build_co_heatmap_tbl <- function(survival_tbl, feature_tbl, sample_tbl){
     )
 }
 
-#' Build Heatmap Matrix
-#'
-#' @param tbl A tibble with columns feature, value, time, status, group
-#' @importFrom magrittr %>%
-#' @importFrom dplyr select mutate
-#' @importFrom tidyr nest pivot_wider
-#' @importFrom tibble column_to_rownames
-#' @importFrom purrr map2_dbl map
-#' @importFrom concordanceIndex concordanceIndex
-#' @importFrom rlang .data
 build_co_heatmap_matrix <- function(tbl){
   tbl %>%
     dplyr::select(

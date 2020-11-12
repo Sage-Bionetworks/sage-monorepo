@@ -64,7 +64,8 @@ distribution_plot_server <- function(
 
         distplot_tbl() %>%
           dplyr::filter(x == clicked_group) %>%
-          dplyr::select(x = y)
+          dplyr::select(-"x") %>%
+          dplyr::rename(x = y)
       })
 
       output$histplot <- plotly::renderPlotly({

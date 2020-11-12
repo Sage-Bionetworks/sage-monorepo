@@ -30,8 +30,8 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       tags <- shiny::reactive({
         iatlas.api.client::query_tags(
-          cohort_obj()$dataset,
-          cohort_obj()$group_name
+          datasets = cohort_obj()$dataset,
+          parent_tags = cohort_obj()$group_name
         ) %>%
           dplyr::pull("name")
       })
@@ -65,6 +65,36 @@ univariate_driver_server <- function(id, cohort_obj) {
             "entrez",
             "mutation_code"
           )
+      })
+
+      #TODO: use query instead of hard-coded number
+      total_associations <- shiny::reactive({
+        # n_mutations <-
+        #   iatlas.api.client::query_mutations(
+        #     datasets = "TCGA", types = "driver_mutation"
+        #   ) %>%
+        #   nrow()
+
+        n_mutations <- 865
+
+        n_tags <- length(tags())
+
+        n_possible <-  n_tags * n_mutations
+      })
+
+      p_tested <- shiny::reactive({
+        p_tested <-
+          volcano_plot_tbl() %>%
+          nrow() %>%
+          magrittr::divide_by(., total_associations()) %>%
+          round(2)
+      })
+
+      output$result_text <- shiny::renderText({
+        stringr::str_c(
+          "Percentage of Tested Associations: ",
+          as.character(p_tested())
+        )
       })
 
       output$volcano_plot <- plotly::renderPlotly({
@@ -142,13 +172,16 @@ univariate_driver_server <- function(id, cohort_obj) {
             tags = selected_volcano_result()$group
           )
         status_tbl <-
-          iatlas.api.client::query_mutations_by_samples(
+          iatlas.api.client::query_mutations_by_sample(
             entrez = selected_volcano_result()$entrez,
             mutation_codes = selected_volcano_result()$mutation_code,
             mutation_types = "driver_mutation",
             samples = cohort_obj()$sample_tbl$sample
           )
         dplyr::inner_join(feature_tbl, status_tbl, by = "sample") %>%
+          dplyr::mutate(
+            "status" = forcats::fct_relevel(.data$status, "Wt", "Mut")
+          ) %>%
           dplyr::select(x = .data$status, y = .data$feature_value)
 
       })
