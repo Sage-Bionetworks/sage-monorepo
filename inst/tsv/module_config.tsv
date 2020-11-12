@@ -12,3 +12,4 @@ Tumor Microenvironment	tumor_microenvironment	analysis	Explore the immune cell p
 Immune Subtype Classifier	immune_subtype_classifier	tool	Use an ensemble model trained on all TCGA data to classify gene expression profiles from your own data into the six immune subtypes identified in Thorsson et al.
 Cohort Selection	cohort_selection	other	
 Data Description	data_info	other	
+Test	test_ici	ici	Test

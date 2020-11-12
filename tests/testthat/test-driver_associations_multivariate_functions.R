@@ -72,7 +72,7 @@ test_that("Build Multivariate Driver Response Tibble", {
   )
 })
 
-status_tbl1 <- iatlas.api.client::query_mutations_by_samples(
+status_tbl1 <- iatlas.api.client::query_mutations_by_sample(
   samples = cohort_obj1$sample_tbl$sample,
   entrez = 1,
 ) %>%

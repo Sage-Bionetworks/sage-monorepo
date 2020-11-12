@@ -1,4 +1,4 @@
-test_that("module_works", {
+test_that("cohort_dataset_selection_server", {
   shiny::testServer(
     cohort_dataset_selection_server,
     args = list("default_dataset" = "TCGA"),

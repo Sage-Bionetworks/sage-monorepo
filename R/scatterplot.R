@@ -54,9 +54,9 @@ create_scatterplot <- function(
             plotly::layout(
                 shapes = list(
                     type = "line",
-                    x0 = -1,
+                    x0 = min(df[[x_col]]),
                     y0 = horizontal_line_y,
-                    x1 = 1,
+                    x1 = max(df[[x_col]]),
                     y1 = horizontal_line_y,
                     line = list(color = "black", dash = "dot", alpha = 0.5)
                 ))

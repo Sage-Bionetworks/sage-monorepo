@@ -12,12 +12,13 @@ extracellular_network_main_server <- function(
 
       ns <- session$ns
 
-      show_stratify_option <- shiny::reactive(
+      show_stratify_option <- shiny::reactive({
+        shiny::req(cohort_obj())
         all(
           (cohort_obj()$dataset == "TCGA"),
           (cohort_obj()$group_name == "TCGA_Study")
         )
-      )
+      })
 
       output$show_stratify_option <- show_stratify_option
 
@@ -97,13 +98,17 @@ extracellular_network_main_server <- function(
         )
       })
 
+      gene_choice_list <- shiny::reactive({
+        build_ecn_gene_choice_list()
+      })
+
       output$select_genes <- shiny::renderUI({
         shiny::selectizeInput(
           ns("selected_genes"),
           "Select genes of interest (optional)",
-          choices = build_ecn_gene_choice_list(),
-          multiple = TRUE,
-          selected = "geneset:extra_cellular_network"
+          choices = gene_choice_list(),
+          selected = "geneset:immunomodulator",
+          multiple = TRUE
         )
       })
 
@@ -112,8 +117,8 @@ extracellular_network_main_server <- function(
           ns("selected_celltypes"),
           "Select cells of interest (optional)",
           choices = build_ecn_celltype_choice_list(),
-          multiple = TRUE,
-          selected = "All"
+          selected = "All",
+          multiple = TRUE
         )
       })
 
@@ -128,94 +133,39 @@ extracellular_network_main_server <- function(
       })
 
       gene_nodes <- shiny::eventReactive(input$calculate_button, {
-        if(stratify()) n_tags <- 2
-        else n_tags <- 1
-        nodes <-
-          iatlas.api.client::query_gene_nodes(
-            datasets = "TCGA",
-            network = "extracellular_network",
-            entrez = selected_genes(),
-            tags = input$group_selected,
-            min_score = input$abundance / 100
-          ) %>%
-          dplyr::filter(purrr::map_lgl(
-            purrr::map_int(.data$tags, nrow),
-            ~ .x == n_tags
-          ))
-        if(stratify()){
-          nodes <- nodes %>%
-            dplyr::filter(purrr::map_lgl(
-              purrr::map(.data$tags, dplyr::pull, "name"),
-              ~ any(input$stratified_group_selected %in% .x)
-            ))
-        }
-        nodes <- nodes %>%
-          dplyr::select("tags", "node_name" = "name", "node_display" = "hgnc") %>%
-          tidyr::unnest("tags") %>%
-          dplyr::select("node_name", "node_display", "tag" = "name") %>%
-          dplyr::mutate("Type" = "Gene")
-        return(nodes)
+        get_gene_nodes(
+          stratify(),
+          selected_genes(),
+          input$group_selected,
+          input$stratified_group_selected,
+          input$abundance
+        )
       })
 
       feature_nodes <- shiny::eventReactive(input$calculate_button, {
-        if(stratify()) n_tags <- 2
-        else n_tags <- 1
-        nodes <-
-          iatlas.api.client::query_feature_nodes(
-            datasets = "TCGA",
-            network = "extracellular_network",
-            features = selected_celltypes(),
-            tags = input$group_selected,
-            min_score = input$abundance / 100
-          ) %>%
-          dplyr::filter(purrr::map_lgl(
-            purrr::map_int(.data$tags, nrow),
-            ~ .x == n_tags
-          ))
-        if(stratify()){
-          nodes <- nodes %>%
-            dplyr::filter(purrr::map_lgl(
-              purrr::map(.data$tags, dplyr::pull, "name"),
-              ~any(input$stratified_group_selected %in% .x)
-            ))
-        }
-        nodes <- nodes %>%
-          dplyr::select("tags", "node_name" = "name", "node_display" = "feature_display") %>%
-          tidyr::unnest("tags") %>%
-          dplyr::select("node_name", "node_display", "tag" = "name") %>%
-          dplyr::mutate("Type" = "Cell")
-        return(nodes)
+        get_feature_nodes(
+          stratify(),
+          selected_celltypes(),
+          input$group_selected,
+          input$stratified_group_selected,
+          input$abundance
+        )
       })
 
-      nodes <- shiny::reactive(dplyr::bind_rows(gene_nodes(), feature_nodes()))
-
-      # TODO: Use client to filter edges
-      edges <- shiny::eventReactive(input$calculate_button, {
-        nodes <- nodes() %>%
-          dplyr::pull("node_name") %>%
-          unique()
-        edges <- iatlas.api.client::query_edges(nodes, nodes) %>%
-          dplyr::filter(.data$score > input$concordance) %>%
-          dplyr::select("edge_name" = "name", "node1", "node2", "score") %>%
-          tidyr::pivot_longer(
-            cols = c("node1", "node2"),
-            names_to = "node_num",
-            values_to = "node_name"
-          ) %>%
-          dplyr::inner_join(nodes(), by = "node_name") %>%
-          dplyr::select(
-            "edge_name", "score", "node_num", "node_display", "tag"
-          ) %>%
-          tidyr::pivot_wider(
-            names_from = "node_num", values_from = "node_display"
-          )
+      nodes <- shiny::reactive({
+        shiny::req(gene_nodes(), feature_nodes())
+        dplyr::bind_rows(gene_nodes(), feature_nodes())
       })
 
-      scaffold <- shiny::reactive(
-        edges() %>%
-          dplyr::select("node1", "node2") %>%
-          dplyr::distinct()
-      )
+      edges <- shiny::reactive({
+        shiny::req(nodes(), input$concordance)
+        edges <- get_edges(nodes(), input$concordance)
+        shiny::validate(shiny::need(
+          nrow(edges) > 0,
+          "No network for this selection. Try changing the thresholds or selecting another subset."
+        ))
+        return(edges)
+      })
 
       output$select_node_ui <- shiny::renderUI({
         shiny::selectInput(
@@ -229,28 +179,12 @@ extracellular_network_main_server <- function(
         )
       })
 
+      filtered_nodes <- shiny::reactive({
+        filter_nodes(nodes(), edges())
+      })
+
       graph_json <- shiny::reactive({
-        print("##############")
-        nodes <- nodes() %>%
-          dplyr::select("id" = "node_name", "Gene" = "node_display", "Type") %>%
-          dplyr::mutate(
-            name = .data$Gene,
-            FriendlyName = .data$Gene
-          ) %>%
-          as.data.frame() %>%
-          print()
-        print("##############")
-        edges <- edges() %>%
-          dplyr::select(
-            "source" = "node1",
-            "target" = "node2",
-            "score",
-            "interaction" = "tag"
-          ) %>%
-          as.data.frame() %>%
-          print()
-        print("##############")
-        cyjShiny::dataFramesToJSON(edges, nodes)
+        create_graph_json(edges(), filtered_nodes())
       })
 
       output$cyjShiny <- cyjShiny::renderCyjShiny({
@@ -277,7 +211,6 @@ extracellular_network_main_server <- function(
       })
 
       shiny::observeEvent(input$node_selection,  ignoreInit = TRUE, {
-        print(input$node_selection)
         session$sendCustomMessage(
           type = "selectNodes",
           message = list(as.integer(input$node_selection))
@@ -315,8 +248,62 @@ extracellular_network_main_server <- function(
       shiny::observeEvent(input$savePNGbutton, ignoreInit = TRUE, {
         file.name <- tempfile(fileext = ".png")
         shiny::savePNGtoFile(session, file.name)
-
       })
+
+      edges_output <- shiny::reactive({
+        edges() %>%
+          dplyr::select(
+            "From" = "node_display1",
+            "From (Friendly Name)" =  "node_friendly1",
+            "To" = "node_display2",
+            "To (Friendly Name)" = "node_friendly2",
+            "Group" = "tag",
+            "Concordance" = "score"
+          )
+      })
+
+      nodes_output <- shiny::reactive({
+        filtered_nodes() %>%
+          dplyr::select(
+            "Node",
+            "Friendly Name" = "FriendlyName",
+            "Type",
+            "Group",
+            "Abundance"
+          )
+      })
+
+      output$download_edges <- shiny::downloadHandler(
+        filename = function() stringr::str_c("edges-", Sys.Date(), ".csv"),
+        content = function(con) readr::write_csv(edges_output(), con)
+      )
+
+      output$download_nodes <- shiny::downloadHandler(
+        filename = function() stringr::str_c("nodes-", Sys.Date(), ".csv"),
+        content = function(con) readr::write_csv(nodes_output(), con)
+      )
+
+      output$edges_dt <- DT::renderDataTable({
+        shiny::req(edges_output())
+
+        DT::datatable(
+          edges_output(),
+          caption = "Edges Table",
+          width = "100%",
+          rownames = FALSE
+        )
+      })
+
+      output$nodes_dt <- DT::renderDataTable({
+        shiny::req(nodes_output())
+        DT::datatable(
+          nodes_output(),
+          caption = "Nodes Table",
+          width = "100%",
+          rownames = FALSE
+        )
+      })
+
     }
   )
 }

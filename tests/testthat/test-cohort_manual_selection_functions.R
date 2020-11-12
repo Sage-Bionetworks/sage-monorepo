@@ -53,7 +53,7 @@ test_that("build_tag_cohort_object", {
 
 test_that("build_mutation_cohort_object", {
   res1 <- build_mutation_cohort_object("TCGA", tcga_samples_50, 191)
-  # res2 <- build_mutation_cohort_object("TCGA", tcga_samples_50, "191")
+  res2 <- build_mutation_cohort_object("TCGA", tcga_samples_50, "191")
 
   expected_names <-  c("sample_tbl", "group_tbl", "feature_tbl", "group_name")
   expected_sample_tbl_cols <- c("sample", "group")

@@ -63,7 +63,12 @@ insert_remove_element_server <- function(
         purrr::walk(button_selectors, shiny::removeUI)
         purrr::walk(button_selectors, shiny::removeUI)
         params$ui_numbers <- c()
-        results <- shiny::reactiveValues()
+        names <- results %>%
+          shiny::reactiveValuesToList(.) %>%
+          names()
+        for(name in names){
+          results[[name]] <- NULL
+        }
       })
 
       return(shiny::reactive(results))

@@ -16,7 +16,7 @@ cohort_upload_selection_ui <- function(id) {
         ),
         shiny::hr(),
         shiny::fileInput(
-          ns("file1"),
+          ns("file"),
           "Choose CSV File",
           multiple = FALSE,
           accept = c(
