@@ -61,6 +61,12 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
             width = 6,
             DT::DTOutput(ns("snp_tbl")),
             shiny::uiOutput(ns("clicked"))
+          ),
+          plotBox(
+            width = 6,
+            plotly::plotlyOutput(ns("colocalization")) %>%
+              shinycssloaders::withSpinner(.)
+
           )
         )
 )

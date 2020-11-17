@@ -46,7 +46,7 @@ germline_heritability_ui <- function(id){
             plotly::plotlyOutput(ns("heritability"), height = "700px") %>%
               shinycssloaders::withSpinner(.)
           ),
-          shiny::conditionalPanel(paste0("input['", ns("ancestry"), "'] == 'European' & input['", ns("byImmune"), "'] == 1"),
+          shiny::conditionalPanel(paste0("input['", ns("group"), "'] == 'European' & input['", ns("byImmune"), "'] == 1"),
                                   shiny::column(
                                     width = 6,
                                     messageBox(
