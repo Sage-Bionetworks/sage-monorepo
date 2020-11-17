@@ -265,3 +265,9 @@ get_tsv_path <- function(name, extension = ".tsv"){
     stringr::str_c(extension) %>%
     file.path(system.file("tsv", package = "iatlas.app"), .)
 }
+
+get_svg_path <- function(name, extension = ".svg"){
+  name %>%
+    stringr::str_c(extension) %>%
+    file.path(system.file("svg", package = "iatlas.app"), .)
+}

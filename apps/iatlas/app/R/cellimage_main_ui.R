@@ -12,7 +12,7 @@ cellimage_main_ui <- function(id){
         shiny::column(
           width = 6,
           shiny::radioButtons(
-            ns("ui1"),
+            ns("viz_selection1"),
             "Select type of visualization:",
             choices = c("Illustration", "Network"),
             selected = "Illustration"
@@ -20,14 +20,14 @@ cellimage_main_ui <- function(id){
         ),
         shiny::column(
           width = 6,
-          shiny::uiOutput(ns("select_ui"))
+          shiny::uiOutput(ns("select_group1_ui"))
         )
       ),
       optionsBox(
         shiny::column(
           width = 6,
           shiny::radioButtons(
-            ns("ui2"),
+            ns("viz_selection2"),
             "Select type of visualization:",
             choices = c("Illustration", "Network"),
             selected = "Network"
@@ -35,21 +35,31 @@ cellimage_main_ui <- function(id){
         ),
         shiny::column(
           width = 6,
-          shiny::uiOutput(ns("select_ui2"))
+          shiny::uiOutput(ns("select_group2_ui"))
         )
       )
     ),
     shiny::fluidRow(
-      plotBox(
-        width = 6,
-        shiny::uiOutput(ns("plot1")) %>%
-          shinycssloaders::withSpinner(.)
+      shiny::conditionalPanel(
+        condition = "input.viz_selection1 == 'Illustration'",
+        cellimage_plot_ui(ns("cellimage_plot1")),
+        ns = ns
       ),
-      plotBox(
-        width = 6,
-        shiny::uiOutput(ns("plot2")) %>%
-          shinycssloaders::withSpinner(.)
-      )
+      shiny::conditionalPanel(
+        condition = "input.viz_selection1 == 'Network'",
+        cellimage_network_ui(ns("cellimage_network1")),
+        ns = ns
+      ),
+      shiny::conditionalPanel(
+        condition = "input.viz_selection2 == 'Illustration'",
+        cellimage_plot_ui(ns("cellimage_plot2")),
+        ns = ns
+      ),
+      shiny::conditionalPanel(
+        condition = "input.viz_selection2 == 'Network'",
+        cellimage_network_ui(ns("cellimage_network2")),
+        ns = ns
+      ),
     ),
     shiny::img(src = "images/cell-image-legend.png", width = "100%"),
     shiny::br(),
