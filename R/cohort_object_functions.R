@@ -67,12 +67,21 @@ show_ocp_submodule <- function(cohort_obj){
 }
 
 show_ecn_submodules <- function(cohort_obj){
-  all(
-    cohort_has_dataset(cohort_obj, "TCGA"),
-    cohort_has_group(
-      cohort_obj, c("Immune_Subtype", "TCGA_Subtype", "TCGA_Study")
+  any(
+    all(
+      cohort_has_dataset(cohort_obj, "TCGA"),
+      cohort_has_group(
+        cohort_obj, c("Immune_Subtype", "TCGA_Subtype", "TCGA_Study")
+      )
+    ),
+    all(
+      cohort_has_dataset(cohort_obj, "PCAWG"),
+      cohort_has_group(
+        cohort_obj, c("Immune_Subtype", "PCAWG_Study")
+      )
     )
   )
+
 }
 
 show_ctf_submodule <- function(cohort_obj){

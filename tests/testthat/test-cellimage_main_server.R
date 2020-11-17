@@ -10,8 +10,35 @@ test_that("cellimage_main_server", {
       expect_type(output$select_group2_ui, "list")
       session$setInputs("group_selected1" = "C1")
       session$setInputs("group_selected2" = "C1")
-      # print(gene_nodes1())
-      print(feature_nodes1())
+      expect_named(
+        feature_nodes1(),
+        c("node_name", "node_display", "tag", "x", "y", "score", "Type")
+      )
+      expect_named(
+        gene_nodes1(),
+        c("node_name", "node_display", "tag", "x", "y", "score", "Type")
+      )
+      expect_named(
+        edges1(),
+        c("node_display1", "node_display2", "node1", "node2", "tag")
+      )
+      expect_type(graph_json1(), "character")
+      session$setInputs("viz_selection1" = "Network")
+      expect_type(output$plot1, "list")
+
+      # expect_named(
+      #   feature_nodes2(),
+      #   c("node_name", "node_display", "tag", "x", "y", "Type")
+      # )
+      # expect_named(
+      #   gene_nodes2(),
+      #   c("node_name", "node_display", "tag", "x", "y", "Type")
+      # )
+      # expect_named(
+      #   edges2(),
+      #   c("node_display1", "node_display2", "node1", "node2", "tag")
+      # )
+
     }
   )
 })
