@@ -79,15 +79,21 @@ germline_heritability_server <- function(id, cohort_obj){
               dplyr::arrange(.[[input$order_bars]], Variance))$ylabel %>%
               as.factor()
 
+
         hdf() %>%
-          dplyr::rename(LRT_p_value = pval) %>% #changing column name to legend title display
+          #dplyr::rename(LRT_p_value = pval) %>%
+          dplyr::mutate('Neg_log10_p_value' = dplyr::case_when(
+            pval != 0.0000 ~ -log10(pval),
+            TRUE ~ 5
+          )
+             ) %>% #changing column name to legend title display
             create_barplot_horizontal(
               df = .,
               x_col = "Variance",
               y_col = "ylabel",
               error_col = "SE",
               key_col = NA,
-              color_col = "LRT_p_value",
+              color_col = "Neg_log10_p_value",
               label_col = "label",
               xlab = "Heritability",
               ylab = "",
@@ -96,7 +102,7 @@ germline_heritability_server <- function(id, cohort_obj){
               showLegend = TRUE,
               legendTitle = "LRT \n p-value",
               source_name = "heritability_plot",
-              bar_colors = NULL
+              bar_colors = NULL #rev(RColorBrewer::brewer.pal(11, "PRGn"))
             ) %>%
           plotly::layout(
             xaxis = list(
@@ -142,12 +148,17 @@ germline_heritability_server <- function(id, cohort_obj){
           key_col = NA,
           color_col = "cluster",
           label_col = NA,
-          xlab = "",
+          xlab = "Heritability",
           ylab = "",
           title = paste("Random data for", selected_plot_trait),
           showLegend = FALSE,
           source_name = NULL,
           bar_colors = plot_colors
+        ) %>%
+          plotly::layout(
+          xaxis = list(
+            tickformat = "%"
+          )
         )
 
       })

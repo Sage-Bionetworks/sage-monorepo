@@ -68,7 +68,7 @@ build_manhattanplot_tbl <- function(
     dplyr::left_join(gwas_df, ., by = "chr_col") %>%
     # Add a cumulative position of each SNP
     dplyr::arrange(chr_col, bp_col) %>%
-    dplyr::mutate( BPcum=bp_col+tot) %>%
+    dplyr::mutate(x_col=bp_col+tot) %>%
     # Add highlight and annotation information
     dplyr::mutate( log10p = -log10(PLINK.P),
                    text = paste("<b>",display, "</b>",
