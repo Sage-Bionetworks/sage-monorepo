@@ -13,11 +13,11 @@ get_cellimage_features <- function(){
   )
 }
 
-get_cellimage_gene_nodes <- function(tag, genes){
+get_cellimage_gene_nodes <- function(dataset, tag, genes){
 
   nodes <-
     iatlas.api.client::query_gene_nodes(
-      datasets = "TCGA",
+      datasets = dataset,
       network = "cellimage_network",
       entrez = genes,
       tags = tag
@@ -47,10 +47,10 @@ get_cellimage_gene_nodes <- function(tag, genes){
     )
 }
 
-get_cellimage_feature_nodes <- function(tag, features){
+get_cellimage_feature_nodes <- function(dataset, tag, features){
   nodes <-
     iatlas.api.client::query_feature_nodes(
-      datasets = "TCGA",
+      datasets = dataset,
       network = "cellimage_network",
       features = features,
       tags = tag

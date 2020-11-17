@@ -1,4 +1,4 @@
-cellimage_network_server <- function(id, tag) {
+cellimage_network_server <- function(id, dataset, tag) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -10,13 +10,13 @@ cellimage_network_server <- function(id, tag) {
       cellimage_features <- shiny::reactive(get_cellimage_features())
 
       gene_nodes <- shiny::reactive({
-        shiny::req(tag(), cellimage_genes())
-        get_cellimage_gene_nodes(tag(), cellimage_genes())
+        shiny::req(dataset(), tag(), cellimage_genes())
+        get_cellimage_gene_nodes(dataset(), tag(), cellimage_genes())
       })
 
       feature_nodes <- shiny::reactive({
-        shiny::req(tag(), cellimage_features())
-        get_cellimage_feature_nodes(tag(), cellimage_features())
+        shiny::req(dataset(), tag(), cellimage_features())
+        get_cellimage_feature_nodes(dataset(), tag(), cellimage_features())
       })
 
       nodes <- shiny::reactive({
