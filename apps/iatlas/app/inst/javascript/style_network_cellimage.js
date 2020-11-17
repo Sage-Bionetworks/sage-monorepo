@@ -65,7 +65,7 @@
       "background-color" : "mapData(UpBinRatio,0,0.125,rgb(247,252,245),rgb(229,245,224))"
     }
   }, {
-    "selector" : "node[id = 'T_cells_CD8_Aggregate2'][UpBinRatio >= 0.875][UpBinRatio <= 1]",
+    "selector" : "node[id = 'T Cells CD8'][UpBinRatio >= 0.875][UpBinRatio <= 1]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.875,1,rgb(153,52,4),rgb(102,37,6))",
       "color" : "rgb(217,217,217)",
@@ -76,7 +76,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'T_cells_CD8_Aggregate2'][UpBinRatio >= 0.75][UpBinRatio < 0.875]",
+    "selector" : "node[id = 'T Cells CD8'][UpBinRatio >= 0.75][UpBinRatio < 0.875]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.75,0.875,rgb(204,76,2),rgb(153,52,4))",
       "shape" : "ellipse",
@@ -86,7 +86,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'T_cells_CD8_Aggregate2'][UpBinRatio >= 0.625][UpBinRatio < 0.75]",
+    "selector" : "node[id = 'T Cells CD8'][UpBinRatio >= 0.625][UpBinRatio < 0.75]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.625,0.75,rgb(236,112,20),rgb(204,76,2))",
       "shape" : "ellipse",
@@ -96,7 +96,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'T_cells_CD8_Aggregate2'][UpBinRatio >= 0.5][UpBinRatio < 0.625]",
+    "selector" : "node[id = 'T Cells CD8'][UpBinRatio >= 0.5][UpBinRatio < 0.625]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.5,0.625,rgb(254,153,41),rgb(236,112,20))",
       "shape" : "ellipse",
@@ -106,7 +106,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'T_cells_CD8_Aggregate2'][UpBinRatio >= 0.375][UpBinRatio < 0.5]",
+    "selector" : "node[id = 'T Cells CD8'][UpBinRatio >= 0.375][UpBinRatio < 0.5]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.375,0.5,rgb(254,196,79),rgb(254,153,41))",
       "shape" : "ellipse",
@@ -116,7 +116,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'T_cells_CD8_Aggregate2'][UpBinRatio >= 0.25][UpBinRatio < 0.375]",
+    "selector" : "node[id = 'T Cells CD8'][UpBinRatio >= 0.25][UpBinRatio < 0.375]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.25,0.375,rgb(254,227,145),rgb(254,196,79))",
       "shape" : "ellipse",
@@ -126,7 +126,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'T_cells_CD8_Aggregate2'][UpBinRatio >= 0.125][UpBinRatio < 0.25]",
+    "selector" : "node[id = 'T Cells CD8'][UpBinRatio >= 0.125][UpBinRatio < 0.25]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.125,0.25,rgb(255,247,188),rgb(254,227,145))",
       "shape" : "ellipse",
@@ -136,7 +136,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'T_cells_CD8_Aggregate2'][UpBinRatio >= 0][UpBinRatio < 0.125]",
+    "selector" : "node[id = 'T Cells CD8'][UpBinRatio >= 0][UpBinRatio < 0.125]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0,0.125,rgb(255,255,229),rgb(255,247,188))",
       "shape" : "ellipse",
@@ -146,7 +146,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Macrophage_Aggregate2'][UpBinRatio >= 0.875][UpBinRatio <= 1]",
+    "selector" : "node[id = 'Macrophages'][UpBinRatio >= 0.875][UpBinRatio <= 1]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.875,1,rgb(8,81,156),rgb(8,48,107))",
       "color" : "rgb(217,217,217)",
@@ -157,7 +157,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Macrophage_Aggregate2'][UpBinRatio >= 0.75][UpBinRatio < 0.875]",
+    "selector" : "node[id = 'Macrophages'][UpBinRatio >= 0.75][UpBinRatio < 0.875]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.75,0.875,rgb(33,113,181),rgb(8,81,156))",
       "shape" : "ellipse",
@@ -167,7 +167,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Macrophage_Aggregate2'][UpBinRatio >= 0.625][UpBinRatio < 0.75]",
+    "selector" : "node[id = 'Macrophages'][UpBinRatio >= 0.625][UpBinRatio < 0.75]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.625,0.75,rgb(66,146,198),rgb(33,113,181))",
       "shape" : "ellipse",
@@ -177,7 +177,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Macrophage_Aggregate2'][UpBinRatio >= 0.5][UpBinRatio < 0.625]",
+    "selector" : "node[id = 'Macrophages'][UpBinRatio >= 0.5][UpBinRatio < 0.625]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.5,0.625,rgb(107,174,214),rgb(66,146,198))",
       "shape" : "ellipse",
@@ -187,7 +187,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Macrophage_Aggregate2'][UpBinRatio >= 0.375][UpBinRatio < 0.5]",
+    "selector" : "node[id = 'Macrophages'][UpBinRatio >= 0.375][UpBinRatio < 0.5]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.375,0.5,rgb(158,202,225),rgb(107,174,214))",
       "shape" : "ellipse",
@@ -197,7 +197,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Macrophage_Aggregate2'][UpBinRatio >= 0.25][UpBinRatio < 0.375]",
+    "selector" : "node[id = 'Macrophages'][UpBinRatio >= 0.25][UpBinRatio < 0.375]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.25,0.375,rgb(198,219,239),rgb(158,202,225))",
       "shape" : "ellipse",
@@ -207,7 +207,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Macrophage_Aggregate2'][UpBinRatio >= 0.125][UpBinRatio < 0.25]",
+    "selector" : "node[id = 'Macrophages'][UpBinRatio >= 0.125][UpBinRatio < 0.25]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.125,0.25,rgb(222,235,247),rgb(198,219,239))",
       "shape" : "ellipse",
@@ -217,7 +217,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Macrophage_Aggregate2'][UpBinRatio >= 0][UpBinRatio < 0.125]",
+    "selector" : "node[id = 'Macrophages'][UpBinRatio >= 0][UpBinRatio < 0.125]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0,0.125,rgb(247,251,255),rgb(222,235,247))",
       "shape" : "ellipse",
@@ -227,7 +227,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Dendritic_cells_Aggregate2'][UpBinRatio >= 0.875][UpBinRatio <= 1]",
+    "selector" : "node[id = 'Dendritic Cells'][UpBinRatio >= 0.875][UpBinRatio <= 1]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.875,1,rgb(84,39,143),rgb(63,0,125))",
       "color" : "rgb(217,217,217)",
@@ -238,7 +238,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Dendritic_cells_Aggregate2'][UpBinRatio >= 0.75][UpBinRatio < 0.875]",
+    "selector" : "node[id = 'Dendritic Cells'][UpBinRatio >= 0.75][UpBinRatio < 0.875]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.75,0.875,rgb(106,81,163),rgb(84,39,143))",
       "shape" : "ellipse",
@@ -248,7 +248,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Dendritic_cells_Aggregate2'][UpBinRatio >= 0.625][UpBinRatio < 0.75]",
+    "selector" : "node[id = 'Dendritic Cells'][UpBinRatio >= 0.625][UpBinRatio < 0.75]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.625,0.75,rgb(128,125,186),rgb(106,81,163))",
       "shape" : "ellipse",
@@ -258,7 +258,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Dendritic_cells_Aggregate2'][UpBinRatio >= 0.5][UpBinRatio < 0.625]",
+    "selector" : "node[id = 'Dendritic Cells'][UpBinRatio >= 0.5][UpBinRatio < 0.625]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.5,0.625,rgb(158,154,200),rgb(128,125,186))",
       "shape" : "ellipse",
@@ -268,7 +268,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Dendritic_cells_Aggregate2'][UpBinRatio >= 0.375][UpBinRatio < 0.5]",
+    "selector" : "node[id = 'Dendritic Cells'][UpBinRatio >= 0.375][UpBinRatio < 0.5]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.375,0.5,rgb(188,189,220),rgb(158,154,200))",
       "shape" : "ellipse",
@@ -278,7 +278,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Dendritic_cells_Aggregate2'][UpBinRatio >= 0.25][UpBinRatio < 0.375]",
+    "selector" : "node[id = 'Dendritic Cells'][UpBinRatio >= 0.25][UpBinRatio < 0.375]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.25,0.375,rgb(218,218,235),rgb(188,189,220))",
       "shape" : "ellipse",
@@ -288,7 +288,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Dendritic_cells_Aggregate2'][UpBinRatio >= 0.125][UpBinRatio < 0.25]",
+    "selector" : "node[id = 'Dendritic Cells'][UpBinRatio >= 0.125][UpBinRatio < 0.25]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.125,0.25,rgb(239,237,245),rgb(218,218,235))",
       "shape" : "ellipse",
@@ -298,7 +298,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Dendritic_cells_Aggregate2'][UpBinRatio >= 0][UpBinRatio < 0.125]",
+    "selector" : "node[id = 'Dendritic Cells'][UpBinRatio >= 0][UpBinRatio < 0.125]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0,0.125,rgb(252,251,253),rgb(239,237,245))",
       "shape" : "ellipse",
@@ -308,7 +308,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Tumor_fraction'][UpBinRatio >= 0.875][UpBinRatio <= 1]",
+    "selector" : "node[id = 'Tumor Fraction'][UpBinRatio >= 0.875][UpBinRatio <= 1]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.875,1,rgb(189,0,38),rgb(128,0,38))",
       "color" : "rgb(217,217,217)",
@@ -319,7 +319,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Tumor_fraction'][UpBinRatio >= 0.75][UpBinRatio < 0.875]",
+    "selector" : "node[id = 'Tumor Fraction'][UpBinRatio >= 0.75][UpBinRatio < 0.875]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.75,0.875,rgb(227,26,28),rgb(189,0,38))",
       "shape" : "ellipse",
@@ -329,7 +329,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Tumor_fraction'][UpBinRatio >= 0.625][UpBinRatio < 0.75]",
+    "selector" : "node[id = 'Tumor Fraction'][UpBinRatio >= 0.625][UpBinRatio < 0.75]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.625,0.75,rgb(252,78,42),rgb(227,26,28))",
       "shape" : "ellipse",
@@ -339,7 +339,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Tumor_fraction'][UpBinRatio >= 0.5][UpBinRatio < 0.625]",
+    "selector" : "node[id = 'Tumor Fraction'][UpBinRatio >= 0.5][UpBinRatio < 0.625]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.5,0.625,rgb(253,141,60),rgb(252,78,42))",
       "shape" : "ellipse",
@@ -349,7 +349,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Tumor_fraction'][UpBinRatio >= 0.375][UpBinRatio < 0.5]",
+    "selector" : "node[id = 'Tumor Fraction'][UpBinRatio >= 0.375][UpBinRatio < 0.5]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.375,0.5,rgb(254,178,76),rgb(253,141,60))",
       "shape" : "ellipse",
@@ -359,7 +359,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Tumor_fraction'][UpBinRatio >= 0.25][UpBinRatio < 0.375]",
+    "selector" : "node[id = 'Tumor Fraction'][UpBinRatio >= 0.25][UpBinRatio < 0.375]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.25,0.375,rgb(254,217,118),rgb(254,178,76))",
       "shape" : "ellipse",
@@ -369,7 +369,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Tumor_fraction'][UpBinRatio >= 0.125][UpBinRatio < 0.25]",
+    "selector" : "node[id = 'Tumor Fraction'][UpBinRatio >= 0.125][UpBinRatio < 0.25]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.125,0.25,rgb(255,237,160),rgb(254,217,118))",
       "shape" : "ellipse",
@@ -379,7 +379,7 @@
       "height" : 60.0
     }
   }, {
-    "selector" : "node[id = 'Tumor_fraction'][UpBinRatio >= 0][UpBinRatio < 0.125]",
+    "selector" : "node[id = 'Tumor Fraction'][UpBinRatio >= 0][UpBinRatio < 0.125]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0,0.125,rgb(255,255,204),rgb(255,237,160))",
       "shape" : "ellipse",
