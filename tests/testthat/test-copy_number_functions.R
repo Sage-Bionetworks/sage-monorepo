@@ -1,12 +1,20 @@
 
-group_tbl    <- iatlas.api.client::query_tags(
+group_tbl <- iatlas.api.client::query_tags(
   datasets = "TCGA",
   parent_tags = "Immune_Subtype"
-)
-gene_tbl     <- iatlas.api.client::query_genes(entrez = 1:2) %>%
+) %>%
+  dplyr::select("display" = "short_display", "name")
+
+gene_tbl <- iatlas.api.client::query_genes(entrez = 1:300) %>%
   dplyr::select("entrez", "hgnc")
+
+im_gene_tbl <-
+  iatlas.api.client::query_genes(gene_types = "immunomodulator") %>%
+  dplyr::select("entrez", "hgnc")
+
 gene_set_tbl <- iatlas.api.client::query_gene_types()
-result_tbl   <- iatlas.api.client::query_copy_number_results(
+
+result_tbl<- iatlas.api.client::query_copy_number_results(
   datasets = "TCGA",
   tags = c("C1", "C2"),
   entrez = 1:2,
@@ -15,7 +23,11 @@ result_tbl   <- iatlas.api.client::query_copy_number_results(
 
 test_that("get_cnv_group_list", {
   result <- build_cnv_group_list(group_tbl)
-  expect_equal(result, c("All", "C1", "C2", "C3", "C4", "C5", "C6"))
+  items <- c("All", "C1", "C2", "C3", "C4", "C5", "C6")
+  expect_equal(
+    result,
+    purrr::set_names(items, items)
+  )
 })
 
 test_that("build_cnv_gene_list", {
@@ -24,12 +36,15 @@ test_that("build_cnv_gene_list", {
 })
 
 test_that("get_cnv_entrez_query_from_filters", {
+
   result1 <- get_cnv_entrez_query_from_filters("All", gene_set_tbl, gene_tbl)
-  expect_equal(result1, list())
+  expect_equal(result1, gene_tbl$entrez)
+
   result2 <- get_cnv_entrez_query_from_filters(
     c("All", "immunomodulators"), gene_set_tbl, gene_tbl
   )
-  expect_equal(result2, list())
+
+  expect_equal(result2, gene_tbl$entrez)
 
   result3 <- get_cnv_entrez_query_from_filters(
     "immunomodulator", gene_set_tbl, gene_tbl
