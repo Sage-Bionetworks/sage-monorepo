@@ -117,6 +117,9 @@ create_cellimage_json <- function(nodes, edges){
     ) %>%
     as.data.frame()
 
+  #one of the edges needs to show that the interaction is mediated by a peptide
+  edges[edges$source == "LAG3" & edges$target == "HLA-DPA1", "interaction"] <- "peptide"
+
   nodes <- dplyr::select(
     nodes,
     "id" = "node_feature_display",
