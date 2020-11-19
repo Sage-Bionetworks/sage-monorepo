@@ -6,8 +6,6 @@ variables:
   # Staging variables
   STAGING_CONTAINER_NAME: $CI_REGISTRY_IMAGE:${CI_COMMIT_SHORT_SHA}-${CI_COMMIT_REF_NAME}
   STAGING_CONTAINER_LABEL: iatlas-api
-  STAGING_DB_HOST: iatlas-staging-us-west-2.cluster-cfb68nhqxoz9.us-west-2.rds.amazonaws.com
-  STAGING_DB_USER: postgres
   STAGING_DOCKER_HOST: ip-10-220-11-144.us-west-2.compute.internal
 
 stages:
@@ -28,6 +26,9 @@ tests:
     - apk add --no-cache openssh git libpq
     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir pytest pytest-cov pytest-xdist && apk del --no-cache .build-deps
     - export POSTGRES_DB=${STAGING_DB_NAME}
+    - export POSTGRES_HOST=${POSTGRES_HOST}
+    - export POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    - export POSTGRES_USER=${POSTGRES_USER}
     - export FLASK_ENV=development
     - pytest --cov --cov-report html -n auto
   artifacts:
@@ -45,6 +46,9 @@ tests:coverage-report-staging:
     - apk add openssh git libpq
     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir pytest pytest-cov pytest-xdist && apk del --no-cache .build-deps
     - export POSTGRES_DB=${STAGING_DB_NAME}
+    - export POSTGRES_HOST=${POSTGRES_HOST}
+    - export POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    - export POSTGRES_USER=${POSTGRES_USER}
     - export FLASK_ENV=staging
     - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml --cov-report term:skip-covered -n auto
     - coverage report --skip-covered | grep TOTAL
@@ -116,4 +120,4 @@ Deploy to Staging:
     - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker stop ${STAGING_CONTAINER_LABEL}
     - docker ps -a
-    - docker run --rm -d -p 80:80 --name ${STAGING_CONTAINER_LABEL} -e POSTGRES_HOST=${STAGING_DB_HOST} -e POSTGRES_USER=${STAGING_DB_USER} -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -e POSTGRES_DB=${STAGING_DB_NAME} -e POSTGRES_PORT=5432 -e FLASK_ENV=staging ${STAGING_CONTAINER_NAME}
+    - docker run --rm -d -p 80:80 --name ${STAGING_CONTAINER_LABEL} -e POSTGRES_HOST=${POSTGRES_HOST} -e POSTGRES_USER=${POSTGRES_USER} -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -e POSTGRES_DB=${STAGING_DB_NAME} -e POSTGRES_PORT=5432 -e FLASK_ENV=staging ${STAGING_CONTAINER_NAME}
