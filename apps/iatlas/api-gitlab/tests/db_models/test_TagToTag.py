@@ -5,7 +5,7 @@ from api.db_models import TagToTag
 
 @pytest.fixture(scope='module')
 def tt_tag(test_db):
-    return 'AML.3'
+    return 'AML_3'
 
 
 @pytest.fixture(scope='module')

@@ -21,7 +21,7 @@ To change any of the environment variables used by the app see [Environment Vari
 
 The first time you checkout the project, run the following command to build the docker image, start the container, and start the API:
 
-```bash
+```sh
 ./start.sh
 ```
 
@@ -37,13 +37,13 @@ To exit the container's command prompt, type `exit` and enter. This will bring y
 
 The following command will stop the server and container:
 
-```bash
+```sh
 ./stop.sh
 ```
 
 Restart the container with the following command:
 
-```bash
+```sh
 ./start.sh
 ```
 
@@ -59,9 +59,9 @@ If you choose NOT to use the dockerized development method above, please ensure 
 
 See [https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) for information on installing Python packages for a specific project.
 
-Start the app with (called from the root of the project):
+Start the app with the following called from the root of the project. (Please note the dot(`.`) at the very beginning of the command. This will "source" the script.):
 
-```bash
+```sh
 . set_env_variables.sh && python run.py
 ```
 
@@ -94,9 +94,9 @@ POSTGRES_USER=postgres
 
 ### Environment Variables
 
-All the environment variables used by the app have defaults. To set the environment variables, simply run the following bash script from the root of the project:
+All the environment variables used by the app have defaults. To set the environment variables, simply run the following bash script from the root of the project. (Please note the dot(`.`) at the very beginning of the command. This will "source" the script.):
 
-```bash
+```sh
 . set_env_variables.sh
 ```
 

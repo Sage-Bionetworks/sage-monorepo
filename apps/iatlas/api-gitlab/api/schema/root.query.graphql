@@ -339,7 +339,7 @@ type Query {
     status: [StatusEnum!]
     "A list of tag names associated with the samples associated with the mutations to filter by."
     tag: [String!]
-    "The page of results to get. Defaults to 1 (the first page) with a maximum of 100,000 rows returned."
+    "The page of results to get. Defaults to 1 (the first page) with a maximum of 10,000 mutation rows returned."
     page: Int
   ): MutationsBySampleResult!
 

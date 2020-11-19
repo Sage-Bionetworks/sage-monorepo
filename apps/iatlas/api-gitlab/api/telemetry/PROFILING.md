@@ -2,11 +2,11 @@
 
 [BACK TO MAIN README](./../../README.md)
 
-### Deterministic Profiling
+## Deterministic Profiling
 
 Functions may be profiled using the `@profile(__name__)` decorator. Adding this decorator to a function will cause the app to write a profile for that function when it is called. The profile may be reviewed via [SnakeViz](https://jiffyclub.github.io/snakeviz/). Simply call:
 
-```bash
+```sh
 ./view_profile.sh
 ```
 

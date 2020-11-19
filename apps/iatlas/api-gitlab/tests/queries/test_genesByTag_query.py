@@ -6,7 +6,7 @@ from api.database import return_feature_class_query
 
 @pytest.fixture(scope='module')
 def gene_type():
-    return 'extra_cellular_network'
+    return 'extracellular_network'
 
 
 @pytest.fixture(scope='module')

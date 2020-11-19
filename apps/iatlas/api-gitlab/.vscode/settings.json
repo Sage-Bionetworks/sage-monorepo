@@ -9,9 +9,11 @@
   ],
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
-  "python.formatting.autopep8Args": ["--ignore", "E402"],
+  "python.formatting.autopep8Args": [
+    "--ignore",
+    "E402"
+  ],
   "files.associations": {
     "Dockerfile*": "dockerfile"
-  },
-  "python.pythonPath": "/DevSpot/sage/iatlas-api/env/bin/python3.8"
+  }
 }
