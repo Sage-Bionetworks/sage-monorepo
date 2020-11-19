@@ -5,7 +5,7 @@ from api.database import return_gene_type_query
 
 @pytest.fixture(scope='module')
 def gene_type():
-    return 'extra_cellular_network'
+    return 'extracellular_network'
 
 
 @pytest.fixture(scope='module')

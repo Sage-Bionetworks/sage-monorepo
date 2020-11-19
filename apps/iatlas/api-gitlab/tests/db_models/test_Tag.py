@@ -10,7 +10,7 @@ def tag_name():
 
 @pytest.fixture(scope='module')
 def tag_with_publication():
-    return 'AML.1'
+    return 'AML_1'
 
 
 def test_Tag_no_relations(app, tag_name):

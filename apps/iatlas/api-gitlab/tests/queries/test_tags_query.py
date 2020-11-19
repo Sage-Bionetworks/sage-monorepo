@@ -6,7 +6,7 @@ from tests import NoneType
 
 @pytest.fixture(scope='module')
 def tag_with_publication():
-    return 'BRCA.Normal'
+    return 'BRCA_Normal'
 
 
 @pytest.fixture(scope='module')
