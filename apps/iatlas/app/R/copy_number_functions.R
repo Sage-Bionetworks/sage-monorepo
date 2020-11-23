@@ -1,5 +1,4 @@
 
-
 build_cnv_group_list <- function(tbl){
     tbl %>%
         dplyr::pull("name") %>%

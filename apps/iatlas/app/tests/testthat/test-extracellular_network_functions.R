@@ -7,6 +7,7 @@ test_that("build_ecn_gene_choice_list", {
     c("Extracellular Network Genes", "Immunomodulator Genes")
   )
   expect_named(result$Genes)
+  expect_true(length(result$Genes) > 0)
 })
 
 test_that("build_ecn_celltype_choice_list", {
@@ -21,14 +22,17 @@ test_that("get_selected_gene_ids", {
   gene_list2 <- list("geneset:immunomodulator")
   gene_list3 <- list("gene:1")
   gene_list4 <- list("geneset:immunomodulator", "gene:1")
+  gene_list5 <- list("geneset:extracellular_network")
   result1 <- get_selected_gene_ids(gene_list1)
   result2 <- get_selected_gene_ids(gene_list2)
   result3 <- get_selected_gene_ids(gene_list3)
   result4 <- get_selected_gene_ids(gene_list4)
+  result5 <- get_selected_gene_ids(gene_list5)
   expect_null(result1)
   expect_length (result2, 78)
   expect_equal(result3, 1)
   expect_length(result4, 79)
+  expect_true(length(result5) > 0)
 })
 
 test_that("get_selected_celltypes", {

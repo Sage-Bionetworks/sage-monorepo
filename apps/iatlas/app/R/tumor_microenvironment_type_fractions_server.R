@@ -3,38 +3,43 @@ tumor_microenvironment_type_fractions_server <- function(id, cohort_obj) {
     id,
     function(input, output, session) {
 
-      value_tbl <- shiny::reactive({
-        shiny::req(input$fraction_group_choice)
-        build_ctf_value_tbl(cohort_obj(), input$fraction_group_choice)
+      plot_data_function <- shiny::reactive({
+        func <- function(.feature_class){
+          group_data <- cohort_obj()$group_tbl %>%
+            dplyr::select("group", "group_description" = "characteristics")
+
+          cohort_obj() %>%
+            query_feature_values_with_cohort_object(class = .feature_class) %>%
+            dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample") %>%
+            dplyr::inner_join(group_data, by = "group") %>%
+            dplyr::select(
+              "sample",
+              "group",
+              "feature" = "feature_display",
+              "feature_value",
+              "group_description"
+            )
+        }
+        return(func)
       })
 
-      plot_tbl <- shiny::reactive({
-        shiny::req(value_tbl())
-        build_ctf_barplot_tbl(value_tbl())
-      })
-
-      output$barplot <- plotly::renderPlotly({
-        shiny::req(plot_tbl())
-
-        create_barplot(
-          plot_tbl(),
-          source_name = "cell_type_fractions_barplot",
-          color_col = "color",
-          label_col = "label",
-          xlab = "Fraction type by group",
-          ylab = "Fraction mean"
+      feature_classes <- shiny::reactive({
+        c(
+          "Immune Cell Proportion - Common Lymphoid and Myeloid Cell Derivative Class",
+          "Immune Cell Proportion - Differentiated Lymphoid and Myeloid Cell Derivative Class",
+          "Immune Cell Proportion - Multipotent Progenitor Cell Derivative Class",
+          "Immune Cell Proportion - Original"
         )
       })
 
-      barplot_eventdata <- shiny::reactive({
-        plotly::event_data("plotly_click", "cell_type_fractions_barplot")
-      })
-
-      plotly_server(
+      iatlas.modules::barplot_server(
         "barplot",
-        plot_tbl       = plot_tbl,
-        plot_eventdata = barplot_eventdata,
-        group_tbl      = shiny::reactive(cohort_obj()$group_tbl)
+        plot_data_function,
+        feature_classes,
+        barplot_xlab  = shiny::reactive("Fraction type by group"),
+        barplot_ylab  = shiny::reactive("Fraction mean"),
+        barplot_label = shiny::reactive("Fraction"),
+        drilldown     = shiny::reactive(T)
       )
     }
   )
