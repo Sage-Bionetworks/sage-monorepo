@@ -1,5 +1,8 @@
 
-group_tbl    <- iatlas.api.client::query_tags("TCGA", "Immune_Subtype")
+group_tbl    <- iatlas.api.client::query_tags(
+  datasets = "TCGA",
+  parent_tags = "Immune_Subtype"
+)
 gene_tbl     <- iatlas.api.client::query_genes(entrez = 1:2) %>%
   dplyr::select("entrez", "hgnc")
 gene_set_tbl <- iatlas.api.client::query_gene_types()

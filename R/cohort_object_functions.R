@@ -29,10 +29,12 @@ cohort_has_features <- function(cohort_obj, features, all_features = T){
 }
 
 cohort_has_dataset <- function(cohort_object, datasets){
+  if(is.null(cohort_object$dataset)) return(F)
   cohort_object$dataset %in% datasets
 }
 
 cohort_has_group <- function(cohort_object, groups){
+  if(is.null(cohort_object$group_name)) return(F)
   cohort_object$group_name %in% groups
 }
 
@@ -64,6 +66,24 @@ show_ocp_submodule <- function(cohort_obj){
   )
 }
 
+show_ecn_submodules <- function(cohort_obj){
+  any(
+    all(
+      cohort_has_dataset(cohort_obj, "TCGA"),
+      cohort_has_group(
+        cohort_obj, c("Immune_Subtype", "TCGA_Subtype", "TCGA_Study")
+      )
+    ),
+    all(
+      cohort_has_dataset(cohort_obj, "PCAWG"),
+      cohort_has_group(
+        cohort_obj, c("Immune_Subtype", "PCAWG_Study")
+      )
+    )
+  )
+
+}
+
 show_ctf_submodule <- function(cohort_obj){
   fraction_classes <- c(
     "Immune Cell Proportion - Common Lymphoid and Myeloid Cell Derivative Class",
@@ -77,23 +97,16 @@ show_ctf_submodule <- function(cohort_obj){
 ## api queries ----------------------------------------------------------------
 # features --------------------------------------------------------------------
 
-#' Title
-#'
-#' @param cohort_object
-#' @param feature
-#' @param class
-#'
-#' @import iatlas.api.client
 query_feature_values_with_cohort_object <- function(
   cohort_object,
   feature = NA,
   class = NA
 ){
-  if (cohort_object$group_type == "tag") related <- cohort_object$group_name
-  else related <- NA
+  if (cohort_object$group_type == "tag") parent_tags <- cohort_object$group_name
+  else parent_tags <- NA
   iatlas.api.client::query_feature_values(
     datasets = cohort_object$dataset,
-    parent_tags = related,
+    parent_tags = parent_tags,
     features = feature,
     feature_classes = class,
     samples = cohort_object$sample_tbl$sample
@@ -102,14 +115,26 @@ query_feature_values_with_cohort_object <- function(
 
 # genes -----------------------------------------------------------------------
 
+# TODO: remove distinct
 query_gene_expression_with_cohort_object <- function(
   cohort_object,
   gene_types = NA,
   entrez = NA
 ){
-  iatlas.api.client::query_expression_by_genes(
+  if (cohort_object$group_type == "tag"){
+    parent_tags <- cohort_object$group_name
+    samples <- NA
+  } else {
+    parent_tags <- NA
+    samples <- cohort_object$sample_tbl$sample
+  }
+
+  iatlas.api.client::query_gene_expression(
+    datasets = cohort_object$dataset,
+    parent_tags = parent_tags,
+    samples = cohort_object$sample_tbl$sample,
     gene_types = gene_types,
-    entrez = entrez,
-    samples = cohort_object$sample_tbl$sample
-  )
+    entrez = entrez
+  ) %>%
+    dplyr::distinct()
 }
