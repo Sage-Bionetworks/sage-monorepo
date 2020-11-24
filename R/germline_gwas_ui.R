@@ -32,41 +32,42 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
         ),
         shiny::column(
           width = 10,
-          shiny::conditionalPanel(paste0("input['", ns("selection"), "'] == 'Select a region'"),
-                                  messageBox(
-                                    width = 12,
-                                    # uiOutput(ns("link_genome")),
-                                    # shiny::br(),
-                                    shiny::p("Update region of interest by zooming in the plot or by manually adding coordinates:"),
-                                    shiny::column(
-                                      width = 2,
-                                      shiny::numericInput(ns("chr"), "Chr", value= 1, min = 1, max = 22, step = 1)
-                                    ),
-                                    shiny::column(
-                                      width = 10,
-                                      uiOutput(ns("xrange"))
-                                    )
-                                  )
-          ),
-          plotBox(
+          iatlas.app::plotBox(
             width = 12,
-            plotly::plotlyOutput(ns("mht_plot"), height = "400px") %>%
+            plotly::plotlyOutput(ns("mht_plot"), height = "300px") %>%
               shinycssloaders::withSpinner(.),
             shiny::conditionalPanel(paste0("input['", ns("selection"), "'] == 'Select a region'"),
-                                    shiny::plotOutput(ns("genome_plot"), height = "200px") %>%
+                                    igvShiny::igvShinyOutput(ns('igv_plot')) %>%
                                       shinycssloaders::withSpinner(.)
             )
           ),
-          plotBox(
-            width = 6,
-            DT::DTOutput(ns("snp_tbl")),
-            shiny::uiOutput(ns("clicked"))
+          shiny::fluidRow(
+            shiny::column(
+              width = 4,
+              iatlas.app::optionsBox(
+                width = 12,
+                shiny::uiOutput(ns("search_snp"))
+              )
+            ),
+            shiny::column(
+              width = 5,
+              iatlas.app::messageBox(
+                width = 12,
+                shiny::uiOutput(ns("links"))
+              )
+            )
           ),
-          plotBox(
-            width = 6,
-            plotly::plotlyOutput(ns("colocalization")) %>%
-              shinycssloaders::withSpinner(.)
-
+          shiny::fluidRow(
+            plotBox(
+              width = 4,
+              DT::DTOutput(ns("snp_tbl"))
+            ),
+            plotBox(
+              width = 8,
+              DT::DTOutput(ns("colocalization")) %>%
+                shinycssloaders::withSpinner(.),
+              shiny::uiOutput(ns("colocalization_plot"))
+            )
           )
         )
 )
