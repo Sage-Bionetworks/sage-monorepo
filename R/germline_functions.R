@@ -1,3 +1,70 @@
+#Heritability functions
+
+#' Prepare heritability tibble for plotting
+#'
+#' @param heritablity_data A tibble
+#' @param parameter Parameter to be used for selection of results (eg, ancestry cluster, immune feature)
+#' @param group Specific group, in the selected parameter, to be displayed (eg. European - ancestry cluster, NK cells - immune feature)
+#' @param strat_immune Should the plots show the results of analysis that took into consideration Immune Subtypes? (only available for European ancestry cluster)
+#' @param pval_thres Maximun p-value to be included
+#' @importFrom magrittr %>%
+
+create_heritability_df <- function(
+  heritablity_data,
+  parameter = "cluster",
+  group = "European",
+  strat_immune = FALSE,
+  pval_thres = 0.05
+){
+  if(parameter == "cluster" & group == "European" & strat_immune == TRUE){
+    df <- heritablity_data %>%
+      dplyr::filter(cluster == "European_immune")
+  }else{
+    df <- heritablity_data %>%
+      dplyr::filter(.[[parameter]] == group)
+  }
+  #creating the lable for plot
+  df <- df %>%
+    dplyr::filter(pval <= pval_thres) %>%
+    create_plotly_label(
+      ., paste(.$display, "- ", group, "Ancestry"),
+      paste("\n Immune Trait Category:",.$Annot.Figure.ImmuneCategory, "\n Immune Trait Module:", .$Annot.Figure.ImmuneModule),
+      c("Variance", "SE", "pval","FDR"),
+      title = "Immune Trait"
+    )
+
+  #creating the y label
+  if(parameter == "cluster") df <- df %>% mutate(ylabel = display)
+  else if (parameter == "Annot.Figure.ImmuneCategory" | parameter == "Annot.Figure.ImmuneModule")
+    df <- df %>% mutate(ylabel = paste(cluster, display, sep = " - "))
+  else  df <- df %>% mutate(ylabel = paste(cluster, .[[parameter]], sep = " - "))
+}
+
+
+format_heritability_plot <- function(p, hdf, fdr = FALSE){
+  p <- p %>%
+    plotly::layout(
+      xaxis = list(
+        tickformat = "%"
+      )
+    )
+    if(fdr == TRUE){
+      p <- p %>%
+            plotly::add_annotations(x = hdf$Variance+hdf$SE+0.01,
+                                    y = hdf$ylabel,
+                                    text = (hdf$plot_annot),
+                                    xref = "x",
+                                    yref = "y",
+                                    showarrow = F,
+                                    font=list(color='black')) %>%
+            plotly::add_annotations( text="LRT FDR \n † <= 0.1 \n * <= 0.05 \n ** <= 0.01 \n *** <= 0.001", xref="paper", yref="paper",
+                                     x=1.03, xanchor="left",
+                                     y=0, yanchor="bottom",
+                                     legendtitle=TRUE, showarrow=FALSE )
+    }
+  p
+}
+
 #' Add FDR annotation for plot display
 #'
 #' @param tbl A tibble
