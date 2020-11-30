@@ -1,4 +1,4 @@
-cellimage_plot_server <- function(id, tag) {
+cellimage_plot_server <- function(id, dataset, tag) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -10,13 +10,13 @@ cellimage_plot_server <- function(id, tag) {
       cellimage_features <- shiny::reactive(get_cellimage_features())
 
       gene_nodes <- shiny::reactive({
-        shiny::req(tag(), cellimage_genes())
-        get_cellimage_gene_nodes(tag(), cellimage_genes())
+        shiny::req(dataset(), tag(), cellimage_genes())
+        get_cellimage_gene_nodes(dataset(), tag(), cellimage_genes())
       })
 
       feature_nodes <- shiny::reactive({
-        shiny::req(tag(), cellimage_features())
-        get_cellimage_feature_nodes(tag(), cellimage_features())
+        shiny::req(dataset(), tag(), cellimage_features())
+        get_cellimage_feature_nodes(dataset(), tag(), cellimage_features())
       })
 
       nodes <- shiny::reactive({
@@ -46,14 +46,14 @@ cellimage_plot_server <- function(id, tag) {
           get_svg_path() %>%
           grImport2::readPicture()
 
-
         image_grob <- grImport2::pictureGrob(pic)
         gTree_name <- grid::childNames(image_grob)
         pathlabels <- image_grob$children[[gTree_name]]$childrenOrder
-        fill_color <- character(43)
-        names(fill_color) <- pathlabels[1:43]
+        n_image_objects <- length(labels)
+        fill_color <- character(n_image_objects)
+        names(fill_color) <- pathlabels[1:n_image_objects]
 
-        for (ind in seq(1, length(labels))){
+        for (ind in seq(1, n_image_objects) ){
           ioa      <- labels[ind]
           datavar  <- annotations %>% dplyr::filter(.data$display == ioa) %>% purrr::pluck("name")
           colormap <- annotations %>% dplyr::filter(.data$display == ioa) %>% purrr::pluck("color")
@@ -62,7 +62,7 @@ cellimage_plot_server <- function(id, tag) {
           fill_color[ind] <- color
         }
 
-        for (s in pathlabels[1:43] ){
+        for (s in pathlabels[1:n_image_objects] ){
           image_grob$children[[gTree_name]]$children[[s]]$gp$fill <- fill_color[s]
         }
 
