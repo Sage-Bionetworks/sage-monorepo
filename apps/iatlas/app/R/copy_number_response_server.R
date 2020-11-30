@@ -22,26 +22,34 @@ copy_number_response_server <- function(id, cohort_obj) {
 
       group_tbl <- shiny::reactive({
         iatlas.api.client::query_tags(
-          cohort_obj()$dataset,
-          cohort_obj()$group_name
-        )
+          datasets = cohort_obj()$dataset,
+          parent_tags = cohort_obj()$group_name
+        ) %>%
+          dplyr::select("display" = "short_display", "name")
+      })
+
+      group_choice_list <- shiny::reactive({
+        build_cnv_group_list(group_tbl())
       })
 
       output$select_cn_group_ui <- shiny::renderUI({
         shiny::selectInput(
           inputId  = ns("group_choices"),
           label    = "Select Group Filter",
-          choices  = build_cnv_group_list(group_tbl()),
+          choices  = group_choice_list(),
           selected = "All",
           multiple = T
         )
       })
 
+      # TODO: fix when query_copy_number_result_genes is not slow
       gene_tbl  <- shiny::reactive(
-        iatlas.api.client::query_copy_number_result_genes(cohort_obj()$dataset)
+        # iatlas.api.client::query_copy_number_result_genes(cohort_obj()$dataset)
+        iatlas.api.client::query_genes(entrez = 1:100) %>%
+          dplyr::select("hgnc", "entrez")
       )
 
-      gene_set_tbl <- shiny::reactive(query_gene_types())
+      gene_set_tbl <- shiny::reactive(iatlas.api.client::query_gene_types())
 
       gene_choice_list <- shiny::reactive({
         shiny::req(gene_set_tbl(), gene_tbl())
@@ -75,7 +83,7 @@ copy_number_response_server <- function(id, cohort_obj) {
 
       direction_query <- shiny::reactive({
         shiny::req(input$cn_dir_point_filter)
-        if (input$cn_dir_point_filter == "All") return(list())
+        if (input$cn_dir_point_filter == "All") return(NA)
         else return(input$cn_dir_point_filter)
       })
 
@@ -85,10 +93,10 @@ copy_number_response_server <- function(id, cohort_obj) {
           groups(),
           gene_entrez_query(),
           input$response_variable,
-          direction_query()
+          !is.null(direction_query())
         )
 
-        result_tbl <- query_copy_number_results(
+        result_tbl <- iatlas.api.client::query_copy_number_results(
           datasets = cohort_obj()$dataset,
           tags = groups(),
           entrez = gene_entrez_query(),
