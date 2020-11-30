@@ -1,8 +1,8 @@
 
 build_cnv_group_list <- function(tbl){
-    tbl %>%
-        dplyr::pull("name") %>%
-        c("All", .)
+  tbl %>%
+    tibble::deframe(.) %>%
+    c("All" = "All", .)
 }
 
 build_cnv_gene_list <- function(gene_set_tbl, gene_tbl){
@@ -14,7 +14,7 @@ build_cnv_gene_list <- function(gene_set_tbl, gene_tbl){
 }
 
 get_cnv_entrez_query_from_filters <- function(filters, gene_set_tbl, gene_tbl){
-  if ("All" %in% filters) return(list())
+  if ("All" %in% filters) return(gene_tbl$entrez)
   gene_sets <- filters %>%
     purrr::keep(., . %in% gene_set_tbl$name)
   if(length(gene_sets) == 0) return(as.integer(filters))
