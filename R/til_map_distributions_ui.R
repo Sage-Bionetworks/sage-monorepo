@@ -1,22 +1,9 @@
 til_map_distributions_ui <- function(id) {
-
-    ns <- shiny::NS(id)
-
-    shiny::tagList(
-        messageBox(
-            width = 12,
-            shiny::includeMarkdown(get_markdown_path("tilmap_dist")),
-        ),
-        shiny::fluidRow(
-            optionsBox(
-                width = 12,
-                shiny::column(
-                    width = 4,
-                    shiny::uiOutput(ns("selection_ui"))
-                ),
-                distribution_plot_selector_ui(id)
-            )
-        ),
-        distribution_plot_ui(ns("tilmap_dist_plot"))
+  ns <- shiny::NS(id)
+  iatlas.modules::distributions_plot_ui(
+    ns("distplot"),
+    html = shiny::includeMarkdown(
+      get_markdown_path("tilmap_dist")
     )
+  )
 }
