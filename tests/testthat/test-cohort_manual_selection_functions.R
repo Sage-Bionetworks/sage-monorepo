@@ -33,20 +33,20 @@ test_that("build_cohort_tbl_by_tag", {
 test_that("build_tag_cohort_object", {
   res1 <- build_tag_cohort_object("TCGA", tcga_samples_50, "TCGA_Study")
   res2 <- build_tag_cohort_object( "PCAWG", pcawg_samples_50, "PCAWG_Study")
-  expected_names <- c("sample_tbl", "group_tbl", "feature_tbl", "group_name")
+  expected_names <- c(
+    "sample_tbl", "group_tbl", "feature_tbl", "group_name", "group_display"
+  )
+  expected_group_names <- c(
+    "name", "group", "characteristics", "color", "size"
+  )
+  expected_sample_names <- c("sample", "group")
 
   expect_named(res1, expected_names)
   expect_named(res2, expected_names)
-  expect_named(res1$sample_tbl, c("sample", "group"))
-  expect_named(res2$sample_tbl, c("sample", "group"))
-  expect_named(
-    res1$group_tbl,
-    c("name", "group", "characteristics", "color", "size")
-  )
-  expect_named(
-    res2$group_tbl,
-    c("name", "group", "characteristics", "color", "size")
-  )
+  expect_named(res1$sample_tbl, expected_sample_names)
+  expect_named(res2$sample_tbl, expected_sample_names)
+  expect_named(res1$group_tbl, expected_group_names)
+  expect_named(res2$group_tbl, expected_group_names)
 })
 
 # mutation status ---------------------------------------------------------
@@ -55,7 +55,9 @@ test_that("build_mutation_cohort_object", {
   res1 <- build_mutation_cohort_object("TCGA", tcga_samples_50, 191)
   res2 <- build_mutation_cohort_object("TCGA", tcga_samples_50, "191")
 
-  expected_names <-  c("sample_tbl", "group_tbl", "feature_tbl", "group_name")
+  expected_names <-  c(
+    "sample_tbl", "group_tbl", "feature_tbl", "group_name", "group_display"
+  )
   expected_sample_tbl_cols <- c("sample", "group")
   expected_group_tbl_cols <- c("group", "size", "name", "characteristics", "color")
 
@@ -93,22 +95,26 @@ test_that("Build Feature Bin Group Tibble", {
 })
 
 test_that("Build Feature Bin Cohort Object",{
+
+  expected_names <-  c(
+    "sample_tbl", "group_tbl", "feature_tbl", "group_name", "group_display"
+  )
+  expected_sample_tbl_cols <- c("sample", "group")
+  expected_group_tbl_cols <- c("group", "size", "name", "characteristics", "color")
+
   res1 <- build_feature_bin_cohort_object(
     "TCGA", tcga_samples_50, "leukocyte_fraction", 2L
   )
   res2 <- build_feature_bin_cohort_object(
     "PCAWG", pcawg_samples_50, "B_cells_Aggregate2", 2L
   )
-  expect_named(res1$sample_tbl, c("sample", "group"))
-  expect_named(res2$sample_tbl, c("sample", "group"))
-  expect_named(
-    res1$group_tbl,
-    c("group", "size", "name", "characteristics", "color")
-  )
-  expect_named(
-    res2$group_tbl,
-    c("group", "size", "name", "characteristics", "color")
-  )
+
+  expect_named(res1, expected_names)
+  expect_named(res2, expected_names)
+  expect_named(res1$sample_tbl, expected_sample_tbl_cols)
+  expect_named(res2$sample_tbl, expected_sample_tbl_cols )
+  expect_named(res1$group_tbl, expected_group_tbl_cols)
+  expect_named(res2$group_tbl, expected_group_tbl_cols)
 })
 
 # top level cohort function -----------------------------------------------
@@ -119,6 +125,7 @@ expected_cohort_object_names <- c(
   "feature_tbl",
   "filters",
   "group_name",
+  "group_display",
   "group_tbl",
   "group_type",
   "plot_colors",
