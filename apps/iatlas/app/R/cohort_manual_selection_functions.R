@@ -59,11 +59,17 @@ build_tag_cohort_object <- function(dataset, samples, tag){
   feature_tbl <- iatlas.api.client::query_features(
     datasets = dataset, samples = samples
   )
+  group_display <-
+    iatlas.api.client::query_tags(tags = tag) %>%
+    dplyr::pull("short_display")
+
   list(
-    "sample_tbl"  = sample_tbl,
-    "group_tbl"   = group_tbl,
-    "feature_tbl" = feature_tbl,
-    "group_name"  = tag
+    "sample_tbl"    = sample_tbl,
+    "group_tbl"     = group_tbl,
+    "feature_tbl"   = feature_tbl,
+    "group_name"    = tag,
+    "group_display" = group_display
+
   )
 }
 
@@ -108,11 +114,13 @@ build_mutation_cohort_object <- function(dataset, samples, mutation_id){
   feature_tbl <- iatlas.api.client::query_features(
     datasets = dataset, samples = samples
   )
+  group_name <- stringr::str_c("Mutation Status: ", mutation)
   list(
-    "sample_tbl"  = sample_tbl,
-    "group_tbl"   = group_tbl,
-    "feature_tbl" = feature_tbl,
-    "group_name"  = paste0("Mutation Status: ", mutation)
+    "sample_tbl"    = sample_tbl,
+    "group_tbl"     = group_tbl,
+    "feature_tbl"   = feature_tbl,
+    "group_name"    = group_name,
+    "group_display" = group_name
   )
 }
 
@@ -153,12 +161,14 @@ build_feature_bin_cohort_object <- function(
   feature_tbl <- iatlas.api.client::query_features(
     datasets = dataset, samples = samples
   )
+  group_name  = stringr::str_c("Immune Feature Bins:", feature_display)
 
   list(
-    "sample_tbl"  = sample_tbl,
-    "group_tbl"   = group_tbl,
-    "feature_tbl" = feature_tbl,
-    "group_name"  = paste("Immune Feature Bins:", feature_display)
+    "sample_tbl"    = sample_tbl,
+    "group_tbl"     = group_tbl,
+    "feature_tbl"   = feature_tbl,
+    "group_name"    = group_name,
+    "group_display" = group_name
   )
 }
 
