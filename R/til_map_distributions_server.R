@@ -39,7 +39,7 @@ til_map_distributions_server <- function(id, cohort_obj) {
         "distplot",
         plot_data_function,
         features      = features,
-        distplot_xlab = shiny::reactive(cohort_obj()$group_name),
+        distplot_xlab = shiny::reactive(cohort_obj()$group_display),
         drilldown     = shiny::reactive(T)
       )
 

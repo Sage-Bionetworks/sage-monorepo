@@ -43,7 +43,8 @@ immunomodulator_distributions_server <- function(
         "distplot",
         plot_data_function,
         features   = features,
-        distplot_xlab = shiny::reactive(cohort_obj()$group_name),
+        distplot_xlab = shiny::reactive(cohort_obj()$group_display),
+        scale_method_default = shiny::reactive("Log10"),
         drilldown  = shiny::reactive(T)
       )
     }
