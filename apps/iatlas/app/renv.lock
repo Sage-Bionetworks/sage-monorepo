@@ -64,9 +64,9 @@
     },
     "BiocParallel": {
       "Package": "BiocParallel",
-      "Version": "1.24.1",
+      "Version": "1.24.0",
       "Source": "Bioconductor",
-      "Hash": "338a72852f019b3b51ae87dc82391eb3"
+      "Hash": "b21df3f5f4412aaa996924fbd5f72596"
     },
     "Biostrings": {
       "Package": "Biostrings",
@@ -116,9 +116,9 @@
     },
     "GenomeInfoDb": {
       "Package": "GenomeInfoDb",
-      "Version": "1.26.1",
+      "Version": "1.26.0",
       "Source": "Bioconductor",
-      "Hash": "0dc6752f1e4894ac536c2b0c9a2e2799"
+      "Hash": "f44d06397ff70ae5ede97f24195193ed"
     },
     "GenomeInfoDbData": {
       "Package": "GenomeInfoDbData",
@@ -134,9 +134,9 @@
     },
     "GenomicFeatures": {
       "Package": "GenomicFeatures",
-      "Version": "1.42.1",
+      "Version": "1.42.0",
       "Source": "Bioconductor",
-      "Hash": "10c8a15846af2fd20d2645ce4edf74e3"
+      "Hash": "abdf84ab969669a426d23d1645106864"
     },
     "GenomicRanges": {
       "Package": "GenomicRanges",
@@ -146,10 +146,10 @@
     },
     "Hmisc": {
       "Package": "Hmisc",
-      "Version": "4.4-2",
+      "Version": "4.4-1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "66458e906b2112a8b1639964efd77d7c"
+      "Hash": "35bce0d50fdf86441171ff6742e29c8c"
     },
     "Homo.sapiens": {
       "Package": "Homo.sapiens",
@@ -171,9 +171,9 @@
       "RemoteUsername": "Gibbsdavidl",
       "RemoteRepo": "ImmuneSubtypeClassifier",
       "RemoteRef": "master",
-      "RemoteSha": "5c9efe1613bff4f462447927d78f90b06a5a3bc0",
+      "RemoteSha": "361058a02511ec83af96ce750eb30ba3ee9b7478",
       "RemoteHost": "api.github.com",
-      "Hash": "af8181077902143469eed944c4316d93"
+      "Hash": "af5f326937a172dd9c77c86707133e5c"
     },
     "KMsurv": {
       "Package": "KMsurv",
@@ -264,10 +264,10 @@
     },
     "RcppArmadillo": {
       "Package": "RcppArmadillo",
-      "Version": "0.10.1.2.0",
+      "Version": "0.10.1.0.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "1a885965adade4b8629c478a3b3c2cf7"
+      "Hash": "742b8fb360381a242b6512df1faa53fb"
     },
     "RcppEigen": {
       "Package": "RcppEigen",
@@ -472,10 +472,10 @@
     },
     "cli": {
       "Package": "cli",
-      "Version": "2.2.0",
+      "Version": "2.1.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3ef298932294b775fa0a3eeaa3a645b0"
+      "Hash": "0b316487b21d21f99ebf98abe179b1ea"
     },
     "clipr": {
       "Package": "clipr",
@@ -493,10 +493,10 @@
     },
     "colorspace": {
       "Package": "colorspace",
-      "Version": "2.0-0",
+      "Version": "1.4-1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "abea3384649ef37f60ef51ce002f3547"
+      "Hash": "6b436e95723d1f0e861224dd9b094dfb"
     },
     "commonmark": {
       "Package": "commonmark",
@@ -554,10 +554,10 @@
     },
     "cpp11": {
       "Package": "cpp11",
-      "Version": "0.2.4",
+      "Version": "0.2.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ba66e5a750d39067d888aa7af797fed2"
+      "Hash": "f9df472593124299aef98fba2c96dfd3"
     },
     "crayon": {
       "Package": "crayon",
@@ -595,9 +595,9 @@
       "RemoteUsername": "cytoscape",
       "RemoteRepo": "cyjShiny",
       "RemoteRef": "master",
-      "RemoteSha": "8c3be30e60157c9a1ef508a8d85212f7365b7c80",
+      "RemoteSha": "ff4972c1eb1b5de439b841c7fadcd4f8692a54ef",
       "RemoteHost": "api.github.com",
-      "Hash": "53ce39edf15c5534e96b065014f1fdaa"
+      "Hash": "c32d2b0089f4d858abdee8376eee625b"
     },
     "data.table": {
       "Package": "data.table",
@@ -802,10 +802,10 @@
     },
     "gh": {
       "Package": "gh",
-      "Version": "1.2.0",
+      "Version": "1.1.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "05129b4387282404780d2f8593636388"
+      "Hash": "89ea5998938d1ad55f035c8a86f96b74"
     },
     "ghql": {
       "Package": "ghql",
@@ -820,13 +820,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "531a82d1beed1f545beb25f4f5945bf7"
-    },
-    "gitcreds": {
-      "Package": "gitcreds",
-      "Version": "0.1.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "ceb3cc7bcf372186ade7954427f30d42"
     },
     "glue": {
       "Package": "glue",
@@ -960,15 +953,15 @@
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
-      "Version": "0.3.1",
+      "Version": "0.1.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules",
       "RemoteRef": "master",
-      "RemoteSha": "29e06312dd73a0f8c1cc2b22376bee1262e333ee",
+      "RemoteSha": "6921c250e0107b02af44dc61de23a983d3b2c707",
       "RemoteHost": "api.github.com",
-      "Hash": "962aa50554182b76aac7aefab765059e"
+      "Hash": "12c322c24c642f1ff24b1994d1b2b36d"
     },
     "ini": {
       "Package": "ini",
@@ -979,10 +972,10 @@
     },
     "isoband": {
       "Package": "isoband",
-      "Version": "0.2.3",
+      "Version": "0.2.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "53647fb507373700028b2ce6cd30751a"
+      "Hash": "6e58bd3d6b3dd82a944cd6f05ade228f"
     },
     "jpeg": {
       "Package": "jpeg",
@@ -1063,17 +1056,17 @@
     },
     "lme4": {
       "Package": "lme4",
-      "Version": "1.1-26",
+      "Version": "1.1-25",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "5f2466f5127e0ce67e44bb381387eeca"
+      "Hash": "b3b401eba1d6435bcf009576e811f9bf"
     },
     "magrittr": {
       "Package": "magrittr",
-      "Version": "2.0.1",
+      "Version": "1.5",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "41287f1ac7d28a92f0a286ed507928d3"
+      "Hash": "1bb58822a20301cee84a41678e25d9b7"
     },
     "maptools": {
       "Package": "maptools",
@@ -1202,10 +1195,10 @@
     },
     "pillar": {
       "Package": "pillar",
-      "Version": "1.4.7",
+      "Version": "1.4.6",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3b3dd89b2ee115a8b54e93a34cd546b4"
+      "Hash": "bdf26e55ccb7df3e49a490150277f002"
     },
     "pkgbuild": {
       "Package": "pkgbuild",
@@ -1244,10 +1237,15 @@
     },
     "plotly": {
       "Package": "plotly",
-      "Version": "4.9.2.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "b08edf378e0e38959a6983e3d5902795"
+      "Version": "4.9.2.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteUsername": "ropensci",
+      "RemoteRepo": "plotly",
+      "RemoteRef": "master",
+      "RemoteSha": "51e444d150d72c505a74211eb1bfe4a9f767ec86",
+      "RemoteHost": "api.github.com",
+      "Hash": "0cfea6a157ee2beb6bfc12de9cf1f430"
     },
     "plyr": {
       "Package": "plyr",
@@ -1293,10 +1291,10 @@
     },
     "processx": {
       "Package": "processx",
-      "Version": "3.4.5",
+      "Version": "3.4.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "22aab6098cb14edd0a5973a8438b569b"
+      "Hash": "03446ed0b8129916f73676726cb3c48f"
     },
     "productplots": {
       "Package": "productplots",
@@ -1391,10 +1389,10 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "0.12.3",
+      "Version": "0.12.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "b5510c50c7f31d453c385c7b460af2b9"
+      "Hash": "b95626d4e5b1ec52f47ee4e156926bf2"
     },
     "reshape": {
       "Package": "reshape",
@@ -1426,10 +1424,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "0.4.9",
+      "Version": "0.4.8",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "9d7aba7bed9a79e2403b4777428a2b12"
+      "Hash": "843a6af51414bce7f8a8e372f11d6cd0"
     },
     "roxygen2": {
       "Package": "roxygen2",
@@ -1447,22 +1445,22 @@
     },
     "rprojroot": {
       "Package": "rprojroot",
-      "Version": "2.0.2",
+      "Version": "1.3-2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "249d8cd1e74a8f6a26194a91b47f21d1"
+      "Hash": "f6a407ae5dd21f6f80a6708bbb6eb3ae"
     },
     "rsconnect": {
       "Package": "rsconnect",
-      "Version": "0.8.16-9002",
+      "Version": "0.8.16-9000",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteUsername": "rstudio",
-      "RemoteRepo": "rsconnect",
-      "RemoteRef": "master",
-      "RemoteSha": "f50110e32ba410008ab1e792948f6b69d6f7ae17",
       "RemoteHost": "api.github.com",
-      "Hash": "d62317d8fa65b7d744bccb125e0427b9"
+      "RemoteRepo": "rsconnect",
+      "RemoteUsername": "rstudio",
+      "RemoteRef": "master",
+      "RemoteSha": "050a7f7cb533bc1c689a631d64458aabeb23f807",
+      "Hash": "8a66aca57dab56e683095d8743fbeb1f"
     },
     "rstatix": {
       "Package": "rstatix",
@@ -1473,10 +1471,10 @@
     },
     "rstudioapi": {
       "Package": "rstudioapi",
-      "Version": "0.13",
+      "Version": "0.11",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "06c85365a03fdaf699966cc1d3cf53ea"
+      "Hash": "33a5b27a03da82ac4b1d43268f80088a"
     },
     "rtracklayer": {
       "Package": "rtracklayer",
@@ -1654,10 +1652,10 @@
     },
     "vctrs": {
       "Package": "vctrs",
-      "Version": "0.3.5",
+      "Version": "0.3.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "d25c5bea636cf892edbfd64fc3d20c20"
+      "Hash": "0bc90078aeee42f2520b1d0a33bd6758"
     },
     "viridis": {
       "Package": "viridis",
@@ -1675,10 +1673,10 @@
     },
     "waldo": {
       "Package": "waldo",
-      "Version": "0.2.3",
+      "Version": "0.2.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "181d1a31b1ba2009ef20926f2ee0570c"
+      "Hash": "6aa53cb78ef07cfcd7bcee7435f1d1f5"
     },
     "whisker": {
       "Package": "whisker",
@@ -1696,10 +1694,10 @@
     },
     "wrapr": {
       "Package": "wrapr",
-      "Version": "2.0.5",
+      "Version": "2.0.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0f6c65d1b5ef4ea6e6ffb83851921c61"
+      "Hash": "69463a9752d895ac42c0d7adf861571e"
     },
     "xfun": {
       "Package": "xfun",
