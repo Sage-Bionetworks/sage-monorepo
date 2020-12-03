@@ -30,6 +30,11 @@ build_cohort_object <- function(
     stop(group_type, " is not an allowed group type.")
   }
   cohort_object$dataset <- dataset
+  cohort_object$dataset_display <-
+    iatlas.api.client::query_datasets() %>%
+    dplyr::filter(.data$name == dataset) %>%
+    dplyr::pull("display")
+
   cohort_object$group_type <- group_type
   cohort_object$filters <- filters
   cohort_object$plot_colors <- cohort_object$group_tbl %>%

@@ -113,18 +113,36 @@ test_that("Build Feature Bin Cohort Object",{
 
 # top level cohort function -----------------------------------------------
 
-  expected_cohort_object_names <- c(
-    "dataset",
-    "feature_tbl",
-    "filters",
-    "group_name",
-    "group_tbl",
-    "group_type",
-    "plot_colors",
-    "sample_tbl"
-  )
+expected_cohort_object_names <- c(
+  "dataset",
+  "dataset_display",
+  "feature_tbl",
+  "filters",
+  "group_name",
+  "group_tbl",
+  "group_type",
+  "plot_colors",
+  "sample_tbl"
+)
 
 test_that("Create Cohort Object", {
+
+  expected_sample_names <- c("sample", "group")
+  expected_group_names <- c(
+    "group",
+    "name",
+    "characteristics",
+    "size",
+    "color"
+  )
+  expected_feature_names <- c(
+    "class",
+    "display",
+    "method_tag",
+    "name",
+    "order",
+    "unit"
+  )
 
   res1 <- build_cohort_object("TCGA", tcga_samples_50, "TCGA_Study", "tag")
   res2 <- build_cohort_object("PCAWG", pcawg_samples_50, "PCAWG_Study", "tag")
@@ -142,23 +160,6 @@ test_that("Create Cohort Object", {
     "custom",
     bin_immune_feature = "leukocyte_fraction",
     bin_number = 2L
-  )
-
-  expected_sample_names <- c("sample", "group")
-  expected_group_names <- c(
-    "group",
-    "name",
-    "characteristics",
-    "size",
-    "color"
-  )
-  expected_feature_names <- c(
-    "class",
-    "display",
-    "method_tag",
-    "name",
-    "order",
-    "unit"
   )
 
   expect_named(res1, expected_cohort_object_names, ignore.order = T)
