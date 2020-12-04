@@ -4,6 +4,7 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 .gitlab-ci.yml
+^\.Rprofile$
 
 Dockerfile.build
 css
