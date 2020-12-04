@@ -24,7 +24,6 @@ Imports:
     dplyr,
     DT,
     forcats,
-    ggmosaic,
     ggplot2,
     grDevices,
     grid,
