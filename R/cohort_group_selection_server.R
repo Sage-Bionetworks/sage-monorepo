@@ -6,20 +6,42 @@ cohort_group_selection_server <- function(id, selected_dataset) {
 
       # Select group type ----
 
-      tag_group_tbl <- shiny::reactive(
+      tag_group_tbl <- shiny::reactive({
+        shiny::req(selected_dataset())
         selected_dataset() %>%
           iatlas.api.client::query_dataset_tags() %>%
           dplyr::select("display" = "short_display", "name")
-      )
+      })
 
       custom_group_tbl <- shiny::reactive({
         shiny::req(selected_dataset())
         build_custom_group_tbl(selected_dataset())
       })
 
+      clinical_group_tbl <- shiny::reactive({
+        shiny::req(selected_dataset())
+        selected_dataset() %>%
+          iatlas.api.client::query_patients(datasets = .) %>%
+          dplyr::select("ethnicity", "gender", "race") %>%
+          tidyr::pivot_longer(cols = dplyr::everything()) %>%
+          tidyr::drop_na() %>%
+          dplyr::select("name") %>%
+          dplyr::distinct() %>%
+          dplyr::mutate(
+            "display" = stringr::str_replace_all(.data$name, "_", " "),
+            "display" = stringr::str_to_title(.data$display)
+          ) %>%
+          dplyr::select("display", "name")
+
+      })
+
       available_groups_list <- shiny::reactive({
-        shiny::req(tag_group_tbl(), custom_group_tbl())
-        build_cohort_group_list(tag_group_tbl(), custom_group_tbl())
+        shiny::req(tag_group_tbl(), custom_group_tbl(), clinical_group_tbl())
+        build_cohort_group_list(
+          tag_group_tbl(),
+          custom_group_tbl(),
+          clinical_group_tbl()
+        )
       })
 
       default_group <- shiny::reactive({
@@ -122,11 +144,15 @@ cohort_group_selection_server <- function(id, selected_dataset) {
 
       group_object <- shiny::reactive({
         shiny::req(selected_dataset(), group_choice())
+
         group_object <- list(
-          "dataset" = selected_dataset(), "group_name" = group_choice()
+          "dataset" = selected_dataset(),
+          "group_name" = group_choice()
         )
+
         if (group_choice() == "Driver Mutation") {
           shiny::req(input$driver_mutation_choice_id)
+          group_object$group_display <- "Driver Mutation"
           group_object$group_type <- "custom"
           group_object$mutation_id <- as.integer(
             input$driver_mutation_choice_id
@@ -136,12 +162,23 @@ cohort_group_selection_server <- function(id, selected_dataset) {
             input$bin_immune_feature_choice,
             input$bin_number_choice
           )
+          group_object$group_display <- "Immune Feature Bins"
           group_object$group_type <- "custom"
           group_object$bin_immune_feature <- input$bin_immune_feature_choice
           group_object$bin_number <- input$bin_number_choice
+        } else if (group_choice() %in% c("gender", "race", "etnicity")) {
+          group_object$group_display <- group_choice() %>%
+            stringr::str_replace_all("_", " ") %>%
+            stringr::str_to_title(.)
+          group_object$group_type <- "clinical"
         } else {
+          group_object$group_display <- group_choice() %>%
+            iatlas.api.client::query_tags(tags = .) %>%
+            dplyr::pull("short_display")
           group_object$group_type <- "tag"
         }
+
+
         return(group_object)
       })
 
