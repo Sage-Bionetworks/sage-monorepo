@@ -8,7 +8,7 @@ numeric_filter_element_ui <- function(id){
     )
 }
 
-tag_filter_element_ui <- function(id){
+group_filter_element_ui <- function(id){
     ns <- shiny::NS(id)
     shiny::tagList(
         shiny::uiOutput(ns("select_ui")),
@@ -25,7 +25,6 @@ numeric_model_covariate_element_ui <- function(id){
         shiny::uiOutput(ns("select_transformation_ui"))
     )
 }
-
 
 categorical_model_covariate_element_ui <- function(id){
     ns <- shiny::NS(id)
