@@ -327,17 +327,17 @@ def get_slides(requested, slide_requested, patient_ids=set(), max_age_at_diagnos
     return []
 
 
-def request_patients(requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None,
-                     race=None, max_weight=None, min_weight=None, sample=None, slide=None):
-    query = build_patient_request(requested, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, barcode=barcode, data_set=data_set,
-                                  ethnicity=ethnicity, gender=gender, max_height=max_height, min_height=min_height, race=race, max_weight=max_weight, min_weight=min_weight, sample=sample, slide=slide)
+def request_patients(
+        requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None, race=None, max_weight=None, min_weight=None, sample=None, slide=None):
+    query = build_patient_request(
+        requested, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, barcode=barcode, data_set=data_set, ethnicity=ethnicity, gender=gender, max_height=max_height, min_height=min_height, race=race, max_weight=max_weight, min_weight=min_weight, sample=sample, slide=slide)
     return query.all()
 
 
-def return_patient_derived_fields(requested, slide_requested, patient_ids=set(), max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None,
-                                  race=None, max_weight=None, min_weight=None, sample=None, slide=None):
-    samples = get_samples(requested, patient_ids=patient_ids, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, barcode=barcode, data_set=data_set,
-                          ethnicity=ethnicity, gender=gender, max_height=max_height, min_height=min_height, race=race, max_weight=max_weight, min_weight=min_weight, sample=sample, slide=slide)
+def return_patient_derived_fields(
+        requested, slide_requested, patient_ids=set(), max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None, race=None, max_weight=None, min_weight=None, sample=None, slide=None):
+    samples = get_samples(
+        requested, patient_ids=patient_ids, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, barcode=barcode, data_set=data_set, ethnicity=ethnicity, gender=gender, max_height=max_height, min_height=min_height, race=race, max_weight=max_weight, min_weight=min_weight, sample=sample, slide=slide)
 
     samples_dict = dict()
     for key, collection in groupby(samples, key=lambda s: s.patient_id):
