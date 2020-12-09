@@ -71,11 +71,11 @@ numeric_filter_element_server <- function(
   )
 }
 
-tag_filter_element_server <- function(
+group_filter_element_server <- function(
   id,
   reactive_values,
   module_id,
-  tag_named_list,
+  group_named_list,
   dataset
 ) {
   shiny::moduleServer(
@@ -85,29 +85,59 @@ tag_filter_element_server <- function(
       ns <- session$ns
 
       output$select_ui <- shiny::renderUI({
-        shiny::req(tag_named_list())
+        shiny::req(group_named_list())
         shiny::selectInput(
-          inputId = ns("parent_tag_choice"),
+          inputId = ns("parent_group_choice"),
           label = "Select or Search for Group",
-          choices = tag_named_list()
+          choices = group_named_list()
         )
       })
 
+      group_type <- shiny::reactive({
+        shiny::req(input$parent_group_choice)
+        stringr::str_remove_all(input$parent_group_choice, ":[:print:]+$")
+      })
+
+      parent_group <- shiny::reactive({
+        shiny::req(input$parent_group_choice)
+        stringr::str_remove_all(input$parent_group_choice, "^[:print:]+:")
+      })
+
+      group_choices <- shiny::reactive({
+        shiny::req(group_type(), parent_group(), input$parent_group_choice)
+        if(group_type() == "tag"){
+          choices <- build_tag_filter_list(parent_group(), dataset())
+        } else if (group_type() == "clinical"){
+          choices <-
+            iatlas.api.client::query_patients(datasets = dataset()) %>%
+            dplyr::select(parent_group()) %>%
+            dplyr::distinct() %>%
+            tidyr::drop_na() %>%
+            dplyr::pull(parent_group())
+        }
+        return(choices)
+      })
+
       output$checkbox_ui <- shiny::renderUI({
-        shiny::req(input$parent_tag_choice)
+        shiny::req(group_choices())
         shiny::checkboxGroupInput(
-          inputId = ns("tag_choices"),
+          inputId = ns("group_choices"),
           label = "Select choices to include:",
-          choices = build_tag_filter_list(
-            input$parent_tag_choice,
-            dataset()
-          ),
+          choices = group_choices(),
           inline = T
         )
       })
 
-      shiny::observeEvent(input$tag_choices, {
-        reactive_values[[module_id]]$tags <- input$tag_choices
+      shiny::observeEvent(parent_group(), {
+        reactive_values[[module_id]]$parent_group_choice <- parent_group()
+      })
+
+      shiny::observeEvent(group_type(), {
+        reactive_values[[module_id]]$group_type <- group_type()
+      })
+
+      shiny::observeEvent(input$group_choices, {
+        reactive_values[[module_id]]$group_choices <- input$group_choices
       })
 
       return(reactive_values)

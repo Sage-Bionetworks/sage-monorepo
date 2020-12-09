@@ -25,22 +25,39 @@ test_that("numeric_filter_element_server", {
   )
 })
 
-test_that("numeric_filter_element_server", {
+test_that("group_filter_element_server", {
   shiny::testServer(
-    tag_filter_element_server,
+    group_filter_element_server,
     args = list(
       "reactive_values" = shiny::reactiveValues(),
       "module_id" = "element1",
-      "tag_named_list" = shiny::reactiveVal(
-        list("Immune Subtype" = "Immune_Subtype")
+      "group_named_list" = shiny::reactiveVal(
+        list(
+          "Immune Subtype" = "tag:Immune_Subtype",
+          "Gender" = "clinical:gender"
+        )
       ),
-      "dataset" = shiny::reactiveVal("PCAWG")
+      "dataset" = shiny::reactiveVal("TCGA")
     ),
     {
       expect_type(output$select_ui, "list")
-      session$setInputs("parent_tag_choice" = "Immune_Subtype")
+
+      session$setInputs("parent_group_choice" = "tag:Immune_Subtype")
+      expect_equal(group_type(), "tag")
+      expect_equal(parent_group(), "Immune_Subtype")
+      expect_type(group_choices(), "character")
+      expect_equal(group_choices(), c("C1", "C2", "C3", "C4", "C5", "C6"))
       expect_type(output$checkbox_ui, "list")
       session$setInputs("tag_choices" = "C1")
+      expect_true(shiny::is.reactivevalues(session$getReturned()))
+
+
+      session$setInputs("parent_group_choice" = "clinical:gender")
+      expect_equal(group_type(), "clinical")
+      expect_equal(parent_group(), "gender")
+      expect_type(group_choices(), "character")
+      expect_equal(group_choices(), c("female", "male"))
+      expect_type(output$checkbox_ui, "list")
       expect_true(shiny::is.reactivevalues(session$getReturned()))
     }
   )
