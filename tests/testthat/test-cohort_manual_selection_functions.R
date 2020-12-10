@@ -31,8 +31,8 @@ test_that("build_cohort_tbl_by_tag", {
 })
 
 test_that("build_tag_cohort_object", {
-  res1 <- build_tag_cohort_object("TCGA", tcga_samples_50, "TCGA_Study")
-  res2 <- build_tag_cohort_object( "PCAWG", pcawg_samples_50, "PCAWG_Study")
+  res1 <- build_tag_cohort_object("TCGA", tcga_samples_50, "TCGA_Study", "TCGA Study")
+  res2 <- build_tag_cohort_object( "PCAWG", pcawg_samples_50, "PCAWG_Study", "PCAWG Study")
   expected_names <- c(
     "sample_tbl", "group_tbl", "feature_tbl", "group_name", "group_display"
   )
@@ -49,7 +49,25 @@ test_that("build_tag_cohort_object", {
   expect_named(res2$group_tbl, expected_group_names)
 })
 
-# mutation status ---------------------------------------------------------
+# clinical --------------------------------------------------------------------
+
+test_that("build_clinical_cohort_object", {
+  res1 <- build_clinical_cohort_object("TCGA", tcga_samples_50, "gender", "Gender")
+  expected_names <- c(
+    "sample_tbl", "group_tbl", "feature_tbl", "group_name", "group_display"
+  )
+  expected_group_names <- c(
+    "name", "group", "characteristics", "color", "size"
+  )
+  expected_sample_names <- c("sample", "group")
+
+  expect_named(res1, expected_names)
+  expect_named(res1$sample_tbl, expected_sample_names)
+  expect_named(res1$group_tbl, expected_group_names)
+})
+
+
+# mutation status -------------------------------------------------------------
 
 test_that("build_mutation_cohort_object", {
   res1 <- build_mutation_cohort_object("TCGA", tcga_samples_50, 191)
@@ -151,20 +169,34 @@ test_that("Create Cohort Object", {
     "unit"
   )
 
-  res1 <- build_cohort_object("TCGA", tcga_samples_50, "TCGA_Study", "tag")
-  res2 <- build_cohort_object("PCAWG", pcawg_samples_50, "PCAWG_Study", "tag")
+  res1 <- build_cohort_object(
+    dataset = "TCGA",
+    samples = tcga_samples_50,
+    group_name = "TCGA_Study",
+    group_display = "TCGA Study",
+    group_type = "tag"
+  )
+  res2 <- build_cohort_object(
+    dataset = "PCAWG",
+    samples = pcawg_samples_50,
+    group_name = "PCAWG_Study",
+    group_display = "PCAWG Study",
+    group_type = "tag"
+  )
   res3 <- build_cohort_object(
-    "TCGA",
-    tcga_samples_50,
-    "Driver Mutation",
-    "custom",
+    dataset = "TCGA",
+    samples = tcga_samples_50,
+    group_name = "Driver Mutation",
+    group_display = "Driver Mutation",
+    group_type = "custom",
     mutation_id = 191L
   )
   res4 <- build_cohort_object(
-    "TCGA",
-    tcga_samples_50,
-    "Immune Feature Bins",
-    "custom",
+    dataset = "TCGA",
+    samples = tcga_samples_50,
+    group_name = "Immune Feature Bins",
+    group_display = "Immune Feature Bins",
+    group_type = "custom",
     bin_immune_feature = "leukocyte_fraction",
     bin_number = 2L
   )
@@ -183,11 +215,23 @@ test_that("Create Cohort Object", {
   expect_named(res4$feature_tbl, expected_feature_names, ignore.order = T)
 
   expect_error(
-    build_cohort_object("TCGA", tcga_samples_50, "TCGA_Study", "not_type"),
+    build_cohort_object(
+      dataset = "TCGA",
+      samples = tcga_samples_50,
+      group_name = "TCGA_Study",
+      group_display = "TCGA Study",
+      group_type = "not_type"
+    ),
     "not_type is not an allowed group type."
   )
   expect_error(
-    build_cohort_object("TCGA", tcga_samples_50, "TCGA_Study", "custom"),
+    build_cohort_object(
+      dataset = "TCGA",
+      samples = tcga_samples_50,
+      group_name = "TCGA_Study",
+      group_display = "TCGA Study",
+      group_type = "custom"
+    ),
     "TCGA_Study is not an allowed custom group name."
   )
 })
@@ -196,7 +240,10 @@ test_that("build_cohort_object_from_objects", {
   filter_object1 <- list(samples = tcga_samples_50)
   filter_object2 <- list(samples = tcga_samples_50, filters = list())
   group_obj1 <- list(
-    dataset = "TCGA", group_name = "Immune_Subtype", group_type = "tag"
+    dataset = "TCGA",
+    group_name = "Immune_Subtype",
+    group_display = "Immune Subtype",
+    group_type = "tag"
   )
   res1 <- build_cohort_object_from_objects(group_obj1, filter_object1)
   res2 <- build_cohort_object_from_objects(group_obj1, filter_object2)
