@@ -79,17 +79,41 @@ cohort_filter_selection_server <- function(id, dataset) {
 
       # # numeric_filters -------------------------------------------------------
 
-      feature_named_list <- shiny::reactive({
+      feature_tbl <- shiny::reactive({
         dataset() %>%
           iatlas.api.client::query_features_by_class() %>%
           dplyr::select("class", "display", "feature" = "name") %>%
+          dplyr::mutate("feature" = stringr::str_c("feature:", .data$feature))
+      })
+
+      clinical_tbl <- shiny::reactive({
+        dataset() %>%
+          iatlas.api.client::query_patients(datasets = .) %>%
+          dplyr::select("age_at_diagnosis", "height", "weight") %>%
+          tidyr::pivot_longer(cols = dplyr::everything()) %>%
+          tidyr::drop_na() %>%
+          dplyr::select("name") %>%
+          dplyr::distinct() %>%
+          dplyr::mutate(
+            "display" = stringr::str_replace_all(.data$name, "_", " "),
+            "display" = stringr::str_to_title(.data$display),
+            "feature" = stringr::str_c("clinical:", .data$name)
+          ) %>%
+          dplyr::mutate("class" = "clinical") %>%
+          dplyr::select("class", "display", "feature")
+      })
+
+      numeric_named_list <- shiny::reactive({
+        shiny::req(feature_tbl(), clinical_tbl())
+        lst <-
+          dplyr::bind_rows(feature_tbl(), clinical_tbl()) %>%
           create_nested_named_list()
       })
 
       numeric_element_module_server <- shiny::reactive({
         purrr::partial(
           numeric_filter_element_server,
-          feature_named_list = feature_named_list,
+          numeric_named_list = numeric_named_list,
           dataset = dataset
         )
       })
@@ -112,7 +136,7 @@ cohort_filter_selection_server <- function(id, dataset) {
 
       numeric_filter_samples <- shiny::reactive({
         shiny::req(samples)
-        get_filtered_feature_samples(
+        get_numeric_filtered_samples(
           valid_numeric_filter_obj(),
           samples(),
           dataset()
