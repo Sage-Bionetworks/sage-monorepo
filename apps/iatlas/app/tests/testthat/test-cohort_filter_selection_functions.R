@@ -48,8 +48,8 @@ test_that("get_valid_group_filters", {
   )
   expect_equal(
     get_valid_group_filters(list(
-        "element1" = valid1,
-        "element2" = invalid1
+      "element1" = valid1,
+      "element2" = invalid1
     )),
     list(valid1)
   )
@@ -94,82 +94,121 @@ test_that("get_group_filtered_samples", {
   expect_true(length(result1) > 0)
 })
 
-test_that("get_filtered_tag_samples", {
-    filter_obj <- list(
-        list("tags" = c("C1", "C2", "C3", "C4", "C6")),
-        list("tags" = c("CLLE-ES", "MALY-DE"))
-    )
-    pcawg_samples <- iatlas.api.client::query_dataset_samples("PCAWG")$name
-    result1 <- get_filtered_tag_samples(filter_obj, pcawg_samples, "PCAWG")
-    expect_type(result1, "character")
-    expect_true(length(result1) > 0)
+test_that("get_filtered_group_tag_samples", {
+  filter_obj <- list(
+    list("tags" = c("C1", "C2", "C3", "C4", "C6")),
+    list("tags" = c("CLLE-ES", "MALY-DE"))
+  )
+  pcawg_samples <- iatlas.api.client::query_dataset_samples("PCAWG")$name
+  result1 <- get_filtered_group_tag_samples(filter_obj, pcawg_samples, "PCAWG")
+  expect_type(result1, "character")
+  expect_true(length(result1) > 0)
 })
 
 test_that("Is Numeric Filter Valid", {
-    expect_false(is_numeric_filter_valid(NULL))
-    expect_false(is_numeric_filter_valid(list("feature" = "a", "max" = 1)))
-    expect_false(
-        is_numeric_filter_valid(list("feature" = "a", "min" = 0, "mx" = 1))
-    )
-    expect_true(
-        is_numeric_filter_valid(list("feature" = "a", "min" = 0, "max" = 1))
-    )
+  expect_false(is_numeric_filter_valid(NULL))
+  expect_false(is_numeric_filter_valid(list("name" = "a", "max" = 1)))
+  expect_false(
+    is_numeric_filter_valid(list("name" = "a", "min" = 0, "mx" = 1))
+  )
+  expect_false(
+    is_numeric_filter_valid(list("name" = "a", "min" = 0, "max" = 1))
+  )
+  expect_true(
+    is_numeric_filter_valid(list(
+      "name" = "a", "min" = 0, "max" = 1, "type" = "feature"
+    ))
+  )
 })
 
 test_that("get_valid_numeric_filters", {
-    expect_equal(get_valid_numeric_filters(list()), list())
-    expect_equal(get_valid_numeric_filters(list(NULL)), list())
-    expect_equal(
-        get_valid_numeric_filters(list("element1" = list("feature" = "a"))),
-        list()
-    )
-    expect_equal(
-        get_valid_numeric_filters(
-            list("element1" = list("feature" = "a", "min" = 1))
-        ),
-        list()
-    )
-    expect_equal(
-        get_valid_numeric_filters(
-            list("element1" = list("feature" = "a", "max" = 1))),
-        list()
-    )
-    expect_equal(
-        get_valid_numeric_filters(
-            list("element1" = list("feature" = "a", "max" = 1, "min" = 0))
-        ),
-        list(list("feature" = "a", "max" = 1, "min" = 0))
-    )
-    expect_equal(
-        get_valid_numeric_filters(
-            list(
-                "element1" = list("feature" = "a", "max" = 1, "min" = 0),
-                "element2" = list("feature" = "b", "max" = 1)
-            )
-        ),
-        list(list("feature" = "a", "max" = 1, "min" = 0))
-    )
-    expect_equal(
-        get_valid_numeric_filters(
-            list(
-                "element1" = list("feature" = "a", "max" = 1, "min" = 0),
-                "element2" = list("feature" = "b", "max" = 1, "min" = 0)
-            )
-        ),
-        list(
-            list("feature" = "a", "max" = 1, "min" = 0),
-            list("feature" = "b", "max" = 1, "min" = 0)
-        )
-    )
+  invalid1 <- list()
+  invalid2 <- list(NULL)
+  invalid3 <- list("name" = "a")
+  invalid4 <- list("name" = "a", "min" = 1)
+  invalid5 <- list("name" = "a", "max" = 1)
+
+  valid1 <- list("name" = "a", "max" = 1, "min" = 0, "type" = "feature")
+  valid2 <- list("name" = "b", "max" = 1, "min" = 0, "type" = "feature")
+
+  expect_equal(get_valid_numeric_filters(invalid1), list())
+  expect_equal(get_valid_numeric_filters(invalid2), list())
+  expect_equal(
+    get_valid_numeric_filters(list("element1" = invalid3)),
+    list()
+  )
+  expect_equal(
+    get_valid_numeric_filters(list("element1" = invalid4)),
+    list()
+  )
+  expect_equal(
+    get_valid_numeric_filters(list("element1" = invalid5)),
+    list()
+  )
+  expect_equal(
+    get_valid_numeric_filters(list("element1" = valid1)),
+    list(valid1)
+  )
+  expect_equal(
+    get_valid_numeric_filters(
+      list(
+        "element1" = valid1,
+        "element2" = invalid1
+      )
+    ),
+    list(valid1)
+  )
+  expect_equal(
+    get_valid_numeric_filters(
+      list(
+        "element1" = valid1,
+        "element2" = valid2
+      )
+    ),
+    list(valid1, valid2)
+  )
 })
 
-test_that("get_filtered_feature_samples", {
-    filter_obj <- list(
-        "element1" = list("feature" = "B_cells_memory", "max" = 1, "min" = 0),
-        "element2" = list("feature" = "B_cells_naive", "max" = 1, "min" = 0)
+test_that("get_numeric_filtered_samples", {
+  filter_obj1 <- list(
+    "element1" = list(
+      "name" = "B_cells_memory",
+      "max" = 0.11,
+      "min" = 0.1,
+      "type" = "feature"
+    ),
+    "element2" = list(
+      "name" = "height",
+      "max" = 200,
+      "min" = 0,
+      "type" = "clinical"
     )
-    pcawg_samples <- iatlas.api.client::query_dataset_samples("PCAWG")$name
-    result1 <- get_filtered_feature_samples(filter_obj, pcawg_samples, "PCAWG")
-    expect_type(result1, "character")
-    expect_true(length(result1) > 0)
+  )
+  samples <- iatlas.api.client::query_dataset_samples("TCGA")$name
+  result1 <- get_numeric_filtered_samples(filter_obj1, samples, "TCGA")
+  expect_type(result1, "character")
+  expect_true(length(result1) > 0)
+})
+
+test_that("get_numeric_feature_filtered_samples", {
+  filter_obj1 <- list(
+    "element1" = list(
+      "name" = "B_cells_memory",
+      "max" = 1,
+      "min" = 0,
+      "type" = "feature"
+    ),
+    "element2" = list(
+      "name" = "B_cells_naive",
+      "max" = 1,
+      "min" = 0,
+      "type" = "feature"
+    )
+  )
+  pcawg_samples <- iatlas.api.client::query_dataset_samples("PCAWG")$name
+  result1 <- get_numeric_feature_filtered_samples(
+    filter_obj1, pcawg_samples, "PCAWG"
+  )
+  expect_type(result1, "character")
+  expect_true(length(result1) > 0)
 })

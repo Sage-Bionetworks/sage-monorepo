@@ -4,7 +4,7 @@ numeric_filter_element_server <- function(
   id,
   reactive_values,
   module_id,
-  feature_named_list,
+  numeric_named_list,
   dataset
 ) {
   shiny::moduleServer(
@@ -14,21 +14,43 @@ numeric_filter_element_server <- function(
       ns <- session$ns
 
       output$select_ui <- shiny::renderUI({
-        shiny::req(feature_named_list())
+        shiny::req(numeric_named_list())
         shiny::selectInput(
-          inputId = ns("feature_choice"),
+          inputId = ns("numeric_choice"),
           label = "Select or Search for feature",
-          choices = feature_named_list()
+          choices = numeric_named_list()
         )
       })
 
+      numeric_type <- shiny::reactive({
+        shiny::req(input$numeric_choice)
+        stringr::str_remove_all(input$numeric_choice, ":[:print:]+$")
+      })
+
+      numeric_name <- shiny::reactive({
+        shiny::req(input$numeric_choice)
+        stringr::str_remove_all(input$numeric_choice, "^[:print:]+:")
+      })
+
       features_tbl <- shiny::reactive({
-        req(input$feature_choice, dataset())
-        iatlas.api.client::query_features_range(
-          datasets = dataset(),
-          features = input$feature_choice
-        ) %>%
-          dplyr::distinct()
+        req(numeric_type(), numeric_name(), dataset())
+        if(numeric_type() == "feature"){
+          tbl <-
+            iatlas.api.client::query_features_range(
+              datasets = dataset(),
+              features = numeric_name()
+            ) %>%
+            dplyr::distinct()
+        } else if (numeric_type() == "clinical"){
+          tbl <-
+            iatlas.api.client::query_patients(datasets = dataset()) %>%
+            dplyr::select("value" = numeric_name()) %>%
+            tidyr::drop_na() %>%
+            dplyr::summarise(
+              "value_min" = min(.data$value), "value_max" = max(.data$value)
+            )
+        }
+        return(tbl)
       })
 
       feature_min <- shiny::reactive({
@@ -57,8 +79,12 @@ numeric_filter_element_server <- function(
         )
       })
 
-      shiny::observeEvent(input$feature_choice, {
-        reactive_values[[module_id]]$feature <- input$feature_choice
+      shiny::observeEvent(numeric_type(), {
+        reactive_values[[module_id]]$type <- numeric_type()
+      })
+
+      shiny::observeEvent(numeric_name(), {
+        reactive_values[[module_id]]$name <- numeric_name()
       })
 
       shiny::observeEvent(input$range, {
