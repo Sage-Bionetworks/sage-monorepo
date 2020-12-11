@@ -15,6 +15,7 @@ cohort_selection_server <- function(
       )
 
       cohort_obj <- shiny::reactive({
+        shiny::req(input$cohort_mode_choice)
         if (input$cohort_mode_choice == "Cohort Selection") {
           shiny::req(cohort_obj_manual())
           return(cohort_obj_manual())
