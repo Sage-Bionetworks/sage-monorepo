@@ -12,11 +12,11 @@ immune_features_ui <- function(id) {
       ))
     ),
     sectionBox(
-      title = "Correlations",
+      title = "Distributions",
       module_ui(ns("immune_feature_distributions"))
     ),
     sectionBox(
-      title = "Distributions",
+      title = "Correlations",
       module_ui(ns("immune_feature_correlations"))
     )
   )

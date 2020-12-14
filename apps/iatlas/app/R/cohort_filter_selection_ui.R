@@ -7,7 +7,7 @@ cohort_filter_selection_ui <- function(id) {
             optionsBox(
                 width = 12,
                 insert_remove_element_ui(
-                    ns("tags_filter"),
+                    ns("group_filter"),
                     "Add group filter"
                 )
             ),
