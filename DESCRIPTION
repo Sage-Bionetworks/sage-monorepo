@@ -32,6 +32,7 @@ Imports:
     grImport2,
     iatlas.api.client,
     iatlas.modules,
+    igvShiny,
     ImmuneSubtypeClassifier,
     magrittr,
     plotly,
@@ -61,6 +62,7 @@ Remotes:
     CRI-iAtlas/cyjShiny@master, 
     th86/concordanceIndex@master,
     ropensci/plotly@master,
-    rstudio/rsconnect@master 
+    rstudio/rsconnect@master,
+    heimannch/igvShiny@master 
 
 
