@@ -8,7 +8,7 @@ from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
 
 def resolve_copy_number_results(_obj, info, dataSet=None, direction=None, distinct=False, entrez=None, feature=None, maxPValue=None,
                                 maxLog10PValue=None, minLog10PValue=None, minMeanCnv=None, minMeanNormal=None,
-                                minPValue=None, minTStat=None, paging=None, tag=None):
+                                minPValue=None, minTStat=None, paging=None, related=None, tag=None):
 
     # Request fields within 'items'
     selection_set = get_selection_set(info=info, child_node='items')
@@ -31,7 +31,7 @@ def resolve_copy_number_results(_obj, info, dataSet=None, direction=None, distin
 
     query, count_query = build_copy_number_result_request(
         requested, data_set_requested, feature_requested, gene_requested, tag_requested,
-        data_set=dataSet, direction=direction, distinct=distinct, entrez=entrez, feature=feature, max_p_value=maxPValue, max_log10_p_value=maxLog10PValue, min_log10_p_value=minLog10PValue, min_mean_cnv=minMeanCnv, min_mean_normal=minMeanNormal, min_p_value=minPValue, min_t_stat=minTStat, paging=paging, tag=tag)
+        data_set=dataSet, direction=direction, distinct=distinct, entrez=entrez, feature=feature, max_p_value=maxPValue, max_log10_p_value=maxLog10PValue, min_log10_p_value=minLog10PValue, min_mean_cnv=minMeanCnv, min_mean_normal=minMeanNormal, min_p_value=minPValue, min_t_stat=minTStat, paging=paging, related=related, tag=tag)
 
     # Request fields within 'paging'
     pagination_requested = get_requested(info, paging_fields, 'paging')
