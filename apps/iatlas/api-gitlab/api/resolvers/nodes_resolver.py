@@ -1,11 +1,10 @@
-from .resolver_helpers import (build_node_graphql_response, build_node_request, feature_request_fields, fetch_nodes_with_tags,
-                               get_selection_set, gene_request_fields, get_requested, node_request_fields, return_node_derived_fields,
-                               simple_data_set_request_fields, simple_tag_request_fields)
+from .resolver_helpers import build_node_graphql_response, build_node_request, feature_request_fields, fetch_nodes_with_tags, get_selection_set, gene_request_fields, get_requested, node_request_fields, simple_data_set_request_fields, simple_tag_request_fields
 from .resolver_helpers.paging_utils import fetch_page, paginate, Paging, paging_fields, process_page
 from api.telemetry import profile
 
 
-def resolve_nodes(_obj, info, dataSet=None, distinct=False, entrez=None, feature=None, maxScore=None, minScore=None, network=None, related=None, paging=None, tag=None):
+def resolve_nodes(
+        _obj, info, dataSet=None, distinct=False, entrez=None, feature=None, featureClass=None, geneType=None, maxScore=None, minScore=None, network=None, related=None, paging=None, tag=None):
     # The selection is nested under the 'items' node.
     selection_set = get_selection_set(info=info, child_node='items')
     requested = get_requested(
@@ -29,13 +28,14 @@ def resolve_nodes(_obj, info, dataSet=None, distinct=False, entrez=None, feature
     paging = paging if paging else Paging.DEFAULT
 
     query, count_query = build_node_request(
-        requested, data_set_requested, feature_requested, gene_requested, data_set=dataSet, distinct=distinct, entrez=entrez, feature=feature, max_score=maxScore, min_score=minScore, network=network, related=related, paging=paging, tag=tag)
+        requested, data_set_requested, feature_requested, gene_requested, data_set=dataSet, distinct=distinct, entrez=entrez, feature=feature, feature_class=featureClass, gene_type=geneType, max_score=maxScore, min_score=minScore, network=network, related=related, paging=paging, tag=tag)
 
     items = {}
     tag_dict = {}
+    # Verify that we are indeed requesting tags before running any queries.
     if len(tag_requested):
-        # verify that we are indeed requesting tags before running any queries
-        items, tag_dict = fetch_nodes_with_tags(query, paging, distinct, tag_requested, network)
+        items, tag_dict = fetch_nodes_with_tags(
+            query, paging, distinct, tag_requested)
         items = list(items)
 
     else:
