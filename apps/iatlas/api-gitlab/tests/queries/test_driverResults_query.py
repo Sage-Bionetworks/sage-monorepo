@@ -8,6 +8,7 @@ query DriverResults(
   $paging: PagingInput
   $distinct:Boolean
   $dataSet: [String!]
+  $related: [String!]
   $entrez: [Int!]
   $feature: [String!]
   $mutationCode: [String!]
@@ -25,6 +26,7 @@ query DriverResults(
     paging: $paging
     distinct: $distinct
     dataSet: $dataSet
+    related: $related
     feature: $feature
     entrez: $entrez
     mutationCode: $mutationCode
@@ -95,6 +97,7 @@ def common_query_builder():
         $paging: PagingInput
         $distinct: Boolean
         $dataSet: [String!]
+        $related: [String!]
         $entrez: [Int!]
         $feature: [String!]
         $mutationCode: [String!]
@@ -112,6 +115,7 @@ def common_query_builder():
             paging: $paging
             distinct: $distinct
             dataSet: $dataSet
+            related: $related
             feature: $feature
             entrez: $entrez
             mutationCode: $mutationCode
@@ -349,6 +353,40 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_and_mutation(cl
         'entrez': [gene_entrez],
         'feature': [dr_feature],
         'mutationCode': [mutation_code]
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['driverResults']
+    results = page['items']
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        assert result['dataSet']['name'] == data_set
+        assert result['feature']['name'] == dr_feature
+        assert result['gene']['entrez'] == gene_entrez
+        assert result['mutationCode'] == mutation_code
+        assert type(result['tag']['name']) is str
+
+
+def test_driverResults_query_with_passed_data_set_related_entrez_feature_and_mutation(client, common_query, data_set, dr_feature, gene_entrez, mutation_code, related):
+    response = client.post('/api', json={'query': common_query, 'variables': {
+        'dataSet': [data_set],
+        'entrez': [gene_entrez],
+        'feature': [dr_feature],
+        'mutationCode': [mutation_code],
+        'related': ['does_not_exist']
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['driverResults']
+    results = page['items']
+    assert isinstance(results, list)
+    assert len(results) == 0
+
+    response = client.post('/api', json={'query': common_query, 'variables': {
+        'dataSet': [data_set],
+        'entrez': [gene_entrez],
+        'feature': [dr_feature],
+        'mutationCode': [mutation_code],
+        'related': [related]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
