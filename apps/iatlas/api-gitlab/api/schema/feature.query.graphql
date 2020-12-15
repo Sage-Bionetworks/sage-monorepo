@@ -1,75 +1,69 @@
 """
 The "Feature" type may return:
 
-- The "class" is the feature class associated with this feature.
-- A "display" name, a readable name for the feature.
-- The "methodTag" is the method tag associated with this feature.
-- The feature's "name" (a unique string for this feature).
-- The "order" is a number representing the index order the feature would be displayed in.
-- The "sample" will be the name of the sample related to this feature that is assocoated with the "value".
-- The "unit" is the type of measurement of the value.
-- The "value" is the relationship between the feature and the sample.
-- The "valueMax" is the maximum value of all relationships between a specific feature and the samples.
-- The "valueMin" is the minimum value of all relationships between a specific feature and the samples.
-
-
 See also "FeaturesByClass", "FeaturesByTag", and "SimpleFeature".
 """
 type Feature {
+  "The feature class associated with this feature."
   class: String
+  "A readable name for the feature."
   display: String
+  "The method tag associated with this feature."
   methodTag: String
+  "The feature's name (a unique string for this feature)."
   name: String!
+  "A number representing the index order the feature would be displayed in."
   order: Int
+  "A list of the names of the sample related to this feature that is associated with the value."
   samples: [FeatureRelatedSample!]!
+  "The type of measurement of the value."
   unit: String
+  "The maximum value of all relationships between a specific feature and the samples."
   valueMax: Float
+  "The minimum value of all relationships between a specific feature and the samples."
   valueMin: Float
 }
 
 """
-The "FeaturesByClass" type may return:
-
-- The "name" of the feature class.
-- A list of features associated with that feature class.
+The "FeaturesByClass" type
 """
 type FeaturesByClass {
+  "The name of the feature class."
   class: String!
+  "A list of features associated with that feature class."
   features: [Feature!]!
 }
 
 """
-The "FeaturesByTag" type may return:
-
-- The "characteristics" of the tag.
-- The "color", a color to represent the tag as a hex value.
-- "features", a list of features associated with that tag.
-- The "longDisplay", a long display name for the tag used in text descriptions.
-- The "shortDisplay", a friendly name for the tag (used in plots).
-- The "tag" (the name of the tag).
+The "FeaturesByTag" type
 """
 type FeaturesByTag {
+  "The characteristics of the tag."
   characteristics: String
+  "A color to represent the tag as a hex value."
   color: String
+  "A list of features associated with that tag."
   features: [Feature!]!
+  "A long display name for the tag used in text descriptions."
   longDisplay: String
+  "A friendly name for the tag (used in plots)."
   shortDisplay: String
+  "The name of the tag."
   tag: String!
 }
 
 """
 The "SimpleFeature" is a version of a `Feature`. Only basic feature attributes may be returned.
 
-- The feature's "name" (a unique string for this feature).
-- A "display" name, a readable name for the feature.
-- The "order" is a number representing the index order the feature would be displayed in.
-- The "unit" is the type of measurement of the value.
-
 To get more properties of features, please see "Feature", "FeaturesByClass", "FeaturesByTag".
 """
 type SimpleFeature {
+  "A readable name for the feature."
   display: String
+  "The feature's name (a unique string for this feature)."
   name: String!
+  "A number representing the index order the feature would be displayed in."
   order: Int
+  "The type of measurement of the value."
   unit: String
 }
