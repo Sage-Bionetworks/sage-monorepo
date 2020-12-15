@@ -12,6 +12,16 @@ def node_feature():
 
 
 @pytest.fixture(scope='module')
+def node_feature_class():
+    return 'Immune Cell Proportion - Common Lymphoid and Myeloid Cell Derivative Class'
+
+
+@pytest.fixture(scope='module')
+def node_gene_type():
+    return 'Chemokine12_score'
+
+
+@pytest.fixture(scope='module')
 def max_score():
     return 0.0234375
 
@@ -35,6 +45,8 @@ def common_query_builder():
             $dataSet: [String!]
             $entrez: [Int!]
             $feature: [String!]
+            $featureClass: [String!]
+            $geneType: [String!]
             $maxScore: Float
             $minScore: Float
             $network: [String!]
@@ -47,6 +59,8 @@ def common_query_builder():
                 dataSet: $dataSet
                 entrez: $entrez
                 feature: $feature
+                featureClass: $featureClass
+                geneType: $geneType
                 maxScore: $maxScore
                 minScore: $minScore
                 network: $network
@@ -143,6 +157,66 @@ def test_nodes_query_with_passed_feature(client, common_query_builder, node_feat
         feature = result['feature']
         assert type(result['name']) is str
         assert feature['name'] == node_feature
+
+
+def test_nodes_query_with_passed_featureClass(client, common_query_builder, node_feature_class):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        feature { name }
+                                    }
+                                }""")
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'featureClass': ['does_not_exist']}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) == 0
+
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'featureClass': [node_feature_class]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        feature = result['feature']
+        assert type(result['name']) is str
+        assert type(feature['name']) is str
+
+
+def test_nodes_query_with_passed_geneType(client, common_query_builder, node_gene_type):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        gene { entrez }
+                                    }
+                                }""")
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'geneType': ['does_not_exist']}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) == 0
+
+    response = client.post('/api', json={'query': query,
+                                         'variables': {'geneType': [node_gene_type]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        gene = result['gene']
+        assert type(result['name']) is str
+        assert type(gene['entrez']) is int
 
 
 def test_nodes_query_with_passed_network(client, common_query_builder, network):
