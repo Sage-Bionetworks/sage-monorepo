@@ -662,54 +662,28 @@ def test_driverResults_query_with_passed_min_n_wt(client, common_query, data_set
     for result in results[0:2]:
         assert result['numWildTypes'] >= min_n_wt
 
-# def test_driverResults_query_with_no_arguments_no_relations(client):
-#     query = """query DriverResults(
-#         $dataSet: [String!]
-#         $entrez: [Int!]
-#         $feature: [String!]
-#         $mutationCode: [String!]
-#         $tag: [String!]
-#         $minPValue: Float
-#         $maxPValue: Float
-#         $minLog10PValue: Float
-#         $maxLog10PValue: Float
-#         $minFoldChange: Float
-#         $minLog10FoldChange: Float
-#         $minNumWildTypes: Int
-#         $minNumMutants: Int
-#     ) {
-#         driverResults(
-#             dataSet: $dataSet
-#             feature: $feature
-#             entrez: $entrez
-#             mutationCode: $mutationCode
-#             tag: $tag
-#             minPValue: $minPValue
-#             maxPValue: $maxPValue
-#             minLog10PValue: $minLog10PValue
-#             maxLog10PValue: $maxLog10PValue
-#             minFoldChange: $minFoldChange
-#             minLog10FoldChange: $minLog10FoldChange
-#             minNumWildTypes: $minNumWildTypes
-#             minNumMutants: $minNumMutants
-#         ) {
-#             foldChange
-#             pValue
-#             log10PValue
-#             log10FoldChange
-#             numWildTypes
-#             numMutants
-#         }
-#     }"""
-#     response = client.post('/api', json={'query': query})
-#     json_data = json.loads(response.data)
-#     driver_results = json_data['data']['driverResults']
-#     assert isinstance(driver_results, list)
-#     assert len(driver_results) > 0
-#     for driver_result in driver_results[0:2]:
-#         assert type(driver_result['foldChange']) is float or NoneType
-#         assert type(driver_result['pValue']) is float or NoneType
-#         assert type(driver_result['log10PValue']) is float or NoneType
-#         assert type(driver_result['log10FoldChange']) is float or NoneType
-#         assert type(driver_result['numWildTypes']) is int or NoneType
-#         assert type(driver_result['numMutants']) is int or NoneType
+
+def test_driverResults_query_with_no_arguments_no_relations(client, common_query_builder):
+    query = common_query_builder("""{
+            items {
+                foldChange
+                pValue
+                log10PValue
+                log10FoldChange
+                numWildTypes
+                numMutants
+            }
+        }""")
+    response = client.post('/api', json={'query': query})
+    json_data = json.loads(response.data)
+    page = json_data['data']['driverResults']
+    driver_results = page['items']
+    assert isinstance(driver_results, list)
+    assert len(driver_results) > 0
+    for driver_result in driver_results[0:2]:
+        assert type(driver_result['foldChange']) is float or NoneType
+        assert type(driver_result['pValue']) is float or NoneType
+        assert type(driver_result['log10PValue']) is float or NoneType
+        assert type(driver_result['log10FoldChange']) is float or NoneType
+        assert type(driver_result['numWildTypes']) is int or NoneType
+        assert type(driver_result['numMutants']) is int or NoneType

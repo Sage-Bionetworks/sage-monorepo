@@ -46,6 +46,13 @@ def build_driver_result_request(
     """
     Builds a SQL request.
 
+    All positional arguments are required. Positional arguments are:
+        1st position - a set of the requested fields at the root of the graphql request
+        2nd position - a set of the requested fields in the 'dataSet' node of the graphql request. If 'dataSet' is not requested, this will be an empty set.
+        3rd position - a set of the requested fields in the 'feature' node of the graphql request. If 'feature' is not requested, this will be an empty set.
+        4th position - a set of the requested fields in the 'gene' node of the graphql request. If 'gene' is not requested, this will be an empty set.
+        5th position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this will be an empty set.
+
     All keyword arguments are optional. Keyword arguments are:
         `data_set` - a list of strings, data set names
         `distinct` - a boolean, indicates whether duplicate records should be filtered out
@@ -190,32 +197,3 @@ def build_driver_result_request(
             data_set_to_tag_1, and_(*data_set_tag_join_condition))
 
     return get_pagination_queries(query, paging, distinct, cursor_field=driver_result_1.id)
-
-
-def request_driver_results(*args, **kwargs):
-    '''
-    All positional arguments are required. Positional arguments are:
-        1st position - a set of the requested fields at the root of the graphql request
-        2nd position - a set of the requested fields in the 'dataSet' node of the graphql request. If 'dataSet' is not requested, this will be an empty set.
-        3rd position - a set of the requested fields in the 'feature' node of the graphql request. If 'feature' is not requested, this will be an empty set.
-        4th position - a set of the requested fields in the 'gene' node of the graphql request. If 'gene' is not requested, this will be an empty set.
-        5th position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this will be an empty set.
-
-    All keyword arguments are optional. Keyword arguments are:
-        `data_set` - a list of strings, data set names
-        `entrez` - a list of integers, gene entrez ids
-        `feature` - a list of strings, feature names
-        `max_p_value` - a float, a maximum P value
-        `max_log10_p_value` - a float, a minimum calculated log10 P value
-        `min_fold_change` - a float, a minimum fold change value
-        `min_log10_fold_change` - a float, a minimum calculated log 10 fold change value
-        `min_log10_p_value` - a float, a minimum calculated log 10 P value
-        `min_p_value` - a float, a minimum P value
-        `min_n_mut` - a float, a minimum number of mutants
-        `min_n_wt` - a float, a minimum number of wild types
-        `mutation_code` - a list of strings, mutation codes
-        `related` - a list of strings, tags related to the dataset that is associated with the result.
-        `tag` - a list of strings, tag names
-    '''
-    query = build_driver_result_request(*args, **kwargs)
-    return query.distinct()

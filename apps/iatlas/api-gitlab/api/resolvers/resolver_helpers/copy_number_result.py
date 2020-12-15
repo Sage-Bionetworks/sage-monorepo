@@ -42,6 +42,13 @@ def build_copy_number_result_request(
     """
     Builds a SQL request.
 
+    All positional arguments are required. Positional arguments are:
+        1st position - a set of the requested fields at the root of the graphql request
+        2nd position - a set of the requested fields in the 'dataSet' node of the graphql request. If 'dataSet' is not requested, this will be an empty set.
+        3rd position - a set of the requested fields in the 'feature' node of the graphql request. If 'feature' is not requested, this will be an empty set.
+        4th position - a set of the requested fields in the 'gene' node of the graphql request. If 'gene' is not requested, this will be an empty set.
+        5th position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this will be an empty set.
+
     All keyword arguments are optional. Keyword arguments are:
         `data_set` - a list of strings, data set names
         `direction` - a value from the DirectionEnum. (either 'Amp' or 'Del')

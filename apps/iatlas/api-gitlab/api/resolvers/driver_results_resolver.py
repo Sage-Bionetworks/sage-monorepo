@@ -1,4 +1,4 @@
-from .resolver_helpers import build_dr_graphql_response, build_driver_result_request, driver_result_request_fields, get_requested, get_selection_set, request_driver_results, simple_data_set_request_fields, simple_feature_request_fields, simple_gene_request_fields, simple_tag_request_fields
+from .resolver_helpers import build_dr_graphql_response, build_driver_result_request, driver_result_request_fields, get_requested, get_selection_set, simple_data_set_request_fields, simple_feature_request_fields, simple_gene_request_fields, simple_tag_request_fields
 
 from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
 
@@ -23,7 +23,8 @@ def resolve_driver_results(
         selection_set=selection_set, requested_field_mapping=simple_tag_request_fields, child_node='tag')
 
     if distinct == False:
-        requested.add('id')  # Add the id as a cursor if not selecting distinct
+        # Add the id as a cursor if not selecting distinct
+        requested.add('id')
 
     paging = paging if paging else Paging.DEFAULT
 
