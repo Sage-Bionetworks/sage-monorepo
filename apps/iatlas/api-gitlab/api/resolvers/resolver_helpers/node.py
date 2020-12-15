@@ -3,7 +3,7 @@ from itertools import groupby
 from sqlalchemy import and_, or_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToSample, DatasetToTag, Feature, FeatureToSample, Gene, GeneToSample, Node, NodeToTag, SampleToTag, Tag, TagToTag
+from api.db_models import Dataset, DatasetToSample, DatasetToTag, Feature, FeatureClass, FeatureToSample, Gene, GeneToSample, GeneToType, GeneType, Node, NodeToTag, SampleToTag, Tag, TagToTag
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .data_set import build_data_set_graphql_response
 from api.database.database_helpers import execute_sql
@@ -46,10 +46,37 @@ def build_node_graphql_response(tag_dict):
     return f
 
 
-def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, distinct=False, entrez=None, feature=None, max_score=None, min_score=None, network=None, related=None, paging=None, tag=None):
-    """
+def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, distinct=False, entrez=None, feature=None, feature_class=None, gene_type=None, max_score=None, min_score=None, network=None, paging=None, related=None, tag=None):
+    '''
     Builds a SQL request.
-    """
+
+    All positional arguments are required. Positional arguments are:
+        1st position - a set of the requested fields at the root of the graphql request
+        2nd position - a set of the requested fields in the 'dataSet' node of the graphql request. If 'dataSet' is not requested, this will be an empty set.
+        3rd position - a set of the requested fields in the 'feature' node of the graphql request. If 'feature' is not requested, this will be an empty set.
+        4th position - a set of the requested fields in the 'gene' node of the graphql request. If 'gene' is not requested, this will be an empty set.
+
+    All keyword arguments are optional. Keyword arguments are:
+        `data_set` - a list of strings, data set names
+        `distinct` - a boolean, specifies whether or not duplicates should be filtered out
+        `entrez` - a list of integers, gene entrez ids
+        `feature` - a list of strings, feature names
+        `feature_class` - a list of strings, feature class names
+        `gene_type` - a list of strings, gene type names
+        `max_score` - a float, a maximum score value
+        `min_score` - a float, a minimum score value
+        `network` -  a list of strings, tag names that are also associated with the 'network' tag
+        'paging' - an instance of PagingInput
+            `type` - a string, the type of pagination to perform. Must be either 'OFFSET' or 'CURSOR'."
+            `page` - an integer, when performing OFFSET paging, the page number requested.
+            `limit` - an integer, when performing OFFSET paging, the number or records requested.
+            `first` - an integer, when performing CURSOR paging, the number of records requested AFTER the CURSOR.
+            `last` - an integer, when performing CURSOR paging, the number of records requested BEFORE the CURSOR.
+            `before` - an integer, when performing CURSOR paging: the CURSOR to be used in tandem with 'last'
+            `after` - an integer, when performing CURSOR paging: the CURSOR to be used in tandem with 'first'
+        `related` - a list of strings, tag names related to data sets
+        `tag` - a list of strings, tag names
+    '''
     sess = db.session
 
     data_set_1 = aliased(Dataset, name='d')
@@ -136,134 +163,68 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
         query = query.join(
             data_set_to_tag_1, and_(*data_set_tag_join_condition))
 
-    if feature or 'feature' in requested:
+    if feature or 'feature' in requested or feature_class:
         is_outer = not bool(feature)
         feature_join_condition = build_join_condition(
             feature_1.id, node_1.feature_id, feature_1.name, feature)
         query = query.join(feature_1, and_(
             *feature_join_condition), isouter=is_outer)
 
-    if entrez or 'gene' in requested:
+        if feature_class:
+            feature_class_1 = aliased(FeatureClass, name='fc')
+            feature_class_join_condition = build_join_condition(
+                feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
+            query = query.join(
+                feature_class_1, and_(*feature_class_join_condition))
+
+    if entrez or 'gene' in requested or gene_type:
         is_outer = not bool(entrez)
         gene_join_condition = build_join_condition(
             gene_1.id, node_1.gene_id, gene_1.entrez, entrez)
         query = query.join(gene_1, and_(
             *gene_join_condition), isouter=is_outer)
 
+        if gene_type:
+            gene_type_1 = aliased(GeneType, name='gt')
+            gene_to_type_1 = aliased(GeneToType, name='ggt')
+            query = query.join(gene_to_type_1, and_(
+                gene_to_type_1.gene_id == gene_1.id, gene_to_type_1.type_id.in_(sess.query(gene_type_1.id).filter(gene_type_1.name.in_(gene_type)))))
+
     return get_pagination_queries(query, paging, distinct, cursor_field=node_1.id)
 
 
-def build_tags_request(requested, tag_requested, data_set=None, entrez=None, feature=None, max_score=None, min_score=None, network=None, related=None, tag=None):
-    if 'tags' not in requested:
-        return None
-    sess = db.session
-
-    data_set_1 = aliased(Dataset, name='d')
-    network_tag_2 = aliased(Tag, name='nt2')
-    node_1 = aliased(Node, name='n')
-    node_to_tag_2 = aliased(NodeToTag, name='ntt2')
-    tag_1 = aliased(Tag, name='t')
-    tag_to_tag_1 = aliased(TagToTag, name='tt')
-
-    tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
-                                'color': tag_1.color.label('color'),
-                                'longDisplay': tag_1.long_display.label('tag_long_display'),
-                                'name': tag_1.name.label('name'),
-                                'shortDisplay': tag_1.short_display.label('tag_short_display')}
-
-    tag_core = get_selected(tag_requested, tag_core_field_mapping)
-
-    # Always select the tag id and the node id.
-    tag_core |= {tag_1.id.label('id'), node_1.id.label('node_id')}
-
-    tag_query = sess.query(*tag_core)
-    tag_query = tag_query.select_from(node_1)
-
-    if max_score or max_score == 0:
-        tag_query = tag_query.filter(node_1.score <= max_score)
-
-    if min_score or min_score == 0:
-        tag_query = tag_query.filter(node_1.score >= min_score)
-
-    if data_set or related or 'dataSet' in requested:
-        data_set_join_condition = build_join_condition(
-            data_set_1.id, node_1.dataset_id, data_set_1.name, data_set)
-        tag_query = tag_query.join(
-            data_set_1, and_(*data_set_join_condition))
-
-    if related:
-        data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
-        related_tag_1 = aliased(Tag, name='rt')
-
-        related_tag_sub_query = sess.query(related_tag_1.id).filter(
-            related_tag_1.name.in_(related))
-
-        data_set_tag_join_condition = build_join_condition(
-            data_set_to_tag_1.dataset_id, data_set_1.id, data_set_to_tag_1.tag_id, related_tag_sub_query)
-        tag_query = tag_query.join(
-            data_set_to_tag_1, and_(*data_set_tag_join_condition))
-
-    # Filter results down by the nodes' association with the passed network
-    if network:
-        network_tag_1 = aliased(Tag, name='nt1')
-        node_to_tag_1 = aliased(NodeToTag, name='ntt1')
-        network_subquery = sess.query(network_tag_1.id).filter(
-            network_tag_1.name.in_(network))
-        node_tag_join_condition = build_join_condition(
-            node_to_tag_1.node_id, node_1.id, node_to_tag_1.tag_id, network_subquery)
-        tag_query = tag_query.join(
-            node_to_tag_1, and_(*node_tag_join_condition))
-
-    if tag:
-        tag_2 = aliased(Tag, name='t2')
-        node_to_tag_3 = aliased(NodeToTag, name='ntt3')
-        node_tag_subquery = sess.query(tag_2.id).filter(
-            tag_2.name.in_(tag))
-        node_tag_join_condition = build_join_condition(
-            node_to_tag_3.node_id, node_1.id, node_to_tag_3.tag_id, node_tag_subquery)
-        tag_query = tag_query.join(
-            node_to_tag_3, and_(*node_tag_join_condition))
-
-    if feature:
-        feature_1 = aliased(Feature, name='f')
-        feature_join_condition = build_join_condition(
-            feature_1.id, node_1.feature_id, feature_1.name, feature)
-        tag_query = tag_query.join(
-            feature_1, and_(*feature_join_condition))
-
-    if entrez:
-        gene_1 = aliased(Gene, name='g')
-        gene_join_condition = build_join_condition(
-            gene_1.id, node_1.gene_id, gene_1.entrez, entrez)
-        tag_query = tag_query.join(gene_1, and_(*gene_join_condition))
-
-    tag_query = tag_query.join(
-        node_to_tag_2, node_to_tag_2.node_id == node_1.id)
-
-    network_tag_subquery = sess.query(
-        network_tag_2.id).filter(network_tag_2.name == 'network')
-
-    tag_to_tag_join_condition = [
-        tag_to_tag_1.tag_id == node_to_tag_2.tag_id, tag_to_tag_1.related_tag_id.notin_(network_tag_subquery)]
-
-    tag_query = tag_query.join(
-        tag_to_tag_1, and_(*tag_to_tag_join_condition))
-
-    tag_query = tag_query.join(tag_1, tag_to_tag_1.tag_id == tag_1.id)
-
-    return tag_query.distinct()
-
-def fetch_nodes_with_tags(query, paging, distinct, tag_requested, network):
+def fetch_nodes_with_tags(query, paging, distinct, tag_requested):
+    '''
+    All positional arguments are required. Positional arguments are:
+        1st position - a SQLAlchemy built query
+        2nd position - a paging dict - an instance of PagingInput
+            `type` - a string, the type of pagination to perform. Must be either 'OFFSET' or 'CURSOR'."
+            `page` - an integer, when performing OFFSET paging, the page number requested.
+            `limit` - an integer, when performing OFFSET paging, the number or records requested.
+            `first` - an integer, when performing CURSOR paging, the number of records requested AFTER the CURSOR.
+            `last` - an integer, when performing CURSOR paging, the number of records requested BEFORE the CURSOR.
+            `before` - an integer, when performing CURSOR paging: the CURSOR to be used in tandem with 'last'
+            `after` - an integer, when performing CURSOR paging: the CURSOR to be used in tandem with 'first'.
+        3rd position - a boolean, specifies whether or not duplicates should be filtered out
+        4th position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this should be an empty set.
+    '''
     items, table_name, conn = create_temp_table(query, paging, distinct)
-    return items, return_associated_tags(table_name, conn, tag_requested, network)
+    return items, return_associated_tags(table_name, conn, tag_requested)
 
-def return_associated_tags(table_name, conn, tag_requested, network):
+
+def return_associated_tags(table_name, conn, tag_requested):
+    '''
+    All positional arguments are required. Positional arguments are:
+        1st position - the name of the temp table with the node values
+        2nd position - the current database connection
+        3rd position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this should be an empty set.
+    '''
     tag_1 = aliased(Tag, name='t')
     tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
-                                'color': tag_1.color.label('color'),
-                                'longDisplay': tag_1.long_display.label('tag_long_display'),
-                                'name': tag_1.name.label('name'),
-                                'shortDisplay': tag_1.short_display.label('tag_short_display')}
+                              'color': tag_1.color.label('color'),
+                              'longDisplay': tag_1.long_display.label('tag_long_display'),
+                              'name': tag_1.name.label('name'),
+                              'shortDisplay': tag_1.short_display.label('tag_short_display')}
 
     tag_core = get_selected(tag_requested, tag_core_field_mapping)
     tag_fields = [str(tag_field) for tag_field in tag_core]
@@ -273,21 +234,9 @@ def return_associated_tags(table_name, conn, tag_requested, network):
     (network_tag_id, ) = db.session.query(Tag.id).filter_by(
         name='network').one_or_none()
     query = f'SELECT DISTINCT {tag_fields}, n.id as node_id FROM tags as t, {table_name} as n, nodes_to_tags, tags_to_tags WHERE (n.id = nodes_to_tags.node_id AND t.id = nodes_to_tags.tag_id) AND (tags_to_tags.tag_id = t.id AND tags_to_tags.related_tag_id != {network_tag_id})'
-    # query = f'SELECT DISTINCT {tag_fields}, n.id as node_id FROM tags as t, {table_name} as n, nodes_to_tags JOIN tags_to_tags ON (tags_to_tags.tag_id = nodes_to_tags.tag_id AND tags_to_tags.related_tag_id != {network_tag_id}) WHERE n.id = nodes_to_tags.node_id AND t.id = nodes_to_tags.tag_id'
     tag_results = execute_sql(query, conn=conn)
     tag_dict = dict()
     if tag_results:
         for key, collection in groupby(tag_results, key=lambda t: t.node_id):
             tag_dict[key] = tag_dict.get(key, []) + list(collection)
-    return tag_dict
-
-def return_node_derived_fields(requested, tag_requested, data_set=None, entrez=None, feature=None, max_score=None, min_score=None, network=None, related=None, tag=None):
-    tag_results = build_tags_request(
-        requested, tag_requested, data_set=data_set, entrez=entrez, feature=feature, max_score=max_score, min_score=min_score, network=network, related=related, tag=tag)
-
-    tag_dict = dict()
-    if tag_results:
-        for key, collection in groupby(tag_results.yield_per(10000).all(), key=lambda t: t.node_id):
-            tag_dict[key] = tag_dict.get(key, []) + list(collection)
-
     return tag_dict
