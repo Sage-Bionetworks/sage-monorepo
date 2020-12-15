@@ -41,6 +41,30 @@ def build_copy_number_result_request(
         requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, direction=None, distinct=False, entrez=None, feature=None, max_p_value=None, max_log10_p_value=None, min_log10_p_value=None, min_mean_cnv=None, min_mean_normal=None, min_p_value=None, min_t_stat=None, paging=None, related=None, tag=None):
     """
     Builds a SQL request.
+
+    All positional arguments are required. Positional arguments are:
+        1st position - a set of the requested fields at the root of the graphql request
+        2nd position - a set of the requested fields in the 'dataSet' node of the graphql request. If 'dataSet' is not requested, this will be an empty set.
+        3rd position - a set of the requested fields in the 'feature' node of the graphql request. If 'feature' is not requested, this will be an empty set.
+        4th position - a set of the requested fields in the 'gene' node of the graphql request. If 'gene' is not requested, this will be an empty set.
+        5th position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this will be an empty set.
+
+    All keyword arguments are optional. Keyword arguments are:
+        `data_set` - a list of strings, data set names
+        `direction` - a value from the DirectionEnum. (either 'Amp' or 'Del')
+        `distinct` - a boolean, indicates whether duplicate records should be filtered out
+        `entrez` - a list of integers, gene entrez ids
+        `feature` - a list of strings, feature names
+        `max_p_value` - a float, a maximum P value
+        `max_log10_p_value` - a float, a minimum calculated log10 P value
+        `min_log10_p_value` - a float, a minimum calculated log 10 P value
+        `min_mean_cnv` - a float, a minimum mean cnv value
+        `min_mean_normal` - a float, a minimum mean normal value
+        `min_p_value` - a float, a minimum P value
+        `min_t_stat` - a float, a minimum t stat value
+        `paging` - a dict containing pagination metadata
+        `related` - a list of strings, tags related to the dataset that is associated with the result.
+        `tag` - a list of strings, tag names
     """
     sess = db.session
 

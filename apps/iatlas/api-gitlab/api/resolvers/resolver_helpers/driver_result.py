@@ -1,6 +1,7 @@
-from sqlalchemy import and_, orm
+from sqlalchemy import and_
+from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DriverResult, Feature, Gene, Mutation, MutationCode, Tag
+from api.db_models import Dataset, DatasetToTag, DriverResult, Feature, Gene, Mutation, MutationCode, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
@@ -41,9 +42,16 @@ def build_dr_graphql_response(driver_result):
 
 
 def build_driver_result_request(
-        requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, distinct=False, entrez=None, feature=None, max_p_value=None, max_log10_p_value=None, min_fold_change=None, min_log10_fold_change=None, min_log10_p_value=None, min_p_value=None, min_n_mut=None, min_n_wt=None, mutation_code=None, paging=None, tag=None):
+        requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, distinct=False, entrez=None, feature=None, max_p_value=None, max_log10_p_value=None, min_fold_change=None, min_log10_fold_change=None, min_log10_p_value=None, min_p_value=None, min_n_mut=None, min_n_wt=None, mutation_code=None, paging=None, related=None, tag=None):
     """
     Builds a SQL request.
+
+    All positional arguments are required. Positional arguments are:
+        1st position - a set of the requested fields at the root of the graphql request
+        2nd position - a set of the requested fields in the 'dataSet' node of the graphql request. If 'dataSet' is not requested, this will be an empty set.
+        3rd position - a set of the requested fields in the 'feature' node of the graphql request. If 'feature' is not requested, this will be an empty set.
+        4th position - a set of the requested fields in the 'gene' node of the graphql request. If 'gene' is not requested, this will be an empty set.
+        5th position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this will be an empty set.
 
     All keyword arguments are optional. Keyword arguments are:
         `data_set` - a list of strings, data set names
@@ -60,28 +68,29 @@ def build_driver_result_request(
         `min_n_wt` - a float, a minimum number of wild types
         `mutation_code` - a list of strings, mutation codes
         `paging` - a dict containing pagination metadata
+        `related` - a list of strings, tags related to the dataset that is associated with the result.
         `tag` - a list of strings, tag names
     """
     sess = db.session
 
-    driver_result_1 = orm.aliased(DriverResult, name='dr')
-    gene_1 = orm.aliased(Gene, name='g')
-    mutation_1 = orm.aliased(Mutation, name='m')
-    mutation_code_1 = orm.aliased(MutationCode, name='mc')
-    tag_1 = orm.aliased(Tag, name='t')
-    feature_1 = orm.aliased(Feature, name='f')
-    data_set_1 = orm.aliased(Dataset, name='ds')
+    driver_result_1 = aliased(DriverResult, name='dr')
+    gene_1 = aliased(Gene, name='g')
+    mutation_1 = aliased(Mutation, name='m')
+    mutation_code_1 = aliased(MutationCode, name='mc')
+    tag_1 = aliased(Tag, name='t')
+    feature_1 = aliased(Feature, name='f')
+    data_set_1 = aliased(Dataset, name='ds')
 
     core_field_mapping = {
-                          'id': driver_result_1.id.label('id'),
-                          'pValue': driver_result_1.p_value.label('p_value'),
-                          'foldChange': driver_result_1.fold_change.label('fold_change'),
-                          'log10PValue': driver_result_1.log10_p_value.label('log10_p_value'),
-                          'log10FoldChange': driver_result_1.log10_fold_change.label('log10_fold_change'),
-                          'mutationCode': mutation_code_1.code.label('code'),
-                          'mutationId': mutation_1.id.label('mutation_id'),
-                          'numWildTypes': driver_result_1.n_wt.label('n_wt'),
-                          'numMutants': driver_result_1.n_mut.label('n_mut')}
+        'id': driver_result_1.id.label('id'),
+        'pValue': driver_result_1.p_value.label('p_value'),
+        'foldChange': driver_result_1.fold_change.label('fold_change'),
+        'log10PValue': driver_result_1.log10_p_value.label('log10_p_value'),
+        'log10FoldChange': driver_result_1.log10_fold_change.label('log10_fold_change'),
+        'mutationCode': mutation_code_1.code.label('code'),
+        'mutationId': mutation_1.id.label('mutation_id'),
+        'numWildTypes': driver_result_1.n_wt.label('n_wt'),
+        'numMutants': driver_result_1.n_mut.label('n_mut')}
     data_set_core_field_mapping = {'display': data_set_1.display.label('data_set_display'),
                                    'name': data_set_1.name.label('data_set_name'),
                                    'type': data_set_1.data_set_type.label('data_set_type')}
@@ -137,7 +146,7 @@ def build_driver_result_request(
     if min_n_wt or min_n_wt == 0:
         query = query.filter(driver_result_1.n_wt >= min_n_wt)
 
-    if 'dataSet' in requested or data_set:
+    if 'dataSet' in requested or data_set or related:
         is_outer = not bool(data_set)
         data_set_join_condition = build_join_condition(
             data_set_1.id, driver_result_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
@@ -175,33 +184,16 @@ def build_driver_result_request(
             tag_1.id, driver_result_1.tag_id, filter_column=tag_1.name, filter_list=tag)
         query = query.join(tag_1, and_(
             *data_set_join_condition), isouter=is_outer)
+    if related:
+        data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
+        related_tag_1 = aliased(Tag, name='rt')
+
+        related_tag_sub_query = sess.query(related_tag_1.id).filter(
+            related_tag_1.name.in_(related))
+
+        data_set_tag_join_condition = build_join_condition(
+            data_set_to_tag_1.dataset_id, data_set_1.id, data_set_to_tag_1.tag_id, related_tag_sub_query)
+        query = query.join(
+            data_set_to_tag_1, and_(*data_set_tag_join_condition))
 
     return get_pagination_queries(query, paging, distinct, cursor_field=driver_result_1.id)
-
-
-def request_driver_results(*args, **kwargs):
-    '''
-    All positional arguments are required. Positional arguments are:
-        1st position - a set of the requested fields at the root of the graphql request
-        2nd position - a set of the requested fields in the 'dataSet' node of the graphql request. If 'dataSet' is not requested, this will be an empty set.
-        3rd position - a set of the requested fields in the 'feature' node of the graphql request. If 'feature' is not requested, this will be an empty set.
-        4th position - a set of the requested fields in the 'gene' node of the graphql request. If 'gene' is not requested, this will be an empty set.
-        5th position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this will be an empty set.
-
-    All keyword arguments are optional. Keyword arguments are:
-        `data_set` - a list of strings, data set names
-        `entrez` - a list of integers, gene entrez ids
-        `feature` - a list of strings, feature names
-        `max_p_value` - a float, a maximum P value
-        `max_log10_p_value` - a float, a minimum calculated log10 P value
-        `min_fold_change` - a float, a minimum fold change value
-        `min_log10_fold_change` - a float, a minimum calculated log 10 fold change value
-        `min_log10_p_value` - a float, a minimum calculated log 10 P value
-        `min_p_value` - a float, a minimum P value
-        `min_n_mut` - a float, a minimum number of mutants
-        `min_n_wt` - a float, a minimum number of wild types
-        `mutation_code` - a list of strings, mutation codes
-        `tag` - a list of strings, tag names
-    '''
-    query = build_driver_result_request(*args, **kwargs)
-    return query.distinct()
