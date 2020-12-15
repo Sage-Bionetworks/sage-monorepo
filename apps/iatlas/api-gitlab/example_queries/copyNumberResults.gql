@@ -1,4 +1,6 @@
 query CopyNumberResults(
+  $paging: PagingInput
+  $distinct: Boolean
   $dataSet: [String!]
   $feature: [String!]
   $entrez: [Int!]
@@ -11,9 +13,10 @@ query CopyNumberResults(
   $minMeanNormal: Float
   $minMeanCnv: Float
   $minTStat: Float
-  $page: Int
 ) {
   copyNumberResults(
+    paging: $paging
+    distinct: $distinct
     dataSet: $dataSet
     feature: $feature
     entrez: $entrez
@@ -26,7 +29,6 @@ query CopyNumberResults(
     minMeanNormal: $minMeanNormal
     minMeanCnv: $minMeanCnv
     minTStat: $minTStat
-    page: $page
   ) {
     items {
       direction
@@ -43,13 +45,24 @@ query CopyNumberResults(
         hgnc
       }
     }
-    page
-    pages
-    total
+    error
+    paging {
+      type
+      pages
+      total
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+      page
+      limit
+    }
   }
 }
 
-query CopyNumberResults_test(
+query CopyNumberResults(
+  $paging: PagingInput
+  $distinct: Boolean
   $dataSet: [String!]
   $feature: [String!]
   $entrez: [Int!]
@@ -62,9 +75,10 @@ query CopyNumberResults_test(
   $minMeanNormal: Float
   $minMeanCnv: Float
   $minTStat: Float
-  $page: Int
 ) {
   copyNumberResults(
+    paging: $paging
+    distinct: $distinct
     dataSet: $dataSet
     feature: $feature
     entrez: $entrez
@@ -77,25 +91,41 @@ query CopyNumberResults_test(
     minMeanNormal: $minMeanNormal
     minMeanCnv: $minMeanCnv
     minTStat: $minTStat
-    page: $page
   ) {
+    paging {
+      type
+      pages
+      total
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+      page
+      limit
+    }
+    error
     items {
+      id
       direction
+      meanNormal
+      meanCnv
       pValue
       log10PValue
-      meanCnv
-      meanNormal
       tStat
+      dataSet {
+        name
+      }
       tag {
         name
       }
       gene {
         entrez
+        hgnc
+      }
+      feature {
+        name
       }
     }
-    page
-    pages
-    total
   }
 }
 

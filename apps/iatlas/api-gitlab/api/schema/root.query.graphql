@@ -12,6 +12,8 @@ type Query {
     id: ID
     "A list of data set names associated with the copy number results to filter by."
     dataSet: [String!]
+    "A list of 'related' tag names associated with the data set that is associated with the results to filter by."
+    related: [String!]
     "A list of feature names associated with the copy number results to filter by."
     feature: [String!]
     "A list of gene entrez ids associated with the copy number results to filter by."

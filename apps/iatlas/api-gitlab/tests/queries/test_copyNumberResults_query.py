@@ -9,6 +9,7 @@ query CopyNumberResults(
   $paging: PagingInput
   $distinct:Boolean
   $dataSet: [String!]
+  $related: [String!]
   $feature: [String!]
   $entrez: [Int!]
   $tag: [String!]
@@ -25,6 +26,7 @@ query CopyNumberResults(
     paging: $paging
     distinct: $distinct
     dataSet: $dataSet
+    related: $related
     feature: $feature
     entrez: $entrez
     tag: $tag
@@ -133,6 +135,7 @@ def common_query_builder():
             $paging: PagingInput
             $distinct:Boolean
             $dataSet: [String!]
+            $related: [String!]
             $feature: [String!]
             $entrez: [Int!]
             $tag: [String!]
@@ -149,6 +152,7 @@ def common_query_builder():
             paging: $paging
             distinct: $distinct
             dataSet: $dataSet
+            related: $related
             feature: $feature
             entrez: $entrez
             tag: $tag
@@ -310,6 +314,43 @@ def test_copyNumberResults_query_with_passed_data_set(client, common_query_build
     for item in items[0:2]:
         current_data_set = item['dataSet']
         assert current_data_set['name'] == data_set
+
+
+def test_copyNumberResults_query_with_passed_related(client, common_query_builder, data_set, entrez, min_t_stat, cnr_tag_name, related):
+    query = common_query_builder("""{
+            items { tStat }
+        }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'dataSet': [data_set],
+            'entrez': [entrez],
+            'minTStat': min_t_stat,
+            'related': ['does_not_exist'],
+            'tag': [cnr_tag_name]
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) == 0
+
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'dataSet': [data_set],
+            'entrez': [entrez],
+            'minTStat': min_t_stat,
+            'related': [related],
+            'tag': [cnr_tag_name]
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['copyNumberResults']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        assert result['tStat'] >= min_t_stat
 
 
 def test_copyNumberResults_query_with_passed_entrez(client, common_query_builder, data_set, entrez, cnr_feature):

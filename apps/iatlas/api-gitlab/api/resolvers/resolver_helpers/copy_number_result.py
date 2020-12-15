@@ -1,7 +1,7 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import CopyNumberResult, Dataset, Feature, Gene, Tag
+from api.db_models import CopyNumberResult, Dataset, DatasetToTag, Feature, Gene, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
@@ -38,7 +38,7 @@ def build_cnr_graphql_response(copy_number_result):
 
 
 def build_copy_number_result_request(
-        requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, direction=None, distinct=False, entrez=None, feature=None, max_p_value=None, max_log10_p_value=None, min_log10_p_value=None, min_mean_cnv=None, min_mean_normal=None, min_p_value=None, min_t_stat=None, paging=None, tag=None):
+        requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, direction=None, distinct=False, entrez=None, feature=None, max_p_value=None, max_log10_p_value=None, min_log10_p_value=None, min_mean_cnv=None, min_mean_normal=None, min_p_value=None, min_t_stat=None, paging=None, related=None, tag=None):
     """
     Builds a SQL request.
     """
@@ -119,7 +119,7 @@ def build_copy_number_result_request(
     if min_t_stat or min_t_stat == 0:
         query = query.filter(copy_number_result_1.t_stat >= min_t_stat)
 
-    if data_set or 'dataSet' in requested:
+    if data_set or 'dataSet' in requested or related:
         is_outer = not bool(data_set)
         data_set_join_condition = build_join_condition(
             data_set_1.id, copy_number_result_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
@@ -146,5 +146,17 @@ def build_copy_number_result_request(
             tag_1.id, copy_number_result_1.tag_id, filter_column=tag_1.name, filter_list=tag)
         query = query.join(tag_1, and_(
             *data_set_join_condition), isouter=is_outer)
+
+    if related:
+        data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
+        related_tag_1 = aliased(Tag, name='rt')
+
+        related_tag_sub_query = sess.query(related_tag_1.id).filter(
+            related_tag_1.name.in_(related))
+
+        data_set_tag_join_condition = build_join_condition(
+            data_set_to_tag_1.dataset_id, data_set_1.id, data_set_to_tag_1.tag_id, related_tag_sub_query)
+        query = query.join(
+            data_set_to_tag_1, and_(*data_set_tag_join_condition))
 
     return get_pagination_queries(query, paging, distinct, cursor_field=copy_number_result_1.id)
