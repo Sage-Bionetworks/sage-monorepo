@@ -50,11 +50,11 @@ germline_gwas_server <- function(id, cohort_obj){
 
       selected_chr <- reactive({
         shiny::validate(
-          shiny::need(selected_chr_reactive$ev %in% c(1:22), "Data available for chromossomes 1 to 22.")
+          shiny::need(selected_chr_reactive$ev %in% c(1:22), "Data available for chromosomes 1 to 22.")
         )
         switch(
           input$selection,
-          "See all chromossomes" = c(1:22),
+          "See all chromosomes" = c(1:22),
           "Select a region" = selected_chr_reactive$ev
         )
       })
@@ -78,7 +78,7 @@ germline_gwas_server <- function(id, cohort_obj){
         }
       })
 
-      #reset region with change of chromossome or selection of all chromossomes
+      #reset region with change of chromosome or selection of all chromosomes
       toReset <- reactive({
         list(input$chr,
              input$selection)
@@ -95,7 +95,7 @@ germline_gwas_server <- function(id, cohort_obj){
         shiny::req(input$selection == "Select a region",
                    chr_size())
 
-        if(is.null(clicked_int$ev)){ #default option is min and max positions for the chromossome
+        if(is.null(clicked_int$ev)){ #default option is min and max positions for the chromosome
           chr_range$range = chr_size()
         } else { #Update range after a zoom in the plot - need to compare with chr_size because plot has x-axis longer than chr_size
           chr_range$range = c((floor(max(chr_size()[1], clicked_int$ev$`xaxis.range[0]`))),
@@ -117,7 +117,7 @@ germline_gwas_server <- function(id, cohort_obj){
       selected_min <- reactive({
         switch(
           input$selection,
-          "See all chromossomes" = 1,
+          "See all chromosomes" = 1,
           "Select a region" = chr_range$range[1]
         )
       })
@@ -125,7 +125,7 @@ germline_gwas_server <- function(id, cohort_obj){
       selected_max <- reactive({
         switch(
           input$selection,
-          "See all chromossomes" = 245246279,
+          "See all chromosomes" = 245246279,
           "Select a region" = chr_range$range[2]
         )
       })
@@ -164,7 +164,7 @@ germline_gwas_server <- function(id, cohort_obj){
 
       axisdf <- eventReactive(gwas_mht(), {# Prepare X axis
         shiny::req(gwas_mht(), subset_gwas())
-        if(input$selection == "See all chromossomes"){
+        if(input$selection == "See all chromosomes"){
           gwas_mht() %>%
             dplyr::group_by(chr_col) %>%
             dplyr::summarize(center=( max(x_col) + min(x_col) ) / 2 ) %>%
@@ -180,12 +180,12 @@ germline_gwas_server <- function(id, cohort_obj){
       })
 
       x_title <- reactive({
-        if(input$selection == "See all chromossomes") "Chromossome"
+        if(input$selection == "See all chromosomes") "Chromosome"
         else ""
       })
 
       plot_title <- reactive({
-        if(input$selection == "See all chromossomes") ""
+        if(input$selection == "See all chromosomes") ""
         else paste0("chr", selected_chr(), ":", scales::comma(selected_min()), "-", scales::comma(selected_max()),
                                                    "<a href = 'http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr", input$chr, ":", chr_range$range[1], "-", chr_range$range[2],
                                                    "'> - View on UCSC Genome Browser</a>")
