@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+.DS_Store
 rsconnect/
 tests/testthat/helper-a_use_dev_globals.R
 .mailmap
