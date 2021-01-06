@@ -13,3 +13,4 @@ Immune Subtype Classifier	immune_subtype_classifier	tool	Use an ensemble model t
 Cohort Selection	cohort_selection	other	
 Data Description	data_info	other	
 Test	test_ici	ici	Test
+ICI Datasets Overview	ici_overview	ici	Explore categories and groups of the available datasets.
