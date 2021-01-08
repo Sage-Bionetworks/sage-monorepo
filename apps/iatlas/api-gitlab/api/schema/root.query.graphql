@@ -95,13 +95,7 @@ type Query {
   ): DriverResult!
 
   """
-  The "edges" query accepts:
-
-    - "maxScore" the maximum score value to return
-    - "minScore" the minimum score value to return
-    - "node1" a list of starting node names
-    - "node2" a list of ending node names
-    - "page", the page of results to get. Defaults to 1 (the first page) with a maximum of 100,000 rows return.
+  The "edges" query
 
   If no arguments are passed, this will return all edges (please note, there will be a LOT of results).
   """
@@ -110,179 +104,191 @@ type Query {
     paging: PagingInput
     "A boolean specifying whether or not duplicates should be filtered out. Default is false. Set to 'true' only when necessary, as it negatively impacts performance."
     distinct: Boolean
+    "The maximum score value to return."
     maxScore: Float
+    "The minimum score value to return."
     minScore: Float
+    "A list of starting node names."
     node1: [String!]
+    "A list of ending node names."
     node2: [String!]
   ): EdgeResult!
 
   """
-  The "features" query accepts:
-
-    - "dataSet", a list of data set names associated with the features to filter by.
-    - "related", a list of "related" tag names associated with the data set that is associated with the features to filter by.
-    - "tag", a list of tag names associated with the sample that is associated with the features to filter by.
-    - "feature", a list of feature names to filter by.
-    - "featureClass", a list of feature class names associated with the features to filter by.
-    - "sample", a list of sample names associated with the feature to filter by.
+  The "features" query
 
   If no arguments are passed, this will return all features.
 
   See also: featuresByClass and featuresByTag
   """
   features(
+    "A list of data set names associated with the features to filter by."
     dataSet: [String!]
+    "A list of 'related' tag names associated with the data set that is associated with the features to filter by."
     related: [String!]
+    "A list of tag names associated with the sample that is associated with the features to filter by."
     tag: [String!]
+    "A list of feature names to filter by."
     feature: [String!]
+    "A list of feature class names associated with the features to filter by."
     featureClass: [String!]
+    "A list of sample names associated with the feature to filter by."
     sample: [String!]
+    "The maximum value (relationship between the feature and the sample) to filter by."
     maxValue: Float
+    "The minimum value (relationship between the feature and the sample) to filter by."
     minValue: Float
   ): [Feature!]!
 
   """
-  The "featuresByClass" query accepts:
-
-    - "dataSet", a list of data set names associated with the features to filter by.
-    - "related", a list of "related" tag names associated with the data set that is associated with the features to filter by.
-    - "tag", a list of tag names associated with the sample that is associated with the features to filter by.
-    - "feature", a list of feature names to filter by.
-    - "featureClass", a list of feature class names associated with the features to filter by.
-    - "sample", a list of sample names associated with the feature to filter by.
+  The "featuresByClass" query
 
   If no arguments are passed, this will return all features organized by feature class.
   """
   featuresByClass(
+    "A list of data set names associated with the features to filter by."
     dataSet: [String!]
+    "A list of 'related' tag names associated with the data set that is associated with the features to filter by."
     related: [String!]
+    "A list of tag names associated with the sample that is associated with the features to filter by."
     tag: [String!]
+    "A list of feature names to filter by."
     feature: [String!]
+    "A list of feature class names associated with the features to filter by."
     featureClass: [String!]
+    "A list of sample names associated with the feature to filter by."
     sample: [String!]
+    "The maximum value (relationship between the feature and the sample) to filter by."
     maxValue: Float
+    "The minimum value (relationship between the feature and the sample) to filter by."
     minValue: Float
   ): [FeaturesByClass!]!
 
   """
-  The "featuresByTag" query accepts:
-
-    - "dataSet", a list of data set names associated with the features to filter by.
-    - "related", a list of "related" tag names associated with the data set that is associated with the features to filter by.
-    - "tag", a list of tag names associated with the sample that is associated with the features to filter by.
-    - "feature", a list of feature names to filter by.
-    - "featureClass", a list of feature class names associated with the features to filter by.
-    - "sample", a list of sample names associated with the feature to filter by.
+  The "featuresByTag" query
 
   If no arguments are passed, this will return all features organized by tag.
   """
   featuresByTag(
+    "A list of data set names associated with the features to filter by."
     dataSet: [String!]
+    "A list of 'related' tag names associated with the data set that is associated with the features to filter by."
     related: [String!]
+    "A list of tag names associated with the sample that is associated with the features to filter by."
     tag: [String!]
+    "A list of feature names to filter by."
     feature: [String!]
+    "A list of feature class names associated with the features to filter by."
     featureClass: [String!]
+    "A list of sample names associated with the feature to filter by."
     sample: [String!]
+    "The maximum value (relationship between the feature and the sample) to filter by."
     maxValue: Float
+    "The minimum value (relationship between the feature and the sample) to filter by."
     minValue: Float
   ): [FeaturesByTag!]!
 
   """
-  The "gene" query accepts:
-
-    - "entrez", the entrez id of the gene to look up.
-    - "sample", a list of sample names associated with the gene (used to look up RNA sequence expressions).
+  The "gene" query
   """
-  gene(entrez: Int!, sample: [String!]): Gene
-
-  """
-  The "geneFamilies" query accepts:
-
-    - "name", a list of names of the gene families to look up.
-  """
-  geneFamilies(name: [String!]): [GeneFamily!]
+  gene(
+    "The entrez id of the gene to look up."
+    entrez: Int!
+    "A list of sample names associated with the gene (used to look up RNA sequence expressions)."
+    sample: [String!]
+  ): Gene
 
   """
-  The "geneTypes" query accepts:
-
-    - "name", a list of names of the gene functions to look up.
+  The "geneFamilies" query
   """
-  geneFunctions(name: [String!]): [GeneFunction!]
+  geneFamilies(
+    "A list of names of the gene families to look up."
+    name: [String!]
+  ): [GeneFamily!]
 
   """
-  The "genes" query accepts:
+  The "geneTypes" query
+  """
+  geneFunctions(
+    "A list of names of the gene functions to look up."
+    name: [String!]
+  ): [GeneFunction!]
 
-    - "dataSet", a list of data set names related to samples that are related to the genes to look up.
-    - "entrez", a list of entrez ids for the genes to look up.
-    - "geneType", a list of gene types related to the genes to look up.
-    - "maxRnaSeqExp", the maximum RNA Sequence Expression value related to the genes to look up.
-    - "minRnaSeqExp", the minimum RNA Sequence Expression value related to the genes to look up.
-    - "related", a list of tag names related to data sets to filter by.
-    - "sample", a list of sample names associated with the gene (used to look up RNA sequence expressions).
-    - "tag", a list of tag names related to samples that are related to the genes to look up.
+  """
+  The "genes" query
 
   If no arguments are passed, this will return all genes.
   """
   genes(
+    "A list of data set names related to samples that are related to the genes to look up."
     dataSet: [String!]
+    "A list of entrez ids for the genes to look up."
     entrez: [Int!]
+    "A list of gene types related to the genes to look up."
     geneType: [String!]
+    "The maximum RNA Sequence Expression value related to the genes to look up."
     maxRnaSeqExpr: Float
+    "The minimum RNA Sequence Expression value related to the genes to look up."
     minRnaSeqExpr: Float
+    "A list of tag names related to data sets to filter by."
     related: [String!]
+    "A list of sample names associated with the gene (used to look up RNA sequence expressions)."
     sample: [String!]
+    "A list of tag names related to samples that are related to the genes to look up."
     tag: [String!]
   ): [Gene!]!
 
   """
-  The "genesByTag" query accepts:
-
-    - "dataSet", a list of data set names to filter by.
-    - "entrez", a list of gene entrez ids to filter by.
-    - "feature", a list of feature names to filter by.
-    - "featureClass", a list of feature class names associated with the features to filter by.
-    - "geneType", a list of gene type names associated with the genes to filter by.
-    - "maxRnaSeqExp", the maximum RNA Sequence Expression value related to the genes to look up.
-    - "minRnaSeqExp", the minimum RNA Sequence Expression value related to the genes to look up.
-    - "related", a list of tag names associated with the data sets to filter by.
-    - "sample", a list of sample names associated with the gene (used to look up RNA sequence expressions).
-    - "tag", a list of tag names associated with the related to filter by.
+  The "genesByTag" query
 
   If no arguments are passed, this will return all genes organized by tag.
   """
   genesByTag(
+    "A list of data set names to filter by."
     dataSet: [String!]
+    "A list of gene entrez ids to filter by."
     entrez: [Int!]
+    "A list of feature names to filter by."
     feature: [String!]
+    "A list of feature class names associated with the features to filter by."
     featureClass: [String!]
+    "A list of gene type names associated with the genes to filter by."
     geneType: [String!]
+    "The maximum RNA Sequence Expression value related to the genes to look up."
     maxRnaSeqExpr: Float
+    "The minimum RNA Sequence Expression value related to the genes to look up."
     minRnaSeqExpr: Float
+    "A list of tag names associated with the data sets to filter by."
     related: [String!]
+    "A list of sample names associated with the gene (used to look up RNA sequence expressions)."
     sample: [String!]
+    "A list of tag names associated with the related to filter by."
     tag: [String!]
   ): [GenesByTag!]!
 
   """
-  The "geneTypes" query accepts:
-
-    - "name", a list of names of the gene types to look up.
+  The "geneTypes" query
   """
-  geneTypes(name: [String!]): [GeneType!]!
-
-  """
-  The "ImmuneCheckpoints" query accepts:
-
-    - "name", a list of names of the immune checkpoints to look up.
-  """
-  immuneCheckpoints(name: [String!]): [ImmuneCheckpoint!]
+  geneTypes(
+    "A list of names of the gene types to look up."
+    name: [String!]
+  ): [GeneType!]!
 
   """
-  The "methodTags" query accepts:
-
-    - "name", a list of names of the method tags to look up.
+  The "ImmuneCheckpoints" query
   """
-  methodTags(name: [String!]): [MethodTag!]!
+  immuneCheckpoints(
+    "A list of names of the immune checkpoints to look up."
+    name: [String!]
+  ): [ImmuneCheckpoint!]
+
+  """
+  The "methodTags" query
+  """
+  methodTags(
+    "A list of names of the method tags to look up."
+    name: [String!]
+  ): [MethodTag!]!
 
   """
   The "mutations" type
@@ -384,85 +390,86 @@ type Query {
   ): NodeResult
 
   """
-  The "patients" query accepts:
-
-    - "barcode", a list of patient barcodes of the patients to look up.
-    - "dataSet", a list of data set names associated with the samples related to the patient to filter by
-    - "ethnicity", a list of patient ethnicities to filter the patients by
-    - "gender", a list of patient genders to filter the patients by
-    - "maxAgeAtDiagnosis", a number representing the maximum age of the patient at the time of diagnosis to filter the patients by
-    - "maxHeight", a number representing the maximum patient height to filter the patients by
-    - "maxHeight", a number representing the maximum patient weight to filter the patients by
-    - "minAgeAtDiagnosis", a number representing the minimum age of the patient at the time of diagnosis to filter the patients by
-    - "minHeight", a number representing the minimum patient height to filter the patients by
-    - "minWeight", a number representing the minimum patient weight to filter the patients by
-    - "race", a list of patient races to filter the patients by
-    - "sample", a list of sample names to filter the patients by
-    - "slide", a list of slide names to filter the patients by
+  The "patients" query
 
   If no arguments are passed, this will return all patients.
   """
   patients(
+    "A list of patient barcodes of the patients to look up."
     barcode: [String!]
+    "A list of data set names associated with the samples related to the patient to filter by"
     dataSet: [String!]
+    "A list of patient ethnicities to filter the patients by"
     ethnicity: [EthnicityEnum!]
+    "A list of patient genders to filter the patients by"
     gender: [GenderEnum!]
+    "A number representing the maximum age of the patient at the time of diagnosis to filter the patients by"
     maxAgeAtDiagnosis: Int
+    "A number representing the maximum patient height to filter the patients by"
     maxHeight: Float
+    "A number representing the maximum patient weight to filter the patients by"
     maxWeight: Float
+    "A number representing the minimum age of the patient at the time of diagnosis to filter the patients by"
     minAgeAtDiagnosis: Int
+    "A number representing the minimum patient height to filter the patients by"
     minHeight: Float
+    "A number representing the minimum patient weight to filter the patients by"
     minWeight: Float
+    "A list of patient races to filter the patients by"
     race: [RaceEnum!]
+    "A list of sample names to filter the patients by"
     sample: [String!]
+    "A list of slide names to filter the patients by"
     slide: [String!]
   ): [Patient!]!
 
   """
-  The "Pathways" query accepts:
-
-    - "name", a list of names of the pathways to look up.
+  The "Pathways" query
   """
-  pathways(name: [String!]): [Pathway!]
+  pathways(
+    "A list of names of the pathways to look up."
+    name: [String!]
+  ): [Pathway!]
 
   """
-  The "related" query accepts:
-
-    - "dataSet", a list of data set names
-    - "related", a list of tag (related) names related to the data set(s)
+  The "related" query
 
   If no filters are passed, this will return all tags related to data sets.
   """
-  related(dataSet: [String!], related: [String!]): [RelatedByDataSet!]!
+  related(
+    "A list of data set names."
+    dataSet: [String!]
+    "A list of tag (related) names related to the data set(s)."
+    related: [String!]
+  ): [RelatedByDataSet!]!
 
   """
-  The "samples" query accepts:
-
-    - "ethnicity", a list of patient ethnicities to filter the samples by
-    - "gender", a list of patient genders to filter the samples by
-    - "maxAgeAtDiagnosis", a number representing the maximum age of the patient at the time of diagnosis to filter the samples by
-    - "maxHeight", a number representing the maximum patient height to filter the samples by
-    - "maxHeight", a number representing the maximum patient weight to filter the samples by
-    - "minAgeAtDiagnosis", a number representing the minimum age of the patient at the time of diagnosis to filter the samples by
-    - "minHeight", a number representing the minimum patient height to filter the samples by
-    - "minWeight", a number representing the minimum patient weight to filter the samples by
-    - "name", a list of sample names to filter the samples by
-    - "patient", a list of patient barcodes to filter the samples by
-    - "race", a list of patient races to filter the samples by
+  The "samples" query
 
   If no filters are passed, this will return all samples.
   """
   samples(
+    "A list of patient ethnicities to filter the samples by"
     ethnicity: [EthnicityEnum!]
+    "A list of patient genders to filter the samples by"
     gender: [GenderEnum!]
+    "A number representing the maximum age of the patient at the time of diagnosis to filter the samples by"
     maxAgeAtDiagnosis: Int
+    "A number representing the maximum patient height to filter the samples by"
     maxHeight: Float
+    "A number representing the maximum patient weight to filter the samples by"
     maxWeight: Float
+    "A number representing the minimum age of the patient at the time of diagnosis to filter the samples by"
     minAgeAtDiagnosis: Int
+    "A number representing the minimum patient height to filter the samples by"
     minHeight: Float
+    "A number representing the minimum patient weight to filter the samples by"
     minWeight: Float
+    "A list of sample names to filter the samples by"
     name: [String!]
+    "A list of patient barcodes to filter the samples by"
     patient: [String!]
+    "A list of patient races to filter the samples by"
     race: [RaceEnum!]
   ): [Sample!]!
 
@@ -511,110 +518,110 @@ type Query {
   ): [SampleByMutationStatus!]!
 
   """
-  The "samplesByTag" query accepts:
-
-    - "dataSet", a list of data set names
-    - "ethnicity", a list of patient ethnicities to filter the samples by
-    - "feature", a list of feature names
-    - "featureClass", a list of feature class names
-    - "gender", a list of patient genders to filter the samples by
-    - "maxAgeAtDiagnosis", a number representing the maximum age of the patient at the time of diagnosis to filter the samples by
-    - "maxHeight", a number representing the maximum patient height to filter the samples by
-    - "maxHeight", a number representing the maximum patient weight to filter the samples by
-    - "minAgeAtDiagnosis", a number representing the minimum age of the patient at the time of diagnosis to filter the samples by
-    - "minHeight", a number representing the minimum patient height to filter the samples by
-    - "minWeight", a number representing the minimum patient weight to filter the samples by
-    - "patient", a list of patient barcodes
-    - "race", a list of patient races to filter the samples by
-    - "related", a list of tag names related to the data set(s)
-    - "sample", a list of sample names
-    - "tag", a list of tag names
+  The "samplesByTag" query
 
   If no filters are passed, this will return all samples organized by tag.
   """
   samplesByTag(
+    "A list of data set names."
     dataSet: [String!]
+    "A list of patient ethnicities to filter the samples by."
     ethnicity: [EthnicityEnum!]
+    "A list of feature names."
     feature: [String!]
+    "A list of feature class names."
     featureClass: [String!]
+    "A list of patient genders to filter the samples by."
     gender: [GenderEnum!]
+    "A number representing the maximum age of the patient at the time of diagnosis to filter the samples by."
     maxAgeAtDiagnosis: Int
+    "A number representing the maximum patient height to filter the samples by."
     maxHeight: Float
+    "A number representing the maximum patient weight to filter the samples by."
     maxWeight: Float
+    "A number representing the minimum age of the patient at the time of diagnosis to filter the samples by."
     minAgeAtDiagnosis: Int
+    "A number representing the minimum patient height to filter the samples by."
     minHeight: Float
+    "A number representing the minimum patient weight to filter the samples by."
     minWeight: Float
+    "A list of sample names."
     name: [String!]
+    "A list of patient barcodes."
     patient: [String!]
+    "A list of patient races to filter the samples by."
     race: [RaceEnum!]
+    "A list of tag names related to the data set(s)."
     related: [String!]
+    "A list of tag names."
     tag: [String!]
   ): [SamplesByTag!]!
 
   """
-  The "slides" query accepts:
-
-    - "barcode", a list of patient barcodes to filter the slides by
-    - "ethnicity", a list of patient ethnicities to filter the slides by
-    - "gender", a list of patient genders to filter the slides by
-    - "maxAgeAtDiagnosis", a number representing the maximum age of the patient at the time of diagnosis to filter the slides by
-    - "maxHeight", a number representing the maximum patient height to filter the slides by
-    - "maxHeight", a number representing the maximum patient weight to filter the slides by
-    - "minAgeAtDiagnosis", a number representing the minimum age of the patient at the time of diagnosis to filter the slides by
-    - "minHeight", a number representing the minimum patient height to filter the slides by
-    - "minWeight", a number representing the minimum patient weight to filter the slides by
-    - "name", a list of slide names to look up.
-    - "race", a list of patient races to filter the slides by
-    - "sample", a list of samples related to the slides to filter by
+  The "slides" query
 
   If no arguments are passed, this will return all slides.
   """
   slides(
+    "A list of patient barcodes to filter the slides by."
     barcode: [String!]
+    "A list of patient ethnicities to filter the slides by."
     ethnicity: [EthnicityEnum!]
+    "A list of patient genders to filter the slides by."
     gender: [GenderEnum!]
+    "A number representing the maximum age of the patient at the time of diagnosis to filter the slides by."
     maxAgeAtDiagnosis: Int
+    "A number representing the maximum patient height to filter the slides by."
     maxHeight: Float
+    "A number representing the maximum patient weight to filter the slides by."
     maxWeight: Float
+    "A number representing the minimum age of the patient at the time of diagnosis to filter the slides by."
     minAgeAtDiagnosis: Int
+    "A number representing the minimum patient height to filter the slides by."
     minHeight: Float
+    "A number representing the minimum patient weight to filter the slides by."
     minWeight: Float
+    "A list of slide names to look up."
     name: [String!]
+    "A list of patient races to filter the slides by."
     race: [RaceEnum!]
+    "A list of samples related to the slides to filter by."
     sample: [String!]
   ): [Slide!]!
 
   """
-  The "superCategories" query accepts:
-
-    - "name", a list of names of the super categories to look up.
+  The "superCategories" query
   """
-  superCategories(name: [String!]): [SuperCategory!]!
+  superCategories(
+    "A list of names of the super categories to look up."
+    name: [String!]
+  ): [SuperCategory!]!
 
   """
-  The "tags" query accepts:
-
-    - "dataSet", a list of data set names
-    - "related", a list of tag names related to the data set(s)
-    - "tag", a list of tag names
-    - "feature", a list of feature names
-    - "featureClass", a list of feature class names
+  The "tags" query
   """
   tags(
+    "A list of data set names."
     dataSet: [String!]
+    "A list of tag names related to the data set(s)."
     related: [String!]
+    "A list of tag names."
     tag: [String!]
+    "A list of feature names."
     feature: [String!]
+    "A list of feature class names."
     featureClass: [String!]
+    "A list of sample names."
     sample: [String!]
   ): [Tag!]!
 
   """
-  The "therapyTypes" query accepts:
-
-    - "name", a list of names of the therapy types to look up.
+  The "therapyTypes" query\
   """
-  therapyTypes(name: [String!]): [TherapyType!]!
+  therapyTypes(
+    "A list of names of the therapy types to look up."
+    name: [String!]
+  ): [TherapyType!]!
 
   """
   A simple test query that is independent of the database.

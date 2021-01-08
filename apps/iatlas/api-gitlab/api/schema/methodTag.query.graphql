@@ -1,10 +1,9 @@
 """
-The "MethodTag" type may return:
-
-- The "name" of the Super category
-- "features", a list of Features associated with the Method Tag
+The "MethodTag" type
 """
 type MethodTag {
+  "The name of the MethodTag"
   name: String!
+  "A list of Features associated with the Method Tag"
   features: [SimpleFeature]!
 }

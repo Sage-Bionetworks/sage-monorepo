@@ -14,47 +14,45 @@ The "RaceEnum" scalar will always be either `american indian or alaska native`, 
 scalar RaceEnum
 
 """
-The "Patient" type may return:
-
-- "ageAtDiagnosis" is the age of the patient at the time of diagnosis
-- The "barcode" of the patient
-- The "ethnicity" of the patient
-- The "gender" of the patient
-- The "height" of the patient
-- The "race" of the patient
-- The "weight" of the patient
-- A list of "samples" associated with the patient
-- A list of "slides" associated with the patient
+The "Patient" type
 """
 type Patient {
+  "The age of the patient at the time of diagnosis."
   ageAtDiagnosis: Int
+  "The barcode of the patient."
   barcode: String!
+  "The ethnicity of the patient."
   ethnicity: EthnicityEnum
+  "The gender of the patient."
   gender: GenderEnum
+  "The height of the patient."
   height: Float
+  "The race of the patient."
   race: RaceEnum
+  "The weight of the patient."
   weight: Float
+  "A list of samples associated with the patient."
   samples: [String!]!
+  "A list of slides associated with the patient."
   slides: [SimpleSlide!]!
 }
 
 """
-The "SimplePatient" type may return:
-
-- "ageAtDiagnosis" is the age of the patient at the time of diagnisis
-- The "barcode" of the patient
-- The "ethnicity" of the patient
-- The "gender" of the patient
-- The "height" of the patient
-- The "race" of the patient
-- The "weight" of the patient
+The "SimplePatient" type
 """
 type SimplePatient {
+  "The age of the patient at the time of diagnosis."
   ageAtDiagnosis: Int
+  "The barcode of the patient."
   barcode: String!
+  "The ethnicity of the patient."
   ethnicity: EthnicityEnum
+  "The gender of the patient."
   gender: GenderEnum
+  "The height of the patient."
   height: Float
+  "The race of the patient."
   race: RaceEnum
+  "The weight of the patient."
   weight: Float
 }

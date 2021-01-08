@@ -1,10 +1,9 @@
 """
-The "Pathway" type may return:
-
-- The "name" of the Pathway
-- A list of Genes associated with the Pathway
+The "Pathway" type
 """
 type Pathway {
+  "The name of the Pathway"
   name: String!
+  "A list of Genes associated with the Pathway"
   genes: [SimpleGene]!
 }

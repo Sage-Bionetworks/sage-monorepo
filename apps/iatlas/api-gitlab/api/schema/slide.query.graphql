@@ -1,23 +1,21 @@
 """
-The "Slide" type may return:
-
-- The  "name" of the slide
-- The  "description" of the slide
-- The  "patient" associated to the slide
+The "Slide" type
 """
 type Slide {
+  "The name of the slide."
   name: String!
+  "The description of the slide."
   description: String
+  "The patient associated to the slide."
   patient: Patient
 }
 
 """
-The "SimpleSlide" type may return:
-
-- The  "name" of the slide
-- The  "description" of the slide
+The "SimpleSlide" type
 """
 type SimpleSlide {
+  "The name of the slide."
   name: String!
+  "The description of the slide."
   description: String
 }

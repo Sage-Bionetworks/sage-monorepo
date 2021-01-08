@@ -17,7 +17,6 @@ simple_feature_request_fields = {'display',
 feature_request_fields = simple_feature_request_fields.union({'class',
                                                               'methodTag',
                                                               'samples',
-                                                              'value',
                                                               'valueMax',
                                                               'valueMin'})
 
@@ -41,7 +40,6 @@ def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
                 'value': get_value(sample, 'value')
             } for sample in samples],
             'unit': get_value(feature, 'unit'),
-            'value': get_value(feature, 'value'),
             'valueMax': max_min.get('value_max') if max_min else None,
             'valueMin': max_min.get('value_min') if max_min else None
         }
