@@ -5,7 +5,6 @@
 #' @param heritablity_data A tibble
 #' @param parameter Parameter to be used for selection of results (eg, ancestry cluster, immune feature)
 #' @param group Specific group, in the selected parameter, to be displayed (eg. European - ancestry cluster, NK cells - immune feature)
-#' @param strat_immune Should the plots show the results of analysis that took into consideration Immune Subtypes? (only available for European ancestry cluster)
 #' @param pval_thres Maximun p-value to be included
 #' @importFrom magrittr %>%
 
@@ -13,33 +12,30 @@ create_heritability_df <- function(
   heritablity_data,
   parameter = "cluster",
   group = "European",
-  strat_immune = FALSE,
-  pval_thres = 0.05
+  pval_thres = 0.05,
+  ancestry_labels
 ){
-  if(parameter == "cluster" & group == "European" & strat_immune == TRUE){
+
+  ancestry_df <- names(ancestry_labels)
+  names(ancestry_df) <- ancestry_labels
+
     df <- heritablity_data %>%
-      dplyr::filter(cluster == "European_immune")
-  }else{
-    df <- heritablity_data %>%
-      dplyr::filter(.[[parameter]] == group)
-  }
-  #creating the lable for plot
-  df <- df %>%
-    dplyr::filter(pval <= pval_thres) %>%
-    create_plotly_label(
-      ., paste(.$display, "- ", group, "Ancestry"),
-      paste("\n Immune Trait Category:",.$Annot.Figure.ImmuneCategory, "\n Immune Trait Module:", .$Annot.Figure.ImmuneModule),
-      c("Variance", "SE", "pval","FDR"),
-      title = "Immune Trait"
-    )
+      dplyr::filter(.[[parameter]] == group) %>%
+      dplyr::filter(pval <= pval_thres) %>%
+      dplyr::filter(Variance >= 0) %>%
+      iatlas.app::create_plotly_label(
+        ., paste(.$display, "- ", ancestry_df[cluster], "Ancestry"),
+        paste("\n Immune Trait Category:",.$Annot.Figure.ImmuneCategory, "\n Immune Trait Module:", .$Annot.Figure.ImmuneModule),
+        c("Variance", "SE", "pval","FDR"),
+        title = "Immune Trait"
+      )
 
   #creating the y label
   if(parameter == "cluster") df <- df %>% mutate(ylabel = display)
   else if (parameter == "Annot.Figure.ImmuneCategory" | parameter == "Annot.Figure.ImmuneModule")
-    df <- df %>% mutate(ylabel = paste(cluster, display, sep = " - "))
-  else  df <- df %>% mutate(ylabel = paste(cluster, .[[parameter]], sep = " - "))
+    df <- df %>% mutate(ylabel = paste(ancestry_df[cluster], display, sep = " - "))
+  else  df <- df %>% mutate(ylabel = paste(ancestry_df[cluster], .[[parameter]], sep = " - "))
 }
-
 
 format_heritability_plot <- function(p, hdf, fdr = FALSE){
   p <- p %>%
