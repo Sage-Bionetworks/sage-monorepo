@@ -47,7 +47,7 @@ def test_gene_functions_query_with_passed_gene_function_no_genes(client, gene_fu
         assert result['name'] == gene_function
 
 
-def test_gene_functionss_query_no_args(client):
+def test_gene_functions_query_no_args(client):
     query = """query geneFunctions($name: [String!]) {
         geneFunctions(name: $name) { name }
     }"""
