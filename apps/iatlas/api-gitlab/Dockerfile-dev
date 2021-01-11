@@ -19,7 +19,7 @@ RUN apk add --no-cache --virtual .build-deps \
     linux-headers \
     && pip install --no-cache-dir -r requirements.txt \
     ### These are only insalled in the development environment.
-    && pip install --no-cache-dir requirements-dev.txt \
+    && pip install --no-cache-dir -r requirements-dev.txt \
     && apk del --no-cache .build-deps
 
 CMD ["sh", "-c", "flask run --host 0.0.0.0 --port ${FLASK_RUN_PORT}"]
