@@ -8,12 +8,16 @@ germline_heritability_server <- function(id, cohort_obj){
         feather::read_feather(paste0(GERMLINE_PATH, "tcga_heritability.feather"))
       })
 
+      ancestry_options <- reactive({
+        c("Ad Mixed American" = "American", "African" = "African", "Asian" = "Asian", "European"= "European", "European by Immune Subtype" = "European_immune")
+      })
+
       ns <- session$ns
 
       output$selection_options <- renderUI({
         shiny::req(input$parameter)
 
-        if(input$parameter == "cluster") opt <- c("Ad Mixed American" = "American", "African" = "African", "Asian" = "Asian", "European"= "European")
+        if(input$parameter == "cluster") opt <- ancestry_options()
 
         if(input$parameter == "display"){
           opt <- heritability() %>%
@@ -32,7 +36,7 @@ germline_heritability_server <- function(id, cohort_obj){
 
       plot_title <- reactive({
         if(input$parameter == "cluster"){
-          if( is.null( input$byImmune) |  input$byImmune == 0) "V(Genotype)/Vp"
+          if(input$group != "European_immune") "V(Genotype)/Vp"
           else "V(Genotype x Immune Subtype)/Vp"
         } else{
           paste("V(Genotype)/Vp", input$group, sep = " - ")
@@ -45,8 +49,8 @@ germline_heritability_server <- function(id, cohort_obj){
             heritablity_data = heritability(),
             parameter = input$parameter,
             group = input$group,
-            strat_immune = input$byImmune,
-            pval_thres =input$pvalue
+            pval_thres =input$pvalue,
+            ancestry_labels = ancestry_options()
           )
       })
 

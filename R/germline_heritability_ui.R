@@ -22,9 +22,9 @@ germline_heritability_ui <- function(id){
                                   ),
                                   selected = "Ancestry"),
             shiny::uiOutput(ns("selection_options")),
-            shiny::conditionalPanel(paste0("input['", ns("group"), "'] == 'European'"),
-                                    shiny::checkboxInput(ns("byImmune"),
-                                                         "Account for interaction betweem germline genotypes and immune subtypes")),
+            # shiny::conditionalPanel(paste0("input['", ns("group"), "'] == 'European'"),
+            #                         shiny::checkboxInput(ns("byImmune"),
+            #                                              "Account for interaction betweem germline genotypes and immune subtypes")),
             shiny::sliderInput(ns("pvalue"),
                                "Select p-value threshold",
                                min = 0, max = 0.5, value = 0.05, step = 0.01),
@@ -46,7 +46,7 @@ germline_heritability_ui <- function(id){
             plotly::plotlyOutput(ns("heritability"), height = "700px") %>%
               shinycssloaders::withSpinner(.)
           ),
-          shiny::conditionalPanel(paste0("input['", ns("group"), "'] == 'European' & input['", ns("byImmune"), "'] == 1"),
+          shiny::conditionalPanel(paste0("input['", ns("group"), "'] == 'European_immune'"), #& input['", ns("byImmune"), "'] == 1"),
                                   shiny::column(
                                     width = 6,
                                     messageBox(
