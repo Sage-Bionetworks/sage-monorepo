@@ -43,7 +43,7 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
           ),
           shiny::fluidRow(
             shiny::column(
-              width = 4,
+              width = 3,
               iatlas.app::optionsBox(
                 width = 12,
                 shiny::uiOutput(ns("search_snp"))
@@ -55,18 +55,39 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
                 width = 12,
                 shiny::uiOutput(ns("links"))
               )
+            ),
+            shiny::column(
+              width = 4,
+              tableBox(
+                width = 12,
+                DT::DTOutput(ns("snp_tbl"))
+              )
             )
           ),
+          iatlas.app::messageBox(
+            width = 12,
+            shiny::p("Brief explanation of colocalization analysis.")
+          ),
           shiny::fluidRow(
-            plotBox(
-              width = 4,
-              DT::DTOutput(ns("snp_tbl"))
+            column(
+              width = 6,
+              tableBox(
+                width = 12,
+                DT::DTOutput(ns("colocalization_tcga")) %>%
+                  shinycssloaders::withSpinner(.),
+                shiny::uiOutput(ns("tcga_colocalization_plot"))
+              )
             ),
-            plotBox(
-              width = 8,
-              DT::DTOutput(ns("colocalization")) %>%
-                shinycssloaders::withSpinner(.),
-              shiny::uiOutput(ns("colocalization_plot"))
+            column(
+              width = 6,
+              tableBox(
+                width = 12,
+                div(style = "overflow-y: scroll",
+                    DT::DTOutput(ns("colocalization_gtex")) %>%
+                      shinycssloaders::withSpinner(.)
+                ),
+                shiny::uiOutput(ns("gtex_colocalization_plot"))
+              )
             )
           )
         )

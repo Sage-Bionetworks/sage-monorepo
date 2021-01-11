@@ -227,6 +227,12 @@ germline_gwas_server <- function(id, cohort_obj){
         displayMode="SQUISHED")
       })
 
+      observe({
+        igvShiny::loadGwasTrack(session, id="igv_plot", trackName="gwas", tbl=gwas_data() %>%
+                                  dplyr::select("SNPS" = snp_id, "CHR_ID" = chr_col, "CHR_POS" = bp_col, "P" = PLINK.P),
+                                deleteTracksOfSameName=FALSE)
+      })
+
       #adding interactivity to select a SNP from the plot or from the dropdown menu
 
       clicked_snp <- reactiveValues(ev=NULL)
@@ -321,11 +327,13 @@ germline_gwas_server <- function(id, cohort_obj){
        options = list(dom = 't'))
    })
 
+   #COLOCALIZATION
+   ##TCGA
    colocalization_plot <- reactive({ #get files with the selected SNP
      shiny::req(selected_snp())
 
      GERMLINE_PATH = "inst/extdata/"
-     feather::read_feather(paste0(GERMLINE_PATH, "colocalization_df.feather"))
+     feather::read_feather(paste0(GERMLINE_PATH, "colocalization_TCGA_df.feather"))
    })
 
    col_snp <- reactive({
@@ -337,10 +345,10 @@ germline_gwas_server <- function(id, cohort_obj){
          sep=""
        )
        ) %>%
-       dplyr::select(Trait = display, gene, QTL, C1C2, TCGA.Splice.ID, View, link_plot)
+       dplyr::select(Type, Trait = display, gene, QTL, C1C2, TCGA.Splice.ID, View, link_plot)
    })
 
-   output$colocalization <- DT::renderDT({
+   output$colocalization_tcga <- DT::renderDT({
      shiny::validate(
        shiny::need(
          snp_of_int$ev != "", "Select a SNP"))
@@ -359,19 +367,71 @@ germline_gwas_server <- function(id, cohort_obj){
 
    })
 
-   output$colocalization_plot <- shiny::renderUI({
-     shiny::req(selected_snp(), input$colocalization_rows_selected)
+   output$tcga_colocalization_plot <- shiny::renderUI({
+     shiny::req(selected_snp(), input$colocalization_tcga_rows_selected)
      shiny::validate(
        shiny::need(
          snp_of_int$ev != "", "Select a SNP"))
 
      shiny::validate(
        shiny::need(
-         !is.null(input$colocalization_rows_selected), "Click on table to see plot"))
+         !is.null(input$colocalization_tcga_rows_selected), "Click on table to see plot"))
 
-     link_plot <- as.character(col_snp()[input$colocalization_rows_selected, "link_plot"])
+     link_plot <- as.character(col_snp()[input$colocalization_tcga_rows_selected, "link_plot"])
 
-     tags$img(src = "https://pbs.twimg.com/media/EoZzj8OXYAAv8C-?format=png&name=small")
+     tags$img(src = "https://ndownloader.figshare.com/files/25065650/preview/25065650/preview.jpg?private_link=f0b0ec535a7a68e703f6",
+              width = "100%")
+
+     #tags$img(src = "https://pbs.twimg.com/media/EoZzj8OXYAAv8C-?format=png&name=small")
+   })
+
+   ##GTEX
+
+   gtex_coloc <- reactive({
+     GERMLINE_PATH = "inst/extdata/"
+     gtex_df <- feather::read_feather(paste0(GERMLINE_PATH, "colocalization_GTEX_df.feather")) %>%
+       dplyr::mutate(View =  paste(
+         "<a href=\"",
+         link_plot,"\"> View plot</a>",
+         sep=""
+       )
+       )
+   })
+
+   output$colocalization_gtex <- DT::renderDT({
+     shiny::req(selected_chr())
+
+     DT::datatable(
+       gtex_coloc() %>%
+         dplyr::filter(CHR %in% selected_chr()) %>%
+         dplyr::select(Trait = display, QTL, Tissue, Gene, CHR, View),
+       escape = FALSE,
+       rownames = FALSE,
+       caption = " GTEX colocalization plots available", #paste("Colocalization plots available - ", selected_chr()),
+       selection = 'single',
+       options = list(
+         dom = 't',
+         scrollY = '300px',
+         paging = TRUE,
+         scrollX = TRUE))
+
+   })
+
+   output$gtex_colocalization_plot <- shiny::renderUI({
+     shiny::req(input$colocalization_gtex_rows_selected)
+
+     shiny::validate(
+       shiny::need(
+         !is.null(input$colocalization_gtex_rows_selected), "Click on table to see plot"))
+
+     link_plot <- as.character(gtex_coloc()[input$colocalization_gtex_rows_selected, "link_plot"])
+
+     tags$div(
+       tags$br(),
+       tags$p(paste("GTEX Splice ID: ", as.character(gtex_coloc()[input$colocalization_gtex_rows_selected, "GTEXspliceID"]))),
+       tags$img(src = link_plot,
+                width = "100%")
+     )
    })
 
     }
