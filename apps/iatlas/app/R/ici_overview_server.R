@@ -1,6 +1,5 @@
 ici_overview_server <- function(
-  id,
-  cohort_obj
+  id
 ){
   shiny::moduleServer(
     id,
@@ -8,20 +7,16 @@ ici_overview_server <- function(
 
       ici_data <- load_io_data()
 
-      call_module_server(
+      ici_overview_datasets_server(
         "ici_overview_datasets",
-        cohort_obj,
-        ioresponse_data = ici_data,
-        server_function = ici_overview_datasets_server,
-        ui_function = ici_overview_datasets_ui
+        ioresponse_data = ici_data
       )
 
-      call_module_server(
+      ici_overview_category_server(
         "ici_overview_category",
-        cohort_obj,
-        server_function = ici_overview_category_server,
-        ui_function = ici_overview_category_ui
+        ioresponse_data = ici_data
       )
+
     }
   )
 }

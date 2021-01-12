@@ -1,6 +1,5 @@
 ici_overview_datasets_server <- function(
   id,
-  cohort_obj,
   ioresponse_data
 ) {
   shiny::moduleServer(

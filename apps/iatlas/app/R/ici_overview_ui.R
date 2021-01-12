@@ -15,11 +15,12 @@ ici_overview_ui <- function(id){
     ),
     sectionBox(
       title = "Dataset Information",
-      module_ui(ns("ici_overview_datasets"))
+      ici_overview_datasets_ui(ns("ici_overview_datasets"))
     ),
     sectionBox(
       title = "Category Key",
-      module_ui(ns("ici_overview_category"))
+      ici_overview_category_ui(ns("ici_overview_category"))
+      # module_ui(ns("ici_overview_category"))
     )
     # sectionBox(
     #   title = "Group Overlap",

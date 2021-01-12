@@ -16,7 +16,7 @@ ici_overview_category_ui <- function(
     ),
     optionsBox(
       width = 12,
-      shiny::selectInput(ns("ici_category"), "Select Category", choices = ioresponse_data$categories_df$CategoryLabel)
+      shiny::uiOutput(ns("select_group1"))
     ),
     plotBox(
       width = 12,
@@ -37,11 +37,11 @@ ici_overview_category_ui <- function(
       ),
       optionsBox(
         width = 12,
-        uiOutput(ns("select_group2"))
+        shiny::uiOutput(ns("select_group2"))
       ),
       plotBox(
         width = 12,
-        plotlyOutput(ns("ici_mosaic"), height = "600px") %>%
+        plotly::plotlyOutput(ns("ici_mosaic"), height = "600px") %>%
           shinycssloaders::withSpinner()
       )
     )

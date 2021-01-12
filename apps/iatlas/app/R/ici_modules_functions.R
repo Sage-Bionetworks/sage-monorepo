@@ -1,5 +1,21 @@
 #utils functions from shiny-iatlas
 
+assert_df_has_columns <- function(df, columns){
+  missing_columns <- columns[!columns %in% colnames(df)]
+  if(length(missing_columns) != 0){
+    stop("df has missing columns: ",
+         stringr::str_c(missing_columns, collapse = ", "))
+  }
+}
+
+convert_values <- function(values, df, from_column, to_column){
+  assert_df_has_columns(df, c(from_column, to_column))
+  df %>%
+    dplyr::select(FROM = from_column, TO = to_column) %>%
+    dplyr::filter(FROM %in% values) %>%
+    magrittr::use_series(TO)
+}
+
 convert_value_between_columns <- function(
   input_value, df, from_column, to_column,
   no_matches = "error",
@@ -38,7 +54,7 @@ convert_value_between_columns <- function(
 # functions for multiple ici modules
 
 get_group_labels <-  function(df, group){
-  ioresponse_data$sample_group_df %>%
+  df %>%
     dplyr::filter(Category == group) %>%
     dplyr::select(FeatureValue, FeatureLabel, FeatureHex, order_within_sample_group)
 }
