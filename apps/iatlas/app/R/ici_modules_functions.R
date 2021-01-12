@@ -1,3 +1,16 @@
+datasets_options <-  list(
+  "Gide, 2019 - SKCM, Anti-PD-1 +/- Anti-CTLA-4" =  "Gide 2019",
+  "Hugo, 2016 - SKCM, Anti-PD-1" = "Hugo 2016",
+  "Riaz, 2017 - SKCM, Anti-PD-1" = "Riaz 2017",
+  "Van Allen, 2015 - SKCM, Anti-CTLA-4" = "Van Allen 2015",
+  "IMVigor210 - BLCA, Anti-PD-L1" = "IMVigor210",
+  "Prins, 2019 - GBM, Anti-PD-1" = "Prins 2019")
+
+datasets_PFI <- c("Gide 2019", "Van Allen 2015", "Prins 2019")
+
+ioresponse_data <- load_io_data()
+
+
 #utils functions from shiny-iatlas
 
 assert_df_has_columns <- function(df, columns){
@@ -5,6 +18,12 @@ assert_df_has_columns <- function(df, columns){
   if(length(missing_columns) != 0){
     stop("df has missing columns: ",
          stringr::str_c(missing_columns, collapse = ", "))
+  }
+}
+
+assert_df_has_rows <- function(df){
+  if(nrow(df) == 0){
+    stop("result df is empty")
   }
 }
 
@@ -49,6 +68,64 @@ convert_value_between_columns <- function(
            stringr::str_c(result, collapse = ", "))
     }
   }
+}
+
+create_filtered_nested_list_by_class <- function(
+  feature_df,
+  filter_value,
+  class_column = "CLASS",
+  display_column = "DISPLAY",
+  internal_column = "INTERNAL",
+  filter_column = "FILTER"){
+
+  feature_df %>%
+    dplyr::select(
+      CLASS = class_column,
+      DISPLAY = display_column,
+      INTERNAL = internal_column,
+      FILTER = filter_column) %>%
+    dplyr::filter(FILTER == filter_value) %>%
+    select(CLASS, INTERNAL, DISPLAY) %>%
+    create_nested_list_by_class()
+}
+
+create_nested_list_by_class <- function(
+  df,
+  class_column = "CLASS",
+  display_column = "DISPLAY",
+  internal_column = "INTERNAL",
+  filter_expr = T)
+{
+  df %>%
+    dplyr::filter({{filter_expr}}) %>%
+    dplyr::select(
+      CLASS = class_column,
+      DISPLAY = display_column,
+      INTERNAL = internal_column
+    ) %>%
+    dplyr::mutate(CLASS = ifelse(is.na(CLASS), "Other", CLASS)) %>%
+    dplyr::mutate(CLASS = ifelse(CLASS == "", "Other", CLASS)) %>%
+    df_to_nested_list(
+      group_column = "CLASS",
+      key_column = "INTERNAL",
+      value_column = "DISPLAY")
+}
+
+df_to_nested_list <- function(df, group_column, key_column, value_column){
+  df %>%
+    get_complete_df_by_columns(c(group_column, value_column, key_column)) %>%
+    tidyr::nest(data = c(value_column, key_column)) %>%
+    dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
+    tibble::deframe()
+}
+
+get_complete_df_by_columns <- function(df, columns){
+  assert_df_has_columns(df, columns)
+  result_df <- df %>%
+    dplyr::select(columns) %>%
+    tidyr::drop_na()
+  assert_df_has_rows(result_df)
+  return(result_df)
 }
 
 # functions for multiple ici modules
