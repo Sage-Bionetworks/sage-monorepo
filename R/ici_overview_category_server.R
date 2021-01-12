@@ -1,6 +1,6 @@
 ici_overview_category_server <- function(
   id,
-  cohort_obj
+  ioresponse_data
 ) {
   shiny::moduleServer(
     id,
@@ -8,14 +8,20 @@ ici_overview_category_server <- function(
 
       ns <- session$ns
 
-      output$select_group2 <- renderUI(
-        selectInput(ns("group2"), "Select second category to see groups overlap",
-                    choices = (ioresponse_data$categories_df %>%
-                                 dplyr::filter(CategoryLabel != input$group))$CategoryLabel)
+      output$select_group1 <- renderUI(
+        selectInput(ns("group1"), "Select Category",
+                    choices = ioresponse_data$categories_df$CategoryLabel)
       )
 
+      output$select_group2 <- renderUI({
+        shiny::req(input$group1)
+        selectInput(ns("group2"), "Select second category to see groups overlap",
+                    choices = (ioresponse_data$categories_df %>%
+                                 dplyr::filter(CategoryLabel != input$group1))$CategoryLabel)
+      })
+
       group1 <- reactive({
-        iatlas.app::convert_value_between_columns(input_value = input$group,
+        iatlas.app::convert_value_between_columns(input_value = input$group1,
                                       df = ioresponse_data$feature_df,
                                       from_column = "FriendlyLabel",
                                       to_column = "FeatureMatrixLabelTSV")
@@ -29,22 +35,21 @@ ici_overview_category_server <- function(
       })
 
 
-
       output$ici_groups_df <- DT::renderDT({
         DT::datatable(ioresponse_data$categories_df %>%
-                        dplyr::filter(CategoryLabel == input$group) %>%
+                        dplyr::filter(CategoryLabel %in% input$group1) %>%
                         dplyr::select(Category = CategoryLabel, Definition, `Sample Groups`, `Available for`),
                       rownames = FALSE,
                       options = list(dom = 't'))
       })
 
       output$ici_per_ds_df <- DT::renderDT({
-        shiny::req(input$group)
+        shiny::req(input$group1)
 
-        DT::datatable(get_io_overview_table(group1()) %>%
+        DT::datatable(iatlas.app::get_io_overview_table(group1(), ioresponse_data) %>%
                         data.table::setcolorder(c("Order", "Sample Group", "Group Name", "Plot Color")),
                       rownames = FALSE,
-                      caption = paste("Group Size per dataset for", input$group),
+                      caption = paste("Group Size per dataset for", input$group1),
                       options = list(dom = 't',
                                      order = list(list(0, 'asc')))) %>%
           DT::formatStyle(
@@ -53,10 +58,10 @@ ici_overview_category_server <- function(
 
       })
 
-      output$ici_mosaic <- renderPlotly({
-        shiny::req(input$group, input$group2)
+      output$ici_mosaic <- plotly::renderPlotly({
+        shiny::req(input$group1, input$group2)
 
-        df_mosaic <- iatlas.app::get_io_mosaic_df(ioresponse_data$fmx_df, group1(), group2())
+        df_mosaic <- iatlas.app::get_io_mosaic_df(ioresponse_data, group1(), group2())
 
         df_colors <- df_mosaic %>%
           dplyr::select(y, plot_color) %>%
@@ -66,9 +71,9 @@ ici_overview_category_server <- function(
         names(plot_colors) <- c("Not annotated", as.character(df_colors$y))
 
         iatlas.app::create_mosaicplot(df_mosaic %>% dplyr::select(x,y),
-                                      title = stringr::str_c(input$group2, "by", input$group, sep = " "),
+                                      title = stringr::str_c(input$group2, "by", input$group1, sep = " "),
                                       fill_colors = plot_colors) %>%
-                    layout(
+                    plotly::layout(
                       autosize = TRUE,
                       margin = list(b=0)
                     )
