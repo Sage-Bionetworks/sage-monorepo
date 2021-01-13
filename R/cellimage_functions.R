@@ -93,7 +93,13 @@ add_nonexistent_feature_nodes <- function(present_nodes, all_nodes){
   rbind(present_nodes, missing_df)
 }
 
-get_cellimage_edges <- function(nodes){
+get_cellimage_edges <- function(){
+
+  #Using TCGA/C1 as default for getting all cellimage edges
+  nodes <- dplyr::bind_rows(
+    get_cellimage_gene_nodes("TCGA", "C1", get_cellimage_genes()),
+    get_cellimage_feature_nodes("TCGA", "C1", get_cellimage_features()))
+
   node_names <- nodes %>%
     dplyr::pull("node_name") %>%
     unique()
