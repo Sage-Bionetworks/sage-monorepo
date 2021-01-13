@@ -24,6 +24,11 @@
       "content" : "data(FriendlyName)"
     }
   }, {
+    "selector" : "node[UpBinRatio == NA]",
+    "css" : {
+      "background-color" : "rgb(230,230,230)"
+    }
+  }, {
     "selector" : "node[UpBinRatio >= 0.875][UpBinRatio <= 1]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.875,1,rgb(0,109,44),rgb(0,68,27))",
@@ -63,6 +68,16 @@
     "selector" : "node[UpBinRatio >= 0][UpBinRatio < 0.125]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0,0.125,rgb(247,252,245),rgb(229,245,224))"
+    }
+  }, {
+    "selector" : "node[id = 'T Cells CD8'][UpBinRatio == 'NA']",
+    "css" : {
+      "background-color" : "rgb(230,230,230)",
+      "shape" : "ellipse",
+      "text-max-width" : 90.0,
+      "text-wrap" : "wrap",
+      "width" : 100.0,
+      "height" : 60.0
     }
   }, {
     "selector" : "node[id = 'T Cells CD8'][UpBinRatio >= 0.875][UpBinRatio <= 1]",
@@ -139,6 +154,16 @@
     "selector" : "node[id = 'T Cells CD8'][UpBinRatio >= 0][UpBinRatio < 0.125]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0,0.125,rgb(255,255,229),rgb(255,247,188))",
+      "shape" : "ellipse",
+      "text-max-width" : 90.0,
+      "text-wrap" : "wrap",
+      "width" : 100.0,
+      "height" : 60.0
+    }
+  }, {
+    "selector" : "node[id = 'Macrophages'][UpBinRatio == 'NA']",
+    "css" : {
+      "background-color" : "rgb(230,230,230)",
       "shape" : "ellipse",
       "text-max-width" : 90.0,
       "text-wrap" : "wrap",
@@ -227,6 +252,16 @@
       "height" : 60.0
     }
   }, {
+    "selector" : "node[id = 'Dendritic Cells'][UpBinRatio == 'NA']",
+    "css" : {
+      "background-color" : "rgb(230,230,230)",
+      "shape" : "ellipse",
+      "text-max-width" : 90.0,
+      "text-wrap" : "wrap",
+      "width" : 100.0,
+      "height" : 60.0
+    }
+  }, {
     "selector" : "node[id = 'Dendritic Cells'][UpBinRatio >= 0.875][UpBinRatio <= 1]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0.875,1,rgb(84,39,143),rgb(63,0,125))",
@@ -301,6 +336,16 @@
     "selector" : "node[id = 'Dendritic Cells'][UpBinRatio >= 0][UpBinRatio < 0.125]",
     "css" : {
       "background-color" : "mapData(UpBinRatio,0,0.125,rgb(252,251,253),rgb(239,237,245))",
+      "shape" : "ellipse",
+      "text-max-width" : 90.0,
+      "text-wrap" : "wrap",
+      "width" : 100.0,
+      "height" : 60.0
+    }
+  }, {
+    "selector" : "node[id = 'Tumor Fraction'][UpBinRatio == 'NA']",
+    "css" : {
+      "background-color" : "rgb(232,232,232)",
       "shape" : "ellipse",
       "text-max-width" : 90.0,
       "text-wrap" : "wrap",
