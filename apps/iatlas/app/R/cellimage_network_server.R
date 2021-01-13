@@ -32,8 +32,7 @@ cellimage_network_server <- function(id, dataset, tag) {
 
       edges <- shiny::reactive({
         shiny::req(nodes())
-        View(nodes())
-        get_cellimage_edges(nodes())
+        get_cellimage_edges()
       })
 
       graph_json <- shiny::reactive({
