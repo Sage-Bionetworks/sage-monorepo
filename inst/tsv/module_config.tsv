@@ -12,7 +12,6 @@ Tumor Microenvironment	tumor_microenvironment	analysis	Explore the immune cell p
 Immune Subtype Classifier	immune_subtype_classifier	tool	Use an ensemble model trained on all TCGA data to classify gene expression profiles from your own data into the six immune subtypes identified in Thorsson et al.
 Cohort Selection	cohort_selection	other	
 Data Description	data_info	other	
-Test	test_ici	ici	Test
 ICI Datasets Overview	ici_overview	ici	Explore categories and groups of the available datasets.
 ICI Clinical Outcomes	ici_clinical_outcomes	ici	Plot survival curves based on immune characteristics and identify variables associated with outcome.
 ICI Hazard Ratio	ici_hazard_ratio	ici	Create Cox Proportional Hazard Regression Models and visualize Hazard Ratio in a heatmap and a forest plot.

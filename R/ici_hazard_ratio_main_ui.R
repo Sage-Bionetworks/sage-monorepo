@@ -55,13 +55,13 @@ ici_hazard_ratio_main_ui <- function(id){
         shinycssloaders::withSpinner()
     ),
     messageBox(
-      width = 24,
+      width = 12,
       p("The table shows the computed data used to create the visualizations above.")
     ),
-    plotBox(
+    tableBox(
       width = 12,
       DT::dataTableOutput(ns("stats_summary")),
       downloadButton(ns('download_stats'), 'Download')
     )
-  )
+  )#taglist
 }

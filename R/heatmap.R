@@ -1,4 +1,4 @@
-create_heatmap <- function(corr_mat, source_name, scale_colors = F){
+create_heatmap <- function(corr_mat, source_name, scale_colors = F,  legend_title = NULL){
   zmin <- NULL
   zmax <- NULL
   if(scale_colors){
@@ -7,8 +7,8 @@ create_heatmap <- function(corr_mat, source_name, scale_colors = F){
     zmax <- extreme
     zmin <- -extreme
   }
-  
-  p <- 
+
+  p <-
     plotly::plot_ly(
       z = corr_mat,
       x = colnames(corr_mat),
@@ -16,10 +16,11 @@ create_heatmap <- function(corr_mat, source_name, scale_colors = F){
       type = "heatmap",
       source = source_name,
       colors = rev(RColorBrewer::brewer.pal(8, "RdBu")),
+      colorbar = list(title = legend_title),
       zmin = zmin,
       zmax = zmax
-    ) %>% 
-    plotly::layout(xaxis = list(tickangle = 90)) %>% 
+    ) %>%
+    plotly::layout(xaxis = list(tickangle = 90)) %>%
     format_plotly() %>%
     I
 }

@@ -136,3 +136,81 @@ get_group_labels <-  function(df, group){
     dplyr::select(FeatureValue, FeatureLabel, FeatureHex, order_within_sample_group)
 }
 
+#functions to add lines for categorical groups
+
+get_lines_pos <- function(samples, y){
+
+  n_int <- nrow(samples)
+
+  divs <-seq(0, 1, len=n_int+1)
+
+  #getting the intervals with the same variable
+  int_pos <- divs[1]
+  for(i in 1:n_int){
+    try(if(samples$var1[i] != samples$var1[i+1]) int_pos <- c(int_pos, divs[i+1]), silent = TRUE)
+  }
+  int_pos <- c(int_pos, divs[n_int+1])
+
+  lines_pos <- "list("
+  for (i in 1:(length(int_pos)-1)) {
+
+    lines_pos <- paste(lines_pos,
+                       "list(line = list(color = 'rgba(68, 68, 68, 0.5)', width = 1), type = 'line', x0 =",
+                       (int_pos[i]+0.01),
+                       ", x1 =",
+                       (int_pos[i]+0.01),
+                       ", xref = 'paper', y0 =",
+                       0.2,
+                       ", y1 =",
+                       - 0.1,
+                       ", yref = 'paper'),
+                       list(line = list(color = 'rgba(68, 68, 68, 0.5)', width = 1), type = 'line', x0 =",
+                       (int_pos[i+1]),
+                       ", x1 =",
+                       (int_pos[i+1]),
+                       ", xref = 'paper', y0 =",
+                       0.2,
+                       ", y1 =",
+                       - 0.1,
+                       ", yref = 'paper')
+                       "
+                       )
+    if(i != (length(int_pos)-1)) lines_pos <- paste(lines_pos, ",")
+  }
+  paste(lines_pos, ")")
+}
+
+get_hlines_pos <- function(samples){
+
+  n_int <- nrow(samples)
+
+  divs <-seq(0, 1, len=n_int+1)
+
+  #getting the intervals with the same variable
+  int_pos <- as.numeric()#divs[1]
+  for(i in 1:n_int){
+    try(if(samples$var1[i] != samples$var1[i+1]) int_pos <- c(int_pos, divs[i+1]), silent = TRUE)
+  }
+  int_pos <- c(int_pos, divs[n_int+1])
+
+  lines_pos <- "list("
+  for (i in 1:(length(int_pos)-1)) {
+
+    lines_pos <- paste(lines_pos,
+                       "list(line = list(color = 'rgba(68, 68, 68, 0.5)', width = 1), type = 'line', x0 =",
+                       0,
+                       ", x1 =",
+                       -0.5,
+                       ", xref = 'paper', y0 =",
+                       (int_pos[i]),
+                       ", y1 =",
+                       (int_pos[i]),
+                       ", yref = 'paper')
+                       "
+    )
+    if(i != (length(int_pos)-1)) lines_pos <- paste(lines_pos, ",")
+  }
+  paste(lines_pos, ")")
+}
+
+
