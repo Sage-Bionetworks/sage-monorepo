@@ -1,6 +1,5 @@
 ici_hazard_ratio_main_server <- function(
-  id,
-  ioresponse_data
+  id
 ) {
   shiny::moduleServer(
     id,
@@ -8,7 +7,7 @@ ici_hazard_ratio_main_server <- function(
 
       ns <- session$ns
 
-      output$heatmap_op <- renderUI({
+      output$heatmap_op <- shiny::renderUI({
 
         non_selected_ds <- paste("Clinical data for", setdiff(unlist(datasets_options), input$datasets_mult), sep = " ")
 
@@ -17,31 +16,31 @@ ici_hazard_ratio_main_server <- function(
                           FeatureMatrixLabelTSV %in% ioresponse_data$categories_df$Category &
                           !`Variable Class` %in% non_selected_ds)
 
-        var_choices_clin <- create_filtered_nested_list_by_class(feature_df = clin_data,
-                                                                 filter_value = "Categorical",
-                                                                 class_column = "Variable Class",
-                                                                 internal_column = "FeatureMatrixLabelTSV",
-                                                                 display_column = "FriendlyLabel",
-                                                                 filter_column = "VariableType")
+        var_choices_clin <- iatlas.app::create_filtered_nested_list_by_class(feature_df = clin_data,
+                                                                             filter_value = "Categorical",
+                                                                             class_column = "Variable Class",
+                                                                             internal_column = "FeatureMatrixLabelTSV",
+                                                                             display_column = "FriendlyLabel",
+                                                                             filter_column = "VariableType")
 
-        var_choices_feat <- create_filtered_nested_list_by_class(feature_df = ioresponse_data$feature_df %>% dplyr::filter(`Variable Class` != "NA"),
-                                                                 filter_value = "Numeric",
-                                                                 class_column = "Variable Class",
-                                                                 internal_column = "FeatureMatrixLabelTSV",
-                                                                 display_column = "FriendlyLabel",
-                                                                 filter_column = "VariableType")
+        var_choices_feat <- iatlas.app::create_filtered_nested_list_by_class(feature_df = ioresponse_data$feature_df %>% dplyr::filter(`Variable Class` != "NA"),
+                                                                             filter_value = "Numeric",
+                                                                             class_column = "Variable Class",
+                                                                             internal_column = "FeatureMatrixLabelTSV",
+                                                                             display_column = "FriendlyLabel",
+                                                                             filter_column = "VariableType")
         var_choices <- c(var_choices_clin, var_choices_feat)
 
-        selectizeInput(
-          ns("var2_cox"),
-          "Select or Search for variables",
-          var_choices,
-          selected = c("IMPRES", "Vincent_IPRES_NonResponder"),
-          multiple = TRUE
-        )
+        shiny::selectizeInput(
+                  ns("var2_cox"),
+                  "Select or Search for variables",
+                  var_choices,
+                  selected = c("IMPRES", "Vincent_IPRES_NonResponder"),
+                  multiple = TRUE
+                )
       })
 
-      datasets <- reactive({
+      datasets <- shiny::reactive({
         switch(
           input$timevar,
           "OS_time" = input$datasets_mult,
@@ -49,7 +48,7 @@ ici_hazard_ratio_main_server <- function(
         )
       })
 
-      mult_coxph <- reactive({
+      mult_coxph <- shiny::reactive({
         switch(
           input$analysisvar,
           "uni_coxph" = FALSE,
@@ -57,7 +56,7 @@ ici_hazard_ratio_main_server <- function(
         )
       })
 
-      status_column <- reactive({
+      status_column <- shiny::reactive({
         switch(
           input$timevar,
           "OS_time" = "OS",
@@ -65,12 +64,12 @@ ici_hazard_ratio_main_server <- function(
         )
       })
 
-      feature_df_mult <- reactive({
+      feature_df_mult <- shiny::reactive({
 
-        req(input$datasets_mult, input$var2_cox)
+        shiny::req(input$datasets_mult, input$var2_cox)
 
         ioresponse_data$fmx_df %>%
-          filter(Dataset %in% datasets()) %>%
+          dplyr::filter(Dataset %in% datasets()) %>%
           `if`(
             !("treatment_when_collected" %in% input$var2_cox),
             dplyr::filter(., treatment_when_collected == "Pre"),
@@ -79,11 +78,11 @@ ici_hazard_ratio_main_server <- function(
           dplyr::select(Sample_ID, Dataset, input$timevar, status_column(), treatment_when_collected, dplyr::one_of(input$var2_cox))
       })
 
-      dataset_ft <- reactive({
-        req(input$datasets_mult, input$var2_cox)
+      dataset_ft <- shiny::reactive({
+        shiny::req(input$datasets_mult, input$var2_cox)
         #creates a df with the dataset x feature combinations that are available
 
-        get_feature_by_dataset(
+        iatlas.app::get_feature_by_dataset(
           datasets = datasets(),
           features = input$var2_cox,
           feature_df = ioresponse_data$feature_df,
@@ -92,15 +91,15 @@ ici_hazard_ratio_main_server <- function(
         )
       })
 
-      coxph_df <- reactive({
-        req(input$datasets_mult, input$var2_cox, dataset_ft())
-        build_coxph_df(datasets = datasets(),
-                       data = feature_df_mult(),
-                       feature = input$var2_cox,
-                       time = input$timevar,
-                       status = status_column(),
-                       ft_labels = dataset_ft(),
-                       multivariate = mult_coxph())
+      coxph_df <- shiny::reactive({
+        shiny::req(input$datasets_mult, input$var2_cox, dataset_ft())
+        iatlas.app::build_coxph_df(datasets = datasets(),
+                                   data = feature_df_mult(),
+                                   feature = input$var2_cox,
+                                   time = input$timevar,
+                                   status = status_column(),
+                                   ft_labels = dataset_ft(),
+                                   multivariate = mult_coxph())
       })
 
       output$mult_forest <- plotly::renderPlotly({
@@ -124,17 +123,17 @@ ici_hazard_ratio_main_server <- function(
         shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
         shiny::validate(need(length(input$var2_cox)>0, "Select at least one variable."))
 
-        heatmap_df <-  build_heatmap_df(coxph_df())
+        heatmap_df <-  iatlas.app::build_heatmap_df(coxph_df())
 
-        p <- create_heatmap(heatmap_df, "heatmap", scale_colors = T, legend_title = "log10(Hazard Ratio)")
+        p <- iatlas.app::create_heatmap(heatmap_df, "heatmap", scale_colors = T, legend_title = "log10(Hazard Ratio)")
 
         if(mult_coxph() == FALSE & length(input$var2_cox)>1){
-          p <- add_BH_annotation(coxph_df(), p)
+          p <- iatlas.app::add_BH_annotation(coxph_df(), p)
         }
         p
       })
 
-      summary_table <- reactive({
+      summary_table <- shiny::reactive({
 
         if(mult_coxph() == FALSE){ #for univariable models, we need to display the FDR results
           coxph_df() %>%
@@ -161,7 +160,7 @@ ici_hazard_ratio_main_server <- function(
       observeEvent(input$method_link,{
         showModal(modalDialog(
           title = "Method",
-          includeMarkdown("data/markdown/cox_regression.markdown"),
+          includeMarkdown("inst/markdown/cox_regression.markdown"),
           easyClose = TRUE,
           footer = NULL
         ))

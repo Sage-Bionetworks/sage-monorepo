@@ -1,7 +1,7 @@
 ici_hazard_ratio_ui <- function(id){
 
   ns <- shiny::NS(id)
-N
+
   shiny::tagList(
     titleBox(
       "iAtlas Explorer — Cox Proportional Hazard Ratio to Immune Checkpoint Inhibitors"
