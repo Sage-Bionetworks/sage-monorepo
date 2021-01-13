@@ -39,6 +39,14 @@ class Config(object):
     SQLALCHEMY_ECHO = True
 
 
+class TestConfig(Config):
+    LOG_LEVEL = logging.INFO
+    PROFILE = False
+    SQLALCHEMY_ECHO = False
+    SQLALCHEMY_DATABASE_URI = get_database_uri()
+    TESTING = True
+
+
 class StagingConfig(Config):
     LOG_LEVEL = logging.INFO
     LOG_TYPE = 'stream'
@@ -53,7 +61,9 @@ class ProdConfig(Config):
     SQLALCHEMY_ECHO = False
 
 
-def get_config():
+def get_config(test=False):
+    if (test):
+        return TestConfig
     FLASK_ENV = environ['FLASK_ENV']
     if FLASK_ENV == 'development':
         return Config

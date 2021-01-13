@@ -1,11 +1,18 @@
 import pytest
-from api import create_app
-from tests import db, TestConfig
+from api import create_app, db
+
+
+@pytest.fixture(autouse=True)
+def enable_transactional_tests(db_session):
+    """
+    Automatically enable transactions for all tests, without importing any extra fixtures.
+    """
+    pass
 
 
 @pytest.fixture(scope='session')
 def app():
-    app = create_app(TestConfig)
+    app = create_app(test=True)
     app.test_request_context().push()
 
     yield app
@@ -13,8 +20,7 @@ def app():
 
 
 @pytest.fixture(scope='session')
-def client():
-    app = create_app(TestConfig)
+def client(app):
     with app.test_client() as client:
         yield client
 
@@ -23,6 +29,12 @@ def client():
 def test_db(app):
     from api import db
     yield db
+
+
+@pytest.fixture(scope='session')
+def _db(test_db):
+    yield test_db
+    test_db.session.remove()
 
 
 @pytest.fixture(scope='session')
