@@ -15,3 +15,4 @@ Data Description	data_info	other
 Test	test_ici	ici	Test
 ICI Datasets Overview	ici_overview	ici	Explore categories and groups of the available datasets.
 ICI Clinical Outcomes	ici_clinical_outcomes	ici	Plot survival curves based on immune characteristics and identify variables associated with outcome.
+ICI Hazard Ratio	ici_hazard_ratio	ici	Create Cox Proportional Hazard Regression Models and visualize Hazard Ratio in a heatmap and a forest plot.

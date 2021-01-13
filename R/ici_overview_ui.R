@@ -20,11 +20,6 @@ ici_overview_ui <- function(id){
     sectionBox(
       title = "Category Key",
       ici_overview_category_ui(ns("ici_overview_category"))
-      # module_ui(ns("ici_overview_category"))
     )
-    # sectionBox(
-    #   title = "Group Overlap",
-    #   module_ui(ns("ici_overview_overlap_ui"))
-    # )
   )
 }
