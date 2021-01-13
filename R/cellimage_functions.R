@@ -77,6 +77,22 @@ get_cellimage_feature_nodes <- function(dataset, tag, features){
     dplyr::mutate("Type" = "Cell")
 }
 
+add_nonexistent_gene_nodes <- function(present_nodes, all_nodes){
+  missing_nodes <- all_nodes[which(!all_nodes %in% present_nodes$node_feature_name)] #which node is missing
+  missing_df <- get_cellimage_gene_nodes("TCGA", "C1", missing_nodes) #query for a group that is known to have all nodes
+  missing_df$score <- NA_integer_
+
+  rbind(present_nodes, missing_df)
+}
+
+add_nonexistent_feature_nodes <- function(present_nodes, all_nodes){
+  missing_nodes <- all_nodes[which(!all_nodes %in% present_nodes$node_feature_name)] #which node is missing
+  missing_df <- get_cellimage_feature_nodes("TCGA", "C1", missing_nodes) #query for a group that is known to have all nodes
+  missing_df$score <- NA_integer_
+
+  rbind(present_nodes, missing_df)
+}
+
 get_cellimage_edges <- function(nodes){
   node_names <- nodes %>%
     dplyr::pull("node_name") %>%
