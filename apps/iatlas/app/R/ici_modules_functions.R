@@ -130,8 +130,8 @@ get_complete_df_by_columns <- function(df, columns){
 
 # functions for multiple ici modules
 
-get_group_labels <-  function(df, group){
-  df %>%
+get_group_labels <-  function(df, group, group_labels = ioresponse_data$sample_group_df){
+  group_labels %>%
     dplyr::filter(Category == group) %>%
     dplyr::select(FeatureValue, FeatureLabel, FeatureHex, order_within_sample_group)
 }
