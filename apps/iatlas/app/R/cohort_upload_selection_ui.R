@@ -4,6 +4,7 @@ cohort_upload_selection_ui <- function(id) {
 
   shiny::tagList(
     shiny::fluidRow(
+      width = 12,
       optionsBox(
         width = 12,
         shiny::tags$head(
