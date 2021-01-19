@@ -15,7 +15,7 @@ ici_distribution_server <- function(
         selectInput(
           ns("var1_surv"),
           "Select of Search for Variable",
-          variable_options %>% create_nested_list_by_class()
+          variable_options %>% iatlas.app::create_nested_list_by_class()
         )
       })
 
