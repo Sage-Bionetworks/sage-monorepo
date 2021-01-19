@@ -125,6 +125,15 @@ germline_heritability_server <- function(id, cohort_obj){
           ) %>%
           iatlas.app::format_heritability_plot(., hdf_plot, fdr = FALSE)
       })
+
+      observeEvent(input$method_link,{
+        shiny::showModal(modalDialog(
+          title = "Method",
+          includeMarkdown("inst/markdown/methods/germline_heritability.md"),
+          easyClose = TRUE,
+          footer = NULL
+        ))
+      })
     }
   )
 }
