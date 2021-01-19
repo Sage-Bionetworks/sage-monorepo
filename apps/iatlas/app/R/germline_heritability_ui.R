@@ -8,7 +8,8 @@ germline_heritability_ui <- function(id){
             shiny::p("Heritability analyses were performed using genomic-relatedness-based restricted maximum-likelihood (GREML) and provide estimates of the proportion of phenotypic variance explained by the genetic variance, V(Genotype)/Vp."),
             shiny::p("The analyses were conducted separately within each ancestral subgroup (NEuropean=7,813, NAfrican=863, NAsian=570, and NAmerican=209 individuals), which were derived from ancestry analysis using the genotype data."),
             shiny::p("Select the ancestry cluster of interest for a bar plot summarizing the V(Genotype)/Vp for the immune traits with p-values lower than the selected p-value threshold."),
-            shiny::p("For the European ancestry cluster, it is also possible to visualize the percentage of variance of immune traits accounted for by interaction between germline genotypes and immune subtypes (G x Immune Subtype).")
+            shiny::p("For the European ancestry cluster, it is also possible to visualize the percentage of variance of immune traits accounted for by interaction between germline genotypes and immune subtypes (G x Immune Subtype)."),
+            shiny::actionLink(ns("method_link"), "Click to view method description.")
         ),
         optionsBox(
           width = 3,

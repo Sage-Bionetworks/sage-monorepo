@@ -227,11 +227,17 @@ germline_gwas_server <- function(id, cohort_obj){
         displayMode="SQUISHED")
       })
 
-      observe({
-        igvShiny::loadGwasTrack(session, id="igv_plot", trackName="gwas", tbl=gwas_data() %>%
-                                  dplyr::select("SNPS" = snp_id, "CHR_ID" = chr_col, "CHR_POS" = bp_col, "P" = PLINK.P),
-                                deleteTracksOfSameName=FALSE)
-      })
+      # observe({
+      #   shiny::req(input$selection == "Select a region")
+      #   shiny::req(subset_gwas(), selected_chr(), selected_min(), selected_max())
+      #
+      #   #region <- paste0("chr", selected_chr(), ":", scales::comma(selected_min()), "-", scales::comma(selected_max()))
+      #
+      #   igvShiny::showGenomicRegion(session, id=session$ns("igv_plot"), "chr1:45,248,108-45,564,645")
+      #   igvShiny::loadGwasTrack(session, id=session$ns("igv_plot"), trackName="gwas", tbl=gwas_data() %>%
+      #                             dplyr::select("SNPS" = snp_id, "CHR_ID" = chr_col, "CHR_POS" = bp_col, "P" = PLINK.P),
+      #                           deleteTracksOfSameName=FALSE)
+      # })
 
       #adding interactivity to select a SNP from the plot or from the dropdown menu
 
