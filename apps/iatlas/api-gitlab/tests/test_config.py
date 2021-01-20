@@ -43,7 +43,7 @@ def test_development_config(monkeypatch: MonkeyPatch):
 
     FLASK_ENV = 'development'
     monkeypatch.setenv('FLASK_ENV', FLASK_ENV)
-    app = create_app(get_config())
+    app = create_app()
     assert app.config['DEBUG']
     assert app.config['PROFILE']
     assert not app.config['TESTING']
@@ -56,7 +56,7 @@ def test_staging_config(monkeypatch: MonkeyPatch):
 
     FLASK_ENV = 'staging'
     monkeypatch.setenv('FLASK_ENV', FLASK_ENV)
-    app = create_app(get_config())
+    app = create_app()
     assert not app.config['DEBUG']
     assert not app.config['PROFILE']
     assert not app.config['TESTING']
@@ -69,7 +69,7 @@ def test_production_config(monkeypatch: MonkeyPatch):
 
     FLASK_ENV = 'production'
     monkeypatch.setenv('FLASK_ENV', FLASK_ENV)
-    app = create_app(get_config())
+    app = create_app()
     assert not app.config['DEBUG']
     assert not app.config['PROFILE']
     assert not app.config['TESTING']

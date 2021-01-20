@@ -2,9 +2,9 @@
   "recommendations": [
     "bierner.markdown-preview-github-styles",
     "davidanson.vscode-markdownlint",
+    "graphql.vscode-graphql",
     "ms-python.python",
     "ms-vscode-remote.remote-containers",
-    "prisma.vscode-graphql",
     "shakram02.bash-beautify",
     "shardulm94.trailing-spaces",
     "streetsidesoftware.code-spell-checker"

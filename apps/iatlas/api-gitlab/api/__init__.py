@@ -6,9 +6,10 @@ from config import get_config
 from .extensions import db, logs
 
 
-def create_app(config_class=get_config()):
+def create_app(test=False):
+    config = get_config(test=test)
     app = Flask(__name__)
-    app.config.from_object(config_class)
+    app.config.from_object(config)
 
     register_extensions(app)
 
