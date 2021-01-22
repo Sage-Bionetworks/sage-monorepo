@@ -17,6 +17,7 @@ from .gene_function import GeneFunction
 from .gene_to_sample import GeneToSample
 from .gene_to_type import GeneToType
 from .gene_type import GeneType
+from .heritability_result import HeritabilityResult
 from .immune_checkpoint import ImmuneCheckpoint
 from .method_tag import MethodTag
 from .mutation import Mutation
