@@ -27,6 +27,8 @@ gene_function_query = load_schema_from_path(
     schema_dirname + '/geneFunction.query.graphql')
 gene_type_query = load_schema_from_path(
     schema_dirname + '/geneType.query.graphql')
+heritability_result_query = load_schema_from_path(
+    schema_dirname + '/heritabilityResult.query.graphql')
 immune_checkpoint_query = load_schema_from_path(
     schema_dirname + '/immuneCheckpoint.query.graphql')
 method_tag_query = load_schema_from_path(
@@ -52,7 +54,7 @@ therapy_type_query = load_schema_from_path(
     schema_dirname + '/therapyType.query.graphql')
 
 type_defs = [
-    root_query, paging_types, copy_number_result_query, data_set_query, driver_result_query, edge_query, feature_query, gene_query, gene_family_query, gene_function_query, gene_type_query, immune_checkpoint_query, method_tag_query, mutation_query, mutation_code_query, node_query, pathway_query, patient_query, publication_query, sample_query, slide_query, super_category, tag_query, therapy_type_query]
+    root_query, paging_types, copy_number_result_query, data_set_query, driver_result_query, edge_query, feature_query, gene_query, gene_family_query, gene_function_query, gene_type_query, heritability_result_query, immune_checkpoint_query, method_tag_query, mutation_query, mutation_code_query, node_query, pathway_query, patient_query, publication_query, sample_query, slide_query, super_category, tag_query, therapy_type_query]
 
 # Initialize custom scalars.
 direction_enum_scalar = ScalarType('DirectionEnum')
@@ -119,6 +121,8 @@ gene_family = ObjectType('GeneFamily')
 gene_function = ObjectType('GeneFunction')
 genes_by_tag = ObjectType('GenesByTag')
 gene_type = ObjectType('GeneType')
+heritability_result_node = ObjectType('HeritabilityResultNode')
+heritability_result = ObjectType('HeritabilityResult')
 immune_checkpoint = ObjectType('ImmuneCheckpoint')
 method_tag = ObjectType('MethodTag')
 mutation = ObjectType('GeneMutation')
@@ -183,5 +187,5 @@ root.set_field('therapyTypes', resolve_therapy_types)
 schema = make_executable_schema(
     type_defs,
     [
-        root, copy_number_result, data_set, direction_enum_scalar, driver_result, edge_result, ethnicity_enum_scalar, feature, features_by_class, features_by_tag, gender_enum_scalar, gene, gene_family, gene_function, genes_by_tag, gene_type, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, node, node_result, pathway, patient, publication, race_enum_scalar, related_by_data_set, sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_node, simple_publication, simple_tag, slide, tag, super_category, therapy_type]
+        root, copy_number_result, data_set, direction_enum_scalar, driver_result, edge_result, ethnicity_enum_scalar, feature, features_by_class, features_by_tag, gender_enum_scalar, gene, gene_family, gene_function, genes_by_tag, gene_type, heritability_result_node, heritability_result, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, node, node_result, pathway, patient, publication, race_enum_scalar, related_by_data_set, sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_node, simple_publication, simple_tag, slide, tag, super_category, therapy_type]
 )
