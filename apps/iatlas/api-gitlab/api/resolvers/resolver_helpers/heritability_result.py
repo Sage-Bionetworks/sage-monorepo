@@ -8,7 +8,7 @@ from .feature import build_feature_graphql_response
 from .paging_utils import get_cursor, get_pagination_queries, Paging
 
 heritability_result_request_fields = {'dataSet',
-                                      'id'
+                                      'id',
                                       'feature',
                                       'pValue',
                                       'cluster',
@@ -112,9 +112,9 @@ def build_heritability_result_request(
 
     if 'feature' in requested or feature:
         is_outer = not bool(feature)
-        data_set_join_condition = build_join_condition(
+        feature_join_condition = build_join_condition(
             feature_1.id, heritability_result_1.feature_id, filter_column=feature_1.name, filter_list=feature)
         query = query.join(feature_1, and_(
-            *data_set_join_condition), isouter=is_outer)
+            *feature_join_condition), isouter=is_outer)
 
     return get_pagination_queries(query, paging, distinct, cursor_field=heritability_result_1.id)
