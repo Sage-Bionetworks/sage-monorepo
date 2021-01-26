@@ -15,7 +15,9 @@ ici_overview_datasets_ui <- function(id){
       ),
       shiny::downloadButton(ns('download_metadata'), 'Download Dataset Metadata'),
       shiny::downloadButton(ns('download_data'), 'Download Immune Features and Clinical data'),
-      shiny::downloadButton(ns('download_expr'), 'Download Gene Expression data')
+      shiny::downloadButton(ns('download_expr'), 'Download Gene Expression data'),
+      shiny::br(),
+      tags$a(href="https://www.synapse.org/#!Synapse:syn24200710", "Download full gene expression data from Synapse")
     )
   )
 }
