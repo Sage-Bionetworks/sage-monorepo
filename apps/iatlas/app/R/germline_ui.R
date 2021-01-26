@@ -20,6 +20,10 @@ germline_ui <- function(id){
       sectionBox(
         title = "GWAS",
         module_ui(ns("germline_gwas"))
+      ),
+      sectionBox(
+        title = "Rare Variants",
+        module_ui(ns("germline_rarevariants"))
       )
     )
 
