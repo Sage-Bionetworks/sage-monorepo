@@ -11,8 +11,6 @@ germline_rarevariants_server <- function(id, cohort_obj){
       })
 
       output$features <- renderUI({
-        choices <- unique(rv_data()$display)
-
         trait_choices <- rv_data() %>%
                           dplyr::select(display,category) %>%
                           dplyr::group_by(category) %>%
