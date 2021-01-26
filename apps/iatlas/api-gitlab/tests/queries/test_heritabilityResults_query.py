@@ -55,23 +55,8 @@ query HeritabilityResults(
 
 
 @pytest.fixture(scope='module')
-def dr_feature():
-    return 'Module11_Prolif_score'
-
-
-@pytest.fixture(scope='module')
-def gene_entrez():
-    return 284058
-
-
-@pytest.fixture(scope='module')
-def mutation_code():
-    return '(OM)'
-
-
-@pytest.fixture(scope='module')
-def dr_tag_name():
-    return 'BLCA'
+def hr_feature():
+    return 'Attractors_G_CD3E'
 
 
 @pytest.fixture(scope='module')
@@ -133,42 +118,12 @@ def common_query(common_query_builder):
 
 @pytest.fixture(scope='module')
 def max_p_value():
-    return 0.495103
-
-
-@pytest.fixture(scope='module')
-def max_log10_p_value():
-    return 0.197782
-
-
-@pytest.fixture(scope='module')
-def min_fold_change():
-    return 1.44142
-
-
-@pytest.fixture(scope='module')
-def min_log10_fold_change():
-    return -0.0544383
+    return 0.000084099999999999998
 
 
 @pytest.fixture(scope='module')
 def min_p_value():
-    return 0.634187
-
-
-@pytest.fixture(scope='module')
-def min_log10_p_value():
-    return 0.30530497
-
-
-@pytest.fixture(scope='module')
-def min_n_mut():
-    return 23
-
-
-@pytest.fixture(scope='module')
-def min_n_wt():
-    return 383
+    return 0.493599999999999983213
 
 # Test that forward cursor pagination gives us the expected paginInfo
 
@@ -270,10 +225,10 @@ def test_heritabilityResults_cursor_distinct_pagination(client, common_query):
     assert page_num == page['paging']['page']
 
 
-def test_heritabilityResults_query_with_passed_data_set_and_feature(client, common_query, data_set, dr_feature):
+def test_heritabilityResults_query_with_passed_data_set_and_feature(client, common_query, data_set, hr_feature):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
-        'feature': [dr_feature]
+        'feature': [hr_feature]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['heritabilityResults']
@@ -282,14 +237,12 @@ def test_heritabilityResults_query_with_passed_data_set_and_feature(client, comm
     assert len(results) > 0
     for result in results[0:2]:
         assert result['dataSet']['name'] == data_set
-        assert result['feature']['name'] == dr_feature
+        assert result['feature']['name'] == hr_feature
 
 
-def test_heritabilityResults_query_with_passed_min_p_value(client, common_query, data_set, dr_feature, min_p_value):
+def test_heritabilityResults_query_with_passed_min_p_value(client, common_query, min_p_value):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
-            'dataSet': [data_set],
-            'feature': [dr_feature],
             'minPValue': min_p_value
         }})
     json_data = json.loads(response.data)
@@ -301,11 +254,9 @@ def test_heritabilityResults_query_with_passed_min_p_value(client, common_query,
         assert result['pValue'] >= min_p_value
 
 
-def test_heritabilityResults_query_with_passed_max_p_value(client, common_query, data_set, dr_feature, max_p_value):
+def test_heritabilityResults_query_with_passed_max_p_value(client, common_query, max_p_value):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
-            'dataSet': [data_set],
-            'feature': [dr_feature],
             'maxPValue': max_p_value
         }})
     json_data = json.loads(response.data)

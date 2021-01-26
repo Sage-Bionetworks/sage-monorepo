@@ -8,6 +8,7 @@ from .gene_family import request_gene_families
 from .gene_function import request_gene_functions
 from .gene_type import gene_type_request_fields, request_gene_types, simple_gene_type_request_fields
 from .general_resolvers import *
+from .heritability_result import heritability_result_request_fields, build_hr_graphql_response, build_heritability_result_request
 from .immune_checkpoint import request_immune_checkpoints
 from .method_tag import request_method_tags
 from .mutation import build_mutation_graphql_response, build_mutation_by_sample_graphql_response, build_mutation_request, mutation_by_sample_request_fields, mutation_request_fields, request_mutations, return_mutation_derived_fields
