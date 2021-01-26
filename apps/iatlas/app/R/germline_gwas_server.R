@@ -37,21 +37,31 @@ germline_gwas_server <- function(id, cohort_obj){
 
       output$search_snp <- renderUI({
         shiny::req(subset_gwas())
+        snp_options <- (subset_gwas() %>% dplyr::filter(snp_id != "NA"))$snp_id
         shiny::selectInput(ns("snp_int"), "Click on the plot for more SNP information, or search for a SNP id:",
-                           choices = c("", (subset_gwas() %>% dplyr::filter(snp_id != "NA"))$snp_id), selected = snp_of_int$ev)
+                           choices = c("", snp_options), selected = snp_of_int$ev)
       })
 
+      #keeping track of the selected chromossome
       selected_chr_reactive <- reactiveValues(ev = 1)
 
-      observeEvent(input[[sprintf("currentGenomicRegion.%s", "igv_plot")]], {
+      toIGVupdate <- reactive({
+        list(
+          input[[sprintf("currentGenomicRegion.%s", "igv_plot")]],
+          plotly::event_data("plotly_relayout", source = "gwas_mht", priority = "event")
+        )
+      })
+
+      #observeEvent(input[[sprintf("currentGenomicRegion.%s", "igv_plot")]], { #selection from the IGV plot
+      observeEvent(toIGVupdate(), {
         shiny::req(input$selection == "Select a region")
-        selected_chr_reactive$ev <-  as.numeric(sub("chr(.*):.*", "\\1", input[[sprintf("currentGenomicRegion.%s", "igv_plot")]]))
+        if(!("width" %in% names(plotly::event_data("plotly_relayout", source = "gwas_mht", priority = "event")))){
+          new_chr <- as.numeric(sub("chr(.*):.*", "\\1", input[[sprintf("currentGenomicRegion.%s", "igv_plot")]]))
+          if(new_chr %in% c(1:22)) selected_chr_reactive$ev <- new_chr
+        }
       })
 
       selected_chr <- reactive({
-        shiny::validate(
-          shiny::need(selected_chr_reactive$ev %in% c(1:22), "Data available for chromosomes 1 to 22.")
-        )
         switch(
           input$selection,
           "See all chromosomes" = c(1:22),
@@ -80,7 +90,8 @@ germline_gwas_server <- function(id, cohort_obj){
 
       #reset region with change of chromosome or selection of all chromosomes
       toReset <- reactive({
-        list(input$chr,
+        shiny::req(input$selection == "Select a region")
+        list(selected_chr(), #chr_size(),
              input$selection)
       })
 
@@ -103,15 +114,19 @@ germline_gwas_server <- function(id, cohort_obj){
         }
       })
 
-      observeEvent(input[[sprintf("currentGenomicRegion.%s", "igv_plot")]], { #this observer is only activated when a change is made on the IGV plot
-        newLoc <- input[[sprintf("currentGenomicRegion.%s", "igv_plot")]]
 
-        pattern <- "chr(.*):(.*)-(.*)"
-        sel_start <- as.numeric(gsub(",", "", sub(pattern, "\\2", newLoc)))
-        sel_end <- as.numeric(gsub(",", "", sub(pattern, "\\3", newLoc)))
+      observeEvent(toIGVupdate(), {
+       #observeEvent(input[[sprintf("currentGenomicRegion.%s", "igv_plot")]], { #this observer is only activated when a change is made on the IGV plot
+        #if(!("width" %in% names(plotly::event_data("plotly_relayout", source = "gwas_mht", priority = "event")))){
+          newLoc <- input[[sprintf("currentGenomicRegion.%s", "igv_plot")]]
 
-        chr_range$range <- c(sel_start,
-                             sel_end)
+          pattern <- "chr(.*):(.*)-(.*)"
+          sel_start <- as.numeric(gsub(",", "", sub(pattern, "\\2", newLoc)))
+          sel_end <- as.numeric(gsub(",", "", sub(pattern, "\\3", newLoc)))
+
+          chr_range$range <- c(sel_start,
+                               sel_end)
+         #}
       })
 
       selected_min <- reactive({
@@ -155,7 +170,7 @@ germline_gwas_server <- function(id, cohort_obj){
               bp_max = selected_max())
       })
 
-      subset_gwas <- reactive({
+      subset_gwas <- reactive({ #updates when range is changed
         shiny::req(gwas_mht())
         gwas_mht() %>%
           dplyr::filter(chr_col %in% selected_chr()) %>%
@@ -184,13 +199,6 @@ germline_gwas_server <- function(id, cohort_obj){
         else ""
       })
 
-      plot_title <- reactive({
-        if(input$selection == "See all chromosomes") ""
-        else paste0("chr", selected_chr(), ":", scales::comma(selected_min()), "-", scales::comma(selected_max()),
-                                                   "<a href = 'http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr", input$chr, ":", chr_range$range[1], "-", chr_range$range[2],
-                                                   "'> - View on UCSC Genome Browser</a>")
-      })
-
       output$mht_plot <- plotly::renderPlotly({
         shiny::req(subset_gwas(), axisdf())
 
@@ -206,12 +214,12 @@ germline_gwas_server <- function(id, cohort_obj){
           create_manhattanplot(
             df = .,
             x_label = axisdf(),
-            y_min = input$yrange[1],
-            y_max = input$yrange[2],
+            y_min = 6,
+            y_max = ceiling(max(gwas_df$log10p)),
             x_limits = c(selected_min(), max(selected_max(), subset_gwas()$x_col)),
             x_name = x_title(),
             y_name = "- log10(p-value)",
-            plot_title = plot_title(),
+            plot_title = "", #plot_title(),
             source_name = "gwas_mht"
           )
       })
@@ -226,18 +234,6 @@ germline_gwas_server <- function(id, cohort_obj){
         ),
         displayMode="SQUISHED")
       })
-
-      # observe({
-      #   shiny::req(input$selection == "Select a region")
-      #   shiny::req(subset_gwas(), selected_chr(), selected_min(), selected_max())
-      #
-      #   #region <- paste0("chr", selected_chr(), ":", scales::comma(selected_min()), "-", scales::comma(selected_max()))
-      #
-      #   igvShiny::showGenomicRegion(session, id=session$ns("igv_plot"), "chr1:45,248,108-45,564,645")
-      #   igvShiny::loadGwasTrack(session, id=session$ns("igv_plot"), trackName="gwas", tbl=gwas_data() %>%
-      #                             dplyr::select("SNPS" = snp_id, "CHR_ID" = chr_col, "CHR_POS" = bp_col, "P" = PLINK.P),
-      #                           deleteTracksOfSameName=FALSE)
-      # })
 
       #adding interactivity to select a SNP from the plot or from the dropdown menu
 
@@ -260,7 +256,7 @@ germline_gwas_server <- function(id, cohort_obj){
         }
       })
 
-      snp_of_int <- reactiveValues(ev=NULL)
+      snp_of_int <- reactiveValues(ev="")
 
       shiny::observeEvent(clicked_snp$ev,{
         snp_of_int$ev <- clicked_snp$ev
@@ -270,9 +266,9 @@ germline_gwas_server <- function(id, cohort_obj){
         snp_of_int$ev <- input$snp_int
       })
 
-      ## clear selected snp on double click
+      # clear selected snp on double click
       observeEvent(plotly::event_data("plotly_doubleclick", source = "gwas_mht"), {
-        snp_of_int$ev <- NULL
+        snp_of_int$ev <- ""
       })
 
 
@@ -296,7 +292,7 @@ germline_gwas_server <- function(id, cohort_obj){
 
    output$links <- renderUI({
      shiny::validate(
-       shiny::need(selected_snp()$snp_id %in% gwas_mht()$snp_id, "")
+       shiny::need(selected_snp()$snp_id %in% gwas_mht()$snp_id, "Select SNP")
      )
         #creating the links for external sources
         dbsnp <- paste0("https://www.ncbi.nlm.nih.gov/snp/", selected_snp()$snp_id)
@@ -317,20 +313,25 @@ germline_gwas_server <- function(id, cohort_obj){
       })
 
    output$snp_tbl <- DT::renderDT({
-     shiny::req(selected_snp())
+     #shiny::req(gwas_mht())
      shiny::validate(
-       shiny::need(selected_snp()$snp_id %in% gwas_mht()$snp_id, "Select SNP")
+       shiny::need(selected_snp()$snp_id %in% gwas_mht()$snp_id, "")
      )
+     #if(snp_of_int$ev == "") snp_df <- gwas_mht() %>% dplyr::filter(!is.na(snp_id))
+     #else
+     snp_df <- gwas_mht() %>%
+       dplyr::filter(snp_id == selected_snp()$snp_id) %>%
+       dplyr::mutate(nlog = round(log10p, 2)) %>%
+       dplyr::select(#'SNP' = snp_id,
+         Trait = display,
+         `-log10(p)` = nlog)
 
      DT::datatable(
-       gwas_mht() %>%
-         dplyr::filter(snp_id == selected_snp()$snp_id) %>%
-         dplyr::mutate(nlog = round(log10p, 2)) %>%
-         dplyr::select(Trait = display, #`Trait Category` = `Annot.Figure.ImmuneCategory`, `PLINK MAF` = maf,
-                        `Neg (log10(p))` = nlog),
+       snp_df,
        rownames = FALSE,
-       caption = paste("GWAS hits - ", selected_snp()$snp_id),
-       options = list(dom = 't'))
+       caption = paste("GWAS hits"),
+       options = list(dom = 't')
+                      )
    })
 
    #COLOCALIZATION
@@ -351,7 +352,7 @@ germline_gwas_server <- function(id, cohort_obj){
          sep=""
        )
        ) %>%
-       dplyr::select(Type, Trait = display, gene, QTL, C1C2, TCGA.Splice.ID, View, link_plot)
+       dplyr::select(Type, Trait = display, QTL, gene, C1C2, TCGA.Splice.ID, View, link_plot)
    })
 
    output$colocalization_tcga <- DT::renderDT({
@@ -367,9 +368,8 @@ germline_gwas_server <- function(id, cohort_obj){
        col_snp() %>% dplyr::select(!link_plot),
        escape = FALSE,
        rownames = FALSE,
-       caption = paste("Colocalization plots available - ", selected_snp()$snp_id),
-       selection = 'single',
-       options = list(dom = 't'))
+       caption = paste("TCGA colocalization plots - ", selected_snp()$snp_id),
+       selection = 'single')
 
    })
 
@@ -385,23 +385,18 @@ germline_gwas_server <- function(id, cohort_obj){
 
      link_plot <- as.character(col_snp()[input$colocalization_tcga_rows_selected, "link_plot"])
 
-     tags$img(src = "https://ndownloader.figshare.com/files/25065650/preview/25065650/preview.jpg?private_link=f0b0ec535a7a68e703f6",
-              width = "100%")
-
-     #tags$img(src = "https://pbs.twimg.com/media/EoZzj8OXYAAv8C-?format=png&name=small")
+     tags$div(
+       tags$hr(),
+       tags$img(src = "https://ndownloader.figshare.com/files/25065650/preview/25065650/preview.jpg?private_link=f0b0ec535a7a68e703f6",
+                width = "100%")
+     )
    })
 
    ##GTEX
 
    gtex_coloc <- reactive({
      GERMLINE_PATH = "inst/extdata/"
-     gtex_df <- feather::read_feather(paste0(GERMLINE_PATH, "colocalization_GTEX_df.feather")) %>%
-       dplyr::mutate(View =  paste(
-         "<a href=\"",
-         link_plot,"\"> View plot</a>",
-         sep=""
-       )
-       )
+     gtex_df <- feather::read_feather(paste0(GERMLINE_PATH, "colocalization_GTEX_df.feather"))
    })
 
    output$colocalization_gtex <- DT::renderDT({
@@ -410,17 +405,12 @@ germline_gwas_server <- function(id, cohort_obj){
      DT::datatable(
        gtex_coloc() %>%
          dplyr::filter(CHR %in% selected_chr()) %>%
-         dplyr::select(Trait = display, QTL, Tissue, Gene, CHR, View),
+         dplyr::select(Trait = display, QTL, Tissue, Gene, CHR),
        escape = FALSE,
        rownames = FALSE,
        caption = " GTEX colocalization plots available", #paste("Colocalization plots available - ", selected_chr()),
-       selection = 'single',
-       options = list(
-         dom = 't',
-         scrollY = '300px',
-         paging = TRUE,
-         scrollX = TRUE))
-
+       selection = 'single'
+      )
    })
 
    output$gtex_colocalization_plot <- shiny::renderUI({
@@ -433,13 +423,30 @@ germline_gwas_server <- function(id, cohort_obj){
      link_plot <- as.character(gtex_coloc()[input$colocalization_gtex_rows_selected, "link_plot"])
 
      tags$div(
-       tags$br(),
+       tags$hr(),
        tags$p(paste("GTEX Splice ID: ", as.character(gtex_coloc()[input$colocalization_gtex_rows_selected, "GTEXspliceID"]))),
        tags$img(src = link_plot,
                 width = "100%")
      )
    })
 
+   observeEvent(input$method_link_gwas,{
+     shiny::showModal(modalDialog(
+       title = "Method",
+       includeMarkdown("inst/markdown/methods/germline-gwas.md"),
+       easyClose = TRUE,
+       footer = NULL
+     ))
+   })
+
+   observeEvent(input$method_link_colocalization,{
+     shiny::showModal(modalDialog(
+       title = "Method",
+       includeMarkdown("inst/markdown/methods/germline-colocalization.md"),
+       easyClose = TRUE,
+       footer = NULL
+     ))
+   })
     }
   )
 }

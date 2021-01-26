@@ -12,63 +12,65 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
                      Figures 4A can be reproduced by selecting IFN 21978456 in 'Select Immune Features'.
               To generate Figure 4B, change the range of visualization to 'Select a region', Chromosome 2 and then select the coordinates by zooming in the plot or
               by manually updating the start and end of the region of interest. Similar procedures should be followed for
-                     Figures 4E, 5B, 5D, S4D, S5A, S5C, S5E.")
+                     Figures 4E, 5B, 5D, S4D, S5A, S5C, S5E."),
+            shiny::actionLink(ns("method_link_gwas"), "Click to view method description.")
         ),
         shiny::column(
-          width = 2,
+          width = 9,
           optionsBox(
             width = 12,
-            shiny::verticalLayout(
+            shiny::column(
+              width = 3,
+              shiny::radioButtons(ns("selection"), "Select range of visualization", choices = c("See all chromosomes", "Select a region"), selected = "See all chromosomes")
+            ),
+            shiny::column(
+              width = 5,
               shiny::uiOutput(ns("features")),
-              shiny::checkboxInput(ns("only_selected"), "Display only selected feature(s)"),
+              shiny::checkboxInput(ns("only_selected"), "Display only selected feature(s)")
+            ),
+            shiny::column(
+              width = 4,
               shiny:: conditionalPanel(
                 condition = paste("" , paste0("input['", ns("only_selected"), "'] == false")),
                 shiny::uiOutput(ns("to_exclude"))
-              ),
-              shiny::sliderInput(ns("yrange"), "Select range of -log10(p-values) to be included", min = 6, max = 30, value = c(6,12), step = 1),
-              shiny::radioButtons(ns("selection"), "Select range of visualization", choices = c("See all chromosomes", "Select a region"), selected = "See all chromosomes")
+              )
+            )
+         ),
+         iatlas.app::plotBox(
+           width = 12,
+           plotly::plotlyOutput(ns("mht_plot"), height = "300px") %>%
+             shinycssloaders::withSpinner(.),
+           shiny::conditionalPanel(paste0("input['", ns("selection"), "'] == 'Select a region'"),
+                                   igvShiny::igvShinyOutput(ns('igv_plot')) %>%
+                                     shinycssloaders::withSpinner(.)
            )
          )
         ),
         shiny::column(
-          width = 10,
-          iatlas.app::plotBox(
-            width = 12,
-            plotly::plotlyOutput(ns("mht_plot"), height = "300px") %>%
-              shinycssloaders::withSpinner(.),
-            shiny::conditionalPanel(paste0("input['", ns("selection"), "'] == 'Select a region'"),
-                                    igvShiny::igvShinyOutput(ns('igv_plot')) %>%
-                                      shinycssloaders::withSpinner(.)
-            )
-          ),
-          shiny::fluidRow(
-            shiny::column(
-              width = 3,
-              iatlas.app::optionsBox(
-                width = 12,
-                shiny::uiOutput(ns("search_snp"))
-              )
+          width = 3,
+          shiny::verticalLayout(
+            iatlas.app::optionsBox(
+              width = 12,
+              shiny::uiOutput(ns("search_snp"))
             ),
-            shiny::column(
-              width = 5,
-              iatlas.app::messageBox(
-                width = 12,
-                shiny::uiOutput(ns("links"))
-              )
+            iatlas.app::messageBox(
+              width = 12,
+              shiny::uiOutput(ns("links"))
             ),
-            shiny::column(
-              width = 4,
-              tableBox(
-                width = 12,
-                DT::DTOutput(ns("snp_tbl"))
-              )
+            tableBox(
+              width = 12,
+              DT::DTOutput(ns("snp_tbl"))
             )
+           )
           ),
           iatlas.app::messageBox(
             width = 12,
-            shiny::p("Brief explanation of colocalization analysis.")
+            shiny::p("We conducted a GWAS paired with colocalization analyses, and below you can access the results.
+                     eQTL and sQTL analyses were performed in TCGA and GTEx. The table in the left summarizes the TCGA results, and contains two types of plots: three level plots and expanded region. The table at the right summarises the GTEX results, and is updated with changes in the chromosome selected in the manhattan plot above."
+                     ),
+            shiny::actionLink(ns("method_link_colocalization"), "Click to view method description.")
           ),
-          shiny::fluidRow(
+          #shiny::fluidRow(
             column(
               width = 6,
               tableBox(
@@ -82,14 +84,11 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
               width = 6,
               tableBox(
                 width = 12,
-                div(style = "overflow-y: scroll",
-                    DT::DTOutput(ns("colocalization_gtex")) %>%
-                      shinycssloaders::withSpinner(.)
-                ),
+                DT::DTOutput(ns("colocalization_gtex")) %>%
+                  shinycssloaders::withSpinner(.),
                 shiny::uiOutput(ns("gtex_colocalization_plot"))
               )
             )
-          )
-        )
+          #)
 )
 }
