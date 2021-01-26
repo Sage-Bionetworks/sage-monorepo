@@ -11,6 +11,7 @@ from .gene_function_resolver import resolve_gene_function
 from .gene_types_resolver import resolve_gene_types
 from .genes_resolver import resolve_genes
 from .genes_by_tag_resolver import resolve_genes_by_tag
+from .heritability_results_resolver import resolve_heritability_results
 from .immune_checkpoint_resolver import resolve_immune_checkpoints
 from .method_tags_resolver import resolve_method_tags
 from .mutations_resolver import resolve_mutations

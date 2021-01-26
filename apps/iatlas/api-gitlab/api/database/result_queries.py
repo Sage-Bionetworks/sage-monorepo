@@ -1,5 +1,5 @@
 from api import db
-from api.db_models import CopyNumberResult, DriverResult
+from api.db_models import CopyNumberResult, DriverResult, HeritabilityResult
 from .database_helpers import build_option_args, build_query_args
 
 accepted_cnr_option_args = ['data_set', 'feature', 'gene', 'tag']
@@ -31,6 +31,22 @@ accepted_dr_query_args = ['id',
                           'mutation_code_id',
                           'tag_id']
 
+accepted_hr_option_args = ['data_set', 'feature']
+
+accepted_hr_query_args = ['dataset_id',
+                          'id'
+                          'feature_id',
+                          'p_value',
+                          'cluster',
+                          'module',
+                          'category',
+                          'fdr',
+                          'variance',
+                          'se',
+                          'y_min',
+                          'y_max',
+                          ]
+
 
 def return_copy_number_result_query(*args):
     option_args = build_option_args(
@@ -51,4 +67,15 @@ def return_driver_result_query(*args):
     query = db.session.query(*query_args)
     if option_args:
         query = db.session.query(DriverResult).options(*option_args)
+    return query
+
+
+def return_heritability_result_query(*args):
+    option_args = build_option_args(
+        *args, accepted_args=accepted_hr_option_args)
+    query_args = build_query_args(
+        HeritabilityResult, *args, accepted_args=accepted_hr_query_args)
+    query = db.session.query(*query_args)
+    if option_args:
+        query = db.session.query(HeritabilityResult).options(*option_args)
     return query
