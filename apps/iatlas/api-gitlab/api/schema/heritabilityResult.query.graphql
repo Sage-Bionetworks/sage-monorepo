@@ -8,19 +8,19 @@ type HeritabilityResultNode implements BaseNode {
   dataSet: SimpleDataSet!
   "The feature associated with the heritability result."
   feature: SimpleFeature!
-  "The P value of the heritability result."
+  "The Log-likelihood test (LRT) p-value of the heritability result."
   pValue: Float
-  "Placeholder"
+  "Ancestry cluster, determined from ancestry analysis by Sayaman et al, 2021."
   cluster: String
-  "Placeholder"
+  "Immune traits clustered based on their Pearson correlation coefficients, described by Sayaman et al, 2021."
   module: String
-  "Placeholder"
+  "Immune traits clustered based on the approach used to derive them and the parameters they intend to measure , described by Sayaman et al, 2021."
   category: String
-  "Placeholder"
+  "Benjamini-Hochberg false discovery rate (FDR) adjustment for multiple testing calculated in R (p.adjust, method=BH)."
   fdr: Float
-  "Placeholder"
+  "Ratio of genetic variance to phenotypic variance, estimate."
   variance: Float
-  "Placeholder"
+  "Standard error."
   se: Float
 }
 
