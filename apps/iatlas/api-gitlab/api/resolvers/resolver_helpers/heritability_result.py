@@ -16,9 +16,7 @@ heritability_result_request_fields = {'dataSet',
                                       'category',
                                       'fdr',
                                       'variance',
-                                      'se',
-                                      'yMin',
-                                      'yMax'}
+                                      'se'}
 
 
 def build_hr_graphql_response(heritability_result):
@@ -32,9 +30,7 @@ def build_hr_graphql_response(heritability_result):
         'category': get_value(heritability_result, 'category'),
         'fdr': get_value(heritability_result, 'fdr'),
         'variance': get_value(heritability_result, 'variance'),
-        'se': get_value(heritability_result, 'se'),
-        'yMin': get_value(heritability_result, 'y_min'),
-        'yMax': get_value(heritability_result, 'y_max')
+        'se': get_value(heritability_result, 'se')
     }
 
 
@@ -70,8 +66,6 @@ def build_heritability_result_request(
         'se': heritability_result_1.se.label('se'),
         'variance': heritability_result_1.variance.label('variance'),
         'fdr': heritability_result_1.fdr.label('fdr'),
-        'y_min': heritability_result_1.y_min.label('y_min'),
-        'y_max': heritability_result_1.y_max.label('y_max'),
         'category': heritability_result_1.category.label('category'),
         'cluster': heritability_result_1.cluster.label('cluster'),
         'module': heritability_result_1.module.label('module')

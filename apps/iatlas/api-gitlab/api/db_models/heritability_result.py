@@ -13,8 +13,6 @@ class HeritabilityResult(Base):
     cluster = db.Column(db.String, nullable=False)
     module = db.Column(db.String, nullable=False)
     category = db.Column(db.String, nullable=False)
-    y_min = db.Column(db.Numeric, nullable=True)
-    y_max = db.Column(db.Numeric, nullable=True)
 
     dataset_id = db.Column(db.Integer, db.ForeignKey(
         'datasets.id'), nullable=False)

@@ -22,10 +22,6 @@ type HeritabilityResultNode implements BaseNode {
   variance: Float
   "Placeholder"
   se: Float
-  "Placeholder"
-  yMin: Float
-  "Placeholder"
-  yMax: Float
 }
 
 type HeritabilityResult implements BaseResult {
