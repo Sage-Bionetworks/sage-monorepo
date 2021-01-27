@@ -46,8 +46,6 @@ query HeritabilityResults(
         fdr
         variance
         se
-        yMin
-        yMax
     }
   }
 }
@@ -98,8 +96,6 @@ def common_query(common_query_builder):
                 fdr
                 variance
                 se
-                yMin
-                yMax
             }
             paging {
                 type

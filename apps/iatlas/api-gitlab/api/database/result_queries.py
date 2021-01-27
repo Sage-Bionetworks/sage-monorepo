@@ -42,10 +42,7 @@ accepted_hr_query_args = ['dataset_id',
                           'category',
                           'fdr',
                           'variance',
-                          'se',
-                          'y_min',
-                          'y_max',
-                          ]
+                          'se']
 
 
 def return_copy_number_result_query(*args):

@@ -38,8 +38,6 @@ def test_HeritabilityResult_with_relations(app, data_set, data_set_id, hr_featur
         assert type(result.p_value) is float or NoneType
         assert type(result.variance) is float or NoneType
         assert type(result.se) is float or NoneType
-        assert type(result.y_max) is float or NoneType
-        assert type(result.y_min) is float or NoneType
         assert type(result.module) is str
         assert type(result.category) is str
         assert type(result.cluster) is str
@@ -65,8 +63,6 @@ def test_HeritabilityResult_no_relations(app, data_set_id, hr_feature_id):
         assert type(result.p_value) is float or NoneType
         assert type(result.variance) is float or NoneType
         assert type(result.se) is float or NoneType
-        assert type(result.y_max) is float or NoneType
-        assert type(result.y_min) is float or NoneType
         assert type(result.module) is str
         assert type(result.category) is str
         assert type(result.cluster) is str
