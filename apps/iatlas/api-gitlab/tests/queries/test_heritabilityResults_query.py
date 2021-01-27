@@ -2,7 +2,7 @@ import json
 import pytest
 from tests import NoneType
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
-
+from api.database import return_heritability_result_query
 """
 query HeritabilityResults(
   $paging: PagingInput
@@ -272,13 +272,19 @@ def test_heritabilityResults_query_with_no_arguments(client, common_query_builde
     query = common_query_builder("""{
             items {
                 pValue
+                feature {
+                    name
+                }
             }
         }""")
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
     page = json_data['data']['heritabilityResults']
     heritability_results = page['items']
+    # Get the total number of hr results in the database.
+    hr_count = return_heritability_result_query('id').count()
+
     assert isinstance(heritability_results, list)
-    assert len(heritability_results) > 0
+    assert len(heritability_results) == hr_count
     for heritability_result in heritability_results[0:2]:
         assert type(heritability_result['pValue']) is float or NoneType
