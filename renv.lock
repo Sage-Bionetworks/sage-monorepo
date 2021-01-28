@@ -244,12 +244,6 @@
       "Repository": "CRAN",
       "Hash": "d57ac35220b39c591388ab3a080f9cbe"
     },
-    "MotifDb": {
-      "Package": "MotifDb",
-      "Version": "1.32.0",
-      "Source": "Bioconductor",
-      "Hash": "ada9e76d751165e9e5e8ca7329d09012"
-    },
     "OrganismDbi": {
       "Package": "OrganismDbi",
       "Version": "1.32.0",
@@ -409,12 +403,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "8c5e8c58ff4fc8dfc67e24985005159b"
-    },
-    "VariantAnnotation": {
-      "Package": "VariantAnnotation",
-      "Version": "1.36.0",
-      "Source": "Bioconductor",
-      "Hash": "84fd273c3800d7a06e9d9b954585a44f"
     },
     "XML": {
       "Package": "XML",
@@ -1123,15 +1111,15 @@
     },
     "igvShiny": {
       "Package": "igvShiny",
-      "Version": "1.2.8",
+      "Version": "1.2.14",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "heimannch",
       "RemoteRepo": "igvShiny",
       "RemoteRef": "master",
-      "RemoteSha": "3a5f1f960f0dab657249eb56272e716eb2357a24",
-      "Hash": "244235d2740e0207b7c8c8ee0964d649"
+      "RemoteSha": "89c2c90d6e45bbd95ce20e95aebac2b1929faf91",
+      "Hash": "db80c2e0bc68a13a7f99cfd494d93289"
     },
     "ini": {
       "Package": "ini",
