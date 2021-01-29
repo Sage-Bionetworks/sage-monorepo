@@ -8,6 +8,7 @@ from .gene_family import request_gene_families
 from .gene_function import request_gene_functions
 from .gene_type import gene_type_request_fields, request_gene_types, simple_gene_type_request_fields
 from .general_resolvers import *
+from .germline_gwas_result import germline_gwas_result_request_fields, build_ggr_graphql_response, build_germline_gwas_result_request
 from .heritability_result import heritability_result_request_fields, build_hr_graphql_response, build_heritability_result_request
 from .immune_checkpoint import request_immune_checkpoints
 from .method_tag import request_method_tags
@@ -19,6 +20,7 @@ from .patient import build_patient_graphql_response, patient_request_fields, req
 from .publication import build_publication_graphql_response, publication_request_fields, simple_publication_request_fields
 from .sample import build_sample_graphql_response, feature_related_sample_request_fields, gene_related_sample_request_fields, mutation_related_sample_request_fields, request_samples, sample_by_mutation_status_request_fields, sample_request_fields, simple_sample_request_fields
 from .slide import build_slide_graphql_response, request_slides, slide_request_fields, simple_slide_request_fields
+from .snp import snp_request_fields, build_snp_graphql_response, build_snp_request
 from .super_category import request_super_categories
 from .tag import build_related_graphql_response, build_tag_graphql_response, related_request_fields, request_related, request_tags, return_tag_derived_fields, simple_tag_request_fields, tag_request_fields
 from .therapy_type import request_therapy_types

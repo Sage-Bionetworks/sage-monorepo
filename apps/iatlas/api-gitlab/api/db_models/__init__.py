@@ -17,6 +17,7 @@ from .gene_function import GeneFunction
 from .gene_to_sample import GeneToSample
 from .gene_to_type import GeneToType
 from .gene_type import GeneType
+from .germline_gwas_result import GermlineGwasResult
 from .heritability_result import HeritabilityResult
 from .immune_checkpoint import ImmuneCheckpoint
 from .method_tag import MethodTag
@@ -33,6 +34,7 @@ from .sample import Sample
 from .sample_to_mutation import SampleToMutation
 from .sample_to_tag import SampleToTag
 from .slide import Slide
+from .snp import Snp
 from .super_category import SuperCategory
 from .tag import Tag
 from .tag_to_publication import TagToPublication

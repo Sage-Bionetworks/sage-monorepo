@@ -11,6 +11,7 @@ from .gene_function_resolver import resolve_gene_function
 from .gene_types_resolver import resolve_gene_types
 from .genes_resolver import resolve_genes
 from .genes_by_tag_resolver import resolve_genes_by_tag
+from .germline_gwas_results_resolver import resolve_germline_gwas_results
 from .heritability_results_resolver import resolve_heritability_results
 from .immune_checkpoint_resolver import resolve_immune_checkpoints
 from .method_tags_resolver import resolve_method_tags
@@ -25,6 +26,7 @@ from .samples_resolver import resolve_samples
 from .samples_by_mutations_status_resolver import resolve_samples_by_mutations_status
 from .samples_by_tag_resolver import resolve_samples_by_tag
 from .slide_resolver import resolve_slides
+from .snp_resolver import resolve_snps
 from .super_categories_resolver import resolve_super_categories
 from .tags_resolver import resolve_tags
 from .test_resolver import resolve_test

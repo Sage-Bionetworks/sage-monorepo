@@ -274,6 +274,28 @@ type Query {
     name: [String!]
   ): [GeneType!]!
 
+    """
+  The "germlineGwasResults" query
+
+  If no arguments are passed, this will return all germline gwas results.
+  """
+  germlineGwasResults(
+    "An instance of PagingInput (see PagingInput)"
+    paging: PagingInput
+    "A boolean specifying whether or not duplicates should be filtered out. Default is false. Set to 'true' only when necessary, as it negatively impacts performance."
+    distinct: Boolean
+    "A list of data set names associated with the germline gwas results to filter by"
+    dataSet: [String!]
+    "A list of feature names associated with the germline gwas results to filter by."
+    feature: [String!]
+    "A list of snp names associated with the germline gwas results to filter by."
+    snp: [String!]
+    "A maximum P value to filter the germline gwas results by."
+    maxPValue: Float
+    "A minimum P value to filter the germline gwas results by."
+    minPValue: Float
+  ): GermlineGwasResult!
+
 
   """
   The "heritabilityResults" query
@@ -613,6 +635,27 @@ type Query {
     "A list of samples related to the slides to filter by."
     sample: [String!]
   ): [Slide!]!
+    """
+  The "snps" query
+
+  If no arguments are passed, this will return all snps.
+  """
+  snps(
+    "An instance of PagingInput (see PagingInput)"
+    paging: PagingInput
+    "A boolean specifying whether or not duplicates should be filtered out. Default is false. Set to 'true' only when necessary, as it negatively impacts performance."
+    distinct: Boolean
+    "A list of snp names to filter by."
+    name: [String!]
+    "A list of snp rsids to filter by."
+    rsid: [String!]
+    "A list of chromosomes to filter by."
+    chr: [String!]
+    "A maximum basepair value to filter snps by."
+    maxBP: Int
+    "A minimum basepair value to filter snps by."
+    minBP: Int
+  ): Snp!
 
   """
   The "superCategories" query

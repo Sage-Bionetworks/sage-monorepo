@@ -16,6 +16,7 @@ from .publication_to_gene_to_gene_type_queries import *
 from .result_queries import *
 from .sample_to_mutation_queries import *
 from .sample_to_tag_queries import *
+from .snp_queries import *
 from .tag_queries import *
 from .tag_to_publication_queries import *
 from .tag_to_tag_queries import *
