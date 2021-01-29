@@ -43,6 +43,6 @@ def graphql_server():
     return jsonify(result), status_code
 
 
-@bp.route('/home')
-def home():
-    return "I'm home!"
+@bp.route('/healthcheck')
+def healthcheck():
+    return 'Running', 200

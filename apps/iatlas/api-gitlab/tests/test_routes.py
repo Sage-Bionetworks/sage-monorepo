@@ -7,8 +7,8 @@ def test_graphiql_get(client):
     assert response.status_code == 200
 
 
-def test_home_get(client):
-    response = client.get('/home')
+def test_healthcheck_get(client):
+    response = client.get('/healthcheck')
     assert response.status_code == 200
 
 
