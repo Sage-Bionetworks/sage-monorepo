@@ -792,10 +792,10 @@
     },
     "dplyr": {
       "Package": "dplyr",
-      "Version": "1.0.2",
+      "Version": "1.0.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "d0509913b27ea898189ee664b6030dc2"
+      "Hash": "365f8c3650ab95582e600f160fd5fb88"
     },
     "ellipsis": {
       "Package": "ellipsis",
@@ -1069,10 +1069,10 @@
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
-      "Version": "1.5.2",
+      "Version": "1.5.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0aaf56b7960bb066646e1868cadcaf07"
+      "Hash": "6fdaa86d0700f8b3e92ee3c445a5a10d"
     },
     "httpcode": {
       "Package": "httpcode",
@@ -1097,27 +1097,27 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.12.0",
+      "Version": "0.12.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "master",
-      "RemoteSha": "3241ae6ed44566f9db91af394e7f8a1544d0855d",
+      "RemoteSha": "8c3fbe44cc44db0796021dd859b6ed73263bc6e5",
       "RemoteHost": "api.github.com",
-      "Hash": "30139f50a7eb75f67eaffb9e63342c94"
+      "Hash": "ff8d2f3257db8b6089d1690de1e1a414"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
-      "Version": "0.3.4",
+      "Version": "0.4.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules",
       "RemoteRef": "master",
-      "RemoteSha": "b467bd89c2fc114ec4ce10949e93fb6c0e40ffc8",
+      "RemoteSha": "0abb24cfe647b6bd74887885b8853f21f15c773f",
       "RemoteHost": "api.github.com",
-      "Hash": "64fc05872b56938dd3df840ac3136ba0"
+      "Hash": "2a7b17ac44b617766b8aa7a90516947a"
     },
     "igvShiny": {
       "Package": "igvShiny",
@@ -1426,10 +1426,10 @@
     },
     "plotly": {
       "Package": "plotly",
-      "Version": "4.9.2.1",
+      "Version": "4.9.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "b08edf378e0e38959a6983e3d5902795"
+      "Hash": "f6b85d9e4ed88074ea0ede1aa74bb00e"
     },
     "plyr": {
       "Package": "plyr",
@@ -1862,10 +1862,10 @@
     },
     "tibble": {
       "Package": "tibble",
-      "Version": "3.0.4",
+      "Version": "3.0.6",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "71dffd8544691c520dd8e41ed2d7e070"
+      "Hash": "9c6c10e594f32096ede0c7d373ccbddd"
     },
     "tictoc": {
       "Package": "tictoc",
