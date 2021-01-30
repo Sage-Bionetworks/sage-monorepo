@@ -133,11 +133,11 @@ build_cohort_tbl_by_clinical <- function(samples, clinical){
     iatlas.api.client::query_sample_patients(
       samples = samples
     ) %>%
-    dplyr::select(
+    dplyr::select(dplyr::all_of(c(
       "name" = clinical,
       "group" = clinical,
       "sample"
-    ) %>%
+    ))) %>%
     tidyr::drop_na() %>%
     dplyr::group_by(.data$group) %>%
     dplyr::mutate(
