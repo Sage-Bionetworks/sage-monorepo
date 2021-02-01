@@ -1,5 +1,5 @@
 from api import db
-from api.db_models import CopyNumberResult, DriverResult, HeritabilityResult
+from api.db_models import CopyNumberResult, DriverResult, HeritabilityResult, GermlineGwasResult
 from .database_helpers import build_option_args, build_query_args
 
 accepted_cnr_option_args = ['data_set', 'feature', 'gene', 'tag']
@@ -44,6 +44,17 @@ accepted_hr_query_args = ['dataset_id',
                           'variance',
                           'se']
 
+accepted_ggr_option_args = ['data_set', 'feature', 'snp']
+
+accepted_ggr_query_args = ['dataset_id',
+                           'id'
+                           'feature_id',
+                           'snp_id',
+                           'p_value',
+                           'maf',
+                           'module',
+                           'category']
+
 
 def return_copy_number_result_query(*args):
     option_args = build_option_args(
@@ -75,4 +86,15 @@ def return_heritability_result_query(*args):
     query = db.session.query(*query_args)
     if option_args:
         query = db.session.query(HeritabilityResult).options(*option_args)
+    return query
+
+
+def return_germline_gwas_result_query(*args):
+    option_args = build_option_args(
+        *args, accepted_args=accepted_ggr_option_args)
+    query_args = build_query_args(
+        GermlineGwasResult, *args, accepted_args=accepted_ggr_query_args)
+    query = db.session.query(*query_args)
+    if option_args:
+        query = db.session.query(GermlineGwasResult).options(*option_args)
     return query
