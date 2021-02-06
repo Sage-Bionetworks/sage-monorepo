@@ -118,7 +118,7 @@ Deploy:
   script:
     - "echo GITLAB_RUNNER_TOKEN: $GITLAB_RUNNER_TOKEN"
     # Which environment is the API being deployed to?
-    - 'env=$(( $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" ? "prod" : "staging" ))'
+    - 'env="staging"; if [ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" ]; then env="prod"; fi'
     - "export TRAVIS_BRANCH=$env"
     - "echo Deploying iAtlas API to $env"
     # Create .aws config and credentials files
