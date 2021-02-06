@@ -116,13 +116,14 @@ Deploy:
   stage: deploy
   image: python:3.8-alpine
   script:
+    - 'region="us-west-2"'
     # Which environment is the API being deployed to?
     - 'env="staging"; if [ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" ]; then env="prod"; fi'
     - "export TRAVIS_BRANCH=$env"
     - "echo Deploying iAtlas API to $env"
     # Create .aws config and credentials files
-    - 'echo -e "[default]\nregion = us-west-2\noutput = json" >> ~/.aws/config'
-    - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = us-west-2" >> ~/.aws/credentials'
+    - 'echo -e "[default]\nregion = ${region}\noutput = json" >> ~/.aws/config'
+    - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${region}" >> ~/.aws/credentials'
     # Ensure git is available.
     - "apk add --no-cache git"
     # Get the Sceptre scripts.
