@@ -122,6 +122,7 @@ Deploy:
     - "export TRAVIS_BRANCH=$env"
     - "echo Deploying iAtlas API to $env"
     # Create .aws config and credentials files
+    - "mkdir ~/.aws"
     - 'echo -e "[default]\nregion = ${region}\noutput = json" >> ~/.aws/config'
     - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${region}" >> ~/.aws/credentials'
     # Ensure git is available.
