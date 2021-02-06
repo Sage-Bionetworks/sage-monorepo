@@ -15,5 +15,7 @@
   ],
   "files.associations": {
     "Dockerfile*": "dockerfile"
-  }
+  },
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true
 }

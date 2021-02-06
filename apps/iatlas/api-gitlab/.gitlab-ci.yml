@@ -2,122 +2,141 @@ variables:
   CI: "1"
   # Workaround for locally issued TLS certs
   DOCKER_TLS_CERTDIR: ""
-
-  # Staging variables
-  STAGING_CONTAINER_NAME: $CI_REGISTRY_IMAGE:${CI_COMMIT_SHORT_SHA}-${CI_COMMIT_REF_NAME}
-  STAGING_CONTAINER_LABEL: iatlas-api
-  STAGING_DOCKER_HOST: ip-10-220-11-144.us-west-2.compute.internal
+  CONTAINER_NAME: $CI_REGISTRY_IMAGE:${CI_COMMIT_SHORT_SHA}-${CI_COMMIT_REF_NAME}
+  CONTAINER_LABEL: iatlas-api
 
 stages:
-  - test_code
-  - publish_coverage
-  - build_container
-  - deploy_staging
+  # - test_code
+  # - publish_coverage
+  # - build_container
+  - deploy
 
-tests:
-  only:
-    - merge_requests
-  except:
-    variables:
-      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
-  stage: test_code
-  image: python:3.8-alpine
-  script:
-    - apk add --no-cache openssh git libpq
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps
-    - export POSTGRES_DB=${STAGING_DB_NAME}
-    - export POSTGRES_HOST=${POSTGRES_HOST}
-    - export POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    - export POSTGRES_USER=${POSTGRES_USER}
-    - export FLASK_ENV=development
-    - pytest --cov --cov-report html -n auto
-  artifacts:
-    expose_as: "coverage-initial"
-    paths:
-      - coverage
-    expire_in: 30 days
-
-tests:coverage-report-staging:
-  only:
-    - staging
-  stage: test_code
-  image: python:3.8-alpine
-  script:
-    - apk add openssh git libpq
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps
-    - export POSTGRES_DB=${STAGING_DB_NAME}
-    - export POSTGRES_HOST=${POSTGRES_HOST}
-    - export POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    - export POSTGRES_USER=${POSTGRES_USER}
-    - export FLASK_ENV=staging
-    - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml --cov-report term:skip-covered -n auto
-    - coverage report --skip-covered | grep TOTAL
-  artifacts:
-    reports:
-      cobertura: coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
-
-# tests:coverage-report-prod:
+# tests:
 #   only:
-#     - master
+#     - merge_requests
+#   except:
+#     variables:
+#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
 #   stage: test_code
 #   image: python:3.8-alpine
+#   variables:
+#     # The environment variables used to populate the jon scoped environment variables (DB_HOST_PROD, DB_NAME_PROD, etc) are populated in the GitLab Runner in AWS
+#     - POSTGRES_DB: $DB_NAME_STAGING
+#     - POSTGRES_HOST: $DB_HOST_STAGING
+#     - POSTGRES_PASSWORD: $DB_PASSWORD_STAGING
+#     - POSTGRES_USER: $DB_USER_STAGING
+#     - FLASK_ENV: "test"
+#   script:
+#     - "echo POSTGRES_HOST -> $DB_HOST_STAGING"
+#     - "apk add --no-cache openssh git libpq"
+#     - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps"
+#     - pytest --cov --cov-report html -n auto
+#   artifacts:
+#     expose_as: "coverage-initial"
+#     paths:
+#       - coverage
+#     expire_in: 30 days
+
+# tests:coverage-report-staging:
+#   only:
+#     - staging
+#   stage: test_code
+#   image: python:3.8-alpine
+#   variables:
+#     # The environment variables used to populate the jon scoped environment variables (DB_HOST_PROD, DB_NAME_PROD, etc) are populated in the GitLab Runner in AWS
+#     - POSTGRES_DB: $DB_NAME_STAGING
+#     - POSTGRES_HOST: $DB_HOST_STAGING
+#     - POSTGRES_PASSWORD: $DB_PASSWORD_STAGING
+#     - POSTGRES_USER: $DB_USER_STAGING
+#     - FLASK_ENV: "test"
 #   script:
 #     - apk add openssh git libpq
 #     - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps
-#     - export POSTGRES_DB=${POSTGRES_DB}
-#     - export FLASK_ENV=production
 #     - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml --cov-report term:skip-covered -n auto
 #     - coverage report --skip-covered | grep TOTAL
 #   artifacts:
 #     reports:
 #       cobertura: coverage/iatlas-api_coverage_$CI_MERGE_REQUEST_TARGET_BRANCH_NAME.xml
 
-pages:
-  only:
-    - merge_requests
-  except:
-    variables:
-      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
-  stage: publish_coverage
-  dependencies:
-    - tests
-  script:
-    - mv ./coverage/ ./public/
-    - echo "Coverage available at $CI_PAGES_URL/"
-  artifacts:
-    expose_as: "coverage"
-    paths:
-      - public
-    expire_in: 30 days
+# tests:coverage-report-prod:
+#   only:
+#     - master
+#   stage: test_code
+#   image: python:3.8-alpine
+#   variables:
+#     # The environment variables used to populate the jon scoped environment variables (DB_HOST_PROD, DB_NAME_PROD, etc) are populated in the GitLab Runner in AWS
+#     - POSTGRES_DB: $DB_NAME_PROD
+#     - POSTGRES_HOST: $DB_HOST_PROD
+#     - POSTGRES_PASSWORD: $DB_PASSWORD_PROD
+#     - POSTGRES_USER: $DB_USER_PROD
+#     - FLASK_ENV: "test"
+#   script:
+#     - "apk add openssh git libpq"
+#     - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps"
+#     - "pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}.xml --cov-report term:skip-covered -n auto"
+#     - "coverage report --skip-covered | grep TOTAL"
+#   artifacts:
+#     reports:
+#       cobertura: "coverage/iatlas-api_coverage_${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}.xml"
 
-Build Container:
+# pages:
+#   only:
+#     - merge_requests
+#   except:
+#     variables:
+#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
+#   stage: publish_coverage
+#   dependencies:
+#     - tests
+#   script:
+#     - "mv ./coverage/ ./public/"
+#     - 'echo "Coverage available at ${CI_PAGES_URL}/"'
+#   artifacts:
+#     expose_as: "coverage"
+#     paths:
+#       - public
+#     expire_in: 30 days
+
+# Build Container:
+#   only:
+#     - staging
+#   stage: build_container
+#   image: docker:19.03.1-dind
+#   services:
+#     - name: docker:19.03.1-dind
+#   script:
+#     - "docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}"
+#     - "docker build -t ${CONTAINER_NAME} ."
+#     - "docker push ${CONTAINER_NAME}"
+
+Deploy:
   only:
     - staging
-  stage: build_container
-  image: docker:19.03.1-dind
-  services:
-    - name: docker:19.03.1-dind
+    - master
+  stage: deploy
+  image: python:3.8-alpine
   script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -t $STAGING_CONTAINER_NAME .
-    - docker push $STAGING_CONTAINER_NAME
-
-Deploy to Staging:
-  only:
-    - staging
-  stage: deploy_staging
-  image: eugenmayer/docker-client:latest
-  before_script:
-    - mkdir -p ~/.ssh
-    - mv "$STAGING_DOCKER_SSH_PRIV_KEY" ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    # Accept the Docker server host key
-    - ssh-keyscan -t rsa ${STAGING_DOCKER_HOST} >> ~/.ssh/known_hosts
-  script:
-    # Set the remote Docker endpoint
-    - export DOCKER_HOST=ssh://ubuntu@${STAGING_DOCKER_HOST}
-    # Stop the existing container
-    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker stop ${STAGING_CONTAINER_LABEL}
-    - docker ps -a
-    - docker run --rm -d -p 80:80 --name ${STAGING_CONTAINER_LABEL} -e POSTGRES_HOST=${POSTGRES_HOST} -e POSTGRES_USER=${POSTGRES_USER} -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -e POSTGRES_DB=${STAGING_DB_NAME} -e POSTGRES_PORT=5432 -e FLASK_ENV=staging ${STAGING_CONTAINER_NAME}
+    - "echo GITLAB_RUNNER_TOKEN: $GITLAB_RUNNER_TOKEN"
+    # Which environment is the API being deployed to?
+    - 'env=$(( $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" ? "prod" : "staging" ))'
+    - "export TRAVIS_BRANCH=$env"
+    - "echo Deploying iAtlas API to $env"
+    # Create .aws config and credentials files
+    # Ensure git is available.
+    - "apk add --no-cache git"
+    # Get the Sceptre scripts.
+    - "git clone -b feature/ecs https://github.com/generalui/iAtlas-infra.git"
+    - "cd iAtlas-infra"
+    - "echo At: $(pwd)"
+    # Ensure Sceptre is available and can handle !ssm.
+    # - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
+    # # Get the current status of the API stack.
+    # - 'sceptre_status=$(sceptre --var "region=us-west-2" status $env/iatlas-api.yaml)'
+    # # If there was an issue and the build was rolled back, delete the stack.
+    # - 'if [$sceptre_status == "ROLLBACK_COMPLETE"]; then sceptre_status=$(sceptre --var "region=us-west-2" delete $env/iatlas-api.yaml) && echo $sceptre_status; fi'
+    # # If there is no stack, create the stack.
+    # - 'if [$sceptre_status == "PENDING"]; then sceptre_status=$(sceptre --var "region=us-west-2" create $env/iatlas-api.yaml) && echo $sceptre_status; fi'
+    # # If there is an existing stack, update the stack.
+    # - 'if [$sceptre_status != "UPDATE_COMPLETE"] && [$sceptre_status != "CREATE_COMPLETE"]; then sceptre_status=$(sceptre --var "region=us-west-2" update $env/iatlas-api.yaml) && echo $sceptre_status; fi'
+    # # If the update succeeded, end the job, otherwise, fail the job.
+    # - 'if [$sceptre_status == "UPDATE_COMPLETE"]; then exit 0; else exit 1; fi'
