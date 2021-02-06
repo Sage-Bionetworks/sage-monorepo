@@ -116,21 +116,21 @@ Deploy:
   stage: deploy
   image: python:3.8-alpine
   script:
-    - "echo GITLAB_RUNNER_TOKEN: $GITLAB_RUNNER_TOKEN"
     # Which environment is the API being deployed to?
     - 'env="staging"; if [ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" ]; then env="prod"; fi'
     - "export TRAVIS_BRANCH=$env"
     - "echo Deploying iAtlas API to $env"
     # Create .aws config and credentials files
+    - 'echo -e "[default]\nregion = us-west-2\noutput = json" >> ~/.aws/config'
+    - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = us-west-2" >> ~/.aws/credentials'
     # Ensure git is available.
     - "apk add --no-cache git"
     # Get the Sceptre scripts.
     - "git clone -b feature/ecs https://github.com/generalui/iAtlas-infra.git"
     - "cd iAtlas-infra"
-    - "echo At: $(pwd)"
     # Ensure Sceptre is available and can handle !ssm.
-    # - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
-    # # Get the current status of the API stack.
+    - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
+    # Get the current status of the API stack.
     # - 'sceptre_status=$(sceptre --var "region=us-west-2" status $env/iatlas-api.yaml)'
     # # If there was an issue and the build was rolled back, delete the stack.
     # - 'if [$sceptre_status == "ROLLBACK_COMPLETE"]; then sceptre_status=$(sceptre --var "region=us-west-2" delete $env/iatlas-api.yaml) && echo $sceptre_status; fi'
