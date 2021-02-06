@@ -123,11 +123,11 @@ Deploy:
     - "echo Deploying iAtlas API to $env"
     # Create .aws config and credentials files
     # Ensure git is available.
-    - "apk add --no-cache git"
-    # Get the Sceptre scripts.
-    - "git clone -b feature/ecs https://github.com/generalui/iAtlas-infra.git"
-    - "cd iAtlas-infra"
-    - "echo At: $(pwd)"
+    # - "apk add --no-cache git"
+    # # Get the Sceptre scripts.
+    # - "git clone -b feature/ecs https://github.com/generalui/iAtlas-infra.git"
+    # - "cd iAtlas-infra"
+    # - "echo At: $(pwd)"
     # Ensure Sceptre is available and can handle !ssm.
     # - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
     # # Get the current status of the API stack.
