@@ -116,7 +116,7 @@ Deploy:
   stage: deploy
   image: python:3.8-alpine
   script:
-    - 'echo DB_USER_PROD_A: ${DB_USER_PROD_A}"
+    - "echo DB_USER_PROD_A: ${DB_USER_PROD_A}"
     - 'region="us-west-2"'
     # Which environment is the API being deployed to?
     - 'env="staging"; if [ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" ]; then env="prod"; fi'
