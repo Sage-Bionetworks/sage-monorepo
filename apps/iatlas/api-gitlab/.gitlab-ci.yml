@@ -34,8 +34,8 @@ tests:
     POSTGRES_USER: $DB_USER_STAGING
     FLASK_ENV: "test"
   script:
-    - "echo POSTGRES_HOST -> ${DB_HOST_STAGING}"
-    - "echo AWS_REGION -> ${AWS_DEFAULT_REGION}"
+    - "echo POSTGRES_HOST: ${DB_HOST_STAGING}"
+    - "echo AWS_REGION: ${AWS_DEFAULT_REGION}"
     # - "apk add --no-cache openssh git libpq unzip jq"
     # - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps"
     # - "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o '/tmp/awscliv2.zip' && cd /tmp && unzip awscliv2.zip && ./aws/install"
