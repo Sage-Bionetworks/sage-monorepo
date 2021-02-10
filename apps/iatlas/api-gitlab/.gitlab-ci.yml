@@ -7,8 +7,6 @@ variables:
 
 default:
   before_script:
-    - "cd ~"
-    - "ls"
     # Create .aws config and credentials files
     # - "mkdir ~/.aws"
     # - 'echo -e "[default]\nregion = ${AWS_REGION}\noutput = json" >> ~/.aws/config'
