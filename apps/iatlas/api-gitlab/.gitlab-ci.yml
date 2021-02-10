@@ -11,6 +11,32 @@ default:
     - "mkdir ~/.aws"
     - 'echo -e "[default]\nregion = ${AWS_DEFAULT_REGION}\noutput = json" >> ~/.aws/config'
     - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${AWS_DEFAULT_REGION}" >> ~/.aws/credentials'
+    # Install glibc compatibility for alpine and install aws (also installs curl)
+    - "GLIBC_VER=2.31-r0"
+    - "apk --no-cache add \
+      binutils \
+      curl \
+      unzip \
+      && curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub \
+      && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk \
+      && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk \
+      && apk add --no-cache \
+      glibc-${GLIBC_VER}.apk \
+      glibc-bin-${GLIBC_VER}.apk \
+      && curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
+      && unzip awscliv2.zip \
+      && aws/install \
+      && rm -rf \
+      awscliv2.zip \
+      aws \
+      /usr/local/aws-cli/v2/*/dist/aws_completer \
+      /usr/local/aws-cli/v2/*/dist/awscli/data/ac.index \
+      /usr/local/aws-cli/v2/*/dist/awscli/examples \
+      && apk --no-cache del \
+      binutils \
+      && rm glibc-${GLIBC_VER}.apk \
+      && rm glibc-bin-${GLIBC_VER}.apk \
+      && rm -rf /var/cache/apk/*"
 
 stages:
   - test_code
@@ -36,9 +62,8 @@ tests:
   script:
     - "echo POSTGRES_HOST: ${DB_HOST_STAGING}"
     - "echo AWS_REGION: ${AWS_DEFAULT_REGION}"
-    - "apk add --no-cache openssh git libpq curl unzip jq"
+    - "apk add --no-cache openssh libpq jq"
     - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps"
-    - "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o '/tmp/awscliv2.zip' && cd /tmp && unzip awscliv2.zip && ./aws/install"
     - "creds=$(aws --region ${AWS_DEFAULT_REGION} secretsmanager get-secret-value --secret-id iatlas_db_creds_encrypted --query SecretString --output text)"
     - "export DB_USER_PROD_A=$(echo $creds | jq -r .username_prod)"
     - "echo DB_USER_PROD_A -> $DB_USER_PROD_A"
