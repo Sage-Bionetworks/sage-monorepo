@@ -5,12 +5,12 @@ variables:
   CONTAINER_NAME: $CI_REGISTRY_IMAGE:${CI_COMMIT_SHORT_SHA}-${CI_COMMIT_REF_NAME}
   CONTAINER_LABEL: iatlas-api
 
-# default:
-#   before_script:
-#     # Create .aws config and credentials files
-#     - "mkdir ~/.aws"
-#     - 'echo -e "[default]\nregion = ${AWS_DEFAULT_REGION}\noutput = json" >> ~/.aws/config'
-#     - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${AWS_DEFAULT_REGION}" >> ~/.aws/credentials'
+default:
+  before_script:
+    # Create .aws config and credentials files
+    - "mkdir ~/.aws"
+    - 'echo -e "[default]\nregion = ${AWS_DEFAULT_REGION}\noutput = json" >> ~/.aws/config'
+    - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${AWS_DEFAULT_REGION}" >> ~/.aws/credentials'
 
 stages:
   - test_code
@@ -36,12 +36,12 @@ tests:
   script:
     - "echo POSTGRES_HOST: ${DB_HOST_STAGING}"
     - "echo AWS_REGION: ${AWS_DEFAULT_REGION}"
-    # - "apk add --no-cache openssh git libpq unzip jq"
-    # - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps"
-    # - "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o '/tmp/awscliv2.zip' && cd /tmp && unzip awscliv2.zip && ./aws/install"
-    # - "creds=$(aws --region ${AWS_DEFAULT_REGION} secretsmanager get-secret-value --secret-id iatlas_db_creds_encrypted --query SecretString --output text)"
-    # - "export DB_USER_PROD_A=$(echo $creds | jq -r .username_prod)"
-    # - "echo DB_USER_PROD_A -> $DB_USER_PROD_A"
+    - "apk add --no-cache openssh git libpq unzip jq"
+    - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps"
+    - "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o '/tmp/awscliv2.zip' && cd /tmp && unzip awscliv2.zip && ./aws/install"
+    - "creds=$(aws --region ${AWS_DEFAULT_REGION} secretsmanager get-secret-value --secret-id iatlas_db_creds_encrypted --query SecretString --output text)"
+    - "export DB_USER_PROD_A=$(echo $creds | jq -r .username_prod)"
+    - "echo DB_USER_PROD_A -> $DB_USER_PROD_A"
     # - pytest --cov --cov-report html -n auto
   artifacts:
     expose_as: "coverage-initial"
