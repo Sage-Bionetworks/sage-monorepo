@@ -6,37 +6,41 @@ variables:
   CONTAINER_LABEL: iatlas-api
 
 stages:
-  # - test_code
+  - test_code
   # - publish_coverage
   # - build_container
-  - deploy
+  # - deploy
 
-# tests:
-#   only:
-#     - merge_requests
-#   except:
-#     variables:
-#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
-#   stage: test_code
-#   image: python:3.8-alpine
-#   variables:
-#     # The environment variables used to populate the jon scoped environment variables (DB_HOST_PROD, DB_NAME_PROD, etc) are populated in the GitLab Runner in AWS
-#     - POSTGRES_DB: $DB_NAME_STAGING
-#     - POSTGRES_HOST: $DB_HOST_STAGING
-#     - POSTGRES_PASSWORD: $DB_PASSWORD_STAGING
-#     - POSTGRES_USER: $DB_USER_STAGING
-#     - FLASK_ENV: "test"
-#   script:
-#     - "echo POSTGRES_HOST -> $DB_HOST_STAGING"
-#     - "apk add --no-cache openssh git libpq"
-#     - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps"
-#     - pytest --cov --cov-report html -n auto
-#   artifacts:
-#     expose_as: "coverage-initial"
-#     paths:
-#       - coverage
-#     expire_in: 30 days
-
+tests:
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
+  stage: test_code
+  image: python:3.8-alpine
+  variables:
+    # The environment variables used to populate the jon scoped environment variables (DB_HOST_PROD, DB_NAME_PROD, etc) are populated in the GitLab Runner in AWS
+    - POSTGRES_DB: $DB_NAME_STAGING
+    - POSTGRES_HOST: $DB_HOST_STAGING
+    - POSTGRES_PASSWORD: $DB_PASSWORD_STAGING
+    - POSTGRES_USER: $DB_USER_STAGING
+    - FLASK_ENV: "test"
+  script:
+    - "echo POSTGRES_HOST -> $DB_HOST_STAGING"
+    - "echo AWS_REGION -> $AWS_REGION"
+    - "apk add --no-cache openssh git libpq unzip jq"
+    - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps"
+    - "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o 'awscliv2.zip' && unzip awscliv2.zip && ./aws/install"
+    - "creds=$(aws --region ${AWS_REGION} secretsmanager get-secret-value --secret-id iatlas_db_creds_encrypted --query SecretString --output text);"
+    - "export DB_USER_PROD_A=$(echo $creds | jq -r .username_prod)"
+    - "echo DB_USER_PROD_A -> $DB_USER_PROD_A"
+    # - pytest --cov --cov-report html -n auto
+  # artifacts:
+  #   expose_as: "coverage-initial"
+  #   paths:
+  #     - coverage
+  #   expire_in: 30 days
 # tests:coverage-report-staging:
 #   only:
 #     - staging
@@ -109,37 +113,35 @@ stages:
 #     - "docker build -t ${CONTAINER_NAME} ."
 #     - "docker push ${CONTAINER_NAME}"
 
-Deploy:
-  only:
-    - staging
-    - master
-  stage: deploy
-  image: python:3.8-alpine
-  script:
-    - "echo DB_USER_PROD_A: ${DB_USER_PROD_A}"
-    - 'region="us-west-2"'
-    # Which environment is the API being deployed to?
-    - 'env="staging"; if [ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" ]; then env="prod"; fi'
-    - "export TRAVIS_BRANCH=$env"
-    - "echo Deploying iAtlas API to $env"
-    # Create .aws config and credentials files
-    - "mkdir ~/.aws"
-    - 'echo -e "[default]\nregion = ${region}\noutput = json" >> ~/.aws/config'
-    - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${region}" >> ~/.aws/credentials'
-    # Ensure git is available.
-    - "apk add --no-cache git"
-    # Get the Sceptre scripts.
-    - "git clone -b feature/ecs https://github.com/generalui/iAtlas-infra.git"
-    - "cd iAtlas-infra"
-    # Ensure Sceptre is available and can handle !ssm.
-    - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
-    # Get the current status of the API stack.
-    # - 'sceptre_status=$(sceptre --var "region=us-west-2" status $env/iatlas-api.yaml)'
-    # # If there was an issue and the build was rolled back, delete the stack.
-    # - 'if [$sceptre_status == "ROLLBACK_COMPLETE"]; then sceptre_status=$(sceptre --var "region=us-west-2" delete $env/iatlas-api.yaml) && echo $sceptre_status; fi'
-    # # If there is no stack, create the stack.
-    # - 'if [$sceptre_status == "PENDING"]; then sceptre_status=$(sceptre --var "region=us-west-2" create $env/iatlas-api.yaml) && echo $sceptre_status; fi'
-    # # If there is an existing stack, update the stack.
-    # - 'if [$sceptre_status != "UPDATE_COMPLETE"] && [$sceptre_status != "CREATE_COMPLETE"]; then sceptre_status=$(sceptre --var "region=us-west-2" update $env/iatlas-api.yaml) && echo $sceptre_status; fi'
-    # # If the update succeeded, end the job, otherwise, fail the job.
-    # - 'if [$sceptre_status == "UPDATE_COMPLETE"]; then exit 0; else exit 1; fi'
+# Deploy:
+#   only:
+#     - staging
+#     - master
+#   stage: deploy
+#   image: python:3.8-alpine
+#   script:
+#     # Which environment is the API being deployed to?
+#     - 'env="staging"; if [ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" ]; then env="prod"; fi'
+#     - "export TRAVIS_BRANCH=$env"
+#     - "echo Deploying iAtlas API to $env"
+#     # Create .aws config and credentials files
+#     - "mkdir ~/.aws"
+#     - 'echo -e "[default]\nregion = ${AWS_REGION}\noutput = json" >> ~/.aws/config'
+#     - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${AWS_REGION}" >> ~/.aws/credentials'
+#     # Ensure git is available.
+#     - "apk add --no-cache git"
+#     # Get the Sceptre scripts.
+#     - "git clone -b feature/ecs https://github.com/generalui/iAtlas-infra.git"
+#     - "cd iAtlas-infra"
+#     # Ensure Sceptre is available and can handle !ssm.
+#     - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
+#     # Get the current status of the API stack.
+#     - 'sceptre_status=$(sceptre --var "region=${AWS_REGION}" status $env/iatlas-api.yaml)'
+#     # If there was an issue and the build was rolled back, delete the stack.
+#     - 'if [$sceptre_status == "ROLLBACK_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_REGION}" delete $env/iatlas-api.yaml) && echo $sceptre_status; fi'
+#     # If there is no stack, create the stack.
+#     - 'if [$sceptre_status == "PENDING"]; then sceptre_status=$(sceptre --var "region=${AWS_REGION}" create $env/iatlas-api.yaml) && echo $sceptre_status; fi'
+#     # If there is an existing stack, update the stack.
+#     - 'if [$sceptre_status != "UPDATE_COMPLETE"] && [$sceptre_status != "CREATE_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_REGION}" update $env/iatlas-api.yaml) && echo $sceptre_status; fi'
+#     # If the update succeeded, end the job, otherwise, fail the job.
+#     - 'if [$sceptre_status == "UPDATE_COMPLETE"]; then exit 0; else exit 1; fi'
