@@ -67,8 +67,7 @@ tests:
     - "creds=$(aws --region ${AWS_DEFAULT_REGION} secretsmanager get-secret-value --secret-id iatlas_db_creds_encrypted --query SecretString --output text)"
     - "export DB_USER_PROD_A=$(echo $creds | jq -r .username_prod)"
     - "echo DB_USER_PROD_A: $DB_USER_PROD_A"
-    # - pytest --cov --cov-report html -n auto
-    - exit 1
+    - pytest --cov --cov-report html -n auto
   artifacts:
     expose_as: "coverage-initial"
     paths:
