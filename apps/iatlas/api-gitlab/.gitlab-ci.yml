@@ -9,8 +9,8 @@ variables:
 #   before_script:
 #     # Create .aws config and credentials files
 #     - "mkdir ~/.aws"
-#     - 'echo -e "[default]\nregion = ${AWS_REGION}\noutput = json" >> ~/.aws/config'
-#     - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${AWS_REGION}" >> ~/.aws/credentials'
+#     - 'echo -e "[default]\nregion = ${AWS_DEFAULT_REGION}\noutput = json" >> ~/.aws/config'
+#     - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${AWS_DEFAULT_REGION}" >> ~/.aws/credentials'
 
 stages:
   - test_code
@@ -34,12 +34,12 @@ tests:
     POSTGRES_USER: $DB_USER_STAGING
     FLASK_ENV: "test"
   script:
-    - "echo POSTGRES_HOST -> $DB_HOST_STAGING"
-    # - "echo AWS_REGION -> $AWS_REGION"
+    - "echo POSTGRES_HOST -> ${DB_HOST_STAGING}"
+    - "echo AWS_REGION -> ${AWS_DEFAULT_REGION}"
     # - "apk add --no-cache openssh git libpq unzip jq"
     # - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps"
     # - "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o '/tmp/awscliv2.zip' && cd /tmp && unzip awscliv2.zip && ./aws/install"
-    # - "creds=$(aws --region ${AWS_REGION} secretsmanager get-secret-value --secret-id iatlas_db_creds_encrypted --query SecretString --output text)"
+    # - "creds=$(aws --region ${AWS_DEFAULT_REGION} secretsmanager get-secret-value --secret-id iatlas_db_creds_encrypted --query SecretString --output text)"
     # - "export DB_USER_PROD_A=$(echo $creds | jq -r .username_prod)"
     # - "echo DB_USER_PROD_A -> $DB_USER_PROD_A"
     # - pytest --cov --cov-report html -n auto
@@ -143,12 +143,12 @@ tests:
 #     # Ensure Sceptre is available and can handle !ssm.
 #     - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
 #     # Get the current status of the API stack.
-#     - 'sceptre_status=$(sceptre --var "region=${AWS_REGION}" status $env/iatlas-api.yaml)'
+#     - 'sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status $env/iatlas-api.yaml)'
 #     # If there was an issue and the build was rolled back, delete the stack.
-#     - 'if [$sceptre_status == "ROLLBACK_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_REGION}" delete $env/iatlas-api.yaml) && echo $sceptre_status; fi'
+#     - 'if [$sceptre_status == "ROLLBACK_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete $env/iatlas-api.yaml) && echo $sceptre_status; fi'
 #     # If there is no stack, create the stack.
-#     - 'if [$sceptre_status == "PENDING"]; then sceptre_status=$(sceptre --var "region=${AWS_REGION}" create $env/iatlas-api.yaml) && echo $sceptre_status; fi'
+#     - 'if [$sceptre_status == "PENDING"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create $env/iatlas-api.yaml) && echo $sceptre_status; fi'
 #     # If there is an existing stack, update the stack.
-#     - 'if [$sceptre_status != "UPDATE_COMPLETE"] && [$sceptre_status != "CREATE_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_REGION}" update $env/iatlas-api.yaml) && echo $sceptre_status; fi'
+#     - 'if [$sceptre_status != "UPDATE_COMPLETE"] && [$sceptre_status != "CREATE_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update $env/iatlas-api.yaml) && echo $sceptre_status; fi'
 #     # If the update succeeded, end the job, otherwise, fail the job.
 #     - 'if [$sceptre_status == "UPDATE_COMPLETE"]; then exit 0; else exit 1; fi'
