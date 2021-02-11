@@ -269,6 +269,7 @@ ici_distribution_server <- function(
       output$plot_text <- shiny::renderText({
 
         shiny::validate(need(!is.null(input$datasets), " "))
+        shiny::req(df_selected())
 
         data <- plotly::event_data("plotly_click", source = "distPlots")
 
@@ -295,6 +296,7 @@ ici_distribution_server <- function(
 
       output$drilldown_plot <- plotly::renderPlotly({
         shiny::validate(need(!is.null(input$datasets), " "))
+        shiny::req(df_selected())
 
         eventdata <- plotly::event_data("plotly_click", source = "distPlots")
         shiny::validate(need(!is.null(eventdata), "Click plot above"))
