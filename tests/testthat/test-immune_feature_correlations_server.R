@@ -1,4 +1,4 @@
-test_that("module_works", {
+test_that("immune_feature_correlations_server", {
   shiny::testServer(
     immune_feature_correlations_server,
     args = list(
