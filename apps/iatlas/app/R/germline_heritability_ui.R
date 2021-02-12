@@ -15,33 +15,29 @@ germline_heritability_ui <- function(id){
           width = 3,
           shiny::column(
             width = 12,
-            shiny::selectizeInput(ns("parameter"), "Choose selection parameter",
+            shiny::selectizeInput(ns("parameter"), "Subset by",
                                   choices = c("Ancestry" = "cluster",
-                                    "Immune Feature" = "display",
-                                    "Immune Category" = "Annot.Figure.ImmuneCategory",
-                                    "Immune Module" = "Annot.Figure.ImmuneModule"
+                                              "Immune Feature" = "feature_display",
+                                              "Immune Category" = "category",
+                                              "Immune Module" = "module"
                                   ),
                                   selected = "Ancestry"),
             shiny::uiOutput(ns("selection_options")),
-            # shiny::conditionalPanel(paste0("input['", ns("group"), "'] == 'European'"),
-            #                         shiny::checkboxInput(ns("byImmune"),
-            #                                              "Account for interaction betweem germline genotypes and immune subtypes")),
             shiny::sliderInput(ns("pvalue"),
                                "Select p-value threshold",
                                min = 0, max = 0.5, value = 0.05, step = 0.01),
             shiny::selectizeInput(ns("order_bars"),
                                   "Order bars by ",
-                                  choices = list("V(Genotype)/Vp" = "Variance",
-                                                 "LRT p-value" = "pval",
-                                                 "LRT FDR" = "FDR",
-                                                 "Immune Trait Category" = "Annot.Figure.ImmuneCategory",
-                                                 "Immune Trait Module" = "Annot.Figure.ImmuneModule",
+                                  choices = list("V(Genotype)/Vp" = "variance",
+                                                 "LRT p-value" = "p_value",
+                                                 "LRT FDR" = "fdr",
+                                                 "Immune Trait Category" = "category",
+                                                 "Immune Trait Module" = "module",
                                                  "Ancestry" = "cluster"
-                                                 ),
-                                  selected = "Variance")
+                                  ),
+                                  selected = "variance")
           )
         ),
-        #shiny::fluidRow(
           plotBox(
             width = 9,
             plotly::plotlyOutput(ns("heritability"), height = "700px") %>%

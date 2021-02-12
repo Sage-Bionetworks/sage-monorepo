@@ -4,8 +4,7 @@ germline_heritability_server <- function(id, cohort_obj){
     function(input, output, session) {
 
       heritability <- reactive({
-        GERMLINE_PATH = "inst/extdata/"
-        feather::read_feather(paste0(GERMLINE_PATH, "tcga_heritability.feather"))
+        iatlas.api.client::query_heritability_results(datasets = "TCGA")
       })
 
       ancestry_options <- reactive({
@@ -15,22 +14,22 @@ germline_heritability_server <- function(id, cohort_obj){
       ns <- session$ns
 
       output$selection_options <- renderUI({
-        shiny::req(input$parameter)
+        shiny::req(input$parameter, heritability())
 
         if(input$parameter == "cluster") opt <- ancestry_options()
 
-        if(input$parameter == "display"){
+        if(input$parameter == "feature_display"){
           opt <- heritability() %>%
-            dplyr::select(display,`Annot.Figure.ImmuneCategory`) %>%
-            dplyr::group_by(`Annot.Figure.ImmuneCategory`) %>%
-            tidyr::nest(data = c(display))%>%
+            dplyr::select(feature_display,category) %>%
+            dplyr::group_by(category) %>%
+            tidyr::nest(data = c(feature_display))%>%
             dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
             tibble::deframe()
         }
-        if(input$parameter == "Annot.Figure.ImmuneCategory") opt <- unique(heritability()$`Annot.Figure.ImmuneCategory`)
-        if(input$parameter == "Annot.Figure.ImmuneModule") opt <- unique(heritability()$`Annot.Figure.ImmuneModule`)
+        if(input$parameter == "category") opt <- unique(heritability()$category)
+        if(input$parameter == "module") opt <- unique(heritability()$module)
 
-        shiny::selectizeInput(ns("group"), "Select variable", choices = opt, selected = opt[4])
+        shiny::selectizeInput(ns("group"), "Show associated results for", choices = opt, selected = opt[4])
 
       })
 
@@ -45,13 +44,13 @@ germline_heritability_server <- function(id, cohort_obj){
 
       hdf <- reactive({
         shiny::req(input$group)
-        iatlas.app::create_heritability_df(
-            heritablity_data = heritability(),
-            parameter = input$parameter,
-            group = input$group,
-            pval_thres =input$pvalue,
-            ancestry_labels = ancestry_options()
-          )
+        create_heritability_df(
+          heritablity_data = heritability(),
+          parameter = input$parameter,
+          group = input$group,
+          pval_thres =input$pvalue,
+          ancestry_labels = ancestry_options()
+        )
       })
 
       output$heritability <- plotly::renderPlotly({
@@ -63,68 +62,67 @@ germline_heritability_server <- function(id, cohort_obj){
         #order bars
         if(is.numeric(hdf()[[input$order_bars]]))  plot_levels <-levels(reorder(hdf()[["ylabel"]], hdf()[[input$order_bars]], sort))
         else plot_levels <- (hdf() %>%
-              dplyr::arrange(.[[input$order_bars]], Variance))$ylabel %>%
-              as.factor()
+                               dplyr::arrange(.[[input$order_bars]], variance))$ylabel %>%
+          as.factor()
 
 
         hdf() %>%
-          #dplyr::rename(LRT_p_value = pval) %>%
-          dplyr::mutate('Neg_log10_p_value' = -log10(pval)) %>% #changing column name to legend title display
-          iatlas.app::create_barplot_horizontal(
-              df = .,
-              x_col = "Variance",
-              y_col = "ylabel",
-              error_col = "SE",
-              key_col = NA,
-              color_col = "Neg_log10_p_value",
-              label_col = "label",
-              xlab = "Heritability",
-              ylab = "",
-              order_by = plot_levels,
-              title = plot_title(),
-              showLegend = TRUE,
-              legendTitle = "LRT \n p-value",
-              source_name = "heritability_plot",
-              bar_colors = NULL
-            ) %>%
-          iatlas.app::format_heritability_plot(., hdf(), fdr = TRUE)
+          dplyr::mutate('Neg_log10_p_value' = -log10(p_value)) %>% #changing column name to legend title display
+          create_barplot_horizontal(
+            df = .,
+            x_col = "variance",
+            y_col = "ylabel",
+            error_col = "se",
+            key_col = NA,
+            color_col = "Neg_log10_p_value",
+            label_col = "label",
+            xlab = "Heritability",
+            ylab = "",
+            order_by = plot_levels,
+            title = plot_title(),
+            showLegend = TRUE,
+            legendTitle = "LRT \n p-value",
+            source_name = "heritability_plot",
+            bar_colors = NULL
+          ) #%>%
+          #format_heritability_plot(., hdf(), fdr = TRUE)
       })
 
-      output$heritability_cov <- plotly::renderPlotly({
-
-        eventdata <- plotly::event_data( "plotly_click", source = "heritability_plot")
-        sub_clusters <- c("Covar:Immune Subtype", "C1", "C2", "C3")
-
-        shiny::validate(
-          shiny::need(!is.null(eventdata),
-                      "Click bar plot"))
-        selected_plot_trait <- eventdata$y[[1]]
-
-        hdf_plot <-heritability()%>%
-          dplyr::filter(cluster %in% sub_clusters & display == selected_plot_trait)
-
-        plot_colors <- c("#bebebe", "#FF0000", "#FFFF00", "#00FF00")
-        names(plot_colors) <- sub_clusters
-
-        hdf_plot$cluster <- factor(hdf_plot$cluster, levels = c("C3", "C2", "C1", "Covar:Immune Subtype" ))
-
-        iatlas.app::create_barplot_horizontal(
-          df = hdf_plot,
-          x_col = "Variance",
-          y_col = "cluster",
-          error_col = "SE",
-          key_col = NA,
-          color_col = "cluster",
-          label_col = NA,
-          xlab = "Heritability",
-          ylab = "",
-          title = paste("Random data for", selected_plot_trait),
-          showLegend = FALSE,
-          source_name = NULL,
-          bar_colors = plot_colors
-          ) %>%
-          iatlas.app::format_heritability_plot(., hdf_plot, fdr = FALSE)
-      })
+      # output$heritability_cov <- plotly::renderPlotly({
+      #
+      #   eventdata <- plotly::event_data( "plotly_click", source = "heritability_plot")
+      #   sub_clusters <- c("Covar:Immune Subtype", "C1", "C2", "C3")
+      #
+      #   shiny::validate(
+      #     shiny::need(!is.null(eventdata),
+      #                 "Click bar plot"))
+      #   selected_plot_trait <- eventdata$y[[1]]
+      #
+      #   hdf_plot <- germline_data$heritability %>%
+      #     dplyr::filter(cluster %in% sub_clusters & display == selected_plot_trait)
+      #
+      #   plot_colors <- c("#bebebe", "#FF0000", "#FFFF00", "#00FF00")
+      #   names(plot_colors) <- sub_clusters
+      #
+      #   hdf_plot$cluster <- factor(hdf_plot$cluster, levels = c("C3", "C2", "C1", "Covar:Immune Subtype" ))
+      #
+      #   create_barplot_horizontal(
+      #     df = hdf_plot,
+      #     x_col = "Variance",
+      #     y_col = "cluster",
+      #     error_col = "SE",
+      #     key_col = NA,
+      #     color_col = "cluster",
+      #     label_col = NA,
+      #     xlab = "Heritability",
+      #     ylab = "",
+      #     title = paste("Random data for", selected_plot_trait),
+      #     showLegend = FALSE,
+      #     source_name = NULL,
+      #     bar_colors = plot_colors
+      #   ) %>%
+      #     format_heritability_plot(., hdf_plot, fdr = FALSE)
+      # })
 
       observeEvent(input$method_link,{
         shiny::showModal(modalDialog(
