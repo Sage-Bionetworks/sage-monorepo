@@ -21,19 +21,19 @@ create_heritability_df <- function(
 
     df <- heritablity_data %>%
       dplyr::filter(.[[parameter]] == group) %>%
-      dplyr::filter(pval <= pval_thres) %>%
-      dplyr::filter(Variance >= 0) %>%
+      dplyr::filter(p_value <= pval_thres) %>%
+      dplyr::filter(variance >= 0) %>%
       iatlas.app::create_plotly_label(
-        ., paste(.$display, "- ", ancestry_df[cluster], "Ancestry"),
-        paste("\n Immune Trait Category:",.$Annot.Figure.ImmuneCategory, "\n Immune Trait Module:", .$Annot.Figure.ImmuneModule),
-        c("Variance", "SE", "pval","FDR"),
+        ., paste(.$feature_display, "- ", ancestry_df[cluster], "Ancestry"),
+        paste("\n Immune Trait Category:",.$category, "\n Immune Trait Module:", .$module),
+        c("variance", "se", "p_value","fdr"),
         title = "Immune Trait"
       )
 
   #creating the y label
-  if(parameter == "cluster") df <- df %>% mutate(ylabel = display)
-  else if (parameter == "Annot.Figure.ImmuneCategory" | parameter == "Annot.Figure.ImmuneModule")
-    df <- df %>% mutate(ylabel = paste(ancestry_df[cluster], display, sep = " - "))
+  if(parameter == "cluster") df <- df %>% mutate(ylabel = feature_display)
+  else if (parameter == "category" | parameter == "module")
+    df <- df %>% mutate(ylabel = paste(ancestry_df[cluster], feature_display, sep = " - "))
   else  df <- df %>% mutate(ylabel = paste(ancestry_df[cluster], .[[parameter]], sep = " - "))
 }
 
@@ -46,17 +46,17 @@ format_heritability_plot <- function(p, hdf, fdr = FALSE){
     )
     if(fdr == TRUE){
       p <- p %>%
-            plotly::add_annotations(x = hdf$Variance+hdf$SE+0.01,
+            plotly::add_annotations(x = hdf$variance+hdf$se+0.01,
                                     y = hdf$ylabel,
                                     text = (hdf$plot_annot),
                                     xref = "x",
                                     yref = "y",
                                     showarrow = F,
-                                    font=list(color='black')) %>%
-            plotly::add_annotations( text="LRT FDR \n † <= 0.1 \n * <= 0.05 \n ** <= 0.01 \n *** <= 0.001", xref="paper", yref="paper",
-                                     x=1.03, xanchor="left",
-                                     y=0, yanchor="bottom",
-                                     legendtitle=TRUE, showarrow=FALSE )
+                                    font=list(color='black')) #%>%
+            # plotly::add_annotations( text="LRT FDR \n † <= 0.1 \n * <= 0.05 \n ** <= 0.01 \n *** <= 0.001", xref="paper", yref="paper",
+            #                          x=1.03, xanchor="left",
+            #                          y=0, yanchor="bottom",
+            #                          legendtitle=TRUE, showarrow=FALSE )
     }
   p
 }
