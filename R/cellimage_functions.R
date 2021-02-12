@@ -77,7 +77,29 @@ get_cellimage_feature_nodes <- function(dataset, tag, features){
     dplyr::mutate("Type" = "Cell")
 }
 
-get_cellimage_edges <- function(nodes){
+add_nonexistent_gene_nodes <- function(present_nodes, all_nodes){
+  missing_nodes <- all_nodes[which(!all_nodes %in% present_nodes$node_feature_name)] #which node is missing
+  missing_df <- get_cellimage_gene_nodes("TCGA", "C1", missing_nodes) #query for a group that is known to have all nodes
+  missing_df$score <- NA_integer_
+
+  rbind(present_nodes, missing_df)
+}
+
+add_nonexistent_feature_nodes <- function(present_nodes, all_nodes){
+  missing_nodes <- all_nodes[which(!all_nodes %in% present_nodes$node_feature_name)] #which node is missing
+  missing_df <- get_cellimage_feature_nodes("TCGA", "C1", missing_nodes) #query for a group that is known to have all nodes
+  missing_df$score <- NA_integer_
+
+  rbind(present_nodes, missing_df)
+}
+
+get_cellimage_edges <- function(){
+
+  #Using TCGA/C1 as default for getting all cellimage edges
+  nodes <- dplyr::bind_rows(
+    get_cellimage_gene_nodes("TCGA", "C1", get_cellimage_genes()),
+    get_cellimage_feature_nodes("TCGA", "C1", get_cellimage_features()))
+
   node_names <- nodes %>%
     dplyr::pull("node_name") %>%
     unique()
@@ -139,28 +161,34 @@ getVarColor <- function(feature, colormap, node_df, range_df, alpha = 1.){
     dplyr::filter(.data$node_feature_name == feature) %>%
     purrr::pluck("score")
 
-  vmin <- range_df %>%
-    dplyr::filter(.data$node_feature_name == feature) %>%
-    purrr::pluck("MinBound")
-  vmax <- range_df %>%
-    dplyr::filter(.data$node_feature_name == feature) %>%
-    purrr::pluck("MaxBound")
-  vnstep <- 51
-  vstep <- (vmax-vmin)/(vnstep-1) ## size of step
+  if ( is.null(display.val)) {
+    usecolor <- paste("#e6e6e6",alpha.hex,sep = "")
+  } else {
+    vmin <- range_df %>%
+      dplyr::filter(.data$node_feature_name == feature) %>%
+      purrr::pluck("MinBound")
+    vmax <- range_df %>%
+      dplyr::filter(.data$node_feature_name == feature) %>%
+      purrr::pluck("MaxBound")
+    vnstep <- 51
+    vstep <- (vmax-vmin)/(vnstep-1) ## size of step
 
-  if(vstep == 0 || is.na(vstep)){
-    stop("step size in getVarColor is 0 or NA")
+    if(vstep == 0 || is.na(vstep)){
+      stop("step size in getVarColor is 0 or NA")
+    }
+    if (length(display.val) == 0 || is.na(display.val)){
+      stop("Display value: ", display.val, " is problematic")
+    }
+    breakList <- seq(vmin,vmax,vstep)
+    cind <- min(which(!(display.val-breakList)>0)) ## right turnover point
+
+    allcolors <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(n = 7,name=colormap))(length(breakList))
+    allcolors.with.alpha <- paste(allcolors,alpha.hex,sep = "")
+
+    usecolor <- allcolors.with.alpha[cind]
   }
-  if (length(display.val) == 0 || is.na(display.val)){
-    stop("Display value: ", display.val, " is problematic")
-  }
-  breakList <- seq(vmin,vmax,vstep)
-  cind <- min(which(!(display.val-breakList)>0)) ## right turnover point
-
-  allcolors <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(n = 7,name=colormap))(length(breakList))
-  allcolors.with.alpha <- paste(allcolors,alpha.hex,sep = "")
-
-  usecolor <- allcolors.with.alpha[cind]
   usecolor
+
+
 }
 

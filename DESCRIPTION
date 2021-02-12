@@ -12,7 +12,8 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests:
-    testthat (>= 2.1.0)
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
 RoxygenNote: 7.1.1
 biocViews:
 Imports:
@@ -56,7 +57,7 @@ Imports:
     viridisLite,
     wrapr
 Remotes:
-    CRI-iAtlas/iatlas.api.client@master,
+    CRI-iAtlas/iatlas.api.client@main,
     CRI-iAtlas/iatlas.modules@master,
     CRI-iAtlas/ImmuneSubtypeClassifier@master,
     CRI-iAtlas/cyjShiny@master, 
