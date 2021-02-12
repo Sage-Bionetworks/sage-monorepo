@@ -71,7 +71,7 @@ test_that("cellimage_plot_server_pcawg", {
           "Type"
         )
       )
-      expect_error(plot_obj())
+      expect_type(plot_obj(), "list")
     }
   )
 })

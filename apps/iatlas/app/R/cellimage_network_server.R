@@ -11,12 +11,18 @@ cellimage_network_server <- function(id, dataset, tag) {
 
       gene_nodes <- shiny::reactive({
         shiny::req(dataset(), tag(), cellimage_genes())
-        get_cellimage_gene_nodes(dataset(), tag(), cellimage_genes())
+        nodes <- get_cellimage_gene_nodes(dataset(), tag(), cellimage_genes())
+
+        if(nrow(nodes) == length(cellimage_genes())) nodes
+        else add_nonexistent_gene_nodes(nodes, cellimage_genes())
       })
 
       feature_nodes <- shiny::reactive({
         shiny::req(dataset(), tag(), cellimage_features())
-        get_cellimage_feature_nodes(dataset(), tag(), cellimage_features())
+        nodes <- get_cellimage_feature_nodes(dataset(), tag(), cellimage_features())
+
+        if(nrow(nodes) == length(cellimage_features())) nodes
+        else add_nonexistent_feature_nodes(nodes, cellimage_features())
       })
 
       nodes <- shiny::reactive({
@@ -26,7 +32,7 @@ cellimage_network_server <- function(id, dataset, tag) {
 
       edges <- shiny::reactive({
         shiny::req(nodes())
-        get_cellimage_edges(nodes())
+        get_cellimage_edges()
       })
 
       graph_json <- shiny::reactive({

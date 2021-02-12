@@ -35,11 +35,11 @@ cellimage_plot_server <- function(id, dataset, tag) {
 
         annotations <- "cellimage_annotations" %>%
           get_tsv_path() %>%
-          readr::read_tsv(.)
+          readr::read_tsv(., col_types = "cccd")
 
         labels <- "cellimage_labels" %>%
           get_tsv_path() %>%
-          readr::read_tsv(.) %>%
+          readr::read_tsv(., col_types = "c") %>%
           dplyr::pull("label")
 
         pic <- "tcell-cairo" %>%

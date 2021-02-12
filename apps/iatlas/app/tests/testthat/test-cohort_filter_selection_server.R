@@ -68,9 +68,7 @@ test_that("cohort_filter_selection_server_tcga", {
       expect_named(feature_tbl(), c("class", "display", "feature"))
       expect_true(nrow(feature_tbl()) > 0)
       expect_named(clinical_tbl(), c("class", "display", "feature"))
-      expect_equal(nrow(clinical_tbl()), 3options(repos = BiocManager::repositories())
-options(repos = BiocManager::repositories())
-)
+      expect_equal(nrow(clinical_tbl()), 3)
       expect_type(numeric_named_list(), "list")
       expect_named(numeric_named_list())
 
