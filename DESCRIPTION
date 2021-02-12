@@ -54,7 +54,7 @@ Imports:
     viridisLite,
     wrapr
 Remotes:
-    CRI-iAtlas/iatlas.api.client@master,
+    CRI-iAtlas/iatlas.api.client@main,
     CRI-iAtlas/iatlas.modules@master,
     CRI-iAtlas/ImmuneSubtypeClassifier@master,
     CRI-iAtlas/cyjShiny@master, 
