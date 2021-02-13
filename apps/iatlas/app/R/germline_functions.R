@@ -114,34 +114,50 @@ build_manhattanplot_tbl <- function(
   gwas_df,
   chr_selected,
   bp_min,
-  bp_max) {
+  bp_max,
+  to_select,
+  to_highlight,
+  to_exclude) {
 
-  df <- gwas_df %>%
+  if(to_highlight == FALSE & !is.null(to_exclude)) gwas <- gwas_df %>% dplyr::filter(!(feature_display %in% to_exclude))
+  else if(to_highlight == TRUE) gwas <- gwas_df %>% dplyr::filter(feature_display %in% to_select)
+  else gwas <- gwas_df
 
-    # Compute chromosome size
-    dplyr::filter(chr_col %in% chr_selected) %>%
-    # dplyr::filter(bp_col >= bp_min & bp_col <= bp_max) %>%
-    dplyr::group_by(chr_col) %>%
-    dplyr::summarise(chr_len=max(bp_col)) %>%
-    # Calculate cumulative position of each chromosome
+  gwas %>%
+    dplyr::filter(snp_chr %in% chr_selected) %>%
+    dplyr::group_by(snp_chr) %>%
+    dplyr::summarise(chr_len=max(snp_bp), .groups = "drop_last") %>%
     dplyr::mutate(tot=cumsum(as.numeric(chr_len))-chr_len) %>%
     dplyr::select(-chr_len) %>%
-    # Add this info to the initial dataset
-    dplyr::left_join(gwas_df, ., by = "chr_col") %>%
-    # Add a cumulative position of each SNP
-    dplyr::arrange(chr_col, bp_col) %>%
-    dplyr::mutate(x_col=bp_col+tot) %>%
-    # Add highlight and annotation information
-    dplyr::mutate( log10p = -log10(PLINK.P),
-                   text = paste("<b>",display, "</b>",
-                                "\n(Immune Trait Category: ", `Annot.Figure.ImmuneCategory`, ")",
-                                "\nSNP name: ", snp_id, "\nSNP: ", snp_col, "\nPosition: ", bp_col, "\nChromosome: ", chr_col,
-                                "\nPLINK MAF: ", maf, sep="")) #%>%
-
-  # Filter SNP to make the plot lighter
-  #filter(-log10(P)>0.5)
-
-  df
-
+    dplyr::left_join(gwas, ., by = "snp_chr") %>%
+    dplyr::arrange(snp_chr, snp_bp) %>%
+    dplyr::mutate(x_col=snp_bp+tot) %>%
+    dplyr::mutate( log10p = -log10(p_value),
+                   text = paste("<b>",feature_display, "</b>",
+                                "\n(Immune Trait Category: ", `category`, ")",
+                                "\nSNP name: ", snp_rsid, "\nSNP: ", snp_name, "\nChromosome: ", snp_chr, "\nPosition: ", snp_bp,
+                                "\nPLINK MAF: ", maf, sep=""))
 }
+
+get_mhtplot_xlabel <- function(
+  selected_region = input$selection,
+  gwas_df = gwas_mht(),
+  x_min = selected_min(),
+  x_max = selected_max()
+){
+  if(selected_region == "See all chromosomes"){
+    gwas_df %>%
+      dplyr::group_by(snp_chr) %>%
+      dplyr::summarize(center=( max(x_col) + min(x_col) ) / 2 , .groups = "drop") %>%
+      dplyr::rename(label = snp_chr)
+  }else{
+    breaks <- c(x_min, (x_min+x_max)/2, x_max)
+    data.frame(
+      label = paste(format(round(breaks / 1e6, 2), trim = TRUE), "Mb"),
+      center = breaks,
+      stringsAsFactors = FALSE
+    )
+  }
+}
+
 

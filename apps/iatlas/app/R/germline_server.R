@@ -17,12 +17,12 @@ germline_server <- function(id, cohort_obj){
         ui_function = germline_gwas_ui
       )
 
-      call_module_server(
-        "germline_rarevariants",
-        cohort_obj,
-        server_function = germline_rarevariants_server,
-        ui_function = germline_rarevariants_ui
-      )
+      # call_module_server(
+      #   "germline_rarevariants",
+      #   cohort_obj,
+      #   server_function = germline_rarevariants_server,
+      #   ui_function = germline_rarevariants_ui
+      # )
 
     }
   )
