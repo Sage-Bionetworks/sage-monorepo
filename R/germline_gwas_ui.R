@@ -69,26 +69,26 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
                      eQTL and sQTL analyses were performed in TCGA and GTEx. The table in the left summarizes the TCGA results, and contains two types of plots: three level plots and expanded region. The table at the right summarises the GTEX results, and is updated with changes in the chromosome selected in the manhattan plot above."
                      ),
             shiny::actionLink(ns("method_link_colocalization"), "Click to view method description.")
-          ),
+          )#,
           #shiny::fluidRow(
-            column(
-              width = 6,
-              tableBox(
-                width = 12,
-                DT::DTOutput(ns("colocalization_tcga")) %>%
-                  shinycssloaders::withSpinner(.),
-                shiny::uiOutput(ns("tcga_colocalization_plot"))
-              )
-            ),
-            column(
-              width = 6,
-              tableBox(
-                width = 12,
-                DT::DTOutput(ns("colocalization_gtex")) %>%
-                  shinycssloaders::withSpinner(.),
-                shiny::uiOutput(ns("gtex_colocalization_plot"))
-              )
-            )
+            # column(
+            #   width = 6,
+            #   tableBox(
+            #     width = 12,
+            #     DT::DTOutput(ns("colocalization_tcga")) %>%
+            #       shinycssloaders::withSpinner(.),
+            #     shiny::uiOutput(ns("tcga_colocalization_plot"))
+            #   )
+            # ),
+            # column(
+            #   width = 6,
+            #   tableBox(
+            #     width = 12,
+            #     DT::DTOutput(ns("colocalization_gtex")) %>%
+            #       shinycssloaders::withSpinner(.),
+            #     shiny::uiOutput(ns("gtex_colocalization_plot"))
+            #   )
+            # )
           #)
 )
 }
