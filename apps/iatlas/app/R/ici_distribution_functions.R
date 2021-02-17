@@ -71,6 +71,7 @@ create_plot_onegroup <- function(dataset_data, plot_type, dataset, feature, grou
             ylab = ylabel,
             custom_data = as.character(dataset),
             fill_colors = group_colors,
+            source = "p1",
             showlegend = F)  %>%
     add_title_subplot_plotly(dataset) %>%
     plotly::layout(
@@ -119,6 +120,7 @@ create_plot_twogroup <- function(dataset_data, plot_type, dataset, feature, grou
               ylab = ylabel,
               custom_data = as.character(dataset),
               fill_colors = group_colors,
+              source = "p1",
               showlegend = F) %>%
     add_title_subplot_plotly(dataset) %>%
     plotly::layout(

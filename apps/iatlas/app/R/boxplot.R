@@ -11,7 +11,8 @@ create_boxplot <- function(
     title = "",
     source_name = NULL,
     custom_data = "",
-    fill_colors = NA){
+    fill_colors = NA,
+    showlegend = T){
 
     if(is.na(key_col)) key_col <- x_col
     if(is.na(color_col)) color_col <- x_col
@@ -40,7 +41,8 @@ create_boxplot <- function(
             pointpos = 0,
             colors = fill_colors,
             source = source_name,
-            customdata = custom_data
+            customdata = custom_data,
+            showlegend = showlegend
         )) %>%
         plotly::layout(
             title = title,
