@@ -241,6 +241,7 @@ ici_distribution_server <- function(
 
       test_summary_table <- reactive({
         shiny::req(input$groupvar)
+        shiny::req(df_selected())
 
         group_label <- convert_value_between_columns(input_value = input$groupvar,
                                                      df = metadata_feature_df,
@@ -253,11 +254,12 @@ ici_distribution_server <- function(
                        paired = paired_test(),
                        test = test_function(),
                        label = group_label,
-                       .f = get_stat_test)#)
+                       .f = get_stat_test)
       })
 
       output$stats1 <- DT::renderDataTable({
         shiny::req(input$groupvar)
+        shiny::req(df_selected())
         test_summary_table()
       })
 
