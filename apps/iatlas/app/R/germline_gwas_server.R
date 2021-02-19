@@ -25,7 +25,7 @@ germline_gwas_server <- function(id, cohort_obj){
 
       output$search_snp <- renderUI({
         shiny::req(subset_gwas())
-        snp_options <- (subset_gwas() %>% dplyr::filter(snp_rsid != "NA"))$snp_rsid
+        snp_options <- (subset_gwas() %>% dplyr::filter(!is.na(snp_rsid)))$snp_rsid
         shiny::selectInput(ns("snp_int"), "Click on the plot or search for a SNP id:",
                            choices = c("", snp_options))
       })

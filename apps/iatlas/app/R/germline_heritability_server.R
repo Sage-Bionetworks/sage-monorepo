@@ -84,8 +84,8 @@ germline_heritability_server <- function(id, cohort_obj){
             legendTitle = "LRT \n p-value",
             source_name = "heritability_plot",
             bar_colors = NULL
-          ) #%>%
-          #format_heritability_plot(., hdf(), fdr = TRUE)
+          ) %>%
+          format_heritability_plot(., hdf(), fdr = TRUE)
       })
 
       # output$heritability_cov <- plotly::renderPlotly({
