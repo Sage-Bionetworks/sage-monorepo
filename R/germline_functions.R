@@ -23,6 +23,13 @@ create_heritability_df <- function(
       dplyr::filter(.[[parameter]] == group) %>%
       dplyr::filter(p_value <= pval_thres) %>%
       dplyr::filter(variance >= 0) %>%
+      dplyr::mutate(plot_annot = dplyr::case_when(
+        fdr <= 0.001 ~"***",
+        fdr <= 0.01 ~"**",
+        fdr <= 0.05 ~ "*",
+        fdr <= 0.1 ~"†",
+        fdr > 0.1 ~ ""
+      )) %>%
       iatlas.app::create_plotly_label(
         ., paste(.$feature_display, "- ", ancestry_df[cluster], "Ancestry"),
         paste("\n Immune Trait Category:",.$category, "\n Immune Trait Module:", .$module),
@@ -52,53 +59,14 @@ format_heritability_plot <- function(p, hdf, fdr = FALSE){
                                     xref = "x",
                                     yref = "y",
                                     showarrow = F,
-                                    font=list(color='black')) #%>%
-            # plotly::add_annotations( text="LRT FDR \n † <= 0.1 \n * <= 0.05 \n ** <= 0.01 \n *** <= 0.001", xref="paper", yref="paper",
-            #                          x=1.03, xanchor="left",
-            #                          y=0, yanchor="bottom",
-            #                          legendtitle=TRUE, showarrow=FALSE )
+                                    font=list(color='black')) %>%
+            plotly::add_annotations( text="LRT FDR \n † <= 0.1 \n * <= 0.05 \n ** <= 0.01 \n *** <= 0.001", xref="paper", yref="paper",
+                                     x=1.03, xanchor="left",
+                                     y=0, yanchor="bottom",
+                                     legendtitle=TRUE, showarrow=FALSE )
     }
   p
 }
-
-#' Add FDR annotation for plot display
-#'
-#' @param tbl A tibble
-#' @param FDR A column with FDR values
-#' @param intervals A vector with numbers for each FDR interval
-#' @param symbols A vector of strings, which will be used as symbols for each FDR interval
-#' @importFrom magrittr %>%
-#' @importFrom rlang .data
-#' @importFrom tidyr unite
-#' @importFrom tidyselect all_of
-create_FDR_label <- function(
-  tbl,
-  FDR,
-  intervals,
-  symbols
-){
-
-
-  #TODO:still duplicating all rows!
-  #example: test_fdr <- create_FDR_label(heritability$EUR, "FDR", c(0.001, 0.05), c("***", "*"))
-
-  intervals <-sort(intervals) #making sure that they are in an ascending order
-
-  tbl$FDR_label <- ""
-
-  df <- purrr::map_dfr(seq_along(intervals), function(i){
-
-    tbl %>%
-      dplyr::mutate(FDR_label =  replace(
-          FDR_label, (FDR_label == "" & FDR <= intervals[i]), symbols[i]
-        )
-    )
-    # print(dfm)
-    # dfm
-  })
-}
-
-
 
 #' Build Manhattan plot tibble
 #'
