@@ -6,33 +6,22 @@ germline_gwas_server <- function(id, cohort_obj){
       ns <- session$ns
 
       gwas_data <- reactive({
-        iatlas.api.client::query_germline_gwas_results(datasets = "TCGA")
+        df <- iatlas.api.client::query_germline_gwas_results(datasets = "TCGA")
+        df$snp_chr <- as.numeric(df$snp_chr)
+        df
       })
 
       immune_feat <- reactive({
-
         gwas_data() %>%
           dplyr::select(feature_display, category) %>%
           dplyr::group_by(category) %>%
           tidyr::nest(data = c(feature_display))%>%
           dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
           tibble::deframe()
-
       })
 
-      output$features <- renderUI({
-        shiny::selectizeInput(ns('immunefeature'), "Select Immune Feature(s)",
-                              choices = immune_feat(),
-                              selected = c("CD8 T cells", "NK cells"),
-                              multiple = TRUE)
-      })
-
-      output$to_exclude <- renderUI({
-        shiny::selectizeInput(ns('exclude_feat'), "Exclude Immune Feature (optional)",
-                              choices = immune_feat(),
-                              selected = c("MHC2 21978456", "Th17 cells"),
-                              multiple = TRUE)
-      })
+      updateSelectizeInput(session, 'immunefeature', choices = immune_feat(), server = TRUE)
+      updateSelectizeInput(session, 'exclude_feat', choices = immune_feat(), selected = c("MHC2 21978456", "Th17 cells"), server = TRUE)
 
       output$search_snp <- renderUI({
         shiny::req(subset_gwas())

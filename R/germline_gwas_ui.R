@@ -25,14 +25,18 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
             ),
             shiny::column(
               width = 5,
-              shiny::uiOutput(ns("features")),
+              shiny::selectizeInput(ns('immunefeature'), "Select Immune Feature(s)",
+                                    choices = NULL,
+                                    multiple = TRUE),
               shiny::checkboxInput(ns("only_selected"), "Display only selected feature(s)")
             ),
             shiny::column(
               width = 4,
               shiny:: conditionalPanel(
                 condition = paste("" , paste0("input['", ns("only_selected"), "'] == false")),
-                shiny::uiOutput(ns("to_exclude"))
+                shiny::selectizeInput(ns('exclude_feat'), "Exclude Immune Feature (optional)",
+                                      choices = NULL,
+                                      multiple = TRUE)
               )
             )
          ),
