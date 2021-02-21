@@ -59,6 +59,9 @@ tests:
     - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
     - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
+    - "apk --update add postgresql-client"
+    # Does it connect to the DB?
+    - "psql -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -P ${POSTGRES_PASSWORD}"
     # Run test coverage using as many cores as are available.
     - pytest --cov --cov-report html -n auto
   artifacts:
