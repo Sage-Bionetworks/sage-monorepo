@@ -7,36 +7,26 @@ variables:
 
 default:
   before_script:
-    # Create .aws config and credentials files
-    - "mkdir ~/.aws"
-    - 'echo -e "[default]\nregion = ${AWS_DEFAULT_REGION}\noutput = json" >> ~/.aws/config'
-    - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${AWS_DEFAULT_REGION}" >> ~/.aws/credentials'
-    # Install glibc compatibility for alpine and install aws (also installs curl)
+    # Install glibc compatibility for alpine and install aws (also installs curl and unzip)
     - "GLIBC_VER=2.31-r0"
-    - "apk --no-cache add \
-      binutils \
-      curl \
-      unzip \
-      && curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub \
-      && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk \
-      && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk \
-      && apk add --no-cache \
-      glibc-${GLIBC_VER}.apk \
-      glibc-bin-${GLIBC_VER}.apk \
-      && curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
-      && unzip awscliv2.zip \
-      && aws/install \
-      && rm -rf \
-      awscliv2.zip \
-      aws \
+    - "apk --no-cache add binutils curl unzip"
+    - "curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub"
+    - "curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk"
+    - "curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk"
+    - "apk add --no-cache glibc-${GLIBC_VER}.apk glibc-bin-${GLIBC_VER}.apk"
+    - "curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip"
+    - "unzip awscliv2.zip"
+    - "aws/install"
+    - "rm -rf awscliv2.zip"
+    - "aws \
       /usr/local/aws-cli/v2/*/dist/aws_completer \
       /usr/local/aws-cli/v2/*/dist/awscli/data/ac.index \
-      /usr/local/aws-cli/v2/*/dist/awscli/examples \
-      && apk --no-cache del \
-      binutils \
-      && rm glibc-${GLIBC_VER}.apk \
-      && rm glibc-bin-${GLIBC_VER}.apk \
-      && rm -rf /var/cache/apk/*"
+      /usr/local/aws-cli/v2/*/dist/awscli/examples"
+    - "apk --no-cache del binutils"
+    - "rm glibc-${GLIBC_VER}.apk"
+    - "rm glibc-bin-${GLIBC_VER}.apk"
+    - "rm -rf /var/cache/apk/*"
+    - "aws --version"
 
 stages:
   - test_code
@@ -53,20 +43,30 @@ tests:
   stage: test_code
   image: python:3.8-alpine
   variables:
-    # The environment variables used to populate the jon scoped environment variables (DB_HOST_PROD, DB_NAME_PROD, etc) are populated in the GitLab Runner in AWS
-    POSTGRES_DB: $DB_NAME_STAGING
-    POSTGRES_HOST: $DB_HOST_STAGING
-    POSTGRES_PASSWORD: $DB_PASSWORD_STAGING
-    POSTGRES_USER: $DB_USER_STAGING
     FLASK_ENV: "test"
+    # The environment variables used to populate the job scoped environment variables (DB_HOST_PROD and DB_PORT_STAGING) are populated in the GitLab Runner in AWS
+    POSTGRES_HOST: ${DB_HOST_STAGING}
+    POSTGRES_PORT: ${DB_PORT_STAGING}
   script:
-    - "echo POSTGRES_HOST: ${DB_HOST_STAGING}"
+    - "echo FLASK_ENV: ${FLASK_ENV}"
+    - "echo POSTGRES_HOST: ${POSTGRES_HOST}"
+    - "echo POSTGRES_PORT: ${POSTGRES_PORT}"
     - "echo AWS_REGION: ${AWS_DEFAULT_REGION}"
     - "apk add --no-cache openssh libpq jq"
-    - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers && pip install --no-cache-dir -r ./requirements.txt && pip install --no-cache-dir -r ./requirements-dev.txt && apk del --no-cache .build-deps"
-    - "creds=$(aws --region ${AWS_DEFAULT_REGION} secretsmanager get-secret-value --secret-id iatlas_db_creds_encrypted --query SecretString --output text)"
-    - "export DB_USER_PROD_A=$(echo $creds | jq -r .username_prod)"
-    - "echo DB_USER_PROD_A: $DB_USER_PROD_A"
+    - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
+    - "pip install --no-cache-dir -r ./requirements.txt"
+    - "pip install --no-cache-dir -r ./requirements-dev.txt"
+    - "apk del --no-cache .build-deps"
+    # Get DB Secrets from AWS
+    - "creds=$(aws --region ${AWS_DEFAULT_REGION} secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING} --query SecretString --output text)"
+    - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
+    - "echo POSTGRES_USER: $POSTGRES_USER"
+    - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
+    - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
+    - "echo POSTGRES_DB: $POSTGRES_DB"
+    # Does it connect to the DB?
+    - "psql -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+    # Run test coverage using as many cores as are available.
     - pytest --cov --cov-report html -n auto
   artifacts:
     expose_as: "coverage-initial"
