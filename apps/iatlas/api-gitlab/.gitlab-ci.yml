@@ -58,7 +58,9 @@ tests:
     - "pip install --no-cache-dir -r ./requirements-dev.txt"
     - "apk del --no-cache .build-deps"
     # Get DB Secrets from AWS
-    - "creds=$(aws --region ${AWS_DEFAULT_REGION} secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING} --query SecretString --output text)"
+    - "echo AWS_REGION: ${AWS_DEFAULT_REGION}"
+    - "echo DB_SECRET_NAME_STAGING: ${DB_SECRET_NAME_STAGING}"
+    - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})"
     - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
     - "echo POSTGRES_USER: $POSTGRES_USER"
     - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
