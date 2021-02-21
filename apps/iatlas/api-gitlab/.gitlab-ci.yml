@@ -55,14 +55,11 @@ tests:
     - "pip install --no-cache-dir -r ./requirements-dev.txt"
     - "apk del --no-cache .build-deps"
     # Get DB Secrets from AWS
-    - "echo AWS_REGION: ${AWS_DEFAULT_REGION}"
-    - "echo DB_SECRET_NAME: ${DB_SECRET_NAME}"
     - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
     - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
-    - "echo POSTGRES_USER: $POSTGRES_USER"
     - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
-    - "echo POSTGRES_DB: $POSTGRES_DB"
+    - "apk --update add postgresql-client"
     # Does it connect to the DB?
     - "psql -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
     # Run test coverage using as many cores as are available.
