@@ -207,13 +207,13 @@ Deploy:Staging:
     # Ensure jq is installed for reading JSON.
     - "apk add --no-cache jq"
     # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '.${sceptre_stack}')
+    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '.[${sceptre_stack}]')
     # If there was an issue with the previous build and the build was rolled back, delete the stack.
-    - if [ $sceptre_status == "ROLLBACK_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete ${sceptre_stack_file} | jq '.${sceptre_stack}') && echo $sceptre_status; fi
+    - if [ $sceptre_status == "ROLLBACK_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete ${sceptre_stack_file} | jq '.[${sceptre_stack}]') && echo $sceptre_status; fi
     # If there is an existing stack, update the stack.
-    - if [ $sceptre_status != "UPDATE_COMPLETE" ] && [ $sceptre_status != "CREATE_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update ${sceptre_stack_file} | jq '.${sceptre_stack}') && echo $sceptre_status; fi
+    - if [ $sceptre_status != "UPDATE_COMPLETE" ] && [ $sceptre_status != "CREATE_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update ${sceptre_stack_file} | jq '.[${sceptre_stack}]') && echo $sceptre_status; fi
     # If there is no stack, create the stack.
-    - if [ $sceptre_status == "PENDING" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create ${sceptre_stack_file} | jq '.${sceptre_stack}') && echo $sceptre_status; fi
+    - if [ $sceptre_status == "PENDING" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create ${sceptre_stack_file} | jq '.[${sceptre_stack}]') && echo $sceptre_status; fi
     # If the update succeeded, end the job, otherwise, fail the job.
     - 'if [ $sceptre_status == "UPDATE_COMPLETE" ]; then exit 0; else exit 1; fi'
 
