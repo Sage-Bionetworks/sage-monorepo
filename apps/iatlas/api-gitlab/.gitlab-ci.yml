@@ -172,7 +172,7 @@ Build Container Staging:
   before_script:
     - "echo Building staging container."
   script:
-    - 'echo CONTAINER_NAME: ${CONTAINER_NAME}''
+    - 'echo CONTAINER_NAME: ${CONTAINER_NAME}'
     - echo "${CI_JOB_TOKEN}" | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
     - "docker build -t ${CONTAINER_NAME} ."
     - "docker push ${CONTAINER_NAME}"
