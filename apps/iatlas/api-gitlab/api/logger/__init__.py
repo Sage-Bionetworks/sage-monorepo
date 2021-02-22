@@ -25,8 +25,7 @@ class LogSetup(object):
                 log_directory = config['LOG_DIR']
                 app_log_file_name = config['LOG_APP_NAME'] + log_extension
                 access_log_file_name = config['LOG_WWW_NAME'] + log_extension
-                if not path.exists(log_directory):
-                    makedirs(log_directory)
+                makedirs(log_directory, exist_ok=True)
             except KeyError as e:
                 exit(code="{} is a required parameter for log_type '{}'".format(
                     e, log_type))
