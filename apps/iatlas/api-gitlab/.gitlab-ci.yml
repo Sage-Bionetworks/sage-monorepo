@@ -70,13 +70,17 @@ tests:
 
 tests:coverage-report-staging:
   only:
+    - merge_requests
     - staging
     - master
+  except:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"
   stage: test_code
   image: python:3.8-alpine
   variables:
     FLASK_ENV: "test"
   script:
+    - "echo CI_MERGE_REQUEST_TARGET_BRANCH_NAME: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     # Which environment is the API being deployed to?
     - 'env="staging"; if [ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" ]; then env="prod"; fi'
     # Set environment variables for the correct environment
