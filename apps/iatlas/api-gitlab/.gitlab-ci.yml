@@ -72,8 +72,6 @@ tests:coverage-report:
   only:
     - staging
     - master
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
   stage: test_code
   image: python:3.8-alpine
   variables:
@@ -119,71 +117,71 @@ tests:coverage-report:
       # Make the coverage xml available
       cobertura: "coverage/iatlas-api_coverage_${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}.xml"
 
-pages:
-  only:
-    - merge_requests
-  except:
-    variables:
-      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
-  stage: publish_coverage
-  dependencies:
-    - tests
-  before_script:
-    - "echo Publishing ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} coverage."
-  script:
-    - "mv ./coverage/ ./public/"
-    - 'echo "Coverage available at ${CI_PAGES_URL}/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}/"'
-  artifacts:
-    expose_as: "coverage"
-    paths:
-      - public
-      - public/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}
-    expire_in: 30 days
+# pages:
+#   only:
+#     - merge_requests
+#   except:
+#     variables:
+#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
+#   stage: publish_coverage
+#   dependencies:
+#     - tests
+#   before_script:
+#     - "echo Publishing ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} coverage."
+#   script:
+#     - "mv ./coverage/ ./public/"
+#     - 'echo "Coverage available at ${CI_PAGES_URL}/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}/"'
+#   artifacts:
+#     expose_as: "coverage"
+#     paths:
+#       - public
+#       - public/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}
+#     expire_in: 30 days
 
-Build Container:
-  only:
-    - staging
-  stage: build_container
-  image: docker:19.03.1-dind
-  services:
-    - name: docker:19.03.1-dind
-  before_script:
-    - "echo Building ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} container."
-  script:
-    - "docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}"
-    - "docker build -t ${CONTAINER_NAME} ."
-    - "docker push ${CONTAINER_NAME}"
+# Build Container:
+#   only:
+#     - staging
+#   stage: build_container
+#   image: docker:19.03.1-dind
+#   services:
+#     - name: docker:19.03.1-dind
+#   before_script:
+#     - "echo Building ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} container."
+#   script:
+#     - "docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}"
+#     - "docker build -t ${CONTAINER_NAME} ."
+#     - "docker push ${CONTAINER_NAME}"
 
-Deploy:
-  only:
-    - staging
-    - master
-  stage: deploy
-  image: python:3.8-alpine
-  variables:
-    # The AWS Environment Variables to specify configuration options and credentials for the aws cli.
-    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-    AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
-    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-  script:
-    # Which environment is the API being deployed to?
-    - 'env="staging"; if [ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" ]; then env="prod"; fi'
-    - "export TRAVIS_BRANCH=$env"
-    - "echo Deploying iAtlas API to $env"
-    # Ensure git is available.
-    - "apk add --no-cache git"
-    # Get the Sceptre scripts.
-    - "git clone -b feature/ecs https://github.com/generalui/iAtlas-infra.git"
-    - "cd iAtlas-infra"
-    # Ensure Sceptre is available and can handle !ssm.
-    - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
-    # Get the current status of the API stack.
-    - 'sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status $env/iatlas-api.yaml)'
-    # If there was an issue with the previous build and the build was rolled back, delete the stack.
-    - 'if [$sceptre_status == "ROLLBACK_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete $env/iatlas-api.yaml) && echo $sceptre_status; fi'
-    # If there is an existing stack, update the stack.
-    - 'if [$sceptre_status != "UPDATE_COMPLETE"] && [$sceptre_status != "CREATE_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update $env/iatlas-api.yaml) && echo $sceptre_status; fi'
-    # If there is no stack, create the stack.
-    - 'if [$sceptre_status == "PENDING"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create $env/iatlas-api.yaml) && echo $sceptre_status; fi'
-    # If the update succeeded, end the job, otherwise, fail the job.
-    - 'if [$sceptre_status == "UPDATE_COMPLETE"]; then exit 0; else exit 1; fi'
+# Deploy:
+#   only:
+#     - staging
+#     - master
+#   stage: deploy
+#   image: python:3.8-alpine
+#   variables:
+#     # The AWS Environment Variables to specify configuration options and credentials for the aws cli.
+#     AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+#     AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+#     AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+#   script:
+#     # Which environment is the API being deployed to?
+#     - 'env="staging"; if [ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" ]; then env="prod"; fi'
+#     - "export TRAVIS_BRANCH=$env"
+#     - "echo Deploying iAtlas API to $env"
+#     # Ensure git is available.
+#     - "apk add --no-cache git"
+#     # Get the Sceptre scripts.
+#     - "git clone -b feature/ecs https://github.com/generalui/iAtlas-infra.git"
+#     - "cd iAtlas-infra"
+#     # Ensure Sceptre is available and can handle !ssm.
+#     - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
+#     # Get the current status of the API stack.
+#     - 'sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status $env/iatlas-api.yaml)'
+#     # If there was an issue with the previous build and the build was rolled back, delete the stack.
+#     - 'if [$sceptre_status == "ROLLBACK_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete $env/iatlas-api.yaml) && echo $sceptre_status; fi'
+#     # If there is an existing stack, update the stack.
+#     - 'if [$sceptre_status != "UPDATE_COMPLETE"] && [$sceptre_status != "CREATE_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update $env/iatlas-api.yaml) && echo $sceptre_status; fi'
+#     # If there is no stack, create the stack.
+#     - 'if [$sceptre_status == "PENDING"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create $env/iatlas-api.yaml) && echo $sceptre_status; fi'
+#     # If the update succeeded, end the job, otherwise, fail the job.
+#     - 'if [$sceptre_status == "UPDATE_COMPLETE"]; then exit 0; else exit 1; fi'
