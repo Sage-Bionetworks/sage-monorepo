@@ -164,7 +164,7 @@ stages:
 # Save it to the container repo as the latest and as the commit name (so it may be re-used if needed).
 Build Container Staging:
   only:
-    - staging
+    - merge_requests
   stage: build_container
   image: docker:19.03.1-dind
   services:
@@ -194,7 +194,7 @@ Build Container Prod:
     - "docker push ${CONTAINER_NAME}"
     - "docker push ${DOCKER_IMAGE_TAG_PROD}"
 
-#
+# The Deploy job uses
 Deploy:Staging:
   only:
     - merge_requests
@@ -210,8 +210,7 @@ Deploy:Staging:
     TRAVIS_BRANCH: "staging"
   script:
     - "echo Deploying iAtlas API to Staging"
-    - 'sceptre_stack=staging/iatlas-api'
-    - 'sceptre_stack_file=${sceptre_stack}.yaml'
+    - 'sceptre_stack_file=staging/iatlas-api.yaml'
     # Create the AWS credentials and config files.
     - 'mkdir ~/.aws'
     - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${AWS_DEFAULT_REGION}" >> ~/.aws/credentials'
