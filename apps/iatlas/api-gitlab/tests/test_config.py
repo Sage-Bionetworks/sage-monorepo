@@ -1,13 +1,9 @@
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
-import os
+from os import getenv
 from config import get_config, get_database_uri
 
 
-@pytest.mark.skipif(
-    'CI' in os.environ and os.environ['CI'] == '1',
-    reason='Skipping this test on GitLab CI.',
-)
 def test_get_database_uri(monkeypatch: MonkeyPatch):
     monkeypatch.setenv('POSTGRES_USER', 'TestingUser')
     monkeypatch.setenv('POSTGRES_PASSWORD', 'TestingPassword')
@@ -27,7 +23,7 @@ def test_get_database_uri(monkeypatch: MonkeyPatch):
 
 
 def test_testing_config(app):
-    FLASK_ENV = os.getenv('FLASK_ENV')
+    FLASK_ENV = getenv('FLASK_ENV')
     if FLASK_ENV == 'development':
         assert app.config['DEBUG']
     else:

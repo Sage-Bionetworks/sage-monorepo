@@ -24,7 +24,7 @@ BASE_PATH = path.dirname(path.abspath(__file__))
 class Config(object):
     LOG_APP_NAME = 'iatlas-api'
     LOG_COPIES = 10
-    LOG_DIR = path.join(BASE_PATH, '.logs')
+    LOG_DIR = path.join(BASE_PATH, '.logs', 'development')
     LOG_FILE = path.join(LOG_DIR, 'server.log')
     LOG_INTERVAL = 1
     LOG_LEVEL = logging.DEBUG
@@ -40,6 +40,10 @@ class Config(object):
 
 
 class TestConfig(Config):
+    LOG_DIR = path.join(
+        BASE_PATH, '.logs', 'test',
+        environ['FLASK_ENV'] if environ['FLASK_ENV'] != 'test' else ''
+    )
     LOG_LEVEL = logging.INFO
     PROFILE = False
     SQLALCHEMY_ECHO = False
@@ -48,6 +52,7 @@ class TestConfig(Config):
 
 
 class StagingConfig(Config):
+    LOG_DIR = path.join(BASE_PATH, '.logs', 'staging')
     LOG_LEVEL = logging.INFO
     LOG_TYPE = 'stream'
     PROFILE = False
@@ -55,6 +60,7 @@ class StagingConfig(Config):
 
 
 class ProdConfig(Config):
+    LOG_DIR = path.join(BASE_PATH, '.logs', 'production')
     LOG_LEVEL = logging.WARN
     LOG_TYPE = 'stream'
     PROFILE = False
@@ -62,9 +68,9 @@ class ProdConfig(Config):
 
 
 def get_config(test=False):
-    if (test):
-        return TestConfig
     FLASK_ENV = environ['FLASK_ENV']
+    if (test or FLASK_ENV == 'test'):
+        return TestConfig
     if FLASK_ENV == 'development':
         return Config
     elif FLASK_ENV == 'staging':
