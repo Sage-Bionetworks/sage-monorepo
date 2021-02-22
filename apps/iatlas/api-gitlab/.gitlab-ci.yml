@@ -8,6 +8,7 @@ variables:
   DOCKER_IMAGE_TAG_PROD: ${CI_REGISTRY_IMAGE}:iatlas-api-latest
 
 default:
+  # This runs on every job that doesn't have a 'before_script'.
   before_script:
     # Install glibc compatibility for alpine and install aws (also installs curl and unzip)
     - "GLIBC_VER=2.31-r0"
@@ -159,6 +160,8 @@ stages:
 #       - public
 #     expire_in: 30 days
 
+# Build the Staging container with the app in it.
+# Save it to the container repo as the latest and as the commit name (so it may be re-used if needed).
 Build Container Staging:
   only:
     - staging
@@ -174,6 +177,8 @@ Build Container Staging:
     - "docker push ${CONTAINER_NAME}"
     - "docker push ${DOCKER_IMAGE_TAG_STAGING}"
 
+# Build the Prod container with the app in it.
+# Save it to the container repo as the latest and as the commit name (so it may be re-used if needed).
 Build Container Prod:
   only:
     - master
@@ -189,6 +194,7 @@ Build Container Prod:
     - "docker push ${CONTAINER_NAME}"
     - "docker push ${DOCKER_IMAGE_TAG_PROD}"
 
+#
 Deploy:Staging:
   only:
     - merge_requests
@@ -202,9 +208,8 @@ Deploy:Staging:
     DOCKER_IMAGE_TAG: ${DOCKER_IMAGE_TAG_STAGING}
     GITLAB_REG_TOKEN: ${GITLAB_REG_TOKEN}
     TRAVIS_BRANCH: "staging"
-  before_script:
-    - "echo Deploying iAtlas API to Staging"
   script:
+    - "echo Deploying iAtlas API to Staging"
     - 'sceptre_stack=staging/iatlas-api'
     - 'sceptre_stack_file=${sceptre_stack}.yaml'
     # Create the AWS credentials and config files.
