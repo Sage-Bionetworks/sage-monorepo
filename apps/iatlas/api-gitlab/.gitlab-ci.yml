@@ -94,13 +94,13 @@ tests:coverage-report-staging:
     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
     # Run test coverage using as many cores as are available.
     # Output the results to an xml document.
-    - pytest --cov --cov-report html --cov-report xml:coverage/staging/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
+    - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_staging.xml --cov-report term:skip-covered -n auto
     # Get the coverage value for the badge.
     - coverage report --skip-covered | grep TOTAL
   artifacts:
     reports:
       # Make the coverage xml available
-      cobertura: "coverage/staging/iatlas-api_coverage.xml"
+      cobertura: "coverage/api_coverage_staging-api_coverage.xml"
 
 tests:coverage-report-prod:
   only:
@@ -128,13 +128,13 @@ tests:coverage-report-prod:
     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
     # Run test coverage using as many cores as are available.
     # Output the results to an xml document.
-    - pytest --cov --cov-report html --cov-report xml:coverage/prod/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
+    - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_prod.xml --cov-report term:skip-covered -n auto
     # Get the coverage value for the badge.
     - coverage report --skip-covered | grep TOTAL
   artifacts:
     reports:
       # Make the coverage xml available
-      cobertura: "coverage/prod/iatlas-api_coverage.xml"
+      cobertura: "coverage/iatlas-api_coverage_prod.xml"
 
 pages:
   only:
@@ -149,12 +149,11 @@ pages:
     - "echo Publishing ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} coverage."
   script:
     - "mv ./coverage/ ./public/"
-    - 'echo "Coverage available at ${CI_PAGES_URL}/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}/"'
+    - 'echo "Coverage available at ${CI_PAGES_URL}/"'
   artifacts:
     expose_as: "coverage"
     paths:
       - public
-      - public/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}
     expire_in: 30 days
 
 Build Container:
