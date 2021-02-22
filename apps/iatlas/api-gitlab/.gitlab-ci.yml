@@ -39,17 +39,18 @@ tests:
     - merge_requests
   except:
     variables:
-      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
+      - '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "MASTER"'
   stage: test_code
   image: python:3.8-alpine
   variables:
     DB_SECRET_NAME: ${DB_SECRET_NAME_STAGING}
     FLASK_ENV: "test"
-    # The environment variables used to populate the job scoped environment variables (DB_HOST_PROD and DB_PORT_STAGING) are populated in the GitLab Runner in AWS
+    # The environment variables used to populate the job scoped environment variables (DB_HOST_STAGING and DB_PORT_STAGING) are populated in the GitLab Runner in AWS
     POSTGRES_HOST: ${DB_HOST_STAGING}
     POSTGRES_PORT: ${DB_PORT_STAGING}
   script:
     # Install dependencies for the app.
+    # (The dev dependencies are needed for testing.)
     - "apk add --no-cache openssh libpq jq"
     - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
     - "pip install --no-cache-dir -r ./requirements.txt"
@@ -74,11 +75,11 @@ tests:coverage-report-staging:
   stage: test_code
   image: python:3.8-alpine
   variables:
+    DB_SECRET_NAME: ${DB_SECRET_NAME_STAGING}
     FLASK_ENV: "test"
-    # (The DB_HOST_STAGING, DB_PORT_STAGING, and DB_SECRET_NAME_STAGING variables come from the gitlab runner itself.)
+    # The environment variables used to populate the job scoped environment variables (DB_HOST_STAGING and DB_PORT_STAGING) are populated in the GitLab Runner in AWS.
     POSTGRES_HOST: ${DB_HOST_STAGING}
     POSTGRES_PORT: ${DB_PORT_STAGING}
-    DB_SECRET_NAME: ${DB_SECRET_NAME_STAGING}
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
@@ -87,7 +88,7 @@ tests:coverage-report-staging:
     - "pip install --no-cache-dir -r ./requirements.txt"
     - "pip install --no-cache-dir -r ./requirements-dev.txt"
     - "apk del --no-cache .build-deps"
-    # Get DB Secrets from AWS
+    # Get DB Secrets from AWS.
     - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
     - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
     - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
@@ -99,7 +100,7 @@ tests:coverage-report-staging:
     - coverage report --skip-covered | grep TOTAL
   artifacts:
     reports:
-      # Make the coverage xml available
+      # Make the coverage xml available.
       cobertura: "coverage/api_coverage_staging-api_coverage.xml"
 
 tests:coverage-report-prod:
@@ -109,7 +110,7 @@ tests:coverage-report-prod:
   image: python:3.8-alpine
   variables:
     FLASK_ENV: "test"
-    # (The  DB_HOST_PROD, DB_PORT_PROD, and DB_SECRET_NAME_PROD variables come from the gitlab runner itself.)
+    # The environment variables used to populate the job scoped environment variables (DB_HOST_PROD, DB_PORT_PROD, and DB_SECRET_NAME_PROD) are populated in the GitLab Runner in AWS.
     POSTGRES_HOST: ${DB_HOST_PROD}
     POSTGRES_PORT: ${DB_PORT_PROD}
     DB_SECRET_NAME: ${DB_SECRET_NAME_PROD}
@@ -121,7 +122,7 @@ tests:coverage-report-prod:
     - "pip install --no-cache-dir -r ./requirements.txt"
     - "pip install --no-cache-dir -r ./requirements-dev.txt"
     - "apk del --no-cache .build-deps"
-    # Get DB Secrets from AWS
+    # Get DB Secrets from AWS.
     - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
     - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
     - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
@@ -133,7 +134,7 @@ tests:coverage-report-prod:
     - coverage report --skip-covered | grep TOTAL
   artifacts:
     reports:
-      # Make the coverage xml available
+      # Make the coverage xml available.
       cobertura: "coverage/iatlas-api_coverage_prod.xml"
 
 pages:
