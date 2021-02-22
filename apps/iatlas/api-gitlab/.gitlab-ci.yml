@@ -224,17 +224,17 @@ Deploy:Staging:
     - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."staging/iatlas-api"')
     - "echo ${sceptre_status}"
     # If there was an issue with the previous build and the build was rolled back, delete the stack.
-    - if [ ${sceptre_status} == '"ROLLBACK_COMPLETE"' ]; then sceptre --var "region=${AWS_DEFAULT_REGION}" delete ${sceptre_stack_file}; fi
+    - if [ ${sceptre_status} == '"ROLLBACK_COMPLETE"' ]; then sceptre --var "region=${AWS_DEFAULT_REGION}" delete -y ${sceptre_stack_file}; fi
     # Get the current status of the API stack.
     - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."staging/iatlas-api"')
     - "echo ${sceptre_status}"
     # If there is an existing stack, update the stack.
-    - if [ ${sceptre_status} == '"UPDATE_COMPLETE"' ] || [ ${sceptre_status} == '"CREATE_COMPLETE"' ]; then sceptre --var "region=${AWS_DEFAULT_REGION}" update ${sceptre_stack_file}; fi
+    - if [ ${sceptre_status} == '"UPDATE_COMPLETE"' ] || [ ${sceptre_status} == '"CREATE_COMPLETE"' ]; then sceptre --var "region=${AWS_DEFAULT_REGION}" update -y ${sceptre_stack_file}; fi
     # Get the current status of the API stack.
     - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."staging/iatlas-api"')
     - "echo ${sceptre_status}"
     # If there is no stack, create the stack.
-    - if [ ${sceptre_status} == '"PENDING"' ]; then sceptre --var "region=${AWS_DEFAULT_REGION}" create ${sceptre_stack_file}; fi
+    - if [ ${sceptre_status} == '"PENDING"' ]; then sceptre --var "region=${AWS_DEFAULT_REGION}" create -y ${sceptre_stack_file}; fi
     # Get the current status of the API stack.
     - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."staging/iatlas-api"')
     - "echo ${sceptre_status}"
