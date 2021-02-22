@@ -186,6 +186,7 @@ Deploy:Staging:
     - "echo Deploying iAtlas API to Staging"
   script:
     - 'sceptre_stack=staging/iatlas-api.yaml'
+    - 'sceptre_stack_file=${sceptre_stack}.yaml'
     # Create the AWS credentials and config files.
     - 'mkdir ~/.aws'
     - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${AWS_DEFAULT_REGION}" >> ~/.aws/credentials'
@@ -202,15 +203,17 @@ Deploy:Staging:
     - "echo $(sceptre --version)"
     - "echo region=${AWS_DEFAULT_REGION}"
     - "echo ${AWS_DEFAULT_REGION}"
-    - "echo ${sceptre_stack}"
+    - "echo ${sceptre_stack_file}"
+    # Ensure jq is installed for reading JSON.
+    - "apk add --no-cache jq"
     # Get the current status of the API stack.
-    - 'sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack})'
+    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '.${sceptre_stack}')
     # If there was an issue with the previous build and the build was rolled back, delete the stack.
-    - 'if [ $sceptre_status == "ROLLBACK_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete ${sceptre_stack}) && echo $sceptre_status; fi'
+    - if [ $sceptre_status == "ROLLBACK_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete ${sceptre_stack_file} | jq '.${sceptre_stack}') && echo $sceptre_status; fi
     # If there is an existing stack, update the stack.
-    - 'if [ $sceptre_status != "UPDATE_COMPLETE" ] && [ $sceptre_status != "CREATE_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update ${sceptre_stack}) && echo $sceptre_status; fi'
+    - if [ $sceptre_status != "UPDATE_COMPLETE" ] && [ $sceptre_status != "CREATE_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update ${sceptre_stack_file} | jq '.${sceptre_stack}') && echo $sceptre_status; fi
     # If there is no stack, create the stack.
-    - 'if [ $sceptre_status == "PENDING" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create ${sceptre_stack}) && echo $sceptre_status; fi'
+    - if [ $sceptre_status == "PENDING" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create ${sceptre_stack_file} | jq '.${sceptre_stack}') && echo $sceptre_status; fi
     # If the update succeeded, end the job, otherwise, fail the job.
     - 'if [ $sceptre_status == "UPDATE_COMPLETE" ]; then exit 0; else exit 1; fi'
 
