@@ -31,52 +31,62 @@ default:
 stages:
   - test_code
   - publish_coverage
-  - build_container
-  - deploy
+  # - build_container
+  # - deploy
 
-tests:
-  only:
-    - merge_requests
-  except:
-    variables:
-      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
-  stage: test_code
-  image: python:3.8-alpine
-  variables:
-    DB_SECRET_NAME: ${DB_SECRET_NAME_STAGING}
-    FLASK_ENV: "test"
-    # The environment variables used to populate the job scoped environment variables (DB_HOST_PROD and DB_PORT_STAGING) are populated in the GitLab Runner in AWS
-    POSTGRES_HOST: ${DB_HOST_STAGING}
-    POSTGRES_PORT: ${DB_PORT_STAGING}
-  script:
-    # Install dependencies for the app.
-    - "apk add --no-cache openssh libpq jq"
-    - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
-    - "pip install --no-cache-dir -r ./requirements.txt"
-    - "pip install --no-cache-dir -r ./requirements-dev.txt"
-    - "apk del --no-cache .build-deps"
-    # Get DB Secrets from AWS
-    - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
-    - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
-    - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
-    - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
-    # Run test coverage using as many cores as are available.
-    - pytest --cov --cov-report html -n auto
-  artifacts:
-    expose_as: "coverage-initial"
-    paths:
-      - coverage
-    expire_in: 30 days
+# tests:
+#   only:
+#     - merge_requests
+#   except:
+#     variables:
+#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
+#   stage: test_code
+#   image: python:3.8-alpine
+#   variables:
+#     DB_SECRET_NAME: ${DB_SECRET_NAME_STAGING}
+#     FLASK_ENV: "test"
+#     # The environment variables used to populate the job scoped environment variables (DB_HOST_PROD and DB_PORT_STAGING) are populated in the GitLab Runner in AWS
+#     POSTGRES_HOST: ${DB_HOST_STAGING}
+#     POSTGRES_PORT: ${DB_PORT_STAGING}
+#   script:
+#     # Install dependencies for the app.
+#     - "apk add --no-cache openssh libpq jq"
+#     - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
+#     - "pip install --no-cache-dir -r ./requirements.txt"
+#     - "pip install --no-cache-dir -r ./requirements-dev.txt"
+#     - "apk del --no-cache .build-deps"
+#     # Get DB Secrets from AWS
+#     - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
+#     - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
+#     - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
+#     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
+#     # Run test coverage using as many cores as are available.
+#     - pytest --cov --cov-report html -n auto
+#   artifacts:
+#     expose_as: "coverage-initial"
+#     paths:
+#       - coverage
+#     expire_in: 30 days
 
-tests:coverage-report-staging:
+tests:coverage-report:
   only:
     - staging
     - master
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
   stage: test_code
   image: python:3.8-alpine
   variables:
     FLASK_ENV: "test"
   script:
+    # - 'token_header="PRIVATE-TOKEN: ${CI_PRIVATE_TOKEN}"'
+    - commit_sha_url="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/repository/commits/${CI_COMMIT_SHA}?job_token=${CI_JOB_TOKEN}"
+    - branch_last_commit_sha=$(curl -s ${commit_sha_url} | jq -r '.parent_ids | del(.[] | select(. == "${CI_COMMIT_BEFORE_SHA}")) | .[-1]')
+    - merge_request_url="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/repository/commits/${branch_last_commit_sha}/merge_requests?job_token=${CI_JOB_TOKEN}"
+    - merged_branch_name=$(curl -s ${merge_request_url} | jq -r '.[0].source_branch')
+    - "echo CI_MERGE_REQUEST_TARGET_BRANCH_NAME: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - "echo merged_branch_name: $merged_branch_name"
+    - "echo CI_COMMIT_REF_NAME: $CI_COMMIT_REF_NAME"
     # Which environment is the API being deployed to?
     - 'env="staging"; if [ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" ]; then env="prod"; fi'
     # Set environment variables for the correct environment
