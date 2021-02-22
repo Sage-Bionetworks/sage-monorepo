@@ -77,6 +77,7 @@ tests:coverage-report:
   variables:
     FLASK_ENV: "test"
   script:
+    - "apk add --no-cache openssh libpq jq"
     # - 'token_header="PRIVATE-TOKEN: ${CI_PRIVATE_TOKEN}"'
     - commit_sha_url="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/repository/commits/${CI_COMMIT_SHA}?job_token=${CI_JOB_TOKEN}"
     - branch_last_commit_sha=$(curl -s ${commit_sha_url} | jq -r '.parent_ids | del(.[] | select(. == "${CI_COMMIT_BEFORE_SHA}")) | .[-1]')
@@ -97,7 +98,6 @@ tests:coverage-report:
     - 'export DB_SECRET_NAME=${DB_SECRET_NAME_STAGING}; if [ $env != "staging" ]; then export DB_SECRET_NAME=${DB_SECRET_NAME_PROD}; fi'
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - "apk add --no-cache openssh libpq jq"
     - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
     - "pip install --no-cache-dir -r ./requirements.txt"
     - "pip install --no-cache-dir -r ./requirements-dev.txt"
