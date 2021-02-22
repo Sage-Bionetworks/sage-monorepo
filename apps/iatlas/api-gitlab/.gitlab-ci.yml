@@ -71,8 +71,6 @@ tests:
 tests:coverage-report-staging:
   only:
     - staging
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
   stage: test_code
   image: python:3.8-alpine
   variables:
@@ -107,8 +105,6 @@ tests:coverage-report-staging:
 tests:coverage-report-prod:
   only:
     - master
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "staging" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
   stage: test_code
   image: python:3.8-alpine
   variables:
