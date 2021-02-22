@@ -29,133 +29,133 @@ default:
     - "aws --version"
 
 stages:
-  - test_code
-  - publish_coverage
+  # - test_code
+  # - publish_coverage
   - build_container
   - deploy
 
-tests:
-  only:
-    - merge_requests
-  except:
-    variables:
-      - '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "MASTER"'
-  stage: test_code
-  image: python:3.8-alpine
-  variables:
-    DB_SECRET_NAME: ${DB_SECRET_NAME_STAGING}
-    FLASK_ENV: "test"
-    # The environment variables used to populate the job scoped environment variables (DB_HOST_STAGING and DB_PORT_STAGING) are populated in the GitLab Runner in AWS
-    POSTGRES_HOST: ${DB_HOST_STAGING}
-    POSTGRES_PORT: ${DB_PORT_STAGING}
-  script:
-    # Install dependencies for the app.
-    # (The dev dependencies are needed for testing.)
-    - "apk add --no-cache openssh libpq jq"
-    - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
-    - "pip install --no-cache-dir -r ./requirements.txt"
-    - "pip install --no-cache-dir -r ./requirements-dev.txt"
-    - "apk del --no-cache .build-deps"
-    # Get DB Secrets from AWS
-    - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
-    - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
-    - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
-    - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
-    # Run test coverage using as many cores as are available.
-    - pytest --cov --cov-report html -n auto
-  artifacts:
-    expose_as: "coverage-initial"
-    paths:
-      - coverage
-    expire_in: 30 days
+# tests:
+#   only:
+#     - merge_requests
+#   except:
+#     variables:
+#       - '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "MASTER"'
+#   stage: test_code
+#   image: python:3.8-alpine
+#   variables:
+#     DB_SECRET_NAME: ${DB_SECRET_NAME_STAGING}
+#     FLASK_ENV: "test"
+#     # The environment variables used to populate the job scoped environment variables (DB_HOST_STAGING and DB_PORT_STAGING) are populated in the GitLab Runner in AWS
+#     POSTGRES_HOST: ${DB_HOST_STAGING}
+#     POSTGRES_PORT: ${DB_PORT_STAGING}
+#   script:
+#     # Install dependencies for the app.
+#     # (The dev dependencies are needed for testing.)
+#     - "apk add --no-cache openssh libpq jq"
+#     - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
+#     - "pip install --no-cache-dir -r ./requirements.txt"
+#     - "pip install --no-cache-dir -r ./requirements-dev.txt"
+#     - "apk del --no-cache .build-deps"
+#     # Get DB Secrets from AWS
+#     - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
+#     - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
+#     - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
+#     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
+#     # Run test coverage using as many cores as are available.
+#     - pytest --cov --cov-report html -n auto
+#   artifacts:
+#     expose_as: "coverage-initial"
+#     paths:
+#       - coverage
+#     expire_in: 30 days
 
-tests:coverage-report-staging:
-  only:
-    - staging
-  stage: test_code
-  image: python:3.8-alpine
-  variables:
-    DB_SECRET_NAME: ${DB_SECRET_NAME_STAGING}
-    FLASK_ENV: "test"
-    # The environment variables used to populate the job scoped environment variables (DB_HOST_STAGING and DB_PORT_STAGING) are populated in the GitLab Runner in AWS.
-    POSTGRES_HOST: ${DB_HOST_STAGING}
-    POSTGRES_PORT: ${DB_PORT_STAGING}
-  script:
-    # Install dependencies for the app.
-    # (The dev dependencies are needed for testing.)
-    - "apk add --no-cache openssh libpq jq"
-    - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
-    - "pip install --no-cache-dir -r ./requirements.txt"
-    - "pip install --no-cache-dir -r ./requirements-dev.txt"
-    - "apk del --no-cache .build-deps"
-    # Get DB Secrets from AWS.
-    - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
-    - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
-    - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
-    - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
-    # Run test coverage using as many cores as are available.
-    # Output the results to an xml document.
-    - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_staging.xml --cov-report term:skip-covered -n auto
-    # Get the coverage value for the badge.
-    - coverage report --skip-covered | grep TOTAL
-  artifacts:
-    reports:
-      # Make the coverage xml available.
-      cobertura: "coverage/iatlas-api_coverage_staging.xml"
+# tests:coverage-report-staging:
+#   only:
+#     - staging
+#   stage: test_code
+#   image: python:3.8-alpine
+#   variables:
+#     DB_SECRET_NAME: ${DB_SECRET_NAME_STAGING}
+#     FLASK_ENV: "test"
+#     # The environment variables used to populate the job scoped environment variables (DB_HOST_STAGING and DB_PORT_STAGING) are populated in the GitLab Runner in AWS.
+#     POSTGRES_HOST: ${DB_HOST_STAGING}
+#     POSTGRES_PORT: ${DB_PORT_STAGING}
+#   script:
+#     # Install dependencies for the app.
+#     # (The dev dependencies are needed for testing.)
+#     - "apk add --no-cache openssh libpq jq"
+#     - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
+#     - "pip install --no-cache-dir -r ./requirements.txt"
+#     - "pip install --no-cache-dir -r ./requirements-dev.txt"
+#     - "apk del --no-cache .build-deps"
+#     # Get DB Secrets from AWS.
+#     - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
+#     - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
+#     - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
+#     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
+#     # Run test coverage using as many cores as are available.
+#     # Output the results to an xml document.
+#     - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_staging.xml --cov-report term:skip-covered -n auto
+#     # Get the coverage value for the badge.
+#     - coverage report --skip-covered | grep TOTAL
+#   artifacts:
+#     reports:
+#       # Make the coverage xml available.
+#       cobertura: "coverage/iatlas-api_coverage_staging.xml"
 
-tests:coverage-report-prod:
-  only:
-    - master
-  stage: test_code
-  image: python:3.8-alpine
-  variables:
-    FLASK_ENV: "test"
-    # The environment variables used to populate the job scoped environment variables (DB_HOST_PROD, DB_PORT_PROD, and DB_SECRET_NAME_PROD) are populated in the GitLab Runner in AWS.
-    POSTGRES_HOST: ${DB_HOST_PROD}
-    POSTGRES_PORT: ${DB_PORT_PROD}
-    DB_SECRET_NAME: ${DB_SECRET_NAME_PROD}
-  script:
-    # Install dependencies for the app.
-    # (The dev dependencies are needed for testing.)
-    - "apk add --no-cache openssh libpq jq"
-    - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
-    - "pip install --no-cache-dir -r ./requirements.txt"
-    - "pip install --no-cache-dir -r ./requirements-dev.txt"
-    - "apk del --no-cache .build-deps"
-    # Get DB Secrets from AWS.
-    - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
-    - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
-    - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
-    - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
-    # Run test coverage using as many cores as are available.
-    # Output the results to an xml document.
-    - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_prod.xml --cov-report term:skip-covered -n auto
-    # Get the coverage value for the badge.
-    - coverage report --skip-covered | grep TOTAL
-  artifacts:
-    reports:
-      # Make the coverage xml available.
-      cobertura: "coverage/iatlas-api_coverage_prod.xml"
+# tests:coverage-report-prod:
+#   only:
+#     - master
+#   stage: test_code
+#   image: python:3.8-alpine
+#   variables:
+#     FLASK_ENV: "test"
+#     # The environment variables used to populate the job scoped environment variables (DB_HOST_PROD, DB_PORT_PROD, and DB_SECRET_NAME_PROD) are populated in the GitLab Runner in AWS.
+#     POSTGRES_HOST: ${DB_HOST_PROD}
+#     POSTGRES_PORT: ${DB_PORT_PROD}
+#     DB_SECRET_NAME: ${DB_SECRET_NAME_PROD}
+#   script:
+#     # Install dependencies for the app.
+#     # (The dev dependencies are needed for testing.)
+#     - "apk add --no-cache openssh libpq jq"
+#     - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
+#     - "pip install --no-cache-dir -r ./requirements.txt"
+#     - "pip install --no-cache-dir -r ./requirements-dev.txt"
+#     - "apk del --no-cache .build-deps"
+#     # Get DB Secrets from AWS.
+#     - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
+#     - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
+#     - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
+#     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
+#     # Run test coverage using as many cores as are available.
+#     # Output the results to an xml document.
+#     - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage_prod.xml --cov-report term:skip-covered -n auto
+#     # Get the coverage value for the badge.
+#     - coverage report --skip-covered | grep TOTAL
+#   artifacts:
+#     reports:
+#       # Make the coverage xml available.
+#       cobertura: "coverage/iatlas-api_coverage_prod.xml"
 
-pages:
-  only:
-    - merge_requests
-  except:
-    variables:
-      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
-  stage: publish_coverage
-  dependencies:
-    - tests
-  before_script:
-    - "echo Publishing ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} coverage."
-  script:
-    - "mv ./coverage/ ./public/"
-    - 'echo "Coverage available at ${CI_PAGES_URL}/"'
-  artifacts:
-    expose_as: "coverage"
-    paths:
-      - public
-    expire_in: 30 days
+# pages:
+#   only:
+#     - merge_requests
+#   except:
+#     variables:
+#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
+#   stage: publish_coverage
+#   dependencies:
+#     - tests
+#   before_script:
+#     - "echo Publishing ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} coverage."
+#   script:
+#     - "mv ./coverage/ ./public/"
+#     - 'echo "Coverage available at ${CI_PAGES_URL}/"'
+#   artifacts:
+#     expose_as: "coverage"
+#     paths:
+#       - public
+#     expire_in: 30 days
 
 Build Container:
   only:
@@ -173,7 +173,7 @@ Build Container:
 
 Deploy:Staging:
   only:
-    - staging
+    - merge_requests
   stage: deploy
   image: python:3.8-alpine
   variables:
@@ -202,13 +202,13 @@ Deploy:Staging:
     # Get the current status of the API stack.
     - 'sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack})'
     # If there was an issue with the previous build and the build was rolled back, delete the stack.
-    - 'if [$sceptre_status == "ROLLBACK_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete ${sceptre_stack}) && echo $sceptre_status; fi'
+    - 'if [ $sceptre_status == "ROLLBACK_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete ${sceptre_stack}) && echo $sceptre_status; fi'
     # If there is an existing stack, update the stack.
-    - 'if [$sceptre_status != "UPDATE_COMPLETE"] && [$sceptre_status != "CREATE_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update ${sceptre_stack}) && echo $sceptre_status; fi'
+    - 'if [ $sceptre_status != "UPDATE_COMPLETE" ] && [ $sceptre_status != "CREATE_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update ${sceptre_stack}) && echo $sceptre_status; fi'
     # If there is no stack, create the stack.
-    - 'if [$sceptre_status == "PENDING"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create ${sceptre_stack}) && echo $sceptre_status; fi'
+    - 'if [ $sceptre_status == "PENDING" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create ${sceptre_stack}) && echo $sceptre_status; fi'
     # If the update succeeded, end the job, otherwise, fail the job.
-    - 'if [$sceptre_status == "UPDATE_COMPLETE"]; then exit 0; else exit 1; fi'
+    - 'if [ $sceptre_status == "UPDATE_COMPLETE" ]; then exit 0; else exit 1; fi'
 
 Deploy:Prod:
   only:
@@ -235,10 +235,10 @@ Deploy:Prod:
     # Get the current status of the API stack.
     - 'sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack})'
     # If there was an issue with the previous build and the build was rolled back, delete the stack.
-    - 'if [$sceptre_status == "ROLLBACK_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete ${sceptre_stack}) && echo $sceptre_status; fi'
+    - 'if [ $sceptre_status == "ROLLBACK_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete ${sceptre_stack}) && echo $sceptre_status; fi'
     # If there is an existing stack, update the stack.
-    - 'if [$sceptre_status != "UPDATE_COMPLETE"] && [$sceptre_status != "CREATE_COMPLETE"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update ${sceptre_stack}) && echo $sceptre_status; fi'
+    - 'if [ $sceptre_status != "UPDATE_COMPLETE" ] && [ $sceptre_status != "CREATE_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update ${sceptre_stack}) && echo $sceptre_status; fi'
     # If there is no stack, create the stack.
-    - 'if [$sceptre_status == "PENDING"]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create ${sceptre_stack}) && echo $sceptre_status; fi'
+    - 'if [ $sceptre_status == "PENDING" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create ${sceptre_stack}) && echo $sceptre_status; fi'
     # If the update succeeded, end the job, otherwise, fail the job.
-    - 'if [$sceptre_status == "UPDATE_COMPLETE"]; then exit 0; else exit 1; fi'
+    - 'if [ $sceptre_status == "UPDATE_COMPLETE" ]; then exit 0; else exit 1; fi'
