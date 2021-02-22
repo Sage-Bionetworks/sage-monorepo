@@ -234,7 +234,7 @@ Deploy:Staging:
     - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."staging/iatlas-api"')
     - "echo ${sceptre_status}"
     # If there is no stack, create the stack.
-    - if [ ${sceptre_status} == "PENDING" ]; then echo "In PENDING"; fi
+    - if [[ ${sceptre_status} == "PENDING" ]]; then echo "In PENDING"; fi
     # Get the current status of the API stack.
     - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."staging/iatlas-api"')
     - "echo ${sceptre_status}"
