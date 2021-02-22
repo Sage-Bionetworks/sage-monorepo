@@ -4,6 +4,8 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   CONTAINER_NAME: $CI_REGISTRY_IMAGE:${CI_COMMIT_SHORT_SHA}-${CI_COMMIT_REF_NAME}
   CONTAINER_LABEL: iatlas-api
+  DOCKER_IMAGE_TAG_STAGING: ${CI_REGISTRY_IMAGE}:iatlas-api-staging-latest
+  DOCKER_IMAGE_TAG_PROD: ${CI_REGISTRY_IMAGE}:iatlas-api-latest
 
 default:
   before_script:
@@ -157,7 +159,7 @@ stages:
 #       - public
 #     expire_in: 30 days
 
-Build Container:
+Build Container Staging:
   only:
     - staging
   stage: build_container
@@ -170,6 +172,22 @@ Build Container:
     - "docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}"
     - "docker build -t ${CONTAINER_NAME} ."
     - "docker push ${CONTAINER_NAME}"
+    - "docker push ${DOCKER_IMAGE_TAG_STAGING}"
+
+Build Container Prod:
+  only:
+    - master
+  stage: build_container
+  image: docker:19.03.1-dind
+  services:
+    - name: docker:19.03.1-dind
+  before_script:
+    - "echo Building staging container."
+  script:
+    - "docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}"
+    - "docker build -t ${CONTAINER_NAME} ."
+    - "docker push ${CONTAINER_NAME}"
+    - "docker push ${DOCKER_IMAGE_TAG_PROD}"
 
 Deploy:Staging:
   only:
@@ -181,6 +199,8 @@ Deploy:Staging:
     AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
     AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
     AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+    DOCKER_IMAGE_TAG: ${DOCKER_IMAGE_TAG_STAGING}
+    GITLAB_REG_TOKEN: ${GITLAB_REG_TOKEN}
     TRAVIS_BRANCH: "staging"
   before_script:
     - "echo Deploying iAtlas API to Staging"
@@ -210,37 +230,38 @@ Deploy:Staging:
     # If there is no stack, create the stack.
     - if [ ${sceptre_status} == "PENDING" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create ${sceptre_stack_file} | jq '."staging/iatlas-api"') && echo ${sceptre_status}; fi
     # If the update succeeded or a first build succeeded, end the job, otherwise, fail the job.
-    - 'if [ ${sceptre_status} == "UPDATE_COMPLETE" ] || [ ${sceptre_status} != "CREATE_COMPLETE" ]; then exit 0; else exit 1; fi'
+    - 'if [ ${sceptre_status} == "UPDATE_COMPLETE" ] || [ ${sceptre_status} == "CREATE_COMPLETE" ]; then exit 0; else exit 1; fi'
 
-Deploy:Prod:
-  only:
-    - master
-  stage: deploy
-  image: python:3.8-alpine
-  variables:
-    # The AWS Environment Variables to specify configuration options and credentials for the aws cli.
-    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-    AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
-    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-    TRAVIS_BRANCH: "master"
-  before_script:
-    - "echo Deploying iAtlas API to Production"
-  script:
-    - 'sceptre_stack=prod/iatlas-api.yaml'
-    # Ensure git is available.
-    - "apk add --no-cache git"
-    # Get the Sceptre scripts.
-    - "git clone -b feature/ecs https://github.com/generalui/iAtlas-infra.git"
-    - "cd iAtlas-infra"
-    # Ensure Sceptre is available and can handle !ssm.
-    - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
-    # Get the current status of the API stack.
-    - 'sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack})'
-    # If there was an issue with the previous build and the build was rolled back, delete the stack.
-    - 'if [ $sceptre_status == "ROLLBACK_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete ${sceptre_stack}) && echo $sceptre_status; fi'
-    # If there is an existing stack, update the stack.
-    - 'if [ $sceptre_status != "UPDATE_COMPLETE" ] && [ $sceptre_status != "CREATE_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update ${sceptre_stack}) && echo $sceptre_status; fi'
-    # If there is no stack, create the stack.
-    - 'if [ $sceptre_status == "PENDING" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create ${sceptre_stack}) && echo $sceptre_status; fi'
-    # If the update succeeded, end the job, otherwise, fail the job.
-    - 'if [ $sceptre_status == "UPDATE_COMPLETE" ]; then exit 0; else exit 1; fi'
+# Deploy:Prod:
+#   only:
+#     - master
+#   stage: deploy
+#   image: python:3.8-alpine
+#   variables:
+#     # The AWS Environment Variables to specify configuration options and credentials for the aws cli.
+#     AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+#     AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+#     AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+#     DOCKER_IMAGE_TAG: ${DOCKER_IMAGE_TAG_PROD}
+#     TRAVIS_BRANCH: "master"
+#   before_script:
+#     - "echo Deploying iAtlas API to Production"
+#   script:
+#     - 'sceptre_stack=prod/iatlas-api.yaml'
+#     # Ensure git is available.
+#     - "apk add --no-cache git"
+#     # Get the Sceptre scripts.
+#     - "git clone -b feature/ecs https://github.com/generalui/iAtlas-infra.git"
+#     - "cd iAtlas-infra"
+#     # Ensure Sceptre is available and can handle !ssm.
+#     - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
+#     # Get the current status of the API stack.
+#     - 'sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack})'
+#     # If there was an issue with the previous build and the build was rolled back, delete the stack.
+#     - 'if [ $sceptre_status == "ROLLBACK_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" delete ${sceptre_stack}) && echo $sceptre_status; fi'
+#     # If there is an existing stack, update the stack.
+#     - 'if [ $sceptre_status != "UPDATE_COMPLETE" ] && [ $sceptre_status != "CREATE_COMPLETE" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" update ${sceptre_stack}) && echo $sceptre_status; fi'
+#     # If there is no stack, create the stack.
+#     - 'if [ $sceptre_status == "PENDING" ]; then sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" create ${sceptre_stack}) && echo $sceptre_status; fi'
+#     # If the update succeeded, end the job, otherwise, fail the job.
+#     - 'if [ $sceptre_status == "UPDATE_COMPLETE" ]; then exit 0; else exit 1; fi'
