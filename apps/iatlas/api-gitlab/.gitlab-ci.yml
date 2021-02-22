@@ -186,6 +186,10 @@ Deploy:Staging:
     - "echo Deploying iAtlas API to Staging"
   script:
     - 'sceptre_stack=staging/iatlas-api.yaml'
+    # Create the AWS credentials and config files.
+    - 'mkdir ~/.aws'
+    - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${AWS_DEFAULT_REGION}" >> ~/.aws/credentials'
+    - 'echo -e "[default]\nregion = $AWS_DEFAULT_REGION\noutput = json" >> ~/.aws/config'
     # Ensure git is available.
     - "apk add --no-cache git"
     # Get the Sceptre scripts.
