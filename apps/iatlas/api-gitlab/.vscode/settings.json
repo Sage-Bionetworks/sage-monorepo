@@ -9,6 +9,7 @@
   ],
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
+  "files.trimTrailingWhitespace": true,
   "python.formatting.autopep8Args": [
     "--ignore",
     "E402"
