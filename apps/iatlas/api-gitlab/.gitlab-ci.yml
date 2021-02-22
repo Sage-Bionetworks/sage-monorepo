@@ -101,7 +101,7 @@ tests:coverage-report-staging:
   artifacts:
     reports:
       # Make the coverage xml available.
-      cobertura: "coverage/api_coverage_staging-api_coverage.xml"
+      cobertura: "coverage/iatlas-api_coverage_staging.xml"
 
 tests:coverage-report-prod:
   only:
@@ -193,6 +193,12 @@ Deploy:Staging:
     - "cd iAtlas-infra"
     # Ensure Sceptre is available and can handle !ssm.
     - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
+    - "echo $(pwd)"
+    - "echo $(which sceptre)"
+    - "echo $(sceptre --version)"
+    - "echo region=${AWS_DEFAULT_REGION}"
+    - "echo ${AWS_DEFAULT_REGION}"
+    - "echo ${sceptre_stack}"
     # Get the current status of the API stack.
     - 'sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack})'
     # If there was an issue with the previous build and the build was rolled back, delete the stack.
