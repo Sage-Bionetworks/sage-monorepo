@@ -70,6 +70,7 @@ tests:
     - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
     # Run test coverage using as many cores as are available.
+    - mkdir -p coverage/${CI_COMMIT_SHORT_SHA}
     - pytest --cov --cov-report html:coverage/${CI_COMMIT_SHORT_SHA} -n auto
   artifacts:
     expose_as: "coverage-initial"
@@ -103,6 +104,7 @@ tests:coverage-report-staging:
     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
     # Run test coverage using as many cores as are available.
     # Output the results to an xml document.
+    - mkdir -p coverage/staging
     - pytest --cov --cov-report html:coverage/staging --cov-report xml:coverage/staging/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
     # Get the coverage value for the badge.
     - coverage report --skip-covered | grep TOTAL
@@ -141,6 +143,7 @@ tests:coverage-report-prod:
     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
     # Run test coverage using as many cores as are available.
     # Output the results to an xml document.
+    - mkdir -p coverage/prod
     - pytest --cov --cov-report html:coverage/prod --cov-report xml:coverage/prod/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
     # Get the coverage value for the badge.
     - coverage report --skip-covered | grep TOTAL
