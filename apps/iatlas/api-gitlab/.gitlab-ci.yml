@@ -175,7 +175,7 @@ Build Container Staging:
   script:
     - 'echo CONTAINER_NAME: ${CONTAINER_NAME_STAGING}'
     - echo "${CI_JOB_TOKEN}" | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-    - "docker build -t ${CONTAINER_NAME_STAGING} ."
+    - "docker build -t ${CONTAINER_NAME_STAGING} -t ${DOCKER_IMAGE_TAG_STAGING} ."
     - "docker push ${CONTAINER_NAME_STAGING}"
     - "docker push ${DOCKER_IMAGE_TAG_STAGING}"
 
@@ -192,7 +192,7 @@ Build Container Prod:
     - "echo Building staging container."
   script:
     - echo "${CI_JOB_TOKEN}" | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-    - "docker build -t ${CONTAINER_NAME_PROD} ."
+    - "docker build -t ${CONTAINER_NAME_PROD} -t ${DOCKER_IMAGE_TAG_PROD} ."
     - "docker push ${CONTAINER_NAME_PROD}"
     - "docker push ${DOCKER_IMAGE_TAG_PROD}"
 
