@@ -14,7 +14,7 @@ ici_distribution_server <- function(
       output$feature_op <- renderUI({
         selectInput(
           ns("var1_surv"),
-          "Select of Search for Variable",
+          "Select or Search for Variable",
           variable_options %>% iatlas.app::create_nested_list_by_class()
         )
       })
@@ -196,6 +196,7 @@ ici_distribution_server <- function(
                                      dataset,
                                      "y",
                                      "group",
+                                     reorder_function = input$reorder_method_choice,
                                      varible_plot_label())
 
             }else{ #when two grouping levels are selected
@@ -208,6 +209,7 @@ ici_distribution_server <- function(
                                      "group",
                                      input$groupvar,
                                      input[[group2]],
+                                     reorder_function = input$reorder_method_choice,
                                      varible_plot_label())
             }
           }
@@ -222,6 +224,10 @@ ici_distribution_server <- function(
         s$x$source <- "distPlots"
         s
       })
+      output$download_tbl <- downloadHandler(
+        filename = function() stringr::str_c("distplot-", Sys.Date(), ".csv"),
+        content = function(con) readr::write_csv(df_selected(), con)
+      )
 
       paired_test <- shiny::reactive({
         switch(
@@ -296,7 +302,7 @@ ici_distribution_server <- function(
                  ioresponse_data$sample_group_df[which(ioresponse_data$sample_group_df$FeatureLabel == x), "Characteristics"], "\n"))
       })
 
-      output$drilldown_plot <- plotly::renderPlotly({
+      drilldown_df <- reactive({
         shiny::validate(need(!is.null(input$datasets), " "))
         shiny::req(df_selected())
 
@@ -315,13 +321,23 @@ ici_distribution_server <- function(
           shiny::need(clicked_group %in% current_groups$group, "Click plot above"))
 
         df_selected() %>%
-          dplyr::filter(Dataset == clicked_dataset & group == clicked_group) %>%
+          dplyr::filter(Dataset == clicked_dataset & group == clicked_group)
+      })
+
+      output$drilldown_plot <- plotly::renderPlotly({
+        shiny::req(drilldown_df())
           create_histogram(
+            df = drilldown_df(),
             x_col = "y",
-            title = paste(clicked_dataset, clicked_group, sep = ", "),
+            title = paste(unique(drilldown_df()$Dataset), unique(drilldown_df()$group), sep = ", "),
             x_lab = varible_plot_label()
           )
       })
+
+      output$download_hist <- downloadHandler(
+        filename = function() stringr::str_c("drilldown-", Sys.Date(), ".csv"),
+        content = function(con) readr::write_csv(drilldown_df(), con)
+      )
     }
   )
 }
