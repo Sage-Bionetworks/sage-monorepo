@@ -48,21 +48,39 @@ combine_groups <- function(df, group1, group2, label1, label2){
   df
 }
 
-create_plot_onegroup <- function(dataset_data, plot_type, dataset, feature, group1, ylabel){
+
+
+create_plot_onegroup <- function(dataset_data, plot_type, dataset, feature, group1, reorder_function = "None",  ylabel){
+
+  if (reorder_function == "None"){
+    order_plot <- dataset_data %>%
+      dplyr::select(group, order_within_sample_group, color) %>%
+      dplyr::group_by(group, color) %>%
+      dplyr::summarise(m = min(order_within_sample_group)) %>%
+      dplyr::arrange(m) %>%
+      dplyr::select(group, color)
+  } else {
+    reorder_method <- switch(
+      reorder_function,
+      "Median" = median,
+      "Mean" = mean,
+      "Max" = max,
+      "Min" = min
+    )
+
+    order_plot <- dataset_data %>%
+      dplyr::group_by(group, color) %>%
+      dplyr::summarise(m = reorder_method(.data[[feature]]), .groups = "drop") %>%
+      dplyr::arrange(.data$m) %>%
+      dplyr::select("group", "color")
+  }
 
   xform <- list(automargin = TRUE,
                 categoryorder = "array",
-                categoryarray = (dataset_data %>%
-                                   dplyr::select(group, order_within_sample_group) %>%
-                                   dplyr::group_by(group) %>%
-                                   dplyr::summarise(m = min(order_within_sample_group)) %>%
-                                   dplyr::arrange(m) %>%
-                                   dplyr::pull(group))
-  )
+                categoryarray = order_plot$group)
 
-  group_colors <- unique((dataset_data %>%
-                            dplyr::arrange(order_within_sample_group))$color)
-  names(group_colors) <- xform$categoryarray
+  group_colors <- order_plot$color
+  names(group_colors) <- order_plot$group
 
   plot_type(dataset_data,
             x_col = as.character(group1),
@@ -81,7 +99,7 @@ create_plot_onegroup <- function(dataset_data, plot_type, dataset, feature, grou
     )
 }
 
-create_plot_twogroup <- function(dataset_data, plot_type, dataset, feature, group, group1, group2, ylabel){
+create_plot_twogroup <- function(dataset_data, plot_type, dataset, feature, group, group1, group2, reorder_function = "None", ylabel){
 
   samples <- (dataset_data %>% dplyr::group_by(dataset_data[[group1]], dataset_data[[group2]]) %>%
                 dplyr::summarise(samples = dplyr::n()))
@@ -97,20 +115,39 @@ create_plot_twogroup <- function(dataset_data, plot_type, dataset, feature, grou
 
   colnames(samples) <- c("var1", "var2", "samples")
 
+  #ordering plot
+  if (reorder_function == "None"){
+    order_plot <- dataset_data %>%
+      dplyr::select(group, order_within_sample_group.x, order_within_sample_group.y, color) %>%
+      dplyr::group_by(group, color) %>%
+      dplyr::summarise(m = min(order_within_sample_group.x),
+                       n = min(order_within_sample_group.y)) %>%
+      dplyr::arrange(m, n) %>%
+      dplyr::select(group, color)
+  } else {
+    reorder_method <- switch(
+      reorder_function,
+      "Median" = median,
+      "Mean" = mean,
+      "Max" = max,
+      "Min" = min
+    )
+
+    order_plot <- dataset_data %>%
+      dplyr::group_by(group, color) %>%
+      dplyr::summarise(m = min(order_within_sample_group.x),
+                       n = reorder_method(.data[[feature]]), .groups = "drop") %>%
+      dplyr::arrange(.data$m,.data$n) %>%
+      dplyr::select(group, color)
+  }
+
   xform <- list(automargin = TRUE,
                 tickangle = 80,
                 categoryorder = "array",
-                categoryarray = (dataset_data %>%
-                                   dplyr::select(group, order_within_sample_group.x, order_within_sample_group.y) %>%
-                                   dplyr::group_by(group) %>%
-                                   dplyr::summarise(m = min(order_within_sample_group.x),
-                                                    n = min(order_within_sample_group.y)) %>%
-                                   dplyr::arrange(m, n) %>%
-                                   dplyr::pull(group))
+                categoryarray = order_plot$group
   )
-  group_colors <- unique((dataset_data %>%
-                            dplyr::arrange(order_within_sample_group.x, order_within_sample_group.y))$color)
-  names(group_colors) <- xform$categoryarray
+  group_colors <- order_plot$color
+  names(group_colors) <- order_plot$group
 
   dataset_data %>%
     plot_type(.,

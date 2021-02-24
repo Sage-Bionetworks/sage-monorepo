@@ -39,11 +39,17 @@ ici_distribution_ui <- function(id){
                 ),
                 selected = "None"
         ),
-        shiny::checkboxInput(
-                ns("see_drilldown"),
-                "Display histogram of distribution by clicking on a violin",
-                FALSE
+        shiny::selectInput(
+          ns("reorder_method_choice"),
+          "Reorder Function",
+          choices = c("None" = "None", "Median", "Mean", "Max", "Min"),
+          selected = "None"
         )
+        # shiny::checkboxInput(
+        #         ns("see_drilldown"),
+        #         "Display histogram of distribution by clicking on a plot",
+        #         TRUE
+        # )
       )
     ),#optionsBox
     plotBox(
@@ -51,7 +57,8 @@ ici_distribution_ui <- function(id){
       plotly::plotlyOutput(ns("dist_plots"), height = "500px") %>%
         shinycssloaders::withSpinner(),
       tagAppendAttributes(shiny::textOutput(ns("plot_text")), style="white-space:pre-wrap;"),
-      shiny::h5("Click plot to see group information.")
+      shiny::h5("Click plot to see group information."),
+      shiny::downloadButton(ns("download_tbl"), "Download plot table")
     ),
     shiny::fluidRow(
       optionsBox(
@@ -65,14 +72,15 @@ ici_distribution_ui <- function(id){
         downloadButton(ns('download_test'), 'Download')
       )
     ),
-    shiny::conditionalPanel(
-      condition =  "input.see_drilldown",
-      ns = ns,
+    # shiny::conditionalPanel(
+    #   condition =  "input.see_drilldown",
+    #   ns = ns,
       plotBox(
         width = 12,
         plotly::plotlyOutput(ns("drilldown_plot")) %>%
-          shinycssloaders::withSpinner()
+          shinycssloaders::withSpinner(),
+        shiny::downloadButton(ns("download_hist"), "Download plot table")
       )
-    )
+    #)
   )
 }
