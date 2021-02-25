@@ -165,42 +165,8 @@ pages:
   before_script:
     - "echo Publishing ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} coverage."
   script:
-    - "mv ./coverage/ ./public/${CI_COMMIT_SHORT_SHA}/"
-    - 'echo "Coverage available at ${CI_PAGES_URL}/${CI_COMMIT_SHORT_SHA}"'
-  artifacts:
-    expose_as: "coverage"
-    paths:
-      - public
-    expire_in: 30 days
-
-pages:staging:
-  only:
-    - staging
-  stage: publish_coverage
-  dependencies:
-    - tests:coverage-report-staging
-  before_script:
-    - "echo Publishing Staging coverage."
-  script:
-    - "mv ./coverage/ ./public/staging/"
-    - 'echo "Coverage available at ${CI_PAGES_URL}/staging"'
-  artifacts:
-    expose_as: "coverage"
-    paths:
-      - public
-    expire_in: 30 days
-
-pages:prod:
-  only:
-    - master
-  stage: publish_coverage
-  dependencies:
-    - tests:coverage-report-prod
-  before_script:
-    - "echo Publishing Production coverage."
-  script:
-    - "mv ./coverage/prod ./public/prod"
-    - 'echo "Coverage available at ${CI_PAGES_URL}/prod"'
+    - "mv ./coverage/ ./public/"
+    - 'echo "Coverage available at ${CI_PAGES_URL}"'
   artifacts:
     expose_as: "coverage"
     paths:
