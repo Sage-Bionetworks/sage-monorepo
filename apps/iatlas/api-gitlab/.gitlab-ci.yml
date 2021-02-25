@@ -72,7 +72,7 @@ tests:
     # Run test coverage using as many cores as are available.
     - pytest --cov --cov-report html -n auto
   artifacts:
-    expose_as: "coverage-${CI_COMMIT_SHORT_SHA}"
+    expose_as: "coverage-mr"
     paths:
       - coverage
     expire_in: 30 days
