@@ -75,7 +75,7 @@ A simple way to get PostgreSQL running locally is to use Docker. Here is a simpl
 
 If you are running on a Linux operating system the default connection to the docker container `host.docker.internal` will not work. To connect to the local dockerized PostgreSQL DB, ensure there is a `.env-dev` file ([`.env-SAMPLE`](./.env-SAMPLE) can be used as a reference.) In the `.env-dev` file, ensure the `POSTGRES_HOST` variable is set to `172.17.0.1`
 
-```.env
+```.env-dev
 POSTGRES_HOST=172.17.0.1
 ```
 
@@ -85,7 +85,7 @@ Alternatively, the app may be set up to connect to the existing staging database
 
 To connect to a different database (ie staging), the `.env-dev` file must also be used with values similar to:
 
-```.env
+```.env-dev
 POSTGRES_DB=iatlas_staging
 POSTGRES_HOST=iatlas-staging-us-west-2.cluster-cfb68nhqxoz9.us-west-2.rds.amazonaws.com
 POSTGRES_PASSWORD={Get_the_staging_password}
