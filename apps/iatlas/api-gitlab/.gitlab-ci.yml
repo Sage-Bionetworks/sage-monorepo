@@ -32,7 +32,7 @@ default:
     - "rm -rf /var/cache/apk/*"
     - "aws --version"
     # Create the AWS credentials and config files.
-    - 'mkdir ~/.aws'
+    - "mkdir ~/.aws"
     - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${AWS_DEFAULT_REGION}" >> ~/.aws/credentials'
     - 'echo -e "[default]\nregion = $AWS_DEFAULT_REGION\noutput = json" >> ~/.aws/config'
 
@@ -70,12 +70,11 @@ tests:
     - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
     # Run test coverage using as many cores as are available.
-    - mkdir -p coverage/${CI_COMMIT_SHORT_SHA}
-    - pytest --cov --cov-report html:coverage/${CI_COMMIT_SHORT_SHA} -n auto
+    - pytest --cov --cov-report html -n auto
   artifacts:
-    expose_as: "coverage-initial"
+    expose_as: "coverage-${CI_COMMIT_SHORT_SHA}"
     paths:
-      - coverage/${CI_COMMIT_SHORT_SHA}
+      - coverage
     expire_in: 30 days
 
 tests:coverage-report-staging:
@@ -104,18 +103,17 @@ tests:coverage-report-staging:
     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
     # Run test coverage using as many cores as are available.
     # Output the results to an xml document.
-    - mkdir -p coverage/staging
-    - pytest --cov --cov-report html:coverage/staging --cov-report xml:coverage/staging/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
+    - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
     # Get the coverage value for the badge.
     - coverage report --skip-covered | grep TOTAL
   artifacts:
     expose_as: "coverage-staging"
     paths:
-      - coverage/staging
+      - coverage
     expire_in: 30 days
     reports:
       # Make the coverage xml available.
-      cobertura: "coverage/staging/iatlas-api_coverage_staging.xml"
+      cobertura: "coverage/iatlas-api_coverage_staging.xml"
 
 tests:coverage-report-prod:
   only:
@@ -143,18 +141,17 @@ tests:coverage-report-prod:
     - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
     # Run test coverage using as many cores as are available.
     # Output the results to an xml document.
-    - mkdir -p coverage/prod
-    - pytest --cov --cov-report html:coverage/prod --cov-report xml:coverage/prod/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
+    - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
     # Get the coverage value for the badge.
     - coverage report --skip-covered | grep TOTAL
   artifacts:
     expose_as: "coverage-prod"
     paths:
-      - coverage/prod
+      - coverage
     expire_in: 30 days
     reports:
       # Make the coverage xml available.
-      cobertura: "coverage/prod/iatlas-api_coverage.xml"
+      cobertura: "coverage/iatlas-api_coverage.xml"
 
 pages:
   only:
@@ -168,7 +165,7 @@ pages:
   before_script:
     - "echo Publishing ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} coverage."
   script:
-    - "mv ./coverage/${CI_COMMIT_SHORT_SHA} ./public/${CI_COMMIT_SHORT_SHA}"
+    - "mv ./coverage/ ./public/${CI_COMMIT_SHORT_SHA}/"
     - 'echo "Coverage available at ${CI_PAGES_URL}/${CI_COMMIT_SHORT_SHA}"'
   artifacts:
     expose_as: "coverage"
@@ -181,11 +178,11 @@ pages:staging:
     - staging
   stage: publish_coverage
   dependencies:
-    - tests
+    - tests:coverage-report-staging
   before_script:
     - "echo Publishing Staging coverage."
   script:
-    - "mv ./coverage/staging ./public/staging"
+    - "mv ./coverage/ ./public/staging/"
     - 'echo "Coverage available at ${CI_PAGES_URL}/staging"'
   artifacts:
     expose_as: "coverage"
@@ -198,7 +195,7 @@ pages:prod:
     - master
   stage: publish_coverage
   dependencies:
-    - tests
+    - tests:coverage-report-prod
   before_script:
     - "echo Publishing Production coverage."
   script:
@@ -222,7 +219,7 @@ Build Container Staging:
   before_script:
     - "echo Building Staging container."
   script:
-    - 'echo CONTAINER_NAME: ${CONTAINER_NAME_STAGING}'
+    - "echo CONTAINER_NAME: ${CONTAINER_NAME_STAGING}"
     - echo "${CI_JOB_TOKEN}" | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
     - "docker build -t ${CONTAINER_NAME_STAGING} -t ${DOCKER_IMAGE_TAG_STAGING} ."
     - "docker push ${CONTAINER_NAME_STAGING}"
@@ -261,7 +258,7 @@ Deploy:Staging:
     TRAVIS_BRANCH: "staging"
   script:
     - "echo Deploying iAtlas API to Staging"
-    - 'sceptre_stack_file=staging/iatlas-api.yaml'
+    - "sceptre_stack_file=staging/iatlas-api.yaml"
     # Ensure git is available.
     - "apk add --no-cache git"
     # Get the Sceptre scripts.
@@ -304,7 +301,7 @@ Deploy:Prod:
     TRAVIS_BRANCH: "master"
   script:
     - "echo Deploying iAtlas API to Production"
-    - 'sceptre_stack_file=prod/iatlas-api.yaml'
+    - "sceptre_stack_file=prod/iatlas-api.yaml"
     # Ensure git is available.
     - "apk add --no-cache git"
     # Get the Sceptre scripts.

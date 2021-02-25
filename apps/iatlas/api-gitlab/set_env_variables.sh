@@ -19,7 +19,7 @@ dotenv() {
         set +a
     else
         DOT_ENV_FILE=${PROJECT_DIR}/.env-none
-        >&2 echo -e "${YELLOW}No .env-dev file found${NC}"
+        >&2 echo -e "${YELLOW}Not using a .env-dev file${NC}"
     fi
 }
 # Run dotenv
