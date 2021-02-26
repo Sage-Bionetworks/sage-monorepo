@@ -2,11 +2,9 @@ variables:
   CI: "1"
   # Workaround for locally issued TLS certs
   DOCKER_TLS_CERTDIR: ""
-  CONTAINER_NAME_STAGING: $CI_REGISTRY_IMAGE:${CI_COMMIT_SHORT_SHA}-staging
-  CONTAINER_NAME_PROD: $CI_REGISTRY_IMAGE:${CI_COMMIT_SHORT_SHA}
   CONTAINER_LABEL: iatlas-api
-  DOCKER_IMAGE_TAG_STAGING: ${CI_REGISTRY_IMAGE}:staging-latest
-  DOCKER_IMAGE_TAG_PROD: ${CI_REGISTRY_IMAGE}:latest
+  DOCKER_IMAGE_TAG_STAGING: ${CI_COMMIT_SHORT_SHA}-staging
+  DOCKER_IMAGE_TAG_PROD: ${CI_COMMIT_SHORT_SHA}
 
 default:
   # This runs on every job that doesn't have a 'before_script'.
@@ -185,11 +183,13 @@ Build Container Staging:
   before_script:
     - "echo Building Staging container."
   script:
-    - "echo CONTAINER_NAME: ${CONTAINER_NAME_STAGING}"
+    - current=${CI_REGISTRY_IMAGE}:${DOCKER_IMAGE_TAG_STAGING}
+    - latest=${CI_REGISTRY_IMAGE}:staging-latest
+    - "echo CONTAINER_NAME: ${current}"
     - echo "${CI_JOB_TOKEN}" | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-    - "docker build -t ${CONTAINER_NAME_STAGING} -t ${DOCKER_IMAGE_TAG_STAGING} ."
-    - "docker push ${CONTAINER_NAME_STAGING}"
-    - "docker push ${DOCKER_IMAGE_TAG_STAGING}"
+    - "docker build -t ${current} -t ${latest} ."
+    - "docker push ${current}"
+    - "docker push ${latest}"
 
 # Build the Prod container with the app in it.
 # Save it to the container repo as the latest and as the commit name (so it may be re-used if needed).
@@ -203,10 +203,12 @@ Build Container Prod:
   before_script:
     - "echo Building Prod container."
   script:
+    - current=${CI_REGISTRY_IMAGE}:${DOCKER_IMAGE_TAG_PROD}
+    - latest=${CI_REGISTRY_IMAGE}:staging-latest
     - echo "${CI_JOB_TOKEN}" | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-    - "docker build -t ${CONTAINER_NAME_PROD} -t ${DOCKER_IMAGE_TAG_PROD} ."
-    - "docker push ${CONTAINER_NAME_PROD}"
-    - "docker push ${DOCKER_IMAGE_TAG_PROD}"
+    - "docker build -t ${current} -t ${latest} ."
+    - "docker push ${current}"
+    - "docker push ${latest}"
 
 # The Deploy job uses
 Deploy:Staging:
@@ -219,7 +221,7 @@ Deploy:Staging:
     AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
     AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
     AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-    DOCKER_IMAGE_TAG: "staging-latest"
+    DOCKER_IMAGE_TAG: ${DOCKER_IMAGE_TAG_STAGING}
     GITLAB_REG_TOKEN: ${GITLAB_REG_TOKEN}
     TRAVIS_BRANCH: "staging"
   script:
@@ -263,7 +265,7 @@ Deploy:Prod:
     AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
     AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
     AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-    DOCKER_IMAGE_TAG: "latest"
+    DOCKER_IMAGE_TAG: ${DOCKER_IMAGE_TAG_PROD}
     TRAVIS_BRANCH: "master"
   script:
     - "echo Deploying iAtlas API to Production"
