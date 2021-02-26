@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.0.3",
+    "Version": "4.0.4",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -1111,15 +1111,15 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.12.2",
+      "Version": "0.12.3",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "5239952bc4000826b11189ed42246d1518ed475e",
-      "Hash": "ac30e3e6f453a0ed3d6dde52c3179627"
+      "RemoteSha": "023ff3c35e008347a670da3883df251dc18d6b4b",
+      "RemoteHost": "api.github.com",
+      "Hash": "c91278a865b6abcdd58fdabc634b90a4"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
