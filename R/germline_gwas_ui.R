@@ -33,7 +33,6 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
          ),
          iatlas.app::plotBox(
            width = 12,
-           shinyjs::useShinyjs(),
            igvShiny::igvShinyOutput(ns('igv_plot')) %>%
              shinycssloaders::withSpinner(.)
          )
