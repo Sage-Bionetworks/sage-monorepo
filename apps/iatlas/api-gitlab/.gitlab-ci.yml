@@ -221,14 +221,11 @@ Deploy:Staging:
     AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
     AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
     AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-    DOCKER_IMAGE_TAG: ${DOCKER_IMAGE_TAG_STAGING}
     GITLAB_REG_TOKEN: ${GITLAB_REG_TOKEN}
     TRAVIS_BRANCH: "staging"
   script:
     - echo Deploying iAtlas API to Staging
     - echo image ${DOCKER_IMAGE_TAG_STAGING}
-    - echo image ${CI_COMMIT_SHORT_SHA}-staging
-    - echo sha ${CI_COMMIT_SHORT_SHA}
     - export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG_STAGING}
     - "sceptre_stack_file=staging/iatlas-api.yaml"
     # Ensure git is available.
@@ -269,7 +266,6 @@ Deploy:Prod:
     AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
     AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
     AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-    DOCKER_IMAGE_TAG: ${DOCKER_IMAGE_TAG_PROD}
     TRAVIS_BRANCH: "master"
   script:
     - echo Deploying iAtlas API to Production
