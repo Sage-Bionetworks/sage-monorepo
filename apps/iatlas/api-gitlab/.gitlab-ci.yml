@@ -272,7 +272,7 @@ Deploy:Prod:
     DOCKER_IMAGE_TAG: ${DOCKER_IMAGE_TAG_PROD}
     TRAVIS_BRANCH: "master"
   script:
-    - 'echo "Deploying iAtlas API to Production
+    - echo Deploying iAtlas API to Production
     - image ${DOCKER_IMAGE_TAG_PROD}
     - export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG_PROD}
     - "sceptre_stack_file=prod/iatlas-api.yaml"
