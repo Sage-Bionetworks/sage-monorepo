@@ -225,7 +225,11 @@ Deploy:Staging:
     GITLAB_REG_TOKEN: ${GITLAB_REG_TOKEN}
     TRAVIS_BRANCH: "staging"
   script:
-    - 'echo "Deploying iAtlas API to Staging - image ${DOCKER_IMAGE_TAG}"'
+    - echo Deploying iAtlas API to Staging
+    - echo image ${DOCKER_IMAGE_TAG_STAGING}
+    - echo image ${CI_COMMIT_SHORT_SHA}-staging
+    - echo sha ${CI_COMMIT_SHORT_SHA}
+    - export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG_STAGING}
     - "sceptre_stack_file=staging/iatlas-api.yaml"
     # Ensure git is available.
     - "apk add --no-cache git"
@@ -268,7 +272,9 @@ Deploy:Prod:
     DOCKER_IMAGE_TAG: ${DOCKER_IMAGE_TAG_PROD}
     TRAVIS_BRANCH: "master"
   script:
-    - 'echo "Deploying iAtlas API to Production - image ${DOCKER_IMAGE_TAG}"'
+    - 'echo "Deploying iAtlas API to Production
+    - image ${DOCKER_IMAGE_TAG_PROD}
+    - export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG_PROD}
     - "sceptre_stack_file=prod/iatlas-api.yaml"
     # Ensure git is available.
     - "apk add --no-cache git"
