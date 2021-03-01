@@ -20,34 +20,22 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
           optionsBox(
             width = 12,
             shiny::column(
-              width = 3,
-              shiny::radioButtons(ns("selection"), "Select range of visualization", choices = c("See all chromosomes", "Select a region"), selected = "See all chromosomes")
-            ),
-            shiny::column(
               width = 5,
-              shiny::selectizeInput(ns('immunefeature'), "Select Immune Feature(s)",
+              shiny::selectizeInput(ns('immunefeature'), "Exclude Immune Feature (optional)",
                                     choices = NULL,
                                     multiple = TRUE),
-              shiny::checkboxInput(ns("only_selected"), "Display only selected feature(s)")
+              shiny::radioButtons(ns("feature_action"), "Select or Exclude?", choices = c("Select", "Exclude"), selected = "Exclude")
             ),
             shiny::column(
               width = 4,
-              shiny:: conditionalPanel(
-                condition = paste("" , paste0("input['", ns("only_selected"), "'] == false")),
-                shiny::selectizeInput(ns('exclude_feat'), "Exclude Immune Feature (optional)",
-                                      choices = NULL,
-                                      multiple = TRUE)
-              )
+              actionButton(ns("addGwasTrackButton"), "Add GWAS Track")
             )
          ),
          iatlas.app::plotBox(
            width = 12,
-           plotly::plotlyOutput(ns("mht_plot"), height = "300px") %>%
-             shinycssloaders::withSpinner(.),
-           shiny::conditionalPanel(paste0("input['", ns("selection"), "'] == 'Select a region'"),
-                                   igvShiny::igvShinyOutput(ns('igv_plot')) %>%
-                                     shinycssloaders::withSpinner(.)
-           )
+           shinyjs::useShinyjs(),
+           igvShiny::igvShinyOutput(ns('igv_plot')) %>%
+             shinycssloaders::withSpinner(.)
          )
         ),
         shiny::column(
@@ -64,9 +52,9 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
             tableBox(
               width = 12,
               DT::DTOutput(ns("snp_tbl"))
+             )
             )
-           )
-          ),
+           ),
           iatlas.app::messageBox(
             width = 12,
             shiny::p("We conducted a GWAS paired with colocalization analyses, and below you can access the results.
