@@ -5,10 +5,12 @@ germline_gwas_server <- function(id, cohort_obj){
 
       ns <- session$ns
 
+      if(!dir.exists("tracks"))
+        dir.create("tracks")
+      addResourcePath("tracks", "tracks")
+
       gwas_data <- reactive({
-        df <- iatlas.api.client::query_germline_gwas_results(datasets = "TCGA")
-        df$snp_chr <- as.numeric(df$snp_chr)
-        df
+        iatlas.api.client::query_germline_gwas_results(datasets = "TCGA")
       })
 
       immune_feat <- reactive({
@@ -20,12 +22,10 @@ germline_gwas_server <- function(id, cohort_obj){
           tibble::deframe()
       })
 
-      updateSelectizeInput(session, 'immunefeature', choices = immune_feat(), server = TRUE)
-      updateSelectizeInput(session, 'exclude_feat', choices = immune_feat(), selected = c("MHC2 21978456", "Th17 cells"), server = TRUE)
+      updateSelectizeInput(session, 'immunefeature', choices = immune_feat(), selected = c("MHC2 21978456", "Th17 cells"), server = TRUE)
 
       output$search_snp <- renderUI({
-        shiny::req(subset_gwas())
-        snp_options <- (subset_gwas() %>% dplyr::filter(!is.na(snp_rsid)))$snp_rsid
+        snp_options <- (gwas_data() %>% dplyr::filter(!is.na(snp_rsid)))$snp_rsid
         shiny::selectInput(ns("snp_int"), "Click on the plot or search for a SNP id:",
                            choices = c("", snp_options))
       })
@@ -34,199 +34,48 @@ germline_gwas_server <- function(id, cohort_obj){
         updateSelectInput(session, "snp_int", selected = snp_of_int$ev)
       })
 
-      #keeping track of the selected chromossome
-      selected_chr_reactive <- reactiveValues(ev = 1)
-
-      observeEvent(input[[sprintf("currentGenomicRegion.%s", "igv_plot")]], {
-        shiny::req(input$selection == "Select a region")
-        #if(!("width" %in% names(plotly::event_data("plotly_relayout", source = "gwas_mht", priority = "event")))){
-        new_chr <- as.numeric(sub("chr(.*):.*", "\\1", input[[sprintf("currentGenomicRegion.%s", "igv_plot")]]))
-        if(new_chr %in% c(1:22)) selected_chr_reactive$ev <- new_chr
-        #}
-      })
-
-      selected_chr <- reactive({
-        switch(
-          input$selection,
-          "See all chromosomes" = c(1:22),
-          "Select a region" = selected_chr_reactive$ev
-        )
-      })
-
-      chr_size <- reactive({
-        shiny::req(input$selection == "Select a region", selected_chr())
-
-        c((min((gwas_data() %>% dplyr::filter(snp_chr == selected_chr()))$snp_bp)),
-          (max((gwas_data() %>% dplyr::filter(snp_chr == selected_chr()))$snp_bp)))
-      })
-
-      #adding interactivity to select a region from zooming in the plot
-
-      clicked_int <- reactiveValues(ev=NULL)
-
-      observe({
-        shiny::req(input$selection == "Select a region")
-        #if a user resizes the browser, a new event data will be released, so let's guarantee that this will not affect the visualization
-        if(!("width" %in% names(plotly::event_data("plotly_relayout", source = "gwas_mht", priority = "event")))){
-          clicked_int$ev <- plotly::event_data("plotly_relayout", source = "gwas_mht", priority = "event")
-        }
-      })
-
-      #reset region with change of chromosome or selection of all chromosomes
-      toReset <- reactive({
-        shiny::req(input$selection == "Select a region")
-        list(selected_chr(),
-             input$selection)
-      })
-
-      observeEvent(toReset(), {
-        clicked_int$ev <- NULL
-      })
-
-      #Creating the object that stores the selected range (either by zoom on manhattan plot or change in the IGV plot)
-      chr_range <- reactiveValues(range = NULL)
-
-      observe({
-        shiny::req(input$selection == "Select a region",
-                   chr_size())
-
-        if(is.null(clicked_int$ev)){ #default option is min and max positions for the chromosome
-          chr_range$range = chr_size()
-        } else { #Update range after a zoom in the plot - need to compare with chr_size because plot has x-axis longer than chr_size
-          chr_range$range = c((floor(max(chr_size()[1], clicked_int$ev$`xaxis.range[0]`))),
-                              (ceiling(min(chr_size()[2], clicked_int$ev$`xaxis.range[1]`))))
-        }
-      })
-
-      observeEvent(input[[sprintf("currentGenomicRegion.%s", "igv_plot")]], { #this observer is only activated when a change is made on the IGV plot
-        #if(!("width" %in% names(plotly::event_data("plotly_relayout", source = "gwas_mht", priority = "event")))){
-        newLoc <- input[[sprintf("currentGenomicRegion.%s", "igv_plot")]]
-
-        pattern <- "chr(.*):(.*)-(.*)"
-        sel_start <- as.numeric(gsub(",", "", sub(pattern, "\\2", newLoc)))
-        sel_end <- as.numeric(gsub(",", "", sub(pattern, "\\3", newLoc)))
-
-        chr_range$range <- c(sel_start,
-                             sel_end)
-        #}
-      })
-
-      selected_min <- reactive({
-        switch(
-          input$selection,
-          "See all chromosomes" = 1,
-          "Select a region" = chr_range$range[1]
-        )
-      })
-
-      selected_max <- reactive({
-        switch(
-          input$selection,
-          "See all chromosomes" = 245246279,
-          "Select a region" = chr_range$range[2]
-        )
-      })
-
-      # Prepare the dataset
-      toUpdate <- reactive({
-        list(
-          input$immunefeature,
-          input$exclude_feat,
-          input$only_selected,
-          selected_chr(),
-          input$go_button
-        )
-      })
-
-      gwas_mht <- eventReactive(toUpdate(),{
-        shiny::req(immune_feat(), selected_chr(), selected_min(), selected_max())
-        build_manhattanplot_tbl(
-          gwas_df = gwas_data(),
-          chr_selected = selected_chr(),
-          bp_min = selected_min(),
-          bp_max = selected_max(),
-          to_select = input$immunefeature,
-          to_highlight = input$only_selected,
-          to_exclude = input$exclude_feat)
-      })
-
-      subset_gwas <- reactive({ #updates when range is changed
-        shiny::req(gwas_mht())
-        gwas_mht() %>%
-          dplyr::filter(snp_chr %in% selected_chr()) %>%
-          dplyr::filter(snp_bp >= selected_min() & snp_bp <= selected_max())
-      })
-
-      axisdf <- eventReactive(gwas_mht(), {
-        shiny::req(gwas_mht(), subset_gwas())
-        get_mhtplot_xlabel(
-          selected_region = input$selection,
-          gwas_df = gwas_mht(),
-          x_min = selected_min(),
-          x_max = selected_max()
-        )
-      })
-
-      x_title <- reactive({
-        if(input$selection == "See all chromosomes") "Chromosome"
-        else ""
-      })
-
-      output$mht_plot <- plotly::renderPlotly({
-        shiny::req(subset_gwas(), axisdf())
-
-        shiny::validate(
-          shiny::need(nrow(subset_gwas()) > 0, "Select a region with a GWAS hit.")
-        )
-
-        if(input$only_selected == 0) gwas_df <- subset_gwas() %>% dplyr::mutate(is_highlight=ifelse(feature_display %in% input$immunefeature, "yes", "no"))
-        else gwas_df <- subset_gwas() %>% dplyr::mutate(is_highlight = "no")
-
-        gwas_df %>%
-          dplyr::mutate(is_highlight = replace(is_highlight, snp_rsid == snp_of_int$ev, "snp")) %>%
-          create_manhattanplot(
-            df = .,
-            x_label = axisdf(),
-            y_min = 6,
-            y_max = ceiling(max(gwas_df$log10p)),
-            x_limits = c(selected_min(), max(selected_max(), subset_gwas()$x_col)),
-            x_name = x_title(),
-            y_name = "- log10(p-value)",
-            plot_title = "",
-            source_name = "gwas_mht"
-          )
+      subset_gwas <- reactive({
+        shiny::req(input$immunefeature)
+        if(input$feature_action == "Exclude") gwas_data() %>% dplyr::filter(!(feature_display %in% input$immunefeature)) %>% dplyr::select(SNP = snp_rsid, `SNP id` = snp_name, CHR = snp_chr, POS = snp_bp, 'P.VALUE'= p_value, Trait = feature_display, 'Immune Trait Module' = module, 'Immune Trait Category' = category)
+        else gwas_data() %>% dplyr::filter(feature_display %in% input$immunefeature) %>% dplyr::select(SNP = snp_rsid, `SNP id` = snp_name, CHR = snp_chr, POS = snp_bp, 'P.VALUE'= p_value, Trait = feature_display, 'Immune Trait Module' = module, 'Immune Trait Category' = category)
       })
 
       output$igv_plot <- igvShiny::renderIgvShiny({
-        shiny::req(subset_gwas())
-        shiny::req(input$selection == "Select a region")
-
         igvShiny::igvShiny(list(
           genomeName="hg19",
-          initialLocus= paste0("chr", selected_chr(), ":", scales::comma(selected_min()), "-", scales::comma(selected_max()))
+          initialLocus= "all"
         ),
         displayMode="SQUISHED")
       })
 
-      #adding interactivity to select a SNP from the plot or from the dropdown menu
+      observeEvent(input$addGwasTrackButton, {
+        igvShiny::loadGwasTrack(session, id=session$ns("igv_plot"), trackName="GWAS",
+                                tbl=subset_gwas(),
+                                deleteTracksOfSameName=FALSE)
+      })
 
+      #adding interactivity to select a SNP from the plot or from the dropdown menu
       clicked_snp <- reactiveValues(ev=NULL)
 
-      observe({
-        eventdata <- plotly::event_data( "plotly_click", source = "gwas_mht")
-        if(is.null(eventdata)){
-          clicked_snp$ev <- NULL
-        }else{
-          x_pos <- eventdata$x
-          y_pos <- round(eventdata$y, 2)
+      shiny::observeEvent(input$trackClick,{
+        x <- input$trackClick
+        #we need to discover which track was clicked
+        if(x[1] == "SNP"){
+          clicked_snp$ev <- x[2]
 
-          check_df <- gwas_mht()
-          check_df$log10p <- round(check_df$log10p, 2)
-
-          clicked_snp$ev <- as.character(check_df %>%
-                                           dplyr::filter(x_col == x_pos & log10p  == y_pos) %>%
-                                           dplyr::select(snp_rsid))
+          #show a pop-up window with more data
+          attribute.name.positions <- grep("name", names(x[1:16]))
+          attribute.value.positions <- grep("value", names(x[1:16]))
+          attribute.names <- as.character(x)[attribute.name.positions]
+          attribute.values <- as.character(x)[attribute.value.positions]
+          tbl <- data.frame(name=attribute.names,
+                            value=attribute.values,
+                            stringsAsFactors=FALSE)
+          dialogContent <- renderTable(tbl)
+          html <- HTML(dialogContent())
+          showModal(modalDialog(html, easyClose=TRUE))
         }
+        if(x[1] == "Name")  print("eh gene")
       })
 
       snp_of_int <- reactiveValues(ev="")
@@ -235,27 +84,17 @@ germline_gwas_server <- function(id, cohort_obj){
         snp_of_int$ev <- clicked_snp$ev
       })
 
-      shiny::observeEvent(input$snp_int,{
+      shiny::observeEvent(input$snp_int,{ #search for selected SNP
         snp_of_int$ev <- input$snp_int
-      })
-
-      # clear selected snp on double click
-      observeEvent(plotly::event_data("plotly_doubleclick", source = "gwas_mht"), {
-        snp_of_int$ev <- ""
+        igvShiny::showGenomicRegion(session, id=session$ns("igv_plot"), input$snp_int) #update region on IGV plot
       })
 
       selected_snp <- reactive({
-        shiny::req(gwas_mht(), axisdf())
-
         shiny::validate(
           shiny::need(!is.null(snp_of_int$ev),
                       "Click manhattan plot to select a SNP."))
 
-        shiny::validate(
-          shiny::need(snp_of_int$ev != "NA",
-                      "Selected SNP has no SNP id"))
-
-        gwas_mht() %>%
+        gwas_data() %>%
           dplyr::filter(snp_rsid == snp_of_int$ev) %>%
           dplyr::select(snp_rsid, snp_name, snp_chr, snp_bp) %>%
           dplyr::distinct()
@@ -264,7 +103,7 @@ germline_gwas_server <- function(id, cohort_obj){
 
       output$links <- renderUI({
         shiny::validate(
-          shiny::need(selected_snp()$snp_rsid %in% gwas_mht()$snp_rsid, "Select SNP")
+          shiny::need(selected_snp()$snp_rsid %in% gwas_data()$snp_rsid, "Select SNP")
         )
         #creating the links for external sources
         dbsnp <- paste0("https://www.ncbi.nlm.nih.gov/snp/", selected_snp()$snp_rsid)
@@ -285,14 +124,14 @@ germline_gwas_server <- function(id, cohort_obj){
       })
 
       output$snp_tbl <- DT::renderDT({
-        shiny::req(gwas_mht())
+        shiny::req(gwas_data())
         shiny::validate(
-          shiny::need(selected_snp()$snp_rsid %in% gwas_mht()$snp_rsid, "")
+          shiny::need(selected_snp()$snp_rsid %in% gwas_data()$snp_rsid, "")
         )
 
-        snp_df <- gwas_mht() %>%
+        snp_df <- gwas_data() %>%
           dplyr::filter(snp_rsid == selected_snp()$snp_rsid) %>%
-          dplyr::mutate(nlog = round(log10p, 2)) %>%
+          dplyr::mutate(nlog = round(-log10(p_value), 2)) %>%
           dplyr::select(
             Trait = feature_display,
             `-log10(p)` = nlog)
@@ -410,3 +249,159 @@ germline_gwas_server <- function(id, cohort_obj){
     }
   )
 }
+
+# #keeping track of the selected chromossome
+# selected_chr_reactive <- reactiveValues(ev = 1)
+#
+# observeEvent(input[[sprintf("currentGenomicRegion.%s", "igv_plot")]], {
+#   shiny::req(input$selection == "Select a region")
+#   #if(!("width" %in% names(plotly::event_data("plotly_relayout", source = "gwas_mht", priority = "event")))){
+#   new_chr <- as.numeric(sub("chr(.*):.*", "\\1", input[[sprintf("currentGenomicRegion.%s", "igv_plot")]]))
+#   if(new_chr %in% c(1:22)) selected_chr_reactive$ev <- new_chr
+#   #}
+# })
+#
+# selected_chr <- reactive({
+#   switch(
+#     input$selection,
+#     "See all chromosomes" = c(1:22),
+#     "Select a region" = selected_chr_reactive$ev
+#   )
+# })
+#
+# chr_size <- reactive({
+#   shiny::req(input$selection == "Select a region", selected_chr())
+#
+#   c((min((gwas_data() %>% dplyr::filter(snp_chr == selected_chr()))$snp_bp)),
+#     (max((gwas_data() %>% dplyr::filter(snp_chr == selected_chr()))$snp_bp)))
+# })
+#
+# #adding interactivity to select a region from zooming in the plot
+#
+# clicked_int <- reactiveValues(ev=NULL)
+#
+# observe({
+#   shiny::req(input$selection == "Select a region")
+#   #if a user resizes the browser, a new event data will be released, so let's guarantee that this will not affect the visualization
+#   if(!("width" %in% names(plotly::event_data("plotly_relayout", source = "gwas_mht", priority = "event")))){
+#     clicked_int$ev <- plotly::event_data("plotly_relayout", source = "gwas_mht", priority = "event")
+#   }
+# })
+#
+# #reset region with change of chromosome or selection of all chromosomes
+# toReset <- reactive({
+#   shiny::req(input$selection == "Select a region")
+#   list(selected_chr(),
+#        input$selection)
+# })
+#
+# observeEvent(toReset(), {
+#   clicked_int$ev <- NULL
+# })
+#
+# #Creating the object that stores the selected range (either by zoom on manhattan plot or change in the IGV plot)
+# chr_range <- reactiveValues(range = NULL)
+#
+# observe({
+#   shiny::req(input$selection == "Select a region",
+#              chr_size())
+#
+#   if(is.null(clicked_int$ev)){ #default option is min and max positions for the chromosome
+#     chr_range$range = chr_size()
+#   } else { #Update range after a zoom in the plot - need to compare with chr_size because plot has x-axis longer than chr_size
+#     chr_range$range = c((floor(max(chr_size()[1], clicked_int$ev$`xaxis.range[0]`))),
+#                         (ceiling(min(chr_size()[2], clicked_int$ev$`xaxis.range[1]`))))
+#   }
+# })
+#
+# observeEvent(input[[sprintf("currentGenomicRegion.%s", "igv_plot")]], { #this observer is only activated when a change is made on the IGV plot
+#   #if(!("width" %in% names(plotly::event_data("plotly_relayout", source = "gwas_mht", priority = "event")))){
+#   newLoc <- input[[sprintf("currentGenomicRegion.%s", "igv_plot")]]
+#
+#   pattern <- "chr(.*):(.*)-(.*)"
+#   sel_start <- as.numeric(gsub(",", "", sub(pattern, "\\2", newLoc)))
+#   sel_end <- as.numeric(gsub(",", "", sub(pattern, "\\3", newLoc)))
+#
+#   chr_range$range <- c(sel_start,
+#                        sel_end)
+#   #}
+# })
+#
+# selected_min <- reactive({
+#   switch(
+#     input$selection,
+#     "See all chromosomes" = 1,
+#     "Select a region" = chr_range$range[1]
+#   )
+# })
+#
+# selected_max <- reactive({
+#   switch(
+#     input$selection,
+#     "See all chromosomes" = 245246279,
+#     "Select a region" = chr_range$range[2]
+#   )
+# })
+# subset_gwas <- reactive({ #updates when range is changed
+#   shiny::req(gwas_mht())
+#   gwas_mht() %>%
+#     dplyr::filter(snp_chr %in% selected_chr()) %>%
+#     dplyr::filter(snp_bp >= selected_min() & snp_bp <= selected_max())
+# })
+#
+# axisdf <- eventReactive(gwas_mht(), {
+#   shiny::req(gwas_mht(), subset_gwas())
+#   get_mhtplot_xlabel(
+#     selected_region = input$selection,
+#     gwas_df = gwas_mht(),
+#     x_min = selected_min(),
+#     x_max = selected_max()
+#   )
+# })
+#
+# x_title <- reactive({
+#   if(input$selection == "See all chromosomes") "Chromosome"
+#   else ""
+# })
+
+# output$mht_plot <- plotly::renderPlotly({
+#   shiny::req(subset_gwas(), axisdf())
+#
+#   shiny::validate(
+#     shiny::need(nrow(subset_gwas()) > 0, "Select a region with a GWAS hit.")
+#   )
+#
+#   if(input$only_selected == 0) gwas_df <- subset_gwas() %>% dplyr::mutate(is_highlight=ifelse(feature_display %in% input$immunefeature, "yes", "no"))
+#   else gwas_df <- subset_gwas() %>% dplyr::mutate(is_highlight = "no")
+#
+#   gwas_df %>%
+#     dplyr::mutate(is_highlight = replace(is_highlight, snp_rsid == snp_of_int$ev, "snp")) %>%
+#     create_manhattanplot(
+#       df = .,
+#       x_label = axisdf(),
+#       y_min = 6,
+#       y_max = ceiling(max(gwas_df$log10p)),
+#       x_limits = c(selected_min(), max(selected_max(), subset_gwas()$x_col)),
+#       x_name = x_title(),
+#       y_name = "- log10(p-value)",
+#       plot_title = "",
+#       source_name = "gwas_mht"
+#     )
+# })
+# if(is.null(eventdata)){
+#   clicked_snp$ev <- NULL
+# }else{
+#   x_pos <- eventdata$x
+#   y_pos <- round(eventdata$y, 2)
+#
+#   check_df <- gwas_mht()
+#   check_df$log10p <- round(check_df$log10p, 2)
+#
+#   clicked_snp$ev <- as.character(check_df %>%
+#                                    dplyr::filter(x_col == x_pos & log10p  == y_pos) %>%
+#                                    dplyr::select(snp_rsid))
+# }
+# clear selected snp on double click
+# observeEvent(plotly::event_data("plotly_doubleclick", source = "gwas_mht"), {
+#   snp_of_int$ev <- ""
+# })
