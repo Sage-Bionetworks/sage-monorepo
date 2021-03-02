@@ -166,12 +166,6 @@
       "Source": "Bioconductor",
       "Hash": "2826edf1a5ff7d6ce991ec5ed918ec5f"
     },
-    "Gviz": {
-      "Package": "Gviz",
-      "Version": "1.34.0",
-      "Source": "Bioconductor",
-      "Hash": "d461db897c55d20842451182ac98241f"
-    },
     "Hmisc": {
       "Package": "Hmisc",
       "Version": "4.4-2",
@@ -243,12 +237,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "d57ac35220b39c591388ab3a080f9cbe"
-    },
-    "MotifDb": {
-      "Package": "MotifDb",
-      "Version": "1.32.0",
-      "Source": "Bioconductor",
-      "Hash": "ada9e76d751165e9e5e8ca7329d09012"
     },
     "OrganismDbi": {
       "Package": "OrganismDbi",
@@ -410,12 +398,6 @@
       "Repository": "CRAN",
       "Hash": "8c5e8c58ff4fc8dfc67e24985005159b"
     },
-    "VariantAnnotation": {
-      "Package": "VariantAnnotation",
-      "Version": "1.36.0",
-      "Source": "Bioconductor",
-      "Hash": "84fd273c3800d7a06e9d9b954585a44f"
-    },
     "XML": {
       "Package": "XML",
       "Version": "3.99-0.5",
@@ -488,12 +470,6 @@
       "Version": "2.46.2",
       "Source": "Bioconductor",
       "Hash": "70fd24a776819d31a007251fe9349229"
-    },
-    "biovizBase": {
-      "Package": "biovizBase",
-      "Version": "1.38.0",
-      "Source": "Bioconductor",
-      "Hash": "f2cc4e67a6a9fe8e7900746f3af3a10d"
     },
     "bit": {
       "Package": "bit",
@@ -875,13 +851,6 @@
       "Repository": "CRAN",
       "Hash": "76de23891bdba419517e855ed611ad29"
     },
-    "feather": {
-      "Package": "feather",
-      "Version": "0.3.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "76de23891bdba419517e855ed611ad29"
-    },
     "forcats": {
       "Package": "forcats",
       "Version": "0.5.1",
@@ -937,12 +906,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "c637d042178a0f65f9703c8d7f2be996"
-    },
-    "ggbio": {
-      "Package": "ggbio",
-      "Version": "1.38.0",
-      "Source": "Bioconductor",
-      "Hash": "82c5c9aa22be828f8dd6b5889032e1a0"
     },
     "ggmosaic": {
       "Package": "ggmosaic",
@@ -1158,27 +1121,15 @@
     },
     "igvShiny": {
       "Package": "igvShiny",
-      "Version": "1.2.14",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteUsername": "heimannch",
-      "RemoteRepo": "igvShiny",
-      "RemoteRef": "master",
-      "RemoteSha": "89c2c90d6e45bbd95ce20e95aebac2b1929faf91",
-      "RemoteHost": "api.github.com",
-      "Hash": "db80c2e0bc68a13a7f99cfd494d93289"
-    },
-    "igvShiny": {
-      "Package": "igvShiny",
-      "Version": "1.2.14",
+      "Version": "1.2.17",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteUsername": "heimannch",
+      "RemoteUsername": "paul-shannon",
       "RemoteRepo": "igvShiny",
       "RemoteRef": "master",
-      "RemoteSha": "89c2c90d6e45bbd95ce20e95aebac2b1929faf91",
-      "Hash": "db80c2e0bc68a13a7f99cfd494d93289"
+      "RemoteSha": "a92fb08c7e8ee8ec1bd40846c3bc18c0d4890056",
+      "Hash": "b22ef85b3466e56590cc35ba5c93864d"
     },
     "ini": {
       "Package": "ini",
@@ -1606,13 +1557,6 @@
       "Repository": "CRAN",
       "Hash": "dd08bb0be91b93194fa944b68b3bccb0"
     },
-    "randomcoloR": {
-      "Package": "randomcoloR",
-      "Version": "1.1.0.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "dd08bb0be91b93194fa944b68b3bccb0"
-    },
     "rappdirs": {
       "Package": "rappdirs",
       "Version": "0.3.2",
@@ -1867,27 +1811,6 @@
       "Repository": "CRAN",
       "Hash": "083bd0b279a4e54a788eea455b76d7a0"
     },
-    "spatial": {
-      "Package": "spatial",
-      "Version": "7.3-11",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "f27a078d834614513608da2c08031130"
-    },
-    "splitstackshape": {
-      "Package": "splitstackshape",
-      "Version": "1.4.8",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "69b26ceb9f7976f347049b4d470c2d65"
-    },
-    "startup": {
-      "Package": "startup",
-      "Version": "0.14.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "17a4b68eeeef4ab9f521caf9f16d1e86"
-    },
     "statmod": {
       "Package": "statmod",
       "Version": "1.4.35",
@@ -1964,13 +1887,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "9c6c10e594f32096ede0c7d373ccbddd"
-    },
-    "tictoc": {
-      "Package": "tictoc",
-      "Version": "1.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "f8cc5adf4671b013434bbe127f35b28c"
     },
     "tictoc": {
       "Package": "tictoc",

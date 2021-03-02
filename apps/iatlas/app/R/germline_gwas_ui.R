@@ -20,15 +20,20 @@ traits. Select an Immune Trait of interest to highlight the GWAS hits associated
           optionsBox(
             width = 12,
             shiny::column(
-              width = 5,
-              shiny::selectizeInput(ns('immunefeature'), "Exclude Immune Feature (optional)",
-                                    choices = NULL,
-                                    multiple = TRUE),
+              width = 3,
               shiny::radioButtons(ns("feature_action"), "Select or Exclude?", choices = c("Select", "Exclude"), selected = "Exclude")
             ),
             shiny::column(
-              width = 4,
-              actionButton(ns("addGwasTrackButton"), "Add GWAS Track")
+              width = 6,
+              shiny::selectizeInput(ns('immunefeature'), "Choose Immune Feature(s)",
+                                    choices = NULL,
+                                    multiple = TRUE)
+            ),
+            shiny::column(
+              width = 3,
+              shiny::br(),
+              shiny::actionButton(ns("addGwasTrackButton"), "Add GWAS Track"),
+              align = "center"
             )
          ),
          iatlas.app::plotBox(
