@@ -67,3 +67,46 @@ format_heritability_plot <- function(p, hdf, fdr = FALSE){
     }
   p
 }
+
+
+format_gwas_df <- function(df){
+  df %>%
+    dplyr::select(SNP = snp_rsid,
+                  'SNP id' = snp_name,
+                  CHR = snp_chr,
+                  POS = snp_bp,
+                  'P.VALUE'= p_value,
+                  Trait = feature_display,
+                  'Immune Trait Module' = module,
+                  'Immune Trait Category' = category)
+}
+
+create_snp_popup_tbl <- function(track_event){
+  attribute.name.positions <- grep("name", names(track_event[1:16]))
+  attribute.value.positions <- grep("value", names(track_event[1:16]))
+  attribute.names <- as.character(track_event)[attribute.name.positions]
+  attribute.values <- as.character(track_event)[attribute.value.positions]
+  tbl <- data.frame(name=attribute.names,
+                    value=attribute.values,
+                    stringsAsFactors=FALSE)
+  dialogContent <- renderTable(tbl)
+  HTML(dialogContent())
+}
+
+get_snp_links <- function(rsid, snpid){
+  dbsnp <- paste0("https://www.ncbi.nlm.nih.gov/snp/", rsid)
+  gtex <- paste0("https://gtexportal.org/home/snp/", rsid)
+  gwascat <- paste0("https://www.ebi.ac.uk/gwas/search?query=", rsid)
+  pheweb <- paste0("http://pheweb-tcga.qcri.org/variant/", gsub(':([[:upper:]])', "-\\1", snpid))
+  dice <- paste0("https://dice-database.org/eqtls/", rsid)
+
+  shiny::p(shiny::strong(rsid), shiny::tags$br(),
+          snpid, shiny::tags$br(),
+          "View more SNP information at",
+          shiny::tags$a(href = dbsnp, "dbSNP, "),
+          shiny::tags$a(href = gtex, "GTEx, "),
+          shiny::tags$a(href = gwascat, "GWAS Catalog, "),
+          shiny::tags$a(href = pheweb, "PheWeb, "),
+          shiny::tags$a(href = dice, "DICE")
+        )
+}

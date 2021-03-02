@@ -14,30 +14,34 @@ germline_gwas_server <- function(id, cohort_obj){
       })
 
       immune_feat <- reactive({
-        gwas_data() %>%
-          dplyr::select(feature_display, category) %>%
-          dplyr::group_by(category) %>%
-          tidyr::nest(data = c(feature_display))%>%
-          dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
-          tibble::deframe()
+        iatlas.app::create_nested_named_list(
+          gwas_data(),
+          names_col1 = "category",
+          names_col2 = "feature_display",
+          values_col = "feature_name"
+        )
       })
 
-      updateSelectizeInput(session, 'immunefeature', choices = immune_feat(), selected = c("MHC2 21978456", "Th17 cells"), server = TRUE)
+      updateSelectizeInput(session, 'immunefeature',
+                           choices = immune_feat(),
+                           selected = c("Wolf_MHC2_21978456", "Bindea_Th17_cells"), #default to exclude that, as suggested by manuscript authors
+                           server = TRUE)
 
       output$search_snp <- renderUI({
-        snp_options <- (gwas_data() %>% dplyr::filter(!is.na(snp_rsid)))$snp_rsid
+        snp_options <- gwas_data() %>% dplyr::filter(!is.na(snp_rsid)) %>% dplyr::pull(snp_rsid)
         shiny::selectInput(ns("snp_int"), "Click on the plot or search for a SNP id:",
                            choices = c("", snp_options))
       })
 
-      observe({
-        updateSelectInput(session, "snp_int", selected = snp_of_int$ev)
-      })
-
       subset_gwas <- reactive({
         shiny::req(input$immunefeature)
-        if(input$feature_action == "Exclude") gwas_data() %>% dplyr::filter(!(feature_display %in% input$immunefeature)) %>% dplyr::select(SNP = snp_rsid, `SNP id` = snp_name, CHR = snp_chr, POS = snp_bp, 'P.VALUE'= p_value, Trait = feature_display, 'Immune Trait Module' = module, 'Immune Trait Category' = category)
-        else gwas_data() %>% dplyr::filter(feature_display %in% input$immunefeature) %>% dplyr::select(SNP = snp_rsid, `SNP id` = snp_name, CHR = snp_chr, POS = snp_bp, 'P.VALUE'= p_value, Trait = feature_display, 'Immune Trait Module' = module, 'Immune Trait Category' = category)
+        if(input$feature_action == "Exclude") gwas_data() %>% dplyr::filter(!(feature_name %in% input$immunefeature)) %>% iatlas.app::format_gwas_df()
+        else gwas_data() %>% dplyr::filter(feature_name %in% input$immunefeature) %>% iatlas.app::format_gwas_df()
+      })
+
+      trackname <- reactive({
+        labels <- gwas_data() %>% dplyr::filter(feature_name %in% input$immunefeature) %>% purrr::pluck("feature_display") %>% unique()
+        paste("GWAS -", input$feature_action, paste(labels, collapse = ", "))
       })
 
       output$igv_plot <- igvShiny::renderIgvShiny({
@@ -48,79 +52,52 @@ germline_gwas_server <- function(id, cohort_obj){
         displayMode="SQUISHED")
       })
 
-      observeEvent(input$addGwasTrackButton, {
-        igvShiny::loadGwasTrack(session, id=session$ns("igv_plot"), trackName="GWAS",
+      shiny::observeEvent(input$addGwasTrackButton, {
+        igvShiny::loadGwasTrack(session, id=session$ns("igv_plot"), trackName=trackname(),
                                 tbl=subset_gwas(),
                                 deleteTracksOfSameName=FALSE)
       })
 
       #adding interactivity to select a SNP from the plot or from the dropdown menu
-      clicked_snp <- reactiveValues(ev=NULL)
+      clicked_snp <- shiny::reactiveValues(ev=NULL)
 
       shiny::observeEvent(input$trackClick,{
         x <- input$trackClick
         #we need to discover which track was clicked
         if(x[1] == "SNP"){
           clicked_snp$ev <- x[2]
-
-          #show a pop-up window with more data
-          attribute.name.positions <- grep("name", names(x[1:16]))
-          attribute.value.positions <- grep("value", names(x[1:16]))
-          attribute.names <- as.character(x)[attribute.name.positions]
-          attribute.values <- as.character(x)[attribute.value.positions]
-          tbl <- data.frame(name=attribute.names,
-                            value=attribute.values,
-                            stringsAsFactors=FALSE)
-          dialogContent <- renderTable(tbl)
-          html <- HTML(dialogContent())
-          showModal(modalDialog(html, easyClose=TRUE))
+          shiny::showModal(shiny::modalDialog(iatlas.app::create_snp_popup_tbl(x), easyClose=TRUE))
         }
-        if(x[1] == "Name")  print("eh gene")
       })
 
-      snp_of_int <- reactiveValues(ev="")
+      snp_of_int <- shiny::reactiveValues(ev="")
 
       shiny::observeEvent(clicked_snp$ev,{
         snp_of_int$ev <- clicked_snp$ev
       })
 
       shiny::observeEvent(input$snp_int,{ #search for selected SNP
-        snp_of_int$ev <- input$snp_int
         igvShiny::showGenomicRegion(session, id=session$ns("igv_plot"), input$snp_int) #update region on IGV plot
+        snp_of_int$ev <- input$snp_int
       })
 
-      selected_snp <- reactive({
+      selected_snp <- shiny::reactive({
         shiny::validate(
           shiny::need(!is.null(snp_of_int$ev),
                       "Click manhattan plot to select a SNP."))
 
         gwas_data() %>%
           dplyr::filter(snp_rsid == snp_of_int$ev) %>%
-          dplyr::select(snp_rsid, snp_name, snp_chr, snp_bp) %>%
-          dplyr::distinct()
-
+          dplyr::mutate(nlog = round(-log10(p_value), 2)) %>%
+          dplyr::select(snp_rsid, snp_name, snp_chr, snp_bp, feature_display, nlog)
       })
 
       output$links <- renderUI({
         shiny::validate(
           shiny::need(selected_snp()$snp_rsid %in% gwas_data()$snp_rsid, "Select SNP")
         )
-        #creating the links for external sources
-        dbsnp <- paste0("https://www.ncbi.nlm.nih.gov/snp/", selected_snp()$snp_rsid)
-        gtex <- paste0("https://gtexportal.org/home/snp/", selected_snp()$snp_rsid)
-        gwascat <- paste0("https://www.ebi.ac.uk/gwas/search?query=", selected_snp()$snp_rsid)
-        pheweb <- paste0("http://pheweb-tcga.qcri.org/variant/",  gsub(':([[:upper:]])', "-\\1", selected_snp()$snp_name))
-        dice <- paste0("https://dice-database.org/eqtls/",  selected_snp()$snp_rsid)
-
-        p(strong(selected_snp()$snp_rsid), tags$br(),
-          selected_snp()$snp_name, tags$br(),
-          "View more SNP information at",
-          tags$a(href = dbsnp, "dbSNP, "),
-          tags$a(href = gtex, "GTEx, "),
-          tags$a(href = gwascat, "GWAS Catalog, "),
-          tags$a(href = pheweb, "PheWeb, "),
-          tags$a(href = dice, "DICE")
-        )
+        iatlas.app::get_snp_links(selected_snp()$snp_rsid[1],
+                                  selected_snp()$snp_name[1])
       })
 
       output$snp_tbl <- DT::renderDT({
@@ -129,15 +106,11 @@ germline_gwas_server <- function(id, cohort_obj){
           shiny::need(selected_snp()$snp_rsid %in% gwas_data()$snp_rsid, "")
         )
 
-        snp_df <- gwas_data() %>%
-          dplyr::filter(snp_rsid == selected_snp()$snp_rsid) %>%
-          dplyr::mutate(nlog = round(-log10(p_value), 2)) %>%
-          dplyr::select(
-            Trait = feature_display,
-            `-log10(p)` = nlog)
-
         DT::datatable(
-          snp_df,
+          selected_snp() %>%
+            dplyr::select(
+              Trait = feature_display,
+              `-log10(p)` = nlog),
           rownames = FALSE,
           caption = paste("GWAS hits"),
           options = list(dom = 't')
