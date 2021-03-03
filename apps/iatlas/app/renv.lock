@@ -859,6 +859,13 @@
       "Repository": "CRAN",
       "Hash": "76de23891bdba419517e855ed611ad29"
     },
+    "feather": {
+      "Package": "feather",
+      "Version": "0.3.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "76de23891bdba419517e855ed611ad29"
+    },
     "forcats": {
       "Package": "forcats",
       "Version": "0.5.1",
@@ -1144,6 +1151,18 @@
       "RemoteSha": "89c2c90d6e45bbd95ce20e95aebac2b1929faf91",
       "RemoteHost": "api.github.com",
       "Hash": "db80c2e0bc68a13a7f99cfd494d93289"
+    },
+    "igvShiny": {
+      "Package": "igvShiny",
+      "Version": "1.2.8",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "heimannch",
+      "RemoteRepo": "igvShiny",
+      "RemoteRef": "master",
+      "RemoteSha": "c304823f984c8e91027487acfa0d76da86476dbc",
+      "Hash": "e8bbb193a312f4d1a3b4a2302558fdf2"
     },
     "ini": {
       "Package": "ini",
@@ -1571,6 +1590,13 @@
       "Repository": "CRAN",
       "Hash": "dd08bb0be91b93194fa944b68b3bccb0"
     },
+    "randomcoloR": {
+      "Package": "randomcoloR",
+      "Version": "1.1.0.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "dd08bb0be91b93194fa944b68b3bccb0"
+    },
     "rappdirs": {
       "Package": "rappdirs",
       "Version": "0.3.2",
@@ -1776,6 +1802,13 @@
       "Repository": "CRAN",
       "Hash": "133639dc106955eee4ffb8ec73edac37"
     },
+    "shinyjs": {
+      "Package": "shinyjs",
+      "Version": "2.0.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "9ddfc91d4280eaa34c2103951538976f"
+    },
     "snow": {
       "Package": "snow",
       "Version": "0.4-3",
@@ -1817,6 +1850,27 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "083bd0b279a4e54a788eea455b76d7a0"
+    },
+    "spatial": {
+      "Package": "spatial",
+      "Version": "7.3-11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "f27a078d834614513608da2c08031130"
+    },
+    "splitstackshape": {
+      "Package": "splitstackshape",
+      "Version": "1.4.8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "69b26ceb9f7976f347049b4d470c2d65"
+    },
+    "startup": {
+      "Package": "startup",
+      "Version": "0.14.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "17a4b68eeeef4ab9f521caf9f16d1e86"
     },
     "statmod": {
       "Package": "statmod",
@@ -1894,6 +1948,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "9c6c10e594f32096ede0c7d373ccbddd"
+    },
+    "tictoc": {
+      "Package": "tictoc",
+      "Version": "1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "f8cc5adf4671b013434bbe127f35b28c"
     },
     "tictoc": {
       "Package": "tictoc",
