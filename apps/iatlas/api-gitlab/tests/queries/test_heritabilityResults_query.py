@@ -54,7 +54,17 @@ from api.database import return_heritability_result_query
 
 @pytest.fixture(scope='module')
 def hr_feature():
-    return 'Attractors_G_CD3E'
+    return 'BCR_Richness'
+
+
+@pytest.fixture(scope='module')
+def hr_germline_module():
+    return 'Unassigned'
+
+
+@pytest.fixture(scope='module')
+def hr_germline_category():
+    return 'Adaptive Receptor'
 
 
 @pytest.fixture(scope='module')
@@ -221,7 +231,7 @@ def test_heritabilityResults_cursor_distinct_pagination(client, common_query):
     assert page_num == page['paging']['page']
 
 
-def test_heritabilityResults_query_with_passed_data_set_and_feature(client, common_query, data_set, hr_feature):
+def test_heritabilityResults_query_with_passed_data_set_and_feature(client, common_query, data_set, hr_feature, hr_germline_module, hr_germline_category):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
         'feature': [hr_feature]
@@ -234,6 +244,8 @@ def test_heritabilityResults_query_with_passed_data_set_and_feature(client, comm
     for result in results[0:2]:
         assert result['dataSet']['name'] == data_set
         assert result['feature']['name'] == hr_feature
+        assert result['feature']['germline_module'] == hr_germline_module
+        assert result['feature']['germline_category'] == hr_germline_category
 
 
 def test_heritabilityResults_query_with_passed_min_p_value(client, common_query, min_p_value):
