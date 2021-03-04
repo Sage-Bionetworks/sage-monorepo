@@ -17,6 +17,7 @@ Config/testthat/edition: 3
 RoxygenNote: 7.1.1
 biocViews:
 Imports:
+    arrow,
     concordanceIndex,
     config,
     crayon,
@@ -26,6 +27,7 @@ Imports:
     DT,
     forcats,
     ggplot2,
+    ggmosaic,
     grDevices,
     grid,
     grImport2,
@@ -43,6 +45,7 @@ Imports:
     shiny,
     shinycssloaders,
     shinydashboard,
+    shinyjs,
     stringr,
     survival,
     survminer,
