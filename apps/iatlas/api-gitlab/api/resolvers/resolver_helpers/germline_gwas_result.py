@@ -14,9 +14,7 @@ germline_gwas_result_request_fields = {'dataSet',
                                        'feature',
                                        'snp',
                                        'pValue',
-                                       'maf',
-                                       'module',
-                                       'category'}
+                                       'maf'}
 
 
 def build_ggr_graphql_response(germline_gwas_result):
@@ -26,8 +24,6 @@ def build_ggr_graphql_response(germline_gwas_result):
         'dataSet': build_data_set_graphql_response(germline_gwas_result),
         'feature': build_feature_graphql_response()(germline_gwas_result),
         'snp': build_snp_graphql_response(germline_gwas_result),
-        'module': get_value(germline_gwas_result, 'module'),
-        'category': get_value(germline_gwas_result, 'category'),
         'maf': get_value(germline_gwas_result, 'maf')
     }
 
@@ -63,9 +59,7 @@ def build_germline_gwas_result_request(
     core_field_mapping = {
         'id': germline_gwas_result_1.id.label('id'),
         'pValue': germline_gwas_result_1.p_value.label('p_value'),
-        'maf': germline_gwas_result_1.maf.label('maf'),
-        'category': germline_gwas_result_1.category.label('category'),
-        'module': germline_gwas_result_1.module.label('module')
+        'maf': germline_gwas_result_1.maf.label('maf')
     }
     data_set_core_field_mapping = {'display': data_set_1.display.label('data_set_display'),
                                    'name': data_set_1.name.label('data_set_name'),
@@ -73,7 +67,9 @@ def build_germline_gwas_result_request(
     feature_core_field_mapping = {'display': feature_1.display.label('feature_display'),
                                   'name': feature_1.name.label('feature_name'),
                                   'order': feature_1.order.label('order'),
-                                  'unit': feature_1.unit.label('unit')}
+                                  'unit': feature_1.unit.label('unit'),
+                                  'germline_category': feature_1.germline_category.label('germline_category'),
+                                  'germline_module': feature_1.germline_module.label('germline_module')}
     snp_core_field_mapping = {'rsid': snp_1.rsid.label('snp_rsid'),
                               'name': snp_1.name.label('snp_name'),
                               'bp': snp_1.bp.label('snp_bp'),

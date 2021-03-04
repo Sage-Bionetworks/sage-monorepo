@@ -69,7 +69,9 @@ def build_heritability_result_request(
     feature_core_field_mapping = {'display': feature_1.display.label('feature_display'),
                                   'name': feature_1.name.label('feature_name'),
                                   'order': feature_1.order.label('order'),
-                                  'unit': feature_1.unit.label('unit')}
+                                  'unit': feature_1.unit.label('unit'),
+                                  'germline_category': feature_1.germline_category.label('germline_category'),
+                                  'germline_module': feature_1.germline_module.label('germline_module')}
 
     core = get_selected(requested, core_field_mapping)
     core |= get_selected(data_set_requested, data_set_core_field_mapping)

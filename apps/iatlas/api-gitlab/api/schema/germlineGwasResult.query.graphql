@@ -14,10 +14,6 @@ type GermlineGwasResultNode implements BaseNode {
   pValue: Float
   "MAF value for gwas result."
   maf: Float
-  "Immune traits clustered based on their Pearson correlation coefficients, described by Sayaman et al, 2021."
-  module: String!
-  "Immune traits clustered based on the approach used to derive them and the parameters they intend to measure , described by Sayaman et al, 2021."
-  category: String!
 }
 
 type GermlineGwasResult implements BaseResult {
