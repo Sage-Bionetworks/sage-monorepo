@@ -8,8 +8,6 @@ class GermlineGwasResult(Base):
     id = db.Column(db.Integer, primary_key=True)
     p_value = db.Column(db.Numeric, nullable=True)
     maf = db.Column(db.Numeric, nullable=True)
-    module = db.Column(db.String, nullable=True)
-    category = db.Column(db.String, nullable=True)
 
     dataset_id = db.Column(db.Integer, db.ForeignKey(
         'datasets.id'), nullable=False)
