@@ -1,5 +1,5 @@
 from api import db
-from api.db_models import CopyNumberResult, DriverResult, HeritabilityResult, GermlineGwasResult
+from api.db_models import CopyNumberResult, DriverResult, HeritabilityResult, GermlineGwasResult, RareVariantPathwayAssociation
 from .database_helpers import build_option_args, build_query_args
 
 accepted_cnr_option_args = ['data_set', 'feature', 'gene', 'tag']
@@ -51,6 +51,22 @@ accepted_ggr_query_args = ['dataset_id',
                            'p_value',
                            'maf']
 
+accepted_rvpa_option_args = ['data_set', 'feature']
+
+accepted_rvpa_query_args = ['id',
+                            'data_set_id',
+                            'feature_id',
+                            'pathway',
+                            'p_value',
+                            'min',
+                            'max',
+                            'mean',
+                            'q1',
+                            'q2',
+                            'q3',
+                            'n_mutants',
+                            'n_total']
+
 
 def return_copy_number_result_query(*args):
     option_args = build_option_args(
@@ -93,4 +109,16 @@ def return_germline_gwas_result_query(*args):
     query = db.session.query(*query_args)
     if option_args:
         query = db.session.query(GermlineGwasResult).options(*option_args)
+    return query
+
+
+def return_rare_variant_pathway_associations_query(*args):
+    option_args = build_option_args(
+        *args, accepted_args=accepted_rvpa_option_args)
+    query_args = build_query_args(
+        RareVariantPathwayAssociation, *args, accepted_args=accepted_rvpa_query_args)
+    query = db.session.query(*query_args)
+    if option_args:
+        query = db.session.query(
+            RareVariantPathwayAssociation).options(*option_args)
     return query

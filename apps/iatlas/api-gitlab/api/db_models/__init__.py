@@ -30,6 +30,7 @@ from .pathway import Pathway
 from .patient import Patient
 from .publication import Publication
 from .publication_to_gene_to_gene_type import PublicationToGeneToGeneType
+from .rare_variant_pathway_associations import RareVariantPathwayAssociation
 from .sample import Sample
 from .sample_to_mutation import SampleToMutation
 from .sample_to_tag import SampleToTag
