@@ -6,15 +6,30 @@ from api.enums import unit_enum
 
 @pytest.fixture(scope='module')
 def display():
-    return 'B Cells Memory'
+    return 'Eosinophils'
 
 
 @pytest.fixture(scope='module')
 def name():
-    return 'B_cells_memory'
+    return 'Eosinophils'
 
 
-def test_Feature_with_relations(app, display, name):
+@pytest.fixture(scope='module')
+def unit():
+    return 'Fraction'
+
+
+@pytest.fixture(scope='module')
+def germline_category():
+    return 'Leukocyte Subset ES'
+
+
+@pytest.fixture(scope='module')
+def germline_module():
+    return 'Cytotoxic'
+
+
+def test_Feature_with_relations(app, display, name, unit, germline_category, germline_module):
     relationships_to_join = ['feature_class', 'method_tag', 'samples']
 
     query = return_feature_query(*relationships_to_join)
@@ -31,6 +46,9 @@ def test_Feature_with_relations(app, display, name):
             assert type(sample.name) is str
     assert result.name == name
     assert result.display == display
+    assert result.unit == unit
+    assert result.germline_category == germline_category
+    assert result.germline_module == germline_module
     assert result.unit in unit_enum.enums or type(result.unit) is NoneType
     assert type(result.class_id) is int or NoneType
     assert type(result.method_tag_id) is int or NoneType

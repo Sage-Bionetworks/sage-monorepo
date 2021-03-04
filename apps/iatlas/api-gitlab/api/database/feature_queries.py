@@ -8,7 +8,7 @@ feature_related_fields = [
     'feature_class', 'feature_sample_assoc', 'method_tag', 'samples']
 
 feature_core_fields = [
-    'id', 'name', 'display', 'order', 'unit', 'class_id', 'method_tag_id']
+    'id', 'name', 'display', 'order', 'unit', 'class_id', 'method_tag_id', 'germline_category', 'germline_module']
 
 
 def return_feature_class_query(*args):
