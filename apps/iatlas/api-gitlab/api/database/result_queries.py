@@ -38,8 +38,6 @@ accepted_hr_query_args = ['dataset_id',
                           'feature_id',
                           'p_value',
                           'cluster',
-                          'module',
-                          'category',
                           'fdr',
                           'variance',
                           'se']
@@ -51,9 +49,7 @@ accepted_ggr_query_args = ['dataset_id',
                            'feature_id',
                            'snp_id',
                            'p_value',
-                           'maf',
-                           'module',
-                           'category']
+                           'maf']
 
 
 def return_copy_number_result_query(*args):
