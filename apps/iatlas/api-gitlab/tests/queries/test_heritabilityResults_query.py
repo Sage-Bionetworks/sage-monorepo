@@ -4,51 +4,51 @@ from tests import NoneType
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 from api.database import return_heritability_result_query
 """
-query HeritabilityResults(
-  $paging: PagingInput
-  $distinct:Boolean
-  $dataSet: [String!]
-  $feature: [String!]
-  $module: [String!]
-  $cluster: [String!]
-  $minPValue: Float
-  $maxPValue: Float
-) {
-  heritabilityResults(
-    paging: $paging
-    distinct: $distinct
-    dataSet: $dataSet
-    feature: $feature
-    module: $module
-    cluster: $cluster
-    minPValue: $minPValue
-    maxPValue: $maxPValue
-  ) {
-    paging {
-      type
-      pages
-      total
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-      page
-      limit
+    query HeritabilityResults(
+    $paging: PagingInput
+    $distinct:Boolean
+    $dataSet: [String!]
+    $feature: [String!]
+    $cluster: [String!]
+    $minPValue: Float
+    $maxPValue: Float
+    ) {
+    heritabilityResults(
+        paging: $paging
+        distinct: $distinct
+        dataSet: $dataSet
+        feature: $feature
+        cluster: $cluster
+        minPValue: $minPValue
+        maxPValue: $maxPValue
+    ) {
+        paging {
+        type
+        pages
+        total
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+        page
+        limit
+        }
+        error
+        items {
+            pValue
+            dataSet { name }
+            feature {
+            name
+            germline_module
+            germline_category
+            }
+            cluster
+            fdr
+            variance
+            se
+        }
     }
-    error
-    items {
-        pValue
-        dataSet { name }
-        feature { name }
-        cluster
-        module
-        category
-        fdr
-        variance
-        se
     }
-  }
-}
 """
 
 
@@ -65,7 +65,6 @@ def common_query_builder():
             $distinct:Boolean
             $dataSet: [String!]
             $feature: [String!]
-            $module: [String!]
             $cluster: [String!]
             $minPValue: Float
             $maxPValue: Float
@@ -75,7 +74,6 @@ def common_query_builder():
             distinct: $distinct
             dataSet: $dataSet
             feature: $feature
-            module: $module
             cluster: $cluster
             minPValue: $minPValue
             maxPValue: $maxPValue
@@ -87,15 +85,17 @@ def common_query_builder():
 def common_query(common_query_builder):
     return common_query_builder("""{
             items {
-                pValue
-                dataSet { name }
-                feature { name }
-                cluster
-                module
-                category
-                fdr
-                variance
-                se
+              pValue
+              dataSet { name }
+              feature {
+                name
+                germline_module
+                germline_category
+              }
+              cluster
+              fdr
+              variance
+              se
             }
             paging {
                 type

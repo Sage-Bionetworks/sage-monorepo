@@ -11,8 +11,6 @@ class HeritabilityResult(Base):
     variance = db.Column(db.Numeric, nullable=True)
     se = db.Column(db.Numeric, nullable=True)
     cluster = db.Column(db.String, nullable=False)
-    module = db.Column(db.String, nullable=False)
-    category = db.Column(db.String, nullable=False)
 
     dataset_id = db.Column(db.Integer, db.ForeignKey(
         'datasets.id'), nullable=False)

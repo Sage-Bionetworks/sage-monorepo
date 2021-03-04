@@ -12,8 +12,6 @@ heritability_result_request_fields = {'dataSet',
                                       'feature',
                                       'pValue',
                                       'cluster',
-                                      'module',
-                                      'category',
                                       'fdr',
                                       'variance',
                                       'se'}
@@ -26,8 +24,6 @@ def build_hr_graphql_response(heritability_result):
         'dataSet': build_data_set_graphql_response(heritability_result),
         'feature': build_feature_graphql_response()(heritability_result),
         'cluster': get_value(heritability_result, 'cluster'),
-        'module': get_value(heritability_result, 'module'),
-        'category': get_value(heritability_result, 'category'),
         'fdr': get_value(heritability_result, 'fdr'),
         'variance': get_value(heritability_result, 'variance'),
         'se': get_value(heritability_result, 'se')
@@ -35,7 +31,7 @@ def build_hr_graphql_response(heritability_result):
 
 
 def build_heritability_result_request(
-        requested, data_set_requested, feature_requested, data_set=None, distinct=False, feature=None, max_p_value=None, min_p_value=None, module=None, cluster=None, paging=None):
+        requested, data_set_requested, feature_requested, data_set=None, distinct=False, feature=None, max_p_value=None, min_p_value=None, cluster=None, paging=None):
     """
     Builds a SQL request.
 
@@ -50,7 +46,6 @@ def build_heritability_result_request(
         `feature` - a list of strings, feature names
         `max_p_value` - a float, a maximum P value
         `min_p_value` - a float, a minimum P value
-        `module` a string
         `cluster` a string
         `paging` - a dict containing pagination metadata
     """
@@ -66,9 +61,7 @@ def build_heritability_result_request(
         'se': heritability_result_1.se.label('se'),
         'variance': heritability_result_1.variance.label('variance'),
         'fdr': heritability_result_1.fdr.label('fdr'),
-        'category': heritability_result_1.category.label('category'),
-        'cluster': heritability_result_1.cluster.label('cluster'),
-        'module': heritability_result_1.module.label('module')
+        'cluster': heritability_result_1.cluster.label('cluster')
     }
     data_set_core_field_mapping = {'display': data_set_1.display.label('data_set_display'),
                                    'name': data_set_1.name.label('data_set_name'),
@@ -84,9 +77,6 @@ def build_heritability_result_request(
 
     query = sess.query(*core)
     query = query.select_from(heritability_result_1)
-
-    if module:
-        query = query.filter(heritability_result_1.module.in_(module))
 
     if cluster:
         query = query.filter(heritability_result_1.cluster.in_(cluster))

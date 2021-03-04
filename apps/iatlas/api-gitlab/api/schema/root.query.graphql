@@ -316,8 +316,6 @@ type Query {
     "A minimum P value to filter the heritability results by."
     minPValue: Float
     "Immune traits clustered based on their Pearson correlation coefficients, described by Sayaman et al, 2021."
-    module: [String!]
-    "Ancestry cluster, determined from ancestry analysis by Sayaman et al, 2021."
     cluster: [String!]
   ): HeritabilityResult!
 
