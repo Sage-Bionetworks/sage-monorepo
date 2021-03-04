@@ -9,59 +9,13 @@ The portal is built entirely in **R** and **Shiny** using the **RStudio** develo
 - [plotly](https://plot.ly/r/)
 - [crosstalk](https://rstudio.github.io/crosstalk/)
 
-## iAtlas-App and iAtlas-Data
-
-This app is spit into two repositories:
-
-- [iatlas-app](https://github.com/CRI-iAtlas/iatlas-app) - for all the shiny-app R code (this repository)
-- [iatlas-data](https://github.com/CRI-iAtlas/iatlas-data) - for all the iatlas-related data, DB-creation and DB-populating code
-
-The easiest way to get start is to clone both repositories, go through the iatlas-data README, then go through this README. More or less this means:
-
-1. install a few dependencies (~30min)
-1. load iatlas-data; auto-install its packages; build the db (~15-75min depending on package install time)
-1. load iatlas-app; auto-install its packages; and run shiny (~5-60min depending on package install time)
-
-You don't need iatlas-data to run iatlas-app if you:
-
-* Already have the database built locally
-* You configure your environment variables to connect directly to the staging or production DB servers
-
-
 ## Install
 
 ### Requirements
 
-- iatlas-data is needed to create and populate the database
-
-  - `git clone https://github.com/CRI-iAtlas/iatlas-data`
-  - follow the instructions in the README
-
-- R: https://www.r-project.org/ - v3.6.2
+- R: https://www.r-project.org/ - v4.0+
 
 - RStudio: https://rstudio.com/products/rstudio/download
-
-- Docker: https://www.docker.com/products/docker-desktop
-
-  Ensure that the location of the repository is shared via docker:
-
-  - Mac: https://docs.docker.com/docker-for-mac/#file-sharing
-
-  - Windows: https://docs.microsoft.com/en-us/archive/blogs/stevelasker/configuring-docker-for-windows-volumes
-
-- git-lfs: https://git-lfs.github.com
-
-  For installation on the various platforms, please see this [git-lfs wiki](https://github.com/git-lfs/git-lfs/wiki/Installation)
-
-  Some feather files are _very_ large. `git-lfs` is used to store these files.
-
-  **Please note**: `git lfs install` _must_ be executed within the repository directory immediately after cloning the repo.
-
-- libpq (postgres): https://www.postgresql.org/download/
-
-- lib cairo: https://www.cairographics.org/ (only required for iAtlas client)
-
-- gfortran (libgfortran): usually installed with gcc
 
 ### MacOS Install instructions
 
@@ -74,18 +28,11 @@ Then in the terminal, run:
 - xcode-select --install
 - brew install R
 - brew install cairo
-- brew install git-lfs
-- brew install postgres
 - download and install RStudio: https://rstudio.com/products/rstudio/download
-- download and install Docker: https://www.docker.com/products/docker-desktop
-
-> Note: gfortran seems to be a recurring problem for Mac installes on various versions of OSX. Here are some additional resources if the above instructions don't work for you: https://github.com/fxcoudert/gfortran-for-macOS/releases and https://cran.r-project.org/bin/macosx/tools/
 
 ### Initialize R Packages, Database and run App
 
 To run the app locally:
-
-1. Make sure you've created and populated the local postgres database using the iatlas-data repository (see above)
 
 1. Clone this repository
 
@@ -214,20 +161,6 @@ rsconnect::setAccountInfo(
   secret='yyy'
 )
 ```
-
-## Configuration and Environment Variables
-
-The database connection is configured in the `config.yml` file. We use the [config package](https://github.com/rstudio/config) to load the correct config. See init.R for exactly how this is done. You can also override the config by setting these environment variables:
-
-```
-DB_NAME=XYZ
-DB_HOST=XYZ
-DB_PORT=123
-DB_USER=XYZ
-DB_PW=XYZ
-```
-
-WARNING! `config.yml` is part of the *public* git repository. Do NOT put sensitive passwords or keys in `config.yml`. Use environment variables for any passwords or keys you do not wish to share publicly.
 
 ## Methods
 
