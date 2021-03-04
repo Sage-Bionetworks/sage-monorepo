@@ -12,7 +12,9 @@ feature_class_request_fields = {'name'}
 simple_feature_request_fields = {'display',
                                  'name',
                                  'order',
-                                 'unit'}
+                                 'unit',
+                                 'germline_module',
+                                 'germline_category'}
 
 feature_request_fields = simple_feature_request_fields.union({'class',
                                                               'methodTag',
@@ -35,6 +37,8 @@ def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
             'methodTag': get_value(feature, 'method_tag'),
             'name': get_value(feature, 'feature_name') or get_value(feature),
             'order': get_value(feature, 'order'),
+            'germline_module': get_value(feature, 'germline_module'),
+            'germline_category': get_value(feature, 'germline_category'),
             'samples': [{
                 'name': get_value(sample),
                 'value': get_value(sample, 'value')
@@ -68,6 +72,8 @@ def build_features_query(requested, class_requested, tag_requested, data_set=Non
                           'methodTag': method_tag_1.name.label('method_tag'),
                           'name': feature_1.name.label('name'),
                           'order': feature_1.order.label('order'),
+                          'germline_module': feature_1.germline_module.label('germline_module'),
+                          'germline_category': feature_1.germline_category.label('germline_category'),
                           'unit': feature_1.unit.label('unit')}
     tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('tag_characteristics'),
                               'color': tag_1.color.label('tag_color'),
@@ -188,6 +194,10 @@ def build_features_query(requested, class_requested, tag_requested, data_set=Non
         append_to_order(feature_class_1.name)
     if 'order' in requested:
         append_to_order(feature_1.order)
+    if 'germline_module' in requested:
+        append_to_order(feature_1.germline_module)
+    if 'germline_category' in requested:
+        append_to_order(feature_1.germline_category)
     if 'display' in requested:
         append_to_order(feature_1.display)
     if 'name' in requested:
