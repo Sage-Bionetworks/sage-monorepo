@@ -11,6 +11,8 @@ class Feature(Base):
     display = db.Column(db.String, nullable=True)
     order = db.Column(db.Integer, nullable=True)
     unit = db.Column(unit_enum, nullable=True)
+    germline_category = db.Column(db.String, nullable=True)
+    germline_module = db.Column(db.String, nullable=True)
 
     class_id = db.Column(db.Integer, db.ForeignKey(
         'classes.id'), nullable=False)

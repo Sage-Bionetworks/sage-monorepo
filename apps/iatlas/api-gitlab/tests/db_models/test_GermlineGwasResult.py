@@ -53,8 +53,6 @@ def test_GermlineGwasResult_with_relations(app, data_set, data_set_id, ggr_featu
         assert result.data_set.name == data_set
         assert type(result.p_value) is float or NoneType
         assert type(result.maf) is float or NoneType
-        assert type(result.module) is str or NoneType
-        assert type(result.category) is str or NoneType
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
@@ -79,8 +77,6 @@ def test_GermlineGwasResult_no_relations(app, data_set_id, ggr_feature_id, ggr_s
         assert result.snp_id == ggr_snp_id
         assert type(result.p_value) is float or NoneType
         assert type(result.maf) is float or NoneType
-        assert type(result.module) is str or NoneType
-        assert type(result.category) is str or NoneType
         assert repr(result) == string_representation
 
 
@@ -98,6 +94,4 @@ def test_GermlineGwasResult_no_filters(app):
         assert type(result.snp) is NoneType
         assert type(result.p_value) is float or NoneType
         assert type(result.maf) is float or NoneType
-        assert type(result.module) is str or NoneType
-        assert type(result.category) is str or NoneType
         assert repr(result) == string_representation

@@ -2,89 +2,46 @@ import json
 import pytest
 from tests import NoneType
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
-from api.database import return_heritability_result_query
-"""
-    query HeritabilityResults(
-    $paging: PagingInput
-    $distinct:Boolean
-    $dataSet: [String!]
-    $feature: [String!]
-    $cluster: [String!]
-    $minPValue: Float
-    $maxPValue: Float
-    ) {
-    heritabilityResults(
-        paging: $paging
-        distinct: $distinct
-        dataSet: $dataSet
-        feature: $feature
-        cluster: $cluster
-        minPValue: $minPValue
-        maxPValue: $maxPValue
-    ) {
-        paging {
-        type
-        pages
-        total
-        startCursor
-        endCursor
-        hasPreviousPage
-        hasNextPage
-        page
-        limit
-        }
-        error
-        items {
-            pValue
-            dataSet { name }
-            feature {
-            name
-            germline_module
-            germline_category
-            }
-            cluster
-            fdr
-            variance
-            se
-        }
-    }
-    }
-"""
 
 
 @pytest.fixture(scope='module')
-def hr_feature():
+def rvpa_feature():
     return 'BCR_Richness'
 
 
 @pytest.fixture(scope='module')
-def hr_germline_module():
-    return 'Unassigned'
+def rvpa_pathway():
+    return 'MMR'
 
 
 @pytest.fixture(scope='module')
-def hr_germline_category():
-    return 'Adaptive Receptor'
+def rvpa_max_p_value():
+    return 0.495103
+
+
+@pytest.fixture(scope='module')
+def rvpa_min_p_value():
+    return 0.634187
 
 
 @pytest.fixture(scope='module')
 def common_query_builder():
     def f(query_fields):
-        return """query HeritabilityResults(
-            $paging: PagingInput
-            $distinct:Boolean
-            $dataSet: [String!]
-            $feature: [String!]
-            $cluster: [String!]
-            $minPValue: Float
-            $maxPValue: Float
+        return """query RareVariantPathwayAssociation(
+        $paging: PagingInput
+        $distinct: Boolean
+        $dataSet: [String!]
+        $feature: [String!]
+        $pathway: [String!]
+        $minPValue: Float
+        $maxPValue: Float
     ) {
-        heritabilityResults(
+        rareVariantPathwayAssociations(
             paging: $paging
             distinct: $distinct
             dataSet: $dataSet
             feature: $feature
-            cluster: $cluster
+            pathway: $pathway
             minPValue: $minPValue
             maxPValue: $maxPValue
         )""" + query_fields + "}"
@@ -95,17 +52,18 @@ def common_query_builder():
 def common_query(common_query_builder):
     return common_query_builder("""{
             items {
-              pValue
-              dataSet { name }
-              feature {
-                name
-                germline_module
-                germline_category
-              }
-              cluster
-              fdr
-              variance
-              se
+                dataSet { name }
+                feature { name }
+                pathway
+                pValue
+                min
+                max
+                mean
+                q1
+                q2
+                q3
+                nMutants
+                nTotal
             }
             paging {
                 type
@@ -122,19 +80,10 @@ def common_query(common_query_builder):
         }""")
 
 
-@pytest.fixture(scope='module')
-def max_p_value():
-    return 0.000084099999999999998
-
-
-@pytest.fixture(scope='module')
-def min_p_value():
-    return 0.493599999999999983213
-
 # Test that forward cursor pagination gives us the expected paginInfo
 
 
-def test_heritabilityResults_cursor_pagination_first(client, common_query_builder):
+def test_rareVariantPathwayAssociation_cursor_pagination_first(client, common_query_builder):
     query = common_query_builder("""{
             items {
                 id
@@ -157,7 +106,7 @@ def test_heritabilityResults_cursor_pagination_first(client, common_query_builde
             'paging': {'first': num}
         }})
     json_data = json.loads(response.data)
-    page = json_data['data']['heritabilityResults']
+    page = json_data['data']['rareVariantPathwayAssociations']
     items = page['items']
     paging = page['paging']
     start = from_cursor_hash(paging['startCursor'])
@@ -171,7 +120,7 @@ def test_heritabilityResults_cursor_pagination_first(client, common_query_builde
     assert int(end) - int(start) > 0
 
 
-def test_heritabilityResults_cursor_pagination_last(client, common_query_builder):
+def test_rareVariantPathwayAssociation_cursor_pagination_last(client, common_query_builder):
     query = common_query_builder("""{
             items {
                 id
@@ -197,7 +146,7 @@ def test_heritabilityResults_cursor_pagination_last(client, common_query_builder
             }
         }})
     json_data = json.loads(response.data)
-    page = json_data['data']['heritabilityResults']
+    page = json_data['data']['rareVariantPathwayAssociations']
     items = page['items']
     paging = page['paging']
     start = from_cursor_hash(paging['startCursor'])
@@ -210,7 +159,7 @@ def test_heritabilityResults_cursor_pagination_last(client, common_query_builder
     assert end == items[num - 1]['id']
 
 
-def test_heritabilityResults_cursor_distinct_pagination(client, common_query):
+def test_rareVariantPathwayAssociation_cursor_distinct_pagination(client, common_query):
     page_num = 2
     num = 10
     response = client.post(
@@ -220,79 +169,103 @@ def test_heritabilityResults_cursor_distinct_pagination(client, common_query):
                 'first': num,
             },
             'distinct': True,
-            'dataSet': ['TCGA'],
-            'tag': ['C1']
+            'dataSet': ['TCGA']
         }})
     json_data = json.loads(response.data)
-    page = json_data['data']['heritabilityResults']
+    page = json_data['data']['rareVariantPathwayAssociations']
     items = page['items']
 
     assert len(items) == num
     assert page_num == page['paging']['page']
 
 
-def test_heritabilityResults_query_with_passed_data_set_and_feature(client, common_query, data_set, hr_feature, hr_germline_module, hr_germline_category):
+def test_rareVariantPathwayAssociation_query_with_passed_data_set_feature_and_pathway(client, common_query, data_set, rvpa_feature, rvpa_pathway):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
-        'feature': [hr_feature]
+        'feature': [rvpa_feature],
+        'pathway': [rvpa_pathway]
     }})
     json_data = json.loads(response.data)
-    page = json_data['data']['heritabilityResults']
+    page = json_data['data']['rareVariantPathwayAssociations']
     results = page['items']
     assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results[0:2]:
+    assert len(results) == 1
+    for result in results:
         assert result['dataSet']['name'] == data_set
-        assert result['feature']['name'] == hr_feature
-        assert result['feature']['germline_module'] == hr_germline_module
-        assert result['feature']['germline_category'] == hr_germline_category
+        assert result['feature']['name'] == rvpa_feature
+        assert result['pathway'] == rvpa_pathway
+        assert type(result['pValue']) is float
+        assert type(result['min']) is float
+        assert type(result['max']) is float
+        assert type(result['mean']) is float
+        assert type(result['q1']) is float
+        assert type(result['q2']) is float
+        assert type(result['q3']) is float
+        assert type(result['nMutants']) is int
+        assert type(result['nTotal']) is int
 
 
-def test_heritabilityResults_query_with_passed_min_p_value(client, common_query, min_p_value):
+def test_rareVariantPathwayAssociation_query_with_passed_min_p_value(client, common_query, data_set, rvpa_min_p_value):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
-            'minPValue': min_p_value
+            'dataSet': [data_set],
+            'minPValue': rvpa_min_p_value
         }})
     json_data = json.loads(response.data)
-    page = json_data['data']['heritabilityResults']
+    page = json_data['data']['rareVariantPathwayAssociations']
     results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
-        assert result['pValue'] >= min_p_value
+        assert type(result['pValue']) is float
+        assert result['pValue'] >= rvpa_min_p_value
 
 
-def test_heritabilityResults_query_with_passed_max_p_value(client, common_query, max_p_value):
+def test_rareVariantPathwayAssociation_query_with_passed_max_p_value(client, common_query, data_set, rvpa_max_p_value):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
-            'maxPValue': max_p_value
+            'dataSet': [data_set],
+            'maxPValue': rvpa_max_p_value
         }})
     json_data = json.loads(response.data)
-    page = json_data['data']['heritabilityResults']
+    page = json_data['data']['rareVariantPathwayAssociations']
     results = page['items']
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
-        assert result['pValue'] <= max_p_value
+        assert type(result['pValue']) is float
+        assert result['pValue'] <= rvpa_max_p_value
 
 
-def test_heritabilityResults_query_with_no_arguments(client, common_query_builder):
+def test_rareVariantPathwayAssociation_query_with_no_arguments_no_relations(client, common_query_builder):
     query = common_query_builder("""{
             items {
+                pathway
                 pValue
-                feature {
-                    name
-                }
+                min
+                max
+                mean
+                q1
+                q2
+                q3
+                nMutants
+                nTotal
             }
         }""")
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
-    page = json_data['data']['heritabilityResults']
-    heritability_results = page['items']
-    # Get the total number of hr results in the database.
-    hr_count = return_heritability_result_query('id').count()
-
-    assert isinstance(heritability_results, list)
-    assert len(heritability_results) == hr_count
-    for heritability_result in heritability_results[0:2]:
-        assert type(heritability_result['pValue']) is float or NoneType
+    page = json_data['data']['rareVariantPathwayAssociations']
+    results = page['items']
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        assert type(result['pathway']) is str
+        assert type(result['pValue']) is float or NoneType
+        assert type(result['min']) is float or NoneType
+        assert type(result['max']) is float or NoneType
+        assert type(result['mean']) is float or NoneType
+        assert type(result['q1']) is float or NoneType
+        assert type(result['q2']) is float or NoneType
+        assert type(result['q3']) is float or NoneType
+        assert type(result['nMutants']) is int or NoneType
+        assert type(result['nTotal']) is int or NoneType

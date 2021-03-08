@@ -14,6 +14,10 @@ type Feature {
   name: String!
   "A number representing the index order the feature would be displayed in."
   order: Int
+  "Immune traits clustered based on their Pearson correlation coefficients, described by Sayaman et al, 2021."
+  germline_module: String
+  "Immune traits clustered based on the approach used to derive them and the parameters they intend to measure , described by Sayaman et al, 2021."
+  germline_category: String
   "A list of the names of the sample related to this feature that is associated with the value."
   samples: [FeatureRelatedSample!]!
   "The type of measurement of the value."
@@ -66,4 +70,8 @@ type SimpleFeature {
   order: Int
   "The type of measurement of the value."
   unit: String
+  "Immune traits clustered based on their Pearson correlation coefficients, described by Sayaman et al, 2021."
+  germline_module: String
+  "Immune traits clustered based on the approach used to derive them and the parameters they intend to measure , described by Sayaman et al, 2021."
+  germline_category: String
 }

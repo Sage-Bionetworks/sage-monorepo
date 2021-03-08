@@ -56,9 +56,12 @@ def common_query(common_query_builder):
     return common_query_builder("""{
             items {
                 dataSet { name }
-                feature { name }
+                feature {
+                  name
+                  germline_category
+                  germline_module
+                }
                 snp { name }
-                category
                 pValue
                 maf
             }

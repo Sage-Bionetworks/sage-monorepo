@@ -2,6 +2,7 @@ import base64
 import math
 import uuid
 from collections import deque
+import logging
 
 from api.database.database_helpers import temp_table, execute_sql
 
@@ -55,7 +56,6 @@ def get_pagination_queries(query, paging, distinct, cursor_field=None):
         if distinct == True:
             return query.distinct(), count_query.distinct()
         return query, count_query
-
     # Handle cursor and sort order
     cursor, sort_order = get_cursor(paging.get('before'), paging.get('after'))
     order_by = cursor_field

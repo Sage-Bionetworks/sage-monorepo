@@ -12,10 +12,6 @@ type HeritabilityResultNode implements BaseNode {
   pValue: Float
   "Ancestry cluster, determined from ancestry analysis by Sayaman et al, 2021."
   cluster: String
-  "Immune traits clustered based on their Pearson correlation coefficients, described by Sayaman et al, 2021."
-  module: String
-  "Immune traits clustered based on the approach used to derive them and the parameters they intend to measure , described by Sayaman et al, 2021."
-  category: String
   "Benjamini-Hochberg false discovery rate (FDR) adjustment for multiple testing calculated in R (p.adjust, method=BH)."
   fdr: Float
   "Ratio of genetic variance to phenotypic variance, estimate."

@@ -6,6 +6,21 @@ from api.database import return_feature_query
 
 
 @pytest.fixture(scope='module')
+def feature_name():
+    return 'Eosinophils'
+
+
+@pytest.fixture(scope='module')
+def germline_category():
+    return 'Leukocyte Subset ES'
+
+
+@pytest.fixture(scope='module')
+def germline_module():
+    return 'Cytotoxic'
+
+
+@pytest.fixture(scope='module')
 def max_value():
     return 5.7561021
 
@@ -41,11 +56,13 @@ def common_query():
             name
             order
             unit
+            germline_module
+            germline_category
         }
     }"""
 
 
-def test_features_query_with_feature(client, chosen_feature):
+def test_features_query_with_feature(client, feature_name, germline_category, germline_module):
     query = """query Features(
             $dataSet: [String!]
             $related: [String!]
@@ -72,6 +89,8 @@ def test_features_query_with_feature(client, chosen_feature):
             name
             order
             unit
+            germline_module
+            germline_category
             samples {
                 name
                 value
@@ -79,7 +98,7 @@ def test_features_query_with_feature(client, chosen_feature):
         }
     }"""
     response = client.post(
-        '/api', json={'query': query, 'variables': {'feature': [chosen_feature]}})
+        '/api', json={'query': query, 'variables': {'feature': [feature_name]}})
     json_data = json.loads(response.data)
     features = json_data['data']['features']
 
@@ -90,16 +109,18 @@ def test_features_query_with_feature(client, chosen_feature):
         assert type(feature['class']) is str
         assert type(feature['display']) is str or NoneType
         assert type(feature['methodTag']) is str or NoneType
-        assert feature['name'] == chosen_feature
+        assert feature['name'] == feature_name
         assert type(feature['order']) is int or NoneType
+        assert feature['unit'] in unit_enum.enums or type(
+            feature['unit']) is NoneType
+        assert feature['germline_module'] == germline_module
+        assert feature['germline_category'] == germline_category
         assert isinstance(samples, list)
         assert len(samples) > 0
         # Don't need to iterate through every result.
         for current_sample in samples[0:2]:
             assert type(current_sample['name']) is str
             assert type(current_sample['value']) is float
-        assert feature['unit'] in unit_enum.enums or type(
-            feature['unit']) is NoneType
 
 
 def test_features_query_with_feature_no_sample_or_value(client, data_set, related, chosen_feature):

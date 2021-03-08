@@ -1,3 +1,4 @@
+from .colocalizations_resolver import resolve_colocalizations
 from .copy_number_results_resolver import resolve_copy_number_results
 from .data_sets_resolver import resolve_data_sets
 from .driver_results_resolver import resolve_driver_results
@@ -21,6 +22,7 @@ from .mutation_types_resolver import resolve_mutation_types
 from .nodes_resolver import resolve_nodes
 from .pathway_resolver import resolve_pathways
 from .patient_resolver import resolve_patients
+from .rare_variant_pathway_association_resolver import resolve_rare_variant_pathway_associations
 from .related_resolver import resolve_related
 from .samples_resolver import resolve_samples
 from .samples_by_mutations_status_resolver import resolve_samples_by_mutations_status
