@@ -8,6 +8,7 @@ from .feature import build_feature_graphql_response
 from .paging_utils import get_cursor, get_pagination_queries, Paging
 
 rare_variant_pathway_association_request_fields = {
+    'id',
     'dataSet',
     'feature',
     'pathway',
@@ -18,8 +19,9 @@ rare_variant_pathway_association_request_fields = {
     'q1',
     'q2',
     'q3',
+    'nTotal',
     'nMutants'
-    'nTotal'}
+}
 
 
 def build_rvpa_graphql_response(rare_variant_pathway_association):
@@ -36,7 +38,7 @@ def build_rvpa_graphql_response(rare_variant_pathway_association):
         'q2': get_value(rare_variant_pathway_association, 'q2'),
         'q3': get_value(rare_variant_pathway_association, 'q3'),
         'nMutants': get_value(rare_variant_pathway_association, 'n_mutants'),
-        'nTotal': get_value(rare_variant_pathway_association, 'n_notal'),
+        'nTotal': get_value(rare_variant_pathway_association, 'n_total'),
 
     }
 

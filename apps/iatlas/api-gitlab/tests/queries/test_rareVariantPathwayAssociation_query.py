@@ -194,15 +194,15 @@ def test_rareVariantPathwayAssociation_query_with_passed_data_set_feature_and_pa
         assert result['dataSet']['name'] == data_set
         assert result['feature']['name'] == rvpa_feature
         assert result['pathway'] == rvpa_pathway
-        #assert type(result['pValue']) is float
+        assert type(result['pValue']) is float
         assert type(result['min']) is float
         assert type(result['max']) is float
         assert type(result['mean']) is float
         assert type(result['q1']) is float
         assert type(result['q2']) is float
         assert type(result['q3']) is float
-        #assert type(result['nMutants']) is int
-        #assert type(result['nTotal']) is int
+        assert type(result['nMutants']) is int
+        assert type(result['nTotal']) is int
 
 
 def test_rareVariantPathwayAssociation_query_with_passed_min_p_value(client, common_query, data_set, rvpa_min_p_value):
