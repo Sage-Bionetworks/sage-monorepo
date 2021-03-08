@@ -1,3 +1,4 @@
+from .colocalizations_resolver import resolve_colocalizations
 from .copy_number_results_resolver import resolve_copy_number_results
 from .data_sets_resolver import resolve_data_sets
 from .driver_results_resolver import resolve_driver_results

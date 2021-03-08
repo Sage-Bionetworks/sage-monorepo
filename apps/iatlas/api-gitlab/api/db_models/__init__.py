@@ -2,6 +2,7 @@ from api import db
 
 Base = db.Model
 
+from .colocalization import Colocalization
 from .copy_number_result import CopyNumberResult
 from .dataset import Dataset
 from .dataset_to_sample import DatasetToSample

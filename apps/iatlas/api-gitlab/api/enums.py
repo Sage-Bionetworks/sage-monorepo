@@ -14,3 +14,9 @@ status_enum = ENUM('Wt', 'Mut', name='status_enum')
 
 unit_enum = ENUM('Count', 'Fraction', 'Per Megabase',
                  'Score', 'Year', name='unit_enum')
+
+qtl_enum = ENUM('sQTL', 'eQTL')
+
+ecaviar_pp_enum = ENUM('C1', 'C2')
+
+coloc_plot_type_enum = ENUM('3 Level Plot', 'Expanded Region')

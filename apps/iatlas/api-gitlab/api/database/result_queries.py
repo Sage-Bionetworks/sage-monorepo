@@ -1,6 +1,20 @@
 from api import db
-from api.db_models import CopyNumberResult, DriverResult, HeritabilityResult, GermlineGwasResult, RareVariantPathwayAssociation
+from api.db_models import Colocalization, CopyNumberResult, DriverResult, HeritabilityResult, GermlineGwasResult, RareVariantPathwayAssociation
 from .database_helpers import build_option_args, build_query_args
+
+accepted_coloc_option_args = ['data_set',
+                              'coloc_data_set', 'feature', 'gene', 'snp']
+
+accepted_coloc_query_args = [
+    'id',
+    'dataset_id',
+    'coloc_dataset_id',
+    'feature_id',
+    'gene_id',
+    'snp_id',
+    'qtl_type',
+    'ecaviar_pp',
+    'plot_type']
 
 accepted_cnr_option_args = ['data_set', 'feature', 'gene', 'tag']
 
@@ -66,6 +80,17 @@ accepted_rvpa_query_args = ['id',
                             'q3',
                             'n_mutants',
                             'n_total']
+
+
+def return_colocalization_query(*args):
+    option_args = build_option_args(
+        *args, accepted_args=accepted_coloc_option_args)
+    query_args = build_query_args(
+        Colocalization, * args, accepted_args=accepted_coloc_query_args)
+    query = db.session.query(*query_args)
+    if option_args:
+        query = db.session.query(Colocalization).options(*option_args)
+    return query
 
 
 def return_copy_number_result_query(*args):
