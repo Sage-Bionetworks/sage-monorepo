@@ -126,8 +126,8 @@ def common_query(common_query_builder):
             dataSet { name }
             colocDataSet { name }
             feature { name }
-            snp { name }
             gene { entrez }
+            snp { name }
             qtlType
             eCaviarPP
             plotType
@@ -152,8 +152,6 @@ def common_query(common_query_builder):
 
 # Test that forward cursor pagination gives us the expected paginInfo
 
-
-'''
 
 def test_colocalizations_cursor_pagination_first(client, common_query_builder):
     query = common_query_builder("""{
@@ -256,7 +254,12 @@ def test_colocalizations_unique_query(client, common_query, data_set, coloc_feat
         'dataSet': [data_set],
         'colocDataSet': [data_set],
         'feature': [coloc_feature],
-        'entrez': [coloc_gene_entrez]
+        'entrez': [coloc_gene_entrez],
+        'snp': [coloc_snp_name],
+        'qtlType': coloc_qtl_type,
+        'eCaviarPP': coloc_ecaviar_pp,
+        'plotType': coloc_plot_type
+
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['colocalizations']
@@ -294,5 +297,3 @@ def test_colocalizations_query_with_no_arguments(client, common_query):
         assert type(result['plotType']) is str or NoneType
         assert type(result['spliceLoc']) is str or NoneType
         assert type(result['plotLink']) is str or NoneType
-
-'''

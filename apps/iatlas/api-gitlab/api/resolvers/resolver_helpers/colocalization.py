@@ -8,6 +8,7 @@ from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
 from .snp import build_snp_graphql_response
 from .paging_utils import get_cursor, get_pagination_queries, Paging
+import logging
 
 colocalization_request_fields = {
     'id',
@@ -31,12 +32,12 @@ def build_coloc_graphql_response(colocalization):
         'colocDataSet': build_data_set_graphql_response(colocalization),
         'feature': build_feature_graphql_response()(colocalization),
         'gene': build_gene_graphql_response()(colocalization),
-        'snp': build_snp_graphql_response()(colocalization),
-        'qtlType': get_value(colocalization, 'qtlType'),
-        'eCaviarPP': get_value(colocalization, 'eCaviarPP'),
-        'plotType': get_value(colocalization, 'plotType'),
-        'spliceLoc': get_value(colocalization, 'spliceLoc'),
-        'plotLink': get_value(colocalization, 'plotLink')
+        'snp': build_snp_graphql_response(colocalization),
+        'qtlType': get_value(colocalization, 'qtl_type'),
+        'eCaviarPP': get_value(colocalization, 'ecaviar_pp'),
+        'plotType': get_value(colocalization, 'plot_type'),
+        'spliceLoc': get_value(colocalization, 'splice_loc'),
+        'plotLink': get_value(colocalization, 'plot_link')
     }
 
 
@@ -85,9 +86,9 @@ def build_colocalization_request(
     data_set_core_field_mapping = {'display': data_set_1.display.label('data_set_display'),
                                    'name': data_set_1.name.label('data_set_name'),
                                    'type': data_set_1.data_set_type.label('data_set_type')}
-    coloc_data_set_core_field_mapping = {'display': coloc_data_set_1.display.label('data_set_display'),
-                                         'name': coloc_data_set_1.name.label('data_set_name'),
-                                         'type': coloc_data_set_1.data_set_type.label('data_set_type')}
+    coloc_data_set_core_field_mapping = {'display': coloc_data_set_1.display.label('coloc_data_set_display'),
+                                         'name': coloc_data_set_1.name.label('coloc_data_set_name'),
+                                         'type': coloc_data_set_1.data_set_type.label('coloc_data_set_type')}
     feature_core_field_mapping = {'display': feature_1.display.label('feature_display'),
                                   'name': feature_1.name.label('feature_name'),
                                   'order': feature_1.order.label('order'),
