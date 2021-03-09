@@ -33,15 +33,27 @@ germline_gwas_server <- function(id, cohort_obj){
                            choices = c("", snp_options))
       })
 
-      subset_gwas <- reactive({
-        shiny::req(input$immunefeature)
-        if(input$feature_action == "Exclude") gwas_data() %>% dplyr::filter(!(feature_name %in% input$immunefeature)) %>% iatlas.app::format_gwas_df()
-        else gwas_data() %>% dplyr::filter(feature_name %in% input$immunefeature) %>% iatlas.app::format_gwas_df()
+      subset_gwas <- shiny::reactive({
+        if(is.null(input$immunefeature)){
+          gwas_data() %>% iatlas.app::format_gwas_df()
+        }else{
+          if(input$feature_action == "Exclude") gwas_data() %>% dplyr::filter(!(feature_name %in% input$immunefeature)) %>% iatlas.app::format_gwas_df()
+          else gwas_data() %>% dplyr::filter(feature_name %in% input$immunefeature) %>% iatlas.app::format_gwas_df()
+        }
       })
 
-      trackname <- reactive({
-        labels <- gwas_data() %>% dplyr::filter(feature_name %in% input$immunefeature) %>% purrr::pluck("feature_display") %>% unique()
-        paste("GWAS -", input$feature_action, paste(labels, collapse = ", "))
+      trackname <- shiny::reactive({
+        if(is.null(input$immunefeature)) "GWAS"
+        else paste("GWAS -",
+                   input$feature_action,
+                   paste(gwas_data() %>% dplyr::filter(feature_name %in% input$immunefeature) %>% purrr::pluck("feature_display") %>% unique(),
+                         collapse = ", "))
+      })
+
+      yaxis <- shiny::reactive({
+        c(min(-log10(subset_gwas()$P.VALUE)-1),
+          max(-log10(subset_gwas()$P.VALUE)+1)
+        )
       })
 
       output$igv_plot <- igvShiny::renderIgvShiny({
@@ -52,9 +64,24 @@ germline_gwas_server <- function(id, cohort_obj){
         displayMode="SQUISHED")
       })
 
-      shiny::observeEvent(input$addGwasTrackButton, {
-        igvShiny::loadGwasTrack(session, id=session$ns("igv_plot"), trackName=trackname(),
+      shiny::observeEvent(input$igvReady, {
+        containerID <- input$igvReady
+        print(paste("igv ready, ", containerID))
+        igvShiny::loadGwasTrack(session, id=session$ns("igv_plot"),
+                                trackName=trackname(),
                                 tbl=subset_gwas(),
+                                ymin = yaxis()[1],
+                                ymax = yaxis()[2],
+                                deleteTracksOfSameName=FALSE)
+      })
+
+      shiny::observeEvent(input$addGwasTrackButton, {
+        print("oi")
+        igvShiny::loadGwasTrack(session, id=session$ns("igv_plot"),
+                                trackName=trackname(),
+                                tbl=subset_gwas(),
+                                ymin = yaxis()[1],
+                                ymax = yaxis()[2],
                                 deleteTracksOfSameName=FALSE)
       })
 
