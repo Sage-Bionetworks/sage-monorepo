@@ -859,13 +859,6 @@
       "Repository": "CRAN",
       "Hash": "76de23891bdba419517e855ed611ad29"
     },
-    "feather": {
-      "Package": "feather",
-      "Version": "0.3.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "76de23891bdba419517e855ed611ad29"
-    },
     "forcats": {
       "Package": "forcats",
       "Version": "0.5.1",
@@ -1118,15 +1111,15 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.12.3",
+      "Version": "0.13.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "023ff3c35e008347a670da3883df251dc18d6b4b",
+      "RemoteSha": "d1674e360bd366539e2308b3681f46ba9d1958a2",
       "RemoteHost": "api.github.com",
-      "Hash": "c91278a865b6abcdd58fdabc634b90a4"
+      "Hash": "45eb5186b07c14a37bc8e692f2bbb4e7"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
@@ -1151,18 +1144,6 @@
       "RemoteSha": "89c2c90d6e45bbd95ce20e95aebac2b1929faf91",
       "RemoteHost": "api.github.com",
       "Hash": "db80c2e0bc68a13a7f99cfd494d93289"
-    },
-    "igvShiny": {
-      "Package": "igvShiny",
-      "Version": "1.2.8",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteUsername": "heimannch",
-      "RemoteRepo": "igvShiny",
-      "RemoteRef": "master",
-      "RemoteSha": "c304823f984c8e91027487acfa0d76da86476dbc",
-      "Hash": "e8bbb193a312f4d1a3b4a2302558fdf2"
     },
     "ini": {
       "Package": "ini",
@@ -1590,13 +1571,6 @@
       "Repository": "CRAN",
       "Hash": "dd08bb0be91b93194fa944b68b3bccb0"
     },
-    "randomcoloR": {
-      "Package": "randomcoloR",
-      "Version": "1.1.0.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "dd08bb0be91b93194fa944b68b3bccb0"
-    },
     "rappdirs": {
       "Package": "rappdirs",
       "Version": "0.3.2",
@@ -1699,6 +1673,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "599df23c40a4fce9c7b4764f28c37857"
+    },
+    "rmarkdown": {
+      "Package": "rmarkdown",
+      "Version": "2.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "edbf4cb1aefae783fd8d3a008ae51943"
     },
     "roxygen2": {
       "Package": "roxygen2",
@@ -1851,27 +1832,6 @@
       "Repository": "CRAN",
       "Hash": "083bd0b279a4e54a788eea455b76d7a0"
     },
-    "spatial": {
-      "Package": "spatial",
-      "Version": "7.3-11",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "f27a078d834614513608da2c08031130"
-    },
-    "splitstackshape": {
-      "Package": "splitstackshape",
-      "Version": "1.4.8",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "69b26ceb9f7976f347049b4d470c2d65"
-    },
-    "startup": {
-      "Package": "startup",
-      "Version": "0.14.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "17a4b68eeeef4ab9f521caf9f16d1e86"
-    },
     "statmod": {
       "Package": "statmod",
       "Version": "1.4.35",
@@ -1956,13 +1916,6 @@
       "Repository": "CRAN",
       "Hash": "f8cc5adf4671b013434bbe127f35b28c"
     },
-    "tictoc": {
-      "Package": "tictoc",
-      "Version": "1.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "f8cc5adf4671b013434bbe127f35b28c"
-    },
     "tidyr": {
       "Package": "tidyr",
       "Version": "1.1.2",
@@ -1976,6 +1929,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "6ea435c354e8448819627cf686f66e0a"
+    },
+    "tinytex": {
+      "Package": "tinytex",
+      "Version": "0.30",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "066f49a225dc3215cb1f32bc23535f88"
     },
     "triebeard": {
       "Package": "triebeard",
