@@ -1,5 +1,5 @@
 
-test_that("cohort_manual_selection_server", {
+test_that("cohort_manual_selection_server_pcawg", {
   shiny::testServer(
     cohort_manual_selection_server,
     {
@@ -14,7 +14,7 @@ test_that("cohort_manual_selection_server", {
       expect_equal(group_object()$group_display, "Immune Subtype")
       expect_equal(group_object()$group_type, "tag")
       cohort_object <- session$getReturned()()
-      # expect_type(cohort_object, "list")
+      expect_type(cohort_object, "list")
     }
   )
 })
