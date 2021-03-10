@@ -3,58 +3,6 @@ import pytest
 from tests import NoneType
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 from api.database import return_colocalization_query
-"""
-    query Colocalizations(
-    $paging: PagingInput
-    $distinct:Boolean
-    $dataSet: [String!]
-    $colocDataSet: [String!]
-    $feature: [String!]
-    $entrez: [Int!]
-    $snp: [String!]
-    $qtlType: QTLTypeEnum
-    $eCaviarPP: ECaviarPPEnum
-    $plotType: ColocPlotTypeEnum
-    ) {
-    colocalizations(
-        paging: $paging
-        distinct: $distinct
-        dataSet: $dataSet
-        colocDataSet: $colocDataSet
-        entrez: $entrez
-        snp: $snp
-        qtlType: $qtlType
-        eCaviarPP: $eCaviarPP
-        plotType: $plotType
-
-    ) {
-        paging {
-            type
-            pages
-            total
-            startCursor
-            endCursor
-            hasPreviousPage
-            hasNextPage
-            page
-            limit
-        }
-        error
-        items {
-            dataSet { name }
-            colocDataSet { name }
-            feature { name }
-            snp { name }
-            gene { entrez }
-            qtlType
-            eCaviarPP
-            plotType
-            spliceLoc
-            plotLink
-        }
-    }
-    }
-"""
 
 
 @pytest.fixture(scope='module')
@@ -131,6 +79,7 @@ def common_query(common_query_builder):
             qtlType
             eCaviarPP
             plotType
+            tissue
             spliceLoc
             plotLink
         }
@@ -275,6 +224,7 @@ def test_colocalizations_unique_query(client, common_query, data_set, coloc_feat
         assert result['qtlType'] == coloc_qtl_type
         assert result['eCaviarPP'] == coloc_ecaviar_pp
         assert result['plotType'] == coloc_plot_type
+        assert type(result['tissue']) is str or NoneType
         assert type(result['spliceLoc']) is str
         assert type(result['plotLink']) is str
 
@@ -295,5 +245,6 @@ def test_colocalizations_query_with_no_arguments(client, common_query):
         assert type(result['qtlType']) is str
         assert type(result['eCaviarPP']) is str or NoneType
         assert type(result['plotType']) is str or NoneType
+        assert type(result['tissue']) is str or NoneType
         assert type(result['spliceLoc']) is str or NoneType
         assert type(result['plotLink']) is str or NoneType

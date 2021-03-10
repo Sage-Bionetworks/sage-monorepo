@@ -84,6 +84,7 @@ def test_Colocalization_with_relations(app, data_set, data_set_id, coloc_feature
         assert result.qtl_type == coloc_qtl_type
         assert result.ecaviar_pp == coloc_ecaviar_pp
         assert result.plot_type == coloc_plot_type
+        assert type(result.splice_loc) is str or NoneType
         assert type(result.splice_loc) is str
         assert type(result.plot_link) is str
         assert repr(result) == string_representation
@@ -112,6 +113,7 @@ def test_Colocalization_no_relations(app, data_set_id, coloc_feature_id, coloc_g
         assert type(result.qtl_type) is str
         assert type(result.ecaviar_pp) is str or NoneType
         assert type(result.plot_type) is str or NoneType
+        assert type(result.splice_loc) is str or NoneType
         assert type(result.splice_loc) is str or NoneType
         assert type(result.plot_link) is str or NoneType
         assert repr(result) == string_representation
