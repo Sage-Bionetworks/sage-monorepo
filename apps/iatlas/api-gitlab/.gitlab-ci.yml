@@ -44,7 +44,7 @@ tests:
     - merge_requests
   except:
     variables:
-      - '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "MASTER"'
+      - '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"'
   stage: test_code
   image: python:3.8-alpine
   variables:
