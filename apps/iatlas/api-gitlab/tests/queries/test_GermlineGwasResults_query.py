@@ -19,12 +19,12 @@ def ggr_snp():
 @pytest.fixture(scope='module')
 def ggr_max_p_value():
     # return 0.000000000000712
-    return 7.12e-26
+    return 1.0e-26
 
 
 @pytest.fixture(scope='module')
 def ggr_min_p_value():
-    return 9.98e-07
+    return 1.0e-07
 
 
 @pytest.fixture(scope='module')
