@@ -11,10 +11,10 @@ test_that("cohort_filter_selection_server_pcawg", {
       expect_named(tag_group_filter_tbl(), c("display", "name"))
       expect_type(clinical_group_filter_tbl(), "list")
 
-      expect_equal(nrow(clinical_group_filter_tbl()), 0)
+      expect_equal(nrow(clinical_group_filter_tbl()), 1)
       expect_named(clinical_group_filter_tbl(), c("display", "name"))
       expect_type(group_filter_list(), "character")
-      expect_equal(length(group_filter_list()), 2)
+      expect_equal(length(group_filter_list()), 3)
       expect_named(group_filter_list())
 
       expect_type(group_element_module_server(), "closure")
@@ -24,7 +24,7 @@ test_that("cohort_filter_selection_server_pcawg", {
       expect_named(feature_tbl(), c("class", "display", "feature"))
       expect_true(nrow(feature_tbl()) > 0)
       expect_named(clinical_tbl(), c("class", "display", "feature"))
-      expect_equal(nrow(clinical_tbl()), 0)
+      expect_equal(nrow(clinical_tbl()), 1)
       expect_type(numeric_named_list(), "list")
       expect_named(numeric_named_list())
 

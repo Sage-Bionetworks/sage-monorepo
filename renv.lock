@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.0.3",
+    "Version": "4.0.4",
     "Repositories": [
       {
         "Name": "BioCsoft",
@@ -1134,15 +1134,15 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.12.2",
+      "Version": "0.13.0",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "5239952bc4000826b11189ed42246d1518ed475e",
-      "Hash": "ac30e3e6f453a0ed3d6dde52c3179627"
+      "RemoteSha": "d1674e360bd366539e2308b3681f46ba9d1958a2",
+      "RemoteHost": "api.github.com",
+      "Hash": "45eb5186b07c14a37bc8e692f2bbb4e7"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
@@ -1716,6 +1716,13 @@
       "Repository": "CRAN",
       "Hash": "599df23c40a4fce9c7b4764f28c37857"
     },
+    "rmarkdown": {
+      "Package": "rmarkdown",
+      "Version": "2.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "edbf4cb1aefae783fd8d3a008ae51943"
+    },
     "roxygen2": {
       "Package": "roxygen2",
       "Version": "7.1.1",
@@ -1992,6 +1999,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "6ea435c354e8448819627cf686f66e0a"
+    },
+    "tinytex": {
+      "Package": "tinytex",
+      "Version": "0.30",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "066f49a225dc3215cb1f32bc23535f88"
     },
     "triebeard": {
       "Package": "triebeard",
