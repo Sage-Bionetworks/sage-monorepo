@@ -25,6 +25,8 @@ type ColocalizationNode implements BaseNode {
   eCaviarPP: ECaviarPPEnum
   "Type of colocalization plot. (either '3 Level Plot' or 'Expanded Region')."
   plotType: ColocPlotTypeEnum
+  "Source tissue for QTL association, for gTEX colocalizations."
+  tissue: String
   "For sQTLS, the location of the splice event."
   spliceLoc: String
   "A link to the associated plot."

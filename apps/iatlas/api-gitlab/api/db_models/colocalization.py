@@ -10,8 +10,9 @@ class Colocalization(Base):
     qtl_type = db.Column(qtl_enum, nullable=False)
     ecaviar_pp = db.Column(ecaviar_pp_enum, nullable=True)
     plot_type = db.Column(coloc_plot_type_enum, nullable=True)
+    tissue = db.Column(db.String, nullable=True)
     splice_loc = db.Column(db.String, nullable=True)
-    plot_link = db.Column(db.String, nullable=True)
+    plot_link = db.Column(db.String, nullable=False)
 
     dataset_id = db.Column(db.Integer, db.ForeignKey(
         'datasets.id'), nullable=False)

@@ -20,6 +20,7 @@ colocalization_request_fields = {
     'qtlType',
     'eCaviarPP',
     'plotType',
+    'tissue',
     'spliceLoc',
     'plotLink'
 }
@@ -36,6 +37,7 @@ def build_coloc_graphql_response(colocalization):
         'qtlType': get_value(colocalization, 'qtl_type'),
         'eCaviarPP': get_value(colocalization, 'ecaviar_pp'),
         'plotType': get_value(colocalization, 'plot_type'),
+        'tissue': get_value(colocalization, 'tissue'),
         'spliceLoc': get_value(colocalization, 'splice_loc'),
         'plotLink': get_value(colocalization, 'plot_link')
     }
@@ -80,6 +82,7 @@ def build_colocalization_request(
         'qtlType': colocalization_1.qtl_type.label('qtl_type'),
         'eCaviarPP': colocalization_1.ecaviar_pp.label('ecaviar_pp'),
         'plotType': colocalization_1.plot_type.label('plot_type'),
+        'tissue': colocalization_1.tissue.label('tissue'),
         'spliceLoc': colocalization_1.splice_loc.label('splice_loc'),
         'plotLink': colocalization_1.plot_link.label('plot_link')
     }
