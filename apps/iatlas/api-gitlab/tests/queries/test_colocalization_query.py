@@ -3,58 +3,6 @@ import pytest
 from tests import NoneType
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 from api.database import return_colocalization_query
-"""
-    query Colocalizations(
-    $paging: PagingInput
-    $distinct:Boolean
-    $dataSet: [String!]
-    $colocDataSet: [String!]
-    $feature: [String!]
-    $entrez: [Int!]
-    $snp: [String!]
-    $qtlType: QTLTypeEnum
-    $eCaviarPP: ECaviarPPEnum
-    $plotType: ColocPlotTypeEnum
-    ) {
-    colocalizations(
-        paging: $paging
-        distinct: $distinct
-        dataSet: $dataSet
-        colocDataSet: $colocDataSet
-        entrez: $entrez
-        snp: $snp
-        qtlType: $qtlType
-        eCaviarPP: $eCaviarPP
-        plotType: $plotType
-
-    ) {
-        paging {
-            type
-            pages
-            total
-            startCursor
-            endCursor
-            hasPreviousPage
-            hasNextPage
-            page
-            limit
-        }
-        error
-        items {
-            dataSet { name }
-            colocDataSet { name }
-            feature { name }
-            snp { name }
-            gene { entrez }
-            qtlType
-            eCaviarPP
-            plotType
-            spliceLoc
-            plotLink
-        }
-    }
-    }
-"""
 
 
 @pytest.fixture(scope='module')
