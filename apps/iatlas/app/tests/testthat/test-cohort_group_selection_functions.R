@@ -29,17 +29,17 @@ test_that("build_custom_group_tbl", {
   )
 })
 
-# TODO: Uncomment whern patients query works
-# test_that("build_cohort_group_list", {
-#   expect_equal(
-#     available_groups_list,
-#     c(
-#       "Immune Subtype" = "Immune_Subtype",
-#       "PCAWG Study" = "PCAWG_Study",
-#       "Immune Feature Bins" = "Immune Feature Bins"
-#     )
-#   )
-# })
+test_that("build_cohort_group_list", {
+  expect_equal(
+    available_groups_list,
+    c(
+      "Immune Subtype" = "Immune_Subtype",
+      "PCAWG Study" = "PCAWG_Study",
+      "Immune Feature Bins" = "Immune Feature Bins",
+      "Gender" = "gender"
+    )
+  )
+})
 
 test_that("build_cohort_mutation_tbl", {
   expect_named(
