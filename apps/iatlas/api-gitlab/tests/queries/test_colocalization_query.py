@@ -79,6 +79,7 @@ def common_query(common_query_builder):
             qtlType
             eCaviarPP
             plotType
+            tissue
             spliceLoc
             plotLink
         }
@@ -223,6 +224,7 @@ def test_colocalizations_unique_query(client, common_query, data_set, coloc_feat
         assert result['qtlType'] == coloc_qtl_type
         assert result['eCaviarPP'] == coloc_ecaviar_pp
         assert result['plotType'] == coloc_plot_type
+        assert type(result['tissue']) is str or NoneType
         assert type(result['spliceLoc']) is str
         assert type(result['plotLink']) is str
 
@@ -243,5 +245,6 @@ def test_colocalizations_query_with_no_arguments(client, common_query):
         assert type(result['qtlType']) is str
         assert type(result['eCaviarPP']) is str or NoneType
         assert type(result['plotType']) is str or NoneType
+        assert type(result['tissue']) is str or NoneType
         assert type(result['spliceLoc']) is str or NoneType
         assert type(result['plotLink']) is str or NoneType
