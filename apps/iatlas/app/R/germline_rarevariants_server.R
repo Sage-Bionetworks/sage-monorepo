@@ -6,15 +6,15 @@ germline_rarevariants_server <- function(id, cohort_obj){
       ns <- session$ns
 
       rv_data <- reactive({
-        GERMLINE_PATH = "inst/extdata/"
-        feather::read_feather(paste0(GERMLINE_PATH, "germline_rare_variants.feather"))
+        iatlas.api.client::query_rare_variant_pathway_associations()
       })
 
       output$features <- renderUI({
+        View(rv_data())
         trait_choices <- rv_data() %>%
-                          dplyr::select(display,category) %>%
-                          dplyr::group_by(category) %>%
-                          tidyr::nest(data = c(display))%>%
+                          dplyr::select(feature_display,feature_germline_category) %>%
+                          dplyr::group_by(feature_germline_category) %>%
+                          tidyr::nest(data = c(feature_display))%>%
                           dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
                           tibble::deframe()
 
@@ -26,7 +26,7 @@ germline_rarevariants_server <- function(id, cohort_obj){
 
       selected_data <- reactive({
         rv_data() %>%
-          dplyr::filter(display == input$feature)
+          dplyr::filter(feature_display == input$feature)
       })
 
       output$dist_plot <- plotly::renderPlotly({
@@ -56,7 +56,7 @@ germline_rarevariants_server <- function(id, cohort_obj){
       output$stats_tbl <- DT::renderDataTable({
         shiny::req(input$feature)
         DT::datatable(
-          selected_data() %>% dplyr::select(pathway, n_mutations, n, p_value) ,
+          selected_data() %>% dplyr::select(pathway, n_mutants, n_total, p_value) ,
           rownames = FALSE
         ) %>% DT::formatRound(columns= "p_value", digits=3)
       })
