@@ -10,15 +10,12 @@ germline_rarevariants_server <- function(id, cohort_obj){
       })
 
       output$features <- renderUI({
-
-        # trait_choices <- rv_data() %>%
-        #                   dplyr::select(feature_display,feature_germline_category) %>%
-        #                   dplyr::group_by(feature_germline_category) %>%
-        #                   tidyr::nest(data = c(feature_display))%>%
-        #                   dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
-        #                   tibble::deframe()
-
-        trait_choices <- unique(rv_data()$feature_display)
+        trait_choices <- iatlas.app::create_nested_named_list(
+                            rv_data(),
+                            names_col1 = "feature_germline_category",
+                            names_col2 = "feature_display",
+                            values_col = "feature_name"
+                          )
 
         shiny::selectInput(ns("feature"),
                            "Search and select Immune Trait",
@@ -28,17 +25,15 @@ germline_rarevariants_server <- function(id, cohort_obj){
 
       selected_data <- reactive({
         rv_data() %>%
-          dplyr::filter(feature_display == input$feature)
+          dplyr::filter(feature_name == input$feature) %>%
+          dplyr::mutate(pathway = stringr::str_replace_all(pathway, "_", " "))
       })
 
       output$dist_plot <- plotly::renderPlotly({
         shiny::req(input$feature)
 
         df <- selected_data() %>% tidyr::drop_na()
-
-        #order plots
-        if(is.numeric(df[[input$order_box]]))  plot_levels <-levels(reorder(df[["pathway"]], df[[input$order_box]], sort))
-        else plot_levels <- (df %>% dplyr::arrange(.[[input$order_box]], p_value))$pathway %>% as.factor()
+        plot_levels <- (df %>% dplyr::arrange(desc(.[[input$order_box]])))$pathway
 
         create_boxplot_from_summary_stats(
            df,

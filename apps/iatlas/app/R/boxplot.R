@@ -69,6 +69,7 @@ create_boxplot_from_summary_stats <- function(
   color_col = NA,
   label_col = NA,
   order_by = NULL,
+  title = "",
   xlab = "",
   ylab = "",
   source_name = NULL,
@@ -104,6 +105,7 @@ create_boxplot_from_summary_stats <- function(
       source = source_name
     )) %>%
     plotly::layout(
+      title = title,
       xaxis = list(title = xlab),
       yaxis = list(title = ylab,
                    ategoryorder = "array",
