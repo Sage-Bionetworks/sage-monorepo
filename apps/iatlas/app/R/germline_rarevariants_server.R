@@ -6,17 +6,19 @@ germline_rarevariants_server <- function(id, cohort_obj){
       ns <- session$ns
 
       rv_data <- reactive({
-        iatlas.api.client::query_rare_variant_pathway_associations()
+        iatlas.api.client::query_rare_variant_pathway_associations(datasets = "TCGA")
       })
 
       output$features <- renderUI({
-        View(rv_data())
-        trait_choices <- rv_data() %>%
-                          dplyr::select(feature_display,feature_germline_category) %>%
-                          dplyr::group_by(feature_germline_category) %>%
-                          tidyr::nest(data = c(feature_display))%>%
-                          dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
-                          tibble::deframe()
+
+        # trait_choices <- rv_data() %>%
+        #                   dplyr::select(feature_display,feature_germline_category) %>%
+        #                   dplyr::group_by(feature_germline_category) %>%
+        #                   tidyr::nest(data = c(feature_display))%>%
+        #                   dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
+        #                   tibble::deframe()
+
+        trait_choices <- unique(rv_data()$feature_display)
 
         shiny::selectInput(ns("feature"),
                            "Search and select Immune Trait",
@@ -56,9 +58,22 @@ germline_rarevariants_server <- function(id, cohort_obj){
       output$stats_tbl <- DT::renderDataTable({
         shiny::req(input$feature)
         DT::datatable(
-          selected_data() %>% dplyr::select(pathway, n_mutants, n_total, p_value) ,
-          rownames = FALSE
-        ) %>% DT::formatRound(columns= "p_value", digits=3)
+          selected_data() %>% dplyr::select(Pathway = pathway,
+                                            "Patients with mutation" = n_mutants,
+                                            "Total patients" = n_total,
+                                            "p-value" = p_value) ,
+          rownames = FALSE,
+          options = list(order = list(3, 'asc'))
+        ) %>% DT::formatRound(columns= "p-value", digits=3)
+      })
+
+      observeEvent(input$method_link,{
+        shiny::showModal(modalDialog(
+          title = "Method",
+          includeMarkdown("inst/markdown/methods/germline-rarevariants.md"),
+          easyClose = TRUE,
+          footer = NULL
+        ))
       })
     }
   )
