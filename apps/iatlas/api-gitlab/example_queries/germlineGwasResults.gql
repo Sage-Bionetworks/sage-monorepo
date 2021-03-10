@@ -1,16 +1,16 @@
-query HeritabilityResults(
+query GermlineGwasResults(
   $dataSet: [String!]
   $feature: [String!]
-  $cluster: [String!]
+  $snp: [String!]
   $minPValue: Float
   $maxPValue: Float
   $paging: PagingInput
   $distinct: Boolean
 ) {
-  heritabilityResults(
+  germlineGwasResults(
     dataSet: $dataSet
     feature: $feature
-    cluster: $cluster
+    snp: $snp
     minPValue: $minPValue
     maxPValue: $maxPValue
     paging: $paging
@@ -27,11 +27,14 @@ query HeritabilityResults(
         germline_module
         germline_category
       }
+      snp{
+        name
+        rsid
+        chr
+        bp
+      }
       pValue
-      cluster
-      fdr
-      variance
-      se
+      maf
     }
     paging{
       type
