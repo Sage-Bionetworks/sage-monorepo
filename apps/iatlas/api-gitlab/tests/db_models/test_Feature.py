@@ -19,17 +19,7 @@ def unit():
     return 'Fraction'
 
 
-@pytest.fixture(scope='module')
-def germline_category():
-    return 'Leukocyte Subset ES'
-
-
-@pytest.fixture(scope='module')
-def germline_module():
-    return 'Cytotoxic'
-
-
-def test_Feature_with_relations(app, display, name, unit, germline_category, germline_module):
+def test_Feature_with_relations(app, display, name, unit):
     relationships_to_join = ['feature_class', 'method_tag', 'samples']
 
     query = return_feature_query(*relationships_to_join)
@@ -47,8 +37,8 @@ def test_Feature_with_relations(app, display, name, unit, germline_category, ger
     assert result.name == name
     assert result.display == display
     assert result.unit == unit
-    assert result.germline_category == germline_category
-    assert result.germline_module == germline_module
+    assert type(result.germline_category) is str or NoneType
+    assert type(result.germline_module) is str or NoneType
     assert result.unit in unit_enum.enums or type(result.unit) is NoneType
     assert type(result.class_id) is int or NoneType
     assert type(result.method_tag_id) is int or NoneType
@@ -88,7 +78,7 @@ def test_Feature_with_feature_sample_assoc(app, name):
             assert feature_sample_rel.feature_id == result.id
 
 
-def test_Feature_no_relations(app, display, name, germline_category, germline_module):
+def test_Feature_no_relations(app, display, name):
     query = return_feature_query()
     result = query.filter_by(name=name).first()
 
@@ -100,8 +90,8 @@ def test_Feature_no_relations(app, display, name, germline_category, germline_mo
     assert result.feature_sample_assoc == []
     assert result.name == name
     assert result.display == display
-    assert result.germline_category == germline_category
-    assert result.germline_module == germline_module
+    assert type(result.germline_category) is str or NoneType
+    assert type(result.germline_module) is str or NoneType
     assert result.unit in unit_enum.enums or type(result.unit) is NoneType
     assert type(result.class_id) is int or NoneType
     assert type(result.method_tag_id) is int or NoneType
