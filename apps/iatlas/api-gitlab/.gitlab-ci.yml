@@ -2,7 +2,6 @@ variables:
   CI: "1"
   # Workaround for locally issued TLS certs
   DOCKER_TLS_CERTDIR: ""
-  CONTAINER_LABEL: iatlas-api
   DOCKER_IMAGE_TAG_STAGING: ${CI_COMMIT_SHORT_SHA}-staging
   DOCKER_IMAGE_TAG_PROD: ${CI_COMMIT_SHORT_SHA}
 
@@ -30,9 +29,9 @@ default:
     - "rm -rf /var/cache/apk/*"
     - "aws --version"
     # Create the AWS credentials and config files.
-    - "mkdir ~/.aws"
-    - 'echo -e "[default]\naws_access_key_id = ${AWS_ACCESS_KEY_ID}\naws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}\nregion = ${AWS_DEFAULT_REGION}" >> ~/.aws/credentials'
-    - 'echo -e "[default]\nregion = $AWS_DEFAULT_REGION\noutput = json" >> ~/.aws/config'
+    - 'aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"'
+    - 'aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"'
+    - 'aws configure set region "${AWS_DEFAULT_REGION}"'
 
 stages:
   - test_code
