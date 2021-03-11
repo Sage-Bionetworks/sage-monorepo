@@ -10,12 +10,12 @@ simple_data_set_request_fields = {'display', 'name', 'type'}
 data_set_request_fields = simple_data_set_request_fields.union({'samples'})
 
 
-def build_data_set_graphql_response(data_set):
+def build_data_set_graphql_response(data_set, prefix='data_set_'):
     return {
-        'display': get_value(data_set, 'data_set_display') or get_value(data_set, 'display'),
-        'name': get_value(data_set, 'data_set_name') or get_value(data_set),
+        'display': get_value(data_set, prefix + 'display') or get_value(data_set, 'display'),
+        'name': get_value(data_set, prefix + 'name') or get_value(data_set),
         'samples': map(build_sample_graphql_response, get_value(data_set, 'samples', [])),
-        'type': get_value(data_set, 'data_set_type') or get_value(data_set, 'type'),
+        'type': get_value(data_set, prefix + 'type') or get_value(data_set, 'type'),
     }
 
 
