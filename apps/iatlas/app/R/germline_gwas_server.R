@@ -16,7 +16,7 @@ germline_gwas_server <- function(id, cohort_obj){
       immune_feat <- reactive({
         iatlas.app::create_nested_named_list(
           gwas_data(),
-          names_col1 = "category",
+          names_col1 = "feature_germline_category",
           names_col2 = "feature_display",
           values_col = "feature_name"
         )
@@ -66,7 +66,6 @@ germline_gwas_server <- function(id, cohort_obj){
 
       shiny::observeEvent(input$igvReady, {
         containerID <- input$igvReady
-        print(paste("igv ready, ", containerID))
         igvShiny::loadGwasTrack(session, id=session$ns("igv_plot"),
                                 trackName=trackname(),
                                 tbl=subset_gwas(),
