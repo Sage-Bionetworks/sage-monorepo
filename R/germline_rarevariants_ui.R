@@ -4,7 +4,10 @@ germline_rarevariants_ui <- function(id){
   shiny::tagList(
     messageBox(
       width = 12,
-      shiny::p("See rare variants boxplots for different pathways.")
+      shiny::p("The boxplots show the values of selected immune traits across samples with germline mutations in genes belonging to defined functional categories, or pathways."),
+      shiny::p("We performed association analyses between germline pathogenic and likely pathogenic cancer predisposition variants in high penetrance susceptibility genes, and immune traits and immune
+               subtypes.  Since mutations in most of the genes were rare we collapsed genes into categories summarizing different biologic processes or functions, when possible."),
+      shiny::actionLink(ns("method_link"), "Click to view method description.")
     ),
     optionsBox(
       width = 12,
@@ -22,7 +25,7 @@ germline_rarevariants_ui <- function(id){
                                              "Mean" = "mean",
                                              "Min" = "min",
                                              "Max" = "max",
-                                             "Number of patients with mutation" = "n_mutation"
+                                             "Number of patients with mutation" = "n_mutant"
                               ),
                               selected = "p_value")
       )
@@ -34,7 +37,8 @@ germline_rarevariants_ui <- function(id){
     ),
     messageBox(
       width = 3,
-      shiny::p("Tests comparing a group with all other groups were performed.")
+      shiny::p("Tests comparing the phenotype values with respect to the burden of rare variants within each pathway was performed (i.e., mean of phenotype values of rare mutation carriers vs mean of phenotype values of rare mutation non-carriers).
+              In the Pathway column, 'Multiple' refers to samples with mutation in more than one pathway; and 'No defect' refers to samples with no mutation in the studied pathways.")
     ),
     plotBox(
       width = 9,

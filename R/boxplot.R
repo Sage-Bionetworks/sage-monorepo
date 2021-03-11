@@ -10,16 +10,14 @@ create_boxplot <- function(
     ylab = "",
     title = "",
     source_name = NULL,
-    fill_colors = NA){
+    custom_data = "",
+    fill_colors = NA,
+    showlegend = T){
 
     if(is.na(key_col)) key_col <- x_col
     if(is.na(color_col)) color_col <- x_col
     if(is.na(label_col)) label_col <- x_col
     if(is.na(split_col)) split_col <- x_col
-
-    if(is.na(fill_colors)){
-      fill_colors <- viridis::viridis_pal(option = "D")(dplyr::n_distinct(df[[color_col]]))
-    }
 
     wrapr::let(
         alias = c(
@@ -42,7 +40,9 @@ create_boxplot <- function(
             jitter = 0.7,
             pointpos = 0,
             colors = fill_colors,
-            source = source_name
+            source = source_name,
+            customdata = custom_data,
+            showlegend = showlegend
         )) %>%
         plotly::layout(
             title = title,
@@ -69,6 +69,7 @@ create_boxplot_from_summary_stats <- function(
   color_col = NA,
   label_col = NA,
   order_by = NULL,
+  title = "",
   xlab = "",
   ylab = "",
   source_name = NULL,
@@ -104,6 +105,7 @@ create_boxplot_from_summary_stats <- function(
       source = source_name
     )) %>%
     plotly::layout(
+      title = title,
       xaxis = list(title = xlab),
       yaxis = list(title = ylab,
                    ategoryorder = "array",

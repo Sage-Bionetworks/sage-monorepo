@@ -3,6 +3,9 @@ read_rds_file <- function(file){
   readRDS(file.path(test_file_dir, file))
 }
 
+tcga_samples <- iatlas.api.client::query_dataset_samples("TCGA")$name
+pcawg_samples <- iatlas.api.client::query_dataset_samples("PCAWG")$name
+
 pcawg_immune_subtype_cohort_obj <- read_rds_file(
   "pcawg_immune_subtype_cohort_obj.rds"
 )

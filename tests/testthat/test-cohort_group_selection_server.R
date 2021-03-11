@@ -97,7 +97,6 @@ test_that("cohort_group_selection_server_immune_feature_bin", {
   )
 })
 
-
 test_that("cohort_group_selection_server_tcga_clinical", {
   shiny::testServer(
     cohort_group_selection_server,
