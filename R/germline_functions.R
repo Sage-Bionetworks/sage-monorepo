@@ -32,14 +32,14 @@ create_heritability_df <- function(
       )) %>%
       iatlas.app::create_plotly_label(
         ., paste(.$feature_display, "- ", ancestry_df[cluster], "Ancestry"),
-        paste("\n Immune Trait Category:",.$category, "\n Immune Trait Module:", .$module),
+        paste("\n Immune Trait Category:",.$feature_germline_category, "\n Immune Trait Module:", .$feature_germline_module),
         c("variance", "se", "p_value","fdr"),
         title = "Immune Trait"
       )
 
   #creating the y label
   if(parameter == "cluster") df <- df %>% mutate(ylabel = feature_display)
-  else if (parameter == "category" | parameter == "module")
+  else if (parameter == "feature_germline_category" | parameter == "feature_germline_module")
     df <- df %>% mutate(ylabel = paste(ancestry_df[cluster], feature_display, sep = " - "))
   else  df <- df %>% mutate(ylabel = paste(ancestry_df[cluster], .[[parameter]], sep = " - "))
 }
@@ -77,8 +77,8 @@ format_gwas_df <- function(df){
                   POS = snp_bp,
                   'P.VALUE'= p_value,
                   Trait = feature_display,
-                  'Immune Trait Module' = module,
-                  'Immune Trait Category' = category)
+                  'Immune Trait Module' = feature_germline_module,
+                  'Immune Trait Category' = feature_germline_category)
 }
 
 create_snp_popup_tbl <- function(track_event){
