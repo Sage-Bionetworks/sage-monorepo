@@ -144,29 +144,27 @@ germline_gwas_server <- function(id, cohort_obj){
       })
 
       #COLOCALIZATION
-      coloc_label <- reactive({
-        switch(
-          input$selection,
-          "See all chromosomes" = "for all chromosomes",
-          "Select a region" = paste("for chromosome", selected_chr())
-        )
-      })
+      # coloc_label <- reactive({
+      #   switch(
+      #     input$selection,
+      #     "See all chromosomes" = "for all chromosomes",
+      #     "Select a region" = paste("for chromosome", selected_chr())
+      #   )
+      # })
       ##TCGA
       col_tcga <- reactive({
-        germline_data$coloc_tcga %>%
-          dplyr::filter(snp_chr %in% selected_chr()) %>%
-          dplyr::select("Plot" = plot_type, "SNP" = snp_rsid, Trait = feature_display, QTL, Gene = gene, `Causal SNPs` = C1C2, Splice = splice, snp_chr, link_plot)
+        iatlas.api.client::query_colocalizations() %>%
+          dplyr::filter(is.na(tissue)) %>%
+          dplyr::select("Plot" = plot_type, "SNP" = snp_rsid, Trait = feature_display, QTL = qtl_type, Gene = gene_hgnc, `Causal SNPs` = ecaviar_pp, Splice = splice_loc, CHR = snp_chr, plot_link)
       })
 
       output$colocalization_tcga <- DT::renderDT({
 
-        shiny::req(selected_chr())
-
         DT::datatable(
-          col_tcga() %>% dplyr::select(!link_plot),
+          col_tcga() %>% dplyr::select(!plot_link),
           escape = FALSE,
           rownames = FALSE,
-          caption = paste("TCGA colocalization plots available ", coloc_label()),
+          caption = "TCGA colocalization plots available", #paste("TCGA colocalization plots available ", coloc_label()),
           selection = 'single',
           options = list(
             pageLength = 5,
@@ -182,7 +180,7 @@ germline_gwas_server <- function(id, cohort_obj){
           shiny::need(
             !is.null(input$colocalization_tcga_rows_selected), "Click on table to see plot"))
 
-        link_plot <- as.character(col_tcga()[input$colocalization_tcga_rows_selected, "link_plot"])
+        link_plot <- as.character(col_tcga()[input$colocalization_tcga_rows_selected, "plot_link"])
 
         tags$div(
           tags$hr(),
@@ -192,17 +190,19 @@ germline_gwas_server <- function(id, cohort_obj){
       })
 
       ##GTEX
+      col_gtex <- reactive({
+        iatlas.api.client::query_colocalizations() %>%
+          dplyr::filter(!is.na(tissue)) %>%
+          dplyr::select("SNP" = snp_rsid, Trait = feature_display, QTL = qtl_type, Gene = gene_hgnc, Tissue = tissue, Splice = splice_loc, CHR = snp_chr, plot_link)
+      })
 
       output$colocalization_gtex <- DT::renderDT({
-        shiny::req(selected_chr())
 
         DT::datatable(
-          germline_data$coloc_gtex %>%
-            dplyr::filter(snp_chr %in% selected_chr()) %>%
-            dplyr::select("SNP" = snp_rsid, Trait = feature_display, QTL, Tissue = tissue, Gene = gene, snp_chr),
+          col_gtex()%>% dplyr::select(!c(plot_link, Splice)),
           escape = FALSE,
           rownames = FALSE,
-          caption = paste("GTEX colocalization plots available ", coloc_label()),
+          caption = "GTEX colocalization plots available ", #paste("GTEX colocalization plots available ", coloc_label()),
           selection = 'single',
           options = list(
             pageLength = 5,
@@ -218,11 +218,11 @@ germline_gwas_server <- function(id, cohort_obj){
           shiny::need(
             !is.null(input$colocalization_gtex_rows_selected), "Click on table to see plot"))
 
-        link_plot <- as.character(germline_data$coloc_gtex[input$colocalization_gtex_rows_selected, "link_plot"])
+        link_plot <- as.character(col_gtex()[input$colocalization_gtex_rows_selected, "plot_link"])
 
         tags$div(
           tags$hr(),
-          tags$p(paste("GTEX Splice ID: ", as.character(germline_data$coloc_gtex[input$colocalization_gtex_rows_selected, "splice"]))),
+          tags$p(paste("GTEX Splice ID: ", as.character(col_gtex()[input$colocalization_gtex_rows_selected, "Splice"]))),
           tags$img(src = link_plot,
                    width = "100%")
         )
