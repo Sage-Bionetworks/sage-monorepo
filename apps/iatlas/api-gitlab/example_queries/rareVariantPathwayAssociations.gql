@@ -1,0 +1,57 @@
+query RareVariantPathwayAssociation(
+  $paging: PagingInput
+  $distinct: Boolean
+  $dataSet: [String!]
+  $feature: [String!]
+  $pathway: [String!]
+  $minPValue: Float
+  $maxPValue: Float
+) {
+  rareVariantPathwayAssociations(
+    paging: $paging
+    distinct: $distinct
+    dataSet: $dataSet
+    feature: $feature
+    pathway: $pathway
+    minPValue: $minPValue
+    maxPValue: $maxPValue
+  ) {
+    items {
+      dataSet {
+        name
+        display
+      }
+      feature {
+        name
+        display
+        germline_module
+        germline_category
+      }
+      pathway
+      pValue
+      min
+      max
+      mean
+      q1
+      q2
+      q3
+      nMutants
+      nTotal
+    }
+    paging {
+      type
+      pages
+      total
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+      page
+      limit
+    }
+    error
+  }
+}
+
+# Variables
+# {"dataSet": ["TCGA"]}

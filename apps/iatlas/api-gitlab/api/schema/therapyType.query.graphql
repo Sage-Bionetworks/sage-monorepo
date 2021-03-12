@@ -1,0 +1,9 @@
+"""
+The "TherapyTypes" type
+"""
+type TherapyType {
+  "The name of the TherapyType."
+  name: String!
+  "A list of Genes associated with the Therapy type."
+  genes: [SimpleGene]!
+}

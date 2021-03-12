@@ -1,0 +1,77 @@
+"""
+The "Feature" type may return:
+
+See also "FeaturesByClass", "FeaturesByTag", and "SimpleFeature".
+"""
+type Feature {
+  "The feature class associated with this feature."
+  class: String
+  "A readable name for the feature."
+  display: String
+  "The method tag associated with this feature."
+  methodTag: String
+  "The feature's name (a unique string for this feature)."
+  name: String!
+  "A number representing the index order the feature would be displayed in."
+  order: Int
+  "Immune traits clustered based on their Pearson correlation coefficients, described by Sayaman et al, 2021."
+  germline_module: String
+  "Immune traits clustered based on the approach used to derive them and the parameters they intend to measure , described by Sayaman et al, 2021."
+  germline_category: String
+  "A list of the names of the sample related to this feature that is associated with the value."
+  samples: [FeatureRelatedSample!]!
+  "The type of measurement of the value."
+  unit: String
+  "The maximum value of all relationships between a specific feature and the samples."
+  valueMax: Float
+  "The minimum value of all relationships between a specific feature and the samples."
+  valueMin: Float
+}
+
+"""
+The "FeaturesByClass" type
+"""
+type FeaturesByClass {
+  "The name of the feature class."
+  class: String!
+  "A list of features associated with that feature class."
+  features: [Feature!]!
+}
+
+"""
+The "FeaturesByTag" type
+"""
+type FeaturesByTag {
+  "The characteristics of the tag."
+  characteristics: String
+  "A color to represent the tag as a hex value."
+  color: String
+  "A list of features associated with that tag."
+  features: [Feature!]!
+  "A long display name for the tag used in text descriptions."
+  longDisplay: String
+  "A friendly name for the tag (used in plots)."
+  shortDisplay: String
+  "The name of the tag."
+  tag: String!
+}
+
+"""
+The "SimpleFeature" is a version of a `Feature`. Only basic feature attributes may be returned.
+
+To get more properties of features, please see "Feature", "FeaturesByClass", "FeaturesByTag".
+"""
+type SimpleFeature {
+  "A readable name for the feature."
+  display: String
+  "The feature's name (a unique string for this feature)."
+  name: String!
+  "A number representing the index order the feature would be displayed in."
+  order: Int
+  "The type of measurement of the value."
+  unit: String
+  "Immune traits clustered based on their Pearson correlation coefficients, described by Sayaman et al, 2021."
+  germline_module: String
+  "Immune traits clustered based on the approach used to derive them and the parameters they intend to measure , described by Sayaman et al, 2021."
+  germline_category: String
+}

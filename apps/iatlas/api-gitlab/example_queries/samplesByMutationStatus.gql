@@ -1,0 +1,49 @@
+query SamplesByMutationStatus(
+    $dataSet: [String!]
+    $ethnicity: [EthnicityEnum!]
+    $feature: [String!]
+    $featureClass: [String!]
+    $gender: [GenderEnum!]
+    $maxAgeAtDiagnosis: Int
+    $maxHeight: Float
+    $maxWeight: Float
+    $minAgeAtDiagnosis: Int
+    $minHeight: Float
+    $minWeight: Float
+    $mutationId: [Int!]
+    $mutationStatus: StatusEnum
+    $patient: [String!]
+    $race: [RaceEnum!]
+    $related: [String!]
+    $sample: [String!]
+    $tag: [String!]
+) {
+  samplesByMutationStatus(
+    dataSet: $dataSet
+    ethnicity: $ethnicity
+    feature: $feature
+    featureClass: $featureClass
+    gender: $gender
+    maxAgeAtDiagnosis: $maxAgeAtDiagnosis
+    maxHeight: $maxHeight
+    maxWeight: $maxWeight
+    minAgeAtDiagnosis: $minAgeAtDiagnosis
+    minHeight: $minHeight
+    minWeight: $minWeight
+    mutationId: $mutationId
+    mutationStatus: $mutationStatus
+    patient: $patient
+    race: $race
+    related: $related
+    sample: $sample
+    tag: $tag
+  ) {
+    status
+    samples {
+      name
+    }
+  }
+}
+
+# Variables
+# {"sample": ["TCGA-38-7271"]}

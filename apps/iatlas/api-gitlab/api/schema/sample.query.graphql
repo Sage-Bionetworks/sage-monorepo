@@ -1,0 +1,75 @@
+"""
+The "Sample" type
+
+See also `SampleByMutationStatus` and `SamplesByTag`
+"""
+type Sample {
+  "The sample's name (often the 'sample' portion of a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/))."
+  name: String!
+  "A Patient structure related to the sample. There may only ever be one patient to a sample though a patient may be related to many samples."
+  patient: SimplePatient
+}
+
+"""
+The "FeatureRelatedSample" type is a Sample that is specifically related to a Feature.
+
+See also `Feature`
+"""
+type FeatureRelatedSample {
+  "The sample's name (often the 'sample' portion of a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/))."
+  name: String!
+  "The calculated relational value or the Sample related to the Feature."
+  value: Float
+}
+
+"""
+The "MutationRelatedSample" type is a Sample that is specifically related to a Mutation.
+
+See also `Sample`, `Mutation`, `StatusEnum`, and `SimplePatient`
+"""
+type MutationRelatedSample {
+  "The sample's name (often the 'sample' portion of a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/))."
+  name: String!
+  "The Patient related to the Sample"
+  patient: SimplePatient
+  "The status of the Sample, either `Mut` or `Wt`, related to the Mutation."
+  status: StatusEnum!
+}
+
+"""
+The "SampleByMutationStatus" type
+"""
+type SampleByMutationStatus {
+  "The 'status' the Mutation, either `Mut` or `Wt`."
+  status: StatusEnum
+  "A list of Samples associated with the mutation status."
+  samples: [Sample!]!
+}
+
+"""
+The "SamplesByTag" type
+"""
+type SamplesByTag {
+  "The 'characteristics' of the tag."
+  characteristics: String
+  "A color to represent the Tag as a hex value."
+  color: String
+  "A long display name for the Tag used in text descriptions."
+  longDisplay: String
+  "A list of Samples associated with the Tag."
+  samples: [Sample!]!
+  "A friendly name for the Tag (used in plots)."
+  shortDisplay: String
+  "The name of the Tag."
+  tag: String!
+}
+
+"""
+The "SimpleSample" is a simple version of a Sample; it has no related fields.
+
+See also `Sample`
+"""
+type SimpleSample {
+  "The sample's name (often the 'sample' portion of a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/))."
+  name: String!
+}

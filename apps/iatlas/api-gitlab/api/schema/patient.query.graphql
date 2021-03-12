@@ -1,0 +1,58 @@
+"""
+The "EthnicityEnum" scalar will always be either `not hispanic or latino` or `hispanic or latino`.
+"""
+scalar EthnicityEnum
+
+"""
+The "GenderEnum" scalar will always be either `female` or `male`.
+"""
+scalar GenderEnum
+
+"""
+The "RaceEnum" scalar will always be either `american indian or alaska native`, `black or african american`, `native hawaiian or other pacific islander`, `white`, or `asian`.
+"""
+scalar RaceEnum
+
+"""
+The "Patient" type
+"""
+type Patient {
+  "The age of the patient at the time of diagnosis."
+  ageAtDiagnosis: Int
+  "The barcode of the patient."
+  barcode: String!
+  "The ethnicity of the patient."
+  ethnicity: EthnicityEnum
+  "The gender of the patient."
+  gender: GenderEnum
+  "The height of the patient."
+  height: Float
+  "The race of the patient."
+  race: RaceEnum
+  "The weight of the patient."
+  weight: Float
+  "A list of samples associated with the patient."
+  samples: [String!]!
+  "A list of slides associated with the patient."
+  slides: [SimpleSlide!]!
+}
+
+"""
+The "SimplePatient" type
+"""
+type SimplePatient {
+  "The age of the patient at the time of diagnosis."
+  ageAtDiagnosis: Int
+  "The barcode of the patient."
+  barcode: String!
+  "The ethnicity of the patient."
+  ethnicity: EthnicityEnum
+  "The gender of the patient."
+  gender: GenderEnum
+  "The height of the patient."
+  height: Float
+  "The race of the patient."
+  race: RaceEnum
+  "The weight of the patient."
+  weight: Float
+}

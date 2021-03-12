@@ -1,0 +1,7 @@
+"""
+The "MutationCode" type
+"""
+type MutationCode {
+  "The code of the mutation."
+  code: String!
+}

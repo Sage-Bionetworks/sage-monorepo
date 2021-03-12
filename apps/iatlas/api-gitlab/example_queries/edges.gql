@@ -1,0 +1,30 @@
+query Edges(
+  $maxScore: Float
+  $minScore: Float
+  $node1: [String!]
+  $node2: [String!]
+  $page: Int
+) {
+  edges(
+    maxScore: $maxScore
+    minScore: $minScore
+    node1: $node1
+    node2: $node2
+    page: $page
+  ) {
+    items {
+      label
+      name
+      score
+      node1 {
+        name
+      }
+      node2 {
+        name
+      }
+    }
+  }
+}
+
+# Variables
+# {"dataSet": ["TCGA"], "related": ["Immune_Subtype"]}

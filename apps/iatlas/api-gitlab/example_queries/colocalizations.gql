@@ -1,0 +1,73 @@
+query Colocalizations(
+  $paging: PagingInput
+  $distinct: Boolean
+  $dataSet: [String!]
+  $colocDataSet: [String!]
+  $feature: [String!]
+  $entrez: [Int!]
+  $snp: [String!]
+  $qtlType: QTLTypeEnum
+  $eCaviarPP: ECaviarPPEnum
+  $plotType: ColocPlotTypeEnum
+) {
+  colocalizations(
+    paging: $paging
+    distinct: $distinct
+    dataSet: $dataSet
+    colocDataSet: $colocDataSet
+    feature: $feature
+    entrez: $entrez
+    snp: $snp
+    qtlType: $qtlType
+    eCaviarPP: $eCaviarPP
+    plotType: $plotType
+  ) {
+    paging {
+      type
+      pages
+      total
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+      page
+      limit
+    }
+    error
+    items {
+      dataSet {
+        name
+        display
+      }
+      colocDataSet {
+        name
+        display
+      }
+      feature {
+        name
+        display
+        germline_module
+        germline_category
+      }
+      snp {
+        name
+        rsid
+        bp
+        chr
+      }
+      gene {
+        entrez
+        hgnc
+      }
+      qtlType
+      eCaviarPP
+      tissue
+      plotType
+      spliceLoc
+      plotLink
+    }
+  }
+}
+
+# Variables
+# {"dataSet": ["TCGA"]}

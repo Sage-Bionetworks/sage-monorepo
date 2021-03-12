@@ -1,0 +1,9 @@
+"""
+The "MethodTag" type
+"""
+type MethodTag {
+  "The name of the MethodTag"
+  name: String!
+  "A list of Features associated with the Method Tag"
+  features: [SimpleFeature]!
+}

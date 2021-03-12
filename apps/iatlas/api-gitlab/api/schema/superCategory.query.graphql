@@ -1,0 +1,9 @@
+"""
+The "SuperCategory" type
+"""
+type SuperCategory {
+  "The name of the SuperCategory"
+  name: String!
+  "A list of Genes associated with the Super category"
+  genes: [SimpleGene]!
+}

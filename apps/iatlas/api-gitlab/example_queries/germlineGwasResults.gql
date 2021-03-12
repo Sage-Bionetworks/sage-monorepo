@@ -1,0 +1,55 @@
+query GermlineGwasResults(
+  $dataSet: [String!]
+  $feature: [String!]
+  $snp: [String!]
+  $minPValue: Float
+  $maxPValue: Float
+  $paging: PagingInput
+  $distinct: Boolean
+) {
+  germlineGwasResults(
+    dataSet: $dataSet
+    feature: $feature
+    snp: $snp
+    minPValue: $minPValue
+    maxPValue: $maxPValue
+    paging: $paging
+    distinct: $distinct
+  ){
+    items {
+      dataSet{
+        name
+        display
+      }
+      feature{
+        name
+        display
+        germline_module
+        germline_category
+      }
+      snp{
+        name
+        rsid
+        chr
+        bp
+      }
+      pValue
+      maf
+    }
+    paging{
+      type
+      pages
+      total
+      page
+      limit
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    error
+  }
+}
+
+# Variables
+# {"dataSet": ["TCGA"]}

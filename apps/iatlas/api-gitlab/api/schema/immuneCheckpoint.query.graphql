@@ -1,0 +1,9 @@
+"""
+The "ImmuneCheckpoint" type
+"""
+type ImmuneCheckpoint {
+  "The name of the ImmuneCheckpoint"
+  name: String!
+  "A list of Genes associated with the ImmuneCheckpoint"
+  genes: [SimpleGene]!
+}

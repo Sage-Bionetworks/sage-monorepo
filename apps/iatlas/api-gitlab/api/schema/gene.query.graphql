@@ -1,0 +1,69 @@
+"""
+The "Gene" type
+"""
+type Gene {
+  "The unique id of the gene to use on search engines."
+  entrez: Int!
+  "The HUGO Gene Nomenclature Committee."
+  hgnc: String!
+  "The 'description' of the gene."
+  description: String
+  "The 'friendlyName' of the gene."
+  friendlyName: String
+  "The IO Landscape Name of the gene."
+  ioLandscapeName: String
+  "The 'geneFamily' of the gene."
+  geneFamily: String
+  "The 'geneFunction' of the gene."
+  geneFunction: String
+  "A list of GeneTypes associated with the gene."
+  geneTypes: [SimpleGeneType!]!
+  "The 'immuneCheckpoint' of the gene."
+  immuneCheckpoint: String
+  "The 'pathway' of the gene."
+  pathway: String
+  "A list of Publications associated with the gene."
+  publications: [SimplePublication!]!
+  "A list of RNA Sequence Expressions associated with the gene and it's related samples."
+  rnaSeqExprs: [Float!]!
+  "A list of sample names and the RNA Sequence Expressions related to the gene."
+  samples: [String!]!
+  "The 'superCategory' of the gene."
+  superCategory: String
+  "The 'therapyType' of the gene."
+  therapyType: String
+}
+
+"""
+The "SimpleGene" is a version of a gene. Only basic attributes may be returned.
+"""
+type SimpleGene {
+  "The unique id of the gene to use on search engines."
+  entrez: Int!
+  "The HUGO Gene Nomenclature Committee."
+  hgnc: String!
+  "The 'description' of the gene."
+  description: String
+  "The 'friendlyName' of the gene."
+  friendlyName: String
+  "The IO Landscape Name of the gene."
+  ioLandscapeName: String
+}
+
+"""
+The "GenesByTag" type
+"""
+type GenesByTag {
+  "The 'characteristics' or description of the tag."
+  characteristics: String
+  "A color to represent the tag as a hex value."
+  color: String
+  "A list of Genes related to the tag."
+  genes: [Gene!]!
+  "A long display name for the tag used in text descriptions."
+  longDisplay: String
+  "The name of the tag."
+  tag: String!
+  "A friendly name for the tag (used in plots)."
+  shortDisplay: String
+}

@@ -1,0 +1,9 @@
+"""
+The "Pathway" type
+"""
+type Pathway {
+  "The name of the Pathway"
+  name: String!
+  "A list of Genes associated with the Pathway"
+  genes: [SimpleGene]!
+}

@@ -1,0 +1,9 @@
+"""
+The "GeneFunction" type
+"""
+type GeneFunction {
+  "The name of the GeneFunction"
+  name: String!
+  "A list of Genes associated with the GeneFunction."
+  genes: [SimpleGene]!
+}
