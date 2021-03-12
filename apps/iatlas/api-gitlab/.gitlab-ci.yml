@@ -203,7 +203,7 @@ Build Container Prod:
     - "echo Building Prod container."
   script:
     - current=${CI_REGISTRY_IMAGE}:${DOCKER_IMAGE_TAG_PROD}
-    - latest=${CI_REGISTRY_IMAGE}:staging-latest
+    - latest=${CI_REGISTRY_IMAGE}:prod
     - echo "${CI_JOB_TOKEN}" | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
     - "docker build -t ${current} -t ${latest} ."
     - "docker push ${current}"
@@ -273,7 +273,7 @@ Deploy:Prod:
     TRAVIS_BRANCH: "master"
   script:
     - echo Deploying iAtlas API to Production
-    - image ${DOCKER_IMAGE_TAG_PROD}
+    - echo image ${DOCKER_IMAGE_TAG_PROD}
     - export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG_PROD}
     - "sceptre_stack_file=prod/iatlas-api.yaml"
     # Ensure git is available.
