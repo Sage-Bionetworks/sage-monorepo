@@ -3,26 +3,32 @@ import pytest
 from tests import NoneType
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 from api.database import return_colocalization_query
+import logging
+
+
+@pytest.fixture(scope='module')
+def coloc_data_set(test_db):
+    return "GTEX"
 
 
 @pytest.fixture(scope='module')
 def coloc_feature(test_db):
-    return 'Bindea_CD8_T_cells'
+    return 'Bindea_aDC'
 
 
 @pytest.fixture(scope='module')
 def coloc_gene_entrez(test_db):
-    return 23779
+    return 4677
 
 
 @pytest.fixture(scope='module')
 def coloc_snp_name(test_db):
-    return "22:45019343:A:G"
+    return "18:55726795:A:T"
 
 
 @pytest.fixture(scope='module')
 def coloc_qtl_type(test_db):
-    return "sQTL"
+    return "eQTL"
 
 
 @pytest.fixture(scope='module')
@@ -32,7 +38,12 @@ def coloc_ecaviar_pp(test_db):
 
 @pytest.fixture(scope='module')
 def coloc_plot_type(test_db):
-    return "3 Level Plot"
+    return "Expanded Region"
+
+
+@pytest.fixture(scope='module')
+def coloc_tissue(test_db):
+    return "Artery Aorta"
 
 
 @pytest.fixture(scope='module')
@@ -198,34 +209,36 @@ def test_colocalizations_cursor_distinct_pagination(client, common_query):
     assert page_num == page['paging']['page']
 
 
-def test_colocalizations_unique_query(client, common_query, data_set, coloc_feature, coloc_gene_entrez, coloc_snp_name, coloc_qtl_type, coloc_ecaviar_pp, coloc_plot_type):
+def test_colocalizations_unique_query(client, common_query, data_set, coloc_data_set, coloc_feature, coloc_gene_entrez, coloc_snp_name, coloc_qtl_type, coloc_ecaviar_pp, coloc_plot_type, coloc_tissue):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
-        'colocDataSet': [data_set],
+        'colocDataSet': [coloc_data_set],
         'feature': [coloc_feature],
         'entrez': [coloc_gene_entrez],
         'snp': [coloc_snp_name],
-        'qtlType': coloc_qtl_type,
-        'eCaviarPP': coloc_ecaviar_pp,
-        'plotType': coloc_plot_type
-
+        'qtlType': coloc_qtl_type
     }})
+    logger = logging.getLogger('logger name here')
+
     json_data = json.loads(response.data)
     page = json_data['data']['colocalizations']
     results = page['items']
+
+    logger.info(results)
+
     assert isinstance(results, list)
     assert len(results) == 1
     for result in results:
         assert result['dataSet']['name'] == data_set
-        assert result['colocDataSet']['name'] == data_set
+        assert result['colocDataSet']['name'] == coloc_data_set
         assert result['feature']['name'] == coloc_feature
         assert result['gene']['entrez'] == coloc_gene_entrez
         assert result['snp']['name'] == coloc_snp_name
         assert result['qtlType'] == coloc_qtl_type
-        assert result['eCaviarPP'] == coloc_ecaviar_pp
+        assert type(result['eCaviarPP']) is NoneType
         assert result['plotType'] == coloc_plot_type
-        assert type(result['tissue']) is str or NoneType
-        assert type(result['spliceLoc']) is str
+        assert result['tissue'] == coloc_tissue
+        assert type(result['spliceLoc']) is NoneType
         assert type(result['plotLink']) is str
 
 

@@ -15,7 +15,7 @@ def resolve_colocalizations(
         selection_set=selection_set, requested_field_mapping=simple_data_set_request_fields, child_node='dataSet')
 
     coloc_data_set_requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=simple_data_set_request_fields, child_node='dataSet')
+        selection_set=selection_set, requested_field_mapping=simple_data_set_request_fields, child_node='colocDataSet')
 
     feature_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_feature_request_fields, child_node='feature')
