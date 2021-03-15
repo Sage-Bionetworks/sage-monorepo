@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.0.4",
+    "Version": "4.0.3",
     "Repositories": [
       {
         "Name": "BioCsoft",
@@ -166,12 +166,6 @@
       "Source": "Bioconductor",
       "Hash": "2826edf1a5ff7d6ce991ec5ed918ec5f"
     },
-    "Gviz": {
-      "Package": "Gviz",
-      "Version": "1.34.0",
-      "Source": "Bioconductor",
-      "Hash": "d461db897c55d20842451182ac98241f"
-    },
     "Hmisc": {
       "Package": "Hmisc",
       "Version": "4.4-2",
@@ -243,12 +237,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "d57ac35220b39c591388ab3a080f9cbe"
-    },
-    "MotifDb": {
-      "Package": "MotifDb",
-      "Version": "1.32.0",
-      "Source": "Bioconductor",
-      "Hash": "ada9e76d751165e9e5e8ca7329d09012"
     },
     "OrganismDbi": {
       "Package": "OrganismDbi",
@@ -410,12 +398,6 @@
       "Repository": "CRAN",
       "Hash": "8c5e8c58ff4fc8dfc67e24985005159b"
     },
-    "VariantAnnotation": {
-      "Package": "VariantAnnotation",
-      "Version": "1.36.0",
-      "Source": "Bioconductor",
-      "Hash": "84fd273c3800d7a06e9d9b954585a44f"
-    },
     "XML": {
       "Package": "XML",
       "Version": "3.99-0.5",
@@ -488,12 +470,6 @@
       "Version": "2.46.2",
       "Source": "Bioconductor",
       "Hash": "70fd24a776819d31a007251fe9349229"
-    },
-    "biovizBase": {
-      "Package": "biovizBase",
-      "Version": "1.38.0",
-      "Source": "Bioconductor",
-      "Hash": "f2cc4e67a6a9fe8e7900746f3af3a10d"
     },
     "bit": {
       "Package": "bit",
@@ -930,12 +906,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "c637d042178a0f65f9703c8d7f2be996"
-    },
-    "ggbio": {
-      "Package": "ggbio",
-      "Version": "1.38.0",
-      "Source": "Bioconductor",
-      "Hash": "82c5c9aa22be828f8dd6b5889032e1a0"
     },
     "ggmosaic": {
       "Package": "ggmosaic",

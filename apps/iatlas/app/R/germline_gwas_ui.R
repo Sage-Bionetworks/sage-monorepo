@@ -57,7 +57,7 @@ germline_gwas_ui <- function(id){
             width = 12,
             shiny::p("We conducted a GWAS paired with colocalization analyses, with eQTL and sQTL analyses performed in TCGA and GTEx.
                Results with a Colocalization Posterior Probability (CLPP) > 0.01 are summarized in the tables below."),
-            shiny::p("Click on a table row to visualize the plot. The table is updated with available plots in the region displayed at the manhattan plot."),
+            shiny::p("Click on a table row to visualize the plot."),
             shiny::actionLink(ns("method_link_colocalization"), "Click to view method description.")
           ),
           shiny::fluidRow(
