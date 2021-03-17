@@ -22,16 +22,20 @@ germline_gwas_server <- function(id, cohort_obj){
         )
       })
 
-      updateSelectizeInput(session, 'immunefeature',
-                           choices = immune_feat(),
-                           selected = c("Wolf_MHC2_21978456", "Bindea_Th17_cells"), #default to exclude that, as suggested by manuscript authors
-                           server = TRUE)
+      shiny::updateSelectizeInput(session, 'immunefeature',
+                                 choices = immune_feat(),
+                                 selected = c("Wolf_MHC2_21978456", "Bindea_Th17_cells"), #default to exclude that, as suggested by manuscript authors
+                                 server = TRUE)
 
-      output$search_snp <- renderUI({
-        snp_options <- gwas_data() %>% dplyr::filter(!is.na(snp_rsid)) %>% dplyr::pull(snp_rsid)
-        shiny::selectInput(ns("snp_int"), "Click on the plot or search for a SNP id:",
-                           choices = c("", snp_options))
+      snp_options <- reactive({
+        shiny::req(gwas_data())
+        gwas_data() %>% dplyr::filter(!is.na(snp_rsid)) %>% dplyr::pull(snp_rsid)
       })
+
+      shiny::updateSelectizeInput(session, 'snp_int',
+                                 choices = c("", snp_options()),
+                                 selected = "",
+                                 server = TRUE)
 
       subset_gwas <- shiny::reactive({
         if(is.null(input$immunefeature)){

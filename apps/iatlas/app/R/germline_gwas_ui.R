@@ -32,7 +32,7 @@ germline_gwas_ui <- function(id){
          ),
          iatlas.app::plotBox(
            width = 12,
-           igvShiny::igvShinyOutput(ns('igv_plot')) %>%
+           igvShiny::igvShinyOutput(ns('igv_plot'), height = NULL) %>%
              shinycssloaders::withSpinner(.)
          )
         ),
@@ -41,7 +41,9 @@ germline_gwas_ui <- function(id){
           shiny::verticalLayout(
             iatlas.app::optionsBox(
               width = 12,
-              shiny::uiOutput(ns("search_snp"))
+              shiny::selectInput(ns("snp_int"), "Click on the plot or search for a SNP id:",
+                                choices = NULL)
+              #shiny::uiOutput(ns("search_snp"))
             ),
             iatlas.app::messageBox(
               width = 12,
