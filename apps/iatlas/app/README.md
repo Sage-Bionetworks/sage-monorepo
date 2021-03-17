@@ -36,7 +36,7 @@ To run the app locally:
 
 1. Clone this repository
 
-1. Open `shiny-iatlas.Rproj`
+1. Open `iatlas-app.Rproj`
 
 1. Follow the instructions in your console
 
@@ -111,7 +111,7 @@ renv::install("useful_package")
 renv::snapshot()
 ```
 
-Git works will with renv. Once you validate the package should be kept, `git add renv.lock` to the repo and everyone else will automatically install it when they git-pull and re-open their R session or run renv::restore.
+Git works well with renv. Once you validate the package should be kept, `git add renv.lock` to the repo and everyone else will automatically install it when they git-pull and re-open their R session or run renv::restore().
 
 If you decide you don't want to include the package, just `git checkout renv.lock` to reset your dependencies to the point before you made changes.
 
@@ -162,9 +162,14 @@ rsconnect::setAccountInfo(
 )
 ```
 
+### Deploy
+```R
+rsconnect::deployApp()
+```
+
 ## Methods
 
-While many of the results presented in tables and plots are taken directly from IRWG data (including the main **feature matrix** and various feature and group annotations), we compute some values internally. Unless otherwise noted, the following methods/tools were used to compute summary statistics:
+While many of the results presented in tables and plots are taken directly from Immune Response Working Group (IRWG) data (including the main **feature matrix** and various feature and group annotations), we compute some values internally. Unless otherwise noted, the following methods/tools were used to compute summary statistics:
 
 ### Correlation — Spearman's rank-order correlation
 
