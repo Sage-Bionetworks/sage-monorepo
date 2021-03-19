@@ -1,7 +1,7 @@
 
 # iAtlas-App
 
-The iAtlas app is an interactive web portal that provides multiple analysis modules to visualize and explore immune response characterizations across cancer types. The app is hosted on shinyapps.io at [https://isb-cgc.shinyapps.io/shiny-iatlas/](https://isb-cgc.shinyapps.io/shiny-iatlas/) and can also be accessed via the main CRI iAtlas page at [http://www.cri-iatlas.org/](http://www.cri-iatlas.org/).
+The iAtlas app is an interactive web portal that provides multiple analysis modules to visualize and explore immune response characterizations across cancer types. The app is hosted on shinyapps.io at [https://isb-cgc.shinyapps.io/iatlas-app/](https://isb-cgc.shinyapps.io/iatlas-app/) and can also be accessed via the main CRI iAtlas page at [http://www.cri-iatlas.org/](http://www.cri-iatlas.org/).
 
 The portal is built entirely in **R** and **Shiny** using the **RStudio** development environment. Layout and interactivity within the portal are achieved by heavy use of the following packages:
 
@@ -26,8 +26,8 @@ Install package manager:
 Then in the terminal, run:
 
 - xcode-select --install
-- brew install R
 - brew install cairo
+- brew install R or install R .pkg from https://cran.r-project.org/bin/macosx/
 - download and install RStudio: https://rstudio.com/products/rstudio/download
 
 ### Initialize R Packages, Database and run App
