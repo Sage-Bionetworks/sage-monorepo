@@ -95,8 +95,6 @@ Once your pull request has been accepted, our GitLab CI/CD will automatically de
 
 Once you validate everything is working in staging, the staging branch can be merged into master and then deployed to production.
 
-* TODO: expand on the production deployment process
-
 ## Installing and Upgrading Packages
 
 This project uses [renv](https://rstudio.github.io/renv/reference/install.html) to manage packages. The definitive list of required packages and versions is stored in the `renv.lock` file.
