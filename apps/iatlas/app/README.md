@@ -30,7 +30,7 @@ Then in the terminal, run:
 - brew install R or install R .pkg from https://cran.r-project.org/bin/macosx/
 - download and install RStudio: https://rstudio.com/products/rstudio/download
 
-### Initialize R Packages, Database and run App
+### Initialize R Packages and run App
 
 To run the app locally:
 
