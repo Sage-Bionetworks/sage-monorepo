@@ -42,6 +42,8 @@ To run the app locally:
 
 1. Restart R (ctrl+shift+F10)
 
+1. Run the command shiny::runApp() in your console
+
 ## Branches: Staging & Master
 
 We recommend the following workflow. When you are starting a new feature or project:
