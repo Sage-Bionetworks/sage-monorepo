@@ -40,6 +40,8 @@ To run the app locally:
 
 1. Follow the instructions in your console
 
+1. Restart R (ctrl+shift+F10)
+
 ## Branches: Staging & Master
 
 We recommend the following workflow. When you are starting a new feature or project:
