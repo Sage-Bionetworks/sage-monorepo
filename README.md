@@ -129,11 +129,6 @@ And git-commit it once you are sure you want to keep the changes.
 
 You can use renv::upgrade("package-name") to upgrade a package, but it'll always update to the very latest uniless you manually tell it otherwise.
 
-* IMPORTANT: A few of the packages we currently use don't work with the latest versions, so **don't use renv::update to update all packages.**
-* Known upgrade-problems:
-  - don't upgrade shinycssloaders to v0.3.0
-  - don't upgrade plotly to v4.9.2
-
 ### Installing Packages and RsConnect
 
 This application is deployed using rsconnect::deployApp(). As of the current version (0.8.16-9000), rsconnect does not support using the renv.lock file to determin which packages to deploy. Instead, it uses its own till (rsconnect::appDependencies) to detect your app's dependencies from the R source files and the DESCRIPTION file. The good news is it will generally get the correct version, since it'll use the current version you have installed and renv manages that tightly. The bad news is sometimes it won't detect you need a package. Here's how you solve that problem:
