@@ -1,7 +1,7 @@
 
 # iAtlas-App
 
-The iAtlas app is an interactive web portal that provides multiple analysis modules to visualize and explore immune response characterizations across cancer types. The app is hosted on shinyapps.io at [https://isb-cgc.shinyapps.io/shiny-iatlas/](https://isb-cgc.shinyapps.io/shiny-iatlas/) and can also be accessed via the main CRI iAtlas page at [http://www.cri-iatlas.org/](http://www.cri-iatlas.org/).
+The iAtlas app is an interactive web portal that provides multiple analysis modules to visualize and explore immune response characterizations across cancer types. The app is hosted on shinyapps.io at [https://isb-cgc.shinyapps.io/iatlas-app/](https://isb-cgc.shinyapps.io/iatlas-app/) and can also be accessed via the main CRI iAtlas page at [http://www.cri-iatlas.org/](http://www.cri-iatlas.org/).
 
 The portal is built entirely in **R** and **Shiny** using the **RStudio** development environment. Layout and interactivity within the portal are achieved by heavy use of the following packages:
 
@@ -9,59 +9,13 @@ The portal is built entirely in **R** and **Shiny** using the **RStudio** develo
 - [plotly](https://plot.ly/r/)
 - [crosstalk](https://rstudio.github.io/crosstalk/)
 
-## iAtlas-App and iAtlas-Data
-
-This app is spit into two repositories:
-
-- [iatlas-app](https://github.com/CRI-iAtlas/iatlas-app) - for all the shiny-app R code (this repository)
-- [iatlas-data](https://github.com/CRI-iAtlas/iatlas-data) - for all the iatlas-related data, DB-creation and DB-populating code
-
-The easiest way to get start is to clone both repositories, go through the iatlas-data README, then go through this README. More or less this means:
-
-1. install a few dependencies (~30min)
-1. load iatlas-data; auto-install its packages; build the db (~15-75min depending on package install time)
-1. load iatlas-app; auto-install its packages; and run shiny (~5-60min depending on package install time)
-
-You don't need iatlas-data to run iatlas-app if you:
-
-* Already have the database built locally
-* You configure your environment variables to connect directly to the staging or production DB servers
-
-
 ## Install
 
 ### Requirements
 
-- iatlas-data is needed to create and populate the database
-
-  - `git clone https://github.com/CRI-iAtlas/iatlas-data`
-  - follow the instructions in the README
-
-- R: https://www.r-project.org/ - v3.6.2
+- R: https://www.r-project.org/ - v4.0+
 
 - RStudio: https://rstudio.com/products/rstudio/download
-
-- Docker: https://www.docker.com/products/docker-desktop
-
-  Ensure that the location of the repository is shared via docker:
-
-  - Mac: https://docs.docker.com/docker-for-mac/#file-sharing
-
-  - Windows: https://docs.microsoft.com/en-us/archive/blogs/stevelasker/configuring-docker-for-windows-volumes
-
-- git-lfs: https://git-lfs.github.com
-
-  For installation on the various platforms, please see this [git-lfs wiki](https://github.com/git-lfs/git-lfs/wiki/Installation)
-
-  Some feather files are _very_ large. `git-lfs` is used to store these files.
-
-  **Please note**: `git lfs install` _must_ be executed within the repository directory immediately after cloning the repo.
-
-- libpq (postgres): https://www.postgresql.org/download/
-
-- lib cairo: https://www.cairographics.org/ (only required for iAtlas client)
-
-- gfortran (libgfortran): usually installed with gcc
 
 ### MacOS Install instructions
 
@@ -72,26 +26,23 @@ Install package manager:
 Then in the terminal, run:
 
 - xcode-select --install
-- brew install R
 - brew install cairo
-- brew install git-lfs
-- brew install postgres
+- brew install R or install R .pkg from https://cran.r-project.org/bin/macosx/
 - download and install RStudio: https://rstudio.com/products/rstudio/download
-- download and install Docker: https://www.docker.com/products/docker-desktop
 
-> Note: gfortran seems to be a recurring problem for Mac installes on various versions of OSX. Here are some additional resources if the above instructions don't work for you: https://github.com/fxcoudert/gfortran-for-macOS/releases and https://cran.r-project.org/bin/macosx/tools/
-
-### Initialize R Packages, Database and run App
+### Initialize R Packages and run App
 
 To run the app locally:
 
-1. Make sure you've created and populated the local postgres database using the iatlas-data repository (see above)
-
 1. Clone this repository
 
-1. Open `shiny-iatlas.Rproj`
+1. Open `iatlas-app.Rproj`
 
 1. Follow the instructions in your console
+
+1. Restart R (ctrl+shift+F10)
+
+1. Run the command shiny::runApp() in your console
 
 ## Branches: Staging & Master
 
@@ -148,8 +99,6 @@ Once your pull request has been accepted, our GitLab CI/CD will automatically de
 
 Once you validate everything is working in staging, the staging branch can be merged into master and then deployed to production.
 
-* TODO: expand on the production deployment process
-
 ## Installing and Upgrading Packages
 
 This project uses [renv](https://rstudio.github.io/renv/reference/install.html) to manage packages. The definitive list of required packages and versions is stored in the `renv.lock` file.
@@ -164,7 +113,7 @@ renv::install("useful_package")
 renv::snapshot()
 ```
 
-Git works will with renv. Once you validate the package should be kept, `git add renv.lock` to the repo and everyone else will automatically install it when they git-pull and re-open their R session or run renv::restore.
+Git works well with renv. Once you validate the package should be kept, `git add renv.lock` to the repo and everyone else will automatically install it when they git-pull and re-open their R session or run renv::restore().
 
 If you decide you don't want to include the package, just `git checkout renv.lock` to reset your dependencies to the point before you made changes.
 
@@ -181,11 +130,6 @@ And git-commit it once you are sure you want to keep the changes.
 ### Upgrading Packages
 
 You can use renv::upgrade("package-name") to upgrade a package, but it'll always update to the very latest uniless you manually tell it otherwise.
-
-* IMPORTANT: A few of the packages we currently use don't work with the latest versions, so **don't use renv::update to update all packages.**
-* Known upgrade-problems:
-  - don't upgrade shinycssloaders to v0.3.0
-  - don't upgrade plotly to v4.9.2
 
 ### Installing Packages and RsConnect
 
@@ -215,23 +159,14 @@ rsconnect::setAccountInfo(
 )
 ```
 
-## Configuration and Environment Variables
-
-The database connection is configured in the `config.yml` file. We use the [config package](https://github.com/rstudio/config) to load the correct config. See init.R for exactly how this is done. You can also override the config by setting these environment variables:
-
+### Deploy
+```R
+rsconnect::deployApp()
 ```
-DB_NAME=XYZ
-DB_HOST=XYZ
-DB_PORT=123
-DB_USER=XYZ
-DB_PW=XYZ
-```
-
-WARNING! `config.yml` is part of the *public* git repository. Do NOT put sensitive passwords or keys in `config.yml`. Use environment variables for any passwords or keys you do not wish to share publicly.
 
 ## Methods
 
-While many of the results presented in tables and plots are taken directly from IRWG data (including the main **feature matrix** and various feature and group annotations), we compute some values internally. Unless otherwise noted, the following methods/tools were used to compute summary statistics:
+While many of the results presented in tables and plots are taken directly from Immune Response Working Group (IRWG) data (including the main **feature matrix** and various feature and group annotations), we compute some values internally. Unless otherwise noted, the following methods/tools were used to compute summary statistics:
 
 ### Correlation — Spearman's rank-order correlation
 
