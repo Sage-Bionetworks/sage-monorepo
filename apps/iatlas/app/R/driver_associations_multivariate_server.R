@@ -10,8 +10,11 @@ multivariate_driver_server <- function(id, cohort_obj) {
           inputId  = ns("response_choice"),
           label    = "Select or Search for Response Variable",
           selected = "leukocyte_fraction",
-          choices  = create_nested_named_list(
-            cohort_obj()$feature_tbl, values_col = "name"
+          choices  = iatlas.modules::create_nested_named_list(
+            cohort_obj()$feature_tbl,
+            names_col1 = "class",
+            names_col2 = "display",
+            values_col = "name"
           )
         )
       })
@@ -188,7 +191,7 @@ multivariate_driver_server <- function(id, cohort_obj) {
           )
         ))
 
-        clicked_label <- get_values_from_eventdata(eventdata, "key")
+        clicked_label <- iatlas.modules::get_values_from_eventdata(eventdata, "key")
 
         result <-  dplyr::filter(
           volcano_plot_tbl(),

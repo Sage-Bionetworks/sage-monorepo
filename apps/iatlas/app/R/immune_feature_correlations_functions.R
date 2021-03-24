@@ -66,6 +66,11 @@ build_ifc_scatterplot_tbl <- function(tbl, .feature, .group){
             "x"     = .data$feature_value,
             "sample"
         ) %>%
-        create_plotly_label(.data$sample, .data$group, cols = c("x", "y")) %>%
-        dplyr::select("label", "x", "y")
+        iatlas.modules::create_plotly_text(
+            .data$sample,
+            .data$group,
+            cols = c("x", "y"),
+            title = "ParticipantBarcode"
+        ) %>%
+        dplyr::select("label" = "text", "x", "y")
 }

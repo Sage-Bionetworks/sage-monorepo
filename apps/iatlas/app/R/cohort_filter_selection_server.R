@@ -107,7 +107,11 @@ cohort_filter_selection_server <- function(id, dataset) {
         shiny::req(feature_tbl(), clinical_tbl())
         lst <-
           dplyr::bind_rows(feature_tbl(), clinical_tbl()) %>%
-          create_nested_named_list()
+          iatlas.modules::create_nested_named_list(
+            names_col1 = "class",
+            names_col2 = "display",
+            values_col = "feature"
+          )
       })
 
       numeric_element_module_server <- shiny::reactive({
