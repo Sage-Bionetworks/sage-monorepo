@@ -7,7 +7,7 @@
 #' @importFrom dplyr filter mutate
 #' @importFrom rlang .data
 create_group_text_from_eventdata <- function(eventdata, group_tbl){
-    selected_group <- get_values_from_eventdata(eventdata)
+    selected_group <- iatlas.modules::get_values_from_eventdata(eventdata)
     group_tbl %>%
         dplyr::filter(.data$group == selected_group) %>%
         dplyr::mutate(text = paste0(

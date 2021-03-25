@@ -54,7 +54,7 @@ data_info_server <- function(id){
 
       selected_method_tags <- shiny::reactive({
         shiny::req(filtered_feature_tbl())
-        get_unique_values_from_col(
+        iatlas.modules::get_unique_values_from_col(
           filtered_feature_tbl(),
           method_tag
         )

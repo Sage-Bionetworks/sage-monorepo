@@ -6,8 +6,11 @@ univariate_driver_server <- function(id, cohort_obj) {
       ns <- session$ns
 
       response_option_list <- shiny::reactive({
-        create_nested_named_list(
-          cohort_obj()$feature_tbl, values_col = "name"
+        iatlas.modules::create_nested_named_list(
+          cohort_obj()$feature_tbl,
+          names_col1 = "class",
+          names_col2 = "display",
+          values_col = "name"
         )
       })
 
@@ -145,7 +148,7 @@ univariate_driver_server <- function(id, cohort_obj) {
           )
         ))
 
-        clicked_label <- get_values_from_eventdata(eventdata, "key")
+        clicked_label <- iatlas.modules::get_values_from_eventdata(eventdata, "key")
 
         result <-  dplyr::filter(
           volcano_plot_tbl(),
