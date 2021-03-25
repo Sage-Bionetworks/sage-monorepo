@@ -245,8 +245,8 @@ create_graph_json <- function(edges, nodes){
     dplyr::select(
       "source" = "node_friendly1",
       "target" = "node_friendly2",
-      "score",
-      "interaction" = "tag"
+      "interaction" = "tag",
+      "score"
     ) %>%
     as.data.frame()
 
