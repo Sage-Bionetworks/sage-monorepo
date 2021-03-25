@@ -250,7 +250,7 @@ create_graph_json <- function(edges, nodes){
     ) %>%
     as.data.frame()
 
-  nodes <- dplyr::select(nodes, "id", "Type", "FriendlyName")
+  nodes <- dplyr::select(nodes, "id", "Type", "FriendlyName") %>% dplyr::distinct()
 
   cyjShiny::dataFramesToJSON(edges, nodes)
 }
