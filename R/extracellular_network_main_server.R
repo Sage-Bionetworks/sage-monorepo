@@ -102,15 +102,11 @@ extracellular_network_main_server <- function(
         build_ecn_gene_choice_list()
       })
 
-      output$select_genes <- shiny::renderUI({
-        shiny::selectizeInput(
-          ns("selected_genes"),
-          "Select genes of interest (optional)",
-          choices = gene_choice_list(),
-          selected = "geneset:immunomodulator",
-          multiple = TRUE
-        )
-      })
+      shiny::updateSelectizeInput(session, 'selected_genes',
+                                  choices = gene_choice_list(),
+                                  selected = "geneset:immunomodulator",
+                                  server = TRUE)
+
 
       output$select_celltypes <- shiny::renderUI({
         shiny::selectizeInput(
