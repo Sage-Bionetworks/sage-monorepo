@@ -248,18 +248,20 @@ extracellular_network_main_server <- function(
 
       edges_output <- shiny::reactive({
         edges() %>%
+          dplyr::mutate(Concordance = round(score, 3)) %>%
           dplyr::select(
             "From" = "node_display1",
             "From (Friendly Name)" =  "node_friendly1",
             "To" = "node_display2",
             "To (Friendly Name)" = "node_friendly2",
             "Group" = "tag",
-            "Concordance" = "score"
+            "Concordance"
           )
       })
 
       nodes_output <- shiny::reactive({
         filtered_nodes() %>%
+          dplyr::mutate(Abundance = round(Abundance, 3)) %>%
           dplyr::select(
             "Node",
             "Friendly Name" = "FriendlyName",
