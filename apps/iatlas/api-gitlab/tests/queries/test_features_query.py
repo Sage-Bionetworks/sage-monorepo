@@ -113,8 +113,8 @@ def test_features_query_with_feature(client, feature_name, germline_category, ge
         assert type(feature['order']) is int or NoneType
         assert feature['unit'] in unit_enum.enums or type(
             feature['unit']) is NoneType
-        assert feature['germline_module'] == germline_module
-        assert feature['germline_category'] == germline_category
+        assert type(feature['germline_module']) is str or NoneType
+        assert type(feature['germline_category']) is str or NoneType
         assert isinstance(samples, list)
         assert len(samples) > 0
         # Don't need to iterate through every result.
