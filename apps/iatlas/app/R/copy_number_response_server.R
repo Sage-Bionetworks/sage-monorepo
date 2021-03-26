@@ -6,8 +6,11 @@ copy_number_response_server <- function(id, cohort_obj) {
       ns <- session$ns
 
       feature_class_list <- shiny::reactive({
-        create_nested_named_list(
-          cohort_obj()$feature_tbl, values_col = "name"
+        iatlas.modules::create_nested_named_list(
+          cohort_obj()$feature_tbl,
+          names_col1 = "class",
+          names_col2 = "display",
+          values_col = "name"
         )
       })
 
