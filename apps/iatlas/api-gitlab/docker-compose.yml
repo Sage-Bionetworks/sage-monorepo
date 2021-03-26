@@ -21,6 +21,7 @@ services:
       args:
         pythonImageVersion: ${PYTHON_IMAGE_VERSION}
     container_name: iatlas-api-dev
+    image: iatlas-api:dev
     ports:
       - ${FLASK_RUN_PORT}:${FLASK_RUN_PORT}
       - ${SNAKEVIZ_PORT}:${SNAKEVIZ_PORT}
