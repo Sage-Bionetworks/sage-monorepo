@@ -12,7 +12,12 @@ model_selection_server <- function(
       # numeric covariate ui --------------------------------------------------
 
       numerical_covariate_list <- shiny::reactive({
-        create_nested_named_list(numerical_covariate_tbl())
+        iatlas.modules::create_nested_named_list(
+          numerical_covariate_tbl(),
+          names_col1 = "class",
+          names_col2 = "display",
+          values_col = "feature"
+        )
       })
 
       numeric_covariate_module <- shiny::reactive({
@@ -79,7 +84,12 @@ model_selection_server <- function(
       # categorical covariate ui ----------------------------------------------
 
       categorical_covariate_list <- shiny::reactive({
-        create_nested_named_list(categorical_covariate_tbl())
+        iatlas.modules::create_nested_named_list(
+          categorical_covariate_tbl(),
+          names_col1 = "class",
+          names_col2 = "display",
+          values_col = "feature"
+        )
       })
 
       categorical_covariate_module <- shiny::reactive({
