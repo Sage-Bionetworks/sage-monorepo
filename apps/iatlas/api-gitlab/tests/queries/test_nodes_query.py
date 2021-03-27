@@ -70,7 +70,38 @@ def common_query_builder():
     return f
 
 
-def test_nodes_query_with_passed_data_set(client, common_query_builder, data_set):
+@pytest.fixture(scope='module')
+def common_query(common_query_builder):
+    return common_query_builder("""{
+        items { name }
+        paging {
+            page
+            pages
+            total
+            returned
+        }
+    }""")
+
+
+def test_nodes_query_with_passed_data_set(client, common_query, data_set):
+    response = client.post(
+        '/api', json={'query': common_query, 'variables': {'paging': None, 'dataSet': [data_set]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+    paging = page['paging']
+
+    #assert paging['page'] == 1
+    assert type(paging['pages']) is int
+    assert type(paging['total']) is int
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        assert type(result['name']) is str
+
+
+'''
+def test_nodes_query_with_passed_data_set2(client, common_query_builder, data_set):
     query = common_query_builder("""{
                                     items { name }
                                     paging {
@@ -93,6 +124,7 @@ def test_nodes_query_with_passed_data_set(client, common_query_builder, data_set
     assert len(results) > 0
     for result in results[0:2]:
         assert type(result['name']) is str
+'''
 
 
 def test_nodes_query_with_passed_related(client, common_query_builder, related):
