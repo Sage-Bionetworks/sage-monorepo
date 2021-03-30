@@ -14,8 +14,8 @@ germline_heritability_ui <- function(id){
             shiny::selectizeInput(ns("parameter"), "Subset by",
                                   choices = c("Ancestry" = "cluster",
                                               "Immune Feature" = "feature_display",
-                                              "Immune Category" = "category",
-                                              "Immune Module" = "module"
+                                              "Immune Category" = "feature_germline_category",
+                                              "Immune Module" = "feature_germline_module"
                                   ),
                                   selected = "Ancestry"),
             shiny::uiOutput(ns("selection_options")),
@@ -27,8 +27,8 @@ germline_heritability_ui <- function(id){
                                   choices = list("V(Genotype)/Vp" = "variance",
                                                  "LRT p-value" = "p_value",
                                                  "LRT FDR" = "fdr",
-                                                 "Immune Trait Category" = "category",
-                                                 "Immune Trait Module" = "module",
+                                                 "Immune Trait Category" = "feature_germline_category",
+                                                 "Immune Trait Module" = "feature_germline_module",
                                                  "Ancestry" = "cluster"
                                   ),
                                   selected = "variance")

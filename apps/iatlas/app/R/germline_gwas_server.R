@@ -14,7 +14,7 @@ germline_gwas_server <- function(id, cohort_obj){
       })
 
       immune_feat <- reactive({
-        iatlas.app::create_nested_named_list(
+        iatlas.modules::create_nested_named_list(
           gwas_data(),
           names_col1 = "feature_germline_category",
           names_col2 = "feature_display",

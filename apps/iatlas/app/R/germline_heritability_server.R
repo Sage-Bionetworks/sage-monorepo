@@ -20,14 +20,14 @@ germline_heritability_server <- function(id, cohort_obj){
 
         if(input$parameter == "feature_display"){
           opt <- heritability() %>%
-            dplyr::select(feature_display,category) %>%
-            dplyr::group_by(category) %>%
+            dplyr::select(feature_display,feature_germline_category) %>%
+            dplyr::group_by(feature_germline_category) %>%
             tidyr::nest(data = c(feature_display))%>%
             dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
             tibble::deframe()
         }
-        if(input$parameter == "category") opt <- unique(heritability()$category)
-        if(input$parameter == "module") opt <- unique(heritability()$module)
+        if(input$parameter == "feature_germline_category") opt <- unique(heritability()$feature_germline_category)
+        if(input$parameter == "feature_germline_module") opt <- unique(heritability()$feature_germline_module)
 
         shiny::selectizeInput(ns("group"), "Show associated results for", choices = opt, selected = opt[4])
 
@@ -65,7 +65,6 @@ germline_heritability_server <- function(id, cohort_obj){
                                dplyr::arrange(.[[input$order_bars]], variance))$ylabel %>%
           as.factor()
 
-
         hdf() %>%
           dplyr::mutate('Neg_log10_p_value' = -log10(p_value)) %>% #changing column name to legend title display
           create_barplot_horizontal(
@@ -75,7 +74,7 @@ germline_heritability_server <- function(id, cohort_obj){
             error_col = "se",
             key_col = NA,
             color_col = "Neg_log10_p_value",
-            label_col = "label",
+            label_col = "text",
             xlab = "Heritability",
             ylab = "",
             order_by = plot_levels,
