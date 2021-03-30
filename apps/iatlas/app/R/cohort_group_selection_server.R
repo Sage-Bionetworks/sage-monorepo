@@ -134,7 +134,7 @@ cohort_group_selection_server <- function(id, selected_dataset) {
         shiny::selectInput(
           inputId = ns("bin_immune_feature_choice"),
           label = "Select or Search for feature",
-          choices = create_nested_named_list(
+          choices = iatlas.modules::create_nested_named_list(
             feature_bin_tbl(), values_col = "name"
           )
         )
