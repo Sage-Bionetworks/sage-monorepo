@@ -9,19 +9,20 @@ germline_rarevariants_server <- function(id, cohort_obj){
         iatlas.api.client::query_rare_variant_pathway_associations(datasets = "TCGA")
       })
 
-      output$features <- renderUI({
-        trait_choices <- iatlas.app::create_nested_named_list(
-                            rv_data(),
-                            names_col1 = "feature_germline_category",
-                            names_col2 = "feature_display",
-                            values_col = "feature_name"
-                          )
 
-        shiny::selectInput(ns("feature"),
-                           "Search and select Immune Trait",
-                           choices = trait_choices,
-                           selected = trait_choices[1])
+      trait_choices <- reactive({
+        iatlas.modules::create_nested_named_list(
+                          rv_data(),
+                          names_col1 = "feature_germline_category",
+                          names_col2 = "feature_display",
+                          values_col = "feature_name"
+                        )
       })
+
+      shiny::updateSelectizeInput(session, 'feature',
+                                  choices = trait_choices(),
+                                  selected = "Bindea_CD8_T_cells",
+                                  server = TRUE)
 
       selected_data <- reactive({
         rv_data() %>%

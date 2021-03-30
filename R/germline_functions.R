@@ -30,10 +30,10 @@ create_heritability_df <- function(
         fdr <= 0.1 ~"†",
         fdr > 0.1 ~ ""
       )) %>%
-      iatlas.app::create_plotly_label(
-        ., paste(.$feature_display, "- ", ancestry_df[cluster], "Ancestry"),
-        paste("\n Immune Trait Category:",.$feature_germline_category, "\n Immune Trait Module:", .$feature_germline_module),
-        c("variance", "se", "p_value","fdr"),
+      iatlas.modules::create_plotly_text(
+        paste(.data$feature_display, "- ", ancestry_df[cluster], "Ancestry"),
+        paste("\n Immune Trait Category:",.data$feature_germline_category, "\n Immune Trait Module:", .data$feature_germline_module),
+        cols = c("variance", "se", "p_value","fdr"),
         title = "Immune Trait"
       )
 

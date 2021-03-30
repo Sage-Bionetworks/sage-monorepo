@@ -13,7 +13,10 @@ germline_rarevariants_ui <- function(id){
       width = 12,
       shiny::column(
         width = 8,
-        shiny::uiOutput(ns("features"))
+        shiny::selectizeInput(ns("feature"),
+                           "Search and select Immune Trait",
+                           choices = NULL,
+                           multiple = FALSE)
       ),
       shiny::column(
         width = 4,
