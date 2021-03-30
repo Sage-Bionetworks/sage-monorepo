@@ -85,23 +85,59 @@ def common_query(common_query_builder):
 
 def test_nodes_query_with_passed_data_set(client, common_query, data_set):
     response = client.post(
-        '/api', json={'query': common_query, 'variables': {'paging': None, 'dataSet': [data_set]}})
+        '/api', json={'query': common_query, 'variables': {'dataSet': [data_set]}})
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
     results = page['items']
     paging = page['paging']
 
-    #assert paging['page'] == 1
+    assert type(paging['page']) is NoneType
     assert type(paging['pages']) is int
     assert type(paging['total']) is int
+    assert type(paging['returned']) is int
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
         assert type(result['name']) is str
 
 
-'''
-def test_nodes_query_with_passed_data_set2(client, common_query_builder, data_set):
+def test_nodes_query_with_passed_data_set_page2(client, common_query_builder, data_set):
+
+    query = common_query_builder("""{
+                                    items { name }
+                                    paging {
+                                        endCursor
+                                        startCursor
+                                    }
+                                }""")
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'dataSet': [data_set], "paging": {"limit": 10}}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+    paging = page['paging']
+    assert type(paging['endCursor']) is str
+    assert type(paging['startCursor']) is str
+    assert isinstance(results, list)
+    assert len(results) == 10
+    for result in results[0:2]:
+        assert type(result['name']) is str
+
+    response = client.post(
+        '/api', json={'query': query, 'variables': {'dataSet': [data_set], "paging": {"limit": 10, "after": paging['endCursor']}}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+    paging = page['paging']
+    assert type(paging['startCursor']) is str
+    assert type(paging['endCursor']) is str
+    assert isinstance(results, list)
+    assert len(results) == 10
+    for result in results[0:2]:
+        assert type(result['name']) is str
+
+
+def test_nodes_query_with_passed_data_set_offset(client, common_query_builder, data_set):
     query = common_query_builder("""{
                                     items { name }
                                     paging {
@@ -124,7 +160,6 @@ def test_nodes_query_with_passed_data_set2(client, common_query_builder, data_se
     assert len(results) > 0
     for result in results[0:2]:
         assert type(result['name']) is str
-'''
 
 
 def test_nodes_query_with_passed_related(client, common_query_builder, related):
