@@ -28,7 +28,7 @@ def resolve_nodes(
     max_results = 12_000
     paging = paging if paging else Paging.DEFAULT
     Paging.MAX_LIMIT = Paging.MAX_LIMIT if Paging.MAX_LIMIT < max_results else max_results
-    paging['first'] = paging['first'] if paging['first'] < max_results else max_results
+    #paging['first'] = paging['first'] if paging['first'] < max_results else max_results
 
     query, count_query = build_node_request(
         requested, data_set_requested, feature_requested, gene_requested, data_set=dataSet, distinct=distinct, entrez=entrez, feature=feature, feature_class=featureClass, gene_type=geneType, max_score=maxScore, min_score=minScore, network=network, related=related, paging=paging, tag=tag)
