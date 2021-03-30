@@ -57,7 +57,11 @@ extracellular_network_main_ui <- function(id){
           ),
 
           shiny::uiOutput(ns("select_celltypes")),
-          shiny::uiOutput(ns("select_genes")),
+          shiny::selectizeInput(
+            ns("selected_genes"),
+            "Select genes of interest (optional)",
+            choices = NULL,
+            multiple = TRUE),
 
           shiny::div(
             class = "form-group shiny-input-container",
