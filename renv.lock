@@ -1121,15 +1121,15 @@
     },
     "igvShiny": {
       "Package": "igvShiny",
-      "Version": "1.3.2",
+      "Version": "1.3.4",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteUsername": "heimannch",
+      "RemoteUsername": "paul-shannon",
       "RemoteRepo": "igvShiny",
       "RemoteRef": "master",
-      "RemoteSha": "ea8766e73bea9a90ef5e74e594711ae0bbf97738",
-      "Hash": "d88a81ca206719410330403eeeaad5cc"
+      "RemoteSha": "ededfaec5447633d7ff06fcf61f8b6c4ac7b17b0",
+      "Hash": "a4d6a057f27c92c503ca45f2600cc4ca"
     },
     "ini": {
       "Package": "ini",
