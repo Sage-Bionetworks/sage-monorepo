@@ -25,6 +25,8 @@ Imports:
     devtools,
     dplyr,
     DT,
+    feather,
+    ghql,
     forcats,
     ggplot2,
     ggmosaic,
@@ -33,6 +35,7 @@ Imports:
     grImport2,
     iatlas.api.client,
     iatlas.modules,
+    igvShiny,
     ImmuneSubtypeClassifier,
     magrittr,
     plotly,
@@ -63,6 +66,7 @@ Remotes:
     CRI-iAtlas/cyjShiny@master, 
     th86/concordanceIndex@master,
     ropensci/plotly@master,
-    rstudio/rsconnect@master 
+    rstudio/rsconnect@master,
+    paul-shannon/igvShiny@master 
 
 
