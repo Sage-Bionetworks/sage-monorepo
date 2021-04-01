@@ -60,6 +60,7 @@ get_selected_celltypes <- function(celltype_input_list){
 
 get_gene_nodes <- function(
   stratify,
+  dataset,
   genes,
   tags,
   stratified_tags,
@@ -68,7 +69,7 @@ get_gene_nodes <- function(
   n_tags <- find_n_tags(stratify)
   nodes <-
     iatlas.api.client::query_gene_nodes(
-      datasets = "TCGA",
+      datasets = dataset,
       network = "extracellular_network",
       entrez = genes,
       tags = tags,
@@ -97,6 +98,7 @@ get_gene_nodes <- function(
 
 get_feature_nodes <- function(
   stratify,
+  dataset,
   features,
   tags,
   stratified_tags,
@@ -105,7 +107,7 @@ get_feature_nodes <- function(
   n_tags <- find_n_tags(stratify)
   nodes <-
     iatlas.api.client::query_feature_nodes(
-      datasets = "TCGA",
+      datasets = dataset,
       network = "extracellular_network",
       features = features,
       tags = tags,

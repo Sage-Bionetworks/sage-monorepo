@@ -131,6 +131,7 @@ extracellular_network_main_server <- function(
       gene_nodes <- shiny::eventReactive(input$calculate_button, {
         get_gene_nodes(
           stratify(),
+          cohort_obj()$dataset,
           selected_genes(),
           input$group_selected,
           input$stratified_group_selected,
@@ -141,6 +142,7 @@ extracellular_network_main_server <- function(
       feature_nodes <- shiny::eventReactive(input$calculate_button, {
         get_feature_nodes(
           stratify(),
+          cohort_obj()$dataset,
           selected_celltypes(),
           input$group_selected,
           input$stratified_group_selected,
