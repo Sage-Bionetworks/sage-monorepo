@@ -12,21 +12,22 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests:
-    testthat (>= 3.0.0)
+    crayon,
+    devtools,
+    rsconnect,
+    testthat (>= 3.0.0),
+    usethis
 Config/testthat/edition: 3
 RoxygenNote: 7.1.1
 biocViews:
 Imports:
     arrow,
+    broom,
     concordanceIndex,
-    config,
-    crayon,
     cyjShiny,
-    devtools,
+    data.table,
     dplyr,
     DT,
-    feather,
-    ghql,
     forcats,
     ggplot2,
     ggmosaic,
@@ -37,6 +38,7 @@ Imports:
     iatlas.modules,
     igvShiny,
     ImmuneSubtypeClassifier,
+    lazyeval,
     magrittr,
     plotly,
     purrr,
@@ -44,7 +46,6 @@ Imports:
     readr,
     renv,
     rlang,
-    rsconnect,
     shiny,
     shinycssloaders,
     shinydashboard,
