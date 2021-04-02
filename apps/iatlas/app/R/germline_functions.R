@@ -5,7 +5,9 @@
 #' @param heritablity_data A tibble
 #' @param parameter Parameter to be used for selection of results (eg, ancestry cluster, immune feature)
 #' @param group Specific group, in the selected parameter, to be displayed (eg. European - ancestry cluster, NK cells - immune feature)
+#' @param ancestry_labels A list
 #' @param pval_thres Maximun p-value to be included
+#'
 #' @importFrom magrittr %>%
 
 create_heritability_df <- function(
@@ -27,7 +29,7 @@ create_heritability_df <- function(
         fdr <= 0.001 ~"***",
         fdr <= 0.01 ~"**",
         fdr <= 0.05 ~ "*",
-        fdr <= 0.1 ~"†",
+        fdr <= 0.1 ~"+",
         fdr > 0.1 ~ ""
       )) %>%
       iatlas.modules::create_plotly_text(
@@ -60,7 +62,7 @@ format_heritability_plot <- function(p, hdf, fdr = FALSE){
                                     yref = "y",
                                     showarrow = F,
                                     font=list(color='black')) %>%
-            plotly::add_annotations( text="LRT FDR \n † <= 0.1 \n * <= 0.05 \n ** <= 0.01 \n *** <= 0.001", xref="paper", yref="paper",
+            plotly::add_annotations( text="LRT FDR \n + <= 0.1 \n * <= 0.05 \n ** <= 0.01 \n *** <= 0.001", xref="paper", yref="paper",
                                      x=1.03, xanchor="left",
                                      y=0, yanchor="bottom",
                                      legendtitle=TRUE, showarrow=FALSE )
