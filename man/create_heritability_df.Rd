@@ -20,6 +20,8 @@ create_heritability_df(
 \item{group}{Specific group, in the selected parameter, to be displayed (eg. European - ancestry cluster, NK cells - immune feature)}
 
 \item{pval_thres}{Maximun p-value to be included}
+
+\item{ancestry_labels}{A list}
 }
 \description{
 Prepare heritability tibble for plotting
