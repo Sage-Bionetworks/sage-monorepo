@@ -18,6 +18,7 @@ RoxygenNote: 7.1.1
 biocViews:
 Imports:
     arrow,
+    broom,
     concordanceIndex,
     config,
     crayon,
@@ -37,6 +38,7 @@ Imports:
     iatlas.modules,
     igvShiny,
     ImmuneSubtypeClassifier,
+    lazyeval,
     magrittr,
     plotly,
     purrr,
