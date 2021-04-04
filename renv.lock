@@ -1983,10 +1983,15 @@
     },
     "usethis": {
       "Package": "usethis",
-      "Version": "2.0.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "360e904f9e623286e1a0c6ca0a98c5f6"
+      "Version": "2.0.1.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "r-lib",
+      "RemoteRepo": "usethis",
+      "RemoteRef": "master",
+      "RemoteSha": "a40714fba2fa9adf45d3e12f73ffe941eb799423",
+      "Hash": "caad262147459edd834d09ebd56d6a28"
     },
     "utf8": {
       "Package": "utf8",
