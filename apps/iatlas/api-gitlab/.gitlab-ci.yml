@@ -1,5 +1,7 @@
 variables:
   CI: "1"
+  # Workaround for locally issued TLS certs
+  DOCKER_TLS_CERTDIR: ""
   DOCKER_IMAGE_TAG_STAGING: ${CI_COMMIT_SHORT_SHA}-staging
   DOCKER_IMAGE_TAG_PROD: ${CI_COMMIT_SHORT_SHA}
 
