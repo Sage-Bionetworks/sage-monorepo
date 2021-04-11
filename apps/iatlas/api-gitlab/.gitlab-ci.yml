@@ -154,7 +154,6 @@ tests:coverage-report-prod:
 pages:
   tags:
     - staging
-    - prod
   only:
     - merge_requests
   except:
