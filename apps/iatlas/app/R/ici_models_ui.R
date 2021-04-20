@@ -11,8 +11,8 @@ ici_models_ui <- function(id){
       p("Train and run multivariable regression models with cross-validation on ICI genomics and immunogenomics data.")
     ),
     sectionBox(
-      title = "Multivariable Models"
-      #ici_hazard_ratio_main_ui(ns("ici_hazard_ratio_main"))
+      title = "Multivariable Models",
+      ici_models_train_ui(ns("ici_models_train"))
     )
   )
 }
