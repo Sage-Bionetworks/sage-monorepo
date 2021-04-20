@@ -5,8 +5,8 @@ ici_models_server <- function(
     id,
     function(input, output, session) {
 
-      ici_hazard_ratio_main_server(
-        "ici_hazard_ratio_main"
+      ici_models_train_server(
+        "ici_models_train"
       )
     }
   )
