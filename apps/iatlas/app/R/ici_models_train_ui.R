@@ -44,7 +44,10 @@ ici_models_train_ui <- function(id){
       )
     ),#optionsBox
     plotBox(
-      width = 24
+      width = 24,
+      DT::dataTableOutput(ns("results")),
+      plotly::plotlyOutput(ns("plot_coef")) %>%
+        shinycssloaders::withSpinner()
     ),
     optionsBox(
       width = 24,
@@ -55,6 +58,29 @@ ici_models_train_ui <- function(id){
       shiny::column(
         width = 3,
         shiny::actionButton(ns("compute_test"), "Run model in the test dataset(s)")
+      )
+    ),
+    tableBox(
+      width = 24,
+      shiny::column(
+        width = 6,
+        DT::dataTableOutput(ns("confusion_matrix"))
+      ),
+      shiny::column(
+        width = 6,
+        textOutput(ns("accuracy"))
+      )
+    ),
+    plotBox(
+      width = 24,
+      shiny::column(
+        width = 6,
+        plotOutput(ns("roc"))
+      ),
+      shiny::column(
+        width = 6,
+        uiOutput(ns("km_plots")) %>%
+          shinycssloaders::withSpinner()
       )
     )
   )
