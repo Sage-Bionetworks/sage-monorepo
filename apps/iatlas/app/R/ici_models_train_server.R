@@ -18,7 +18,7 @@ ici_models_train_server <- function(
           sortable::add_rank_list(
             text = "Datasets available",
             labels = lapply(
-              lapply(names(datasets_options), function(x) paste(list_format, x, "</p>")),
+              lapply(names(datasets_options_train), function(x) paste(list_format, x, "</p>")),
               shiny::HTML),
             input_id = ns("datasets")
           ),
@@ -33,14 +33,49 @@ ici_models_train_server <- function(
         )
       })
 
-      predictors <- reactive({
-        c(colnames(ioresponse_data$fmx_df), colnames(ioresponse_data$im_expr))
+      immunefeatures_choices <-  shiny::reactive({
+
+        #immunefeatures
+        ioresponse_data$feature_df %>%
+          dplyr::filter(VariableType == "Numeric" & `Variable Class` != "NA") %>%
+          dplyr::select(
+            INTERNAL = FeatureMatrixLabelTSV,
+            DISPLAY = FriendlyLabel,
+            CLASS = `Variable Class`)
       })
 
-      shiny::updateSelectizeInput(session, 'train_predictors',
-                           choices = colnames(ioresponse_data$im_expr),
-                           #selected = predictors()[19:25],
-                           server = TRUE)
+      gene_choices <- shiny::reactive({
+        features <- iatlas.api.client::query_immunomodulators() %>%
+            dplyr::select(
+              "feature_name" = "entrez",
+              "feature_display" = "hgnc",
+              "Gene Family" = "gene_family",
+              "Gene Function" = "gene_function",
+              "Immune Checkpoint" = "immune_checkpoint",
+              "Super Category" = "super_category"
+            )
+
+          features %>%
+            filter(feature_display %in% colnames(ioresponse_data$im_expr)) %>%
+            mutate(INTERNAL = feature_display) %>%
+            dplyr::select(
+              INTERNAL,
+              DISPLAY = feature_display,
+              CLASS = `Gene Family`
+            )
+      })
+
+      predictors <- reactive({
+        c(immunefeatures_choices() %>% iatlas.app::create_nested_list_by_class(),
+          gene_choices() %>% iatlas.app::create_nested_list_by_class())
+      })
+
+      observe({shiny::updateSelectizeInput(session, 'train_predictors',
+                                  label = "Select predictors",
+                                  choices = predictors(),#c(immunefeatures_choices(), gene_choices()),
+                                  selected = NULL,
+                                  server = TRUE)
+      })
 
       train_ds <- reactive({
         get_dataset_id(input$train)
@@ -106,6 +141,8 @@ ici_models_train_server <- function(
 
       #Running model
       model_train <- eventReactive(input$compute_train, {
+        shiny::validate(shiny::need(length(input$train_predictors)>1, "Select predictors for model training."))
+        if(!is.na(input$seed_value)) set.seed(input$seed_value)
         run_elastic_net(
           train_df = train_df(),
           response_variable = "Responder",
@@ -114,9 +151,9 @@ ici_models_train_server <- function(
         )
       })
 
-      output$results <- DT::renderDataTable(
+      output$results <- DT::renderDataTable({
         model_train()$results[rownames(model_train()$bestTune),]
-      )
+      })
 
       output$plot_coef <- plotly::renderPlotly({
         plot_df <- data.frame(
@@ -146,16 +183,24 @@ ici_models_train_server <- function(
         )
       })
 
+      ###TEST
       prediction_test <- eventReactive(input$compute_test, {
         predict(model_train(), newdata = test_df())
       })
 
       output$confusion_matrix <- DT::renderDataTable({
         shiny::req(prediction_test())
-        table(
-          test_df()$Responder,
-          prediction_test()
-        )
+        cm <- table(test_df()$Responder, prediction_test()) %>%
+          as.data.frame() %>%
+          tidyr::pivot_wider(names_from = Var2, names_prefix = "Predicted ",values_from = Freq)
+        colnames(cm)[1] <- " "
+
+        DT::datatable(
+          cm,
+          rownames = FALSE,
+          options = list(dom = 't')
+        ) %>%
+          DT::formatStyle(" ", fontWeight = 'bold')
       })
 
       output$accuracy <- renderText({
@@ -165,6 +210,7 @@ ici_models_train_server <- function(
       })
 
       output$roc <- renderPlot({
+        shiny::req(prediction_test())
         rplot <- pROC::roc(
           response = factor(test_df()$Responder,  ordered = TRUE),
           predictor = factor(prediction_test(), ordered = TRUE)
@@ -174,7 +220,7 @@ ici_models_train_server <- function(
 
       #code for km plot
 #
-      all_survival <- reactive({
+      all_survival <- eventReactive(input$compute_test, {
         shiny::req(prediction_test())
         df_km <- merge(cbind(test_df(), prediction = prediction_test()), df_to_model() %>% select(Sample_ID, "OS_time", "OS"), by = "Sample_ID")
 
@@ -201,7 +247,7 @@ ici_models_train_server <- function(
           df = all_survival(),
           confint = TRUE,
           risktable = TRUE,
-          title = test_ds(),
+          title = shiny::isolate(test_ds()),
           group_colors = c("red", "green"),
           facet = TRUE)
       })
@@ -219,7 +265,7 @@ ici_models_train_server <- function(
       })
 
       shiny::observe({
-        lapply(1:length(test_ds()), function(i){
+        lapply(1:length(shiny::isolate(test_ds())), function(i){
           my_dataset <- names(all_survival())[i]
           output[[my_dataset]] <- shiny::renderPlot({
             shiny::req(prediction_test())

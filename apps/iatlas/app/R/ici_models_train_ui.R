@@ -20,6 +20,12 @@ ici_models_train_ui <- function(id){
                            label = "Select training method",
                            choices = "Elastic Net Regression",
                            selected = "Elastic Net Regression"),
+        shiny::splitLayout(
+          shiny::p("Add seed (optional)"),
+          #shiny::checkboxInput(ns("add_seed"), "Add seed", value = FALSE, width = "50%"),
+          shiny::numericInput(ns("seed_value"), NULL, value = NULL, width = "80%")
+        ),
+
         shiny::br(),
         shiny::sliderInput(ns("cv_number"),
                            label = "Number of folds for cross-validation",
@@ -60,25 +66,23 @@ ici_models_train_ui <- function(id){
         shiny::actionButton(ns("compute_test"), "Run model in the test dataset(s)")
       )
     ),
-    tableBox(
-      width = 24,
-      shiny::column(
-        width = 6,
-        DT::dataTableOutput(ns("confusion_matrix"))
-      ),
-      shiny::column(
-        width = 6,
-        textOutput(ns("accuracy"))
+    shiny::column(
+      width = 4,
+      tableBox(
+        width = 24,
+        shiny::p("Test results"),
+        DT::dataTableOutput(ns("confusion_matrix")),
+        shiny::hr(),
+        textOutput(ns("accuracy")),
+        shiny::hr(),
+        plotOutput(ns("roc"))
       )
     ),
-    plotBox(
-      width = 24,
-      shiny::column(
-        width = 6,
-        plotOutput(ns("roc"))
-      ),
-      shiny::column(
-        width = 6,
+    shiny::column(
+      width = 8,
+      plotBox(
+        width = 24,
+        shiny::p("KM plots dividing testing samples by predicted response"),
         uiOutput(ns("km_plots")) %>%
           shinycssloaders::withSpinner()
       )
