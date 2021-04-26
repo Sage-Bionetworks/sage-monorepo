@@ -11,7 +11,8 @@ ici_immune_features_server <- function(
           dplyr::select(
             INTERNAL = FeatureMatrixLabelTSV,
             DISPLAY = FriendlyLabel,
-            CLASS = `Variable Class`)
+            CLASS = `Variable Class`) %>%
+        iatlas.app::create_nested_list_by_class()
       })
 
       ici_distribution_server(

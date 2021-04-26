@@ -1,5 +1,5 @@
 get_dataset_id <- function(ds_labels){
-  sapply(ds_labels, function(x) datasets_options[[x]])
+  sapply(ds_labels, function(x) datasets_options_train[[x]])
 }
 
 normalize_variable <- function(x, is_test = FALSE, train_avg = NULL, train_sd = NULL){
