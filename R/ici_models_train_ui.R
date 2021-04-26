@@ -13,40 +13,55 @@ ici_models_train_ui <- function(id){
         #shiny::p(strong("Select training and testing datasets")),
         shiny::uiOutput(ns("bucket_list"))
       ),
-      shiny::column(
-        width = 3,
-        shiny::br(),
-        shiny::selectInput(ns("train_method"),
-                           label = "Select training method",
-                           choices = "Elastic Net Regression",
-                           selected = "Elastic Net Regression"),
-        shiny::splitLayout(
-          shiny::p("Add seed (optional)"),
-          #shiny::checkboxInput(ns("add_seed"), "Add seed", value = FALSE, width = "50%"),
-          shiny::numericInput(ns("seed_value"), NULL, value = NULL, width = "80%")
-        ),
-
-        shiny::br(),
-        shiny::sliderInput(ns("cv_number"),
-                           label = "Number of folds for cross-validation",
-                           min = 1,
-                           max = 10,
-                           step = 1,
-                           value = 3),
-        shiny::br(),
-        shiny::selectizeInput(ns("train_predictors"),
-                           label = "Select predictors",
-                           choices = NULL,
-                           multiple = TRUE)
-      ),
-      shiny::column(
-        width = 3,
-        shiny::br(),
-        textOutput(ns("samples_summary")),
-        shiny::br(),
-        textOutput(ns("train_summary")),
-        shiny::br(),
-        shiny::actionButton(ns("compute_train"), "Train Model")
+      shiny::fluidRow(
+        shiny::column(
+          width = 3,
+          shiny::selectInput(ns("train_method"),
+                             label = "Select training method",
+                             choices = "Elastic Net Regression",
+                             selected = "Elastic Net Regression"),
+          shiny::splitLayout(
+            shiny::p("Add seed (optional)"),
+            #shiny::checkboxInput(ns("add_seed"), "Add seed", value = FALSE, width = "50%"),
+            shiny::numericInput(ns("seed_value"), NULL, value = NULL, width = "80%")
+          ),
+          shiny::br(),
+          shiny::sliderInput(ns("cv_number"),
+                             label = "Number of folds for cross-validation",
+                             min = 1,
+                             max = 10,
+                             step = 1,
+                             value = 3)
+          ),
+          shiny::column(
+            width = 3,
+            shiny::p(strong("Select predictors")),
+            shiny::selectizeInput(ns("predictors_clinical_data"),
+                                  label = "Clinical Data",
+                                  choices = NULL,
+                                  multiple = TRUE),
+            shiny::selectizeInput(ns("predictors_immunefeatures"),
+                                  label = "Immunefeatures",
+                                  choices = NULL,
+                                  multiple = TRUE),
+            shiny::selectizeInput(ns("predictors_biomarkers"),
+                                  label = "Biomarkers",
+                                  choices = NULL,
+                                  multiple = TRUE),
+            shiny::selectizeInput(ns("predictors_gene"),
+                                  label = "Gene Expression",
+                                  choices = NULL,
+                                  multiple = TRUE)
+          ),
+        shiny::column(
+          width = 6,
+          shiny::hr(),
+          textOutput(ns("samples_summary")),
+          shiny::br(),
+          textOutput(ns("train_summary")),
+          shiny::br(),
+          shiny::actionButton(ns("compute_train"), "Train Model")
+        )
       )
     ),#optionsBox
     plotBox(

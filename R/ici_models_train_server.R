@@ -33,15 +33,28 @@ ici_models_train_server <- function(
         )
       })
 
-      immunefeatures_choices <-  shiny::reactive({
+      clinical_data_choices <- shiny::reactive({
+        ioresponse_data$feature_df %>%
+          dplyr::filter(VariableType == "Numeric" & `Variable Class` == "Clinical data") %>%
+          dplyr::pull("FeatureMatrixLabelTSV")
+      })
 
-        #immunefeatures
+      immunefeatures_choices <-  shiny::reactive({
         ioresponse_data$feature_df %>%
           dplyr::filter(VariableType == "Numeric" & `Variable Class` != "NA") %>%
           dplyr::select(
             INTERNAL = FeatureMatrixLabelTSV,
             DISPLAY = FriendlyLabel,
-            CLASS = `Variable Class`)
+            CLASS = `Variable Class`) %>% iatlas.app::create_nested_list_by_class()
+      })
+
+      biomarkers_choices <- shiny::reactive({
+        ioresponse_data$feature_df %>%
+          dplyr::filter(VariableType == "Numeric" & `Variable Class` == "Predictor - Immune Checkpoint Treatment") %>%
+          dplyr::select(
+            INTERNAL = FeatureMatrixLabelTSV,
+            DISPLAY = FriendlyLabel,
+            CLASS = `Variable Class`) %>% iatlas.app::create_nested_list_by_class()
       })
 
       gene_choices <- shiny::reactive({
@@ -62,20 +75,31 @@ ici_models_train_server <- function(
               INTERNAL,
               DISPLAY = feature_display,
               CLASS = `Gene Family`
-            )
+            ) %>% iatlas.app::create_nested_list_by_class()
       })
 
-      predictors <- reactive({
-        c(immunefeatures_choices() %>% iatlas.app::create_nested_list_by_class(),
-          gene_choices() %>% iatlas.app::create_nested_list_by_class())
-      })
+      observe(shiny::updateSelectizeInput(session, 'predictors_clinical_data',
+                                          choices = clinical_data_choices(),
+                                          selected = NULL,
+                                          server = TRUE))
 
-      observe({shiny::updateSelectizeInput(session, 'train_predictors',
-                                  label = "Select predictors",
-                                  choices = predictors(),#c(immunefeatures_choices(), gene_choices()),
+      observe(shiny::updateSelectizeInput(session, 'predictors_immunefeatures',
+                                  choices = immunefeatures_choices(),
                                   selected = NULL,
-                                  server = TRUE)
-      })
+                                  server = TRUE))
+      observe(shiny::updateSelectizeInput(session, 'predictors_biomarkers',
+                                          choices = biomarkers_choices(),
+                                          selected = NULL,
+                                          server = TRUE))
+
+      observe(shiny::updateSelectizeInput(session, 'predictors_gene',
+                                          choices = gene_choices(),
+                                          selected = NULL,
+                                          server = TRUE))
+
+      predictors <- shiny::reactive(
+        c(input$predictors_clinical_data, input$predictors_immunefeatures, input$predictors_biomarkers, input$predictors_gene)
+      )
 
       train_ds <- reactive({
         get_dataset_id(input$train)
@@ -103,8 +127,8 @@ ici_models_train_server <- function(
       })
 
       output$train_summary <- shiny::renderText({
-        shiny::req(input$train_predictors)
-        paste0("Selected formula: Response to ICI ~ ", paste(input$train_predictors, collapse = " + "))
+        shiny::req(predictors())
+        paste0("Selected formula: Response to ICI ~ ", paste(predictors(), collapse = " + "))
       })
 
       #organizing train and test datasets - subsetting and normalizing
@@ -121,8 +145,8 @@ ici_models_train_server <- function(
           df = df_to_model(),
           train_ds = train_ds(),
           test_ds = test_ds(),
-          variable_to_norm = input$train_predictors,
-          predictors = input$train_predictors,
+          variable_to_norm = input$predictors_gene,
+          predictors = predictors(),
           is_test = FALSE
         )
       })
@@ -133,26 +157,31 @@ ici_models_train_server <- function(
           df = df_to_model(),
           train_ds = train_ds(),
           test_ds = test_ds(),
-          variable_to_norm = input$train_predictors,
-          predictors = input$train_predictors,
+          variable_to_norm = input$predictors_gene,
+          predictors = predictors(),
           is_test = TRUE
         )
       })
 
       #Running model
       model_train <- eventReactive(input$compute_train, {
-        shiny::validate(shiny::need(length(input$train_predictors)>1, "Select predictors for model training."))
+        shiny::validate(shiny::need(length(predictors())>1, "Select predictors for model training."))
         if(!is.na(input$seed_value)) set.seed(input$seed_value)
         run_elastic_net(
           train_df = train_df(),
           response_variable = "Responder",
-          predictors = input$train_predictors,
+          predictors = predictors(),
           n_cv_folds = input$cv_number
         )
       })
 
       output$results <- DT::renderDataTable({
-        model_train()$results[rownames(model_train()$bestTune),]
+        numeric_columns <- colnames(model_train()$results[1, sapply(model_train()$results,is.numeric)])
+        DT::datatable(
+          model_train()$results[rownames(model_train()$bestTune),],
+          rownames = FALSE,
+          options = list(dom = 't')
+        ) %>% DT::formatRound(columns =numeric_columns, digits = 3)
       })
 
       output$plot_coef <- plotly::renderPlotly({
