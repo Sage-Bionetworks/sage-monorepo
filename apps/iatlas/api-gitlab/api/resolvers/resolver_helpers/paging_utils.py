@@ -172,6 +172,7 @@ def process_page(items, count_query, paging, distinct, response_builder, paginat
         pageInfo['pages'] = math.ceil(count / limit)
 
     pageInfo['returned'] = len(items)
+    logger = logging.getLogger('process_page')
     return {
         'items': results,
         'paging': pageInfo
