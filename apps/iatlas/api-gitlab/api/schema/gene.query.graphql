@@ -60,21 +60,3 @@ type SimpleGene {
   "The IO Landscape Name of the gene."
   ioLandscapeName: String
 }
-
-"""
-The "GenesByTag" type
-"""
-type GenesByTag {
-  "The 'characteristics' or description of the tag."
-  characteristics: String
-  "A color to represent the tag as a hex value."
-  color: String
-  "A list of Genes related to the tag."
-  genes: [Gene!]!
-  "A long display name for the tag used in text descriptions."
-  longDisplay: String
-  "The name of the tag."
-  tag: String!
-  "A friendly name for the tag (used in plots)."
-  shortDisplay: String
-}

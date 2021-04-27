@@ -275,34 +275,6 @@ type Query {
   ): Gene!
 
   """
-  The "genesByTag" query
-
-  If no arguments are passed, this will return all genes organized by tag.
-  """
-  genesByTag(
-    "A list of data set names to filter by."
-    dataSet: [String!]
-    "A list of gene entrez ids to filter by."
-    entrez: [Int!]
-    "A list of feature names to filter by."
-    feature: [String!]
-    "A list of feature class names associated with the features to filter by."
-    featureClass: [String!]
-    "A list of gene type names associated with the genes to filter by."
-    geneType: [String!]
-    "The maximum RNA Sequence Expression value related to the genes to look up."
-    maxRnaSeqExpr: Float
-    "The minimum RNA Sequence Expression value related to the genes to look up."
-    minRnaSeqExpr: Float
-    "A list of tag names associated with the data sets to filter by."
-    related: [String!]
-    "A list of sample names associated with the gene (used to look up RNA sequence expressions)."
-    sample: [String!]
-    "A list of tag names associated with the related to filter by."
-    tag: [String!]
-  ): [GenesByTag!]!
-
-  """
   The "geneTypes" query
   """
   geneTypes(

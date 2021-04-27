@@ -11,7 +11,6 @@ from .gene_family_resolver import resolve_gene_family
 from .gene_function_resolver import resolve_gene_function
 from .gene_types_resolver import resolve_gene_types
 from .genes_resolver import resolve_genes
-from .genes_by_tag_resolver import resolve_genes_by_tag
 from .germline_gwas_results_resolver import resolve_germline_gwas_results
 from .heritability_results_resolver import resolve_heritability_results
 from .immune_checkpoint_resolver import resolve_immune_checkpoints
