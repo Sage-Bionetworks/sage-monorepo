@@ -45,7 +45,7 @@ normalize_dataset <- function(df, train_ds, test_ds, variable_to_norm, predictor
 #########################
 run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds){
   print("training model")
-  parameters <- as.formula(paste(response_variable, "~ ", paste0(predictors, collapse = "+")))
+  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
   caret::train(
     parameters, data = train_df, method = "glmnet",
     trControl = caret::trainControl("cv", number = n_cv_folds),

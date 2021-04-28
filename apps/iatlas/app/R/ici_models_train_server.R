@@ -176,6 +176,7 @@ ici_models_train_server <- function(
       })
 
       output$results <- DT::renderDataTable({
+        shiny::req(model_train())
         numeric_columns <- colnames(model_train()$results[1, sapply(model_train()$results,is.numeric)])
         DT::datatable(
           model_train()$results[rownames(model_train()$bestTune),],
@@ -213,6 +214,7 @@ ici_models_train_server <- function(
       })
 
       ###TEST
+
       prediction_test <- eventReactive(input$compute_test, {
         predict(model_train(), newdata = test_df())
       })
@@ -303,6 +305,18 @@ ici_models_train_server <- function(
         })
       })
 
+      observeEvent(input$compute_train,{
+        shinyjs::hide("confusion_matrix")
+        shinyjs::hide("accuracy")
+        shinyjs::hide("roc")
+        shinyjs::hide("km_plots")
+      })
+      observeEvent(input$compute_test,{
+        shinyjs::show("confusion_matrix")
+        shinyjs::show("accuracy")
+        shinyjs::show("roc")
+        shinyjs::show("km_plots")
+      })
     }
   )
 }
