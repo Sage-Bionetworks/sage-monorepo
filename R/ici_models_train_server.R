@@ -216,12 +216,12 @@ ici_models_train_server <- function(
       ###TEST
 
       prediction_test <- eventReactive(input$compute_test, {
-        predict(model_train(), newdata = test_df())
+        iatlas.app::get_testing_data(model_train(), test_df(), test_datasets = test_ds(), survival_data = df_to_model())
       })
 
       output$confusion_matrix <- DT::renderDataTable({
         shiny::req(prediction_test())
-        cm <- table(test_df()$Responder, prediction_test()) %>%
+        cm <- table(test_df()$Responder, prediction_test()$predictions) %>%
           as.data.frame() %>%
           tidyr::pivot_wider(names_from = Var2, names_prefix = "Predicted ",values_from = Freq)
         colnames(cm)[1] <- " "
@@ -234,73 +234,37 @@ ici_models_train_server <- function(
           DT::formatStyle(" ", fontWeight = 'bold')
       })
 
-      output$accuracy <- renderText({
+      output$accuracy <- renderPrint({
         shiny::req(prediction_test())
-        accuracy <- mean(test_df()$Responder == prediction_test())
-        paste("Accuracy: ", accuracy)
+        prediction_test()$accuracy_results
       })
 
       output$roc <- renderPlot({
         shiny::req(prediction_test())
-        rplot <- pROC::roc(
-          response = factor(test_df()$Responder,  ordered = TRUE),
-          predictor = factor(prediction_test(), ordered = TRUE)
-        )
-        plot(rplot, print.auc = TRUE)
+        plot(prediction_test()$roc_plot, print.auc = TRUE)
       })
 
       #code for km plot
-#
-      all_survival <- eventReactive(input$compute_test, {
-        shiny::req(prediction_test())
-        df_km <- merge(cbind(test_df(), prediction = prediction_test()), df_to_model() %>% select(Sample_ID, "OS_time", "OS"), by = "Sample_ID")
-
-        df <- purrr::map(.x = test_ds(), df = df_km, .f= function(dataset, df){
-          dataset_df <- df %>%
-            dplyr::filter(Dataset == dataset)
-
-          build_survival_df(
-            df = dataset_df,
-            group_column = "prediction",
-            group_options = "prediction",
-            time_column = "OS_time"
-          )
-        })
-      })#all_survival
-
-      all_fit <- reactive({
-        purrr::map(all_survival(), function(df) survival::survfit(survival::Surv(time, status) ~ variable, data = df))
-      })
-
-      all_kmplot <- reactive({
-        create_kmplot(
-          fit = all_fit(),
-          df = all_survival(),
-          confint = TRUE,
-          risktable = TRUE,
-          title = shiny::isolate(test_ds()),
-          group_colors = c("red", "green"),
-          facet = TRUE)
-      })
 
       #the KM Plots are stored as a list, so a few adjustments are necessary to plot everything
-      shiny::observe({
+      shiny::observeEvent(input$compute_test,{
+        shiny::req(prediction_test())
         output$km_plots <- renderUI({
           plot_output_list <-
-            lapply(1:length(all_survival()), function(i) {
-              plotname <- names(all_survival())[i]
+            lapply(1:length(prediction_test()$km_plots), function(i) {
+              plotname <- names(prediction_test()$km_plots)[i]
               plotOutput(ns(plotname), height = 600)
             })
           do.call(tagList, plot_output_list)
         })
       })
 
-      shiny::observe({
+      shiny::observeEvent(input$compute_test,{
         lapply(1:length(shiny::isolate(test_ds())), function(i){
-          my_dataset <- names(all_survival())[i]
+          my_dataset <- names(prediction_test()$km_plots)[i]
           output[[my_dataset]] <- shiny::renderPlot({
             shiny::req(prediction_test())
-            all_kmplot()[i]
+            prediction_test()$km_plots[i]
           })
         })
       })
