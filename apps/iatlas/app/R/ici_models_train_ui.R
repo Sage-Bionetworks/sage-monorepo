@@ -22,7 +22,6 @@ ici_models_train_ui <- function(id){
                              selected = "Elastic Net Regression"),
           shiny::splitLayout(
             shiny::p("Add seed (optional)"),
-            #shiny::checkboxInput(ns("add_seed"), "Add seed", value = FALSE, width = "50%"),
             shiny::numericInput(ns("seed_value"), NULL, value = NULL, width = "80%")
           ),
           shiny::br(),
@@ -82,24 +81,21 @@ ici_models_train_ui <- function(id){
       )
     ),
     shiny::column(
-      width = 4,
+      width = 5,
       tableBox(
         width = 24,
         shiny::p("Test results"),
-        DT::dataTableOutput(ns("confusion_matrix")),
-        shiny::hr(),
-        textOutput(ns("accuracy")),
-        shiny::hr(),
-        plotOutput(ns("roc"))
+        verbatimTextOutput(ns("accuracy")),
+        plotOutput(ns("roc")),
+        DT::dataTableOutput(ns("confusion_matrix"))
       )
     ),
     shiny::column(
-      width = 8,
+      width = 7,
       plotBox(
         width = 24,
         shiny::p("KM plots dividing testing samples by predicted response"),
-        uiOutput(ns("km_plots")) %>%
-          shinycssloaders::withSpinner()
+        uiOutput(ns("km_plots"))
       )
     )
   )
