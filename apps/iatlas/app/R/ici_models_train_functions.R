@@ -59,11 +59,35 @@ run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds)
 # Training  results
 #
 
+get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selected_genes, feature_df = ioresponse_data$feature_df){
+
+  predictors <- feature_df %>%
+    dplyr::filter(FeatureMatrixLabelTSV %in% selected_pred) %>%
+    dplyr::select("feature_name" = FeatureMatrixLabelTSV, "feature_display" = FriendlyLabel)
+
+  predictors <- rbind(predictors, data.frame(feature_name = selected_genes, feature_display = selected_genes))
+
+  #Check if any of the selected predictors is missing for a specific dataset (eg, IMVigor210 doesn't have Age data)
+  missing_annot <- purrr::map_dfr(.x = c(train_ds, test_ds), predictor = selected_pred, fmx_df = data_df, function(dataset, predictor, fmx_df){
+    feature <- sapply(data_df %>% dplyr::filter(Dataset == dataset) %>% dplyr::select(predictor), function(x)all(is.na(x))) %>% which() %>% names()
+    if(length(feature)>0) data.frame(feature = feature,
+                                     dataset = dataset,
+                                     missing_all = TRUE,
+                                     n_missing = NA)
+  })
+  #Check if gene expression for a gene is 0 for all samples in a dataset
+
+
+  list(
+   predictors = predictors,
+   missing_annot = missing_annot
+  )
+}
 
 #testing results object
 
 
-get_testing_data <- function(model, test_df, test_datasets, survival_data){
+get_testing_results <- function(model, test_df, test_datasets, survival_data){
   predictions <- predict(model, newdata = test_df)
 
   accuracy_results <- caret::confusionMatrix(predictions, as.factor(test_df$Responder), positive = "Responder")
