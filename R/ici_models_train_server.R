@@ -109,7 +109,6 @@ ici_models_train_server <- function(
         get_dataset_id(input$test)
       })
 
-
       output$samples_summary <- shiny::renderText({
         shiny::req(input$train)
 
@@ -128,7 +127,7 @@ ici_models_train_server <- function(
 
       output$train_summary <- shiny::renderText({
         shiny::req(predictors())
-        paste0("Selected formula: Response to ICI ~ ", paste(predictors(), collapse = " + "))
+        paste0("Selected formula: Response to ICI ~ ", paste(training_obj()$predictors$feature_display, collapse = " + "))
       })
 
       #organizing train and test datasets - subsetting and normalizing
@@ -140,6 +139,23 @@ ici_models_train_server <- function(
           merge(., ioresponse_data$im_expr, by = "Sample_ID")
       })
 
+      training_obj <- reactive({
+        shiny::req(df_to_model(), train_ds(), predictors())
+        get_training_object(
+          data_df = df_to_model(),
+          train_ds = train_ds(),
+          test_ds = test_ds(),
+          selected_pred = predictors(),
+          selected_genes = input$predictors_gene,
+          feature_df = ioresponse_data$feature_df
+        )
+      })
+
+      observe({
+        if(nrow(training_obj()$missing_annot) != 0) shinyjs::disable("compute_train")
+        else shinyjs::enable("compute_train")
+      })
+
       train_df <- eventReactive(input$compute_train,{
         normalize_dataset(
           df = df_to_model(),
@@ -148,18 +164,6 @@ ici_models_train_server <- function(
           variable_to_norm = input$predictors_gene,
           predictors = predictors(),
           is_test = FALSE
-        )
-      })
-
-      test_df <- eventReactive(input$compute_test,{
-        shiny::req(model_train())
-        normalize_dataset(
-          df = df_to_model(),
-          train_ds = train_ds(),
-          test_ds = test_ds(),
-          variable_to_norm = input$predictors_gene,
-          predictors = predictors(),
-          is_test = TRUE
         )
       })
 
@@ -188,10 +192,12 @@ ici_models_train_server <- function(
       output$plot_coef <- plotly::renderPlotly({
         plot_df <- data.frame(
           x = coef(model_train()$finalModel, model_train()$bestTune$lambda)@x,
-          y = coef(model_train()$finalModel,
-                   model_train()$bestTune$lambda)@Dimnames[[1]][coef(model_train()$finalModel, model_train()$bestTune$lambda)@i+1],
+          feature_name = coef(model_train()$finalModel,
+                               model_train()$bestTune$lambda)@Dimnames[[1]][coef(model_train()$finalModel, model_train()$bestTune$lambda)@i+1],
           error = 0
         )
+
+        plot_df <- merge(plot_df, training_obj()$predictors, by = "feature_name") %>% dplyr::select(x, y = feature_display, error)
 
         plot_levels <-levels(reorder(plot_df[["y"]], plot_df[["x"]], sort))
 
@@ -215,8 +221,19 @@ ici_models_train_server <- function(
 
       ###TEST
 
+      test_df <- eventReactive(input$compute_test,{
+        normalize_dataset(
+          df = df_to_model(),
+          train_ds = train_ds(),
+          test_ds = test_ds(),
+          variable_to_norm = input$predictors_gene,
+          predictors = predictors(),
+          is_test = TRUE
+        )
+      })
+
       prediction_test <- eventReactive(input$compute_test, {
-        iatlas.app::get_testing_data(model_train(), test_df(), test_datasets = test_ds(), survival_data = df_to_model())
+        iatlas.app::get_testing_results(model_train(), test_df(), test_datasets = test_ds(), survival_data = df_to_model())
       })
 
       output$confusion_matrix <- DT::renderDataTable({
@@ -269,13 +286,13 @@ ici_models_train_server <- function(
         })
       })
 
-      observeEvent(input$compute_train,{
+      shiny::observeEvent(input$compute_train,{
         shinyjs::hide("confusion_matrix")
         shinyjs::hide("accuracy")
         shinyjs::hide("roc")
         shinyjs::hide("km_plots")
       })
-      observeEvent(input$compute_test,{
+      shiny::observeEvent(input$compute_test,{
         shinyjs::show("confusion_matrix")
         shinyjs::show("accuracy")
         shinyjs::show("roc")
