@@ -236,21 +236,6 @@ ici_models_train_server <- function(
         iatlas.app::get_testing_results(model_train(), test_df(), test_datasets = test_ds(), survival_data = df_to_model())
       })
 
-      output$confusion_matrix <- DT::renderDataTable({
-        shiny::req(prediction_test())
-        cm <- table(test_df()$Responder, prediction_test()$predictions) %>%
-          as.data.frame() %>%
-          tidyr::pivot_wider(names_from = Var2, names_prefix = "Predicted ",values_from = Freq)
-        colnames(cm)[1] <- " "
-
-        DT::datatable(
-          cm,
-          rownames = FALSE,
-          options = list(dom = 't')
-        ) %>%
-          DT::formatStyle(" ", fontWeight = 'bold')
-      })
-
       output$accuracy <- renderPrint({
         shiny::req(prediction_test())
         prediction_test()$accuracy_results
@@ -287,13 +272,11 @@ ici_models_train_server <- function(
       })
 
       shiny::observeEvent(input$compute_train,{
-        shinyjs::hide("confusion_matrix")
         shinyjs::hide("accuracy")
         shinyjs::hide("roc")
         shinyjs::hide("km_plots")
       })
       shiny::observeEvent(input$compute_test,{
-        shinyjs::show("confusion_matrix")
         shinyjs::show("accuracy")
         shinyjs::show("roc")
         shinyjs::show("km_plots")
