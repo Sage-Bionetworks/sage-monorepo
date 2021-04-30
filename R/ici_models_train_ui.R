@@ -86,8 +86,7 @@ ici_models_train_ui <- function(id){
         width = 24,
         shiny::p("Test results"),
         verbatimTextOutput(ns("accuracy")),
-        plotOutput(ns("roc")),
-        DT::dataTableOutput(ns("confusion_matrix"))
+        plotOutput(ns("roc"))
       )
     ),
     shiny::column(
