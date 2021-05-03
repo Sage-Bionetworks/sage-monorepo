@@ -59,7 +59,9 @@ ici_models_train_ui <- function(id){
           shiny::br(),
           textOutput(ns("train_summary")),
           shiny::br(),
-          shiny::actionButton(ns("compute_train"), "Train Model")
+          shiny::actionButton(ns("compute_train"), "Train Model"),
+          shiny::textOutput(ns("missing_data")),
+          shiny::textOutput(ns("missing_sample"))
         )
       )
     ),#optionsBox
