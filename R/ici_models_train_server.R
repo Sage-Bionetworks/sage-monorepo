@@ -140,7 +140,7 @@ ici_models_train_server <- function(
       })
 
       training_obj <- reactive({
-        shiny::req(df_to_model(), train_ds(), predictors())
+        shiny::req(df_to_model(), train_ds(), test_ds(), predictors())
         get_training_object(
           data_df = df_to_model(),
           train_ds = train_ds(),
@@ -152,11 +152,41 @@ ici_models_train_server <- function(
       })
 
       observe({
-        if(nrow(training_obj()$missing_annot) != 0) shinyjs::disable("compute_train")
-        else shinyjs::enable("compute_train")
+        shiny::req(training_obj())
+
+        if(nrow(training_obj()$missing_annot) == 0){
+          shinyjs::enable("compute_train")
+          shinyjs::hide("missing_data")
+          shinyjs::hide("missing_sample")
+        }else{
+          if(any(training_obj()$missing_annot$missing_all == 1)){ #dataset doesn't have annotation for one selected feature
+            shinyjs::disable("compute_train")
+            shinyjs::show("missing_data")
+            output$missing_data <- shiny::renderText({
+              shiny::req(nrow(training_obj()$missing_annot) != 0)
+              missing_all <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == 1))
+              paste("Dataset ", missing_all$dataset, "has no data for ", missing_all$feature,
+                    ". Change the dataset and/or predictor selection to proceed.")})
+          }else{
+            shinyjs::enable("compute_train")
+            shinyjs::hide("missing_data")
+          }
+          if(any(training_obj()$missing_annot$missing_all == 0)){ #samples with missing info for a selected feature
+            shinyjs::show("missing_sample")
+            output$missing_sample <- shiny::renderText({
+              shiny::req(nrow(training_obj()$missing_annot) != 0)
+              missing_some <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == 0))
+              paste("Dataset ", missing_some$dataset, "has ", missing_some$n_missing, " samples with NA info for ", missing_some$feature,
+                    " that will be excluded from modeling.")
+            })
+          }else{
+            shinyjs::hide("missing_sample")
+          }
+        }
       })
 
       train_df <- eventReactive(input$compute_train,{
+        View(training_obj())
         normalize_dataset(
           df = df_to_model(),
           train_ds = train_ds(),
@@ -247,7 +277,6 @@ ici_models_train_server <- function(
       })
 
       #code for km plot
-
       #the KM Plots are stored as a list, so a few adjustments are necessary to plot everything
       shiny::observeEvent(input$compute_test,{
         shiny::req(prediction_test())
@@ -271,7 +300,7 @@ ici_models_train_server <- function(
         })
       })
 
-      shiny::observeEvent(input$compute_train,{
+      shiny::observeEvent(input$compute_train,{#if user creates a new model, testing results from the previous will be hidden
         shinyjs::hide("accuracy")
         shinyjs::hide("roc")
         shinyjs::hide("km_plots")

@@ -69,14 +69,20 @@ get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selec
 
   #Check if any of the selected predictors is missing for a specific dataset (eg, IMVigor210 doesn't have Age data)
   missing_annot <- purrr::map_dfr(.x = c(train_ds, test_ds), predictor = selected_pred, fmx_df = data_df, function(dataset, predictor, fmx_df){
-    feature <- sapply(data_df %>% dplyr::filter(Dataset == dataset) %>% dplyr::select(predictor), function(x)all(is.na(x))) %>% which() %>% names()
-    if(length(feature)>0) data.frame(feature = feature,
-                                     dataset = dataset,
-                                     missing_all = TRUE,
-                                     n_missing = NA)
+    feature <- sapply(data_df %>% dplyr::filter(Dataset == dataset) %>% dplyr::select(predictor), function(x)sum(is.na(x)))
+
+    if(length(feature[feature != 0])>0){
+      n_samples <- nrow(data_df[data_df$Dataset == dataset,])
+      data.frame(feature = names(feature[feature != 0]),
+                 dataset = dataset,
+                 n_missing = feature[feature != 0]) %>%
+        dplyr::mutate(missing_all = dplyr::case_when(
+          n_missing == n_samples ~ 1,
+          TRUE ~ 0
+        ))
+    }
   })
   #Check if gene expression for a gene is 0 for all samples in a dataset
-
 
   list(
    predictors = predictors,
