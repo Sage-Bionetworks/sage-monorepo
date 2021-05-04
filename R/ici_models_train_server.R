@@ -101,36 +101,6 @@ ici_models_train_server <- function(
         c(input$predictors_clinical_data, input$predictors_immunefeatures, input$predictors_biomarkers, input$predictors_gene)
       )
 
-      train_ds <- reactive({
-        get_dataset_id(input$train)
-      })
-
-      test_ds <- reactive({
-        get_dataset_id(input$test)
-      })
-
-      output$samples_summary <- shiny::renderText({
-        shiny::req(input$train)
-
-        training <- ioresponse_data$fmx_df %>%
-          dplyr::filter(Dataset %in% train_ds() & treatment_when_collected == "Pre") %>%
-          nrow()
-
-        testing <- ioresponse_data$fmx_df %>%
-          dplyr::filter(Dataset %in% test_ds() & treatment_when_collected == "Pre") %>%
-          nrow()
-
-        paste("Samples in training set:",training,
-              "Samples in testing set:", testing)
-
-      })
-
-      output$train_summary <- shiny::renderText({
-        shiny::req(predictors())
-        paste0("Selected formula: Response to ICI ~ ", paste(training_obj()$predictors$feature_display, collapse = " + "))
-      })
-
-      #organizing train and test datasets - subsetting and normalizing
 
       df_to_model <- reactive({
         ioresponse_data$fmx_df %>%
@@ -140,20 +110,30 @@ ici_models_train_server <- function(
       })
 
       training_obj <- reactive({
-        shiny::req(df_to_model(), train_ds(), test_ds(), predictors())
+        shiny::req(df_to_model(), input$train, input$test, predictors())
         get_training_object(
           data_df = df_to_model(),
-          train_ds = train_ds(),
-          test_ds = test_ds(),
+          train_ds = input$train,
+          test_ds = input$test,
           selected_pred = predictors(),
           selected_genes = input$predictors_gene,
           feature_df = ioresponse_data$feature_df
         )
       })
 
-      observe({
+      output$samples_summary <- shiny::renderText({
         shiny::req(training_obj())
+        paste("Samples in training set:", nrow(training_obj()$subset_df$train_df),
+              "Samples in testing set:", nrow(training_obj()$subset_df$test_df))
+      })
 
+      output$train_summary <- shiny::renderText({
+        shiny::req(training_obj())
+        paste0("Selected formula: Response to ICI ~ ", paste(training_obj()$predictors$feature_display, collapse = " + "))
+      })
+
+      observe({ #block Train button if one of the datasets is missing annotation for one predictor. Notify number of samples with NA that will be excluded
+        shiny::req(training_obj())
         if(nrow(training_obj()$missing_annot) == 0){
           shinyjs::enable("compute_train")
           shinyjs::hide("missing_data")
@@ -186,11 +166,10 @@ ici_models_train_server <- function(
       })
 
       train_df <- eventReactive(input$compute_train,{
-        View(training_obj())
         normalize_dataset(
           df = df_to_model(),
-          train_ds = train_ds(),
-          test_ds = test_ds(),
+          train_ds = training_obj()$dataset$train,
+          test_ds = training_obj()$dataset$test,
           variable_to_norm = input$predictors_gene,
           predictors = predictors(),
           is_test = FALSE
@@ -227,7 +206,9 @@ ici_models_train_server <- function(
           error = 0
         )
 
-        plot_df <- merge(plot_df, training_obj()$predictors, by = "feature_name") %>% dplyr::select(x, y = feature_display, error)
+        plot_df <- merge(plot_df, training_obj()$predictors, by = "feature_name", all.x = TRUE) %>%
+          dplyr::mutate(feature_display = replace(feature_display, feature_name == "(Intercept)", "(Intercept)")) %>%
+          dplyr::select(x, y = feature_display, error)
 
         plot_levels <-levels(reorder(plot_df[["y"]], plot_df[["x"]], sort))
 
@@ -254,8 +235,8 @@ ici_models_train_server <- function(
       test_df <- eventReactive(input$compute_test,{
         normalize_dataset(
           df = df_to_model(),
-          train_ds = train_ds(),
-          test_ds = test_ds(),
+          train_ds = training_obj()$dataset$train,
+          test_ds = training_obj()$dataset$test,
           variable_to_norm = input$predictors_gene,
           predictors = predictors(),
           is_test = TRUE
@@ -263,7 +244,7 @@ ici_models_train_server <- function(
       })
 
       prediction_test <- eventReactive(input$compute_test, {
-        iatlas.app::get_testing_results(model_train(), test_df(), test_datasets = test_ds(), survival_data = df_to_model())
+        iatlas.app::get_testing_results(model_train(), test_df(), test_datasets = training_obj()$dataset$test, survival_data = df_to_model())
       })
 
       output$accuracy <- renderPrint({
@@ -291,7 +272,7 @@ ici_models_train_server <- function(
       })
 
       shiny::observeEvent(input$compute_test,{
-        lapply(1:length(shiny::isolate(test_ds())), function(i){
+        lapply(1:length(shiny::isolate(training_obj()$dataset$test)), function(i){
           my_dataset <- names(prediction_test()$km_plots)[i]
           output[[my_dataset]] <- shiny::renderPlot({
             shiny::req(prediction_test())
