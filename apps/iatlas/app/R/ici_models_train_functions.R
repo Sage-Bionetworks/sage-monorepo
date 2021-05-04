@@ -61,14 +61,31 @@ run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds)
 
 get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selected_genes, feature_df = ioresponse_data$feature_df){
 
+  #df with train and test
+  dataset_selection <- list(
+    train = get_dataset_id(train_ds),
+    test = get_dataset_id(test_ds)
+  )
+
+  #df with selected predictors and labels
   predictors <- feature_df %>%
     dplyr::filter(FeatureMatrixLabelTSV %in% selected_pred) %>%
     dplyr::select("feature_name" = FeatureMatrixLabelTSV, "feature_display" = FriendlyLabel)
 
   predictors <- rbind(predictors, data.frame(feature_name = selected_genes, feature_display = selected_genes))
 
+  #subset dataset
+  data_bucket <- list(
+    train_df = data_df %>%
+      dplyr::filter(Dataset %in% dataset_selection$train) %>%
+      tidyr::drop_na(any_of(predictors$feature_name)),
+    test_df = data_df %>%
+      dplyr::filter(Dataset %in% dataset_selection$test) %>%
+      tidyr::drop_na(any_of(predictors$feature_name))
+  )
+
   #Check if any of the selected predictors is missing for a specific dataset (eg, IMVigor210 doesn't have Age data)
-  missing_annot <- purrr::map_dfr(.x = c(train_ds, test_ds), predictor = selected_pred, fmx_df = data_df, function(dataset, predictor, fmx_df){
+  missing_annot <- purrr::map_dfr(.x = c(dataset_selection$train, dataset_selection$test), predictor = selected_pred, fmx_df = data_df, function(dataset, predictor, fmx_df){
     feature <- sapply(data_df %>% dplyr::filter(Dataset == dataset) %>% dplyr::select(predictor), function(x)sum(is.na(x)))
 
     if(length(feature[feature != 0])>0){
@@ -82,10 +99,12 @@ get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selec
         ))
     }
   })
-  #Check if gene expression for a gene is 0 for all samples in a dataset
 
+  #normalize train and test, count number of samples in each
   list(
+   dataset = dataset_selection,
    predictors = predictors,
+   subset_df = data_bucket,
    missing_annot = missing_annot
   )
 }
