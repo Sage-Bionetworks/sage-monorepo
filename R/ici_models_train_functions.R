@@ -20,8 +20,8 @@ normalize_dataset <- function(df, train_ds, test_ds, variable_to_norm, predictor
     sd_train <-  NULL
     filter_ds <- train_ds
   }else{
-    avg_train <- colMeans((df %>% dplyr::filter(Dataset %in% train_ds))[,variable_to_norm])
-    sd_train <- apply((df %>% dplyr::filter(Dataset %in% train_ds))[,variable_to_norm], 2, sd)
+    avg_train <- colMeans((df %>% dplyr::filter(Dataset %in% train_ds))[,variable_to_norm, drop = FALSE])
+    sd_train <- apply((df %>% dplyr::filter(Dataset %in% train_ds))[,variable_to_norm, drop = FALSE], 2, sd)
     filter_ds <- test_ds
   }
   df %>%
@@ -42,22 +42,8 @@ normalize_dataset <- function(df, train_ds, test_ds, variable_to_norm, predictor
 
 
 #########################
-# Training Methods
+# Training  parameters
 #########################
-#Elastic Net
-run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds){
-  print("training model")
-  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
-  caret::train(
-    parameters, data = train_df, method = "glmnet",
-    trControl = caret::trainControl("cv", number = n_cv_folds),
-    tuneLength = 15
-  )
-}
-
-#####
-# Training  results
-#
 
 get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selected_genes, feature_df = ioresponse_data$feature_df){
 
@@ -109,25 +95,64 @@ get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selec
   )
 }
 
-#testing results object
 
+#########################
+# Training Methods
+#########################
+#Elastic Net
+run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds){
+  print("training model")
+  cvIndex <- caret::createFolds(y = factor(train_df[[response_variable]]), k = n_cv_folds, returnTrain = TRUE)
+  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
+  caret::train(
+    parameters, data = train_df, method = "glmnet",
+    trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
+    tuneLength = 15
+  )
+}
+
+
+#########################
+# Testing Results
+#########################
 
 get_testing_results <- function(model, test_df, test_datasets, survival_data){
-  predictions <- predict(model, newdata = test_df)
 
-  accuracy_results <- caret::confusionMatrix(predictions, as.factor(test_df$Responder), positive = "Responder")
+  fmx_pred <- purrr::map(.x = test_datasets, function(x){
+    test_df %>%
+      dplyr::filter(Dataset == x) %>%
+      dplyr::mutate(prediction = predict(model, newdata = .))
+  })
+  names(fmx_pred) <- test_datasets
 
-  roc_plot <- pROC::roc(
-    response = factor(test_df$Responder,  ordered = TRUE),
-    predictor = factor(predictions, ordered = TRUE)
-  )
+  accuracy_results <- lapply(fmx_pred, function(x) caret::confusionMatrix(x$prediction, as.factor(x$Responder)))
+
+  roc_plot <- purrr::map(fmx_pred, function(x){
+    rplot <- pROC::roc(
+      response = factor(x$Responder,  ordered = TRUE),
+      predictor = factor(x$prediction, ordered = TRUE),
+      auc = TRUE
+    )
+    pROC::ggroc(rplot, print.auc = TRUE)
+  })
+
+
+  # predictions <- predict(model, newdata = test_df)
+  #
+  # accuracy_results <- caret::confusionMatrix(predictions, as.factor(test_df$Responder), positive = "Responder")
+  #
+  # roc_plot <- pROC::roc(
+  #   response = factor(test_df$Responder,  ordered = TRUE),
+  #   predictor = factor(predictions, ordered = TRUE)
+  # )
 
   #data for KM plot
-  df_km <- merge(cbind(test_df, prediction = predictions), survival_data %>% select(Sample_ID, "OS_time", "OS"), by = "Sample_ID")
+  #df_km <- merge(cbind(test_df, prediction = predictions), survival_data %>% select(Sample_ID, "OS_time", "OS"), by = "Sample_ID")
 
-  surv_df <- purrr::map(.x = test_datasets, df = df_km, .f= function(dataset, df){
+  surv_df <- purrr::map(.x = fmx_pred, df = survival_data, .f= function(dataset, df){
     dataset_df <- df %>%
-      dplyr::filter(Dataset == dataset)
+      select(Sample_ID, OS, OS_time, PFI_1, PFI_time_1) %>%
+      merge(., dataset, by = "Sample_ID")
 
     build_survival_df(
       df = dataset_df,
@@ -140,7 +165,6 @@ get_testing_results <- function(model, test_df, test_datasets, survival_data){
   all_fit <- purrr::map(surv_df,
                         function(df) survival::survfit(survival::Surv(time, status) ~ variable, data = df))
 
-
   all_kmplot <- create_kmplot(fit = all_fit,
                               df = surv_df,
                               confint = TRUE,
@@ -149,11 +173,9 @@ get_testing_results <- function(model, test_df, test_datasets, survival_data){
                               group_colors = c("red", "green"),
                               facet = TRUE)
 
-
-
   #sending all data in a list
   list(
-    predictions = predictions,
+    predictions = fmx_pred,
     accuracy_results = accuracy_results,
     roc_plot = roc_plot,
     km_plots = all_kmplot
