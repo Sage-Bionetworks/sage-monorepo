@@ -170,7 +170,7 @@ ici_models_train_server <- function(
           df = df_to_model(),
           train_ds = training_obj()$dataset$train,
           test_ds = training_obj()$dataset$test,
-          variable_to_norm = input$predictors_gene,
+          variable_to_norm = c(input$predictors_gene, input$biomarkers_choices),
           predictors = predictors(),
           is_test = FALSE
         )
@@ -244,7 +244,10 @@ ici_models_train_server <- function(
       })
 
       prediction_test <- eventReactive(input$compute_test, {
-        iatlas.app::get_testing_results(model_train(), test_df(), test_datasets = training_obj()$dataset$test, survival_data = df_to_model())
+        iatlas.app::get_testing_results(model_train(),
+                                        test_df(),
+                                        test_datasets = training_obj()$dataset$test,
+                                        survival_data = df_to_model())
       })
 
       output$accuracy <- renderPrint({
@@ -254,7 +257,8 @@ ici_models_train_server <- function(
 
       output$roc <- renderPlot({
         shiny::req(prediction_test())
-        plot(prediction_test()$roc_plot, print.auc = TRUE)
+        #plot(prediction_test()$roc_plot, print.auc = TRUE)
+        cowplot::plot_grid(plotlist = prediction_test()$roc_plot)
       })
 
       #code for km plot
@@ -281,7 +285,7 @@ ici_models_train_server <- function(
         })
       })
 
-      shiny::observeEvent(input$compute_train,{#if user creates a new model, testing results from the previous will be hidden
+      shiny::observeEvent(input$compute_train,{#if user creates a new model, previous testing results will be hidden
         shinyjs::hide("accuracy")
         shinyjs::hide("roc")
         shinyjs::hide("km_plots")
