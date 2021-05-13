@@ -83,20 +83,10 @@ ici_models_train_ui <- function(id){
       )
     ),
     shiny::column(
-      width = 5,
-      tableBox(
-        width = 24,
-        shiny::p("Test results"),
-        verbatimTextOutput(ns("accuracy")),
-        plotOutput(ns("roc"))
-      )
-    ),
-    shiny::column(
-      width = 7,
+      width = 12,
       plotBox(
         width = 24,
-        shiny::p("KM plots dividing testing samples by predicted response"),
-        uiOutput(ns("km_plots"))
+        uiOutput(ns("test_plots"))
       )
     )
   )

@@ -250,50 +250,58 @@ ici_models_train_server <- function(
                                         survival_data = df_to_model())
       })
 
-      output$accuracy <- renderPrint({
-        shiny::req(prediction_test())
-        prediction_test()$accuracy_results
-      })
-
-      output$roc <- renderPlot({
-        shiny::req(prediction_test())
-        #plot(prediction_test()$roc_plot, print.auc = TRUE)
-        cowplot::plot_grid(plotlist = prediction_test()$roc_plot)
-      })
-
-      #code for km plot
-      #the KM Plots are stored as a list, so a few adjustments are necessary to plot everything
+      #Results of test for each selected dataset are stored in a list, so below we will plot all elements in the list
       shiny::observeEvent(input$compute_test,{
-        shiny::req(prediction_test())
-        output$km_plots <- renderUI({
-          plot_output_list <-
-            lapply(1:length(prediction_test()$km_plots), function(i) {
-              plotname <- names(prediction_test()$km_plots)[i]
-              plotOutput(ns(plotname), height = 600)
-            })
-          do.call(tagList, plot_output_list)
-        })
-      })
-
-      shiny::observeEvent(input$compute_test,{
-        lapply(1:length(shiny::isolate(training_obj()$dataset$test)), function(i){
-          my_dataset <- names(prediction_test()$km_plots)[i]
-          output[[my_dataset]] <- shiny::renderPlot({
-            shiny::req(prediction_test())
-            prediction_test()$km_plots[i]
+          shiny::req(prediction_test())
+          output$test_plots <- renderUI({
+            plot_output_list <-
+              lapply(1:length(training_obj()$dataset$test), function(i) {
+                plotname <- training_obj()$dataset$test[i]
+                shiny::verticalLayout(
+                  shiny::fluidRow(
+                    shiny::column(
+                      width = 5,
+                      plotOutput(ns(paste0("km_", plotname)), height = 400)
+                    ),
+                    shiny::column(
+                      width = 3,
+                      plotOutput(ns(paste0("roc_", plotname)), height = 300)
+                    ),
+                    shiny::column(
+                      width = 4,
+                      verbatimTextOutput(ns(paste0("ac_", plotname)))
+                    )
+                  ),
+                  shiny::hr()
+                )
+              })
+            do.call(tagList, plot_output_list)
           })
         })
-      })
+
+        shiny::observeEvent(input$compute_test,{
+          lapply(1:length(shiny::isolate(training_obj()$dataset$test)), function(i){
+            my_dataset <- training_obj()$dataset$test[i]
+            output[[paste0("ac_", my_dataset)]] <- shiny::renderPrint({
+              shiny::req(prediction_test())
+              prediction_test()[[i]]$accuracy_results
+            })
+            output[[paste0("roc_", my_dataset)]] <- shiny::renderPlot({
+              shiny::req(prediction_test())
+              prediction_test()[[i]]$roc_plot
+            })
+            output[[paste0("km_", my_dataset)]] <- shiny::renderPlot({
+              shiny::req(prediction_test())
+              prediction_test()[[i]]$km_plot
+            })
+          })
+        })
 
       shiny::observeEvent(input$compute_train,{#if user creates a new model, previous testing results will be hidden
-        shinyjs::hide("accuracy")
-        shinyjs::hide("roc")
-        shinyjs::hide("km_plots")
+        shinyjs::hide("test_plots")
       })
       shiny::observeEvent(input$compute_test,{
-        shinyjs::show("accuracy")
-        shinyjs::show("roc")
-        shinyjs::show("km_plots")
+        shinyjs::show("test_plots")
       })
     }
   )

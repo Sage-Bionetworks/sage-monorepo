@@ -117,68 +117,46 @@ run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds)
 #########################
 
 get_testing_results <- function(model, test_df, test_datasets, survival_data){
+  purrr::map(.x = test_datasets, function(x){
+    df <- test_df %>%
+            dplyr::filter(Dataset == x) %>%
+            dplyr::mutate(prediction = predict(model, newdata = .))
 
-  fmx_pred <- purrr::map(.x = test_datasets, function(x){
-    test_df %>%
-      dplyr::filter(Dataset == x) %>%
-      dplyr::mutate(prediction = predict(model, newdata = .))
-  })
-  names(fmx_pred) <- test_datasets
+    accuracy_results <- caret::confusionMatrix(df$prediction, as.factor(df$Responder))
 
-  accuracy_results <- lapply(fmx_pred, function(x) caret::confusionMatrix(x$prediction, as.factor(x$Responder)))
+    rocp <- pROC::roc(
+      response = factor(df$Responder,  ordered = TRUE),
+      predictor = factor(df$prediction, ordered = TRUE),
+      auc = TRUE)
 
-  roc_plot <- purrr::map(fmx_pred, function(x){
-    rplot <- pROC::roc(
-      response = factor(x$Responder,  ordered = TRUE),
-      predictor = factor(x$prediction, ordered = TRUE),
-      auc = TRUE
-    )
-    pROC::ggroc(rplot, print.auc = TRUE)
-  })
+    rplot <- pROC::ggroc(rocp) + ggplot2::labs(title = paste("AUC: ", round(rocp$auc, 3)))
+    #KM plot
+    dataset_df <- survival_data %>%
+        select(Sample_ID, OS, OS_time, PFI_1, PFI_time_1) %>%
+        merge(., df, by = "Sample_ID")
 
+    surv_df <- build_survival_df(
+                      df = dataset_df,
+                      group_column = "prediction",
+                      group_options = "prediction",
+                      time_column = "OS_time")
 
-  # predictions <- predict(model, newdata = test_df)
-  #
-  # accuracy_results <- caret::confusionMatrix(predictions, as.factor(test_df$Responder), positive = "Responder")
-  #
-  # roc_plot <- pROC::roc(
-  #   response = factor(test_df$Responder,  ordered = TRUE),
-  #   predictor = factor(predictions, ordered = TRUE)
-  # )
+    fit_df <- survival::survfit(survival::Surv(time, status) ~ variable, data = surv_df)
 
-  #data for KM plot
-  #df_km <- merge(cbind(test_df, prediction = predictions), survival_data %>% select(Sample_ID, "OS_time", "OS"), by = "Sample_ID")
-
-  surv_df <- purrr::map(.x = fmx_pred, df = survival_data, .f= function(dataset, df){
-    dataset_df <- df %>%
-      select(Sample_ID, OS, OS_time, PFI_1, PFI_time_1) %>%
-      merge(., dataset, by = "Sample_ID")
-
-    build_survival_df(
-      df = dataset_df,
-      group_column = "prediction",
-      group_options = "prediction",
-      time_column = "OS_time"
+    kmplot <- create_kmplot(fit = fit_df,
+                            df = surv_df,
+                            confint = TRUE,
+                            risktable = FALSE,
+                            title = x,
+                            group_colors = c("red", "green"),
+                            show_pval = TRUE,
+                            show_pval_method = TRUE,
+                            facet = FALSE)
+    list(
+        accuracy_results = accuracy_results,
+        roc_plot = rplot,
+        km_plot = kmplot
     )
   })
-
-  all_fit <- purrr::map(surv_df,
-                        function(df) survival::survfit(survival::Surv(time, status) ~ variable, data = df))
-
-  all_kmplot <- create_kmplot(fit = all_fit,
-                              df = surv_df,
-                              confint = TRUE,
-                              risktable = TRUE,
-                              title = test_datasets,
-                              group_colors = c("red", "green"),
-                              facet = TRUE)
-
-  #sending all data in a list
-  list(
-    predictions = fmx_pred,
-    accuracy_results = accuracy_results,
-    roc_plot = roc_plot,
-    km_plots = all_kmplot
-  )
 }
 
