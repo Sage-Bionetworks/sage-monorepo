@@ -122,11 +122,13 @@ get_testing_results <- function(model, test_df, test_datasets, survival_data){
             dplyr::filter(Dataset == x) %>%
             dplyr::mutate(prediction = predict(model, newdata = .))
 
-    accuracy_results <- caret::confusionMatrix(df$prediction, as.factor(df$Responder))
+    accuracy_results <- caret::confusionMatrix(df$prediction, as.factor(df$Responder), positive = "Responder")
 
     rocp <- pROC::roc(
       response = factor(df$Responder,  ordered = TRUE),
       predictor = factor(df$prediction, ordered = TRUE),
+      levels = c("Responder", "Non-Responder"),
+      quiet = TRUE,
       auc = TRUE)
 
     rplot <- pROC::ggroc(rocp) + ggplot2::labs(title = paste("AUC: ", round(rocp$auc, 3)))
