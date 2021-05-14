@@ -218,7 +218,7 @@ ici_models_train_server <- function(
           y_col = "y",
           error_col = "error",
           key_col = NA,
-          color_col = NA,
+          color_col = "y",
           label_col = NA,
           order_by = plot_levels,
           xlab = "",
@@ -226,7 +226,7 @@ ici_models_train_server <- function(
           title = "",
           showLegend = FALSE,
           source_name = NULL,
-          bar_colors = "gray"
+          bar_colors = "#59a0af"
         )
       })
 
