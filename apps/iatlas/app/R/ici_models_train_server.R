@@ -303,6 +303,15 @@ ici_models_train_server <- function(
       shiny::observeEvent(input$compute_test,{
         shinyjs::show("test_plots")
       })
+
+      output$download_train <- shiny::downloadHandler(
+        filename = function() stringr::str_c("train-", Sys.Date(), ".tsv"),
+        content = function(con) readr::write_delim(dplyr::mutate(train_df(), prediction = predict(model_train(), newdata = train_df())), con, delim = "\t")
+      )
+      output$download_test <- shiny::downloadHandler(
+        filename = function() stringr::str_c("test-", Sys.Date(), ".tsv"),
+        content = function(con) readr::write_delim(purrr::map_dfr(prediction_test(), function(x)x$results), con, delim = "\t")
+      )
     }
   )
 }
