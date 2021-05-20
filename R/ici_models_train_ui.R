@@ -69,7 +69,8 @@ ici_models_train_ui <- function(id){
       width = 24,
       DT::dataTableOutput(ns("results")),
       plotly::plotlyOutput(ns("plot_coef")) %>%
-        shinycssloaders::withSpinner()
+        shinycssloaders::withSpinner(),
+      shiny::downloadButton(ns("download_train"), "Download training predictions")
     ),
     optionsBox(
       width = 24,
@@ -86,7 +87,8 @@ ici_models_train_ui <- function(id){
       width = 12,
       plotBox(
         width = 24,
-        uiOutput(ns("test_plots"))
+        uiOutput(ns("test_plots")),
+        shiny::downloadButton(ns("download_test"), "Download testing predictions")
       )
     )
   )

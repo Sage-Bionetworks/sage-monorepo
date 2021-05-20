@@ -155,6 +155,7 @@ get_testing_results <- function(model, test_df, test_datasets, survival_data){
                             show_pval_method = TRUE,
                             facet = FALSE)
     list(
+        results = as.data.frame(df),
         accuracy_results = accuracy_results,
         roc_plot = rplot,
         km_plot = kmplot
