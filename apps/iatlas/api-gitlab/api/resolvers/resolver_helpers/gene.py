@@ -141,6 +141,7 @@ def build_gene_request(
                               'tag': tag_1.name.label('tag')}
 
     core = get_selected(requested, core_field_mapping)
+
     core.add(gene_1.id)
     core |= get_selected(tag_requested, tag_core_field_mapping)
 
@@ -353,6 +354,7 @@ def get_gene_types(
     if not gene_ids:
         query, _count_query = build_gene_request(
             set(), set(), distinct=distinct, paging=paging, data_set=data_set, entrez=entrez, gene_family=gene_family, gene_function=gene_function, gene_type=gene_type, immune_checkpoint=immune_checkpoint, max_rna_seq_expr=max_rna_seq_expr, min_rna_seq_expr=min_rna_seq_expr, pathway=pathway, related=related, sample=sample, super_category=super_category, tag=tag, therapy_type=therapy_type)
+        #res = fetch_page(query, paging, distinct)
         res = fetch_page(query, paging, distinct)
         genes = list(set(gene.id for gene in res)) if len(res) > 0 else []
     else:

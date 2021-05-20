@@ -219,16 +219,6 @@ type Query {
   ): [FeaturesByTag!]!
 
   """
-  The "gene" query
-  """
-  gene(
-    "The entrez id of the gene to look up."
-    entrez: Int!
-    "A list of sample names associated with the gene (used to look up RNA sequence expressions)."
-    sample: [String!]
-  ): Gene
-
-  """
   The "geneFamilies" query
   """
   geneFamilies(

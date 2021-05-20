@@ -183,7 +183,6 @@ def test_cursor_pagination_last(client, common_query_builder):
     assert end == items[num - 1]['id']
 
 
-'''
 def test_cursor_distinct_pagination(client, common_query):
     page_num = 2
     num = 10
@@ -202,7 +201,6 @@ def test_cursor_distinct_pagination(client, common_query):
 
     assert len(items) == num
     assert page_num == page['paging']['page']
-'''
 
 
 def test_genes_query_with_entrez(client, common_query, entrez, hgnc):
@@ -404,7 +402,7 @@ def test_genes_query_no_entrez(client, common_query_builder):
     results = page['items']
 
     assert isinstance(results, list)
-    assert len(results) == 500
+    assert len(results) == 10
     for gene in results[0:1]:
         assert type(gene['entrez']) is int
         assert type(gene['hgnc']) is str
