@@ -35,7 +35,7 @@ ici_models_train_server <- function(
 
       clinical_data_choices <- shiny::reactive({
         ioresponse_data$feature_df %>%
-          dplyr::filter(VariableType == "Numeric" & `Variable Class` == "Clinical data") %>%
+          dplyr::filter(`Variable Class` == "Clinical data") %>%
           dplyr::pull("FeatureMatrixLabelTSV")
       })
 
@@ -50,7 +50,7 @@ ici_models_train_server <- function(
 
       biomarkers_choices <- shiny::reactive({
         ioresponse_data$feature_df %>%
-          dplyr::filter(VariableType == "Numeric" & `Variable Class` == "Predictor - Immune Checkpoint Treatment") %>%
+          dplyr::filter(`Variable Class` %in% c("Predictor - Immune Checkpoint Treatment", "Sample Category")) %>%
           dplyr::select(
             INTERNAL = FeatureMatrixLabelTSV,
             DISPLAY = FriendlyLabel,
@@ -129,7 +129,9 @@ ici_models_train_server <- function(
 
       output$train_summary <- shiny::renderText({
         shiny::req(training_obj())
-        paste0("Selected formula: Response to ICI ~ ", paste(training_obj()$predictors$feature_display, collapse = " + "))
+        paste0("Selected formula: Response to ICI ~ ",
+               paste(subset(training_obj()$predictors, VariableType != "Category")$feature_display, collapse = " + ")
+               )
       })
 
       observe({ #block Train button if one of the datasets is missing annotation for one predictor. Notify number of samples with NA that will be excluded
@@ -170,7 +172,7 @@ ici_models_train_server <- function(
           df = df_to_model(),
           train_ds = training_obj()$dataset$train,
           test_ds = training_obj()$dataset$test,
-          variable_to_norm = c(input$predictors_gene, input$biomarkers_choices),
+          variable_to_norm = c(input$predictors_gene),
           predictors = predictors(),
           is_test = FALSE
         )
@@ -205,7 +207,6 @@ ici_models_train_server <- function(
                                model_train()$bestTune$lambda)@Dimnames[[1]][coef(model_train()$finalModel, model_train()$bestTune$lambda)@i+1],
           error = 0
         )
-
         plot_df <- merge(plot_df, training_obj()$predictors, by = "feature_name", all.x = TRUE) %>%
           dplyr::mutate(feature_display = replace(feature_display, feature_name == "(Intercept)", "(Intercept)")) %>%
           dplyr::select(x, y = feature_display, error)
@@ -297,7 +298,8 @@ ici_models_train_server <- function(
           })
         })
 
-      shiny::observeEvent(input$compute_train,{#if user creates a new model, previous testing results will be hidden
+      #if user creates a new model, previous testing results will be hidden
+      shiny::observeEvent(input$compute_train,{
         shinyjs::hide("test_plots")
       })
       shiny::observeEvent(input$compute_test,{
