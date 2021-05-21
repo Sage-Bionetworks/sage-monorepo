@@ -12,7 +12,7 @@ ici_models_train_server <- function(
       output$bucket_list <- shiny::renderUI({
 
         sortable::bucket_list(
-          header = "Select training and testing datasets", #"",
+          header = "Select training and testing datasets",
           group_name = ns("dataset_bucket"),
           orientation = "horizontal",
           sortable::add_rank_list(
@@ -136,6 +136,12 @@ ici_models_train_server <- function(
 
       observe({ #block Train button if one of the datasets is missing annotation for one predictor. Notify number of samples with NA that will be excluded
         shiny::req(training_obj())
+        if(dplyr::n_distinct(training_obj()$subset_df$train_df$Study) >1) shiny::showNotification("Warning: You selected datasets with samples from different tumor types. The data from these datasets will be merged for training.", duration = NULL, id = "mix_types")
+        else shiny::removeNotification(id = "mix_types")
+
+        if((nrow(training_obj()$subset_df$train_df)/length(predictors()))<10) shiny::showNotification("Warning: The number of selected predictors is higher than 10% of the number of samples selected for training.", duration = NULL, id = "high_pred")
+        else shiny::removeNotification(id = "high_pred")
+
         if(nrow(training_obj()$missing_annot) == 0){
           shinyjs::enable("compute_train")
           shinyjs::hide("missing_data")
