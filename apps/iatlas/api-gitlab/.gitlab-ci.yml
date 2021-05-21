@@ -28,10 +28,6 @@ default:
     - rm glibc-bin-${GLIBC_VER}.apk
     - rm -rf /var/cache/apk/*
     - aws --version
-    # Create the AWS credentials and config files.
-    - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
-    - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
-    - aws configure set region "${AWS_DEFAULT_REGION}"
 
 stages:
   - test_code
@@ -60,7 +56,7 @@ tests:
     - pip install --no-cache-dir -r ./requirements-dev.txt
     - apk del --no-cache .build-deps
     # Get DB Secrets from AWS
-    - creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
@@ -93,7 +89,7 @@ tests:coverage-report-staging:
     - pip install --no-cache-dir -r ./requirements-dev.txt
     - apk del --no-cache .build-deps
     # Get DB Secrets from AWS.
-    - creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
@@ -132,7 +128,7 @@ tests:coverage-report-prod:
     - pip install --no-cache-dir -r ./requirements-dev.txt
     - apk del --no-cache .build-deps
     # Get DB Secrets from AWS.
-    - creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_PROD})
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_PROD})
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
@@ -226,33 +222,10 @@ Deploy:Staging:
     - staging
   stage: deploy
   image: python:3.8-alpine
-  variables:
-    DOMAIN_NAME_STAGING: ${DOMAIN_NAME_STAGING}
-    GITLAB_REG_TOKEN: ${GITLAB_REG_TOKEN}
-    SUB_DOMAIN_NAME_STAGING: ${SUB_DOMAIN_NAME_STAGING}
-    TRAVIS_BRANCH: "staging"
   script:
     - echo "Deploying iAtlas API to Staging"
-    - echo "image ${DOCKER_IMAGE_TAG_STAGING}"
-    - export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG_STAGING}
-    - sceptre_stack_file=staging/iatlas-api.yaml
-    # Ensure git is available.
-    - apk add --no-cache git
-    # Get the Sceptre scripts.
-    - git clone -b $INFRA_BRANCH $INFRA_REPO_URL
-    - cd iAtlas-infra
-    # Ensure Sceptre is available and can handle !ssm.
-    - pip install --no-cache-dir sceptre sceptre-ssm-resolver
-    # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."staging/iatlas-api"')
-    - echo "${sceptre_status}"
-    # If there was an issue with the previous build and the build was rolled back, delete the stack.
-    - sceptre --var "region=${AWS_DEFAULT_REGION}" launch -y ${sceptre_stack_file} || exit_code=$?; if [ $exit_code -ne 0 ]; then echo "The exit code of the previous command is $exit_code"; fi
-    # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."staging/iatlas-api"')
-    - echo "${sceptre_status}"
-    # If the update succeeded or a first build succeeded, end the job, otherwise, fail the job.
-    - if [ ${sceptre_status} == '"UPDATE_COMPLETE"' ] || [ ${sceptre_status} == '"CREATE_COMPLETE"' ]; then exit 0; else exit 1; fi
+    # Force update the ECS service. It should be using the latest image (staging-latest).
+    - aws ecs update-service --cluster iatlas-staging-EcsCluster --service iatlas-staging-EcsService --force-new-deployment
 
 Deploy:Prod:
   tags:
@@ -261,30 +234,7 @@ Deploy:Prod:
     - master
   stage: deploy
   image: python:3.8-alpine
-  variables:
-    DOMAIN_NAME: ${DOMAIN_NAME}
-    GITLAB_REG_TOKEN: ${GITLAB_REG_TOKEN}
-    SUB_DOMAIN_NAME: ${SUB_DOMAIN_NAME}
-    TRAVIS_BRANCH: "master"
   script:
     - echo "Deploying iAtlas API to Production"
-    - echo "image ${DOCKER_IMAGE_TAG_PROD}"
-    - export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG_PROD}
-    - sceptre_stack_file=prod/iatlas-api.yaml
-    # Ensure git is available.
-    - apk add --no-cache git
-    # Get the Sceptre scripts.
-    - git clone -b $INFRA_BRANCH $INFRA_REPO_URL
-    - cd iAtlas-infra
-    # Ensure Sceptre is available and can handle !ssm.
-    - pip install --no-cache-dir sceptre sceptre-ssm-resolver
-    # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."prod/iatlas-api"')
-    - echo "${sceptre_status}"
-    # If there was an issue with the previous build and the build was rolled back, delete the stack.
-    - sceptre --var "region=${AWS_DEFAULT_REGION}" launch -y ${sceptre_stack_file} || exit_code=$?; if [ $exit_code -ne 0 ]; then echo "The exit code of the previous command is $exit_code"; fi
-    # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."prod/iatlas-api"')
-    - echo "${sceptre_status}"
-    # If the update succeeded or a first build succeeded, end the job, otherwise, fail the job.
-    - if [ ${sceptre_status} == '"UPDATE_COMPLETE"' ] || [ ${sceptre_status} == '"CREATE_COMPLETE"' ]; then exit 0; else exit 1; fi
+    # Force update the ECS service. It should be using the latest image (prod).
+    - aws ecs update-service --cluster iatlas-prod-EcsCluster --service iatlas-prod-EcsService --force-new-deployment
