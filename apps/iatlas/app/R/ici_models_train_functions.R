@@ -27,6 +27,7 @@ normalize_dataset <- function(df, train_ds, test_ds, variable_to_norm, predictor
   df %>%
     dplyr::filter(Dataset %in% filter_ds) %>%
     dplyr::group_by(Dataset) %>%
+    tidyr::drop_na(any_of(predictors)) %>%
     dplyr::mutate(across(all_of(variable_to_norm),
                          ~normalize_variable(
                            .x,
@@ -54,11 +55,24 @@ get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selec
   )
 
   #df with selected predictors and labels
-  predictors <- feature_df %>%
+  pred_features <- feature_df %>%
     dplyr::filter(FeatureMatrixLabelTSV %in% selected_pred) %>%
-    dplyr::select("feature_name" = FeatureMatrixLabelTSV, "feature_display" = FriendlyLabel)
+    dplyr::select("feature_name" = FeatureMatrixLabelTSV, "feature_display" = FriendlyLabel, VariableType)
 
-  predictors <- rbind(predictors, data.frame(feature_name = selected_genes, feature_display = selected_genes))
+  #for categorical predictors, we need to make sure to store the key to label them correctly
+  categories <- ioresponse_data$sample_group_df %>%
+    dplyr::filter(Category %in% pred_features$feature_name) %>%
+    dplyr::mutate(feature_name = paste0(Category, FeatureValue),
+                  feature_display = FeatureLabel,
+                  VariableType = "Category") %>%
+    dplyr::select(feature_name, feature_display, VariableType)
+
+  genes <- data.frame()
+  if(length(selected_genes >0)) genes <- data.frame(
+                                            feature_name = selected_genes,
+                                            feature_display = selected_genes,
+                                            VariableType = "Gene")
+  predictors <- rbind(pred_features, categories, genes)
 
   #subset dataset
   data_bucket <- list(

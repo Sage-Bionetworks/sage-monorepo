@@ -9,7 +9,7 @@ datasets_options <-  list(
 datasets_options_train <-  list(
   "Gide, 2019 - SKCM, Anti-PD-1 +/- Anti-CTLA-4 (72)" =  "Gide 2019",
   "Hugo, 2016 - SKCM, Anti-PD-1 (28)" = "Hugo 2016",
-  "Riaz, 2017 - SKCM, Anti-PD-1 (51)" = "Riaz 2017",
+  "Riaz, 2017 - SKCM, Anti-PD-1 (49)" = "Riaz 2017",
   "Van Allen, 2015 - SKCM, Anti-CTLA-4 (42)" = "Van Allen 2015",
   "IMVigor210 - BLCA, Anti-PD-L1 (348)" = "IMVigor210",
   "Prins, 2019 - GBM, Anti-PD-1 (29)" = "Prins 2019")
