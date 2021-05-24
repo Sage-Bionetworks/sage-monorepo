@@ -20,9 +20,9 @@ def resolve_genes(
     tag_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_tag_request_fields, child_node='tag')
 
-    paging = create_paging(paging, 10)
-    logger = logging.getLogger("resolve_genes")
-    logger.info(paging)
+    max_items = 10 if 'samples' in requested else 100_000
+
+    paging = create_paging(paging, max_items)
 
     query, count_query = build_gene_request(
         requested, tag_requested, distinct=distinct, paging=paging, data_set=dataSet, entrez=entrez, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, related=related, sample=sample, super_category=superCategory, tag=tag, therapy_type=therapyType)

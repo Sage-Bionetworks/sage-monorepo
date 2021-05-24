@@ -107,7 +107,46 @@ def common_query(common_query_builder):
                                 )
 
 
-def test_cursor_pagination_first(client, common_query_builder):
+def test_cursor_pagination_first_with_samples(client, common_query_builder):
+    query = common_query_builder("""{
+            items {
+                id
+                samples
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+        }""")
+    requested_n = 15
+    max_n = 10
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'paging': {'first': requested_n}
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['genes']
+    items = page['items']
+    paging = page['paging']
+    start = from_cursor_hash(paging['startCursor'])
+    end = from_cursor_hash(paging['endCursor'])
+
+    assert len(items) == max_n
+    assert paging['hasNextPage'] == True
+    assert paging['hasPreviousPage'] == False
+    assert start == items[0]['id']
+    assert end == items[max_n - 1]['id']
+    assert int(end) - int(start) > 0
+
+
+def test_cursor_pagination_first_without_samples(client, common_query_builder):
     query = common_query_builder("""{
             items {
                 id
@@ -124,10 +163,10 @@ def test_cursor_pagination_first(client, common_query_builder):
                 limit
             }
         }""")
-    num = 10
+    requested_n = 15
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'paging': {'first': num}
+            'paging': {'first': requested_n}
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['genes']
@@ -136,11 +175,11 @@ def test_cursor_pagination_first(client, common_query_builder):
     start = from_cursor_hash(paging['startCursor'])
     end = from_cursor_hash(paging['endCursor'])
 
-    assert len(items) == num
+    assert len(items) == requested_n
     assert paging['hasNextPage'] == True
     assert paging['hasPreviousPage'] == False
     assert start == items[0]['id']
-    assert end == items[num - 1]['id']
+    assert end == items[requested_n - 1]['id']
     assert int(end) - int(start) > 0
 
 
@@ -402,7 +441,7 @@ def test_genes_query_no_entrez(client, common_query_builder):
     results = page['items']
 
     assert isinstance(results, list)
-    assert len(results) == 10
+    assert len(results) > 10
     for gene in results[0:1]:
         assert type(gene['entrez']) is int
         assert type(gene['hgnc']) is str
