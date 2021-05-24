@@ -1,3 +1,6 @@
+import logging
+
+
 def build_join_condition(join_column, column, filter_column=None, filter_list=None):
     '''
     A helper function that creates a list of conditions.

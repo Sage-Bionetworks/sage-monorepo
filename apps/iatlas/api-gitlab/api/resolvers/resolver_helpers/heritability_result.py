@@ -77,6 +77,10 @@ def build_heritability_result_request(
     core |= get_selected(data_set_requested, data_set_core_field_mapping)
     core |= get_selected(feature_requested, feature_core_field_mapping)
 
+    if distinct == False:
+        # Add the id as a cursor if not selecting distinct
+        core.add(heritability_result_1.id)
+
     query = sess.query(*core)
     query = query.select_from(heritability_result_1)
 

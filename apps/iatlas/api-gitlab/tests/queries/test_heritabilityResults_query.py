@@ -278,12 +278,7 @@ def test_heritabilityResults_query_with_passed_max_p_value(client, common_query,
 
 def test_heritabilityResults_query_with_no_arguments(client, common_query_builder):
     query = common_query_builder("""{
-            items {
-                pValue
-                feature {
-                    name
-                }
-            }
+            items { id }
         }""")
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
@@ -295,4 +290,4 @@ def test_heritabilityResults_query_with_no_arguments(client, common_query_builde
     assert isinstance(heritability_results, list)
     assert len(heritability_results) == hr_count
     for heritability_result in heritability_results[0:2]:
-        assert type(heritability_result['pValue']) is float or NoneType
+        assert type(heritability_result['id']) is str

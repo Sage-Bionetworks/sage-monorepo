@@ -16,10 +16,6 @@ def resolve_heritability_results(
     feature_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_feature_request_fields, child_node='feature')
 
-    if distinct == False:
-        # Add the id as a cursor if not selecting distinct
-        requested.add('id')
-
     paging = paging if paging else Paging.DEFAULT
 
     query, count_query = build_heritability_result_request(

@@ -2,7 +2,7 @@ from ariadne import load_schema_from_path, make_executable_schema, ObjectType, S
 import os
 import decimal
 from api.resolvers import (
-    resolve_colocalizations, resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_edges, resolve_features, resolve_features_by_class, resolve_features_by_tag, resolve_gene, resolve_gene_family, resolve_gene_function, resolve_gene_types, resolve_genes, resolve_genes_by_tag, resolve_germline_gwas_results, resolve_heritability_results, resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutations_by_sample, resolve_mutation_types, resolve_nodes, resolve_rare_variant_pathway_associations, resolve_pathways, resolve_patients, resolve_related, resolve_samples, resolve_samples_by_mutations_status, resolve_samples_by_tag, resolve_slides, resolve_snps, resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
+    resolve_colocalizations, resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_edges, resolve_features, resolve_features_by_class, resolve_features_by_tag, resolve_gene_family, resolve_gene_function, resolve_gene_types, resolve_genes, resolve_germline_gwas_results, resolve_heritability_results, resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutations_by_sample, resolve_mutation_types, resolve_nodes, resolve_rare_variant_pathway_associations, resolve_pathways, resolve_patients, resolve_related, resolve_samples, resolve_samples_by_mutations_status, resolve_samples_by_tag, resolve_slides, resolve_snps, resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 
@@ -148,7 +148,6 @@ features_by_tag = ObjectType('FeaturesByTag')
 gene = ObjectType('Gene')
 gene_family = ObjectType('GeneFamily')
 gene_function = ObjectType('GeneFunction')
-genes_by_tag = ObjectType('GenesByTag')
 gene_type = ObjectType('GeneType')
 germline_gwas_result_node = ObjectType('GermlineGwasResultNode')
 germline_gwas_result = ObjectType('GermlineGwasResult')
@@ -198,12 +197,10 @@ root.set_field('edges', resolve_edges)
 root.set_field('features', resolve_features)
 root.set_field('featuresByClass', resolve_features_by_class)
 root.set_field('featuresByTag', resolve_features_by_tag)
-root.set_field('gene', resolve_gene)
 root.set_field('geneFamilies', resolve_gene_family)
 root.set_field('geneFunctions', resolve_gene_function)
 root.set_field('geneTypes', resolve_gene_types)
 root.set_field('genes', resolve_genes)
-root.set_field('genesByTag', resolve_genes_by_tag)
 root.set_field('germlineGwasResults', resolve_germline_gwas_results)
 root.set_field('heritabilityResults', resolve_heritability_results)
 root.set_field('immuneCheckpoints', resolve_immune_checkpoints)
@@ -231,5 +228,5 @@ root.set_field('therapyTypes', resolve_therapy_types)
 schema = make_executable_schema(
     type_defs,
     [
-        root, colocalization, copy_number_result, data_set, direction_enum_scalar, driver_result, edge_result, ethnicity_enum_scalar, feature, features_by_class, features_by_tag, gender_enum_scalar, gene, gene_family, gene_function, genes_by_tag, gene_type, germline_gwas_result, germline_gwas_result_node, heritability_result_node, heritability_result, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, node, node_result, pathway, patient, publication, race_enum_scalar, rare_variant_pathway_association, related_by_data_set, sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_node, simple_publication, simple_tag, slide, snp, tag, super_category, therapy_type]
+        root, colocalization, copy_number_result, data_set, direction_enum_scalar, driver_result, edge_result, ethnicity_enum_scalar, feature, features_by_class, features_by_tag, gender_enum_scalar, gene, gene_family, gene_function, gene_type, germline_gwas_result, germline_gwas_result_node, heritability_result_node, heritability_result, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, node, node_result, pathway, patient, publication, race_enum_scalar, rare_variant_pathway_association, related_by_data_set, sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_node, simple_publication, simple_tag, slide, snp, tag, super_category, therapy_type]
 )
