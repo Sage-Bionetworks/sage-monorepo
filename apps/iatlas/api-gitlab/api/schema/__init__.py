@@ -143,8 +143,6 @@ data_set = ObjectType('DataSet')
 driver_result = ObjectType('DriverResult')
 edge_result = ObjectType('EdgeResult')
 feature = ObjectType('Feature')
-features_by_class = ObjectType('FeaturesByClass')
-features_by_tag = ObjectType('FeaturesByTag')
 gene = ObjectType('Gene')
 gene_family = ObjectType('GeneFamily')
 gene_function = ObjectType('GeneFunction')
@@ -195,8 +193,6 @@ root.set_field('dataSets', resolve_data_sets)
 root.set_field('driverResults', resolve_driver_results)
 root.set_field('edges', resolve_edges)
 root.set_field('features', resolve_features)
-root.set_field('featuresByClass', resolve_features_by_class)
-root.set_field('featuresByTag', resolve_features_by_tag)
 root.set_field('geneFamilies', resolve_gene_family)
 root.set_field('geneFunctions', resolve_gene_function)
 root.set_field('geneTypes', resolve_gene_types)
@@ -228,5 +224,5 @@ root.set_field('therapyTypes', resolve_therapy_types)
 schema = make_executable_schema(
     type_defs,
     [
-        root, colocalization, copy_number_result, data_set, direction_enum_scalar, driver_result, edge_result, ethnicity_enum_scalar, feature, features_by_class, features_by_tag, gender_enum_scalar, gene, gene_family, gene_function, gene_type, germline_gwas_result, germline_gwas_result_node, heritability_result_node, heritability_result, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, node, node_result, pathway, patient, publication, race_enum_scalar, rare_variant_pathway_association, related_by_data_set, sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_node, simple_publication, simple_tag, slide, snp, tag, super_category, therapy_type]
+        root, colocalization, copy_number_result, data_set, direction_enum_scalar, driver_result, edge_result, ethnicity_enum_scalar, feature, gender_enum_scalar, gene, gene_family, gene_function, gene_type, germline_gwas_result, germline_gwas_result_node, heritability_result_node, heritability_result, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, node, node_result, pathway, patient, publication, race_enum_scalar, rare_variant_pathway_association, related_by_data_set, sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_node, simple_publication, simple_tag, slide, snp, tag, super_category, therapy_type]
 )

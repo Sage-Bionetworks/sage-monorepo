@@ -111,7 +111,10 @@ def fetch_page(query, paging, distinct):
         if distinct:
             query = query.distinct()
         return query.paginate(page, limit).items
-    return query.limit(limit + 1).all()
+    logger = logging.getLogger('paging')
+    x = query.limit(limit + 1).all()
+    logger.info(x)
+    return x
 
 
 def process_page(items, count_query, paging, distinct, response_builder, pagination_requested):

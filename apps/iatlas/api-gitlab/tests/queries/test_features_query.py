@@ -3,6 +3,7 @@ import pytest
 from tests import NoneType
 from api.enums import unit_enum
 from api.database import return_feature_query
+import logging
 
 
 @pytest.fixture(scope='module')
@@ -43,6 +44,8 @@ def common_query_builder():
             $sample: [String!]
             $minValue: Float
             $maxValue: Float
+            $paging: PagingInput
+            $distinct: Boolean
         ) {
         features(
             dataSet: $dataSet
@@ -53,6 +56,8 @@ def common_query_builder():
             sample: $sample
             minValue: $minValue
             maxValue: $maxValue
+            paging: $paging
+            distinct: $distinct
             )
         """ + query_fields + "}"
     return f
@@ -63,13 +68,27 @@ def common_query(common_query_builder):
     return common_query_builder(
         """
         {
-            class
-            display
-            name
-            order
-            unit
-            germline_module
-            germline_category
+            items {
+                class
+                display
+                name
+                order
+                unit
+                germline_module
+                germline_category
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+            error
         }
         """
     )
@@ -80,9 +99,23 @@ def values_query(common_query_builder):
     return common_query_builder(
         """
         {
-            name
-            valueMin
-            valueMax
+            items {
+                name
+                valueMin
+                valueMax
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+            error
         }
         """
     )
@@ -92,25 +125,41 @@ def test_features_query_with_feature(client, feature_name, common_query_builder)
     query = common_query_builder(
         """
         {
-            class
-            display
-            methodTag
-            name
-            order
-            unit
-            germline_module
-            germline_category
-            samples {
+            items {
+                class
+                display
+                methodTag
                 name
-                value
+                order
+                unit
+                germline_module
+                germline_category
+                samples {
+                    name
+                    value
+                }
             }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+            error
+
         }
         """
     )
     response = client.post(
         '/api', json={'query': query, 'variables': {'feature': [feature_name]}})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     assert isinstance(features, list)
     assert len(features) > 0
@@ -140,7 +189,8 @@ def test_features_query_with_feature_no_sample_or_value(client, data_set, relate
                                     'related': [related],
                                     'feature': [chosen_feature]}})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     assert isinstance(features, list)
     assert len(features) == 1
@@ -152,7 +202,8 @@ def test_features_query_no_feature(client, data_set, related, common_query):
                       'variables': {'dataSet': [data_set],
                                     'related': [related]}})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     assert isinstance(features, list)
     assert len(features) > 0
@@ -169,7 +220,8 @@ def test_features_query_with_passed_sample(client, common_query, data_set, relat
                                     'related': [related],
                                     'sample': [sample]}})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     assert isinstance(features, list)
     assert len(features) > 0
@@ -189,7 +241,8 @@ def test_features_query_max_value(client, data_set, related, chosen_feature, val
                                     'related': [related],
                                     'feature': [chosen_feature]}})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     assert isinstance(features, list)
     assert len(features) > 0
@@ -206,7 +259,8 @@ def test_features_query_min_value(client, data_set, related, chosen_feature, val
                                     'related': [related],
                                     'feature': [chosen_feature]}})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     assert isinstance(features, list)
     assert len(features) > 0
@@ -224,7 +278,8 @@ def test_features_query_with_passed_max_value(client, data_set, related, chosen_
                                     'feature': [chosen_feature],
                                     'maxValue': max_value}})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     assert isinstance(features, list)
     assert len(features) > 0
@@ -242,7 +297,8 @@ def test_features_query_with_passed_min_value(client, data_set, related, chosen_
                                     'feature': [chosen_feature],
                                     'minValue': min_value}})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     assert isinstance(features, list)
     assert len(features) > 0
@@ -259,7 +315,8 @@ def test_features_query_no_relations(client, common_query, data_set, related, ch
                                     'related': [related],
                                     'feature': [chosen_feature]}})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     assert isinstance(features, list)
     assert len(features) == 1
@@ -278,7 +335,8 @@ def test_features_query_no_dataSet(client, common_query, related, chosen_feature
                       'variables': {'related': [related],
                                     'feature': [chosen_feature]}})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     assert isinstance(features, list)
     assert len(features) == 1
@@ -297,7 +355,8 @@ def test_features_query_no_related(client, common_query, data_set, chosen_featur
                       'variables': {'dataSet': [data_set],
                                     'feature': [chosen_feature]}})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     assert isinstance(features, list)
     assert len(features) == 1
@@ -313,7 +372,8 @@ def test_features_query_no_related(client, common_query, data_set, chosen_featur
 def test_features_query_no_args(client, common_query):
     response = client.post('/api', json={'query': common_query})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     # Get the total number of features in the database.
     feature_count = return_feature_query('id').count()
@@ -330,7 +390,8 @@ def test_features_query_with_feature_class(client, data_set, related, chosen_fea
                                     'feature': [chosen_feature],
                                     'featureClass': [feature_class]}})
     json_data = json.loads(response.data)
-    features = json_data['data']['features']
+    page = json_data['data']['features']
+    features = page['items']
 
     assert isinstance(features, list)
     assert len(features) > 0
