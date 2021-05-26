@@ -1,5 +1,6 @@
 ici_models_train_server <- function(
-  id
+  id,
+  variables_list
 ) {
   shiny::moduleServer(
     id,
@@ -33,67 +34,20 @@ ici_models_train_server <- function(
         )
       })
 
-      clinical_data_choices <- shiny::reactive({
-        ioresponse_data$feature_df %>%
-          dplyr::filter(`Variable Class` == "Clinical data") %>%
-          dplyr::pull("FeatureMatrixLabelTSV")
-      })
-
-      immunefeatures_choices <-  shiny::reactive({
-        ioresponse_data$feature_df %>%
-          dplyr::filter(VariableType == "Numeric" & `Variable Class` != "NA") %>%
-          dplyr::select(
-            INTERNAL = FeatureMatrixLabelTSV,
-            DISPLAY = FriendlyLabel,
-            CLASS = `Variable Class`) %>% iatlas.app::create_nested_list_by_class()
-      })
-
-      biomarkers_choices <- shiny::reactive({
-        ioresponse_data$feature_df %>%
-          dplyr::filter(`Variable Class` %in% c("Predictor - Immune Checkpoint Treatment", "Sample Category")) %>%
-          dplyr::select(
-            INTERNAL = FeatureMatrixLabelTSV,
-            DISPLAY = FriendlyLabel,
-            CLASS = `Variable Class`) %>% iatlas.app::create_nested_list_by_class()
-      })
-
-      gene_choices <- shiny::reactive({
-        features <- iatlas.api.client::query_immunomodulators() %>%
-            dplyr::select(
-              "feature_name" = "entrez",
-              "feature_display" = "hgnc",
-              "Gene Family" = "gene_family",
-              "Gene Function" = "gene_function",
-              "Immune Checkpoint" = "immune_checkpoint",
-              "Super Category" = "super_category"
-            )
-
-          features %>%
-            filter(feature_display %in% colnames(ioresponse_data$im_expr)) %>%
-            mutate(INTERNAL = feature_display) %>%
-            dplyr::select(
-              INTERNAL,
-              DISPLAY = feature_display,
-              CLASS = `Gene Family`
-            ) %>% iatlas.app::create_nested_list_by_class()
-      })
-
       observe(shiny::updateSelectizeInput(session, 'predictors_clinical_data',
-                                          choices = clinical_data_choices(),
+                                          choices = variables_list$clinical_data,
                                           selected = NULL,
                                           server = TRUE))
-
       observe(shiny::updateSelectizeInput(session, 'predictors_immunefeatures',
-                                  choices = immunefeatures_choices(),
-                                  selected = NULL,
-                                  server = TRUE))
-      observe(shiny::updateSelectizeInput(session, 'predictors_biomarkers',
-                                          choices = biomarkers_choices(),
+                                          choices = variables_list$immunefeatures,
                                           selected = NULL,
                                           server = TRUE))
-
+      observe(shiny::updateSelectizeInput(session, 'predictors_biomarkers',
+                                          choices = variables_list$biomarkers,
+                                          selected = NULL,
+                                          server = TRUE))
       observe(shiny::updateSelectizeInput(session, 'predictors_gene',
-                                          choices = gene_choices(),
+                                          choices = variables_list$genes,
                                           selected = NULL,
                                           server = TRUE))
 
@@ -174,14 +128,21 @@ ici_models_train_server <- function(
       })
 
       train_df <- eventReactive(input$compute_train,{
-        normalize_dataset(
-          df = df_to_model(),
-          train_ds = training_obj()$dataset$train,
-          test_ds = training_obj()$dataset$test,
-          variable_to_norm = c(input$predictors_gene),
-          predictors = predictors(),
-          is_test = FALSE
-        )
+        if(input$do_norm == TRUE){
+          normalize_dataset(
+            df = df_to_model(),
+            train_ds = training_obj()$dataset$train,
+            test_ds = training_obj()$dataset$test,
+            variable_to_norm = c(input$predictors_gene,
+                                 input$predictors_immunefeatures,
+                                 df_to_model()[input$predictors_biomarkers] %>% dplyr::select(where(is.numeric)) %>% colnames()),
+            predictors = predictors(),
+            is_test = FALSE)
+        }else{
+          training_obj()$subset_df$train_df %>%
+              tidyr::drop_na(any_of(predictors())) %>%
+              dplyr::select("Sample_ID", "Dataset", "Responder", all_of(predictors()))
+        }
       })
 
       #Running model
@@ -192,7 +153,8 @@ ici_models_train_server <- function(
           train_df = train_df(),
           response_variable = "Responder",
           predictors = predictors(),
-          n_cv_folds = input$cv_number
+          n_cv_folds = input$cv_number,
+          balance_lhs = input$balance_resp
         )
       })
 

@@ -114,9 +114,11 @@ get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selec
 # Training Methods
 #########################
 #Elastic Net
-run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds){
+run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE){
   print("training model")
-  cvIndex <- caret::createFolds(y = factor(train_df[[response_variable]]), k = n_cv_folds, returnTrain = TRUE)
+  if(balance_lhs == TRUE) cvIndex <- caret::createFolds(y = factor(train_df[[response_variable]]), k = n_cv_folds, returnTrain = TRUE)
+  else cvIndex <- NULL
+
   parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
   caret::train(
     parameters, data = train_df, method = "glmnet",

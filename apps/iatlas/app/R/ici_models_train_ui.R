@@ -63,6 +63,27 @@ ici_models_train_ui <- function(id){
           shiny::textOutput(ns("missing_data")),
           shiny::textOutput(ns("missing_sample"))
         )
+      ),
+      optionsBox(
+        width = 24,
+        title = "Advanced options",
+        collapsible = TRUE,
+        collapsed = TRUE,
+        shiny::column(
+          width = 4,
+          shiny::checkboxInput(ns("do_norm"), "Normalize numeric data", value = TRUE),
+          shiny::checkboxInput(ns("balance_resp"), "Balance folds in cv for Response outcome", value = TRUE)
+        ),
+        shiny::column(
+          width = 4,
+          shiny::checkboxInput(ns("balance_pred"), "Balance folds in cv for categorical predictors", value = FALSE),
+          #add checkbox input for selected categorical predictors
+        ),
+        shiny::column(
+          width = 4,
+          shiny::checkboxInput(ns("transform_num"), "Transform numeric variables - before normalization, if selected", value = FALSE)
+          #add checkbox input for selected numeric predictors
+        )
       )
     ),#optionsBox
     plotBox(
