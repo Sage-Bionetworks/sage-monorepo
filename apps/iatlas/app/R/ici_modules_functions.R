@@ -116,7 +116,8 @@ df_to_nested_list <- function(df, group_column, key_column, value_column){
     get_complete_df_by_columns(c(group_column, value_column, key_column)) %>%
     tidyr::nest(data = c(value_column, key_column)) %>%
     dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
-    tibble::deframe()
+    tibble::deframe() %>%
+    sapply(., as.list)
 }
 
 get_complete_df_by_columns <- function(df, columns){

@@ -39,7 +39,12 @@ ici_hazard_ratio_main_ui <- function(id){
       ),
       column(
         width = 5,
-        uiOutput(ns("heatmap_op"))
+        shiny::selectizeInput(
+                      ns("var2_cox"),
+                      label = "Select or Search for variables",
+                      choices = NULL,
+                      multiple = TRUE
+                    )
       )
     ),
     conditionalPanel(condition = paste0("input['", ns("timevar"), "'] == 'PFI_time_1'"),
