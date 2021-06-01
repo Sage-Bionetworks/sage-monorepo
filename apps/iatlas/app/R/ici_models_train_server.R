@@ -8,10 +8,8 @@ ici_models_train_server <- function(
 
       ns <- session$ns
 
-      list_format <- "<p style = 'color:Gray; font-size: 12px; height: 18px;'>"
-
       output$bucket_list <- shiny::renderUI({
-
+        list_format <- "<p style = 'color:Gray; font-size: 12px; height: 18px;'>"
         sortable::bucket_list(
           header = "Select training and testing datasets",
           group_name = ns("dataset_bucket"),
@@ -55,6 +53,25 @@ ici_models_train_server <- function(
         c(input$predictors_clinical_data, input$predictors_immunefeatures, input$predictors_biomarkers, input$predictors_gene)
       )
 
+      output$categoric_pred <- shiny::renderUI({
+        shiny::req(input$balance_pred == TRUE)
+        selected_pred <- training_obj()$predictors %>% filter(VariableType == "Categorical") %>% pull(feature_name, name = feature_display)
+        shiny::validate(shiny::need(length(selected_pred)>0, "No categorical predictor was selected."))
+        shiny::checkboxGroupInput(
+          ns("pred_to_balance"),
+          label = "Select variable(s) to be balanced",
+          choices = selected_pred
+        )
+      })
+      output$num_transform <- shiny::renderUI({
+        selected_pred <- training_obj()$predictors %>% filter(VariableType == "Numeric") %>% pull(feature_name, name = feature_display)
+        shiny::validate(shiny::need(length(selected_pred)>0, "No numeric predictor was selected."))
+        shiny::checkboxGroupInput(
+          ns("pred_to_transform"),
+          label = "Select variable(s) to transform",
+          choices = selected_pred
+        )
+      })
 
       df_to_model <- reactive({
         ioresponse_data$fmx_df %>%
@@ -127,34 +144,44 @@ ici_models_train_server <- function(
         }
       })
 
+      #scale numeric variables
+      selected_df <- eventReactive(input$compute_train,{
+        list(
+          train = get_scaled_data(training_obj()$subset_df$train_df, scale_function_choice = input$scale_method, predictors_to_scale = input$pred_to_transform),
+          test = get_scaled_data(training_obj()$subset_df$test_df, scale_function_choice = input$scale_method, predictors_to_scale = input$pred_to_transform)
+        )
+      })
+
       train_df <- eventReactive(input$compute_train,{
         if(input$do_norm == TRUE){
           normalize_dataset(
-            df = df_to_model(),
-            train_ds = training_obj()$dataset$train,
-            test_ds = training_obj()$dataset$test,
+            train_df = selected_df()$train,
+            test_df = selected_df()$test,
             variable_to_norm = c(input$predictors_gene,
                                  input$predictors_immunefeatures,
                                  df_to_model()[input$predictors_biomarkers] %>% dplyr::select(where(is.numeric)) %>% colnames()),
             predictors = predictors(),
             is_test = FALSE)
         }else{
-          training_obj()$subset_df$train_df %>%
-              tidyr::drop_na(any_of(predictors())) %>%
-              dplyr::select("Sample_ID", "Dataset", "Responder", all_of(predictors()))
+          scaled_df %>%
+            tidyr::drop_na(any_of(predictors())) %>%
+            dplyr::select("Sample_ID", "Dataset", "Responder", all_of(predictors()))
         }
       })
 
       #Running model
       model_train <- eventReactive(input$compute_train, {
         shiny::validate(shiny::need(length(predictors())>1, "Select predictors for model training."))
+        if(input$balance_pred == TRUE) shiny::validate(shiny::need(length(input$pred_to_balance)>0, "Select categorical predictors for balancing (advanced options)"))
         if(!is.na(input$seed_value)) set.seed(input$seed_value)
         run_elastic_net(
           train_df = train_df(),
           response_variable = "Responder",
           predictors = predictors(),
           n_cv_folds = input$cv_number,
-          balance_lhs = input$balance_resp
+          balance_lhs = input$balance_resp,
+          balance_rhs = input$balance_pred,
+          predictors_to_balance = input$pred_to_balance
         )
       })
 
@@ -202,14 +229,20 @@ ici_models_train_server <- function(
       ###TEST
 
       test_df <- eventReactive(input$compute_test,{
-        normalize_dataset(
-          df = df_to_model(),
-          train_ds = training_obj()$dataset$train,
-          test_ds = training_obj()$dataset$test,
-          variable_to_norm = input$predictors_gene,
-          predictors = predictors(),
-          is_test = TRUE
-        )
+        if(input$do_norm == TRUE){
+          normalize_dataset(
+            train_df = selected_df()$train,
+            test_df = selected_df()$test,
+            variable_to_norm = c(input$predictors_gene,
+                                 input$predictors_immunefeatures,
+                                 df_to_model()[input$predictors_biomarkers] %>% dplyr::select(where(is.numeric)) %>% colnames()),
+            predictors = predictors(),
+            is_test = TRUE)
+        }else{
+          scaled_df %>%
+            tidyr::drop_na(any_of(predictors())) %>%
+            dplyr::select("Sample_ID", "Dataset", "Responder", all_of(predictors()))
+        }
       })
 
       prediction_test <- eventReactive(input$compute_test, {
@@ -218,7 +251,6 @@ ici_models_train_server <- function(
                                         test_datasets = training_obj()$dataset$test,
                                         survival_data = df_to_model())
       })
-
       #Results of test for each selected dataset are stored in a list, so below we will plot all elements in the list
       shiny::observeEvent(input$compute_test,{
           shiny::req(prediction_test())
