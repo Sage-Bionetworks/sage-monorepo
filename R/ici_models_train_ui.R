@@ -77,12 +77,27 @@ ici_models_train_ui <- function(id){
         shiny::column(
           width = 4,
           shiny::checkboxInput(ns("balance_pred"), "Balance folds in cv for categorical predictors", value = FALSE),
-          #add checkbox input for selected categorical predictors
+          shiny::conditionalPanel(
+            "input.balance_pred == 1",
+            shiny::uiOutput(ns("categoric_pred")),
+            ns = ns
+          )
         ),
         shiny::column(
           width = 4,
-          shiny::checkboxInput(ns("transform_num"), "Transform numeric variables - before normalization, if selected", value = FALSE)
-          #add checkbox input for selected numeric predictors
+          shiny::selectInput(
+            ns("scale_method"),
+            "Select variable scaling",
+            choices = c(
+              "None",
+              "Log2",
+              "Log2 + 1",
+              "Log10",
+              "Log10 + 1"
+            ),
+            selected = "None"
+          ),
+          shiny::uiOutput(ns("num_transform"))
         )
       )
     ),#optionsBox

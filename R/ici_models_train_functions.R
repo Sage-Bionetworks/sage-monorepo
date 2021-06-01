@@ -14,18 +14,17 @@ normalize_variable <- function(x, is_test = FALSE, train_avg = NULL, train_sd = 
   }
 }
 
-normalize_dataset <- function(df, train_ds, test_ds, variable_to_norm, predictors, is_test = FALSE){
+normalize_dataset <- function(train_df, test_df = NULL, variable_to_norm, predictors, is_test = FALSE){
   if(is_test == FALSE){
     avg_train <-  NULL
     sd_train <-  NULL
-    filter_ds <- train_ds
+    df <- train_df
   }else{
-    avg_train <- colMeans((df %>% dplyr::filter(Dataset %in% train_ds))[,variable_to_norm, drop = FALSE])
-    sd_train <- apply((df %>% dplyr::filter(Dataset %in% train_ds))[,variable_to_norm, drop = FALSE], 2, sd)
-    filter_ds <- test_ds
+    avg_train <- colMeans(train_df[,variable_to_norm, drop = FALSE])
+    sd_train <- apply(train_df[,variable_to_norm, drop = FALSE], 2, sd)
+    df <- test_df
   }
   df %>%
-    dplyr::filter(Dataset %in% filter_ds) %>%
     dplyr::group_by(Dataset) %>%
     tidyr::drop_na(any_of(predictors)) %>%
     dplyr::mutate(across(all_of(variable_to_norm),
@@ -45,8 +44,21 @@ normalize_dataset <- function(df, train_ds, test_ds, variable_to_norm, predictor
 #########################
 # Training  parameters
 #########################
+get_scaled_data <- function(df, scale_function_choice = "None", predictors_to_scale){
 
-get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selected_genes, feature_df = ioresponse_data$feature_df){
+  scale_function <- switch(
+    scale_function_choice,
+    "None" = identity,
+    "Log2" = log2,
+    "Log2 + 1" = function(x) log2(x + 1),
+    "Log10" = log10,
+    "Log10 + 1" = function(x) log10(x + 1)
+  )
+  df %>%
+    mutate(across(all_of(predictors_to_scale), scale_function))
+}
+
+get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selected_genes, feature_df = ioresponse_data$feature_df, scale_function_choice = "None", predictors_to_scale){
 
   #df with train and test
   dataset_selection <- list(
@@ -71,19 +83,18 @@ get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selec
   if(length(selected_genes >0)) genes <- data.frame(
                                             feature_name = selected_genes,
                                             feature_display = selected_genes,
-                                            VariableType = "Gene")
+                                            VariableType = "Numeric")
   predictors <- rbind(pred_features, categories, genes)
 
   #subset dataset
   data_bucket <- list(
     train_df = data_df %>%
       dplyr::filter(Dataset %in% dataset_selection$train) %>%
-      tidyr::drop_na(any_of(predictors$feature_name)),
+      tidyr::drop_na(dplyr::any_of(predictors$feature_name)),
     test_df = data_df %>%
       dplyr::filter(Dataset %in% dataset_selection$test) %>%
-      tidyr::drop_na(any_of(predictors$feature_name))
+      tidyr::drop_na(dplyr::any_of(predictors$feature_name))
   )
-
   #Check if any of the selected predictors is missing for a specific dataset (eg, IMVigor210 doesn't have Age data)
   missing_annot <- purrr::map_dfr(.x = c(dataset_selection$train, dataset_selection$test), predictor = selected_pred, fmx_df = data_df, function(dataset, predictor, fmx_df){
     feature <- sapply(data_df %>% dplyr::filter(Dataset == dataset) %>% dplyr::select(predictor), function(x)sum(is.na(x)))
@@ -100,7 +111,6 @@ get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selec
     }
   })
 
-  #normalize train and test, count number of samples in each
   list(
    dataset = dataset_selection,
    predictors = predictors,
@@ -113,11 +123,24 @@ get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selec
 #########################
 # Training Methods
 #########################
+#get folds for cross-validation
+get_balance_class <- function(df, response_variable, predictors_to_balance){
+    dplyr::mutate(df, balance = paste0(df[[response_variable]], df[[predictors_to_balance]]))
+}
+get_cv_folds <- function(train_df, balance_lhs = TRUE, balance_rhs = FALSE, response_variable, predictors_to_balance, n_cv_folds){
+  if(balance_rhs == FALSE){
+    if(balance_lhs == TRUE) caret::createFolds(y = factor(train_df[[response_variable]]), k = n_cv_folds, returnTrain = TRUE)
+    if(balance_lhs == FALSE) return(NULL)
+  }else{
+    if(balance_lhs == TRUE) bdf <- get_balance_class(train_df, response_variable, predictors_to_balance)
+    if(balance_lhs == FALSE) bdf <- get_balance_class(train_df, response_variable = "", predictors_to_balance)
+    caret::createFolds(y = factor(bdf$balance), k = n_cv_folds, returnTrain = TRUE)
+  }
+}
 #Elastic Net
-run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE){
+run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
   print("training model")
-  if(balance_lhs == TRUE) cvIndex <- caret::createFolds(y = factor(train_df[[response_variable]]), k = n_cv_folds, returnTrain = TRUE)
-  else cvIndex <- NULL
+  cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
   parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
   caret::train(
