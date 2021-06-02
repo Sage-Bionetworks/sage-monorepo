@@ -72,10 +72,7 @@ ici_models_train_ui <- function(id){
         shiny::column(
           width = 4,
           shiny::checkboxInput(ns("do_norm"), "Normalize numeric data", value = TRUE),
-          shiny::checkboxInput(ns("balance_resp"), "Balance folds in cv for Response outcome", value = TRUE)
-        ),
-        shiny::column(
-          width = 4,
+          shiny::checkboxInput(ns("balance_resp"), "Balance folds in cv for Response outcome", value = TRUE),
           shiny::checkboxInput(ns("balance_pred"), "Balance folds in cv for categorical predictors", value = FALSE),
           shiny::conditionalPanel(
             "input.balance_pred == 1",
@@ -98,6 +95,14 @@ ici_models_train_ui <- function(id){
             selected = "None"
           ),
           shiny::uiOutput(ns("num_transform"))
+        ),
+        shiny::column(
+          width = 4,
+          shiny::checkboxGroupInput(ns("exclude_previous"), "Exclude samples previously treated with:",
+                                    choices = c("BRAF inhibitor" = "pre_BRAF",
+                                                "Ipilimumab" = "CTLA4_Pretreatment",
+                                                "MAPk inhibitor" = "Previous_MAPKi",
+                                                "Platinum" = "Received_platinum"))
         )
       )
     ),#optionsBox

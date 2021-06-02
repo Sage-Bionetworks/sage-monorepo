@@ -88,7 +88,8 @@ ici_models_train_server <- function(
           test_ds = input$test,
           selected_pred = predictors(),
           selected_genes = input$predictors_gene,
-          feature_df = ioresponse_data$feature_df
+          feature_df = ioresponse_data$feature_df,
+          previous_treat_to_exclude = input$exclude_previous
         )
       })
 
