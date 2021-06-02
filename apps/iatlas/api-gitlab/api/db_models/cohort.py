@@ -9,13 +9,12 @@ class Cohort(Base):
     name = db.Column(db.String, nullable=False)
     clinical = db.Column(db.String, nullable=True)
 
-    dataset_id = db.Column(
-        db.Integer, db.ForeignKey('datasets.id'), nullable=False)
+    dataset_id = db.Column(db.Integer, db.ForeignKey(
+        'datasets.id'), nullable=False)
 
-    tag_id = db.Column(
-        db.Integer, db.ForeignKey('tags.id'), nullable=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
 
-    dataset = db.relationship(
+    data_set = db.relationship(
         'Dataset', backref=orm.backref('cohorts', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')
 
@@ -23,16 +22,16 @@ class Cohort(Base):
         'Tag', backref=orm.backref('cohorts', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')
 
-    samples = db.relationship(
+    sample = db.relationship(
         "Sample", secondary='cohorts_to_samples', uselist=True, lazy='noload')
 
-    features = db.relationship(
+    feature = db.relationship(
         "Feature", secondary='cohorts_to_features', uselist=True, lazy='noload')
 
-    genes = db.relationship(
+    gene = db.relationship(
         "Gene", secondary='cohorts_to_genes', uselist=True, lazy='noload')
 
-    mutations = db.relationship(
+    mutation = db.relationship(
         "Mutation", secondary='cohorts_to_mutations', uselist=True, lazy='noload')
 
     def __repr__(self):

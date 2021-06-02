@@ -5,7 +5,7 @@ from api.db_models import Cohort
 
 accepted_cohort_option_args = ['name', 'data_set', 'tag', 'clinical']
 
-accepted_cohort_query_args = ['name', 'data_set_id', 'tag_id', 'clinical']
+accepted_cohort_query_args = ['name', 'dataset_id', 'tag_id', 'clinical']
 
 
 def return_cohort_query(*args):

@@ -1,3 +1,4 @@
+from .cohort import build_cohort_graphql_response, build_cohort_request, cohort_request_fields
 from .colocalization import colocalization_request_fields, build_coloc_graphql_response, build_colocalization_request
 from .copy_number_result import build_cnr_graphql_response, build_copy_number_result_request, cnr_request_fields
 from .data_set import build_data_set_graphql_response, data_set_request_fields, request_data_sets, simple_data_set_request_fields
