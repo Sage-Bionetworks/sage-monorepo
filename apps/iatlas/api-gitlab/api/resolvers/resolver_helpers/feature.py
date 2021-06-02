@@ -6,6 +6,8 @@ from api.db_models import (
     Dataset, DatasetToSample, DatasetToTag, Feature, FeatureClass, FeatureToSample,
     MethodTag, Sample, SampleToTag, Tag, TagToTag)
 from .general_resolvers import build_join_condition, get_selected, get_selection_set, get_value
+from .paging_utils import get_pagination_queries, fetch_page
+import logging
 
 feature_class_request_fields = {'name'}
 
@@ -24,14 +26,20 @@ feature_request_fields = simple_feature_request_fields.union({'class',
 
 
 def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
+    logger = logging.getLogger("test")
+    # logger.info(sample_dict)
+
     def f(feature):
         if not feature:
             return None
         feature_id = get_value(feature, 'id')
+        logger.info(feature_id)
         max_min = max_min_dict.get(
             feature_id, dict()) if max_min_dict else dict()
         samples = sample_dict.get(feature_id, []) if sample_dict else []
+        logger.info(samples)
         return {
+            'id': feature_id,
             'class': get_value(feature, 'class'),
             'display': get_value(feature, 'feature_display') or get_value(feature, 'display'),
             'methodTag': get_value(feature, 'method_tag'),
@@ -50,7 +58,7 @@ def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
     return f
 
 
-def build_features_query(requested, class_requested, tag_requested, data_set=None, feature=None, feature_class=None, max_value=None, method_tag=None, min_value=None, related=None, sample=None, tag=None, by_class=False, by_tag=False):
+def build_features_query(requested, class_requested, tag_requested, distinct=False, paging=None, data_set=None, feature=None, feature_class=None, max_value=None, method_tag=None, min_value=None, related=None, sample=None, tag=None, by_class=False, by_tag=False):
     """
     Builds a SQL request.
     """
@@ -211,14 +219,14 @@ def build_features_query(requested, class_requested, tag_requested, data_set=Non
     if not order:
         append_to_order(feature_1.id)
 
-    return query.order_by(*order)
+    return get_pagination_queries(query, paging, distinct, cursor_field=feature_1.id)
 
 
-def get_samples(requested, sample_requested, data_set=None, max_value=None, min_value=None, related=None, sample=None, tag=None, feature_ids=set()):
+def get_samples(requested, sample_requested, distinct, paging, data_set=None, max_value=None, min_value=None, feature=None, feature_class=None, method_tag=None, related=None, sample=None, tag=None, feature_ids=set()):
     has_samples = 'samples' in requested
     has_max_min = 'valueMax' in requested or 'valueMin' in requested
 
-    if feature_ids and (has_samples or has_max_min):
+    if (has_samples or has_max_min):
         sess = db.session
 
         data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
@@ -242,8 +250,17 @@ def get_samples(requested, sample_requested, data_set=None, max_value=None, min_
         if sample:
             sample_query = sample_query.filter(sample_1.name.in_(sample))
 
+        if not feature_ids:
+            query, _count_query = build_features_query(
+                set(), set(), set(), distinct=distinct, paging=paging, data_set=data_set, feature=feature, feature_class=feature_class, max_value=max_value, min_value=min_value, method_tag=method_tag, related=related, sample=sample, tag=tag)
+            res = fetch_page(query, paging, distinct)
+            features = list(set(feature.id for feature in res)
+                            ) if len(res) > 0 else []
+        else:
+            features = feature_ids
+
         feature_sample_join_condition = build_join_condition(
-            feature_to_sample_1.sample_id, sample_1.id, feature_to_sample_1.feature_id, feature_ids)
+            feature_to_sample_1.sample_id, sample_1.id, feature_to_sample_1.feature_id, features)
 
         if max_value:
             feature_sample_join_condition.append(
@@ -311,18 +328,18 @@ def get_samples(requested, sample_requested, data_set=None, max_value=None, min_
     return []
 
 
-def request_features(requested, class_requested, tag_requested, data_set=None, feature=None, feature_class=None, max_value=None, min_value=None,
+def request_features(requested, class_requested, tag_requested, distinct, paging, data_set=None, feature=None, feature_class=None, max_value=None, min_value=None,
                      related=None, sample=None, tag=None, by_class=False, by_tag=False):
-    query = build_features_query(requested, class_requested, tag_requested, data_set=data_set, feature=feature, feature_class=feature_class, max_value=max_value,
-                                 min_value=min_value, related=related, sample=sample, tag=tag, by_class=by_class, by_tag=by_tag)
+    query, count_query = build_features_query(requested, class_requested, tag_requested, distinct, paging, data_set=data_set, feature=feature, feature_class=feature_class, max_value=max_value,
+                                              min_value=min_value, related=related, sample=sample, tag=tag, by_class=by_class, by_tag=by_tag)
 
     return query.distinct().all()
 
 
-def return_feature_derived_fields(requested, sample_requested, feature_ids=set(), data_set=None, max_value=None, min_value=None,
-                                  related=None, sample=None, tag=None):
-    samples = get_samples(requested, sample_requested, data_set=data_set, max_value=max_value, min_value=min_value, related=related,
-                          sample=sample, tag=tag, feature_ids=feature_ids)
+def return_feature_derived_fields(requested, sample_requested, distinct, paging, **kwargs):
+
+    samples = get_samples(requested, sample_requested,
+                          distinct=distinct, paging=paging, **kwargs)
 
     has_max_min = 'valueMax' in requested or 'valueMin' in requested
 
