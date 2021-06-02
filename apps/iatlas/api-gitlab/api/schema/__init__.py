@@ -2,7 +2,7 @@ from ariadne import load_schema_from_path, make_executable_schema, ObjectType, S
 import os
 import decimal
 from api.resolvers import (
-    resolve_colocalizations, resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_edges, resolve_features, resolve_features_by_class, resolve_features_by_tag, resolve_gene_family, resolve_gene_function, resolve_gene_types, resolve_genes, resolve_germline_gwas_results, resolve_heritability_results, resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutations_by_sample, resolve_mutation_types, resolve_nodes, resolve_rare_variant_pathway_associations, resolve_pathways, resolve_patients, resolve_related, resolve_samples, resolve_samples_by_mutations_status, resolve_samples_by_tag, resolve_slides, resolve_snps, resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
+    resolve_colocalizations, resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_edges, resolve_features, resolve_gene_family, resolve_gene_function, resolve_gene_types, resolve_genes, resolve_germline_gwas_results, resolve_heritability_results, resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutations_by_sample, resolve_mutation_types, resolve_nodes, resolve_rare_variant_pathway_associations, resolve_pathways, resolve_patients, resolve_related, resolve_samples, resolve_samples_by_mutations_status, resolve_samples_by_tag, resolve_slides, resolve_snps, resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 
