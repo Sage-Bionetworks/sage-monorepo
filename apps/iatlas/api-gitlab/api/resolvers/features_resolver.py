@@ -3,7 +3,7 @@ from .resolver_helpers.paging_utils import paginate, paging_fields, create_pagin
 import logging
 
 
-def resolve_features(_obj, info, distinct=False, paging=None, dataSet=None, feature=None, featureClass=None, maxValue=None, minValue=None, related=None, sample=None, tag=None):
+def resolve_features(_obj, info, distinct=True, paging=None, dataSet=None, feature=None, featureClass=None, maxValue=None, minValue=None, related=None, sample=None, tag=None):
 
     selection_set = get_selection_set(info=info, child_node='items')
 
@@ -23,12 +23,11 @@ def resolve_features(_obj, info, distinct=False, paging=None, dataSet=None, feat
 
     paging = create_paging(paging, max_items)
 
-    # look into method_tag
     query, count_query = build_features_query(
-        requested, class_requested, tag_requested, distinct, paging, data_set=dataSet, feature=feature, feature_class=featureClass, max_value=maxValue, method_tag=None, min_value=minValue, related=related, sample=sample, tag=tag)
+        requested, class_requested, tag_requested, distinct, paging, data_set=dataSet, feature=feature, feature_class=featureClass, max_value=maxValue, min_value=minValue, related=related, sample=sample, tag=tag)
 
     max_min_dict, sample_dict = return_feature_derived_fields(
-        requested, sample_requested, distinct, paging, data_set=dataSet, max_value=maxValue, min_value=minValue, related=related, sample=sample, tag=tag)
+        requested, sample_requested, distinct, paging, data_set=dataSet, max_value=maxValue, min_value=minValue, feature=feature, feature_class=featureClass, related=related, sample=sample, tag=tag)
 
     pagination_requested = get_requested(info, paging_fields, 'paging')
 

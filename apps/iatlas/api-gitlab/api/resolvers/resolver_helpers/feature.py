@@ -26,13 +26,18 @@ feature_request_fields = simple_feature_request_fields.union({'class',
 
 
 def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
+    logger = logging.getLogger("test")
+    # logger.info(sample_dict)
+
     def f(feature):
         if not feature:
             return None
         feature_id = get_value(feature, 'id')
+        logger.info(feature_id)
         max_min = max_min_dict.get(
             feature_id, dict()) if max_min_dict else dict()
         samples = sample_dict.get(feature_id, []) if sample_dict else []
+        logger.info(samples)
         return {
             'id': feature_id,
             'class': get_value(feature, 'class'),
@@ -217,11 +222,11 @@ def build_features_query(requested, class_requested, tag_requested, distinct=Fal
     return get_pagination_queries(query, paging, distinct, cursor_field=feature_1.id)
 
 
-def get_samples(requested, sample_requested, distinct, paging, data_set=None, max_value=None, min_value=None, related=None, sample=None, tag=None, feature_ids=set()):
+def get_samples(requested, sample_requested, distinct, paging, data_set=None, max_value=None, min_value=None, feature=None, feature_class=None, method_tag=None, related=None, sample=None, tag=None, feature_ids=set()):
     has_samples = 'samples' in requested
     has_max_min = 'valueMax' in requested or 'valueMin' in requested
 
-    if feature_ids and (has_samples or has_max_min):
+    if (has_samples or has_max_min):
         sess = db.session
 
         data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
@@ -247,7 +252,7 @@ def get_samples(requested, sample_requested, distinct, paging, data_set=None, ma
 
         if not feature_ids:
             query, _count_query = build_features_query(
-                set(), set(), set(), distinct=distinct, paging=paging, data_set=None, max_value=None, min_value=None, related=None, sample=None, tag=None)
+                set(), set(), set(), distinct=distinct, paging=paging, data_set=data_set, feature=feature, feature_class=feature_class, max_value=max_value, min_value=min_value, method_tag=method_tag, related=related, sample=sample, tag=tag)
             res = fetch_page(query, paging, distinct)
             features = list(set(feature.id for feature in res)
                             ) if len(res) > 0 else []
