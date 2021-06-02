@@ -58,7 +58,14 @@ get_scaled_data <- function(df, scale_function_choice = "None", predictors_to_sc
     mutate(across(all_of(predictors_to_scale), scale_function))
 }
 
-get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selected_genes, feature_df = ioresponse_data$feature_df, scale_function_choice = "None", predictors_to_scale){
+exclude_treatment_data <- function(x){
+  is.na(x) | x == FALSE
+}
+get_training_object <- function(data_df, train_ds, test_ds,
+                                selected_pred, selected_genes,
+                                feature_df = ioresponse_data$feature_df,
+                                scale_function_choice = "None", predictors_to_scale,
+                                previous_treat_to_exclude = NULL){
 
   #df with train and test
   dataset_selection <- list(
@@ -90,10 +97,12 @@ get_training_object <- function(data_df, train_ds, test_ds, selected_pred, selec
   data_bucket <- list(
     train_df = data_df %>%
       dplyr::filter(Dataset %in% dataset_selection$train) %>%
-      tidyr::drop_na(dplyr::any_of(predictors$feature_name)),
+      tidyr::drop_na(dplyr::any_of(predictors$feature_name)) %>%
+      dplyr::filter(dplyr::if_all(previous_treat_to_exclude, exclude_treatment_data)),
     test_df = data_df %>%
       dplyr::filter(Dataset %in% dataset_selection$test) %>%
-      tidyr::drop_na(dplyr::any_of(predictors$feature_name))
+      tidyr::drop_na(dplyr::any_of(predictors$feature_name)) %>%
+      dplyr::filter(dplyr::if_all(previous_treat_to_exclude, exclude_treatment_data))
   )
   #Check if any of the selected predictors is missing for a specific dataset (eg, IMVigor210 doesn't have Age data)
   missing_annot <- purrr::map_dfr(.x = c(dataset_selection$train, dataset_selection$test), predictor = selected_pred, fmx_df = data_df, function(dataset, predictor, fmx_df){
