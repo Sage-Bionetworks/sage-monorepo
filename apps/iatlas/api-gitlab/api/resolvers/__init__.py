@@ -5,8 +5,6 @@ from .data_sets_resolver import resolve_data_sets
 from .driver_results_resolver import resolve_driver_results
 from .edges_resolver import resolve_edges
 from .features_resolver import resolve_features
-from .features_by_class_resolver import resolve_features_by_class
-from .features_by_tag_resolver import resolve_features_by_tag
 from .gene_resolver import resolve_gene
 from .gene_family_resolver import resolve_gene_family
 from .gene_function_resolver import resolve_gene_function
