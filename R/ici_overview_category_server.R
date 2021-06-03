@@ -21,14 +21,14 @@ ici_overview_category_server <- function(
       })
 
       group1 <- reactive({
-        iatlas.app::convert_value_between_columns(input_value = input$group1,
+        convert_value_between_columns(input_value = input$group1,
                                       df = ioresponse_data$feature_df,
                                       from_column = "FriendlyLabel",
                                       to_column = "FeatureMatrixLabelTSV")
       })
 
       group2 <- reactive({
-        iatlas.app::convert_value_between_columns(input_value = input$group2,
+        convert_value_between_columns(input_value = input$group2,
                                       df = ioresponse_data$feature_df,
                                       from_column = "FriendlyLabel",
                                       to_column = "FeatureMatrixLabelTSV")
