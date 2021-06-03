@@ -8,7 +8,7 @@ available_groups_list <- build_cohort_group_list(
 )
 
 feature_bin_tbl <- "PCAWG" %>%
-  iatlas.api.client::query_features_by_class() %>%
+  iatlas.api.client::query_features() %>%
   dplyr::select("class", "display", "name")
 
 test_that("build_custom_group_tbl", {
