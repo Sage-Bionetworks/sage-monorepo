@@ -60,7 +60,7 @@ fit_coxph <- function(dataset1, data, feature, time, status, ft_labels, multivar
         "survival::Surv(", time, ",", status, ") ~ ", x))
 
       survival::coxph(cox_features, data_cox)%>%
-        iatlas.app::create_ph_df(dataset = dataset1)
+        create_ph_df(dataset = dataset1)
     })
   }else{
     mult_ft <- paste0(valid_ft, collapse  = " + ")
@@ -70,7 +70,7 @@ fit_coxph <- function(dataset1, data, feature, time, status, ft_labels, multivar
       mult_ft)
     )
     survival::coxph(cox_features, data_cox) %>%
-      iatlas.app::create_ph_df(dataset = dataset1)
+      create_ph_df(dataset = dataset1)
   }
 }
 
