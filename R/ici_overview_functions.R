@@ -11,19 +11,19 @@ get_io_overview_table <- function(group, ioresponse_data){
       values_from = n) %>%
     dplyr::mutate("Group Name" = purrr::map_chr(.[["Sample Group"]], function(x){
       if(x == "Not annotated") return("")
-      iatlas.app::convert_value_between_columns(input_value = x,
+      convert_value_between_columns(input_value = x,
                                                 df = ioresponse_data$sample_group_df %>% filter(Category %in% group),
                                                 from_column = "FeatureValue",
                                                 to_column = "FeatureName")}),
       "Plot Color" = purrr::map_chr(.[["Sample Group"]], function(x){
         if(x == "Not annotated")return("#C9C9C9")
-        iatlas.app::convert_value_between_columns(input_value = x,
+        convert_value_between_columns(input_value = x,
                                                   df = ioresponse_data$sample_group_df %>% filter(Category %in% group),
                                                   from_column = "FeatureValue",
                                                   to_column = "FeatureHex")}),
       "Order" = purrr::map_chr(.[["Sample Group"]], function(x){
         if(x == "Not annotated")return("0")
-        iatlas.app::convert_value_between_columns(input_value = x,
+        convert_value_between_columns(input_value = x,
                                                   df = ioresponse_data$sample_group_df %>% filter(Category %in% group),
                                                   from_column = "FeatureValue",
                                                   to_column = "order_within_sample_group") %>% as.integer()
@@ -34,8 +34,8 @@ get_io_overview_table <- function(group, ioresponse_data){
 get_io_mosaic_df <- function(ioresponse_data, group1, group2){
 
   #getting the labels
-  label1 <- iatlas.app::get_group_labels(ioresponse_data$sample_group_df, group1)
-  label2 <- iatlas.app::get_group_labels(ioresponse_data$sample_group_df, group2)
+  label1 <- get_group_labels(ioresponse_data$sample_group_df, group1)
+  label2 <- get_group_labels(ioresponse_data$sample_group_df, group2)
 
   not_annot <- data.frame("FeatureValue" = NA_character_,
                           "FeatureLabel" = "Not annotated",
@@ -92,7 +92,7 @@ create_mosaicplot <- function(
   p <- plotly::plotly_build(plot) %>%
     plotly::layout(title = title,
            legend = list(traceorder = 'reversed')) %>%
-    iatlas.app::format_plotly()
+    format_plotly()
   p["width"] <- list(NULL)
   p["height"] <- list(NULL)
   p$x$layout["width"] <- list(NULL)

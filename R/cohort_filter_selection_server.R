@@ -81,7 +81,7 @@ cohort_filter_selection_server <- function(id, dataset) {
 
       feature_tbl <- shiny::reactive({
         dataset() %>%
-          iatlas.api.client::query_features_by_class() %>%
+          iatlas.api.client::query_features() %>%
           dplyr::select("class", "display", "feature" = "name") %>%
           dplyr::mutate("feature" = stringr::str_c("feature:", .data$feature))
       })
