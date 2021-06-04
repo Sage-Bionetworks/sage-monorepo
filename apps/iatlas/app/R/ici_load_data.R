@@ -10,7 +10,6 @@ load_io_response <- function(){
 }
 
 load_io_data <- function(){
-
   io_data <- load_io_response()
 
   list(
