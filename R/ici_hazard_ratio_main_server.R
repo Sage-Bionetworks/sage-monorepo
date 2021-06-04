@@ -7,8 +7,14 @@ ici_hazard_ratio_main_server <- function(
 
       ns <- session$ns
 
-      output$heatmap_op <- shiny::renderUI({
+      #store selected variables
+      selected_vals <- shiny::reactiveValues(vars = c("IMPRES", "Vincent_IPRES_NonResponder"))
+      observe({
+        shiny::req(input$var2_cox)
+        selected_vals$vars <- input$var2_cox
+      })
 
+      observe({
         non_selected_ds <- paste("Clinical data for", setdiff(unlist(datasets_options), input$datasets_mult), sep = " ")
 
         clin_data <- ioresponse_data$feature_df %>%
@@ -31,13 +37,12 @@ ici_hazard_ratio_main_server <- function(
                                                                              filter_column = "VariableType")
         var_choices <- c(var_choices_clin, var_choices_feat)
 
-        shiny::selectizeInput(
-                  ns("var2_cox"),
-                  "Select or Search for variables",
-                  var_choices,
-                  selected = c("IMPRES", "Vincent_IPRES_NonResponder"),
-                  multiple = TRUE
-                )
+        updateSelectizeInput(session,
+                          "var2_cox",
+                          choices = var_choices,
+                          selected = selected_vals$vars,
+                          server = TRUE
+                          )
       })
 
       datasets <- shiny::reactive({

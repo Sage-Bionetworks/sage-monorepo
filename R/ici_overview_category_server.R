@@ -65,7 +65,7 @@ ici_overview_category_server <- function(
 
         df_colors <- df_mosaic %>%
           dplyr::select(y, plot_color) %>%
-          distinct()
+          dplyr::distinct()
 
         plot_colors <- c("#C9C9C9", df_colors$plot_color)
         names(plot_colors) <- c("Not annotated", as.character(df_colors$y))
