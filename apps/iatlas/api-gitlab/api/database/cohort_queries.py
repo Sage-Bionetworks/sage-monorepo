@@ -3,13 +3,14 @@ from api import db
 from .database_helpers import build_general_query
 from api.db_models import Cohort
 
-accepted_cohort_option_args = ['name', 'data_set', 'tag', 'clinical']
+cohort_related_fields = ['data_set', 'tag',
+                         'samples', 'features', 'mutations', 'genes']
 
-accepted_cohort_query_args = ['name', 'dataset_id', 'tag_id', 'clinical']
+cohort_core_fields = ['id', 'name', 'dataset_id', 'tag_id', 'clinical']
 
 
 def return_cohort_query(*args):
     return build_general_query(
         Cohort, args=args,
-        accepted_option_args=accepted_cohort_option_args,
-        accepted_query_args=accepted_cohort_query_args)
+        accepted_option_args=cohort_related_fields,
+        accepted_query_args=cohort_core_fields)

@@ -19,112 +19,135 @@ def tag_cohort_id(test_db, tag_cohort_name):
 
 
 @pytest.fixture(scope='module')
-def cohort_data_set():
-    return "TCGA"
+def clinical_cohort_name():
+    return 'tcga_gender'
 
 
 @pytest.fixture(scope='module')
-def cohort_data_set_id(test_db, cohort_data_set):
-    from api.db_models import Dataset
-    (id, ) = test_db.session.query(Dataset.id).filter_by(
-        name=cohort_data_set).one_or_none()
+def clinical_cohort_id(test_db, clinical_cohort_name):
+    from api.db_models import Cohort
+    (id, ) = test_db.session.query(Cohort.id).filter_by(
+        name=clinical_cohort_name).one_or_none()
     return id
 
 
-@pytest.fixture(scope='module')
-def parent_tag_name():
-    return "immune_subtype"
-
-
-@pytest.fixture(scope='module')
-def parent_tag_id(test_db, parent_tag_name):
-    from api.db_models import Tag
-    (id, ) = test_db.session.query(Tag.id).filter_by(
-        name=parent_tag_name).one_or_none()
-    return id
-
-
-def test_cohort_no_relationships(app):
-    string_representation_list = []
-    separator = ', '
-
+def test_tag_cohort_no_relationships(app, tag_cohort_name, tag_cohort_id, related_id, data_set_id):
     query = return_cohort_query()
-    results = query.all()
-
-    assert isinstance(results, list)
-    assert len(results) == 9
-    for result in results:
-        string_representation = '<Cohort %r>' % result.name
-        string_representation_list.append(string_representation)
-        assert repr(result) == string_representation
-        assert type(result.name) is str
-        assert type(result.clinical) is str or NoneType
-        assert type(result.tag_id) is int or NoneType
-        assert type(result.dataset_id) is int
-    assert repr(results) == '[' + separator.join(
-        string_representation_list) + ']'
+    result = query.filter_by(name=tag_cohort_name).one_or_none()
+    string_representation = '<Cohort %r>' % result.name
+    assert repr(result) == string_representation
+    assert result
+    assert result.id == tag_cohort_id
+    assert result.name == tag_cohort_name
+    assert result.tag_id == related_id
+    assert result.dataset_id == data_set_id
+    assert type(result.clinical) is NoneType
 
 
-def test_cohort_relationships(app):
-    string_representation_list = []
-    separator = ', '
-    relationships_to_join = ['data_set', 'tag',
-                             'sample', 'feature', 'gene', 'mutation']
-
-    query = return_cohort_query(*relationships_to_join)
-    results = query.all()
-
-    assert isinstance(results, list)
-    assert len(results) == 9
-    logger = logging.getLogger('test cohort')
-    for result in results:
-        string_representation = '<Cohort %r>' % result.name
-        string_representation_list.append(string_representation)
-        assert repr(result) == string_representation
-        assert type(result.name) is str
-        assert type(result.clinical) is str or NoneType
-        assert type(result.tag_id) is int or NoneType
-        assert type(result.dataset_id) is int
-        assert type(result.data_set.name) is str
-        assert type(result.data_set.id) is int
-        logger.info(result.feature)
-        logger.info(result.gene)
-        logger.info(result.sample)
-        logger.info(result.mutation)
-        assert 1 == 2
-    assert repr(results) == '[' + separator.join(
-        string_representation_list) + ']'
+def test_clinical_cohort_no_relationships(app, clinical_cohort_name, clinical_cohort_id, data_set_id):
+    query = return_cohort_query()
+    result = query.filter_by(name=clinical_cohort_name).one_or_none()
+    string_representation = '<Cohort %r>' % result.name
+    assert repr(result) == string_representation
+    assert result
+    assert result.id == clinical_cohort_id
+    assert result.name == clinical_cohort_name
+    assert type(result.tag_id) is NoneType
+    assert result.dataset_id == data_set_id
+    assert result.clinical == "Gender"
 
 
-def test_unique_cohort(app, data_set_id, parent_tag_id, parent_tag_name, cohort_data_set, cohort_data_set_id):
-    string_representation_list = []
-    separator = ', '
-    relationships_to_join = ['data_set', 'tag',
-                             'sample', 'feature', 'gene', 'mutation']
+def test_cohort_samples_relationship(app, tag_cohort_name, tag_cohort_id, related_id, data_set_id):
+    query = return_cohort_query('samples')
+    result = query.filter_by(name=tag_cohort_name).one_or_none()
+    string_representation = '<Cohort %r>' % result.name
+    assert repr(result) == string_representation
+    assert result
+    assert result.id == tag_cohort_id
+    assert result.name == tag_cohort_name
+    assert result.tag_id == related_id
+    assert result.dataset_id == data_set_id
+    assert type(result.clinical) is NoneType
+    for sample in result.samples[0:2]:
+        assert type(sample.id) is int
+        assert type(sample.name) is str
 
-    query = return_cohort_query(*relationships_to_join)
-    results = query.filter_by(tag_id=parent_tag_id).filter_by(
-        dataset_id=data_set_id).all()
-    logger = logging.getLogger('test cohort')
-    logger.info(results)
-    logger.info(parent_tag_name)
 
-    assert isinstance(results, list)
-    assert len(results) == 1
-    for result in results:
-        string_representation = '<Cohort %r>' % result.name
-        string_representation_list.append(string_representation)
-        assert repr(result) == string_representation
-        assert type(result.name) is str
-        assert type(result.clinical) is str or NoneType
-        assert type(result.tag_id) is int or NoneType
-        assert type(result.dataset_id) is int
-        assert type(result.data_set.name) is str
-        assert type(result.data_set.id) is int
-        logger.info(result.feature)
-        logger.info(result.gene)
-        logger.info(result.sample)
-        logger.info(result.mutation)
-        assert 1 == 2
-    assert repr(results) == '[' + separator.join(
-        string_representation_list) + ']'
+def test_cohort_genes_relationship(app, tag_cohort_name, tag_cohort_id, related_id, data_set_id):
+    query = return_cohort_query('genes')
+    result = query.filter_by(name=tag_cohort_name).one_or_none()
+    string_representation = '<Cohort %r>' % result.name
+    assert repr(result) == string_representation
+    assert result
+    assert result.id == tag_cohort_id
+    assert result.name == tag_cohort_name
+    assert result.tag_id == related_id
+    assert result.dataset_id == data_set_id
+    assert type(result.clinical) is NoneType
+    for gene in result.genes[0:2]:
+        assert type(gene.id) is int
+        assert type(gene.entrez) is int
+        assert type(gene.hgnc) is str
+
+
+def test_cohort_features_relationship(app, tag_cohort_name, tag_cohort_id, related_id, data_set_id):
+    query = return_cohort_query('features')
+    result = query.filter_by(name=tag_cohort_name).one_or_none()
+    string_representation = '<Cohort %r>' % result.name
+    assert repr(result) == string_representation
+    assert result
+    assert result.id == tag_cohort_id
+    assert result.name == tag_cohort_name
+    assert result.tag_id == related_id
+    assert result.dataset_id == data_set_id
+    assert type(result.clinical) is NoneType
+    for feature in result.features[0:2]:
+        assert type(feature.id) is int
+        assert type(feature.name) is str
+        assert type(feature.display) is str
+
+
+def test_cohort_mutations_relationship(app, tag_cohort_name, tag_cohort_id, related_id, data_set_id):
+    query = return_cohort_query('mutations')
+    result = query.filter_by(name=tag_cohort_name).one_or_none()
+    string_representation = '<Cohort %r>' % result.name
+    assert repr(result) == string_representation
+    assert result
+    assert result.id == tag_cohort_id
+    assert result.name == tag_cohort_name
+    assert result.tag_id == related_id
+    assert result.dataset_id == data_set_id
+    assert type(result.clinical) is NoneType
+    for mutation in result.mutations[0:2]:
+        assert type(mutation.id) is int
+        assert type(mutation.gene_id) is int
+        assert type(mutation.mutation_code_id) is int
+        assert type(mutation.mutation_type_id) is int
+
+
+def test_cohort_tag_relationship(app, tag_cohort_name, tag_cohort_id, related, related_id, data_set_id):
+    query = return_cohort_query('tag')
+    result = query.filter_by(name=tag_cohort_name).one_or_none()
+    string_representation = '<Cohort %r>' % result.name
+    assert repr(result) == string_representation
+    assert result
+    assert result.id == tag_cohort_id
+    assert result.name == tag_cohort_name
+    assert result.tag_id == related_id
+    assert result.dataset_id == data_set_id
+    assert type(result.clinical) is NoneType
+    assert result.tag.name == related
+
+
+def test_cohort_dataset_relationship(app, tag_cohort_name, tag_cohort_id, related_id, data_set_id, data_set):
+    query = return_cohort_query('data_set')
+    result = query.filter_by(name=tag_cohort_name).one_or_none()
+    string_representation = '<Cohort %r>' % result.name
+    assert repr(result) == string_representation
+    assert result
+    assert result.id == tag_cohort_id
+    assert result.name == tag_cohort_name
+    assert result.tag_id == related_id
+    assert result.dataset_id == data_set_id
+    assert type(result.clinical) is NoneType
+    assert result.data_set.name == data_set

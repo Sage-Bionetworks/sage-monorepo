@@ -22,16 +22,16 @@ class Cohort(Base):
         'Tag', backref=orm.backref('cohorts', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')
 
-    sample = db.relationship(
+    samples = db.relationship(
         "Sample", secondary='cohorts_to_samples', uselist=True, lazy='noload')
 
-    feature = db.relationship(
+    features = db.relationship(
         "Feature", secondary='cohorts_to_features', uselist=True, lazy='noload')
 
-    gene = db.relationship(
+    genes = db.relationship(
         "Gene", secondary='cohorts_to_genes', uselist=True, lazy='noload')
 
-    mutation = db.relationship(
+    mutations = db.relationship(
         "Mutation", secondary='cohorts_to_mutations', uselist=True, lazy='noload')
 
     def __repr__(self):
