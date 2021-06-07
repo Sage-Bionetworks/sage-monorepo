@@ -11,7 +11,7 @@ ici_models_train_server <- function(
       output$bucket_list <- shiny::renderUI({
         list_format <- "<p style = 'color:Gray; font-size: 12px; height: 18px;'>"
         sortable::bucket_list(
-          header = "Select training and testing datasets",
+          header = "1. Select training and testing datasets",
           group_name = ns("dataset_bucket"),
           orientation = "horizontal",
           sortable::add_rank_list(
@@ -68,7 +68,7 @@ ici_models_train_server <- function(
         shiny::validate(shiny::need(length(selected_pred)>0, "No numeric predictor was selected."))
         shiny::checkboxGroupInput(
           ns("pred_to_transform"),
-          label = "Select variable(s) to transform",
+          label = "Select variable(s) to scale",
           choices = selected_pred
         )
       })
