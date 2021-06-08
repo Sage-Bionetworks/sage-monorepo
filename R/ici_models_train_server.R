@@ -108,40 +108,61 @@ ici_models_train_server <- function(
 
       observe({ #block Train button if one of the datasets is missing annotation for one predictor. Notify number of samples with NA that will be excluded
         shiny::req(training_obj())
-        if(dplyr::n_distinct(training_obj()$subset_df$train_df$Study) >1) shiny::showNotification("Warning: You selected datasets with samples from different tumor types. The data from these datasets will be merged for training.", duration = NULL, id = "mix_types")
+
+        if(dplyr::n_distinct(training_obj()$subset_df$train_df$Study) >1) shiny::showNotification("Warning: You selected datasets with samples from different tumor types. The data from these datasets will be merged for training.", duration = 10, id = "mix_types")
         else shiny::removeNotification(id = "mix_types")
 
-        if((nrow(training_obj()$subset_df$train_df)/length(predictors()))<10) shiny::showNotification("Warning: The number of selected predictors is higher than 10% of the number of samples selected for training.", duration = NULL, id = "high_pred")
+        if((nrow(training_obj()$subset_df$train_df)/length(predictors()))<10) shiny::showNotification("Warning: The number of selected predictors is higher than 10% of the number of samples selected for training.", duration = 10, id = "high_pred")
         else shiny::removeNotification(id = "high_pred")
 
-        if(nrow(training_obj()$missing_annot) == 0){
+        if(nrow(training_obj()$missing_annot) == 0 & length(training_obj()$missing_level)==0){
           shinyjs::enable("compute_train")
           shinyjs::hide("missing_data")
           shinyjs::hide("missing_sample")
-        }else{
-          if(any(training_obj()$missing_annot$missing_all == 1)){ #dataset doesn't have annotation for one selected feature
+         }else{
+          if(nrow(training_obj()$missing_level)>0){
             shinyjs::disable("compute_train")
-            shinyjs::show("missing_data")
-            output$missing_data <- shiny::renderText({
-              shiny::req(nrow(training_obj()$missing_annot) != 0)
-              missing_all <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == 1))
-              paste("Dataset ", missing_all$dataset, "has no data for ", missing_all$feature,
-                    ". Change the dataset and/or predictor selection to proceed.")})
-          }else{
-            shinyjs::enable("compute_train")
-            shinyjs::hide("missing_data")
+            output$missing_level <- shiny::renderText({
+              shiny::req(nrow(training_obj()$missing_level) != 0)
+              paste(training_obj()$missing_level$feature_display, "has group ", training_obj()$missing_level$group, "only at the testing set (",
+                    training_obj()$missing_level$dataset, "). Change the dataset and/or predictor selection to proceed.")})
           }
-          if(any(training_obj()$missing_annot$missing_all == 0)){ #samples with missing info for a selected feature
-            shinyjs::show("missing_sample")
-            output$missing_sample <- shiny::renderText({
-              shiny::req(nrow(training_obj()$missing_annot) != 0)
-              missing_some <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == 0))
-              paste("Dataset ", missing_some$dataset, "has ", missing_some$n_missing, " samples with NA info for ", missing_some$feature,
-                    " that will be excluded from modeling.")
-            })
-          }else{
-            shinyjs::hide("missing_sample")
-          }
+
+          if(nrow(training_obj()$missing_annot)>0){ #checks for missing data
+            if(any(training_obj()$missing_annot$missing_all == 1)){ #dataset doesn't have annotation for one selected feature
+              shinyjs::disable("compute_train")
+              shinyjs::show("missing_data")
+              output$missing_data <- shiny::renderText({
+                shiny::req(nrow(training_obj()$missing_annot) != 0)
+                missing_all <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == 1))
+                paste("Dataset ", missing_all$dataset, "has no data for ", missing_all$feature,
+                      ". Change the dataset and/or predictor selection to proceed.")})
+            }else{
+              #shinyjs::enable("compute_train")
+              shinyjs::hide("missing_data")
+            }
+
+            if(any(training_obj()$missing_annot$missing_all == 0)){ #samples with missing info for a selected feature
+              shinyjs::show("missing_sample")
+              output$missing_sample <- shiny::renderText({
+                shiny::req(nrow(training_obj()$missing_annot) != 0)
+                missing_some <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == 0))
+                paste("Dataset ", missing_some$dataset, "has ", missing_some$n_missing, " samples with NA info for ", missing_some$feature,
+                      " that will be excluded from modeling.")
+              })
+            }
+
+
+          } #ends check for NAs in annotation
+
+
+          # else{
+          #   shinyjs::enable("compute_train")
+          #   shinyjs::hide("missing_data")
+          # }
+            #else{
+          #   shinyjs::hide("missing_sample")
+          # }
         }
       })
 

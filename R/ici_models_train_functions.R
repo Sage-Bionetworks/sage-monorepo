@@ -120,11 +120,38 @@ get_training_object <- function(data_df, train_ds, test_ds,
     }
   })
 
+  #In case a categorical predictor is selected, check if the testing dataset has the same levels included for training
+  cat_predictors <-subset(predictors,VariableType == "Categorical", feature_name)
+  #if some category is not annotated, we need to exclude it from training
+  cat_missing <- if(nrow(cat_predictors) >0){
+    purrr::map_dfr(.x = cat_predictors$feature_name, function(x){
+      missing_train <- unique(data_bucket$train_df[[x]])
+      missing_test <- unique(data_bucket$test_df[[x]])
+      if(length(missing_test)== 0 |length(missing_train)== 0) return(NULL)
+
+      missing_level <- setdiff(unique(data_bucket$test_df[[x]]), unique(data_bucket$train_df[[x]]))
+      if(length(missing_level) != 0){
+        missing_df <- data_bucket$test_df %>%
+          dplyr::filter(.[[x]] %in% missing_level) %>%
+          dplyr::group_by(Dataset) %>%
+          dplyr::select(Dataset, dplyr::any_of(x)) %>%
+          dplyr::distinct()
+
+        cat_missing <- data.frame(
+          feature_name = x,
+          feature_display = subset(predictors, feature_name == x, feature_display),
+          group = missing_df[[x]],
+          dataset = missing_df$Dataset
+        )
+      }
+    })
+  }
   list(
    dataset = dataset_selection,
    predictors = predictors,
    subset_df = data_bucket,
-   missing_annot = missing_annot
+   missing_annot = missing_annot,
+   missing_level = cat_missing
   )
 }
 

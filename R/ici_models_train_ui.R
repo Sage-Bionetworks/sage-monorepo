@@ -101,6 +101,7 @@ ici_models_train_ui <- function(id){
             shiny::br(),
             shiny::actionButton(ns("compute_train"), "Train Model"),
             shiny::textOutput(ns("missing_data")),
+            shiny::textOutput(ns("missing_level")),
             shiny::textOutput(ns("missing_sample"))
           ),
           plotBox(
