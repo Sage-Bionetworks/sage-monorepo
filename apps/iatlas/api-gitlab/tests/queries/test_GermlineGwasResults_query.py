@@ -3,7 +3,6 @@ import pytest
 from tests import NoneType
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 from api.database import return_germline_gwas_result_query
-import logging
 
 
 @pytest.fixture(scope='module')
@@ -216,7 +215,6 @@ def test_germlineGwasResults_query_with_passed_min_p_value(client, common_query_
 
 
 def test_germlineGwasResults_query_with_passed_max_p_value(client, common_query_builder, ggr_max_p_value):
-    logger = logging.getLogger("ggresulttest ")
     query = common_query_builder(
         """{
             items { pValue }
