@@ -63,7 +63,7 @@ def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={},
     return f
 
 
-def build_cohort_request(requested, data_set_requested, tag_requested, sample_requested, feature_requested, gene_requested, mutation_requested, name=None, data_set=None, tag=None, clinical=None, distinct=False, paging=None):
+def build_cohort_request(requested, data_set_requested, tag_requested, name=None, data_set=None, tag=None, clinical=None, distinct=False, paging=None):
     """
     Builds a SQL request.
 
@@ -71,10 +71,6 @@ def build_cohort_request(requested, data_set_requested, tag_requested, sample_re
         1st position - a set of the requested fields at the root of the graphql request
         2nd position - a set of the requested fields in the 'dataSet' node of the graphql request. If 'dataSet' is not requested, this will be an empty set.
         3rd position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this will be an empty set.
-        4th position - a set of the requested fields in the 'sample' node of the graphql request. If 'feature' is not requested, this will be an empty set.
-        5th position - a set of the requested fields in the 'feature' node of the graphql request. If 'feature' is not requested, this will be an empty set.
-        6th position - a set of the requested fields in the 'gene' node of the graphql request. If 'feature' is not requested, this will be an empty set.
-        7th position - a set of the requested fields in the 'mutation' node of the graphql request. If 'feature' is not requested, this will be an empty set.
 
     All keyword arguments are optional. Keyword arguments are:
         `name` - a list of strings
@@ -87,10 +83,6 @@ def build_cohort_request(requested, data_set_requested, tag_requested, sample_re
     cohort_1 = aliased(Cohort, name='c')
     data_set_1 = aliased(Dataset, name='ds')
     tag_1 = aliased(Tag, name='t')
-    cohort_to_sample_1 = aliased(CohortToFeature, name='cts')
-    cohort_to_feature_1 = aliased(CohortToFeature, name='ctf')
-    cohort_to_gene_1 = aliased(CohortToGene, name='ctg')
-    cohort_to_mutation_1 = aliased(CohortToGene, name='ctm')
 
     core_field_mapping = {
         'id': cohort_1.id.label('id'),
