@@ -67,16 +67,12 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
 
     has_min_max = 'valueMax' in requested or 'valueMin' in requested
 
-    data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
     feature_1 = aliased(Feature, name='f')
     feature_class_1 = aliased(FeatureClass, name='fc')
-    feature_to_sample_1 = aliased(FeatureToSample, name='fs1')
+    feature_to_sample_1 = aliased(FeatureToSample, name='fts')
     method_tag_1 = aliased(MethodTag, name='mt')
     sample_1 = aliased(Sample, name='s')
-    sample_to_tag_1 = aliased(SampleToTag, name='stt')
-    tag_1 = aliased(Tag, name='t')
     cohort_1 = aliased(Cohort, name='c')
-    cohort_to_sample_1 = aliased(CohortToSample, name='cts')
     cohort_to_feature_1 = aliased(CohortToFeature, name='ctf')
 
     core_field_mapping = {
@@ -92,6 +88,7 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
     }
 
     core = get_selected(requested, core_field_mapping)
+    core |= {feature_1.id.label('feature_id')}
 
     query = sess.query(*core)
     query = query.select_from(feature_1)
@@ -110,71 +107,54 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
         method_tag_join_condition = build_join_condition(
             method_tag_1.id, feature_1.method_tag_id)
         query = query.join(method_tag_1, and_(
-            *method_tag_join_condition), isouter=true)
+            *method_tag_join_condition), isouter=True)
 
-    if has_min_max:
-        feature_sample_join_condition = [
-            feature_1.id == feature_to_sample_1.feature_id]
+    if has_min_max or sample:
+        feature_to_sample_subquery = sess.query(feature_to_sample_1.feature_id)
 
         if max_value:
-            feature_sample_join_condition.append(
+            feature_to_sample_subquery = feature_to_sample_subquery.filter(
                 feature_to_sample_1.value <= max_value)
 
         if min_value:
-            feature_sample_join_condition.append(
+            feature_to_sample_subquery = feature_to_sample_subquery.filter(
                 feature_to_sample_1.value >= min_value)
 
-        query = query.join(feature_to_sample_1, and_(
-            *feature_sample_join_condition))
-    '''
-    if cohort:
+        if sample:
 
-        cohort_to_feature_join_condition = build_join_condition(
-            feature_1.id, cohort_to_feature_1.feature_id)
-        cohort_query = query.join(cohort_to_feature_1, and_(
-            *cohort_to_feature_join_condition), isouter=false)
+            sample_join_condition = build_join_condition(
+                feature_to_sample_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
+            cohort_subquery = feature_to_sample_subquery.join(sample_1, and_(
+                *sample_join_condition), isouter=False)
+
+            feature_to_sample_subquery = feature_to_sample_subquery.filter(
+                sample_1.name.in_(sample))
+
+        query = query.filter(feature_1.id.in_(feature_to_sample_subquery))
+
+    if cohort:
+        cohort_subquery = sess.query(cohort_to_feature_1.feature_id)
 
         cohort_join_condition = build_join_condition(
             cohort_to_feature_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
-        cohort_query = cohort_query.join(cohort_1, and_(
-            *cohort_join_condition), isouter=false)
+        cohort_subquery = cohort_subquery.join(cohort_1, and_(
+            *cohort_join_condition), isouter=False)
 
-        res = cohort_query.distinct().all()
+        query = query.filter(feature_1.id.in_(cohort_subquery))
 
-        logger = logging.getLogger("feature_resolver")
-        logger.info("###")
-        logger.info(query)
-        logger.info(cohort_query)
-        logger.info(res)
-        for row in res:
-            logger.info(row)
-            logger.info(get_value(feature, 'feature_name'))
-            logger.info(get_value(feature, 'feature_id'))
-        # logger.info(res[0])
-        # logger.info(res[0].feature_id)
-        logger.info("###")
-    '''
-
-    order = []
-    append_to_order = order.append
-    if 'order' in requested:
-        append_to_order(feature_1.order)
-    if 'germline_module' in requested:
-        append_to_order(feature_1.germline_module)
-    if 'germline_category' in requested:
-        append_to_order(feature_1.germline_category)
-    if 'display' in requested:
-        append_to_order(feature_1.display)
-    if 'name' in requested:
-        append_to_order(feature_1.name)
-    if 'class' in requested:
-        append_to_order(feature_class_1.name)
-    if 'methodTag' in requested:
-        append_to_order(method_tag_1.name)
-    if 'unit' in requested:
-        append_to_order(feature_1.unit)
-    if not order:
-        append_to_order(feature_1.id)
+    if 'samples' not in requested:
+        order = []
+        append_to_order = order.append
+        if 'class' in requested:
+            append_to_order(feature_class_1.name)
+        if 'order' in requested:
+            append_to_order(feature_1.order)
+        if 'display' in requested:
+            append_to_order(feature_1.display)
+        if 'name' in requested:
+            append_to_order(feature_1.name)
+        if not order:
+            append_to_order(feature_1.id)
 
     return get_pagination_queries(query, paging, distinct, cursor_field=feature_1.id)
 
@@ -186,8 +166,10 @@ def get_samples(requested, sample_requested, distinct, paging, max_value=None, m
     if (has_samples or has_max_min):
         sess = db.session
 
-        feature_to_sample_1 = aliased(FeatureToSample, name='fs')
+        feature_to_sample_1 = aliased(FeatureToSample, name='fts')
         sample_1 = aliased(Sample, name='s')
+        cohort_1 = aliased(Cohort, name='c')
+        cohort_to_sample_1 = aliased(CohortToSample, name='cts')
 
         sample_core_field_mapping = {'name': sample_1.name.label('name')}
 
@@ -202,6 +184,9 @@ def get_samples(requested, sample_requested, distinct, paging, max_value=None, m
         sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)
 
+        logger = logging.getLogger("get_samples")
+        logger.info(sample_query)
+
         if sample:
             sample_query = sample_query.filter(sample_1.name.in_(sample))
 
@@ -210,7 +195,7 @@ def get_samples(requested, sample_requested, distinct, paging, max_value=None, m
                 set(), distinct=distinct, paging=paging, feature=feature, feature_class=feature_class, max_value=max_value, min_value=min_value, sample=sample, cohort=cohort)
 
             res = fetch_page(query, paging, distinct)
-            features = list(set(feature.id for feature in res)
+            features = list(set(feature.feature_id for feature in res)
                             ) if len(res) > 0 else []
         else:
             features = feature_ids
@@ -229,58 +214,21 @@ def get_samples(requested, sample_requested, distinct, paging, max_value=None, m
         sample_query = sample_query.join(
             feature_to_sample_1, and_(*feature_sample_join_condition))
 
-        '''
-        if data_set or related:
-            data_set_1 = aliased(Dataset, name='d')
+        if cohort:
+            cohort_subquery = sess.query(cohort_to_sample_1.sample_id)
 
-            data_set_sub_query = sess.query(data_set_1.id).filter(
-                data_set_1.name.in_(data_set)) if data_set else data_set
+            cohort_join_condition = build_join_condition(
+                cohort_to_sample_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
+            cohort_subquery = cohort_subquery.join(cohort_1, and_(
+                *cohort_join_condition), isouter=False)
 
-            data_set_to_sample_join_condition = build_join_condition(
-                data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
-            sample_query = sample_query.join(
-                data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
+            sample_query = sample_query.filter(
+                sample_1.id.in_(cohort_subquery))
 
-        if tag or related:
-            tag_1 = aliased(Tag, name='t')
+        logger.info(sample_query)
 
-            tag_sub_query = sess.query(tag_1.id).filter(
-                tag_1.name.in_(tag)) if tag else tag
-            sample_to_tag_join_condition = build_join_condition(
-                sample_to_tag_1.sample_id, sample_1.id, sample_to_tag_1.tag_id, tag_sub_query)
-
-        if related:
-            data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
-            related_tag_1 = aliased(Tag, name='rt')
-            tag_to_tag_1 = aliased(TagToTag, name='tt')
-
-            related_tag_sub_query = sess.query(related_tag_1.id).filter(
-                related_tag_1.name.in_(related)) if related else related
-
-            data_set_tag_join_condition = build_join_condition(
-                data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
-            sample_query = sample_query.join(
-                data_set_to_tag_1, and_(*data_set_tag_join_condition))
-
-            tag_to_tag_subquery = sess.query(tag_to_tag_1.tag_id).filter(
-                tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id)
-
-            sample_to_tag_join_condition.append(
-                sample_to_tag_1.tag_id.in_(tag_to_tag_subquery))
-
-        if tag or related:
-            sample_query = sample_query.join(sample_to_tag_1, and_(
-                *sample_to_tag_join_condition))
-        '''
-
-        order = []
-        append_to_order = order.append
-        if 'name' in sample_requested:
-            append_to_order(sample_1.name)
-        if 'value' in sample_requested:
-            append_to_order(feature_to_sample_1.value)
-        sample_query = sample_query.order_by(*order) if order else sample_query
         samples = sample_query.distinct().all()
+        logger.info(cohort)
         return samples
 
     return []
