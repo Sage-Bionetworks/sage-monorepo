@@ -177,31 +177,31 @@ def get_cohort_samples(requested, sample_requested, sample_tag_requested, name=N
             data_set_join_condition = build_join_condition(
                 data_set_1.id, cohort_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
             query = query.join(data_set_1, and_(
-                *data_set_join_condition), isouter=false)
+                *data_set_join_condition), isouter=False)
 
         if tag:
             tag_join_condition = build_join_condition(
                 tag_1.id, cohort_1.tag_id, filter_column=tag_1.name, filter_list=tag)
             query = query.join(tag_1, and_(
-                *tag_join_condition), isouter=false)
+                *tag_join_condition), isouter=False)
 
         cohort_to_sample_join_condition = build_join_condition(
             cohort_to_sample_1.cohort_id, cohort_1.id)
 
         query = query.join(cohort_to_sample_1, and_(
-            *cohort_to_sample_join_condition), isouter=false)
+            *cohort_to_sample_join_condition), isouter=False)
 
         sample_join_condition = build_join_condition(
             sample_1.id, cohort_to_sample_1.sample_id)
 
         query = query.join(sample_1, and_(
-            *sample_join_condition), isouter=false)
+            *sample_join_condition), isouter=False)
 
         if 'tag' in sample_requested:
             sample_tag_join_condition = build_join_condition(
                 tag_2.id, cohort_to_sample_1.tag_id)
             query = query.join(tag_2, and_(
-                *sample_tag_join_condition), isouter=false)
+                *sample_tag_join_condition), isouter=False)
 
         samples = query.all()
         sample_dict = dict()
@@ -250,25 +250,25 @@ def get_cohort_features(requested, feature_requested, name=None, data_set=None, 
             data_set_join_condition = build_join_condition(
                 data_set_1.id, cohort_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
             query = query.join(data_set_1, and_(
-                *data_set_join_condition), isouter=false)
+                *data_set_join_condition), isouter=False)
 
         if tag:
             tag_join_condition = build_join_condition(
                 tag_1.id, cohort_1.tag_id, filter_column=tag_1.name, filter_list=tag)
             query = query.join(tag_1, and_(
-                *tag_join_condition), isouter=false)
+                *tag_join_condition), isouter=False)
 
         cohort_to_feature_join_condition = build_join_condition(
             cohort_to_feature_1.cohort_id, cohort_1.id)
 
         query = query.join(cohort_to_feature_1, and_(
-            *cohort_to_feature_join_condition), isouter=false)
+            *cohort_to_feature_join_condition), isouter=False)
 
         feature_join_condition = build_join_condition(
             feature_1.id, cohort_to_feature_1.feature_id)
 
         query = query.join(feature_1, and_(
-            *feature_join_condition), isouter=false)
+            *feature_join_condition), isouter=False)
 
         features = query.all()
         feature_dict = dict()
@@ -317,25 +317,25 @@ def get_cohort_genes(requested, gene_requested, name=None, data_set=None, tag=No
             data_set_join_condition = build_join_condition(
                 data_set_1.id, cohort_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
             query = query.join(data_set_1, and_(
-                *data_set_join_condition), isouter=false)
+                *data_set_join_condition), isouter=False)
 
         if tag:
             tag_join_condition = build_join_condition(
                 tag_1.id, cohort_1.tag_id, filter_column=tag_1.name, filter_list=tag)
             query = query.join(tag_1, and_(
-                *tag_join_condition), isouter=false)
+                *tag_join_condition), isouter=False)
 
         cohort_to_gene_join_condition = build_join_condition(
             cohort_to_gene_1.cohort_id, cohort_1.id)
 
         query = query.join(cohort_to_gene_1, and_(
-            *cohort_to_gene_join_condition), isouter=false)
+            *cohort_to_gene_join_condition), isouter=False)
 
         gene_join_condition = build_join_condition(
             gene_1.id, cohort_to_gene_1.gene_id)
 
         query = query.join(gene_1, and_(
-            *gene_join_condition), isouter=false)
+            *gene_join_condition), isouter=False)
 
         genes = query.all()
         gene_dict = dict()
@@ -390,39 +390,39 @@ def get_cohort_mutations(requested, mutation_requested, mutation_gene_requested,
             data_set_join_condition = build_join_condition(
                 data_set_1.id, cohort_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
             query = query.join(data_set_1, and_(
-                *data_set_join_condition), isouter=false)
+                *data_set_join_condition), isouter=False)
 
         if tag:
             tag_join_condition = build_join_condition(
                 tag_1.id, cohort_1.tag_id, filter_column=tag_1.name, filter_list=tag)
             query = query.join(tag_1, and_(
-                *tag_join_condition), isouter=false)
+                *tag_join_condition), isouter=False)
 
         cohort_to_mutation_join_condition = build_join_condition(
             cohort_to_mutation_1.cohort_id, cohort_1.id)
 
         query = query.join(cohort_to_mutation_1, and_(
-            *cohort_to_mutation_join_condition), isouter=false)
+            *cohort_to_mutation_join_condition), isouter=False)
 
         mutation_join_condition = build_join_condition(
             mutation_1.id, cohort_to_mutation_1.mutation_id)
 
         query = query.join(mutation_1, and_(
-            *mutation_join_condition), isouter=false)
+            *mutation_join_condition), isouter=False)
 
         if 'mutationCode' in mutation_requested:
             mutation_code_join_condition = build_join_condition(
                 mutation_1.mutation_code_id, mutation_code_1.id)
 
             query = query.join(mutation_code_1, and_(
-                *mutation_code_join_condition), isouter=false)
+                *mutation_code_join_condition), isouter=False)
 
         if 'gene' in mutation_requested:
             mutation_gene_join_condition = build_join_condition(
                 mutation_1.gene_id, gene_1.id)
 
             query = query.join(gene_1, and_(
-                *mutation_gene_join_condition), isouter=false)
+                *mutation_gene_join_condition), isouter=False)
 
         mutations = query.all()
         mutation_dict = dict()

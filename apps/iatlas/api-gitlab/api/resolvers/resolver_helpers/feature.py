@@ -3,12 +3,10 @@ from sqlalchemy import and_, func
 from sqlalchemy.orm import aliased
 from sqlalchemy.sql.expression import false, true
 from api import db
-from api.db_models import (
-    Dataset, DatasetToSample, DatasetToTag, Feature, FeatureClass, FeatureToSample,
-    MethodTag, Sample, SampleToTag, Tag, TagToTag, Cohort, CohortToSample, CohortToFeature)
-from .general_resolvers import build_join_condition, get_selected, get_selection_set, get_value
+from api.db_models import (Feature, FeatureClass, FeatureToSample,
+                           MethodTag, Sample, Cohort, CohortToSample, CohortToFeature)
+from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries, fetch_page
-import logging
 
 feature_class_request_fields = {'name'}
 
@@ -35,9 +33,6 @@ def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
         max_min = max_min_dict.get(
             feature_id, dict()) if max_min_dict else dict()
         samples = sample_dict.get(feature_id, []) if sample_dict else []
-        # logger = logging.getLogger('feature_response')
-        # logger.info(feature)
-        # logger.info(len(samples))
         result = {
             'id': feature_id,
             'class': get_value(feature, 'feature_class'),
@@ -184,9 +179,6 @@ def get_samples(requested, sample_requested, distinct, paging, max_value=None, m
         sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)
 
-        logger = logging.getLogger("get_samples")
-        logger.info(sample_query)
-
         if sample:
             sample_query = sample_query.filter(sample_1.name.in_(sample))
 
@@ -225,10 +217,7 @@ def get_samples(requested, sample_requested, distinct, paging, max_value=None, m
             sample_query = sample_query.filter(
                 sample_1.id.in_(cohort_subquery))
 
-        logger.info(sample_query)
-
         samples = sample_query.distinct().all()
-        logger.info(cohort)
         return samples
 
     return []
