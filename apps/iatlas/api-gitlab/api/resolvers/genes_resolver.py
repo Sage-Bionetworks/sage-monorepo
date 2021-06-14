@@ -4,7 +4,7 @@ import logging
 
 
 def resolve_genes(
-        _obj, info, distinct=False, paging=None, dataSet=None, entrez=None, geneFamily=None, geneFunction=None, geneType=None, immuneCheckpoint=None, maxRnaSeqExpr=None, minRnaSeqExpr=None, pathway=None, related=None, sample=None, superCategory=None, tag=None, therapyType=None, feature=None, featureClass=None):
+        _obj, info, distinct=False, paging=None, entrez=None, geneFamily=None, geneFunction=None, geneType=None, immuneCheckpoint=None, maxRnaSeqExpr=None, minRnaSeqExpr=None, pathway=None, cohort=None, sample=None, superCategory=None, therapyType=None):
 
     selection_set = get_selection_set(info=info, child_node='items')
 
@@ -17,20 +17,20 @@ def resolve_genes(
     publications_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_publication_request_fields, child_node='publications')
 
-    tag_requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=simple_tag_request_fields, child_node='tag')
+    samples_requested = get_requested(
+        selection_set=selection_set, requested_field_mapping=gene_related_sample_request_fields, child_node='samples')
 
     max_items = 10 if 'samples' in requested else 100_000
 
     paging = create_paging(paging, max_items)
 
     query, count_query = build_gene_request(
-        requested, tag_requested, distinct=distinct, paging=paging, data_set=dataSet, entrez=entrez, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, related=related, sample=sample, super_category=superCategory, tag=tag, therapy_type=therapyType)
+        requested, distinct=distinct, paging=paging, entrez=entrez, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, cohort=cohort, sample=sample, super_category=superCategory, therapy_type=therapyType)
 
-    pubs_dict, types_dict = return_gene_derived_fields(
-        requested, gene_types_requested, publications_requested, distinct, paging, data_set=dataSet, entrez=entrez, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, related=related, sample=sample, super_category=superCategory, tag=tag, therapy_type=therapyType)
+    pubs_dict, types_dict, sample_dict = return_gene_derived_fields(
+        requested, gene_types_requested, publications_requested, samples_requested, distinct, paging, cohort=cohort, entrez=entrez, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, sample=sample, super_category=superCategory, therapy_type=therapyType)
 
     pagination_requested = get_requested(info, paging_fields, 'paging')
     res = paginate(query, count_query, paging, distinct,
-                   build_gene_graphql_response(pubs_dict, types_dict), pagination_requested)
+                   build_gene_graphql_response(pubs_dict, types_dict, sample_dict), pagination_requested)
     return(res)
