@@ -26,18 +26,14 @@ feature_request_fields = simple_feature_request_fields.union({'class',
 
 
 def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
-    logger = logging.getLogger("test")
-    # logger.info(sample_dict)
 
     def f(feature):
         if not feature:
             return None
         feature_id = get_value(feature, 'id')
-        logger.info(feature_id)
         max_min = max_min_dict.get(
             feature_id, dict()) if max_min_dict else dict()
         samples = sample_dict.get(feature_id, []) if sample_dict else []
-        logger.info(samples)
         return {
             'id': feature_id,
             'class': get_value(feature, 'class'),

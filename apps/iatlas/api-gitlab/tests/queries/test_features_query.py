@@ -3,7 +3,6 @@ import pytest
 from tests import NoneType
 from api.enums import unit_enum
 from api.database import return_feature_query
-import logging
 
 
 @pytest.fixture(scope='module')
@@ -160,8 +159,6 @@ def test_features_query_with_feature(client, feature_name, common_query_builder)
     json_data = json.loads(response.data)
     page = json_data['data']['features']
     features = page['items']
-    logger = logging.getLogger("test")
-    logger.info(page)
 
     assert isinstance(features, list)
     assert len(features) > 0

@@ -73,3 +73,17 @@ type SimpleSample {
   "The sample's name (often the 'sample' portion of a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/))."
   name: String!
 }
+
+"""
+The "CohortSample" is a simple version of a Sample; it has no related fields.
+
+See also `Sample`
+"""
+type CohortSample {
+  "The sample's name (often the 'sample' portion of a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/))."
+  name: String!
+  "The value of the clinical variable for the samples cohort."
+  clinical_value: String
+  "The Tag for the samples cohort."
+  tag: SimpleTag
+}

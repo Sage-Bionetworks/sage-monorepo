@@ -3,7 +3,6 @@ import pytest
 from tests import NoneType
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 from api.database import return_colocalization_query
-import logging
 
 
 @pytest.fixture(scope='module')
@@ -218,13 +217,10 @@ def test_colocalizations_unique_query(client, common_query, data_set, coloc_data
         'snp': [coloc_snp_name],
         'qtlType': coloc_qtl_type
     }})
-    logger = logging.getLogger('logger name here')
 
     json_data = json.loads(response.data)
     page = json_data['data']['colocalizations']
     results = page['items']
-
-    logger.info(results)
 
     assert isinstance(results, list)
     assert len(results) == 1

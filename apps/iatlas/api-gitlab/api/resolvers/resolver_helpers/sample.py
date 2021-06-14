@@ -8,6 +8,8 @@ from .patient import build_patient_graphql_response
 
 simple_sample_request_fields = {'name'}
 
+cohort_sample_request_fields = {'name', 'clinical_value', 'tag'}
+
 sample_request_fields = simple_sample_request_fields.union({'patient'})
 
 feature_related_sample_request_fields = simple_sample_request_fields.union({

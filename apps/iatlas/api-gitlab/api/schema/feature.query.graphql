@@ -42,7 +42,7 @@ type Feature implements BaseResult {
 """
 The "SimpleFeature" is a version of a `Feature`. Only basic feature attributes may be returned.
 
-To get more properties of features, please see "Feature", "FeaturesByClass", "FeaturesByTag".
+To get more properties of features, please see "Feature"
 """
 type SimpleFeature {
   "A readable name for the feature."

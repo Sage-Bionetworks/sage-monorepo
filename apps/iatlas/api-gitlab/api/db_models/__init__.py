@@ -2,6 +2,11 @@ from api import db
 
 Base = db.Model
 
+from .cohort import Cohort
+from .cohort_to_gene import CohortToGene
+from .cohort_to_feature import CohortToFeature
+from .cohort_to_mutation import CohortToMutation
+from .cohort_to_sample import CohortToSample
 from .colocalization import Colocalization
 from .copy_number_result import CopyNumberResult
 from .dataset import Dataset
