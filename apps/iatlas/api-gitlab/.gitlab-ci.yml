@@ -8,13 +8,15 @@ variables:
 default:
   # This runs on every job that doesn't have a 'before_script'.
   before_script:
-    # Install glibc compatibility for alpine and install aws (also installs curl, unzip, and jq) - (Running on Alpine)
+    # Install aws cli (also installs binutils, jq, unzip, and wget) - (Running on Alpine)
     - GLIBC_VER=2.31-r0
-    - apk add --no-cache binutils curl jq unzip wget
+    - apk add --no-cache binutils curl jq unzip
+    # Install glibc compatibility for alpine (Needed for AWS cli v2)
     - curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub
     - curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk
     - curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk
     - apk add --no-cache glibc-${GLIBC_VER}.apk glibc-bin-${GLIBC_VER}.apk
+    # Install AWS cli v2
     - curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip
     - unzip awscliv2.zip
     - aws/install
@@ -23,7 +25,7 @@ default:
       /usr/local/aws-cli/v2/*/dist/aws_completer \
       /usr/local/aws-cli/v2/*/dist/awscli/data/ac.index \
       /usr/local/aws-cli/v2/*/dist/awscli/examples"
-    - apk --no-cache del binutils
+    - apk --no-cache del binutils curl unzip
     - rm glibc-${GLIBC_VER}.apk
     - rm glibc-bin-${GLIBC_VER}.apk
     - rm -rf /var/cache/apk/*
