@@ -154,8 +154,8 @@ def common_query(common_query_builder):
                 order
                 unit
                 methodTag
-                germline_module
-                germline_category
+                germlineModule
+                germlineCategory
             }
             paging {
                 type
@@ -347,8 +347,8 @@ def test_features_query_with_no_args(client, common_query):
         assert type(feature['order']) is int or NoneType
         assert feature['unit'] in unit_enum.enums or type(
             feature['unit']) is NoneType
-        assert type(feature['germline_module']) is str or NoneType
-        assert type(feature['germline_category']) is str or NoneType
+        assert type(feature['germlineModule']) is str or NoneType
+        assert type(feature['germlineCategory']) is str or NoneType
 
 
 def test_features_query_with_feature(client, chosen_feature, common_query):
@@ -372,8 +372,8 @@ def test_features_query_with_feature(client, chosen_feature, common_query):
     assert type(feature['order']) is int or NoneType
     assert feature['unit'] in unit_enum.enums or type(
         feature['unit']) is NoneType
-    assert type(feature['germline_module']) is str or NoneType
-    assert type(feature['germline_category']) is str or NoneType
+    assert type(feature['germlineModule']) is str or NoneType
+    assert type(feature['germlineCategory']) is str or NoneType
 
 
 def test_features_query_with_feature_class(client, feature_class, common_query):
@@ -397,8 +397,8 @@ def test_features_query_with_feature_class(client, feature_class, common_query):
         assert type(feature['order']) is int or NoneType
         assert feature['unit'] in unit_enum.enums or type(
             feature['unit']) is NoneType
-        assert type(feature['germline_module']) is str or NoneType
-        assert type(feature['germline_category']) is str or NoneType
+        assert type(feature['germlineModule']) is str or NoneType
+        assert type(feature['germlineCategory']) is str or NoneType
 
 
 def test_features_query_with_feature_and_feature_class(client, chosen_feature, feature_class, common_query):
@@ -425,8 +425,8 @@ def test_features_query_with_feature_and_feature_class(client, chosen_feature, f
     assert type(feature['order']) is int or NoneType
     assert feature['unit'] in unit_enum.enums or type(
         feature['unit']) is NoneType
-    assert type(feature['germline_module']) is str or NoneType
-    assert type(feature['germline_category']) is str or NoneType
+    assert type(feature['germlineModule']) is str or NoneType
+    assert type(feature['germlineCategory']) is str or NoneType
 
 
 def test_features_query_with_passed_max_value(client, chosen_feature, max_value, values_query):

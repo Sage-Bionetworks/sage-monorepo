@@ -14,8 +14,8 @@ simple_feature_request_fields = {'display',
                                  'name',
                                  'order',
                                  'unit',
-                                 'germline_module',
-                                 'germline_category'}
+                                 'germlineModule',
+                                 'germlineCategory'}
 
 feature_request_fields = simple_feature_request_fields.union({'class',
                                                               'methodTag',
@@ -36,12 +36,12 @@ def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
         result = {
             'id': feature_id,
             'class': get_value(feature, 'feature_class'),
-            'display': get_value(feature, 'feature_display') or get_value(feature, 'display'),
-            'methodTag': get_value(feature, 'method_tag'),
-            'name': get_value(feature, 'feature_name') or get_value(feature),
+            'display': get_value(feature, 'feature_display'),
+            'methodTag': get_value(feature, 'feature_method_tag'),
+            'name': get_value(feature, 'feature_name'),
             'order': get_value(feature, 'feature_order'),
-            'germline_module': get_value(feature, 'feature_germline_module'),
-            'germline_category': get_value(feature, 'featuregermline_category'),
+            'germlineModule': get_value(feature, 'feature_germline_module'),
+            'germlineCategory': get_value(feature, 'feature_germline_category'),
             'unit': get_value(feature, 'feature_unit'),
             'samples': [{
                 'name': get_value(sample),
@@ -77,8 +77,8 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
         'methodTag': method_tag_1.name.label('feature_method_tag'),
         'name': feature_1.name.label('feature_name'),
         'order': feature_1.order.label('feature_order'),
-        'germline_module': feature_1.germline_module.label('feature_germline_module'),
-        'germline_category': feature_1.germline_category.label('feature_germline_category'),
+        'germlineModule': feature_1.germline_module.label('feature_germline_module'),
+        'germlineCategory': feature_1.germline_category.label('feature_germline_category'),
         'unit': feature_1.unit.label('feature_unit')
     }
 
