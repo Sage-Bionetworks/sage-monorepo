@@ -1,5 +1,6 @@
 import pytest
 from api import create_app, db
+import json
 
 
 @pytest.fixture(autouse=True)
@@ -47,6 +48,19 @@ def data_set_id(test_db, data_set):
     from api.db_models import Dataset
     (id, ) = test_db.session.query(Dataset.id).filter_by(
         name=data_set).one_or_none()
+    return id
+
+
+@pytest.fixture(scope='session')
+def pcawg_data_set():
+    return 'PCAWG'
+
+
+@pytest.fixture(scope='session')
+def pcawg_data_set_id(test_db, pcawg_data_set):
+    from api.db_models import Dataset
+    (id, ) = test_db.session.query(Dataset.id).filter_by(
+        name=pcawg_data_set).one_or_none()
     return id
 
 
@@ -178,3 +192,95 @@ def max_weight():
 @ pytest.fixture(scope='session')
 def min_weight():
     return 42
+
+
+@pytest.fixture(scope='module')
+def cohort_query_builder():
+    def f(query_fields):
+        return """
+        query Cohorts(
+            $paging: PagingInput
+            $distinct:Boolean
+            $cohort: [String!]
+            $dataSet: [String!]
+            $tag: [String!]
+            $clinical: [String!]
+        ) {
+        cohorts(
+            paging: $paging
+            distinct: $distinct
+            cohort: $cohort
+            dataSet: $dataSet
+            tag: $tag
+            clinical: $clinical
+        )
+        """ + query_fields + "}"
+    return f
+
+
+@pytest.fixture(scope='module')
+def cohort_query(cohort_query_builder):
+    return cohort_query_builder(
+        """
+        {
+            items {
+                name
+                samples {
+                    name
+                }
+            }
+        }
+        """
+    )
+
+
+@pytest.fixture(scope='module')
+def tcga_tag_cohort_name():
+    return 'TCGA_Immune_Subtype'
+
+
+@pytest.fixture(scope='module')
+def pcawg_clinical_cohort_name():
+    return('PCAWG_Gender')
+
+
+@pytest.fixture(scope='module')
+def tcga_tag_cohort_id(test_db, tcga_tag_cohort_name):
+    from api.db_models import Cohort
+    (id, ) = test_db.session.query(Cohort.id).filter_by(
+        name=tcga_tag_cohort_name).one_or_none()
+    return id
+
+
+@pytest.fixture(scope='module')
+def pcawg_clinical_cohort_id(test_db, pcawg_clinical_cohort_name):
+    from api.db_models import Cohort
+    (id, ) = test_db.session.query(Cohort.id).filter_by(
+        name=pcawg_clinical_cohort_name).one_or_none()
+    return id
+
+
+@pytest.fixture(scope='module')
+def tcga_tag_cohort_samples(client, tcga_tag_cohort_name, cohort_query):
+    response = client.post('/api', json={'query': cohort_query, 'variables': {
+        'cohort': [tcga_tag_cohort_name]
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['cohorts']
+    cohort = page['items'][0]
+    samples = cohort['samples']
+    names = [sample['name'] for sample in samples]
+    return names
+
+
+@pytest.fixture(scope='module')
+def pcawg_clinical_cohort_samples(client, pcawg_clinical_cohort_name, cohort_query):
+    response = client.post('/api', json={'query': cohort_query, 'variables': {
+        'cohort': [pcawg_clinical_cohort_name]
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['cohorts']
+    cohort = page['items'][0]
+    samples = cohort['samples']
+    names = [sample['name'] for sample in samples]
+    return names
