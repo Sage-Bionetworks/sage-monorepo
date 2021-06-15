@@ -32,90 +32,6 @@ def min_value():
 
 
 @pytest.fixture(scope='module')
-def cohort_name():
-    return 'tcga_immune_subtype'
-
-
-@pytest.fixture(scope='module')
-def cohort_id(test_db, cohort_name):
-    from api.db_models import Cohort
-    (id, ) = test_db.session.query(Cohort.id).filter_by(
-        name=cohort_name).one_or_none()
-    return id
-
-
-@pytest.fixture(scope='module')
-def cohort_query_builder():
-    def f(query_fields):
-        return """
-        query Cohorts(
-            $paging: PagingInput
-            $distinct:Boolean
-            $name: [String!]
-            $dataSet: [String!]
-            $tag: [String!]
-            $clinical: [String!]
-        ) {
-        cohorts(
-            paging: $paging
-            distinct: $distinct
-            name: $name
-            dataSet: $dataSet
-            tag: $tag
-            clinical: $clinical
-        )
-        """ + query_fields + "}"
-    return f
-
-
-@pytest.fixture(scope='module')
-def cohort_query(cohort_query_builder):
-    return cohort_query_builder(
-        """
-        {
-            items {
-                name
-                samples {
-                    name
-                }
-            }
-        }
-        """
-    )
-
-
-@pytest.fixture(scope='module')
-def tcga_cohort_samples(client, cohort_name, cohort_query):
-    response = client.post('/api', json={'query': cohort_query, 'variables': {
-        'name': [cohort_name]
-    }})
-    json_data = json.loads(response.data)
-    page = json_data['data']['cohorts']
-    cohort = page['items'][0]
-    samples = cohort['samples']
-    names = [sample['name'] for sample in samples]
-    return names
-
-
-@pytest.fixture(scope='module')
-def pcawg_cohort_name():
-    return('pcawg_gender')
-
-
-@pytest.fixture(scope='module')
-def pcawg_cohort_samples(client, pcawg_cohort_name, cohort_query):
-    response = client.post('/api', json={'query': cohort_query, 'variables': {
-        'name': [pcawg_cohort_name]
-    }})
-    json_data = json.loads(response.data)
-    page = json_data['data']['cohorts']
-    cohort = page['items'][0]
-    samples = cohort['samples']
-    names = [sample['name'] for sample in samples]
-    return names
-
-
-@pytest.fixture(scope='module')
 def common_query_builder():
     def f(query_fields):
         return """
@@ -547,13 +463,13 @@ def test_feature_samples_query_with_class(client, feature_class, samples_query):
             assert type(sample['value']) is float
 
 
-def test_feature_samples_query_with_feature_and_cohort(client, feature_name, samples_query, cohort_name, tcga_cohort_samples):
+def test_feature_samples_query_with_feature_and_cohort(client, feature_name, samples_query, tcga_tag_cohort_name, tcga_tag_cohort_samples):
     response = client.post(
         '/api', json={
             'query': samples_query,
             'variables': {
                 'feature': [feature_name],
-                'cohort': [cohort_name]
+                'cohort': [tcga_tag_cohort_name]
             }
         })
     json_data = json.loads(response.data)
@@ -570,16 +486,16 @@ def test_feature_samples_query_with_feature_and_cohort(client, feature_name, sam
     for sample in samples[0:2]:
         assert type(sample['name']) is str
         assert type(sample['value']) is float
-        assert sample['name'] in tcga_cohort_samples
+        assert sample['name'] in tcga_tag_cohort_samples
 
 
-def test_pcawg_feature_samples_query_with_feature_and_cohort(client, feature_name, samples_query, pcawg_cohort_samples, pcawg_cohort_name):
+def test_pcawg_feature_samples_query_with_feature_and_cohort(client, feature_name, samples_query, pcawg_clinical_cohort_name, pcawg_clinical_cohort_samples):
     response = client.post(
         '/api', json={
             'query': samples_query,
             'variables': {
                 'feature': [feature_name],
-                'cohort': [pcawg_cohort_name]
+                'cohort': [pcawg_clinical_cohort_name]
             }
         })
     json_data = json.loads(response.data)
@@ -596,7 +512,7 @@ def test_pcawg_feature_samples_query_with_feature_and_cohort(client, feature_nam
     for sample in samples:
         assert type(sample['name']) is str
         assert type(sample['value']) is float
-        assert sample['name'] in pcawg_cohort_samples
+        assert sample['name'] in pcawg_clinical_cohort_samples
 
 
 def test_feature_samples_query_with_feature_and_sample(client, feature_name, samples_query, sample):
