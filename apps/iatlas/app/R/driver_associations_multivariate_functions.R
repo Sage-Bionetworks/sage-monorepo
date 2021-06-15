@@ -26,7 +26,7 @@ build_md_feature_covariate_tbl <- function(cohort_obj, cov_obj){
   tbl <-
     iatlas.api.client::query_feature_values(
       features = features,
-      datasets = cohort_obj$dataset,
+      cohorts = cohort_obj$dataset,
       samples = cohort_obj$sample_tbl$sample
     ) %>%
     dplyr::select("sample", "feature_name", "feature_value") %>%
