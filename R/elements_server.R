@@ -37,7 +37,7 @@ numeric_filter_element_server <- function(
         if(numeric_type() == "feature"){
           tbl <-
             iatlas.api.client::query_features_range(
-              datasets = dataset(),
+              cohorts = dataset(),
               features = numeric_name()
             ) %>%
             dplyr::distinct()
