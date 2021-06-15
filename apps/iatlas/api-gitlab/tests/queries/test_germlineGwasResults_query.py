@@ -57,8 +57,8 @@ def common_query(common_query_builder):
                 dataSet { name }
                 feature {
                   name
-                  germline_category
-                  germline_module
+                  germlineCategory
+                  germlineModule
                 }
                 snp { name }
                 pValue

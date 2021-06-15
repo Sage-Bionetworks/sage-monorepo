@@ -40,6 +40,7 @@ def test_FeatureToSample_with_relations(app, fs_feature, fs_feature_id):
             # Don't need to iterate through every result.
             for sample in result.samples[0:2]:
                 assert type(sample.name) is str
+        assert type(result.id) is int
         assert result.feature_id == fs_feature_id
         assert type(result.sample_id) is int
         assert isinstance(result.value, Decimal)
@@ -57,5 +58,6 @@ def test_FeatureToSample_no_relations(app, fs_feature_id):
         assert result.features == []
         assert result.samples == []
         assert result.feature_id == fs_feature_id
+        assert type(result.id) is int
         assert type(result.sample_id) is int
         assert isinstance(result.value, Decimal)

@@ -71,7 +71,7 @@ def resolve_cohorts(_obj, info, distinct=False, paging=None, name=None, dataSet=
         requested, mutation_requested, mutation_gene_requested, name=name, data_set=dataSet, tag=tag, clinical=clinical)
 
     query, count_query = build_cohort_request(
-        requested, data_set_requested, tag_requested, sample_requested, feature_requested, gene_requested, mutation_requested, distinct=distinct, paging=paging, name=name, data_set=dataSet, tag=tag, clinical=clinical)
+        requested, data_set_requested, tag_requested, distinct=distinct, paging=paging, name=name, data_set=dataSet, tag=tag, clinical=clinical)
 
     pagination_requested = get_requested(info, paging_fields, 'paging')
     res = paginate(query, count_query, paging, distinct,
