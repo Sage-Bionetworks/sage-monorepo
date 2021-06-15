@@ -176,6 +176,6 @@ def paginate(query, count_query, paging, distinct, response_builder, pagination_
 
 
 def create_paging(paging=None, max_results=Paging.MAX_LIMIT):
-    paging = paging if paging else Paging.DEFAULT
+    paging = paging if paging else Paging.DEFAULT.copy()
     paging['max'] = max_results
     return(paging)
