@@ -105,7 +105,7 @@ ici_models_train_server <- function(
                paste(subset(training_obj()$predictors, VariableType != "Category")$feature_display, collapse = " + ")
                )
       })
-
+#TODO: test checks for NAs and missing levels
       observe({ #block Train button if one of the datasets is missing annotation for one predictor. Notify number of samples with NA that will be excluded
         shiny::req(training_obj())
 
@@ -120,14 +120,6 @@ ici_models_train_server <- function(
           shinyjs::hide("missing_data")
           shinyjs::hide("missing_sample")
          }else{
-          if(nrow(training_obj()$missing_level)>0){
-            shinyjs::disable("compute_train")
-            output$missing_level <- shiny::renderText({
-              shiny::req(nrow(training_obj()$missing_level) != 0)
-              paste(training_obj()$missing_level$feature_display, "has group ", training_obj()$missing_level$group, "only at the testing set (",
-                    training_obj()$missing_level$dataset, "). Change the dataset and/or predictor selection to proceed.")})
-          }
-
           if(nrow(training_obj()$missing_annot)>0){ #checks for missing data
             if(any(training_obj()$missing_annot$missing_all == 1)){ #dataset doesn't have annotation for one selected feature
               shinyjs::disable("compute_train")
@@ -138,7 +130,7 @@ ici_models_train_server <- function(
                 paste("Dataset ", missing_all$dataset, "has no data for ", missing_all$feature,
                       ". Change the dataset and/or predictor selection to proceed.")})
             }else{
-              #shinyjs::enable("compute_train")
+              shinyjs::enable("compute_train")
               shinyjs::hide("missing_data")
             }
 
@@ -151,18 +143,14 @@ ici_models_train_server <- function(
                       " that will be excluded from modeling.")
               })
             }
-
-
           } #ends check for NAs in annotation
-
-
-          # else{
-          #   shinyjs::enable("compute_train")
-          #   shinyjs::hide("missing_data")
-          # }
-            #else{
-          #   shinyjs::hide("missing_sample")
-          # }
+         if(length(training_obj()$missing_level)>0){
+           shinyjs::disable("compute_train")
+           output$missing_level <- shiny::renderText({
+             shiny::req(nrow(training_obj()$missing_level) != 0)
+             paste(training_obj()$missing_level$feature_display, "has group ", training_obj()$missing_level$group, "only at the testing set (",
+                   training_obj()$missing_level$dataset, "). Change the dataset and/or predictor selection to proceed.")})
+         }
         }
       })
 
