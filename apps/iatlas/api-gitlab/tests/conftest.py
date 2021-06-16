@@ -284,3 +284,25 @@ def pcawg_clinical_cohort_samples(client, pcawg_clinical_cohort_name, cohort_que
     samples = cohort['samples']
     names = [sample['name'] for sample in samples]
     return names
+
+# for testing germline fields ----
+
+
+@pytest.fixture(scope='module')
+def germline_feature():
+    return 'BCR_Richness'
+
+
+@pytest.fixture(scope='module')
+def germline_pathway():
+    return 'MMR'
+
+
+@pytest.fixture(scope='module')
+def germline_category():
+    return 'Adaptive Receptor'
+
+
+@pytest.fixture(scope='module')
+def germline_module():
+    return 'Unassigned'

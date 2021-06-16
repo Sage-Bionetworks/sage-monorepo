@@ -5,11 +5,6 @@ from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cur
 
 
 @pytest.fixture(scope='module')
-def rvpa_feature():
-    return 'BCR_Richness'
-
-
-@pytest.fixture(scope='module')
 def rvpa_pathway():
     return 'MMR'
 
@@ -53,7 +48,11 @@ def common_query(common_query_builder):
     return common_query_builder("""{
             items {
                 dataSet { name }
-                feature { name }
+                feature {
+                    name
+                    germlineModule
+                    germlineCategory
+                }
                 pathway
                 pValue
                 min
@@ -78,9 +77,6 @@ def common_query(common_query_builder):
             }
             error
         }""")
-
-
-# Test that forward cursor pagination gives us the expected paginInfo
 
 
 def test_rareVariantPathwayAssociation_cursor_pagination_first(client, common_query_builder):
@@ -179,10 +175,10 @@ def test_rareVariantPathwayAssociation_cursor_distinct_pagination(client, common
     assert page_num == page['paging']['page']
 
 
-def test_rareVariantPathwayAssociation_query_with_passed_data_set_feature_and_pathway(client, common_query, data_set, rvpa_feature, rvpa_pathway):
+def test_rareVariantPathwayAssociation_query_with_passed_data_set_feature_and_pathway(client, common_query, data_set, rvpa_pathway, germline_feature, germline_category, germline_module):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
-        'feature': [rvpa_feature],
+        'feature': [germline_feature],
         'pathway': [rvpa_pathway]
     }})
     json_data = json.loads(response.data)
@@ -192,7 +188,10 @@ def test_rareVariantPathwayAssociation_query_with_passed_data_set_feature_and_pa
     assert len(results) == 1
     for result in results:
         assert result['dataSet']['name'] == data_set
-        assert result['feature']['name'] == rvpa_feature
+        assert result['feature']['name'] == germline_feature
+        assert result['feature']['germlineCategory'] == germline_category
+        assert result['feature']['germlineModule'] == germline_module
+
         assert result['pathway'] == rvpa_pathway
         assert type(result['pValue']) is float
         assert type(result['min']) is float

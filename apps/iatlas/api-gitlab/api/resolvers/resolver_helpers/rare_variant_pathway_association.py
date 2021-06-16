@@ -81,15 +81,19 @@ def build_rare_variant_pathway_association_request(
         'q3': rare_variant_pathway_association_1.q3.label('q3'),
         'nTotal': rare_variant_pathway_association_1.n_total.label('n_total'),
         'nMutants': rare_variant_pathway_association_1.n_mutants.label('n_mutants')}
-    data_set_core_field_mapping = {'display': data_set_1.display.label('data_set_display'),
-                                   'name': data_set_1.name.label('data_set_name'),
-                                   'type': data_set_1.data_set_type.label('data_set_type')}
-    feature_core_field_mapping = {'display': feature_1.display.label('feature_display'),
-                                  'name': feature_1.name.label('feature_name'),
-                                  'order': feature_1.order.label('order'),
-                                  'unit': feature_1.unit.label('unit'),
-                                  'germline_module': feature_1.germline_module.label('germline_module'),
-                                  'germline_category': feature_1.germline_category.label('germline_category')}
+    data_set_core_field_mapping = {
+        'display': data_set_1.display.label('data_set_display'),
+        'name': data_set_1.name.label('data_set_name'),
+        'type': data_set_1.data_set_type.label('data_set_type')
+    }
+    feature_core_field_mapping = {
+        'display': feature_1.display.label('feature_display'),
+        'name': feature_1.name.label('feature_name'),
+        'order': feature_1.order.label('feature_order'),
+        'unit': feature_1.unit.label('feature_unit'),
+        'germlineModule': feature_1.germline_module.label('feature_germline_module'),
+        'germlineCategory': feature_1.germline_category.label('feature_germline_category')
+    }
 
     core = get_selected(requested, core_field_mapping)
     core |= get_selected(data_set_requested, data_set_core_field_mapping)

@@ -12,16 +12,6 @@ def feature_name():
 
 
 @pytest.fixture(scope='module')
-def germline_category():
-    return 'Leukocyte Subset ES'
-
-
-@pytest.fixture(scope='module')
-def germline_module():
-    return 'Cytotoxic'
-
-
-@pytest.fixture(scope='module')
 def max_value():
     return 5.7561021
 
@@ -538,3 +528,22 @@ def test_feature_samples_query_with_feature_and_sample(client, feature_name, sam
     for s in samples:
         assert s['name'] == sample
         assert type(s['value']) is float
+
+
+def test_features_query_with_germline_feature(client, common_query, germline_feature, germline_module, germline_category):
+    response = client.post(
+        '/api', json={
+            'query': common_query,
+            'variables': {
+                'feature': [germline_feature]
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['features']
+    features = page['items']
+    assert isinstance(features, list)
+    assert len(features) == 1
+    feature = features[0]
+    assert feature['name'] == germline_feature
+    assert feature['germlineModule'] == germline_module
+    assert feature['germlineCategory'] == germline_category
