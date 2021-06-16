@@ -68,9 +68,9 @@
     },
     "Biostrings": {
       "Package": "Biostrings",
-      "Version": "2.60.0",
+      "Version": "2.60.1",
       "Source": "Bioconductor",
-      "Hash": "b6102c0a5ee15f50c8c08c685ad1052a"
+      "Hash": "ee27fadce643ce9df34bb1778748af38"
     },
     "DT": {
       "Package": "DT",
@@ -368,10 +368,10 @@
     },
     "broom": {
       "Package": "broom",
-      "Version": "0.7.6",
+      "Version": "0.7.7",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "06015476250468fc013c30022118ce3a"
+      "Hash": "2368dde18d8ef1ca933e7e2eea3ece57"
     },
     "bslib": {
       "Package": "bslib",
@@ -499,10 +499,10 @@
     },
     "corrplot": {
       "Package": "corrplot",
-      "Version": "0.88",
+      "Version": "0.89",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "73276adb48c37144836420004f59d546"
+      "Hash": "98960b099023f7d04dd5a46bd4ff5d45"
     },
     "cowplot": {
       "Package": "cowplot",
@@ -555,15 +555,15 @@
     },
     "cyjShiny": {
       "Package": "cyjShiny",
-      "Version": "1.0.17",
+      "Version": "1.0.19",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "cytoscape",
       "RemoteRepo": "cyjShiny",
       "RemoteRef": "master",
-      "RemoteSha": "399575a9b18b2d1b8b207ae8686bd6464faaafd9",
+      "RemoteSha": "aa6d3fe1a1a81b6d26c05ef1ae9715a44a5aab1c",
       "RemoteHost": "api.github.com",
-      "Hash": "1fa092c4441008de02b18c7e6bbe32f6"
+      "Hash": "ed2b151f83d8d07fa1d9bd32cf2ca5c7"
     },
     "data.table": {
       "Package": "data.table",
@@ -581,10 +581,10 @@
     },
     "devtools": {
       "Package": "devtools",
-      "Version": "2.4.1",
+      "Version": "2.4.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "1f78e8ca9a18884c86b0c340db97037d"
+      "Hash": "048d0b914d2cea61f440d35dd3cbddac"
     },
     "diffobj": {
       "Package": "diffobj",
@@ -756,10 +756,10 @@
     },
     "ggsignif": {
       "Package": "ggsignif",
-      "Version": "0.6.1",
+      "Version": "0.6.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "6770aac2203800889cccd6aee7f206a7"
+      "Hash": "b1c9776ac546b9f3c51c9b21ba8f6869"
     },
     "ggtext": {
       "Package": "ggtext",
@@ -916,15 +916,15 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.14.0",
+      "Version": "0.16.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "8498d237d1dddbe90b2d2c77bb9a6f848f1e658a",
+      "RemoteSha": "12099a9e9f30731a86dbc4028d06f76ab7caa8e1",
       "RemoteHost": "api.github.com",
-      "Hash": "f33daf5886952806cde16a41f3103077"
+      "Hash": "186d3294a3a35b2ed2d8d9c8c92ab388"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
@@ -934,9 +934,9 @@
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules",
       "RemoteRef": "master",
-      "RemoteSha": "93ddf2c2a6ae71673ee555f902f003492f0cb920",
+      "RemoteSha": "794fcdca0a69f754076ce74dad28042da2cf5f2d",
       "RemoteHost": "api.github.com",
-      "Hash": "406553f575f708b6901cfe5e4d5644e5"
+      "Hash": "a4d1ca831b68647db784a145bc8f0010"
     },
     "igvShiny": {
       "Package": "igvShiny",
@@ -1155,10 +1155,10 @@
     },
     "mvtnorm": {
       "Package": "mvtnorm",
-      "Version": "1.1-1",
+      "Version": "1.1-2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "69fa7331e7410c2a2cb3f9868513904f"
+      "Hash": "6f0133c3842aef0394dbd844a21d3f5f"
     },
     "nlme": {
       "Package": "nlme",
@@ -1260,10 +1260,10 @@
     },
     "plotly": {
       "Package": "plotly",
-      "Version": "4.9.3",
+      "Version": "4.9.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "f6b85d9e4ed88074ea0ede1aa74bb00e"
+      "Hash": "3f385f2cd5c270ea3bbe68cb94f7c558"
     },
     "plyr": {
       "Package": "plyr",
@@ -1358,10 +1358,10 @@
     },
     "quantreg": {
       "Package": "quantreg",
-      "Version": "5.85",
+      "Version": "5.86",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "d41a5849071941c6c269b57324515398"
+      "Hash": "28692dfa3efea8e19d29347d05f5a489"
     },
     "randomcoloR": {
       "Package": "randomcoloR",
@@ -1777,10 +1777,10 @@
     },
     "wrapr": {
       "Package": "wrapr",
-      "Version": "2.0.7",
+      "Version": "2.0.8",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ce8844517369ed789a63a8581e634f1b"
+      "Hash": "697c1937d4e3275f2493802acd1372c0"
     },
     "xfun": {
       "Package": "xfun",

@@ -133,7 +133,7 @@ test_that("query_feature_values_with_cohort_object", {
 
   result6 <- query_feature_values_with_cohort_object(
     list(
-      "dataset" = NA,
+      "dataset" = "PCAWG",
       "group_name" = "COAD",
       "group_type" = "User Defined Group",
       "sample_tbl" = iatlas.api.client::query_dataset_samples(datasets = "PCAWG") %>%
