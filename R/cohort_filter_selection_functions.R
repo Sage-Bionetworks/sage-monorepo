@@ -125,9 +125,10 @@ get_numeric_feature_filtered_samples <- function(filter_obj, samples, dataset){
     purrr::reduce(base::intersect, .init = samples)
 }
 
+#todo: fix to use cohort
 get_filtered_samples_by_feature <- function(name, min, max, dataset){
   iatlas.api.client::query_feature_values(
-    dataset, features = name, max_value = max, min_value = min
+    cohort = dataset, features = name, max_value = max, min_value = min
   ) %>%
     dplyr::pull(sample)
 }
