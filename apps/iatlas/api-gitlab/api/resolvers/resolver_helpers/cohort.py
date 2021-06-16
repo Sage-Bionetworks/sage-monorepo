@@ -19,6 +19,9 @@ def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={},
         if not cohort:
             return None
         else:
+            import logging
+            logger = logging.getLogger('cohort_resolver')
+            logger.info(cohort)
             cohort_id = get_value(cohort, 'cohort_id')
             samples = sample_dict.get(cohort_id, []) if sample_dict else []
             features = feature_dict.get(cohort_id, []) if feature_dict else []
@@ -30,7 +33,13 @@ def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={},
                 'name': get_value(cohort, 'cohort_name'),
                 'clinical': get_value(cohort, 'cohort_clinical'),
                 'dataSet': build_data_set_graphql_response(cohort),
-                'tag': build_tag_graphql_response()(cohort),
+                'tag': {
+                    'name': get_value(cohort, 'tag_name'),
+                    'characteristics': get_value(cohort, 'tag_characteristics'),
+                    'color': get_value(cohort, 'tag_color'),
+                    'longDisplay': get_value(cohort, 'tag_long_display'),
+                    'shortDisplay': get_value(cohort, 'tag_short_display')
+                },
                 'samples': [{
                     'name': get_value(sample, 'sample_name'),
                     'clinical_value': get_value(sample, 'sample_clinical_value'),
@@ -63,7 +72,7 @@ def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={},
     return f
 
 
-def build_cohort_request(requested, data_set_requested, tag_requested, name=None, data_set=None, tag=None, clinical=None, distinct=False, paging=None):
+def build_cohort_request(requested, data_set_requested, tag_requested, cohort=None, data_set=None, tag=None, clinical=None, distinct=False, paging=None):
     """
     Builds a SQL request.
 
@@ -73,7 +82,7 @@ def build_cohort_request(requested, data_set_requested, tag_requested, name=None
         3rd position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this will be an empty set.
 
     All keyword arguments are optional. Keyword arguments are:
-        `name` - a list of strings
+        `cohort` - a list of strings, cohorts
         `data_set` - a list of strings, data set names
         `tag` - a list of strings, tag names
         `clinical` - a list of strings, clincial variable names
@@ -111,8 +120,8 @@ def build_cohort_request(requested, data_set_requested, tag_requested, name=None
     query = sess.query(*core)
     query = query.select_from(cohort_1)
 
-    if name:
-        query = query.filter(cohort_1.name.in_(name))
+    if cohort:
+        query = query.filter(cohort_1.name.in_(cohort))
 
     if clinical:
         query = query.filter(cohort_1.clinical.in_(clinical))
@@ -134,7 +143,7 @@ def build_cohort_request(requested, data_set_requested, tag_requested, name=None
     return get_pagination_queries(query, paging, distinct, cursor_field=cohort_1.id)
 
 
-def get_cohort_samples(requested, sample_requested, sample_tag_requested, name=None, data_set=None, tag=None, clinical=None):
+def get_cohort_samples(requested, sample_requested, sample_tag_requested, cohort=None, data_set=None, tag=None, clinical=None):
     if 'samples' not in requested:
         return([])
     else:
@@ -172,8 +181,8 @@ def get_cohort_samples(requested, sample_requested, sample_tag_requested, name=N
         query = sess.query(*core)
         query = query.select_from(cohort_1)
 
-        if name:
-            query = query.filter(cohort_1.name.in_(name))
+        if cohort:
+            query = query.filter(cohort_1.name.in_(cohort))
 
         if clinical:
             query = query.filter(cohort_1.clinical.in_(clinical))
@@ -215,7 +224,7 @@ def get_cohort_samples(requested, sample_requested, sample_tag_requested, name=N
         return(sample_dict)
 
 
-def get_cohort_features(requested, feature_requested, name=None, data_set=None, tag=None, clinical=None):
+def get_cohort_features(requested, feature_requested, cohort=None, data_set=None, tag=None, clinical=None):
     if 'features' not in requested:
         return([])
     else:
@@ -245,8 +254,8 @@ def get_cohort_features(requested, feature_requested, name=None, data_set=None, 
         query = sess.query(*core)
         query = query.select_from(cohort_1)
 
-        if name:
-            query = query.filter(cohort_1.name.in_(name))
+        if cohort:
+            query = query.filter(cohort_1.name.in_(cohort))
 
         if clinical:
             query = query.filter(cohort_1.clinical.in_(clinical))
@@ -275,6 +284,10 @@ def get_cohort_features(requested, feature_requested, name=None, data_set=None, 
         query = query.join(feature_1, and_(
             *feature_join_condition), isouter=False)
 
+        import logging
+        logger = logging.getLogger('cohort resolver')
+        logger.info(query)
+
         features = query.all()
         feature_dict = dict()
         for key, collection in groupby(features, key=lambda f: f.cohort_id):
@@ -282,7 +295,7 @@ def get_cohort_features(requested, feature_requested, name=None, data_set=None, 
         return(feature_dict)
 
 
-def get_cohort_genes(requested, gene_requested, name=None, data_set=None, tag=None, clinical=None):
+def get_cohort_genes(requested, gene_requested, cohort=None, data_set=None, tag=None, clinical=None):
     if 'genes' not in requested:
         return([])
     else:
@@ -312,8 +325,8 @@ def get_cohort_genes(requested, gene_requested, name=None, data_set=None, tag=No
         query = sess.query(*core)
         query = query.select_from(cohort_1)
 
-        if name:
-            query = query.filter(cohort_1.name.in_(name))
+        if cohort:
+            query = query.filter(cohort_1.name.in_(cohort))
 
         if clinical:
             query = query.filter(cohort_1.clinical.in_(clinical))
@@ -349,7 +362,7 @@ def get_cohort_genes(requested, gene_requested, name=None, data_set=None, tag=No
         return(gene_dict)
 
 
-def get_cohort_mutations(requested, mutation_requested, mutation_gene_requested, name=None, data_set=None, tag=None, clinical=None):
+def get_cohort_mutations(requested, mutation_requested, mutation_gene_requested, cohort=None, data_set=None, tag=None, clinical=None):
 
     if 'mutations' not in requested:
         return([])
@@ -385,8 +398,8 @@ def get_cohort_mutations(requested, mutation_requested, mutation_gene_requested,
         query = sess.query(*core)
         query = query.select_from(cohort_1)
 
-        if name:
-            query = query.filter(cohort_1.name.in_(name))
+        if cohort:
+            query = query.filter(cohort_1.name.in_(cohort))
 
         if clinical:
             query = query.filter(cohort_1.clinical.in_(clinical))

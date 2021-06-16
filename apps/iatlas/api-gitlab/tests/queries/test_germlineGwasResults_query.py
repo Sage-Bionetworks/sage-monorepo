@@ -11,6 +11,16 @@ def ggr_feature():
 
 
 @pytest.fixture(scope='module')
+def ggr_germline_module():
+    return 'Unassigned'
+
+
+@pytest.fixture(scope='module')
+def ggr_germline_category():
+    return 'Leukocyte Subset %'
+
+
+@pytest.fixture(scope='module')
 def ggr_snp():
     return '7:104003135:C:G'
 
@@ -253,3 +263,18 @@ def test_germlineGwasResults_query_with_no_arguments(client, common_query_builde
     assert len(germline_gwas_results) == ggr_count
     for germline_gwas_result in germline_gwas_results[0:2]:
         assert type(germline_gwas_result['pValue']) is float or NoneType
+
+
+def test_germlineGwasResults_query_with_germline_fetaure(client, common_query, ggr_feature, ggr_germline_module, ggr_germline_category):
+    response = client.post('/api', json={'query': common_query, 'variables': {
+        'feature': [ggr_feature]
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['germlineGwasResults']
+    results = page['items']
+    assert isinstance(results, list)
+    assert len(results) > 1
+    for result in results:
+        assert result['feature']['name'] == ggr_feature
+        assert result['feature']['germlineCategory'] == ggr_germline_category
+        assert result['feature']['germlineModule'] == ggr_germline_module

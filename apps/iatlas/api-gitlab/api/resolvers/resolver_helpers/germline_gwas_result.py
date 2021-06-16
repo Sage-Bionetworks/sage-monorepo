@@ -66,10 +66,10 @@ def build_germline_gwas_result_request(
                                    'type': data_set_1.data_set_type.label('data_set_type')}
     feature_core_field_mapping = {'display': feature_1.display.label('feature_display'),
                                   'name': feature_1.name.label('feature_name'),
-                                  'order': feature_1.order.label('order'),
-                                  'unit': feature_1.unit.label('unit'),
-                                  'germline_category': feature_1.germline_category.label('germline_category'),
-                                  'germline_module': feature_1.germline_module.label('germline_module')}
+                                  'order': feature_1.order.label('feature_order'),
+                                  'unit': feature_1.unit.label('feature_unit'),
+                                  'germlineCategory': feature_1.germline_category.label('feature_germline_category'),
+                                  'germlineModule': feature_1.germline_module.label('feature_germline_module')}
     snp_core_field_mapping = {'rsid': snp_1.rsid.label('snp_rsid'),
                               'name': snp_1.name.label('snp_name'),
                               'bp': snp_1.bp.label('snp_bp'),

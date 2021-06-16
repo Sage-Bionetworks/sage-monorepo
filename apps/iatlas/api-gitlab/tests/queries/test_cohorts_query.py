@@ -8,16 +8,6 @@ import logging
 
 
 @pytest.fixture(scope='module')
-def tag_cohort():
-    return "tcga_immune_subtype"
-
-
-@pytest.fixture(scope='module')
-def clinical_cohort():
-    return "tcga_gender"
-
-
-@pytest.fixture(scope='module')
 def clinical():
     return "Gender"
 
@@ -29,7 +19,7 @@ def common_query_builder():
         query Cohorts(
             $paging: PagingInput
             $distinct:Boolean
-            $name: [String!]
+            $cohort: [String!]
             $dataSet: [String!]
             $tag: [String!]
             $clinical: [String!]
@@ -37,7 +27,7 @@ def common_query_builder():
         cohorts(
             paging: $paging
             distinct: $distinct
-            name: $name
+            cohort: $cohort
             dataSet: $dataSet
             tag: $tag
             clinical: $clinical
@@ -170,9 +160,9 @@ def test_cohorts_cursor_distinct_pagination(client, common_query):
     assert page_num == page['paging']['page']
 
 
-def test_tag_cohort_query_by_name(client, common_query, tag_cohort, data_set, related):
+def test_tag_cohort_query_by_name(client, common_query, tcga_tag_cohort_name, data_set, related):
     response = client.post('/api', json={'query': common_query, 'variables': {
-        'name': [tag_cohort]
+        'cohort': [tcga_tag_cohort_name]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
@@ -182,11 +172,11 @@ def test_tag_cohort_query_by_name(client, common_query, tag_cohort, data_set, re
     result = results[0]
     assert result['dataSet']['name'] == data_set
     assert result['tag']['name'] == related
-    assert result['name'] == tag_cohort
+    assert result['name'] == tcga_tag_cohort_name
     assert type(result['clinical']) is NoneType
 
 
-def test_tag_cohort_query_by_dataset_and_tag(client, common_query, tag_cohort, data_set, related):
+def test_tag_cohort_query_by_dataset_and_tag(client, common_query, tcga_tag_cohort_name, data_set, related):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
         'tag': [related]
@@ -199,13 +189,14 @@ def test_tag_cohort_query_by_dataset_and_tag(client, common_query, tag_cohort, d
     result = results[0]
     assert result['dataSet']['name'] == data_set
     assert result['tag']['name'] == related
-    assert result['name'] == tag_cohort
+    assert result['name'] == tcga_tag_cohort_name
     assert type(result['clinical']) is NoneType
 
 
-def test_clinical_cohort_query_by_name(client, common_query, clinical_cohort, data_set, clinical):
+def test_clinical_cohort_query_by_name(client, common_query, pcawg_clinical_cohort_name, clinical):
+    data_set = "PCAWG"
     response = client.post('/api', json={'query': common_query, 'variables': {
-        'name': [clinical_cohort]
+        'cohort': [pcawg_clinical_cohort_name]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
@@ -215,11 +206,12 @@ def test_clinical_cohort_query_by_name(client, common_query, clinical_cohort, da
     result = results[0]
     assert result['dataSet']['name'] == data_set
     assert type(result['tag']) is NoneType
-    assert result['name'] == clinical_cohort
+    assert result['name'] == pcawg_clinical_cohort_name
     assert result['clinical'] == clinical
 
 
-def test_clinical_cohort_query_by_dataset_and_tag(client, common_query, clinical_cohort, data_set, clinical):
+def test_clinical_cohort_query_by_dataset_and_tag(client, common_query, pcawg_clinical_cohort_name, clinical):
+    data_set = "PCAWG"
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
         'clinical': [clinical]
@@ -232,11 +224,11 @@ def test_clinical_cohort_query_by_dataset_and_tag(client, common_query, clinical
     result = results[0]
     assert result['dataSet']['name'] == data_set
     assert type(result['tag']) is NoneType
-    assert result['name'] == clinical_cohort
+    assert result['name'] == pcawg_clinical_cohort_name
     assert result['clinical'] == clinical
 
 
-def test_tag_cohort_samples_query(client, common_query_builder, tag_cohort, data_set, related):
+def test_tag_cohort_samples_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):
     query = common_query_builder(
         """
         {
@@ -254,7 +246,7 @@ def test_tag_cohort_samples_query(client, common_query_builder, tag_cohort, data
         }
         """)
     response = client.post('/api', json={'query': query, 'variables': {
-        'name': [tag_cohort]
+        'cohort': [tcga_tag_cohort_name]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
@@ -262,7 +254,7 @@ def test_tag_cohort_samples_query(client, common_query_builder, tag_cohort, data
     result = results[0]
     assert result['dataSet']['name'] == data_set
     assert result['tag']['name'] == related
-    assert result['name'] == tag_cohort
+    assert result['name'] == tcga_tag_cohort_name
     assert type(result['clinical']) is NoneType
     assert isinstance(results, list)
     assert len(results) == 1
@@ -274,7 +266,8 @@ def test_tag_cohort_samples_query(client, common_query_builder, tag_cohort, data
         assert type(sample['clinical_value'] is NoneType)
 
 
-def test_clinical_cohort_samples_query(client, common_query_builder, clinical_cohort, data_set, clinical):
+def test_clinical_cohort_samples_query(client, common_query_builder, pcawg_clinical_cohort_name, clinical):
+    data_set = "PCAWG"
     query = common_query_builder(
         """
         {
@@ -292,7 +285,7 @@ def test_clinical_cohort_samples_query(client, common_query_builder, clinical_co
         }
         """)
     response = client.post('/api', json={'query': query, 'variables': {
-        'name': [clinical_cohort]
+        'cohort': [pcawg_clinical_cohort_name]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
@@ -300,7 +293,7 @@ def test_clinical_cohort_samples_query(client, common_query_builder, clinical_co
     result = results[0]
     assert result['dataSet']['name'] == data_set
     assert type(result['tag']) is NoneType
-    assert result['name'] == clinical_cohort
+    assert result['name'] == pcawg_clinical_cohort_name
     assert result['clinical'] == clinical
     assert isinstance(results, list)
     assert len(results) == 1
@@ -312,7 +305,7 @@ def test_clinical_cohort_samples_query(client, common_query_builder, clinical_co
         assert type(sample['clinical_value']) is str
 
 
-def test_tag_cohort_features_query(client, common_query_builder, tag_cohort, data_set, related):
+def test_tag_cohort_features_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):
     query = common_query_builder(
         """
         {
@@ -329,7 +322,7 @@ def test_tag_cohort_features_query(client, common_query_builder, tag_cohort, dat
         }
         """)
     response = client.post('/api', json={'query': query, 'variables': {
-        'name': [tag_cohort]
+        'cohort': [tcga_tag_cohort_name]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
@@ -337,7 +330,7 @@ def test_tag_cohort_features_query(client, common_query_builder, tag_cohort, dat
     result = results[0]
     assert result['dataSet']['name'] == data_set
     assert result['tag']['name'] == related
-    assert result['name'] == tag_cohort
+    assert result['name'] == tcga_tag_cohort_name
     assert type(result['clinical']) is NoneType
     assert isinstance(results, list)
     assert len(results) == 1
@@ -348,7 +341,7 @@ def test_tag_cohort_features_query(client, common_query_builder, tag_cohort, dat
         assert type(feature['display'] is str)
 
 
-def test_tag_cohort_genes_query(client, common_query_builder, tag_cohort, data_set, related):
+def test_tag_cohort_genes_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):
     query = common_query_builder(
         """
         {
@@ -365,7 +358,7 @@ def test_tag_cohort_genes_query(client, common_query_builder, tag_cohort, data_s
         }
         """)
     response = client.post('/api', json={'query': query, 'variables': {
-        'name': [tag_cohort]
+        'cohort': [tcga_tag_cohort_name]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
@@ -373,7 +366,7 @@ def test_tag_cohort_genes_query(client, common_query_builder, tag_cohort, data_s
     result = results[0]
     assert result['dataSet']['name'] == data_set
     assert result['tag']['name'] == related
-    assert result['name'] == tag_cohort
+    assert result['name'] == tcga_tag_cohort_name
     assert type(result['clinical']) is NoneType
     assert isinstance(results, list)
     assert len(results) == 1
@@ -384,7 +377,7 @@ def test_tag_cohort_genes_query(client, common_query_builder, tag_cohort, data_s
         assert type(gene['entrez'] is int)
 
 
-def test_tag_cohort_mutations_query(client, common_query_builder, tag_cohort, data_set, related):
+def test_tag_cohort_mutations_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):
     query = common_query_builder(
         """
         {
@@ -405,7 +398,7 @@ def test_tag_cohort_mutations_query(client, common_query_builder, tag_cohort, da
         """
     )
     response = client.post('/api', json={'query': query, 'variables': {
-        'name': [tag_cohort]
+        'cohort': [tcga_tag_cohort_name]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
@@ -413,7 +406,7 @@ def test_tag_cohort_mutations_query(client, common_query_builder, tag_cohort, da
     result = results[0]
     assert result['dataSet']['name'] == data_set
     assert result['tag']['name'] == related
-    assert result['name'] == tag_cohort
+    assert result['name'] == tcga_tag_cohort_name
     assert type(result['clinical']) is NoneType
     assert isinstance(results, list)
     assert len(results) == 1

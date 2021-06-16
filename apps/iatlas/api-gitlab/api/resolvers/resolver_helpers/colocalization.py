@@ -94,10 +94,10 @@ def build_colocalization_request(
                                          'type': coloc_data_set_1.data_set_type.label('coloc_data_set_type')}
     feature_core_field_mapping = {'display': feature_1.display.label('feature_display'),
                                   'name': feature_1.name.label('feature_name'),
-                                  'order': feature_1.order.label('order'),
-                                  'unit': feature_1.unit.label('unit'),
-                                  'germline_category': feature_1.germline_category.label('germline_category'),
-                                  'germline_module': feature_1.germline_module.label('germline_module')}
+                                  'order': feature_1.order.label('feature_order'),
+                                  'unit': feature_1.unit.label('feature_unit'),
+                                  'germlineCategory': feature_1.germline_category.label('feature_germline_category'),
+                                  'germlineModule': feature_1.germline_module.label('feature_germline_module')}
     gene_core_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
                                'hgnc': gene_1.hgnc.label('hgnc')}
     snp_core_field_mapping = {'rsid': snp_1.rsid.label('snp_rsid'),
