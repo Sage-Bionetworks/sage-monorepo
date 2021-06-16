@@ -79,9 +79,9 @@ cohort_filter_selection_server <- function(id, dataset) {
 
       # # numeric_filters -------------------------------------------------------
 
+      # TODO fix to use cohort
       feature_tbl <- shiny::reactive({
-        dataset() %>%
-          iatlas.api.client::query_features() %>%
+        iatlas.api.client::query_features(cohorts = dataset()) %>%
           dplyr::select("class", "display", "feature" = "name") %>%
           dplyr::mutate("feature" = stringr::str_c("feature:", .data$feature))
       })
