@@ -40,8 +40,8 @@ def build_gene_graphql_response(pub_dict=dict(), gene_type_dict=dict()):
         publications = pub_dict.get(gene_id, []) if pub_dict else []
         return {
             'id': gene_id,
-            'entrez': get_value(gene, 'entrez'),
-            'hgnc': get_value(gene, 'hgnc'),
+            'entrez': get_value(gene, 'gene_entrez') or get_value(gene, 'entrez'),
+            'hgnc': get_value(gene, 'gene_hgnc') or get_value(gene, 'hgnc'),
             'description': get_value(gene, 'description'),
             'friendlyName': get_value(gene, 'friendly_name'),
             'ioLandscapeName': get_value(gene, 'io_landscape_name'),

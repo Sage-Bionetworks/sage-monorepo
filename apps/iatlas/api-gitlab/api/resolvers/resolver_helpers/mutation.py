@@ -20,6 +20,7 @@ mutation_request_fields = {'id',
 
 
 def build_mutation_graphql_response(sample_dict=dict()):
+
     def f(mutation):
         if not mutation:
             return None
@@ -28,7 +29,7 @@ def build_mutation_graphql_response(sample_dict=dict()):
         return {
             'id': mutation_id,
             'gene': build_gene_graphql_response()(mutation),
-            'mutationCode': get_value(mutation, 'code'),
+            'mutationCode': get_value(mutation, 'mutation_code') or get_value(mutation, 'code'),
             'mutationType': build_mutation_type_graphql_response(mutation),
             'samples': map(build_sample_graphql_response, samples),
             'status': get_value(mutation, 'status')
@@ -86,10 +87,12 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, s
                                'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
     mutation_type_field_mapping = {'display': mutation_type_1.display.label('display'),
                                    'name': mutation_type_1.name.label('name')}
-    sample_core_field_mapping = {'id': sample_1.id.label('sample_id'), 'name': sample_1.name.label('sample_name')}
+    sample_core_field_mapping = {'id': sample_1.id.label(
+        'sample_id'), 'name': sample_1.name.label('sample_name')}
 
     core = get_selected(requested, core_field_mapping)
-    core |= {mutation_1.id.label('id')} # if we always request id, distinct will return every record
+    # if we always request id, distinct will return every record
+    core |= {mutation_1.id.label('id')}
     # if not distinct:
     #     # Add the id as a cursor if not selecting distinct
     #     core.add(mutation_1.id.label('id'))

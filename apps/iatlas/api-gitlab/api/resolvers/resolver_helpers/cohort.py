@@ -6,6 +6,10 @@ from api.db_models import Cohort, Dataset, Tag, Sample, Feature, Gene, Mutation,
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
 from .data_set import build_data_set_graphql_response
+from .feature import build_feature_graphql_response
+from .gene import build_gene_graphql_response
+from .mutation import build_mutation_graphql_response
+from .sample import build_cohort_sample_graphql_response
 from .tag import build_tag_graphql_response
 from itertools import groupby
 
@@ -14,14 +18,10 @@ cohort_request_fields = {'id', 'name',
 
 
 def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={}, mutation_dict={}):
-
     def f(cohort):
         if not cohort:
             return None
         else:
-            import logging
-            logger = logging.getLogger('cohort_resolver')
-            logger.info(cohort)
             cohort_id = get_value(cohort, 'cohort_id')
             samples = sample_dict.get(cohort_id, []) if sample_dict else []
             features = feature_dict.get(cohort_id, []) if feature_dict else []
@@ -33,39 +33,12 @@ def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={},
                 'name': get_value(cohort, 'cohort_name'),
                 'clinical': get_value(cohort, 'cohort_clinical'),
                 'dataSet': build_data_set_graphql_response(cohort),
-                'tag': {
-                    'name': get_value(cohort, 'tag_name'),
-                    'characteristics': get_value(cohort, 'tag_characteristics'),
-                    'color': get_value(cohort, 'tag_color'),
-                    'longDisplay': get_value(cohort, 'tag_long_display'),
-                    'shortDisplay': get_value(cohort, 'tag_short_display')
-                },
-                'samples': [{
-                    'name': get_value(sample, 'sample_name'),
-                    'clinical_value': get_value(sample, 'sample_clinical_value'),
-                    'tag': {
-                        'name': get_value(sample, 'sample_tag_name'),
-                        'characteristics': get_value(sample, 'sample_tag_characteristics'),
-                        'color': get_value(sample, 'sample_tag_color'),
-                        'longDisplay': get_value(sample, 'sample_tag_long_display'),
-                        'shortDisplay': get_value(sample, 'sample_tag_short_display')
-                    }
-                } for sample in samples],
-                'features': [{
-                    'name': get_value(feature, 'feature_name'),
-                    'display': get_value(feature, 'feature_display')
-                } for feature in features],
-                'genes': [{
-                    'entrez': get_value(gene, 'gene_entrez'),
-                    'hgnc': get_value(gene, 'gene_hgnc')
-                } for gene in genes],
-                'mutations': [{
-                    'mutationCode': get_value(mutation, 'mutation_code'),
-                    'gene': {
-                        'entrez': get_value(mutation, 'mutation_gene_entrez'),
-                        'hgnc': get_value(mutation, 'mutation_gene_hgnc')
-                    }
-                } for mutation in mutations],
+                'tag': build_tag_graphql_response()(
+                    cohort) if get_value(cohort, 'tag_name') else None,
+                'samples': map(build_cohort_sample_graphql_response, samples),
+                'features': map(build_feature_graphql_response(), features),
+                'genes': map(build_gene_graphql_response(), genes),
+                'mutations': map(build_mutation_graphql_response(), mutations)
             }
             return(dict)
 
@@ -114,6 +87,7 @@ def build_cohort_request(requested, data_set_requested, tag_requested, cohort=No
     }
 
     core = get_selected(requested, core_field_mapping)
+    core |= {cohort_1.id.label('cohort_id')}
     core |= get_selected(data_set_requested, data_set_core_field_mapping)
     core |= get_selected(tag_requested, tag_core_field_mapping)
 
@@ -166,11 +140,11 @@ def get_cohort_samples(requested, sample_requested, sample_tag_requested, cohort
         }
 
         sample_tag_core_field_mapping = {
-            'characteristics': tag_2.characteristics.label('sample_tag_characteristics'),
-            'color': tag_2.color.label('sample_tag_color'),
-            'longDisplay': tag_2.long_display.label('sample_tag_long_display'),
-            'name': tag_2.name.label('sample_tag_name'),
-            'shortDisplay': tag_2.short_display.label('sample_tag_short_display')
+            'characteristics': tag_2.characteristics.label('tag_characteristics'),
+            'color': tag_2.color.label('tag_color'),
+            'longDisplay': tag_2.long_display.label('tag_long_display'),
+            'name': tag_2.name.label('tag_name'),
+            'shortDisplay': tag_2.short_display.label('tag_short_display')
         }
 
         core = get_selected(requested, core_field_mapping)
@@ -386,8 +360,8 @@ def get_cohort_mutations(requested, mutation_requested, mutation_gene_requested,
         }
 
         mutation_gene_core_field_mapping = {
-            'hgnc': gene_1.hgnc.label('mutation_gene_hgnc'),
-            'entrez': gene_1.entrez.label('mutation_gene_entrez'),
+            'hgnc': gene_1.hgnc.label('gene_hgnc'),
+            'entrez': gene_1.entrez.label('gene_entrez'),
         }
 
         core = get_selected(requested, core_field_mapping)
@@ -446,4 +420,5 @@ def get_cohort_mutations(requested, mutation_requested, mutation_gene_requested,
         mutation_dict = dict()
         for key, collection in groupby(mutations, key=lambda m: m.cohort_id):
             mutation_dict[key] = mutation_dict.get(key, []) + list(collection)
+
         return(mutation_dict)
