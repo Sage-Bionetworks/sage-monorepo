@@ -55,10 +55,10 @@
     },
     "BiocManager": {
       "Package": "BiocManager",
-      "Version": "1.30.15",
+      "Version": "1.30.16",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "87a690190741d0791c9c10b390c933ff"
+      "Hash": "2fdca0877debdd4668190832cdee4c31"
     },
     "BiocParallel": {
       "Package": "BiocParallel",
@@ -574,10 +574,10 @@
     },
     "dplyr": {
       "Package": "dplyr",
-      "Version": "1.0.6",
+      "Version": "1.0.7",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "19e84500b64bc7e589cb1e2550e25832"
+      "Hash": "36f1ae62f026c8ba9f9b5c9a08c03297"
     },
     "ellipsis": {
       "Package": "ellipsis",
@@ -686,10 +686,10 @@
     },
     "ggplot2": {
       "Package": "ggplot2",
-      "Version": "3.3.3",
+      "Version": "3.3.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3eb6477d01eb5bbdc03f7d5f70f2733e"
+      "Hash": "53ed0e82132d7f6ade8428f494d175e1"
     },
     "ggpubr": {
       "Package": "ggpubr",
@@ -860,27 +860,40 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.16.1",
+      "Version": "0.17.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "12099a9e9f30731a86dbc4028d06f76ab7caa8e1",
+      "RemoteSha": "afc0c4bcbca72c8a3e422a7b0da36b7736eab9a5",
       "RemoteHost": "api.github.com",
-      "Hash": "186d3294a3a35b2ed2d8d9c8c92ab388"
+      "Hash": "7ede18395c2655813fe04c86a374bcd1"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
-      "Version": "0.4.2",
+      "Version": "0.4.3",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules",
       "RemoteRef": "master",
-      "RemoteSha": "794fcdca0a69f754076ce74dad28042da2cf5f2d",
+      "RemoteSha": "83c9edd63b074e378ed7216a505000e334509df6",
       "RemoteHost": "api.github.com",
-      "Hash": "a4d1ca831b68647db784a145bc8f0010"
+      "Hash": "b7110fd84ee286fda47f74ca6817fd3c"
+    },
+    "iatlas.modules2": {
+      "Package": "iatlas.modules2",
+      "Version": "0.1",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "CRI-iAtlas",
+      "RemoteRepo": "iatlas.modules2",
+      "RemoteRef": "master",
+      "RemoteSha": "0134bcc5a14324b77ed8b16d6db824a282524f8d",
+      "Remotes": "CRI-iAtlas/iatlas.api.client@main, CRI-iAtlas/iatlas.modules@master",
+      "Hash": "32cc3cdebe1b2eea7ebec06f5d750773"
     },
     "igvShiny": {
       "Package": "igvShiny",
@@ -1106,10 +1119,10 @@
     },
     "openxlsx": {
       "Package": "openxlsx",
-      "Version": "4.2.3",
+      "Version": "4.2.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "2253a430965e222d11a2f9277cd34c2e"
+      "Hash": "f1b1ca1254ccb485dccc9c0dc65a2c36"
     },
     "packrat": {
       "Package": "packrat",
@@ -1162,10 +1175,10 @@
     },
     "plotly": {
       "Package": "plotly",
-      "Version": "4.9.4",
+      "Version": "4.9.4.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3f385f2cd5c270ea3bbe68cb94f7c558"
+      "Hash": "af4b92cb3828aa30002e2f945c49c2d7"
     },
     "plyr": {
       "Package": "plyr",
@@ -1446,6 +1459,13 @@
       "Repository": "CRAN",
       "Hash": "9ddfc91d4280eaa34c2103951538976f"
     },
+    "snakecase": {
+      "Package": "snakecase",
+      "Version": "0.11.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4079070fc210c7901c0832a3aeab894f"
+    },
     "snow": {
       "Package": "snow",
       "Version": "0.4-3",
@@ -1518,10 +1538,10 @@
     },
     "testthat": {
       "Package": "testthat",
-      "Version": "3.0.2",
+      "Version": "3.0.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "495e0434d9305716b6a87031570ce109"
+      "Hash": "3624827fc69a7ef793a67b36edb4db90"
     },
     "tibble": {
       "Package": "tibble",
@@ -1623,10 +1643,10 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.23",
+      "Version": "0.24",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "791a57f43c887111490851dcd166d344"
+      "Hash": "88cdb9779a657ad80ad942245fffba31"
     },
     "xgboost": {
       "Package": "xgboost",

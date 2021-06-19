@@ -145,19 +145,19 @@ test_that("query_feature_values_with_cohort_object", {
 
 # genes ---------------------------------------------------------------------
 
-test_that("query_gene_expression_with_cohort_object", {
-
-  expected_columns <- c(
-    "sample",
-    "entrez",
-    "hgnc",
-    "rna_seq_expr"
-  )
-  result1 <- query_gene_expression_with_cohort_object(
-    pcawg_immune_subtype_cohort_obj,
-    entrez = 135L
-  )
-
-  expect_named(result1, expected_columns)
-  expect_equal(nrow(result1), 455L)
-})
+# test_that("query_gene_expression_with_cohort_object", {
+#
+#   expected_columns <- c(
+#     "sample",
+#     "entrez",
+#     "hgnc",
+#     "rna_seq_expr"
+#   )
+#   result1 <- query_gene_expression_with_cohort_object(
+#     pcawg_immune_subtype_cohort_obj,
+#     entrez = 135L
+#   )
+#
+#   expect_named(result1, expected_columns)
+#   expect_equal(nrow(result1), 455L)
+# })
