@@ -10,6 +10,7 @@ from api.db_models import (
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .publication import build_publication_graphql_response
 from .paging_utils import get_pagination_queries, fetch_page
+from .sample import build_gene_sample_graphql_response
 
 
 simple_gene_request_fields = {
@@ -54,12 +55,9 @@ def build_gene_graphql_response(pub_dict=dict(), gene_type_dict=dict(), sample_d
             'immuneCheckpoint': get_value(gene, 'gene_immune_checkpoint'),
             'pathway': get_value(gene, 'gene_pathway'),
             'publications': map(build_publication_graphql_response, publications),
-            'samples': [{
-                'name': get_value(sample, 'sample_name'),
-                'rnaSeqExpr': get_value(sample, 'gene_rna_seq_expr')
-            } for sample in samples],
             'superCategory': get_value(gene, 'gene_super_category'),
-            'therapyType': get_value(gene, 'gene_therapy_type')
+            'therapyType': get_value(gene, 'gene_therapy_type'),
+            'samples': map(build_gene_sample_graphql_response, samples)
         }
     return f
 
