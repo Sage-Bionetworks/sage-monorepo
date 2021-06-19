@@ -26,10 +26,8 @@ type GeneNode implements BaseNode{
   pathway: String
   "A list of Publications associated with the gene."
   publications: [SimplePublication!]!
-  "A list of RNA Sequence Expressions associated with the gene and it's related samples."
-  rnaSeqExprs: [Float!]!
-  "A list of sample names and the RNA Sequence Expressions related to the gene."
-  samples: [String!]!
+  "A list of samples related to this gene that is associated with the value."
+  samples: [GeneRelatedSample!]!
   "The 'superCategory' of the gene."
   superCategory: String
   "The 'therapyType' of the gene."

@@ -193,6 +193,8 @@ def max_weight():
 def min_weight():
     return 42
 
+# ----
+
 
 @pytest.fixture(scope='module')
 def cohort_query_builder():

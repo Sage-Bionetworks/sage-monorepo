@@ -11,6 +11,16 @@ type Sample {
 }
 
 """
+The "GeneRelatedSample" type is a Sample that is specifically related to a Gene.
+"""
+type GeneRelatedSample {
+  "The sample's name (often the 'sample' portion of a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/))."
+  name: String!
+  "The the RNASeq expression value of the Sample related to the Gene."
+  rnaSeqExpr: Float
+}
+
+"""
 The "FeatureRelatedSample" type is a Sample that is specifically related to a Feature.
 
 See also `Feature`
