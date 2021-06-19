@@ -93,7 +93,6 @@ def build_related_request(requested, related_requested, data_set=None, related=N
         append_to_order(related_1.characteristics)
 
     query = query.order_by(*order) if order else query
-
     return query
 
 
@@ -101,17 +100,19 @@ def build_tag_graphql_response(publication_dict=dict(), related_dict=dict(), sam
     def f(tag):
         if not tag:
             return None
-        tag_id = get_value(tag, 'id')
+        tag_id = get_value(tag, 'tag_id') or get_value(tag, 'id')
+        tag_name = get_value(tag, 'tag_name') or get_value(tag, 'name')
         publications = publication_dict.get(
             tag_id, []) if publication_dict else []
         related = related_dict.get(tag_id, []) if related_dict else []
         samples = sample_dict.get(tag_id, []) if sample_dict else []
         return {
-            'characteristics': get_value(tag, 'characteristics'),
-            'color': get_value(tag, 'color'),
+            'id': tag_id,
+            'name': tag_name,
+            'characteristics': get_value(tag, 'tag_characteristics') or get_value(tag, 'characteristics'),
+            'color': get_value(tag, 'tag_color') or get_value(tag, 'color'),
             'longDisplay': get_value(tag, 'tag_long_display') or get_value(tag, 'long_display'),
             'publications': map(build_publication_graphql_response, publications),
-            'name': get_value(tag, 'tag_name') or get_value(tag, 'name'),
             'related': [build_tag_graphql_response()(r) for r in related],
             'sampleCount': get_value(tag, 'sample_count'),
             'samples': [sample.name for sample in samples],
