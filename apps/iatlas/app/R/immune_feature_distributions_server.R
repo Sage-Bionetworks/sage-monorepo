@@ -23,7 +23,7 @@ immune_feature_distributions_server <- function(
             dplyr::select("group", "group_description" = "characteristics", "color")
 
           cohort_obj() %>%
-            query_feature_values_with_cohort_object(feature = .feature) %>%
+            iatlas.modules2::query_feature_values_with_cohort_object(feature = .feature) %>%
             dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample") %>%
             dplyr::inner_join(group_data, by = "group") %>%
             dplyr::select(

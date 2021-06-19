@@ -14,10 +14,10 @@ get_co_status_feature <- function(time_feature){
 
 build_co_survival_value_tbl <- function(cohort_obj, time, status) {
   time_tbl <-
-    query_feature_values_with_cohort_object(cohort_obj, time) %>%
+    iatlas.modules2::query_feature_values_with_cohort_object(cohort_obj, time) %>%
     dplyr::select("sample", "time" = "feature_value")
   status_tbl <-
-    query_feature_values_with_cohort_object(cohort_obj, status) %>%
+    iatlas.modules2::query_feature_values_with_cohort_object(cohort_obj, status) %>%
     dplyr::select("sample", "status" = "feature_value")
   tbl <-
     purrr::reduce(
@@ -30,8 +30,11 @@ build_co_survival_value_tbl <- function(cohort_obj, time, status) {
 }
 
 build_co_feature_tbl <- function(cohort_obj, feature_class){
-  cohort_obj %>%
-    query_feature_values_with_cohort_object(class = feature_class) %>%
+  tbl <-
+    iatlas.modules2::query_feature_values_with_cohort_object(
+      cohort_object = cohort_obj,
+      feature_class = feature_class
+    ) %>%
     dplyr::select(
       "sample",
       "feature_display",

@@ -9,7 +9,7 @@ tumor_microenvironment_type_fractions_server <- function(id, cohort_obj) {
             dplyr::select("group", "group_description" = "characteristics")
 
           cohort_obj() %>%
-            query_feature_values_with_cohort_object(class = .feature_class) %>%
+            iatlas.modules2::query_feature_values_with_cohort_object(class = .feature_class) %>%
             dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample") %>%
             dplyr::inner_join(group_data, by = "group") %>%
             dplyr::select(

@@ -884,16 +884,16 @@
     },
     "iatlas.modules2": {
       "Package": "iatlas.modules2",
-      "Version": "0.1",
+      "Version": "0.1.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules2",
       "RemoteRef": "master",
-      "RemoteSha": "0134bcc5a14324b77ed8b16d6db824a282524f8d",
+      "RemoteSha": "e2d9079c9d380d8871e4b99d57af77c2faa91723",
+      "RemoteHost": "api.github.com",
       "Remotes": "CRI-iAtlas/iatlas.api.client@main, CRI-iAtlas/iatlas.modules@master",
-      "Hash": "32cc3cdebe1b2eea7ebec06f5d750773"
+      "Hash": "24f6c1c1e647c72586bd78ff0f4584cd"
     },
     "igvShiny": {
       "Package": "igvShiny",
