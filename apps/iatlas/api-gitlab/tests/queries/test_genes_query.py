@@ -103,50 +103,14 @@ def common_query(common_query_builder):
 
 
 @pytest.fixture(scope='module')
-def cohort_name():
-    return 'tcga_immune_subtype'
-
-
-@pytest.fixture(scope='module')
-def cohort_id(test_db, cohort_name):
-    from api.db_models import Cohort
-    (id, ) = test_db.session.query(Cohort.id).filter_by(
-        name=cohort_name).one_or_none()
-    return id
-
-
-@pytest.fixture(scope='module')
-def cohort_query_builder():
-    def f(query_fields):
-        return """
-        query Cohorts(
-            $paging: PagingInput
-            $distinct:Boolean
-            $name: [String!]
-            $dataSet: [String!]
-            $tag: [String!]
-            $clinical: [String!]
-        ) {
-        cohorts(
-            paging: $paging
-            distinct: $distinct
-            name: $name
-            dataSet: $dataSet
-            tag: $tag
-            clinical: $clinical
-        )
-        """ + query_fields + "}"
-    return f
-
-
-@pytest.fixture(scope='module')
-def cohort_query(cohort_query_builder):
-    return cohort_query_builder(
+def samples_query(common_query_builder):
+    return common_query_builder(
         """
         {
-            items {
-                name
+            items{
+                entrez
                 samples {
+                    rnaSeqExpr
                     name
                 }
             }
@@ -154,9 +118,11 @@ def cohort_query(cohort_query_builder):
         """
     )
 
+    from api.db_models import Cohort
+    (id, ) = test_db.session.query(Cohort.id).filter_by(
+        name=cohort_name).one_or_none()
+    return id
 
-@pytest.fixture(scope='module')
-def tcga_cohort_samples(client, cohort_name, cohort_query):
     response = client.post('/api', json={'query': cohort_query, 'variables': {
         'name': [cohort_name]
     }})
@@ -442,26 +408,13 @@ def test_genes_query_returns_publications_with_geneType(client, common_query_bui
             assert type(publication['pubmedId']) is int
 
 
-def test_genes_samples_query_with_gene_and_cohort(client, entrez, common_query_builder, cohort_name, tcga_cohort_samples):
-    query = common_query_builder(
-        """
-        {
-            items{
-                entrez
-                samples {
-                    rnaSeqExpr
-                    name
-                }
-            }
-        }
-        """
-    )
+def test_genes_samples_query_with_gene_and_cohort(client, entrez, samples_query, tcga_tag_cohort_name, tcga_tag_cohort_samples):
     response = client.post(
         '/api', json={
-            'query': query,
+            'query': samples_query,
             'variables': {
                 'entrez': [entrez],
-                'cohort': [cohort_name]
+                'cohort': [tcga_tag_cohort_name]
             }
         })
     json_data = json.loads(response.data)
@@ -477,26 +430,13 @@ def test_genes_samples_query_with_gene_and_cohort(client, entrez, common_query_b
     for sample in gene['samples'][0:10]:
         assert type(sample['name']) is str
         assert type(sample['rnaSeqExpr']) is float
-        assert sample['name'] in tcga_cohort_samples
+        assert sample['name'] in tcga_tag_cohort_samples
 
 
-def test_genes_samples_query_with_gene_and_sample(client, entrez, common_query_builder, sample):
-    query = common_query_builder(
-        """
-        {
-            items{
-                entrez
-                samples {
-                    rnaSeqExpr
-                    name
-                }
-            }
-        }
-        """
-    )
+def test_genes_samples_query_with_gene_and_sample(client, entrez, samples_query, sample):
     response = client.post(
         '/api', json={
-            'query': query,
+            'query': samples_query,
             'variables': {
                 'entrez': [entrez],
                 'sample': [sample]
@@ -518,26 +458,16 @@ def test_genes_samples_query_with_gene_and_sample(client, entrez, common_query_b
     assert s['name'] == sample
 
 
-def test_genes_query_with_entrez_and_maxRnaSeqExpr(client, common_query_builder, entrez):
+def test_genes_query_with_entrez_and_maxRnaSeqExpr(client, samples_query, entrez):
     max_rna_seq_expr = 1
-    query = common_query_builder(
-        """
-        {
-            items{
-                entrez
-                samples {
-                    name
-                    rnaSeqExpr
-                }
-            }
-        }
-        """
-    )
     response = client.post(
-        '/api', json={'query': query, 'variables': {
-            'maxRnaSeqExpr': max_rna_seq_expr,
-            'entrez': entrez
-        }})
+        '/api', json={
+            'query': samples_query,
+            'variables': {
+                'maxRnaSeqExpr': max_rna_seq_expr,
+                'entrez': entrez
+            }
+        })
     json_data = json.loads(response.data)
     page = json_data['data']['genes']
     genes = page['items']
@@ -554,26 +484,16 @@ def test_genes_query_with_entrez_and_maxRnaSeqExpr(client, common_query_builder,
         assert sample['rnaSeqExpr'] <= max_rna_seq_expr
 
 
-def test_genes_query_with_entrez_and_minRnaSeqExpr(client, common_query_builder, entrez):
+def test_genes_query_with_entrez_and_minRnaSeqExpr(client, samples_query, entrez):
     min_rna_seq_expr = 1
-    query = common_query_builder(
-        """
-        {
-            items{
-                entrez
-                samples {
-                    name
-                    rnaSeqExpr
-                }
-            }
-        }
-        """
-    )
     response = client.post(
-        '/api', json={'query': query, 'variables': {
-            'minRnaSeqExpr': min_rna_seq_expr,
-            'entrez': entrez
-        }})
+        '/api', json={
+            'query': samples_query,
+            'variables': {
+                'minRnaSeqExpr': min_rna_seq_expr,
+                'entrez': entrez
+            }
+        })
     json_data = json.loads(response.data)
     page = json_data['data']['genes']
     genes = page['items']

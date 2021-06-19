@@ -1,6 +1,5 @@
 from .resolver_helpers import build_cohort_graphql_response, build_cohort_request, get_cohort_samples, get_cohort_features, get_cohort_genes, get_cohort_mutations, cohort_request_fields, get_requested, get_selection_set, simple_data_set_request_fields, simple_tag_request_fields, cohort_sample_request_fields, simple_feature_request_fields, simple_gene_request_fields, mutation_request_fields
 from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
-import logging
 
 
 def resolve_cohorts(_obj, info, distinct=False, paging=None, cohort=None, dataSet=None, tag=None, clinical=None):

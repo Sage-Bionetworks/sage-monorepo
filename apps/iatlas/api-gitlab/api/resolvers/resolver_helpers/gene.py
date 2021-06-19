@@ -43,11 +43,11 @@ def build_gene_graphql_response(pub_dict=dict(), gene_type_dict=dict(), sample_d
         samples = sample_dict.get(gene_id, []) if sample_dict else []
         return {
             'id': gene_id,
-            'entrez': get_value(gene, 'gene_entrez'),
-            'hgnc': get_value(gene, 'gene_hgnc'),
-            'description': get_value(gene, 'gene_description'),
-            'friendlyName': get_value(gene, 'gene_friendly_name'),
-            'ioLandscapeName': get_value(gene, 'gene_io_landscape_name'),
+            'entrez': get_value(gene, 'gene_entrez') or get_value(gene, 'entrez'),
+            'hgnc': get_value(gene, 'gene_hgnc') or get_value(gene, 'hgnc'),
+            'description': get_value(gene, 'gene_description') or get_value(gene, 'description'),
+            'friendlyName': get_value(gene, 'gene_friendly_name') or get_value(gene, 'friendly_name'),
+            'ioLandscapeName': get_value(gene, 'gene_io_landscape_name') or get_value(gene, 'io_landscape_name'),
             'geneFamily': get_value(gene, 'gene_family'),
             'geneFunction': get_value(gene, 'gene_function'),
             'geneTypes': gene_types,
@@ -230,131 +230,6 @@ def build_gene_request(
             *cohort_join_condition), isouter=False)
 
         query = query.filter(gene_1.id.in_(cohort_subquery))
-
-    '''
-    if tag_requested or tag or sample or data_set or related or max_rna_seq_expr != None or min_rna_seq_expr != None or 'rnaSeqExprs' in requested or 'samples' in requested:
-        gene_sample_join_condition = [gene_to_sample_1.gene_id == gene_1.id]
-        if max_rna_seq_expr != None:
-            gene_sample_join_condition.append(
-                gene_to_sample_1.rna_seq_expr <= max_rna_seq_expr)
-        if min_rna_seq_expr != None:
-            gene_sample_join_condition.append(
-                gene_to_sample_1.rna_seq_expr >= min_rna_seq_expr)
-        query = query.join(gene_to_sample_1, and_(*gene_sample_join_condition))
-
-        if 'samples' in requested or sample:
-            sample_join_condition = build_join_condition(
-                sample_1.id, gene_to_sample_1.sample_id, sample_1.name, sample)
-            query = query.join(sample_1, and_(*sample_join_condition))
-
-        if data_set or related:
-            data_set_1 = aliased(Dataset, name='d')
-            data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
-
-            data_set_sub_query = sess.query(data_set_1.id).filter(
-                data_set_1.name.in_(data_set)) if data_set else data_set
-
-            data_set_to_sample_join_condition = build_join_condition(
-                data_set_to_sample_1.sample_id, gene_to_sample_1.sample_id, data_set_to_sample_1.dataset_id, data_set_sub_query)
-            query = query.join(
-                data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
-
-        if tag_requested or tag:
-            sample_to_tag_1 = aliased(SampleToTag, name='stt')
-            sample_to_tag_join_condition = [
-                sample_to_tag_1.sample_id == gene_to_sample_1.sample_id]
-
-        if related:
-            data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
-            related_tag_1 = aliased(Tag, name='rt')
-
-            related_tag_sub_query = sess.query(related_tag_1.id).filter(
-                related_tag_1.name.in_(related))
-
-            data_set_tag_join_condition = build_join_condition(
-                data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
-            query = query.join(
-                data_set_to_tag_1, and_(*data_set_tag_join_condition))
-
-            if tag_requested or tag:
-                tag_to_tag_1 = aliased(TagToTag, name='tt')
-                tag_to_tag_subquery = sess.query(tag_to_tag_1.tag_id).filter(
-                    tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id)
-
-                sample_to_tag_join_condition.append(
-                    sample_to_tag_1.tag_id.in_(tag_to_tag_subquery))
-
-        if tag_requested or tag:
-            query = query.join(sample_to_tag_1, and_(
-                *sample_to_tag_join_condition))
-            tag_join_condition = build_join_condition(
-                tag_1.id, sample_to_tag_1.tag_id, tag_1.name, tag)
-            query = query.join(tag_1, and_(*tag_join_condition))
-
-    # Only group if array_aggr is used in the selection.
-    if 'samples' in requested or 'rnaSeqExprs' in requested:
-        group = [gene_1.id]
-        append_to_group = group.append
-        if 'entrez' in requested:
-            append_to_group(gene_1.entrez)
-        if 'hgnc' in requested:
-            append_to_group(gene_1.hgnc)
-        if 'geneFamily' in requested:
-            append_to_group(gene_family_1.name)
-        if 'friendlyName' in requested:
-            append_to_group(gene_1.friendly_name)
-        if 'ioLandscapeName' in requested:
-            append_to_group(gene_1.io_landscape_name)
-        if 'geneFunction' in requested:
-            append_to_group(gene_function_1.name)
-        if 'superCategory' in requested:
-            append_to_group(super_category_1.name)
-        if 'therapyType' in requested:
-            append_to_group(therapy_type_1.name)
-        if 'immuneCheckpoint' in requested:
-            append_to_group(immune_checkpoint_1.name)
-        if 'pathway' in requested:
-            append_to_group(pathway_1.name)
-        if 'description' in requested:
-            append_to_group(gene_1.description)
-        query = query.group_by(*group)
-
-    # return get_pagination_queries(query, paging, distinct, cursor_field=copy_number_result_1.id)
-    order = []
-    append_to_order = order.append
-    if 'tag' in tag_requested:
-        append_to_order(tag_1.name)
-    if 'shortDisplay' in tag_requested:
-        append_to_order(tag_1.short_display)
-    if 'longDisplay' in tag_requested:
-        append_to_order(tag_1.long_display)
-    if 'color' in tag_requested:
-        append_to_order(tag_1.color)
-    if 'characteristics' in tag_requested:
-        append_to_order(tag_1.characteristics)
-    if 'entrez' in requested:
-        append_to_order(gene_1.entrez)
-    if 'hgnc' in requested:
-        append_to_order(gene_1.hgnc)
-    if 'geneFamily' in requested:
-        append_to_order(gene_family_1.name)
-    if 'friendlyName' in requested:
-        append_to_order(gene_1.friendly_name)
-    if 'ioLandscapeName' in requested:
-        append_to_order(gene_1.io_landscape_name)
-    if 'geneFunction' in requested:
-        append_to_order(gene_function_1.name)
-    if 'superCategory' in requested:
-        append_to_order(super_category_1.name)
-    if 'therapyType' in requested:
-        append_to_order(therapy_type_1.name)
-    if 'immuneCheckpoint' in requested:
-        append_to_order(immune_checkpoint_1.name)
-    if 'description' in requested:
-        append_to_order(gene_1.description)
-    if not order:
-        append_to_order(gene_1.id)
-    '''
 
     return get_pagination_queries(query, paging, distinct, cursor_field=gene_1.id)
 

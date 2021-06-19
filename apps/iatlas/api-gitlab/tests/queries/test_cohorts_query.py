@@ -64,6 +64,30 @@ def common_query(common_query_builder):
     )
 
 
+@pytest.fixture(scope='module')
+def samples_query(common_query_builder):
+    return common_query_builder(
+        """
+        {
+            items {
+                name
+                dataSet { name }
+                tag { name }
+                clinical
+                samples{
+                    name
+                    clinical_value
+                    tag {
+                        name
+                        shortDisplay
+                        longDisplay
+                    }
+                }
+            }
+        }
+        """)
+
+
 def test_cohorts_cursor_pagination_first(client, common_query_builder):
     query = common_query_builder("""{
             items {
@@ -228,33 +252,17 @@ def test_clinical_cohort_query_by_dataset_and_tag(client, common_query, pcawg_cl
     assert result['clinical'] == clinical
 
 
-def test_tag_cohort_samples_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):
-    query = common_query_builder(
-        """
-        {
-            items {
-                name
-                tag { name }
-                dataSet { name }
-                clinical
-                samples {
-                    name
-                    clinical_value
-                    tag { name }
-                }
-            }
-        }
-        """)
-    response = client.post('/api', json={'query': query, 'variables': {
+def test_tag_cohort_samples_query(client, samples_query, tcga_tag_cohort_name, data_set, related):
+    response = client.post('/api', json={'query': samples_query, 'variables': {
         'cohort': [tcga_tag_cohort_name]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
     results = page['items']
     result = results[0]
+    assert result['name'] == tcga_tag_cohort_name
     assert result['dataSet']['name'] == data_set
     assert result['tag']['name'] == related
-    assert result['name'] == tcga_tag_cohort_name
     assert type(result['clinical']) is NoneType
     assert isinstance(results, list)
     assert len(results) == 1
@@ -266,34 +274,18 @@ def test_tag_cohort_samples_query(client, common_query_builder, tcga_tag_cohort_
         assert type(sample['clinical_value'] is NoneType)
 
 
-def test_clinical_cohort_samples_query(client, common_query_builder, pcawg_clinical_cohort_name, clinical):
-    data_set = "PCAWG"
-    query = common_query_builder(
-        """
-        {
-            items {
-                name
-                tag { name }
-                dataSet { name }
-                clinical
-                samples {
-                    name
-                    clinical_value
-                    tag { name }
-                }
-            }
-        }
-        """)
-    response = client.post('/api', json={'query': query, 'variables': {
-        'cohort': [pcawg_clinical_cohort_name]
+def test_clinical_cohort_samples_query(client, samples_query, clinical, data_set):
+    cohort = "TCGA_Gender"
+    response = client.post('/api', json={'query': samples_query, 'variables': {
+        'cohort': [cohort]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
     results = page['items']
     result = results[0]
+    assert result['name'] == cohort
     assert result['dataSet']['name'] == data_set
     assert type(result['tag']) is NoneType
-    assert result['name'] == pcawg_clinical_cohort_name
     assert result['clinical'] == clinical
     assert isinstance(results, list)
     assert len(results) == 1
@@ -303,6 +295,28 @@ def test_clinical_cohort_samples_query(client, common_query_builder, pcawg_clini
         assert type(sample['name'] is str)
         assert type(sample['tag'] is NoneType)
         assert type(sample['clinical_value']) is str
+
+
+def test_dataset_cohort_samples_query(client, samples_query, data_set):
+    response = client.post('/api', json={'query': samples_query, 'variables': {
+        'cohort': [data_set]
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['cohorts']
+    results = page['items']
+    result = results[0]
+    assert result['name'] == data_set
+    assert result['dataSet']['name'] == data_set
+    assert type(result['tag']) is NoneType
+    assert type(result['clinical']) is NoneType
+    assert isinstance(results, list)
+    assert len(results) == 1
+    samples = results[0]['samples']
+    assert len(samples) > 1
+    for sample in samples[0:2]:
+        assert type(sample['name'] is str)
+        assert type(sample['tag'] is NoneType)
+        assert type(sample['clinical_value'] is NoneType)
 
 
 def test_tag_cohort_features_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):

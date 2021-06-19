@@ -5,6 +5,7 @@ from api.db_models import (Dataset, DatasetToSample, DatasetToTag, Feature, Feat
                            Patient, Sample, SampleToMutation, SampleToTag, Tag, TagToTag)
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .patient import build_patient_graphql_response
+from .tag import build_tag_graphql_response
 
 simple_sample_request_fields = {'name'}
 
@@ -30,6 +31,16 @@ def build_sample_graphql_response(sample):
         'patient': build_patient_graphql_response()(sample),
         'status': get_value(sample, 'status')
     }
+
+
+def build_cohort_sample_graphql_response(sample):
+    dict = {
+        'name': get_value(sample, 'sample_name'),
+        'clinical_value': get_value(sample, 'sample_clinical_value'),
+        'tag': build_tag_graphql_response()(
+            sample) if get_value(sample, 'tag_name') else None
+    }
+    return dict
 
 
 def build_sample_mutation_join_condition(sample_to_mutation_model, sample_model, mutation_status, mutation_id=None, status=None):
