@@ -12,7 +12,7 @@ clinical_outcomes_heatmap_server <- function(
         shiny::selectInput(
           inputId  = ns("class_choice"),
           label    = "Select or Search for Variable Class",
-          choices  = get_cohort_feature_class_list(cohort_obj()),
+          choices  = iatlas.modules2::get_cohort_feature_class_list(cohort_obj()),
           selected = "T Helper Cell Score"
         )
       })

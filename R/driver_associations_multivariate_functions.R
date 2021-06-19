@@ -24,10 +24,9 @@ build_md_feature_covariate_tbl <- function(cohort_obj, cov_obj){
   features <- cov_obj$numerical_covariates
   if (is.null(features)) return(NULL)
   tbl <-
-    iatlas.api.client::query_feature_values(
-      features = features,
-      cohorts = cohort_obj$dataset,
-      samples = cohort_obj$sample_tbl$sample
+    iatlas.modules2::query_feature_values_with_cohort_object(
+      cohort_object = cohort_obj,
+      features = features
     ) %>%
     dplyr::select("sample", "feature_name", "feature_value") %>%
     tidyr::pivot_wider(
@@ -51,7 +50,7 @@ build_md_covariate_tbl <- function(cohort_obj, cov_obj){
 
 build_md_response_tbl <- function(cohort_obj, feature){
   tbl <-
-    query_feature_values_with_cohort_object(cohort_obj, feature) %>%
+    iatlas.modules2::query_feature_values_with_cohort_object(cohort_obj, feature) %>%
     dplyr::inner_join(cohort_obj$sample_tbl, by = "sample") %>%
     dplyr::select("sample", "response" = "feature_value")
 }
