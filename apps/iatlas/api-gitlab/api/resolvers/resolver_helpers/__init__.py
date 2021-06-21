@@ -5,7 +5,7 @@ from .data_set import build_data_set_graphql_response, data_set_request_fields, 
 from .driver_result import build_dr_graphql_response, build_driver_result_request, driver_result_request_fields
 from .edge import build_edge_graphql_response, build_edge_request, edge_request_fields
 from .feature_value import build_feature_value_graphql_response, feature_value_request_fields, build_feature_values_query
-from .feature import build_feature_graphql_response, feature_class_request_fields, feature_request_fields, return_feature_derived_fields, request_features, simple_feature_request_fields, build_features_query
+from .feature import build_feature_graphql_response, feature_class_request_fields, feature_request_fields, return_feature_derived_fields, request_features, simple_feature_request_fields, simple_feature_request_fields2, build_features_query
 from .gene import build_gene_graphql_response, gene_request_fields, request_gene, request_genes, return_gene_derived_fields, simple_gene_request_fields, build_gene_request
 from .gene_family import request_gene_families
 from .gene_function import request_gene_functions

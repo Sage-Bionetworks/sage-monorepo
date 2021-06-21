@@ -1,6 +1,5 @@
 from .resolver_helpers import build_feature_graphql_response, feature_related_sample_request_fields, feature_request_fields, get_requested, request_features, return_feature_derived_fields, build_features_query, get_selection_set, get_requested, simple_tag_request_fields, feature_class_request_fields, return_feature_derived_fields
 from .resolver_helpers.paging_utils import paginate, paging_fields, create_paging
-import logging
 
 
 def resolve_features(_obj, info, distinct=False, paging=None, feature=None, featureClass=None, maxValue=None, minValue=None, sample=None, cohort=None):
@@ -13,7 +12,7 @@ def resolve_features(_obj, info, distinct=False, paging=None, feature=None, feat
     sample_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=feature_related_sample_request_fields, child_node='samples')
 
-    max_items = 10 if 'samples' in requested else 100_000
+    max_items = 1 if 'samples' in requested else 100_000
 
     paging = create_paging(paging, max_items)
 

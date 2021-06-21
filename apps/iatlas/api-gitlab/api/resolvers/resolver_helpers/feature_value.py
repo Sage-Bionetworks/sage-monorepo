@@ -2,13 +2,12 @@ from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from sqlalchemy.sql.expression import false, true
 from api import db
-from api.db_models import (Feature, FeatureClass, FeatureToSample,
-                           MethodTag, Sample, Cohort, CohortToSample)
+from api.db_models import (FeatureToSampleJoined, Cohort, CohortToSample)
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .sample import build_sample_graphql_response
 from .feature import build_feature_graphql_response
 from .paging_utils import get_pagination_queries
-
+from api.telemetry import profile
 
 feature_value_request_fields = {'value', 'sample', 'feature'}
 
@@ -21,12 +20,10 @@ def build_feature_value_graphql_response(feature_value):
             'name': get_value(feature_value, 'sample_name'),
         },
         'feature': {
-            'name': get_value(feature_value, 'feature_name'),
+            'class': get_value(feature_value, 'feature_class'),
             'display': get_value(feature_value, 'feature_display'),
-            'unit': get_value(feature_value, 'feature_unit'),
-            'order': get_value(feature_value, 'feature_order'),
-            'germlineModule': get_value(feature_value, 'feature_germline_module'),
-            'germlineCategory': get_value(feature_value, 'feature_germline_category'),
+            'name': get_value(feature_value, 'feature_name'),
+            'order': get_value(feature_value, 'feature_order')
         }
     }
     return(response_dict)
@@ -38,12 +35,7 @@ def build_feature_values_query(requested, feature_requested, sample_requested, d
     """
     sess = db.session
 
-    feature_to_sample_1 = aliased(FeatureToSample, name='fts')
-    feature_1 = aliased(Feature, name='f')
-    sample_1 = aliased(Sample, name='s')
-
-    feature_class_1 = aliased(FeatureClass, name='fc')
-    method_tag_1 = aliased(MethodTag, name='mt')
+    feature_to_sample_1 = aliased(FeatureToSampleJoined, name='fts')
 
     cohort_1 = aliased(Cohort, name='c')
     cohort_to_sample_1 = aliased(CohortToSample, name='cts')
@@ -54,18 +46,14 @@ def build_feature_values_query(requested, feature_requested, sample_requested, d
     }
 
     feature_core_field_mapping = {
-        'class': feature_class_1.name.label('feature_class'),
-        'display': feature_1.display.label('feature_display'),
-        'methodTag': method_tag_1.name.label('feature_method_tag'),
-        'name': feature_1.name.label('feature_name'),
-        'order': feature_1.order.label('feature_order'),
-        'germlineModule': feature_1.germline_module.label('feature_germline_module'),
-        'germlineCategory': feature_1.germline_category.label('feature_germline_category'),
-        'unit': feature_1.unit.label('feature_unit')
+        'name': feature_to_sample_1.feature_name.label('feature_name'),
+        'display': feature_to_sample_1.feature_display.label('feature_display'),
+        'class': feature_to_sample_1.class_name.label('feature_class'),
+        'order': feature_to_sample_1.feature_order.label('feature_order')
     }
 
     sample_core_field_mapping = {
-        'name': sample_1.name.label('sample_name'),
+        'name': feature_to_sample_1.sample_name.label('sample_name'),
     }
 
     core = get_selected(requested, core_field_mapping)
@@ -76,18 +64,6 @@ def build_feature_values_query(requested, feature_requested, sample_requested, d
     query = sess.query(*core)
     query = query.select_from(feature_to_sample_1)
 
-    feature_join_condition = build_join_condition(
-        feature_to_sample_1.feature_id, feature_1.id)
-
-    query = query.join(
-        feature_1, and_(*feature_join_condition))
-
-    sample_join_condition = build_join_condition(
-        feature_to_sample_1.sample_id, sample_1.id)
-
-    query = query.join(
-        sample_1, and_(*sample_join_condition))
-
     if max_value:
         query = query.filter(feature_to_sample_1.value <= max_value)
 
@@ -95,23 +71,13 @@ def build_feature_values_query(requested, feature_requested, sample_requested, d
         query = query.filter(feature_to_sample_1.value >= min_value)
 
     if feature:
-        query = query.filter(feature_1.name.in_(feature))
+        query = query.filter(feature_to_sample_1.feature_name.in_(feature))
 
-    if feature_class or 'featureClass' in requested:
-        is_outer = not bool(feature_class)
-        feature_class_join_condition = build_join_condition(
-            feature_class_1.id, feature_1.class_id, filter_column=feature_class_1.name, filter_list=feature_class)
-        query = query.join(feature_class_1, and_(
-            *feature_class_join_condition), isouter=is_outer)
-
-    if 'featureMethodTag' in requested:
-        method_tag_join_condition = build_join_condition(
-            method_tag_1.id, feature_1.method_tag_id)
-        query = query.join(method_tag_1, and_(
-            *method_tag_join_condition), isouter=True)
+    if feature_class:
+        query = query.filter(feature_to_sample_1.class_name.in_(feature_class))
 
     if sample:
-        query = query.filter(sample_1.name.in_(sample))
+        query = query.filter(feature_to_sample_1.sample_name.in_(sample))
 
     if cohort:
 
@@ -123,6 +89,6 @@ def build_feature_values_query(requested, feature_requested, sample_requested, d
             *cohort_join_condition), isouter=False)
 
         query = query.filter(
-            sample_1.id.in_(cohort_to_sample_subquery))
+            feature_to_sample_1.sample_id.in_(cohort_to_sample_subquery))
 
     return get_pagination_queries(query, paging, distinct, cursor_field=feature_to_sample_1.id)

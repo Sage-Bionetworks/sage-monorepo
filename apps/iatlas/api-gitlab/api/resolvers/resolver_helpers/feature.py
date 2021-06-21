@@ -5,6 +5,7 @@ from sqlalchemy.sql.expression import false, true
 from api import db
 from api.db_models import (Feature, FeatureClass, FeatureToSample,
                            MethodTag, Sample, Cohort, CohortToSample, CohortToFeature)
+from .sample import build_feature_sample_graphql_response
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries, fetch_page
 
@@ -16,6 +17,13 @@ simple_feature_request_fields = {'display',
                                  'unit',
                                  'germlineModule',
                                  'germlineCategory'}
+
+simple_feature_request_fields2 = {
+    'display',
+    'name',
+    'order',
+    'class'
+}
 
 feature_request_fields = simple_feature_request_fields.union({'class',
                                                               'methodTag',
@@ -43,10 +51,7 @@ def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
             'germlineModule': get_value(feature, 'feature_germline_module'),
             'germlineCategory': get_value(feature, 'feature_germline_category'),
             'unit': get_value(feature, 'feature_unit'),
-            'samples': [{
-                'name': get_value(sample),
-                'value': get_value(sample, 'value')
-            } for sample in samples],
+            'samples': map(build_feature_sample_graphql_response, samples),
             'valueMax': max_min.get('value_max') if max_min else None,
             'valueMin': max_min.get('value_min') if max_min else None
         }
@@ -235,14 +240,21 @@ def return_feature_derived_fields(requested, sample_requested, distinct, paging,
 
     samples = get_samples(requested, sample_requested,
                           distinct=distinct, paging=paging, **kwargs)
+    sample_dict = get_sample_dict(samples)
+    max_min_value_dict = get_min_max_dict(sample_dict, requested)
+    return (max_min_value_dict, sample_dict)
 
-    has_max_min = 'valueMax' in requested or 'valueMin' in requested
 
-    max_min_value_dict = dict()
+def get_sample_dict(samples):
     sample_dict = dict()
     for key, collection in groupby(samples, key=lambda s: s.feature_id):
         sample_dict[key] = sample_dict.get(key, []) + list(collection)
+    return(sample_dict)
 
+
+def get_min_max_dict(sample_dict, requested):
+    max_min_value_dict = dict()
+    has_max_min = 'valueMax' in requested or 'valueMin' in requested
     if has_max_min:
         for f_id, features in sample_dict.items():
             max_min_dict = {'value_max': None, 'value_min': None}
@@ -253,5 +265,4 @@ def return_feature_derived_fields(requested, sample_requested, distinct, paging,
                 value_min = min(features, key=lambda f: get_value(f, 'value'))
                 max_min_dict['value_min'] = get_value(value_min, 'value')
             max_min_value_dict[f_id] = max_min_dict
-
-    return (max_min_value_dict, sample_dict)
+    return(max_min_value_dict)

@@ -51,6 +51,14 @@ def build_gene_sample_graphql_response(sample):
     return dict
 
 
+def build_feature_sample_graphql_response(sample):
+    dict = {
+        'name': get_value(sample, 'name'),
+        'value': get_value(sample, 'value')
+    }
+    return dict
+
+
 def build_sample_mutation_join_condition(sample_to_mutation_model, sample_model, mutation_status, mutation_id=None, status=None):
     join_condition = build_join_condition(sample_to_mutation_model.sample_id, sample_model.id,
                                           filter_column=sample_to_mutation_model.mutation_id, filter_list=mutation_id)
