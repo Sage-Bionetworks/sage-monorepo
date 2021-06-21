@@ -58,3 +58,20 @@ type SimpleFeature {
   "Immune traits clustered based on the approach used to derive them and the parameters they intend to measure , described by Sayaman et al, 2021."
   germlineCategory: String
 }
+
+"""
+The "SimpleFeature2" is a version of a `Feature`. Used by featureValue.
+
+To get more properties of features, please see "Feature"
+"""
+type SimpleFeature2 {
+  "A readable name for the feature."
+  display: String
+  "The feature's name (a unique string for this feature)."
+  name: String!
+  "A number representing the index order the feature would be displayed in."
+  order: Int
+  "The feature class associated with this feature."
+  class: String
+}
+

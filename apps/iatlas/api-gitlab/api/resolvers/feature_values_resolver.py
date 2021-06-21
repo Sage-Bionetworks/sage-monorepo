@@ -1,4 +1,4 @@
-from .resolver_helpers import build_feature_value_graphql_response, feature_value_request_fields, simple_feature_request_fields, simple_sample_request_fields, build_feature_values_query, get_requested, get_selection_set, get_requested
+from .resolver_helpers import build_feature_value_graphql_response, feature_value_request_fields, simple_feature_request_fields2, simple_sample_request_fields, build_feature_values_query, get_requested, get_selection_set, get_requested
 from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
 
 
@@ -10,7 +10,7 @@ def resolve_feature_values(_obj, info, distinct=False, paging=None, feature=None
         selection_set=selection_set, requested_field_mapping=feature_value_request_fields)
 
     feature_requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=simple_feature_request_fields, child_node='feature')
+        selection_set=selection_set, requested_field_mapping=simple_feature_request_fields2, child_node='feature')
 
     sample_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_sample_request_fields, child_node='sample')

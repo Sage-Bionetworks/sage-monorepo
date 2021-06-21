@@ -3,8 +3,7 @@ from logging import getLogger
 import pytest
 from tests import NoneType
 from api.enums import unit_enum
-#from api.database import return_feature_value_query
-from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
+from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash
 
 
 @pytest.fixture(scope='module')
@@ -33,96 +32,12 @@ def min_value():
 
 
 @pytest.fixture(scope='module')
-def cohort_name():
-    return 'tcga_immune_subtype'
-
-
-@pytest.fixture(scope='module')
-def cohort_id(test_db, cohort_name):
-    from api.db_models import Cohort
-    (id, ) = test_db.session.query(Cohort.id).filter_by(
-        name=cohort_name).one_or_none()
-    return id
-
-
-@pytest.fixture(scope='module')
-def cohort_query_builder():
-    def f(query_fields):
-        return """
-        query Cohorts(
-            $paging: PagingInput
-            $distinct:Boolean
-            $name: [String!]
-            $dataSet: [String!]
-            $tag: [String!]
-            $clinical: [String!]
-        ) {
-        cohorts(
-            paging: $paging
-            distinct: $distinct
-            name: $name
-            dataSet: $dataSet
-            tag: $tag
-            clinical: $clinical
-        )
-        """ + query_fields + "}"
-    return f
-
-
-@pytest.fixture(scope='module')
-def cohort_query(cohort_query_builder):
-    return cohort_query_builder(
-        """
-        {
-            items {
-                name
-                samples {
-                    name
-                }
-            }
-        }
-        """
-    )
-
-
-@pytest.fixture(scope='module')
-def tcga_cohort_samples(client, cohort_name, cohort_query):
-    response = client.post('/api', json={'query': cohort_query, 'variables': {
-        'name': [cohort_name]
-    }})
-    json_data = json.loads(response.data)
-    page = json_data['data']['cohorts']
-    cohort = page['items'][0]
-    samples = cohort['samples']
-    names = [sample['name'] for sample in samples]
-    return names
-
-
-@pytest.fixture(scope='module')
-def pcawg_cohort_name():
-    return('pcawg_gender')
-
-
-@pytest.fixture(scope='module')
-def pcawg_cohort_samples(client, pcawg_cohort_name, cohort_query):
-    response = client.post('/api', json={'query': cohort_query, 'variables': {
-        'name': [pcawg_cohort_name]
-    }})
-    json_data = json.loads(response.data)
-    page = json_data['data']['cohorts']
-    cohort = page['items'][0]
-    samples = cohort['samples']
-    names = [sample['name'] for sample in samples]
-    return names
-
-
-@pytest.fixture(scope='module')
 def common_query_builder():
     def f(query_fields):
         return """
         query FeatureValues(
             $feature: [String!]
-            $class: [String!]
+            $featureClass: [String!]
             $cohort: [String!]
             $sample: [String!]
             $minValue: Float
@@ -132,7 +47,7 @@ def common_query_builder():
         ) {
         featureValues(
             feature: $feature
-            class: $class
+            featureClass: $featureClass
             cohort: $cohort
             sample: $sample
             minValue: $minValue
@@ -156,9 +71,7 @@ def common_query(common_query_builder):
                     name
                     display
                     order
-                    unit
-                    germlineModule
-                    germlineCategory
+                    class
                 }
             }
             paging {
@@ -295,12 +208,7 @@ def test_feature_values_query_with_no_args(client, common_query):
         assert type(feature_value['feature']['name']) is str
         assert type(feature_value['feature']['display']) is str
         assert type(feature_value['feature']['order']) is int or NoneType
-        assert feature_value['feature']['unit'] in unit_enum.enums or type(
-            feature_value['feature']['unit']) is NoneType
-        assert type(feature_value['feature']
-                    ['germlineModule']) is str or NoneType
-        assert type(
-            feature_value['feature']['germlineCategory']) is str or NoneType
+        assert type(feature_value['feature']['class']) is str
 
 
 def test_feature_values_query_with_feature(client, chosen_feature, common_query):
@@ -322,3 +230,28 @@ def test_feature_values_query_with_feature(client, chosen_feature, common_query)
     assert len(feature_values) == num
     for feature_value in feature_values:
         assert feature_value['feature']['name'] == chosen_feature
+
+
+def test_feature_values_query_with_class(client, common_query, feature_class2, data_set, feature_class2_feature_names):
+    num = 100000
+    response = client.post(
+        '/api', json={
+            'query': common_query,
+            'variables': {
+                'featureClass': [feature_class2],
+                'cohort': [data_set],
+                'paging': {'first': num}
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['featureValues']
+    featureValues = page['items']
+
+    assert isinstance(featureValues, list)
+    assert len(featureValues) == num
+    for featureValue in featureValues[0:10]:
+        assert type(featureValue['feature']['name']) is str
+        assert featureValue['feature']['name'] in feature_class2_feature_names
+        assert type(featureValue['feature']['display']) is str
+        assert type(featureValue['sample']['name']) is str
+        assert type(featureValue['value']) is float

@@ -96,8 +96,38 @@ def chosen_feature():
 
 
 @ pytest.fixture(scope='session')
+def chosen_feature_id(test_db, chosen_feature):
+    from api.db_models import Feature
+    (id, ) = test_db.session.query(Feature.id).filter_by(
+        name=chosen_feature).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
 def feature_class():
     return 'TIL Map Characteristic'
+
+
+@ pytest.fixture(scope='session')
+def feature_class2():
+    return 'DNA Alteration'
+
+
+@ pytest.fixture(scope='session')
+def feature_class2_id(test_db, feature_class2):
+    from api.db_models import FeatureClass
+    (id, ) = test_db.session.query(FeatureClass.id).filter_by(
+        name=feature_class2).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
+def feature_class2_feature_names(test_db, feature_class2_id):
+    from api.db_models import Feature
+    res = test_db.session.query(Feature.name).filter_by(
+        class_id=feature_class2_id).all()
+    features = [feature[0] for feature in res]
+    return features
 
 
 @ pytest.fixture(scope='session')

@@ -10,7 +10,7 @@ type FeatureValueNode implements BaseNode{
   "The associated sample."
   sample: SimpleSample!
    "The associated feature."
-  feature: SimpleFeature!
+  feature: SimpleFeature2!
 }
 
 type FeatureValue implements BaseResult {

@@ -17,6 +17,7 @@ from .edge import Edge
 from .feature import Feature
 from .feature_class import FeatureClass
 from .feature_to_sample import FeatureToSample
+from .feature_to_sample_joined import FeatureToSampleJoined
 from .gene import Gene
 from .gene_family import GeneFamily
 from .gene_function import GeneFunction
