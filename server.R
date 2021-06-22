@@ -174,7 +174,7 @@ shiny::shinyServer(function(input, output, session) {
         imgSrc = analysis_modules_tbl$image,
         boxText = analysis_modules_tbl$description
       ),
-      iatlas.app::imgLinkBox,
+      iatlas.modules::imgLinkBox,
       width = 6,
       linkText = "Open Module"
     )
@@ -187,21 +187,21 @@ shiny::shinyServer(function(input, output, session) {
   })
 
   output$dashboard_body <- shiny::renderUI({
-    shiny::req(readout_info_boxes(), module_image_boxes(), module_tab_items())
+    # shiny::req(readout_info_boxes(), module_image_boxes(), module_tab_items())
     tab_item <- list(shinydashboard::tabItem(
       tabName = "dashboard",
-      iatlas.app::titleBox("iAtlas Explorer — Home"),
-      iatlas.app::textBox(
+      iatlas.modules::titleBox("iAtlas Explorer — Home"),
+      iatlas.modules::textBox(
         width = 12,
         shiny::includeMarkdown("inst/markdown/explore1.markdown")
       ),
-      iatlas.app::sectionBox(
+      iatlas.modules::sectionBox(
         title = "What's Inside",
         shiny::fluidRow(readout_info_boxes())
       ),
-      iatlas.app::sectionBox(
+      iatlas.modules::sectionBox(
         title = "Analysis Modules",
-        iatlas.app::messageBox(
+        iatlas.modules::messageBox(
           width = 12,
           shiny::includeMarkdown("inst/markdown/explore2.markdown")
         ),

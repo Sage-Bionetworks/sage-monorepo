@@ -2,7 +2,7 @@ ici_hazard_ratio_main_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    messageBox(
+    iatlas.modules::messageBox(
       width = 24,
       p("Analyze survival data with Cox proportional hazard models. Select the datasets of interest, variables, and outcome in terms of either overall survival (OS) or progression free interval (PFI)
         endpoints." ),
@@ -11,7 +11,7 @@ ici_hazard_ratio_main_ui <- function(id){
       p("The results are summarized in a heatmap with the log10 of Hazard Ratio. For the univariable analysis, when more than one variable is selected, a Benjamini-Hochberg FDR correction is made, and variables with a p-value smaller than 0.05 and BH pvalue smaller than 0.05 are indicated in the heatmap.
         In addition, forest plot with the log10 of the Cox Proportional Hazard Ratio with 95th confidence intervals for each variable is displayed.")
       ),
-    optionsBox(
+    iatlas.modules::optionsBox(
       width = 12,
       column(
         width = 3,
@@ -49,21 +49,21 @@ ici_hazard_ratio_main_ui <- function(id){
     ),
     conditionalPanel(condition = paste0("input['", ns("timevar"), "'] == 'PFI_time_1'"),
                      helpText("There is no PFI annotation for Hugo 2016, Riaz 2017, and IMVigor210.")),
-    plotBox(
+    iatlas.modules::plotBox(
       width = 12,
       plotly::plotlyOutput(ns("mult_heatmap"), width = "100%", height = "600px")%>%
         shinycssloaders::withSpinner()
     ),
-    plotBox(
+    iatlas.modules::plotBox(
       width = 12,
       plotly::plotlyOutput(ns("mult_forest"), width = "100%", height = "700px")%>%
         shinycssloaders::withSpinner()
     ),
-    messageBox(
+    iatlas.modules::messageBox(
       width = 12,
       p("The table shows the computed data used to create the visualizations above.")
     ),
-    tableBox(
+    iatlas.modules::tableBox(
       width = 12,
       DT::dataTableOutput(ns("stats_summary")),
       downloadButton(ns('download_stats'), 'Download')

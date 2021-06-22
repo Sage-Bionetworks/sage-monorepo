@@ -3,12 +3,12 @@ univariate_driver_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    messageBox(
+    iatlas.modules::messageBox(
       width = 12,
       shiny::includeMarkdown(get_markdown_path("driver_single"))
     ),
     shiny::fluidRow(
-      optionsBox(
+      iatlas.modules::optionsBox(
         width = 12,
         shiny::column(
           width = 4,
@@ -35,13 +35,13 @@ univariate_driver_ui <- function(id){
       )
     ),
     shiny::fluidRow(
-      messageBox(
+      iatlas.modules::messageBox(
         width = 12,
         shiny::p(shiny::textOutput(ns("result_text")))
       )
     ),
     shiny::fluidRow(
-      plotBox(
+      iatlas.modules::plotBox(
         width = 12,
         "volcano_plot" %>%
           ns() %>%
@@ -51,7 +51,7 @@ univariate_driver_ui <- function(id){
       )
     ),
     shiny::fluidRow(
-      plotBox(
+      iatlas.modules::plotBox(
         width = 12,
         "violin_plot" %>%
           ns() %>%
