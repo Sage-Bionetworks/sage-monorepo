@@ -179,14 +179,48 @@ run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds,
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
   parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
-  caret::train(
+  model <- caret::train(
     parameters, data = train_df, method = "glmnet",
     trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
     tuneLength = 15
   )
+
+  results <-  model$results[rownames(model$bestTune),]
+
+  plot_df <- data.frame(
+    x = coef(model$finalModel, model$bestTune$lambda)@x,
+    feature_name = coef(model$finalModel,
+                        model$bestTune$lambda)@Dimnames[[1]][coef(model$finalModel, model$bestTune$lambda)@i+1],
+    error = 0
+  )
+
+  list(model = model,
+       results = results,
+       plot_df = plot_df)
 }
 
+run_xgboost <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
+  print("training xgboost")
+  cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
+  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
+  model <- caret::train(
+    parameters, data = train_df, method = "xgbTree",
+    trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
+    tuneLength = 5
+  )
+
+  results <-  model$results[rownames(model$bestTune),]
+
+  plot_df <- (caret::varImp(model))$importance
+  plot_df$feature_name = rownames(plot_df)
+  colnames(plot_df) <- c("x", "feature_name")
+  plot_df$error <- 0
+
+  list(model = model,
+       results = results,
+       plot_df = plot_df)
+}
 #########################
 # Testing Results
 #########################
