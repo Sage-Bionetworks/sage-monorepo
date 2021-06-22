@@ -7,14 +7,14 @@ model_selection_ui <- function(id){
             width = 12,
             shiny::column(
                 width = 12,
-                insert_remove_element_ui(
+                iatlas.modules2::insert_remove_element_ui(
                     ns("select_numeric_covariate"),
                     "Add numerical covariate"
                 )
             ),
             shiny::column(
                 width = 12,
-                insert_remove_element_ui(
+                iatlas.modules2::insert_remove_element_ui(
                     ns("select_categorical_covariate"),
                     "Add categorical covariate"
                 )
