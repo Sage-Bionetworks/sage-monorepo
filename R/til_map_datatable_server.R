@@ -21,8 +21,8 @@ til_map_datatable_server <- function(id, cohort_obj) {
           tidyr::drop_na()
 
         feature_tbl <-
-          iatlas.api.client::query_feature_values(
-            samples = sample_tbl$sample,
+          iatlas.modules2::query_feature_values_with_cohort_object(
+            cohort_object = cohort_obj(),
             feature_classes = "TIL Map Characteristic"
           ) %>%
           dplyr::mutate(

@@ -2,7 +2,7 @@ test_that("immune_feature_correlations_server", {
   shiny::testServer(
     immune_feature_correlations_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(pcawg_immune_subtype_cohort_obj)
+      "cohort_obj" = shiny::reactiveVal(get_pcawg_immune_subtype_cohort_obj())
     ),
     {
       session$setInputs("response_choice" = "B_cells_naive")

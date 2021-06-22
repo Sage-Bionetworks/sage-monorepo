@@ -2,7 +2,7 @@ test_that("module_works", {
   shiny::testServer(
     clinical_outcomes_survival_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(tcga_immune_subtype_cohort_obj_50)
+      "cohort_obj" = shiny::reactiveVal(get_tcga_immune_subtype_cohort_obj_50())
     ),
     {
       #TODO: Deal with survminer warning
