@@ -1,5 +1,5 @@
 
-cohort_obj1 <- tcga_immune_subtype_cohort_obj_50
+cohort_obj1 <- get_tcga_immune_subtype_cohort_obj_50()
 
 cov_obj1 <- list(
   "categorical_covariates" = NULL, "numerical_covariates" = NULL

@@ -1,5 +1,5 @@
 
-cohort_obj1 <- pcawg_immune_subtype_cohort_obj
+cohort_obj1 <- get_pcawg_immune_subtype_cohort_obj()
 
 response_tbl1 <- build_ifc_response_tbl(cohort_obj1, "EPIC_B_Cells")
 

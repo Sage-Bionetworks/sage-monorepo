@@ -14,6 +14,7 @@ LazyData: true
 Suggests:
     crayon,
     devtools,
+    memoise (>= 2.0),
     rsconnect,
     testthat (>= 3.0.0),
     usethis
