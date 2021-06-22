@@ -884,16 +884,16 @@
     },
     "iatlas.modules2": {
       "Package": "iatlas.modules2",
-      "Version": "0.1.1",
+      "Version": "0.1.2",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules2",
       "RemoteRef": "master",
-      "RemoteSha": "e2d9079c9d380d8871e4b99d57af77c2faa91723",
+      "RemoteSha": "238b54871f084fe7d7d5e080abd8169cee136054",
       "RemoteHost": "api.github.com",
       "Remotes": "CRI-iAtlas/iatlas.api.client@main, CRI-iAtlas/iatlas.modules@master",
-      "Hash": "24f6c1c1e647c72586bd78ff0f4584cd"
+      "Hash": "21f9806bd88e13362e461eecb897defa"
     },
     "igvShiny": {
       "Package": "igvShiny",
@@ -1000,10 +1000,10 @@
     },
     "lme4": {
       "Package": "lme4",
-      "Version": "1.1-27",
+      "Version": "1.1-27.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "e055d75b424a33fdc8904e5f81263789"
+      "Hash": "c995b0405ce0894d6fe52b3e08ea9085"
     },
     "magrittr": {
       "Package": "magrittr",
@@ -1336,10 +1336,10 @@
     },
     "rio": {
       "Package": "rio",
-      "Version": "0.5.26",
+      "Version": "0.5.27",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "a83d5939c0e7478cdf53da1da16eaedc"
+      "Hash": "18f47d9adafc32abd3d0f450036f739e"
     },
     "rjson": {
       "Package": "rjson",
