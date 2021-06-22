@@ -20,8 +20,11 @@ til_map_distributions_server <- function(id, cohort_obj) {
           group_data <- cohort_obj()$group_tbl %>%
             dplyr::select("group", "group_description" = "characteristics", "color")
 
-          cohort_obj() %>%
-            iatlas.modules2::query_feature_values_with_cohort_object(feature = .feature) %>%
+          tbl <-
+            iatlas.modules2::query_feature_values_with_cohort_object(
+              cohort_object = cohort_obj(),
+              features = .feature
+            ) %>%
             dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample") %>%
             dplyr::inner_join(group_data, by = "group") %>%
             dplyr::select(

@@ -3,7 +3,7 @@ test_that("extracellular_network_main_server_tcga_study_no_results", {
   shiny::testServer(
     extracellular_network_main_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(tcga_study_cohort_obj_50)
+      "cohort_obj" = shiny::reactiveVal(get_tcga_study_cohort_obj_50())
     ),
     {
       session$setInputs("stratify" = F)
@@ -50,7 +50,7 @@ test_that("extracellular_network_main_server_immune_subtype", {
   shiny::testServer(
     extracellular_network_main_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(tcga_immune_subtype_cohort_obj_50)
+      "cohort_obj" = shiny::reactiveVal(get_tcga_immune_subtype_cohort_obj_50())
     ),
     {
       expect_false(show_stratify_option())
@@ -87,7 +87,7 @@ test_that("extracellular_network_main_server_tcga_study_no_stratification", {
   shiny::testServer(
     extracellular_network_main_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(tcga_study_cohort_obj_50)
+      "cohort_obj" = shiny::reactiveVal(get_tcga_study_cohort_obj_50())
     ),
     {
       session$setInputs("stratify" = F)
@@ -130,7 +130,7 @@ test_that("extracellular_network_main_server_tcga_study_with_stratification", {
   shiny::testServer(
     extracellular_network_main_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(tcga_study_cohort_obj_50)
+      "cohort_obj" = shiny::reactiveVal(get_tcga_study_cohort_obj_50())
     ),
     {
       expect_equal(show_stratify_option(), T)
@@ -171,7 +171,7 @@ test_that("extracellular_network_main_server_pcawg_immune_subtype", {
   shiny::testServer(
     extracellular_network_main_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(pcawg_immune_subtype_cohort_obj)
+      "cohort_obj" = shiny::reactiveVal(get_pcawg_immune_subtype_cohort_obj())
     ),
     {
       expect_false(show_stratify_option())
