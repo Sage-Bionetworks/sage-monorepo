@@ -3,16 +3,16 @@ ici_immunomodulators_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    titleBox(
+    iatlas.modules::titleBox(
       "iAtlas Explorer — Immunomodulators"
     ),
-    textBox(
+    iatlas.modules::textBox(
       width = 12,
       p("Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.")
     ),
-    sectionBox(
+    iatlas.modules::sectionBox(
       title = "Distributions",
-      messageBox(width = 12,
+      iatlas.modules::messageBox(width = 12,
                  shiny::p("Select the datasets of interest, an immunomodulator gene, and a criterion to group samples to see the distribution of gene expression within sample groups.
                           Samples can be further divided into additional sub-group based on the availability of those groups for each dataset.  Use the plot parameters to adjust the type of plot and choice of scale.
 
