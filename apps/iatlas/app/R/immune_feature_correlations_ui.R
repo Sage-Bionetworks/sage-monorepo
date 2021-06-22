@@ -3,14 +3,14 @@ immune_feature_correlations_ui <- function(id) {
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        messageBox(
+        iatlas.modules::messageBox(
             width = 12,
             shiny::includeMarkdown(get_markdown_path(
                 "immune_features_correlations"
             ))
         ),
         shiny::fluidRow(
-            optionsBox(
+            iatlas.modules::optionsBox(
                 width = 12,
                 shiny::column(
                     width = 6,
@@ -36,7 +36,7 @@ immune_feature_correlations_ui <- function(id) {
             )
         ),
         shiny::fluidRow(
-            plotBox(
+            iatlas.modules::plotBox(
                 width = 12,
                 shiny::fluidRow(
                     "heatmap" %>%
@@ -48,7 +48,7 @@ immune_feature_correlations_ui <- function(id) {
             )
         ),
         shiny::fluidRow(
-            plotBox(
+            iatlas.modules::plotBox(
                 width = 12,
                 "scatterPlot" %>%
                     ns() %>%
