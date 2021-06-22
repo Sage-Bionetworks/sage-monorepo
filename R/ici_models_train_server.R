@@ -180,11 +180,18 @@ ici_models_train_server <- function(
       })
 
       #Running model
+      train_method <- reactive({
+        switch(
+          input$train_method,
+          "Elastic Net Regression" = run_elastic_net,
+          "XGBoost" = run_xgboost
+        )
+      })
       model_train <- eventReactive(input$compute_train, {
         shiny::validate(shiny::need(length(predictors())>1, "Select predictors for model training."))
         if(input$balance_pred == TRUE) shiny::validate(shiny::need(length(input$pred_to_balance)>0, "Select categorical predictors for balancing (advanced options)"))
         if(!is.na(input$seed_value)) set.seed(input$seed_value)
-        run_elastic_net(
+        train_method()(
           train_df = train_df(),
           response_variable = "Responder",
           predictors = predictors(),
@@ -199,20 +206,20 @@ ici_models_train_server <- function(
         shiny::req(model_train())
         numeric_columns <- colnames(model_train()$results[1, sapply(model_train()$results,is.numeric)])
         DT::datatable(
-          model_train()$results[rownames(model_train()$bestTune),],
+          model_train()$results,
           rownames = FALSE,
           options = list(dom = 't')
         ) %>% DT::formatRound(columns =numeric_columns, digits = 3)
       })
 
       output$plot_coef <- plotly::renderPlotly({
-        plot_df <- data.frame(
-          x = coef(model_train()$finalModel, model_train()$bestTune$lambda)@x,
-          feature_name = coef(model_train()$finalModel,
-                               model_train()$bestTune$lambda)@Dimnames[[1]][coef(model_train()$finalModel, model_train()$bestTune$lambda)@i+1],
-          error = 0
-        )
-        plot_df <- merge(plot_df, training_obj()$predictors, by = "feature_name", all.x = TRUE) %>%
+        # plot_df <- data.frame(
+        #   x = coef(model_train()$finalModel, model_train()$bestTune$lambda)@x,
+        #   feature_name = coef(model_train()$finalModel,
+        #                        model_train()$bestTune$lambda)@Dimnames[[1]][coef(model_train()$finalModel, model_train()$bestTune$lambda)@i+1],
+        #   error = 0
+        # )
+        plot_df <- merge(model_train()$plot_df, training_obj()$predictors, by = "feature_name", all.x = TRUE) %>%
           dplyr::mutate(feature_display = replace(feature_display, feature_name == "(Intercept)", "(Intercept)")) %>%
           dplyr::select(x, y = feature_display, error)
 
@@ -256,7 +263,7 @@ ici_models_train_server <- function(
       })
 
       prediction_test <- eventReactive(input$compute_test, {
-        iatlas.app::get_testing_results(model_train(),
+        iatlas.app::get_testing_results(model_train()$model,
                                         test_df(),
                                         test_datasets = training_obj()$dataset$test,
                                         survival_data = df_to_model())
@@ -318,7 +325,7 @@ ici_models_train_server <- function(
 
       output$download_train <- shiny::downloadHandler(
         filename = function() stringr::str_c("train-", Sys.Date(), ".tsv"),
-        content = function(con) readr::write_delim(dplyr::mutate(train_df(), prediction = predict(model_train(), newdata = train_df())), con, delim = "\t")
+        content = function(con) readr::write_delim(dplyr::mutate(train_df(), prediction = predict(model_train()$model, newdata = train_df())), con, delim = "\t")
       )
       output$download_test <- shiny::downloadHandler(
         filename = function() stringr::str_c("test-", Sys.Date(), ".tsv"),
