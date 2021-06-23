@@ -12,7 +12,7 @@ def resolve_features(_obj, info, distinct=False, paging=None, feature=None, feat
     sample_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=feature_related_sample_request_fields, child_node='samples')
 
-    max_items = 1 if 'samples' in requested else 100_000
+    max_items = 10 if 'samples' in requested else 100_000
 
     paging = create_paging(paging, max_items)
 

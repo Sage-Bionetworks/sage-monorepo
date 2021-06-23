@@ -89,6 +89,7 @@ def samples_query(common_query_builder):
                 id
                 name
                 class
+                order
                 samples {
                     name
                     value
@@ -441,7 +442,7 @@ def test_feature_samples_query_with_class(client, feature_class, samples_query):
     features = page['items']
 
     assert isinstance(features, list)
-    assert len(features) == 1
+    assert len(features) == 10
     for feature in features:
         samples = feature['samples']
         assert feature['class'] == feature_class
@@ -562,7 +563,7 @@ def test_feature_samples_query_with_class_and_cohort(client, samples_query, feat
     page = json_data['data']['features']
     features = page['items']
     assert isinstance(features, list)
-    assert len(features) == 1
+    assert len(features) == 10
     feature = features[0]
     samples = feature['samples']
     assert feature['name'] in feature_class2_feature_names
