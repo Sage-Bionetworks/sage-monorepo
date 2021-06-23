@@ -184,7 +184,8 @@ ici_models_train_server <- function(
         switch(
           input$train_method,
           "Elastic Net Regression" = run_elastic_net,
-          "XGBoost" = run_xgboost
+          "XGBoost" = run_xgboost,
+          "Random Forest" = run_rf
         )
       })
       model_train <- eventReactive(input$compute_train, {
@@ -213,12 +214,6 @@ ici_models_train_server <- function(
       })
 
       output$plot_coef <- plotly::renderPlotly({
-        # plot_df <- data.frame(
-        #   x = coef(model_train()$finalModel, model_train()$bestTune$lambda)@x,
-        #   feature_name = coef(model_train()$finalModel,
-        #                        model_train()$bestTune$lambda)@Dimnames[[1]][coef(model_train()$finalModel, model_train()$bestTune$lambda)@i+1],
-        #   error = 0
-        # )
         plot_df <- merge(model_train()$plot_df, training_obj()$predictors, by = "feature_name", all.x = TRUE) %>%
           dplyr::mutate(feature_display = replace(feature_display, feature_name == "(Intercept)", "(Intercept)")) %>%
           dplyr::select(x, y = feature_display, error)
