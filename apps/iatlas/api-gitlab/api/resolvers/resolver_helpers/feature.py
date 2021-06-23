@@ -8,6 +8,7 @@ from api.db_models import (Feature, FeatureClass, FeatureToSample,
 from .sample import build_feature_sample_graphql_response
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries, fetch_page
+from decimal import Decimal
 
 feature_class_request_fields = {'name'}
 
@@ -32,15 +33,18 @@ feature_request_fields = simple_feature_request_fields.union({'class',
                                                               'valueMin'})
 
 
-def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
+def build_feature_graphql_response(requested=[], sample_requested=[], max_value=None, min_value=None, cohort=None, sample=None, max_min_dict=dict()):
 
     def f(feature):
         if not feature:
             return None
         feature_id = get_value(feature, 'feature_id')
-        max_min = max_min_dict.get(
-            feature_id, dict()) if max_min_dict else dict()
-        samples = sample_dict.get(feature_id, []) if sample_dict else []
+        samples = get_feature_samples(
+            [feature_id], requested=requested, sample_requested=sample_requested, max_value=max_value, min_value=min_value, cohort=cohort, sample=sample)
+        if 'valueMax' in requested or 'valueMin' in requested:
+            values = [get_value(sample, 'value') for sample in samples]
+        value_min = min(values) if 'valueMin' in requested else None
+        value_max = max(values) if 'valueMax' in requested else None
         result = {
             'id': feature_id,
             'class': get_value(feature, 'feature_class'),
@@ -52,8 +56,8 @@ def build_feature_graphql_response(max_min_dict=dict(), sample_dict=dict()):
             'germlineCategory': get_value(feature, 'feature_germline_category'),
             'unit': get_value(feature, 'feature_unit'),
             'samples': map(build_feature_sample_graphql_response, samples),
-            'valueMax': max_min.get('value_max') if max_min else None,
-            'valueMin': max_min.get('value_min') if max_min else None
+            'valueMax': value_min if type(value_min) is Decimal else None,
+            'valueMin': value_max if type(value_max) is Decimal else None
         }
         return(result)
     return f
@@ -159,6 +163,65 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
     return get_pagination_queries(query, paging, distinct, cursor_field=feature_1.id)
 
 
+def get_feature_samples(feature_id, requested, sample_requested, max_value=None, min_value=None, cohort=None, sample=None):
+    has_samples = 'samples' in requested
+    has_max_min = 'valueMax' in requested or 'valueMin' in requested
+
+    if (has_samples or has_max_min):
+        sess = db.session
+
+        feature_to_sample_1 = aliased(FeatureToSample, name='fts')
+        sample_1 = aliased(Sample, name='s')
+        cohort_1 = aliased(Cohort, name='c')
+        cohort_to_sample_1 = aliased(CohortToSample, name='cts')
+
+        sample_core_field_mapping = {'name': sample_1.name.label('name')}
+
+        sample_core = get_selected(sample_requested, sample_core_field_mapping)
+        # Always select the sample id and the feature id.
+        sample_core |= {sample_1.id.label(
+            'id'), feature_to_sample_1.feature_id.label('feature_id')}
+
+        if has_max_min or 'value' in sample_requested:
+            sample_core |= {feature_to_sample_1.value.label('value')}
+
+        sample_query = sess.query(*sample_core)
+        sample_query = sample_query.select_from(sample_1)
+
+        if sample:
+            sample_query = sample_query.filter(sample_1.name.in_(sample))
+
+        feature_sample_join_condition = build_join_condition(
+            feature_to_sample_1.sample_id, sample_1.id, feature_to_sample_1.feature_id, feature_id)
+
+        if max_value:
+            feature_sample_join_condition.append(
+                feature_to_sample_1.value <= max_value)
+
+        if min_value:
+            feature_sample_join_condition.append(
+                feature_to_sample_1.value >= min_value)
+
+        sample_query = sample_query.join(
+            feature_to_sample_1, and_(*feature_sample_join_condition))
+
+        if cohort:
+            cohort_subquery = sess.query(cohort_to_sample_1.sample_id)
+
+            cohort_join_condition = build_join_condition(
+                cohort_to_sample_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
+            cohort_subquery = cohort_subquery.join(cohort_1, and_(
+                *cohort_join_condition), isouter=False)
+
+            sample_query = sample_query.filter(
+                sample_1.id.in_(cohort_subquery))
+
+        samples = sample_query.distinct().all()
+        return samples
+
+    return []
+
+
 def get_samples(requested, sample_requested, distinct, paging, max_value=None, min_value=None, feature=None, feature_class=None, cohort=None, sample=None, feature_ids=set()):
     has_samples = 'samples' in requested
     has_max_min = 'valueMax' in requested or 'valueMin' in requested
@@ -227,42 +290,3 @@ def get_samples(requested, sample_requested, distinct, paging, max_value=None, m
 
     return []
 
-
-def request_features(requested, class_requested, tag_requested, distinct, paging, data_set=None, feature=None, feature_class=None, max_value=None, min_value=None,
-                     related=None, sample=None, tag=None, by_class=False, by_tag=False):
-    query, count_query = build_features_query(requested, class_requested, tag_requested, distinct, paging, data_set=data_set, feature=feature, feature_class=feature_class, max_value=max_value,
-                                              min_value=min_value, related=related, sample=sample, tag=tag, by_class=by_class, by_tag=by_tag)
-
-    return query.distinct().all()
-
-
-def return_feature_derived_fields(requested, sample_requested, distinct, paging, **kwargs):
-
-    samples = get_samples(requested, sample_requested,
-                          distinct=distinct, paging=paging, **kwargs)
-    sample_dict = get_sample_dict(samples)
-    max_min_value_dict = get_min_max_dict(sample_dict, requested)
-    return (max_min_value_dict, sample_dict)
-
-
-def get_sample_dict(samples):
-    sample_dict = dict()
-    for key, collection in groupby(samples, key=lambda s: s.feature_id):
-        sample_dict[key] = sample_dict.get(key, []) + list(collection)
-    return(sample_dict)
-
-
-def get_min_max_dict(sample_dict, requested):
-    max_min_value_dict = dict()
-    has_max_min = 'valueMax' in requested or 'valueMin' in requested
-    if has_max_min:
-        for f_id, features in sample_dict.items():
-            max_min_dict = {'value_max': None, 'value_min': None}
-            if 'valueMax' in requested:
-                value_max = max(features, key=lambda f: get_value(f, 'value'))
-                max_min_dict['value_max'] = get_value(value_max, 'value')
-            if 'valueMin' in requested:
-                value_min = min(features, key=lambda f: get_value(f, 'value'))
-                max_min_dict['value_min'] = get_value(value_min, 'value')
-            max_min_value_dict[f_id] = max_min_dict
-    return(max_min_value_dict)
