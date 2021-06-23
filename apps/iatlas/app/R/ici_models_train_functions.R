@@ -173,7 +173,7 @@ get_cv_folds <- function(train_df, balance_lhs = TRUE, balance_rhs = FALSE, resp
     caret::createFolds(y = factor(bdf$balance), k = n_cv_folds, returnTrain = TRUE)
   }
 }
-#Elastic Net
+# Methods calls
 run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
   print("training model")
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
@@ -208,6 +208,29 @@ run_xgboost <- function(train_df, response_variable, predictors, n_cv_folds, bal
     parameters, data = train_df, method = "xgbTree",
     trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
     tuneLength = 5
+  )
+
+  results <-  model$results[rownames(model$bestTune),]
+
+  plot_df <- (caret::varImp(model))$importance
+  plot_df$feature_name = rownames(plot_df)
+  colnames(plot_df) <- c("x", "feature_name")
+  plot_df$error <- 0
+
+  list(model = model,
+       results = results,
+       plot_df = plot_df)
+}
+
+run_rf <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
+  print("training random forest")
+  cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
+
+  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
+  model <- caret::train(
+    parameters, data = train_df, method = "rf",
+    trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
+    tuneLength = length(predictors)
   )
 
   results <-  model$results[rownames(model$bestTune),]
