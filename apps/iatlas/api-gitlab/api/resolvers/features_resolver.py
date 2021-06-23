@@ -1,4 +1,4 @@
-from .resolver_helpers import build_feature_graphql_response, feature_related_sample_request_fields, feature_request_fields, get_requested, request_features, return_feature_derived_fields, build_features_query, get_selection_set, get_requested, simple_tag_request_fields, feature_class_request_fields, return_feature_derived_fields
+from .resolver_helpers import build_feature_graphql_response, feature_related_sample_request_fields, feature_request_fields, get_requested, build_features_query, get_selection_set, get_requested
 from .resolver_helpers.paging_utils import paginate, paging_fields, create_paging
 
 

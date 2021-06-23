@@ -190,14 +190,6 @@ def get_feature_samples(feature_id, requested, sample_requested, max_value=None,
 
         if sample:
             sample_query = sample_query.filter(sample_1.name.in_(sample))
-        '''
-
-        import logging
-        logger = logging.getLogger("feature samples")
-        logger.info(sample_query)
-        logger.info(sample)
-        logger.info(feature_id)
-        '''
 
         feature_sample_join_condition = build_join_condition(
             feature_to_sample_1.sample_id, sample_1.id, feature_to_sample_1.feature_id, feature_id)
@@ -298,42 +290,3 @@ def get_samples(requested, sample_requested, distinct, paging, max_value=None, m
 
     return []
 
-
-def request_features(requested, class_requested, tag_requested, distinct, paging, data_set=None, feature=None, feature_class=None, max_value=None, min_value=None,
-                     related=None, sample=None, tag=None, by_class=False, by_tag=False):
-    query, count_query = build_features_query(requested, class_requested, tag_requested, distinct, paging, data_set=data_set, feature=feature, feature_class=feature_class, max_value=max_value,
-                                              min_value=min_value, related=related, sample=sample, tag=tag, by_class=by_class, by_tag=by_tag)
-
-    return query.distinct().all()
-
-
-def return_feature_derived_fields(requested, sample_requested, distinct, paging, **kwargs):
-
-    samples = get_samples(requested, sample_requested,
-                          distinct=distinct, paging=paging, **kwargs)
-    sample_dict = get_sample_dict(samples)
-    max_min_value_dict = get_min_max_dict(sample_dict, requested)
-    return (max_min_value_dict, sample_dict)
-
-
-def get_sample_dict(samples):
-    sample_dict = dict()
-    for key, collection in groupby(samples, key=lambda s: s.feature_id):
-        sample_dict[key] = sample_dict.get(key, []) + list(collection)
-    return(sample_dict)
-
-
-def get_min_max_dict(sample_dict, requested):
-    max_min_value_dict = dict()
-    has_max_min = 'valueMax' in requested or 'valueMin' in requested
-    if has_max_min:
-        for f_id, features in sample_dict.items():
-            max_min_dict = {'value_max': None, 'value_min': None}
-            if 'valueMax' in requested:
-                value_max = max(features, key=lambda f: get_value(f, 'value'))
-                max_min_dict['value_max'] = get_value(value_max, 'value')
-            if 'valueMin' in requested:
-                value_min = min(features, key=lambda f: get_value(f, 'value'))
-                max_min_dict['value_min'] = get_value(value_min, 'value')
-            max_min_value_dict[f_id] = max_min_dict
-    return(max_min_value_dict)

@@ -575,7 +575,7 @@ def test_feature_samples_query_with_class_and_cohort(client, samples_query, feat
         assert sample['name'] in tcga_tag_cohort_samples
 
 
-def test_feature_samples_query_with_class_and_pcawg_cohort(client, samples_query, feature_class2, feature_class2_feature_names, pcawg_clinical_cohort_name, pcawg_clinical_cohort_samples):
+def test_feature_samples_query_with_class_and_pcawg_cohort(client, samples_query, feature_class2, pcawg_clinical_cohort_name):
     response = client.post(
         '/api', json={
             'query': samples_query,
