@@ -547,3 +547,45 @@ def test_features_query_with_germline_feature(client, common_query, germline_fea
     assert feature['name'] == germline_feature
     assert feature['germlineModule'] == germline_module
     assert feature['germlineCategory'] == germline_category
+
+
+def test_feature_samples_query_with_class_and_cohort(client, samples_query, feature_class2, feature_class2_feature_names, tcga_tag_cohort_name, tcga_tag_cohort_samples):
+    response = client.post(
+        '/api', json={
+            'query': samples_query,
+            'variables': {
+                'featureClass': [feature_class2],
+                'cohort': [tcga_tag_cohort_name]
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['features']
+    features = page['items']
+    assert isinstance(features, list)
+    assert len(features) == 1
+    feature = features[0]
+    samples = feature['samples']
+    assert feature['name'] in feature_class2_feature_names
+    assert feature['class'] == feature_class2
+    assert isinstance(samples, list)
+    assert len(samples) > 0
+    for sample in samples[0:2]:
+        assert type(sample['name']) is str
+        assert type(sample['value']) is float
+        assert sample['name'] in tcga_tag_cohort_samples
+
+
+def test_feature_samples_query_with_class_and_pcawg_cohort(client, samples_query, feature_class2, feature_class2_feature_names, pcawg_clinical_cohort_name, pcawg_clinical_cohort_samples):
+    response = client.post(
+        '/api', json={
+            'query': samples_query,
+            'variables': {
+                'featureClass': [feature_class2],
+                'cohort': [pcawg_clinical_cohort_name]
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['features']
+    features = page['items']
+    assert isinstance(features, list)
+    assert len(features) == 0

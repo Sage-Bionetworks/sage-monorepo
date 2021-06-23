@@ -310,6 +310,9 @@ def pcawg_clinical_cohort_samples(client, pcawg_clinical_cohort_name, cohort_que
     response = client.post('/api', json={'query': cohort_query, 'variables': {
         'cohort': [pcawg_clinical_cohort_name]
     }})
+    import logging
+    logger = logging.getLogger("feature response")
+    logger.info(pcawg_clinical_cohort_name)
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
     cohort = page['items'][0]

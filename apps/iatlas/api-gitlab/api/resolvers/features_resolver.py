@@ -19,11 +19,8 @@ def resolve_features(_obj, info, distinct=False, paging=None, feature=None, feat
     query, count_query = build_features_query(
         requested, distinct, paging, feature=feature, feature_class=featureClass, max_value=maxValue, min_value=minValue, sample=sample, cohort=cohort)
 
-    max_min_dict, sample_dict = return_feature_derived_fields(
-        requested, sample_requested, distinct, paging, feature=feature, feature_class=featureClass, max_value=maxValue, min_value=minValue, sample=sample, cohort=cohort)
-
     pagination_requested = get_requested(info, paging_fields, 'paging')
 
     res = paginate(query, count_query, paging, distinct,
-                   build_feature_graphql_response(max_min_dict, sample_dict), pagination_requested)
+                   build_feature_graphql_response(requested, sample_requested, maxValue, minValue, cohort, sample), pagination_requested)
     return(res)
