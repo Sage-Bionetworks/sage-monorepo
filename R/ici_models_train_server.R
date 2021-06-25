@@ -197,6 +197,7 @@ ici_models_train_server <- function(
           train_df = train_df(),
           response_variable = "Responder",
           predictors = predictors(),
+          labels = training_obj()$predictor,
           n_cv_folds = input$cv_number,
           balance_lhs = input$balance_resp,
           balance_rhs = input$balance_pred,
@@ -206,37 +207,12 @@ ici_models_train_server <- function(
 
       output$results <- DT::renderDataTable({
         shiny::req(model_train())
-        numeric_columns <- colnames(model_train()$results[1, sapply(model_train()$results,is.numeric)])
-        DT::datatable(
-          model_train()$results,
-          rownames = FALSE,
-          options = list(dom = 't')
-        ) %>% DT::formatRound(columns =numeric_columns, digits = 3)
+        model_train()$results
       })
 
       output$plot_coef <- plotly::renderPlotly({
-        plot_df <- merge(model_train()$plot_df, training_obj()$predictors, by = "feature_name", all.x = TRUE) %>%
-          dplyr::mutate(feature_display = replace(feature_display, feature_name == "(Intercept)", "(Intercept)")) %>%
-          dplyr::select(x, y = feature_display, error)
-
-        plot_levels <-levels(reorder(plot_df[["y"]], plot_df[["x"]], sort))
-
-        create_barplot_horizontal(
-          df = plot_df,
-          x_col = "x",
-          y_col = "y",
-          error_col = "error",
-          key_col = NA,
-          color_col = "y",
-          label_col = NA,
-          order_by = plot_levels,
-          xlab = "",
-          ylab = "",
-          title = "",
-          showLegend = FALSE,
-          source_name = NULL,
-          bar_colors = "#59a0af"
-        )
+        shiny::req(model_train())
+        model_train()$plot
       })
 
       ###TEST
