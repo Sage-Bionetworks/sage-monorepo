@@ -184,8 +184,9 @@ ici_models_train_server <- function(
         switch(
           input$train_method,
           "Elastic Net Regression" = run_elastic_net,
+          "Logistic Regression" = run_logistic_reg,
+          "Random Forest" = run_rf,
           "XGBoost" = run_xgboost,
-          "Random Forest" = run_rf
         )
       })
       model_train <- eventReactive(input$compute_train, {
