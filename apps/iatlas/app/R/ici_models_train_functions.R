@@ -173,8 +173,62 @@ get_cv_folds <- function(train_df, balance_lhs = TRUE, balance_rhs = FALSE, resp
     caret::createFolds(y = factor(bdf$balance), k = n_cv_folds, returnTrain = TRUE)
   }
 }
+#build table with results of cross-validation
+get_table_cv_results <- function(model, has_bestTune = TRUE){
+  if(has_bestTune == TRUE){
+    results <-  model$results[rownames(model$bestTune),]
+  }else{
+    results <-  model$results
+  }
+  numeric_columns <- colnames(results[1, sapply(results,is.numeric)])
+
+  DT::datatable(
+    results,
+    rownames = FALSE,
+    options = list(dom = 't')
+  ) %>% DT::formatRound(columns =numeric_columns, digits = 3)
+}
+
+#build plots with coefficients
+get_plot_var_importance <- function(model, labels = NULL, from_varImp = TRUE, scale_values = FALSE, title = ""){
+  if(from_varImp == TRUE){
+    plot_df <- (caret::varImp(model, scale = scale_values))$importance
+    plot_df$feature_name = rownames(plot_df)
+    colnames(plot_df) <- c("x", "feature_name")
+    plot_df$error <- 0
+  }else{ #right now, only logistic regression
+    plot_df <- data.frame(
+      x = coef(summary(model))[,1],
+      feature_name = rownames(coef(summary(model))),
+      error = coef(summary(model))[,2]
+    )
+  }
+  plot_df <- merge(plot_df, labels, by = "feature_name", all.x = TRUE) %>%
+    dplyr::mutate(feature_display = replace(feature_display, feature_name == "(Intercept)", "(Intercept)")) %>%
+    dplyr::select(x, y = feature_display, error)
+
+  plot_levels <-levels(reorder(plot_df[["y"]], plot_df[["x"]], sort))
+
+  create_barplot_horizontal(
+    df = plot_df,
+    x_col = "x",
+    y_col = "y",
+    error_col = "error",
+    key_col = NA,
+    color_col = "y",
+    label_col = NA,
+    order_by = plot_levels,
+    xlab = "",
+    ylab = "",
+    title = title,
+    showLegend = FALSE,
+    source_name = NULL,
+    bar_colors = "#59a0af"
+  )
+}
+
 # Methods calls
-run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
+run_elastic_net <- function(train_df, response_variable, predictors, labels, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
   print("training model")
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
@@ -185,21 +239,16 @@ run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds,
     tuneLength = 15
   )
 
-  results <-  model$results[rownames(model$bestTune),]
+  results <- get_table_cv_results(model, has_bestTune = TRUE)
 
-  plot_df <- data.frame(
-    x = coef(model$finalModel, model$bestTune$lambda)@x,
-    feature_name = coef(model$finalModel,
-                        model$bestTune$lambda)@Dimnames[[1]][coef(model$finalModel, model$bestTune$lambda)@i+1],
-    error = 0
-  )
+  plot <- get_plot_var_importance(model, labels, from_varImp = TRUE, scale_values = FALSE)
 
   list(model = model,
        results = results,
-       plot_df = plot_df)
+       plot = plot)
 }
 
-run_logistic_reg<- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
+run_logistic_reg<- function(train_df, response_variable, predictors, labels, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
   print("training model")
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
@@ -210,20 +259,16 @@ run_logistic_reg<- function(train_df, response_variable, predictors, n_cv_folds,
     tuneLength = 15
   )
 
-  results <-  model$results
+  results <- get_table_cv_results(model, has_bestTune = FALSE)
 
-  plot_df <- data.frame(
-    x = coef(summary(model))[,1],
-    feature_name = rownames(coef(summary(model))),
-    error = coef(summary(model))[,2]
-  )
+  plot <- get_plot_var_importance(model, labels, from_varImp = FALSE)
 
   list(model = model,
        results = results,
-       plot_df = plot_df)
+       plot = plot)
 }
 
-run_xgboost <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
+run_xgboost <- function(train_df, response_variable, predictors, labels, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
   print("training xgboost")
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
@@ -234,19 +279,16 @@ run_xgboost <- function(train_df, response_variable, predictors, n_cv_folds, bal
     tuneLength = 5
   )
 
-  results <-  model$results[rownames(model$bestTune),]
+  results <- get_table_cv_results(model, has_bestTune = TRUE)
 
-  plot_df <- (caret::varImp(model))$importance
-  plot_df$feature_name = rownames(plot_df)
-  colnames(plot_df) <- c("x", "feature_name")
-  plot_df$error <- 0
+  plot <- get_plot_var_importance(model, labels, from_varImp = TRUE, scale_values = TRUE)
 
   list(model = model,
        results = results,
-       plot_df = plot_df)
+       plot = plot)
 }
 
-run_rf <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
+run_rf <- function(train_df, response_variable, predictors, labels, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
   print("training random forest")
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
@@ -257,16 +299,13 @@ run_rf <- function(train_df, response_variable, predictors, n_cv_folds, balance_
     tuneLength = length(predictors)
   )
 
-  results <-  model$results[rownames(model$bestTune),]
+  results <- get_table_cv_results(model, has_bestTune = TRUE)
 
-  plot_df <- (caret::varImp(model))$importance
-  plot_df$feature_name = rownames(plot_df)
-  colnames(plot_df) <- c("x", "feature_name")
-  plot_df$error <- 0
+  plot <- get_plot_var_importance(model, labels, from_varImp = TRUE, scale_values = TRUE)
 
   list(model = model,
        results = results,
-       plot_df = plot_df)
+       plot = plot)
 }
 #########################
 # Testing Results
