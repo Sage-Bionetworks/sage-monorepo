@@ -199,6 +199,30 @@ run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds,
        plot_df = plot_df)
 }
 
+run_logistic_reg<- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
+  print("training model")
+  cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
+
+  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
+  model <- caret::train(
+    parameters, data = train_df, method = "glm", family = "binomial",
+    trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
+    tuneLength = 15
+  )
+
+  results <-  model$results
+
+  plot_df <- data.frame(
+    x = coef(summary(model))[,1],
+    feature_name = rownames(coef(summary(model))),
+    error = coef(summary(model))[,2]
+  )
+
+  list(model = model,
+       results = results,
+       plot_df = plot_df)
+}
+
 run_xgboost <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
   print("training xgboost")
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)

@@ -41,7 +41,7 @@ ici_models_train_ui <- function(id){
           width = 12,
           shiny::selectInput(ns("train_method"),
                              label = "3. Select training method",
-                             choices = c("Elastic Net Regression", "XGBoost", "Random Forest"),
+                             choices = c("Elastic Net Regression", "Logistic Regression", "Random Forest", "XGBoost"),
                              selected = "Elastic Net Regression"),
           shiny::sliderInput(ns("cv_number"),
                              label = "Number of folds for cross-validation",
