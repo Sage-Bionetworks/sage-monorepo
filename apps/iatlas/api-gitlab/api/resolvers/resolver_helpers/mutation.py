@@ -2,11 +2,11 @@ from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from itertools import groupby
 from api import db
-from api.db_models import Dataset, DatasetToTag, DatasetToSample, Gene, Mutation, MutationCode, MutationType, Patient, Sample, SampleToMutation, SampleToTag, Tag
+from api.db_models import Gene, Mutation, MutationCode, MutationType, Patient, Sample, SampleToMutation, Cohort, CohortToSample, CohortToMutation
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .gene import build_gene_graphql_response
 from .mutation_type import build_mutation_type_graphql_response
-from .paging_utils import create_temp_table, get_cursor, get_pagination_queries, Paging
+from .paging_utils import get_pagination_queries
 from .sample import build_sample_graphql_response
 
 mutation_by_sample_request_fields = {'id', 'name', 'mutations'}
@@ -46,7 +46,7 @@ def build_mutation_by_sample_graphql_response(mutation_set):
     }
 
 
-def build_mutation_request(requested, gene_requested, mutation_type_requested, sample_requested, data_set=None, distinct=False, entrez=None, feature=None, feature_class=None, mutation_code=None, mutation_id=None, mutation_type=None, paging=None, related=None, sample=None, status=None, tag=None, by_sample=False):
+def build_mutation_request(requested, gene_requested, mutation_type_requested, sample_requested, cohort=None, distinct=False, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, paging=None, sample=None, status=None, by_sample=False):
     '''
     Builds a SQL request
 
@@ -76,19 +76,27 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, s
     mutation_type_1 = aliased(MutationType, name='mt')
     sample_1 = aliased(Sample, name='s')
     sample_to_mutation_1 = aliased(SampleToMutation, name='sm')
+    cohort_1 = aliased(Cohort, name='c')
+    cohort_to_mutation_1 = aliased(CohortToMutation, name='ctm')
 
     core_field_mapping = {
         'mutationCode': mutation_code_1.code.label('code'),
         'status': sample_to_mutation_1.status.label('status')}
-    gene_core_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
-                               'hgnc': gene_1.hgnc.label('hgnc'),
-                               'description': gene_1.description.label('description'),
-                               'friendlyName': gene_1.friendly_name.label('friendly_name'),
-                               'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
-    mutation_type_field_mapping = {'display': mutation_type_1.display.label('display'),
-                                   'name': mutation_type_1.name.label('name')}
-    sample_core_field_mapping = {'id': sample_1.id.label(
-        'sample_id'), 'name': sample_1.name.label('sample_name')}
+    gene_core_field_mapping = {
+        'entrez': gene_1.entrez.label('entrez'),
+        'hgnc': gene_1.hgnc.label('hgnc'),
+        'description': gene_1.description.label('description'),
+        'friendlyName': gene_1.friendly_name.label('friendly_name'),
+        'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')
+    }
+    mutation_type_field_mapping = {
+        'display': mutation_type_1.display.label('display'),
+        'name': mutation_type_1.name.label('name')
+    }
+    sample_core_field_mapping = {
+        'id': sample_1.id.label('sample_id'),
+        'name': sample_1.name.label('sample_name')
+    }
 
     core = get_selected(requested, core_field_mapping)
     # if we always request id, distinct will return every record
@@ -132,52 +140,35 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, s
         query = query.join(mutation_type_1, and_(
             *mutation_type_join_condition), isouter=is_outer)
 
-    if by_sample or status or sample or data_set or tag:
-        sample_mutation_join_condition = build_join_condition(
-            sample_to_mutation_1.mutation_id, mutation_1.id, filter_column=sample_to_mutation_1.status, filter_list=status)
+    if sample:
+        sample_to_mutation_subquery = sess.query(
+            sample_to_mutation_1.mutation_id)
 
-        query = query.join(sample_to_mutation_1, and_(
-            *sample_mutation_join_condition))
+        sample_join_condition = build_join_condition(
+            sample_to_mutation_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
 
-        if data_set or related:
-            data_set_1 = aliased(Dataset, name='d')
-            data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
-            data_set_subquery = sess.query(data_set_1.id).filter(
-                data_set_1.name.in_(data_set)) if data_set else None
-            data_set_sample_join_condition = build_join_condition(
-                data_set_to_sample_1.sample_id, sample_to_mutation_1.sample_id, data_set_to_sample_1.dataset_id, data_set_subquery)
-            query = query.join(data_set_to_sample_1,
-                               and_(*data_set_sample_join_condition))
+        cohort_subquery = sample_to_mutation_subquery.join(sample_1, and_(
+            *sample_join_condition), isouter=False)
 
-            if related:
-                data_set_to_tag_1 = aliased(DatasetToTag, name='dt')
-                related_tag_1 = aliased(Tag, name='rt')
-                related_tag_subquery = sess.query(related_tag_1.id).filter(
-                    related_tag_1.name.in_(related))
-                data_set_tag_join_condition = build_join_condition(
-                    data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_subquery)
-                query = query.join(data_set_to_tag_1,
-                                   and_(*data_set_tag_join_condition))
+        sample_to_mutation_subquery = sample_to_mutation_subquery.filter(
+            sample_1.name.in_(sample))
 
-        if tag:
-            sample_to_tag_1 = aliased(SampleToTag, name='st')
-            tag_1 = aliased(Tag, name='t')
-            tag_subquery = sess.query(tag_1.id).filter(
-                tag_1.name.in_(tag))
-            sample_tag_join_condition = build_join_condition(
-                sample_to_tag_1.sample_id, sample_to_mutation_1.sample_id, sample_to_tag_1.tag_id, tag_subquery)
-            query = query.join(sample_to_tag_1, and_(
-                *sample_tag_join_condition))
+        query = query.filter(mutation_1.id.in_(sample_to_mutation_subquery))
 
-        if by_sample or sample:
-            sample_join_condition = build_join_condition(
-                sample_to_mutation_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
-            query = query.join(sample_1, and_(*sample_join_condition))
+    if cohort:
+        cohort_subquery = sess.query(cohort_to_mutation_1.mutation_id)
+
+        cohort_join_condition = build_join_condition(
+            cohort_to_mutation_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
+        cohort_subquery = cohort_subquery.join(cohort_1, and_(
+            *cohort_join_condition), isouter=False)
+
+        query = query.filter(mutation_1.id.in_(cohort_subquery))
 
     return get_pagination_queries(query, paging, distinct, cursor_field=mutation_1.id)
 
 
-def get_samples(requested, patient_requested, sample_requested, data_set=None, entrez=None, feature=None, feature_class=None, mutation_code=None, mutation_id=set(), mutation_type=None, related=None, sample=None, status=None, tag=None):
+def get_samples(requested, patient_requested, sample_requested, cohort=None, entrez=None, mutation_code=None, mutation_id=set(), mutation_type=None, sample=None, status=None):
     '''
     All positional arguments are required. Positional arguments are:
         1st position - a set of the requested fields at the root of the graphql request
@@ -256,45 +247,11 @@ def get_samples(requested, patient_requested, sample_requested, data_set=None, e
         sample_query = sample_query.join(
             sample_to_mutation_1, and_(*sample_mutation_join_condition))
 
-        if data_set or related:
-            data_set_1 = aliased(Dataset, name='d')
-            data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
-            data_set_subquery = sess.query(data_set_1.id).filter(
-                data_set_1.name.in_(data_set)) if data_set else None
-            sample_join_condition = build_join_condition(
-                data_set_to_sample_1.sample_id, sample_to_mutation_1.sample_id, data_set_to_sample_1.dataset_id, data_set_subquery)
-            sample_query = sample_query.join(data_set_to_sample_1,
-                                             and_(*sample_join_condition))
-
-            if related:
-                data_set_to_tag_1 = aliased(DatasetToTag, name='dt')
-                related_tag_1 = aliased(Tag, name='rt')
-                related_tag_subquery = sess.query(related_tag_1.id).filter(
-                    related_tag_1.name.in_(related))
-                data_set_tag_join_condition = build_join_condition(
-                    data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_subquery)
-                sample_query = sample_query.join(data_set_to_tag_1,
-                                                 and_(*data_set_tag_join_condition))
-
-        if tag:
-            sample_to_tag_1 = aliased(SampleToTag, name='st')
-            tag_1 = aliased(Tag, name='t')
-            tag_subquery = sess.query(tag_1.id).filter(
-                tag_1.name.in_(tag))
-            sample_tag_join_condition = build_join_condition(
-                sample_to_tag_1.sample_id, sample_to_mutation_1.sample_id, sample_to_tag_1.tag_id, tag_subquery)
-            sample_query = sample_query.join(sample_to_tag_1, and_(
-                *sample_tag_join_condition))
-
         sample_join_condition = build_join_condition(
             sample_1.id, sample_to_mutation_1.sample_id, filter_column=sample_1.name, filter_list=sample)
 
         sample_query = sample_query.join(
             sample_1, and_(*sample_join_condition))
-
-        if 'patient' in sample_requested:
-            sample_query = sample_query.join(
-                patient_1, sample_1.patient_id == patient.id)
 
         order = []
         append_to_order = order.append
