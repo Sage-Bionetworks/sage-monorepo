@@ -37,36 +37,87 @@ def common_query_builder():
         return """query Mutations(
             $paging: PagingInput
             $distinct: Boolean
-            $dataSet: [String!]
+            $cohort: [String!]
             $entrez: [Int!]
             $mutationCode: [String!]
             $mutationId: [Int!]
             $mutationType: [String!]
-            $related: [String!]
             $sample: [String!]
             $status: [StatusEnum!]
-            $tag: [String!]
         ) {
             mutations(
                 paging: $paging
                 distinct: $distinct
-                dataSet: $dataSet
+                cohort: $cohort
                 entrez: $entrez
                 mutationCode: $mutationCode
                 mutationId: $mutationId
                 mutationType: $mutationType
-                related: $related
                 sample: $sample
                 status: $status
-                tag: $tag
             )""" + query_fields + "}"
     return f
 
 
-def test_mutations_query_with_mutationId(client, common_query_builder, mutation_id):
-    query = common_query_builder("""{ items { id } }""")
+@pytest.fixture(scope='module')
+def common_query(common_query_builder):
+    return common_query_builder("""
+        {
+            items {
+                id
+                gene { entrez }
+                mutationCode
+                mutationType { name }
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+            error
+        }"""
+                                )
+
+
+@pytest.fixture(scope='module')
+def samples_query(common_query_builder):
+    return common_query_builder("""
+        {
+            items {
+                id
+                gene { entrez }
+                mutationCode
+                mutationType { name }
+                samples {
+                    name
+                    status
+                }
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+            error
+        }"""
+                                )
+
+
+def test_mutations_query_with_mutationId(client, common_query, mutation_id):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'mutationId': [mutation_id]}})
+        '/api', json={'query': common_query, 'variables': {'mutationId': [mutation_id]}})
     json_data = json.loads(response.data)
     mutations = json_data['data']['mutations']
     page = mutations['items']
@@ -77,18 +128,9 @@ def test_mutations_query_with_mutationId(client, common_query_builder, mutation_
         assert mutation['id'] == str(mutation_id)
 
 
-def test_mutations_query_with_entrez(client, common_query_builder, gene_entrez):
-    query = common_query_builder("""{
-                                    items {
-                                        id
-                                        gene { entrez }
-                                        mutationCode
-                                        mutationType { name }
-                                        samples { name }
-                                    }
-                                }""")
+def test_mutations_query_with_entrez(client, samples_query, gene_entrez):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'entrez': [gene_entrez]}})
+        '/api', json={'query': samples_query, 'variables': {'entrez': [gene_entrez]}})
     json_data = json.loads(response.data)
     mutations = json_data['data']['mutations']
     page = mutations['items']
@@ -106,15 +148,9 @@ def test_mutations_query_with_entrez(client, common_query_builder, gene_entrez):
             assert type(sample['name']) is str
 
 
-def test_mutations_query_with_mutationCode(client, common_query_builder, mutation_code):
-    query = common_query_builder("""{
-                                    items {
-                                        id
-                                        mutationCode
-                                    }
-                                }""")
+def test_mutations_query_with_mutationCode(client, common_query, mutation_code):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'mutationCode': [mutation_code]}})
+        '/api', json={'query': common_query, 'variables': {'mutationCode': [mutation_code]}})
     json_data = json.loads(response.data)
     mutations = json_data['data']['mutations']
     page = mutations['items']
@@ -125,15 +161,9 @@ def test_mutations_query_with_mutationCode(client, common_query_builder, mutatio
         assert mutation['mutationCode'] == mutation_code
 
 
-def test_mutations_query_with_mutationType(client, common_query_builder, mutation_type):
-    query = common_query_builder("""{
-                                    items {
-                                        id
-                                        mutationType { name }
-                                    }
-                                }""")
+def test_mutations_query_with_mutationType(client, common_query, mutation_type):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'mutationType': [mutation_type]}})
+        '/api', json={'query': common_query, 'variables': {'mutationType': [mutation_type]}})
     json_data = json.loads(response.data)
     mutations = json_data['data']['mutations']
     page = mutations['items']
@@ -143,15 +173,10 @@ def test_mutations_query_with_mutationType(client, common_query_builder, mutatio
     for mutation in page[0:2]:
         assert mutation['mutationType']['name'] == mutation_type
 
-def test_mutations_query_with_sample(client, common_query_builder, sample_name):
-    query = common_query_builder("""{
-                                    items {
-                                        id
-                                        samples { name }
-                                    }
-                                }""")
+
+def test_mutations_query_with_sample(client, samples_query, sample_name):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'sample': [sample_name]}})
+        '/api', json={'query': samples_query, 'variables': {'sample': [sample_name]}})
     json_data = json.loads(response.data)
     mutations = json_data['data']['mutations']
     page = mutations['items']
@@ -165,18 +190,10 @@ def test_mutations_query_with_sample(client, common_query_builder, sample_name):
         for current_sample in samples:
             assert current_sample['name'] == sample_name
 
-def test_mutations_query_with_sample_and_status(client, common_query_builder, sample_name, mutation_status):
-    query = common_query_builder("""{
-                                    items {
-                                        id
-                                        samples {
-                                            name
-                                            status
-                                        }
-                                    }
-                                }""")
+
+def test_mutations_query_with_sample_and_status(client, samples_query, mutation_status):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'paging': {'first': 100}, 'status': [mutation_status]}})
+        '/api', json={'query': samples_query, 'variables': {'paging': {'first': 100}, 'status': [mutation_status]}})
     json_data = json.loads(response.data)
     mutations = json_data['data']['mutations']
     page = mutations['items']
@@ -190,10 +207,10 @@ def test_mutations_query_with_sample_and_status(client, common_query_builder, sa
         for current_sample in samples:
             assert current_sample['status'] == mutation_status
 
-def test_mutations_query_with_no_variables(client, common_query_builder):
-    query = common_query_builder("""{ items { id } }""")
+
+def test_mutations_query_with_no_variables(client, common_query):
     response = client.post(
-        '/api', json={'query': query})
+        '/api', json={'query': common_query})
     json_data = json.loads(response.data)
     mutations = json_data['data']['mutations']
     page = mutations['items']
@@ -203,22 +220,20 @@ def test_mutations_query_with_no_variables(client, common_query_builder):
     for mutation in page[0:2]:
         assert type(mutation['id']) is not None
 
-def test_mutations_query_with_dataSet(client, common_query_builder, data_set, data_set_id, mutation_status, test_db):
-    query = common_query_builder("""{
-                                    items {
-                                        id
-                                        samples { name }
-                                    }
-                                }""")
+
+def test_mutations_query_with_cohort(client, samples_query, tcga_tag_cohort_name, tcga_tag_cohort_samples):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'paging': {'first': 10}, 'dataSet': [data_set], 'status': [mutation_status]}})
+        '/api', json={
+            'query': samples_query,
+            'variables': {
+                'paging': {'first': 10},
+                'cohort': [tcga_tag_cohort_name]
+            }
+        }
+    )
     json_data = json.loads(response.data)
     mutations = json_data['data']['mutations']
     page = mutations['items']
-
-    sample_name_results = test_db.session.query(Sample.name).select_from(DatasetToSample).filter_by(
-        dataset_id=data_set_id).join(Sample, Sample.id == DatasetToSample.sample_id).all()
-    sample_names_in_data_set = list(map(lambda s: s.name, sample_name_results))
 
     assert isinstance(page, list)
     assert len(page) > 0
@@ -226,84 +241,7 @@ def test_mutations_query_with_dataSet(client, common_query_builder, data_set, da
         samples = mutation['samples']
         assert isinstance(samples, list)
         assert len(samples) > 0
-        for current_sample in samples:
-            assert type(current_sample['name']) is str
-            assert current_sample['name'] in sample_names_in_data_set
-
-def test_mutations_query_with_related(client, common_query_builder, data_set, data_set_id, related, related_id, mutation_status, test_db):
-    query = common_query_builder("""{
-                                    items {
-                                        id
-                                        samples { name }
-                                    }
-                                }""")
-    response = client.post(
-        '/api', json={'query': query, 'variables': {
-            'paging': {'first': 10},
-            'dataSet': [data_set],
-            'related': [related],
-            'status': [mutation_status]}})
-    json_data = json.loads(response.data)
-    mutations = json_data['data']['mutations']
-    page = mutations['items']
-
-    sess = test_db.session
-
-    sample_name_query = sess.query(Sample.name).select_from(
-        DatasetToSample).filter_by(dataset_id=data_set_id)
-    sample_name_query = sample_name_query.join(
-        DatasetToTag, and_(DatasetToTag.dataset_id == data_set_id, DatasetToTag.tag_id == related_id))
-    sample_name_query = sample_name_query.join(
-        Sample, Sample.id == DatasetToSample.sample_id)
-    sample_name_results = sample_name_query.all()
-    sample_names_in_related = list(map(lambda s: s.name, sample_name_results))
-
-    assert isinstance(page, list)
-    assert len(page) > 0
-    for mutation in page[0:2]:
-        samples = mutation['samples']
-        assert isinstance(samples, list)
-        assert len(samples) > 0
-        for current_sample in samples:
-            assert type(current_sample['name']) is str
-            assert current_sample['name'] in sample_names_in_related
-
-
-def test_mutations_query_with_tag(client, common_query_builder, data_set, data_set_id, mutation_status, tag, tag_id, test_db):
-    query = common_query_builder("""{
-                                    items {
-                                        id
-                                        samples { name }
-                                    }
-                                }""")
-    response = client.post(
-        '/api', json={'query': query, 'variables': {
-            'paging': {'first': 10},
-            'dataSet': [data_set],
-            'status': [mutation_status],
-            'tag': [tag]
-        }})
-    json_data = json.loads(response.data)
-    mutations = json_data['data']['mutations']
-    page = mutations['items']
-
-    sess = test_db.session
-
-    sample_name_query = sess.query(Sample.name).select_from(
-        DatasetToSample).filter_by(dataset_id=data_set_id)
-    sample_name_query = sample_name_query.join(
-        SampleToTag, and_(SampleToTag.sample_id == DatasetToSample.sample_id, SampleToTag.tag_id == tag_id))
-    sample_name_query = sample_name_query.join(
-        Sample, Sample.id == DatasetToSample.sample_id)
-    sample_name_results = sample_name_query.all()
-    sample_names_in_tags = list(map(lambda s: s.name, sample_name_results))
-
-    assert isinstance(page, list)
-    assert len(page) > 0
-    for mutation in page[0:2]:
-        samples = mutation['samples']
-        assert isinstance(samples, list)
-        assert len(samples) > 0
-        for current_sample in samples:
-            assert type(current_sample['name']) is str
-            assert current_sample['name'] in sample_names_in_tags
+        for sample in samples:
+            assert type(sample['name']) is str
+            assert type(sample['status']) is str
+            assert sample['name'] in tcga_tag_cohort_samples

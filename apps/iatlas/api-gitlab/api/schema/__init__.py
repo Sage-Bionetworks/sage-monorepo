@@ -1,7 +1,7 @@
 from ariadne import load_schema_from_path, make_executable_schema, ObjectType, ScalarType
 import os
 from api.resolvers import (
-    resolve_cohorts, resolve_colocalizations, resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_edges, resolve_features, resolve_feature_values, resolve_gene_family, resolve_gene_function, resolve_gene_types, resolve_genes, resolve_germline_gwas_results, resolve_heritability_results, resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutations_by_sample, resolve_mutation_types, resolve_nodes, resolve_rare_variant_pathway_associations, resolve_pathways, resolve_patients, resolve_related, resolve_samples, resolve_samples_by_mutations_status, resolve_samples_by_tag, resolve_slides, resolve_snps, resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
+    resolve_cohorts, resolve_colocalizations, resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_edges, resolve_features, resolve_feature_values, resolve_gene_family, resolve_gene_function, resolve_gene_types, resolve_genes, resolve_germline_gwas_results, resolve_heritability_results, resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutation_types, resolve_nodes, resolve_rare_variant_pathway_associations, resolve_pathways, resolve_patients, resolve_related, resolve_samples, resolve_samples_by_mutations_status, resolve_samples_by_tag, resolve_slides, resolve_snps, resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
 
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
@@ -159,7 +159,7 @@ heritability_result_node = ObjectType('HeritabilityResultNode')
 heritability_result = ObjectType('HeritabilityResult')
 immune_checkpoint = ObjectType('ImmuneCheckpoint')
 method_tag = ObjectType('MethodTag')
-mutation = ObjectType('GeneMutation')
+mutation = ObjectType('Mutation')
 mutation_code = ObjectType('MutationCode')
 mutation_type = ObjectType('MutationType')
 node = ObjectType('Node')
@@ -210,7 +210,6 @@ root.set_field('heritabilityResults', resolve_heritability_results)
 root.set_field('immuneCheckpoints', resolve_immune_checkpoints)
 root.set_field('methodTags', resolve_method_tags)
 root.set_field('mutations', resolve_mutations)
-root.set_field('mutationsBySample', resolve_mutations_by_sample)
 root.set_field('mutationTypes', resolve_mutation_types)
 root.set_field('nodes', resolve_nodes)
 root.set_field('pathways', resolve_pathways)

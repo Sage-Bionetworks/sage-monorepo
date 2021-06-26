@@ -16,7 +16,6 @@ from .heritability_results_resolver import resolve_heritability_results
 from .immune_checkpoint_resolver import resolve_immune_checkpoints
 from .method_tags_resolver import resolve_method_tags
 from .mutations_resolver import resolve_mutations
-from .mutations_by_sample_resolver import resolve_mutations_by_sample
 from .mutation_types_resolver import resolve_mutation_types
 from .nodes_resolver import resolve_nodes
 from .pathway_resolver import resolve_pathways
