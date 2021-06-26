@@ -20,7 +20,7 @@ type CohortNode implements BaseNode {
   "The genes associated with the cohort."
   genes: [SimpleGene!]!
   "The mutations associated with the cohort."
-  mutations: [Mutation!]!
+  mutations: [SimpleMutation!]!
 }
 
 type Cohort implements BaseResult {

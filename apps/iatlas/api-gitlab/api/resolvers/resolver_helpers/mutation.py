@@ -144,25 +144,14 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, s
         sample_to_mutation_subquery = sess.query(
             sample_to_mutation_1.mutation_id)
 
-        '''
-        if max_value:
-            feature_to_sample_subquery = feature_to_sample_subquery.filter(
-                feature_to_sample_1.value <= max_value)
+        sample_join_condition = build_join_condition(
+            sample_to_mutation_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
 
-        if min_value:
-            feature_to_sample_subquery = feature_to_sample_subquery.filter(
-                feature_to_sample_1.value >= min_value)
-        '''
+        cohort_subquery = sample_to_mutation_subquery.join(sample_1, and_(
+            *sample_join_condition), isouter=False)
 
-        if sample:
-
-            sample_join_condition = build_join_condition(
-                sample_to_mutation_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
-            cohort_subquery = sample_to_mutation_subquery.join(sample_1, and_(
-                *sample_join_condition), isouter=False)
-
-            sample_to_mutation_subquery = sample_to_mutation_subquery.filter(
-                sample_1.name.in_(sample))
+        sample_to_mutation_subquery = sample_to_mutation_subquery.filter(
+            sample_1.name.in_(sample))
 
         query = query.filter(mutation_1.id.in_(sample_to_mutation_subquery))
 
