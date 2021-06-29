@@ -127,8 +127,9 @@ ici_models_train_server <- function(
               output$missing_data <- shiny::renderText({
                 shiny::req(nrow(training_obj()$missing_annot) != 0)
                 missing_all <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == 1))
-                paste("Dataset ", missing_all$dataset, "has no data for ", missing_all$feature,
-                      ". Change the dataset and/or predictor selection to proceed.")})
+                paste("<ul><i> Change the following dataset and/or predictor selection to proceed:</i><br>",
+                      paste0("<li>Dataset ", missing_all$dataset, " has no data for ", missing_all$feature_display,".", collapse = "</li>"), "</ul>")
+                })
             }else{
               shinyjs::enable("compute_train")
               shinyjs::hide("missing_data")
@@ -139,8 +140,8 @@ ici_models_train_server <- function(
               output$missing_sample <- shiny::renderText({
                 shiny::req(nrow(training_obj()$missing_annot) != 0)
                 missing_some <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == 0))
-                paste("Dataset ", missing_some$dataset, "has ", missing_some$n_missing, " samples with NA info for ", missing_some$feature,
-                      " that will be excluded from modeling.")
+                paste("<i> Samples with NA annotation will be excluded from modeling:</i><br>",
+                      paste0(missing_some$dataset, " has ", missing_some$n_missing," samples with NA info for ", missing_some$feature_display, ".", collapse = "<br>"))
               })
             }
           } #ends check for NAs in annotation
@@ -148,8 +149,10 @@ ici_models_train_server <- function(
            shinyjs::disable("compute_train")
            output$missing_level <- shiny::renderText({
              shiny::req(nrow(training_obj()$missing_level) != 0)
-             paste(training_obj()$missing_level$feature_display, "has group ", training_obj()$missing_level$group, "only at the testing set (",
-                   training_obj()$missing_level$dataset, "). Change the dataset and/or predictor selection to proceed.")})
+             paste("<ul><i> Categorical level only present in testing dataset - change the dataset and/or predictor selection to proceed:</i><br>",
+                   paste0("<li>", training_obj()$missing_level$feature_display, " has group ", training_obj()$missing_level$group, " only at the testing set (",
+                          training_obj()$missing_level$dataset, ").", collapse = "</li>"), "</ul>")
+             })
          }
         }
       })
