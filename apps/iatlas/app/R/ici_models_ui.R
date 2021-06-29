@@ -12,7 +12,7 @@ ici_models_ui <- function(id){
     ),
     sectionBox(
       title = "Multivariable Models",
-      ici_models_train_ui(ns("ici_models_train"))
+      ici_models_main_ui(ns("ici_models_train"))
     )
   )
 }

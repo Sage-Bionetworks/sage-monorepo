@@ -58,7 +58,7 @@ ici_models_server <- function(
         )
       })
 
-      ici_models_train_server(
+      ici_models_main_server(
         "ici_models_train",
         variables_list = predictors_list()
       )
