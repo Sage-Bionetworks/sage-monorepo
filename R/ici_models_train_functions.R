@@ -231,10 +231,11 @@ get_plot_var_importance <- function(model, labels = NULL, from_varImp = TRUE, sc
 
 # Methods calls
 run_elastic_net <- function(train_df, response_variable, predictors, labels, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
-  print("training model")
-  cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
+  print("training elastic net")
 
+  cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
   parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
+
   model <- caret::train(
     parameters, data = train_df, method = "glmnet",
     trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
