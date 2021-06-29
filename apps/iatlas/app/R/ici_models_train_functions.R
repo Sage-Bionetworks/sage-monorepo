@@ -110,13 +110,16 @@ get_training_object <- function(data_df, train_ds, test_ds,
 
     if(length(feature[feature != 0])>0){
       n_samples <- nrow(data_df[data_df$Dataset == dataset,])
-      data.frame(feature = names(feature[feature != 0]),
+      data.frame(feature_name = names(feature[feature != 0]),
                  dataset = dataset,
                  n_missing = feature[feature != 0]) %>%
-        dplyr::mutate(missing_all = dplyr::case_when(
-          n_missing == n_samples ~ 1,
-          TRUE ~ 0
-        ))
+        dplyr::mutate(
+          missing_all = dplyr::case_when(
+            n_missing == n_samples ~ 1,
+            TRUE ~ 0
+        )) %>%
+        merge(., pred_features, by = "feature_name") %>%
+        dplyr::select(feature_name, feature_display, dataset, n_missing, missing_all)
     }
   })
 
@@ -128,8 +131,7 @@ get_training_object <- function(data_df, train_ds, test_ds,
       missing_train <- unique(data_bucket$train_df[[x]])
       missing_test <- unique(data_bucket$test_df[[x]])
       if(length(missing_test)== 0 |length(missing_train)== 0) return(NULL)
-
-      missing_level <- setdiff(unique(data_bucket$test_df[[x]]), unique(data_bucket$train_df[[x]]))
+      missing_level <- setdiff(missing_test, missing_train)
       if(length(missing_level) != 0){
         missing_df <- data_bucket$test_df %>%
           dplyr::filter(.[[x]] %in% missing_level) %>%
