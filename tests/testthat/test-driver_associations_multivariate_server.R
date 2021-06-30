@@ -1,5 +1,4 @@
-#TODO: uncomment out slow tests
-
+# TODO: fix slow query, uncomment tests
 test_that("multivariate_driver_server", {
   shiny::testServer(
     multivariate_driver_server,
@@ -38,15 +37,9 @@ test_that("multivariate_driver_server", {
       # expect_named(
       #   status_tbl(),
       #   c(
+      #     "mutation",
       #     "sample",
-      #     "mutation_id",
-      #     "entrez",
-      #     "hgnc",
-      #     "code",
-      #     "mutation_type_name",
-      #     "mutation_type_display",
-      #     "status",
-      #     "mutation"
+      #     "status"
       #   )
       # )
       # expect_true(nrow(status_tbl()) > 0)
