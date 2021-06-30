@@ -2,7 +2,7 @@ import json
 import pytest
 from sqlalchemy import and_
 from tests import NoneType
-from api.db_models import DatasetToSample, DatasetToTag, Sample, SampleToTag, Tag
+from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 
 
 @pytest.fixture(scope='module')
@@ -113,6 +113,121 @@ def samples_query(common_query_builder):
             error
         }"""
                                 )
+
+
+def test_mutations_cursor_pagination_first_without_samples(client, common_query_builder):
+    query = common_query_builder("""{
+            items {
+                id
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+        }""")
+    requested_n = 15
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'paging': {'first': requested_n}
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['mutations']
+    items = page['items']
+    paging = page['paging']
+    start = from_cursor_hash(paging['startCursor'])
+    end = from_cursor_hash(paging['endCursor'])
+
+    assert len(items) == requested_n
+    assert paging['hasNextPage'] == True
+    assert paging['hasPreviousPage'] == False
+    assert start == items[0]['id']
+    assert end == items[requested_n - 1]['id']
+    assert int(end) - int(start) > 0
+
+
+def test_mutationscursor_pagination_first_with_samples(client, common_query_builder):
+    query = common_query_builder("""{
+            items {
+                id
+                samples { name }
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+        }""")
+    requested_n = 15
+    max_n = 10
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'paging': {'first': requested_n}
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['mutations']
+    items = page['items']
+    paging = page['paging']
+    start = from_cursor_hash(paging['startCursor'])
+    end = from_cursor_hash(paging['endCursor'])
+
+    assert len(items) == max_n
+    assert paging['hasNextPage'] == True
+    assert paging['hasPreviousPage'] == False
+    assert start == items[0]['id']
+    assert end == items[max_n - 1]['id']
+    assert int(end) - int(start) > 0
+
+
+def test_cursor_pagination_last(client, common_query_builder):
+    query = common_query_builder("""{
+            items {
+                id
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+        }""")
+    num = 10
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'paging': {
+                'last': num,
+                'before': to_cursor_hash(1000)
+            }
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['mutations']
+    items = page['items']
+    paging = page['paging']
+    start = from_cursor_hash(paging['startCursor'])
+    end = from_cursor_hash(paging['endCursor'])
+
+    assert len(items) == num
+    assert paging['hasNextPage'] == False
+    assert paging['hasPreviousPage'] == True
+    assert start == items[0]['id']
+    assert end == items[num - 1]['id']
 
 
 def test_mutations_query_with_mutationId(client, common_query, mutation_id):

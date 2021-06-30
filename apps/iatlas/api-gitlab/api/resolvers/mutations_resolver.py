@@ -1,5 +1,5 @@
 from .resolver_helpers import build_mutation_graphql_response, get_requested, get_selection_set, mutation_related_sample_request_fields, mutation_request_fields, mutation_type_request_fields, request_mutations, return_mutation_derived_fields, simple_gene_request_fields, simple_patient_request_fields
-from .resolver_helpers.paging_utils import fetch_page, Paging, paging_fields, process_page
+from .resolver_helpers.paging_utils import fetch_page, paging_fields, process_page, create_paging
 
 
 def resolve_mutations(_obj, info, cohort=None, distinct=False, entrez=None, mutationCode=None, mutationId=None, mutationType=None, paging=None, sample=None, status=None):
@@ -22,7 +22,9 @@ def resolve_mutations(_obj, info, cohort=None, distinct=False, entrez=None, muta
     patient_requested = get_requested(
         selection_set=sample_selection_set, requested_field_mapping=simple_patient_request_fields, child_node='patient')
 
-    paging = paging if paging else Paging.DEFAULT
+    max_items = 10 if 'samples' in requested else 100_000
+
+    paging = create_paging(paging, max_items)
 
     query, count_query = request_mutations(
         requested, gene_requested, mutation_type_requested, cohort=cohort, distinct=distinct, entrez=entrez, mutation_id=mutationId, mutation_code=mutationCode, mutation_type=mutationType, paging=paging, sample=sample, status=status)
