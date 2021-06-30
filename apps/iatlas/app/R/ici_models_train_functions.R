@@ -230,11 +230,12 @@ get_plot_var_importance <- function(model, labels = NULL, from_varImp = TRUE, sc
 }
 
 # Methods calls
-run_elastic_net <- function(train_df, response_variable, predictors, labels, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
+run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
   print("training elastic net")
 
+  predictors_to_model <- predictors %>% dplyr::filter(VariableType != "Category") %>% dplyr::pull(feature_name)
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
-  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
+  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors_to_model), collapse = "+")))
 
   model <- caret::train(
     parameters, data = train_df, method = "glmnet",
@@ -244,18 +245,19 @@ run_elastic_net <- function(train_df, response_variable, predictors, labels, n_c
 
   results <- get_table_cv_results(model, has_bestTune = TRUE)
 
-  plot <- get_plot_var_importance(model, labels, from_varImp = TRUE, scale_values = FALSE)
+  plot <- get_plot_var_importance(model, predictors, from_varImp = TRUE, scale_values = FALSE)
 
   list(model = model,
        results = results,
        plot = plot)
 }
 
-run_logistic_reg<- function(train_df, response_variable, predictors, labels, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
+run_logistic_reg<- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
   print("training model")
+  predictors_to_model <- predictors %>% dplyr::filter(VariableType != "Category") %>% dplyr::pull(feature_name)
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
-  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
+  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors_to_model), collapse = "+")))
   model <- caret::train(
     parameters, data = train_df, method = "glm", family = "binomial",
     trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
@@ -264,18 +266,19 @@ run_logistic_reg<- function(train_df, response_variable, predictors, labels, n_c
 
   results <- get_table_cv_results(model, has_bestTune = FALSE)
 
-  plot <- get_plot_var_importance(model, labels, from_varImp = FALSE)
+  plot <- get_plot_var_importance(model, predictors, from_varImp = FALSE)
 
   list(model = model,
        results = results,
        plot = plot)
 }
 
-run_xgboost <- function(train_df, response_variable, predictors, labels, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
+run_xgboost <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
   print("training xgboost")
+  predictors_to_model <- predictors %>% dplyr::filter(VariableType != "Category") %>% dplyr::pull(feature_name)
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
-  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
+  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors_to_model), collapse = "+")))
   model <- caret::train(
     parameters, data = train_df, method = "xgbTree",
     trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
@@ -284,18 +287,19 @@ run_xgboost <- function(train_df, response_variable, predictors, labels, n_cv_fo
 
   results <- get_table_cv_results(model, has_bestTune = TRUE)
 
-  plot <- get_plot_var_importance(model, labels, from_varImp = TRUE, scale_values = TRUE)
+  plot <- get_plot_var_importance(model, predictors, from_varImp = TRUE, scale_values = TRUE)
 
   list(model = model,
        results = results,
        plot = plot)
 }
 
-run_rf <- function(train_df, response_variable, predictors, labels, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
+run_rf <- function(train_df, response_variable, predictors, n_cv_folds, balance_lhs = TRUE, balance_rhs = FALSE, predictors_to_balance = NULL){
   print("training random forest")
+  predictors_to_model <- predictors %>% dplyr::filter(VariableType != "Category") %>% dplyr::pull(feature_name)
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
-  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors), collapse = "+")))
+  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors_to_model), collapse = "+")))
   model <- caret::train(
     parameters, data = train_df, method = "rf",
     trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
@@ -304,7 +308,7 @@ run_rf <- function(train_df, response_variable, predictors, labels, n_cv_folds, 
 
   results <- get_table_cv_results(model, has_bestTune = TRUE)
 
-  plot <- get_plot_var_importance(model, labels, from_varImp = TRUE, scale_values = TRUE)
+  plot <- get_plot_var_importance(model, predictors, from_varImp = TRUE, scale_values = TRUE)
 
   list(model = model,
        results = results,
