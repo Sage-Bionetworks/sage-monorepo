@@ -29,8 +29,7 @@ ici_models_train_server <- function(
         train_method()(
           train_df = train_df(),
           response_variable = "Responder",
-          predictors = training_obj()$predictor$feature_name,
-          labels = training_obj()$predictor,
+          predictors = training_obj()$predictor,
           n_cv_folds = input$cv_number,
           balance_lhs = advanced_options()$balance_lhs,
           balance_rhs = advanced_options()$balance_rhs,
@@ -49,9 +48,6 @@ ici_models_train_server <- function(
       })
 
       ###TEST
-
-
-
       prediction_test <- eventReactive(input$compute_test, {
         iatlas.app::get_testing_results(model_train()$model,
                                         test_df(),
