@@ -408,6 +408,24 @@ def test_features_query_with_passed_min_value_and_class(client, feature_class, m
         assert feature['valueMax'] >= min_value
 
 
+def test_features_query_values(client, feature_name, min_value, values_query):
+    response = client.post(
+        '/api', json={'query': values_query,
+                      'variables': {
+                          'feature': [feature_name],
+                          'minValue': min_value
+                      }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['features']
+    features = page['items']
+
+    assert isinstance(features, list)
+    assert len(features) == 1
+    for feature in features:
+        assert feature['name'] == feature_name
+        assert feature['valueMax'] >= feature['valueMin']
+
+
 def test_feature_samples_query_with_feature(client, feature_name, samples_query):
     response = client.post(
         '/api', json={
