@@ -72,11 +72,15 @@ test_that("Build Multivariate Driver Response Tibble", {
   )
 })
 
-status_tbl1 <- iatlas.api.client::query_mutations_by_sample(
+status_tbl1 <- iatlas.api.client::query_mutation_statuses(
   samples = cohort_obj1$sample_tbl$sample,
   entrez = 1,
 ) %>%
-  dplyr::rename("mutation" = "mutation_name")
+  dplyr::select(
+    "mutation" = "mutation_name",
+    "sample" = "sample_name",
+    "status" = "mutation_status"
+  )
 
 test_that("Combine Multivariate Driver Tibbles", {
   result1 <- combine_md_tbls(
