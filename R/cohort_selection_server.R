@@ -5,7 +5,7 @@ cohort_selection_server <- function(
   shiny::moduleServer(
     id,
     function(input, output, session) {
-      cohort_obj <- iatlas.modules2::cohort_selection_server("cohort_selection2")
+      cohort_obj <- iatlas.modules2::cohort_selection_server("cohort_selection")
       return(cohort_obj)
     }
   )
