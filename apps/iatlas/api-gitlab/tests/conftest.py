@@ -131,6 +131,24 @@ def feature_class2_feature_names(test_db, feature_class2_id):
 
 
 @ pytest.fixture(scope='session')
+def feature3():
+    return 'height'
+
+
+@ pytest.fixture(scope='session')
+def feature3_class():
+    return 'Clinical'
+
+
+@ pytest.fixture(scope='session')
+def feature3_id(test_db, feature3):
+    from api.db_models import Feature
+    (id, ) = test_db.session.query(Feature.id).filter_by(
+        name=feature3).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
 def entrez():
     return 3627
 

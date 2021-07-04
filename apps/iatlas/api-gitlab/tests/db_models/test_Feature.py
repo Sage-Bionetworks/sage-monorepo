@@ -95,3 +95,17 @@ def test_Feature_no_relations(app, display, name):
     assert result.unit in unit_enum.enums or type(result.unit) is NoneType
     assert type(result.class_id) is int or NoneType
     assert type(result.method_tag_id) is int or NoneType
+
+
+def test_Feature_has_clinical_features(app, feature3, feature3_id, feature3_class):
+    query = return_feature_query('feature_class')
+    result = query.filter_by(name=feature3).first()
+
+    assert type(result.class_id) is int
+    assert type(result.id) is int
+    assert type(result.feature_class.name) is str
+    assert type(result.name) is str
+
+    assert result.id == feature3_id
+    assert result.feature_class.name == feature3_class
+    assert result.name == feature3
