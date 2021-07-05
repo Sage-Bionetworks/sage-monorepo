@@ -11,8 +11,6 @@ type CohortNode implements BaseNode {
   dataSet: SimpleDataSet!
   "The tag associated with the cohort."
   tag: SimpleTag
-  "The clinical variable associated with the cohort."
-  clinical: String
   "The samples associated with the cohort."
   samples: [CohortSample!]!
   "The features associated with the cohort."

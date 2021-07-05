@@ -17,8 +17,6 @@ class CohortToSample(Base):
     tag_id = db.Column(
         db.Integer, db.ForeignKey('tags.id'), nullable=True)
 
-    clinical_value = db.Column(db.String, nullable=True)
-
     cohort = db.relationship('Cohort', backref=orm.backref(
         'cohort_sample_assoc', uselist=True, lazy='noload'), uselist=False, lazy='noload')
 

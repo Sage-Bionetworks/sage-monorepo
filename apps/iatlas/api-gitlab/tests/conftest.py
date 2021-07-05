@@ -254,7 +254,6 @@ def cohort_query_builder():
             $cohort: [String!]
             $dataSet: [String!]
             $tag: [String!]
-            $clinical: [String!]
         ) {
         cohorts(
             paging: $paging
@@ -262,7 +261,6 @@ def cohort_query_builder():
             cohort: $cohort
             dataSet: $dataSet
             tag: $tag
-            clinical: $clinical
         )
         """ + query_fields + "}"
     return f
@@ -290,8 +288,8 @@ def tcga_tag_cohort_name():
 
 
 @pytest.fixture(scope='module')
-def pcawg_clinical_cohort_name():
-    return('PCAWG_Gender')
+def pcawg_cohort_name():
+    return('PCAWG')
 
 
 @pytest.fixture(scope='module')
@@ -303,10 +301,10 @@ def tcga_tag_cohort_id(test_db, tcga_tag_cohort_name):
 
 
 @pytest.fixture(scope='module')
-def pcawg_clinical_cohort_id(test_db, pcawg_clinical_cohort_name):
+def pcawg_cohort_id(test_db, pcawg_cohort_name):
     from api.db_models import Cohort
     (id, ) = test_db.session.query(Cohort.id).filter_by(
-        name=pcawg_clinical_cohort_name).one_or_none()
+        name=pcawg_cohort_name).one_or_none()
     return id
 
 
@@ -324,13 +322,13 @@ def tcga_tag_cohort_samples(client, tcga_tag_cohort_name, cohort_query):
 
 
 @pytest.fixture(scope='module')
-def pcawg_clinical_cohort_samples(client, pcawg_clinical_cohort_name, cohort_query):
+def pcawg_cohort_samples(client, pcawg_cohort_name, cohort_query):
     response = client.post('/api', json={'query': cohort_query, 'variables': {
-        'cohort': [pcawg_clinical_cohort_name]
+        'cohort': [pcawg_cohort_name]
     }})
     import logging
     logger = logging.getLogger("feature response")
-    logger.info(pcawg_clinical_cohort_name)
+    logger.info(pcawg_cohort_name)
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
     cohort = page['items'][0]

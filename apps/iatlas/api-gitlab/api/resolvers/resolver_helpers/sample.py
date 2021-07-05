@@ -9,7 +9,7 @@ from .tag import build_tag_graphql_response
 
 simple_sample_request_fields = {'name'}
 
-cohort_sample_request_fields = {'name', 'clinical_value', 'tag'}
+cohort_sample_request_fields = {'name', 'tag'}
 
 sample_request_fields = simple_sample_request_fields.union({'patient'})
 
@@ -36,7 +36,6 @@ def build_sample_graphql_response(sample):
 def build_cohort_sample_graphql_response(sample):
     dict = {
         'name': get_value(sample, 'sample_name'),
-        'clinical_value': get_value(sample, 'sample_clinical_value'),
         'tag': build_tag_graphql_response()(
             sample) if get_value(sample, 'tag_name') else None
     }

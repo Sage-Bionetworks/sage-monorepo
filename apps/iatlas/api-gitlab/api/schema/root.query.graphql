@@ -17,8 +17,6 @@ type Query {
     dataSet: [String!]
     "A list of tag names associated with the cohort to filter by."
     tag: [String!]
-    "A list of cliinical variables associated with the cohort to filter by."
-    clinical: [String!]
   ): Cohort!
   """
   The data structure containing Colocalizations.

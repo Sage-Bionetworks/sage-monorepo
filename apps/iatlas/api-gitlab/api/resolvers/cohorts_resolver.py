@@ -2,7 +2,7 @@ from .resolver_helpers import build_cohort_graphql_response, build_cohort_reques
 from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
 
 
-def resolve_cohorts(_obj, info, distinct=False, paging=None, cohort=None, dataSet=None, tag=None, clinical=None):
+def resolve_cohorts(_obj, info, distinct=False, paging=None, cohort=None, dataSet=None, tag=None):
 
     selection_set = get_selection_set(info=info, child_node='items')
 
@@ -58,19 +58,19 @@ def resolve_cohorts(_obj, info, distinct=False, paging=None, cohort=None, dataSe
     paging = paging if paging else Paging.DEFAULT
 
     samples = get_cohort_samples(
-        requested, sample_requested, sample_tag_requested, cohort=cohort, data_set=dataSet, tag=tag, clinical=clinical)
+        requested, sample_requested, sample_tag_requested, cohort=cohort, data_set=dataSet, tag=tag)
 
     features = get_cohort_features(
-        requested, feature_requested, cohort=cohort, data_set=dataSet, tag=tag, clinical=clinical)
+        requested, feature_requested, cohort=cohort, data_set=dataSet, tag=tag)
 
     genes = get_cohort_genes(
-        requested, gene_requested, cohort=cohort, data_set=dataSet, tag=tag, clinical=clinical)
+        requested, gene_requested, cohort=cohort, data_set=dataSet, tag=tag)
 
     mutations = get_cohort_mutations(
-        requested, mutation_requested, mutation_gene_requested, cohort=cohort, data_set=dataSet, tag=tag, clinical=clinical)
+        requested, mutation_requested, mutation_gene_requested, cohort=cohort, data_set=dataSet, tag=tag)
 
     query, count_query = build_cohort_request(
-        requested, data_set_requested, tag_requested, distinct=distinct, paging=paging, cohort=cohort, data_set=dataSet, tag=tag, clinical=clinical)
+        requested, data_set_requested, tag_requested, distinct=distinct, paging=paging, cohort=cohort, data_set=dataSet, tag=tag)
 
     pagination_requested = get_requested(info, paging_fields, 'paging')
     res = paginate(query, count_query, paging, distinct,

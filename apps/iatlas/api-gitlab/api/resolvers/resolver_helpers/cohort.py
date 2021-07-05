@@ -14,7 +14,7 @@ from .tag import build_tag_graphql_response
 from itertools import groupby
 
 cohort_request_fields = {'id', 'name',
-                         'dataSet', 'tag', 'clinical', 'samples', 'features', 'genes', 'mutations'}
+                         'dataSet', 'tag', 'samples', 'features', 'genes', 'mutations'}
 
 
 def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={}, mutation_dict={}):
@@ -31,7 +31,6 @@ def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={},
             dict = {
                 'id': cohort_id,
                 'name': get_value(cohort, 'cohort_name'),
-                'clinical': get_value(cohort, 'cohort_clinical'),
                 'dataSet': build_data_set_graphql_response(cohort),
                 'tag': build_tag_graphql_response()(
                     cohort) if get_value(cohort, 'tag_name') else None,
@@ -45,7 +44,7 @@ def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={},
     return f
 
 
-def build_cohort_request(requested, data_set_requested, tag_requested, cohort=None, data_set=None, tag=None, clinical=None, distinct=False, paging=None):
+def build_cohort_request(requested, data_set_requested, tag_requested, cohort=None, data_set=None, tag=None, distinct=False, paging=None):
     """
     Builds a SQL request.
 
@@ -58,7 +57,6 @@ def build_cohort_request(requested, data_set_requested, tag_requested, cohort=No
         `cohort` - a list of strings, cohorts
         `data_set` - a list of strings, data set names
         `tag` - a list of strings, tag names
-        `clinical` - a list of strings, clincial variable names
     """
     sess = db.session
 
@@ -69,7 +67,6 @@ def build_cohort_request(requested, data_set_requested, tag_requested, cohort=No
     core_field_mapping = {
         'id': cohort_1.id.label('cohort_id'),
         'name': cohort_1.name.label('cohort_name'),
-        'clinical': cohort_1.clinical.label('cohort_clinical')
     }
 
     data_set_core_field_mapping = {
@@ -97,9 +94,6 @@ def build_cohort_request(requested, data_set_requested, tag_requested, cohort=No
     if cohort:
         query = query.filter(cohort_1.name.in_(cohort))
 
-    if clinical:
-        query = query.filter(cohort_1.clinical.in_(clinical))
-
     if 'dataSet' in requested or data_set:
         is_outer = not bool(data_set)
         data_set_join_condition = build_join_condition(
@@ -117,7 +111,7 @@ def build_cohort_request(requested, data_set_requested, tag_requested, cohort=No
     return get_pagination_queries(query, paging, distinct, cursor_field=cohort_1.id)
 
 
-def get_cohort_samples(requested, sample_requested, sample_tag_requested, cohort=None, data_set=None, tag=None, clinical=None):
+def get_cohort_samples(requested, sample_requested, sample_tag_requested, cohort=None, data_set=None, tag=None):
     if 'samples' not in requested:
         return([])
     else:
@@ -136,7 +130,6 @@ def get_cohort_samples(requested, sample_requested, sample_tag_requested, cohort
 
         sample_core_field_mapping = {
             'name': sample_1.name.label('sample_name'),
-            'clinical_value': cohort_to_sample_1.clinical_value.label('sample_clinical_value')
         }
 
         sample_tag_core_field_mapping = {
@@ -157,9 +150,6 @@ def get_cohort_samples(requested, sample_requested, sample_tag_requested, cohort
 
         if cohort:
             query = query.filter(cohort_1.name.in_(cohort))
-
-        if clinical:
-            query = query.filter(cohort_1.clinical.in_(clinical))
 
         if data_set:
             data_set_join_condition = build_join_condition(
@@ -198,7 +188,7 @@ def get_cohort_samples(requested, sample_requested, sample_tag_requested, cohort
         return(sample_dict)
 
 
-def get_cohort_features(requested, feature_requested, cohort=None, data_set=None, tag=None, clinical=None):
+def get_cohort_features(requested, feature_requested, cohort=None, data_set=None, tag=None):
     if 'features' not in requested:
         return([])
     else:
@@ -213,7 +203,6 @@ def get_cohort_features(requested, feature_requested, cohort=None, data_set=None
         core_field_mapping = {
             'id': cohort_1.id.label('cohort_id'),
             'name': cohort_1.name.label('cohort_name'),
-            'clinical': cohort_1.clinical.label('cohort_clinical')
         }
 
         feature_core_field_mapping = {
@@ -230,9 +219,6 @@ def get_cohort_features(requested, feature_requested, cohort=None, data_set=None
 
         if cohort:
             query = query.filter(cohort_1.name.in_(cohort))
-
-        if clinical:
-            query = query.filter(cohort_1.clinical.in_(clinical))
 
         if data_set:
             data_set_join_condition = build_join_condition(
@@ -269,7 +255,7 @@ def get_cohort_features(requested, feature_requested, cohort=None, data_set=None
         return(feature_dict)
 
 
-def get_cohort_genes(requested, gene_requested, cohort=None, data_set=None, tag=None, clinical=None):
+def get_cohort_genes(requested, gene_requested, cohort=None, data_set=None, tag=None):
     if 'genes' not in requested:
         return([])
     else:
@@ -284,7 +270,6 @@ def get_cohort_genes(requested, gene_requested, cohort=None, data_set=None, tag=
         core_field_mapping = {
             'id': cohort_1.id.label('cohort_id'),
             'name': cohort_1.name.label('cohort_name'),
-            'clinical': cohort_1.clinical.label('cohort_clinical')
         }
 
         gene_core_field_mapping = {
@@ -301,9 +286,6 @@ def get_cohort_genes(requested, gene_requested, cohort=None, data_set=None, tag=
 
         if cohort:
             query = query.filter(cohort_1.name.in_(cohort))
-
-        if clinical:
-            query = query.filter(cohort_1.clinical.in_(clinical))
 
         if data_set:
             data_set_join_condition = build_join_condition(
@@ -336,7 +318,7 @@ def get_cohort_genes(requested, gene_requested, cohort=None, data_set=None, tag=
         return(gene_dict)
 
 
-def get_cohort_mutations(requested, mutation_requested, mutation_gene_requested, cohort=None, data_set=None, tag=None, clinical=None):
+def get_cohort_mutations(requested, mutation_requested, mutation_gene_requested, cohort=None, data_set=None, tag=None):
 
     if 'mutations' not in requested:
         return([])
@@ -374,9 +356,6 @@ def get_cohort_mutations(requested, mutation_requested, mutation_gene_requested,
 
         if cohort:
             query = query.filter(cohort_1.name.in_(cohort))
-
-        if clinical:
-            query = query.filter(cohort_1.clinical.in_(clinical))
 
         if data_set:
             data_set_join_condition = build_join_condition(

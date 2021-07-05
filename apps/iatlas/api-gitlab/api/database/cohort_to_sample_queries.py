@@ -6,7 +6,7 @@ from .database_helpers import build_general_query
 accepted_cohort_to_sample_option_args = ['cohort', 'sample']
 
 accepted_cohort_to_sample_query_args = [
-    'cohort_id', 'sample_id' 'tag_id', 'clinical_value']
+    'cohort_id', 'sample_id' 'tag_id']
 
 
 def return_cohort_to_sample_query(*args):

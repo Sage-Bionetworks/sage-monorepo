@@ -6,7 +6,7 @@ from api.db_models import Cohort
 cohort_related_fields = ['data_set', 'tag',
                          'samples', 'features', 'mutations', 'genes']
 
-cohort_core_fields = ['id', 'name', 'dataset_id', 'tag_id', 'clinical']
+cohort_core_fields = ['id', 'name', 'dataset_id', 'tag_id']
 
 
 def return_cohort_query(*args):
