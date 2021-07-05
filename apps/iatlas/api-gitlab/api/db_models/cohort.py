@@ -7,7 +7,6 @@ class Cohort(Base):
     __tablename__ = 'cohorts'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    clinical = db.Column(db.String, nullable=True)
 
     dataset_id = db.Column(db.Integer, db.ForeignKey(
         'datasets.id'), nullable=False)

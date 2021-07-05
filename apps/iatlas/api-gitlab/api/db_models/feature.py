@@ -27,7 +27,7 @@ class Feature(Base):
         'features', uselist=True, lazy='noload'), uselist=False, lazy='noload')
 
     samples = db.relationship(
-        "Sample", secondary='features_to_samples', uselist=True, lazy='noload')
+        "Sample", secondary='features_to_samples2', uselist=True, lazy='noload')
 
     def __repr__(self):
         return '<Feature %r>' % self.name

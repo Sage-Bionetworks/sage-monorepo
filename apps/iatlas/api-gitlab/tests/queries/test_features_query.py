@@ -498,13 +498,13 @@ def test_feature_samples_query_with_feature_and_cohort(client, feature_name, sam
         assert sample['name'] in tcga_tag_cohort_samples
 
 
-def test_pcawg_feature_samples_query_with_feature_and_cohort(client, feature_name, samples_query, pcawg_clinical_cohort_name, pcawg_clinical_cohort_samples):
+def test_pcawg_feature_samples_query_with_feature_and_cohort(client, feature_name, samples_query, pcawg_cohort_name, pcawg_cohort_samples):
     response = client.post(
         '/api', json={
             'query': samples_query,
             'variables': {
                 'feature': [feature_name],
-                'cohort': [pcawg_clinical_cohort_name]
+                'cohort': [pcawg_cohort_name]
             }
         })
     json_data = json.loads(response.data)
@@ -521,7 +521,7 @@ def test_pcawg_feature_samples_query_with_feature_and_cohort(client, feature_nam
     for sample in samples:
         assert type(sample['name']) is str
         assert type(sample['value']) is float
-        assert sample['name'] in pcawg_clinical_cohort_samples
+        assert sample['name'] in pcawg_cohort_samples
 
 
 def test_feature_samples_query_with_feature_and_sample(client, feature_name, samples_query, sample):
@@ -594,13 +594,13 @@ def test_feature_samples_query_with_class_and_cohort(client, samples_query, feat
         assert sample['name'] in tcga_tag_cohort_samples
 
 
-def test_feature_samples_query_with_class_and_pcawg_cohort(client, samples_query, feature_class2, pcawg_clinical_cohort_name):
+def test_feature_samples_query_with_class_and_pcawg_cohort(client, samples_query, feature_class2, pcawg_cohort_name):
     response = client.post(
         '/api', json={
             'query': samples_query,
             'variables': {
                 'featureClass': [feature_class2],
-                'cohort': [pcawg_clinical_cohort_name]
+                'cohort': [pcawg_cohort_name]
             }
         })
     json_data = json.loads(response.data)

@@ -35,14 +35,14 @@ def test_CohortToFeature_with_tag_cohort(tcga_tag_cohort_name, tcga_tag_cohort_i
         string_representation_list) + ']'
 
 
-def test_CohortToFeature_with_clinical_cohort(pcawg_clinical_cohort_name, pcawg_clinical_cohort_id):
+def test_CohortToFeature_with_clinical_cohort(pcawg_cohort_name, pcawg_cohort_id):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['cohort', 'feature']
 
     query = return_cohort_to_feature_query(*relationships_to_join)
     results = query.filter_by(
-        cohort_id=pcawg_clinical_cohort_id).limit(3).all()
+        cohort_id=pcawg_cohort_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
@@ -50,8 +50,8 @@ def test_CohortToFeature_with_clinical_cohort(pcawg_clinical_cohort_name, pcawg_
         string_representation = '<CohortToFeature %r>' % id
         string_representation_list.append(string_representation)
         assert type(result.feature_id) is int
-        assert result.cohort_id == pcawg_clinical_cohort_id
-        assert result.cohort.name == pcawg_clinical_cohort_name
+        assert result.cohort_id == pcawg_cohort_id
+        assert result.cohort.name == pcawg_cohort_name
         assert type(result.feature.name) is str
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(

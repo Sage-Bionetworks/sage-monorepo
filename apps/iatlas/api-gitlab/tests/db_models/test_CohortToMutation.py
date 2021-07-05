@@ -36,14 +36,14 @@ def test_CohortToMutation_with_tag_cohort(tcga_tag_cohort_name, tcga_tag_cohort_
         string_representation_list) + ']'
 
 
-def test_CohortToMutation_with_clinical_cohort(pcawg_clinical_cohort_name, pcawg_clinical_cohort_id):
+def test_CohortToMutation_with_clinical_cohort(pcawg_cohort_name, pcawg_cohort_id):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['cohort', 'mutation']
 
     query = return_cohort_to_mutation_query(*relationships_to_join)
     results = query.filter_by(
-        cohort_id=pcawg_clinical_cohort_id).limit(3).all()
+        cohort_id=pcawg_cohort_id).limit(3).all()
 
     assert isinstance(results, list)
     for result in results:
@@ -51,8 +51,8 @@ def test_CohortToMutation_with_clinical_cohort(pcawg_clinical_cohort_name, pcawg
         string_representation = '<CohortToMutation %r>' % id
         string_representation_list.append(string_representation)
         assert type(result.mutation_id) is int
-        assert result.cohort_id == pcawg_clinical_cohort_id
-        assert result.cohort.name == pcawg_clinical_cohort_name
+        assert result.cohort_id == pcawg_cohort_id
+        assert result.cohort.name == pcawg_cohort_name
         assert type(result.mutation.mutation_code_id) is int
         assert type(result.mutation.mutation_type_id) is int
         assert repr(result) == string_representation

@@ -61,3 +61,17 @@ def test_FeatureToSample_no_relations(app, fs_feature_id):
         assert type(result.id) is int
         assert type(result.sample_id) is int
         assert isinstance(result.value, Decimal)
+
+
+def test_FeatureToSample_has_clinical_features(app, feature3, feature3_id):
+    relationships_to_join = ['features', 'samples']
+    query = return_feature_to_sample_query(*relationships_to_join)
+    results = query.filter_by(feature_id=feature3_id).limit(3).all()
+
+    assert isinstance(results, list)
+    for result in results:
+        assert isinstance(result.features, list)
+        assert len(result.features) > 0
+        for feature in result.features[0:2]:
+            assert feature.id == feature3_id
+            assert feature.name == feature3
