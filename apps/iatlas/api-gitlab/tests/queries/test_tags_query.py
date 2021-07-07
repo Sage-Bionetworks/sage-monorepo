@@ -101,6 +101,34 @@ def full_query(common_query_builder):
     return(query)
 
 
+@pytest.fixture(scope='module')
+def full_query2(common_query_builder):
+    query = common_query_builder(
+        """
+        {
+            items {
+                id
+                color
+                longDisplay
+                name
+                shortDisplay
+                characteristics
+                related {
+                    name
+                    characteristics
+                    color
+                    longDisplay
+                    shortDisplay
+                }
+                sampleCount
+                publications { name }
+                }
+        }
+        """
+    )
+    return(query)
+
+
 def test_tags_cursor_pagination_first(client, paging_query):
     num = 5
     response = client.post(
@@ -223,6 +251,42 @@ def test_tags_query_with_data_set_related(client, full_query, data_set, related)
         assert len(samples) > 0
         for current_sample in samples[0:2]:
             assert type(current_sample) is str
+
+
+def test_tags_query_with_data_set_related2(client, full_query2, data_set, related2):
+    response = client.post(
+        '/api',
+        json={
+            'query': full_query2,
+            'variables': {
+                'dataSet': [data_set],
+                'related': [related2]
+            }
+        }
+    )
+    json_data = json.loads(response.data)
+    page = json_data['data']['tags']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) == 2
+
+    for result in results:
+        related = result['related']
+        assert type(result['characteristics']) is str or NoneType
+        assert type(result['color']) is str or NoneType
+        assert type(result['longDisplay']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
+        assert type(result['name']) is str
+        assert type(result['sampleCount']) is int
+        assert isinstance(related, list)
+        assert len(related) > 0
+        for current_related in related[0:2]:
+            assert current_related["name"] in [related2, 'group']
+            assert type(current_related["characteristics"]) is str or NoneType
+            assert type(current_related["color"]) is str or NoneType
+            assert type(current_related["longDisplay"]) is str or NoneType
+            assert type(current_related["shortDisplay"]) is str or NoneType
 
 
 def test_tags_query_no_data_set_and_related(client, common_query, data_set, related):

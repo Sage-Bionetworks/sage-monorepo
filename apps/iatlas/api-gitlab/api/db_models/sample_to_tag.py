@@ -4,7 +4,7 @@ from . import Base
 
 
 class SampleToTag(Base):
-    __tablename__ = 'samples_to_tags'
+    __tablename__ = 'samples_to_tags2'
 
     sample_id = db.Column(
         db.Integer, db.ForeignKey('samples.id'), primary_key=True)
