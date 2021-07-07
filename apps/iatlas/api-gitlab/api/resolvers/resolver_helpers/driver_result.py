@@ -6,8 +6,8 @@ from .general_resolvers import build_join_condition, get_selected, get_value
 from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
-from .paging_utils import get_cursor, get_pagination_queries, Paging
-from .tag import build_tag_graphql_response
+from .paging_utils import get_pagination_queries, Paging
+from .tag import build_simple_tag_graphql_response
 
 driver_result_request_fields = {'dataSet',
                                 'feature',
@@ -24,7 +24,7 @@ driver_result_request_fields = {'dataSet',
 
 
 def build_dr_graphql_response(driver_result):
-    return {
+    result = {
         'id': get_value(driver_result, 'id'),
         'pValue': get_value(driver_result, 'p_value'),
         'foldChange': get_value(driver_result, 'fold_change'),
@@ -37,8 +37,9 @@ def build_dr_graphql_response(driver_result):
         'gene': build_gene_graphql_response()(driver_result),
         'mutationCode': get_value(driver_result, 'code'),
         'mutationId': get_value(driver_result, 'mutation_id'),
-        'tag': build_tag_graphql_response()(driver_result)
+        'tag': build_simple_tag_graphql_response(driver_result)
     }
+    return(result)
 
 
 def build_driver_result_request(

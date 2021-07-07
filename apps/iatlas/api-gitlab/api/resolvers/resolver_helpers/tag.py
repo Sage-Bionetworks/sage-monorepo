@@ -5,7 +5,7 @@ from api import db
 from api.db_models import Dataset, DatasetToTag, DatasetToSample, Publication, Sample, SampleToTag, Tag, TagToPublication, TagToTag
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .publication import build_publication_graphql_response
-from .paging_utils import get_pagination_queries, fetch_page
+from .paging_utils import get_pagination_queries
 
 related_request_fields = {'dataSet',
                           'display',
@@ -29,7 +29,7 @@ def build_related_graphql_response(related_set=set()):
     return {
         'display': get_value(related_tag[0], 'data_set_display'),
         'dataSet': data_set,
-        'related': list(map(build_tag_graphql_response(), related_tag))
+        'related': list(map(build_simple_tag_graphql_response, related_tag))
     }
 
 
@@ -126,6 +126,18 @@ def build_tag_graphql_response(requested, publications_requested=set(), related_
         }
         return(result)
     return(f)
+
+
+def build_simple_tag_graphql_response(tag):
+    result = {
+        'id': get_value(tag, 'tag_id') or get_value(tag, 'id'),
+        'name': get_value(tag, 'tag_name') or get_value(tag, 'name'),
+        'characteristics': get_value(tag, 'tag_characteristics') or get_value(tag, 'characteristics'),
+        'color': get_value(tag, 'tag_color') or get_value(tag, 'color'),
+        'longDisplay': get_value(tag, 'tag_long_display') or get_value(tag, 'long_display'),
+        'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display')
+    }
+    return(result)
 
 
 def build_tag_request(
