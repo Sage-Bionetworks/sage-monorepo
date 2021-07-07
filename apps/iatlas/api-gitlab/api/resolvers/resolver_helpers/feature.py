@@ -12,12 +12,14 @@ from decimal import Decimal
 
 feature_class_request_fields = {'name'}
 
-simple_feature_request_fields = {'display',
-                                 'name',
-                                 'order',
-                                 'unit',
-                                 'germlineModule',
-                                 'germlineCategory'}
+simple_feature_request_fields = {
+    'display',
+    'name',
+    'order',
+    'unit',
+    'germlineModule',
+    'germlineCategory'
+}
 
 simple_feature_request_fields2 = {
     'display',
@@ -26,14 +28,16 @@ simple_feature_request_fields2 = {
     'class'
 }
 
-feature_request_fields = simple_feature_request_fields.union({'class',
-                                                              'methodTag',
-                                                              'samples',
-                                                              'valueMax',
-                                                              'valueMin'})
+feature_request_fields = simple_feature_request_fields.union({
+    'class',
+    'methodTag',
+    'samples',
+    'valueMax',
+    'valueMin'
+})
 
 
-def build_feature_graphql_response(requested=[], sample_requested=[], max_value=None, min_value=None, cohort=None, sample=None, max_min_dict=dict()):
+def build_feature_graphql_response(requested=[], sample_requested=[], max_value=None, min_value=None, cohort=None, sample=None):
 
     def f(feature):
         if not feature:
@@ -159,6 +163,9 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
             append_to_order(feature_1.name)
         if not order:
             append_to_order(feature_1.id)
+    import logging
+    logger = logging.getLogger("feature response")
+    logger.info(query)
 
     return get_pagination_queries(query, paging, distinct, cursor_field=feature_1.id)
 
