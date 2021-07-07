@@ -25,5 +25,5 @@ from .sample import build_sample_graphql_response, feature_related_sample_reques
 from .slide import build_slide_graphql_response, request_slides, slide_request_fields, simple_slide_request_fields
 from .snp import snp_request_fields, build_snp_graphql_response, build_snp_request
 from .super_category import request_super_categories
-from .tag import build_related_graphql_response, build_tag_graphql_response, related_request_fields, request_related, request_tags, return_tag_derived_fields, simple_tag_request_fields, tag_request_fields
+from .tag import build_related_graphql_response, build_tag_graphql_response, build_simple_tag_graphql_response, related_request_fields, request_related, request_tags, return_tag_derived_fields, simple_tag_request_fields, tag_request_fields, build_tag_request
 from .therapy_type import request_therapy_types

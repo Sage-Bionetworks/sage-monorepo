@@ -28,7 +28,7 @@ class Sample(Base):
         uselist=False, lazy='noload')
 
     tags = db.relationship(
-        "Tag", secondary='samples_to_tags', uselist=True, lazy='noload')
+        "Tag", secondary='samples_to_tags2', uselist=True, lazy='noload')
 
     def __repr__(self):
         return '<Sample %r>' % self.name

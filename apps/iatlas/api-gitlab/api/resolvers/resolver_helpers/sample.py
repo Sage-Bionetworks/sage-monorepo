@@ -5,7 +5,7 @@ from api.db_models import (Dataset, DatasetToSample, DatasetToTag, Feature, Feat
                            Patient, Sample, SampleToMutation, SampleToTag, Tag, TagToTag)
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .patient import build_patient_graphql_response
-from .tag import build_tag_graphql_response
+from .tag import build_simple_tag_graphql_response
 
 simple_sample_request_fields = {'name'}
 
@@ -36,7 +36,7 @@ def build_sample_graphql_response(sample):
 def build_cohort_sample_graphql_response(sample):
     dict = {
         'name': get_value(sample, 'sample_name'),
-        'tag': build_tag_graphql_response()(
+        'tag': build_simple_tag_graphql_response(
             sample) if get_value(sample, 'tag_name') else None
     }
     return dict

@@ -2,6 +2,7 @@ import json
 import pytest
 from api.database import return_tag_query
 from tests import NoneType
+from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash
 
 
 @pytest.fixture(scope='module')
@@ -16,45 +17,216 @@ def common_query_builder():
             $dataSet: [String!]
             $related: [String!]
             $tag: [String!]
-            $feature: [String!]
-            $featureClass: [String!]
             $sample: [String!]
+            $paging: PagingInput
+            $distinct: Boolean
         ) {
             tags(
                 dataSet: $dataSet
                 related: $related
                 tag: $tag
-                feature: $feature
-                featureClass: $featureClass
                 sample: $sample
+                paging: $paging
+                distinct: $distinct
         )""" + query_fields + "}"
     return f
 
 
-def test_tags_query_with_data_set_related_and_feature(client, common_query_builder, data_set, related, chosen_feature):
+@pytest.fixture(scope='module')
+def paging_query(common_query_builder):
     query = common_query_builder("""{
-                                    characteristics
-                                    color
-                                    longDisplay
-                                    name
-                                    shortDisplay
-                                    related {
-                                        name
-                                        characteristics
-                                        color
-                                        longDisplay
-                                        shortDisplay
-                                    }
-                                    sampleCount
-                                    samples
-                                }""")
+            items {
+                id
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+        }""")
+    return(query)
+
+
+@pytest.fixture(scope='module')
+def common_query(common_query_builder):
+    query = common_query_builder(
+        """
+        {
+            items {
+                id
+                characteristics
+                color
+                longDisplay
+                name
+                shortDisplay
+            }
+        }
+        """
+    )
+    return(query)
+
+
+@pytest.fixture(scope='module')
+def full_query(common_query_builder):
+    query = common_query_builder(
+        """
+        {
+            items {
+                id
+                color
+                longDisplay
+                name
+                shortDisplay
+                characteristics
+                related {
+                    name
+                    characteristics
+                    color
+                    longDisplay
+                    shortDisplay
+                }
+                sampleCount
+                samples
+                publications { name }
+                }
+        }
+        """
+    )
+    return(query)
+
+
+@pytest.fixture(scope='module')
+def full_query2(common_query_builder):
+    query = common_query_builder(
+        """
+        {
+            items {
+                id
+                color
+                longDisplay
+                name
+                shortDisplay
+                characteristics
+                related {
+                    name
+                    characteristics
+                    color
+                    longDisplay
+                    shortDisplay
+                }
+                sampleCount
+                publications { name }
+                }
+        }
+        """
+    )
+    return(query)
+
+
+def test_tags_cursor_pagination_first(client, paging_query):
+    num = 5
     response = client.post(
-        '/api', json={'query': query,
-                      'variables': {'dataSet': [data_set],
-                                    'related': [related],
-                                    'feature': [chosen_feature]}})
+        '/api', json={'query': paging_query, 'variables': {
+            'paging': {'first': num}
+        }})
     json_data = json.loads(response.data)
-    results = json_data['data']['tags']
+    page = json_data['data']['tags']
+    items = page['items']
+    paging = page['paging']
+    start = from_cursor_hash(paging['startCursor'])
+    end = from_cursor_hash(paging['endCursor'])
+    assert len(items) == num
+    assert paging['hasNextPage'] == True
+    assert paging['hasPreviousPage'] == False
+    assert start == items[0]['id']
+    assert end == items[num - 1]['id']
+    assert int(end) - int(start) > 0
+
+
+def test_tags_cursor_pagination_last(client, paging_query):
+    num = 5
+    response = client.post(
+        '/api', json={'query': paging_query, 'variables': {
+            'paging': {
+                'last': num,
+                'before': to_cursor_hash(1000)
+            }
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['tags']
+    items = page['items']
+    paging = page['paging']
+    start = from_cursor_hash(paging['startCursor'])
+    end = from_cursor_hash(paging['endCursor'])
+
+    assert len(items) == num
+    assert paging['hasNextPage'] == False
+    assert paging['hasPreviousPage'] == True
+    assert start == items[0]['id']
+    assert end == items[num - 1]['id']
+
+
+def test_tags_cursor_distinct_pagination(client, paging_query):
+    page_num = 2
+    num = 2
+    response = client.post(
+        '/api', json={'query': paging_query, 'variables': {
+            'paging': {
+                'page': page_num,
+                'first': num,
+            },
+            'distinct': True,
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['tags']
+    items = page['items']
+
+    assert len(items) == num
+    assert page_num == page['paging']['page']
+
+
+def test_tags_query_no_args(client, common_query):
+    num = 5
+    response = client.post(
+        '/api',
+        json={
+            'query': common_query,
+            'variables': {'paging': {'first': num}}
+        }
+    )
+    json_data = json.loads(response.data)
+    page = json_data['data']['tags']
+    results = page['items']
+    assert isinstance(results, list)
+    assert len(results) == num
+    for result in results:
+        assert type(result['characteristics']) is str or NoneType
+        assert type(result['color']) is str or NoneType
+        assert type(result['longDisplay']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
+        assert type(result['name']) is str
+
+
+def test_tags_query_with_data_set_related(client, full_query, data_set, related):
+    response = client.post(
+        '/api',
+        json={
+            'query': full_query,
+            'variables': {
+                'dataSet': [data_set],
+                'related': [related]
+            }
+        }
+    )
+    json_data = json.loads(response.data)
+    page = json_data['data']['tags']
+    results = page['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -81,19 +253,56 @@ def test_tags_query_with_data_set_related_and_feature(client, common_query_build
             assert type(current_sample) is str
 
 
-def test_tags_query_no_data_set_and_related(client, common_query_builder, data_set, related):
-    query = common_query_builder("""{
-                                    characteristics
-                                    color
-                                    shortDisplay
-                                    name
-                                }""")
+def test_tags_query_with_data_set_related2(client, full_query2, data_set, related2):
     response = client.post(
-        '/api', json={'query': query,
-                      'variables': {'dataSet': [data_set],
-                                    'related': [related]}})
+        '/api',
+        json={
+            'query': full_query2,
+            'variables': {
+                'dataSet': [data_set],
+                'related': [related2]
+            }
+        }
+    )
     json_data = json.loads(response.data)
-    results = json_data['data']['tags']
+    page = json_data['data']['tags']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) == 2
+
+    for result in results:
+        related = result['related']
+        assert type(result['characteristics']) is str or NoneType
+        assert type(result['color']) is str or NoneType
+        assert type(result['longDisplay']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
+        assert type(result['name']) is str
+        assert type(result['sampleCount']) is int
+        assert isinstance(related, list)
+        assert len(related) > 0
+        for current_related in related[0:2]:
+            assert current_related["name"] in [related2, 'group']
+            assert type(current_related["characteristics"]) is str or NoneType
+            assert type(current_related["color"]) is str or NoneType
+            assert type(current_related["longDisplay"]) is str or NoneType
+            assert type(current_related["shortDisplay"]) is str or NoneType
+
+
+def test_tags_query_no_data_set_and_related(client, common_query, data_set, related):
+    response = client.post(
+        '/api',
+        json={
+            'query': common_query,
+            'variables': {
+                'dataSet': [data_set],
+                'related': [related]
+            }
+        }
+    )
+    json_data = json.loads(response.data)
+    page = json_data['data']['tags']
+    results = page['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -102,46 +311,23 @@ def test_tags_query_no_data_set_and_related(client, common_query_builder, data_s
         assert type(result['color']) is str or NoneType
         assert type(result['shortDisplay']) is str or NoneType
         assert type(result['name']) is str
-        assert not 'sampleCount' in result
-        assert not 'samples' in result
 
 
-def test_tags_query_with_data_set_related_and_feature_class(client, common_query_builder, data_set, related, feature_class):
-    query = common_query_builder("""{
-                                    characteristics
-                                    color
-                                    shortDisplay
-                                    name
-                                }""")
+def test_tags_query_with_data_set_related_and_tag(client, full_query, data_set, related, tag):
     response = client.post(
-        '/api', json={'query': query,
-                      'variables': {'dataSet': [data_set],
-                                    'related': [related],
-                                    'featureClass': [feature_class]}})
+        '/api',
+        json={
+            'query': full_query,
+            'variables': {
+                'dataSet': [data_set],
+                'related': [related],
+                'tag': [tag]
+            }
+        }
+    )
     json_data = json.loads(response.data)
-    results = json_data['data']['tags']
-
-    assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results:
-        assert type(result['characteristics']) is str or NoneType
-        assert type(result['color']) is str or NoneType
-        assert type(result['shortDisplay']) is str or NoneType
-        assert type(result['name']) is str
-
-
-def test_tags_query_with_data_set_related_and_tag(client, common_query_builder, data_set, related, tag):
-    query = common_query_builder("""{
-                                    name
-                                    sampleCount
-                                }""")
-    response = client.post(
-        '/api', json={'query': query,
-                      'variables': {'dataSet': [data_set],
-                                    'related': [related],
-                                    'tag': [tag]}})
-    json_data = json.loads(response.data)
-    results = json_data['data']['tags']
+    page = json_data['data']['tags']
+    results = page['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -150,20 +336,22 @@ def test_tags_query_with_data_set_related_and_tag(client, common_query_builder, 
         assert type(result['sampleCount']) is int
 
 
-def test_tags_query_with_data_set_related_tag_and_sample(client, common_query_builder, data_set, related, tag, sample):
-    query = common_query_builder("""{
-                                    name
-                                    sampleCount
-                                    samples
-                                }""")
+def test_tags_query_with_data_set_related_tag_and_sample(client, full_query, data_set, related, tag, sample):
     response = client.post(
-        '/api', json={'query': query,
-                      'variables': {'dataSet': [data_set],
-                                    'related': [related],
-                                    'tag': [tag],
-                                    'sample': [sample]}})
+        '/api',
+        json={
+            'query': full_query,
+            'variables': {
+                'dataSet': [data_set],
+                'related': [related],
+                'tag': [tag],
+                'sample': [sample]
+            }
+        }
+    )
     json_data = json.loads(response.data)
-    results = json_data['data']['tags']
+    page = json_data['data']['tags']
+    results = page['items']
 
     assert isinstance(results, list)
     assert len(results) == 1
@@ -177,15 +365,17 @@ def test_tags_query_with_data_set_related_tag_and_sample(client, common_query_bu
             assert current_sample == sample
 
 
-def test_tags_query_returns_publications(client, common_query_builder, data_set, related, tag_with_publication):
-    query = common_query_builder("""{
-                                    name
-                                    publications { name }
-                                }""")
+def test_tags_query_returns_publications(client, full_query, tag_with_publication):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'tag': [tag_with_publication]}})
+        '/api',
+        json={
+            'query': full_query,
+            'variables': {'tag': [tag_with_publication]}
+        }
+    )
     json_data = json.loads(response.data)
-    results = json_data['data']['tags']
+    page = json_data['data']['tags']
+    results = page['items']
 
     assert isinstance(results, list)
     assert len(results) == 1
@@ -196,22 +386,3 @@ def test_tags_query_returns_publications(client, common_query_builder, data_set,
         assert len(publications) > 0
         for publication in publications[0:5]:
             assert type(publication['name']) is str
-
-
-def test_tags_query_with_no_args(client, common_query_builder):
-    query = common_query_builder("""{
-                                    name
-                                    sampleCount
-                                }""")
-    response = client.post('/api', json={'query': query})
-    json_data = json.loads(response.data)
-    results = json_data['data']['tags']
-
-    # Get the total number of tags in the database.
-    tag_count = return_tag_query('id').count()
-
-    assert isinstance(results, list)
-    assert len(results) == tag_count
-    for result in results:
-        assert type(result['name']) is str
-        assert type(result['sampleCount']) is int

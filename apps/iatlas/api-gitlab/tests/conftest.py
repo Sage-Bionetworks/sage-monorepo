@@ -91,6 +91,40 @@ def tag_id(test_db, tag):
 
 
 @ pytest.fixture(scope='session')
+def tag2():
+    return 'male'
+
+
+@ pytest.fixture(scope='session')
+def tag_id2(test_db, tag2):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=tag2).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
+def related2():
+    return 'gender'
+
+
+@ pytest.fixture(scope='session')
+def related_id2(test_db, related2):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=related2).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
+def tag_i2d(test_db, tag2):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=tag2).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
 def chosen_feature():
     return 'Det_Ratio'
 

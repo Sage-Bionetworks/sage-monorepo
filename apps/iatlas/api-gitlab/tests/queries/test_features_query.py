@@ -54,6 +54,7 @@ def common_query(common_query_builder):
         """
         {
             items {
+                id
                 class
                 display
                 name
@@ -283,6 +284,31 @@ def test_features_query_with_feature(client, chosen_feature, common_query):
     assert type(feature['germlineCategory']) is str or NoneType
 
 
+def test_features_query_with_feature2(client, feature3, feature3_class, common_query):
+    response = client.post(
+        '/api', json={
+            'query': common_query,
+            'variables': {'feature': [feature3]}
+        }
+    )
+    json_data = json.loads(response.data)
+    page = json_data['data']['features']
+    features = page['items']
+
+    assert isinstance(features, list)
+    assert len(features) == 1
+    feature = features[0]
+    assert feature['name'] == feature3
+    assert type(feature['display']) is str
+    assert feature['class'] == feature3_class
+    assert type(feature['methodTag']) is str or NoneType
+    assert type(feature['order']) is int or NoneType
+    assert feature['unit'] in unit_enum.enums or type(
+        feature['unit']) is NoneType
+    assert type(feature['germlineModule']) is str or NoneType
+    assert type(feature['germlineCategory']) is str or NoneType
+
+
 def test_features_query_with_feature_class(client, feature_class, common_query):
     response = client.post(
         '/api', json={
@@ -490,6 +516,32 @@ def test_feature_samples_query_with_feature_and_cohort(client, feature_name, sam
     samples = feature['samples']
     assert feature['name'] == feature_name
     assert type(feature['class']) is str
+    assert isinstance(samples, list)
+    assert len(samples) > 0
+    for sample in samples[0:2]:
+        assert type(sample['name']) is str
+        assert type(sample['value']) is float
+        assert sample['name'] in tcga_tag_cohort_samples
+
+
+def test_feature_samples_query_with_feature_and_cohort2(client, feature3, feature3_class, tcga_tag_cohort_name, tcga_tag_cohort_samples, samples_query):
+    response = client.post(
+        '/api', json={
+            'query': samples_query,
+            'variables': {
+                'feature': [feature3],
+                'cohort': [tcga_tag_cohort_name]
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['features']
+    features = page['items']
+    assert isinstance(features, list)
+    assert len(features) == 1
+    feature = features[0]
+    samples = feature['samples']
+    assert feature['name'] == feature3
+    assert feature['class'] == feature3_class
     assert isinstance(samples, list)
     assert len(samples) > 0
     for sample in samples[0:2]:

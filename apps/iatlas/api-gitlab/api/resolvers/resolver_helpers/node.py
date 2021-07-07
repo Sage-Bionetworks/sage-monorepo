@@ -1,16 +1,15 @@
-from threading import Thread
 from itertools import groupby
-from sqlalchemy import and_, or_
+from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToSample, DatasetToTag, Feature, FeatureClass, FeatureToSample, Gene, GeneToSample, GeneToType, GeneType, Node, NodeToTag, SampleToTag, Tag, TagToTag
+from api.db_models import Dataset, DatasetToTag, Feature, FeatureClass, Gene, GeneToType, GeneType, Node, NodeToTag, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .data_set import build_data_set_graphql_response
 from api.database.database_helpers import execute_sql
 from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
-from .paging_utils import create_temp_table, get_cursor, get_pagination_queries, Paging
-from .tag import build_tag_graphql_response
+from .paging_utils import create_temp_table, get_pagination_queries, Paging
+from .tag import build_simple_tag_graphql_response
 
 node_request_fields = {'dataSet',
                        'feature',
@@ -39,7 +38,7 @@ def build_node_graphql_response(tag_dict):
             'label': get_value(node, 'label'),
             'name': get_value(node, 'node_name'),
             'score': get_value(node, 'score'),
-            'tags': map(build_tag_graphql_response(), tags),
+            'tags': map(build_simple_tag_graphql_response, tags),
             'x': get_value(node, 'x'),
             'y': get_value(node, 'y')
         }
