@@ -624,19 +624,19 @@ type Query {
   The "tags" query
   """
   tags(
+    "An instance of PagingInput (see PagingInput)"
+    paging: PagingInput
+    "A boolean specifying whether or not duplicates should be filtered out. Default is false. Set to 'true' only when necessary, as it negatively impacts performance."
+    distinct: Boolean
     "A list of data set names."
     dataSet: [String!]
     "A list of tag names related to the data set(s)."
     related: [String!]
     "A list of tag names."
     tag: [String!]
-    "A list of feature names."
-    feature: [String!]
-    "A list of feature class names."
-    featureClass: [String!]
     "A list of sample names."
     sample: [String!]
-  ): [Tag!]!
+  ): Tag!
 
   """
   The "therapyTypes" query\

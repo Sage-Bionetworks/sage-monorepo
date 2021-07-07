@@ -163,9 +163,6 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
             append_to_order(feature_1.name)
         if not order:
             append_to_order(feature_1.id)
-    import logging
-    logger = logging.getLogger("feature response")
-    logger.info(query)
 
     return get_pagination_queries(query, paging, distinct, cursor_field=feature_1.id)
 

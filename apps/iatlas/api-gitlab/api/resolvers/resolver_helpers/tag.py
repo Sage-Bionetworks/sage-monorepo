@@ -2,9 +2,10 @@ from itertools import groupby
 from sqlalchemy import and_, func
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, DatasetToSample, Feature, FeatureClass, FeatureToSample, Publication, Sample, SampleToTag, Tag, TagToPublication, TagToTag
+from api.db_models import Dataset, DatasetToTag, DatasetToSample, Publication, Sample, SampleToTag, Tag, TagToPublication, TagToTag
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .publication import build_publication_graphql_response
+from .paging_utils import get_pagination_queries, fetch_page
 
 related_request_fields = {'dataSet',
                           'display',
@@ -96,33 +97,39 @@ def build_related_request(requested, related_requested, data_set=None, related=N
     return query
 
 
-def build_tag_graphql_response(publication_dict=dict(), related_dict=dict(), sample_dict=dict()):
+def build_tag_graphql_response(requested, publications_requested=set(), related_requested=set(), data_set=None, related=None, sample=None):
     def f(tag):
         if not tag:
             return None
         tag_id = get_value(tag, 'tag_id') or get_value(tag, 'id')
-        tag_name = get_value(tag, 'tag_name') or get_value(tag, 'name')
-        publications = publication_dict.get(
-            tag_id, []) if publication_dict else []
-        related = related_dict.get(tag_id, []) if related_dict else []
-        samples = sample_dict.get(tag_id, []) if sample_dict else []
-        return {
+
+        sample_dict = get_samples(
+            tag_ids=[tag_id], requested=requested, data_set=data_set, related=related, sample=sample)
+
+        publication_dict = get_publications(
+            tag_ids=[tag_id], requested=requested, publications_requested=publications_requested)
+
+        related_dict = get_related(
+            tag_ids=[tag_id], requested=requested, related_requested=related_requested)
+
+        result = {
             'id': tag_id,
-            'name': tag_name,
+            'name': get_value(tag, 'tag_name') or get_value(tag, 'name'),
             'characteristics': get_value(tag, 'tag_characteristics') or get_value(tag, 'characteristics'),
             'color': get_value(tag, 'tag_color') or get_value(tag, 'color'),
             'longDisplay': get_value(tag, 'tag_long_display') or get_value(tag, 'long_display'),
-            'publications': map(build_publication_graphql_response, publications),
-            'related': [build_tag_graphql_response()(r) for r in related],
+            'publications': map(build_publication_graphql_response, publication_dict) if publication_dict else None,
+            'related': map(build_tag_graphql_response(requested=related_requested), related_dict) if related_dict else None,
             'sampleCount': get_value(tag, 'sample_count'),
-            'samples': [sample.name for sample in samples],
+            'samples': [sample.name for sample in sample_dict] if sample_dict else None,
             'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display')
         }
-    return f
+        return(result)
+    return(f)
 
 
 def build_tag_request(
-        requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None):
+        requested, distinct=False, paging=None, data_set=None, related=None, sample=None, tag=None):
     '''
     Builds a SQL request.
 
@@ -131,8 +138,6 @@ def build_tag_request(
 
     All keyword arguments are optional. Keyword arguments are:
         `data_set` - a list of strings, data set names
-        `feature` - a list of strings, feature names
-        `feature_class` - a list of strings, feature class names
         `related` - a list of strings, tag names related to data sets
         `sample` - a list of strings, sample names
         `tag` - a list of strings, tag names related to samples
@@ -142,13 +147,16 @@ def build_tag_request(
     tag_1 = aliased(Tag, name='t')
     sample_to_tag_1 = aliased(SampleToTag, name='st')
 
-    core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
-                          'color': tag_1.color.label('color'),
-                          'longDisplay': tag_1.long_display.label('long_display'),
-                          'name': tag_1.name.label('name'),
-                          'sampleCount': func.count(func.distinct(sample_to_tag_1.sample_id)).label('sample_count'),
-                          'shortDisplay': tag_1.short_display.label('short_display'),
-                          'tag': tag_1.name.label('tag')}
+    core_field_mapping = {
+        'id': tag_1.id.label('tag_id'),
+        'characteristics': tag_1.characteristics.label('tag_characteristics'),
+        'color': tag_1.color.label('tag_color'),
+        'longDisplay': tag_1.long_display.label('tag_long_display'),
+        'name': tag_1.name.label('tag_name'),
+        'shortDisplay': tag_1.short_display.label('tag_short_display'),
+        'sampleCount': func.count(func.distinct(sample_to_tag_1.sample_id)).label('sample_count'),
+        'tag': tag_1.name.label('tag')
+    }
 
     # Only select fields that were requested.
     core = get_selected(requested, core_field_mapping)
@@ -160,7 +168,7 @@ def build_tag_request(
     if tag:
         query = query.filter(tag_1.name.in_(tag))
 
-    if data_set or feature or feature_class or related or sample or ('sampleCount' in requested):
+    if data_set or related or sample or ('sampleCount' in requested):
         sample_1 = aliased(Sample, name='s')
         data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
 
@@ -184,24 +192,6 @@ def build_tag_request(
                 data_set_to_sample_1.sample_id, sample_to_tag_1.sample_id, data_set_to_sample_1.dataset_id, data_set_sub_query)
             query = query.join(
                 data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
-
-        if feature or feature_class:
-            feature_1 = aliased(Feature, name='f')
-            feature_class_1 = aliased(FeatureClass, name='fc')
-            feature_to_sample_1 = aliased(FeatureToSample, name='fs')
-
-            query = query.join(feature_to_sample_1,
-                               feature_to_sample_1.sample_id == sample_to_tag_1.sample_id)
-
-            feature_join_condition = build_join_condition(
-                feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
-            query = query.join(feature_1, and_(*feature_join_condition))
-
-            if feature_class:
-                feature_class_join_condition = build_join_condition(
-                    feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
-                query = query.join(
-                    feature_class_1, and_(*feature_class_join_condition))
 
         if related:
             data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
@@ -249,10 +239,14 @@ def build_tag_request(
 
     query = query.order_by(*order) if order else query
 
-    return query
+    import logging
+    logger = logging.getLogger("tag request")
+    logger.info(query)
+
+    return get_pagination_queries(query, paging, distinct, cursor_field=tag_1.id)
 
 
-def get_publications(requested, publications_requested, tag_ids=set()):
+def get_publications(tag_ids, requested, publications_requested):
     if 'publications' in requested:
         sess = db.session
 
@@ -306,7 +300,7 @@ def get_publications(requested, publications_requested, tag_ids=set()):
     return []
 
 
-def get_related(requested, related_requested, tag_ids=set()):
+def get_related(tag_ids, requested, related_requested):
     if 'related' in requested:
         sess = db.session
 
@@ -358,7 +352,7 @@ def get_related(requested, related_requested, tag_ids=set()):
     return []
 
 
-def get_samples(requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag_ids=set()):
+def get_samples(tag_ids, requested, data_set=None, related=None, sample=None):
     if tag_ids and 'samples' in requested:
         sess = db.session
 
@@ -393,25 +387,6 @@ def get_samples(requested, data_set=None, feature=None, feature_class=None, rela
                 data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
             sample_query = sample_query.join(
                 data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
-
-        if feature or feature_class:
-            feature_1 = aliased(Feature, name='f')
-            feature_class_1 = aliased(FeatureClass, name='fc')
-            feature_to_sample_1 = aliased(FeatureToSample, name='fs')
-
-            sample_query = sample_query.join(feature_to_sample_1,
-                                             feature_to_sample_1.sample_id == sample_1.id)
-
-            feature_join_condition = build_join_condition(
-                feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
-            sample_query = sample_query.join(
-                feature_1, and_(*feature_join_condition))
-
-            if feature_class:
-                feature_class_join_condition = build_join_condition(
-                    feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
-                sample_query = sample_query.join(
-                    feature_class_1, and_(*feature_class_join_condition))
 
         if related:
             data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
@@ -468,7 +443,7 @@ def request_tags(requested, **kwargs):
     return query.distinct().all()
 
 
-def return_tag_derived_fields(requested, publications_requested, related_requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag_ids=None):
+def return_tag_derived_fields(requested, publications_requested, related_requested, data_set=None, related=None, sample=None, tag_ids=None):
     publications = get_publications(
         requested, publications_requested, tag_ids=tag_ids)
 
@@ -484,7 +459,7 @@ def return_tag_derived_fields(requested, publications_requested, related_request
         related_dict[key] = related_dict.get(key, []) + list(collection)
 
     samples = get_samples(
-        requested, data_set=data_set, feature=feature, feature_class=feature_class, related=related, sample=sample, tag_ids=tag_ids)
+        requested, data_set=data_set, related=related, sample=sample, tag_ids=tag_ids)
 
     sample_dict = dict()
     for key, collection in groupby(samples, key=lambda s: s.tag_id):
