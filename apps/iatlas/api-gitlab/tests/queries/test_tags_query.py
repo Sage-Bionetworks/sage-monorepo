@@ -187,17 +187,14 @@ def full_query(common_query_builder):
                     shortDisplay
                 }
                 sampleCount
-                samples
+                samples { name }
                 publications { name }
-                }
+            }
         }
         """
     )
     return(query)
 
-
-@pytest.fixture(scope='module')
-def full_query2(common_query_builder):
     query = common_query_builder(
         """
         {
@@ -365,6 +362,36 @@ def test_tags_query_with_cohort(client, samples_query, tcga_tag_cohort_name, tcg
         for sample in samples:
             assert type(sample['name']) is str
             assert sample['name'] in tcga_tag_cohort_samples
+
+
+def test_tags_query_with_cohort2(client, full_query, pcawg_cohort_name, pcawg_cohort_samples):
+    response = client.post(
+        '/api',
+        json={
+            'query': full_query,
+            'variables': {
+                'cohort': [pcawg_cohort_name]
+            }
+        }
+    )
+    json_data = json.loads(response.data)
+    page = json_data['data']['tags']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 1
+    for result in results:
+        assert type(result['characteristics']) is str or NoneType
+        assert type(result['color']) is str or NoneType
+        assert type(result['longDisplay']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
+        assert type(result['name']) is str
+        samples = result['samples']
+        assert isinstance(samples, list)
+        assert result['sampleCount'] == len(samples)
+        for sample in samples:
+            assert type(sample['name']) is str
+            assert sample['name'] in pcawg_cohort_samples
 
 
 def test_tags_query_with_related(client, related_query, related):
