@@ -636,6 +636,8 @@ type Query {
     tag: [String!]
     "A list of sample names."
     sample: [String!]
+    "A list of cohort names"
+    cohort: [String!]
   ): Tag!
 
   """
