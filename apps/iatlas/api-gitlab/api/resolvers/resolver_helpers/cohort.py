@@ -10,7 +10,7 @@ from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
 from .mutation import build_mutation_graphql_response
 from .sample import build_cohort_sample_graphql_response
-from .tag import build_simple_tag_graphql_response
+from .response_utils import build_simple_tag_graphql_response
 from itertools import groupby
 
 cohort_request_fields = {'id', 'name',

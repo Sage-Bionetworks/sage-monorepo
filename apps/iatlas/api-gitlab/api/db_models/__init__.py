@@ -7,6 +7,7 @@ from .cohort_to_gene import CohortToGene
 from .cohort_to_feature import CohortToFeature
 from .cohort_to_mutation import CohortToMutation
 from .cohort_to_sample import CohortToSample
+from .cohort_to_tag import CohortToTag
 from .colocalization import Colocalization
 from .copy_number_result import CopyNumberResult
 from .dataset import Dataset

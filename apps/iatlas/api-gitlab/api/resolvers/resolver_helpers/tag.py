@@ -2,10 +2,12 @@ from itertools import groupby
 from sqlalchemy import and_, func
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, DatasetToSample, Publication, Sample, SampleToTag, Tag, TagToPublication, TagToTag
+from api.db_models import Dataset, DatasetToTag, DatasetToSample, Publication, Sample, SampleToTag, Tag, TagToPublication, TagToTag, Cohort, CohortToTag, CohortToSample
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .publication import build_publication_graphql_response
 from .paging_utils import get_pagination_queries
+from .sample import build_sample_graphql_response
+from .response_utils import build_simple_tag_graphql_response
 
 related_request_fields = {'dataSet',
                           'display',
@@ -97,20 +99,20 @@ def build_related_request(requested, related_requested, data_set=None, related=N
     return query
 
 
-def build_tag_graphql_response(requested, publications_requested=set(), related_requested=set(), data_set=None, related=None, sample=None):
+def build_tag_graphql_response(requested=[], sample_requested=[], publications_requested=[], related_requested=[], cohort=None, sample=None):
     def f(tag):
         if not tag:
             return None
         tag_id = get_value(tag, 'tag_id') or get_value(tag, 'id')
 
         sample_dict = get_samples(
-            tag_ids=[tag_id], requested=requested, data_set=data_set, related=related, sample=sample)
+            tag_id=tag_id, requested=requested, sample_requested=sample_requested, cohort=cohort, sample=sample)
 
         publication_dict = get_publications(
-            tag_ids=[tag_id], requested=requested, publications_requested=publications_requested)
+            tag_id=tag_id, requested=requested, publications_requested=publications_requested)
 
         related_dict = get_related(
-            tag_ids=[tag_id], requested=requested, related_requested=related_requested)
+            tag_id=tag_id, requested=requested, related_requested=related_requested)
 
         result = {
             'id': tag_id,
@@ -120,28 +122,16 @@ def build_tag_graphql_response(requested, publications_requested=set(), related_
             'longDisplay': get_value(tag, 'tag_long_display') or get_value(tag, 'long_display'),
             'publications': map(build_publication_graphql_response, publication_dict) if publication_dict else None,
             'related': map(build_tag_graphql_response(requested=related_requested), related_dict) if related_dict else None,
-            'sampleCount': get_value(tag, 'sample_count'),
-            'samples': [sample.name for sample in sample_dict] if sample_dict else None,
+            'sampleCount': len(sample_dict) if sample_dict and 'sampleCount' in requested else None,
+            'samples': map(build_sample_graphql_response, sample_dict) if sample_dict and 'samples' in requested else None,
             'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display')
         }
         return(result)
     return(f)
 
 
-def build_simple_tag_graphql_response(tag):
-    result = {
-        'id': get_value(tag, 'tag_id') or get_value(tag, 'id'),
-        'name': get_value(tag, 'tag_name') or get_value(tag, 'name'),
-        'characteristics': get_value(tag, 'tag_characteristics') or get_value(tag, 'characteristics'),
-        'color': get_value(tag, 'tag_color') or get_value(tag, 'color'),
-        'longDisplay': get_value(tag, 'tag_long_display') or get_value(tag, 'long_display'),
-        'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display')
-    }
-    return(result)
-
-
 def build_tag_request(
-        requested, distinct=False, paging=None, data_set=None, related=None, sample=None, tag=None):
+        requested, distinct=False, paging=None, cohort=None, data_set=None, related=None, sample=None, tag=None):
     '''
     Builds a SQL request.
 
@@ -157,7 +147,13 @@ def build_tag_request(
     sess = db.session
 
     tag_1 = aliased(Tag, name='t')
-    sample_to_tag_1 = aliased(SampleToTag, name='st')
+    sample_1 = aliased(Sample, name='s')
+    sample_to_tag_1 = aliased(SampleToTag, name='stt')
+    dataset_to_tag_1 = aliased(DatasetToTag, name='dtt')
+    dataset_1 = aliased(Dataset, name='d')
+    cohort_1 = aliased(Cohort, name='c')
+    cohort_to_tag_1 = aliased(CohortToTag, name='ctt')
+    tag_to_tag_1 = aliased(TagToTag, name='ttt')
 
     core_field_mapping = {
         'id': tag_1.id.label('tag_id'),
@@ -166,7 +162,6 @@ def build_tag_request(
         'longDisplay': tag_1.long_display.label('tag_long_display'),
         'name': tag_1.name.label('tag_name'),
         'shortDisplay': tag_1.short_display.label('tag_short_display'),
-        'sampleCount': func.count(func.distinct(sample_to_tag_1.sample_id)).label('sample_count'),
         'tag': tag_1.name.label('tag')
     }
 
@@ -180,61 +175,45 @@ def build_tag_request(
     if tag:
         query = query.filter(tag_1.name.in_(tag))
 
-    if data_set or related or sample or ('sampleCount' in requested):
-        sample_1 = aliased(Sample, name='s')
-        data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
+    if data_set:
+        dataset_subquery = sess.query(dataset_to_tag_1.tag_id)
 
-        is_outer = not bool(sample)
+        dataset_join_condition = build_join_condition(
+            dataset_to_tag_1.dataset_id, dataset_1.id, filter_column=dataset_1.name, filter_list=data_set)
+        dataset_subquery = dataset_subquery.join(dataset_1, and_(
+            *dataset_join_condition), isouter=False)
 
-        sample_sub_query = sess.query(sample_1.id).filter(
-            sample_1.name.in_(sample)) if sample else None
+        query = query.filter(tag_1.id.in_(dataset_subquery))
 
-        sample_tag_join_condition = build_join_condition(
-            sample_to_tag_1.tag_id, tag_1.id, sample_to_tag_1.sample_id, sample_sub_query)
-        query = query.join(
-            sample_to_tag_1, and_(*sample_tag_join_condition), isouter=is_outer)
+    if cohort:
+        cohort_subquery = sess.query(cohort_to_tag_1.tag_id)
 
-        if data_set or related:
-            data_set_1 = aliased(Dataset, name='d')
+        cohort_join_condition = build_join_condition(
+            cohort_to_tag_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
+        cohort_subquery = cohort_subquery.join(cohort_1, and_(
+            *cohort_join_condition), isouter=False)
 
-            data_set_sub_query = sess.query(data_set_1.id).filter(
-                data_set_1.name.in_(data_set)) if data_set else data_set
+        query = query.filter(tag_1.id.in_(cohort_subquery))
 
-            data_set_to_sample_join_condition = build_join_condition(
-                data_set_to_sample_1.sample_id, sample_to_tag_1.sample_id, data_set_to_sample_1.dataset_id, data_set_sub_query)
-            query = query.join(
-                data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
+    if related:
+        related_subquery = sess.query(tag_to_tag_1.tag_id)
 
-        if related:
-            data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
-            related_tag_1 = aliased(Tag, name='rt')
-            tag_to_tag_1 = aliased(TagToTag, name='tt')
+        related_join_condition = build_join_condition(
+            tag_to_tag_1.related_tag_id, tag_1.id, filter_column=tag_1.name, filter_list=related)
+        related_subquery = related_subquery.join(tag_1, and_(
+            *related_join_condition), isouter=False)
 
-            related_tag_sub_query = sess.query(related_tag_1.id).filter(
-                related_tag_1.name.in_(related))
+        query = query.filter(tag_1.id.in_(related_subquery))
 
-            data_set_tag_join_condition = build_join_condition(
-                data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
-            query = query.join(
-                data_set_to_tag_1, and_(*data_set_tag_join_condition))
+    if sample:
+        sample_subquery = sess.query(sample_to_tag_1.tag_id)
 
-            query = query.join(tag_to_tag_1, and_(
-                tag_to_tag_1.tag_id == tag_1.id, tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id))
+        sample_join_condition = build_join_condition(
+            sample_to_tag_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
+        sample_subquery = sample_subquery.join(sample_1, and_(
+            *sample_join_condition), isouter=False)
 
-        if 'sampleCount' in requested:
-            group_by = set()
-            add_to_group_by = group_by.add
-            if 'name' in requested:
-                add_to_group_by(tag_1.name)
-            if 'display' in requested:
-                add_to_group_by(tag_1.display)
-            if 'color' in requested:
-                add_to_group_by(tag_1.color)
-            if 'characteristics' in requested:
-                add_to_group_by(tag_1.characteristics)
-            add_to_group_by(tag_1.id)
-
-            query = query.group_by(*group_by)
+        query = query.filter(tag_1.id.in_(sample_subquery))
 
     order = []
     append_to_order = order.append
@@ -258,7 +237,7 @@ def build_tag_request(
     return get_pagination_queries(query, paging, distinct, cursor_field=tag_1.id)
 
 
-def get_publications(tag_ids, requested, publications_requested):
+def get_publications(tag_id, requested, publications_requested):
     if 'publications' in requested:
         sess = db.session
 
@@ -282,7 +261,7 @@ def get_publications(tag_ids, requested, publications_requested):
         pub_query = sess.query(*core)
         pub_query = pub_query.select_from(pub_1)
 
-        tag_sub_query = sess.query(tag_1.id).filter(tag_1.id.in_(tag_ids))
+        tag_sub_query = sess.query(tag_1.id).filter(tag_1.id.in_([tag_id]))
 
         tag_tag_join_condition = build_join_condition(
             tag_to_pub_1.publication_id, pub_1.id, tag_to_pub_1.tag_id, tag_sub_query)
@@ -312,7 +291,7 @@ def get_publications(tag_ids, requested, publications_requested):
     return []
 
 
-def get_related(tag_ids, requested, related_requested):
+def get_related(tag_id, requested, related_requested):
     if 'related' in requested:
         sess = db.session
 
@@ -336,7 +315,7 @@ def get_related(tag_ids, requested, related_requested):
         related_query = sess.query(*related_core)
         related_query = related_query.select_from(related_tag_1)
 
-        tag_sub_query = sess.query(tag_1.id).filter(tag_1.id.in_(tag_ids))
+        tag_sub_query = sess.query(tag_1.id).filter(tag_1.id.in_([tag_id]))
 
         tag_tag_join_condition = build_join_condition(
             tag_to_tag_1.related_tag_id, related_tag_1.id, tag_to_tag_1.tag_id, tag_sub_query)
@@ -364,59 +343,44 @@ def get_related(tag_ids, requested, related_requested):
     return []
 
 
-def get_samples(tag_ids, requested, data_set=None, related=None, sample=None):
-    if tag_ids and 'samples' in requested:
+def get_samples(tag_id, requested, sample_requested, cohort=None, sample=None):
+    if 'samples' in requested or 'sampleCount' in requested:
         sess = db.session
 
-        data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
         sample_1 = aliased(Sample, name='s')
-        sample_to_tag_1 = aliased(SampleToTag, name='st')
+        sample_to_tag_1 = aliased(SampleToTag, name='stt')
+        cohort_1 = aliased(Cohort, name='c')
+        cohort_to_sample_1 = aliased(CohortToSample, name='cts')
 
-        # Always select the sample id and the gene id.
-        sample_core = {sample_1.id.label('id'),
-                       sample_1.name.label('name'),
-                       sample_to_tag_1.tag_id.label('tag_id')}
+        sample_core_field_mapping = {'name': sample_1.name.label('name')}
+
+        sample_core = get_selected(sample_requested, sample_core_field_mapping)
+        sample_core |= {sample_1.id.label('id')}
 
         sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)
 
+        tag_subquery = sess.query(sample_to_tag_1.sample_id)
+        tag_join_condition = build_join_condition(
+            sample_to_tag_1.sample_id, sample_1.id, filter_column=sample_to_tag_1.tag_id, filter_list=[tag_id])
+        tag_subquery = tag_subquery.join(cohort_1, and_(
+            *tag_join_condition), isouter=False)
+        sample_query = sample_query.filter(
+            sample_1.id.in_(tag_subquery))
+
         if sample:
             sample_query = sample_query.filter(sample_1.name.in_(sample))
 
-        sample_tag_join_condition = build_join_condition(
-            sample_to_tag_1.sample_id, sample_1.id, sample_to_tag_1.tag_id, tag_ids)
+        if cohort:
+            cohort_subquery = sess.query(cohort_to_sample_1.sample_id)
 
-        sample_query = sample_query.join(
-            sample_to_tag_1, and_(*sample_tag_join_condition))
+            cohort_join_condition = build_join_condition(
+                cohort_to_sample_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
+            cohort_subquery = cohort_subquery.join(cohort_1, and_(
+                *cohort_join_condition), isouter=False)
 
-        if data_set or related:
-            data_set_1 = aliased(Dataset, name='d')
-
-            data_set_sub_query = sess.query(data_set_1.id).filter(
-                data_set_1.name.in_(data_set)) if data_set else data_set
-
-            data_set_to_sample_join_condition = build_join_condition(
-                data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
-            sample_query = sample_query.join(
-                data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
-
-        if related:
-            data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
-            related_tag_1 = aliased(Tag, name='rt')
-            tag_to_tag_1 = aliased(TagToTag, name='tt')
-
-            related_tag_sub_query = sess.query(related_tag_1.id).filter(
-                related_tag_1.name.in_(related)) if related else related
-
-            data_set_tag_join_condition = build_join_condition(
-                data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
-            sample_query = sample_query.join(
-                data_set_to_tag_1, and_(*data_set_tag_join_condition))
-
-            sample_query = sample_query.join(tag_to_tag_1, and_(
-                tag_to_tag_1.tag_id == sample_to_tag_1.tag_id, tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id))
-
-        sample_query = sample_query.order_by(sample_1.name)
+            sample_query = sample_query.filter(
+                sample_1.id.in_(cohort_subquery))
 
         return sample_query.distinct().all()
 

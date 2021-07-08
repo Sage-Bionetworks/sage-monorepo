@@ -20,8 +20,8 @@ type TagNode implements BaseNode {
   related: [SimpleTag!]
   "The number of sample associated with the tag."
   sampleCount: Int!
-  "A list of the names of the samples associated with the tag."
-  samples: [String!]
+  "A list of the samples associated with the tag."
+  samples: [SimpleSample!]
   "A friendly name for the tag (used in plots)."
   shortDisplay: String
 }

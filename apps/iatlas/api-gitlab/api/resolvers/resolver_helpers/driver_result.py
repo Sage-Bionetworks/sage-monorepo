@@ -7,7 +7,7 @@ from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
 from .paging_utils import get_pagination_queries, Paging
-from .tag import build_simple_tag_graphql_response
+from .response_utils import build_simple_tag_graphql_response
 
 driver_result_request_fields = {'dataSet',
                                 'feature',
