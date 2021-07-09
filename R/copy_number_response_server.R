@@ -25,7 +25,7 @@ copy_number_response_server <- function(id, cohort_obj) {
 
       group_tbl <- shiny::reactive({
         iatlas.api.client::query_tags(
-          datasets = cohort_obj()$dataset,
+          cohorts = cohort_obj()$dataset,
           parent_tags = cohort_obj()$group_name
         ) %>%
           dplyr::select("display" = "short_display", "name")
