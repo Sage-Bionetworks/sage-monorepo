@@ -1,14 +1,13 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, Colocalization, Feature, Gene, Snp
+from api.db_models import Dataset, Colocalization, Feature, Gene, Snp
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
 from .snp import build_snp_graphql_response
-from .paging_utils import get_cursor, get_pagination_queries, Paging
-import logging
+from .paging_utils import get_pagination_queries
 
 colocalization_request_fields = {
     'id',

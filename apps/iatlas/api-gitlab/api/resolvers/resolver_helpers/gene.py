@@ -1,6 +1,5 @@
-from sqlalchemy import and_, func
+from sqlalchemy import and_
 from sqlalchemy.orm import aliased
-from sqlalchemy.dialects.postgresql import aggregate_order_by
 from itertools import groupby
 from api import db
 from api.db_models import (

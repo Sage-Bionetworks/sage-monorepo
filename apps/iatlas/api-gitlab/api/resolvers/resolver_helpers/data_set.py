@@ -1,4 +1,3 @@
-from sqlalchemy import and_
 from sqlalchemy.orm import aliased, contains_eager
 from api import db
 from api.db_models import Dataset, Sample

@@ -1,4 +1,4 @@
-from sqlalchemy import and_, orm
+from sqlalchemy import orm
 from api import db
 from api.db_models import Gene, GeneFamily
 from .general_resolvers import build_option_args, get_selection_set

@@ -434,18 +434,6 @@ type Query {
   ): RareVariantPathwayAssociation!
 
   """
-  The "related" query
-
-  If no filters are passed, this will return all tags related to data sets.
-  """
-  related(
-    "A list of data set names."
-    dataSet: [String!]
-    "A list of tag (related) names related to the data set(s)."
-    related: [String!]
-  ): [RelatedByDataSet!]!
-
-  """
   The "samples" query
 
   If no filters are passed, this will return all samples.
@@ -519,45 +507,6 @@ type Query {
     tag: [String!]
   ): [SampleByMutationStatus!]!
 
-  """
-  The "samplesByTag" query
-
-  If no filters are passed, this will return all samples organized by tag.
-  """
-  samplesByTag(
-    "A list of data set names."
-    dataSet: [String!]
-    "A list of patient ethnicities to filter the samples by."
-    ethnicity: [EthnicityEnum!]
-    "A list of feature names."
-    feature: [String!]
-    "A list of feature class names."
-    featureClass: [String!]
-    "A list of patient genders to filter the samples by."
-    gender: [GenderEnum!]
-    "A number representing the maximum age of the patient at the time of diagnosis to filter the samples by."
-    maxAgeAtDiagnosis: Int
-    "A number representing the maximum patient height to filter the samples by."
-    maxHeight: Float
-    "A number representing the maximum patient weight to filter the samples by."
-    maxWeight: Float
-    "A number representing the minimum age of the patient at the time of diagnosis to filter the samples by."
-    minAgeAtDiagnosis: Int
-    "A number representing the minimum patient height to filter the samples by."
-    minHeight: Float
-    "A number representing the minimum patient weight to filter the samples by."
-    minWeight: Float
-    "A list of sample names."
-    name: [String!]
-    "A list of patient barcodes."
-    patient: [String!]
-    "A list of patient races to filter the samples by."
-    race: [RaceEnum!]
-    "A list of tag names related to the data set(s)."
-    related: [String!]
-    "A list of tag names."
-    tag: [String!]
-  ): [SamplesByTag!]!
 
   """
   The "slides" query

@@ -1,11 +1,11 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, RareVariantPathwayAssociation, Feature, Gene
+from api.db_models import Dataset, RareVariantPathwayAssociation, Feature
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
-from .paging_utils import get_cursor, get_pagination_queries, Paging
+from .paging_utils import get_pagination_queries
 
 rare_variant_pathway_association_request_fields = {
     'id',

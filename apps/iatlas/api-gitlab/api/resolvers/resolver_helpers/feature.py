@@ -1,7 +1,5 @@
-from itertools import groupby
-from sqlalchemy import and_, func
+from sqlalchemy import and_
 from sqlalchemy.orm import aliased
-from sqlalchemy.sql.expression import false, true
 from api import db
 from api.db_models import (Feature, FeatureClass, FeatureToSample,
                            MethodTag, Sample, Cohort, CohortToSample, CohortToFeature)

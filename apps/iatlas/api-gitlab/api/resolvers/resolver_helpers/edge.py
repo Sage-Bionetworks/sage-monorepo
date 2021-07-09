@@ -1,9 +1,8 @@
-from itertools import groupby
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, Edge, Feature, Node, NodeToTag, Tag
-from .paging_utils import get_cursor, get_pagination_queries, Paging
+from api.db_models import Edge, Node
+from .paging_utils import get_pagination_queries
 from .general_resolvers import build_join_condition, get_selected, get_value
 
 edge_request_fields = {'label',
@@ -53,10 +52,10 @@ def build_edge_request(requested, node_1_requested, node_2_requested, distinct=F
     node_2 = aliased(Node, name='n2')
 
     core_field_mapping = {
-                          'id': edge_1.id.label('id'),
-                          'label': edge_1.label.label('label'),
-                          'name': edge_1.name.label('name'),
-                          'score': edge_1.score.label('score')}
+        'id': edge_1.id.label('id'),
+        'label': edge_1.label.label('label'),
+        'name': edge_1.name.label('name'),
+        'score': edge_1.score.label('score')}
     node_1_core_field_mapping = {'label': node_1.label.label('n1_label'),
                                  'name': node_1.name.label('n1_name'),
                                  'score': node_1.score.label('n1_score'),

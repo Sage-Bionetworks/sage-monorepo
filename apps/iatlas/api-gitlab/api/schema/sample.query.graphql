@@ -57,24 +57,6 @@ type SampleByMutationStatus {
 }
 
 """
-The "SamplesByTag" type
-"""
-type SamplesByTag {
-  "The 'characteristics' of the tag."
-  characteristics: String
-  "A color to represent the Tag as a hex value."
-  color: String
-  "A long display name for the Tag used in text descriptions."
-  longDisplay: String
-  "A list of Samples associated with the Tag."
-  samples: [Sample!]!
-  "A friendly name for the Tag (used in plots)."
-  shortDisplay: String
-  "The name of the Tag."
-  tag: String!
-}
-
-"""
 The "SimpleSample" is a simple version of a Sample; it has no related fields.
 
 See also `Sample`

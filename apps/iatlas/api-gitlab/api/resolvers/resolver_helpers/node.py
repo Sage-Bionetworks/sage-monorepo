@@ -8,7 +8,7 @@ from .data_set import build_data_set_graphql_response
 from api.database.database_helpers import execute_sql
 from .feature import build_feature_graphql_response
 from .gene import build_gene_graphql_response
-from .paging_utils import create_temp_table, get_pagination_queries, Paging
+from .paging_utils import create_temp_table, get_pagination_queries
 from .response_utils import build_simple_tag_graphql_response
 
 node_request_fields = {'dataSet',
