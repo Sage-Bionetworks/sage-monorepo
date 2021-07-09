@@ -33,14 +33,13 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       tags <- shiny::reactive({
         iatlas.api.client::query_tags(
-          datasets = cohort_obj()$dataset,
+          cohorts = cohort_obj()$dataset,
           parent_tags = cohort_obj()$group_name
         ) %>%
           dplyr::pull("name")
       })
 
       volcano_plot_tbl <- shiny::reactive({
-
         shiny::req(
           tags(),
           input$response_choice,
@@ -73,7 +72,6 @@ univariate_driver_server <- function(id, cohort_obj) {
       total_associations <- shiny::reactive({
         n_mutations <-
           iatlas.api.client::query_cohort_mutations(cohorts = cohort_obj()$dataset) %>%
-          print() %>%
           nrow()
 
         n_tags <- length(tags())

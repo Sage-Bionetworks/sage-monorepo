@@ -62,9 +62,9 @@
     },
     "BiocParallel": {
       "Package": "BiocParallel",
-      "Version": "1.26.0",
+      "Version": "1.26.1",
       "Source": "Bioconductor",
-      "Hash": "ea7cc8ca1aa588eca380f4d08e4b6f8f"
+      "Hash": "9b5f507fed616566984c90c2b321ec00"
     },
     "Biostrings": {
       "Package": "Biostrings",
@@ -87,9 +87,9 @@
     },
     "GenomeInfoDb": {
       "Package": "GenomeInfoDb",
-      "Version": "1.28.0",
+      "Version": "1.28.1",
       "Source": "Bioconductor",
-      "Hash": "5da742d3bdb8c8c9d74a599f84b4bb96"
+      "Hash": "b84b718032db0bf747bbd2563399f354"
     },
     "GenomeInfoDbData": {
       "Package": "GenomeInfoDbData",
@@ -191,10 +191,10 @@
     },
     "Rcpp": {
       "Package": "Rcpp",
-      "Version": "1.0.6",
+      "Version": "1.0.7",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "dbb5e436998a7eba5a9d682060533338"
+      "Hash": "dab19adae4440ae55aa8a9d238b246bb"
     },
     "RcppArmadillo": {
       "Package": "RcppArmadillo",
@@ -860,15 +860,15 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.20.0",
+      "Version": "0.22.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "644062cbdf691cfd9a3a1c6e3fc5a6537f562d47",
+      "RemoteSha": "41eed585bd82c3f145d48ae6c779b51c9c71c439",
       "RemoteHost": "api.github.com",
-      "Hash": "f7057f76efc82d3878227c0d5572942f"
+      "Hash": "cc353fbe7087cfd8af7562aa96a5ddd4"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
@@ -884,16 +884,16 @@
     },
     "iatlas.modules2": {
       "Package": "iatlas.modules2",
-      "Version": "0.1.4",
+      "Version": "0.2.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules2",
       "RemoteRef": "master",
-      "RemoteSha": "56164586576412cec9d1b26056ca7db2203222b7",
+      "RemoteSha": "f7c3624503a4d16c5165f542dd0f43408ddb51ba",
       "RemoteHost": "api.github.com",
       "Remotes": "CRI-iAtlas/iatlas.api.client@main, CRI-iAtlas/iatlas.modules@master",
-      "Hash": "69f979ef1b7f1748a9178efe07df2d4c"
+      "Hash": "5f70392fb3d85823fd3d73df39243d39"
     },
     "igvShiny": {
       "Package": "igvShiny",
@@ -1538,10 +1538,10 @@
     },
     "testthat": {
       "Package": "testthat",
-      "Version": "3.0.3",
+      "Version": "3.0.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3624827fc69a7ef793a67b36edb4db90"
+      "Hash": "575216c9946ca70016c3ffb9c31709ba"
     },
     "tibble": {
       "Package": "tibble",

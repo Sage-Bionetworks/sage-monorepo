@@ -13,6 +13,7 @@ test_that("univariate_driver_server", {
       session$setInputs("min_wt" = 30)
       session$setInputs("min_mut" = 30)
       expect_type(tags(), "character")
+      expect_true(length(tags()) == 6)
       expect_type(volcano_plot_tbl(), "list")
       expect_named(
         volcano_plot_tbl(),
