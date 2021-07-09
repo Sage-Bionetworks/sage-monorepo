@@ -463,50 +463,6 @@ type Query {
     race: [RaceEnum!]
   ): [Sample!]!
 
-  """
-  The data structure containing Samples by Mutation Status.
-
-  If no filters are passed, this will return a list of all mutation statuses with lists of all related samples.
-  """
-  samplesByMutationStatus(
-    "A list of data set names to filter the samples by."
-    dataSet: [String!]
-    "A list of patient ethnicities to filter the samples by."
-    ethnicity: [EthnicityEnum!]
-    "A list of feature names to filter the samples by."
-    feature: [String!]
-    "A list of feature class names related to the features associated with the samples to filter by."
-    featureClass: [String!]
-    "A list of patient genders to filter the samples by."
-    gender: [GenderEnum!]
-    "A number representing the maximum age of the patient at the time of diagnosis to filter the samples by."
-    maxAgeAtDiagnosis: Int
-    "A number representing the maximum patient height to filter the samples by."
-    maxHeight: Float
-    "A number representing the maximum patient weight to filter the samples by."
-    maxWeight: Float
-    "A number representing the minimum age of the patient at the time of diagnosis to filter the samples by."
-    minAgeAtDiagnosis: Int
-    "A number representing the minimum patient height to filter the samples by."
-    minHeight: Float
-    "A number representing the minimum patient weight to filter the samples by."
-    minWeight: Float
-    "A list of mutation ids."
-    mutationId: [Int!]
-    "A StatusEnum value to filter the samples by."
-    mutationStatus: StatusEnum
-    "A list of patient barcodes to filter the samples by."
-    patient: [String!]
-    "A list of patient races to filter the samples by."
-    race: [RaceEnum!]
-    "A list of tag names related to the data sets associated with the samples to filter by."
-    related: [String!]
-    "A list of sample names."
-    sample: [String!]
-    "A list of tag names associated with the samples to filter by."
-    tag: [String!]
-  ): [SampleByMutationStatus!]!
-
 
   """
   The "slides" query

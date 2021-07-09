@@ -212,7 +212,6 @@ root.set_field('patients', resolve_patients)
 root.set_field('rareVariantPathwayAssociations',
                resolve_rare_variant_pathway_associations)
 root.set_field('samples', resolve_samples)
-root.set_field('samplesByMutationStatus', resolve_samples_by_mutations_status)
 root.set_field('slides', resolve_slides)
 root.set_field('snps', resolve_snps)
 root.set_field('superCategories', resolve_super_categories)

@@ -9,8 +9,6 @@ from .mutation_type import build_mutation_type_graphql_response
 from .paging_utils import get_pagination_queries
 from .sample import build_sample_graphql_response
 
-mutation_by_sample_request_fields = {'id', 'name', 'mutations'}
-
 mutation_request_fields = {'id',
                            'gene',
                            'mutationCode',
@@ -35,15 +33,6 @@ def build_mutation_graphql_response(sample_dict=dict()):
             'status': get_value(mutation, 'status')
         }
     return f
-
-
-def build_mutation_by_sample_graphql_response(mutation_set):
-    mutations = mutation_set[1] or []
-    return {
-        'id': get_value(mutations[0], 'sample_id'),
-        'name': get_value(mutations[0], 'sample_name'),
-        'mutations': map(build_mutation_graphql_response(), mutations)
-    }
 
 
 def build_mutation_request(requested, gene_requested, mutation_type_requested, sample_requested, cohort=None, distinct=False, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, paging=None, sample=None, status=None, by_sample=False):
