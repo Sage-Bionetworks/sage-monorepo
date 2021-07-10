@@ -34,29 +34,29 @@ feature_request_fields = simple_feature_request_fields.union({
 })
 
 
-def build_feature_graphql_response(requested=[], sample_requested=[], max_value=None, min_value=None, cohort=None, sample=None):
+def build_feature_graphql_response(requested=[], sample_requested=[], max_value=None, min_value=None, cohort=None, sample=None, prefix='feature_'):
 
     def f(feature):
         if not feature:
             return None
-        feature_id = get_value(feature, 'feature_id')
+        id = get_value(feature, prefix + 'id')
         samples = get_samples(
-            [feature_id], requested=requested, sample_requested=sample_requested, max_value=max_value, min_value=min_value, cohort=cohort, sample=sample)
+            [id], requested=requested, sample_requested=sample_requested, max_value=max_value, min_value=min_value, cohort=cohort, sample=sample)
         if 'valueMax' in requested or 'valueMin' in requested:
             values = [get_value(sample, 'sample_feature_value')
                       for sample in samples]
         value_min = min(values) if 'valueMin' in requested else None
         value_max = max(values) if 'valueMax' in requested else None
         result = {
-            'id': feature_id,
-            'class': get_value(feature, 'feature_class'),
-            'display': get_value(feature, 'feature_display'),
-            'methodTag': get_value(feature, 'feature_method_tag'),
-            'name': get_value(feature, 'feature_name'),
-            'order': get_value(feature, 'feature_order'),
-            'germlineModule': get_value(feature, 'feature_germline_module'),
-            'germlineCategory': get_value(feature, 'feature_germline_category'),
-            'unit': get_value(feature, 'feature_unit'),
+            'id': id,
+            'class': get_value(feature, prefix + 'class'),
+            'display': get_value(feature, prefix + 'display'),
+            'methodTag': get_value(feature, prefix + 'method_tag'),
+            'name': get_value(feature, prefix + 'name'),
+            'order': get_value(feature, prefix + 'order'),
+            'germlineModule': get_value(feature, prefix + 'germline_module'),
+            'germlineCategory': get_value(feature, prefix + 'germline_category'),
+            'unit': get_value(feature, prefix + 'unit'),
             'samples': map(build_sample_graphql_response(), samples),
             'valueMin': value_min if type(value_min) is Decimal else None,
             'valueMax': value_max if type(value_max) is Decimal else None
