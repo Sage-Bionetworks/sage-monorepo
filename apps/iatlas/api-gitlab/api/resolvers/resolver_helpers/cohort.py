@@ -31,7 +31,7 @@ def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={},
             dict = {
                 'id': cohort_id,
                 'name': get_value(cohort, 'cohort_name'),
-                'dataSet': build_data_set_graphql_response(cohort),
+                'dataSet': build_data_set_graphql_response()(cohort),
                 'tag': build_simple_tag_graphql_response(
                     cohort) if get_value(cohort, 'tag_name') else None,
                 'samples': map(build_cohort_sample_graphql_response, samples),

@@ -1,24 +1,38 @@
-from sqlalchemy.orm import aliased, contains_eager
+from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, Sample
-from .general_resolvers import get_selected, get_value
+from sqlalchemy import and_
+from api.db_models import Dataset, Sample, DatasetToSample
+from .general_resolvers import get_selected, get_value, build_join_condition
 from .sample import build_sample_graphql_response
+from .paging_utils import get_pagination_queries
+
 
 simple_data_set_request_fields = {'display', 'name', 'type'}
 
 data_set_request_fields = simple_data_set_request_fields.union({'samples'})
 
 
-def build_data_set_graphql_response(data_set, prefix='data_set_'):
-    return {
-        'display': get_value(data_set, prefix + 'display') or get_value(data_set, 'display'),
-        'name': get_value(data_set, prefix + 'name') or get_value(data_set),
-        'samples': map(build_sample_graphql_response, get_value(data_set, 'samples', [])),
-        'type': get_value(data_set, prefix + 'type') or get_value(data_set, 'type'),
-    }
+def build_data_set_graphql_response(prefix='data_set_', requested=[], sample_requested=[], sample=None):
+
+    def f(data_set):
+        if not data_set:
+            return None
+        else:
+            id = get_value(data_set, prefix +
+                           'id') or get_value(data_set, 'id')
+            samples = get_samples(id, requested, sample_requested, sample)
+            dict = {
+                'id': id,
+                'display': get_value(data_set, prefix + 'display') or get_value(data_set, 'display'),
+                'name': get_value(data_set, prefix + 'name') or get_value(data_set),
+                'samples': map(build_sample_graphql_response, samples),
+                'type': get_value(data_set, prefix + 'type') or get_value(data_set, 'type'),
+            }
+            return(dict)
+    return(f)
 
 
-def build_data_set_request(requested, data_set=None, sample=None, data_set_type=None):
+def build_data_set_request(requested, data_set=None, sample=None, data_set_type=None, distinct=False, paging=None):
     '''
     Builds a SQL query.
 
@@ -29,32 +43,40 @@ def build_data_set_request(requested, data_set=None, sample=None, data_set_type=
         `data_set` - a list of strings, data set names
         `sample` - a list of strings, sample names
         `data_set_type` - a list of strings, data set types
+        `distinct` - a boolean, indicates whether duplicate records should be filtered out
+        `paging` - a dict containing pagination metadata
     '''
     sess = db.session
 
     data_set_1 = aliased(Dataset, name='d')
+    data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
     sample_1 = aliased(Sample, name='s')
 
-    core_field_mapping = {'display': data_set_1.display.label('display'),
-                          'name': data_set_1.name.label('name'),
-                          'type': data_set_1.data_set_type.label('type')}
-    sample_core_field_mapping = {'name': sample_1.name.label('name')}
+    core_field_mapping = {
+        'id': data_set_1.id.label('id'),
+        'display': data_set_1.display.label('data_set_display'),
+        'name': data_set_1.name.label('data_set_name'),
+        'type': data_set_1.data_set_type.label('data_set_type')
+    }
 
     core = get_selected(requested, core_field_mapping)
+    core |= {data_set_1.id.label('id')}
 
-    option_args = []
+    query = sess.query(*core)
+    query = query.select_from(data_set_1)
 
-    query = sess.query(data_set_1)
+    if sample:
 
-    if 'samples' in requested or sample:
-        query = query.join((sample_1, data_set_1.samples), isouter=True)
-        option_args.append(contains_eager(
-            data_set_1.samples.of_type(sample_1)))
+        data_set_to_sample_subquery = sess.query(
+            data_set_to_sample_1.dataset_id)
 
-    if option_args:
-        query = query.options(*option_args)
-    else:
-        query = sess.query(*core)
+        sample_join_condition = build_join_condition(
+            data_set_to_sample_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
+
+        data_set_to_sample_subquery = data_set_to_sample_subquery.join(sample_1, and_(
+            *sample_join_condition), isouter=False)
+
+        query = query.filter(data_set_1.id.in_(data_set_to_sample_subquery))
 
     if data_set:
         query = query.filter(data_set_1.name.in_(data_set))
@@ -62,21 +84,34 @@ def build_data_set_request(requested, data_set=None, sample=None, data_set_type=
     if data_set_type:
         query = query.filter(data_set_1.data_set_type.in_(data_set_type))
 
-    if sample:
-        query = query.filter(sample_1.name.in_(sample))
-
-    return query
+    return get_pagination_queries(query, paging, distinct, cursor_field=data_set_1.id)
 
 
-def request_data_sets(*args, **kwargs):
-    '''
-    All positional arguments are required. Positional arguments are:
-        1st position - a set of the requested fields at the root of the graphql request.
+def get_samples(dataset_id, requested, sample_requested, sample=None):
+    if 'samples' in requested:
+        sess = db.session
 
-    All keyword arguments are optional. Keyword arguments are:
-        `data_set` - a list of strings, data set names
-        `sample` - a list of strings, sample names
-        `data_set_type` - a list of strings, data set types
-    '''
-    query = build_data_set_request(*args, **kwargs)
-    return query.distinct().all()
+        data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
+        sample_1 = aliased(Sample, name='s')
+
+        sample_core_field_mapping = {'name': sample_1.name.label('name')}
+
+        sample_core = get_selected(sample_requested, sample_core_field_mapping)
+        sample_core |= {sample_1.id.label('id')}
+
+        sample_query = sess.query(*sample_core)
+        sample_query = sample_query.select_from(data_set_to_sample_1)
+
+        sample_query = sample_query.filter(
+            data_set_to_sample_1.dataset_id.in_([dataset_id]))
+
+        if sample:
+            sample_join_condition = build_join_condition(
+                data_set_to_sample_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
+
+            sample_query = sample_query.join(sample_1, and_(
+                *sample_join_condition), isouter=False)
+
+        return sample_query.distinct().all()
+
+    return []

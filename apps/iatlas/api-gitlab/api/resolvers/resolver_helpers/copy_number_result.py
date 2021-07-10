@@ -30,7 +30,7 @@ def build_cnr_graphql_response(copy_number_result):
         'pValue': get_value(copy_number_result, 'p_value'),
         'log10PValue': get_value(copy_number_result, 'log10_p_value'),
         'tStat': get_value(copy_number_result, 't_stat'),
-        'dataSet': build_data_set_graphql_response(copy_number_result),
+        'dataSet': build_data_set_graphql_response()(copy_number_result),
         'feature': build_feature_graphql_response()(copy_number_result),
         'gene': build_gene_graphql_response()(copy_number_result),
         'tag': build_simple_tag_graphql_response(copy_number_result)

@@ -21,7 +21,7 @@ def build_hr_graphql_response(heritability_result):
     result_dict = {
         'id': get_value(heritability_result, 'id'),
         'pValue': get_value(heritability_result, 'p_value'),
-        'dataSet': build_data_set_graphql_response(heritability_result),
+        'dataSet': build_data_set_graphql_response()(heritability_result),
         'feature': build_feature_graphql_response()(heritability_result),
         'cluster': get_value(heritability_result, 'cluster'),
         'fdr': get_value(heritability_result, 'fdr'),

@@ -27,7 +27,7 @@ rare_variant_pathway_association_request_fields = {
 def build_rvpa_graphql_response(rare_variant_pathway_association):
     return {
         'id': get_value(rare_variant_pathway_association, 'id'),
-        'dataSet': build_data_set_graphql_response(rare_variant_pathway_association),
+        'dataSet': build_data_set_graphql_response()(rare_variant_pathway_association),
         'feature': build_feature_graphql_response()(rare_variant_pathway_association),
         'pathway': get_value(rare_variant_pathway_association, 'pathway'),
         'pValue': get_value(rare_variant_pathway_association, 'p_value'),

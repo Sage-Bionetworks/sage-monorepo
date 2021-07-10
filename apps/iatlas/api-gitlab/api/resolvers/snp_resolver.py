@@ -1,4 +1,3 @@
-from api.db_models import (Snp)
 from .resolver_helpers import (
     get_requested, snp_request_fields, build_snp_graphql_response, build_snp_request)
 

@@ -1,7 +1,7 @@
 from .cohort import build_cohort_graphql_response, build_cohort_request, cohort_request_fields, get_cohort_samples, get_cohort_features, get_cohort_genes, get_cohort_mutations
 from .colocalization import colocalization_request_fields, build_coloc_graphql_response, build_colocalization_request
 from .copy_number_result import build_cnr_graphql_response, build_copy_number_result_request, cnr_request_fields
-from .data_set import build_data_set_graphql_response, data_set_request_fields, request_data_sets, simple_data_set_request_fields
+from .data_set import build_data_set_graphql_response, data_set_request_fields, build_data_set_request, simple_data_set_request_fields
 from .driver_result import build_dr_graphql_response, build_driver_result_request, driver_result_request_fields
 from .edge import build_edge_graphql_response, build_edge_request, edge_request_fields
 from .feature import build_feature_graphql_response, feature_class_request_fields, feature_request_fields, simple_feature_request_fields, simple_feature_request_fields2, build_features_query

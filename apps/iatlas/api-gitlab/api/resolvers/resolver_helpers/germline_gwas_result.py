@@ -20,7 +20,7 @@ def build_ggr_graphql_response(germline_gwas_result):
     return {
         'id': get_value(germline_gwas_result, 'id'),
         'pValue': get_value(germline_gwas_result, 'p_value'),
-        'dataSet': build_data_set_graphql_response(germline_gwas_result),
+        'dataSet': build_data_set_graphql_response()(germline_gwas_result),
         'feature': build_feature_graphql_response()(germline_gwas_result),
         'snp': build_snp_graphql_response(germline_gwas_result),
         'maf': get_value(germline_gwas_result, 'maf')

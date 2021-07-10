@@ -32,7 +32,7 @@ def build_dr_graphql_response(driver_result):
         'log10FoldChange': get_value(driver_result, 'log10_fold_change'),
         'numWildTypes': get_value(driver_result, 'n_wt'),
         'numMutants': get_value(driver_result, 'n_mut'),
-        'dataSet': build_data_set_graphql_response(driver_result),
+        'dataSet': build_data_set_graphql_response()(driver_result),
         'feature': build_feature_graphql_response()(driver_result),
         'gene': build_gene_graphql_response()(driver_result),
         'mutationCode': get_value(driver_result, 'code'),

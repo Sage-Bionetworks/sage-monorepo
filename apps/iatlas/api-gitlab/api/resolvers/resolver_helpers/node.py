@@ -32,7 +32,7 @@ def build_node_graphql_response(tag_dict):
             node, 'description') or get_value(node, 'friendly_name') or get_value(node, 'io_landscape_name')
         return {
             'id': node_id,
-            'dataSet': build_data_set_graphql_response(node),
+            'dataSet': build_data_set_graphql_response()(node),
             'feature': build_feature_graphql_response()(node) if has_feature else None,
             'gene': build_gene_graphql_response()(node) if has_gene else None,
             'label': get_value(node, 'label'),

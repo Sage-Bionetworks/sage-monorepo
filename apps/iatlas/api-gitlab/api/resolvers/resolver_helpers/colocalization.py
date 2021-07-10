@@ -28,8 +28,8 @@ colocalization_request_fields = {
 def build_coloc_graphql_response(colocalization):
     return {
         'id': get_value(colocalization, 'id'),
-        'dataSet': build_data_set_graphql_response(colocalization),
-        'colocDataSet': build_data_set_graphql_response(colocalization, prefix='coloc_data_set_'),
+        'dataSet': build_data_set_graphql_response()(colocalization),
+        'colocDataSet': build_data_set_graphql_response(prefix='coloc_data_set_')(colocalization),
         'feature': build_feature_graphql_response()(colocalization),
         'gene': build_gene_graphql_response()(colocalization),
         'snp': build_snp_graphql_response(colocalization),
