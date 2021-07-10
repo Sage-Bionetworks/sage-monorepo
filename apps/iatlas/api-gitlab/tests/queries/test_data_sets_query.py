@@ -76,6 +76,23 @@ def samples_query(common_query_builder):
     )
 
 
+@pytest.fixture(scope='module')
+def tags_query(common_query_builder):
+    return common_query_builder(
+        """{
+            items {
+                id
+                display
+                name
+                type
+                tags {
+                    name
+                }
+            }
+        }"""
+    )
+
+
 def test_data_sets_cursor_pagination_first(client, common_query):
     num = 2
     response = client.post(
@@ -229,3 +246,20 @@ def test_data_sets_query_with_dataSetType(client, common_query, data_set_type):
         assert type(data_set['name']) is str
         assert type(data_set['display']) is str or NoneType
         assert data_set['type'] == data_set_type
+
+
+def test_data_sets_query_with_tags(client, tags_query, data_set):
+    response = client.post(
+        '/api', json={'query': tags_query, 'variables': {'dataSet': [data_set]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['dataSets']
+    results = page['items']
+    assert isinstance(results, list)
+    assert len(results) == 1
+    for d in results:
+        assert d['name'] == data_set
+        tags = d['tags']
+        assert isinstance(tags, list)
+        assert len(tags) > 1
+        for tag in tags:
+            assert type(tag['name']) is str

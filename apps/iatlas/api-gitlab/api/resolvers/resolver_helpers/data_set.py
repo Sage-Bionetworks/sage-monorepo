@@ -1,33 +1,42 @@
 from sqlalchemy.orm import aliased
 from api import db
 from sqlalchemy import and_
-from api.db_models import Dataset, Sample, DatasetToSample
+from api.db_models import Dataset, Sample, DatasetToSample, DatasetToTag, Tag
 from .general_resolvers import get_selected, get_value, build_join_condition
 from .sample import build_sample_graphql_response
+from .tag import build_tag_graphql_response
 from .paging_utils import get_pagination_queries
 
 
 simple_data_set_request_fields = {'display', 'name', 'type'}
 
-data_set_request_fields = simple_data_set_request_fields.union({'samples'})
+data_set_request_fields = simple_data_set_request_fields.union({
+                                                               'samples', 'tags'})
 
 
-def build_data_set_graphql_response(prefix='data_set_', requested=[], sample_requested=[], sample=None):
+def build_data_set_graphql_response(prefix='data_set_', requested=[], sample_requested=[], tag_requested=[], sample=None):
 
     def f(data_set):
         if not data_set:
             return None
         else:
+            import logging
+            logger = logging.getLogger('dataset response')
+            logger.info(data_set)
             id = get_value(data_set, prefix +
                            'id') or get_value(data_set, 'id')
             samples = get_samples(id, requested, sample_requested, sample)
+            tags = get_tags(id, requested, tag_requested)
+            logger.info(tags)
             dict = {
                 'id': id,
                 'display': get_value(data_set, prefix + 'display') or get_value(data_set, 'display'),
                 'name': get_value(data_set, prefix + 'name') or get_value(data_set),
                 'samples': map(build_sample_graphql_response, samples),
+                'tags': map(build_tag_graphql_response(), tags),
                 'type': get_value(data_set, prefix + 'type') or get_value(data_set, 'type'),
             }
+            logger.info(dict)
             return(dict)
     return(f)
 
@@ -115,5 +124,35 @@ def get_samples(dataset_id, requested, sample_requested, sample=None):
             sample_1.id.in_(data_set_to_sample_subquery))
 
         return sample_query.distinct().all()
+
+    return []
+
+
+def get_tags(dataset_id, requested, tag_requested):
+    if 'tags' in requested:
+        sess = db.session
+
+        data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
+        tag_1 = aliased(Tag, name='t')
+
+        core_field_mapping = {
+            'characteristics': tag_1.characteristics.label('tag_characteristics'),
+            'color': tag_1.color.label('tag_color'),
+            'longDisplay': tag_1.long_display.label('tag_long_display'),
+            'name': tag_1.name.label('tag_name'),
+            'shortDisplay': tag_1.short_display.label('tag_short_display')
+        }
+
+        core = get_selected(tag_requested, core_field_mapping)
+        query = sess.query(*core)
+        query = query.select_from(tag_1)
+
+        subquery = sess.query(data_set_to_tag_1.tag_id)
+
+        subquery = subquery.filter(data_set_to_tag_1.dataset_id == dataset_id)
+
+        query = query.filter(tag_1.id.in_(subquery))
+
+        return query.distinct().all()
 
     return []
