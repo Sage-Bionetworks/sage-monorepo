@@ -94,7 +94,7 @@ def tags_query(common_query_builder):
 
 
 def test_data_sets_cursor_pagination_first(client, common_query):
-    num = 2
+    num = 5
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'paging': {'first': num}
@@ -203,14 +203,12 @@ def test_data_sets_query_with_sample(client, samples_query, sample):
     assert len(results) == 1
     for data_set in results:
         samples = data_set['samples']
-
         assert type(data_set['name']) is str
         assert type(data_set['display']) is str or NoneType
         assert isinstance(samples, list)
         assert len(samples) == 1
-        if samples:
-            for current_sample in samples:
-                assert current_sample['name'] == sample
+        for current_sample in samples:
+            assert current_sample['name'] == sample
 
 
 def test_data_sets_query_with_dataSet_and_sample(client, samples_query, data_set, sample):

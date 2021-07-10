@@ -20,17 +20,16 @@ def build_data_set_graphql_response(prefix='data_set_', requested=[], sample_req
         if not data_set:
             return None
         else:
-            id = get_value(data_set, prefix +
-                           'id') or get_value(data_set, 'id')
+            id = get_value(data_set, prefix + 'id')
             samples = get_samples(id, requested, sample_requested, sample)
             tags = get_tags(id, requested, tag_requested)
             dict = {
                 'id': id,
-                'display': get_value(data_set, prefix + 'display') or get_value(data_set, 'display'),
-                'name': get_value(data_set, prefix + 'name') or get_value(data_set),
+                'display': get_value(data_set, prefix + 'display'),
+                'name': get_value(data_set, prefix + 'name'),
+                'type': get_value(data_set, prefix + 'type'),
                 'samples': map(build_sample_graphql_response(), samples),
                 'tags': map(build_tag_graphql_response(), tags),
-                'type': get_value(data_set, prefix + 'type') or get_value(data_set, 'type'),
             }
             return(dict)
     return(f)
@@ -57,14 +56,13 @@ def build_data_set_request(requested, data_set=None, sample=None, data_set_type=
     sample_1 = aliased(Sample, name='s')
 
     core_field_mapping = {
-        'id': data_set_1.id.label('id'),
         'display': data_set_1.display.label('data_set_display'),
         'name': data_set_1.name.label('data_set_name'),
         'type': data_set_1.data_set_type.label('data_set_type')
     }
 
     core = get_selected(requested, core_field_mapping)
-    core |= {data_set_1.id.label('id')}
+    core |= {data_set_1.id.label('data_set_id')}
 
     query = sess.query(*core)
     query = query.select_from(data_set_1)
@@ -102,7 +100,7 @@ def get_samples(dataset_id, requested, sample_requested, sample=None):
             'name': sample_1.name.label('sample_name')}
 
         sample_core = get_selected(sample_requested, sample_core_field_mapping)
-        sample_core |= {sample_1.id.label('id')}
+        #sample_core |= {sample_1.id.label('sample_id')}
 
         sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)
