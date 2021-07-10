@@ -3,7 +3,7 @@ from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import (Feature, FeatureClass, FeatureToSample,
                            MethodTag, Sample, Cohort, CohortToSample, CohortToFeature)
-from .sample import build_feature_sample_graphql_response
+from .sample import build_sample_graphql_response
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries, fetch_page
 from decimal import Decimal
@@ -44,7 +44,8 @@ def build_feature_graphql_response(requested=[], sample_requested=[], max_value=
         samples = get_feature_samples(
             [feature_id], requested=requested, sample_requested=sample_requested, max_value=max_value, min_value=min_value, cohort=cohort, sample=sample)
         if 'valueMax' in requested or 'valueMin' in requested:
-            values = [get_value(sample, 'value') for sample in samples]
+            values = [get_value(sample, 'sample_feature_value')
+                      for sample in samples]
         value_min = min(values) if 'valueMin' in requested else None
         value_max = max(values) if 'valueMax' in requested else None
         result = {
@@ -57,7 +58,7 @@ def build_feature_graphql_response(requested=[], sample_requested=[], max_value=
             'germlineModule': get_value(feature, 'feature_germline_module'),
             'germlineCategory': get_value(feature, 'feature_germline_category'),
             'unit': get_value(feature, 'feature_unit'),
-            'samples': map(build_feature_sample_graphql_response, samples),
+            'samples': map(build_sample_graphql_response, samples),
             'valueMin': value_min if type(value_min) is Decimal else None,
             'valueMax': value_max if type(value_max) is Decimal else None
         }
@@ -177,7 +178,8 @@ def get_feature_samples(feature_id, requested, sample_requested, max_value=None,
         cohort_1 = aliased(Cohort, name='c')
         cohort_to_sample_1 = aliased(CohortToSample, name='cts')
 
-        sample_core_field_mapping = {'name': sample_1.name.label('name')}
+        sample_core_field_mapping = {
+            'name': sample_1.name.label('sample_name')}
 
         sample_core = get_selected(sample_requested, sample_core_field_mapping)
         # Always select the sample id and the feature id.
@@ -185,7 +187,8 @@ def get_feature_samples(feature_id, requested, sample_requested, max_value=None,
             'id'), feature_to_sample_1.feature_id.label('feature_id')}
 
         if has_max_min or 'value' in sample_requested:
-            sample_core |= {feature_to_sample_1.value.label('value')}
+            sample_core |= {feature_to_sample_1.value.label(
+                'sample_feature_value')}
 
         sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)
@@ -236,7 +239,8 @@ def get_samples(requested, sample_requested, distinct, paging, max_value=None, m
         cohort_1 = aliased(Cohort, name='c')
         cohort_to_sample_1 = aliased(CohortToSample, name='cts')
 
-        sample_core_field_mapping = {'name': sample_1.name.label('name')}
+        sample_core_field_mapping = {
+            'name': sample_1.name.label('sample_name')}
 
         sample_core = get_selected(sample_requested, sample_core_field_mapping)
         # Always select the sample id and the feature id.
@@ -244,7 +248,8 @@ def get_samples(requested, sample_requested, distinct, paging, max_value=None, m
             'id'), feature_to_sample_1.feature_id.label('feature_id')}
 
         if has_max_min or 'value' in sample_requested:
-            sample_core |= {feature_to_sample_1.value.label('value')}
+            sample_core |= {feature_to_sample_1.value.label(
+                'sample_feature_value')}
 
         sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)

@@ -274,7 +274,8 @@ def get_samples(tag_id, requested, sample_requested, cohort=None, sample=None):
         cohort_1 = aliased(Cohort, name='c')
         cohort_to_sample_1 = aliased(CohortToSample, name='cts')
 
-        sample_core_field_mapping = {'name': sample_1.name.label('name')}
+        sample_core_field_mapping = {
+            'name': sample_1.name.label('sample_name')}
 
         sample_core = get_selected(sample_requested, sample_core_field_mapping)
         sample_core |= {sample_1.id.label('id')}

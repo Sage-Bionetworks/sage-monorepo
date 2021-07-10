@@ -9,7 +9,7 @@ from api.db_models import (
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .publication import build_publication_graphql_response
 from .paging_utils import get_pagination_queries, fetch_page
-from .sample import build_gene_sample_graphql_response
+from .sample import build_sample_graphql_response
 
 
 simple_gene_request_fields = {
@@ -56,7 +56,7 @@ def build_gene_graphql_response(pub_dict=dict(), gene_type_dict=dict(), sample_d
             'publications': map(build_publication_graphql_response, publications),
             'superCategory': get_value(gene, 'gene_super_category'),
             'therapyType': get_value(gene, 'gene_therapy_type'),
-            'samples': map(build_gene_sample_graphql_response, samples)
+            'samples': map(build_sample_graphql_response, samples)
         }
     return f
 
@@ -243,7 +243,7 @@ def get_samples(requested, sample_requested, distinct=False, paging=None, entrez
 
         core_field_mapping = {
             'name': sample_1.name.label('sample_name'),
-            'rnaSeqExpr': gene_to_sample_1.rna_seq_expr.label('gene_rna_seq_expr')
+            'rnaSeqExpr': gene_to_sample_1.rna_seq_expr.label('sample_gene_rna_seq_expr')
         }
 
         core = get_selected(sample_requested, core_field_mapping)

@@ -1,8 +1,8 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import (Dataset, DatasetToSample, DatasetToTag, Feature, FeatureClass, FeatureToSample,
-                           Patient, Sample, SampleToMutation, Tag, TagToTag)
+from api.db_models import (Dataset, DatasetToSample, Feature, FeatureClass, FeatureToSample,
+                           Patient, Sample)
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .patient import build_patient_graphql_response
 from .response_utils import build_simple_tag_graphql_response
@@ -28,36 +28,15 @@ sample_by_mutation_status_request_fields = {'status', 'samples'}
 
 def build_sample_graphql_response(sample):
     return {
-        'id': get_value(sample, 'id'),
-        'name': get_value(sample),
+        'id': get_value(sample, 'sample_id'),
+        'name': get_value(sample, 'sample_name'),
+        'status': get_value(sample, 'sample_mutation_status'),
         'patient': build_patient_graphql_response()(sample),
-        'status': get_value(sample, 'status')
-    }
-
-
-def build_cohort_sample_graphql_response(sample):
-    dict = {
-        'name': get_value(sample, 'sample_name'),
         'tag': build_simple_tag_graphql_response(
-            sample) if get_value(sample, 'tag_name') else None
+            sample) if get_value(sample, 'tag_name') else None,
+        'rnaSeqExpr': get_value(sample, 'sample_gene_rna_seq_expr'),
+        'value': get_value(sample, 'sample_feature_value')
     }
-    return dict
-
-
-def build_gene_sample_graphql_response(sample):
-    dict = {
-        'name': get_value(sample, 'sample_name'),
-        'rnaSeqExpr': get_value(sample, 'gene_rna_seq_expr')
-    }
-    return dict
-
-
-def build_feature_sample_graphql_response(sample):
-    dict = {
-        'name': get_value(sample, 'name'),
-        'value': get_value(sample, 'value')
-    }
-    return dict
 
 
 def build_sample_mutation_join_condition(sample_to_mutation_model, sample_model, mutation_status, mutation_id=None, status=None):
@@ -106,7 +85,7 @@ def build_sample_request(
     sample_1 = aliased(Sample, name='s')
 
     core_field_mapping = {
-        'name': sample_1.name.label('name')
+        'name': sample_1.name.label('sample_name')
     }
     patient_core_field_mapping = {
         'ageAtDiagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
@@ -119,7 +98,7 @@ def build_sample_request(
     }
 
     core = get_selected(requested, core_field_mapping)
-    core.add(sample_1.id.label('id'))
+    core.add(sample_1.id.label('sample_id'))
     patient_core = get_selected(patient_requested, patient_core_field_mapping)
 
     query = sess.query(*[*core, *patient_core])

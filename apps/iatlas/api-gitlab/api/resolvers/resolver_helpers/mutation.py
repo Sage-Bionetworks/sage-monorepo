@@ -186,8 +186,8 @@ def get_samples(requested, patient_requested, sample_requested, cohort=None, ent
         sample_1 = aliased(Sample, name='s')
         sample_to_mutation_1 = aliased(SampleToMutation, name='sm')
 
-        core_field_mapping = {'id': sample_1.id.label('id'), 'name': sample_1.name.label('name'),
-                              'status': sample_to_mutation_1.status.label('status')}
+        core_field_mapping = {'id': sample_1.id.label('id'), 'name': sample_1.name.label('sample_name'),
+                              'status': sample_to_mutation_1.status.label('sample_mutation_status')}
         patient_field_mapping = {'ageAtDiagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
                                  'barcode': patient_1.barcode.label('barcode'),
                                  'ethnicity': patient_1.ethnicity.label('ethnicity'),
