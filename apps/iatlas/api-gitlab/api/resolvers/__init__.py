@@ -21,7 +21,6 @@ from .pathway_resolver import resolve_pathways
 from .patient_resolver import resolve_patients
 from .rare_variant_pathway_association_resolver import resolve_rare_variant_pathway_associations
 from .samples_resolver import resolve_samples
-from .samples_by_mutations_status_resolver import resolve_samples_by_mutations_status
 from .slide_resolver import resolve_slides
 from .snp_resolver import resolve_snps
 from .super_categories_resolver import resolve_super_categories
