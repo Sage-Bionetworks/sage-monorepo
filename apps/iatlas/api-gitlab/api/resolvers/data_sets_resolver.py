@@ -1,9 +1,7 @@
 from .resolver_helpers import build_data_set_graphql_response, data_set_request_fields, simple_sample_request_fields, simple_tag_request_fields, get_requested, build_data_set_request, get_selection_set
 from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
-from ..telemetry import profile
 
 
-@profile(__name__)
 def resolve_data_sets(_obj, info, dataSet=None, sample=None, dataSetType=None, paging=None, distinct=False):
 
     selection_set = get_selection_set(info=info, child_node='items')
