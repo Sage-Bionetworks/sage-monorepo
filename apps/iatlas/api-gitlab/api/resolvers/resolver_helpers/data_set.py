@@ -100,17 +100,19 @@ def get_samples(dataset_id, requested, sample_requested, sample=None):
         sample_core |= {sample_1.id.label('id')}
 
         sample_query = sess.query(*sample_core)
-        sample_query = sample_query.select_from(data_set_to_sample_1)
-
-        sample_query = sample_query.filter(
-            data_set_to_sample_1.dataset_id.in_([dataset_id]))
+        sample_query = sample_query.select_from(sample_1)
 
         if sample:
-            sample_join_condition = build_join_condition(
-                data_set_to_sample_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
+            sample_query = sample_query.filter(sample_1.name.in_(sample))
 
-            sample_query = sample_query.join(sample_1, and_(
-                *sample_join_condition), isouter=False)
+        data_set_to_sample_subquery = sess.query(
+            data_set_to_sample_1.sample_id)
+
+        data_set_to_sample_subquery = data_set_to_sample_subquery.filter(
+            data_set_to_sample_1.dataset_id == dataset_id)
+
+        sample_query = sample_query.filter(
+            sample_1.id.in_(data_set_to_sample_subquery))
 
         return sample_query.distinct().all()
 
