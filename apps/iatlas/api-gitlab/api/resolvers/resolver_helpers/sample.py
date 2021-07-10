@@ -26,17 +26,23 @@ mutation_related_sample_request_fields = sample_request_fields.union({
 sample_by_mutation_status_request_fields = {'status', 'samples'}
 
 
-def build_sample_graphql_response(sample):
-    return {
-        'id': get_value(sample, 'sample_id'),
-        'name': get_value(sample, 'sample_name'),
-        'status': get_value(sample, 'sample_mutation_status'),
-        'patient': build_patient_graphql_response()(sample),
-        'tag': build_simple_tag_graphql_response(
-            sample) if get_value(sample, 'tag_name') else None,
-        'rnaSeqExpr': get_value(sample, 'sample_gene_rna_seq_expr'),
-        'value': get_value(sample, 'sample_feature_value')
-    }
+def build_sample_graphql_response(prefix='sample_'):
+    def f(sample):
+        if not sample:
+            return None
+        else:
+            dict = {
+                'id': get_value(sample, prefix + 'id'),
+                'name': get_value(sample, prefix + 'name'),
+                'status': get_value(sample, prefix + 'mutation_status'),
+                'rnaSeqExpr': get_value(sample, prefix + 'gene_rna_seq_expr'),
+                'value': get_value(sample, prefix + 'feature_value'),
+                'patient': build_patient_graphql_response()(sample),
+                'tag': build_simple_tag_graphql_response(
+                    sample) if get_value(sample, 'tag_name') else None,
+            }
+            return(dict)
+    return(f)
 
 
 def build_sample_mutation_join_condition(sample_to_mutation_model, sample_model, mutation_status, mutation_id=None, status=None):

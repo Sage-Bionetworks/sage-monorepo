@@ -18,4 +18,4 @@ def resolve_samples(_obj, info, maxAgeAtDiagnosis=None, minAgeAtDiagnosis=None, 
                                               ethnicity=ethnicity, gender=gender, max_height=maxHeight, min_height=minHeight, patient=patient, race=race, sample=name, max_weight=maxWeight, min_weight=minWeight, paging=paging, distinct=distinct)
 
     pagination_requested = get_requested(info, paging_fields, 'paging')
-    return paginate(query, count_query, paging, distinct, build_sample_graphql_response, pagination_requested)
+    return paginate(query, count_query, paging, distinct, build_sample_graphql_response(), pagination_requested)

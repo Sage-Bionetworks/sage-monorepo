@@ -58,7 +58,7 @@ def build_feature_graphql_response(requested=[], sample_requested=[], max_value=
             'germlineModule': get_value(feature, 'feature_germline_module'),
             'germlineCategory': get_value(feature, 'feature_germline_category'),
             'unit': get_value(feature, 'feature_unit'),
-            'samples': map(build_sample_graphql_response, samples),
+            'samples': map(build_sample_graphql_response(), samples),
             'valueMin': value_min if type(value_min) is Decimal else None,
             'valueMax': value_max if type(value_max) is Decimal else None
         }

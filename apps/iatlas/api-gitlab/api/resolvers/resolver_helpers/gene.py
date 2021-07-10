@@ -56,7 +56,7 @@ def build_gene_graphql_response(pub_dict=dict(), gene_type_dict=dict(), sample_d
             'publications': map(build_publication_graphql_response, publications),
             'superCategory': get_value(gene, 'gene_super_category'),
             'therapyType': get_value(gene, 'gene_therapy_type'),
-            'samples': map(build_sample_graphql_response, samples)
+            'samples': map(build_sample_graphql_response(), samples)
         }
     return f
 

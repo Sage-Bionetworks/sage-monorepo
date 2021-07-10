@@ -29,7 +29,7 @@ def build_mutation_graphql_response(sample_dict=dict()):
             'gene': build_gene_graphql_response()(mutation),
             'mutationCode': get_value(mutation, 'mutation_code') or get_value(mutation, 'code'),
             'mutationType': build_mutation_type_graphql_response(mutation),
-            'samples': map(build_sample_graphql_response, samples),
+            'samples': map(build_sample_graphql_response(), samples),
             'status': get_value(mutation, 'status')
         }
     return f

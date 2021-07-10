@@ -20,23 +20,18 @@ def build_data_set_graphql_response(prefix='data_set_', requested=[], sample_req
         if not data_set:
             return None
         else:
-            import logging
-            logger = logging.getLogger('dataset response')
-            logger.info(data_set)
             id = get_value(data_set, prefix +
                            'id') or get_value(data_set, 'id')
             samples = get_samples(id, requested, sample_requested, sample)
             tags = get_tags(id, requested, tag_requested)
-            logger.info(tags)
             dict = {
                 'id': id,
                 'display': get_value(data_set, prefix + 'display') or get_value(data_set, 'display'),
                 'name': get_value(data_set, prefix + 'name') or get_value(data_set),
-                'samples': map(build_sample_graphql_response, samples),
+                'samples': map(build_sample_graphql_response(), samples),
                 'tags': map(build_tag_graphql_response(), tags),
                 'type': get_value(data_set, prefix + 'type') or get_value(data_set, 'type'),
             }
-            logger.info(dict)
             return(dict)
     return(f)
 

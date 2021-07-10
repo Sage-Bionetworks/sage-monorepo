@@ -45,7 +45,7 @@ def build_tag_graphql_response(requested=[], sample_requested=[], publications_r
             'publications': map(build_publication_graphql_response, publication_dict) if publication_dict else None,
             'related': map(build_tag_graphql_response(requested=related_requested), related_dict) if related_dict else None,
             'sampleCount': len(sample_dict) if sample_dict and 'sampleCount' in requested else None,
-            'samples': map(build_sample_graphql_response, sample_dict) if sample_dict and 'samples' in requested else None,
+            'samples': map(build_sample_graphql_response(), sample_dict) if sample_dict and 'samples' in requested else None,
             'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display')
         }
         return(result)
