@@ -409,7 +409,8 @@ def test_copyNumberResults_query_with_passed_tag(client, common_query_builder, d
         '/api', json={'query': query, 'variables': {
             'dataSet': [data_set],
             'feature': [cnr_feature],
-            'tag': [cnr_tag_name]
+            'tag': [cnr_tag_name],
+            'paging': {'first': 100000}
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -474,7 +475,8 @@ def test_copyNumberResults_query_with_passed_min_p_value_and_min_log10_p_value(c
             'entrez': [entrez],
             'minLog10PValue': min_log10_p_value,
             'minPValue': min_p_value,
-            'tag': [cnr_tag_name]
+            'tag': [cnr_tag_name],
+            'paging': {'first': 10000}
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -645,7 +647,10 @@ def test_copyNumberResults_query_with_no_arguments(client, common_query_builder)
                 tStat
             }
         }""")
-    response = client.post('/api', json={'query': query})
+    response = client.post('/api', json={
+        'query': query,
+        'variables': {'paging': {'first': 10000}}
+    })
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
     results = page['items']

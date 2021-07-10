@@ -11,38 +11,44 @@ from .gene import build_gene_graphql_response
 from .paging_utils import create_temp_table, get_pagination_queries
 from .response_utils import build_simple_tag_graphql_response
 
-node_request_fields = {'dataSet',
-                       'feature',
-                       'gene',
-                       'label',
-                       'name',
-                       'score',
-                       'tags',
-                       'x',
-                       'y'}
+node_request_fields = {
+    'dataSet',
+    'feature',
+    'gene',
+    'label',
+    'name',
+    'score',
+    'tags',
+    'x',
+    'y'
+}
 
 
 def build_node_graphql_response(tag_dict):
     def f(node):
-        node_id = get_value(node, 'id')
-        tags = tag_dict.get(node_id, []) if tag_dict else []
-        has_feature = get_value(node, 'feature_name') or get_value(
-            node, 'feature_display') or get_value(node, 'order') or get_value(node, 'unit')
-        has_gene = get_value(node, 'entrez') or get_value(node, 'hgnc') or get_value(
-            node, 'description') or get_value(node, 'friendly_name') or get_value(node, 'io_landscape_name')
-        return {
-            'id': node_id,
-            'dataSet': build_data_set_graphql_response()(node),
-            'feature': build_feature_graphql_response()(node) if has_feature else None,
-            'gene': build_gene_graphql_response()(node) if has_gene else None,
-            'label': get_value(node, 'label'),
-            'name': get_value(node, 'node_name'),
-            'score': get_value(node, 'score'),
-            'tags': map(build_simple_tag_graphql_response, tags),
-            'x': get_value(node, 'x'),
-            'y': get_value(node, 'y')
-        }
-    return f
+        if not node:
+            return None
+        else:
+            node_id = get_value(node, 'id')
+            tags = tag_dict.get(node_id, []) if tag_dict else []
+            has_feature = get_value(node, 'feature_name') or get_value(
+                node, 'feature_display') or get_value(node, 'order') or get_value(node, 'unit')
+            has_gene = get_value(node, 'entrez') or get_value(node, 'hgnc') or get_value(
+                node, 'description') or get_value(node, 'friendly_name') or get_value(node, 'io_landscape_name')
+            dict = {
+                'id': node_id,
+                'dataSet': build_data_set_graphql_response()(node),
+                'feature': build_feature_graphql_response()(node) if has_feature else None,
+                'gene': build_gene_graphql_response()(node) if has_gene else None,
+                'label': get_value(node, 'label'),
+                'name': get_value(node, 'node_name'),
+                'score': get_value(node, 'score'),
+                'tags': map(build_simple_tag_graphql_response(), tags),
+                'x': get_value(node, 'x'),
+                'y': get_value(node, 'y')
+            }
+            return(dict)
+    return(f)
 
 
 def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, distinct=False, entrez=None, feature=None, feature_class=None, gene_type=None, max_score=None, min_score=None, network=None, paging=None, related=None, tag=None):
@@ -219,10 +225,10 @@ def return_associated_tags(table_name, conn, tag_requested):
         3rd position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this should be an empty set.
     '''
     tag_1 = aliased(Tag, name='t')
-    tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
-                              'color': tag_1.color.label('color'),
+    tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('tag_characteristics'),
+                              'color': tag_1.color.label('tag_color'),
                               'longDisplay': tag_1.long_display.label('tag_long_display'),
-                              'name': tag_1.name.label('name'),
+                              'name': tag_1.name.label('tag_name'),
                               'shortDisplay': tag_1.short_display.label('tag_short_display')}
 
     tag_core = get_selected(tag_requested, tag_core_field_mapping)

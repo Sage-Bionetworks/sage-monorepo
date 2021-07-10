@@ -21,21 +21,26 @@ cnr_request_fields = {'dataSet',
                       'tStat'}
 
 
-def build_cnr_graphql_response(copy_number_result):
-    result = {
-        'id': get_value(copy_number_result, 'id'),
-        'direction': get_value(copy_number_result, 'direction'),
-        'meanNormal': get_value(copy_number_result, 'mean_normal'),
-        'meanCnv': get_value(copy_number_result, 'mean_cnv'),
-        'pValue': get_value(copy_number_result, 'p_value'),
-        'log10PValue': get_value(copy_number_result, 'log10_p_value'),
-        'tStat': get_value(copy_number_result, 't_stat'),
-        'dataSet': build_data_set_graphql_response()(copy_number_result),
-        'feature': build_feature_graphql_response()(copy_number_result),
-        'gene': build_gene_graphql_response()(copy_number_result),
-        'tag': build_simple_tag_graphql_response(copy_number_result)
-    }
-    return(result)
+def build_cnr_graphql_response(prefix=''):
+    def f(copy_number_result):
+        if not copy_number_result:
+            return None
+        else:
+            dict = {
+                'id': get_value(copy_number_result, prefix + 'id'),
+                'direction': get_value(copy_number_result, prefix + 'direction'),
+                'meanNormal': get_value(copy_number_result, prefix + 'mean_normal'),
+                'meanCnv': get_value(copy_number_result, prefix + 'mean_cnv'),
+                'pValue': get_value(copy_number_result, prefix + 'p_value'),
+                'log10PValue': get_value(copy_number_result, prefix + 'log10_p_value'),
+                'tStat': get_value(copy_number_result, prefix + 't_stat'),
+                'dataSet': build_data_set_graphql_response()(copy_number_result),
+                'feature': build_feature_graphql_response()(copy_number_result),
+                'gene': build_gene_graphql_response()(copy_number_result),
+                'tag': build_simple_tag_graphql_response()(copy_number_result)
+            }
+            return(dict)
+    return(f)
 
 
 def build_copy_number_result_request(
@@ -98,8 +103,8 @@ def build_copy_number_result_request(
                           'friendlyName': gene_1.friendly_name.label('friendly_name'),
                           'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
 
-    tag_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
-                         'color': tag_1.color.label('color'),
+    tag_field_mapping = {'characteristics': tag_1.characteristics.label('tag_characteristics'),
+                         'color': tag_1.color.label('tag_color'),
                          'longDisplay': tag_1.long_display.label('tag_long_display'),
                          'name': tag_1.name.label('tag_name'),
                          'shortDisplay': tag_1.short_display.label('tag_short_display')}

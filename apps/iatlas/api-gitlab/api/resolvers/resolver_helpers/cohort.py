@@ -31,8 +31,7 @@ def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={},
                 'id': cohort_id,
                 'name': get_value(cohort, 'cohort_name'),
                 'dataSet': build_data_set_graphql_response()(cohort),
-                'tag': build_simple_tag_graphql_response(
-                    cohort) if get_value(cohort, 'tag_name') else None,
+                'tag': build_simple_tag_graphql_response()(cohort),
                 'samples': map(build_sample_graphql_response(), samples),
                 'features': map(build_feature_graphql_response(), features),
                 'genes': map(build_gene_graphql_response(), genes),
@@ -64,7 +63,6 @@ def build_cohort_request(requested, data_set_requested, tag_requested, cohort=No
     tag_1 = aliased(Tag, name='t')
 
     core_field_mapping = {
-        'id': cohort_1.id.label('cohort_id'),
         'name': cohort_1.name.label('cohort_name'),
     }
 

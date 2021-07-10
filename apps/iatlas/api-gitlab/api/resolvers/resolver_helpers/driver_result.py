@@ -37,7 +37,7 @@ def build_dr_graphql_response(driver_result):
         'gene': build_gene_graphql_response()(driver_result),
         'mutationCode': get_value(driver_result, 'code'),
         'mutationId': get_value(driver_result, 'mutation_id'),
-        'tag': build_simple_tag_graphql_response(driver_result)
+        'tag': build_simple_tag_graphql_response()(driver_result)
     }
     return(result)
 
@@ -104,8 +104,8 @@ def build_driver_result_request(
                                'description': gene_1.description.label('description'),
                                'friendlyName': gene_1.friendly_name.label('friendly_name'),
                                'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
-    tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
-                              'color': tag_1.color.label('color'),
+    tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('tag_characteristics'),
+                              'color': tag_1.color.label('tag_color'),
                               'longDisplay': tag_1.long_display.label('tag_long_display'),
                               'name': tag_1.name.label('tag_name'),
                               'shortDisplay': tag_1.short_display.label('tag_short_display')}
