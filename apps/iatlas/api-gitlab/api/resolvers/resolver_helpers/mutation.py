@@ -9,12 +9,14 @@ from .mutation_type import build_mutation_type_graphql_response
 from .paging_utils import get_pagination_queries
 from .sample import build_sample_graphql_response
 
-mutation_request_fields = {'id',
-                           'gene',
-                           'mutationCode',
-                           'mutationType',
-                           'samples',
-                           'status'}
+mutation_request_fields = {
+    'id',
+    'gene',
+    'mutationCode',
+    'mutationType',
+    'samples',
+    'status'
+}
 
 
 def build_mutation_graphql_response(sample_dict=dict()):
@@ -35,7 +37,7 @@ def build_mutation_graphql_response(sample_dict=dict()):
     return f
 
 
-def build_mutation_request(requested, gene_requested, mutation_type_requested, sample_requested, cohort=None, distinct=False, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, paging=None, sample=None, status=None, by_sample=False):
+def build_mutation_request(requested, gene_requested, mutation_type_requested, sample_requested, distinct=False, paging=None, cohort=None, entrez=None, mutation_code=None, mutation_id=None, mutation_type=None, sample=None, status=None):
     '''
     Builds a SQL request
 
@@ -43,19 +45,18 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, s
         1st position - a set of the requested fields at the root of the graphql request
         2nd position - a set of the requested fields in the 'gene' node of the graphql request. If 'gene' is not requested, this will be an empty set.
         3rd position - a set of the requested fields in the 'mutationType' node of the graphql request. If 'mutationType' is not requested, this will be an empty set.
+        4th position - a set of the requested fields in the 'sample' node of the graphql request. If 'sample' is not requested, this will be an empty set.
 
     All keyword arguments are optional. Keyword arguments are:
-        `data_set` - a list of strings, data set names
+        `distinct` - a boolean, indicates whether duplicate records should be filtered out
+        `paging` - a dict containing pagination metadata
+        `cohort` - a list of strings, cohort names
         `entrez` - a list of integers, gene entrez ids
-        `feature` - a list of strings, feature names
-        `feature_class` - a list of strings, feature class names
         `mutation_code` - a list of strings, mutation codes
         `mutation_id` - a list of integers, mutation ids
         `mutation_type` - a list of strings, mutation type names
-        `related` - a list of strings, tag names related to the data set
         `sample` - a list of strings, sample names
-        `tag` - a list of strings, tag names
-        'by_sample' a boolean, truen if the mutations are requested by sample.
+        `status` - a string, either `Mut` or `Wt`
     '''
     sess = db.session
 
@@ -70,13 +71,14 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, s
 
     core_field_mapping = {
         'mutationCode': mutation_code_1.code.label('code'),
-        'status': sample_to_mutation_1.status.label('status')}
+        'status': sample_to_mutation_1.status.label('status')
+    }
     gene_core_field_mapping = {
-        'entrez': gene_1.entrez.label('entrez'),
-        'hgnc': gene_1.hgnc.label('hgnc'),
-        'description': gene_1.description.label('description'),
-        'friendlyName': gene_1.friendly_name.label('friendly_name'),
-        'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')
+        'entrez': gene_1.entrez.label('gene_entrez'),
+        'hgnc': gene_1.hgnc.label('gene_hgnc'),
+        'description': gene_1.description.label('gene_description'),
+        'friendlyName': gene_1.friendly_name.label('gene_friendly_name'),
+        'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
     }
     mutation_type_field_mapping = {
         'display': mutation_type_1.display.label('display'),
@@ -98,9 +100,6 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, s
     mutation_type_core = get_selected(
         mutation_type_requested, mutation_type_field_mapping)
     sample_core = get_selected(sample_requested, sample_core_field_mapping)
-
-    if by_sample:
-        sample_core |= {sample_1.id.label('sample_id')}
 
     query = sess.query(*[*core, *gene_core, *mutation_type_core, *sample_core])
     query = query.select_from(mutation_1)
@@ -186,15 +185,19 @@ def get_samples(requested, patient_requested, sample_requested, cohort=None, ent
         sample_1 = aliased(Sample, name='s')
         sample_to_mutation_1 = aliased(SampleToMutation, name='sm')
 
-        core_field_mapping = {'id': sample_1.id.label('id'), 'name': sample_1.name.label('sample_name'),
-                              'status': sample_to_mutation_1.status.label('sample_mutation_status')}
-        patient_field_mapping = {'ageAtDiagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
-                                 'barcode': patient_1.barcode.label('barcode'),
-                                 'ethnicity': patient_1.ethnicity.label('ethnicity'),
-                                 'gender': patient_1.gender.label('gender'),
-                                 'height': patient_1.height.label('height'),
-                                 'race': patient_1.race.label('race'),
-                                 'weight': patient_1.weight.label('weight')}
+        core_field_mapping = {
+            'id': sample_1.id.label('id'), 'name': sample_1.name.label('sample_name'),
+            'status': sample_to_mutation_1.status.label('sample_mutation_status')
+        }
+        patient_field_mapping = {
+            'ageAtDiagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
+            'barcode': patient_1.barcode.label('barcode'),
+            'ethnicity': patient_1.ethnicity.label('ethnicity'),
+            'gender': patient_1.gender.label('gender'),
+            'height': patient_1.height.label('height'),
+            'race': patient_1.race.label('race'),
+            'weight': patient_1.weight.label('weight')
+        }
         core = get_selected(sample_requested, core_field_mapping)
         # Always select the sample id and the mutation id.
         core |= {sample_to_mutation_1.sample_id.label('id'),

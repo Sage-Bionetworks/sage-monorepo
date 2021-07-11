@@ -85,24 +85,34 @@ def build_colocalization_request(
         'spliceLoc': colocalization_1.splice_loc.label('splice_loc'),
         'plotLink': colocalization_1.plot_link.label('plot_link')
     }
-    data_set_core_field_mapping = {'display': data_set_1.display.label('data_set_display'),
-                                   'name': data_set_1.name.label('data_set_name'),
-                                   'type': data_set_1.data_set_type.label('data_set_type')}
-    coloc_data_set_core_field_mapping = {'display': coloc_data_set_1.display.label('coloc_data_set_display'),
-                                         'name': coloc_data_set_1.name.label('coloc_data_set_name'),
-                                         'type': coloc_data_set_1.data_set_type.label('coloc_data_set_type')}
-    feature_core_field_mapping = {'display': feature_1.display.label('feature_display'),
-                                  'name': feature_1.name.label('feature_name'),
-                                  'order': feature_1.order.label('feature_order'),
-                                  'unit': feature_1.unit.label('feature_unit'),
-                                  'germlineCategory': feature_1.germline_category.label('feature_germline_category'),
-                                  'germlineModule': feature_1.germline_module.label('feature_germline_module')}
-    gene_core_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
-                               'hgnc': gene_1.hgnc.label('hgnc')}
-    snp_core_field_mapping = {'rsid': snp_1.rsid.label('snp_rsid'),
-                              'name': snp_1.name.label('snp_name'),
-                              'bp': snp_1.bp.label('snp_bp'),
-                              'chr': snp_1.chr.label('snp_chr')}
+    data_set_core_field_mapping = {
+        'display': data_set_1.display.label('data_set_display'),
+        'name': data_set_1.name.label('data_set_name'),
+        'type': data_set_1.data_set_type.label('data_set_type')
+    }
+    coloc_data_set_core_field_mapping = {
+        'display': coloc_data_set_1.display.label('coloc_data_set_display'),
+        'name': coloc_data_set_1.name.label('coloc_data_set_name'),
+        'type': coloc_data_set_1.data_set_type.label('coloc_data_set_type')
+    }
+    feature_core_field_mapping = {
+        'display': feature_1.display.label('feature_display'),
+        'name': feature_1.name.label('feature_name'),
+        'order': feature_1.order.label('feature_order'),
+        'unit': feature_1.unit.label('feature_unit'),
+        'germlineCategory': feature_1.germline_category.label('feature_germline_category'),
+        'germlineModule': feature_1.germline_module.label('feature_germline_module')
+    }
+    gene_core_field_mapping = {
+        'entrez': gene_1.entrez.label('gene_entrez'),
+        'hgnc': gene_1.hgnc.label('gene_hgnc')
+    }
+    snp_core_field_mapping = {
+        'rsid': snp_1.rsid.label('snp_rsid'),
+        'name': snp_1.name.label('snp_name'),
+        'bp': snp_1.bp.label('snp_bp'),
+        'chr': snp_1.chr.label('snp_chr')
+    }
 
     core = get_selected(requested, core_field_mapping)
     core |= get_selected(data_set_requested, data_set_core_field_mapping)

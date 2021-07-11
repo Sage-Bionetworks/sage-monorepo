@@ -88,26 +88,34 @@ def build_copy_number_result_request(
         'log10PValue': copy_number_result_1.log10_p_value.label('log10_p_value'),
         'tStat': copy_number_result_1.t_stat.label('t_stat')}
 
-    data_set_field_mapping = {'display': data_set_1.display.label('data_set_display'),
-                              'name': data_set_1.name.label('data_set_name'),
-                              'type': data_set_1.data_set_type.label('data_set_type')}
+    data_set_field_mapping = {
+        'display': data_set_1.display.label('data_set_display'),
+        'name': data_set_1.name.label('data_set_name'),
+        'type': data_set_1.data_set_type.label('data_set_type')
+    }
 
-    feature_field_mapping = {'display': feature_1.display.label('feature_display'),
-                             'name': feature_1.name.label('feature_name'),
-                             'order': feature_1.order.label('order'),
-                             'unit': feature_1.unit.label('unit')}
+    feature_field_mapping = {
+        'display': feature_1.display.label('feature_display'),
+        'name': feature_1.name.label('feature_name'),
+        'order': feature_1.order.label('order'),
+        'unit': feature_1.unit.label('unit')
+    }
 
-    gene_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
-                          'hgnc': gene_1.hgnc.label('hgnc'),
-                          'description': gene_1.description.label('description'),
-                          'friendlyName': gene_1.friendly_name.label('friendly_name'),
-                          'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
+    gene_field_mapping = {
+        'entrez': gene_1.entrez.label('gene_entrez'),
+        'hgnc': gene_1.hgnc.label('gene_hgnc'),
+        'description': gene_1.description.label('gene_description'),
+        'friendlyName': gene_1.friendly_name.label('gene_friendly_name'),
+        'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
+    }
 
-    tag_field_mapping = {'characteristics': tag_1.characteristics.label('tag_characteristics'),
-                         'color': tag_1.color.label('tag_color'),
-                         'longDisplay': tag_1.long_display.label('tag_long_display'),
-                         'name': tag_1.name.label('tag_name'),
-                         'shortDisplay': tag_1.short_display.label('tag_short_display')}
+    tag_field_mapping = {
+        'characteristics': tag_1.characteristics.label('tag_characteristics'),
+        'color': tag_1.color.label('tag_color'),
+        'longDisplay': tag_1.long_display.label('tag_long_display'),
+        'name': tag_1.name.label('tag_name'),
+        'shortDisplay': tag_1.short_display.label('tag_short_display')
+    }
 
     core = get_selected(requested, core_field_mapping)
     core |= get_selected(data_set_requested, data_set_field_mapping)
