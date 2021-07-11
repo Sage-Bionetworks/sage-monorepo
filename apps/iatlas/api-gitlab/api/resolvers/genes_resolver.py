@@ -1,6 +1,5 @@
-from .resolver_helpers import build_gene_graphql_response, build_gene_request, get_selection_set, gene_related_sample_request_fields, gene_request_fields, get_requested, request_genes, return_gene_derived_fields, simple_gene_type_request_fields, simple_publication_request_fields, simple_data_set_request_fields, simple_tag_request_fields
-from .resolver_helpers.paging_utils import paginate, Paging, paging_fields, create_paging
-import logging
+from .resolver_helpers import build_gene_graphql_response, build_gene_request, get_selection_set, gene_related_sample_request_fields, gene_request_fields, get_requested, simple_gene_type_request_fields, simple_publication_request_fields
+from .resolver_helpers.paging_utils import paginate, paging_fields, create_paging
 
 
 def resolve_genes(
@@ -27,10 +26,7 @@ def resolve_genes(
     query, count_query = build_gene_request(
         requested, distinct=distinct, paging=paging, entrez=entrez, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, cohort=cohort, sample=sample, super_category=superCategory, therapy_type=therapyType)
 
-    pubs_dict, types_dict, sample_dict = return_gene_derived_fields(
-        requested, gene_types_requested, publications_requested, samples_requested, distinct, paging, cohort=cohort, entrez=entrez, gene_family=geneFamily, gene_function=geneFunction, gene_type=geneType, immune_checkpoint=immuneCheckpoint, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, pathway=pathway, sample=sample, super_category=superCategory, therapy_type=therapyType)
-
     pagination_requested = get_requested(info, paging_fields, 'paging')
     res = paginate(query, count_query, paging, distinct,
-                   build_gene_graphql_response(pubs_dict, types_dict, sample_dict), pagination_requested)
+                   build_gene_graphql_response(requested, gene_types_requested, publications_requested, samples_requested, gene_type=geneType, max_rna_seq_expr=maxRnaSeqExpr, min_rna_seq_expr=minRnaSeqExpr, cohort=cohort, sample=sample), pagination_requested)
     return(res)

@@ -1,7 +1,6 @@
 import json
 import pytest
-from api.database import return_gene_query
-from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
+from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash
 from tests import NoneType
 
 

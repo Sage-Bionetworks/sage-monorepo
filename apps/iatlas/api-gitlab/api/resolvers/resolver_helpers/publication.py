@@ -8,6 +8,8 @@ publication_request_fields = simple_publication_request_fields.union({
 
 
 def build_publication_graphql_response(pub):
+    if not pub:
+        return None
     return {
         'firstAuthorLastName': get_value(pub, 'first_author_last_name'),
         'doId': get_value(pub, 'do_id'),
