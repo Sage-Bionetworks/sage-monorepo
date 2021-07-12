@@ -1,13 +1,24 @@
 """
 The "Slide" type
 """
-type Slide {
+type SlideNode implements BaseNode {
+  "A unique id for the slide by the database. Please note that this value may change as the database gets updated and should not be relied on."
+  id: ID!
   "The name of the slide."
   name: String!
   "The description of the slide."
   description: String
   "The patient associated to the slide."
   patient: SimplePatient
+}
+
+type Slide implements BaseResult {
+  "A Paging object (see Paging)"
+  paging: Paging
+  "A string describing any error that may have occurred."
+  error: String
+  "A list of returned SlideNodes"
+  items: [SlideNode]
 }
 
 """

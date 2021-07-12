@@ -38,16 +38,45 @@ def common_query_builder():
     return f
 
 
-def test_slides_query_with_passed_slide(client, common_query_builder, slide):
-    query = common_query_builder("""{
-        name
-        description
-        patient { barcode }
-    }""")
+@pytest.fixture(scope='module')
+def common_query(common_query_builder):
+    return common_query_builder(
+        """{
+            items {
+                id
+                name
+                description
+                patient {
+                    ageAtDiagnosis
+                    barcode
+                    ethnicity
+                    gender
+                    height
+                    race
+                    weight
+                }
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+            error
+        }"""
+    )
+
+
+def test_slides_query_with_passed_slide(client, common_query, slide):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'name': slide}})
+        '/api', json={'query': common_query, 'variables': {'name': slide}})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     assert isinstance(results, list)
     assert len(results) == 1
@@ -57,15 +86,11 @@ def test_slides_query_with_passed_slide(client, common_query_builder, slide):
         assert type(result['patient']['barcode']) is str
 
 
-def test_slides_query_with_passed_maxAgeAtDiagnosis(client, common_query_builder, max_age_at_diagnosis):
-    query = common_query_builder("""{
-        name
-        patient { ageAtDiagnosis }
-    }""")
+def test_slides_query_with_passed_maxAgeAtDiagnosis(client, common_query, max_age_at_diagnosis):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'maxAgeAtDiagnosis': max_age_at_diagnosis}})
+        '/api', json={'query': common_query, 'variables': {'maxAgeAtDiagnosis': max_age_at_diagnosis}})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -74,15 +99,11 @@ def test_slides_query_with_passed_maxAgeAtDiagnosis(client, common_query_builder
         assert result['patient']['ageAtDiagnosis'] <= max_age_at_diagnosis
 
 
-def test_slides_query_with_passed_minAgeAtDiagnosis(client, common_query_builder, min_age_at_diagnosis):
-    query = common_query_builder("""{
-        name
-        patient { ageAtDiagnosis }
-    }""")
+def test_slides_query_with_passed_minAgeAtDiagnosis(client, common_query, min_age_at_diagnosis):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'minAgeAtDiagnosis': min_age_at_diagnosis}})
+        '/api', json={'query': common_query, 'variables': {'minAgeAtDiagnosis': min_age_at_diagnosis}})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -91,15 +112,12 @@ def test_slides_query_with_passed_minAgeAtDiagnosis(client, common_query_builder
         assert result['patient']['ageAtDiagnosis'] >= min_age_at_diagnosis
 
 
-def test_slides_query_with_passed_barcode(client, common_query_builder, patient):
-    query = common_query_builder("""{
-        name
-        patient { barcode }
-    }""")
+def test_slides_query_with_passed_barcode(client, common_query, patient):
+
     response = client.post(
-        '/api', json={'query': query, 'variables': {'barcode': [patient]}})
+        '/api', json={'query': common_query, 'variables': {'barcode': [patient]}})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     assert isinstance(results, list)
     assert len(results) == 1
@@ -108,15 +126,12 @@ def test_slides_query_with_passed_barcode(client, common_query_builder, patient)
         assert result['patient']['barcode'] == patient
 
 
-def test_slides_query_with_passed_ethnicity(client, common_query_builder, ethnicity):
-    query = common_query_builder("""{
-        name
-        patient { ethnicity }
-    }""")
+def test_slides_query_with_passed_ethnicity(client, common_query, ethnicity):
+
     response = client.post(
-        '/api', json={'query': query, 'variables': {'ethnicity': [ethnicity]}})
+        '/api', json={'query': common_query, 'variables': {'ethnicity': [ethnicity]}})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -125,15 +140,12 @@ def test_slides_query_with_passed_ethnicity(client, common_query_builder, ethnic
         assert result['patient']['ethnicity'] == ethnicity
 
 
-def test_slides_query_with_passed_gender(client, common_query_builder, gender):
-    query = common_query_builder("""{
-        name
-        patient { gender }
-    }""")
+def test_slides_query_with_passed_gender(client, common_query, gender):
+
     response = client.post(
-        '/api', json={'query': query, 'variables': {'gender': [gender]}})
+        '/api', json={'query': common_query, 'variables': {'gender': [gender]}})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -142,15 +154,12 @@ def test_slides_query_with_passed_gender(client, common_query_builder, gender):
         assert result['patient']['gender'] == gender
 
 
-def test_slides_query_with_passed_maxHeight(client, common_query_builder, max_height):
-    query = common_query_builder("""{
-        name
-        patient { height }
-    }""")
+def test_slides_query_with_passed_maxHeight(client, common_query, max_height):
+
     response = client.post(
-        '/api', json={'query': query, 'variables': {'maxHeight': max_height}})
+        '/api', json={'query': common_query, 'variables': {'maxHeight': max_height}})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -159,15 +168,12 @@ def test_slides_query_with_passed_maxHeight(client, common_query_builder, max_he
         assert result['patient']['height'] <= max_height
 
 
-def test_slides_query_with_passed_minHeight(client, common_query_builder, min_height):
-    query = common_query_builder("""{
-        name
-        patient { height }
-    }""")
+def test_slides_query_with_passed_minHeight(client, common_query, min_height):
+
     response = client.post(
-        '/api', json={'query': query, 'variables': {'minHeight': min_height}})
+        '/api', json={'query': common_query, 'variables': {'minHeight': min_height}})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -176,15 +182,12 @@ def test_slides_query_with_passed_minHeight(client, common_query_builder, min_he
         assert result['patient']['height'] >= min_height
 
 
-def test_slides_query_with_passed_race(client, common_query_builder, race):
-    query = common_query_builder("""{
-        name
-        patient { race }
-    }""")
+def test_slides_query_with_passed_race(client, common_query, race):
+
     response = client.post(
-        '/api', json={'query': query, 'variables': {'race': [race]}})
+        '/api', json={'query': common_query, 'variables': {'race': [race]}})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -193,15 +196,12 @@ def test_slides_query_with_passed_race(client, common_query_builder, race):
         assert result['patient']['race'] == race
 
 
-def test_slides_query_with_passed_maxWeight(client, common_query_builder, max_weight):
-    query = common_query_builder("""{
-        name
-        patient { weight }
-    }""")
+def test_slides_query_with_passed_maxWeight(client, common_query, max_weight):
+
     response = client.post(
-        '/api', json={'query': query, 'variables': {'maxWeight': max_weight}})
+        '/api', json={'query': common_query, 'variables': {'maxWeight': max_weight}})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -210,15 +210,12 @@ def test_slides_query_with_passed_maxWeight(client, common_query_builder, max_we
         assert result['patient']['weight'] <= max_weight
 
 
-def test_slides_query_with_passed_minWeight(client, common_query_builder, min_weight):
-    query = common_query_builder("""{
-        name
-        patient { weight }
-    }""")
+def test_slides_query_with_passed_minWeight(client, common_query, min_weight):
+
     response = client.post(
-        '/api', json={'query': query, 'variables': {'minWeight': min_weight}})
+        '/api', json={'query': common_query, 'variables': {'minWeight': min_weight}})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -227,12 +224,11 @@ def test_slides_query_with_passed_minWeight(client, common_query_builder, min_we
         assert result['patient']['weight'] >= min_weight
 
 
-def test_slides_query_with_passed_sample(client, common_query_builder, sample):
-    query = common_query_builder("""{ name }""")
+def test_slides_query_with_passed_sample(client, common_query, sample):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'sample': [sample]}})
+        '/api', json={'query': common_query, 'variables': {'sample': [sample]}})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     assert isinstance(results, list)
     assert len(results) == 1
@@ -240,12 +236,11 @@ def test_slides_query_with_passed_sample(client, common_query_builder, sample):
         assert type(result['name']) is str
 
 
-def test_slides_query_no_args(client, common_query_builder):
-    query = common_query_builder("""{ name }""")
+def test_slides_query_no_args(client, common_query):
     response = client.post(
-        '/api', json={'query': query})
+        '/api', json={'query': common_query})
     json_data = json.loads(response.data)
-    results = json_data['data']['slides']
+    results = json_data['data']['slides']['items']
 
     slide_count = return_slide_query('id').count()
 

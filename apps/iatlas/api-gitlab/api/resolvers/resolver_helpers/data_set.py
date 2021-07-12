@@ -3,8 +3,6 @@ from api import db
 from sqlalchemy import and_
 from api.db_models import Dataset, Sample, DatasetToSample, DatasetToTag, Tag
 from .general_resolvers import get_selected, get_value, build_join_condition
-from .sample import build_sample_graphql_response
-from .tag import build_tag_graphql_response
 from .paging_utils import get_pagination_queries
 
 
@@ -15,6 +13,8 @@ data_set_request_fields = simple_data_set_request_fields.union({
 
 
 def build_data_set_graphql_response(prefix='data_set_', requested=[], sample_requested=[], tag_requested=[], sample=None):
+    from .sample import build_sample_graphql_response
+    from .tag import build_tag_graphql_response
 
     def f(data_set):
         if not data_set:

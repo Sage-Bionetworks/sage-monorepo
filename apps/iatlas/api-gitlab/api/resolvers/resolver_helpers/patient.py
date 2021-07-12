@@ -4,7 +4,6 @@ from itertools import groupby
 from api import db
 from api.db_models import Dataset, DatasetToSample, Patient, Sample, Slide
 from .general_resolvers import build_join_condition, get_selected, get_value
-from .slide import build_slide_graphql_response
 from .paging_utils import get_pagination_queries
 
 simple_patient_request_fields = {
@@ -22,6 +21,8 @@ patient_request_fields = simple_patient_request_fields.union(
 
 
 def build_patient_graphql_response(requested=dict(), slide_requested=dict(), sample=None, slide=None, prefix='patient_'):
+    from .slide import build_slide_graphql_response
+
     def f(patient):
         if not patient:
             return None
@@ -39,7 +40,7 @@ def build_patient_graphql_response(requested=dict(), slide_requested=dict(), sam
                 'race': get_value(patient, prefix + 'race'),
                 'weight': get_value(patient, prefix + 'weight'),
                 'samples': map(get_value, samples),
-                'slides': map(build_slide_graphql_response, slides)
+                'slides': map(build_slide_graphql_response(), slides)
             }
             return(dict)
     return f
@@ -193,8 +194,8 @@ def get_slides(id, requested, slide_requested, slide=None):
         slide_1 = aliased(Slide, name='sd')
 
         core_field_mapping = {
-            'description': slide_1.description.label('description'),
-            'name': slide_1.name.label('name')
+            'description': slide_1.description.label('slide_description'),
+            'name': slide_1.name.label('slide_name')
         }
 
         core = get_selected(slide_requested, core_field_mapping)
@@ -217,29 +218,3 @@ def get_slides(id, requested, slide_requested, slide=None):
         query = query.order_by(*order) if order else query
 
         return query.all()
-
-
-def request_patients(requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None, race=None, max_weight=None, min_weight=None, sample=None, slide=None):
-
-    query, _ = build_patient_request(
-        requested, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, barcode=barcode, data_set=data_set, ethnicity=ethnicity, gender=gender, max_height=max_height, min_height=min_height, race=race, max_weight=max_weight, min_weight=min_weight, sample=sample, slide=slide)
-    return query.all()
-
-
-def return_patient_derived_fields(
-        requested, slide_requested, patient_ids=set(), max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None, race=None, max_weight=None, min_weight=None, sample=None, slide=None):
-    samples = get_samples(
-        requested, patient_ids=patient_ids, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, barcode=barcode, data_set=data_set, ethnicity=ethnicity, gender=gender, max_height=max_height, min_height=min_height, race=race, max_weight=max_weight, min_weight=min_weight, sample=sample, slide=slide)
-
-    samples_dict = dict()
-    for key, collection in groupby(samples, key=lambda s: s.patient_id):
-        samples_dict[key] = samples_dict.get(key, []) + list(collection)
-
-    slides = get_slides(requested, slide_requested, patient_ids=patient_ids, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, barcode=barcode, data_set=data_set,
-                        ethnicity=ethnicity, gender=gender, max_height=max_height, min_height=min_height, race=race, max_weight=max_weight, min_weight=min_weight, sample=sample, slide=slide)
-
-    slides_dict = dict()
-    for key, collection in groupby(slides, key=lambda s: s.patient_id):
-        slides_dict[key] = slides_dict.get(key, []) + list(collection)
-
-    return (samples_dict, slides_dict)
