@@ -1,12 +1,11 @@
 from itertools import groupby
-from sqlalchemy import and_, func
+from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import Dataset, DatasetToTag, Publication, Sample, SampleToTag, Tag, TagToPublication, TagToTag, Cohort, CohortToTag, CohortToSample
 from .general_resolvers import build_join_condition, get_selected, get_value
-from .publication import build_publication_graphql_response
 from .paging_utils import get_pagination_queries
-from .sample import build_sample_graphql_response
+
 
 simple_tag_request_fields = {'characteristics',
                              'color',
@@ -22,6 +21,9 @@ tag_request_fields = simple_tag_request_fields.union({'publications',
 
 
 def build_tag_graphql_response(requested=[], sample_requested=[], publications_requested=[], related_requested=[], cohort=None, sample=None):
+    from .publication import build_publication_graphql_response
+    from .sample import build_sample_graphql_response
+
     def f(tag):
         if not tag:
             return None
@@ -42,11 +44,11 @@ def build_tag_graphql_response(requested=[], sample_requested=[], publications_r
             'characteristics': get_value(tag, 'tag_characteristics') or get_value(tag, 'characteristics'),
             'color': get_value(tag, 'tag_color') or get_value(tag, 'color'),
             'longDisplay': get_value(tag, 'tag_long_display') or get_value(tag, 'long_display'),
+            'sampleCount': len(sample_dict) if sample_dict and 'sampleCount' in requested else None,
             'publications': map(build_publication_graphql_response, publication_dict) if publication_dict else None,
             'related': map(build_tag_graphql_response(requested=related_requested), related_dict) if related_dict else None,
-            'sampleCount': len(sample_dict) if sample_dict and 'sampleCount' in requested else None,
-            'samples': map(build_sample_graphql_response(), sample_dict) if sample_dict and 'samples' in requested else None,
-            'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display')
+            'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display'),
+            'samples': map(build_sample_graphql_response(), sample_dict) if sample_dict and 'samples' in requested else None
         }
         return(result)
     return(f)

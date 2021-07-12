@@ -4,12 +4,8 @@ from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import Dataset, DatasetToTag, Feature, FeatureClass, Gene, GeneToType, GeneType, Node, NodeToTag, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
-from .data_set import build_data_set_graphql_response
 from api.database.database_helpers import execute_sql
-from .feature import build_feature_graphql_response
-from .gene import build_gene_graphql_response
 from .paging_utils import create_temp_table, get_pagination_queries
-from .response_utils import build_simple_tag_graphql_response
 
 node_request_fields = {
     'dataSet',
@@ -25,6 +21,11 @@ node_request_fields = {
 
 
 def build_node_graphql_response(tag_dict):
+    from .data_set import build_data_set_graphql_response
+    from .feature import build_feature_graphql_response
+    from .gene import build_gene_graphql_response
+    from .tag import build_tag_graphql_response
+
     def f(node):
         if not node:
             return None
@@ -43,7 +44,7 @@ def build_node_graphql_response(tag_dict):
                 'label': get_value(node, 'label'),
                 'name': get_value(node, 'node_name'),
                 'score': get_value(node, 'score'),
-                'tags': map(build_simple_tag_graphql_response(), tags),
+                'tags': map(build_tag_graphql_response(), tags),
                 'x': get_value(node, 'x'),
                 'y': get_value(node, 'y')
             }

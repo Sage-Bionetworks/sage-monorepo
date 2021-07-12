@@ -4,9 +4,8 @@ from api import db
 from api.db_models import (Dataset, DatasetToSample, Feature, FeatureClass, FeatureToSample,
                            Patient, Sample)
 from .general_resolvers import build_join_condition, get_selected, get_value
-from .patient import build_patient_graphql_response
 from .paging_utils import get_pagination_queries
-from .response_utils import build_simple_tag_graphql_response
+
 
 simple_sample_request_fields = {'name'}
 
@@ -27,6 +26,9 @@ sample_by_mutation_status_request_fields = {'status', 'samples'}
 
 
 def build_sample_graphql_response(prefix='sample_'):
+    from .patient import build_patient_graphql_response
+    from .tag import build_tag_graphql_response
+
     def f(sample):
         if not sample:
             return None
@@ -38,7 +40,7 @@ def build_sample_graphql_response(prefix='sample_'):
                 'rnaSeqExpr': get_value(sample, prefix + 'gene_rna_seq_expr'),
                 'value': get_value(sample, prefix + 'feature_value'),
                 'patient': build_patient_graphql_response()(sample),
-                'tag': build_simple_tag_graphql_response()(sample)
+                'tag': build_tag_graphql_response()(sample)
             }
             return(dict)
     return(f)

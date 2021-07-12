@@ -4,12 +4,6 @@ from api import db
 from api.db_models import Cohort, Dataset, Tag, Sample, Feature, Gene, Mutation, MutationCode, CohortToSample, CohortToFeature, CohortToGene, CohortToMutation
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
-from .data_set import build_data_set_graphql_response
-from .feature import build_feature_graphql_response
-from .gene import build_gene_graphql_response
-from .mutation import build_mutation_graphql_response
-from .sample import build_sample_graphql_response
-from .response_utils import build_simple_tag_graphql_response
 from itertools import groupby
 
 cohort_request_fields = {'id', 'name',
@@ -17,6 +11,13 @@ cohort_request_fields = {'id', 'name',
 
 
 def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={}, mutation_dict={}):
+    from .data_set import build_data_set_graphql_response
+    from .feature import build_feature_graphql_response
+    from .gene import build_gene_graphql_response
+    from .mutation import build_mutation_graphql_response
+    from .sample import build_sample_graphql_response
+    from .tag import build_tag_graphql_response
+
     def f(cohort):
         if not cohort:
             return None
@@ -31,7 +32,7 @@ def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={},
                 'id': cohort_id,
                 'name': get_value(cohort, 'cohort_name'),
                 'dataSet': build_data_set_graphql_response()(cohort),
-                'tag': build_simple_tag_graphql_response()(cohort),
+                'tag': build_tag_graphql_response()(cohort),
                 'samples': map(build_sample_graphql_response(), samples),
                 'features': map(build_feature_graphql_response(), features),
                 'genes': map(build_gene_graphql_response(), genes),

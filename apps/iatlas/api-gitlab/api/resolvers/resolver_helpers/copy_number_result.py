@@ -3,10 +3,6 @@ from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import CopyNumberResult, Dataset, DatasetToTag, Feature, Gene, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
-from .data_set import build_data_set_graphql_response
-from .feature import build_feature_graphql_response
-from .gene import build_gene_graphql_response
-from .response_utils import build_simple_tag_graphql_response
 from .paging_utils import get_pagination_queries
 
 cnr_request_fields = {'dataSet',
@@ -22,6 +18,11 @@ cnr_request_fields = {'dataSet',
 
 
 def build_cnr_graphql_response(prefix=''):
+    from .data_set import build_data_set_graphql_response
+    from .feature import build_feature_graphql_response
+    from .gene import build_gene_graphql_response
+    from .tag import build_tag_graphql_response
+
     def f(copy_number_result):
         if not copy_number_result:
             return None
@@ -37,7 +38,7 @@ def build_cnr_graphql_response(prefix=''):
                 'dataSet': build_data_set_graphql_response()(copy_number_result),
                 'feature': build_feature_graphql_response()(copy_number_result),
                 'gene': build_gene_graphql_response()(copy_number_result),
-                'tag': build_simple_tag_graphql_response()(copy_number_result)
+                'tag': build_tag_graphql_response()(copy_number_result)
             }
             return(dict)
     return(f)
