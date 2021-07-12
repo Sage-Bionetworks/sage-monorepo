@@ -1,6 +1,6 @@
 build_ifc_response_tbl <- function(cohort_obj, response){
     cohort_obj %>%
-        query_feature_values_with_cohort_object(response) %>%
+        iatlas.modules2::query_feature_values_with_cohort_object(response) %>%
         dplyr::select(
             "sample",
             "response_display" = "feature_display",
@@ -9,8 +9,11 @@ build_ifc_response_tbl <- function(cohort_obj, response){
 }
 
 build_ifc_feature_tbl <- function(cohort_obj, feature_class){
-    cohort_obj %>%
-        query_feature_values_with_cohort_object(class = feature_class) %>%
+    tbl <-
+        iatlas.modules2::query_feature_values_with_cohort_object(
+            cohort_object = cohort_obj,
+            feature_class = feature_class
+        ) %>%
         dplyr::select(
             "sample",
             "feature_display",

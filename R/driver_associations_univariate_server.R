@@ -33,14 +33,13 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       tags <- shiny::reactive({
         iatlas.api.client::query_tags(
-          datasets = cohort_obj()$dataset,
+          cohorts = cohort_obj()$dataset,
           parent_tags = cohort_obj()$group_name
         ) %>%
           dplyr::pull("name")
       })
 
       volcano_plot_tbl <- shiny::reactive({
-
         shiny::req(
           tags(),
           input$response_choice,
@@ -70,15 +69,10 @@ univariate_driver_server <- function(id, cohort_obj) {
           )
       })
 
-      #TODO: use query instead of hard-coded number
       total_associations <- shiny::reactive({
-        # n_mutations <-
-        #   iatlas.api.client::query_mutations(
-        #     datasets = "TCGA", types = "driver_mutation"
-        #   ) %>%
-        #   nrow()
-
-        n_mutations <- 865
+        n_mutations <-
+          iatlas.api.client::query_cohort_mutations(cohorts = cohort_obj()$dataset) %>%
+          nrow()
 
         n_tags <- length(tags())
 
@@ -168,18 +162,21 @@ univariate_driver_server <- function(id, cohort_obj) {
 
       violin_tbl <- shiny::reactive({
         shiny::req(selected_volcano_result(), input$response_choice)
-        feature_tbl <-
-          iatlas.api.client::query_feature_values(
-            datasets = cohort_obj()$dataset,
-            features = input$response_choice,
-            tags = selected_volcano_result()$group
-          )
+        feature_tbl <- iatlas.modules2::query_feature_values_with_cohort_object(
+          cohort_object = cohort_obj(),
+          features = input$response_choice,
+          groups = selected_volcano_result()$group
+        )
         status_tbl <-
-          iatlas.api.client::query_mutations_by_sample(
+          iatlas.api.client::query_mutation_statuses(
             entrez = selected_volcano_result()$entrez,
-            mutation_codes = selected_volcano_result()$mutation_code,
-            mutation_types = "driver_mutation",
+            codes = selected_volcano_result()$mutation_code,
+            types = "driver_mutation",
             samples = cohort_obj()$sample_tbl$sample
+          ) %>%
+          dplyr::select(
+            "sample" = "sample_name",
+            "status" = "mutation_status"
           )
         dplyr::inner_join(feature_tbl, status_tbl, by = "sample") %>%
           dplyr::mutate(

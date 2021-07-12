@@ -93,7 +93,7 @@ data_info_server <- function(id){
         output$variable_details_section <- shiny::renderUI({
           sectionBox(
             title = "Variable Class Details",
-            messageBox(
+            iatlas.modules::messageBox(
               width = 12,
               shiny::p("Here is additional information about the variables in the Variable Class you selected. To the right you can access description of the methods used to obtain the variables.")
             ),
