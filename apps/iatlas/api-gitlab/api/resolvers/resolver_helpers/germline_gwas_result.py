@@ -1,13 +1,12 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, Feature, Snp, GermlineGwasResult
+from api.db_models import Dataset, Feature, Snp, GermlineGwasResult
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
 from .snp import build_snp_graphql_response
-from .paging_utils import get_cursor, get_pagination_queries, Paging
-import logging
+from .paging_utils import get_pagination_queries
 
 germline_gwas_result_request_fields = {'dataSet',
                                        'id',
@@ -21,7 +20,7 @@ def build_ggr_graphql_response(germline_gwas_result):
     return {
         'id': get_value(germline_gwas_result, 'id'),
         'pValue': get_value(germline_gwas_result, 'p_value'),
-        'dataSet': build_data_set_graphql_response(germline_gwas_result),
+        'dataSet': build_data_set_graphql_response()(germline_gwas_result),
         'feature': build_feature_graphql_response()(germline_gwas_result),
         'snp': build_snp_graphql_response(germline_gwas_result),
         'maf': get_value(germline_gwas_result, 'maf')

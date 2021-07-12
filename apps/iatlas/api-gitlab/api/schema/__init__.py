@@ -1,7 +1,7 @@
 from ariadne import load_schema_from_path, make_executable_schema, ObjectType, ScalarType
 import os
 from api.resolvers import (
-    resolve_cohorts, resolve_colocalizations, resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_edges, resolve_features, resolve_gene_family, resolve_gene_function, resolve_gene_types, resolve_genes, resolve_germline_gwas_results, resolve_heritability_results, resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutation_types, resolve_nodes, resolve_rare_variant_pathway_associations, resolve_pathways, resolve_patients, resolve_related, resolve_samples, resolve_samples_by_mutations_status, resolve_samples_by_tag, resolve_slides, resolve_snps, resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
+    resolve_cohorts, resolve_colocalizations, resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_edges, resolve_features, resolve_gene_family, resolve_gene_function, resolve_gene_types, resolve_genes, resolve_germline_gwas_results, resolve_heritability_results, resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutation_types, resolve_nodes, resolve_rare_variant_pathway_associations, resolve_pathways, resolve_patients, resolve_samples, resolve_slides, resolve_snps, resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
 
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
@@ -169,7 +169,6 @@ rare_variant_pathway_association = ObjectType(
 related_by_data_set = ObjectType('RelatedByDataSet')
 sample = ObjectType('Sample')
 sample_by_mutation_status = ObjectType('SampleByMutationStatus')
-sample_by_tag = ObjectType('SamplesByTag')
 slide = ObjectType('Slide')
 snp = ObjectType('Snp')
 super_category = ObjectType('SuperCategory')
@@ -210,12 +209,9 @@ root.set_field('mutationTypes', resolve_mutation_types)
 root.set_field('nodes', resolve_nodes)
 root.set_field('pathways', resolve_pathways)
 root.set_field('patients', resolve_patients)
-root.set_field('related', resolve_related)
 root.set_field('rareVariantPathwayAssociations',
                resolve_rare_variant_pathway_associations)
 root.set_field('samples', resolve_samples)
-root.set_field('samplesByMutationStatus', resolve_samples_by_mutations_status)
-root.set_field('samplesByTag', resolve_samples_by_tag)
 root.set_field('slides', resolve_slides)
 root.set_field('snps', resolve_snps)
 root.set_field('superCategories', resolve_super_categories)
@@ -227,5 +223,5 @@ root.set_field('therapyTypes', resolve_therapy_types)
 schema = make_executable_schema(
     type_defs,
     [
-        root, cohort, colocalization, copy_number_result, data_set, direction_enum_scalar, driver_result, edge_result, ethnicity_enum_scalar, feature, gender_enum_scalar, gene, gene_family, gene_function, gene_type, germline_gwas_result, germline_gwas_result_node, heritability_result_node, heritability_result, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, node, node_result, pathway, patient, publication, race_enum_scalar, rare_variant_pathway_association, related_by_data_set, sample, sample_by_mutation_status, sample_by_tag, simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_node, simple_publication, simple_tag, slide, snp, tag, super_category, therapy_type]
+        root, cohort, colocalization, copy_number_result, data_set, direction_enum_scalar, driver_result, edge_result, ethnicity_enum_scalar, feature, gender_enum_scalar, gene, gene_family, gene_function, gene_type, germline_gwas_result, germline_gwas_result_node, heritability_result_node, heritability_result, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, node, node_result, pathway, patient, publication, race_enum_scalar, rare_variant_pathway_association, related_by_data_set, sample, sample_by_mutation_status, simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_node, simple_publication, simple_tag, slide, snp, tag, super_category, therapy_type]
 )

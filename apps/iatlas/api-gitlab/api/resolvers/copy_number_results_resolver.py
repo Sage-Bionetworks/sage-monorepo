@@ -31,4 +31,4 @@ def resolve_copy_number_results(_obj, info, dataSet=None, direction=None, distin
 
     # Request fields within 'paging'
     pagination_requested = get_requested(info, paging_fields, 'paging')
-    return paginate(query, count_query, paging, distinct, build_cnr_graphql_response, pagination_requested)
+    return paginate(query, count_query, paging, distinct, build_cnr_graphql_response(), pagination_requested)

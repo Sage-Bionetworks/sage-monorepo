@@ -5,7 +5,6 @@ from .data_sets_resolver import resolve_data_sets
 from .driver_results_resolver import resolve_driver_results
 from .edges_resolver import resolve_edges
 from .features_resolver import resolve_features
-from .gene_resolver import resolve_gene
 from .gene_family_resolver import resolve_gene_family
 from .gene_function_resolver import resolve_gene_function
 from .gene_types_resolver import resolve_gene_types
@@ -20,10 +19,7 @@ from .nodes_resolver import resolve_nodes
 from .pathway_resolver import resolve_pathways
 from .patient_resolver import resolve_patients
 from .rare_variant_pathway_association_resolver import resolve_rare_variant_pathway_associations
-from .related_resolver import resolve_related
 from .samples_resolver import resolve_samples
-from .samples_by_mutations_status_resolver import resolve_samples_by_mutations_status
-from .samples_by_tag_resolver import resolve_samples_by_tag
 from .slide_resolver import resolve_slides
 from .snp_resolver import resolve_snps
 from .super_categories_resolver import resolve_super_categories

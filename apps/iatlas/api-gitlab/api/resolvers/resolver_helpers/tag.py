@@ -1,17 +1,11 @@
 from itertools import groupby
-from sqlalchemy import and_, func
+from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, DatasetToSample, Publication, Sample, SampleToTag, Tag, TagToPublication, TagToTag, Cohort, CohortToTag, CohortToSample
+from api.db_models import Dataset, DatasetToTag, Publication, Sample, SampleToTag, Tag, TagToPublication, TagToTag, Cohort, CohortToTag, CohortToSample
 from .general_resolvers import build_join_condition, get_selected, get_value
-from .publication import build_publication_graphql_response
 from .paging_utils import get_pagination_queries
-from .sample import build_sample_graphql_response
-from .response_utils import build_simple_tag_graphql_response
 
-related_request_fields = {'dataSet',
-                          'display',
-                          'related'}
 
 simple_tag_request_fields = {'characteristics',
                              'color',
@@ -26,80 +20,10 @@ tag_request_fields = simple_tag_request_fields.union({'publications',
                                                       'samples'})
 
 
-def build_related_graphql_response(related_set=set()):
-    data_set, related_tag = related_set
-    return {
-        'display': get_value(related_tag[0], 'data_set_display'),
-        'dataSet': data_set,
-        'related': list(map(build_simple_tag_graphql_response, related_tag))
-    }
-
-
-def build_related_request(requested, related_requested, data_set=None, related=None, by_data_set=True):
-    '''
-    Builds a SQL request.
-
-    All positional arguments are required. Positional arguments are:
-        1st position - a set of the requested fields at the root of the graphql request. The request is typically made for data set values with a 'related' child node.
-        2nd position - a set of the requested fields in the 'related' node of the graphql request. If 'related' is not requested, this will be an empty set.
-
-    All keyword arguments are optional. Keyword arguments are:
-        `data_set` - a list of strings, data set names
-        `related` - a list of strings, tag names related to data sets
-        `by_data_set` - a boolean, True if the returned related tags are by data set. This defaults to True.
-    '''
-    sess = db.session
-
-    related_1 = aliased(Tag, name='t')
-    data_set_1 = aliased(Dataset, name='d')
-
-    core_field_mapping = {'characteristics': related_1.characteristics.label('characteristics'),
-                          'color': related_1.color.label('color'),
-                          'longDisplay': related_1.long_display.label('long_display'),
-                          'name': related_1.name.label('name'),
-                          'shortDisplay': related_1.short_display.label('short_display')}
-    data_set_core_field_mapping = {
-        'display': data_set_1.display.label('data_set_display')}
-
-    core = get_selected(related_requested, core_field_mapping)
-    data_set_core = get_selected(requested, data_set_core_field_mapping)
-
-    if by_data_set or 'dataSet' in requested:
-        data_set_core.add(data_set_1.name.label('data_set'))
-
-    query = sess.query(*[*core, *data_set_core])
-
-    if related:
-        query = query.filter(related_1.name.in_(related))
-
-    if data_set or by_data_set or 'dataSet' in requested:
-        data_set_to_tag_1 = aliased(DatasetToTag, name='dt')
-
-        query = query.join(data_set_to_tag_1,
-                           data_set_to_tag_1.tag_id == related_1.id)
-
-        data_set_join_condition = build_join_condition(
-            data_set_1.id, data_set_to_tag_1.dataset_id, data_set_1.name, data_set)
-        query = query.join(data_set_1, and_(*data_set_join_condition))
-
-    order = []
-    append_to_order = order.append
-    if 'name' in related_requested:
-        append_to_order(related_1.name)
-    if 'shortDisplay' in related_requested:
-        append_to_order(related_1.short_display)
-    if 'longDisplay' in related_requested:
-        append_to_order(related_1.long_display)
-    if 'color' in related_requested:
-        append_to_order(related_1.color)
-    if 'characteristics' in related_requested:
-        append_to_order(related_1.characteristics)
-
-    query = query.order_by(*order) if order else query
-    return query
-
-
 def build_tag_graphql_response(requested=[], sample_requested=[], publications_requested=[], related_requested=[], cohort=None, sample=None):
+    from .publication import build_publication_graphql_response
+    from .sample import build_sample_graphql_response
+
     def f(tag):
         if not tag:
             return None
@@ -120,11 +44,11 @@ def build_tag_graphql_response(requested=[], sample_requested=[], publications_r
             'characteristics': get_value(tag, 'tag_characteristics') or get_value(tag, 'characteristics'),
             'color': get_value(tag, 'tag_color') or get_value(tag, 'color'),
             'longDisplay': get_value(tag, 'tag_long_display') or get_value(tag, 'long_display'),
+            'sampleCount': len(sample_dict) if sample_dict and 'sampleCount' in requested else None,
             'publications': map(build_publication_graphql_response, publication_dict) if publication_dict else None,
             'related': map(build_tag_graphql_response(requested=related_requested), related_dict) if related_dict else None,
-            'sampleCount': len(sample_dict) if sample_dict and 'sampleCount' in requested else None,
-            'samples': map(build_sample_graphql_response, sample_dict) if sample_dict and 'samples' in requested else None,
-            'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display')
+            'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display'),
+            'samples': map(build_sample_graphql_response(), sample_dict) if sample_dict and 'samples' in requested else None
         }
         return(result)
     return(f)
@@ -352,7 +276,8 @@ def get_samples(tag_id, requested, sample_requested, cohort=None, sample=None):
         cohort_1 = aliased(Cohort, name='c')
         cohort_to_sample_1 = aliased(CohortToSample, name='cts')
 
-        sample_core_field_mapping = {'name': sample_1.name.label('name')}
+        sample_core_field_mapping = {
+            'name': sample_1.name.label('sample_name')}
 
         sample_core = get_selected(sample_requested, sample_core_field_mapping)
         sample_core |= {sample_1.id.label('id')}
@@ -385,23 +310,6 @@ def get_samples(tag_id, requested, sample_requested, cohort=None, sample=None):
         return sample_query.distinct().all()
 
     return []
-
-
-def request_related(requested, related_requested, **kwargs):
-    '''
-    All positional arguments are required. Positional arguments are:
-        1st position - a set of the requested fields at the root of the graphql request. The request is typically made for data set values with a 'related' child node.
-        2nd position - a set of the requested fields in the 'related' node of the graphql request. If 'related' is not requested, this will be an empty set.
-
-    All keyword arguments are optional. Keyword arguments are:
-        `data_set` - a list of strings, data set names
-        `related` - a list of strings, tag names related to data sets
-        `by_data_set` - a boolean, True if the returned related tags are by data set.
-    '''
-    query = build_related_request(
-        requested, related_requested, **kwargs)
-
-    return query.distinct().all()
 
 
 def request_tags(requested, **kwargs):

@@ -417,15 +417,23 @@ def test_nodes_query_with_passed_tag_and_entrez(client, common_query_builder, en
 
 
 def test_nodes_query_with_passed_tag_and_feature(client, common_query_builder, node_feature, tag):
-    query = common_query_builder("""{
-                                    items {
-                                        name
-                                        feature { name }
-                                        tags { name }
-                                    }
-                                }""")
-    response = client.post('/api', json={'query': query,
-                                         'variables': {'feature': [node_feature], 'tag': [tag]}})
+    query = common_query_builder(""" {
+        items {
+            name
+            feature { name }
+            tags { name }
+        }
+    } """)
+    response = client.post(
+        '/api',
+        json={
+            'query': query,
+            'variables': {
+                'feature': [node_feature],
+                'tag': [tag]
+            }
+        }
+    )
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
     results = page['items']

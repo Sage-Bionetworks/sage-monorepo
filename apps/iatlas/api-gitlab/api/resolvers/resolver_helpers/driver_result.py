@@ -3,11 +3,7 @@ from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import Dataset, DatasetToTag, DriverResult, Feature, Gene, Mutation, MutationCode, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
-from .data_set import build_data_set_graphql_response
-from .feature import build_feature_graphql_response
-from .gene import build_gene_graphql_response
-from .paging_utils import get_pagination_queries, Paging
-from .response_utils import build_simple_tag_graphql_response
+from .paging_utils import get_pagination_queries
 
 driver_result_request_fields = {'dataSet',
                                 'feature',
@@ -24,6 +20,11 @@ driver_result_request_fields = {'dataSet',
 
 
 def build_dr_graphql_response(driver_result):
+    from .data_set import build_data_set_graphql_response
+    from .feature import build_feature_graphql_response
+    from .gene import build_gene_graphql_response
+    from .tag import build_tag_graphql_response
+
     result = {
         'id': get_value(driver_result, 'id'),
         'pValue': get_value(driver_result, 'p_value'),
@@ -32,12 +33,12 @@ def build_dr_graphql_response(driver_result):
         'log10FoldChange': get_value(driver_result, 'log10_fold_change'),
         'numWildTypes': get_value(driver_result, 'n_wt'),
         'numMutants': get_value(driver_result, 'n_mut'),
-        'dataSet': build_data_set_graphql_response(driver_result),
+        'dataSet': build_data_set_graphql_response()(driver_result),
         'feature': build_feature_graphql_response()(driver_result),
         'gene': build_gene_graphql_response()(driver_result),
         'mutationCode': get_value(driver_result, 'code'),
         'mutationId': get_value(driver_result, 'mutation_id'),
-        'tag': build_simple_tag_graphql_response(driver_result)
+        'tag': build_tag_graphql_response()(driver_result)
     }
     return(result)
 
@@ -92,23 +93,31 @@ def build_driver_result_request(
         'mutationId': mutation_1.id.label('mutation_id'),
         'numWildTypes': driver_result_1.n_wt.label('n_wt'),
         'numMutants': driver_result_1.n_mut.label('n_mut')}
-    data_set_core_field_mapping = {'display': data_set_1.display.label('data_set_display'),
-                                   'name': data_set_1.name.label('data_set_name'),
-                                   'type': data_set_1.data_set_type.label('data_set_type')}
-    feature_core_field_mapping = {'display': feature_1.display.label('feature_display'),
-                                  'name': feature_1.name.label('feature_name'),
-                                  'order': feature_1.order.label('order'),
-                                  'unit': feature_1.unit.label('unit')}
-    gene_core_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
-                               'hgnc': gene_1.hgnc.label('hgnc'),
-                               'description': gene_1.description.label('description'),
-                               'friendlyName': gene_1.friendly_name.label('friendly_name'),
-                               'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
-    tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
-                              'color': tag_1.color.label('color'),
-                              'longDisplay': tag_1.long_display.label('tag_long_display'),
-                              'name': tag_1.name.label('tag_name'),
-                              'shortDisplay': tag_1.short_display.label('tag_short_display')}
+    data_set_core_field_mapping = {
+        'display': data_set_1.display.label('data_set_display'),
+        'name': data_set_1.name.label('data_set_name'),
+        'type': data_set_1.data_set_type.label('data_set_type')
+    }
+    feature_core_field_mapping = {
+        'display': feature_1.display.label('feature_display'),
+        'name': feature_1.name.label('feature_name'),
+        'order': feature_1.order.label('feature_order'),
+        'unit': feature_1.unit.label('feature_unit')
+    }
+    gene_core_field_mapping = {
+        'entrez': gene_1.entrez.label('gene_entrez'),
+        'hgnc': gene_1.hgnc.label('gene_hgnc'),
+        'description': gene_1.description.label('gene_description'),
+        'friendlyName': gene_1.friendly_name.label('gene_friendly_name'),
+        'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
+    }
+    tag_core_field_mapping = {
+        'characteristics': tag_1.characteristics.label('tag_characteristics'),
+        'color': tag_1.color.label('tag_color'),
+        'longDisplay': tag_1.long_display.label('tag_long_display'),
+        'name': tag_1.name.label('tag_name'),
+        'shortDisplay': tag_1.short_display.label('tag_short_display')
+    }
 
     core = get_selected(requested, core_field_mapping)
     core |= get_selected(data_set_requested, data_set_core_field_mapping)

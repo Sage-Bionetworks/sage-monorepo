@@ -61,7 +61,11 @@ def samples_query(common_query_builder):
             items {
                 name
                 dataSet { name }
-                tag { name }
+                tag {
+                    name
+                    shortDisplay
+                    longDisplay
+                }
                 samples{
                     name
                     tag {
@@ -263,13 +267,20 @@ def test_tag_cohort_samples_query(client, samples_query, tcga_tag_cohort_name, d
     assert result['name'] == tcga_tag_cohort_name
     assert result['dataSet']['name'] == data_set
     assert result['tag']['name'] == related
+    assert type(result['tag']['shortDisplay'] is str)
+    assert type(result['tag']['longDisplay'] is str)
     assert isinstance(results, list)
     assert len(results) == 1
     samples = results[0]['samples']
     assert len(samples) > 1
     for sample in samples[0:2]:
+        import logging
+        logger = logging.getLogger('test cohort')
+        logger.info(sample)
         assert type(sample['name'] is str)
         assert type(sample['tag']['name'] is str)
+        assert type(sample['tag']['shortDisplay'] is str)
+        assert type(sample['tag']['longDisplay'] is str)
 
 
 def test_tag_cohort_features_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):

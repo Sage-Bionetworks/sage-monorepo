@@ -1,9 +1,8 @@
-from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import Snp
-from .general_resolvers import build_join_condition, get_selected, get_value
-from .paging_utils import get_cursor, get_pagination_queries, Paging
+from .general_resolvers import get_selected, get_value
+from .paging_utils import get_pagination_queries
 
 snp_request_fields = {'id', 'name', 'rsid', 'chr', 'bp'}
 

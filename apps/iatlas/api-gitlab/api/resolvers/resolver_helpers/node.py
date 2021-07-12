@@ -4,45 +4,52 @@ from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import Dataset, DatasetToTag, Feature, FeatureClass, Gene, GeneToType, GeneType, Node, NodeToTag, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
-from .data_set import build_data_set_graphql_response
 from api.database.database_helpers import execute_sql
-from .feature import build_feature_graphql_response
-from .gene import build_gene_graphql_response
-from .paging_utils import create_temp_table, get_pagination_queries, Paging
-from .response_utils import build_simple_tag_graphql_response
+from .paging_utils import create_temp_table, get_pagination_queries
 
-node_request_fields = {'dataSet',
-                       'feature',
-                       'gene',
-                       'label',
-                       'name',
-                       'score',
-                       'tags',
-                       'x',
-                       'y'}
+node_request_fields = {
+    'dataSet',
+    'feature',
+    'gene',
+    'label',
+    'name',
+    'score',
+    'tags',
+    'x',
+    'y'
+}
 
 
 def build_node_graphql_response(tag_dict):
+    from .data_set import build_data_set_graphql_response
+    from .feature import build_feature_graphql_response
+    from .gene import build_gene_graphql_response
+    from .tag import build_tag_graphql_response
+
     def f(node):
-        node_id = get_value(node, 'id')
-        tags = tag_dict.get(node_id, []) if tag_dict else []
-        has_feature = get_value(node, 'feature_name') or get_value(
-            node, 'feature_display') or get_value(node, 'order') or get_value(node, 'unit')
-        has_gene = get_value(node, 'entrez') or get_value(node, 'hgnc') or get_value(
-            node, 'description') or get_value(node, 'friendly_name') or get_value(node, 'io_landscape_name')
-        return {
-            'id': node_id,
-            'dataSet': build_data_set_graphql_response(node),
-            'feature': build_feature_graphql_response()(node) if has_feature else None,
-            'gene': build_gene_graphql_response()(node) if has_gene else None,
-            'label': get_value(node, 'label'),
-            'name': get_value(node, 'node_name'),
-            'score': get_value(node, 'score'),
-            'tags': map(build_simple_tag_graphql_response, tags),
-            'x': get_value(node, 'x'),
-            'y': get_value(node, 'y')
-        }
-    return f
+        if not node:
+            return None
+        else:
+            node_id = get_value(node, 'id')
+            tags = tag_dict.get(node_id, []) if tag_dict else []
+            has_feature = get_value(node, 'feature_name') or get_value(
+                node, 'feature_display') or get_value(node, 'feature_order') or get_value(node, 'feature_unit')
+            has_gene = get_value(node, 'gene_entrez') or get_value(node, 'gene_hgnc') or get_value(
+                node, 'gene_description') or get_value(node, 'gene_friendly_name') or get_value(node, 'gene_io_landscape_name')
+            dict = {
+                'id': node_id,
+                'dataSet': build_data_set_graphql_response()(node),
+                'feature': build_feature_graphql_response()(node) if has_feature else None,
+                'gene': build_gene_graphql_response()(node) if has_gene else None,
+                'label': get_value(node, 'label'),
+                'name': get_value(node, 'node_name'),
+                'score': get_value(node, 'score'),
+                'tags': map(build_tag_graphql_response(), tags),
+                'x': get_value(node, 'x'),
+                'y': get_value(node, 'y')
+            }
+            return(dict)
+    return(f)
 
 
 def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, distinct=False, entrez=None, feature=None, feature_class=None, gene_type=None, max_score=None, min_score=None, network=None, paging=None, related=None, tag=None):
@@ -83,26 +90,34 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     gene_1 = aliased(Gene, name='g')
     node_1 = aliased(Node, name='n')
 
-    core_field_mapping = {'label': node_1.label.label('label'),
-                          'name': node_1.name.label('node_name'),
-                          'score': node_1.score.label('score'),
-                          'x': node_1.x.label('x'),
-                          'y': node_1.y.label('y')}
+    core_field_mapping = {
+        'label': node_1.label.label('label'),
+        'name': node_1.name.label('node_name'),
+        'score': node_1.score.label('score'),
+        'x': node_1.x.label('x'),
+        'y': node_1.y.label('y')
+    }
 
-    data_set_field_mapping = {'display': data_set_1.display.label('data_set_display'),
-                              'name': data_set_1.name.label('data_set_name'),
-                              'type': data_set_1.data_set_type.label('data_set_type')}
+    data_set_field_mapping = {
+        'display': data_set_1.display.label('data_set_display'),
+        'name': data_set_1.name.label('data_set_name'),
+        'type': data_set_1.data_set_type.label('data_set_type')
+    }
 
-    feature_field_mapping = {'display': feature_1.display.label('feature_display'),
-                             'name': feature_1.name.label('feature_name'),
-                             'order': feature_1.order.label('order'),
-                             'unit': feature_1.unit.label('unit')}
+    feature_field_mapping = {
+        'display': feature_1.display.label('feature_display'),
+        'name': feature_1.name.label('feature_name'),
+        'order': feature_1.order.label('feature_order'),
+        'unit': feature_1.unit.label('feature_unit')
+    }
 
-    gene_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
-                          'hgnc': gene_1.hgnc.label('hgnc'),
-                          'description': gene_1.description.label('description'),
-                          'friendlyName': gene_1.friendly_name.label('friendly_name'),
-                          'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
+    gene_field_mapping = {
+        'entrez': gene_1.entrez.label('gene_entrez'),
+        'hgnc': gene_1.hgnc.label('gene_hgnc'),
+        'description': gene_1.description.label('gene_description'),
+        'friendlyName': gene_1.friendly_name.label('gene_friendly_name'),
+        'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
+    }
 
     core = get_selected(requested, core_field_mapping)
     data_set_core = get_selected(data_set_requested, data_set_field_mapping)
@@ -219,11 +234,13 @@ def return_associated_tags(table_name, conn, tag_requested):
         3rd position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this should be an empty set.
     '''
     tag_1 = aliased(Tag, name='t')
-    tag_core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
-                              'color': tag_1.color.label('color'),
-                              'longDisplay': tag_1.long_display.label('tag_long_display'),
-                              'name': tag_1.name.label('name'),
-                              'shortDisplay': tag_1.short_display.label('tag_short_display')}
+    tag_core_field_mapping = {
+        'characteristics': tag_1.characteristics.label('tag_characteristics'),
+        'color': tag_1.color.label('tag_color'),
+        'longDisplay': tag_1.long_display.label('tag_long_display'),
+        'name': tag_1.name.label('tag_name'),
+        'shortDisplay': tag_1.short_display.label('tag_short_display')
+    }
 
     tag_core = get_selected(tag_requested, tag_core_field_mapping)
     tag_fields = [str(tag_field) for tag_field in tag_core]

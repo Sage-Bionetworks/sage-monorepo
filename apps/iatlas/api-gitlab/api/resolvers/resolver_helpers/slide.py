@@ -3,28 +3,33 @@ from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import Patient, Sample, Slide
 from .general_resolvers import build_join_condition, get_selected, get_value
+from .paging_utils import get_pagination_queries
+
 
 simple_slide_request_fields = {'description', 'name'}
 
 slide_request_fields = simple_slide_request_fields.union({'patient'})
 
 
-def build_slide_graphql_response(slide):
+def build_slide_graphql_response(prefix='slide_'):
     from .patient import build_patient_graphql_response
 
-    if not slide:
-        return None
-    has_patient = bool(
-        get_value(slide, 'barcode') or get_value(slide, 'age_at_diagnosis') or get_value(slide, 'ethnicity') or get_value(slide, 'gender') or get_value(slide, 'height') or get_value(slide, 'race') or get_value(slide, 'weight'))
-    return {
-        'description': get_value(slide, 'description'),
-        'name': get_value(slide, 'name'),
-        'patient': build_patient_graphql_response()(slide) if has_patient else None
-    }
+    def f(slide):
+        if not slide:
+            return None
+        else:
+            dict = {
+                'id': get_value(slide, prefix + 'id'),
+                'description': get_value(slide, prefix + 'description'),
+                'name': get_value(slide, prefix + 'name'),
+                'patient': build_patient_graphql_response()(slide)
+            }
+            return(dict)
+    return(f)
 
 
 def build_slide_request(requested, patient_requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, ethnicity=None, gender=None, max_height=None, min_height=None,
-                        name=None, race=None, max_weight=None, min_weight=None, sample=None):
+                        name=None, race=None, max_weight=None, min_weight=None, sample=None, distinct=False, paging=None):
     """
     Builds a SQL query.
     """
@@ -37,18 +42,24 @@ def build_slide_request(requested, patient_requested, max_age_at_diagnosis=None,
     sample_1 = aliased(Sample, name='s')
     slide_1 = aliased(Slide, name='sd')
 
-    core_field_mapping = {'description': slide_1.description.label('description'),
-                          'name': slide_1.name.label('name')}
-    patient_core_field_mapping = {'ageAtDiagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
-                                  'barcode': patient_1.barcode.label('barcode'),
-                                  'ethnicity': patient_1.ethnicity.label('ethnicity'),
-                                  'gender': patient_1.gender.label('gender'),
-                                  'height': patient_1.height.label('height'),
-                                  'race': patient_1.race.label('race'),
-                                  'weight': patient_1.weight.label('weight')}
+    core_field_mapping = {
+        'description': slide_1.description.label('slide_description'),
+        'name': slide_1.name.label('slide_name')
+    }
+    patient_core_field_mapping = {
+        'ageAtDiagnosis': patient_1.age_at_diagnosis.label('patient_age_at_diagnosis'),
+        'barcode': patient_1.barcode.label('patient_barcode'),
+        'ethnicity': patient_1.ethnicity.label('patient_ethnicity'),
+        'gender': patient_1.gender.label('patient_gender'),
+        'height': patient_1.height.label('patient_height'),
+        'race': patient_1.race.label('patient_race'),
+        'weight': patient_1.weight.label('patient_weight')
+    }
 
     # Only select fields that were requested.
     core = get_selected(requested, core_field_mapping)
+    core |= {slide_1.id.label('slide_id')}
+
     patient_core = get_selected(patient_requested, patient_core_field_mapping)
 
     query = sess.query(*[*core, *patient_core])
@@ -110,11 +121,4 @@ def build_slide_request(requested, patient_requested, max_age_at_diagnosis=None,
 
     query = query.order_by(*order) if order else query
 
-    return query
-
-
-def request_slides(requested, patient_requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None,
-                   ethnicity=None, gender=None, max_height=None, min_height=None, name=None, race=None, max_weight=None, min_weight=None, sample=None):
-    query = build_slide_request(requested, patient_requested, max_age_at_diagnosis=max_age_at_diagnosis, min_age_at_diagnosis=min_age_at_diagnosis, barcode=barcode,
-                                ethnicity=ethnicity, gender=gender, max_height=max_height, min_height=min_height, name=name, race=race, max_weight=max_weight, min_weight=min_weight, sample=sample)
-    return query.all()
+    return get_pagination_queries(query, paging, distinct, cursor_field=slide_1.id)
