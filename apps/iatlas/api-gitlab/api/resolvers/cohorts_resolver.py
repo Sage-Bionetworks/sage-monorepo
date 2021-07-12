@@ -1,4 +1,4 @@
-from .resolver_helpers import build_cohort_graphql_response, build_cohort_request, get_cohort_samples, get_cohort_features, get_cohort_genes, get_cohort_mutations, cohort_request_fields, get_requested, get_selection_set, simple_data_set_request_fields, simple_tag_request_fields, cohort_sample_request_fields, simple_feature_request_fields, simple_gene_request_fields, mutation_request_fields
+from .resolver_helpers import build_cohort_graphql_response, build_cohort_request, cohort_request_fields, get_requested, get_selection_set, simple_data_set_request_fields, simple_tag_request_fields, cohort_sample_request_fields, simple_feature_request_fields, simple_gene_request_fields, mutation_request_fields
 from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
 
 
@@ -51,29 +51,17 @@ def resolve_cohorts(_obj, info, distinct=False, paging=None, cohort=None, dataSe
     mutation_gene_requested = get_requested(
         selection_set=mutation_gene_selection_set, requested_field_mapping=simple_gene_request_fields)
 
-    if distinct == False:
-        # Add the id as a cursor if not selecting distinct
-        requested.add('id')
-
     paging = paging if paging else Paging.DEFAULT
-
-    samples = get_cohort_samples(
-        requested, sample_requested, sample_tag_requested, cohort=cohort, data_set=dataSet, tag=tag)
-
-    features = get_cohort_features(
-        requested, feature_requested, cohort=cohort, data_set=dataSet, tag=tag)
-
-    genes = get_cohort_genes(
-        requested, gene_requested, cohort=cohort, data_set=dataSet, tag=tag)
-
-    mutations = get_cohort_mutations(
-        requested, mutation_requested, mutation_gene_requested, cohort=cohort, data_set=dataSet, tag=tag)
 
     query, count_query = build_cohort_request(
         requested, data_set_requested, tag_requested, distinct=distinct, paging=paging, cohort=cohort, data_set=dataSet, tag=tag)
 
     pagination_requested = get_requested(info, paging_fields, 'paging')
+
+    response_function = build_cohort_graphql_response(requested=requested, sample_requested=sample_requested, sample_tag_requested=sample_tag_requested,
+                                                      feature_requested=feature_requested, gene_requested=gene_requested, mutation_requested=mutation_requested, mutation_gene_requested=mutation_gene_requested)
+
     res = paginate(query, count_query, paging, distinct,
-                   build_cohort_graphql_response(sample_dict=samples, feature_dict=features, gene_dict=genes, mutation_dict=mutations), pagination_requested)
+                   response_function, pagination_requested)
 
     return(res)

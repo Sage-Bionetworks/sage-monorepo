@@ -27,7 +27,7 @@ sample_by_mutation_status_request_fields = {'status', 'samples'}
 
 def build_sample_graphql_response(prefix='sample_'):
     from .patient import build_patient_graphql_response
-    from .tag import build_tag_graphql_response
+    from .tag import build_tag_graphql_response, has_tag_fields
 
     def f(sample):
         if not sample:
@@ -40,7 +40,7 @@ def build_sample_graphql_response(prefix='sample_'):
                 'rnaSeqExpr': get_value(sample, prefix + 'gene_rna_seq_expr'),
                 'value': get_value(sample, prefix + 'feature_value'),
                 'patient': build_patient_graphql_response()(sample),
-                'tag': build_tag_graphql_response()(sample)
+                'tag': build_tag_graphql_response()(sample) if has_tag_fields(sample) else None
             }
             return(dict)
     return(f)

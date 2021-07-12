@@ -252,8 +252,8 @@ def test_dataset_cohort_samples_query(client, samples_query, pcawg_cohort_name):
     samples = results[0]['samples']
     assert len(samples) > 1
     for sample in samples[0:2]:
-        assert type(sample['name'] is str)
-        assert type(sample['tag'] is NoneType)
+        assert type(sample['name']) is str
+        assert type(sample['tag']) is NoneType
 
 
 def test_tag_cohort_samples_query(client, samples_query, tcga_tag_cohort_name, data_set, related):
@@ -267,20 +267,57 @@ def test_tag_cohort_samples_query(client, samples_query, tcga_tag_cohort_name, d
     assert result['name'] == tcga_tag_cohort_name
     assert result['dataSet']['name'] == data_set
     assert result['tag']['name'] == related
-    assert type(result['tag']['shortDisplay'] is str)
-    assert type(result['tag']['longDisplay'] is str)
+    assert type(result['tag']['shortDisplay']) is str
+    assert type(result['tag']['longDisplay']) is str
     assert isinstance(results, list)
     assert len(results) == 1
     samples = results[0]['samples']
     assert len(samples) > 1
     for sample in samples[0:2]:
-        import logging
-        logger = logging.getLogger('test cohort')
-        logger.info(sample)
-        assert type(sample['name'] is str)
-        assert type(sample['tag']['name'] is str)
-        assert type(sample['tag']['shortDisplay'] is str)
-        assert type(sample['tag']['longDisplay'] is str)
+        assert type(sample['name']) is str
+        assert type(sample['tag']['name']) is str
+        assert type(sample['tag']['shortDisplay']) is str
+        assert type(sample['tag']['longDisplay']) is str
+
+
+def test_tcga_cohort_samples_query(client, samples_query, data_set):
+    response = client.post('/api', json={'query': samples_query, 'variables': {
+        'cohort': [data_set]
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['cohorts']
+    results = page['items']
+    result = results[0]
+    assert result['name'] == data_set
+    assert result['dataSet']['name'] == data_set
+    assert type(result['tag']) is NoneType
+    assert isinstance(results, list)
+    assert len(results) == 1
+    samples = results[0]['samples']
+    assert len(samples) > 1
+    for sample in samples[0:2]:
+        assert type(sample['name']) is str
+        assert type(sample['tag']) is NoneType
+
+
+def test_pcawg_cohort_samples_query(client, samples_query, pcawg_data_set):
+    response = client.post('/api', json={'query': samples_query, 'variables': {
+        'cohort': [pcawg_data_set]
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['cohorts']
+    results = page['items']
+    result = results[0]
+    assert result['name'] == pcawg_data_set
+    assert result['dataSet']['name'] == pcawg_data_set
+    assert type(result['tag']) is NoneType
+    assert isinstance(results, list)
+    assert len(results) == 1
+    samples = results[0]['samples']
+    assert len(samples) > 1
+    for sample in samples[0:2]:
+        assert type(sample['name']) is str
+        assert type(sample['tag']) is NoneType
 
 
 def test_tag_cohort_features_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):
@@ -313,8 +350,8 @@ def test_tag_cohort_features_query(client, common_query_builder, tcga_tag_cohort
     features = results[0]['features']
     assert len(features) > 1
     for feature in features[0:2]:
-        assert type(feature['name'] is str)
-        assert type(feature['display'] is str)
+        assert type(feature['name']) is str
+        assert type(feature['display']) is str
 
 
 def test_tag_cohort_genes_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):
@@ -347,8 +384,8 @@ def test_tag_cohort_genes_query(client, common_query_builder, tcga_tag_cohort_na
     genes = results[0]['genes']
     assert len(genes) > 1
     for gene in genes[0:2]:
-        assert type(gene['hgnc'] is str)
-        assert type(gene['entrez'] is int)
+        assert type(gene['hgnc']) is str
+        assert type(gene['entrez']) is int
 
 
 def test_tag_cohort_mutations_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):
@@ -385,6 +422,6 @@ def test_tag_cohort_mutations_query(client, common_query_builder, tcga_tag_cohor
     mutations = results[0]['mutations']
     assert len(mutations) > 1
     for mutation in mutations[0:2]:
-        assert type(mutation['mutationCode'] is str)
-        assert type(mutation['gene']['hgnc'] is str)
-        assert type(mutation['gene']['entrez'] is int)
+        assert type(mutation['mutationCode']) is str
+        assert type(mutation['gene']['hgnc']) is str
+        assert type(mutation['gene']['entrez']) is int
