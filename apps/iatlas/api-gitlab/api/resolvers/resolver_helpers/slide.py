@@ -4,6 +4,7 @@ from api import db
 from api.db_models import Patient, Sample, Slide
 from .general_resolvers import build_join_condition, get_selected, get_value
 
+
 simple_slide_request_fields = {'description', 'name'}
 
 slide_request_fields = simple_slide_request_fields.union({'patient'})
@@ -11,16 +12,16 @@ slide_request_fields = simple_slide_request_fields.union({'patient'})
 
 def build_slide_graphql_response(slide):
     from .patient import build_patient_graphql_response
-
     if not slide:
         return None
     has_patient = bool(
-        get_value(slide, 'barcode') or get_value(slide, 'age_at_diagnosis') or get_value(slide, 'ethnicity') or get_value(slide, 'gender') or get_value(slide, 'height') or get_value(slide, 'race') or get_value(slide, 'weight'))
-    return {
+        get_value(slide, 'patient_barcode') or get_value(slide, 'patient_age_at_diagnosis') or get_value(slide, 'patient_ethnicity') or get_value(slide, 'patient_gender') or get_value(slide, 'patient_height') or get_value(slide, 'patient_race') or get_value(slide, 'patient_weight'))
+    dict = {
         'description': get_value(slide, 'description'),
         'name': get_value(slide, 'name'),
         'patient': build_patient_graphql_response()(slide) if has_patient else None
     }
+    return(dict)
 
 
 def build_slide_request(requested, patient_requested, max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, ethnicity=None, gender=None, max_height=None, min_height=None,
@@ -37,15 +38,19 @@ def build_slide_request(requested, patient_requested, max_age_at_diagnosis=None,
     sample_1 = aliased(Sample, name='s')
     slide_1 = aliased(Slide, name='sd')
 
-    core_field_mapping = {'description': slide_1.description.label('description'),
-                          'name': slide_1.name.label('name')}
-    patient_core_field_mapping = {'ageAtDiagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
-                                  'barcode': patient_1.barcode.label('barcode'),
-                                  'ethnicity': patient_1.ethnicity.label('ethnicity'),
-                                  'gender': patient_1.gender.label('gender'),
-                                  'height': patient_1.height.label('height'),
-                                  'race': patient_1.race.label('race'),
-                                  'weight': patient_1.weight.label('weight')}
+    core_field_mapping = {
+        'description': slide_1.description.label('description'),
+        'name': slide_1.name.label('name')
+    }
+    patient_core_field_mapping = {
+        'ageAtDiagnosis': patient_1.age_at_diagnosis.label('patient_age_at_diagnosis'),
+        'barcode': patient_1.barcode.label('patient_barcode'),
+        'ethnicity': patient_1.ethnicity.label('patient_ethnicity'),
+        'gender': patient_1.gender.label('patient_gender'),
+        'height': patient_1.height.label('patient_height'),
+        'race': patient_1.race.label('patient_race'),
+        'weight': patient_1.weight.label('patient_weight')
+    }
 
     # Only select fields that were requested.
     core = get_selected(requested, core_field_mapping)

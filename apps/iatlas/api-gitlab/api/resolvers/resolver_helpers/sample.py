@@ -93,13 +93,13 @@ def build_sample_request(
         'name': sample_1.name.label('sample_name')
     }
     patient_core_field_mapping = {
-        'ageAtDiagnosis': patient_1.age_at_diagnosis.label('age_at_diagnosis'),
-        'barcode': patient_1.barcode.label('barcode'),
-        'ethnicity': patient_1.ethnicity.label('ethnicity'),
-        'gender': patient_1.gender.label('gender'),
-        'height': patient_1.height.label('height'),
-        'race': patient_1.race.label('race'),
-        'weight': patient_1.weight.label('weight')
+        'ageAtDiagnosis': patient_1.age_at_diagnosis.label('patient_age_at_diagnosis'),
+        'barcode': patient_1.barcode.label('patient_barcode'),
+        'ethnicity': patient_1.ethnicity.label('patient_ethnicity'),
+        'gender': patient_1.gender.label('patient_gender'),
+        'height': patient_1.height.label('patient_height'),
+        'race': patient_1.race.label('patient_race'),
+        'weight': patient_1.weight.label('patient_weight')
     }
 
     core = get_selected(requested, core_field_mapping)

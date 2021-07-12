@@ -7,7 +7,7 @@ type Slide {
   "The description of the slide."
   description: String
   "The patient associated to the slide."
-  patient: Patient
+  patient: SimplePatient
 }
 
 """
