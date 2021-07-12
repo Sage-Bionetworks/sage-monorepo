@@ -1,4 +1,5 @@
 explorepage_ui <- function(){
+  print("test")
   shinydashboard::dashboardPage(
     header  = shinydashboard::dashboardHeader(disable = TRUE),
     sidebar = shinydashboard::dashboardSidebar(

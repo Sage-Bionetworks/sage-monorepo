@@ -167,17 +167,39 @@ shiny::shinyServer(function(input, output, session) {
   })
 
   module_image_boxes <- shiny::reactive({
-    purrr::pmap(
+    lst <- purrr::pmap(
       list(
         title  = analysis_modules_tbl$display,
         linkId = analysis_modules_tbl$link,
         imgSrc = analysis_modules_tbl$image,
         boxText = analysis_modules_tbl$description
       ),
-      iatlas.app::imgLinkBox,
+      iatlas.modules::imgLinkBox,
       width = 6,
       linkText = "Open Module"
     )
+
+    row_tbl <- lst %>%
+      dplyr::tibble("item" = .) %>%
+      dplyr::mutate("row" = as.character(ceiling(dplyr::row_number() / 2))) %>%
+      dplyr::group_by(.data$row) %>%
+      dplyr::mutate("n" = as.character(dplyr::row_number())) %>%
+      dplyr::ungroup() %>%
+      tidyr::pivot_wider(names_from = "n", values_from = "item")
+
+    func <- function(i, tbl){
+      item1 <- tbl$`1`[[i]]
+      item2 <- tbl$`2`[[i]]
+      if(is.null(item2)){
+        row_list <- shiny::tagList(item1)
+      } else {
+        row_list <- shiny::tagList(item1, item2)
+      }
+      shiny::fluidRow(row_list)
+    }
+
+    return(purrr::map(1:nrow(row_tbl), func, row_tbl))
+
   })
 
   module_tab_items <- shiny::reactive({
@@ -190,25 +212,24 @@ shiny::shinyServer(function(input, output, session) {
     shiny::req(readout_info_boxes(), module_image_boxes(), module_tab_items())
     tab_item <- list(shinydashboard::tabItem(
       tabName = "dashboard",
-      iatlas.app::titleBox("iAtlas Explorer — Home"),
-      iatlas.app::textBox(
+      iatlas.modules::titleBox("iAtlas Explorer — Home"),
+      iatlas.modules::textBox(
         width = 12,
         shiny::includeMarkdown("inst/markdown/explore1.markdown")
       ),
-      iatlas.app::sectionBox(
+      iatlas.modules::sectionBox(
         title = "What's Inside",
         shiny::fluidRow(readout_info_boxes())
       ),
-      iatlas.app::sectionBox(
+      iatlas.modules::sectionBox(
         title = "Analysis Modules",
-        iatlas.app::messageBox(
+        iatlas.modules::messageBox(
           width = 12,
           shiny::includeMarkdown("inst/markdown/explore2.markdown")
         ),
-        shiny::fluidRow(module_image_boxes())
+        module_image_boxes()
       )
     ))
-
     do.call(
       shinydashboard::tabItems,
       c(tab_item, module_tab_items())

@@ -1,7 +1,7 @@
 
-cohort_obj1 <- tcga_immune_subtype_cohort_obj_50
-cohort_obj2 <- tcga_feature_bin_cohort_obj_50
-cohort_obj3 <- pcawg_immune_subtype_cohort_obj
+cohort_obj1 <- get_tcga_immune_subtype_cohort_obj_50()
+cohort_obj2 <- get_tcga_feature_bin_cohort_obj_50()
+cohort_obj3 <- get_pcawg_immune_subtype_cohort_obj()
 
 
 

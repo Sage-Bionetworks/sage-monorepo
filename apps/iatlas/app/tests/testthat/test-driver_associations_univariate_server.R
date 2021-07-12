@@ -3,7 +3,7 @@ test_that("univariate_driver_server", {
   shiny::testServer(
     univariate_driver_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(tcga_immune_subtype_cohort_obj_50)
+      "cohort_obj" = shiny::reactiveVal(get_tcga_immune_subtype_cohort_obj_50())
     ),
     {
       expect_type(response_option_list(), "list")
@@ -13,6 +13,7 @@ test_that("univariate_driver_server", {
       session$setInputs("min_wt" = 30)
       session$setInputs("min_mut" = 30)
       expect_type(tags(), "character")
+      expect_true(length(tags()) == 6)
       expect_type(volcano_plot_tbl(), "list")
       expect_named(
         volcano_plot_tbl(),

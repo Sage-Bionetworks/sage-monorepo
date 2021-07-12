@@ -11,9 +11,10 @@ tumor_microenvironment_cell_proportions_server  <- function(
           group_data <- cohort_obj()$group_tbl %>%
             dplyr::select("group", "group_description" = "characteristics")
 
-          cohort_obj() %>%
-            query_feature_values_with_cohort_object(
-              feature = c(
+          tbl <-
+            iatlas.modules2::query_feature_values_with_cohort_object(
+              cohort_object = cohort_obj(),
+              features = c(
                 "leukocyte_fraction", "Stromal_Fraction", "Tumor_fraction"
               )
             ) %>%
