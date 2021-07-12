@@ -7,27 +7,39 @@ from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
 
 
-simple_tag_request_fields = {'characteristics',
-                             'color',
-                             'longDisplay',
-                             'name',
-                             'shortDisplay',
-                             'tag'}
+simple_tag_request_fields = {
+    'characteristics',
+    'color',
+    'longDisplay',
+    'name',
+    'shortDisplay',
+    'tag'
+}
 
-tag_request_fields = simple_tag_request_fields.union({'publications',
-                                                      'related',
-                                                      'sampleCount',
-                                                      'samples'})
+tag_request_fields = simple_tag_request_fields.union({
+    'publications',
+    'related',
+    'sampleCount',
+    'samples'
+})
 
 
-def build_tag_graphql_response(requested=[], sample_requested=[], publications_requested=[], related_requested=[], cohort=None, sample=None):
+def has_tag_fields(item, prefix='tag_'):
+    if not item:
+        return False
+    return(get_value(item, prefix + 'id') or get_value(item, prefix + 'name') or get_value(
+        item, prefix + 'characteristics') or get_value(item, prefix + 'short_display') or get_value(item, prefix + 'long_display'))
+
+
+def build_tag_graphql_response(requested=[], sample_requested=[], publications_requested=[], related_requested=[], cohort=None, sample=None, prefix='tag_'):
     from .publication import build_publication_graphql_response
     from .sample import build_sample_graphql_response
 
     def f(tag):
         if not tag:
             return None
-        tag_id = get_value(tag, 'tag_id') or get_value(tag, 'id')
+
+        tag_id = get_value(tag, prefix + 'id')
 
         sample_dict = get_samples(
             tag_id=tag_id, requested=requested, sample_requested=sample_requested, cohort=cohort, sample=sample)
@@ -40,14 +52,14 @@ def build_tag_graphql_response(requested=[], sample_requested=[], publications_r
 
         result = {
             'id': tag_id,
-            'name': get_value(tag, 'tag_name') or get_value(tag, 'name'),
-            'characteristics': get_value(tag, 'tag_characteristics') or get_value(tag, 'characteristics'),
-            'color': get_value(tag, 'tag_color') or get_value(tag, 'color'),
-            'longDisplay': get_value(tag, 'tag_long_display') or get_value(tag, 'long_display'),
+            'name': get_value(tag, prefix + 'name') or get_value(tag, 'name'),
+            'characteristics': get_value(tag, prefix + 'characteristics'),
+            'color': get_value(tag, prefix + 'color'),
+            'longDisplay': get_value(tag, prefix + 'long_display'),
+            'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display'),
             'sampleCount': len(sample_dict) if sample_dict and 'sampleCount' in requested else None,
             'publications': map(build_publication_graphql_response, publication_dict) if publication_dict else None,
             'related': map(build_tag_graphql_response(requested=related_requested), related_dict) if related_dict else None,
-            'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display'),
             'samples': map(build_sample_graphql_response(), sample_dict) if sample_dict and 'samples' in requested else None
         }
         return(result)
@@ -80,18 +92,15 @@ def build_tag_request(
     tag_to_tag_1 = aliased(TagToTag, name='ttt')
 
     core_field_mapping = {
-        'id': tag_1.id.label('tag_id'),
         'characteristics': tag_1.characteristics.label('tag_characteristics'),
         'color': tag_1.color.label('tag_color'),
         'longDisplay': tag_1.long_display.label('tag_long_display'),
         'name': tag_1.name.label('tag_name'),
-        'shortDisplay': tag_1.short_display.label('tag_short_display'),
-        'tag': tag_1.name.label('tag')
+        'shortDisplay': tag_1.short_display.label('tag_short_display')
     }
 
-    # Only select fields that were requested.
     core = get_selected(requested, core_field_mapping)
-    core.add(tag_1.id.label('id'))
+    core.add(tag_1.id.label('tag_id'))
 
     query = sess.query(*core)
     query = query.select_from(tag_1)
@@ -169,18 +178,22 @@ def get_publications(tag_id, requested, publications_requested):
         tag_1 = aliased(Tag, name='t')
         tag_to_pub_1 = aliased(TagToPublication, name='tp')
 
-        core_field_mapping = {'doId': pub_1.do_id.label('do_id'),
-                              'firstAuthorLastName': pub_1.first_author_last_name.label('first_author_last_name'),
-                              'journal': pub_1.journal.label('journal'),
-                              'name': pub_1.name.label('name'),
-                              'pubmedId': pub_1.pubmed_id.label('pubmed_id'),
-                              'title': pub_1.title.label('title'),
-                              'year': pub_1.year.label('year')}
+        core_field_mapping = {
+            'doId': pub_1.do_id.label('do_id'),
+            'firstAuthorLastName': pub_1.first_author_last_name.label('first_author_last_name'),
+            'journal': pub_1.journal.label('journal'),
+            'name': pub_1.name.label('name'),
+            'pubmedId': pub_1.pubmed_id.label('pubmed_id'),
+            'title': pub_1.title.label('title'),
+            'year': pub_1.year.label('year')
+        }
 
         core = get_selected(publications_requested, core_field_mapping)
         # Always select the publication id and the tag id.
-        core |= {pub_1.id.label('id'),
-                 tag_to_pub_1.tag_id.label('tag_id')}
+        core |= {
+            pub_1.id.label('id'),
+            tag_to_pub_1.tag_id.label('tag_id')
+        }
 
         pub_query = sess.query(*core)
         pub_query = pub_query.select_from(pub_1)
@@ -224,17 +237,20 @@ def get_related(tag_id, requested, related_requested):
         tag_to_tag_1 = aliased(TagToTag, name='tt')
 
         related_core_field_mapping = {
-            'characteristics': related_tag_1.characteristics.label('characteristics'),
-            'color': related_tag_1.color.label('color'),
-            'longDisplay': related_tag_1.long_display.label('long_display'),
-            'name': related_tag_1.name.label('name'),
-            'shortDisplay': related_tag_1.short_display.label('short_display')}
+            'characteristics': related_tag_1.characteristics.label('tag_characteristics'),
+            'color': related_tag_1.color.label('tag_color'),
+            'longDisplay': related_tag_1.long_display.label('tag_long_display'),
+            'name': related_tag_1.name.label('tag_name'),
+            'shortDisplay': related_tag_1.short_display.label('tag_short_display')
+        }
 
         related_core = get_selected(
             related_requested, related_core_field_mapping)
-        # Always select the related id and the tag id.
-        related_core |= {related_tag_1.id.label(
-            'id'), tag_to_tag_1.tag_id.label('tag_id')}
+
+        related_core |= {
+            related_tag_1.id.label('id'),
+            tag_to_tag_1.tag_id.label('tag_id')
+        }
 
         related_query = sess.query(*related_core)
         related_query = related_query.select_from(related_tag_1)
@@ -280,7 +296,7 @@ def get_samples(tag_id, requested, sample_requested, cohort=None, sample=None):
             'name': sample_1.name.label('sample_name')}
 
         sample_core = get_selected(sample_requested, sample_core_field_mapping)
-        sample_core |= {sample_1.id.label('id')}
+        sample_core |= {sample_1.id.label('sample_id')}
 
         sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)
@@ -310,43 +326,3 @@ def get_samples(tag_id, requested, sample_requested, cohort=None, sample=None):
         return sample_query.distinct().all()
 
     return []
-
-
-def request_tags(requested, **kwargs):
-    '''
-    All keyword arguments are optional. Keyword arguments are:
-        `data_set` - a list of strings, data set names
-        `feature` - a list of strings, feature names
-        `feature_class` - a list of strings, feature class names
-        `related` - a list of strings, tag names related to data sets
-        `sample` - a list of strings, sample names
-        `tag` - a list of strings, tag names related to samples
-    '''
-    query = build_tag_request(requested, **kwargs)
-
-    return query.distinct().all()
-
-
-def return_tag_derived_fields(requested, publications_requested, related_requested, data_set=None, related=None, sample=None, tag_ids=None):
-    publications = get_publications(
-        requested, publications_requested, tag_ids=tag_ids)
-
-    publication_dict = dict()
-    for key, collection in groupby(publications, key=lambda r: r.tag_id):
-        publication_dict[key] = publication_dict.get(
-            key, []) + list(collection)
-
-    related_tags = get_related(requested, related_requested, tag_ids=tag_ids)
-
-    related_dict = dict()
-    for key, collection in groupby(related_tags, key=lambda r: r.tag_id):
-        related_dict[key] = related_dict.get(key, []) + list(collection)
-
-    samples = get_samples(
-        requested, data_set=data_set, related=related, sample=sample, tag_ids=tag_ids)
-
-    sample_dict = dict()
-    for key, collection in groupby(samples, key=lambda s: s.tag_id):
-        sample_dict[key] = sample_dict.get(key, []) + list(collection)
-
-    return (publication_dict, related_dict, sample_dict)

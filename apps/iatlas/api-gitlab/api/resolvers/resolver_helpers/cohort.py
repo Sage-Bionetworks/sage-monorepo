@@ -1,3 +1,4 @@
+from logging import Logger
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
@@ -10,7 +11,7 @@ cohort_request_fields = {'id', 'name',
                          'dataSet', 'tag', 'samples', 'features', 'genes', 'mutations'}
 
 
-def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={}, mutation_dict={}):
+def build_cohort_graphql_response(requested=[], sample_requested=[], sample_tag_requested=[], feature_requested=[], gene_requested=[], mutation_requested=[], mutation_gene_requested=[]):
     from .data_set import build_data_set_graphql_response
     from .feature import build_feature_graphql_response
     from .gene import build_gene_graphql_response
@@ -23,11 +24,12 @@ def build_cohort_graphql_response(sample_dict={}, feature_dict={}, gene_dict={},
             return None
         else:
             cohort_id = get_value(cohort, 'cohort_id')
-            samples = sample_dict.get(cohort_id, []) if sample_dict else []
-            features = feature_dict.get(cohort_id, []) if feature_dict else []
-            genes = gene_dict.get(cohort_id, []) if gene_dict else []
-            mutations = mutation_dict.get(
-                cohort_id, []) if mutation_dict else []
+            samples = get_samples(cohort_id, requested,
+                                  sample_requested, sample_tag_requested)
+            features = get_features(cohort_id, requested, feature_requested)
+            genes = get_genes(cohort_id, requested, gene_requested)
+            mutations = get_mutations(
+                cohort_id, requested, mutation_requested, mutation_gene_requested)
             dict = {
                 'id': cohort_id,
                 'name': get_value(cohort, 'cohort_name'),
@@ -109,231 +111,122 @@ def build_cohort_request(requested, data_set_requested, tag_requested, cohort=No
     return get_pagination_queries(query, paging, distinct, cursor_field=cohort_1.id)
 
 
-def get_cohort_samples(requested, sample_requested, sample_tag_requested, cohort=None, data_set=None, tag=None):
+def get_samples(id, requested, sample_requested, tag_requested):
     if 'samples' not in requested:
         return([])
     else:
         sess = db.session
 
-        cohort_1 = aliased(Cohort, name='c')
-        data_set_1 = aliased(Dataset, name='ds')
-        tag_1 = aliased(Tag, name='t1')
         cohort_to_sample_1 = aliased(CohortToSample, name='cts')
         sample_1 = aliased(Sample, name='s')
-        tag_2 = aliased(Tag, name='t2')
-
-        core_field_mapping = {
-            'id': cohort_1.id.label('cohort_id'),
-        }
+        tag_1 = aliased(Tag, name='t2')
 
         sample_core_field_mapping = {
             'name': sample_1.name.label('sample_name'),
         }
 
-        sample_tag_core_field_mapping = {
-            'characteristics': tag_2.characteristics.label('tag_characteristics'),
-            'color': tag_2.color.label('tag_color'),
-            'longDisplay': tag_2.long_display.label('tag_long_display'),
-            'name': tag_2.name.label('tag_name'),
-            'shortDisplay': tag_2.short_display.label('tag_short_display')
+        tag_core_field_mapping = {
+            'characteristics': tag_1.characteristics.label('tag_characteristics'),
+            'color': tag_1.color.label('tag_color'),
+            'longDisplay': tag_1.long_display.label('tag_long_display'),
+            'name': tag_1.name.label('tag_name'),
+            'shortDisplay': tag_1.short_display.label('tag_short_display')
         }
 
-        core = get_selected(requested, core_field_mapping)
-        core |= get_selected(sample_requested, sample_core_field_mapping)
-        core |= get_selected(sample_tag_requested,
-                             sample_tag_core_field_mapping)
+        core = get_selected(sample_requested, sample_core_field_mapping)
+        core |= get_selected(tag_requested, tag_core_field_mapping)
 
         query = sess.query(*core)
-        query = query.select_from(cohort_1)
-
-        if cohort:
-            query = query.filter(cohort_1.name.in_(cohort))
-
-        if data_set:
-            data_set_join_condition = build_join_condition(
-                data_set_1.id, cohort_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
-            query = query.join(data_set_1, and_(
-                *data_set_join_condition), isouter=False)
-
-        if tag:
-            tag_join_condition = build_join_condition(
-                tag_1.id, cohort_1.tag_id, filter_column=tag_1.name, filter_list=tag)
-            query = query.join(tag_1, and_(
-                *tag_join_condition), isouter=False)
-
-        cohort_to_sample_join_condition = build_join_condition(
-            cohort_to_sample_1.cohort_id, cohort_1.id)
-
-        query = query.join(cohort_to_sample_1, and_(
-            *cohort_to_sample_join_condition), isouter=False)
+        query = query.select_from(cohort_to_sample_1)
+        query = query.filter(cohort_to_sample_1.cohort_id == id)
 
         sample_join_condition = build_join_condition(
-            sample_1.id, cohort_to_sample_1.sample_id)
+            cohort_to_sample_1.sample_id, sample_1.id)
 
         query = query.join(sample_1, and_(
             *sample_join_condition), isouter=False)
 
         if 'tag' in sample_requested:
             sample_tag_join_condition = build_join_condition(
-                tag_2.id, cohort_to_sample_1.tag_id)
-            query = query.join(tag_2, and_(
+                tag_1.id, cohort_to_sample_1.tag_id)
+            query = query.join(tag_1, and_(
                 *sample_tag_join_condition), isouter=True)
 
         samples = query.all()
-        sample_dict = dict()
-        for key, collection in groupby(samples, key=lambda s: s.cohort_id):
-            sample_dict[key] = sample_dict.get(key, []) + list(collection)
-        return(sample_dict)
+        return(samples)
 
 
-def get_cohort_features(requested, feature_requested, cohort=None, data_set=None, tag=None):
+def get_features(id, requested, feature_requested):
     if 'features' not in requested:
         return([])
     else:
         sess = db.session
 
-        cohort_1 = aliased(Cohort, name='c')
-        data_set_1 = aliased(Dataset, name='ds')
-        tag_1 = aliased(Tag, name='t')
         cohort_to_feature_1 = aliased(CohortToFeature, name='ctf')
         feature_1 = aliased(Feature, name='f')
 
-        core_field_mapping = {
-            'id': cohort_1.id.label('cohort_id'),
-            'name': cohort_1.name.label('cohort_name'),
-        }
-
         feature_core_field_mapping = {
-            'feature_id': feature_1.id.label('feature_id'),
             'display': feature_1.display.label('feature_display'),
             'name': feature_1.name.label('feature_name'),
         }
 
-        core = get_selected(requested, core_field_mapping)
-        core |= get_selected(feature_requested, feature_core_field_mapping)
+        core = get_selected(feature_requested, feature_core_field_mapping)
 
         query = sess.query(*core)
-        query = query.select_from(cohort_1)
-
-        if cohort:
-            query = query.filter(cohort_1.name.in_(cohort))
-
-        if data_set:
-            data_set_join_condition = build_join_condition(
-                data_set_1.id, cohort_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
-            query = query.join(data_set_1, and_(
-                *data_set_join_condition), isouter=False)
-
-        if tag:
-            tag_join_condition = build_join_condition(
-                tag_1.id, cohort_1.tag_id, filter_column=tag_1.name, filter_list=tag)
-            query = query.join(tag_1, and_(
-                *tag_join_condition), isouter=False)
-
-        cohort_to_feature_join_condition = build_join_condition(
-            cohort_to_feature_1.cohort_id, cohort_1.id)
-
-        query = query.join(cohort_to_feature_1, and_(
-            *cohort_to_feature_join_condition), isouter=False)
+        query = query.select_from(cohort_to_feature_1)
+        query = query.filter(cohort_to_feature_1.cohort_id == id)
 
         feature_join_condition = build_join_condition(
-            feature_1.id, cohort_to_feature_1.feature_id)
+            cohort_to_feature_1.feature_id, feature_1.id)
 
         query = query.join(feature_1, and_(
             *feature_join_condition), isouter=False)
 
-        import logging
-        logger = logging.getLogger('cohort resolver')
-        logger.info(query)
-
         features = query.all()
-        feature_dict = dict()
-        for key, collection in groupby(features, key=lambda f: f.cohort_id):
-            feature_dict[key] = feature_dict.get(key, []) + list(collection)
-        return(feature_dict)
+        return(features)
 
 
-def get_cohort_genes(requested, gene_requested, cohort=None, data_set=None, tag=None):
+def get_genes(id, requested, gene_requested):
     if 'genes' not in requested:
         return([])
     else:
         sess = db.session
 
-        cohort_1 = aliased(Cohort, name='c')
-        data_set_1 = aliased(Dataset, name='ds')
-        tag_1 = aliased(Tag, name='t')
         cohort_to_gene_1 = aliased(CohortToGene, name='ctg')
         gene_1 = aliased(Gene, name='g')
 
-        core_field_mapping = {
-            'id': cohort_1.id.label('cohort_id'),
-            'name': cohort_1.name.label('cohort_name'),
-        }
-
         gene_core_field_mapping = {
-            'gene_id': gene_1.id.label('gene_id'),
             'hgnc': gene_1.hgnc.label('gene_hgnc'),
             'entrez': gene_1.entrez.label('gene_entrez'),
         }
 
-        core = get_selected(requested, core_field_mapping)
-        core |= get_selected(gene_requested, gene_core_field_mapping)
+        core = get_selected(gene_requested, gene_core_field_mapping)
 
         query = sess.query(*core)
-        query = query.select_from(cohort_1)
-
-        if cohort:
-            query = query.filter(cohort_1.name.in_(cohort))
-
-        if data_set:
-            data_set_join_condition = build_join_condition(
-                data_set_1.id, cohort_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
-            query = query.join(data_set_1, and_(
-                *data_set_join_condition), isouter=False)
-
-        if tag:
-            tag_join_condition = build_join_condition(
-                tag_1.id, cohort_1.tag_id, filter_column=tag_1.name, filter_list=tag)
-            query = query.join(tag_1, and_(
-                *tag_join_condition), isouter=False)
-
-        cohort_to_gene_join_condition = build_join_condition(
-            cohort_to_gene_1.cohort_id, cohort_1.id)
-
-        query = query.join(cohort_to_gene_1, and_(
-            *cohort_to_gene_join_condition), isouter=False)
+        query = query.select_from(cohort_to_gene_1)
+        query = query.filter(cohort_to_gene_1.cohort_id == id)
 
         gene_join_condition = build_join_condition(
-            gene_1.id, cohort_to_gene_1.gene_id)
+            cohort_to_gene_1.gene_id, gene_1.id)
 
         query = query.join(gene_1, and_(
             *gene_join_condition), isouter=False)
 
         genes = query.all()
-        gene_dict = dict()
-        for key, collection in groupby(genes, key=lambda g: g.cohort_id):
-            gene_dict[key] = gene_dict.get(key, []) + list(collection)
-        return(gene_dict)
+        return(genes)
 
 
-def get_cohort_mutations(requested, mutation_requested, mutation_gene_requested, cohort=None, data_set=None, tag=None):
+def get_mutations(id, requested, mutation_requested, mutation_gene_requested):
 
     if 'mutations' not in requested:
         return([])
     else:
         sess = db.session
 
-        cohort_1 = aliased(Cohort, name='c')
-        data_set_1 = aliased(Dataset, name='ds')
-        tag_1 = aliased(Tag, name='t')
         cohort_to_mutation_1 = aliased(CohortToMutation, name='ctm')
         mutation_1 = aliased(Mutation, name='m')
         gene_1 = aliased(Gene, name='g')
         mutation_code_1 = aliased(MutationCode, name='mc')
-
-        core_field_mapping = {
-            'id': cohort_1.id.label('cohort_id'),
-        }
 
         mutation_core_field_mapping = {
             'mutationCode': mutation_code_1.code.label('mutation_code')
@@ -344,34 +237,13 @@ def get_cohort_mutations(requested, mutation_requested, mutation_gene_requested,
             'entrez': gene_1.entrez.label('gene_entrez'),
         }
 
-        core = get_selected(requested, core_field_mapping)
-        core |= get_selected(mutation_requested, mutation_core_field_mapping)
+        core = get_selected(mutation_requested, mutation_core_field_mapping)
         core |= get_selected(mutation_gene_requested,
                              mutation_gene_core_field_mapping)
 
         query = sess.query(*core)
-        query = query.select_from(cohort_1)
-
-        if cohort:
-            query = query.filter(cohort_1.name.in_(cohort))
-
-        if data_set:
-            data_set_join_condition = build_join_condition(
-                data_set_1.id, cohort_1.dataset_id, filter_column=data_set_1.name, filter_list=data_set)
-            query = query.join(data_set_1, and_(
-                *data_set_join_condition), isouter=False)
-
-        if tag:
-            tag_join_condition = build_join_condition(
-                tag_1.id, cohort_1.tag_id, filter_column=tag_1.name, filter_list=tag)
-            query = query.join(tag_1, and_(
-                *tag_join_condition), isouter=False)
-
-        cohort_to_mutation_join_condition = build_join_condition(
-            cohort_to_mutation_1.cohort_id, cohort_1.id)
-
-        query = query.join(cohort_to_mutation_1, and_(
-            *cohort_to_mutation_join_condition), isouter=False)
+        query = query.select_from(cohort_to_mutation_1)
+        query = query.filter(cohort_to_mutation_1.cohort_id == id)
 
         mutation_join_condition = build_join_condition(
             mutation_1.id, cohort_to_mutation_1.mutation_id)
@@ -394,8 +266,4 @@ def get_cohort_mutations(requested, mutation_requested, mutation_gene_requested,
                 *mutation_gene_join_condition), isouter=False)
 
         mutations = query.all()
-        mutation_dict = dict()
-        for key, collection in groupby(mutations, key=lambda m: m.cohort_id):
-            mutation_dict[key] = mutation_dict.get(key, []) + list(collection)
-
-        return(mutation_dict)
+        return(mutations)

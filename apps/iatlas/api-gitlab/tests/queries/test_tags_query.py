@@ -231,6 +231,11 @@ def test_tags_cursor_pagination_first(client, paging_query):
     page = json_data['data']['tags']
     items = page['items']
     paging = page['paging']
+    import logging
+    logger = logging.getLogger('test tag')
+    logger.info(items)
+    logger.info(paging)
+
     start = from_cursor_hash(paging['startCursor'])
     end = from_cursor_hash(paging['endCursor'])
     assert len(items) == num

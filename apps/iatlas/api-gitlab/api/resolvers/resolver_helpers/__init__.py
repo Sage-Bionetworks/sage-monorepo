@@ -1,4 +1,4 @@
-from .cohort import build_cohort_graphql_response, build_cohort_request, cohort_request_fields, get_cohort_samples, get_cohort_features, get_cohort_genes, get_cohort_mutations
+from .cohort import build_cohort_graphql_response, build_cohort_request, cohort_request_fields
 from .colocalization import colocalization_request_fields, build_coloc_graphql_response, build_colocalization_request
 from .copy_number_result import build_cnr_graphql_response, build_copy_number_result_request, cnr_request_fields
 from .data_set import build_data_set_graphql_response, data_set_request_fields, build_data_set_request, simple_data_set_request_fields
@@ -25,5 +25,5 @@ from .sample import build_sample_graphql_response, feature_related_sample_reques
 from .slide import build_slide_graphql_response, build_slide_request, slide_request_fields, simple_slide_request_fields
 from .snp import snp_request_fields, build_snp_graphql_response, build_snp_request
 from .super_category import request_super_categories
-from .tag import build_tag_graphql_response, request_tags, return_tag_derived_fields, simple_tag_request_fields, tag_request_fields, build_tag_request
+from .tag import build_tag_graphql_response, simple_tag_request_fields, tag_request_fields, build_tag_request, has_tag_fields
 from .therapy_type import request_therapy_types
