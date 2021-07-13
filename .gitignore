@@ -7,3 +7,4 @@ rsconnect/
 tests/testthat/helper-a_use_dev_globals.R
 .mailmap
 inst/extdata/*
+tracks
