@@ -5,15 +5,15 @@ build_md_tag_covariate_tbl <- function(cohort_obj, cov_obj){
   tbl <-
     purrr::map(
       parent_tags,
-      ~iatlas.api.client::query_samples_by_tag(
-        datasets = cohort_obj$dataset,
-        samples = cohort_obj$sample_tbl$sample,
+      ~iatlas.api.client::query_tag_samples(
+        cohorts = cohort_obj$dataset,
         parent_tags = .x
       )
     ) %>%
     purrr::map2(parent_tags, ~dplyr::mutate(.x, "parent_tag" = .y)) %>%
     dplyr::bind_rows() %>%
-    dplyr::select("sample", "parent_tag", "tag_name") %>%
+    dplyr::select("sample" = "sample_name", "parent_tag", "tag_name") %>%
+    dplyr::filter(.data$sample %in% cohort_obj$sample_tbl$sample) %>%
     tidyr::pivot_wider(
       ., names_from = "parent_tag", values_from = "tag_name"
     ) %>%
