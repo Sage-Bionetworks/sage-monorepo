@@ -3,11 +3,11 @@ ici_models_main_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    messageBox(
+    iatlas.modules::messageBox(
       width = 24,
       shiny::p("Select parameters of interest for model training")
     ),
-    optionsBox(
+    iatlas.modules::optionsBox(
       width = 24,
       shiny::column(
         width = 8,
@@ -38,7 +38,7 @@ ici_models_main_ui <- function(id){
     shiny::fluidRow(
       shiny::column(
         width = 3,
-        optionsBox(
+        iatlas.modules::optionsBox(
           width = 12,
           title = "Advanced",
           collapsible = TRUE,
@@ -81,7 +81,7 @@ ici_models_main_ui <- function(id){
       shiny::column(
         width = 9,
         shiny::verticalLayout(
-          messageBox(
+          iatlas.modules::messageBox(
             width = 12,
             textOutput(ns("samples_summary")),
             shiny::br(),
