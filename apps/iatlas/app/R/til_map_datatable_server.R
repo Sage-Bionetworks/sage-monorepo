@@ -11,13 +11,13 @@ til_map_datatable_server <- function(id, cohort_obj) {
           iatlas.api.client::query_sample_patients(
             samples = sample_tbl$sample
           ) %>%
-          dplyr::select("sample", "patient")
+          dplyr::select("sample" = "sample_name", "patient" = "patient_name")
 
         slide_tbl <-
           iatlas.api.client::query_patient_slides(
             samples = sample_tbl$sample
           ) %>%
-          dplyr::select("patient", "slide") %>%
+          dplyr::select("patient" = "patient_name", "slide" = "slide_name") %>%
           tidyr::drop_na()
 
         feature_tbl <-
