@@ -3,7 +3,7 @@ ici_models_train_ui <- function(id){
 
   shiny::tagList(
     verticalLayout(
-      optionsBox(
+      iatlas.modules::optionsBox(
         width = 12,
         shiny::column(
           width = 6,
@@ -27,7 +27,7 @@ ici_models_train_ui <- function(id){
           shiny::actionButton(ns("compute_train"), "Train Model")
           )
       ),
-      plotBox(
+      iatlas.modules::plotBox(
         width = 12,
         DT::dataTableOutput(ns("results")),
         plotly::plotlyOutput(ns("plot_coef")) %>%
@@ -35,7 +35,7 @@ ici_models_train_ui <- function(id){
         shiny::downloadButton(ns("download_train"), "Download training predictions")
       )
     ),
-    optionsBox(
+    iatlas.modules::optionsBox(
       width = 12,
       shiny::column(
         width = 5,
@@ -48,7 +48,7 @@ ici_models_train_ui <- function(id){
     ),
     shiny::column(
       width = 12,
-      plotBox(
+      iatlas.modules::plotBox(
         width = 24,
         uiOutput(ns("test_plots")),
         shiny::downloadButton(ns("download_test"), "Download testing predictions")
