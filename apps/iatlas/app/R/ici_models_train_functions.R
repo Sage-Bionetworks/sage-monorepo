@@ -205,6 +205,7 @@ get_plot_var_importance <- function(model, labels = NULL, from_varImp = TRUE, sc
       error = coef(summary(model))[,2]
     )
   }
+
   plot_df <- merge(plot_df, labels, by = "feature_name", all.x = TRUE) %>%
     dplyr::mutate(feature_display = replace(feature_display, feature_name == "(Intercept)", "(Intercept)")) %>%
     dplyr::select(x, y = feature_display, error)
@@ -245,7 +246,7 @@ run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds,
 
   results <- get_table_cv_results(model, has_bestTune = TRUE)
 
-  plot <- get_plot_var_importance(model, predictors, from_varImp = TRUE, scale_values = FALSE)
+  plot <- get_plot_var_importance(model, predictors, from_varImp = TRUE, scale_values = FALSE, title = "Absolute values of coefficients")
 
   list(model = model,
        results = results,
@@ -266,7 +267,7 @@ run_logistic_reg<- function(train_df, response_variable, predictors, n_cv_folds,
 
   results <- get_table_cv_results(model, has_bestTune = FALSE)
 
-  plot <- get_plot_var_importance(model, predictors, from_varImp = FALSE)
+  plot <- get_plot_var_importance(model, predictors, from_varImp = FALSE, title = "Absolute values of coefficients")
 
   list(model = model,
        results = results,
@@ -287,7 +288,7 @@ run_xgboost <- function(train_df, response_variable, predictors, n_cv_folds, bal
 
   results <- get_table_cv_results(model, has_bestTune = TRUE)
 
-  plot <- get_plot_var_importance(model, predictors, from_varImp = TRUE, scale_values = TRUE)
+  plot <- get_plot_var_importance(model, predictors, from_varImp = TRUE, scale_values = TRUE, title = "Relative importance of predictors")
 
   list(model = model,
        results = results,
@@ -308,7 +309,7 @@ run_rf <- function(train_df, response_variable, predictors, n_cv_folds, balance_
 
   results <- get_table_cv_results(model, has_bestTune = TRUE)
 
-  plot <- get_plot_var_importance(model, predictors, from_varImp = TRUE, scale_values = TRUE)
+  plot <- get_plot_var_importance(model, predictors, from_varImp = TRUE, scale_values = TRUE, title = "Relative importance of predictors")
 
   list(model = model,
        results = results,
