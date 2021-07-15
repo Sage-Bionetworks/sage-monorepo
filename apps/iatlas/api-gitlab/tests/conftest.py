@@ -78,6 +78,32 @@ def related_id(test_db, related):
 
 
 @ pytest.fixture(scope='session')
+def related2():
+    return 'gender'
+
+
+@ pytest.fixture(scope='session')
+def related_id2(test_db, related2):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=related2).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
+def related3():
+    return 'TCGA_Subtype'
+
+
+@ pytest.fixture(scope='session')
+def related_id3(test_db, related3):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=related3).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
 def tag():
     return 'C1'
 
@@ -100,19 +126,6 @@ def tag_id2(test_db, tag2):
     from api.db_models import Tag
     (id, ) = test_db.session.query(Tag.id).filter_by(
         name=tag2).one_or_none()
-    return id
-
-
-@ pytest.fixture(scope='session')
-def related2():
-    return 'gender'
-
-
-@ pytest.fixture(scope='session')
-def related_id2(test_db, related2):
-    from api.db_models import Tag
-    (id, ) = test_db.session.query(Tag.id).filter_by(
-        name=related2).one_or_none()
     return id
 
 
@@ -318,7 +331,7 @@ def cohort_query(cohort_query_builder):
 
 @pytest.fixture(scope='module')
 def tcga_tag_cohort_name():
-    return 'TCGA_Immune_Subtype'
+    return 'TCGA_TCGA_Subtype'
 
 
 @pytest.fixture(scope='module')

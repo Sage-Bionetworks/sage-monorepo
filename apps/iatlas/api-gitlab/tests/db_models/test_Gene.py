@@ -79,17 +79,6 @@ def test_Gene_with_copy_number_results(app, entrez):
         assert copy_number_result.gene_id == result.id
 
 
-def test_Gene_with_driver_results(app, entrez):
-    query = return_gene_query('driver_results')
-    result = query.filter_by(entrez=entrez).one_or_none()
-
-    assert result
-    assert isinstance(result.driver_results, list)
-    # Don't need to iterate through every result.
-    for driver_result in result.driver_results[0:2]:
-        assert driver_result.gene_id == result.id
-
-
 def test_Gene_with_gene_sample_assoc(app, entrez):
     query = return_gene_query('gene_sample_assoc')
     result = query.filter_by(entrez=entrez).one_or_none()
@@ -129,7 +118,6 @@ def test_Gene_no_relations(app, entrez, hgnc):
 
     assert result
     assert result.copy_number_results == []
-    assert result.driver_results == []
     assert result.gene_sample_assoc == []
     assert type(result.gene_family) is NoneType
     assert type(result.gene_function) is NoneType

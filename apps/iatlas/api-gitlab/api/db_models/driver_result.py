@@ -1,7 +1,6 @@
 from sqlalchemy import orm
 from api import db
 from . import Base
-from api.enums import direction_enum
 
 
 class DriverResult(Base):
@@ -20,10 +19,8 @@ class DriverResult(Base):
     feature_id = db.Column(db.Integer, db.ForeignKey(
         'features.id'), nullable=False)
 
-    gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=False)
-
-    mutation_code_id = db.Column(db.Integer, db.ForeignKey(
-        'mutation_codes.id'), nullable=False)
+    mutation_id = db.Column(db.Integer, db.ForeignKey(
+        'mutations.id'), nullable=False)
 
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
 
@@ -35,12 +32,8 @@ class DriverResult(Base):
         'Feature', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')
 
-    gene = db.relationship(
-        'Gene', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
-        uselist=False, lazy='noload')
-
-    mutation_code = db.relationship(
-        'MutationCode', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
+    mutation = db.relationship(
+        'Mutation', backref=orm.backref('driver_results', uselist=True, lazy='noload'),
         uselist=False, lazy='noload')
 
     tag = db.relationship(

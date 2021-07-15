@@ -1,73 +1,7 @@
 import json
 import pytest
 from tests import NoneType
-from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
-
-"""
-query DriverResults(
-  $paging: PagingInput
-  $distinct:Boolean
-  $dataSet: [String!]
-  $related: [String!]
-  $entrez: [Int!]
-  $feature: [String!]
-  $mutationCode: [String!]
-  $tag: [String!]
-  $minPValue: Float
-  $maxPValue: Float
-  $minLog10PValue: Float
-  $maxLog10PValue: Float
-  $minFoldChange: Float
-  $minLog10FoldChange: Float
-  $minNumWildTypes: Int
-  $minNumMutants: Int
-) {
-  driverResults(
-    paging: $paging
-    distinct: $distinct
-    dataSet: $dataSet
-    related: $related
-    feature: $feature
-    entrez: $entrez
-    mutationCode: $mutationCode
-    tag: $tag
-    minPValue: $minPValue
-    maxPValue: $maxPValue
-    minLog10PValue: $minLog10PValue
-    maxLog10PValue: $maxLog10PValue
-    minFoldChange: $minFoldChange
-    minLog10FoldChange: $minLog10FoldChange
-    minNumWildTypes: $minNumWildTypes
-    minNumMutants: $minNumMutants
-  ) {
-    paging {
-      type
-      pages
-      total
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-      page
-      limit
-    }
-    error
-    items {
-        pValue
-        log10PValue
-        foldChange
-        log10FoldChange
-        numWildTypes
-        numMutants
-        dataSet { name }
-        feature { name }
-        gene { entrez }
-        mutationCode
-        tag { name }
-    }
-  }
-}
-"""
+from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash
 
 
 @pytest.fixture(scope='module')
@@ -76,8 +10,8 @@ def dr_feature():
 
 
 @pytest.fixture(scope='module')
-def gene_entrez():
-    return 284058
+def dr_mutation():
+    return 'KANSL1:(OM)'
 
 
 @pytest.fixture(scope='module')
@@ -86,81 +20,18 @@ def mutation_code():
 
 
 @pytest.fixture(scope='module')
+def gene_entrez():
+    return 284058
+
+
+@pytest.fixture(scope='module')
+def gene_hgnc():
+    return 'KANSL1'
+
+
+@pytest.fixture(scope='module')
 def dr_tag_name():
     return 'BLCA'
-
-
-@pytest.fixture(scope='module')
-def common_query_builder():
-    def f(query_fields):
-        return """query DriverResults(
-        $paging: PagingInput
-        $distinct: Boolean
-        $dataSet: [String!]
-        $related: [String!]
-        $entrez: [Int!]
-        $feature: [String!]
-        $mutationCode: [String!]
-        $tag: [String!]
-        $minPValue: Float
-        $maxPValue: Float
-        $minLog10PValue: Float
-        $maxLog10PValue: Float
-        $minFoldChange: Float
-        $minLog10FoldChange: Float
-        $minNumWildTypes: Int
-        $minNumMutants: Int
-    ) {
-        driverResults(
-            paging: $paging
-            distinct: $distinct
-            dataSet: $dataSet
-            related: $related
-            feature: $feature
-            entrez: $entrez
-            mutationCode: $mutationCode
-            tag: $tag
-            minPValue: $minPValue
-            maxPValue: $maxPValue
-            minLog10PValue: $minLog10PValue
-            maxLog10PValue: $maxLog10PValue
-            minFoldChange: $minFoldChange
-            minLog10FoldChange: $minLog10FoldChange
-            minNumWildTypes: $minNumWildTypes
-            minNumMutants: $minNumMutants
-        )""" + query_fields + "}"
-    return f
-
-
-@pytest.fixture(scope='module')
-def common_query(common_query_builder):
-    return common_query_builder("""{
-            items {
-                pValue
-                log10PValue
-                foldChange
-                log10FoldChange
-                numWildTypes
-                numMutants
-                dataSet { name }
-                feature { name }
-                gene { entrez }
-                mutationCode
-                tag { name }
-            }
-            paging {
-                type
-                pages
-                total
-                startCursor
-                endCursor
-                hasPreviousPage
-                hasNextPage
-                page
-                limit
-            }
-            error
-        }""")
 
 
 @pytest.fixture(scope='module')
@@ -202,11 +73,55 @@ def min_n_mut():
 def min_n_wt():
     return 383
 
-# Test that forward cursor pagination gives us the expected paginInfo
+
+@pytest.fixture(scope='module')
+def common_query_builder():
+    def f(query_fields):
+        return """query DriverResults(
+        $paging: PagingInput
+        $distinct: Boolean
+        $dataSet: [String!]
+        $related: [String!]
+        $entrez: [Int!]
+        $feature: [String!]
+        $mutation: [String!]
+        $mutationCode: [String!]
+        $tag: [String!]
+        $minPValue: Float
+        $maxPValue: Float
+        $minLog10PValue: Float
+        $maxLog10PValue: Float
+        $minFoldChange: Float
+        $minLog10FoldChange: Float
+        $minNumWildTypes: Int
+        $minNumMutants: Int
+    ) {
+        driverResults(
+            paging: $paging
+            distinct: $distinct
+            dataSet: $dataSet
+            related: $related
+            feature: $feature
+            entrez: $entrez
+            mutation: $mutation
+            mutationCode: $mutationCode
+            tag: $tag
+            minPValue: $minPValue
+            maxPValue: $maxPValue
+            minLog10PValue: $minLog10PValue
+            maxLog10PValue: $maxLog10PValue
+            minFoldChange: $minFoldChange
+            minLog10FoldChange: $minLog10FoldChange
+            minNumWildTypes: $minNumWildTypes
+            minNumMutants: $minNumMutants
+        )""" + query_fields + "}"
+    return f
 
 
-def test_driverResults_cursor_pagination_first(client, common_query_builder):
-    query = common_query_builder("""{
+@pytest.fixture(scope='module')
+def paging_query(common_query_builder):
+    return common_query_builder(
+        """{
             items {
                 id
             }
@@ -221,10 +136,58 @@ def test_driverResults_cursor_pagination_first(client, common_query_builder):
                 page
                 limit
             }
+            error
         }""")
+
+
+@pytest.fixture(scope='module')
+def simple_query(common_query_builder):
+    return common_query_builder(
+        """{
+            items {
+                pValue
+                log10PValue
+                foldChange
+                log10FoldChange
+                numWildTypes
+                numMutants
+            }
+        }""")
+
+
+@pytest.fixture(scope='module')
+def common_query(common_query_builder):
+    return common_query_builder("""{
+            items {
+                pValue
+                log10PValue
+                foldChange
+                log10FoldChange
+                numWildTypes
+                numMutants
+                dataSet { name }
+                feature { name }
+                mutation {
+                    name
+                    gene {
+                        entrez
+                        hgnc
+                    }
+                    mutationCode
+                    mutationType {
+                        name
+                        display
+                    }
+                }
+                tag { name }
+            }
+        }""")
+
+
+def test_driverResults_cursor_pagination_first(client, paging_query):
     num = 10
     response = client.post(
-        '/api', json={'query': query, 'variables': {
+        '/api', json={'query': paging_query, 'variables': {
             'paging': {'first': num}
         }})
     json_data = json.loads(response.data)
@@ -242,26 +205,10 @@ def test_driverResults_cursor_pagination_first(client, common_query_builder):
     assert int(end) - int(start) > 0
 
 
-def test_driverResults_cursor_pagination_last(client, common_query_builder):
-    query = common_query_builder("""{
-            items {
-                id
-            }
-            paging {
-                type
-                pages
-                total
-                startCursor
-                endCursor
-                hasPreviousPage
-                hasNextPage
-                page
-                limit
-            }
-        }""")
+def test_driverResults_cursor_pagination_last(client, paging_query):
     num = 10
     response = client.post(
-        '/api', json={'query': query, 'variables': {
+        '/api', json={'query': paging_query, 'variables': {
             'paging': {
                 'last': num,
                 'before': to_cursor_hash(1000)
@@ -281,11 +228,11 @@ def test_driverResults_cursor_pagination_last(client, common_query_builder):
     assert end == items[num - 1]['id']
 
 
-def test_driverResults_cursor_distinct_pagination(client, common_query):
+def test_driverResults_cursor_distinct_pagination(client, paging_query):
     page_num = 2
     num = 10
     response = client.post(
-        '/api', json={'query': common_query, 'variables': {
+        '/api', json={'query': paging_query, 'variables': {
             'paging': {
                 'page': page_num,
                 'first': num,
@@ -302,49 +249,51 @@ def test_driverResults_cursor_distinct_pagination(client, common_query):
     assert page_num == page['paging']['page']
 
 
+def test_driverResults_query_with_no_arguments_no_relations(client, simple_query):
+    num = 10
+    response = client.post(
+        '/api',
+        json={
+            'query': simple_query,
+            'variables': {'paging': {'first': num}}
+        }
+    )
+    json_data = json.loads(response.data)
+    page = json_data['data']['driverResults']
+    driver_results = page['items']
+    assert isinstance(driver_results, list)
+    assert len(driver_results) == num
+    for driver_result in driver_results[0:2]:
+        assert type(driver_result['foldChange']) is float or NoneType
+        assert type(driver_result['pValue']) is float or NoneType
+        assert type(driver_result['log10PValue']) is float or NoneType
+        assert type(driver_result['log10FoldChange']) is float or NoneType
+        assert type(driver_result['numWildTypes']) is int or NoneType
+        assert type(driver_result['numMutants']) is int or NoneType
+
+
 def test_driverResults_query_with_passed_data_set_entrez_feature_and_tag(client, common_query, data_set, dr_feature, gene_entrez, dr_tag_name):
+    num = 1
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
         'entrez': [gene_entrez],
         'feature': [dr_feature],
-        'tag': [dr_tag_name]
+        'tag': [dr_tag_name],
+        'paging': {'first': num}
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['driverResults']
     results = page['items']
     assert isinstance(results, list)
-    assert len(results) > 0
+    assert len(results) == num
     for result in results[0:2]:
         assert result['dataSet']['name'] == data_set
         assert result['feature']['name'] == dr_feature
-        assert result['gene']['entrez'] == gene_entrez
-        assert type(result['mutationCode']) is str
         assert result['tag']['name'] == dr_tag_name
-
-
-def test_driverResults_query_returns_mutationId(client, common_query_builder, data_set, dr_feature, gene_entrez, dr_tag_name):
-    query = common_query_builder("""{
-            items {
-                gene { entrez }
-                mutationId
-                mutationCode
-            }
-        }""")
-    response = client.post('/api', json={'query': query, 'variables': {
-        'dataSet': [data_set],
-        'entrez': [gene_entrez],
-        'feature': [dr_feature],
-        'tag': [dr_tag_name]
-    }})
-    json_data = json.loads(response.data)
-    page = json_data['data']['driverResults']
-    results = page['items']
-    assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results[0:2]:
-        assert result['gene']['entrez'] == gene_entrez
-        assert type(result['mutationId']) is int
-        assert type(result['mutationCode']) is str
+        assert type(result['mutation']['name']) is str
+        assert type(result['mutation']['gene']['entrez']) is int
+        assert result['mutation']['gene']['entrez'] == gene_entrez
+        assert type(result['mutation']['mutationCode']) is str
 
 
 def test_driverResults_query_with_passed_data_set_entrez_feature_and_mutation(client, common_query, data_set, dr_feature, gene_entrez, mutation_code):
@@ -362,8 +311,8 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_and_mutation(cl
     for result in results[0:2]:
         assert result['dataSet']['name'] == data_set
         assert result['feature']['name'] == dr_feature
-        assert result['gene']['entrez'] == gene_entrez
-        assert result['mutationCode'] == mutation_code
+        assert result['mutation']['gene']['entrez'] == gene_entrez
+        assert result['mutation']['mutationCode'] == mutation_code
         assert type(result['tag']['name']) is str
 
 
@@ -396,8 +345,8 @@ def test_driverResults_query_with_passed_data_set_related_entrez_feature_and_mut
     for result in results[0:2]:
         assert result['dataSet']['name'] == data_set
         assert result['feature']['name'] == dr_feature
-        assert result['gene']['entrez'] == gene_entrez
-        assert result['mutationCode'] == mutation_code
+        assert result['mutation']['gene']['entrez'] == gene_entrez
+        assert result['mutation']['mutationCode'] == mutation_code
         assert type(result['tag']['name']) is str
 
 
@@ -416,8 +365,8 @@ def test_driverResults_query_with_passed_data_set_entrez_mutation_code_and_tag(c
     for result in results[0:2]:
         assert result['dataSet']['name'] == data_set
         assert type(result['feature']['name']) is str
-        assert result['gene']['entrez'] == gene_entrez
-        assert result['mutationCode'] == mutation_code
+        assert result['mutation']['gene']['entrez'] == gene_entrez
+        assert result['mutation']['mutationCode'] == mutation_code
         assert result['tag']['name'] == dr_tag_name
 
 
@@ -436,9 +385,58 @@ def test_driverResults_query_with_passed_data_set_feature_mutation_code_and_tag(
     for result in results[0:2]:
         assert result['dataSet']['name'] == data_set
         assert result['feature']['name'] == dr_feature
-        assert type(result['gene']['entrez']) is int
-        assert result['mutationCode'] == mutation_code
+        assert type(result['mutation']['gene']['entrez']) is int
+        assert result['mutation']['mutationCode'] == mutation_code
         assert result['tag']['name'] == dr_tag_name
+
+
+def test_driverResults_query_with_passed_data_set_feature_mutation_code_entrez_and_tag(client, common_query, data_set, dr_feature, mutation_code, dr_tag_name, gene_entrez, gene_hgnc, dr_mutation):
+    response = client.post('/api', json={'query': common_query, 'variables': {
+        'dataSet': [data_set],
+        'feature': [dr_feature],
+        'mutationCode': [mutation_code],
+        'tag': [dr_tag_name],
+        'entrez': [gene_entrez],
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['driverResults']
+    results = page['items']
+    assert isinstance(results, list)
+    assert len(results) == 1
+    for result in results:
+        assert result['dataSet']['name'] == data_set
+        assert result['feature']['name'] == dr_feature
+        assert result['tag']['name'] == dr_tag_name
+        assert result['mutation']['name'] == dr_mutation
+        assert result['mutation']['gene']['entrez'] == gene_entrez
+        assert result['mutation']['gene']['hgnc'] == gene_hgnc
+        assert result['mutation']['mutationCode'] == mutation_code
+        assert result['mutation']['mutationType']['name'] == 'driver_mutation'
+        assert result['mutation']['mutationType']['display'] == 'Driver Mutation'
+
+
+def test_driverResults_query_with_passed_data_set_feature_tag_and_mutation(client, common_query, data_set, dr_feature, dr_mutation, dr_tag_name, gene_entrez, gene_hgnc, mutation_code):
+    response = client.post('/api', json={'query': common_query, 'variables': {
+        'dataSet': [data_set],
+        'feature': [dr_feature],
+        'mutation': [dr_mutation],
+        'tag': [dr_tag_name]
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['driverResults']
+    results = page['items']
+    assert isinstance(results, list)
+    assert len(results) == 1
+    for result in results:
+        assert result['dataSet']['name'] == data_set
+        assert result['feature']['name'] == dr_feature
+        assert result['mutation']['name'] == dr_mutation
+        assert result['tag']['name'] == dr_tag_name
+        assert result['mutation']['gene']['entrez'] == gene_entrez
+        assert result['mutation']['gene']['hgnc'] == gene_hgnc
+        assert result['mutation']['mutationCode'] == mutation_code
+        assert result['mutation']['mutationType']['name'] == 'driver_mutation'
+        assert result['mutation']['mutationType']['display'] == 'Driver Mutation'
 
 
 def test_driverResults_query_with_passed_data_set_entrez_feature_mutation_code_and_tag(client, common_query, dr_feature, gene_entrez, mutation_code, dr_tag_name):
@@ -457,8 +455,8 @@ def test_driverResults_query_with_passed_data_set_entrez_feature_mutation_code_a
     for result in results[0:2]:
         assert type(result['dataSet']['name']) is str
         assert result['feature']['name'] == dr_feature
-        assert result['gene']['entrez'] == gene_entrez
-        assert result['mutationCode'] == mutation_code
+        assert result['mutation']['gene']['entrez'] == gene_entrez
+        assert result['mutation']['mutationCode'] == mutation_code
         assert result['tag']['name'] == dr_tag_name
 
 
@@ -661,29 +659,3 @@ def test_driverResults_query_with_passed_min_n_wt(client, common_query, data_set
     assert len(results) > 0
     for result in results[0:2]:
         assert result['numWildTypes'] >= min_n_wt
-
-
-def test_driverResults_query_with_no_arguments_no_relations(client, common_query_builder):
-    query = common_query_builder("""{
-            items {
-                foldChange
-                pValue
-                log10PValue
-                log10FoldChange
-                numWildTypes
-                numMutants
-            }
-        }""")
-    response = client.post('/api', json={'query': query})
-    json_data = json.loads(response.data)
-    page = json_data['data']['driverResults']
-    driver_results = page['items']
-    assert isinstance(driver_results, list)
-    assert len(driver_results) > 0
-    for driver_result in driver_results[0:2]:
-        assert type(driver_result['foldChange']) is float or NoneType
-        assert type(driver_result['pValue']) is float or NoneType
-        assert type(driver_result['log10PValue']) is float or NoneType
-        assert type(driver_result['log10FoldChange']) is float or NoneType
-        assert type(driver_result['numWildTypes']) is int or NoneType
-        assert type(driver_result['numMutants']) is int or NoneType

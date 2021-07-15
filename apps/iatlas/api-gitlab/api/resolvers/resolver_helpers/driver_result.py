@@ -1,31 +1,31 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, DriverResult, Feature, Gene, Mutation, MutationCode, Tag
+from api.db_models import Dataset, DatasetToTag, DriverResult, Feature, Gene, Mutation, MutationCode, Tag, MutationType
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
 
-driver_result_request_fields = {'dataSet',
-                                'feature',
-                                'gene',
-                                'mutationCode',
-                                'mutationId',
-                                'tag',
-                                'pValue',
-                                'foldChange',
-                                'log10PValue',
-                                'log10FoldChange',
-                                'numWildTypes',
-                                'numMutants'}
+driver_result_request_fields = {
+    'dataSet',
+    'feature',
+    'mutation',
+    'tag',
+    'pValue',
+    'foldChange',
+    'log10PValue',
+    'log10FoldChange',
+    'numWildTypes',
+    'numMutants'
+}
 
 
 def build_dr_graphql_response(driver_result):
     from .data_set import build_data_set_graphql_response
     from .feature import build_feature_graphql_response
-    from .gene import build_gene_graphql_response
+    from .mutation import build_mutation_graphql_response
     from .tag import build_tag_graphql_response
 
-    result = {
+    dict = {
         'id': get_value(driver_result, 'id'),
         'pValue': get_value(driver_result, 'p_value'),
         'foldChange': get_value(driver_result, 'fold_change'),
@@ -35,16 +35,13 @@ def build_dr_graphql_response(driver_result):
         'numMutants': get_value(driver_result, 'n_mut'),
         'dataSet': build_data_set_graphql_response()(driver_result),
         'feature': build_feature_graphql_response()(driver_result),
-        'gene': build_gene_graphql_response()(driver_result),
-        'mutationCode': get_value(driver_result, 'code'),
-        'mutationId': get_value(driver_result, 'mutation_id'),
+        'mutation': build_mutation_graphql_response()(driver_result),
         'tag': build_tag_graphql_response()(driver_result)
     }
-    return(result)
+    return(dict)
 
 
-def build_driver_result_request(
-        requested, data_set_requested, feature_requested, gene_requested, tag_requested, data_set=None, distinct=False, entrez=None, feature=None, max_p_value=None, max_log10_p_value=None, min_fold_change=None, min_log10_fold_change=None, min_log10_p_value=None, min_p_value=None, min_n_mut=None, min_n_wt=None, mutation_code=None, paging=None, related=None, tag=None):
+def build_driver_result_request(requested, data_set_requested, feature_requested, mutation_requested, mutation_gene_requested, mutation_type_requested, tag_requested, data_set=None, distinct=False, entrez=None, feature=None, max_p_value=None, max_log10_p_value=None, min_fold_change=None, min_log10_fold_change=None, min_log10_p_value=None, min_p_value=None, min_n_mut=None, min_n_wt=None, mutation=None, mutation_code=None, paging=None, related=None, tag=None):
     """
     Builds a SQL request.
 
@@ -52,8 +49,10 @@ def build_driver_result_request(
         1st position - a set of the requested fields at the root of the graphql request
         2nd position - a set of the requested fields in the 'dataSet' node of the graphql request. If 'dataSet' is not requested, this will be an empty set.
         3rd position - a set of the requested fields in the 'feature' node of the graphql request. If 'feature' is not requested, this will be an empty set.
-        4th position - a set of the requested fields in the 'gene' node of the graphql request. If 'gene' is not requested, this will be an empty set.
-        5th position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this will be an empty set.
+        4th position - a set of the requested fields in the 'mutation' node of the graphql request. If 'mutation' is not requested, this will be an empty set.
+        5th position - a set of the requested fields in the 'gene' node of the graphql request. If 'gene' is not requested, this will be an empty set.
+        6th position - a set of the requested fields in the 'mutationType' node of the graphql request. If 'mutationType' is not requested, this will be an empty set.
+        7th position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this will be an empty set.
 
     All keyword arguments are optional. Keyword arguments are:
         `data_set` - a list of strings, data set names
@@ -68,17 +67,21 @@ def build_driver_result_request(
         `min_p_value` - a float, a minimum P value
         `min_n_mut` - a float, a minimum number of mutants
         `min_n_wt` - a float, a minimum number of wild types
+        `mutation` - a list of strings, mutations
         `mutation_code` - a list of strings, mutation codes
         `paging` - a dict containing pagination metadata
         `related` - a list of strings, tags related to the dataset that is associated with the result.
         `tag` - a list of strings, tag names
     """
+    from .gene import get_simple_gene_column_labels
+    from .mutation import get_mutation_column_labels, get_mutation_type_column_labels, build_simple_mutation_request
     sess = db.session
 
     driver_result_1 = aliased(DriverResult, name='dr')
     gene_1 = aliased(Gene, name='g')
     mutation_1 = aliased(Mutation, name='m')
     mutation_code_1 = aliased(MutationCode, name='mc')
+    mutation_type_1 = aliased(MutationType, name='mt')
     tag_1 = aliased(Tag, name='t')
     feature_1 = aliased(Feature, name='f')
     data_set_1 = aliased(Dataset, name='ds')
@@ -89,10 +92,9 @@ def build_driver_result_request(
         'foldChange': driver_result_1.fold_change.label('fold_change'),
         'log10PValue': driver_result_1.log10_p_value.label('log10_p_value'),
         'log10FoldChange': driver_result_1.log10_fold_change.label('log10_fold_change'),
-        'mutationCode': mutation_code_1.code.label('code'),
-        'mutationId': mutation_1.id.label('mutation_id'),
         'numWildTypes': driver_result_1.n_wt.label('n_wt'),
-        'numMutants': driver_result_1.n_mut.label('n_mut')}
+        'numMutants': driver_result_1.n_mut.label('n_mut')
+    }
     data_set_core_field_mapping = {
         'display': data_set_1.display.label('data_set_display'),
         'name': data_set_1.name.label('data_set_name'),
@@ -103,13 +105,6 @@ def build_driver_result_request(
         'name': feature_1.name.label('feature_name'),
         'order': feature_1.order.label('feature_order'),
         'unit': feature_1.unit.label('feature_unit')
-    }
-    gene_core_field_mapping = {
-        'entrez': gene_1.entrez.label('gene_entrez'),
-        'hgnc': gene_1.hgnc.label('gene_hgnc'),
-        'description': gene_1.description.label('gene_description'),
-        'friendlyName': gene_1.friendly_name.label('gene_friendly_name'),
-        'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
     }
     tag_core_field_mapping = {
         'characteristics': tag_1.characteristics.label('tag_characteristics'),
@@ -122,8 +117,21 @@ def build_driver_result_request(
     core = get_selected(requested, core_field_mapping)
     core |= get_selected(data_set_requested, data_set_core_field_mapping)
     core |= get_selected(feature_requested, feature_core_field_mapping)
-    core |= get_selected(gene_requested, gene_core_field_mapping)
     core |= get_selected(tag_requested, tag_core_field_mapping)
+
+    mutation_core = get_mutation_column_labels(
+        mutation_requested, mutation_1, mutation_code_1)
+
+    gene_core = get_simple_gene_column_labels(mutation_gene_requested, gene_1)
+
+    mutation_type_core = get_mutation_type_column_labels(
+        mutation_type_requested, mutation_type_1)
+
+    core |= mutation_core
+    core |= gene_core
+    core |= mutation_type_core
+
+    core |= {driver_result_1.id.label('id')}
 
     query = sess.query(*core)
     query = query.select_from(driver_result_1)
@@ -163,13 +171,6 @@ def build_driver_result_request(
         query = query.join(data_set_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
-    if 'gene' in requested or entrez:
-        is_outer = not bool(entrez)
-        data_set_join_condition = build_join_condition(
-            gene_1.id, driver_result_1.gene_id, filter_column=gene_1.entrez, filter_list=entrez)
-        query = query.join(gene_1, and_(
-            *data_set_join_condition), isouter=is_outer)
-
     if 'feature' in requested or feature:
         is_outer = not bool(feature)
         data_set_join_condition = build_join_condition(
@@ -177,23 +178,13 @@ def build_driver_result_request(
         query = query.join(feature_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
-    if 'mutationCode' in requested or mutation_code:
-        is_outer = not bool(mutation_code)
-        mutation_code_join_condition = build_join_condition(
-            mutation_code_1.id, driver_result_1.mutation_code_id, filter_column=mutation_code_1.code, filter_list=mutation_code)
-        query = query.join(mutation_code_1, and_(
-            *mutation_code_join_condition), isouter=is_outer)
-
-    if 'mutationId' in requested:
-        query = query.join(mutation_1, and_(
-            mutation_1.gene_id == driver_result_1.gene_id, mutation_1.mutation_code_id == driver_result_1.mutation_code_id))
-
     if 'tag' in requested or tag:
         is_outer = not bool(tag)
         data_set_join_condition = build_join_condition(
             tag_1.id, driver_result_1.tag_id, filter_column=tag_1.name, filter_list=tag)
         query = query.join(tag_1, and_(
             *data_set_join_condition), isouter=is_outer)
+
     if related:
         data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
         related_tag_1 = aliased(Tag, name='rt')
@@ -205,5 +196,15 @@ def build_driver_result_request(
             data_set_to_tag_1.dataset_id, data_set_1.id, data_set_to_tag_1.tag_id, related_tag_sub_query)
         query = query.join(
             data_set_to_tag_1, and_(*data_set_tag_join_condition))
+
+    if 'mutation' in requested or mutation:
+        is_outer = not bool(mutation)
+        mutation_join_condition = build_join_condition(
+            driver_result_1.mutation_id, mutation_1.id, filter_column=mutation_1.name, filter_list=mutation)
+        query = query.join(mutation_1, and_(
+            *mutation_join_condition), isouter=is_outer)
+
+    query = build_simple_mutation_request(query, mutation_requested, mutation_1, gene_1, mutation_code_1,
+                                          mutation_type_1, entrez=entrez, mutation_code=mutation_code)
 
     return get_pagination_queries(query, paging, distinct, cursor_field=driver_result_1.id)

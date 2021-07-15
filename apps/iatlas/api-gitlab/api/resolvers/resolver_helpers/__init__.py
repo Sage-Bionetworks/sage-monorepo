@@ -14,7 +14,7 @@ from .germline_gwas_result import germline_gwas_result_request_fields, build_ggr
 from .heritability_result import heritability_result_request_fields, build_hr_graphql_response, build_heritability_result_request
 from .immune_checkpoint import request_immune_checkpoints
 from .method_tag import request_method_tags
-from .mutation import build_mutation_graphql_response, build_mutation_request, mutation_request_fields, request_mutations, return_mutation_derived_fields
+from .mutation import build_mutation_graphql_response, build_mutation_request, mutation_request_fields
 from .mutation_type import build_mutation_type_graphql_response, mutation_type_request_fields, request_mutation_types
 from .node import build_node_graphql_response, build_node_request, fetch_nodes_with_tags, node_request_fields
 from .pathway import request_pathways

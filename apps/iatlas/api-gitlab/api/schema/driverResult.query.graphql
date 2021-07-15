@@ -8,13 +8,9 @@ type DriverResultNode implements BaseNode {
   dataSet: SimpleDataSet!
   "The feature associated with the driver result."
   feature: SimpleFeature!
-  "The gene associated with the driver result."
-  gene: SimpleGene!
-  "The mutation code associated with the driver result."
-  mutationCode: String!
+  "The mutation associated with the driver result."
+  mutation: SimpleMutation!
   "A database generated id of the mutation related to the gene and mutation code associated with the driver result."
-  mutationId: Int!
-  "The tag associated with the driver result."
   tag: SimpleTag!
   "The P value of the driver result."
   pValue: Float

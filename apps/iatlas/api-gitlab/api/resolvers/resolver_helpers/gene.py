@@ -30,6 +30,18 @@ gene_request_fields = simple_gene_request_fields.union({
 })
 
 
+def get_simple_gene_column_labels(requested, gene):
+    mapping = {
+        'entrez': gene.entrez.label('gene_entrez'),
+        'hgnc': gene.hgnc.label('gene_hgnc'),
+        'description': gene.description.label('gene_description'),
+        'friendlyName': gene.friendly_name.label('gene_friendly_name'),
+        'ioLandscapeName': gene.io_landscape_name.label('gene_io_landscape_name')
+    }
+    labels = get_selected(requested, mapping)
+    return(labels)
+
+
 def build_gene_graphql_response(requested=[], gene_types_requested=[], publications_requested=[], sample_requested=[], gene_type=None, cohort=None, sample=None, max_rna_seq_expr=None, min_rna_seq_expr=None, prefix='gene_'):
     def f(gene):
         if not gene:
