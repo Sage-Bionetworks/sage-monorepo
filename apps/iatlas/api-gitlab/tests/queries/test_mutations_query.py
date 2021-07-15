@@ -1,3 +1,4 @@
+from enum import unique
 import json
 import pytest
 from sqlalchemy import and_
@@ -32,6 +33,11 @@ def sample_name():
 
 
 @pytest.fixture(scope='module')
+def dr_mutation():
+    return 'ABL1:(NS)'
+
+
+@pytest.fixture(scope='module')
 def common_query_builder():
     def f(query_fields):
         return """query Mutations(
@@ -39,8 +45,8 @@ def common_query_builder():
             $distinct: Boolean
             $cohort: [String!]
             $entrez: [Int!]
+            $mutation: [String!]
             $mutationCode: [String!]
-            $mutationId: [Int!]
             $mutationType: [String!]
             $sample: [String!]
             $status: [StatusEnum!]
@@ -50,8 +56,8 @@ def common_query_builder():
                 distinct: $distinct
                 cohort: $cohort
                 entrez: $entrez
+                mutation: $mutation
                 mutationCode: $mutationCode
-                mutationId: $mutationId
                 mutationType: $mutationType
                 sample: $sample
                 status: $status
@@ -65,6 +71,7 @@ def common_query(common_query_builder):
         {
             items {
                 id
+                name
                 gene { entrez }
                 mutationCode
                 mutationType { name }
@@ -91,6 +98,7 @@ def samples_query(common_query_builder):
         {
             items {
                 id
+                name
                 gene { entrez }
                 mutationCode
                 mutationType { name }
@@ -230,9 +238,9 @@ def test_cursor_pagination_last(client, common_query_builder):
     assert end == items[num - 1]['id']
 
 
-def test_mutations_query_with_mutationId(client, common_query, mutation_id):
+def test_mutations_query_with_mutation_name(client, common_query, dr_mutation):
     response = client.post(
-        '/api', json={'query': common_query, 'variables': {'mutationId': [mutation_id]}})
+        '/api', json={'query': common_query, 'variables': {'mutation': [dr_mutation]}})
     json_data = json.loads(response.data)
     mutations = json_data['data']['mutations']
     page = mutations['items']
@@ -240,7 +248,7 @@ def test_mutations_query_with_mutationId(client, common_query, mutation_id):
     assert isinstance(page, list)
     assert len(page) == 1
     for mutation in page:
-        assert mutation['id'] == str(mutation_id)
+        assert mutation['name'] == dr_mutation
 
 
 def test_mutations_query_with_entrez(client, samples_query, gene_entrez):
@@ -306,15 +314,16 @@ def test_mutations_query_with_sample(client, samples_query, sample_name):
             assert current_sample['name'] == sample_name
 
 
-def test_mutations_query_with_sample_and_status(client, samples_query, mutation_status):
+def test_mutations_query_with_status(client, samples_query, mutation_status):
+    num = 5
     response = client.post(
-        '/api', json={'query': samples_query, 'variables': {'paging': {'first': 100}, 'status': [mutation_status]}})
+        '/api', json={'query': samples_query, 'variables': {'paging': {'first': num}, 'status': [mutation_status]}})
     json_data = json.loads(response.data)
     mutations = json_data['data']['mutations']
     page = mutations['items']
 
     assert isinstance(page, list)
-    assert len(page) > 0
+    assert len(page) == num
     for mutation in page[0:2]:
         samples = mutation['samples']
         assert isinstance(samples, list)
@@ -337,11 +346,12 @@ def test_mutations_query_with_no_variables(client, common_query):
 
 
 def test_mutations_query_with_cohort(client, samples_query, tcga_tag_cohort_name, tcga_tag_cohort_samples):
+    num = 1
     response = client.post(
         '/api', json={
             'query': samples_query,
             'variables': {
-                'paging': {'first': 10},
+                'paging': {'first': num},
                 'cohort': [tcga_tag_cohort_name]
             }
         }
@@ -351,7 +361,7 @@ def test_mutations_query_with_cohort(client, samples_query, tcga_tag_cohort_name
     page = mutations['items']
 
     assert isinstance(page, list)
-    assert len(page) > 0
+    assert len(page) == num
     for mutation in page[0:2]:
         samples = mutation['samples']
         assert isinstance(samples, list)

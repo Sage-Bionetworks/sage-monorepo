@@ -175,7 +175,7 @@ def test_cohorts_cursor_distinct_pagination(client, common_query):
     assert page_num == page['paging']['page']
 
 
-def test_tag_cohort_query_by_name(client, common_query, tcga_tag_cohort_name, data_set, related):
+def test_tag_cohort_query_by_name(client, common_query, tcga_tag_cohort_name, data_set, related3):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'cohort': [tcga_tag_cohort_name]
     }})
@@ -186,14 +186,14 @@ def test_tag_cohort_query_by_name(client, common_query, tcga_tag_cohort_name, da
     assert len(results) == 1
     result = results[0]
     assert result['dataSet']['name'] == data_set
-    assert result['tag']['name'] == related
+    assert result['tag']['name'] == related3
     assert result['name'] == tcga_tag_cohort_name
 
 
-def test_tag_cohort_query_by_dataset_and_tag(client, common_query, tcga_tag_cohort_name, data_set, related):
+def test_tag_cohort_query_by_dataset_and_tag(client, common_query, tcga_tag_cohort_name, data_set, related3):
     response = client.post('/api', json={'query': common_query, 'variables': {
         'dataSet': [data_set],
-        'tag': [related]
+        'tag': [related3]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
@@ -202,7 +202,7 @@ def test_tag_cohort_query_by_dataset_and_tag(client, common_query, tcga_tag_coho
     assert len(results) == 1
     result = results[0]
     assert result['dataSet']['name'] == data_set
-    assert result['tag']['name'] == related
+    assert result['tag']['name'] == related3
     assert result['name'] == tcga_tag_cohort_name
 
 
@@ -256,7 +256,7 @@ def test_dataset_cohort_samples_query(client, samples_query, pcawg_cohort_name):
         assert type(sample['tag']) is NoneType
 
 
-def test_tag_cohort_samples_query(client, samples_query, tcga_tag_cohort_name, data_set, related):
+def test_tag_cohort_samples_query(client, samples_query, tcga_tag_cohort_name, data_set, related3):
     response = client.post('/api', json={'query': samples_query, 'variables': {
         'cohort': [tcga_tag_cohort_name]
     }})
@@ -266,7 +266,7 @@ def test_tag_cohort_samples_query(client, samples_query, tcga_tag_cohort_name, d
     result = results[0]
     assert result['name'] == tcga_tag_cohort_name
     assert result['dataSet']['name'] == data_set
-    assert result['tag']['name'] == related
+    assert result['tag']['name'] == related3
     assert type(result['tag']['shortDisplay']) is str
     assert type(result['tag']['longDisplay']) is str
     assert isinstance(results, list)
@@ -320,7 +320,7 @@ def test_pcawg_cohort_samples_query(client, samples_query, pcawg_data_set):
         assert type(sample['tag']) is NoneType
 
 
-def test_tag_cohort_features_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):
+def test_tag_cohort_features_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related3):
     query = common_query_builder(
         """
         {
@@ -343,7 +343,7 @@ def test_tag_cohort_features_query(client, common_query_builder, tcga_tag_cohort
     results = page['items']
     result = results[0]
     assert result['dataSet']['name'] == data_set
-    assert result['tag']['name'] == related
+    assert result['tag']['name'] == related3
     assert result['name'] == tcga_tag_cohort_name
     assert isinstance(results, list)
     assert len(results) == 1
@@ -354,7 +354,7 @@ def test_tag_cohort_features_query(client, common_query_builder, tcga_tag_cohort
         assert type(feature['display']) is str
 
 
-def test_tag_cohort_genes_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):
+def test_tag_cohort_genes_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related3):
     query = common_query_builder(
         """
         {
@@ -377,7 +377,7 @@ def test_tag_cohort_genes_query(client, common_query_builder, tcga_tag_cohort_na
     results = page['items']
     result = results[0]
     assert result['dataSet']['name'] == data_set
-    assert result['tag']['name'] == related
+    assert result['tag']['name'] == related3
     assert result['name'] == tcga_tag_cohort_name
     assert isinstance(results, list)
     assert len(results) == 1
@@ -388,7 +388,7 @@ def test_tag_cohort_genes_query(client, common_query_builder, tcga_tag_cohort_na
         assert type(gene['entrez']) is int
 
 
-def test_tag_cohort_mutations_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related):
+def test_tag_cohort_mutations_query(client, common_query_builder, tcga_tag_cohort_name, data_set, related3):
     query = common_query_builder(
         """
         {
@@ -415,7 +415,7 @@ def test_tag_cohort_mutations_query(client, common_query_builder, tcga_tag_cohor
     results = page['items']
     result = results[0]
     assert result['dataSet']['name'] == data_set
-    assert result['tag']['name'] == related
+    assert result['tag']['name'] == related3
     assert result['name'] == tcga_tag_cohort_name
     assert isinstance(results, list)
     assert len(results) == 1

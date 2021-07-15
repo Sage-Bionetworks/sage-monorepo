@@ -7,6 +7,8 @@ class Mutation(Base):
     __tablename__ = 'mutations'
     id = db.Column(db.Integer, primary_key=True)
 
+    name = db.Column(db.String, nullable=False)
+
     gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=False)
 
     mutation_code_id = db.Column(
