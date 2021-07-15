@@ -1,4 +1,4 @@
-from .resolver_helpers import build_mutation_graphql_response, get_requested, get_selection_set, mutation_related_sample_request_fields, mutation_request_fields, mutation_type_request_fields, build_mutation_request, simple_gene_request_fields, simple_patient_request_fields
+from .resolver_helpers import build_mutation_graphql_response, get_requested, get_selection_set, mutation_related_sample_request_fields, mutation_request_fields, mutation_type_request_fields, build_mutation_request, simple_gene_request_fields
 from .resolver_helpers.paging_utils import create_paging, paginate, paging_fields, create_paging
 
 

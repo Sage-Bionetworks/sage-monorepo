@@ -38,10 +38,6 @@ def build_dr_graphql_response(driver_result):
         'mutation': build_mutation_graphql_response()(driver_result),
         'tag': build_tag_graphql_response()(driver_result)
     }
-    import logging
-    logger = logging.getLogger('dr request')
-    logger.info(driver_result)
-    logger.info(dict)
     return(dict)
 
 
@@ -77,6 +73,8 @@ def build_driver_result_request(requested, data_set_requested, feature_requested
         `related` - a list of strings, tags related to the dataset that is associated with the result.
         `tag` - a list of strings, tag names
     """
+    from .gene import get_simple_gene_column_labels
+    from .mutation import get_mutation_column_labels, get_mutation_type_column_labels, build_simple_mutation_request
     sess = db.session
 
     driver_result_1 = aliased(DriverResult, name='dr')
@@ -108,23 +106,6 @@ def build_driver_result_request(requested, data_set_requested, feature_requested
         'order': feature_1.order.label('feature_order'),
         'unit': feature_1.unit.label('feature_unit')
     }
-    mutation_core_field_mapping = {
-        'name': mutation_1.name.label('mutation_name'),
-        'mutationCode': mutation_code_1.code.label('mutation_code')
-    }
-    mutation_gene_core_field_mapping = {
-        'entrez': gene_1.entrez.label('gene_entrez'),
-        'hgnc': gene_1.hgnc.label('gene_hgnc'),
-        'description': gene_1.description.label('gene_description'),
-        'friendlyName': gene_1.friendly_name.label('gene_friendly_name'),
-        'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
-    }
-
-    mutation_type_field_mapping = {
-        'display': mutation_type_1.display.label('display'),
-        'name': mutation_type_1.name.label('name')
-    }
-
     tag_core_field_mapping = {
         'characteristics': tag_1.characteristics.label('tag_characteristics'),
         'color': tag_1.color.label('tag_color'),
@@ -136,12 +117,20 @@ def build_driver_result_request(requested, data_set_requested, feature_requested
     core = get_selected(requested, core_field_mapping)
     core |= get_selected(data_set_requested, data_set_core_field_mapping)
     core |= get_selected(feature_requested, feature_core_field_mapping)
-    core |= get_selected(mutation_requested, mutation_core_field_mapping)
-    core |= get_selected(mutation_gene_requested,
-                         mutation_gene_core_field_mapping)
-    core |= get_selected(mutation_type_requested,
-                         mutation_type_field_mapping)
     core |= get_selected(tag_requested, tag_core_field_mapping)
+
+    mutation_core = get_mutation_column_labels(
+        mutation_requested, mutation_1, mutation_code_1)
+
+    gene_core = get_simple_gene_column_labels(mutation_gene_requested, gene_1)
+
+    mutation_type_core = get_mutation_type_column_labels(
+        mutation_type_requested, mutation_type_1)
+
+    core |= mutation_core
+    core |= gene_core
+    core |= mutation_type_core
+
     core |= {driver_result_1.id.label('id')}
 
     query = sess.query(*core)
@@ -215,24 +204,7 @@ def build_driver_result_request(requested, data_set_requested, feature_requested
         query = query.join(mutation_1, and_(
             *mutation_join_condition), isouter=is_outer)
 
-    if 'gene' in mutation_requested or entrez:
-        is_outer = not bool(entrez)
-        gene_join_condition = build_join_condition(
-            mutation_1.gene_id, gene_1.id, filter_column=gene_1.entrez, filter_list=entrez)
-        query = query.join(gene_1, and_(
-            *gene_join_condition), isouter=is_outer)
-
-    if 'mutationCode' in mutation_requested or mutation_code:
-        is_outer = not bool(mutation_code)
-        mutation_code_join_condition = build_join_condition(
-            mutation_1.mutation_code_id, mutation_code_1.id, filter_column=mutation_code_1.code, filter_list=mutation_code)
-        query = query.join(mutation_code_1, and_(
-            *mutation_code_join_condition), isouter=is_outer)
-
-    if 'mutationType' in requested:
-        mutation_type_join_condition = build_join_condition(
-            mutation_type_1.id, mutation_1.mutation_type_id)
-        query = query.join(mutation_type_1, and_(
-            *mutation_type_join_condition), isouter=True)
+    query = build_simple_mutation_request(query, mutation_requested, mutation_1, gene_1, mutation_code_1,
+                                          mutation_type_1, entrez=entrez, mutation_code=mutation_code)
 
     return get_pagination_queries(query, paging, distinct, cursor_field=driver_result_1.id)
