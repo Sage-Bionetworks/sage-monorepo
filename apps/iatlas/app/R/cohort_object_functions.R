@@ -1,8 +1,3 @@
-
-show_co_submodules <- function(cohort_obj){
-  iatlas.modules2::cohort_has_classes(cohort_obj, c("Survival Time", "Survival Status"))
-}
-
 show_ud_submodule <- function(cohort_obj){
   all(
     iatlas.modules2::cohort_has_dataset(cohort_obj, "TCGA"),
@@ -14,6 +9,10 @@ show_ud_submodule <- function(cohort_obj){
 
 show_md_submodule <- function(cohort_obj){
   iatlas.modules2::cohort_has_dataset(cohort_obj, "TCGA")
+}
+
+show_co_submodules <- function(cohort_obj){
+  iatlas.modules2::cohort_has_classes(cohort_obj, c("Survival Time", "Survival Status"))
 }
 
 show_tilmap_submodules <- function(cohort_obj){
