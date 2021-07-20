@@ -73,11 +73,19 @@ clinical_outcomes_heatmap_server <- function(
         plotly::event_data("plotly_click", "clinical_outcomes_heatmap")
       })
 
-      plotly_server(
+      group_data <- shiny::reactive({
+        cohort_obj()$group_tbl %>%
+          dplyr::mutate("description" = stringr::str_c(
+            .data$name, ": ", .data$characteristics)
+          ) %>%
+          dplyr::select("group", "description")
+      })
+
+      iatlas.modules::plotly_server(
         "heatmap",
-        plot_tbl       = heatmap_tbl,
-        plot_eventdata = heatmap_eventdata,
-        group_tbl      = shiny::reactive(cohort_obj()$group_tbl)
+        plot_data  = heatmap_tbl,
+        eventdata  = heatmap_eventdata,
+        group_data = group_data
       )
     }
   )

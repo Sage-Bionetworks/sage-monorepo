@@ -198,10 +198,10 @@
     },
     "RcppArmadillo": {
       "Package": "RcppArmadillo",
-      "Version": "0.10.5.0.0",
+      "Version": "0.10.6.0.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "b1c9574190c1c84417eedaa5901138bf"
+      "Hash": "d34bcef6e2df81ab2d44c7fbe8b4d3f0"
     },
     "RcppEigen": {
       "Package": "RcppEigen",
@@ -410,10 +410,10 @@
     },
     "cli": {
       "Package": "cli",
-      "Version": "3.0.0",
+      "Version": "3.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "096829b701eec2d2b4538be63de97e75"
+      "Hash": "e3ae5d68dea0c55a12ea12a9fda02e61"
     },
     "clipr": {
       "Package": "clipr",
@@ -872,15 +872,16 @@
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
-      "Version": "0.4.3",
+      "Version": "0.5.4",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules",
       "RemoteRef": "master",
-      "RemoteSha": "83c9edd63b074e378ed7216a505000e334509df6",
+      "RemoteSha": "1fd5628101d8ae1460d95e78de4dfee21f05aae6",
       "RemoteHost": "api.github.com",
-      "Hash": "b7110fd84ee286fda47f74ca6817fd3c"
+      "Remotes": "CRI-iAtlas/iatlas.api.client@main",
+      "Hash": "55c120f9f3208d00079bfc33e5597ecf"
     },
     "iatlas.modules2": {
       "Package": "iatlas.modules2",
@@ -1152,6 +1153,13 @@
       "Repository": "CRAN",
       "Hash": "725fcc30222d4d11ec68efb8ff11a9af"
     },
+    "pkgcond": {
+      "Package": "pkgcond",
+      "Version": "0.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "47924126c6dbd0fdd0065c65eef65288"
+    },
     "pkgconfig": {
       "Package": "pkgconfig",
       "Version": "2.0.3",
@@ -1287,10 +1295,10 @@
     },
     "readr": {
       "Package": "readr",
-      "Version": "1.4.0",
+      "Version": "2.0.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "2639976851f71f330264a9c9c3d43a61"
+      "Hash": "849038f0839134ab35e719a9820005a6"
     },
     "readxl": {
       "Package": "readxl",
@@ -1496,10 +1504,10 @@
     },
     "stringi": {
       "Package": "stringi",
-      "Version": "1.7.2",
+      "Version": "1.7.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "45c84ccfd359febce4c7545fee3d36cb"
+      "Hash": "7943cfae120c77a255025e5f63856532"
     },
     "stringr": {
       "Package": "stringr",
@@ -1571,6 +1579,13 @@
       "Repository": "CRAN",
       "Hash": "847a9d113b78baca4a9a8639609ea228"
     },
+    "tzdb": {
+      "Package": "tzdb",
+      "Version": "0.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d60ee49eac3f3aaead137af987c92ddb"
+    },
     "urltools": {
       "Package": "urltools",
       "Version": "1.7.3",
@@ -1612,6 +1627,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "55e157e2aa88161bdb0754218470d204"
+    },
+    "vroom": {
+      "Package": "vroom",
+      "Version": "1.5.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "aac6012f34348b3ca6bf373fe7172b06"
     },
     "waldo": {
       "Package": "waldo",
