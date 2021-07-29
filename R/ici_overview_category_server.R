@@ -65,6 +65,7 @@ ici_overview_category_server <- function(
                       width = "80%",
                       caption = paste("Group Size per dataset for", input$group1),
                       options = list(dom = 't',
+                                     pageLength = 25,
                                      order = list(list(0, 'asc'))))
       })
 
