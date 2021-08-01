@@ -21,7 +21,9 @@ core_fields = ['id',
                'color',
                'long_display',
                'name',
-               'short_display']
+               'short_display',
+               'type',
+               'order']
 
 
 def return_tag_query(*args, model=Tag):

@@ -570,6 +570,8 @@ type Query {
     sample: [String!]
     "A list of cohort names"
     cohort: [String!]
+    "A list of tag types: 'group' or 'parent_group' or 'meta_group' or 'network'"
+    type: [TagTypeEnum!]
   ): Tag!
 
   """

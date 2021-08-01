@@ -20,6 +20,7 @@ def common_query_builder():
             $sample: [String!]
             $paging: PagingInput
             $distinct: Boolean
+            $type: [TagTypeEnum!]
         ) {
             tags(
                 cohort: $cohort
@@ -27,6 +28,7 @@ def common_query_builder():
                 related: $related
                 tag: $tag
                 sample: $sample
+                type: $type
                 paging: $paging
                 distinct: $distinct
         )""" + query_fields + "}"
@@ -66,6 +68,8 @@ def common_query(common_query_builder):
                 longDisplay
                 name
                 shortDisplay
+                type
+                order
             }
         }
         """
@@ -85,6 +89,8 @@ def samples_query(common_query_builder):
                 name
                 shortDisplay
                 characteristics
+                type
+                order
                 samples { name }
             }
         }
@@ -105,6 +111,8 @@ def related_query(common_query_builder):
                 longDisplay
                 name
                 shortDisplay
+                type
+                order
                 related {
                     name
                     characteristics
@@ -131,6 +139,8 @@ def publications_query(common_query_builder):
                 name
                 shortDisplay
                 characteristics
+                type
+                order
                 publications {
                     name
                     firstAuthorLastName
@@ -159,6 +169,8 @@ def sample_count_query(common_query_builder):
                 name
                 shortDisplay
                 characteristics
+                type
+                order
                 sampleCount
                 }
         }
@@ -179,6 +191,8 @@ def full_query(common_query_builder):
                 name
                 shortDisplay
                 characteristics
+                type
+                order
                 related {
                     name
                     characteristics
@@ -307,7 +321,9 @@ def test_tags_query_no_args(client, common_query):
         assert type(result['color']) is str or NoneType
         assert type(result['longDisplay']) is str or NoneType
         assert type(result['shortDisplay']) is str or NoneType
+        assert type(result['order']) is int or NoneType
         assert type(result['name']) is str
+        assert type(result['type']) is str
         assert 'sampleCount' not in result
         assert 'samples' not in result
         assert 'related' not in result
@@ -449,7 +465,7 @@ def test_tags_query_with_related2(client, related_query, related2):
     results = page['items']
 
     assert isinstance(results, list)
-    assert len(results) == 2
+    assert len(results) == 3
 
     for result in results:
         assert type(result['characteristics']) is str or NoneType
@@ -457,17 +473,15 @@ def test_tags_query_with_related2(client, related_query, related2):
         assert type(result['longDisplay']) is str or NoneType
         assert type(result['shortDisplay']) is str or NoneType
         assert type(result['name']) is str
-        assert result['name'] in ["male", "female"]
+        assert result['name'] in ["male", "female", "na_gender"]
         tags = result['related']
         assert isinstance(tags, list)
-        assert len(tags) == 2
         for tag in tags:
             assert type(tag['characteristics']) is str or NoneType
             assert type(tag['color']) is str or NoneType
             assert type(tag['longDisplay']) is str or NoneType
             assert type(tag['shortDisplay']) is str or NoneType
             assert type(tag['name']) is str
-            assert tag['name'] in [related2, 'group']
 
 
 def test_tags_query_with_sample(client, sample_count_query, sample):

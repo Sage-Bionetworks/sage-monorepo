@@ -1,4 +1,10 @@
 """
+'group' or 'parent_group' or 'meta_group' or 'network'
+"""
+scalar TagTypeEnum
+
+
+"""
 The "Tag" type
 
 See also `SimpleTag`
@@ -14,6 +20,8 @@ type TagNode implements BaseNode {
   longDisplay: String
   "The name of the tag."
   name: String!
+  "A number representing the index order the tag would be displayed in."
+  order: Int
   "A list of Publications related to the tag."
   publications: [SimplePublication!]
   "A tag related to the tag."
@@ -24,6 +32,8 @@ type TagNode implements BaseNode {
   samples: [SimpleSample!]
   "A friendly name for the tag (used in plots)."
   shortDisplay: String
+  "The type of tag."
+  type: TagTypeEnum!
 }
 
 type Tag implements BaseResult {
@@ -47,8 +57,12 @@ type SimpleTag {
   longDisplay: String
   "The name of the tag."
   name: String!
+  "A number representing the index order the tag would be displayed in."
+  order: Int
   "A friendly name for the tag (used in plots)."
   shortDisplay: String
+  "The type of tag."
+  type: TagTypeEnum!
 }
 
 """

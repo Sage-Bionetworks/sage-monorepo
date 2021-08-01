@@ -1,5 +1,6 @@
 from api import db
 from . import Base
+from api.enums import tag_type_enum
 
 
 class Tag(Base):
@@ -10,6 +11,8 @@ class Tag(Base):
     color = db.Column(db.String, nullable=True)
     long_display = db.Column(db.String, nullable=True)
     short_display = db.Column(db.String, nullable=True)
+    type = db.Column(tag_type_enum, nullable=False)
+    order = db.Column(db.Integer, nullable=True)
 
     data_sets = db.relationship(
         'Dataset', lazy='noload', uselist=True, secondary='datasets_to_tags')
