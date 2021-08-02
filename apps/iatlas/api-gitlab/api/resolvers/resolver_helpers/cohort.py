@@ -5,7 +5,6 @@ from api import db
 from api.db_models import Cohort, Dataset, Tag, Sample, Feature, Gene, Mutation, MutationCode, CohortToSample, CohortToFeature, CohortToGene, CohortToMutation
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
-from itertools import groupby
 
 cohort_request_fields = {'id', 'name',
                          'dataSet', 'tag', 'samples', 'features', 'genes', 'mutations'}

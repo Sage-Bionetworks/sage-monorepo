@@ -17,7 +17,7 @@ type TagNode implements BaseNode {
   "A color to represent the tag as a hex value."
   color: String
   "A long display name for the tag used in text descriptions."
-  longDisplay: String
+  longDisplay: String!
   "The name of the tag."
   name: String!
   "A number representing the index order the tag would be displayed in."
@@ -31,7 +31,7 @@ type TagNode implements BaseNode {
   "A list of the samples associated with the tag."
   samples: [SimpleSample!]
   "A friendly name for the tag (used in plots)."
-  shortDisplay: String
+  shortDisplay: String!
   "The type of tag."
   type: TagTypeEnum!
 }

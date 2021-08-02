@@ -11,7 +11,7 @@ simple_tag_request_fields = {
     'color',
     'longDisplay',
     'name',
-    'order'
+    'order',
     'shortDisplay',
     'tag',
     'type'
@@ -57,7 +57,7 @@ def build_tag_graphql_response(requested=[], sample_requested=[], publications_r
             'characteristics': get_value(tag, prefix + 'characteristics'),
             'color': get_value(tag, prefix + 'color'),
             'longDisplay': get_value(tag, prefix + 'long_display'),
-            'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display'),
+            'shortDisplay': get_value(tag, prefix + 'short_display'),
             'type': get_value(tag, prefix + 'type'),
             'order': get_value(tag, prefix + 'order'),
             'sampleCount': len(sample_dict) if sample_dict and 'sampleCount' in requested else None,

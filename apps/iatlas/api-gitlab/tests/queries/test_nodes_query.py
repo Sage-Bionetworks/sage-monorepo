@@ -373,14 +373,17 @@ def test_nodes_query_with_passed_tag(client, common_query_builder, tag):
                                         }
                                     }
                                 }""")
-    response = client.post('/api', json={'query': query,
-                                         'variables': {'tag': [tag]}})
+    num = 100
+    response = client.post('/api', json={
+        'query': query,
+        'variables': {'tag': [tag], 'paging': {'first': num}}
+    })
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
     results = page['items']
 
     assert isinstance(results, list)
-    assert len(results) > 0
+    assert len(results) == num
     for result in results[0:2]:
         tags = result['tags']
         assert type(result['label']) is str or NoneType
