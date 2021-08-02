@@ -20,3 +20,5 @@ qtl_enum = ENUM('sQTL', 'eQTL')
 ecaviar_pp_enum = ENUM('C1', 'C2')
 
 coloc_plot_type_enum = ENUM('3 Level Plot', 'Expanded Region')
+
+tag_type_enum = ENUM('group', 'parent_group', 'meta_group', 'network')

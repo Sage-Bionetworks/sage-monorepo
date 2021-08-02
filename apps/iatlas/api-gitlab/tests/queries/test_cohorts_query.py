@@ -33,7 +33,11 @@ def common_query(common_query_builder):
     {
         items {
             name
-            tag { name }
+            tag {
+                name
+                shortDisplay
+                longDisplay
+            }
             dataSet { name }
         }
         paging {
@@ -188,6 +192,8 @@ def test_tag_cohort_query_by_name(client, common_query, tcga_tag_cohort_name, da
     assert result['dataSet']['name'] == data_set
     assert result['tag']['name'] == related3
     assert result['name'] == tcga_tag_cohort_name
+    assert type(result['tag']['longDisplay']) is str
+    assert type(result['tag']['shortDisplay']) is str
 
 
 def test_tag_cohort_query_by_dataset_and_tag(client, common_query, tcga_tag_cohort_name, data_set, related3):
