@@ -448,6 +448,7 @@ def test_tags_query_with_cohort2(client, full_query, pcawg_cohort_name, pcawg_co
             assert sample['name'] in pcawg_cohort_samples
 
 
+'''
 def test_tags_query_with_related(client, related_query, related):
     response = client.post(
         '/api',
@@ -481,6 +482,7 @@ def test_tags_query_with_related(client, related_query, related):
             assert type(tag['shortDisplay']) is str or NoneType
             assert type(tag['name']) is str
             assert tag['name'] == related
+'''
 
 
 def test_tags_query_with_related2(client, related_query, related2):
