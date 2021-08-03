@@ -2,7 +2,7 @@ from .resolver_helpers import build_tag_graphql_response, build_tag_request, get
 from .resolver_helpers.paging_utils import paginate, paging_fields, create_paging
 
 
-def resolve_tags(_obj, info, distinct=False, paging=None, cohort=None, dataSet=None, related=None, sample=None, tag=None):
+def resolve_tags(_obj, info, distinct=False, paging=None, cohort=None, dataSet=None, related=None, sample=None, tag=None, type=None):
 
     selection_set = get_selection_set(info=info, child_node='items')
 
@@ -23,7 +23,7 @@ def resolve_tags(_obj, info, distinct=False, paging=None, cohort=None, dataSet=N
     paging = create_paging(paging, max_items)
 
     query, count_query = build_tag_request(
-        requested, distinct=distinct, paging=paging, cohort=cohort, data_set=dataSet, related=related, sample=sample, tag=tag)
+        requested, distinct=distinct, paging=paging, cohort=cohort, data_set=dataSet, related=related, sample=sample, tag=tag, type=type)
 
     pagination_requested = get_requested(info, paging_fields, 'paging')
 
