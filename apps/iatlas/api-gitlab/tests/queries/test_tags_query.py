@@ -10,6 +10,11 @@ def tag_with_publication():
 
 
 @pytest.fixture(scope='module')
+def tag_type():
+    return 'group'
+
+
+@pytest.fixture(scope='module')
 def common_query_builder():
     def f(query_fields):
         return """query Tags(
@@ -352,6 +357,34 @@ def test_tags_query_with_data_set(client, common_query, data_set):
         assert type(result['longDisplay']) is str or NoneType
         assert type(result['shortDisplay']) is str or NoneType
         assert type(result['name']) is str
+        assert type(result['order']) is int or NoneType
+        assert type(result['type']) is str
+
+
+def test_tags_query_with_tag_type(client, common_query, tag_type):
+    response = client.post(
+        '/api',
+        json={
+            'query': common_query,
+            'variables': {
+                'type': [tag_type]
+            }
+        }
+    )
+    json_data = json.loads(response.data)
+    page = json_data['data']['tags']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results:
+        assert type(result['characteristics']) is str or NoneType
+        assert type(result['color']) is str or NoneType
+        assert type(result['longDisplay']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
+        assert type(result['name']) is str
+        assert type(result['order']) is int or NoneType
+        assert result['type'] == tag_type
 
 
 def test_tags_query_with_cohort(client, samples_query, tcga_tag_cohort_name, tcga_tag_cohort_samples):
@@ -440,14 +473,14 @@ def test_tags_query_with_related(client, related_query, related):
         assert result['name'] in ["C1", "C2", "C3", "C4", "C5", "C6"]
         tags = result['related']
         assert isinstance(tags, list)
-        assert len(tags) == 2
+        assert len(tags) == 1
         for tag in tags:
             assert type(tag['characteristics']) is str or NoneType
             assert type(tag['color']) is str or NoneType
             assert type(tag['longDisplay']) is str or NoneType
             assert type(tag['shortDisplay']) is str or NoneType
             assert type(tag['name']) is str
-            assert tag['name'] in [related, 'group']
+            assert tag['name'] == related
 
 
 def test_tags_query_with_related2(client, related_query, related2):

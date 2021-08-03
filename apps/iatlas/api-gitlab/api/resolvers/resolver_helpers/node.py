@@ -247,9 +247,14 @@ def return_associated_tags(table_name, conn, tag_requested):
     sep = ', '
     tag_fields = sep.join(tag_fields)
 
-    (network_tag_id, ) = db.session.query(Tag.id).filter_by(
-        name='network').one_or_none()
-    query = f'SELECT DISTINCT {tag_fields}, n.id as node_id FROM tags as t, {table_name} as n, nodes_to_tags, tags_to_tags WHERE (n.id = nodes_to_tags.node_id AND t.id = nodes_to_tags.tag_id) AND (tags_to_tags.tag_id = t.id AND tags_to_tags.related_tag_id != {network_tag_id})'
+    network_tag_type = "'network'"
+    query = f'SELECT DISTINCT {tag_fields}, n.id as node_id FROM tags as t, {table_name} as n, nodes_to_tags, tags_to_tags WHERE (n.id = nodes_to_tags.node_id AND t.id = nodes_to_tags.tag_id) AND (tags_to_tags.tag_id = t.id AND t.type != {network_tag_type})'
+
+    import logging
+    logger = logging.getLogger('node tags')
+    logger.info(query)
+
+    tag_results = execute_sql(query, conn=conn)
     tag_results = execute_sql(query, conn=conn)
     tag_dict = dict()
     if tag_results:
