@@ -114,7 +114,8 @@ ici_clinical_outcomes_plot_server <- function(
 
           colors <- feature_df() %>%
             dplyr::select(color, sample_groups) %>%
-            dplyr::distinct()
+            dplyr::distinct() %>%
+            dplyr::mutate(color = replace(color, is.na(color), randomcoloR::randomColor(dplyr::n())))
 
           group_colors <- colors$color
           names(group_colors) <- sapply(colors$sample_groups, function(a) paste('variable=',a,sep=''))
@@ -153,7 +154,7 @@ ici_clinical_outcomes_plot_server <- function(
         lapply(1:length(all_survival()), function(i){
           my_dataset <- names(all_survival())[i]
           output[[my_dataset]] <- shiny::renderPlot({
-            shiny::req(input$var1_surv)
+            shiny::req(input$var1_surv, all_kmplot())
             all_kmplot()[i]
           })
         })
