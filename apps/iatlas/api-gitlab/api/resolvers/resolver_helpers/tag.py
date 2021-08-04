@@ -327,51 +327,36 @@ def get_related(tag_id, requested, related_requested):
     if 'related' in requested:
         sess = db.session
 
-        related_tag_1 = aliased(Tag, name='rt')
         tag_1 = aliased(Tag, name='t')
-        tag_to_tag_1 = aliased(TagToTag, name='tt')
+        tag_to_tag_1 = aliased(TagToTag, name='ttt')
+        related_tag_1 = aliased(Tag, name='rt')
 
         related_core_field_mapping = {
             'characteristics': related_tag_1.characteristics.label('tag_characteristics'),
             'color': related_tag_1.color.label('tag_color'),
             'longDisplay': related_tag_1.long_display.label('tag_long_display'),
             'name': related_tag_1.name.label('tag_name'),
-            'shortDisplay': related_tag_1.short_display.label('tag_short_display')
+            'order': related_tag_1.order.label('tag_order'),
+            'shortDisplay': related_tag_1.short_display.label('tag_short_display'),
+            'type': related_tag_1.type.label('tag_type'),
         }
 
         related_core = get_selected(
             related_requested, related_core_field_mapping)
 
-        related_core |= {
-            related_tag_1.id.label('id'),
-            tag_to_tag_1.tag_id.label('tag_id')
-        }
-
         related_query = sess.query(*related_core)
         related_query = related_query.select_from(related_tag_1)
 
-        tag_sub_query = sess.query(tag_1.id).filter(tag_1.id.in_([tag_id]))
+        tag_sub_query = sess.query(tag_to_tag_1.related_tag_id)
 
         tag_tag_join_condition = build_join_condition(
-            tag_to_tag_1.related_tag_id, related_tag_1.id, tag_to_tag_1.tag_id, tag_sub_query)
-        related_query = related_query.join(
-            tag_to_tag_1, and_(*tag_tag_join_condition))
+            tag_1.id, tag_to_tag_1.tag_id, tag_1.id, [tag_id])
 
-        order = []
-        append_to_order = order.append
-        if 'name' in related_requested:
-            append_to_order(related_tag_1.name)
-        if 'shortDisplay' in related_requested:
-            append_to_order(related_tag_1.short_display)
-        if 'longDisplay' in related_requested:
-            append_to_order(related_tag_1.long_display)
-        if 'color' in related_requested:
-            append_to_order(related_tag_1.color)
-        if 'characteristics' in related_requested:
-            append_to_order(related_tag_1.characteristics)
+        tag_sub_query = tag_sub_query.join(
+            tag_1, and_(*tag_tag_join_condition))
 
-        related_query = related_query.order_by(
-            *order) if order else related_query
+        related_query = related_query.filter(
+            related_tag_1.id.in_(tag_sub_query))
 
         return related_query.distinct().all()
 

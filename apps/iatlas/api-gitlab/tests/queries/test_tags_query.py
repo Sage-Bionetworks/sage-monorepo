@@ -124,6 +124,8 @@ def related_query(common_query_builder):
                     color
                     longDisplay
                     shortDisplay
+                    type
+                    order
                 }
             }
         }
@@ -448,7 +450,6 @@ def test_tags_query_with_cohort2(client, full_query, pcawg_cohort_name, pcawg_co
             assert sample['name'] in pcawg_cohort_samples
 
 
-'''
 def test_tags_query_with_related(client, related_query, related):
     response = client.post(
         '/api',
@@ -471,6 +472,8 @@ def test_tags_query_with_related(client, related_query, related):
         assert type(result['longDisplay']) is str or NoneType
         assert type(result['shortDisplay']) is str or NoneType
         assert type(result['name']) is str
+        assert type(result['order']) is int or NoneType
+        assert result['type'] == 'group'
         assert result['name'] in ["C1", "C2", "C3", "C4", "C5", "C6"]
         tags = result['related']
         assert isinstance(tags, list)
@@ -482,7 +485,8 @@ def test_tags_query_with_related(client, related_query, related):
             assert type(tag['shortDisplay']) is str or NoneType
             assert type(tag['name']) is str
             assert tag['name'] == related
-'''
+            assert type(tag['order']) is int or NoneType
+            assert tag['type'] == 'parent_group'
 
 
 def test_tags_query_with_related2(client, related_query, related2):
@@ -508,6 +512,8 @@ def test_tags_query_with_related2(client, related_query, related2):
         assert type(result['longDisplay']) is str or NoneType
         assert type(result['shortDisplay']) is str or NoneType
         assert type(result['name']) is str
+        assert type(result['order']) is int or NoneType
+        assert result['type'] == 'group'
         assert result['name'] in ["male", "female", "na_gender"]
         tags = result['related']
         assert isinstance(tags, list)
@@ -517,6 +523,8 @@ def test_tags_query_with_related2(client, related_query, related2):
             assert type(tag['longDisplay']) is str or NoneType
             assert type(tag['shortDisplay']) is str or NoneType
             assert type(tag['name']) is str
+            assert type(tag['order']) is int or NoneType
+            assert tag['type'] == 'parent_group'
 
 
 def test_tags_query_with_sample(client, sample_count_query, sample):
