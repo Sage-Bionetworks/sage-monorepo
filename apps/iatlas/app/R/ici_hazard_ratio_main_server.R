@@ -179,16 +179,16 @@ ici_hazard_ratio_main_server <- function(
 
         if(mult_coxph() == FALSE){ #for univariable models, we need to display the FDR results
           coxph_df() %>%
-            dplyr::select(dataset, ft_label, group_label, logHR, loglower, logupper,  pvalue, logpvalue, FDR) %>%
-            dplyr::rename(Feature = ft_label, Variable = group_label, `log10(HR)` = logHR, `p.value` = pvalue, `Neg(log10(p.value))` = logpvalue, `BH FDR` = FDR) %>%
+            dplyr::select(dataset_display, ft_label, group_label, logHR, loglower, logupper,  pvalue, logpvalue, FDR) %>%
+            dplyr::rename(Dataset = dataset_display, Feature = ft_label, Variable = group_label, `log10(HR)` = logHR, `p.value` = pvalue, `Neg(log10(p.value))` = logpvalue, `BH FDR` = FDR) %>%
             dplyr::mutate_if(is.numeric, formatC, digits = 3) %>%
-            dplyr::arrange(dataset)
+            dplyr::arrange(Dataset)
         }else{
           coxph_df() %>%
-            dplyr::select(dataset, ft_label, group_label, logHR, loglower, logupper,  pvalue, logpvalue) %>%
-            dplyr::rename(Feature = ft_label, Variable = group_label, `log10(HR)` = logHR, `p.value` = pvalue, `Neg(log10(p.value))` = logpvalue) %>%
+            dplyr::select(dataset_display, ft_label, group_label, logHR, loglower, logupper,  pvalue, logpvalue) %>%
+            dplyr::rename(Dataset = dataset_display, Feature = ft_label, Variable = group_label, `log10(HR)` = logHR, `p.value` = pvalue, `Neg(log10(p.value))` = logpvalue) %>%
             dplyr::mutate_if(is.numeric, formatC, digits = 3) %>%
-            dplyr::arrange(dataset)
+            dplyr::arrange(dataset_display)
         }
       })
 
