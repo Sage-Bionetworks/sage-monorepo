@@ -7,21 +7,41 @@ from .general_resolvers import build_join_condition, get_selected, get_value
 from api.database.database_helpers import execute_sql
 from .paging_utils import create_temp_table, get_pagination_queries
 
-node_request_fields = {
-    'dataSet',
-    'feature',
-    'gene',
+simple_node_request_fields = {
     'label',
     'name',
     'network',
     'score',
-    'tags',
     'x',
     'y'
 }
 
+node_request_fields = simple_node_request_fields.union({
+    'dataSet',
+    'feature',
+    'gene',
+    'tags',
+})
 
-def build_node_graphql_response(tag_dict):
+
+def get_node_column_labels(requested, node, prefix='node_', add_id=False):
+    mapping = {
+        'label': node.label.label(prefix + 'label'),
+        'name': node.name.label(prefix + 'name'),
+        'network': node.network.label(prefix + 'network'),
+        'score': node.score.label(prefix + 'score'),
+        'x': node.x.label(prefix + 'x'),
+        'y': node.y.label(prefix + 'y')
+    }
+    labels = get_selected(requested, mapping)
+
+    if add_id:
+        labels |= {node.id.label('id')}
+
+    return(labels)
+
+
+def build_node_graphql_response(tag_dict=dict(), prefix='node_'):
     from .data_set import build_data_set_graphql_response
     from .feature import build_feature_graphql_response
     from .gene import build_gene_graphql_response
@@ -40,12 +60,12 @@ def build_node_graphql_response(tag_dict):
                 node, 'gene_description') or get_value(node, 'gene_friendly_name') or get_value(node, 'gene_io_landscape_name')
             dict = {
                 'id': node_id,
-                'label': get_value(node, 'node_label'),
-                'name': get_value(node, 'node_name'),
-                'network': get_value(node, 'node_network'),
-                'score': get_value(node, 'node_score'),
-                'x': get_value(node, 'node_x'),
-                'y': get_value(node, 'node_y'),
+                'label': get_value(node, prefix + 'label'),
+                'name': get_value(node, prefix + 'name'),
+                'network': get_value(node, prefix + 'network'),
+                'score': get_value(node, prefix + 'score'),
+                'x': get_value(node, prefix + 'x'),
+                'y': get_value(node, prefix + 'y'),
                 'dataSet': build_data_set_graphql_response()(node),
                 'feature': build_feature_graphql_response()(node) if has_feature else None,
                 'gene': build_gene_graphql_response()(node) if has_gene else None,
@@ -93,15 +113,6 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     gene_1 = aliased(Gene, name='g')
     node_1 = aliased(Node, name='n')
 
-    core_field_mapping = {
-        'label': node_1.label.label('node_label'),
-        'name': node_1.name.label('node_name'),
-        'network': node_1.network.label('node_network'),
-        'score': node_1.score.label('node_score'),
-        'x': node_1.x.label('node_x'),
-        'y': node_1.y.label('node_y')
-    }
-
     data_set_field_mapping = {
         'display': data_set_1.display.label('data_set_display'),
         'name': data_set_1.name.label('data_set_name'),
@@ -123,14 +134,13 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
         'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
     }
 
-    core = get_selected(requested, core_field_mapping)
+    node_core = get_node_column_labels(requested, node_1, add_id=True)
     data_set_core = get_selected(data_set_requested, data_set_field_mapping)
     feature_core = get_selected(feature_requested, feature_field_mapping)
     gene_core = get_selected(gene_requested, gene_field_mapping)
 
-    core |= {node_1.id.label('id')}
-
-    query = sess.query(*[*core, *data_set_core, *feature_core, *gene_core])
+    query = sess.query(
+        *[*node_core, *data_set_core, *feature_core, *gene_core])
     query = query.select_from(node_1)
 
     if max_score:
