@@ -6,22 +6,27 @@ from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cur
 
 @pytest.fixture(scope='module')
 def max_score():
-    return 10.6
+    return 0.6
 
 
 @pytest.fixture(scope='module')
 def min_score():
-    return 5.5
+    return 0.5
 
 
 @pytest.fixture(scope='module')
 def node_1():
-    return 'tcga_ecn_13857'
+    return 'PCAWG_cellimage_network_BLCA-US_940'
 
 
 @pytest.fixture(scope='module')
 def node_2():
-    return 'tcga_ecn_38967'
+    return 'PCAWG_cellimage_network_BLCA-US_T_cells_CD8_Aggregate2'
+
+
+@pytest.fixture(scope='module')
+def node_3():
+    return 'TCGA_extracellular_network_PRAD_3_ETV4_T_cells_CD8_Aggregate2'
 
 
 @pytest.fixture(scope='module')
@@ -176,7 +181,11 @@ def test_edges_query_with_passed_node1_and_node2(client, common_query_builder, n
                                     }
                                 }""")
     response = client.post('/api', json={'query': query,
-                                         'variables': {'paging': {'type': Paging.OFFSET}, 'node1': [node_1], 'node2': [node_2]}})
+                                         'variables': {
+                                             'paging': {'type': Paging.OFFSET},
+                                             'node1': [node_1],
+                                             'node2': [node_2]}
+                                         })
     json_data = json.loads(response.data)
     page = json_data['data']['edges']
     results = page['items']
@@ -237,7 +246,7 @@ def test_edges_query_with_passed_node2(client, common_query_builder, node_2):
         assert result['node2']['name'] == node_2
 
 
-def test_edges_query_with_passed_maxScore_and_node2(client, common_query_builder, max_score, node_2):
+def test_edges_query_with_passed_maxScore_and_node2(client, common_query_builder, max_score, node_3):
     query = common_query_builder("""{
                                     items {
                                         label
@@ -246,7 +255,7 @@ def test_edges_query_with_passed_maxScore_and_node2(client, common_query_builder
                                     }
                                 }""")
     response = client.post('/api', json={'query': query,
-                                         'variables': {'maxScore': max_score, 'node2': [node_2]}})
+                                         'variables': {'maxScore': max_score, 'node2': [node_3]}})
     json_data = json.loads(response.data)
     page = json_data['data']['edges']
     results = page['items']
@@ -259,7 +268,7 @@ def test_edges_query_with_passed_maxScore_and_node2(client, common_query_builder
         assert result['score'] <= max_score
 
 
-def test_edges_query_with_passed_minScore_and_node2(client, common_query_builder, min_score, node_2):
+def test_edges_query_with_passed_minScore_and_node2(client, common_query_builder, min_score, node_3):
     query = common_query_builder("""{
                                     items {
                                         label
@@ -268,7 +277,7 @@ def test_edges_query_with_passed_minScore_and_node2(client, common_query_builder
                                     }
                                 }""")
     response = client.post('/api', json={'query': query,
-                                         'variables': {'minScore': min_score, 'node2': [node_2]}})
+                                         'variables': {'minScore': min_score, 'node2': [node_3]}})
     json_data = json.loads(response.data)
     page = json_data['data']['edges']
     results = page['items']
@@ -281,7 +290,7 @@ def test_edges_query_with_passed_minScore_and_node2(client, common_query_builder
         assert result['score'] >= min_score
 
 
-def test_edges_query_with_passed_maxScore_minScore_and_node2(client, common_query_builder, max_score, min_score, node_2):
+def test_edges_query_with_passed_maxScore_minScore_and_node2(client, common_query_builder, max_score, min_score, node_3):
     query = common_query_builder("""{
                                     items {
                                         label
@@ -292,7 +301,7 @@ def test_edges_query_with_passed_maxScore_minScore_and_node2(client, common_quer
     response = client.post('/api', json={'query': query,
                                          'variables': {'maxScore': max_score,
                                                        'minScore': min_score,
-                                                       'node2': [node_2]}})
+                                                       'node2': [node_3]}})
     json_data = json.loads(response.data)
     page = json_data['data']['edges']
     results = page['items']
@@ -313,7 +322,14 @@ def test_edges_query_with_no_arguments(client, common_query_builder):
                                         node1 { name }
                                     }
                                 }""")
-    response = client.post('/api', json={'query': query})
+    num = 1000
+    response = client.post(
+        '/api',
+        json={
+            'query': query,
+            'variables': {'paging': {'first': num}}
+        }
+    )
     json_data = json.loads(response.data)
     page = json_data['data']['edges']
     results = page['items']

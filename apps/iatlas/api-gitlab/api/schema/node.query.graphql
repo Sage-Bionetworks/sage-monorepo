@@ -8,6 +8,8 @@ type Node implements BaseNode {
   label: String
   "A unique name for the node."
   name: String!
+  "The type of network associated with the node"
+  network: String!
   "The calculated value of the node."
   score: Float
   "The initial x position of the node."
