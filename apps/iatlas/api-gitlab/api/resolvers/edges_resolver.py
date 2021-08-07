@@ -1,5 +1,5 @@
 from .resolver_helpers import (build_edge_graphql_response, build_edge_request, edge_request_fields,
-                               get_requested, get_selection_set, node_request_fields)
+                               get_requested, get_selection_set, simple_node_request_fields)
 from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
 
 
@@ -16,10 +16,10 @@ def resolve_edges(_obj, info, distinct=False, maxScore=None, minScore=None, node
         selection_set=selection_set, requested_field_mapping=edge_request_fields)
 
     node_1_requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=node_request_fields, child_node='node1')
+        selection_set=selection_set, requested_field_mapping=simple_node_request_fields, child_node='node1')
 
     node_2_requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=node_request_fields, child_node='node2')
+        selection_set=selection_set, requested_field_mapping=simple_node_request_fields, child_node='node2')
 
     if distinct == False:
         requested.add('id')  # Add the id as a cursor if not selecting distinct

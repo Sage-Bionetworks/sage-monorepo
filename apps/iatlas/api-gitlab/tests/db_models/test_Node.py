@@ -42,6 +42,7 @@ def test_Node_with_relations(app, node_entrez, node_gene_id):
         assert result.gene_id == node_gene_id
         assert type(result.feature_id) is NoneType
         assert type(result.name) is str
+        assert type(result.network) is str
         assert type(result.label) is str or NoneType
         assert type(result.score) is float or NoneType
         assert type(result.x) is float or NoneType
@@ -110,6 +111,7 @@ def test_Node_no_relations(app, node_gene_id):
         assert type(result.id) is int
         assert type(result.dataset_id) is int or NoneType
         assert result.gene_id == node_gene_id
+        assert type(result.network) is str
         assert type(result.feature_id) is NoneType
         assert type(result.name) is str
         assert type(result.label) is str or NoneType

@@ -73,6 +73,7 @@ def build_driver_result_request(requested, data_set_requested, feature_requested
         `related` - a list of strings, tags related to the dataset that is associated with the result.
         `tag` - a list of strings, tag names
     """
+    from .tag import get_tag_column_labels
     from .gene import get_simple_gene_column_labels
     from .mutation import get_mutation_column_labels, get_mutation_type_column_labels, build_simple_mutation_request
     sess = db.session
@@ -106,30 +107,16 @@ def build_driver_result_request(requested, data_set_requested, feature_requested
         'order': feature_1.order.label('feature_order'),
         'unit': feature_1.unit.label('feature_unit')
     }
-    tag_core_field_mapping = {
-        'characteristics': tag_1.characteristics.label('tag_characteristics'),
-        'color': tag_1.color.label('tag_color'),
-        'longDisplay': tag_1.long_display.label('tag_long_display'),
-        'name': tag_1.name.label('tag_name'),
-        'shortDisplay': tag_1.short_display.label('tag_short_display')
-    }
 
     core = get_selected(requested, core_field_mapping)
     core |= get_selected(data_set_requested, data_set_core_field_mapping)
     core |= get_selected(feature_requested, feature_core_field_mapping)
-    core |= get_selected(tag_requested, tag_core_field_mapping)
-
-    mutation_core = get_mutation_column_labels(
+    core |= get_tag_column_labels(tag_requested, tag_1)
+    core |= get_mutation_column_labels(
         mutation_requested, mutation_1, mutation_code_1)
-
-    gene_core = get_simple_gene_column_labels(mutation_gene_requested, gene_1)
-
-    mutation_type_core = get_mutation_type_column_labels(
+    core |= get_simple_gene_column_labels(mutation_gene_requested, gene_1)
+    core |= get_mutation_type_column_labels(
         mutation_type_requested, mutation_type_1)
-
-    core |= mutation_core
-    core |= gene_core
-    core |= mutation_type_core
 
     core |= {driver_result_1.id.label('id')}
 

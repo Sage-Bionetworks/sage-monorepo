@@ -2,8 +2,7 @@ import json
 import pytest
 from api.database import return_node_query
 from tests import NoneType
-
-from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
+from api.resolvers.resolver_helpers.paging_utils import Paging
 
 
 @pytest.fixture(scope='module')
@@ -33,7 +32,7 @@ def min_score():
 
 @pytest.fixture(scope='module')
 def network():
-    return 'extracellular_network'
+    return 'Extracellular Network'
 
 
 @pytest.fixture(scope='module')
@@ -294,21 +293,28 @@ def test_nodes_query_with_passed_network(client, common_query_builder, network):
                                         score
                                         x
                                         y
+                                        network
                                         feature { name }
                                         tags { name }
                                     }
                                 }""")
+    num = 10000
     response = client.post('/api', json={'query': query,
-                                         'variables': {'network': [network]}})
+                                         'variables': {
+                                             'network': [network],
+                                             'paging': {'first': num}
+                                         }
+                                         })
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
     results = page['items']
 
     assert isinstance(results, list)
-    assert len(results) > 0
+    assert len(results) == num
     for result in results[0:2]:
         feature = result['feature']
         tags = result['tags']
+        assert result['network'] == network
         assert type(result['label']) is str or NoneType
         assert type(result['name']) is str
         assert type(result['score']) is float or NoneType
@@ -331,12 +337,19 @@ def test_nodes_query_with_passed_network_and_tag(client, common_query_builder, n
                                         score
                                         x
                                         y
+                                        network
                                         gene { entrez }
                                         tags { name }
                                     }
                                 }""")
+    num = 10000
     response = client.post('/api', json={'query': query,
-                                         'variables': {'network': [network], 'tag': [tag]}})
+                                         'variables': {
+                                             'network': [network],
+                                             'tag': [tag],
+                                             'paging': {'first': num}
+                                         }
+                                         })
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
     results = page['items']
@@ -346,6 +359,7 @@ def test_nodes_query_with_passed_network_and_tag(client, common_query_builder, n
     for result in results[0:2]:
         gene = result['gene']
         tags = result['tags']
+        assert result['network'] == network
         assert type(result['label']) is str or NoneType
         assert type(result['name']) is str
         assert type(result['score']) is float or NoneType

@@ -7,20 +7,41 @@ from .general_resolvers import build_join_condition, get_selected, get_value
 from api.database.database_helpers import execute_sql
 from .paging_utils import create_temp_table, get_pagination_queries
 
-node_request_fields = {
-    'dataSet',
-    'feature',
-    'gene',
+simple_node_request_fields = {
     'label',
     'name',
+    'network',
     'score',
-    'tags',
     'x',
     'y'
 }
 
+node_request_fields = simple_node_request_fields.union({
+    'dataSet',
+    'feature',
+    'gene',
+    'tags',
+})
 
-def build_node_graphql_response(tag_dict):
+
+def get_node_column_labels(requested, node, prefix='node_', add_id=False):
+    mapping = {
+        'label': node.label.label(prefix + 'label'),
+        'name': node.name.label(prefix + 'name'),
+        'network': node.network.label(prefix + 'network'),
+        'score': node.score.label(prefix + 'score'),
+        'x': node.x.label(prefix + 'x'),
+        'y': node.y.label(prefix + 'y')
+    }
+    labels = get_selected(requested, mapping)
+
+    if add_id:
+        labels |= {node.id.label('id')}
+
+    return(labels)
+
+
+def build_node_graphql_response(tag_dict=dict(), prefix='node_'):
     from .data_set import build_data_set_graphql_response
     from .feature import build_feature_graphql_response
     from .gene import build_gene_graphql_response
@@ -30,6 +51,7 @@ def build_node_graphql_response(tag_dict):
         if not node:
             return None
         else:
+
             node_id = get_value(node, 'id')
             tags = tag_dict.get(node_id, []) if tag_dict else []
             has_feature = get_value(node, 'feature_name') or get_value(
@@ -38,15 +60,16 @@ def build_node_graphql_response(tag_dict):
                 node, 'gene_description') or get_value(node, 'gene_friendly_name') or get_value(node, 'gene_io_landscape_name')
             dict = {
                 'id': node_id,
+                'label': get_value(node, prefix + 'label'),
+                'name': get_value(node, prefix + 'name'),
+                'network': get_value(node, prefix + 'network'),
+                'score': get_value(node, prefix + 'score'),
+                'x': get_value(node, prefix + 'x'),
+                'y': get_value(node, prefix + 'y'),
                 'dataSet': build_data_set_graphql_response()(node),
                 'feature': build_feature_graphql_response()(node) if has_feature else None,
                 'gene': build_gene_graphql_response()(node) if has_gene else None,
-                'label': get_value(node, 'label'),
-                'name': get_value(node, 'node_name'),
-                'score': get_value(node, 'score'),
                 'tags': map(build_tag_graphql_response(), tags),
-                'x': get_value(node, 'x'),
-                'y': get_value(node, 'y')
             }
             return(dict)
     return(f)
@@ -71,7 +94,7 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
         `gene_type` - a list of strings, gene type names
         `max_score` - a float, a maximum score value
         `min_score` - a float, a minimum score value
-        `network` -  a list of strings, tag names that are also associated with the 'network' tag
+        `network` -  a list of strings
         'paging' - an instance of PagingInput
             `type` - a string, the type of pagination to perform. Must be either 'OFFSET' or 'CURSOR'."
             `page` - an integer, when performing OFFSET paging, the page number requested.
@@ -89,14 +112,6 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     feature_1 = aliased(Feature, name='f')
     gene_1 = aliased(Gene, name='g')
     node_1 = aliased(Node, name='n')
-
-    core_field_mapping = {
-        'label': node_1.label.label('label'),
-        'name': node_1.name.label('node_name'),
-        'score': node_1.score.label('score'),
-        'x': node_1.x.label('x'),
-        'y': node_1.y.label('y')
-    }
 
     data_set_field_mapping = {
         'display': data_set_1.display.label('data_set_display'),
@@ -119,15 +134,13 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
         'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
     }
 
-    core = get_selected(requested, core_field_mapping)
+    node_core = get_node_column_labels(requested, node_1, add_id=True)
     data_set_core = get_selected(data_set_requested, data_set_field_mapping)
     feature_core = get_selected(feature_requested, feature_field_mapping)
     gene_core = get_selected(gene_requested, gene_field_mapping)
 
-    # Always get the node id
-    core |= {node_1.id.label('id')}
-
-    query = sess.query(*[*core, *data_set_core, *feature_core, *gene_core])
+    query = sess.query(
+        *[*node_core, *data_set_core, *feature_core, *gene_core])
     query = query.select_from(node_1)
 
     if max_score:
@@ -137,16 +150,7 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
         query = query.filter(node_1.score >= min_score)
 
     if network:
-        network_1 = aliased(Tag, name='nt')
-        node_to_tag_1 = aliased(NodeToTag, name='ntt1')
-
-        network_subquery = sess.query(network_1.id).filter(
-            network_1.name.in_(network))
-
-        node_tag_join_condition = build_join_condition(
-            node_to_tag_1.node_id, node_1.id, node_to_tag_1.tag_id, network_subquery)
-
-        query = query.join(node_to_tag_1, and_(*node_tag_join_condition))
+        query = query.filter(node_1.network.in_(network))
 
     if tag:
         node_to_tag_2 = aliased(NodeToTag, name='ntt2')
@@ -233,26 +237,16 @@ def return_associated_tags(table_name, conn, tag_requested):
         2nd position - the current database connection
         3rd position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this should be an empty set.
     '''
+    from .tag import get_tag_column_labels
     tag_1 = aliased(Tag, name='t')
-    tag_core_field_mapping = {
-        'characteristics': tag_1.characteristics.label('tag_characteristics'),
-        'color': tag_1.color.label('tag_color'),
-        'longDisplay': tag_1.long_display.label('tag_long_display'),
-        'name': tag_1.name.label('tag_name'),
-        'shortDisplay': tag_1.short_display.label('tag_short_display')
-    }
 
-    tag_core = get_selected(tag_requested, tag_core_field_mapping)
+    tag_core = get_tag_column_labels(tag_requested, tag_1)
     tag_fields = [str(tag_field) for tag_field in tag_core]
     sep = ', '
     tag_fields = sep.join(tag_fields)
 
     network_tag_type = "'network'"
     query = f'SELECT DISTINCT {tag_fields}, n.id as node_id FROM tags as t, {table_name} as n, nodes_to_tags, tags_to_tags WHERE (n.id = nodes_to_tags.node_id AND t.id = nodes_to_tags.tag_id) AND (tags_to_tags.tag_id = t.id AND t.type != {network_tag_type})'
-
-    import logging
-    logger = logging.getLogger('node tags')
-    logger.info(query)
 
     tag_results = execute_sql(query, conn=conn)
     tag_results = execute_sql(query, conn=conn)

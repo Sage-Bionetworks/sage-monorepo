@@ -1,4 +1,3 @@
-from sqlalchemy import orm
 from api import db
 from api.db_models import Node
 from .database_helpers import build_general_query
@@ -8,7 +7,7 @@ related_fields = [
     'feature', 'gene', 'node_tag_assoc', 'tags']
 
 core_fields = ['id', 'dataset_id', 'feature_id',
-               'gene_id', 'name', 'label', 'score', 'x', 'y']
+               'gene_id', 'name', 'network', 'label', 'score', 'x', 'y']
 
 
 def return_node_query(*args):
