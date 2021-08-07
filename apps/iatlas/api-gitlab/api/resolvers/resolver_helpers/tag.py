@@ -69,6 +69,24 @@ def build_tag_graphql_response(requested=[], sample_requested=[], publications_r
     return(f)
 
 
+def get_tag_column_labels(requested, tag, prefix='tag_', add_id=False):
+    mapping = {
+        'characteristics': tag.characteristics.label('tag_characteristics'),
+        'color': tag.color.label('tag_color'),
+        'longDisplay': tag.long_display.label('tag_long_display'),
+        'name': tag.name.label('tag_name'),
+        'order': tag.order.label('tag_order'),
+        'shortDisplay': tag.short_display.label('tag_short_display'),
+        'type': tag.type.label('tag_type'),
+    }
+    labels = get_selected(requested, mapping)
+
+    if add_id:
+        labels |= {tag.id.label(prefix + 'id')}
+
+    return(labels)
+
+
 def build_tag_request(requested, distinct=False, paging=None, cohort=None, data_set=None, related=None, sample=None, tag=None, type=None):
 
     sess = db.session
@@ -82,20 +100,8 @@ def build_tag_request(requested, distinct=False, paging=None, cohort=None, data_
     cohort_to_tag_1 = aliased(CohortToTag, name='ctt')
     tag_to_tag_1 = aliased(TagToTag, name='ttt')
 
-    core_field_mapping = {
-        'characteristics': tag_1.characteristics.label('tag_characteristics'),
-        'color': tag_1.color.label('tag_color'),
-        'longDisplay': tag_1.long_display.label('tag_long_display'),
-        'name': tag_1.name.label('tag_name'),
-        'order': tag_1.order.label('tag_order'),
-        'shortDisplay': tag_1.short_display.label('tag_short_display'),
-        'type': tag_1.type.label('tag_type'),
-    }
-
-    core = get_selected(requested, core_field_mapping)
-    core.add(tag_1.id.label('tag_id'))
-
-    query = sess.query(*core)
+    tag_core = get_tag_column_labels(requested, tag_1, add_id=True)
+    query = sess.query(*tag_core)
     query = query.select_from(tag_1)
 
     if tag:
@@ -158,109 +164,6 @@ def build_tag_request(requested, distinct=False, paging=None, cohort=None, data_
         append_to_order(tag_1.characteristics)
 
     query = query.order_by(*order) if order else query
-
-    return get_pagination_queries(query, paging, distinct, cursor_field=tag_1.id)
-
-
-def build_simple_tag_request(query, requested, distinct=False, paging=None, cohort=None, data_set=None, related=None, sample=None, tag=None):
-    '''
-    Builds a SQL request.
-
-    All positional arguments are required. Positional arguments are:
-        1st position - a set of the requested fields at the root of the graphql request.
-
-    All keyword arguments are optional. Keyword arguments are:
-        `data_set` - a list of strings, data set names
-        `related` - a list of strings, tag names related to data sets
-        `sample` - a list of strings, sample names
-        `tag` - a list of strings, tag names related to samples
-    '''
-    sess = db.session
-
-    tag_1 = aliased(Tag, name='t')
-    sample_1 = aliased(Sample, name='s')
-    sample_to_tag_1 = aliased(SampleToTag, name='stt')
-    dataset_to_tag_1 = aliased(DatasetToTag, name='dtt')
-    dataset_1 = aliased(Dataset, name='d')
-    cohort_1 = aliased(Cohort, name='c')
-    cohort_to_tag_1 = aliased(CohortToTag, name='ctt')
-    tag_to_tag_1 = aliased(TagToTag, name='ttt')
-
-    core_field_mapping = {
-        'characteristics': tag_1.characteristics.label('tag_characteristics'),
-        'color': tag_1.color.label('tag_color'),
-        'longDisplay': tag_1.long_display.label('tag_long_display'),
-        'name': tag_1.name.label('tag_name'),
-        'shortDisplay': tag_1.short_display.label('tag_short_display')
-    }
-
-    core = get_selected(requested, core_field_mapping)
-    core.add(tag_1.id.label('tag_id'))
-
-    query = sess.query(*core)
-    query = query.select_from(tag_1)
-
-    if tag:
-        query = query.filter(tag_1.name.in_(tag))
-
-    if data_set:
-        dataset_subquery = sess.query(dataset_to_tag_1.tag_id)
-
-        dataset_join_condition = build_join_condition(
-            dataset_to_tag_1.dataset_id, dataset_1.id, filter_column=dataset_1.name, filter_list=data_set)
-        dataset_subquery = dataset_subquery.join(dataset_1, and_(
-            *dataset_join_condition), isouter=False)
-
-        query = query.filter(tag_1.id.in_(dataset_subquery))
-
-    if cohort:
-        cohort_subquery = sess.query(cohort_to_tag_1.tag_id)
-
-        cohort_join_condition = build_join_condition(
-            cohort_to_tag_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
-        cohort_subquery = cohort_subquery.join(cohort_1, and_(
-            *cohort_join_condition), isouter=False)
-
-        query = query.filter(tag_1.id.in_(cohort_subquery))
-
-    if related:
-        related_subquery = sess.query(tag_to_tag_1.tag_id)
-
-        related_join_condition = build_join_condition(
-            tag_to_tag_1.related_tag_id, tag_1.id, filter_column=tag_1.name, filter_list=related)
-        related_subquery = related_subquery.join(tag_1, and_(
-            *related_join_condition), isouter=False)
-
-        query = query.filter(tag_1.id.in_(related_subquery))
-
-    if sample:
-        sample_subquery = sess.query(sample_to_tag_1.tag_id)
-
-        sample_join_condition = build_join_condition(
-            sample_to_tag_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
-        sample_subquery = sample_subquery.join(sample_1, and_(
-            *sample_join_condition), isouter=False)
-
-        query = query.filter(tag_1.id.in_(sample_subquery))
-
-    order = []
-    append_to_order = order.append
-    if 'name' in requested:
-        append_to_order(tag_1.name)
-    if 'shortDisplay' in requested:
-        append_to_order(tag_1.short_display)
-    if 'longDisplay' in requested:
-        append_to_order(tag_1.long_display)
-    if 'color' in requested:
-        append_to_order(tag_1.color)
-    if 'characteristics' in requested:
-        append_to_order(tag_1.characteristics)
-
-    query = query.order_by(*order) if order else query
-
-    import logging
-    logger = logging.getLogger("tag request")
-    logger.info(query)
 
     return get_pagination_queries(query, paging, distinct, cursor_field=tag_1.id)
 

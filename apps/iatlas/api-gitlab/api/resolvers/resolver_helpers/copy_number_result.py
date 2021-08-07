@@ -73,6 +73,7 @@ def build_copy_number_result_request(
         `related` - a list of strings, tags related to the dataset that is associated with the result.
         `tag` - a list of strings, tag names
     """
+    from .tag import get_tag_column_labels
     sess = db.session
 
     copy_number_result_1 = aliased(CopyNumberResult, name='dcnr')
@@ -110,19 +111,11 @@ def build_copy_number_result_request(
         'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
     }
 
-    tag_field_mapping = {
-        'characteristics': tag_1.characteristics.label('tag_characteristics'),
-        'color': tag_1.color.label('tag_color'),
-        'longDisplay': tag_1.long_display.label('tag_long_display'),
-        'name': tag_1.name.label('tag_name'),
-        'shortDisplay': tag_1.short_display.label('tag_short_display')
-    }
-
     core = get_selected(requested, core_field_mapping)
     core |= get_selected(data_set_requested, data_set_field_mapping)
     core |= get_selected(feature_requested, feature_field_mapping)
     core |= get_selected(gene_requested, gene_field_mapping)
-    core |= get_selected(tag_requested, tag_field_mapping)
+    core |= get_tag_column_labels(tag_requested, tag_1)
 
     if not distinct:
         # Add the id as a cursor if not selecting distinct

@@ -237,26 +237,16 @@ def return_associated_tags(table_name, conn, tag_requested):
         2nd position - the current database connection
         3rd position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this should be an empty set.
     '''
+    from .tag import get_tag_column_labels
     tag_1 = aliased(Tag, name='t')
-    tag_core_field_mapping = {
-        'characteristics': tag_1.characteristics.label('tag_characteristics'),
-        'color': tag_1.color.label('tag_color'),
-        'longDisplay': tag_1.long_display.label('tag_long_display'),
-        'name': tag_1.name.label('tag_name'),
-        'shortDisplay': tag_1.short_display.label('tag_short_display')
-    }
 
-    tag_core = get_selected(tag_requested, tag_core_field_mapping)
+    tag_core = get_tag_column_labels(tag_requested, tag_1)
     tag_fields = [str(tag_field) for tag_field in tag_core]
     sep = ', '
     tag_fields = sep.join(tag_fields)
 
     network_tag_type = "'network'"
     query = f'SELECT DISTINCT {tag_fields}, n.id as node_id FROM tags as t, {table_name} as n, nodes_to_tags, tags_to_tags WHERE (n.id = nodes_to_tags.node_id AND t.id = nodes_to_tags.tag_id) AND (tags_to_tags.tag_id = t.id AND t.type != {network_tag_type})'
-
-    import logging
-    logger = logging.getLogger('node tags')
-    logger.info(query)
 
     tag_results = execute_sql(query, conn=conn)
     tag_results = execute_sql(query, conn=conn)

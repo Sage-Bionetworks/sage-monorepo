@@ -124,21 +124,14 @@ def get_samples(dataset_id, requested, sample_requested, sample=None):
 
 def get_tags(dataset_id, requested, tag_requested):
     if 'tags' in requested:
+        from .tag import get_tag_column_labels
         sess = db.session
 
         data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
         tag_1 = aliased(Tag, name='t')
 
-        core_field_mapping = {
-            'characteristics': tag_1.characteristics.label('tag_characteristics'),
-            'color': tag_1.color.label('tag_color'),
-            'longDisplay': tag_1.long_display.label('tag_long_display'),
-            'name': tag_1.name.label('tag_name'),
-            'shortDisplay': tag_1.short_display.label('tag_short_display')
-        }
-
-        core = get_selected(tag_requested, core_field_mapping)
-        query = sess.query(*core)
+        tag_core = get_tag_column_labels(tag_requested, tag_1)
+        query = sess.query(*tag_core)
         query = query.select_from(tag_1)
 
         subquery = sess.query(data_set_to_tag_1.tag_id)

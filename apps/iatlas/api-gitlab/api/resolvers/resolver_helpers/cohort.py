@@ -58,6 +58,7 @@ def build_cohort_request(requested, data_set_requested, tag_requested, cohort=No
         `data_set` - a list of strings, data set names
         `tag` - a list of strings, tag names
     """
+    from .tag import get_tag_column_labels
     sess = db.session
 
     cohort_1 = aliased(Cohort, name='c')
@@ -74,18 +75,10 @@ def build_cohort_request(requested, data_set_requested, tag_requested, cohort=No
         'type': data_set_1.data_set_type.label('data_set_type')
     }
 
-    tag_core_field_mapping = {
-        'characteristics': tag_1.characteristics.label('tag_characteristics'),
-        'color': tag_1.color.label('tag_color'),
-        'longDisplay': tag_1.long_display.label('tag_long_display'),
-        'name': tag_1.name.label('tag_name'),
-        'shortDisplay': tag_1.short_display.label('tag_short_display')
-    }
-
     core = get_selected(requested, core_field_mapping)
     core |= {cohort_1.id.label('cohort_id')}
     core |= get_selected(data_set_requested, data_set_core_field_mapping)
-    core |= get_selected(tag_requested, tag_core_field_mapping)
+    core |= get_tag_column_labels(tag_requested, tag_1)
 
     query = sess.query(*core)
     query = query.select_from(cohort_1)
