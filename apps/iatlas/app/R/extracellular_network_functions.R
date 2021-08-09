@@ -70,7 +70,7 @@ get_gene_nodes <- function(
   nodes <-
     iatlas.api.client::query_gene_nodes(
       datasets = dataset,
-      network = "extracellular_network",
+      network = "Extracellular Network",
       entrez = genes,
       tags = tags,
       min_score = min_abundance / 100
@@ -108,7 +108,7 @@ get_feature_nodes <- function(
   nodes <-
     iatlas.api.client::query_feature_nodes(
       datasets = dataset,
-      network = "extracellular_network",
+      network = "Extracellular Network",
       features = features,
       tags = tags,
       min_score = min_abundance / 100
@@ -123,7 +123,7 @@ get_feature_nodes <- function(
       "score"
     )
   if(stratify) nodes <- filter_nodes_with_tag_name(nodes, stratified_tags)
-  unnest_nodes(nodes, stratify)
+  nodes <- unnest_nodes(nodes, stratify)
 }
 
 find_n_tags <- function(stratify){
@@ -181,6 +181,7 @@ unnest_nodes <- function(data, stratify){
 }
 
 get_edges <- function(nodes, min_concordance){
+
   nodes <- dplyr::select(
     nodes, "node_name", "node_display", "node_friendly", "tag"
   )
@@ -195,6 +196,7 @@ get_edges <- function(nodes, min_concordance){
       node1 = node_names,
       node2 = node_names
     )
+
 
   if(nrow(edges) == 0) return(edges)
 

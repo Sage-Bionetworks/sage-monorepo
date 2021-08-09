@@ -3,7 +3,7 @@ group_tbl <- iatlas.api.client::query_tags(
   cohorts = "TCGA",
   parent_tags = "Immune_Subtype"
 ) %>%
-  dplyr::select("display" = "short_display", "name")
+  dplyr::select("display" = "tag_short_display", "name" = "tag_name")
 
 gene_tbl <- iatlas.api.client::query_genes(entrez = 1:300) %>%
   dplyr::select("entrez", "hgnc")
