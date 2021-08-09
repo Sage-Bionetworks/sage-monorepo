@@ -68,9 +68,9 @@
     },
     "Biostrings": {
       "Package": "Biostrings",
-      "Version": "2.60.1",
+      "Version": "2.60.2",
       "Source": "Bioconductor",
-      "Hash": "ee27fadce643ce9df34bb1778748af38"
+      "Hash": "99156112c2bb9dc64c0023ee579eb5d0"
     },
     "DT": {
       "Package": "DT",
@@ -123,9 +123,9 @@
       "RemoteUsername": "Gibbsdavidl",
       "RemoteRepo": "ImmuneSubtypeClassifier",
       "RemoteRef": "master",
-      "RemoteSha": "5c9efe1613bff4f462447927d78f90b06a5a3bc0",
+      "RemoteSha": "955c67b49bcee488c31fef5cf3356efbd62a06e4",
       "RemoteHost": "api.github.com",
-      "Hash": "af8181077902143469eed944c4316d93"
+      "Hash": "871773510a4ad6ccf8e8541d7c0b39f3"
     },
     "KMsurv": {
       "Package": "KMsurv",
@@ -157,9 +157,9 @@
     },
     "MatrixGenerics": {
       "Package": "MatrixGenerics",
-      "Version": "1.4.0",
+      "Version": "1.4.1",
       "Source": "Bioconductor",
-      "Hash": "48cab247b8dbb0ee0d35e2b6cc1370d4"
+      "Hash": "32ec8e9f4187e4a01f839393b959f057"
     },
     "MatrixModels": {
       "Package": "MatrixModels",
@@ -277,10 +277,10 @@
     },
     "arrow": {
       "Package": "arrow",
-      "Version": "4.0.1",
+      "Version": "5.0.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "6c1d55eba1db16126145fb75a447f031"
+      "Hash": "2b09a5d420c3dbcdfe72db10fb29c7e6"
     },
     "askpass": {
       "Package": "askpass",
@@ -354,10 +354,10 @@
     },
     "broom": {
       "Package": "broom",
-      "Version": "0.7.8",
+      "Version": "0.7.9",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "c6dddf90a1e38665c211932696ddbfde"
+      "Hash": "9b1e2c1f75b349e3ffa7e9c69eec0c52"
     },
     "bslib": {
       "Package": "bslib",
@@ -499,10 +499,10 @@
     },
     "credentials": {
       "Package": "credentials",
-      "Version": "1.3.0",
+      "Version": "1.3.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "a96728288c75a814c900af9da84387be"
+      "Hash": "db9463f8f96444ac790bef2076048699"
     },
     "crosstalk": {
       "Package": "crosstalk",
@@ -804,10 +804,10 @@
     },
     "haven": {
       "Package": "haven",
-      "Version": "2.4.1",
+      "Version": "2.4.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "9ace652bffef34af558eb5d70903ac2f"
+      "Hash": "10bec8a8264f3eb59531e8c4c0303f96"
     },
     "highr": {
       "Package": "highr",
@@ -860,41 +860,41 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.24.1",
+      "Version": "0.25.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "1852e6b8dfa7e0fcd0f64512f0d5bbc1b2e634f0",
+      "RemoteSha": "67d5991b34e7707522fa231dd9b79010a64bfe1d",
       "RemoteHost": "api.github.com",
-      "Hash": "178b53a51e9984d12a294f337c71e426"
+      "Hash": "2291c14659c686152fae0da51cef4728"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
-      "Version": "0.5.4",
+      "Version": "0.5.5",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules",
       "RemoteRef": "master",
-      "RemoteSha": "1fd5628101d8ae1460d95e78de4dfee21f05aae6",
+      "RemoteSha": "284cd01dc0cc7fc793f092a162f2d511eeb57f2b",
       "RemoteHost": "api.github.com",
       "Remotes": "CRI-iAtlas/iatlas.api.client@main",
-      "Hash": "55c120f9f3208d00079bfc33e5597ecf"
+      "Hash": "fd4f2c89e47796e65f0ea48a115d4374"
     },
     "iatlas.modules2": {
       "Package": "iatlas.modules2",
-      "Version": "0.2.2",
+      "Version": "0.2.3",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules2",
       "RemoteRef": "master",
-      "RemoteSha": "40c0510ca9a6d467f996afe39ef2d4eb81f8ed71",
+      "RemoteSha": "311cc0070c4d9f30ba362c6d88bd44f8a65d96c0",
       "RemoteHost": "api.github.com",
       "Remotes": "CRI-iAtlas/iatlas.api.client@main, CRI-iAtlas/iatlas.modules@master",
-      "Hash": "65befffd7d33573414564bdfc19e6398"
+      "Hash": "7f497c38da8cd4136d51dbc5a7af0fef"
     },
     "igvShiny": {
       "Package": "igvShiny",
@@ -924,10 +924,10 @@
     },
     "jpeg": {
       "Package": "jpeg",
-      "Version": "0.1-8.1",
+      "Version": "0.1-9",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "bc316c003aba520fc73d70ad53b5fc36"
+      "Hash": "441ee36360a57b363f4fa3df0c364630"
     },
     "jquerylib": {
       "Package": "jquerylib",
@@ -1029,10 +1029,10 @@
     },
     "matrixStats": {
       "Package": "matrixStats",
-      "Version": "0.59.0",
+      "Version": "0.60.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "45a2fee40a2f1bcad392cbe8a5f10d4f"
+      "Hash": "915f59111573046dc425410b435ab5ed"
     },
     "maxstat": {
       "Package": "maxstat",
@@ -1141,10 +1141,10 @@
     },
     "pillar": {
       "Package": "pillar",
-      "Version": "1.6.1",
+      "Version": "1.6.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "8672ae02bd20f6479bce2d06c7ff1401"
+      "Hash": "43f228eb4b49093d1c8a5c93cae9efe9"
     },
     "pkgbuild": {
       "Package": "pkgbuild",
@@ -1330,10 +1330,10 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "0.13.2",
+      "Version": "0.14.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "079cb1f03ff972b30401ed05623cbe92"
+      "Hash": "30e5eba91b67f7f4d75d31de14bbfbdc"
     },
     "restfulr": {
       "Package": "restfulr",
@@ -1386,10 +1386,10 @@
     },
     "rsconnect": {
       "Package": "rsconnect",
-      "Version": "0.8.18",
+      "Version": "0.8.24",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "50b4e52011e335f7d3053cfde69893ba"
+      "Hash": "5e21fd77eb844fa1ff1d23cb04e1d753"
     },
     "rstatix": {
       "Package": "rstatix",
@@ -1553,10 +1553,10 @@
     },
     "tibble": {
       "Package": "tibble",
-      "Version": "3.1.2",
+      "Version": "3.1.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "349b40a9f144516d537c875e786ec8b8"
+      "Hash": "038455513fde65e79c25e724e0c84ca2"
     },
     "tidyr": {
       "Package": "tidyr",
@@ -1581,10 +1581,10 @@
     },
     "tzdb": {
       "Package": "tzdb",
-      "Version": "0.1.1",
+      "Version": "0.1.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "d60ee49eac3f3aaead137af987c92ddb"
+      "Hash": "fb2b801053decce71295bb8cb04d438b"
     },
     "urltools": {
       "Package": "urltools",
@@ -1602,10 +1602,10 @@
     },
     "utf8": {
       "Package": "utf8",
-      "Version": "1.2.1",
+      "Version": "1.2.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "c3ad47dc6da0751f18ed53c4613e3ac7"
+      "Hash": "c9c462b759a5cc844ae25b5942654d13"
     },
     "vctrs": {
       "Package": "vctrs",
@@ -1630,10 +1630,10 @@
     },
     "vroom": {
       "Package": "vroom",
-      "Version": "1.5.3",
+      "Version": "1.5.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "aac6012f34348b3ca6bf373fe7172b06"
+      "Hash": "1a23013f39e67bb57cbda6f4ddde5470"
     },
     "waldo": {
       "Package": "waldo",
@@ -1665,10 +1665,10 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.24",
+      "Version": "0.25",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "88cdb9779a657ad80ad942245fffba31"
+      "Hash": "853d45ffff0a9af1e0af017cd359f75e"
     },
     "xgboost": {
       "Package": "xgboost",
