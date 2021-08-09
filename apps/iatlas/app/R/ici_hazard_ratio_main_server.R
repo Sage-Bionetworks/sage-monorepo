@@ -218,7 +218,8 @@ ici_hazard_ratio_main_server <- function(
           })
         }else{
           output$notification <- shiny::renderText({
-            paste0("Selected survival endpoint not available for ", setdiff(input$datasets_mult, ds_with_os), collapse = "<br>")
+            missing_os <- setdiff(input$datasets_mult, ds_with_os)
+            paste0("Selected survival endpoint not available for ", names(ici_datasets())[ici_datasets() == missing_os], collapse = "<br>")
           })
         }
       })
