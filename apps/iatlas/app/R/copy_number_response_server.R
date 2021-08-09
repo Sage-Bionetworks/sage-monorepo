@@ -28,7 +28,7 @@ copy_number_response_server <- function(id, cohort_obj) {
           cohorts = cohort_obj()$dataset,
           parent_tags = cohort_obj()$group_name
         ) %>%
-          dplyr::select("display" = "short_display", "name")
+          dplyr::select("display" = "tag_short_display", "name" = "tag_name")
       })
 
       group_choice_list <- shiny::reactive({
