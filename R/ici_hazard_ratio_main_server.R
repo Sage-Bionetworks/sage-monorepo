@@ -22,7 +22,7 @@ ici_hazard_ratio_main_server <- function(
 
       categories <- shiny::reactive(iatlas.api.client::query_tags(datasets = ici_datasets()) %>%
                                       dplyr::mutate(class = dplyr::case_when(
-                                        name %in% c( "Response", "Responder", "Progression", "Clinical_Benefit") ~ "Response to ICI",
+                                        tag_name %in% c( "Response", "Responder", "Progression", "Clinical_Benefit") ~ "Response to ICI",
                                         TRUE ~ "Treatment Data"))
       )
 
@@ -39,8 +39,8 @@ ici_hazard_ratio_main_server <- function(
         shiny::req(categories(), features())
         var_choices_clin <- create_nested_list_by_class(categories(),
                                                         class_column = "class",
-                                                        internal_column = "name",
-                                                        display_column = "short_display")
+                                                        internal_column = "tag_name",
+                                                        display_column = "tag_short_display")
 
         var_choices_feat <- create_nested_list_by_class(features(),
                                                         class_column = "class",
