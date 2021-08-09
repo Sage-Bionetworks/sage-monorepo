@@ -2,11 +2,11 @@ on:
   push:
     branches:
       - main
-      - master
+      - staging
   pull_request:
     branches:
       - main
-      - master
+      - staging
 
 name: R-CMD-check
 
