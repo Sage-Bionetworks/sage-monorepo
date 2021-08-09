@@ -13,7 +13,7 @@ cellimage_main_server <- function(
           cohorts = cohort_obj()$dataset,
           parent_tags = cohort_obj()$group_name
         ) %>%
-          dplyr::pull("name")
+          dplyr::pull("tag_name")
       })
 
       output$select_group1_ui <- shiny::renderUI({

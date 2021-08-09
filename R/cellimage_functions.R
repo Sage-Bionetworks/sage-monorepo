@@ -18,7 +18,7 @@ get_cellimage_gene_nodes <- function(dataset, tag, genes){
   nodes <-
     iatlas.api.client::query_gene_nodes(
       datasets = dataset,
-      network = "cellimage_network",
+      network = "Cellimage Network",
       entrez = genes,
       tags = tag
     ) %>%
@@ -51,7 +51,7 @@ get_cellimage_feature_nodes <- function(dataset, tag, features){
   nodes <-
     iatlas.api.client::query_feature_nodes(
       datasets = dataset,
-      network = "cellimage_network",
+      network = "Cellimage Network",
       features = features,
       tags = tag
     ) %>%
