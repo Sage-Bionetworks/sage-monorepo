@@ -41,7 +41,7 @@ def get_node_column_labels(requested, node, prefix='node_', add_id=False):
     return(labels)
 
 
-def build_node_graphql_response(tag_dict=dict(), prefix='node_'):
+def build_node_graphql_response(requested=[], tag_requested=[], prefix='node_'):
     from .data_set import build_data_set_graphql_response
     from .feature import build_feature_graphql_response
     from .gene import build_gene_graphql_response
@@ -53,7 +53,7 @@ def build_node_graphql_response(tag_dict=dict(), prefix='node_'):
         else:
 
             node_id = get_value(node, 'id')
-            tags = tag_dict.get(node_id, []) if tag_dict else []
+            tags = get_tags(node_id, requested, tag_requested)
             has_feature = get_value(node, 'feature_name') or get_value(
                 node, 'feature_display') or get_value(node, 'feature_order') or get_value(node, 'feature_unit')
             has_gene = get_value(node, 'gene_entrez') or get_value(node, 'gene_hgnc') or get_value(
@@ -211,47 +211,24 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     return get_pagination_queries(query, paging, distinct, cursor_field=node_1.id)
 
 
-def fetch_nodes_with_tags(query, paging, distinct, tag_requested):
-    '''
-    All positional arguments are required. Positional arguments are:
-        1st position - a SQLAlchemy built query
-        2nd position - a paging dict - an instance of PagingInput
-            `type` - a string, the type of pagination to perform. Must be either 'OFFSET' or 'CURSOR'."
-            `page` - an integer, when performing OFFSET paging, the page number requested.
-            `limit` - an integer, when performing OFFSET paging, the number or records requested.
-            `first` - an integer, when performing CURSOR paging, the number of records requested AFTER the CURSOR.
-            `last` - an integer, when performing CURSOR paging, the number of records requested BEFORE the CURSOR.
-            `before` - an integer, when performing CURSOR paging: the CURSOR to be used in tandem with 'last'
-            `after` - an integer, when performing CURSOR paging: the CURSOR to be used in tandem with 'first'.
-        3rd position - a boolean, specifies whether or not duplicates should be filtered out
-        4th position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this should be an empty set.
-    '''
-    items, table_name, conn = create_temp_table(query, paging, distinct)
-    return items, return_associated_tags(table_name, conn, tag_requested)
+def get_tags(node_id, requested, tag_requested):
+    if 'tags' in requested:
+        from .tag import get_tag_column_labels
 
+        sess = db.session
+        tag_1 = aliased(Tag, name='t')
+        node_to_tag_1 = aliased(NodeToTag, name='ntt1')
+        core = get_tag_column_labels(tag_requested, tag_1)
 
-def return_associated_tags(table_name, conn, tag_requested):
-    '''
-    All positional arguments are required. Positional arguments are:
-        1st position - the name of the temp table with the node values
-        2nd position - the current database connection
-        3rd position - a set of the requested fields in the 'tag' node of the graphql request. If 'tag' is not requested, this should be an empty set.
-    '''
-    from .tag import get_tag_column_labels
-    tag_1 = aliased(Tag, name='t')
+        query = sess.query(*core)
+        query = query.select_from(tag_1)
 
-    tag_core = get_tag_column_labels(tag_requested, tag_1)
-    tag_fields = [str(tag_field) for tag_field in tag_core]
-    sep = ', '
-    tag_fields = sep.join(tag_fields)
+        node_to_tag_join_condition = build_join_condition(
+            tag_1.id, node_to_tag_1.tag_id, node_to_tag_1.node_id, [node_id])
 
-    network_tag_type = "'network'"
-    query = f'SELECT DISTINCT {tag_fields}, n.id as node_id FROM tags as t, {table_name} as n, nodes_to_tags, tags_to_tags WHERE (n.id = nodes_to_tags.node_id AND t.id = nodes_to_tags.tag_id) AND (tags_to_tags.tag_id = t.id AND t.type != {network_tag_type})'
+        query = query.join(node_to_tag_1, and_(*node_to_tag_join_condition))
+        tags = query.distinct().all()
+        return tags
 
-    tag_results = execute_sql(query, conn=conn)
-    tag_results = execute_sql(query, conn=conn)
-    tag_dict = dict()
-    if tag_results:
-        for key, collection in groupby(tag_results, key=lambda t: t.node_id):
-            tag_dict[key] = tag_dict.get(key, []) + list(collection)
-    return tag_dict
+    else:
+        return []

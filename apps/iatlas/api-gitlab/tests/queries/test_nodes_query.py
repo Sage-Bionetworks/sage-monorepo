@@ -298,7 +298,7 @@ def test_nodes_query_with_passed_network(client, common_query_builder, network):
                                         tags { name }
                                     }
                                 }""")
-    num = 10000
+    num = 1000
     response = client.post('/api', json={'query': query,
                                          'variables': {
                                              'network': [network],
@@ -342,7 +342,7 @@ def test_nodes_query_with_passed_network_and_tag(client, common_query_builder, n
                                         tags { name }
                                     }
                                 }""")
-    num = 10000
+    num = 1000
     response = client.post('/api', json={'query': query,
                                          'variables': {
                                              'network': [network],
