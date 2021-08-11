@@ -15,7 +15,7 @@ ici_overview_category_server <- function(
 
       output$select_group1 <- renderUI(
         shiny::selectInput(ns("group1"), "Select Category",
-                    choices = categories()$short_display,
+                    choices = categories()$tag_short_display,
                     selected = "Responder")
       )
 
@@ -23,7 +23,7 @@ ici_overview_category_server <- function(
         shiny::req(input$group1)
         shiny::selectInput(ns("group2"), "Select second category to see groups overlap",
                     choices = (categories() %>%
-                                 dplyr::filter(short_display != input$group1))$short_display,
+                                 dplyr::filter(tag_short_display != input$group1))$tag_short_display,
                     selected = "Drug")
       })
 
@@ -31,23 +31,23 @@ ici_overview_category_server <- function(
         shiny::req(input$group1)
         convert_value_between_columns(input_value = input$group1,
                                       df = categories(),
-                                      from_column = "short_display",
-                                      to_column = "name")
+                                      from_column = "tag_short_display",
+                                      to_column = "tag_name")
       })
 
       group2 <- reactive({
         shiny::req(input$group2)
         convert_value_between_columns(input_value = input$group2,
                                       df = categories(),
-                                      from_column = "short_display",
-                                      to_column = "name")
+                                      from_column = "tag_short_display",
+                                      to_column = "tag_name")
       })
 
 
       output$ici_groups_df <- DT::renderDT({
         DT::datatable(categories() %>%
-                        dplyr::filter(short_display %in% input$group1) %>%
-                        dplyr::select(Category = short_display, Definition = characteristics), #, `Sample Groups`, `Available for`),
+                        dplyr::filter(tag_short_display %in% input$group1) %>%
+                        dplyr::select(Category = tag_short_display, Definition = tag_characteristics), #, `Sample Groups`, `Available for`),
                       rownames = FALSE,
                       options = list(dom = 't'))
       })
@@ -65,7 +65,7 @@ ici_overview_category_server <- function(
                       width = "80%",
                       caption = paste("Group Size per dataset for", input$group1),
                       options = list(dom = 't',
-                                     pageLength = 25,
+                                     pageLength = 50,
                                      order = list(list(0, 'asc'))))
       })
 

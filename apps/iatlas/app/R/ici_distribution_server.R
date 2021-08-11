@@ -20,50 +20,23 @@ ici_distribution_server <- function(
       })
 
       output$group1 <- renderUI({
-
-        clin_data <- metadata_feature_df %>%
-          dplyr::filter(`Variable Class` %in% c("Immune Checkpoint Treatment - Response",
-                                                "Immune Checkpoint Treatment - Study Condition",
-                                                "Sample Category") &
-                          `FeatureMatrixLabelTSV` != "Study")
-
-        var_choices <- create_filtered_nested_list_by_class(feature_df = clin_data,
-                                                            filter_value = "Categorical",
-                                                            class_column = "Variable Class",
-                                                            internal_column = "FeatureMatrixLabelTSV",
-                                                            display_column = "FriendlyLabel",
-                                                            filter_column = "VariableType")
         selectInput(
           ns("groupvar"),
           "Select Sample Group",
-          var_choices,
+          metadata_feature_df,
           selected = "Responder"
         )
       })
 
-      output$group2 <- renderUI({ #Second level group option include dataset-specific classes
-        lapply(unlist(datasets_options), function(x){
+      output$group2 <- renderUI({
+        #Second level group option include dataset-specific classes
+        selectInput(
+          ns("groupvar"),
+          "Select Sample Group",
+          metadata_feature_df,
+          selected = "Responder"
+        )
 
-          clin_data <- metadata_feature_df %>%
-            dplyr::filter(`Variable Class` == paste("Clinical data for", x) | `Variable Class` %in% c("Immune Checkpoint Treatment - Response", "Immune Checkpoint Treatment - Study Condition", "Sample Category"))
-
-          var_choices <- create_filtered_nested_list_by_class(feature_df = clin_data,
-                                                              filter_value = "Categorical",
-                                                              class_column = "Variable Class",
-                                                              internal_column = "FeatureMatrixLabelTSV",
-                                                              display_column = "FriendlyLabel",
-                                                              filter_column = "VariableType")
-          var_choices[["Default"]] <- c("None" = "None")
-
-          shinyjs::hidden(
-            div(id=ns(paste0('div_',x)),
-                selectInput(
-                  ns(paste0("dist", x)),
-                  label = paste("Select extra group for", as.character(x)),
-                  choices = var_choices,
-                  selected = "None"
-                )
-            ))})
       })
 
       # Show all divs that are selected, hide all divs that are not selected.
