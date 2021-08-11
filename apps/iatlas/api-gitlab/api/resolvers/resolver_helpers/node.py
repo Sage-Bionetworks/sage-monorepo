@@ -1,11 +1,10 @@
 from itertools import groupby
-from sqlalchemy import and_
+from sqlalchemy import and_, func
 from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import Dataset, DatasetToTag, Feature, FeatureClass, Gene, GeneToType, GeneType, Node, NodeToTag, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
-from api.database.database_helpers import execute_sql
-from .paging_utils import create_temp_table, get_pagination_queries
+from .paging_utils import get_pagination_queries
 
 simple_node_request_fields = {
     'label',
@@ -13,7 +12,7 @@ simple_node_request_fields = {
     'network',
     'score',
     'x',
-    'y'
+    'y',
 }
 
 node_request_fields = simple_node_request_fields.union({
@@ -75,7 +74,7 @@ def build_node_graphql_response(requested=[], tag_requested=[], prefix='node_'):
     return(f)
 
 
-def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, distinct=False, entrez=None, feature=None, feature_class=None, gene_type=None, max_score=None, min_score=None, network=None, paging=None, related=None, tag=None):
+def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, distinct=False, entrez=None, feature=None, feature_class=None, gene_type=None, max_score=None, min_score=None, network=None, n_tags=None, paging=None, related=None, tag=None):
     '''
     Builds a SQL request.
 
@@ -112,6 +111,9 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     feature_1 = aliased(Feature, name='f')
     gene_1 = aliased(Gene, name='g')
     node_1 = aliased(Node, name='n')
+    node_to_tag_1 = aliased(NodeToTag, name='ntt1')
+    tag_1 = aliased(Tag, name="t")
+    node_to_tag_2 = aliased(NodeToTag, name='ntt2')
 
     data_set_field_mapping = {
         'display': data_set_1.display.label('data_set_display'),
@@ -153,16 +155,32 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
         query = query.filter(node_1.network.in_(network))
 
     if tag:
-        node_to_tag_2 = aliased(NodeToTag, name='ntt2')
-        tag_1 = aliased(Tag, name="t")
 
-        tag_subquery = sess.query(tag_1.id).filter(
-            tag_1.name.in_(tag))
+        tag_subquery1 = sess.query(node_to_tag_1.node_id)
 
-        node_tag_join_condition = build_join_condition(
-            node_to_tag_2.node_id, node_1.id, node_to_tag_2.tag_id, tag_subquery)
+        node_to_tag_join_condition = build_join_condition(
+            node_to_tag_1.tag_id, tag_1.id, tag_1.name, tag)
 
-        query = query.join(node_to_tag_2, and_(*node_tag_join_condition))
+        tag_subquery1 = tag_subquery1.join(
+            tag_1, and_(*node_to_tag_join_condition))
+
+        query = query.filter(
+            node_1.id.in_(tag_subquery1))
+
+    if n_tags:
+
+        tag_subquery2 = sess.query(
+            node_to_tag_2.node_id)
+        tag_subquery2 = tag_subquery2.group_by(node_to_tag_2.node_id)
+        tag_subquery2 = tag_subquery2.having(
+            func.count(node_to_tag_2.tag_id) == n_tags)
+
+        import logging
+        logger = logging.getLogger("node request")
+        logger.info(tag_subquery2)
+
+        query = query.filter(
+            node_1.id.in_(tag_subquery2))
 
     if data_set or related or 'dataSet' in requested:
         data_set_join_condition = build_join_condition(
