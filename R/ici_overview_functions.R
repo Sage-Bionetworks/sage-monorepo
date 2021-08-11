@@ -1,6 +1,6 @@
 get_io_overview_table <- function(values_for_group1){
   values_for_group1 %>%
-  dplyr::group_by(dataset_display, Group = tag_short_display) %>%
+  dplyr::group_by(dataset_display, Order = tag_order, Group = tag_short_display) %>%
   dplyr::summarise(n = dplyr::n_distinct(sample_name)) %>%
   tidyr::pivot_wider(
     names_from = dataset_display,
