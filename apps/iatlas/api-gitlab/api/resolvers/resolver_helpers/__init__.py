@@ -16,7 +16,7 @@ from .immune_checkpoint import request_immune_checkpoints
 from .method_tag import request_method_tags
 from .mutation import build_mutation_graphql_response, build_mutation_request, mutation_request_fields
 from .mutation_type import build_mutation_type_graphql_response, mutation_type_request_fields, request_mutation_types
-from .node import build_node_graphql_response, build_node_request, fetch_nodes_with_tags, node_request_fields, simple_node_request_fields
+from .node import build_node_graphql_response, build_node_request, node_request_fields, simple_node_request_fields
 from .pathway import request_pathways
 from .patient import build_patient_request, build_patient_graphql_response, patient_request_fields, simple_patient_request_fields
 from .publication import build_publication_graphql_response, publication_request_fields, simple_publication_request_fields
