@@ -7,7 +7,7 @@ ici_distribution_ui <- function(id){
       shinyjs::useShinyjs(),
       column(
         width = 3,
-        checkboxGroupInput(ns("datasets"), "Select Datasets", choices = datasets_options, selected = NULL)
+        shiny::uiOutput(ns("list_datasets"))
       ),
       column(
         width = 3,

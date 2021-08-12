@@ -1,5 +1,6 @@
 ici_distribution_server <- function(
   id,
+  ici_datasets,
   ioresponse_data,
   variable_options,
   metadata_feature_df,
@@ -11,6 +12,10 @@ ici_distribution_server <- function(
 
       ns <- session$ns
 
+      output$list_datasets <- shiny::renderUI({
+        checkboxGroupInput(ns("datasets"), "Select Datasets", choices = ici_datasets, selected = NULL)
+      })
+
       output$feature_op <- renderUI({
         selectInput(
           ns("var1_surv"),
@@ -21,7 +26,7 @@ ici_distribution_server <- function(
 
       output$group1 <- renderUI({
         selectInput(
-          ns("groupvar"),
+          ns("groupvar1"),
           "Select Sample Group",
           metadata_feature_df,
           selected = "Responder"
@@ -31,7 +36,7 @@ ici_distribution_server <- function(
       output$group2 <- renderUI({
         #Second level group option include dataset-specific classes
         selectInput(
-          ns("groupvar"),
+          ns("groupvar2"),
           "Select Sample Group",
           metadata_feature_df,
           selected = "Responder"
@@ -39,30 +44,9 @@ ici_distribution_server <- function(
 
       })
 
-      # Show all divs that are selected, hide all divs that are not selected.
-      shiny::observeEvent(input$datasets, #ignoreNULL = FALSE, ignoreInit = FALSE,
-                   {
-                     to_hide = setdiff(unlist(datasets_options),input$datasets)
-                     for(x in to_hide)
-                     {
-                       shinyjs::hide(paste0("div_", x))
-                     }
-                     to_show = input$datasets
-                     for(x in to_show)
-                     {
-                       shinyjs::show(paste0('div_',x))
-                     }
-                   })
-
-      all_groups <-  shiny::reactive({
-        lapply(unlist(datasets_options), function(x) input[[paste0("dist", x)]]) %>%
-          unlist() %>%
-          unique()
-      })
-
       output$ui_stat <- shiny::renderUI({
-        req(input$groupvar)
-        if(input$groupvar == "treatment_when_collected" | "treatment_when_collected" %in% all_groups()){
+        req(input$groupvar1, input$groupvar2)
+        if(input$groupvar1 == "Sample_Treatment" | input$groupvar2 == "Sample_Treatment"){
           radioButtons(ns("paired"), "Sample type", choices = c("Independent", "Paired"), inline = TRUE, selected = "Paired")
         }else{
           radioButtons(ns("paired"), "Sample type", choices = ("Independent"), inline = TRUE, selected = "Independent")
@@ -114,37 +98,25 @@ ici_distribution_server <- function(
 
       df_selected <- reactive({
 
-        group_df <- suppressWarnings(feature_values %>%
-                                       dplyr::select(Sample_ID, Patient_ID, Dataset, treatment_when_collected, input$groupvar, dplyr::one_of(all_groups())))
+        samples <- feature_values %>%
+          dplyr::filter(feature_name == input$var1_surv) %>%
+          dplyr::inner_join(iatlas.api.client::query_dataset_samples(datasets = input$datasets), by = c("sample" = "sample_name")) %>%
+          build_distribution_io_df(., "feature_value", input$scale_method)
 
-        group_df <- purrr::map_dfr(unlist(datasets_options), df = group_df, function(x, df){
-          g2 <- paste0("dist", x)
+        if(input$groupvar2 == "None" | input$groupvar1 == input$groupvar2){
+          samples %>%
+            dplyr::inner_join(iatlas.api.client::query_tag_samples(parent_tags = c(input$groupvar1)), by = c("sample" = "sample_name")) %>%
+            dplyr::mutate(group = tag_short_display)
 
+        }else{
+           groups <- samples %>%
+             dplyr::inner_join(iatlas.api.client::query_tag_samples(parent_tags = c(input$groupvar1, input$groupvar2)), by = c("sample" = "sample_name"))
 
-          df %>%
-            filter(Dataset == x) %>%
-            tidyr::drop_na(input$groupvar) %>%
-            `if`(
-              input$groupvar != "treatment_when_collected" & input[[g2]] != "treatment_when_collected",
-              dplyr::filter(., treatment_when_collected == "Pre"),
-              .
-            ) %>%
-            `if`(
-              input[[g2]] != "None",
-              tidyr::drop_na(., input[[g2]]),
-              .
-            ) %>%
-            combine_groups(., as.character(input$groupvar), as.character(input[[g2]]))
-        })
-
-        new_df <- feature_values %>%
-          dplyr::select(Sample_ID, input$var1_surv) %>%
-          tidyr::drop_na() %>%
-          build_distribution_io_df(.,
-                                   feature = .[[input$var1_surv]],
-                                   scale_func_choice = input$scale_method)
-
-        merge(group_df, new_df, by = "Sample_ID")
+         combine_groups(groups, input$groupvar1, input$groupvar2) %>%
+           dplyr::inner_join(iatlas.api.client::query_dataset_samples(datasets = input$datasets), by = c("sample" = "sample_name")) %>%
+           dplyr::inner_join(samples %>% dplyr::select(sample, y), by = "sample") %>%
+           dplyr::mutate(group = paste(tag_short_display.x, tag_short_display.y, sep = " & \n"))
+        }
       })
 
       output$dist_plots <- plotly::renderPlotly({
@@ -154,15 +126,12 @@ ici_distribution_server <- function(
 
         all_plots <- purrr::map(.x = input$datasets, function(dataset){
 
-          group1 <- input$groupvar
-          group2 <- paste0("dist", dataset)
+          if(input$groupvar2 == "None" | input$groupvar1 == input$groupvar2){#only one group selected
 
-          dataset_data <- df_selected() %>%
-            dplyr::filter(Dataset == dataset)
+            dataset_data <- df_selected() %>%
+              dplyr::filter(dataset_name == dataset)
 
-          if(nrow(dataset_data)>0){
-            if(input[[group2]] == "None" | input$groupvar == input[[group2]]){#only one group selected
-
+            if(nrow(dataset_data)>0){
               dataset_data %>%
                 create_plot_onegroup(.,
                                      plot_function(),
@@ -171,23 +140,26 @@ ici_distribution_server <- function(
                                      "group",
                                      reorder_function = input$reorder_method_choice,
                                      varible_plot_label())
+            }
 
             }else{ #when two grouping levels are selected
 
-              dataset_data %>%
-                create_plot_twogroup(.,
-                                     plot_function(),
-                                     dataset,
-                                     "y",
-                                     "group",
-                                     input$groupvar,
-                                     input[[group2]],
-                                     reorder_function = input$reorder_method_choice,
-                                     varible_plot_label())
+              dataset_data <- df_selected() %>%
+                dplyr::filter(dataset_name == dataset)
+
+              if(nrow(dataset_data)>0){
+                dataset_data %>%
+                  create_plot_twogroup(.,
+                                       plot_function(),
+                                       dataset,
+                                       "y",
+                                       "group",
+                                       input$groupvar1,
+                                       input$groupvar2,
+                                       reorder_function = input$reorder_method_choice,
+                                       varible_plot_label())
             }
           }
-
-
         }) %>% Filter(Negate(is.null),.) #excluding datasets that do not have annotaion for the selected variable
         shiny::validate(
           shiny::need(length(all_plots)>0, "Variable not annotated in the selected dataset(s). Select other datasets or check ICI Datasets Overview for more information.")
@@ -203,6 +175,7 @@ ici_distribution_server <- function(
       )
 
       paired_test <- shiny::reactive({
+        shiny::req(input$paired)
         switch(
           input$paired,
           "Paired" = TRUE,
@@ -219,26 +192,20 @@ ici_distribution_server <- function(
       })
 
       test_summary_table <- reactive({
-        shiny::req(input$groupvar)
+        shiny::req(input$groupvar1, input$datasets)
         shiny::req(df_selected())
-
-        group_label <- convert_value_between_columns(input_value = input$groupvar,
-                                                     df = metadata_feature_df,
-                                                     from_column = "FeatureMatrixLabelTSV",
-                                                     to_column = "FriendlyLabel")
         purrr::map_dfr(.x = input$datasets,
                        df = df_selected(),
                        group_to_split = "group",
-                       sel_feature = input$var1_surv,
+                       sel_feature = "y",
                        paired = paired_test(),
                        test = test_function(),
-                       label = group_label,
+                       label = input$groupvar1,
                        .f = get_stat_test)
       })
 
       output$stats1 <- DT::renderDataTable({
-        shiny::req(input$groupvar)
-        shiny::req(df_selected())
+        shiny::req(test_summary_table())
         test_summary_table()
       })
 
@@ -259,20 +226,29 @@ ici_distribution_server <- function(
         clicked_dataset <- data$customdata[[1]]
 
         current_groups <- df_selected() %>%
-          dplyr::filter(Dataset == clicked_dataset) %>%
-          dplyr::select(group) %>%
-          unique
+          dplyr::filter(dataset_name == clicked_dataset) #%>%
 
-        shiny::validate(need(gsub("<br />", "\n", data$x[[1]]) %in% current_groups$group, " "))
+        shiny::validate(need(gsub("<br />", "\n", data$x[[1]]) %in% unique(current_groups$group), " ")) #remove text in case grouping selection is changed
 
         key_value <- data %>%
           dplyr::slice(1) %>%
           magrittr::extract2("x") %>%
-          strsplit(., " & <br /> ")
+          gsub("<br />", "\n", .)
 
-        purrr::map_chr(unlist(key_value), function(x)
-          paste0(x, ": ",
-                 ioresponse_data$sample_group_df[which(ioresponse_data$sample_group_df$FeatureLabel == x), "Characteristics"], "\n"))
+        selected_display <- current_groups %>%
+          dplyr::filter(group == key_value) %>%
+          dplyr::select(group, tag_name, dplyr::starts_with(c("tag_short_display", "tag_characteristics"))) %>%
+          dplyr::distinct()
+
+        if(ncol(selected_display)>4){
+          paste(
+            paste(selected_display$tag_short_display.x, selected_display$tag_characteristics.x, sep = ": "),
+            paste(selected_display$tag_short_display.y, selected_display$tag_characteristics.y, sep = ": "),
+            sep = "\n"
+          )
+        }else{
+          paste(selected_display$tag_short_display, selected_display$tag_characteristics, sep = ": ")
+        }
       })
 
       drilldown_df <- reactive({
@@ -282,11 +258,11 @@ ici_distribution_server <- function(
         eventdata <- plotly::event_data("plotly_click", source = "distPlots")
         shiny::validate(need(!is.null(eventdata), "Click plot above"))
 
-        clicked_group <- gsub("<br />", "\n", eventdata$x[[1]]) #eventdata$x[[1]]
+        clicked_group <- gsub("<br />", "\n", eventdata$x[[1]])
         clicked_dataset <- eventdata$customdata[[1]]
 
         current_groups <- df_selected() %>%
-          dplyr::filter(Dataset == clicked_dataset) %>%
+          dplyr::filter(dataset_name == clicked_dataset) %>%
           dplyr::select(group) %>%
           unique
 
@@ -294,15 +270,16 @@ ici_distribution_server <- function(
           shiny::need(clicked_group %in% current_groups$group, "Click plot above"))
 
         df_selected() %>%
-          dplyr::filter(Dataset == clicked_dataset & group == clicked_group)
+          dplyr::filter(dataset_name == clicked_dataset & group == clicked_group)
       })
 
       output$drilldown_plot <- plotly::renderPlotly({
         shiny::req(drilldown_df())
+
           create_histogram(
             df = drilldown_df(),
             x_col = "y",
-            title = paste(unique(drilldown_df()$Dataset), unique(drilldown_df()$group), sep = ", "),
+            title = paste(unique(sub("\\ -.*", "", drilldown_df()$dataset_display)), unique(drilldown_df()$group), sep = ", "),
             x_lab = varible_plot_label()
           )
       })

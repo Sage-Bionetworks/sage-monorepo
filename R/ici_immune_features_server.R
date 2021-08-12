@@ -44,6 +44,7 @@ ici_immune_features_server <- function(
 
       ici_distribution_server(
         "ici_immune_features_distribution",
+        ici_datasets(),
         ioresponse_data,
         variable_options = var_choices(),
         metadata_feature_df = categories_df(),

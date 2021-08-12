@@ -15,7 +15,7 @@ build_distribution_io_df <- function(
 
   df %>%
     tidyr::drop_na() %>%
-    dplyr::mutate(y = scale_function(feature)) %>%
+    dplyr::mutate(y = scale_function(.[[feature]])) %>%
     tidyr::drop_na() %>%
     dplyr::filter(!is.infinite(y))
 }
@@ -28,24 +28,25 @@ combine_colors <- function(color1, color2){
 
 }
 
-combine_groups <- function(df, group1, group2, label1, label2){
+combine_groups <- function(df, group1, group2){
+  cat1 <- iatlas.api.client::query_tags_with_parent_tags(parent_tags = group1)
+  cat2 <- iatlas.api.client::query_tags_with_parent_tags(parent_tags = group2)
+  categories <- rbind(cat1, cat2)
 
-  label1 <- get_group_labels(df, group1)
+  samples <- tidyr::crossing(var1 = cat1$tag_name, var2 = cat2$tag_name) %>%
+    dplyr::inner_join(cat1, by = c("var1" = "tag_name")) %>%
+    dplyr::inner_join(cat2, by = c("var2" = "tag_name")) %>%
+    dplyr::mutate(tag_name = paste(var1, var2, sep = " & \n"),
+                  color = combine_colors(.$tag_color.x,.$tag_color.y))
 
-  df <- merge(df, label1, by.x = group1, by.y = "FeatureValue")
-
-  if(group2 == "None" | group1 == group2){
-    df <- df %>%
-      dplyr::mutate(group = df$FeatureLabel,
-                    color = df$FeatureHex)
-  }else if(group2 != "None"  & group1 != group2){
-    label2 <- get_group_labels(df, group2)
-    df <- merge(df, label2, by.x = group2, by.y = "FeatureValue")
-    df <- df %>%
-      dplyr::mutate(group = (paste(as.character(df$"FeatureLabel.x"), "& \n", as.character(df$"FeatureLabel.y"))),
-                    color = combine_colors(as.character(FeatureHex.x), as.character(FeatureHex.y)))
-  }
-  df
+  df %>%
+    dplyr::inner_join(categories, by = "tag_name") %>%
+    tidyr::pivot_wider(names_from = parent_tag_name, values_from = tag_name) %>%
+    dplyr::select(sample, "group1" = dplyr::ends_with(group1), "group2" = dplyr::ends_with(group2)) %>%
+    dplyr::group_by(sample) %>%
+    dplyr::summarise(groups = dplyr::across(dplyr::all_of(c("group1", "group2")), na.omit)) %>%
+    dplyr::mutate(tag_name = paste(groups$group1, groups$group2, sep = " & \n")) %>%
+    dplyr::inner_join(samples, by ="tag_name")
 }
 
 
@@ -54,11 +55,11 @@ create_plot_onegroup <- function(dataset_data, plot_type, dataset, feature, grou
 
   if (reorder_function == "None"){
     order_plot <- dataset_data %>%
-      dplyr::select(group, order_within_sample_group, color) %>%
-      dplyr::group_by(group, color) %>%
-      dplyr::summarise(m = min(order_within_sample_group)) %>%
+      dplyr::select(tag_short_display, tag_order, tag_color) %>%
+      dplyr::group_by(tag_short_display, tag_color) %>%
+      dplyr::summarise(m = min(tag_order)) %>%
       dplyr::arrange(m) %>%
-      dplyr::select(group, color)
+      dplyr::select(tag_short_display, tag_color)
   } else {
     reorder_method <- switch(
       reorder_function,
@@ -69,18 +70,20 @@ create_plot_onegroup <- function(dataset_data, plot_type, dataset, feature, grou
     )
 
     order_plot <- dataset_data %>%
-      dplyr::group_by(group, color) %>%
+      dplyr::group_by(tag_short_display, tag_color) %>%
       dplyr::summarise(m = reorder_method(.data[[feature]]), .groups = "drop") %>%
       dplyr::arrange(.data$m) %>%
-      dplyr::select("group", "color")
+      dplyr::select("tag_short_display", "tag_color")
   }
 
   xform <- list(automargin = TRUE,
                 categoryorder = "array",
-                categoryarray = order_plot$group)
+                categoryarray = order_plot$tag_short_display)
 
-  group_colors <- order_plot$color
-  names(group_colors) <- order_plot$group
+  group_colors <- order_plot$tag_color
+  names(group_colors) <- order_plot$tag_short_display
+
+  plot_title <- unique(sub("\\ -.*", "", dataset_data$dataset_display))
 
   plot_type(dataset_data,
             x_col = as.character(group1),
@@ -91,7 +94,7 @@ create_plot_onegroup <- function(dataset_data, plot_type, dataset, feature, grou
             fill_colors = group_colors,
             source = "p1",
             showlegend = F)  %>%
-    add_title_subplot_plotly(dataset) %>%
+    add_title_subplot_plotly(plot_title) %>%
     plotly::layout(
       xaxis = xform,
       margin = list(b = 10),
@@ -101,29 +104,24 @@ create_plot_onegroup <- function(dataset_data, plot_type, dataset, feature, grou
 
 create_plot_twogroup <- function(dataset_data, plot_type, dataset, feature, group, group1, group2, reorder_function = "None", ylabel){
 
-  samples <- (dataset_data %>% dplyr::group_by(dataset_data[[group1]], dataset_data[[group2]]) %>%
-                dplyr::summarise(samples = dplyr::n()))
-  colnames(samples) <- c("var1", "var2", "samples")
+  samples <- dataset_data %>%
+    dplyr::group_by(var1, var2) %>%
+    dplyr::summarise(m = min(tag_order.x),
+                     n = min(tag_order.y),
+                     samples = dplyr::n()) %>%
+    dplyr::arrange(m,n)
 
-  #get number of groups to draw lines
-  samples <- (dataset_data %>%
-                dplyr::group_by(dataset_data[[group1]], dataset_data[[group2]]) %>%
-                dplyr::summarise(m = min(order_within_sample_group.x),
-                                n = min(order_within_sample_group.y),
-                                samples = dplyr::n()) %>%
-                dplyr::arrange(m,n))
-
-  colnames(samples) <- c("var1", "var2", "samples")
+  colnames(samples) <- c("var1", "var2", "order1", "order2", "n_samples")
 
   #ordering plot
   if (reorder_function == "None"){
     order_plot <- dataset_data %>%
-      dplyr::select(group, order_within_sample_group.x, order_within_sample_group.y, color) %>%
       dplyr::group_by(group, color) %>%
-      dplyr::summarise(m = min(order_within_sample_group.x),
-                       n = min(order_within_sample_group.y)) %>%
-      dplyr::arrange(m, n) %>%
+      dplyr::summarise(m = min(tag_order.x),
+                       n = min(tag_order.y)) %>%
+      dplyr::arrange(m,n) %>%
       dplyr::select(group, color)
+
   } else {
     reorder_method <- switch(
       reorder_function,
@@ -134,11 +132,13 @@ create_plot_twogroup <- function(dataset_data, plot_type, dataset, feature, grou
     )
 
     order_plot <- dataset_data %>%
-      dplyr::group_by(group, color) %>%
-      dplyr::summarise(m = min(order_within_sample_group.x),
+      dplyr::group_by(group, tag_color) %>%
+      dplyr::inner_join(samples, by = "tag_name") %>%
+      dplyr::summarise(m = min(tag_order.x),
                        n = reorder_method(.data[[feature]]), .groups = "drop") %>%
       dplyr::arrange(.data$m,.data$n) %>%
-      dplyr::select(group, color)
+      dplyr::ungroup() %>%
+      dplyr::select(tag_name, tag_color)
   }
 
   xform <- list(automargin = TRUE,
@@ -146,8 +146,10 @@ create_plot_twogroup <- function(dataset_data, plot_type, dataset, feature, grou
                 categoryorder = "array",
                 categoryarray = order_plot$group
   )
-  group_colors <- order_plot$color
+
+  group_colors <- (order_plot$color)
   names(group_colors) <- order_plot$group
+  plot_title <- unique(sub("\\ -.*", "", dataset_data$dataset_display))
 
   dataset_data %>%
     plot_type(.,
@@ -159,7 +161,7 @@ create_plot_twogroup <- function(dataset_data, plot_type, dataset, feature, grou
               fill_colors = group_colors,
               source = "p1",
               showlegend = F) %>%
-    add_title_subplot_plotly(dataset) %>%
+    add_title_subplot_plotly(plot_title) %>%
     plotly::layout(
       autosize = TRUE,
       shapes = lazyeval::lazy_eval(get_lines_pos(samples, -0.38)),
@@ -175,19 +177,19 @@ log2foldchanges <- function(x,y){
 get_stat_test <- function(df, group_to_split, sel_feature, dataset, paired = FALSE, test = t.test, label = group_to_split){
 
   data_set <- df %>%
-    filter(Dataset == dataset)
+    filter(dataset_name == dataset)
 
+  dataset_display <- unique(sub("\\ -.*", "", data_set$dataset_display))
   if(paired == TRUE){
     #validate(need(group_to_split == "treatment_when_collected"), "The selected sample group has only one sample per patient. Please, select 'Independent'.")
     patients <- data_set %>%
-      dplyr::group_by(Patient_ID) %>%
-      dplyr::summarise(samples = dplyr::n_distinct(Sample_ID)) %>%
+      dplyr::group_by(sample) %>%
+      dplyr::summarise(samples = dplyr::n_distinct(sample)) %>%
       dplyr::filter(samples > 1) %>%
-      dplyr::select(Patient_ID)
+      dplyr::select(sample)
 
     data_set <- data_set %>%
-      dplyr::filter(Patient_ID %in% patients$Patient_ID)
-
+      dplyr::filter(sample %in% patients$sample)
   }
 
   if(dplyr::n_distinct(data_set[[group_to_split]])>1){
@@ -197,7 +199,7 @@ get_stat_test <- function(df, group_to_split, sel_feature, dataset, paired = FAL
     purrr::map2_dfr(.x = comb_groups[1,], .y = comb_groups[2,], function(x,y){
 
       if(paired == TRUE & nrow(split_data[[x]]) != nrow(split_data[[y]])){
-        test_data <- data.frame(Dataset = dataset,
+        test_data <- data.frame(Dataset = dataset_display,
                                 Group1 = paste0("Not available for paired test. ", names(split_data)[x], " (", nrow(split_data[[x]]),")"),
                                 Group2 = paste0(names(split_data)[y], " (", nrow(split_data[[y]]), ")"),
                                 #Test = paste0("Not available for paired test. ", names(split_data)[x], " (", nrow(split_data[[x]]),") vs. ", names(split_data)[y], " (", nrow(split_data[[y]]), ")"),
@@ -205,7 +207,7 @@ get_stat_test <- function(df, group_to_split, sel_feature, dataset, paired = FAL
                                 p.value = NA,
                                 stringsAsFactors = FALSE)
       }else if(nrow(split_data[[x]]) <=1 | nrow(split_data[[y]]) <=1){
-        test_data <- data.frame(Dataset = dataset,
+        test_data <- data.frame(Dataset = dataset_display,
                                 Group1 = paste0("Few samples to perform test. ", names(split_data)[x], " (", nrow(split_data[[x]]),")"),
                                 Group2 = paste0(names(split_data)[y], " (", nrow(split_data[[y]]), ")"),
                                 #Test = paste0("Few samples to perform test.", names(split_data)[x], " (", nrow(split_data[[x]]),") vs. ", names(split_data)[y], " (", nrow(split_data[[y]]), ")"),
@@ -218,7 +220,7 @@ get_stat_test <- function(df, group_to_split, sel_feature, dataset, paired = FAL
                                       paired = paired)) %>%
           dplyr::select(statistic, p.value)
 
-        test_data$Dataset <- as.character(dataset)
+        test_data$Dataset <- as.character(dataset_display)
         test_data$Group1 <- paste0(names(split_data)[x], " (", nrow(split_data[[x]]),")")
         test_data$Group2 <- paste0(names(split_data)[y], " (", nrow(split_data[[y]]), ")")
         test_data$FoldChange <- log2foldchanges(split_data[[x]][[sel_feature]],
@@ -232,7 +234,7 @@ get_stat_test <- function(df, group_to_split, sel_feature, dataset, paired = FAL
       }
     })
   }else{
-    test_data <- data.frame(Dataset = dataset,
+    test_data <- data.frame(Dataset = dataset_display,
                             Group1 = "Sample group has only one level for this dataset.",
                             Group2 = NA,
                             statistic = NA,
