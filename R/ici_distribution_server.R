@@ -37,8 +37,8 @@ ici_distribution_server <- function(
         selectInput(
           ns("groupvar2"),
           "Select Sample Group",
-          metadata_feature_df,
-          selected = "Responder"
+          c("None" = "None", metadata_feature_df),
+          selected = "None"
         )
 
       })
@@ -190,8 +190,11 @@ ici_distribution_server <- function(
       })
 
       test_summary_table <- reactive({
-        shiny::req(input$groupvar1, input$datasets)
-        shiny::req(df_selected())
+        shiny::req(input$groupvar1, input$datasets, df_selected())
+        shiny::validate(
+          shiny::need(nrow(df_selected())>0, "Variable not annotated in the selected dataset(s). Select other datasets or check ICI Datasets Overview for more information.")
+        )
+
         purrr::map_dfr(.x = input$datasets,
                        df = df_selected(),
                        group_to_split = "group",
@@ -224,7 +227,7 @@ ici_distribution_server <- function(
         clicked_dataset <- data$customdata[[1]]
 
         current_groups <- df_selected() %>%
-          dplyr::filter(dataset_name == clicked_dataset) #%>%
+          dplyr::filter(dataset_name == clicked_dataset)
 
         shiny::validate(need(gsub("<br />", "\n", data$x[[1]]) %in% unique(current_groups$group), " ")) #remove text in case grouping selection is changed
 
@@ -235,17 +238,17 @@ ici_distribution_server <- function(
 
         selected_display <- current_groups %>%
           dplyr::filter(group == key_value) %>%
-          dplyr::select(group, tag_name, dplyr::starts_with(c("tag_short_display", "tag_characteristics"))) %>%
+          dplyr::select(group, tag_name, dplyr::starts_with(c("tag_long_display", "tag_characteristics"))) %>%
           dplyr::distinct()
 
         if(ncol(selected_display)>4){
           paste(
-            paste(selected_display$tag_short_display.x, selected_display$tag_characteristics.x, sep = ": "),
-            paste(selected_display$tag_short_display.y, selected_display$tag_characteristics.y, sep = ": "),
+            paste(selected_display$tag_long_display.x, selected_display$tag_characteristics.x, sep = ": "),
+            paste(selected_display$tag_long_display.y, selected_display$tag_characteristics.y, sep = ": "),
             sep = "\n"
           )
         }else{
-          paste(selected_display$tag_short_display, selected_display$tag_characteristics, sep = ": ")
+          paste(selected_display$tag_long_display, selected_display$tag_characteristics, sep = ": ")
         }
       })
 
