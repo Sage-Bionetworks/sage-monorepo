@@ -11,13 +11,6 @@ ici_immune_features_server <- function(
       })
 
       var_choices <- reactive({
-        # ioresponse_data$feature_df %>%
-        #   dplyr::filter(VariableType == "Numeric" & `Variable Class` != "NA") %>%
-        #   dplyr::select(
-        #     INTERNAL = FeatureMatrixLabelTSV,
-        #     DISPLAY = FriendlyLabel,
-        #     CLASS = `Variable Class`)
-
         iatlas.api.client::query_features(cohorts = ici_datasets()) %>%
           dplyr::filter(!class %in% c( "Survival Status", "Survival Time")) %>%
           dplyr::select(
@@ -45,7 +38,6 @@ ici_immune_features_server <- function(
       ici_distribution_server(
         "ici_immune_features_distribution",
         ici_datasets(),
-        ioresponse_data,
         variable_options = var_choices(),
         metadata_feature_df = categories_df(),
         feature_values = features_df()

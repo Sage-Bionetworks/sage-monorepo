@@ -1,7 +1,6 @@
 ici_distribution_server <- function(
   id,
   ici_datasets,
-  ioresponse_data,
   variable_options,
   metadata_feature_df,
   feature_values
@@ -97,7 +96,6 @@ ici_distribution_server <- function(
       })
 
       df_selected <- reactive({
-
         samples <- feature_values %>%
           dplyr::filter(feature_name == input$var1_surv) %>%
           dplyr::inner_join(iatlas.api.client::query_dataset_samples(datasets = input$datasets), by = c("sample" = "sample_name")) %>%
