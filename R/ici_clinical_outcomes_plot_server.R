@@ -14,6 +14,7 @@ ici_clinical_outcomes_plot_server <- function(
         })
 
       categories <- shiny::reactive(iatlas.api.client::query_tags(datasets = ici_datasets()) %>%
+                                      dplyr::filter(tag_name != "Sample_Treatment") %>%
                                       dplyr::mutate(class = dplyr::case_when(
                                         tag_name %in% c( "Response", "Responder", "Progression", "Clinical_Benefit") ~ "Response to ICI",
                                         TRUE ~ "Treatment Data"))
@@ -110,12 +111,11 @@ ici_clinical_outcomes_plot_server <- function(
 
       all_kmplot <- shiny::reactive({
 
-        if (input$var1_surv %in% categories()$name) {
-
+        if (input$var1_surv %in% categories()$tag_name) {
           colors <- feature_df() %>%
             dplyr::select(color, sample_groups) %>%
             dplyr::distinct() %>%
-            dplyr::mutate(color = replace(color, is.na(color), randomcoloR::randomColor(dplyr::n())))
+            dplyr::mutate(color = replace(color, is.na(color), "#868A88"))
 
           group_colors <- colors$color
           names(group_colors) <- sapply(colors$sample_groups, function(a) paste('variable=',a,sep=''))
