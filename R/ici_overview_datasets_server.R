@@ -18,7 +18,8 @@ ici_overview_datasets_server <- function(
                              sep=""
                            )
                          )%>%
-                         select(Dataset, Study, Antibody, `Primary Sample` = `PrimarySample(s)`, Samples, Patients, Reference)),
+                         select(Dataset, Study, Antibody, Samples, Patients, Reference)),
+                      options = list(pageLength = 20),
                       escape= FALSE)
       })
 
