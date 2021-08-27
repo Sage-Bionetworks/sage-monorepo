@@ -1,12 +1,12 @@
-datasets_options <-  list(
-  "Gide, 2019 - SKCM, Anti-PD-1 +/- Anti-CTLA-4" =  "Gide 2019",
-  "Hugo, 2016 - SKCM, Anti-PD-1" = "Hugo 2016",
-  "Riaz, 2017 - SKCM, Anti-PD-1" = "Riaz 2017",
-  "Van Allen, 2015 - SKCM, Anti-CTLA-4" = "Van Allen 2015",
-  "IMVigor210 - BLCA, Anti-PD-L1" = "IMVigor210",
-  "Prins, 2019 - GBM, Anti-PD-1" = "Prins 2019")
-
-datasets_PFI <- c("Gide 2019", "Van Allen 2015", "Prins 2019")
+# datasets_options <-  list(
+#   "Gide, 2019 - SKCM, Anti-PD-1 +/- Anti-CTLA-4" =  "Gide 2019",
+#   "Hugo, 2016 - SKCM, Anti-PD-1" = "Hugo 2016",
+#   "Riaz, 2017 - SKCM, Anti-PD-1" = "Riaz 2017",
+#   "Van Allen, 2015 - SKCM, Anti-CTLA-4" = "Van Allen 2015",
+#   "IMVigor210 - BLCA, Anti-PD-L1" = "IMVigor210",
+#   "Prins, 2019 - GBM, Anti-PD-1" = "Prins 2019")
+#
+# datasets_PFI <- c("Gide 2019", "Van Allen 2015", "Prins 2019")
 
 ioresponse_data <- load_io_data()
 
