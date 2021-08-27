@@ -1,6 +1,7 @@
 get_io_overview_table <- function(values_for_group1){
   values_for_group1 %>%
   dplyr::group_by(dataset_display, Order = tag_order, Group = tag_short_display) %>%
+  dplyr::mutate(dataset_display = sub("\\ -.*", "", dataset_display)) %>%
   dplyr::summarise(n = dplyr::n_distinct(sample_name)) %>%
   tidyr::pivot_wider(
     names_from = dataset_display,
@@ -8,10 +9,9 @@ get_io_overview_table <- function(values_for_group1){
 }
 
 get_io_mosaic_df <- function(values_for_group1, group2){
-  df_mosaic <- iatlas.api.client::query_tag_samples(samples = values_for_group1$sample_name, parent_tags = group2) %>%
+  iatlas.api.client::query_tag_samples(samples = values_for_group1$sample_name, parent_tags = group2) %>%
     merge(., values_for_group1, by = "sample_name") %>%
-    dplyr::mutate(x= paste(dataset_name, tag_short_display.y)) %>%
-    #dplyr::arrange(order_within_sample_group.y) %>%
+    dplyr::mutate(x= paste(sub("\\ -.*", "", dataset_display), tag_short_display.y)) %>%
     dplyr::select(x, y = tag_short_display.x, plot_color = tag_color.x)
 }
 
