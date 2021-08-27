@@ -22,21 +22,6 @@ ici_overview_datasets_server <- function(
                       options = list(pageLength = 20),
                       escape= FALSE)
       })
-
-      output$download_metadata <- downloadHandler(
-        filename = function() stringr::str_c("iatlas-io-metadata-", Sys.Date(), ".csv"),
-        content = function(con) readr::write_csv(ioresponse_data$dataset_df, con)
-      )
-
-      output$download_data <- downloadHandler(
-        filename = function() stringr::str_c("iatlas-io-data-", Sys.Date(), ".csv"),
-        content = function(con) readr::write_csv(ioresponse_data$fmx_df, con)
-      )
-
-      output$download_expr <- downloadHandler(
-        filename = function() stringr::str_c("iatlas-io-im-expr", Sys.Date(), ".csv"),
-        content = function(con) readr::write_csv(ioresponse_data$im_expr, con)
-      )
     }
   )
 }
