@@ -14,11 +14,11 @@ ici_hazard_ratio_main_ui <- function(id){
     iatlas.modules::optionsBox(
       width = 12,
       column(
-        width = 3,
+        width = 4,
         shiny::uiOutput(ns("list_datasets"))
       ),
       column(
-        width = 4,
+        width = 3,
         selectInput(
           ns("timevar"),
           "Survival Endpoint",
@@ -43,7 +43,8 @@ ici_hazard_ratio_main_ui <- function(id){
                       label = "Select or Search for variables",
                       choices = NULL,
                       multiple = TRUE
-                    )
+                    ),
+        shiny::actionButton(ns("go_button"), "Compute HR")
       )
     ),
     shiny::htmlOutput(ns("notification")),

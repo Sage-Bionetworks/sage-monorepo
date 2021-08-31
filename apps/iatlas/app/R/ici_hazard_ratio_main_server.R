@@ -30,12 +30,12 @@ ici_hazard_ratio_main_server <- function(
 
 
       output$list_datasets <- shiny::renderUI({
-        checkboxGroupInput(ns("datasets_mult"), "Select Datasets", choices = ici_datasets(),
-                           selected =  c("Gide_Cell_2019", "HugoLo_IPRES_2016"))
+        shiny::selectizeInput(ns("datasets_mult"), "Select Datasets", choices = ici_datasets(),
+                           selected =  c("Gide_Cell_2019", "HugoLo_IPRES_2016"), multiple = TRUE)
       })
 
 
-      observe({
+      shiny::observe({
         shiny::req(categories(), features())
         var_choices_clin <- create_nested_list_by_class(categories(),
                                                         class_column = "class",
@@ -49,7 +49,7 @@ ici_hazard_ratio_main_server <- function(
 
         var_choices <- c(var_choices_clin, var_choices_feat)
 
-        updateSelectizeInput(session,
+        shiny::updateSelectizeInput(session,
                           "var2_cox",
                           choices = var_choices,
                           selected = selected_vals$vars,
@@ -78,17 +78,18 @@ ici_hazard_ratio_main_server <- function(
         shiny::req(input$datasets_mult, input$var2_cox)
 
         iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment") %>%
-        dplyr::inner_join(iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")),
-                          by = c("sample_name" = "sample")) %>%
-        dplyr::select(sample_name, feature_name, feature_value) %>%
-        tidyr::pivot_wider(., names_from = feature_name, values_from = feature_value, values_fill = NA)
+          dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
+          dplyr::distinct(sample_name) %>%
+          dplyr::inner_join(iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")),
+                            by = c("sample_name" = "sample")) %>%
+          dplyr::select(sample_name, feature_name, feature_value) %>%
+          tidyr::pivot_wider(., names_from = feature_name, values_from = feature_value, values_fill = NA)
       })
 
-      samples <- shiny::reactive({
+      samples <- shiny::eventReactive(input$go_button, {
         shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
         shiny::req(OS_data())
 
-        #getting samples from selected datasets
         iatlas.api.client::query_dataset_samples(datasets = input$datasets_mult) %>%
           dplyr::inner_join(., OS_data(), by = "sample_name") %>%
           dplyr::group_by(dataset_name) %>%
@@ -99,7 +100,7 @@ ici_hazard_ratio_main_server <- function(
 
       groups <- shiny::reactive(iatlas.api.client::query_tags_with_parent_tags(parent_tags = input$var2_cox))
 
-      feature_df_mult <- shiny::reactive({
+      feature_df_mult <- shiny::eventReactive(input$go_button, {
         shiny::req(input$var2_cox, samples())
 
         #Let's assume that variables selected are a mix of features and tags, and do both queries
@@ -107,7 +108,7 @@ ici_hazard_ratio_main_server <- function(
           dplyr::select(sample, feature_name, feature_value) %>%
           tidyr::pivot_wider(names_from = feature_name, values_from = feature_value)
 
-        if(sum(input$var2_cox %in% categories()$name)>0){
+        if(sum(input$var2_cox %in% categories()$tag_name)>0){
           new_tags <- iatlas.api.client::query_tag_samples(parent_tags = input$var2_cox) %>%
              dplyr::inner_join(groups(), by = "tag_name") %>%
             dplyr::select(sample_name, tag_name, parent_tag_name) %>%
@@ -121,7 +122,7 @@ ici_hazard_ratio_main_server <- function(
       })
 
 
-      dataset_ft <- shiny::reactive({
+      dataset_ft <- shiny::eventReactive(input$go_button, {
         shiny::req(input$datasets_mult, input$var2_cox, feature_df_mult())
         #creates a df with the dataset x feature combinations that are available
         iatlas.app::get_feature_by_dataset(
@@ -133,7 +134,7 @@ ici_hazard_ratio_main_server <- function(
         )
       })
 
-      coxph_df <- shiny::reactive({
+      coxph_df <- shiny::eventReactive(input$go_button, {
         shiny::req(input$datasets_mult, input$var2_cox, dataset_ft())
         iatlas.app::build_coxph_df(datasets = input$datasets_mult,
                                    data = feature_df_mult(),
@@ -208,7 +209,7 @@ ici_hazard_ratio_main_server <- function(
         ))
       })
 
-      shiny::observeEvent(samples(),{ #checking for datasets that have no annotation for the selected survival endpoint
+      shiny::observeEvent(input$go_button, {#samples(),{ #checking for datasets that have no annotation for the selected survival endpoint
         shiny::req(samples())
 
         ds_with_os <- unique(samples()$dataset_name)
@@ -219,7 +220,7 @@ ici_hazard_ratio_main_server <- function(
         }else{
           output$notification <- shiny::renderText({
             missing_os <- setdiff(input$datasets_mult, ds_with_os)
-            paste0("Selected survival endpoint not available for ", names(ici_datasets())[ici_datasets() == missing_os], collapse = "<br>")
+            paste0("Selected survival endpoint not available for ", names(ici_datasets()[ici_datasets() %in% missing_os]), collapse = "<br>")
           })
         }
       })

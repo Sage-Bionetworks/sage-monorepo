@@ -53,13 +53,11 @@ ici_clinical_outcomes_plot_server <- function(
 
       #getting survival data of all ICI pre treatment samples
       OS_data <- shiny::reactive({
-        #shiny::req(input$surv1)
-        samples_pre <- iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment")
-        samples_prins <- iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")#a samples from Prins that is "pre-treatment" is also a sample that didn't have ICI as Neoadjuvant, there is no paired pre/post treatment samples, so let's use all of them
-        samples <- dplyr::bind_rows(samples_pre, samples_prins) %>% dplyr::distinct(sample_name)
-        os <- iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1"))
-
-        dplyr::inner_join(samples, os, by = c("sample_name" = "sample")) %>%
+        iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment") %>%
+          dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
+          dplyr::distinct(sample_name) %>%
+          dplyr::inner_join(iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")),
+                            by = c("sample_name" = "sample")) %>%
           dplyr::select(sample_name, feature_name, feature_value) %>%
           tidyr::pivot_wider(., names_from = feature_name, values_from = feature_value, values_fill = NA)
       })

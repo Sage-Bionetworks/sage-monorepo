@@ -30,7 +30,9 @@ get_feature_by_dataset <- function(features, feature_df, group_df, fmx_df, datas
     })
     if(nrow(cat_values)>0) cat_cols <- merge(cat_values, group_df,
               by.x = c("gname", "feature"), by.y = c("tag_name", "parent_tag_name")) %>%
-        dplyr::select(dataset, dataset_display, feature, ft_label = parent_tag_short_display, group, group_label = tag_short_display)
+        dplyr::mutate(group_label = paste(parent_tag_short_display, tag_short_display, sep = " - ")) %>%
+        dplyr::select(dataset, dataset_display, feature, ft_label = parent_tag_short_display, group, group_label)
+
     else return()
     rbind(cat_cols, num_cols)
   }else{
