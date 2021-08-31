@@ -54,7 +54,9 @@ ici_clinical_outcomes_plot_server <- function(
       #getting survival data of all ICI pre treatment samples
       OS_data <- shiny::reactive({
         #shiny::req(input$surv1)
-        samples <- iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment")
+        samples_pre <- iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment")
+        samples_prins <- iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")#a samples from Prins that is "pre-treatment" is also a sample that didn't have ICI as Neoadjuvant, there is no paired pre/post treatment samples, so let's use all of them
+        samples <- dplyr::bind_rows(samples_pre, samples_prins) %>% dplyr::distinct(sample_name)
         os <- iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1"))
 
         dplyr::inner_join(samples, os, by = c("sample_name" = "sample")) %>%
@@ -105,7 +107,8 @@ ici_clinical_outcomes_plot_server <- function(
       })
 
       all_fit <- shiny::reactive({
-        shiny::validate(need(length(all_survival())>0, "Variable not annotated in the selected dataset(s). Select other datasets or check ICI Datasets Overview for more information."))
+        shiny::req(all_survival())
+        shiny::validate(need(length(all_survival())>0, "Variable has only one level in the selected dataset(s). Select other datasets or check ICI Datasets Overview for more information."))
         purrr::map(all_survival(), function(df) survival::survfit(survival::Surv(time, status) ~ variable, data = df))
       })
 
