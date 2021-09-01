@@ -75,7 +75,7 @@ ici_hazard_ratio_main_server <- function(
 
       #getting survival data of all ICI pre treatment samples
       OS_data <- shiny::reactive({
-        shiny::req(input$datasets_mult, input$var2_cox)
+        shiny::req(input$datasets_mult)
 
         iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment") %>%
           dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
@@ -102,6 +102,7 @@ ici_hazard_ratio_main_server <- function(
 
       feature_df_mult <- shiny::eventReactive(input$go_button, {
         shiny::req(input$var2_cox, samples())
+        shiny::validate(shiny::need(nrow(samples())>0, "Selected survival endpoint not available for selected dataset(s)"))
 
         #Let's assume that variables selected are a mix of features and tags, and do both queries
         new_feat <- iatlas.api.client::query_feature_values(features = input$var2_cox) %>%
