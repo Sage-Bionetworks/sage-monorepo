@@ -180,10 +180,11 @@ build_heatmap_df <- function(coxph_df){
 add_BH_annotation <- function(coxph_df, p){
 
   fdr_corrected <- coxph_df %>%
-    dplyr::select(dataset, group_label, pvalue, FDR, heatmap_annotation)
+    dplyr::select(dataset_display, group_label, pvalue, FDR, heatmap_annotation)
+  fdr_corrected$dataset_display <- sub("\\ -.*", "", fdr_corrected$dataset_display)
 
   p %>%
-    plotly::add_annotations(x = fdr_corrected$dataset,
+    plotly::add_annotations(x = fdr_corrected$dataset_display,
                     y = fdr_corrected$group_label,
                     text = fdr_corrected$heatmap_annotation,
                     showarrow = F,
