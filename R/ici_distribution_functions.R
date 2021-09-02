@@ -39,10 +39,10 @@ combine_groups <- function(df, group1, group2){
     dplyr::mutate(tag_name = paste(var1, var2, sep = " & \n"),
                   color = combine_colors(.$tag_color.x,.$tag_color.y))
 
-  df %>%
+   df %>%
     dplyr::inner_join(categories, by = "tag_name") %>%
     tidyr::pivot_wider(names_from = parent_tag_name, values_from = tag_name) %>%
-    dplyr::select(sample, "group1" = dplyr::ends_with(group1), "group2" = dplyr::ends_with(group2)) %>%
+    dplyr::select(sample, "group1" = dplyr::starts_with(group1), "group2" = dplyr::starts_with(group2)) %>%
     dplyr::group_by(sample) %>%
     dplyr::summarise(groups = dplyr::across(dplyr::all_of(c("group1", "group2")), na.omit)) %>%
     dplyr::mutate(tag_name = paste(groups$group1, groups$group2, sep = " & \n")) %>%
