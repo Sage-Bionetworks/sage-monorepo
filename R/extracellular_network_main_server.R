@@ -153,6 +153,7 @@ extracellular_network_main_server <- function(
       })
 
       nodes <- shiny::reactive({
+
         shiny::req(gene_nodes(), feature_nodes())
         dplyr::bind_rows(gene_nodes(), feature_nodes())
       })

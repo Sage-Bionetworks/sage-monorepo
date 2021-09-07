@@ -68,22 +68,22 @@ get_gene_nodes <- function(
   ){
   n_tags <- find_n_tags(stratify)
   nodes <-
-    iatlas.api.client::query_gene_nodes(
+    iatlas.api.client::query_nodes(
       datasets = dataset,
       network = "Extracellular Network",
       entrez = genes,
       tags = tags,
       min_score = min_abundance / 100
     ) %>%
-    filter_nodes_for_n_tags(n_tags) %>%
     dplyr::select(
-      "label",
-      "tags",
-      "node_name" = "name",
-      "node_display" = "hgnc",
+      "label" = "node_label",
+      "tags" = "node_tags",
+      "node_name" = "node_name",
+      "node_display" = "gene_hgnc",
       "node_friendly" = "gene_friendly_name",
-      "score"
+      "score" = "node_score"
     ) %>%
+    filter_nodes_for_n_tags(n_tags) %>%
     dplyr::mutate(
       "node_friendly" = as.character(.data$node_friendly),
       "node_friendly" = dplyr::if_else(
@@ -105,25 +105,28 @@ get_feature_nodes <- function(
   min_abundance
   ){
   n_tags <- find_n_tags(stratify)
+  min_score <- min_abundance / 100
+
   nodes <-
-    iatlas.api.client::query_feature_nodes(
+    iatlas.api.client::query_nodes(
       datasets = dataset,
       network = "Extracellular Network",
       features = features,
       tags = tags,
-      min_score = min_abundance / 100
+      min_score = min_score,
     ) %>%
-    filter_nodes_for_n_tags(n_tags) %>%
     dplyr::select(
-      "label",
-      "tags",
-      "node_name" ="name",
+      "label" = "node_label",
+      "tags" = "node_tags",
+      "node_name" = "node_name",
       "node_display" = "feature_display",
       "node_friendly" = "feature_display",
-      "score"
-    )
+      "score" = "node_score"
+    ) %>%
+    filter_nodes_for_n_tags(n_tags)
   if(stratify) nodes <- filter_nodes_with_tag_name(nodes, stratified_tags)
   nodes <- unnest_nodes(nodes, stratify)
+  return(nodes)
 }
 
 find_n_tags <- function(stratify){

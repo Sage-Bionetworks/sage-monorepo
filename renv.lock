@@ -157,9 +157,9 @@
     },
     "MatrixGenerics": {
       "Package": "MatrixGenerics",
-      "Version": "1.4.1",
+      "Version": "1.4.2",
       "Source": "Bioconductor",
-      "Hash": "32ec8e9f4187e4a01f839393b959f057"
+      "Hash": "3fbc53c34715d9c9d4986adb2085c512"
     },
     "MatrixModels": {
       "Package": "MatrixModels",
@@ -561,9 +561,9 @@
       "RemoteUsername": "cytoscape",
       "RemoteRepo": "cyjShiny",
       "RemoteRef": "master",
-      "RemoteSha": "aa6d3fe1a1a81b6d26c05ef1ae9715a44a5aab1c",
+      "RemoteSha": "b00e92af4c069ff3a3f07608df38d6e07c1c73fe",
       "RemoteHost": "api.github.com",
-      "Hash": "ed2b151f83d8d07fa1d9bd32cf2ca5c7"
+      "Hash": "a56d2a3e952c4a3298bb9334734d9910"
     },
     "data.table": {
       "Package": "data.table",
@@ -916,15 +916,16 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.26.3",
+      "Version": "0.26.2",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "4547b91b857256f28df5742a9e94058c8b6a2cfe",
-      "Hash": "2af189315e41d46220034996cac24b65"
+      "RemoteSha": "c96aea76fdecec5c39022749690447d18255e8f7",
+      "RemoteHost": "api.github.com",
+      "Hash": "95c518b525e46b3a46f28d87f6ac8525"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
@@ -1414,10 +1415,10 @@
     },
     "readr": {
       "Package": "readr",
-      "Version": "2.0.0",
+      "Version": "2.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "849038f0839134ab35e719a9820005a6"
+      "Hash": "34807ea4fb5900386ddef904eef8bdb8"
     },
     "readxl": {
       "Package": "readxl",
