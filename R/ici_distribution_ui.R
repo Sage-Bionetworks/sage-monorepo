@@ -16,7 +16,7 @@ ici_distribution_ui <- function(id){
       column(
         width = 3,
         shiny::uiOutput(ns("group1")),
-        p("Select extra Sample Groups (optional)"),
+        #p("Select extra Sample Groups (optional)"),
         shiny:: uiOutput(ns("group2"))
       ),
       column(

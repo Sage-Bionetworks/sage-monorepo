@@ -12,7 +12,12 @@ ici_distribution_server <- function(
       ns <- session$ns
 
       output$list_datasets <- shiny::renderUI({
-        checkboxGroupInput(ns("datasets"), "Select Datasets", choices = ici_datasets, selected = NULL)
+        shiny::selectizeInput(
+          ns("datasets"),
+          "Select Datasets",
+          choices = ici_datasets,
+          selected = NULL,
+          multiple = TRUE)
       })
 
       output$feature_op <- renderUI({
@@ -36,7 +41,7 @@ ici_distribution_server <- function(
         #Second level group option include dataset-specific classes
         selectInput(
           ns("groupvar2"),
-          "Select Sample Group",
+          "Select extra Sample Group (optional)",
           c("None" = "None", metadata_feature_df),
           selected = "None"
         )
