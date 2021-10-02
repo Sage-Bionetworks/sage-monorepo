@@ -1,15 +1,7 @@
-
 explorepage_ui <- function(){
-  modules_tbl <- "module_config" %>%
-    get_tsv_path() %>%
-    readr::read_tsv(.) %>%
+
+  modules_tbl <- MODULES_TBL %>%
     dplyr::mutate(
-      "label" = dplyr::if_else(.data$label == "none", .data$name, .data$label),
-      "link" = stringr::str_c("link_to_", .data$name),
-      "image" = stringr::str_c("images/", .data$name, ".png"),
-      "server_function_string" = stringr::str_c(.data$name, "_server"),
-      "ui_function_string" = stringr::str_c(.data$name, "_ui"),
-      "server_function" = purrr::map(.data$server_function_string, get),
       "ui_function" = purrr::map(.data$ui_function_string, get)
     )
 
@@ -17,16 +9,67 @@ explorepage_ui <- function(){
   ici_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "ici")
   tool_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "tool")
 
+  analysis_module_menu_items <- analysis_modules_tbl %>%
+    dplyr::select("text" = "display", "tabName" = "name") %>%
+    purrr::pmap(shinydashboard::menuSubItem, icon = shiny::icon("cog"))
+
+  ici_module_menu_items <- ici_modules_tbl %>%
+    dplyr::select("text" = "display", "tabName" = "name") %>%
+    purrr::pmap(shinydashboard::menuSubItem, icon = shiny::icon("cog"))
+
+  tool_module_menu_items <- tool_modules_tbl %>%
+    dplyr::select("text" = "display", "tabName" = "name") %>%
+    purrr::pmap(shinydashboard::menuSubItem, icon = shiny::icon("cog"))
+
 
   shinydashboard::dashboardPage(
     header  = shinydashboard::dashboardHeader(disable = TRUE),
     sidebar = shinydashboard::dashboardSidebar(
-      shinydashboard::sidebarMenuOutput("sidebar_menu")
+      shinydashboard::sidebarMenu(
+        id = "explorertabs",
+        shinydashboard::menuItem(
+          "iAtlas Explorer Home",
+          tabName = "dashboard",
+          icon = shiny::icon("dashboard")
+        ),
+        shinydashboard::menuItem(
+          "Data Description",
+          icon = shiny::icon("th-list"),
+          tabName = "data_info"
+        ),
+        shinydashboard::menuItem(
+          "Cohort Selection",
+          tabName = "analysis_cohort_selection",
+          icon = shiny::icon("cog")
+        ),
+        shinydashboard::menuItem(
+          text = "Analysis Modules",
+          icon = shiny::icon("bar-chart"),
+          startExpanded = TRUE,
+          analysis_module_menu_items
+        ),
+        shinydashboard::menuItem(
+          "ICI Cohort Selection",
+          tabName = "ici_cohort_selection",
+          icon = shiny::icon("cog")
+        ),
+        shinydashboard::menuItem(
+          text = "ICI Modules",
+          icon = shiny::icon("bar-chart"),
+          startExpanded = TRUE,
+          ici_module_menu_items
+        ),
+        shinydashboard::menuItem(
+          text = "iAtlas tools",
+          icon = shiny::icon("wrench"),
+          startExpanded = TRUE,
+          tool_module_menu_items
+        )
+      )
     ),
     body = shinydashboard::dashboardBody({
       # ----
-      readout_info_boxes <- {
-        readout_tbl <- dplyr::tibble(
+      readout_info_boxes <- dplyr::tibble(
           title = c(
             "Immune Readouts:",
             "Classes of Readouts:",
@@ -42,16 +85,13 @@ explorepage_ui <- function(){
             11080
           ),
           icon = purrr::map(c("search", "filter", "flask", "users"), shiny::icon)
-        )
-
-        purrr::pmap(
-          readout_tbl,
-          shinydashboard::infoBox,
-          width = 3,
-          color = "black",
-          fill = FALSE
-        )
-      }
+        ) %>%
+          purrr::pmap(
+            shinydashboard::infoBox,
+            width = 3,
+            color = "black",
+            fill = FALSE
+          )
 
       # ----
       module_image_boxes <- {
