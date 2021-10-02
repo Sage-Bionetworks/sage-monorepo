@@ -96,13 +96,11 @@ explorepage_ui <- function(){
   # image boxes at bottom of page that link to module tabs
   module_image_boxes <- {
 
-    create_fluid_row <- function(i, tbl){
-      item1 <- tbl$`1`[[i]]
-      item2 <- tbl$`2`[[i]]
-      if(is.null(item2)){
-        row_list <- shiny::tagList(item1)
+    create_fluid_row <- function(row){
+      if(is.null(row$item2)){
+        row_list <- shiny::tagList(row$item1)
       } else {
-        row_list <- shiny::tagList(item1, item2)
+        row_list <- shiny::tagList(row$item1, row$item2)
       }
       shiny::fluidRow(row_list)
     }
@@ -122,7 +120,9 @@ explorepage_ui <- function(){
       dplyr::mutate("n" = as.character(dplyr::row_number())) %>%
       dplyr::ungroup() %>%
       tidyr::pivot_wider(names_from = "n", values_from = "item") %>%
-      purrr::map(1:nrow(.), create_fluid_row, .)
+      dplyr::select("item1" = "1", "item2" = "2") %>%
+      dplyr::rowwise() %>%
+      create_fluid_row()
   }
 
   # This is the tab item that users land on
