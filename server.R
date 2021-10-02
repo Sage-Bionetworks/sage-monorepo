@@ -41,7 +41,7 @@ shiny::shinyServer(function(input, output, session) {
 
   data_info_server("data_info")
 
-  cohort_obj <- cohort_selection_server("analysis_cohort_selection")
+  cohort_obj <- iatlas.modules2::cohort_selection_server("analysis_cohort_selection")
 
   analysis_modules_tbl %>%
     dplyr::select("name", "server_function") %>%
@@ -49,7 +49,7 @@ shiny::shinyServer(function(input, output, session) {
 
   # ICI Modules ----------------------------------------------------------
 
-  cohort_selection_server(
+  ici_cohort_obj <- iatlas.modules2::cohort_selection_server(
     "ici_cohort_selection",
     default_datasets = shiny::reactive(c("Gide_Cell_2019", "HugoLo_IPRES_2016")),
     default_group = shiny::reactive("Responder"),
