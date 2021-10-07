@@ -12,13 +12,6 @@ ici_clinical_outcomes_plot_ui <- function(id){
     iatlas.modules::optionsBox(
       width=3,
       shiny::verticalLayout(
-        shiny::fluidRow(
-          column(
-            width = 12,
-            shiny::uiOutput(ns("list_datasets"))
-          )
-        ),
-        shiny::uiOutput(ns("survplot_op")),
         shiny::checkboxInput(ns("confint"), "Confidence Intervals", value = F),
         shiny::checkboxInput(ns("risktable"), "Risk Table", value = T),
 
