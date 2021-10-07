@@ -1,5 +1,6 @@
 ici_immune_features_server <- function(
-  id
+  id,
+  cohort_obj
 ){
   shiny::moduleServer(
     id,

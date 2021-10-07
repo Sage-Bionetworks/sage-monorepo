@@ -1,5 +1,6 @@
 ici_overview_server <- function(
-  id
+  id,
+  cohort_obj
 ){
   shiny::moduleServer(
     id,
