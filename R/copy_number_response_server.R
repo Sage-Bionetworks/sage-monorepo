@@ -25,7 +25,7 @@ copy_number_response_server <- function(id, cohort_obj) {
 
       group_tbl <- shiny::reactive({
         iatlas.api.client::query_tags(
-          cohorts = cohort_obj()$dataset,
+          cohorts = cohort_obj()$dataset_names,
           parent_tags = cohort_obj()$group_name
         ) %>%
           dplyr::select("display" = "tag_short_display", "name" = "tag_name")
@@ -100,7 +100,7 @@ copy_number_response_server <- function(id, cohort_obj) {
         )
 
         result_tbl <- iatlas.api.client::query_copy_number_results(
-          datasets = cohort_obj()$dataset,
+          datasets = cohort_obj()$dataset_names,
           tags = groups(),
           entrez = gene_entrez_query(),
           features = input$response_variable,

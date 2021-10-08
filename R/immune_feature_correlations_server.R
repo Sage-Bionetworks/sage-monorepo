@@ -24,24 +24,15 @@ immune_feature_correlations_server <- function(
 
       feature_data_function <- shiny::reactive({
         function(.class){
-          group_data <- cohort_obj()$group_tbl %>%
-            dplyr::select("group", "group_description" = "characteristics", "color")
-
-          tbl <-
-            iatlas.modules2::query_feature_values_with_cohort_object(
-              cohort_object = cohort_obj(),
-              feature_classes = .class
-            ) %>%
-            dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample") %>%
-            dplyr::inner_join(group_data, by = "group") %>%
+          cohort_obj()$get_feature_values(feature_classes = .class) %>%
             dplyr::select(
-              "sample",
-              "group",
+              "sample" = "sample_name",
+              "group" = "group_short_name",
               "feature" = "feature_display",
               "feature_value",
               "feature_order",
-              "group_description",
-              "color"
+              "group_description" = "group_characteristics",
+              "color" = "group_color"
             )
         }
       })
@@ -50,12 +41,9 @@ immune_feature_correlations_server <- function(
         function(.feature){
 
           tbl <-
-            iatlas.modules2::query_feature_values_with_cohort_object(
-              cohort_object = cohort_obj(),
-              features = .feature
-            ) %>%
+            cohort_obj()$get_feature_values(features = .feature) %>%
             dplyr::select(
-              "sample",
+              "sample" = "sample_name",
               "feature" = "feature_display",
               "feature_value"
             )

@@ -15,49 +15,36 @@ get_co_status_feature <- function(time_feature){
 build_co_survival_value_tbl <- function(cohort_obj, time, status) {
 
   time_tbl <-
-    iatlas.modules2::query_feature_values_with_cohort_object(
-      cohort_object = cohort_obj,
-      features = time
-    ) %>%
-    dplyr::select("sample", "time" = "feature_value")
+    cohort_obj$get_feature_values(time) %>%
+    dplyr::select("sample_name", "time" = "feature_value")
 
   status_tbl <-
-    iatlas.modules2::query_feature_values_with_cohort_object(
-      cohort_object = cohort_obj,
-      features = status
-    ) %>%
-    dplyr::select("sample", "status" = "feature_value")
+    cohort_obj$get_feature_values(status) %>%
+    dplyr::select("sample_name", "status" = "feature_value")
 
-  tbl <-
-    purrr::reduce(
-      list(cohort_obj$sample_tbl, time_tbl, status_tbl),
-      dplyr::inner_join,
-      by = "sample"
-    ) %>%
-    dplyr::select("sample", "group", "time", "status")
+  tbl <- cohort_obj$sample_tbl %>%
+    dplyr::rename("group" = "group_name") %>%
+    dplyr::inner_join(time_tbl, by = "sample_name") %>%
+    dplyr::inner_join(status_tbl, by = "sample_name") %>%
+    dplyr::select("sample" = "sample_name", "group", "time", "status")
 
   return(tbl)
 }
 
 build_co_feature_tbl <- function(cohort_obj, feature_class){
   tbl <-
-    iatlas.modules2::query_feature_values_with_cohort_object(
-      cohort_object = cohort_obj,
-      feature_class = feature_class
-    ) %>%
+    cohort_obj$get_feature_values(feature_classes = feature_class) %>%
     dplyr::select(
-      "sample",
+      "sample" = "sample_name",
       "feature_display",
       "feature_value",
       "feature_order"
     )
 }
 
-build_co_heatmap_tbl <- function(survival_tbl, feature_tbl, sample_tbl){
+build_co_heatmap_tbl <- function(survival_tbl, feature_tbl){
   survival_tbl %>%
-    dplyr::select(-"group") %>%
     dplyr::inner_join(feature_tbl, by = "sample") %>%
-    dplyr::inner_join(sample_tbl, by = "sample") %>%
     dplyr::select(
       "sample",
       "group",
