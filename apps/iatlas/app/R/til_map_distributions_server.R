@@ -17,23 +17,15 @@ til_map_distributions_server <- function(id, cohort_obj) {
 
       plot_data_function <- shiny::reactive({
         function(.feature){
-          group_data <- cohort_obj()$group_tbl %>%
-            dplyr::select("group", "group_description" = "characteristics", "color")
-
-          tbl <-
-            iatlas.modules2::query_feature_values_with_cohort_object(
-              cohort_object = cohort_obj(),
-              features = .feature
-            ) %>%
-            dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample") %>%
-            dplyr::inner_join(group_data, by = "group") %>%
+          cohort_obj()$get_feature_values(features = .feature) %>%
             dplyr::select(
-              "sample",
-              "group",
+              "sample" = "sample_name",
+              "group" = "group_short_name",
               "feature" = "feature_display",
               "feature_value",
-              "group_description",
-              "color"
+              "feature_order",
+              "group_description" = "group_characteristics",
+              "color" = "group_color"
             )
         }
       })
