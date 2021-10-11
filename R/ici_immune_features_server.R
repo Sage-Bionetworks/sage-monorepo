@@ -11,14 +11,14 @@ ici_immune_features_server <- function(
         setNames(as.character(x$name), x$display)
       })
 
-      var_choices <- reactive({
-        iatlas.api.client::query_features(cohorts = ici_datasets()) %>%
-          dplyr::filter(!class %in% c( "Survival Status", "Survival Time")) %>%
-          dplyr::select(
-                INTERNAL = name,
-                DISPLAY = display,
-                CLASS = class)
-      })
+      # var_choices <- reactive({
+      #   iatlas.api.client::query_features(cohorts = ici_datasets()) %>%
+      #     dplyr::filter(!class %in% c( "Survival Status", "Survival Time")) %>%
+      #     dplyr::select(
+      #           INTERNAL = name,
+      #           DISPLAY = display,
+      #           CLASS = class)
+      # })
 
       categories_df <- shiny::reactive(iatlas.api.client::query_tags(datasets = ici_datasets()) %>%
                                          dplyr::mutate(class = dplyr::case_when(
@@ -38,6 +38,7 @@ ici_immune_features_server <- function(
 
       ici_distribution_server(
         "ici_immune_features_distribution",
+        cohort_obj,
         ici_datasets(),
         variable_options = var_choices(),
         metadata_feature_df = categories_df(),

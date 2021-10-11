@@ -5,17 +5,17 @@ ici_distribution_ui <- function(id){
     iatlas.modules::optionsBox(
       width=12,
       shinyjs::useShinyjs(),
-      column(
-        width = 3,
-        shiny::uiOutput(ns("list_datasets"))
-      ),
+      # column(
+      #   width = 3,
+      #   shiny::uiOutput(ns("list_datasets"))
+      # ),
       column(
         width = 3,
         shiny::uiOutput(ns("feature_op"))
       ),
       column(
         width = 3,
-        shiny::uiOutput(ns("group1")),
+        # shiny::uiOutput(ns("group1")),
         #p("Select extra Sample Groups (optional)"),
         shiny:: uiOutput(ns("group2"))
       ),
