@@ -4,7 +4,7 @@ from api.database import return_node_to_tag_query
 
 @pytest.fixture(scope='module')
 def nt_node():
-    return 'tcga_ecn_13857'
+    return 'TCGA_cellimage_network_ACC_940'
 
 
 @pytest.fixture(scope='module')
