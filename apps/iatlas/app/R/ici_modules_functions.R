@@ -91,9 +91,9 @@ create_filtered_nested_list_by_class <- function(
 
 create_nested_list_by_class <- function(
   df,
-  class_column = "CLASS",
-  display_column = "DISPLAY",
-  internal_column = "INTERNAL",
+  class_column = "class",
+  display_column = "display",
+  internal_column = "name",
   filter_expr = T)
 {
   df %>%
