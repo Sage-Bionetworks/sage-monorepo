@@ -46,6 +46,11 @@ def build_gene_graphql_response(requested=[], gene_types_requested=[], publicati
     def f(gene):
         if not gene:
             return None
+
+        import logging
+        logger = logging.getLogger('gene response')
+        logger.info(gene)
+
         id = get_value(gene, prefix + 'id')
         gene_types = get_gene_types(
             id, requested, gene_types_requested, gene_type=gene_type)
@@ -61,10 +66,10 @@ def build_gene_graphql_response(requested=[], gene_types_requested=[], publicati
             'ioLandscapeName': get_value(gene, prefix + 'io_landscape_name'),
             'geneFamily': get_value(gene, prefix + 'family'),
             'geneFunction': get_value(gene, prefix + 'function'),
-            'immuneCheckpoint': get_value(gene, 'gene_immune_checkpoint'),
-            'pathway': get_value(gene, prefix + 'gene_pathway'),
-            'superCategory': get_value(gene, prefix + 'gene_super_category'),
-            'therapyType': get_value(gene, prefix + 'gene_therapy_type'),
+            'immuneCheckpoint': get_value(gene, prefix + 'immune_checkpoint'),
+            'pathway': get_value(gene, prefix + 'pathway'),
+            'superCategory': get_value(gene, prefix + 'super_category'),
+            'therapyType': get_value(gene, prefix + 'therapy_type'),
             'geneTypes': gene_types,
             'publications': map(build_publication_graphql_response, publications),
             'samples': map(build_sample_graphql_response(), samples)
