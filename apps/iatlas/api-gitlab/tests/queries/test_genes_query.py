@@ -10,6 +10,11 @@ def gene_type():
 
 
 @pytest.fixture(scope='module')
+def gene_type2():
+    return 'io_target'
+
+
+@pytest.fixture(scope='module')
 def max_rna_seq_expr_1():
     return -0.727993495057642991952
 
@@ -116,21 +121,6 @@ def samples_query(common_query_builder):
         }
         """
     )
-
-    from api.db_models import Cohort
-    (id, ) = test_db.session.query(Cohort.id).filter_by(
-        name=cohort_name).one_or_none()
-    return id
-
-    response = client.post('/api', json={'query': cohort_query, 'variables': {
-        'name': [cohort_name]
-    }})
-    json_data = json.loads(response.data)
-    page = json_data['data']['cohorts']
-    cohort = page['items'][0]
-    samples = cohort['samples']
-    names = [sample['name'] for sample in samples]
-    return names
 
 
 def test_cursor_pagination_first_without_samples(client, common_query_builder):
@@ -320,6 +310,26 @@ def test_genes_query_with_gene_type(client, common_query, entrez, gene_type):
         assert isinstance(gene_types, list)
         for current_gene_type in gene_types:
             assert current_gene_type['name'] == gene_type
+
+
+def test_genes_query_with_gene_type2(client, common_query, entrez, gene_type2):
+    response = client.post(
+        '/api', json={'query': common_query, 'variables': {'entrez': [55], 'geneType': [gene_type2]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['genes']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) == 1
+    for result in results:
+        assert result['pathway'] == 'Innate Immune System'
+        assert result['therapyType'] == 'Targeted by Other Immuno-Oncology Therapy Type'
+
+        gene_types = result['geneTypes']
+
+        assert isinstance(gene_types, list)
+        for current_gene_type in gene_types:
+            assert current_gene_type['name'] == gene_type2
 
 
 def test_genes_query_no_entrez(client, common_query_builder):

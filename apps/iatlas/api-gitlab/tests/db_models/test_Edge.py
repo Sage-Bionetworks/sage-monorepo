@@ -5,7 +5,7 @@ from api.database import return_edge_query
 
 @pytest.fixture(scope='module')
 def node_1():
-    return 'tcga_ecn_229715'
+    return 'TCGA_cellimage_network_ACC_940'
 
 
 @pytest.fixture(scope='module')

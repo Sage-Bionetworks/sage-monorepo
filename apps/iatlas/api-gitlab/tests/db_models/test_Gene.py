@@ -137,3 +137,15 @@ def test_Gene_no_relations(app, entrez, hgnc):
     assert type(result.pathway_id) is int or NoneType
     assert type(result.super_cat_id) is int or NoneType
     assert type(result.therapy_type_id) is int or NoneType
+
+
+def test_Gene_io_target(app):
+
+    query = return_gene_query('pathway', 'therapy_type')
+    result = query.filter_by(entrez=55).one_or_none()
+
+    assert type(result.pathway_id) is int
+    assert result.pathway.name == 'Innate Immune System'
+
+    assert type(result.therapy_type_id) is int
+    assert result.therapy_type.name == 'Targeted by Other Immuno-Oncology Therapy Type'
