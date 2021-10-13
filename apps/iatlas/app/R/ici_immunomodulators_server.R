@@ -36,9 +36,9 @@ ici_immunomodulators_server <- function(
       var_choices <- reactive({
         genes() %>%
           dplyr::select(
-            INTERNAL = feature_name,
-            DISPLAY = feature_display,
-            CLASS = `Gene Family`
+            name = feature_name,
+            display = feature_display,
+            class = `Gene Family`
           )
       })
 
@@ -55,10 +55,10 @@ ici_immunomodulators_server <- function(
 
       ici_distribution_server(
         "ici_immunomodulators_distribution",
-        ici_datasets(),
-        variable_options = var_choices(),
+        cohort_obj,
+        #variable_options = var_choices(),
         metadata_feature_df = categories_df(),
-        feature_values = features_df()
+        feature_df = var_choices()
       )
     }
   )

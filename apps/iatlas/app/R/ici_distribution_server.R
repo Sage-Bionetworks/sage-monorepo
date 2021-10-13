@@ -1,10 +1,8 @@
 ici_distribution_server <- function(
   id,
   cohort_obj,
-  ici_datasets,
-  variable_options,
   metadata_feature_df,
-  feature_values
+  feature_df
 ) {
   shiny::moduleServer(
     id,
@@ -16,7 +14,7 @@ ici_distribution_server <- function(
         selectInput(
           ns("var1_surv"),
           "Select or Search for Variable",
-          cohort_obj()$feature_tbl %>% iatlas.app::create_nested_list_by_class()
+          feature_df %>% iatlas.app::create_nested_list_by_class()
         )
       })
 
@@ -49,7 +47,7 @@ ici_distribution_server <- function(
 
       varible_display_name <- shiny::reactive({
         convert_value_between_columns(input_value = input$var1_surv,
-                                      df = cohort_obj()$feature_tbl,
+                                      df = feature_df,
                                       from_column = "name",
                                       to_column = "display")
       })
@@ -87,9 +85,16 @@ ici_distribution_server <- function(
 
       df_selected <- reactive({
         shiny::req(cohort_obj(), input$var1_surv)
-        samples <- cohort_obj()$sample_tbl %>%
-          dplyr::inner_join(., iatlas.api.client::query_feature_values(features = input$var1_surv), by = c("sample_name" = "sample")) %>%
-          build_distribution_io_df(., "feature_value", input$scale_method)
+
+        if(input$var1_surv %in% cohort_obj()$feature_tbl$name){
+          samples <- cohort_obj()$sample_tbl %>%
+            dplyr::inner_join(., iatlas.api.client::query_feature_values(features = input$var1_surv), by = c("sample_name" = "sample")) %>%
+            build_distribution_io_df(., "feature_value", input$scale_method)
+        }else{
+          samples <- cohort_obj()$sample_tbl %>%
+            dplyr::inner_join(., iatlas.api.client::query_gene_expression(cohorts = cohort_obj()$dataset_names, entrez = as.numeric(input$var1_surv)), by = c("sample_name" = "sample")) %>%
+            build_distribution_io_df(., "rna_seq_expr", input$scale_method)
+        }
 
         if(input$groupvar2 == "None" | cohort_obj()$group_name == input$groupvar2){
           samples %>%
