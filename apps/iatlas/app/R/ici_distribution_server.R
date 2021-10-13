@@ -13,7 +13,7 @@ ici_distribution_server <- function(
       output$feature_op <- renderUI({
         selectInput(
           ns("var1_surv"),
-          "Select or Search for Variable",
+          "Select Feature",
           feature_df %>% iatlas.app::create_nested_list_by_class()
         )
       })

@@ -56,7 +56,6 @@ ici_immunomodulators_server <- function(
       ici_distribution_server(
         "ici_immunomodulators_distribution",
         cohort_obj,
-        #variable_options = var_choices(),
         metadata_feature_df = categories_df(),
         feature_df = var_choices()
       )

@@ -49,8 +49,6 @@ combine_groups <- function(df, group1, cat1, group2){
    df %>%
     dplyr::inner_join(categories, by = c("group_name" = "short_name")) %>%
     dplyr::select(sample_name, dataset_name, "group1" = group_name, "group2" = tag_short_display) %>%
-    # dplyr::summarise(groups = dplyr::across(dplyr::all_of(c("group1", "group2")), na.omit)) %>%
-    # dplyr::mutate(group = paste(groups$group1, groups$group2, sep = " & \n")) %>%
     dplyr::mutate(group = paste(group1, group2, sep = " & \n")) %>%
     dplyr::inner_join(samples, by ="group")
 }
@@ -61,12 +59,6 @@ create_plot_onegroup <- function(dataset_data, cohort_obj, dataset_display, plot
 
 
   if (reorder_function == "None"){
-    # order_plot <- dataset_data %>%
-    #   dplyr::select(tag_short_display, tag_order, color) %>%
-    #   dplyr::group_by(tag_short_display, color) %>%
-    #   dplyr::summarise(m = min(tag_order)) %>%
-    #   dplyr::arrange(m) %>%
-    #   dplyr::select(tag_short_display, color)
     order_plot <- iatlas.api.client::query_tags_with_parent_tags(parent_tags = cohort_obj$group_name) %>%
       dplyr::select(tag_short_display, tag_order, tag_color) %>%
       dplyr::arrange(tag_order) %>%
@@ -194,13 +186,15 @@ get_stat_test <- function(df, group_to_split, sel_feature, dataset, dataset_titl
 
   if(paired == TRUE){
     patients <- data_set %>%
-      dplyr::group_by(sample_name) %>%
-      dplyr::summarise(samples = dplyr::n_distinct(sample_name)) %>%
-      dplyr::filter(samples > 1) %>%
-      dplyr::select(sample)
+      dplyr::inner_join(iatlas.api.client::query_sample_patients(samples = data_set$sample_name), by = "sample_name")
 
-    data_set <- data_set %>%
-      dplyr::filter(sample_name %in% patients$sample)
+    paired_samples <- patients %>%
+      dplyr::group_by(patient_name) %>%
+      dplyr::summarise(samples = dplyr::n_distinct(sample_name)) %>%
+      dplyr::filter(samples > 1)
+
+    data_set <- patients %>%
+      dplyr::filter(patient_name %in% paired_samples$patient_name)
   }
 
   if(dplyr::n_distinct(data_set[[group_to_split]])>1){
