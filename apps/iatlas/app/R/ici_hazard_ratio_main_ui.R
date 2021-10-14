@@ -15,17 +15,6 @@ ici_hazard_ratio_main_ui <- function(id){
       width = 12,
       column(
         width = 4,
-        shiny::uiOutput(ns("list_datasets"))
-      ),
-      column(
-        width = 3,
-        selectInput(
-          ns("timevar"),
-          "Survival Endpoint",
-          c("Overall Survival" = "OS_time",
-            "Progression Free Interval" = "PFI_time_1"),
-          selected = "OS_time"
-        ),
         selectInput(
           ns("analysisvar"),
           "Select Type of Analysis",
@@ -35,6 +24,16 @@ ici_hazard_ratio_main_ui <- function(id){
           selected = "uni_coxph"
         ),
         actionLink(ns("method_link"), "Click to view method description for each type.")
+      ),
+      column(
+        width = 3,
+        selectInput(
+          ns("timevar"),
+          "Survival Endpoint",
+          c("Overall Survival" = "OS_time",
+            "Progression Free Interval" = "PFI_time_1"),
+          selected = "OS_time"
+        )
       ),
       column(
         width = 5,

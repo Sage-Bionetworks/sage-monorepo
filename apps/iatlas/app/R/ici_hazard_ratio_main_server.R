@@ -1,5 +1,6 @@
 ici_hazard_ratio_main_server <- function(
-  id
+  id,
+  cohort_obj
 ) {
   shiny::moduleServer(
     id,
@@ -14,26 +15,23 @@ ici_hazard_ratio_main_server <- function(
         selected_vals$vars <- input$var2_cox
       })
 
-      #getting dropdown menu options
-      ici_datasets <- shiny::reactive({
-        x <- iatlas.api.client::query_datasets(types = "ici")
-        setNames(as.character(x$name), x$display)
-      })
+      # #getting dropdown menu options
+      # ici_datasets <- shiny::reactive({
+      #   x <- iatlas.api.client::query_datasets(types = "ici")
+      #   setNames(as.character(x$name), x$display)
+      # })
+      # output$list_datasets <- shiny::renderUI({
+      #   shiny::selectizeInput(ns("datasets_mult"), "Select Datasets", choices = ici_datasets(),
+      #                      selected =  c("Gide_Cell_2019", "HugoLo_IPRES_2016"), multiple = TRUE)
+      # })
 
-      categories <- shiny::reactive(iatlas.api.client::query_tags(datasets = ici_datasets()) %>%
+      categories <- shiny::reactive(iatlas.api.client::query_tags(datasets = cohort_obj()[["dataset_names"]]) %>%
                                       dplyr::mutate(class = dplyr::case_when(
                                         tag_name %in% c( "Response", "Responder", "Progression", "Clinical_Benefit") ~ "Response to ICI",
                                         TRUE ~ "Treatment Data"))
       )
 
-      features <- shiny::reactive(iatlas.api.client::query_features(cohorts = ici_datasets()) %>% dplyr::filter(!class %in% c( "Survival Status", "Survival Time")))
-
-
-      output$list_datasets <- shiny::renderUI({
-        shiny::selectizeInput(ns("datasets_mult"), "Select Datasets", choices = ici_datasets(),
-                           selected =  c("Gide_Cell_2019", "HugoLo_IPRES_2016"), multiple = TRUE)
-      })
-
+      features <- shiny::reactive(cohort_obj()$feature_tbl)
 
       shiny::observe({
         shiny::req(categories(), features())
@@ -73,9 +71,13 @@ ici_hazard_ratio_main_server <- function(
         )
       })
 
+      dataset_displays <- reactive({
+        setNames(cohort_obj()$dataset_displays, cohort_obj()$dataset_names)
+      })
+
       #getting survival data of all ICI pre treatment samples
       OS_data <- shiny::reactive({
-        shiny::req(input$datasets_mult)
+        #shiny::req(input$datasets_mult)
 
         iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment") %>%
           dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
@@ -87,10 +89,10 @@ ici_hazard_ratio_main_server <- function(
       })
 
       samples <- shiny::eventReactive(input$go_button, {
-        shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
+        #shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
         shiny::req(OS_data())
 
-        iatlas.api.client::query_dataset_samples(datasets = input$datasets_mult) %>%
+        iatlas.api.client::query_dataset_samples(datasets = cohort_obj()[["dataset_names"]]) %>%
           dplyr::inner_join(., OS_data(), by = "sample_name") %>%
           dplyr::group_by(dataset_name) %>%
           dplyr::group_modify(~ dplyr::mutate(., has_surv_data = !all(is.na(.x[[input$timevar]])))) %>%
@@ -124,20 +126,21 @@ ici_hazard_ratio_main_server <- function(
 
 
       dataset_ft <- shiny::eventReactive(input$go_button, {
-        shiny::req(input$datasets_mult, input$var2_cox, feature_df_mult())
+        shiny::req(input$var2_cox, feature_df_mult())
         #creates a df with the dataset x feature combinations that are available
         iatlas.app::get_feature_by_dataset(
           features = input$var2_cox,
           feature_df = features(),
           group_df = groups(),
           fmx_df = feature_df_mult(),
-          datasets = ici_datasets()
+          datasets = cohort_obj()[["dataset_names"]],
+          dataset_display = dataset_displays()
         )
       })
 
       coxph_df <- shiny::eventReactive(input$go_button, {
-        shiny::req(input$datasets_mult, input$var2_cox, dataset_ft())
-        iatlas.app::build_coxph_df(datasets = input$datasets_mult,
+        shiny::req(input$var2_cox, dataset_ft())
+        iatlas.app::build_coxph_df(datasets = cohort_obj()[["dataset_names"]],
                                    data = feature_df_mult(),
                                    feature = input$var2_cox,
                                    time = input$timevar,
@@ -147,9 +150,8 @@ ici_hazard_ratio_main_server <- function(
       })
 
       output$mult_forest <- plotly::renderPlotly({
-        shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
+        # shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
         shiny::validate(need(length(input$var2_cox)>0, "Select at least one variable."))
-
         all_forests <- purrr::map(.x = unique(coxph_df()$dataset),
                                   .f = build_forestplot_dataset,
                                   coxph_df = coxph_df(),
@@ -164,7 +166,7 @@ ici_hazard_ratio_main_server <- function(
       })
 
       output$mult_heatmap <- plotly::renderPlotly({
-        shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
+        # shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
         shiny::validate(need(length(input$var2_cox)>0, "Select at least one variable."))
 
         heatmap_df <-  iatlas.app::build_heatmap_df(coxph_df())
@@ -215,13 +217,13 @@ ici_hazard_ratio_main_server <- function(
 
         ds_with_os <- unique(samples()$dataset_name)
 
-        if(length(input$datasets_mult) == length(ds_with_os)){
+        if(length(cohort_obj()[["dataset_names"]]) == length(ds_with_os)){
           output$notification <- shiny::renderText({
           })
         }else{
           output$notification <- shiny::renderText({
-            missing_os <- setdiff(input$datasets_mult, ds_with_os)
-            paste0("Selected survival endpoint not available for ", names(ici_datasets()[ici_datasets() %in% missing_os]), collapse = "<br>")
+            missing_os <- setdiff(cohort_obj()[["dataset_names"]], ds_with_os)
+            paste0("Selected survival endpoint not available for ", missing_os, collapse = "<br>")
           })
         }
       })
