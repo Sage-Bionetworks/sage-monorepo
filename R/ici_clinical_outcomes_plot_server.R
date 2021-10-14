@@ -11,8 +11,6 @@ ici_clinical_outcomes_plot_server <- function(
       feature_df <- shiny::reactive({
         cohort_obj()$sample_tbl %>%
           dplyr::inner_join(., iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")), by = c("sample_name" = "sample"))
-          # dplyr::select(sample_groups = feature_value) %>%
-          # dplyr::mutate(color = " ")
       })
 
       all_survival <- shiny::reactive({

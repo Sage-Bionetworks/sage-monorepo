@@ -1,4 +1,4 @@
-get_feature_by_dataset <- function(features, feature_df, group_df, fmx_df, datasets_names){
+get_feature_by_dataset <- function(features, feature_df, group_df, fmx_df, datasets_names, dataset_display){
   datasets <- unique(fmx_df$dataset_name)
   num_features <- features[which(features %in% feature_df$name)]
   cat_features <- features[which(features %in% group_df$parent_tag_name)]
@@ -11,7 +11,7 @@ get_feature_by_dataset <- function(features, feature_df, group_df, fmx_df, datas
                     group_label = display) %>%
       dplyr::rowwise() %>%
       dplyr::mutate(feature= group,
-                    dataset_display = names(datasets_names)[datasets_names == dataset],
+                    dataset_display = unname(dataset_display[dataset]),
                     ft_label = "Immune Feature")
   }
   #Check which datasets have more than one level for categorical features
@@ -21,7 +21,7 @@ get_feature_by_dataset <- function(features, feature_df, group_df, fmx_df, datas
       uvalue <- unique((fmx_df %>%
                           dplyr::filter(dataset_name == x))[[y]])
       if(length(uvalue)>1) data.frame(dataset = as.character(x),
-                                      dataset_display = names(datasets_names)[datasets_names == x],
+                                      dataset_display = unname(dataset_display[x]),
                                       feature = as.character(y),
                                       gname = as.character(uvalue),
                                       stringsAsFactors = FALSE) %>%
@@ -104,7 +104,7 @@ build_coxph_df <- function(datasets, data, feature, time, status, ft_labels, mul
                        status = status,
                        ft_labels = ft_labels,
                        multivariate = multivariate) %>%
-                       {suppressMessages(dplyr::right_join(x = ., ft_labels))} %>%
+    {suppressMessages(dplyr::right_join(x = ., ft_labels))} %>%
     dplyr::mutate(group_label=replace(group_label, is.na(logHR), paste("(Ref.)", .$group_label[is.na(logHR)]))) %>%
     dplyr::mutate_all(~replace(., is.na(.), 0))
 
