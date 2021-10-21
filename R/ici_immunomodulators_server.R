@@ -1,5 +1,6 @@
 ici_immunomodulators_server <- function(
-  id
+  id,
+  cohort_obj
 ){
   shiny::moduleServer(
     id,
@@ -20,7 +21,7 @@ ici_immunomodulators_server <- function(
       var_choices <- reactive({
         features() %>%
           filter(feature_display %in% colnames(ioresponse_data$im_expr)) %>%
-          mutate(INTERNAL = feature_display) %>%
+          dplyr::mutate(INTERNAL = feature_display) %>%
           dplyr::select(
             INTERNAL,
             DISPLAY = feature_display,

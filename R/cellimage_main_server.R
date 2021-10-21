@@ -10,10 +10,10 @@ cellimage_main_server <- function(
 
       cohort_groups <- shiny::reactive({
         iatlas.api.client::query_tags(
-          datasets = cohort_obj()$dataset,
+          cohorts = cohort_obj()$dataset,
           parent_tags = cohort_obj()$group_name
         ) %>%
-          dplyr::pull("name")
+          dplyr::pull("tag_name")
       })
 
       output$select_group1_ui <- shiny::renderUI({
@@ -55,26 +55,6 @@ cellimage_main_server <- function(
         shiny::reactive(cohort_obj()$dataset),
         shiny::reactive(input$group_selected2)
       )
-
-      # # #Button with method information
-      # #
-      # # shiny::observeEvent(input$methodButton, {
-      # #   shiny::showModal(shiny::modalDialog(
-      # #     title = "Method",
-      # #     shiny::includeMarkdown("data/MethodsText/Methods_CellImage.txt"),
-      # #     easyClose = TRUE,
-      # #     footer = NULL
-      # #   ))
-      # # })
-      # #
-      # # shiny::observeEvent(input$method_link,{
-      # #   shiny::showModal(shiny::modalDialog(
-      # #     title = "Method",
-      # #     shiny::includeMarkdown("data/MethodsText/Methods_CellImage.txt"),
-      # #     easyClose = TRUE,
-      # #     footer = NULL
-      # #   ))
-      # # })
     }
   )
 }

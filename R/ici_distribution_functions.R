@@ -225,7 +225,7 @@ get_stat_test <- function(df, group_to_split, sel_feature, dataset, paired = FAL
                                                 split_data[[y]][[sel_feature]])
 
         test_data %>%
-          mutate("-log10(pvalue)" = -log10(p.value)) %>%
+          dplyr::mutate("-log10(pvalue)" = -log10(p.value)) %>%
           dplyr::mutate_if(is.numeric, round, digits = 3) %>%
           dplyr::select(Dataset, Group1, Group2,  "Log2(FoldChange)" = FoldChange, statistic, p.value, "-log10(pvalue)")
         #dplyr::select(Dataset, Group1, "Group 1 Size" =  n_samples1, Group2,  "Group 2 Size" = n_samples2, statistic, p.value, "-log10(pvalue)")

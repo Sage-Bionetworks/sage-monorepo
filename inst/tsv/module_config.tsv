@@ -1,21 +1,19 @@
-display	name	type	description
-Cell-Interaction Diagram	cellimage	analysis	Explore cell and protein abundance on an illustration.
-Clinical Outcomes	clinical_outcomes	analysis	Plot survival curves based on immune characteristics and identify variables associated with outcome.
-CNV Associations	copy_number	analysis	Explore associations of microenvironment with gene copy number.
-Driver Associations	driver_associations	analysis	Explore Associations of Microenvironment with Driver Mutations.
-Extracellular Networks	extracellular_network	analysis	Explore the extracellular networks modulating tumoral immune response.
-Germline Analysis	germline	analysis	Germline Module Description
-Immune Feature Trends	immune_features	analysis	This module allows you to see how immune readouts vary across your groups, and how they relate to one another.
-Immunomodulators	immunomodulators	analysis	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.
-IO Targets	io_targets	analysis	Explore the expression of genes that code for immuno-oncological (IO) targets.
-TIL Maps	til_map	analysis	Explore the characteristics of maps of tumor infiltrating lymphocytes obtained from analysis of H&E images.
-Tumor Microenvironment	tumor_microenvironment	analysis	Explore the immune cell proportions in your sample groups.
-Immune Subtype Classifier	immune_subtype_classifier	tool	Use an ensemble model trained on all TCGA data to classify gene expression profiles from your own data into the six immune subtypes identified in Thorsson et al.
-Cohort Selection	cohort_selection	other
-Data Description	data_info	other
-ICI Datasets Overview	ici_overview	ici	Explore categories and groups of the available datasets.
-ICI Clinical Outcomes	ici_clinical_outcomes	ici	Plot survival curves based on immune characteristics and identify variables associated with outcome.
-ICI Hazard Ratio	ici_hazard_ratio	ici	Create Cox Proportional Hazard Regression Models and visualize Hazard Ratio in a heatmap and a forest plot.
-ICI Immune Features	ici_immune_features	ici	See how immune readouts vary across groups and ICI datasets.
-ICI Immunomodulators	ici_immunomodulators	ici	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.
-ICI Machine Learning	ici_models	ici	Train and run multivariable models with cross-validation on ICI genomics and immunogenomics data.
+display	name	type	description	label
+Cell-Interaction Diagram	cellimage	analysis	Explore cell and protein abundance on an illustration.	none
+Clinical Outcomes	clinical_outcomes	analysis	Plot survival curves based on immune characteristics and identify variables associated with outcome.	none
+CNV Associations	copy_number	analysis	Explore associations of microenvironment with gene copy number.	none
+Driver Associations	driver_associations	analysis	Explore Associations of Microenvironment with Driver Mutations.	none
+Extracellular Networks	extracellular_network	analysis	Explore the extracellular networks modulating tumoral immune response.	none
+Germline Analysis	germline	analysis	Germline Module Description	none
+Immune Feature Trends	immune_features	analysis	This module allows you to see how immune readouts vary across your groups, and how they relate to one another.	none
+Immunomodulators	immunomodulators	analysis	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.	none
+IO Targets	io_targets	analysis	Explore the expression of genes that code for immuno-oncological (IO) targets.	none
+TIL Maps	til_map	analysis	Explore the characteristics of maps of tumor infiltrating lymphocytes obtained from analysis of H&E images.	none
+Tumor Microenvironment	tumor_microenvironment	analysis	Explore the immune cell proportions in your sample groups.	none
+Immune Subtype Classifier	immune_subtype_classifier	tool	Use an ensemble model trained on all TCGA data to classify gene expression profiles from your own data into the six immune subtypes identified in Thorsson et al.	none
+ICI Datasets Overview	ici_overview	ici	Explore categories and groups of the available datasets.	none
+ICI Clinical Outcomes	ici_clinical_outcomes	ici	Plot survival curves based on immune characteristics and identify variables associated with outcome.	none
+ICI Hazard Ratio	ici_hazard_ratio	ici	Create Cox Proportional Hazard Regression Models and visualize Hazard Ratio in a heatmap and a forest plot.	none
+ICI Immune Features	ici_immune_features	ici	See how immune readouts vary across groups and ICI datasets.	none
+ICI Immunomodulators	ici_immunomodulators	ici	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.	none
+ICI Machine Learning	ici_models	ici	Train and run multivariable models with cross-validation on ICI genomics and immunogenomics data.	none
