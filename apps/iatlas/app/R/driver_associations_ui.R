@@ -16,14 +16,14 @@ driver_associations_ui <- function(id) {
         "-- univariate"
       ),
       module_ui(ns("univariate_driver"))
-    ),
-    iatlas.modules::sectionBox(
-      title = paste0(
-        "Immune Response Association With Driver Mutations ",
-        "-- multivariate"
-      ),
-      module_ui(ns("multivariate_driver"))
     )
+    # iatlas.modules::sectionBox(
+    #   title = paste0(
+    #     "Immune Response Association With Driver Mutations ",
+    #     "-- multivariate"
+    #   ),
+    #   module_ui(ns("multivariate_driver"))
+    # )
   )
 }
 

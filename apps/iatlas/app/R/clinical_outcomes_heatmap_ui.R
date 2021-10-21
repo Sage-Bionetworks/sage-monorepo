@@ -26,7 +26,7 @@ clinical_outcomes_heatmap_ui <- function(id) {
                         ns() %>%
                         plotly::plotlyOutput(., height = 600) %>%
                         shinycssloaders::withSpinner(.),
-                    plotly_ui(ns("heatmap"))
+                    iatlas.modules::plotly_ui(ns("heatmap"))
                 )
             )
         )

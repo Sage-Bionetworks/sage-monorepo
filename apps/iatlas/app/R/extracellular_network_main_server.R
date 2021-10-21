@@ -51,7 +51,7 @@ extracellular_network_main_server <- function(
             datasets = cohort_obj()$dataset,
             parent_tags = cohort_obj()$group_name
           ) %>%
-          dplyr::pull("name")
+          dplyr::pull("tag_name")
         if (cohort_obj()$group_name == "Immune_Subtype") {
           shiny::checkboxGroupInput(
             ns("group_selected"),
@@ -75,7 +75,7 @@ extracellular_network_main_server <- function(
             datasets = cohort_obj()$dataset,
             parent_tags = "Immune_Subtype"
           ) %>%
-          dplyr::pull("name")
+          dplyr::pull("tag_name")
         shiny::checkboxGroupInput(
           ns("stratified_group_selected"),
           "Select Immune Subtype",
@@ -102,11 +102,13 @@ extracellular_network_main_server <- function(
         build_ecn_gene_choice_list()
       })
 
-      shiny::updateSelectizeInput(session, 'selected_genes',
-                                  choices = gene_choice_list(),
-                                  selected = "geneset:immunomodulator",
-                                  server = TRUE)
-
+      shiny::updateSelectizeInput(
+        session,
+        'selected_genes',
+        choices = gene_choice_list(),
+        selected = "geneset:immunomodulator",
+        server = TRUE
+      )
 
       output$select_celltypes <- shiny::renderUI({
         shiny::selectizeInput(
@@ -151,6 +153,7 @@ extracellular_network_main_server <- function(
       })
 
       nodes <- shiny::reactive({
+
         shiny::req(gene_nodes(), feature_nodes())
         dplyr::bind_rows(gene_nodes(), feature_nodes())
       })
