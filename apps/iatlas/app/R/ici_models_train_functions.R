@@ -55,7 +55,7 @@ get_scaled_data <- function(df, scale_function_choice = "None", predictors_to_sc
     "Log10 + 1" = function(x) log10(x + 1)
   )
   df %>%
-    mutate(across(all_of(predictors_to_scale), scale_function))
+    dplyr::mutate(across(all_of(predictors_to_scale), scale_function))
 }
 
 exclude_treatment_data <- function(x){
