@@ -1,5 +1,6 @@
 ici_models_server <- function(
-  id
+  id,
+  cohort_obj
 ){
   shiny::moduleServer(
     id,
@@ -7,48 +8,31 @@ ici_models_server <- function(
 
       predictors_list <- reactive({
 
-        clinical_data <- ioresponse_data$feature_df %>%
-          dplyr::filter(`Variable Class` == "Clinical data" | FeatureMatrixLabelTSV == "Subtype_Curated_Malta_Noushmehr_et_al") %>%
-          dplyr::select(
-            INTERNAL = FeatureMatrixLabelTSV,
-            DISPLAY = FriendlyLabel,
-            CLASS = `Variable Class`) %>% iatlas.app::create_nested_list_by_class()
+        clinical_data <- iatlas.api.client::query_dataset_tags(datasets = cohort_obj()$dataset_names) %>%
+          dplyr::filter(!tag_name %in% c("Responder", "Clinical_Benefit", "Progression", "Sample_Treatment", "TCGA_Study")) %>%
+          dplyr::select(tag_short_display, tag_name) %>%
+          tibble::deframe()
 
-        immunefeatures <-  ioresponse_data$feature_df %>%
-          dplyr::filter(VariableType == "Numeric" &
-                          !`Variable Class` %in% c("NA", "Clinical data", "Predictor - Immune Checkpoint Treatment")) %>%
-          dplyr::select(
-            INTERNAL = FeatureMatrixLabelTSV,
-            DISPLAY = FriendlyLabel,
-            CLASS = `Variable Class`) %>% iatlas.app::create_nested_list_by_class()
+        immunefeatures <-  cohort_obj()$feature_tbl %>%
+          dplyr::filter(class != "Predictor of Response to Immune Checkpoint Treatment" &
+                          method_tag != "Survival") %>%
+          iatlas.app::create_nested_list_by_class(
+              class_column = "class",
+              display_column = "display",
+              internal_column = "name"
+            )
 
-        biomarkers <- ioresponse_data$feature_df %>%
-          dplyr::filter(
-            `Variable Class` == "Predictor - Immune Checkpoint Treatment" | FeatureMatrixLabelTSV == "Subtype_Immune_Model_Based") %>%
-          dplyr::select(
-            INTERNAL = FeatureMatrixLabelTSV,
-            DISPLAY = FriendlyLabel,
-            CLASS = `Variable Class`) %>% iatlas.app::create_nested_list_by_class()
+        biomarkers <- cohort_obj()$feature_tbl %>%
+          dplyr::filter(class == "Predictor of Response to Immune Checkpoint Treatment") %>%
+          dplyr::select(display, name) %>%
+          tibble::deframe()
 
-
-        gene_features <- iatlas.api.client::query_immunomodulators() %>%
-          dplyr::select(
-            "feature_name" = "entrez",
-            "feature_display" = "hgnc",
-            "Gene Family" = "gene_family",
-            "Gene Function" = "gene_function",
-            "Immune Checkpoint" = "immune_checkpoint",
-            "Super Category" = "super_category"
+        genes <- iatlas.api.client::query_immunomodulators() %>%
+          iatlas.app::create_nested_list_by_class(
+            class_column = "gene_family",
+            display_column = "hgnc",
+            internal_column = "hgnc"
           )
-
-        genes <- gene_features %>%
-          filter(feature_display %in% colnames(ioresponse_data$im_expr)) %>%
-          mutate(INTERNAL = feature_display) %>%
-          dplyr::select(
-            INTERNAL,
-            DISPLAY = feature_display,
-            CLASS = `Gene Family`
-          ) %>% iatlas.app::create_nested_list_by_class()
 
         list(
           clinical_data = clinical_data,
