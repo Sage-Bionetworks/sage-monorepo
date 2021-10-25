@@ -1,5 +1,6 @@
 ici_models_main_server <- function(
   id,
+  cohort_obj,
   variables_list
 ) {
   shiny::moduleServer(
@@ -55,16 +56,17 @@ ici_models_main_server <- function(
 
       output$categoric_pred <- shiny::renderUI({
         shiny::req(input$balance_pred == TRUE)
-        selected_pred <- training_obj()$predictors %>% filter(VariableType == "Categorical") %>% pull(feature_name, name = feature_display)
-        shiny::validate(shiny::need(length(selected_pred)>0, "No categorical predictor was selected."))
+        #selected_pred <- training_obj()$predictors %>% filter(VariableType == "Categorical") %>% pull(feature_name, name = feature_display)
+        shiny::validate(shiny::need(length(input$predictors_clinical_data)>0, "No categorical predictor was selected."))
         shiny::checkboxGroupInput(
           ns("pred_to_balance"),
           label = "Select variable(s) to be balanced",
-          choices = selected_pred
+          choices = input$predictors_clinical_data
         )
       })
       output$num_transform <- shiny::renderUI({
-        selected_pred <- training_obj()$predictors %>% filter(VariableType == "Numeric") %>% pull(feature_name, name = feature_display)
+        #selected_pred <- training_obj()$predictors %>% filter(VariableType == "Numeric") %>% pull(feature_name, name = feature_display)
+        selected_pred <- c(input$predictors_immunefeatures, input$predictors_biomarkers, input$predictors_gene)
         shiny::validate(shiny::need(length(selected_pred)>0, "No numeric predictor was selected."))
         shiny::checkboxGroupInput(
           ns("pred_to_transform"),
@@ -73,28 +75,22 @@ ici_models_main_server <- function(
         )
       })
 
-      df_to_model <- reactive({
-        ioresponse_data$fmx_df %>%
-          dplyr::filter(treatment_when_collected == "Pre") %>%
-          tidyr::drop_na("Responder") %>% #excluding samples that don't have response annotation
-          merge(., ioresponse_data$im_expr, by = "Sample_ID")
-      })
-
       training_obj <- reactive({
-        shiny::req(df_to_model(), input$train, input$test, predictors())
+        shiny::req(input$train, input$test, predictors())
+
         get_training_object(
-          data_df = df_to_model(),
+          cohort_obj = cohort_obj,
           train_ds = input$train,
           test_ds = input$test,
           selected_pred = predictors(),
           selected_genes = input$predictors_gene,
-          feature_df = ioresponse_data$feature_df,
           previous_treat_to_exclude = input$exclude_previous
         )
       })
 
       output$samples_summary <- shiny::renderText({
         shiny::req(training_obj())
+        View(training_obj())
         paste("Samples in training set:", nrow(training_obj()$subset_df$train_df),
               "Samples in testing set:", nrow(training_obj()$subset_df$test_df))
       })
@@ -109,7 +105,7 @@ ici_models_main_server <- function(
       observe({ #block Train button if one of the datasets is missing annotation for one predictor. Notify number of samples with NA that will be excluded
         shiny::req(training_obj())
 
-        if(dplyr::n_distinct(training_obj()$subset_df$train_df$Study) >1) shiny::showNotification("Warning: You selected datasets with samples from different tumor types. The data from these datasets will be merged for training.", duration = 10, id = "mix_types")
+        if(dplyr::n_distinct(training_obj()$subset_df$train_df$TCGA_Study) >1) shiny::showNotification("Warning: You selected datasets with samples from different tumor types. The data from these datasets will be merged for training.", duration = 10, id = "mix_types")
         else shiny::removeNotification(id = "mix_types")
 
         if((nrow(training_obj()$subset_df$train_df)/length(predictors()))<10) shiny::showNotification("Warning: The number of selected predictors is higher than 10% of the number of samples selected for training.", duration = 10, id = "high_pred")
@@ -170,15 +166,13 @@ ici_models_main_server <- function(
           normalize_dataset(
             train_df = selected_df()$train,
             test_df = selected_df()$test,
-            variable_to_norm = c(input$predictors_gene,
-                                 input$predictors_immunefeatures,
-                                 df_to_model()[input$predictors_biomarkers] %>% dplyr::select(where(is.numeric)) %>% colnames()),
-            predictors = predictors(),
+            variable_to_norm = dplyr::filter(training_obj()$predictors, VariableType == "Numeric")$feature_name,
+            predictors = dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name,
             is_test = FALSE)
         }else{
           scaled_df %>%
             tidyr::drop_na(any_of(predictors())) %>%
-            dplyr::select("Sample_ID", "Dataset", "Responder", all_of(predictors()))
+            dplyr::select("sample_name", "dataset_name", "Responder", all_of(dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name))
         }
       })
 
@@ -189,13 +183,13 @@ ici_models_main_server <- function(
             test_df = selected_df()$test,
             variable_to_norm = c(input$predictors_gene,
                                  input$predictors_immunefeatures,
-                                 df_to_model()[input$predictors_biomarkers] %>% dplyr::select(where(is.numeric)) %>% colnames()),
+                                 input$predictors_biomarkers), #df_to_model()[input$predictors_biomarkers] %>% dplyr::select(where(is.numeric)) %>% colnames()),
             predictors = predictors(),
             is_test = TRUE)
         }else{
           scaled_df %>%
             tidyr::drop_na(any_of(predictors())) %>%
-            dplyr::select("Sample_ID", "Dataset", "Responder", all_of(predictors()))
+            dplyr::select("sample_name", "dataset_name", "Responder", all_of(predictors()))
         }
       })
 

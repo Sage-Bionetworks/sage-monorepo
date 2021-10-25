@@ -9,7 +9,7 @@ ici_models_server <- function(
       predictors_list <- reactive({
 
         clinical_data <- iatlas.api.client::query_dataset_tags(datasets = cohort_obj()$dataset_names) %>%
-          dplyr::filter(!tag_name %in% c("Responder", "Clinical_Benefit", "Progression", "Sample_Treatment", "TCGA_Study")) %>%
+          dplyr::filter(!tag_name %in% c("Response", "Responder", "Clinical_Benefit", "Progression", "Sample_Treatment", "TCGA_Study")) %>%
           dplyr::select(tag_short_display, tag_name) %>%
           tibble::deframe()
 
@@ -31,7 +31,7 @@ ici_models_server <- function(
           iatlas.app::create_nested_list_by_class(
             class_column = "gene_family",
             display_column = "hgnc",
-            internal_column = "hgnc"
+            internal_column = "entrez"
           )
 
         list(
@@ -44,6 +44,7 @@ ici_models_server <- function(
 
       ici_models_main_server(
         "ici_models_train",
+        cohort_obj(),
         variables_list = predictors_list()
       )
     }
