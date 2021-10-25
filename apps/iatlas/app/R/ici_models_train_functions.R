@@ -1,11 +1,11 @@
 get_dataset_id <- function(ds_labels){
   sapply(ds_labels, function(x) datasets_options_train[[x]])
 }
-
 ######################
 # Dataset preparation
 ######################
 normalize_variable <- function(x, is_test = FALSE, train_avg = NULL, train_sd = NULL){
+  x <- as.numeric(x)
   if(is_test == FALSE){
     if(min(x) == 0 & max(x) == 0) return(NA_integer_) #flag in case all values are 0 for a given dataset.
     else (x - mean(x))/sd(x)
@@ -25,21 +25,17 @@ normalize_dataset <- function(train_df, test_df = NULL, variable_to_norm, predic
     df <- test_df
   }
   df %>%
-    dplyr::group_by(Dataset) %>%
-    tidyr::drop_na(any_of(predictors)) %>%
-    dplyr::mutate(across(all_of(variable_to_norm),
+    dplyr::group_by(dataset_name) %>%
+    tidyr::drop_na(dplyr::any_of(predictors)) %>%
+    dplyr::mutate(dplyr::across(dplyr::all_of(variable_to_norm),
                          ~normalize_variable(
                            .x,
                            is_test = is_test,
                            train_avg = avg_train[dplyr::cur_column()],
                            train_sd = sd_train[dplyr::cur_column()]))) %>%
     dplyr::ungroup() %>%
-    dplyr::select("Sample_ID", "Dataset", "Responder", all_of(predictors))
+    dplyr::select("sample_name", "dataset_name", "Responder", dplyr::all_of(predictors))
 }
-
-# #in case a dataset has all gene measurements = 0, exclude it
-# fmx_train <- fmx_train[, colSums(is.na(fmx_train)) == 0]
-
 
 #########################
 # Training  parameters
@@ -61,12 +57,13 @@ get_scaled_data <- function(df, scale_function_choice = "None", predictors_to_sc
 exclude_treatment_data <- function(x){
   is.na(x) | x == FALSE
 }
-get_training_object <- function(data_df, train_ds, test_ds,
-                                selected_pred, selected_genes,
-                                feature_df = ioresponse_data$feature_df,
+get_training_object <- function(cohort_obj,
+                                train_ds,
+                                test_ds,
+                                selected_pred,
+                                selected_genes,
                                 scale_function_choice = "None", predictors_to_scale,
                                 previous_treat_to_exclude = NULL){
-
   #df with train and test
   dataset_selection <- list(
     train = get_dataset_id(train_ds),
@@ -74,42 +71,94 @@ get_training_object <- function(data_df, train_ds, test_ds,
   )
 
   #df with selected predictors and labels
-  pred_features <- feature_df %>%
-    dplyr::filter(FeatureMatrixLabelTSV %in% selected_pred) %>%
-    dplyr::select("feature_name" = FeatureMatrixLabelTSV, "feature_display" = FriendlyLabel, VariableType)
+  pred_features <- iatlas.api.client::query_cohort_features(cohorts = c(dataset_selection$train, dataset_selection$test)) %>%
+    dplyr::filter(feature_name %in% selected_pred) %>%
+    dplyr::mutate(VariableType = "Numeric") %>%
+    dplyr::select(feature_name, feature_display, VariableType) %>%
+    dplyr::distinct()
+
+  if(nrow(pred_features) > 0){
+    pred_df <- iatlas.api.client::query_feature_values(cohorts = cohort_obj$dataset_names, features = pred_features$feature_name) %>%
+      dplyr::select(sample_name = sample, feature_name, feature_value)
+  }else{
+    pred_df <- NULL
+  }
 
   #for categorical predictors, we need to make sure to store the key to label them correctly
-  categories <- ioresponse_data$sample_group_df %>%
-    dplyr::filter(Category %in% pred_features$feature_name) %>%
-    dplyr::mutate(feature_name = paste0(Category, FeatureValue),
-                  feature_display = FeatureLabel,
+  cat_df <- iatlas.api.client::query_tag_samples(cohorts = cohort_obj$dataset_names, parent_tags = c(selected_pred, "TCGA_Study", "Responder")) %>% #we always want TCGA Study to check if user mixed different types
+    dplyr::inner_join(iatlas.api.client::query_tags_with_parent_tags(parent_tags = c(selected_pred, "TCGA_Study", "Responder")), by = c("tag_name", "tag_long_display", "tag_short_display", "tag_characteristics", "tag_color", "tag_order", "tag_type"))
+
+  categories <- cat_df %>%
+    dplyr::mutate(feature_name = paste0(parent_tag_name, tag_name), #parent_tag_name,
+                  feature_display = tag_short_display, #tag_name,
                   VariableType = "Category") %>%
-    dplyr::select(feature_name, feature_display, VariableType)
+    dplyr::select(feature_name, feature_display, VariableType) %>%
+    rbind(
+      iatlas.api.client::query_tags_with_parent_tags(parent_tags = selected_pred)%>%
+        dplyr::select(feature_name = parent_tag_name, feature_display = parent_tag_short_display) %>%
+        dplyr::mutate(VariableType = "Categorical")
+    ) %>%
+    dplyr::distinct()
+
+  cat_df <- dplyr::select(cat_df, sample_name, feature_name = parent_tag_name, feature_value = tag_name) #formatting to bind with others
 
   genes <- data.frame()
   if(length(selected_genes >0)) genes <- data.frame(
                                             feature_name = selected_genes,
                                             feature_display = selected_genes,
                                             VariableType = "Numeric")
+  if(length(selected_genes >0)){
+    gene_df <- iatlas.api.client::query_gene_expression(cohorts = cohort_obj$dataset_names, entrez = as.numeric(selected_genes))
+    genes <- gene_df %>%
+      dplyr::mutate(feature_name = hgnc,
+                    feature_display = hgnc,
+                    VariableType = "Numeric") %>%
+      dplyr::select(feature_name, feature_display, VariableType) %>%
+      dplyr::distinct()
+
+    gene_df <- dplyr::select(gene_df, sample_name = sample, feature_name = hgnc, feature_value = rna_seq_expr)
+  }else{
+    genes <- NULL
+    gene_df <- NULL
+  }
+
   predictors <- rbind(pred_features, categories, genes)
+  predictors_df <- rbind(pred_df,
+                         cat_df,
+                         gene_df)
+
+
+  if("Prins_GBM_2019" %in% cohort_obj$dataset_names){
+    pre_treat_samples <-  iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment", cohorts = cohort_obj$dataset_names) %>%
+      dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>% #we want all samples from Prins
+      dplyr::distinct(sample_name)
+  }else{
+    pre_treat_samples <-  iatlas.api.client::query_tag_samples(cohorts = cohort_obj$dataset_names, tags = "pre_sample_treatment")
+  }
+
+  pred_df <- predictors_df %>%
+    dplyr::filter(sample_name %in% pre_treat_samples$sample_name) %>%
+    tidyr::pivot_wider(., names_from = feature_name, values_from = feature_value, values_fill = NA) %>%
+    dplyr::inner_join(iatlas.api.client::query_dataset_samples(datasets = cohort_obj$dataset_names), by = "sample_name")
 
   #subset dataset
   data_bucket <- list(
-    train_df = data_df %>%
-      dplyr::filter(Dataset %in% dataset_selection$train) %>%
+    train_df = pred_df %>%
+      dplyr::filter(dataset_name %in% dataset_selection$train) %>%
       tidyr::drop_na(dplyr::any_of(predictors$feature_name)) %>%
       dplyr::filter(dplyr::if_all(previous_treat_to_exclude, exclude_treatment_data)),
-    test_df = data_df %>%
-      dplyr::filter(Dataset %in% dataset_selection$test) %>%
+    test_df = pred_df %>%
+      dplyr::filter(dataset_name %in% dataset_selection$test) %>%
       tidyr::drop_na(dplyr::any_of(predictors$feature_name)) %>%
       dplyr::filter(dplyr::if_all(previous_treat_to_exclude, exclude_treatment_data))
   )
+
   #Check if any of the selected predictors is missing for a specific dataset (eg, IMVigor210 doesn't have Age data)
-  missing_annot <- purrr::map_dfr(.x = c(dataset_selection$train, dataset_selection$test), predictor = selected_pred, fmx_df = data_df, function(dataset, predictor, fmx_df){
-    feature <- sapply(data_df %>% dplyr::filter(Dataset == dataset) %>% dplyr::select(predictor), function(x)sum(is.na(x)))
+  missing_annot <- purrr::map_dfr(.x = c(dataset_selection$train, dataset_selection$test), predictor = dplyr::filter(predictors, VariableType != "Category")$feature_name, fmx_df = data_df, function(dataset, predictor, fmx_df){
+    feature <- sapply(pred_df %>% dplyr::filter(dataset_name == dataset) %>% dplyr::select(predictor), function(x)sum(is.na(x)))
 
     if(length(feature[feature != 0])>0){
-      n_samples <- nrow(data_df[data_df$Dataset == dataset,])
+      n_samples <- nrow(pred_df[pred_df$dataset_name == dataset,])
       data.frame(feature_name = names(feature[feature != 0]),
                  dataset = dataset,
                  n_missing = feature[feature != 0]) %>%
@@ -135,15 +184,15 @@ get_training_object <- function(data_df, train_ds, test_ds,
       if(length(missing_level) != 0){
         missing_df <- data_bucket$test_df %>%
           dplyr::filter(.[[x]] %in% missing_level) %>%
-          dplyr::group_by(Dataset) %>%
-          dplyr::select(Dataset, dplyr::any_of(x)) %>%
+          dplyr::group_by(dataset_name) %>%
+          dplyr::select(dataset_name, dplyr::any_of(x)) %>%
           dplyr::distinct()
 
         cat_missing <- data.frame(
           feature_name = x,
           feature_display = subset(predictors, feature_name == x, feature_display),
           group = missing_df[[x]],
-          dataset = missing_df$Dataset
+          dataset = missing_df$dataset_name
         )
       }
     })
@@ -195,21 +244,20 @@ get_table_cv_results <- function(model, has_bestTune = TRUE){
 get_plot_var_importance <- function(model, labels = NULL, from_varImp = TRUE, scale_values = FALSE, title = ""){
   if(from_varImp == TRUE){
     plot_df <- (caret::varImp(model, scale = scale_values))$importance
+
     plot_df$feature_name = rownames(plot_df)
     colnames(plot_df) <- c("x", "feature_name")
     plot_df$error <- 0
-  }else{ #right now, only logistic regression
+  }else{ #at the moment, only logistic regression
     plot_df <- data.frame(
       x = coef(summary(model))[,1],
       feature_name = rownames(coef(summary(model))),
       error = coef(summary(model))[,2]
     )
   }
-
   plot_df <- merge(plot_df, labels, by = "feature_name", all.x = TRUE) %>%
     dplyr::mutate(feature_display = replace(feature_display, feature_name == "(Intercept)", "(Intercept)")) %>%
     dplyr::select(x, y = feature_display, error)
-
   plot_levels <-levels(reorder(plot_df[["y"]], plot_df[["x"]], sort))
 
   create_barplot_horizontal(
@@ -322,7 +370,7 @@ run_rf <- function(train_df, response_variable, predictors, n_cv_folds, balance_
 get_testing_results <- function(model, test_df, test_datasets, survival_data){
   purrr::map(.x = test_datasets, function(x){
     df <- test_df %>%
-            dplyr::filter(Dataset == x) %>%
+            dplyr::filter(dataset_name == x) %>%
             dplyr::mutate(prediction = predict(model, newdata = .))
 
     accuracy_results <- caret::confusionMatrix(df$prediction, as.factor(df$Responder), positive = "Responder")
