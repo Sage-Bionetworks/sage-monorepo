@@ -48,7 +48,7 @@ io_target_distributions_server <- function(
         features   = features,
         distplot_xlab = shiny::reactive(cohort_obj()$group_display),
         scale_method_default = shiny::reactive("Log10"),
-        feature_default = shiny::reactive(url_gene()),
+        # feature_default = shiny::reactive(default_gene()),
         drilldown  = shiny::reactive(T)
       )
 
