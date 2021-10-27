@@ -15,6 +15,7 @@ normalize_variable <- function(x, is_test = FALSE, train_avg = NULL, train_sd = 
 }
 
 normalize_dataset <- function(train_df, test_df = NULL, variable_to_norm, predictors, is_test = FALSE){
+  train_df[, variable_to_norm] <- sapply(train_df[, variable_to_norm], as.numeric)
   if(is_test == FALSE){
     avg_train <-  NULL
     sd_train <-  NULL
@@ -137,6 +138,8 @@ get_training_object <- function(cohort_obj,
   }
 
   pred_df <- predictors_df %>%
+    rbind(iatlas.api.client::query_feature_values(cohorts = cohort_obj$dataset_names, features = c("OS", "OS_time", "PFI_1", "PFI_time_1")) %>%
+                       dplyr::select(sample_name = sample, feature_name, feature_value)) %>%
     dplyr::filter(sample_name %in% pre_treat_samples$sample_name) %>%
     tidyr::pivot_wider(., names_from = feature_name, values_from = feature_value, values_fill = NA) %>%
     dplyr::inner_join(iatlas.api.client::query_dataset_samples(datasets = cohort_obj$dataset_names), by = "sample_name")
@@ -373,21 +376,21 @@ get_testing_results <- function(model, test_df, test_datasets, survival_data){
             dplyr::filter(dataset_name == x) %>%
             dplyr::mutate(prediction = predict(model, newdata = .))
 
-    accuracy_results <- caret::confusionMatrix(df$prediction, as.factor(df$Responder), positive = "Responder")
+    accuracy_results <- caret::confusionMatrix(df$prediction, as.factor(df$Responder), positive = "true_responder")
 
     rocp <- pROC::roc(
       response = factor(df$Responder,  ordered = TRUE),
       predictor = factor(df$prediction, ordered = TRUE),
-      levels = c("Responder", "Non-Responder"),
+      levels = c("true_responder", "false_responder"),
       quiet = TRUE,
       auc = TRUE)
 
     rplot <- pROC::ggroc(rocp) + ggplot2::labs(title = paste("AUC: ", round(rocp$auc, 3)))
     #KM plot
     dataset_df <- survival_data %>%
-        select(Sample_ID, OS, OS_time, PFI_1, PFI_time_1) %>%
-        merge(., df, by = "Sample_ID")
-
+        select(sample_name, OS, OS_time, PFI_1, PFI_time_1) %>%
+        merge(., df, by = "sample_name")
+    dataset_df[, c("OS", "OS_time", "PFI_1", "PFI_time_1")] <- sapply(dataset_df[, c("OS", "OS_time", "PFI_1", "PFI_time_1")], as.numeric)
     surv_df <- build_survival_df(
                       df = dataset_df,
                       group_column = "prediction",

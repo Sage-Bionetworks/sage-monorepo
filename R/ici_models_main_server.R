@@ -90,7 +90,6 @@ ici_models_main_server <- function(
 
       output$samples_summary <- shiny::renderText({
         shiny::req(training_obj())
-        View(training_obj())
         paste("Samples in training set:", nrow(training_obj()$subset_df$train_df),
               "Samples in testing set:", nrow(training_obj()$subset_df$test_df))
       })
@@ -181,10 +180,8 @@ ici_models_main_server <- function(
           normalize_dataset(
             train_df = selected_df()$train,
             test_df = selected_df()$test,
-            variable_to_norm = c(input$predictors_gene,
-                                 input$predictors_immunefeatures,
-                                 input$predictors_biomarkers), #df_to_model()[input$predictors_biomarkers] %>% dplyr::select(where(is.numeric)) %>% colnames()),
-            predictors = predictors(),
+            variable_to_norm = dplyr::filter(training_obj()$predictors, VariableType == "Numeric")$feature_name,
+            predictors = dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name,
             is_test = TRUE)
         }else{
           scaled_df %>%
