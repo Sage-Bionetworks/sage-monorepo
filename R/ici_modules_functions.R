@@ -6,14 +6,6 @@ datasets_options <-  list(
   "IMVigor210 - BLCA, Anti-PD-L1" = "IMVigor210",
   "Prins, 2019 - GBM, Anti-PD-1" = "Prins 2019")
 
-datasets_options_train <-  list(
-  "Gide, 2019 - SKCM, Anti-PD-1 +/- Anti-CTLA-4 (72)" =  "Gide_Cell_2019",
-  "Hugo, 2016 - SKCM, Anti-PD-1 (28)" = "HugoLo_IPRES_2016",
-  "Riaz, 2017 - SKCM, Anti-PD-1 (49)" = "Riaz_Nivolumab_2017",
-  "Van Allen, 2015 - SKCM, Anti-CTLA-4 (42)" = "VanAllen_antiCTLA4_2015",
-  "IMVigor210 - BLCA, Anti-PD-L1 (348)" = "IMVigor210",
-  "Prins, 2019 - GBM, Anti-PD-1 (29)" = "Prins_GBM_2019")
-
 datasets_PFI <- c("Gide 2019", "Van Allen 2015", "Prins 2019")
 
 ioresponse_data <- load_io_data()

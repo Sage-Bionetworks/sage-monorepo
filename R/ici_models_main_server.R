@@ -18,7 +18,7 @@ ici_models_main_server <- function(
           sortable::add_rank_list(
             text = "Datasets available",
             labels = lapply(
-              lapply(names(datasets_options_train), function(x) paste(list_format, x, "</p>")),
+              lapply(cohort_obj()$dataset_displays, function(x) paste(list_format, x, "</p>")),
               shiny::HTML),
             input_id = ns("datasets")
           ),
@@ -56,17 +56,18 @@ ici_models_main_server <- function(
 
       output$categoric_pred <- shiny::renderUI({
         shiny::req(input$balance_pred == TRUE)
-        #selected_pred <- training_obj()$predictors %>% filter(VariableType == "Categorical") %>% pull(feature_name, name = feature_display)
         shiny::validate(shiny::need(length(input$predictors_clinical_data)>0, "No categorical predictor was selected."))
         shiny::checkboxGroupInput(
           ns("pred_to_balance"),
           label = "Select variable(s) to be balanced",
-          choices = input$predictors_clinical_data
+          choices = names(variables_list$clinical_data)[match(input$predictors_clinical_data,variables_list$clinical_data)]
         )
       })
       output$num_transform <- shiny::renderUI({
-        #selected_pred <- training_obj()$predictors %>% filter(VariableType == "Numeric") %>% pull(feature_name, name = feature_display)
-        selected_pred <- c(input$predictors_immunefeatures, input$predictors_biomarkers, input$predictors_gene)
+        selected_pred <- training_obj()$predictors %>%
+          dplyr::filter(feature_name %in% c(input$predictors_immunefeatures, input$predictors_biomarkers,input$predictors_gene)) %>%
+          dplyr::pull(feature_display)
+
         shiny::validate(shiny::need(length(selected_pred)>0, "No numeric predictor was selected."))
         shiny::checkboxGroupInput(
           ns("pred_to_transform"),
@@ -79,7 +80,7 @@ ici_models_main_server <- function(
         shiny::req(input$train, input$test, predictors())
 
         get_training_object(
-          cohort_obj = cohort_obj,
+          cohort_obj = cohort_obj(),
           train_ds = input$train,
           test_ds = input$test,
           selected_pred = predictors(),
