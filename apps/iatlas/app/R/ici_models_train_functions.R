@@ -1,5 +1,6 @@
-get_dataset_id <- function(ds_labels){
-  sapply(ds_labels, function(x) datasets_options_train[[x]])
+get_dataset_id <- function(ds_labels, cohort_obj){
+  ds_ids <- setNames(cohort_obj$dataset_names, cohort_obj$dataset_displays)
+  sapply(ds_labels, function(x) ds_ids[[x]])
 }
 ######################
 # Dataset preparation
@@ -67,8 +68,8 @@ get_training_object <- function(cohort_obj,
                                 previous_treat_to_exclude = NULL){
   #df with train and test
   dataset_selection <- list(
-    train = get_dataset_id(train_ds),
-    test = get_dataset_id(test_ds)
+    train = get_dataset_id(train_ds, cohort_obj),
+    test = get_dataset_id(test_ds, cohort_obj)
   )
 
   #df with selected predictors and labels
@@ -86,11 +87,11 @@ get_training_object <- function(cohort_obj,
   }
 
   #for categorical predictors, we need to make sure to store the key to label them correctly
-  cat_df <- iatlas.api.client::query_tag_samples(cohorts = cohort_obj$dataset_names, parent_tags = c(selected_pred, "TCGA_Study", "Responder")) %>% #we always want TCGA Study to check if user mixed different types
+  cat_df <- iatlas.api.client::query_tag_samples(cohorts = cohort_obj$dataset_names, parent_tags = c(selected_pred, "Prior_Rx", "TCGA_Study", "Responder")) %>% #we always want TCGA Study to check if user mixed different types
     dplyr::inner_join(iatlas.api.client::query_tags_with_parent_tags(parent_tags = c(selected_pred, "TCGA_Study", "Responder")), by = c("tag_name", "tag_long_display", "tag_short_display", "tag_characteristics", "tag_color", "tag_order", "tag_type"))
 
   categories <- cat_df %>%
-    dplyr::mutate(feature_name = paste0(parent_tag_name, tag_name), #parent_tag_name,
+    dplyr::mutate(feature_name = parent_tag_name, #paste0(parent_tag_name, tag_name),
                   feature_display = tag_short_display, #tag_name,
                   VariableType = "Category") %>%
     dplyr::select(feature_name, feature_display, VariableType) %>%
@@ -131,10 +132,12 @@ get_training_object <- function(cohort_obj,
 
   if("Prins_GBM_2019" %in% cohort_obj$dataset_names){
     pre_treat_samples <-  iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment", cohorts = cohort_obj$dataset_names) %>%
+      dplyr::filter(sample_name %in% cohort_obj$sample_tbl$sample_name) %>%
       dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>% #we want all samples from Prins
       dplyr::distinct(sample_name)
   }else{
-    pre_treat_samples <-  iatlas.api.client::query_tag_samples(cohorts = cohort_obj$dataset_names, tags = "pre_sample_treatment")
+    pre_treat_samples <-  iatlas.api.client::query_tag_samples(cohorts = cohort_obj$dataset_names, tags = "pre_sample_treatment") %>%
+      dplyr::filter(sample_name %in% cohort_obj$sample_tbl$sample_name)
   }
 
   pred_df <- predictors_df %>%
