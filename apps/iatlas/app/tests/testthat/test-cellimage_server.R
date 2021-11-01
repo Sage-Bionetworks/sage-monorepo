@@ -1,6 +1,6 @@
-test_that("extracellular_network_server", {
+test_that("cellimage_server", {
   shiny::testServer(
-    extracellular_network_server,
+    cellimage_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
         iatlas.modules2::tcga_immune_subtype_cohort_obj

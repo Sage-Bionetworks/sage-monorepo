@@ -1,8 +1,10 @@
-test_that("module_works", {
+test_that("clinical_outcomes_heatmap_server", {
   shiny::testServer(
     clinical_outcomes_heatmap_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(get_tcga_immune_subtype_cohort_obj_50())
+      "cohort_obj" = shiny::reactiveVal(
+        iatlas.modules2::tcga_immune_subtype_cohort_obj_small
+      )
     ),
     {
       session$setInputs("time_feature_choice" = "OS_time")
