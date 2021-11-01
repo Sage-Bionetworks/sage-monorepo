@@ -23,3 +23,14 @@ build_survival_df <- function(df, group_column, time_column) {
   ) %>%
     na.omit()
 }
+
+get_group_colors <- function(cohort_obj){
+  if(cohort_obj$group_tbl$characteristics == "Immune feature bin range"){
+    group_colors <- viridis::viridis(dplyr::n_distinct(cohort_obj$sample_tbl$group_name))
+    names(group_colors) <- sapply(unique(cohort_obj$sample_tbl$group_name), function(a) paste('measure=',a,sep=''))
+  }else{
+    group_colors <- unique(cohort_obj$group_tbl$color)
+    names(group_colors) <- sapply(unique(cohort_obj$group_tbl$short_name), function(a) paste('measure=',a,sep=''))
+  }
+  group_colors
+}

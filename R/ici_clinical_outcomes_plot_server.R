@@ -9,8 +9,13 @@ ici_clinical_outcomes_plot_server <- function(
       ns <- session$ns
 
       feature_df <- shiny::reactive({
+        pre_treat_samples <- iatlas.api.client::query_tag_samples(cohorts = cohort_obj()[["dataset_names"]], tags = "pre_sample_treatment") %>%
+          dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
+          dplyr::select(sample_name)
+
         cohort_obj()$sample_tbl %>%
-          dplyr::inner_join(., iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")), by = c("sample_name" = "sample"))
+          dplyr::inner_join(pre_treat_samples, by = "sample_name") %>%
+          dplyr::inner_join(iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")), by = c("sample_name" = "sample"))
       })
 
       all_survival <- shiny::reactive({
@@ -41,17 +46,13 @@ ici_clinical_outcomes_plot_server <- function(
       all_kmplot <- shiny::reactive({
         shiny::req(all_fit())
 
-        group_colors <- unique(cohort_obj()$group_tbl$color)
-        names(group_colors) <- unique(cohort_obj()$group_tbl$short_name)
-        # names(group_colors) <- sapply(unique(cohort_obj()$group_tbl$short_name), function(a) paste('variable=',a,sep=''))
-
         create_kmplot(
           fit = all_fit(),
           df = all_survival(),
           confint = input$confint,
           risktable = input$risktable,
           title = names(all_survival()),
-          group_colors = group_colors,
+          group_colors = get_group_colors(cohort_obj()),
           facet = TRUE)
       })
 
@@ -81,7 +82,7 @@ ici_clinical_outcomes_plot_server <- function(
       shiny::observeEvent(all_survival(),{
         shiny::req(all_fit(), feature_df())
 
-        if(length(all_survival())>0 & length(input$datasets) != length(all_survival())){ #some dataset has only one category for the selected grouping variable
+        if(length(all_survival())>0 & length(cohort_obj()[["dataset_names"]]) != length(all_survival())){ #some dataset has only one category for the selected grouping variable
 
           missing_datasets <- setdiff(cohort_obj()$group_tbl$dataset_display, names(all_survival()))
 
@@ -103,7 +104,7 @@ ici_clinical_outcomes_plot_server <- function(
               paste0(missing_annot$error, missing_annot$dataset, collapse = "<br>")
           })
         }
-        if(length(input$datasets) == length(all_survival()) | length(all_survival()) == 0){ #no notification to display
+        if(length(cohort_obj()[["dataset_names"]]) == length(all_survival()) | length(all_survival()) == 0){ #no notification to display
           output$notification <- renderUI({
           })
         }
