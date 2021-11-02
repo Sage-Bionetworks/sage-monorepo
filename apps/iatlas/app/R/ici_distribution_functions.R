@@ -28,12 +28,26 @@ combine_colors <- function(color1, color2){
 
 }
 
-combine_groups <- function(df, group1, cat1, group2){
+combine_groups <- function(df, group2, cohort_obj){
 
-  cat1 <- cat1 %>%
-    dplyr::mutate(parent_tag_name = group1) %>%
-    select(-c(dataset_name, dataset_display, size))%>%
-    dplyr::distinct()
+  group1 <- cohort_obj$group_name
+  cat <- cohort_obj$group_tbl
+
+  if("Immune feature bin range" %in% cat$characteristics){
+    cat1 <- data.frame(
+      parent_tag_name = group1,
+      short_name = unique(cohort_obj$sample_tbl$group_name),
+      long_name = unique(cohort_obj$sample_tbl$group_name),
+      characteristics = "Immune feature bin range",
+      color = viridis::viridis(dplyr::n_distinct(cohort_obj$sample_tbl$group_name))
+    )
+
+  }else{
+    cat1 <- cat %>%
+      dplyr::mutate(parent_tag_name = group1) %>%
+      select(-c(dataset_name, dataset_display, size, order))%>%
+      dplyr::distinct()
+  }
 
   cat2 <- iatlas.api.client::query_tags_with_parent_tags(parent_tags = group2) %>%
     dplyr::select(parent_tag_name, short_name = tag_short_display, long_name = tag_long_display, characteristics = tag_characteristics, color = tag_color)

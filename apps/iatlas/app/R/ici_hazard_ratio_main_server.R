@@ -15,23 +15,15 @@ ici_hazard_ratio_main_server <- function(
         selected_vals$vars <- input$var2_cox
       })
 
-      # #getting dropdown menu options
-      # ici_datasets <- shiny::reactive({
-      #   x <- iatlas.api.client::query_datasets(types = "ici")
-      #   setNames(as.character(x$name), x$display)
-      # })
-      # output$list_datasets <- shiny::renderUI({
-      #   shiny::selectizeInput(ns("datasets_mult"), "Select Datasets", choices = ici_datasets(),
-      #                      selected =  c("Gide_Cell_2019", "HugoLo_IPRES_2016"), multiple = TRUE)
-      # })
-
       categories <- shiny::reactive(iatlas.api.client::query_tags(datasets = cohort_obj()[["dataset_names"]]) %>%
                                       dplyr::mutate(class = dplyr::case_when(
                                         tag_name %in% c( "Response", "Responder", "Progression", "Clinical_Benefit") ~ "Response to ICI",
                                         TRUE ~ "Treatment Data"))
       )
 
-      features <- shiny::reactive(cohort_obj()$feature_tbl)
+      features <- shiny::reactive({cohort_obj()$feature_tbl %>%
+                                    dplyr::filter(!name %in% c("OS", "OS_time", "PFI_1", "PFI_time_1"))
+        })
 
       shiny::observe({
         shiny::req(categories(), features())
