@@ -103,7 +103,7 @@ ici_distribution_server <- function(
          groups <- samples %>%
            dplyr::inner_join(iatlas.api.client::query_tag_samples(parent_tags = input$groupvar2), by = "sample_name")
 
-         combine_groups(groups, cohort_obj()$group_name, cohort_obj()$group_tbl, input$groupvar2) %>%
+         combine_groups(groups, input$groupvar2,cohort_obj()) %>%
            dplyr::inner_join(samples %>% dplyr::select(sample_name, y), by = "sample_name")
         }
       })
@@ -227,13 +227,17 @@ ici_distribution_server <- function(
           magrittr::extract2("x") %>%
           gsub("<br />", "\n", .)
 
-        selected_display <- cohort_obj()$group_tbl %>%
-          dplyr::filter(short_name == key_value) %>%
-          dplyr::select(short_name, long_name, characteristics) %>%
-          dplyr::distinct()
 
-        if(nrow(selected_display)>0){
-          paste(selected_display$long_name, selected_display$characteristics, sep = ": ")
+        if(input$groupvar2 == "None"){
+          if("Immune feature bin range" %in% cohort_obj()$group_tbl$characteristics){
+            paste(unique(cohort_obj()$group_tbl$short_name), key_value, sep = ": ")
+          }else{
+            selected_display <- cohort_obj()$group_tbl %>%
+              dplyr::filter(short_name == key_value) %>%
+              dplyr::select(short_name, long_name, characteristics) %>%
+              dplyr::distinct()
+            paste(selected_display$long_name, selected_display$characteristics, sep = ": ")
+          }
         }else{
           selected_display <- df_selected() %>%
             dplyr::filter(group == key_value) %>%
