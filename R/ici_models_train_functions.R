@@ -197,7 +197,7 @@ get_training_object <- function(cohort_obj,
         cat_missing <- data.frame(
           feature_name = x,
           feature_display = subset(predictors, feature_name == x, feature_display),
-          group = subset(predictors, feature_name == missing_df[[x]], feature_display), #missing_df[[x]],
+          group = subset(predictors, feature_name == paste0(x, missing_df[[x]]), feature_display)$feature_display,
           dataset = missing_df$dataset_display
         )
       }
