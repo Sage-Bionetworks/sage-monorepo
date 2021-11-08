@@ -3,13 +3,18 @@ ici_models_train_server <- function(
   training_obj,
   train_df,
   test_df,
-  advanced_options
+  advanced_options,
+  blocked_train
 ) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
 
       ns <- session$ns
+
+      shiny::observe({ #we need to block the train button in case the selection will cause error in training or testing
+        shinyjs::toggleState("compute_train", condition = (blocked_train() == FALSE))
+      })
 
       #Running model
       train_method <- reactive({

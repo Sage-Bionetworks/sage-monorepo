@@ -2,6 +2,11 @@ get_dataset_id <- function(ds_labels, cohort_obj){
   ds_ids <- setNames(cohort_obj$dataset_names, cohort_obj$dataset_displays)
   sapply(ds_labels, function(x) ds_ids[[x]])
 }
+
+get_dataset_label <- function(ds_name, cohort_obj){
+  ds_ids <- setNames(cohort_obj$dataset_displays, cohort_obj$dataset_names)
+  sapply(ds_name, function(x) ds_ids[[x]])
+}
 ######################
 # Dataset preparation
 ######################
@@ -160,27 +165,86 @@ get_training_object <- function(cohort_obj,
   )
 
   #Check if any of the selected predictors is missing for a specific dataset (eg, IMVigor210 doesn't have Age data)
-  missing_annot <- purrr::map_dfr(.x = c(dataset_selection$train, dataset_selection$test), predictor = dplyr::filter(predictors, VariableType != "Category")$feature_name, fmx_df = data_df, function(dataset, predictor, fmx_df){
+  missing_annot <- purrr::map_dfr(.x = c(dataset_selection$train, dataset_selection$test), predictor = dplyr::filter(predictors, VariableType != "Category")$feature_name,
+                                  function(dataset, predictor){
     feature <- sapply(pred_df %>% dplyr::filter(dataset_name == dataset) %>% dplyr::select(predictor), function(x)sum(is.na(x)))
 
-    if(length(feature[feature != 0])>0){
+    if(length(feature[feature != 0])>0){ #features that were not annotated in a dataset have NA as value
       n_samples <- nrow(pred_df[pred_df$dataset_name == dataset,])
       data.frame(feature_name = names(feature[feature != 0]),
                  dataset = dataset,
                  n_missing = feature[feature != 0]) %>%
         dplyr::mutate(
           missing_all = dplyr::case_when(
-            n_missing == n_samples ~ 1,
-            TRUE ~ 0
+            n_missing == n_samples ~ "feature_all_na",
+            TRUE ~ "feature_some_na"
         )) %>%
         merge(., pred_features, by = "feature_name") %>%
         dplyr::select(feature_name, feature_display, dataset, n_missing, missing_all)
     }
   })
 
-  #In case a categorical predictor is selected, check if the testing dataset has the same levels included for training
+  #In case a categorical predictor is selected, check if:
+  #there is more than one level in the training set
+  #not all samples have NA as value in the training set
+  #the testing dataset has the same levels included for training
   cat_predictors <-subset(predictors,VariableType == "Categorical", feature_name)
-  #if some category is not annotated, we need to exclude it from training
+
+  cat_na <- if(nrow(cat_predictors) >0){
+    purrr::map_dfr(.x = dataset_selection$train, predictor = cat_predictors$feature_name, function(dataset, predictor){
+      dataset_display <- get_dataset_label(dataset, cohort_obj)
+
+      category <- sapply(pred_df %>% dplyr::filter(dataset_name == dataset) %>% dplyr::select(predictor), function(x)dplyr::n_distinct(x))
+      category <- category[category ==1]
+
+      n_na <-  sapply(pred_df %>% dplyr::filter(dataset_name == dataset) %>% dplyr::select(predictor), function(x)sum(stringr::str_starts(x, "na_")))
+      n_samples <- nrow(pred_df[pred_df$dataset_name == dataset,])
+
+      some_na <- n_na[n_na < n_samples & n_na >0]
+      if(length(some_na)>0){
+      one_level_df <- data.frame(feature_name = names(some_na),
+                                 dataset = dataset_display,
+                                 n_missing = some_na,
+                                 missing_all = "tag_some_na")
+      }else{
+        one_level_df <- data.frame()
+      }
+
+      if(length(category>0)){ #category has only one level in training set
+        all_na <- n_na[n_na == n_samples]
+        no_na <- n_na[n_na == 0]
+        if(length(all_na)>0){#list categories that have only NA values
+          one_level_df <- rbind(
+            one_level_df,
+            data.frame(feature_name = names(all_na),
+                     dataset = dataset_display,
+                     n_missing = all_na,
+                     missing_all = "tag_all_na")
+          )
+        }
+        if(length(no_na)>0){ #list categories that have one level that is not NA
+          one_level_df <- rbind(
+            one_level_df,
+            data.frame(feature_name = names(no_na),
+                       dataset = dataset_display,
+                       n_missing = no_na,
+                       missing_all = "tag_one_level")
+          )
+          one_level_df <- one_level_df %>%
+            merge(., categories, by = "feature_name") %>%
+            dplyr::select(feature_name, feature_display, dataset, n_missing, missing_all)
+        }
+      }
+    })
+  }else{
+    data.frame()
+  }
+
+  missing_annot <- rbind(
+    missing_annot,
+    cat_na
+  )
+
   cat_missing <- if(nrow(cat_predictors) >0){
     purrr::map_dfr(.x = cat_predictors$feature_name, function(x){
       missing_train <- unique(data_bucket$train_df[[x]])
@@ -191,15 +255,15 @@ get_training_object <- function(cohort_obj,
         missing_df <- data_bucket$test_df %>%
           dplyr::filter(.[[x]] %in% missing_level) %>%
           dplyr::group_by(dataset_display) %>%
-          dplyr::select(dataset_display, dplyr::any_of(x)) %>%
-          dplyr::distinct()
+          dplyr::select(dataset_display, dplyr::any_of(x))
 
         cat_missing <- data.frame(
           feature_name = x,
           feature_display = subset(predictors, feature_name == x, feature_display),
           group = subset(predictors, feature_name == paste0(x, missing_df[[x]]), feature_display)$feature_display,
           dataset = missing_df$dataset_display
-        )
+        ) %>%
+          dplyr::distinct()
       }
     })
   }
