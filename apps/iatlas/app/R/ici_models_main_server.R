@@ -49,6 +49,10 @@ ici_models_main_server <- function(
                                           choices = variables_list$genes,
                                           selected = NULL,
                                           server = TRUE))
+      observe(shiny::updateSelectizeInput(session, 'response_variable',
+                                          choices = variables_list$response_vars,
+                                          selected = "Responder",
+                                          server = TRUE))
 
       predictors <- shiny::reactive(
         c(input$predictors_clinical_data, input$predictors_immunefeatures, input$predictors_biomarkers, input$predictors_gene)
@@ -83,6 +87,7 @@ ici_models_main_server <- function(
           cohort_obj = cohort_obj(),
           train_ds = input$train,
           test_ds = input$test,
+          selected_response = input$response_variable,
           selected_pred = predictors(),
           selected_genes = input$predictors_gene,
           previous_treat_to_exclude = input$exclude_previous
@@ -97,13 +102,17 @@ ici_models_main_server <- function(
 
       output$train_summary <- shiny::renderText({
         shiny::req(training_obj())
-        paste0("Selected formula: Response to ICI ~ ",
-               paste(subset(training_obj()$predictors, VariableType != "Category")$feature_display, collapse = " + ")
+        paste0("Selected formula: ", names(variables_list$response_vars)[match(input$response_variable,variables_list$response_vars)],
+               " ~ ", paste(subset(training_obj()$predictors, VariableType != "Category")$feature_display, collapse = " + ")
                )
       })
-#TODO: test checks for NAs and missing levels
-      block_train <- shiny::reactiveVal(FALSE)
 
+      output$response_characteristics <- shiny::renderText({
+        shiny::req(input$response_variable)
+        iatlas.api.client::query_tags(tags = input$response_variable) %>% dplyr::pull(tag_characteristics)
+      })
+
+      block_train <- shiny::reactiveVal(FALSE)
       observe({ #block Train button if one of the datasets is missing annotation for one predictor. Notify number of samples with NA that will be excluded
         shiny::req(training_obj())
 
@@ -121,7 +130,6 @@ ici_models_main_server <- function(
          }else{
           if(nrow(training_obj()$missing_annot)>0){ #checks for missing data
             if(any(training_obj()$missing_annot$missing_all %in% c("feature_all_na" ,"tag_all_na"))){ #dataset doesn't have annotation for one selected feature
-              # shinyjs::disable("compute_train")
               block_train(TRUE)
               shinyjs::show("missing_data")
               output$missing_data <- shiny::renderText({
@@ -131,7 +139,6 @@ ici_models_main_server <- function(
                       paste0("<li>Dataset ", missing_all$dataset, " has no data for ", missing_all$feature_display,".", collapse = "</li>"), "</ul>")
                 })
             }else if(any(training_obj()$missing_annot$missing_all == "tag_one_level")){
-              # shinyjs::disable("compute_train")
               block_train(TRUE)
               shinyjs::show("single_level")
               output$single_level <- shiny::renderText({
@@ -141,7 +148,6 @@ ici_models_main_server <- function(
                       paste0("<li>Training set has only one level for ", missing_all$feature_display,".", collapse = "</li>"), "</ul>")
               })
             }else{
-              # shinyjs::enable("compute_train")
               block_train(FALSE)
               shinyjs::hide("missing_data")
               shinyjs::hide("single_level")
@@ -158,7 +164,6 @@ ici_models_main_server <- function(
             }
           } #ends check for NAs in annotation
          if(length(training_obj()$missing_level)>0){
-           # shinyjs::disable("compute_train")
            block_train(TRUE)
            output$missing_level <- shiny::renderText({
              shiny::req(nrow(training_obj()$missing_level) != 0)
@@ -184,12 +189,12 @@ ici_models_main_server <- function(
             train_df = selected_df()$train,
             test_df = selected_df()$test,
             variable_to_norm = dplyr::filter(training_obj()$predictors, VariableType == "Numeric")$feature_name,
-            predictors = dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name,
+            predictors = c(input$response_variable, dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name),
             is_test = FALSE)
         }else{
           scaled_df %>%
             tidyr::drop_na(any_of(predictors())) %>%
-            dplyr::select("sample_name", "dataset_name", "Responder", all_of(dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name))
+            dplyr::select("sample_name", "dataset_name", input$response_variable, all_of(dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name))
         }
       })
 
@@ -199,12 +204,12 @@ ici_models_main_server <- function(
             train_df = selected_df()$train,
             test_df = selected_df()$test,
             variable_to_norm = dplyr::filter(training_obj()$predictors, VariableType == "Numeric")$feature_name,
-            predictors = dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name,
+            predictors = c(input$response_variable, dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name),
             is_test = TRUE)
         }else{
           scaled_df %>%
             tidyr::drop_na(any_of(predictors())) %>%
-            dplyr::select("sample_name", "dataset_name", "Responder", all_of(predictors()))
+            dplyr::select("sample_name", "dataset_name", input$response_variable, all_of(dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name))
         }
       })
 

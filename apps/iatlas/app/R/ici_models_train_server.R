@@ -33,7 +33,7 @@ ici_models_train_server <- function(
 
         train_method()(
           train_df = train_df(),
-          response_variable = "Responder",
+          response_variable = training_obj()$response_var,
           predictors = training_obj()$predictor,
           n_cv_folds = input$cv_number,
           balance_lhs = advanced_options()$balance_lhs,
@@ -56,8 +56,7 @@ ici_models_train_server <- function(
       prediction_test <- eventReactive(input$compute_test, {
         iatlas.app::get_testing_results(model_train()$model,
                                         test_df(),
-                                        test_datasets = training_obj()$dataset$test,
-                                        survival_data = training_obj()$subset_df$test)
+                                        training_obj())
       })
       #Results of test for each selected dataset are stored in a list, so below we will plot all elements in the list
       shiny::observeEvent(input$compute_test,{

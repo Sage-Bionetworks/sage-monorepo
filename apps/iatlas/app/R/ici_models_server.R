@@ -8,6 +8,13 @@ ici_models_server <- function(
 
       predictors_list <- reactive({
 
+        ici_tags <- iatlas.api.client::query_dataset_tags(datasets = cohort_obj()$dataset_names)
+
+        response_vars <- ici_tags %>%
+          dplyr::filter(tag_name %in% c("Responder", "Clinical_Benefit", "Progression")) %>%
+          dplyr::select(tag_short_display, tag_name) %>%
+          tibble::deframe()
+
         clinical_data <- iatlas.api.client::query_dataset_tags(datasets = cohort_obj()$dataset_names) %>%
           dplyr::filter(!tag_name %in% c("Response", "Responder", "Clinical_Benefit", "Progression", "Sample_Treatment", "TCGA_Study")) %>%
           dplyr::select(tag_short_display, tag_name) %>%
@@ -35,6 +42,7 @@ ici_models_server <- function(
           )
 
         list(
+          response_vars = response_vars,
           clinical_data = clinical_data,
           immunefeatures = immunefeatures,
           biomarkers = biomarkers,

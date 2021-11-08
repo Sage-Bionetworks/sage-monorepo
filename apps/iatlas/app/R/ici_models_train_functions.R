@@ -41,7 +41,7 @@ normalize_dataset <- function(train_df, test_df = NULL, variable_to_norm, predic
                            train_avg = avg_train[dplyr::cur_column()],
                            train_sd = sd_train[dplyr::cur_column()]))) %>%
     dplyr::ungroup() %>%
-    dplyr::select("sample_name", "dataset_name", "Responder", dplyr::all_of(predictors))
+    dplyr::select("sample_name", "dataset_name", dplyr::all_of(predictors))
 }
 
 #########################
@@ -67,6 +67,7 @@ exclude_treatment_data <- function(x){
 get_training_object <- function(cohort_obj,
                                 train_ds,
                                 test_ds,
+                                selected_response,
                                 selected_pred,
                                 selected_genes,
                                 scale_function_choice = "None", predictors_to_scale,
@@ -92,11 +93,11 @@ get_training_object <- function(cohort_obj,
   }
 
   #for categorical predictors, we need to make sure to store the key to label them correctly
-  cat_df <- iatlas.api.client::query_tag_samples(cohorts = cohort_obj$dataset_names, parent_tags = c(selected_pred, "Prior_Rx", "TCGA_Study", "Responder")) %>% #we always want TCGA Study to check if user mixed different types
-    dplyr::inner_join(iatlas.api.client::query_tags_with_parent_tags(parent_tags = c(selected_pred, "TCGA_Study", "Responder")), by = c("tag_name", "tag_long_display", "tag_short_display", "tag_characteristics", "tag_color", "tag_order", "tag_type"))
+  cat_df <- iatlas.api.client::query_tag_samples(cohorts = cohort_obj$dataset_names, parent_tags = c(selected_response, selected_pred, "Prior_Rx", "TCGA_Study")) %>% #we always want TCGA Study to check if user mixed different types
+    dplyr::inner_join(iatlas.api.client::query_tags_with_parent_tags(parent_tags = c(selected_response, selected_pred, "TCGA_Study")), by = c("tag_name", "tag_long_display", "tag_short_display", "tag_characteristics", "tag_color", "tag_order", "tag_type"))
 
   categories <- cat_df %>%
-    dplyr::mutate(feature_name = paste0(parent_tag_name, tag_name), # tag_name,
+    dplyr::mutate(feature_name = paste0(parent_tag_name, tag_name),
                   feature_display = tag_short_display, #tag_name,
                   VariableType = "Category") %>%
     dplyr::select(feature_name, feature_display, VariableType) %>%
@@ -269,6 +270,7 @@ get_training_object <- function(cohort_obj,
   }
   list(
    dataset = dataset_selection,
+   response_var = selected_response,
    predictors = predictors,
    subset_df = data_bucket,
    missing_annot = missing_annot,
@@ -437,24 +439,24 @@ run_rf <- function(train_df, response_variable, predictors, n_cv_folds, balance_
 # Testing Results
 #########################
 
-get_testing_results <- function(model, test_df, test_datasets, survival_data){
-  purrr::map(.x = test_datasets, function(x){
+get_testing_results <- function(model, test_df, training_obj){
+  purrr::map(.x = training_obj$dataset$test, function(x){
     df <- test_df %>%
             dplyr::filter(dataset_name == x) %>%
             dplyr::mutate(prediction = predict(model, newdata = .))
 
-    accuracy_results <- caret::confusionMatrix(df$prediction, as.factor(df$Responder), positive = "true_responder")
+    accuracy_results <- caret::confusionMatrix(df$prediction, as.factor(df[[training_obj$response_var]]))
 
     rocp <- pROC::roc(
-      response = factor(df$Responder,  ordered = TRUE),
+      response = factor(df[[training_obj$response_var]],  ordered = TRUE),
       predictor = factor(df$prediction, ordered = TRUE),
-      levels = c("true_responder", "false_responder"),
+     # levels = c("true_responder", "false_responder"),
       quiet = TRUE,
       auc = TRUE)
 
     rplot <- pROC::ggroc(rocp) + ggplot2::labs(title = paste("AUC: ", round(rocp$auc, 3)))
     #KM plot
-    dataset_df <- survival_data %>%
+    dataset_df <- training_obj$subset_df$test %>%
         select(sample_name, OS, OS_time, PFI_1, PFI_time_1) %>%
         merge(., df, by = "sample_name")
     dataset_df[, c("OS", "OS_time", "PFI_1", "PFI_time_1")] <- sapply(dataset_df[, c("OS", "OS_time", "PFI_1", "PFI_time_1")], as.numeric)
