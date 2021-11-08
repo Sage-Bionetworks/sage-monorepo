@@ -11,12 +11,12 @@ ici_models_main_ui <- function(id){
     iatlas.modules::optionsBox(
       width = 24,
       shiny::column(
-        width = 8,
+        width = 6,
         #shiny::p(strong("Select training and testing datasets")),
         shiny::uiOutput(ns("bucket_list"))
       ),
       shiny::column(
-        width = 4,
+        width = 3,
         shiny::p(strong("2. Select predictors")),
         shiny::selectizeInput(ns("predictors_clinical_data"),
                               label = "Clinical Data",
@@ -34,6 +34,13 @@ ici_models_main_ui <- function(id){
                               label = "Gene Expression",
                               choices = NULL,
                               multiple = TRUE)
+      ),
+      shiny::column(
+        width = 3,
+        shiny::selectInput(ns("response_variable"),
+                           label = "3. Select Response Variable",
+                           choices = c("Responder", "Clinical Benefit")),
+        shiny::uiOutput(ns("response_characteristics"))
       )
     ),
     shiny::fluidRow(
