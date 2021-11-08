@@ -102,6 +102,8 @@ ici_models_main_server <- function(
                )
       })
 #TODO: test checks for NAs and missing levels
+      block_train <- shiny::reactiveVal(FALSE)
+
       observe({ #block Train button if one of the datasets is missing annotation for one predictor. Notify number of samples with NA that will be excluded
         shiny::req(training_obj())
 
@@ -112,37 +114,52 @@ ici_models_main_server <- function(
         else shiny::removeNotification(id = "high_pred")
 
         if(nrow(training_obj()$missing_annot) == 0 & length(training_obj()$missing_level)==0){
-          shinyjs::enable("compute_train")
+          #shinyjs::enable("compute_train")
+          block_train(FALSE)
           shinyjs::hide("missing_data")
           shinyjs::hide("missing_sample")
          }else{
           if(nrow(training_obj()$missing_annot)>0){ #checks for missing data
-            if(any(training_obj()$missing_annot$missing_all == 1)){ #dataset doesn't have annotation for one selected feature
-              shinyjs::disable("compute_train")
+            if(any(training_obj()$missing_annot$missing_all %in% c("feature_all_na" ,"tag_all_na"))){ #dataset doesn't have annotation for one selected feature
+              # shinyjs::disable("compute_train")
+              block_train(TRUE)
               shinyjs::show("missing_data")
               output$missing_data <- shiny::renderText({
                 shiny::req(nrow(training_obj()$missing_annot) != 0)
-                missing_all <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == 1))
+                missing_all <- (training_obj()$missing_annot %>% dplyr::filter(missing_all %in% c("feature_all_na" ,"tag_all_na")))
                 paste("<ul><i> Change the following dataset and/or predictor selection to proceed:</i><br>",
                       paste0("<li>Dataset ", missing_all$dataset, " has no data for ", missing_all$feature_display,".", collapse = "</li>"), "</ul>")
                 })
+            }else if(any(training_obj()$missing_annot$missing_all == "tag_one_level")){
+              # shinyjs::disable("compute_train")
+              block_train(TRUE)
+              shinyjs::show("single_level")
+              output$single_level <- shiny::renderText({
+                shiny::req(nrow(training_obj()$missing_annot) != 0)
+                missing_all <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == "tag_one_level"))
+                paste("<ul><i> Change the following dataset and/or predictor selection to proceed:</i><br>",
+                      paste0("<li>Training set has only one level for ", missing_all$feature_display,".", collapse = "</li>"), "</ul>")
+              })
             }else{
-              shinyjs::enable("compute_train")
+              # shinyjs::enable("compute_train")
+              block_train(FALSE)
               shinyjs::hide("missing_data")
+              shinyjs::hide("single_level")
             }
 
-            if(any(training_obj()$missing_annot$missing_all == 0)){ #samples with missing info for a selected feature
+            if(any(training_obj()$missing_annot$missing_all %in% c("feature_some_na" ,"tag_some_na"))){ #samples with missing info for a selected feature
               shinyjs::show("missing_sample")
               output$missing_sample <- shiny::renderText({
                 shiny::req(nrow(training_obj()$missing_annot) != 0)
-                missing_some <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == 0))
+                missing_some <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == c("feature_some_na" ,"tag_some_na")))
                 paste("<i> Samples with NA annotation will be excluded from modeling:</i><br>",
                       paste0(missing_some$dataset, " has ", missing_some$n_missing," samples with NA info for ", missing_some$feature_display, ".", collapse = "<br>"))
               })
             }
           } #ends check for NAs in annotation
          if(length(training_obj()$missing_level)>0){
-           shinyjs::disable("compute_train")
+           # shinyjs::disable("compute_train")
+           block_train(TRUE)
            output$missing_level <- shiny::renderText({
              shiny::req(nrow(training_obj()$missing_level) != 0)
              paste("<ul><i> Categorical level only present in testing dataset - change the dataset and/or predictor selection to proceed:</i><br>",
@@ -205,7 +222,8 @@ ici_models_main_server <- function(
         shiny::reactive(training_obj()),
         train_df = shiny::reactive(train_df()),
         test_df = shiny::reactive(test_df()),
-        advanced_options = shiny::reactive(advanced_selection())
+        advanced_options = shiny::reactive(advanced_selection()),
+        blocked_train = shiny::reactive(block_train())
         )
 
       ici_models_train_server(
@@ -213,7 +231,8 @@ ici_models_main_server <- function(
         shiny::reactive(training_obj()),
         train_df = shiny::reactive(train_df()),
         test_df = shiny::reactive(test_df()),
-        advanced_options = shiny::reactive(advanced_selection())
+        advanced_options = shiny::reactive(advanced_selection()),
+        blocked_train = shiny::reactive(block_train())
       )
     }
   )

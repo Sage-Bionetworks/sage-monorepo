@@ -83,6 +83,7 @@ ici_models_main_ui <- function(id){
             textOutput(ns("train_summary")),
             shiny::br(),
             shiny::htmlOutput(ns("missing_data")),
+            shiny::htmlOutput(ns("single_level")),
             shiny::htmlOutput(ns("missing_level")),
             shiny::htmlOutput(ns("missing_sample"))
           )
