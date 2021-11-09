@@ -98,7 +98,7 @@ get_training_object <- function(cohort_obj,
 
   categories <- cat_df %>%
     dplyr::mutate(feature_name = paste0(parent_tag_name, tag_name),
-                  feature_display = tag_short_display, #tag_name,
+                  feature_display = tag_short_display,
                   VariableType = "Category") %>%
     dplyr::select(feature_name, feature_display, VariableType) %>%
     rbind(
@@ -150,6 +150,7 @@ get_training_object <- function(cohort_obj,
     rbind(iatlas.api.client::query_feature_values(cohorts = cohort_obj$dataset_names, features = c("OS", "OS_time", "PFI_1", "PFI_time_1")) %>%
                        dplyr::select(sample_name = sample, feature_name, feature_value)) %>%
     dplyr::filter(sample_name %in% pre_treat_samples$sample_name) %>%
+    dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
     tidyr::pivot_wider(., names_from = feature_name, values_from = feature_value, values_fill = NA) %>%
     dplyr::inner_join(iatlas.api.client::query_dataset_samples(datasets = cohort_obj$dataset_names), by = "sample_name")
 
