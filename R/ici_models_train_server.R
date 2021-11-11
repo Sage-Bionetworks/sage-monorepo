@@ -56,7 +56,8 @@ ici_models_train_server <- function(
       prediction_test <- eventReactive(input$compute_test, {
         iatlas.app::get_testing_results(model_train()$model,
                                         test_df(),
-                                        training_obj())
+                                        training_obj(),
+                                        input$test_survival)
       })
       #Results of test for each selected dataset are stored in a list, so below we will plot all elements in the list
       shiny::observeEvent(input$compute_test,{

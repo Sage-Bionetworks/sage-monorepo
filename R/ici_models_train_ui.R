@@ -39,7 +39,11 @@ ici_models_train_ui <- function(id){
       width = 12,
       shiny::column(
         width = 5,
-        shiny::p("Ready to see how your model performs on the test datasets?")
+        shiny::selectInput(ns("test_survival"), "Select Survival Endpoint",
+                           choices = c("Overall Survival" = "OS_time",
+                                       "Progression Free Interval" = "PFI_time_1"),
+                           selected = "OS_time")
+        # shiny::p("Ready to see how your model performs on the test datasets?")
       ),
       shiny::column(
         width = 3,
