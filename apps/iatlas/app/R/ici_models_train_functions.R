@@ -78,6 +78,9 @@ get_training_object <- function(cohort_obj,
     test = get_dataset_id(test_ds, cohort_obj)
   )
 
+  #info about selected outcome
+  response_levels <- iatlas.api.client::query_tags_with_parent_tags(parent_tags = selected_response)
+
   #df with selected predictors and labels
   pred_features <- iatlas.api.client::query_cohort_features(cohorts = c(dataset_selection$train, dataset_selection$test)) %>%
     dplyr::filter(feature_name %in% selected_pred) %>%
@@ -273,6 +276,7 @@ get_training_object <- function(cohort_obj,
   list(
    dataset = dataset_selection,
    response_var = selected_response,
+   response_levels = response_levels,
    predictors = predictors,
    subset_df = data_bucket,
    missing_annot = missing_annot,
@@ -310,7 +314,7 @@ get_table_cv_results <- function(model, has_bestTune = TRUE){
   DT::datatable(
     results,
     rownames = FALSE,
-    options = list(dom = 't')
+    options = list(dom = 't', autoWidth = FALSE, scrollX = TRUE)
   ) %>% DT::formatRound(columns =numeric_columns, digits = 3)
 }
 
@@ -440,41 +444,64 @@ run_rf <- function(train_df, response_variable, predictors, n_cv_folds, balance_
 #########################
 # Testing Results
 #########################
+change_survival_endpoint <- function(endpoint_to_change){
+  if(endpoint_to_change == "OS_time") c("PFI_time_1", "KM plot with PFI as endpoint")
+  else c("OS_time", "KM plot with OS as endpoint")
+}
+get_available_survival_endpoint <- function(df, selected_survival_endpoint){ #some datasets have only OS or PFI, force use of the one available
+  if(all(is.na(df[[selected_survival_endpoint]]))) change_survival_endpoint(selected_survival_endpoint)
+  else c(selected_survival_endpoint, "")
+}
+get_test_title <- function(dataset, survival_endpoint){
+  paste(sub("\\ -.*", "", dataset), sub("\\_.*", "", survival_endpoint), sep = "\n")
+}
 
-get_testing_results <- function(model, test_df, training_obj){
+get_testing_results <- function(model, test_df, training_obj, survival_endpoint){
   purrr::map(.x = training_obj$dataset$test, function(x){
+    class_labels <- training_obj$response_levels %>%
+      dplyr::filter(tag_order %in% c(1,2)) %>%
+      dplyr::arrange(tag_order) %>%
+      dplyr::select(tag_name, tag_short_display) %>%
+      tibble::deframe()
+
     df <- test_df %>%
             dplyr::filter(dataset_name == x) %>%
-            dplyr::mutate(prediction = predict(model, newdata = .))
+            dplyr::mutate(prediction = as.character(predict(model, newdata = .))) %>%
+            dplyr::mutate(label_outcome = class_labels[.[[training_obj$response_var]]],
+                          label_prediction = class_labels[.$prediction])
 
-    accuracy_results <- caret::confusionMatrix(df$prediction, as.factor(df[[training_obj$response_var]]))
+    accuracy_results <- caret::confusionMatrix(as.factor(df$label_prediction), as.factor(df$label_outcome), positive = class_labels[1])
 
     rocp <- pROC::roc(
       response = factor(df[[training_obj$response_var]],  ordered = TRUE),
       predictor = factor(df$prediction, ordered = TRUE),
-     # levels = c("true_responder", "false_responder"),
+      levels = names(class_labels),
       quiet = TRUE,
       auc = TRUE)
 
     rplot <- pROC::ggroc(rocp) + ggplot2::labs(title = paste("AUC: ", round(rocp$auc, 3)))
     #KM plot
     dataset_df <- training_obj$subset_df$test %>%
-        select(sample_name, OS, OS_time, PFI_1, PFI_time_1) %>%
+        select(sample_name, OS, OS_time, PFI_1, PFI_time_1, dataset_display) %>%
         merge(., df, by = "sample_name")
     dataset_df[, c("OS", "OS_time", "PFI_1", "PFI_time_1")] <- sapply(dataset_df[, c("OS", "OS_time", "PFI_1", "PFI_time_1")], as.numeric)
+
+    available_endpoint <- get_available_survival_endpoint(dataset_df, survival_endpoint)
     surv_df <- build_survival_df(
                       df = dataset_df,
-                      group_column = "prediction",
-                      group_options = "prediction",
-                      time_column = "OS_time")
+                      group_column = "label_prediction",
+                      group_options = "label_prediction",
+                      time_column =available_endpoint[1])
 
     fit_df <- survival::survfit(survival::Surv(time, status) ~ variable, data = surv_df)
+
+    test_title <- get_test_title(dataset = unique(dataset_df$dataset_display), available_endpoint[2])
 
     kmplot <- create_kmplot(fit = fit_df,
                             df = surv_df,
                             confint = TRUE,
                             risktable = FALSE,
-                            title = x,
+                            title = test_title,
                             group_colors = c("red", "green"),
                             show_pval = TRUE,
                             show_pval_method = TRUE,
