@@ -42,8 +42,6 @@ check_status() {
     fi
 }
 
+>&2 echo -e "${GREEN}Checking if the server is up at localhost:${FLASK_RUN_PORT} ...${NC}"
 iterator=0
 check_status
-
-# Open a command line prompt in the container.
-docker exec -ti iatlas-api-dev bash

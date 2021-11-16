@@ -1,11 +1,11 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, RareVariantPathwayAssociation, Feature, Gene
+from api.db_models import Dataset, RareVariantPathwayAssociation, Feature
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
-from .paging_utils import get_cursor, get_pagination_queries, Paging
+from .paging_utils import get_pagination_queries
 
 rare_variant_pathway_association_request_fields = {
     'id',
@@ -27,7 +27,7 @@ rare_variant_pathway_association_request_fields = {
 def build_rvpa_graphql_response(rare_variant_pathway_association):
     return {
         'id': get_value(rare_variant_pathway_association, 'id'),
-        'dataSet': build_data_set_graphql_response(rare_variant_pathway_association),
+        'dataSet': build_data_set_graphql_response()(rare_variant_pathway_association),
         'feature': build_feature_graphql_response()(rare_variant_pathway_association),
         'pathway': get_value(rare_variant_pathway_association, 'pathway'),
         'pValue': get_value(rare_variant_pathway_association, 'p_value'),
@@ -81,15 +81,19 @@ def build_rare_variant_pathway_association_request(
         'q3': rare_variant_pathway_association_1.q3.label('q3'),
         'nTotal': rare_variant_pathway_association_1.n_total.label('n_total'),
         'nMutants': rare_variant_pathway_association_1.n_mutants.label('n_mutants')}
-    data_set_core_field_mapping = {'display': data_set_1.display.label('data_set_display'),
-                                   'name': data_set_1.name.label('data_set_name'),
-                                   'type': data_set_1.data_set_type.label('data_set_type')}
-    feature_core_field_mapping = {'display': feature_1.display.label('feature_display'),
-                                  'name': feature_1.name.label('feature_name'),
-                                  'order': feature_1.order.label('order'),
-                                  'unit': feature_1.unit.label('unit'),
-                                  'germline_module': feature_1.germline_module.label('germline_module'),
-                                  'germline_category': feature_1.germline_category.label('germline_category')}
+    data_set_core_field_mapping = {
+        'display': data_set_1.display.label('data_set_display'),
+        'name': data_set_1.name.label('data_set_name'),
+        'type': data_set_1.data_set_type.label('data_set_type')
+    }
+    feature_core_field_mapping = {
+        'display': feature_1.display.label('feature_display'),
+        'name': feature_1.name.label('feature_name'),
+        'order': feature_1.order.label('feature_order'),
+        'unit': feature_1.unit.label('feature_unit'),
+        'germlineModule': feature_1.germline_module.label('feature_germline_module'),
+        'germlineCategory': feature_1.germline_category.label('feature_germline_category')
+    }
 
     core = get_selected(requested, core_field_mapping)
     core |= get_selected(data_set_requested, data_set_core_field_mapping)

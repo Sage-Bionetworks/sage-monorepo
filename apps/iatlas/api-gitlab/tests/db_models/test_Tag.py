@@ -13,6 +13,16 @@ def tag_with_publication():
     return 'AML_1'
 
 
+@pytest.fixture(scope='module')
+def tag_with_order():
+    return 'actla4_prior_ici_rx'
+
+
+@pytest.fixture(scope='module')
+def tag_order():
+    return 1
+
+
 def test_Tag_no_relations(app, tag_name):
     query = return_tag_query()
     result = query.filter_by(name=tag_name).one_or_none()
@@ -31,6 +41,16 @@ def test_Tag_no_relations(app, tag_name):
     assert type(result.color) is str or NoneType
     assert type(result.long_display) is str or NoneType
     assert type(result.short_display) is str or NoneType
+    assert result.type == 'group'
+    assert type(result.order) is int or NoneType
+
+
+def test_Tag_with_order(app, tag_with_order, tag_order):
+    query = return_tag_query()
+    result = query.filter_by(name=tag_with_order).one_or_none()
+    assert result.name == tag_with_order
+    assert result.type == 'group'
+    assert result.order == tag_order
 
 
 def test_Tag_with_copy_number_results(app, tag_name):

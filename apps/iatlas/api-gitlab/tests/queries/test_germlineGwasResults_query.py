@@ -3,12 +3,21 @@ import pytest
 from tests import NoneType
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 from api.database import return_germline_gwas_result_query
-import logging
 
 
 @pytest.fixture(scope='module')
 def ggr_feature():
     return 'Cell_Proportion_B_Cells_Memory_Binary_MedianLowHigh'
+
+
+@pytest.fixture(scope='module')
+def ggr_germline_module():
+    return 'Unassigned'
+
+
+@pytest.fixture(scope='module')
+def ggr_germline_category():
+    return 'Leukocyte Subset %'
 
 
 @pytest.fixture(scope='module')
@@ -58,8 +67,8 @@ def common_query(common_query_builder):
                 dataSet { name }
                 feature {
                   name
-                  germline_category
-                  germline_module
+                  germlineCategory
+                  germlineModule
                 }
                 snp { name }
                 pValue
@@ -216,7 +225,6 @@ def test_germlineGwasResults_query_with_passed_min_p_value(client, common_query_
 
 
 def test_germlineGwasResults_query_with_passed_max_p_value(client, common_query_builder, ggr_max_p_value):
-    logger = logging.getLogger("ggresulttest ")
     query = common_query_builder(
         """{
             items { pValue }
@@ -255,3 +263,18 @@ def test_germlineGwasResults_query_with_no_arguments(client, common_query_builde
     assert len(germline_gwas_results) == ggr_count
     for germline_gwas_result in germline_gwas_results[0:2]:
         assert type(germline_gwas_result['pValue']) is float or NoneType
+
+
+def test_germlineGwasResults_query_with_germline_fetaure(client, common_query, ggr_feature, ggr_germline_module, ggr_germline_category):
+    response = client.post('/api', json={'query': common_query, 'variables': {
+        'feature': [ggr_feature]
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['germlineGwasResults']
+    results = page['items']
+    assert isinstance(results, list)
+    assert len(results) > 1
+    for result in results:
+        assert result['feature']['name'] == ggr_feature
+        assert result['feature']['germlineCategory'] == ggr_germline_category
+        assert result['feature']['germlineModule'] == ggr_germline_module

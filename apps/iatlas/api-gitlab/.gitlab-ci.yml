@@ -8,30 +8,28 @@ variables:
 default:
   # This runs on every job that doesn't have a 'before_script'.
   before_script:
-    # Install glibc compatibility for alpine and install aws (also installs curl, unzip, and jq)
-    - "GLIBC_VER=2.31-r0"
-    - "apk add --no-cache binutils curl unzip jq"
-    - "curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub"
-    - "curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk"
-    - "curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk"
-    - "apk add --no-cache glibc-${GLIBC_VER}.apk glibc-bin-${GLIBC_VER}.apk"
-    - "curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip"
-    - "unzip awscliv2.zip"
-    - "aws/install"
+    # Install aws cli (also installs binutils, jq, unzip, and wget) - (Running on Alpine)
+    - GLIBC_VER=2.31-r0
+    - apk add --no-cache binutils curl jq unzip
+    # Install glibc compatibility for alpine (Needed for AWS cli v2)
+    - curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub
+    - curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk
+    - curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk
+    - apk add --no-cache glibc-${GLIBC_VER}.apk glibc-bin-${GLIBC_VER}.apk
+    # Install AWS cli v2
+    - curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip
+    - unzip awscliv2.zip
+    - aws/install
     - "rm -rf awscliv2.zip \
       aws \
       /usr/local/aws-cli/v2/*/dist/aws_completer \
       /usr/local/aws-cli/v2/*/dist/awscli/data/ac.index \
       /usr/local/aws-cli/v2/*/dist/awscli/examples"
-    - "apk --no-cache del binutils"
-    - "rm glibc-${GLIBC_VER}.apk"
-    - "rm glibc-bin-${GLIBC_VER}.apk"
-    - "rm -rf /var/cache/apk/*"
-    - "aws --version"
-    # Create the AWS credentials and config files.
-    - 'aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"'
-    - 'aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"'
-    - 'aws configure set region "${AWS_DEFAULT_REGION}"'
+    - apk --no-cache del binutils curl unzip
+    - rm glibc-${GLIBC_VER}.apk
+    - rm glibc-bin-${GLIBC_VER}.apk
+    - rm -rf /var/cache/apk/*
+    - aws --version
 
 stages:
   - test_code
@@ -40,6 +38,8 @@ stages:
   - deploy
 
 tests:
+  tags:
+    - staging
   only:
     - merge_requests
   except:
@@ -48,24 +48,23 @@ tests:
   stage: test_code
   image: python:3.8-alpine
   variables:
-    DB_SECRET_NAME: ${DB_SECRET_NAME_STAGING}
     FLASK_ENV: "test"
-    # The environment variables used to populate the job scoped environment variables (DB_HOST_STAGING and DB_PORT_STAGING) are populated in the GitLab Runner in AWS
-    POSTGRES_HOST: ${DB_HOST_STAGING}
-    POSTGRES_PORT: ${DB_PORT_STAGING}
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - "apk add --no-cache openssh libpq"
-    - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
-    - "pip install --no-cache-dir -r ./requirements.txt"
-    - "pip install --no-cache-dir -r ./requirements-dev.txt"
-    - "apk del --no-cache .build-deps"
+    - apk add --no-cache openssh libpq
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - pip install --no-cache-dir -r ./requirements.txt
+    - pip install --no-cache-dir -r ./requirements-dev.txt
+    - apk del --no-cache .build-deps
     # Get DB Secrets from AWS
-    - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
-    - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
-    - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
-    - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
+    - export POSTGRES_USER=$(echo $creds | jq -r .username)
+    - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
+    - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
+    # (The DB_HOST and DB_PORT variables comes from the GitLab runner itself.)
+    - export POSTGRES_HOST=$DB_HOST
+    - export POSTGRES_PORT=$DB_PORT
     # Run test coverage using as many cores as are available.
     - pytest --cov --cov-report html -n auto
   artifacts:
@@ -75,29 +74,30 @@ tests:
     expire_in: 30 days
 
 tests:coverage-report-staging:
+  tags:
+    - staging
   only:
     - staging
   stage: test_code
   image: python:3.8-alpine
   variables:
-    DB_SECRET_NAME: ${DB_SECRET_NAME_STAGING}
     FLASK_ENV: "staging"
-    # The environment variables used to populate the job scoped environment variables (DB_HOST_STAGING and DB_PORT_STAGING) are populated in the GitLab Runner in AWS.
-    POSTGRES_HOST: ${DB_HOST_STAGING}
-    POSTGRES_PORT: ${DB_PORT_STAGING}
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - "apk add --no-cache openssh libpq"
-    - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
-    - "pip install --no-cache-dir -r ./requirements.txt"
-    - "pip install --no-cache-dir -r ./requirements-dev.txt"
-    - "apk del --no-cache .build-deps"
+    - apk add --no-cache openssh libpq
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - pip install --no-cache-dir -r ./requirements.txt
+    - pip install --no-cache-dir -r ./requirements-dev.txt
+    - apk del --no-cache .build-deps
     # Get DB Secrets from AWS.
-    - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
-    - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
-    - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
-    - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
+    - export POSTGRES_USER=$(echo $creds | jq -r .username)
+    - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
+    - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
+    # (The DB_HOST and DB_PORT variables comes from the GitLab runner itself.)
+    - export POSTGRES_HOST=$DB_HOST
+    - export POSTGRES_PORT=$DB_PORT
     # Run test coverage using as many cores as are available.
     # Output the results to an xml document.
     - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
@@ -113,29 +113,30 @@ tests:coverage-report-staging:
       cobertura: "coverage/iatlas-api_coverage_staging.xml"
 
 tests:coverage-report-prod:
+  tags:
+    - prod
   only:
     - master
   stage: test_code
   image: python:3.8-alpine
   variables:
     FLASK_ENV: "production"
-    # The environment variables used to populate the job scoped environment variables (DB_HOST_PROD, DB_PORT_PROD, and DB_SECRET_NAME_PROD) are populated in the GitLab Runner in AWS.
-    POSTGRES_HOST: ${DB_HOST_PROD}
-    POSTGRES_PORT: ${DB_PORT_PROD}
-    DB_SECRET_NAME: ${DB_SECRET_NAME_PROD}
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - "apk add --no-cache openssh libpq"
-    - "apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers"
-    - "pip install --no-cache-dir -r ./requirements.txt"
-    - "pip install --no-cache-dir -r ./requirements-dev.txt"
-    - "apk del --no-cache .build-deps"
+    - apk add --no-cache openssh libpq
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - pip install --no-cache-dir -r ./requirements.txt
+    - pip install --no-cache-dir -r ./requirements-dev.txt
+    - apk del --no-cache .build-deps
     # Get DB Secrets from AWS.
-    - "creds=$(aws --region ${AWS_DEFAULT_REGION} --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME})"
-    - "export POSTGRES_USER=$(echo $creds | jq -r .username)"
-    - "export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)"
-    - "export POSTGRES_DB=$(echo $creds | jq -r .db_name)"
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_PROD})
+    - export POSTGRES_USER=$(echo $creds | jq -r .username)
+    - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
+    - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
+    # (The DB_HOST and DB_PORT variables comes from the GitLab runner itself.)
+    - export POSTGRES_HOST=$DB_HOST
+    - export POSTGRES_PORT=$DB_PORT
     # Run test coverage using as many cores as are available.
     # Output the results to an xml document.
     - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
@@ -151,6 +152,8 @@ tests:coverage-report-prod:
       cobertura: "coverage/iatlas-api_coverage.xml"
 
 pages:
+  tags:
+    - staging
   only:
     - merge_requests
   except:
@@ -160,10 +163,10 @@ pages:
   dependencies:
     - tests
   before_script:
-    - "echo Publishing ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} coverage."
+    - echo "Publishing ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} coverage."
   script:
-    - "mv ./coverage/ ./public/"
-    - 'echo "Coverage available at ${CI_PAGES_URL}"'
+    - mv ./coverage/ ./public/
+    - echo "Coverage available at ${CI_PAGES_URL}"
   artifacts:
     expose_as: "coverage"
     paths:
@@ -173,6 +176,8 @@ pages:
 # Build the Staging container with the app in it.
 # Save it to the container repo as the latest and as the commit name (so it may be re-used if needed).
 Build Container Staging:
+  tags:
+    - staging
   only:
     - staging
   stage: build_container
@@ -180,19 +185,21 @@ Build Container Staging:
   services:
     - name: docker:19.03.1-dind
   before_script:
-    - "echo Building Staging container."
+    - echo "Building Staging container."
   script:
     - current=${CI_REGISTRY_IMAGE}:${DOCKER_IMAGE_TAG_STAGING}
     - latest=${CI_REGISTRY_IMAGE}:staging-latest
     - "echo CONTAINER_NAME: ${current}"
     - echo "${CI_JOB_TOKEN}" | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-    - "docker build -t ${current} -t ${latest} ."
-    - "docker push ${current}"
-    - "docker push ${latest}"
+    - docker build -t ${current} -t ${latest} .
+    - docker push ${current}
+    - docker push ${latest}
 
 # Build the Prod container with the app in it.
 # Save it to the container repo as the latest and as the commit name (so it may be re-used if needed).
 Build Container Prod:
+  tags:
+    - prod
   only:
     - master
   stage: build_container
@@ -200,106 +207,36 @@ Build Container Prod:
   services:
     - name: docker:19.03.1-dind
   before_script:
-    - "echo Building Prod container."
+    - echo "Building Prod container."
   script:
     - current=${CI_REGISTRY_IMAGE}:${DOCKER_IMAGE_TAG_PROD}
     - latest=${CI_REGISTRY_IMAGE}:prod
     - echo "${CI_JOB_TOKEN}" | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-    - "docker build -t ${current} -t ${latest} ."
-    - "docker push ${current}"
-    - "docker push ${latest}"
+    - docker build -t ${current} -t ${latest} .
+    - docker push ${current}
+    - docker push ${latest}
 
-# The Deploy job uses
+# The Deploy jobs use sceptre to update the tag image in the stack. This replaces the docker image being used.
 Deploy:Staging:
+  tags:
+    - staging
   only:
     - staging
   stage: deploy
   image: python:3.8-alpine
-  variables:
-    # The AWS Environment Variables to specify configuration options and credentials for the aws cli.
-    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-    AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
-    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-    DOMAIN_NAME_STAGING: ${DOMAIN_NAME_STAGING}
-    GITLAB_REG_TOKEN: ${GITLAB_REG_TOKEN}
-    SUB_DOMAIN_NAME_STAGING: ${SUB_DOMAIN_NAME_STAGING}
-    TRAVIS_BRANCH: "staging"
   script:
-    - echo Deploying iAtlas API to Staging
-    - echo image ${DOCKER_IMAGE_TAG_STAGING}
-    - export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG_STAGING}
-    - "sceptre_stack_file=staging/iatlas-api.yaml"
-    # Ensure git is available.
-    - "apk add --no-cache git"
-    # Get the Sceptre scripts.
-    - "git clone -b genui_deployable https://github.com/generalui/iAtlas-infra.git"
-    - "cd iAtlas-infra"
-    # Ensure Sceptre is available and can handle !ssm.
-    - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
-    # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."staging/iatlas-api"')
-    - "echo ${sceptre_status}"
-    # If there was an issue with the previous build and the build was rolled back, delete the stack.
-    - if [ ${sceptre_status} == '"ROLLBACK_COMPLETE"' ] || [ ${sceptre_status} == '"CREATE_FAILED"' ]; then sceptre --var "region=${AWS_DEFAULT_REGION}" delete -y ${sceptre_stack_file} || exit_code=$?; if [ $exit_code -ne 0 ]; then echo "The exit code of the previous command is $exit_code"; fi; fi
-    # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."staging/iatlas-api"')
-    - "echo ${sceptre_status}"
-    # If there is an existing stack, update the stack.
-    - if [ ${sceptre_status} == '"UPDATE_COMPLETE"' ] || [ ${sceptre_status} == '"CREATE_COMPLETE"' ]; then sceptre --var "region=${AWS_DEFAULT_REGION}" update -y ${sceptre_stack_file} || exit_code=$?; if [ $exit_code -ne 0 ]; then echo "The exit code of the previous command is $exit_code"; fi; fi
-    # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."staging/iatlas-api"')
-    - "echo ${sceptre_status}"
-    # If there is no stack, create the stack.
-    - if [ ${sceptre_status} == '"PENDING"' ]; then sceptre --var "region=${AWS_DEFAULT_REGION}" create -y ${sceptre_stack_file} || exit_code=$?; if [ $exit_code -ne 0 ]; then echo "The exit code of the previous command is $exit_code"; fi; fi
-    # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."staging/iatlas-api"')
-    - "echo ${sceptre_status}"
-    # If the update succeeded or a first build succeeded, end the job, otherwise, fail the job.
-    - if [ ${sceptre_status} == '"UPDATE_COMPLETE"' ] || [ ${sceptre_status} == '"CREATE_COMPLETE"' ]; then exit 0; else exit 1; fi
+    - echo "Deploying iAtlas API to Staging"
+    # Force update the ECS service. It should be using the latest image (staging-latest).
+    - aws ecs update-service --cluster iatlas-staging-EcsCluster --service iatlas-staging-EcsService --force-new-deployment
 
 Deploy:Prod:
+  tags:
+    - prod
   only:
     - master
   stage: deploy
   image: python:3.8-alpine
-  variables:
-    # The AWS Environment Variables to specify configuration options and credentials for the aws cli.
-    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-    AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
-    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-    DOMAIN_NAME: ${DOMAIN_NAME}
-    GITLAB_REG_TOKEN: ${GITLAB_REG_TOKEN}
-    SUB_DOMAIN_NAME: ${SUB_DOMAIN_NAME}
-    TRAVIS_BRANCH: "master"
   script:
-    - echo Deploying iAtlas API to Production
-    - echo image ${DOCKER_IMAGE_TAG_PROD}
-    - export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG_PROD}
-    - "sceptre_stack_file=prod/iatlas-api.yaml"
-    # Ensure git is available.
-    - "apk add --no-cache git"
-    # Get the Sceptre scripts.
-    - "git clone -b genui_deployable https://github.com/generalui/iAtlas-infra.git"
-    - "cd iAtlas-infra"
-    # Ensure Sceptre is available and can handle !ssm.
-    - "pip install --no-cache-dir sceptre sceptre-ssm-resolver"
-    # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."prod/iatlas-api"')
-    - "echo ${sceptre_status}"
-    # If there was an issue with the previous build and the build was rolled back, delete the stack.
-    - if [ ${sceptre_status} == '"ROLLBACK_COMPLETE"' ] || [ ${sceptre_status} == '"CREATE_FAILED"' ]; then sceptre --var "region=${AWS_DEFAULT_REGION}" delete -y ${sceptre_stack_file} || exit_code=$?; if [ $exit_code -ne 0 ]; then echo "The exit code of the previous command is $exit_code"; fi; fi
-    # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."prod/iatlas-api"')
-    - "echo ${sceptre_status}"
-    # If there is an existing stack, update the stack.
-    - if [ ${sceptre_status} == '"UPDATE_COMPLETE"' ] || [ ${sceptre_status} == '"CREATE_COMPLETE"' ]; then sceptre --var "region=${AWS_DEFAULT_REGION}" update -y ${sceptre_stack_file} || exit_code=$?; if [ $exit_code -ne 0 ]; then echo "The exit code of the previous command is $exit_code"; fi; fi
-    # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."prod/iatlas-api"')
-    - "echo ${sceptre_status}"
-    # If there is no stack, create the stack.
-    - if [ ${sceptre_status} == '"PENDING"' ]; then sceptre --var "region=${AWS_DEFAULT_REGION}" create -y ${sceptre_stack_file} || exit_code=$?; if [ $exit_code -ne 0 ]; then echo "The exit code of the previous command is $exit_code"; fi; fi
-    # Get the current status of the API stack.
-    - sceptre_status=$(sceptre --var "region=${AWS_DEFAULT_REGION}" status ${sceptre_stack_file} | jq '."prod/iatlas-api"')
-    - "echo ${sceptre_status}"
-    # If the update succeeded or a first build succeeded, end the job, otherwise, fail the job.
-    - if [ ${sceptre_status} == '"UPDATE_COMPLETE"' ] || [ ${sceptre_status} == '"CREATE_COMPLETE"' ]; then exit 0; else exit 1; fi
+    - echo "Deploying iAtlas API to Production"
+    # Force update the ECS service. It should be using the latest image (prod).
+    - aws ecs update-service --cluster iatlas-prod-EcsCluster --service iatlas-prod-EcsService --force-new-deployment

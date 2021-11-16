@@ -1,237 +1,154 @@
-from itertools import groupby
-from sqlalchemy import and_, func
+from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, DatasetToSample, Feature, FeatureClass, FeatureToSample, Publication, Sample, SampleToTag, Tag, TagToPublication, TagToTag
+from api.db_models import Dataset, DatasetToTag, Publication, Sample, SampleToTag, Tag, TagToPublication, TagToTag, Cohort, CohortToTag, CohortToSample
 from .general_resolvers import build_join_condition, get_selected, get_value
-from .publication import build_publication_graphql_response
-
-related_request_fields = {'dataSet',
-                          'display',
-                          'related'}
-
-simple_tag_request_fields = {'characteristics',
-                             'color',
-                             'longDisplay',
-                             'name',
-                             'shortDisplay',
-                             'tag'}
-
-tag_request_fields = simple_tag_request_fields.union({'publications',
-                                                      'related',
-                                                      'sampleCount',
-                                                      'samples'})
+from .paging_utils import get_pagination_queries
 
 
-def build_related_graphql_response(related_set=set()):
-    data_set, related_tag = related_set
-    return {
-        'display': get_value(related_tag[0], 'data_set_display'),
-        'dataSet': data_set,
-        'related': list(map(build_tag_graphql_response(), related_tag))
-    }
+simple_tag_request_fields = {
+    'characteristics',
+    'color',
+    'longDisplay',
+    'name',
+    'order',
+    'shortDisplay',
+    'tag',
+    'type'
+}
+
+tag_request_fields = simple_tag_request_fields.union({
+    'publications',
+    'related',
+    'sampleCount',
+    'samples'
+})
 
 
-def build_related_request(requested, related_requested, data_set=None, related=None, by_data_set=True):
-    '''
-    Builds a SQL request.
-
-    All positional arguments are required. Positional arguments are:
-        1st position - a set of the requested fields at the root of the graphql request. The request is typically made for data set values with a 'related' child node.
-        2nd position - a set of the requested fields in the 'related' node of the graphql request. If 'related' is not requested, this will be an empty set.
-
-    All keyword arguments are optional. Keyword arguments are:
-        `data_set` - a list of strings, data set names
-        `related` - a list of strings, tag names related to data sets
-        `by_data_set` - a boolean, True if the returned related tags are by data set. This defaults to True.
-    '''
-    sess = db.session
-
-    related_1 = aliased(Tag, name='t')
-    data_set_1 = aliased(Dataset, name='d')
-
-    core_field_mapping = {'characteristics': related_1.characteristics.label('characteristics'),
-                          'color': related_1.color.label('color'),
-                          'longDisplay': related_1.long_display.label('long_display'),
-                          'name': related_1.name.label('name'),
-                          'shortDisplay': related_1.short_display.label('short_display')}
-    data_set_core_field_mapping = {
-        'display': data_set_1.display.label('data_set_display')}
-
-    core = get_selected(related_requested, core_field_mapping)
-    data_set_core = get_selected(requested, data_set_core_field_mapping)
-
-    if by_data_set or 'dataSet' in requested:
-        data_set_core.add(data_set_1.name.label('data_set'))
-
-    query = sess.query(*[*core, *data_set_core])
-
-    if related:
-        query = query.filter(related_1.name.in_(related))
-
-    if data_set or by_data_set or 'dataSet' in requested:
-        data_set_to_tag_1 = aliased(DatasetToTag, name='dt')
-
-        query = query.join(data_set_to_tag_1,
-                           data_set_to_tag_1.tag_id == related_1.id)
-
-        data_set_join_condition = build_join_condition(
-            data_set_1.id, data_set_to_tag_1.dataset_id, data_set_1.name, data_set)
-        query = query.join(data_set_1, and_(*data_set_join_condition))
-
-    order = []
-    append_to_order = order.append
-    if 'name' in related_requested:
-        append_to_order(related_1.name)
-    if 'shortDisplay' in related_requested:
-        append_to_order(related_1.short_display)
-    if 'longDisplay' in related_requested:
-        append_to_order(related_1.long_display)
-    if 'color' in related_requested:
-        append_to_order(related_1.color)
-    if 'characteristics' in related_requested:
-        append_to_order(related_1.characteristics)
-
-    query = query.order_by(*order) if order else query
-
-    return query
+def has_tag_fields(item, prefix='tag_'):
+    if not item:
+        return False
+    return(get_value(item, prefix + 'id') or get_value(item, prefix + 'name') or get_value(
+        item, prefix + 'characteristics') or get_value(item, prefix + 'short_display') or get_value(item, prefix + 'long_display') or get_value(item, prefix + 'type') or get_value(item, prefix + 'order'))
 
 
-def build_tag_graphql_response(publication_dict=dict(), related_dict=dict(), sample_dict=dict()):
+def build_tag_graphql_response(requested=[], sample_requested=[], publications_requested=[], related_requested=[], cohort=None, sample=None, prefix='tag_'):
+    from .publication import build_publication_graphql_response
+    from .sample import build_sample_graphql_response
+
     def f(tag):
         if not tag:
             return None
-        tag_id = get_value(tag, 'id')
-        publications = publication_dict.get(
-            tag_id, []) if publication_dict else []
-        related = related_dict.get(tag_id, []) if related_dict else []
-        samples = sample_dict.get(tag_id, []) if sample_dict else []
-        return {
-            'characteristics': get_value(tag, 'characteristics'),
-            'color': get_value(tag, 'color'),
-            'longDisplay': get_value(tag, 'tag_long_display') or get_value(tag, 'long_display'),
-            'publications': map(build_publication_graphql_response, publications),
-            'name': get_value(tag, 'tag_name') or get_value(tag, 'name'),
-            'related': [build_tag_graphql_response()(r) for r in related],
-            'sampleCount': get_value(tag, 'sample_count'),
-            'samples': [sample.name for sample in samples],
-            'shortDisplay': get_value(tag, 'tag_short_display') or get_value(tag, 'short_display')
+
+        tag_id = get_value(tag, prefix + 'id')
+
+        sample_dict = get_samples(
+            tag_id=tag_id, requested=requested, sample_requested=sample_requested, cohort=cohort, sample=sample)
+
+        publication_dict = get_publications(
+            tag_id=tag_id, requested=requested, publications_requested=publications_requested)
+
+        related_dict = get_related(
+            tag_id=tag_id, requested=requested, related_requested=related_requested)
+
+        result = {
+            'id': tag_id,
+            'name': get_value(tag, prefix + 'name') or get_value(tag, 'name'),
+            'characteristics': get_value(tag, prefix + 'characteristics'),
+            'color': get_value(tag, prefix + 'color'),
+            'longDisplay': get_value(tag, prefix + 'long_display'),
+            'shortDisplay': get_value(tag, prefix + 'short_display'),
+            'type': get_value(tag, prefix + 'type'),
+            'order': get_value(tag, prefix + 'order'),
+            'sampleCount': len(sample_dict) if sample_dict and 'sampleCount' in requested else None,
+            'publications': map(build_publication_graphql_response, publication_dict) if publication_dict else None,
+            'related': map(build_tag_graphql_response(requested=related_requested), related_dict) if related_dict else None,
+            'samples': map(build_sample_graphql_response(), sample_dict) if sample_dict and 'samples' in requested else None
         }
-    return f
+        return(result)
+    return(f)
 
 
-def build_tag_request(
-        requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag=None):
-    '''
-    Builds a SQL request.
+def get_tag_column_labels(requested, tag, prefix='tag_', add_id=False):
+    mapping = {
+        'characteristics': tag.characteristics.label('tag_characteristics'),
+        'color': tag.color.label('tag_color'),
+        'longDisplay': tag.long_display.label('tag_long_display'),
+        'name': tag.name.label('tag_name'),
+        'order': tag.order.label('tag_order'),
+        'shortDisplay': tag.short_display.label('tag_short_display'),
+        'type': tag.type.label('tag_type'),
+    }
+    labels = get_selected(requested, mapping)
 
-    All positional arguments are required. Positional arguments are:
-        1st position - a set of the requested fields at the root of the graphql request.
+    if add_id:
+        labels |= {tag.id.label(prefix + 'id')}
 
-    All keyword arguments are optional. Keyword arguments are:
-        `data_set` - a list of strings, data set names
-        `feature` - a list of strings, feature names
-        `feature_class` - a list of strings, feature class names
-        `related` - a list of strings, tag names related to data sets
-        `sample` - a list of strings, sample names
-        `tag` - a list of strings, tag names related to samples
-    '''
+    return(labels)
+
+
+def build_tag_request(requested, distinct=False, paging=None, cohort=None, data_set=None, related=None, sample=None, tag=None, type=None):
+
     sess = db.session
 
     tag_1 = aliased(Tag, name='t')
-    sample_to_tag_1 = aliased(SampleToTag, name='st')
+    sample_1 = aliased(Sample, name='s')
+    sample_to_tag_1 = aliased(SampleToTag, name='stt')
+    dataset_to_tag_1 = aliased(DatasetToTag, name='dtt')
+    dataset_1 = aliased(Dataset, name='d')
+    cohort_1 = aliased(Cohort, name='c')
+    cohort_to_tag_1 = aliased(CohortToTag, name='ctt')
+    tag_to_tag_1 = aliased(TagToTag, name='ttt')
 
-    core_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
-                          'color': tag_1.color.label('color'),
-                          'longDisplay': tag_1.long_display.label('long_display'),
-                          'name': tag_1.name.label('name'),
-                          'sampleCount': func.count(func.distinct(sample_to_tag_1.sample_id)).label('sample_count'),
-                          'shortDisplay': tag_1.short_display.label('short_display'),
-                          'tag': tag_1.name.label('tag')}
-
-    # Only select fields that were requested.
-    core = get_selected(requested, core_field_mapping)
-    core.add(tag_1.id.label('id'))
-
-    query = sess.query(*core)
+    tag_core = get_tag_column_labels(requested, tag_1, add_id=True)
+    query = sess.query(*tag_core)
     query = query.select_from(tag_1)
 
     if tag:
         query = query.filter(tag_1.name.in_(tag))
 
-    if data_set or feature or feature_class or related or sample or ('sampleCount' in requested):
-        sample_1 = aliased(Sample, name='s')
-        data_set_to_sample_1 = aliased(DatasetToSample, name='dts')
+    if type:
+        query = query.filter(tag_1.type.in_(type))
 
-        is_outer = not bool(sample)
+    if data_set:
+        dataset_subquery = sess.query(dataset_to_tag_1.tag_id)
 
-        sample_sub_query = sess.query(sample_1.id).filter(
-            sample_1.name.in_(sample)) if sample else None
+        dataset_join_condition = build_join_condition(
+            dataset_to_tag_1.dataset_id, dataset_1.id, filter_column=dataset_1.name, filter_list=data_set)
+        dataset_subquery = dataset_subquery.join(dataset_1, and_(
+            *dataset_join_condition), isouter=False)
 
-        sample_tag_join_condition = build_join_condition(
-            sample_to_tag_1.tag_id, tag_1.id, sample_to_tag_1.sample_id, sample_sub_query)
-        query = query.join(
-            sample_to_tag_1, and_(*sample_tag_join_condition), isouter=is_outer)
+        query = query.filter(tag_1.id.in_(dataset_subquery))
 
-        if data_set or related:
-            data_set_1 = aliased(Dataset, name='d')
+    if cohort:
+        cohort_subquery = sess.query(cohort_to_tag_1.tag_id)
 
-            data_set_sub_query = sess.query(data_set_1.id).filter(
-                data_set_1.name.in_(data_set)) if data_set else data_set
+        cohort_join_condition = build_join_condition(
+            cohort_to_tag_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
+        cohort_subquery = cohort_subquery.join(cohort_1, and_(
+            *cohort_join_condition), isouter=False)
 
-            data_set_to_sample_join_condition = build_join_condition(
-                data_set_to_sample_1.sample_id, sample_to_tag_1.sample_id, data_set_to_sample_1.dataset_id, data_set_sub_query)
-            query = query.join(
-                data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
+        query = query.filter(tag_1.id.in_(cohort_subquery))
 
-        if feature or feature_class:
-            feature_1 = aliased(Feature, name='f')
-            feature_class_1 = aliased(FeatureClass, name='fc')
-            feature_to_sample_1 = aliased(FeatureToSample, name='fs')
+    if related:
+        related_subquery = sess.query(tag_to_tag_1.tag_id)
 
-            query = query.join(feature_to_sample_1,
-                               feature_to_sample_1.sample_id == sample_to_tag_1.sample_id)
+        related_join_condition = build_join_condition(
+            tag_to_tag_1.related_tag_id, tag_1.id, filter_column=tag_1.name, filter_list=related)
+        related_subquery = related_subquery.join(tag_1, and_(
+            *related_join_condition), isouter=False)
 
-            feature_join_condition = build_join_condition(
-                feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
-            query = query.join(feature_1, and_(*feature_join_condition))
+        query = query.filter(tag_1.id.in_(related_subquery))
 
-            if feature_class:
-                feature_class_join_condition = build_join_condition(
-                    feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
-                query = query.join(
-                    feature_class_1, and_(*feature_class_join_condition))
+    if sample:
+        sample_subquery = sess.query(sample_to_tag_1.tag_id)
 
-        if related:
-            data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
-            related_tag_1 = aliased(Tag, name='rt')
-            tag_to_tag_1 = aliased(TagToTag, name='tt')
+        sample_join_condition = build_join_condition(
+            sample_to_tag_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
+        sample_subquery = sample_subquery.join(sample_1, and_(
+            *sample_join_condition), isouter=False)
 
-            related_tag_sub_query = sess.query(related_tag_1.id).filter(
-                related_tag_1.name.in_(related))
-
-            data_set_tag_join_condition = build_join_condition(
-                data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
-            query = query.join(
-                data_set_to_tag_1, and_(*data_set_tag_join_condition))
-
-            query = query.join(tag_to_tag_1, and_(
-                tag_to_tag_1.tag_id == tag_1.id, tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id))
-
-        if 'sampleCount' in requested:
-            group_by = set()
-            add_to_group_by = group_by.add
-            if 'name' in requested:
-                add_to_group_by(tag_1.name)
-            if 'display' in requested:
-                add_to_group_by(tag_1.display)
-            if 'color' in requested:
-                add_to_group_by(tag_1.color)
-            if 'characteristics' in requested:
-                add_to_group_by(tag_1.characteristics)
-            add_to_group_by(tag_1.id)
-
-            query = query.group_by(*group_by)
+        query = query.filter(tag_1.id.in_(sample_subquery))
 
     order = []
     append_to_order = order.append
@@ -248,10 +165,10 @@ def build_tag_request(
 
     query = query.order_by(*order) if order else query
 
-    return query
+    return get_pagination_queries(query, paging, distinct, cursor_field=tag_1.id)
 
 
-def get_publications(requested, publications_requested, tag_ids=set()):
+def get_publications(tag_id, requested, publications_requested):
     if 'publications' in requested:
         sess = db.session
 
@@ -259,23 +176,27 @@ def get_publications(requested, publications_requested, tag_ids=set()):
         tag_1 = aliased(Tag, name='t')
         tag_to_pub_1 = aliased(TagToPublication, name='tp')
 
-        core_field_mapping = {'doId': pub_1.do_id.label('do_id'),
-                              'firstAuthorLastName': pub_1.first_author_last_name.label('first_author_last_name'),
-                              'journal': pub_1.journal.label('journal'),
-                              'name': pub_1.name.label('name'),
-                              'pubmedId': pub_1.pubmed_id.label('pubmed_id'),
-                              'title': pub_1.title.label('title'),
-                              'year': pub_1.year.label('year')}
+        core_field_mapping = {
+            'doId': pub_1.do_id.label('do_id'),
+            'firstAuthorLastName': pub_1.first_author_last_name.label('first_author_last_name'),
+            'journal': pub_1.journal.label('journal'),
+            'name': pub_1.name.label('name'),
+            'pubmedId': pub_1.pubmed_id.label('pubmed_id'),
+            'title': pub_1.title.label('title'),
+            'year': pub_1.year.label('year')
+        }
 
         core = get_selected(publications_requested, core_field_mapping)
         # Always select the publication id and the tag id.
-        core |= {pub_1.id.label('id'),
-                 tag_to_pub_1.tag_id.label('tag_id')}
+        core |= {
+            pub_1.id.label('id'),
+            tag_to_pub_1.tag_id.label('tag_id')
+        }
 
         pub_query = sess.query(*core)
         pub_query = pub_query.select_from(pub_1)
 
-        tag_sub_query = sess.query(tag_1.id).filter(tag_1.id.in_(tag_ids))
+        tag_sub_query = sess.query(tag_1.id).filter(tag_1.id.in_([tag_id]))
 
         tag_tag_join_condition = build_join_condition(
             tag_to_pub_1.publication_id, pub_1.id, tag_to_pub_1.tag_id, tag_sub_query)
@@ -305,188 +226,86 @@ def get_publications(requested, publications_requested, tag_ids=set()):
     return []
 
 
-def get_related(requested, related_requested, tag_ids=set()):
+def get_related(tag_id, requested, related_requested):
     if 'related' in requested:
         sess = db.session
 
-        related_tag_1 = aliased(Tag, name='rt')
         tag_1 = aliased(Tag, name='t')
-        tag_to_tag_1 = aliased(TagToTag, name='tt')
+        tag_to_tag_1 = aliased(TagToTag, name='ttt')
+        related_tag_1 = aliased(Tag, name='rt')
 
         related_core_field_mapping = {
-            'characteristics': related_tag_1.characteristics.label('characteristics'),
-            'color': related_tag_1.color.label('color'),
-            'longDisplay': related_tag_1.long_display.label('long_display'),
-            'name': related_tag_1.name.label('name'),
-            'shortDisplay': related_tag_1.short_display.label('short_display')}
+            'characteristics': related_tag_1.characteristics.label('tag_characteristics'),
+            'color': related_tag_1.color.label('tag_color'),
+            'longDisplay': related_tag_1.long_display.label('tag_long_display'),
+            'name': related_tag_1.name.label('tag_name'),
+            'order': related_tag_1.order.label('tag_order'),
+            'shortDisplay': related_tag_1.short_display.label('tag_short_display'),
+            'type': related_tag_1.type.label('tag_type'),
+        }
 
         related_core = get_selected(
             related_requested, related_core_field_mapping)
-        # Always select the related id and the tag id.
-        related_core |= {related_tag_1.id.label(
-            'id'), tag_to_tag_1.tag_id.label('tag_id')}
 
         related_query = sess.query(*related_core)
         related_query = related_query.select_from(related_tag_1)
 
-        tag_sub_query = sess.query(tag_1.id).filter(tag_1.id.in_(tag_ids))
+        tag_sub_query = sess.query(tag_to_tag_1.related_tag_id)
 
         tag_tag_join_condition = build_join_condition(
-            tag_to_tag_1.related_tag_id, related_tag_1.id, tag_to_tag_1.tag_id, tag_sub_query)
-        related_query = related_query.join(
-            tag_to_tag_1, and_(*tag_tag_join_condition))
+            tag_1.id, tag_to_tag_1.tag_id, tag_1.id, [tag_id])
 
-        order = []
-        append_to_order = order.append
-        if 'name' in related_requested:
-            append_to_order(related_tag_1.name)
-        if 'shortDisplay' in related_requested:
-            append_to_order(related_tag_1.short_display)
-        if 'longDisplay' in related_requested:
-            append_to_order(related_tag_1.long_display)
-        if 'color' in related_requested:
-            append_to_order(related_tag_1.color)
-        if 'characteristics' in related_requested:
-            append_to_order(related_tag_1.characteristics)
+        tag_sub_query = tag_sub_query.join(
+            tag_1, and_(*tag_tag_join_condition))
 
-        related_query = related_query.order_by(
-            *order) if order else related_query
+        related_query = related_query.filter(
+            related_tag_1.id.in_(tag_sub_query))
 
         return related_query.distinct().all()
 
     return []
 
 
-def get_samples(requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag_ids=set()):
-    if tag_ids and 'samples' in requested:
+def get_samples(tag_id, requested, sample_requested, cohort=None, sample=None):
+    if 'samples' in requested or 'sampleCount' in requested:
         sess = db.session
 
-        data_set_to_sample_1 = aliased(DatasetToSample, name='ds')
         sample_1 = aliased(Sample, name='s')
-        sample_to_tag_1 = aliased(SampleToTag, name='st')
+        sample_to_tag_1 = aliased(SampleToTag, name='stt')
+        cohort_1 = aliased(Cohort, name='c')
+        cohort_to_sample_1 = aliased(CohortToSample, name='cts')
 
-        # Always select the sample id and the gene id.
-        sample_core = {sample_1.id.label('id'),
-                       sample_1.name.label('name'),
-                       sample_to_tag_1.tag_id.label('tag_id')}
+        sample_core_field_mapping = {
+            'name': sample_1.name.label('sample_name')}
+
+        sample_core = get_selected(sample_requested, sample_core_field_mapping)
+        sample_core |= {sample_1.id.label('sample_id')}
 
         sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)
 
+        tag_subquery = sess.query(sample_to_tag_1.sample_id)
+        tag_join_condition = build_join_condition(
+            sample_to_tag_1.sample_id, sample_1.id, filter_column=sample_to_tag_1.tag_id, filter_list=[tag_id])
+        tag_subquery = tag_subquery.join(cohort_1, and_(
+            *tag_join_condition), isouter=False)
+        sample_query = sample_query.filter(
+            sample_1.id.in_(tag_subquery))
+
         if sample:
             sample_query = sample_query.filter(sample_1.name.in_(sample))
 
-        sample_tag_join_condition = build_join_condition(
-            sample_to_tag_1.sample_id, sample_1.id, sample_to_tag_1.tag_id, tag_ids)
+        if cohort:
+            cohort_subquery = sess.query(cohort_to_sample_1.sample_id)
 
-        sample_query = sample_query.join(
-            sample_to_tag_1, and_(*sample_tag_join_condition))
+            cohort_join_condition = build_join_condition(
+                cohort_to_sample_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
+            cohort_subquery = cohort_subquery.join(cohort_1, and_(
+                *cohort_join_condition), isouter=False)
 
-        if data_set or related:
-            data_set_1 = aliased(Dataset, name='d')
-
-            data_set_sub_query = sess.query(data_set_1.id).filter(
-                data_set_1.name.in_(data_set)) if data_set else data_set
-
-            data_set_to_sample_join_condition = build_join_condition(
-                data_set_to_sample_1.sample_id, sample_1.id, data_set_to_sample_1.dataset_id, data_set_sub_query)
-            sample_query = sample_query.join(
-                data_set_to_sample_1, and_(*data_set_to_sample_join_condition))
-
-        if feature or feature_class:
-            feature_1 = aliased(Feature, name='f')
-            feature_class_1 = aliased(FeatureClass, name='fc')
-            feature_to_sample_1 = aliased(FeatureToSample, name='fs')
-
-            sample_query = sample_query.join(feature_to_sample_1,
-                                             feature_to_sample_1.sample_id == sample_1.id)
-
-            feature_join_condition = build_join_condition(
-                feature_1.id, feature_to_sample_1.feature_id, feature_1.name, feature)
-            sample_query = sample_query.join(
-                feature_1, and_(*feature_join_condition))
-
-            if feature_class:
-                feature_class_join_condition = build_join_condition(
-                    feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
-                sample_query = sample_query.join(
-                    feature_class_1, and_(*feature_class_join_condition))
-
-        if related:
-            data_set_to_tag_1 = aliased(DatasetToTag, name='dtt')
-            related_tag_1 = aliased(Tag, name='rt')
-            tag_to_tag_1 = aliased(TagToTag, name='tt')
-
-            related_tag_sub_query = sess.query(related_tag_1.id).filter(
-                related_tag_1.name.in_(related)) if related else related
-
-            data_set_tag_join_condition = build_join_condition(
-                data_set_to_tag_1.dataset_id, data_set_to_sample_1.dataset_id, data_set_to_tag_1.tag_id, related_tag_sub_query)
-            sample_query = sample_query.join(
-                data_set_to_tag_1, and_(*data_set_tag_join_condition))
-
-            sample_query = sample_query.join(tag_to_tag_1, and_(
-                tag_to_tag_1.tag_id == sample_to_tag_1.tag_id, tag_to_tag_1.related_tag_id == data_set_to_tag_1.tag_id))
-
-        sample_query = sample_query.order_by(sample_1.name)
+            sample_query = sample_query.filter(
+                sample_1.id.in_(cohort_subquery))
 
         return sample_query.distinct().all()
 
     return []
-
-
-def request_related(requested, related_requested, **kwargs):
-    '''
-    All positional arguments are required. Positional arguments are:
-        1st position - a set of the requested fields at the root of the graphql request. The request is typically made for data set values with a 'related' child node.
-        2nd position - a set of the requested fields in the 'related' node of the graphql request. If 'related' is not requested, this will be an empty set.
-
-    All keyword arguments are optional. Keyword arguments are:
-        `data_set` - a list of strings, data set names
-        `related` - a list of strings, tag names related to data sets
-        `by_data_set` - a boolean, True if the returned related tags are by data set.
-    '''
-    query = build_related_request(
-        requested, related_requested, **kwargs)
-
-    return query.distinct().all()
-
-
-def request_tags(requested, **kwargs):
-    '''
-    All keyword arguments are optional. Keyword arguments are:
-        `data_set` - a list of strings, data set names
-        `feature` - a list of strings, feature names
-        `feature_class` - a list of strings, feature class names
-        `related` - a list of strings, tag names related to data sets
-        `sample` - a list of strings, sample names
-        `tag` - a list of strings, tag names related to samples
-    '''
-    query = build_tag_request(requested, **kwargs)
-
-    return query.distinct().all()
-
-
-def return_tag_derived_fields(requested, publications_requested, related_requested, data_set=None, feature=None, feature_class=None, related=None, sample=None, tag_ids=None):
-    publications = get_publications(
-        requested, publications_requested, tag_ids=tag_ids)
-
-    publication_dict = dict()
-    for key, collection in groupby(publications, key=lambda r: r.tag_id):
-        publication_dict[key] = publication_dict.get(
-            key, []) + list(collection)
-
-    related_tags = get_related(requested, related_requested, tag_ids=tag_ids)
-
-    related_dict = dict()
-    for key, collection in groupby(related_tags, key=lambda r: r.tag_id):
-        related_dict[key] = related_dict.get(key, []) + list(collection)
-
-    samples = get_samples(
-        requested, data_set=data_set, feature=feature, feature_class=feature_class, related=related, sample=sample, tag_ids=tag_ids)
-
-    sample_dict = dict()
-    for key, collection in groupby(samples, key=lambda s: s.tag_id):
-        sample_dict[key] = sample_dict.get(key, []) + list(collection)
-
-    return (publication_dict, related_dict, sample_dict)

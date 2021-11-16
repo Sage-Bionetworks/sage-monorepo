@@ -15,7 +15,7 @@ class Sample(Base):
         "Dataset", secondary='datasets_to_samples', uselist=True, lazy='noload')
 
     features = db.relationship(
-        "Feature", secondary='features_to_samples', uselist=True, lazy='noload')
+        "Feature", secondary='features_to_samples2', uselist=True, lazy='noload')
 
     genes = db.relationship(
         "Gene", secondary='genes_to_samples', uselist=True, lazy='noload')
@@ -28,7 +28,7 @@ class Sample(Base):
         uselist=False, lazy='noload')
 
     tags = db.relationship(
-        "Tag", secondary='samples_to_tags', uselist=True, lazy='noload')
+        "Tag", secondary='samples_to_tags2', uselist=True, lazy='noload')
 
     def __repr__(self):
         return '<Sample %r>' % self.name

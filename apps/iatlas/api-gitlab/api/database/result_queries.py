@@ -30,7 +30,7 @@ accepted_cnr_query_args = ['id',
                            'gene_id',
                            'tag_id']
 
-accepted_dr_option_args = accepted_cnr_option_args + ['mutation_code']
+accepted_dr_option_args = ['data_set', 'feature', 'tag', 'mutation']
 
 accepted_dr_query_args = ['id',
                           'p_value',
@@ -41,8 +41,7 @@ accepted_dr_query_args = ['id',
                           'n_mut',
                           'dataset_id',
                           'feature_id',
-                          'gene_id',
-                          'mutation_code_id',
+                          'mutation_id',
                           'tag_id']
 
 accepted_hr_option_args = ['data_set', 'feature']

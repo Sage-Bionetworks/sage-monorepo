@@ -4,7 +4,9 @@ from . import Base
 
 
 class FeatureToSample(Base):
-    __tablename__ = 'features_to_samples'
+    __tablename__ = 'features_to_samples2'
+
+    id = db.Column(db.Integer, primary_key=True)
 
     feature_id = db.Column(db.Integer, db.ForeignKey(
         'features.id'), primary_key=True)

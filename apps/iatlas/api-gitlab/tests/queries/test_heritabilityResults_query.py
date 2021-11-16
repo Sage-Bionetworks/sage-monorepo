@@ -3,53 +3,6 @@ import pytest
 from tests import NoneType
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 from api.database import return_heritability_result_query
-"""
-    query HeritabilityResults(
-    $paging: PagingInput
-    $distinct:Boolean
-    $dataSet: [String!]
-    $feature: [String!]
-    $cluster: [String!]
-    $minPValue: Float
-    $maxPValue: Float
-    ) {
-    heritabilityResults(
-        paging: $paging
-        distinct: $distinct
-        dataSet: $dataSet
-        feature: $feature
-        cluster: $cluster
-        minPValue: $minPValue
-        maxPValue: $maxPValue
-    ) {
-        paging {
-        type
-        pages
-        total
-        startCursor
-        endCursor
-        hasPreviousPage
-        hasNextPage
-        page
-        limit
-        }
-        error
-        items {
-            pValue
-            dataSet { name }
-            feature {
-            name
-            germline_module
-            germline_category
-            }
-            cluster
-            fdr
-            variance
-            se
-        }
-    }
-    }
-"""
 
 
 @pytest.fixture(scope='module')
@@ -99,8 +52,11 @@ def common_query(common_query_builder):
               dataSet { name }
               feature {
                 name
-                germline_module
-                germline_category
+                display
+                unit
+                order
+                germlineModule
+                germlineCategory
               }
               cluster
               fdr
@@ -130,8 +86,6 @@ def max_p_value():
 @pytest.fixture(scope='module')
 def min_p_value():
     return 0.493599999999999983213
-
-# Test that forward cursor pagination gives us the expected paginInfo
 
 
 def test_heritabilityResults_cursor_pagination_first(client, common_query_builder):
@@ -244,8 +198,11 @@ def test_heritabilityResults_query_with_passed_data_set_and_feature(client, comm
     for result in results[0:2]:
         assert result['dataSet']['name'] == data_set
         assert result['feature']['name'] == hr_feature
-        assert result['feature']['germline_module'] == hr_germline_module
-        assert result['feature']['germline_category'] == hr_germline_category
+        assert type(result['feature']['display']) is str
+        assert type(result['feature']['unit']) is str
+        assert type(result['feature']['order']) is int
+        assert result['feature']['germlineModule'] == hr_germline_module
+        assert result['feature']['germlineCategory'] == hr_germline_category
 
 
 def test_heritabilityResults_query_with_passed_min_p_value(client, common_query, min_p_value):
@@ -278,12 +235,7 @@ def test_heritabilityResults_query_with_passed_max_p_value(client, common_query,
 
 def test_heritabilityResults_query_with_no_arguments(client, common_query_builder):
     query = common_query_builder("""{
-            items {
-                pValue
-                feature {
-                    name
-                }
-            }
+            items { id }
         }""")
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
@@ -295,4 +247,4 @@ def test_heritabilityResults_query_with_no_arguments(client, common_query_builde
     assert isinstance(heritability_results, list)
     assert len(heritability_results) == hr_count
     for heritability_result in heritability_results[0:2]:
-        assert type(heritability_result['pValue']) is float or NoneType
+        assert type(heritability_result['id']) is str

@@ -1,12 +1,17 @@
 import json
 import pytest
-from api.database import return_gene_query
+from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash
 from tests import NoneType
 
 
 @pytest.fixture(scope='module')
 def gene_type():
     return 'immunomodulator'
+
+
+@pytest.fixture(scope='module')
+def gene_type2():
+    return 'io_target'
 
 
 @pytest.fixture(scope='module')
@@ -38,54 +43,226 @@ def sample_name():
 def common_query_builder():
     def f(query_fields):
         return """query Genes(
-            $dataSet: [String!]
             $entrez: [Int!]
             $geneType: [String!]
             $maxRnaSeqExpr: Float
             $minRnaSeqExpr: Float
-            $related: [String!]
+            $cohort: [String!]
             $sample: [String!]
-            $tag: [String!]
+            $paging: PagingInput
+            $distinct: Boolean
         ) {
             genes(
-                dataSet: $dataSet
+                paging: $paging
+                distinct: $distinct
+                cohort: $cohort
                 entrez: $entrez
                 geneType: $geneType
                 maxRnaSeqExpr: $maxRnaSeqExpr
                 minRnaSeqExpr: $minRnaSeqExpr
-                related: $related
                 sample: $sample
-                tag: $tag
             )""" + query_fields + "}"
     return f
 
 
-def test_genes_query_with_entrez(client, common_query_builder, entrez, hgnc):
+@pytest.fixture(scope='module')
+def common_query(common_query_builder):
+    return common_query_builder("""
+        {
+            items {
+                entrez
+                hgnc
+                geneFamily
+                geneFunction
+                geneTypes {
+                    name
+                    display
+                }
+                immuneCheckpoint
+                pathway
+                publications {
+                    firstAuthorLastName
+                    journal
+                    pubmedId
+                    title
+                    year
+                }
+                superCategory
+                therapyType
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+            error
+        }"""
+                                )
+
+
+@pytest.fixture(scope='module')
+def samples_query(common_query_builder):
+    return common_query_builder(
+        """
+        {
+            items{
+                entrez
+                samples {
+                    rnaSeqExpr
+                    name
+                }
+            }
+        }
+        """
+    )
+
+
+def test_cursor_pagination_first_without_samples(client, common_query_builder):
     query = common_query_builder("""{
-            entrez
-            hgnc
-            geneFamily
-            geneFunction
-            geneTypes {
-                name
-                display
+            items {
+                id
             }
-            immuneCheckpoint
-            pathway
-            publications {
-                firstAuthorLastName
-                journal
-                pubmedId
-                title
-                year
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
             }
-            superCategory
-            therapyType
         }""")
+    requested_n = 15
     response = client.post(
-        '/api', json={'query': query, 'variables': {'entrez': [entrez]}})
+        '/api', json={'query': query, 'variables': {
+            'paging': {'first': requested_n}
+        }})
     json_data = json.loads(response.data)
-    results = json_data['data']['genes']
+    page = json_data['data']['genes']
+    items = page['items']
+    paging = page['paging']
+    start = from_cursor_hash(paging['startCursor'])
+    end = from_cursor_hash(paging['endCursor'])
+
+    assert len(items) == requested_n
+    assert paging['hasNextPage'] == True
+    assert paging['hasPreviousPage'] == False
+    assert start == items[0]['id']
+    assert end == items[requested_n - 1]['id']
+    assert int(end) - int(start) > 0
+
+
+def test_cursor_pagination_first_with_samples(client, common_query_builder):
+    query = common_query_builder("""{
+            items {
+                id
+                samples { name }
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+        }""")
+    requested_n = 15
+    max_n = 10
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'paging': {'first': requested_n}
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['genes']
+    items = page['items']
+    paging = page['paging']
+    start = from_cursor_hash(paging['startCursor'])
+    end = from_cursor_hash(paging['endCursor'])
+
+    assert len(items) == max_n
+    assert paging['hasNextPage'] == True
+    assert paging['hasPreviousPage'] == False
+    assert start == items[0]['id']
+    assert end == items[max_n - 1]['id']
+    assert int(end) - int(start) > 0
+
+
+def test_cursor_pagination_last(client, common_query_builder):
+    query = common_query_builder("""{
+            items {
+                id
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+        }""")
+    num = 10
+    response = client.post(
+        '/api', json={'query': query, 'variables': {
+            'paging': {
+                'last': num,
+                'before': to_cursor_hash(1000)
+            }
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['genes']
+    items = page['items']
+    paging = page['paging']
+    start = from_cursor_hash(paging['startCursor'])
+    end = from_cursor_hash(paging['endCursor'])
+
+    assert len(items) == num
+    assert paging['hasNextPage'] == False
+    assert paging['hasPreviousPage'] == True
+    assert start == items[0]['id']
+    assert end == items[num - 1]['id']
+
+
+def test_cursor_distinct_pagination(client, common_query):
+    page_num = 2
+    num = 10
+    response = client.post(
+        '/api', json={'query': common_query, 'variables': {
+            'paging': {
+                'page': page_num,
+                'first': num,
+            },
+            'distinct': True
+        }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['genes']
+    items = page['items']
+
+    assert len(items) == num
+    assert page_num == page['paging']['page']
+
+
+def test_genes_query_with_entrez(client, common_query, entrez, hgnc):
+    response = client.post(
+        '/api', json={'query': common_query, 'variables': {'entrez': [entrez]}})
+    json_data = json.loads(response.data)
+    page = json_data['data']['genes']
+    results = page['items']
 
     assert isinstance(results, list)
     assert len(results) == 1
@@ -117,15 +294,12 @@ def test_genes_query_with_entrez(client, common_query_builder, entrez, hgnc):
         assert type(result['therapyType']) is str or NoneType
 
 
-def test_genes_query_with_gene_type(client, common_query_builder, entrez, gene_type):
-    query = common_query_builder("""{
-            entrez
-            geneTypes { name }
-        }""")
+def test_genes_query_with_gene_type(client, common_query, entrez, gene_type):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'entrez': [entrez], 'geneType': [gene_type]}})
+        '/api', json={'query': common_query, 'variables': {'entrez': [entrez], 'geneType': [gene_type]}})
     json_data = json.loads(response.data)
-    results = json_data['data']['genes']
+    page = json_data['data']['genes']
+    results = page['items']
 
     assert isinstance(results, list)
     assert len(results) == 1
@@ -138,133 +312,66 @@ def test_genes_query_with_gene_type(client, common_query_builder, entrez, gene_t
             assert current_gene_type['name'] == gene_type
 
 
-def test_genes_query_with_sample(client, common_query_builder, entrez, gene_type, sample_name):
-    query = common_query_builder("""{
-            entrez
-            samples
-        }""")
+def test_genes_query_with_gene_type2(client, common_query, entrez, gene_type2):
     response = client.post(
-        '/api', json={'query': query, 'variables': {'entrez': [entrez], 'geneType': [gene_type], 'sample': [sample_name]}})
+        '/api', json={'query': common_query, 'variables': {'entrez': [55], 'geneType': [gene_type2]}})
     json_data = json.loads(response.data)
-    results = json_data['data']['genes']
+    page = json_data['data']['genes']
+    results = page['items']
 
     assert isinstance(results, list)
     assert len(results) == 1
     for result in results:
-        samples = result['samples']
+        assert result['pathway'] == 'Innate Immune System'
+        assert result['therapyType'] == 'Targeted by Other Immuno-Oncology Therapy Type'
 
-        assert result['entrez'] == entrez
-        assert isinstance(samples, list)
-        assert len(samples) == 1
-        for current_sample in samples:
-            assert current_sample == sample_name
+        gene_types = result['geneTypes']
 
-
-def test_genes_query_with_dataSet_tag_and_maxRnaSeqExpr(client, common_query_builder, data_set, max_rna_seq_expr_1, tag):
-    query = common_query_builder("""{
-            entrez
-            rnaSeqExprs
-        }""")
-    response = client.post(
-        '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'maxRnaSeqExpr': max_rna_seq_expr_1,
-            'tag': tag
-        }})
-    json_data = json.loads(response.data)
-    results = json_data['data']['genes']
-
-    assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results[0:3]:
-        rna_seq_exprs = result['rnaSeqExprs']
-        assert type(result['entrez']) is int
-        assert isinstance(rna_seq_exprs, list)
-        assert len(rna_seq_exprs) > 0
-        for rna_seq_expr in rna_seq_exprs[0:3]:
-            assert rna_seq_expr <= max_rna_seq_expr_1
-
-
-def test_genes_query_with_dataSet_and_minRnaSeqExpr(client, common_query_builder, data_set, min_rna_seq_expr_1):
-    query = common_query_builder("""{
-            entrez
-            rnaSeqExprs
-        }""")
-    response = client.post(
-        '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'minRnaSeqExpr': min_rna_seq_expr_1
-        }})
-    json_data = json.loads(response.data)
-    results = json_data['data']['genes']
-
-    assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results[0:3]:
-        rna_seq_exprs = result['rnaSeqExprs']
-        assert type(result['entrez']) is int
-        assert isinstance(rna_seq_exprs, list)
-        assert len(rna_seq_exprs) > 0
-        for rna_seq_expr in rna_seq_exprs[0:3]:
-            assert rna_seq_expr >= min_rna_seq_expr_1
-
-
-def test_genes_query_with_dataSet_tag_maxRnaSeqExpr_and_minRnaSeqExpr(client, common_query_builder, data_set, max_rna_seq_expr_2, min_rna_seq_expr_2, tag):
-    query = common_query_builder("""{
-            entrez
-            rnaSeqExprs
-        }""")
-    response = client.post(
-        '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'maxRnaSeqExpr': max_rna_seq_expr_2,
-            'minRnaSeqExpr': min_rna_seq_expr_2,
-            'tag': tag
-        }})
-    json_data = json.loads(response.data)
-    results = json_data['data']['genes']
-
-    assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results[0:3]:
-        rna_seq_exprs = result['rnaSeqExprs']
-        assert type(result['entrez']) is int
-        assert isinstance(rna_seq_exprs, list)
-        assert len(rna_seq_exprs) > 0
-        for rna_seq_expr in rna_seq_exprs[0:3]:
-            assert rna_seq_expr <= max_rna_seq_expr_2
-            assert rna_seq_expr >= min_rna_seq_expr_2
+        assert isinstance(gene_types, list)
+        for current_gene_type in gene_types:
+            assert current_gene_type['name'] == gene_type2
 
 
 def test_genes_query_no_entrez(client, common_query_builder):
-    query = common_query_builder("""{
-            entrez
-            hgnc
-        }""")
+    query = common_query_builder(
+        """
+        {
+            items{
+                entrez
+                hgnc
+            }
+        }
+        """
+    )
     response = client.post('/api', json={'query': query})
     json_data = json.loads(response.data)
-    results = json_data['data']['genes']
-
-    # Get the total number of features in the database.
-    gene_count = return_gene_query('id').count()
+    page = json_data['data']['genes']
+    results = page['items']
 
     assert isinstance(results, list)
-    assert len(results) == gene_count
+    assert len(results) > 10
     for gene in results[0:1]:
         assert type(gene['entrez']) is int
         assert type(gene['hgnc']) is str
 
 
 def test_genes_query_returns_publications(client, common_query_builder, entrez, hgnc):
-    query = common_query_builder("""{
-            entrez
-            hgnc
-            publications { pubmedId }
-        }""")
+    query = common_query_builder(
+        """
+        {
+            items{
+                entrez
+                hgnc
+                publications { pubmedId }
+            }
+        }
+        """
+    )
     response = client.post(
         '/api', json={'query': query, 'variables': {'entrez': [entrez]}})
     json_data = json.loads(response.data)
-    results = json_data['data']['genes']
+    page = json_data['data']['genes']
+    results = page['items']
 
     assert isinstance(results, list)
     assert len(results) == 1
@@ -280,15 +387,22 @@ def test_genes_query_returns_publications(client, common_query_builder, entrez, 
 
 
 def test_genes_query_returns_publications_with_geneType(client, common_query_builder, entrez, gene_type, hgnc):
-    query = common_query_builder("""{
-            entrez
-            hgnc
-            publications { pubmedId }
-        }""")
+    query = common_query_builder(
+        """
+        {
+            items{
+                entrez
+                hgnc
+                publications { pubmedId }
+            }
+        }
+        """
+    )
     response = client.post(
         '/api', json={'query': query, 'variables': {'entrez': [entrez], 'geneType': [gene_type]}})
     json_data = json.loads(response.data)
-    results = json_data['data']['genes']
+    page = json_data['data']['genes']
+    results = page['items']
 
     assert isinstance(results, list)
     assert len(results) > 0
@@ -303,37 +417,103 @@ def test_genes_query_returns_publications_with_geneType(client, common_query_bui
             assert type(publication['pubmedId']) is int
 
 
-def test_genes_query_returns_samples_and_rnaSeqExprs(client, common_query_builder, data_set, max_rna_seq_expr_2, min_rna_seq_expr_2, tag):
-    query = common_query_builder("""{
-            entrez
-            samples
-            rnaSeqExprs
-        }""")
+def test_genes_samples_query_with_gene_and_cohort(client, entrez, samples_query, tcga_tag_cohort_name, tcga_tag_cohort_samples):
     response = client.post(
-        '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'maxRnaSeqExpr': max_rna_seq_expr_2,
-            'minRnaSeqExpr': min_rna_seq_expr_2,
-            'tag': tag
-        }})
+        '/api', json={
+            'query': samples_query,
+            'variables': {
+                'entrez': [entrez],
+                'cohort': [tcga_tag_cohort_name]
+            }
+        })
     json_data = json.loads(response.data)
-    results = json_data['data']['genes']
+    page = json_data['data']['genes']
+    genes = page['items']
+    assert isinstance(genes, list)
+    assert len(genes) == 1
+    gene = genes[0]
+    assert gene['entrez'] == entrez
+    samples = gene['samples']
+    assert isinstance(samples, list)
+    assert len(samples) > 1
+    for sample in gene['samples'][0:10]:
+        assert type(sample['name']) is str
+        assert type(sample['rnaSeqExpr']) is float
+        assert sample['name'] in tcga_tag_cohort_samples
 
-    assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results:
-        samples = result['samples']
-        samples_length = len(samples)
-        rna_seq_exprs = result['rnaSeqExprs']
-        rna_seq_exprs_length = len(rna_seq_exprs)
 
-        assert type(result['entrez']) is int
-        assert isinstance(samples, list)
-        assert samples_length > 0
-        for sample_name in samples[0:5]:
-            assert type(sample_name) is str
-        assert isinstance(rna_seq_exprs, list)
-        assert rna_seq_exprs_length > 0
-        for rna_seq_expr in rna_seq_exprs[0:5]:
-            assert type(rna_seq_expr) is float
-        assert samples_length == rna_seq_exprs_length
+def test_genes_samples_query_with_gene_and_sample(client, entrez, samples_query, sample):
+    response = client.post(
+        '/api', json={
+            'query': samples_query,
+            'variables': {
+                'entrez': [entrez],
+                'sample': [sample]
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['genes']
+    genes = page['items']
+    assert isinstance(genes, list)
+    assert len(genes) == 1
+    gene = genes[0]
+    assert gene['entrez'] == entrez
+    samples = gene['samples']
+    assert isinstance(samples, list)
+    assert len(samples) == 1
+    s = samples[0]
+    assert type(s['name']) is str
+    assert type(s['rnaSeqExpr']) is float
+    assert s['name'] == sample
+
+
+def test_genes_query_with_entrez_and_maxRnaSeqExpr(client, samples_query, entrez):
+    max_rna_seq_expr = 1
+    response = client.post(
+        '/api', json={
+            'query': samples_query,
+            'variables': {
+                'maxRnaSeqExpr': max_rna_seq_expr,
+                'entrez': entrez
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['genes']
+    genes = page['items']
+    assert isinstance(genes, list)
+    assert len(genes) == 1
+    gene = genes[0]
+    assert gene['entrez'] == entrez
+    samples = gene['samples']
+    assert isinstance(samples, list)
+    assert len(samples) > 1
+    for sample in gene['samples'][0:10]:
+        assert type(sample['name']) is str
+        assert type(sample['rnaSeqExpr']) is float
+        assert sample['rnaSeqExpr'] <= max_rna_seq_expr
+
+
+def test_genes_query_with_entrez_and_minRnaSeqExpr(client, samples_query, entrez):
+    min_rna_seq_expr = 1
+    response = client.post(
+        '/api', json={
+            'query': samples_query,
+            'variables': {
+                'minRnaSeqExpr': min_rna_seq_expr,
+                'entrez': entrez
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['genes']
+    genes = page['items']
+    assert isinstance(genes, list)
+    assert len(genes) == 1
+    gene = genes[0]
+    assert gene['entrez'] == entrez
+    samples = gene['samples']
+    assert isinstance(samples, list)
+    assert len(samples) > 1
+    for sample in gene['samples'][0:10]:
+        assert type(sample['name']) is str
+        assert type(sample['rnaSeqExpr']) is float
+        assert sample['rnaSeqExpr'] >= min_rna_seq_expr

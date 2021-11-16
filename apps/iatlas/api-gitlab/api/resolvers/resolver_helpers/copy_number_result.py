@@ -3,10 +3,6 @@ from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import CopyNumberResult, Dataset, DatasetToTag, Feature, Gene, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
-from .data_set import build_data_set_graphql_response
-from .feature import build_feature_graphql_response
-from .gene import build_gene_graphql_response
-from .tag import build_tag_graphql_response
 from .paging_utils import get_pagination_queries
 
 cnr_request_fields = {'dataSet',
@@ -21,20 +17,31 @@ cnr_request_fields = {'dataSet',
                       'tStat'}
 
 
-def build_cnr_graphql_response(copy_number_result):
-    return {
-        'id': get_value(copy_number_result, 'id'),
-        'direction': get_value(copy_number_result, 'direction'),
-        'meanNormal': get_value(copy_number_result, 'mean_normal'),
-        'meanCnv': get_value(copy_number_result, 'mean_cnv'),
-        'pValue': get_value(copy_number_result, 'p_value'),
-        'log10PValue': get_value(copy_number_result, 'log10_p_value'),
-        'tStat': get_value(copy_number_result, 't_stat'),
-        'dataSet': build_data_set_graphql_response(copy_number_result),
-        'feature': build_feature_graphql_response()(copy_number_result),
-        'gene': build_gene_graphql_response()(copy_number_result),
-        'tag': build_tag_graphql_response()(copy_number_result)
-    }
+def build_cnr_graphql_response(prefix=''):
+    from .data_set import build_data_set_graphql_response
+    from .feature import build_feature_graphql_response
+    from .gene import build_gene_graphql_response
+    from .tag import build_tag_graphql_response
+
+    def f(copy_number_result):
+        if not copy_number_result:
+            return None
+        else:
+            dict = {
+                'id': get_value(copy_number_result, prefix + 'id'),
+                'direction': get_value(copy_number_result, prefix + 'direction'),
+                'meanNormal': get_value(copy_number_result, prefix + 'mean_normal'),
+                'meanCnv': get_value(copy_number_result, prefix + 'mean_cnv'),
+                'pValue': get_value(copy_number_result, prefix + 'p_value'),
+                'log10PValue': get_value(copy_number_result, prefix + 'log10_p_value'),
+                'tStat': get_value(copy_number_result, prefix + 't_stat'),
+                'dataSet': build_data_set_graphql_response()(copy_number_result),
+                'feature': build_feature_graphql_response()(copy_number_result),
+                'gene': build_gene_graphql_response()(copy_number_result),
+                'tag': build_tag_graphql_response()(copy_number_result)
+            }
+            return(dict)
+    return(f)
 
 
 def build_copy_number_result_request(
@@ -66,6 +73,7 @@ def build_copy_number_result_request(
         `related` - a list of strings, tags related to the dataset that is associated with the result.
         `tag` - a list of strings, tag names
     """
+    from .tag import get_tag_column_labels
     sess = db.session
 
     copy_number_result_1 = aliased(CopyNumberResult, name='dcnr')
@@ -82,32 +90,32 @@ def build_copy_number_result_request(
         'log10PValue': copy_number_result_1.log10_p_value.label('log10_p_value'),
         'tStat': copy_number_result_1.t_stat.label('t_stat')}
 
-    data_set_field_mapping = {'display': data_set_1.display.label('data_set_display'),
-                              'name': data_set_1.name.label('data_set_name'),
-                              'type': data_set_1.data_set_type.label('data_set_type')}
+    data_set_field_mapping = {
+        'display': data_set_1.display.label('data_set_display'),
+        'name': data_set_1.name.label('data_set_name'),
+        'type': data_set_1.data_set_type.label('data_set_type')
+    }
 
-    feature_field_mapping = {'display': feature_1.display.label('feature_display'),
-                             'name': feature_1.name.label('feature_name'),
-                             'order': feature_1.order.label('order'),
-                             'unit': feature_1.unit.label('unit')}
+    feature_field_mapping = {
+        'display': feature_1.display.label('feature_display'),
+        'name': feature_1.name.label('feature_name'),
+        'order': feature_1.order.label('order'),
+        'unit': feature_1.unit.label('unit')
+    }
 
-    gene_field_mapping = {'entrez': gene_1.entrez.label('entrez'),
-                          'hgnc': gene_1.hgnc.label('hgnc'),
-                          'description': gene_1.description.label('description'),
-                          'friendlyName': gene_1.friendly_name.label('friendly_name'),
-                          'ioLandscapeName': gene_1.io_landscape_name.label('io_landscape_name')}
-
-    tag_field_mapping = {'characteristics': tag_1.characteristics.label('characteristics'),
-                         'color': tag_1.color.label('color'),
-                         'longDisplay': tag_1.long_display.label('tag_long_display'),
-                         'name': tag_1.name.label('tag_name'),
-                         'shortDisplay': tag_1.short_display.label('tag_short_display')}
+    gene_field_mapping = {
+        'entrez': gene_1.entrez.label('gene_entrez'),
+        'hgnc': gene_1.hgnc.label('gene_hgnc'),
+        'description': gene_1.description.label('gene_description'),
+        'friendlyName': gene_1.friendly_name.label('gene_friendly_name'),
+        'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
+    }
 
     core = get_selected(requested, core_field_mapping)
     core |= get_selected(data_set_requested, data_set_field_mapping)
     core |= get_selected(feature_requested, feature_field_mapping)
     core |= get_selected(gene_requested, gene_field_mapping)
-    core |= get_selected(tag_requested, tag_field_mapping)
+    core |= get_tag_column_labels(tag_requested, tag_1)
 
     if not distinct:
         # Add the id as a cursor if not selecting distinct

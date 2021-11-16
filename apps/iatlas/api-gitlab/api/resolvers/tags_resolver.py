@@ -1,21 +1,33 @@
-from .resolver_helpers import build_tag_graphql_response, get_requested, request_tags, return_tag_derived_fields, simple_publication_request_fields, simple_tag_request_fields, tag_request_fields
+from .resolver_helpers import build_tag_graphql_response, build_tag_request, get_requested, simple_sample_request_fields, simple_publication_request_fields, simple_tag_request_fields, tag_request_fields, get_selection_set
+from .resolver_helpers.paging_utils import paginate, paging_fields, create_paging
 
 
-def resolve_tags(_obj, info, dataSet=None, feature=None, featureClass=None, related=None, sample=None, tag=None):
-    requested = get_requested(info, tag_request_fields)
+def resolve_tags(_obj, info, distinct=False, paging=None, cohort=None, dataSet=None, related=None, sample=None, tag=None, type=None):
+
+    selection_set = get_selection_set(info=info, child_node='items')
+
+    requested = get_requested(
+        selection_set=selection_set, requested_field_mapping=tag_request_fields)
+
+    sample_requested = get_requested(
+        selection_set=selection_set, requested_field_mapping=simple_sample_request_fields, child_node='samples')
 
     publications_requested = get_requested(
-        info, simple_publication_request_fields, 'publications')
+        selection_set=selection_set, requested_field_mapping=simple_publication_request_fields, child_node='publications')
 
     related_requested = get_requested(
-        info, simple_tag_request_fields, 'related')
+        selection_set=selection_set, requested_field_mapping=simple_tag_request_fields, child_node='related')
 
-    tag_results = request_tags(
-        requested, data_set=dataSet, feature=feature, feature_class=featureClass, related=related, sample=sample, tag=tag)
+    max_items = 10 if 'samples' in requested else 100_000
 
-    tag_ids = set(tag.id for tag in tag_results) if tag_results else set()
+    paging = create_paging(paging, max_items)
 
-    (publication_dict, related_dict, sample_dict) = return_tag_derived_fields(
-        requested, publications_requested, related_requested, data_set=dataSet, feature=feature, feature_class=featureClass, related=related, sample=sample, tag_ids=tag_ids) if tag_results else (dict(), dict(), dict())
+    query, count_query = build_tag_request(
+        requested, distinct=distinct, paging=paging, cohort=cohort, data_set=dataSet, related=related, sample=sample, tag=tag, type=type)
 
-    return map(build_tag_graphql_response(publication_dict, related_dict, sample_dict), tag_results)
+    pagination_requested = get_requested(info, paging_fields, 'paging')
+
+    res = paginate(query, count_query, paging, distinct,
+                   build_tag_graphql_response(requested, sample_requested, publications_requested, related_requested, cohort=cohort, sample=sample), pagination_requested)
+
+    return(res)

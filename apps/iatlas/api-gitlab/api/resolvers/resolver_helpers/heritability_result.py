@@ -1,11 +1,11 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, HeritabilityResult, Feature
+from api.db_models import Dataset, HeritabilityResult, Feature
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .data_set import build_data_set_graphql_response
 from .feature import build_feature_graphql_response
-from .paging_utils import get_cursor, get_pagination_queries, Paging
+from .paging_utils import get_pagination_queries
 
 heritability_result_request_fields = {'dataSet',
                                       'id',
@@ -18,16 +18,17 @@ heritability_result_request_fields = {'dataSet',
 
 
 def build_hr_graphql_response(heritability_result):
-    return {
+    result_dict = {
         'id': get_value(heritability_result, 'id'),
         'pValue': get_value(heritability_result, 'p_value'),
-        'dataSet': build_data_set_graphql_response(heritability_result),
+        'dataSet': build_data_set_graphql_response()(heritability_result),
         'feature': build_feature_graphql_response()(heritability_result),
         'cluster': get_value(heritability_result, 'cluster'),
         'fdr': get_value(heritability_result, 'fdr'),
         'variance': get_value(heritability_result, 'variance'),
         'se': get_value(heritability_result, 'se')
     }
+    return(result_dict)
 
 
 def build_heritability_result_request(
@@ -63,19 +64,27 @@ def build_heritability_result_request(
         'fdr': heritability_result_1.fdr.label('fdr'),
         'cluster': heritability_result_1.cluster.label('cluster')
     }
-    data_set_core_field_mapping = {'display': data_set_1.display.label('data_set_display'),
-                                   'name': data_set_1.name.label('data_set_name'),
-                                   'type': data_set_1.data_set_type.label('data_set_type')}
-    feature_core_field_mapping = {'display': feature_1.display.label('feature_display'),
-                                  'name': feature_1.name.label('feature_name'),
-                                  'order': feature_1.order.label('order'),
-                                  'unit': feature_1.unit.label('unit'),
-                                  'germline_category': feature_1.germline_category.label('germline_category'),
-                                  'germline_module': feature_1.germline_module.label('germline_module')}
+    data_set_core_field_mapping = {
+        'display': data_set_1.display.label('data_set_display'),
+        'name': data_set_1.name.label('data_set_name'),
+        'type': data_set_1.data_set_type.label('data_set_type')
+    }
+    feature_core_field_mapping = {
+        'display': feature_1.display.label('feature_display'),
+        'name': feature_1.name.label('feature_name'),
+        'order': feature_1.order.label('feature_order'),
+        'unit': feature_1.unit.label('feature_unit'),
+        'germlineCategory': feature_1.germline_category.label('feature_germline_category'),
+        'germlineModule': feature_1.germline_module.label('feature_germline_module')
+    }
 
     core = get_selected(requested, core_field_mapping)
     core |= get_selected(data_set_requested, data_set_core_field_mapping)
     core |= get_selected(feature_requested, feature_core_field_mapping)
+
+    if distinct == False:
+        # Add the id as a cursor if not selecting distinct
+        core.add(heritability_result_1.id)
 
     query = sess.query(*core)
     query = query.select_from(heritability_result_1)

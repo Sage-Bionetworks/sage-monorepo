@@ -1,5 +1,6 @@
 import pytest
 from api import create_app, db
+import json
 
 
 @pytest.fixture(autouse=True)
@@ -50,6 +51,19 @@ def data_set_id(test_db, data_set):
     return id
 
 
+@pytest.fixture(scope='session')
+def pcawg_data_set():
+    return 'PCAWG'
+
+
+@pytest.fixture(scope='session')
+def pcawg_data_set_id(test_db, pcawg_data_set):
+    from api.db_models import Dataset
+    (id, ) = test_db.session.query(Dataset.id).filter_by(
+        name=pcawg_data_set).one_or_none()
+    return id
+
+
 @ pytest.fixture(scope='session')
 def related():
     return 'Immune_Subtype'
@@ -60,6 +74,32 @@ def related_id(test_db, related):
     from api.db_models import Tag
     (id, ) = test_db.session.query(Tag.id).filter_by(
         name=related).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
+def related2():
+    return 'gender'
+
+
+@ pytest.fixture(scope='session')
+def related_id2(test_db, related2):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=related2).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
+def related3():
+    return 'TCGA_Subtype'
+
+
+@ pytest.fixture(scope='session')
+def related_id3(test_db, related3):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=related3).one_or_none()
     return id
 
 
@@ -77,13 +117,82 @@ def tag_id(test_db, tag):
 
 
 @ pytest.fixture(scope='session')
+def tag2():
+    return 'male'
+
+
+@ pytest.fixture(scope='session')
+def tag_id2(test_db, tag2):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=tag2).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
+def tag_i2d(test_db, tag2):
+    from api.db_models import Tag
+    (id, ) = test_db.session.query(Tag.id).filter_by(
+        name=tag2).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
 def chosen_feature():
     return 'Det_Ratio'
 
 
 @ pytest.fixture(scope='session')
+def chosen_feature_id(test_db, chosen_feature):
+    from api.db_models import Feature
+    (id, ) = test_db.session.query(Feature.id).filter_by(
+        name=chosen_feature).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
 def feature_class():
     return 'TIL Map Characteristic'
+
+
+@ pytest.fixture(scope='session')
+def feature_class2():
+    return 'DNA Alteration'
+
+
+@ pytest.fixture(scope='session')
+def feature_class2_id(test_db, feature_class2):
+    from api.db_models import FeatureClass
+    (id, ) = test_db.session.query(FeatureClass.id).filter_by(
+        name=feature_class2).one_or_none()
+    return id
+
+
+@ pytest.fixture(scope='session')
+def feature_class2_feature_names(test_db, feature_class2_id):
+    from api.db_models import Feature
+    res = test_db.session.query(Feature.name).filter_by(
+        class_id=feature_class2_id).all()
+    features = [feature[0] for feature in res]
+    return features
+
+
+@ pytest.fixture(scope='session')
+def feature3():
+    return 'height'
+
+
+@ pytest.fixture(scope='session')
+def feature3_class():
+    return 'Clinical'
+
+
+@ pytest.fixture(scope='session')
+def feature3_id(test_db, feature3):
+    from api.db_models import Feature
+    (id, ) = test_db.session.query(Feature.id).filter_by(
+        name=feature3).one_or_none()
+    return id
 
 
 @ pytest.fixture(scope='session')
@@ -178,3 +287,120 @@ def max_weight():
 @ pytest.fixture(scope='session')
 def min_weight():
     return 42
+
+# ----
+
+
+@pytest.fixture(scope='module')
+def cohort_query_builder():
+    def f(query_fields):
+        return """
+        query Cohorts(
+            $paging: PagingInput
+            $distinct:Boolean
+            $cohort: [String!]
+            $dataSet: [String!]
+            $tag: [String!]
+        ) {
+        cohorts(
+            paging: $paging
+            distinct: $distinct
+            cohort: $cohort
+            dataSet: $dataSet
+            tag: $tag
+        )
+        """ + query_fields + "}"
+    return f
+
+
+@pytest.fixture(scope='module')
+def cohort_query(cohort_query_builder):
+    return cohort_query_builder(
+        """
+        {
+            items {
+                name
+                samples {
+                    name
+                }
+            }
+        }
+        """
+    )
+
+
+@pytest.fixture(scope='module')
+def tcga_tag_cohort_name():
+    return 'TCGA_TCGA_Subtype'
+
+
+@pytest.fixture(scope='module')
+def pcawg_cohort_name():
+    return('PCAWG')
+
+
+@pytest.fixture(scope='module')
+def tcga_tag_cohort_id(test_db, tcga_tag_cohort_name):
+    from api.db_models import Cohort
+    (id, ) = test_db.session.query(Cohort.id).filter_by(
+        name=tcga_tag_cohort_name).one_or_none()
+    return id
+
+
+@pytest.fixture(scope='module')
+def pcawg_cohort_id(test_db, pcawg_cohort_name):
+    from api.db_models import Cohort
+    (id, ) = test_db.session.query(Cohort.id).filter_by(
+        name=pcawg_cohort_name).one_or_none()
+    return id
+
+
+@pytest.fixture(scope='module')
+def tcga_tag_cohort_samples(client, tcga_tag_cohort_name, cohort_query):
+    response = client.post('/api', json={'query': cohort_query, 'variables': {
+        'cohort': [tcga_tag_cohort_name]
+    }})
+    json_data = json.loads(response.data)
+    page = json_data['data']['cohorts']
+    cohort = page['items'][0]
+    samples = cohort['samples']
+    names = [sample['name'] for sample in samples]
+    return names
+
+
+@pytest.fixture(scope='module')
+def pcawg_cohort_samples(client, pcawg_cohort_name, cohort_query):
+    response = client.post('/api', json={'query': cohort_query, 'variables': {
+        'cohort': [pcawg_cohort_name]
+    }})
+    import logging
+    logger = logging.getLogger("feature response")
+    logger.info(pcawg_cohort_name)
+    json_data = json.loads(response.data)
+    page = json_data['data']['cohorts']
+    cohort = page['items'][0]
+    samples = cohort['samples']
+    names = [sample['name'] for sample in samples]
+    return names
+
+# for testing germline fields ----
+
+
+@pytest.fixture(scope='module')
+def germline_feature():
+    return 'BCR_Richness'
+
+
+@pytest.fixture(scope='module')
+def germline_pathway():
+    return 'MMR'
+
+
+@pytest.fixture(scope='module')
+def germline_category():
+    return 'Adaptive Receptor'
+
+
+@pytest.fixture(scope='module')
+def germline_module():
+    return 'Unassigned'

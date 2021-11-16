@@ -1,18 +1,26 @@
-from .resolver_helpers import build_feature_graphql_response, feature_related_sample_request_fields, feature_request_fields, get_requested, request_features, return_feature_derived_fields
+from .resolver_helpers import build_feature_graphql_response, feature_related_sample_request_fields, feature_request_fields, get_requested, build_features_query, get_selection_set, get_requested
+from .resolver_helpers.paging_utils import paginate, paging_fields, create_paging
 
 
-def resolve_features(_obj, info, dataSet=None, feature=None, featureClass=None, maxValue=None, minValue=None, related=None, sample=None, tag=None):
-    requested = get_requested(info, feature_request_fields)
+def resolve_features(_obj, info, distinct=False, paging=None, feature=None, featureClass=None, maxValue=None, minValue=None, sample=None, cohort=None):
+
+    selection_set = get_selection_set(info=info, child_node='items')
+
+    requested = get_requested(
+        selection_set=selection_set, requested_field_mapping=feature_request_fields)
 
     sample_requested = get_requested(
-        info, feature_related_sample_request_fields, 'samples')
+        selection_set=selection_set, requested_field_mapping=feature_related_sample_request_fields, child_node='samples')
 
-    features = request_features(requested, set(), set(), data_set=dataSet, feature=feature, feature_class=featureClass, max_value=maxValue,
-                                min_value=minValue, related=related, sample=sample, tag=tag, by_class=False, by_tag=False)
+    max_items = 10 if 'samples' in requested else 100_000
 
-    feature_ids = set(feature.id for feature in features)
+    paging = create_paging(paging, max_items)
 
-    max_min_dict, sample_dict = return_feature_derived_fields(
-        requested, sample_requested, feature_ids=feature_ids, data_set=dataSet, max_value=maxValue, min_value=minValue, related=related, sample=sample, tag=tag)
+    query, count_query = build_features_query(
+        requested, distinct, paging, feature=feature, feature_class=featureClass, max_value=maxValue, min_value=minValue, sample=sample, cohort=cohort)
 
-    return map(build_feature_graphql_response(max_min_dict=max_min_dict, sample_dict=sample_dict), features)
+    pagination_requested = get_requested(info, paging_fields, 'paging')
+
+    res = paginate(query, count_query, paging, distinct,
+                   build_feature_graphql_response(requested, sample_requested, maxValue, minValue, cohort, sample), pagination_requested)
+    return(res)

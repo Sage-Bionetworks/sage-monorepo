@@ -1,8 +1,8 @@
-ariadne==0.11.0
+ariadne==0.13.0
 click==7.1.2
 Flask==1.1.2
 Flask-SQLAlchemy==2.4.3
-graphql-core==3.0.5
+graphql-core==3.1.0
 itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
