@@ -222,6 +222,15 @@ ici_models_main_server <- function(
         )
       })
 
+      observeEvent(input$method_link,{
+        shiny::showModal(modalDialog(
+          title = "Method",
+          includeMarkdown("inst/markdown/methods/ici_models.markdown"),
+          easyClose = TRUE,
+          footer = NULL
+        ))
+      })
+
       ici_models_train_server(
         "ici_model1",
         shiny::reactive(training_obj()),
