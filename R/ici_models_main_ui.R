@@ -5,8 +5,8 @@ ici_models_main_ui <- function(id){
   shiny::tagList(
     iatlas.modules::messageBox(
       width = 24,
-      shiny::includeMarkdown("inst/markdown/ici_models.markdown")
-     # shiny::p("Select parameters of interest for model training")
+      shiny::includeMarkdown("inst/markdown/ici_models.markdown"),
+      shiny::actionButton(ns("method_link"), "Click to view method description.")
     ),
     iatlas.modules::optionsBox(
       width = 24,

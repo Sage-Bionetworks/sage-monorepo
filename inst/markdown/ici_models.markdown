@@ -6,7 +6,7 @@ Press *Train Model* for each model that you want to run, and press it again to u
 
 When you determine that your trained model is ready to be tested against the testing datasets, press *Run model in the test dataset(s)*. You will see a KM plot stratifying patients based on the predicted response, an AUC plot, and a confusion matrix with associated statistics for each one of the datasets selected for testing.
 
-You can click here for more information on the method for merging the data and running the model. Notebooks replicating the analysis are available in our [iatlas-notebooks](https://github.com/CRI-iAtlas/iatlas-notebooks) repository.
+You can click below for more information on the method for merging the data and running the model. Notebooks replicating the analysis are available in our [iatlas-notebooks](https://github.com/CRI-iAtlas/iatlas-notebooks) repository.
 
 
 
