@@ -64,32 +64,22 @@ get_scaled_data <- function(df, scale_function_choice = "None", predictors_to_sc
 exclude_treatment_data <- function(x){
   is.na(x) | x == FALSE
 }
-get_training_object <- function(cohort_obj,
-                                train_ds,
-                                test_ds,
-                                selected_response,
-                                selected_pred,
-                                selected_genes,
-                                scale_function_choice = "None", predictors_to_scale,
-                                previous_treat_to_exclude = NULL){
-  #df with train and test
-  dataset_selection <- list(
-    train = get_dataset_id(train_ds, cohort_obj),
-    test = get_dataset_id(test_ds, cohort_obj)
-  )
 
-  #info about selected outcome
-  response_levels <- iatlas.api.client::query_tags_with_parent_tags(parent_tags = selected_response)
-
+get_predictors_df <- function(
+  datasets,
+  selected_pred,
+  selected_response,
+  selected_genes
+){
   #df with selected predictors and labels
-  pred_features <- iatlas.api.client::query_cohort_features(cohorts = c(dataset_selection$train, dataset_selection$test)) %>%
+  pred_features <- iatlas.api.client::query_cohort_features(cohorts = datasets) %>%
     dplyr::filter(feature_name %in% selected_pred) %>%
     dplyr::mutate(VariableType = "Numeric") %>%
     dplyr::select(feature_name, feature_display, VariableType) %>%
     dplyr::distinct()
 
   if(nrow(pred_features) > 0){
-    pred_df <- iatlas.api.client::query_feature_values(cohorts = cohort_obj$dataset_names, features = pred_features$feature_name) %>%
+    pred_df <- iatlas.api.client::query_feature_values(cohorts = datasets, features = pred_features$feature_name) %>%
       dplyr::select(sample_name = sample, feature_name, feature_value)
   }else{
     pred_df <- NULL
@@ -97,7 +87,7 @@ get_training_object <- function(cohort_obj,
 
   #for categorical predictors, we need to make sure to store the key to label them correctly
 
-  cat_df <- iatlas.api.client::query_tag_samples(cohorts = cohort_obj$dataset_names, parent_tags = c(selected_response, selected_pred, "Prior_Rx", "TCGA_Study")) %>% #we always want TCGA Study to check if user mixed different types
+  cat_df <- iatlas.api.client::query_tag_samples(cohorts = datasets, parent_tags = c(selected_response, selected_pred, "Prior_Rx", "TCGA_Study")) %>% #we always want TCGA Study to check if user mixed different types
     dplyr::inner_join(iatlas.api.client::query_tags_with_parent_tags(parent_tags = c(selected_response, selected_pred, "TCGA_Study")), by = c("tag_name", "tag_long_display", "tag_short_display", "tag_characteristics", "tag_color", "tag_order", "tag_type"))
 
   categories <- cat_df %>%
@@ -116,11 +106,11 @@ get_training_object <- function(cohort_obj,
 
   genes <- data.frame()
   if(length(selected_genes >0)) genes <- data.frame(
-                                            feature_name = selected_genes,
-                                            feature_display = selected_genes,
-                                            VariableType = "Numeric")
+    feature_name = selected_genes,
+    feature_display = selected_genes,
+    VariableType = "Numeric")
   if(length(selected_genes >0)){
-    gene_df <- iatlas.api.client::query_gene_expression(cohorts = cohort_obj$dataset_names, entrez = as.numeric(selected_genes))
+    gene_df <- iatlas.api.client::query_gene_expression(cohorts = datasets, entrez = as.numeric(selected_genes))
     genes <- gene_df %>%
       dplyr::mutate(feature_name = hgnc,
                     feature_display = hgnc,
@@ -134,12 +124,127 @@ get_training_object <- function(cohort_obj,
     gene_df <- NULL
   }
 
-  predictors <- rbind(pred_features, categories, genes)
-  predictors_df <- rbind(pred_df,
-                         cat_df,
-                         gene_df)
+  list(
+    predictors = rbind(pred_features, categories, genes),
+    predictors_df = rbind(pred_df,
+                           cat_df,
+                           gene_df)
+  )
+}
+
+check_categorical_predictors <- function(
+  cat_predictors_df,
+  data_list
+){
+  cat_predictors <- dplyr::filter(cat_predictors_df,VariableType == "Categorical")
+
+  cat_na <- if(nrow(cat_predictors) >0){
+    purrr::map_dfr(.x = unique(data_list$train$dataset_display), predictor = cat_predictors$feature_name, function(dataset, predictor){
+      dataset_display <- dataset #get_dataset_label(dataset, cohort_obj)
+
+      category <- sapply(data_list$train %>% dplyr::filter(dataset_display == dataset) %>% dplyr::select(predictor), function(x)dplyr::n_distinct(x))
+      category <- category[category ==1]
+
+      n_na <-  sapply(data_list$train %>% dplyr::filter(dataset_name == dataset) %>% dplyr::select(predictor), function(x)sum(stringr::str_starts(x, "na_")))
+      n_samples <- nrow(data_list$train [data_list$train$dataset_name == dataset,])
+
+      some_na <- n_na[n_na < n_samples & n_na >0]
+      if(length(some_na)>0){
+        one_level_df <- data.frame(feature_name = names(some_na),
+                                   dataset = dataset_display,
+                                   n_missing = some_na,
+                                   missing_all = "tag_some_na")
+      }else{
+        one_level_df <- data.frame()
+      }
+
+      if(length(category>0)){ #category has only one level in training set
+        all_na <- n_na[n_na == n_samples]
+        no_na <- n_na[n_na == 0]
+        if(length(all_na)>0){#list categories that have only NA values
+          one_level_df <- rbind(
+            one_level_df,
+            data.frame(feature_name = names(all_na),
+                       dataset = dataset_display,
+                       n_missing = all_na,
+                       missing_all = "tag_all_na")
+          )
+        }
+        if(length(no_na)>0){ #list categories that have one level that is not NA
+          one_level_df <- rbind(
+            one_level_df,
+            data.frame(feature_name = names(no_na),
+                       dataset = dataset_display,
+                       n_missing = no_na,
+                       missing_all = "tag_one_level")
+          )
+          one_level_df <- one_level_df %>%
+            merge(., cat_predictors_df, by = "feature_name") %>%
+            dplyr::select(feature_name, feature_display, dataset, n_missing, missing_all)
+        }
+      }
+    })
+  }else{
+    data.frame()
+  }#cat_na
+
+  cat_missing <- if(nrow(cat_predictors_df) >0){
+    purrr::map_dfr(.x = cat_predictors_df$feature_name, function(x){
+      missing_train <- unique(data_list$train_df[[x]])
+      missing_test <- unique(data_list$test_df[[x]])
+      if(length(missing_test)== 0 |length(missing_train)== 0) return(NULL)
+      missing_level <- setdiff(missing_test, missing_train)
+      if(length(missing_level) != 0){
+        missing_df <- data_list$test_df %>%
+          dplyr::filter(.[[x]] %in% missing_level) %>%
+          dplyr::group_by(dataset_display) %>%
+          dplyr::select(dataset_display, dplyr::any_of(x))
+
+        cat_missing <- data.frame(
+          feature_name = x,
+          feature_display = subset(cat_predictors_df, feature_name == x, feature_display),
+          group = subset(cat_predictors_df, feature_name == paste0(x, missing_df[[x]]), feature_display)$feature_display,
+          dataset = missing_df$dataset_display
+        ) %>%
+          dplyr::distinct()
+      }
+    })
+  }#cat_missing
+
+  list(
+    cat_na = cat_na,
+    cat_missing = cat_missing
+  )
+}
 
 
+###### Build training obj ###############
+get_training_object <- function(cohort_obj,
+                                train_ds,
+                                test_ds,
+                                selected_response,
+                                selected_pred,
+                                selected_genes,
+                                scale_function_choice = "None", predictors_to_scale,
+                                previous_treat_to_exclude = NULL){
+  #df with train and test
+  dataset_selection <- list(
+    train = get_dataset_id(train_ds, cohort_obj),
+    test = get_dataset_id(test_ds, cohort_obj)
+  )
+
+  #info about selected outcome
+  response_levels <- iatlas.api.client::query_tags_with_parent_tags(parent_tags = selected_response)
+
+  # #df with selected predictors and labels
+  predictors <- get_predictors_df(
+    cohort_obj$dataset_names,
+    selected_pred,
+    selected_response,
+    selected_genes
+  )
+
+  #getting samples that are pre-treatment. We need to handle the Prins dataset differently, because an on_sample_treatment means that ICI was not neoadjuvant
   if("Prins_GBM_2019" %in% cohort_obj$dataset_names){
     pre_treat_samples <-  iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment", cohorts = cohort_obj$dataset_names) %>%
       dplyr::filter(sample_name %in% cohort_obj$sample_tbl$sample_name) %>%
@@ -150,7 +255,8 @@ get_training_object <- function(cohort_obj,
       dplyr::filter(sample_name %in% cohort_obj$sample_tbl$sample_name)
   }
 
-  pred_df <- predictors_df %>%
+  #consolidating df with selected predictors, dataset, adding survival data
+  pred_df <- predictors$predictors_df %>%
     rbind(iatlas.api.client::query_feature_values(cohorts = cohort_obj$dataset_names, features = c("OS", "OS_time", "PFI_1", "PFI_time_1")) %>%
                        dplyr::select(sample_name = sample, feature_name, feature_value)) %>%
     dplyr::filter(sample_name %in% pre_treat_samples$sample_name) %>%
@@ -162,16 +268,16 @@ get_training_object <- function(cohort_obj,
   data_bucket <- list(
     train_df = pred_df %>%
       dplyr::filter(dataset_name %in% dataset_selection$train) %>%
-      tidyr::drop_na(dplyr::any_of(predictors$feature_name)) %>%
+      tidyr::drop_na(dplyr::any_of(predictors$predictors$feature_name)) %>%
       dplyr::filter(dplyr::if_all(previous_treat_to_exclude, exclude_treatment_data)),
     test_df = pred_df %>%
       dplyr::filter(dataset_name %in% dataset_selection$test) %>%
-      tidyr::drop_na(dplyr::any_of(predictors$feature_name)) %>%
+      tidyr::drop_na(dplyr::any_of(predictors$predictors$feature_name)) %>%
       dplyr::filter(dplyr::if_all(previous_treat_to_exclude, exclude_treatment_data))
   )
 
   #Check if any of the selected predictors is missing for a specific dataset (eg, IMVigor210 doesn't have Age data)
-  missing_annot <- purrr::map_dfr(.x = c(dataset_selection$train, dataset_selection$test), predictor = dplyr::filter(predictors, VariableType != "Category")$feature_name,
+  missing_annot <- purrr::map_dfr(.x = c(dataset_selection$train, dataset_selection$test), predictor = dplyr::filter(predictors$predictors, VariableType != "Category")$feature_name,
                                   function(dataset, predictor){
     feature <- sapply(pred_df %>% dplyr::filter(dataset_name == dataset) %>% dplyr::select(predictor), function(x)sum(is.na(x)))
 
@@ -194,93 +300,23 @@ get_training_object <- function(cohort_obj,
   #there is more than one level in the training set
   #not all samples have NA as value in the training set
   #the testing dataset has the same levels included for training
-  cat_predictors <-subset(predictors,VariableType == "Categorical", feature_name)
-
-  cat_na <- if(nrow(cat_predictors) >0){
-    purrr::map_dfr(.x = dataset_selection$train, predictor = cat_predictors$feature_name, function(dataset, predictor){
-      dataset_display <- get_dataset_label(dataset, cohort_obj)
-
-      category <- sapply(pred_df %>% dplyr::filter(dataset_name == dataset) %>% dplyr::select(predictor), function(x)dplyr::n_distinct(x))
-      category <- category[category ==1]
-
-      n_na <-  sapply(pred_df %>% dplyr::filter(dataset_name == dataset) %>% dplyr::select(predictor), function(x)sum(stringr::str_starts(x, "na_")))
-      n_samples <- nrow(pred_df[pred_df$dataset_name == dataset,])
-
-      some_na <- n_na[n_na < n_samples & n_na >0]
-      if(length(some_na)>0){
-      one_level_df <- data.frame(feature_name = names(some_na),
-                                 dataset = dataset_display,
-                                 n_missing = some_na,
-                                 missing_all = "tag_some_na")
-      }else{
-        one_level_df <- data.frame()
-      }
-
-      if(length(category>0)){ #category has only one level in training set
-        all_na <- n_na[n_na == n_samples]
-        no_na <- n_na[n_na == 0]
-        if(length(all_na)>0){#list categories that have only NA values
-          one_level_df <- rbind(
-            one_level_df,
-            data.frame(feature_name = names(all_na),
-                     dataset = dataset_display,
-                     n_missing = all_na,
-                     missing_all = "tag_all_na")
-          )
-        }
-        if(length(no_na)>0){ #list categories that have one level that is not NA
-          one_level_df <- rbind(
-            one_level_df,
-            data.frame(feature_name = names(no_na),
-                       dataset = dataset_display,
-                       n_missing = no_na,
-                       missing_all = "tag_one_level")
-          )
-          one_level_df <- one_level_df %>%
-            merge(., categories, by = "feature_name") %>%
-            dplyr::select(feature_name, feature_display, dataset, n_missing, missing_all)
-        }
-      }
-    })
-  }else{
-    data.frame()
-  }
+  cat_errors <- check_categorical_predictors(
+    cat_predictors_df = dplyr::filter(predictors$predictors, VariableType %in% c("Categorical", "Category")),
+    data_list = data_bucket)
 
   missing_annot <- rbind(
     missing_annot,
-    cat_na
+    cat_errors$cat_na
   )
 
-  cat_missing <- if(nrow(cat_predictors) >0){
-    purrr::map_dfr(.x = cat_predictors$feature_name, function(x){
-      missing_train <- unique(data_bucket$train_df[[x]])
-      missing_test <- unique(data_bucket$test_df[[x]])
-      if(length(missing_test)== 0 |length(missing_train)== 0) return(NULL)
-      missing_level <- setdiff(missing_test, missing_train)
-      if(length(missing_level) != 0){
-        missing_df <- data_bucket$test_df %>%
-          dplyr::filter(.[[x]] %in% missing_level) %>%
-          dplyr::group_by(dataset_display) %>%
-          dplyr::select(dataset_display, dplyr::any_of(x))
-
-        cat_missing <- data.frame(
-          feature_name = x,
-          feature_display = subset(predictors, feature_name == x, feature_display),
-          group = subset(predictors, feature_name == paste0(x, missing_df[[x]]), feature_display)$feature_display,
-          dataset = missing_df$dataset_display
-        ) %>%
-          dplyr::distinct()
-      }
-    })
-  }
   list(
    dataset = dataset_selection,
    response_var = selected_response,
    response_levels = response_levels,
-   predictors = predictors,
+   predictors = predictors$predictors,
    subset_df = data_bucket,
    missing_annot = missing_annot,
-   missing_level = cat_missing
+   missing_level = cat_errors$cat_missing
   )
 }
 
