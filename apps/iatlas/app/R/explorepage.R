@@ -42,7 +42,7 @@ explorepage_ui <- function(){
       ),
       shinydashboard::menuItem(
         text = "Analysis Modules",
-        icon = shiny::icon("bar-chart"),
+        icon = shiny::icon("chart-bar"),
         startExpanded = TRUE,
         analysis_module_menu_items
       ),
@@ -53,7 +53,7 @@ explorepage_ui <- function(){
       ),
       shinydashboard::menuItem(
         text = "ICI Modules",
-        icon = shiny::icon("bar-chart"),
+        icon = shiny::icon("chart-bar"),
         startExpanded = TRUE,
         ici_module_menu_items
       ),
