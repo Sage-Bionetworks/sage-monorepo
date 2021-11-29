@@ -214,4 +214,6 @@ get_hlines_pos <- function(samples){
   paste(lines_pos, ")")
 }
 
+# ICI Clinical Outcomes
+# TODO: Creating a list of KM plots for each selected dataset
 
