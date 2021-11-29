@@ -16,3 +16,4 @@ ICI Clinical Outcomes	ici_clinical_outcomes	ici	Plot survival curves based on im
 ICI Hazard Ratio	ici_hazard_ratio	ici	Create Cox Proportional Hazard Regression Models and visualize Hazard Ratio in a heatmap and a forest plot.	none
 ICI Immune Features	ici_immune_features	ici	See how immune readouts vary across groups and ICI datasets.	none
 ICI Immunomodulators	ici_immunomodulators	ici	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.	none
+ICI Machine Learning	ici_models	ici	Train and run multivariable models with cross-validation on ICI genomics and immunogenomics data.	none
