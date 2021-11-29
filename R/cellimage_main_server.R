@@ -10,7 +10,7 @@ cellimage_main_server <- function(
 
       cohort_groups <- shiny::reactive({
         iatlas.api.client::query_tags(
-          cohorts = cohort_obj()$dataset,
+          cohorts = cohort_obj()$dataset_names,
           parent_tags = cohort_obj()$group_name
         ) %>%
           dplyr::pull("tag_name")
@@ -37,22 +37,22 @@ cellimage_main_server <- function(
 
       cellimage_network_server(
         "cellimage_network1",
-        shiny::reactive(cohort_obj()$dataset),
+        shiny::reactive(cohort_obj()$dataset_names),
         shiny::reactive(input$group_selected1)
       )
       cellimage_network_server(
         "cellimage_network2",
-        shiny::reactive(cohort_obj()$dataset),
+        shiny::reactive(cohort_obj()$dataset_names),
         shiny::reactive(input$group_selected2)
       )
       cellimage_plot_server(
         "cellimage_plot1",
-        shiny::reactive(cohort_obj()$dataset),
+        shiny::reactive(cohort_obj()$dataset_names),
         shiny::reactive(input$group_selected1)
       )
       cellimage_plot_server(
         "cellimage_plot2",
-        shiny::reactive(cohort_obj()$dataset),
+        shiny::reactive(cohort_obj()$dataset_names),
         shiny::reactive(input$group_selected2)
       )
     }

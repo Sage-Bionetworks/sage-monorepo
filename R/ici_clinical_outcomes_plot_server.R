@@ -141,6 +141,7 @@ ici_clinical_outcomes_plot_server <- function(
           confint = input$confint,
           risktable = input$risktable,
           title = names(all_survival()),
+          show_pval = TRUE,
           group_colors = group_colors,
           facet = TRUE)
       })

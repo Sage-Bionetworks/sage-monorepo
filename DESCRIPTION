@@ -19,19 +19,22 @@ Suggests:
     testthat (>= 3.0.0),
     usethis
 Config/testthat/edition: 3
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 biocViews:
 Imports:
     arrow,
     broom,
+    caret,
     concordanceIndex,
     cyjShiny,
     data.table,
     dplyr,
     DT,
+    e1071,
     forcats,
     ggplot2,
     ggmosaic,
+    glmnet,
     grDevices,
     grid,
     grImport2,
@@ -43,11 +46,14 @@ Imports:
     lazyeval,
     magrittr,
     plotly,
+    pROC,
     purrr,
+    randomForest,
     RColorBrewer,
     readr,
     renv,
     rlang,
+    sortable,
     shiny,
     shinycssloaders,
     shinydashboard,
@@ -72,5 +78,3 @@ Remotes:
     ropensci/plotly@master,
     rstudio/rsconnect@master,
     paul-shannon/igvShiny@master 
-
-

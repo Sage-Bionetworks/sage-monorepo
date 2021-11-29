@@ -8,24 +8,16 @@ tumor_microenvironment_cell_proportions_server  <- function(
 
       plot_data_function <- shiny::reactive({
         function(.feature_class){
-          group_data <- cohort_obj()$group_tbl %>%
-            dplyr::select("group", "group_description" = "characteristics")
 
-          tbl <-
-            iatlas.modules2::query_feature_values_with_cohort_object(
-              cohort_object = cohort_obj(),
-              features = c(
-                "leukocyte_fraction", "Stromal_Fraction", "Tumor_fraction"
-              )
-            ) %>%
-            dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample") %>%
-            dplyr::inner_join(group_data, by = "group") %>%
+          cohort_obj()$get_feature_values(features = c(
+            "leukocyte_fraction", "Stromal_Fraction", "Tumor_fraction"
+          )) %>%
             dplyr::select(
-              "sample",
-              "group",
+              "sample" = "sample_name",
+              "group" = "group_short_name",
               "feature" = "feature_display",
               "feature_value",
-              "group_description"
+              "group_description" = "group_characteristics"
             )
         }
       })
