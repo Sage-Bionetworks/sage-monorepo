@@ -129,7 +129,7 @@ ici_models_main_server <- function(
           shinyjs::hide("missing_sample")
          }else{
           if(nrow(training_obj()$missing_annot)>0){ #checks for missing data
-            if(any(training_obj()$missing_annot$missing_all %in% c("feature_all_na" ,"tag_all_na"))){ #dataset doesn't have annotation for one selected feature
+            if(any(c("feature_all_na" ,"tag_all_na") %in% (training_obj()$missing_annot$missing_all))){#dataset doesn't have annotation for one selected feature
               block_train(TRUE)
               shinyjs::show("missing_data")
               output$missing_data <- shiny::renderText({
@@ -138,14 +138,14 @@ ici_models_main_server <- function(
                 paste("<ul><i> Change the following dataset and/or predictor selection to proceed:</i><br>",
                       paste0("<li>Dataset ", missing_all$dataset, " has no data for ", missing_all$feature_display,".", collapse = "</li>"), "</ul>")
                 })
-            }else if(any(training_obj()$missing_annot$missing_all == "tag_one_level")){
+            }else if("tag_one_level" %in% training_obj()$missing_annot$missing_all){
               block_train(TRUE)
               shinyjs::show("single_level")
               output$single_level <- shiny::renderText({
                 shiny::req(nrow(training_obj()$missing_annot) != 0)
                 missing_all <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == "tag_one_level"))
                 paste("<ul><i> Change the following dataset and/or predictor selection to proceed:</i><br>",
-                      paste0("<li>Training set has only one level for ", missing_all$feature_display,".", collapse = "</li>"), "</ul>")
+                      paste0("<li>Dataset ", missing_all$dataset, " has only one level for ", missing_all$feature_display,".", collapse = "</li>"), "</ul>")
               })
             }else{
               block_train(FALSE)
@@ -153,13 +153,14 @@ ici_models_main_server <- function(
               shinyjs::hide("single_level")
             }
 
-            if(any(training_obj()$missing_annot$missing_all %in% c("feature_some_na" ,"tag_some_na"))){ #samples with missing info for a selected feature
+            if(any(c("feature_some_na" ,"tag_some_na") %in% training_obj()$missing_annot$missing_all)){ #samples with missing info for a selected feature
               shinyjs::show("missing_sample")
+
               output$missing_sample <- shiny::renderText({
                 shiny::req(nrow(training_obj()$missing_annot) != 0)
-                missing_some <- (training_obj()$missing_annot %>% dplyr::filter(missing_all == c("feature_some_na" ,"tag_some_na")))
-                paste("<i> Samples with NA annotation will be excluded from modeling:</i><br>",
-                      paste0(missing_some$dataset, " has ", missing_some$n_missing," samples with NA info for ", missing_some$feature_display, ".", collapse = "<br>"))
+                missing_some <- (training_obj()$missing_annot %>% dplyr::filter(missing_all %in% c("feature_some_na" ,"tag_some_na")))
+                paste("<ul><i> Samples with NA annotation will be excluded from modeling:</i><br>",
+                      paste0("<li>", missing_some$dataset, " has ", missing_some$n_missing," samples with NA info for ", missing_some$feature_display, ".", collapse = "</li>"), "</ul>")
               })
             }
           } #ends check for NAs in annotation
@@ -190,10 +191,12 @@ ici_models_main_server <- function(
             test_df = selected_df()$test,
             variable_to_norm = dplyr::filter(training_obj()$predictors, VariableType == "Numeric")$feature_name,
             predictors = c(input$response_variable, dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name),
-            is_test = FALSE)
+            is_test = FALSE) %>%
+          dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_")))
         }else{
-          scaled_df %>%
+          selected_df()$train %>%
             tidyr::drop_na(any_of(predictors())) %>%
+            dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
             dplyr::select("sample_name", "dataset_name", input$response_variable, all_of(dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name))
         }
       })
@@ -205,10 +208,12 @@ ici_models_main_server <- function(
             test_df = selected_df()$test,
             variable_to_norm = dplyr::filter(training_obj()$predictors, VariableType == "Numeric")$feature_name,
             predictors = c(input$response_variable, dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name),
-            is_test = TRUE)
+            is_test = TRUE) %>%
+          dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_")))
         }else{
-          scaled_df %>%
+          selected_df()$test %>%
             tidyr::drop_na(any_of(predictors())) %>%
+            dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
             dplyr::select("sample_name", "dataset_name", input$response_variable, all_of(dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name))
         }
       })

@@ -145,13 +145,13 @@ check_categorical_predictors <- function(
       category <- sapply(data_list$train %>% dplyr::filter(dataset_display == dataset) %>% dplyr::select(predictor), function(x)dplyr::n_distinct(x))
       category <- category[category ==1]
 
-      n_na <-  sapply(data_list$train %>% dplyr::filter(dataset_name == dataset) %>% dplyr::select(predictor), function(x)sum(stringr::str_starts(x, "na_")))
-      n_samples <- nrow(data_list$train [data_list$train$dataset_name == dataset,])
+      n_na <-  sapply(data_list$train %>% dplyr::filter(dataset_display == dataset) %>% dplyr::select(predictor), function(x)sum(stringr::str_starts(x, "na_")))
+      n_samples <- nrow(data_list$train [data_list$train$dataset_display == dataset,])
 
       some_na <- n_na[n_na < n_samples & n_na >0]
       if(length(some_na)>0){
         one_level_df <- data.frame(feature_name = names(some_na),
-                                   dataset = dataset_display,
+                                   dataset = dataset,
                                    n_missing = some_na,
                                    missing_all = "tag_some_na")
       }else{
@@ -165,7 +165,7 @@ check_categorical_predictors <- function(
           one_level_df <- rbind(
             one_level_df,
             data.frame(feature_name = names(all_na),
-                       dataset = dataset_display,
+                       dataset = dataset,
                        n_missing = all_na,
                        missing_all = "tag_all_na")
           )
@@ -174,14 +174,18 @@ check_categorical_predictors <- function(
           one_level_df <- rbind(
             one_level_df,
             data.frame(feature_name = names(no_na),
-                       dataset = dataset_display,
+                       dataset = dataset,
                        n_missing = no_na,
                        missing_all = "tag_one_level")
           )
-          one_level_df <- one_level_df %>%
-            merge(., cat_predictors_df, by = "feature_name") %>%
-            dplyr::select(feature_name, feature_display, dataset, n_missing, missing_all)
         }
+      }
+      if(nrow(one_level_df)>0){
+        one_level_df %>%
+          merge(., cat_predictors_df, by = "feature_name") %>%
+          dplyr::select(feature_name, feature_display, dataset, n_missing, missing_all)
+      }else{
+        data.frame()
       }
     })
   }else{
@@ -198,18 +202,22 @@ check_categorical_predictors <- function(
         missing_df <- data_list$test_df %>%
           dplyr::filter(.[[x]] %in% missing_level) %>%
           dplyr::group_by(dataset_display) %>%
-          dplyr::select(dataset_display, dplyr::any_of(x))
+          dplyr::select(dataset_display, dplyr::any_of(x)) %>%
+          dplyr::distinct()
 
-        cat_missing <- data.frame(
-          feature_name = x,
-          feature_display = subset(cat_predictors_df, feature_name == x, feature_display),
-          group = subset(cat_predictors_df, feature_name == paste0(x, missing_df[[x]]), feature_display)$feature_display,
-          dataset = missing_df$dataset_display
-        ) %>%
+        group_labels <- setNames(cat_predictors_df$feature_display, cat_predictors_df$feature_name)
+        cat_missing <- missing_df %>%
+          dplyr::mutate(feature_name = x,
+                        feature_display = subset(cat_predictors_df, feature_name == x, feature_display)$feature_display,
+                        teste = paste0(feature_name, .data[[x]]),
+                        group = group_labels[paste0(feature_name, .data[[x]])] #subset(cat_predictors_df, feature_name == paste0(x, missing_df[[x]]), feature_display)$feature_display
+          ) %>%
+          dplyr::rename(dataset = dataset_display) %>%
           dplyr::distinct()
       }
     })
   }#cat_missing
+
 
   list(
     cat_na = cat_na,
@@ -260,7 +268,7 @@ get_training_object <- function(cohort_obj,
     rbind(iatlas.api.client::query_feature_values(cohorts = cohort_obj$dataset_names, features = c("OS", "OS_time", "PFI_1", "PFI_time_1")) %>%
                        dplyr::select(sample_name = sample, feature_name, feature_value)) %>%
     dplyr::filter(sample_name %in% pre_treat_samples$sample_name) %>%
-    dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
+    #dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
     tidyr::pivot_wider(., names_from = feature_name, values_from = feature_value, values_fill = NA) %>%
     dplyr::inner_join(iatlas.api.client::query_dataset_samples(datasets = cohort_obj$dataset_names), by = "sample_name")
 
@@ -277,12 +285,12 @@ get_training_object <- function(cohort_obj,
   )
 
   #Check if any of the selected predictors is missing for a specific dataset (eg, IMVigor210 doesn't have Age data)
-  missing_annot <- purrr::map_dfr(.x = c(dataset_selection$train, dataset_selection$test), predictor = dplyr::filter(predictors$predictors, VariableType != "Category")$feature_name,
+  missing_annot <- purrr::map_dfr(.x = names(c(dataset_selection$train, dataset_selection$test)), predictor = dplyr::filter(predictors$predictors, VariableType != "Category")$feature_name,
                                   function(dataset, predictor){
-    feature <- sapply(pred_df %>% dplyr::filter(dataset_name == dataset) %>% dplyr::select(predictor), function(x)sum(is.na(x)))
+    feature <- sapply(pred_df %>% dplyr::filter(dataset_display == dataset) %>% dplyr::select(predictor), function(x)sum(is.na(x)))
 
     if(length(feature[feature != 0])>0){ #features that were not annotated in a dataset have NA as value
-      n_samples <- nrow(pred_df[pred_df$dataset_name == dataset,])
+      n_samples <- nrow(pred_df[pred_df$dataset_display == dataset,])
       data.frame(feature_name = names(feature[feature != 0]),
                  dataset = dataset,
                  n_missing = feature[feature != 0]) %>%
@@ -291,7 +299,7 @@ get_training_object <- function(cohort_obj,
             n_missing == n_samples ~ "feature_all_na",
             TRUE ~ "feature_some_na"
         )) %>%
-        merge(., pred_features, by = "feature_name") %>%
+        merge(., predictors$predictors, by = "feature_name") %>%
         dplyr::select(feature_name, feature_display, dataset, n_missing, missing_all)
     }
   })
