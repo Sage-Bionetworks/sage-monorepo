@@ -23,7 +23,7 @@ build_distribution_io_df <- function(
 combine_colors <- function(color1, color2){
 
   purrr::map2_chr(.x = color1, .y = color2, function(c1, c2){
-    colorRampPalette(c(c1, c2))(3)[2]
+    grDevices::colorRampPalette(c(c1, c2))(3)[2]
   })
 
 }
@@ -213,7 +213,7 @@ get_stat_test <- function(df, group_to_split, sel_feature, dataset, dataset_titl
 
   if(dplyr::n_distinct(data_set[[group_to_split]])>1){
     split_data <- split(data_set, data_set[[group_to_split]])
-    comb_groups <- combn(1:length(split_data), 2)
+    comb_groups <- utils::combn(1:length(split_data), 2)
 
     purrr::map2_dfr(.x = comb_groups[1,], .y = comb_groups[2,], function(x,y){
 

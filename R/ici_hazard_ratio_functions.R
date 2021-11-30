@@ -53,7 +53,7 @@ fit_coxph <- function(dataset1, data, feature, time, status, ft_labels, multivar
 
     if(multivariate == FALSE){
       purrr::map_dfr(.x = valid_ft, function(x){
-        cox_features <- as.formula(paste(
+        cox_features <- stats::as.formula(paste(
           "survival::Surv(", time, ",", status, ") ~ ", x))
 
         survival::coxph(cox_features, data_cox)%>%
@@ -62,7 +62,7 @@ fit_coxph <- function(dataset1, data, feature, time, status, ft_labels, multivar
     }else{
       mult_ft <- paste0(valid_ft, collapse  = " + ")
 
-      cox_features <- as.formula(paste(
+      cox_features <- stats::as.formula(paste(
         "survival::Surv(", time, ",", status, ") ~ ",
         mult_ft)
       )
@@ -85,7 +85,7 @@ create_ph_df <- function(coxphList, dataset){
   coef_stats <- as.data.frame(summary(coxphList)$conf.int)
   coef_stats$dataset <- dataset
   coef_stats$group <- row.names(coef_stats)
-  coef_stats$pvalue <- (coef(summary(coxphList))[,5])
+  coef_stats$pvalue <- (stats::coef(summary(coxphList))[,5])
 
   coef_stats %>%
     dplyr::mutate(logHR = log10(`exp(coef)`),
