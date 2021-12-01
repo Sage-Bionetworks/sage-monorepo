@@ -1,76 +1,82 @@
-get_feature_by_dataset <- function(datasets, features, feature_df, group_df, fmx_df){
-
-  all_comb <- tidyr::crossing(dataset = datasets, feature = features) %>%
-    merge(., feature_df %>% dplyr::select(FeatureMatrixLabelTSV, FriendlyLabel,VariableType, `Variable Class Order`),
-          by.x = "feature", by.y ="FeatureMatrixLabelTSV")
-
-  num_cols <- all_comb[which(all_comb$VariableType == "Numeric"),]
-  cat_cols <- all_comb[which(all_comb$VariableType == "Categorical"),]
+get_feature_by_dataset <- function(features, feature_df, group_df, fmx_df, datasets_names, dataset_display){
+  datasets <- unique(fmx_df$dataset_name)
+  num_features <- features[which(features %in% feature_df$name)]
+  cat_features <- features[which(features %in% group_df$parent_tag_name)]
   #Organize numerical features
-  if(nrow(num_cols)>0){
-    num_cols <- num_cols %>%
+  if(length(num_features)>0){
+    num_cols <- tidyr::crossing(dataset = datasets, name = num_features) %>%
+      dplyr::left_join(., feature_df %>% dplyr::select(name, display), by = "name") %>%
       dplyr::select(dataset,
-                    group = feature,
-                    group_label = FriendlyLabel,
-                    order_within_sample_group = `Variable Class Order`) %>%
-      dplyr::mutate(feature=group,
+                    group = name,
+                    group_label = display) %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(feature= group,
+                    dataset_display = unname(dataset_display[dataset]),
                     ft_label = "Immune Feature")
-
   }
   #Check which datasets have more than one level for categorical features
-  if(nrow(cat_cols)>0){
-    cat_values <- purrr::map2_dfr(.x = cat_cols$dataset, .y = cat_cols$feature, .f = function(x, y){
+  if(length(cat_features)>0){
+    options <- tidyr::crossing(dataset = datasets, name = cat_features)
+    cat_values <- purrr::map2_dfr(.x = options$dataset, .y = options$name, .f = function(x, y){
       uvalue <- unique((fmx_df %>%
-                          dplyr::filter(Dataset == x))[[y]])
-
+                          dplyr::filter(dataset_name == x))[[y]])
       if(length(uvalue)>1) data.frame(dataset = as.character(x),
+                                      dataset_display = unname(dataset_display[x]),
                                       feature = as.character(y),
                                       gname = as.character(uvalue),
                                       stringsAsFactors = FALSE) %>%
         dplyr::mutate(group = paste0(feature, gname))
       else return()
     })
+    if(nrow(cat_values)>0) cat_cols <- merge(cat_values, group_df,
+              by.x = c("gname", "feature"), by.y = c("tag_name", "parent_tag_name")) %>%
+        dplyr::mutate(group_label = paste(parent_tag_short_display, tag_short_display, sep = " - ")) %>%
+        dplyr::select(dataset, dataset_display, feature, ft_label = parent_tag_short_display, group, group_label)
 
-    if(nrow(cat_values)>0) cat_cols <- merge(cat_values, cat_cols, by = c("dataset", "feature")) %>%
-        merge(., group_df,
-              by.x = c("gname", "feature"), by.y = c("FeatureValue", "Category")) %>%
-        dplyr::select(dataset, feature, ft_label = FriendlyLabel, group, group_label = FeatureLabel, order_within_sample_group)
     else return()
-
     rbind(cat_cols, num_cols)
   }else{
     num_cols
   }
-
 }
 
 fit_coxph <- function(dataset1, data, feature, time, status, ft_labels, multivariate = FALSE){
 
   data_cox <- data %>%
-    dplyr::filter(Dataset == dataset1)
+    dplyr::filter(dataset_name == dataset1)
 
-  #checking which features have more than one level for the dataset
-  #valid_ft <- purrr::keep(feature, function(x) dplyr::n_distinct(data_cox[[x]])>1)
-  valid_ft <- unique((ft_labels %>%
-                        dplyr::filter(dataset == dataset1))$feature)
+  if(!all(is.na(data_cox[[time]]))){
+    #checking which features have more than one level for the dataset
+    #valid_ft <- purrr::keep(feature, function(x) dplyr::n_distinct(data_cox[[x]])>1)
+    valid_ft <- unique((ft_labels %>%
+                          dplyr::filter(dataset == dataset1))$feature)
 
-  if(multivariate == FALSE){
-    purrr::map_dfr(.x = valid_ft, function(x){
-      cox_features <- as.formula(paste(
-        "survival::Surv(", time, ",", status, ") ~ ", x))
+    if(multivariate == FALSE){
+      purrr::map_dfr(.x = valid_ft, function(x){
+        cox_features <- stats::as.formula(paste(
+          "survival::Surv(", time, ",", status, ") ~ ", x))
 
-      survival::coxph(cox_features, data_cox)%>%
+        survival::coxph(cox_features, data_cox)%>%
+          create_ph_df(dataset = dataset1)
+      })
+    }else{
+      mult_ft <- paste0(valid_ft, collapse  = " + ")
+
+      cox_features <- stats::as.formula(paste(
+        "survival::Surv(", time, ",", status, ") ~ ",
+        mult_ft)
+      )
+      survival::coxph(cox_features, data_cox) %>%
         create_ph_df(dataset = dataset1)
-    })
+    }
   }else{
-    mult_ft <- paste0(valid_ft, collapse  = " + ")
-
-    cox_features <- as.formula(paste(
-      "survival::Surv(", time, ",", status, ") ~ ",
-      mult_ft)
+    data.frame(
+      logHR = NULL,
+      logupper = NULL,
+      loglower = NULL,
+      difflog=NULL,
+      logpvalue = NULL
     )
-    survival::coxph(cox_features, data_cox) %>%
-      create_ph_df(dataset = dataset1)
   }
 }
 
@@ -79,7 +85,7 @@ create_ph_df <- function(coxphList, dataset){
   coef_stats <- as.data.frame(summary(coxphList)$conf.int)
   coef_stats$dataset <- dataset
   coef_stats$group <- row.names(coef_stats)
-  coef_stats$pvalue <- (coef(summary(coxphList))[,5])
+  coef_stats$pvalue <- (stats::coef(summary(coxphList))[,5])
 
   coef_stats %>%
     dplyr::mutate(logHR = log10(`exp(coef)`),
@@ -98,7 +104,7 @@ build_coxph_df <- function(datasets, data, feature, time, status, ft_labels, mul
                        status = status,
                        ft_labels = ft_labels,
                        multivariate = multivariate) %>%
-                       {suppressMessages(dplyr::right_join(x = ., ft_labels))} %>%
+    {suppressMessages(dplyr::right_join(x = ., ft_labels))} %>%
     dplyr::mutate(group_label=replace(group_label, is.na(logHR), paste("(Ref.)", .$group_label[is.na(logHR)]))) %>%
     dplyr::mutate_all(~replace(., is.na(.), 0))
 
@@ -125,13 +131,13 @@ build_forestplot_dataset <- function(x, coxph_df, xname){
 
   subset_df <- coxph_df %>%
     dplyr::filter(dataset == x) %>%
-    dplyr::arrange(ft_label, desc(abs(logHR)))
+    dplyr::arrange(ft_label, dataset_display)#desc(abs(logHR)))
 
   if(dplyr::n_distinct(coxph_df$group) == 1){
     plot_title = ""
-    ylabel = x
+    ylabel = unique(subset_df$dataset_display)
   }else{
-    plot_title = x
+    plot_title = unique(subset_df$dataset_display)
     ylabel = factor(subset_df$group_label, levels = subset_df$group_label)
   }
 
@@ -161,12 +167,12 @@ build_heatmap_df <- function(coxph_df){
   df <- coxph_df %>%
     dplyr::filter(!stringr::str_detect(group_label, '(Ref.)')) %>%
     dplyr::arrange(feature) %>%
-    dplyr::select(dataset, group_label, logHR) %>%
+    dplyr::select(dataset_display, group_label, logHR) %>%
     tidyr::pivot_wider(names_from = group_label, values_from = logHR) %>%
     as.data.frame()
 
-  row.names(df) <- df$dataset
-  df$dataset <- NULL
+  row.names(df) <- sub("\\ -.*", "", df$dataset_display)
+  df$dataset_display <- NULL
 
   t(as.matrix(df))
 }
@@ -174,10 +180,11 @@ build_heatmap_df <- function(coxph_df){
 add_BH_annotation <- function(coxph_df, p){
 
   fdr_corrected <- coxph_df %>%
-    dplyr::select(dataset, group_label, pvalue, FDR, heatmap_annotation)
+    dplyr::select(dataset_display, group_label, pvalue, FDR, heatmap_annotation)
+  fdr_corrected$dataset_display <- sub("\\ -.*", "", fdr_corrected$dataset_display)
 
   p %>%
-    plotly::add_annotations(x = fdr_corrected$dataset,
+    plotly::add_annotations(x = fdr_corrected$dataset_display,
                     y = fdr_corrected$group_label,
                     text = fdr_corrected$heatmap_annotation,
                     showarrow = F,

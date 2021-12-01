@@ -328,9 +328,9 @@ get_plot_var_importance <- function(model, labels = NULL, from_varImp = TRUE, sc
     plot_df$error <- 0
   }else{ #at the moment, only logistic regression
     plot_df <- data.frame(
-      x = coef(summary(model))[,1],
-      feature_name = rownames(coef(summary(model))),
-      error = coef(summary(model))[,2]
+      x = stats::coef(summary(model))[,1],
+      feature_name = rownames(stats::coef(summary(model))),
+      error = stats::coef(summary(model))[,2]
     )
   }
   plot_df <- merge(plot_df, labels, by = "feature_name", all.x = TRUE) %>%
@@ -362,7 +362,7 @@ run_elastic_net <- function(train_df, response_variable, predictors, n_cv_folds,
 
   predictors_to_model <- predictors %>% dplyr::filter(VariableType != "Category") %>% dplyr::pull(feature_name)
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
-  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors_to_model), collapse = "+")))
+  parameters <- stats::as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors_to_model), collapse = "+")))
 
   model <- caret::train(
     parameters, data = train_df, method = "glmnet",
@@ -384,7 +384,7 @@ run_logistic_reg<- function(train_df, response_variable, predictors, n_cv_folds,
   predictors_to_model <- predictors %>% dplyr::filter(VariableType != "Category") %>% dplyr::pull(feature_name)
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
-  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors_to_model), collapse = "+")))
+  parameters <- stats::as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors_to_model), collapse = "+")))
   model <- caret::train(
     parameters, data = train_df, method = "glm", family = "binomial",
     trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
@@ -405,7 +405,7 @@ run_xgboost <- function(train_df, response_variable, predictors, n_cv_folds, bal
   predictors_to_model <- predictors %>% dplyr::filter(VariableType != "Category") %>% dplyr::pull(feature_name)
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
-  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors_to_model), collapse = "+")))
+  parameters <- stats::as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors_to_model), collapse = "+")))
   model <- caret::train(
     parameters, data = train_df, method = "xgbTree",
     trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
@@ -426,7 +426,7 @@ run_rf <- function(train_df, response_variable, predictors, n_cv_folds, balance_
   predictors_to_model <- predictors %>% dplyr::filter(VariableType != "Category") %>% dplyr::pull(feature_name)
   cvIndex <- get_cv_folds(train_df, balance_lhs, balance_rhs, response_variable, predictors_to_balance, n_cv_folds)
 
-  parameters <- as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors_to_model), collapse = "+")))
+  parameters <- stats::as.formula(paste(response_variable, "~ ", paste0(sprintf("`%s`", predictors_to_model), collapse = "+")))
   model <- caret::train(
     parameters, data = train_df, method = "rf",
     trControl = caret::trainControl(index = cvIndex, "cv", number = n_cv_folds),
@@ -490,10 +490,10 @@ get_testing_results <- function(model, test_df, training_obj, survival_endpoint)
     surv_df <- build_survival_df(
                       df = dataset_df,
                       group_column = "label_prediction",
-                      group_options = "label_prediction",
-                      time_column =available_endpoint[1])
+                      time_column =available_endpoint[1],
+                      filter_df = FALSE)
 
-    fit_df <- survival::survfit(survival::Surv(time, status) ~ variable, data = surv_df)
+    fit_df <- survival::survfit(survival::Surv(time, status) ~ measure, data = surv_df)
 
     test_title <- get_test_title(dataset = unique(dataset_df$dataset_display), available_endpoint[2])
 
