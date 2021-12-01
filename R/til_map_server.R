@@ -20,13 +20,13 @@ til_map_server <- function(
         ui_function = til_map_distributions_ui
       )
 
-      # call_module_server(
-      #   "til_map_datatable",
-      #   cohort_obj,
-      #   test_function = show_submodule,
-      #   server_function = til_map_datatable_server,
-      #   ui_function = til_map_datatable_ui
-      # )
+      call_module_server(
+        "til_map_datatable",
+        cohort_obj,
+        test_function = show_submodule,
+        server_function = til_map_datatable_server,
+        ui_function = til_map_datatable_ui
+      )
     }
   )
 }
