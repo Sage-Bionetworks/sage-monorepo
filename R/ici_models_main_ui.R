@@ -40,12 +40,8 @@ ici_models_main_ui <- function(id){
         shiny::selectInput(ns("response_variable"),
                            label = "3. Select Response Variable",
                            choices = c("Responder", "Clinical Benefit")),
-        shiny::uiOutput(ns("response_characteristics"))
-      )
-    ),
-    shiny::fluidRow(
-      shiny::column(
-        width = 3,
+        shiny::uiOutput(ns("response_characteristics")),
+        shiny::br(),
         iatlas.modules::optionsBox(
           width = 12,
           title = "Advanced",
@@ -79,9 +75,9 @@ ici_models_main_ui <- function(id){
           shiny::p("Transform numerical predictors"),
           shiny::checkboxInput(ns("do_norm"), "Normalize numeric data", value = TRUE)
         )
-      ),
-      shiny::column(
-        width = 9,
+      )
+    ),
+    shiny::fluidRow(
         shiny::verticalLayout(
           iatlas.modules::messageBox(
             width = 12,
@@ -94,8 +90,7 @@ ici_models_main_ui <- function(id){
             shiny::htmlOutput(ns("missing_level")),
             shiny::htmlOutput(ns("missing_sample"))
           )
-        )
-      ),
+        ),
       shiny::column(
         width = 6,
         ici_models_train_ui(ns("ici_model1"))

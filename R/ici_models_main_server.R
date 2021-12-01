@@ -96,8 +96,16 @@ ici_models_main_server <- function(
 
       output$samples_summary <- shiny::renderText({
         shiny::req(training_obj())
-        paste("Samples in training set:", nrow(training_obj()$subset_df$train_df),
-              "Samples in testing set:", nrow(training_obj()$subset_df$test_df))
+        shiny::validate(
+          shiny::need(
+            length(predictors())>1, "Select two or more predictors."
+          ))
+
+        paste(
+          paste("Samples in training set: ", nrow(training_obj()$subset_df$train_df)),
+          paste("Samples in testing set: ", nrow(training_obj()$subset_df$test_df)),
+          sep = " | "
+        )
       })
 
       output$train_summary <- shiny::renderText({
