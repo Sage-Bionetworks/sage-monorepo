@@ -94,9 +94,7 @@ explorepage_ui <- function(){
     )
 
   # image boxes at bottom of page that link to module tabs
-  module_image_boxes <- {
-
-    analysis_modules_tbl %>%
+  module_image_boxes <- analysis_modules_tbl %>%
       dplyr::select(
         "title" = "display",
         "linkId" = "link",
@@ -116,10 +114,9 @@ explorepage_ui <- function(){
       dplyr::mutate("row" = purrr::map2(
         .data$item1,
         .data$item2,
-        ~shiny::fluidRow(list(.x, .y))
+        shiny::fluidRow
       )) %>%
       dplyr::pull("row")
-  }
 
   # This is the tab item that users land on
   landing_tab_item <- list(shinydashboard::tabItem(
