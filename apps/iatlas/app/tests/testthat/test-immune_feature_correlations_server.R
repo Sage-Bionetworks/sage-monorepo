@@ -8,6 +8,10 @@ test_that("immune_feature_correlations_server", {
     ),
     {
       expect_type(feature_classes(), "character")
+      expect_equal(
+        length(feature_classes()),
+        length(unique(feature_classes()))
+      )
       expect_type(response_features(), "list")
       expect_type(feature_data_function(), "closure")
       feature_data <- feature_data_function()("Adaptive Receptor - T cell")
