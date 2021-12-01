@@ -1,5 +1,6 @@
 ici_hazard_ratio_main_server <- function(
-  id
+  id,
+  cohort_obj
 ) {
   shiny::moduleServer(
     id,
@@ -14,43 +15,36 @@ ici_hazard_ratio_main_server <- function(
         selected_vals$vars <- input$var2_cox
       })
 
-      observe({
-        non_selected_ds <- paste("Clinical data for", setdiff(unlist(datasets_options), input$datasets_mult), sep = " ")
+      categories <- shiny::reactive(iatlas.api.client::query_tags(datasets = cohort_obj()[["dataset_names"]]) %>%
+                                      dplyr::mutate(class = dplyr::case_when(
+                                        tag_name %in% c( "Response", "Responder", "Progression", "Clinical_Benefit") ~ "Response to ICI",
+                                        TRUE ~ "Treatment Data"))
+      )
 
-        clin_data <- ioresponse_data$feature_df %>%
-          dplyr::filter(FeatureMatrixLabelTSV != "treatment_when_collected" &
-                          FeatureMatrixLabelTSV %in% ioresponse_data$categories_df$Category &
-                          !`Variable Class` %in% non_selected_ds)
+      features <- shiny::reactive({cohort_obj()$feature_tbl %>%
+                                    dplyr::filter(!name %in% c("OS", "OS_time", "PFI_1", "PFI_time_1"))
+        })
 
-        var_choices_clin <- iatlas.app::create_filtered_nested_list_by_class(feature_df = clin_data,
-                                                                             filter_value = "Categorical",
-                                                                             class_column = "Variable Class",
-                                                                             internal_column = "FeatureMatrixLabelTSV",
-                                                                             display_column = "FriendlyLabel",
-                                                                             filter_column = "VariableType")
+      shiny::observe({
+        shiny::req(categories(), features())
+        var_choices_clin <- create_nested_list_by_class(categories(),
+                                                        class_column = "class",
+                                                        internal_column = "tag_name",
+                                                        display_column = "tag_short_display")
 
-        var_choices_feat <- iatlas.app::create_filtered_nested_list_by_class(feature_df = ioresponse_data$feature_df %>% dplyr::filter(`Variable Class` != "NA"),
-                                                                             filter_value = "Numeric",
-                                                                             class_column = "Variable Class",
-                                                                             internal_column = "FeatureMatrixLabelTSV",
-                                                                             display_column = "FriendlyLabel",
-                                                                             filter_column = "VariableType")
+        var_choices_feat <- create_nested_list_by_class(features(),
+                                                        class_column = "class",
+                                                        internal_column = "name",
+                                                        display_column = "display")
+
         var_choices <- c(var_choices_clin, var_choices_feat)
 
-        updateSelectizeInput(session,
+        shiny::updateSelectizeInput(session,
                           "var2_cox",
                           choices = var_choices,
                           selected = selected_vals$vars,
                           server = TRUE
                           )
-      })
-
-      datasets <- shiny::reactive({
-        switch(
-          input$timevar,
-          "OS_time" = input$datasets_mult,
-          "PFI_time_1"= input$datasets_mult[input$datasets_mult %in% datasets_PFI]
-        )
       })
 
       mult_coxph <- shiny::reactive({
@@ -69,36 +63,76 @@ ici_hazard_ratio_main_server <- function(
         )
       })
 
-      feature_df_mult <- shiny::reactive({
-
-        shiny::req(input$datasets_mult, input$var2_cox)
-
-        ioresponse_data$fmx_df %>%
-          dplyr::filter(Dataset %in% datasets()) %>%
-          `if`(
-            !("treatment_when_collected" %in% input$var2_cox),
-            dplyr::filter(., treatment_when_collected == "Pre"),
-            .
-          ) %>%
-          dplyr::select(Sample_ID, Dataset, input$timevar, status_column(), treatment_when_collected, dplyr::one_of(input$var2_cox))
+      dataset_displays <- reactive({
+        setNames(cohort_obj()$dataset_displays, cohort_obj()$dataset_names)
       })
 
-      dataset_ft <- shiny::reactive({
-        shiny::req(input$datasets_mult, input$var2_cox)
-        #creates a df with the dataset x feature combinations that are available
+      #getting survival data of all ICI pre treatment samples
+      OS_data <- shiny::reactive({
+        #shiny::req(input$datasets_mult)
 
+        iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment") %>%
+          dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
+          dplyr::distinct(sample_name) %>%
+          dplyr::inner_join(iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")),
+                            by = c("sample_name" = "sample")) %>%
+          dplyr::select(sample_name, feature_name, feature_value) %>%
+          tidyr::pivot_wider(., names_from = feature_name, values_from = feature_value, values_fill = NA)
+      })
+
+      samples <- shiny::eventReactive(input$go_button, {
+        #shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
+        shiny::req(OS_data())
+
+        iatlas.api.client::query_dataset_samples(datasets = cohort_obj()[["dataset_names"]]) %>%
+          dplyr::inner_join(., OS_data(), by = "sample_name") %>%
+          dplyr::group_by(dataset_name) %>%
+          dplyr::group_modify(~ dplyr::mutate(., has_surv_data = !all(is.na(.x[[input$timevar]])))) %>%
+          dplyr::ungroup() %>%
+          dplyr::filter(has_surv_data)
+      })
+
+      groups <- shiny::reactive(iatlas.api.client::query_tags_with_parent_tags(parent_tags = input$var2_cox))
+
+      feature_df_mult <- shiny::eventReactive(input$go_button, {
+        shiny::req(input$var2_cox, samples())
+        shiny::validate(shiny::need(nrow(samples())>0, "Selected survival endpoint not available for selected dataset(s)"))
+
+        #Let's assume that variables selected are a mix of features and tags, and do both queries
+        new_feat <- iatlas.api.client::query_feature_values(features = input$var2_cox) %>%
+          dplyr::select(sample, feature_name, feature_value) %>%
+          tidyr::pivot_wider(names_from = feature_name, values_from = feature_value)
+
+        if(sum(input$var2_cox %in% categories()$tag_name)>0){
+          new_tags <- iatlas.api.client::query_tag_samples(parent_tags = input$var2_cox) %>%
+             dplyr::inner_join(groups(), by = "tag_name") %>%
+            dplyr::select(sample_name, tag_name, parent_tag_name) %>%
+            tidyr::pivot_wider(names_from = parent_tag_name, values_from = tag_name)
+
+          new_feat <- dplyr::inner_join(new_feat, new_tags, by = c("sample" = "sample_name"))
+        }
+
+        samples() %>%
+          dplyr::inner_join(new_feat, by = c("sample_name" = "sample"))
+      })
+
+
+      dataset_ft <- shiny::eventReactive(input$go_button, {
+        shiny::req(input$var2_cox, feature_df_mult())
+        #creates a df with the dataset x feature combinations that are available
         iatlas.app::get_feature_by_dataset(
-          datasets = datasets(),
           features = input$var2_cox,
-          feature_df = ioresponse_data$feature_df,
-          group_df = ioresponse_data$sample_group_df,
-          fmx_df = feature_df_mult()
+          feature_df = features(),
+          group_df = groups(),
+          fmx_df = feature_df_mult(),
+          datasets = cohort_obj()[["dataset_names"]],
+          dataset_display = dataset_displays()
         )
       })
 
-      coxph_df <- shiny::reactive({
-        shiny::req(input$datasets_mult, input$var2_cox, dataset_ft())
-        iatlas.app::build_coxph_df(datasets = datasets(),
+      coxph_df <- shiny::eventReactive(input$go_button, {
+        shiny::req(input$var2_cox, dataset_ft())
+        iatlas.app::build_coxph_df(datasets = cohort_obj()[["dataset_names"]],
                                    data = feature_df_mult(),
                                    feature = input$var2_cox,
                                    time = input$timevar,
@@ -108,9 +142,8 @@ ici_hazard_ratio_main_server <- function(
       })
 
       output$mult_forest <- plotly::renderPlotly({
-        shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
+        # shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
         shiny::validate(need(length(input$var2_cox)>0, "Select at least one variable."))
-
         all_forests <- purrr::map(.x = unique(coxph_df()$dataset),
                                   .f = build_forestplot_dataset,
                                   coxph_df = coxph_df(),
@@ -125,7 +158,7 @@ ici_hazard_ratio_main_server <- function(
       })
 
       output$mult_heatmap <- plotly::renderPlotly({
-        shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
+        # shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
         shiny::validate(need(length(input$var2_cox)>0, "Select at least one variable."))
 
         heatmap_df <-  iatlas.app::build_heatmap_df(coxph_df())
@@ -142,16 +175,16 @@ ici_hazard_ratio_main_server <- function(
 
         if(mult_coxph() == FALSE){ #for univariable models, we need to display the FDR results
           coxph_df() %>%
-            dplyr::select(dataset, ft_label, group_label, logHR, loglower, logupper,  pvalue, logpvalue, FDR) %>%
-            dplyr::rename(Feature = ft_label, Variable = group_label, `log10(HR)` = logHR, `p.value` = pvalue, `Neg(log10(p.value))` = logpvalue, `BH FDR` = FDR) %>%
+            dplyr::select(dataset_display, ft_label, group_label, logHR, loglower, logupper,  pvalue, logpvalue, FDR) %>%
+            dplyr::rename(Dataset = dataset_display, Feature = ft_label, Variable = group_label, `log10(HR)` = logHR, `p.value` = pvalue, `Neg(log10(p.value))` = logpvalue, `BH FDR` = FDR) %>%
             dplyr::mutate_if(is.numeric, formatC, digits = 3) %>%
-            dplyr::arrange(dataset)
+            dplyr::arrange(Dataset)
         }else{
           coxph_df() %>%
-            dplyr::select(dataset, ft_label, group_label, logHR, loglower, logupper,  pvalue, logpvalue) %>%
-            dplyr::rename(Feature = ft_label, Variable = group_label, `log10(HR)` = logHR, `p.value` = pvalue, `Neg(log10(p.value))` = logpvalue) %>%
+            dplyr::select(dataset_display, ft_label, group_label, logHR, loglower, logupper,  pvalue, logpvalue) %>%
+            dplyr::rename(Dataset = dataset_display, Feature = ft_label, Variable = group_label, `log10(HR)` = logHR, `p.value` = pvalue, `Neg(log10(p.value))` = logpvalue) %>%
             dplyr::mutate_if(is.numeric, formatC, digits = 3) %>%
-            dplyr::arrange(dataset)
+            dplyr::arrange(dataset_display)
         }
       })
 
@@ -162,13 +195,29 @@ ici_hazard_ratio_main_server <- function(
         content = function(con) readr::write_csv(summary_table(), con)
       )
 
-      observeEvent(input$method_link,{
-        showModal(modalDialog(
+      shiny::observeEvent(input$method_link,{
+        shiny::showModal(modalDialog(
           title = "Method",
           includeMarkdown("inst/markdown/cox_regression.markdown"),
           easyClose = TRUE,
           footer = NULL
         ))
+      })
+
+      shiny::observeEvent(input$go_button, {#samples(),{ #checking for datasets that have no annotation for the selected survival endpoint
+        shiny::req(samples())
+
+        ds_with_os <- unique(samples()$dataset_name)
+
+        if(length(cohort_obj()[["dataset_names"]]) == length(ds_with_os)){
+          output$notification <- shiny::renderText({
+          })
+        }else{
+          output$notification <- shiny::renderText({
+            missing_os <- setdiff(cohort_obj()[["dataset_names"]], ds_with_os)
+            paste0("Selected survival endpoint not available for ", missing_os, collapse = "<br>")
+          })
+        }
       })
     }
   )

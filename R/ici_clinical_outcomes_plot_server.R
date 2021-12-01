@@ -1,5 +1,6 @@
 ici_clinical_outcomes_plot_server <- function(
-  id
+  id,
+  cohort_obj
 ) {
   shiny::moduleServer(
     id,
@@ -7,133 +8,43 @@ ici_clinical_outcomes_plot_server <- function(
 
       ns <- session$ns
 
-      output$survplot_op <- renderUI({
+      feature_df <- shiny::reactive({
+        pre_treat_samples <- iatlas.api.client::query_tag_samples(cohorts = cohort_obj()[["dataset_names"]], tags = "pre_sample_treatment") %>%
+          dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
+          dplyr::select(sample_name)
 
-        clin_data <- ioresponse_data$feature_df %>%
-          dplyr::filter(FeatureMatrixLabelTSV != "treatment_when_collected" & FeatureMatrixLabelTSV %in% ioresponse_data$categories_df$Category)
-
-        var_choices_clin <- create_filtered_nested_list_by_class(feature_df = clin_data,
-                                                                 filter_value = "Categorical",
-                                                                 class_column = "Variable Class",
-                                                                 internal_column = "FeatureMatrixLabelTSV",
-                                                                 display_column = "FriendlyLabel",
-                                                                 filter_column = "VariableType")
-
-        var_choices_feat <- create_filtered_nested_list_by_class(feature_df = ioresponse_data$feature_df %>% dplyr::filter(`Variable Class` != "NA"),
-                                                                 filter_value = "Numeric",
-                                                                 class_column = "Variable Class",
-                                                                 internal_column = "FeatureMatrixLabelTSV",
-                                                                 display_column = "FriendlyLabel",
-                                                                 filter_column = "VariableType")
-        var_choices <- c(var_choices_clin, var_choices_feat)
-
-        selectInput(
-          ns("var1_surv"),
-          "Variable",
-          var_choices,
-          selected = "IMPRES"
-        )
+        cohort_obj()$sample_tbl %>%
+          dplyr::inner_join(pre_treat_samples, by = "sample_name") %>%
+          dplyr::inner_join(iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")), by = c("sample_name" = "sample"))
       })
 
-      datasets <- shiny::reactive({
-        shiny::req(input$timevar)
-        switch(
-          input$timevar,
-          "OS_time" = input$datasets,
-          "PFI_time_1"= input$datasets[input$datasets %in% datasets_PFI]
-        )
-      })
+      all_survival <- shiny::reactive({
+       shiny::req(!is.null(feature_df()), cancelOutput = T)
 
-      shiny::observeEvent(all_survival(),{
-
-        if(length(all_survival())>0 & length(datasets()) != length(all_survival())){
-          var_label <- convert_value_between_columns(
-            input$var1_surv,
-            ioresponse_data$feature_df,
-            from_column = "FeatureMatrixLabelTSV",
-            to_column = "FriendlyLabel"
-          )
-          output$notification <- renderUI({
-            missing_datasets <- paste0(intersect(datasets(), names(all_survival())), collapse = ", ")
-            helpText(
-              paste("Annotation and/or more than one level for ", var_label, "is available for", missing_datasets, "."))
-          })
-        }
-        if(length(datasets()) == length(all_survival()) | length(all_survival()) == 0){
-          output$notification <- renderUI({
-          })
-        }
-      })
-
-      feature_df <- reactive({
-        shiny::validate(need(!is.null(input$datasets), "Select at least one dataset."))
-        shiny::req(input$var1_surv)
-
-        ioresponse_data$fmx_df %>%
-          dplyr::filter(Dataset %in% datasets() & treatment_when_collected == "Pre") %>%
-          dplyr::select(Sample_ID, Dataset, treatment_when_collected, OS, OS_time, PFI_1, PFI_time_1, input$var1_surv)
-      })
-
-      all_survival <- reactive({
-        shiny::req(input$var1_surv, !is.null(feature_df()), cancelOutput = T)
-        sample_groups <- ioresponse_data$feature_df %>%
-          dplyr::filter(VariableType == "Categorical") %>%
-          dplyr::select(FeatureMatrixLabelTSV, FriendlyLabel) %>% as.vector()
-
-        df <- purrr::map(.x = datasets(), df = feature_df(), .f= function(dataset, df){
+       df <- purrr::map(.x = cohort_obj()[["dataset_names"]], df = feature_df(), .f= function(dataset, df){
           dataset_df <- df %>%
-            dplyr::filter(Dataset == dataset)
+            dplyr::filter(dataset_name == dataset)
 
-          if(!all(is.na(dataset_df[[input$var1_surv]])) & dplyr::n_distinct(dataset_df[[input$var1_surv]])>1){
-
-            surv_df <- build_survival_df(
+          if(!all(is.na(dataset_df$group_name)) & dplyr::n_distinct(dataset_df$group_name)>1){
+            build_survival_df(
               df = dataset_df,
-              group_column = input$var1_surv,
-              group_options = sample_groups$FeatureMatrixLabelTSV,
-              time_column = input$timevar,
-              k = input$divk,
-              div_range = input$div_range
+              group_column = "group_name",
+              time_column = input$timevar
             )
-
-            if(input$var1_surv %in% sample_groups$FeatureMatrixLabelTSV){#adding the friendly labels
-
-              surv_df <- merge(surv_df, ioresponse_data$sample_group_df %>%
-                                 dplyr::filter(Category == input$var1_surv) %>%
-                                 dplyr::select(FeatureValue, FeatureLabel),
-                               by.x = "variable", by.y = "FeatureValue")
-              surv_df$variable <- NULL
-              surv_df <- surv_df %>%
-                dplyr::rename(variable = FeatureLabel)
-            }
-            surv_df
-          }
+           }
         })
-
-        names(df) <- datasets()
+        names(df) <- unique(cohort_obj()$group_tbl$dataset_display)
         Filter(Negate(is.null), df)
       })
 
-      all_fit <- reactive({
-        shiny::validate(need(length(all_survival())>0, "Variable not annotated in the selected dataset(s). Select other datasets or check ICI Datasets Overview for more information."))
-        purrr::map(all_survival(), function(df) survival::survfit(survival::Surv(time, status) ~ variable, data = df))
+      all_fit <- shiny::reactive({
+        shiny::req(all_survival())
+        shiny::validate(need(length(all_survival())>0, "Variable has only one level in the selected dataset(s). Select other datasets or check ICI Datasets Overview for more information."))
+        purrr::map(all_survival(), function(df) survival::survfit(survival::Surv(time, status) ~ measure, data = df))
       })
 
-      all_kmplot <- reactive({
-        sample_groups <- ioresponse_data$feature_df %>% dplyr::filter(VariableType == "Categorical") %>% dplyr::select(FeatureMatrixLabelTSV)
-
-        if (input$var1_surv %in% sample_groups$FeatureMatrixLabelTSV) {
-          group_colors <- (ioresponse_data$sample_group_df %>%
-                             dplyr::filter(Category == input$var1_surv))$FeatureHex
-          colors_labels <-(ioresponse_data$sample_group_df %>%
-                             dplyr::filter(Category == input$var1_surv))$FeatureLabel
-
-          names(group_colors) <- sapply(colors_labels, function(a) paste('variable=',a,sep=''))
-
-        } else if(input$div_range == "median") {
-          group_colors <- viridisLite::viridis(2)
-        }else{
-          group_colors <- viridisLite::viridis(input$divk)
-        }
+      all_kmplot <- shiny::reactive({
+        shiny::req(all_fit())
 
         create_kmplot(
           fit = all_fit(),
@@ -141,15 +52,13 @@ ici_clinical_outcomes_plot_server <- function(
           confint = input$confint,
           risktable = input$risktable,
           title = names(all_survival()),
-          show_pval = TRUE,
-          group_colors = group_colors,
+          group_colors = get_group_colors(cohort_obj()),
           facet = TRUE)
       })
 
       #the KM Plots are stored as a list, so a few adjustments are necessary to plot everything
       shiny::observe({
-        output$plots <- renderUI({
-          shiny::req(input$var1_surv)
+        output$plots <- shiny::renderUI({
 
           plot_output_list <-
             lapply(1:length(all_survival()), function(i) {
@@ -161,13 +70,44 @@ ici_clinical_outcomes_plot_server <- function(
       })
 
       shiny::observe({
-        lapply(1:length(datasets()), function(i){
+        lapply(1:length(all_survival()), function(i){
           my_dataset <- names(all_survival())[i]
           output[[my_dataset]] <- shiny::renderPlot({
-            shiny::req(input$var1_surv)
+            shiny::req(all_kmplot())
             all_kmplot()[i]
           })
         })
+      })
+
+      shiny::observeEvent(all_survival(),{
+        shiny::req(all_fit(), feature_df())
+
+        if(length(all_survival())>0 & length(cohort_obj()[["dataset_names"]]) != length(all_survival())){ #some dataset has only one category for the selected grouping variable
+
+          missing_datasets <- setdiff(cohort_obj()$group_tbl$dataset_display, names(all_survival()))
+
+          #check if there is survival annotation or more than one group level for the missing dataset
+          missing_annot <- purrr::map_df(.x = missing_datasets, function(x){
+
+            surv_data <- feature_df() %>%
+              dplyr::filter(dataset_name == x) #%>%
+              # dplyr::select(input$timevar, group_name)
+
+            if(nrow(surv_data) == 0) c(dataset = x,
+                                       error = "Selected survival endpoint not available for ",
+                                       variable = input$timevar)
+            else if(dplyr::n_distinct(surv_data$group_name) == 1) c(dataset = x,
+                                                                       error = "Selected variable has only one level for ",
+                                                                       variable = cohort_obj()[["group_display"]])
+          })
+          output$notification <- shiny::renderText({
+              paste0(missing_annot$error, missing_annot$dataset, collapse = "<br>")
+          })
+        }
+        if(length(cohort_obj()[["dataset_names"]]) == length(all_survival()) | length(all_survival()) == 0){ #no notification to display
+          output$notification <- renderUI({
+          })
+        }
       })
     }
   )
