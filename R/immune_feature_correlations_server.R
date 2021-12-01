@@ -9,7 +9,9 @@ immune_feature_correlations_server <- function(
       ns <- session$ns
 
       feature_classes <- shiny::reactive({
-        cohort_obj()$feature_tbl$class
+        cohort_obj()$feature_tbl$class %>%
+          unique() %>%
+          sort()
       })
 
       response_features <- shiny::reactive({
@@ -65,7 +67,8 @@ immune_feature_correlations_server <- function(
         feature_data_function   = feature_data_function,
         response_data_function  = response_data_function,
         summarise_function_list = summarise_function_list,
-        drilldown               = shiny::reactive(T)
+        drilldown               = shiny::reactive(T),
+        default_class           = shiny::reactive(feature_classes()[[2]])
       )
 
     }
