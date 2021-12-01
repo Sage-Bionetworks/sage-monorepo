@@ -2,7 +2,9 @@ test_that("immune_feature_correlations_server", {
   shiny::testServer(
     immune_feature_correlations_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(get_pcawg_immune_subtype_cohort_obj())
+      "cohort_obj" = shiny::reactiveVal(
+        iatlas.modules2::pcawg_immune_subtype_cohort_obj
+      )
     ),
     {
       expect_type(feature_classes(), "character")
@@ -13,13 +15,13 @@ test_that("immune_feature_correlations_server", {
       expect_named(
         feature_data,
         c(
-          'sample',
-          'group',
-          'feature',
-          'feature_value',
-          'feature_order',
-          'group_description',
-          'color'
+          "sample",
+          "group",
+          "feature",
+          "feature_value",
+          "feature_order",
+          "group_description",
+          "color"
         )
       )
       response_data <- response_data_function()("Eosinophils")
@@ -27,9 +29,9 @@ test_that("immune_feature_correlations_server", {
       expect_named(
         response_data,
         c(
-          'sample',
-          'feature',
-          'feature_value'
+          "sample",
+          "feature",
+          "feature_value"
         )
       )
       expect_type(summarise_function_list(), "list")

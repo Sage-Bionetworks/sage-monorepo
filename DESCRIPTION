@@ -19,7 +19,7 @@ Suggests:
     testthat (>= 3.0.0),
     usethis
 Config/testthat/edition: 3
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 biocViews:
 Imports:
     arrow,
@@ -46,6 +46,7 @@ Imports:
     lazyeval,
     magrittr,
     plotly,
+    pROC,
     purrr,
     randomForest,
     RColorBrewer,
@@ -77,5 +78,3 @@ Remotes:
     ropensci/plotly@master,
     rstudio/rsconnect@master,
     paul-shannon/igvShiny@master 
-
-

@@ -2,7 +2,9 @@ test_that("extracellular_network_main_server_immune_subtype", {
   shiny::testServer(
     extracellular_network_main_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(get_tcga_immune_subtype_cohort_obj_50())
+      "cohort_obj" = shiny::reactiveVal(
+        iatlas.modules2::tcga_immune_subtype_cohort_obj
+      )
     ),
     {
       session$setInputs("group_selected" = "C1")
@@ -17,6 +19,8 @@ test_that("extracellular_network_main_server_immune_subtype", {
       expect_false(show_stratify_option())
       expect_false(stratify())
       expect_type(gene_choice_list(), "list")
+      expect_equal(group_choices(), c("C1", "C2", "C3", "C4", "C5", "C6"))
+
       expect_type(output$select_groups_ui, "list")
       expect_type(output$select_style, "list")
       expect_type(output$select_celltypes, "list")
@@ -51,7 +55,9 @@ test_that("extracellular_network_main_server_tcga_study_no_results", {
   shiny::testServer(
     extracellular_network_main_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(get_tcga_study_cohort_obj_50())
+      "cohort_obj" = shiny::reactiveVal(
+        iatlas.modules2::tcga_tcga_study_cohort_obj
+      )
     ),
     {
       session$setInputs("stratify" = F)
@@ -105,7 +111,9 @@ test_that("extracellular_network_main_server_tcga_study_no_stratification", {
   shiny::testServer(
     extracellular_network_main_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(get_tcga_study_cohort_obj_50())
+      "cohort_obj" = shiny::reactiveVal(
+        iatlas.modules2::tcga_tcga_study_cohort_obj
+      )
     ),
     {
       session$setInputs("stratify" = F)
@@ -148,7 +156,9 @@ test_that("extracellular_network_main_server_tcga_study_with_stratification", {
   shiny::testServer(
     extracellular_network_main_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(get_tcga_study_cohort_obj_50())
+      "cohort_obj" = shiny::reactiveVal(
+        iatlas.modules2::tcga_tcga_study_cohort_obj
+      )
     ),
     {
       session$setInputs("stratify" = T)
@@ -196,7 +206,9 @@ test_that("extracellular_network_main_server_pcawg_immune_subtype", {
   shiny::testServer(
     extracellular_network_main_server,
     args = list(
-      "cohort_obj" = shiny::reactiveVal(get_pcawg_immune_subtype_cohort_obj())
+      "cohort_obj" = shiny::reactiveVal(
+        iatlas.modules2::pcawg_immune_subtype_cohort_obj
+      )
     ),
     {
       expect_false(show_stratify_option())

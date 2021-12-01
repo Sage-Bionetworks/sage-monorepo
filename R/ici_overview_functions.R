@@ -1,66 +1,18 @@
-get_io_overview_table <- function(group, ioresponse_data){
-  ioresponse_data$fmx_df %>%
-    dplyr::mutate("Sample Group" = dplyr::case_when(
-      is.na(.[[group]]) ~ "Not annotated",
-      !is.na(.[[group]]) ~ as.character(.[[group]])
-    )) %>%
-    dplyr::group_by(Dataset, `Sample Group`) %>%
-    dplyr::summarise(n = dplyr::n_distinct(Sample_ID)) %>%
-    tidyr::pivot_wider(
-      names_from = Dataset,
-      values_from = n) %>%
-    dplyr::mutate("Group Name" = purrr::map_chr(.[["Sample Group"]], function(x){
-      if(x == "Not annotated") return("")
-      convert_value_between_columns(input_value = x,
-                                                df = ioresponse_data$sample_group_df %>% filter(Category %in% group),
-                                                from_column = "FeatureValue",
-                                                to_column = "FeatureName")}),
-      "Plot Color" = purrr::map_chr(.[["Sample Group"]], function(x){
-        if(x == "Not annotated")return("#C9C9C9")
-        convert_value_between_columns(input_value = x,
-                                                  df = ioresponse_data$sample_group_df %>% filter(Category %in% group),
-                                                  from_column = "FeatureValue",
-                                                  to_column = "FeatureHex")}),
-      "Order" = purrr::map_chr(.[["Sample Group"]], function(x){
-        if(x == "Not annotated")return("0")
-        convert_value_between_columns(input_value = x,
-                                                  df = ioresponse_data$sample_group_df %>% filter(Category %in% group),
-                                                  from_column = "FeatureValue",
-                                                  to_column = "order_within_sample_group") %>% as.integer()
-      })
-    )
+get_io_overview_table <- function(values_for_group1){
+  values_for_group1 %>%
+  dplyr::group_by(dataset_display, Order = tag_order, Group = tag_short_display) %>%
+  dplyr::mutate(dataset_display = sub("\\ -.*", "", dataset_display)) %>%
+  dplyr::summarise(n = dplyr::n_distinct(sample_name)) %>%
+  tidyr::pivot_wider(
+    names_from = dataset_display,
+    values_from = n)
 }
 
-get_io_mosaic_df <- function(ioresponse_data, group1, group2){
-
-  #getting the labels
-  label1 <- get_group_labels(ioresponse_data$sample_group_df, group1)
-  label2 <- get_group_labels(ioresponse_data$sample_group_df, group2)
-
-  not_annot <- data.frame("FeatureValue" = NA_character_,
-                          "FeatureLabel" = "Not annotated",
-                          "FeatureHex"="#C9C9C9",
-                          "order_within_sample_group" = 0)
-  label1 <- rbind(label1, not_annot)
-  label2 <- rbind(label2, not_annot)
-
-  df_mosaic <- merge(ioresponse_data$fmx_df %>%
-                       dplyr::select(Sample_ID, Dataset, group1, group2),
-                     label1, by.x = group1, by.y = "FeatureValue")
-
-  df_mosaic <- merge(df_mosaic,
-                     label2, by.x = group2, by.y = "FeatureValue")
-
-  df_mosaic <- df_mosaic %>%
-    dplyr::mutate(x= paste(Dataset, FeatureLabel.y)) %>%
-    dplyr::arrange(order_within_sample_group.y) %>%
-    dplyr::select(x, y = FeatureLabel.x, plot_color = FeatureHex.x)
-
-  df_mosaic$x <-  as.factor(df_mosaic$x)
-  df_mosaic$y <-  factor(df_mosaic$y, levels = (label1 %>%
-                                                  dplyr::arrange(order_within_sample_group))$FeatureLabel)
-
-  df_mosaic
+get_io_mosaic_df <- function(values_for_group1, group2){
+  iatlas.api.client::query_tag_samples(samples = values_for_group1$sample_name, parent_tags = group2) %>%
+    merge(., values_for_group1, by = "sample_name") %>%
+    dplyr::mutate(x= paste(sub("\\ -.*", "", dataset_display), tag_short_display.y)) %>%
+    dplyr::select(x, y = tag_short_display.x, plot_color = tag_color.x)
 }
 
 create_mosaicplot <- function(

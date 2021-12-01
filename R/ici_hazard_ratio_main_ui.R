@@ -14,19 +14,7 @@ ici_hazard_ratio_main_ui <- function(id){
     iatlas.modules::optionsBox(
       width = 12,
       column(
-        width = 3,
-        checkboxGroupInput(ns("datasets_mult"), "Select Datasets", choices = datasets_options,
-                           selected =  c("Gide 2019", "Hugo 2016", "Riaz 2017", "Van Allen 2015"))
-      ),
-      column(
         width = 4,
-        selectInput(
-          ns("timevar"),
-          "Survival Endpoint",
-          c("Overall Survival" = "OS_time",
-            "Progression Free Interval" = "PFI_time_1"),
-          selected = "OS_time"
-        ),
         selectInput(
           ns("analysisvar"),
           "Select Type of Analysis",
@@ -38,17 +26,27 @@ ici_hazard_ratio_main_ui <- function(id){
         actionLink(ns("method_link"), "Click to view method description for each type.")
       ),
       column(
+        width = 3,
+        selectInput(
+          ns("timevar"),
+          "Survival Endpoint",
+          c("Overall Survival" = "OS_time",
+            "Progression Free Interval" = "PFI_time_1"),
+          selected = "OS_time"
+        )
+      ),
+      column(
         width = 5,
         shiny::selectizeInput(
                       ns("var2_cox"),
                       label = "Select or Search for variables",
                       choices = NULL,
                       multiple = TRUE
-                    )
+                    ),
+        shiny::actionButton(ns("go_button"), "Compute HR")
       )
     ),
-    conditionalPanel(condition = paste0("input['", ns("timevar"), "'] == 'PFI_time_1'"),
-                     helpText("There is no PFI annotation for Hugo 2016, Riaz 2017, and IMVigor210.")),
+    shiny::htmlOutput(ns("notification")),
     iatlas.modules::plotBox(
       width = 12,
       plotly::plotlyOutput(ns("mult_heatmap"), width = "100%", height = "600px")%>%

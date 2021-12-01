@@ -128,7 +128,7 @@ explorepage_ui <- function(){
   # This is the tab item that users land on
   landing_tab_item <- list(shinydashboard::tabItem(
     tabName = "dashboard",
-    iatlas.modules::titleBox("iAtlas Explorer — Home"),
+    iatlas.modules::titleBox("iAtlas Explorer - Home"),
     iatlas.modules::textBox(
       width = 12,
       shiny::includeMarkdown("inst/markdown/explore1.markdown")

@@ -11,46 +11,36 @@ ici_clinical_outcomes_plot_ui <- function(id){
 
     iatlas.modules::optionsBox(
       width=3,
-      verticalLayout(
-        fluidRow(
-          column(
-            width = 12,
-            checkboxGroupInput(ns("datasets"), "Select Datasets", choices = datasets_options,
-                               selected =  c("Gide 2019", "Hugo 2016"))
-          )
-        ),
-        uiOutput(ns("survplot_op")),
-        checkboxInput(ns("confint"), "Confidence Intervals", value = F),
-        checkboxInput(ns("risktable"), "Risk Table", value = T),
+      shiny::verticalLayout(
+        shiny::checkboxInput(ns("confint"), "Confidence Intervals", value = F),
+        shiny::checkboxInput(ns("risktable"), "Risk Table", value = T),
 
-        selectInput(
+        shiny::selectInput(
           ns("timevar"),
           "Survival Endpoint",
           c("Overall Survival" = "OS_time",
             "Progression Free Interval" = "PFI_time_1"),
           selected = "OS_time"
         ),
-        radioButtons(ns("div_range"), "Divide value range",
+        shiny::radioButtons(ns("div_range"), "Divide value range",
                      choices = c("In the median" = "median", "In equal intervals" = "intervals"),
                      inline = TRUE, selected = "median"),
-        conditionalPanel(condition = paste0("input['", ns("div_range"), "'] == 'intervals'"),
-                         sliderInput(
-                           ns("divk"),
-                           "Value Range Divisions",
-                           min = 2,
-                           max = 10,
-                           value = 2
-                         ))
+        shiny::conditionalPanel(condition = paste0("input['", ns("div_range"), "'] == 'intervals'"),
+                                shiny::sliderInput(
+                                   ns("divk"),
+                                   "Value Range Divisions",
+                                   min = 2,
+                                   max = 10,
+                                   value = 2
+                                 ))
       )
     ),#optionsBox
-    column(
+    shiny::column(
       width = 9,
-      conditionalPanel(condition = paste0("input['", ns("timevar"), "'] == 'PFI_time_1'"),
-                       helpText("There is no PFI annotation for Hugo 2016, Riaz 2017, and IMVigor210.")),
-      uiOutput(ns("notification")),
+      shiny::htmlOutput(ns("notification")),
       iatlas.modules::plotBox(
         width = 12,
-        uiOutput(ns("plots")) %>%
+        shiny::uiOutput(ns("plots")) %>%
           shinycssloaders::withSpinner()
       )
     )
