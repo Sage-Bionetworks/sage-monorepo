@@ -944,15 +944,15 @@
     },
     "iatlas.api.client": {
       "Package": "iatlas.api.client",
-      "Version": "0.27.1",
+      "Version": "0.27.2",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.api.client",
       "RemoteRef": "main",
-      "RemoteSha": "d146d31f6a7dd0ba46386d28cda34849073f83e7",
+      "RemoteSha": "900d5c37901996d585b2e0773c9637aa71d69ac0",
       "RemoteHost": "api.github.com",
-      "Hash": "13cfde4bff883998445b16f60ee4a122"
+      "Hash": "bd666e066f462a58024d498dab0ec8c1"
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
@@ -969,16 +969,16 @@
     },
     "iatlas.modules2": {
       "Package": "iatlas.modules2",
-      "Version": "0.3.6",
+      "Version": "0.4.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules2",
       "RemoteRef": "master",
-      "RemoteSha": "9e913c4ef4f373e788cc436297a24be63542f258",
+      "RemoteSha": "5e16cd893c9b9ffad9b3955e0f567ac197c4e3c3",
       "RemoteHost": "api.github.com",
       "Remotes": "CRI-iAtlas/iatlas.api.client@main, CRI-iAtlas/iatlas.modules@master",
-      "Hash": "b9b14e4a6ec82b11c2c4524e3c06be40"
+      "Hash": "e5e0a094321c5e8aa170f3d929ce47ed"
     },
     "igvShiny": {
       "Package": "igvShiny",
