@@ -5,6 +5,7 @@ ici_models_train_ui <- function(id){
     verticalLayout(
       iatlas.modules::optionsBox(
         width = 12,
+        shinyjs::useShinyjs(),
         shiny::column(
           width = 6,
           shiny::selectInput(ns("train_method"),
