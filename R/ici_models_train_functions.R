@@ -143,7 +143,7 @@ check_categorical_predictors <- function(
       dataset_display <- dataset #get_dataset_label(dataset, cohort_obj)
 
       category <- sapply(data_list$train %>% dplyr::filter(dataset_display == dataset) %>% dplyr::select(predictor), function(x)dplyr::n_distinct(x))
-      category <- category[category ==1]
+      category <- category[category ==1] #get categories that have only one level
 
       n_na <-  sapply(data_list$train %>% dplyr::filter(dataset_display == dataset) %>% dplyr::select(predictor), function(x)sum(stringr::str_starts(x, "na_")))
       n_samples <- nrow(data_list$train [data_list$train$dataset_display == dataset,])
@@ -159,8 +159,8 @@ check_categorical_predictors <- function(
       }
 
       if(length(category>0)){ #category has only one level in training set
-        all_na <- n_na[n_na == n_samples]
-        no_na <- n_na[n_na == 0]
+        all_na <- n_na[names(n_na) %in% names(category) & n_na == n_samples]
+        no_na <- n_na[names(n_na) %in% names(category) & n_na == 0]
         if(length(all_na)>0){#list categories that have only NA values
           one_level_df <- rbind(
             one_level_df,

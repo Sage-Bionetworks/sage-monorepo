@@ -3,6 +3,7 @@ build_survival_df <- function(df, group_column, time_column, filter_df = TRUE) {
     time_status <-  "OS"
     if(filter_df == TRUE){
       df <- df %>%
+        dplyr::distinct() %>%
         dplyr::filter(feature_name %in% c("OS", "OS_time")) %>%
         dplyr::select(sample_name, group_column, dataset_name, feature_name, feature_value) %>%
         tidyr::pivot_wider(names_from = feature_name, values_from = feature_value)
@@ -11,6 +12,7 @@ build_survival_df <- function(df, group_column, time_column, filter_df = TRUE) {
     time_status <-  "PFI_1"
     if(filter_df == TRUE){
       df <- df %>%
+        dplyr::distinct() %>%
         dplyr::filter(feature_name %in% c("PFI_1", "PFI_time_1")) %>%
         dplyr::select(sample_name, group_column, dataset_name, feature_name, feature_value) %>%
         tidyr::pivot_wider(names_from = feature_name, values_from = feature_value)

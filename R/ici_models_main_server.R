@@ -146,7 +146,11 @@ ici_models_main_server <- function(
                 paste("<ul><i> Change the following dataset and/or predictor selection to proceed:</i><br>",
                       paste0("<li>Dataset ", missing_all$dataset, " has no data for ", missing_all$feature_display,".", collapse = "</li>"), "</ul>")
                 })
-            }else if("tag_one_level" %in% training_obj()$missing_annot$missing_all){
+            }else{
+              shinyjs::hide("missing_data")
+            }
+
+            if("tag_one_level" %in% training_obj()$missing_annot$missing_all){
               block_train(TRUE)
               shinyjs::show("single_level")
               output$single_level <- shiny::renderText({
@@ -156,9 +160,11 @@ ici_models_main_server <- function(
                       paste0("<li>Dataset ", missing_all$dataset, " has only one level for ", missing_all$feature_display,".", collapse = "</li>"), "</ul>")
               })
             }else{
-              block_train(FALSE)
-              shinyjs::hide("missing_data")
               shinyjs::hide("single_level")
+            }
+
+            if(!any(c("feature_all_na" ,"tag_all_na", "tag_one_level") %in% (training_obj()$missing_annot$missing_all))){
+              block_train(FALSE)
             }
 
             if(any(c("feature_some_na" ,"tag_some_na") %in% training_obj()$missing_annot$missing_all)){ #samples with missing info for a selected feature
