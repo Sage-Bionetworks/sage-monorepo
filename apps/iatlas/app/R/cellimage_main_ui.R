@@ -61,8 +61,6 @@ cellimage_main_ui <- function(id){
         ns = ns
       ),
     ),
-    shiny::img(src = "images/cell-image-legend.png", width = "100%"),
-    shiny::br(),
-    shiny::actionButton(ns("methodButton"), "Click to view method")
+    shiny::img(src = "images/cell-image-legend.png", width = "100%")
   )
 }
