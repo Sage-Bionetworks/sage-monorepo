@@ -55,6 +55,15 @@ cellimage_main_server <- function(
         shiny::reactive(cohort_obj()$dataset_names),
         shiny::reactive(input$group_selected2)
       )
+
+      observeEvent(input$method_link,{
+        shiny::showModal(modalDialog(
+          title = "Method",
+          includeMarkdown("inst/markdown/methods/CellImage_method.markdown"),
+          easyClose = TRUE,
+          footer = NULL
+        ))
+      })
     }
   )
 }

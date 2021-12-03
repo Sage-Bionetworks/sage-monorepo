@@ -5,6 +5,7 @@ ici_models_train_ui <- function(id){
     verticalLayout(
       iatlas.modules::optionsBox(
         width = 12,
+        shinyjs::useShinyjs(),
         shiny::column(
           width = 6,
           shiny::selectInput(ns("train_method"),
@@ -37,18 +38,12 @@ ici_models_train_ui <- function(id){
     ),
     iatlas.modules::optionsBox(
       width = 12,
-      shiny::column(
-        width = 5,
-        shiny::selectInput(ns("test_survival"), "Select Survival Endpoint",
-                           choices = c("Overall Survival" = "OS_time",
-                                       "Progression Free Interval" = "PFI_time_1"),
-                           selected = "OS_time")
-        # shiny::p("Ready to see how your model performs on the test datasets?")
-      ),
-      shiny::column(
-        width = 3,
-        shiny::actionButton(ns("compute_test"), "Run model in the test dataset(s)")
-      )
+      shiny::actionButton(ns("compute_test"), "Run model in the test dataset(s)"),
+      shiny::br(),
+      shiny::selectInput(ns("test_survival"), "Select Survival Endpoint for KM plot with predicted outcome",
+                         choices = c("Overall Survival" = "OS_time",
+                                     "Progression Free Interval" = "PFI_time_1"),
+                         selected = "OS_time")
     ),
     shiny::column(
       width = 12,
