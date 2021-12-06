@@ -31,17 +31,12 @@ explorepage_ui <- function(){
         icon = shiny::icon("tachometer-alt")
       ),
       shinydashboard::menuItem(
-        "Data Description",
-        icon = shiny::icon("th-list"),
-        tabName = "data_info"
-      ),
-      shinydashboard::menuItem(
-        "Cohort Selection",
+        "CG Cohort Selection",
         tabName = "analysis_cohort_selection",
         icon = shiny::icon("cog")
       ),
       shinydashboard::menuItem(
-        text = "Analysis Modules",
+        text = "CG Analysis Modules",
         icon = shiny::icon("chart-bar"),
         startExpanded = TRUE,
         analysis_module_menu_items
@@ -52,7 +47,7 @@ explorepage_ui <- function(){
         icon = shiny::icon("cog")
       ),
       shinydashboard::menuItem(
-        text = "ICI Modules",
+        text = "ICI Analysis Modules",
         icon = shiny::icon("chart-bar"),
         startExpanded = TRUE,
         ici_module_menu_items
@@ -62,6 +57,11 @@ explorepage_ui <- function(){
         icon = shiny::icon("wrench"),
         startExpanded = TRUE,
         tool_module_menu_items
+      ),
+      shinydashboard::menuItem(
+        "Data Description",
+        icon = shiny::icon("th-list"),
+        tabName = "data_info"
       )
     )
   )
@@ -118,6 +118,31 @@ explorepage_ui <- function(){
       )) %>%
       dplyr::pull("row")
 
+  # image boxes at bottom of page that link to module tabs
+  ici_module_image_boxes <- ici_modules_tbl %>%
+    dplyr::select(
+      "title" = "display",
+      "linkId" = "link",
+      "imgSrc" = "image",
+      "boxText" = "description"
+    ) %>%
+    purrr::pmap(
+      iatlas.modules::imgLinkBox, width = 6, linkText = "Open Module"
+    ) %>%
+    dplyr::tibble("item" = .) %>%
+    dplyr::mutate("row" = as.character(ceiling(dplyr::row_number() / 2))) %>%
+    dplyr::group_by(.data$row) %>%
+    dplyr::mutate("n" = as.character(dplyr::row_number())) %>%
+    dplyr::ungroup() %>%
+    tidyr::pivot_wider(names_from = "n", values_from = "item") %>%
+    dplyr::select("item1" = "1", "item2" = "2") %>%
+    dplyr::mutate("row" = purrr::map2(
+      .data$item1,
+      .data$item2,
+      shiny::fluidRow
+    )) %>%
+    dplyr::pull("row")
+
   # This is the tab item that users land on
   landing_tab_item <- list(shinydashboard::tabItem(
     tabName = "dashboard",
@@ -131,12 +156,20 @@ explorepage_ui <- function(){
       shiny::fluidRow(readout_info_boxes)
     ),
     iatlas.modules::sectionBox(
-      title = "Analysis Modules",
+      title = "Cancer Genomics Analysis Modules",
       iatlas.modules::messageBox(
         width = 12,
         shiny::includeMarkdown("inst/markdown/explore2.markdown")
       ),
       module_image_boxes
+    ),
+    iatlas.modules::sectionBox(
+      title = "Immune Checkpoint Inhibition Analysis Modules",
+      iatlas.modules::messageBox(
+        width = 12,
+        shiny::includeMarkdown("inst/markdown/explore3.markdown")
+      ),
+      ici_module_image_boxes
     )
   ))
 
