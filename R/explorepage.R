@@ -69,22 +69,43 @@ explorepage_ui <- function(){
   # body ----
 
   # info boxes at top of page
+  # readout_info_boxes <- dplyr::tibble(
+  #   title = c(
+  #     "Immune Readouts:",
+  #     "Classes of Readouts:",
+  #     "TCGA Cancers:",
+  #     "TCGA Samples:"
+  #   ),
+  #   value = c(
+  #     nrow(iatlas.api.client::query_features()),
+  #     length(unique(iatlas.api.client::query_features()$class)),
+  #     nrow(iatlas.api.client::query_tags(
+  #       datasets = "TCGA", parent_tags = "TCGA_Study"
+  #     )),
+  #     11080
+  #   ),
+  #   icon = purrr::map(c("search", "filter", "flask", "users"), shiny::icon)
+  # ) %>%
+  #   purrr::pmap(
+  #     shinydashboard::infoBox,
+  #     width = 3,
+  #     color = "black",
+  #     fill = FALSE
+  #   )
   readout_info_boxes <- dplyr::tibble(
     title = c(
+      "Immune Checkpoint Inhibitors (ICI) datasets:",
+      "Cancer Genomics (CG) datasets:",
       "Immune Readouts:",
-      "Classes of Readouts:",
-      "TCGA Cancers:",
-      "TCGA Samples:"
+      "Samples:"
     ),
     value = c(
+      12,
+      "TCGA, PCAWG",
       nrow(iatlas.api.client::query_features()),
-      length(unique(iatlas.api.client::query_features()$class)),
-      nrow(iatlas.api.client::query_tags(
-        datasets = "TCGA", parent_tags = "TCGA_Study"
-      )),
-      11080
+      12677
     ),
-    icon = purrr::map(c("search", "filter", "flask", "users"), shiny::icon)
+    icon = purrr::map(c("search", "database", "filter", "users"), shiny::icon)
   ) %>%
     purrr::pmap(
       shinydashboard::infoBox,
