@@ -1,15 +1,9 @@
 
-cohort_obj1 <- tcga_immune_subtype_cohort_obj_50
-cohort_obj2 <- tcga_feature_bin_cohort_obj_50
-cohort_obj3 <- pcawg_immune_subtype_cohort_obj
-
-
-
 test_that("build_co_survival_list", {
-    res1 <- build_co_survival_list(cohort_obj1$feature_tbl)
+    res1 <- build_co_survival_list(iatlas.modules2::tcga_immune_subtype_cohort_obj_small$feature_tbl)
     expect_named(res1)
     expect_vector(res1)
-    res2 <- build_co_survival_list(cohort_obj2$feature_tbl)
+    res2 <- build_co_survival_list(iatlas.modules2::tcga_bin_cohort_obj_small$feature_tbl)
     expect_named(res2)
     expect_vector(res2)
 })
@@ -20,8 +14,8 @@ test_that("get_co_status_feature", {
     expect_error(get_co_status_feature("not_a_feature"), "Unknown time feature")
 })
 
-survival_tbl1 <- build_co_survival_value_tbl(cohort_obj1, "OS_time", "OS")
-survival_tbl2 <- build_co_survival_value_tbl(cohort_obj2, "OS_time", "OS")
+survival_tbl1 <- build_co_survival_value_tbl(iatlas.modules2::tcga_immune_subtype_cohort_obj_small, "OS_time", "OS")
+survival_tbl2 <- build_co_survival_value_tbl(iatlas.modules2::tcga_bin_cohort_obj_small, "OS_time", "OS")
 
 test_that("Build Survival Values Tibble", {
     expect_named(survival_tbl1, c("sample", "group", "time", "status"))
@@ -29,10 +23,10 @@ test_that("Build Survival Values Tibble", {
 })
 
 feature_tbl1 <- build_co_feature_tbl(
-    cohort_obj1, "DNA Alteration"
+    iatlas.modules2::tcga_immune_subtype_cohort_obj_small, "DNA Alteration"
 )
 feature_tbl2 <- build_co_feature_tbl(
-    cohort_obj2, "DNA Alteration"
+    iatlas.modules2::tcga_bin_cohort_obj_small, "DNA Alteration"
 )
 
 test_that("build_co_feature_tbl", {
@@ -46,12 +40,8 @@ test_that("build_co_feature_tbl", {
     expect_named(feature_tbl2, expected_columns)
 })
 
-heatmap_tbl1 <- build_co_heatmap_tbl(
-    survival_tbl1, feature_tbl1, cohort_obj1$sample_tbl
-)
-heatmap_tbl2 <- build_co_heatmap_tbl(
-    survival_tbl2, feature_tbl2, cohort_obj2$sample_tbl
-)
+heatmap_tbl1 <- build_co_heatmap_tbl(survival_tbl1, feature_tbl1)
+heatmap_tbl2 <- build_co_heatmap_tbl(survival_tbl2, feature_tbl2)
 
 test_that("build_co_heatmap_tbl", {
     expected_columns <- c(
@@ -86,7 +76,7 @@ test_that("Build Heatmap Matrix", {
     )
     expect_equal(rownames(heatmap_matrix1), expected_rownames)
 
-    expected_colnames <- c("C1", "C2", "C3", "C4", "C5", "C6")
+    expected_colnames <- c("C4", "C5", "C6")
     expect_equal(colnames(heatmap_matrix1), expected_colnames)
 })
 

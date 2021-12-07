@@ -22,16 +22,16 @@ model_selection_server <- function(
 
       numeric_covariate_module <- shiny::reactive({
         purrr::partial(
-          numeric_model_covariate_element_server,
+          iatlas.modules2::numeric_model_covariate_element_server,
           covariate_list = numerical_covariate_list
         )
       })
 
       numeric_covariate_module_ui <- shiny::reactive(
-        numeric_model_covariate_element_ui
+        iatlas.modules2::numeric_model_covariate_element_ui
       )
 
-      numeric_covariate_output <- insert_remove_element_server(
+      numeric_covariate_output <- iatlas.modules2::insert_remove_element_server(
         "select_numeric_covariate",
         element_module = numeric_covariate_module,
         element_module_ui = numeric_covariate_module_ui
@@ -66,7 +66,7 @@ model_selection_server <- function(
         create_numerical_covariate_string(
           covs,
           numerical_transformations(),
-          transform_feature_string
+          iatlas.modules::transform_feature_string
         )
       })
 
@@ -77,7 +77,7 @@ model_selection_server <- function(
         create_numerical_covariate_string(
           numerical_covariates(),
           numerical_transformations(),
-          transform_feature_formula
+          iatlas.modules::transform_feature_formula
         )
       })
 
@@ -94,16 +94,16 @@ model_selection_server <- function(
 
       categorical_covariate_module <- shiny::reactive({
         purrr::partial(
-          categorical_model_covariate_element_server,
+          iatlas.modules2::categorical_model_covariate_element_server,
           covariate_list = categorical_covariate_list
         )
       })
 
       categorical_covariate_module_ui <- shiny::reactive(
-        categorical_model_covariate_element_ui
+        iatlas.modules2::categorical_model_covariate_element_ui
       )
 
-      categorical_covariate_output <- insert_remove_element_server(
+      categorical_covariate_output <- iatlas.modules2::insert_remove_element_server(
         "select_categorical_covariate",
         element_module = categorical_covariate_module,
         element_module_ui = categorical_covariate_module_ui

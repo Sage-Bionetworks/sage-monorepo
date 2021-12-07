@@ -40,10 +40,10 @@ create_heritability_df <- function(
       )
 
   #creating the y label
-  if(parameter == "cluster") df <- df %>% mutate(ylabel = feature_display)
+  if(parameter == "cluster") df <- df %>% dplyr::mutate(ylabel = feature_display)
   else if (parameter == "feature_germline_category" | parameter == "feature_germline_module")
-    df <- df %>% mutate(ylabel = paste(ancestry_df[cluster], feature_display, sep = " - "))
-  else  df <- df %>% mutate(ylabel = paste(ancestry_df[cluster], .[[parameter]], sep = " - "))
+    df <- df %>% dplyr::mutate(ylabel = paste(ancestry_df[cluster], feature_display, sep = " - "))
+  else  df <- df %>% dplyr::mutate(ylabel = paste(ancestry_df[cluster], .[[parameter]], sep = " - "))
 }
 
 format_heritability_plot <- function(p, hdf, fdr = FALSE){

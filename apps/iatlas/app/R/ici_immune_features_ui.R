@@ -3,16 +3,16 @@ ici_immune_features_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    titleBox(
+    iatlas.modules::titleBox(
       "iAtlas Explorer — Immune Features in Immune Checkpoint Inhibitors datasets"
     ),
-    textBox(
+    iatlas.modules::textBox(
       width = 12,
       p("This module allows you to see how immune readouts vary across your groups.")
       ),
-    sectionBox(
+    iatlas.modules::sectionBox(
       title = "Distributions",
-      messageBox(width = 12,
+      iatlas.modules::messageBox(width = 12,
                  shiny::p("This displays the value of immune readouts by sample group.
       Select the datasets of interest, a variable of interest, and how you want to split your samples into groups.
       Samples can be further divided into additional sub-group based on the availability of those groups for each dataset.

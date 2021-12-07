@@ -12,7 +12,7 @@ clinical_outcomes_heatmap_server <- function(
         shiny::selectInput(
           inputId  = ns("class_choice"),
           label    = "Select or Search for Variable Class",
-          choices  = get_cohort_feature_class_list(cohort_obj()),
+          choices  = cohort_obj()$get_feature_class_list(),
           selected = "T Helper Cell Score"
         )
       })
@@ -21,9 +21,7 @@ clinical_outcomes_heatmap_server <- function(
         shiny::selectInput(
           inputId = ns("time_feature_choice"),
           label = "Select or Search for Survival Endpoint",
-          choices = build_co_survival_list(
-            cohort_obj()$feature_tbl
-          )
+          choices = build_co_survival_list(cohort_obj()$feature_tbl)
         )
       })
 
@@ -48,11 +46,7 @@ clinical_outcomes_heatmap_server <- function(
 
       heatmap_tbl <- shiny::reactive({
         shiny::req(survival_value_tbl(), feature_tbl())
-        build_co_heatmap_tbl(
-          survival_value_tbl(),
-          feature_tbl(),
-          cohort_obj()$sample_tbl
-        )
+        build_co_heatmap_tbl(survival_value_tbl(), feature_tbl())
       })
 
       output$heatmap <- plotly::renderPlotly({
@@ -70,14 +64,27 @@ clinical_outcomes_heatmap_server <- function(
 
       heatmap_eventdata <- shiny::reactive({
         shiny::req(heatmap_tbl())
-        plotly::event_data("plotly_click", "clinical_outcomes_heatmap")
+        eventdata <- plotly::event_data("plotly_click", "clinical_outcomes_heatmap")
+        if(is.null(eventdata) & !is.null(input$mock_event_data)){
+          eventdata <- input$mock_event_data
+        }
+        shiny::validate(shiny::need(eventdata, "Click on above heatmap."))
+        return(eventdata)
       })
 
-      plotly_server(
+      group_data <- shiny::reactive({
+        cohort_obj()$group_tbl %>%
+          dplyr::mutate("description" = stringr::str_c(
+            .data$short_name, ": ", .data$characteristics)
+          ) %>%
+          dplyr::select("group" = "short_name", "description")
+      })
+
+      iatlas.modules::plotly_server(
         "heatmap",
-        plot_tbl       = heatmap_tbl,
-        plot_eventdata = heatmap_eventdata,
-        group_tbl      = shiny::reactive(cohort_obj()$group_tbl)
+        plot_data  = heatmap_tbl,
+        eventdata  = heatmap_eventdata,
+        group_data = group_data
       )
     }
   )

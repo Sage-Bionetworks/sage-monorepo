@@ -2,13 +2,13 @@ cellimage_main_ui <- function(id){
 
   ns <- shiny::NS(id)
   shiny::tagList(
-    messageBox(
+    iatlas.modules::messageBox(
       width = 12,
       shiny::includeMarkdown(get_markdown_path("cellimage")),
       shiny::actionLink(ns("method_link"), "Click to view method.")
     ),
     shiny::fluidRow(
-      optionsBox(
+      iatlas.modules::optionsBox(
         shiny::column(
           width = 6,
           shiny::radioButtons(
@@ -23,7 +23,7 @@ cellimage_main_ui <- function(id){
           shiny::uiOutput(ns("select_group1_ui"))
         )
       ),
-      optionsBox(
+      iatlas.modules::optionsBox(
         shiny::column(
           width = 6,
           shiny::radioButtons(
@@ -61,8 +61,6 @@ cellimage_main_ui <- function(id){
         ns = ns
       ),
     ),
-    shiny::img(src = "images/cell-image-legend.png", width = "100%"),
-    shiny::br(),
-    shiny::actionButton(ns("methodButton"), "Click to view method")
+    shiny::img(src = "images/cell-image-legend.png", width = "100%")
   )
 }

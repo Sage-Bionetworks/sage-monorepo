@@ -1,12 +1,12 @@
-datasets_options <-  list(
-  "Gide, 2019 - SKCM, Anti-PD-1 +/- Anti-CTLA-4" =  "Gide 2019",
-  "Hugo, 2016 - SKCM, Anti-PD-1" = "Hugo 2016",
-  "Riaz, 2017 - SKCM, Anti-PD-1" = "Riaz 2017",
-  "Van Allen, 2015 - SKCM, Anti-CTLA-4" = "Van Allen 2015",
-  "IMVigor210 - BLCA, Anti-PD-L1" = "IMVigor210",
-  "Prins, 2019 - GBM, Anti-PD-1" = "Prins 2019")
-
-datasets_PFI <- c("Gide 2019", "Van Allen 2015", "Prins 2019")
+# datasets_options <-  list(
+#   "Gide, 2019 - SKCM, Anti-PD-1 +/- Anti-CTLA-4" =  "Gide 2019",
+#   "Hugo, 2016 - SKCM, Anti-PD-1" = "Hugo 2016",
+#   "Riaz, 2017 - SKCM, Anti-PD-1" = "Riaz 2017",
+#   "Van Allen, 2015 - SKCM, Anti-CTLA-4" = "Van Allen 2015",
+#   "IMVigor210 - BLCA, Anti-PD-L1" = "IMVigor210",
+#   "Prins, 2019 - GBM, Anti-PD-1" = "Prins 2019")
+#
+# datasets_PFI <- c("Gide 2019", "Van Allen 2015", "Prins 2019")
 
 ioresponse_data <- load_io_data()
 
@@ -91,9 +91,9 @@ create_filtered_nested_list_by_class <- function(
 
 create_nested_list_by_class <- function(
   df,
-  class_column = "CLASS",
-  display_column = "DISPLAY",
-  internal_column = "INTERNAL",
+  class_column = "class",
+  display_column = "display",
+  internal_column = "name",
   filter_expr = T)
 {
   df %>%
@@ -116,7 +116,8 @@ df_to_nested_list <- function(df, group_column, key_column, value_column){
     get_complete_df_by_columns(c(group_column, value_column, key_column)) %>%
     tidyr::nest(data = c(value_column, key_column)) %>%
     dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
-    tibble::deframe()
+    tibble::deframe() %>%
+    sapply(., as.list)
 }
 
 get_complete_df_by_columns <- function(df, columns){
@@ -213,4 +214,6 @@ get_hlines_pos <- function(samples){
   paste(lines_pos, ")")
 }
 
+# ICI Clinical Outcomes
+# TODO: Creating a list of KM plots for each selected dataset
 
