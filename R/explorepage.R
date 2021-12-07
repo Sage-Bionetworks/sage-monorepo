@@ -31,17 +31,6 @@ explorepage_ui <- function(){
         icon = shiny::icon("tachometer-alt")
       ),
       shinydashboard::menuItem(
-        "CG Cohort Selection",
-        tabName = "analysis_cohort_selection",
-        icon = shiny::icon("cog")
-      ),
-      shinydashboard::menuItem(
-        text = "CG Analysis Modules",
-        icon = shiny::icon("chart-bar"),
-        startExpanded = TRUE,
-        analysis_module_menu_items
-      ),
-      shinydashboard::menuItem(
         "ICI Cohort Selection",
         tabName = "ici_cohort_selection",
         icon = shiny::icon("cog")
@@ -51,6 +40,17 @@ explorepage_ui <- function(){
         icon = shiny::icon("chart-bar"),
         startExpanded = TRUE,
         ici_module_menu_items
+      ),
+      shinydashboard::menuItem(
+        "CG Cohort Selection",
+        tabName = "analysis_cohort_selection",
+        icon = shiny::icon("cog")
+      ),
+      shinydashboard::menuItem(
+        text = "CG Analysis Modules",
+        icon = shiny::icon("chart-bar"),
+        startExpanded = TRUE,
+        analysis_module_menu_items
       ),
       shinydashboard::menuItem(
         text = "iAtlas tools",
@@ -69,29 +69,6 @@ explorepage_ui <- function(){
   # body ----
 
   # info boxes at top of page
-  # readout_info_boxes <- dplyr::tibble(
-  #   title = c(
-  #     "Immune Readouts:",
-  #     "Classes of Readouts:",
-  #     "TCGA Cancers:",
-  #     "TCGA Samples:"
-  #   ),
-  #   value = c(
-  #     nrow(iatlas.api.client::query_features()),
-  #     length(unique(iatlas.api.client::query_features()$class)),
-  #     nrow(iatlas.api.client::query_tags(
-  #       datasets = "TCGA", parent_tags = "TCGA_Study"
-  #     )),
-  #     11080
-  #   ),
-  #   icon = purrr::map(c("search", "filter", "flask", "users"), shiny::icon)
-  # ) %>%
-  #   purrr::pmap(
-  #     shinydashboard::infoBox,
-  #     width = 3,
-  #     color = "black",
-  #     fill = FALSE
-  #   )
   readout_info_boxes <- dplyr::tibble(
     title = c(
       "Immune Checkpoint Inhibitors (ICI) datasets:",
@@ -100,10 +77,10 @@ explorepage_ui <- function(){
       "Samples:"
     ),
     value = c(
-      12,
-      "TCGA, PCAWG",
+      nrow(iatlas.api.client::query_datasets(types = "ici")),
+      2,
       nrow(iatlas.api.client::query_features()),
-      12677
+      nrow(iatlas.api.client::query_samples())
     ),
     icon = purrr::map(c("search", "database", "filter", "users"), shiny::icon)
   ) %>%
@@ -177,20 +154,20 @@ explorepage_ui <- function(){
       shiny::fluidRow(readout_info_boxes)
     ),
     iatlas.modules::sectionBox(
-      title = "Cancer Genomics Analysis Modules",
-      iatlas.modules::messageBox(
-        width = 12,
-        shiny::includeMarkdown("inst/markdown/explore2.markdown")
-      ),
-      module_image_boxes
-    ),
-    iatlas.modules::sectionBox(
       title = "Immune Checkpoint Inhibition Analysis Modules",
       iatlas.modules::messageBox(
         width = 12,
         shiny::includeMarkdown("inst/markdown/explore3.markdown")
       ),
       ici_module_image_boxes
+    ),
+    iatlas.modules::sectionBox(
+      title = "Cancer Genomics Analysis Modules",
+      iatlas.modules::messageBox(
+        width = 12,
+        shiny::includeMarkdown("inst/markdown/explore2.markdown")
+      ),
+      module_image_boxes
     )
   ))
 
