@@ -5,6 +5,9 @@ cellimage_server <- function(id, cohort_obj){
 
       show_submodule <- shiny::reactive({
         function(cohort_obj){
+          print(length(cohort_obj$dataset_names))
+          print(cohort_obj$dataset_names)
+          print(cohort_obj$group_name)
           any(
             all(
               length(cohort_obj$dataset_names) == 1,
@@ -14,7 +17,7 @@ cellimage_server <- function(id, cohort_obj){
               )
             ),
             all(
-              length(cohort_obj$dataset_name) == 1,
+              length(cohort_obj$dataset_names) == 1,
               cohort_obj$dataset_names == "PCAWG",
               cohort_obj$group_name %in% c(
                 "Immune_Subtype", "PCAWG_Study"
