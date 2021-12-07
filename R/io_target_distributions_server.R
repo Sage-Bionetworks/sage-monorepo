@@ -13,6 +13,11 @@ io_target_distributions_server <- function(
         get_gene_from_url(query)
       })
 
+      default_gene <- shiny::reactive({
+        if(is.na(url_gene())) return(NULL)
+        else return(url_gene())
+      })
+
       features <- shiny::reactive({
         iatlas.api.client::query_io_targets() %>%
           dplyr::select(
@@ -25,19 +30,14 @@ io_target_distributions_server <- function(
 
       plot_data_function <- shiny::reactive({
         function(.feature){
-          group_data <- cohort_obj()$group_tbl %>%
-            dplyr::select("group", "group_description" = "characteristics", "color")
-          cohort_obj() %>%
-            query_gene_expression_with_cohort_object(entrez = as.integer(.feature)) %>%
-            dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample") %>%
-            dplyr::inner_join(group_data, by = "group") %>%
+          cohort_obj()$get_gene_values(entrez = as.integer(.feature)) %>%
             dplyr::select(
-              "sample",
-              "group",
+              "sample" = "sample_name",
+              "group" = "group_short_name",
               "feature" = "hgnc",
               "feature_value" = "rna_seq_expr",
-              "group_description",
-              "color"
+              "group_description" = "group_characteristics",
+              "color" = "group_color"
             )
         }
       })
@@ -48,7 +48,7 @@ io_target_distributions_server <- function(
         features   = features,
         distplot_xlab = shiny::reactive(cohort_obj()$group_display),
         scale_method_default = shiny::reactive("Log10"),
-        feature_default = shiny::reactive(url_gene()),
+        # feature_default = shiny::reactive(default_gene()),
         drilldown  = shiny::reactive(T)
       )
 

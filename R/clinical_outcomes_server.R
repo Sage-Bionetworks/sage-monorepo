@@ -6,6 +6,10 @@ clinical_outcomes_server <- function(
     id,
     function(input, output, session) {
 
+      show_co_submodules <- function(cohort_obj){
+        cohort_obj$has_classes(c("Survival Time", "Survival Status"))
+      }
+
       call_module_server(
         "clinical_outcomes_survival",
         cohort_obj,

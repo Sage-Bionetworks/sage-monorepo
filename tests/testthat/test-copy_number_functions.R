@@ -1,9 +1,9 @@
 
 group_tbl <- iatlas.api.client::query_tags(
-  datasets = "TCGA",
+  cohorts = "TCGA",
   parent_tags = "Immune_Subtype"
 ) %>%
-  dplyr::select("display" = "short_display", "name")
+  dplyr::select("display" = "tag_short_display", "name" = "tag_name")
 
 gene_tbl <- iatlas.api.client::query_genes(entrez = 1:300) %>%
   dplyr::select("entrez", "hgnc")
@@ -21,7 +21,7 @@ result_tbl<- iatlas.api.client::query_copy_number_results(
   features = "AS"
 )
 
-test_that("get_cnv_group_list", {
+test_that("build_cnv_group_list", {
   result <- build_cnv_group_list(group_tbl)
   items <- c("All", "C1", "C2", "C3", "C4", "C5", "C6")
   expect_equal(

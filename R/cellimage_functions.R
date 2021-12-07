@@ -16,20 +16,20 @@ get_cellimage_features <- function(){
 get_cellimage_gene_nodes <- function(dataset, tag, genes){
 
   nodes <-
-    iatlas.api.client::query_gene_nodes(
+    iatlas.api.client::query_nodes(
       datasets = dataset,
-      network = "cellimage_network",
+      network = "Cellimage Network",
       entrez = genes,
       tags = tag
     ) %>%
     dplyr::select(
-      "tags",
-      "node_name" = "name",
-      "node_feature_name" = "entrez",
-      "node_feature_display" = "hgnc",
-      "x",
-      "y",
-      "score"
+      "tags" = "node_tags",
+      "node_name",
+      "node_feature_name" = "gene_entrez",
+      "node_feature_display" = "gene_hgnc",
+      "x" = "node_x",
+      "y" = "node_y",
+      "score" = "node_score"
     ) %>%
     tidyr::unnest("tags") %>%
     dplyr::select(
@@ -49,20 +49,20 @@ get_cellimage_gene_nodes <- function(dataset, tag, genes){
 
 get_cellimage_feature_nodes <- function(dataset, tag, features){
   nodes <-
-    iatlas.api.client::query_feature_nodes(
+    iatlas.api.client::query_nodes(
       datasets = dataset,
-      network = "cellimage_network",
+      network = "Cellimage Network",
       features = features,
       tags = tag
     ) %>%
     dplyr::select(
-      "tags",
-      "node_name" = "name",
+      "tags" = "node_tags",
+      "node_name",
       "node_feature_name" = "feature_name",
       "node_feature_display" = "feature_display",
-      "x",
-      "y",
-      "score"
+      "x" = "node_x",
+      "y" = "node_y",
+      "score" = "node_score"
     ) %>%
     tidyr::unnest("tags") %>%
     dplyr::select(

@@ -33,6 +33,7 @@ test_that("cellimage_plot_server_tcga", {
         )
       )
       expect_type(plot_obj(), "list")
+      expect_type(output$plot, "list")
     }
   )
 })

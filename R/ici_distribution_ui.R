@@ -2,57 +2,50 @@ ici_distribution_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    optionsBox(
+    iatlas.modules::optionsBox(
       width=12,
-      shinyjs::useShinyjs(),
-      column(
-        width = 3,
-        checkboxGroupInput(ns("datasets"), "Select Datasets", choices = datasets_options, selected = NULL)
-      ),
       column(
         width = 3,
         shiny::uiOutput(ns("feature_op"))
       ),
       column(
         width = 3,
-        shiny::uiOutput(ns("group1")),
-        p("Select extra Sample Groups (optional)"),
         shiny:: uiOutput(ns("group2"))
       ),
       column(
-        width = 3,
+        width = 2,
         shiny::selectInput(
                 ns("plot_type"),
                 "Select Plot Type",
                 choices = c("Violin", "Box")
-              ),
-
-        shiny::selectInput(
-                ns("scale_method"),
-                "Select variable scaling",
-                choices = c(
-                  "None",
-                  "Log2",
-                  "Log2 + 1",
-                  "Log10",
-                  "Log10 + 1"
-                ),
-                selected = "None"
-        ),
+              )
+      ),
+      column(
+        width = 2,
+          shiny::selectInput(
+                  ns("scale_method"),
+                  "Select scaling",
+                  choices = c(
+                    "None",
+                    "Log2",
+                    "Log2 + 1",
+                    "Log10",
+                    "Log10 + 1"
+                  ),
+                  selected = "None"
+          )
+      ),
+      column(
+        width = 2,
         shiny::selectInput(
           ns("reorder_method_choice"),
           "Reorder Function",
           choices = c("None" = "None", "Median", "Mean", "Max", "Min"),
           selected = "None"
         )
-        # shiny::checkboxInput(
-        #         ns("see_drilldown"),
-        #         "Display histogram of distribution by clicking on a plot",
-        #         TRUE
-        # )
       )
     ),#optionsBox
-    plotBox(
+    iatlas.modules::plotBox(
       width = 12,
       plotly::plotlyOutput(ns("dist_plots"), height = "500px") %>%
         shinycssloaders::withSpinner(),
@@ -61,21 +54,18 @@ ici_distribution_ui <- function(id){
       shiny::downloadButton(ns("download_tbl"), "Download plot table")
     ),
     shiny::fluidRow(
-      optionsBox(
+      iatlas.modules::optionsBox(
         width = 3,
         shiny::uiOutput(ns("ui_stat")),
         shiny::radioButtons(ns("stattest"), "Test type", choices = c("t-test", "Wilcox"), inline = TRUE, selected = "t-test")
       ),
-      plotBox(
+      iatlas.modules::plotBox(
         width = 9,
         DT::dataTableOutput(ns("stats1")),
         downloadButton(ns('download_test'), 'Download')
       )
     ),
-    # shiny::conditionalPanel(
-    #   condition =  "input.see_drilldown",
-    #   ns = ns,
-      plotBox(
+    iatlas.modules::plotBox(
         width = 12,
         plotly::plotlyOutput(ns("drilldown_plot")) %>%
           shinycssloaders::withSpinner(),

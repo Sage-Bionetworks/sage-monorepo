@@ -1,5 +1,6 @@
 ici_hazard_ratio_server <- function(
-  id
+  id,
+  cohort_obj
 ){
   shiny::moduleServer(
     id,
@@ -8,7 +9,8 @@ ici_hazard_ratio_server <- function(
       # ici_data <- load_io_data()
 
       ici_hazard_ratio_main_server(
-        "ici_hazard_ratio_main"
+        "ici_hazard_ratio_main",
+        cohort_obj
       )
     }
   )
