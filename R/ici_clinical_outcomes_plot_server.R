@@ -44,7 +44,8 @@ ici_clinical_outcomes_plot_server <- function(
       })
 
       all_kmplot <- shiny::reactive({
-        shiny::req(all_fit())
+        shiny::req(all_fit(), all_survival())
+
 
         create_kmplot(
           fit = all_fit(),
@@ -56,59 +57,23 @@ ici_clinical_outcomes_plot_server <- function(
           facet = TRUE)
       })
 
-      #the KM Plots are stored as a list, so a few adjustments are necessary to plot everything
-      shiny::observe({
-        output$plots <- shiny::renderUI({
+      # survminer::ggsurvplot_list object does not work if using a for loop, or
+      # purrr::map, or lapply
+      output$plots <- shiny::renderUI({
+        shiny::tagList(
+          shiny::renderPlot(all_kmplot()[1]),
+          shiny::renderPlot(all_kmplot()[2]),
+          shiny::renderPlot(all_kmplot()[3]),
+          shiny::renderPlot(all_kmplot()[4]),
+          shiny::renderPlot(all_kmplot()[5]),
+          shiny::renderPlot(all_kmplot()[6]),
+          shiny::renderPlot(all_kmplot()[7]),
+          shiny::renderPlot(all_kmplot()[8]),
+          shiny::renderPlot(all_kmplot()[9])
+        )
 
-          plot_output_list <-
-            lapply(1:length(all_survival()), function(i) {
-              plotname <- names(all_survival())[i]
-              plotOutput(ns(plotname), height = 600)
-            })
-          do.call(tagList, plot_output_list)
-        })
       })
 
-      shiny::observe({
-        lapply(1:length(all_survival()), function(i){
-          my_dataset <- names(all_survival())[i]
-          output[[my_dataset]] <- shiny::renderPlot({
-            shiny::req(all_kmplot())
-            all_kmplot()[i]
-          })
-        })
-      })
-
-      shiny::observeEvent(all_survival(),{
-        shiny::req(all_fit(), feature_df())
-
-        if(length(all_survival())>0 & length(cohort_obj()[["dataset_names"]]) != length(all_survival())){ #some dataset has only one category for the selected grouping variable
-
-          missing_datasets <- setdiff(cohort_obj()$group_tbl$dataset_display, names(all_survival()))
-
-          #check if there is survival annotation or more than one group level for the missing dataset
-          missing_annot <- purrr::map_df(.x = missing_datasets, function(x){
-
-            surv_data <- feature_df() %>%
-              dplyr::filter(dataset_name == x) #%>%
-              # dplyr::select(input$timevar, group_name)
-
-            if(nrow(surv_data) == 0) c(dataset = x,
-                                       error = "Selected survival endpoint not available for ",
-                                       variable = input$timevar)
-            else if(dplyr::n_distinct(surv_data$group_name) == 1) c(dataset = x,
-                                                                       error = "Selected variable has only one level for ",
-                                                                       variable = cohort_obj()[["group_display"]])
-          })
-          output$notification <- shiny::renderText({
-              paste0(missing_annot$error, missing_annot$dataset, collapse = "<br>")
-          })
-        }
-        if(length(cohort_obj()[["dataset_names"]]) == length(all_survival()) | length(all_survival()) == 0){ #no notification to display
-          output$notification <- renderUI({
-          })
-        }
-      })
     }
   )
 }
