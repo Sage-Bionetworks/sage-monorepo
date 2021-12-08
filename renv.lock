@@ -561,9 +561,9 @@
       "RemoteUsername": "cytoscape",
       "RemoteRepo": "cyjShiny",
       "RemoteRef": "master",
-      "RemoteSha": "eacfaa62542654af9821ac1a3523891da7303f38",
+      "RemoteSha": "7c6eb9706541991603680b35ecf3f671a9385d0a",
       "RemoteHost": "api.github.com",
-      "Hash": "4df542b130248ee273b1858f4811246d"
+      "Hash": "0982451f8d5f72cd40422cf7194e9850"
     },
     "data.table": {
       "Package": "data.table",
@@ -969,16 +969,16 @@
     },
     "iatlas.modules2": {
       "Package": "iatlas.modules2",
-      "Version": "0.4.2",
+      "Version": "0.4.3",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules2",
       "RemoteRef": "master",
-      "RemoteSha": "ba717382bbf540e92cdbed51ed5a5e6d80976932",
+      "RemoteSha": "78e9314c4e5ac33ef72ef52142391b5ba79d21c1",
       "RemoteHost": "api.github.com",
       "Remotes": "CRI-iAtlas/iatlas.api.client@main, CRI-iAtlas/iatlas.modules@master",
-      "Hash": "84ed6faddcc4c5f1ecc298f844e97df6"
+      "Hash": "991631714714c9fbd75f60d144c55da2"
     },
     "igvShiny": {
       "Package": "igvShiny",
