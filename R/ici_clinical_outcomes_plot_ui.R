@@ -10,33 +10,36 @@ ici_clinical_outcomes_plot_ui <- function(id){
       ),
 
     iatlas.modules::optionsBox(
-      width=3,
-      shiny::verticalLayout(
-        shiny::checkboxInput(ns("confint"), "Confidence Intervals", value = F),
-        shiny::checkboxInput(ns("risktable"), "Risk Table", value = T),
-
+      width=12,
+      shiny::column(
+        width = 8,
         shiny::selectInput(
           ns("timevar"),
           "Survival Endpoint",
           c("Overall Survival" = "OS_time",
             "Progression Free Interval" = "PFI_time_1"),
           selected = "OS_time"
-        ),
-        shiny::radioButtons(ns("div_range"), "Divide value range",
-                     choices = c("In the median" = "median", "In equal intervals" = "intervals"),
-                     inline = TRUE, selected = "median"),
-        shiny::conditionalPanel(condition = paste0("input['", ns("div_range"), "'] == 'intervals'"),
-                                shiny::sliderInput(
-                                   ns("divk"),
-                                   "Value Range Divisions",
-                                   min = 2,
-                                   max = 10,
-                                   value = 2
-                                 ))
+        )
+      ),
+      shiny::column(
+        width = 2,
+        shiny::checkboxInput(
+          ns("confint"),
+          "Confidence Intervals",
+          value = F
+        )
+      ),
+      shiny::column(
+        width = 2,
+        shiny::checkboxInput(
+          ns("risktable"),
+          "Risk Table",
+          value = T
+        )
       )
     ),#optionsBox
     shiny::column(
-      width = 9,
+      width = 12,
       shiny::htmlOutput(ns("notification")),
       iatlas.modules::plotBox(
         width = 12,
