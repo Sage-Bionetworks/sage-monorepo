@@ -72,7 +72,7 @@ ici_clinical_outcomes_plot_server <- function(
           shiny::renderPlot(all_kmplot()[9]),
           shiny::renderPlot(all_kmplot()[10]),
           shiny::renderPlot(all_kmplot()[11]),
-          shiny::renderPlot(all_kmplot()[12]),
+          shiny::renderPlot(all_kmplot()[12])
         )
 
       })
