@@ -4,7 +4,7 @@ ici_immunomodulators_ui <- function(id){
 
   shiny::tagList(
     iatlas.modules::titleBox(
-      "iAtlas Explorer — Immunomodulators"
+      "iAtlas Explorer — Immunomodulators Expression in Immune Checkpoint Inhibitors datasets"
     ),
     iatlas.modules::textBox(
       width = 12,
