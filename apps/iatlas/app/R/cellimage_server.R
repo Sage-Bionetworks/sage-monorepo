@@ -5,9 +5,6 @@ cellimage_server <- function(id, cohort_obj){
 
       show_submodule <- shiny::reactive({
         function(cohort_obj){
-          print(length(cohort_obj$dataset_names))
-          print(cohort_obj$dataset_names)
-          print(cohort_obj$group_name)
           any(
             all(
               length(cohort_obj$dataset_names) == 1,
