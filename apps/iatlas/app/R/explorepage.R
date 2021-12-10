@@ -145,13 +145,31 @@ explorepage_ui <- function(){
   landing_tab_item <- list(shinydashboard::tabItem(
     tabName = "dashboard",
     iatlas.modules::titleBox("iAtlas Explorer - Home"),
-    iatlas.modules::textBox(
-      width = 12,
-      shiny::includeMarkdown("inst/markdown/explore1.markdown")
-    ),
     iatlas.modules::sectionBox(
       title = "What's Inside",
+      column(
+        width = 6,
+        shiny::includeMarkdown("inst/markdown/explore1.markdown")
+      ),
+
       shiny::fluidRow(readout_info_boxes)
+    ),
+    iatlas.modules::sectionBox(
+      title = "Get Started",
+      iatlas.modules::textBox(
+        width = 6,
+        shiny::p(shiny::h4(shiny::strong("1. Build your Cohort"))),
+        shiny::p("Use our cohort selector to explore the available data and narrow down your research targets."),
+        shiny::splitLayout(
+          shiny::actionButton("ici_cohort_selection", label = "Open ICI Cohort Selection"),
+          shiny::actionButton(inputId = "analysis_cohort_selection", label = "Open CG Cohort Selection")
+        )
+      ),
+      iatlas.modules::textBox(
+        width = 6,
+        shiny::p(shiny::h4(shiny::strong("2. Visualize your data"))),
+        shiny::p("Use our analysis modules to explore the selected cohorts. You can access the analysis modules from the sections below and from the left menu. Any changes in the selected cohort in step 1 will be automatically propagated to the corresponding modules.")
+      )
     ),
     iatlas.modules::sectionBox(
       title = "Immune Checkpoint Inhibition Analysis Modules",
