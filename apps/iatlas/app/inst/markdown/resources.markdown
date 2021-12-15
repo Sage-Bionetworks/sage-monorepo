@@ -7,6 +7,7 @@ iAtlas app, tools, and data and annotations
 
 + **GitHub:** https://github.com/CRI-iAtlas
 + **GitLab:** https://gitlab.com/cri-iatlas
++ **iAtlas Notebooks:** https://github.com/CRI-iAtlas/iatlas-notebooks
 + **Synapse:** https://www.synapse.org/#!Synapse:syn10337516/wiki/458420
 + **Immune Subtype Classifier:** https://github.com/CRI-iAtlas/ImmuneSubtypeClassifier
 + **DockStore:** https://dockstore.org/organizations/SageBionetworks/collections/iatlas
@@ -24,17 +25,29 @@ iAtlas app, tools, and data and annotations
 
 ### Source for data in the Molecular Response to Immune Checkpoint Inhibitor modules:
 
+* [Choueiri et al. Immunomodulatory Activity of Nivolumab in Metastatic Renal Cell Carcinoma. Clin Cancer Res. 2016;22(22):5461-5471](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5106340/)
+
 * [Cloughesy et al. Neoadjuvant anti-PD-1 immunotherapy promotes a survival benefit with intratumoral and systemic immune responses in recurrent glioblastoma. Nat Med. 2019 Mar;25(3):477-486](https://doi.org/10.1038/s41591-018-0337-7)
 
 * [Gide et al. Distinct Immune Cell Populations Define Response to Anti-PD-1 Monotherapy and Anti-PD-1/Anti-CTLA-4 Combined Therapy. Cancer Cell. 2019 Feb 11;35(2):238-255.e6](https://www.cell.com/cancer-cell/fulltext/S1535-6108(19\)30037-6)
 
 * [Hugo et al. Genomic and Transcriptomic Features of Response to Anti-PD-1 Therapy in Metastatic Melanoma. Cell. 2016 Mar 24;165(1):35-44](https://www.cell.com/cell/fulltext/S0092-8674(16\)30215-X)
 
+* [Kim et al. Comprehensive molecular characterization of clinical responses to PD-1 inhibition in metastatic gastric cancer. Nat Med. 2018 Sep;24(9):1449-1458. doi: 10.1038/s41591-018-0101-z. Epub 2018 Jul 16. PMID: 30013197](https://pubmed.ncbi.nlm.nih.gov/30013197/)
+
+* [Liu et al. Integrative molecular and clinical modeling of clinical outcomes to PD1 blockade in patients with metastatic melanoma [published correction appears in Nat Med. 2020 Jul;26(7):1147]. Nat Med. 2019;25(12):1916-1927](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6898788/)
+
 * [Mariathasan et al. TGFβ attenuates tumour response to PD-L1 blockade by contributing to exclusion of T cells. Nature. 2018 Feb 22;554(7693):544-548](https://doi.org/10.1038/nature25501)
+
+* [McDermott et al. Clinical activity and molecular correlates of response to atezolizumab alone or in combination with bevacizumab versus sunitinib in renal cell carcinoma. Nat Med.  2018 Dec;24(12):1941. Nat Med. 2018;24(6):749-757](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6721896/)
+
+* [Miao et al. Genomic correlates of response to immune checkpoint therapies in clear cell renal cell carcinoma. Science. 2018;359(6377):801-806](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6035749/)
 
 * [Riaz et al. Tumor and Microenvironment Evolution during Immunotherapy with Nivolumab. Cell. 2017 Nov 2;171(4):934-949.e16](https://www.cell.com/cell/fulltext/S0092-8674(17\)31122-4)
 
 * [Van Allen et al. Genomic correlates of response to CTLA-4 blockade in metastatic melanoma. Science. 2015 Oct 9;350(6257):207-211](https://pubmed.ncbi.nlm.nih.gov/26359337/)
+
+* [Zhao et al. Immune and genomic correlates of response to anti-PD-1 immunotherapy in glioblastoma [published correction appears in Nat Med. 2019 Apr 17;:]. Nat Med. 2019;25(3):462-469](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6810613/)
 
 ## Workflows
 Workflows for characterization of immune environment in cancer
