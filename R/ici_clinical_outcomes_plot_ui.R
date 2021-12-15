@@ -4,11 +4,8 @@ ici_clinical_outcomes_plot_ui <- function(id){
   shiny::tagList(
     iatlas.modules::messageBox(
       width = 24,
-      p("Select the datasets of interest, variable, and outcome in terms of either overall survival (OS) or progression free interval (PFI) endpoints to generate a Kaplan-Meier plot.
-        For a continuous (numeric) variable, the range can be split in the median of the interval, or into equal intervals of the value range.
-        For the latter, the slider can be used to specify how the range of values of that variable is split. Selecting 2 splits the values by the middle of the range, 3 splits the range into three even intervals and so on.")
-      ),
-
+      shiny::includeMarkdown("inst/markdown/ici_clinical_outcomes.markdown")
+    ),
     iatlas.modules::optionsBox(
       width=12,
       shiny::column(

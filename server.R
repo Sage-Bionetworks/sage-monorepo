@@ -13,8 +13,8 @@ modules_tbl <- MODULES_TBL %>%
     "server_function" = purrr::map(.data$server_function_string, get),
   )
 
-analysis_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "analysis")
 ici_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "ici")
+cg_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "cg")
 tool_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "tool")
 
 
@@ -36,21 +36,13 @@ shiny::shinyServer(function(input, output, session) {
     }
   })
 
-
-  # Analysis Modules ----------------------------------------------------------
-
-  data_info_server("data_info")
-
-  cohort_obj <- iatlas.modules2::cohort_selection_server("analysis_cohort_selection")
-
-  analysis_modules_tbl %>%
-    dplyr::select("name", "server_function") %>%
-    purrr::pwalk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
-
   # ICI Modules ----------------------------------------------------------
 
-  ici_cohort_obj <- iatlas.modules2::cohort_selection_server(
+  ici_cohort_obj <- call_iatlas_module(
     "ici_cohort_selection",
+    iatlas.modules2::cohort_selection_server,
+    input,
+    session,
     default_datasets = shiny::reactive(c("Gide_Cell_2019", "HugoLo_IPRES_2016")),
     default_group = shiny::reactive("Responder"),
     dataset_type = shiny::reactive("ici")
@@ -60,12 +52,33 @@ shiny::shinyServer(function(input, output, session) {
     dplyr::select("name", "server_function") %>%
     purrr::pwalk(iatlas.app::call_iatlas_module, input, session, ici_cohort_obj)
 
+  # CG Modules ----------------------------------------------------------
+
+  cg_cohort_obj <- call_iatlas_module(
+    "cg_cohort_selection",
+    iatlas.modules2::cohort_selection_server,
+    input,
+    session
+  )
+
+  cg_modules_tbl %>%
+    dplyr::select("name", "server_function") %>%
+    purrr::pwalk(iatlas.app::call_iatlas_module, input, session, cg_cohort_obj)
+
   # Tool Modules --------------------------------------------------------------
 
   tool_modules_tbl %>%
     dplyr::select("name", "server_function") %>%
     purrr::pwalk(iatlas.app::call_iatlas_module, input, session)
 
+  # Other ---------------------------------------------------------------------
+
+  call_iatlas_module(
+    "data_info",
+    data_info_server,
+    input,
+    session
+  )
 
 })
 

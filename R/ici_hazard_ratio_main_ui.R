@@ -4,13 +4,8 @@ ici_hazard_ratio_main_ui <- function(id){
   shiny::tagList(
     iatlas.modules::messageBox(
       width = 24,
-      p("Analyze survival data with Cox proportional hazard models. Select the datasets of interest, variables, and outcome in terms of either overall survival (OS) or progression free interval (PFI)
-        endpoints." ),
-      p("Then, select whether the models should be univariable or multivariable. The univariable analysis will compute the Cox proportional hazard ratio (HR) for each combination of selected variable and dataset. The multivariable analysis will compute the HR considering all the selected features
-        as predictors of time to survival outcome."),
-      p("The results are summarized in a heatmap with the log10 of Hazard Ratio. For the univariable analysis, when more than one variable is selected, a Benjamini-Hochberg FDR correction is made, and variables with a p-value smaller than 0.05 and BH pvalue smaller than 0.05 are indicated in the heatmap.
-        In addition, forest plot with the log10 of the Cox Proportional Hazard Ratio with 95th confidence intervals for each variable is displayed.")
-      ),
+      shiny::includeMarkdown("inst/markdown/ici_hazard_ratio.markdown")
+    ),
     iatlas.modules::optionsBox(
       width = 12,
       column(
