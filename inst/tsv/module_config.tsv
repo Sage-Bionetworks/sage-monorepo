@@ -1,15 +1,15 @@
 display	name	type	description	label
-Cell-Interaction Diagram	cellimage	analysis	Explore cell and protein abundance on an illustration.	none
-Clinical Outcomes	clinical_outcomes	analysis	Plot survival curves based on immune characteristics and identify variables associated with outcome.	none
-CNV Associations	copy_number	analysis	Explore associations of microenvironment with gene copy number.	none
-Driver Associations	driver_associations	analysis	Explore associations of microenvironment with driver mutations.	none
-Extracellular Networks	extracellular_network	analysis	Explore the extracellular networks modulating tumoral immune response.	none
-Germline Analysis	germline	analysis	Explore the germline genetic contribution to the immune landscape of cancer.	none
-Immune Feature Trends	immune_features	analysis	This module allows you to see how immune readouts vary across your groups, and how they relate to one another.	none
-Immunomodulators	immunomodulators	analysis	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.	none
-IO Targets	io_targets	analysis	Explore the expression of genes that code for immuno-oncological (IO) targets.	none
-TIL Maps	til_map	analysis	Explore the characteristics of maps of tumor infiltrating lymphocytes obtained from analysis of H&E images.	none
-Tumor Microenvironment	tumor_microenvironment	analysis	Explore the immune cell proportions in your cohort.	none
+Cell-Interaction Diagram	cellimage	cg	Explore cell and protein abundance on an illustration.	none
+Clinical Outcomes	clinical_outcomes	cg	Plot survival curves based on immune characteristics and identify variables associated with outcome.	none
+CNV Associations	copy_number	cg	Explore associations of microenvironment with gene copy number.	none
+Driver Associations	driver_associations	cg	Explore associations of microenvironment with driver mutations.	none
+Extracellular Networks	extracellular_network	cg	Explore the extracellular networks modulating tumoral immune response.	none
+Germline Analysis	germline	cg	Explore the germline genetic contribution to the immune landscape of cancer.	none
+Immune Feature Trends	immune_features	cg	This module allows you to see how immune readouts vary across your groups, and how they relate to one another.	none
+Immunomodulators	immunomodulators	cg	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.	none
+IO Targets	io_targets	cg	Explore the expression of genes that code for immuno-oncological (IO) targets.	none
+TIL Maps	til_map	cg	Explore the characteristics of maps of tumor infiltrating lymphocytes obtained from analysis of H&E images.	none
+Tumor Microenvironment	tumor_microenvironment	cg	Explore the immune cell proportions in your cohort.	none
 Immune Subtype Classifier	immune_subtype_classifier	tool	Use an ensemble model trained on all TCGA data to classify gene expression profiles from your own data into the six immune subtypes identified in Thorsson et al.	none
 Datasets Overview	ici_overview	ici	Explore categories and groups of the available datasets.	none
 Clinical Outcomes	ici_clinical_outcomes	ici	Plot survival curves based on immune characteristics and identify variables associated with outcome.	none
