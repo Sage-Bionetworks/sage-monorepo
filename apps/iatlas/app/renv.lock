@@ -150,10 +150,10 @@
     },
     "Matrix": {
       "Package": "Matrix",
-      "Version": "1.3-4",
+      "Version": "1.4-0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "4ed05e9c9726267e4a5872e09c04587c"
+      "Hash": "130c0caba175739d98f2963c6a407cf6"
     },
     "MatrixGenerics": {
       "Package": "MatrixGenerics",
@@ -561,9 +561,9 @@
       "RemoteUsername": "cytoscape",
       "RemoteRepo": "cyjShiny",
       "RemoteRef": "master",
-      "RemoteSha": "eacfaa62542654af9821ac1a3523891da7303f38",
+      "RemoteSha": "7c6eb9706541991603680b35ecf3f671a9385d0a",
       "RemoteHost": "api.github.com",
-      "Hash": "4df542b130248ee273b1858f4811246d"
+      "Hash": "0982451f8d5f72cd40422cf7194e9850"
     },
     "data.table": {
       "Package": "data.table",
@@ -693,10 +693,10 @@
     },
     "fs": {
       "Package": "fs",
-      "Version": "1.5.1",
+      "Version": "1.5.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "8142f0a2056d53ec2e15bf701185beb1"
+      "Hash": "7c89603d81793f0d5486d91ab1fc6f1d"
     },
     "futile.logger": {
       "Package": "futile.logger",
@@ -969,16 +969,16 @@
     },
     "iatlas.modules2": {
       "Package": "iatlas.modules2",
-      "Version": "0.4.1",
+      "Version": "0.4.4",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules2",
       "RemoteRef": "master",
-      "RemoteSha": "5e16cd893c9b9ffad9b3955e0f567ac197c4e3c3",
+      "RemoteSha": "51ff0e099d0c7a1ee908cff8c3cdba7265c6eb80",
       "RemoteHost": "api.github.com",
       "Remotes": "CRI-iAtlas/iatlas.api.client@main, CRI-iAtlas/iatlas.modules@master",
-      "Hash": "e5e0a094321c5e8aa170f3d929ce47ed"
+      "Hash": "8b22cf816b20a8e9b924468dda6d9a29"
     },
     "igvShiny": {
       "Package": "igvShiny",
@@ -1623,10 +1623,10 @@
     },
     "sessioninfo": {
       "Package": "sessioninfo",
-      "Version": "1.2.1",
+      "Version": "1.2.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "19ab8539771d727754c178f2ef892615"
+      "Hash": "3f9796a8d0a0e8c6eb49a4b029359d1f"
     },
     "shape": {
       "Package": "shape",
@@ -1749,10 +1749,10 @@
     },
     "testthat": {
       "Package": "testthat",
-      "Version": "3.1.0",
+      "Version": "3.1.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "89e55ebe4f5ddd7f43f0f2bc6d96c950"
+      "Hash": "2a5c5646456762131ce40272964599d3"
     },
     "tibble": {
       "Package": "tibble",
