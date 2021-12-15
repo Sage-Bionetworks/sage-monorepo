@@ -47,6 +47,14 @@ shiny::shinyServer(function(input, output, session) {
     dplyr::select("name", "server_function") %>%
     purrr::pwalk(iatlas.app::call_iatlas_module, input, session, cohort_obj)
 
+  shiny::observeEvent(input$link_to_cohort_selection, {
+    shinydashboard::updateTabItems(
+      session,
+      "explorertabs",
+      "analysis_cohort_selection"
+    )
+  })
+
   # ICI Modules ----------------------------------------------------------
 
   ici_cohort_obj <- iatlas.modules2::cohort_selection_server(
@@ -59,6 +67,14 @@ shiny::shinyServer(function(input, output, session) {
   ici_modules_tbl %>%
     dplyr::select("name", "server_function") %>%
     purrr::pwalk(iatlas.app::call_iatlas_module, input, session, ici_cohort_obj)
+
+  shiny::observeEvent(input$link_to_ici_cohort_selection, {
+    shinydashboard::updateTabItems(
+      session,
+      "explorertabs",
+      "ici_cohort_selection"
+    )
+  })
 
   # Tool Modules --------------------------------------------------------------
 
