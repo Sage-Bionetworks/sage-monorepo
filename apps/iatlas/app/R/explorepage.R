@@ -6,8 +6,8 @@ explorepage_ui <- function(){
       "ui_function" = purrr::map(.data$ui_function_string, get)
     )
 
-  analysis_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "analysis")
   ici_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "ici")
+  cg_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "cg")
   tool_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "tool")
 
   # sidebar ----
@@ -18,9 +18,9 @@ explorepage_ui <- function(){
       purrr::pmap(shinydashboard::menuSubItem, icon = shiny::icon("cog"))
   }
 
-  analysis_module_menu_items <- create_menu_subitems(analysis_modules_tbl)
-  ici_module_menu_items      <- create_menu_subitems(ici_modules_tbl)
-  tool_module_menu_items     <- create_menu_subitems(tool_modules_tbl)
+  ici_module_menu_items   <- create_menu_subitems(ici_modules_tbl)
+  cg_module_menu_items    <- create_menu_subitems(cg_modules_tbl)
+  tool_module_menu_items  <- create_menu_subitems(tool_modules_tbl)
 
   sidebar <- shinydashboard::dashboardSidebar(
     shinydashboard::sidebarMenu(
@@ -43,14 +43,14 @@ explorepage_ui <- function(){
       ),
       shinydashboard::menuItem(
         "CG Cohort Selection",
-        tabName = "analysis_cohort_selection",
+        tabName = "cg_cohort_selection",
         icon = shiny::icon("cog")
       ),
       shinydashboard::menuItem(
         text = "CG Analysis Modules",
         icon = shiny::icon("chart-bar"),
         startExpanded = TRUE,
-        analysis_module_menu_items
+        cg_module_menu_items
       ),
       shinydashboard::menuItem(
         text = "iAtlas tools",
@@ -92,7 +92,9 @@ explorepage_ui <- function(){
     )
 
   # image boxes at bottom of page that link to module tabs
-  module_image_boxes <- analysis_modules_tbl %>%
+
+  make_image_boxes <- function(tbl){
+    tbl %>%
       dplyr::select(
         "title" = "display",
         "linkId" = "link",
@@ -115,31 +117,10 @@ explorepage_ui <- function(){
         shiny::fluidRow
       )) %>%
       dplyr::pull("row")
+  }
 
-  # image boxes at bottom of page that link to module tabs
-  ici_module_image_boxes <- ici_modules_tbl %>%
-    dplyr::select(
-      "title" = "display",
-      "linkId" = "link",
-      "imgSrc" = "image",
-      "boxText" = "description"
-    ) %>%
-    purrr::pmap(
-      iatlas.modules::imgLinkBox, width = 6, linkText = "Open Module"
-    ) %>%
-    dplyr::tibble("item" = .) %>%
-    dplyr::mutate("row" = as.character(ceiling(dplyr::row_number() / 2))) %>%
-    dplyr::group_by(.data$row) %>%
-    dplyr::mutate("n" = as.character(dplyr::row_number())) %>%
-    dplyr::ungroup() %>%
-    tidyr::pivot_wider(names_from = "n", values_from = "item") %>%
-    dplyr::select("item1" = "1", "item2" = "2") %>%
-    dplyr::mutate("row" = purrr::map2(
-      .data$item1,
-      .data$item2,
-      shiny::fluidRow
-    )) %>%
-    dplyr::pull("row")
+  cg_module_image_boxes  <- make_image_boxes(cg_modules_tbl)
+  ici_module_image_boxes <- make_image_boxes(ici_modules_tbl)
 
   # This is the tab item that users land on
   landing_tab_item <- list(shinydashboard::tabItem(
@@ -162,7 +143,7 @@ explorepage_ui <- function(){
         shiny::p("Use our cohort selector to explore the available data and narrow down your research targets."),
         shiny::splitLayout(
           shiny::actionButton("link_to_ici_cohort_selection", label = "Open ICI Cohort Selection"),
-          shiny::actionButton(inputId = "link_to_cohort_selection", label = "Open CG Cohort Selection")
+          shiny::actionButton(inputId = "link_to_cg_cohort_selection", label = "Open CG Cohort Selection")
         )
       ),
       iatlas.modules::textBox(
@@ -185,7 +166,7 @@ explorepage_ui <- function(){
         width = 12,
         shiny::includeMarkdown("inst/markdown/explore2.markdown")
       ),
-      module_image_boxes
+      cg_module_image_boxes
     )
   ))
 
@@ -195,7 +176,7 @@ explorepage_ui <- function(){
       dplyr::select(modules_tbl, "label", "ui_function"),
       dplyr::tibble(
         "label" = c(
-          "analysis_cohort_selection",
+          "cg_cohort_selection",
           "ici_cohort_selection",
           "data_info"
         ),
