@@ -161,8 +161,8 @@ explorepage_ui <- function(){
         shiny::p(shiny::h4(shiny::strong("1. Build your Cohort"))),
         shiny::p("Use our cohort selector to explore the available data and narrow down your research targets."),
         shiny::splitLayout(
-          shiny::actionButton("ici_cohort_selection", label = "Open ICI Cohort Selection"),
-          shiny::actionButton(inputId = "analysis_cohort_selection", label = "Open CG Cohort Selection")
+          shiny::actionButton("link_to_ici_cohort_selection", label = "Open ICI Cohort Selection"),
+          shiny::actionButton(inputId = "link_to_cohort_selection", label = "Open CG Cohort Selection")
         )
       ),
       iatlas.modules::textBox(
