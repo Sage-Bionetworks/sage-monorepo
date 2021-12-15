@@ -14,7 +14,7 @@ cellimage_server <- function(id, cohort_obj){
               )
             ),
             all(
-              length(cohort_obj$dataset_name) == 1,
+              length(cohort_obj$dataset_names) == 1,
               cohort_obj$dataset_names == "PCAWG",
               cohort_obj$group_name %in% c(
                 "Immune_Subtype", "PCAWG_Study"
