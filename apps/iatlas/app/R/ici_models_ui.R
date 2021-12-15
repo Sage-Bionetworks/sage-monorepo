@@ -4,7 +4,7 @@ ici_models_ui <- function(id){
 
   shiny::tagList(
     iatlas.modules::titleBox(
-      "iAtlas Explorer — Machine Learning Models with ICI data"
+      "iAtlas Explorer — Machine Learning Models of Response to Immunotherapy with Immune Checkpoint Inhibition datasets"
     ),
     iatlas.modules::textBox(
       width = 12,
