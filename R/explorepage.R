@@ -86,7 +86,7 @@ explorepage_ui <- function(){
   ) %>%
     purrr::pmap(
       shinydashboard::infoBox,
-      width = 3,
+      width = 6,
       color = "black",
       fill = FALSE
     )
@@ -128,12 +128,17 @@ explorepage_ui <- function(){
     iatlas.modules::titleBox("iAtlas Explorer - Home"),
     iatlas.modules::sectionBox(
       title = "What's Inside",
-      column(
+      shiny::column(
         width = 6,
         shiny::includeMarkdown("inst/markdown/explore1.markdown")
       ),
-
-      shiny::fluidRow(readout_info_boxes)
+      shiny::column(
+        width = 6,
+        shiny::verticalLayout(
+          readout_info_boxes[1:2],
+          readout_info_boxes[3:4]
+        )
+      )
     ),
     iatlas.modules::sectionBox(
       title = "Get Started",
