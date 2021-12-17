@@ -23,7 +23,7 @@ ici_models_server <- function(
         immunefeatures <-  cohort_obj()$feature_tbl %>%
           dplyr::filter(class != "Predictor of Response to Immune Checkpoint Treatment" &
                           method_tag != "Survival") %>%
-          iatlas.app::create_nested_list_by_class(
+          create_nested_list_by_class(
               class_column = "class",
               display_column = "display",
               internal_column = "name"
@@ -35,7 +35,7 @@ ici_models_server <- function(
           tibble::deframe()
 
         genes <- iatlas.api.client::query_immunomodulators() %>%
-          iatlas.app::create_nested_list_by_class(
+          create_nested_list_by_class(
             class_column = "gene_family",
             display_column = "hgnc",
             internal_column = "entrez"
