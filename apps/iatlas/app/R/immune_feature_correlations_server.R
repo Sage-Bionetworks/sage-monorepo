@@ -25,16 +25,17 @@ immune_feature_correlations_server <- function(
       })
 
       feature_data_function <- shiny::reactive({
-        function(.class){
-          cohort_obj()$get_feature_values(feature_classes = .class) %>%
+        function(.feature_class){
+          cohort_obj()$get_feature_values(feature_classes = .feature_class) %>%
             dplyr::select(
-              "sample" = "sample_name",
-              "group" = "group_short_name",
-              "feature" = "feature_display",
+              "sample_name",
+              "group_name" = "group_short_name",
+              "feature_name",
+              "feature_display",
               "feature_value",
               "feature_order",
               "group_description" = "group_characteristics",
-              "color" = "group_color"
+              "group_color"
             )
         }
       })
@@ -45,8 +46,9 @@ immune_feature_correlations_server <- function(
           tbl <-
             cohort_obj()$get_feature_values(features = .feature) %>%
             dplyr::select(
-              "sample" = "sample_name",
-              "feature" = "feature_display",
+              "sample_name",
+              "feature_name",
+              "feature_display",
               "feature_value"
             )
         }
