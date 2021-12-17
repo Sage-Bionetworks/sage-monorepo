@@ -39,10 +39,10 @@ germline_gwas_server <- function(id, cohort_obj){
 
       subset_gwas <- shiny::reactive({
         if(is.null(input$immunefeature)){
-          gwas_data() %>% iatlas.app::format_gwas_df()
+          gwas_data() %>% format_gwas_df()
         }else{
-          if(input$feature_action == "Exclude") gwas_data() %>% dplyr::filter(!(feature_name %in% input$immunefeature)) %>% iatlas.app::format_gwas_df()
-          else gwas_data() %>% dplyr::filter(feature_name %in% input$immunefeature) %>% iatlas.app::format_gwas_df()
+          if(input$feature_action == "Exclude") gwas_data() %>% dplyr::filter(!(feature_name %in% input$immunefeature)) %>% format_gwas_df()
+          else gwas_data() %>% dplyr::filter(feature_name %in% input$immunefeature) %>% format_gwas_df()
         }
       })
 
@@ -95,7 +95,7 @@ germline_gwas_server <- function(id, cohort_obj){
         #we need to discover which track was clicked
         if(x[1] == "SNP"){
           clicked_snp$ev <- x[2]
-          shiny::showModal(shiny::modalDialog(iatlas.app::create_snp_popup_tbl(x), easyClose=TRUE))
+          shiny::showModal(shiny::modalDialog(create_snp_popup_tbl(x), easyClose=TRUE))
         }
       })
 
@@ -125,7 +125,7 @@ germline_gwas_server <- function(id, cohort_obj){
         shiny::validate(
           shiny::need(selected_snp()$snp_rsid %in% gwas_data()$snp_rsid, "Select SNP")
         )
-        iatlas.app::get_snp_links(selected_snp()$snp_rsid[1],
+        get_snp_links(selected_snp()$snp_rsid[1],
                                   selected_snp()$snp_name[1])
       })
 

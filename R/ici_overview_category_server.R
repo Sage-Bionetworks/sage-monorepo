@@ -60,7 +60,7 @@ ici_overview_category_server <- function(
 
       output$ici_per_ds_df <- DT::renderDT({
         shiny::req(input$group1)
-        DT::datatable(iatlas.app::get_io_overview_table(values_for_group1()),
+        DT::datatable(get_io_overview_table(values_for_group1()),
                       rownames = FALSE,
                       width = "80%",
                       caption = paste("Group Size per dataset for", input$group1),
@@ -72,7 +72,7 @@ ici_overview_category_server <- function(
       output$ici_mosaic <- plotly::renderPlotly({
         shiny::req(values_for_group1(), group2())
 
-        df_mosaic <- iatlas.app::get_io_mosaic_df(values_for_group1(), group2())
+        df_mosaic <- get_io_mosaic_df(values_for_group1(), group2())
 
         df_colors <- df_mosaic %>%
           dplyr::select(y, plot_color) %>%
@@ -82,7 +82,7 @@ ici_overview_category_server <- function(
         names(plot_colors) <-  as.character(df_colors$y)
 
         suppressWarnings( #format_plot throws an warning with the mosaic plot - supressing warning, investigate if possible to change format_plot()
-        iatlas.app::create_mosaicplot(df_mosaic %>% dplyr::select(x,y),
+        create_mosaicplot(df_mosaic %>% dplyr::select(x,y),
                                       title = stringr::str_c(input$group2, "by", input$group1, sep = " "),
                                       fill_colors = plot_colors) %>%
                     plotly::layout(

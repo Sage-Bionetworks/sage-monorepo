@@ -14,7 +14,7 @@ ici_distribution_server <- function(
         selectInput(
           ns("var1_surv"),
           "Select Feature",
-          feature_df %>% iatlas.app::create_nested_list_by_class()
+          feature_df %>% create_nested_list_by_class()
         )
       })
 
