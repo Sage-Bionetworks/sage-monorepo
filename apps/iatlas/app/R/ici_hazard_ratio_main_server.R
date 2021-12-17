@@ -120,7 +120,7 @@ ici_hazard_ratio_main_server <- function(
       dataset_ft <- shiny::eventReactive(input$go_button, {
         shiny::req(input$var2_cox, feature_df_mult())
         #creates a df with the dataset x feature combinations that are available
-        iatlas.app::get_feature_by_dataset(
+        get_feature_by_dataset(
           features = input$var2_cox,
           feature_df = features(),
           group_df = groups(),
@@ -132,7 +132,7 @@ ici_hazard_ratio_main_server <- function(
 
       coxph_df <- shiny::eventReactive(input$go_button, {
         shiny::req(input$var2_cox, dataset_ft())
-        iatlas.app::build_coxph_df(datasets = cohort_obj()[["dataset_names"]],
+        build_coxph_df(datasets = cohort_obj()[["dataset_names"]],
                                    data = feature_df_mult(),
                                    feature = input$var2_cox,
                                    time = input$timevar,
@@ -161,12 +161,12 @@ ici_hazard_ratio_main_server <- function(
         # shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
         shiny::validate(need(length(input$var2_cox)>0, "Select at least one variable."))
 
-        heatmap_df <-  iatlas.app::build_heatmap_df(coxph_df())
+        heatmap_df <-  build_heatmap_df(coxph_df())
 
-        p <- iatlas.app::create_heatmap(heatmap_df, "heatmap", scale_colors = T, legend_title = "log10(Hazard Ratio)")
+        p <- create_heatmap(heatmap_df, "heatmap", scale_colors = T, legend_title = "log10(Hazard Ratio)")
 
         if(mult_coxph() == FALSE & length(input$var2_cox)>1){
-          p <- iatlas.app::add_BH_annotation(coxph_df(), p)
+          p <- add_BH_annotation(coxph_df(), p)
         }
         p
       })
