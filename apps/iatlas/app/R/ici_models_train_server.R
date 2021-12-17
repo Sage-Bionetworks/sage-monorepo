@@ -54,7 +54,7 @@ ici_models_train_server <- function(
 
       ###TEST
       prediction_test <- eventReactive(input$compute_test, {
-        iatlas.app::get_testing_results(model_train()$model,
+        get_testing_results(model_train()$model,
                                         test_df(),
                                         training_obj(),
                                         input$test_survival)

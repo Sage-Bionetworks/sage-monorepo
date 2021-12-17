@@ -3,36 +3,17 @@ tumor_microenvironment_type_fractions_server <- function(id, cohort_obj) {
     id,
     function(input, output, session) {
 
-      # plot_data_function <- shiny::reactive({
-      #   func <- function(.feature_class){
-      #     group_data <- cohort_obj()$group_tbl %>%
-      #       dplyr::select("group", "group_description" = "characteristics")
-      #
-      #     tbl <-
-      #       iatlas.modules2::query_feature_values_with_cohort_object(
-      #         cohort_object <- cohort_obj(),
-      #         feature_class = .feature_class
-      #       ) %>%
-      #       dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample") %>%
-      #       dplyr::inner_join(group_data, by = "group") %>%
-      #       dplyr::select(
-      #         "sample",
-      #         "group",
-      #         "feature" = "feature_display",
-      #         "feature_value",
-      #         "group_description"
-      #       )
-      #   }
-      #   return(func)
-      # })
-
       plot_data_function <- shiny::reactive({
         function(.feature_class){
-          cohort_obj()$get_feature_values(feature_classes = .feature_class) %>%
+          result <-
+            cohort_obj()$get_feature_values(
+              feature_classes = .feature_class
+            ) %>%
             dplyr::select(
-              "sample" = "sample_name",
-              "group" = "group_short_name",
-              "feature" = "feature_display",
+              "sample_name",
+              "group_name" = "group_short_name",
+              "feature_name",
+              "feature_display",
               "feature_value",
               "group_description" = "group_characteristics"
             )
@@ -48,7 +29,7 @@ tumor_microenvironment_type_fractions_server <- function(id, cohort_obj) {
         )
       })
 
-      iatlas.modules::barplot_server(
+      result <- iatlas.modules::barplot_server(
         "barplot",
         plot_data_function,
         feature_classes,
