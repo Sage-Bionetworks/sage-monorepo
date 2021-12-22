@@ -9,6 +9,18 @@ ici_models_main_server <- function(
 
       ns <- session$ns
 
+      output$excluded_dataset <- shiny::renderText({
+        if(identical(unique(cohort_obj()$group_tbl$dataset_display), cohort_obj()$dataset_displays)){
+          ""
+        }else{
+          excluded_datasets <- setdiff(cohort_obj()$dataset_displays, unique(cohort_obj()$group_tbl$dataset_display))
+          paste(
+            paste(excluded_datasets, collapse = ", "),
+            " not available for training because all samples were filtered in ICI Cohort Selection."
+          )
+        }
+      })
+
       output$bucket_list <- shiny::renderUI({
         list_format <- "<p style = 'color:Gray; font-size: 12px; height: 18px;'>"
         sortable::bucket_list(
@@ -18,7 +30,7 @@ ici_models_main_server <- function(
           sortable::add_rank_list(
             text = "Datasets available",
             labels = lapply(
-              lapply(cohort_obj()$dataset_displays, function(x) paste(list_format, x, "</p>")),
+              lapply(unique(cohort_obj()$group_tbl$dataset_display), function(x) paste(list_format, x, "</p>")),
               shiny::HTML),
             input_id = ns("datasets")
           ),
@@ -100,6 +112,12 @@ ici_models_main_server <- function(
           shiny::need(
             length(predictors())>1, "Select two or more predictors."
           ))
+        shiny::validate(
+          shiny::need(nrow(training_obj()$subset_df$train_df)>0, "No samples in the training dataset. Change your selection of training datasets or change filters in ICI Cohort Selection.")
+        )
+        shiny::validate(
+          shiny::need(nrow(training_obj()$subset_df$test_df)>0, "No samples in the testing dataset. Change your selection of testing datasets or change filters in ICI Cohort Selection.")
+        )
 
         paste(
           paste("Samples in training set: ", nrow(training_obj()$subset_df$train_df)),
