@@ -8,6 +8,18 @@ ici_clinical_outcomes_plot_server <- function(
 
       ns <- session$ns
 
+      output$excluded_dataset <- shiny::renderText({
+        if(identical(unique(cohort_obj()$group_tbl$dataset_display), cohort_obj()$dataset_displays)){
+          ""
+        }else{
+          excluded_datasets <- setdiff(cohort_obj()$dataset_displays, unique(cohort_obj()$group_tbl$dataset_display))
+          paste(
+            paste(excluded_datasets, collapse = ", "),
+            " not included because all samples were filtered in ICI Cohort Selection."
+          )
+        }
+      })
+
       feature_df <- shiny::reactive({
         pre_treat_samples <- iatlas.api.client::query_tag_samples(cohorts = cohort_obj()[["dataset_names"]], tags = "pre_sample_treatment") %>%
           dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
@@ -21,7 +33,7 @@ ici_clinical_outcomes_plot_server <- function(
       all_survival <- shiny::reactive({
        shiny::req(!is.null(feature_df()), cancelOutput = T)
 
-       df <- purrr::map(.x = cohort_obj()[["dataset_names"]], df = feature_df(), .f= function(dataset, df){
+       df <- purrr::map(.x = unique(cohort_obj()$group_tbl$dataset_name), df = feature_df(), .f= function(dataset, df){
           dataset_df <- df %>%
             dplyr::filter(dataset_name == dataset)
 
@@ -80,7 +92,7 @@ ici_clinical_outcomes_plot_server <- function(
       missing_plot <- shiny::reactive({
         shiny::req(all_fit(), feature_df())
 
-        if(length(all_survival())>0 & length(cohort_obj()[["dataset_names"]]) != length(all_survival())){ #some dataset has only one category for the selected grouping variable
+        if(length(all_survival())>0 & dplyr::n_distinct(cohort_obj()$group_tbl$dataset_name) != length(all_survival())){ #some dataset has only one category for the selected grouping variable
 
           missing_datasets <- setdiff(cohort_obj()$group_tbl$dataset_display, names(all_survival()))
 

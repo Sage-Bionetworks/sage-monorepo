@@ -38,6 +38,7 @@ ici_clinical_outcomes_plot_ui <- function(id){
     shiny::column(
       width = 12,
       shiny::htmlOutput(ns("notification")),
+      shiny::htmlOutput(ns("excluded_dataset")),
       iatlas.modules::plotBox(
         width = 12,
         shiny::uiOutput(ns("plots")) %>%
