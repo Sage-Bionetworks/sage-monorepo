@@ -8,6 +8,7 @@ ici_models_main_ui <- function(id){
       shiny::includeMarkdown("inst/markdown/ici_models.markdown"),
       shiny::actionLink(ns("method_link"), "Click to view method description.")
     ),
+    shiny::htmlOutput(ns("excluded_dataset")),
     iatlas.modules::optionsBox(
       width = 24,
       shiny::column(
