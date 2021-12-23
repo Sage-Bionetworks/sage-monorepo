@@ -42,6 +42,7 @@ ici_hazard_ratio_main_ui <- function(id){
       )
     ),
     shiny::htmlOutput(ns("notification")),
+    shiny::htmlOutput(ns("excluded_dataset")),
     iatlas.modules::plotBox(
       width = 12,
       plotly::plotlyOutput(ns("mult_heatmap"), width = "100%", height = "600px")%>%
