@@ -34,6 +34,7 @@ create_barplot <- function(
       y = ~Y,
       color = ~COLOR,
       text = ~LABEL,
+      textposition = 'none',
       key = ~KEY,
       type = 'bar',
       source = source_name,

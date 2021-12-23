@@ -9,7 +9,7 @@ ici_neoantigen_classes_server <- function(
       ns <- session$ns
 
       #get the count data for the samples in the cohort_obj
-      count_df <- arrow::read_arrow("inst/feather/neoantigen_classes_count.feather")
+      count_df <- arrow::read_feather("inst/feather/neoantigen_classes_count.feather")
 
 
       cohort_count <- shiny::reactive({
@@ -19,7 +19,8 @@ ici_neoantigen_classes_server <- function(
           dplyr::mutate(ERROR = NA) %>%
           dplyr::group_by(dataset_name, group_name, feature_name) %>%
           dplyr::mutate(y = sum(feature_value)) %>%
-          dplyr::select(dataset_name, group_name, feature_name, y, ERROR) %>%
+          dplyr::mutate(text = paste("Neoantigen class: ", feature_name, "\n Group: ", group_name, "\n Count: ", y)) %>%
+          dplyr::select(dataset_name, group_name, feature_name, y, ERROR, text) %>%
           dplyr::distinct()
       })
 
@@ -27,24 +28,27 @@ ici_neoantigen_classes_server <- function(
         shiny::req(cohort_count())
 
         purrr::map(cohort_obj()$dataset_names, function(x){
-          cohort_count() %>%
-            dplyr::filter(dataset_name == x) %>%
-            create_barplot(
-              .,
-              x_col = "feature_name",
-              y_col = "y",
-              error_col = "ERROR",
-              key_col = NA,
-              color_col = "group_name",
-              label_col = NA,
-              xlab = "",
-              ylab = "",
-              title = unique(.$dataset_name),
-              source_name = NULL,
-              bar_colors = cohort_obj()$plot_colors,
-              showlegend = FALSE
-            )
-        })
+          dataset_df <-  cohort_count() %>%
+            dplyr::filter(dataset_name == x)
+
+          if(nrow(dataset_df)>0){
+            dataset_df %>%
+              create_barplot(
+                .,
+                x_col = "feature_name",
+                y_col = "y",
+                error_col = "ERROR",
+                key_col = NA,
+                color_col = "group_name",
+                label_col = "text",
+                title = "",
+                source_name = "neo_plot",
+                bar_colors = cohort_obj()$plot_colors,
+                showlegend = FALSE
+              ) %>%
+              add_title_subplot_plotly(x)
+          }
+        }) %>% Filter(Negate(is.null),.)
       })
 
       output$neoantigen_classes_plot <- plotly::renderPlotly({
