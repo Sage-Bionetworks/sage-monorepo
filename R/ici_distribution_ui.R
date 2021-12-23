@@ -45,6 +45,7 @@ ici_distribution_ui <- function(id){
         )
       )
     ),#optionsBox
+    shiny::htmlOutput(ns("excluded_dataset")),
     iatlas.modules::plotBox(
       width = 12,
       plotly::plotlyOutput(ns("dist_plots"), height = "500px") %>%
