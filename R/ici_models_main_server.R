@@ -92,8 +92,17 @@ ici_models_main_server <- function(
         )
       })
 
+      block_train <- shiny::reactiveVal(TRUE) #Train button blocked at startup
       training_obj <- reactive({
-        shiny::req(input$train, input$test, predictors())
+
+        if( (length(input$train) == 0) | (length(input$test) == 0) | length(predictors()) < 2) block_train(TRUE)
+        else block_train(FALSE)
+
+        shiny::validate(
+          shiny::need(input$train, "Select training dataset(s)"),
+          shiny::need(input$test, "Select testing dataset(s)"),
+          shiny::need(length(predictors())>1, "Select two or more predictors")
+        )
 
         get_training_object(
           cohort_obj = cohort_obj(),
@@ -106,31 +115,24 @@ ici_models_main_server <- function(
         )
       })
 
-      output$samples_summary <- shiny::renderText({
+      output$samples_summary <- shiny::renderUI({
         shiny::req(training_obj())
-        shiny::validate(
-          shiny::need(
-            length(predictors())>1, "Select two or more predictors."
-          ))
-        shiny::validate(
-          shiny::need(nrow(training_obj()$subset_df$train_df)>0, "No samples in the training dataset. Change your selection of training datasets or change filters in ICI Cohort Selection.")
-        )
-        shiny::validate(
-          shiny::need(nrow(training_obj()$subset_df$test_df)>0, "No samples in the testing dataset. Change your selection of testing datasets or change filters in ICI Cohort Selection.")
-        )
 
-        paste(
-          paste("Samples in training set: ", nrow(training_obj()$subset_df$train_df)),
-          paste("Samples in testing set: ", nrow(training_obj()$subset_df$test_df)),
-          sep = " | "
+        shiny::verticalLayout(
+          shiny::p(
+            paste(
+              paste("Samples in training set: ", nrow(training_obj()$subset_df$train_df)),
+              paste("Samples in testing set: ", nrow(training_obj()$subset_df$test_df)),
+              sep = " | "
+            )
+          ),
+          shiny::br(),
+          shiny::p(
+            paste0("Selected formula: ", names(variables_list$response_vars)[match(input$response_variable,variables_list$response_vars)],
+                   " ~ ", paste(subset(training_obj()$predictors, VariableType != "Category")$feature_display, collapse = " + ")
+            )
+          )
         )
-      })
-
-      output$train_summary <- shiny::renderText({
-        shiny::req(training_obj())
-        paste0("Selected formula: ", names(variables_list$response_vars)[match(input$response_variable,variables_list$response_vars)],
-               " ~ ", paste(subset(training_obj()$predictors, VariableType != "Category")$feature_display, collapse = " + ")
-               )
       })
 
       output$response_characteristics <- shiny::renderText({
@@ -138,7 +140,7 @@ ici_models_main_server <- function(
         iatlas.api.client::query_tags(tags = input$response_variable) %>% dplyr::pull(tag_characteristics)
       })
 
-      block_train <- shiny::reactiveVal(FALSE)
+
       observe({ #block Train button if one of the datasets is missing annotation for one predictor. Notify number of samples with NA that will be excluded
         shiny::req(training_obj())
 
@@ -149,7 +151,6 @@ ici_models_main_server <- function(
         else shiny::removeNotification(id = "high_pred")
 
         if(nrow(training_obj()$missing_annot) == 0 & length(training_obj()$missing_level)==0){
-          #shinyjs::enable("compute_train")
           block_train(FALSE)
           shinyjs::hide("missing_data")
           shinyjs::hide("missing_sample")
