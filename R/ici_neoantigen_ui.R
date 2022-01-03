@@ -13,6 +13,10 @@ ici_neoantigen_ui <- function(id){
     iatlas.modules::sectionBox(
       title = "Classes of Neoantigens",
       ici_neoantigen_classes_ui(ns("ici_neoantigen_classes"))
+    ),
+    iatlas.modules::sectionBox(
+      title = "Correlations",
+      ici_neoantigen_correlations_ui(ns("ici_neoantigen_correlations"))
     )
   )
 }

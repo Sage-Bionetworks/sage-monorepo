@@ -9,6 +9,10 @@ ici_neoantigen_server <- function(
         "ici_neoantigen_classes",
         cohort_obj
       )
+      ici_neoantigen_correlations_server(
+        "ici_neoantigen_correlations",
+        cohort_obj
+      )
     }
   )
 }
