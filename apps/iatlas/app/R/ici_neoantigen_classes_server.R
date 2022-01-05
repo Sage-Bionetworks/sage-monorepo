@@ -43,7 +43,7 @@ ici_neoantigen_classes_server <- function(
                 label_col = "text",
                 title = "",
                 source_name = "neo_plot",
-                bar_colors = cohort_obj()$plot_colors,
+                bar_colors = unique(cohort_obj()$plot_colors),
                 showlegend = FALSE
               ) %>%
               add_title_subplot_plotly(x)
