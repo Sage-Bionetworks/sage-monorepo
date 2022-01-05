@@ -30,8 +30,10 @@ create_scatterplot <- function(
                 df,
                 x = ~X,
                 y = ~Y,
-                # color = ~COLOR,
-                # colors = fill_colors,
+                color = ~COLOR,
+                colors = fill_colors,
+                showlegend = TRUE,
+                legendgroup = ~COLOR,
                 text = ~LABEL,
                 key = ~KEY,
                 source = source_name) %>%

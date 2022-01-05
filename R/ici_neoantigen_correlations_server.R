@@ -46,7 +46,6 @@ ici_neoantigen_correlations_server <- function(
       })
 
       response_data_function <- shiny::reactive({
-        View(cohort_obj())
         function(.feature){
           tbl <-
             cohort_count() %>%

@@ -13,6 +13,10 @@ ici_neoantigen_server <- function(
         "ici_neoantigen_correlations",
         cohort_obj
       )
+      ici_neoantigen_frequency_server(
+        "ici_neoantigen_frequency",
+        cohort_obj
+      )
     }
   )
 }
