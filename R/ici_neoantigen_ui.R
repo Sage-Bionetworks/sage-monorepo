@@ -15,12 +15,12 @@ ici_neoantigen_ui <- function(id){
       ici_neoantigen_classes_ui(ns("ici_neoantigen_classes"))
     ),
     iatlas.modules::sectionBox(
-      title = "Correlations",
-      ici_neoantigen_correlations_ui(ns("ici_neoantigen_correlations"))
-    ),
-    iatlas.modules::sectionBox(
       title = "Frequency of peptides",
       ici_neoantigen_frequency_ui(ns("ici_neoantigen_frequency"))
+    ),
+    iatlas.modules::sectionBox(
+      title = "Correlations",
+      ici_neoantigen_correlations_ui(ns("ici_neoantigen_correlations"))
     )
   )
 }
