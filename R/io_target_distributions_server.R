@@ -32,12 +32,13 @@ io_target_distributions_server <- function(
         function(.feature){
           cohort_obj()$get_gene_values(entrez = as.integer(.feature)) %>%
             dplyr::select(
-              "sample" = "sample_name",
-              "group" = "group_short_name",
-              "feature" = "hgnc",
+              "sample_name",
+              "group_name" = "group_short_name",
+              "feature_name" = "entrez",
+              "feature_display" = "hgnc",
               "feature_value" = "rna_seq_expr",
               "group_description" = "group_characteristics",
-              "color" = "group_color"
+              "group_color"
             )
         }
       })
@@ -48,7 +49,6 @@ io_target_distributions_server <- function(
         features   = features,
         distplot_xlab = shiny::reactive(cohort_obj()$group_display),
         scale_method_default = shiny::reactive("Log10"),
-        # feature_default = shiny::reactive(default_gene()),
         drilldown  = shiny::reactive(T)
       )
 
