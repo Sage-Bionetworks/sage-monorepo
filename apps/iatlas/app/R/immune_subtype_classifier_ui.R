@@ -29,7 +29,7 @@ immune_subtype_classifier_ui <- function(id) {
           shiny::tags$li("For an example of outputs, leave the input file blank, set ensemble size to a small number (32) and click GO.")
         ),
         shiny::p(""),
-        shiny::tags$a(href="https://github.com/CRI-iAtlas/shiny-iatlas/blob/develop/data/ebpp_test1_1to20.tsv", "Get an example input file here."),
+        shiny::tags$a(href="https://github.com/CRI-iAtlas/iatlas-app/blob/staging/inst/tsv/ebpp_test1_1to20.tsv", "Get an example input file here."),
         shiny::p(""),
         shiny::tags$hr(),
         shiny::p(shiny::tags$b("Data Formatting Example:")),
