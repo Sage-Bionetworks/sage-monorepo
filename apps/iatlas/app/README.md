@@ -153,7 +153,7 @@ Paste and evaluate your tokens in the RStudio console. They look like this:
 ```R
 # shinyapps.io example credentials
 rsconnect::setAccountInfo(
-  name='shiny-iatlas',
+  name='iatlas-app',
   token='xxx',
   secret='yyy'
 )
