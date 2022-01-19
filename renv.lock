@@ -11,6 +11,14 @@
         "URL": "https://packagemanager.rstudio.com/all/latest"
       },
       {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
         "Name": "BioCsoft",
         "URL": "https://bioconductor.org/packages/3.14/bioc"
       },
@@ -977,16 +985,16 @@
     },
     "iatlas.modules2": {
       "Package": "iatlas.modules2",
-      "Version": "0.4.7",
+      "Version": "0.4.8",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules2",
       "RemoteRef": "master",
-      "RemoteSha": "bd2521a70d104232bf818fb8a3f935ca1035c9b0",
+      "RemoteSha": "cccb3e6d3716b3b0cdfb688cc9f57dee16bf03b1",
       "RemoteHost": "api.github.com",
       "Remotes": "CRI-iAtlas/iatlas.api.client@main, CRI-iAtlas/iatlas.modules@master",
-      "Hash": "bcb4f2d02c74fd95b10b216f32ae7579"
+      "Hash": "3461ae7656e183533b377e121e376899"
     },
     "igvShiny": {
       "Package": "igvShiny",
