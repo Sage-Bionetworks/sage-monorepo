@@ -45,7 +45,8 @@ shiny::shinyServer(function(input, output, session) {
     session,
     default_datasets = shiny::reactive(c("Gide_Cell_2019", "HugoLo_IPRES_2016")),
     default_group = shiny::reactive("Responder"),
-    dataset_type = shiny::reactive("ici")
+    dataset_type = shiny::reactive("ici"),
+    display_module_availibility_string = shiny::reactive(F)
   )
 
   ici_modules_tbl %>%
