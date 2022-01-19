@@ -21,7 +21,7 @@ def resolve_nodes(_obj, info, dataSet=None, distinct=False, entrez=None, feature
     tag_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_tag_request_fields, child_node='tags')
 
-    paging = create_paging(paging, 12_000)
+    paging = create_paging(paging, 1000)
 
     query, count_query = build_node_request(
         requested, data_set_requested, feature_requested, gene_requested, data_set=dataSet, distinct=distinct, entrez=entrez, feature=feature, feature_class=featureClass, gene_type=geneType, max_score=maxScore, min_score=minScore, network=network, n_tags=nTags, related=related, paging=paging, tag=tag)
