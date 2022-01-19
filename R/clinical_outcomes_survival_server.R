@@ -62,7 +62,7 @@ clinical_outcomes_survival_server <- function(id, cohort_obj) {
           df = survival_value_tbl(),
           confint = input$confint,
           risktable = input$risktable,
-          title = cohort_obj()$group_name,
+          title = cohort_obj()$group_display,
           group_colors = unname(cohort_obj()$plot_colors)
         )
       })
