@@ -27,16 +27,20 @@ test_that("immunomodulator_distributions_server", {
       expect_named(
         plot_data,
         c(
-          "sample",
-          "group",
-          "feature",
+          "sample_name",
+          "group_name",
+          "feature_name",
+          "feature_display",
           "feature_value",
           "group_description",
-          "color"
+          "group_color"
         )
       )
       expect_true(nrow(plot_data) > 0)
-      expect_equal(unique(plot_data$feature), features()$feature_display[[1]])
+      expect_equal(
+        unique(plot_data$feature_display),
+        features()$feature_display[[1]]
+      )
     }
   )
 })
