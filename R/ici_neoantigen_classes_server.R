@@ -24,6 +24,10 @@ ici_neoantigen_classes_server <- function(
           dplyr::distinct()
       })
 
+      dataset_displays <- reactive({
+        setNames(cohort_obj()$dataset_displays, cohort_obj()$dataset_names)
+      })
+
       all_plots <- shiny::reactive({
         shiny::req(cohort_count())
 
@@ -46,14 +50,22 @@ ici_neoantigen_classes_server <- function(
                 bar_colors = unique(cohort_obj()$plot_colors),
                 showlegend = FALSE
               ) %>%
-              add_title_subplot_plotly(x)
+              add_title_subplot_plotly(unname(dataset_displays()[x]))
           }
         }) %>% Filter(Negate(is.null),.)
       })
 
+      output$classes_plot <- shiny::renderUI({
+        shiny::req(all_plots())
+        n_rows = (length(all_plots())+2)%/%3
+        box_height = paste0(n_rows*400, "px")
+
+        plotly::plotlyOutput(ns("neoantigen_classes_plot"), height = box_height)
+      })
+
       output$neoantigen_classes_plot <- plotly::renderPlotly({
         shiny::req(all_plots())
-        plotly::subplot(all_plots(), nrows = 1)
+        plotly::subplot(all_plots(), nrows = (length(all_plots())+2)%/%3, margin = 0.04)
       })
     }
   )

@@ -11,7 +11,8 @@ ici_neoantigen_frequency_ui <- function(
     ),
     iatlas.modules::plotBox(
       width = 12,
-      plotly::plotlyOutput(ns("neoantigen_frequency_plot"))
+      shiny::uiOutput(ns("frequency_plot"))
+      #plotly::plotlyOutput(ns("neoantigen_frequency_plot"))
     )
   )
 }

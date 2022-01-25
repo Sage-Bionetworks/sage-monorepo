@@ -7,16 +7,11 @@ ici_neoantigen_classes_ui <- function(
   shiny::tagList(
     iatlas.modules::messageBox(
       width = 24,
-      p("Neonatigens can have differente sources. Here you can explore the frequency of neoantigens for each class.")
+      p("Neoantigens can have differente sources. Here you can explore the frequency of neoantigens for each class.")
     ),
-    # iatlas.modules::optionsBox(
-    #   width = 12,
-    #   shiny::checkboxInput(ns("group_by_patient"),
-    #                      "Show frequency for patient level")
-    # ),
     iatlas.modules::plotBox(
       width = 12,
-      plotly::plotlyOutput(ns("neoantigen_classes_plot"))
+      shiny::uiOutput(ns("classes_plot"))
     )
   )
 }

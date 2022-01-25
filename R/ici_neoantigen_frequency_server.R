@@ -20,6 +20,10 @@ ici_neoantigen_frequency_server <- function(
           dplyr::summarise(n = dplyr::n(), n_pat= dplyr::n_distinct(patient_name), .groups = "keep")
       })
 
+      dataset_displays <- reactive({
+        setNames(cohort_obj()$dataset_displays, cohort_obj()$dataset_names)
+      })
+
       all_plots <- shiny::reactive({
         shiny::req(plot_df())
 
@@ -42,14 +46,22 @@ ici_neoantigen_frequency_server <- function(
                 source_name = "neo_plot",
                 fill_colors = unique(cohort_obj()$plot_colors)
               ) %>%
-              add_title_subplot_plotly(x)
+              add_title_subplot_plotly(unname(dataset_displays()[x]))
           }
         }) %>% Filter(Negate(is.null),.)
       })
 
+      output$frequency_plot <- shiny::renderUI({
+        shiny::req(all_plots())
+        n_rows = (length(all_plots())+1)%/%2
+        box_height = paste0(n_rows*300, "px")
+
+        plotly::plotlyOutput(ns("neoantigen_frequency_plot"), height = box_height)
+      })
+
       output$neoantigen_frequency_plot <- plotly::renderPlotly({
         shiny::req(all_plots())
-        plotly::subplot(all_plots(), nrows = 1, shareX = TRUE, shareY = TRUE)
+        plotly::subplot(all_plots(), nrows = (length(all_plots())+1)%/%2, margin = 0.04, shareX = FALSE, shareY = TRUE)
       })
     }
   )
