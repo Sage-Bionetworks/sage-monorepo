@@ -11,13 +11,24 @@ ici_neoantigen_frequency_server <- function(
       #get the count data for the samples in the cohort_obj
       top_mhc_df <- arrow::read_feather("inst/feather/neoantigen_top_pmhc.feather")
 
+      output$gene_selection <- shiny::renderUI({
+        shiny::selectInput(ns("gene"),
+                           "Select Gene:",
+                           choices = c("All", unique(top_mhc_df$gene_name)),
+                           selected = "All")
+      })
 
       plot_df <- shiny::reactive({
-        cohort_obj()$sample_tbl %>%
+        shiny::req(input$gene)
+        df <- cohort_obj()$sample_tbl %>%
           dplyr::inner_join(iatlas.api.client::query_sample_patients(), by = "sample_name") %>%
-          dplyr::inner_join(top_mhc_df, by = "patient_name") %>%
+          dplyr::inner_join(top_mhc_df, by = "patient_name")
+
+        if(input$gene != "All") df <- dplyr::filter(df, gene_name == input$gene)
+
+        df %>%
           dplyr::group_by(dataset_name, pmhc, group_name) %>%
-          dplyr::summarise(n = dplyr::n(), n_pat= dplyr::n_distinct(patient_name), .groups = "keep")
+          dplyr::summarise(n = jitter(dplyr::n()), n_pat= jitter(dplyr::n_distinct(patient_name)), .groups = "keep")
       })
 
       dataset_displays <- reactive({
@@ -61,7 +72,7 @@ ici_neoantigen_frequency_server <- function(
 
       output$neoantigen_frequency_plot <- plotly::renderPlotly({
         shiny::req(all_plots())
-        plotly::subplot(all_plots(), nrows = (length(all_plots())+1)%/%2, margin = 0.04, shareX = FALSE, shareY = TRUE)
+        plotly::subplot(all_plots(), nrows = (length(all_plots())+1)%/%2, margin = 0.06, shareX = FALSE, shareY = TRUE)
       })
     }
   )

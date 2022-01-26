@@ -9,10 +9,13 @@ ici_neoantigen_frequency_ui <- function(
       width = 24,
       p("The scatterplot shows the frequency of the top 1% most common combination of MHC, peptide, and gene and how many patients have this given combination.")
     ),
+    iatlas.modules::optionsBox(
+      width = 12,
+      shiny::uiOutput(ns("gene_selection"))
+    ),
     iatlas.modules::plotBox(
       width = 12,
       shiny::uiOutput(ns("frequency_plot"))
-      #plotly::plotlyOutput(ns("neoantigen_frequency_plot"))
     )
   )
 }
