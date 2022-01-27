@@ -15,7 +15,19 @@ ici_neoantigen_frequency_ui <- function(
     ),
     iatlas.modules::plotBox(
       width = 12,
-      shiny::uiOutput(ns("frequency_plot"))
+      shiny::column(
+        width = 9,
+        shiny::uiOutput(ns("frequency_plot"))
+      ),
+      shiny::column(
+        width = 3,
+        div(
+          DT::DTOutput(ns("legend")),
+          shiny::br(),
+          DT::DTOutput(ns("pmhc_tbl")),
+          style = "font-size: 75%"
+        )
+      )
     )
   )
 }

@@ -9,12 +9,15 @@ ici_neoantigen_frequency_server <- function(
       ns <- session$ns
 
       #get the count data for the samples in the cohort_obj
-      top_mhc_df <- arrow::read_feather("inst/feather/neoantigen_top_pmhc.feather")
+      top_mhc_df <- shiny::reactive(arrow::read_feather("inst/feather/neoantigen_top_pmhc.feather"))
+
+      clicked_point <- shiny::reactiveValues(ev="")
 
       output$gene_selection <- shiny::renderUI({
+        shiny::req(top_mhc_df())
         shiny::selectInput(ns("gene"),
                            "Select Gene:",
-                           choices = c("All", unique(top_mhc_df$gene_name)),
+                           choices = c("All", unique(top_mhc_df()$gene_name)),
                            selected = "All")
       })
 
@@ -22,13 +25,15 @@ ici_neoantigen_frequency_server <- function(
         shiny::req(input$gene)
         df <- cohort_obj()$sample_tbl %>%
           dplyr::inner_join(iatlas.api.client::query_sample_patients(), by = "sample_name") %>%
-          dplyr::inner_join(top_mhc_df, by = "patient_name")
+          dplyr::inner_join(top_mhc_df(), by = "patient_name")
 
         if(input$gene != "All") df <- dplyr::filter(df, gene_name == input$gene)
 
         df %>%
           dplyr::group_by(dataset_name, pmhc, group_name) %>%
-          dplyr::summarise(n = jitter(dplyr::n()), n_pat= jitter(dplyr::n_distinct(patient_name)), .groups = "keep")
+          dplyr::summarise(n = dplyr::n(), n_pat= dplyr::n_distinct(patient_name), .groups = "keep") %>%
+          dplyr::mutate(text = paste0(pmhc, "\n Group: ", group_name)) %>%
+          dplyr::mutate(highlight = ifelse(pmhc == clicked_point$ev, 1, 0))
       })
 
       dataset_displays <- reactive({
@@ -40,22 +45,25 @@ ici_neoantigen_frequency_server <- function(
 
         purrr::map(cohort_obj()$dataset_names, function(x){
           dataset_df <-  plot_df() %>%
-            dplyr::filter(dataset_name == x)
+            dplyr::filter(dataset_name == x) %>%
+            dplyr::mutate(n = jitter(n), n_pat = jitter(n_pat))
 
           if(nrow(dataset_df)>0){
             dataset_df %>%
               dplyr::mutate_at("group_name", as.factor) %>%
+              dplyr::group_by(highlight) %>%
               create_scatterplot(
                 .,
                 x_col = "n",
                 y_col = "n_pat",
-                key_col = NA,
+                key_col = "pmhc",
                 color_col = "group_name",
-                label_col = "pmhc",
+                label_col = "text",
                 xlab = "Frequency of pMHC",
                 ylab = "Number of patients with pMHC",
                 source_name = "neo_plot",
-                fill_colors = unique(cohort_obj()$plot_colors)
+                fill_colors = unique(cohort_obj()$plot_colors),
+                show_legend = FALSE
               ) %>%
               add_title_subplot_plotly(unname(dataset_displays()[x]))
           }
@@ -73,6 +81,63 @@ ici_neoantigen_frequency_server <- function(
       output$neoantigen_frequency_plot <- plotly::renderPlotly({
         shiny::req(all_plots())
         plotly::subplot(all_plots(), nrows = (length(all_plots())+1)%/%2, margin = 0.06, shareX = FALSE, shareY = TRUE)
+      })
+
+      output$legend <-  DT:: renderDT({
+        tbl <- dplyr::distinct(
+          data.frame(
+            b = cohort_obj()$plot_colors,
+            a = names(cohort_obj()$plot_colors)
+          ))
+
+        DT::datatable(
+          tbl,
+          rownames = FALSE,
+          options = list(
+            dom = 't',
+            headerCallback = DT::JS(
+              "function(thead, data, start, end, display){",
+              "  $(thead).remove();",
+              "}")
+          )
+        ) %>%
+          DT::formatStyle('b', backgroundColor = DT::styleEqual(tbl$b, tbl$b)) %>%
+          DT::formatStyle('b', color = DT::styleEqual(tbl$b, tbl$b))
+      })
+
+
+      #adding interactivity to select a point from the plot and render table with data for all groups
+      observe({
+        shiny::req(all_plots())
+        eventdata <- plotly::event_data( "plotly_click", source = "neo_plot")
+        if(is.null(eventdata)){
+          clicked_point$ev <- ""
+        }else{
+          clicked_point$ev  <- eventdata$key
+        }
+      })
+
+      output$pmhc_tbl <- DT::renderDT({
+        shiny::req(all_plots())
+        shiny::validate(
+          shiny::need(unique(clicked_point$ev) %in% plot_df()$pmhc, "")
+        )
+
+        DT::datatable(
+          plot_df() %>%
+            dplyr::filter(pmhc == clicked_point$ev) %>%
+            dplyr::mutate(Dataset = dataset_displays()[dataset_name]) %>%
+            dplyr::ungroup() %>%
+            dplyr::select(
+              Dataset,
+              Group = group_name,
+              n,
+              n_pat
+            ),
+          rownames = FALSE,
+          caption = unique(clicked_point$ev),
+          options = list(dom = 't')
+        )
       })
     }
   )
