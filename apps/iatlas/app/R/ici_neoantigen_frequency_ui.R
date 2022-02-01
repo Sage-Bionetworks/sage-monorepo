@@ -23,7 +23,6 @@ ici_neoantigen_frequency_ui <- function(
         width = 3,
         div(
           DT::DTOutput(ns("legend")),
-          shiny::br(),
           DT::DTOutput(ns("pmhc_tbl")),
           style = "font-size: 75%"
         )
