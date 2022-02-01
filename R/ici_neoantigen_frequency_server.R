@@ -49,23 +49,28 @@ ici_neoantigen_frequency_server <- function(
             dplyr::mutate(n = jitter(n), n_pat = jitter(n_pat))
 
           if(nrow(dataset_df)>0){
-            dataset_df %>%
-              dplyr::mutate_at("group_name", as.factor) %>%
-              dplyr::group_by(highlight) %>%
-              create_scatterplot(
-                .,
-                x_col = "n",
-                y_col = "n_pat",
-                key_col = "pmhc",
-                color_col = "group_name",
-                label_col = "text",
-                xlab = "Frequency of pMHC",
-                ylab = "Number of patients with pMHC",
-                source_name = "neo_plot",
-                fill_colors = unique(cohort_obj()$plot_colors),
-                show_legend = FALSE
-              ) %>%
-              add_title_subplot_plotly(unname(dataset_displays()[x]))
+            p <- ggplot2::ggplot(dataset_df, aes(x=n, y=n_pat, text=text, key = pmhc)) +
+                               geom_point(data=subset(dataset_df, highlight==0), aes(colour = group_name)) +
+                               scale_color_manual("Group", values = (cohort_obj()$plot_colors))+
+                               theme_bw() +
+                               theme(
+                                 legend.position="none",
+                                 panel.border = element_blank(),
+                                 panel.grid.major.x = element_blank(),
+                                 panel.grid.minor.x = element_blank(),
+                                 plot.margin = unit(c(1, 0.5, 0, 0), "cm")
+                               )+
+                               labs(
+                                 y = "Number of patients with pMHC",
+                                 x = "Frequency of pMHC")
+
+
+            if(sum(dataset_df$highlight) != 0) p <- p + geom_point(data=subset(dataset_df, highlight==1), color="black", shape = "diamond", size=4)
+
+            plotly::ggplotly(p,
+                             tooltip="text",
+                             source = "neo_plot") %>%
+                    add_title_subplot_plotly(unname(dataset_displays()[x]))
           }
         }) %>% Filter(Negate(is.null),.)
       })
