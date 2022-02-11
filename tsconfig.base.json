@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@challenge-registry/shared/data-access-user": [
+        "libs/shared/data-access-user/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

@@ -1,4 +1,10 @@
 {
   "version": 2,
-  "projects": {}
+  "projects": {
+    "login": "apps/login",
+    "login-e2e": "apps/login-e2e",
+    "shared-data-access-user": "libs/shared/data-access-user",
+    "web-app": "apps/web-app",
+    "web-app-e2e": "apps/web-app-e2e"
+  }
 }

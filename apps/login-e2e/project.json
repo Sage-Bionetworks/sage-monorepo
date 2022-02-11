@@ -1,0 +1,28 @@
+{
+  "root": "apps/login-e2e",
+  "sourceRoot": "apps/login-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/login-e2e/cypress.json",
+        "devServerTarget": "login:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "login:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/login-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["login"]
+}
