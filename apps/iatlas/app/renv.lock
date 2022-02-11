@@ -19,6 +19,14 @@
         "URL": "https://packagemanager.rstudio.com/all/latest"
       },
       {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
         "Name": "BioCsoft",
         "URL": "https://bioconductor.org/packages/3.14/bioc"
       },
@@ -972,16 +980,15 @@
     },
     "iatlas.modules": {
       "Package": "iatlas.modules",
-      "Version": "0.6.1",
+      "Version": "0.7.3",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules",
       "RemoteRef": "master",
-      "RemoteSha": "2a28084275995b4b4e9532feb91b3d7c591fd9a3",
+      "RemoteSha": "13a0e09ef226467eadc623e1de5e3f6723b5f91e",
       "RemoteHost": "api.github.com",
-      "Remotes": "CRI-iAtlas/iatlas.api.client@main, CRI-iAtlas/iatlas.modules2@master",
-      "Hash": "469c810cb09aae80303c12f772a2e3db"
+      "Hash": "7af55a60c7dd7e1c66109e8ad860111d"
     },
     "iatlas.modules2": {
       "Package": "iatlas.modules2",
@@ -1297,10 +1304,10 @@
     },
     "pillar": {
       "Package": "pillar",
-      "Version": "1.6.4",
+      "Version": "1.7.0",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "60200b6aa32314ac457d3efbb5ccbd98"
+      "Repository": "RSPM",
+      "Hash": "51dfc97e1b7069e9f7e6f83f3589c22e"
     },
     "pkgbuild": {
       "Package": "pkgbuild",
