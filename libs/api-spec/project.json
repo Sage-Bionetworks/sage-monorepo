@@ -12,6 +12,11 @@
       }
     },
     "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "openapi preview-docs openapi/openapi.yaml",
+        "cwd": "libs/api-spec"
+      }
     },
     "lint": {
       "executor": "@nrwl/workspace:run-commands",
