@@ -350,7 +350,6 @@ export class ChallengeService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/challenges`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
@@ -408,7 +407,6 @@ export class ChallengeService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/challenges/${encodeURIComponent(String(accountName))}/${encodeURIComponent(String(challengeName))}`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
@@ -470,7 +468,6 @@ export class ChallengeService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/challenges/${encodeURIComponent(String(accountName))}/${encodeURIComponent(String(challengeName))}/organizers/${encodeURIComponent(String(organizerId))}`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
@@ -532,7 +529,6 @@ export class ChallengeService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/challenges/${encodeURIComponent(String(accountName))}/${encodeURIComponent(String(challengeName))}/sponsors/${encodeURIComponent(String(sponsorId))}`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,

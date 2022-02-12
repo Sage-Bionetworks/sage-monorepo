@@ -182,7 +182,6 @@ export class OrgMembershipService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/orgMemberships`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
@@ -236,7 +235,6 @@ export class OrgMembershipService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/orgMemberships/${encodeURIComponent(String(orgMembershipId))}`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,

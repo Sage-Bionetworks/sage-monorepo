@@ -7,7 +7,11 @@
     "generate-sources": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "openapi-generator-cli generate -g typescript-angular -o src/lib -c openapi-generator.config.yaml -i ../api-spec/openapi.yaml",
+        "commands": [
+          "rm -fr src/lib/api",
+          "rm -fr src/lib/model",
+          "openapi-generator-cli generate -g typescript-angular -o src/lib -c openapi-generator.config.yaml -i ../api-spec/openapi.yaml"
+        ],
         "cwd": "libs/api-angular"
       }
     },

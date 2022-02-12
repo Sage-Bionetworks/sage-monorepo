@@ -189,7 +189,6 @@ export class OrganizationService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/organizations`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
@@ -243,7 +242,6 @@ export class OrganizationService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/organizations/${encodeURIComponent(String(organizationId))}`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,

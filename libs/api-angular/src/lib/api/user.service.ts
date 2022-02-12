@@ -184,7 +184,6 @@ export class UserService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/users`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
@@ -238,7 +237,6 @@ export class UserService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/users/${encodeURIComponent(String(userId))}`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
@@ -816,7 +814,6 @@ export class UserService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/user/starred/${encodeURIComponent(String(accountName))}/${encodeURIComponent(String(challengeName))}`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,

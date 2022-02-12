@@ -189,7 +189,6 @@ export class ChallengePlatformService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/challengePlatforms`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
@@ -243,7 +242,6 @@ export class ChallengePlatformService {
         }
 
         return this.httpClient.delete<object>(`${this.configuration.basePath}/challengePlatforms/${encodeURIComponent(String(challengePlatformId))}`,
-            null,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
