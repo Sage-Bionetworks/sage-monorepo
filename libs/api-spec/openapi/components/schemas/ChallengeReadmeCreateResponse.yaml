@@ -1,0 +1,9 @@
+type: object
+description: The unique identifier of the challenge README created
+properties:
+  id:
+    $ref: ../parameters/ChallengeReadmeId.yaml
+required:
+  - id
+example:
+  id: 507f1f77bcf86cd799439011

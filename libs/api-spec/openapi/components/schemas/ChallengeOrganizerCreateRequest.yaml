@@ -1,0 +1,20 @@
+type: object
+description: The information used to create a challenge organizer
+properties:
+  name:
+    type: string
+  login:
+    $ref: ../parameters/AccountLogin.yaml
+    nullable: true
+  roles:
+    type: array
+    items:
+      $ref: ../parameters/ChallengeOrganizerRole.yaml
+required:
+  - name
+example:
+  name: John Smith
+  login: jsmith
+  roles:
+    - ChallengeLead
+    - InfrastructureLead

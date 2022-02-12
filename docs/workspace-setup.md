@@ -30,6 +30,7 @@ nx g @nrwl/angular:service user --project=shared-data-access-user
 
 ```console
 yarn add -D @trumbitta/nx-plugin-openapi
+yarn add -D @redocly/openapi-cli
 ```
 
 <!-- Links -->

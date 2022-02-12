@@ -1,0 +1,32 @@
+type: object
+description: The information required to create a user account
+properties:
+  login:
+    type: string
+  email:
+    $ref: ../parameters/Email.yaml
+  password:
+    type: string
+    format: password
+  name:
+    type: string
+    nullable: true
+  avatarUrl:
+    type: string
+    format: uri
+    example: https://example.com/awesome-avatar.png
+    nullable: true
+  bio:
+    type: string
+    nullable: true
+required:
+  - login
+  - email
+  - password
+example:
+  login: awesome-user
+  email: awesome-user@example.org
+  password: yourpassword
+  name: Awesome User
+  avatarUrl: https://example.com/awesome-avatar.png
+  bio: A great bio

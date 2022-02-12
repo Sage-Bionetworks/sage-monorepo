@@ -1,0 +1,8 @@
+name: sponsorIds
+description: Array of sponsor org identifiers used to filter the results
+in: query
+required: false
+schema:
+  type: array
+  items:
+    $ref: ../../../components/parameters/OrgId.yaml

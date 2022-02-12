@@ -1,0 +1,25 @@
+type: object
+description: A page of results
+properties:
+  offset:
+    description: Index of the first result that must be returned
+    type: integer
+  limit:
+    description: Maximum number of results returned
+    type: integer
+  paging:
+    description: Links to navigate to different pages of results
+    type: object
+    properties:
+      next:
+        description: Link to the next page of results
+        type: string
+        format: uri
+  totalResults:
+    description: Total number of results in the result set
+    type: integer
+required:
+  - offset
+  - limit
+  - paging
+  - totalResults

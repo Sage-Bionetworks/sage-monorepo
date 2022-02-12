@@ -1,0 +1,9 @@
+type: object
+description: The unique identifier of the grant created
+properties:
+  id:
+    $ref: ../parameters/GrantId.yaml
+required:
+  - id
+example:
+  id: 507f1f77bcf86cd799439011

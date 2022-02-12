@@ -1,0 +1,20 @@
+type: object
+description: The information used to create a challenge sponsor
+properties:
+  name:
+    type: string
+  login:
+    $ref: ../parameters/AccountLogin.yaml
+    nullable: true
+  roles:
+    type: array
+    items:
+      $ref: ../parameters/ChallengeSponsorRole.yaml
+required:
+  - name
+example:
+  name: IBM
+  login: ibm
+  roles:
+    - ComputeProvider
+    - DataProvider

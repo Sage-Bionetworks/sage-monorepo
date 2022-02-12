@@ -1,0 +1,4 @@
+extends: ibm:oas
+rules:
+  response-error-response-schema: off
+  response-example-provided: off

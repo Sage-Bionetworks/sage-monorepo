@@ -1,0 +1,88 @@
+type: object
+description: The information used to create a challenge
+properties:
+  name:
+    $ref: ../parameters/ChallengeName.yaml
+  displayName:
+    type: string
+    minLength: 3
+    maxLength: 60
+  description:
+    description: A short description of the challenge
+    type: string
+    nullable: true
+    maxLength: 280
+  websiteUrl:
+    type: string
+    format: uri
+  status:
+    $ref: ../parameters/ChallengeStatus.yaml
+  startDate:
+    type: string
+    format: date
+    nullable: true
+  endDate:
+    type: string
+    format: date
+    nullable: true
+  incentiveTypes:
+    type: array
+    items:
+      $ref: ../parameters/ChallengeIncentiveType.yaml
+    nullable: true
+  platformId:
+    $ref: ../parameters/ChallengePlatformId.yaml
+    nullable: true
+  difficulty:
+    $ref: ../parameters/ChallengeDifficulty.yaml
+  submissionTypes:
+    type: array
+    items:
+      $ref: ../parameters/ChallengeSubmissionType.yaml
+    nullable: true
+  topics:
+    type: array
+    items:
+      $ref: Topic.yaml
+    # uniqueItems: true
+    maxItems: 30
+  inputDataTypes:
+    type: array
+    items:
+      $ref: ../parameters/ChallengeInputDataType.yaml
+    maxItems: 10
+    nullable: true
+  doi:
+    type: string
+    # pattern: "^10.\d{4,9}/[-._;()/:A-Z0-9]+$"
+    nullable: true
+  participantCount:
+    type: integer
+    minimum: 0
+    nullable: true
+required:
+  - name
+  - description
+example:
+  name: awesome-challenge
+  displayName: Awesome Challenge
+  description: This challenge is awesome.
+  websiteUrl: https://synapse.org/awesome-challenge
+  status: active
+  startDate: '2020-11-10'
+  endDate: '2020-12-31'
+  platformId: 507f1f77bcf86cd799439011
+  submissionTypes:
+    - PredictionFile
+    - DockerImage
+  incentiveTypes:
+    - Monetary
+    - Publication
+  topics:
+    - breast-cancer
+    - covid
+  dataTypes:
+    - genomic
+    - ehr
+  doi: http://doi.org/10.5281/zenodo.3714971
+  participantCount: 100

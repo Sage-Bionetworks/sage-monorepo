@@ -1,0 +1,33 @@
+type: object
+description: The information required to create an org account
+properties:
+  login:
+    type: string
+  email:
+    $ref: ../parameters/Email.yaml
+  name:
+    type: string
+    nullable: true
+  avatarUrl:
+    type: string
+    format: uri
+    example: https://example.com/awesome-avatar.png
+    nullable: true
+  websiteUrl:
+    type: string
+    format: uri
+    example: https://example.com
+    nullable: true
+  description:
+    type: string
+    nullable: true
+required:
+  - login
+  - email
+example:
+  login: awesome-org
+  email: contact@example.org
+  name: Awesome Org
+  avatarUrl: https://example.com/awesome-avatar.png
+  websiteUrl: https://example.com
+  description: A great organization
