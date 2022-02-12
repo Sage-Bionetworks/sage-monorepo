@@ -3,19 +3,18 @@
   "sourceRoot": "libs/api-docs/src",
   "projectType": "library",
   "targets": {
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "lintFilePatterns": ["libs/api-docs/**/*.ts"]
+        "command": "redoc-cli bundle ../api-spec/openapi.yaml",
+        "cwd": "libs/api-docs"
       }
     },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api-docs"],
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "jestConfig": "libs/api-docs/jest.config.js",
-        "passWithNoTests": true
+        "command": "redoc-cli serve ../api-spec/openapi.yaml",
+        "cwd": "libs/api-docs"
       }
     }
   },
