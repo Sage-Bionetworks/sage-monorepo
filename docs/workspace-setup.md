@@ -1,5 +1,9 @@
 ## Workspace setup
 
+## Nx references
+
+- [Approved plugins]
+
 ### Requirements
 
 - [yarn]
@@ -22,6 +26,13 @@ nx g @nrwl/angular:lib shared/data-access-user
 nx g @nrwl/angular:service user --project=shared-data-access-user
 ```
 
+### Add api-spec library
+
+```console
+yarn add -D @trumbitta/nx-plugin-openapi
+```
+
 <!-- Links -->
 
 [yarn]: https://yarnpkg.com/
+[Approved plugins]: https://github.com/nrwl/nx/blob/master/community/approved-plugins.json
