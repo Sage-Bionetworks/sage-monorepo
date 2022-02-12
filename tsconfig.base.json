@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@challenge-registry/api-angular": ["libs/api-angular/src/index.ts"],
+      "@challenge-registry/api-docs": ["libs/api-docs/src/index.ts"],
       "@challenge-registry/api-spec": ["libs/api-spec/src/index.ts"],
       "@challenge-registry/shared/data-access-user": [
         "libs/shared/data-access-user/src/index.ts"
