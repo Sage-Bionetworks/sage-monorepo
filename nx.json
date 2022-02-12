@@ -16,8 +16,7 @@
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
-      "options": {
-      }
+      "options": {}
     }
   },
   "targetDependencies": {

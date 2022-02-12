@@ -1,0 +1,33 @@
+{
+  "projectType": "library",
+  "root": "libs/api-angular",
+  "sourceRoot": "libs/api-angular/src",
+  "prefix": "challenge-registry",
+  "targets": {
+    "generate-sources": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "openapi-generator-cli generate -g typescript-angular -o src/lib -c openapi-generator.config.yaml -i ../api-spec/openapi.yaml",
+        "cwd": "libs/api-angular"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/api-angular"],
+      "options": {
+        "jestConfig": "libs/api-angular/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/api-angular/src/**/*.ts",
+          "libs/api-angular/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
