@@ -1,0 +1,13 @@
+type: object
+description: A page of Organizations
+allOf:
+  - $ref: ResponsePageMetadata.yaml
+  - type: object
+    properties:
+      organizations:
+        description: An array of Organizations
+        type: array
+        items:
+          $ref: Organization.yaml
+    required:
+      - organizations

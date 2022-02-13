@@ -1,0 +1,13 @@
+type: object
+description: A page of Users
+allOf:
+  - $ref: ResponsePageMetadata.yaml
+  - type: object
+    properties:
+      users:
+        description: An array of Users
+        type: array
+        items:
+          $ref: User.yaml
+    required:
+      - users

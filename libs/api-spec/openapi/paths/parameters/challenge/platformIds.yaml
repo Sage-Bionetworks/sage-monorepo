@@ -1,0 +1,8 @@
+name: platformIds
+description: Array of challenge platform ids used to filter the results
+in: query
+required: false
+schema:
+  type: array
+  items:
+    $ref: ../../../components/parameters/ChallengePlatformId.yaml

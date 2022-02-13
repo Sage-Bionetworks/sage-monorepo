@@ -1,0 +1,8 @@
+name: status
+description: Array of challenge status used to filter the results
+in: query
+required: false
+schema:
+  type: array
+  items:
+    $ref: ../../../components/parameters/ChallengeStatus.yaml

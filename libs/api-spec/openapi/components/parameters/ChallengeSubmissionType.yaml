@@ -1,0 +1,7 @@
+description: The submission type of the challenge
+type: string
+enum:
+  - DockerImage
+  - PredictionFile
+  - Other
+example: DockerImage

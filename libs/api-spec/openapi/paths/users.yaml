@@ -1,0 +1,72 @@
+post:
+  tags:
+    - User
+  summary: Create a user
+  description: Create a user with the specified account name
+  operationId: createUser
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/UserCreateRequest.yaml
+    required: true
+  responses:
+    '201':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserCreateResponse.yaml
+      description: Success
+      links:
+        GetUserById:
+          $ref: ../components/links/GetUserById.yaml
+        DeleteUserById:
+          $ref: ../components/links/DeleteUserById.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '409':
+      $ref: ../components/responses/Conflict.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
+get:
+  tags:
+    - User
+  summary: Get all users
+  description: Returns the users
+  operationId: listUsers
+  security:
+    - BearerAuth: []
+    - OAuth: []
+  parameters:
+    - $ref: parameters/limit.yaml
+    - $ref: parameters/offset.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PageOfUsers.yaml
+      description: Success
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
+delete:
+  tags:
+    - User
+  summary: Delete all users
+  description: Delete all users
+  operationId: deleteAllUsers
+  security:
+    - ApiKeyAuth: []
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/EmptyObject.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

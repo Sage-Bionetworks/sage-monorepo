@@ -1,0 +1,43 @@
+parameters:
+  - in: path
+    name: userId
+    description: The unique identifier of the user, either the user account ID or login
+    required: true
+    schema:
+      $ref: ../components/parameters/AccountId.yaml
+get:
+  tags:
+    - User
+  summary: Get a user
+  description: Returns the user specified
+  operationId: getUser
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/User.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
+delete:
+  tags:
+    - User
+  summary: Delete a user
+  description: Deletes the user specified
+  operationId: deleteUser
+  security:
+    - ApiKeyAuth: []
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/EmptyObject.yaml
+    '400':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

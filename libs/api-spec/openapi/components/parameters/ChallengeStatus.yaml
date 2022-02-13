@@ -1,0 +1,7 @@
+description: The status of the challenge
+type: string
+enum:
+  - upcoming
+  - active
+  - completed
+example: active

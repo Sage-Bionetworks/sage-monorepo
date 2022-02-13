@@ -1,0 +1,8 @@
+name: difficulty
+description: Array of challenge difficulty levels used to filter the results
+in: query
+required: false
+schema:
+  type: array
+  items:
+    $ref: ../../../components/parameters/ChallengeDifficulty.yaml

@@ -1,0 +1,30 @@
+{
+  "projectType": "library",
+  "root": "libs/api-spec",
+  "sourceRoot": "libs/api-spec/src",
+  "prefix": "challenge-registry",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "openapi bundle -o openapi openapi/openapi.yaml",
+        "cwd": "libs/api-spec"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "openapi preview-docs openapi/openapi.yaml",
+        "cwd": "libs/api-spec"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "lint-openapi --config .validaterc --ruleset .spectral.yaml -v openapi.yaml",
+        "cwd": "libs/api-spec"
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,20 @@
+type: object
+description: A user or organization account
+properties:
+  id:
+    $ref: ../parameters/AccountId.yaml
+  login:
+    $ref: ../parameters/AccountLogin.yaml
+  type:
+    type: string
+    enum:
+      - User
+      - Organization
+required:
+  - id
+  - login
+  - type
+example:
+  id: 507f1f77bcf86cd799439011
+  login: awesome-user
+  type: User

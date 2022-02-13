@@ -1,0 +1,13 @@
+type: object
+description: A page of ChallengePlatforms
+allOf:
+  - $ref: ResponsePageMetadata.yaml
+  - type: object
+    properties:
+      challengePlatforms:
+        description: An array of ChallengePlatforms
+        type: array
+        items:
+          $ref: ChallengePlatform.yaml
+    required:
+      - challengePlatforms

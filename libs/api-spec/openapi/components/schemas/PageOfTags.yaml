@@ -1,0 +1,13 @@
+type: object
+description: A page of Tags
+allOf:
+  - $ref: ResponsePageMetadata.yaml
+  - type: object
+    properties:
+      tags:
+        description: An array of Tags
+        type: array
+        items:
+          $ref: Tag.yaml
+    required:
+      - tags

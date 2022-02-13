@@ -1,0 +1,8 @@
+name: incentiveTypes
+description: Array of challenge incentive types used to filter the results
+in: query
+required: false
+schema:
+  type: array
+  items:
+    $ref: ../../../components/parameters/ChallengeIncentiveType.yaml

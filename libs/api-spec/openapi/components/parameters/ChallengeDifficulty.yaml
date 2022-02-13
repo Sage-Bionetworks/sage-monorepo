@@ -1,0 +1,7 @@
+description: The difficulty level of a challenge
+type: string
+enum:
+  - GoodForBeginners
+  - Intermediate
+  - Advanced
+example: Intermediate

@@ -1,0 +1,6 @@
+operationId: getOrganization
+description: >
+  The `id` value returned in the response can be used as the
+  `organizationId` parameter in `GET /organizations/{organizationId}`
+parameters:
+  organizationId: $response.body#/organizationId

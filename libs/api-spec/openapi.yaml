@@ -1,0 +1,2640 @@
+openapi: 3.0.2
+info:
+  version: 0.6.0
+  title: Registry of Open Community Challenges API
+  contact:
+    name: The ROCC Team
+    email: thomas.schaffter@sagebionetworks.org
+    url: https://Sage-Bionetworks.github.io/rocc-schemas
+  license:
+    name: Apache 2.0
+    url: https://Sage-Bionetworks.github.io/rocc-schemas
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+  description: |
+    The OpenAPI specification implemented by the Challenge Registries.
+    # Introduction
+    TBA
+tags:
+  - name: Account
+    description: Operations about accounts
+  - name: Auth
+    description: Operations about authentication and authorization
+  - name: Challenge
+    description: Operations about challenges
+  - name: ChallengePlatform
+    description: Operations about challenge platforms
+  - name: Grant
+    description: Operations about grants
+  - name: Organization
+    description: Operations about organizations
+  - name: OrgMembership
+    description: Operations about org memberships
+  - name: Registry
+    description: Operations about the registry
+  - name: User
+    description: Operations about users
+  - name: HealthCheck
+    description: Operations about health checks
+servers:
+  - url: '{scheme}://localhost:8080/api/v1'
+    variables:
+      scheme:
+        enum:
+          - http
+          - https
+        default: http
+paths:
+  /accounts/{login}:
+    parameters:
+      - in: path
+        name: login
+        description: The login of an account
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+    get:
+      tags:
+        - Account
+      summary: Get an account
+      description: Returns the user or org account
+      operationId: getAccount
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /auth/local:
+    post:
+      tags:
+        - Auth
+      summary: Authentify a local account
+      description: Authentify a local account with the specified credential
+      operationId: authLocal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalAuthRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocalAuthResponse'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /auth/google:
+    get:
+      tags:
+        - Auth
+      summary: Authentify a local account with Google OAuth 2.1
+      description: Authentify a local account with Google OAuth 2.1
+      operationId: authGoogle
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+  /challenges:
+    get:
+      tags:
+        - Challenge
+      summary: List all the challenges
+      description: Returns all the challenges
+      operationId: listChallenges
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/direction'
+        - $ref: '#/components/parameters/searchTerms'
+        - $ref: '#/components/parameters/topics'
+        - $ref: '#/components/parameters/inputDataTypes'
+        - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/platformIds'
+        - $ref: '#/components/parameters/difficulty'
+        - $ref: '#/components/parameters/submissionTypes'
+        - $ref: '#/components/parameters/incentiveTypes'
+        - $ref: '#/components/parameters/startDateRange'
+        - $ref: '#/components/parameters/orgIds'
+        - $ref: '#/components/parameters/organizerIds'
+        - $ref: '#/components/parameters/sponsorIds'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfChallenges'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Challenge
+      summary: Delete all challenges
+      description: Delete all challenges
+      operationId: deleteAllChallenges
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challenges/{accountName}:
+    parameters:
+      - in: path
+        name: accountName
+        description: The name of the account that owns the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+    post:
+      tags:
+        - Challenge
+      summary: Add a challenge
+      description: Adds a challenge
+      operationId: createChallenge
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeCreateResponse'
+          description: Success
+          links:
+            GetChallengeById:
+              $ref: '#/components/links/GetChallengeById'
+            DeleteChallengeById:
+              $ref: '#/components/links/DeleteChallengeById'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Challenge
+      summary: List all the challenges owned by the specified account
+      description: List all the challenges owned by the specified account
+      operationId: listAccountChallenges
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/searchTerms'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfChallenges'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challenges/{accountName}/{challengeName}:
+    parameters:
+      - in: path
+        name: accountName
+        description: The name of the account that owns the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+      - in: path
+        name: challengeName
+        description: The name of the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+    get:
+      tags:
+        - Challenge
+      summary: Get a challenge
+      description: Returns the challenge specified
+      operationId: getChallenge
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Challenge
+      summary: Delete a challenge
+      description: Deletes the challenge specified
+      operationId: deleteChallenge
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challenges/{accountName}/{challengeName}/organizers:
+    parameters:
+      - in: path
+        name: accountName
+        description: The name of the account that owns the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+      - in: path
+        name: challengeName
+        description: The name of the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+    post:
+      tags:
+        - Challenge
+      summary: Create a challenge organizer
+      description: Create a challenge organizer
+      operationId: createChallengeOrganizer
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeOrganizerCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeOrganizerCreateResponse'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Challenge
+      summary: List organizers
+      description: Lists the organizers of the challenge.
+      operationId: listChallengeOrganizers
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeOrganizerList'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challenges/{accountName}/{challengeName}/organizers/{organizerId}:
+    parameters:
+      - in: path
+        name: accountName
+        description: The name of the account that owns the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+      - in: path
+        name: challengeName
+        description: The name of the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+      - in: path
+        name: organizerId
+        description: The identifier of the challenge organizer
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeOrganizerId'
+    delete:
+      tags:
+        - Challenge
+      summary: Delete a challenge organizer
+      description: Deletes the challenge organizer specified
+      operationId: deleteChallengeOrganizer
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '400':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challenges/{accountName}/{challengeName}/readme:
+    parameters:
+      - in: path
+        name: accountName
+        description: The name of the account that owns the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+      - in: path
+        name: challengeName
+        description: The name of the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+    patch:
+      tags:
+        - Challenge
+      summary: Update a challenge README
+      description: Update a challenge README
+      operationId: updateChallengeReadme
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeReadmeUpdateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Challenge
+      summary: Get a challenge README
+      description: Returns the challenge README specified
+      operationId: getChallengeReadme
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeReadme'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challenges/{accountName}/{challengeName}/sponsors:
+    parameters:
+      - in: path
+        name: accountName
+        description: The name of the account that owns the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+      - in: path
+        name: challengeName
+        description: The name of the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+    post:
+      tags:
+        - Challenge
+      summary: Create a challenge sponsor
+      description: Create a challenge sponsor
+      operationId: createChallengeSponsor
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeSponsorCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeSponsorCreateResponse'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Challenge
+      summary: List sponsors
+      description: Lists the sponsors of the challenge.
+      operationId: listChallengeSponsors
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeSponsorList'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challenges/{accountName}/{challengeName}/sponsors/{sponsorId}:
+    parameters:
+      - in: path
+        name: accountName
+        description: The name of the account that owns the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+      - in: path
+        name: challengeName
+        description: The name of the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+      - in: path
+        name: sponsorId
+        description: The identifier of the challenge sponsor
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeSponsorId'
+    delete:
+      tags:
+        - Challenge
+      summary: Delete a challenge sponsor
+      description: Deletes the challenge sponsor specified
+      operationId: deleteChallengeSponsor
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '400':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challenges/{accountName}/{challengeName}/stargazers:
+    parameters:
+      - in: path
+        name: accountName
+        description: The name of the account that owns the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+      - in: path
+        name: challengeName
+        description: The name of the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+    get:
+      tags:
+        - Challenge
+      summary: List stargazers
+      description: Lists the people that have starred the challenge.
+      operationId: listChallengeStargazers
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfUsers'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challenges/{accountName}/{challengeName}/topics:
+    parameters:
+      - in: path
+        name: accountName
+        description: The name of the account that owns the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+      - in: path
+        name: challengeName
+        description: The name of the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+    get:
+      tags:
+        - Challenge
+      summary: List stargazers
+      description: Lists the challenge topics.
+      operationId: listChallengeTopics
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfTopics'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challengePlatforms:
+    post:
+      tags:
+        - ChallengePlatform
+      summary: Create a challenge platform
+      description: Create a challenge platform with the specified ID
+      operationId: createChallengePlatform
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengePlatformCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatformCreateResponse'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - ChallengePlatform
+      summary: Get all challenge platforms
+      description: Returns the challenge platforms
+      operationId: listChallengePlatforms
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfChallengePlatforms'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - ChallengePlatform
+      summary: Delete all challenge platforms
+      description: Delete all challenge platforms
+      operationId: deleteAllChallengePlatforms
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challengePlatforms/{challengePlatformId}:
+    parameters:
+      - in: path
+        name: challengePlatformId
+        description: The unique identifier of the challenge platform
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengePlatformId'
+    get:
+      tags:
+        - ChallengePlatform
+      summary: Get a challenge platform
+      description: Returns the challenge platform specified
+      operationId: getChallengePlatform
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatform'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - ChallengePlatform
+      summary: Delete a challenge platform
+      description: Deletes the challenge platform specified
+      operationId: deleteChallengePlatform
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /grants:
+    post:
+      tags:
+        - Grant
+      summary: Create a grant
+      description: Create a grant with the specified name
+      operationId: createGrant
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GrantCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrantCreateResponse'
+          description: Success
+          links:
+            GetGrantById:
+              $ref: '#/components/links/GetGrantById'
+            DeleteGrantById:
+              $ref: '#/components/links/DeleteGrantById'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Grant
+      summary: Get all grants
+      description: Returns the grants
+      operationId: listGrants
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfGrants'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Grant
+      summary: Delete all grants
+      description: Delete all grants
+      operationId: deleteAllGrants
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /grants/{grantId}:
+    parameters:
+      - in: path
+        name: grantId
+        description: The ID of the grant that is being created
+        required: true
+        schema:
+          $ref: '#/components/schemas/GrantId'
+    get:
+      tags:
+        - Grant
+      summary: Get a grant
+      description: Returns the grant specified
+      operationId: getGrant
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grant'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Grant
+      summary: Delete a grant
+      description: Deletes the grant specified
+      operationId: deleteGrant
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /healthcheck:
+    get:
+      tags:
+        - HealthCheck
+      summary: Get health check information
+      description: Get information about the health of the service
+      operationId: getHealthCheck
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheck'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /organizations:
+    post:
+      tags:
+        - Organization
+      summary: Create an organization
+      description: Create an organization with the specified account name
+      operationId: createOrganization
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationCreateResponse'
+          description: Success
+          links:
+            GetOrganizationById:
+              $ref: '#/components/links/GetOrganizationById'
+            DeleteOrganizationById:
+              $ref: '#/components/links/DeleteOrganizationById'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Organization
+      summary: Get all organizations
+      description: Returns the organizations
+      operationId: listOrganizations
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfOrganizations'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Organization
+      summary: Delete all organizations
+      description: Delete all organizations
+      operationId: deleteAllOrganizations
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /organizations/{organizationId}:
+    parameters:
+      - in: path
+        name: organizationId
+        description: >-
+          The unique identifier of the organization, either the user ID or
+          account name
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+    get:
+      tags:
+        - Organization
+      summary: Get an organization
+      description: Returns the organization specified
+      operationId: getOrganization
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Organization
+      summary: Delete an organization
+      description: Deletes the organization specified
+      operationId: deleteOrganization
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /orgMemberships:
+    post:
+      tags:
+        - OrgMembership
+      summary: Create an org membership
+      description: Create an org membership
+      operationId: createOrgMembership
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrgMembershipCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrgMembershipCreateResponse'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - OrgMembership
+      summary: List all the org memberships
+      description: Returns the org memberships
+      operationId: listOrgMemberships
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/orgId'
+        - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfOrgMemberships'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - OrgMembership
+      summary: Delete all org memberships
+      description: Delete all org memberships
+      operationId: deleteAllOrgMemberships
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /orgMemberships/{orgMembershipId}:
+    parameters:
+      - in: path
+        name: orgMembershipId
+        description: The unique identifier of the org membership
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrgMembershipId'
+    get:
+      tags:
+        - OrgMembership
+      summary: Get an org membership
+      description: Returns the org membership specified
+      operationId: getOrgMembership
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrgMembership'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - OrgMembership
+      summary: Delete an org membership
+      description: Deletes the org membership specified
+      operationId: deleteOrgMembership
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /registry:
+    get:
+      tags:
+        - Registry
+      summary: Get registry information
+      description: Get information about the registry
+      operationId: getRegistry
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registry'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /user:
+    get:
+      tags:
+        - User
+      summary: Get the authenticated user
+      description: Get the authenticated user
+      operationId: getAuthenticatedUser
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /user/starred:
+    get:
+      tags:
+        - User
+      summary: List challenges starred by the authenticated user
+      description: Lists challenges the authenticated user has starred.
+      operationId: listStarredChallenges
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfChallenges'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /user/orgs:
+    get:
+      tags:
+        - User
+      summary: List organizations of the authenticated user
+      description: Lists organizations the authenticated user belongs to.
+      operationId: listAuthenticatedUserOrganizations
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfOrganizations'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /user/starred/{accountName}/{challengeName}:
+    parameters:
+      - in: path
+        name: accountName
+        description: The name of the account that owns the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+      - in: path
+        name: challengeName
+        description: The name of the challenge
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+    get:
+      tags:
+        - User
+      summary: Check if a challenge is starred by the authenticated user
+      description: Check if a challenge is starred by the authenticated user
+      operationId: isStarredChallenge
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Response if this challenge is starred by you
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - User
+      summary: Star a challenge for the authenticated user
+      description: Star a challenge for the authenticated user
+      operationId: starChallenge
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - User
+      summary: Unstar a challenge for the authenticated user
+      description: Unstar a challenge for the authenticated user
+      operationId: unstarChallenge
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /users:
+    post:
+      tags:
+        - User
+      summary: Create a user
+      description: Create a user with the specified account name
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreateResponse'
+          description: Success
+          links:
+            GetUserById:
+              $ref: '#/components/links/GetUserById'
+            DeleteUserById:
+              $ref: '#/components/links/DeleteUserById'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - User
+      summary: Get all users
+      description: Returns the users
+      operationId: listUsers
+      security:
+        - BearerAuth: []
+        - OAuth: []
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfUsers'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - User
+      summary: Delete all users
+      description: Delete all users
+      operationId: deleteAllUsers
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /users/{userId}:
+    parameters:
+      - in: path
+        name: userId
+        description: The unique identifier of the user, either the user account ID or login
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+    get:
+      tags:
+        - User
+      summary: Get a user
+      description: Returns the user specified
+      operationId: getUser
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - User
+      summary: Delete a user
+      description: Deletes the user specified
+      operationId: deleteUser
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '400':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /users/{userId}/orgs:
+    parameters:
+      - in: path
+        name: userId
+        description: The unique identifier of the user, either the user account ID or login
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+    get:
+      tags:
+        - User
+      summary: List orgsnizations of a user
+      description: Lists organizations a user belongs to.
+      operationId: listUserOrganizations
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfOrganizations'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /users/{userId}/starred:
+    parameters:
+      - in: path
+        name: userId
+        description: The unique identifier of the user, either the user account ID or login
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+    get:
+      tags:
+        - User
+      summary: List challenges starred by a user
+      description: Lists challenges a user has starred.
+      operationId: listUserStarredChallenges
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfChallenges'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    OAuth:
+      type: oauth2
+      description: For more information, see https://api.challenge-registry.org/docs/oauth
+      flows:
+        implicit:
+          authorizationUrl: /oauth2/authorize
+          scopes:
+            read:users: read users info
+            write:users: modify or remove users
+  schemas:
+    AccountLogin:
+      description: The user or organization account name
+      type: string
+      minLength: 3
+      maxLength: 25
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example: awesome-user
+    AccountId:
+      description: The unique identifier of an account
+      type: string
+      example: 507f1f77bcf86cd799439011
+    Account:
+      type: object
+      description: A user or organization account
+      properties:
+        id:
+          $ref: '#/components/schemas/AccountId'
+        login:
+          $ref: '#/components/schemas/AccountLogin'
+        type:
+          type: string
+          enum:
+            - User
+            - Organization
+      required:
+        - id
+        - login
+        - type
+      example:
+        id: 507f1f77bcf86cd799439011
+        login: awesome-user
+        type: User
+    Error:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: >-
+            A human readable explanation specific to this occurrence of the
+            problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+      required:
+        - title
+        - status
+    LocalAuthRequest:
+      type: object
+      description: The information required to authentify a local account
+      properties:
+        login:
+          $ref: '#/components/schemas/AccountLogin'
+        password:
+          type: string
+      required:
+        - login
+        - password
+      example:
+        login: awesome-user
+        password: yourpassword
+    LocalAuthResponse:
+      type: object
+      description: The token returned after the authentication of a local account
+      properties:
+        token:
+          type: string
+      required:
+        - token
+      example:
+        token: >-
+          eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2MTNlM2RiNWNhYzdjZDcwNmNjZDBjNDEiLCJpYXQiOjE2MzE0Njg5ODEsImV4cCI6MTYzMTQ2ODk4Nn0.shJH6Tp19nzjU8Bnlov55hqtkwwu6E_5ZTrhOZu8dyQ
+    EmptyObject:
+      type: object
+      description: Empty JSON object
+    Topic:
+      description: The topic
+      type: string
+      minLength: 3
+      maxLength: 30
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example:
+        - breast-cancer
+        - ehr
+    ChallengeInputDataType:
+      description: A challenge input data type
+      type: string
+      minLength: 3
+      maxLength: 30
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example:
+        - genomic
+        - clinical
+    ChallengeStatus:
+      description: The status of the challenge
+      type: string
+      enum:
+        - upcoming
+        - active
+        - completed
+      example: active
+    ChallengePlatformId:
+      description: The unique identifier of a challenge platform
+      type: string
+      example: 507f1f77bcf86cd799439011
+    ChallengeDifficulty:
+      description: The difficulty level of a challenge
+      type: string
+      enum:
+        - GoodForBeginners
+        - Intermediate
+        - Advanced
+      example: Intermediate
+    ChallengeSubmissionType:
+      description: The submission type of the challenge
+      type: string
+      enum:
+        - DockerImage
+        - PredictionFile
+        - Other
+      example: DockerImage
+    ChallengeIncentiveType:
+      description: The incentive type of the challenge
+      type: string
+      enum:
+        - Monetary
+        - Publication
+        - SpeakingEngagement
+        - Other
+      example: Monetary
+    DateRange:
+      type: object
+      description: A date range
+      properties:
+        start:
+          description: Start date of the date range
+          type: string
+          format: date
+        end:
+          description: End date of the date range
+          type: string
+          format: date
+      example:
+        start: '2021-07-17'
+        end: '2021-07-17'
+    OrgId:
+      description: The unique identifier of an organization
+      type: string
+      example: 507f1f77bcf86cd799439011
+    UserId:
+      description: The unique identifier of a user
+      type: string
+      example: 507f1f77bcf86cd799439011
+    ResponsePageMetadata:
+      type: object
+      description: A page of results
+      properties:
+        offset:
+          description: Index of the first result that must be returned
+          type: integer
+        limit:
+          description: Maximum number of results returned
+          type: integer
+        paging:
+          description: Links to navigate to different pages of results
+          type: object
+          properties:
+            next:
+              description: Link to the next page of results
+              type: string
+              format: uri
+        totalResults:
+          description: Total number of results in the result set
+          type: integer
+      required:
+        - offset
+        - limit
+        - paging
+        - totalResults
+    ChallengeId:
+      description: The unique identifier of the challenge
+      type: string
+      example: 507f1f77bcf86cd799439011
+    ChallengeCreateResponse:
+      type: object
+      description: The unique identifier of the challenge created
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengeId'
+      required:
+        - id
+      example:
+        id: 507f1f77bcf86cd799439011
+    ChallengeName:
+      description: The name of the a challenge
+      type: string
+      minLength: 3
+      maxLength: 60
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example: awesome-challenge
+    ChallengeCreateRequest:
+      type: object
+      description: The information used to create a challenge
+      properties:
+        name:
+          $ref: '#/components/schemas/ChallengeName'
+        displayName:
+          type: string
+          minLength: 3
+          maxLength: 60
+        description:
+          description: A short description of the challenge
+          type: string
+          nullable: true
+          maxLength: 280
+        websiteUrl:
+          type: string
+          format: uri
+        status:
+          $ref: '#/components/schemas/ChallengeStatus'
+        startDate:
+          type: string
+          format: date
+          nullable: true
+        endDate:
+          type: string
+          format: date
+          nullable: true
+        incentiveTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeIncentiveType'
+          nullable: true
+        platformId:
+          $ref: '#/components/schemas/ChallengePlatformId'
+          nullable: true
+        difficulty:
+          $ref: '#/components/schemas/ChallengeDifficulty'
+        submissionTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+          nullable: true
+        topics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Topic'
+          maxItems: 30
+        inputDataTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeInputDataType'
+          maxItems: 10
+          nullable: true
+        doi:
+          type: string
+          nullable: true
+        participantCount:
+          type: integer
+          minimum: 0
+          nullable: true
+      required:
+        - name
+        - description
+      example:
+        name: awesome-challenge
+        displayName: Awesome Challenge
+        description: This challenge is awesome.
+        websiteUrl: https://synapse.org/awesome-challenge
+        status: active
+        startDate: '2020-11-10'
+        endDate: '2020-12-31'
+        platformId: 507f1f77bcf86cd799439011
+        submissionTypes:
+          - PredictionFile
+          - DockerImage
+        incentiveTypes:
+          - Monetary
+          - Publication
+        topics:
+          - breast-cancer
+          - covid
+        dataTypes:
+          - genomic
+          - ehr
+        doi: http://doi.org/10.5281/zenodo.3714971
+        participantCount: 100
+    ChallengeReadmeId:
+      description: The unique identifier of a challenge README
+      type: string
+      example: 507f1f77bcf86cd799439011
+    Challenge:
+      type: object
+      description: A challenge
+      allOf:
+        - $ref: '#/components/schemas/ChallengeCreateResponse'
+        - $ref: '#/components/schemas/ChallengeCreateRequest'
+        - type: object
+          properties:
+            fullName:
+              type: string
+            ownerId:
+              $ref: '#/components/schemas/AccountId'
+            readmeId:
+              $ref: '#/components/schemas/ChallengeReadmeId'
+            featured:
+              description: Whether the challenge is featured
+              type: boolean
+              default: false
+            participantCount:
+              description: Number of challenge participants
+              type: integer
+              default: 0
+            viewCount:
+              description: Number of challenge views
+              type: integer
+              default: 0
+            starredCount:
+              description: Number of times the challenge has been starred by users
+              type: integer
+              default: 0
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+          required:
+            - fullName
+            - ownerId
+            - readmeId
+            - createdAt
+            - updatedAt
+          example:
+            fullName: dream/awesome-challenge
+            ownerId: 507f1f77bcf86cd799439011
+            createdAt: '2017-07-08T16:18:44-04:00'
+            updatedAt: '2017-07-08T16:18:44-04:00'
+    PageOfChallenges:
+      type: object
+      description: A page of Challenges
+      allOf:
+        - $ref: '#/components/schemas/ResponsePageMetadata'
+        - type: object
+          properties:
+            challenges:
+              description: An array of Challenges
+              type: array
+              items:
+                $ref: '#/components/schemas/Challenge'
+          required:
+            - challenges
+    ChallengeOrganizerId:
+      description: The unique identifier of a challenge organizer
+      type: string
+      example: 507f1f77bcf86cd799439011
+    ChallengeOrganizerCreateResponse:
+      type: object
+      description: The unique identifier of the challenge organizer created
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengeOrganizerId'
+      required:
+        - id
+      example:
+        id: 507f1f77bcf86cd799439011
+    ChallengeOrganizerRole:
+      description: The role of the challenge organizer
+      type: string
+      enum:
+        - ChallengeLead
+        - InfrastructureLead
+      example: ChallengeLead
+    ChallengeOrganizerCreateRequest:
+      type: object
+      description: The information used to create a challenge organizer
+      properties:
+        name:
+          type: string
+        login:
+          $ref: '#/components/schemas/AccountLogin'
+          nullable: true
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeOrganizerRole'
+      required:
+        - name
+      example:
+        name: John Smith
+        login: jsmith
+        roles:
+          - ChallengeLead
+          - InfrastructureLead
+    ChallengeOrganizer:
+      type: object
+      description: A challenge organizer
+      allOf:
+        - $ref: '#/components/schemas/ChallengeOrganizerCreateResponse'
+        - $ref: '#/components/schemas/ChallengeOrganizerCreateRequest'
+    ChallengeOrganizerList:
+      type: object
+      description: A list of challenge organizers
+      properties:
+        challengeOrganizers:
+          description: A list of ChallengeOrganizers
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeOrganizer'
+      required:
+        - challengeOrganizers
+    ChallengeReadmeCreateResponse:
+      type: object
+      description: The unique identifier of the challenge README created
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengeReadmeId'
+      required:
+        - id
+      example:
+        id: 507f1f77bcf86cd799439011
+    ChallengeReadmeCreateRequest:
+      type: object
+      description: The information used to the README of a challenge
+      properties:
+        text:
+          type: string
+      required:
+        - text
+      example:
+        text: A great README text
+    ChallengeReadme:
+      type: object
+      description: A challenge README
+      allOf:
+        - $ref: '#/components/schemas/ChallengeReadmeCreateResponse'
+        - $ref: '#/components/schemas/ChallengeReadmeCreateRequest'
+        - type: object
+          properties:
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+          required:
+            - createdAt
+            - updatedAt
+          example:
+            createdAt: '2017-07-08T16:18:44-04:00'
+            updatedAt: '2017-07-08T16:18:44-04:00'
+    ChallengeReadmeUpdateRequest:
+      type: object
+      description: The new README content of a challenge
+      properties:
+        text:
+          type: string
+      required:
+        - text
+      example:
+        text: A great README text
+    ChallengeSponsorId:
+      description: The unique identifier of a challenge sponsor
+      type: string
+      example: 507f1f77bcf86cd799439011
+    ChallengeSponsorCreateResponse:
+      type: object
+      description: The unique identifier of a challenge sponsor
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengeSponsorId'
+      required:
+        - id
+      example:
+        id: 507f1f77bcf86cd799439011
+    ChallengeSponsorRole:
+      description: The role of a challenge sponsor
+      type: string
+      enum:
+        - ChallengeOrganizer
+        - ComputeProvider
+        - DataProvider
+        - Funder
+        - Other
+      example: DataProvider
+    ChallengeSponsorCreateRequest:
+      type: object
+      description: The information used to create a challenge sponsor
+      properties:
+        name:
+          type: string
+        login:
+          $ref: '#/components/schemas/AccountLogin'
+          nullable: true
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeSponsorRole'
+      required:
+        - name
+      example:
+        name: IBM
+        login: ibm
+        roles:
+          - ComputeProvider
+          - DataProvider
+    ChallengeSponsor:
+      type: object
+      description: A challenge sponsor
+      allOf:
+        - $ref: '#/components/schemas/ChallengeSponsorCreateResponse'
+        - $ref: '#/components/schemas/ChallengeSponsorCreateRequest'
+    ChallengeSponsorList:
+      type: object
+      description: A list of challenge sponsors
+      properties:
+        challengeSponsors:
+          description: A list of ChallengeSponsors
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeSponsor'
+      required:
+        - challengeSponsors
+    UserCreateResponse:
+      type: object
+      description: The response returned after the creation of the user
+      properties:
+        id:
+          $ref: '#/components/schemas/AccountId'
+      required:
+        - id
+      example:
+        id: 507f1f77bcf86cd799439011
+    Email:
+      description: An email address
+      type: string
+      format: email
+      example: john.smith@example.com
+    User:
+      type: object
+      description: A simple user
+      allOf:
+        - $ref: '#/components/schemas/UserCreateResponse'
+        - type: object
+          properties:
+            login:
+              type: string
+            email:
+              $ref: '#/components/schemas/Email'
+            name:
+              type: string
+              nullable: true
+            avatarUrl:
+              type: string
+              format: uri
+              example: https://example.com/awesome-avatar.png
+              nullable: true
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            type:
+              type: string
+              example: User
+            bio:
+              type: string
+              nullable: true
+          required:
+            - login
+            - email
+            - createdAt
+            - updatedAt
+            - type
+          example:
+            login: awesome-user
+            email: awesome-user@example.org
+            name: Awesome User
+            avatarUrl: https://example.com/awesome-avatar.png
+            bio: A great bio
+            createdAt: '2017-07-08T16:18:44-04:00'
+            updatedAt: '2017-07-08T16:18:44-04:00'
+            type: User
+    PageOfUsers:
+      type: object
+      description: A page of Users
+      allOf:
+        - $ref: '#/components/schemas/ResponsePageMetadata'
+        - type: object
+          properties:
+            users:
+              description: An array of Users
+              type: array
+              items:
+                $ref: '#/components/schemas/User'
+          required:
+            - users
+    ArrayOfTopics:
+      type: object
+      description: An array of topics
+      properties:
+        topics:
+          description: An array of Topics
+          type: array
+          items:
+            $ref: '#/components/schemas/Topic'
+      required:
+        - topics
+      example:
+        topics:
+          - breast-cancer
+          - ehr
+    ChallengePlatformCreateResponse:
+      type: object
+      description: The unique identifier of the challenge platform created
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengePlatformId'
+      required:
+        - id
+      example:
+        id: 507f1f77bcf86cd799439011
+    ChallengePlatformName:
+      description: The name of the challenge platform
+      type: string
+      minLength: 3
+      maxLength: 30
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example: awesome-challenge-platform
+    ChallengePlatformCreateRequest:
+      type: object
+      description: The information used to create a challenge platform
+      properties:
+        name:
+          $ref: '#/components/schemas/ChallengePlatformName'
+        displayName:
+          type: string
+        websiteUrl:
+          type: string
+          format: uri
+        avatarUrl:
+          type: string
+          format: uri
+      required:
+        - name
+        - displayName
+        - websiteUrl
+        - avatarUrl
+      example:
+        name: awesome-challenge-platform
+        displayName: Awesome Challenge Platform
+        websiteUrl: https://awesome-challenge-platform.io
+        avatarUrl: https://awesome-challenge-platform.io/logo.png
+    ChallengePlatform:
+      type: object
+      description: A challenge platform
+      allOf:
+        - $ref: '#/components/schemas/ChallengePlatformCreateResponse'
+        - $ref: '#/components/schemas/ChallengePlatformCreateRequest'
+        - type: object
+          properties:
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+          required:
+            - createdAt
+            - updatedAt
+          example:
+            createdAt: '2017-07-08T16:18:44-04:00'
+            updatedAt: '2017-07-08T16:18:44-04:00'
+    PageOfChallengePlatforms:
+      type: object
+      description: A page of ChallengePlatforms
+      allOf:
+        - $ref: '#/components/schemas/ResponsePageMetadata'
+        - type: object
+          properties:
+            challengePlatforms:
+              description: An array of ChallengePlatforms
+              type: array
+              items:
+                $ref: '#/components/schemas/ChallengePlatform'
+          required:
+            - challengePlatforms
+    GrantId:
+      description: The unique identifier of a grant
+      type: string
+      example: 507f1f77bcf86cd799439011
+    GrantCreateResponse:
+      type: object
+      description: The unique identifier of the grant created
+      properties:
+        id:
+          $ref: '#/components/schemas/GrantId'
+      required:
+        - id
+      example:
+        id: 507f1f77bcf86cd799439011
+    GrantCreateRequest:
+      type: object
+      description: The information required to create a grant
+      properties:
+        name:
+          description: The name of the grant
+          type: string
+      required:
+        - name
+      example:
+        name: Awesome Grant
+    Grant:
+      type: object
+      description: Information about monetary resources for challenge
+      allOf:
+        - $ref: '#/components/schemas/GrantCreateResponse'
+        - $ref: '#/components/schemas/GrantCreateRequest'
+    PageOfGrants:
+      type: object
+      description: A page of Grants
+      allOf:
+        - $ref: '#/components/schemas/ResponsePageMetadata'
+        - type: object
+          properties:
+            grants:
+              description: An array of Grants
+              type: array
+              items:
+                $ref: '#/components/schemas/Grant'
+          required:
+            - grants
+    HealthCheck:
+      type: object
+      description: Represents the health of a service
+      properties:
+        status:
+          description: Indicates whether the service status is acceptable or not
+          type: string
+          enum:
+            - pass
+            - fail
+            - warn
+      required:
+        - status
+    OrganizationCreateResponse:
+      type: object
+      description: The unique identifier of the org created
+      properties:
+        id:
+          $ref: '#/components/schemas/AccountId'
+      required:
+        - id
+      example:
+        id: 507f1f77bcf86cd799439011
+    OrganizationCreateRequest:
+      type: object
+      description: The information required to create an org account
+      properties:
+        login:
+          type: string
+        email:
+          $ref: '#/components/schemas/Email'
+        name:
+          type: string
+          nullable: true
+        avatarUrl:
+          type: string
+          format: uri
+          example: https://example.com/awesome-avatar.png
+          nullable: true
+        websiteUrl:
+          type: string
+          format: uri
+          example: https://example.com
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+        - login
+        - email
+      example:
+        login: awesome-org
+        email: contact@example.org
+        name: Awesome Org
+        avatarUrl: https://example.com/awesome-avatar.png
+        websiteUrl: https://example.com
+        description: A great organization
+    Organization:
+      type: object
+      description: An organization
+      allOf:
+        - $ref: '#/components/schemas/OrganizationCreateResponse'
+        - $ref: '#/components/schemas/OrganizationCreateRequest'
+        - type: object
+          properties:
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            type:
+              type: string
+              example: Organization
+          required:
+            - createdAt
+            - updatedAt
+            - type
+          example:
+            createdAt: '2017-07-08T16:18:44-04:00'
+            updatedAt: '2017-07-08T16:18:44-04:00'
+            type: Organization
+    PageOfOrganizations:
+      type: object
+      description: A page of Organizations
+      allOf:
+        - $ref: '#/components/schemas/ResponsePageMetadata'
+        - type: object
+          properties:
+            organizations:
+              description: An array of Organizations
+              type: array
+              items:
+                $ref: '#/components/schemas/Organization'
+          required:
+            - organizations
+    OrgMembershipId:
+      description: The unique identifier of the org membership
+      type: string
+      example: 507f1f77bcf86cd799439011
+    OrgMembershipCreateResponse:
+      type: object
+      description: The unique identifier of the org membership
+      properties:
+        id:
+          $ref: '#/components/schemas/OrgMembershipId'
+      required:
+        - id
+      example:
+        id: 507f1f77bcf86cd799439011
+    OrgMembershipCreateRequest:
+      type: object
+      description: The information used to create an org membership
+      properties:
+        state:
+          type: string
+          description: >-
+            The state of the member in the organization. The `pending` state
+            indicates the user has not yet accepted an invitation.
+          example: active
+          enum:
+            - active
+            - pending
+        role:
+          type: string
+          description: The user's membership type in the organization.
+          enum:
+            - admin
+            - member
+        organizationId:
+          $ref: '#/components/schemas/OrgId'
+        userId:
+          $ref: '#/components/schemas/UserId'
+      required:
+        - state
+        - role
+        - organizationId
+        - userId
+      example:
+        state: active
+        role: admin
+        organizationId: 507f1f77bcf86cd799439011
+        userId: 507f1f77bcf86cd799439012
+    OrgMembership:
+      type: object
+      description: Information about an org membership
+      allOf:
+        - $ref: '#/components/schemas/OrgMembershipCreateResponse'
+        - $ref: '#/components/schemas/OrgMembershipCreateRequest'
+    PageOfOrgMemberships:
+      type: object
+      description: A page of org memberships
+      allOf:
+        - $ref: '#/components/schemas/ResponsePageMetadata'
+        - type: object
+          properties:
+            orgMemberships:
+              description: An array of org memberships
+              type: array
+              items:
+                $ref: '#/components/schemas/OrgMembership'
+          required:
+            - orgMemberships
+    Registry:
+      type: object
+      description: The Challenge Registry
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        userCount:
+          type: integer
+        orgCount:
+          type: integer
+        challengeCount:
+          type: integer
+      required:
+        - name
+        - description
+        - userCount
+        - orgCount
+        - challengeCount
+      example:
+        name: Challenge Registry
+        description: A great challenge registry
+        userCount: 1000
+        orgCount: 1000
+        challengeCound: 1000
+    UserCreateRequest:
+      type: object
+      description: The information required to create a user account
+      properties:
+        login:
+          type: string
+        email:
+          $ref: '#/components/schemas/Email'
+        password:
+          type: string
+          format: password
+        name:
+          type: string
+          nullable: true
+        avatarUrl:
+          type: string
+          format: uri
+          example: https://example.com/awesome-avatar.png
+          nullable: true
+        bio:
+          type: string
+          nullable: true
+      required:
+        - login
+        - email
+        - password
+      example:
+        login: awesome-user
+        email: awesome-user@example.org
+        password: yourpassword
+        name: Awesome User
+        avatarUrl: https://example.com/awesome-avatar.png
+        bio: A great bio
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: The request conflicts with current state of the target resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    limit:
+      name: limit
+      description: Maximum number of results returned
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 10
+        minimum: 10
+        maximum: 100
+    offset:
+      name: offset
+      description: Index of the first result that must be returned
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - featured
+          - startDate
+          - participantCount
+          - viewCount
+          - starredCount
+          - name
+          - createdAt
+          - updatedAt
+      description: |
+        Properties used to sort the results that must be returned:
+          * featured - featured challenge, from featured to non-featured.
+          * startDate - start date of a challenge, from latest to oldest.
+          * participantCount - number of participants of a challenge, from most to least.
+          * viewCount - number of views of a challenge, from most to least.
+          * starredCount - number of stargazers of a challenge, from most to least.
+          * name - name of a challenge, from A to Z.
+          * createdAt - when a challenge is created, from latest to oldest.
+          * updatedAt - when a challenge is updated, from latest to oldest.
+    direction:
+      name: direction
+      description: Can be either `asc` or `desc`. Ignored without `sort` parameter.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+    searchTerms:
+      name: searchTerms
+      description: A string of search terms used to filter the results
+      in: query
+      required: false
+      schema:
+        type: string
+    topics:
+      name: topics
+      description: Array of topics used to filter the results
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/Topic'
+    inputDataTypes:
+      name: inputDataTypes
+      description: Array of input data types used to filter the results
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengeInputDataType'
+    status:
+      name: status
+      description: Array of challenge status used to filter the results
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengeStatus'
+    platformIds:
+      name: platformIds
+      description: Array of challenge platform ids used to filter the results
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengePlatformId'
+    difficulty:
+      name: difficulty
+      description: Array of challenge difficulty levels used to filter the results
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengeDifficulty'
+    submissionTypes:
+      name: submissionTypes
+      description: Array of challenge submission types used to filter the results
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengeSubmissionType'
+    incentiveTypes:
+      name: incentiveTypes
+      description: Array of challenge incentive types used to filter the results
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengeIncentiveType'
+    startDateRange:
+      name: startDateRange
+      description: Return challenges that start during the date range specified
+      in: query
+      required: false
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/DateRange'
+    orgIds:
+      name: orgIds
+      description: Array of organization ids used to filter the results
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/OrgId'
+    organizerIds:
+      name: organizerIds
+      description: Array of organizer identifiers used to filter the results
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/UserId'
+    sponsorIds:
+      name: sponsorIds
+      description: Array of sponsor org identifiers used to filter the results
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/OrgId'
+    orgId:
+      name: orgId
+      description: An organization identifier used to filter the results
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/OrgId'
+    userId:
+      name: userId
+      description: A user identifier used to filter the results
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/UserId'
+  links:
+    GetChallengeById:
+      operationId: getChallenge
+      description: >
+        The `id` value returned in the response can be used as the `challengeId`
+        parameter in `GET /challenges/{challengeId}`
+      parameters:
+        challengeId: $response.body#/challengeId
+    DeleteChallengeById:
+      operationId: deleteChallenge
+      description: >
+        The `id` value returned in the response can be used as the `challengeId`
+        parameter in `DELETE /challenges/{challengeId}`
+      parameters:
+        challengeId: $response.body#/challengeId
+    GetGrantById:
+      operationId: getGrant
+      description: >
+        The `id` value returned in the response can be used as the `grantId`
+        parameter in `GET /grants/{grantId}`
+      parameters:
+        grantId: $response.body#/grantId
+    DeleteGrantById:
+      operationId: deleteGrant
+      description: >
+        The `id` value returned in the response can be used as the `grantId`
+        parameter in `DELETE /grants/{grantId}`
+      parameters:
+        grantId: $response.body#/grantId
+    GetOrganizationById:
+      operationId: getOrganization
+      description: >
+        The `id` value returned in the response can be used as the
+        `organizationId` parameter in `GET /organizations/{organizationId}`
+      parameters:
+        organizationId: $response.body#/organizationId
+    DeleteOrganizationById:
+      operationId: deleteOrganization
+      description: >
+        The `id` value returned in the response can be used as the
+        `organizationId` parameter in `DELETE /organizations/{organizationId}`
+      parameters:
+        organizationId: $response.body#/organizationId
+    GetUserById:
+      operationId: getUser
+      description: >
+        The `userName` value returned in the response can be used as the
+        `userName` parameter in `GET /users/{userName}`
+      parameters:
+        userName: $response.body#/userName
+    DeleteUserById:
+      operationId: deleteUser
+      description: >
+        The `userName` value returned in the response can be used as the
+        `userName` parameter in `DELETE /users/{userName}`
+      parameters:
+        userName: $response.body#/userName

@@ -1,0 +1,6 @@
+operationId: getChallenge
+description: >
+  The `id` value returned in the response can be used as the
+  `challengeId` parameter in `GET /challenges/{challengeId}`
+parameters:
+  challengeId: $response.body#/challengeId

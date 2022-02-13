@@ -1,4 +1,6 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
+.env
+nx-cloud.env
 
 # compiled output
 /dist
@@ -37,3 +39,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+.angular

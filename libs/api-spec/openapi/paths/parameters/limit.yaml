@@ -1,0 +1,9 @@
+name: limit
+description: Maximum number of results returned
+in: query
+required: false
+schema:
+  type: integer
+  default: 10
+  minimum: 10
+  maximum: 100

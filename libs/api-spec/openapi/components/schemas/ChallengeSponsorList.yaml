@@ -1,0 +1,10 @@
+type: object
+description: A list of challenge sponsors
+properties:
+  challengeSponsors:
+    description: A list of ChallengeSponsors
+    type: array
+    items:
+      $ref: ChallengeSponsor.yaml
+required:
+  - challengeSponsors

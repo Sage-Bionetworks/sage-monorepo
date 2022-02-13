@@ -1,0 +1,43 @@
+parameters:
+  - in: path
+    name: challengePlatformId
+    description: The unique identifier of the challenge platform
+    required: true
+    schema:
+      $ref: ../components/parameters/ChallengePlatformId.yaml
+get:
+  tags:
+    - ChallengePlatform
+  summary: Get a challenge platform
+  description: Returns the challenge platform specified
+  operationId: getChallengePlatform
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ChallengePlatform.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
+delete:
+  tags:
+    - ChallengePlatform
+  summary: Delete a challenge platform
+  description: Deletes the challenge platform specified
+  operationId: deleteChallengePlatform
+  security:
+    - ApiKeyAuth: []
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/EmptyObject.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
