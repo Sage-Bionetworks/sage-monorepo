@@ -5,6 +5,7 @@
     "api-angular": "libs/api-angular",
     "api-docs": "libs/api-docs",
     "api-spec": "libs/api-spec",
+    "db-cli": "apps/db-cli",
     "login": "apps/login",
     "login-e2e": "apps/login-e2e",
     "shared-data-access-user": "libs/shared/data-access-user",

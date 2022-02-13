@@ -1,0 +1,59 @@
+{
+  "users": [
+    {
+      "_id": "613913256b8190e8cc02ed27",
+      "email": "awesome-user@example.org",
+      "login": "awesome-user",
+      "name": "Awesome User",
+      "bio": "Lorem ipsum doleors amet commodo dolors amet dolors amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor."
+    },
+    {
+      "_id": "61391334790dbc2726b9d37f",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/3056480",
+      "email": "thomas.schaffter@sagebionetworks.org",
+      "login": "tschaffter",
+      "name": "Thomas Schaffter",
+      "bio": "A great bio"
+    },
+    {
+      "_id": "613913b20f2bccc6d225ceef",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/73901500",
+      "email": "rchai@sagebionetworks.org",
+      "login": "rrchai",
+      "name": "Rongrong Chai",
+      "bio": "A great bio"
+    },
+    {
+      "_id": "61391449adff709da1c4248a",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/9377970",
+      "email": "verena.chung@sagebionetworks.org",
+      "login": "vpchung",
+      "name": "Verena Chung",
+      "bio": "A great bio"
+    },
+    {
+      "_id": "6139146ba836320b7a3d063d",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/5205872",
+      "email": "jiaxin.zheng@sagebionetworks.org",
+      "login": "jiaxinmachine88",
+      "name": "Jiaxin Zheng",
+      "bio": "A great bio"
+    },
+    {
+      "_id": "6148c569f57a85fb53d4d7b0",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1247823198118457345/x0qkF7SX_400x400.jpg",
+      "email": "contact@email.com",
+      "login": "areinke",
+      "name": "Annika Reinke",
+      "bio": "A great bio"
+    },
+    {
+      "_id": "6148c5b6f57a85fb53d4d7b1",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/920707237856899073/bgsuvcXt_400x400.jpg",
+      "email": "sbakas@upenn.edu",
+      "login": "sbakas",
+      "name": "Spyridon Bakas",
+      "bio": "A great bio"
+    }
+  ]
+}

@@ -33,6 +33,13 @@ yarn add -D @trumbitta/nx-plugin-openapi
 yarn add -D @redocly/openapi-cli
 ```
 
+### Add db-cli
+
+```console
+yarn install -D @nrwl/js
+nx generate @nrwl/js:app db-cli
+```
+
 <!-- Links -->
 
 [yarn]: https://yarnpkg.com/

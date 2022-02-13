@@ -6,7 +6,8 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "postinstall": "ngcc --properties es2015 browser module main"
+    "postinstall": "ngcc --properties es2015 browser module main",
+    "db-cli": "node dist/apps/db-cli/src/index.js"
   },
   "private": true,
   "dependencies": {
@@ -19,8 +20,12 @@
     "@angular/platform-browser": "~13.2.0",
     "@angular/platform-browser-dynamic": "~13.2.0",
     "@angular/router": "~13.2.0",
+    "commander": "^8.2.0",
+    "mongoose": "^6.0.9",
     "rxjs": "~7.4.0",
     "tslib": "^2.0.0",
+    "validator": "^13.6.0",
+    "winston": "^3.3.3",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -36,6 +41,7 @@
     "@nrwl/cypress": "13.8.1",
     "@nrwl/eslint-plugin-nx": "13.8.1",
     "@nrwl/jest": "13.8.1",
+    "@nrwl/js": "^13.8.1",
     "@nrwl/linter": "13.8.1",
     "@nrwl/node": "^13.8.1",
     "@nrwl/nx-cloud": "^13.1.4",
@@ -45,6 +51,7 @@
     "@redocly/openapi-cli": "^1.0.0-beta.81",
     "@types/jest": "27.0.2",
     "@types/node": "16.11.7",
+    "@types/validator": "^13.7.1",
     "@typescript-eslint/eslint-plugin": "~5.10.0",
     "@typescript-eslint/parser": "~5.10.0",
     "cypress": "^9.1.0",

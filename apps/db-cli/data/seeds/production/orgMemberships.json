@@ -1,0 +1,53 @@
+{
+  "orgMemberships": [
+    {
+      "_id": "61b26e5de98893556289e1a1",
+      "state": "active",
+      "role": "admin",
+      "organizationId": "61b26e5ce98893556289df29",
+      "userId": "61b26e5de98893556289e1a0"
+    },
+    {
+      "_id": "61b26e5de98893556289e1a2",
+      "state": "active",
+      "role": "admin",
+      "organizationId": "61b26e5ce98893556289df29",
+      "userId": "61b26e5de98893556289e19f"
+    },
+    {
+      "_id": "61b26e5de98893556289e1a3",
+      "state": "active",
+      "role": "admin",
+      "organizationId": "61b26e5ce98893556289df29",
+      "userId": "61b26e5de98893556289e19b"
+    },
+    {
+      "_id": "61b26e5de98893556289e1a4",
+      "state": "active",
+      "role": "admin",
+      "organizationId": "61b26e5ce98893556289df29",
+      "userId": "61b26e5de98893556289e19e"
+    },
+    {
+      "_id": "61b26e5de98893556289e1a5",
+      "state": "active",
+      "role": "admin",
+      "organizationId": "61b26e5ce98893556289df29",
+      "userId": "61b26e5de98893556289e19d"
+    },
+    {
+      "_id": "61b26e5de98893556289e1a6",
+      "state": "active",
+      "role": "admin",
+      "organizationId": "61b26e5ce98893556289df29",
+      "userId": "61b26e5de98893556289e19a"
+    },
+    {
+      "_id": "61b26e5de98893556289e1a7",
+      "state": "active",
+      "role": "admin",
+      "organizationId": "61b26e5ce98893556289df29",
+      "userId": "61b26e5de98893556289e19c"
+    }
+  ]
+}
