@@ -1,15 +1,14 @@
-# db-client
+# DB Client
 
-This application was generated with [Nx](https://nx.dev).
+This CLI is a tool to manage the content of the Challenge Registry MongoDB
+instance.
 
-## Building
+## Usage
 
-Run `nx build db-client` to build the application.
+Build the client.
 
-## Starting
+    nx build db-client
 
-Run `nx start db-client` to start/run the application.
+Run the client.
 
-## Running unit tests
-
-Run `nx test db-client` to execute the unit tests via [Jest](https://jestjs.io).
+    yarn run db-client --help
