@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"
+
+[packages]
+Werkzeug = "==0.16.1"
+swagger-ui-bundle = ">=0.0.2"
+python-dateutil = ">=2.6.0"
+Flask = "==1.1.2"
+
+[packages.connexion]
+extras = [ "swagger-ui",]
+version = "<=2.3.0"
