@@ -5,9 +5,21 @@ instance.
 
 ## Usage
 
+Check the code style.
+
+    nx lint db-cli
+
+Test the client.
+
+    nx test db-cli
+
 Build the client.
 
     nx build db-cli
+
+Run the client in watch mode.
+
+    nx serve db-cli
 
 Run the client.
 
