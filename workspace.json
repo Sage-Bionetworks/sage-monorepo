@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "api": "apps/api",
     "api-angular": "libs/api-angular",
     "api-docs": "libs/api-docs",
     "api-spec": "libs/api-spec",

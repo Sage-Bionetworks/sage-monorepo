@@ -37,6 +37,7 @@
     "@nrwl/eslint-plugin-nx": "13.8.1",
     "@nrwl/jest": "13.8.1",
     "@nrwl/linter": "13.8.1",
+    "@nrwl/node": "^13.8.1",
     "@nrwl/nx-cloud": "^13.1.4",
     "@nrwl/tao": "13.8.1",
     "@nrwl/workspace": "13.8.1",
