@@ -18,7 +18,7 @@ export class App {
     this.program = new Command();
 
     this.program
-      .name('rocc-db-client')
+      .name('rocc-db-cli')
       .usage('[global options] command')
       .version(Pkg.version, '-v, --version', 'output the current version')
       .description(Pkg.description);

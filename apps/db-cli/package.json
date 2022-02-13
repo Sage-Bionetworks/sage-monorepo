@@ -1,5 +1,5 @@
 {
-  "name": "@challenge-registry/db-client",
+  "name": "@challenge-registry/db-cli",
   "version": "0.0.1",
   "type": "commonjs",
   "description": "Client for managing a ROCC DB instance."

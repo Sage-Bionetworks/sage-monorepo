@@ -7,8 +7,8 @@ instance.
 
 Build the client.
 
-    nx build db-client
+    nx build db-cli
 
 Run the client.
 
-    yarn run db-client --help
+    yarn run db-cli --help
