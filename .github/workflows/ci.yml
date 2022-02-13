@@ -10,7 +10,7 @@ env:
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_CLOUD_DISTRIBUTED_EXECUTION: true
   NX_CLOUD_ENV_NAME: 'Node 12.x -'
-  # NX_VERBOSE_LOGGING : true
+  NX_VERBOSE_LOGGING : true
 
 jobs:
   main:
