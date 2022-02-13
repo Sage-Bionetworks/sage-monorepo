@@ -3,6 +3,17 @@
   "sourceRoot": "apps/api/src",
   "projectType": "application",
   "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "pipenv install",
+          "pipenv run pip install --upgrade jsonschema"
+        ],
+        "cwd": "apps/api",
+        "parallel": false
+      }
+    },
     "generate-sources": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {

@@ -12,7 +12,8 @@
           "rm -fr src/lib/model",
           "openapi-generator-cli generate -g typescript-angular -o src/lib -c openapi-generator.config.yaml -i ../api-spec/openapi.yaml"
         ],
-        "cwd": "libs/api-angular"
+        "cwd": "libs/api-angular",
+        "parallel": false
       }
     },
     "test": {
