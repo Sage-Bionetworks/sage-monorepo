@@ -16,10 +16,10 @@ info:
   x-logo:
     url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
 servers:
-- url: '{scheme}://localhost:8080/api/v1'
+- url: '{protocol}://rocc.org/api/v1'
   variables:
-    scheme:
-      default: http
+    protocol:
+      default: https
       enum:
       - http
       - https
@@ -82,21 +82,6 @@ paths:
       tags:
       - Account
       x-openapi-router-controller: openapi_server.controllers.account_controller
-  /auth/google:
-    get:
-      description: Authentify a local account with Google OAuth 2.1
-      operationId: auth_google
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmptyObject'
-          description: Success
-      summary: Authentify a local account with Google OAuth 2.1
-      tags:
-      - Auth
-      x-openapi-router-controller: openapi_server.controllers.auth_controller
   /auth/local:
     post:
       description: Authentify a local account with the specified credential
@@ -2321,9 +2306,6 @@ paths:
                 $ref: '#/components/schemas/Error'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      security:
-      - BearerAuth: []
-      - OAuth: []
       summary: Get all users
       tags:
       - User
@@ -2941,7 +2923,6 @@ components:
       required:
       - login
       - password
-      title: LocalAuthRequest
       type: object
     LocalAuthResponse:
       description: The token returned after the authentication of a local account
@@ -2953,9 +2934,6 @@ components:
       required:
       - token
       title: LocalAuthResponse
-      type: object
-    EmptyObject:
-      description: Empty JSON object
       type: object
     Topic:
       description: The topic
@@ -3046,24 +3024,20 @@ components:
       properties:
         offset:
           description: Index of the first result that must be returned
-          title: offset
           type: integer
         limit:
           description: Maximum number of results returned
-          title: limit
           type: integer
         paging:
           $ref: '#/components/schemas/ResponsePageMetadata_paging'
         totalResults:
           description: Total number of results in the result set
-          title: totalResults
           type: integer
       required:
       - limit
       - offset
       - paging
       - totalResults
-      title: ResponsePageMetadata
       type: object
     ChallengeId:
       description: The unique identifier of the challenge
@@ -3182,7 +3156,6 @@ components:
       required:
       - description
       - name
-      title: ChallengeCreateRequest
       type: object
     ChallengeReadmeId:
       description: The unique identifier of a challenge README
@@ -3202,6 +3175,9 @@ components:
       - $ref: '#/components/schemas/PageOfChallenges_allOf'
       description: A page of Challenges
       title: PageOfChallenges
+      type: object
+    EmptyObject:
+      description: Empty JSON object
       type: object
     ChallengeOrganizerId:
       description: The unique identifier of a challenge organizer
@@ -3252,7 +3228,6 @@ components:
           type: array
       required:
       - name
-      title: ChallengeOrganizerCreateRequest
       type: object
     ChallengeOrganizer:
       allOf:
@@ -3289,7 +3264,6 @@ components:
           type: string
       required:
       - id
-      title: ChallengeReadmeCreateResponse
       type: object
     ChallengeReadmeCreateRequest:
       description: The information used to the README of a challenge
@@ -3300,7 +3274,6 @@ components:
           type: string
       required:
       - text
-      title: ChallengeReadmeCreateRequest
       type: object
     ChallengeReadme:
       allOf:
@@ -3319,7 +3292,6 @@ components:
           type: string
       required:
       - text
-      title: ChallengeReadmeUpdateRequest
       type: object
     ChallengeSponsorId:
       description: The unique identifier of a challenge sponsor
@@ -3373,7 +3345,6 @@ components:
           type: array
       required:
       - name
-      title: ChallengeSponsorCreateRequest
       type: object
     ChallengeSponsor:
       allOf:
@@ -3496,7 +3467,6 @@ components:
       - displayName
       - name
       - websiteUrl
-      title: ChallengePlatformCreateRequest
       type: object
     ChallengePlatform:
       allOf:
@@ -3540,7 +3510,6 @@ components:
           type: string
       required:
       - name
-      title: GrantCreateRequest
       type: object
     Grant:
       allOf:
@@ -3622,7 +3591,6 @@ components:
       required:
       - email
       - login
-      title: OrganizationCreateRequest
       type: object
     Organization:
       allOf:
@@ -3693,7 +3661,6 @@ components:
       - role
       - state
       - userId
-      title: OrgMembershipCreateRequest
       type: object
     OrgMembership:
       allOf:
@@ -3771,7 +3738,6 @@ components:
       - email
       - login
       - password
-      title: UserCreateRequest
       type: object
     ResponsePageMetadata_paging:
       description: Links to navigate to different pages of results
@@ -3828,7 +3794,6 @@ components:
       - ownerId
       - readmeId
       - updatedAt
-      title: Challenge_allOf
       type: object
     PageOfChallenges_allOf:
       properties:
@@ -3836,11 +3801,9 @@ components:
           description: An array of Challenges
           items:
             $ref: '#/components/schemas/Challenge'
-          title: challenges
           type: array
       required:
       - challenges
-      title: PageOfChallenges_allOf
       type: object
     ChallengeReadme_allOf:
       example:
@@ -3856,7 +3819,6 @@ components:
       required:
       - createdAt
       - updatedAt
-      title: ChallengeReadme_allOf
       type: object
     User_allOf:
       example:
@@ -3902,7 +3864,6 @@ components:
       - login
       - type
       - updatedAt
-      title: User_allOf
       type: object
     PageOfUsers_allOf:
       properties:
@@ -3910,11 +3871,9 @@ components:
           description: An array of Users
           items:
             $ref: '#/components/schemas/User'
-          title: users
           type: array
       required:
       - users
-      title: PageOfUsers_allOf
       type: object
     PageOfChallengePlatforms_allOf:
       properties:
@@ -3922,11 +3881,9 @@ components:
           description: An array of ChallengePlatforms
           items:
             $ref: '#/components/schemas/ChallengePlatform'
-          title: challengePlatforms
           type: array
       required:
       - challengePlatforms
-      title: PageOfChallengePlatforms_allOf
       type: object
     PageOfGrants_allOf:
       properties:
@@ -3934,11 +3891,9 @@ components:
           description: An array of Grants
           items:
             $ref: '#/components/schemas/Grant'
-          title: grants
           type: array
       required:
       - grants
-      title: PageOfGrants_allOf
       type: object
     Organization_allOf:
       example:
@@ -3959,7 +3914,6 @@ components:
       - createdAt
       - type
       - updatedAt
-      title: Organization_allOf
       type: object
     PageOfOrganizations_allOf:
       properties:
@@ -3967,11 +3921,9 @@ components:
           description: An array of Organizations
           items:
             $ref: '#/components/schemas/Organization'
-          title: organizations
           type: array
       required:
       - organizations
-      title: PageOfOrganizations_allOf
       type: object
     PageOfOrgMemberships_allOf:
       properties:
@@ -3979,11 +3931,9 @@ components:
           description: An array of org memberships
           items:
             $ref: '#/components/schemas/OrgMembership'
-          title: orgMemberships
           type: array
       required:
       - orgMemberships
-      title: PageOfOrgMemberships_allOf
       type: object
   securitySchemes:
     BearerAuth:
@@ -3996,14 +3946,3 @@ components:
       name: X-API-Key
       type: apiKey
       x-apikeyInfoFunc: openapi_server.controllers.security_controller_.info_from_ApiKeyAuth
-    OAuth:
-      description: For more information, see https://api.challenge-registry.org/docs/oauth
-      flows:
-        implicit:
-          authorizationUrl: /oauth2/authorize
-          scopes:
-            read:users: read users info
-            write:users: modify or remove users
-      type: oauth2
-      x-tokenInfoFunc: openapi_server.controllers.security_controller_.info_from_OAuth
-      x-scopeValidateFunc: openapi_server.controllers.security_controller_.validate_scope_OAuth

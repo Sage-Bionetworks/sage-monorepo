@@ -23,22 +23,21 @@ class TestChallengePlatformController(BaseTestCase):
         Create a challenge platform
         """
         challenge_platform_create_request = {
-  "name" : "awesome-challenge-platform",
-  "displayName" : "Awesome Challenge Platform",
-  "websiteUrl" : "https://awesome-challenge-platform.io",
-  "avatarUrl" : "https://awesome-challenge-platform.io/logo.png"
+  "name" : "Awesome Challenge Platform",
+  "url" : "https://awesome-challenge-platform.io"
 }
+        query_string = [('challengePlatformId', 'challenge_platform_id_example')]
         headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer special-key',
         }
         response = self.client.open(
             '/api/v1/challengePlatforms',
             method='POST',
             headers=headers,
             data=json.dumps(challenge_platform_create_request),
-            content_type='application/json')
+            content_type='application/json',
+            query_string=query_string)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -49,7 +48,6 @@ class TestChallengePlatformController(BaseTestCase):
         """
         headers = { 
             'Accept': 'application/json',
-            'ApiKeyAuth': 'special-key',
         }
         response = self.client.open(
             '/api/v1/challengePlatforms',
@@ -65,7 +63,6 @@ class TestChallengePlatformController(BaseTestCase):
         """
         headers = { 
             'Accept': 'application/json',
-            'ApiKeyAuth': 'special-key',
         }
         response = self.client.open(
             '/api/v1/challengePlatforms/{challenge_platform_id}'.format(challenge_platform_id='challenge_platform_id_example'),

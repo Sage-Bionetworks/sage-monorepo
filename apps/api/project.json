@@ -7,8 +7,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "pipenv install",
-          "pipenv run pip install --upgrade jsonschema"
+          "pipenv install"
         ],
         "cwd": "apps/api",
         "parallel": false

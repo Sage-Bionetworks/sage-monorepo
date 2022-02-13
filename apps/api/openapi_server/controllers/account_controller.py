@@ -1,9 +1,8 @@
-import connexion
-import six
+from mongoengine.errors import DoesNotExist
 
+from openapi_server.dbmodels.account import Account as DbAccount
 from openapi_server.models.account import Account  # noqa: E501
 from openapi_server.models.error import Error  # noqa: E501
-from openapi_server import util
 
 
 def get_account(login):  # noqa: E501
@@ -16,4 +15,14 @@ def get_account(login):  # noqa: E501
 
     :rtype: Account
     """
-    return 'do some magic!'
+    try:
+        db_account = DbAccount.objects.get(login=login)
+        res = Account.from_dict(db_account.to_dict())
+        status = 200
+    except DoesNotExist:
+        status = 404
+        res = Error("The specified resource was not found", status)
+    except Exception as error:
+        status = 500
+        res = Error("Internal error", status, str(error))
+    return res, status
