@@ -1,0 +1,85 @@
+{
+  "organizations": [
+    {
+      "_id": "613931b5ae0267da3f0275c7",
+      "name": "Awesome Org",
+      "description": "This is an awesome organization",
+      "email": "contact@example.org",
+      "login": "awesome-org",
+      "websiteUrl": "https://www.synapse.org/",
+      "avatarUrl": "https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/synapse.png"
+    },
+    {
+      "_id": "613931c01193d6884a4e617a",
+      "name": "The Dialogue on Reverse Engineering Assessment and Methods",
+      "description": "This is an awesome organization",
+      "email": "dream@sagebionetworks.org",
+      "login": "dream",
+      "websiteUrl": "https://dreamchallenges.org/",
+      "avatarUrl": "https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/dream.png"
+    },
+    {
+      "_id": "613931c6bef3ffc6e5091e4b",
+      "name": "Sage Bionetworks",
+      "description": "We help research communities develop reliable outcomes to advance our understanding of human health and to speed the translation of science into medicine.",
+      "email": "info@sagebase.org",
+      "login": "sage-bionetworks",
+      "websiteUrl": "https://sagebionetworks.org/",
+      "avatarUrl": "https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/sage-bionetworks.png"
+    },
+    {
+      "_id": "613931cc566bf7138df32788",
+      "name": "Medical Image Computing and Computer Assisted Interventions",
+      "description": "This is an awesome organization",
+      "email": "general-chairs@miccai2021.org",
+      "login": "miccai",
+      "websiteUrl": "https://www.miccai2021.org/",
+      "avatarUrl": "https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/miccai.png"
+    },
+    {
+      "_id": "613931cc566bf7138df32789",
+      "name": "precision FDA",
+      "description": "This is an awesome organization",
+      "email": "precisionfda@fda.hhs.gov",
+      "login": "precisionfda",
+      "websiteUrl": "https://precision.fda.gov/",
+      "avatarUrl": "https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/precisionfda.png"
+    },
+    {
+      "_id": "613931cc566bf7138df32790",
+      "name": "Critical Assessment of Genome Interpretation",
+      "description": "This is an awesome organization",
+      "email": "cagi@genomeinterpretation.org",
+      "login": "cagi",
+      "websiteUrl": "https://genomeinterpretation.org/",
+      "avatarUrl": "https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/cagi.png"
+    },
+    {
+      "_id": "613931cc566bf7138df32791",
+      "name": "Protein Structure Prediction Center",
+      "description": "This is an awesome organization",
+      "email": "casp@predictioncenter.org",
+      "login": "casp",
+      "websiteUrl": "https://predictioncenter.org/",
+      "avatarUrl": "https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/casp.png"
+    },
+    {
+      "_id": "613931cc566bf7138df32792",
+      "name": "Critical Assessment of Massive Data Analysis",
+      "description": "This is an awesome organization",
+      "email": "contact@email.com",
+      "login": "camda",
+      "websiteUrl": "http://camda.info/",
+      "avatarUrl": "https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/camda.png"
+    },
+    {
+      "_id": "613931cc566bf7138df32793",
+      "name": "Critical Assessment of Functional Annotation",
+      "description": "This is an awesome organization",
+      "email": "contact@email.com",
+      "login": "cafa",
+      "websiteUrl": "https://www.biofunctionprediction.org/cafa/",
+      "avatarUrl": "https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/cafa.png"
+    }
+  ]
+}
