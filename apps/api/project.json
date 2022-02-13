@@ -31,6 +31,24 @@
         ],
         "cwd": "apps/api"
       }
+    },
+    "start-db": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "docker compose up -d db"
+        ],
+        "cwd": "apps/api"
+      }
+    },
+    "stop-db": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "docker compose stop db"
+        ],
+        "cwd": "apps/api"
+      }
     }
   },
   "tags": []
