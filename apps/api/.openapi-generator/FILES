@@ -1,9 +1,7 @@
 .dockerignore
 .gitignore
-.travis.yml
 Dockerfile
 README.md
-git_push.sh
 openapi_server/__init__.py
 openapi_server/__main__.py
 openapi_server/controllers/__init__.py
@@ -87,7 +85,5 @@ openapi_server/openapi/openapi.yaml
 openapi_server/test/__init__.py
 openapi_server/typing_utils.py
 openapi_server/util.py
-requirements.txt
 setup.py
-test-requirements.txt
 tox.ini

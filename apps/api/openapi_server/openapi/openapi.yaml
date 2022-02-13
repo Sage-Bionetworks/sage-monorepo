@@ -16,10 +16,10 @@ info:
   x-logo:
     url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
 servers:
-- url: '{protocol}://rocc.org/api/v1'
+- url: '{scheme}://localhost:8080/api/v1'
   variables:
-    protocol:
-      default: https
+    scheme:
+      default: http
       enum:
       - http
       - https

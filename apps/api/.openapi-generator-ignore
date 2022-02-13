@@ -24,4 +24,5 @@
 .travis.yml
 git_push.sh
 requirements.txt
+setup.py
 test-requirements.txt

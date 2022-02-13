@@ -11,6 +11,15 @@
         ],
         "cwd": "apps/api"
       }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "pipenv run python -m openapi_server"
+        ],
+        "cwd": "apps/api"
+      }
     }
   },
   "tags": []
