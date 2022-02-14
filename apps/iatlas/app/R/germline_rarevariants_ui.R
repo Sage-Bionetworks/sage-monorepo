@@ -28,7 +28,7 @@ germline_rarevariants_ui <- function(id){
                                              "Mean" = "mean",
                                              "Min" = "min",
                                              "Max" = "max",
-                                             "Number of patients with mutation" = "n_mutant"
+                                             "Number of patients with mutation" = "n_mutants"
                               ),
                               selected = "p_value")
       )

@@ -8,6 +8,18 @@ ici_hazard_ratio_main_server <- function(
 
       ns <- session$ns
 
+      output$excluded_dataset <- shiny::renderText({
+        if(identical(unique(cohort_obj()$group_tbl$dataset_display), cohort_obj()$dataset_displays)){
+          ""
+        }else{
+          excluded_datasets <- setdiff(cohort_obj()$dataset_displays, unique(cohort_obj()$group_tbl$dataset_display))
+          paste(
+            paste(excluded_datasets, collapse = ", "),
+            " not included because all samples were filtered in ICI Cohort Selection."
+          )
+        }
+      })
+
       #store selected variables
       selected_vals <- shiny::reactiveValues(vars = c("IMPRES", "Vincent_IPRES_NonResponder"))
       observe({
@@ -69,8 +81,6 @@ ici_hazard_ratio_main_server <- function(
 
       #getting survival data of all ICI pre treatment samples
       OS_data <- shiny::reactive({
-        #shiny::req(input$datasets_mult)
-
         iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment") %>%
           dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
           dplyr::distinct(sample_name) %>%
@@ -81,10 +91,9 @@ ici_hazard_ratio_main_server <- function(
       })
 
       samples <- shiny::eventReactive(input$go_button, {
-        #shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
         shiny::req(OS_data())
 
-        iatlas.api.client::query_dataset_samples(datasets = cohort_obj()[["dataset_names"]]) %>%
+        cohort_obj()$sample_tbl %>%
           dplyr::inner_join(., OS_data(), by = "sample_name") %>%
           dplyr::group_by(dataset_name) %>%
           dplyr::group_modify(~ dplyr::mutate(., has_surv_data = !all(is.na(.x[[input$timevar]])))) %>%
@@ -98,7 +107,7 @@ ici_hazard_ratio_main_server <- function(
         shiny::req(input$var2_cox, samples())
         shiny::validate(shiny::need(nrow(samples())>0, "Selected survival endpoint not available for selected dataset(s)"))
 
-        #Let's assume that variables selected are a mix of features and tags, and do both queries
+        #Let's assume that selected variables are a mix of features and tags, and do both queries
         new_feat <- iatlas.api.client::query_feature_values(features = input$var2_cox) %>%
           dplyr::select(sample, feature_name, feature_value) %>%
           tidyr::pivot_wider(names_from = feature_name, values_from = feature_value)
@@ -120,7 +129,7 @@ ici_hazard_ratio_main_server <- function(
       dataset_ft <- shiny::eventReactive(input$go_button, {
         shiny::req(input$var2_cox, feature_df_mult())
         #creates a df with the dataset x feature combinations that are available
-        iatlas.app::get_feature_by_dataset(
+        get_feature_by_dataset(
           features = input$var2_cox,
           feature_df = features(),
           group_df = groups(),
@@ -132,7 +141,7 @@ ici_hazard_ratio_main_server <- function(
 
       coxph_df <- shiny::eventReactive(input$go_button, {
         shiny::req(input$var2_cox, dataset_ft())
-        iatlas.app::build_coxph_df(datasets = cohort_obj()[["dataset_names"]],
+        build_coxph_df(datasets = cohort_obj()[["dataset_names"]],
                                    data = feature_df_mult(),
                                    feature = input$var2_cox,
                                    time = input$timevar,
@@ -142,7 +151,6 @@ ici_hazard_ratio_main_server <- function(
       })
 
       output$mult_forest <- plotly::renderPlotly({
-        # shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
         shiny::validate(need(length(input$var2_cox)>0, "Select at least one variable."))
         all_forests <- purrr::map(.x = unique(coxph_df()$dataset),
                                   .f = build_forestplot_dataset,
@@ -158,15 +166,14 @@ ici_hazard_ratio_main_server <- function(
       })
 
       output$mult_heatmap <- plotly::renderPlotly({
-        # shiny::validate(need(!is.null(input$datasets_mult), "Select at least one dataset."))
         shiny::validate(need(length(input$var2_cox)>0, "Select at least one variable."))
 
-        heatmap_df <-  iatlas.app::build_heatmap_df(coxph_df())
+        heatmap_df <-  build_heatmap_df(coxph_df())
 
-        p <- iatlas.app::create_heatmap(heatmap_df, "heatmap", scale_colors = T, legend_title = "log10(Hazard Ratio)")
+        p <- create_heatmap(heatmap_df, "heatmap", scale_colors = T, legend_title = "log10(Hazard Ratio)")
 
         if(mult_coxph() == FALSE & length(input$var2_cox)>1){
-          p <- iatlas.app::add_BH_annotation(coxph_df(), p)
+          p <- add_BH_annotation(coxph_df(), p)
         }
         p
       })
@@ -204,19 +211,22 @@ ici_hazard_ratio_main_server <- function(
         ))
       })
 
-      shiny::observeEvent(input$go_button, {#samples(),{ #checking for datasets that have no annotation for the selected survival endpoint
+      missing_os <- shiny::reactive({
         shiny::req(samples())
 
-        ds_with_os <- unique(samples()$dataset_name)
+        ds_with_os <- unique(coxph_df()$dataset_display)
 
-        if(length(cohort_obj()[["dataset_names"]]) == length(ds_with_os)){
-          output$notification <- shiny::renderText({
-          })
+        if(dplyr::n_distinct(cohort_obj()$group_tbl$dataset_display) != length(ds_with_os)){
+          setdiff(cohort_obj()$group_tbl$dataset_display, ds_with_os)
+        }
+      })
+
+      output$notification <- shiny::renderText({
+        shiny::req(missing_os())
+        if(length(missing_os()) == 0){#no notification to display
+          ""
         }else{
-          output$notification <- shiny::renderText({
-            missing_os <- setdiff(cohort_obj()[["dataset_names"]], ds_with_os)
-            paste0("Selected survival endpoint not available for ", missing_os, collapse = "<br>")
-          })
+          paste0("Selected survival endpoint not available for ", missing_os(), collapse = "<br>")
         }
       })
     }

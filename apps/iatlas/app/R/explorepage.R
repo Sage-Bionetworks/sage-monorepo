@@ -6,8 +6,8 @@ explorepage_ui <- function(){
       "ui_function" = purrr::map(.data$ui_function_string, get)
     )
 
-  analysis_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "analysis")
   ici_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "ici")
+  cg_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "cg")
   tool_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "tool")
 
   # sidebar ----
@@ -18,9 +18,9 @@ explorepage_ui <- function(){
       purrr::pmap(shinydashboard::menuSubItem, icon = shiny::icon("cog"))
   }
 
-  analysis_module_menu_items <- create_menu_subitems(analysis_modules_tbl)
-  ici_module_menu_items      <- create_menu_subitems(ici_modules_tbl)
-  tool_module_menu_items     <- create_menu_subitems(tool_modules_tbl)
+  ici_module_menu_items   <- create_menu_subitems(ici_modules_tbl)
+  cg_module_menu_items    <- create_menu_subitems(cg_modules_tbl)
+  tool_module_menu_items  <- create_menu_subitems(tool_modules_tbl)
 
   sidebar <- shinydashboard::dashboardSidebar(
     shinydashboard::sidebarMenu(
@@ -31,37 +31,37 @@ explorepage_ui <- function(){
         icon = shiny::icon("tachometer-alt")
       ),
       shinydashboard::menuItem(
-        "Data Description",
-        icon = shiny::icon("th-list"),
-        tabName = "data_info"
-      ),
-      shinydashboard::menuItem(
-        "Cohort Selection",
-        tabName = "analysis_cohort_selection",
-        icon = shiny::icon("cog")
-      ),
-      shinydashboard::menuItem(
-        text = "Analysis Modules",
-        icon = shiny::icon("chart-bar"),
-        startExpanded = TRUE,
-        analysis_module_menu_items
-      ),
-      shinydashboard::menuItem(
         "ICI Cohort Selection",
         tabName = "ici_cohort_selection",
         icon = shiny::icon("cog")
       ),
       shinydashboard::menuItem(
-        text = "ICI Modules",
+        text = "ICI Analysis Modules",
         icon = shiny::icon("chart-bar"),
         startExpanded = TRUE,
         ici_module_menu_items
+      ),
+      shinydashboard::menuItem(
+        "CG Cohort Selection",
+        tabName = "cg_cohort_selection",
+        icon = shiny::icon("cog")
+      ),
+      shinydashboard::menuItem(
+        text = "CG Analysis Modules",
+        icon = shiny::icon("chart-bar"),
+        startExpanded = TRUE,
+        cg_module_menu_items
       ),
       shinydashboard::menuItem(
         text = "iAtlas tools",
         icon = shiny::icon("wrench"),
         startExpanded = TRUE,
         tool_module_menu_items
+      ),
+      shinydashboard::menuItem(
+        "Data Description",
+        icon = shiny::icon("th-list"),
+        tabName = "data_info"
       )
     )
   )
@@ -71,30 +71,30 @@ explorepage_ui <- function(){
   # info boxes at top of page
   readout_info_boxes <- dplyr::tibble(
     title = c(
+      "Immune Checkpoint Inhibitors (ICI) datasets:",
+      "Cancer Genomics (CG) datasets:",
       "Immune Readouts:",
-      "Classes of Readouts:",
-      "TCGA Cancers:",
-      "TCGA Samples:"
+      "Samples:"
     ),
     value = c(
+      nrow(iatlas.api.client::query_datasets(types = "ici")),
+      2,
       nrow(iatlas.api.client::query_features()),
-      length(unique(iatlas.api.client::query_features()$class)),
-      nrow(iatlas.api.client::query_tags(
-        datasets = "TCGA", parent_tags = "TCGA_Study"
-      )),
-      11080
+      nrow(iatlas.api.client::query_samples())
     ),
-    icon = purrr::map(c("search", "filter", "flask", "users"), shiny::icon)
+    icon = purrr::map(c("search", "database", "filter", "users"), shiny::icon)
   ) %>%
     purrr::pmap(
       shinydashboard::infoBox,
-      width = 3,
+      width = 6,
       color = "black",
       fill = FALSE
     )
 
   # image boxes at bottom of page that link to module tabs
-  module_image_boxes <- analysis_modules_tbl %>%
+
+  make_image_boxes <- function(tbl){
+    tbl %>%
       dplyr::select(
         "title" = "display",
         "linkId" = "link",
@@ -117,26 +117,61 @@ explorepage_ui <- function(){
         shiny::fluidRow
       )) %>%
       dplyr::pull("row")
+  }
+
+  cg_module_image_boxes  <- make_image_boxes(cg_modules_tbl)
+  ici_module_image_boxes <- make_image_boxes(ici_modules_tbl)
 
   # This is the tab item that users land on
   landing_tab_item <- list(shinydashboard::tabItem(
     tabName = "dashboard",
     iatlas.modules::titleBox("iAtlas Explorer - Home"),
-    iatlas.modules::textBox(
-      width = 12,
-      shiny::includeMarkdown("inst/markdown/explore1.markdown")
-    ),
     iatlas.modules::sectionBox(
       title = "What's Inside",
-      shiny::fluidRow(readout_info_boxes)
+      shiny::column(
+        width = 6,
+        shiny::includeMarkdown("inst/markdown/explore1.markdown")
+      ),
+      shiny::column(
+        width = 6,
+        shiny::verticalLayout(
+          readout_info_boxes[1:2],
+          readout_info_boxes[3:4]
+        )
+      )
     ),
     iatlas.modules::sectionBox(
-      title = "Analysis Modules",
+      title = "Get Started",
+      iatlas.modules::textBox(
+        width = 6,
+        shiny::p(shiny::h4(shiny::strong("1. Build your Cohort"))),
+        shiny::p("Use our cohort selector to explore the available data and narrow down your research targets."),
+        shiny::splitLayout(
+          shiny::actionButton("link_to_ici_cohort_selection", label = "Open ICI Cohort Selection"),
+          shiny::actionButton(inputId = "link_to_cg_cohort_selection", label = "Open CG Cohort Selection")
+        )
+      ),
+      iatlas.modules::textBox(
+        width = 6,
+        shiny::p(shiny::h4(shiny::strong("2. Visualize your data"))),
+        shiny::p("Use our analysis modules to explore the selected cohorts. You can access the analysis modules from the sections below and from the left menu. Any changes in the selected cohort in step 1 will be automatically propagated to the corresponding modules.")
+      )
+    ),
+    iatlas.modules::sectionBox(
+      title = "Immune Checkpoint Inhibition Analysis Modules",
+      iatlas.modules::messageBox(
+        width = 12,
+        shiny::includeMarkdown("inst/markdown/explore3.markdown")
+      ),
+      ici_module_image_boxes
+    ),
+    iatlas.modules::sectionBox(
+      title = "Cancer Genomics Analysis Modules",
       iatlas.modules::messageBox(
         width = 12,
         shiny::includeMarkdown("inst/markdown/explore2.markdown")
       ),
-      module_image_boxes
+      cg_module_image_boxes
     )
   ))
 
@@ -146,7 +181,7 @@ explorepage_ui <- function(){
       dplyr::select(modules_tbl, "label", "ui_function"),
       dplyr::tibble(
         "label" = c(
-          "analysis_cohort_selection",
+          "cg_cohort_selection",
           "ici_cohort_selection",
           "data_info"
         ),
