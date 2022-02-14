@@ -7,7 +7,8 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "pipenv install"
+          "pipenv install --dev",
+          "pipenv run pip install click==8.0.3"
         ],
         "cwd": "apps/api",
         "parallel": false
@@ -46,6 +47,20 @@
         "commands": [
           "docker compose stop db"
         ],
+        "cwd": "apps/api"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "pipenv run black ./openapi_server --check --exclude '(models|test)'",
+        "cwd": "apps/api"
+      }
+    },
+    "lint-fix": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "pipenv run black ./openapi_server --exclude '(models|test)'",
         "cwd": "apps/api"
       }
     }
