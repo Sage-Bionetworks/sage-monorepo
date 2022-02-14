@@ -8,6 +8,7 @@ ici_models_main_ui <- function(id){
       shiny::includeMarkdown("inst/markdown/ici_models.markdown"),
       shiny::actionLink(ns("method_link"), "Click to view method description.")
     ),
+    shiny::htmlOutput(ns("excluded_dataset")),
     iatlas.modules::optionsBox(
       width = 24,
       shiny::column(
@@ -81,9 +82,7 @@ ici_models_main_ui <- function(id){
         shiny::verticalLayout(
           iatlas.modules::messageBox(
             width = 12,
-            textOutput(ns("samples_summary")),
-            shiny::br(),
-            textOutput(ns("train_summary")),
+            shiny::uiOutput(ns("samples_summary")),
             shiny::br(),
             shiny::htmlOutput(ns("missing_data")),
             shiny::htmlOutput(ns("single_level")),

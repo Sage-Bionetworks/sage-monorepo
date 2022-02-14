@@ -10,11 +10,23 @@ ici_distribution_server <- function(
 
       ns <- session$ns
 
+      output$excluded_dataset <- shiny::renderText({
+        if(identical(unique(cohort_obj()$group_tbl$dataset_display), cohort_obj()$dataset_displays)){
+          ""
+        }else{
+          excluded_datasets <- setdiff(cohort_obj()$dataset_displays, unique(cohort_obj()$group_tbl$dataset_display))
+          paste(
+            paste(excluded_datasets, collapse = ", "),
+            " not included because all samples were filtered in ICI Cohort Selection."
+          )
+        }
+      })
+
       output$feature_op <- renderUI({
         selectInput(
           ns("var1_surv"),
           "Select Feature",
-          feature_df %>% iatlas.app::create_nested_list_by_class()
+          feature_df %>% create_nested_list_by_class()
         )
       })
 

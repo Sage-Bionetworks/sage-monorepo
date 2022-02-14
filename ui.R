@@ -28,9 +28,10 @@ ui <- shiny::navbarPage(
   shiny::includeCSS("css/bootstrapTable.min.css"),
   title = shiny::strong("CRI iAtlas Portal"), selected = "Explore",
   shiny::tabPanel("Explore", explorepage_ui(), icon = icon("chart-bar")),
+  shiny::tabPanel("Notebooks", notebookpage_ui(), icon = icon("book-open")),
   shiny::tabPanel("About", aboutpage_ui(), icon = icon("info-circle")),
-  shiny::tabPanel("Documentation", docspage_ui(), icon = icon("file-alt")),
   shiny::tabPanel("Resources", resourcespage_ui(), icon = icon("link")),
+  shiny::tabPanel("Documentation", docspage_ui(), icon = icon("file-alt")),
   header = headerTagList,
   footer = footerTagList,
   collapsible = TRUE,
@@ -56,26 +57,7 @@ ui <- shiny::navbarPage(
       });
       '
     ),
-    shiny::HTML(
-      "
-      <script>
-      (function(i,s,o,g,r,a,m){
-		  i['GoogleAnalyticsObject']=r;i[r]=i[r]||
-		  function(){
-		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();
-		  a=s.createElement(o), m=s.getElementsByTagName(o)[0];
-		  a.async=1;
-		  a.src=g;m.parentNode.insertBefore(a,m)
-		  })
-		  (window, document, 'script',
-		  '//www.google-analytics.com/analytics.js','ga');
-
-		  ga('create', 'UA-121820794-2', 'auto');
-		  ga('send', 'pageview');
-
-		  </script>
-      "
-    )
+    shiny::includeHTML("google_analytics.html")
   )
 )
 
