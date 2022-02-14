@@ -7,8 +7,9 @@ on:
 
 env:
   PRIMARY_NODE_VERSION: 12
+  NX_BRANCH: ${{ github.event.number }}
+  NX_RUN_GROUP: ${{ github.run_id }}
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
-  NX_CLOUD_DISTRIBUTED_EXECUTION: true
   NX_CLOUD_ENV_NAME: 'Node 12.x -'
   NX_VERBOSE_LOGGING : true
 
@@ -27,10 +28,8 @@ jobs:
         with:
           node-version: ${{ env.PRIMARY_NODE_VERSION }}
       - run: npm install
-      - run: npx nx-cloud start-ci-run
       - run: npx nx affected --target=build --parallel --max-parallel=3
       - run: npx nx affected --target=test --parallel --max-parallel=2
-      - run: npx nx-cloud stop-all-agents
   pr:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
@@ -45,22 +44,5 @@ jobs:
         with:
           node-version: ${{ env.PRIMARY_NODE_VERSION }}
       - run: npm install
-      - run: npx nx-cloud start-ci-run
       - run: npx nx affected --target=build --parallel --max-parallel=3
       - run: npx nx affected --target=test --parallel --max-parallel=2
-      - run: npx nx-cloud stop-all-agents
-  agents:
-    runs-on: ubuntu-latest
-    name: Agent 1
-    timeout-minutes: 60
-    strategy:
-      matrix:
-        agent: [ 1, 2, 3 ]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: ${{ env.PRIMARY_NODE_VERSION }}
-      - run: npm install
-      - name: Start Nx Agent ${{ matrix.agent }}
-        run: npx nx-cloud start-agent
