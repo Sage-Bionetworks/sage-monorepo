@@ -3,6 +3,7 @@
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.formatting.provider": "black",
+  "eslint.format.enable": true,
   "editor.tabSize": 2,
   "python.formatting.blackArgs": [],
   "[python]": {
@@ -11,5 +12,13 @@
   },
   "[json]": {
     "editor.tabSize": 2
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   }
 }

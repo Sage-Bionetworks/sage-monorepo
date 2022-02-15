@@ -26,6 +26,14 @@
         "lintFilePatterns": ["apps/db-cli/**/*.ts"]
       }
     },
+    "lint-fix": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/db-cli/**/*.ts"],
+        "fix": true
+      }
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/db-cli"],
