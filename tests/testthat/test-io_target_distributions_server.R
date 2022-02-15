@@ -4,15 +4,27 @@ test_that("io_target_distributions_server", {
     args = list(
       "cohort_obj" = shiny::reactiveVal(
         iatlas.modules2::pcawg_immune_subtype_cohort_obj
-      )
+      ),
+      "mock_event_data" = shiny::reactive(data.frame(
+        "curveNumber" = c(0,0),
+        "pointNumber" = c(0,0),
+        "x" = "C1",
+        "y" = c(5.1, 2.1),
+        "key" = "PCAWG"
+      ))
     ),
     {
+      session$setInputs("distplot-feature_choice" = "340273")
+      session$setInputs("distplot-scale_method_choice" = "None")
+      session$setInputs("distplot-reorder_method_choice" = "None")
+      session$setInputs("distplot-plot_type_choice" = "Violin")
+
       expect_true(is.na(url_gene()))
       expect_null(default_gene())
 
-      expect_type(features(), "list")
+      expect_true(tibble::is_tibble(feature_data()))
       expect_named(
-        features(),
+        feature_data(),
         c(
           "feature_name",
           "feature_display",
@@ -20,28 +32,29 @@ test_that("io_target_distributions_server", {
           "Therapy Type"
         )
       )
-      expect_type(plot_data_function(), "closure")
-      entrez = as.character(features()$feature_name[[1]])
+      expect_type(sample_data_function(), "closure")
+      entrez = as.character(feature_data()$feature_name[[1]])
 
-      plot_data <- plot_data_function()(.feature = entrez)
-      expect_type(plot_data, "list")
+      sample_data <- sample_data_function()(.feature = entrez)
+      expect_true(tibble::is_tibble(sample_data))
       expect_named(
-        plot_data,
+        sample_data,
         c(
           "sample_name",
           "group_name",
           "feature_name",
           "feature_display",
           "feature_value",
-          "group_description",
-          "group_color"
+          "dataset_name"
         )
       )
-      expect_true(nrow(plot_data) > 0)
+      expect_true(nrow(sample_data) > 0)
       expect_equal(
-        unique(plot_data$feature_display),
-        features()$feature_display[[1]]
+        unique(sample_data$feature_display),
+        feature_data()$feature_display[[1]]
       )
+
+      expect_type(result(), "list")
     }
   )
 })
