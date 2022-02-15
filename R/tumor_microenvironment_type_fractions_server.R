@@ -40,6 +40,15 @@ tumor_microenvironment_type_fractions_server <- function(
             "feature_name" = "name",
             "feature_display" = "display",
             "feature_class" = "class"
+          ) %>%
+          dplyr::filter(
+            .data$feature_class %in%
+              c(
+                "Immune Cell Proportion - Common Lymphoid and Myeloid Cell Derivative Class",
+                "Immune Cell Proportion - Differentiated Lymphoid and Myeloid Cell Derivative Class",
+                "Immune Cell Proportion - Multipotent Progenitor Cell Derivative Class",
+                "Immune Cell Proportion - Original"
+              )
           )
       })
 
