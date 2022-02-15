@@ -4,16 +4,21 @@ test_that("immunomodulator_distributions_server", {
     args = list(
       "cohort_obj" = shiny::reactiveVal(
         iatlas.modules2::pcawg_immune_subtype_cohort_obj
-      )
-    ),
-    {
-      session$setInputs("disttplot-distplot-mock_event_data" = data.frame(
+      ),
+      "mock_event_data" = shiny::reactive(data.frame(
         "curveNumber" = c(0,0),
         "pointNumber" = c(0,0),
         "x" = "C1",
         "y" = c(5.1, 2.1),
         "key" = "PCAWG"
       ))
+    ),
+    {
+      session$setInputs("distplot-feature_choice" = "135")
+      session$setInputs("distplot-scale_method_choice" = "None")
+      session$setInputs("distplot-reorder_method_choice" = "None")
+      session$setInputs("distplot-plot_type_choice" = "Violin")
+
       expect_type(feature_data(), "list")
       expect_named(
         feature_data(),
@@ -39,8 +44,6 @@ test_that("immunomodulator_distributions_server", {
           "feature_name",
           "feature_display",
           "feature_value",
-          "group_description",
-          "group_color",
           "dataset_name"
         )
       )
@@ -50,7 +53,7 @@ test_that("immunomodulator_distributions_server", {
         unique(plot_data$feature_display),
         feature_data()$feature_display[[1]]
       )
-      expect_error(result(), "fff")
+      expect_type(result(), "list")
     }
   )
 })
