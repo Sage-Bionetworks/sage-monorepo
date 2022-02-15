@@ -9,8 +9,8 @@ Monorepo configuration status:
 | apps/api         | ✔️ | ✔️ | n/a |    |          | ✔️ |
 | apps/db-cli      | ✔️ |       | ✔️ | ✔️ |          | ✔️ |
 | apps/web-app     |      |       |    |  |          |       |
-| libs/api-angular |      |       |   |   |          |       |
-| libs/api-docs    |      |       |   |   |          |       |
+| libs/api-angular | ✔️ |       |   |   |          |       |
+| libs/api-docs    | n/a | n/a |   |   |          |       |
 | libs/api-spec    | ❌ | n/a | ✔️ | n/a  | n/a  | ✔️ |
 
 This project was generated using [Nx](https://nx.dev).
