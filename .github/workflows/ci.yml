@@ -11,7 +11,6 @@ env:
   NX_RUN_GROUP: ${{ github.run_id }}
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_CLOUD_ENV_NAME: 'Node 14.x -'
-  NX_VERBOSE_LOGGING : true
 
 jobs:
   main:
@@ -30,8 +29,8 @@ jobs:
         with:
           node-version: ${{ env.PRIMARY_NODE_VERSION }}
       - run: yarn install --frozen-lockfile
-      - run: yarn nx affected --target=build --parallel --max-parallel=3
-      - run: yarn nx affected --target=test --parallel --max-parallel=2
+      - run: yarn nx affected --target=build --parallel --max-parallel=3 --verbose
+      - run: yarn nx affected --target=test --parallel --max-parallel=2 --verbose
   pr:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
