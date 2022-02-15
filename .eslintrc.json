@@ -23,7 +23,11 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
+      "extends": [
+        "plugin:@nrwl/nx/typescript",
+        "standard",
+        "prettier"
+      ],
       "rules": {
         "@typescript-eslint/no-explicit-any": "off"
       }
