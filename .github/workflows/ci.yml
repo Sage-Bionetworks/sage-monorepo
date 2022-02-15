@@ -6,11 +6,11 @@ on:
   pull_request:
 
 env:
-  PRIMARY_NODE_VERSION: 12
+  PRIMARY_NODE_VERSION: 14
   NX_BRANCH: ${{ github.event.number }}
   NX_RUN_GROUP: ${{ github.run_id }}
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
-  NX_CLOUD_ENV_NAME: 'Node 12.x -'
+  NX_CLOUD_ENV_NAME: 'Node 14.x -'
   NX_VERBOSE_LOGGING : true
 
 jobs:
