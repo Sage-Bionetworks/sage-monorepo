@@ -26,24 +26,24 @@
       "extends": [
         "plugin:@nrwl/nx/typescript",
         "standard", // required?
-        "prettier"
+        "eslint-config-prettier"
       ],
       "plugins": [
-        "@typescript-eslint"
-        // "prettier"
+        "@typescript-eslint",
+        "eslint-plugin-prettier"
       ],
       "rules": {
         "dot-notation": "off",
-        // "prettier/prettier": [
-        //   "error",
-        //   {
-        //     "tabWidth": 2,
-        //     "useTabs": false,
-        //     "singleQuote": true,
-        //     "printWidth": 80
-        //   }
-        // ],
-        "@typescript-eslint/no-explicit-any": "off"
+        "@typescript-eslint/no-explicit-any": "off",
+        "prettier/prettier": [
+          "error",
+          {
+            "tabWidth": 2,
+            "useTabs": false,
+            "singleQuote": true,
+            "printWidth": 80
+          }
+        ]
       }
     },
     {

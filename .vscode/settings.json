@@ -20,5 +20,9 @@
   "[javascript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": true
-  }
+  },
+  "eslint.workingDirectories": [
+    "./apps/db-cli",
+    "."
+  ]
 }

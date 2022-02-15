@@ -6,7 +6,7 @@ export enum ChallengeSponsorRole {
   ComputeProvider = 'ComputeProvider',
   DataProvider = 'DataProvider',
   Funder = 'Funder',
-  Other = 'Other'
+  Other = 'Other',
 }
 /* eslint-enable no-unused-vars */
 

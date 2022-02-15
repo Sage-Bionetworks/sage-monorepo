@@ -19,21 +19,21 @@ interface SeedFiles {
   [key: string]: string;
 }
 
-export const connectToDatabase = async(): Promise<Mongoose> => {
+export const connectToDatabase = async (): Promise<Mongoose> => {
   const mongooseConnection = connect(config.mongo.uri, config.mongo.options);
-  connection.on('connected', function() {
-      logger.verbose(`Mongoose connected to ${config.mongo.uri}`);
+  connection.on('connected', function () {
+    logger.verbose(`Mongoose connected to ${config.mongo.uri}`);
   });
   connection.on('error', (err: any) => {
     logger.error(`Mongoose connection error: ${err}`);
   });
-  connection.on('disconnected', function() {
+  connection.on('disconnected', function () {
     logger.verbose('Mongoose disconnected');
   });
   return mongooseConnection;
 };
 
-export const removeCollections = async(): Promise<boolean> => {
+export const removeCollections = async (): Promise<boolean> => {
   const db: any = connection.db;
   const collections = await db.listCollections().toArray();
   const promises: Promise<any>[] = collections.map((collection: any) => {
@@ -46,12 +46,12 @@ export const removeCollections = async(): Promise<boolean> => {
   return true;
 };
 
-export const pingDatabase = async(): Promise<boolean> => {
+export const pingDatabase = async (): Promise<boolean> => {
   const res = await connection.db.admin().ping();
   return !!res && res['ok'] === 1;
 };
 
-export const seedDatabase = async(directory: string): Promise<boolean> => {
+export const seedDatabase = async (directory: string): Promise<boolean> => {
   await removeCollections();
   const seedFiles = await listSeedFiles(directory);
   // The order of the seeds matters
@@ -71,7 +71,7 @@ export const seedDatabase = async(directory: string): Promise<boolean> => {
   return true;
 };
 
-const readSeedFile = async(seedFile: string): Promise<any> => {
+const readSeedFile = async (seedFile: string): Promise<any> => {
   return promises
     .readFile(seedFile, 'utf8')
     .then((data) => JSON.parse(data))
@@ -89,9 +89,9 @@ const seedCollection = async <T>(
     .catch((err: any) => logger.error(`Unable to seed ${name}`, err));
 };
 
-const listSeedFiles = async(directory: string): Promise<SeedFiles> => {
+const listSeedFiles = async (directory: string): Promise<SeedFiles> => {
   return new Promise((resolve, reject) => {
-    glob(directory + '/*.json', { ignore: 'nodir' }, function(err, files) {
+    glob(directory + '/*.json', { ignore: 'nodir' }, function (err, files) {
       if (err) {
         reject(err);
       } else {

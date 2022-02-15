@@ -14,9 +14,7 @@ export class App {
   private program: Command;
   private mongoose!: Mongoose;
 
-  constructor(     ) {
-
-
+  constructor() {
     this.program = new Command();
 
     this.program

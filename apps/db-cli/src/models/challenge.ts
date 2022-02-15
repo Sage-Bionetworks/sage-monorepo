@@ -112,8 +112,16 @@ export const ChallengeSchema = new Schema<Challenge>(
     },
     inputDataTypes: { type: [String], default: [] },
     difficulty: { type: String, enum: ChallengeDifficulty, required: false },
-    submissionTypes: { type: [String], enum: ChallengeSubmissionType, required: false },
-    incentiveTypes: { type: [String], enum: ChallengeIncentiveType, required: false },
+    submissionTypes: {
+      type: [String],
+      enum: ChallengeSubmissionType,
+      required: false,
+    },
+    incentiveTypes: {
+      type: [String],
+      enum: ChallengeIncentiveType,
+      required: false,
+    },
   },
   options
 );
