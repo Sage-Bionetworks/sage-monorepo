@@ -8,7 +8,7 @@ test_that("til_map_distributions_server", {
       "mock_event_data" = shiny::reactive(data.frame(
         "curveNumber" = c(0,0),
         "pointNumber" = c(0,0),
-        "x" = "C1",
+        "x" = "C4",
         "y" = c(5.1, 2.1),
         "key" = "TCGA"
       ))
@@ -23,7 +23,7 @@ test_that("til_map_distributions_server", {
       expect_type(feature_data(), "list")
       expect_named(
         feature_data(),
-        c("feature_class", "feature_name", "feature_display")
+        c("feature_name", "feature_display", "feature_class")
       )
 
       expect_type(sample_data_function(), "closure")
@@ -47,25 +47,25 @@ test_that("til_map_distributions_server", {
         "Ball Hall Index"
       )
 
-      # histogram_data <- result()$histogram_data
-      # expect_type(histogram_data, "list")
-      # expect_named(histogram_data, "feature_value")
-      # expect_true(nrow(histogram_data) > 0)
-      # distplot_data <- result()$distplot_data
-      # expect_type(distplot_data, "list")
-      # expect_named(
-      #   distplot_data,
-      #   c(
-      #     'sample_name',
-      #     'group_display',
-      #     'group_color',
-      #     'group_description',
-      #     'feature_display',
-      #     'feature_value',
-      #     'dataset_display'
-      #   )
-      # )
-      # expect_true(nrow(distplot_data) > 0)
+      histogram_data <- result()$histogram_data
+      expect_type(histogram_data, "list")
+      expect_named(histogram_data, "feature_value")
+      expect_true(nrow(histogram_data) > 0)
+      distplot_data <- result()$distplot_data
+      expect_type(distplot_data, "list")
+      expect_named(
+        distplot_data,
+        c(
+          'sample_name',
+          'group_display',
+          'group_color',
+          'group_description',
+          'feature_display',
+          'feature_value',
+          'dataset_display'
+        )
+      )
+      expect_true(nrow(distplot_data) > 0)
     }
   )
 })
