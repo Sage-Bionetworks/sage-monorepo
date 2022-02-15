@@ -29,9 +29,9 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ env.PRIMARY_NODE_VERSION }}
-      - run: npm install
-      - run: npx nx affected --target=build --parallel --max-parallel=3
-      - run: npx nx affected --target=test --parallel --max-parallel=2
+      - run: yarn install --frozen-lockfile
+      - run: yarn nx affected --target=build --parallel --max-parallel=3
+      - run: yarn nx affected --target=test --parallel --max-parallel=2
   pr:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
@@ -46,6 +46,6 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ env.PRIMARY_NODE_VERSION }}
-      - run: npm install
-      - run: npx nx affected --target=build --parallel --max-parallel=3
-      - run: npx nx affected --target=test --parallel --max-parallel=2
+      - run: yarn install --frozen-lockfile
+      - run: yarn nx affected --target=build --parallel --max-parallel=3
+      - run: yarn nx affected --target=test --parallel --max-parallel=2
