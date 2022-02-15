@@ -2,6 +2,17 @@
 
 # Challenge Registry
 
+Monorepo configuration status:
+
+|                  | lint | build | test | coverage | serve |
+|------------------|------|-------|------|----------|-------|
+| apps/api         |      |       |      |          |       |
+| apps/db-cli      |      |       |      |          |       |
+| apps/web-app     |      |       |      |          |       |
+| libs/api-angular |      |       |      |          |       |
+| libs/api-docs    |      |       |      |          |       |
+| libs/api-spec    |      |       |      |          |       |
+
 This project was generated using [Nx](https://nx.dev).
 
 <p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
