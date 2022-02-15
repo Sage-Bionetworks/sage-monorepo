@@ -11,7 +11,7 @@ Monorepo configuration status:
 | apps/web-app     |      |       |      |          |       |
 | libs/api-angular |      |       |      |          |       |
 | libs/api-docs    |      |       |      |          |       |
-| libs/api-spec    |      |       |      |          |       |
+| libs/api-spec    | ❌ | ✔️ | n/a |  n/a  | ✔️ |
 
 This project was generated using [Nx](https://nx.dev).
 
