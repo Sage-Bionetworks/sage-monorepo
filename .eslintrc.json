@@ -25,10 +25,24 @@
       "files": ["*.ts", "*.tsx"],
       "extends": [
         "plugin:@nrwl/nx/typescript",
-        "standard",
+        "standard", // required?
         "prettier"
       ],
+      "plugins": [
+        "@typescript-eslint"
+        // "prettier"
+      ],
       "rules": {
+        "dot-notation": "off",
+        // "prettier/prettier": [
+        //   "error",
+        //   {
+        //     "tabWidth": 2,
+        //     "useTabs": false,
+        //     "singleQuote": true,
+        //     "printWidth": 80
+        //   }
+        // ],
         "@typescript-eslint/no-explicit-any": "off"
       }
     },

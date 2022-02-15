@@ -22,7 +22,7 @@ interface SeedFiles {
 export const connectToDatabase = async(): Promise<Mongoose> => {
   const mongooseConnection = connect(config.mongo.uri, config.mongo.options);
   connection.on('connected', function() {
-    logger.verbose(`Mongoose connected to ${config.mongo.uri}`);
+      logger.verbose(`Mongoose connected to ${config.mongo.uri}`);
   });
   connection.on('error', (err: any) => {
     logger.error(`Mongoose connection error: ${err}`);
