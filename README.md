@@ -4,15 +4,16 @@
 
 Monorepo creation status:
 
-|                  | prepare | lint | lint-fix | build | test | coverage | serve |
-|------------------|---------|------|----------|-------|------|----------|-------|
-| apps/api         | ✔️       | ✔️    | ✔️        | n/a   | ✔️    |          | ✔️     |
-| apps/api-db      | ✔️       |      |          |       |      |          | ✔️     |
-| apps/db-cli      |         | ✔️    | ✔️        | ✔️     | ✔️    |          | ✔️     |
-| apps/web-app     |         |      |          |       |      |          |       |
-| libs/api-angular |         | ✔️    | ✔️        | ✔️     | ✔️    |          |       |
-| libs/api-docs    |         |      |          | ✔️     | n/a  | n/a      | ✔️     |
-| libs/api-spec    |         | ✔️    |          | ✔️     | n/a  | n/a      | ✔️     |
+|                  | prepare | lint | lint-fix | build | test | coverage | serve | e2e |
+|------------------|---------|------|----------|-------|------|----------|-------|-----|
+| apps/api         | ✔️       | ✔️    | ✔️        | n/a   | ✔️    |          | ✔️     |     |
+| apps/api-db      | ✔️       |      |          |       |      |          | ✔️     |     |
+| apps/db-cli      |         | ✔️    | ✔️        | ✔️     | ✔️    |          | ✔️     |     |
+| apps/web-app     |         | ✔️    | ✔️        | ✔️     | ✔️    |          | ✔️     |     |
+| apps/web-app-e2e |         | ✔️    | ✔️        |       |      |          |       |     |
+| libs/api-angular |         | ✔️    | ✔️        | ✔️     | ✔️    |          |       | ✔️   |
+| libs/api-docs    |         |      |          | ✔️     | n/a  | n/a      | ✔️     |     |
+| libs/api-spec    |         | ✔️    |          | ✔️     | n/a  | n/a      | ✔️     |     |
 
 This project was generated using [Nx](https://nx.dev).
 
