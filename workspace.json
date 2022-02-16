@@ -3,6 +3,7 @@
   "projects": {
     "api": "apps/api",
     "api-angular": "libs/api-angular",
+    "api-db": "apps/api-db",
     "api-docs": "libs/api-docs",
     "api-spec": "libs/api-spec",
     "db-cli": "apps/db-cli"
