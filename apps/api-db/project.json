@@ -3,6 +3,24 @@
   "sourceRoot": "apps/api-db/src",
   "projectType": "application",
   "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "eval \"echo \"$(cat .env.example)\"\" > .env",
+          "docker compose pull"
+        ],
+        "cwd": "apps/api-db",
+        "parallel": false
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/api-db"
+      }
+    }
   },
   "tags": []
 }
