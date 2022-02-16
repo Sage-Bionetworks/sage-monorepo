@@ -47,6 +47,10 @@ Start the stack.
 
     yarn start
 
+Seed the API DB with the default seed (`production`).
+
+    challenge-registry-seed-db
+
 <!-- Links -->
 
 [Docker]: https://docs.docker.com/get-docker/

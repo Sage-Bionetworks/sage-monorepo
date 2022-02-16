@@ -23,3 +23,7 @@ function challenge-registry-prepare {
   yarn install --frozen-lockfile
   nx run-many --all --parallel --target=prepare
 }
+
+function challenge-registry-seed-db {
+  yarn db-cli seed "$CHALLENGE_REGISTRY_DIR/apps/db-cli/data/seeds/production/"
+}

@@ -7,7 +7,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "eval \"echo \"$(cat .env.example)\"\" > .env",
+          "echo \"$(cat .env.example)\" > .env",
           "pipenv install --deploy --dev",
           "pipenv run pip install click==8.0.3"
         ],

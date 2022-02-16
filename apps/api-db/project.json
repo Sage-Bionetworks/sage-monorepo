@@ -7,7 +7,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "eval \"echo \"$(cat .env.example)\"\" > .env",
+          "echo \"$(cat .env.example)\" > .env",
           "docker compose pull"
         ],
         "cwd": "apps/api-db",
