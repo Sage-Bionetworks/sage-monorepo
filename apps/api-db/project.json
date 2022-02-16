@@ -1,0 +1,8 @@
+{
+  "root": "apps/api-db",
+  "sourceRoot": "apps/api-db/src",
+  "projectType": "application",
+  "targets": {
+  },
+  "tags": []
+}
