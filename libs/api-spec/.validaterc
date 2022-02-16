@@ -50,10 +50,7 @@
     "schemas": {
       "invalid_type_format_pair": "warning",
       "snake_case_only": "off",
-      "no_schema_description": "warning",
-      "no_property_description": "off",
       "description_mentions_json": "warning",
-      "array_of_arrays": "warning",
       "inconsistent_property_type": [
         "error",
         [
@@ -70,8 +67,7 @@
       "enum_case_convention": [
         "off",
         "lower_snake_case"
-      ],
-      "undefined_required_properties": "warning"
+      ]
     },
     "walker": {
       "no_empty_descriptions": "error",
@@ -101,8 +97,5 @@
     "schemas": {
       "json_or_param_binary_string": "warning"
     }
-  },
-  "spectral": {
-    "rules": {}
   }
 }

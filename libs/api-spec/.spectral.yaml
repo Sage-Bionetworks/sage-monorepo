@@ -1,4 +1,5 @@
-extends: ibm:oas
+extends: @ibm-cloud/openapi-ruleset
 rules:
   response-error-response-schema: off
   response-example-provided: off
+  # schema-description: off

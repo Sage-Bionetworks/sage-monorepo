@@ -14,7 +14,7 @@ properties:
     maxLength: 280
   websiteUrl:
     type: string
-    format: uri
+    format: url
   status:
     $ref: ../parameters/ChallengeStatus.yaml
   startDate:
