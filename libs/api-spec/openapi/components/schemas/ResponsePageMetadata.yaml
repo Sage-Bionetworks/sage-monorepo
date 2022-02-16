@@ -14,7 +14,7 @@ properties:
       next:
         description: Link to the next page of results
         type: string
-        format: uri
+        format: url
   totalResults:
     description: Total number of results in the result set
     type: integer

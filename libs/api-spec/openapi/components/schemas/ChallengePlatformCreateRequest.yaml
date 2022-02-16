@@ -7,10 +7,10 @@ properties:
     type: string
   websiteUrl:
     type: string
-    format: uri
+    format: url
   avatarUrl:
     type: string
-    format: uri
+    format: url
 required:
   - name
   - displayName

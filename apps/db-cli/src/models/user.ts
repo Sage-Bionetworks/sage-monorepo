@@ -27,7 +27,7 @@ export const UserSchema = new Schema<User>({
   },
 });
 
-UserSchema.pre<User>('validate', function(next) {
+UserSchema.pre<User>('validate', function (next) {
   this.type = AccountType.User;
   next();
 });

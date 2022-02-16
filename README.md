@@ -4,14 +4,14 @@
 
 Monorepo configuration status:
 
-|                  | lint | build | test | coverage | serve |
-|------------------|------|-------|------|----------|-------|
-| apps/api         |      |       |      |          |       |
-| apps/db-cli      |      |       |      |          |       |
-| apps/web-app     |      |       |      |          |       |
-| libs/api-angular |      |       |      |          |       |
-| libs/api-docs    |      |       |      |          |       |
-| libs/api-spec    | ❌ | ✔️ | n/a |  n/a  | ✔️ |
+|                  | prepare | lint | lint-fix | build | test | coverage | serve |
+|------------------|---------|------|----------|-------|------|----------|-------|
+| apps/api         | ✔️      | ✔️   | ✔️      | n/a |    |          | ✔️ |
+| apps/db-cli      |         | ✔️   | ✔️      | ✔️ | ✔️ |          | ✔️ |
+| apps/web-app     |         |      |          |    |  |          |       |
+| libs/api-angular |         | ✔️   | ✔️      |   |   |          |       |
+| libs/api-docs    |         |      |          |    |   |          |       |
+| libs/api-spec    |         | ✔️   |          | ✔️ | n/a  | n/a  | ✔️ |
 
 This project was generated using [Nx](https://nx.dev).
 

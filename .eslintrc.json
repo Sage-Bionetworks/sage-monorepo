@@ -23,8 +23,28 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
-      "rules": {}
+      "extends": [
+        "plugin:@nrwl/nx/typescript",
+        "standard", // required?
+        "eslint-config-prettier"
+      ],
+      "plugins": [
+        "@typescript-eslint",
+        "eslint-plugin-prettier"
+      ],
+      "rules": {
+        "dot-notation": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "prettier/prettier": [
+          "error",
+          {
+            "tabWidth": 2,
+            "useTabs": false,
+            "singleQuote": true,
+            "printWidth": 80
+          }
+        ]
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

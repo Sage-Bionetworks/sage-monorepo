@@ -25,7 +25,7 @@ export const OrganizationSchema = new Schema<Organization>({
   description: { type: String },
 });
 
-OrganizationSchema.pre<Organization>('validate', function(next) {
+OrganizationSchema.pre<Organization>('validate', function (next) {
   this.type = AccountType.Organization;
   next();
 });

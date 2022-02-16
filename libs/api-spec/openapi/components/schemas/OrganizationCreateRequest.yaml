@@ -10,12 +10,12 @@ properties:
     nullable: true
   avatarUrl:
     type: string
-    format: uri
+    format: url
     example: https://example.com/awesome-avatar.png
     nullable: true
   websiteUrl:
     type: string
-    format: uri
+    format: url
     example: https://example.com
     nullable: true
   description:

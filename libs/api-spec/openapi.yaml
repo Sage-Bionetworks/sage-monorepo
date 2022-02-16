@@ -1590,7 +1590,7 @@ components:
             next:
               description: Link to the next page of results
               type: string
-              format: uri
+              format: url
         totalResults:
           description: Total number of results in the result set
           type: integer
@@ -1637,7 +1637,7 @@ components:
           maxLength: 280
         websiteUrl:
           type: string
-          format: uri
+          format: url
         status:
           $ref: '#/components/schemas/ChallengeStatus'
         startDate:
@@ -1974,7 +1974,7 @@ components:
               nullable: true
             avatarUrl:
               type: string
-              format: uri
+              format: url
               example: https://example.com/awesome-avatar.png
               nullable: true
             createdAt:
@@ -2060,10 +2060,10 @@ components:
           type: string
         websiteUrl:
           type: string
-          format: uri
+          format: url
         avatarUrl:
           type: string
-          format: uri
+          format: url
       required:
         - name
         - displayName
@@ -2189,12 +2189,12 @@ components:
           nullable: true
         avatarUrl:
           type: string
-          format: uri
+          format: url
           example: https://example.com/awesome-avatar.png
           nullable: true
         websiteUrl:
           type: string
-          format: uri
+          format: url
           example: https://example.com
           nullable: true
         description:
@@ -2358,7 +2358,7 @@ components:
           nullable: true
         avatarUrl:
           type: string
-          format: uri
+          format: url
           example: https://example.com/awesome-avatar.png
           nullable: true
         bio:
