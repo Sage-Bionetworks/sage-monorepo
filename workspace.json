@@ -5,6 +5,7 @@
     "api-angular": "libs/api-angular",
     "api-docs": "libs/api-docs",
     "api-spec": "libs/api-spec",
-    "db-cli": "apps/db-cli"
+    "db-cli": "apps/db-cli",
+    "web-app": "apps/web-app"
   }
 }
