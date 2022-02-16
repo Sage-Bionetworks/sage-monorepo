@@ -16,6 +16,22 @@
         "parallel": false
       }
     },
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/api-angular"],
+      "options": {
+        "project": "libs/api-angular/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/api-angular/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/api-angular/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/api-angular"],
@@ -27,17 +43,13 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "libs/api-angular/src/index.ts"
-        ]
+        "lintFilePatterns": ["libs/api-angular/src/index.ts"]
       }
     },
     "lint-fix": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "libs/api-angular/src/index.ts"
-        ],
+        "lintFilePatterns": ["libs/api-angular/src/index.ts"],
         "fix": true
       }
     }
