@@ -31,6 +31,15 @@
           "libs/api-angular/src/index.ts"
         ]
       }
+    },
+    "lint-fix": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/api-angular/src/index.ts"
+        ],
+        "fix": true
+      }
     }
   },
   "tags": []
