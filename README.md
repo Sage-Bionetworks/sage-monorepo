@@ -9,7 +9,7 @@ Monorepo configuration status:
 | apps/api         | ✔️      | ✔️   | ✔️      | n/a   | ✔️  |          | ✔️   |
 | apps/db-cli      |         | ✔️   | ✔️      | ✔️    | ✔️  |          | ✔️    |
 | apps/web-app     |         |      |          |       |      |          |       |
-| libs/api-angular |         | ✔️   | ✔️      | ✔️    | ✔️  |          | n/a   |
+| libs/api-angular |         | ✔️   | ✔️      | ✔️    | ✔️  |          |       |
 | libs/api-docs    |         |      |          | ✔️    | n/a  | n/a     | ✔️    |
 | libs/api-spec    |         | ✔️   |          | ✔️   | n/a  | n/a      | ✔️   |
 
