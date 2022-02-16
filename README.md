@@ -15,3 +15,23 @@ Monorepo creation status:
 | libs/api-spec    |         | ✔️   |          | ✔️   | n/a  | n/a      | ✔️   |
 
 This project was generated using [Nx](https://nx.dev).
+
+## Requirements
+
+- [Docker]
+- [Yarn]
+
+## Development
+
+Source `dev-env.sh`.
+
+    source dev-env.sh
+
+Prepare the development environment.
+
+    challenge-registry-prepare
+
+<!-- Links -->
+
+[Docker]: https://docs.docker.com/get-docker/
+[Yarn]: https://yarnpkg.com/
