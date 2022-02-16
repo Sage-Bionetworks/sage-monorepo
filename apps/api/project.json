@@ -63,6 +63,13 @@
         "command": "pipenv run black ./openapi_server --exclude '(models|test)'",
         "cwd": "apps/api"
       }
+    },
+    "test": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "pipenv run tox",
+        "cwd": "apps/api"
+      }
     }
   },
   "tags": []
