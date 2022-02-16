@@ -46,9 +46,13 @@ export class App {
 
     this.program
       .option('-d, --debug', 'output extra debugging')
-      .option('--uri <uri>', 'MongoDB uri', 'mongodb://localhost:27017/rocc')
-      .option('--username <username>', 'MongoDB username', 'roccmongo')
-      .option('--password <password>', 'MongoDB password', 'roccmongo');
+      .option(
+        '--uri <uri>',
+        'MongoDB uri',
+        'mongodb://localhost:27017/challenge-registry'
+      )
+      .option('--username <username>', 'MongoDB username', 'challenge-registry')
+      .option('--password <password>', 'MongoDB password', 'changeme');
   }
 
   public async gracefulShutdown(msg: string, callback: any): Promise<void> {

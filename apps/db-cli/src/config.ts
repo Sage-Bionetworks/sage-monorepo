@@ -1,9 +1,9 @@
 export const config = {
   mongo: {
     options: {
-      user: 'roccmongo',
-      pass: 'roccmongo',
+      user: 'challenge-registry',
+      pass: 'changeme',
     },
-    uri: 'mongodb://localhost:27017/rocc',
+    uri: 'mongodb://localhost:27017/challenge-registry',
   },
 };
