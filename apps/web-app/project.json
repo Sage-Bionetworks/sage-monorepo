@@ -87,18 +87,20 @@
         ]
       }
     },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/web-app"],
+    "lint-fix": {
+      "executor": "@nrwl/linter:eslint",
       "options": {
-        "jestConfig": "apps/web-app/jest.config.js",
-        "passWithNoTests": true
+        "lintFilePatterns": [
+          "apps/web-app/src/**/*.ts",
+          "apps/web-app/src/**/*.html"
+        ],
+        "fix": true
       }
     },
     "serve-mfe": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["nx serve login", "nx serve web-app"]
+        "commands": ["nx serve web-app"]
       }
     }
   },

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx run-many --target=serve --projects=api-db,api",
+    "start": "nx run-many --target=serve --projects=api-db,api,web-app",
     "build": "nx run-many --all --target=lint",
     "test": "nx run-many --all --target=lint",
     "lint": "nx run-many --all --target=lint",
