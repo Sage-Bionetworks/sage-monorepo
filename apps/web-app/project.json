@@ -98,7 +98,7 @@
     "serve-mfe": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["nx serve login", "nx serve web-app"]
+        "commands": ["nx serve web-app"]
       }
     }
   },

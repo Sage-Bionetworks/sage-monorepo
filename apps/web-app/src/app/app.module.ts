@@ -12,11 +12,11 @@ import { ApiModule } from '@challenge-registry/api-angular';
     BrowserModule,
     RouterModule.forRoot(
       [
-        {
-          path: 'login',
-          loadChildren: () =>
-            import('login/Module').then((m) => m.RemoteEntryModule),
-        },
+        // {
+        //   path: 'login',
+        //   loadChildren: () =>
+        //     import('login/Module').then((m) => m.RemoteEntryModule),
+        // },
       ],
       { initialNavigation: 'enabledBlocking' }
     ),
