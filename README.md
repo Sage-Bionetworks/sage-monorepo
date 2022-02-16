@@ -6,7 +6,7 @@ Monorepo configuration status:
 
 |                  | prepare | lint | lint-fix | build | test | coverage | serve |
 |------------------|---------|------|----------|-------|------|----------|-------|
-| apps/api         | ✔️      | ✔️   | ✔️      | n/a   |      |          | ✔️   |
+| apps/api         | ✔️      | ✔️   | ✔️      | n/a   | ✔️  |          | ✔️   |
 | apps/db-cli      |         | ✔️   | ✔️      | ✔️    | ✔️  |          | ✔️    |
 | apps/web-app     |         |      |          |       |      |          |       |
 | libs/api-angular |         | ✔️   | ✔️      | ✔️    | ✔️  |          |       |
