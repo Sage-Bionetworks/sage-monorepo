@@ -22,6 +22,7 @@
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
 .travis.yml
+Dockerfile
 git_push.sh
 requirements.txt
 setup.py

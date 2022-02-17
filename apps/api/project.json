@@ -49,6 +49,14 @@
         "command": "pipenv run tox",
         "cwd": "apps/api"
       }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/api",
+        "push": false,
+        "tags": ["sagebionetworks/challenge-registry-api:latest"]
+      }
     }
   },
   "tags": []
