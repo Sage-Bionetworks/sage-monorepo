@@ -8,7 +8,8 @@
     "test": "nx run-many --all --target=lint",
     "lint": "nx run-many --all --target=lint",
     "postinstall": "ngcc --properties es2015 browser module main",
-    "db-cli": "node dist/apps/db-cli/src/index.js"
+    "db-cli": "node dist/apps/db-cli/src/index.js",
+    "affected:lint": "nx affected --target=lint --parallel --max-parallel=3"
   },
   "private": true,
   "dependencies": {
@@ -81,7 +82,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn nx affected --target=lint --parallel --max-parallel=3 -- --uncommitted"
+      "pre-commit": "yarn affected:lint --uncommitted"
     }
   }
 }
