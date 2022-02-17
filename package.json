@@ -14,7 +14,8 @@
     "affected:e2e": "nx affected:e2e",
     "affected:test": "nx affected:test",
     "affected:lint": "nx affected:lint",
-    "affected:dep-graph": "nx affected:dep-graph"
+    "affected:dep-graph": "nx affected:dep-graph",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
