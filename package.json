@@ -8,7 +8,14 @@
     "test": "nx run-many --all --target=lint",
     "lint": "nx run-many --all --target=lint",
     "postinstall": "ngcc --properties es2015 browser module main",
-    "db-cli": "node dist/apps/db-cli/src/index.js"
+    "db-cli": "node dist/apps/db-cli/src/index.js",
+    "affected:apps": "nx affected:apps",
+    "affected:build": "nx affected:build",
+    "affected:e2e": "nx affected:e2e",
+    "affected:test": "nx affected:test",
+    "affected:lint": "nx affected:lint",
+    "affected:dep-graph": "nx affected:dep-graph",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -64,6 +71,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^6.0.0",
+    "husky": "^7.0.4",
     "ibm-openapi-validator": "^0.55.0",
     "jest": "27.2.3",
     "jest-preset-angular": "11.0.0",
