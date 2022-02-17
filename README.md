@@ -10,8 +10,8 @@ Monorepo creation status:
 | apps/api-db      | ✔️       |      |          |       |      |          | ✔️     |     |
 | apps/db-cli      |         | ✔️    | ✔️        | ✔️     | ✔️    |          | ✔️     |     |
 | apps/web-app     |         | ✔️    | ✔️        | ✔️     | ✔️    |          | ✔️     |     |
-| apps/web-app-e2e |         | ✔️    | ✔️        |       |      |          |       |     |
-| libs/api-angular |         | ✔️    | ✔️        | ✔️     | ✔️    |          |       | ✔️   |
+| apps/web-app-e2e |         | ✔️    | ✔️        |       |      |          |       | ✔️   |
+| libs/api-angular |         | ✔️    | ✔️        | ✔️     | ✔️    |          |       |     |
 | libs/api-docs    |         |      |          | ✔️     | n/a  | n/a      | ✔️     |     |
 | libs/api-spec    |         | ✔️    |          | ✔️     | n/a  | n/a      | ✔️     |     |
 
