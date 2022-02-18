@@ -1,10 +1,19 @@
 # Nx Libraries
 
+## Angular library
+
+### Creating the library
+
+    nx g @nrwl/angular:lib awesome-lib [--dry-run]
+
+The library is added to `tsconfig.base.json`, which will make it available to
+other projects.
+
 ## Web Components library
 
 ### Creating the library
 
-    nx g @nrwl/web:lib ui-footer
+    nx g @nrwl/web:lib ui-footer [--dry-run]
 
 The library is added to `tsconfig.base.json`, which will make it available to
 other projects.
