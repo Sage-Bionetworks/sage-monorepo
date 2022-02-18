@@ -9,7 +9,7 @@ import '@challenge-registry/ui-footer';
 export function App() {
   return (
     <>
-      <ui-greeting title="web-app-react" />
+      <ui-welcome title="web-app-react" />
       <NxWelcome title="web-app-react" />
       <div />
 

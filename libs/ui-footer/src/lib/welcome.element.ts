@@ -1,4 +1,4 @@
-export class GreetingElement extends HTMLElement {
+export class WelcomeElement extends HTMLElement {
   public static observedAttributes = ['title'];
 
   attributeChangedCallback() {
@@ -6,4 +6,4 @@ export class GreetingElement extends HTMLElement {
   }
 }
 
-customElements.define('ui-greeting', GreetingElement);
+customElements.define('ui-welcome', WelcomeElement);
