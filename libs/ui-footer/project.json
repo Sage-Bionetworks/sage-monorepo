@@ -1,0 +1,8 @@
+{
+  "root": "libs/ui-footer",
+  "sourceRoot": "libs/ui-footer/src",
+  "projectType": "library",
+  "targets": {
+  },
+  "tags": []
+}
