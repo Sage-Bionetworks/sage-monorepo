@@ -6,14 +6,14 @@ Monorepo creation status:
 
 |                  | prepare | lint | lint-fix | build | test | coverage | serve | e2e | docker |
 |------------------|---------|------|----------|-------|------|----------|-------|-----|--------|
-| apps/api         | ✔️       | ✔️    | ✔️        | n/a   | ✔️    |          | ✔️     |     | ✔️      |
+| apps/api         | ✔️       | ✔️    | ✔️        |       | ✔️    |          | ✔️     |     | ✔️      |
 | apps/api-db      | ✔️       |      |          |       |      |          | ✔️     |     | ✔️      |
 | apps/db-cli      |         | ✔️    | ✔️        | ✔️     | ✔️    |          | ✔️     |     |        |
 | apps/web-app     |         | ✔️    | ✔️        | ✔️     | ✔️    |          | ✔️     |     |        |
 | apps/web-app-e2e |         | ✔️    | ✔️        |       |      |          |       | ✔️   |        |
 | libs/api-angular |         | ✔️    | ✔️        | ✔️     | ✔️    |          |       |     |        |
-| libs/api-docs    |         |      |          | ✔️     | n/a  | n/a      | ✔️     |     |        |
-| libs/api-spec    |         | ✔️    |          | ✔️     | n/a  | n/a      | ✔️     |     |        |
+| libs/api-docs    |         |      |          | ✔️     |      |          | ✔️     |     |        |
+| libs/api-spec    |         | ✔️    |          | ✔️     |      |          | ✔️     |     |        |
 
 This project was generated using [Nx](https://nx.dev).
 
