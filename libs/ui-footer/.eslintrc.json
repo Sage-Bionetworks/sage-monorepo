@@ -9,7 +9,7 @@
     {
       "files": ["*.ts", "*.tsx"],
       "rules": {
-        "no-undef": "off"
+        // "no-undef": "off"
       }
     },
     {
