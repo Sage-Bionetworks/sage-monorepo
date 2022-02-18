@@ -1,16 +1,37 @@
-FROM python:3-alpine
+FROM python:3.9.6-slim-buster
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+ENV APP_DIR=/opt/app
 
-COPY requirements.txt /usr/src/app/
+SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
-RUN pip3 install --no-cache-dir -r requirements.txt
+# hadolint ignore=DL3008
+RUN apt-get update -qq -y \
+    && apt-get install --no-install-recommends -qq -y \
+        build-essential \
+        gosu \
+        libpcre3 \
+        libpcre3-dev \
+    && apt-get -y autoclean \
+    && apt-get -y autoremove \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY . /usr/src/app
+WORKDIR ${APP_DIR}
+COPY openapi_server openapi_server/
+COPY Pipfile Pipfile.lock uwsgi.ini ./
+
+RUN pip install pipenv \
+  && pipenv install --deploy --system \
+  && pip install --no-cache-dir uWSGI==2.0.19.1 click==8.0.3
+
+WORKDIR /
+COPY docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
 
 EXPOSE 8080
 
-ENTRYPOINT ["python3"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["-m", "openapi_server"]
+# Run server in development mode
+# CMD ["python", "-m", "openapi_server"]
+# Run server in production mode
+CMD ["uwsgi", "--ini", "uwsgi.ini", "--lazy", "--http", ":8080"]

@@ -55,6 +55,7 @@
     "@nrwl/nx-cloud": "^13.1.4",
     "@nrwl/tao": "13.8.1",
     "@nrwl/workspace": "13.8.1",
+    "@nx-tools/nx-docker": "^2.3.0",
     "@openapitools/openapi-generator-cli": "^2.4.26",
     "@redocly/openapi-cli": "^1.0.0-beta.81",
     "@types/jest": "27.0.2",

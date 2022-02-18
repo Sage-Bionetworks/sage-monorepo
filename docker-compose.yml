@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  api-db:
+    image: sagebionetworks/challenge-registry-api-db:latest
+    container_name: challenge-registry-api-db
+    restart: always
+    env_file:
+      - ./apps/api-db/.env
+      - .env
+    networks:
+      - challenge-registry
+    ports:
+      - "27017:27017"
+    volumes:
+      - api-db:/data/db
+
+  api:
+    image: sagebionetworks/challenge-registry-api:latest
+    container_name: challenge-registry-api
+    restart: always
+    env_file:
+      - apps/api/.env
+      - .env
+    environment:
+      - DB_DOMAIN=api-db
+    networks:
+      - challenge-registry
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api-db
+
+  # rocc-app:
+  #   image: sagebionetworks/rocc-app:0.6.0
+  #   container_name: rocc-app
+  #   build: .
+  #   restart: always
+  #   environment:
+  #     - ENVIRONMENT
+  #     - API_URL
+  #     - APP_VERSION
+  #     - SEED_DATABASE
+  #     - SERVICE_HOST=rocc-service
+  #     - SERVICE_PORT=8080
+  #   networks:
+  #     - rocc-networks
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - rocc-service
+
+networks:
+  challenge-registry:
+
+volumes:
+  api-db:
+    name: challenge-registry-api-db

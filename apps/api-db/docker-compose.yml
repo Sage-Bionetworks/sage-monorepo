@@ -1,20 +1,17 @@
 version: "3.8"
 
 services:
-  challenge-registry-api-db:
-    image: sagebionetworks/mongo:5.0.6
+  api-db:
+    image: sagebionetworks/challenge-registry-api-db:latest
     container_name: challenge-registry-api-db
     restart: always
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME
-      - MONGO_INITDB_ROOT_PASSWORD
-      - MONGO_INITDB_DATABASE
-      - MONGO_USERNAME
-      - MONGO_PASSWORD
+    env_file:
+      - .env
     volumes:
-      - database-data:/data/db
+      - api-db:/data/db
     ports:
-      - "${MONGO_PORT}:27017"
+      - "27017:27017"
 
 volumes:
-    database-data:
+  api-db:
+    name: challenge-registry-api-db
