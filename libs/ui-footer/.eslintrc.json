@@ -8,7 +8,9 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "rules": {}
+      "rules": {
+        "no-undef": "off"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],
