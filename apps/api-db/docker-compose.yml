@@ -1,8 +1,8 @@
 version: "3.8"
 
 services:
-  challenge-registry-api-db:
-    image: sagebionetworks/mongo:4.4.8
+  api-db:
+    image: sagebionetworks/challenge-registry-api-db:latest
     container_name: challenge-registry-api-db
     restart: always
     env_file:

@@ -20,6 +20,14 @@
         "command": "docker compose up",
         "cwd": "apps/api-db"
       }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/api-db",
+        "push": false,
+        "tags": ["sagebionetworks/challenge-registry-api-db:latest"]
+      }
     }
   },
   "tags": []

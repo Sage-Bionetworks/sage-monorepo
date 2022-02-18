@@ -2,12 +2,12 @@ version: '3.8'
 
 services:
   api-db:
-    image: sagebionetworks/mongo:5.0.6
+    image: sagebionetworks/challenge-registry-api-db:latest
     container_name: challenge-registry-api-db
     restart: always
     env_file:
-      - .env
       - ./apps/api-db/.env
+      - .env
     networks:
       - challenge-registry
     ports:
@@ -20,8 +20,8 @@ services:
     container_name: challenge-registry-api
     restart: always
     env_file:
-      - .env
       - apps/api/.env
+      - .env
     environment:
       - DB_DOMAIN=api-db
     networks:
