@@ -94,6 +94,6 @@ export default App;
 ### References
 
 - [Share Components across Front Ends frameworks using Nx and Web
-  Components](https://dev.to/crocsx/share-components-across-front-ends-frameworks-using-nx-and-web-components-40jf)
+  Components](https://crocsx.hashnode.dev/share-components-across-front-ends-frameworks-using-nx-and-web-components)
 - [Working with Nx.dev using React, Angular and native web components (Part 1 of
   3)](https://medium.com/@fabianandrescano/working-with-nx-dev-9761da40566a)
