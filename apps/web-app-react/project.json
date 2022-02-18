@@ -1,0 +1,58 @@
+{
+  "root": "apps/web-app-react",
+  "sourceRoot": "apps/web-app-react/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/web-app-react",
+        "index": "apps/web-app-react/src/index.html",
+        "baseHref": "/",
+        "main": "apps/web-app-react/src/main.tsx",
+        "polyfills": "apps/web-app-react/src/polyfills.ts",
+        "tsConfig": "apps/web-app-react/tsconfig.app.json",
+        "assets": [
+          "apps/web-app-react/src/favicon.ico",
+          "apps/web-app-react/src/assets"
+        ],
+        "styles": ["apps/web-app-react/src/styles.scss"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/web-app-react/src/environments/environment.ts",
+              "with": "apps/web-app-react/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "web-app-react:build",
+        "hmr": true
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "web-app-react:build:production",
+          "hmr": false
+        }
+      }
+    }
+  },
+  "tags": []
+}

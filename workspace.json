@@ -8,6 +8,8 @@
     "api-spec": "libs/api-spec",
     "db-cli": "apps/db-cli",
     "web-app": "apps/web-app",
-    "web-app-e2e": "apps/web-app-e2e"
+    "web-app-e2e": "apps/web-app-e2e",
+    "web-app-react": "apps/web-app-react",
+    "web-app-react-e2e": "apps/web-app-react-e2e"
   }
 }
