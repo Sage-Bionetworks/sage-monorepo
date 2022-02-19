@@ -5,12 +5,16 @@
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/db-cli",
         "main": "apps/db-cli/src/index.ts",
         "tsConfig": "apps/db-cli/tsconfig.app.json",
-        "assets": ["apps/db-cli/*.md"]
+        "assets": [
+          "apps/db-cli/*.md"
+        ]
       }
     },
     "serve": {
@@ -21,22 +25,32 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/db-cli/**/*.ts"]
+        "lintFilePatterns": [
+          "apps/db-cli/**/*.ts"
+        ]
       }
     },
     "lint-fix": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/db-cli/**/*.ts"],
+        "lintFilePatterns": [
+          "apps/db-cli/**/*.ts"
+        ],
         "fix": true
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/db-cli"],
+      "outputs": [
+        "coverage/apps/db-cli"
+      ],
       "options": {
         "jestConfig": "apps/db-cli/jest.config.js",
         "passWithNoTests": true

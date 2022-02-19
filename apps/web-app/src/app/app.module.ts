@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { NxWelcomeComponent } from './nx-welcome.component';
 import { RouterModule } from '@angular/router';
 // import { ApiModule } from '@challenge-registry/api-angular';
+import { MatSliderModule } from '@angular/material/slider';
 
 import { WebUiModule } from '@challenge-registry/web/ui';
 
@@ -12,6 +13,7 @@ import { WebUiModule } from '@challenge-registry/web/ui';
   declarations: [AppComponent, NxWelcomeComponent],
   imports: [
     BrowserModule,
+    MatSliderModule,
     RouterModule.forRoot(
       [
         // {

@@ -17,5 +17,7 @@
     }
   },
   "tags": [],
-  "implicitDependencies": ["web-app-react"]
+  "implicitDependencies": [
+    "web-app-react"
+  ]
 }

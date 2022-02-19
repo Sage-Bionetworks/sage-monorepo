@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@nrwl/angular:webpack-browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/web-app",
         "index": "apps/web-app/src/index.html",
@@ -28,7 +30,7 @@
           }
         ],
         "styles": [
-          "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+          "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
           "apps/web-app/src/styles.scss",
           "libs/web/ui/src/styles.scss"
         ],
@@ -116,10 +118,14 @@
     "serve-mfe": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["nx serve web-app"]
+        "commands": [
+          "nx serve web-app"
+        ]
       }
     }
   },
   "tags": [],
-  "implicitDependencies": ["shared-assets"]
+  "implicitDependencies": [
+    "shared-assets"
+  ]
 }

@@ -55,7 +55,9 @@
       "options": {
         "context": "apps/api",
         "push": false,
-        "tags": ["sagebionetworks/challenge-registry-api:latest"]
+        "tags": [
+          "sagebionetworks/challenge-registry-api:latest"
+        ]
       }
     }
   },
