@@ -15,15 +15,20 @@
         "tsConfig": "apps/web-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
-          "apps/web-app/src/favicon.ico",
           "apps/web-app/src/assets",
           {
-            "input": "libs/web/ui/src/assets",
+            "input": "libs/shared/assets/src/assets",
             "glob": "**/*",
             "output": "assets"
+          },
+          {
+            "input": "libs/shared/assets/src",
+            "glob": "favicon.ico",
+            "output": ""
           }
         ],
         "styles": [
+          "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
           "apps/web-app/src/styles.scss",
           "libs/web/ui/src/styles.scss"
         ],
@@ -115,5 +120,6 @@
       }
     }
   },
-  "tags": []
+  "tags": [],
+  "implicitDependencies": ["shared-assets"]
 }
