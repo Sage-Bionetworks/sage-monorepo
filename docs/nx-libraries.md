@@ -9,6 +9,15 @@
 The library is added to `tsconfig.base.json`, which will make it available to
 other projects.
 
+### Example
+
+Creation of an Angular footer library in `libs/web/ui-footer`.
+
+```console
+nx g @nrwl/angular:lib ui --directory web
+nx g @nrwl/angular:component footer --project=web-ui
+```
+
 ## Web Components library
 
 ### Creating the library

@@ -6,6 +6,8 @@ import { NxWelcomeComponent } from './nx-welcome.component';
 import { RouterModule } from '@angular/router';
 // import { ApiModule } from '@challenge-registry/api-angular';
 
+import { WebUiModule } from '@challenge-registry/web/ui';
+
 @NgModule({
   declarations: [AppComponent, NxWelcomeComponent],
   imports: [
@@ -20,6 +22,7 @@ import { RouterModule } from '@angular/router';
       ],
       { initialNavigation: 'enabledBlocking' }
     ),
+    WebUiModule,
   ],
   providers: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
