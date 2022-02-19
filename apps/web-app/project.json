@@ -14,7 +14,15 @@
         "polyfills": "apps/web-app/src/polyfills.ts",
         "tsConfig": "apps/web-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/web-app/src/favicon.ico", "apps/web-app/src/assets"],
+        "assets": [
+          "apps/web-app/src/favicon.ico",
+          "apps/web-app/src/assets",
+          {
+            "input": "libs/web/ui/src/assets",
+            "glob": "**/*",
+            "output": "assets"
+          }
+        ],
         "styles": [
           "apps/web-app/src/styles.scss",
           "libs/web/ui/src/styles.scss"
