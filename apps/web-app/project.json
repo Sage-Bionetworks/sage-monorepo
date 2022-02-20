@@ -30,9 +30,7 @@
           }
         ],
         "styles": [
-          "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-          "apps/web-app/src/styles.scss",
-          "libs/web/ui/src/styles.scss"
+          "apps/web-app/src/styles.scss"
         ],
         "scripts": [],
         "customWebpackConfig": {

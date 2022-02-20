@@ -8,11 +8,14 @@
     "api-spec": "libs/api-spec",
     "db-cli": "apps/db-cli",
     "shared-assets": "libs/shared/assets",
+    "shared-style": "libs/shared/style",
+    "shared-theming": "libs/shared/theming",
     "ui-footer": "libs/ui-footer",
     "web-app": "apps/web-app",
     "web-app-e2e": "apps/web-app-e2e",
     "web-app-react": "apps/web-app-react",
     "web-app-react-e2e": "apps/web-app-react-e2e",
-    "web-ui": "libs/web/ui"
+    "web-ui": "libs/web/ui",
+    "web-ui-footer": "libs/web/ui-footer"
   }
 }

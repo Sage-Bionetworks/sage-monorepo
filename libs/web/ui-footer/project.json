@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/web/ui-footer",
+  "sourceRoot": "libs/web/ui-footer/src",
+  "prefix": "challenge-registry",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/web/ui-footer"],
+      "options": {
+        "jestConfig": "libs/web/ui-footer/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/web/ui-footer/src/**/*.ts",
+          "libs/web/ui-footer/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

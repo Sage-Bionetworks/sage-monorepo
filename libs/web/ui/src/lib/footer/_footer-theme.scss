@@ -1,13 +1,34 @@
-@mixin footer-theme($theme) {
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-  $background: map-get($theme, background);
-  $foreground: map-get($theme, foreground);
+@use 'sass:map';
+@use '@angular/material' as mat;
+// @use 'libs/shared/theming/src/theming';
 
-  challenge-registry-footer {
-    .challenge-registry-footer-links a {
-      color: mat-color($primary, default-contrast);
-    }
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, primary);
+  $accent: map.get($config, accent);
+  $warn: map.get($config, warn);
+  $background: map.get($config, background);
+  $foreground: map.get($config, foreground);
+
+  .challenge-registry-footer {
+    background-color: mat.get-color-from-palette($primary, default);
+
+    // .challenge-registry-links a {
+    //   // color: mat-color($primary, default-contrast);
+    // }
+  }
+}
+
+@mixin typography($theme) {}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
   }
 }

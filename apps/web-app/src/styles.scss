@@ -4,3 +4,7 @@
 // @use '@challenge-registry/web/ui' as web-ui;
 
 // @import '~@challenge-registry/web-ui/src/styles';
+@use '@angular/material' as mat;
+@use 'app-theme';
+
+@include mat.core();

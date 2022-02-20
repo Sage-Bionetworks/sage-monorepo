@@ -20,7 +20,8 @@
         "libs/shared/data-access-user/src/index.ts"
       ],
       "@challenge-registry/ui-footer": ["libs/ui-footer/src/index.ts"],
-      "@challenge-registry/web/ui": ["libs/web/ui/src/index.ts"]
+      "@challenge-registry/web/ui": ["libs/web/ui/src/index.ts"],
+      "@challenge-registry/web/ui-footer": ["libs/web/ui-footer/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

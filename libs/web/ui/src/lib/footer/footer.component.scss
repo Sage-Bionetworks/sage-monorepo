@@ -1,4 +1,7 @@
+// @use 'libs/shared/style/src/variables';
+
 .challenge-registry-footer {
+  // padding: variables.$padding-test;
   padding: 12px;
   font-size: 12px;
 }
@@ -24,7 +27,7 @@
   align-items: center;
   flex: 1;
 
-  .sage-angular-logo {
+  .challenge-registry-footer-logo {
     height: 40px;
     margin: 10px 0 10px 16px;
   }
