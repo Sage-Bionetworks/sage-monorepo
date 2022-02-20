@@ -13,9 +13,11 @@
   .challenge-registry-footer {
     background-color: mat.get-color-from-palette($primary, default);
 
-    // .challenge-registry-links a {
-    //   // color: mat-color($primary, default-contrast);
-    // }
+    .challenge-registry-links a {
+      color: green;
+
+      // mat-color($primary, default-contrast);
+    }
   }
 }
 
