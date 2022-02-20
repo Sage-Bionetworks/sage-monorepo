@@ -5,7 +5,7 @@ import { FooterModule } from './footer/footer.module';
 import { NavbarModule } from './navbar/navbar.module';
 
 @NgModule({
-  imports: [CommonModule, ButtonGithubModule, FooterModule, NavbarModule],
+  imports: [CommonModule],
   declarations: [],
   exports: [ButtonGithubModule, FooterModule, NavbarModule],
 })

@@ -4,17 +4,17 @@
 
 @include mat.core();
 
-$my-primary: mat.define-palette(mat.$indigo-palette, 500);
-$my-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$primary: mat.define-palette(mat.$indigo-palette, 500);
+$accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
-$my-theme: mat.define-light-theme((
+$theme: mat.define-light-theme((
  color: (
-   primary: $my-primary,
-   accent: $my-accent,
+   primary: $primary,
+   accent: $accent,
  ),
  typography: mat.define-typography-config(
     $font-family: serif,
   )
 ));
 
-@include web-ui.theme($my-theme);
+@include web-ui.theme($theme);
