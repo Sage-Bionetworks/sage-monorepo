@@ -1,0 +1,44 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+
+name: shiny-deploy
+
+on:
+  pull_request:
+    branches: [testing]
+  push:
+    branches:
+      - main
+      - staging
+
+jobs:
+  shiny-deploy:
+    runs-on: macOS-latest
+    env:
+      GITHUB_PAT: ${{ secrets.PAT }}
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-pandoc@v1
+
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-renv@v2
+        with:
+          cache-version: 2
+
+      - name: Authorize and deploy app
+        run: |
+          branch   <- Sys.getenv("GITHUB_REF_NAME")
+          app_name <- "iatlas"
+          if(branch == "main") {
+             appName <- app_name
+          } else if(branch == c("testing", "staging"){
+            appName <- paste(app_name, branch, sep = "-")
+          }
+          rsconnect::setAccountInfo("iatlas-app", "${{ secrets.RSCONNECT_TOKEN }}", "${{ secrets.RSCONNECT_SECRET }}")
+          rsconnect::deployApp(appName = appName)
+        shell: Rscript {0}
