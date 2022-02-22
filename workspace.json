@@ -10,7 +10,6 @@
     "shared-assets": "libs/shared/assets",
     "shared-style": "libs/shared/style",
     "shared-theming": "libs/shared/theming",
-    "ui-footer": "libs/ui-footer",
     "web-app": "apps/web-app",
     "web-app-e2e": "apps/web-app-e2e",
     "web-app-react": "apps/web-app-react",
