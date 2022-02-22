@@ -6,7 +6,7 @@ import { NxWelcomeComponent } from './nx-welcome.component';
 import { RouterModule } from '@angular/router';
 // import { ApiModule } from '@challenge-registry/api-angular';
 import { MatSliderModule } from '@angular/material/slider';
-
+import { WebDataAccessModule } from '@challenge-registry/web/data-access';
 import { WebUiModule } from '@challenge-registry/web/ui';
 
 @NgModule({
@@ -24,6 +24,7 @@ import { WebUiModule } from '@challenge-registry/web/ui';
       ],
       { initialNavigation: 'enabledBlocking' }
     ),
+    WebDataAccessModule,
     WebUiModule,
   ],
   providers: [],
