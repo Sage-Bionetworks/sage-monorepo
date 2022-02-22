@@ -1,11 +1,14 @@
 import { InjectionToken } from '@angular/core';
 
-export enum Environment {}
-// Production = 'prod',
-// Staging = 'staging',
-// Test = 'test',
-// Development = 'dev',
-// Local = 'local',
+/* eslint-disable no-unused-vars */
+export enum Environment {
+  Production = 'prod',
+  Staging = 'staging',
+  Test = 'test',
+  Development = 'dev',
+  Local = 'local',
+}
+/* eslint-enable no-unused-vars */
 
 export interface AppConfig {
   environment: Environment;
