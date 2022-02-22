@@ -18,6 +18,7 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           "apps/web-app/src/assets",
+          "apps/web-app/src/config",
           {
             "input": "libs/shared/assets/src/assets",
             "glob": "**/*",
