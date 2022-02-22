@@ -11,7 +11,7 @@ other projects.
 
 ### Example
 
-Creation of an Angular footer library in `libs/web/ui-footer`.
+Creation of the UI library for the web-app in `libs/web/ui`.
 
 ```console
 nx g @nrwl/angular:lib ui --directory web
