@@ -18,6 +18,7 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           "apps/web-app/src/assets",
+          "apps/web-app/src/config",
           {
             "input": "libs/shared/assets/src/assets",
             "glob": "**/*",
@@ -51,12 +52,7 @@
               "maximumError": "4kb"
             }
           ],
-          "fileReplacements": [
-            {
-              "replace": "apps/web-app/src/environments/environment.ts",
-              "with": "apps/web-app/src/environments/environment.prod.ts"
-            }
-          ],
+          "fileReplacements": [],
           "outputHashing": "all",
           "customWebpackConfig": {
             "path": "apps/web-app/webpack.prod.config.js"
@@ -85,7 +81,8 @@
       },
       "defaultConfiguration": "development",
       "options": {
-        "publicHost": "http://localhost:4200"
+        "publicHost": "http://localhost:4200",
+        "proxyConfig": "apps/web-app/src/proxy.conf.json"
       }
     },
     "extract-i18n": {

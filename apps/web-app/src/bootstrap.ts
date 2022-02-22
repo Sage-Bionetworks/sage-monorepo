@@ -2,12 +2,18 @@ import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
+import { AppConfig, APP_CONFIG, Environment } from './app/app.config';
 
-if (environment.production) {
-  enableProdMode();
-}
+fetch('/config/config.json')
+  .then((response) => response.json() as Promise<AppConfig>)
+  .then((config: AppConfig) => {
+    if (
+      [Environment.Production, Environment.Staging].includes(config.environment)
+    ) {
+      enableProdMode();
+    }
 
-platformBrowserDynamic()
-  .bootstrapModule(AppModule)
-  .catch((err) => console.error(err));
+    platformBrowserDynamic([{ provide: APP_CONFIG, useValue: config }])
+      .bootstrapModule(AppModule)
+      .catch((err) => console.error(err));
+  });
