@@ -2,13 +2,11 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-
-import { AppComponent } from './app.component';
-import { NxWelcomeComponent } from './nx-welcome.component';
 import { RouterModule } from '@angular/router';
-// import { ApiModule } from '@challenge-registry/api-angular';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
+import { CountUpModule } from 'ngx-countup';
+
 import { WebDataAccessModule } from '@challenge-registry/web/data-access';
 import { WebUiModule } from '@challenge-registry/web/ui';
 import {
@@ -17,6 +15,8 @@ import {
   // ConfigurationParameters,
   // BASE_PATH
 } from '@challenge-registry/api-angular';
+import { AppComponent } from './app.component';
+import { NxWelcomeComponent } from './nx-welcome.component';
 import { AppConfig, APP_CONFIG } from './app.config';
 import { TokenService } from './token.service';
 
@@ -26,6 +26,7 @@ import { TokenService } from './token.service';
     ApiModule,
     BrowserModule,
     BrowserAnimationsModule,
+    CountUpModule,
     HttpClientModule,
     MatButtonModule,
     MatSliderModule,
