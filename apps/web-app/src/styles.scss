@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+// @import '@challenge-registry/web/ui/src/styles';
+
+// @use '@challenge-registry/web/ui' as web-ui;
+
+// @import '~@challenge-registry/web-ui/src/styles';
+@use '@angular/material' as mat;
+@use 'app-theme';
+
+@include mat.core();

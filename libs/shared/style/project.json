@@ -1,0 +1,11 @@
+{
+  "root": "libs/shared/style",
+  "sourceRoot": "libs/shared/style/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": [
+    "scope:shared",
+    "type:style"
+  ]
+}

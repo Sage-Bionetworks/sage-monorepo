@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@nrwl/angular:webpack-browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/web-app",
         "index": "apps/web-app/src/index.html",
@@ -14,8 +16,22 @@
         "polyfills": "apps/web-app/src/polyfills.ts",
         "tsConfig": "apps/web-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/web-app/src/favicon.ico", "apps/web-app/src/assets"],
-        "styles": ["apps/web-app/src/styles.scss"],
+        "assets": [
+          "apps/web-app/src/assets",
+          {
+            "input": "libs/shared/assets/src/assets",
+            "glob": "**/*",
+            "output": "assets"
+          },
+          {
+            "input": "libs/shared/assets/src",
+            "glob": "favicon.ico",
+            "output": ""
+          }
+        ],
+        "styles": [
+          "apps/web-app/src/styles.scss"
+        ],
         "scripts": [],
         "customWebpackConfig": {
           "path": "apps/web-app/webpack.config.js"
@@ -100,9 +116,14 @@
     "serve-mfe": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["nx serve web-app"]
+        "commands": [
+          "nx serve web-app"
+        ]
       }
     }
   },
-  "tags": []
+  "tags": [],
+  "implicitDependencies": [
+    "shared-assets"
+  ]
 }

@@ -1,0 +1,45 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+// @use 'libs/shared/theming/src/theming';
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, primary);
+  $accent: map.get($config, accent);
+  $warn: map.get($config, warn);
+  $background: map.get($config, background);
+  $foreground: map.get($config, foreground);
+
+  challenge-registry-navbar {
+    color: mat.get-color-from-palette($primary, default-contrast);
+
+    .sage-navbar, .sage-navbar-header {
+      background: mat.get-color-from-palette($primary);
+    }
+  }
+
+
+  // .challenge-registry-footer {
+  //   background-color: mat.get-color-from-palette($primary, default);
+
+  //   .challenge-registry-links a {
+  //     color: green;
+
+  //     // mat-color($primary, default-contrast);
+  //   }
+  // }
+}
+
+@mixin typography($theme) {}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}

@@ -1,0 +1,18 @@
+<!-- TODO: figure out if the <nav> should go inside of a <header> element. -->
+<nav class="sage-navbar-header" aria-label="Top Toolbar">
+  <button mat-button class="sage-button" routerLink="/" aria-label="Sage Angular">
+    <img class="sage-angular-logo"
+      src="assets/images/angular-white-transparent.svg"
+      alt="Sage Angular">
+    <span>{{title}}</span>
+  </button>
+  <div class="flex-spacer"></div>
+  <challenge-registry-button-github
+    [href]="githubUrl"></challenge-registry-button-github>
+  <button mat-button class="sage-button"
+    routerLink="/signin"
+    aria-label="Sign In">Sign In</button>
+  <a mat-button class="sage-button"
+    routerLink="/signup"
+    aria-label="Sign Up">Sign Up</a>
+</nav>

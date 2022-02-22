@@ -1,10 +1,28 @@
 # Nx Libraries
 
+## Angular library
+
+### Creating the library
+
+    nx g @nrwl/angular:lib awesome-lib [--dry-run]
+
+The library is added to `tsconfig.base.json`, which will make it available to
+other projects.
+
+### Example
+
+Creation of the UI library for the web-app in `libs/web/ui`.
+
+```console
+nx g @nrwl/angular:lib ui --directory web
+nx g @nrwl/angular:component footer --project=web-ui
+```
+
 ## Web Components library
 
 ### Creating the library
 
-    nx g @nrwl/web:lib ui-footer
+    nx g @nrwl/web:lib ui-footer [--dry-run]
 
 The library is added to `tsconfig.base.json`, which will make it available to
 other projects.
@@ -94,6 +112,6 @@ export default App;
 ### References
 
 - [Share Components across Front Ends frameworks using Nx and Web
-  Components](https://dev.to/crocsx/share-components-across-front-ends-frameworks-using-nx-and-web-components-40jf)
+  Components](https://crocsx.hashnode.dev/share-components-across-front-ends-frameworks-using-nx-and-web-components)
 - [Working with Nx.dev using React, Angular and native web components (Part 1 of
   3)](https://medium.com/@fabianandrescano/working-with-nx-dev-9761da40566a)

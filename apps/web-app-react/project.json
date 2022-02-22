@@ -5,7 +5,9 @@
   "targets": {
     "build": {
       "executor": "@nrwl/web:webpack",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
         "compiler": "babel",
@@ -19,7 +21,9 @@
           "apps/web-app-react/src/favicon.ico",
           "apps/web-app-react/src/assets"
         ],
-        "styles": ["apps/web-app-react/src/styles.scss"],
+        "styles": [
+          "apps/web-app-react/src/styles.scss"
+        ],
         "scripts": [],
         "webpackConfig": "@nrwl/react/plugins/webpack"
       },

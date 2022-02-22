@@ -1,0 +1,11 @@
+{
+  "root": "libs/shared/theming",
+  "sourceRoot": "libs/shared/theming/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": [
+    "scope:shared",
+    "type:theming"
+  ]
+}

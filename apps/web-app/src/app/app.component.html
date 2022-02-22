@@ -1,3 +1,38 @@
 <ui-welcome [title]="title"></ui-welcome>
-<challenge-registry-nx-welcome></challenge-registry-nx-welcome>
+
+<div>
+  <img src="/assets/images/github.png" alt="GitHub icon">
+</div>
+
+<button mat-button>Basic</button>
+<button mat-button color="primary">Primary</button>
+<a mat-raised-button color="primary" href="https://www.google.com/" target="_blank">Link</a>
+
+<div>
+  <mat-slider min="1" max="100" step="1" value="50"></mat-slider>
+</div>
+
+<div>
+  <challenge-registry-button-github></challenge-registry-button-github>
+</div>
+
+<div>
+  <challenge-registry-navbar class="mat-elevation-z6" [title]="title">
+  </challenge-registry-navbar>
+</div>
+
+<!-- [sections]="sections"
+    [userAvatar]="userAvatar" [userMenuItems]="userMenuItems"
+    (userMenuItemSelected)="selectUserMenuItem($event)"
+    (notificationButtonClick)="clickNotificationButton()" [signedIn]="signedIn" -->
+
+<div>
+  <span>Content</span>
+</div>
+
+<div>
+  <challenge-registry-footer></challenge-registry-footer>
+</div>
+
+<!-- <challenge-registry-nx-welcome></challenge-registry-nx-welcome> -->
 <router-outlet></router-outlet>

@@ -34,6 +34,7 @@
       ],
       "rules": {
         "dot-notation": "off",
+        "no-useless-constructor": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "prettier/prettier": [
           "error",

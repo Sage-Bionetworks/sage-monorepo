@@ -4,12 +4,9 @@ import NxWelcome from './nx-welcome';
 
 import { Route, Link } from 'react-router-dom';
 
-import '@challenge-registry/ui-footer';
-
 export function App() {
   return (
     <>
-      <ui-welcome title="web-app-react" />
       <NxWelcome title="web-app-react" />
       <div />
 
