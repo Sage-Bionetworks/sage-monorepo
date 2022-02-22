@@ -17,4 +17,12 @@ $theme: mat.define-light-theme((
   )
 ));
 
+// Emit theme-dependent styles for common features used across multiple
+// components.
+@include mat.core-theme($theme);
+
+// Emit styles for MatButton based on `$theme`.
+@include mat.button-theme($theme);
+
+// Include the theme mixins for other components you use here.
 @include web-ui.theme($theme);
