@@ -6,8 +6,7 @@ on:
       - testing
   push:
     branches:
-      - main
-      - staging
+      - testing
 
 name: R-CMD-check
 
