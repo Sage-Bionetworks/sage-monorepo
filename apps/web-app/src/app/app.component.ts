@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 // import { Challenge } from '@challenge-registry/api-angular';
 import { PageTitleService } from '@challenge-registry/web/data-access';
 // import { FooterComponent } from '@challenge-registry/web/ui';
+import '@challenge-registry/shared/web-components';
 
 @Component({
   selector: 'challenge-registry-root',

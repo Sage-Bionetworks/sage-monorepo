@@ -6,12 +6,8 @@
     "prepare": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": [
-          "echo \"$(cat .env.example)\" > .env",
-          "docker compose pull"
-        ],
-        "cwd": "apps/api-db",
-        "parallel": false
+        "command": "echo \"$(cat .env.example)\" > .env",
+        "cwd": "apps/api-db"
       }
     },
     "serve": {

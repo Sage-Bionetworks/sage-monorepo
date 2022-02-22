@@ -10,6 +10,7 @@
     "shared-assets": "libs/shared/assets",
     "shared-style": "libs/shared/style",
     "shared-theming": "libs/shared/theming",
+    "shared-web-components": "libs/shared/web-components",
     "web-app": "apps/web-app",
     "web-app-e2e": "apps/web-app-e2e",
     "web-app-react": "apps/web-app-react",

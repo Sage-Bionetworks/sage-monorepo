@@ -3,10 +3,12 @@ import styles from './app.module.scss';
 import NxWelcome from './nx-welcome';
 
 import { Route, Link } from 'react-router-dom';
+import '@challenge-registry/shared/web-components';
 
 export function App() {
   return (
     <>
+      <ui-welcome title="web-app-react" />
       <NxWelcome title="web-app-react" />
       <div />
 
