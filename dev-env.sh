@@ -24,6 +24,10 @@ function challenge-registry-prepare {
   nx run-many --all --parallel --target=prepare
 }
 
+function challenge-registry-docker {
+  nx run-many --all --parallel --target=docker
+}
+
 function challenge-registry-seed-db {
   yarn db-cli seed "$CHALLENGE_REGISTRY_DIR/apps/db-cli/data/seeds/production/"
 }

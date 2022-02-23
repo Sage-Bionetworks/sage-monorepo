@@ -125,6 +125,16 @@
           "nx serve web-app"
         ]
       }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/web-app",
+        "push": false,
+        "tags": [
+          "sagebionetworks/challenge-registry-web-app:latest"
+        ]
+      }
     }
   },
   "tags": [],
