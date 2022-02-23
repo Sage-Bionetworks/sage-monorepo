@@ -4,6 +4,14 @@
   "sourceRoot": "apps/web-app/src",
   "prefix": "challenge-registry",
   "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"$(cat .env.example)\" > .env",
+        "cwd": "apps/web-app",
+        "parallel": false
+      }
+    },
     "build": {
       "executor": "@nrwl/angular:webpack-browser",
       "outputs": [
@@ -115,6 +123,16 @@
       "options": {
         "commands": [
           "nx serve web-app"
+        ]
+      }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/web-app",
+        "push": false,
+        "tags": [
+          "sagebionetworks/challenge-registry-web-app:latest"
         ]
       }
     }
