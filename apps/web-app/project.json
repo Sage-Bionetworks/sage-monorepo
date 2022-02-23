@@ -4,6 +4,14 @@
   "sourceRoot": "apps/web-app/src",
   "prefix": "challenge-registry",
   "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "echo \"$(cat .env.example)\" > .env",
+        "cwd": "apps/web-app",
+        "parallel": false
+      }
+    },
     "build": {
       "executor": "@nrwl/angular:webpack-browser",
       "outputs": [
