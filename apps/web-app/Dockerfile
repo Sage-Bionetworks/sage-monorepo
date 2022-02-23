@@ -1,9 +1,7 @@
 FROM node:16.10.0-slim as build
 
-# ARG challengeRegistryRepository=Sage-Bionetworks/challenge-registry
-# ARG challengeRegistryBranch=main
-ARG challengeRegistryRepository=tschaffter/challenge-registry
-ARG challengeRegistryBranch=dockerize-web-app
+ARG challengeRegistryRepository=Sage-Bionetworks/challenge-registry
+ARG challengeRegistryBranch=main
 
 ENV DEBIAN_FRONTEND=noninteractive
 
