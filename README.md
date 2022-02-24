@@ -21,7 +21,7 @@ This project was generated using [Nx](https://nx.dev).
 
 - [Docker]
 - [Node.js] >= 14
-- [Yarn]
+- [Yarn] >= 1.22
 
 ## Development
 
