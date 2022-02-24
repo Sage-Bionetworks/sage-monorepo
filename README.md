@@ -27,7 +27,7 @@ This project was generated using [Nx](https://nx.dev).
 
 Source `dev-env.sh`.
 
-    source dev-env.sh
+    . dev-env.sh
 
 Prepare the development environment.
 
@@ -51,7 +51,7 @@ Start the stack.
 
 Seed the API DB with the default seed (`production`).
 
-    challenge-registry-seed-db
+    yarn seed-db
 
 <!-- Links -->
 
