@@ -24,6 +24,22 @@ function challenge-registry-prepare {
   nx run-many --all --parallel --target=prepare
 }
 
+function challenge-registry-lint {
+  nx run-many --all --target=lint
+}
+
+function challenge-registry-build {
+  nx run-many --all --target=build
+}
+
+function challenge-registry-test {
+  nx run-many --all --target=test
+}
+
+function challenge-registry-serve {
+  nx run-many --target=serve --projects=api-db,api,web-app
+}
+
 function challenge-registry-docker {
   nx run-many --all --parallel --target=docker
 }
