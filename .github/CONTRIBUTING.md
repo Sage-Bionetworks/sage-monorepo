@@ -19,7 +19,9 @@ issue, assessing changes, and helping you finalize your pull requests.
     - [Issues](#issues)
     - [Pull Requests](#pull-requests)
     - [Setup Development Environment](#setup-development-environment)
+    - [Linting](#linting)
     - [Testing](#testing)
+    - [Start the Challenge Registry]
 - [Release Procedure](#release-procedure)
 - [Getting Help](#getting-help)
 
@@ -75,6 +77,9 @@ In general, we follow the [Forking Workflow]:
 1. Fork the repository to your own Github account
 2. Clone the project to your machine
 3. Create a branch locally with a succinct but descriptive name
+
+       git checkout -b ＜new-branch＞ main
+
 4. Commit changes to the branch
 5. Following any formatting and testing guidelines specific to this repo
 6. Push changes to your fork
@@ -107,11 +112,34 @@ This project relies on Node tools and project-specific commands defined in
 [package.json] to streamline the development and testing. The command below will
 install the required development tools.
 
-TBA
+Source `dev-env.sh`.
+
+    . dev-env.sh
+
+Prepare the development environment.
+
+    challenge-registry-prepare
+
+### Linting
+
+Lint all the projects.
+
+    yarn lint
 
 ### Testing
 
-TBA
+Build and test all the projects.
+
+```console
+yarn build
+yarn test
+```
+
+### Start the Challenge Registry
+
+Start the web app and its dependencies (API, API database).
+
+    yarn start
 
 ## Release Procedure
 
