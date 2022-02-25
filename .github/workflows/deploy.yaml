@@ -40,7 +40,7 @@ jobs:
           app_name <- "iatlas"
           if(branch == "main") {
              appName <- app_name
-          } else if(branch in c("testing", "staging")) {
+          } else if(branch %in% c("testing", "staging")) {
             appName <- paste(app_name, branch, sep = "-")
           }
           rsconnect::setAccountInfo("iatlas-app", "${{ secrets.RSCONNECT_TOKEN }}", "${{ secrets.RSCONNECT_SECRET }}")
