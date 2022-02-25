@@ -7,9 +7,9 @@
 | [Sage-Bionetworks/rocc-app]            | apps/web-app         |
 | [Sage-Bionetworks/rocc-db-client]      | apps/db-cli          |
 | [Sage-Bionetworks/rocc-service]        | apps/api             |
-| [Sage-Bionetworks/rocc-schemas]        | libs/api-spec        |
 | [Sage-Bionetworks/rocc-client-angular] | libs/api-angular     |
 | [Sage-Bionetworks/rocc-client-r]       | libs/api-r           |
+| [Sage-Bionetworks/rocc-schemas]        | libs/api-spec        |
 
 <!-- Links -->
 
