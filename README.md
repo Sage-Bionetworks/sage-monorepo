@@ -23,7 +23,13 @@ This project was generated using [Nx](https://nx.dev).
 - [Node.js] >= 14
 - [Yarn] >= 1.22
 
-## Development
+## Usage
+
+### Running with Docker
+
+Clone this repository.
+
+    git clone --depth 1 https://github.com/Sage-Bionetworks/challenge-registry.git
 
 Source `dev-env.sh`.
 
@@ -32,6 +38,22 @@ Source `dev-env.sh`.
 Prepare the development environment.
 
     challenge-registry-prepare
+
+Build the Docker images.
+
+    yarn docker
+
+Seed the API DB with the sample Challenge data.
+
+    yarn seed-db
+
+Start the Challenge Registry.
+
+    docker compose up
+
+In your browser, open http://localhost.
+
+## Development
 
 Lint the projects.
 
@@ -45,13 +67,15 @@ Test the projects.
 
     yarn test
 
-Start the stack.
+Start the Challenge Registry.
 
     yarn start
 
 Seed the API DB with the default seed (`production`).
 
     yarn seed-db
+
+In your browser, open http://localhost:4200.
 
 <!-- Links -->
 
