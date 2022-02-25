@@ -35,14 +35,15 @@ jobs:
 
       - name: Authorize and deploy app
         run: |
-
           branch   <- Sys.getenv("GITHUB_REF_NAME")
           app_name <- "iatlas"
-          if(branch == "main") {
-             appName <- app_name
-          } else if(branch %in% c("testing", "staging")) {
-            appName <- paste(app_name, branch, sep = "-")
+          if(branch %in% c("testing", "staging")) {
+            app_name <- paste(app_name, branch, sep = "-")
           }
-          rsconnect::setAccountInfo("iatlas-app", "${{ secrets.RSCONNECT_TOKEN }}", "${{ secrets.RSCONNECT_SECRET }}")
-          rsconnect::deployApp(appName = appName)
+          rsconnect::setAccountInfo(
+            name   = 'iatlas-app',
+            token  = "${{ secrets.RSCONNECT_TOKEN }}",
+            secret = "${{ secrets.RSCONNECT_SECRET }}"
+          )
+          rsconnect::deployApp(appName = app_name)
         shell: Rscript {0}
