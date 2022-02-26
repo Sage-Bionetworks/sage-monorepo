@@ -7,7 +7,7 @@
     "prepare": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "echo \"$(cat .env.example)\" > .env",
+        "command": "shx cp .env.example .env",
         "cwd": "apps/web-app",
         "parallel": false
       }

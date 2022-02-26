@@ -7,7 +7,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "echo \"$(cat .env.example)\" > .env",
+          "shx cp .env.example .env",
           "pipenv install --deploy --dev",
           "pipenv run pip install click==8.0.3"
         ],
