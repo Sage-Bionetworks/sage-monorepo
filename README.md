@@ -79,7 +79,7 @@ In your browser, open http://localhost:4200.
 
 ## Contributing
 
-See [Contributing.md](.github/CONTRIBUTING.md).
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
 <!-- Links -->
 
