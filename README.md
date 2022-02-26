@@ -27,7 +27,7 @@ Each project is managed using multiple "targets" such as `build`, `test` and
 | libs/api-docs    |         |      |          | ✔️     |      | ✔️     |     |        |
 | libs/api-spec    |         | ✔️    |          | ✔️     |      | ✔️     |     |        |
 
-See this [Cheatsheet] to learn more about Nx commands.
+See this [cheat sheet] to learn more about Nx commands.
 
 ## Requirements
 
@@ -95,7 +95,7 @@ See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
 <!-- Links -->
 
-[Cheatsheet]: ./docs/cheatsheet.md
+[cheat sheet]: ./docs/cheat-sheet.md
 [Docker]: https://docs.docker.com/get-docker/
 [Node.js]: https://nodejs.org/en/
 [Yarn]: https://yarnpkg.com/
