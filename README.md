@@ -2,7 +2,16 @@
 
 # Challenge Registry
 
-Monorepo creation status:
+This monorepo includes the codebase of the Challenge Registry.
+
+## Workspace, Projects and Targets
+
+This workspace was generated using [Nx](https://nx.dev).
+
+The table shown below lists the main "projects" included with this workspace.
+Each project is managed using multiple "targets" such as `build`, `test` and
+`serve`. One way to execute a target is by using the command `nx <target>
+<project>`.
 
 |                  | prepare | lint | lint-fix | build | test | coverage | serve | e2e | docker |
 |------------------|---------|------|----------|-------|------|----------|-------|-----|--------|
@@ -15,7 +24,7 @@ Monorepo creation status:
 | libs/api-docs    |         |      |          | ✔️     |      |          | ✔️     |     |        |
 | libs/api-spec    |         | ✔️    |          | ✔️     |      |          | ✔️     |     |        |
 
-This project was generated using [Nx](https://nx.dev).
+See this [Cheatsheet] to learn more about Nx commands.
 
 ## Requirements
 
@@ -83,6 +92,7 @@ See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
 <!-- Links -->
 
+[Cheatsheet]: ./docs/cheatsheet.md
 [Docker]: https://docs.docker.com/get-docker/
 [Node.js]: https://nodejs.org/en/
 [Yarn]: https://yarnpkg.com/
