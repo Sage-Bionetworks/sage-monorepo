@@ -1,4 +1,8 @@
-# Nx Libraries
+# Libraries
+
+## Overview
+
+This document explains how to create Angular and Web Components libraries.
 
 ## Angular library
 

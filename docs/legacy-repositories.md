@@ -1,6 +1,8 @@
-# Legacy
+# Legacy Repositories
 
-## Repositories
+This table lists the repositories used to develop the individual components of
+the Challenge Registry. Since XXX, the codebase of these components is
+maintained in this monorepo.
 
 | Repository                             | Monorepo Project     |
 |----------------------------------------|----------------------|
@@ -19,4 +21,3 @@
 [Sage-Bionetworks/rocc-schemas]: https://github.com/Sage-Bionetworks/rocc-schemas
 [Sage-Bionetworks/rocc-client-angular]: https://github.com/Sage-Bionetworks/rocc-client-angular
 [Sage-Bionetworks/rocc-client-r]: https://github.com/Sage-Bionetworks/rocc-client-r
-[Sage-Bionetworks/rocc]: https://github.com/Sage-Bionetworks/rocc

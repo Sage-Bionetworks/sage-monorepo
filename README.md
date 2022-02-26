@@ -1,21 +1,33 @@
-
-
 # Challenge Registry
 
-Monorepo creation status:
+[![GitHub CI](https://img.shields.io/github/workflow/status/Sage-Bionetworks/challenge-registry/CI.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/challenge-registry/actions)
+[![GitHub License](https://img.shields.io/github/license/Sage-Bionetworks/challenge-registry.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE)
 
-|                  | prepare | lint | lint-fix | build | test | coverage | serve | e2e | docker |
-|------------------|---------|------|----------|-------|------|----------|-------|-----|--------|
-| apps/api         | ✔️       | ✔️    | ✔️        |       | ✔️    |          | ✔️     |     | ✔️      |
-| apps/api-db      | ✔️       |      |          |       |      |          | ✔️     |     | ✔️      |
-| apps/db-cli      |         | ✔️    | ✔️        | ✔️     | ✔️    |          | ✔️     |     |        |
-| apps/web-app     | ✔️       | ✔️    | ✔️        | ✔️     | ✔️    |          | ✔️     |     | ✔️      |
-| apps/web-app-e2e |         | ✔️    | ✔️        |       |      |          |       | ✔️   |        |
-| libs/api-angular |         | ✔️    | ✔️        | ✔️     | ✔️    |          |       |     |        |
-| libs/api-docs    |         |      |          | ✔️     |      |          | ✔️     |     |        |
-| libs/api-spec    |         | ✔️    |          | ✔️     |      |          | ✔️     |     |        |
+## Introduction
 
-This project was generated using [Nx](https://nx.dev).
+This monorepo includes the codebase of the Challenge Registry.
+
+## Workspace, Projects and Targets
+
+This workspace was generated using [Nx](https://nx.dev).
+
+The table shown below lists the main "projects" included with this workspace.
+Each project is managed using multiple "targets" such as `build`, `test` and
+`serve`. One way to execute a target is by using the command `nx <target>
+<project>`.
+
+|                  | prepare | lint | lint-fix | build | test | serve | e2e | docker |
+|------------------|---------|------|----------|-------|------|-------|-----|--------|
+| apps/api         | ✔️       | ✔️    | ✔️        |       | ✔️    | ✔️     |     | ✔️      |
+| apps/api-db      | ✔️       |      |          |       |      | ✔️     |     | ✔️      |
+| apps/db-cli      |         | ✔️    | ✔️        | ✔️     | ✔️    | ✔️     |     |        |
+| apps/web-app     | ✔️       | ✔️    | ✔️        | ✔️     | ✔️    | ✔️     |     | ✔️      |
+| apps/web-app-e2e |         | ✔️    | ✔️        |       |      |       | ✔️   |        |
+| libs/api-angular |         | ✔️    | ✔️        | ✔️     | ✔️    |       |     |        |
+| libs/api-docs    |         |      |          | ✔️     |      | ✔️     |     |        |
+| libs/api-spec    |         | ✔️    |          | ✔️     |      | ✔️     |     |        |
+
+See this [cheat sheet] to learn more about Nx commands.
 
 ## Requirements
 
@@ -83,6 +95,7 @@ See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
 <!-- Links -->
 
+[cheat sheet]: ./docs/cheat-sheet.md
 [Docker]: https://docs.docker.com/get-docker/
 [Node.js]: https://nodejs.org/en/
 [Yarn]: https://yarnpkg.com/
