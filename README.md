@@ -55,13 +55,13 @@ Build the Docker images.
 
     yarn docker
 
-Seed the API DB with the sample Challenge data.
-
-    yarn seed-db
-
 Start the Challenge Registry.
 
-    docker compose up
+    docker compose up -d
+
+Seed the API DB with sample Challenge data.
+
+    nx build db-cli && yarn seed-db
 
 In your browser, open http://localhost.
 
@@ -83,7 +83,7 @@ Start the Challenge Registry.
 
     yarn start
 
-Seed the API DB with the default seed (`production`).
+Seed the API DB with sample Challenge data.
 
     yarn seed-db
 
