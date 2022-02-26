@@ -16,16 +16,16 @@ Each project is managed using multiple "targets" such as `build`, `test` and
 `serve`. One way to execute a target is by using the command `nx <target>
 <project>`.
 
-|                  | prepare | lint | lint-fix | build | test | coverage | serve | e2e | docker |
-|------------------|---------|------|----------|-------|------|----------|-------|-----|--------|
-| apps/api         | ✔️       | ✔️    | ✔️        |       | ✔️    |          | ✔️     |     | ✔️      |
-| apps/api-db      | ✔️       |      |          |       |      |          | ✔️     |     | ✔️      |
-| apps/db-cli      |         | ✔️    | ✔️        | ✔️     | ✔️    |          | ✔️     |     |        |
-| apps/web-app     | ✔️       | ✔️    | ✔️        | ✔️     | ✔️    |          | ✔️     |     | ✔️      |
-| apps/web-app-e2e |         | ✔️    | ✔️        |       |      |          |       | ✔️   |        |
-| libs/api-angular |         | ✔️    | ✔️        | ✔️     | ✔️    |          |       |     |        |
-| libs/api-docs    |         |      |          | ✔️     |      |          | ✔️     |     |        |
-| libs/api-spec    |         | ✔️    |          | ✔️     |      |          | ✔️     |     |        |
+|                  | prepare | lint | lint-fix | build | test | serve | e2e | docker |
+|------------------|---------|------|----------|-------|------|-------|-----|--------|
+| apps/api         | ✔️       | ✔️    | ✔️        |       | ✔️    | ✔️     |     | ✔️      |
+| apps/api-db      | ✔️       |      |          |       |      | ✔️     |     | ✔️      |
+| apps/db-cli      |         | ✔️    | ✔️        | ✔️     | ✔️    | ✔️     |     |        |
+| apps/web-app     | ✔️       | ✔️    | ✔️        | ✔️     | ✔️    | ✔️     |     | ✔️      |
+| apps/web-app-e2e |         | ✔️    | ✔️        |       |      |       | ✔️   |        |
+| libs/api-angular |         | ✔️    | ✔️        | ✔️     | ✔️    |       |     |        |
+| libs/api-docs    |         |      |          | ✔️     |      | ✔️     |     |        |
+| libs/api-spec    |         | ✔️    |          | ✔️     |      | ✔️     |     |        |
 
 See this [Cheatsheet] to learn more about Nx commands.
 
