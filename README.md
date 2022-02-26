@@ -77,6 +77,10 @@ Seed the API DB with the default seed (`production`).
 
 In your browser, open http://localhost:4200.
 
+## Contributing
+
+See [Contributing.md](.github/CONTRIBUTING.md).
+
 <!-- Links -->
 
 [Docker]: https://docs.docker.com/get-docker/
