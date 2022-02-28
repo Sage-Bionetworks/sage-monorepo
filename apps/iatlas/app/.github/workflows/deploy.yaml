@@ -41,7 +41,7 @@ jobs:
             app_name <- paste(app_name, branch, sep = "-")
           }
           rsconnect::setAccountInfo(
-            name   = 'iatlas-app',
+            name   = 'isb-cgc',
             token  = "${{ secrets.RSCONNECT_TOKEN }}",
             secret = "${{ secrets.RSCONNECT_SECRET }}"
           )
