@@ -37,6 +37,7 @@ jobs:
         run: |
           branch   <- Sys.getenv("GITHUB_REF_NAME")
           print(branch)
+          print(Sys.getenv("GITHUB_REF"))
           app_name <- "iatlas"
           print(app_name)
           if(branch %in% c("testing", "staging")) {
