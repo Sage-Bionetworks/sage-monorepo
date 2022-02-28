@@ -79,7 +79,7 @@ git checkout feature/my-new-feature
 git merge staging
 ```
 
-### Staging
+### Testing the pull request.
 
 When you are ready to deploy your code to staging, you'll need to create a pull request. First, push your branch to Github:
 
@@ -87,17 +87,16 @@ When you are ready to deploy your code to staging, you'll need to create a pull 
 git push
 ```
 
-Then go to the repository on Github, go to your branch, and create a pull-request:
+Then go to the repository on Github, go to your branch, and create a pull-request into the testing branch.
 
 * https://github.com/CRI-iAtlas/iatlas-app
 
-Once your pull request has been accepted, our GitLab CI/CD will automatically deploy your changes to the staging server. Note: It can take 10-15 minutes to update.
+GitLab CI/CD will will run the test-suite on the pull-request, and automatically deploy your changes to the testing server. Note: It can take 10-15 minutes to update.
 
-* Staging Server: https://isb-cgc.shinyapps.io/iatlas-staging/
+If the tests pass and the app is able to be deployed then it will be reviewed.
 
-### Master
+* Testing Server: https://isb-cgc.shinyapps.io/iatlas-testing
 
-Once you validate everything is working in staging, the staging branch can be merged into master and then deployed to production.
 
 ## Installing and Upgrading Packages
 
@@ -153,7 +152,7 @@ Paste and evaluate your tokens in the RStudio console. They look like this:
 ```R
 # shinyapps.io example credentials
 rsconnect::setAccountInfo(
-  name='iatlas-app',
+  name='isb-cgc',
   token='xxx',
   secret='yyy'
 )
