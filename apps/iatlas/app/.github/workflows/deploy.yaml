@@ -40,14 +40,17 @@ jobs:
             app_name <- "iatlas"
           } else if (branch == "staging"){
             app_name <- "iatlas-staging"
+            yaml::write_yaml(list("app" = 'staging'),  "app_config.yml")
           } else {
             app_name <- "iatlas-testing"
+            yaml::write_yaml(list("app" = 'staging'),  "app_config.yml")
           }
           print(app_name)
+          print(yaml::read_yaml("app_config.yml"))
           rsconnect::setAccountInfo(
             name   = 'isb-cgc',
             token  = "${{ secrets.RSCONNECT_TOKEN }}",
             secret = "${{ secrets.RSCONNECT_SECRET }}"
           )
-          #rsconnect::deployApp(appName = app_name)
+          rsconnect::deployApp(appName = app_name)
         shell: Rscript {0}
