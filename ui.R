@@ -29,9 +29,14 @@ ui <- shiny::navbarPage(
   title = shiny::strong("CRI iAtlas Portal"), selected = "Explore",
   shiny::tabPanel("Explore", explorepage_ui(), icon = icon("chart-bar")),
   shiny::tabPanel("Notebooks", notebookpage_ui(), icon = icon("book-open")),
-  shiny::tabPanel("About", aboutpage_ui(), icon = icon("info-circle")),
-  shiny::tabPanel("Resources", resourcespage_ui(), icon = icon("link")),
   shiny::tabPanel("Documentation", docspage_ui(), icon = icon("file-alt")),
+  shiny::tabPanel(
+    shiny::tags$style(type = "text/css", ".tabpanel{padding-top:auto;
+       padding-bottom:auto ; padding-right:0px; padding-left:0px;}"),
+    title=shiny::HTML("<li><a href='https://cri-iatlas.org/about/' target=>About"), icon = icon("info-circle")),
+  shiny::tabPanel(title=shiny::HTML("<li><a href='https://cri-iatlas.org/resources/' target=>Resources"), icon = icon("link")),
+  #shiny::tabPanel("About", aboutpage_ui(), icon = icon("info-circle")),
+  #shiny::tabPanel("Resources", resourcespage_ui()),
   header = headerTagList,
   footer = footerTagList,
   collapsible = TRUE,
