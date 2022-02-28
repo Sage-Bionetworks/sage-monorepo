@@ -32,8 +32,6 @@ ui <- shiny::navbarPage(
   shiny::tabPanel("Documentation", docspage_ui(), icon = icon("file-alt")),
   shiny::tabPanel(title=shiny::HTML("<li><a href='https://cri-iatlas.org/about/' target=>About"), icon = icon("info-circle")),
   shiny::tabPanel(title=shiny::HTML("<li><a href='https://cri-iatlas.org/resources/' target=>Resources"), icon = icon("link")),
-  #shiny::tabPanel("About", aboutpage_ui(), icon = icon("info-circle")),
-  #shiny::tabPanel("Resources", resourcespage_ui(), icon = icon("link")),
   header = headerTagList,
   footer = footerTagList,
   collapsible = TRUE,
