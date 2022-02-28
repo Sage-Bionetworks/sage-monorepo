@@ -1,6 +1,6 @@
 # FAQ
 
-## Unable to create Nx workspace because of Nx GPG-related bug
+## Unable to create Nx workspace because of GPG-related bug
 
 The solution is to temporarily disable the git config `commit.gpgsign`.
 
