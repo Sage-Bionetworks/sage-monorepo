@@ -5,10 +5,10 @@ name: shiny-deploy
 
 on:
   pull_request:
-    branches: [testing]
-  push:
     branches:
       - testing
+  push:
+    branches:
       - main
       - staging
 
@@ -36,14 +36,14 @@ jobs:
       - name: Authorize and deploy app
         run: |
           branch   <- Sys.getenv("GITHUB_REF_NAME")
-          print(branch)
-          print(Sys.getenv("GITHUB_REF"))
-          app_name <- "iatlas"
-          print(app_name)
-          if(branch %in% c("testing", "staging")) {
-            app_name <- paste(app_name, branch, sep = "-")
-            print(app_name)
+          if (branch == "main"){
+            app_name <- "iatlas"
+          } else if (branch == "staging"){
+            app_name <- "iatlas-staging"
+          } else {
+            app_name <- "iatlas-testing"
           }
+          print(app_name)
           rsconnect::setAccountInfo(
             name   = 'isb-cgc',
             token  = "${{ secrets.RSCONNECT_TOKEN }}",
