@@ -113,7 +113,7 @@ export function App() {
 export default App;
 ```
 
-### References
+## References
 
 - [Share Components across Front Ends frameworks using Nx and Web
   Components](https://crocsx.hashnode.dev/share-components-across-front-ends-frameworks-using-nx-and-web-components)
