@@ -9,7 +9,7 @@ This monorepo includes the codebase of the Challenge Registry.
 
 ## Workspace, Projects and Targets
 
-This *workspace* was generated using [Nx](https://nx.dev).
+This workspace was generated using [Nx](https://nx.dev).
 
 The table shown below lists the main *projects* included with this workspace.
 Each project is managed using multiple *targets* such as `build`, `test` and
