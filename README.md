@@ -32,8 +32,8 @@ See this [cheat sheet] to learn more about Nx commands.
 ## Requirements
 
 - [Docker]
-- [Node.js] >= 14
-- [Yarn] >= 1.22
+- [Node.js] ^14.17.0 or >=16.0.0
+- [Yarn] >=1.22
 
 ## Usage
 
@@ -67,6 +67,10 @@ In your browser, open http://localhost.
 
 ## Development
 
+Additional dependencies required:
+
+- [pipenv]
+
 Lint the projects.
 
     yarn lint
@@ -99,3 +103,4 @@ See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 [Docker]: https://docs.docker.com/get-docker/
 [Node.js]: https://nodejs.org/en/
 [Yarn]: https://yarnpkg.com/
+[pipenv]: https://pypi.org/project/pipenv/
