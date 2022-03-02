@@ -45,7 +45,7 @@ Clone this repository.
 
 Source `dev-env.sh`.
 
-    . dev-env.sh
+    . ./dev-env.sh
 
 Prepare the development environment.
 
