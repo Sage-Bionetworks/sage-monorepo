@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ButtonGithubComponent } from '../button-github/button-github.component';
 
 import { NavbarComponent } from './navbar.component';
 
@@ -8,7 +9,7 @@ describe('NavbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NavbarComponent],
+      declarations: [NavbarComponent, ButtonGithubComponent],
     }).compileComponents();
   });
 
