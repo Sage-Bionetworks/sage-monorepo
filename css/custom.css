@@ -41,12 +41,12 @@ body {
 
 /*sidebar*/
 .main-sidebar {
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#333333+0,488a99+100 */
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#333333+0,55a89e+100 */
   background: #333333; /* Old browsers */
-  background: -moz-linear-gradient(top, #333333 0%, #488a99 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #333333 0%,#488a99 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #333333 0%,#488a99 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#488a99',GradientType=0 ); /* IE6-9 */
+  background: -moz-linear-gradient(top, #333333 0%, #55a89e 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #333333 0%,#55a89e 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #333333 0%,#55a89e 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#55a89e',GradientType=0 ); /* IE6-9 */
   border-left-color: rgba(0, 0, 0, 1)!important;
 }
 
