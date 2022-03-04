@@ -54,12 +54,12 @@
 #myFooter a:hover,
 #myFooter a:focus {
     text-decoration: none;
-    color: white;
+    color: #6E96B7;
 }
 
 #myFooter .btn {
     color: white;
-    background-color: #AC3E31;
+    background-color: #B99055;
     border-radius: 20px;
     border: none;
     width: 150px;
