@@ -67,7 +67,7 @@ In your browser, open http://localhost.
 
 ## Development
 
-Additional dependencies required:
+Additional requirements:
 
 - [pipenv]
 
