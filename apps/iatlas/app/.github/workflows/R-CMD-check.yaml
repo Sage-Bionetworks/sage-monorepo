@@ -3,10 +3,7 @@
 on:
   pull_request:
     branches:
-      - testing
-  push:
-    branches:
-      - testing
+      - staging
 
 name: R-CMD-check
 
@@ -21,8 +18,6 @@ jobs:
       matrix:
         config:
           - {os: macOS-latest,   r: '4.1.2'}
-          #- {os: windows-latest, r: '4.1.2'}
-          #- {os: ubuntu-21.10, r: '4.1.2', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true

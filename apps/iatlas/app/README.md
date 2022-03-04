@@ -87,15 +87,17 @@ When you are ready to deploy your code to staging, you'll need to create a pull 
 git push
 ```
 
-Then go to the repository on Github, go to your branch, and create a pull-request into the testing branch.
+Then go to the repository on Github, go to your branch, and create a pull-request into the staging branch.
 
 * https://github.com/CRI-iAtlas/iatlas-app
 
 GitLab CI/CD will will run the test-suite on the pull-request, and automatically deploy your changes to the testing server. Note: It can take 10-15 minutes to update.
 
-If the tests pass and the app is able to be deployed then it will be reviewed.
+If the tests pass and the app is able to be deployed then it will be reviewed and deployed to staging.
 
-* Testing Server: https://isb-cgc.shinyapps.io/iatlas-testing
+* Testing App: https://isb-cgc.shinyapps.io/iatlas-testing
+* Staging App: https://isb-cgc.shinyapps.io/iatlas-staging
+
 
 
 ## Installing and Upgrading Packages
@@ -139,6 +141,7 @@ This application is deployed using rsconnect::deployApp(). As of the current ver
 
 ## Deployment
 
+Only deploy to  branch specific apps, not to testing, staging or the main app.
 The first time you deploy, go through the Deployment-Setup instructions. Afterwards, you can deploy with one line.
 
 ### Deployment Setup (First-Time-Only)
@@ -160,7 +163,7 @@ rsconnect::setAccountInfo(
 
 ### Deploy
 ```R
-rsconnect::deployApp()
+rsconnect::deployApp(appName = "iatlas-branchxxx-app")
 ```
 
 ## Methods
