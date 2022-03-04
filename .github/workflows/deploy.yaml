@@ -6,7 +6,7 @@ name: shiny-deploy
 on:
   pull_request:
     branches:
-      - testing
+      - staging
   push:
     branches:
       - main
