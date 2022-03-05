@@ -4,10 +4,13 @@
 	"name": "Challenge Registry",
 
 	// Sets the run context to one level up instead of the .devcontainer folder.
-	"context": "..",
+	// "context": "..",
 
-	// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
-	"dockerFile": "Dockerfile",
+  "build": {
+    "context": "..",
+    "dockerfile": "Dockerfile",
+    "args": { "IMAGE_VERSION": "16.10.0-slim" }
+  },
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": {},

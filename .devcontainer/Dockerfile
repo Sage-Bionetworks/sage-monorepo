@@ -1,4 +1,5 @@
-FROM node:16.10.0-slim
+ARG IMAGE_VERSION=16.10.0-slim
+FROM node:$IMAGE_VERSION
 
 RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
