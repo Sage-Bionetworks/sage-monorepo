@@ -2,7 +2,6 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.224.2/containers/docker-existing-dockerfile
 {
   "name": "Challenge Registry",
-
   "build": {
     "context": "..",
     "dockerfile": "Dockerfile",
@@ -12,34 +11,16 @@
       "imageVersion": "bullseye-20211220-slim"
     }
   },
-
   "features": {
     "docker-in-docker": "latest"
   },
-
-  // Set *default* container specific settings.json values on container create.
   "settings": {},
-
-  // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
     "dbaeumer.vscode-eslint",
     "ms-python.python"
   ],
-
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [80, 8080, 27017],
-
-  // Uncomment the next line to run commands after the container is created - for example installing curl.
-  // "postCreateCommand": "apt-get update && apt-get install -y curl",
-
-  // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
-  // "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
-
-  // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
-  // "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
-
-  // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "vscode"
 }
