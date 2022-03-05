@@ -1,39 +1,40 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.224.2/containers/docker-existing-dockerfile
 {
-	"name": "Challenge Registry",
-
-	// Sets the run context to one level up instead of the .devcontainer folder.
-	// "context": "..",
+  "name": "Challenge Registry",
 
   "build": {
     "context": "..",
     "dockerfile": "Dockerfile",
     "args": {
-      // "dockerGid": "${localEnv:VARIABLE_NAME}",
+      // "dockerGid": "${localEnv:DOCKER_GID}",
       "dockerGid": "1001",
       "imageVersion": "bullseye-20211220-slim"
     }
   },
 
-	// Set *default* container specific settings.json values on container create.
-	"settings": {},
+  "features": {
+    "docker-in-docker": "latest"
+  },
 
-	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [],
+  // Set *default* container specific settings.json values on container create.
+  "settings": {},
 
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [],
 
-	// Uncomment the next line to run commands after the container is created - for example installing curl.
-	// "postCreateCommand": "apt-get update && apt-get install -y curl",
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
 
-	// Uncomment when using a ptrace-based debugger like C++, Go, and Rust
-	// "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
+  // Uncomment the next line to run commands after the container is created - for example installing curl.
+  // "postCreateCommand": "apt-get update && apt-get install -y curl",
 
-	// Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
-	"mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
+  // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
+  // "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
 
-	// Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "vscode"
+  // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
+  "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
+
+  // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "vscode"
 }

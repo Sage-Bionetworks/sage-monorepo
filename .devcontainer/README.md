@@ -2,6 +2,13 @@
 
 ## Build
 
+Get Docker Group ID (GID):
+
+```console
+$ cut -d: -f3 < <(getent group docker)
+1001
+```
+
 From the root of the workspace:
 
 ```console

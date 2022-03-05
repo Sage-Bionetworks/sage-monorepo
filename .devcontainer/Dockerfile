@@ -1,7 +1,7 @@
 ARG imageVersion=bullseye-20211220-slim
 FROM debian:$imageVersion
 
-ARG dockerGid=1001
+ARG dockerGid
 
 # Create the docker group before installing Docker to specify its GID.
 # Then, install Python, Node and Docker.
@@ -19,7 +19,7 @@ RUN groupadd --gid $dockerGid docker \
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
     nodejs \
-    docker-ce docker-ce-cli containerd.io \
+    # docker-ce docker-ce-cli containerd.io \
   && npm install --global yarn \
   && apt-get -y autoclean \
   && apt-get -y autoremove \
