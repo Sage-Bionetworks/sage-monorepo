@@ -1,12 +1,12 @@
 ARG imageVersion=bullseye-20211220-slim
 FROM debian:$imageVersion
 
-ARG dockerGid
+# ARG dockerGid
 
 # Create the docker group before Docker is installed to specify its GID.
 # The GID must match the value on the host.
 # cut -d: -f3 < <(getent group docker)
-RUN groupadd --gid $dockerGid docker \
+RUN groupadd docker \
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
     ca-certificates curl git gnupg lsb-release sudo \
@@ -24,7 +24,7 @@ RUN groupadd --gid $dockerGid docker \
 ARG user=vscode
 RUN useradd -m $user \
   && echo "$user:$user" | chpasswd \
-  && usermod -a --groups sudo,$dockerGid $user \
+  && usermod -a --groups docker,sudo $user \
   && usermod --shell /bin/bash $user \
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 

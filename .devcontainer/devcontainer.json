@@ -1,13 +1,11 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.224.2/containers/docker-existing-dockerfile
+// https://github.com/microsoft/vscode-dev-containers/tree/main/containers/docker-existing-dockerfile
 {
   "name": "Challenge Registry",
   "build": {
     "context": "..",
     "dockerfile": "Dockerfile",
     "args": {
-      // "dockerGid": "${localEnv:DOCKER_GID}",
-      "dockerGid": "1001",
       "imageVersion": "bullseye-20211220-slim"
     }
   },
