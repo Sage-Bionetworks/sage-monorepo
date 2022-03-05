@@ -1,10 +1,14 @@
 ARG imageVersion=bullseye-20211220-slim
 FROM debian:$imageVersion
 
-RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
+ARG dockerGid=1001
+
+# Create the docker group before installing Docker to specify its GID.
+# Then, install Python, Node and Docker.
+RUN groupadd --gid $dockerGid docker \
+  && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
     ca-certificates curl git gnupg lsb-release sudo \
-    # Python
     python3-pip python-is-python3 \
   && curl -sL https://deb.nodesource.com/setup_16.x | sudo bash - \
   && curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg \
@@ -25,7 +29,7 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
 ARG user=vscode
 RUN useradd -m $user \
   && echo "$user:$user" | chpasswd \
-  && usermod -a --groups sudo $user \
+  && usermod -a --groups sudo,$dockerGid $user \
   && usermod --shell /bin/bash $user \
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 

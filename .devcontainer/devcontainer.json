@@ -10,7 +10,8 @@
     "context": "..",
     "dockerfile": "Dockerfile",
     "args": {
-      // "userUid": "${localEnv:VARIABLE_NAME}",
+      // "dockerGid": "${localEnv:VARIABLE_NAME}",
+      "dockerGid": "1001",
       "imageVersion": "bullseye-20211220-slim"
     }
   },
