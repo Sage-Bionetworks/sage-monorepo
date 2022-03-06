@@ -3,9 +3,7 @@ FROM debian:$imageVersion
 
 # ARG dockerGid
 
-# Create the docker group before Docker is installed to specify its GID.
-# The GID must match the value on the host.
-# cut -d: -f3 < <(getent group docker)
+# Create the docker group so that we can assign it to the user.
 RUN groupadd docker \
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
