@@ -52,3 +52,7 @@ $ eval $(keychain --eval --agents ssh id_rsa)
 ```
 
 TODO: Is the container recreated?
+
+List GPG keys:
+
+    gpg --list-keys
