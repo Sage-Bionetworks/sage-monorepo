@@ -2,6 +2,8 @@
 
 ## Build
 
+Test
+
 Get Docker Group ID (GID):
 
 ```console
