@@ -10,7 +10,7 @@
     }
   },
   "features": {
-    "docker-from-docker": "latest"
+    "docker-in-docker": "latest"
   },
   "settings": {},
   "extensions": [
