@@ -2,6 +2,7 @@ ARG imageVersion=bullseye-20211220-slim
 FROM debian:$imageVersion
 
 # Create the docker group so that we can assign it to the user.
+# This is to enable the non-root user to use the command `docker`.
 RUN groupadd docker \
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
