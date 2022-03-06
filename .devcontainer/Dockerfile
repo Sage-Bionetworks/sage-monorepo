@@ -1,8 +1,6 @@
 ARG imageVersion=bullseye-20211220-slim
 FROM debian:$imageVersion
 
-# ARG dockerGid
-
 # Create the docker group so that we can assign it to the user.
 RUN groupadd docker \
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
