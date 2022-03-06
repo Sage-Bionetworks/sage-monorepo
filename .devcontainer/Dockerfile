@@ -6,7 +6,7 @@ FROM debian:$imageVersion
 RUN groupadd docker \
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
-    ca-certificates curl git gnupg lsb-release ssh sudo \
+    ca-certificates curl git gnupg2 lsb-release ssh sudo \
     python3-pip python-is-python3 \
   && curl -sL https://deb.nodesource.com/setup_16.x | sudo bash - \
   && apt-get update -qq -y \
