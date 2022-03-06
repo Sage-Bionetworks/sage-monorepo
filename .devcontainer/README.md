@@ -1,21 +1,14 @@
 # Dev Container
 
-## Build
+## Sharing Git credentials with your container
 
-Test
-
-Get Docker Group ID (GID):
+Copy your host SSH configuration to the dev container:
 
 ```console
-$ cut -d: -f3 < <(getent group docker)
-1001
+docker cp ~/.ssh/config <container>:/home/vscode/.ssh/.
+docker cp ~/.ssh/id_rsa <container>:/home/vscode/.ssh/.
 ```
 
-From the root of the workspace:
+That's it!
 
-```console
-docker build \
-  --build-arg imageVersion=bullseye-20211220-slim \
-  --tag challenge-registry-dev \
-  .devcontainer/
-```
+TODO: Try using `ssh-agent` instead of copying the above files.
