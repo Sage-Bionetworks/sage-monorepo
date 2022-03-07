@@ -67,7 +67,14 @@ In your browser, open http://localhost.
 
 ## Development
 
-Additional requirements:
+The recommended way to contribute to this workspace is to use the [development
+container] for VS Code specified by this repository. The dev container provides
+all the tools needed (Node.js, Yarn, Python, Docker, etc.). The only requirement
+for the host is to have Docker installed. See [how to develop inside the dev
+container].
+
+If you prefer to develop on the host, please install these additional
+requirements:
 
 - [pipenv]
 
@@ -104,3 +111,5 @@ See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 [Node.js]: https://nodejs.org/en/
 [Yarn]: https://yarnpkg.com/
 [pipenv]: https://pypi.org/project/pipenv/
+[development container]: https://code.visualstudio.com/docs/remote/containers
+[how to develop inside the dev container]: docs/dev-container.md
