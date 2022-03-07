@@ -1,4 +1,4 @@
-# Dev Container
+# Developing inside a Container
 
 ## Overview
 
