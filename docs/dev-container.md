@@ -29,6 +29,10 @@ bottom-left corner of VS Code.
 
 <img src="images/vscode-dev-container.png" height="26">
 
+To reopen the workspace folder locally, click on the above green button and
+select `Reopen Folder Locally` or `Reopen Folder in WSL` when developing on
+Windows with WSL.
+
 ## Sharing Git credentials with the container
 
 To run `git` commands that require authentication inside the dev container,
