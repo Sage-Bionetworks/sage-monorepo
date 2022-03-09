@@ -20,7 +20,7 @@ Open the workspace folder in VS Code after cloning it. VS Code should invite you
 to open the folder in the dev container specified by this repository.
 Alternatively:
 
-- Press `F1` or click on `Help` > `Show All Commands`
+- Press `F1` or <kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> (macOS) or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> (Windows) or click on `Help` > `Show All Commands`
 - Enter `Remote-Containers: Open Folder in Container...`
 
 That's it! VS Code should now have open the workspace folder in the dev
