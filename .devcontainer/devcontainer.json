@@ -1,0 +1,24 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/main/containers/docker-existing-dockerfile
+{
+  "name": "Challenge Registry",
+  "build": {
+    "context": "..",
+    "dockerfile": "Dockerfile",
+    "args": {
+      "imageVersion": "bullseye-20211220-slim"
+    }
+  },
+  "features": {
+    "docker-in-docker": "latest"
+  },
+  "settings": {},
+  "extensions": [
+    "esbenp.prettier-vscode",
+    "firsttris.vscode-jest-runner",
+    "dbaeumer.vscode-eslint",
+    "ms-python.python"
+  ],
+  "forwardPorts": [80, 8080, 27017],
+  "remoteUser": "vscode"
+}
