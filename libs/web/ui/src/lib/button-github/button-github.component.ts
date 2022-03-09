@@ -7,6 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class ButtonGithubComponent {
   @Input() label = 'GitHub';
-  @Input() color = '';
   @Input() href = 'https://github.com';
 }
