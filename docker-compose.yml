@@ -31,7 +31,7 @@ services:
 
   web-app:
     image: sagebionetworks/challenge-registry-web-app:latest
-    container_name: challenge-registry-api-web-app
+    container_name: challenge-registry-web-app
     restart: always
     env_file:
       - apps/web-app/.env
