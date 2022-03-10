@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomepageComponent } from './homepage/homepage.component';
+import { HomepageModule } from './homepage/homepage.module';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [HomepageComponent],
+  declarations: [],
+  exports: [HomepageModule],
 })
 export class WebPagesModule {}

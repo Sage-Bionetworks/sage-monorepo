@@ -19,11 +19,13 @@ import { AppComponent } from './app.component';
 import { NxWelcomeComponent } from './nx-welcome.component';
 import { AppConfig, APP_CONFIG } from './app.config';
 import { TokenService } from './token.service';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [AppComponent, NxWelcomeComponent],
   imports: [
     ApiModule,
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     CountUpModule,
