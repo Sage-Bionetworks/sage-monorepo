@@ -2,7 +2,6 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { CountUpModule } from 'ngx-countup';
@@ -32,16 +31,6 @@ import { AppRoutingModule } from './app-routing.module';
     HttpClientModule,
     MatButtonModule,
     MatSliderModule,
-    RouterModule.forRoot(
-      [
-        // {
-        //   path: 'login',
-        //   loadChildren: () =>
-        //     import('login/Module').then((m) => m.RemoteEntryModule),
-        // },
-      ],
-      { initialNavigation: 'enabledBlocking' }
-    ),
     WebDataAccessModule,
     WebUiModule,
   ],
