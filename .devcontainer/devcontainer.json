@@ -12,13 +12,44 @@
   "features": {
     "docker-in-docker": "latest"
   },
-  "settings": {},
+  "settings": {
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "black",
+    "eslint.format.enable": true,
+    "editor.tabSize": 2,
+    "python.formatting.blackArgs": [],
+    "[python]": {
+      "editor.formatOnSave": true,
+      "editor.tabSize": 4
+    },
+    "[json]": {
+      "editor.tabSize": 2
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+      "editor.formatOnSave": true
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+      "editor.formatOnSave": true
+    },
+    "eslint.workingDirectories": [
+      "./apps/db-cli",
+      "."
+    ]
+  },
   "extensions": [
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
     "dbaeumer.vscode-eslint",
     "ms-python.python"
   ],
-  "forwardPorts": [80, 8080, 27017],
+  "forwardPorts": [
+    80,
+    8080,
+    27017
+  ],
   "remoteUser": "vscode"
 }
