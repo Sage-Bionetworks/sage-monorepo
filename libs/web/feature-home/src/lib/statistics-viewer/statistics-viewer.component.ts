@@ -1,4 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import {
+  Configuration,
+  Registry,
+  RegistryService,
+} from '@challenge-registry/api-angular';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'challenge-registry-statistics-viewer',
@@ -6,6 +12,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./statistics-viewer.component.scss'],
 })
 export class StatisticsViewerComponent {
-  // constructor() {}
-  // ngOnInit(): void {}
+  registry$!: Observable<Registry>;
+
+  constructor(
+    private registryService: RegistryService,
+    @Inject(Configuration) private apiConfig: Configuration
+  ) {
+    this.registry$ = this.registryService.getRegistry();
+  }
 }
