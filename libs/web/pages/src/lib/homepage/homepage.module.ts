@@ -7,6 +7,7 @@ import { HomepageComponent } from './homepage.component';
 // import { NgxTypedJsModule } from 'ngx-typed-js-public';
 // import { CountUpModule } from 'ngx-countup';
 import { WebFeatureHomeModule } from '@challenge-registry/web/feature-home';
+import { WebUiModule } from '@challenge-registry/web/ui';
 
 const routes: Routes = [{ path: '', component: HomepageComponent }];
 
@@ -16,6 +17,7 @@ const routes: Routes = [{ path: '', component: HomepageComponent }];
     CommonModule,
     RouterModule.forChild(routes),
     WebFeatureHomeModule,
+    WebUiModule,
     // FooterModule,
     // MaterialModule,
     // AvatarModule,
