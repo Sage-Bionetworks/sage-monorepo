@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchViewerModule } from './search-viewer/search-viewer.module';
-import { StatisticsViewerComponent } from './statistics-viewer/statistics-viewer.component';
+import { StatisticsViewerModule } from './statistics-viewer/statistics-viewer.module';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [StatisticsViewerComponent],
-  exports: [SearchViewerModule],
+  declarations: [],
+  exports: [SearchViewerModule, StatisticsViewerModule],
 })
 export class WebFeatureHomeModule {}
