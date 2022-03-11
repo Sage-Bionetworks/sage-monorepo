@@ -10731,6 +10731,14 @@ ngx-countup@^13.0.0:
     countup.js "^2.0.8"
     tslib "^2.0.0"
 
+ngx-typed-js@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/ngx-typed-js/-/ngx-typed-js-2.1.1.tgz#8c43fb9fadc4dffaf3b5d6e5e21a53f7156c3095"
+  integrity sha512-j/S5SdYy+Wjw+ad6OEfgk3QfucdqgS48XmKv34k0QII2MyRSwYvMxJ9ax60WdwRQCAG0xmu67FAN8tww7XwTEQ==
+  dependencies:
+    tslib "^2.3.0"
+    typed.js "^2.0.12"
+
 nice-napi@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/nice-napi/-/nice-napi-1.0.2.tgz#dc0ab5a1eac20ce548802fc5686eaa6bc654927b"
@@ -14682,6 +14690,11 @@ typed-assert@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/typed-assert/-/typed-assert-1.0.8.tgz#4bf9f1ce7f3f974d09c3afd7c68d12e1391a233c"
   integrity sha512-5NkbXZUlmCE73Fs7gvkp1XXJWHYetPkg60QnQ2NXQmBYNFxbBr2zA8GCtaH4K2s2WhOmSlgiSTmrjrcm5tnM5g==
+
+typed.js@^2.0.12:
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/typed.js/-/typed.js-2.0.12.tgz#246aff074c8e18d32ec27acb7be15094ac0bc0e1"
+  integrity sha512-lyACZh1cu+vpfYY3DG/bvsGLXXbdoDDpWxmqta10IQUdMXisMXOEyl+jos+YT9uBbzK4QaKYBjT3R0kTJO0Slw==
 
 typedarray-dts@^1.0.0:
   version "1.0.0"
