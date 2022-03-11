@@ -1,9 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import {
-  Configuration,
-  Registry,
-  RegistryService,
-} from '@challenge-registry/api-angular';
+import { Component } from '@angular/core';
+import { Registry, RegistryService } from '@challenge-registry/api-angular';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -14,10 +10,7 @@ import { Observable } from 'rxjs';
 export class StatisticsViewerComponent {
   registry$!: Observable<Registry>;
 
-  constructor(
-    private registryService: RegistryService,
-    @Inject(Configuration) private apiConfig: Configuration
-  ) {
+  constructor(private registryService: RegistryService) {
     this.registry$ = this.registryService.getRegistry();
   }
 }
