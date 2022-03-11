@@ -7,7 +7,7 @@ import { APP_CONFIG, AppConfig } from '@challenge-registry/web/config';
   styleUrls: ['./homepage.component.scss'],
 })
 export class HomepageComponent {
-  public appVersion;
+  public appVersion: string;
 
   constructor(@Inject(APP_CONFIG) private appConfig: AppConfig) {
     this.appVersion = appConfig.appVersion;
