@@ -15,13 +15,12 @@ import {
   // BASE_PATH
 } from '@challenge-registry/api-angular';
 import { AppComponent } from './app.component';
-import { NxWelcomeComponent } from './nx-welcome.component';
 import { AppConfig, APP_CONFIG } from './app.config';
 import { TokenService } from './token.service';
 import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent],
+  declarations: [AppComponent],
   imports: [
     ApiModule,
     AppRoutingModule,
