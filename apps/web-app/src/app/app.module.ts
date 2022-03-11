@@ -15,7 +15,7 @@ import {
   // BASE_PATH
 } from '@challenge-registry/api-angular';
 import { AppComponent } from './app.component';
-import { AppConfig, APP_CONFIG } from './app.config';
+import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
 import { TokenService } from './token.service';
 import { AppRoutingModule } from './app-routing.module';
 
