@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-// import { Challenge } from '@challenge-registry/api-angular';
-import { PageTitleService } from '@challenge-registry/web/data-access';
-// import { FooterComponent } from '@challenge-registry/web/ui';
-import '@challenge-registry/shared/web-components';
 import { Observable } from 'rxjs';
+import { PageTitleService } from '@challenge-registry/web/data-access';
+import { NavbarSection } from '@challenge-registry/web/ui';
 import { Registry, RegistryService } from '@challenge-registry/api-angular';
+import { APP_SECTIONS } from './app-sections';
 
 @Component({
   selector: 'challenge-registry-root',
@@ -13,6 +12,7 @@ import { Registry, RegistryService } from '@challenge-registry/api-angular';
 })
 export class AppComponent implements OnInit {
   title = 'web-app';
+  sections: { [key: string]: NavbarSection } = APP_SECTIONS;
   registry$!: Observable<Registry>;
 
   constructor(
@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.pageTitleService.setTitle('Awesome web-app');
+    this.pageTitleService.setTitle('Challenge Registry');
     this.registry$ = this.registryService.getRegistry();
   }
 }
