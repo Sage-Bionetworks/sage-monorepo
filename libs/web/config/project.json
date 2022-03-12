@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/web/config",
+  "sourceRoot": "libs/web/config/src",
+  "prefix": "challenge-registry",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/web/config"],
+      "options": {
+        "jestConfig": "libs/web/config/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/web/config/src/**/*.ts",
+          "libs/web/config/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

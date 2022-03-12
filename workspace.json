@@ -15,7 +15,10 @@
     "web-app-e2e": "apps/web-app-e2e",
     "web-app-react": "apps/web-app-react",
     "web-app-react-e2e": "apps/web-app-react-e2e",
+    "web-config": "libs/web/config",
     "web-data-access": "libs/web/data-access",
+    "web-feature-home": "libs/web/feature-home",
+    "web-pages": "libs/web/pages",
     "web-ui": "libs/web/ui"
   }
 }

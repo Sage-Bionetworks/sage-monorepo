@@ -2,7 +2,6 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { CountUpModule } from 'ngx-countup';
@@ -16,30 +15,21 @@ import {
   // BASE_PATH
 } from '@challenge-registry/api-angular';
 import { AppComponent } from './app.component';
-import { NxWelcomeComponent } from './nx-welcome.component';
-import { AppConfig, APP_CONFIG } from './app.config';
+import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
 import { TokenService } from './token.service';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent],
+  declarations: [AppComponent],
   imports: [
     ApiModule,
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     CountUpModule,
     HttpClientModule,
     MatButtonModule,
     MatSliderModule,
-    RouterModule.forRoot(
-      [
-        // {
-        //   path: 'login',
-        //   loadChildren: () =>
-        //     import('login/Module').then((m) => m.RemoteEntryModule),
-        // },
-      ],
-      { initialNavigation: 'enabledBlocking' }
-    ),
     WebDataAccessModule,
     WebUiModule,
   ],
