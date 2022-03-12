@@ -6,6 +6,7 @@ import { TopicsViewerModule } from './topics-viewer/topics-viewer.module';
 import { ChallengeHostListModule } from './challenge-host-list/challenge-host-list.module';
 import { ChallengeRegistrationModule } from './challenge-registration/challenge-registration.module';
 import { FeaturedChallengeListModule } from './featured-challenge-list/featured-challenge-list.module';
+import { SponsorListModule } from './sponsor-list/sponsor-list.module';
 
 @NgModule({
   imports: [CommonModule],
@@ -17,6 +18,7 @@ import { FeaturedChallengeListModule } from './featured-challenge-list/featured-
     ChallengeHostListModule,
     ChallengeRegistrationModule,
     FeaturedChallengeListModule,
+    SponsorListModule,
   ],
 })
 export class WebFeatureHomeModule {}
