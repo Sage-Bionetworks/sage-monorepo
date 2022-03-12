@@ -24,6 +24,10 @@ function challenge-registry-prepare {
   nx run-many --all --parallel --target=prepare
 }
 
+function challenge-registry-python {
+  nx run-many --all --parallel --target=python
+}
+
 function challenge-registry-lint {
   nx run-many --all --target=lint
 }

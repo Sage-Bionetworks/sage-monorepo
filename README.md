@@ -76,8 +76,12 @@ container].
 If you prefer to develop on the host, please install these additional
 requirements:
 
-- [pipenv]
 - [pyenv] >=2.2
+- [pipenv]
+
+Install Python virtualenvs:
+
+    yarn python
 
 Lint the projects.
 

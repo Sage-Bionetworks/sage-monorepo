@@ -7,6 +7,7 @@
     "lint": "bash -c '. dev-env.sh && challenge-registry-lint'",
     "build": "bash -c '. dev-env.sh && challenge-registry-build'",
     "test": "bash -c '. dev-env.sh && challenge-registry-test'",
+    "python": "bash -c '. dev-env.sh && challenge-registry-python'",
     "docker": "bash -c '. dev-env.sh && challenge-registry-docker'",
     "seed-db": "bash -c '. dev-env.sh && challenge-registry-seed-db'",
     "postinstall": "ngcc --properties es2015 browser module main",
