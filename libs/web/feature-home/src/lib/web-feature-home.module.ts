@@ -5,6 +5,7 @@ import { StatisticsViewerModule } from './statistics-viewer/statistics-viewer.mo
 import { TopicsViewerModule } from './topics-viewer/topics-viewer.module';
 import { ChallengeHostListModule } from './challenge-host-list/challenge-host-list.module';
 import { ChallengeRegistrationModule } from './challenge-registration/challenge-registration.module';
+import { FeaturedChallengeListModule } from './featured-challenge-list/featured-challenge-list.module';
 
 @NgModule({
   imports: [CommonModule],
@@ -15,6 +16,7 @@ import { ChallengeRegistrationModule } from './challenge-registration/challenge-
     TopicsViewerModule,
     ChallengeHostListModule,
     ChallengeRegistrationModule,
+    FeaturedChallengeListModule,
   ],
 })
 export class WebFeatureHomeModule {}
