@@ -3,6 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'about',
+    loadChildren: () =>
+      import('@challenge-registry/web/pages').then((m) => m.AboutModule),
+  },
+  {
     path: 'not-found',
     loadChildren: () =>
       import('@challenge-registry/web/pages').then((m) => m.NotFoundModule),
