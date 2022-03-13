@@ -19,6 +19,7 @@
     "web-data-access": "libs/web/data-access",
     "web-feature-home": "libs/web/feature-home",
     "web-pages": "libs/web/pages",
-    "web-ui": "libs/web/ui"
+    "web-ui": "libs/web/ui",
+    "web-util": "libs/web/util"
   }
 }
