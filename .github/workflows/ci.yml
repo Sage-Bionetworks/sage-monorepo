@@ -6,7 +6,7 @@ on:
   pull_request:
 
 env:
-  PRIMARY_NODE_VERSION: 14
+  PRIMARY_NODE_VERSION: 16
   PRIMARY_PYTHON_VERSION: 3.9
   NX_BRANCH: ${{ github.event.number }}
   NX_RUN_GROUP: ${{ github.run_id }}
@@ -27,6 +27,11 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.PRIMARY_NODE_VERSION }}
+      - name: Setup node_modules cache
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PRIMARY_PYTHON_VERSION }}
@@ -60,6 +65,11 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.PRIMARY_NODE_VERSION }}
+      - name: Setup node_modules cache
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PRIMARY_PYTHON_VERSION }}
