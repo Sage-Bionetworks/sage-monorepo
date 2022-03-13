@@ -8,6 +8,11 @@ export const routes: Routes = [
       import('@challenge-registry/web/pages').then((m) => m.AboutModule),
   },
   {
+    path: 'signup',
+    loadChildren: () =>
+      import('@challenge-registry/web/pages').then((m) => m.SignupModule),
+  },
+  {
     path: 'not-found',
     loadChildren: () =>
       import('@challenge-registry/web/pages').then((m) => m.NotFoundModule),

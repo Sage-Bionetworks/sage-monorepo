@@ -30,7 +30,8 @@
         "libs/web/feature-home/src/index.ts"
       ],
       "@challenge-registry/web/pages": ["libs/web/pages/src/index.ts"],
-      "@challenge-registry/web/ui": ["libs/web/ui/src/index.ts"]
+      "@challenge-registry/web/ui": ["libs/web/ui/src/index.ts"],
+      "@challenge-registry/web/util": ["libs/web/util/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
