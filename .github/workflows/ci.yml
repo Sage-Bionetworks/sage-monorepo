@@ -6,17 +6,20 @@ on:
   pull_request:
 
 env:
-  PRIMARY_NODE_VERSION: 14
+  PRIMARY_NODE_VERSION: 16
   PRIMARY_PYTHON_VERSION: 3.9
   NX_BRANCH: ${{ github.event.number }}
   NX_RUN_GROUP: ${{ github.run_id }}
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+  NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
 
 jobs:
   main:
     runs-on: ubuntu-latest
     if: ${{ github.event_name != 'pull_request' }}
+    env:
+      NX_BRANCH: main
     steps:
       - uses: actions/checkout@v2
         name: Checkout [main]
@@ -27,6 +30,12 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.PRIMARY_NODE_VERSION }}
+      - name: Setup Node.js cache
+        id: cache-node
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PRIMARY_PYTHON_VERSION }}
@@ -38,7 +47,9 @@ jobs:
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-      - run: yarn install --frozen-lockfile
+      - name: Install Node.js dependencies
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
       - name: Install Python dependencies
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: |
@@ -60,6 +71,12 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.PRIMARY_NODE_VERSION }}
+      - name: Setup Node.js cache
+        id: cache-node
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PRIMARY_PYTHON_VERSION }}
@@ -71,7 +88,9 @@ jobs:
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-      - run: yarn install --frozen-lockfile
+      - name: Install Node.js dependencies
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
       - name: Install Python dependencies
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: |
