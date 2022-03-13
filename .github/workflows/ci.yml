@@ -47,6 +47,11 @@ jobs:
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
+      - name: debug
+        run: |
+          ls -al node_modules/.cache/nx
+          nx clear-cache
+          ls -al node_modules/.cache/nx
       - name: Install Python dependencies
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: |
