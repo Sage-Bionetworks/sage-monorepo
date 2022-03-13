@@ -11,6 +11,7 @@ env:
   NX_BRANCH: ${{ github.event.number }}
   NX_RUN_GROUP: ${{ github.run_id }}
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+  NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
 
 jobs:
