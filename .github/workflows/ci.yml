@@ -49,9 +49,8 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: debug
         run: |
-          ls -al node_modules/.cache
+          ls -al node_modules/
           yarn nx clear-cache
-          ls -al node_modules/.cache
       - name: Install Python dependencies
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: |
