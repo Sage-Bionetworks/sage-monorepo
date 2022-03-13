@@ -37,7 +37,7 @@ See this [cheat sheet] to learn more about Nx commands.
 
 ## Usage
 
-### Running with Docker
+### Preparing the workspace
 
 Clone this repository.
 
@@ -47,9 +47,15 @@ Source `dev-env.sh`.
 
     . ./dev-env.sh
 
+Install Node.js dependencies:
+
+    yarn install --frozen-lockfile
+
 Prepare the development environment.
 
     challenge-registry-prepare
+
+### Running with Docker
 
 Build the Docker images.
 
