@@ -58,8 +58,6 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
-    env:
-      NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -96,5 +94,11 @@ jobs:
         run: |
           yarn nx prepare api
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
+        env:
+          NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
       - run: yarn nx affected --target=build --parallel --max-parallel=3
+        env:
+          NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
       - run: yarn nx affected --target=test --parallel --max-parallel=2
+        env:
+          NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
