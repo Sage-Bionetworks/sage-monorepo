@@ -10,8 +10,7 @@ env:
   PRIMARY_PYTHON_VERSION: 3.9
   NX_BRANCH: ${{ github.event.number }}
   NX_RUN_GROUP: ${{ github.run_id }}
-  NX_CLOUD_AUTH_TOKEN: 'plop'
-  # NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+  NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_CLOUD_ENV_NAME: 'linux'
 
 jobs:
@@ -28,7 +27,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.PRIMARY_NODE_VERSION }}
-      - name: Setup node_modules cache
+      - name: Setup Node.js cache
+        id: cache-node
         uses: actions/cache@v2
         with:
           path: '**/node_modules'
@@ -44,7 +44,9 @@ jobs:
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-      - run: yarn install --frozen-lockfile
+      - name: Install Node.js dependencies
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
       - name: Install Python dependencies
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: |
@@ -66,7 +68,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.PRIMARY_NODE_VERSION }}
-      - name: Setup node_modules cache
+      - name: Setup Node.js cache
+        id: cache-node
         uses: actions/cache@v2
         with:
           path: '**/node_modules'
@@ -82,7 +85,9 @@ jobs:
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-      - run: yarn install --frozen-lockfile
+      - name: Install Node.js dependencies
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
       - name: Install Python dependencies
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: |
