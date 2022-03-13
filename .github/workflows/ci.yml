@@ -17,8 +17,6 @@ jobs:
   main:
     runs-on: ubuntu-latest
     if: ${{ github.event_name != 'pull_request' }}
-    env:
-
     steps:
       - uses: actions/checkout@v2
         name: Checkout [main]
