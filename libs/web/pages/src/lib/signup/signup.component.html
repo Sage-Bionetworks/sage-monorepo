@@ -1,1 +1,35 @@
-<p>signup works!</p>
+<main>
+  <mat-card class="container">
+    <mat-card-title class="title">Join ROCC</mat-card-title>
+    <!-- <mat-card-content>
+      <form class="form-container" [formGroup]="newUserForm" novalidate>
+        <mat-form-field class="email">
+          <input matInput placeholder="Enter your email" type="email"
+            formControlName="email">
+          <mat-error *ngIf="email?.invalid">{{getEmailErrorMessage()}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="password">
+          <input matInput placeholder="Create a password" type="password"
+            formControlName="password">
+          <mat-error *ngIf="password?.invalid">{{getPasswordErrorMessage()}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="username">
+          <input matInput placeholder="Enter a username" type="text"
+            formControlName="username">
+          <mat-error *ngIf="username?.invalid">{{getUsernameErrorMessage()}}
+          </mat-error>
+        </mat-form-field>
+        <mat-error *ngIf="errors.other">{{errors.other}}</mat-error>
+        <div>
+          <button mat-raised-button color="primary"
+            [disabled]="newUserForm.invalid" (click)="createUserAccount()">Sign
+            up</button>
+        </div>
+      </form>
+    </mat-card-content> -->
+  </mat-card>
+</main>
+
+<challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
