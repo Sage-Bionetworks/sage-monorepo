@@ -39,9 +39,11 @@ See this [cheat sheet] to learn more about Nx commands.
 
 ### Running with Docker
 
-Clone this repository.
+Clone this repository. If you plan to contribute to this project, please create a fork and use its
+URL for cloning.  For more information on contributing and/or our Forking Workflow approach, see 
+[CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
-    git clone --depth 1 https://github.com/Sage-Bionetworks/challenge-registry.git
+    git clone --depth 1 <repo url>
 
 Source `dev-env.sh`.
 
