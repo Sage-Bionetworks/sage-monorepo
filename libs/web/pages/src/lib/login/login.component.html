@@ -1,1 +1,28 @@
-<p>login works!</p>
+<main>
+  <mat-card class="container">
+    <mat-card-title class="title">Log in to ROCC</mat-card-title>
+    <mat-card-content>
+      <form class="form-container" [formGroup]="signinForm" novalidate>
+        <mat-form-field class="username">
+          <input matInput placeholder="Enter a username" type="text"
+            formControlName="username">
+          <mat-error *ngIf="username?.invalid">{{getUsernameErrorMessage()}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="password">
+          <input matInput placeholder="Create a password" type="password"
+            formControlName="password">
+          <mat-error *ngIf="password?.invalid">{{getPasswordErrorMessage()}}
+          </mat-error>
+        </mat-form-field>
+        <mat-error *ngIf="errors.other">{{errors.other}}</mat-error>
+        <div>
+          <button mat-raised-button color="primary"
+            [disabled]="signinForm.invalid" (click)="signin()">Log in</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</main>
+
+<challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
