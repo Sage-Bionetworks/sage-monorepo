@@ -43,7 +43,7 @@ Clone this repository. If you plan to contribute to this project, please create 
 URL for cloning.  For more information on contributing and/or our Forking Workflow approach, see 
 [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
-git clone --depth 1 <repo url>
+    git clone --depth 1 <repo url>
 
 Source `dev-env.sh`.
 
