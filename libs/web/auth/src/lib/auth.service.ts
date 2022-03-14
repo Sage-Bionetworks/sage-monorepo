@@ -67,11 +67,12 @@ export class AuthService {
         return token;
       }),
       switchMap(() => this.userService.getAuthenticatedUser()),
+      tap((user) => console.log('fired', user)),
       tap((user) => this.user.next(user))
     );
   }
 
-  signout(): Observable<null> {
+  logout(): Observable<null> {
     this.tokenService.deleteToken();
     this.user.next(undefined);
     return of(null);

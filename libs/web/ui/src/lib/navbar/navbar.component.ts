@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MenuItem } from '../user-button/menu-item';
 import { NavbarSection } from './navbar-section';
 
 @Component({
@@ -9,6 +10,8 @@ import { NavbarSection } from './navbar-section';
 export class NavbarComponent {
   @Input() title = 'Awesome App';
   @Input() loggedIn = false;
+  @Input() userMenuItems: MenuItem[] = [];
+  @Output() userMenuItemSelected = new EventEmitter<MenuItem>();
 
   private _sections: { [key: string]: NavbarSection } = {};
   sectionsKeys: string[] = [];
@@ -21,5 +24,9 @@ export class NavbarComponent {
 
   public get sections(): { [key: string]: NavbarSection } {
     return this._sections;
+  }
+
+  selectUserMenuItem(menuItem: MenuItem) {
+    this.userMenuItemSelected.emit(menuItem);
   }
 }

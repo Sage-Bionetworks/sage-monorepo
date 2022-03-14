@@ -2,7 +2,7 @@
   <mat-card class="container">
     <mat-card-title class="title">Log in to ROCC</mat-card-title>
     <mat-card-content>
-      <form class="form-container" [formGroup]="signinForm" novalidate>
+      <form class="form-container" [formGroup]="loginForm" novalidate>
         <mat-form-field class="username">
           <input matInput placeholder="Enter a username" type="text"
             formControlName="username">
@@ -18,7 +18,7 @@
         <mat-error *ngIf="errors.other">{{errors.other}}</mat-error>
         <div>
           <button mat-raised-button color="primary"
-            [disabled]="signinForm.invalid" (click)="signin()">Log in</button>
+            [disabled]="loginForm.invalid" (click)="login()">Log in</button>
         </div>
       </form>
     </mat-card-content>

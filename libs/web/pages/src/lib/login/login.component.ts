@@ -20,7 +20,7 @@ import { ModelError as ApiClientError } from '@challenge-registry/api-angular';
 export class LoginComponent implements OnInit, OnDestroy {
   public appVersion: string;
 
-  signinForm!: FormGroup;
+  loginForm!: FormGroup;
   errors = {
     other: undefined,
   } as { other?: string };
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.signinForm = this.formBuilder.group({
+    this.loginForm = this.formBuilder.group({
       username: new FormControl('awesome-user', [
         Validators.required,
         Validators.minLength(3),
@@ -64,11 +64,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   get username() {
-    return this.signinForm.get('username');
+    return this.loginForm.get('username');
   }
 
   get password() {
-    return this.signinForm.get('password');
+    return this.loginForm.get('password');
   }
 
   getUsernameErrorMessage(): string {
@@ -95,8 +95,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  signin(): void {
-    if (this.signinForm.invalid) {
+  login(): void {
+    if (this.loginForm.invalid) {
       return;
     }
     this.submitted = true;
