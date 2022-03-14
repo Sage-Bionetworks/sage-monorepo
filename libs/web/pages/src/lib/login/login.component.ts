@@ -6,8 +6,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '@challenge-registry/web/auth';
 import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
+import { isApiClientError } from '@challenge-registry/web/util';
 import { Subscription } from 'rxjs';
+import { ModelError as ApiClientError } from '@challenge-registry/api-angular';
 
 @Component({
   selector: 'challenge-registry-login',
@@ -28,7 +31,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    @Inject(APP_CONFIG) private appConfig: AppConfig // private authService: AuthService
+    private authService: AuthService,
+    @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.appVersion = appConfig.appVersion;
   }
@@ -46,12 +50,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         Validators.maxLength(64),
       ]),
     });
-    // const signedInSub = this.authService.isSignedIn().subscribe((signedIn) => {
-    //   if (signedIn) {
-    //     this.router.navigate([this.authService.getRedirectUrl()]);
-    //   }
-    // });
-    // this.subscriptions.push(signedInSub);
+
+    const loggedInSub = this.authService.isLoggedIn().subscribe((loggedIn) => {
+      if (loggedIn) {
+        this.router.navigate([this.authService.getRedirectUrl()]);
+      }
+    });
+    this.subscriptions.push(loggedInSub);
   }
 
   ngOnDestroy(): void {
@@ -97,25 +102,25 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.submitted = true;
     this.errors.other = undefined;
 
-    // this.authService
-    //   .signin(this.username?.value, this.password?.value)
-    //   .subscribe(
-    //     () => {
-    //       this.router.navigateByUrl(this.authService.getRedirectUrl());
-    //       this.authService.setRedirectUrl('/');
-    //     },
-    //     (err) => {
-    //       const error = err.error as RoccClientError;
-    //       if (isRoccClientError(error)) {
-    //         if (error.status === 409) {
-    //           this.username?.setErrors({
-    //             alreadyExists: true,
-    //           });
-    //         } else {
-    //           this.errors.other = `Server error: ${error.title}`;
-    //         }
-    //       }
-    //     }
-    //   );
+    this.authService
+      .login(this.username?.value, this.password?.value)
+      .subscribe(
+        () => {
+          this.router.navigateByUrl(this.authService.getRedirectUrl());
+          this.authService.setRedirectUrl('/');
+        },
+        (err) => {
+          const error = err.error as ApiClientError;
+          if (isApiClientError(error)) {
+            if (error.status === 409) {
+              this.username?.setErrors({
+                alreadyExists: true,
+              });
+            } else {
+              this.errors.other = `Server error: ${error.title}`;
+            }
+          }
+        }
+      );
   }
 }

@@ -54,7 +54,7 @@ export class AuthService {
     });
   }
 
-  signin(login: string, password: string): Observable<User> {
+  login(login: string, password: string): Observable<User> {
     const localAuthRequest: LocalAuthRequest = {
       login: login,
       password: password,
@@ -77,7 +77,7 @@ export class AuthService {
     return of(null);
   }
 
-  isSignedIn(): Observable<boolean> {
+  isLoggedIn(): Observable<boolean> {
     if (!this.initialized) {
       this.initialize();
     }
@@ -99,7 +99,7 @@ export class AuthService {
     this.redirectUrl = redirectUrl;
   }
 
-  getSigninUrl(): string {
+  getLoginUrl(): string {
     return this.loginUrl;
   }
 }

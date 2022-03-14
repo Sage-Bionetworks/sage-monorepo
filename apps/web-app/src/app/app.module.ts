@@ -8,15 +8,10 @@ import { CountUpModule } from 'ngx-countup';
 
 import { WebDataAccessModule } from '@challenge-registry/web/data-access';
 import { WebUiModule } from '@challenge-registry/web/ui';
-import {
-  ApiModule,
-  Configuration,
-  // ConfigurationParameters,
-  // BASE_PATH
-} from '@challenge-registry/api-angular';
+import { ApiModule, Configuration } from '@challenge-registry/api-angular';
 import { AppComponent } from './app.component';
 import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
-import { TokenService } from './token.service';
+import { TokenService } from '@challenge-registry/web/auth';
 import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({

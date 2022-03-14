@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { WebUiModule } from '@challenge-registry/web/ui';
+import { WebAuthModule } from '@challenge-registry/web/auth';
 
 const routes: Routes = [{ path: '', component: LoginComponent }];
 
@@ -22,6 +23,7 @@ const routes: Routes = [{ path: '', component: LoginComponent }];
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    WebAuthModule,
     WebUiModule,
   ],
   exports: [LoginComponent],
