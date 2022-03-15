@@ -66,7 +66,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   selectUserMenuItem(menuItem: MenuItem): void {
-    console.log('Navbar user menu item selected', menuItem);
     // TODO DRY selected item, no not make comparison with string that way
     if (menuItem.name === 'Log out') {
       this.authService.logout();

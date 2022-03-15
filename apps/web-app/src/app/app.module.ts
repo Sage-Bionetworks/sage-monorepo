@@ -11,7 +11,7 @@ import { WebUiModule } from '@challenge-registry/web/ui';
 import { ApiModule, Configuration } from '@challenge-registry/api-angular';
 import { AppComponent } from './app.component';
 import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
-import { TokenService } from '@challenge-registry/web/auth';
+import { TokenService, WebAuthModule } from '@challenge-registry/web/auth';
 import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
@@ -26,6 +26,7 @@ import { AppRoutingModule } from './app-routing.module';
     MatButtonModule,
     MatSliderModule,
     WebDataAccessModule,
+    WebAuthModule,
     WebUiModule,
   ],
   providers: [

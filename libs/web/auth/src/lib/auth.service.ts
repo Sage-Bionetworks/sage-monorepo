@@ -80,7 +80,8 @@ export class AuthService {
 
   isLoggedIn(): Observable<boolean> {
     if (!this.initialized) {
-      this.initialize();
+      console.log('initializing auth.service');
+      this.initialize(); // TODO: use await?
     }
     return this.user.pipe(map((user) => user !== undefined));
   }

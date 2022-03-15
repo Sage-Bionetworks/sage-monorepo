@@ -106,8 +106,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       .login(this.username?.value, this.password?.value)
       .subscribe(
         () => {
-          this.router.navigateByUrl(this.authService.getRedirectUrl());
-          this.authService.setRedirectUrl('/');
+          // this.router.navigateByUrl(this.authService.getRedirectUrl());
+          // this.authService.setRedirectUrl('/');
         },
         (err) => {
           const error = err.error as ApiClientError;
