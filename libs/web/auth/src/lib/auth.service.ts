@@ -67,7 +67,6 @@ export class AuthService {
         return token;
       }),
       switchMap(() => this.userService.getAuthenticatedUser()),
-      tap((user) => console.log('fired', user)),
       tap((user) => this.user.next(user))
     );
   }
@@ -80,8 +79,7 @@ export class AuthService {
 
   isLoggedIn(): Observable<boolean> {
     if (!this.initialized) {
-      console.log('initializing auth.service');
-      this.initialize(); // TODO: use await?
+      this.initialize();
     }
     return this.user.pipe(map((user) => user !== undefined));
   }
