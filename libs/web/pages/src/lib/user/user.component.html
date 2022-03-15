@@ -1,1 +1,12 @@
-<p>user works!</p>
+<main>
+  {{account$ | async | json}}
+  <!-- <ng-container *ngIf="account$ | async as account" [ngSwitch]="account?.type">
+    <rocc-user-account *ngSwitchCase="'User'" [accountId]="account.id">
+    </rocc-user-account>
+    <rocc-org-account *ngSwitchCase="'Organization'" [accountId]="account.id">
+    </rocc-org-account>
+  </ng-container> -->
+  <!-- <rocc-not-found *ngIf="accountNotFound"></rocc-not-found> -->
+</main>
+
+<challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
