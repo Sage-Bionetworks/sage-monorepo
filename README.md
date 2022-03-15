@@ -37,7 +37,7 @@ See this [cheat sheet] to learn more about Nx commands.
 
 ## Usage
 
-### Running with Docker
+### Preparing the workspace
 
 Clone this repository. If you plan to contribute to this project, please create a fork and use its
 URL for cloning.  For more information on contributing and/or our Forking Workflow approach, see 
@@ -49,9 +49,15 @@ Source `dev-env.sh`.
 
     . ./dev-env.sh
 
+Install Node.js dependencies:
+
+    yarn install --frozen-lockfile
+
 Prepare the development environment.
 
     challenge-registry-prepare
+
+### Running with Docker
 
 Build the Docker images.
 
@@ -78,7 +84,12 @@ container].
 If you prefer to develop on the host, please install these additional
 requirements:
 
+- [pyenv] >=2.2
 - [pipenv]
+
+Install Python virtualenvs:
+
+    yarn python
 
 Lint the projects.
 
@@ -112,6 +123,7 @@ See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 [Docker]: https://docs.docker.com/get-docker/
 [Node.js]: https://nodejs.org/en/
 [Yarn]: https://yarnpkg.com/
+[pyenv]: https://github.com/pyenv/pyenv
 [pipenv]: https://pypi.org/project/pipenv/
 [development container]: https://code.visualstudio.com/docs/remote/containers
 [how to develop inside the dev container]: docs/dev-container.md

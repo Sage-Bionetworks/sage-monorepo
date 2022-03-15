@@ -20,8 +20,12 @@ function challenge-registry-cd {
 export PATH="$PATH:$(yarn bin)"
 
 function challenge-registry-prepare {
-  yarn install --frozen-lockfile
   nx run-many --all --parallel --target=prepare
+}
+
+# Setup Python virtualenvs
+function challenge-registry-python {
+  nx run-many --all --parallel --target=python
 }
 
 function challenge-registry-lint {
