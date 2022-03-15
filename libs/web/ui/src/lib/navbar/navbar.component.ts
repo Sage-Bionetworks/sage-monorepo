@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Avatar } from '../avatar/avatar';
+import { EMPTY_AVATAR } from '../avatar/mock-avatars';
 import { MenuItem } from '../user-button/menu-item';
 import { NavbarSection } from './navbar-section';
 
@@ -10,6 +12,7 @@ import { NavbarSection } from './navbar-section';
 export class NavbarComponent {
   @Input() title = 'Awesome App';
   @Input() loggedIn = false;
+  @Input() userAvatar: Avatar = EMPTY_AVATAR;
   @Input() userMenuItems: MenuItem[] = [];
   @Output() userMenuItemSelected = new EventEmitter<MenuItem>();
 

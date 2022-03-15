@@ -6,6 +6,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { UserButtonComponent } from './user-button.component';
+import { AvatarModule } from '../avatar/avatar.module';
 
 @NgModule({
   declarations: [UserButtonComponent],
@@ -16,6 +17,7 @@ import { UserButtonComponent } from './user-button.component';
     MatDividerModule,
     MatIconModule,
     MatMenuModule,
+    AvatarModule,
   ],
   exports: [UserButtonComponent],
 })

@@ -17,8 +17,7 @@
   <a mat-button class="sage-button" *ngIf="!loggedIn" routerLink="/signup"
     aria-label="Sign Up">Sign Up</a>
 
-  <challenge-registry-user-button *ngIf="loggedIn"
+  <challenge-registry-user-button *ngIf="loggedIn" [avatar]="userAvatar"
     [menuItems]="userMenuItems" (menuItemSelected)="selectUserMenuItem($event)">
   </challenge-registry-user-button>
-  <!-- [avatar]="userAvatar" -->
 </nav>

@@ -10714,6 +10714,14 @@ ng-packagr@^13.0.0:
   optionalDependencies:
     esbuild "^0.14.0"
 
+ngx-avatar@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/ngx-avatar/-/ngx-avatar-4.1.0.tgz#f3f4b47b7490cdb83d1bfffd535c199c15559307"
+  integrity sha512-0cIaCYOeY7tNsr9Zdg7SmgVG3Yka5mQDvYboybjP4yF47o2XO/rvkRaY98N5wtRF8FL9+OzLXfHbrvYGDGEomQ==
+  dependencies:
+    ts-md5 "^1.2.4"
+    tslib "^2.0.0"
+
 ngx-build-plus@^13.0.0:
   version "13.0.1"
   resolved "https://registry.yarnpkg.com/ngx-build-plus/-/ngx-build-plus-13.0.1.tgz#60d78d1f5a104e1c3338861b0c089b2ad1442809"
@@ -14555,6 +14563,11 @@ ts-loader@^9.2.6:
     enhanced-resolve "^5.0.0"
     micromatch "^4.0.0"
     semver "^7.3.4"
+
+ts-md5@^1.2.4:
+  version "1.2.11"
+  resolved "https://registry.yarnpkg.com/ts-md5/-/ts-md5-1.2.11.tgz#0bbdf884eecf7da3952fe8671a109d7e55d322c6"
+  integrity sha512-vAwy9rEuRE6a8xa1MavIVkLFyyU0ydk4CLMFA5vOVccmQKLOuGb/BHm3oEN7XHf2FoqS+z0pSvhaad/ombd1Vg==
 
 ts-node@~9.1.1:
   version "9.1.1"
