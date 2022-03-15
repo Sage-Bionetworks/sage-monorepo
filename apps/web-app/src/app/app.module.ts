@@ -26,7 +26,7 @@ import { AppRoutingModule } from './app-routing.module';
     MatButtonModule,
     MatSliderModule,
     WebDataAccessModule,
-    WebAuthModule,
+    WebAuthModule.forRoot(),
     WebUiModule,
   ],
   providers: [
