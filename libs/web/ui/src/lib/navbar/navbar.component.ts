@@ -1,4 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Avatar } from '../avatar/avatar';
+import { EMPTY_AVATAR } from '../avatar/mock-avatars';
+import { MenuItem } from '../user-button/menu-item';
 import { NavbarSection } from './navbar-section';
 
 @Component({
@@ -7,9 +10,11 @@ import { NavbarSection } from './navbar-section';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
-  @Input() title = 'Sage Angular';
-  @Input() githubUrl = 'https://github.com/Sage-Bionetworks/sage-angular';
-  @Output() login = new EventEmitter<Event>();
+  @Input() title = 'Awesome App';
+  @Input() loggedIn = false;
+  @Input() userAvatar: Avatar = EMPTY_AVATAR;
+  @Input() userMenuItems: MenuItem[] = [];
+  @Output() userMenuItemSelected = new EventEmitter<MenuItem>();
 
   private _sections: { [key: string]: NavbarSection } = {};
   sectionsKeys: string[] = [];
@@ -22,5 +27,9 @@ export class NavbarComponent {
 
   public get sections(): { [key: string]: NavbarSection } {
     return this._sections;
+  }
+
+  selectUserMenuItem(menuItem: MenuItem) {
+    this.userMenuItemSelected.emit(menuItem);
   }
 }

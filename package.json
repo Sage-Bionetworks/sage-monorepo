@@ -35,6 +35,7 @@
     "commander": "^8.2.0",
     "core-js": "^3.6.5",
     "mongoose": "^6.0.9",
+    "ngx-avatar": "^4.1.0",
     "ngx-countup": "^13.0.0",
     "ngx-typed-js": "^2.1.1",
     "react": "17.0.2",

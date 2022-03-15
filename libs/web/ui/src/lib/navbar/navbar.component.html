@@ -12,11 +12,12 @@
 
   <div class="flex-spacer"></div>
 
-  <challenge-registry-button-github [href]="githubUrl">
-  </challenge-registry-button-github>
-
-  <a mat-button class="sage-button" routerLink="/signin"
-    aria-label="Sign In">Sign In</a>
-  <a mat-button class="sage-button" routerLink="/signup"
+  <a mat-button class="sage-button" *ngIf="!loggedIn" routerLink="/login"
+    aria-label="Log In">Log In</a>
+  <a mat-button class="sage-button" *ngIf="!loggedIn" routerLink="/signup"
     aria-label="Sign Up">Sign Up</a>
+
+  <challenge-registry-user-button *ngIf="loggedIn" [avatar]="userAvatar"
+    [menuItems]="userMenuItems" (menuItemSelected)="selectUserMenuItem($event)">
+  </challenge-registry-user-button>
 </nav>

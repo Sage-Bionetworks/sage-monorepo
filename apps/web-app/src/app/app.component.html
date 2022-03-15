@@ -1,4 +1,7 @@
-<challenge-registry-navbar class="mat-elevation-z6" [title]="title" [sections]="sections">
+<challenge-registry-navbar class="mat-elevation-z6" [title]="title"
+  [sections]="sections" [loggedIn]="loggedIn" [userAvatar]="userAvatar"
+  [userMenuItems]="userMenuItems"
+  (userMenuItemSelected)="selectUserMenuItem($event)">
 </challenge-registry-navbar>
 
 <router-outlet></router-outlet>
