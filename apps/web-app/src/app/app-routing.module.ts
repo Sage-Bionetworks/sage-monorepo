@@ -29,6 +29,11 @@ export const routes: Routes = [
       import('@challenge-registry/web/pages').then((m) => m.HomepageModule),
   },
   {
+    path: ':login',
+    loadChildren: () =>
+      import('@challenge-registry/web/pages').then((m) => m.UserModule),
+  },
+  {
     path: '**',
     redirectTo: '/not-found',
   },
