@@ -4,10 +4,22 @@ import {
   Account,
   AccountService,
   ModelError as ApiClientError,
+  Organization,
+  User,
+  UserService,
 } from '@challenge-registry/api-angular';
 import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
 import { isApiClientError } from '@challenge-registry/web/util';
-import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
+import {
+  catchError,
+  filter,
+  map,
+  Observable,
+  of,
+  Subscription,
+  switchMap,
+  throwError,
+} from 'rxjs';
 
 @Component({
   selector: 'challenge-registry-user',
@@ -17,10 +29,14 @@ import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 export class UserComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
+  user$!: Observable<User>;
+  orgs: Organization[] = [];
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private accountService: AccountService,
+    private userService: UserService,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.appVersion = appConfig.appVersion;
@@ -46,5 +62,21 @@ export class UserComponent implements OnInit {
       // this.pageTitleService.setTitle(`${pageTitle} · ROCC`);
       // this.accountNotFound = !account;
     });
+
+    this.user$ = this.account$.pipe(
+      filter((account): account is Account => account !== undefined),
+      switchMap((account) => this.userService.getUser(account.id))
+    );
+
+    const orgs$ = this.account$.pipe(
+      filter((account): account is Account => account !== undefined),
+      switchMap((account) =>
+        this.userService.listUserOrganizations(account.id)
+      ),
+      map((page) => page.organizations)
+    );
+
+    const orgsSub = orgs$.subscribe((orgs) => (this.orgs = orgs));
+    this.subscriptions.push(orgsSub);
   }
 }
