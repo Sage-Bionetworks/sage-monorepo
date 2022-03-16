@@ -15,8 +15,8 @@
       <ng-container [ngSwitch]="activeTab">
         <challenge-registry-user-profile-overview *ngSwitchCase="tabs['overview']" [user]="user"
           [orgs]="orgs"></challenge-registry-user-profile-overview>
-        <!-- <rocc-user-profile-challenges *ngSwitchCase="tabs['challenges']"
-          [userId]="accountId"></rocc-user-profile-challenges> -->
+        <challenge-registry-user-profile-challenges *ngSwitchCase="tabs['challenges']"
+          [userId]="user.id"></challenge-registry-user-profile-challenges>
         <!-- <rocc-user-profile-starred *ngSwitchCase="tabs['starred']" [user]="user" [loggedIn]="loggedIn">
         </rocc-user-profile-starred> -->
       </ng-container>
