@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/web/feature-user",
+  "sourceRoot": "libs/web/feature-user/src",
+  "prefix": "challenge-registry",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/web/feature-user"],
+      "options": {
+        "jestConfig": "libs/web/feature-user/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/web/feature-user/src/**/*.ts",
+          "libs/web/feature-user/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

@@ -30,6 +30,9 @@
       "@challenge-registry/web/feature-home": [
         "libs/web/feature-home/src/index.ts"
       ],
+      "@challenge-registry/web/feature-user": [
+        "libs/web/feature-user/src/index.ts"
+      ],
       "@challenge-registry/web/pages": ["libs/web/pages/src/index.ts"],
       "@challenge-registry/web/ui": ["libs/web/ui/src/index.ts"],
       "@challenge-registry/web/util": ["libs/web/util/src/index.ts"]
