@@ -8,6 +8,7 @@ import {
   User,
   UserService,
 } from '@challenge-registry/api-angular';
+import { AuthService } from '@challenge-registry/web/auth';
 import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
 import { isApiClientError } from '@challenge-registry/web/util';
 import {
@@ -33,6 +34,7 @@ export class UserProfileComponent implements OnInit {
   account$!: Observable<Account | undefined>;
   user$!: Observable<User>;
   orgs: Organization[] = [];
+  loggedIn = false;
 
   tabs = USER_PROFILE_TABS;
   tabKeys: string[] = Object.keys(this.tabs);
@@ -45,6 +47,7 @@ export class UserProfileComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private userService: UserService,
+    private authService: AuthService,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.appVersion = appConfig.appVersion;
@@ -98,6 +101,10 @@ export class UserProfileComponent implements OnInit {
         this.activeTab = this.tabs[key];
       }
     });
+
+    this.authService
+      .isLoggedIn()
+      .subscribe((loggedIn) => (this.loggedIn = loggedIn));
 
     this.subscriptions.push(orgsSub);
     this.subscriptions.push(activeTabSub);
