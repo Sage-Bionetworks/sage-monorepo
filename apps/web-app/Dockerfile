@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # hadolint ignore=DL3008
 RUN apt-get update -qq -y && apt-get install --no-install-recommends -qq -y \
-    git \
+    ca-certificates git \
   && apt-get -y autoclean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/*
@@ -15,7 +15,7 @@ RUN apt-get update -qq -y && apt-get install --no-install-recommends -qq -y \
 WORKDIR /opt
 
 # Build the web-app
-RUN git clone --depth 1 --branch $challengeRegistryBranch git://github.com/${challengeRegistryRepository}.git \
+RUN git clone --depth 1 --branch $challengeRegistryBranch https://github.com/${challengeRegistryRepository}.git \
   && cd challenge-registry \
   && yarn install --frozen-lockfile \
   && yarn nx build web-app
