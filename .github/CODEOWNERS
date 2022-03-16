@@ -1,0 +1,11 @@
+* @tschaffter
+
+/apps/api/ @vpchung
+/apps/api-db/ @vpchung
+/apps/db-cli/ @rrchai
+/apps/web-app/ @rrchai
+/apps/web-app-e2e/ @rrchai
+
+/libs/api-spec/ @vpchung
+/libs/shared/ @rrchai
+/libs/web/ @rrchai
