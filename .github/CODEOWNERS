@@ -2,7 +2,7 @@
 
 /apps/api/ @vpchung
 /apps/api-db/ @vpchung
-/apps/api-cli/ @rrchai
+/apps/db-cli/ @rrchai
 /apps/web-app/ @rrchai
 /apps/web-app-e2e/ @rrchai
 
