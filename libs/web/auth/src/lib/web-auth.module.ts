@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from './auth.service';
 import { TokenModule } from './token/token.module';
 import { GuardModule } from './guard/guard.module';
-import { UserModule } from './user/user.module';
+import { UserProfileModule } from './user/user.module';
 
 @NgModule({
   imports: [CommonModule],
-  exports: [GuardModule, TokenModule, UserModule],
+  exports: [GuardModule, TokenModule, UserProfileModule],
 })
 export class WebAuthModule {
   static forRoot(): ModuleWithProviders<WebAuthModule> {

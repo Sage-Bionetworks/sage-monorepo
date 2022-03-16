@@ -31,7 +31,7 @@ export const routes: Routes = [
   {
     path: ':login',
     loadChildren: () =>
-      import('@challenge-registry/web/pages').then((m) => m.UserModule),
+      import('@challenge-registry/web/pages').then((m) => m.UserProfileModule),
   },
   {
     path: '**',

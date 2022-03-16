@@ -7,4 +7,4 @@ import { UserService } from './user.service';
   imports: [CommonModule],
   providers: [UserService],
 })
-export class UserModule {}
+export class UserProfileModule {}

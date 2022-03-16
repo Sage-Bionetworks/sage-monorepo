@@ -7,4 +7,4 @@ import { UserProfileBarModule } from './user-profile-bar/user-profile-bar.module
   declarations: [],
   exports: [UserProfileBarModule],
 })
-export class WebFeatureUserModule {}
+export class WebFeatureUserProfileModule {}

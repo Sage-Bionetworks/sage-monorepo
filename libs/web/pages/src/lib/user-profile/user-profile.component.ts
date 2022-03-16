@@ -25,10 +25,10 @@ import { USER_PROFILE_TABS } from './user-profile-tabs';
 
 @Component({
   selector: 'challenge-registry-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss'],
+  templateUrl: './user-profile.component.html',
+  styleUrls: ['./user-profile.component.scss'],
 })
-export class UserComponent implements OnInit {
+export class UserProfileComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
   user$!: Observable<User>;
