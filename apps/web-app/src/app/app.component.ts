@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PageTitleService } from '@challenge-registry/web/data-access';
+import { PageTitleService } from '@challenge-registry/web/util';
 import {
   Avatar,
   MenuItem,

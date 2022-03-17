@@ -6,13 +6,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { CountUpModule } from 'ngx-countup';
 
-import { WebDataAccessModule } from '@challenge-registry/web/data-access';
 import { WebUiModule } from '@challenge-registry/web/ui';
 import { ApiModule, Configuration } from '@challenge-registry/api-angular';
 import { AppComponent } from './app.component';
 import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
 import { TokenService, WebAuthModule } from '@challenge-registry/web/auth';
 import { AppRoutingModule } from './app-routing.module';
+import { WebUtilModule } from '@challenge-registry/web/util';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,7 +25,7 @@ import { AppRoutingModule } from './app-routing.module';
     HttpClientModule,
     MatButtonModule,
     MatSliderModule,
-    WebDataAccessModule,
+    WebUtilModule,
     WebAuthModule.forRoot(),
     WebUiModule,
   ],
