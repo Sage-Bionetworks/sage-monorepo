@@ -10,7 +10,7 @@ export const routes: Routes = [
   {
     path: 'login',
     loadChildren: () =>
-      import('@challenge-registry/web/pages').then((m) => m.LoginModule),
+      import('@challenge-registry/web/login').then((m) => m.LoginModule),
   },
   {
     path: 'signup',
