@@ -22,6 +22,7 @@
     "web-home": "libs/web/home",
     "web-not-found": "libs/web/not-found",
     "web-pages": "libs/web/pages",
+    "web-signup": "libs/web/signup",
     "web-ui": "libs/web/ui",
     "web-util": "libs/web/util"
   }

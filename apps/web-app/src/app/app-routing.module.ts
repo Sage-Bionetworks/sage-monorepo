@@ -15,7 +15,7 @@ export const routes: Routes = [
   {
     path: 'signup',
     loadChildren: () =>
-      import('@challenge-registry/web/pages').then((m) => m.SignupModule),
+      import('@challenge-registry/web/signup').then((m) => m.SignupModule),
   },
   {
     path: 'not-found',

@@ -37,6 +37,7 @@
       "@challenge-registry/web/home": ["libs/web/home/src/index.ts"],
       "@challenge-registry/web/not-found": ["libs/web/not-found/src/index.ts"],
       "@challenge-registry/web/pages": ["libs/web/pages/src/index.ts"],
+      "@challenge-registry/web/signup": ["libs/web/signup/src/index.ts"],
       "@challenge-registry/web/ui": ["libs/web/ui/src/index.ts"],
       "@challenge-registry/web/util": ["libs/web/util/src/index.ts"]
     }
