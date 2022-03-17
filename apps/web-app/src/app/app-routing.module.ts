@@ -26,7 +26,7 @@ export const routes: Routes = [
     path: '',
     pathMatch: 'full',
     loadChildren: () =>
-      import('@challenge-registry/web/pages').then((m) => m.HomepageModule),
+      import('@challenge-registry/web/home').then((m) => m.HomeModule),
   },
   {
     path: ':login',

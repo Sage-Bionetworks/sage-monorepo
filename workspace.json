@@ -17,8 +17,8 @@
     "web-app-react-e2e": "apps/web-app-react-e2e",
     "web-auth": "libs/web/auth",
     "web-config": "libs/web/config",
-    "web-feature-home": "libs/web/feature-home",
     "web-feature-user-profile": "libs/web/feature-user-profile",
+    "web-home": "libs/web/home",
     "web-pages": "libs/web/pages",
     "web-ui": "libs/web/ui",
     "web-util": "libs/web/util"
