@@ -20,7 +20,7 @@ export const routes: Routes = [
   {
     path: 'not-found',
     loadChildren: () =>
-      import('@challenge-registry/web/pages').then((m) => m.NotFoundModule),
+      import('@challenge-registry/web/not-found').then((m) => m.NotFoundModule),
   },
   {
     path: '',
