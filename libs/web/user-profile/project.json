@@ -1,14 +1,14 @@
 {
   "projectType": "library",
-  "root": "libs/web/pages",
-  "sourceRoot": "libs/web/pages/src",
+  "root": "libs/web/user-profile",
+  "sourceRoot": "libs/web/user-profile/src",
   "prefix": "challenge-registry",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/web/pages"],
+      "outputs": ["coverage/libs/web/user-profile"],
       "options": {
-        "jestConfig": "libs/web/pages/jest.config.js",
+        "jestConfig": "libs/web/user-profile/jest.config.js",
         "passWithNoTests": true
       }
     },
@@ -16,8 +16,8 @@
       "executor": "@nrwl/linter:eslint",
       "options": {
         "lintFilePatterns": [
-          "libs/web/pages/src/**/*.ts",
-          "libs/web/pages/src/**/*.html"
+          "libs/web/user-profile/src/**/*.ts",
+          "libs/web/user-profile/src/**/*.html"
         ]
       }
     }

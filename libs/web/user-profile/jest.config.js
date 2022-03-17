@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'web-pages',
+  displayName: 'web-user-profile',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/web/pages',
+  coverageDirectory: '../../../coverage/libs/web/user-profile',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },
