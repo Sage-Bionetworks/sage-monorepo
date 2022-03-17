@@ -5,7 +5,7 @@ export const routes: Routes = [
   {
     path: 'about',
     loadChildren: () =>
-      import('@challenge-registry/web/pages').then((m) => m.AboutModule),
+      import('@challenge-registry/web/about').then((m) => m.AboutModule),
   },
   {
     path: 'login',
