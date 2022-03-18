@@ -1,0 +1,8 @@
+<mat-card *ngIf="org">
+  <challenge-registry-avatar [avatar]="orgAvatar"></challenge-registry-avatar>
+  <div class="rocc-org-content-container">
+    <a href="/{{org.login}}"><mat-card-title>{{org.name}}</mat-card-title></a>
+    <mat-card-content>{{org.description}}</mat-card-content>
+  </div>
+
+</mat-card>
