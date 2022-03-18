@@ -1,0 +1,30 @@
+<div class="rocc-user-page-bar-container">
+  <div class="rocc-user-page-bar-content-container">
+    <challenge-registry-avatar [avatar]="userAvatar"></challenge-registry-avatar>
+    <div class="rocc-user-page-bar-name">{{user.name}}</div>
+    <div class="rocc-user-page-bar-login-container">
+      <span>@{{user.login}}</span>
+      <mat-icon *ngIf="isVerified" inline=true>
+        verified
+      </mat-icon>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="rocc-user-page-bar-detail-container">
+      <span class="rocc-user-page-bar-organizations-container">
+        <mat-icon>home_work</mat-icon>
+        <span class="rocc-user-page-bar-organizations">
+          <strong>{{numOrgs}}</strong> organizations
+        </span>
+      </span>
+      <span class="dot"> · </span>
+      <a class="rocc-user-page-bar-favorites-container" routerLink="."
+        [queryParams]="{tab: 'starred'}">
+        <mat-icon>star</mat-icon>
+        <span class="rocc-user-page-bar-favorites">
+          <strong>{{numStarredChallenges$ | async}}</strong>
+        </span>
+      </a>
+    </div>
+    <button mat-raised-button>Edit your profile</button>
+  </div>
+</div>

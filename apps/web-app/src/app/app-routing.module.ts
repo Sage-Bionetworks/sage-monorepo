@@ -5,28 +5,35 @@ export const routes: Routes = [
   {
     path: 'about',
     loadChildren: () =>
-      import('@challenge-registry/web/pages').then((m) => m.AboutModule),
+      import('@challenge-registry/web/about').then((m) => m.AboutModule),
   },
   {
     path: 'login',
     loadChildren: () =>
-      import('@challenge-registry/web/pages').then((m) => m.LoginModule),
+      import('@challenge-registry/web/login').then((m) => m.LoginModule),
   },
   {
     path: 'signup',
     loadChildren: () =>
-      import('@challenge-registry/web/pages').then((m) => m.SignupModule),
+      import('@challenge-registry/web/signup').then((m) => m.SignupModule),
   },
   {
     path: 'not-found',
     loadChildren: () =>
-      import('@challenge-registry/web/pages').then((m) => m.NotFoundModule),
+      import('@challenge-registry/web/not-found').then((m) => m.NotFoundModule),
   },
   {
     path: '',
     pathMatch: 'full',
     loadChildren: () =>
-      import('@challenge-registry/web/pages').then((m) => m.HomepageModule),
+      import('@challenge-registry/web/home').then((m) => m.HomeModule),
+  },
+  {
+    path: ':login',
+    loadChildren: () =>
+      import('@challenge-registry/web/user-profile').then(
+        (m) => m.UserProfileModule
+      ),
   },
   {
     path: '**',

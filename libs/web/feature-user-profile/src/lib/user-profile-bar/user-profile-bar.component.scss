@@ -1,0 +1,76 @@
+.rocc-user-page-bar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 260px;
+  height: 100%;
+  background-color: #f3f3f3;
+}
+
+.rocc-user-page-bar-content-container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 200px;
+  width: 100%;
+}
+
+.rocc-user-page-bar-name {
+  margin: 20px 0;
+  font-size: 1.8em;
+  font-weight: 900;
+}
+
+.rocc-user-page-bar-login-container {
+  display: flex;
+  margin-bottom: 20px;
+  font-size: 1.2em;
+
+  span {
+    margin-right: 15px;
+  }
+
+  .mat-icon {
+    color: green;
+  }
+}
+
+.mat-divider {
+  width: calc(260px * 0.9);
+}
+
+.rocc-user-page-bar-detail-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 20px;
+  font-size: 1.2em;
+
+  .rocc-user-page-bar-organizations-container,
+  .rocc-user-page-bar-favorites-container {
+    display: inline-flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.54);
+    text-decoration: none;
+
+    .mat-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      color: #f1d07e;
+      font-size: 20px;
+    }
+  }
+
+  .dot {
+    margin: 0 10px;
+    font-size: 2em;
+  }
+}
+
+.mat-raised-button {
+  margin-top: 30px;
+  background-color: #7879f1;
+  color: #fff;
+}

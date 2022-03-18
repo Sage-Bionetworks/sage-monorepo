@@ -11,16 +11,20 @@
     "shared-style": "libs/shared/style",
     "shared-theming": "libs/shared/theming",
     "shared-web-components": "libs/shared/web-components",
+    "web-about": "libs/web/about",
     "web-app": "apps/web-app",
     "web-app-e2e": "apps/web-app-e2e",
     "web-app-react": "apps/web-app-react",
     "web-app-react-e2e": "apps/web-app-react-e2e",
     "web-auth": "libs/web/auth",
     "web-config": "libs/web/config",
-    "web-data-access": "libs/web/data-access",
-    "web-feature-home": "libs/web/feature-home",
-    "web-pages": "libs/web/pages",
+    "web-feature-user-profile": "libs/web/feature-user-profile",
+    "web-home": "libs/web/home",
+    "web-login": "libs/web/login",
+    "web-not-found": "libs/web/not-found",
+    "web-signup": "libs/web/signup",
     "web-ui": "libs/web/ui",
+    "web-user-profile": "libs/web/user-profile",
     "web-util": "libs/web/util"
   }
 }
