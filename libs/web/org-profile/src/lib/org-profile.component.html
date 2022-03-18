@@ -1,0 +1,17 @@
+<main>
+  <div class="container" *ngIf="org$ | async as org">
+    {{org | json }}
+    <!-- <rocc-org-header [org]="org"></rocc-org-header> -->
+    <!-- <p>org-account works!</p> -->
+
+    <!-- <nav mat-tab-nav-bar>
+      <a mat-tab-link *ngFor="let section of sections"
+        [routerLink]="section.path" routerLinkActive #rla="routerLinkActive"
+        [routerLinkActiveOptions]="{exact: true}"
+        [active]="rla.isActive">{{section.label}}</a>
+    </nav> -->
+    <!-- <rocc-org-overview [org]="org"></rocc-org-overview> -->
+  </div>
+</main>
+
+<challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
