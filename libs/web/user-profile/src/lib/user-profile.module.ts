@@ -3,8 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UserProfileComponent } from './user-profile.component';
-import { WebFeatureUserProfileModule } from '@challenge-registry/web/feature-user-profile';
 import { WebUiModule } from '@challenge-registry/web/ui';
+import { UserProfileBarModule } from './user-profile-bar/user-profile-bar.module';
+import { UserProfileChallengesModule } from './user-profile-challenges/user-profile-challenges.module';
+import { UserProfileOverviewModule } from './user-profile-overview/user-profile-overview.module';
+import { UserProfileStarredModule } from './user-profile-starred/user-profile-starred.module';
 
 const routes: Routes = [{ path: '', component: UserProfileComponent }];
 
@@ -14,8 +17,11 @@ const routes: Routes = [{ path: '', component: UserProfileComponent }];
     CommonModule,
     RouterModule.forChild(routes),
     MatTabsModule,
-    WebFeatureUserProfileModule,
     WebUiModule,
+    UserProfileBarModule,
+    UserProfileChallengesModule,
+    UserProfileOverviewModule,
+    UserProfileStarredModule,
   ],
   exports: [UserProfileComponent],
 })
