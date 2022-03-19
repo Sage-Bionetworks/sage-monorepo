@@ -13,9 +13,9 @@ import { OrgProfileRoutingModule } from './org-profile-routing.modules';
     CommonModule,
     MatTabsModule,
     WebUiModule,
-    OrgProfileRoutingModule,
     OrgProfileHeaderModule,
     OrgProfileOverviewModule,
+    OrgProfileRoutingModule,
   ],
   exports: [OrgProfileComponent],
 })

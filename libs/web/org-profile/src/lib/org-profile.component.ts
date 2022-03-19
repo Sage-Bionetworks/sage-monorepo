@@ -17,6 +17,7 @@ import {
 import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isApiClientError } from '@challenge-registry/web/util';
+import { OrgProfileDataServiceService } from './org-profile-data-service.service';
 
 @Component({
   selector: 'challenge-registry-org-profile',
@@ -36,6 +37,7 @@ export class OrgProfileComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private orgService: OrganizationService,
+    private orgProfileDataService: OrgProfileDataServiceService,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.appVersion = appConfig.appVersion;
@@ -69,6 +71,8 @@ export class OrgProfileComponent implements OnInit {
 
     this.org$.subscribe((org) => {
       console.log(org);
+      this.orgProfileDataService.setOrg(org);
+
       this.sections = [
         {
           label: 'Overview',
