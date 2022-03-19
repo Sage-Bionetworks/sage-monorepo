@@ -1,0 +1,11 @@
+{
+  "root": "libs/web/assets",
+  "sourceRoot": "libs/web/assets/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": [
+    "type:assets",
+    "scope:web"
+  ]
+}
