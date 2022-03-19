@@ -6,8 +6,19 @@ import { WebUiModule } from '@challenge-registry/web/ui';
 import { OrgProfileComponent } from './org-profile.component';
 import { OrgProfileHeaderModule } from './org-profile-header/org-profile-header.module';
 import { OrgProfileOverviewModule } from './org-profile-overview/org-profile-overview.module';
+import { OrgProfileOverviewComponent } from './org-profile-overview/org-profile-overview.component';
+import { OrgProfileChallengesComponent } from './org-profile-challenges/org-profile-challenges.component';
 
-const routes: Routes = [{ path: '', component: OrgProfileComponent }];
+const routes: Routes = [
+  {
+    path: '',
+    component: OrgProfileComponent,
+    children: [
+      { path: '', component: OrgProfileOverviewComponent },
+      { path: 'challenges', component: OrgProfileChallengesComponent },
+    ],
+  },
+];
 
 @NgModule({
   declarations: [OrgProfileComponent],
