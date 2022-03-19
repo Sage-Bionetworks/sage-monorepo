@@ -18,6 +18,7 @@
     "web-app-react-e2e": "apps/web-app-react-e2e",
     "web-assets": "libs/web/assets",
     "web-auth": "libs/web/auth",
+    "web-challenges": "libs/web/challenges",
     "web-config": "libs/web/config",
     "web-home": "libs/web/home",
     "web-login": "libs/web/login",

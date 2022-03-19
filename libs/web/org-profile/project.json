@@ -23,7 +23,5 @@
     }
   },
   "tags": [],
-  "implicitDependencies": [
-    "web-assets"
-  ]
+  "implicitDependencies": ["web-assets"]
 }

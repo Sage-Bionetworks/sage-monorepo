@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/web/challenges",
+  "sourceRoot": "libs/web/challenges/src",
+  "prefix": "challenge-registry",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/web/challenges"],
+      "options": {
+        "jestConfig": "libs/web/challenges/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/web/challenges/src/**/*.ts",
+          "libs/web/challenges/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
