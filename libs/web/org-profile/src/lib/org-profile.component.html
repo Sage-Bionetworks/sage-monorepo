@@ -1,0 +1,17 @@
+<main>
+  <div class="container" *ngIf="org$ | async as org">
+    <challenge-registry-org-profile-header [org]="org"></challenge-registry-org-profile-header>
+
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link *ngFor="let section of sections"
+        [routerLink]="section.path" routerLinkActive #rla="routerLinkActive"
+        [routerLinkActiveOptions]="{exact: true}"
+        [active]="rla.isActive">{{section.label}}</a>
+    </nav>
+    <!-- <challenge-registry-org-profile-overview [org]="org"></challenge-registry-org-profile-overview> -->
+
+    <router-outlet></router-outlet>
+  </div>
+</main>
+
+<challenge-registry-footer [version]="appVersion"></challenge-registry-footer>

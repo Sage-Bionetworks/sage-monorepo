@@ -1,0 +1,24 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { OrgProfileSettingsComponent } from './org-profile-settings.component';
+
+describe('OrgProfileSettingsComponent', () => {
+  let component: OrgProfileSettingsComponent;
+  let fixture: ComponentFixture<OrgProfileSettingsComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [OrgProfileSettingsComponent],
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(OrgProfileSettingsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

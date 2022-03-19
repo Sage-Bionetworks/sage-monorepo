@@ -33,6 +33,11 @@
             "output": "assets"
           },
           {
+            "input": "libs/web/assets/src/assets",
+            "glob": "**/*",
+            "output": "web-assets"
+          },
+          {
             "input": "libs/shared/assets/src",
             "glob": "favicon.ico",
             "output": ""

@@ -1,0 +1,36 @@
+<div class="rocc-org-header-container">
+  <img src="{{org.avatarUrl}}" alt="org-logo">
+  <div class="rocc-org-header-content-container">
+    <div class="rocc-org-header-title-container">
+      <span class="rocc-org-header-title">{{org.name}}</span>
+    </div>
+    <div class="rocc-org-header-info-container">
+      <div class="rocc-org-header-info-left-container">
+        <div class="rocc-org-header-link-container">
+          <a *ngIf="!!org.websiteUrl" href="{{org.websiteUrl}}"  target="_blank">
+            <mat-icon>travel_explore</mat-icon>
+            <span>{{org.websiteUrl}}</span>
+          </a>
+          <div *ngIf="!!org.email">
+            <mat-icon>mail_outline</mat-icon>
+            <span>{{org.email}}</span>
+          </div>
+        </div>
+        <p>{{org.description}}</p>
+      </div>
+      <div class="rocc-org-header-info-right-container">
+        <ul>
+        <li><span>People</span>:
+          <strong>{{numPeople$ | async}}</strong>
+        </li>
+        <li><span>Challenges</span>:
+          <strong>{{numChallenges$ | async}}</strong>
+        </li>
+        <li><span>Joined</span>:
+          <strong>{{org.createdAt | date: "yyyy-MM-dd":"UTC"}}</strong>
+        </li>
+      </ul>
+      </div>
+    </div>
+  </div>
+</div>

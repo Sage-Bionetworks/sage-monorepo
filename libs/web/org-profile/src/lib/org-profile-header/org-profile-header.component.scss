@@ -1,0 +1,98 @@
+$base_size: 12px;
+
+a {
+  color: #fff;
+  text-decoration: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.rocc-org-header-container {
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: 200px;
+  padding: 15px 30px;
+  color: #fff;
+  background-image: url('/web-assets/images/challenge-view-header-background.png');
+  background-size: cover;
+  font-size: $base_size;
+
+  img {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+.rocc-org-header-content-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-top: 50px;
+  padding-left: 30px;
+}
+
+.rocc-org-header-title-container {
+  .rocc-org-header-title {
+    font-size: 2.5em;
+    font-weight: 900;
+  }
+}
+
+.rocc-org-header-info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .rocc-org-header-info-left-container {
+    min-height: 100px;
+
+    .rocc-org-header-link-container {
+      margin: 10px 0;
+
+      a,
+      div {
+        display: inline-flex;
+        align-items: flex-end;
+        margin-right: 15px;
+      }
+      .mat-icon {
+        margin-right: 5px;
+      }
+    }
+
+    flex-direction: column;
+    p {
+      font-size: 1.2em;
+    }
+  }
+
+  .rocc-org-header-info-right-container {
+    min-width: 40ch;
+
+    ul {
+      list-style: none;
+      display: table;
+      border-spacing: 10px;
+      margin-top: 0;
+
+      li {
+        display: table-row;
+        font-size: 1.2em;
+      }
+
+      span {
+        display: table-cell;
+        padding-right: 5px;
+      }
+
+      strong {
+        padding-left: 5px;
+      }
+    }
+  }
+}

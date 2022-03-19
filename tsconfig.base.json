@@ -23,11 +23,15 @@
         "libs/shared/web-components/src/index.ts"
       ],
       "@challenge-registry/web/about": ["libs/web/about/src/index.ts"],
+      "@challenge-registry/web/assets": ["libs/web/assets/src/index.ts"],
       "@challenge-registry/web/auth": ["libs/web/auth/src/index.ts"],
       "@challenge-registry/web/config": ["libs/web/config/src/index.ts"],
       "@challenge-registry/web/home": ["libs/web/home/src/index.ts"],
       "@challenge-registry/web/login": ["libs/web/login/src/index.ts"],
       "@challenge-registry/web/not-found": ["libs/web/not-found/src/index.ts"],
+      "@challenge-registry/web/org-profile": [
+        "libs/web/org-profile/src/index.ts"
+      ],
       "@challenge-registry/web/pages": ["libs/web/pages/src/index.ts"],
       "@challenge-registry/web/signup": ["libs/web/signup/src/index.ts"],
       "@challenge-registry/web/ui": ["libs/web/ui/src/index.ts"],
