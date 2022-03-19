@@ -7,8 +7,10 @@
         [routerLink]="section.path" routerLinkActive #rla="routerLinkActive"
         [routerLinkActiveOptions]="{exact: true}"
         [active]="rla.isActive">{{section.label}}</a>
-    </nav> -->
-    <!-- <rocc-org-overview [org]="org"></rocc-org-overview> -->
+    </nav>
+    <challenge-registry-org-profile-overview [org]="org"></challenge-registry-org-profile-overview> -->
+
+    <router-outlet></router-outlet>
   </div>
 </main>
 
