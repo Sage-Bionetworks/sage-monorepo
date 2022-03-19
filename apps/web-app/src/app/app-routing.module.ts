@@ -8,6 +8,13 @@ export const routes: Routes = [
       import('@challenge-registry/web/about').then((m) => m.AboutModule),
   },
   {
+    path: 'search',
+    loadChildren: () =>
+      import('@challenge-registry/web/challenges').then(
+        (m) => m.ChallengesModule
+      ),
+  },
+  {
     path: 'login',
     loadChildren: () =>
       import('@challenge-registry/web/login').then((m) => m.LoginModule),

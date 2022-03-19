@@ -6,7 +6,7 @@ export const APP_SECTIONS: { [key: string]: NavbarSection } = {
     summary: 'About ROCC',
   },
   search: {
-    name: 'Search',
+    name: 'Challenges',
     summary: 'Search challenges',
   },
 };
