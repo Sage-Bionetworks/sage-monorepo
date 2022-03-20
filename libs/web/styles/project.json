@@ -1,0 +1,14 @@
+{
+  "root": "libs/web/styles",
+  "sourceRoot": "libs/web/styles/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": [
+    "scope:shared",
+    "type:styles"
+  ],
+  "implicitDependencies": [
+    "shared-styles"
+  ]
+}

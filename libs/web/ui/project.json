@@ -27,7 +27,7 @@
   "tags": [],
   "implicitDependencies": [
     "shared-assets",
-    "shared-style",
+    "shared-styles",
     "shared-theming"
   ]
 }

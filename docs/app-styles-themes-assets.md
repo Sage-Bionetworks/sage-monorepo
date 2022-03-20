@@ -15,9 +15,57 @@ individual component style files together into the file
 
 ## File Organization
 
+```console
+apps/
+└─ web-app/
+   └─ src/
+      ├─ _app-themes.scss
+      ├─ index.html
+      └─ styles.scss                    <---- imports web-app styles
+dist/
+└─ apps/
+   └─ web-app/
+      ├─ index.html
+      └─ styles.<hash>.css              <---- compiled web-app styles
+libs/
+├─ shared/
+│  ├─ assets/                           <---- cross-app assets
+│  │  └─ src/
+│  │     ├─ assets/
+|  |     |  └─ images/
+│  │     └─ favicon.ico
+│  └─ styles/                           <---- cross-app styles
+|     └─ src/
+│        ├─ libs/
+│        |  ├─ _constants.scss
+│        |  └─ _general.scss
+|        └─ index.scss
+└─ web/
+   ├─ assets/                           <---- web-app assets
+   │  └─ src/
+   │     ├─ assets/
+   |     |  └─ images/
+   │     └─ favicon.ico
+   └─ styles/                           <---- web-app styles
+      └─ src/
+         ├─ libs/
+         |  ├─ _constants.scss
+         |  └─ _general.scss
+         └─ index.scss
+```
+
+### App files
+
 - The app style is defined in `apps/<app></app>/src/styles.scss`. This file is
   specified in the build option of the app in the app `project.json`. The main
   purpose of the app style file is to import the app style file (see below).
 - The app theme is defined in `apps/<app></app>/src/_app-theme.scss`. This file is
   imported in by the app style file. The app theme file is responsible for
   referencing the theme files of all the Angular components used by the app.
+
+### App-specific library files
+
+
+
+### Library files shared across apps
+

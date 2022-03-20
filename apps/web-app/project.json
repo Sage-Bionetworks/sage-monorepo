@@ -144,6 +144,7 @@
   },
   "tags": [],
   "implicitDependencies": [
+    "web-styles",
     "shared-assets"
   ]
 }
