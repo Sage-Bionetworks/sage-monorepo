@@ -1,0 +1,14 @@
+{
+  "root": "libs/web/themes",
+  "sourceRoot": "libs/web/themes/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": [
+    "scope:shared",
+    "type:themes"
+  ],
+  "implicitDependencies": [
+    "web-about"
+  ]
+}

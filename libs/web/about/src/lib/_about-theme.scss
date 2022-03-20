@@ -1,0 +1,52 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, primary);
+  $accent: map.get($config, accent);
+  $warn: map.get($config, warn);
+  $background: map.get($config, background);
+  $foreground: map.get($config, foreground);
+
+  h2 {
+    color: mat.get-color-from-palette($primary, default);
+  }
+}
+
+@mixin typography($theme) {
+  $config: mat.get-typography-config($theme);
+
+  h2 {
+    font-family: mat.font-family($config);
+  }
+
+  // $config: typography.private-typography-to-2014-config(
+  //   theming.get-typography-config($config-or-theme));
+  // .mat-badge-content {
+  //   font-weight: $font-weight;
+  //   font-size: $font-size;
+  //   font-family: typography-utils.font-family($config);
+  // }
+
+  // .mat-badge-small .mat-badge-content {
+  //   // Set the font size to 75% of the original.
+  //   font-size: $font-size * 0.75;
+  // }
+
+  // .mat-badge-large .mat-badge-content {
+  //   font-size: $font-size * 2;
+  // }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}

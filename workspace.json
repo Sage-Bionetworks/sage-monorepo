@@ -8,7 +8,7 @@
     "api-spec": "libs/api-spec",
     "db-cli": "apps/db-cli",
     "shared-assets": "libs/shared/assets",
-    "shared-style": "libs/shared/style",
+    "shared-styles": "libs/shared/styles",
     "shared-theming": "libs/shared/theming",
     "shared-web-components": "libs/shared/web-components",
     "web-about": "libs/web/about",
@@ -25,6 +25,8 @@
     "web-not-found": "libs/web/not-found",
     "web-org-profile": "libs/web/org-profile",
     "web-signup": "libs/web/signup",
+    "web-styles": "libs/web/styles",
+    "web-themes": "libs/web/themes",
     "web-ui": "libs/web/ui",
     "web-user-profile": "libs/web/user-profile",
     "web-util": "libs/web/util"
