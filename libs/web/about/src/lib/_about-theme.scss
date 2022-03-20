@@ -12,19 +12,15 @@
   h2 {
     color: mat.get-color-from-palette($primary, default);
   }
-
-  // .challenge-registry-footer {
-  //   background-color: mat.get-color-from-palette($primary, default);
-
-  //   .challenge-registry-links a {
-  //     color: green;
-
-  //     // mat-color($primary, default-contrast);
-  //   }
-  // }
 }
 
 @mixin typography($theme) {
+  $config: mat.get-typography-config($theme);
+
+  h2 {
+    font-family: mat.font-family($config);
+  }
+
   // $config: typography.private-typography-to-2014-config(
   //   theming.get-typography-config($config-or-theme));
   // .mat-badge-content {

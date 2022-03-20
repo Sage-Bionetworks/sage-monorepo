@@ -8,5 +8,7 @@
     "scope:shared",
     "type:themes"
   ],
-  "implicitDependencies": []
+  "implicitDependencies": [
+    "web-about"
+  ]
 }

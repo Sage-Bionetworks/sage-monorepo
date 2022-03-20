@@ -145,6 +145,7 @@
   "tags": [],
   "implicitDependencies": [
     "web-styles",
+    "web-themes",
     "shared-assets"
   ]
 }

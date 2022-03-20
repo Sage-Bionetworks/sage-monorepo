@@ -12,7 +12,7 @@ $theme: mat.define-light-theme((
    accent: $accent,
  ),
  typography: mat.define-typography-config(
-    $font-family: serif,
+    $font-family: 'Roboto',
   )
 ));
 
