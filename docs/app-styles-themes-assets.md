@@ -69,3 +69,9 @@ libs/
 
 ### Library files shared across apps
 
+### Draft
+
+Additionally, the file starts with an underscore (`_`), indicating that this is a
+Sass partial file. See the [Sass
+documentation](https://sass-lang.com/guide#topic-4) for more information about
+partial files.
