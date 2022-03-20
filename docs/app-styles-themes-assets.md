@@ -63,6 +63,6 @@ asset files from these libraries. This example shows how to import an image from
 the cross-app and app-specific asset libraries.
 
 ```html
-<img src="/web-assets/images/challenge-view-header-background.png">
 <img src="/shared-assets/images/github.png">
+<img src="/web-assets/images/challenge-view-header-background.png">
 ```
