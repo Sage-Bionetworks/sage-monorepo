@@ -26,6 +26,7 @@
     "web-org-profile": "libs/web/org-profile",
     "web-signup": "libs/web/signup",
     "web-styles": "libs/web/styles",
+    "web-themes": "libs/web/themes",
     "web-ui": "libs/web/ui",
     "web-user-profile": "libs/web/user-profile",
     "web-util": "libs/web/util"

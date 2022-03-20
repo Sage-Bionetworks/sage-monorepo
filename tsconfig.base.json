@@ -38,6 +38,7 @@
       "@challenge-registry/web/pages": ["libs/web/pages/src/index.ts"],
       "@challenge-registry/web/signup": ["libs/web/signup/src/index.ts"],
       "@challenge-registry/web/styles": ["libs/web/styles/src/index.ts"],
+      "@challenge-registry/web/themes": ["libs/web/themes/src/index.ts"],
       "@challenge-registry/web/ui": ["libs/web/ui/src/index.ts"],
       "@challenge-registry/web/user-profile": [
         "libs/web/user-profile/src/index.ts"

@@ -1,0 +1,5 @@
+@use './lib/about-theme';
+
+@mixin theme($theme) {
+  @include about-theme.theme($theme);
+}

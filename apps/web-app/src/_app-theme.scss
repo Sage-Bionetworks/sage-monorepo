@@ -1,6 +1,5 @@
 @use '@angular/material' as mat;
-@use 'libs/web/ui/src/lib-theme' as web-ui;
-// @import '../node_modules/@angular/material/prebuilt-themes/indigo-pink.css';
+@use 'libs/web/themes/src/index' as web;
 
 @include mat.core();
 
@@ -25,4 +24,4 @@ $theme: mat.define-light-theme((
 @include mat.button-theme($theme);
 
 // Include the theme mixins for other components you use here.
-@include web-ui.theme($theme);
+@include web.theme($theme);
