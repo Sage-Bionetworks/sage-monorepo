@@ -1,8 +1,8 @@
 docspage_ui <- function(){
   shiny::fluidPage(
     shiny::br(),
-    iatlas.modules::titleBox("Documentation"),
-    iatlas.modules::messageBox(
+    iatlasModules::titleBox("Documentation"),
+    iatlasModules::messageBox(
       width = 12,
       shiny::includeMarkdown("inst/markdown/docs.markdown")
     ),

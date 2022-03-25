@@ -4,18 +4,18 @@ immune_subtype_classifier_ui <- function(id) {
 
   shiny::tagList(
 
-    iatlas.modules::titleBox("iAtlas Tools — Immune Subtype Classifier"),
+    iatlasModules::titleBox("iAtlas Tools — Immune Subtype Classifier"),
 
-    iatlas.modules::textBox(
+    iatlasModules::textBox(
       width = 12,
       shiny::p("Upload gene expression* and classify immune subtypes.")
     ),
 
     # Immunomodulator distributions section ----
-    iatlas.modules::sectionBox(
+    iatlasModules::sectionBox(
       title = "Immune Subtype Classification",
 
-      iatlas.modules::messageBox(
+      iatlasModules::messageBox(
         width = 12,
 
         shiny::p("Upload gene expression (csv or tsv). **BETA** any gene quantification pipeline should be OK."),
@@ -64,7 +64,7 @@ immune_subtype_classifier_ui <- function(id) {
         shiny::p("Manuscript context:  See figure 1A.")
       ),
       shiny::fluidRow(
-        iatlas.modules::optionsBox(
+        iatlasModules::optionsBox(
           width = 12,
           shiny::column(
             width = 2,
@@ -95,7 +95,7 @@ immune_subtype_classifier_ui <- function(id) {
       ),
 
       shiny::fluidRow(
-        iatlas.modules::plotBox(
+        iatlasModules::plotBox(
           width = 12,
           shiny::plotOutput(ns('barPlot')) %>%
             shinycssloaders::withSpinner()
@@ -104,14 +104,14 @@ immune_subtype_classifier_ui <- function(id) {
     ),
 
     # Immunomodulator annotations section ----
-    iatlas.modules::sectionBox(
+    iatlasModules::sectionBox(
       title = "Subtype Classification Table",
-      iatlas.modules::messageBox(
+      iatlasModules::messageBox(
         width = 12,
         shiny::p("The table shows the results of subtype classification. Use the Search box in the upper right to find a sample of interest.")
       ),
       shiny::fluidRow(
-        iatlas.modules::tableBox(
+        iatlasModules::tableBox(
           width = 12,
           shiny::div(style = "overflow-x: scroll",
                      DT::dataTableOutput(ns("subtypetable")) %>%

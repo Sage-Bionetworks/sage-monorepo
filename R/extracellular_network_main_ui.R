@@ -3,7 +3,7 @@ extracellular_network_main_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlas.modules::messageBox(
+    iatlasModules::messageBox(
       width = 24,
       shiny::includeMarkdown(get_markdown_path(
         "extracellular_network_main"
@@ -12,7 +12,7 @@ extracellular_network_main_ui <- function(id){
     shiny::fluidRow(
       shiny::column(
         width = 3,
-        iatlas.modules::optionsBox(
+        iatlasModules::optionsBox(
           width=24,
           #this tags$head makes sure that the checkboxes are formatted appropriately
           shiny::tags$head(
@@ -102,7 +102,7 @@ extracellular_network_main_ui <- function(id){
       shiny::column(
         width = 9,
         shiny::verticalLayout(
-          iatlas.modules::plotBox(
+          iatlasModules::plotBox(
             width = 24,
             cyjShiny::cyjShinyOutput(ns("cyjShiny"), height = 800) %>%
               shinycssloaders::withSpinner(.)
@@ -111,18 +111,18 @@ extracellular_network_main_ui <- function(id){
         )
       )
     ),
-    iatlas.modules::messageBox(
+    iatlasModules::messageBox(
       width = 24,
       "The tables describe the nodes and edges in the network displayed above. You can download the tables for further processing in network visualization softwares."
     ),
     shiny::fluidRow(
-      iatlas.modules::tableBox(
+      iatlasModules::tableBox(
         width = 5,
         DT::DTOutput(ns("nodes_dt")) %>%
           shinycssloaders::withSpinner(.),
         shiny::downloadButton(ns('download_nodes'), 'Download')
       ),
-      iatlas.modules::tableBox(
+      iatlasModules::tableBox(
         width = 7,
         DT::DTOutput(ns("edges_dt")) %>%
           shinycssloaders::withSpinner(.),

@@ -7,11 +7,11 @@ ici_immunomodulators_server <- function(
     function(input, output, session) {
 
       ici_datasets <- shiny::reactive({
-        x <- iatlas.api.client::query_datasets(types = "ici")
+        x <- iatlasGraphqlClient::query_datasets(types = "ici")
         setNames(as.character(x$name), x$display)
       })
 
-      categories_df <- shiny::reactive(iatlas.api.client::query_tags(datasets = ici_datasets()) %>%
+      categories_df <- shiny::reactive(iatlasGraphqlClient::query_tags(datasets = ici_datasets()) %>%
                                          dplyr::mutate(class = dplyr::case_when(
                                            tag_name %in% c( "Response", "Responder", "Progression", "Clinical_Benefit") ~ "Response to ICI",
                                            TRUE ~ "Treatment Data")) %>%
@@ -22,7 +22,7 @@ ici_immunomodulators_server <- function(
       )
 
       genes <- shiny::reactive({
-        iatlas.api.client::query_immunomodulators() %>%
+        iatlasGraphqlClient::query_immunomodulators() %>%
           dplyr::select(
             "feature_name" = "entrez",
             "feature_display" = "hgnc",
@@ -44,7 +44,7 @@ ici_immunomodulators_server <- function(
 
       features_df <- shiny::reactive({
         shiny::req(genes())
-        iatlas.api.client::query_gene_expression(cohorts = ici_datasets(), entrez = genes()$feature_name) %>%
+        iatlasGraphqlClient::query_gene_expression(cohorts = ici_datasets(), entrez = genes()$feature_name) %>%
           dplyr::select(
             sample,
             "feature_name" = "entrez",
