@@ -2,23 +2,23 @@ data_info_ui <- function(id) {
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        iatlas.modules::titleBox("iAtlas Explorer — Data Description"),
-        iatlas.modules::textBox(
+        iatlasModules::titleBox("iAtlas Explorer — Data Description"),
+        iatlasModules::textBox(
             width = 12,
             shiny::includeMarkdown("inst/markdown/data_info.markdown")
         ),
-        iatlas.modules::sectionBox(
+        iatlasModules::sectionBox(
             title = "PanImmune Readouts",
-            iatlas.modules::messageBox(
+            iatlasModules::messageBox(
                 width = 12,
                 shiny::includeMarkdown("inst/markdown/data_info_readouts.markdown")
             ),
             shiny::fluidRow(
-                iatlas.modules::optionsBox(
+                iatlasModules::optionsBox(
                     width = 6,
                     shiny::uiOutput(ns("classes")))),
             shiny::fluidRow(
-                iatlas.modules::tableBox(
+                iatlasModules::tableBox(
                     width = 12,
                     shiny::div(
                         'feature_table' %>%

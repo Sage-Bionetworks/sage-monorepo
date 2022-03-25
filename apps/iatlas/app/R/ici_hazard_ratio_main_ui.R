@@ -2,11 +2,11 @@ ici_hazard_ratio_main_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlas.modules::messageBox(
+    iatlasModules::messageBox(
       width = 24,
       shiny::includeMarkdown("inst/markdown/ici_hazard_ratio.markdown")
     ),
-    iatlas.modules::optionsBox(
+    iatlasModules::optionsBox(
       width = 12,
       column(
         width = 4,
@@ -43,21 +43,21 @@ ici_hazard_ratio_main_ui <- function(id){
     ),
     shiny::htmlOutput(ns("notification")),
     shiny::htmlOutput(ns("excluded_dataset")),
-    iatlas.modules::plotBox(
+    iatlasModules::plotBox(
       width = 12,
       plotly::plotlyOutput(ns("mult_heatmap"), width = "100%", height = "600px")%>%
         shinycssloaders::withSpinner()
     ),
-    iatlas.modules::plotBox(
+    iatlasModules::plotBox(
       width = 12,
       plotly::plotlyOutput(ns("mult_forest"), width = "100%", height = "700px")%>%
         shinycssloaders::withSpinner()
     ),
-    iatlas.modules::messageBox(
+    iatlasModules::messageBox(
       width = 12,
       p("The table shows the computed data used to create the visualizations above.")
     ),
-    iatlas.modules::tableBox(
+    iatlasModules::tableBox(
       width = 12,
       DT::dataTableOutput(ns("stats_summary")),
       downloadButton(ns('download_stats'), 'Download')

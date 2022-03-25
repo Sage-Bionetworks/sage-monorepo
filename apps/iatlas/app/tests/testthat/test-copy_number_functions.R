@@ -1,20 +1,20 @@
 
-group_tbl <- iatlas.api.client::query_tags(
+group_tbl <- iatlasGraphqlClient::query_tags(
   cohorts = "TCGA",
   parent_tags = "Immune_Subtype"
 ) %>%
   dplyr::select("display" = "tag_short_display", "name" = "tag_name")
 
-gene_tbl <- iatlas.api.client::query_genes(entrez = 1:300) %>%
+gene_tbl <- iatlasGraphqlClient::query_genes(entrez = 1:300) %>%
   dplyr::select("entrez", "hgnc")
 
 im_gene_tbl <-
-  iatlas.api.client::query_genes(gene_types = "immunomodulator") %>%
+  iatlasGraphqlClient::query_genes(gene_types = "immunomodulator") %>%
   dplyr::select("entrez", "hgnc")
 
-gene_set_tbl <- iatlas.api.client::query_gene_types()
+gene_set_tbl <- iatlasGraphqlClient::query_gene_types()
 
-result_tbl<- iatlas.api.client::query_copy_number_results(
+result_tbl<- iatlasGraphqlClient::query_copy_number_results(
   datasets = "TCGA",
   tags = c("C1", "C2"),
   entrez = 1:2,

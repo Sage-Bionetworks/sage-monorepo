@@ -6,12 +6,12 @@ germline_rarevariants_server <- function(id, cohort_obj){
       ns <- session$ns
 
       rv_data <- reactive({
-        iatlas.api.client::query_rare_variant_pathway_associations(datasets = "TCGA")
+        iatlasGraphqlClient::query_rare_variant_pathway_associations(datasets = "TCGA")
       })
 
 
       trait_choices <- reactive({
-        iatlas.modules::create_nested_named_list(
+        iatlasModules::create_nested_named_list(
                           rv_data(),
                           names_col1 = "feature_germline_category",
                           names_col2 = "feature_display",

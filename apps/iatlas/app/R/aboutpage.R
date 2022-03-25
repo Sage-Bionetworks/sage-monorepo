@@ -1,7 +1,7 @@
 aboutpage_ui <- function(){
   shiny::fluidPage(
     shiny::br(),
-    iatlas.modules::titleBox("About"),
+    iatlasModules::titleBox("About"),
     shiny::fluidRow(
       shiny::column(
         width = 12,
