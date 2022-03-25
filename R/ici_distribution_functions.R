@@ -49,7 +49,7 @@ combine_groups <- function(df, group2, cohort_obj){
       dplyr::distinct()
   }
 
-  cat2 <- iatlas.api.client::query_tags_with_parent_tags(parent_tags = group2) %>%
+  cat2 <- iatlasGraphqlClient::query_tags_with_parent_tags(parent_tags = group2) %>%
     dplyr::select(parent_tag_name, short_name = tag_short_display, long_name = tag_long_display, characteristics = tag_characteristics, color = tag_color)
 
   categories <- rbind(cat1, cat2)
@@ -73,7 +73,7 @@ create_plot_onegroup <- function(dataset_data, cohort_obj, dataset_display, plot
 
 
   if (reorder_function == "None"){
-    order_plot <- iatlas.api.client::query_tags_with_parent_tags(parent_tags = cohort_obj$group_name) %>%
+    order_plot <- iatlasGraphqlClient::query_tags_with_parent_tags(parent_tags = cohort_obj$group_name) %>%
       dplyr::select(tag_short_display, tag_order, tag_color) %>%
       dplyr::arrange(tag_order) %>%
       dplyr::select(group = tag_short_display, color = tag_color)
@@ -124,10 +124,10 @@ create_plot_twogroup <- function(dataset_data, cohort_obj, dataset_display, plot
   samples <- dataset_data %>% #getting the order to display groups
     dplyr::select(var1, var2, group) %>%
     dplyr::distinct() %>%
-    dplyr::inner_join(iatlas.api.client::query_tags_with_parent_tags(parent_tags = group1) %>%
+    dplyr::inner_join(iatlasGraphqlClient::query_tags_with_parent_tags(parent_tags = group1) %>%
                         dplyr::select(var1 = tag_short_display, order1 = tag_order),
                       by = "var1") %>%
-    dplyr::inner_join(iatlas.api.client::query_tags_with_parent_tags(parent_tags = group2) %>%
+    dplyr::inner_join(iatlasGraphqlClient::query_tags_with_parent_tags(parent_tags = group2) %>%
                         dplyr::select(var2 = tag_short_display, order2 = tag_order),
                       by = "var2") %>%
     dplyr::arrange(order1, order2)
@@ -200,7 +200,7 @@ get_stat_test <- function(df, group_to_split, sel_feature, dataset, dataset_titl
 
   if(paired == TRUE){
     patients <- data_set %>%
-      dplyr::inner_join(iatlas.api.client::query_sample_patients(samples = data_set$sample_name), by = "sample_name")
+      dplyr::inner_join(iatlasGraphqlClient::query_sample_patients(samples = data_set$sample_name), by = "sample_name")
 
     paired_samples <- patients %>%
       dplyr::group_by(patient_name) %>%

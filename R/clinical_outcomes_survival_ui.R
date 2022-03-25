@@ -3,14 +3,14 @@ clinical_outcomes_survival_ui <- function(id) {
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        iatlas.modules::messageBox(
+        iatlasModules::messageBox(
             width = 12,
             shiny::includeMarkdown(get_markdown_path(
               "clinical_outcomes_survival"
             ))
         ),
         shiny::fluidRow(
-            iatlas.modules::optionsBox(
+            iatlasModules::optionsBox(
                 width = 12,
                 shiny::column(
                     width = 8,
@@ -33,7 +33,7 @@ clinical_outcomes_survival_ui <- function(id) {
                     )
                 )
             ),
-            iatlas.modules::plotBox(
+            iatlasModules::plotBox(
                 width = 12,
                 "survival_plot" %>%
                     ns() %>%

@@ -4,7 +4,7 @@ test_that("Get Gene From URL", {
     expect_equal(get_gene_from_url(list("gene" = "gene1")), "gene1")
 })
 
-io_target_tbl <- iatlas.api.client::query_io_targets()
+io_target_tbl <- iatlasGraphqlClient::query_io_targets()
 
 test_that("Build IO Target Datatable Tibble", {
     result <- build_io_target_dt_tbl(io_target_tbl)

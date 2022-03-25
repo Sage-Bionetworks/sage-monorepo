@@ -27,7 +27,7 @@ immunomodulator_distributions_server <- function(
       })
 
       feature_data <- shiny::reactive({
-        iatlas.api.client::query_immunomodulators() %>%
+        iatlasGraphqlClient::query_immunomodulators() %>%
           dplyr::select(
             "feature_name" = "entrez",
             "feature_display" = "hgnc",
@@ -49,7 +49,7 @@ immunomodulator_distributions_server <- function(
           dplyr::mutate("group_display" = .data$group_name)
       })
 
-      result <- iatlas.modules::distributions_plot_server(
+      result <- iatlasModules::distributions_plot_server(
         "distplot",
         sample_data_function = sample_data_function,
         feature_data = feature_data,

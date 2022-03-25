@@ -2,7 +2,7 @@ germline_gwas_ui <- function(id){
 
     ns <- shiny::NS(id)
     shiny::tagList(
-        iatlas.modules::messageBox(
+        iatlasModules::messageBox(
             width = 12,
             shiny::includeMarkdown("inst/markdown/germline_gwas.markdown"),
             shiny::p("GWAS results can also be visualized in ",
@@ -11,7 +11,7 @@ germline_gwas_ui <- function(id){
         ),
         shiny::column(
           width = 9,
-          iatlas.modules::optionsBox(
+          iatlasModules::optionsBox(
             width = 12,
             shiny::column(
               width = 3,
@@ -30,7 +30,7 @@ germline_gwas_ui <- function(id){
               align = "center"
             )
          ),
-         iatlas.modules::plotBox(
+         iatlasModules::plotBox(
            width = 12,
            igvShiny::igvShinyOutput(ns('igv_plot'), height = NULL) %>%
              shinycssloaders::withSpinner(.)
@@ -39,23 +39,23 @@ germline_gwas_ui <- function(id){
         shiny::column(
           width = 3,
           shiny::verticalLayout(
-              iatlas.modules::optionsBox(
+              iatlasModules::optionsBox(
               width = 12,
               shiny::selectInput(ns("snp_int"), "Click on the plot or search for a SNP id:",
                                 choices = NULL)
               #shiny::uiOutput(ns("search_snp"))
             ),
-            iatlas.modules::messageBox(
+            iatlasModules::messageBox(
               width = 12,
               shiny::uiOutput(ns("links"))
             ),
-            iatlas.modules::tableBox(
+            iatlasModules::tableBox(
               width = 12,
               DT::DTOutput(ns("snp_tbl"))
              )
             )
            ),
-        iatlas.modules::messageBox(
+        iatlasModules::messageBox(
             width = 12,
             shiny::p("We conducted a GWAS paired with colocalization analyses, with eQTL and sQTL analyses performed in TCGA and GTEx.
                Results with a Colocalization Posterior Probability (CLPP) > 0.01 are summarized in the tables below."),
@@ -63,7 +63,7 @@ germline_gwas_ui <- function(id){
             shiny::actionLink(ns("method_link_colocalization"), "Click to view method description.")
           ),
           shiny::fluidRow(
-              iatlas.modules::tableBox(
+              iatlasModules::tableBox(
             width = 6,
             div(
               DT::DTOutput(ns("colocalization_tcga")) %>%
@@ -71,7 +71,7 @@ germline_gwas_ui <- function(id){
               style = "font-size: 75%"),
             shiny::uiOutput(ns("tcga_colocalization_plot"))
             ),
-            iatlas.modules::tableBox(
+            iatlasModules::tableBox(
             width = 6,
             div(
               DT::DTOutput(ns("colocalization_gtex")) %>%
