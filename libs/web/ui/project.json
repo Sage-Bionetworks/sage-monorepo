@@ -11,7 +11,8 @@
       ],
       "options": {
         "jestConfig": "libs/web/ui/jest.config.js",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "codeCoverage": true
       }
     },
     "lint": {

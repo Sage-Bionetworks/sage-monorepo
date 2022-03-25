@@ -9,7 +9,8 @@
       "outputs": ["coverage/libs/web/not-found"],
       "options": {
         "jestConfig": "libs/web/not-found/jest.config.js",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "codeCoverage": true
       }
     },
     "lint": {
