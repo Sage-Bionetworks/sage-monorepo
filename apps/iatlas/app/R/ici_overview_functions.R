@@ -9,7 +9,7 @@ get_io_overview_table <- function(values_for_group1){
 }
 
 get_io_mosaic_df <- function(values_for_group1, group2){
-  iatlas.api.client::query_tag_samples(samples = values_for_group1$sample_name, parent_tags = group2) %>%
+  iatlasGraphqlClient::query_tag_samples(samples = values_for_group1$sample_name, parent_tags = group2) %>%
     merge(., values_for_group1, by = "sample_name") %>%
     dplyr::mutate(x= paste(sub("\\ -.*", "", dataset_display), tag_short_display.y)) %>%
     dplyr::select(x, y = tag_short_display.x, plot_color = tag_color.x)

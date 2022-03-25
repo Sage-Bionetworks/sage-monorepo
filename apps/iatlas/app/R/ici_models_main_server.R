@@ -137,7 +137,7 @@ ici_models_main_server <- function(
 
       output$response_characteristics <- shiny::renderText({
         shiny::req(input$response_variable)
-        iatlas.api.client::query_tags(tags = input$response_variable) %>% dplyr::pull(tag_characteristics)
+        iatlasGraphqlClient::query_tags(tags = input$response_variable) %>% dplyr::pull(tag_characteristics)
       })
 
 

@@ -5,7 +5,7 @@ ici_overview_category_ui <- function(
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlas.modules::messageBox(
+    iatlasModules::messageBox(
       width = 24,
       # shiny::includeMarkdown(get_markdown_path(
       #   "ici_overview_datasets"
@@ -14,11 +14,11 @@ ici_overview_category_ui <- function(
                Here you can obtain details of these categories and the number of samples in each group per dataset."),
       actionLink(ns("method_link"), "Click to view method description.")
     ),
-    iatlas.modules::optionsBox(
+    iatlasModules::optionsBox(
       width = 12,
       shiny::uiOutput(ns("select_group1"))
     ),
-    iatlas.modules::plotBox(
+    iatlasModules::plotBox(
       width = 12,
       DT::DTOutput(
         ns("ici_groups_df")
@@ -29,17 +29,17 @@ ici_overview_category_ui <- function(
       )
     ),
     #test if can be in the same submodule
-    iatlas.modules::sectionBox(
+    iatlasModules::sectionBox(
       title = "Group Overlap",
-      iatlas.modules::messageBox(
+      iatlasModules::messageBox(
         width = 24,
         p("See a mosaic plot for two sample groups.")
       ),
-      iatlas.modules::optionsBox(
+      iatlasModules::optionsBox(
         width = 12,
         shiny::uiOutput(ns("select_group2"))
       ),
-      iatlas.modules::plotBox(
+      iatlasModules::plotBox(
         width = 12,
         plotly::plotlyOutput(ns("ici_mosaic"), height = "600px") %>%
           shinycssloaders::withSpinner()

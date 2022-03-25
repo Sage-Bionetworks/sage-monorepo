@@ -10,7 +10,7 @@ io_target_datatable_server <- function(
         "datatable",
         shiny::reactive(
           build_io_target_dt_tbl(
-            iatlas.api.client::query_io_targets()
+            iatlasGraphqlClient::query_io_targets()
           )
         ),
         escape = F

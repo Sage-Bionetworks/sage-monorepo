@@ -1,5 +1,5 @@
 build_ecn_gene_choice_list <- function(){
-    genes <- iatlas.api.client::query_genes(gene_types = "extracellular_network") %>%
+    genes <- iatlasGraphqlClient::query_genes(gene_types = "extracellular_network") %>%
         dplyr::select("hgnc", "entrez") %>%
         dplyr::mutate("entrez" = stringr::str_c("gene:", .data$entrez)) %>%
         tibble::deframe(.)
@@ -15,7 +15,7 @@ build_ecn_gene_choice_list <- function(){
 
 build_ecn_celltype_choice_list <- function(){
     features <-
-        iatlas.api.client::query_features(
+        iatlasGraphqlClient::query_features(
             feature_classes = "Immune Cell Proportion - Common Lymphoid and Myeloid Cell Derivative Class"
         ) %>%
         dplyr::select("display", "name") %>%
@@ -31,7 +31,7 @@ get_selected_gene_ids <- function(gene_input_list){
         stringr::str_remove_all(., "^geneset:")
     if(length(genesets) != 0){
         geneset_genes <- genesets %>%
-            iatlas.api.client::query_genes(gene_types = .) %>%
+            iatlasGraphqlClient::query_genes(gene_types = .) %>%
             dplyr::pull("entrez")
     } else {
         geneset_genes <- c()
@@ -48,7 +48,7 @@ get_selected_gene_ids <- function(gene_input_list){
 get_selected_celltypes <- function(celltype_input_list){
     celltype_input = unlist(celltype_input_list)
     if("All" %in% celltype_input) {
-        celltypes <- iatlas.api.client::query_features(
+        celltypes <- iatlasGraphqlClient::query_features(
             feature_classes = "Immune Cell Proportion - Common Lymphoid and Myeloid Cell Derivative Class"
         ) %>%
             dplyr::pull("name")
@@ -68,7 +68,7 @@ get_gene_nodes <- function(
   ){
   n_tags <- find_n_tags(stratify)
   nodes <-
-    iatlas.api.client::query_nodes(
+    iatlasGraphqlClient::query_nodes(
       datasets = dataset,
       network = "Extracellular Network",
       entrez = genes,
@@ -108,7 +108,7 @@ get_feature_nodes <- function(
   min_score <- min_abundance / 100
 
   nodes <-
-    iatlas.api.client::query_nodes(
+    iatlasGraphqlClient::query_nodes(
       datasets = dataset,
       network = "Extracellular Network",
       features = features,
@@ -194,7 +194,7 @@ get_edges <- function(nodes, min_concordance){
     unique()
 
   edges <-
-    iatlas.api.client::query_edges(
+    iatlasGraphqlClient::query_edges(
       min_score = min_concordance,
       node1 = node_names,
       node2 = node_names

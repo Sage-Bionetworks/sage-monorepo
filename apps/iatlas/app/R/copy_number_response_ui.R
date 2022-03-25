@@ -3,13 +3,13 @@ copy_number_response_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlas.modules::textBox(
+    iatlasModules::textBox(
       width = 12,
       shiny::p("Explore statistical associations between immune readouts and copy number variations.")
     ),
-    iatlas.modules::sectionBox(
+    iatlasModules::sectionBox(
       title = "Immune Response Association With Copy Number Variation",
-      iatlas.modules::messageBox(
+      iatlasModules::messageBox(
         width = 12,
         shiny::p("This module allows you to identify associations between specific somatic gene copy number alterations (SCNAs) and immune readouts. Gene SCNAs are specified as either amplified or deleted.\n\n"),
 
@@ -36,7 +36,7 @@ copy_number_response_ui <- function(id){
         shiny::p("")
       ),
       shiny::fluidRow(
-        iatlas.modules::optionsBox(
+        iatlasModules::optionsBox(
           width = 12,
           shiny::column(
             width = 6,
@@ -67,14 +67,14 @@ copy_number_response_ui <- function(id){
         )
       ),
       shiny::fluidRow(
-        iatlas.modules::plotBox(
+        iatlasModules::plotBox(
           width = 12,
           plotly::plotlyOutput(ns("cnvPlot")) %>%
             shinycssloaders::withSpinner(.)
         )
       ),
 
-      iatlas.modules::tableBox(
+      iatlasModules::tableBox(
         width = 12,
         shiny::div(style = "overflow-x: scroll",
                    DT::dataTableOutput(ns("cnvtable")) %>%

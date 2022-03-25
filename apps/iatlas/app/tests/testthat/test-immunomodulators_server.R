@@ -3,7 +3,7 @@ test_that("immunomodulators_server", {
     immunomodulators_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlas.modules2::pcawg_immune_subtype_cohort_obj
+        iatlasModules2::pcawg_immune_subtype_cohort_obj
       )
     ),
     {

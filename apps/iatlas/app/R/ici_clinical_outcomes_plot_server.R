@@ -21,13 +21,13 @@ ici_clinical_outcomes_plot_server <- function(
       })
 
       feature_df <- shiny::reactive({
-        pre_treat_samples <- iatlas.api.client::query_tag_samples(cohorts = cohort_obj()[["dataset_names"]], tags = "pre_sample_treatment") %>%
-          dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
+        pre_treat_samples <- iatlasGraphqlClient::query_tag_samples(cohorts = cohort_obj()[["dataset_names"]], tags = "pre_sample_treatment") %>%
+          dplyr::bind_rows(iatlasGraphqlClient::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
           dplyr::select(sample_name)
 
         cohort_obj()$sample_tbl %>%
           dplyr::inner_join(pre_treat_samples, by = "sample_name") %>%
-          dplyr::inner_join(iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")), by = c("sample_name" = "sample"))
+          dplyr::inner_join(iatlasGraphqlClient::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")), by = c("sample_name" = "sample"))
       })
 
       all_survival <- shiny::reactive({
