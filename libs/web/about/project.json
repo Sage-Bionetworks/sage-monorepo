@@ -9,8 +9,7 @@
       "outputs": ["coverage/libs/web/about"],
       "options": {
         "jestConfig": "libs/web/about/jest.config.js",
-        "passWithNoTests": true,
-        "codeCoverage": true
+        "passWithNoTests": true
       }
     },
     "lint": {
