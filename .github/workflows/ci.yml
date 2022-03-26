@@ -13,7 +13,6 @@ env:
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
-  COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
 jobs:
   main:
@@ -110,6 +109,9 @@ jobs:
         run: node ./tools/coverage-merger.js
       - name: Push coverage report to Coveralls
         run: yarn coveralls < coverage/lcov.info
+        env:
+          COVERALLS_SERVICE_NAME: github
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       # - name: Push coverage report to Coveralls
       #   uses: coverallsapp/github-action@master
       #   with:
