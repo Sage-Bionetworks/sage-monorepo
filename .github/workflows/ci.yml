@@ -104,3 +104,7 @@ jobs:
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
       - run: yarn nx affected --target=build --parallel --max-parallel=3
       - run: yarn nx affected --target=test --parallel --max-parallel=2
+      - name: Push coverage report to Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
