@@ -107,11 +107,10 @@ jobs:
       - run: yarn nx affected --target=test --parallel --max-parallel=2
       - name: Merge coverage reports
         run: node ./tools/coverage-merger.js
-      - run: |
-          cat coverage/lcov.info
-          cat ${{ github.workspace }}/coverage/lcov.info
       - name: Push coverage report to Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ${{ github.workspace }}/coverage/lcov.info
+        run: yarn coveralls < coverage/lcov.info
+      # - name: Push coverage report to Coveralls
+      #   uses: coverallsapp/github-action@master
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     path-to-lcov: coverage/lcov.info
