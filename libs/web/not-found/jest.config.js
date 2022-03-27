@@ -8,6 +8,8 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
+  collectCoverage: true,
+  coverageReporters: ['html','json','lcov'],
   coverageDirectory: '../../../coverage/libs/web/not-found',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
