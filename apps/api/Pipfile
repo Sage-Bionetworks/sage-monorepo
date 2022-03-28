@@ -11,6 +11,7 @@ tox = "==3.24.5"
 pytest = "==7.1.1"
 coverage = "==6.3.2"
 mongomock = "==4.0.0"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.9"
