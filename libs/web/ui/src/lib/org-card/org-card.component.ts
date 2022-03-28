@@ -12,12 +12,14 @@ export class OrgCardComponent implements OnInit {
   @Input() orgAvatar!: Avatar;
 
   ngOnInit(): void {
-    this.orgAvatar = {
-      name: this.org.name
-        ? (this.org.name as string)
-        : this.org.login.replace(/-/g, ' '),
-      src: this.org.avatarUrl ? this.org.avatarUrl : '',
-      size: 100,
-    };
+    if (this.orgAvatar) {
+      this.orgAvatar = {
+        name: this.org.name
+          ? (this.org.name as string)
+          : this.org.login.replace(/-/g, ' '),
+        src: this.org.avatarUrl ? this.org.avatarUrl : '',
+        size: 100,
+      };
+    }
   }
 }

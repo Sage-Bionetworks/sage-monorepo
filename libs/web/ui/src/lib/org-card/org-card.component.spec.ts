@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AvatarModule } from '../avatar/avatar.module';
 
 import { OrgCardComponent } from './org-card.component';
 
@@ -9,6 +10,7 @@ describe('OrgCardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [OrgCardComponent],
+      imports: [AvatarModule],
     }).compileComponents();
   });
 

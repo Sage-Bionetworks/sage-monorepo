@@ -1,4 +1,6 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AvatarModule as NgxAvatarModule } from 'ngx-avatar';
 
 import { AvatarComponent } from './avatar.component';
 
@@ -8,9 +10,9 @@ describe('AvatarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AvatarComponent ]
-    })
-    .compileComponents();
+      declarations: [AvatarComponent],
+      imports: [HttpClientModule, NgxAvatarModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -1,6 +1,7 @@
 # Challenge Registry
 
 [![GitHub CI](https://img.shields.io/github/workflow/status/Sage-Bionetworks/challenge-registry/CI.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/challenge-registry/actions)
+[![Coverage Status](https://img.shields.io/coveralls/github/Sage-Bionetworks/challenge-registry.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=coverage&logo=Coveralls)](https://coveralls.io/github/Sage-Bionetworks/challenge-registry?branch=main)
 [![GitHub License](https://img.shields.io/github/license/Sage-Bionetworks/challenge-registry.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE)
 
 ## Introduction
@@ -40,7 +41,7 @@ See this [cheat sheet] to learn more about Nx commands.
 ### Preparing the workspace
 
 Clone this repository. If you plan to contribute to this project, please create a fork and use its
-URL for cloning.  For more information on contributing and/or our Forking Workflow approach, see 
+URL for cloning.  For more information on contributing and/or our Forking Workflow approach, see
 [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
     git clone --depth 1 <repo url>
