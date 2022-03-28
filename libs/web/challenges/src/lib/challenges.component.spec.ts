@@ -1,4 +1,6 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { APP_CONFIG, MOCK_APP_CONFIG } from '@challenge-registry/web/config';
 
 import { ChallengesComponent } from './challenges.component';
 
@@ -9,6 +11,8 @@ describe('ChallengesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ChallengesComponent],
+      providers: [{ provide: APP_CONFIG, useValue: MOCK_APP_CONFIG }],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
 
