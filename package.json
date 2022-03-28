@@ -10,6 +10,7 @@
     "python": "bash -c '. ./dev-env.sh && challenge-registry-python'",
     "docker": "bash -c '. ./dev-env.sh && challenge-registry-docker'",
     "seed-db": "bash -c '. ./dev-env.sh && challenge-registry-seed-db'",
+    "coverage:merge": "node ./tools/coverage-merger.js",
     "postinstall": "ngcc --properties es2015 browser module main",
     "prepare": "husky install",
     "db-cli": "node dist/apps/db-cli/src/index.js",

@@ -25,6 +25,7 @@ connect(
     username=config.db_username,
     password=config.db_password,
     host=config.db_host,
+    authentication_source=config.db_database,
 )
 
 
