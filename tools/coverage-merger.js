@@ -12,7 +12,10 @@ const getLcovFiles = function (src) {
 };
 
 (async function(){
-  const files = await getLcovFiles('coverage');
+  const appsFiles = await getLcovFiles('coverage/apps');
+  const libsFiles = await getLcovFiles('coverage/libs');
+  const files = appsFiles.concat(libsFiles);
+  console.log('files', files);
   const mergedReport = files.reduce((mergedReport, currFile) => mergedReport += fs.readFileSync(currFile), '');
   await fs.writeFile(path.resolve('./coverage/lcov.info'), mergedReport, (err) => {
     if (err) throw err;
