@@ -61,7 +61,7 @@ jobs:
       - run: yarn nx affected --target=build --parallel --max-parallel=3
       - run: yarn nx run-many --all --target=test --parallel --max-parallel=2
       - name: Merge coverage reports
-        run: node ./tools/coverage-merger.js
+        run: yarn coverage:merge
       - name: Push coverage report to Coveralls
         uses: coverallsapp/github-action@master
         with:
