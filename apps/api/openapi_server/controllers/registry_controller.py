@@ -7,6 +7,7 @@ from openapi_server.dbmodels.organization import (
 from openapi_server.dbmodels.user import User as DbUser  # noqa: E501
 from openapi_server.models.error import Error  # noqa: E501
 from openapi_server.models.registry import Registry  # noqa: E501
+import sys
 
 
 def get_registry():  # noqa: E501

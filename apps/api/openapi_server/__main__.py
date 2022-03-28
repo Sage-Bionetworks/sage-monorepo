@@ -25,11 +25,12 @@ connect(
     username=config.db_username,
     password=config.db_password,
     host=config.db_host,
+    authentication_source="challenge-registry",
 )
 
 
 def main():
-    app.run(port=8080, debug=False)
+    app.run(port=8080, debug=True)
 
 
 if __name__ == "__main__":
