@@ -1,4 +1,4 @@
-<!-- Updated from https://sites.google.com/sagebase.org/intranet/hr/policies?authuser=0#h.r7p7w5ny6bxo on March 30, 2022 -->
+<!-- Updated from https://sites.google.com/sagebase.org/intranet/hr/policies?authuser=0#h.r7p7w5ny6bxo on March 31, 2022 -->
 
 # Code of Conduct
 
@@ -55,7 +55,7 @@ Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported in several ways. You may report directly to your manager or any manager
 you feel comfortable with, you may contact Human Resources at
 diane.gary@sagebase.org or erin.gerhard@sagebase.org, or submit an anonymous
-report.  Anonymous reports may be made using the Sage Safe Hotline by calling
+report. Anonymous reports may be made using the Sage Safe Hotline by calling
 1-855-662-SAFE (1-855-662-7233) or through the website [SAFEHOTLINE.COM],
 referencing the Sage ID number 6882112080. All reports will be reviewed and
 investigated by HR (Diane Gary & Erin Gerhard) and will result in a response
