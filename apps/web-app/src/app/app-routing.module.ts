@@ -15,6 +15,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'orgs',
+    loadChildren: () =>
+      import('@challenge-registry/web/org-search').then(
+        (m) => m.OrgSearchModule
+      ),
+  },
+  {
     path: 'login',
     loadChildren: () =>
       import('@challenge-registry/web/login').then((m) => m.LoginModule),

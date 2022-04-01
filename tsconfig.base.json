@@ -35,6 +35,9 @@
       "@challenge-registry/web/org-profile": [
         "libs/web/org-profile/src/index.ts"
       ],
+      "@challenge-registry/web/org-search": [
+        "libs/web/org-search/src/index.ts"
+      ],
       "@challenge-registry/web/pages": ["libs/web/pages/src/index.ts"],
       "@challenge-registry/web/signup": ["libs/web/signup/src/index.ts"],
       "@challenge-registry/web/styles": ["libs/web/styles/src/index.ts"],
