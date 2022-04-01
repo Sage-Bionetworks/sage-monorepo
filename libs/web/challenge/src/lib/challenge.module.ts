@@ -6,6 +6,7 @@ import { ChallengeComponent } from './challenge.component';
 import { ChallengeRoutingModule } from './challenge-routing.modules';
 import { ChallengeHeaderModule } from './challenge-header/challenge-header.module';
 import { ChallengeStargazersModule } from './challenge-stargazers/challenge-stargazers.module';
+import { ChallengeSettingsModule } from './challenge-settings/challenge-settings.module';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { ChallengeStargazersModule } from './challenge-stargazers/challenge-star
     ChallengeRoutingModule,
     ChallengeHeaderModule,
     ChallengeStargazersModule,
+    ChallengeSettingsModule,
   ],
   declarations: [ChallengeComponent],
   exports: [ChallengeComponent],
