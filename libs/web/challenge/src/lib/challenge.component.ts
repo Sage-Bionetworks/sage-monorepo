@@ -8,6 +8,7 @@ import {
 import { APP_CONFIG, AppConfig } from '@challenge-registry/web/config';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { isApiClientError } from '@challenge-registry/web/util';
+import { CHALLENGE_SECTIONS } from './challenge-sections';
 
 @Component({
   selector: 'challenge-registry-challenges',
@@ -21,6 +22,8 @@ export class ChallengeComponent implements OnInit {
   challengeNotFound = false;
   accountName = '';
 
+  sections: any[] = [];
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -31,6 +34,8 @@ export class ChallengeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.sections = CHALLENGE_SECTIONS;
+
     this.challenge$ = this.route.params.pipe(
       switchMap((params) =>
         this.challengeService.getChallenge(params['login'], params['challenge'])
