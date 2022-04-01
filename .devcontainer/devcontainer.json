@@ -2,7 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/main/containers/docker-existing-dockerfile
 {
   "name": "Challenge Registry",
-  "image": "sagebionetworks/python-3-node:0.0.1",
+  "image": "sagebionetworks/python-3-node:0.1.0",
   "features": {
     "docker-in-docker": "latest"
   },
