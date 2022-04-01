@@ -25,6 +25,13 @@ export const routes: Routes = [
       import('@challenge-registry/web/signup').then((m) => m.SignupModule),
   },
   {
+    path: 'org/:login/:challenge',
+    loadChildren: () =>
+      import('@challenge-registry/web/challenge').then(
+        (m) => m.ChallengeModule
+      ),
+  },
+  {
     path: 'org/:login',
     loadChildren: () =>
       import('@challenge-registry/web/org-profile').then(

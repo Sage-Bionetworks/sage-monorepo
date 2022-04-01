@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
 import { ChallengeComponent } from './challenge.component';
 import { WebUiModule } from '@challenge-registry/web/ui';
-
-const routes: Routes = [{ path: '', component: ChallengeComponent }];
+import { ChallengeRoutingModule } from './challenge-routing.modules';
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes), WebUiModule],
+  imports: [CommonModule, WebUiModule, ChallengeRoutingModule],
   declarations: [ChallengeComponent],
   exports: [ChallengeComponent],
 })
