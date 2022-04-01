@@ -3,10 +3,10 @@ import { APP_CONFIG, AppConfig } from '@challenge-registry/web/config';
 
 @Component({
   selector: 'challenge-registry-challenges',
-  templateUrl: './challenges.component.html',
-  styleUrls: ['./challenges.component.scss'],
+  templateUrl: './challenge.component.html',
+  styleUrls: ['./challenge.component.scss'],
 })
-export class ChallengesComponent {
+export class ChallengeComponent {
   public appVersion: string;
 
   constructor(@Inject(APP_CONFIG) private appConfig: AppConfig) {

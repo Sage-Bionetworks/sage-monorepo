@@ -10,8 +10,8 @@ export const routes: Routes = [
   {
     path: 'search',
     loadChildren: () =>
-      import('@challenge-registry/web/challenges').then(
-        (m) => m.ChallengesModule
+      import('@challenge-registry/web/challenge').then(
+        (m) => m.ChallengeModule
       ),
   },
   {
