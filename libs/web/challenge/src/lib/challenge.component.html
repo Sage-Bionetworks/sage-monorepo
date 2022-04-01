@@ -1,5 +1,15 @@
 <main>
-  <p>challenge works!</p>
+  <div class="container" *ngIf="challenge$ | async as challenge">
+    <!-- <rocc-challenge-header [challenge]="challenge" [accountName]="accountName">
+    </rocc-challenge-header>
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link *ngFor="let section of sections"
+        [routerLink]="section.path" routerLinkActive #rla="routerLinkActive"
+        [routerLinkActiveOptions]="{exact: true}"
+        [active]="rla.isActive">{{section.label}}</a>
+    </nav> -->
+    <router-outlet></router-outlet>
+  </div>
 </main>
 
 <challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
