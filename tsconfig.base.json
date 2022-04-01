@@ -25,6 +25,9 @@
       "@challenge-registry/web/about": ["libs/web/about/src/index.ts"],
       "@challenge-registry/web/assets": ["libs/web/assets/src/index.ts"],
       "@challenge-registry/web/auth": ["libs/web/auth/src/index.ts"],
+      "@challenge-registry/web/challenge-search": [
+        "libs/web/challenge-search/src/index.ts"
+      ],
       "@challenge-registry/web/challenges": [
         "libs/web/challenges/src/index.ts"
       ],
@@ -36,7 +39,6 @@
         "libs/web/org-profile/src/index.ts"
       ],
       "@challenge-registry/web/pages": ["libs/web/pages/src/index.ts"],
-      "@challenge-registry/web/search": ["libs/web/search/src/index.ts"],
       "@challenge-registry/web/signup": ["libs/web/signup/src/index.ts"],
       "@challenge-registry/web/styles": ["libs/web/styles/src/index.ts"],
       "@challenge-registry/web/themes": ["libs/web/themes/src/index.ts"],
