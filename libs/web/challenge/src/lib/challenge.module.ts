@@ -5,6 +5,7 @@ import { WebUiModule } from '@challenge-registry/web/ui';
 import { ChallengeComponent } from './challenge.component';
 import { ChallengeRoutingModule } from './challenge-routing.modules';
 import { ChallengeHeaderModule } from './challenge-header/challenge-header.module';
+import { ChallengeStargazersModule } from './challenge-stargazers/challenge-stargazers.module';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { ChallengeHeaderModule } from './challenge-header/challenge-header.modul
     WebUiModule,
     ChallengeRoutingModule,
     ChallengeHeaderModule,
+    ChallengeStargazersModule,
   ],
   declarations: [ChallengeComponent],
   exports: [ChallengeComponent],
