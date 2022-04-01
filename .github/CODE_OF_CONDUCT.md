@@ -1,77 +1,72 @@
+<!-- Updated from https://sites.google.com/sagebase.org/intranet/hr/policies?authuser=0#h.r7p7w5ny6bxo on March 31, 2022 -->
+
 # Code of Conduct
 
-## Our Pledge
-
-In the interest of fostering an open and welcoming environment, we as
-contributors and maintainers pledge to making participation in our project and
-our community a harassment-free experience for everyone, regardless of age, body
-size, disability, ethnicity, sex characteristics, gender identity and
-expression, level of experience, education, socio-economic status, nationality,
-personal appearance, race, religion, or sexual identity and orientation.
-
-## Our Standards
-
-Examples of behavior that contributes to creating a positive environment
-include:
-
-- Using welcoming and inclusive language
-- Being respectful of differing viewpoints and experiences
-- Gracefully accepting constructive criticism
-- Focusing on what is best for the community
-- Showing empathy towards other community members
-
-Examples of unacceptable behavior by participants include:
-
-- The use of sexualized language or imagery and unwelcome sexual attention or
-  advances
-- Trolling, insulting/derogatory comments, and personal or political attacks
-- Public or private harassment
-- Publishing others' private information, such as a physical or electronic
-  address, without explicit permission
-- Other conduct which could reasonably be considered inappropriate in a
-  professional setting
-
-## Our Responsibilities
-
-Project maintainers are responsible for clarifying the standards of acceptable
-behavior and are expected to take appropriate and fair corrective action in
-response to any instances of unacceptable behavior.
-
-Project maintainers have the right and responsibility to remove, edit, or reject
-comments, commits, code, wiki edits, issues, and other contributions that are
-not aligned to this Code of Conduct, or to ban temporarily or permanently any
-contributor for other behaviors that they deem inappropriate, threatening,
-offensive, or harmful.
+At Sage, we believe that science is better together, regardless of race, age,
+ethnicity, gender, sexual orientation, gender identity, gender expression,
+religion, national origin, migratory status, disability/abilities, political
+affiliation, veteran status, or socioeconomic background.*
 
 ## Scope
 
-This Code of Conduct applies both within project spaces and in public spaces
-when an individual is representing the project or its community. Examples of
-representing a project or community include using an official project e-mail
-address, posting via an official social media account, or acting as an appointed
-representative at an online or offline event. Representation of a project may be
-further defined and clarified by project maintainers.
+We expect all who participate within the Sage community, including all Sage
+employees, contractors, board members, and collaborators, to abide by this Code
+of Conduct when working with Sage, including in Sage’s physical spaces (i.e.
+Sage Bionetworks office and events*), digital spaces (i.e. email communication,
+SMS, video chats, JIRA, GitHub, Slack*), and in Sage related social media
+channels.
 
-## Enforcement
+## Our Standards
+
+We require and promote the following behaviors as a Sage Bionetworks team member
+and collaborator:
+
+- Be welcome and inclusive.
+- Participate in an authentic and active way.
+- Respect the viewpoints and ideas of others.
+- Attempt collaboration before conflict.
+- Refrain from demeaning, discriminatory, or harassing behavior and speech.
+- Show empathy and kindness when interacting with others.
+
+The following behaviors* are considered harassment and are unacceptable within
+our community:
+
+- Violence, threats of violence, or violent language directed against another
+  person.
+- Sexist, racist, homophobic, transphobic, ableist, or otherwise discriminatory
+  jokes and language.
+- Posting or threatening to post other people’s personally identifying
+  information (“doxing”).
+- Sending, posting, or displaying sexually explicit or violent material.
+- Personal insults, particularly those related to gender, sexual orientation,
+  race, religion, or disability.
+- Inappropriate photography or recording.
+- Inappropriate physical contact. You should have someone’s consent before
+  touching them.
+- Unwelcome sexual attention. This includes sexualized comments or jokes,
+  inappropriate touching, groping, and unwelcome sexual advances.
+- Deliberate intimidation, stalking, or following (online or in-person).
+- Advocating for, or encouraging, any of the above behavior.
+- Sustained disruption of community events, including talks and presentations.
+
+## Enforcement 
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by contacting the contacting the project lead or Sage Privacy Officer
-(privacyofficer@sagebase.org). The project team will review and investigate all
-complaints, and will respond in a way that it deems appropriate to the
-circumstances. The project team is obligated to maintain confidentiality with
-regard to the reporter of an incident. Further details of specific enforcement
-policies may be posted separately.
+reported in several ways. You may report directly to your manager or any manager
+you feel comfortable with, you may contact Human Resources at
+diane.gary@sagebase.org or erin.gerhard@sagebase.org, or submit an anonymous
+report. Anonymous reports may be made using the Sage Safe Hotline by calling
+1-855-662-SAFE (1-855-662-7233) or through the website [SAFEHOTLINE.COM],
+referencing the Sage ID number 6882112080. All reports will be reviewed and
+investigated by HR (Diane Gary & Erin Gerhard) and will result in a response
+that is deemed necessary and appropriate to the circumstances. HR and all the
+involved parties are obligated to maintain the confidentiality of the reporter.
 
-Project maintainers who do not follow or enforce the Code of Conduct in good
-faith may face temporary or permanent repercussions as determined by other
-members of the project's leadership.
+*This is not meant to be a complete list.
 
-## Attribution
-
-This Code of Conduct is adapted from the [Contributor Covenant][homepage],
-version 1.4, available at
-https://www.contributor-covenant.org/version/1/4/code-of-conduct.html
+This Code of Conduct is adapted from the [Contributor Covenant, version 1.4].
 
 <!-- Links -->
 
-[homepage]: https://www.contributor-covenant.org
+[SAFEHOTLINE.COM]: https://www.google.com/url?q=https%3A%2F%2Fsafehotline.com%2F&sa=D&sntz=1&usg=AOvVaw2ELj3uaxOcA0cZ-urQ1cfP
+[Contributor Covenant, version 1.4]: https://www.google.com/url?q=https%3A%2F%2Fwww.contributor-covenant.org%2Fversion%2F1%2F4%2Fcode-of-conduct.html&sa=D&sntz=1&usg=AOvVaw36CLk033noxVBQLvTOBXLm
