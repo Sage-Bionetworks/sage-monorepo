@@ -1,29 +1,29 @@
 {
-  "root": "apps/iam",
-  "sourceRoot": "apps/iam/src",
+  "root": "apps/keycloak",
+  "sourceRoot": "apps/keycloak/src",
   "projectType": "application",
   "targets": {
     "prepare": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "shx cp .env.example .env",
-        "cwd": "apps/iam"
+        "cwd": "apps/keycloak"
       }
     },
     "serve": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "docker compose up",
-        "cwd": "apps/iam"
+        "cwd": "apps/keycloak"
       }
     },
     "docker": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "context": "apps/iam",
+        "context": "apps/keycloak",
         "push": false,
         "tags": [
-          "sagebionetworks/challenge-registry-iam:latest"
+          "sagebionetworks/challenge-registry-keycloak:latest"
         ]
       }
     }
