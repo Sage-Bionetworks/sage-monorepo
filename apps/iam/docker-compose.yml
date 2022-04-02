@@ -7,6 +7,12 @@ services:
     restart: always
     env_file:
       - .env
+    volumes:
+      - iam-db:/opt/keycloak/data
     ports:
       - "8081:8080"
     command: start-dev
+
+volumes:
+  iam-db:
+    name: challenge-registry-iam-db
