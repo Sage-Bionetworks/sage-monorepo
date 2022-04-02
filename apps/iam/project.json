@@ -1,0 +1,32 @@
+{
+  "root": "apps/iam",
+  "sourceRoot": "apps/iam/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "shx cp .env.example .env",
+        "cwd": "apps/iam"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/iam"
+      }
+    },
+    "docker": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/iam",
+        "push": false,
+        "tags": [
+          "sagebionetworks/challenge-registry-iam:latest"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

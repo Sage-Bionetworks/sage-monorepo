@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  iam:
+    image: sagebionetworks/challenge-registry-iam:latest
+    container_name: challenge-registry-iam
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "8081:8080"
+    command: start-dev
