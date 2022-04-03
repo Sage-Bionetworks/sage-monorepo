@@ -14,5 +14,5 @@ services:
     command: [
       "start-dev",
       "-Dkeycloak.profile.feature.upload_scripts=enabled",
-      "-Dkeycloak.migration.file=/tmp/keycloak/imports/realm-test.json"
+      "-Dkeycloak.import=/tmp/keycloak/imports/test-realm.json"
     ]
