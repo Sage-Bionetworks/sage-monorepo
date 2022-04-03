@@ -1,10 +1,11 @@
 {
   "recommendations": [
-    "nrwl.angular-console",
+    "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
-    "dbaeumer.vscode-eslint",
     "ms-python.python",
-    "stkb.rewrap"
+    "nrwl.angular-console",
+    "stkb.rewrap",
+    "webhint.vscode-webhint"
   ]
 }
