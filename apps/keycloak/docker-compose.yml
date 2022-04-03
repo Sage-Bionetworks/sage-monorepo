@@ -13,18 +13,7 @@ services:
       - 8081:8080
     command: >
       start-dev
-      --db postgres
-      --db-url-host keycloak-db
-      --db-username keycloak
-      --db-schema public
-      --db-password changeme
-      # --help-all
-      # --log-level info
-    # [
-    #   "start-dev"
-    #   # "-Dkeycloak.profile.feature.upload_scripts=enabled",
-    #   # "-Dkeycloak.import=/tmp/keycloak/imports/test-realm.json"
-    # ]
+      -Dkeycloak.import=/tmp/keycloak/imports/test-realm.json
     depends_on:
       - keycloak-db
 
@@ -34,13 +23,12 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: changeme
-    # volumes:
-    #   - keycloak-db:/var/lib/postgresql/data
-      # - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    volumes:
+      - keycloak-db:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
-# volumes:
-#   keycloak-db:
-#     name: challenge-registry-keycloak-db
+volumes:
+  keycloak-db:
+    name: challenge-registry-keycloak-db
