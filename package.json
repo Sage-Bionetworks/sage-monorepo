@@ -5,6 +5,7 @@
   "scripts": {
     "start": "bash -c '. ./dev-env.sh && challenge-registry-serve'",
     "lint": "bash -c '. ./dev-env.sh && challenge-registry-lint'",
+    "lint-html": "bash -c '. ./dev-env.sh && challenge-registry-lint-html'",
     "build": "bash -c '. ./dev-env.sh && challenge-registry-build'",
     "test": "bash -c '. ./dev-env.sh && challenge-registry-test'",
     "python": "bash -c '. ./dev-env.sh && challenge-registry-python'",
