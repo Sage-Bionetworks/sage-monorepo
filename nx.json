@@ -21,6 +21,7 @@
           "build",
           "test",
           "lint",
+          "lint-html",
           "e2e"
         ],
         "canTrackAnalytics": false,
