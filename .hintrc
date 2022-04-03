@@ -1,0 +1,4 @@
+{
+  "extends": ["development"],
+  "formatters": ["codeframe", "summary"]
+}
