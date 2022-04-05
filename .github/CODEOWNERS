@@ -1,11 +1,12 @@
 * @tschaffter
 
-/apps/api/ @vpchung
-/apps/api-db/ @vpchung
-/apps/db-cli/ @rrchai
-/apps/web-app/ @rrchai
-/apps/web-app-e2e/ @rrchai
+/apps/api/ @tschaffter @vpchung
+/apps/api-db/ @tschaffter @vpchung
+/apps/db-cli/ @tschaffter @rrchai
+/apps/web-app/ @tschaffter @rrchai
+/apps/web-app-e2e/ @tschaffter @rrchai
 
-/libs/api-spec/ @vpchung
-/libs/shared/ @rrchai
-/libs/web/ @rrchai
+/libs/api-angular/ @tschaffter
+/libs/api-spec/ @tschaffter @vpchung
+/libs/shared/ @tschaffter @rrchai
+/libs/web/ @tschaffter @rrchai
