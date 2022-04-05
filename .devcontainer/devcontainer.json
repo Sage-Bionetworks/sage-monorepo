@@ -38,6 +38,7 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
+    "mhutchie.git-graph",
     "ms-python.python",
     "nrwl.angular-console",
     "stkb.rewrap",
