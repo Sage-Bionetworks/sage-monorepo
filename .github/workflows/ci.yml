@@ -92,12 +92,12 @@ jobs:
           python-version: ${{ env.PRIMARY_PYTHON_VERSION }}
       - name: Install pipenv
         run: python -m pip install --upgrade pipenv wheel
-      # - name: Setup pipenv cache
-      #   id: cache-pipenv
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: ~/.local/share/virtualenvs
-      #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+      - name: Setup pipenv cache
+        id: cache-pipenv
+        uses: actions/cache@v2
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
@@ -106,7 +106,7 @@ jobs:
           . ./dev-env.sh
           challenge-registry-prepare
       - name: Setup Python virtualenvs
-        # if: steps.cache-pipenv.outputs.cache-hit != 'true'
+        if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: yarn nx python api
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
       - run: yarn nx affected --target=build --parallel --max-parallel=3
