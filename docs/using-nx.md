@@ -129,6 +129,11 @@ If you want to know more about code ownership on Github, please check the
 [documentation on the CODEOWNERS
 file](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners).
 
+## Cheat Sheet
+
+This [cheat sheet](cheat-sheet.md) provides an overview of the commands needed
+when developing in this monorepo.
+
 ## References
 
 The content of this document was initially copied-pasted from:
