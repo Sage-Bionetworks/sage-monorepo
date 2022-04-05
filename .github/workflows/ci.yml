@@ -106,7 +106,7 @@ jobs:
           . ./dev-env.sh
           challenge-registry-prepare
       - name: Setup Python virtualenvs
-        if: steps.cache-pipenv.outputs.cache-hit != 'true'
+        # if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: yarn nx python api
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
       - run: yarn nx affected --target=build --parallel --max-parallel=3
