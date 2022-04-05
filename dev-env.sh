@@ -32,6 +32,10 @@ function challenge-registry-lint {
   nx run-many --all --target=lint
 }
 
+function challenge-registry-lint-html {
+  nx run-many --all --target=lint-html
+}
+
 function challenge-registry-build {
   nx run-many --all --target=build
 }
