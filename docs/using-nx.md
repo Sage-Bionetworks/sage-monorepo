@@ -66,16 +66,18 @@ mid-size applications.
 For example:
 
 ```
-apps/web-app      <---- app named `web-app`
-libs/web          <---- app-specific libraries
+apps/web-app          <---- app
+libs/web-app          <---- app-specific libraries
 ```
 
-Note: We would probably rename the above app `challenge-registry` the day this
-monorepo hosts more than one web applications. We would then have:
+If more than one web app was added to the monorepo, say `booking` and `check-in`
+for an airline, the file structure would look something like this:
 
 ```
-apps/challenge-registry-app        <---- app named `web-app`
-libs/challenge-registry-app        <---- app-specific libraries
+apps/booking               <---- app
+apps/check-in              <---- app
+libs/booking               <---- app-specific libraries
+libs/check-in              <---- app-specific libraries
 ```
 
 ### Type (What is in the library)
