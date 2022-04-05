@@ -74,8 +74,8 @@ Note: We would probably rename the above app `challenge-registry` the day this
 monorepo hosts more than one web applications. We would then have:
 
 ```
-apps/challenge-registry        <---- app named `web-app`
-libs/challenge-registry        <---- app-specific libraries
+apps/challenge-registry-app        <---- app named `web-app`
+libs/challenge-registry-app        <---- app-specific libraries
 ```
 
 ### Type (What is in the library)
