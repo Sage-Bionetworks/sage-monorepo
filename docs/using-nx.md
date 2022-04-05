@@ -119,9 +119,9 @@ often reflects the structure of an organization. GitHub users can use the
 CODEOWNERS file for that.
 
 ```
-/libs/happynrwlapp          julie-happynrwlapp-lead
-/apps/happynrwlapp          julie-happynrwlapp-lead
-/libs/shared/ui             hank-the-ui-guy
+/libs/happynrwlapp          julie
+/apps/happynrwlapp          julie
+/libs/shared/ui             hank
 /libs/shared/utils-testing  julie,hank
 ```
 
