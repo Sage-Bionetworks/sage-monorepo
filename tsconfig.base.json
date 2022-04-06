@@ -28,8 +28,8 @@
       "@challenge-registry/web/challenge-search": [
         "libs/web/challenge-search/src/index.ts"
       ],
-      "@challenge-registry/web/challenges": [
-        "libs/web/challenges/src/index.ts"
+      "@challenge-registry/web/challenge": [
+        "libs/web/challenge/src/index.ts"
       ],
       "@challenge-registry/web/config": ["libs/web/config/src/index.ts"],
       "@challenge-registry/web/home": ["libs/web/home/src/index.ts"],
@@ -37,6 +37,9 @@
       "@challenge-registry/web/not-found": ["libs/web/not-found/src/index.ts"],
       "@challenge-registry/web/org-profile": [
         "libs/web/org-profile/src/index.ts"
+      ],
+      "@challenge-registry/web/org-search": [
+        "libs/web/org-search/src/index.ts"
       ],
       "@challenge-registry/web/pages": ["libs/web/pages/src/index.ts"],
       "@challenge-registry/web/signup": ["libs/web/signup/src/index.ts"],

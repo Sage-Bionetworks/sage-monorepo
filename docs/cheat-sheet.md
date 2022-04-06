@@ -2,8 +2,8 @@
 
 ## Overview
 
-This cheat sheet provides a quick overview of the most important commands needed
-when developing in this monorepo.
+This cheat sheet provides an overview of the commands needed when developing in
+this monorepo.
 
 ## Workspace
 
