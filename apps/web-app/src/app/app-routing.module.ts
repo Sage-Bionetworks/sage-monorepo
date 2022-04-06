@@ -10,8 +10,8 @@ export const routes: Routes = [
   {
     path: 'search',
     loadChildren: () =>
-      import('@challenge-registry/web/challenges').then(
-        (m) => m.ChallengesModule
+      import('@challenge-registry/web/challenge').then(
+        (m) => m.ChallengeModule
       ),
   },
   {
@@ -23,6 +23,13 @@ export const routes: Routes = [
     path: 'signup',
     loadChildren: () =>
       import('@challenge-registry/web/signup').then((m) => m.SignupModule),
+  },
+  {
+    path: 'org/:login/:challenge',
+    loadChildren: () =>
+      import('@challenge-registry/web/challenge').then(
+        (m) => m.ChallengeModule
+      ),
   },
   {
     path: 'org/:login',

@@ -25,8 +25,8 @@
       "@challenge-registry/web/about": ["libs/web/about/src/index.ts"],
       "@challenge-registry/web/assets": ["libs/web/assets/src/index.ts"],
       "@challenge-registry/web/auth": ["libs/web/auth/src/index.ts"],
-      "@challenge-registry/web/challenges": [
-        "libs/web/challenges/src/index.ts"
+      "@challenge-registry/web/challenge": [
+        "libs/web/challenge/src/index.ts"
       ],
       "@challenge-registry/web/config": ["libs/web/config/src/index.ts"],
       "@challenge-registry/web/home": ["libs/web/home/src/index.ts"],
