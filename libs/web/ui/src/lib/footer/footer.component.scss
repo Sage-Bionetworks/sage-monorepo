@@ -1,85 +1,143 @@
-// @use 'libs/shared/style/src/variables';
 
-.challenge-registry-footer {
-  // padding: variables.$padding-test;
-  padding: 12px;
-  font-size: 12px;
+footer {
+  position: relative;
+  box-sizing: border-box;
+  align-items: flex-start;
+  min-width: 100%;
+  color: #fff;
 }
-
-.challenge-registry-footer-list {
-  align-items: center;
+.footer-top-section {
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 191px;
   display: flex;
-  flex-flow: row wrap;
-  padding: 8px;
+  position: absolute;
+  align-items: flex-start;
+  background-color: rgba(49, 78, 167, 1);
 }
-
-.challenge-registry-footer-logo {
-  flex: 1;
-}
-
-.challenge-registry-footer-angular-logo {
-  height: 50px;
-}
-
-.challenge-registry-footer-version {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex: 1;
-
-  .challenge-registry-footer-logo {
-    height: 40px;
-    margin: 10px 0 10px 16px;
-  }
-  .version {
-    margin: 0 40px;
-  }
-}
-
-.challenge-registry-footer-copyright {
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
-  flex-direction: column;
-  min-width: 225px;
-  margin-top: 16px;
-
-  > div {
-    display: flex;
-    flex-direction: column;
-    align-self: flex-end;
-    text-align: center;
-  }
-
-  @media (min-width: 885px) {
-    margin-top: 0;
-  }
-}
-
-.challenge-registry-footer-logo span {
-  display: inline-block;
-  line-height: 50px;
-  margin: 0 40px;
-  vertical-align: bottom;
-
-  a {
-    font-size: 16px;
-    padding: 0;
-  }
-}
-
-a {
+.footer-rocc {
+  top: 27px;
+  left: 52px;
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Poppins;
+  font-weight: 500;
+  line-height: normal;
+  font-stretch: normal;
   text-decoration: none;
-  color: inherit;
-
-  &:hover,
-  &:focus {
-    text-decoration: underline;
-  }
 }
-
-@media screen and (max-width: 884px){
-  .docs-footer-list {
-    flex-direction: column;
-  }
+.footer-registry {
+  top: 78px;
+  left: 52px;
+  height: auto;
+  position: absolute;
+  font-size: 15px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Poppins;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.footer-links {
+  top: 121px;
+  left: 52px;
+  width: 332.984375px;
+  height: 30px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+}
+.footer-about {
+  top: 0px;
+  left: 0px;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Poppins;
+  font-weight: 600px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.footer-team {
+  top: 0px;
+  left: 107px;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Poppins;
+  font-weight: 600px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.footer-api {
+  top: 0px;
+  right: 0px;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Poppins;
+  font-weight: 600px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.footer-info {
+  top: 69px;
+  right: 21px;
+  height: auto;
+  position: absolute;
+  font-size: 12px;
+  align-self: auto;
+  font-style: normal;
+  text-align: right;
+  font-family: Poppins;
+  font-weight: 500px;
+  line-height: 20px;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.footer-bottom-section {
+  top: 189px;
+  left: 0px;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  background-color: rgba(29, 53, 128, 1);
+}
+.footer-other-links {
+  top: 24px;
+  left: 465px;
+  height: auto;
+  margin: auto;
+  position: absolute;
+  font-size: 14px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Poppins;
+  font-weight: 600px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
 }
