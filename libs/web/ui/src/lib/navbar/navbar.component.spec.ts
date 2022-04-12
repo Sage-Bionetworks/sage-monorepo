@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ButtonGithubComponent } from '../button-github/button-github.component';
+import { MOCK_MENU_ITEMS } from '../user-button/mock-menu-items';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { NavbarComponent } from './navbar.component';
 
@@ -10,6 +12,7 @@ describe('NavbarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NavbarComponent, ButtonGithubComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
 
@@ -21,5 +24,24 @@ describe('NavbarComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should get sections', () => {
+    const MOCK_SECTIONS = {
+      sss: {
+        name: 'awesome org',
+        summary: 'awesome summary',
+      },
+    };
+    component.sections = MOCK_SECTIONS;
+    expect(component.sections).toEqual(MOCK_SECTIONS);
+  });
+
+  it('should emit', () => {
+    jest.spyOn(component.userMenuItemSelected, 'emit');
+    component.selectUserMenuItem(MOCK_MENU_ITEMS[0]);
+    expect(component.userMenuItemSelected.emit).toHaveBeenCalledWith(
+      MOCK_MENU_ITEMS[0]
+    );
   });
 });
