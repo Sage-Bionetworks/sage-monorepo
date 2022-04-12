@@ -26,10 +26,6 @@ describe('OrgCardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('orgAvatar should be undefined', () => {
-    expect(component.orgAvatar).toBeFalsy();
-  });
-
   it('orgAvatar name and avatar should be defined', () => {
     fixture.detectChanges();
     expect(component.orgAvatar).toEqual({
