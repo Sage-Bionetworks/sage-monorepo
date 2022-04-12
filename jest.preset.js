@@ -3,7 +3,7 @@ const nxPreset = require('@nrwl/jest/preset');
 module.exports = {
   ...nxPreset,
   collectCoverage: true,
-  coverageReporters: ['html','json','lcov'],
+  coverageReporters: ['text', 'html','json','lcov'],
   coverageThreshold: {
     "global": {
       "branches": 0,
