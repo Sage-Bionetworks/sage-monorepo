@@ -27,6 +27,6 @@ describe('AvatarComponent', () => {
 
   it('should get an Avatar', () => {
     component.avatar = EMPTY_AVATAR;
-    expect(component.avatar).toStrictEqual(EMPTY_AVATAR);
+    expect(component.avatar).toEqual(EMPTY_AVATAR);
   });
 });
