@@ -1,10 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AvatarModule as NgxAvatarModule } from 'ngx-avatar';
 import { EMPTY_AVATAR } from './mock-avatars';
 import { AvatarComponent } from './avatar.component';
@@ -32,6 +27,6 @@ describe('AvatarComponent', () => {
 
   it('should get an Avatar', () => {
     component.avatar = EMPTY_AVATAR;
-    expect(component.avatar).toBe(EMPTY_AVATAR);
+    expect(component.avatar).toStrictEqual(EMPTY_AVATAR);
   });
 });
