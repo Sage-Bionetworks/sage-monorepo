@@ -6,12 +6,11 @@
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/libs/web/ui"
-      ],
+      "outputs": ["coverage/libs/web/ui"],
       "options": {
         "jestConfig": "libs/web/ui/jest.config.js",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "runInBand": true
       }
     },
     "lint": {
@@ -25,9 +24,5 @@
     }
   },
   "tags": [],
-  "implicitDependencies": [
-    "shared-assets",
-    "shared-styles",
-    "shared-theming"
-  ]
+  "implicitDependencies": ["shared-assets", "shared-styles", "shared-theming"]
 }
