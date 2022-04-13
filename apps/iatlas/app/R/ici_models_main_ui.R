@@ -3,13 +3,13 @@ ici_models_main_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlasModules::messageBox(
+    iatlas.modules::messageBox(
       width = 24,
       shiny::includeMarkdown("inst/markdown/ici_models.markdown"),
       shiny::actionLink(ns("method_link"), "Click to view method description.")
     ),
     shiny::htmlOutput(ns("excluded_dataset")),
-    iatlasModules::optionsBox(
+    iatlas.modules::optionsBox(
       width = 24,
       shiny::column(
         width = 6,
@@ -43,7 +43,7 @@ ici_models_main_ui <- function(id){
                            choices = c("Responder", "Clinical Benefit")),
         shiny::uiOutput(ns("response_characteristics")),
         shiny::br(),
-        iatlasModules::optionsBox(
+        iatlas.modules::optionsBox(
           width = 12,
           title = "Advanced",
           collapsible = TRUE,
@@ -80,7 +80,7 @@ ici_models_main_ui <- function(id){
     ),
     shiny::fluidRow(
         shiny::verticalLayout(
-          iatlasModules::messageBox(
+          iatlas.modules::messageBox(
             width = 12,
             shiny::uiOutput(ns("samples_summary")),
             shiny::br(),

@@ -1,7 +1,7 @@
 notebookpage_ui <- function(){
   shiny::fluidPage(
     shiny::br(),
-    iatlasModules::titleBox("iAtlas Notebooks"),
+    iatlas.modules::titleBox("iAtlas Notebooks"),
     shiny::fluidRow(
       shiny::column(
         width = 12,

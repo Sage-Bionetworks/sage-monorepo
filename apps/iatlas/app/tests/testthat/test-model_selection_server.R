@@ -1,4 +1,4 @@
-numerical_covariate_tbl <- iatlasGraphqlClient::query_features() %>%
+numerical_covariate_tbl <- iatlasGraphQLClient::query_features() %>%
   dplyr::select("class", "display", "feature" = "name") %>%
   shiny::reactiveVal()
 

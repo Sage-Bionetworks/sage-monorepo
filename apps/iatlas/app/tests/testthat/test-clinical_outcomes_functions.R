@@ -1,9 +1,9 @@
 
 test_that("build_co_survival_list", {
-    res1 <- build_co_survival_list(iatlasModules2::tcga_immune_subtype_cohort_obj_small$feature_tbl)
+    res1 <- build_co_survival_list(iatlas.modules2::tcga_immune_subtype_cohort_obj_small$feature_tbl)
     expect_named(res1)
     expect_vector(res1)
-    res2 <- build_co_survival_list(iatlasModules2::tcga_bin_cohort_obj_small$feature_tbl)
+    res2 <- build_co_survival_list(iatlas.modules2::tcga_bin_cohort_obj_small$feature_tbl)
     expect_named(res2)
     expect_vector(res2)
 })
@@ -14,8 +14,8 @@ test_that("get_co_status_feature", {
     expect_error(get_co_status_feature("not_a_feature"), "Unknown time feature")
 })
 
-survival_tbl1 <- build_co_survival_value_tbl(iatlasModules2::tcga_immune_subtype_cohort_obj_small, "OS_time", "OS")
-survival_tbl2 <- build_co_survival_value_tbl(iatlasModules2::tcga_bin_cohort_obj_small, "OS_time", "OS")
+survival_tbl1 <- build_co_survival_value_tbl(iatlas.modules2::tcga_immune_subtype_cohort_obj_small, "OS_time", "OS")
+survival_tbl2 <- build_co_survival_value_tbl(iatlas.modules2::tcga_bin_cohort_obj_small, "OS_time", "OS")
 
 test_that("Build Survival Values Tibble", {
     expect_named(survival_tbl1, c("sample", "group", "time", "status"))
@@ -23,10 +23,10 @@ test_that("Build Survival Values Tibble", {
 })
 
 feature_tbl1 <- build_co_feature_tbl(
-    iatlasModules2::tcga_immune_subtype_cohort_obj_small, "DNA Alteration"
+    iatlas.modules2::tcga_immune_subtype_cohort_obj_small, "DNA Alteration"
 )
 feature_tbl2 <- build_co_feature_tbl(
-    iatlasModules2::tcga_bin_cohort_obj_small, "DNA Alteration"
+    iatlas.modules2::tcga_bin_cohort_obj_small, "DNA Alteration"
 )
 
 test_that("build_co_feature_tbl", {

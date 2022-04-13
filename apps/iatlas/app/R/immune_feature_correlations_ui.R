@@ -1,6 +1,6 @@
 immune_feature_correlations_ui <- function(id) {
     ns <- shiny::NS(id)
-    iatlasModules::heatmap_ui(
+    iatlas.modules::heatmap_ui(
         ns("heatmap")
         # html = shiny::includeMarkdown(
         #     get_markdown_path("immune_features_dist")
@@ -8,14 +8,14 @@ immune_feature_correlations_ui <- function(id) {
     )
 
     # shiny::tagList(
-    #     iatlasModules::messageBox(
+    #     iatlas.modules::messageBox(
     #         width = 12,
     #         shiny::includeMarkdown(get_markdown_path(
     #             "immune_features_correlations"
     #         ))
     #     ),
     #     shiny::fluidRow(
-    #         iatlasModules::optionsBox(
+    #         iatlas.modules::optionsBox(
     #             width = 12,
     #             shiny::column(
     #                 width = 6,
@@ -41,25 +41,25 @@ immune_feature_correlations_ui <- function(id) {
     #         )
     #     ),
     #     shiny::fluidRow(
-    #         iatlasModules::plotBox(
+    #         iatlas.modules::plotBox(
     #             width = 12,
     #             shiny::fluidRow(
     #                 "heatmap" %>%
     #                     ns() %>%
     #                     plotly::plotlyOutput(.) %>%
     #                     shinycssloaders::withSpinner(.),
-    #                 iatlasModules::plotly_ui(ns("heatmap"))
+    #                 iatlas.modules::plotly_ui(ns("heatmap"))
     #             )
     #         )
     #     ),
     #     shiny::fluidRow(
-    #         iatlasModules::plotBox(
+    #         iatlas.modules::plotBox(
     #             width = 12,
     #             "scatterPlot" %>%
     #                 ns() %>%
     #                 plotly::plotlyOutput(.) %>%
     #                 shinycssloaders::withSpinner(.),
-    #             iatlasModules::plotly_ui(ns("scatterplot"))
+    #             iatlas.modules::plotly_ui(ns("scatterplot"))
     #         )
     #     )
     # )

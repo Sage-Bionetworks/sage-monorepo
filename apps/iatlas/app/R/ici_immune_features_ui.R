@@ -3,16 +3,16 @@ ici_immune_features_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlasModules::titleBox(
+    iatlas.modules::titleBox(
       "iAtlas Explorer — Immune Features in Immune Checkpoint Inhibitors datasets"
     ),
-    iatlasModules::textBox(
+    iatlas.modules::textBox(
       width = 12,
       p("This module allows you to see how immune readouts vary across your groups.")
       ),
-    iatlasModules::sectionBox(
+    iatlas.modules::sectionBox(
       title = "Distributions",
-      iatlasModules::messageBox(
+      iatlas.modules::messageBox(
         width = 12,
         shiny::includeMarkdown("inst/markdown/ici_immunefeatures.markdown")
       ),

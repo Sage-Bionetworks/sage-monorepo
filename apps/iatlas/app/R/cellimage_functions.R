@@ -1,6 +1,6 @@
 get_cellimage_genes <- function(){
   genes <-
-    iatlasGraphqlClient::query_genes(gene_types = "cellimage_network") %>%
+    iatlasGraphQLClient::query_genes(gene_types = "cellimage_network") %>%
     dplyr::pull("entrez")
 }
 
@@ -16,7 +16,7 @@ get_cellimage_features <- function(){
 get_cellimage_gene_nodes <- function(dataset, tag, genes){
 
   nodes <-
-    iatlasGraphqlClient::query_nodes(
+    iatlasGraphQLClient::query_nodes(
       datasets = dataset,
       network = "Cellimage Network",
       entrez = genes,
@@ -49,7 +49,7 @@ get_cellimage_gene_nodes <- function(dataset, tag, genes){
 
 get_cellimage_feature_nodes <- function(dataset, tag, features){
   nodes <-
-    iatlasGraphqlClient::query_nodes(
+    iatlasGraphQLClient::query_nodes(
       datasets = dataset,
       network = "Cellimage Network",
       features = features,
@@ -105,7 +105,7 @@ get_cellimage_edges <- function(){
     unique()
 
   edges <-
-    iatlasGraphqlClient::query_edges(
+    iatlasGraphQLClient::query_edges(
       node1 = node_names,
       node2 = node_names
     )

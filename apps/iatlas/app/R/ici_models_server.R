@@ -8,14 +8,14 @@ ici_models_server <- function(
 
       predictors_list <- reactive({
 
-        ici_tags <- iatlasGraphqlClient::query_dataset_tags(datasets = cohort_obj()$dataset_names)
+        ici_tags <- iatlasGraphQLClient::query_dataset_tags(datasets = cohort_obj()$dataset_names)
 
         response_vars <- ici_tags %>%
           dplyr::filter(tag_name %in% c("Responder", "Clinical_Benefit", "Progression")) %>%
           dplyr::select(tag_short_display, tag_name) %>%
           tibble::deframe()
 
-        clinical_data <- iatlasGraphqlClient::query_dataset_tags(datasets = cohort_obj()$dataset_names) %>%
+        clinical_data <- iatlasGraphQLClient::query_dataset_tags(datasets = cohort_obj()$dataset_names) %>%
           dplyr::filter(!tag_name %in% c("Response", "Responder", "Clinical_Benefit", "Progression", "Sample_Treatment", "TCGA_Study")) %>%
           dplyr::select(tag_short_display, tag_name) %>%
           tibble::deframe()
@@ -34,7 +34,7 @@ ici_models_server <- function(
           dplyr::select(display, name) %>%
           tibble::deframe()
 
-        genes <- iatlasGraphqlClient::query_immunomodulators() %>%
+        genes <- iatlasGraphQLClient::query_immunomodulators() %>%
           create_nested_list_by_class(
             class_column = "gene_family",
             display_column = "hgnc",
