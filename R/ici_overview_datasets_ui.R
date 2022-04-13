@@ -2,13 +2,13 @@ ici_overview_datasets_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlasModules::messageBox(
+    iatlas.modules::messageBox(
       width = 24,
       shiny::includeMarkdown(get_markdown_path(
         "ici_overview_datasets"
       ))
     ),
-    iatlasModules::plotBox(
+    iatlas.modules::plotBox(
       width = 12,
       DT::DTOutput(
         ns("ici_datasets_df")

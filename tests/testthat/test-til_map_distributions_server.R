@@ -3,7 +3,7 @@ test_that("til_map_distributions_server", {
     til_map_distributions_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::tcga_immune_subtype_cohort_obj_small
+        iatlas.modules2::tcga_immune_subtype_cohort_obj_small
       ),
       "mock_event_data" = shiny::reactive(data.frame(
         "curveNumber" = c(0,0),

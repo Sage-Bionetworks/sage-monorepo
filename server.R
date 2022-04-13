@@ -40,7 +40,7 @@ shiny::shinyServer(function(input, output, session) {
 
   ici_cohort_obj <- call_iatlas_module(
     "ici_cohort_selection",
-    iatlasModules2::cohort_selection_server,
+    iatlas.modules2::cohort_selection_server,
     input,
     session,
     default_datasets = shiny::reactive(c("Gide_Cell_2019", "HugoLo_IPRES_2016")),
@@ -57,7 +57,7 @@ shiny::shinyServer(function(input, output, session) {
 
   cg_cohort_obj <- call_iatlas_module(
     "cg_cohort_selection",
-    iatlasModules2::cohort_selection_server,
+    iatlas.modules2::cohort_selection_server,
     input,
     session
   )

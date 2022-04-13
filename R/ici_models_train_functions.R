@@ -72,14 +72,14 @@ get_predictors_df <- function(
   selected_genes
 ){
   #df with selected predictors and labels
-  pred_features <- iatlasGraphqlClient::query_cohort_features(cohorts = datasets) %>%
+  pred_features <- iatlasGraphQLClient::query_cohort_features(cohorts = datasets) %>%
     dplyr::filter(feature_name %in% selected_pred) %>%
     dplyr::mutate(VariableType = "Numeric") %>%
     dplyr::select(feature_name, feature_display, VariableType) %>%
     dplyr::distinct()
 
   if(nrow(pred_features) > 0){
-    pred_df <- iatlasGraphqlClient::query_feature_values(cohorts = datasets, features = pred_features$feature_name) %>%
+    pred_df <- iatlasGraphQLClient::query_feature_values(cohorts = datasets, features = pred_features$feature_name) %>%
       dplyr::select(sample_name = sample, feature_name, feature_value)
   }else{
     pred_df <- NULL
@@ -87,8 +87,8 @@ get_predictors_df <- function(
 
   #for categorical predictors, we need to make sure to store the key to label them correctly
 
-  cat_df <- iatlasGraphqlClient::query_tag_samples(cohorts = datasets, parent_tags = c(selected_response, selected_pred, "Prior_Rx", "TCGA_Study")) %>% #we always want TCGA Study to check if user mixed different types
-    dplyr::inner_join(iatlasGraphqlClient::query_tags_with_parent_tags(parent_tags = c(selected_response, selected_pred, "TCGA_Study")), by = c("tag_name", "tag_long_display", "tag_short_display", "tag_characteristics", "tag_color", "tag_order", "tag_type"))
+  cat_df <- iatlasGraphQLClient::query_tag_samples(cohorts = datasets, parent_tags = c(selected_response, selected_pred, "Prior_Rx", "TCGA_Study")) %>% #we always want TCGA Study to check if user mixed different types
+    dplyr::inner_join(iatlasGraphQLClient::query_tags_with_parent_tags(parent_tags = c(selected_response, selected_pred, "TCGA_Study")), by = c("tag_name", "tag_long_display", "tag_short_display", "tag_characteristics", "tag_color", "tag_order", "tag_type"))
 
   categories <- cat_df %>%
     dplyr::mutate(feature_name = paste0(parent_tag_name, tag_name),
@@ -96,7 +96,7 @@ get_predictors_df <- function(
                   VariableType = "Category") %>%
     dplyr::select(feature_name, feature_display, VariableType) %>%
     rbind(
-      iatlasGraphqlClient::query_tags_with_parent_tags(parent_tags = selected_pred)%>%
+      iatlasGraphQLClient::query_tags_with_parent_tags(parent_tags = selected_pred)%>%
         dplyr::select(feature_name = parent_tag_name, feature_display = parent_tag_short_display) %>%
         dplyr::mutate(VariableType = "Categorical")
     ) %>%
@@ -110,7 +110,7 @@ get_predictors_df <- function(
     feature_display = selected_genes,
     VariableType = "Numeric")
   if(length(selected_genes >0)){
-    gene_df <- iatlasGraphqlClient::query_gene_expression(cohorts = datasets, entrez = as.numeric(selected_genes))
+    gene_df <- iatlasGraphQLClient::query_gene_expression(cohorts = datasets, entrez = as.numeric(selected_genes))
     genes <- gene_df %>%
       dplyr::mutate(feature_name = hgnc,
                     feature_display = hgnc,
@@ -242,7 +242,7 @@ get_training_object <- function(cohort_obj,
   )
 
   #info about selected outcome
-  response_levels <- iatlasGraphqlClient::query_tags_with_parent_tags(parent_tags = selected_response)
+  response_levels <- iatlasGraphQLClient::query_tags_with_parent_tags(parent_tags = selected_response)
 
   # #df with selected predictors and labels
   predictors <- get_predictors_df(
@@ -254,23 +254,23 @@ get_training_object <- function(cohort_obj,
 
   #getting samples that are pre-treatment. We need to handle the Prins dataset differently, because an on_sample_treatment means that ICI was not neoadjuvant
   if("Prins_GBM_2019" %in% cohort_obj$dataset_names){
-    pre_treat_samples <-  iatlasGraphqlClient::query_tag_samples(tags = "pre_sample_treatment", cohorts = cohort_obj$dataset_names) %>%
+    pre_treat_samples <-  iatlasGraphQLClient::query_tag_samples(tags = "pre_sample_treatment", cohorts = cohort_obj$dataset_names) %>%
       dplyr::filter(sample_name %in% cohort_obj$sample_tbl$sample_name) %>%
-      dplyr::bind_rows(iatlasGraphqlClient::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>% #we want all samples from Prins
+      dplyr::bind_rows(iatlasGraphQLClient::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>% #we want all samples from Prins
       dplyr::distinct(sample_name)
   }else{
-    pre_treat_samples <-  iatlasGraphqlClient::query_tag_samples(cohorts = cohort_obj$dataset_names, tags = "pre_sample_treatment") %>%
+    pre_treat_samples <-  iatlasGraphQLClient::query_tag_samples(cohorts = cohort_obj$dataset_names, tags = "pre_sample_treatment") %>%
       dplyr::filter(sample_name %in% cohort_obj$sample_tbl$sample_name)
   }
 
   #consolidating df with selected predictors, dataset, adding survival data
   pred_df <- predictors$predictors_df %>%
-    rbind(iatlasGraphqlClient::query_feature_values(cohorts = cohort_obj$dataset_names, features = c("OS", "OS_time", "PFI_1", "PFI_time_1")) %>%
+    rbind(iatlasGraphQLClient::query_feature_values(cohorts = cohort_obj$dataset_names, features = c("OS", "OS_time", "PFI_1", "PFI_time_1")) %>%
                        dplyr::select(sample_name = sample, feature_name, feature_value)) %>%
     dplyr::filter(sample_name %in% pre_treat_samples$sample_name) %>%
     #dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
     tidyr::pivot_wider(., names_from = feature_name, values_from = feature_value, values_fill = NA) %>%
-    dplyr::inner_join(iatlasGraphqlClient::query_dataset_samples(datasets = cohort_obj$dataset_names), by = "sample_name")
+    dplyr::inner_join(iatlasGraphQLClient::query_dataset_samples(datasets = cohort_obj$dataset_names), by = "sample_name")
 
   #subset dataset
   data_bucket <- list(

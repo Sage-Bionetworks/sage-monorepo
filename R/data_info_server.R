@@ -5,7 +5,7 @@ data_info_server <- function(id){
       ns <- session$ns
 
       class_list <- shiny::reactive({
-        iatlasGraphqlClient::query_features() %>%
+        iatlasGraphQLClient::query_features() %>%
           dplyr::pull("class") %>%
           c("All classes", .)
       })
@@ -22,9 +22,9 @@ data_info_server <- function(id){
       feature_tbl <- shiny::reactive({
         shiny::req(input$class_choice)
         if(input$class_choice == "All classes") {
-          iatlasGraphqlClient::query_features()
+          iatlasGraphQLClient::query_features()
         } else {
-          iatlasGraphqlClient::query_features(
+          iatlasGraphQLClient::query_features(
             feature_class = input$class_choice
           )
         }
@@ -54,7 +54,7 @@ data_info_server <- function(id){
 
       selected_method_tags <- shiny::reactive({
         shiny::req(filtered_feature_tbl())
-        iatlasModules::get_unique_values_from_col(
+        iatlas.modules::get_unique_values_from_col(
           filtered_feature_tbl(),
           method_tag
         )
@@ -91,14 +91,14 @@ data_info_server <- function(id){
 
       shiny::observeEvent(input$feature_table_rows_selected, {
         output$variable_details_section <- shiny::renderUI({
-          iatlasModules::sectionBox(
+          iatlas.modules::sectionBox(
             title = "Variable Class Details",
-            iatlasModules::messageBox(
+            iatlas.modules::messageBox(
               width = 12,
               shiny::p("Here is additional information about the variables in the Variable Class you selected. To the right you can access description of the methods used to obtain the variables.")
             ),
             shiny::fluidRow(
-              iatlasModules::tableBox(
+              iatlas.modules::tableBox(
                 width = 9,
                 shiny::tableOutput(ns('variable_class_table'))
               ),

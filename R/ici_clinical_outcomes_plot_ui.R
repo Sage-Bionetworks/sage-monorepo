@@ -2,11 +2,11 @@ ici_clinical_outcomes_plot_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlasModules::messageBox(
+    iatlas.modules::messageBox(
       width = 24,
       shiny::includeMarkdown("inst/markdown/ici_clinical_outcomes.markdown")
     ),
-    iatlasModules::optionsBox(
+    iatlas.modules::optionsBox(
       width=12,
       shiny::column(
         width = 8,
@@ -39,7 +39,7 @@ ici_clinical_outcomes_plot_ui <- function(id){
       width = 12,
       shiny::htmlOutput(ns("notification")),
       shiny::htmlOutput(ns("excluded_dataset")),
-      iatlasModules::plotBox(
+      iatlas.modules::plotBox(
         width = 12,
         shiny::uiOutput(ns("plots")) %>%
           shinycssloaders::withSpinner()

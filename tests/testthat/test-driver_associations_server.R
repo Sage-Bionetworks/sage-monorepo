@@ -3,7 +3,7 @@ test_that("driver_associations_server", {
     driver_associations_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::tcga_immune_subtype_cohort_obj
+        iatlas.modules2::tcga_immune_subtype_cohort_obj
       )
     ),
     {

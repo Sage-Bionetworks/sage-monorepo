@@ -100,11 +100,11 @@ ici_distribution_server <- function(
 
         if(input$var1_surv %in% cohort_obj()$feature_tbl$name){
           samples <- cohort_obj()$sample_tbl %>%
-            dplyr::inner_join(., iatlasGraphqlClient::query_feature_values(features = input$var1_surv), by = c("sample_name" = "sample")) %>%
+            dplyr::inner_join(., iatlasGraphQLClient::query_feature_values(features = input$var1_surv), by = c("sample_name" = "sample")) %>%
             build_distribution_io_df(., "feature_value", input$scale_method)
         }else{
           samples <- cohort_obj()$sample_tbl %>%
-            dplyr::inner_join(., iatlasGraphqlClient::query_gene_expression(cohorts = cohort_obj()$dataset_names, entrez = as.numeric(input$var1_surv)), by = c("sample_name" = "sample")) %>%
+            dplyr::inner_join(., iatlasGraphQLClient::query_gene_expression(cohorts = cohort_obj()$dataset_names, entrez = as.numeric(input$var1_surv)), by = c("sample_name" = "sample")) %>%
             build_distribution_io_df(., "rna_seq_expr", input$scale_method)
         }
 
@@ -113,7 +113,7 @@ ici_distribution_server <- function(
             dplyr::rename(group = group_name)
         }else{
          groups <- samples %>%
-           dplyr::inner_join(iatlasGraphqlClient::query_tag_samples(parent_tags = input$groupvar2), by = "sample_name")
+           dplyr::inner_join(iatlasGraphQLClient::query_tag_samples(parent_tags = input$groupvar2), by = "sample_name")
 
          combine_groups(groups, input$groupvar2,cohort_obj()) %>%
            dplyr::inner_join(samples %>% dplyr::select(sample_name, y), by = "sample_name")

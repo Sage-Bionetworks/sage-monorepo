@@ -7,9 +7,9 @@ data_table_ui <- function(
     ns <- shiny::NS(id)
 
     shiny::tagList(
-        iatlasModules::messageBox(width = 12, message_html),
+        iatlas.modules::messageBox(width = 12, message_html),
         shiny::fluidRow(
-            iatlasModules::tableBox(
+            iatlas.modules::tableBox(
                 width = 12,
                 shiny::div(
                     style = "overflow-x: scroll",

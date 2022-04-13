@@ -79,7 +79,7 @@ immune_feature_correlations_server <- function(
         feature_data()$feature_class[[1]]
       )
 
-      result <- iatlasModules::heatmap_server(
+      result <- iatlas.modules::heatmap_server(
         "heatmap",
 
         feature_sample_data_function  = feature_sample_data_function,

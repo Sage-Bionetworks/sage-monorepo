@@ -77,10 +77,10 @@ explorepage_ui <- function(){
       "Samples:"
     ),
     value = c(
-      nrow(iatlasGraphqlClient::query_datasets(types = "ici")),
+      nrow(iatlasGraphQLClient::query_datasets(types = "ici")),
       2,
-      nrow(iatlasGraphqlClient::query_features()),
-      nrow(iatlasGraphqlClient::query_samples())
+      nrow(iatlasGraphQLClient::query_features()),
+      nrow(iatlasGraphQLClient::query_samples())
     ),
     icon = purrr::map(c("search", "database", "filter", "users"), shiny::icon)
   ) %>%
@@ -102,7 +102,7 @@ explorepage_ui <- function(){
         "boxText" = "description"
       ) %>%
       purrr::pmap(
-        iatlasModules::imgLinkBox, width = 6, linkText = "Open Module"
+        iatlas.modules::imgLinkBox, width = 6, linkText = "Open Module"
       ) %>%
       dplyr::tibble("item" = .) %>%
       dplyr::mutate("row" = as.character(ceiling(dplyr::row_number() / 2))) %>%
@@ -125,8 +125,8 @@ explorepage_ui <- function(){
   # This is the tab item that users land on
   landing_tab_item <- list(shinydashboard::tabItem(
     tabName = "dashboard",
-    iatlasModules::titleBox("iAtlas Explorer - Home"),
-    iatlasModules::sectionBox(
+    iatlas.modules::titleBox("iAtlas Explorer - Home"),
+    iatlas.modules::sectionBox(
       title = "What's Inside",
       shiny::column(
         width = 6,
@@ -140,9 +140,9 @@ explorepage_ui <- function(){
         )
       )
     ),
-    iatlasModules::sectionBox(
+    iatlas.modules::sectionBox(
       title = "Get Started",
-      iatlasModules::textBox(
+      iatlas.modules::textBox(
         width = 6,
         shiny::p(shiny::h4(shiny::strong("1. Build your Cohort"))),
         shiny::p("Use our cohort selector to explore the available data and narrow down your research targets."),
@@ -151,23 +151,23 @@ explorepage_ui <- function(){
           shiny::actionButton(inputId = "link_to_cg_cohort_selection", label = "Open CG Cohort Selection")
         )
       ),
-      iatlasModules::textBox(
+      iatlas.modules::textBox(
         width = 6,
         shiny::p(shiny::h4(shiny::strong("2. Visualize your data"))),
         shiny::p("Use our analysis modules to explore the selected cohorts. You can access the analysis modules from the sections below and from the left menu. Any changes in the selected cohort in step 1 will be automatically propagated to the corresponding modules.")
       )
     ),
-    iatlasModules::sectionBox(
+    iatlas.modules::sectionBox(
       title = "Immune Checkpoint Inhibition Analysis Modules",
-      iatlasModules::messageBox(
+      iatlas.modules::messageBox(
         width = 12,
         shiny::includeMarkdown("inst/markdown/explore3.markdown")
       ),
       ici_module_image_boxes
     ),
-    iatlasModules::sectionBox(
+    iatlas.modules::sectionBox(
       title = "Cancer Genomics Analysis Modules",
-      iatlasModules::messageBox(
+      iatlas.modules::messageBox(
         width = 12,
         shiny::includeMarkdown("inst/markdown/explore2.markdown")
       ),
@@ -186,8 +186,8 @@ explorepage_ui <- function(){
           "data_info"
         ),
         "ui_function" = c(
-          iatlasModules2::cohort_selection_ui,
-          iatlasModules2::cohort_selection_ui,
+          iatlas.modules2::cohort_selection_ui,
+          iatlas.modules2::cohort_selection_ui,
           data_info_ui
         )
       )

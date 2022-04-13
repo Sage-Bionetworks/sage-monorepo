@@ -43,7 +43,7 @@ tumor_microenvironment_cell_proportions_server  <- function(
           )
       })
 
-      result <- iatlasModules::barplot_server(
+      result <- iatlas.modules::barplot_server(
         "barplot",
         sample_data_function,
         group_data      = group_data,

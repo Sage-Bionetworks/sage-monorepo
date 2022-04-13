@@ -3,7 +3,7 @@ test_that("io_target_distributions_server", {
     io_target_distributions_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::pcawg_immune_subtype_cohort_obj
+        iatlas.modules2::pcawg_immune_subtype_cohort_obj
       ),
       "mock_event_data" = shiny::reactive(data.frame(
         "curveNumber" = c(0,0),

@@ -5,7 +5,7 @@ til_map_datatable_server <- function(id, cohort_obj) {
 
       patient_tbl <- shiny::reactive({
         patient_tbl <-
-          iatlasGraphqlClient::query_sample_patients(
+          iatlasGraphQLClient::query_sample_patients(
             samples = cohort_obj()$sample_tbl$sample_name
           ) %>%
           dplyr::select("sample_name", "patient_name")
@@ -13,7 +13,7 @@ til_map_datatable_server <- function(id, cohort_obj) {
 
       slide_tbl <- shiny::reactive({
         slide_tbl <-
-          iatlasGraphqlClient::query_patient_slides(
+          iatlasGraphQLClient::query_patient_slides(
             samples = cohort_obj()$sample_tbl$sample_name
           ) %>%
           dplyr::select("patient_name", "slide_name") %>%

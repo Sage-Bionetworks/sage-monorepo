@@ -1,12 +1,12 @@
 get_tcga_samples_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_cohort_samples(cohorts = "TCGA")
+    iatlasGraphQLClient::query_cohort_samples(cohorts = "TCGA")
   }
 )
 
 get_tcga_study_samples_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_cohort_samples(cohorts = "TCGA_TCGA_Study")
+    iatlasGraphQLClient::query_cohort_samples(cohorts = "TCGA_TCGA_Study")
   }
 )
 
@@ -24,19 +24,19 @@ get_tcga_samples_50 <- memoise::memoise(
 
 get_tcga_features_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_features(cohorts = "TCGA")
+    iatlasGraphQLClient::query_features(cohorts = "TCGA")
   }
 )
 
 get_pcawg_samples_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_cohort_samples(cohorts = "PCAWG")
+    iatlasGraphQLClient::query_cohort_samples(cohorts = "PCAWG")
   }
 )
 
 get_pcawg_study_samples_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_cohort_samples(cohorts = "PCAWG_PCAWG_Study")
+    iatlasGraphQLClient::query_cohort_samples(cohorts = "PCAWG_PCAWG_Study")
   }
 )
 
@@ -54,6 +54,6 @@ get_pcawg_samples_50 <- memoise::memoise(
 
 get_pcawg_features_tbl <- memoise::memoise(
   function(){
-    iatlasGraphqlClient::query_features(cohorts = "PCAWG")
+    iatlasGraphQLClient::query_features(cohorts = "PCAWG")
   }
 )

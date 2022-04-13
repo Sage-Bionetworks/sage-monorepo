@@ -8,10 +8,10 @@ ici_overview_category_server <- function(
 
       ns <- session$ns
 
-      ici_datasets <- shiny::reactive(iatlasGraphqlClient::query_datasets(types = "ici"))
-      ici_samples <- shiny::reactive(iatlasGraphqlClient::query_dataset_samples(datasets = ici_datasets()$name))
+      ici_datasets <- shiny::reactive(iatlasGraphQLClient::query_datasets(types = "ici"))
+      ici_samples <- shiny::reactive(iatlasGraphQLClient::query_dataset_samples(datasets = ici_datasets()$name))
 
-      categories <- shiny::reactive(iatlasGraphqlClient::query_tags(datasets = ici_datasets()$name))
+      categories <- shiny::reactive(iatlasGraphQLClient::query_tags(datasets = ici_datasets()$name))
 
       output$select_group1 <- renderUI(
         shiny::selectInput(ns("group1"), "Select Category",
@@ -54,7 +54,7 @@ ici_overview_category_server <- function(
 
       values_for_group1 <- shiny::reactive({
         shiny::req(group1())
-        iatlasGraphqlClient::query_tag_samples(samples = ici_samples()$sample_name, parent_tags = group1()) %>%
+        iatlasGraphQLClient::query_tag_samples(samples = ici_samples()$sample_name, parent_tags = group1()) %>%
           merge(., ici_samples(), by = "sample_name")
       })
 
