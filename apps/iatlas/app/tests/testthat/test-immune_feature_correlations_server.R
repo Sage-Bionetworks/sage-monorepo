@@ -3,7 +3,7 @@ test_that("immune_feature_correlations_server", {
     immune_feature_correlations_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::pcawg_immune_subtype_cohort_obj
+        iatlas.modules2::pcawg_immune_subtype_cohort_obj
       ),
       "mock_event_data" = shiny::reactive(data.frame(
         "curveNumber" = 0,

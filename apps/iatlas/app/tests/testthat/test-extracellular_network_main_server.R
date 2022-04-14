@@ -3,7 +3,7 @@ test_that("extracellular_network_main_server_immune_subtype", {
     extracellular_network_main_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::tcga_immune_subtype_cohort_obj
+        iatlas.modules2::tcga_immune_subtype_cohort_obj
       )
     ),
     {
@@ -56,7 +56,7 @@ test_that("extracellular_network_main_server_tcga_study_no_results", {
     extracellular_network_main_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::tcga_tcga_study_cohort_obj
+        iatlas.modules2::tcga_tcga_study_cohort_obj
       )
     ),
     {
@@ -112,7 +112,7 @@ test_that("extracellular_network_main_server_tcga_study_no_stratification", {
     extracellular_network_main_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::tcga_tcga_study_cohort_obj
+        iatlas.modules2::tcga_tcga_study_cohort_obj
       )
     ),
     {
@@ -157,7 +157,7 @@ test_that("extracellular_network_main_server_tcga_study_with_stratification", {
     extracellular_network_main_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::tcga_tcga_study_cohort_obj
+        iatlas.modules2::tcga_tcga_study_cohort_obj
       )
     ),
     {
@@ -207,7 +207,7 @@ test_that("extracellular_network_main_server_pcawg_immune_subtype", {
     extracellular_network_main_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::pcawg_immune_subtype_cohort_obj
+        iatlas.modules2::pcawg_immune_subtype_cohort_obj
       )
     ),
     {

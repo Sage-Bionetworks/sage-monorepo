@@ -59,6 +59,30 @@
         "URL": "https://packagemanager.rstudio.com/all/latest"
       },
       {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
         "Name": "BioCsoft",
         "URL": "https://bioconductor.org/packages/3.14/bioc"
       },
@@ -173,10 +197,10 @@
     },
     "DT": {
       "Package": "DT",
-      "Version": "0.21",
+      "Version": "0.22",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "45fa28dbf288cd606e13ca35d3d72437",
+      "Hash": "fc53164de9ee32692eef6fdd14115381",
       "Requirements": [
         "crosstalk",
         "htmltools",
@@ -375,10 +399,10 @@
     },
     "RColorBrewer": {
       "Package": "RColorBrewer",
-      "Version": "1.1-2",
+      "Version": "1.1-3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "e031418365a7f7a766181ab5a41a5716",
+      "Hash": "45f0398006e83a5b10b72a90663d8d8c",
       "Requirements": []
     },
     "RCurl": {
@@ -401,10 +425,10 @@
     },
     "RcppEigen": {
       "Package": "RcppEigen",
-      "Version": "0.3.3.9.1",
+      "Version": "0.3.3.9.2",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "ddfa72a87fdf4c80466a20818be91d00",
+      "Repository": "RSPM",
+      "Hash": "4c86baed78388ceb06f88e3e9a1d87f5",
       "Requirements": [
         "Matrix",
         "Rcpp"
@@ -653,10 +677,10 @@
     },
     "broom": {
       "Package": "broom",
-      "Version": "0.7.12",
+      "Version": "0.8.0",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "bfa8a039d77ae8d5413254e572c8abea",
+      "Repository": "CRAN",
+      "Hash": "fe13cb670e14da57fd7a466578db8ce5",
       "Requirements": [
         "backports",
         "dplyr",
@@ -796,7 +820,7 @@
       "Package": "cluster",
       "Version": "2.1.2",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Hash": "ce49bfe5bc0b3ecd43a01fe1b01c2243",
       "Requirements": []
     },
@@ -868,10 +892,10 @@
     },
     "crayon": {
       "Package": "crayon",
-      "Version": "1.5.0",
+      "Version": "1.5.1",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "741c2e098e98afe3dc26a7b0e5489f4e",
+      "Repository": "CRAN",
+      "Hash": "8dc45fd8a1ee067a92b85ef274e66d6a",
       "Requirements": []
     },
     "credentials": {
@@ -926,10 +950,15 @@
     },
     "cyjShiny": {
       "Package": "cyjShiny",
-      "Version": "1.0.34",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "84e9a729cb10d1474ec895b20a0048de",
+      "Version": "1.0.17",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "CRI-iAtlas",
+      "RemoteRepo": "cyjShiny",
+      "RemoteRef": "master",
+      "RemoteSha": "29583d53ecdd58f4e428e8ab31eafc6599be0da5",
+      "Hash": "ad77a630759dff02e9d1ae6a61764cb8",
       "Requirements": [
         "base64enc",
         "graph",
@@ -1197,10 +1226,10 @@
     },
     "gert": {
       "Package": "gert",
-      "Version": "1.5.0",
+      "Version": "1.6.0",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "8fddce7cbd59467106266a6e93e253b4",
+      "Repository": "CRAN",
+      "Hash": "98c014c4c933f23ea5a0321a4d0b588b",
       "Requirements": [
         "askpass",
         "credentials",
@@ -1575,42 +1604,17 @@
         "openssl"
       ]
     },
-    "iatlasGraphqlClient": {
-      "Package": "iatlasGraphqlClient",
-      "Version": "0.28.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteUsername": "CRI-iAtlas",
-      "RemoteRepo": "iatlas.api.client",
-      "RemoteRef": "main",
-      "RemoteSha": "e7cae563a0735b4fb4e00ec15487c73058add809",
-      "RemoteHost": "api.github.com",
-      "Hash": "10a3dc6198f2b8a73731e90197351705",
-      "Requirements": [
-        "assertthat",
-        "dplyr",
-        "ghql",
-        "jsonlite",
-        "magrittr",
-        "purrr",
-        "rlang",
-        "snakecase",
-        "stringr",
-        "tibble",
-        "tidyr"
-      ]
-    },
-    "iatlasModules": {
-      "Package": "iatlasModules",
-      "Version": "0.8.0",
+    "iatlas.modules": {
+      "Package": "iatlas.modules",
+      "Version": "0.9.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules",
       "RemoteRef": "master",
-      "RemoteSha": "6d1acdd28e0984a1788fad8235c1b231a4bb7330",
+      "RemoteSha": "351864f7d25ebd821426fdb2ac64790f4536fe75",
       "RemoteHost": "api.github.com",
-      "Hash": "7e9a87a234dda20b05c5ef4b841f2b24",
+      "Hash": "94e4315acc912778ee40081702f7d527",
       "Requirements": [
         "RColorBrewer",
         "crayon",
@@ -1634,25 +1638,25 @@
         "viridis"
       ]
     },
-    "iatlasModules2": {
-      "Package": "iatlasModules2",
-      "Version": "0.5.0",
+    "iatlas.modules2": {
+      "Package": "iatlas.modules2",
+      "Version": "0.6.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules2",
       "RemoteRef": "master",
-      "RemoteSha": "d88cca4340f4645b2d3689c499b64703f34a011f",
+      "RemoteSha": "7a73c7433e9d086e5448bb8b9a2889c8dbc7485c",
       "RemoteHost": "api.github.com",
-      "Remotes": "CRI-iAtlas/iatlasGraphqlClient@main, CRI-iAtlas/iatlasModules@master",
-      "Hash": "b34c063f4ee867cba0319056d0245cc6",
+      "Remotes": "CRI-iAtlas/iatlasGraphQLClient@main, CRI-iAtlas/iatlas.modules@master",
+      "Hash": "98b2ab4c588fc5eac0c902aca39173d0",
       "Requirements": [
         "DT",
         "assertthat",
         "dplyr",
         "forcats",
-        "iatlasGraphqlClient",
-        "iatlasModules",
+        "iatlas.modules",
+        "iatlasGraphQLClient",
         "magrittr",
         "plotly",
         "purrr",
@@ -1669,17 +1673,42 @@
         "viridisLite"
       ]
     },
-    "igvShiny": {
-      "Package": "igvShiny",
-      "Version": "1.4.4",
+    "iatlasGraphQLClient": {
+      "Package": "iatlasGraphQLClient",
+      "Version": "0.1.0",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "CRI-iAtlas",
+      "RemoteRepo": "iatlasGraphQLClient",
+      "RemoteRef": "main",
+      "RemoteSha": "d97a8b7c4162ee0f31f717ff4b2e7c61ae77edca",
+      "Hash": "92d3a568c2fbd8b97267dc67a5f4a9c1",
+      "Requirements": [
+        "assertthat",
+        "dplyr",
+        "ghql",
+        "jsonlite",
+        "magrittr",
+        "purrr",
+        "rlang",
+        "snakecase",
+        "stringr",
+        "tibble",
+        "tidyr"
+      ]
+    },
+    "igvShiny": {
+      "Package": "igvShiny",
+      "Version": "1.4.5",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "paul-shannon",
       "RemoteRepo": "igvShiny",
       "RemoteRef": "master",
-      "RemoteSha": "95ec0819fd1bcb13551f006feaddb8329d389254",
-      "RemoteHost": "api.github.com",
-      "Hash": "608fa4a6b470be92e4b3109a0c7e2aec",
+      "RemoteSha": "be9b05fd3f92b4b9b4e9d1921e207f7dd6cc9884",
+      "Hash": "e6f84092bb9b3abf8de934d8acbaecc4",
       "Requirements": [
         "GenomeInfoDbData",
         "GenomicRanges",
@@ -1757,10 +1786,10 @@
     },
     "km.ci": {
       "Package": "km.ci",
-      "Version": "0.5-2",
+      "Version": "0.5-6",
       "Source": "Repository",
       "Repository": "RSPM",
-      "Hash": "b6090043f6d0b5ffc447be4b3f2811e9",
+      "Hash": "41d857f78edf8f5db59608b6a42b6005",
       "Requirements": [
         "survival"
       ]
@@ -1882,10 +1911,10 @@
     },
     "lme4": {
       "Package": "lme4",
-      "Version": "1.1-28",
+      "Version": "1.1-29",
       "Source": "Repository",
       "Repository": "RSPM",
-      "Hash": "15b3e9b19ecd9c2ea0d6a3d32248063c",
+      "Hash": "4f55df530bfb9fe95fc42738fa55f183",
       "Requirements": [
         "MASS",
         "Matrix",
@@ -1911,10 +1940,10 @@
     },
     "magrittr": {
       "Package": "magrittr",
-      "Version": "2.0.2",
+      "Version": "2.0.3",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "cdc87ecd81934679d1557633d8e1fe51",
+      "Repository": "CRAN",
+      "Hash": "7ce2733a9826b3aeb1775d56fd305472",
       "Requirements": []
     },
     "maptools": {
@@ -1972,10 +2001,10 @@
     },
     "mgcv": {
       "Package": "mgcv",
-      "Version": "1.8-39",
+      "Version": "1.8-40",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "055265005c238024e306fe0b600c89ff",
+      "Repository": "CRAN",
+      "Hash": "c6b2fdb18cf68ab613bd564363e1ba0d",
       "Requirements": [
         "Matrix",
         "nlme"
@@ -2019,10 +2048,10 @@
     },
     "nlme": {
       "Package": "nlme",
-      "Version": "3.1-155",
+      "Version": "3.1-157",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "74ad940dccc9e977189a5afe5fcdb7ba",
+      "Hash": "dbca60742be0c9eddc5205e5c7ca1f44",
       "Requirements": [
         "lattice"
       ]
@@ -2084,10 +2113,10 @@
     },
     "parallelly": {
       "Package": "parallelly",
-      "Version": "1.30.0",
+      "Version": "1.31.0",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "67db13907a9cea89c118cf82d448799f",
+      "Repository": "RSPM",
+      "Hash": "ceef6586b2539fd15f4cdf87061bfa04",
       "Requirements": []
     },
     "pbkrtest": {
@@ -2192,10 +2221,15 @@
     },
     "plotly": {
       "Package": "plotly",
-      "Version": "4.10.0",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "fbb11e44d057996ca5fe40d959cacfb0",
+      "Version": "4.10.0.9001",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "ropensci",
+      "RemoteRepo": "plotly",
+      "RemoteRef": "master",
+      "RemoteSha": "2a197769833f2490ff5dbb0677f25ed8f99e8281",
+      "Hash": "8b02e5549af3303f02cfe36ba1987f1e",
       "Requirements": [
         "RColorBrewer",
         "base64enc",
@@ -2240,10 +2274,10 @@
     },
     "polynom": {
       "Package": "polynom",
-      "Version": "1.4-0",
+      "Version": "1.4-1",
       "Source": "Repository",
       "Repository": "RSPM",
-      "Hash": "c396592ecfe9e75cee1013533efafe34",
+      "Hash": "ceb5c2a59ba33d42d051285a3e8a5118",
       "Requirements": []
     },
     "praise": {
@@ -2264,10 +2298,10 @@
     },
     "processx": {
       "Package": "processx",
-      "Version": "3.5.2",
+      "Version": "3.5.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0cbca2bc4d16525d009c4dbba156b37c",
+      "Hash": "8bbae1a548d0d3fdf6647bdd9d35bf6d",
       "Requirements": [
         "R6",
         "ps"
@@ -2592,18 +2626,23 @@
     },
     "rprojroot": {
       "Package": "rprojroot",
-      "Version": "2.0.2",
+      "Version": "2.0.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "249d8cd1e74a8f6a26194a91b47f21d1",
+      "Hash": "1de7ab598047a87bba48434ba35d497d",
       "Requirements": []
     },
     "rsconnect": {
       "Package": "rsconnect",
-      "Version": "0.8.25",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "c78e0acc405a6990475f1f9500ebe66c",
+      "Version": "0.8.26",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "rstudio",
+      "RemoteRepo": "rsconnect",
+      "RemoteRef": "main",
+      "RemoteSha": "9c72d5ea8c2e5be2283395a9667b77313a77a017",
+      "Hash": "c31ca48af8211abbda783bf5216329e4",
       "Requirements": [
         "curl",
         "digest",
@@ -2876,10 +2915,10 @@
     },
     "survMisc": {
       "Package": "survMisc",
-      "Version": "0.5.5",
+      "Version": "0.5.6",
       "Source": "Repository",
       "Repository": "RSPM",
-      "Hash": "566b73db4f3b2f517e707e1c73267325",
+      "Hash": "2367feed5d6f99ee1e380da3eac55ab6",
       "Requirements": [
         "KMsurv",
         "data.table",
@@ -2936,10 +2975,10 @@
     },
     "testthat": {
       "Package": "testthat",
-      "Version": "3.1.2",
+      "Version": "3.1.3",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "32454e5780e8dbe31e4b61b13d8918fe",
+      "Repository": "CRAN",
+      "Hash": "affcf9db2c99dd2c7e6459ef55ed3385",
       "Requirements": [
         "R6",
         "brio",
@@ -3023,10 +3062,10 @@
     },
     "tinytex": {
       "Package": "tinytex",
-      "Version": "0.37",
+      "Version": "0.38",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "a80abeb527a977e4bef21873d29222dd",
+      "Repository": "CRAN",
+      "Hash": "759d047596ac173433985deddf313450",
       "Requirements": [
         "xfun"
       ]
@@ -3043,10 +3082,10 @@
     },
     "tzdb": {
       "Package": "tzdb",
-      "Version": "0.2.0",
+      "Version": "0.3.0",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "5e069fb033daf2317bd628d3100b75c5",
+      "Repository": "CRAN",
+      "Hash": "b2e1cbce7c903eaf23ec05c58e59fb5e",
       "Requirements": [
         "cpp11"
       ]
@@ -3100,12 +3139,12 @@
     },
     "vctrs": {
       "Package": "vctrs",
-      "Version": "0.3.8",
+      "Version": "0.4.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ecf749a1b39ea72bd9b51b76292261f1",
+      "Hash": "8b54f22e2a58c4f275479c92ce041a57",
       "Requirements": [
-        "ellipsis",
+        "cli",
         "glue",
         "rlang"
       ]

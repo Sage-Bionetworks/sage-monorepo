@@ -43,7 +43,7 @@ immune_feature_distributions_server <- function(
           dplyr::mutate("group_display" = .data$group_name)
       })
 
-      result <- iatlasModules::distributions_plot_server(
+      result <- iatlas.modules::distributions_plot_server(
         "distplot",
         sample_data_function,
         feature_data    = feature_data,

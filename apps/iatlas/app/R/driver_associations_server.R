@@ -19,16 +19,16 @@ driver_associations_server <- function(id, cohort_obj){
         "univariate_driver",
         cohort_obj,
         test_function = show_submodule,
-        server_function = iatlasModules2::univariate_driver_server,
-        ui_function = iatlasModules2::univariate_driver_ui
+        server_function = iatlas.modules2::univariate_driver_server,
+        ui_function = iatlas.modules2::univariate_driver_ui
       )
 
       # call_module_server(
       #   "multivariate_driver",
       #   cohort_obj,
       #   test_function = show_submodule,
-      #   server_function = iatlasModules2::multivariate_driver_server,
-      #   ui_function = iatlasModules2::multivariate_driver_ui
+      #   server_function = iatlas.modules2::multivariate_driver_server,
+      #   ui_function = iatlas.modules2::multivariate_driver_ui
       # )
     }
   )

@@ -20,7 +20,7 @@ get_cnv_entrez_query_from_filters <- function(filters, gene_set_tbl, gene_tbl){
   if(length(gene_sets) == 0) return(as.integer(filters))
   genes <- filters %>%
     purrr::discard(., . %in% gene_sets)
-  iatlasGraphqlClient::query_genes_by_gene_types(gene_sets) %>%
+  iatlasGraphQLClient::query_genes_by_gene_types(gene_sets) %>%
     dplyr::pull("entrez") %>%
     unique() %>%
     union(genes) %>%

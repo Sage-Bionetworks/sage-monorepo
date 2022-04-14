@@ -48,7 +48,7 @@ extracellular_network_main_server <- function(
 
       group_choices <- shiny::reactive({
         choices <-
-          iatlasGraphqlClient::query_tags(
+          iatlasGraphQLClient::query_tags(
             cohorts = cohort_obj()$dataset_names,
             parent_tags = cohort_obj()$group_name
           ) %>%
@@ -76,7 +76,7 @@ extracellular_network_main_server <- function(
 
       output$select_statify_groups_ui <- shiny::renderUI({
         choices <-
-          iatlasGraphqlClient::query_tags(
+          iatlasGraphQLClient::query_tags(
             datasets = cohort_obj()$dataset_names,
             parent_tags = "Immune_Subtype"
           ) %>%

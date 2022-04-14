@@ -52,7 +52,7 @@ tumor_microenvironment_type_fractions_server <- function(
           )
       })
 
-      result <- iatlasModules::barplot_server(
+      result <- iatlas.modules::barplot_server(
         "barplot",
         sample_data_function,
         group_data      = group_data,

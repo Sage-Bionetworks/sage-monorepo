@@ -80,7 +80,7 @@ clinical_outcomes_heatmap_server <- function(
           dplyr::select("group" = "short_name", "description")
       })
 
-      iatlasModules::plotly_server(
+      iatlas.modules::plotly_server(
         "heatmap",
         plot_data  = heatmap_tbl,
         eventdata  = heatmap_eventdata,

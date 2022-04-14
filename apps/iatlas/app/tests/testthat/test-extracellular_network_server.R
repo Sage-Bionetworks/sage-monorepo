@@ -3,7 +3,7 @@ test_that("extracellular_network_server_tcga", {
     extracellular_network_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::tcga_immune_subtype_cohort_obj
+        iatlas.modules2::tcga_immune_subtype_cohort_obj
       )
     ),
     {
@@ -19,7 +19,7 @@ test_that("extracellular_network_server_pcawg", {
     extracellular_network_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::pcawg_immune_subtype_cohort_obj
+        iatlas.modules2::pcawg_immune_subtype_cohort_obj
       )
     ),
     {

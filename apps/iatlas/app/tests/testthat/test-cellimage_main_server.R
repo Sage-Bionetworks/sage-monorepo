@@ -3,7 +3,7 @@ test_that("cellimage_main_server", {
     cellimage_main_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::tcga_immune_subtype_cohort_obj
+        iatlas.modules2::tcga_immune_subtype_cohort_obj
       )
     ),
     {

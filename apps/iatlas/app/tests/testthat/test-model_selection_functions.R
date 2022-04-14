@@ -95,7 +95,7 @@ test_that("create_numerical_covariate_string", {
         create_numerical_covariate_string(
             1,
             "None",
-            iatlasModules::transform_feature_formula
+            iatlas.modules::transform_feature_formula
         ),
         "character"
     )
@@ -103,7 +103,7 @@ test_that("create_numerical_covariate_string", {
         create_numerical_covariate_string(
             1,
             "None",
-            iatlasModules::transform_feature_formula
+            iatlas.modules::transform_feature_formula
         ),
         1L
     )
