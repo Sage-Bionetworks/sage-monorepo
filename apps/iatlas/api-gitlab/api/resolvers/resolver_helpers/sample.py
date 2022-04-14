@@ -17,7 +17,7 @@ feature_related_sample_request_fields = simple_sample_request_fields.union({
                                                                            'value'})
 
 gene_related_sample_request_fields = simple_sample_request_fields.union({
-                                                                        'rnaSeqExpr'})
+                                                                        'rnaSeqExpr', 'nanostringExpr'})
 
 mutation_related_sample_request_fields = sample_request_fields.union({
                                                                      'status'})
@@ -38,6 +38,7 @@ def build_sample_graphql_response(prefix='sample_'):
                 'name': get_value(sample, prefix + 'name'),
                 'status': get_value(sample, prefix + 'mutation_status'),
                 'rnaSeqExpr': get_value(sample, prefix + 'gene_rna_seq_expr'),
+                'nanostringExpr': get_value(sample, prefix + 'gene_nanostring_expr'),
                 'value': get_value(sample, prefix + 'feature_value'),
                 'patient': build_patient_graphql_response()(sample),
                 'tag': build_tag_graphql_response()(sample) if has_tag_fields(sample) else None
