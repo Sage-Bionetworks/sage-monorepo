@@ -5,7 +5,7 @@ from .database_helpers import build_general_query
 
 related_fields = ['gene', 'sample']
 
-core_fields = ['gene_id', 'sample_id', 'rna_seq_expr']
+core_fields = ['gene_id', 'sample_id', 'rna_seq_expr', 'nanostring_expr']
 
 
 def return_gene_to_sample_query(*args):
