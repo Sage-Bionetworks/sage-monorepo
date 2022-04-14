@@ -27,6 +27,8 @@ type GeneRelatedSample {
   name: String!
   "The the RNASeq expression value of the Sample related to the Gene."
   rnaSeqExpr: Float
+  "The the nanostring expression value of the Sample related to the Gene."
+  nanostringExpr: Float
 }
 
 """

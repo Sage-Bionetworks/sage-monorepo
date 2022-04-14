@@ -38,6 +38,14 @@ def min_rna_seq_expr_2():
 def sample_name():
     return 'TCGA-27-1837'
 
+@pytest.fixture(scope='module')
+def nanostring_sample():
+    return "Prins_GBM_2019-SK08-ar-A07"
+
+@pytest.fixture(scope='module')
+def nanostring_entrez():
+    return 259
+
 
 @pytest.fixture(scope='module')
 def common_query_builder():
@@ -107,7 +115,7 @@ def common_query(common_query_builder):
 
 
 @pytest.fixture(scope='module')
-def samples_query(common_query_builder):
+def rnaseq_query(common_query_builder):
     return common_query_builder(
         """
         {
@@ -115,6 +123,22 @@ def samples_query(common_query_builder):
                 entrez
                 samples {
                     rnaSeqExpr
+                    name
+                }
+            }
+        }
+        """
+    )
+
+@pytest.fixture(scope='module')
+def nanostring_query(common_query_builder):
+    return common_query_builder(
+        """
+        {
+            items{
+                entrez
+                samples {
+                    nanostringExpr
                     name
                 }
             }
@@ -417,10 +441,10 @@ def test_genes_query_returns_publications_with_geneType(client, common_query_bui
             assert type(publication['pubmedId']) is int
 
 
-def test_genes_samples_query_with_gene_and_cohort(client, entrez, samples_query, tcga_tag_cohort_name, tcga_tag_cohort_samples):
+def test_genes_rnaseq_query_with_gene_and_cohort(client, entrez, rnaseq_query, tcga_tag_cohort_name, tcga_tag_cohort_samples):
     response = client.post(
         '/api', json={
-            'query': samples_query,
+            'query': rnaseq_query,
             'variables': {
                 'entrez': [entrez],
                 'cohort': [tcga_tag_cohort_name]
@@ -442,10 +466,10 @@ def test_genes_samples_query_with_gene_and_cohort(client, entrez, samples_query,
         assert sample['name'] in tcga_tag_cohort_samples
 
 
-def test_genes_samples_query_with_gene_and_sample(client, entrez, samples_query, sample):
+def test_genes_rnaseq_query_with_gene_and_sample(client, entrez, rnaseq_query, sample):
     response = client.post(
         '/api', json={
-            'query': samples_query,
+            'query': rnaseq_query,
             'variables': {
                 'entrez': [entrez],
                 'sample': [sample]
@@ -467,11 +491,11 @@ def test_genes_samples_query_with_gene_and_sample(client, entrez, samples_query,
     assert s['name'] == sample
 
 
-def test_genes_query_with_entrez_and_maxRnaSeqExpr(client, samples_query, entrez):
+def test_genes_query_with_entrez_and_maxRnaSeqExpr(client, rnaseq_query, entrez):
     max_rna_seq_expr = 1
     response = client.post(
         '/api', json={
-            'query': samples_query,
+            'query': rnaseq_query,
             'variables': {
                 'maxRnaSeqExpr': max_rna_seq_expr,
                 'entrez': entrez
@@ -493,11 +517,11 @@ def test_genes_query_with_entrez_and_maxRnaSeqExpr(client, samples_query, entrez
         assert sample['rnaSeqExpr'] <= max_rna_seq_expr
 
 
-def test_genes_query_with_entrez_and_minRnaSeqExpr(client, samples_query, entrez):
+def test_genes_query_with_entrez_and_minRnaSeqExpr(client, rnaseq_query, entrez):
     min_rna_seq_expr = 1
     response = client.post(
         '/api', json={
-            'query': samples_query,
+            'query': rnaseq_query,
             'variables': {
                 'minRnaSeqExpr': min_rna_seq_expr,
                 'entrez': entrez
@@ -517,3 +541,27 @@ def test_genes_query_with_entrez_and_minRnaSeqExpr(client, samples_query, entrez
         assert type(sample['name']) is str
         assert type(sample['rnaSeqExpr']) is float
         assert sample['rnaSeqExpr'] >= min_rna_seq_expr
+
+def test_genes_nanostring_query_with_gene_and_sample(client, nanostring_query, nanostring_entrez, nanostring_sample):
+    response = client.post(
+        '/api', json={
+            'query': nanostring_query,
+            'variables': {
+                'entrez': [nanostring_entrez],
+                'sample': [nanostring_sample]
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['genes']
+    genes = page['items']
+    assert isinstance(genes, list)
+    assert len(genes) == 1
+    gene = genes[0]
+    assert gene['entrez'] == nanostring_entrez
+    samples = gene['samples']
+    assert isinstance(samples, list)
+    assert len(samples) == 1
+    s = samples[0]
+    assert type(s['name']) is str
+    assert type(s['nanostringExpr']) is float
+    assert s['name'] == nanostring_sample
