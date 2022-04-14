@@ -2,12 +2,12 @@ germline_heritability_ui <- function(id){
 
     ns <- shiny::NS(id)
     shiny::tagList(
-        iatlasModules::messageBox(
+        iatlas.modules::messageBox(
             width = 12,
             shiny::includeMarkdown("inst/markdown/germline_heritability.markdown"),
             shiny::actionLink(ns("method_link"), "Click to view method description.")
         ),
-        iatlasModules::optionsBox(
+        iatlas.modules::optionsBox(
           width = 3,
           shiny::column(
             width = 12,
@@ -34,7 +34,7 @@ germline_heritability_ui <- function(id){
                                   selected = "variance")
           )
         ),
-        iatlasModules::plotBox(
+        iatlas.modules::plotBox(
             width = 9,
             plotly::plotlyOutput(ns("heritability"), height = "700px") %>%
               shinycssloaders::withSpinner(.)
@@ -42,7 +42,7 @@ germline_heritability_ui <- function(id){
           shiny::conditionalPanel(paste0("input['", ns("group"), "'] == 'European_immune'"), #& input['", ns("byImmune"), "'] == 1"),
                                   shiny::column(
                                     width = 6,
-                                    iatlasModules::messageBox(
+                                    iatlas.modules::messageBox(
                                       width = 12,
                                       shiny::p("Click on a bar on the plot above and see immune subtype-specific heritability analysis conducted for
                                                immune traits with significant (p < 0.05) G x Immune Subtype interaction. Heritability was calculated in three of the
@@ -53,7 +53,7 @@ germline_heritability_ui <- function(id){
                                       ),
                                   shiny::column(
                                     width = 6,
-                                    iatlasModules::plotBox(
+                                    iatlas.modules::plotBox(
                                       width = 12,
                                       plotly::plotlyOutput(ns("heritability_cov"), height = "300px") %>%
                                         shinycssloaders::withSpinner(.)

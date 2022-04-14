@@ -4,7 +4,7 @@ test_that("tumor_microenvironment_type_fractions_server_pcawg", {
     tumor_microenvironment_type_fractions_server,
     args = list(
       "cohort_obj" = shiny::reactiveVal(
-        iatlasModules2::pcawg_immune_subtype_cohort_obj
+        iatlas.modules2::pcawg_immune_subtype_cohort_obj
       ),
       "mock_event_data" = shiny::reactive(data.frame(
         "curveNumber" = 1,

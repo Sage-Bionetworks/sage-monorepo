@@ -2,7 +2,7 @@ ici_distribution_ui <- function(id){
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlasModules::optionsBox(
+    iatlas.modules::optionsBox(
       width=12,
       column(
         width = 3,
@@ -46,7 +46,7 @@ ici_distribution_ui <- function(id){
       )
     ),#optionsBox
     shiny::htmlOutput(ns("excluded_dataset")),
-    iatlasModules::plotBox(
+    iatlas.modules::plotBox(
       width = 12,
       plotly::plotlyOutput(ns("dist_plots"), height = "500px") %>%
         shinycssloaders::withSpinner(),
@@ -55,18 +55,18 @@ ici_distribution_ui <- function(id){
       shiny::downloadButton(ns("download_tbl"), "Download plot table")
     ),
     shiny::fluidRow(
-      iatlasModules::optionsBox(
+      iatlas.modules::optionsBox(
         width = 3,
         shiny::uiOutput(ns("ui_stat")),
         shiny::radioButtons(ns("stattest"), "Test type", choices = c("t-test", "Wilcox"), inline = TRUE, selected = "t-test")
       ),
-      iatlasModules::plotBox(
+      iatlas.modules::plotBox(
         width = 9,
         DT::dataTableOutput(ns("stats1")),
         downloadButton(ns('download_test'), 'Download')
       )
     ),
-    iatlasModules::plotBox(
+    iatlas.modules::plotBox(
         width = 12,
         plotly::plotlyOutput(ns("drilldown_plot")) %>%
           shinycssloaders::withSpinner(),
