@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AvatarModule } from '../avatar/avatar.module';
 import { MatCardModule } from '@angular/material/card';
+import {MatDividerModule} from '@angular/material/divider';
 import { OrgCardComponent } from './org-card.component';
 import { MOCK_ORG } from './mock-org';
 import { HttpClientModule } from '@angular/common/http';
@@ -12,7 +13,7 @@ describe('OrgCardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [OrgCardComponent],
-      imports: [HttpClientModule, AvatarModule, MatCardModule],
+      imports: [HttpClientModule, AvatarModule, MatCardModule, MatDividerModule],
     }).compileComponents();
   });
 
