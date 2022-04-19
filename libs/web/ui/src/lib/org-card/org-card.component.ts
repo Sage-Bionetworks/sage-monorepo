@@ -9,10 +9,10 @@ import { Avatar } from '../avatar/avatar';
 })
 export class OrgCardComponent implements OnInit {
   @Input() org!: Organization;
-  @Input() orgAvatar!: Avatar;
+  orgAvatar!: Avatar;
 
   ngOnInit(): void {
-    if (this.orgAvatar) {
+    if (this.org) {
       this.orgAvatar = {
         name: this.org.name
           ? (this.org.name as string)
