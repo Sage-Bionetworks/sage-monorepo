@@ -43,7 +43,8 @@
     "ms-python.python",
     "nrwl.angular-console",
     "stkb.rewrap",
-    "webhint.vscode-webhint"
+    "webhint.vscode-webhint",
+    "GitHub.vscode-pull-request-github"
   ],
   "forwardPorts": [
     80,
