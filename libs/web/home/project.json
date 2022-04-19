@@ -9,8 +9,7 @@
       "outputs": ["coverage/libs/web/home"],
       "options": {
         "jestConfig": "libs/web/home/jest.config.js",
-        "passWithNoTests": true,
-        "runInBand": true
+        "passWithNoTests": true
       }
     },
     "lint": {
