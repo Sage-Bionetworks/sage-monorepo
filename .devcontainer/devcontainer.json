@@ -6,6 +6,7 @@
   "features": {
     "docker-in-docker": "latest"
   },
+  "hostRequirements": {"memory": "4gb"},
   "settings": {
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": false,
