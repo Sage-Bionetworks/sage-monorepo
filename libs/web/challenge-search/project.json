@@ -9,8 +9,7 @@
       "outputs": ["coverage/libs/web/challenge-search"],
       "options": {
         "jestConfig": "libs/web/challenge-search/jest.config.js",
-        "passWithNoTests": true,
-        "runInBand": true
+        "passWithNoTests": true
       }
     },
     "lint": {

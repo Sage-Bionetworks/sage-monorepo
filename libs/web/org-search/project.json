@@ -9,8 +9,7 @@
       "outputs": ["coverage/libs/web/org-search"],
       "options": {
         "jestConfig": "libs/web/org-search/jest.config.js",
-        "passWithNoTests": true,
-        "runInBand": true
+        "passWithNoTests": true
       }
     },
     "lint": {
