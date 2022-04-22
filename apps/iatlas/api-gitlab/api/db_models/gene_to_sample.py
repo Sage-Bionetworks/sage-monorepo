@@ -14,6 +14,8 @@ class GeneToSample(Base):
 
     rna_seq_expr = db.Column(db.Numeric, nullable=True)
 
+    nanostring_expr = db.Column(db.Numeric, nullable=True)
+
     gene = db.relationship('Gene', backref=orm.backref(
         'gene_sample_assoc', uselist=True, lazy='noload'), uselist=False, lazy='noload')
 

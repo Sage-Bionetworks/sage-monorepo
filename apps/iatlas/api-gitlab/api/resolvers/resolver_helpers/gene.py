@@ -47,10 +47,6 @@ def build_gene_graphql_response(requested=[], gene_types_requested=[], publicati
         if not gene:
             return None
 
-        import logging
-        logger = logging.getLogger('gene response')
-        logger.info(gene)
-
         id = get_value(gene, prefix + 'id')
         gene_types = get_gene_types(
             id, requested, gene_types_requested, gene_type=gene_type)
@@ -259,7 +255,8 @@ def get_samples(id, requested, sample_requested, cohort=None, sample=None, max_r
 
     core_field_mapping = {
         'name': sample_1.name.label('sample_name'),
-        'rnaSeqExpr': gene_to_sample_1.rna_seq_expr.label('sample_gene_rna_seq_expr')
+        'rnaSeqExpr': gene_to_sample_1.rna_seq_expr.label('sample_gene_rna_seq_expr'),
+        'nanostringExpr': gene_to_sample_1.nanostring_expr.label('sample_gene_nanostring_expr')
     }
 
     core = get_selected(sample_requested, core_field_mapping)
