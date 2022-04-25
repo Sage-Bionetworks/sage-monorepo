@@ -25,10 +25,8 @@
     "./apps/db-cli",
     "."
   ],
-  "jest.jestCommandLine": "bash -c '. ./dev-env.sh && challenge-registry-test'",
   "jest.autoRun": {
-    "watch": false,
-    "onSave": "test-file",
+    "watch": true,
     "onStartup": ["all-tests"]
   }
 }
