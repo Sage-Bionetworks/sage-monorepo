@@ -24,5 +24,11 @@
   "eslint.workingDirectories": [
     "./apps/db-cli",
     "."
-  ]
+  ],
+  "jest.jestCommandLine": "bash -c '. ./dev-env.sh && challenge-registry-test'",
+  "jest.autoRun": {
+    "watch": false,
+    "onSave": "test-file",
+    "onStartup": ["all-tests"]
+  }
 }
