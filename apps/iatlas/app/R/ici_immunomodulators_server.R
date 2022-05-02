@@ -42,17 +42,6 @@ ici_immunomodulators_server <- function(
           )
       })
 
-      features_df <- shiny::reactive({
-        shiny::req(genes())
-        iatlasGraphQLClient::query_gene_expression(cohorts = ici_datasets(), entrez = genes()$feature_name) %>%
-          dplyr::select(
-            sample,
-            "feature_name" = "entrez",
-            "feature_display" = "hgnc",
-            "feature_value" = "rna_seq_expr"
-          )
-      })
-
       ici_distribution_server(
         "ici_immunomodulators_distribution",
         cohort_obj,
