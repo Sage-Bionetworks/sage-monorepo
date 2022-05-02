@@ -98,14 +98,33 @@ ici_distribution_server <- function(
       df_selected <- reactive({
         shiny::req(cohort_obj(), input$var1_surv)
 
-        if(input$var1_surv %in% cohort_obj()$feature_tbl$name){
-          samples <- cohort_obj()$sample_tbl %>%
-            dplyr::inner_join(., iatlasGraphQLClient::query_feature_values(features = input$var1_surv), by = c("sample_name" = "sample")) %>%
-            build_distribution_io_df(., "feature_value", input$scale_method)
-        }else{
-          samples <- cohort_obj()$sample_tbl %>%
-            dplyr::inner_join(., iatlasGraphQLClient::query_gene_expression(cohorts = cohort_obj()$dataset_names, entrez = as.numeric(input$var1_surv)), by = c("sample_name" = "sample")) %>%
-            build_distribution_io_df(., "rna_seq_expr", input$scale_method)
+        if(input$var1_surv %in% cohort_obj()$feature_tbl$name){ #immune features module
+          if(cohort_obj()$group_name == "Sample_Treatment" | input$groupvar2 == "Sample_Treatment"){
+            samples <- cohort_obj()$sample_tbl %>%
+              dplyr::inner_join(., iatlasGraphQLClient::query_feature_values(features = input$var1_surv), by = c("sample_name" = "sample")) %>%
+              build_distribution_io_df(., "feature_value", input$scale_method)
+          } else{ #get only pre treatment samples
+            samples <- iatlasGraphQLClient::query_tag_samples(tags = "pre_sample_treatment") %>%
+              dplyr::bind_rows(iatlasGraphQLClient::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
+              dplyr::distinct(sample_name) %>%
+              dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample_name") %>%
+              dplyr::inner_join(., iatlasGraphQLClient::query_feature_values(features = input$var1_surv), by = c("sample_name" = "sample")) %>%
+              build_distribution_io_df(., "feature_value", input$scale_method)
+          }
+
+        }else{ #immunomodulator module
+          if(cohort_obj()$group_name == "Sample_Treatment" | input$groupvar2 == "Sample_Treatment"){
+            samples <- cohort_obj()$sample_tbl %>%
+              dplyr::inner_join(., iatlasGraphQLClient::query_gene_expression(cohorts = cohort_obj()$dataset_names, entrez = as.numeric(input$var1_surv)), by = c("sample_name" = "sample")) %>%
+              build_distribution_io_df(., "rna_seq_expr", input$scale_method)
+          }else{
+            samples <- iatlasGraphQLClient::query_tag_samples(tags = "pre_sample_treatment") %>%
+              dplyr::bind_rows(iatlasGraphQLClient::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
+              dplyr::distinct(sample_name) %>%
+              dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample_name") %>%
+              dplyr::inner_join(., iatlasGraphQLClient::query_gene_expression(cohorts = cohort_obj()$dataset_names, entrez = as.numeric(input$var1_surv)), by = c("sample_name" = "sample")) %>%
+              build_distribution_io_df(., "rna_seq_expr", input$scale_method)
+          }
         }
 
         if(input$groupvar2 == "None" | cohort_obj()$group_name == input$groupvar2){
