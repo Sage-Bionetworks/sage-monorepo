@@ -11,7 +11,7 @@ ici_distribution_server <- function(
       ns <- session$ns
 
       output$excluded_dataset <- shiny::renderText({
-        if(identical(unique(cohort_obj()$group_tbl$dataset_display), cohort_obj()$dataset_displays)){
+        if(all(unique(cohort_obj()$group_tbl$dataset_display) %in% cohort_obj()$dataset_displays)){
           ""
         }else{
           excluded_datasets <- setdiff(cohort_obj()$dataset_displays, unique(cohort_obj()$group_tbl$dataset_display))
@@ -114,16 +114,33 @@ ici_distribution_server <- function(
 
         }else{ #immunomodulator module
           if(cohort_obj()$group_name == "Sample_Treatment" | input$groupvar2 == "Sample_Treatment"){
-            samples <- cohort_obj()$sample_tbl %>%
+            samples_rna_seq <- cohort_obj()$sample_tbl %>%
               dplyr::inner_join(., iatlasGraphQLClient::query_gene_expression(cohorts = cohort_obj()$dataset_names, entrez = as.numeric(input$var1_surv)), by = c("sample_name" = "sample")) %>%
               build_distribution_io_df(., "rna_seq_expr", input$scale_method)
+
+            samples_ns <- cohort_obj()$sample_tbl %>%
+              dplyr::inner_join(., iatlasGraphQLClient::query_gene_nanostring_expression(entrez = as.numeric(input$var1_surv)), by = c("sample_name" = "sample")) %>%
+              build_distribution_io_df(., c("nanostring_expr"), input$scale_method)
+
+            samples_ns$dataset_name <- paste0("nanostring_", samples_ns$dataset_name)
+
+            samples <- dplyr::bind_rows(samples_rna_seq, samples_ns)
           }else{
-            samples <- iatlasGraphQLClient::query_tag_samples(tags = "pre_sample_treatment") %>%
+            pre_samples <- iatlasGraphQLClient::query_tag_samples(tags = "pre_sample_treatment") %>%
               dplyr::bind_rows(iatlasGraphQLClient::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
               dplyr::distinct(sample_name) %>%
-              dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample_name") %>%
+              dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample_name")
+
+            samples_rna_seq <- pre_samples %>%
               dplyr::inner_join(., iatlasGraphQLClient::query_gene_expression(cohorts = cohort_obj()$dataset_names, entrez = as.numeric(input$var1_surv)), by = c("sample_name" = "sample")) %>%
-              build_distribution_io_df(., "rna_seq_expr", input$scale_method)
+              build_distribution_io_df(., c("rna_seq_expr"), input$scale_method)
+
+            samples_ns <- pre_samples %>%
+              dplyr::inner_join(., iatlasGraphQLClient::query_gene_nanostring_expression(entrez = as.numeric(input$var1_surv)), by = c("sample_name" = "sample")) %>%
+              build_distribution_io_df(., c("nanostring_expr"), input$scale_method)
+
+            samples_ns$dataset_name <- paste0("nanostring_", samples_ns$dataset_name)
+            samples <- dplyr::bind_rows(samples_rna_seq, samples_ns)
           }
         }
 
@@ -142,7 +159,7 @@ ici_distribution_server <- function(
       output$dist_plots <- plotly::renderPlotly({
         shiny::req(df_selected())
 
-        all_plots <- purrr::map(.x = cohort_obj()$dataset_names, function(dataset){
+        all_plots <- purrr::map(.x = unique(df_selected()$dataset_name), function(dataset){
 
           if(input$groupvar2 == "None" | cohort_obj()$group_name == input$groupvar2){#only one group selected
 
