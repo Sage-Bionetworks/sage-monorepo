@@ -18,7 +18,7 @@ ici_overview_datasets_server <- function(
                              sep=""
                            )
                          )%>%
-                         select(Dataset, Study, Antibody, Samples, Patients, Reference)),
+                         select(Dataset, Study, Antibody, Samples, Patients, `Sequencing Method`, Reference)),
                       options = list(pageLength = 20),
                       escape= FALSE)
       })
