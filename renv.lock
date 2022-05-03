@@ -83,6 +83,14 @@
         "URL": "https://packagemanager.rstudio.com/all/latest"
       },
       {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
         "Name": "BioCsoft",
         "URL": "https://bioconductor.org/packages/3.14/bioc"
       },
@@ -1675,15 +1683,15 @@
     },
     "iatlasGraphQLClient": {
       "Package": "iatlasGraphQLClient",
-      "Version": "0.1.0",
+      "Version": "0.1.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlasGraphQLClient",
       "RemoteRef": "main",
-      "RemoteSha": "d97a8b7c4162ee0f31f717ff4b2e7c61ae77edca",
-      "Hash": "92d3a568c2fbd8b97267dc67a5f4a9c1",
+      "RemoteSha": "5f431f641e7dc50f17fed80b75c4210e1af49e5b",
+      "RemoteHost": "api.github.com",
+      "Hash": "d7d143592fbb4f64da02e1e7d518ab61",
       "Requirements": [
         "assertthat",
         "dplyr",
