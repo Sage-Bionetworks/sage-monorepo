@@ -13,7 +13,6 @@ ici_models_main_ui <- function(id){
       width = 24,
       shiny::column(
         width = 6,
-        #shiny::p(strong("Select training and testing datasets")),
         shiny::uiOutput(ns("bucket_list"))
       ),
       shiny::column(
