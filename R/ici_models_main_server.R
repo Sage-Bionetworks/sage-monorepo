@@ -10,7 +10,7 @@ ici_models_main_server <- function(
       ns <- session$ns
 
       output$excluded_dataset <- shiny::renderText({
-        if(identical(unique(cohort_obj()$group_tbl$dataset_display), cohort_obj()$dataset_displays)){
+        if(all(cohort_obj()$dataset_displays %in% unique(cohort_obj()$group_tbl$dataset_display))){
           ""
         }else{
           excluded_datasets <- setdiff(cohort_obj()$dataset_displays, unique(cohort_obj()$group_tbl$dataset_display))
