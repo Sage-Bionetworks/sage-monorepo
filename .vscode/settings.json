@@ -26,7 +26,8 @@
     "."
   ],
   "jest.autoRun": {
-    "watch": true,
-    "onStartup": ["all-tests"]
+    "watch": false,
+    "onSave": "test-file",
+    "onStartup": []
   }
 }
