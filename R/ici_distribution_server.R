@@ -236,7 +236,7 @@ ici_distribution_server <- function(
           shiny::need(nrow(df_selected())>0, "Variable not annotated in the selected dataset(s). Select other datasets or check ICI Datasets Overview for more information.")
         )
 
-        purrr::map_dfr(.x =  cohort_obj()$dataset_names,
+        purrr::map_dfr(.x =  unique(df_selected()$dataset_name),
                        df = df_selected(),
                        group_to_split = "group",
                        sel_feature = "y",
@@ -325,7 +325,7 @@ ici_distribution_server <- function(
         create_histogram(
           df = drilldown_df(),
           x_col = "y",
-          title = paste(unique(unname(dataset_displays()[drilldown_df()$dataset_name])), unique(drilldown_df()$group), sep = "\n"),
+          title = paste(get_plot_title(unique(drilldown_df()$dataset_name), dataset_displays()), unique(drilldown_df()$group), sep = "\n"),
           x_lab = varible_plot_label()
         )
       })
