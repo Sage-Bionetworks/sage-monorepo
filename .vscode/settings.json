@@ -24,5 +24,10 @@
   "eslint.workingDirectories": [
     "./apps/db-cli",
     "."
-  ]
+  ],
+  "jest.autoRun": {
+    "watch": false,
+    "onSave": "test-file",
+    "onStartup": []
+  }
 }
