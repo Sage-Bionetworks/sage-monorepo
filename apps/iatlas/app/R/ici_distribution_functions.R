@@ -195,11 +195,10 @@ log2foldchanges <- function(x,y){
 }
 
 get_stat_test <- function(df, group_to_split, sel_feature, dataset, dataset_title, paired = FALSE, test = t.test, label = group_to_split){
-
   data_set <- df %>%
     filter(dataset_name == dataset)
 
-  dataset_display <- (sub("\\ -.*", "", unname(dataset_title[dataset])))
+  dataset_display <- get_plot_title(dataset, dataset_title)
 
   if(paired == TRUE){
     patients <- data_set %>%
