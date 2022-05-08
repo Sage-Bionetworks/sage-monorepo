@@ -1,0 +1,13 @@
+{
+  "folders": [
+    {
+      "name": "API specification",
+      "path": "../libs/api-spec"
+    },
+    {
+      "name": "Documentation",
+      "path": "../docs"
+    }
+  ],
+  "settings": {}
+}

@@ -27,6 +27,7 @@ nx-cloud.env
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/*.code-workspace
 
 # misc
 /.sass-cache
