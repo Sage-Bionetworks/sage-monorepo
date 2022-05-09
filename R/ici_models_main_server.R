@@ -21,6 +21,12 @@ ici_models_main_server <- function(
         }
       })
 
+      ici_rna_ds <- shiny::reactive({
+        names_ds <- setNames(cohort_obj()$dataset_displays, cohort_obj()$dataset_names)
+        rna_ds <- create_ici_options(unique(cohort_obj()$group_tbl$dataset_name))
+        names_ds[rna_ds[['RNA-Seq']]]
+        }) #gets list of RNA-seq and Nanostring datasets
+
       output$bucket_list <- shiny::renderUI({
         list_format <- "<p style = 'color:Gray; font-size: 12px; height: 18px;'>"
         sortable::bucket_list(
@@ -30,7 +36,7 @@ ici_models_main_server <- function(
           sortable::add_rank_list(
             text = "Datasets available",
             labels = lapply(
-              lapply(unique(cohort_obj()$group_tbl$dataset_display), function(x) paste(list_format, x, "</p>")),
+              lapply(ici_rna_ds(), function(x) paste(list_format, x, "</p>")),
               shiny::HTML),
             input_id = ns("datasets")
           ),
