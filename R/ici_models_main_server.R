@@ -161,11 +161,11 @@ ici_models_main_server <- function(
             variable_to_norm = dplyr::filter(training_obj()$predictors, VariableType == "Numeric")$feature_name,
             predictors = c(input$response_variable, dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name),
             is_test = FALSE) %>%
-          dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_")))
+          dplyr::filter(dplyr::if_all(tidyselect::everything(), ~ !stringr::str_starts(., "na_")))
         }else{
           selected_df()$train %>%
             tidyr::drop_na(any_of(predictors())) %>%
-            dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
+            dplyr::filter(dplyr::if_all(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
             dplyr::select("sample_name", "dataset_name", input$response_variable, all_of(dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name))
         }
       })
@@ -178,11 +178,11 @@ ici_models_main_server <- function(
             variable_to_norm = dplyr::filter(training_obj()$predictors, VariableType == "Numeric")$feature_name,
             predictors = c(input$response_variable, dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name),
             is_test = TRUE) %>%
-          dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_")))
+          dplyr::filter(dplyr::if_all(tidyselect::everything(), ~ !stringr::str_starts(., "na_")))
         }else{
           selected_df()$test %>%
             tidyr::drop_na(any_of(predictors())) %>%
-            dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
+            dplyr::filter(dplyr::if_all(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
             dplyr::select("sample_name", "dataset_name", input$response_variable, all_of(dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name))
         }
       })
