@@ -123,7 +123,6 @@ ici_models_main_server <- function(
 
       output$samples_summary <- shiny::renderUI({
         shiny::req(training_obj())
-
         shiny::verticalLayout(
           shiny::p(
             paste(
@@ -146,6 +145,47 @@ ici_models_main_server <- function(
         iatlasGraphQLClient::query_tags(tags = input$response_variable) %>% dplyr::pull(tag_characteristics)
       })
 
+      #scale numeric variables
+      selected_df <- reactive({
+        list(
+          train = get_scaled_data(training_obj()$subset_df$train_df, scale_function_choice = input$scale_method, predictors_to_scale = input$pred_to_transform),
+          test = get_scaled_data(training_obj()$subset_df$test_df, scale_function_choice = input$scale_method, predictors_to_scale = input$pred_to_transform)
+        )
+      })
+
+      train_df <- reactive({
+        if(input$do_norm == TRUE){
+          normalize_dataset(
+            train_df = selected_df()$train,
+            test_df = selected_df()$test,
+            variable_to_norm = dplyr::filter(training_obj()$predictors, VariableType == "Numeric")$feature_name,
+            predictors = c(input$response_variable, dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name),
+            is_test = FALSE) %>%
+          dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_")))
+        }else{
+          selected_df()$train %>%
+            tidyr::drop_na(any_of(predictors())) %>%
+            dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
+            dplyr::select("sample_name", "dataset_name", input$response_variable, all_of(dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name))
+        }
+      })
+
+      test_df <- reactive({
+        if(input$do_norm == TRUE){
+          normalize_dataset(
+            train_df = selected_df()$train,
+            test_df = selected_df()$test,
+            variable_to_norm = dplyr::filter(training_obj()$predictors, VariableType == "Numeric")$feature_name,
+            predictors = c(input$response_variable, dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name),
+            is_test = TRUE) %>%
+          dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_")))
+        }else{
+          selected_df()$test %>%
+            tidyr::drop_na(any_of(predictors())) %>%
+            dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
+            dplyr::select("sample_name", "dataset_name", input$response_variable, all_of(dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name))
+        }
+      })
 
       observe({ #block Train button if one of the datasets is missing annotation for one predictor. Notify number of samples with NA that will be excluded
         shiny::req(training_obj())
@@ -156,10 +196,23 @@ ici_models_main_server <- function(
         if((nrow(training_obj()$subset_df$train_df)/length(predictors()))<10) shiny::showNotification("Warning: The number of selected predictors is higher than 10% of the number of samples selected for training.", duration = 10, id = "high_pred")
         else shiny::removeNotification(id = "high_pred")
 
-        if(nrow(training_obj()$missing_annot) == 0 & length(training_obj()$missing_level)==0){
+        #Check if both train and test datasets have the same levels for the independent variable
+        if(all(
+          unique(test_df()[[input$response_variable]]) %in% unique(train_df()[[input$response_variable]]))){
+          response_levels <- NULL
+        }
+        else{
+          block_train(TRUE)
+          response_levels <- "different"
+          shinyjs::show("response_levels")
+          output$response_levels <- shiny::renderText({"Testing dataset(s) with response levels not present in training. Rearrange selection to continue."})
+        }
+
+        if(nrow(training_obj()$missing_annot) == 0 & length(training_obj()$missing_level)==0 & is.null(response_levels)){
           block_train(FALSE)
           shinyjs::hide("missing_data")
           shinyjs::hide("missing_sample")
+          shinyjs::hide("response_levels")
          }else{
           if(nrow(training_obj()$missing_annot)>0){ #checks for missing data
             if(any(c("feature_all_na" ,"tag_all_na") %in% (training_obj()$missing_annot$missing_all))){#dataset doesn't have annotation for one selected feature
@@ -212,48 +265,6 @@ ici_models_main_server <- function(
                           training_obj()$missing_level$dataset, ").", collapse = "</li>"), "</ul>")
              })
          }
-        }
-      })
-
-      #scale numeric variables
-      selected_df <- reactive({
-        list(
-          train = get_scaled_data(training_obj()$subset_df$train_df, scale_function_choice = input$scale_method, predictors_to_scale = input$pred_to_transform),
-          test = get_scaled_data(training_obj()$subset_df$test_df, scale_function_choice = input$scale_method, predictors_to_scale = input$pred_to_transform)
-        )
-      })
-
-      train_df <- reactive({
-        if(input$do_norm == TRUE){
-          normalize_dataset(
-            train_df = selected_df()$train,
-            test_df = selected_df()$test,
-            variable_to_norm = dplyr::filter(training_obj()$predictors, VariableType == "Numeric")$feature_name,
-            predictors = c(input$response_variable, dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name),
-            is_test = FALSE) %>%
-          dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_")))
-        }else{
-          selected_df()$train %>%
-            tidyr::drop_na(any_of(predictors())) %>%
-            dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
-            dplyr::select("sample_name", "dataset_name", input$response_variable, all_of(dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name))
-        }
-      })
-
-      test_df <- reactive({
-        if(input$do_norm == TRUE){
-          normalize_dataset(
-            train_df = selected_df()$train,
-            test_df = selected_df()$test,
-            variable_to_norm = dplyr::filter(training_obj()$predictors, VariableType == "Numeric")$feature_name,
-            predictors = c(input$response_variable, dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name),
-            is_test = TRUE) %>%
-          dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_")))
-        }else{
-          selected_df()$test %>%
-            tidyr::drop_na(any_of(predictors())) %>%
-            dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
-            dplyr::select("sample_name", "dataset_name", input$response_variable, all_of(dplyr::filter(training_obj()$predictors, VariableType != "Category")$feature_name))
         }
       })
 
