@@ -83,6 +83,7 @@ ici_models_main_ui <- function(id){
             width = 12,
             shiny::uiOutput(ns("samples_summary")),
             shiny::br(),
+            shiny::htmlOutput(ns("response_levels")),
             shiny::htmlOutput(ns("missing_data")),
             shiny::htmlOutput(ns("single_level")),
             shiny::htmlOutput(ns("missing_level")),

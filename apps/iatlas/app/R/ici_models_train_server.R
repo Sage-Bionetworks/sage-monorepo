@@ -95,6 +95,8 @@ ici_models_train_server <- function(
             })
             output[[paste0("roc_", my_dataset)]] <- shiny::renderPlot({
               shiny::req(prediction_test())
+              shiny::validate(
+                shiny::need(!is.character(prediction_test()[[i]]$roc_plot), "No ROC curve computed."))
               prediction_test()[[i]]$roc_plot
             })
             output[[paste0("km_", my_dataset)]] <- shiny::renderPlot({
