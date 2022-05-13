@@ -7,6 +7,7 @@ import { ChallengeRoutingModule } from './challenge-routing.modules';
 import { ChallengeHeaderModule } from './challenge-header/challenge-header.module';
 import { ChallengeStargazersModule } from './challenge-stargazers/challenge-stargazers.module';
 import { ChallengeSettingsModule } from './challenge-settings/challenge-settings.module';
+import { ChallengeSponsorsComponent } from './challenge-sponsors/challenge-sponsors.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,7 @@ import { ChallengeSettingsModule } from './challenge-settings/challenge-settings
     ChallengeStargazersModule,
     ChallengeSettingsModule,
   ],
-  declarations: [ChallengeComponent],
+  declarations: [ChallengeComponent, ChallengeSponsorsComponent],
   exports: [ChallengeComponent],
 })
 export class ChallengeModule {}

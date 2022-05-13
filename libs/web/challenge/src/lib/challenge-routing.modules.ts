@@ -4,6 +4,7 @@ import { ChallengeComponent } from './challenge.component';
 import { ChallengeOverviewComponent } from './challenge-overview/challenge-overview.component';
 import { ChallengeSettingsComponent } from './challenge-settings/challenge-settings.component';
 import { ChallengeStargazersComponent } from './challenge-stargazers/challenge-stargazers.component';
+import { ChallengeSponsorsComponent } from './challenge-sponsors/challenge-sponsors.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,7 @@ const routes: Routes = [
     component: ChallengeComponent,
     children: [
       { path: '', component: ChallengeOverviewComponent },
+      { path: 'sponsors', component: ChallengeSponsorsComponent },
       { path: 'stargazers', component: ChallengeStargazersComponent },
       { path: 'settings', component: ChallengeSettingsComponent },
     ],
