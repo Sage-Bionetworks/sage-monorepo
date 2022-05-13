@@ -10,18 +10,23 @@
   $background: map.get($config, background);
   $foreground: map.get($config, foreground);
 
-  .challenge-registry-footer {
+  .footer-footer {
     background-color: mat.get-color-from-palette($primary, default);
-
-    .challenge-registry-links a {
-      color: green;
-
-      // mat-color($primary, default-contrast);
-    }
   }
+
+  // .challenge-registry-footer {
+  //   background-color: mat.get-color-from-palette($primary, default);
+
+  //   .challenge-registry-links a {
+  //     color: green;
+
+  //     // mat-color($primary, default-contrast);
+  //   }
+  // }
 }
 
-@mixin typography($theme) {}
+@mixin typography($theme) {
+}
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
