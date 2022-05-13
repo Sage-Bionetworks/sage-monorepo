@@ -114,7 +114,7 @@ Seed the API DB with sample Challenge data.
 
 In your browser, open http://localhost:4200.
 
-## Contributing
+## Contributing :beers:
 
 See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
