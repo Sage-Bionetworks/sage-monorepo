@@ -1,85 +1,229 @@
-// @use 'libs/shared/style/src/variables';
+$dl-color-gray-500: #595959;
+$dl-color-gray-700: #999999;
+$dl-color-gray-900: #d9d9d9;
+$dl-size-size-large: 144px;
+$dl-size-size-small: 48px;
+$dl-color-danger-300: #a22020;
+$dl-color-danger-500: #bf2626;
+$dl-color-danger-700: #e14747;
+$dl-color-gray-black: #000000;
+$dl-color-gray-white: #ffffff;
+$dl-color-primary-50: #e8ebf5ff;
+$dl-size-size-medium: 96px;
+$dl-size-size-xlarge: 192px;
+$dl-size-size-xsmall: 16px;
+$dl-space-space-unit: 16px;
+$dl-color-accent1-100: #ffd2daff;
+$dl-color-accent1-200: #ff9eafff;
+$dl-color-accent2-100: #ffd8cdff;
+$dl-color-accent2-200: #fca187ff;
+$dl-color-accent3-100: #c6fdf3ff;
+$dl-color-accent3-200: #64d3bfff;
+$dl-color-accent4-100: #e0e1feff;
+$dl-color-accent4-200: #9da0ffff;
+$dl-color-primary-100: #c4cce7ff;
+$dl-color-primary-300: #768ac7ff;
+$dl-color-primary-600: #314fa7ff;
+$dl-color-primary-800: #1f3b8fff;
+$dl-color-success-300: #199033;
+$dl-color-success-500: #32a94c;
+$dl-color-success-700: #4cc366;
+$dl-size-size-xxlarge: 288px;
+$dl-color-brand-hover1: rgba(249, 249, 249, 1);
+$dl-color-brand-hover2: rgba(229, 229, 229, 1);
+$dl-size-size-maxwidth: 1400px;
+$dl-radius-radius-round: 50%;
+$dl-color-brand-primary1: rgba(73, 80, 246, 1);
+$dl-color-brand-primary2: rgba(196, 196, 196, 1);
+$dl-space-space-halfunit: 8px;
+$dl-space-space-sixunits: 96px;
+$dl-space-space-twounits: 32px;
+$dl-radius-radius-radius2: 2px;
+$dl-radius-radius-radius4: 4px;
+$dl-radius-radius-radius8: 8px;
+$dl-space-space-fiveunits: 80px;
+$dl-space-space-fourunits: 64px;
+$dl-color-brand-secondary1: rgba(57, 189, 231, 1);
+$dl-color-brand-secondary2: rgba(139, 120, 255, 1);
+$dl-space-space-threeunits: 48px;
+$dl-space-space-oneandhalfunits: 24px;
 
-.challenge-registry-footer {
-  // padding: variables.$padding-test;
-  padding: 12px;
-  font-size: 12px;
-}
-
-.challenge-registry-footer-list {
-  align-items: center;
+.footer-links {
+  top: 121px;
+  left: 52px;
+  width: 332.984375px;
+  height: 30px;
   display: flex;
-  flex-flow: row wrap;
-  padding: 8px;
+  position: absolute;
+  align-items: flex-start;
 }
-
-.challenge-registry-footer-logo {
-  flex: 1;
-}
-
-.challenge-registry-footer-angular-logo {
-  height: 50px;
-}
-
-.challenge-registry-footer-version {
+.footer-bottom {
+  top: 189px;
+  left: 0px;
+  width: 1920px;
+  height: 70px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex: 1;
-
-  .challenge-registry-footer-logo {
-    height: 40px;
-    margin: 10px 0 10px 16px;
-  }
-  .version {
-    margin: 0 40px;
-  }
+  position: absolute;
+  align-items: flex-start;
+  background-color: rgba(29, 53, 128, 1);
 }
-
-.challenge-registry-footer-copyright {
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
-  flex-direction: column;
-  min-width: 225px;
-  margin-top: 16px;
-
-  > div {
-    display: flex;
-    flex-direction: column;
-    align-self: flex-end;
-    text-align: center;
-  }
-
-  @media (min-width: 885px) {
-    margin-top: 0;
-  }
-}
-
-.challenge-registry-footer-logo span {
-  display: inline-block;
-  line-height: 50px;
-  margin: 0 40px;
-  vertical-align: bottom;
-
-  a {
-    font-size: 16px;
-    padding: 0;
-  }
-}
-
-a {
+.content {
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 400;
+  line-height: 1.15;
+  text-transform: none;
   text-decoration: none;
-  color: inherit;
-
-  &:hover,
-  &:focus {
-    text-decoration: underline;
-  }
+}
+.heading {
+  font-size: 32px;
+  font-family: Inter;
+  font-weight: 700;
+  line-height: 1.15;
+  text-transform: none;
+  text-decoration: none;
 }
 
-@media screen and (max-width: 884px){
-  .docs-footer-list {
-    flex-direction: column;
-  }
+:host {
+  display: contents;
+}
+.footer-container {
+  min-height: 100vh;
+}
+.footer-footer {
+  width: 1920px;
+  height: 259px;
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
+  align-items: flex-start;
+  border-color: transparent;
+  background-color: $dl-color-primary-600;
+}
+.footer-text {
+  top: 27px;
+  left: 52px;
+  color: $dl-color-gray-white;
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Poppins;
+  font-weight: 600px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.footer-text01 {
+  top: 78px;
+  left: 52px;
+  color: $dl-color-gray-white;
+  height: auto;
+  position: absolute;
+  font-size: 15px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Poppins;
+  font-weight: 500px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.footer-text02 {
+  top: 0px;
+  left: 0px;
+  color: $dl-color-gray-white;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  transition: 0.3s;
+  font-family: Poppins;
+  font-weight: 600px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.footer-text02:hover {
+  text-decoration: underline none;
+}
+.footer-text03 {
+  top: 0px;
+  left: 107px;
+  color: $dl-color-gray-white;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  transition: 0.3s;
+  font-family: Poppins;
+  font-weight: 600px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.footer-text03:hover {
+  text-decoration: underline none;
+}
+.footer-text04 {
+  top: 0px;
+  color: $dl-color-gray-white;
+  right: 0px;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  transition: 0.3s;
+  font-family: Poppins;
+  font-weight: 600px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.footer-text04:hover {
+  text-decoration: underline none;
+}
+.footer-text05 {
+  top: 49px;
+  left: 1534px;
+  color: $dl-color-gray-white;
+  height: auto;
+  position: absolute;
+  font-size: 16px;
+  align-self: auto;
+  font-style: normal;
+  text-align: right;
+  font-family: Poppins;
+  font-weight: 500px;
+  line-height: 28px;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.footer-footer-bottom {
+  background-color: $dl-color-primary-800;
+}
+.footer-links1 {
+  top: 20px;
+  left: 684px;
+  color: $dl-color-gray-white;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  align-self: auto;
+  font-style: normal;
+  text-align: center;
+  font-family: Poppins;
+  font-weight: 600px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
 }
