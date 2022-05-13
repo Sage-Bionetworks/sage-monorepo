@@ -12,21 +12,20 @@ This monorepo includes the codebase of the Challenge Registry.
 
 This workspace was generated using [Nx](https://nx.dev).
 
-The table shown below lists the main *projects* included with this workspace.
-Each project is managed using multiple *targets* such as `build`, `test` and
-`serve`. One way to execute a target is by using the command `nx <target>
-<project>`.
+The table shown below lists the main _projects_ included with this workspace.
+Each project is managed using multiple _targets_ such as `build`, `test` and
+`serve`. One way to execute a target is by using the command `nx <target> <project>`.
 
 |                  | prepare | lint | lint-fix | build | test | serve | e2e | docker |
-|------------------|---------|------|----------|-------|------|-------|-----|--------|
-| apps/api         | ✔️       | ✔️    | ✔️        |       | ✔️    | ✔️     |     | ✔️      |
-| apps/api-db      | ✔️       |      |          |       |      | ✔️     |     | ✔️      |
-| apps/db-cli      |         | ✔️    | ✔️        | ✔️     | ✔️    | ✔️     |     |        |
-| apps/web-app     | ✔️       | ✔️    | ✔️        | ✔️     | ✔️    | ✔️     |     | ✔️      |
-| apps/web-app-e2e |         | ✔️    | ✔️        |       |      |       | ✔️   |        |
-| libs/api-angular |         | ✔️    | ✔️        | ✔️     | ✔️    |       |     |        |
-| libs/api-docs    |         |      |          | ✔️     |      | ✔️     |     |        |
-| libs/api-spec    |         | ✔️    |          | ✔️     |      | ✔️     |     |        |
+| ---------------- | ------- | ---- | -------- | ----- | ---- | ----- | --- | ------ |
+| apps/api         | ✔️      | ✔️   | ✔️       |       | ✔️   | ✔️    |     | ✔️     |
+| apps/api-db      | ✔️      |      |          |       |      | ✔️    |     | ✔️     |
+| apps/db-cli      |         | ✔️   | ✔️       | ✔️    | ✔️   | ✔️    |     |        |
+| apps/web-app     | ✔️      | ✔️   | ✔️       | ✔️    | ✔️   | ✔️    |     | ✔️     |
+| apps/web-app-e2e |         | ✔️   | ✔️       |       |      |       | ✔️  |        |
+| libs/api-angular |         | ✔️   | ✔️       | ✔️    | ✔️   |       |     |        |
+| libs/api-docs    |         |      |          | ✔️    |      | ✔️    |     |        |
+| libs/api-spec    |         | ✔️   |          | ✔️    |      | ✔️    |     |        |
 
 See this [cheat sheet] to learn more about Nx commands.
 
@@ -41,7 +40,7 @@ See this [cheat sheet] to learn more about Nx commands.
 ### Preparing the workspace
 
 Clone this repository. If you plan to contribute to this project, please create a fork and use its
-URL for cloning.  For more information on contributing and/or our Forking Workflow approach, see
+URL for cloning. For more information on contributing and/or our Forking Workflow approach, see
 [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
     git clone --depth 1 <repo url>
@@ -114,16 +113,16 @@ Seed the API DB with sample Challenge data.
 
 In your browser, open http://localhost:4200.
 
-## Contributing
+## Contributing :beers:
 
 See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
 <!-- Links -->
 
 [cheat sheet]: ./docs/cheat-sheet.md
-[Docker]: https://docs.docker.com/get-docker/
-[Node.js]: https://nodejs.org/en/
-[Yarn]: https://yarnpkg.com/
+[docker]: https://docs.docker.com/get-docker/
+[node.js]: https://nodejs.org/en/
+[yarn]: https://yarnpkg.com/
 [pyenv]: https://github.com/pyenv/pyenv
 [pipenv]: https://pypi.org/project/pipenv/
 [development container]: https://code.visualstudio.com/docs/remote/containers
