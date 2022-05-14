@@ -1,0 +1,89 @@
+# Develop on a remote Docker host
+
+## Overview
+
+## Preparing the remote host
+
+This section describes how to instantiate an AWS EC2 as the remote host.
+
+### Login into the AWS Management Console
+
+- Login into [Sage JumpCloud user console](https://console.jumpcloud.com/userconsole#/)
+- `Applications` > Select `aws-sso-organization`
+- Select the AWS account `org-sagebase-sandbox`
+- Click on `Management console` for the role `Developer`
+
+### In AWS Management Console
+
+- Instantiate EC2 instance
+  - Name and tags
+    - Name: `<GitHub username>-devcontainers`
+    - Tags:
+      - `Department`: `IBC` or `CNB` (selected from [this list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Departments.json))
+      - `Project`: `challenge` (selected from [this list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Projects.json))
+      - `OwnerEmail`: `<your email address>`
+      - `CostCenter`: `NIH-ITCR / 101600` (selected from [these lists](https://github.com/Sage-Bionetworks/aws-infra/tree/master/templates/tags))
+  - Application and OS Images (Amazon Machine Image)
+    - Name: `Ubuntu Server 22.04 LTS (HVM), SSD Volume Type`
+    - Architecture: `64-bit (x86)`
+    - AMI ID: `ami-09d56f8956ab235b3`
+  - Instance type
+    - Instance type: `t3a.xlarge`
+  - Network settings
+    - Click on `Edit`
+    - VPC: `vpc-0e9b80dc470a797d5 (sandcastlevpc)`
+    - Subnet: `subnet-025c297e427e44daf (Sandcastle-Private1)`
+    - Firewall
+      - Click on `Select existing security group`
+      - Select security group `challenge-registry-devcontainers (sg-03b891e56d6a1e851)`
+  - Configure storage
+    - 1x 50 GB (gp2)
+- Identify the Private IPv4 addresses of the EC2 once it has started
+
+### On your local host
+
+- Add an host profile to your local `.ssh/config`
+   ```console
+   Host devcontainers
+       HostName <private_ip>
+       User ubuntu
+       IdentityFile ~/.ssh/tschaffter-sandbox.pem
+   ```
+- Connect to [Sage VPN](https://sagebionetworks.jira.com/wiki/spaces/IT/pages/1705246745/AWS+Client+VPN+User+Guide)
+- SSH to the instance
+   ```console
+   ssh devcontainers
+   ```
+
+### On the EC2 instance
+
+- Update system packages
+   ```console
+   sudo apt update && sudo apt upgrade -y
+   ```
+- [Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository)
+- Add your user account to docker group.
+   ```console
+   sudo usermod -aG docker ${USER}
+   ```
+- To apply the new group membership, log out of the server and back in. Run the command `groups` to check that your user is a member of the group `docker`.
+- Verify that Docker Engine is installed correctly by running the hello-world image.
+   ```console
+   docker run --rm hello-world
+   ```
+- Clone your fork in the home directory
+
+### In VS Code
+
+- Install the extension `Remote - SSH` and `Remote - Containers`
+- `Remote-SSH: Connect to Host...` > Select the host
+- Verify that the green button on the bottom-left corner shows `SSH: <host name>` upon successfully connecting to the remote instance.
+- `File` > `Open Folder...` > Select the folder of the project
+- `Remote-Containers: Open Folder in Container...`
+- Click on `OK` to open the project folder in the dev container
+- Verify that the green button on the bottom-left corner shows `Dev Container: Challenge Registry @ ssh://<host name>`
+
+Congratulations, you are now ready to develop in the dev container that runs on the EC2 instance! 🚀
+
+## Testing the new dev environment
+
