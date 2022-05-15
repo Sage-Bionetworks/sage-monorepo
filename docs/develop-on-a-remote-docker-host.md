@@ -1,6 +1,14 @@
 # Develop on a remote Docker host
 
-## Overview
+## Introduction
+
+Team members who develop locally may not benefit from similar compute resources.
+The most notable resources that can impact developers are the number and
+frequency of the CPU cores, the memory available and internet speed. In extreme
+cases, an older machine may not have the resources sufficient to run the app
+that the team develop, for example when not enough memory is available.
+
+https://code.visualstudio.com/remote/advancedcontainers/develop-remote-host
 
 ## Preparing the remote host
 
