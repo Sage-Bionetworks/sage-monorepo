@@ -2,13 +2,28 @@
 
 ## Introduction
 
-Team members who develop locally may not benefit from similar compute resources.
-The most notable resources that can impact developers are the number and
-frequency of the CPU cores, the memory available and internet speed. In extreme
-cases, an older machine may not have the resources sufficient to run the app
-that the team develop, for example when not enough memory is available.
+Team members who develop locally may not benefit from the same compute
+resources. The most notable resources that can impact the productivity of
+developers are the number and frequency of the CPU cores, the memory available
+and internet speed. The worse case is when a machine does not have the resources
+to run the app that the team develop, for example when not enough memory is
+available. On other times, the time required to complete a task may be many
+times slower on a computer with lower CPU resources.
 
-https://code.visualstudio.com/remote/advancedcontainers/develop-remote-host
+Working remotely means that developers no longer benefit from the same internet
+speed, either because of the quality of the internet connection available at the
+location or because the speed is shared among the members of a household. As a
+result, tasks that involve downloading or uploading artifacts, like pulling or
+pushing a Docker image, may take up to one hundred times longer to complete.
+
+This page describes how to setup a development environment that enables
+developers to use VS Code while using the compute resources of a remote host.
+The developers start by creating identical EC2 instances before [connecting to
+them with VS
+Code](https://code.visualstudio.com/remote/advancedcontainers/develop-remote-host).
+This SOP enables developers to continue working [inside the
+devcontainer](#devcontainer) provided with this project, hence further
+contributing to the standardization of the development envrionment.
 
 ## Preparing the remote host
 
@@ -88,10 +103,10 @@ This section describes how to instantiate an AWS EC2 as the remote host.
 - Verify that the green button on the bottom-left corner shows `SSH: <host name>` upon successfully connecting to the remote instance.
 - `File` > `Open Folder...` > Select the folder of the project
 - `Remote-Containers: Open Folder in Container...`
-- Click on `OK` to open the project folder in the dev container
+- Click on `OK` to open the project folder in the devcontainer
 - Verify that the green button on the bottom-left corner shows `Dev Container: Challenge Registry @ ssh://<host name>`
 
-Congratulations, you are now ready to develop in the dev container that runs on the EC2 instance! 🚀
+Congratulations, you are now ready to develop in the devcontainer that runs on the EC2 instance! 🚀
 
 ## Testing the new dev environment
 
