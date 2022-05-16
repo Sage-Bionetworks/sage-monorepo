@@ -125,3 +125,12 @@ services.
 
 Simply drag and drop files to the VS Code explorer to upload files from your
 local environment to the remote host.
+
+## Closing the remote connection
+
+Click on the green button at the bottom-left corner of VS Code and select one of
+these options:
+
+- `Close Remote Connection` to close the connection with the remote host.
+- `Reopen Folder in SSH` if you want to stop the devcontainer but stay connected
+  to the remote host.
