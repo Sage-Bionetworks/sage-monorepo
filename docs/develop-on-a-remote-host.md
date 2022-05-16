@@ -108,5 +108,21 @@ This section describes how to instantiate an AWS EC2 as the remote host.
 
 Congratulations, you are now ready to develop in the devcontainer that runs on the EC2 instance! 🚀
 
-## Testing the new dev environment
+## Accessing apps and services
+
+The devcontainer provided with this project uses the VS Code devcontainer
+feature `docker-in-docker`. In addition to isolating the Docker engine running
+in the devcontainer from the engine running on the host, this feature enables VS
+Code to forward the ports defined in `devcontainer.json` to the local
+envrionment of the developer. Therefore, apps and services can be accessed using
+the address `localhost` even though they are running on the remote host!
+
+Accessing the apps and services using the IP address of the remote host won't
+work, unless you replace the feature `docker-in-docker` by `docker-from-docker`.
+In this case, `localhost` can not longer be used to access the apps and
+services.
+
+## Uploading and downloading files
+
+
 
