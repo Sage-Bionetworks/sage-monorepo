@@ -98,13 +98,12 @@ This section describes how to instantiate an AWS EC2 as the remote host.
 
 ### In VS Code
 
-- Install the extension `Remote - SSH` and `Remote - Containers`
+- Install the extension `Remote - SSH` and `Remote - Containers`.
 - `Remote-SSH: Connect to Host...` > Select the host
 - Verify that the green button on the bottom-left corner shows `SSH: <host name>` upon successfully connecting to the remote instance.
-- `File` > `Open Folder...` > Select the folder of the project
 - `Remote-Containers: Open Folder in Container...`
-- Click on `OK` to open the project folder in the devcontainer
-- Verify that the green button on the bottom-left corner shows `Dev Container: Challenge Registry @ ssh://<host name>`
+- Select the project folder and click on `OK`.
+- Verify that the green button on the bottom-left corner shows `Dev Container: Challenge Registry @ ssh://<host name>`.
 
 Congratulations, you are now ready to develop in the devcontainer that runs on the EC2 instance! 🚀
 
@@ -122,7 +121,7 @@ work, unless you replace the feature `docker-in-docker` by `docker-from-docker`.
 In this case, `localhost` can not longer be used to access the apps and
 services.
 
-## Uploading and downloading files
+## Uploading files
 
-
-
+Simply drag and drop files to the VS Code explorer to upload files from your
+local environment to the remote host.
