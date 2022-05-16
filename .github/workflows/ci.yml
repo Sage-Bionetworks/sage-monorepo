@@ -13,13 +13,13 @@ env:
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
-  DEVCONTAINER_IMAGE: sagebionetworks/python-3-node:0.2.0
+  # DEVCONTAINER_IMAGE: sagebionetworks/python-3-node:0.2.0
 
 jobs:
   main:
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.DEVCONTAINER_IMAGE }}
+      image: sagebionetworks/python-3-node:0.2.0
     if: ${{ github.event_name != 'pull_request' }}
     env:
       NX_BRANCH: main
@@ -73,7 +73,7 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.DEVCONTAINER_IMAGE }}
+      image: sagebionetworks/python-3-node:0.2.0
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
