@@ -128,8 +128,7 @@ the address `localhost` even though they are running on the remote host!
 
 Accessing the apps and services using the IP address of the remote host won't
 work, unless you replace the feature `docker-in-docker` by `docker-from-docker`.
-In this case, `localhost` can not longer be used to access the apps and
-services.
+In this case, `localhost` can no longer be used to access the apps and services.
 
 ## Uploading files
 
