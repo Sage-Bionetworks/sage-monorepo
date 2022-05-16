@@ -6,8 +6,8 @@ on:
   pull_request:
 
 env:
-  PRIMARY_NODE_VERSION: 16
-  PRIMARY_PYTHON_VERSION: 3.9
+  # PRIMARY_NODE_VERSION: 16
+  # PRIMARY_PYTHON_VERSION: 3.9
   NX_BRANCH: ${{ github.event.number }}
   NX_RUN_GROUP: ${{ github.run_id }}
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
@@ -75,6 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: sagebionetworks/python-3-node:0.2.0
+      options: --user 1001
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
