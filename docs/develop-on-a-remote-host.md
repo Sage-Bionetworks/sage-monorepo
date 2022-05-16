@@ -6,7 +6,7 @@ Team members who develop locally may not benefit from the same compute
 resources. The most notable resources that can impact the productivity of
 developers are the number and frequency of the CPU cores, the memory available
 and internet speed. The worse case is when a machine does not have the resources
-to run the app that the team develop, for example when not enough memory is
+to run the apps that the team develops, for example when not enough memory is
 available. On other times, the time required to complete a task may be many
 times slower on a computer with lower CPU resources.
 
