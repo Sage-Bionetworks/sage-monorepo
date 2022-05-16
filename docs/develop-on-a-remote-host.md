@@ -99,13 +99,22 @@ This section describes how to instantiate an AWS EC2 as the remote host.
 ### In VS Code
 
 - Install the extension `Remote - SSH` and `Remote - Containers`.
-- `Remote-SSH: Connect to Host...` > Select the host
-- Verify that the green button on the bottom-left corner shows `SSH: <host name>` upon successfully connecting to the remote instance.
+- `Remote-SSH: Connect to Host...` > Select the host.
+- Verify that the green button on the bottom-left corner shows `SSH: <host
+  name>` upon successfully connecting to the remote instance (the color of the
+  button may be different if you changed VS Code theme).
+
+  <img src="images/vscode-remote-ssh-button.png" height="26">
+
 - `Remote-Containers: Open Folder in Container...`
 - Select the project folder and click on `OK`.
-- Verify that the green button on the bottom-left corner shows `Dev Container: Challenge Registry @ ssh://<host name>`.
+- Verify that the green button on the bottom-left corner shows `Dev Container:
+  Challenge Registry @ ssh://<host name>`.
 
-Congratulations, you are now ready to develop in the devcontainer that runs on the EC2 instance! 🚀
+  <img src="images/vscode-remote-ssh-devcontainer-button.png" height="58">
+
+Congratulations, you are now ready to develop in the devcontainer that runs on
+the EC2 instance! 🚀
 
 ## Accessing apps and services
 
