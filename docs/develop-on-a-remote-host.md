@@ -11,10 +11,10 @@ available. On other times, the time required to complete a task may be many
 times slower on a computer with lower CPU resources.
 
 Working remotely means that developers no longer benefit from the same internet
-speed, either because of the quality of the internet connection available at the
-location or because the speed is shared among the members of a household. As a
-result, tasks that involve downloading or uploading artifacts, like pulling or
-pushing a Docker image, may take up to one hundred times longer to complete.
+speed, either because of the quality of the internet connection available at
+their location or because the speed is shared among the members of a household.
+As a result, tasks that involve downloading or uploading artifacts, like pulling
+or pushing Docker images, may take significantly longer to complete.
 
 This page describes how to setup a development environment that enables
 developers to use VS Code while using the compute resources of a remote host.
