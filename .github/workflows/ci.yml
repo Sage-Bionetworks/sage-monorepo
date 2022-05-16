@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: sagebionetworks/python-3-node:0.2.0
+      options: --user 1001
     if: ${{ github.event_name != 'pull_request' }}
     env:
       NX_BRANCH: main
