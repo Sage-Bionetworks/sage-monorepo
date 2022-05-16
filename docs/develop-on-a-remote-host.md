@@ -65,7 +65,7 @@ This section describes how to instantiate an AWS EC2 as the remote host.
 
 ### On your local host
 
-- Add an host profile to your local `.ssh/config`
+- Add a host profile to your local `.ssh/config`
    ```console
    Host devcontainers
        HostName <private_ip>
@@ -89,8 +89,10 @@ This section describes how to instantiate an AWS EC2 as the remote host.
    ```console
    sudo usermod -aG docker ${USER}
    ```
-- To apply the new group membership, log out of the server and back in. Run the command `groups` to check that your user is a member of the group `docker`.
-- Verify that Docker Engine is installed correctly by running the hello-world image.
+- To apply the new group membership, log out of the server and back in. Run the
+  command `groups` to check that your user is a member of the group `docker`.
+- Verify that Docker Engine is installed correctly by running the hello-world
+  image.
    ```console
    docker run --rm hello-world
    ```
@@ -103,7 +105,7 @@ This section describes how to instantiate an AWS EC2 as the remote host.
 - Verify that the bottom-left corner of the VSCode window shows `SSH: <host
   name>` upon successfully connecting to the remote instance.
 
-  <img src="images/vscode-remote-ssh-button.png" height="26">
+  <img src="images/vscode-remote-ssh-button.png" height="24">
 
 - `Remote-Containers: Open Folder in Container...`
 - Select the project folder and click on `OK`.
