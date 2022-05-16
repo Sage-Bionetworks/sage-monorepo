@@ -110,6 +110,8 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Prepare the projects
         run: |
+          pwd
+          ls -al
           . ./dev-env.sh
           challenge-registry-prepare
       - name: Setup Python virtualenvs
