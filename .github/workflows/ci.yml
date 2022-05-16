@@ -13,10 +13,13 @@ env:
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
+  DEVCONTAINER_IMAGE: sagebionetworks/python-3-node:0.2.0
 
 jobs:
   main:
     runs-on: ubuntu-latest
+    container:
+      image: ${{ env.DEVCONTAINER_IMAGE }}
     if: ${{ github.event_name != 'pull_request' }}
     env:
       NX_BRANCH: main
@@ -27,9 +30,9 @@ jobs:
           fetch-depth: 0
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.PRIMARY_NODE_VERSION }}
+      # - uses: actions/setup-node@v2
+      #   with:
+      #     node-version: ${{ env.PRIMARY_NODE_VERSION }}
       - name: Setup Node.js cache
         id: cache-node
         uses: actions/cache@v3
@@ -39,8 +42,8 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PRIMARY_PYTHON_VERSION }}
-      - name: Install pipenv
-        run: python -m pip install --upgrade pipenv wheel
+      # - name: Install pipenv
+      #   run: python -m pip install --upgrade pipenv wheel
       - name: Setup pipenv cache
         id: cache-pipenv
         uses: actions/cache@v3
@@ -69,6 +72,8 @@ jobs:
           path-to-lcov: coverage/lcov.info
   pr:
     runs-on: ubuntu-latest
+    container:
+      image: ${{ env.DEVCONTAINER_IMAGE }}
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
@@ -78,20 +83,20 @@ jobs:
           fetch-depth: 0
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.PRIMARY_NODE_VERSION }}
+      # - uses: actions/setup-node@v2
+      #   with:
+      #     node-version: ${{ env.PRIMARY_NODE_VERSION }}
       - name: Setup Node.js cache
         id: cache-node
         uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - uses: actions/setup-python@v2
-        with:
-          python-version: ${{ env.PRIMARY_PYTHON_VERSION }}
-      - name: Install pipenv
-        run: python -m pip install --upgrade pipenv wheel
+      # - uses: actions/setup-python@v2
+      #   with:
+      #     python-version: ${{ env.PRIMARY_PYTHON_VERSION }}
+      # - name: Install pipenv
+      #   run: python -m pip install --upgrade pipenv wheel
       - name: Setup pipenv cache
         id: cache-pipenv
         uses: actions/cache@v3
