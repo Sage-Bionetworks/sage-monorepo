@@ -20,17 +20,6 @@
     "Version": "3.15"
   },
   "Packages": {
-    "BiocGenerics": {
-      "Package": "BiocGenerics",
-      "Version": "0.42.0",
-      "Source": "Bioconductor",
-      "git_url": "https://git.bioconductor.org/packages/BiocGenerics",
-      "git_branch": "RELEASE_3_15",
-      "git_last_commit": "3582d47",
-      "git_last_commit_date": "2022-04-26",
-      "Hash": "37348ee784e82c0a6b650146275b459d",
-      "Requirements": []
-    },
     "BiocManager": {
       "Package": "BiocManager",
       "Version": "1.30.17",
@@ -570,25 +559,6 @@
       "Hash": "022c42d49c28e95d69ca60446dbabf88",
       "Requirements": []
     },
-    "cyjShiny": {
-      "Package": "cyjShiny",
-      "Version": "1.0.17",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteUsername": "CRI-iAtlas",
-      "RemoteRepo": "cyjShiny",
-      "RemoteRef": "master",
-      "RemoteSha": "29583d53ecdd58f4e428e8ab31eafc6599be0da5",
-      "Hash": "ad77a630759dff02e9d1ae6a61764cb8",
-      "Requirements": [
-        "base64enc",
-        "graph",
-        "htmlwidgets",
-        "jsonlite",
-        "shiny"
-      ]
-    },
     "data.table": {
       "Package": "data.table",
       "Version": "1.14.2",
@@ -1015,19 +985,6 @@
         "base64enc",
         "jpeg",
         "png"
-      ]
-    },
-    "graph": {
-      "Package": "graph",
-      "Version": "1.74.0",
-      "Source": "Bioconductor",
-      "git_url": "https://git.bioconductor.org/packages/graph",
-      "git_branch": "RELEASE_3_15",
-      "git_last_commit": "4af608a",
-      "git_last_commit_date": "2022-04-26",
-      "Hash": "08e64017b9fc86340df1a13eb89573cc",
-      "Requirements": [
-        "BiocGenerics"
       ]
     },
     "graphql": {
