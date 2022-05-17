@@ -27,6 +27,7 @@ Imports:
     broom,
     caret,
     concordanceIndex,
+    cyjShiny,
     dplyr,
     DT,
     ggplot2,
