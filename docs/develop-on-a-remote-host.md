@@ -29,10 +29,11 @@ contributing to the standardization of the development envrionment.
 
 This table summarizes the local compute resources available to the developers of
 the challenge registry. The same information is displayed for two types of EC2
-instances that were selected as candidates to host the development environment
-of the team members. The table also includes the runtimes in seconds of
-different tasks such as linting or testing all the projects included in the
-monorepo (the method used to generate these results is described in the next section).
+instances that were selected as candidates as alternative development
+environment for the team members. The table also includes the runtimes in
+seconds of different tasks such as linting or testing all the projects included
+in the monorepo (the method used to generate these results is described in the
+next section).
 
 |                                                        | Thomas       | Verena       | Rong         | m5.2xlarge   | t3a.xlarge   |
 | ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
@@ -47,11 +48,11 @@ monorepo (the method used to generate these results is described in the next sec
 | Runtime: Test web-app (s)                              | 5.3          | 43.0         | 35.0         | 6.5          | 9.2          |
 | Download speed (Mbit/s)                                | 395.9        | 52.1         | 160.1        | 2165.0       | 1606.7       |
 | Upload speed (Mbit/s)                                  | 183.3        | 15.6         | 10.3         | 1861.0       | 1030.2       |
-| On-Demand Cost ($/day)                                 | 0            | 0            | 0            | 9.2          | 3.6          |
-| On-Demand Cost ($/year)                                | 0            | 0            | 0            | 3363.8       | 1317.5       |
+| On-Demand Cost ($/day)                                 | n/a            | n/a            | n/a            | 9.2          | 3.6          |
+| On-Demand Cost ($/year)                                | n/a            | n/a            | n/a            | 3363.8       | 1317.5       |
 
 The table below shows the number of times a task is faster than the slowest
-runtime.
+runtime (denoted by "1.0").
 
 |                                                        | Thomas       | Verena       | Rong         | m5.2xlarge   | t3a.xlarge   |
 | ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
@@ -62,6 +63,11 @@ runtime.
 | Runtime: Test web-app       | 8.0          | 1.0          | 1.2          | 6.6          | 4.6          |
 | Download speed              | 7.6          | 1.0          | 3.1          | 41.5         | 30.8         |
 | Upload speed                | 17.8         | 1.5          | 1.0          | 180.5        | 99.9         |
+
+For example, linting all the projects of this monorepo is 13.6 times faster on
+Thomas' computer than on Verena's. Moreover, all the developers can benefit from
+improved download speed (up to 41.5 faster for Verena) and upload speed (up to
+180 times faster for Rong) when developing on an EC2 instance.
 
 ### Data collection
 
