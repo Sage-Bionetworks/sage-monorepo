@@ -65,9 +65,16 @@ runtime (denoted by "1.0").
 | Upload speed                | 17.8         | 1.5          | 1.0          | 180.5        | 99.9         |
 
 For example, linting all the projects of this monorepo is 13.6 times faster on
-Thomas' computer than on Verena's. Moreover, all the developers can benefit from
-improved download speed (up to 41.5 faster for Verena) and upload speed (up to
-180 times faster for Rong) when developing on an EC2 instance.
+Thomas' computer than on Verena's. Note that developers have been asked to
+measure runtimes and internet speeds while keeping open the applications that
+are usually running when they develop (e.g. Spotify, several instances of VS
+Code, browser with many tabs open). This could be one reason why runtimes
+reported a developers are larger that those reported by another despite having
+higher compute resources available. 
+
+Moreover, all the developers can benefit from improved download speeds (up to
+41.5 faster for Verena) and upload speeds (up to 180 times faster for Rong) when
+developing on an EC2 instance.
 
 ### Data collection
 
