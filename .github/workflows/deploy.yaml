@@ -29,6 +29,9 @@ jobs:
           r-version: '4.2.0'
           use-public-rspm: true
 
+      - name: Install cmake
+        run: brew install cmake
+
       - uses: r-lib/actions/setup-renv@v2
         with:
           cache-version: 2
