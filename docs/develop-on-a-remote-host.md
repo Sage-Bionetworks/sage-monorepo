@@ -25,6 +25,48 @@ This SOP enables developers to continue working [inside the
 devcontainer](#devcontainer) provided with this project, hence further
 contributing to the standardization of the development envrionment.
 
+## Use case
+
+This table summarizes the local compute resources available to the developers of
+the challenge registry. The same information is displayed for two types of EC2
+instances that were selected as candidates to host the development environment
+of the team members. The table also includes the runtimes in seconds of
+different tasks such as linting or testing all the projects included in the
+monorepo (the method used to generate these results is described in the next section).
+
+|                                                        | Thomas       | Verena       | Rong         | m5.2xlarge   | t3a.xlarge   |
+| ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
+| Architecture                                           | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) |
+| CPU Count                                              | 8            | 4            | 4            | 8            | 4            |
+| CPU Frequency (GHz)                                    | 3.6          | 2.4          | 1.7          | 2.5          | 2.2          |
+| Memory (GB)                                            | 32           |              |              | 32           | 16           |
+| Runtime: Lint All Projects (s)                         | 15.4         | 208.9        | 183.8        | 18.6         | 33.4         |
+| Runtime: Build All Projects (s)                        | 19.4         | 196.2        | 162.2        | 26.7         | 44.9         |
+| Runtime: Test All Projects (s)                         | 12.4         | 117.1        | 82.8         | 15.3         | 29.2         |
+| Runtime: Test api (s)                                  | 6.2          | 29.6         | 21.3         | 7.2          | 10.4         |
+| Runtime: Test web-app (s)                              | 5.3          | 43.0         | 35.0         | 6.5          | 9.2          |
+| Download speed (Mbit/s)                                | 395.9        | 52.1         | 160.1        | 2165.0       | 1606.7       |
+| Upload speed (Mbit/s)                                  | 183.3        | 15.6         | 10.3         | 1861.0       | 1030.2       |
+| On-Demand Cost ($/day)                                 | 0            | 0            | 0            | 9.2          | 3.6          |
+| On-Demand Cost ($/year)                                | 0            | 0            | 0            | 3363.8       | 1317.5       |
+
+The table below shows the number of times a task is faster than the slowest
+runtime.
+
+|                                                        | Thomas       | Verena       | Rong         | m5.2xlarge   | t3a.xlarge   |
+| ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
+| Runtime: Lint All Projects  | 13.6         | 1.0          | 1.1          | 11.2         | 6.3          |
+| Runtime: Build All Projects | 10.1         | 1.0          | 1.2          | 7.3          | 4.4          |
+| Runtime: Test All Projects  | 9.4          | 1.0          | 1.4          | 7.6          | 4.0          |
+| Runtime: Test api           | 4.8          | 1.0          | 1.4          | 4.1          | 2.8          |
+| Runtime: Test web-app       | 8.0          | 1.0          | 1.2          | 6.6          | 4.6          |
+| Download speed              | 7.6          | 1.0          | 3.1          | 41.5         | 30.8         |
+| Upload speed                | 17.8         | 1.5          | 1.0          | 180.5        | 99.9         |
+
+### Data collection
+
+TODO
+
 ## Preparing the remote host
 
 This section describes how to instantiate an AWS EC2 as the remote host.
