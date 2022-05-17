@@ -40,7 +40,7 @@ next section).
 | Architecture                                           | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) |
 | CPU Count                                              | 8            | 4            | 4            | 8            | 4            |
 | CPU Frequency (GHz)                                    | 3.6          | 2.4          | 1.7          | 2.5          | 2.2          |
-| Memory (GB)                                            | 32           |              |              | 32           | 16           |
+| Memory (GB)                                            | 32           | 16           | 16           | 32           | 16           |
 | Runtime: Lint All Projects (s)                         | 15.4         | 208.9        | 183.8        | 18.6         | 33.4         |
 | Runtime: Build All Projects (s)                        | 19.4         | 196.2        | 162.2        | 26.7         | 44.9         |
 | Runtime: Test All Projects (s)                         | 12.4         | 117.1        | 82.8         | 15.3         | 29.2         |
