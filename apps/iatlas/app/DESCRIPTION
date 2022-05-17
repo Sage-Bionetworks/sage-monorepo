@@ -27,7 +27,6 @@ Imports:
     broom,
     caret,
     concordanceIndex,
-    cyjShiny,
     dplyr,
     DT,
     ggplot2,
@@ -66,5 +65,4 @@ Remotes:
     CRI-iAtlas/iatlas.modules@master,
     CRI-iAtlas/iatlas.modules2@master,
     CRI-iAtlas/ImmuneSubtypeClassifier@master,
-    CRI-iAtlas/cyjShiny@master, 
     th86/concordanceIndex@master
