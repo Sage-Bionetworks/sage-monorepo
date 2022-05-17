@@ -71,7 +71,25 @@ improved download speed (up to 41.5 faster for Verena) and upload speed (up to
 
 ### Data collection
 
-TODO
+- Runtimes are obtained from [this commit](https://github.com/Sage-Bionetworks/challenge-registry/tree/25f2292388d9e71bf46ba137aa530aefb571deab).
+- Identification of the compute resources.
+  ```console
+  $ nproc
+  $ cat /proc/cpuinfo
+  $ cat /proc/meminfo
+  ```
+- Runtimes are averaged over 10 runs that follow a warmup run using [hyperfine](https://github.com/sharkdp/hyperfine).
+  ```console
+  $ hyperfine --warmup 1 --runs 10 'nx run-many --all --target=lint --skip-nx-cache'
+  $ hyperfine --warmup 1 --runs 10 'nx run-many --all --target=test --skip-nx-cache'
+  $ hyperfine --warmup 1 --runs 10 'nx run-many --all --target=build --skip-nx-cache'
+  $ hyperfine --warmup 1 --runs 10 'nx test api --skip-nx-cache'
+  $ hyperfine --warmup 1 --runs 10 'nx test web-ui --skip-nx-cache'
+  ```
+- Internet speeds are measured with [speedtest-cli](https://www.speedtest.net/apps/cli).
+  ```console
+  $ speedtest
+  ```
 
 ## Preparing the remote host
 
