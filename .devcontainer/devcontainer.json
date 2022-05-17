@@ -2,10 +2,11 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/main/containers/docker-existing-dockerfile
 {
   "name": "Challenge Registry",
-  "image": "sagebionetworks/python-3-node:0.1.0",
+  "image": "sagebionetworks/python-3-node:0.2.0",
   "features": {
     "docker-in-docker": "latest"
   },
+  "hostRequirements": {"memory": "4gb"},
   "settings": {
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": false,
@@ -35,10 +36,16 @@
     ]
   },
   "extensions": [
+    "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
-    "dbaeumer.vscode-eslint",
-    "ms-python.python"
+    "mhutchie.git-graph",
+    "ms-python.python",
+    "nrwl.angular-console",
+    "stkb.rewrap",
+    "webhint.vscode-webhint",
+    "GitHub.vscode-pull-request-github",
+    "orta.vscode-jest"
   ],
   "forwardPorts": [
     80,

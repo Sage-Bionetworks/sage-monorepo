@@ -9,7 +9,7 @@
   $background: map.get($config, background);
   $foreground: map.get($config, foreground);
 
-  h2 {
+  .welcome-msg > span {
     color: mat.get-color-from-palette($primary, default);
   }
 }
@@ -17,8 +17,8 @@
 @mixin typography($theme) {
   $config: mat.get-typography-config($theme);
 
-  h2 {
-    font-family: mat.font-family($config);
+  .subtitle {
+    font-size: 0.75em;
   }
 
   // $config: typography.private-typography-to-2014-config(

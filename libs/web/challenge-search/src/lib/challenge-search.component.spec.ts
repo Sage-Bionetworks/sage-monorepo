@@ -2,22 +2,22 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { APP_CONFIG, MOCK_APP_CONFIG } from '@challenge-registry/web/config';
 
-import { ChallengesComponent } from './challenges.component';
+import { ChallengeSearchComponent } from './challenge-search.component';
 
-describe('ChallengesComponent', () => {
-  let component: ChallengesComponent;
-  let fixture: ComponentFixture<ChallengesComponent>;
+describe('ChallengeSearchComponent', () => {
+  let component: ChallengeSearchComponent;
+  let fixture: ComponentFixture<ChallengeSearchComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ChallengesComponent],
+      declarations: [ChallengeSearchComponent],
       providers: [{ provide: APP_CONFIG, useValue: MOCK_APP_CONFIG }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ChallengesComponent);
+    fixture = TestBed.createComponent(ChallengeSearchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
