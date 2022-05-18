@@ -28,9 +28,9 @@ contributing to the standardization of the development envrionment.
 ## Use case
 
 This table summarizes the local compute resources available to the developers of
-the challenge registry. The same information is displayed for two types of EC2
-instances that were selected as candidates as alternative development
-environment for the team members. The table also includes the runtimes in
+the challenge registry. The same information is displayed for two types of
+Amazon EC2 instances that were selected as candidate alternative development
+environments for the team members. The table also includes the runtimes in
 seconds of different tasks such as linting or testing all the projects included
 in the monorepo (the method used to generate these results is described in the
 next section).
@@ -55,7 +55,7 @@ next section).
 Note that developers have been asked to measure runtimes and internet speeds
 while keeping open the applications that are usually running when they develop
 (e.g. Spotify, several instances of VS Code, browser with many tabs open). This
-could be one reason why runtimes reported by a developers are larger that those
+could be one reason why runtimes reported by a developer are larger that those
 reported by another developer who has less compute resources available.
 
 The table below shows the number of times a task is faster than the slowest
