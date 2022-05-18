@@ -37,6 +37,7 @@ next section).
 
 |                                                        | Thomas       | Verena       | Rong         | m5.2xlarge   | t3a.xlarge   |
 | ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
+| Computer Type                                           | Desktop PC | MacBook Pro | MacBook Pro | Amazon EC2 | Amazon EC2 |
 | Architecture                                           | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) |
 | CPU Count                                              | 8            | 4            | 4            | 8            | 4            |
 | CPU Frequency (GHz)                                    | 3.6          | 2.4          | 1.7          | 2.5          | 2.2          |
