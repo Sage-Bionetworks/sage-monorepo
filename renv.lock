@@ -350,25 +350,6 @@
         "processx"
       ]
     },
-    "car": {
-      "Package": "car",
-      "Version": "3.0-13",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "69e00596e08b7f64e5a7d16447bec44d",
-      "Requirements": [
-        "MASS",
-        "abind",
-        "carData",
-        "lme4",
-        "maptools",
-        "mgcv",
-        "nlme",
-        "nnet",
-        "pbkrtest",
-        "quantreg"
-      ]
-    },
     "carData": {
       "Package": "carData",
       "Version": "3.0-5",
@@ -839,31 +820,6 @@
         "scales",
         "tibble",
         "withr"
-      ]
-    },
-    "ggpubr": {
-      "Package": "ggpubr",
-      "Version": "0.4.0",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "77089557d374c69db7cb77e65f0d6ab0",
-      "Requirements": [
-        "cowplot",
-        "dplyr",
-        "ggplot2",
-        "ggrepel",
-        "ggsci",
-        "ggsignif",
-        "glue",
-        "gridExtra",
-        "magrittr",
-        "polynom",
-        "purrr",
-        "rlang",
-        "rstatix",
-        "scales",
-        "tibble",
-        "tidyr"
       ]
     },
     "ggrepel": {
@@ -1415,24 +1371,6 @@
       "Hash": "0bde42ee282efb18c7c4e63822f5b4f7",
       "Requirements": []
     },
-    "lme4": {
-      "Package": "lme4",
-      "Version": "1.1-29",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "4f55df530bfb9fe95fc42738fa55f183",
-      "Requirements": [
-        "MASS",
-        "Matrix",
-        "Rcpp",
-        "RcppEigen",
-        "boot",
-        "lattice",
-        "minqa",
-        "nlme",
-        "nloptr"
-      ]
-    },
     "lubridate": {
       "Package": "lubridate",
       "Version": "1.8.0",
@@ -1554,16 +1492,6 @@
         "lattice"
       ]
     },
-    "nloptr": {
-      "Package": "nloptr",
-      "Version": "2.0.1",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "158916799afe8d32e07b0b1920ea79a8",
-      "Requirements": [
-        "testthat"
-      ]
-    },
     "nnet": {
       "Package": "nnet",
       "Version": "7.3-17",
@@ -1616,23 +1544,6 @@
       "Repository": "RSPM",
       "Hash": "115faaa1a50897c3e2339d1cb7d3d493",
       "Requirements": []
-    },
-    "pbkrtest": {
-      "Package": "pbkrtest",
-      "Version": "0.5.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "b304ff5955f37b48bd30518faf582929",
-      "Requirements": [
-        "MASS",
-        "Matrix",
-        "broom",
-        "dplyr",
-        "knitr",
-        "lme4",
-        "magrittr",
-        "numDeriv"
-      ]
     },
     "pillar": {
       "Package": "pillar",
@@ -2100,26 +2011,6 @@
         "yaml"
       ]
     },
-    "rstatix": {
-      "Package": "rstatix",
-      "Version": "0.7.0",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "aa020f8efde649badd0b2b5456e942fe",
-      "Requirements": [
-        "broom",
-        "car",
-        "corrplot",
-        "dplyr",
-        "generics",
-        "magrittr",
-        "purrr",
-        "rlang",
-        "tibble",
-        "tidyr",
-        "tidyselect"
-      ]
-    },
     "rstudioapi": {
       "Package": "rstudioapi",
       "Version": "0.13",
@@ -2337,30 +2228,6 @@
       "Hash": "f6189c70451d3d68e0d571235576e833",
       "Requirements": [
         "Matrix"
-      ]
-    },
-    "survminer": {
-      "Package": "survminer",
-      "Version": "0.4.9",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "3f29f006a8eb499eff91d8b72325756e",
-      "Requirements": [
-        "broom",
-        "dplyr",
-        "ggplot2",
-        "ggpubr",
-        "ggtext",
-        "gridExtra",
-        "magrittr",
-        "maxstat",
-        "purrr",
-        "rlang",
-        "scales",
-        "survMisc",
-        "survival",
-        "tibble",
-        "tidyr"
       ]
     },
     "sys": {
