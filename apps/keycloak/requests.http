@@ -1,0 +1,11 @@
+@clientId = test_client
+@clientSecret = lLSr7gP9eIpMy4OF66RHbieolraqeMNg
+
+### Get token
+POST http://localhost:8081/realms/test/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+&scope=openid
+&client_id={{clientId}}
+&client_secret={{clientSecret}}

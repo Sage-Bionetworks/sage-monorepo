@@ -1,4 +1,4 @@
-# Keycloak 3
+# Keycloak
 
 ## Introduction
 
