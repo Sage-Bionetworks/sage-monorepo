@@ -540,16 +540,16 @@ get_testing_results <- function(model, test_df, training_obj, survival_endpoint)
     fit_df <- survival::survfit(survival::Surv(time, status) ~ measure, data = surv_df)
 
     test_title <- get_test_title(dataset = unique(dataset_df$dataset_display), available_endpoint[2])
-
-    kmplot <- create_kmplot(fit = fit_df,
-                            df = surv_df,
-                            confint = TRUE,
-                            risktable = FALSE,
-                            title = test_title,
-                            group_colors = c("red", "green"),
-                            show_pval = TRUE,
-                            show_pval_method = TRUE,
-                            facet = FALSE)
+#
+#     kmplot <- create_kmplot(fit = fit_df,
+#                             df = surv_df,
+#                             confint = TRUE,
+#                             risktable = FALSE,
+#                             title = test_title,
+#                             group_colors = c("red", "green"),
+#                             show_pval = TRUE,
+#                             show_pval_method = TRUE,
+#                             facet = FALSE)
     list(
         results = as.data.frame(df),
         accuracy_results = accuracy_results,

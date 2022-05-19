@@ -59,14 +59,14 @@ ici_clinical_outcomes_plot_server <- function(
         shiny::req(all_fit(), all_survival())
 
 
-        create_kmplot(
-          fit = all_fit(),
-          df = all_survival(),
-          confint = input$confint,
-          risktable = input$risktable,
-          title = names(all_survival()),
-          group_colors = get_group_colors(cohort_obj()),
-          facet = TRUE)
+        # create_kmplot(
+        #   fit = all_fit(),
+        #   df = all_survival(),
+        #   confint = input$confint,
+        #   risktable = input$risktable,
+        #   title = names(all_survival()),
+        #   group_colors = get_group_colors(cohort_obj()),
+        #   facet = TRUE)
       })
 
       # survminer::ggsurvplot_list object does not work if using a for loop, or
