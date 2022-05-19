@@ -24,3 +24,19 @@ nx serve keycloak
 - Enter the credentials defined in `.env`
   - `KEYCLOAK_ADMIN`
   - `KEYCLOAK_ADMIN_PASSWORD`
+
+## Development
+
+### Exporting realms and users
+
+1. Start KC so that it can save its data to `data/h2`.
+   ```console
+   docker compose -f docker-compose.yml -f docker-compose.edit.yml up
+   ```
+2. Login into KC Admin Console.
+3. Edit KC configuration.
+4. Stop KC.
+5. Export KC data to `data/import`.
+   ```console
+   docker compose -f docker-compose.yml -f docker-compose.export.yml up
+   ```

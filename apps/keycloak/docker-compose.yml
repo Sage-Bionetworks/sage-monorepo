@@ -8,12 +8,10 @@ services:
     env_file:
       - .env
     volumes:
-      - ./imports:/tmp/keycloak/imports
+      - ./data/import:/opt/keycloak/data/import
     ports:
       - 8081:8080
-    command: >
-      start-dev
-      -Dkeycloak.import=/tmp/keycloak/imports/test-realm.json
+    command: start-dev --import-realm
     depends_on:
       - keycloak-db
 
