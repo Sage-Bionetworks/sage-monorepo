@@ -1,5 +1,5 @@
-@clientId = test
-@clientSecret = KDfVWawbDJzkrB6KW1dgDeNF3Gt6Y4hu
+@clientId = test-client
+@clientSecret = MiZwMWx3Tuw1mkySKId10lk7kPgKV9IZ
 
 ### Get token
 POST http://localhost:8081/realms/test/protocol/openid-connect/token
