@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  keycloak:
+    restart: "no"
+    volumes:
+      - ./data/h2:/opt/keycloak/data/h2
+      - ./data/import:/opt/keycloak/data/import:ro
+    command: start-dev --import-realm
