@@ -128,6 +128,9 @@ This section describes how to instantiate an AWS EC2 as the remote host.
     - AMI ID: `ami-09d56f8956ab235b3`
   - Instance type
     - Instance type: `t3a.xlarge`
+  - Key pair (login)
+    - Select your existing key pair or
+    - [Create a new key pair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/create-key-pairs.html)
   - Network settings
     - Click on `Edit`
     - VPC: `vpc-0e9b80dc470a797d5 (sandcastlevpc)`
