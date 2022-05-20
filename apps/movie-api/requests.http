@@ -1,0 +1,15 @@
+###
+
+GET http://localhost:9000/
+
+### Check that /actuator endpoint is not protected
+
+GET http://localhost:9000/actuator
+
+### Get the list of movies
+
+GET http://localhost:9000/movies
+
+### Get the movie specified
+
+GET http://localhost:9000/movies/1
