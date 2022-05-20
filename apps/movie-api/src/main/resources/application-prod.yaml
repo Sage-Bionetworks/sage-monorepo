@@ -1,0 +1,11 @@
+server:
+  port: 9000
+
+keycloak:
+  url: ${KEYCLOAK_URL}
+  realm: ${KEYCLOAK_REALM}
+
+management:
+  metrics:
+    tags:
+      application: ${APP_NAME}

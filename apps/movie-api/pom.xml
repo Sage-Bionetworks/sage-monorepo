@@ -169,7 +169,7 @@ https://maven.apache.org/xsd/maven-4.0.0.xsd">
 		<profile>
 			<id>prod</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
 				<active-profiles>prod</active-profiles>
@@ -178,7 +178,7 @@ https://maven.apache.org/xsd/maven-4.0.0.xsd">
 		<profile>
 			<id>dev</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
 				<active-profiles>dev</active-profiles>
