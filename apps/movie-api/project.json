@@ -55,6 +55,13 @@
         ]
       }
     },
+    "serveImage": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/movie-api"
+      }
+    },
     "buildInfo": {
       "executor": "@nxrocks/nx-spring-boot:buildInfo",
       "options": {
