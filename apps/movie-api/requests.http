@@ -1,3 +1,20 @@
+@clientId = test-client
+@clientSecret = MiZwMWx3Tuw1mkySKId10lk7kPgKV9IZ
+@username = luke
+@password = changeme
+
+# @name login
+
+POST http://localhost:8081/realms/test/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password
+&scope=openid
+&client_id={{clientId}}
+&client_secret={{clientSecret}}
+&username={{username}}
+&password={{password}}
+
 ###
 
 GET http://localhost:9000/

@@ -8,10 +8,10 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data/import:/opt/keycloak/data/import
+      - ./data/h2:/opt/keycloak/data/h2
     ports:
       - 8081:8080
-    command: start-dev --import-realm
+    command: start-dev
     depends_on:
       - keycloak-db
 

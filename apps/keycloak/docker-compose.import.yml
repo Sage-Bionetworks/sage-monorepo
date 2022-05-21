@@ -6,4 +6,4 @@ services:
     volumes:
       - ./data/h2:/opt/keycloak/data/h2
       - ./data/import:/opt/keycloak/data/import:ro
-    command: start-dev --import-realm
+    command: import --dir /opt/keycloak/data/import --override true
