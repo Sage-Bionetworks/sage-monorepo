@@ -1,7 +1,13 @@
 @clientId = test-client
 @clientSecret = MiZwMWx3Tuw1mkySKId10lk7kPgKV9IZ
+
+# Visitor account
 @username = luke
 @password = changeme
+
+# Admin account
+# @username = tschaffter
+# @password = changeme
 
 # @name login
 
@@ -15,10 +21,6 @@ grant_type=password
 &username={{username}}
 &password={{password}}
 
-###
-
-GET http://localhost:9000/
-
 ### Check that /actuator endpoint is not protected
 
 GET http://localhost:9000/actuator
@@ -26,7 +28,9 @@ GET http://localhost:9000/actuator
 ### Get the list of movies
 
 GET http://localhost:9000/movies
+Authorization: Bearer {{login.response.body.$.access_token}}
 
 ### Get the movie specified
 
 GET http://localhost:9000/movies/1
+Authorization: Bearer {{login.response.body.$.access_token}}
