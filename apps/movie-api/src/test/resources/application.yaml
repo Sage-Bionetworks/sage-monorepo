@@ -1,0 +1,16 @@
+keycloak:
+  url: http://keycloak:8081
+  realm: test
+  jwk: ${keycloak.url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+
+spring:
+  security:
+    ignored: "/actuator/**"
+
+logging:
+  level:
+    org:
+      springframework:
+        security: INFO
+      zalando:
+        logbook: TRACE

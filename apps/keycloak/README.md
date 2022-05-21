@@ -27,16 +27,22 @@ nx serve keycloak
 
 ## Development
 
+### Importing realms and users from files
+
+1. Import KC data from `data/import`.
+   ```console
+   docker compose -f docker-compose.yml -f docker-compose.import.yml up
+   ```
+
 ### Editing KC data
 
-1. Remove `data/h2/*.db` files.
-2. Start KC so that it can save its data to `data/h2`.
+1. Start KC so that it can save its data to `data/h2`.
    ```console
-   docker compose -f docker-compose.yml -f docker-compose.edit.yml up
+   docker compose up
    ```
-3. Login into KC Admin Console.
-4. Edit KC data.
-5. Stop KC.
+2. Login into KC Admin Console.
+3. Edit KC data.
+4. Stop KC.
 
 ### Exporting realms and users
 
