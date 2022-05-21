@@ -74,7 +74,7 @@ runtime (denoted by "1.0").
 For example, linting all the projects of this monorepo is 13.6 times faster on
 Thomas' computer than on Verena's. Moreover, all the developers can benefit from
 improved download speeds (up to 41.5 faster for Verena) and upload speeds (up to
-180 times faster for Rong) when developing on an EC2 instance. This table
+180.5 times faster for Rong) when developing on an EC2 instance. This table
 illustrates well the diversity in compute resources available locally to
 developers, and how relying on remote hosts like EC2 instances can provide a
 better working environment to developers.
