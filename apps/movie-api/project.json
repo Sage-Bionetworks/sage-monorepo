@@ -46,9 +46,13 @@
       }
     },
     "buildImage": {
-      "executor": "@nxrocks/nx-spring-boot:buildImage",
+      "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "root": "apps/movie-api"
+        "context": "apps/movie-api",
+        "push": false,
+        "tags": [
+          "sagebionetworks/challenge-registry-movie-api:latest"
+        ]
       }
     },
     "buildInfo": {
