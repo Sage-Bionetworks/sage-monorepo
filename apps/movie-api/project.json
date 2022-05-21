@@ -45,7 +45,7 @@
         "root": "apps/movie-api"
       }
     },
-    "buildImage": {
+    "build-image": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
         "context": "apps/movie-api",
@@ -55,14 +55,14 @@
         ]
       }
     },
-    "serveImage": {
+    "serve-image": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "docker compose up",
         "cwd": "apps/movie-api"
       }
     },
-    "buildInfo": {
+    "build-info": {
       "executor": "@nxrocks/nx-spring-boot:buildInfo",
       "options": {
         "root": "apps/movie-api"
