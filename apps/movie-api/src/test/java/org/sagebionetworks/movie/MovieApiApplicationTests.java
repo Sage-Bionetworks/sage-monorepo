@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MovieApiApplicationTests {
 
     @Container
-    private static final GenericContainer keycloak = new GenericContainer(DockerImageName.parse("sagebionetworks/challenge-registry-keycloak:latest"))
+    private static final GenericContainer keycloak = new GenericContainer(DockerImageName.parse("sagebionetworks/keycloak:latest"))
             .withExposedPorts(8080)
             .withEnv("KEYCLOAK_ADMIN", "admin")
             .withEnv("KEYCLOAK_ADMIN_PASSWORD", "changeme")

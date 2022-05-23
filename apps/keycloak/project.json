@@ -23,7 +23,7 @@
         "context": "apps/keycloak",
         "push": false,
         "tags": [
-          "sagebionetworks/challenge-registry-keycloak:latest"
+          "sagebionetworks/keycloak:latest"
         ]
       }
     }
