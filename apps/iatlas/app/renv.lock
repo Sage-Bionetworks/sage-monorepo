@@ -3,32 +3,24 @@
     "Version": "4.2.0",
     "Repositories": [
       {
-        "Name": "REPO_NAME",
-        "URL": "https://packagemanager.rstudio.com/all/latest"
+        "Name": "BioCsoft",
+        "URL": "https://bioconductor.org/packages/3.15/bioc"
       },
       {
-        "Name": "REPO_NAME",
-        "URL": "https://packagemanager.rstudio.com/all/latest"
+        "Name": "BioCann",
+        "URL": "https://bioconductor.org/packages/3.15/data/annotation"
       },
       {
-        "Name": "REPO_NAME",
-        "URL": "https://packagemanager.rstudio.com/all/latest"
+        "Name": "BioCexp",
+        "URL": "https://bioconductor.org/packages/3.15/data/experiment"
       },
       {
-        "Name": "REPO_NAME",
-        "URL": "https://packagemanager.rstudio.com/all/latest"
+        "Name": "BioCworkflows",
+        "URL": "https://bioconductor.org/packages/3.15/workflows"
       },
       {
-        "Name": "REPO_NAME",
-        "URL": "https://packagemanager.rstudio.com/all/latest"
-      },
-      {
-        "Name": "REPO_NAME",
-        "URL": "https://packagemanager.rstudio.com/all/latest"
-      },
-      {
-        "Name": "REPO_NAME",
-        "URL": "https://packagemanager.rstudio.com/all/latest"
+        "Name": "BioCbooks",
+        "URL": "https://bioconductor.org/packages/3.15/books"
       },
       {
         "Name": "REPO_NAME",
@@ -1434,9 +1426,9 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "paul-shannon",
       "RemoteRepo": "igvShiny",
-      "RemoteRef": "7728ee83f160200675a8e7e2729f52993663e808",
-      "RemoteSha": "7728ee83f160200675a8e7e2729f52993663e808",
-      "Hash": "1cff41054551164b59de1b710e5b236f",
+      "RemoteRef": "master",
+      "RemoteSha": "be9b05fd3f92b4b9b4e9d1921e207f7dd6cc9884",
+      "Hash": "e6f84092bb9b3abf8de934d8acbaecc4",
       "Requirements": [
         "GenomeInfoDbData",
         "GenomicRanges",
