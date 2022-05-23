@@ -15,18 +15,18 @@ services:
     depends_on:
       - keycloak-db
 
-  keycloak-db:
-    image: postgres:13.6-alpine
-    container_name: challenge-registry-keycloak-db
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: changeme
-    volumes:
-      - keycloak-db:/var/lib/postgresql/data
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+  # keycloak-db:
+  #   image: postgres:13.6-alpine
+  #   container_name: challenge-registry-keycloak-db
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: changeme
+  #   volumes:
+  #     - keycloak-db:/var/lib/postgresql/data
+  #     - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
-volumes:
-  keycloak-db:
-    name: challenge-registry-keycloak-db
+# volumes:
+#   keycloak-db:
+#     name: challenge-registry-keycloak-db
