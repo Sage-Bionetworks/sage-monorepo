@@ -9,7 +9,7 @@
     "build": "bash -c '. ./dev-env.sh && challenge-registry-build'",
     "test": "bash -c '. ./dev-env.sh && challenge-registry-test'",
     "python": "bash -c '. ./dev-env.sh && challenge-registry-python'",
-    "docker": "bash -c '. ./dev-env.sh && challenge-registry-docker'",
+    "build-images": "bash -c '. ./dev-env.sh && challenge-registry-build-images'",
     "seed-db": "bash -c '. ./dev-env.sh && challenge-registry-seed-db'",
     "coverage:merge": "node ./tools/coverage-merger.js",
     "postinstall": "ngcc --properties es2015 browser module main",

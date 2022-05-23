@@ -17,7 +17,7 @@ Each project is managed using multiple *targets* such as `build`, `test` and
 `serve`. One way to execute a target is by using the command `nx <target>
 <project>`.
 
-|                  | prepare | lint | lint-fix | build | test | serve | e2e | docker |
+|                  | prepare | lint | lint-fix | build | test | serve | e2e | build-image |
 |------------------|---------|------|----------|-------|------|-------|-----|--------|
 | apps/api         | ✔️       | ✔️    | ✔️        |       | ✔️    | ✔️     |     | ✔️      |
 | apps/api-db      | ✔️       |      |          |       |      | ✔️     |     | ✔️      |
@@ -62,7 +62,7 @@ Prepare the development environment.
 
 Build the Docker images.
 
-    yarn docker
+    yarn build-images
 
 Start the Challenge Registry.
 
