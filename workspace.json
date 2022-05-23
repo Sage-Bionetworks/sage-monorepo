@@ -8,6 +8,7 @@
     "api-spec": "libs/api-spec",
     "db-cli": "apps/db-cli",
     "keycloak": "apps/keycloak",
+    "keycloak-db": "apps/keycloak-db",
     "shared-assets": "libs/shared/assets",
     "shared-styles": "libs/shared/styles",
     "shared-theming": "libs/shared/theming",

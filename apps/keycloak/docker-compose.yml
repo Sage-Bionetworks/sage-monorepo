@@ -2,8 +2,8 @@ version: "3.8"
 
 services:
   keycloak:
-    image: sagebionetworks/challenge-registry-keycloak:latest
-    container_name: challenge-registry-keycloak
+    image: sagebionetworks/keycloak:latest
+    container_name: keycloak
     restart: always
     env_file:
       - .env
@@ -12,21 +12,3 @@ services:
     ports:
       - 8081:8080
     command: start-dev
-    depends_on:
-      - keycloak-db
-
-  keycloak-db:
-    image: postgres:13.6-alpine
-    container_name: challenge-registry-keycloak-db
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: changeme
-    volumes:
-      - keycloak-db:/var/lib/postgresql/data
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-
-volumes:
-  keycloak-db:
-    name: challenge-registry-keycloak-db
