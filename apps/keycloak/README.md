@@ -29,27 +29,26 @@ nx serve keycloak
 
 ### Importing realms and users from files
 
-1. Import KC data from `data/import`.
-   ```console
-   docker compose -f docker-compose.yml -f docker-compose.import.yml up
-   ```
+Import development data from JSON file and generate data in `./data/h2/`. This
+command must be run when the Keycloak server is not running.
+
+```console
+nx import-dev-data keycloak
+```
 
 ### Editing KC data
 
-1. Start KC so that it can save its data to `data/h2`.
-   ```console
-   docker compose up
-   ```
-2. Login into KC Admin Console.
-3. Edit KC data.
-4. Stop KC.
+Start Keycloak in development mode and make edits.
+
+```console
+nx serve keycloak
+```
 
 ### Exporting realms and users
 
-1. Export KC data to `data/import`.
-   ```console
-   docker compose -f docker-compose.yml -f docker-compose.export.yml up
-   ```
-2. Fix the exported realm files (need to be done only once).
-     - In `test-realm.json`, replace `"policies" : [{...}, {...}],` by
-       `"policies" : [],`.
+Export development data from `./data/h2/` to JSON files. This command must be
+run when the Keycloak server is not running.
+
+```console
+nx export-dev-data keycloak
+```
