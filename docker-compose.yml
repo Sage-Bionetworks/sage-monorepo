@@ -19,7 +19,7 @@ services:
     container_name: challenge-registry-api
     restart: always
     env_file:
-      - apps/api/.env
+      - ./apps/api/.env
     environment:
       - DB_DOMAIN=challenge-registry-api-db
     networks:
@@ -34,7 +34,7 @@ services:
     container_name: challenge-registry-web-app
     restart: always
     env_file:
-      - apps/web-app/.env
+      - ./apps/web-app/.env
     environment:
       - SERVICE_HOST=challenge-registry-api
       - SERVICE_PORT=8080
@@ -45,9 +45,41 @@ services:
     depends_on:
       - challenge-registry-api
 
+  keycloak:
+    image: sagebionetworks/keycloak:latest
+    container_name: keycloak
+    restart: always
+    env_file:
+      - ./apps/keycloak/.env
+    volumes:
+      - ./apps/keycloak/data/h2:/opt/keycloak/data/h2
+    networks:
+      - challenge-registry
+    ports:
+      - "8081:8080"
+    command: start-dev
+    depends_on:
+      - keycloak-db
+
+  keycloak-db:
+    image: sagebionetworks/keycloak-db:latest
+    container_name: keycloak-db
+    restart: always
+    env_file:
+      - ./apps/keycloak-db/.env
+    volumes:
+      - keycloak-db:/var/lib/postgresql/data
+      - ./apps/keycloak-db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - challenge-registry
+    ports:
+      - "5432:5432"
+
 networks:
   challenge-registry:
 
 volumes:
   challenge-registry-api-db:
     name: challenge-registry-api-db
+  keycloak-db:
+    name: keycloak-db

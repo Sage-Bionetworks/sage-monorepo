@@ -10,7 +10,7 @@ services:
       - keycloak-db:/var/lib/postgresql/data
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     ports:
-      - 27017:27017
+      - "5432:5432"
 
 volumes:
   keycloak-db:
