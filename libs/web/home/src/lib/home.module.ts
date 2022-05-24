@@ -10,6 +10,7 @@ import { FeaturedChallengeListModule } from './featured-challenge-list/featured-
 import { SponsorListModule } from './sponsor-list/sponsor-list.module';
 import { StatisticsViewerModule } from './statistics-viewer/statistics-viewer.module';
 import { TopicsViewerModule } from './topics-viewer/topics-viewer.module';
+import { MovieListModule } from './movie-list/movie-list.module';
 
 const routes: Routes = [{ path: '', component: HomeComponent }];
 
@@ -26,6 +27,7 @@ const routes: Routes = [{ path: '', component: HomeComponent }];
     SponsorListModule,
     StatisticsViewerModule,
     TopicsViewerModule,
+    MovieListModule,
   ],
   exports: [HomeComponent],
 })
