@@ -6059,7 +6059,7 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-base64-js@^1.0.2, base64-js@^1.2.0, base64-js@^1.3.1:
+base64-js@^1.0.2, base64-js@^1.2.0, base64-js@^1.3.1, base64-js@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
@@ -11360,6 +11360,11 @@ js-library-detector@^6.4.0:
   resolved "https://registry.yarnpkg.com/js-library-detector/-/js-library-detector-6.4.0.tgz#63e165cb84a4a0a7f7bbf1e97d60623921baae14"
   integrity sha512-NB2sYpmgqiTd7PNNhgp6bnEZmjvTUdAbzxABvYXWLpTL/t158T6mPnD8uYNd0FDP73YWyMrTYDvPxqdvCTbv2g==
 
+js-sha256@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/js-sha256/-/js-sha256-0.9.0.tgz#0b89ac166583e91ef9123644bd3c5334ce9d0966"
+  integrity sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA==
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -11642,6 +11647,21 @@ karma-source-map-support@1.4.0:
   integrity sha512-RsBECncGO17KAoJCYXjv+ckIz+Ii9NCi+9enk+rq6XC81ezYkb4/RHE6CTXdA7IOJqoF3wcaLfVG0CPmE5ca6A==
   dependencies:
     source-map-support "^0.5.5"
+
+keycloak-angular@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/keycloak-angular/-/keycloak-angular-9.1.0.tgz#d51f3a36101bc1f309c082ab71434fb352951607"
+  integrity sha512-ATxVOfxMaBHMOIdGIXDXqQwVhKl0CqCBwg7BabwWToA41jJdV/pBR+QeF3XkBEuvowXfr3bAW2aOfNSXLUJUeg==
+  dependencies:
+    tslib "^2.0.0"
+
+keycloak-js@^18.0.0:
+  version "18.0.0"
+  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-18.0.0.tgz#0825d3e2818aacf9e13cdd41f7eeae6c6114db38"
+  integrity sha512-kaD6nrzgYX3NhgwQfVEZiAzaZXua3PSBIBWGWf8fgqPgUdiO8uvYaKV1Ebf43IAB5M8kvubW+2J+eBS+UnWsuw==
+  dependencies:
+    base64-js "^1.5.1"
+    js-sha256 "^0.9.0"
 
 keyv@^3.0.0:
   version "3.1.0"
