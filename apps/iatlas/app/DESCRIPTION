@@ -68,4 +68,4 @@ Remotes:
     CRI-iAtlas/ImmuneSubtypeClassifier@master,
     th86/concordanceIndex@master,
     cytoscape/cyjShiny@master,
-    paul-shannon/igvShiny@update_description
+    paul-shannon/igvShiny@master
