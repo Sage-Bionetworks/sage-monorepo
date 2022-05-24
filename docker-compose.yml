@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  api-db:
+  challenge-registry-api-db:
     image: sagebionetworks/challenge-registry-api-db:latest
     container_name: challenge-registry-api-db
     restart: always
@@ -12,42 +12,42 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - api-db:/data/db
+      - challenge-registry-api-db:/data/db
 
-  api:
+  challenge-registry-api:
     image: sagebionetworks/challenge-registry-api:latest
     container_name: challenge-registry-api
     restart: always
     env_file:
       - apps/api/.env
     environment:
-      - DB_DOMAIN=api-db
+      - DB_DOMAIN=challenge-registry-api-db
     networks:
       - challenge-registry
     ports:
       - "8080:8080"
     depends_on:
-      - api-db
+      - challenge-registry-api-db
 
-  web-app:
+  challenge-registry-web-app:
     image: sagebionetworks/challenge-registry-web-app:latest
     container_name: challenge-registry-web-app
     restart: always
     env_file:
       - apps/web-app/.env
     environment:
-      - SERVICE_HOST=api
+      - SERVICE_HOST=challenge-registry-api
       - SERVICE_PORT=8080
     networks:
       - challenge-registry
     ports:
       - "80:80"
     depends_on:
-      - api
+      - challenge-registry-api
 
 networks:
   challenge-registry:
 
 volumes:
-  api-db:
+  challenge-registry-api-db:
     name: challenge-registry-api-db
