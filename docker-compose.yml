@@ -45,6 +45,15 @@ services:
     depends_on:
       - challenge-registry-api
 
+  challenge-registry-movie-api:
+    image: sagebionetworks/challenge-registry-movie-api:latest
+    container_name: challenge-registry-movie-api
+    restart: always
+    networks:
+      - challenge-registry
+    ports:
+      - "9000:9000"
+
   keycloak:
     image: sagebionetworks/keycloak:latest
     container_name: keycloak
