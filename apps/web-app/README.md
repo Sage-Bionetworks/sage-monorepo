@@ -5,7 +5,7 @@
 Start the MongoDB instance that hosts the data managed by the challenge registry
 API. The following command must be run from the root of the workspace.
 
-    docker compose up api-db -d
+    docker compose up challenge-registry-api-db -d
 
 Start the challenge registry REST API in development mode.
 
