@@ -39,15 +39,13 @@ export class ChallengeComponent implements OnInit {
     this.sections = CHALLENGE_SECTIONS;
 
     this.challenge$ = this.route.params.pipe(
-      // switchMap((params) =>
-      //   this.challengeService.getChallenge(params['login'], params['challenge'])
-      // ),
-      switchMap((params) =>
-        this.challengeDataService.fetchChallenge(
+      switchMap((params) => {
+        this.challengeDataService.setLogin(params['login']);
+        return this.challengeDataService.fetchChallenge(
           params['login'],
           params['challenge']
-        )
-      ),
+        );
+      }),
       catchError((err) => {
         const error = err.error as ApiClientError;
         if (isApiClientError(error)) {
