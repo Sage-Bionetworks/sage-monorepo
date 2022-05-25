@@ -20,7 +20,7 @@ export function initializeKeycloakFactory(
         // clientId: config['KEYCLOAK_CLIENT_ID'],
       },
       initOptions: {
-        onLoad: 'check-sso',
+        onLoad: 'login-required',
         silentCheckSsoRedirectUri:
           window.location.origin + '/assets/silent-check-sso.html',
       },
