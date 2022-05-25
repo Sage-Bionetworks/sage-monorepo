@@ -44,7 +44,9 @@
     "nrwl.angular-console",
     "stkb.rewrap",
     "webhint.vscode-webhint",
-    "GitHub.vscode-pull-request-github"
+    "GitHub.vscode-pull-request-github",
+    "orta.vscode-jest",
+    "humao.rest-client"
   ],
   "forwardPorts": [
     80,

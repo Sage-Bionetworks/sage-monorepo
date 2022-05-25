@@ -1,0 +1,56 @@
+{
+  "root": "apps/keycloak",
+  "sourceRoot": "apps/keycloak/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "shx cp .env.example .env",
+        "cwd": "apps/keycloak"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/keycloak"
+      }
+    },
+    "import-dev-data": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "docker compose down",
+          "docker compose -f docker-compose.yml -f docker-compose.import.yml up",
+          "docker compose down"
+        ],
+        "cwd": "apps/keycloak",
+        "parallel": false
+      }
+    },
+    "export-dev-data": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "docker compose down",
+          "docker compose -f docker-compose.yml -f docker-compose.export.yml up",
+          "docker compose down"
+        ],
+        "cwd": "apps/keycloak",
+        "parallel": false
+      }
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/keycloak",
+        "push": false,
+        "tags": [
+          "sagebionetworks/keycloak:latest"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

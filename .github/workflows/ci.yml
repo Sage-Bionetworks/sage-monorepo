@@ -6,8 +6,6 @@ on:
   pull_request:
 
 env:
-  PRIMARY_NODE_VERSION: 16
-  PRIMARY_PYTHON_VERSION: 3.9
   NX_BRANCH: ${{ github.event.number }}
   NX_RUN_GROUP: ${{ github.run_id }}
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
@@ -17,6 +15,9 @@ env:
 jobs:
   main:
     runs-on: ubuntu-latest
+    container:
+      image: sagebionetworks/python-3-node:0.2.0
+      options: --user 1001
     if: ${{ github.event_name != 'pull_request' }}
     env:
       NX_BRANCH: main
@@ -27,33 +28,23 @@ jobs:
           fetch-depth: 0
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.PRIMARY_NODE_VERSION }}
       - name: Setup Node.js cache
         id: cache-node
         uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - uses: actions/setup-python@v2
+      - name: Setup pipenv cache
+        id: cache-pipenv
+        uses: actions/cache@v3
         with:
-          python-version: ${{ env.PRIMARY_PYTHON_VERSION }}
-      - name: Install pipenv
-        run: python -m pip install --upgrade pipenv wheel
-      # - name: Setup pipenv cache
-      #   id: cache-pipenv
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ~/.local/share/virtualenvs
-      #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - name: Prepare the projects
-        run: |
-          . ./dev-env.sh
-          challenge-registry-prepare
+        run: yarn nx run-many --all --parallel --target=prepare
       - name: Setup Python virtualenvs
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: yarn nx python api
@@ -69,6 +60,9 @@ jobs:
           path-to-lcov: coverage/lcov.info
   pr:
     runs-on: ubuntu-latest
+    container:
+      image: sagebionetworks/python-3-node:0.2.0
+      options: --user 1001
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
@@ -78,33 +72,23 @@ jobs:
           fetch-depth: 0
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.PRIMARY_NODE_VERSION }}
       - name: Setup Node.js cache
         id: cache-node
         uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - uses: actions/setup-python@v2
+      - name: Setup pipenv cache
+        id: cache-pipenv
+        uses: actions/cache@v3
         with:
-          python-version: ${{ env.PRIMARY_PYTHON_VERSION }}
-      - name: Install pipenv
-        run: python -m pip install --upgrade pipenv wheel
-      # - name: Setup pipenv cache
-      #   id: cache-pipenv
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ~/.local/share/virtualenvs
-      #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - name: Prepare the projects
-        run: |
-          . ./dev-env.sh
-          challenge-registry-prepare
+        run: yarn nx run-many --all --parallel --target=prepare
       - name: Setup Python virtualenvs
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: yarn nx python api

@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  keycloak-db:
+    image: sagebionetworks/keycloak-db:latest
+    container_name: keycloak-db
+    env_file:
+      - .env
+    volumes:
+      - keycloak-db:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+
+volumes:
+  keycloak-db:
+    name: keycloak-db

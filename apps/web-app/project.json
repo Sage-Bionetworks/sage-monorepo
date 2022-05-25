@@ -131,7 +131,7 @@
         ]
       }
     },
-    "docker": {
+    "build-image": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
         "context": "apps/web-app",

@@ -7,6 +7,8 @@
     "api-docs": "libs/api-docs",
     "api-spec": "libs/api-spec",
     "db-cli": "apps/db-cli",
+    "keycloak": "apps/keycloak",
+    "keycloak-db": "apps/keycloak-db",
     "shared-assets": "libs/shared/assets",
     "shared-styles": "libs/shared/styles",
     "shared-theming": "libs/shared/theming",
@@ -31,6 +33,7 @@
     "web-themes": "libs/web/themes",
     "web-ui": "libs/web/ui",
     "web-user-profile": "libs/web/user-profile",
-    "web-util": "libs/web/util"
+    "web-util": "libs/web/util",
+    "movie-api": "apps/movie-api"
   }
 }

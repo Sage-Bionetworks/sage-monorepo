@@ -27,7 +27,7 @@ That's it! VS Code should now have open the workspace folder in the dev
 container as indicated by the following green button displayed in the
 bottom-left corner of VS Code.
 
-<img src="images/vscode-dev-container.png" height="26">
+<img src="images/vscode-devcontainer.png" height="24">
 
 To reopen the workspace folder locally, click on the above green button and
 select `Reopen Folder Locally` or `Reopen Folder in WSL` when developing on
