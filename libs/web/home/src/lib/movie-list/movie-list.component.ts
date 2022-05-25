@@ -29,6 +29,10 @@ export class MovieListComponent {
     private snackBar: MatSnackBar
   ) {}
 
+  login() {
+    this.keycloakService.login();
+  }
+
   logout() {
     this.keycloakService.logout();
   }
