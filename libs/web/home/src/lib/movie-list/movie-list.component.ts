@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTable } from '@angular/material/table';
+import { KeycloakService } from 'keycloak-angular';
 import { MovieListService } from './movie-list.service';
 import { Movie } from './movie';
 
@@ -23,12 +24,13 @@ export class MovieListComponent {
   @ViewChild(MatTable) table!: MatTable<any>;
 
   constructor(
+    private keycloakService: KeycloakService,
     private backend: MovieListService,
     private snackBar: MatSnackBar
   ) {}
 
   logout() {
-    console.log('Logout button was clicked');
+    this.keycloakService.logout();
   }
 
   getAllMovies() {

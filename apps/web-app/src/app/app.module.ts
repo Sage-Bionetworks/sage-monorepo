@@ -53,7 +53,7 @@ import { initializeKeycloakFactory } from './initialize-keycloak.factory';
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloakFactory,
       multi: true,
-      deps: [APP_CONFIG, KeycloakService],
+      deps: [KeycloakService],
     },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

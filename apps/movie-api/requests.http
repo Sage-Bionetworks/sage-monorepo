@@ -17,7 +17,7 @@ Content-Type: application/x-www-form-urlencoded
 grant_type=password
 &scope=openid
 &client_id={{clientId}}
-&client_secret={{clientSecret}}
+# &client_secret={{clientSecret}}
 &username={{username}}
 &password={{password}}
 

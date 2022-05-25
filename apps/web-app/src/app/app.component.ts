@@ -10,6 +10,7 @@ import {
 import { APP_SECTIONS } from './app-sections';
 import { AuthService } from '@challenge-registry/web/auth';
 import { Router } from '@angular/router';
+import { KeycloakService } from 'keycloak-angular';
 import { User } from '@challenge-registry/api-angular';
 
 @Component({
@@ -39,26 +40,27 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private pageTitleService: PageTitleService,
-    private authService: AuthService
+    private authService: AuthService,
+    private keycloakService: KeycloakService
   ) {}
 
   ngOnInit() {
-    const loggedInSub = this.authService
-      .isLoggedIn()
-      .subscribe((loggedIn) => (this.loggedIn = loggedIn));
-    this.subscriptions.push(loggedInSub);
+    // const loggedInSub = this.authService
+    //   .isLoggedIn()
+    //   .subscribe((loggedIn) => (this.loggedIn = loggedIn));
+    // this.subscriptions.push(loggedInSub);
 
-    const userSub = this.authService.getUser().subscribe((user) => {
-      this.user = user;
-      if (user) {
-        this.userAvatar.name = user.name ? user.name : user.login;
-        this.userAvatar.src = user.avatarUrl ? user.avatarUrl : '';
-      } else {
-        this.userAvatar.name = '';
-        this.userAvatar.src = '';
-      }
-    });
-    this.subscriptions.push(userSub);
+    // const userSub = this.authService.getUser().subscribe((user) => {
+    //   this.user = user;
+    //   if (user) {
+    //     this.userAvatar.name = user.name ? user.name : user.login;
+    //     this.userAvatar.src = user.avatarUrl ? user.avatarUrl : '';
+    //   } else {
+    //     this.userAvatar.name = '';
+    //     this.userAvatar.src = '';
+    //   }
+    // });
+    // this.subscriptions.push(userSub);
 
     this.pageTitleService.setTitle('Challenge Registry');
   }
@@ -70,7 +72,8 @@ export class AppComponent implements OnInit, OnDestroy {
   selectUserMenuItem(menuItem: MenuItem): void {
     // TODO DRY selected item, no not make comparison with string that way
     if (menuItem.name === 'Log out') {
-      this.authService.logout();
+      // this.authService.logout();
+      this.keycloakService.logout();
     } else if (menuItem.name === 'Profile') {
       this.router.navigate([this.user?.login]);
     }
