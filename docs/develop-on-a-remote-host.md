@@ -35,9 +35,9 @@ seconds of different tasks such as linting or testing all the projects included
 in the monorepo (the method used to generate these results is described in the
 next section).
 
-|                                                        | Thomas       | Verena       | Rong         | m5.2xlarge   | t3a.xlarge   |
+|                                                        | Shirou       | Rin          | Sakura       | m5.2xlarge   | t3a.xlarge   |
 | ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
-| Computer Type                                           | Desktop PC | MacBook Pro | MacBook Pro | Amazon EC2 | Amazon EC2 |
+| Computer Type                                          | Desktop PC   | MacBook Pro  | MacBook Pro  | Amazon EC2   | Amazon EC2   |
 | Architecture                                           | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) |
 | CPU Count                                              | 8            | 4            | 4            | 8            | 4            |
 | CPU Frequency (GHz)                                    | 3.6          | 2.4          | 1.7          | 2.5          | 2.2          |
@@ -49,8 +49,8 @@ next section).
 | Runtime: Test web-app (s)                              | 5.3          | 43.0         | 35.0         | 6.5          | 9.2          |
 | Download speed (Mbit/s)                                | 395.9        | 52.1         | 160.1        | 2165.0       | 1606.7       |
 | Upload speed (Mbit/s)                                  | 183.3        | 15.6         | 10.3         | 1861.0       | 1030.2       |
-| On-Demand Cost ($/day)                                 | n/a            | n/a            | n/a            | 9.2          | 3.6          |
-| On-Demand Cost ($/year)                                | n/a            | n/a            | n/a            | 3363.8       | 1317.5       |
+| On-Demand Cost ($/day)                                 | n/a          | n/a          | n/a          | 9.2          | 3.6          |
+| On-Demand Cost ($/year)                                | n/a          | n/a          | n/a          | 3363.8       | 1317.5       |
 
 Note that developers have been asked to measure runtimes and internet speeds
 while keeping open the applications that are usually running when they develop
@@ -61,7 +61,7 @@ reported by another developer who has less compute resources available.
 The table below shows the number of times a task is faster than the slowest
 runtime (denoted by "1.0").
 
-|                                                        | Thomas       | Verena       | Rong         | m5.2xlarge   | t3a.xlarge   |
+|                                                        | Shirou       | Rin       | Sakura         | m5.2xlarge   | t3a.xlarge   |
 | ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
 | Runtime: Lint All Projects  | 13.6         | 1.0          | 1.1          | 11.2         | 6.3          |
 | Runtime: Build All Projects | 10.1         | 1.0          | 1.2          | 7.3          | 4.4          |
@@ -72,9 +72,9 @@ runtime (denoted by "1.0").
 | Upload speed                | 17.8         | 1.5          | 1.0          | 180.5        | 99.9         |
 
 For example, linting all the projects of this monorepo is 13.6 times faster on
-Thomas' computer than on Verena's. Moreover, all the developers can benefit from
-improved download speeds (up to 41.5 faster for Verena) and upload speeds (up to
-180.5 times faster for Rong) when developing on an EC2 instance. This table
+Shirou's computer than on Rin's. Moreover, all the developers can benefit from
+improved download speeds (up to 41.5 faster for Rin) and upload speeds (up to
+180.5 times faster for Sakura) when developing on an EC2 instance. This table
 illustrates well the diversity in compute resources available locally to
 developers, and how relying on remote hosts like EC2 instances can provide a
 better working environment to developers.
