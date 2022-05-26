@@ -3,6 +3,13 @@
   "sourceRoot": "apps/movie-api/src",
   "projectType": "application",
   "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "shx cp .env.example .env",
+        "cwd": "apps/movie-api"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
@@ -42,7 +49,8 @@
     "serve": {
       "executor": "@nxrocks/nx-spring-boot:serve",
       "options": {
-        "root": "apps/movie-api"
+        "root": "apps/movie-api",
+        "args": ["-P", "dev"]
       }
     },
     "build-image": {

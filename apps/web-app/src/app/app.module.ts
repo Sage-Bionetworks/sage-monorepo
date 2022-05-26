@@ -1,10 +1,15 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  CUSTOM_ELEMENTS_SCHEMA,
+  NgModule,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { CountUpModule } from 'ngx-countup';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 import { WebUiModule } from '@challenge-registry/web/ui';
 import { ApiModule, Configuration } from '@challenge-registry/api-angular';
@@ -13,6 +18,7 @@ import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
 import { TokenService, WebAuthModule } from '@challenge-registry/web/auth';
 import { AppRoutingModule } from './app-routing.module';
 import { WebUtilModule } from '@challenge-registry/web/util';
+import { initializeKeycloakFactory } from './initialize-keycloak.factory';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +31,7 @@ import { WebUtilModule } from '@challenge-registry/web/util';
     HttpClientModule,
     MatButtonModule,
     MatSliderModule,
+    KeycloakAngularModule,
     WebUtilModule,
     WebAuthModule.forRoot(),
     WebUiModule,
@@ -41,6 +48,12 @@ import { WebUtilModule } from '@challenge-registry/web/util';
         }),
       deps: [APP_CONFIG, TokenService],
       multi: false,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloakFactory,
+      multi: true,
+      deps: [KeycloakService],
     },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
