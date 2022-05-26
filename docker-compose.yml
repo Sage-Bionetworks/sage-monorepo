@@ -51,6 +51,8 @@ services:
     image: sagebionetworks/challenge-registry-movie-api:latest
     container_name: challenge-registry-movie-api
     restart: always
+    env_file:
+      - ./apps/movie-api/.env
     networks:
       - challenge-registry
     ports:
@@ -71,6 +73,7 @@ services:
     command: start-dev
     depends_on:
       - keycloak-db
+      - challenge-registry-movie-api  # cheating temporarily to make it easier to start the stack.
 
   keycloak-db:
     image: sagebionetworks/keycloak-db:latest
