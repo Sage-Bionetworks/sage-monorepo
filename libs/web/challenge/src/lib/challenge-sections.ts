@@ -4,6 +4,10 @@ export const CHALLENGE_SECTIONS = [
     path: '.',
   },
   {
+    label: 'Sponsors',
+    path: 'sponsors',
+  },
+  {
     label: 'Stargazers',
     path: 'stargazers',
   },

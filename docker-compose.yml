@@ -44,6 +44,8 @@ services:
       - "80:80"
     depends_on:
       - challenge-registry-api
+      - challenge-registry-movie-api
+      - keycloak
 
   challenge-registry-movie-api:
     image: sagebionetworks/challenge-registry-movie-api:latest

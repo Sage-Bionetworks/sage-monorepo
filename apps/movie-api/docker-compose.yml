@@ -6,4 +6,4 @@ services:
     container_name: challenge-registry-movie-api
     restart: always
     ports:
-      - 9000:9000
+      - "9000:9000"

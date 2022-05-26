@@ -50,6 +50,7 @@
     "regenerator-runtime": "0.13.7",
     "rxjs": "~7.4.0",
     "tslib": "^2.0.0",
+    "type-guards": "^0.15.0",
     "validator": "^13.6.0",
     "winston": "^3.3.3",
     "zone.js": "~0.11.4"
