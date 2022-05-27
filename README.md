@@ -1,4 +1,4 @@
-# Challenge Registry 5
+# Challenge Registry
 
 [![GitHub CI](https://img.shields.io/github/workflow/status/Sage-Bionetworks/challenge-registry/CI.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/challenge-registry/actions)
 [![Coverage Status](https://img.shields.io/coveralls/github/Sage-Bionetworks/challenge-registry.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=coverage&logo=Coveralls)](https://coveralls.io/github/Sage-Bionetworks/challenge-registry?branch=main)
@@ -16,16 +16,16 @@ The table shown below lists the main _projects_ included with this workspace.
 Each project is managed using multiple _targets_ such as `build`, `test` and
 `serve`. One way to execute a target is by using the command `nx <target> <project>`.
 
-|                  | prepare | lint | lint-fix | build | test | serve | e2e | docker |
-| ---------------- | ------- | ---- | -------- | ----- | ---- | ----- | --- | ------ |
-| apps/api         | ✔️      | ✔️   | ✔️       |       | ✔️   | ✔️    |     | ✔️     |
-| apps/api-db      | ✔️      |      |          |       |      | ✔️    |     | ✔️     |
-| apps/db-cli      |         | ✔️   | ✔️       | ✔️    | ✔️   | ✔️    |     |        |
-| apps/web-app     | ✔️      | ✔️   | ✔️       | ✔️    | ✔️   | ✔️    |     | ✔️     |
-| apps/web-app-e2e |         | ✔️   | ✔️       |       |      |       | ✔️  |        |
-| libs/api-angular |         | ✔️   | ✔️       | ✔️    | ✔️   |       |     |        |
-| libs/api-docs    |         |      |          | ✔️    |      | ✔️    |     |        |
-| libs/api-spec    |         | ✔️   |          | ✔️    |      | ✔️    |     |        |
+|                  | prepare | lint | lint-fix | build | test | serve | e2e | build-image |
+|------------------|---------|------|----------|-------|------|-------|-----|--------|
+| apps/api         | ✔️       | ✔️    | ✔️        |       | ✔️    | ✔️     |     | ✔️      |
+| apps/api-db      | ✔️       |      |          |       |      | ✔️     |     | ✔️      |
+| apps/db-cli      |         | ✔️    | ✔️        | ✔️     | ✔️    | ✔️     |     |        |
+| apps/web-app     | ✔️       | ✔️    | ✔️        | ✔️     | ✔️    | ✔️     |     | ✔️      |
+| apps/web-app-e2e |         | ✔️    | ✔️        |       |      |       | ✔️   |        |
+| libs/api-angular |         | ✔️    | ✔️        | ✔️     | ✔️    |       |     |        |
+| libs/api-docs    |         |      |          | ✔️     |      | ✔️     |     |        |
+| libs/api-spec    |         | ✔️    |          | ✔️     |      | ✔️     |     |        |
 
 See this [cheat sheet] to learn more about Nx commands.
 
