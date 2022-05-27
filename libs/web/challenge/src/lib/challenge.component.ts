@@ -4,11 +4,12 @@ import {
   Challenge,
   ChallengeService,
   ModelError as ApiClientError,
-} from '@challenge-registry/api-angular';
-import { APP_CONFIG, AppConfig } from '@challenge-registry/web/config';
+} from '@sage-bionetworks/api-angular';
+import { APP_CONFIG, AppConfig } from '@sage-bionetworks/web/config';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
-import { isApiClientError } from '@challenge-registry/web/util';
+import { isApiClientError } from '@sage-bionetworks/web/util';
 import { CHALLENGE_SECTIONS } from './challenge-sections';
+import { ChallengeDataService } from './challenge-data.service';
 
 @Component({
   selector: 'challenge-registry-challenges',
@@ -28,6 +29,7 @@ export class ChallengeComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private challengeService: ChallengeService,
+    private challengeDataService: ChallengeDataService,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
     this.appVersion = appConfig.appVersion;
@@ -37,9 +39,13 @@ export class ChallengeComponent implements OnInit {
     this.sections = CHALLENGE_SECTIONS;
 
     this.challenge$ = this.route.params.pipe(
-      switchMap((params) =>
-        this.challengeService.getChallenge(params['login'], params['challenge'])
-      ),
+      switchMap((params) => {
+        this.challengeDataService.setLogin(params['login']);
+        return this.challengeDataService.fetchChallenge(
+          params['login'],
+          params['challenge']
+        );
+      }),
       catchError((err) => {
         const error = err.error as ApiClientError;
         if (isApiClientError(error)) {

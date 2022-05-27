@@ -9,6 +9,7 @@
     "stkb.rewrap",
     "webhint.vscode-webhint",
     "GitHub.vscode-pull-request-github",
-    "orta.vscode-jest"
+    "orta.vscode-jest",
+    "humao.rest-client"
   ]
 }

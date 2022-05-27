@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { NotFoundComponent } from './not-found.component';
-import { WebUiModule } from '@challenge-registry/web/ui';
+import { WebUiModule } from '@sage-bionetworks/web/ui';
 
 const routes: Routes = [{ path: '', component: NotFoundComponent }];
 

@@ -61,7 +61,7 @@ Prepare the development environment.
 
 Build the Docker images.
 
-    yarn docker
+    yarn build-images
 
 Start the Challenge Registry.
 
@@ -126,4 +126,4 @@ See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 [pyenv]: https://github.com/pyenv/pyenv
 [pipenv]: https://pypi.org/project/pipenv/
 [development container]: https://code.visualstudio.com/docs/remote/containers
-[how to develop inside the dev container]: docs/dev-container.md
+[how to develop inside the dev container]: docs/devcontainer.md

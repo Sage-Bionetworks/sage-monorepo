@@ -6,11 +6,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '@challenge-registry/web/auth';
-import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
-import { isApiClientError } from '@challenge-registry/web/util';
+import { AuthService } from '@sage-bionetworks/web/auth';
+import { AppConfig, APP_CONFIG } from '@sage-bionetworks/web/config';
+import { isApiClientError } from '@sage-bionetworks/web/util';
 import { Subscription } from 'rxjs';
-import { ModelError as ApiClientError } from '@challenge-registry/api-angular';
+import { ModelError as ApiClientError } from '@sage-bionetworks/api-angular';
 
 @Component({
   selector: 'challenge-registry-login',

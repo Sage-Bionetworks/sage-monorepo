@@ -7,10 +7,10 @@ import {
   Organization,
   User,
   UserService,
-} from '@challenge-registry/api-angular';
-import { AuthService } from '@challenge-registry/web/auth';
-import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
-import { isApiClientError } from '@challenge-registry/web/util';
+} from '@sage-bionetworks/api-angular';
+import { AuthService } from '@sage-bionetworks/web/auth';
+import { AppConfig, APP_CONFIG } from '@sage-bionetworks/web/config';
+import { isApiClientError } from '@sage-bionetworks/web/util';
 import {
   catchError,
   filter,

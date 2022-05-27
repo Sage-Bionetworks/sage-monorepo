@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  challenge-registry-movie-api:
+    image: sagebionetworks/challenge-registry-movie-api:latest
+    container_name: challenge-registry-movie-api
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "9000:9000"

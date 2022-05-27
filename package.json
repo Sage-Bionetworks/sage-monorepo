@@ -1,5 +1,5 @@
 {
-  "name": "challenge-registry",
+  "name": "challenges",
   "version": "0.0.0",
   "license": "Apache-2.0",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "bash -c '. ./dev-env.sh && challenge-registry-build'",
     "test": "bash -c '. ./dev-env.sh && challenge-registry-test'",
     "python": "bash -c '. ./dev-env.sh && challenge-registry-python'",
-    "docker": "bash -c '. ./dev-env.sh && challenge-registry-docker'",
+    "build-images": "bash -c '. ./dev-env.sh && challenge-registry-build-images'",
     "seed-db": "bash -c '. ./dev-env.sh && challenge-registry-seed-db'",
     "coverage:merge": "node ./tools/coverage-merger.js",
     "postinstall": "ngcc --properties es2015 browser module main",
@@ -37,6 +37,8 @@
     "@angular/router": "~13.2.0",
     "commander": "^8.2.0",
     "core-js": "^3.6.5",
+    "keycloak-angular": "^9.1.0",
+    "keycloak-js": "^18.0.0",
     "lodash": "^4.17.21",
     "mongoose": "^6.0.9",
     "ngx-avatar": "^4.1.0",
@@ -48,6 +50,7 @@
     "regenerator-runtime": "0.13.7",
     "rxjs": "~7.4.0",
     "tslib": "^2.0.0",
+    "type-guards": "^0.15.0",
     "validator": "^13.6.0",
     "winston": "^3.3.3",
     "zone.js": "~0.11.4"
@@ -76,6 +79,7 @@
     "@nrwl/web": "13.8.2",
     "@nrwl/workspace": "13.8.1",
     "@nx-tools/nx-docker": "^2.3.0",
+    "@nxrocks/nx-spring-boot": "^4.0.2",
     "@openapitools/openapi-generator-cli": "^2.4.26",
     "@redocly/openapi-cli": "^1.0.0-beta.81",
     "@testing-library/react": "12.1.2",

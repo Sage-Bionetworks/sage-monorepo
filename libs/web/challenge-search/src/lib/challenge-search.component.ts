@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { APP_CONFIG, AppConfig } from '@challenge-registry/web/config';
+import { APP_CONFIG, AppConfig } from '@sage-bionetworks/web/config';
 
 @Component({
   selector: 'challenge-registry-challenge-search',

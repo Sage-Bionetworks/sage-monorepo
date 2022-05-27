@@ -48,8 +48,8 @@ function challenge-registry-serve {
   nx run-many --target=serve --projects=api-db,api,web-app
 }
 
-function challenge-registry-docker {
-  nx run-many --all --parallel --target=docker
+function challenge-registry-build-images {
+  nx run-many --all --parallel --target=build-image
 }
 
 function challenge-registry-seed-db {

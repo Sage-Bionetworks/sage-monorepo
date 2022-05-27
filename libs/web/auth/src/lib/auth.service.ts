@@ -6,7 +6,7 @@ import {
   LocalAuthResponse,
   User,
   UserService,
-} from '@challenge-registry/api-angular';
+} from '@sage-bionetworks/api-angular';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { TokenService } from './token/token.service';
 
