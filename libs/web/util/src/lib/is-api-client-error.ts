@@ -1,4 +1,4 @@
-import { ModelError as ApiClientError } from '@sagebionetworks/api-angular';
+import { ModelError as ApiClientError } from '@sage-bionetworks/api-angular';
 
 // Type guard for ApiClientError
 export function isApiClientError(error: any): error is ApiClientError {

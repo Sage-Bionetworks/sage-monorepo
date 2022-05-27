@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Challenge, UserService } from '@sagebionetworks/api-angular';
+import { Challenge, UserService } from '@sage-bionetworks/api-angular';
 import { map, Observable } from 'rxjs';
 
 @Component({

@@ -7,8 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { WebAuthModule } from '@sagebionetworks/web/auth';
-import { WebUiModule } from '@sagebionetworks/web/ui';
+import { WebAuthModule } from '@sage-bionetworks/web/auth';
+import { WebUiModule } from '@sage-bionetworks/web/ui';
 
 const routes: Routes = [{ path: '', component: LoginComponent }];
 

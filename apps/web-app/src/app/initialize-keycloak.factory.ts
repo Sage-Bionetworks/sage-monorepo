@@ -2,7 +2,7 @@ import { KeycloakService } from 'keycloak-angular';
 // import { of } from 'rxjs';
 // import { switchMap } from 'rxjs/operators';
 // import { fromPromise } from 'rxjs/internal-compatibility';
-// import { AppConfig } from '@sagebionetworks/web/config';
+// import { AppConfig } from '@sage-bionetworks/web/config';
 // import { ConfigInitService } from './config-init.service';
 
 export function initializeKeycloakFactory(

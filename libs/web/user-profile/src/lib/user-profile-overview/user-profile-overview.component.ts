@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Organization, User } from '@sagebionetworks/api-angular';
+import { Organization, User } from '@sage-bionetworks/api-angular';
 
 @Component({
   selector: 'challenge-registry-user-profile-overview',

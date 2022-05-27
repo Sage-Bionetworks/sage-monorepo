@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Registry, RegistryService } from '@sagebionetworks/api-angular';
+import { Registry, RegistryService } from '@sage-bionetworks/api-angular';
 import { Observable } from 'rxjs';
 
 @Component({

@@ -4,10 +4,10 @@ import {
   Challenge,
   ChallengeService,
   ModelError as ApiClientError,
-} from '@sagebionetworks/api-angular';
-import { APP_CONFIG, AppConfig } from '@sagebionetworks/web/config';
+} from '@sage-bionetworks/api-angular';
+import { APP_CONFIG, AppConfig } from '@sage-bionetworks/web/config';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
-import { isApiClientError } from '@sagebionetworks/web/util';
+import { isApiClientError } from '@sage-bionetworks/web/util';
 import { CHALLENGE_SECTIONS } from './challenge-sections';
 import { ChallengeDataService } from './challenge-data.service';
 

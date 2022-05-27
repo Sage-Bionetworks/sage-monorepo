@@ -1,4 +1,4 @@
-import { Organization } from '@sagebionetworks/api-angular';
+import { Organization } from '@sage-bionetworks/api-angular';
 
 export const MOCK_ORG: Organization = {
   id: '613931b5ae0267da3f0275c7',
