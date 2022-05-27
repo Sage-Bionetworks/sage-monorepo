@@ -1,5 +1,5 @@
 {
-  "name": "@challenge-registry/api-angular",
+  "name": "@sage-bionetworks/api-angular",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^13.2.0",
