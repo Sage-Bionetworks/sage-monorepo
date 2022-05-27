@@ -5,7 +5,7 @@ import {
   ModelError as ApiClientError,
   Organization,
   OrganizationService,
-} from '@challenge-registry/api-angular';
+} from '@sagebionetworks/api-angular';
 import {
   catchError,
   filter,
@@ -14,9 +14,9 @@ import {
   switchMap,
   throwError,
 } from 'rxjs';
-import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
+import { AppConfig, APP_CONFIG } from '@sagebionetworks/web/config';
 import { ActivatedRoute, Router } from '@angular/router';
-import { isApiClientError } from '@challenge-registry/web/util';
+import { isApiClientError } from '@sagebionetworks/web/util';
 import { OrgProfileDataServiceService } from './org-profile-data-service.service';
 
 @Component({

@@ -3,7 +3,7 @@ import {
   ChallengeService,
   Organization,
   OrgMembershipService,
-} from '@challenge-registry/api-angular';
+} from '@sagebionetworks/api-angular';
 import { map, Observable } from 'rxjs';
 import { map as _map, uniqBy as _uniqBy } from 'lodash';
 

@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { SignupComponent } from './signup.component';
-import { WebUiModule } from '@challenge-registry/web/ui';
+import { WebUiModule } from '@sagebionetworks/web/ui';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [{ path: '', component: SignupComponent }];

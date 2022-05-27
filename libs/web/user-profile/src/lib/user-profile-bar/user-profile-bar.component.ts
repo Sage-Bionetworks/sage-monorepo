@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { User, UserService } from '@challenge-registry/api-angular';
-import { Avatar } from '@challenge-registry/web/ui';
+import { User, UserService } from '@sagebionetworks/api-angular';
+import { Avatar } from '@sagebionetworks/web/ui';
 
 @Component({
   selector: 'challenge-registry-user-profile-bar',

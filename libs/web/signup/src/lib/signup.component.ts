@@ -10,9 +10,9 @@ import {
   UserCreateRequest,
   UserService,
   ModelError as ApiClientError,
-} from '@challenge-registry/api-angular';
-import { APP_CONFIG, AppConfig } from '@challenge-registry/web/config';
-import { isApiClientError } from '@challenge-registry/web/util';
+} from '@sagebionetworks/api-angular';
+import { APP_CONFIG, AppConfig } from '@sagebionetworks/web/config';
+import { isApiClientError } from '@sagebionetworks/web/util';
 
 @Component({
   selector: 'challenge-registry-signup',

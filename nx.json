@@ -1,5 +1,5 @@
 {
-  "npmScope": "challenge-registry",
+  "npmScope": "sagebionetworks",
   "affected": {
     "defaultBase": "main"
   },

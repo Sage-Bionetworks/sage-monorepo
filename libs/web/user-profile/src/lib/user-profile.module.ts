@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UserProfileComponent } from './user-profile.component';
-import { WebUiModule } from '@challenge-registry/web/ui';
+import { WebUiModule } from '@sagebionetworks/web/ui';
 import { UserProfileBarModule } from './user-profile-bar/user-profile-bar.module';
 import { UserProfileChallengesModule } from './user-profile-challenges/user-profile-challenges.module';
 import { UserProfileOverviewModule } from './user-profile-overview/user-profile-overview.module';

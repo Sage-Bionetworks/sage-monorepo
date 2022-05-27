@@ -1,17 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, from } from 'rxjs';
-import { PageTitleService } from '@challenge-registry/web/util';
+import { PageTitleService } from '@sagebionetworks/web/util';
 import {
   Avatar,
   MenuItem,
   MOCK_AVATAR_32,
   NavbarSection,
-} from '@challenge-registry/web/ui';
+} from '@sagebionetworks/web/ui';
 import { APP_SECTIONS } from './app-sections';
-import { AuthService } from '@challenge-registry/web/auth';
+import { AuthService } from '@sagebionetworks/web/auth';
 import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
-import { User } from '@challenge-registry/api-angular';
+import { User } from '@sagebionetworks/api-angular';
 
 @Component({
   selector: 'challenge-registry-root',

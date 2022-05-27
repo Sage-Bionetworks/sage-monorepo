@@ -11,13 +11,13 @@ import { MatSliderModule } from '@angular/material/slider';
 import { CountUpModule } from 'ngx-countup';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
-import { WebUiModule } from '@challenge-registry/web/ui';
-import { ApiModule, Configuration } from '@challenge-registry/api-angular';
+import { WebUiModule } from '@sagebionetworks/web/ui';
+import { ApiModule, Configuration } from '@sagebionetworks/api-angular';
 import { AppComponent } from './app.component';
-import { AppConfig, APP_CONFIG } from '@challenge-registry/web/config';
-import { TokenService, WebAuthModule } from '@challenge-registry/web/auth';
+import { AppConfig, APP_CONFIG } from '@sagebionetworks/web/config';
+import { TokenService, WebAuthModule } from '@sagebionetworks/web/auth';
 import { AppRoutingModule } from './app-routing.module';
-import { WebUtilModule } from '@challenge-registry/web/util';
+import { WebUtilModule } from '@sagebionetworks/web/util';
 import { initializeKeycloakFactory } from './initialize-keycloak.factory';
 
 @NgModule({

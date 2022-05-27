@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { APP_CONFIG, MOCK_APP_CONFIG } from '@challenge-registry/web/config';
+import { APP_CONFIG, MOCK_APP_CONFIG } from '@sagebionetworks/web/config';
 
 import { HomeComponent } from './home.component';
 

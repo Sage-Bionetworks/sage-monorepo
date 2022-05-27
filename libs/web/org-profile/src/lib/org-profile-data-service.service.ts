@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Organization } from '@challenge-registry/api-angular';
+import { Organization } from '@sagebionetworks/api-angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({

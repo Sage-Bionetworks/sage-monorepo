@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WebUiModule } from '@challenge-registry/web/ui';
+import { WebUiModule } from '@sagebionetworks/web/ui';
 import { UserProfileOverviewComponent } from './user-profile-overview.component';
 
 @NgModule({

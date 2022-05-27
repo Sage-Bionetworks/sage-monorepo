@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserService } from '@challenge-registry/shared/data-access-user';
+import { UserService } from '@sagebionetworks/shared/data-access-user';
 
 @Component({
   selector: 'challenge-registry-login-entry',
