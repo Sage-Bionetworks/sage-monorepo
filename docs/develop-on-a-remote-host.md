@@ -1,4 +1,4 @@
-# Develop on a remote Docker host
+# Develop on a remote host
 
 ## Introduction
 
