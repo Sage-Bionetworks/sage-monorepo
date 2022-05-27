@@ -25,11 +25,9 @@
       "@sage-bionetworks/web/about": ["libs/web/about/src/index.ts"],
       "@sage-bionetworks/web/assets": ["libs/web/assets/src/index.ts"],
       "@sage-bionetworks/web/auth": ["libs/web/auth/src/index.ts"],
+      "@sage-bionetworks/web/challenge": ["libs/web/challenge/src/index.ts"],
       "@sage-bionetworks/web/challenge-search": [
         "libs/web/challenge-search/src/index.ts"
-      ],
-      "@sage-bionetworks/web/challenge": [
-        "libs/web/challenge/src/index.ts"
       ],
       "@sage-bionetworks/web/config": ["libs/web/config/src/index.ts"],
       "@sage-bionetworks/web/home": ["libs/web/home/src/index.ts"],
@@ -38,9 +36,7 @@
       "@sage-bionetworks/web/org-profile": [
         "libs/web/org-profile/src/index.ts"
       ],
-      "@sage-bionetworks/web/org-search": [
-        "libs/web/org-search/src/index.ts"
-      ],
+      "@sage-bionetworks/web/org-search": ["libs/web/org-search/src/index.ts"],
       "@sage-bionetworks/web/pages": ["libs/web/pages/src/index.ts"],
       "@sage-bionetworks/web/signup": ["libs/web/signup/src/index.ts"],
       "@sage-bionetworks/web/styles": ["libs/web/styles/src/index.ts"],

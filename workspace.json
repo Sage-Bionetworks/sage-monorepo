@@ -6,9 +6,12 @@
     "api-db": "apps/api-db",
     "api-docs": "libs/api-docs",
     "api-spec": "libs/api-spec",
+    "challenge-platform-app": "apps/challenge-platform-app",
+    "challenge-platform-app-e2e": "apps/challenge-platform-app-e2e",
     "db-cli": "apps/db-cli",
     "keycloak": "apps/keycloak",
     "keycloak-db": "apps/keycloak-db",
+    "movie-api": "apps/movie-api",
     "shared-assets": "libs/shared/assets",
     "shared-styles": "libs/shared/styles",
     "shared-theming": "libs/shared/theming",
@@ -20,8 +23,8 @@
     "web-app-react-e2e": "apps/web-app-react-e2e",
     "web-assets": "libs/web/assets",
     "web-auth": "libs/web/auth",
-    "web-challenge-search": "libs/web/challenge-search",
     "web-challenge": "libs/web/challenge",
+    "web-challenge-search": "libs/web/challenge-search",
     "web-config": "libs/web/config",
     "web-home": "libs/web/home",
     "web-login": "libs/web/login",
@@ -33,7 +36,6 @@
     "web-themes": "libs/web/themes",
     "web-ui": "libs/web/ui",
     "web-user-profile": "libs/web/user-profile",
-    "web-util": "libs/web/util",
-    "movie-api": "apps/movie-api"
+    "web-util": "libs/web/util"
   }
 }
