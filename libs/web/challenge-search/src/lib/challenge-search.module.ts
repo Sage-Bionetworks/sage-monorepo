@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { WebUiModule } from '@challenge-registry/web/ui';
+import { WebUiModule } from '@sage-bionetworks/web/ui';
 import { ChallengeSearchComponent } from './challenge-search.component';
 
 const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
