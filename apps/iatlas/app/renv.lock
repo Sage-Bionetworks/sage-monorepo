@@ -3,6 +3,14 @@
     "Version": "4.2.0",
     "Repositories": [
       {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
         "Name": "BioCsoft",
         "URL": "https://bioconductor.org/packages/3.15/bioc"
       },
@@ -104,6 +112,17 @@
         "futile.logger",
         "snow"
       ]
+    },
+    "BiocVersion": {
+      "Package": "BiocVersion",
+      "Version": "3.15.2",
+      "Source": "Bioconductor",
+      "git_url": "https://git.bioconductor.org/packages/BiocVersion",
+      "git_branch": "master",
+      "git_last_commit": "818ab03",
+      "git_last_commit_date": "2022-03-29",
+      "Hash": "48e545a2fa24a967de72b1114bfe96ac",
+      "Requirements": []
     },
     "Biostrings": {
       "Package": "Biostrings",
@@ -777,15 +796,15 @@
     },
     "cyjShiny": {
       "Package": "cyjShiny",
-      "Version": "1.0.34",
+      "Version": "1.0.35",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "cytoscape",
       "RemoteRepo": "cyjShiny",
       "RemoteRef": "master",
-      "RemoteSha": "afcf807cfff6cd14bf68e14c62a0a1366c6960dd",
-      "Hash": "89095ede43e4345994d5a8521e4df7ba",
+      "RemoteSha": "2e3a9447971f9d2b255ac8fc87514353ed70a024",
+      "Hash": "f5b7fec26c44e52894779e13bb13d783",
       "Requirements": [
         "base64enc",
         "graph",
@@ -1420,15 +1439,15 @@
     },
     "igvShiny": {
       "Package": "igvShiny",
-      "Version": "1.4.5",
+      "Version": "1.4.6",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "paul-shannon",
       "RemoteRepo": "igvShiny",
       "RemoteRef": "master",
-      "RemoteSha": "be9b05fd3f92b4b9b4e9d1921e207f7dd6cc9884",
-      "Hash": "e6f84092bb9b3abf8de934d8acbaecc4",
+      "RemoteSha": "598f928ff28dfe29ac24594606ba2f6c1039444e",
+      "Hash": "ad2799d216a6973d6d30c50bff95a984",
       "Requirements": [
         "GenomeInfoDbData",
         "GenomicRanges",
