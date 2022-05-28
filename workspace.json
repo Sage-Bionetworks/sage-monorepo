@@ -34,6 +34,7 @@
     "web-ui": "libs/web/ui",
     "web-user-profile": "libs/web/user-profile",
     "web-util": "libs/web/util",
-    "movie-api": "apps/movie-api"
+    "movie-api": "apps/movie-api",
+    "service-registry": "apps/service-registry"
   }
 }
