@@ -45,13 +45,17 @@
         "root": "apps/service-registry"
       }
     },
-    "buildImage": {
-      "executor": "@nxrocks/nx-spring-boot:buildImage",
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "root": "apps/service-registry"
+        "context": "apps/service-registry",
+        "push": false,
+        "tags": [
+          "sagebionetworks/service-registry:latest"
+        ]
       }
     },
-    "buildInfo": {
+    "build-info": {
       "executor": "@nxrocks/nx-spring-boot:buildInfo",
       "options": {
         "root": "apps/service-registry"
