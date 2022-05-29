@@ -9,3 +9,16 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8081/eureka
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+info:
+  application:
+    name: ${spring.application.name}
