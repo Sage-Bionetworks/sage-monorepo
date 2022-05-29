@@ -2,6 +2,18 @@ spring:
   application:
     name: challenge-api-gateway
 
+  # # GATEWAY CONFIGURATIONS
+  # cloud:
+  #   gateway:
+  #     routes:
+  #       # USER SERVICE
+  #       - id: challenge-user-service
+  #         uri: lb://challenge-user-service
+  #         predicates:
+  #           - Path=/user/**
+  #         filters:
+  #           - StripPrefix=1
+
 server:
   port: 8082
 
