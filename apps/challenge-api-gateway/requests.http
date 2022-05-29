@@ -4,4 +4,4 @@ GET http://localhost:8083/actuator/info
 
 ### Check user service info via the API gateway
 
-GET http://localhost:8082/user/actuator/info
+GET http://localhost:8082/users/actuator/info

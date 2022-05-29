@@ -8,7 +8,7 @@ spring:
         - id: challenge-user-service
           uri: lb://challenge-user-service
           predicates:
-            - Path=/user/**
+            - Path=/users/**
           filters:
             - StripPrefix=1
 
