@@ -1230,8 +1230,8 @@
     "firstBrokerLoginFlowAlias" : "first broker login",
     "config" : {
       "syncMode" : "IMPORT",
-      "clientSecret" : "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",
-      "clientId" : "581982163579-9bscip449c1rpb5sv7s8sngpr7e1ib66.apps.googleusercontent.com",
+      "clientSecret" : "KEYCLOAK_TEST_CLIENT_SECRET",
+      "clientId" : "KEYCLOAK_TEST_CLIENT_ID",
       "useJwksUrl" : "true"
     }
   } ],
