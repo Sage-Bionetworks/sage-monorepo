@@ -34,6 +34,9 @@
     "web-ui": "libs/web/ui",
     "web-user-profile": "libs/web/user-profile",
     "web-util": "libs/web/util",
-    "movie-api": "apps/movie-api"
+    "movie-api": "apps/movie-api",
+    "challenge-service-registry": "apps/challenge-service-registry",
+    "challenge-api-gateway": "apps/challenge-api-gateway",
+    "challenge-user-service": "apps/challenge-user-service"
   }
 }
