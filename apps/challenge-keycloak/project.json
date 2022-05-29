@@ -47,7 +47,7 @@
         "context": "apps/challenge-keycloak",
         "push": false,
         "tags": [
-          "sagebionetworks/keycloak:latest"
+          "sagebionetworks/challenge-keycloak:latest"
         ]
       }
     }
