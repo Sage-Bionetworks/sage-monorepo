@@ -40,6 +40,27 @@
     "notBefore" : 0,
     "groups" : [ ]
   }, {
+    "id" : "0c23c91f-e9bb-4610-8758-e3bd405320c1",
+    "createdTimestamp" : 1653522635425,
+    "username" : "thomas.schaffter@sagebase.org",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "Thomas",
+    "lastName" : "Schaffter",
+    "email" : "thomas.schaffter@sagebase.org",
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "federatedIdentities" : [ {
+      "identityProvider" : "google",
+      "userId" : "112660821224003480767",
+      "userName" : "thomas.schaffter@sagebase.org"
+    } ],
+    "realmRoles" : [ "test-visitor", "default-roles-test", "test-admin" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
     "id" : "3739ed0d-6da2-4d65-ba5a-223eb2dfe2b6",
     "createdTimestamp" : 1653006571091,
     "username" : "tschaffter",
