@@ -58,9 +58,7 @@
       "options": {
         "context": "apps/movie-api",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-registry-movie-api:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-registry-movie-api:latest"]
       }
     },
     "serve-image": {

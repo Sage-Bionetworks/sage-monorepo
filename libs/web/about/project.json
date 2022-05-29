@@ -24,9 +24,7 @@
     "lint-html": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": [
-          "hint src/**/*.html"
-        ],
+        "commands": ["hint src/**/*.html"],
         "cwd": "libs/web/about",
         "parallel": false
       }
