@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: challenge-api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: challenge-user-service
+          uri: lb://challenge-user-service
+          predicates:
+            - Path=/users/**
+          filters:
+            - StripPrefix=1
+
+server:
+  port: 8082
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8081/eureka

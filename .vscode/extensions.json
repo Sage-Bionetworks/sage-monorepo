@@ -10,6 +10,8 @@
     "webhint.vscode-webhint",
     "GitHub.vscode-pull-request-github",
     "orta.vscode-jest",
-    "humao.rest-client"
+    "humao.rest-client",
+    "vscjava.vscode-java-pack",
+    "Pivotal.vscode-boot-dev-pack"
   ]
 }
