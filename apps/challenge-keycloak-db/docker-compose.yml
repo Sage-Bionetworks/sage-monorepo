@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   keycloak-db:
-    image: sagebionetworks/keycloak-db:latest
+    image: sagebionetworks/challenge-keycloak-db:latest
     container_name: keycloak-db
     env_file:
       - .env

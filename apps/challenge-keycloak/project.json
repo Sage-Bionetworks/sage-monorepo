@@ -1,20 +1,20 @@
 {
-  "root": "apps/keycloak",
-  "sourceRoot": "apps/keycloak/src",
+  "root": "apps/challenge-keycloak",
+  "sourceRoot": "apps/challenge-keycloak/src",
   "projectType": "application",
   "targets": {
     "prepare": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "shx cp .env.example .env",
-        "cwd": "apps/keycloak"
+        "cwd": "apps/challenge-keycloak"
       }
     },
     "serve": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "docker compose up",
-        "cwd": "apps/keycloak"
+        "cwd": "apps/challenge-keycloak"
       }
     },
     "import-dev-data": {
@@ -25,7 +25,7 @@
           "docker compose -f docker-compose.yml -f docker-compose.import.yml up",
           "docker compose down"
         ],
-        "cwd": "apps/keycloak",
+        "cwd": "apps/challenge-keycloak",
         "parallel": false
       }
     },
@@ -37,14 +37,14 @@
           "docker compose -f docker-compose.yml -f docker-compose.export.yml up",
           "docker compose down"
         ],
-        "cwd": "apps/keycloak",
+        "cwd": "apps/challenge-keycloak",
         "parallel": false
       }
     },
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "context": "apps/keycloak",
+        "context": "apps/challenge-keycloak",
         "push": false,
         "tags": [
           "sagebionetworks/keycloak:latest"

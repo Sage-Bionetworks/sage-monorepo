@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   keycloak:
-    image: sagebionetworks/keycloak:latest
+    image: sagebionetworks/challenge-keycloak:latest
     container_name: keycloak
     restart: always
     env_file:
