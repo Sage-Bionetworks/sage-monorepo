@@ -2,9 +2,9 @@ spring:
   application:
     name: challenge-user-service
   datasource:
-    url: jdbc:mysql://localhost:3306/banking_core_user_service
+    url: jdbc:mysql://localhost:3306/challenge
     username: root
-    password: password
+    password: changeme
   jpa:
     hibernate:
       ddl-auto: update

@@ -38,6 +38,7 @@
     "movie-api": "apps/movie-api",
     "challenge-service-registry": "apps/challenge-service-registry",
     "challenge-api-gateway": "apps/challenge-api-gateway",
-    "challenge-user-service": "apps/challenge-user-service"
+    "challenge-user-service": "apps/challenge-user-service",
+    "challenge-mariadb": "apps/challenge-mariadb"
   }
 }
