@@ -1,6 +1,13 @@
 spring:
   application:
     name: challenge-user-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/banking_core_user_service
+    username: root
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 server:
   port: 8083
@@ -22,3 +29,11 @@ management:
 info:
   application:
     name: ${spring.application.name}
+
+app:
+  config:
+    keycloak:
+      server-url: http://localhost:8080
+      realm: test
+      clientId: challenge-api-client
+      client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
