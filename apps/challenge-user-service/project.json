@@ -44,7 +44,7 @@
       "executor": "@nxrocks/nx-spring-boot:serve",
       "options": {
         "root": "apps/challenge-user-service",
-        "args": ["-e"]
+        "args": ["-X"]
       }
     },
     "build-image": {
