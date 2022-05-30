@@ -30,5 +30,20 @@
     "onSave": "test-file",
     "onStartup": []
   },
-  "java.configuration.updateBuildConfiguration": "disabled"
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MariaDB",
+      "name": "challenge-mariadb",
+      "database": "challenge",
+      "username": "root",
+      "password": "changeme"
+    }
+  ]
 }
