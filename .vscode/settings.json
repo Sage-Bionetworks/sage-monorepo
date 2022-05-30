@@ -29,5 +29,6 @@
     "watch": false,
     "onSave": "test-file",
     "onStartup": []
-  }
+  },
+  "java.configuration.updateBuildConfiguration": "disabled"
 }
