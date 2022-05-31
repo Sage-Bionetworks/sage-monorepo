@@ -10,7 +10,7 @@ germline_gwas_server <- function(id, cohort_obj){
       addResourcePath("tracks", "tracks")
 
       gwas_data <- reactive({
-        iatlas.api.client::query_germline_gwas_results(datasets = "TCGA")
+        iatlasGraphQLClient::query_germline_gwas_results(datasets = "TCGA")
       })
 
       immune_feat <- reactive({
@@ -61,11 +61,9 @@ germline_gwas_server <- function(id, cohort_obj){
       })
 
       output$igv_plot <- igvShiny::renderIgvShiny({
-        igvShiny::igvShiny(list(
-          genomeName="hg19",
-          initialLocus= "all"
-        ),
-        displayMode="SQUISHED")
+        genomeOptions <- igvShiny::parseAndValidateGenomeSpec(genomeName="hg19",  initialLocus="all")
+        igvShiny::igvShiny(genomeOptions,
+          displayMode="SQUISHED")
       })
 
       shiny::observeEvent(input$igvReady, {
@@ -156,7 +154,7 @@ germline_gwas_server <- function(id, cohort_obj){
       # })
       ##TCGA
       col_tcga <- reactive({
-        iatlas.api.client::query_colocalizations(coloc_datasets = "TCGA") %>%
+        iatlasGraphQLClient::query_colocalizations(coloc_datasets = "TCGA") %>%
           dplyr::filter(coloc_dataset_name == "TCGA") %>%
           dplyr::select("Plot" = plot_type, "SNP" = snp_rsid, Trait = feature_display, QTL = qtl_type, Gene = gene_hgnc, `Causal SNPs` = ecaviar_pp, Splice = splice_loc, CHR = snp_chr, plot_link)
       })
@@ -194,7 +192,7 @@ germline_gwas_server <- function(id, cohort_obj){
 
       ##GTEX
       col_gtex <- reactive({
-        iatlas.api.client::query_colocalizations(coloc_datasets = "GTEX") %>%
+        iatlasGraphQLClient::query_colocalizations(coloc_datasets = "GTEX") %>%
           dplyr::filter(coloc_dataset_name == "GTEX") %>%
           dplyr::select("SNP" = snp_rsid, Trait = feature_display, QTL = qtl_type, Gene = gene_hgnc, Tissue = tissue, Splice = splice_loc, CHR = snp_chr, plot_link)
       })

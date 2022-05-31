@@ -27,7 +27,7 @@ immunomodulator_distributions_server <- function(
       })
 
       feature_data <- shiny::reactive({
-        iatlas.api.client::query_immunomodulators() %>%
+        iatlasGraphQLClient::query_immunomodulators() %>%
           dplyr::select(
             "feature_name" = "entrez",
             "feature_display" = "hgnc",

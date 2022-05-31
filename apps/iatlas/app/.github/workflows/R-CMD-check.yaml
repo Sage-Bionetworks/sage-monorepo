@@ -1,10 +1,9 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/master/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
-  push:
-    branches: [main, master, staging, develop]
   pull_request:
-    branches: [main, master, staging, develop]
+    branches:
+      - staging
 
 name: R-CMD-check
 
@@ -18,9 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: '4.1.0'}
-          #- {os: windows-latest, r: '4.1.0'}
-          #- {os: ubuntu-21.10, r: '4.1.0', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          - {os: macOS-latest,   r: '4.1.2'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true

@@ -7,11 +7,11 @@ ici_immune_features_server <- function(
     function(input, output, session) {
 
       ici_datasets <- shiny::reactive({
-        x <- iatlas.api.client::query_datasets(types = "ici")
+        x <- iatlasGraphQLClient::query_datasets(types = "ici")
         setNames(as.character(x$name), x$display)
       })
 
-      categories_df <- shiny::reactive(iatlas.api.client::query_tags(datasets = ici_datasets()) %>%
+      categories_df <- shiny::reactive(iatlasGraphQLClient::query_tags(datasets = ici_datasets()) %>%
                                          dplyr::mutate(class = dplyr::case_when(
                                            tag_name %in% c( "Response", "Responder", "Progression", "Clinical_Benefit") ~ "Response to ICI",
                                            TRUE ~ "Treatment Data")) %>%
