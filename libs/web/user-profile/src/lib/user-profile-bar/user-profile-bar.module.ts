@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { WebUiModule } from '@sage-bionetworks/web/ui';
+import { WebUiModule } from '@sagebionetworks/web/ui';
 import { UserProfileBarComponent } from './user-profile-bar.component';
 import { MatButtonModule } from '@angular/material/button';
 

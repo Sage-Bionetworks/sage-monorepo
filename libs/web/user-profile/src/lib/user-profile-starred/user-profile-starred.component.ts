@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Challenge, User, UserService } from '@sage-bionetworks/api-angular';
+import { Challenge, User, UserService } from '@sagebionetworks/api-angular';
 import { map, Subscription } from 'rxjs';
 
 @Component({

@@ -75,7 +75,7 @@ export class AppModule {}
 Import the UI library in an Angular component.
 
 ```typescript
-import '@sage-bionetworks/ui-footer';
+import '@sagebionetworks/ui-footer';
 ```
 
 The component `ui-welcome` provided by the library can now be used in the HTML

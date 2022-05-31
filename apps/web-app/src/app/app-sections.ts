@@ -1,4 +1,4 @@
-import { NavbarSection } from '@sage-bionetworks/web/ui';
+import { NavbarSection } from '@sagebionetworks/web/ui';
 
 export const APP_SECTIONS: { [key: string]: NavbarSection } = {
   about: {
