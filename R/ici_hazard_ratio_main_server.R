@@ -27,7 +27,7 @@ ici_hazard_ratio_main_server <- function(
         selected_vals$vars <- input$var2_cox
       })
 
-      categories <- shiny::reactive(iatlas.api.client::query_tags(datasets = cohort_obj()[["dataset_names"]]) %>%
+      categories <- shiny::reactive(iatlasGraphQLClient::query_tags(datasets = cohort_obj()[["dataset_names"]]) %>%
                                       dplyr::mutate(class = dplyr::case_when(
                                         tag_name %in% c( "Response", "Responder", "Progression", "Clinical_Benefit") ~ "Response to ICI",
                                         TRUE ~ "Treatment Data"))
@@ -81,10 +81,10 @@ ici_hazard_ratio_main_server <- function(
 
       #getting survival data of all ICI pre treatment samples
       OS_data <- shiny::reactive({
-        iatlas.api.client::query_tag_samples(tags = "pre_sample_treatment") %>%
-          dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
+        iatlasGraphQLClient::query_tag_samples(tags = "pre_sample_treatment") %>%
+          dplyr::bind_rows(iatlasGraphQLClient::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
           dplyr::distinct(sample_name) %>%
-          dplyr::inner_join(iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")),
+          dplyr::inner_join(iatlasGraphQLClient::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")),
                             by = c("sample_name" = "sample")) %>%
           dplyr::select(sample_name, feature_name, feature_value) %>%
           tidyr::pivot_wider(., names_from = feature_name, values_from = feature_value, values_fill = NA)
@@ -101,19 +101,19 @@ ici_hazard_ratio_main_server <- function(
           dplyr::filter(has_surv_data)
       })
 
-      groups <- shiny::reactive(iatlas.api.client::query_tags_with_parent_tags(parent_tags = input$var2_cox))
+      groups <- shiny::reactive(iatlasGraphQLClient::query_tags_with_parent_tags(parent_tags = input$var2_cox))
 
       feature_df_mult <- shiny::eventReactive(input$go_button, {
         shiny::req(input$var2_cox, samples())
         shiny::validate(shiny::need(nrow(samples())>0, "Selected survival endpoint not available for selected dataset(s)"))
 
         #Let's assume that selected variables are a mix of features and tags, and do both queries
-        new_feat <- iatlas.api.client::query_feature_values(features = input$var2_cox) %>%
+        new_feat <- iatlasGraphQLClient::query_feature_values(features = input$var2_cox) %>%
           dplyr::select(sample, feature_name, feature_value) %>%
           tidyr::pivot_wider(names_from = feature_name, values_from = feature_value)
 
         if(sum(input$var2_cox %in% categories()$tag_name)>0){
-          new_tags <- iatlas.api.client::query_tag_samples(parent_tags = input$var2_cox) %>%
+          new_tags <- iatlasGraphQLClient::query_tag_samples(parent_tags = input$var2_cox) %>%
              dplyr::inner_join(groups(), by = "tag_name") %>%
             dplyr::select(sample_name, tag_name, parent_tag_name) %>%
             tidyr::pivot_wider(names_from = parent_tag_name, values_from = tag_name)

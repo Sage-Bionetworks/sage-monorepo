@@ -15,11 +15,12 @@ Suggests:
     crayon,
     devtools,
     memoise (>= 2.0),
+    renv,
     rsconnect,
     testthat (>= 3.0.0),
     usethis
 Config/testthat/edition: 3
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 biocViews:
 Imports:
     arrow,
@@ -27,18 +28,14 @@ Imports:
     caret,
     concordanceIndex,
     cyjShiny,
-    data.table,
     dplyr,
     DT,
-    e1071,
-    forcats,
     ggplot2,
     ggmosaic,
-    glmnet,
     grDevices,
     grid,
     grImport2,
-    iatlas.api.client,
+    iatlasGraphQLClient,
     iatlas.modules,
     iatlas.modules2,
     igvShiny,
@@ -48,10 +45,8 @@ Imports:
     plotly,
     pROC,
     purrr,
-    randomForest,
     RColorBrewer,
     readr,
-    renv,
     rlang,
     sortable,
     shiny,
@@ -60,21 +55,17 @@ Imports:
     shinyjs,
     stringr,
     survival,
-    survminer,
     tibble,
     tidyr,
     tidyselect,
     utils,
     viridis,
-    viridisLite,
     wrapr
 Remotes:
-    CRI-iAtlas/iatlas.api.client@main,
+    CRI-iAtlas/iatlasGraphQLClient@main,
     CRI-iAtlas/iatlas.modules@master,
     CRI-iAtlas/iatlas.modules2@master,
     CRI-iAtlas/ImmuneSubtypeClassifier@master,
-    CRI-iAtlas/cyjShiny@master, 
     th86/concordanceIndex@master,
-    ropensci/plotly@master,
-    rstudio/rsconnect@master,
-    paul-shannon/igvShiny@master 
+    cytoscape/cyjShiny@master,
+    paul-shannon/igvShiny@master

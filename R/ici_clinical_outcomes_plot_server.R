@@ -21,13 +21,13 @@ ici_clinical_outcomes_plot_server <- function(
       })
 
       feature_df <- shiny::reactive({
-        pre_treat_samples <- iatlas.api.client::query_tag_samples(cohorts = cohort_obj()[["dataset_names"]], tags = "pre_sample_treatment") %>%
-          dplyr::bind_rows(iatlas.api.client::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
+        pre_treat_samples <- iatlasGraphQLClient::query_tag_samples(cohorts = cohort_obj()[["dataset_names"]], tags = "pre_sample_treatment") %>%
+          dplyr::bind_rows(iatlasGraphQLClient::query_cohort_samples(cohorts = "Prins_GBM_2019")) %>%
           dplyr::select(sample_name)
 
         cohort_obj()$sample_tbl %>%
           dplyr::inner_join(pre_treat_samples, by = "sample_name") %>%
-          dplyr::inner_join(iatlas.api.client::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")), by = c("sample_name" = "sample"))
+          dplyr::inner_join(iatlasGraphQLClient::query_feature_values(features = c("OS", "OS_time", "PFI_1", "PFI_time_1")), by = c("sample_name" = "sample"))
       })
 
       all_survival <- shiny::reactive({
@@ -59,14 +59,14 @@ ici_clinical_outcomes_plot_server <- function(
         shiny::req(all_fit(), all_survival())
 
 
-        create_kmplot(
-          fit = all_fit(),
-          df = all_survival(),
-          confint = input$confint,
-          risktable = input$risktable,
-          title = names(all_survival()),
-          group_colors = get_group_colors(cohort_obj()),
-          facet = TRUE)
+        # create_kmplot(
+        #   fit = all_fit(),
+        #   df = all_survival(),
+        #   confint = input$confint,
+        #   risktable = input$risktable,
+        #   title = names(all_survival()),
+        #   group_colors = get_group_colors(cohort_obj()),
+        #   facet = TRUE)
       })
 
       # survminer::ggsurvplot_list object does not work if using a for loop, or

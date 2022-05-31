@@ -6,7 +6,7 @@ germline_rarevariants_server <- function(id, cohort_obj){
       ns <- session$ns
 
       rv_data <- reactive({
-        iatlas.api.client::query_rare_variant_pathway_associations(datasets = "TCGA")
+        iatlasGraphQLClient::query_rare_variant_pathway_associations(datasets = "TCGA")
       })
 
 
