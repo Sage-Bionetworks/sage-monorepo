@@ -61,11 +61,9 @@ germline_gwas_server <- function(id, cohort_obj){
       })
 
       output$igv_plot <- igvShiny::renderIgvShiny({
-        igvShiny::igvShiny(list(
-          genomeName="hg19",
-          initialLocus= "all"
-        ),
-        displayMode="SQUISHED")
+        genomeOptions <- igvShiny::parseAndValidateGenomeSpec(genomeName="hg19",  initialLocus="all")
+        igvShiny::igvShiny(genomeOptions,
+          displayMode="SQUISHED")
       })
 
       shiny::observeEvent(input$igvReady, {

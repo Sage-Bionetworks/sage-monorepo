@@ -11,10 +11,8 @@ til_map_distributions_server <- function(
 
       sample_data_function <- shiny::reactive({
         function(.feature){
-          print(.feature)
           result <-
             cohort_obj()$get_feature_values(features = .feature) %>%
-            print() %>%
             dplyr::select(
               "sample_name",
               "group_name" = "group_short_name",
