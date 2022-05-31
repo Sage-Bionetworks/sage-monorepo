@@ -11,6 +11,14 @@
         "URL": "https://packagemanager.rstudio.com/all/latest"
       },
       {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
         "Name": "BioCsoft",
         "URL": "https://bioconductor.org/packages/3.15/bioc"
       },
@@ -1439,15 +1447,15 @@
     },
     "igvShiny": {
       "Package": "igvShiny",
-      "Version": "1.4.6",
+      "Version": "1.5.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "paul-shannon",
       "RemoteRepo": "igvShiny",
       "RemoteRef": "master",
-      "RemoteSha": "598f928ff28dfe29ac24594606ba2f6c1039444e",
-      "Hash": "ad2799d216a6973d6d30c50bff95a984",
+      "RemoteSha": "30d164f1a16b65137b7e480fd1e2b28626667aec",
+      "Hash": "dc0f9cfd28137d270dcf1ff1d610f3b8",
       "Requirements": [
         "GenomeInfoDbData",
         "GenomicRanges",
