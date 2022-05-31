@@ -22,7 +22,7 @@ sharedMappings.register(
   tsConfigPath,
   [
     /* mapped paths to share */
-    '@sage-bionetworks/shared/data-access-user',
+    '@sagebionetworks/shared/data-access-user',
   ],
   workspaceRootPath
 );

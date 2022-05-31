@@ -1,5 +1,5 @@
 {
-  "npmScope": "sage-bionetworks",
+  "npmScope": "sagebionetworks",
   "affected": {
     "defaultBase": "main"
   },

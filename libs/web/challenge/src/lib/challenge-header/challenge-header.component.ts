@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Challenge } from '@sage-bionetworks/api-angular';
+import { Challenge } from '@sagebionetworks/api-angular';
 
 @Component({
   selector: 'challenge-registry-challenge-header',

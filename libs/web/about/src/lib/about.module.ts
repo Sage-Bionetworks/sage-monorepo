@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './about.component';
 import { RouterModule, Routes } from '@angular/router';
-import { WebUiModule } from '@sage-bionetworks/web/ui';
+import { WebUiModule } from '@sagebionetworks/web/ui';
 
 const routes: Routes = [{ path: '', component: AboutComponent }];
 

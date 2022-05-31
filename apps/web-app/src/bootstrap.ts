@@ -6,7 +6,7 @@ import {
   AppConfig,
   APP_CONFIG,
   Environment,
-} from '@sage-bionetworks/web/config';
+} from '@sagebionetworks/web/config';
 
 fetch('/config/config.json')
   .then((response) => response.json() as Promise<AppConfig>)
