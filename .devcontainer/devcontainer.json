@@ -1,4 +1,4 @@
 {
   "name": "Challenge Dev Container",
-  "image": "sagebionetworks/challenge-devcontainer:latest"
+  "image": "ghcr.io/sage-bionetworks/challenge-devcontainer:latest"
 }
