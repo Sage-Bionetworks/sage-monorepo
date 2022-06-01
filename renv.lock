@@ -19,6 +19,14 @@
         "URL": "https://packagemanager.rstudio.com/all/latest"
       },
       {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
+        "Name": "REPO_NAME",
+        "URL": "https://packagemanager.rstudio.com/all/latest"
+      },
+      {
         "Name": "BioCsoft",
         "URL": "https://bioconductor.org/packages/3.15/bioc"
       },
@@ -1021,10 +1029,10 @@
     },
     "future": {
       "Package": "future",
-      "Version": "1.25.0",
+      "Version": "1.26.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "877024e372cf61e41f5d13eafd8d4bac",
+      "Hash": "cd20396d5395828de2e12d60467f6a53",
       "Requirements": [
         "digest",
         "globals",
