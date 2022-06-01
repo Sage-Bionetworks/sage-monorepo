@@ -29,7 +29,6 @@ public class KeycloakUserService {
 
 
     public List<UserRepresentation> readUserByEmail(String email) {
-      log.info("Calling readUserByEmail() with email:" + email);
         return keyCloakManager.getKeyCloakInstanceWithRealm().users().search(email);
     }
 
