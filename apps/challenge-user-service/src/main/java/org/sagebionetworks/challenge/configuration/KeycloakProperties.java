@@ -25,6 +25,8 @@ public class KeycloakProperties {
 
     public Keycloak getInstance() {
 
+      log.info("realm: " + realm);
+
         if (keycloakInstance == null) {
             keycloakInstance = KeycloakBuilder
                     .builder()
