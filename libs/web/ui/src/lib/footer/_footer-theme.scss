@@ -10,22 +10,133 @@
   $background: map.get($config, background);
   $foreground: map.get($config, foreground);
 
+  $dl-color-gray-500: #595959;
+  $dl-color-gray-700: #999999;
+  $dl-color-gray-900: #d9d9d9;
+  $dl-size-size-large: 144px;
+  $dl-size-size-small: 48px;
+  $dl-color-danger-300: #a22020;
+  $dl-color-danger-500: #bf2626;
+  $dl-color-danger-700: #e14747;
+  $dl-color-gray-black: #000000;
+  $dl-color-gray-white: #ffffff;
+  $dl-color-primary-50: #e8ebf5ff;
+  $dl-size-size-medium: 96px;
+  $dl-size-size-xlarge: 192px;
+  $dl-size-size-xsmall: 16px;
+  $dl-space-space-unit: 16px;
+  $dl-color-accent1-100: #ffd2daff;
+  $dl-color-accent1-200: #ff9eafff;
+  $dl-color-accent2-100: #ffd8cdff;
+  $dl-color-accent2-200: #fca187ff;
+  $dl-color-accent3-100: #c6fdf3ff;
+  $dl-color-accent3-200: #64d3bfff;
+  $dl-color-accent4-100: #e0e1feff;
+  $dl-color-accent4-200: #9da0ffff;
+  $dl-color-primary-100: #c4cce7ff;
+  $dl-color-primary-300: #768ac7ff;
+  $dl-color-primary-600: #314fa7ff;
+  $dl-color-primary-800: #1f3b8fff;
+  $dl-color-success-300: #199033;
+  $dl-color-success-500: #32a94c;
+  $dl-color-success-700: #4cc366;
+  $dl-size-size-xxlarge: 288px;
+  $dl-color-brand-hover1: rgba(249, 249, 249, 1);
+  $dl-color-brand-hover2: rgba(229, 229, 229, 1);
+  $dl-size-size-maxwidth: 1400px;
+  $dl-radius-radius-round: 50%;
+  $dl-color-brand-primary1: rgba(73, 80, 246, 1);
+  $dl-color-brand-primary2: rgba(196, 196, 196, 1);
+  $dl-space-space-halfunit: 8px;
+  $dl-space-space-sixunits: 96px;
+  $dl-space-space-twounits: 32px;
+  $dl-radius-radius-radius2: 2px;
+  $dl-radius-radius-radius4: 4px;
+  $dl-radius-radius-radius8: 8px;
+  $dl-space-space-fiveunits: 80px;
+  $dl-space-space-fourunits: 64px;
+  $dl-color-brand-secondary1: rgba(57, 189, 231, 1);
+  $dl-color-brand-secondary2: rgba(139, 120, 255, 1);
+  $dl-space-space-threeunits: 48px;
+  $dl-space-space-oneandhalfunits: 24px;
+
+  .footer-bottom {
+    background-color: rgba(29, 53, 128, 1);
+  }
+
   .footer-footer {
     background-color: mat.get-color-from-palette($primary, default);
   }
 
-  // .challenge-registry-footer {
-  //   background-color: mat.get-color-from-palette($primary, default);
+  @each $i
+    in ('text', 'text01', 'text02', 'text03', 'text04', 'text05', 'links1')
+  {
+    .footer-#{$i} {
+      color: $dl-color-gray-white;
+    }
+  }
 
-  //   .challenge-registry-links a {
-  //     color: green;
-
-  //     // mat-color($primary, default-contrast);
-  //   }
-  // }
+  .footer-footer-bottom {
+    background-color: $dl-color-primary-800;
+  }
 }
 
 @mixin typography($theme) {
+  .content {
+    font-size: 16px;
+    font-family: Inter;
+    font-weight: 400;
+  }
+
+  .heading {
+    font-size: 32px;
+    font-family: Inter;
+    font-weight: 700;
+  }
+
+  .text-shared {
+    font-style: normal;
+    font-family: Poppins;
+    font-stretch: normal;
+    font-weight: 600px;
+  }
+
+  .footer-text {
+    @extend .text-shared;
+    font-size: 36px;
+  }
+
+  .footer-text01 {
+    @extend .text-shared;
+    font-size: 15px;
+    font-weight: 500px;
+  }
+
+  .footer-text02 {
+    @extend .text-shared;
+    font-size: 20px;
+  }
+
+  .footer-text03 {
+    @extend .text-shared;
+    font-size: 20px;
+  }
+
+  .footer-text04 {
+    @extend .text-shared;
+    font-size: 20px;
+  }
+
+  .footer-text05 {
+    @extend .text-shared;
+    font-size: 16px;
+    font-weight: 500px;
+  }
+
+  .footer-links1 {
+    @extend .text-shared;
+    font-size: 20px;
+  }
 }
 
 @mixin theme($theme) {
