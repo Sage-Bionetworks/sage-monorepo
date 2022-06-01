@@ -47,6 +47,7 @@ public class UserService {
         userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
 
         Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
+        log.info("userCreationResponse: {}", userCreationResponse);
 
         if (userCreationResponse == 201) {
             log.info("User created under given username {}", user.getEmail());

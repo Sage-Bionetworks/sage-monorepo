@@ -14,8 +14,10 @@ GET {{apiGatewayHost}}/user/actuator/info
 
 ### Get access token from Keycloak
 
-@clientId = challenge-core-client
-@clientSecret = O0cNRMWg3LHsdHW8BNPlY96qKooDPhPX
+# @clientId = challenge-core-client
+# @clientSecret = O0cNRMWg3LHsdHW8BNPlY96qKooDPhPX
+@clientId = challenge-api-client
+@clientSecret = mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
 @username = luke
 @password = changeme
 
