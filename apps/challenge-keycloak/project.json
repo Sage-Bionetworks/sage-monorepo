@@ -21,24 +21,18 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "docker compose down",
-          "docker compose -f docker-compose.yml -f docker-compose.import.yml up",
-          "docker compose down"
+          "docker run --rm --env-file .env -v \"$(pwd)\"/data/h2:/opt/keycloak/data/h2 -v \"$(pwd)\"/data/import:/opt/keycloak/data/import:ro sagebionetworks/challenge-keycloak:latest import --dir /opt/keycloak/data/import --override true"
         ],
-        "cwd": "apps/challenge-keycloak",
-        "parallel": false
+        "cwd": "apps/challenge-keycloak"
       }
     },
     "export-dev-data": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "docker compose down",
-          "docker compose -f docker-compose.yml -f docker-compose.export.yml up",
-          "docker compose down"
+          "docker run --rm --env-file .env -v \"$(pwd)\"/data/h2:/opt/keycloak/data/h2 -v \"$(pwd)\"/data/import:/opt/keycloak/data/import sagebionetworks/challenge-keycloak:latest export --dir /opt/keycloak/data/import"
         ],
-        "cwd": "apps/challenge-keycloak",
-        "parallel": false
+        "cwd": "apps/challenge-keycloak"
       }
     },
     "build-image": {
