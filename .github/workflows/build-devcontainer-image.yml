@@ -38,12 +38,20 @@ jobs:
       - name: Set buildx as the default builder
         run: docker buildx install
 
+      - name: Prepare the image build
+        id: prep
+        run: |
+          set -e
+
+          IMAGE_NAME="${{ env.IMAGE_REPOSITORY }}:${GITHUB_SHA::8}"
+          echo ::set-output name=image_name::${IMAGE_NAME}
+
       - name: Build the image
         run: |
           set -e
 
           FOLDER_WITH_DOT_DEVCONTAINER="tools/devcontainers/challenge-devcontainer"
-          IMAGE_NAME="${{ env.docker_repository }}:${GITHUB_SHA::8}"
+          IMAGE_NAME=${{ steps.prep.outputs.image_name }}
 
           # [Optional] Enable buildkit, set output to plain text for logging
           export DOCKER_BUILDKIT=1
@@ -63,8 +71,5 @@ jobs:
         run: |
           set -e
 
-          # TODO: Define the image name once inside the job
-          IMAGE_NAME="${{ env.docker_repository }}:${GITHUB_SHA::8}"
-
           # Push the image to Docker Hub
-          docker push "${IMAGE_NAME}"
+          docker push "${{ steps.prep.outputs.image_name }}"
