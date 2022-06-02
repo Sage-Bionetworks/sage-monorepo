@@ -6,8 +6,8 @@ on:
     paths:
       - 'tools/devcontainers/challenge-devcontainer/**/*'
   pull_request:
-    # paths:
-    #   - 'tools/devcontainers/challenge-devcontainer/**/*'
+    paths:
+      - 'tools/devcontainers/challenge-devcontainer/**/*'
 
 jobs:
   devcontainer:
