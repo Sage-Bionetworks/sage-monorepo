@@ -13,8 +13,13 @@
   // Install tools and languages from a pre-defined set of scripts or even your
   // own.
   "features": {
-    "docker-in-docker": "latest"
+    // docker features must be specified in the developer facing
+    // devcontainer.json for VS Code to properly mount the docker sockets.
+    // "docker-in-docker": "latest"
   },
+
+  // The reference properties listed below are not used during the devcontainer
+  // image building process (`devcontainer build [OPTIONS]`).
 
   // Set *default* container specific settings.json values on container create.
   "settings": {
@@ -47,21 +52,22 @@
 
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "firsttris.vscode-jest-runner",
-    "mhutchie.git-graph",
-    "ms-python.python",
-    "nrwl.angular-console",
-    "stkb.rewrap",
-    "webhint.vscode-webhint",
-    "GitHub.vscode-pull-request-github",
-    "orta.vscode-jest",
-    "humao.rest-client",
-    "vscjava.vscode-java-pack",
-    "Pivotal.vscode-boot-dev-pack",
-    "mtxr.sqltools",
-    "mtxr.sqltools-driver-mysql"
+    "dbaeumer.vscode-eslint@2.2.2",
+    "esbenp.prettier-vscode@9.5.0",
+    "firsttris.vscode-jest-runner@0.4.48",
+    "mhutchie.git-graph@1.30.0",
+    "ms-python.python@2022.6.3",
+    "nrwl.angular-console@17.17.0",
+    "stkb.rewrap@1.16.3",
+    "webhint.vscode-webhint@1.6.8",
+    "GitHub.vscode-pull-request-github@0.42.0",
+    "orta.vscode-jest@4.6.0",
+    "humao.rest-client@0.24.6",
+    "vscjava.vscode-java-pack@0.23.0",
+    "Pivotal.vscode-boot-dev-pack@0.1.0",
+    "mtxr.sqltools@0.23.0",
+    "mtxr.sqltools-driver-mysql@0.2.0",
+    "GabrielBB.vscode-lombok@1.0.1"
   ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available
