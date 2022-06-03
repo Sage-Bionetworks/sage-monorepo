@@ -52,7 +52,8 @@ format_heritability_plot <- function(p, hdf, fdr = FALSE){
       xaxis = list(
         tickformat = "%"
       )
-    )
+    ) %>%
+    plotly::colorbar(title = "-log10(p-value)")
     if(fdr == TRUE){
       p <- p %>%
             plotly::add_annotations(x = hdf$variance+hdf$se+0.01,
