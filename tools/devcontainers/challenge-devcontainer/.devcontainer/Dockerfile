@@ -28,8 +28,14 @@ RUN useradd -m $user \
   && echo "$user:$user" | chpasswd \
   && usermod -a --groups docker,sudo $user \
   && usermod --shell /bin/bash $user \
-  && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+  && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+  && printf "%s\n" \
+    "" \
+    "# source dev-env.sh if found in the current directory" \
+    "if [ -f dev-env.sh ]; then" \
+    "  . ./dev-env.sh" \
+    "fi" | tee -a /home/$user/.bashrc
 
-USER $user
+# USER $user
 
 CMD ["bash"]
