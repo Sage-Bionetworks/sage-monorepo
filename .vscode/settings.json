@@ -25,10 +25,6 @@
     "./apps/db-cli",
     "."
   ],
-  "jest.autoRun": {
-    "watch": false,
-    "onSave": "test-file",
-    "onStartup": []
-  },
+  "jest.autoRun": "off",
   "java.configuration.updateBuildConfiguration": "disabled"
 }

@@ -12,6 +12,9 @@
     "orta.vscode-jest",
     "humao.rest-client",
     "vscjava.vscode-java-pack",
-    "Pivotal.vscode-boot-dev-pack"
+    "Pivotal.vscode-boot-dev-pack",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-mysql",
+    "GabrielBB.vscode-lombok"
   ]
 }
