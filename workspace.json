@@ -40,6 +40,7 @@
     "challenge-api-gateway": "apps/challenge-api-gateway",
     "challenge-user-service": "apps/challenge-user-service",
     "challenge-mariadb": "apps/challenge-mariadb",
-    "challenge-mongodb": "apps/challenge-mongodb"
+    "challenge-mongodb": "apps/challenge-mongodb",
+    "challenge-postgresql": "apps/challenge-postgresql"
   }
 }

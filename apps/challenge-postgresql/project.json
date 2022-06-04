@@ -1,0 +1,32 @@
+{
+  "root": "apps/challenge-postgresql",
+  "sourceRoot": "apps/challenge-postgresql/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "shx cp .env.example .env",
+        "cwd": "apps/challenge-postgresql"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/challenge-postgresql"
+      }
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/challenge-postgresql",
+        "push": false,
+        "tags": [
+          "sagebionetworks/challenge-postgresql:latest"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
