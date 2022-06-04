@@ -33,9 +33,49 @@
 
   // Use 'forwardPorts' to make a list of ports inside the container available
 	// locally.
-  "forwardPorts": [],
+  "forwardPorts": [
+    4200,
+    5432,
+    8080,
+    8081,
+    9000,
+    27017
+  ],
+
+  // Object that maps a port number, "host:port" value, range, or regular
+  // expression to a set of default options.
+  "portsAttributes": {
+    "4200": {
+      "label": "challenge-registry-app"
+    },
+    "5432": {
+      "label": "challenge-keycloak-db",
+      "onAutoForward": "silent"
+    },
+    "8080": {
+      "label": "challenge-registry-api",
+      "onAutoForward": "silent"
+    },
+    "8081": {
+      "label": "challenge-keycloak",
+      "onAutoForward": "silent"
+    },
+    "9000": {
+      "label": "challenge-registry-movie-api",
+      "onAutoForward": "silent"
+    },
+    "27017": {
+      "label": "challenge-registry-api-db",
+      "onAutoForward": "silent"
+    }
+  },
 
   // Comment out to connect as root instead. More info:
   // https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "vscode"
+	"remoteUser": "vscode",
+
+  // Indicates whether VS Code and other devcontainer.json supporting tools
+  // should stop the containers when the related tool window is closed / shut
+  // down.
+  "shutdownAction": "stopContainer"
 }

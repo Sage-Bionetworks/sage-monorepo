@@ -58,14 +58,14 @@ services:
     ports:
       - "9000:9000"
 
-  keycloak:
+  challenge-keycloak:
     image: sagebionetworks/challenge-keycloak:latest
     container_name: challenge-keycloak
     restart: always
     env_file:
-      - ./apps/keycloak/.env
+      - ./apps/challenge-keycloak/.env
     volumes:
-      - ./apps/keycloak/data/h2:/opt/keycloak/data/h2
+      - ./apps/challenge-keycloak/data/h2:/opt/keycloak/data/h2
     networks:
       - challenge-registry
     ports:
@@ -75,15 +75,15 @@ services:
       - challenge-keycloak-db
       - challenge-registry-movie-api  # cheating temporarily to make it easier to start the stack.
 
-  keycloak-db:
+  challenge-keycloak-db:
     image: sagebionetworks/challenge-keycloak-db:latest
     container_name: challenge-keycloak-db
     restart: always
     env_file:
-      - ./apps/keycloak-db/.env
+      - ./apps/challenge-keycloak-db/.env
     volumes:
       - challenge-keycloak-db:/var/lib/postgresql/data
-      - ./apps/keycloak-db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./apps/challenge-keycloak-db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - challenge-registry
     ports:

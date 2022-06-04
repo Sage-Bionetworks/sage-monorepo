@@ -7,7 +7,7 @@ that backs the REST API. This command must be run from the root of the
 workspace.
 
 ```console
-docker compose up challenge-registry-api keycloak -d
+docker compose up challenge-registry-api challenge-keycloak -d
 ```
 
 Another option is to start the REST API server in development mode if you aim to
@@ -17,7 +17,7 @@ See the [README of the REST API](../api/README.md) on how to prepare this
 project. This command must be run from the root of the workspace.
 
 ```console
-docker compose up challenge-registry-api-db keycloak -d
+docker compose up challenge-registry-api-db challenge-keycloak -d
 ```
 
 Then, start the REST API server in development mode.
