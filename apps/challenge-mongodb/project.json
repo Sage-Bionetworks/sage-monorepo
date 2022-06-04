@@ -6,7 +6,7 @@
     "prepare": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "shx cp .env.example .env",
+        "command": "shx cp -n .env.example .env",
         "cwd": "apps/challenge-mongodb"
       }
     },
@@ -19,6 +19,10 @@
       "dependsOn": [
         {
           "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
           "projects": "self"
         }
       ]
