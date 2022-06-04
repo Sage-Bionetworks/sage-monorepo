@@ -50,7 +50,7 @@
       "label": "challenge-registry-app"
     },
     "5432": {
-      "label": "challenge-keycloak-db",
+      "label": "challenge-postgresql",
       "onAutoForward": "silent"
     },
     "8080": {

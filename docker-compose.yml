@@ -72,18 +72,18 @@ services:
       - "8081:8080"
     command: start-dev
     depends_on:
-      - challenge-keycloak-db
+      - challenge-postgresql
       - challenge-registry-movie-api  # cheating temporarily to make it easier to start the stack.
 
-  challenge-keycloak-db:
-    image: sagebionetworks/challenge-keycloak-db:latest
-    container_name: challenge-keycloak-db
+  challenge-postgresql:
+    image: sagebionetworks/challenge-postgresql:latest
+    container_name: challenge-postgresql
     restart: always
     env_file:
-      - ./apps/challenge-keycloak-db/.env
+      - ./apps/challenge-postgresql/.env
     volumes:
-      - challenge-keycloak-db:/var/lib/postgresql/data
-      - ./apps/challenge-keycloak-db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - challenge-postgresql:/var/lib/postgresql/data
+      - ./apps/challenge-postgresql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - challenge-registry
     ports:
@@ -95,5 +95,5 @@ networks:
 volumes:
   challenge-registry-api-db:
     name: challenge-registry-api-db
-  challenge-keycloak-db:
-    name: challenge-keycloak-db
+  challenge-postgresql:
+    name: challenge-postgresql

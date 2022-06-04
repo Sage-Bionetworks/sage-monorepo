@@ -10,7 +10,6 @@
     "challenge-platform-app-e2e": "apps/challenge-platform-app-e2e",
     "db-cli": "apps/db-cli",
     "challenge-keycloak": "apps/challenge-keycloak",
-    "challenge-keycloak-db": "apps/challenge-keycloak-db",
     "shared-assets": "libs/shared/assets",
     "shared-styles": "libs/shared/styles",
     "shared-theming": "libs/shared/theming",
