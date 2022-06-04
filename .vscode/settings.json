@@ -25,6 +25,5 @@
     "./apps/db-cli",
     "."
   ],
-  "jest.autoRun": "off",
   "java.configuration.updateBuildConfiguration": "disabled"
 }
