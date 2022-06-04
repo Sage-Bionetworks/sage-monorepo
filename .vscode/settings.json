@@ -28,6 +28,16 @@
   "java.configuration.updateBuildConfiguration": "disabled",
   "sqltools.connections": [
     {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "challenge-postgresql",
+      "database": "challenge",
+      "username": "postgres",
+      "password": "changeme"
+    },
+    {
       "mysqlOptions": {
         "authProtocol": "default"
       },
