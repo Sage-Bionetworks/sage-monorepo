@@ -27,7 +27,8 @@
     "Pivotal.vscode-boot-dev-pack@0.1.0",
     "mtxr.sqltools@0.23.0",
     "mtxr.sqltools-driver-mysql@0.2.0",
-    "GabrielBB.vscode-lombok@1.0.1"
+    "GabrielBB.vscode-lombok@1.0.1",
+    "mongodb.mongodb-vscode@0.9.3"
   ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available

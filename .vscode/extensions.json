@@ -14,6 +14,7 @@
     "Pivotal.vscode-boot-dev-pack",
     "mtxr.sqltools",
     "mtxr.sqltools-driver-mysql",
-    "GabrielBB.vscode-lombok"
+    "GabrielBB.vscode-lombok",
+    "mongodb.mongodb-vscode"
   ]
 }
