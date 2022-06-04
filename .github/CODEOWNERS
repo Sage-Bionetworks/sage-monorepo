@@ -1,7 +1,6 @@
 * @tschaffter
 
 /apps/api/ @tschaffter @vpchung
-/apps/api-db/ @tschaffter @vpchung
 /apps/db-cli/ @tschaffter @rrchai
 /apps/web-app/ @tschaffter @rrchai
 /apps/web-app-e2e/ @tschaffter @rrchai

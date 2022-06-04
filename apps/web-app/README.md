@@ -17,7 +17,7 @@ See the [README of the REST API](../api/README.md) on how to prepare this
 project. This command must be run from the root of the workspace.
 
 ```console
-docker compose up challenge-registry-api-db challenge-keycloak -d
+docker compose up challenge-mongodb challenge-keycloak -d
 ```
 
 Then, start the REST API server in development mode.

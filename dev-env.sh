@@ -45,7 +45,7 @@ function challenge-registry-test {
 }
 
 function challenge-registry-serve {
-  nx run-many --target=serve --projects=api-db,api,web-app
+  nx run-many --target=serve --projects=challenge-mongodb,api,web-app
 }
 
 function challenge-registry-build-images {
