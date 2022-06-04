@@ -25,33 +25,25 @@
   "settings": {},
 
   // Add the IDs of extensions you want installed when the container is created.
-  "extensions": [
-    "dbaeumer.vscode-eslint@2.2.2",
-    "esbenp.prettier-vscode@9.5.0",
-    "firsttris.vscode-jest-runner@0.4.48",
-    "mhutchie.git-graph@1.30.0",
-    "ms-python.python@2022.6.3",
-    "nrwl.angular-console@17.17.0",
-    "stkb.rewrap@1.16.3",
-    "webhint.vscode-webhint@1.6.8",
-    "GitHub.vscode-pull-request-github@0.42.0",
-    "orta.vscode-jest@4.6.0",
-    "humao.rest-client@0.24.6",
-    "vscjava.vscode-java-pack@0.23.0",
-    "Pivotal.vscode-boot-dev-pack@0.1.0",
-    "mtxr.sqltools@0.23.0",
-    "mtxr.sqltools-driver-mysql@0.2.0",
-    "GabrielBB.vscode-lombok@1.0.1"
-  ],
+  "extensions": [],
 
   // Use 'forwardPorts' to make a list of ports inside the container available
 	// locally.
   "forwardPorts": [],
+
+    // Object that maps a port number, "host:port" value, range, or regular
+  // expression to a set of default options.
+  "portsAttributes": {},
 
   // Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "yarn install",
 
   // Comment out to connect as root instead. More info:
   // https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "vscode"
+	"remoteUser": "vscode",
+
+  // Indicates whether VS Code and other devcontainer.json supporting tools
+  // should stop the containers when the related tool window is closed / shut
+  // down.
+  "shutdownAction": "stopContainer"
 }
