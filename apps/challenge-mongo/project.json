@@ -1,0 +1,32 @@
+{
+  "root": "apps/challenge-mongo",
+  "sourceRoot": "apps/challenge-mongo/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "shx cp .env.example .env",
+        "cwd": "apps/challenge-mongo"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/challenge-mongo"
+      }
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/challenge-mongo",
+        "push": false,
+        "tags": [
+          "sagebionetworks/challenge-mongo:latest"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
