@@ -10,16 +10,6 @@
         "cwd": "apps/challenge-mariadb"
       }
     },
-    "build": {
-      "executor": "@nx-tools/nx-docker:build",
-      "options": {
-        "context": "apps/challenge-mariadb",
-        "push": false,
-        "tags": [
-          "sagebionetworks/challenge-mariadb:latest"
-        ]
-      }
-    },
     "serve": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
@@ -28,7 +18,7 @@
       },
       "dependsOn": [
         {
-          "target": "build",
+          "target": "build-image",
           "projects": "self"
         }
       ]

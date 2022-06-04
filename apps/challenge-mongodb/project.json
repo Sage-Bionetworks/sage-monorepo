@@ -15,7 +15,13 @@
       "options": {
         "command": "docker compose up",
         "cwd": "apps/challenge-mongodb"
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        }
+      ]
     },
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
