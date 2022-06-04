@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  challenge-mongodb:
+    image: sagebionetworks/challenge-mongodb:latest
+    container_name: challenge-mongodb
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - challenge-mongodb:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  challenge-mongodb:
+    name: challenge-mongodb
