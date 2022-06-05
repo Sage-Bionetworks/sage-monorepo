@@ -12,14 +12,14 @@ import { CountUpModule } from 'ngx-countup';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
-import { ApiModule, Configuration } from '@sagebionetworks/api-angular';
+import { ApiModule } from '@sagebionetworks/api-angular';
 import { AppComponent } from './app.component';
+// import {
+//   AppConfig,
+//   APP_CONFIG,
+// } from '@sagebionetworks/challenge-registry/config';
 import {
-  AppConfig,
-  APP_CONFIG,
-} from '@sagebionetworks/challenge-registry/config';
-import {
-  TokenService,
+  // TokenService,
   AuthModule,
 } from '@sagebionetworks/challenge-registry/auth';
 import { AppRoutingModule } from './app-routing.module';
@@ -43,18 +43,18 @@ import { initializeKeycloakFactory } from './initialize-keycloak.factory';
     UiModule,
   ],
   providers: [
-    {
-      provide: Configuration,
-      useFactory: (config: AppConfig, tokenService: TokenService) =>
-        new Configuration({
-          credentials: {
-            BearerAuth: () => tokenService.getToken(),
-          },
-          basePath: config.apiUrl,
-        }),
-      deps: [APP_CONFIG, TokenService],
-      multi: false,
-    },
+    // {
+    //   provide: Configuration,
+    //   useFactory: (config: AppConfig, tokenService: TokenService) =>
+    //     new Configuration({
+    //       credentials: {
+    //         BearerAuth: () => tokenService.getToken(),
+    //       },
+    //       basePath: config.apiUrl,
+    //     }),
+    //   deps: [APP_CONFIG, TokenService],
+    //   multi: false,
+    // },
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloakFactory,
