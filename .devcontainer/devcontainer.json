@@ -37,6 +37,7 @@
   "forwardPorts": [
     3306,
     4200,
+    4211,
     5432,
     8080,
     8081,
@@ -53,6 +54,9 @@
     },
     "4200": {
       "label": "challenge-registry-app"
+    },
+    "4211": {
+      "label": "nx graph"
     },
     "5432": {
       "label": "challenge-postgresql",

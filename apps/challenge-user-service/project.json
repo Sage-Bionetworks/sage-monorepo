@@ -34,18 +34,22 @@
         "root": "apps/challenge-user-service"
       }
     },
-    "run": {
-      "executor": "@nxrocks/nx-spring-boot:run",
-      "options": {
-        "root": "apps/challenge-user-service"
-      }
-    },
     "serve": {
       "executor": "@nxrocks/nx-spring-boot:serve",
       "options": {
         "root": "apps/challenge-user-service",
         "args": ["-e"]
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
     },
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
