@@ -79,7 +79,7 @@
       }
     }
   },
-  "tags": ["scope:backend"],
+  "tags": ["backend"],
   "implicitDependencies": [
     "challenge-mariadb",
     "challenge-keycloak",

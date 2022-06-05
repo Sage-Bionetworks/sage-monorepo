@@ -148,7 +148,11 @@
       }
     }
   },
-  "tags": ["scope:client"],
+  "tags": [
+    "frontend",
+    "scope:client",
+    "type:app"
+  ],
   "implicitDependencies": [
     "web-styles",
     "web-themes",
