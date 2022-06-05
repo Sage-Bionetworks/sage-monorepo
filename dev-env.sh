@@ -1,57 +1,61 @@
 # This file to be sourced in the terminal for development.
 
-export CHALLENGE_REGISTRY_DIR=$(pwd)
+export CHALLENGE_DIR=$(pwd)
 
 if [ -e /proc/cpuinfo ]; then # Linux
-  CHALLENGE_REGISTRY_BUILD_PROCS=$(grep -c ^processor /proc/cpuinfo)
+  CHALLENGE_BUILD_PROCS=$(grep -c ^processor /proc/cpuinfo)
 elif [ $(sysctl -n hw.ncpu) ]; then # Mac
-  CHALLENGE_REGISTRY_BUILD_PROCS=$(sysctl -n hw.ncpu)
+  CHALLENGE_BUILD_PROCS=$(sysctl -n hw.ncpu)
 else # Other/fail
-  CHALLENGE_REGISTRY_BUILD_PROCS=4
+  CHALLENGE_BUILD_PROCS=4
 fi
-export CHALLENGE_REGISTRY_BUILD_PROCS
+export CHALLENGE_BUILD_PROCS
 
 # cd to the workspace directory
-function challenge-registry-cd {
-  cd $CHALLENGE_REGISTRY_DIR
+function challenge-cd {
+  cd $CHALLENGE_DIR
 }
 
 # Add local npm binaries to PATH
 export PATH="$PATH:$(yarn bin)"
 
-function challenge-registry-prepare {
+function challenge-prepare {
   nx run-many --all --parallel --target=prepare
 }
 
 # Setup Python virtualenvs
-function challenge-registry-python {
+function challenge-python {
   nx run-many --all --parallel --target=python
 }
 
-function challenge-registry-lint {
+function challenge-lint {
   nx run-many --all --target=lint
 }
 
-function challenge-registry-lint-html {
+function challenge-lint-html {
   nx run-many --all --target=lint-html
 }
 
-function challenge-registry-build {
+function challenge-build {
   nx run-many --all --target=build
 }
 
-function challenge-registry-test {
+function challenge-test {
   nx run-many --all --target=test
 }
 
-function challenge-registry-serve {
+function challenge-serve {
   nx run-many --target=serve --projects=challenge-mongodb,api,web-app
 }
 
-function challenge-registry-build-images {
+function challenge-build-images {
   nx run-many --all --parallel --target=build-image
 }
 
-function challenge-registry-seed-db {
-  yarn db-cli seed "$CHALLENGE_REGISTRY_DIR/apps/db-cli/data/seeds/production/"
+function challenge-graph {
+  nx graph
+}
+
+function challenge-seed-db {
+  yarn db-cli seed "$CHALLENGE_DIR/apps/db-cli/data/seeds/production/"
 }

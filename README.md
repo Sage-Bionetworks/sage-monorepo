@@ -71,7 +71,7 @@ Start the Challenge Registry.
 
 Seed the API DB with sample Challenge data.
 
-    nx build db-cli && yarn seed-db
+    nx build db-cli && yarn challenge-seed-db
 
 In your browser, open http://localhost.
 
@@ -91,27 +91,27 @@ requirements:
 
 Install Python virtualenvs:
 
-    yarn python
+    challenge-python
 
 Lint the projects.
 
-    yarn lint
+    challenge-lint
 
 Build the projects.
 
-    yarn build
+    challenge-build
 
 Test the projects.
 
-    yarn test
+    challenge-test
 
 Start the Challenge Registry.
 
-    yarn start
+    challenge-start
 
 Seed the API DB with sample Challenge data.
 
-    yarn seed-db
+    challenge-seed-db
 
 In your browser, open http://localhost:4200.
 
