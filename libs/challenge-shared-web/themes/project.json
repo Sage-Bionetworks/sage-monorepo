@@ -24,10 +24,9 @@
       }
     }
   },
-  "tags": [],
-  "implicitDependencies": [
-    "challenge-shared-web-assets",
-    "challenge-shared-web-styles",
-    "challenge-shared-web-themes"
-  ]
+  "tags": [
+    "type:themes",
+    "scope:shared"
+  ],
+  "implicitDependencies": []
 }

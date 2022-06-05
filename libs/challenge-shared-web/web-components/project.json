@@ -19,5 +19,8 @@
       }
     }
   },
-  "tags": []
+  "tags": [
+    "type:web",
+    "scope:shared"
+  ]
 }
