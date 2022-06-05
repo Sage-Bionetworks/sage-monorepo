@@ -35,6 +35,7 @@
   // Use 'forwardPorts' to make a list of ports inside the container available
 	// locally.
   "forwardPorts": [
+    3306,
     4200,
     5432,
     8080,
@@ -46,6 +47,10 @@
   // Object that maps a port number, "host:port" value, range, or regular
   // expression to a set of default options.
   "portsAttributes": {
+    "3306": {
+      "label": "challenge-mariadb",
+      "onAutoForward": "silent"
+    },
     "4200": {
       "label": "challenge-registry-app"
     },
