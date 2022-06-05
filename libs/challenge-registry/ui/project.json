@@ -29,8 +29,8 @@
     "scope:challenge-registry"
   ],
   "implicitDependencies": [
-    "challenge-shared-web-assets",
-    "challenge-shared-web-styles",
-    "challenge-shared-web-themes"
+    "shared-assets",
+    "shared-styles",
+    "shared-themes"
   ]
 }

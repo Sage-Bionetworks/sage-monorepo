@@ -7,5 +7,5 @@
 
 /libs/api-angular/ @tschaffter
 /libs/api-spec/ @tschaffter @vpchung
-/libs/challenge-shared-web/ @tschaffter @rrchai
+/libs/shared/ @tschaffter @rrchai
 /libs/web/ @tschaffter @rrchai

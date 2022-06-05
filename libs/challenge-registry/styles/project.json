@@ -9,6 +9,6 @@
     "scope:challenge-registry"
   ],
   "implicitDependencies": [
-    "challenge-shared-web-styles"
+    "shared-styles"
   ]
 }
