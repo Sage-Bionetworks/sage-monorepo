@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'challenge-platform-app',
+  displayName: 'challenge-platform',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../coverage/apps/challenge-platform-app',
+  coverageDirectory: '../../coverage/apps/challenge-platform',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },
