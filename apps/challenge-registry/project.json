@@ -150,7 +150,7 @@
   },
   "tags": [
     "type:app",
-    "scope:challenge-registry"
+    "scope:client"
   ],
   "implicitDependencies": [
     "challenge-registry-styles",
