@@ -56,6 +56,10 @@
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "browserTarget": "challenge-platform:build",
+        "port": 4201
+      },
       "configurations": {
         "production": {
           "browserTarget": "challenge-platform:build:production"
