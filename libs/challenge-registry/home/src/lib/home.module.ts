@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { ChallengeRegistryUiModule } from '@sagebionetworks/challenge-registry/ui';
+import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { HomeComponent } from './home.component';
 import { ChallengeSearchModule } from './challenge-search/challenge-search.module';
 import { ChallengeHostListModule } from './challenge-host-list/challenge-host-list.module';
@@ -19,7 +19,7 @@ const routes: Routes = [{ path: '', component: HomeComponent }];
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    ChallengeRegistryUiModule,
+    UiModule,
     ChallengeHostListModule,
     ChallengeRegistrationModule,
     ChallengeSearchModule,

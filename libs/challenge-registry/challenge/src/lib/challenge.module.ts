@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
-import { ChallengeRegistryUiModule } from '@sagebionetworks/challenge-registry/ui';
+import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { ChallengeComponent } from './challenge.component';
 import { ChallengeRoutingModule } from './challenge-routing.modules';
 import { ChallengeHeaderModule } from './challenge-header/challenge-header.module';
@@ -13,7 +13,7 @@ import { ChallengeSponsorsModule } from './challenge-sponsors/challenge-sponsors
   imports: [
     CommonModule,
     MatTabsModule,
-    ChallengeRegistryUiModule,
+    UiModule,
     ChallengeRoutingModule,
     ChallengeHeaderModule,
     ChallengeStargazersModule,

@@ -6,4 +6,4 @@ import { PageTitleService } from './page-title/page-title.service';
   imports: [CommonModule],
   providers: [PageTitleService],
 })
-export class ChallengeRegistryUtilModule {}
+export class UtilModule {}

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { NotFoundComponent } from './not-found.component';
-import { ChallengeRegistryUiModule } from '@sagebionetworks/challenge-registry/ui';
+import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 
 const routes: Routes = [{ path: '', component: NotFoundComponent }];
 
@@ -13,7 +13,7 @@ const routes: Routes = [{ path: '', component: NotFoundComponent }];
     CommonModule,
     RouterModule.forChild(routes),
     MatCardModule,
-    ChallengeRegistryUiModule,
+    UiModule,
   ],
   exports: [NotFoundComponent],
 })

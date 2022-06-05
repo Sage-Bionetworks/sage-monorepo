@@ -1,4 +1,4 @@
-export * from './lib/challenge-registry-ui.module';
+export * from './lib/ui.module';
 
 export * from './lib/avatar/avatar';
 export * from './lib/avatar/mock-avatars';

@@ -9,10 +9,10 @@ import { UserProfileModule } from './user/user.module';
   imports: [CommonModule],
   exports: [GuardModule, TokenModule, UserProfileModule],
 })
-export class ChallengeRegistryAuthModule {
-  static forRoot(): ModuleWithProviders<ChallengeRegistryAuthModule> {
+export class AuthModule {
+  static forRoot(): ModuleWithProviders<AuthModule> {
     return {
-      ngModule: ChallengeRegistryAuthModule,
+      ngModule: AuthModule,
       providers: [AuthService],
     };
   }

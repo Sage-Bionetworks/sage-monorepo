@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { SignupComponent } from './signup.component';
-import { ChallengeRegistryUiModule } from '@sagebionetworks/challenge-registry/ui';
+import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [{ path: '', component: SignupComponent }];
@@ -22,7 +22,7 @@ const routes: Routes = [{ path: '', component: SignupComponent }];
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    ChallengeRegistryUiModule,
+    UiModule,
   ],
   exports: [SignupComponent],
 })

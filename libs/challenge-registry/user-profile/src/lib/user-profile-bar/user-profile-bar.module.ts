@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { ChallengeRegistryUiModule } from '@sagebionetworks/challenge-registry/ui';
+import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { UserProfileBarComponent } from './user-profile-bar.component';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
-    ChallengeRegistryUiModule,
+    UiModule,
   ],
   exports: [UserProfileBarComponent],
 })

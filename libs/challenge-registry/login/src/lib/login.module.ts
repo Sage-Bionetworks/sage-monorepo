@@ -7,8 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ChallengeRegistryAuthModule } from '@sagebionetworks/challenge-registry/auth';
-import { ChallengeRegistryUiModule } from '@sagebionetworks/challenge-registry/ui';
+import { AuthModule } from '@sagebionetworks/challenge-registry/auth';
+import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 
 const routes: Routes = [{ path: '', component: LoginComponent }];
 
@@ -23,8 +23,8 @@ const routes: Routes = [{ path: '', component: LoginComponent }];
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    ChallengeRegistryAuthModule,
-    ChallengeRegistryUiModule,
+    AuthModule,
+    UiModule,
   ],
   exports: [LoginComponent],
 })

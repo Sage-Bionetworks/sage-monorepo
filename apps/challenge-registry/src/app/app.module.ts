@@ -11,7 +11,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { CountUpModule } from 'ngx-countup';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
-import { ChallengeRegistryUiModule } from '@sagebionetworks/challenge-registry/ui';
+import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { ApiModule, Configuration } from '@sagebionetworks/api-angular';
 import { AppComponent } from './app.component';
 import {
@@ -20,10 +20,10 @@ import {
 } from '@sagebionetworks/challenge-registry/config';
 import {
   TokenService,
-  ChallengeRegistryAuthModule,
+  AuthModule,
 } from '@sagebionetworks/challenge-registry/auth';
 import { AppRoutingModule } from './app-routing.module';
-import { ChallengeRegistryUtilModule } from '@sagebionetworks/challenge-registry/util';
+import { UtilModule } from '@sagebionetworks/challenge-registry/util';
 import { initializeKeycloakFactory } from './initialize-keycloak.factory';
 
 @NgModule({
@@ -38,9 +38,9 @@ import { initializeKeycloakFactory } from './initialize-keycloak.factory';
     MatButtonModule,
     MatSliderModule,
     KeycloakAngularModule,
-    ChallengeRegistryUtilModule,
-    ChallengeRegistryAuthModule.forRoot(),
-    ChallengeRegistryUiModule,
+    UtilModule,
+    AuthModule.forRoot(),
+    UiModule,
   ],
   providers: [
     {

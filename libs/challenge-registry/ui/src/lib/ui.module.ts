@@ -19,4 +19,4 @@ import { UserButtonModule } from './user-button/user-button.module';
     UserButtonModule,
   ],
 })
-export class ChallengeRegistryUiModule {}
+export class UiModule {}
