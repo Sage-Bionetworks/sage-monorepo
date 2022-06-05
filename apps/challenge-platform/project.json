@@ -94,5 +94,8 @@
       }
     }
   },
-  "tags": []
+  "tags": [
+    "type:app",
+    "scope:challenge-platform"
+  ]
 }

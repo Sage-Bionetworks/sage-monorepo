@@ -5,8 +5,8 @@
   "generators": {},
   "targets": {},
   "tags": [
-    "scope:shared",
-    "type:styles"
+    "type:styles",
+    "scope:challenge-registry"
   ],
   "implicitDependencies": [
     "challenge-shared-web-styles"

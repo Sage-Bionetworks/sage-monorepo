@@ -30,5 +30,8 @@
       }
     }
   },
-  "tags": []
+  "tags": [
+    "type:feature",
+    "scope:challenge-registry"
+  ]
 }

@@ -149,9 +149,8 @@
     }
   },
   "tags": [
-    "frontend",
-    "scope:client",
-    "type:angular"
+    "type:app",
+    "scope:challenge-registry"
   ],
   "implicitDependencies": [
     "challenge-registry-styles",
