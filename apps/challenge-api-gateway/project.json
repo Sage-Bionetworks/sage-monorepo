@@ -54,12 +54,6 @@
           "sagebionetworks/challenge-api-gateway:latest"
         ]
       }
-    },
-    "build-info": {
-      "executor": "@nxrocks/nx-spring-boot:buildInfo",
-      "options": {
-        "root": "apps/challenge-api-gateway"
-      }
     }
   },
   "tags": ["scope:backend"],

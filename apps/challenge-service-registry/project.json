@@ -54,12 +54,6 @@
           "sagebionetworks/challenge-service-registry:latest"
         ]
       }
-    },
-    "build-info": {
-      "executor": "@nxrocks/nx-spring-boot:buildInfo",
-      "options": {
-        "root": "apps/challenge-service-registry"
-      }
     }
   },
   "tags": []

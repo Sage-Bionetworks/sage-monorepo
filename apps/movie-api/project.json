@@ -67,12 +67,6 @@
         "command": "docker compose up",
         "cwd": "apps/movie-api"
       }
-    },
-    "build-info": {
-      "executor": "@nxrocks/nx-spring-boot:buildInfo",
-      "options": {
-        "root": "apps/movie-api"
-      }
     }
   },
   "tags": []

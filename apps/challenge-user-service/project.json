@@ -56,12 +56,6 @@
           "sagebionetworks/challenge-user-service:latest"
         ]
       }
-    },
-    "build-info": {
-      "executor": "@nxrocks/nx-spring-boot:buildInfo",
-      "options": {
-        "root": "apps/challenge-user-service"
-      }
     }
   },
   "tags": ["scope:backend"],
