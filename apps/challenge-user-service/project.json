@@ -64,5 +64,10 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:backend"],
+  "implicitDependencies": [
+    "challenge-mariadb",
+    "challenge-keycloak",
+    "challenge-service-registry"
+  ]
 }

@@ -46,5 +46,6 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:backend"],
+  "implicitDependencies": ["challenge-postgresql"]
 }

@@ -62,5 +62,8 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:backend"],
+  "implicitDependencies": [
+    "challenge-service-registry"
+  ]
 }
