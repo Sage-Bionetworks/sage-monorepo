@@ -17,10 +17,10 @@
     "paths": {
       "@sagebionetworks/api-angular": ["libs/api-angular/src/index.ts"],
       "@sagebionetworks/shared/data-access-user": [
-        "libs/shared/data-access-user/src/index.ts"
+        "libs/challenge-shared-web/data-access-user/src/index.ts"
       ],
       "@sagebionetworks/shared/web-components": [
-        "libs/shared/web-components/src/index.ts"
+        "libs/challenge-shared-web/web-components/src/index.ts"
       ],
       "@sagebionetworks/challenge-registry/about": ["libs/challenge-registry/about/src/index.ts"],
       "@sagebionetworks/challenge-registry/assets": ["libs/challenge-registry/assets/src/index.ts"],

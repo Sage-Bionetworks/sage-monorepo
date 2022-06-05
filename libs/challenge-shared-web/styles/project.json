@@ -1,6 +1,6 @@
 {
-  "root": "libs/shared/styles",
-  "sourceRoot": "libs/shared/styles/src",
+  "root": "libs/challenge-shared-web/styles",
+  "sourceRoot": "libs/challenge-shared-web/styles/src",
   "projectType": "library",
   "generators": {},
   "targets": {},

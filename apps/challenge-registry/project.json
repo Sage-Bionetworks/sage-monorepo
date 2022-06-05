@@ -28,7 +28,7 @@
           "apps/challenge-registry/src/assets",
           "apps/challenge-registry/src/config",
           {
-            "input": "libs/shared/assets/src/assets",
+            "input": "libs/challenge-shared-web/assets/src/assets",
             "glob": "**/*",
             "output": "assets"
           },
@@ -38,7 +38,7 @@
             "output": "challenge-registry-assets"
           },
           {
-            "input": "libs/shared/assets/src",
+            "input": "libs/challenge-shared-web/assets/src",
             "glob": "favicon.ico",
             "output": ""
           }
@@ -156,7 +156,7 @@
   "implicitDependencies": [
     "challenge-registry-styles",
     "challenge-registry-themes",
-    "shared-assets",
+    "challenge-shared-web-assets",
     "challenge-api-gateway",
     "challenge-keycloak"
   ]

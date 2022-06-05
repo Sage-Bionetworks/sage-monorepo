@@ -123,8 +123,8 @@ CODEOWNERS file for that.
 ```
 /libs/happynrwlapp          julie
 /apps/happynrwlapp          julie
-/libs/shared/ui             hank
-/libs/shared/utils-testing  julie,hank
+/libs/challenge-shared-web/ui             hank
+/libs/challenge-shared-web/utils-testing  julie,hank
 ```
 
 If you want to know more about code ownership on Github, please check the

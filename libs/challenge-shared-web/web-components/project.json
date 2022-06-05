@@ -1,0 +1,23 @@
+{
+  "root": "libs/challenge-shared-web/web-components",
+  "sourceRoot": "libs/challenge-shared-web/web-components/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/challenge-shared-web/web-components/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/challenge-shared-web/web-components"],
+      "options": {
+        "jestConfig": "libs/challenge-shared-web/web-components/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

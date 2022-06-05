@@ -9,6 +9,6 @@
     "type:styles"
   ],
   "implicitDependencies": [
-    "shared-styles"
+    "challenge-shared-web-styles"
   ]
 }

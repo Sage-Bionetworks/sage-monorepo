@@ -43,7 +43,7 @@ libs/
    and typography). This file imports the themes defined in the app library
    `libs/web/themes`.
 3. The app styles library - This library defines the styles of the application.
-   This library extends the cross-app styles defined in `libs/shared/styles`.
+   This library extends the cross-app styles defined in `libs/challenge-shared-web/styles`.
 4. The app themes library - This library references the theme files of all the
    components defined in `libs/web`.
 5. The cross-app style library - This library defines styles shared accross
@@ -54,7 +54,7 @@ libs/
    components as well as the app style and theme files of the app.
 
 Assets like images are used in HTML and SCSS files. Assets that are shared
-across applications are stored in `libs/shared/assets`. Assets that are specific
+across applications are stored in `libs/challenge-shared-web/assets`. Assets that are specific
 to an app are located in `libs/<app>/assets` (e.g., where `libs/web/assets`). In
 order to use these assets in the app and libraries of the `web-app` application,
 the path to the asset folders are referenced in the build options of the app
@@ -63,7 +63,7 @@ asset files from these libraries. This example shows how to import an image from
 the cross-app and app-specific asset libraries.
 
 ```html
-<img src="/shared-assets/images/github.png">
+<img src="/challenge-shared-web-assets/images/github.png">
 <img src="/challenge-registry-assets/images/challenge-view-header-background.png">
 ```
 

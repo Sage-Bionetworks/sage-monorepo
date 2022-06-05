@@ -26,8 +26,8 @@
   },
   "tags": [],
   "implicitDependencies": [
-    "shared-assets",
-    "shared-styles",
-    "shared-theming"
+    "challenge-shared-web-assets",
+    "challenge-shared-web-styles",
+    "challenge-shared-web-theming"
   ]
 }
