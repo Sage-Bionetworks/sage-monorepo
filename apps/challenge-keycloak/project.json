@@ -81,6 +81,9 @@
       }
     }
   },
-  "tags": ["backend"],
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
   "implicitDependencies": ["challenge-postgresql"]
 }

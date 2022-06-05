@@ -38,5 +38,8 @@
       }
     }
   },
-  "tags": ["scope:db"]
+  "tags": [
+    "type:type",
+    "scope:backend"
+  ]
 }

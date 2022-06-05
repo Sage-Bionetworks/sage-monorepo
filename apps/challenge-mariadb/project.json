@@ -55,5 +55,8 @@
       }
     }
   },
-  "tags": ["scope:db"]
+  "tags": [
+    "type:db",
+    "scope:backend"
+  ]
 }
