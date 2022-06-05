@@ -142,10 +142,11 @@
       }
     }
   },
-  "tags": [],
+  "tags": ["scope:client"],
   "implicitDependencies": [
     "web-styles",
     "web-themes",
-    "shared-assets"
+    "shared-assets",
+    "challenge-keycloak"
   ]
 }
