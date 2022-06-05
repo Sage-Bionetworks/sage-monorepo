@@ -25,6 +25,30 @@
     "./apps/db-cli",
     "."
   ],
-  "jest.autoRun": "off",
-  "java.configuration.updateBuildConfiguration": "disabled"
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "challenge-postgresql",
+      "database": "challenge",
+      "username": "postgres",
+      "password": "changeme"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MariaDB",
+      "name": "challenge-mariadb",
+      "database": "challenge",
+      "username": "root",
+      "password": "changeme"
+    }
+  ]
 }

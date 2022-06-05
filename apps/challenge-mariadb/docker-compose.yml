@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  challenge-mariadb:
+    image: sagebionetworks/challenge-mariadb:latest
+    container_name: challenge-mariadb
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - challenge-mariadb:/data/db
+    ports:
+      - "3306:3306"
+
+volumes:
+  challenge-mariadb:
+    name: challenge-mariadb

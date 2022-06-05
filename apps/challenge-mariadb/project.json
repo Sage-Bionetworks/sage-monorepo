@@ -1,0 +1,62 @@
+{
+  "root": "apps/challenge-mariadb",
+  "sourceRoot": "apps/challenge-mariadb/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/challenge-mariadb"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/challenge-mariadb"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        }
+      ]
+    },
+    "serve-detach": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/challenge-mariadb"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        }
+      ]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/challenge-mariadb",
+        "push": false,
+        "tags": [
+          "sagebionetworks/challenge-mariadb:latest"
+        ]
+      }
+    }
+  },
+  "tags": [
+    "type:db",
+    "scope:backend"
+  ]
+}

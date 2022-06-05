@@ -1,0 +1,45 @@
+{
+  "root": "apps/challenge-mongodb",
+  "sourceRoot": "apps/challenge-mongodb/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/challenge-mongodb"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/challenge-mongodb"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        }
+      ]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/challenge-mongodb",
+        "push": false,
+        "tags": [
+          "sagebionetworks/challenge-mongodb:latest"
+        ]
+      }
+    }
+  },
+  "tags": [
+    "type:type",
+    "scope:backend"
+  ]
+}

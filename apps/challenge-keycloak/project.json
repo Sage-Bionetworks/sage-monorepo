@@ -6,7 +6,7 @@
     "prepare": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "shx cp .env.example .env",
+        "command": "shx cp -n .env.example .env",
         "cwd": "apps/challenge-keycloak"
       }
     },
@@ -15,7 +15,42 @@
       "options": {
         "command": "docker compose up",
         "cwd": "apps/challenge-keycloak"
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "serve-detach": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/challenge-keycloak"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
     },
     "import-dev-data": {
       "executor": "@nrwl/workspace:run-commands",
@@ -46,5 +81,9 @@
       }
     }
   },
-  "tags": []
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
+  "implicitDependencies": ["challenge-postgresql"]
 }

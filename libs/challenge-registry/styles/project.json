@@ -1,0 +1,14 @@
+{
+  "root": "libs/challenge-registry/styles",
+  "sourceRoot": "libs/challenge-registry/styles/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": [
+    "type:styles",
+    "scope:challenge-registry"
+  ],
+  "implicitDependencies": [
+    "shared-styles"
+  ]
+}

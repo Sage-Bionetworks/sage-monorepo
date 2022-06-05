@@ -1,1 +1,0 @@
-FROM sagebionetworks/mongo:5.0.6

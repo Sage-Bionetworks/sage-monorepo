@@ -1,18 +1,18 @@
 version: '3.8'
 
 services:
-  challenge-registry-api-db:
-    image: sagebionetworks/challenge-registry-api-db:latest
-    container_name: challenge-registry-api-db
+  challenge-mongodb:
+    image: sagebionetworks/challenge-mongodb:latest
+    container_name: challenge-mongodb
     restart: always
     env_file:
-      - ./apps/api-db/.env
+      - ./apps/challenge-mongodb/.env
     networks:
       - challenge-registry
     ports:
       - "27017:27017"
     volumes:
-      - challenge-registry-api-db:/data/db
+      - challenge-mongodb:/data/db
 
   challenge-registry-api:
     image: sagebionetworks/challenge-registry-api:latest
@@ -21,13 +21,13 @@ services:
     env_file:
       - ./apps/api/.env
     environment:
-      - DB_DOMAIN=challenge-registry-api-db
+      - DB_DOMAIN=challenge-mongodb
     networks:
       - challenge-registry
     ports:
       - "8080:8080"
     depends_on:
-      - challenge-registry-api-db
+      - challenge-mongodb
 
   challenge-registry-web-app:
     image: sagebionetworks/challenge-registry-web-app:latest
@@ -72,18 +72,18 @@ services:
       - "8081:8080"
     command: start-dev
     depends_on:
-      - challenge-keycloak-db
+      - challenge-postgresql
       - challenge-registry-movie-api  # cheating temporarily to make it easier to start the stack.
 
-  challenge-keycloak-db:
-    image: sagebionetworks/challenge-keycloak-db:latest
-    container_name: challenge-keycloak-db
+  challenge-postgresql:
+    image: sagebionetworks/challenge-postgresql:latest
+    container_name: challenge-postgresql
     restart: always
     env_file:
-      - ./apps/challenge-keycloak-db/.env
+      - ./apps/challenge-postgresql/.env
     volumes:
-      - challenge-keycloak-db:/var/lib/postgresql/data
-      - ./apps/challenge-keycloak-db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - challenge-postgresql:/var/lib/postgresql/data
+      - ./apps/challenge-postgresql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - challenge-registry
     ports:
@@ -93,7 +93,7 @@ networks:
   challenge-registry:
 
 volumes:
-  challenge-registry-api-db:
-    name: challenge-registry-api-db
-  challenge-keycloak-db:
-    name: challenge-keycloak-db
+  challenge-mongodb:
+    name: challenge-mongodb
+  challenge-postgresql:
+    name: challenge-postgresql

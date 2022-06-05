@@ -64,7 +64,7 @@ the cross-app and app-specific asset libraries.
 
 ```html
 <img src="/shared-assets/images/github.png">
-<img src="/web-assets/images/challenge-view-header-background.png">
+<img src="/challenge-registry-assets/images/challenge-view-header-background.png">
 ```
 
 ## Applying a theme to a component

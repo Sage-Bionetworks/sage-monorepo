@@ -1,0 +1,29 @@
+{
+  "projectType": "library",
+  "root": "libs/challenge-registry/login",
+  "sourceRoot": "libs/challenge-registry/login/src",
+  "prefix": "challenge-registry",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/challenge-registry/login"],
+      "options": {
+        "jestConfig": "libs/challenge-registry/login/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/challenge-registry/login/src/**/*.ts",
+          "libs/challenge-registry/login/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": [
+    "type:feature",
+    "scope:challenge-registry"
+  ]
+}

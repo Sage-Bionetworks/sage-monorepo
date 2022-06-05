@@ -33,17 +33,28 @@
         "root": "apps/challenge-api-gateway"
       }
     },
-    "run": {
-      "executor": "@nxrocks/nx-spring-boot:run",
-      "options": {
-        "root": "apps/challenge-api-gateway"
-      }
-    },
     "serve": {
       "executor": "@nxrocks/nx-spring-boot:serve",
       "options": {
         "root": "apps/challenge-api-gateway"
       }
+    },
+    "serve-detach": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/challenge-api-gateway"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
     },
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
@@ -54,13 +65,13 @@
           "sagebionetworks/challenge-api-gateway:latest"
         ]
       }
-    },
-    "build-info": {
-      "executor": "@nxrocks/nx-spring-boot:buildInfo",
-      "options": {
-        "root": "apps/challenge-api-gateway"
-      }
     }
   },
-  "tags": []
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
+  "implicitDependencies": [
+    "challenge-service-registry"
+  ]
 }

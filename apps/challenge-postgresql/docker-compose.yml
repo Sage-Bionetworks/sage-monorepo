@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  challenge-postgresql:
+    image: sagebionetworks/challenge-postgresql:latest
+    container_name: challenge-postgresql
+    env_file:
+      - .env
+    volumes:
+      - challenge-postgresql:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+
+volumes:
+  challenge-postgresql:
+    name: challenge-postgresql

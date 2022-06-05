@@ -57,5 +57,8 @@
       }
     }
   },
-  "tags": []
+  "tags": [
+    "type:app",
+    "scope:client"
+  ]
 }

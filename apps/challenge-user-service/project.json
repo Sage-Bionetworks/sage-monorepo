@@ -6,7 +6,8 @@
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "root": "apps/challenge-user-service"
+        "root": "apps/challenge-user-service",
+        "args": ["-e"]
       }
     },
     "test": {
@@ -33,17 +34,39 @@
         "root": "apps/challenge-user-service"
       }
     },
-    "run": {
-      "executor": "@nxrocks/nx-spring-boot:run",
-      "options": {
-        "root": "apps/challenge-user-service"
-      }
-    },
     "serve": {
       "executor": "@nxrocks/nx-spring-boot:serve",
       "options": {
-        "root": "apps/challenge-user-service"
-      }
+        "root": "apps/challenge-user-service",
+        "args": ["-e"]
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "serve-detach": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/challenge-user-registry"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
     },
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
@@ -54,13 +77,15 @@
           "sagebionetworks/challenge-user-service:latest"
         ]
       }
-    },
-    "build-info": {
-      "executor": "@nxrocks/nx-spring-boot:buildInfo",
-      "options": {
-        "root": "apps/challenge-user-service"
-      }
     }
   },
-  "tags": []
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
+  "implicitDependencies": [
+    "challenge-mariadb",
+    "challenge-keycloak",
+    "challenge-service-registry"
+  ]
 }
