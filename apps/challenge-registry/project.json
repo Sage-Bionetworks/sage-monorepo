@@ -151,7 +151,7 @@
   "tags": [
     "frontend",
     "scope:client",
-    "type:app"
+    "type:angular"
   ],
   "implicitDependencies": [
     "challenge-registry-styles",
