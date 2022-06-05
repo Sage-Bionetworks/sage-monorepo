@@ -1,7 +1,0 @@
-@use 'libs/web/about/src/lib-theme' as web-about;
-@use 'libs/web/ui/src/lib-theme' as web-ui;
-
-@mixin theme($theme) {
-  @include web-about.theme($theme);
-  @include web-ui.theme($theme);
-}

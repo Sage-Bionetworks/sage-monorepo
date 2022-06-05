@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/challenge-registry/auth",
+  "sourceRoot": "libs/challenge-registry/auth/src",
+  "prefix": "challenge-registry",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/challenge-registry/auth"],
+      "options": {
+        "jestConfig": "libs/challenge-registry/auth/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/challenge-registry/auth/src/**/*.ts",
+          "libs/challenge-registry/auth/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

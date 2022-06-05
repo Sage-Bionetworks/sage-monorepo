@@ -1,0 +1,11 @@
+{
+  "root": "libs/challenge-registry/assets",
+  "sourceRoot": "libs/challenge-registry/assets/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": [
+    "type:assets",
+    "scope:web"
+  ]
+}

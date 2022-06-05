@@ -1,0 +1,27 @@
+{
+  "projectType": "library",
+  "root": "libs/challenge-registry/org-profile",
+  "sourceRoot": "libs/challenge-registry/org-profile/src",
+  "prefix": "challenge-registry",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/challenge-registry/org-profile"],
+      "options": {
+        "jestConfig": "libs/challenge-registry/org-profile/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/challenge-registry/org-profile/src/**/*.ts",
+          "libs/challenge-registry/org-profile/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["challenge-registry-assets"]
+}

@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/challenge-registry/not-found",
+  "sourceRoot": "libs/challenge-registry/not-found/src",
+  "prefix": "challenge-registry",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/challenge-registry/not-found"],
+      "options": {
+        "jestConfig": "libs/challenge-registry/not-found/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/challenge-registry/not-found/src/**/*.ts",
+          "libs/challenge-registry/not-found/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

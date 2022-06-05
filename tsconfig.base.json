@@ -22,30 +22,30 @@
       "@sagebionetworks/shared/web-components": [
         "libs/shared/web-components/src/index.ts"
       ],
-      "@sagebionetworks/web/about": ["libs/web/about/src/index.ts"],
-      "@sagebionetworks/web/assets": ["libs/web/assets/src/index.ts"],
-      "@sagebionetworks/web/auth": ["libs/web/auth/src/index.ts"],
-      "@sagebionetworks/web/challenge": ["libs/web/challenge/src/index.ts"],
-      "@sagebionetworks/web/challenge-search": [
-        "libs/web/challenge-search/src/index.ts"
+      "@sagebionetworks/challenge-registry/about": ["libs/challenge-registry/about/src/index.ts"],
+      "@sagebionetworks/challenge-registry/assets": ["libs/challenge-registry/assets/src/index.ts"],
+      "@sagebionetworks/challenge-registry/auth": ["libs/challenge-registry/auth/src/index.ts"],
+      "@sagebionetworks/challenge-registry/challenge": ["libs/challenge-registry/challenge/src/index.ts"],
+      "@sagebionetworks/challenge-registry/challenge-search": [
+        "libs/challenge-registry/challenge-search/src/index.ts"
       ],
-      "@sagebionetworks/web/config": ["libs/web/config/src/index.ts"],
-      "@sagebionetworks/web/home": ["libs/web/home/src/index.ts"],
-      "@sagebionetworks/web/login": ["libs/web/login/src/index.ts"],
-      "@sagebionetworks/web/not-found": ["libs/web/not-found/src/index.ts"],
-      "@sagebionetworks/web/org-profile": [
-        "libs/web/org-profile/src/index.ts"
+      "@sagebionetworks/challenge-registry/config": ["libs/challenge-registry/config/src/index.ts"],
+      "@sagebionetworks/challenge-registry/home": ["libs/challenge-registry/home/src/index.ts"],
+      "@sagebionetworks/challenge-registry/login": ["libs/challenge-registry/login/src/index.ts"],
+      "@sagebionetworks/challenge-registry/not-found": ["libs/challenge-registry/not-found/src/index.ts"],
+      "@sagebionetworks/challenge-registry/org-profile": [
+        "libs/challenge-registry/org-profile/src/index.ts"
       ],
-      "@sagebionetworks/web/org-search": ["libs/web/org-search/src/index.ts"],
-      "@sagebionetworks/web/pages": ["libs/web/pages/src/index.ts"],
-      "@sagebionetworks/web/signup": ["libs/web/signup/src/index.ts"],
-      "@sagebionetworks/web/styles": ["libs/web/styles/src/index.ts"],
-      "@sagebionetworks/web/themes": ["libs/web/themes/src/index.ts"],
-      "@sagebionetworks/web/ui": ["libs/web/ui/src/index.ts"],
-      "@sagebionetworks/web/user-profile": [
-        "libs/web/user-profile/src/index.ts"
+      "@sagebionetworks/challenge-registry/org-search": ["libs/challenge-registry/org-search/src/index.ts"],
+      "@sagebionetworks/challenge-registry/pages": ["libs/challenge-registry/pages/src/index.ts"],
+      "@sagebionetworks/challenge-registry/signup": ["libs/challenge-registry/signup/src/index.ts"],
+      "@sagebionetworks/challenge-registry/styles": ["libs/challenge-registry/styles/src/index.ts"],
+      "@sagebionetworks/challenge-registry/themes": ["libs/challenge-registry/themes/src/index.ts"],
+      "@sagebionetworks/challenge-registry/ui": ["libs/challenge-registry/ui/src/index.ts"],
+      "@sagebionetworks/challenge-registry/user-profile": [
+        "libs/challenge-registry/user-profile/src/index.ts"
       ],
-      "@sagebionetworks/web/util": ["libs/web/util/src/index.ts"]
+      "@sagebionetworks/challenge-registry/util": ["libs/challenge-registry/util/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
