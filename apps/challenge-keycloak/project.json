@@ -31,7 +31,7 @@
         }
       ]
     },
-    "serve-detech": {
+    "serve-detach": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "docker compose up -d",

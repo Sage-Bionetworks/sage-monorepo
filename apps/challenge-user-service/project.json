@@ -51,6 +51,23 @@
         }
       ]
     },
+    "serve-detach": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/challenge-user-registry"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
+    },
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {

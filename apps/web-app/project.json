@@ -96,7 +96,13 @@
       "options": {
         "publicHost": "http://localhost:4200",
         "proxyConfig": "apps/web-app/src/proxy.conf.json"
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -147,6 +153,7 @@
     "web-styles",
     "web-themes",
     "shared-assets",
+    "challenge-api-gateway",
     "challenge-keycloak"
   ]
 }

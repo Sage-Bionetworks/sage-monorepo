@@ -12,7 +12,7 @@ export function initializeKeycloakFactory(
   return () =>
     keycloak.init({
       config: {
-        url: 'http://localhost:8081',
+        url: 'http://localhost:8080',
         realm: 'test',
         clientId: 'test-client',
         // url: config['KEYCLOAK_URL'] + '/auth',
