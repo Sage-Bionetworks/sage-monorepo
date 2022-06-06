@@ -11,6 +11,12 @@ else # Other/fail
 fi
 export CHALLENGE_BUILD_PROCS
 
+bold=$(tput bold)
+italic=$(tput sitm)
+reset=$(tput sgr0)
+
+orange=$(tput setaf 166)
+
 # cd to the workspace directory
 function challenge-cd {
   cd $CHALLENGE_DIR
@@ -18,6 +24,10 @@ function challenge-cd {
 
 # Add local npm binaries to PATH
 export PATH="$PATH:$(yarn bin)"
+
+function challenge-install {
+  yarn install --frozen-lockfile
+}
 
 function challenge-prepare {
   nx run-many --all --parallel --target=prepare
@@ -66,4 +76,19 @@ function challenge-seed-db {
 
 function challenge-welcome {
   echo "Welcome to the Challenge monorepo! 👋"
+
+  if [ ! -d "node_modules" ]; then
+    printf "%s\n" \
+      "" \
+      "Run ${bold}challenge-install${reset} to install workspace tools like ${bold}nx${reset} and ${bold}jest${reset}." \
+      "Run this command each time ${italic}package-lock.json${reset} may have changed."
+  fi
+
+  if [ ! -f "nx-cloud.env" ]; then
+    printf "%s\n" \
+      "" \
+      "This workspace is not configured to use Nx Cloud. To configure it," \
+      "  - Run ${bold}cp .nx-cloud.env.example .nx-cloud.env${reset}" \
+      "  - Add Nx Cloud credentials to ${italic}.nx-cloud.env${reset} (contact thomas.schaffter@sagebionetworks.org)"
+  fi
 }
