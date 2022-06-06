@@ -19,6 +19,10 @@ function challenge-cd {
 # Add local npm binaries to PATH
 export PATH="$PATH:$(yarn bin)"
 
+function challenge-install {
+  yarn install --frozen-lockfile
+}
+
 function challenge-prepare {
   nx run-many --all --parallel --target=prepare
 }
