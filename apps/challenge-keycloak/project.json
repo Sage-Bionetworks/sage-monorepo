@@ -59,7 +59,17 @@
           "docker run --rm --env-file .env -v \"$(pwd)\"/data/h2:/opt/keycloak/data/h2 -v \"$(pwd)\"/data/import:/opt/keycloak/data/import:ro sagebionetworks/challenge-keycloak:latest import --dir /opt/keycloak/data/import --override true"
         ],
         "cwd": "apps/challenge-keycloak"
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        }
+      ]
     },
     "export-dev-data": {
       "executor": "@nrwl/workspace:run-commands",
@@ -68,7 +78,17 @@
           "docker run --rm --env-file .env -v \"$(pwd)\"/data/h2:/opt/keycloak/data/h2 -v \"$(pwd)\"/data/import:/opt/keycloak/data/import sagebionetworks/challenge-keycloak:latest export --dir /opt/keycloak/data/import"
         ],
         "cwd": "apps/challenge-keycloak"
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        }
+      ]
     },
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
