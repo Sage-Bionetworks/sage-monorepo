@@ -65,5 +65,5 @@ function challenge-seed-db {
 }
 
 function challenge-welcome {
-  echo "Welcome to the Challenge Monorepo! 👋"
+  echo "Welcome to the Challenge monorepo! 👋"
 }
