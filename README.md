@@ -50,8 +50,12 @@ Then open your fork repo inside our devcontainer using these instructions:
 ### Preparing the workspace
 
 - Run `challenge-install` to install workspace tools like `nx` and `jest`.
-- Run `nx import-dev-data challenge-keycloak` to seed Keycloak database.
 - Run `challenge-nx-cloud-help` to start configuring Nx Cloud (optional).
+
+### Preparing the databases
+
+- Run `nx import-dev-data challenge-keycloak` to seed Keycloak database.
+  - Keycloak must not be running when executing this command.
 
 ### Starting the Challenge Registry in watch mode
 
