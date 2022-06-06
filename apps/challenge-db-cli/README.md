@@ -7,30 +7,30 @@ instance.
 
 Check the code style.
 
-    nx lint db-cli
+    nx lint challenge-db-cli
 
 Test the client.
 
-    nx test db-cli
+    nx test challenge-db-cli
 
 Build the client.
 
-    nx build db-cli
+    nx build challenge-db-cli
 
 Run the client in watch mode.
 
-    nx serve db-cli
+    nx serve challenge-db-cli
 
 Run the client.
 
-    yarn run db-cli --help
+    yarn run challenge-db-cli --help
 
 Seed the DB with local data (e.g., using the `production` seed).
 
 ```console
-$ yarn run db-cli seed apps/db-cli/data/seeds/production/
+$ yarn run challenge-db-cli seed apps/challenge-db-cli/data/seeds/production/
 yarn run v1.22.17
-$ node dist/apps/db-cli/src/index.js seed apps/db-cli/data/seeds/production/
+$ node dist/apps/challenge-db-cli/src/index.js seed apps/challenge-db-cli/data/seeds/production/
 2022-02-12 21:25:32 info: Collection challenge_organizer removed
 2022-02-12 21:25:32 info: Collection challenge_sponsor removed
 2022-02-12 21:25:32 info: Collection org_membership removed

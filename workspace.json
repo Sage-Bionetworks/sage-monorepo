@@ -6,7 +6,7 @@
     "api-spec": "libs/api-spec",
     "challenge-platform": "apps/challenge-platform",
     "challenge-platform-e2e": "apps/challenge-platform-e2e",
-    "db-cli": "apps/db-cli",
+    "challenge-db-cli": "apps/challenge-db-cli",
     "challenge-keycloak": "apps/challenge-keycloak",
     "shared-assets": "libs/shared/assets",
     "shared-styles": "libs/shared/styles",

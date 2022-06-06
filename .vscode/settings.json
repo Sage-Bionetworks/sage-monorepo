@@ -22,7 +22,7 @@
     "editor.formatOnSave": true
   },
   "eslint.workingDirectories": [
-    "./apps/db-cli",
+    "./apps/challenge-db-cli",
     "."
   ],
   "java.configuration.updateBuildConfiguration": "disabled",
