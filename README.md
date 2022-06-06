@@ -28,7 +28,7 @@ approach, see [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
     git clone --depth 1 <repo url>
 
-Then start our devcontainer using these instructions:
+Then open your fork repo inside our devcontainer using these instructions:
 
 - [Developing inside a Container](./docs/devcontainer.md)
 - [Develop on a remote host](./docs/develop-on-a-remote-host.md) (optional)
