@@ -9,6 +9,8 @@
 This [Nx monorepo](https://nx.dev/) includes the codebase of the Challenge
 ecosystem.
 
+TODO: Add brief description of the apps and services
+
 ## Requirements
 
 - [Docker]
@@ -37,12 +39,8 @@ Then open your fork repo inside our devcontainer using these instructions:
 ### Preparing the workspace
 
 - Run `challenge-install` to install workspace tools like `nx` and `jest`.
+- Run `nx import-dev-data challenge-keycloak` to seed Keycloak database.
 - Run `challenge-nx-cloud-help` to start configuring Nx Cloud (optional).
-
-### Preparing databases
-
-- Run `nx import-dev-data challenge-keycloak` to populate Keycloak (IAM)
-  database.
 
 ### Starting the Challenge Registry in watch mode
 
