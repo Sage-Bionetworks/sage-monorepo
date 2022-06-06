@@ -34,6 +34,7 @@ RUN useradd -m $user \
     "# source dev-env.sh if found in the current directory" \
     "if [ -f dev-env.sh ]; then" \
     "  . ./dev-env.sh" \
+    "  challenge-welcome" \
     "fi" | tee -a /home/$user/.bashrc
 
 # USER $user

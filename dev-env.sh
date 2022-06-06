@@ -63,3 +63,7 @@ function challenge-db-cli {
 function challenge-seed-db {
   node dist/apps/challenge-db-cli/src/index.js seed "$CHALLENGE_DIR/apps/challenge-db-cli/data/seeds/production/"
 }
+
+function challenge-welcome {
+  echo "Welcome to the Challenge Monorepo! 👋"
+}
