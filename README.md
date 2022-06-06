@@ -6,7 +6,8 @@
 
 ## Overview
 
-This monorepo includes the codebase of the Challenge ecosystem.
+This [Nx monorepo](https://nx.dev/) includes the codebase of the Challenge
+ecosystem.
 
 ## Requirements
 
@@ -51,9 +52,14 @@ You can access the Challenge Registry on http://localhost:4200.
 
 ## Documentation
 
-See the folder [docs](./docs) for the documentation of this workspace.
+Checkout the folder [docs](./docs) to learn more about this monorepo.
+
+## License
+
+[Apache License 2.0]
 
 <!-- Links -->
 
 [Docker]: https://docs.docker.com/get-docker/
 [Visual Studio Code]: https://code.visualstudio.com/
+[Apache License 2.0]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt
