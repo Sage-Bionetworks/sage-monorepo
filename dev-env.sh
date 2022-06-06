@@ -88,7 +88,7 @@ function challenge-welcome {
     printf "%s\n" \
       "" \
       "This workspace is not configured to use Nx Cloud. To configure it," \
-      "  - Run ${bold}cp .nx-cloud.env.example .nx-cloud.env${reset}" \
-      "  - Add Nx Cloud credentials to ${italic}.nx-cloud.env${reset} (contact thomas.schaffter@sagebionetworks.org)"
+      "  - Run ${bold}cp nx-cloud.env.example nx-cloud.env${reset}" \
+      "  - Add Nx Cloud credentials to ${italic}nx-cloud.env${reset} (contact thomas.schaffter@sagebionetworks.org)"
   fi
 }
