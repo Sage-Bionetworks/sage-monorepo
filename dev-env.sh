@@ -24,9 +24,9 @@ function challenge-prepare {
 }
 
 # Setup Python virtualenvs
-function challenge-python {
-  nx run-many --all --parallel --target=python
-}
+# function challenge-python {
+#   nx run-many --all --parallel --target=python
+# }
 
 function challenge-lint {
   nx run-many --all --target=lint
@@ -44,10 +44,6 @@ function challenge-test {
   nx run-many --all --target=test
 }
 
-function challenge-serve {
-  nx run-many --target=serve --projects=challenge-mongodb,api,web-app
-}
-
 function challenge-build-images {
   nx run-many --all --parallel --target=build-image
 }
@@ -56,6 +52,18 @@ function challenge-graph {
   nx graph
 }
 
+function challenge-registry-serve {
+  nx serve challenge-registry
+}
+
+function challenge-db-cli {
+  node dist/apps/challenge-db-cli/src/index.js
+}
+
 function challenge-seed-db {
-  yarn db-cli seed "$CHALLENGE_DIR/apps/db-cli/data/seeds/production/"
+  node dist/apps/challenge-db-cli/src/index.js seed "$CHALLENGE_DIR/apps/challenge-db-cli/data/seeds/production/"
+}
+
+function challenge-welcome {
+  echo "Welcome to the Challenge monorepo! 👋"
 }

@@ -1,6 +1,6 @@
 {
-  "root": "apps/db-cli",
-  "sourceRoot": "apps/db-cli/src",
+  "root": "apps/challenge-db-cli",
+  "sourceRoot": "apps/challenge-db-cli/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,18 +9,18 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/apps/db-cli",
-        "main": "apps/db-cli/src/index.ts",
-        "tsConfig": "apps/db-cli/tsconfig.app.json",
+        "outputPath": "dist/apps/challenge-db-cli",
+        "main": "apps/challenge-db-cli/src/index.ts",
+        "tsConfig": "apps/challenge-db-cli/tsconfig.app.json",
         "assets": [
-          "apps/db-cli/*.md"
+          "apps/challenge-db-cli/*.md"
         ]
       }
     },
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "db-cli:build"
+        "buildTarget": "challenge-db-cli:build"
       }
     },
     "lint": {
@@ -30,7 +30,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "apps/db-cli/**/*.ts"
+          "apps/challenge-db-cli/**/*.ts"
         ]
       }
     },
@@ -41,7 +41,7 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "apps/db-cli/**/*.ts"
+          "apps/challenge-db-cli/**/*.ts"
         ],
         "fix": true
       }
@@ -49,16 +49,16 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/apps/db-cli"
+        "coverage/apps/challenge-db-cli"
       ],
       "options": {
-        "jestConfig": "apps/db-cli/jest.config.js",
+        "jestConfig": "apps/challenge-db-cli/jest.config.js",
         "passWithNoTests": true
       }
     }
   },
   "tags": [
     "type:app",
-    "scope:client"
+    "scope:admin"
   ]
 }

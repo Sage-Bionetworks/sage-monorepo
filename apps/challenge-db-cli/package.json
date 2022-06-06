@@ -1,0 +1,6 @@
+{
+  "name": "@sagebionetworks/challenge-db-cli",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "description": "Client for managing the challenge DB instances."
+}

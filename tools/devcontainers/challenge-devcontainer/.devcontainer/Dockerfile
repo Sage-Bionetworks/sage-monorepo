@@ -34,8 +34,10 @@ RUN useradd -m $user \
     "# source dev-env.sh if found in the current directory" \
     "if [ -f dev-env.sh ]; then" \
     "  . ./dev-env.sh" \
+    "  challenge-welcome" \
     "fi" | tee -a /home/$user/.bashrc
 
+# VS Code my need to be root to complete the subsequent image build steps.
 # USER $user
 
 CMD ["bash"]

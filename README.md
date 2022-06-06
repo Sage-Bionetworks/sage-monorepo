@@ -71,7 +71,7 @@ Start the Challenge Registry.
 
 Seed the API DB with sample Challenge data.
 
-    nx build db-cli && yarn challenge-seed-db
+    nx build challenge-db-cli && yarn challenge-seed-db
 
 In your browser, open http://localhost.
 
