@@ -74,6 +74,14 @@ function challenge-seed-db {
   node dist/apps/challenge-db-cli/src/index.js seed "$CHALLENGE_DIR/apps/challenge-db-cli/data/seeds/production/"
 }
 
+function challenge-nx-cloud-help {
+  printf "%s\n" \
+    "" \
+    "This workspace is not configured to use Nx Cloud. To configure it," \
+    "  - Run ${bold}cp nx-cloud.env.example nx-cloud.env${reset}" \
+    "  - Add Nx Cloud credentials to ${italic}nx-cloud.env${reset} (contact thomas.schaffter@sagebionetworks.org)"
+}
+
 function challenge-welcome {
   echo "Welcome to the Challenge monorepo! 👋"
 
@@ -85,10 +93,6 @@ function challenge-welcome {
   fi
 
   if [ ! -f "nx-cloud.env" ]; then
-    printf "%s\n" \
-      "" \
-      "This workspace is not configured to use Nx Cloud. To configure it," \
-      "  - Run ${bold}cp nx-cloud.env.example nx-cloud.env${reset}" \
-      "  - Add Nx Cloud credentials to ${italic}nx-cloud.env${reset} (contact thomas.schaffter@sagebionetworks.org)"
+    challenge-nx-cloud-help
   fi
 }
