@@ -2,7 +2,7 @@ spring:
   application:
     name: challenge-user-service
   datasource:
-    url: jdbc:mysql://localhost:3306/challenge
+    url: jdbc:mysql://challenge-mariadb:3306/challenge
     username: maria
     password: changeme
   jpa:
@@ -15,7 +15,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8081/eureka
+      defaultZone: http://challenge-service-registry:8081/eureka
 
 management:
   info:
@@ -33,7 +33,7 @@ info:
 app:
   config:
     keycloak:
-      server-url: http://localhost:8080
+      server-url: http://challenge-keycloak:8080
       realm: test
       clientId: challenge-api-client
       client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
