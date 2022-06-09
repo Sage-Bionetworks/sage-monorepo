@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  challenge-user-service:
+    image: sagebionetworks/challenge-user-service:latest
+    container_name: challenge-user-service
+    restart: always
+    # env_file:
+    #   - .env
+    # volumes:
+    #   - ./data/h2:/opt/keycloak/data/h2
+    networks:
+      - challenge
+    ports:
+      - "8080:8080"
+    command: start-dev
+
+networks:
+  challenge:
+    name: challenge
