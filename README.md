@@ -71,6 +71,14 @@ Checkout the folder [docs](./docs) to learn more about this monorepo.
 
 [Apache License 2.0]
 
+## Contributors
+
+Main contributors and developers:
+
+- [Thomas Schaffter](https://github.com/tschaffter)
+- [Verena Chung](https://github.com/vpchung)
+- [Rongrong Chai](https://github.com/rrchai)
+
 <!-- Links -->
 
 [Docker]: https://docs.docker.com/get-docker/
