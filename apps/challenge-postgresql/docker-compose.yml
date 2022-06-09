@@ -9,9 +9,15 @@ services:
     volumes:
       - challenge-postgresql:/var/lib/postgresql/data
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - challenge
     ports:
       - "5432:5432"
 
 volumes:
   challenge-postgresql:
     name: challenge-postgresql
+
+networks:
+  challenge:
+    name: challenge

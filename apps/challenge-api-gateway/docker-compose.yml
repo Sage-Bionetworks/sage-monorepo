@@ -1,10 +1,16 @@
 version: "3.8"
 
 services:
-  keycloak:
+  challenge-api-gateway:
     image: sagebionetworks/challenge-api-gateway:latest
     container_name: challenge-api-gateway
     restart: always
+    networks:
+      - challenge
     ports:
       - "8082:8082"
     command: start-dev
+
+networks:
+  challenge:
+    name: challenge

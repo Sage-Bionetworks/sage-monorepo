@@ -1,12 +1,18 @@
 version: "3.8"
 
 services:
-  keycloak:
+  challenge-service-registry:
     image: sagebionetworks/challenge-service-registry:latest
     container_name: challenge-service-registry
     restart: always
     # env_file:
     #   - .env
+    networks:
+      - challenge
     ports:
       - "8081:8081"
     command: start-dev
+
+networks:
+  challenge:
+    name: challenge
