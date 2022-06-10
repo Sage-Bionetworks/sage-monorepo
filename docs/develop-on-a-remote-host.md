@@ -169,6 +169,7 @@ by running any Docker command, e.g.
    docker --version
    ```
 - Clone your fork in the home directory
+- Follow the [**Storing GitHub credentials on the EC2 instance**](https://sagebionetworks.jira.com/wiki/spaces/APGD/pages/2590244872/Service+Catalog+Instance+Setup#Storing-GitHub-credentials-on-the-EC2-instance) instructions to config your GitHub account
 
 ### In VS Code
 
