@@ -5,6 +5,9 @@ services:
     image: sagebionetworks/challenge-api-gateway:latest
     container_name: challenge-api-gateway
     restart: always
+    environment:
+      - KEYCLOAK_URL=http://challenge-keycloak:8080
+      - SERVICE_REGISTRY_URL=http://challenge-service-registry:8081/eureka
     networks:
       - challenge
     ports:

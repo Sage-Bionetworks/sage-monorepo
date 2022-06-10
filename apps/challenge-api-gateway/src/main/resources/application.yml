@@ -1,7 +1,7 @@
 app:
   config:
     keycloak:
-      url: http://challenge-keycloak:8080
+      url: ${keycloak.url}
       realm: test
 
 spring:
@@ -24,7 +24,7 @@ spring:
             client-id: challenge-core-client
             client-secret: O0cNRMWg3LHsdHW8BNPlY96qKooDPhPX
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8080/login/oauth2/code/keycloak
+            redirect-uri: ${app.config.keycloak.url}/login/oauth2/code/keycloak
             scope: openid
       resourceserver:
         jwt:
@@ -46,4 +46,4 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://challenge-service-registry:8081/eureka
+      defaultZone: ${service.registry.url}
