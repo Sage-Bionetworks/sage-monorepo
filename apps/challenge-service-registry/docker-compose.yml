@@ -5,8 +5,8 @@ services:
     image: sagebionetworks/challenge-service-registry:latest
     container_name: challenge-service-registry
     restart: always
-    # env_file:
-    #   - .env
+    environment:
+      - DEFAULT_ZONE=http://challenge-service-registry:8081/eureka
     networks:
       - challenge
     ports:
