@@ -3,6 +3,13 @@
   "sourceRoot": "apps/challenge-user-service/src",
   "projectType": "application",
   "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/challenge-user-service"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
@@ -46,6 +53,10 @@
           "projects": "self"
         },
         {
+          "target": "prepare",
+          "projects": "self"
+        },
+        {
           "target": "serve-detach",
           "projects": "dependencies"
         }
@@ -60,6 +71,10 @@
       "dependsOn": [
         {
           "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
           "projects": "self"
         },
         {

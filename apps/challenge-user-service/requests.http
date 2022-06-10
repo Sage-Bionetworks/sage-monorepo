@@ -45,7 +45,7 @@ POST {{userServiceHost}}/api/v1/users/register
 Content-Type: application/json
 
 {
-  "email": "test3@gmail.com",
+  "email": "test4@gmail.com",
   "password": "changeme",
   "identification": "12345"
 }
