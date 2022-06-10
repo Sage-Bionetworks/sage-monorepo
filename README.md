@@ -1,4 +1,4 @@
-# Challenge Registry
+# Challenge
 
 [![GitHub CI](https://img.shields.io/github/workflow/status/Sage-Bionetworks/challenge-registry/CI.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/challenge-registry/actions)
 [![Coverage Status](https://img.shields.io/coveralls/github/Sage-Bionetworks/challenge-registry.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=coverage&logo=Coveralls)](https://coveralls.io/github/Sage-Bionetworks/challenge-registry?branch=main)
@@ -6,124 +6,81 @@
 
 ## Introduction
 
-This monorepo includes the codebase of the Challenge Registry.
+This [Nx monorepo](https://nx.dev/) includes the codebase of the Challenge
+ecosystem.
 
-## Workspace, Projects and Targets
+### Apps
 
-This workspace was generated using [Nx](https://nx.dev).
+- Challenge Registry
+- Challenge Platform
 
-The table shown below lists the main _projects_ included with this workspace.
-Each project is managed using multiple _targets_ such as `build`, `test` and
-`serve`. One way to execute a target is by using the command `nx <target> <project>`.
+### Backend
 
-|                  | prepare | lint | lint-fix | build | test | serve | e2e | build-image |
-|------------------|---------|------|----------|-------|------|-------|-----|--------|
-| apps/api         | ✔️       | ✔️    | ✔️        |       | ✔️    | ✔️     |     | ✔️      |
-| apps/api-db      | ✔️       |      |          |       |      | ✔️     |     | ✔️      |
-| apps/db-cli      |         | ✔️    | ✔️        | ✔️     | ✔️    | ✔️     |     |        |
-| apps/web-app     | ✔️       | ✔️    | ✔️        | ✔️     | ✔️    | ✔️     |     | ✔️      |
-| apps/web-app-e2e |         | ✔️    | ✔️        |       |      |       | ✔️   |        |
-| libs/api-angular |         | ✔️    | ✔️        | ✔️     | ✔️    |       |     |        |
-| libs/api-docs    |         |      |          | ✔️     |      | ✔️     |     |        |
-| libs/api-spec    |         | ✔️    |          | ✔️     |      | ✔️     |     |        |
-
-See this [cheat sheet] to learn more about Nx commands.
+- API Gateway
+- Service Registry
+- Keycloak (IAM)
+- Databases: MariaDB, PostgreSQL, MongoDB
+- User Service
 
 ## Requirements
 
 - [Docker]
-- [Node.js] ^14.17.0 or >=16.0.0
-- [Yarn] >=1.22
+- [Visual Studio Code]
 
 ## Usage
 
-### Preparing the workspace
+### Opening the workspace in VS Code
 
-Clone this repository. If you plan to contribute to this project, please create a fork and use its
-URL for cloning. For more information on contributing and/or our Forking Workflow approach, see
-[CONTRIBUTING.md](.github/CONTRIBUTING.md).
+Click on this badge to open the workspace in VS Code using our development
+container.
+
+[![Open in Remote - Containers](https://img.shields.io/static/v1?label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode&style=for-the-badge)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Sage-Bionetworks/challenge-registry "Open in VS Code Remote - Containers")
+
+If you plan to contribute to this project, please create a fork and use its URL
+for cloning. For more information on contributing and/or our Forking Workflow
+approach, see [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
     git clone --depth 1 <repo url>
 
-Source `dev-env.sh`.
+Then open your fork repo inside our devcontainer using these instructions:
 
-    . ./dev-env.sh
+- [Developing inside a Container](./docs/devcontainer.md)
+- [Develop on a remote host](./docs/develop-on-a-remote-host.md) (optional)
 
-Install Node.js dependencies:
+### Preparing the workspace
 
-    yarn install --frozen-lockfile
+- Run `challenge-install` to install workspace tools like `nx` and `jest`.
+- Run `challenge-nx-cloud-help` to start configuring Nx Cloud (optional).
 
-Prepare the development environment.
+### Preparing the databases
 
-    challenge-registry-prepare
+- Run `nx import-dev-data challenge-keycloak` to seed Keycloak database.
+  - Keycloak must not be running when executing this command.
 
-### Running with Docker
+### Starting the Challenge Registry
 
-Build the Docker images.
+    challenge-registry-serve
 
-    yarn build-images
+You can access the Challenge Registry on http://localhost:4200.
 
-Start the Challenge Registry.
+## Documentation
 
-    docker compose up -d
+Checkout the folder [docs](./docs) to learn more about this monorepo.
 
-Seed the API DB with sample Challenge data.
+## License
 
-    nx build db-cli && yarn seed-db
+[Apache License 2.0]
 
-In your browser, open http://localhost.
+## Contributors
 
-## Development
+Main contributors and developers:
 
-The recommended way to contribute to this workspace is to use the [development
-container] for VS Code specified by this repository. The dev container provides
-all the tools needed (Node.js, Yarn, Python, Docker, etc.). The only requirement
-for the host is to have Docker installed. See [how to develop inside the dev
-container].
-
-If you prefer to develop on the host, please install these additional
-requirements:
-
-- [pyenv] >=2.2
-- [pipenv]
-
-Install Python virtualenvs:
-
-    yarn python
-
-Lint the projects.
-
-    yarn lint
-
-Build the projects.
-
-    yarn build
-
-Test the projects.
-
-    yarn test
-
-Start the Challenge Registry.
-
-    yarn start
-
-Seed the API DB with sample Challenge data.
-
-    yarn seed-db
-
-In your browser, open http://localhost:4200.
-
-## Contributing :beers:
-
-See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
+- [Thomas Schaffter](https://github.com/tschaffter)
+- [Verena Chung](https://github.com/vpchung)
+- [Rongrong Chai](https://github.com/rrchai)
 
 <!-- Links -->
 
-[cheat sheet]: ./docs/cheat-sheet.md
-[docker]: https://docs.docker.com/get-docker/
-[node.js]: https://nodejs.org/en/
-[yarn]: https://yarnpkg.com/
-[pyenv]: https://github.com/pyenv/pyenv
-[pipenv]: https://pypi.org/project/pipenv/
-[development container]: https://code.visualstudio.com/docs/remote/containers
-[how to develop inside the dev container]: docs/devcontainer.md
+[Docker]: https://docs.docker.com/get-docker/
+[Visual Studio Code]: https://code.visualstudio.com/
+[Apache License 2.0]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt

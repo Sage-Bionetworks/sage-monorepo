@@ -1,0 +1,49 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/main/containers/docker-existing-dockerfile
+{
+  "name": "Challenge Dev Container",
+
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+			"imageVersion": "bullseye-20211220-slim"
+		}
+	},
+
+  // Install tools and languages from a pre-defined set of scripts or even your
+  // own.
+  "features": {
+    // docker features must be specified in the developer facing
+    // devcontainer.json for VS Code to properly mount the docker sockets.
+    // "docker-in-docker": "latest"
+  },
+
+  // The reference properties listed below are not used during the devcontainer
+  // image building process (`devcontainer build [OPTIONS]`).
+
+  // Set *default* container specific settings.json values on container create.
+  "settings": {},
+
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [],
+
+  // Use 'forwardPorts' to make a list of ports inside the container available
+	// locally.
+  "forwardPorts": [],
+
+    // Object that maps a port number, "host:port" value, range, or regular
+  // expression to a set of default options.
+  "portsAttributes": {},
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "yarn install",
+
+  // Comment out to connect as root instead. More info:
+  // https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "vscode",
+
+  // Indicates whether VS Code and other devcontainer.json supporting tools
+  // should stop the containers when the related tool window is closed / shut
+  // down.
+  "shutdownAction": "stopContainer"
+}

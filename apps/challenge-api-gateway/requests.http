@@ -1,0 +1,37 @@
+@serviceRegistryHost = http://localhost:8081
+@apiGatewayHost = http://localhost:8082
+@userServiceHost = http://localhost:8083
+@keycloakHost = http://localhost:8080
+
+### Check user service info
+
+GET {{userServiceHost}}/actuator/info
+
+### Check user service info via the API gateway
+
+GET {{apiGatewayHost}}/user/actuator/info
+
+
+### Get access token from Keycloak
+
+@clientId = challenge-core-client
+@clientSecret = O0cNRMWg3LHsdHW8BNPlY96qKooDPhPX
+@username = luke
+@password = changeme
+
+# @name login
+
+POST {{keycloakHost}}/realms/test/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password
+&scope=email
+&client_id={{clientId}}
+&client_secret={{clientSecret}}
+&username={{username}}
+&password={{password}}
+
+### Check user service info using access token
+
+GET {{apiGatewayHost}}/user/actuator/info
+Authorization: Bearer {{login.response.body.$.access_token}}

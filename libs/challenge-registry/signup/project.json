@@ -1,0 +1,29 @@
+{
+  "projectType": "library",
+  "root": "libs/challenge-registry/signup",
+  "sourceRoot": "libs/challenge-registry/signup/src",
+  "prefix": "challenge-registry",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/challenge-registry/signup"],
+      "options": {
+        "jestConfig": "libs/challenge-registry/signup/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/challenge-registry/signup/src/**/*.ts",
+          "libs/challenge-registry/signup/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": [
+    "type:feature",
+    "scope:challenge-registry"
+  ]
+}

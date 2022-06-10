@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: challenge-user-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/challenge
+    username: maria
+    password: changeme
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8083
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8081/eureka
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+info:
+  application:
+    name: ${spring.application.name}
+
+app:
+  config:
+    keycloak:
+      server-url: http://localhost:8080
+      realm: test
+      clientId: challenge-api-client
+      client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb

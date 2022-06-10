@@ -1,0 +1,101 @@
+{
+  "projectType": "application",
+  "root": "apps/challenge-platform",
+  "sourceRoot": "apps/challenge-platform/src",
+  "prefix": "sage-bionetworks",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/challenge-platform",
+        "index": "apps/challenge-platform/src/index.html",
+        "main": "apps/challenge-platform/src/main.ts",
+        "polyfills": "apps/challenge-platform/src/polyfills.ts",
+        "tsConfig": "apps/challenge-platform/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/challenge-platform/src/favicon.ico",
+          "apps/challenge-platform/src/assets"
+        ],
+        "styles": ["apps/challenge-platform/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/challenge-platform/src/environments/environment.ts",
+              "with": "apps/challenge-platform/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "browserTarget": "challenge-platform:build",
+        "port": 4201
+      },
+      "configurations": {
+        "production": {
+          "browserTarget": "challenge-platform:build:production"
+        },
+        "development": {
+          "browserTarget": "challenge-platform:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "challenge-platform:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/challenge-platform/src/**/*.ts",
+          "apps/challenge-platform/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/challenge-platform"],
+      "options": {
+        "jestConfig": "apps/challenge-platform/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": [
+    "type:app",
+    "scope:client"
+  ]
+}

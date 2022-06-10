@@ -1,57 +1,105 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/main/containers/docker-existing-dockerfile
 {
-  "name": "Challenge Registry",
-  "image": "sagebionetworks/python-3-node:0.2.0",
+  "name": "Challenge Dev Container",
+  "image": "sagebionetworks/challenge-devcontainer:8e0d61ab",
+
   "features": {
-    "docker-in-docker": "latest"
+    // docker features must be specified in the developer facing
+    // devcontainer.json for VS Code to properly mount the docker sockets.
+    "docker-in-docker": "20.10"
   },
-  "hostRequirements": {"memory": "4gb"},
-  "settings": {
-    "python.linting.enabled": true,
-    "python.linting.pylintEnabled": false,
-    "python.linting.flake8Enabled": true,
-    "python.formatting.provider": "black",
-    "eslint.format.enable": true,
-    "editor.tabSize": 2,
-    "python.formatting.blackArgs": [],
-    "[python]": {
-      "editor.formatOnSave": true,
-      "editor.tabSize": 4
-    },
-    "[json]": {
-      "editor.tabSize": 2
-    },
-    "[typescript]": {
-      "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-      "editor.formatOnSave": true
-    },
-    "[javascript]": {
-      "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-      "editor.formatOnSave": true
-    },
-    "eslint.workingDirectories": [
-      "./apps/db-cli",
-      "."
-    ]
-  },
+
+  // Set *default* container specific settings.json values on container create.
+  "settings": {},
+
+  // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "firsttris.vscode-jest-runner",
-    "mhutchie.git-graph",
-    "ms-python.python",
-    "nrwl.angular-console",
-    "stkb.rewrap",
-    "webhint.vscode-webhint",
-    "GitHub.vscode-pull-request-github",
-    "orta.vscode-jest",
-    "humao.rest-client"
+    "dbaeumer.vscode-eslint@2.2.2",
+    "esbenp.prettier-vscode@9.5.0",
+    "firsttris.vscode-jest-runner@0.4.48",
+    "mhutchie.git-graph@1.30.0",
+    "ms-python.python@2022.6.3",
+    "nrwl.angular-console@17.17.0",
+    "stkb.rewrap@1.16.3",
+    "webhint.vscode-webhint@1.6.8",
+    "GitHub.vscode-pull-request-github@0.42.0",
+    "humao.rest-client@0.24.6",
+    "vscjava.vscode-java-pack@0.23.0",
+    "Pivotal.vscode-boot-dev-pack@0.1.0",
+    "mtxr.sqltools@0.23.0",
+    "mtxr.sqltools-driver-mysql@0.2.0",
+    "mtxr.sqltools-driver-pg@0.2.0",
+    "GabrielBB.vscode-lombok@1.0.1",
+    "mongodb.mongodb-vscode@0.9.3"
   ],
+
+  // Use 'forwardPorts' to make a list of ports inside the container available
+	// locally.
   "forwardPorts": [
-    80,
+    3306,
+    4200,
+    4201,
+    4211,
+    5432,
     8080,
+    8081,
+    8082,
+    8083,
+    9000,
     27017
   ],
-  "remoteUser": "vscode"
+
+  // Object that maps a port number, "host:port" value, range, or regular
+  // expression to a set of default options.
+  "portsAttributes": {
+    "3306": {
+      "label": "challenge-mariadb",
+      "onAutoForward": "silent"
+    },
+    "4200": {
+      "label": "challenge-registry"
+    },
+    "4201": {
+      "label": "challenge-platform"
+    },
+    "4211": {
+      "label": "nx graph"
+    },
+    "5432": {
+      "label": "challenge-postgresql",
+      "onAutoForward": "silent"
+    },
+    "8080": {
+      "label": "challenge-keycloak",
+      "onAutoForward": "silent"
+    },
+    "8081": {
+      "label": "challenge-service-registry",
+      "onAutoForward": "silent"
+    },
+    "8082": {
+      "label": "challenge-api-gateway",
+      "onAutoForward": "silent"
+    },
+    "8083": {
+      "label": "challenge-user-service",
+      "onAutoForward": "silent"
+    },
+    "9000": {
+      "label": "challenge-registry-movie-api",
+      "onAutoForward": "silent"
+    },
+    "27017": {
+      "label": "challenge-mongodb",
+      "onAutoForward": "silent"
+    }
+  },
+
+  // Comment out to connect as root instead. More info:
+  // https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "vscode",
+
+  // Indicates whether VS Code and other devcontainer.json supporting tools
+  // should stop the containers when the related tool window is closed / shut
+  // down.
+  "shutdownAction": "stopContainer"
 }

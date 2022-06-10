@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  keycloak:
+    image: sagebionetworks/challenge-keycloak:latest
+    container_name: challenge-keycloak
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./data/h2:/opt/keycloak/data/h2
+    ports:
+      - "8080:8080"
+    command: start-dev

@@ -1,0 +1,78 @@
+name: Build Dev Container Image
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'tools/devcontainers/challenge-devcontainer/**/*'
+  pull_request:
+    paths:
+      - 'tools/devcontainers/challenge-devcontainer/**/*'
+
+env:
+  IMAGE_REPOSITORY: sagebionetworks/challenge-devcontainer
+  DEFAULT_BRANCH: main
+
+jobs:
+  devcontainer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Lint Dockerfile
+        uses: docker://hadolint/hadolint:latest
+        with:
+          entrypoint: hadolint
+          args: tools/devcontainers/challenge-devcontainer/.devcontainer/Dockerfile
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-single-buildx
+
+      - name: Set buildx as the default builder
+        run: docker buildx install
+
+      - name: Prepare the image build
+        id: prep
+        run: |
+          set -e
+
+          IMAGE_NAME="${{ env.IMAGE_REPOSITORY }}:${GITHUB_SHA::8}"
+          echo ::set-output name=image_name::${IMAGE_NAME}
+
+      - name: Build the image
+        run: |
+          set -e
+
+          FOLDER_WITH_DOT_DEVCONTAINER="tools/devcontainers/challenge-devcontainer"
+          IMAGE_NAME=${{ steps.prep.outputs.image_name }}
+
+          # [Optional] Enable buildkit, set output to plain text for logging
+          export DOCKER_BUILDKIT=1
+          export BUILDKIT_PROGRESS=plain
+
+          # Build the image
+          npm install -g "@vscode/dev-container-cli"
+          devcontainer build --image-name "${IMAGE_NAME}" "${FOLDER_WITH_DOT_DEVCONTAINER}"
+
+      - name: Login to Docker Hub
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push the image to Docker Hub
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          set -e
+
+          # Push the image to Docker Hub
+          docker push "${{ steps.prep.outputs.image_name }}"

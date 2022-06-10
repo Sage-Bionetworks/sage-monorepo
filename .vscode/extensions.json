@@ -9,7 +9,13 @@
     "stkb.rewrap",
     "webhint.vscode-webhint",
     "GitHub.vscode-pull-request-github",
-    "orta.vscode-jest",
-    "humao.rest-client"
+    "humao.rest-client",
+    "vscjava.vscode-java-pack",
+    "Pivotal.vscode-boot-dev-pack",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-mysql",
+    "mtxr.sqltools-driver-pg",
+    "GabrielBB.vscode-lombok",
+    "mongodb.mongodb-vscode"
   ]
 }

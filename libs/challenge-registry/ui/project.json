@@ -1,0 +1,36 @@
+{
+  "projectType": "library",
+  "root": "libs/challenge-registry/ui",
+  "sourceRoot": "libs/challenge-registry/ui/src",
+  "prefix": "challenge-registry",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/libs/challenge-registry/ui"
+      ],
+      "options": {
+        "jestConfig": "libs/challenge-registry/ui/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/challenge-registry/ui/src/**/*.ts",
+          "libs/challenge-registry/ui/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": [
+    "type:feature",
+    "scope:challenge-registry"
+  ],
+  "implicitDependencies": [
+    "shared-assets",
+    "shared-styles",
+    "shared-themes"
+  ]
+}

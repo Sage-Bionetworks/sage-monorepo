@@ -1,0 +1,14 @@
+{
+  "root": "libs/challenge-registry/themes",
+  "sourceRoot": "libs/challenge-registry/themes/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": [
+    "type:themes",
+    "scope:challenge-registry"
+  ],
+  "implicitDependencies": [
+    "challenge-registry-about"
+  ]
+}

@@ -1,18 +1,18 @@
 version: '3.8'
 
 services:
-  challenge-registry-api-db:
-    image: sagebionetworks/challenge-registry-api-db:latest
-    container_name: challenge-registry-api-db
+  challenge-mongodb:
+    image: sagebionetworks/challenge-mongodb:latest
+    container_name: challenge-mongodb
     restart: always
     env_file:
-      - ./apps/api-db/.env
+      - ./apps/challenge-mongodb/.env
     networks:
       - challenge-registry
     ports:
       - "27017:27017"
     volumes:
-      - challenge-registry-api-db:/data/db
+      - challenge-mongodb:/data/db
 
   challenge-registry-api:
     image: sagebionetworks/challenge-registry-api:latest
@@ -21,13 +21,13 @@ services:
     env_file:
       - ./apps/api/.env
     environment:
-      - DB_DOMAIN=challenge-registry-api-db
+      - DB_DOMAIN=challenge-mongodb
     networks:
       - challenge-registry
     ports:
       - "8080:8080"
     depends_on:
-      - challenge-registry-api-db
+      - challenge-mongodb
 
   challenge-registry-web-app:
     image: sagebionetworks/challenge-registry-web-app:latest
@@ -45,7 +45,7 @@ services:
     depends_on:
       - challenge-registry-api
       - challenge-registry-movie-api
-      - keycloak
+      - challenge-keycloak
 
   challenge-registry-movie-api:
     image: sagebionetworks/challenge-registry-movie-api:latest
@@ -58,32 +58,32 @@ services:
     ports:
       - "9000:9000"
 
-  keycloak:
-    image: sagebionetworks/keycloak:latest
-    container_name: keycloak
+  challenge-keycloak:
+    image: sagebionetworks/challenge-keycloak:latest
+    container_name: challenge-keycloak
     restart: always
     env_file:
-      - ./apps/keycloak/.env
+      - ./apps/challenge-keycloak/.env
     volumes:
-      - ./apps/keycloak/data/h2:/opt/keycloak/data/h2
+      - ./apps/challenge-keycloak/data/h2:/opt/keycloak/data/h2
     networks:
       - challenge-registry
     ports:
       - "8081:8080"
     command: start-dev
     depends_on:
-      - keycloak-db
+      - challenge-postgresql
       - challenge-registry-movie-api  # cheating temporarily to make it easier to start the stack.
 
-  keycloak-db:
-    image: sagebionetworks/keycloak-db:latest
-    container_name: keycloak-db
+  challenge-postgresql:
+    image: sagebionetworks/challenge-postgresql:latest
+    container_name: challenge-postgresql
     restart: always
     env_file:
-      - ./apps/keycloak-db/.env
+      - ./apps/challenge-postgresql/.env
     volumes:
-      - keycloak-db:/var/lib/postgresql/data
-      - ./apps/keycloak-db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - challenge-postgresql:/var/lib/postgresql/data
+      - ./apps/challenge-postgresql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - challenge-registry
     ports:
@@ -93,7 +93,7 @@ networks:
   challenge-registry:
 
 volumes:
-  challenge-registry-api-db:
-    name: challenge-registry-api-db
-  keycloak-db:
-    name: keycloak-db
+  challenge-mongodb:
+    name: challenge-mongodb
+  challenge-postgresql:
+    name: challenge-postgresql

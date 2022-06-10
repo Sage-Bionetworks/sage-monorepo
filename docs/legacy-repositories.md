@@ -4,14 +4,14 @@ This table lists the repositories used to develop the individual components of
 the Challenge Registry. Since XXX, the codebase of these components is
 maintained in this monorepo.
 
-| Repository                             | Monorepo Project     |
-|----------------------------------------|----------------------|
-| [Sage-Bionetworks/rocc-app]            | apps/web-app         |
-| [Sage-Bionetworks/rocc-db-client]      | apps/db-cli          |
-| [Sage-Bionetworks/rocc-service]        | apps/api             |
-| [Sage-Bionetworks/rocc-client-angular] | libs/api-angular     |
-| [Sage-Bionetworks/rocc-client-r]       | libs/api-r           |
-| [Sage-Bionetworks/rocc-schemas]        | libs/api-spec        |
+| Repository                             | Monorepo Project      |
+|----------------------------------------|-----------------------|
+| [Sage-Bionetworks/rocc-app]            | apps/web-app          |
+| [Sage-Bionetworks/rocc-db-client]      | apps/challenge-db-cli |
+| [Sage-Bionetworks/rocc-service]        | apps/api              |
+| [Sage-Bionetworks/rocc-client-angular] | libs/api-angular      |
+| [Sage-Bionetworks/rocc-client-r]       | libs/api-r            |
+| [Sage-Bionetworks/rocc-schemas]        | libs/api-spec         |
 
 <!-- Links -->
 

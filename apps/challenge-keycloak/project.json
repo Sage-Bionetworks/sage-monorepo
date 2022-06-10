@@ -1,0 +1,109 @@
+{
+  "root": "apps/challenge-keycloak",
+  "sourceRoot": "apps/challenge-keycloak/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/challenge-keycloak"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/challenge-keycloak"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "serve-detach": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/challenge-keycloak"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "import-dev-data": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "docker run --rm --env-file .env -v \"$(pwd)\"/data/h2:/opt/keycloak/data/h2 -v \"$(pwd)\"/data/import:/opt/keycloak/data/import:ro sagebionetworks/challenge-keycloak:latest import --dir /opt/keycloak/data/import --override true"
+        ],
+        "cwd": "apps/challenge-keycloak"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        }
+      ]
+    },
+    "export-dev-data": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "docker run --rm --env-file .env -v \"$(pwd)\"/data/h2:/opt/keycloak/data/h2 -v \"$(pwd)\"/data/import:/opt/keycloak/data/import sagebionetworks/challenge-keycloak:latest export --dir /opt/keycloak/data/import"
+        ],
+        "cwd": "apps/challenge-keycloak"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        }
+      ]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/challenge-keycloak",
+        "push": false,
+        "tags": [
+          "sagebionetworks/challenge-keycloak:latest"
+        ]
+      }
+    }
+  },
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
+  "implicitDependencies": ["challenge-postgresql"]
+}
