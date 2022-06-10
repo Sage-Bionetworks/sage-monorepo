@@ -103,53 +103,40 @@ better working environment to developers.
 
 ## Preparing the remote host
 
-This section describes how to instantiate an AWS EC2 as the remote host.
+This section describes how to instantiate an AWS EC2 as the remote host.  Steps
+outlined below will assume you have access to the Sage AWS Service Catalog.
 
-### Login into the AWS Management Console
+### On the Service Catalog Portal
 
-- Login into [Sage JumpCloud user console](https://console.jumpcloud.com/userconsole#/)
-- `Applications` > Select `aws-sso-organization`
-- Select the AWS account `org-sagebase-sandbox`
-- Click on `Management console` for the role `Developer`
-
-### In AWS Management Console
-
-- Instantiate EC2 instance
-  - Name and tags
+- Log in to the [Service Catalog](sc.sageit.org) with your Synapse credentials.
+- From the list of Products, select **EC2: Linux Docker**. On the Product page,
+then select **Launch product** in the upper-right corner.
+- Fill out the wizard as follows:
+  - **Provisioned product name**
     - Name: `<GitHub username>-devcontainers`
-    - Tags:
-      - `Department`: `IBC` or `CNB` (selected from [this list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Departments.json))
-      - `Project`: `challenge` (selected from [this list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Projects.json))
-      - `OwnerEmail`: `<your email address>`
-      - `CostCenter`: `NIH-ITCR / 101600` (selected from [these lists](https://github.com/Sage-Bionetworks/aws-infra/tree/master/templates/tags))
-  - Application and OS Images (Amazon Machine Image)
-    - Name: `Ubuntu Server 22.04 LTS (HVM), SSD Volume Type`
-    - Architecture: `64-bit (x86)`
-    - AMI ID: `ami-09d56f8956ab235b3`
-  - Instance type
-    - Instance type: `t3a.xlarge`
-  - Key pair (login)
-    - Select your existing key pair or
-    - [Create a new key pair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/create-key-pairs.html)
-  - Network settings
-    - Click on `Edit`
-    - VPC: `vpc-0e9b80dc470a797d5 (sandcastlevpc)`
-    - Subnet: `subnet-025c297e427e44daf (Sandcastle-Private1)`
-    - Firewall
-      - Click on `Select existing security group`
-      - Select security group `challenge-registry-devcontainers (sg-03b891e56d6a1e851)`
-  - Configure storage
-    - 1x 50 GB (gp2)
-- Identify the Private IPv4 addresses of the EC2 once it has started
+  - **Parameters**:
+    - EC2 Instance Type: `t3a.xlarge`
+    - Base Image: `AmazonLinuxDocker` (leave default)
+    - Disk Size: 50
+  - **Manage tags**:
+    - `Department`: `IBC` or `CNB` (selected from [this list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Departments.json))
+    - `Project`: `challenge` (selected from [this list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Projects.json))
+    - `CostCenter`: `NIH-ITCR / 101600` (selected from [these lists](https://github.com/Sage-Bionetworks/aws-infra/tree/master/templates/tags))
+  - **Enable event notifications**: SKIP - DO NOT MODIFY
+- Click **Launch product**. Your instance will take anywhere between 3-5 minutes
+to deploy.  You can either wait on this page until "EC2Instance" shows up on the
+list under Resources, or you can leave and come back at a later time.
 
 ### On your local host
 
-- Add a host profile to your local `.ssh/config`
+- Navigate to the Provisioned products page for your instance.  Under **Events**,
+copy the `EC2InstancePrivateIpAddress`
+- In your terminal, add a host profile to your local `.ssh/config`
    ```console
    Host devcontainers
        HostName <private_ip>
-       User ubuntu
-       IdentityFile ~/.ssh/tschaffter-sandbox.pem
+       User ec2-user
+       IdentityFile ~/.ssh/id_rsa
    ```
 - Connect to [Sage VPN](https://sagebionetworks.jira.com/wiki/spaces/IT/pages/1705246745/AWS+Client+VPN+User+Guide)
 - SSH to the instance
@@ -161,19 +148,12 @@ This section describes how to instantiate an AWS EC2 as the remote host.
 
 - Update system packages
    ```console
-   sudo apt update && sudo apt upgrade -y
+   sudo yum update -y
    ```
-- [Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository)
-- Add your user account to docker group.
+- Docker should already be readily available on the instance. Verify this
+by running any Docker command, e.g.
    ```console
-   sudo usermod -aG docker ${USER}
-   ```
-- To apply the new group membership, log out of the server and back in. Run the
-  command `groups` to check that your user is a member of the group `docker`.
-- Verify that Docker Engine is installed correctly by running the hello-world
-  image.
-   ```console
-   docker run --rm hello-world
+   docker --version
    ```
 - Clone your fork in the home directory
 
