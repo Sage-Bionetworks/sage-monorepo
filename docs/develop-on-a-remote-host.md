@@ -138,28 +138,28 @@ up on the list under Resources, or you can leave and come back at a later time.
 >
 > (Don't worry, you will only need to do this once for your local machine!)
 
-- Navigate to the Provisioned products page for your instance.  Under **Events**,
-copy the `EC2InstancePrivateIpAddress`
 - In your terminal, connect to your instance following the
 [**Connecting to an Instance - SSM with SSH**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMwithSSH)
-instructions from the Service Catalog Provisioning.
-- Once you can successfully login through SSM with SSH, exit the instance and
-return to your local `.ssh/config`. Add the following:
+instructions from the Service Catalog Provisioning doc.
+- Once you can successfully login through SSM with SSH, exit the instance.
+- Navigate to the Provisioned products page for your instance.  Under **Events**,
+copy the `EC2InstancePrivateIpAddress`
+- In your terminal, add the following into your local `~/.ssh/config`:
    ```console
    Host devcontainers
        HostName <private_ip>
        User ec2-user
        IdentityFile ~/.ssh/id_rsa
    ```
-- Connect to [Sage VPN](https://sagebionetworks.jira.com/wiki/spaces/IT/pages/1705246745/AWS+Client+VPN+User+Guide)
-- SSH to the instance
+- Connect to the [Sage VPN](https://sagebionetworks.jira.com/wiki/spaces/IT/pages/1705246745/AWS+Client+VPN+User+Guide)
+- In your terminal, SSH to the instance to ensure `~/.ssh/config` was setup correctly.
    ```console
    ssh devcontainers
    ```
 
 ### On the EC2 instance
 
-- Update system packages
+- Update the system packages.
    ```console
    sudo yum update -y
    ```
@@ -168,7 +168,7 @@ by running any Docker command, e.g.
    ```console
    docker --version
    ```
-- Clone your fork in the home directory
+- Clone your fork into the home directory.
 - To easily pull and push changes, we suggest storing your GitHub credentials
 onto the instance.  Follow the [**Storing GitHub credentials on the EC2 instance**](https://sagebionetworks.jira.com/wiki/spaces/APGD/pages/2590244872/Service+Catalog+Instance+Setup#Storing-GitHub-credentials-on-the-EC2-instance).
 instructions to do so.
