@@ -96,3 +96,7 @@ function challenge-welcome {
     challenge-nx-cloud-help
   fi
 }
+
+function challenge-docker-stop {
+  docker stop $(docker ps -q)
+}
