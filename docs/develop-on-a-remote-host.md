@@ -129,14 +129,14 @@ up on the list under Resources, or you can leave and come back at a later time.
 
 ### On your local host
 
-#### Note:
-**If this is your first time connecting to an instance,** you will first need to
-set up access to the EC2 instances with the AWS Systems Manager (SSM).  Follow
-the instructions under:
-  - [**Create a Synapse personal access token**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-CreateaSynapsepersonalaccesstoken)
-  - [**SSM access to an Instance**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMaccesstoanInstance)
-
-(Don't worry, you will only need to do this once!)
+> #### Note:
+> If this is your first time **ever** connecting to an instance from your machine, 
+> you will first need to set up EC2 access with the AWS Systems Manager (SSM). 
+> Follow the instructions below to complete the setup:
+>  - [**Create a Synapse personal access token**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-CreateaSynapsepersonalaccesstoken)
+>  - [**SSM access to an Instance**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMaccesstoanInstance)
+>
+> (Don't worry, you will only need to do this once for your local machine!)
 
 - Navigate to the Provisioned products page for your instance.  Under **Events**,
 copy the `EC2InstancePrivateIpAddress`
@@ -169,7 +169,9 @@ by running any Docker command, e.g.
    docker --version
    ```
 - Clone your fork in the home directory
-- Follow the [**Storing GitHub credentials on the EC2 instance**](https://sagebionetworks.jira.com/wiki/spaces/APGD/pages/2590244872/Service+Catalog+Instance+Setup#Storing-GitHub-credentials-on-the-EC2-instance) instructions to config your GitHub account
+- To easily pull and push changes, we suggest storing your GitHub credentials
+onto the instance.  Follow the [**Storing GitHub credentials on the EC2 instance**](https://sagebionetworks.jira.com/wiki/spaces/APGD/pages/2590244872/Service+Catalog+Instance+Setup#Storing-GitHub-credentials-on-the-EC2-instance).
+instructions to do so.
 
 ### In VS Code
 
