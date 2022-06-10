@@ -110,8 +110,8 @@ outlined below will assume you have access to the Sage AWS Service Catalog.
 
 - Log in to the [Service Catalog](sc.sageit.org) with your Synapse credentials.
 - From the list of Products, select **EC2: Linux Docker**. On the Product page,
-then select **Launch product** in the upper-right corner.
-- Fill out the wizard as follows:
+click on **Launch product** in the upper-right corner.
+- On the next page, fill out the wizard as follows:
   - **Provisioned product name**
     - Name: `<GitHub username>-devcontainers`
   - **Parameters**:
@@ -123,15 +123,19 @@ then select **Launch product** in the upper-right corner.
     - `Project`: `challenge` (selected from [this list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Projects.json))
     - `CostCenter`: `NIH-ITCR / 101600` (selected from [these lists](https://github.com/Sage-Bionetworks/aws-infra/tree/master/templates/tags))
   - **Enable event notifications**: SKIP - DO NOT MODIFY
-- Click **Launch product**. Your instance will take anywhere between 3-5 minutes
-to deploy.  You can either wait on this page until "EC2Instance" shows up on the
-list under Resources, or you can leave and come back at a later time.
+- Click on **Launch product**. Your instance will take anywhere between 3-5
+minutes to deploy.  You can either wait on this page until "EC2Instance" shows
+up on the list under Resources, or you can leave and come back at a later time.
 
 ### On your local host
 
 - Navigate to the Provisioned products page for your instance.  Under **Events**,
 copy the `EC2InstancePrivateIpAddress`
-- In your terminal, add a host profile to your local `.ssh/config`
+- In your terminal, connect to your instance following the
+[**Connecting to an Instance - SSM with SSH**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMwithSSH)
+instructions from the Service Catalog Provisioning.
+- Once you can successfully login through SSM with SSH, exit the instance and
+return to your local `.ssh/config`. Add the following:
    ```console
    Host devcontainers
        HostName <private_ip>
