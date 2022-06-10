@@ -106,15 +106,6 @@ better working environment to developers.
 This section describes how to instantiate an AWS EC2 as the remote host.  Steps
 outlined below will assume you have access to the Sage AWS Service Catalog.
 
-#### Note:
-**If this is your first time connecting to an instance,** you will first need to
-set up access to the EC2 instances with the AWS Systems Manager (SSM).  Follow
-the instructions under:
-  - [**Create a Synapse personal access token**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-CreateaSynapsepersonalaccesstoken)
-  - [**SSM access to an Instance**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMaccesstoanInstance)
-
-(Don't worry, you will only need to do this once!)
-
 ### On the Service Catalog Portal
 
 - Log in to the [Service Catalog](sc.sageit.org) with your Synapse credentials.
@@ -137,6 +128,15 @@ minutes to deploy.  You can either wait on this page until "EC2Instance" shows
 up on the list under Resources, or you can leave and come back at a later time.
 
 ### On your local host
+
+#### Note:
+**If this is your first time connecting to an instance,** you will first need to
+set up access to the EC2 instances with the AWS Systems Manager (SSM).  Follow
+the instructions under:
+  - [**Create a Synapse personal access token**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-CreateaSynapsepersonalaccesstoken)
+  - [**SSM access to an Instance**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMaccesstoanInstance)
+
+(Don't worry, you will only need to do this once!)
 
 - Navigate to the Provisioned products page for your instance.  Under **Events**,
 copy the `EC2InstancePrivateIpAddress`
