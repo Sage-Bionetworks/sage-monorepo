@@ -7,6 +7,10 @@
 
 GET {{userServiceHost}}/actuator/info
 
+### Check API gateway info
+
+GET {{apiGatewayHost}}/actuator/info
+
 ### Check user service info via the API gateway
 
 GET {{apiGatewayHost}}/user/actuator/info
