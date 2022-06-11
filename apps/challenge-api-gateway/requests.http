@@ -3,9 +3,9 @@
 @userServiceHost = http://localhost:8083
 @keycloakHost = http://localhost:8080
 
-### Check API gateway info
+### Check API gateway actuator (expected to fail because not authentified)
 
-GET {{apiGatewayHost}}/actuator/info
+GET {{apiGatewayHost}}/actuator
 
 ### Check service registry info
 
@@ -15,10 +15,10 @@ GET {{serviceRegistryHost}}/actuator/info
 
 GET {{userServiceHost}}/actuator/info
 
-### Check user service info via the API gateway
+### Check user service info via the API gateway (expected to fail because not
+### authentified)
 
 GET {{apiGatewayHost}}/user/actuator/info
-
 
 ### Get access token from Keycloak
 
@@ -39,7 +39,17 @@ grant_type=password
 &username={{username}}
 &password={{password}}
 
-### Check user service info using access token
+### Check user service info
 
 GET {{apiGatewayHost}}/user/actuator/info
+Authorization: Bearer {{login.response.body.$.access_token}}
+
+### Check API gateway info
+
+GET {{apiGatewayHost}}/actuator/info
+Authorization: Bearer {{login.response.body.$.access_token}}
+
+### Check API gateway routes
+
+GET {{apiGatewayHost}}/actuator/gateway/routes
 Authorization: Bearer {{login.response.body.$.access_token}}

@@ -48,6 +48,17 @@ eureka:
     service-url:
       defaultZone: ${service.registry.url}
 
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - info
+          - gateway
+
 info:
   application:
     name: ${spring.application.name}
