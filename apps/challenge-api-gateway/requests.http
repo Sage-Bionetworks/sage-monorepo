@@ -3,6 +3,14 @@
 @userServiceHost = http://localhost:8083
 @keycloakHost = http://localhost:8080
 
+### Check API gateway info
+
+GET {{apiGatewayHost}}/actuator/info
+
+### Check service registry info
+
+GET {{serviceRegistryHost}}/actuator/info
+
 ### Check user service info
 
 GET {{userServiceHost}}/actuator/info

@@ -47,3 +47,7 @@ eureka:
   client:
     service-url:
       defaultZone: ${service.registry.url}
+
+info:
+  application:
+    name: ${spring.application.name}
