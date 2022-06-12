@@ -9,8 +9,9 @@ services:
       - .env
     volumes:
       - challenge-mariadb:/data/db
-    networks:
-      - challenge
+    # networks:
+    #   - challenge
+    network_mode: "host"
     ports:
       - "3306:3306"
 

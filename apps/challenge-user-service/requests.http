@@ -7,14 +7,14 @@
 
 GET {{userServiceHost}}/actuator/info
 
-### Check API gateway info
+### Check API gateway actuator (expected to redirect to Keycloak login page)
 
 GET {{apiGatewayHost}}/actuator/info
 
-### Check user service info via the API gateway
+### Check user service info via the API gateway (expected to redirect to
+### Keycloak login page)
 
 GET {{apiGatewayHost}}/user/actuator/info
-
 
 ### Get access token from Keycloak
 
@@ -37,7 +37,7 @@ grant_type=password
 &username={{username}}
 &password={{password}}
 
-### Check user service info using access token
+### Check user service info
 
 GET {{apiGatewayHost}}/user/actuator/info
 Authorization: Bearer {{login.response.body.$.access_token}}
