@@ -1,6 +1,6 @@
 {
   "name": "Challenge Dev Container",
-  "image": "sagebionetworks/challenge-devcontainer:8e0d61ab",
+  "image": "sagebionetworks/challenge-devcontainer:cd2aef12",
 
   "runArgs": [
     "--add-host=challenge-api-gateway:127.0.0.1",

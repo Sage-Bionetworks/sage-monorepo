@@ -103,79 +103,75 @@ better working environment to developers.
 
 ## Preparing the remote host
 
-This section describes how to instantiate an AWS EC2 as the remote host.
+This section describes how to instantiate an AWS EC2 as the remote host.  Steps
+outlined below will assume you have access to the Sage AWS Service Catalog.
 
-### Login into the AWS Management Console
+### On the Service Catalog Portal
 
-- Login into [Sage JumpCloud user console](https://console.jumpcloud.com/userconsole#/)
-- `Applications` > Select `aws-sso-organization`
-- Select the AWS account `org-sagebase-sandbox`
-- Click on `Management console` for the role `Developer`
-
-### In AWS Management Console
-
-- Instantiate EC2 instance
-  - Name and tags
+- Log in to the [Service Catalog](sc.sageit.org) with your Synapse credentials.
+- From the list of Products, select **EC2: Linux Docker**. On the Product page,
+click on **Launch product** in the upper-right corner.
+- On the next page, fill out the wizard as follows:
+  - **Provisioned product name**
     - Name: `<GitHub username>-devcontainers`
-    - Tags:
-      - `Department`: `IBC` or `CNB` (selected from [this list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Departments.json))
-      - `Project`: `challenge` (selected from [this list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Projects.json))
-      - `OwnerEmail`: `<your email address>`
-      - `CostCenter`: `NIH-ITCR / 101600` (selected from [these lists](https://github.com/Sage-Bionetworks/aws-infra/tree/master/templates/tags))
-  - Application and OS Images (Amazon Machine Image)
-    - Name: `Ubuntu Server 22.04 LTS (HVM), SSD Volume Type`
-    - Architecture: `64-bit (x86)`
-    - AMI ID: `ami-09d56f8956ab235b3`
-  - Instance type
-    - Instance type: `t3a.xlarge`
-  - Key pair (login)
-    - Select your existing key pair or
-    - [Create a new key pair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/create-key-pairs.html)
-  - Network settings
-    - Click on `Edit`
-    - VPC: `vpc-0e9b80dc470a797d5 (sandcastlevpc)`
-    - Subnet: `subnet-025c297e427e44daf (Sandcastle-Private1)`
-    - Firewall
-      - Click on `Select existing security group`
-      - Select security group `challenge-registry-devcontainers (sg-03b891e56d6a1e851)`
-  - Configure storage
-    - 1x 50 GB (gp2)
-- Identify the Private IPv4 addresses of the EC2 once it has started
+  - **Parameters**:
+    - EC2 Instance Type: `t3a.xlarge`
+    - Base Image: `AmazonLinuxDocker` (leave default)
+    - Disk Size: 50
+  - **Manage tags**:
+    - `Department`: `IBC` or `CNB` (selected from [this list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Departments.json))
+    - `Project`: `challenge` (selected from [this list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Projects.json))
+    - `CostCenter`: `NIH-ITCR / 101600` (selected from [these lists](https://github.com/Sage-Bionetworks/aws-infra/tree/master/templates/tags))
+  - **Enable event notifications**: SKIP - DO NOT MODIFY
+- Click on **Launch product**. Your instance will take anywhere between 3-5
+minutes to deploy.  You can either wait on this page until "EC2Instance" shows
+up on the list under Resources, or you can leave and come back at a later time.
 
 ### On your local host
 
-- Add a host profile to your local `.ssh/config`
+> #### Note:
+> If this is your first time **ever** connecting to an instance from your machine, 
+> you will first need to set up EC2 access with the AWS Systems Manager (SSM). 
+> Follow the instructions below to complete the setup:
+>  - [**Create a Synapse personal access token**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-CreateaSynapsepersonalaccesstoken)
+>  - [**SSM access to an Instance**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMaccesstoanInstance)
+>
+> (Don't worry, you will only need to do this once for your local machine!)
+
+- In your terminal, connect to your instance following the
+[**Connecting to an Instance - SSM with SSH**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMwithSSH)
+instructions from the Service Catalog Provisioning doc.
+- Once you can successfully login through SSM with SSH, exit the instance.
+- Navigate to the Provisioned products page for your instance.  Under **Events**,
+copy the `EC2InstancePrivateIpAddress`
+- In your terminal, add the following into your local `~/.ssh/config`:
    ```console
    Host devcontainers
        HostName <private_ip>
-       User ubuntu
-       IdentityFile ~/.ssh/tschaffter-sandbox.pem
+       User ec2-user
+       IdentityFile ~/.ssh/id_rsa
    ```
-- Connect to [Sage VPN](https://sagebionetworks.jira.com/wiki/spaces/IT/pages/1705246745/AWS+Client+VPN+User+Guide)
-- SSH to the instance
+- Connect to the [Sage VPN](https://sagebionetworks.jira.com/wiki/spaces/IT/pages/1705246745/AWS+Client+VPN+User+Guide)
+- In your terminal, SSH to the instance to ensure `~/.ssh/config` was setup correctly.
    ```console
    ssh devcontainers
    ```
 
 ### On the EC2 instance
 
-- Update system packages
+- Update the system packages.
    ```console
-   sudo apt update && sudo apt upgrade -y
+   sudo yum update -y
    ```
-- [Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository)
-- Add your user account to docker group.
+- Docker should already be readily available on the instance. Verify this
+by running any Docker command, e.g.
    ```console
-   sudo usermod -aG docker ${USER}
+   docker --version
    ```
-- To apply the new group membership, log out of the server and back in. Run the
-  command `groups` to check that your user is a member of the group `docker`.
-- Verify that Docker Engine is installed correctly by running the hello-world
-  image.
-   ```console
-   docker run --rm hello-world
-   ```
-- Clone your fork in the home directory
+- Clone your fork into the home directory.
+- To easily pull and push changes, we suggest storing your GitHub credentials
+onto the instance.  Follow the [**Storing GitHub credentials on the EC2 instance**](https://sagebionetworks.jira.com/wiki/spaces/APGD/pages/2590244872/Service+Catalog+Instance+Setup#Storing-GitHub-credentials-on-the-EC2-instance).
+instructions to do so.
 
 ### In VS Code
 
