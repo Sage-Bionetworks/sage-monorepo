@@ -100,3 +100,10 @@ function challenge-welcome {
 function challenge-docker-stop {
   docker stop $(docker ps -q)
 }
+
+function challenge-initialize-env {
+  challenge-welcome
+
+  # Add app hostnames
+  sudo ./tools/add-hostnames.sh
+}
