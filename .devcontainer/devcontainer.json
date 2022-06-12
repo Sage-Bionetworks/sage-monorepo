@@ -2,6 +2,11 @@
   "name": "Challenge Dev Container",
   "image": "sagebionetworks/challenge-devcontainer:8e0d61ab",
 
+  "runArgs": [
+    "--add-host=challenge-api-gateway:127.0.0.1",
+    "--add-host=challenge-keycloak:127.0.0.1"
+  ],
+
   "features": {
     // docker features must be specified in the developer facing
     // devcontainer.json for VS Code to properly mount the docker sockets.

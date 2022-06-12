@@ -3,7 +3,7 @@
 @userServiceHost = http://localhost:8083
 @keycloakHost = http://localhost:8080
 
-### Check API gateway actuator (expected to fail because not authentified)
+### Check API gateway actuator (expected to redirect to Keycloak login page)
 
 GET {{apiGatewayHost}}/actuator
 
@@ -15,8 +15,8 @@ GET {{serviceRegistryHost}}/actuator/info
 
 GET {{userServiceHost}}/actuator/info
 
-### Check user service info via the API gateway (expected to fail because not
-### authentified)
+### Check user service info via the API gateway (expected to redirect to
+### Keycloak login page)
 
 GET {{apiGatewayHost}}/user/actuator/info
 
