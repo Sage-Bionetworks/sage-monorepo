@@ -19,6 +19,6 @@ volumes:
   challenge-postgresql:
     name: challenge-postgresql
 
-networks:
-  challenge:
-    name: challenge
+# networks:
+#   challenge:
+#     name: challenge

@@ -19,6 +19,6 @@ volumes:
   challenge-mariadb:
     name: challenge-mariadb
 
-networks:
-  challenge:
-    name: challenge
+# networks:
+#   challenge:
+#     name: challenge

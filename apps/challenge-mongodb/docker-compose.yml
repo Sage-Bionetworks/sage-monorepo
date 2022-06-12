@@ -19,6 +19,6 @@ volumes:
   challenge-mongodb:
     name: challenge-mongodb
 
-networks:
-  challenge:
-    name: challenge
+# networks:
+#   challenge:
+#     name: challenge

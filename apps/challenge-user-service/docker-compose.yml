@@ -16,6 +16,6 @@ services:
       - "8083:8083"
     command: start-dev
 
-networks:
-  challenge:
-    name: challenge
+# networks:
+#   challenge:
+#     name: challenge
