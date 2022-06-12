@@ -1,18 +1,19 @@
 version: "3.8"
 
 services:
-  challenge-api-gateway:
-    image: sagebionetworks/challenge-api-gateway:latest
-    container_name: challenge-api-gateway
+  challenge-user-service:
+    image: sagebionetworks/challenge-user-service:latest
+    container_name: challenge-user-service
     restart: always
     environment:
       - KEYCLOAK_URL=http://challenge-keycloak:8080
       - SERVICE_REGISTRY_URL=http://challenge-service-registry:8081/eureka
+      - DB_URL=jdbc:mysql://challenge-mariadb:3306/challenge
     # networks:
     #   - challenge
     network_mode: "host"
     ports:
-      - "8082:8082"
+      - "8083:8083"
     command: start-dev
 
 # networks:

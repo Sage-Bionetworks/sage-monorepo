@@ -1,12 +1,19 @@
 version: "3.8"
 
 services:
-  keycloak:
+  challenge-service-registry:
     image: sagebionetworks/challenge-service-registry:latest
     container_name: challenge-service-registry
     restart: always
-    # env_file:
-    #   - .env
+    environment:
+      - DEFAULT_ZONE=http://challenge-service-registry:8081/eureka
+    # networks:
+    #   - challenge
+    network_mode: "host"
     ports:
       - "8081:8081"
     command: start-dev
+
+# networks:
+#   challenge:
+#     name: challenge

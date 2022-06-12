@@ -8,6 +8,19 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8081/eureka
+      defaultZone: ${default.zone}
     fetch-registry: false
     register-with-eureka: false
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info
+
+info:
+  application:
+    name: ${spring.application.name}
