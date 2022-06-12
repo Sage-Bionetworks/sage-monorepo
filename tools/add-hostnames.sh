@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Add an entry to /etc/hosts for each app directory included in apps/.
+# Map the name of the apps in ./apps to 127.0.0.1.
 
 # list the names of the apps and services
 readarray -t app_names < <(find ./apps -mindepth 1 -maxdepth 1 -type d -printf '%P\n')

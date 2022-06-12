@@ -95,11 +95,15 @@ function challenge-welcome {
   if [ ! -f "nx-cloud.env" ]; then
     challenge-nx-cloud-help
   fi
-
-  # initialize environment
-  sudo ./tools/add-hosts.sh
 }
 
 function challenge-docker-stop {
   docker stop $(docker ps -q)
+}
+
+function challenge-initialize-env {
+  challenge-welcome
+
+  # Add app hostnames
+  sudo ./tools/add-hostnames.sh
 }
