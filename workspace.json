@@ -37,6 +37,7 @@
     "challenge-user-service": "apps/challenge-user-service",
     "challenge-mariadb": "apps/challenge-mariadb",
     "challenge-mongodb": "apps/challenge-mongodb",
-    "challenge-postgresql": "apps/challenge-postgresql"
+    "challenge-postgresql": "apps/challenge-postgresql",
+    "challenge-core-service": "apps/challenge-core-service"
   }
 }
