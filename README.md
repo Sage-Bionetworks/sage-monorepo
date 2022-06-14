@@ -55,7 +55,9 @@ Then open your fork repo inside our devcontainer using these instructions:
 ### Preparing the databases
 
 - Run `nx import-dev-data challenge-keycloak` to seed Keycloak database.
-  - Keycloak must not be running when executing this command.
+
+> **Warning**
+> Keycloak must not be running when executing this command.
 
 ### Starting the Challenge Registry
 
