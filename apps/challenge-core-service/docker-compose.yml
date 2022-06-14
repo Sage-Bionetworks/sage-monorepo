@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  challenge-core-service:
+    image: sagebionetworks/challenge-core-service:latest
+    container_name: challenge-core-service
+    restart: always
+    # environment:
+    #   - KEYCLOAK_URL=http://challenge-keycloak:8080
+    #   - SERVICE_REGISTRY_URL=http://challenge-service-registry:8081/eureka
+    #   - DB_URL=jdbc:mysql://challenge-mariadb:3306/challenge
+    # networks:
+    #   - challenge
+    network_mode: "host"
+    ports:
+      - "8092:8092"
+    command: start-dev
+
+# networks:
+#   challenge:
+#     name: challenge

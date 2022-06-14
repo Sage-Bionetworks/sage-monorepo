@@ -1,16 +1,16 @@
 spring:
   application:
-    name: challenge-user-service
+    name: challenge-core-service
   datasource:
     url: ${db.url}
     username: maria
     password: changeme
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 
 server:
-  port: 8083
+  port: 8092
 
 eureka:
   client:
@@ -27,13 +27,5 @@ management:
         include: info
 
 info:
-  application:
+  app:
     name: ${spring.application.name}
-
-app:
-  config:
-    keycloak:
-      server-url: ${keycloak.url}
-      realm: test
-      clientId: challenge-api-client
-      client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
