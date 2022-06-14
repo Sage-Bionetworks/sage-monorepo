@@ -10,18 +10,19 @@ services:
   # any modification to existing users.
   challenge-logstash-kibana-setup:
     image: sagebionetworks/challenge-logstash-kibana-setup:latest
+    container_name: challenge-logstash-kibana-setup
     build:
       context: setup/
     init: true
-    env_file:
-      - .env
     environment:
       # These two password should probably be imported from the logstash and
       # kibana projects.
+      ELASTIC_PASSWORD: changeme
       LOGSTASH_INTERNAL_PASSWORD: changeme
       KIBANA_SYSTEM_PASSWORD: changeme
     volumes:
       - challenge-logstash-kibana-setup:/state:Z
+    network_mode: "host"
 
   challenge-elasticsearch:
     image: sagebionetworks/challenge-elasticsearch:latest
