@@ -15,8 +15,8 @@ services:
       context: setup/
     init: true
     environment:
-      # These two password should probably be imported from the logstash and
-      # kibana projects.
+      # These passwords should probably be imported from the logstash and kibana
+      # projects.
       ELASTIC_PASSWORD: changeme
       LOGSTASH_INTERNAL_PASSWORD: changeme
       KIBANA_SYSTEM_PASSWORD: changeme
