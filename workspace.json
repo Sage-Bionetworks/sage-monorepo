@@ -38,6 +38,7 @@
     "challenge-mariadb": "apps/challenge-mariadb",
     "challenge-mongodb": "apps/challenge-mongodb",
     "challenge-postgresql": "apps/challenge-postgresql",
-    "challenge-elasticsearch": "apps/challenge-elasticsearch"
+    "challenge-elasticsearch": "apps/challenge-elasticsearch",
+    "challenge-logstash": "apps/challenge-logstash"
   }
 }
