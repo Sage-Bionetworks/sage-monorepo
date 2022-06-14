@@ -39,6 +39,7 @@
     "challenge-mongodb": "apps/challenge-mongodb",
     "challenge-postgresql": "apps/challenge-postgresql",
     "challenge-elasticsearch": "apps/challenge-elasticsearch",
-    "challenge-logstash": "apps/challenge-logstash"
+    "challenge-logstash": "apps/challenge-logstash",
+    "challenge-kibana": "apps/challenge-kibana"
   }
 }

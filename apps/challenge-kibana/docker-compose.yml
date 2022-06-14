@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  challenge-kibana:
+    image: sagebionetworks/challenge-kibana:latest
+    container_name: challenge-kibana
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+    network_mode: "host"
+    ports:
+      - "5601:5601"

@@ -40,13 +40,12 @@
     4201,
     4211,
     5432,
+    5601,
     8080,
     8081,
     8082,
     8083,
     9000,
-    9200,
-    9300,
     27017
   ],
 
@@ -70,6 +69,10 @@
       "label": "challenge-postgresql",
       "onAutoForward": "silent"
     },
+    "5601": {
+      "label": "challenge-kibana",
+      "onAutoForward": "silent"
+    },
     "8080": {
       "label": "challenge-keycloak",
       "onAutoForward": "silent"
@@ -88,14 +91,6 @@
     },
     "9000": {
       "label": "challenge-registry-movie-api",
-      "onAutoForward": "silent"
-    },
-    "9200": {
-      "label": "challenge-elasticsearch",
-      "onAutoForward": "silent"
-    },
-    "9300": {
-      "label": "challenge-elasticsearch",
       "onAutoForward": "silent"
     },
     "27017": {
