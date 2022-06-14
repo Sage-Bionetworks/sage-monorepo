@@ -68,6 +68,7 @@
     "scope:backend"
   ],
   "implicitDependencies": [
-    "challenge-elasticsearch"
+    "challenge-elasticsearch",
+    "challenge-logstash"
   ]
 }
