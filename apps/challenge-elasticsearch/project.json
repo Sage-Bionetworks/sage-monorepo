@@ -18,12 +18,16 @@
       },
       "dependsOn": [
         {
-          "target": "build-image",
+          "target": "build",
           "projects": "self"
         },
         {
           "target": "prepare",
           "projects": "self"
+        },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
         }
       ]
     },
@@ -41,6 +45,10 @@
         {
           "target": "prepare",
           "projects": "self"
+        },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
         }
       ]
     },
