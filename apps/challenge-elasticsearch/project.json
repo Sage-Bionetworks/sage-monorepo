@@ -56,7 +56,7 @@
     }
   },
   "tags": [
-    "type:db",
+    "type:service",
     "scope:backend"
   ]
 }

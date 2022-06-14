@@ -13,7 +13,7 @@ services:
       # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
     volumes:
-      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
+      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
       - challenge-elasticsearch:/usr/share/elasticsearch/data:z
     network_mode: "host"
     ports:
@@ -23,7 +23,3 @@ services:
 volumes:
   challenge-elasticsearch:
     name: challenge-elasticsearch
-
-# networks:
-#   challenge:
-#     name: challenge
