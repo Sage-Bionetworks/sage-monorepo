@@ -2,8 +2,7 @@ version: "3.8"
 
 services:
   # The 'setup' service runs a one-off script which initializes the
-  # 'logstash_internal' and 'kibana_system' users inside Elasticsearch with the
-  # values of the passwords defined in the '.env' file.
+  # 'logstash_internal' and 'kibana_system' users inside Elasticsearch.
   #
   # This task is only performed during the *initial* startup of the stack. On all
   # subsequent runs, the service simply returns immediately, without performing
@@ -15,9 +14,7 @@ services:
       context: setup/
     init: true
     environment:
-      ELASTICSEARCH_HOST: localhost
-      # These passwords should probably be imported from the logstash and kibana
-      # projects.
+      ELASTICSEARCH_HOST: challenge-elasticsearch
       ELASTIC_PASSWORD: changeme
       LOGSTASH_INTERNAL_PASSWORD: changeme
       KIBANA_SYSTEM_PASSWORD: changeme

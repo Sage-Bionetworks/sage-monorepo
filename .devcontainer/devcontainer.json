@@ -46,6 +46,8 @@
     8082,
     8083,
     9000,
+    9200,
+    9300,
     27017
   ],
 
@@ -91,6 +93,14 @@
     },
     "9000": {
       "label": "challenge-registry-movie-api",
+      "onAutoForward": "silent"
+    },
+    "9200": {
+      "label": "challenge-elasticsearch (HTTP)",
+      "onAutoForward": "silent"
+    },
+    "9300": {
+      "label": "challenge-elasticsearch (TCP transport)",
       "onAutoForward": "silent"
     },
     "27017": {
