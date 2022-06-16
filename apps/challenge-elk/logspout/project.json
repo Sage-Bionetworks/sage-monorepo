@@ -1,20 +1,20 @@
 {
-  "root": "apps/challenge-elk/kibana",
-  "sourceRoot": "apps/challenge-elk/kibana/src",
+  "root": "apps/challenge-elk/logspout",
+  "sourceRoot": "apps/challenge-elk/logspout/src",
   "projectType": "application",
   "targets": {
     "prepare": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
-        "cwd": "apps/challenge-elk/kibana"
+        "cwd": "apps/challenge-elk/logspout"
       }
     },
     "serve": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "docker compose up",
-        "cwd": "apps/challenge-elk/kibana"
+        "cwd": "apps/challenge-elk/logspout"
       },
       "dependsOn": [
         {
@@ -35,7 +35,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "docker compose up -d",
-        "cwd": "apps/challenge-elk/kibana"
+        "cwd": "apps/challenge-elk/logspout"
       },
       "dependsOn": [
         {
@@ -55,10 +55,10 @@
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "context": "apps/challenge-elk/kibana",
+        "context": "apps/challenge-elk/logspout",
         "push": false,
         "tags": [
-          "sagebionetworks/challenge-kibana:latest"
+          "sagebionetworks/challenge-logspout:latest"
         ]
       }
     }
@@ -68,8 +68,6 @@
     "scope:backend"
   ],
   "implicitDependencies": [
-    "challenge-elasticsearch",
-    "challenge-logstash",
-    "challenge-logspout"
+    "challenge-logstash"
   ]
 }
