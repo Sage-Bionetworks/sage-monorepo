@@ -107,7 +107,4 @@ function challenge-docker-stop {
 
 function challenge-initialize-env {
   challenge-welcome
-
-  # Add app hostnames
-  sudo ./tools/add-hostnames.sh
 }
