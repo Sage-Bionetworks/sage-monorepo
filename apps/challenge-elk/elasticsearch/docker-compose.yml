@@ -11,7 +11,7 @@ services:
     image: sagebionetworks/challenge-logstash-kibana-setup:latest
     container_name: challenge-logstash-kibana-setup
     build:
-      context: setup/
+      context: ../setup/
     init: true
     environment:
       ELASTICSEARCH_HOST: challenge-elasticsearch

@@ -1,20 +1,20 @@
 {
-  "root": "apps/challenge-kibana",
-  "sourceRoot": "apps/challenge-kibana/src",
+  "root": "apps/challenge-elk/elasticsearch",
+  "sourceRoot": "apps/challenge-elk/elasticsearch/src",
   "projectType": "application",
   "targets": {
     "prepare": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
-        "cwd": "apps/challenge-kibana"
+        "cwd": "apps/challenge-elk/elasticsearch"
       }
     },
     "serve": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "docker compose up",
-        "cwd": "apps/challenge-kibana"
+        "cwd": "apps/challenge-elk/elasticsearch"
       },
       "dependsOn": [
         {
@@ -35,7 +35,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "docker compose up -d",
-        "cwd": "apps/challenge-kibana"
+        "cwd": "apps/challenge-elk/elasticsearch"
       },
       "dependsOn": [
         {
@@ -55,10 +55,10 @@
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "context": "apps/challenge-kibana",
+        "context": "apps/challenge-elk/elasticsearch",
         "push": false,
         "tags": [
-          "sagebionetworks/challenge-kibana:latest"
+          "sagebionetworks/challenge-elasticsearch:latest"
         ]
       }
     }
@@ -66,9 +66,5 @@
   "tags": [
     "type:service",
     "scope:backend"
-  ],
-  "implicitDependencies": [
-    "challenge-elasticsearch",
-    "challenge-logstash"
   ]
 }
