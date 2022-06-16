@@ -10,7 +10,7 @@ services:
         target: /var/run/docker.sock
         read_only: true
     environment:
-      ROUTE_URIS: logstash+udp://challenge-logstash:5000
+      ROUTE_URIS: logstash://challenge-logstash:5000
       LOGSTASH_TAGS: docker-elk
     network_mode: "host"
     # networks:
