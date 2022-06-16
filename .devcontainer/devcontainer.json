@@ -39,6 +39,8 @@
     4200,
     4201,
     4211,
+    5000,
+    5044,
     5432,
     5601,
     8080,
@@ -48,6 +50,7 @@
     9000,
     9200,
     9300,
+    9600,
     27017
   ],
 
@@ -66,6 +69,14 @@
     },
     "4211": {
       "label": "nx graph"
+    },
+    "5000": {
+      "label": "challenge-logstash (TCP input)",
+      "onAutoForward": "silent"
+    },
+    "5044": {
+      "label": "challenge-logstash (Beats input)",
+      "onAutoForward": "silent"
     },
     "5432": {
       "label": "challenge-postgresql",
@@ -101,6 +112,10 @@
     },
     "9300": {
       "label": "challenge-elasticsearch (TCP transport)",
+      "onAutoForward": "silent"
+    },
+    "9600": {
+      "label": "challenge-logstash (monitoring API)",
       "onAutoForward": "silent"
     },
     "27017": {
