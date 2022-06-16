@@ -66,6 +66,10 @@ function challenge-registry-serve {
   nx serve challenge-registry
 }
 
+function challenge-elk-serve-detach {
+  nx serve-detach challenge-kibana
+}
+
 function challenge-db-cli {
   node dist/apps/challenge-db-cli/src/index.js
 }
