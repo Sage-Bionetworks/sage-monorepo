@@ -12,9 +12,14 @@ services:
     volumes:
       - ./config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
       - ./pipeline:/usr/share/logstash/pipeline:ro,Z
-    network_mode: "host"
+    networks:
+      - challenge-elk
     ports:
       - "5044:5044"
       - "5000:5000/tcp"
       - "5000:5000/udp"
       - "9600:9600"
+
+networks:
+  challenge-elk:
+    name: challenge-elk

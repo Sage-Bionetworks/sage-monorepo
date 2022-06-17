@@ -4,17 +4,20 @@ services:
   challenge-logspout:
     image: sagebionetworks/challenge-logspout:latest
     container_name: challenge-logspout
+    restart: on-failure
+    env_file:
+      - .env
+    environment:
+      ROUTE_URIS: logstash://challenge-logstash:5000
+      LOGSTASH_TAGS: docker-elk
     volumes:
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
         read_only: true
-    environment:
-      ROUTE_URIS: logstash://challenge-logstash:5000
-      LOGSTASH_TAGS: docker-elk
-    network_mode: "host"
-    # networks:
-    #   - elk
-    # depends_on:
-    #   - logstash
-    restart: on-failure
+    networks:
+      - challenge-elk
+
+networks:
+  challenge-elk:
+    name: challenge-elk

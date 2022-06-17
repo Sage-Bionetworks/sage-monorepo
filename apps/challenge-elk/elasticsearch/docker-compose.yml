@@ -20,7 +20,8 @@ services:
       KIBANA_SYSTEM_PASSWORD: changeme
     volumes:
       - challenge-logstash-kibana-setup:/state:Z
-    network_mode: "host"
+    networks:
+      - challenge-elk
 
   challenge-elasticsearch:
     image: sagebionetworks/challenge-elasticsearch:latest
@@ -36,7 +37,8 @@ services:
     volumes:
       - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
       - challenge-elasticsearch:/usr/share/elasticsearch/data:z
-    network_mode: "host"
+    networks:
+      - challenge-elk
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -46,3 +48,7 @@ volumes:
     name: challenge-elasticsearch
   challenge-logstash-kibana-setup:
     name: challenge-logstash-kibana-setup
+
+networks:
+  challenge-elk:
+    name: challenge-elk

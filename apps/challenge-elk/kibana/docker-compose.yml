@@ -9,6 +9,11 @@ services:
       - .env
     volumes:
       - ./config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
-    network_mode: "host"
+    networks:
+      - challenge-elk
     ports:
       - "5601:5601"
+
+networks:
+  challenge-elk:
+    name: challenge-elk
