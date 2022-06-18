@@ -9,13 +9,12 @@ services:
       - .env
     volumes:
       - ./data/h2:/opt/keycloak/data/h2
-    # networks:
-    #   - challenge
-    network_mode: "host"
+    networks:
+      - challenge
     ports:
       - "8080:8080"
     command: start-dev
 
-# networks:
-#   challenge:
-#     name: challenge
+networks:
+  challenge:
+    name: challenge
