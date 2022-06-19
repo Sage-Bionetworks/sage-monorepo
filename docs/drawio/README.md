@@ -1,4 +1,14 @@
-# Challenge draw.io Workspace
+# draw.io Resources
+
+## Overview
+
+[draw.io] (also known as diagrams.net) is a free and open source cross-platform
+graph drawing software to create diagrams such as flowcharts, wireframes, UML
+diagrams, organizational charts, and network diagrams.
+
+draw.io's integration with GitHub, the fact that it is an open-source project
+and several quality-of-life features make it the preferred tool to create
+diagrams for this project.
 
 ## Workflow
 
@@ -52,6 +62,11 @@ Otherwise,
 2. Enter Value (org/repo/ref): `Sage-Bionetworks/challenge-registry/drawio` and
    click *OK*.
 3. Select a library from the folder `libraries` and click on *OK*.
+
+## Tips
+
+- [Edit shape fixed connector points](https://drawio-app.com/connection-points-functionality-and-customization-in-project-management/)
+- [Edit path waypoints](https://drawio-app.com/waypoints-in-draw-io-building-a-path-for-your-connectors/)
 
 <!-- Links -->
 
