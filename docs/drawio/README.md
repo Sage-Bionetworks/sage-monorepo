@@ -43,25 +43,25 @@ Otherwise,
 1. Click on *File* > *Save as...*.
 2. Check that the filename has the extension `.drawio.svg`.
 3. Click on `GitHub`.
-4. Enter Value (org/repo/ref): `Sage-Bionetworks/challenge-registry/drawio` and
-   click *OK*.
-5. Select the folder `diagrams` and click on *OK*.
+4. Enter Value (org/repo/ref): `<gh_username>/challenge-registry/<branch_name>`
+   and click *OK*.
+5. Select the folder `docs/drawio/diagrams` and click on *OK*.
 
 ## Open a diagram
 
 1. To open a diagram that you have recently open, click on *File* > *Open
    Recent* and select the diagram.
 2. Otherwise, click on *File* > *Open from* > *GitHub...*.
-3. Enter Value (org/repo/ref): `Sage-Bionetworks/challenge-registry/drawio` and
-   click *OK*.
-4. Select a diagram from the folder `diagrams` and click on *OK*.
+3. Enter Value (org/repo/ref): `<gh_username>/challenge-registry/<branch_name>`
+   and click *OK*.
+4. Select a diagram from the folder `docs/drawio/diagrams` and click on *OK*.
 
 ## Open a project library
 
 1. Click on *File* > *Open Library from...* > *GitHub...*.
-2. Enter Value (org/repo/ref): `Sage-Bionetworks/challenge-registry/drawio` and
-   click *OK*.
-3. Select a library from the folder `libraries` and click on *OK*.
+2. Enter Value (org/repo/ref): `<gh_username>/challenge-registry/<branch_name>`
+   and click *OK*.
+3. Select a library from the folder `docs/drawio/libraries` and click on *OK*.
 
 ## Tips
 
