@@ -1,5 +1,17 @@
 # Challenge draw.io Workspace
 
+## Workflow
+
+The same workflow applies to the development of code and diagrams. See
+[CONTRIBUTING.md](.github/CONTRIBUTING.md) for more information on contributing
+and/or our Forking Workflow approach.
+
+Remainders:
+
+- Create a new branch in your fork whenever you create or edit a diagram.
+- From draw.io, save the diagram to this branch in your fork.
+- Submit the new or updated diagram via a Pull Request.
+
 ## Create a diagram in draw.io
 
 1. Open your browser and navigate to [draw.io].
