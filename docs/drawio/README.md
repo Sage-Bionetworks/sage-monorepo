@@ -6,9 +6,10 @@
 graph drawing software to create diagrams such as flowcharts, wireframes, UML
 diagrams, organizational charts, and network diagrams.
 
-draw.io's integration with GitHub, the fact that it is an open-source project
-and several quality-of-life features make it the preferred tool to create
-diagrams for this project.
+[draw.io]'s integration with GitHub, the fact that it is an open-source project
+and several quality-of-life features (e.g., ability to set shape connector
+points and edit path waypoints) make it the preferred tool to create diagrams
+for this project.
 
 ## Workflow
 
