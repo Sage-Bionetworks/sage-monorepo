@@ -41,7 +41,9 @@ jobs:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
       - name: Initialize dev environment
-        run: challenge-initialize-env
+        run: |
+          . ./dev-env.sh
+          challenge-initialize-env
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
@@ -87,7 +89,9 @@ jobs:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
       - name: Initialize dev environment
-        run: challenge-initialize-env
+        run: |
+          . ./dev-env.sh
+          challenge-initialize-env
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
