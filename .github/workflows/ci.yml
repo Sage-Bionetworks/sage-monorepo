@@ -91,6 +91,7 @@ jobs:
       - name: Initialize dev environment
         run: |
           ls -al
+          cat /etc/hosts
           # . ./dev-env.sh
           # challenge-initialize-env
       - name: Install Node.js dependencies
