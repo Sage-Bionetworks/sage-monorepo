@@ -93,6 +93,7 @@ jobs:
           ls -al
           cat /etc/group
           id
+          id -un
           cat /etc/hosts
           cd ~
           pwd
