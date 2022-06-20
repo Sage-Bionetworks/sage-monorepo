@@ -12,16 +12,12 @@ env:
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   main:
     runs-on: ubuntu-latest
     container:
       image: sagebionetworks/python-3-node:0.2.0
-      options: --user 1001
+      options: --user 1001 --tty
     if: ${{ github.event_name != 'pull_request' }}
     env:
       NX_BRANCH: main
@@ -70,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: sagebionetworks/python-3-node:0.2.0
-      options: --user 1001
+      options: --user 1001 --tty
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
