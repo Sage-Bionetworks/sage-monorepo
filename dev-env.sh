@@ -107,4 +107,8 @@ function challenge-docker-stop {
 
 function challenge-initialize-env {
   challenge-welcome
+
+  if [ -f "./tools/add-hostnames.sh" ]; then
+    sudo ./tools/add-hostnames.sh
+  fi
 }
