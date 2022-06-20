@@ -90,16 +90,8 @@ jobs:
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
       - name: Initialize dev environment
         run: |
-          ls -al
-          cat /etc/group
-          id
-          cat /etc/hosts
-          pwd
-          cd ~
-          pwd
-          cat ~/.bashrc
-          # . ./dev-env.sh
-          # challenge-initialize-env
+          . ./dev-env.sh
+          challenge-initialize-env
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile

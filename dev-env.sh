@@ -11,11 +11,14 @@ else # Other/fail
 fi
 export CHALLENGE_BUILD_PROCS
 
-bold=$(tput bold)
-italic=$(tput sitm)
-reset=$(tput sgr0)
+# tput is not available when GH CI workflow sources this file.
+if [ -x "$(command -v tput)" ]; then
+  bold=$(tput bold)
+  italic=$(tput sitm)
+  reset=$(tput sgr0)
 
-orange=$(tput setaf 166)
+  orange=$(tput setaf 166)
+fi
 
 # cd to the workspace directory
 function challenge-cd {
