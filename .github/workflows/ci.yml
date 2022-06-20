@@ -11,13 +11,14 @@ env:
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
+  DEVCONTAINER_IMAGE: sagebionetworks/challenge-devcontainer:bf457d84
 
 jobs:
   main:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/python-3-node:0.2.0
-      options: --user 1001 -e TERM=xterm
+      image: ${{ env.DEVCONTAINER_IMAGE }}
+      options: --user 1001
     if: ${{ github.event_name != 'pull_request' }}
     env:
       NX_BRANCH: main
@@ -40,10 +41,10 @@ jobs:
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-      - name: Initialize dev environment
-        run: |
-          . ./dev-env.sh
-          challenge-initialize-env
+      # - name: Initialize dev environment
+      #   run: |
+      #     . ./dev-env.sh
+      #     challenge-initialize-env
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
@@ -65,8 +66,8 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/python-3-node:0.2.0
-      options: --user 1001 -e TERM=xterm
+      image: ${{ env.DEVCONTAINER_IMAGE }}
+      options: --user 1001
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
@@ -91,8 +92,8 @@ jobs:
       - name: Initialize dev environment
         run: |
           ls -al
-          . ./dev-env.sh
-          challenge-initialize-env
+          # . ./dev-env.sh
+          # challenge-initialize-env
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
