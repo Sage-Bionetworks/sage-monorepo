@@ -12,6 +12,10 @@ env:
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   main:
     runs-on: ubuntu-latest
@@ -91,8 +95,8 @@ jobs:
       - name: Initialize dev environment
         run: |
           echo "$SHELL"
-          source dev-env.sh
-          # challenge-initialize-env
+          . ./dev-env.sh
+          challenge-initialize-env
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
