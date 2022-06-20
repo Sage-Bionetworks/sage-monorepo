@@ -21,8 +21,7 @@ declare -a hostnames=(
 
 # add hostnames
 for hostname in "${hostnames[@]}"; do
-    line="$hostname"
-    if ! grep -Fxq "$line" /etc/hosts; then
-      echo $line >> /etc/hosts
-    fi
+  if ! grep -Fxq "$hostname" /etc/hosts; then
+    echo "$hostname" >> /etc/hosts
+  fi
 done
