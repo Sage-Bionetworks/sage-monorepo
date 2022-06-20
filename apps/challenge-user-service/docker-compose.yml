@@ -5,10 +5,8 @@ services:
     image: sagebionetworks/challenge-user-service:latest
     container_name: challenge-user-service
     restart: always
-    environment:
-      - KEYCLOAK_URL=http://challenge-keycloak:8080
-      - SERVICE_REGISTRY_URL=http://challenge-service-registry:8081/eureka
-      - DB_URL=jdbc:mysql://challenge-mariadb:3306/challenge
+    env_file:
+      - .env
     networks:
       - challenge
     ports:

@@ -39,6 +39,12 @@ spring:
             - Path=/user/**
           filters:
             - StripPrefix=1
+        - id: challenge-core-service
+          uri: lb://challenge-core-service
+          predicates:
+            - Path=/challenge-core/**
+          filters:
+            - StripPrefix=1
 
 server:
   port: 8082
