@@ -17,7 +17,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.DEVCONTAINER_IMAGE }}
+      image: $DEVCONTAINER_IMAGE
       options: --user 1001
     if: ${{ github.event_name != 'pull_request' }}
     env:
@@ -66,7 +66,7 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.DEVCONTAINER_IMAGE }}
+      image: $DEVCONTAINER_IMAGE
       options: --user 1001
     if: ${{ github.event_name == 'pull_request' }}
     steps:
