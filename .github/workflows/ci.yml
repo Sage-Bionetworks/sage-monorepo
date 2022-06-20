@@ -94,10 +94,9 @@ jobs:
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
       - name: Initialize dev environment
         run: |
-          echo "$SHELL"
-          . ./dev-env.sh
-          which sudo
-          challenge-initialize-env
+          # echo "$SHELL"
+          # . ./dev-env.sh
+          ./tools/add-hostnames.sh
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
