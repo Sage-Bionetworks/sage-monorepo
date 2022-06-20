@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: sagebionetworks/python-3-node:0.2.0
-      options: --user 1001 --tty
+      options: --user 1001 -e TERM=xterm
     if: ${{ github.event_name != 'pull_request' }}
     env:
       NX_BRANCH: main
@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: sagebionetworks/python-3-node:0.2.0
-      options: --user 1001 --tty
+      options: --user 1001 -e TERM=xterm
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
