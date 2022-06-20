@@ -94,6 +94,9 @@ jobs:
           cat /etc/group
           id
           cat /etc/hosts
+          cd ~
+          pwd
+          cat ~/.bashrc
           # . ./dev-env.sh
           # challenge-initialize-env
       - name: Install Node.js dependencies
