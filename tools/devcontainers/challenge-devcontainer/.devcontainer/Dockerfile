@@ -37,7 +37,6 @@ RUN useradd -m $user \
     "  challenge-initialize-env" \
     "fi" | tee -a /home/$user/.bashrc
 
-# VS Code my need to be root to complete the subsequent image build steps.
-# USER $user
+USER $user
 
 CMD ["bash"]
