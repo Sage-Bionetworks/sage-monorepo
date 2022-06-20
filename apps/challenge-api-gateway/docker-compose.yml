@@ -8,13 +8,12 @@ services:
     environment:
       - KEYCLOAK_URL=http://challenge-keycloak:8080
       - SERVICE_REGISTRY_URL=http://challenge-service-registry:8081/eureka
-    # networks:
-    #   - challenge
-    network_mode: "host"
+    networks:
+      - challenge
     ports:
       - "8082:8082"
     command: start-dev
 
-# networks:
-#   challenge:
-#     name: challenge
+networks:
+  challenge:
+    name: challenge

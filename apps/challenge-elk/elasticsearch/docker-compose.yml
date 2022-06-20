@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  # The 'setup' service runs a one-off script which initializes the
+  # 'logstash_internal' and 'kibana_system' users inside Elasticsearch.
+  #
+  # This task is only performed during the *initial* startup of the stack. On all
+  # subsequent runs, the service simply returns immediately, without performing
+  # any modification to existing users.
+  challenge-logstash-kibana-setup:
+    image: sagebionetworks/challenge-logstash-kibana-setup:latest
+    container_name: challenge-logstash-kibana-setup
+    build:
+      context: ../setup/
+    init: true
+    environment:
+      ELASTICSEARCH_HOST: challenge-elasticsearch
+      ELASTIC_PASSWORD: changeme
+      LOGSTASH_INTERNAL_PASSWORD: changeme
+      KIBANA_SYSTEM_PASSWORD: changeme
+    volumes:
+      - challenge-logstash-kibana-setup:/state:Z
+    networks:
+      - challenge-elk
+
+  challenge-elasticsearch:
+    image: sagebionetworks/challenge-elasticsearch:latest
+    container_name: challenge-elasticsearch
+    restart: always
+    env_file:
+      - .env
+    environment:
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    volumes:
+      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
+      - challenge-elasticsearch:/usr/share/elasticsearch/data:z
+    networks:
+      - challenge-elk
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+volumes:
+  challenge-elasticsearch:
+    name: challenge-elasticsearch
+  challenge-logstash-kibana-setup:
+    name: challenge-logstash-kibana-setup
+
+networks:
+  challenge-elk:
+    name: challenge-elk
