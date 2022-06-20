@@ -90,7 +90,8 @@ jobs:
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
       - name: Initialize dev environment
         run: |
-          . ./dev-env.sh
+          echo "$SHELL"
+          source dev-env.sh
           # challenge-initialize-env
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
