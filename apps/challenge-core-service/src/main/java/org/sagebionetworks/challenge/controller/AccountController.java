@@ -17,8 +17,8 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    @GetMapping("/bank-account/{account_number}")
-    public ResponseEntity getBankAccount(@PathVariable("account_number") String accountNumber) {
+    @GetMapping("/challenge-account/{account_number}")
+    public ResponseEntity getChallengeAccount(@PathVariable("account_number") String accountNumber) {
         log.info("Reading account by ID {}", accountNumber);
         return ResponseEntity.ok(accountService.readChallengeAccount(accountNumber));
     }

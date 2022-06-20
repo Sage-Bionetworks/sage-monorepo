@@ -39,6 +39,11 @@ grant_type=password
 GET {{apiGatewayHost}}/core/actuator/info
 Authorization: Bearer {{login.response.body.$.access_token}}
 
+### Read user account by identification number
+
+GET {{apiGatewayHost}}/core/api/v1/account/challenge-account/808829932V
+Authorization: Bearer {{login.response.body.$.access_token}}
+
 # ### Create user
 
 # # POST {{apiGatewayHost}}/user/api/v1/users/register
