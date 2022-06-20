@@ -11,13 +11,12 @@ env:
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
-  DEVCONTAINER_IMAGE: sagebionetworks/challenge-devcontainer:bf457d84
 
 jobs:
   main:
     runs-on: ubuntu-latest
     container:
-      image: $DEVCONTAINER_IMAGE
+      image: sagebionetworks/challenge-devcontainer:bf457d84
       options: --user 1001
     if: ${{ github.event_name != 'pull_request' }}
     env:
@@ -66,7 +65,7 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     container:
-      image: $DEVCONTAINER_IMAGE
+      image: sagebionetworks/challenge-devcontainer:bf457d84
       options: --user 1001
     if: ${{ github.event_name == 'pull_request' }}
     steps:
