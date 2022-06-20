@@ -12,9 +12,9 @@ env:
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
 
-defaults:
-  run:
-    shell: bash
+# defaults:
+#   run:
+#     shell: bash
 
 jobs:
   main:
@@ -71,6 +71,7 @@ jobs:
     container:
       image: sagebionetworks/challenge-devcontainer:bf457d84
       options: --user 1001 -e TERM=xterm-256color
+      shell: bash
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
