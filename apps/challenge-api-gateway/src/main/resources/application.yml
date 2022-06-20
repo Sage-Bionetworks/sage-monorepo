@@ -42,7 +42,7 @@ spring:
         - id: challenge-core-service
           uri: lb://challenge-core-service
           predicates:
-            - Path=/challenge-core/**
+            - Path=/core/**
           filters:
             - StripPrefix=1
 

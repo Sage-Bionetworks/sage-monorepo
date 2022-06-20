@@ -1,0 +1,60 @@
+# @serviceRegistryHost = http://localhost:8081
+@apiGatewayHost = http://challenge-api-gateway:8082
+# @userServiceHost = http://localhost:8083
+@keycloakHost = http://challenge-keycloak:8080
+@coreServiceHost = http://challenge-core-service:8092
+
+### Check core service info
+
+GET {{coreServiceHost}}/actuator/info
+
+### Check core service info via the API gateway (expected to redirect to
+### Keycloak login page)
+
+GET {{apiGatewayHost}}/core/actuator/info
+
+### Get access token from Keycloak
+
+# @clientId = challenge-core-client
+# @clientSecret = O0cNRMWg3LHsdHW8BNPlY96qKooDPhPX
+@clientId = challenge-api-client
+@clientSecret = mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
+@username = luke
+@password = changeme
+
+# @name login
+
+POST {{keycloakHost}}/realms/test/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password
+&scope=email
+&client_id={{clientId}}
+&client_secret={{clientSecret}}
+&username={{username}}
+&password={{password}}
+
+### Check core service info
+
+GET {{apiGatewayHost}}/core/actuator/info
+Authorization: Bearer {{login.response.body.$.access_token}}
+
+# ### Create user
+
+# # POST {{apiGatewayHost}}/user/api/v1/users/register
+# POST {{userServiceHost}}/api/v1/users/register
+# Content-Type: application/json
+
+# {
+#   "email": "test4@gmail.com",
+#   "password": "changeme",
+#   "identification": "12345"
+# }
+
+# ### List all the users
+
+# # from the API gateway => requires authentication / unauthorized
+# # from the user service => works
+
+# # GET {{apiGatewayHost}}/user/api/v1/users
+# GET {{userServiceHost}}/api/v1/users
