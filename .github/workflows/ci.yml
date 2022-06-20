@@ -91,7 +91,7 @@ jobs:
       - name: Initialize dev environment
         run: |
           . ./dev-env.sh
-          challenge-initialize-env
+          # challenge-initialize-env
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile

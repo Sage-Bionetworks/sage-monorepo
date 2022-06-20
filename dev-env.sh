@@ -11,7 +11,8 @@ else # Other/fail
 fi
 export CHALLENGE_BUILD_PROCS
 
-# tput is not available when GH CI workflow sources this file.
+# tput relies on the value of $TERM, which is not available when GH CI workflow
+# sources this file.
 # if [ -x "$(command -v tput)" ]; then
 #   bold=$(tput bold)
 #   italic=$(tput sitm)
