@@ -93,8 +93,8 @@ jobs:
           ls -al
           cat /etc/group
           id
-          id -un
           cat /etc/hosts
+          pwd
           cd ~
           pwd
           cat ~/.bashrc
