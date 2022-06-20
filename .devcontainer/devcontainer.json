@@ -47,7 +47,7 @@
     8081,
     8082,
     8083,
-    8090,
+    8092,
     9000,
     9200,
     9300,
@@ -103,7 +103,7 @@
       "label": "challenge-user-service",
       "onAutoForward": "silent"
     },
-    "8090": {
+    "8092": {
       "label": "challenge-core-service",
       "onAutoForward": "silent"
     },
@@ -131,6 +131,7 @@
 
   "runArgs": [
     "--add-host=challenge-api-gateway:127.0.0.1",
+    "--add-host=challenge-core-service:127.0.0.1",
     "--add-host=challenge-elasticsearch:127.0.0.1",
     "--add-host=challenge-kibana:127.0.0.1",
     "--add-host=challenge-logstash:127.0.0.1",
