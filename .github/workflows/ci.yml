@@ -96,11 +96,10 @@ jobs:
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-      - name: Initialize dev environment
+      - name: Initialize environment
         run: |
           . ./dev-env.sh
           challenge-initialize-env
-          cat /etc/hosts
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
@@ -111,6 +110,6 @@ jobs:
         run: yarn nx python api
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
       - run: |
-          cat /etc/hosts
+          nx --help
           yarn nx affected --target=build --parallel --max-parallel=3
       - run: yarn nx affected --target=test --parallel --max-parallel=2
