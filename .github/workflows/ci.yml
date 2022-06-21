@@ -70,13 +70,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: sagebionetworks/challenge-devcontainer:bf457d84
-      options: --user root -e TERM=xterm-256color
+      options: --user root
     if: ${{ github.event_name == 'pull_request' }}
     steps:
-      - name: plop
-        run: |
-          id
-          echo $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -96,10 +92,8 @@ jobs:
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-      - name: Initialize environment
-        run: |
-          . ./dev-env.sh
-          challenge-initialize-env
+      - name: Configure hostnames
+        run: ./tools/configure-hostnames.sh
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
@@ -109,7 +103,5 @@ jobs:
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: yarn nx python api
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
-      - run: |
-          nx --help
-          yarn nx affected --target=build --parallel --max-parallel=3
+      - run: yarn nx affected --target=build --parallel --max-parallel=3
       - run: yarn nx affected --target=test --parallel --max-parallel=2
