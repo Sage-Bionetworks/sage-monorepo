@@ -73,6 +73,8 @@ jobs:
       options: --user vscode -e TERM=xterm-256color
     if: ${{ github.event_name == 'pull_request' }}
     steps:
+      - run: |
+        id
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.ref }}
