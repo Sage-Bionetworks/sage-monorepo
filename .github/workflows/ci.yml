@@ -12,16 +12,12 @@ env:
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   main:
     runs-on: ubuntu-latest
     container:
       image: sagebionetworks/challenge-devcontainer:bf457d84
-      options: --user 1001
+      options: --user root
     if: ${{ github.event_name != 'pull_request' }}
     env:
       NX_BRANCH: main
@@ -44,10 +40,8 @@ jobs:
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-      # - name: Initialize dev environment
-      #   run: |
-      #     . ./dev-env.sh
-      #     challenge-initialize-env
+      - name: Configure hostnames
+        run: ./tools/configure-hostnames.sh
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
