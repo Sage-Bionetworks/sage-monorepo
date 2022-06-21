@@ -13,7 +13,7 @@ export CHALLENGE_BUILD_PROCS
 
 # tput relies on the value of $TERM, which is not available when GH CI workflow
 # sources this file.
-if [ ! -z "$TERM" ]; then
+if [ ! -z "${TERM}+x" ]; then
   echo "plop"
   bold=$(tput bold)
   italic=$(tput sitm)
