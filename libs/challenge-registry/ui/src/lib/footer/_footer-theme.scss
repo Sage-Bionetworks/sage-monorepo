@@ -1,8 +1,5 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use '../palette' as pal;
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
@@ -11,11 +8,11 @@
   $warn: map.get($config, 'warn');
 
   footer {
-    background-color: rgba(49, 78, 167, 1);
+    background-color: mat.get-color-from-palette($primary, 600);
     color: #fff;
   }
   .footer-bottom {
-    background-color: rgba(29, 53, 128, 1);
+    background-color: mat.get-color-from-palette($primary, 800);
   }
 }
 
@@ -23,7 +20,7 @@
   $typography-config: mat.get-typography-config($theme);
 
   footer {
-    font-family: 'Poppins', sans-serif;
+    font-family: mat.font-family($typography-config);
     font-weight: 600px;
     line-height: normal;
   }
