@@ -13,13 +13,13 @@ export CHALLENGE_BUILD_PROCS
 
 # tput relies on the value of $TERM, which is not available when GH CI workflow
 # sources this file.
-# if [ -x "$(command -v tput)" ]; then
-#   bold=$(tput bold)
-#   italic=$(tput sitm)
-#   reset=$(tput sgr0)
+if [ ! -z "$TERM" ]; then
+  bold=$(tput bold)
+  italic=$(tput sitm)
+  reset=$(tput sgr0)
 
-#   orange=$(tput setaf 166)
-# fi
+  orange=$(tput setaf 166)
+fi
 
 # cd to the workspace directory
 function challenge-cd {
