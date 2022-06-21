@@ -42,12 +42,12 @@
         "authProtocol": "default"
       },
       "previewLimit": 50,
-      "server": "localhost",
+      "server": "challenge-mariadb",
       "port": 3306,
       "driver": "MariaDB",
       "name": "challenge-mariadb",
       "database": "challenge",
-      "username": "root",
+      "username": "maria",
       "password": "changeme"
     }
   ]
