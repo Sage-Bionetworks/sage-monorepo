@@ -46,8 +46,8 @@
       "port": 3306,
       "driver": "MariaDB",
       "name": "challenge-mariadb",
-      "database": "challenge",
-      "username": "maria",
+      "database": "challenge_core_service",
+      "username": "root",
       "password": "changeme"
     }
   ]
