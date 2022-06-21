@@ -1,6 +1,8 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
   $primary: map.get($config, 'primary');
@@ -20,8 +22,9 @@
   $typography-config: mat.get-typography-config($theme);
 
   footer {
-    font-family: mat.font-family($typography-config);
-    font-weight: 600px;
+    // FIXME: Angular theming not applying typography from theme mixin for some reason?
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500px;
     line-height: normal;
   }
 }
