@@ -15,59 +15,8 @@
   flex-grow: 1;
 }
 
-.sage-angular-logo {
+.logo {
   height: 26px;
   margin: 0 4px 3px 0;
   vertical-align: middle;
 }
-
-// .sage-navbar-link {
-//   text-decoration: inherit;
-//   flex: 1;
-// }
-
-// .sage-navbar {
-//   display: none;
-// }
-
-// .sage-navbar-show-small {
-//   display: none;
-// }
-
-// .skip-link-wrapper {
-//   position: absolute;
-//   top: 10px;
-//   left: 50%;
-//   transform: translateX(-50%);
-//   border-radius: 5px;
-// }
-
-/**
-  * Rules for when the device is detected to be a small screen.
-  * Moves content two rows instead of one.
-  */
-// @media (max-width: 720px) {
-//   .sage-navbar-hide-small {
-//     display: none;
-//   }
-
-//   .sage-navbar-show-small {
-//     display: block;
-//   }
-
-//   .sage-navbar {
-//     display: flex;
-//   }
-
-//   .sage-navbar--github-logo {
-//     margin: 0;
-//   }
-// }
-
-// theme-picker {
-//   display: none;
-
-//   @media (min-width: 328px) {
-//     display: block;
-//   }
-// }
