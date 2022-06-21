@@ -13,6 +13,9 @@
     background-color: mat.get-color-from-palette($primary, 600);
     color: #fff;
   }
+  .footer-link-group a, .footer-links a {
+    color: #fff;
+  }
   .footer-bottom {
     background-color: mat.get-color-from-palette($primary, 800);
   }
