@@ -9,6 +9,7 @@ services:
       - .env
     volumes:
       - challenge-mariadb:/data/db
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - challenge
     ports:
