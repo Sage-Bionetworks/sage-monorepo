@@ -41,7 +41,7 @@ Authorization: Bearer {{login.response.body.$.access_token}}
 
 ### Read user account by identification number
 
-GET {{apiGatewayHost}}/core/api/v1/account/challenge-account/808829932V
+GET {{apiGatewayHost}}/core/api/v1/account/challenge-account/100015003000
 Authorization: Bearer {{login.response.body.$.access_token}}
 
 # ### Create user
