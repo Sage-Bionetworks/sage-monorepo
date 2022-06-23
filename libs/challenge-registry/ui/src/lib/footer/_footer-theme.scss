@@ -1,27 +1,36 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-// @use 'libs/shared/theming/src/theming';
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
-  $primary: map.get($config, primary);
-  $accent: map.get($config, accent);
-  $warn: map.get($config, warn);
-  $background: map.get($config, background);
-  $foreground: map.get($config, foreground);
+  $primary: map.get($config, 'primary');
+  $accent: map.get($config, 'accent');
+  $warn: map.get($config, 'warn');
 
-  .challenge-registry-footer {
-    background-color: mat.get-color-from-palette($primary, default);
-
-    .challenge-registry-links a {
-      color: green;
-
-      // mat-color($primary, default-contrast);
-    }
+  footer {
+    background-color: mat.get-color-from-palette($primary, 600);
+    color: #fff;
+  }
+  .footer-link-group a, .footer-links a {
+    color: #fff;
+  }
+  .footer-bottom {
+    background-color: mat.get-color-from-palette($primary, 800);
   }
 }
 
-@mixin typography($theme) {}
+@mixin typography($theme) {
+  $typography-config: mat.get-typography-config($theme);
+
+  footer {
+    // FIXME: Angular theming not applying typography from theme mixin for some reason?
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500px;
+    line-height: normal;
+  }
+}
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
