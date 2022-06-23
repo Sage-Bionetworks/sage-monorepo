@@ -17,12 +17,12 @@
         "args": ["-e"]
       }
     },
-    "test": {
-      "executor": "@nxrocks/nx-spring-boot:test",
-      "options": {
-        "root": "apps/challenge-core-service"
-      }
-    },
+    // "test": {
+    //   "executor": "@nxrocks/nx-spring-boot:test",
+    //   "options": {
+    //     "root": "apps/challenge-core-service"
+    //   }
+    // },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
