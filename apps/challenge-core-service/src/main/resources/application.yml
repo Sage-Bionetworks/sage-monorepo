@@ -3,7 +3,7 @@ spring:
     name: challenge-core-service
   datasource:
     url: ${db.url}
-    username: maria
+    username: challenge_core_service
     password: changeme
   jpa:
     hibernate:
