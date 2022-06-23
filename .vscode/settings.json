@@ -47,7 +47,7 @@
       "driver": "MariaDB",
       "name": "challenge-mariadb",
       "database": "challenge_core_service",
-      "username": "root",
+      "username": "challenge_core_service",
       "password": "changeme"
     }
   ]
