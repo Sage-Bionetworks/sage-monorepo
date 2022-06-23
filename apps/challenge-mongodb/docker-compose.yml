@@ -7,9 +7,8 @@ services:
     restart: always
     env_file:
       - .env
-    # networks:
-    #   - challenge
-    network_mode: "host"
+    networks:
+      - challenge
     volumes:
       - challenge-mongodb:/data/db
     ports:
@@ -19,6 +18,6 @@ volumes:
   challenge-mongodb:
     name: challenge-mongodb
 
-# networks:
-#   challenge:
-#     name: challenge
+networks:
+  challenge:
+    name: challenge

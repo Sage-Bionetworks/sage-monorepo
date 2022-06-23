@@ -9,13 +9,12 @@ services:
       - KEYCLOAK_URL=http://challenge-keycloak:8080
       - SERVICE_REGISTRY_URL=http://challenge-service-registry:8081/eureka
       - DB_URL=jdbc:mysql://challenge-mariadb:3306/challenge
-    # networks:
-    #   - challenge
-    network_mode: "host"
+    networks:
+      - challenge
     ports:
       - "8083:8083"
     command: start-dev
 
-# networks:
-#   challenge:
-#     name: challenge
+networks:
+  challenge:
+    name: challenge

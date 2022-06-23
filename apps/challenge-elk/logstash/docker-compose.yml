@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  challenge-logstash:
+    image: sagebionetworks/challenge-logstash:latest
+    container_name: challenge-logstash
+    restart: always
+    env_file:
+      - .env
+    environment:
+      LS_JAVA_OPTS: -Xms256m -Xmx256m
+    volumes:
+      - ./config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
+      - ./pipeline:/usr/share/logstash/pipeline:ro,Z
+    networks:
+      - challenge-elk
+    ports:
+      - "5044:5044"
+      - "5000:5000/tcp"
+      - "5000:5000/udp"
+      - "9600:9600"
+
+networks:
+  challenge-elk:
+    name: challenge-elk

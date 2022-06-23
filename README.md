@@ -24,8 +24,9 @@ ecosystem.
 
 ## Requirements
 
-- [Docker]
-- [Visual Studio Code]
+- [Docker Engine] version **18.06.0** or newer
+- [Visual Studio Code] version **1.68.1** or newer (including [Compose
+  V2][compose-v2])
 
 ## Usage
 
@@ -83,6 +84,7 @@ Main contributors and developers:
 
 <!-- Links -->
 
-[Docker]: https://docs.docker.com/get-docker/
+[Docker Engine]: https://docs.docker.com/get-docker/
+[compose-v2]: https://docs.docker.com/compose/cli-command/
 [Visual Studio Code]: https://code.visualstudio.com/
 [Apache License 2.0]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt
