@@ -1,25 +1,23 @@
-<section id="landing">
+<section id="landing" class="mat-typography">
   <div class="container">
-    <div class="landing-inner">
-      <div class="landing-content">
-        <h1>I want to find challenges related to
-          <ngx-typed-js [strings]="['breast cancer.', 'immunotherapy.', 'EHR.', 'imaging analysis.']" [loop]="true"
-            [typeSpeed]="65" [backSpeed]="15">
-            <span class="typing"></span>
-          </ngx-typed-js>
-        </h1>
-        <p class="landing-paragraph">The Registry of Community Challenges (ROCC) strives to provide a centralized hub
-          of biomedical challenges from various hosting organizations. Our goal is to empower both participants with
-          the most up-to-date information about relevant challenges, as well as organizers with standardized challenge
-          templates and intelligence.</p>
-        <h4>Let the ROCC help find the perfect challenge for you!</h4>
-        <div class="search field field-grouped">
-          <div class="control control-expanded">
-            <input class="input" type="search" name="search" placeholder="I am interested in...">
-          </div>
-          <div class="control">
-            <a class="btn btn-primary" href="/search">Search</a>
-          </div>
+    <div class="landing-content">
+      <h1>I want to find challenges related to
+        <ngx-typed-js [strings]="['breast cancer.', 'immunotherapy.', 'EHR.', 'imaging analysis.']" [loop]="true"
+          [typeSpeed]="65" [backSpeed]="15">
+          <span class="typing"></span>
+        </ngx-typed-js>
+      </h1>
+      <p class="mat-body-strong about-rocc">The Registry of Community Challenges (ROCC) strives to provide a centralized hub
+        of biomedical challenges from various hosting organizations. Our goal is to empower both participants with
+        the most up-to-date information about relevant challenges, as well as organizers with standardized challenge
+        templates and intelligence.</p>
+      <h4>Let the ROCC help find the perfect challenge for you!</h4>
+      <div class="search field field-grouped">
+        <div class="control control-expanded">
+          <input class="input" type="search" name="search" placeholder="I am interested in...">
+        </div>
+        <div class="control">
+          <a mat-raised-button class="btn" color="primary" href="/search">Search</a>
         </div>
       </div>
     </div>
