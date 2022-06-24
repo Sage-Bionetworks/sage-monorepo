@@ -22,10 +22,9 @@
 
 @mixin typography($theme) {
   $typography-config: mat.get-typography-config($theme);
-  $font-family: map.get($typography-config, 'font-family');
 
   footer {
-    font-family: $font-family;
+    font-family: mat.font-family($typography-config);
     font-weight: 500;
     line-height: normal;
   }
