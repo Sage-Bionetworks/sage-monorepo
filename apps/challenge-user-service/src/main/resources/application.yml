@@ -16,6 +16,8 @@ eureka:
   client:
     service-url:
       defaultZone: ${service.registry.url}
+  instance:
+    preferIpAddress: true
 
 management:
   info:
@@ -24,7 +26,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: info
 
 info:
   application:

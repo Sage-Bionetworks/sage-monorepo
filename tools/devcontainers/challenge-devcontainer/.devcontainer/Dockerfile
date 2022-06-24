@@ -12,7 +12,7 @@ RUN groupadd docker \
   && apt-get install --no-install-recommends -qq -y \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python-is-python3 openjdk-17-jre \
-    htop unzip vim wget lsof \
+    htop unzip vim wget lsof iproute2 \
   && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
@@ -37,7 +37,6 @@ RUN useradd -m $user \
     "  challenge-initialize-env" \
     "fi" | tee -a /home/$user/.bashrc
 
-# VS Code my need to be root to complete the subsequent image build steps.
-# USER $user
+USER $user
 
 CMD ["bash"]

@@ -7,13 +7,12 @@ services:
     restart: always
     environment:
       - DEFAULT_ZONE=http://challenge-service-registry:8081/eureka
-    # networks:
-    #   - challenge
-    network_mode: "host"
+    networks:
+      - challenge
     ports:
       - "8081:8081"
     command: start-dev
 
-# networks:
-#   challenge:
-#     name: challenge
+networks:
+  challenge:
+    name: challenge

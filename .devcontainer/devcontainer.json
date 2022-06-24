@@ -1,6 +1,6 @@
 {
   "name": "Challenge Dev Container",
-  "image": "sagebionetworks/challenge-devcontainer:486f4145",
+  "image": "sagebionetworks/challenge-devcontainer:bf457d84",
 
   "features": {
     // docker features must be specified in the developer facing
@@ -39,12 +39,19 @@
     4200,
     4201,
     4211,
+    5000,
+    5044,
     5432,
+    5601,
     8080,
     8081,
     8082,
     8083,
+    8092,
     9000,
+    9200,
+    9300,
+    9600,
     27017
   ],
 
@@ -64,8 +71,20 @@
     "4211": {
       "label": "nx graph"
     },
+    "5000": {
+      "label": "challenge-logstash (TCP input)",
+      "onAutoForward": "silent"
+    },
+    "5044": {
+      "label": "challenge-logstash (Beats input)",
+      "onAutoForward": "silent"
+    },
     "5432": {
       "label": "challenge-postgresql",
+      "onAutoForward": "silent"
+    },
+    "5601": {
+      "label": "challenge-kibana",
       "onAutoForward": "silent"
     },
     "8080": {
@@ -84,8 +103,24 @@
       "label": "challenge-user-service",
       "onAutoForward": "silent"
     },
+    "8092": {
+      "label": "challenge-core-service",
+      "onAutoForward": "silent"
+    },
     "9000": {
       "label": "challenge-registry-movie-api",
+      "onAutoForward": "silent"
+    },
+    "9200": {
+      "label": "challenge-elasticsearch (HTTP)",
+      "onAutoForward": "silent"
+    },
+    "9300": {
+      "label": "challenge-elasticsearch (TCP transport)",
+      "onAutoForward": "silent"
+    },
+    "9600": {
+      "label": "challenge-logstash (monitoring API)",
       "onAutoForward": "silent"
     },
     "27017": {
