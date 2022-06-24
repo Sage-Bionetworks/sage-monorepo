@@ -4,12 +4,13 @@
 @use './lib/button-github/button-github-theme' as button-github;
 @use './lib/footer/footer-theme' as footer;
 @use './lib/navbar/navbar-theme' as navbar;
+@use './lib/user-button/user-button-theme' as user-button;
 
 @include mat.core();
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
 
 $primary: mat.define-palette(pal.$dark-blue-palette, 600);
-$accent: mat.define-palette(pal.$accent-pink-palette, 400);
+$accent: mat.define-palette(pal.$accent-purple-palette, 400);
 
 $theme: mat.define-light-theme((
   color: (
@@ -26,4 +27,5 @@ $theme: mat.define-light-theme((
   @include button-github.theme($theme);
   @include footer.theme($theme);
   @include navbar.theme($theme);
+  @include user-button.theme($theme);
 }
