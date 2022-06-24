@@ -14,15 +14,11 @@
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
         "root": "apps/challenge-core-service",
-        "args": ["-e"]
+        "args": [
+          "-e"
+        ]
       }
     },
-    // "test": {
-    //   "executor": "@nxrocks/nx-spring-boot:test",
-    //   "options": {
-    //     "root": "apps/challenge-core-service"
-    //   }
-    // },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
@@ -101,6 +97,7 @@
     "challenge-mariadb",
     "challenge-keycloak",
     "challenge-service-registry",
-    "challenge-api-gateway"
+    "challenge-api-gateway",
+    "data-access-java"
   ]
 }
