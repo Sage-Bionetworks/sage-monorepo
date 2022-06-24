@@ -98,6 +98,6 @@
     "challenge-keycloak",
     "challenge-service-registry",
     "challenge-api-gateway",
-    "data-access-java"
+    "shared-data-access-java"
   ]
 }
