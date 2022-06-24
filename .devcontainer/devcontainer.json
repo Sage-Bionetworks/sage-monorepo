@@ -1,6 +1,6 @@
 {
   "name": "Challenge Dev Container",
-  "image": "sagebionetworks/challenge-devcontainer:f70e3da6",
+  "image": "sagebionetworks/challenge-devcontainer:bf457d84",
 
   "features": {
     // docker features must be specified in the developer facing
@@ -47,6 +47,7 @@
     8081,
     8082,
     8083,
+    8092,
     9000,
     9200,
     9300,
@@ -102,6 +103,10 @@
       "label": "challenge-user-service",
       "onAutoForward": "silent"
     },
+    "8092": {
+      "label": "challenge-core-service",
+      "onAutoForward": "silent"
+    },
     "9000": {
       "label": "challenge-registry-movie-api",
       "onAutoForward": "silent"
@@ -123,21 +128,6 @@
       "onAutoForward": "silent"
     }
   },
-
-  "runArgs": [
-    "--add-host=challenge-api-gateway:127.0.0.1",
-    "--add-host=challenge-elasticsearch:127.0.0.1",
-    "--add-host=challenge-kibana:127.0.0.1",
-    "--add-host=challenge-logstash:127.0.0.1",
-    "--add-host=challenge-keycloak:127.0.0.1",
-    "--add-host=challenge-mariadb:127.0.0.1",
-    "--add-host=challenge-mongodb:127.0.0.1",
-    "--add-host=challenge-platform:127.0.0.1",
-    "--add-host=challenge-postgresql:127.0.0.1",
-    "--add-host=challenge-registry:127.0.0.1",
-    "--add-host=challenge-service-registry:127.0.0.1",
-    "--add-host=challenge-user-service:127.0.0.1"
-  ],
 
   // Comment out to connect as root instead. More info:
   // https://aka.ms/vscode-remote/containers/non-root.
