@@ -1,16 +1,16 @@
 version: "3.8"
 
 services:
-  challenge-api-gateway:
-    image: sagebionetworks/challenge-api-gateway:latest
-    container_name: challenge-api-gateway
+  challenge-core-service:
+    image: sagebionetworks/challenge-core-service:latest
+    container_name: challenge-core-service
     restart: always
     env_file:
       - .env
     networks:
       - challenge
     ports:
-      - "8082:8082"
+      - "8092:8092"
     command: start-dev
 
 networks:
