@@ -1,26 +1,6 @@
-@use '@angular/material' as mat;
-
-@use './lib/palette' as pal;
 @use './lib/button-github/button-github-theme' as button-github;
 @use './lib/footer/footer-theme' as footer;
 @use './lib/navbar/navbar-theme' as navbar;
-
-@include mat.core();
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
-
-$primary: mat.define-palette(pal.$dark-blue-palette, 600);
-$accent: mat.define-palette(pal.$accent-pink-palette, 400);
-
-$theme: mat.define-light-theme((
-  color: (
-    primary: $primary,
-    accent: $accent,
-  ),
-  typography:
-    mat.define-typography-config(
-      $font-family: "'Poppins', sans-serif",
-    ),
-));
 
 @mixin theme($theme) {
   @include button-github.theme($theme);
