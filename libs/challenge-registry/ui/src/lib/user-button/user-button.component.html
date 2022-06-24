@@ -1,19 +1,26 @@
 <button mat-button class="user-button" [matMenuTriggerFor]="userMenu">
   <div>
     <challenge-registry-avatar [avatar]="avatar"></challenge-registry-avatar>
+    {{avatar.name}} 
     <mat-icon class="app-hide-small" aria-hidden="true">keyboard_arrow_down
     </mat-icon>
   </div>
 </button>
-<mat-menu #userMenu="matMenu" xPosition="before" [overlapTrigger]="false">
-  <div class="user-account-preview">
-    Signed in as
-    <span class="username">{{avatar.name}}</span>
-  </div>
+<mat-menu class="user-dropdown" #userMenu="matMenu" xPosition="before" [overlapTrigger]="false">
+  <button mat-menu-item>
+    <span>My Challenges</span>
+  </button>
+  <button mat-menu-item>
+    <span>My Organizations</span>
+  </button>
   <mat-divider></mat-divider>
-  <a mat-menu-item *ngFor="let item of menuItems" [attr.aria-label]="item.name"
+  <button mat-menu-item *ngFor="let item of menuItems" [attr.aria-label]="item.name"
     (click)="selectMenuItem(item)">
-    <mat-icon aria-hidden="true">{{item.icon}}</mat-icon>
     <span>{{item.name}}</span>
-  </a>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item>
+    <mat-icon aria-hidden="true">exit_to_app</mat-icon>
+    <span>Log out</span>
+  </button>
 </mat-menu>
