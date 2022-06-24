@@ -1,0 +1,38 @@
+{
+  "root": "libs/shared/data-access-java",
+  "sourceRoot": "libs/shared/data-access-java/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "libs/shared/data-access-java"
+      }
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "libs/shared/data-access-java"
+      }
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "libs/shared/data-access-java"
+      }
+    },
+    "format": {
+      "executor": "@nxrocks/nx-spring-boot:format",
+      "options": {
+        "root": "libs/shared/data-access-java"
+      }
+    },
+    "format-check": {
+      "executor": "@nxrocks/nx-spring-boot:format-check",
+      "options": {
+        "root": "libs/shared/data-access-java"
+      }
+    }
+  },
+  "tags": []
+}
