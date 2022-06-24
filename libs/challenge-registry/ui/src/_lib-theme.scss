@@ -1,9 +1,13 @@
+@use '@angular/material' as mat;
+
 @use './lib/button-github/button-github-theme' as button-github;
 @use './lib/footer/footer-theme' as footer;
 @use './lib/navbar/navbar-theme' as navbar;
+@use './lib/user-button/user-button-theme' as user-button;
 
 @mixin theme($theme) {
   @include button-github.theme($theme);
   @include footer.theme($theme);
   @include navbar.theme($theme);
+  @include user-button.theme($theme);
 }

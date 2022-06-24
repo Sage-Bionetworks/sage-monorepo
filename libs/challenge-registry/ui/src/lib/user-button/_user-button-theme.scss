@@ -1,0 +1,41 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, 'primary');
+  $accent: map.get($config, 'accent');
+  $warn: map.get($config, 'warn');
+
+  .user-button {
+    background-color: mat.get-color-from-palette($accent, 300);
+  }
+
+  .user-dropdown {
+    background-color: #fff;
+  }
+
+  button.mat-menu-item{
+    background-color: #fff;
+    transition: 0.3s;
+  }
+
+  button.mat-menu-item:hover {
+    background-color: mat.get-color-from-palette($primary, 100);;
+  }
+}
+
+@mixin typography($theme) {}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}

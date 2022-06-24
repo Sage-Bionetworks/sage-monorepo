@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
   Account,
   AccountService,
-  ModelError as ApiClientError,
+  // ModelError as ApiClientError,
   Organization,
   User,
   UserService,
@@ -13,20 +13,20 @@ import {
   AppConfig,
   APP_CONFIG,
 } from '@sagebionetworks/challenge-registry/config';
-import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
+// import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 import {
-  catchError,
-  filter,
+  // catchError,
+  // filter,
   map,
   Observable,
   of,
   Subscription,
-  switchMap,
-  throwError,
+  // switchMap,
+  // throwError,
 } from 'rxjs';
 import { Tab } from './tab.model';
 import { USER_PROFILE_TABS } from './user-profile-tabs';
-
+import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/challenge-registry/ui';
 @Component({
   selector: 'challenge-registry-user',
   templateUrl: './user-profile.component.html',
@@ -57,38 +57,41 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.account$ = this.route.params.pipe(
-      switchMap((params) => this.accountService.getAccount(params['login'])),
-      catchError((err) => {
-        const error = err.error as ApiClientError;
-        if (isApiClientError(error)) {
-          if (error.status === 404) {
-            return of(undefined);
-          }
-        }
-        return throwError(err);
-      })
-    );
+    // this.account$ = this.route.params.pipe(
+    //   switchMap((params) => this.accountService.getAccount(params['login'])),
+    //   catchError((err) => {
+    //     const error = err.error as ApiClientError;
+    //     if (isApiClientError(error)) {
+    //       if (error.status === 404) {
+    //         return of(undefined);
+    //       }
+    //     }
+    //     return throwError(err);
+    //   })
+    // );
 
-    this.account$.subscribe((account) => {
-      const pageTitle = account ? `${account.login}` : 'Page not found';
-      console.log(pageTitle);
-      // this.pageTitleService.setTitle(`${pageTitle} · ROCC`);
-      // this.accountNotFound = !account;
-    });
+    // this.account$.subscribe((account) => {
+    //   console.log(account);
+    //   const pageTitle = account ? `${account.login}` : 'Page not found';
+    //   console.log(pageTitle);
+    //   // this.pageTitleService.setTitle(`${pageTitle} · ROCC`);
+    //   // this.accountNotFound = !account;
+    // });
 
-    this.user$ = this.account$.pipe(
-      filter((account): account is Account => account !== undefined),
-      switchMap((account) => this.userService.getUser(account.id))
-    );
+    // this.user$ = this.account$.pipe(
+    //   filter((account): account is Account => account !== undefined),
+    //   switchMap((account) => this.userService.getUser(account.id))
+    // );
 
-    const orgs$ = this.account$.pipe(
-      filter((account): account is Account => account !== undefined),
-      switchMap((account) =>
-        this.userService.listUserOrganizations(account.id)
-      ),
-      map((page) => page.organizations)
-    );
+    this.user$ = of(MOCK_USER);
+    const orgs$ = of([MOCK_ORG]);
+    // const orgs$ = this.account$.pipe(
+    //   filter((account): account is Account => account !== undefined),
+    //   switchMap((account) =>
+    //     this.userService.listUserOrganizations(account.id)
+    //   ),
+    //   map((page) => page.organizations)
+    // );
 
     const activeTab$ = this.route.queryParamMap.pipe(
       map((params: ParamMap) => params.get('tab')),
