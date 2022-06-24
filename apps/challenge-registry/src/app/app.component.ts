@@ -6,6 +6,7 @@ import {
   MenuItem,
   MOCK_AVATAR_32,
   MOCK_MENU_ITEMS,
+  MOCK_USER,
   NavbarSection,
 } from '@sagebionetworks/challenge-registry/ui';
 import { APP_SECTIONS } from './app-sections';
@@ -23,7 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'Challenge Registry';
   sections: { [key: string]: NavbarSection } = APP_SECTIONS;
   loggedIn = true;
-  user!: User | undefined;
+  user: User = MOCK_USER;
   userAvatar: Avatar = MOCK_AVATAR_32;
   userMenuItems: MenuItem[] = MOCK_MENU_ITEMS;
 
@@ -92,5 +93,6 @@ export class AppComponent implements OnInit, OnDestroy {
     } else if (menuItem.name === 'Profile') {
       this.router.navigate([this.user?.login]);
     }
+    // TODO: redirect to all tabs of profile when the rest of tabs components are created
   }
 }
