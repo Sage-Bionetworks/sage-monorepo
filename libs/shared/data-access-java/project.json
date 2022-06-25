@@ -6,11 +6,24 @@
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "root": "libs/shared/data-access-java",
-        "args": [
-          "install"
-        ]
-      }
+        "root": "libs/shared/data-access-java"
+      },
+      "outputs": [
+        "libs/shared/data-access-java/target"
+      ]
+    },
+    "install": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "./mvnw install",
+        "cwd": "libs/shared/data-access-java"
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
