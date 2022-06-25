@@ -21,6 +21,10 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": true
   },
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java",
+    "editor.formatOnSave": true
+  },
   "eslint.workingDirectories": [
     "./apps/challenge-db-cli",
     "."
