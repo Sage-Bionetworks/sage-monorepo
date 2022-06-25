@@ -17,7 +17,13 @@
         "args": [
           "-e"
         ]
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        }
+      ]
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
