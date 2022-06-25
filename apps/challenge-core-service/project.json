@@ -14,9 +14,7 @@
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
         "root": "apps/challenge-core-service",
-        "args": [
-          "-e"
-        ]
+        "args": []
       },
       "dependsOn": [
         {
