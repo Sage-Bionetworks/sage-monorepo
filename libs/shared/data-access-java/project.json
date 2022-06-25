@@ -6,7 +6,10 @@
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "root": "libs/shared/data-access-java"
+        "root": "libs/shared/data-access-java",
+        "args": [
+          "install"
+        ]
       }
     },
     "install": {
