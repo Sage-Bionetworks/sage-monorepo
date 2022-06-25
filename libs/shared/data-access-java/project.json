@@ -12,13 +12,6 @@
         ]
       }
     },
-    "install": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "./mvnw install",
-        "cwd": "libs/shared/data-access-java"
-      }
-    },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
       "options": {
