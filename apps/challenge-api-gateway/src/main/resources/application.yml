@@ -29,7 +29,6 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${app.config.keycloak.url}/realms/${app.config.keycloak.realm}/protocol/openid-connect/certs
-
   cloud:
     gateway:
       routes:
@@ -45,6 +44,8 @@ spring:
             - Path=/core/**
           filters:
             - StripPrefix=1
+    # inetutils:
+    #   timeout-seconds: 10
 
 server:
   port: 8082
@@ -53,6 +54,8 @@ eureka:
   client:
     service-url:
       defaultZone: ${service.registry.url}
+  instance:
+    preferIpAddress: true
 
 management:
   info:
