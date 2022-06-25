@@ -29,7 +29,8 @@
     "mtxr.sqltools-driver-mysql@0.2.0",
     "mtxr.sqltools-driver-pg@0.2.0",
     "GabrielBB.vscode-lombok@1.0.1",
-    "mongodb.mongodb-vscode@0.9.3"
+    "mongodb.mongodb-vscode@0.9.3",
+    "shengchen.vscode-checkstyle@1.4.1"
   ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available
