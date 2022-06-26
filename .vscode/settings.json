@@ -1,4 +1,8 @@
 {
+  "java.format.enabled": true,
+  "java.format.settings.url": "eclipse-java-google-style.xml",
+  "java.checkstyle.configuration": "${workspaceFolder}/google_checks.xml",
+  "java.checkstyle.version": "10.3",
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
@@ -19,6 +23,10 @@
   },
   "[javascript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": true
+  },
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java",
     "editor.formatOnSave": true
   },
   "eslint.workingDirectories": [
