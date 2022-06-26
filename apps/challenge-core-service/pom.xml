@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -8,16 +9,19 @@
 		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>org.sagebionetworks.challenge</groupId>
 	<artifactId>challenge-core-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>challenge-core-service</name>
 	<description>Demo project for Spring Boot</description>
+
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2021.0.3</spring-cloud.version>
     <maven.test.skip>true</maven.test.skip>
 	</properties>
+
 	<dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -38,7 +42,7 @@
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-mysql</artifactId>
-  </dependency>
+    </dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -63,12 +67,14 @@
       <artifactId>spring-boot-devtools</artifactId>
       <optional>true</optional>
     </dependency>
+
     <dependency>
       <groupId>org.sagebionetworks.challenge</groupId>
       <artifactId>data-access-java</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
 	</dependencies>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -80,6 +86,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -92,39 +99,6 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.diffplug.spotless</groupId>
-				<artifactId>spotless-maven-plugin</artifactId>
-				<version>2.20.2</version>
-				<configuration>
-					<formats>
-						<!-- you can define as many formats as you want, each is independent -->
-						<format>
-							<!-- define the files to apply to -->
-							<includes>
-								<include>*.md</include>
-								<include>.gitignore</include>
-							</includes>
-							<!-- define the steps to apply to those files -->
-							<trimTrailingWhitespace/>
-							<endWithNewline/>
-							<indent>
-								<tabs>true</tabs>
-								<spacesPerTab>4</spacesPerTab>
-							</indent>
-						</format>
-					</formats>
-					<java>
-						<!-- to customize, go to https://github.com/diffplug/spotless/tree/main/plugin-maven#java -->
-						<!-- Use the default importOrder configuration -->
-						<importOrder/>
-						<!-- Clean up -->
-						<removeUnusedImports/>
-						<!-- Apply google-java-format formatter -->
-						<googleJavaFormat/>
-					</java>
 				</configuration>
 			</plugin>
 		</plugins>
