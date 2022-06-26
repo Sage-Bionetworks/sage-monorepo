@@ -97,7 +97,6 @@ jobs:
       - name: Setup Python virtualenvs
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: yarn nx python api
-      - run: yarn nx clear-cache
       - run: yarn nx affected --target=lint --parallel --max-parallel=1
-      - run: yarn nx affected --target=build --parallel --max-parallel=1
+      - run: yarn nx affected --target=build --parallel --max-parallel=1 --skip-nx-cache
       - run: yarn nx affected --target=test --parallel --max-parallel=1
