@@ -23,6 +23,13 @@ Remainders:
 - From draw.io, save the diagram to this branch in your fork.
 - Submit the new or updated diagram via a Pull Request.
 
+## Conventions
+
+- Diagram filename
+  - Diagram names must be lower kebab case.
+  - Use the extension `.drawio.svg` to enable GitHub to render a preview of the
+  diagram, while indicating that this is a draw.io file.
+
 ## Create a diagram in draw.io
 
 1. Open your browser and navigate to [draw.io].
