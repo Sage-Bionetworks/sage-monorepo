@@ -12,6 +12,16 @@
         "libs/shared/data-access-java/target"
       ]
     },
+    // "build": {
+    //   "executor": "@nrwl/workspace:run-commands",
+    //   "options": {
+    //     "command": "./mvnw package",
+    //     "cwd": "libs/shared/data-access-java"
+    //   },
+    //   "outputs": [
+    //     "libs/shared/data-access-java/target"
+    //   ]
+    // },
     "install": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
