@@ -23,7 +23,7 @@ Remainders:
 - From draw.io, save the diagram to this branch in your fork.
 - Submit the new or updated diagram via a Pull Request.
 
-## Conventions
+## Naming conventions
 
 - Diagram filename
   - Diagram names must be lower kebab case.
@@ -70,6 +70,22 @@ Otherwise,
 2. Enter Value (org/repo/ref): `<gh_username>/challenge-registry/<branch_name>`
    and click *OK*.
 3. Select a library from the folder `docs/drawio/libraries` and click on *OK*.
+
+## Add an icon to a library
+
+1. Download the icon in svg format that you want to add from the official
+   website.
+2. Verify that the icon meets the following requirements.
+   - The height of the icon must be 80 pt.
+   - The height and width of the svg document must fit the icon.
+3. Open the existing library in draw.io.
+
+> **Note** Import the library from a feature branch that you have created in
+> your fork so that you can submit the new icon in a PR.
+
+4. Drag and drop the svg file to the library.
+5. Click on the `Save` button that appeared in the header of the library.
+6. Submit a PR to the upstream repository.
 
 ## Tips
 
