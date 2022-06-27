@@ -1,28 +1,39 @@
 <main>
-  <mat-card class="container">
-    <mat-card-title class="title">Log in to ROCC</mat-card-title>
+  <div class="container mat-body">
+    <div class="title">
+      <img src="assets/images/registry_b.png" alt="Challenge Registry"/>
+      <mat-card-title>Log in to ROCC</mat-card-title>
+    </div>
     <mat-card-content>
       <form class="form-container" [formGroup]="loginForm" novalidate>
-        <mat-form-field class="username">
-          <input matInput placeholder="Enter a username" type="text"
-            formControlName="username">
+        <mat-form-field class="username" appearance="fill">
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="" type="text" formControlName="username">
           <mat-error *ngIf="username?.invalid">{{getUsernameErrorMessage()}}
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="password">
-          <input matInput placeholder="Create a password" type="password"
-            formControlName="password">
+        <mat-form-field class="password" appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput placeholder="" type="password" formControlName="password">
           <mat-error *ngIf="password?.invalid">{{getPasswordErrorMessage()}}
           </mat-error>
         </mat-form-field>
+        <a class="forgot-password" href="#">Forgot password?</a>
         <mat-error *ngIf="errors.other">{{errors.other}}</mat-error>
-        <div>
+        <div class="btn-group">
           <button mat-raised-button color="primary"
             [disabled]="loginForm.invalid" (click)="login()">Log in</button>
+          <div class="login-options">
+            <button mat-stroked-button color="basic">Log in with Google</button>
+            <button mat-stroked-button color="basic">Log in with Synapse</button>
+          </div>
         </div>
       </form>
     </mat-card-content>
-  </mat-card>
+    <div class="alternative">
+      <p class="mat-body">Don't have an account? <a href="#">Create one!</a></p>
+    </div>
+  </div>
 </main>
 
 <challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
