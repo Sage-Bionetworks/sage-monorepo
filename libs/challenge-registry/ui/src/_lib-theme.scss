@@ -5,26 +5,12 @@
 @use './lib/navbar/navbar-theme' as navbar;
 @use './lib/user-button/user-button-theme' as user-button;
 
-@include mat.core();
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300,500&family=Poppins:wght@500,600&display=swap');
 
-$primary: mat.define-palette(pal.$dark-blue-palette, 600);
-$accent: mat.define-palette(pal.$accent-pink-palette, 400);
 
-$poppins: mat.define-typography-config(
-  $font-family: "'Poppins', sans-serif",
-);
 $fira: mat.define-typography-config(
   $font-family: "'Fira Sans', sans-serif",
 );
-
-$theme: mat.define-light-theme((
-  color: (
-    primary: $primary,
-    accent: $accent,
-  ),
-  typography: $poppins,
-));
 
 @mixin theme($theme) {
   @include button-github.theme($theme);
@@ -32,5 +18,4 @@ $theme: mat.define-light-theme((
   @include navbar.theme($theme);
   @include mat.button-typography($fira);
   @include user-button.theme($theme);
-
 }
