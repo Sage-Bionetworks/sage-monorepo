@@ -1,9 +1,9 @@
 @use '@angular/material' as mat;
 
-@use './lib/palette' as pal;
 @use './lib/button-github/button-github-theme' as button-github;
 @use './lib/footer/footer-theme' as footer;
 @use './lib/navbar/navbar-theme' as navbar;
+@use './lib/user-button/user-button-theme' as user-button;
 
 @include mat.core();
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300,500&family=Poppins:wght@500,600&display=swap');
@@ -31,4 +31,6 @@ $theme: mat.define-light-theme((
   @include footer.theme($theme);
   @include navbar.theme($theme);
   @include mat.button-typography($fira);
+  @include user-button.theme($theme);
+
 }

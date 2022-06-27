@@ -10,12 +10,14 @@ else # Other/fail
   CHALLENGE_BUILD_PROCS=4
 fi
 export CHALLENGE_BUILD_PROCS
+export MAVEN_CONFIG="--no-transfer-progress"
 
 bold=$(tput bold)
 italic=$(tput sitm)
 reset=$(tput sgr0)
 
 orange=$(tput setaf 166)
+
 
 # cd to the workspace directory
 function challenge-cd {
@@ -108,7 +110,7 @@ function challenge-docker-stop {
 function challenge-initialize-env {
   challenge-welcome
 
-  if [ -f "./tools/add-hostnames.sh" ]; then
-    sudo ./tools/add-hostnames.sh
+  if [ -f "./tools/configure-hostnames.sh" ]; then
+    sudo ./tools/configure-hostnames.sh
   fi
 }

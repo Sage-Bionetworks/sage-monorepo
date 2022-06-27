@@ -23,75 +23,80 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final KeycloakUserService keycloakUserService;
-    private final UserRepository userRepository;
+  private final KeycloakUserService keycloakUserService;
+  private final UserRepository userRepository;
 
-    private UserMapper userMapper = new UserMapper();
+  private UserMapper userMapper = new UserMapper();
 
-    public User createUser(User user) {
+  public User createUser(User user) {
 
-        List<UserRepresentation> userRepresentations = keycloakUserService.readUserByEmail(user.getEmail());
-        if (userRepresentations.size() > 0) {
-            throw new RuntimeException("This email already registered as a user. Please check and retry.");
-        }
-
-        UserRepresentation userRepresentation = new UserRepresentation();
-        userRepresentation.setEmail(user.getEmail());
-        userRepresentation.setEmailVerified(false);
-        userRepresentation.setEnabled(false);
-        userRepresentation.setUsername(user.getEmail());
-
-        CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-        credentialRepresentation.setValue(user.getPassword());
-        credentialRepresentation.setTemporary(false);
-        userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
-
-        Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
-        log.info("userCreationResponse: {}", userCreationResponse);
-
-        if (userCreationResponse == 201) {
-            log.info("User created under given username {}", user.getEmail());
-
-            List<UserRepresentation> userRepresentations1 = keycloakUserService.readUserByEmail(user.getEmail());
-            user.setAuthId(userRepresentations1.get(0).getId());
-            user.setStatus(UserStatus.PENDING);
-            user.setIdentification(UUID.randomUUID().toString());
-            UserEntity save = userRepository.save(userMapper.convertToEntity(user));
-            return userMapper.convertToDto(save);
-        }
-
-        throw new RuntimeException("We couldn't find user under given identification. Please check and retry");
-
+    List<UserRepresentation> userRepresentations =
+        keycloakUserService.readUserByEmail(user.getEmail());
+    if (userRepresentations.size() > 0) {
+      throw new RuntimeException(
+          "This email already registered as a user. Please check and retry.");
     }
 
-    public List<User> readUsers(Pageable pageable) {
-        Page<UserEntity> allUsersInDb = userRepository.findAll(pageable);
-        List<User> users = userMapper.convertToDtoList(allUsersInDb.getContent());
-        users.forEach(user -> {
-            UserRepresentation userRepresentation = keycloakUserService.readUser(user.getAuthId());
-            user.setId(user.getId());
-            user.setEmail(userRepresentation.getEmail());
-            user.setIdentification(user.getIdentification());
-        });
-        return users;
+    UserRepresentation userRepresentation = new UserRepresentation();
+    userRepresentation.setEmail(user.getEmail());
+    userRepresentation.setEmailVerified(false);
+    userRepresentation.setEnabled(false);
+    userRepresentation.setUsername(user.getEmail());
+
+    CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
+    credentialRepresentation.setValue(user.getPassword());
+    credentialRepresentation.setTemporary(false);
+    userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
+
+    Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
+    log.info("userCreationResponse: {}", userCreationResponse);
+
+    if (userCreationResponse == 201) {
+      log.info("User created under given username {}", user.getEmail());
+
+      List<UserRepresentation> userRepresentations1 =
+          keycloakUserService.readUserByEmail(user.getEmail());
+      user.setAuthId(userRepresentations1.get(0).getId());
+      user.setStatus(UserStatus.PENDING);
+      user.setIdentification(UUID.randomUUID().toString());
+      UserEntity save = userRepository.save(userMapper.convertToEntity(user));
+      return userMapper.convertToDto(save);
     }
 
-    public User readUser(Long userId) {
-        return userMapper.convertToDto(userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
+    throw new RuntimeException(
+        "We couldn't find user under given identification. Please check and retry");
+
+  }
+
+  public List<User> readUsers(Pageable pageable) {
+    Page<UserEntity> allUsersInDb = userRepository.findAll(pageable);
+    List<User> users = userMapper.convertToDtoList(allUsersInDb.getContent());
+    users.forEach(user -> {
+      UserRepresentation userRepresentation = keycloakUserService.readUser(user.getAuthId());
+      user.setId(user.getId());
+      user.setEmail(userRepresentation.getEmail());
+      user.setIdentification(user.getIdentification());
+    });
+    return users;
+  }
+
+  public User readUser(Long userId) {
+    return userMapper
+        .convertToDto(userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
+  }
+
+  public User updateUser(Long id, UserUpdateRequest userUpdateRequest) {
+    UserEntity userEntity = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+    if (userUpdateRequest.getStatus() == UserStatus.APPROVED) {
+      UserRepresentation userRepresentation = keycloakUserService.readUser(userEntity.getAuthId());
+      userRepresentation.setEnabled(true);
+      userRepresentation.setEmailVerified(true);
+      keycloakUserService.updateUser(userRepresentation);
     }
 
-    public User updateUser(Long id, UserUpdateRequest userUpdateRequest) {
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-
-        if (userUpdateRequest.getStatus() == UserStatus.APPROVED) {
-            UserRepresentation userRepresentation = keycloakUserService.readUser(userEntity.getAuthId());
-            userRepresentation.setEnabled(true);
-            userRepresentation.setEmailVerified(true);
-            keycloakUserService.updateUser(userRepresentation);
-        }
-
-        userEntity.setStatus(userUpdateRequest.getStatus());
-        return userMapper.convertToDto(userRepository.save(userEntity));
-    }
+    userEntity.setStatus(userUpdateRequest.getStatus());
+    return userMapper.convertToDto(userRepository.save(userEntity));
+  }
 
 }
