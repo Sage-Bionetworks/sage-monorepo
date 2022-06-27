@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    @GetMapping(value = "/{identification}")
-    public ResponseEntity readUser(@PathVariable("identification") String identification) {
-        return ResponseEntity.ok(userService.readUser(identification));
-    }
+  @GetMapping(value = "/{identification}")
+  public ResponseEntity readUser(@PathVariable("identification") String identification) {
+    return ResponseEntity.ok(userService.readUser(identification));
+  }
 
-    @GetMapping
-    public ResponseEntity readUser(Pageable pageable) {
-        return ResponseEntity.ok(userService.readUsers(pageable));
-    }
+  @GetMapping
+  public ResponseEntity readUser(Pageable pageable) {
+    return ResponseEntity.ok(userService.readUsers(pageable));
+  }
 
 }

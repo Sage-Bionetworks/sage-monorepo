@@ -14,7 +14,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "./mvnw checkstyle:check",
-        "cwd": "apps/challenge-api-gateway"
+        "cwd": "apps/challenge-service-registry"
       }
     },
     "build": {
