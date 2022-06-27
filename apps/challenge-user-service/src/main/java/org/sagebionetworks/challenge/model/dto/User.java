@@ -4,15 +4,15 @@ import lombok.Data;
 
 @Data
 public class User {
-    private Long id;
+  private Long id;
 
-    private String email;
+  private String email;
 
-    private String identification;
+  private String identification;
 
-    private String password;
+  private String password;
 
-    private String authId;
+  private String authId;
 
-    private UserStatus status;
+  private UserStatus status;
 }

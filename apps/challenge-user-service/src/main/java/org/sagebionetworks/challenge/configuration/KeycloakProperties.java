@@ -9,38 +9,32 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class KeycloakProperties {
-    @Value("${app.config.keycloak.server-url}")
-    private String serverUrl;
+  @Value("${app.config.keycloak.server-url}")
+  private String serverUrl;
 
-    @Value("${app.config.keycloak.realm}")
-    private String realm;
+  @Value("${app.config.keycloak.realm}")
+  private String realm;
 
-    @Value("${app.config.keycloak.clientId}")
-    private String clientId;
+  @Value("${app.config.keycloak.clientId}")
+  private String clientId;
 
-    @Value("${app.config.keycloak.client-secret}")
-    private String clientSecret;
+  @Value("${app.config.keycloak.client-secret}")
+  private String clientSecret;
 
-    private static Keycloak keycloakInstance = null;
+  private static Keycloak keycloakInstance = null;
 
-    public Keycloak getInstance() {
+  public Keycloak getInstance() {
 
-      log.info("realm: " + realm);
+    log.info("realm: " + realm);
 
-        if (keycloakInstance == null) {
-            keycloakInstance = KeycloakBuilder
-                    .builder()
-                    .serverUrl(serverUrl)
-                    .realm(realm)
-                    .grantType("client_credentials")
-                    .clientId(clientId)
-                    .clientSecret(clientSecret)
-                    .build();
-        }
-        return keycloakInstance;
+    if (keycloakInstance == null) {
+      keycloakInstance = KeycloakBuilder.builder().serverUrl(serverUrl).realm(realm)
+          .grantType("client_credentials").clientId(clientId).clientSecret(clientSecret).build();
     }
+    return keycloakInstance;
+  }
 
-    public String getRealm() {
-        return realm;
-    }
+  public String getRealm() {
+    return realm;
+  }
 }
