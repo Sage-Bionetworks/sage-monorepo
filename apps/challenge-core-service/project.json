@@ -97,7 +97,13 @@
         "tags": [
           "sagebionetworks/challenge-core-service:latest"
         ]
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "install",
+          "projects": "dependencies"
+        }
+      ]
     }
   },
   "tags": [
