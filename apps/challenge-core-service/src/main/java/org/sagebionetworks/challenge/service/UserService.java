@@ -14,16 +14,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
-    private UserMapper userMapper = new UserMapper();
+  private UserMapper userMapper = new UserMapper();
 
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    public User readUser(String identification) {
-        UserEntity userEntity = userRepository.findByIdentificationNumber(identification).get();
-        return userMapper.convertToDto(userEntity);
-    }
+  public User readUser(String identification) {
+    UserEntity userEntity = userRepository.findByIdentificationNumber(identification).get();
+    return userMapper.convertToDto(userEntity);
+  }
 
-    public List<User> readUsers(Pageable pageable) {
-       return userMapper.convertToDtoList(userRepository.findAll(pageable).getContent());
-    }
+  public List<User> readUsers(Pageable pageable) {
+    return userMapper.convertToDtoList(userRepository.findAll(pageable).getContent());
+  }
 }

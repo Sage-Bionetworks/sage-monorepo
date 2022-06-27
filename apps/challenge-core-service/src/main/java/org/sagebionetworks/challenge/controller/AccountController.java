@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AccountController {
 
-    private final AccountService accountService;
+  private final AccountService accountService;
 
-    @GetMapping("/challenge-account/{account_number}")
-    public ResponseEntity getChallengeAccount(@PathVariable("account_number") String accountNumber) {
-        log.info("Reading account by ID {}", accountNumber);
-        return ResponseEntity.ok(accountService.readChallengeAccount(accountNumber));
-    }
+  @GetMapping("/challenge-account/{account_number}")
+  public ResponseEntity getChallengeAccount(@PathVariable("account_number") String accountNumber) {
+    log.info("Reading account by ID {}", accountNumber);
+    return ResponseEntity.ok(accountService.readChallengeAccount(accountNumber));
+  }
 }

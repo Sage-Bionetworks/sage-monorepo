@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountService {
 
-    private ChallengeAccountMapper bankAccountMapper = new ChallengeAccountMapper();
+  private ChallengeAccountMapper bankAccountMapper = new ChallengeAccountMapper();
 
-    private final ChallengeAccountRepository bankAccountRepository;
+  private final ChallengeAccountRepository bankAccountRepository;
 
-    public ChallengeAccount readChallengeAccount(String accountNumber) {
-        ChallengeAccountEntity entity = bankAccountRepository.findByNumber(accountNumber).get();
-        return bankAccountMapper.convertToDto(entity);
-    }
+  public ChallengeAccount readChallengeAccount(String accountNumber) {
+    ChallengeAccountEntity entity = bankAccountRepository.findByNumber(accountNumber).get();
+    return bankAccountMapper.convertToDto(entity);
+  }
 }
