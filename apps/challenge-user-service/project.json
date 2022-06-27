@@ -104,7 +104,13 @@
         "tags": [
           "sagebionetworks/challenge-user-service:latest"
         ]
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "install",
+          "projects": "dependencies"
+        }
+      ]
     }
   },
   "tags": [

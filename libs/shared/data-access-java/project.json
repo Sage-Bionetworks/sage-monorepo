@@ -25,8 +25,10 @@
     "install": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "./mvnw install",
-        "cwd": "libs/shared/data-access-java"
+        "commands": [
+          "cp libs/shared/data-access-java/target/data-access-java-0.0.1-SNAPSHOT.jar apps/challenge-core-service/lib/.",
+          "cp libs/shared/data-access-java/target/data-access-java-0.0.1-SNAPSHOT.jar apps/challenge-user-service/lib/."
+        ]
       },
       "dependsOn": [
         {
