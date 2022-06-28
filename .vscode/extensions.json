@@ -11,11 +11,11 @@
     "GitHub.vscode-pull-request-github",
     "humao.rest-client",
     "vscjava.vscode-java-pack",
+    "vscjava.vscode-lombok",
     "Pivotal.vscode-boot-dev-pack",
     "mtxr.sqltools",
     "mtxr.sqltools-driver-mysql",
     "mtxr.sqltools-driver-pg",
-    "GabrielBB.vscode-lombok",
     "mongodb.mongodb-vscode",
     "shengchen.vscode-checkstyle"
   ]
