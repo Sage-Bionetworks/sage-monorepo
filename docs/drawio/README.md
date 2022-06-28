@@ -75,9 +75,22 @@ Otherwise,
 
 1. Download the icon in svg format that you want to add from the official
    website.
+   - If an official icon in svg format cannot be found, it is accepted to use an
+     unofficial icon as long as the icon looks identical to the official icon.
+   - If an icon can only be found in bitmap format (png, jpg), the icon must be
+     converted to an svg document. Note that the icon must be **embeded** in the
+     svg document. Consider this element taken from an svg file:
+       - ✔️ `xlink:href="data:image/png;base64,<data>`: the bitmap icon is encoded
+         in base64 (`<data>`) and is embedded in the svg file.
+       - ❌ `xlink:href="rest-client.png"`: the bitmap icon is linked in the svg
+         document (the icon is not embedded).
+
+      (e.g., see [rest-client.svg](icons/rest-client.svg)).
+
 2. Verify that the icon meets the following requirements.
    - The height of the icon must be 80 pt.
    - The height and width of the svg document must fit the icon.
+   - The background of the svg document must be transparent.
 3. Open the existing library in draw.io.
 
 > **Note** Import the library from a feature branch that you have created in
