@@ -75,9 +75,14 @@ Otherwise,
 
 1. Download the icon in svg format that you want to add from the official
    website.
+   - If an official icon in svg format cannot be found, it is accepted to use an
+     unofficial icon as long as the icon looks identical to the official icon.
+   - If an icon can not be found in svg format, it is accepted to create an svg
+     icon from a bitmap image.
 2. Verify that the icon meets the following requirements.
    - The height of the icon must be 80 pt.
    - The height and width of the svg document must fit the icon.
+   - The background of the scg document must be transparent.
 3. Open the existing library in draw.io.
 
 > **Note** Import the library from a feature branch that you have created in
