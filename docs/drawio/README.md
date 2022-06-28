@@ -90,7 +90,7 @@ Otherwise,
 2. Verify that the icon meets the following requirements.
    - The height of the icon must be 80 pt.
    - The height and width of the svg document must fit the icon.
-   - The background of the scg document must be transparent.
+   - The background of the svg document must be transparent.
 3. Open the existing library in draw.io.
 
 > **Note** Import the library from a feature branch that you have created in
