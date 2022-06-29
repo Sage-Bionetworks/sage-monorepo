@@ -1,3 +1,5 @@
+lib/*.jar
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -31,6 +33,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-### This project ###
-lib/*.jar

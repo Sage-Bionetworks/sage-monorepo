@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.model.mapper;
 
+// import org.sagebionetworks.challenge.model.mapper.BaseMapper;
 import org.sagebionetworks.challenge.model.dto.ChallengeAccount;
 import org.sagebionetworks.challenge.model.entity.ChallengeAccountEntity;
 import org.springframework.beans.BeanUtils;
