@@ -1,5 +1,5 @@
 {
-  "name": "Challenge Dev Container",
+  "name": "Challenge",
   "image": "sagebionetworks/challenge-devcontainer:bf457d84",
 
   "features": {
