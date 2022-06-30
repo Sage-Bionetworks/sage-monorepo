@@ -1,22 +1,20 @@
-<section id="statistics" class="section">
+<section id="statistics" class="mat-typography">
   <div class="container">
-    <div class="section-inner">
-      <h3 class="section-title text-center">
-        Current landscape
-      </h3>
-      <div class="row" *ngIf="registry$ | async as registry">
-        <div class="col text-center">
-          <h2 [countUp]="registry.challengeCount">0</h2>
-          <p>annotated challenges</p>
-        </div>
-        <div class="col text-center">
-          <h2 [countUp]="registry.orgCount">0</h2>
-          <p>organizations & hosting societies</p>
-        </div>
-        <div class="col text-center">
-          <h2 [countUp]="registry.userCount">0</h2>
-          <p>registered users</p>
-        </div>
+    <h3 class="section-title">
+      Current landscape
+    </h3>
+    <div class="row">
+      <div class="col text-center">
+        <h2 [countUp]="92">0</h2>
+        <p>annotated challenges</p>
+      </div>
+      <div class="col text-center">
+        <h2 [countUp]="11">0</h2>
+        <p>organizations & hosting societies</p>
+      </div>
+      <div class="col text-center">
+        <h2 [countUp]="3">0</h2>
+        <p>registered users</p>
       </div>
     </div>
   </div>
