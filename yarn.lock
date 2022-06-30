@@ -53,6 +53,25 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
+"@angular-architects/module-federation-runtime@14.3.9":
+  version "14.3.9"
+  resolved "https://registry.yarnpkg.com/@angular-architects/module-federation-runtime/-/module-federation-runtime-14.3.9.tgz#00c8fac2b87b926f0f6f10aa147ad64c607629b8"
+  integrity sha512-3M4o62PxbvPfz84aX6E1WjqeviwwLEK2uffJI2a7AD0E6vAFY5M2yWUC1fOY/sLsLo6Ob7KB2fYuN6bcrqwglw==
+  dependencies:
+    tslib "^2.0.0"
+
+"@angular-architects/module-federation@^14.3.9":
+  version "14.3.9"
+  resolved "https://registry.yarnpkg.com/@angular-architects/module-federation/-/module-federation-14.3.9.tgz#0096b3dc559faa30516db070b40bc3b5151a9f56"
+  integrity sha512-Nd0T/HdA99HOJvkbDzwrcXpyAbRCr0wRA3ByIEiD+Yrit8FvI0mFSWOj77DrwwzhIgtUPeet03mqO+oW6SyGdA==
+  dependencies:
+    "@angular-architects/module-federation-runtime" "14.3.9"
+    callsite "^1.0.0"
+    node-fetch "^2.6.7"
+    rxjs "~6.6.3"
+    semver "^7.3.5"
+    word-wrap "^1.2.3"
+
 "@angular-devkit/architect@0.1400.4":
   version "0.1400.4"
   resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.1400.4.tgz#62ebb137eade9c4bf268d9bd0336858a67d95c1d"
@@ -7362,6 +7381,11 @@ call-me-maybe@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/call-me-maybe/-/call-me-maybe-1.0.1.tgz#26d208ea89e37b5cbde60250a15f031c16a4d66b"
   integrity sha1-JtII6onje1y95gJQoV8DHBak1ms=
+
+callsite@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callsite/-/callsite-1.0.0.tgz#280398e5d664bd74038b6f0905153e6e8af1bc20"
+  integrity sha512-0vdNRFXn5q+dtOqjfFtmtlI9N2eVZ7LMyEV2iKC5mEEFvSg/69Ml6b/WU2qF8W1nLRa0wiSrDT3Y5jOHZCwKPQ==
 
 callsites@^3.0.0:
   version "3.1.0"
@@ -16442,7 +16466,7 @@ rxjs-for-await@0.0.2:
   resolved "https://registry.yarnpkg.com/rxjs-for-await/-/rxjs-for-await-0.0.2.tgz#26598a1d6167147cc192172970e7eed4e620384b"
   integrity sha512-IJ8R/ZCFMHOcDIqoABs82jal00VrZx8Xkgfe7TOKoaRPAW5nH/VFlG23bXpeGdrmtqI9UobFPgUKgCuFc7Lncw==
 
-rxjs@6.6.7, rxjs@^6.5.4, rxjs@^6.6.3:
+rxjs@6.6.7, rxjs@^6.5.4, rxjs@^6.6.3, rxjs@~6.6.3:
   version "6.6.7"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.7.tgz#90ac018acabf491bf65044235d5863c4dab804c9"
   integrity sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ==
