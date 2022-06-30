@@ -9,9 +9,9 @@ services:
       - .env
     volumes:
       - challenge-mariadb:/data/db
-    # networks:
-    #   - challenge
-    network_mode: "host"
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - challenge
     ports:
       - "3306:3306"
 
@@ -19,6 +19,6 @@ volumes:
   challenge-mariadb:
     name: challenge-mariadb
 
-# networks:
-#   challenge:
-#     name: challenge
+networks:
+  challenge:
+    name: challenge

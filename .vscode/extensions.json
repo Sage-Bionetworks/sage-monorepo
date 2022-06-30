@@ -16,6 +16,7 @@
     "mtxr.sqltools-driver-mysql",
     "mtxr.sqltools-driver-pg",
     "GabrielBB.vscode-lombok",
-    "mongodb.mongodb-vscode"
+    "mongodb.mongodb-vscode",
+    "shengchen.vscode-checkstyle"
   ]
 }

@@ -37,6 +37,12 @@
     "challenge-user-service": "apps/challenge-user-service",
     "challenge-mariadb": "apps/challenge-mariadb",
     "challenge-mongodb": "apps/challenge-mongodb",
-    "challenge-postgresql": "apps/challenge-postgresql"
+    "challenge-postgresql": "apps/challenge-postgresql",
+    "challenge-core-service": "apps/challenge-core-service",
+    "challenge-elasticsearch": "apps/challenge-elk/elasticsearch",
+    "challenge-logstash": "apps/challenge-elk/logstash",
+    "challenge-kibana": "apps/challenge-elk/kibana",
+    "challenge-logspout": "apps/challenge-elk/logspout",
+    "shared-data-access-java": "libs/shared/data-access-java"
   }
 }

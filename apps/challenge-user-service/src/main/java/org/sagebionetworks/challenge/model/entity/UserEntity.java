@@ -12,15 +12,15 @@ import javax.persistence.*;
 @Table(name = "user")
 public class UserEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String authId;
+  private String authId;
 
-    private String identification;
+  private String identification;
 
-    @Enumerated(EnumType.STRING)
-    private UserStatus status;
+  @Enumerated(EnumType.STRING)
+  private UserStatus status;
 
 }

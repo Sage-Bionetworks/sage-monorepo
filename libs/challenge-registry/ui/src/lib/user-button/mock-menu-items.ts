@@ -6,7 +6,7 @@ export const MOCK_MENU_ITEMS: MenuItem[] = [
     icon: 'account_circle',
   },
   {
-    name: 'Sign out',
-    icon: 'exit_to_app',
+    name: 'Settings',
+    icon: 'settings',
   },
 ];

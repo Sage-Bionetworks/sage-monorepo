@@ -10,12 +10,25 @@
         "cwd": "apps/challenge-user-service"
       }
     },
+    "lint": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "./mvnw checkstyle:check",
+        "cwd": "apps/challenge-user-service"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
         "root": "apps/challenge-user-service",
-        "args": ["-e"]
-      }
+        "args": []
+      },
+      "dependsOn": [
+        {
+          "target": "install",
+          "projects": "dependencies"
+        }
+      ]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
@@ -102,6 +115,7 @@
     "challenge-mariadb",
     "challenge-keycloak",
     "challenge-service-registry",
-    "challenge-api-gateway"
+    "challenge-api-gateway",
+    "shared-data-access-java"
   ]
 }

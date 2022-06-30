@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class UserUpdateRequest {
-    private UserStatus status; // TODO: UserStatus?
+  private UserStatus status; // TODO: UserStatus?
 }

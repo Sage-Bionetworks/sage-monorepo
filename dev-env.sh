@@ -10,12 +10,14 @@ else # Other/fail
   CHALLENGE_BUILD_PROCS=4
 fi
 export CHALLENGE_BUILD_PROCS
+export MAVEN_CONFIG="--no-transfer-progress"
 
 bold=$(tput bold)
 italic=$(tput sitm)
 reset=$(tput sgr0)
 
 orange=$(tput setaf 166)
+
 
 # cd to the workspace directory
 function challenge-cd {
@@ -66,6 +68,10 @@ function challenge-registry-serve {
   nx serve challenge-registry
 }
 
+function challenge-elk-serve-detach {
+  nx serve-detach challenge-kibana
+}
+
 function challenge-db-cli {
   node dist/apps/challenge-db-cli/src/index.js
 }
@@ -104,6 +110,7 @@ function challenge-docker-stop {
 function challenge-initialize-env {
   challenge-welcome
 
-  # Add app hostnames
-  sudo ./tools/add-hostnames.sh
+  if [ -f "./tools/configure-hostnames.sh" ]; then
+    sudo ./tools/configure-hostnames.sh
+  fi
 }

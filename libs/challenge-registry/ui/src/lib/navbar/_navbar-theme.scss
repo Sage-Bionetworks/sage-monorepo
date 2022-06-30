@@ -11,8 +11,9 @@
 
   challenge-registry-navbar {
     color: mat.get-color-from-palette($primary, default-contrast);
-
-    .sage-navbar, .sage-navbar-header {
+    
+    .sage-navbar,
+    .sage-navbar-header {
       background: mat.get-color-from-palette($primary, 600);
     }
   }
@@ -23,12 +24,12 @@
 
   nav .sage-button {
     font-family: 'Fira Sans', sans-serif;
-    font-weight: 300px;
+    font-weight: 300;
   }
 
   .home-btn {
-    font-family: 'Poppins', sans-serif !important;
-    font-weight: 500px;
+    font-family: mat.font-family($typography-config);
+    font-weight: 500;
     line-height: normal;
   }
 }

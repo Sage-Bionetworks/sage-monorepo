@@ -10,6 +10,13 @@
         "cwd": "apps/challenge-api-gateway"
       }
     },
+    "lint": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "./mvnw checkstyle:check",
+        "cwd": "apps/challenge-api-gateway"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
@@ -24,18 +31,6 @@
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
-      "options": {
-        "root": "apps/challenge-api-gateway"
-      }
-    },
-    "format": {
-      "executor": "@nxrocks/nx-spring-boot:format",
-      "options": {
-        "root": "apps/challenge-api-gateway"
-      }
-    },
-    "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:format-check",
       "options": {
         "root": "apps/challenge-api-gateway"
       }

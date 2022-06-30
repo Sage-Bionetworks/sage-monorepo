@@ -11,13 +11,14 @@ env:
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
+  MAVEN_CONFIG: "--no-transfer-progress"
 
 jobs:
   main:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/python-3-node:0.2.0
-      options: --user 1001
+      image: sagebionetworks/challenge-devcontainer:bf457d84
+      options: --user root
     if: ${{ github.event_name != 'pull_request' }}
     env:
       NX_BRANCH: main
@@ -40,6 +41,15 @@ jobs:
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+      - name: Setup Maven cache
+        uses: actions/cache@v3
+        with:
+          path: /root/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Configure hostnames
+        run: ./tools/configure-hostnames.sh
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
@@ -61,8 +71,8 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/python-3-node:0.2.0
-      options: --user 1001
+      image: sagebionetworks/challenge-devcontainer:bf457d84
+      options: --user root
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v2
@@ -84,6 +94,15 @@ jobs:
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+      - name: Setup Maven cache
+        uses: actions/cache@v3
+        with:
+          path: /root/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Configure hostnames
+        run: ./tools/configure-hostnames.sh
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
