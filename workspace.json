@@ -1,8 +1,8 @@
 {
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
     "api-angular": "libs/api-angular",
-    "api-docs": "libs/api-docs",
     "api-spec": "libs/api-spec",
     "challenge-api-gateway": "apps/challenge-api-gateway",
     "challenge-core-service": "apps/challenge-core-service",
@@ -40,9 +40,6 @@
     "shared-data-access-java": "libs/shared/data-access-java",
     "shared-styles": "libs/shared/styles",
     "shared-themes": "libs/shared/themes",
-    "shared-web-components": "libs/shared/web-components",
-    "web-app-react": "apps/web-app-react",
-    "web-app-react-e2e": "apps/web-app-react-e2e"
-  },
-  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
+    "shared-web-components": "libs/shared/web-components"
+  }
 }
