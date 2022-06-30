@@ -24,11 +24,11 @@ $fira: mat.define-typography-config(
   $title: mat.define-typography-level(40px, 50px, 600),
   $subheading-2: mat.define-typography-level(32px, 42px, 600, $letter-spacing: -0.1px),
   $subheading-1: mat.define-typography-level(22px, 32px, 600, $letter-spacing: -0.1px),
-  $body-1: mat.define-typography-level(13px, 24px, 400, $font-family: "'Lato', sans-serif"),
-  $body-2: mat.define-typography-level(16px, 30px, 400, $font-family: "'Lato', sans-serif", $letter-spacing: -0.1px),
-  $caption: mat.define-typography-level(11px, 20px, 400, $font-family: "'Lato', sans-serif"),
+  $body-1: mat.define-typography-level(13px, 24px, 400, "'Lato', sans-serif"),
+  $body-2: mat.define-typography-level(16px, 30px, 400, "'Lato', sans-serif", -0.1px),
+  $caption: mat.define-typography-level(11px, 20px, 400, "'Lato', sans-serif"),
   $button: mat.define-typography-level(14px, 18px, 400),
-  $input: mat.define-typography-level(16px, 1.125, 400, $font-family: "'Lato', sans-serif", $letter-spacing: 0.1px),
+  $input: mat.define-typography-level(16px, 1.125, 400, "'Lato', sans-serif", 0.1px),
 );
 
 $theme: mat.define-light-theme((
