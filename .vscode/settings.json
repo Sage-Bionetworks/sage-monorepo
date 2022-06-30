@@ -71,5 +71,6 @@
       "username": "challenge_user_service",
       "password": "changeme"
     }
-  ]
+  ],
+  "terminal.integrated.showExitAlert": false
 }

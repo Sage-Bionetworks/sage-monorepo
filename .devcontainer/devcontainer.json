@@ -1,5 +1,5 @@
 {
-  "name": "Challenge Dev Container",
+  "name": "Challenge",
   "image": "sagebionetworks/challenge-devcontainer:bf457d84",
 
   "features": {
@@ -24,11 +24,11 @@
     "GitHub.vscode-pull-request-github@0.42.0",
     "humao.rest-client@0.24.6",
     "vscjava.vscode-java-pack@0.23.0",
+    "vscjava.vscode-lombok@1.0.1",
     "Pivotal.vscode-boot-dev-pack@0.1.0",
     "mtxr.sqltools@0.23.0",
     "mtxr.sqltools-driver-mysql@0.2.0",
     "mtxr.sqltools-driver-pg@0.2.0",
-    "GabrielBB.vscode-lombok@1.0.1",
     "mongodb.mongodb-vscode@0.9.3",
     "shengchen.vscode-checkstyle@1.4.1"
   ],
