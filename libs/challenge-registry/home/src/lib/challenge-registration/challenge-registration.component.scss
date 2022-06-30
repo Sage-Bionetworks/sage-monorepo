@@ -1,23 +1,14 @@
 $screen-sm: 481px;
-$screen-lg: 641px;
-
-// TAGS
-a:hover,
-a:active {
-  outline: 0;
-  text-decoration: underline;
-}
 
 // GENERAL CLASSES
 .container {
   width: 100%;
   margin: 0 auto;
-  padding-left: 16px;
-  padding-right: 16px;
 }
 .row {
   display: flex;
   flex-wrap: wrap;
+  padding: 18px 88px;
 }
 .col {
   flex: 1;
@@ -36,16 +27,10 @@ a:active {
 .text-light h2 {
   color: #fff !important;
 }
-@media (min-width: $screen-sm) {
-  .container {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-}
 
 // BUTTONS
 .btn {
-  width: 80%;
+  width: 100%;
   text-transform: uppercase;
   transition: background 0.15s ease;
   text-align: center;
@@ -58,23 +43,5 @@ a:active {
 .dark {
   position: relative;
   background-color: #11103e;
-}
-.dark::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 279px;
-  height: 274px;
-}
-.dark .section-paragraph {
-  margin-bottom: 32px;
-}
-@media (min-width: $screen-lg) {
-  .dark .section-paragraph {
-    margin-bottom: 40px;
-    padding-left: 72px;
-    padding-right: 72px;
-  }
 }
 
