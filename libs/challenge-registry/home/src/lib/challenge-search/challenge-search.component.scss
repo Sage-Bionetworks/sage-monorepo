@@ -97,7 +97,9 @@ a:active {
 
 // SECTION: landing
 #landing {
-  padding-top: 40px;
+  height: 40vh;
+  padding: 210px 64px 72px;
+  background-color: #F8F8F8;
 }
 .about-rocc {
   margin-bottom: 40px;
@@ -110,9 +112,6 @@ a:active {
   }
 }
 @media (min-width: $screen-sm) {
-  #landing {
-    padding: 108px 64px 72px;
-  }
   .about-rocc {
     font-size: 18px;
     line-height: 32px;
