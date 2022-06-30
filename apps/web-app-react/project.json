@@ -1,13 +1,11 @@
 {
-  "root": "apps/web-app-react",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/web-app-react/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/web:webpack",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
         "compiler": "babel",
@@ -21,9 +19,7 @@
           "apps/web-app-react/src/favicon.ico",
           "apps/web-app-react/src/assets"
         ],
-        "styles": [
-          "apps/web-app-react/src/styles.scss"
-        ],
+        "styles": ["apps/web-app-react/src/styles.scss"],
         "scripts": [],
         "webpackConfig": "@nrwl/react/plugins/webpack"
       },
@@ -41,6 +37,12 @@
           "namedChunks": false,
           "extractLicenses": true,
           "vendorChunk": false
+        },
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
         }
       }
     },
@@ -54,8 +56,12 @@
         "production": {
           "buildTarget": "web-app-react:build:production",
           "hmr": false
+        },
+        "development": {
+          "buildTarget": "web-app-react:build:development"
         }
-      }
+      },
+      "defaultConfiguration": "development"
     }
   },
   "tags": []

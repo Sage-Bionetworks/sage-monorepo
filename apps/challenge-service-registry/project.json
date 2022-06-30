@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-service-registry",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-service-registry/src",
   "projectType": "application",
   "targets": {
@@ -81,14 +81,9 @@
       "options": {
         "context": "apps/challenge-service-registry",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-service-registry:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-service-registry:latest"]
       }
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ]
+  "tags": ["type:service", "scope:backend"]
 }

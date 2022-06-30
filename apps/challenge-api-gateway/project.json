@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-api-gateway",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-api-gateway/src",
   "projectType": "application",
   "targets": {
@@ -81,17 +81,10 @@
       "options": {
         "context": "apps/challenge-api-gateway",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-api-gateway:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-api-gateway:latest"]
       }
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
-  "implicitDependencies": [
-    "challenge-service-registry"
-  ]
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": ["challenge-service-registry"]
 }

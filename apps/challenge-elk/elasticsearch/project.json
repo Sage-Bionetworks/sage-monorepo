@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-elk/elasticsearch",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-elk/elasticsearch/src",
   "projectType": "application",
   "targets": {
@@ -57,14 +57,9 @@
       "options": {
         "context": "apps/challenge-elk/elasticsearch",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-elasticsearch:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-elasticsearch:latest"]
       }
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ]
+  "tags": ["type:service", "scope:backend"]
 }

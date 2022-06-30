@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-core-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-core-service/src",
   "projectType": "application",
   "targets": {
@@ -94,9 +94,7 @@
       "options": {
         "context": "apps/challenge-core-service",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-core-service:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-core-service:latest"]
       },
       "dependsOn": [
         {
@@ -106,10 +104,7 @@
       ]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
+  "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
     "challenge-mariadb",
     "challenge-keycloak",

@@ -1,5 +1,5 @@
 {
-  "root": "apps/web-app-react-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/web-app-react-e2e/src",
   "projectType": "application",
   "targets": {
@@ -17,7 +17,5 @@
     }
   },
   "tags": [],
-  "implicitDependencies": [
-    "web-app-react"
-  ]
+  "implicitDependencies": ["web-app-react"]
 }

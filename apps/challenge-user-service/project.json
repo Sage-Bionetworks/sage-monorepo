@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-user-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-user-service/src",
   "projectType": "application",
   "targets": {
@@ -101,9 +101,7 @@
       "options": {
         "context": "apps/challenge-user-service",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-user-service:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-user-service:latest"]
       },
       "dependsOn": [
         {
@@ -113,10 +111,7 @@
       ]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
+  "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
     "challenge-mariadb",
     "challenge-keycloak",
