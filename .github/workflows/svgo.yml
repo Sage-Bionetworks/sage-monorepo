@@ -1,11 +1,11 @@
 name: Optimize SVGs
 on:
   pull_request:
-    paths:
-    - "**.svg"
+    # paths:
+    # - "**.svg"
   push:
-    paths:
-    - "**.svg"
+    # paths:
+    # - "**.svg"
 
 permissions:
   contents: read
