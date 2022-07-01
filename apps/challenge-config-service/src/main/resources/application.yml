@@ -1,0 +1,27 @@
+
+spring:
+  application:
+    name: challenge-config-service
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Sage-Bionetworks/challenge-registry.git
+          search-paths: configuration
+          default-label: add-config-service
+
+server:
+  port: 8090
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info
+
+info:
+  app:
+    name: ${spring.application.name}
