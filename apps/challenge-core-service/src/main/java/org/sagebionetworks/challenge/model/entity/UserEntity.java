@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "challenge_core_user")
+@Table(name = "challenge_user")
 public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

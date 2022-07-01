@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "challenge_core_account")
+@Table(name = "challenge_account")
 public class ChallengeAccountEntity {
 
   @Id
