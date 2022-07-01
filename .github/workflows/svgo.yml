@@ -1,0 +1,30 @@
+name: Optimize SVGs
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'docs/drawio/**/*.svg'
+    # paths:
+    # - "**.svg"
+  pull_request:
+    # paths:
+    # - "**.svg"
+    paths:
+      - 'docs/drawio/**/*.svg'
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  svgs:
+    name: SVGs
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ericcornelissen/svgo-action@v3
+      with:
+        dry-run: true
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        strict: true

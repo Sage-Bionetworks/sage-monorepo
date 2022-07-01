@@ -8,15 +8,16 @@
     "nrwl.angular-console",
     "stkb.rewrap",
     "webhint.vscode-webhint",
-    "GitHub.vscode-pull-request-github",
+    "github.vscode-pull-request-github",
     "humao.rest-client",
     "vscjava.vscode-java-pack",
     "vscjava.vscode-lombok",
-    "Pivotal.vscode-boot-dev-pack",
+    "pivotal.vscode-boot-dev-pack",
     "mtxr.sqltools",
     "mtxr.sqltools-driver-mysql",
     "mtxr.sqltools-driver-pg",
     "mongodb.mongodb-vscode",
-    "shengchen.vscode-checkstyle"
+    "shengchen.vscode-checkstyle",
+    "1000ch.svgo"
   ]
 }
