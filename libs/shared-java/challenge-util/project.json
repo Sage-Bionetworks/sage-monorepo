@@ -1,33 +1,33 @@
 {
-  "root": "libs/shared/data-access-java",
-  "sourceRoot": "libs/shared/data-access-java/src",
+  "root": "libs/shared-java/challenge-util",
+  "sourceRoot": "libs/shared-java/challenge-util/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "root": "libs/shared/data-access-java"
+        "root": "libs/shared-java/challenge-util"
       },
       "outputs": [
-        "libs/shared/data-access-java/target"
+        "libs/shared-java/challenge-util/target"
       ]
     },
     // "build": {
     //   "executor": "@nrwl/workspace:run-commands",
     //   "options": {
     //     "command": "./mvnw package",
-    //     "cwd": "libs/shared/data-access-java"
+    //     "cwd": "libs/shared-java/challenge-util"
     //   },
     //   "outputs": [
-    //     "libs/shared/data-access-java/target"
+    //     "libs/shared-java/challenge-util/target"
     //   ]
     // },
     "install": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "cp libs/shared/data-access-java/target/data-access-java-0.0.1-SNAPSHOT.jar apps/challenge-core-service/lib/.",
-          "cp libs/shared/data-access-java/target/data-access-java-0.0.1-SNAPSHOT.jar apps/challenge-user-service/lib/."
+          "cp libs/shared-java/challenge-util/target/challenge-util-0.0.1-SNAPSHOT.jar apps/challenge-core-service/lib/.",
+          "cp libs/shared-java/challenge-util/target/challenge-util-0.0.1-SNAPSHOT.jar apps/challenge-user-service/lib/."
         ]
       },
       "dependsOn": [
@@ -40,25 +40,25 @@
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
       "options": {
-        "root": "libs/shared/data-access-java"
+        "root": "libs/shared-java/challenge-util"
       }
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
-        "root": "libs/shared/data-access-java"
+        "root": "libs/shared-java/challenge-util"
       }
     },
     "format": {
       "executor": "@nxrocks/nx-spring-boot:format",
       "options": {
-        "root": "libs/shared/data-access-java"
+        "root": "libs/shared-java/challenge-util"
       }
     },
     "format-check": {
       "executor": "@nxrocks/nx-spring-boot:format-check",
       "options": {
-        "root": "libs/shared/data-access-java"
+        "root": "libs/shared-java/challenge-util"
       }
     }
   },

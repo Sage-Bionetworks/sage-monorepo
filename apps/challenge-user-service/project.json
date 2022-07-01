@@ -123,6 +123,6 @@
     "challenge-service-registry",
     "challenge-api-gateway",
     "challenge-core-service",
-    "shared-data-access-java"
+    "shared-java-challenge-util"
   ]
 }

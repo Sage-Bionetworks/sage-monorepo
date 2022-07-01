@@ -43,6 +43,6 @@
     "challenge-logstash": "apps/challenge-elk/logstash",
     "challenge-kibana": "apps/challenge-elk/kibana",
     "challenge-logspout": "apps/challenge-elk/logspout",
-    "shared-data-access-java": "libs/shared/data-access-java"
+    "shared-java-challenge-util": "libs/shared-java/challenge-util"
   }
 }
