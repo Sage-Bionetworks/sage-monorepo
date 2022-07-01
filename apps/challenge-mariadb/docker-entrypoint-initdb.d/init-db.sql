@@ -2,6 +2,10 @@ create database challenge;
 create role challenge_role_admin;
 grant all on challenge.* to challenge_role_admin;
 
+-- maria
+grant challenge_role_admin to maria;
+set default role challenge_role_admin for maria;
+
 -- challenge-core-service
 create user challenge_core_service identified by 'changeme';
 grant challenge_role_admin to challenge_core_service;

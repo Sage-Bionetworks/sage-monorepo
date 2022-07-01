@@ -1,6 +1,6 @@
--- challenge.challenge_user definition
+-- challenge.challenge_core_user definition
 
-CREATE TABLE `challenge_user`
+CREATE TABLE `challenge_core_user`
 (
     `id`                    bigint(20) NOT NULL AUTO_INCREMENT,
     `email`                 varchar(255) DEFAULT NULL,
@@ -10,9 +10,9 @@ CREATE TABLE `challenge_user`
     PRIMARY KEY (`id`)
 );
 
--- challenge.challenge_account definition
+-- challenge.challenge_core_account definition
 
-CREATE TABLE `challenge_account`
+CREATE TABLE `challenge_core_account`
 (
     `id`                bigint(20) NOT NULL AUTO_INCREMENT,
     `actual_balance`    decimal(19, 2) DEFAULT NULL,
@@ -23,5 +23,5 @@ CREATE TABLE `challenge_account`
     `user_id`           bigint(20) DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY                 `FKt5uqy9p0v3rp3yhlgvm7ep0ij` (`user_id`),
-    CONSTRAINT `FKt5uqy9p0v3rp3yhlgvm7ep0ij` FOREIGN KEY (`user_id`) REFERENCES `challenge_user` (`id`)
+    CONSTRAINT `FKt5uqy9p0v3rp3yhlgvm7ep0ij` FOREIGN KEY (`user_id`) REFERENCES `challenge_core_user` (`id`)
 );

@@ -1,13 +1,13 @@
-INSERT INTO challenge_user (id, email, first_name, identification_number, last_name)
+INSERT INTO challenge_core_user (id, email, first_name, identification_number, last_name)
 VALUES ('1', 'sam@gmail.com', 'Sam', '808829932V', 'Silva');
-INSERT INTO challenge.challenge_user (id, email, first_name, identification_number, last_name)
+INSERT INTO challenge.challenge_core_user (id, email, first_name, identification_number, last_name)
 VALUES ('2', 'guru@gmail.com', 'Guru', '901830556V', 'Darmaraj');
-INSERT INTO challenge.challenge_user (id, email, first_name, identification_number, last_name)
+INSERT INTO challenge.challenge_core_user (id, email, first_name, identification_number, last_name)
 VALUES ('3', 'ragu@gmail.com', 'Ragu', '348829932V', 'Sivaraj');
-INSERT INTO challenge.challenge_user (id, email, first_name, identification_number, last_name)
+INSERT INTO challenge.challenge_core_user (id, email, first_name, identification_number, last_name)
 VALUES ('4', 'randor@gmail.com', 'Randor', '842829932V', 'Manoon');
 
-INSERT INTO challenge_account
+INSERT INTO challenge_core_account
     (actual_balance, available_balance, `number`, status, `type`, user_id)
 VALUES (100000.00, 100000.00, 100015003000, 'ACTIVE', 'USER_ACCOUNT', '1'),
        (100000.00, 100000.00, 100015003001, 'ACTIVE', 'USER_ACCOUNT', '1'),
