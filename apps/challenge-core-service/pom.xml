@@ -71,10 +71,10 @@
 
     <dependency>
       <groupId>org.sagebionetworks.challenge</groupId>
-      <artifactId>data-access-java</artifactId>
+      <artifactId>challenge-util</artifactId>
       <version>0.0.1-SNAPSHOT</version>
       <scope>system</scope>
-      <systemPath>${pom.basedir}/lib/data-access-java-0.0.1-SNAPSHOT.jar</systemPath>
+      <systemPath>${pom.basedir}/lib/challenge-util-0.0.1-SNAPSHOT.jar</systemPath>
     </dependency>
 	</dependencies>
 

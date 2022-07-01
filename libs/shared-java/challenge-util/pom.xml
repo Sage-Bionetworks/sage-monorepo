@@ -11,9 +11,9 @@
 	</parent>
 
 	<groupId>org.sagebionetworks.challenge</groupId>
-	<artifactId>data-access-java</artifactId>
+	<artifactId>challenge-util</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>data-access-java</name>
+	<name>challenge-util</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -36,9 +36,4 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-		</plugins>
-	</build>
 </project>

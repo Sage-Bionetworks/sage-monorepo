@@ -115,6 +115,6 @@
     "challenge-keycloak",
     "challenge-service-registry",
     "challenge-api-gateway",
-    "shared-data-access-java"
+    "shared-java-challenge-util"
   ]
 }

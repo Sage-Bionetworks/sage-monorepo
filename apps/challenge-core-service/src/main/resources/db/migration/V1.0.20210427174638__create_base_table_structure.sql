@@ -1,4 +1,4 @@
--- challenge_core_service.challenge_core_user definition
+-- challenge.challenge_core_user definition
 
 CREATE TABLE `challenge_core_user`
 (
@@ -10,7 +10,7 @@ CREATE TABLE `challenge_core_user`
     PRIMARY KEY (`id`)
 );
 
--- challenge_core_service.challenge_core_account definition
+-- challenge.challenge_core_account definition
 
 CREATE TABLE `challenge_core_account`
 (
