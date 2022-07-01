@@ -54,7 +54,7 @@
       "port": 3306,
       "driver": "MariaDB",
       "name": "challenge-core-service-db",
-      "database": "challenge_core_service",
+      "database": "challenge",
       "username": "challenge_core_service",
       "password": "changeme"
     },
@@ -67,7 +67,7 @@
       "port": 3306,
       "driver": "MariaDB",
       "name": "challenge-user-service-db",
-      "database": "challenge_user_service",
+      "database": "challenge",
       "username": "challenge_user_service",
       "password": "changeme"
     }
