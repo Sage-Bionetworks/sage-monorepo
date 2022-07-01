@@ -1,0 +1,45 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, 'primary');
+  $accent: map.get($config, 'accent');
+  $warn: map.get($config, 'warn');
+
+  $accent-color1: #FFD2DA;
+  $accent-color2: #FFD8CD;
+  $accent-color3: #C6FDF3;
+  $accent-color4: #E0E1FE;
+
+  .card-inner {
+    background: #fff;
+  }
+  .acc1 {
+    background:$accent-color1;
+  }
+  .acc2 {
+    background:$accent-color2;
+  }
+  .acc3 {
+    background:$accent-color3;
+  }
+  .acc4 {
+    background:$accent-color4;
+  }
+}
+
+@mixin typography($theme) {}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}
