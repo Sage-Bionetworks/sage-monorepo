@@ -1,14 +1,14 @@
 package org.sagebionetworks.challenge.controller;
 
+import org.sagebionetworks.challenge.model.dto.User;
+import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
+import org.sagebionetworks.challenge.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import org.sagebionetworks.challenge.model.dto.User;
-import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
-import org.sagebionetworks.challenge.service.UserService;
 
 @Slf4j
 @RestController
