@@ -7,6 +7,10 @@ on:
     paths:
     - "**.svg"
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   svgs:
     name: SVGs
