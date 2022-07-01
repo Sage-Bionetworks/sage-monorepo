@@ -34,6 +34,7 @@
     "."
   ],
   "java.configuration.updateBuildConfiguration": "disabled",
+  "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
       "previewLimit": 50,
@@ -53,9 +54,9 @@
       "server": "challenge-mariadb",
       "port": 3306,
       "driver": "MariaDB",
-      "name": "challenge-core-service-db",
+      "name": "challenge-user-service-db",
       "database": "challenge",
-      "username": "challenge_core_service",
+      "username": "challenge_user_service",
       "password": "changeme"
     },
     {
@@ -66,9 +67,9 @@
       "server": "challenge-mariadb",
       "port": 3306,
       "driver": "MariaDB",
-      "name": "challenge-user-service-db",
+      "name": "challenge-core-service-db",
       "database": "challenge",
-      "username": "challenge_user_service",
+      "username": "challenge_core_service",
       "password": "changeme"
     }
   ],
