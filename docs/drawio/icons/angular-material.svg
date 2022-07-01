@@ -1,21 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 26.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 74.4 80" style="enable-background:new 0 0 74.4 80;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#FFA726;}
-	.st1{fill:#FB8C00;}
-	.st2{fill:#FFE0B2;}
-	.st3{fill:#FFF3E0;}
-	.st4{fill:#FFFFFF;}
-</style>
-<g id="Layer_2_00000044897186907371479160000008521772140371743380_">
-	<g id="Layer_1-2">
-		<polygon class="st0" points="37.1,0 37.1,0 37.1,0 0,13.3 5.6,62.4 37.1,80 37.1,80 37.1,80 68.7,62.4 74.4,13.3 		"/>
-		<polygon class="st1" points="37.1,0 37.1,8.9 37.1,8.9 37.1,49.3 37.1,49.3 37.1,80 37.1,80 68.7,62.4 74.4,13.3 		"/>
-		<polygon class="st2" points="42.7,60.7 16.4,48.1 31.5,38.8 58,51.5 		"/>
-		<polygon class="st3" points="42.7,51 16.4,38.3 31.5,29 58,41.7 		"/>
-		<polygon class="st4" points="42.7,41.2 16.4,28.5 31.5,19.2 58,31.9 		"/>
-	</g>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 74.4 80" style="enable-background:new 0 0 74.4 80" xml:space="preserve">
+    <path style="fill:#ffa726" d="M37.1 0 0 13.3l5.6 49.1L37.1 80l31.6-17.6 5.7-49.1z"/>
+    <path style="fill:#fb8c00" d="M37.1 0v80l31.6-17.6 5.7-49.1z"/>
+    <path style="fill:#ffe0b2" d="M42.7 60.7 16.4 48.1l15.1-9.3L58 51.5z"/>
+    <path style="fill:#fff3e0" d="M42.7 51 16.4 38.3 31.5 29 58 41.7z"/>
+    <path style="fill:#fff" d="M42.7 41.2 16.4 28.5l15.1-9.3L58 31.9z"/>
 </svg>
