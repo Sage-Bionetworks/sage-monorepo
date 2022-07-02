@@ -10,13 +10,13 @@
         "cwd": "apps/challenge-user-service"
       }
     },
-    "lint": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "./mvnw checkstyle:check",
-        "cwd": "apps/challenge-user-service"
-      }
-    },
+    // "lint": {
+    //   "executor": "@nrwl/workspace:run-commands",
+    //   "options": {
+    //     "command": "./mvnw checkstyle:check",
+    //     "cwd": "apps/challenge-user-service"
+    //   }
+    // },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {

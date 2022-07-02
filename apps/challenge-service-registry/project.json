@@ -10,13 +10,13 @@
         "cwd": "apps/challenge-service-registry"
       }
     },
-    "lint": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "./mvnw checkstyle:check",
-        "cwd": "apps/challenge-service-registry"
-      }
-    },
+    // "lint": {
+    //   "executor": "@nrwl/workspace:run-commands",
+    //   "options": {
+    //     "command": "./mvnw checkstyle:check",
+    //     "cwd": "apps/challenge-service-registry"
+    //   }
+    // },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {

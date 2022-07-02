@@ -10,13 +10,13 @@
         "cwd": "apps/challenge-api-gateway"
       }
     },
-    "lint": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "./mvnw checkstyle:check",
-        "cwd": "apps/challenge-api-gateway"
-      }
-    },
+    // "lint": {
+    //   "executor": "@nrwl/workspace:run-commands",
+    //   "options": {
+    //     "command": "./mvnw checkstyle:check",
+    //     "cwd": "apps/challenge-api-gateway"
+    //   }
+    // },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
