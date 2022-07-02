@@ -6,9 +6,9 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/tschaffter/challenge-registry.git
+          uri: https://github.com/Sage-Bionetworks/challenge-registry.git
           search-paths: configuration
-          default-label: add-config-service
+          default-label: main
 
 server:
   port: 8090
