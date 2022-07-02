@@ -1,5 +1,4 @@
 {
-  // "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "root": "apps/challenge-config-service",
   "sourceRoot": "apps/challenge-config-service/src",
   "projectType": "application",
@@ -38,6 +37,51 @@
       "executor": "@nxrocks/nx-spring-boot:serve",
       "options": {
         "root": "apps/challenge-config-service"
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "serve-detach": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/challenge-api-gateway"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        // {
+        //   "target": "prepare",
+        //   "projects": "self"
+        // },
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/challenge-api-gateway",
+        "push": false,
+        "tags": [
+          "sagebionetworks/challenge-api-gateway:latest"
+        ]
       }
     }
   },
