@@ -3,4 +3,4 @@ spring:
     name: challenge_api_gateway
   cloud:
     config:
-      uri: http://localhost:8090
+      uri: http://challenge-config-service:8090
