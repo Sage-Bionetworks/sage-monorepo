@@ -1,0 +1,33 @@
+# spring:
+#   application:
+#     name: challenge-core-service
+#   datasource:
+#     url: jdbc:mysql://challenge-mariadb:3306/challenge
+#     username: challenge_core_service
+#     password: changeme
+#   jpa:
+#     hibernate:
+#       ddl-auto: none
+
+# server:
+#   port: 8092
+
+# eureka:
+#   client:
+#     service-url:
+#       defaultZone: http://challenge-service-registry:8081/eureka
+#   instance:
+#     preferIpAddress: true
+
+# management:
+#   info:
+#     env:
+#       enabled: true
+#   endpoints:
+#     web:
+#       exposure:
+#         include: info
+
+# info:
+#   app:
+#     name: ${spring.application.name}

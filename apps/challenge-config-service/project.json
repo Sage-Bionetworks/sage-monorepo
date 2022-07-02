@@ -1,44 +1,42 @@
 {
-  "root": "apps/challenge-service-registry",
-  "sourceRoot": "apps/challenge-service-registry/src",
+  "root": "apps/challenge-config-service",
+  "sourceRoot": "apps/challenge-config-service/src",
   "projectType": "application",
   "targets": {
-    "prepare": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/challenge-service-registry"
-      }
-    },
-    // "lint": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "command": "./mvnw checkstyle:check",
-    //     "cwd": "apps/challenge-service-registry"
-    //   }
-    // },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "root": "apps/challenge-service-registry"
+        "root": "apps/challenge-config-service"
       }
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
       "options": {
-        "root": "apps/challenge-service-registry"
+        "root": "apps/challenge-config-service"
       }
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
-        "root": "apps/challenge-service-registry"
+        "root": "apps/challenge-config-service"
+      }
+    },
+    "format": {
+      "executor": "@nxrocks/nx-spring-boot:format",
+      "options": {
+        "root": "apps/challenge-config-service"
+      }
+    },
+    "format-check": {
+      "executor": "@nxrocks/nx-spring-boot:format-check",
+      "options": {
+        "root": "apps/challenge-config-service"
       }
     },
     "serve": {
       "executor": "@nxrocks/nx-spring-boot:serve",
       "options": {
-        "root": "apps/challenge-service-registry"
+        "root": "apps/challenge-config-service"
       },
       "dependsOn": [
         {
@@ -59,15 +57,11 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "docker compose up -d",
-        "cwd": "apps/challenge-service-registry"
+        "cwd": "apps/challenge-config-service"
       },
       "dependsOn": [
         {
           "target": "build-image",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
           "projects": "self"
         },
         {
@@ -79,10 +73,10 @@
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "context": "apps/challenge-service-registry",
+        "context": "apps/challenge-config-service",
         "push": false,
         "tags": [
-          "sagebionetworks/challenge-service-registry:latest"
+          "sagebionetworks/challenge-config-service:latest"
         ]
       }
     }

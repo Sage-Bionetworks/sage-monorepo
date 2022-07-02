@@ -1,12 +1,10 @@
 app:
   config:
     keycloak:
-      url: ${keycloak.url}
+      url: http://challenge-keycloak:8080
       realm: test
 
 spring:
-  application:
-    name: challenge-api-gateway
   security:
     oauth2:
       client:
@@ -53,7 +51,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: ${service.registry.url}
+      defaultZone: http://challenge-service-registry:8081/eureka
   instance:
     preferIpAddress: true
 

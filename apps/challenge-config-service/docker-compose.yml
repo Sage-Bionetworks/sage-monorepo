@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  challenge-config-service:
+    image: sagebionetworks/challenge-config-service:latest
+    container_name: challenge-config-service
+    restart: always
+    # env_file:
+    #   - .env
+    networks:
+      - challenge
+    ports:
+      - "8082:8082"
+    command: start-dev
+
+networks:
+  challenge:
+    name: challenge
