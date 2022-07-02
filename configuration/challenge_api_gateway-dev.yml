@@ -1,0 +1,73 @@
+# app:
+#   config:
+#     keycloak:
+#       url: ${keycloak.url}
+#       realm: test
+
+# spring:
+#   application:
+#     name: challenge-api-gateway
+#   security:
+#     oauth2:
+#       client:
+#         provider:
+#           keycloak:
+#             token-uri: ${app.config.keycloak.url}/realms/${app.config.keycloak.realm}/protocol/openid-connect/token
+#             authorization-uri: ${app.config.keycloak.url}/realms/${app.config.keycloak.realm}/protocol/openid-connect/auth
+#             user-name-attribute: preferred_username
+#             user-info-uri: ${app.config.keycloak.url}/realms/${app.config.keycloak.realm}/protocol/openid-connect/userinfo
+#             jwk-set-uri: ${app.config.keycloak.url}/realms/${app.config.keycloak.realm}/protocol/openid-connect/certs
+#             user-info-authentication-method: header
+#         registration:
+#           challenge-core-client:
+#             provider: keycloak
+#             client-id: challenge-core-client
+#             client-secret: O0cNRMWg3LHsdHW8BNPlY96qKooDPhPX
+#             authorization-grant-type: authorization_code
+#             redirect-uri: ${app.config.keycloak.url}/login/oauth2/code/keycloak
+#             scope: openid
+#       resourceserver:
+#         jwt:
+#           jwk-set-uri: ${app.config.keycloak.url}/realms/${app.config.keycloak.realm}/protocol/openid-connect/certs
+#   cloud:
+#     gateway:
+#       routes:
+#         - id: challenge-user-service
+#           uri: lb://challenge-user-service
+#           predicates:
+#             - Path=/user/**
+#           filters:
+#             - StripPrefix=1
+#         - id: challenge-core-service
+#           uri: lb://challenge-core-service
+#           predicates:
+#             - Path=/core/**
+#           filters:
+#             - StripPrefix=1
+#     # inetutils:
+#     #   timeout-seconds: 10
+
+# server:
+#   port: 8082
+
+# eureka:
+#   client:
+#     service-url:
+#       defaultZone: ${service.registry.url}
+#   instance:
+#     preferIpAddress: true
+
+# management:
+#   info:
+#     env:
+#       enabled: true
+#   endpoints:
+#     web:
+#       exposure:
+#         include:
+#           - info
+#           - gateway
+
+# info:
+#   application:
+#     name: ${spring.application.name}

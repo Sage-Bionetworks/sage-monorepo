@@ -92,6 +92,7 @@
     "scope:backend"
   ],
   "implicitDependencies": [
-    "challenge-service-registry"
+    "challenge-service-registry",
+    "challenge-config-service"
   ]
 }
