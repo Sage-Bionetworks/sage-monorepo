@@ -57,17 +57,13 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "docker compose up -d",
-        "cwd": "apps/challenge-api-gateway"
+        "cwd": "apps/challenge-config-service"
       },
       "dependsOn": [
         {
           "target": "build-image",
           "projects": "self"
         },
-        // {
-        //   "target": "prepare",
-        //   "projects": "self"
-        // },
         {
           "target": "serve-detach",
           "projects": "dependencies"
@@ -77,10 +73,10 @@
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "context": "apps/challenge-api-gateway",
+        "context": "apps/challenge-config-service",
         "push": false,
         "tags": [
-          "sagebionetworks/challenge-api-gateway:latest"
+          "sagebionetworks/challenge-config-service:latest"
         ]
       }
     }
