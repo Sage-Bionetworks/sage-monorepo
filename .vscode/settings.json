@@ -33,7 +33,6 @@
     "./apps/challenge-db-cli",
     "."
   ],
-  "java.configuration.updateBuildConfiguration": "disabled",
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
