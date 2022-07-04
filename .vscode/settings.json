@@ -3,6 +3,7 @@
   "java.format.settings.url": "eclipse-java-google-style.xml",
   "java.checkstyle.configuration": "${workspaceFolder}/google_checks.xml",
   "java.checkstyle.version": "10.3",
+  "java.jdt.ls.lombokSupport.enabled": false,
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
@@ -33,7 +34,6 @@
     "./apps/challenge-db-cli",
     "."
   ],
-  "java.configuration.updateBuildConfiguration": "disabled",
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
@@ -60,5 +60,6 @@
       "password": "changeme"
     }
   ],
-  "terminal.integrated.showExitAlert": false
+  "terminal.integrated.showExitAlert": false,
+  "java.configuration.updateBuildConfiguration": "disabled"
 }
