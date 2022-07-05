@@ -44,41 +44,43 @@ public class UserService {
           GlobalErrorCode.ERROR_EMAIL_REGISTERED);
     }
 
-    UserResponse userResponse = challengeCoreRestClient.readUser(user.getIdentification());
+    // UserResponse userResponse = challengeCoreRestClient.readUser(user.getIdentification());
 
-    if (userResponse.getId() != null) {
+    // if (userResponse.getId() != null) {
 
-      if (!userResponse.getEmail().equals(user.getEmail())) {
-        throw new InvalidEmailException("Incorrect email. Please check and retry.",
-            GlobalErrorCode.ERROR_INVALID_EMAIL);
-      }
+    // if (!userResponse.getEmail().equals(user.getEmail())) {
+    // throw new InvalidEmailException("Incorrect email. Please check and retry.",
+    // GlobalErrorCode.ERROR_INVALID_EMAIL);
+    // }
 
-      UserRepresentation userRepresentation = new UserRepresentation();
-      userRepresentation.setEmail(userResponse.getEmail());
-      userRepresentation.setEmailVerified(false);
-      userRepresentation.setEnabled(false);
-      userRepresentation.setUsername(userResponse.getEmail());
+    UserRepresentation userRepresentation = new UserRepresentation();
+    // userRepresentation.setEmail(userResponse.getEmail());
+    userRepresentation.setEmail(user.getEmail());
+    userRepresentation.setEmailVerified(false);
+    userRepresentation.setEnabled(false);
+    // userRepresentation.setUsername(userResponse.getEmail());
+    userRepresentation.setUsername(user.getEmail());
 
-      CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-      credentialRepresentation.setValue(user.getPassword());
-      credentialRepresentation.setTemporary(false);
-      userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
+    CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
+    credentialRepresentation.setValue(user.getPassword());
+    credentialRepresentation.setTemporary(false);
+    userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
 
-      Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
+    Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
 
-      if (userCreationResponse == 201) {
-        log.info("User created under given username {}", user.getEmail());
+    if (userCreationResponse == 201) {
+      log.info("User created under given username {}", user.getEmail());
 
-        List<UserRepresentation> userRepresentations1 =
-            keycloakUserService.readUserByEmail(user.getEmail());
-        user.setAuthId(userRepresentations1.get(0).getId());
-        user.setStatus(UserStatus.PENDING);
-        user.setIdentification(userResponse.getIdentificationNumber());
-        UserEntity save = userRepository.save(userMapper.convertToEntity(user));
-        return userMapper.convertToDto(save);
-      }
-
+      List<UserRepresentation> userRepresentations1 =
+          keycloakUserService.readUserByEmail(user.getEmail());
+      user.setAuthId(userRepresentations1.get(0).getId());
+      user.setStatus(UserStatus.PENDING);
+      // user.setIdentification(userResponse.getIdentificationNumber());
+      UserEntity save = userRepository.save(userMapper.convertToEntity(user));
+      return userMapper.convertToDto(save);
     }
+
+    // }
 
     throw new InvalidChallengeUserException(
         "We couldn't find user under given identification. Please check and retry",

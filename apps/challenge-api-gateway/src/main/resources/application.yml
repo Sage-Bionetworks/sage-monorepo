@@ -35,15 +35,15 @@ spring:
         - id: challenge-user-service
           uri: lb://challenge-user-service
           predicates:
-            - Path=/user/**
+            - Path=/api/v1/users/**
           filters:
-            - StripPrefix=1
-        - id: challenge-core-service
-          uri: lb://challenge-core-service
-          predicates:
-            - Path=/core/**
-          filters:
-            - StripPrefix=1
+            - StripPrefix=0
+        # - id: challenge-core-service
+        #   uri: lb://challenge-core-service
+        #   predicates:
+        #     - Path=/core/**
+        #   filters:
+        #     - StripPrefix=1
     # inetutils:
     #   timeout-seconds: 10
 
