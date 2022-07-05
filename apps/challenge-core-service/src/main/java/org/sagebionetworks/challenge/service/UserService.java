@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.service;
 
+import org.sagebionetworks.challenge.exception.EntityNotFoundException;
 import org.sagebionetworks.challenge.model.dto.User;
 import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.model.mapper.UserMapper;
@@ -19,7 +20,8 @@ public class UserService {
   private final UserRepository userRepository;
 
   public User readUser(String identification) {
-    UserEntity userEntity = userRepository.findByIdentificationNumber(identification).get();
+    UserEntity userEntity = userRepository.findByIdentificationNumber(identification)
+        .orElseThrow(EntityNotFoundException::new);
     return userMapper.convertToDto(userEntity);
   }
 
