@@ -30,12 +30,10 @@ import java.util.List;
 public class UserService {
   private final KeycloakUserService keycloakUserService;
   private final UserRepository userRepository;
-  private final ChallengeCoreRestClient challengeCoreRestClient;
 
   private UserMapper userMapper = new UserMapper();
 
   public User createUser(User user) {
-
     List<UserRepresentation> userRepresentations =
         keycloakUserService.readUserByEmail(user.getEmail());
     if (userRepresentations.size() > 0) {
@@ -44,21 +42,10 @@ public class UserService {
           GlobalErrorCode.ERROR_EMAIL_REGISTERED);
     }
 
-    // UserResponse userResponse = challengeCoreRestClient.readUser(user.getIdentification());
-
-    // if (userResponse.getId() != null) {
-
-    // if (!userResponse.getEmail().equals(user.getEmail())) {
-    // throw new InvalidEmailException("Incorrect email. Please check and retry.",
-    // GlobalErrorCode.ERROR_INVALID_EMAIL);
-    // }
-
     UserRepresentation userRepresentation = new UserRepresentation();
-    // userRepresentation.setEmail(userResponse.getEmail());
     userRepresentation.setEmail(user.getEmail());
     userRepresentation.setEmailVerified(false);
     userRepresentation.setEnabled(false);
-    // userRepresentation.setUsername(userResponse.getEmail());
     userRepresentation.setUsername(user.getEmail());
 
     CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
@@ -75,17 +62,12 @@ public class UserService {
           keycloakUserService.readUserByEmail(user.getEmail());
       user.setAuthId(userRepresentations1.get(0).getId());
       user.setStatus(UserStatus.PENDING);
-      // user.setIdentification(userResponse.getIdentificationNumber());
-      UserEntity save = userRepository.save(userMapper.convertToEntity(user));
-      return userMapper.convertToDto(save);
+      UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
+      return userMapper.convertToDto(userEntity);
     }
 
-    // }
-
-    throw new InvalidChallengeUserException(
-        "We couldn't find user under given identification. Please check and retry",
-        GlobalErrorCode.ERROR_USER_NOT_FOUND_UNDER_NIC);
-
+    throw new InvalidChallengeUserException("Unable to create the new user",
+        GlobalErrorCode.ERROR_INVALID_USER);
   }
 
   public List<User> readUsers(Pageable pageable) {
@@ -95,7 +77,6 @@ public class UserService {
       UserRepresentation userRepresentation = keycloakUserService.readUser(user.getAuthId());
       user.setId(user.getId());
       user.setEmail(userRepresentation.getEmail());
-      user.setIdentification(user.getIdentification());
     });
     return users;
   }

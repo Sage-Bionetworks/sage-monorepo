@@ -18,13 +18,13 @@ public class UserController {
 
   private final UserService userService;
 
-  @PostMapping(value = "/register")
+  @PostMapping
   public ResponseEntity<User> createUser(@RequestBody User request) {
     log.info("Creating user with {}", request.toString());
     return ResponseEntity.ok(userService.createUser(request));
   }
 
-  @PatchMapping(value = "/update/{id}")
+  @PatchMapping(value = "/{id}")
   public ResponseEntity<User> updateUser(@PathVariable("id") Long userId,
       @RequestBody UserUpdateRequest userUpdateRequest) {
     log.info("Updating user with {}", userUpdateRequest.toString());

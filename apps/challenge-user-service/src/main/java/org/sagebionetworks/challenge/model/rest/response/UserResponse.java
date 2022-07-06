@@ -10,7 +10,6 @@ public class UserResponse {
   private String firstName;
   private String lastName;
   private List<AccountResponse> challengeAccounts;
-  private String identificationNumber;
   private Integer id;
   private String email;
 }
