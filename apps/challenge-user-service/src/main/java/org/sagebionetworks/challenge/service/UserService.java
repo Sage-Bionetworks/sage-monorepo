@@ -3,15 +3,12 @@ package org.sagebionetworks.challenge.service;
 import org.sagebionetworks.challenge.model.dto.UserStatus;
 import org.sagebionetworks.challenge.exception.GlobalErrorCode;
 import org.sagebionetworks.challenge.exception.InvalidChallengeUserException;
-import org.sagebionetworks.challenge.exception.InvalidEmailException;
 import org.sagebionetworks.challenge.exception.UserAlreadyRegisteredException;
 import org.sagebionetworks.challenge.model.dto.User;
 import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
 import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.model.mapper.UserMapper;
 import org.sagebionetworks.challenge.model.repository.UserRepository;
-import org.sagebionetworks.challenge.model.rest.response.UserResponse;
-import org.sagebionetworks.challenge.service.rest.ChallengeCoreRestClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.CredentialRepresentation;
@@ -45,7 +42,7 @@ public class UserService {
     UserRepresentation userRepresentation = new UserRepresentation();
     userRepresentation.setEmail(user.getEmail());
     userRepresentation.setEmailVerified(false);
-    userRepresentation.setEnabled(false);
+    userRepresentation.setEnabled(true);
     userRepresentation.setUsername(user.getUsername());
 
     CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
