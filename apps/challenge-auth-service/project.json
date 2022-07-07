@@ -1,6 +1,6 @@
 {
-  "root": "apps/challenge-user-service",
-  "sourceRoot": "apps/challenge-user-service/src",
+  "root": "apps/challenge-auth-service",
+  "sourceRoot": "apps/challenge-auth-service/src",
   "projectType": "application",
   "targets": {
     "prepare": {
@@ -10,17 +10,10 @@
         "cwd": "apps/challenge-user-service"
       }
     },
-    // "lint": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "command": "./mvnw checkstyle:check",
-    //     "cwd": "apps/challenge-user-service"
-    //   }
-    // },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "root": "apps/challenge-user-service"
+        "root": "apps/challenge-auth-service"
       },
       "dependsOn": [
         {
@@ -32,31 +25,31 @@
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
       "options": {
-        "root": "apps/challenge-user-service"
+        "root": "apps/challenge-auth-service"
       }
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
-        "root": "apps/challenge-user-service"
+        "root": "apps/challenge-auth-service"
       }
     },
     "format": {
       "executor": "@nxrocks/nx-spring-boot:format",
       "options": {
-        "root": "apps/challenge-user-service"
+        "root": "apps/challenge-auth-service"
       }
     },
     "format-check": {
       "executor": "@nxrocks/nx-spring-boot:format-check",
       "options": {
-        "root": "apps/challenge-user-service"
+        "root": "apps/challenge-auth-service"
       }
     },
     "serve": {
       "executor": "@nxrocks/nx-spring-boot:serve",
       "options": {
-        "root": "apps/challenge-user-service"
+        "root": "apps/challenge-auth-service"
       },
       "dependsOn": [
         {
@@ -77,7 +70,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "docker compose up -d",
-        "cwd": "apps/challenge-user-service"
+        "cwd": "apps/challenge-auth-service"
       },
       "dependsOn": [
         {
@@ -97,10 +90,10 @@
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "context": "apps/challenge-user-service",
+        "context": "apps/challenge-auth-service",
         "push": false,
         "tags": [
-          "sagebionetworks/challenge-user-service:latest"
+          "sagebionetworks/challenge-auth-service:latest"
         ]
       },
       "dependsOn": [
@@ -120,7 +113,6 @@
     "challenge-keycloak",
     "challenge-service-registry",
     "challenge-api-gateway",
-    // "challenge-core-service",
     "shared-java-challenge-util"
   ]
 }

@@ -50,6 +50,7 @@
     8082,
     8083,
     8090,
+    8091,
     8092,
     9000,
     9200,
@@ -108,6 +109,10 @@
     },
     "8090": {
       "label": "challenge-config-service",
+      "onAutoForward": "silent"
+    },
+    "8091": {
+      "label": "challenge-auth-service",
       "onAutoForward": "silent"
     },
     "8092": {
