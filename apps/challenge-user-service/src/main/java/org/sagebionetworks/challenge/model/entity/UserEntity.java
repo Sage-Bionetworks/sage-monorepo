@@ -14,7 +14,7 @@ public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String login;
+  private String username;
   private String authId;
 
   @Enumerated(EnumType.STRING)

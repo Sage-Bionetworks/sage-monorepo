@@ -42,17 +42,14 @@ grant_type=password
 # GET {{apiGatewayHost}}/user/actuator/info
 # Authorization: Bearer {{login.response.body.$.access_token}}
 
-### Create user
+### Create user (autorized without token)
 
-# POST {{userServiceHost}}/api/v1/users/register
-
-POST {{apiGatewayHost}}/api/v1/users
-Authorization: Bearer {{login.response.body.$.access_token}}
+POST {{apiGatewayHost}}/api/v1/users/register
 Content-Type: application/json
 
 {
-  "username": "plop10plop10",
-  "email": "sam8@gmail.com",
+  "username": "plop10plop102",
+  "email": "sam9@gmail.com",
   "password": "changeme"
 }
 
