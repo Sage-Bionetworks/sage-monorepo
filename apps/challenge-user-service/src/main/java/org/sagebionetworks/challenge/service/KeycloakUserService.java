@@ -27,8 +27,8 @@ public class KeycloakUserService {
         .update(userRepresentation);
   }
 
-  public List<UserRepresentation> readUserByEmail(String email) {
-    return keyCloakManager.getKeyCloakInstanceWithRealm().users().search(email);
+  public List<UserRepresentation> readUserByUsername(String username) {
+    return keyCloakManager.getKeyCloakInstanceWithRealm().users().search(username);
   }
 
   public UserRepresentation readUser(String authId) {

@@ -35,7 +35,7 @@ public class UserService {
 
   public User createUser(User user) {
     List<UserRepresentation> userRepresentations =
-        keycloakUserService.readUserByEmail(user.getEmail());
+        keycloakUserService.readUserByUsername(user.getEmail());
     if (userRepresentations.size() > 0) {
       throw new UserAlreadyRegisteredException(
           "This email already registered as a user. Please check and retry.",
@@ -46,7 +46,7 @@ public class UserService {
     userRepresentation.setEmail(user.getEmail());
     userRepresentation.setEmailVerified(false);
     userRepresentation.setEnabled(false);
-    userRepresentation.setUsername(user.getEmail());
+    userRepresentation.setUsername(user.getUsername());
 
     CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
     credentialRepresentation.setValue(user.getPassword());
@@ -58,9 +58,9 @@ public class UserService {
     if (userCreationResponse == 201) {
       log.info("User created under given username {}", user.getEmail());
 
-      List<UserRepresentation> userRepresentations1 =
-          keycloakUserService.readUserByEmail(user.getEmail());
-      user.setAuthId(userRepresentations1.get(0).getId());
+      List<UserRepresentation> representations =
+          keycloakUserService.readUserByUsername(user.getUsername());
+      user.setAuthId(representations.get(0).getId());
       user.setStatus(UserStatus.PENDING);
       UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
       return userMapper.convertToDto(userEntity);
