@@ -39,3 +39,9 @@ app:
       realm: test
       clientId: challenge-api-client
       client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
+  keycloak:
+    login:
+      url: http://challenge-keycloak:8080/realms/test/protocol/openid-connect/token
+    client-id: challenge-core-client
+    client-secret: O0cNRMWg3LHsdHW8BNPlY96qKooDPhPX
+    grant-type: password

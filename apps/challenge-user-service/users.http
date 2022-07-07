@@ -22,9 +22,15 @@ Content-Type: application/json
 #   "status": "PENDING"
 # }
 
-### Sign In (get access token)
+### Login
 
+POST {{apiGatewayHost}}/api/v1/auth/login
+Content-Type: application/json
 
+{
+  "username": "test",
+  "password": "changeme"
+}
 
 ### List all the users
 
