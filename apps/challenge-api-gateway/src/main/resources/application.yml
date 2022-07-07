@@ -32,10 +32,16 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: challenge-auth-service
+          uri: lb://challenge-auth-service
+          predicates:
+            - Path=/api/v1/auth/**
+          filters:
+            - StripPrefix=0
         - id: challenge-user-service
           uri: lb://challenge-user-service
           predicates:
-            - Path=/api/v1/users/**,/api/v1/auth/**
+            - Path=/api/v1/users/**
           filters:
             - StripPrefix=0
         # - id: challenge-core-service

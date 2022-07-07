@@ -7,7 +7,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
-        "cwd": "apps/challenge-user-service"
+        "cwd": "apps/challenge-auth-service"
       }
     },
     "build": {
@@ -109,7 +109,6 @@
     "scope:backend"
   ],
   "implicitDependencies": [
-    "challenge-mariadb",
     "challenge-keycloak",
     "challenge-service-registry",
     "challenge-api-gateway",
