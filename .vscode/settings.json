@@ -61,5 +61,6 @@
     }
   ],
   "terminal.integrated.showExitAlert": false,
-  "java.configuration.updateBuildConfiguration": "disabled"
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "editor.inlayHints.enabled": "off"
 }
