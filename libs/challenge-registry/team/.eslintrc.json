@@ -1,19 +1,23 @@
 {
   "extends": ["../../../.eslintrc.json"],
   "ignorePatterns": ["!**/*"],
+  "env": {
+    "jest": true
+  },
   "overrides": [
     {
       "files": ["*.ts"],
       "extends": [
         "plugin:@nrwl/nx/angular",
-        "plugin:@angular-eslint/template/process-inline-templates"
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:jest/recommended"
       ],
       "rules": {
         "@angular-eslint/directive-selector": [
           "error",
           {
             "type": "attribute",
-            "prefix": "sagebionetworks",
+            "prefix": "challengeRegistry",
             "style": "camelCase"
           }
         ],
@@ -21,7 +25,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "sagebionetworks",
+            "prefix": "challenge-registry",
             "style": "kebab-case"
           }
         ]
