@@ -6,35 +6,24 @@ POST {{apiGatewayHost}}/api/v1/users/register
 Content-Type: application/json
 
 {
-  "username": "test",
-  "email": "test@gmail.com",
+  "username": "test2",
+  "email": "test2@gmail.com",
   "password": "changeme"
 }
 
-# Expected 201 response:
-
-# {
-#   "id": 1,
-#   "username": "test",
-#   "email": null,
-#   "password": null,
-#   "authId": "033a4bac-80df-4eac-8478-b7f67d44e2d5",
-#   "status": "PENDING"
-# }
-
 ### Login
+
+# @name login
 
 POST {{apiGatewayHost}}/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "username": "test",
+  "username": "test2",
   "password": "changeme"
 }
 
 ### List all the users
 
-# GET {{userServiceHost}}/api/v1/users
-
 GET {{apiGatewayHost}}/api/v1/users
-# Authorization: Bearer {{login.response.body.$.access_token}}
+Authorization: Bearer {{login.response.body.$.access_token}}
