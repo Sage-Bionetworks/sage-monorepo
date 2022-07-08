@@ -19,6 +19,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2021.0.3</spring-cloud.version>
+    <keycloak.version>18.0.0</keycloak.version>
     <maven.test.skip>true</maven.test.skip>
     <checkstyle.config.location>${basedir}/../../checkstyle.xml</checkstyle.config.location>
 	</properties>
@@ -63,7 +64,7 @@
     <dependency>
       <groupId>org.keycloak</groupId>
       <artifactId>keycloak-admin-client</artifactId>
-      <version>18.0.0</version>
+      <version>${keycloak.version}</version>
     </dependency>
     <!-- <dependency>
       <groupId>com.h2database</groupId>
