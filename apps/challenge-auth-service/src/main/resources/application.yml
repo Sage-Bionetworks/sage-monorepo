@@ -25,16 +25,17 @@ info:
   application:
     name: ${spring.application.name}
 
-# app:
-  # config:
-  #   keycloak:
-  #     server-url: ${keycloak.url}
-  #     realm: test
-  #     clientId: challenge-api-client
-  #     client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
-  # keycloak:
-  #   login:
-  #     url: http://challenge-keycloak:8080/realms/test/protocol/openid-connect/token
-  #   client-id: challenge-core-client
-  #   client-secret: O0cNRMWg3LHsdHW8BNPlY96qKooDPhPX
-  #   grant-type: password
+keycloak:
+  realm: test
+  resource: challenge-core-client # TODO update
+  auth-server-url: ${keycloak.url}
+  ssl-required: external
+  use-resource-role-mappings: false # true: use client roles
+
+app:
+  keycloak:
+    login:
+      url: http://challenge-keycloak:8080/realms/test/protocol/openid-connect/token # TODO update
+    client-id: ${keycloak.resource}
+    client-secret: O0cNRMWg3LHsdHW8BNPlY96qKooDPhPX
+    grant-type: password
