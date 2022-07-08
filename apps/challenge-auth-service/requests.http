@@ -6,6 +6,6 @@ POST {{apiGatewayHost}}/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "username": "test",
+  "username": "luke",
   "password": "changeme"
 }
