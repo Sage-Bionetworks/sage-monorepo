@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  challenge-auth-service:
+    image: sagebionetworks/challenge-auth-service:latest
+    container_name: challenge-auth-service
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - challenge
+    ports:
+      - "8091:8091"
+    command: start-dev
+
+networks:
+  challenge:
+    name: challenge

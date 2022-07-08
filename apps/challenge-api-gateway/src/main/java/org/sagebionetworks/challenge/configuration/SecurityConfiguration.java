@@ -13,7 +13,8 @@ public class SecurityConfiguration {
   SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
     http.authorizeExchange()
         // ALLOWING REGISTER API FOR DIRECT ACCESS
-        .pathMatchers("/user/api/v1/register").permitAll()
+        .pathMatchers("/api/v1/users/register").permitAll().pathMatchers("/api/v1/auth/login")
+        .permitAll()
         // ALL OTHER APIS ARE AUTHENTICATED
         .anyExchange().authenticated().and().csrf().disable().oauth2Login().and()
         .oauth2ResourceServer().jwt();

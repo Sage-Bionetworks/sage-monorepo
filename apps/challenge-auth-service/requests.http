@@ -1,0 +1,11 @@
+@apiGatewayHost = http://challenge-api-gateway:8082
+
+### Login
+
+POST {{apiGatewayHost}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "luke",
+  "password": "changeme"
+}

@@ -1,0 +1,29 @@
+@apiGatewayHost = http://challenge-api-gateway:8082
+
+### Create a User
+
+POST {{apiGatewayHost}}/api/v1/users/register
+Content-Type: application/json
+
+{
+  "username": "test2",
+  "email": "test2@gmail.com",
+  "password": "changeme"
+}
+
+### Login
+
+# @name login
+
+POST {{apiGatewayHost}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "test2",
+  "password": "changeme"
+}
+
+### List all the users
+
+GET {{apiGatewayHost}}/api/v1/users
+Authorization: Bearer {{login.response.body.$.access_token}}

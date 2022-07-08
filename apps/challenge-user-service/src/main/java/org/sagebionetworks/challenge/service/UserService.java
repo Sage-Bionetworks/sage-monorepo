@@ -3,15 +3,12 @@ package org.sagebionetworks.challenge.service;
 import org.sagebionetworks.challenge.model.dto.UserStatus;
 import org.sagebionetworks.challenge.exception.GlobalErrorCode;
 import org.sagebionetworks.challenge.exception.InvalidChallengeUserException;
-import org.sagebionetworks.challenge.exception.InvalidEmailException;
 import org.sagebionetworks.challenge.exception.UserAlreadyRegisteredException;
 import org.sagebionetworks.challenge.model.dto.User;
 import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
 import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.model.mapper.UserMapper;
 import org.sagebionetworks.challenge.model.repository.UserRepository;
-import org.sagebionetworks.challenge.model.rest.response.UserResponse;
-import org.sagebionetworks.challenge.service.rest.ChallengeCoreRestClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.CredentialRepresentation;
@@ -30,60 +27,44 @@ import java.util.List;
 public class UserService {
   private final KeycloakUserService keycloakUserService;
   private final UserRepository userRepository;
-  private final ChallengeCoreRestClient challengeCoreRestClient;
 
   private UserMapper userMapper = new UserMapper();
 
   public User createUser(User user) {
-
     List<UserRepresentation> userRepresentations =
-        keycloakUserService.readUserByEmail(user.getEmail());
+        keycloakUserService.readUserByUsername(user.getEmail());
     if (userRepresentations.size() > 0) {
       throw new UserAlreadyRegisteredException(
           "This email already registered as a user. Please check and retry.",
           GlobalErrorCode.ERROR_EMAIL_REGISTERED);
     }
 
-    UserResponse userResponse = challengeCoreRestClient.readUser(user.getIdentification());
+    UserRepresentation userRepresentation = new UserRepresentation();
+    userRepresentation.setEmail(user.getEmail());
+    userRepresentation.setEmailVerified(false);
+    userRepresentation.setEnabled(true);
+    userRepresentation.setUsername(user.getUsername());
 
-    if (userResponse.getId() != null) {
+    CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
+    credentialRepresentation.setValue(user.getPassword());
+    credentialRepresentation.setTemporary(false);
+    userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
 
-      if (!userResponse.getEmail().equals(user.getEmail())) {
-        throw new InvalidEmailException("Incorrect email. Please check and retry.",
-            GlobalErrorCode.ERROR_INVALID_EMAIL);
-      }
+    Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
 
-      UserRepresentation userRepresentation = new UserRepresentation();
-      userRepresentation.setEmail(userResponse.getEmail());
-      userRepresentation.setEmailVerified(false);
-      userRepresentation.setEnabled(false);
-      userRepresentation.setUsername(userResponse.getEmail());
+    if (userCreationResponse == 201) {
+      log.info("User created under given username {}", user.getEmail());
 
-      CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-      credentialRepresentation.setValue(user.getPassword());
-      credentialRepresentation.setTemporary(false);
-      userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
-
-      Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
-
-      if (userCreationResponse == 201) {
-        log.info("User created under given username {}", user.getEmail());
-
-        List<UserRepresentation> userRepresentations1 =
-            keycloakUserService.readUserByEmail(user.getEmail());
-        user.setAuthId(userRepresentations1.get(0).getId());
-        user.setStatus(UserStatus.PENDING);
-        user.setIdentification(userResponse.getIdentificationNumber());
-        UserEntity save = userRepository.save(userMapper.convertToEntity(user));
-        return userMapper.convertToDto(save);
-      }
-
+      List<UserRepresentation> representations =
+          keycloakUserService.readUserByUsername(user.getUsername());
+      user.setAuthId(representations.get(0).getId());
+      user.setStatus(UserStatus.PENDING);
+      UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
+      return userMapper.convertToDto(userEntity);
     }
 
-    throw new InvalidChallengeUserException(
-        "We couldn't find user under given identification. Please check and retry",
-        GlobalErrorCode.ERROR_USER_NOT_FOUND_UNDER_NIC);
-
+    throw new InvalidChallengeUserException("Unable to create the new user",
+        GlobalErrorCode.ERROR_INVALID_USER);
   }
 
   public List<User> readUsers(Pageable pageable) {
@@ -93,7 +74,6 @@ public class UserService {
       UserRepresentation userRepresentation = keycloakUserService.readUser(user.getAuthId());
       user.setId(user.getId());
       user.setEmail(userRepresentation.getEmail());
-      user.setIdentification(user.getIdentification());
     });
     return users;
   }

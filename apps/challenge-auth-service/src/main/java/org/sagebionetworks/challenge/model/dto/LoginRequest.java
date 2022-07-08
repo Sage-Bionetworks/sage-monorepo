@@ -3,11 +3,7 @@ package org.sagebionetworks.challenge.model.dto;
 import lombok.Data;
 
 @Data
-public class User {
-  private Long id;
+public class LoginRequest {
   private String username;
-  private String email;
   private String password;
-  private String authId;
-  private UserStatus status;
 }
