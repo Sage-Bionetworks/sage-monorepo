@@ -63,5 +63,6 @@
   "terminal.integrated.showExitAlert": false,
   "java.configuration.updateBuildConfiguration": "disabled",
   "editor.inlayHints.enabled": "off",
-  "rewrap.wrappingColumn": 100
+  "rewrap.wrappingColumn": 100,
+  "editor.rulers": [100]
 }
