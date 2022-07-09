@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 
 @KeycloakConfiguration
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
-class KeycloakSecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
+class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
 
   // @Autowired
   // RestAccessDeniedHandler restAccessDeniedHandler;
