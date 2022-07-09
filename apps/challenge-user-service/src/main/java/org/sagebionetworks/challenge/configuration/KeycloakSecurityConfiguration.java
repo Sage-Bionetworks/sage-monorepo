@@ -16,7 +16,6 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-// Defines all annotations that are needed to integrate Keycloak in Spring Security
 @KeycloakConfiguration
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 class KeycloakSecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
@@ -36,7 +35,6 @@ class KeycloakSecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter
     // http.exceptionHandling().accessDeniedHandler(restAccessDeniedHandler);
   }
 
-  // Disable default role prefix ROLE_
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     KeycloakAuthenticationProvider keycloakAuthenticationProvider =
@@ -45,13 +43,6 @@ class KeycloakSecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter
     auth.authenticationProvider(keycloakAuthenticationProvider);
   }
 
-  // Use Spring Boot property files instead of default keycloak.json
-  // @Bean
-  // public KeycloakSpringBootConfigResolver KeycloakConfigResolver() {
-  // return new KeycloakSpringBootConfigResolver();
-  // }
-
-  // Register authentication strategy for public or confidential applications
   @Bean
   @Override
   protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
