@@ -47,5 +47,6 @@ app:
     keycloak:
       server-url: ${keycloak.url}
       realm: test
+      client-id: challenge-api-client
       clientId: challenge-api-client
       client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb

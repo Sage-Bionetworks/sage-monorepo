@@ -25,6 +25,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
   private final KeycloakUserService keycloakUserService;
   private final UserRepository userRepository;
 

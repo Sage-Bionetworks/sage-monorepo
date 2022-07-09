@@ -29,7 +29,8 @@ class KeycloakSecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     super.configure(http);
-    http.csrf().disable().cors().disable().authorizeRequests().anyRequest().permitAll();
+    http.csrf().disable().cors().disable().authorizeRequests().antMatchers("/api/v1/users/register")
+        .permitAll().anyRequest().authenticated();
 
     // Custom error handler
     // http.exceptionHandling().accessDeniedHandler(restAccessDeniedHandler);
