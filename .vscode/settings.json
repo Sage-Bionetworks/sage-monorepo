@@ -62,5 +62,6 @@
   ],
   "terminal.integrated.showExitAlert": false,
   "java.configuration.updateBuildConfiguration": "disabled",
-  "editor.inlayHints.enabled": "off"
+  "editor.inlayHints.enabled": "off",
+  "rewrap.wrappingColumn": 100
 }
