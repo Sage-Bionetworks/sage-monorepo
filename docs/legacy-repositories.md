@@ -1,8 +1,7 @@
 # Legacy Repositories
 
-This table lists the repositories used to develop the individual components of
-the Challenge Registry. Since XXX, the codebase of these components is
-maintained in this monorepo.
+This table lists the repositories used to develop the individual components of the Challenge
+Registry. Since XXX, the codebase of these components is maintained in this monorepo.
 
 | Repository                             | Monorepo Project      |
 |----------------------------------------|-----------------------|
