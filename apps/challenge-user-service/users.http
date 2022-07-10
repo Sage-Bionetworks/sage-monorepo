@@ -1,8 +1,9 @@
 @apiGatewayHost = http://challenge-api-gateway:8082
+@userServiceHost = http://challenge-user-service:8083
 
 ### Create a User
 
-POST {{apiGatewayHost}}/api/v1/users/register
+POST {{userServiceHost}}/api/v1/users/register
 Content-Type: application/json
 
 {
