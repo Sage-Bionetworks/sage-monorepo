@@ -2,7 +2,7 @@ package org.sagebionetworks.challenge.service;
 
 import org.sagebionetworks.challenge.model.dto.UserStatus;
 import org.sagebionetworks.challenge.exception.GlobalErrorCode;
-import org.sagebionetworks.challenge.exception.InvalidChallengeUserException;
+import org.sagebionetworks.challenge.exception.InvalidUserException;
 import org.sagebionetworks.challenge.exception.UserAlreadyRegisteredException;
 import org.sagebionetworks.challenge.model.dto.User;
 import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
@@ -10,7 +10,7 @@ import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.model.mapper.UserMapper;
 import org.sagebionetworks.challenge.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+// import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.data.domain.Page;
@@ -21,22 +21,22 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
 
-@Slf4j
+// @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
   private final KeycloakUserService keycloakUserService;
   private final UserRepository userRepository;
 
   private UserMapper userMapper = new UserMapper();
 
   public User createUser(User user) {
-    List<UserRepresentation> userRepresentations =
-        keycloakUserService.readUserByUsername(user.getEmail());
+    List<UserRepresentation> userRepresentations = keycloakUserService.readUserByUsername(user.getUsername());
     if (userRepresentations.size() > 0) {
       throw new UserAlreadyRegisteredException(
-          "This email already registered as a user. Please check and retry.",
-          GlobalErrorCode.ERROR_EMAIL_REGISTERED);
+          "This username is already registered.",
+          GlobalErrorCode.ERROR_USERNAME_REGISTERED);
     }
 
     UserRepresentation userRepresentation = new UserRepresentation();
@@ -53,17 +53,14 @@ public class UserService {
     Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
 
     if (userCreationResponse == 201) {
-      log.info("User created under given username {}", user.getEmail());
-
-      List<UserRepresentation> representations =
-          keycloakUserService.readUserByUsername(user.getUsername());
+      List<UserRepresentation> representations = keycloakUserService.readUserByUsername(user.getUsername());
       user.setAuthId(representations.get(0).getId());
       user.setStatus(UserStatus.PENDING);
       UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
       return userMapper.convertToDto(userEntity);
     }
 
-    throw new InvalidChallengeUserException("Unable to create the new user",
+    throw new InvalidUserException("Unable to create the new user",
         GlobalErrorCode.ERROR_INVALID_USER);
   }
 

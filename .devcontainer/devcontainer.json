@@ -52,7 +52,6 @@
     8090,
     8091,
     8092,
-    9000,
     9200,
     9300,
     9600,
@@ -117,10 +116,6 @@
     },
     "8092": {
       "label": "challenge-core-service",
-      "onAutoForward": "silent"
-    },
-    "9000": {
-      "label": "challenge-registry-movie-api",
       "onAutoForward": "silent"
     },
     "9200": {

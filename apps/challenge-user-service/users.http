@@ -1,13 +1,14 @@
 @apiGatewayHost = http://challenge-api-gateway:8082
+@userServiceHost = http://challenge-user-service:8083
 
 ### Create a User
 
-POST {{apiGatewayHost}}/api/v1/users/register
+POST {{userServiceHost}}/api/v1/users/register
 Content-Type: application/json
 
 {
-  "username": "test2",
-  "email": "test2@gmail.com",
+  "username": "test",
+  "email": "test@gmail.com",
   "password": "changeme"
 }
 
@@ -19,7 +20,7 @@ POST {{apiGatewayHost}}/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "username": "test2",
+  "username": "test",
   "password": "changeme"
 }
 

@@ -14,27 +14,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class KeycloakUserService {
 
-  private final KeycloakManager keyCloakManager;
+  private final KeycloakManager keycloakManager;
 
   public Integer createUser(UserRepresentation userRepresentation) {
     Response response =
-        keyCloakManager.getKeyCloakInstanceWithRealm().users().create(userRepresentation);
+        keycloakManager.getKeycloakInstanceWithRealm().users().create(userRepresentation);
     return response.getStatus();
   }
 
   public void updateUser(UserRepresentation userRepresentation) {
-    keyCloakManager.getKeyCloakInstanceWithRealm().users().get(userRepresentation.getId())
+    keycloakManager.getKeycloakInstanceWithRealm().users().get(userRepresentation.getId())
         .update(userRepresentation);
   }
 
   public List<UserRepresentation> readUserByUsername(String username) {
-    return keyCloakManager.getKeyCloakInstanceWithRealm().users().search(username);
+    return keycloakManager.getKeycloakInstanceWithRealm().users().search(username);
   }
 
   public UserRepresentation readUser(String authId) {
     try {
       UserResource userResource =
-          keyCloakManager.getKeyCloakInstanceWithRealm().users().get(authId);
+          keycloakManager.getKeycloakInstanceWithRealm().users().get(authId);
       return userResource.toRepresentation();
     } catch (Exception e) {
       throw new RuntimeException("User not found under given ID");

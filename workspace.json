@@ -15,8 +15,6 @@
     "challenge-registry-about": "libs/challenge-registry/about",
     "challenge-registry": "apps/challenge-registry",
     "challenge-registry-e2e": "apps/challenge-registry-e2e",
-    "web-app-react": "apps/web-app-react",
-    "web-app-react-e2e": "apps/web-app-react-e2e",
     "challenge-registry-assets": "libs/challenge-registry/assets",
     "challenge-registry-auth": "libs/challenge-registry/auth",
     "challenge-registry-challenge": "libs/challenge-registry/challenge",
