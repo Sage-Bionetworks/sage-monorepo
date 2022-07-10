@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
+// import javax.annotation.security.RolesAllowed;
 
 @Slf4j
 @RestController
@@ -32,7 +32,7 @@ public class UserController {
     return ResponseEntity.ok(userService.updateUser(userId, userUpdateRequest));
   }
 
-  @RolesAllowed("user")
+  // @RolesAllowed("user")
   @GetMapping
   public ResponseEntity<List<User>> readUsers(Pageable pageable) {
     log.info("Reading all users from API");
