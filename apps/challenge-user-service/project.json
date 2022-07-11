@@ -95,13 +95,10 @@
       ]
     },
     "build-image": {
-      "executor": "@nx-tools/nx-docker:build",
+      "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
-        "context": "apps/challenge-user-service",
-        "push": false,
-        "tags": [
-          "sagebionetworks/challenge-user-service:latest"
-        ]
+        "root": "apps/challenge-user-service",
+        "args": ["-Dspring-boot.build-image.imageName=sagebionetworks/challenge-user-service:latest"]
       },
       "dependsOn": [
         {

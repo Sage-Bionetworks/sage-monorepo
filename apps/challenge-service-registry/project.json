@@ -77,14 +77,17 @@
       ]
     },
     "build-image": {
-      "executor": "@nx-tools/nx-docker:build",
+      "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
-        "context": "apps/challenge-service-registry",
-        "push": false,
-        "tags": [
-          "sagebionetworks/challenge-service-registry:latest"
-        ]
-      }
+        "root": "apps/challenge-service-registry",
+        "args": ["-Dspring-boot.build-image.imageName=sagebionetworks/challenge-service-registry:latest"]
+      },
+      "dependsOn": [
+        {
+          "target": "install",
+          "projects": "dependencies"
+        }
+      ]
     }
   },
   "tags": [
