@@ -12,23 +12,10 @@
         "libs/shared-java/challenge-util/target"
       ]
     },
-    // "build": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "command": "./mvnw package",
-    //     "cwd": "libs/shared-java/challenge-util"
-    //   },
-    //   "outputs": [
-    //     "libs/shared-java/challenge-util/target"
-    //   ]
-    // },
     "install": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "commands": [
-          "cp libs/shared-java/challenge-util/target/challenge-util-0.0.1-SNAPSHOT.jar apps/challenge-core-service/lib/.",
-          "cp libs/shared-java/challenge-util/target/challenge-util-0.0.1-SNAPSHOT.jar apps/challenge-user-service/lib/."
-        ]
+        "args": ["install"]
       },
       "dependsOn": [
         {
