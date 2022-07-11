@@ -77,14 +77,17 @@
       ]
     },
     "build-image": {
-      "executor": "@nx-tools/nx-docker:build",
+      "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
-        "context": "apps/challenge-api-gateway",
-        "push": false,
-        "tags": [
-          "sagebionetworks/challenge-api-gateway:latest"
-        ]
-      }
+        "root": "apps/challenge-api-gateway",
+        "args": ["-Dspring-boot.build-image.imageName=sagebionetworks/challenge-api-gateway:latest"]
+      },
+      "dependsOn": [
+        {
+          "target": "install",
+          "projects": "dependencies"
+        }
+      ]
     }
   },
   "tags": [
