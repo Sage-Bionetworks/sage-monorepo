@@ -2,8 +2,7 @@
 
 ## Overview
 
-This cheat sheet provides an overview of the commands needed when developing in
-this monorepo.
+This cheat sheet provides an overview of the commands needed when developing in this monorepo.
 
 ## Workspace
 
@@ -15,10 +14,9 @@ yarn create nx-workspace challenge-registry --preset=empty --packageManager=yarn
 
 ## Project
 
-Nx projects are created using a "generator". A generator must be installed
-before being able to use it. The generators listed in this document are
-automatically installed when the npm dependencies of this workspace have been
-installed.
+Nx projects are created using a "generator". A generator must be installed before being able to use
+it. The generators listed in this document are automatically installed when the npm dependencies of
+this workspace have been installed.
 
     yarn add -D <generator>
 
@@ -26,8 +24,8 @@ Create a new project:
 
     nx g <generator>:<project-type> <project> [--dry-run]
 
-The option `--dry-run` simulates the generation of the project and shows the
-location of the files that would be generated.
+The option `--dry-run` simulates the generation of the project and shows the location of the files
+that would be generated.
 
 Generators used in this workspace:
 

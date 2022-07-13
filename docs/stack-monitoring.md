@@ -10,8 +10,7 @@ challenge-elk-serve-detach
 
 Open Kibana in your browser at http://localhost:5601.
 
-> **Note**
-> Only the logs of dockerized apps are captured at this time.
+> **Note** Only the logs of dockerized apps are captured at this time.
 
 ## Access the app logs
 
