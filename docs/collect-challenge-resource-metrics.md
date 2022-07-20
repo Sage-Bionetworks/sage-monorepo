@@ -61,7 +61,7 @@ The collected data aim to answer the following questions:
   - This instance requires the Docker Engine.
 - N EC2 instances that will be monitored using Beat agents (Metricbeat, Filebeat).
 
-## Prepare the ELK Stack instance
+## Deploy the ELK Stack
 
 ### Create the EC2 instance
 
@@ -73,18 +73,23 @@ Create an EC2 instance in the AWS account `CnbAccount` with the following specif
     - `Department`: `CNB`
     - `Project`: XXX
     - `CostCenter`: XXX
+
 - Application and OS Images (Amazon Machine Image):
   - Amazon Machine Image (AMI): `Ubuntu Server 22.04 LTS (HVM), SSD Volume Type`
   - Architecture: `64-bit (x86)`
+
 - Instance type: `t2.medium`
   - The instance requires at least 2 vCPUs and 4 GB of memory.
+
 - Network settings:
   - TODO
   - IAM Role: `AmazonSSMRoleForInstancesQuickSetup`
   - Security groups:
     - `sg-0807a0e374542affd (cnbvpc-VpnSecurityGroup-JBXT9AUVDXCA)`
+
 - Configure storage
   - 1x 100 GB gp2
+
 - Storage space: 100 GB
 
 ### Connect to the instance
@@ -212,8 +217,9 @@ Waiting for connections...
 Give Kibana about 2-3 minutes to initialize after having started it, then access the Kibana web UI
 by opening `http://localhost:5601` in a web browser and use the following (default) credentials
 to log in:
-  - user: `elastic`
-  - password: `<elastic password>`
+
+- user: `elastic`
+- password: `<elastic password>`
 
 ## Deploy Beat agents
 
@@ -226,22 +232,22 @@ container levels.
 
 1. Ssh to an EC2 instance.
 2. [Install Metricbeat].
-   > **Note** The version of Metricbeat must match the version of the ELK stack. The version of the
-   > ELK stack is specified in the configuration file `.env` of the ELK stack.
+    > **Note** The version of Metricbeat must match the version of the ELK stack. The version of the
+    > ELK stack is specified in the configuration file `.env` of the ELK stack.
 
 3. Enable the Metricbeat `docker` module.
-   ```console
-   sudo metricbeat modules enable docker
-   ```
+    ```console
+    sudo metricbeat modules enable docker
+    ```
 
 4. Check that the following modules are enable: `system`, `docker`.
-   ```console
-   sudo metricbeat modules list
-   ```
+    ```console
+    sudo metricbeat modules list
+    ```
 
 5. Specify the IP address and credentials that Metricbeat must use to connect to the EKL stack.
-   - Open the Metricbeat configuration file `/etc/metricbeat/metricbeat.yml`.
-   - Update the configuration for the section `output.elasticsearch`.
+    - Open the Metricbeat configuration file `/etc/metricbeat/metricbeat.yml`.
+    - Update the configuration for the section `output.elasticsearch`.
       ```console
       output.elasticsearch:
         hosts: ["<elasticsearch ip>:9200"]
@@ -250,8 +256,8 @@ container levels.
       ```
 
 6. Update the metrics that the `docker` module should capture.
-   - Open the `docker` module configuration file `/etc/metricbeat/modules.d/docker.yml`.
-   - Use the following configuration:
+    - Open the `docker` module configuration file `/etc/metricbeat/modules.d/docker.yml`.
+    - Use the following configuration:
       ```console
       - module: docker
         metricsets:
@@ -270,21 +276,21 @@ container levels.
       ```
 
 7. Enable Metricbeat to start at startup.
-   ```console
-   sudo systemctl enable metricbeat
-   ```
+    ```console
+    sudo systemctl enable metricbeat
+    ```
 
 8. Start Metricbeat.
-   ```console
-   sudo systemctl start metricbeat
-   ```
+    ```console
+    sudo systemctl start metricbeat
+    ```
 
 9. Check that Metricbeat has successfully started.
-   ```console
-   sudo systemctl status metricbeat
-   ```
-   Look at the logs for any error messages. If Metricbeat failed to start, try restarting it with
-   `sudo systemctl restart metricbeat`.
+    ```console
+    sudo systemctl status metricbeat
+    ```
+    Look at the logs for any error messages. If Metricbeat failed to start, try restarting it with
+    `sudo systemctl restart metricbeat`.
 
 Metricbeat should now be sending data to the ELK Stack!
 
@@ -295,18 +301,18 @@ instance that runs the ELK stack, to monitor system log files.
 
 1. Ssh to an EC2 instance.
 2. [Install Filebeat].
-   > **Note** The version of Filebeat must match the version of the ELK stack. The version of the
-   > ELK stack is specified in the configuration file `.env` of the ELK stack.
+    > **Note** The version of Filebeat must match the version of the ELK stack. The version of the
+    > ELK stack is specified in the configuration file `.env` of the ELK stack.
 
 3. Enable the Filebeat `system` module.
-   ```console
-   sudo filebeat modules enable system
-   ```
+    ```console
+    sudo filebeat modules enable system
+    ```
 
 4. Check that the following modules are enable: `system`.
-   ```console
-   sudo filebeat modules list
-   ```
+    ```console
+    sudo filebeat modules list
+    ```
 
 5. Specify the IP address and credentials that Filebeat must use to connect to the EKL stack.
    - Open the Filebeat configuration file `/etc/filebeat/filebeat.yml`.
@@ -319,8 +325,8 @@ instance that runs the ELK stack, to monitor system log files.
       ```
 
 6. Update the metrics that the `system` module should capture.
-   - Open the `system` module configuration file `/etc/filebeat/modules.d/system.yml`.
-   - Use the following configuration:
+    - Open the `system` module configuration file `/etc/filebeat/modules.d/system.yml`.
+    - Use the following configuration:
       ```console
       - module: system
         syslog:
@@ -328,21 +334,21 @@ instance that runs the ELK stack, to monitor system log files.
       ```
 
 7. Enable Filebeat to start at startup.
-   ```console
-   sudo systemctl enable filebeat
-   ```
+    ```console
+    sudo systemctl enable filebeat
+    ```
 
 8. Start Filebeat.
-   ```console
-   sudo systemctl start filebeat
-   ```
+    ```console
+    sudo systemctl start filebeat
+    ```
 
 9. Check that Filebeat has successfully started.
-   ```console
-   sudo systemctl status filebeat
-   ```
-   > **Note** Look at the logs for any error messages. If Filebeat failed to start, try restarting
-   > it with `sudo systemctl restart metricbeat`.
+    ```console
+    sudo systemctl status filebeat
+    ```
+    > **Note** Look at the logs for any error messages. If Filebeat failed to start, try restarting
+    > it with `sudo systemctl restart metricbeat`.
 
 Filebeat should now be sending data to the ELK Stack!
 
@@ -387,7 +393,8 @@ ptb-challenge-gpu` to show only the containers running on the host `ptb-challeng
 
 ### Logs Stream
 
-This page shows the logs generated by all the hosts and sent by Filebeat to the ELK stack. To open the Logs Stream,
+This page shows the logs generated by all the hosts and sent by Filebeat to the ELK stack. To open
+the Logs Stream,
 
 1. Click on the top-left menu button.
 2. Click on `Observability` > `Logs`.
@@ -433,10 +440,12 @@ On the Discovery page,
 2. In the `Search field names` input, enter `system.filesystem.available`.
 3. In the list of available fields, click on `system.filesystem.available`, then click on the
    button `Visualize`.
+
 4. In the right panel, set the following properties:
-   - Horizontal axis: `@timestamp`
-   - Vertical axis: `Median of system.filesystem.available`
-   - Break down by: `host.name`
+    - Horizontal axis: `@timestamp`
+    - Vertical axis: `Median of system.filesystem.available`
+    - Break down by: `host.name`
+
 5. Generate a line plot by selecting `Line` after clicking on one of the menu button above the plot.
 
 You should now be able to see a view similar to the one shown below.
@@ -454,6 +463,8 @@ From there, the following actions are available:
   - when the user connects to Kibana
   - when the Beat agents pushes data to Elasticsearch/Logstash
 - Deploy the Beat agents using Docker.
+- Configure the `aws` module of Metricbeat to collect CloudWatch data, including billing
+  information.
 - Create a custom dashboard in Kibana that shows all the information relevant.
 - Collect logs generated by the Challenge Orchestrator.
 - Collect GPU usage.
