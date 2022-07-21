@@ -1,4 +1,4 @@
-# Collecting Challenge Logs and Metrics
+# Collecting Challenge Logs and System Metrics
 
 ## Overview
 
