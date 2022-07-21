@@ -45,12 +45,16 @@ following questions:
 
 ## Architecture
 
-- 1 EC2 instance that runs the [ELK stack].
-- N EC2 instances that run Beat agents (Metricbeat, Filebeat).
-
 <img src="drawio/diagrams/collect-challenge-resource-metrics.drawio.svg">
 
+The components of the stack are:
+
+- `challenge-elk`: EC2 instance that runs the [ELK stack]
+- `challenge-node-*`: EC2 instances that run Beat agents (Metricbeat, Filebeat).
+
 ## Authors
+
+Please give credits to the following persons if you are using or building on top of this solution.
 
 - [Thomas Schaffter](https://github.com/tschaffter)
 - [Verena Chung](https://github.com/vpchung)
