@@ -1,4 +1,4 @@
-# Collecting Challenge Logs and System Metrics
+# Collect Challenge Logs and System Metrics
 
 ## Overview
 
@@ -447,7 +447,7 @@ information:
 - Tab `Processes`: see the list of processes running on the host.
 - Tab `Metadata`: see host metadata such as OS distrubution name and version, architecture, etc.
 
-<img src="images/collect-challenge-resource-metrics/kibana-inventory.png">
+<img src="images/collect-challenge-logs-and-system-metrics/kibana-inventory.png">
 
 To display similar information for the running Docker containers, set the value of the menu `Show`
 to `Docker Containers`. The tiles shown now represent the Docker containers running across all the
@@ -462,7 +462,7 @@ the Logs Stream,
 1. Click on the top-left menu button.
 2. Click on `Observability` > `Logs`.
 
-<img src="images/collect-challenge-resource-metrics/kibana-logs-stream.png">
+<img src="images/collect-challenge-logs-and-system-metrics/kibana-logs-stream.png">
 
 ### Dashboards
 
@@ -482,7 +482,7 @@ usage. By default, the dashboard displays information aggregated across all the 
 containers. A filter can be specified to display data for a single host. For example, by specifying
 the filter `host.name:"<instance hostname>"`.
 
-<img src="images/collect-challenge-resource-metrics/kibana-dashboard-metricbeat-system-overview-ecs.png">
+<img src="images/collect-challenge-logs-and-system-metrics/kibana-dashboard-metricbeat-system-overview-ecs.png">
 
 ## Discover
 
@@ -513,7 +513,7 @@ On the Discovery page,
 
 You should now be able to see a view similar to the one shown below.
 
-<img src="images/collect-challenge-resource-metrics/kibana-discover-filesystem-available.png">
+<img src="images/collect-challenge-logs-and-system-metrics/kibana-discover-filesystem-available.png">
 
 From there, the following actions are available:
 
