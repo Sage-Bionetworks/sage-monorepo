@@ -60,7 +60,7 @@ applications.
 
 ## Authors
 
-Please give credits to the following persons if you are using or building on top of this solution.
+Please give credit to the following persons if you are using or building on top of this solution.
 
 - [Thomas Schaffter](https://github.com/tschaffter)
 - [Verena Chung](https://github.com/vpchung)
