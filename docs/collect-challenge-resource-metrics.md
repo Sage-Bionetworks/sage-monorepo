@@ -1,4 +1,4 @@
-# Collecting Challenge Resource Metrics
+# Collecting Challenge Logs and Metrics
 
 ## Overview
 
