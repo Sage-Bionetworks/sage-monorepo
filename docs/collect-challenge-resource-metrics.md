@@ -42,18 +42,18 @@ The collected data aim to answer the following questions:
     - [Prepare the instance](#prepare-the-instance)
     - [Configure the ELK Stack](#configure-the-elk-stack)
     - [Start the ELK Stack](#start-the-elk-stack)
-3. [Connect to Kibana](#connect-to-kibana)
-4. [Deploy Beat agents](#deploy-beat-agents)
+    - [Connect to Kibana](#connect-to-kibana)
+3. [Deploy Beat agents](#deploy-beat-agents)
     - [Metricbeat](#metricbeat)
     - [Filebeat](#filebeat)
     - [Set up Beat assets](#set-up-beat-assets)
-5. [Explore and visualize data in Kibana](#explore-and-visualize-data-in-kibana)
+4. [Explore and visualize data in Kibana](#explore-and-visualize-data-in-kibana)
     - [Inventory](#inventory)
     - [Logs Stream](#logs-stream)
     - [Dashboards](#dashboards)
       - [[Metricbeat System] Overview ECS](#metricbeat-system-overview-ecs)
     - [Discover](#discover)
-6. [Improvements and future activities](#improvements-and-future-activities)
+5. [Improvements and future activities](#improvements-and-future-activities)
 
 ## Requirements
 
@@ -194,7 +194,7 @@ Run this command from the ELK stack folder to start the stack.
 docker compose up -d
 ```
 
-## Connect to Kibana
+### Connect to Kibana
 
 [Kibana] (the "K" in ELK) is a free and open user interface that lets you visualize your
 Elasticsearch data and navigate the Elastic Stack.
