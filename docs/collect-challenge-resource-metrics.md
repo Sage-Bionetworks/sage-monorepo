@@ -52,6 +52,12 @@ The components of the stack are:
 - `challenge-elk`: EC2 instance that runs the [ELK stack]
 - `challenge-node-*`: EC2 instances that run Beat agents (Metricbeat, Filebeat).
 
+> **Note**
+> Instructions on how to deploy and use this monitoring solution are given below. The instructions are
+given in the context of monitoring a stack used to process submissions received during a scientific
+challenge. However, this solution can be used to monitor hosts and containers deployed for other
+applications.
+
 ## Authors
 
 Please give credits to the following persons if you are using or building on top of this solution.
@@ -87,39 +93,59 @@ Please give credits to the following persons if you are using or building on top
 ## Requirements
 
 - 1 EC2 instance where the [ELK Stack] will be deployed.
-  - This instance requires the Docker Engine.
-- N EC2 instances that will be monitored using Beat agents (Metricbeat, Filebeat).
+  - This instance requires the Docker Engine (see [ELK Stack host requirements]).
+- N EC2 instances to monitor using Beat agents (Metricbeat, Filebeat).
 
 ## Deploy the ELK Stack
 
 ### Create the EC2 instance
 
-Create an EC2 instance in the AWS account `CnbAccount` with the following specifications:
+Create an EC2 instance in the AWS account `CnbAccount` with the following specifications.
 
-- Name and tags:
+> **Note**
+> `CnbAccount` represents the AWS account of the Challenge & Benchmarking group at Sage.
+
+- **Name and tags**
   - Name: `<challenge name>-elk` (e.g. `ptb-challenge-elk`)
   - Tags:
     - `Department`: `CNB`
-    - `Project`: XXX
-    - `CostCenter`: XXX
+    - `Project`: `challenge` (selected from [this
+      list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Projects.json))
+    - `CostCenter`: select value from [these
+      lists](https://github.com/Sage-Bionetworks/aws-infra/tree/master/templates/tags)
 
-- Application and OS Images (Amazon Machine Image):
+- **Application and OS Images (Amazon Machine Image)**
   - Amazon Machine Image (AMI): `Ubuntu Server 22.04 LTS (HVM), SSD Volume Type`
   - Architecture: `64-bit (x86)`
 
-- Instance type: `t2.medium`
-  - The instance requires at least 2 vCPUs and 4 GB of memory.
+- **Instance type**
+  - Instace type: `t2.medium`
+    > **Note**
+    > The instance needs at least 2 vCPUs and 4 GB of memory.
 
-- Network settings:
-  - TODO
-  - IAM Role: `AmazonSSMRoleForInstancesQuickSetup`
-  - Security groups:
-    - `sg-0807a0e374542affd (cnbvpc-VpnSecurityGroup-JBXT9AUVDXCA)`
+- **Key pair**
+  - Select your SSH key pair or create a new one.
 
-- Configure storage
+- **Network settings**
+  - Click on `Edit`
+  - VPC: `vpc-0a70996f3e816e067`
+  - Subnet: `subnet-01898b708714fa3b6`
+  - Firewall
+    - Select `Select existing security group`.
+    - Select `sg-0807a0e374542affd (cnbvpc-VpnSecurityGroup-JBXT9AUVDXCA)`.
+
+  > **Note** These values will be different if you are creating the EC2 instance from an AWS account
+  > different from `CnbAccount`.
+
+- **Configure storage**
   - 1x 100 GB gp2
 
-- Storage space: 100 GB
+Once the instance has been created, configure it to use the following IAM:
+
+- Go to `EC2` > `Instances`.
+- Select the ELK instance.
+- Click on the button `Actions` > `Security` > `Modify IAM role`.
+- Select the IAM role `AmazonSSMRoleForInstancesQuickSetup`.
 
 ### Connect to the instance
 
@@ -518,3 +544,4 @@ From there, the following actions are available:
 [steps 1-4 of SSM with SSH]: https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMwithSSH
 [Nvidiagpubeat]: https://github.com/eBay/nvidiagpubeat
 [Community Beats]: https://www.elastic.co/guide/en/beats/libbeat/current/community-beats.html
+[ELK Stack host requirements]: https://github.com/Sage-Bionetworks/docker-elk#host-setup
