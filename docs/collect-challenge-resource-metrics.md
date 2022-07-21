@@ -187,10 +187,10 @@ Follow these instructions to connect to the instance via SSH using the command `
 
 1. Add a new profile to the `~/.ssh/config` file.
     ```console
-    Host ptb-challenge-elk
+    Host <challenge name>-elk
       HostName i-0fad4cb3e6543283e
       User ubuntu
-      IdentityFile ~/.ssh/tschaffter-cnb.pem
+      IdentityFile ~/.ssh/<your pem file>
       ProxyCommand sh -c "AWS_PROFILE=cnb aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'"
     ```
 
@@ -204,7 +204,7 @@ Follow these instructions to connect to the instance via SSH using the command `
 
 4. Connect to the instance.
     ```console
-    ssh ptb-challenge-elk
+    ssh <challenge name>-elk
     ```
 
 ### Prepare the instance
@@ -226,9 +226,9 @@ Follow these instructions to connect to the instance via SSH using the command `
 3. We will use the hostname of the EC2 instances to filter logs and metrics in Kibana. Therefore, it
    is recommended to use short and descriptive hostnames. To update the hostname of an EC2 instance:
     - Open the file `/etc/hostname`.
-    - Set the hostname to `<challenge name>-<instance id>`. For example, `ptb-challenge-elk` for the
-      instance running the ELK stack, `ptb-challenge-<uuid>` for instances that process challenge
-      submissions.
+    - Set the hostname to `<challenge name>-elk`. For example, `ptb-challenge-elk` for the instance
+      running the ELK stack for the Preterm Birth Prediction DREAM Challenge, and
+      `ptb-challenge-node-<uuid>` for instances that process challenge submissions.
 
 ### Configure the ELK Stack
 
@@ -241,13 +241,21 @@ Follow these instructions to connect to the instance via SSH using the command `
     - [Disable paid features](https://github.com/Sage-Bionetworks/docker-elk#how-to-disable-paid-features).
     - Set new passwords in `.env`.
 
+      > **Note** Create new passwords using the password generator that should come with your
+      > favorite password manager.
+
+      Save the new passwords in Sage password manager.
+
 ### Start the ELK Stack
 
-Run this command from the ELK stack folder to start the stack.
+Start the ELK stack services using Docker Compose:
 
 ```console
 docker compose up -d
 ```
+
+> **Note**
+> The stack can be stopped with `docker compose stop` and restarted with `docker compose start`.
 
 ### Connect to Kibana
 
@@ -257,10 +265,10 @@ Elasticsearch data and navigate the Elastic Stack.
 To access Kibana, start by forwarding the Kibana port (5601) to your localhost using AWS SSM.
 
 ```console
-$ AWS_PROFILE=cnb aws ssm start-session --target i-0fad4cb3e6543283e --document-name AWS-StartPortForwardingSession --parameters '{"portNumber":["5601"], "localPortNumber":["5601"]}'
+$ AWS_PROFILE=cnb aws ssm start-session --target <instance id> --document-name AWS-StartPortForwardingSession --parameters '{"portNumber":["5601"], "localPortNumber":["5601"]}'
 
-Starting session with SessionId: thomas.schaffter@sagebase.org-0e9b70fad4a2c0f8f
-Port 5601 opened for sessionId thomas.schaffter@sagebase.org-0e9b70fad4a2c0f8f.
+Starting session with SessionId: ...
+Port 5601 opened for sessionId ...
 Waiting for connections...
 ```
 
@@ -472,7 +480,7 @@ To access the complete list of dashboards,
 This dashboard provides an overview of system metrics such as CPU, memory, network and filesystem
 usage. By default, the dashboard displays information aggregated across all the hosts and Docker
 containers. A filter can be specified to display data for a single host. For example, by specifying
-the filter `host.name:"ptb-challenge-gpu"`.
+the filter `host.name:"<instance hostname>"`.
 
 <img src="images/collect-challenge-resource-metrics/kibana-dashboard-metricbeat-system-overview-ecs.png">
 
