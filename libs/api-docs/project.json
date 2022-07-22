@@ -1,5 +1,5 @@
 {
-  "root": "libs/api-docs",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/api-docs/src",
   "projectType": "library",
   "targets": {

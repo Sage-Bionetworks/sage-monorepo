@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-user-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-user-service/src",
   "projectType": "application",
   "targets": {
@@ -10,13 +10,6 @@
         "cwd": "apps/challenge-user-service"
       }
     },
-    // "lint": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "command": "./mvnw checkstyle:check",
-    //     "cwd": "apps/challenge-user-service"
-    //   }
-    // },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
@@ -98,7 +91,9 @@
       "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
         "root": "apps/challenge-user-service",
-        "args": ["-Dspring-boot.build-image.imageName=sagebionetworks/challenge-user-service:latest"]
+        "args": [
+          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-user-service:latest"
+        ]
       },
       "dependsOn": [
         {
@@ -108,16 +103,12 @@
       ]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
+  "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
     "challenge-mariadb",
     "challenge-keycloak",
     "challenge-service-registry",
     "challenge-api-gateway",
-    // "challenge-core-service",
     "shared-java-challenge-util"
   ]
 }
