@@ -14,3 +14,107 @@ h2 {
 p {
   color: #404040;
 }
+.main-section-bio-container {
+  width: 100%;
+  height: 1400px;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+}
+.main-section-bio-main-section {
+  top: 80px;
+  left: 80px;
+  width: 1260px;
+  height: 1200px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+  border-color: transparent;
+}
+.main-section-bio-container1 {
+  top: 0px;
+  left: 0px;
+  width: 1259px;
+  height: 833px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+  border-color: transparent;
+}
+.main-section-bio-text {
+  top: 0px;
+  left: 0px;
+  color: var(--dl-color-gray-black);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Fira Sans;
+  font-weight: 500px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.main-section-bio-text1 {
+  top: 69px;
+  left: 0px;
+  color: rgba(0, 0, 0, 1);
+  width: 1259px;
+  height: auto;
+  position: absolute;
+  font-size: 24px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Lato;
+  font-weight: 400px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.main-section-bio-container2 {
+  top: 725px;
+  left: 0px;
+  width: 100%;
+  height: 398px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+  border-color: transparent;
+}
+.main-section-bio-text7 {
+  top: 0px;
+  left: 0px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 24px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Lato;
+  font-weight: 500px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.main-section-bio-card-group {
+  top: 98px;
+  left: 0px;
+  width: 100%;
+  height: 300px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  background-color: var(--dl-color-default-hover2);
+}

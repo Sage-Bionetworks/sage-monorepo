@@ -1,14 +1,15 @@
-<main *ngIf="user">
-  <section>
-    <h2>About Me</h2>
-    <p>{{user.bio}}</p>
-  </section>
-  <section>
-
-  <h2>Organizations</h2>
-    <challenge-registry-org-card
-      *ngFor="let org of orgs"
-      [org]="org">
+<main *ngIf="user" class="main-section-bio-container">
+  <section id="main" class="main-section-bio-main-section">
+    <div class="main-section-bio-container1">
+      <h2 class="main-section-bio-text">Biography</h2>
+      {{user.bio}}
+    </div>
+    <div class="main-section-bio-container2">
+      <h3 class="main-section-bio-text7">ORGANIZATIONS</h3>
+      <challenge-registry-org-card
+        *ngFor="let org of orgs"
+        [org]="org">
     </challenge-registry-org-card>
+    </div>
   </section>
 </main>
