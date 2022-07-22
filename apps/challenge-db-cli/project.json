@@ -38,7 +38,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/challenge-db-cli"],
       "options": {
-        "jestConfig": "apps/challenge-db-cli/jest.config.js",
+        "jestConfig": "apps/challenge-db-cli/jest.config.ts",
         "passWithNoTests": true
       }
     }

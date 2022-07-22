@@ -8,7 +8,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/challenge-registry/util"],
       "options": {
-        "jestConfig": "libs/challenge-registry/util/jest.config.js",
+        "jestConfig": "libs/challenge-registry/util/jest.config.ts",
         "passWithNoTests": true
       }
     },
