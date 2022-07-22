@@ -1,0 +1,240 @@
+.challenge-card-container {
+  width: 496px;
+  height: 521px;
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.challenge-card-container1 {
+  top: 0px;
+  left: 0px;
+  width: 496px;
+  height: 521px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  border-color: transparent;
+}
+.challenge-card-card-banner {
+  top: 27px;
+  left: 28px;
+  width: 440px;
+  height: 137px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+  border-color: transparent;
+  background-color: var(--dl-color-default-accent1);
+}
+.challenge-card-text {
+  top: 54px;
+  left: 159px;
+  color: var(--dl-color-default-darkacccent1);
+  height: auto;
+  position: absolute;
+  font-size: 24px;
+  align-self: auto;
+  font-style: normal;
+  text-align: center;
+  font-family: Fira Sans;
+  font-weight: 400px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.challenge-card-starred {
+  top: 36px;
+  left: 381px;
+  width: 78px;
+  height: 42px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+  border-color: transparent;
+}
+.challenge-card-text1 {
+  top: 10px;
+  left: 22px;
+  color: var(--dl-color-default-navbardark);
+  height: auto;
+  position: absolute;
+  font-size: 18px;
+  align-self: auto;
+  font-style: normal;
+  text-align: center;
+  font-family: Fira Sans;
+  font-weight: 600px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.challenge-card-icon {
+  top: 0px;
+  left: 32px;
+  width: 42px;
+  height: 42px;
+  position: absolute;
+  box-sizing: border-box;
+  object-fit: cover;
+  border-color: transparent;
+}
+.challenge-card-card-title {
+  top: 194px;
+  left: 75px;
+  width: 347px;
+  height: 86px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: center;
+  border-color: transparent;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.challenge-card-text2 {
+  color: rgba(0, 0, 0, 1);
+  width: 347px;
+  height: auto;
+  font-size: 32px;
+  align-self: auto;
+  font-style: normal;
+  text-align: center;
+  font-family: Fira Sans;
+  font-weight: 500px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.challenge-card-text3 {
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  font-size: 20px;
+  align-self: auto;
+  font-style: normal;
+  text-align: center;
+  font-family: Lato;
+  font-weight: 400px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.challenge-card-text4 {
+  top: 311px;
+  left: 41px;
+  color: rgba(0, 0, 0, 1);
+  width: 420px;
+  height: auto;
+  position: absolute;
+  font-size: 16px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Lato;
+  font-weight: 400px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.challenge-card-card-footer {
+  top: 456px;
+  left: 38px;
+  width: 420px;
+  height: 41px;
+  display: flex;
+  position: absolute;
+  border-top: 1px solid #C4C4C4;
+  align-items: flex-start;
+}
+.challenge-card-status-tag {
+  top: 456px;
+  left: 323px;
+  width: 135px;
+  height: 41px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  border-color: transparent;
+}
+.challenge-card-svg {
+  width: 126;
+  height: 41;
+  position: absolute;
+}
+.challenge-card-text5 {
+  top: 9px;
+  left: 22px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Lato;
+  font-weight: 400px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.challenge-card-difficulty-tag {
+  top: 465px;
+  left: 38px;
+  width: 202px;
+  height: 24px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  border-color: transparent;
+}
+.challenge-card-text6 {
+  top: 0px;
+  left: 31px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Lato;
+  font-weight: 400px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+@media(max-width: 767px) {
+  .challenge-card-container1 {
+    border-radius: var(--dl-radius-radius-radius16);
+    background-color: var(--dl-color-gray-white);
+  }
+  .challenge-card-starred {
+    border-width: 1px;
+    border-radius: var(--dl-radius-radius-radius16);
+    background-color: var(--dl-color-default-hover1);
+  }
+  .challenge-card-card-footer {
+    top: 440px;
+    left: 0px;
+    right: 0px;
+    width: 451px;
+    bottom: 20px;
+    height: 71px;
+    margin: auto;
+  }
+  .challenge-card-status-tag {
+    top: 19px;
+    right: 0px;
+  }
+  .challenge-card-difficulty-tag {
+    top: 28px;
+    left: 0px;
+  }
+}
