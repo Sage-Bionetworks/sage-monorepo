@@ -37,7 +37,7 @@ export class UserProfileComponent implements OnInit {
   account$!: Observable<Account | undefined>;
   user$!: Observable<User>;
   orgs: Organization[] = [];
-  loggedIn = false;
+  loggedIn = true;
 
   tabs = USER_PROFILE_TABS;
   tabKeys: string[] = Object.keys(this.tabs);
@@ -108,9 +108,9 @@ export class UserProfileComponent implements OnInit {
       }
     });
 
-    this.authService
-      .isLoggedIn()
-      .subscribe((loggedIn) => (this.loggedIn = loggedIn));
+    // this.authService
+    //   .isLoggedIn()
+    //   .subscribe((loggedIn) => (this.loggedIn = loggedIn));
 
     this.subscriptions.push(orgsSub);
     this.subscriptions.push(activeTabSub);

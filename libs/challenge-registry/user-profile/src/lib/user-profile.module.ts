@@ -8,11 +8,12 @@ import { UserProfileBarModule } from './user-profile-bar/user-profile-bar.module
 import { UserProfileChallengesModule } from './user-profile-challenges/user-profile-challenges.module';
 import { UserProfileOverviewModule } from './user-profile-overview/user-profile-overview.module';
 import { UserProfileStarredModule } from './user-profile-starred/user-profile-starred.module';
+import { UserProfileStatsComponent } from './user-profile-stats/user-profile-stats.component';
 
 const routes: Routes = [{ path: '', component: UserProfileComponent }];
 
 @NgModule({
-  declarations: [UserProfileComponent],
+  declarations: [UserProfileComponent, UserProfileStatsComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -23,6 +24,6 @@ const routes: Routes = [{ path: '', component: UserProfileComponent }];
     UserProfileOverviewModule,
     UserProfileStarredModule,
   ],
-  exports: [UserProfileComponent],
+  exports: [UserProfileComponent, UserProfileStatsComponent],
 })
 export class UserProfileModule {}

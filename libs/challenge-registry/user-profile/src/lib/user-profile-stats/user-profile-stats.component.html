@@ -1,7 +1,6 @@
 <div>
-  <link href="./basic-stats.css" rel="stylesheet" />
   <div class="basic-stats-container">
-    <div class="basic-stats-logged-in">
+    <div class="basic-stats-logged-in" *ngIf="loggedIn">
       <div class="basic-stats-frameorganizations">
         <span class="basic-stats-text"><span>2</span></span>
         <span class="basic-stats-text01"><span>organizations</span></span>
@@ -19,7 +18,7 @@
         <span class="basic-stats-text04"><span>EDIT PROFILE</span></span>
       </div>
     </div>
-    <div class="basic-stats-public">
+    <div class="basic-stats-public" *ngIf="!loggedIn">
       <div class="basic-stats-frameorganizations1">
         <span class="basic-stats-text05"><span>2</span></span>
         <span class="basic-stats-text06"><span>organizations</span></span>

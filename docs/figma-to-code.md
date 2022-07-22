@@ -9,3 +9,9 @@ In `user-profile.component.html`:
     ```ts
 
     ```
+n. Update the stats box:
+ - Create a new component `user-profile-stats`. 
+ - Move codes from `basic-stats.html` and `basic-stats.scss` to the `user-profile-stats` component.
+ - Add `loggedIn` variable to determine whether to use the `public` or `loggin` box.
+ - Remove the `top` property of of the `.basic-stats-logged-in` and `.basic-stats-public` to correct the position of the box in the page.
+ 
