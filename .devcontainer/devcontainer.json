@@ -5,8 +5,8 @@
   "features": {
     // docker features must be specified in the developer facing
     // devcontainer.json for VS Code to properly mount the docker sockets.
-    "docker-in-docker": "20.10",
-    "github-cli": "2.14.2"
+    "docker-in-docker": "20.10"
+    // "github-cli": "2.14.2"
   },
 
   // Set *default* container specific settings.json values on container create.
