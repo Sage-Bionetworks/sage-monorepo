@@ -1,27 +1,36 @@
-<main>
-  <div class="container" *ngIf="user$ | async as user">
-    <challenge-registry-user-profile-bar [user]="user" [numOrgs]="orgs.length">
-    </challenge-registry-user-profile-bar>
-
-    <div class=main-container>
-      <nav mat-tab-nav-bar>
-        <ng-container *ngFor="let key of tabKeys">
-          <a mat-tab-link *ngIf="tabs[key].visible" routerLink="."
-            (click)="activeTab = tabs[key]" [active]="activeTab === tabs[key]"
-            [queryParams]="{tab: key}">{{tabs[key].name}}</a>
-        </ng-container>
-      </nav>
-
-      <ng-container [ngSwitch]="activeTab">
-        <challenge-registry-user-profile-overview *ngSwitchCase="tabs['overview']" [user]="user"
-          [orgs]="orgs"></challenge-registry-user-profile-overview>
-        <challenge-registry-user-profile-challenges *ngSwitchCase="tabs['challenges']"
-          [userId]="user.id"></challenge-registry-user-profile-challenges>
-        <challenge-registry-user-profile-starred *ngSwitchCase="tabs['starred']" [user]="user" [loggedIn]="loggedIn">
-        </challenge-registry-user-profile-starred>
-      </ng-container>
+<div class="base-container">
+  <div class="base-container1">
+    <section id="top" class="base-top-section">
+      <div class="base-profile-pic"></div>
+      <span class="base-text">Awesome User</span>
+      <div class="base-verified">
+        <!-- verified icon here -->
+      </div>
+      <span class="base-text01">@awesome-user</span>
+      <div class="base-usertypetag">
+        <span class="base-text02">User</span>
+      </div>
+      <div class="base-createdat">
+        <span class="base-text03">ROCC user since</span>
+        <span class="base-text04">01/01/2020</span>
+      </div>
+      <div class="base-updatedat">
+        <span class="base-text05">Profile last updated</span>
+        <span class="base-text06">03/31/2022</span>
+      </div>
+      <div class="base-basic-stats"></div>
+    </section>
+    <div id="sidenav" class="base-side-nav">
+      <div class="base-bio">
+        <a class="base-text07">Biography</a>
+      </div>
+      <a mat-button class="base-challenges">
+        <a class="base-text08">Challenges</a>
+      </a>
+      <div class="base-stars">
+        <a class="base-text09">Starred</a>
+      </div>
     </div>
+    <section id="main" class="base-main-section"></section>
   </div>
-</main>
-
-<challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
+</div>
