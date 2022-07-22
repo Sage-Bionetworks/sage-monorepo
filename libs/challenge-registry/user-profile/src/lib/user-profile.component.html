@@ -25,16 +25,17 @@
     
       <div id="sidenav" class="base-side-nav">
         <div class="base-bio">
-          <a class="base-text07">Biography</a>
+          <a class="base-text07" routerLink="." [queryParams]="{tab: 'overview'}">Biography</a>
         </div>
         <a mat-button class="base-challenges">
-          <a class="base-text08">Challenges</a>
+          <a class="base-text08" routerLink="." [queryParams]="{tab: 'challenges'}">Challenges</a>
         </a>
         <div class="base-stars">
-          <a class="base-text09">Starred</a>
+          <a class="base-text09" routerLink="." [queryParams]="{tab: 'starred'}">Starred</a>
         </div>
       </div>
 
+      
       <section id="main" class="base-main-section">
         <ng-container [ngSwitch]="activeTab">
           <challenge-registry-user-profile-overview *ngSwitchCase="tabs['overview']" [user]="user"
