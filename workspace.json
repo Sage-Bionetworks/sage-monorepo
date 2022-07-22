@@ -2,7 +2,6 @@
   "version": 2,
   "projects": {
     "api-angular": "libs/api-angular",
-    "api-docs": "libs/api-docs",
     "api-spec": "libs/api-spec",
     "challenge-api-gateway": "apps/challenge-api-gateway",
     "challenge-auth-service": "apps/challenge-auth-service",
