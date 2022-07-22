@@ -1,8 +1,17 @@
-<main>
-  <h2>{{user.name}}'s Favorites</h2>
-  <div class="rocc-user-profile-starred-container">
-    <!-- <rocc-challenge-card *ngFor="let star of stars"
-      [challenge]="star"  [loggedIn]="loggedIn" (click)="onClick('/' + star.fullName)">
-    </rocc-challenge-card> -->
-  </div>
+<main class="main-section-stars-container">
+  <section id="main" class="main-section-stars-main-section">
+    <span class="main-section-stars-text">Starred</span>
+    <div class="main-section-stars-tab-group">
+      <button class="main-section-stars-tab">
+        <span class="main-section-stars-text1">Challenges</span>
+      </button>
+      <button class="main-section-stars-tab1">
+        <span class="main-section-stars-text2">Organizations</span>
+      </button>
+    </div>
+    <div class="main-section-stars-card-group"></div>
+    <div class="main-section-stars-paginator">
+      <!-- Material paginator-->
+    </div>
+  </section>
 </main>
