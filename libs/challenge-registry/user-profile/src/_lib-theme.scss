@@ -1,0 +1,7 @@
+@use './lib/user-profile-theme' as user-profile;
+// @use './lib/user-profile-stats/user-profile-stats-theme' as user-profile-stats;
+
+@mixin theme($theme) {
+  @include user-profile.theme($theme);
+  // @include user-profile-stats.theme($theme);
+}
