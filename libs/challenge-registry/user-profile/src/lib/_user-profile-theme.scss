@@ -195,17 +195,6 @@
     line-height: normal;
     font-stretch: normal;
   }
-  .base-main-section {
-    top: 729px;
-    left: 495px;
-    width: 1259px;
-    height: 1200px;
-    display: flex;
-    position: absolute;
-    box-sizing: border-box;
-    align-items: flex-start;
-    flex-shrink: 1;
-  }
 }
 
 @mixin theme($theme) {
