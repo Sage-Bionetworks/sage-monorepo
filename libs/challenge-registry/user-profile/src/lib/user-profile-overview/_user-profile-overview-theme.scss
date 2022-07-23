@@ -58,185 +58,55 @@
   $dl-color-default-darkaccent4: rgba(157, 160, 255, 1);
   $dl-color-default-darkacccent1: rgba(255, 158, 175, 1);
   $dl-space-space-oneandhalfunits: 24px;
-  .base-container1 {
+  .main-section-bio-main-section {
     border-color: transparent;
-    background-color: rgba(255, 255, 255, 1);
   }
 
-  .base-top-section {
+  .main-section-bio-container1 {
     border-color: transparent;
-    background-color: $dl-color-default-hover1;
   }
 
-  .base-profile-pic {
+  .main-section-bio-text {
+    color: $dl-color-gray-black;
+  }
+
+  .main-section-bio-text1 {
+    color: rgba(0, 0, 0, 1);
+  }
+
+  .main-section-bio-container2 {
     border-color: transparent;
+  }
+  .main-section-bio-text7 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .main-section-bio-card-group {
     background-color: $dl-color-default-hover2;
-  }
-
-  .base-text {
-    color: rgba(0, 0, 0, 1);
-  }
-
-  .base-verified {
-    border-color: transparent;
-  }
-  .base-group {
-    border-color: transparent;
-  }
-  .base-text01 {
-    color: $dl-color-default-secondary1;
-  }
-  .base-usertypetag {
-    border-color: $dl-color-default-secondary2;
-
-    background-color: $dl-color-default-accent4;
-  }
-  .base-text02 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-createdat {
-    border-color: transparent;
-  }
-  .base-text03 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-text04 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-updatedat {
-    border-color: transparent;
-  }
-  .base-text05 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-text06 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-basic-stats {
-    background-color: $dl-color-default-hover2;
-  }
-  .base-side-nav {
-    border-color: $dl-color-default-primary2;
-    background-color: rgba(255, 255, 255, 1);
-  }
-  .base-bio {
-    border-color: transparent;
-    &:focus,
-    &:hover,
-    &:active {
-      background-color: $dl-color-default-hover2;
-    }
-  }
-
-  .base-text07 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-challenges {
-    border-color: transparent;
-    background-color: rgba(255, 255, 255, 1);
-  }
-  .base-text08 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-stars {
-    border-color: transparent;
-    background-color: rgba(255, 255, 255, 1);
-  }
-  .base-text09 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-main-section {
-    border-color: transparent;
-    background-color: $dl-color-default-hover2;
-  }
-
-  @media (max-width: 479px) {
-    .base-profile-pic {
-      background-color: $dl-color-default-hover2;
-    }
   }
 }
 
 @mixin typography($theme) {
-  .base-text {
-    font-size: 64px;
-    font-style: normal;
-    font-family: Fira Sans;
-    font-weight: 500;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text01 {
+  .main-section-bio-text {
     font-size: 40px;
     font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
+    font-family: Fira Sans;
+    font-weight: 500px;
     line-height: normal;
     font-stretch: normal;
   }
-
-  .base-text02 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-
-  .base-text03 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 600;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text04 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text05 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 600;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text06 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text07 {
-    font-size: 24px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text08 {
-    font-size: 24px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text09 {
+  .main-section-bio-text1 {
     font-size: 24px;
     font-style: normal;
     font-family: Lato;
     font-weight: 400px;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .main-section-bio-text7 {
+    font-size: 24px;
+    font-style: normal;
+    font-family: Lato;
+    font-weight: 500px;
     line-height: normal;
     font-stretch: normal;
   }

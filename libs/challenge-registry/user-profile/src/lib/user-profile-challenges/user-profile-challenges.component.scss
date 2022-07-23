@@ -8,8 +8,8 @@
   flex-direction: column;
 }
 .main-section-challenges-main-section {
-  top: 80px;
-  left: 80px;
+  top: 0px;
+  left: 0px;
   width: 1260px;
   height: 1200px;
   display: flex;
@@ -17,22 +17,14 @@
   box-sizing: border-box;
   align-items: flex-start;
   flex-shrink: 1;
-  border-color: transparent;
 }
 .main-section-challenges-text {
   top: 0px;
   left: 0px;
-  color: var(--dl-color-gray-black);
   height: auto;
   position: absolute;
-  font-size: 40px;
   align-self: auto;
-  font-style: normal;
   text-align: left;
-  font-family: Fira Sans;
-  font-weight: 500px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
 .main-section-challenges-card-group {
@@ -43,5 +35,4 @@
   display: flex;
   position: absolute;
   align-items: flex-start;
-  background-color: var(--dl-color-default-hover2);
 }

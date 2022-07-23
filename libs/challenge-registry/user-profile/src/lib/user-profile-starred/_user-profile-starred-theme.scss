@@ -58,102 +58,68 @@
   $dl-color-default-darkaccent4: rgba(157, 160, 255, 1);
   $dl-color-default-darkacccent1: rgba(255, 158, 175, 1);
   $dl-space-space-oneandhalfunits: 24px;
-  .base-container1 {
+  .main-section-stars-main-section {
     border-color: transparent;
-    background-color: rgba(255, 255, 255, 1);
   }
-
-  .base-top-section {
+  .main-section-stars-text {
+    color: rgba(0, 0, 0, 1);
+  }
+  .main-section-stars-tab-group {
     border-color: transparent;
+  }
+  .main-section-stars-tab {
+    color: $dl-color-default-navbardark;
     background-color: $dl-color-default-hover1;
   }
+  .main-section-stars-tab:hover {
+    color: $dl-color-gray-white;
+    background-color: $dl-color-default-navbar;
+  }
+  .main-section-stars-tab:active {
+    color: $dl-color-gray-white;
+    background-color: $dl-color-default-navbar;
+  }
+  .main-section-stars-text1 {
+    color: $dl-color-default-navbardark;
+  }
+  .main-section-stars-tab1 {
+    color: $dl-color-default-navbardark;
 
-  .base-profile-pic {
     border-color: transparent;
+    border-radius: $dl-radius-radius-radius16;
+    background-color: $dl-color-default-hover1;
+  }
+  .main-section-stars-tab1:focus {
+    color: $dl-color-gray-white;
+    background-color: $dl-color-default-navbar;
+  }
+  .main-section-stars-tab1:active {
+    color: $dl-color-gray-white;
+    background-color: $dl-color-default-navbar;
+  }
+  .main-section-stars-text2 {
+    color: $dl-color-default-navbardark;
+  }
+  .main-section-stars-card-group {
     background-color: $dl-color-default-hover2;
   }
-
-  .base-text {
-    color: rgba(0, 0, 0, 1);
-  }
-
-  .base-verified {
+  .main-section-stars-paginator {
     border-color: transparent;
   }
-  .base-group {
+  .main-section-stars-text3 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .main-section-stars-text4 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .main-section-stars-chevronright {
     border-color: transparent;
   }
-  .base-text01 {
-    color: $dl-color-default-secondary1;
-  }
-  .base-usertypetag {
-    border-color: $dl-color-default-secondary2;
-
-    background-color: $dl-color-default-accent4;
-  }
-  .base-text02 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-createdat {
+  .main-section-stars-chevronright1 {
     border-color: transparent;
   }
-  .base-text03 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-text04 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-updatedat {
+  .main-section-stars-expandmore {
     border-color: transparent;
-  }
-  .base-text05 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-text06 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-basic-stats {
-    background-color: $dl-color-default-hover2;
-  }
-  .base-side-nav {
-    border-color: $dl-color-default-primary2;
-    background-color: rgba(255, 255, 255, 1);
-  }
-  .base-bio {
-    border-color: transparent;
-    &:focus,
-    &:hover,
-    &:active {
-      background-color: $dl-color-default-hover2;
-    }
-  }
-
-  .base-text07 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-challenges {
-    border-color: transparent;
-    background-color: rgba(255, 255, 255, 1);
-  }
-  .base-text08 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-stars {
-    border-color: transparent;
-    background-color: rgba(255, 255, 255, 1);
-  }
-  .base-text09 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-main-section {
-    border-color: transparent;
-    background-color: $dl-color-default-hover2;
-  }
-
-  @media (max-width: 479px) {
-    .base-profile-pic {
-      background-color: $dl-color-default-hover2;
-    }
   }
 }
 
