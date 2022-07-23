@@ -26,7 +26,12 @@ import {
 } from 'rxjs';
 import { Tab } from './tab.model';
 import { USER_PROFILE_TABS } from './user-profile-tabs';
-import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/challenge-registry/ui';
+import {
+  MOCK_USER,
+  MOCK_ORG,
+  Avatar,
+} from '@sagebionetworks/challenge-registry/ui';
+
 @Component({
   selector: 'challenge-registry-user',
   templateUrl: './user-profile.component.html',
@@ -38,7 +43,7 @@ export class UserProfileComponent implements OnInit {
   user$!: Observable<User>;
   orgs: Organization[] = [];
   loggedIn = true;
-
+  userAvatar!: Avatar;
   tabs = USER_PROFILE_TABS;
   tabKeys: string[] = Object.keys(this.tabs);
   activeTab: Tab = this.tabs['overview'];
@@ -96,6 +101,17 @@ export class UserProfileComponent implements OnInit {
     const activeTab$ = this.route.queryParamMap.pipe(
       map((params: ParamMap) => params.get('tab')),
       map((key) => (key === null ? 'overview' : key))
+    );
+
+    this.user$.subscribe(
+      (user) =>
+        (this.userAvatar = {
+          name: user.name
+            ? (user.name as string)
+            : user.login.replace(/-/g, ' '),
+          src: user.avatarUrl ? user.avatarUrl : '',
+          size: 320,
+        })
     );
 
     const orgsSub = orgs$.subscribe((orgs) => (this.orgs = orgs));

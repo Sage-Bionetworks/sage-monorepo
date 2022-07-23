@@ -4,11 +4,11 @@
 
 In `user-profile.component.html`:
 
-1. Update the `<div class="base-container">` to import the `user` object.
+- Update the `<div class="base-container">` to import the `user` object.
     ```html
     <div class="base-container"  *ngIf="user$ | async as user">
     ```
-2. Add the conditional section content to enable tab switcher
+- Add the conditional section content to enable tab switcher
     ```html
     <section id="main" class="base-main-section">
         <ng-container [ngSwitch]="activeTab">
@@ -21,7 +21,7 @@ In `user-profile.component.html`:
         </ng-container>
     </section>
     ```
-3. Add `[routerLink]="." [routerParams]=...` to the `<a>` elements of the menu.
+- Add `[routerLink]="." [routerParams]=...` to the `<a>` elements of the menu.
     ```html
     <div id="sidenav" class="base-side-nav">
       <div class="base-bio">
@@ -35,6 +35,34 @@ In `user-profile.component.html`:
       </div>
     </div>
     ```
+- Enable user's avatar
+    1. Use `challenge-registry-avatar` component for `base-profile-pic` class:
+        ```html
+        <challenge-registry-avatar  class="base-profile-pic" [avatar]="userAvatar"></challenge-registry-avatar>
+        ```
+
+    2. Create avatar variable based on the user object
+        ```typescript
+        this.user$.subscribe(
+          (user) =>
+            (this.userAvatar = {
+            name: user.name
+              ? (user.name as string)
+              : user.login.replace(/-/g, ' '),
+            src: user.avatarUrl ? user.avatarUrl : '',
+            size: 320,
+            })
+          );
+        ``` 
+    3. Remove dimensions in scss for avatar since it's defined in .ts:
+        ```scss
+        // remove below properties
+        .base-profile-pic {
+          width: 320px;
+          height: 320px;
+        }
+        ```
+       
 ## Create user-profile-stats component
 
  1. Create a new component `user-profile-stats` by running:
@@ -46,19 +74,10 @@ In `user-profile.component.html`:
     ```html
     <challenge-registry-user-profile-stats class="base-basic-stats" [loggedIn]="loggedIn"></challenge-registry-user-profile-stats>
     ```
- 4. Remove the `top` property in the `.basic-stats-logged-in` and `.basic-stats-public` to correct the position of the box in the page.
-    ```scss
-    .basic-stats-logged-in {
-      top: -141px;
-    }
-    .basic-stats-public {
-      top: -1px;
-      }
-    ```
 
  ## Add themes:
 
-- User Profile: 
+- User-Profile: 
     1. Create `user-profile/src/lib/_user-profile-themes.scss`. 
     2. Move all the colors and fonts from `user-profile.component.scss` to `_user-profile-themes.scss`. 
     3. Create `user-profile/src/_lib_themes.scss` and load `_user-profile-themes`.
@@ -76,20 +95,30 @@ In `user-profile.component.html`:
         }
         ```
 
-- Sub-components (repeated above step 1-3 for each sub component):
-    1. Create `_user-profile-[overview|challenges|starred|stats]-theme.scss`.
-    2. Move colors and fonts from `_user-profile-[overview|challenges|starred|stats].scss` to `_user-profile-[overview|challenges|starred|stats]-theme.scss`.
-    3. Load `_user-profile-[overview|challenges|starred|stats]-theme.scss` in the `libs/challenge-registry/themes/src/_index.scss`
+- Sub-components (repeated above step 1-3 for each sub component): `_user-profile-[overview|challenges|starred|stats]-theme.scss`.
 
 ## Update styles:
-
+ - User-Profile
+    1. The layout of starred section is different from challenges/biography, which caused the starred section to be placed beyong section body box. Discuss with Verena what could be the source of the issue. To fix, use the same layout on the starred section.
+-  User-Profile-Stats
+   1. Remove the `top` property in the `.basic-stats-logged-in` and `.basic-stats-public` to correct the position of the box in the page.
+        ```scss
+        // remove below properties
+        .basic-stats-logged-in {
+            top: -141px;
+        }
+        .basic-stats-public {
+            top: -1px;
+            }
+        ```
+    
 
 
  ## Issues:
 
-1. Layouts among sections (position, height, weight) are not consistent. For example, the layout of starred section is different from challenges/biography, which caused the starred section to be placed beyong section body box. Discuss with Verena what could be the source of the issue.
+1. Ensure Layouts among similar sections (position, height, weight) are consistent.
 
-2. Font weights have invalid format:
+2. Font weights have invalid format - with "px" after the value:
 
 2. The css is from teleportHQ is not reponsive enough.
 
