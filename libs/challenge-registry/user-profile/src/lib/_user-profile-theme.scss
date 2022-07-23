@@ -119,7 +119,9 @@
     border-color: $dl-color-default-primary2;
     background-color: rgba(255, 255, 255, 1);
   }
-  .base-bio {
+  .base-bio,
+  .base-challenges,
+  .base-stars {
     border-color: transparent;
     &:focus,
     &:hover,
@@ -147,7 +149,7 @@
   }
   .base-main-section {
     border-color: transparent;
-    background-color: $dl-color-default-hover2;
+    background-color: transparent;
   }
 
   @media (max-width: 479px) {

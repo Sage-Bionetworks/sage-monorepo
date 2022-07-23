@@ -99,7 +99,26 @@ In `user-profile.component.html`:
 
 ## Update styles:
  - User-Profile
-    1. The layout of starred section is different from challenges/biography, which caused the starred section to be placed beyong section body box. Discuss with Verena what could be the source of the issue. To fix, use the same layout on the starred section.
+    1. The layout of starred section was different from challenges/biography, which caused the starred section to be placed beyong section body box. Discuss with Verena what could be the source of the issue. To fix, use the same layout on the starred section.
+    2. Change background color of tab content from "grey" to transparent, in order to match with what color shown in figma:
+        ```scss
+        .base-main-section {
+          background-color: transparent;
+        }
+        ```
+    3. Add hover colors to on all the tab switch buttons, since it was only applied to the "biography" button:
+        ```scss
+        .base-bio,
+        .base-challenges,
+        .base-stars {
+          &:focus,
+          &:hover,
+          &:active {
+            background-color: $dl-color-default-hover2;
+          }
+        }
+        ```
+
 -  User-Profile-Stats
    1. Remove the `top` property in the `.basic-stats-logged-in` and `.basic-stats-public` to correct the position of the box in the page.
         ```scss
