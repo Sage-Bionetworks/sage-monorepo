@@ -13,5 +13,3 @@
 if [ "$3" = "1" ]; then
   yarn install --frozen-lockfile
 fi
-
-echo "The post-checkout hook ran. 🚀"
