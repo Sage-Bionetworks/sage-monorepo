@@ -1,14 +1,9 @@
 {
-  "root": "libs/challenge-registry/themes",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/challenge-registry/themes/src",
   "projectType": "library",
   "generators": {},
   "targets": {},
-  "tags": [
-    "type:themes",
-    "scope:challenge-registry"
-  ],
-  "implicitDependencies": [
-    "challenge-registry-about"
-  ]
+  "tags": ["type:themes", "scope:challenge-registry"],
+  "implicitDependencies": ["challenge-registry-about"]
 }

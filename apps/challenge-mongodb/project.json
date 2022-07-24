@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-mongodb",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-mongodb/src",
   "projectType": "application",
   "targets": {
@@ -32,14 +32,9 @@
       "options": {
         "context": "apps/challenge-mongodb",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-mongodb:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-mongodb:latest"]
       }
     }
   },
-  "tags": [
-    "type:type",
-    "scope:backend"
-  ]
+  "tags": ["type:type", "scope:backend"]
 }

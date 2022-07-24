@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'web-challenge',
+/* eslint-disable */
+export default {
+  displayName: 'web-org-profile',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +9,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/challenge-registry/challenge',
+  coverageDirectory: '../../../coverage/libs/challenge-registry/org-profile',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

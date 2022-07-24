@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-config-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-config-service/src",
   "projectType": "application",
   "targets": {
@@ -74,7 +74,9 @@
       "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
         "root": "apps/challenge-config-service",
-        "args": ["-Dspring-boot.build-image.imageName=sagebionetworks/challenge-config-service:latest"]
+        "args": [
+          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-config-service:latest"
+        ]
       },
       "dependsOn": [
         {
@@ -84,8 +86,5 @@
       ]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ]
+  "tags": ["type:service", "scope:backend"]
 }

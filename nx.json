@@ -3,9 +3,6 @@
   "affected": {
     "defaultBase": "main"
   },
-  "cli": {
-    "defaultCollection": "@nrwl/angular"
-  },
   "implicitDependencies": {
     "package.json": {
       "dependencies": "*",
@@ -28,14 +25,6 @@
         "scan": true
       }
     }
-  },
-  "targetDependencies": {
-    "build": [
-      {
-        "target": "build",
-        "projects": "dependencies"
-      }
-    ]
   },
   "generators": {
     "@nrwl/angular:application": {
@@ -69,5 +58,13 @@
   "defaultProject": "web-app",
   "plugins": [
     "@nxrocks/nx-spring-boot"
-  ]
+  ],
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ]
+    }
+  }
 }
