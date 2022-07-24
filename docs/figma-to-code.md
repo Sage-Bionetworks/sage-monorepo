@@ -142,7 +142,7 @@ In `user-profile.component.html`:
         flex-direction: column;
       }
       ```
-
+  2. use `<span>` and add back class "main-section-bio-text1" for `{{user.bio}}`
 ## TO-DOs:
 
 - User-Profile
