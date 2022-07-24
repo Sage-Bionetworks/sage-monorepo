@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-api-gateway",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-api-gateway/src",
   "projectType": "application",
   "targets": {
@@ -10,13 +10,6 @@
         "cwd": "apps/challenge-api-gateway"
       }
     },
-    // "lint": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "command": "./mvnw checkstyle:check",
-    //     "cwd": "apps/challenge-api-gateway"
-    //   }
-    // },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
@@ -80,7 +73,9 @@
       "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
         "root": "apps/challenge-api-gateway",
-        "args": ["-Dspring-boot.build-image.imageName=sagebionetworks/challenge-api-gateway:latest"]
+        "args": [
+          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-api-gateway:latest"
+        ]
       },
       "dependsOn": [
         {
@@ -90,12 +85,6 @@
       ]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
-  "implicitDependencies": [
-    "challenge-service-registry"
-    // "challenge-config-service"
-  ]
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": ["challenge-service-registry"]
 }

@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-service-registry",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-service-registry/src",
   "projectType": "application",
   "targets": {
@@ -10,13 +10,6 @@
         "cwd": "apps/challenge-service-registry"
       }
     },
-    // "lint": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "command": "./mvnw checkstyle:check",
-    //     "cwd": "apps/challenge-service-registry"
-    //   }
-    // },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
@@ -80,7 +73,9 @@
       "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
         "root": "apps/challenge-service-registry",
-        "args": ["-Dspring-boot.build-image.imageName=sagebionetworks/challenge-service-registry:latest"]
+        "args": [
+          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-service-registry:latest"
+        ]
       },
       "dependsOn": [
         {
@@ -90,8 +85,5 @@
       ]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ]
+  "tags": ["type:service", "scope:backend"]
 }

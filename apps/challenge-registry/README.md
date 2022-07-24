@@ -41,7 +41,7 @@ Restore target `test`:
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/challenge-registry"],
       "options": {
-        "jestConfig": "apps/challenge-registry/jest.config.js",
+        "jestConfig": "apps/challenge-registry/jest.config.ts",
         "passWithNoTests": true
       }
     },

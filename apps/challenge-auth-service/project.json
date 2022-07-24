@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-auth-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-auth-service/src",
   "projectType": "application",
   "targets": {
@@ -91,7 +91,9 @@
       "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
         "root": "apps/challenge-auth-service",
-        "args": ["-Dspring-boot.build-image.imageName=sagebionetworks/challenge-auth-service:latest"]
+        "args": [
+          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-auth-service:latest"
+        ]
       },
       "dependsOn": [
         {
@@ -101,10 +103,7 @@
       ]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
+  "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
     "challenge-keycloak",
     "challenge-service-registry",
