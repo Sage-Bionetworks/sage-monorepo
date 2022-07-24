@@ -130,14 +130,30 @@ In `user-profile.component.html`:
             top: -1px;
             }
         ```
-    
+- User-Profile-Overview
+  1. Fix the positions between the Headline ("Biography", "Organizations") and contents (bio text, org card):
+      ```scss
+      // remove below properties
+      .main-section-bio-text, .main-section-bio-text7 {
+        position: absolute;
+      }
+      // add below properties
+      ..main-section-bio-container1, ..main-section-bio-container2 {
+        flex-direction: column;
+      }
+      ```
 
+## TO-DOs:
 
- ## Issues:
+- User-Profile
+    1. Upload and link the "verified" image
+    2.
 
-1. Ensure Layouts among similar sections (position, height, weight) are consistent.
+## Issues found on the user profile component:
 
-2. Font weights have invalid format - with "px" after the value:
+- Ensure Layouts among similar sections (position, height, weight) are consistent.
 
-2. The css is from teleportHQ is not reponsive enough.
+- Font weights have invalid format - with "px" after the value:
 
+- Most of components are using `absolute` position and prefined height/weights.
+  1. In the case, the components will not be reponsive enough. Take the biography tab content as example. Both "Biography" and "Organizations" has the same prefined height. If the content of "Biography" is more than the prefined size can handle, the text will be overlapped with the "Organizations" content. If the content of "Biography" only has a few words, it is a little better but will leave a lot of empty vertical space above "Organizations" headline.
