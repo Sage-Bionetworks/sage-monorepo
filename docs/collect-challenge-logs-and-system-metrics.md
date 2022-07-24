@@ -58,6 +58,21 @@ given in the context of monitoring a stack used to process submissions received 
 challenge. However, this solution can be used to monitor hosts and containers deployed for other
 applications.
 
+### Cost estimate
+
+The only additional resource introduced by this architecture is the EC2 instance where the ELK stack
+is deployed. The instance must have at least 4 GB and 2 vCPUs, which is why a `t2.medium` is
+recommended. The storage capacity needed depends on the number of instances monitored, the size and
+frequency of the data collected. It is currently recommended to allocate 100 GB of storage (under
+evaluation).
+
+For example, here is a cost estimate for the recommended EC2 instance (valid on 2022-07-24).
+
+- $0.0464 per On Demand Linux `t2.medium` Instance Hour
+- $0.10 per GB-month of General Purpose SSD (gp2) provisioned storage - US East (Northern Virginia)
+
+Total: 30 * 24 * 0.0464 + 100 * 0.10 = $43.4/month
+
 ## Authors
 
 Please give credit to the following persons if you are using or building on top of this solution.
