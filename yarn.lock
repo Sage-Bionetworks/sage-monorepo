@@ -1740,7 +1740,7 @@
     "@hint/formatter-summary" "^3.0.34"
     "@hint/hint-axe" "^4.4.15"
 
-"@hint/configuration-development@^8.3.5":
+"@hint/configuration-development@^8.3.9":
   version "8.3.9"
   resolved "https://registry.yarnpkg.com/@hint/configuration-development/-/configuration-development-8.3.9.tgz#48d0c6118d1ba95db62b21dd4cd2e55d70f2b1fa"
   integrity sha512-ud6daM/tJTHSgA4R+tgXymnd7AU43ullykLdwUF1A1U9kBft40MPNVITzvXiKXw3b1Xkr7hhj4rEO+/fqaslew==
@@ -1795,7 +1795,7 @@
     "@hint/hint-manifest-is-valid" "^3.4.14"
     "@hint/parser-manifest" "^2.3.14"
 
-"@hint/configuration-web-recommended@^8.2.10", "@hint/configuration-web-recommended@^8.2.8":
+"@hint/configuration-web-recommended@^8.2.14", "@hint/configuration-web-recommended@^8.2.8":
   version "8.2.14"
   resolved "https://registry.yarnpkg.com/@hint/configuration-web-recommended/-/configuration-web-recommended-8.2.14.tgz#d2e61bab7f5bea7a7a41a7cdec462de9c6372f36"
   integrity sha512-EX99ySsOoM7OF2c43vBN+O4Bi46Qxs85fYtVKn29Fv+5WmBdPx9c6Xu4+LN8mbhrEje9U5Okzyu+G5jlL2utyA==
@@ -2523,7 +2523,7 @@
     parse5 "^6.0.1"
     parse5-htmlparser2-tree-adapter "^6.0.1"
 
-"@hint/utils-fs@^1.0.13", "@hint/utils-fs@^1.0.14":
+"@hint/utils-fs@^1.0.14":
   version "1.0.14"
   resolved "https://registry.yarnpkg.com/@hint/utils-fs/-/utils-fs-1.0.14.tgz#4d2fa00f9d270b15112b3e32d19bc1bc3d6b5b2c"
   integrity sha512-BKaFl1bVayHV6K2fzAm3bERzyUsjGi7PSSSYo6knKP7BH/iIfQIFZXU0+ozsy8XRNfCC4PCrLNkeorNdUsML6g==
@@ -2537,7 +2537,7 @@
   dependencies:
     "@hint/utils-types" "^1.2.0"
 
-"@hint/utils-json@^1.0.18", "@hint/utils-json@^1.0.22":
+"@hint/utils-json@^1.0.22":
   version "1.0.22"
   resolved "https://registry.yarnpkg.com/@hint/utils-json/-/utils-json-1.0.22.tgz#0c6938e7426667e87bfcbd4ed8a8a628347571e0"
   integrity sha512-x0GwENoMCFSWj2aHV900gkZui3/ysxtBdh9gPGFpvJ3v+6Bz2DfpAP+Wo+sB7W0PfcP3kNRCo+TQBMW6B9oMNw==
@@ -2550,7 +2550,7 @@
     jsonc-parser "^3.0.0"
     lodash "^4.17.21"
 
-"@hint/utils-network@^1.0.17", "@hint/utils-network@^1.0.21":
+"@hint/utils-network@^1.0.21":
   version "1.0.21"
   resolved "https://registry.yarnpkg.com/@hint/utils-network/-/utils-network-1.0.21.tgz#f43932c7f72e5a0dbc1bfc5d2787cef70d424927"
   integrity sha512-LL63EOGnP6iJYLDZE9M54UhpJFQZg4vH9ispzrS7ayAVR7jg+GysRXhIReCpuhkxz0rSYDQ1AuaTV7JUP+H0Tw==
@@ -2569,12 +2569,12 @@
   resolved "https://registry.yarnpkg.com/@hint/utils-string/-/utils-string-1.0.12.tgz#b3931d97eba7fa599cc02312bc4667bdb6855476"
   integrity sha512-Rt/vhjsZZc7mHLPVr8JYCRpSQs+AV/e2NsEfSUJoHZrv9ZMLuPLGW1RobEBod3S6k7mvCcJM5Ekwre9PyyLcnA==
 
-"@hint/utils-types@^1.1.7", "@hint/utils-types@^1.2.0":
+"@hint/utils-types@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@hint/utils-types/-/utils-types-1.2.0.tgz#2ee56b71682deea1eb06862d8305f83b33e64ea2"
   integrity sha512-ZXxdw1jh4oYMmzFIxpVRqSNhbx5bzOxumn4K+5thbhuGOJE5BUZVWNNa18My0ktdTl5IpMjCNVDhQeZRQxQT1w==
 
-"@hint/utils@^7.0.16", "@hint/utils@^7.0.19":
+"@hint/utils@^7.0.19":
   version "7.0.19"
   resolved "https://registry.yarnpkg.com/@hint/utils/-/utils-7.0.19.tgz#e24eec4ca21385cb2cd3e433aa2376c10d29b545"
   integrity sha512-hmAxtF68Z2JKVJBW9X15u/ExAw1mRedN4IS4hNgwRc3oaNQSxSLkyQRWkQiXpxEOSrGYogI/bErx7FISAbr+IA==
@@ -6473,6 +6473,11 @@ colorette@^2.0.10, colorette@^2.0.16:
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.19.tgz#cdf044f47ad41a0f4b56b3a0d5b4e6e1a2d5a798"
   integrity sha512-3tlv/dIP7FWvj3BsbHrGLJ6l/oKh1O3TcgBqMn+yyCagOxc23fyzDS6HypQbgxWbkpDnf52p1LuR4eWDQ/K9WQ==
 
+colors@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/colors/-/colors-1.4.0.tgz#c50491479d4c1bdaed2c9ced32cf7c7dc2360f78"
+  integrity sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==
+
 colorspace@1.1.x:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/colorspace/-/colorspace-1.1.4.tgz#8d442d1186152f60453bf8070cd66eb364e59243"
@@ -9487,18 +9492,18 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
-hint@^6.1.11:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/hint/-/hint-6.2.0.tgz#06d6c66ac32acb9a45fda8515bb673fe09e7ccd5"
-  integrity sha512-uvSMKoU3Cypmf6R1xt1WdO3RPgSaTuRn/d1YvTW63A4X9hs6xqtWtc5KvltTSLLzFBgpx6KqVW+0UXC4L8vm/w==
+hint@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/hint/-/hint-7.1.1.tgz#a91fd5a14e33ccf744b399c0d19898a3ae7eb793"
+  integrity sha512-p4ADz/UGGm54e6N+Vv6U0qXGIWLRCB8l0B/OQAYHcSgcrCrbaH5ClQ1Xoqfs5ICybrMlBB3yoVrS0cHQnzo9AQ==
   dependencies:
-    "@hint/utils" "^7.0.16"
+    "@hint/utils" "^7.0.19"
     "@hint/utils-debug" "^1.0.10"
-    "@hint/utils-fs" "^1.0.13"
-    "@hint/utils-json" "^1.0.18"
-    "@hint/utils-network" "^1.0.17"
+    "@hint/utils-fs" "^1.0.14"
+    "@hint/utils-json" "^1.0.22"
+    "@hint/utils-network" "^1.0.21"
     "@hint/utils-string" "^1.0.12"
-    "@hint/utils-types" "^1.1.7"
+    "@hint/utils-types" "^1.2.0"
     browserslist "^4.19.3"
     chalk "^4.1.2"
     eventemitter2 "^6.4.5"
@@ -9511,8 +9516,8 @@ hint@^6.1.11:
     setimmediate "^1.0.5"
     update-notifier "^5.1.0"
   optionalDependencies:
-    "@hint/configuration-development" "^8.3.5"
-    "@hint/configuration-web-recommended" "^8.2.10"
+    "@hint/configuration-development" "^8.3.9"
+    "@hint/configuration-web-recommended" "^8.2.14"
 
 history@^5.2.0:
   version "5.3.0"

@@ -1,6 +1,7 @@
 {
   "name": "Challenge",
-  "image": "sagebionetworks/challenge-devcontainer:bf457d84",
+  "image": "sagebionetworks/challenge-devcontainer:f0afc028",
+  // "image": "sagebionetworks/challenge-devcontainer:test",
 
   "features": {
     // docker features must be specified in the developer facing

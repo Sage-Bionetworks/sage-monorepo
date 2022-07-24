@@ -13,10 +13,16 @@ RUN groupadd docker \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python-is-python3 openjdk-17-jre \
     htop unzip vim wget lsof iproute2 \
+  # Add Node.js
   && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+  # Add GitHub CLI
+  && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+      gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
+      tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
-    nodejs \
+    nodejs gh \
   && npm install --global yarn@latest \
   && apt-get -y autoclean \
   && apt-get -y autoremove \
