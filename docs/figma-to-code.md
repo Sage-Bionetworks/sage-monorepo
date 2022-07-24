@@ -131,18 +131,12 @@ In `user-profile.component.html`:
             }
         ```
 - User-Profile-Overview
-  1. Fix the positions between the Headline ("Biography", "Organizations") and contents (bio text, org card):
-      ```scss
-      // remove below properties
-      .main-section-bio-text, .main-section-bio-text7 {
-        position: absolute;
-      }
-      // add below properties
-      ..main-section-bio-container1, ..main-section-bio-container2 {
-        flex-direction: column;
-      }
+  1. Add back class "main-section-bio-text1" to fix the positions between the Headline ("Biography", "Organizations") and contents (bio text, org card):
+      ```html
+      <span class="main-section-bio-text1">{{user.bio}}</span>
       ```
-  2. use `<span>` and add back class "main-section-bio-text1" for `{{user.bio}}`
+
+  2. use `<span>` and  for `{{user.bio}}`
 ## TO-DOs:
 
 - User-Profile
