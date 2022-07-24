@@ -1,5 +1,6 @@
-module.exports = {
-  displayName: 'web-org-search',
+/* eslint-disable */
+export default {
+  displayName: 'challenge-registry-config',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +9,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/challenge-registry/org-search',
+  coverageDirectory: '../../../coverage/libs/challenge-registry/config',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

@@ -1,6 +1,6 @@
 {
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "libs/api-spec",
   "sourceRoot": "libs/api-spec/src",
   "prefix": "challenge-registry",
   "targets": {

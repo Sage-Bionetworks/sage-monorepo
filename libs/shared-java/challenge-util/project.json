@@ -1,5 +1,5 @@
 {
-  "root": "libs/shared-java/challenge-util",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared-java/challenge-util/src",
   "projectType": "library",
   "targets": {
@@ -8,9 +8,7 @@
       "options": {
         "root": "libs/shared-java/challenge-util"
       },
-      "outputs": [
-        "libs/shared-java/challenge-util/target"
-      ]
+      "outputs": ["libs/shared-java/challenge-util/target"]
     },
     "install": {
       "executor": "@nxrocks/nx-spring-boot:build",
@@ -50,8 +48,5 @@
       }
     }
   },
-  "tags": [
-    "type:feature",
-    "scope:shared"
-  ]
+  "tags": ["type:feature", "scope:shared"]
 }

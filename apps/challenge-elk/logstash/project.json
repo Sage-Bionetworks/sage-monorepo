@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-elk/logstash",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-elk/logstash/src",
   "projectType": "application",
   "targets": {
@@ -57,17 +57,10 @@
       "options": {
         "context": "apps/challenge-elk/logstash",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-logstash:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-logstash:latest"]
       }
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
-  "implicitDependencies": [
-    "challenge-elasticsearch"
-  ]
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": ["challenge-elasticsearch"]
 }
