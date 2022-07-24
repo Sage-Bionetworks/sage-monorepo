@@ -19,5 +19,4 @@ git config --global commit.gpgsign true
     ERROR: Something went wrong in @nrwl/run-commands - Command failed: pipenv run black ./openapi_server --check --exclude '(models|test)'
 ```
 
-Run `nx python api` to create the Python virtualenv and install the tools
-needed.
+Run `nx python api` to create the Python virtualenv and install the tools needed.

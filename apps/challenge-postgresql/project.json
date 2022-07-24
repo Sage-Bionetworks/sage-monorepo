@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-postgresql",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-postgresql/src",
   "projectType": "application",
   "targets": {
@@ -49,14 +49,9 @@
       "options": {
         "context": "apps/challenge-postgresql",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-postgresql:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-postgresql:latest"]
       }
     }
   },
-  "tags": [
-    "type:db",
-    "scope:backend"
-  ]
+  "tags": ["type:db", "scope:backend"]
 }

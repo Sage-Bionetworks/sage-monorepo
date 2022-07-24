@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-user-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-user-service/src",
   "projectType": "application",
   "targets": {
@@ -10,18 +10,10 @@
         "cwd": "apps/challenge-user-service"
       }
     },
-    // "lint": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "command": "./mvnw checkstyle:check",
-    //     "cwd": "apps/challenge-user-service"
-    //   }
-    // },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "root": "apps/challenge-user-service",
-        "args": []
+        "root": "apps/challenge-user-service"
       },
       "dependsOn": [
         {
@@ -30,12 +22,12 @@
         }
       ]
     },
-    "test": {
-      "executor": "@nxrocks/nx-spring-boot:test",
-      "options": {
-        "root": "apps/challenge-user-service"
-      }
-    },
+    // "test": {
+    //   "executor": "@nxrocks/nx-spring-boot:test",
+    //   "options": {
+    //     "root": "apps/challenge-user-service"
+    //   }
+    // },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
@@ -57,8 +49,7 @@
     "serve": {
       "executor": "@nxrocks/nx-spring-boot:serve",
       "options": {
-        "root": "apps/challenge-user-service",
-        "args": ["-e"]
+        "root": "apps/challenge-user-service"
       },
       "dependsOn": [
         {
@@ -97,12 +88,11 @@
       ]
     },
     "build-image": {
-      "executor": "@nx-tools/nx-docker:build",
+      "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
-        "context": "apps/challenge-user-service",
-        "push": false,
-        "tags": [
-          "sagebionetworks/challenge-user-service:latest"
+        "root": "apps/challenge-user-service",
+        "args": [
+          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-user-service:latest"
         ]
       },
       "dependsOn": [
@@ -113,16 +103,12 @@
       ]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
+  "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
     "challenge-mariadb",
     "challenge-keycloak",
     "challenge-service-registry",
     "challenge-api-gateway",
-    // "challenge-core-service",
     "shared-java-challenge-util"
   ]
 }

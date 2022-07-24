@@ -5,14 +5,9 @@ import lombok.Data;
 @Data
 public class User {
   private Long id;
-
+  private String username;
   private String email;
-
-  private String identification;
-
   private String password;
-
   private String authId;
-
   private UserStatus status;
 }

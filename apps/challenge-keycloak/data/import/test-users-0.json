@@ -19,7 +19,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "test-visitor", "default-roles-test" ],
+    "realmRoles" : [ "app-user", "test-visitor", "default-roles-test" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -58,42 +58,6 @@
     "notBefore" : 0,
     "groups" : [ ]
   }, {
-    "id" : "5ea3ca0b-af5a-49c9-8732-498e27931bf3",
-    "createdTimestamp" : 1654055477558,
-    "username" : "test@gmail.com",
-    "enabled" : false,
-    "totp" : false,
-    "emailVerified" : false,
-    "email" : "test@gmail.com",
-    "credentials" : [ {
-      "id" : "7c5c8d6f-66bb-417a-9ad1-c168757f632e",
-      "type" : "password",
-      "createdDate" : 1654055477609,
-      "secretData" : "{\"value\":\"CFsPjbGAC2PQ13qvpiuwqbVR5OnpVtZGWyv8fgQRJIaijuUemNbvDUNfo3QHkrWi11Qi5eMmv3cNOmFi4U9MOQ==\",\"salt\":\"4hdjx04tt6y1FvfBbTfCkQ==\",\"additionalParameters\":{}}",
-      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
-    } ],
-    "disableableCredentialTypes" : [ ],
-    "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-test" ],
-    "notBefore" : 0,
-    "groups" : [ ]
-  }, {
-    "id" : "0c23c91f-e9bb-4610-8758-e3bd405320c1",
-    "createdTimestamp" : 1653522635425,
-    "username" : "thomas.schaffter@sagebase.org",
-    "enabled" : true,
-    "totp" : false,
-    "emailVerified" : false,
-    "firstName" : "Thomas",
-    "lastName" : "Schaffter",
-    "email" : "thomas.schaffter@sagebase.org",
-    "credentials" : [ ],
-    "disableableCredentialTypes" : [ ],
-    "requiredActions" : [ ],
-    "realmRoles" : [ "test-visitor", "default-roles-test", "test-admin" ],
-    "notBefore" : 0,
-    "groups" : [ ]
-  }, {
     "id" : "3739ed0d-6da2-4d65-ba5a-223eb2dfe2b6",
     "createdTimestamp" : 1653006571091,
     "username" : "tschaffter",
@@ -112,7 +76,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-test", "test-admin" ],
+    "realmRoles" : [ "default-roles-test", "test-admin", "app-admin" ],
     "notBefore" : 0,
     "groups" : [ ]
   } ]

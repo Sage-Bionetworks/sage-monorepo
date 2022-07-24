@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-mariadb",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-mariadb/src",
   "projectType": "application",
   "targets": {
@@ -49,14 +49,9 @@
       "options": {
         "context": "apps/challenge-mariadb",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-mariadb:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-mariadb:latest"]
       }
     }
   },
-  "tags": [
-    "type:db",
-    "scope:backend"
-  ]
+  "tags": ["type:db", "scope:backend"]
 }

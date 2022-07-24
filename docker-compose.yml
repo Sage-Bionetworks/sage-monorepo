@@ -44,19 +44,7 @@ services:
       - "80:80"
     depends_on:
       - challenge-registry-api
-      - challenge-registry-movie-api
       - challenge-keycloak
-
-  challenge-registry-movie-api:
-    image: sagebionetworks/challenge-registry-movie-api:latest
-    container_name: challenge-registry-movie-api
-    restart: always
-    env_file:
-      - ./apps/movie-api/.env
-    networks:
-      - challenge-registry
-    ports:
-      - "9000:9000"
 
   challenge-keycloak:
     image: sagebionetworks/challenge-keycloak:latest
@@ -73,7 +61,6 @@ services:
     command: start-dev
     depends_on:
       - challenge-postgresql
-      - challenge-registry-movie-api  # cheating temporarily to make it easier to start the stack.
 
   challenge-postgresql:
     image: sagebionetworks/challenge-postgresql:latest

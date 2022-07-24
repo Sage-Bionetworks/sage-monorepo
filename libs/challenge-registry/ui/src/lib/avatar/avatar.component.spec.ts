@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AvatarModule as NgxAvatarModule } from 'ngx-avatar';
+import { AvatarModule as NgxAvatarModule } from 'ngx-avatars';
 import { EMPTY_AVATAR } from './mock-avatars';
 import { AvatarComponent } from './avatar.component';
 

@@ -1,14 +1,9 @@
 {
-  "root": "libs/challenge-registry/styles",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/challenge-registry/styles/src",
   "projectType": "library",
   "generators": {},
   "targets": {},
-  "tags": [
-    "type:styles",
-    "scope:challenge-registry"
-  ],
-  "implicitDependencies": [
-    "shared-styles"
-  ]
+  "tags": ["type:styles", "scope:challenge-registry"],
+  "implicitDependencies": ["shared-styles"]
 }
