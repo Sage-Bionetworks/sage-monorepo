@@ -1,26 +1,9 @@
 {
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/challenge-registry/ui/src",
+  "sourceRoot": "libs/challenge-registry/shared/themes/src",
   "prefix": "challenge-registry",
   "targets": {
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/challenge-registry/ui"],
-      "options": {
-        "jestConfig": "libs/challenge-registry/ui/jest.config.ts",
-        "passWithNoTests": true
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/challenge-registry/ui/src/**/*.ts",
-          "libs/challenge-registry/ui/src/**/*.html"
-        ]
-      }
-    }
   },
   "tags": ["type:themes", "scope:shared"],
   "implicitDependencies": []
