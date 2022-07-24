@@ -12116,13 +12116,13 @@ ng-packagr@14.0.4:
   optionalDependencies:
     esbuild "^0.14.29"
 
-ngx-avatar@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/ngx-avatar/-/ngx-avatar-4.1.0.tgz#f3f4b47b7490cdb83d1bfffd535c199c15559307"
-  integrity sha512-0cIaCYOeY7tNsr9Zdg7SmgVG3Yka5mQDvYboybjP4yF47o2XO/rvkRaY98N5wtRF8FL9+OzLXfHbrvYGDGEomQ==
+ngx-avatars@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/ngx-avatars/-/ngx-avatars-1.4.0.tgz#83e6f6b54935498137cf946687860fff2501031f"
+  integrity sha512-v4MT5BoNybpTNwmLO7RPJT2uDHMvE+aOfZH3AEOefq+p8yOjapTCHQm4bfE1YXg8paQpns6+nu14LqGcK4FDPA==
   dependencies:
-    ts-md5 "^1.2.4"
-    tslib "^2.0.0"
+    ts-md5 "^1.2.11"
+    tslib "^2.4.0"
 
 ngx-countup@^13.0.0:
   version "13.1.0"
@@ -15985,7 +15985,7 @@ ts-loader@^9.2.6:
     micromatch "^4.0.0"
     semver "^7.3.4"
 
-ts-md5@^1.2.4:
+ts-md5@^1.2.11:
   version "1.2.11"
   resolved "https://registry.yarnpkg.com/ts-md5/-/ts-md5-1.2.11.tgz#0bbdf884eecf7da3952fe8671a109d7e55d322c6"
   integrity sha512-vAwy9rEuRE6a8xa1MavIVkLFyyU0ydk4CLMFA5vOVccmQKLOuGb/BHm3oEN7XHf2FoqS+z0pSvhaad/ombd1Vg==
@@ -16038,7 +16038,7 @@ tslib@2.3.1:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
 
-tslib@2.4.0, tslib@^2, tslib@^2.0.0, tslib@^2.0.1, tslib@^2.1.0, tslib@^2.2.0, tslib@^2.3.0, tslib@^2.3.1:
+tslib@2.4.0, tslib@^2, tslib@^2.0.0, tslib@^2.0.1, tslib@^2.1.0, tslib@^2.2.0, tslib@^2.3.0, tslib@^2.3.1, tslib@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
