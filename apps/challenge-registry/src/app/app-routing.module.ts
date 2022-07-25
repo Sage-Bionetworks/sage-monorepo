@@ -10,6 +10,7 @@ export const routes: Routes = [
       import('@sagebionetworks/challenge-registry/about').then(
         (m) => m.AboutModule
       ),
+    canActivate: [KAuthGuard],
   },
   {
     path: 'challenges',
@@ -75,7 +76,6 @@ export const routes: Routes = [
       import('@sagebionetworks/challenge-registry/user-profile').then(
         (m) => m.UserProfileModule
       ),
-    canActivate: [KAuthGuard],
   },
   {
     path: '**',
