@@ -11129,10 +11129,10 @@ karma-source-map-support@1.4.0:
   dependencies:
     source-map-support "^0.5.5"
 
-keycloak-angular@^9.1.0:
-  version "9.3.2"
-  resolved "https://registry.yarnpkg.com/keycloak-angular/-/keycloak-angular-9.3.2.tgz#4dc8e52cca55f15415fba76e2b97cdc2b001b640"
-  integrity sha512-TZTnLFo+GIuCzVBMIEJC+0CdcTvR/O8gxvF0xDckrTDYiUEV8TPiIfaYcjF9LnxpQF98zG66QC67eFCVW6K7tw==
+keycloak-angular@^12.0.0:
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/keycloak-angular/-/keycloak-angular-12.0.0.tgz#a67db482ec552f03d44a663093bb5772b91139f7"
+  integrity sha512-mFCbTgvBZoGtq5Jg4FA67y11pUAQVJbeKcYAykE8LIlp3I2+bNSfOIRYbjEwFcyj3vBORsDMNfbKfsExjMxn5g==
   dependencies:
     tslib "^2.3.0"
 
