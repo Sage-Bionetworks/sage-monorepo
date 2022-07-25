@@ -1,5 +1,6 @@
 {
   "environment": "${ENVIRONMENT}",
   "apiUrl": "${API_URL}",
-  "appVersion": "${APP_VERSION}"
+  "appVersion": "${APP_VERSION}",
+  "keycloakRealm": "${KEYCLOAK_REALM}"
 }

@@ -2,18 +2,18 @@ import { KeycloakService } from 'keycloak-angular';
 // import { of } from 'rxjs';
 // import { switchMap } from 'rxjs/operators';
 // import { fromPromise } from 'rxjs/internal-compatibility';
-// import { AppConfig } from '@sagebionetworks/challenge-registry/config';
+import { AppConfig } from '@sagebionetworks/challenge-registry/config';
 // import { ConfigInitService } from './config-init.service';
 
 export function initializeKeycloakFactory(
-  // config: AppConfig,
+  config: AppConfig,
   keycloak: KeycloakService
 ) {
   return () =>
     keycloak.init({
       config: {
         url: 'http://localhost:8080',
-        realm: 'test',
+        realm: config.keycloakRealm,
         clientId: 'test-client',
         // url: config['KEYCLOAK_URL'] + '/auth',
         // realm: config['KEYCLOAK_REALM'],

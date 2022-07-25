@@ -14,10 +14,10 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { ApiModule } from '@sagebionetworks/api-angular';
 import { AppComponent } from './app.component';
-// import {
-//   AppConfig,
-//   APP_CONFIG,
-// } from '@sagebionetworks/challenge-registry/config';
+import {
+  // AppConfig,
+  APP_CONFIG,
+} from '@sagebionetworks/challenge-registry/config';
 import {
   // TokenService,
   AuthModule,
@@ -59,7 +59,7 @@ import { initializeKeycloakFactory } from './initialize-keycloak.factory';
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloakFactory,
       multi: true,
-      deps: [KeycloakService],
+      deps: [APP_CONFIG, KeycloakService],
     },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

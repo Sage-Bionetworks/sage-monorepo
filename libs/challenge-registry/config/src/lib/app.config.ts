@@ -14,6 +14,7 @@ export interface AppConfig {
   environment: Environment;
   apiUrl: string;
   appVersion: string;
+  keycloakRealm: string;
 }
 
 export const APP_CONFIG = new InjectionToken<AppConfig>('APP_CONFIG');
