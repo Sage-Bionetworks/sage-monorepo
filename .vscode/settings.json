@@ -1,6 +1,6 @@
 {
   "java.format.enabled": true,
-  "java.format.settings.url": "eclipse-java-google-style.xml",
+  "java.format.settings.url": "${workspaceFolder}/eclipse-java-google-style.xml",
   "java.checkstyle.configuration": "${workspaceFolder}/google_checks.xml",
   "java.checkstyle.version": "10.3",
   "java.jdt.ls.lombokSupport.enabled": false,
@@ -61,5 +61,8 @@
     }
   ],
   "terminal.integrated.showExitAlert": false,
-  "java.configuration.updateBuildConfiguration": "disabled"
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "editor.inlayHints.enabled": "off",
+  "rewrap.wrappingColumn": 100,
+  "editor.rulers": [100]
 }

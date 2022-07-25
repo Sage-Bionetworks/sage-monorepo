@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-elk/logspout",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-elk/logspout/src",
   "projectType": "application",
   "targets": {
@@ -57,17 +57,10 @@
       "options": {
         "context": "apps/challenge-elk/logspout",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-logspout:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-logspout:latest"]
       }
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
-  "implicitDependencies": [
-    "challenge-logstash"
-  ]
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": ["challenge-logstash"]
 }

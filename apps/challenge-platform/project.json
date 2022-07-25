@@ -1,6 +1,6 @@
 {
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "root": "apps/challenge-platform",
   "sourceRoot": "apps/challenge-platform/src",
   "prefix": "sage-bionetworks",
   "targets": {
@@ -89,13 +89,10 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/challenge-platform"],
       "options": {
-        "jestConfig": "apps/challenge-platform/jest.config.js",
+        "jestConfig": "apps/challenge-platform/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": [
-    "type:app",
-    "scope:client"
-  ]
+  "tags": ["type:app", "scope:client"]
 }

@@ -32,10 +32,21 @@ info:
   application:
     name: ${spring.application.name}
 
+keycloak:
+  realm: test
+  resource: challenge-user-service
+  credentials:
+    secret: GFRau7cQTxhx19CUmSdrqrqrZ1pshjjB
+  auth-server-url: ${keycloak.url}
+  ssl-required: external
+  use-resource-role-mappings: true
+  bearer-only: true
+
 app:
   config:
     keycloak:
       server-url: ${keycloak.url}
       realm: test
+      client-id: challenge-api-client
       clientId: challenge-api-client
       client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb

@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-keycloak",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-keycloak/src",
   "projectType": "application",
   "targets": {
@@ -95,15 +95,10 @@
       "options": {
         "context": "apps/challenge-keycloak",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-keycloak:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-keycloak:latest"]
       }
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
+  "tags": ["type:service", "scope:backend"],
   "implicitDependencies": ["challenge-postgresql"]
 }

@@ -1,6 +1,7 @@
 {
   "name": "Challenge",
-  "image": "sagebionetworks/challenge-devcontainer:bf457d84",
+  "image": "sagebionetworks/challenge-devcontainer:f0afc028",
+  // "image": "sagebionetworks/challenge-devcontainer:test",
 
   "features": {
     // docker features must be specified in the developer facing
@@ -50,8 +51,8 @@
     8082,
     8083,
     8090,
+    8091,
     8092,
-    9000,
     9200,
     9300,
     9600,
@@ -110,12 +111,12 @@
       "label": "challenge-config-service",
       "onAutoForward": "silent"
     },
-    "8092": {
-      "label": "challenge-core-service",
+    "8091": {
+      "label": "challenge-auth-service",
       "onAutoForward": "silent"
     },
-    "9000": {
-      "label": "challenge-registry-movie-api",
+    "8092": {
+      "label": "challenge-core-service",
       "onAutoForward": "silent"
     },
     "9200": {

@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-api-gateway",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-api-gateway/src",
   "projectType": "application",
   "targets": {
@@ -10,13 +10,6 @@
         "cwd": "apps/challenge-api-gateway"
       }
     },
-    // "lint": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "command": "./mvnw checkstyle:check",
-    //     "cwd": "apps/challenge-api-gateway"
-    //   }
-    // },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
@@ -77,22 +70,21 @@
       ]
     },
     "build-image": {
-      "executor": "@nx-tools/nx-docker:build",
+      "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
-        "context": "apps/challenge-api-gateway",
-        "push": false,
-        "tags": [
-          "sagebionetworks/challenge-api-gateway:latest"
+        "root": "apps/challenge-api-gateway",
+        "args": [
+          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-api-gateway:latest"
         ]
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "install",
+          "projects": "dependencies"
+        }
+      ]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
-  "implicitDependencies": [
-    "challenge-service-registry"
-    // "challenge-config-service"
-  ]
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": ["challenge-service-registry"]
 }

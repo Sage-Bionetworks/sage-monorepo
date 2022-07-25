@@ -1,5 +1,5 @@
 {
-  "root": "libs/shared/web-components",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/web-components/src",
   "projectType": "library",
   "targets": {
@@ -14,13 +14,10 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/shared/web-components"],
       "options": {
-        "jestConfig": "libs/shared/web-components/jest.config.js",
+        "jestConfig": "libs/shared/web-components/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": [
-    "type:feature",
-    "scope:shared"
-  ]
+  "tags": ["type:feature", "scope:shared"]
 }

@@ -1,8 +1,8 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -23,7 +23,7 @@ import { ModelError as ApiClientError } from '@sagebionetworks/api-angular';
 export class LoginComponent implements OnInit, OnDestroy {
   public appVersion: string;
 
-  loginForm!: FormGroup;
+  loginForm!: UntypedFormGroup;
   errors = {
     other: undefined,
   } as { other?: string };
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private authService: AuthService,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
@@ -42,12 +42,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      username: new FormControl('tschaffter', [
+      username: new UntypedFormControl('tschaffter', [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(25),
       ]),
-      password: new FormControl('yourpassword', [
+      password: new UntypedFormControl('yourpassword', [
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(64),

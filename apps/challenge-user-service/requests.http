@@ -5,16 +5,16 @@
 
 ### Check user service info
 
-GET {{userServiceHost}}/actuator/info
+# GET {{userServiceHost}}/actuator/info
 
 ### Check API gateway actuator (expected to redirect to Keycloak login page)
 
-GET {{apiGatewayHost}}/actuator/info
+# GET {{apiGatewayHost}}/actuator/info
 
 ### Check user service info via the API gateway (expected to redirect to
 ### Keycloak login page)
 
-GET {{apiGatewayHost}}/user/actuator/info
+# GET {{apiGatewayHost}}/user/actuator/info
 
 ### Get access token from Keycloak
 
@@ -39,27 +39,24 @@ grant_type=password
 
 ### Check user service info
 
-GET {{apiGatewayHost}}/user/actuator/info
-Authorization: Bearer {{login.response.body.$.access_token}}
+# GET {{apiGatewayHost}}/user/actuator/info
+# Authorization: Bearer {{login.response.body.$.access_token}}
 
-### Create user
+### Create user (autorized without token)
 
-# POST {{userServiceHost}}/api/v1/users/register
-
-POST {{apiGatewayHost}}/user/api/v1/users/register
-Authorization: Bearer {{login.response.body.$.access_token}}
+POST {{apiGatewayHost}}/api/v1/users/register
 Content-Type: application/json
 
 {
-  "email": "sam@gmail.com",
-  "password": "changeme",
-  "identification": "808829932V"
+  "username": "a",
+  "email": "a@gmail.com",
+  "password": "changeme"
 }
 
 ### List all the users
 
 # GET {{userServiceHost}}/api/v1/users
 
-GET {{apiGatewayHost}}/user/api/v1/users
+GET {{apiGatewayHost}}/api/v1/users
 Authorization: Bearer {{login.response.body.$.access_token}}
 
