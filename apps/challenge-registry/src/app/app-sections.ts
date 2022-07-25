@@ -3,10 +3,10 @@ import { NavbarSection } from '@sagebionetworks/challenge-registry/ui';
 export const APP_SECTIONS: { [key: string]: NavbarSection } = {
   about: {
     name: 'About',
-    summary: 'About ROCC',
+    summary: 'About the Challenge Registry',
   },
-  search: {
+  challenges: {
     name: 'Challenges',
-    summary: 'Search challenges',
+    summary: 'Explore challenges',
   },
 };
