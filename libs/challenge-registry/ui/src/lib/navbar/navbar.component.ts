@@ -11,10 +11,11 @@ import { NavbarSection } from './navbar-section';
 })
 export class NavbarComponent {
   @Input() title = 'Awesome App';
-  @Input() loggedIn = false;
+  @Input() isLoggedIn = false;
   @Input() userAvatar: Avatar = EMPTY_AVATAR;
   @Input() userMenuItems: MenuItem[] = [];
   @Output() userMenuItemSelected = new EventEmitter<MenuItem>();
+  @Output() logInClicked = new EventEmitter<boolean>();
 
   private _sections: { [key: string]: NavbarSection } = {};
   sectionsKeys: string[] = [];

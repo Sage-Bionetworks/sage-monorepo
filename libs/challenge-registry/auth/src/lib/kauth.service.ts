@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
+import { KeycloakProfile } from 'keycloak-js';
+import { from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -7,12 +9,19 @@ import { KeycloakService } from 'keycloak-angular';
 export class KAuthService {
   constructor(private keycloakService: KeycloakService) {}
 
-  async logout(): Promise<void> {
-    console.log('KauthService.logout()');
-    return this.keycloakService.logout();
+  login(): Observable<void> {
+    return from(this.keycloakService.login());
   }
 
-  async isLoggedIn(): Promise<boolean> {
-    return this.keycloakService.isLoggedIn();
+  logout(): Observable<void> {
+    return from(this.keycloakService.logout());
+  }
+
+  isLoggedIn(): Observable<boolean> {
+    return from(this.keycloakService.isLoggedIn());
+  }
+
+  getUserProfile(): Observable<KeycloakProfile> {
+    return from(this.keycloakService.loadUserProfile());
   }
 }

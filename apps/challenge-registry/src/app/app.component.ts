@@ -26,7 +26,7 @@ import { User } from '@sagebionetworks/api-angular';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Challenge Registry';
   sections: { [key: string]: NavbarSection } = APP_SECTIONS;
-  loggedIn = true;
+  isLoggedIn = true;
   user: User = MOCK_USER;
   userAvatar: Avatar = MOCK_AVATAR_32;
   userMenuItems: MenuItem[] = USER_MENU_ITEMS;
@@ -44,19 +44,23 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.kauthService
       .isLoggedIn()
-      .then((loggedIn) => {
-        if (loggedIn) {
-          console.log(this.keycloakService.getUsername());
-        }
-      })
-      .catch((reason) => console.log(reason));
+      .subscribe((isLoggedIn) => (this.isLoggedIn = isLoggedIn));
+
+    // this.kauthService
+    //   .isLoggedIn()
+    //   .then((loggedIn) => {
+    //     if (loggedIn) {
+    //       console.log(this.keycloakService.getUsername());
+    //     }
+    //   })
+    //   .catch((reason) => console.log(reason));
 
     // console.log(this.keycloakService.getUsername());
     // const userDetails = await this.keycloakService.loadUserProfile();
     // console.log(userDetails);
 
-    // from(this.keycloakService.isLoggedIn()).subscribe(
-    //   (isLoggedIn) => {
+    // from(this.kauthService.isLoggedIn()).subscribe(
+    //   (isLoggedIn: boolean) => {
     //     if (isLoggedIn) {
     //       // console.log(this.keycloakService.getUsername());
     //       console.log('isLoggedIn: ', isLoggedIn);
@@ -64,6 +68,10 @@ export class AppComponent implements OnInit, OnDestroy {
     //   }
     //   // (loggedIn) => (this.loggedIn = loggedIn)
     // );
+
+    // this.kauthService.getUserProfile().subscribe((userProfile) => {
+    //   console.log(`USER PROFILE`, userProfile);
+    // });
 
     // const loggedInSub = this.authService
     //   .isLoggedIn()
@@ -97,5 +105,9 @@ export class AppComponent implements OnInit, OnDestroy {
       this.router.navigate([this.user?.login]);
     }
     // TODO: redirect to all tabs of profile when the rest of tabs components are created
+  }
+
+  login(): void {
+    this.kauthService.login();
   }
 }
