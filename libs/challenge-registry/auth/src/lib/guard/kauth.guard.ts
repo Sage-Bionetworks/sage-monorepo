@@ -9,7 +9,7 @@ import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard extends KeycloakAuthGuard {
+export class KAuthGuard extends KeycloakAuthGuard {
   constructor(router: Router, protected readonly keycloak: KeycloakService) {
     super(router, keycloak);
   }

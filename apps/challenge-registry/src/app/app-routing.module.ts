@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 // import { AuthGuard } from './auth.guard';
+import { KAuthGuard } from '@sagebionetworks/challenge-registry/auth';
 
 export const routes: Routes = [
   {
@@ -74,6 +75,7 @@ export const routes: Routes = [
       import('@sagebionetworks/challenge-registry/user-profile').then(
         (m) => m.UserProfileModule
       ),
+    canActivate: [KAuthGuard],
   },
   {
     path: '**',
