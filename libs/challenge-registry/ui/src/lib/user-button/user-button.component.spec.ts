@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { AvatarModule } from '../avatar/avatar.module';
-import { MOCK_MENU_ITEMS } from './mock-menu-items';
+import { USER_MENU_ITEMS } from './user-menu-items';
 
 import { UserButtonComponent } from './user-button.component';
 
@@ -37,9 +37,9 @@ describe('UserButtonComponent', () => {
 
   it('should emit', () => {
     jest.spyOn(component.menuItemSelected, 'emit');
-    component.selectMenuItem(MOCK_MENU_ITEMS[0]);
+    component.selectMenuItem(USER_MENU_ITEMS[0]);
     expect(component.menuItemSelected.emit).toHaveBeenCalledWith(
-      MOCK_MENU_ITEMS[0]
+      USER_MENU_ITEMS[0]
     );
   });
 });

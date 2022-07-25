@@ -1,16 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, from } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { PageTitleService } from '@sagebionetworks/challenge-registry/util';
 import {
   Avatar,
   MenuItem,
   MOCK_AVATAR_32,
-  MOCK_MENU_ITEMS,
+  USER_MENU_ITEMS,
   MOCK_USER,
   NavbarSection,
 } from '@sagebionetworks/challenge-registry/ui';
 import { APP_SECTIONS } from './app-sections';
-import { AuthService } from '@sagebionetworks/challenge-registry/auth';
+import {
+  AuthService,
+  KAuthService,
+} from '@sagebionetworks/challenge-registry/auth';
 import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { User } from '@sagebionetworks/api-angular';
@@ -26,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
   loggedIn = true;
   user: User = MOCK_USER;
   userAvatar: Avatar = MOCK_AVATAR_32;
-  userMenuItems: MenuItem[] = MOCK_MENU_ITEMS;
+  userMenuItems: MenuItem[] = USER_MENU_ITEMS;
 
   private subscriptions: Subscription[] = [];
 
@@ -34,11 +37,12 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private pageTitleService: PageTitleService,
     private authService: AuthService,
-    private keycloakService: KeycloakService
+    private keycloakService: KeycloakService,
+    private kauthService: KAuthService
   ) {}
 
   ngOnInit() {
-    this.keycloakService
+    this.kauthService
       .isLoggedIn()
       .then((loggedIn) => {
         if (loggedIn) {
@@ -51,15 +55,15 @@ export class AppComponent implements OnInit, OnDestroy {
     // const userDetails = await this.keycloakService.loadUserProfile();
     // console.log(userDetails);
 
-    from(this.keycloakService.isLoggedIn()).subscribe(
-      (isLoggedIn) => {
-        if (isLoggedIn) {
-          // console.log(this.keycloakService.getUsername());
-          console.log('isLoggedIn: ', isLoggedIn);
-        }
-      }
-      // (loggedIn) => (this.loggedIn = loggedIn)
-    );
+    // from(this.keycloakService.isLoggedIn()).subscribe(
+    //   (isLoggedIn) => {
+    //     if (isLoggedIn) {
+    //       // console.log(this.keycloakService.getUsername());
+    //       console.log('isLoggedIn: ', isLoggedIn);
+    //     }
+    //   }
+    //   // (loggedIn) => (this.loggedIn = loggedIn)
+    // );
 
     // const loggedInSub = this.authService
     //   .isLoggedIn()
@@ -89,7 +93,8 @@ export class AppComponent implements OnInit, OnDestroy {
     // TODO DRY selected item, no not make comparison with string that way
     if (menuItem.name === 'Log out') {
       // this.authService.logout();
-      this.keycloakService.logout();
+      // this.keycloakService.logout();
+      this.kauthService.logout();
     } else if (menuItem.name === 'Profile') {
       this.router.navigate([this.user?.login]);
     }

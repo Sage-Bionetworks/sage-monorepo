@@ -14,6 +14,7 @@ export class UserButtonComponent {
   @Output() menuItemSelected = new EventEmitter<MenuItem>();
 
   selectMenuItem(menuItem: MenuItem) {
+    console.log('EMIT');
     this.menuItemSelected.emit(menuItem);
   }
 }
