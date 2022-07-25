@@ -10,12 +10,8 @@ import {
   NavbarSection,
 } from '@sagebionetworks/challenge-registry/ui';
 import { APP_SECTIONS } from './app-sections';
-import {
-  AuthService,
-  KAuthService,
-} from '@sagebionetworks/challenge-registry/auth';
+import { KAuthService } from '@sagebionetworks/challenge-registry/auth';
 import { Router } from '@angular/router';
-import { KeycloakService } from 'keycloak-angular';
 import { User } from '@sagebionetworks/api-angular';
 
 @Component({
@@ -36,8 +32,6 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private pageTitleService: PageTitleService,
-    private authService: AuthService,
-    private keycloakService: KeycloakService,
     private kauthService: KAuthService
   ) {}
 
@@ -46,49 +40,9 @@ export class AppComponent implements OnInit, OnDestroy {
       .isLoggedIn()
       .subscribe((isLoggedIn) => (this.isLoggedIn = isLoggedIn));
 
-    // this.kauthService
-    //   .isLoggedIn()
-    //   .then((loggedIn) => {
-    //     if (loggedIn) {
-    //       console.log(this.keycloakService.getUsername());
-    //     }
-    //   })
-    //   .catch((reason) => console.log(reason));
-
-    // console.log(this.keycloakService.getUsername());
-    // const userDetails = await this.keycloakService.loadUserProfile();
-    // console.log(userDetails);
-
-    // from(this.kauthService.isLoggedIn()).subscribe(
-    //   (isLoggedIn: boolean) => {
-    //     if (isLoggedIn) {
-    //       // console.log(this.keycloakService.getUsername());
-    //       console.log('isLoggedIn: ', isLoggedIn);
-    //     }
-    //   }
-    //   // (loggedIn) => (this.loggedIn = loggedIn)
-    // );
-
-    // this.kauthService.getUserProfile().subscribe((userProfile) => {
-    //   console.log(`USER PROFILE`, userProfile);
-    // });
-
-    // const loggedInSub = this.authService
-    //   .isLoggedIn()
-    //   .subscribe((loggedIn) => (this.loggedIn = loggedIn));
-    // this.subscriptions.push(loggedInSub);
-
-    // const userSub = this.authService.getUser().subscribe((user) => {
-    //   this.user = user;
-    //   if (user) {
-    //     this.userAvatar.name = user.name ? user.name : user.login;
-    //     this.userAvatar.src = user.avatarUrl ? user.avatarUrl : '';
-    //   } else {
-    //     this.userAvatar.name = '';
-    //     this.userAvatar.src = '';
-    //   }
-    // });
-    // this.subscriptions.push(userSub);
+    this.kauthService.getUserProfile().subscribe((userProfile) => {
+      this.userAvatar.name = userProfile.username ? userProfile.username : '';
+    });
 
     this.pageTitleService.setTitle('Challenge Registry');
   }
