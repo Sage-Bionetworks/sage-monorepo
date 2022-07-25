@@ -90,10 +90,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   selectUserMenuItem(menuItem: MenuItem): void {
-    // TODO DRY selected item, no not make comparison with string that way
+    // TODO: DRY selected item, no not make comparison with string that way
     if (menuItem.name === 'Log out') {
-      // this.authService.logout();
-      // this.keycloakService.logout();
       this.kauthService.logout();
     } else if (menuItem.name === 'Profile') {
       this.router.navigate([this.user?.login]);
