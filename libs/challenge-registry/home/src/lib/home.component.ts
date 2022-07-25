@@ -15,9 +15,4 @@ export class HomeComponent {
   constructor(@Inject(APP_CONFIG) private appConfig: AppConfig) {
     this.appVersion = appConfig.appVersion;
   }
-
-  logout(): void {
-    console.log('Logout');
-    this.kauthService.logout();
-  }
 }
