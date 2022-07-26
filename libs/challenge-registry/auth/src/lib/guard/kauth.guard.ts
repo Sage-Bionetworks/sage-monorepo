@@ -20,22 +20,22 @@ export class KAuthGuard extends KeycloakAuthGuard {
   ) {
     // Force the user to log in if currently unauthenticated.
     if (!this.authenticated) {
-      await this.keycloak.login({
-        redirectUri: window.location.origin + state.url,
-      });
+      // await this.keycloak.login({
+      //   redirectUri: window.location.origin + state.url,
+      // });
+      await this.keycloak.login();
+      return false;
     }
 
-    return this.authenticated;
+    // Get the roles required from the route.
+    const requiredRoles = route.data['roles'];
 
-    // // Get the roles required from the route.
-    // const requiredRoles: any[] = []; // route.data.roles;
+    // Allow the user to proceed if no additional roles are required to access the route.
+    if (!(requiredRoles instanceof Array) || requiredRoles.length === 0) {
+      return true;
+    }
 
-    // // Allow the user to to proceed if no additional roles are required to access the route.
-    // if (!(requiredRoles instanceof Array) || requiredRoles.length === 0) {
-    //   return true;
-    // }
-
-    // // Allow the user to proceed if all the required roles are present.
-    // return requiredRoles.every((role) => this.roles.includes(role));
+    // Allow the user to proceed if all the required roles are present.
+    return requiredRoles.every((role) => this.roles.includes(role));
   }
 }

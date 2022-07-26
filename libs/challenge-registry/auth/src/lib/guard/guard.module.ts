@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthGuard } from './auth-guard.service';
 import { KAuthGuard } from './kauth.guard';
-import { KeycloakAngularModule } from 'keycloak-angular';
+// import { KeycloakAngularModule } from 'keycloak-angular';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, KeycloakAngularModule],
+  imports: [CommonModule],
   providers: [AuthGuard, KAuthGuard],
 })
 export class GuardModule {}

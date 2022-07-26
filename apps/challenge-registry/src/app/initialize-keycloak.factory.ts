@@ -24,5 +24,6 @@ export function initializeKeycloakFactory(
         silentCheckSsoRedirectUri:
           window.location.origin + '/assets/silent-check-sso.html',
       },
+      bearerExcludedUrls: [],
     });
 }
