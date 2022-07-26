@@ -38,7 +38,7 @@ If you plan to contribute to this project, please create a fork and use its URL 
 more information on contributing and/or our Forking Workflow approach, see
 [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
-    git clone --depth 1 <repo url>
+    git clone --depth 1 --no-single-branch <repo url>
 
 Then open your fork repo inside our devcontainer using these instructions:
 
