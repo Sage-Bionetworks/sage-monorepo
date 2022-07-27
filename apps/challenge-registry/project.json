@@ -1,0 +1,133 @@
+{
+  "projectType": "application",
+  "sourceRoot": "apps/challenge-registry/src",
+  "prefix": "sagebionetworks",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/challenge-registry/browser",
+        "index": "apps/challenge-registry/src/index.html",
+        "main": "apps/challenge-registry/src/main.ts",
+        "polyfills": "apps/challenge-registry/src/polyfills.ts",
+        "tsConfig": "apps/challenge-registry/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/challenge-registry/src/favicon.ico",
+          "apps/challenge-registry/src/assets"
+        ],
+        "styles": [
+          "apps/challenge-registry/src/styles.scss"
+        ],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/challenge-registry/src/environments/environment.ts",
+              "with": "apps/challenge-registry/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "challenge-registry:build:production"
+        },
+        "development": {
+          "browserTarget": "challenge-registry:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "challenge-registry:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/challenge-registry/**/*.ts",
+          "apps/challenge-registry/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/challenge-registry"
+      ],
+      "options": {
+        "jestConfig": "apps/challenge-registry/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "server": {
+      "executor": "@angular-devkit/build-angular:server",
+      "options": {
+        "outputPath": "dist/challenge-registry/server",
+        "main": "apps/challenge-registry/src/ssr.server.ts",
+        "tsConfig": "apps/challenge-registry/tsconfig.server.json",
+        "inlineStyleLanguage": "scss"
+      },
+      "configurations": {
+        "production": {
+          "outputHashing": "media"
+        },
+        "development": {
+          "optimization": false,
+          "sourceMap": true,
+          "extractLicenses": false
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve-ssr": {
+      "executor": "@nguniversal/builders:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "browserTarget": "challenge-registry:build:development",
+          "serverTarget": "challenge-registry:server:development"
+        },
+        "production": {
+          "browserTarget": "challenge-registry:build:production",
+          "serverTarget": "challenge-registry:server:production"
+        }
+      },
+      "defaultConfiguration": "development"
+    }
+  },
+  "tags": []
+}
