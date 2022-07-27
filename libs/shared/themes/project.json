@@ -3,8 +3,10 @@
   "projectType": "library",
   "sourceRoot": "libs/challenge-registry/shared/themes/src",
   "prefix": "challenge-registry",
-  "targets": {
-  },
-  "tags": ["type:themes", "scope:shared"],
+  "targets": {},
+  "tags": [
+    "type:themes",
+    "scope:shared"
+  ],
   "implicitDependencies": []
 }

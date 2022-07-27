@@ -14,7 +14,9 @@
     },
     "build": {
       "executor": "@nrwl/angular:webpack-browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/challenge-registry",
         "index": "apps/challenge-registry/src/index.html",
@@ -41,7 +43,9 @@
             "output": ""
           }
         ],
-        "styles": ["apps/challenge-registry/src/styles.scss"],
+        "styles": [
+          "apps/challenge-registry/src/styles.scss"
+        ],
         "scripts": [],
         "customWebpackConfig": {
           "path": "apps/challenge-registry/webpack.config.js"
@@ -129,7 +133,9 @@
     "serve-mfe": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["nx serve challenge-registry"]
+        "commands": [
+          "nx serve challenge-registry"
+        ]
       }
     },
     "build-image": {
@@ -137,11 +143,16 @@
       "options": {
         "context": "apps/challenge-registry",
         "push": false,
-        "tags": ["sagebionetworks/challenge-registry:latest"]
+        "tags": [
+          "sagebionetworks/challenge-registry:latest"
+        ]
       }
     }
   },
-  "tags": ["type:app", "scope:client"],
+  "tags": [
+    "type:app",
+    "scope:client"
+  ],
   "implicitDependencies": [
     "challenge-registry-styles",
     "challenge-registry-themes",

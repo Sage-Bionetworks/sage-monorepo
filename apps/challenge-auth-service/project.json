@@ -103,7 +103,10 @@
       ]
     }
   },
-  "tags": ["type:service", "scope:backend"],
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
   "implicitDependencies": [
     "challenge-keycloak",
     "challenge-service-registry",

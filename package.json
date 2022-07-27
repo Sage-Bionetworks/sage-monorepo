@@ -25,6 +25,7 @@
     "@angular/material": "14.0.6",
     "@angular/platform-browser": "14.0.7",
     "@angular/platform-browser-dynamic": "14.0.7",
+    "@angular/platform-server": "14.0.7",
     "@angular/router": "14.0.7",
     "@nguniversal/express-engine": "^14.0.3",
     "commander": "^8.2.0",
@@ -119,6 +120,7 @@
     "redoc-cli": "^0.13.7",
     "shx": "^0.3.4",
     "ts-jest": "27.1.4",
+    "ts-node": "~10.8.0",
     "typescript": "4.7.4"
   }
 }

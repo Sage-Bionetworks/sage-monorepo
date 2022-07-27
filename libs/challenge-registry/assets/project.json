@@ -4,5 +4,8 @@
   "projectType": "library",
   "generators": {},
   "targets": {},
-  "tags": ["type:assets", "scope:challenge-registry"]
+  "tags": [
+    "type:assets",
+    "scope:challenge-registry"
+  ]
 }

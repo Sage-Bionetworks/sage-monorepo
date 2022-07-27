@@ -98,7 +98,10 @@
       ]
     }
   },
-  "tags": ["type:service", "scope:backend"],
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
   "implicitDependencies": [
     "challenge-mariadb",
     "challenge-keycloak",

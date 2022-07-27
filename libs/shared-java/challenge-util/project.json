@@ -8,13 +8,17 @@
       "options": {
         "root": "libs/shared-java/challenge-util"
       },
-      "outputs": ["libs/shared-java/challenge-util/target"]
+      "outputs": [
+        "libs/shared-java/challenge-util/target"
+      ]
     },
     "install": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
         "root": "libs/shared-java/challenge-util",
-        "args": ["install"]
+        "args": [
+          "install"
+        ]
       },
       "dependsOn": [
         {
@@ -48,5 +52,8 @@
       }
     }
   },
-  "tags": ["type:feature", "scope:shared"]
+  "tags": [
+    "type:feature",
+    "scope:shared"
+  ]
 }

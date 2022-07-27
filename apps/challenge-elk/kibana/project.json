@@ -57,11 +57,16 @@
       "options": {
         "context": "apps/challenge-elk/kibana",
         "push": false,
-        "tags": ["sagebionetworks/challenge-kibana:latest"]
+        "tags": [
+          "sagebionetworks/challenge-kibana:latest"
+        ]
       }
     }
   },
-  "tags": ["type:service", "scope:backend"],
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
   "implicitDependencies": [
     "challenge-elasticsearch",
     "challenge-logstash",
