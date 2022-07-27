@@ -17,14 +17,12 @@
     "challenge-platform": "apps/challenge-platform",
     "challenge-platform-e2e": "apps/challenge-platform-e2e",
     "challenge-postgresql": "apps/challenge-postgresql",
-    "challenge-registry": "apps/challenge-registry",
     "challenge-registry-about": "libs/challenge-registry/about",
     "challenge-registry-assets": "libs/challenge-registry/assets",
     "challenge-registry-auth": "libs/challenge-registry/auth",
     "challenge-registry-challenge": "libs/challenge-registry/challenge",
     "challenge-registry-challenge-search": "libs/challenge-registry/challenge-search",
     "challenge-registry-config": "libs/challenge-registry/config",
-    "challenge-registry-e2e": "apps/challenge-registry-e2e",
     "challenge-registry-home": "libs/challenge-registry/home",
     "challenge-registry-login": "libs/challenge-registry/login",
     "challenge-registry-not-found": "libs/challenge-registry/not-found",
@@ -44,6 +42,5 @@
     "shared-web-components": "libs/shared/web-components",
     "test-app": "apps/test-app",
     "test-app-e2e": "apps/test-app-e2e"
-  },
-  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
+  }
 }
