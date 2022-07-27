@@ -150,7 +150,9 @@
 
   - Update the files in the project folder based on their legacy version. These files include but
     are not limited to:
+    - `docker/`
     - `.eslintrc.json`
+    - `Dockerfile`
 
 <!-- Links -->
 
