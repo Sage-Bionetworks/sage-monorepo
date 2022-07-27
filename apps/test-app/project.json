@@ -16,8 +16,23 @@
         "tsConfig": "apps/test-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
-          "apps/test-app/src/favicon.ico",
-          "apps/test-app/src/assets"
+          "apps/test-app/src/assets",
+          "apps/test-app/src/config",
+          {
+            "input": "libs/shared/assets/src/assets",
+            "glob": "**/*",
+            "output": "assets"
+          },
+          {
+            "input": "libs/challenge-registry/assets/src/assets",
+            "glob": "**/*",
+            "output": "challenge-registry-assets"
+          },
+          {
+            "input": "libs/shared/assets/src",
+            "glob": "favicon.ico",
+            "output": ""
+          }
         ],
         "styles": [
           "apps/test-app/src/styles.scss"
