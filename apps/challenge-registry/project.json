@@ -1,8 +1,17 @@
 {
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/challenge-registry/src",
-  "prefix": "sagebionetworks",
+  "prefix": "challenge-registry",
   "targets": {
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/challenge-registry",
+        "parallel": false
+      }
+    },
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": [
@@ -16,8 +25,23 @@
         "tsConfig": "apps/challenge-registry/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
-          "apps/challenge-registry/src/favicon.ico",
-          "apps/challenge-registry/src/assets"
+          "apps/challenge-registry/src/assets",
+          "apps/challenge-registry/src/config",
+          {
+            "input": "libs/shared/assets/src/assets",
+            "glob": "**/*",
+            "output": "assets"
+          },
+          {
+            "input": "libs/challenge-registry/assets/src/assets",
+            "glob": "**/*",
+            "output": "challenge-registry-assets"
+          },
+          {
+            "input": "libs/shared/assets/src",
+            "glob": "favicon.ico",
+            "output": ""
+          }
         ],
         "styles": [
           "apps/challenge-registry/src/styles.scss"
@@ -35,15 +59,10 @@
             {
               "type": "anyComponentStyle",
               "maximumWarning": "2kb",
-              "maximumError": "4kb"
+              "maximumError": "8kb"
             }
           ],
-          "fileReplacements": [
-            {
-              "replace": "apps/challenge-registry/src/environments/environment.ts",
-              "with": "apps/challenge-registry/src/environments/environment.prod.ts"
-            }
-          ],
+          "fileReplacements": [],
           "outputHashing": "all"
         },
         "development": {
@@ -84,6 +103,16 @@
         ]
       }
     },
+    "lint-fix": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/challenge-registry/src/**/*.ts",
+          "apps/challenge-registry/src/**/*.html"
+        ],
+        "fix": true
+      }
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
@@ -92,6 +121,16 @@
       "options": {
         "jestConfig": "apps/challenge-registry/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/challenge-registry",
+        "push": false,
+        "tags": [
+          "sagebionetworks/challenge-registry:latest"
+        ]
       }
     },
     "server": {
@@ -129,5 +168,15 @@
       "defaultConfiguration": "development"
     }
   },
-  "tags": []
+  "tags": [
+    "type:app",
+    "scope:client"
+  ],
+  "implicitDependencies": [
+    "challenge-registry-styles",
+    "challenge-registry-themes",
+    "shared-assets",
+    "challenge-api-gateway",
+    "challenge-keycloak"
+  ]
 }
