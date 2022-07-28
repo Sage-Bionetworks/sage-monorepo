@@ -138,8 +138,7 @@
       "options": {
         "outputPath": "dist/challenge-registry/server",
         "main": "apps/challenge-registry/src/ssr.server.ts",
-        "tsConfig": "apps/challenge-registry/tsconfig.server.json",
-        "inlineStyleLanguage": "scss"
+        "tsConfig": "apps/challenge-registry/tsconfig.server.json"
       },
       "configurations": {
         "production": {
