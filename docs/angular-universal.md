@@ -1,5 +1,23 @@
 # Angular Universal
 
+## Introduction
+
+The article [Angular Universal: a Complete Practical Guide] offers an excellent introduction to
+Angular Universal, server-side rendering (SSR) and search engine optimization (SEO).
+
+## Why Angular Universal?
+
+- Improve the startup performance of our application.
+- Make our application more search engine friendly.
+  - Most search engine crawlers expect these important SEO meta tags to be present on the HTML
+    returned by the server, and not to modified at runtime by Javascript as done with client-side
+    rendering (CSR).
+  - If we are targetting only the Google search engine, as we have shown there is no need to
+    server-side render our content in order to have it ranked correctly, as Google can today index
+    correctly most Javascript-based content.
+- Improve the social media presence of our application.
+  - Enable social media crawlers to crawl our application pages.
+
 ## About Angular AOT compilation and SRR rendering
 
 > The Angular AOT compiler converts your Angular HTML and TS code into efficient JavaScript code"
@@ -10,7 +28,6 @@
 > at the beginning.
 
 Martin Schneider Aug 26, 2021 at 14:15 ([source](https://stackoverflow.com/q/68939599))
-
 
 ## Create an Angular Universal application
 
