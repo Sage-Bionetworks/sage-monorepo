@@ -1,5 +1,17 @@
 # Server-side rendering (SSR)
 
+## About Angular AOT compilation and SRR rendering
+
+> The Angular AOT compiler converts your Angular HTML and TS code into efficient JavaScript code"
+> (angular.io/guide/aot-compiler). That code is still run on client-side to render the first and
+> every other view. SSR is not an alternative but an additional technique to further increase
+> performance for first-time visitors and SEO, as the first view is rendered on server side and the
+> client receives that assembled and styled HTML, so there is no need to dynamically render anything
+> at the beginning.
+
+Martin Schneider Aug 26, 2021 at 14:15 ([source](https://stackoverflow.com/q/68939599))
+
+
 ## Create an Angular Universal application
 
 1. Create an Angular app.
