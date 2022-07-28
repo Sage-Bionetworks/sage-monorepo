@@ -190,6 +190,40 @@ The previous version of the challenge registry app generated in early 2022 is re
     - `.eslintrc.json`
     - `Dockerfile`
 
+## Build the Angular Universal Bundle
+
+```console
+nx server challenge-registry --prod
+
+$ ls -alh dist/apps/challenge-registry/server/
+total 5.3M
+drwxr-xr-x 2 vscode vscode 4.0K Jul 28 15:39 .
+drwxr-xr-x 3 vscode vscode 4.0K Jul 28 15:39 ..
+-rw-r--r-- 1 vscode vscode 174K Jul 28 15:39 297.js
+-rw-r--r-- 1 vscode vscode 112K Jul 28 15:39 3rdpartylicenses.txt
+-rw-r--r-- 1 vscode vscode 6.9K Jul 28 15:39 513.js
+-rw-r--r-- 1 vscode vscode  95K Jul 28 15:39 603.js
+-rw-r--r-- 1 vscode vscode 6.7K Jul 28 15:39 654.js
+-rw-r--r-- 1 vscode vscode 299K Jul 28 15:39 715.js
+-rw-r--r-- 1 vscode vscode 174K Jul 28 15:39 731.js
+-rw-r--r-- 1 vscode vscode 248K Jul 28 15:39 748.js
+-rw-r--r-- 1 vscode vscode  13K Jul 28 15:39 762.js
+-rw-r--r-- 1 vscode vscode 7.1K Jul 28 15:39 822.js
+-rw-r--r-- 1 vscode vscode 102K Jul 28 15:39 989.js
+-rw-r--r-- 1 vscode vscode 4.0M Jul 28 15:39 main.js
+```
+
+> **Note** Production bundles usually include hashes in client-side applications to help the browser
+> when it can reuse cached files. In SSR application, we prefer to have the names of the bundle files
+> constant so that we can import them in the script that starts the Express server.
+
+From [Angular Universal: a Complete Practical Guide]:
+
+> We will need the production version of the Universal bundle, as the development bundle will not
+> work.
+
+Really?
+
 ## References
 
 - [Server-side rendering (SSR) with Angular Universal]
