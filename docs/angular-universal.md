@@ -1,4 +1,4 @@
-# Server-side rendering (SSR)
+# Angular Universal
 
 ## About Angular AOT compilation and SRR rendering
 
@@ -13,6 +13,13 @@ Martin Schneider Aug 26, 2021 at 14:15 ([source](https://stackoverflow.com/q/689
 
 
 ## Create an Angular Universal application
+
+We are going to go start with an existing Angular application, and we will progressively turn it
+into an Angular Universal application while explaining every step along the way!
+
+The second part of the instructions describe how to tweak the app to meet the need of this project.
+The previous version of the challenge registry app generated in early 2022 is referenced as the
+"legacy" app.
 
 1. Create an Angular app.
     ```console
@@ -166,7 +173,17 @@ Martin Schneider Aug 26, 2021 at 14:15 ([source](https://stackoverflow.com/q/689
     - `.eslintrc.json`
     - `Dockerfile`
 
+## References
+
+- [Server-side rendering (SSR) with Angular Universal]
+- [Angular Universal: a Complete Practical Guide]
+- [Rendering on the Web]
+- [Server-side rendering (SSR) with Angular for Nx workspaces]
+
 <!-- Links -->
 
 [Server-side rendering (SSR) with Angular for Nx workspaces]: https://blog.nrwl.io/server-side-rendering-ssr-with-angular-for-nx-workspaces-14e2414ca532
 [Build once, deploy many]: https://12factor.net/codebase
+[Server-side rendering (SSR) with Angular Universal]: https://angular.io/guide/universal
+[Angular Universal: a Complete Practical Guide]: https://blog.angular-university.io/angular-universal/
+[Rendering on the Web]: https://web.dev/rendering-on-the-web/
