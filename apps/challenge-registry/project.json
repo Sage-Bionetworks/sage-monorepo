@@ -45,7 +45,6 @@
         ],
         "styles": [
           "apps/challenge-registry/src/styles.scss"
-          // "apps/challenge-registry/src/_app-theme.scss"
         ],
         "scripts": []
       },
@@ -140,6 +139,7 @@
         "outputPath": "dist/apps/challenge-registry/server",
         "main": "apps/challenge-registry/src/ssr.server.ts",
         "tsConfig": "apps/challenge-registry/tsconfig.server.json"
+        // "inlineStyleLanguage": "scss"
       },
       "configurations": {
         "production": {
