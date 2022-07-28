@@ -136,7 +136,7 @@
     "server": {
       "executor": "@angular-devkit/build-angular:server",
       "options": {
-        "outputPath": "dist/challenge-registry/server",
+        "outputPath": "dist/apps/challenge-registry/server",
         "main": "apps/challenge-registry/src/ssr.server.ts",
         "tsConfig": "apps/challenge-registry/tsconfig.server.json"
       },
