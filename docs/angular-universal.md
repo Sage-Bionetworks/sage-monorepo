@@ -214,8 +214,9 @@ drwxr-xr-x 3 vscode vscode 4.0K Jul 28 15:39 ..
 ```
 
 > **Note** Production bundles usually include hashes in client-side applications to help the browser
-> when it can reuse cached files. In SSR application, we prefer to have the names of the bundle files
-> constant so that we can import them in the script that starts the Express server.
+> when it can reuse cached files (e.g. `main.4a7032a52eaa8a28.js`). In SSR application, we prefer to
+> have the names of the bundle files constant so that we can import them in the script that starts
+> the Express server.
 
 From [Angular Universal: a Complete Practical Guide]:
 
