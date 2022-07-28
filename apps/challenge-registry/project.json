@@ -45,6 +45,7 @@
         ],
         "styles": [
           "apps/challenge-registry/src/styles.scss"
+          // "apps/challenge-registry/src/_app-theme.scss"
         ],
         "scripts": []
       },

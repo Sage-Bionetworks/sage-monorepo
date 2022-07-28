@@ -225,6 +225,29 @@ From [Angular Universal: a Complete Practical Guide]:
 
 Really?
 
+## TODO
+
+To review and adapt:
+
+```console
+# Development
+npm run start
+http://localhost:4200/
+
+# Tests
+npm run lint
+npm run test
+npm run e2e
+
+# AOT Compilation
+npm run build
+
+# SSR Compilation
+npm run build:ssr
+npm run serve:ssr
+http://localhost:4000/
+```
+
 ## References
 
 - [Server-side rendering (SSR) with Angular Universal]
