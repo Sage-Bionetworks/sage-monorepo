@@ -1,30 +1,4 @@
-// .mat-card {
-//   display: flex;
-//   align-items: center;
-//   margin-bottom: 1em;
-//   background-color: transparent;
-//   box-shadow: none !important;
-// }
-
-// .rocc-org-content-container {
-//   display: flex;
-//   flex-direction: column;
-//   margin-left: 20px;
-
-//   .mat-card-content {
-//     margin: 0;
-//   }
-// }
-
-// a {
-//   color: inherit;
-//   text-decoration: none;
-
-//   &:hover {
-//     text-decoration: underline;
-//     cursor: pointer;
-//   }
-// }
+$dl-radius-radius-round: 50%;
 
 .organization-card-container {
   width: 300px;
@@ -43,7 +17,6 @@
   position: absolute;
   box-sizing: border-box;
   align-items: flex-start;
-  border-color: transparent;
 }
 .organization-card-card-banner {
   top: 0px;
@@ -55,22 +28,14 @@
   box-sizing: border-box;
   align-items: flex-start;
   flex-shrink: 1;
-  border-color: transparent;
 }
 .organization-card-text {
   top: 56px;
   left: 52px;
-  color: var(--dl-color-default-primary2);
   height: auto;
   position: absolute;
-  font-size: 64px;
   align-self: auto;
-  font-style: normal;
   text-align: center;
-  font-family: Fira Sans;
-  font-weight: 500px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
 .organization-card-card-title {
@@ -82,35 +47,20 @@
   box-sizing: border-box;
   align-items: center;
   flex-shrink: 1;
-  border-color: transparent;
   flex-direction: column;
 }
 .organization-card-text1 {
-  color: rgba(0, 0, 0, 1);
   width: 260px;
   height: auto;
   margin: 0 0 24px 0;
-  font-size: 32px;
   align-self: auto;
-  font-style: normal;
   text-align: center;
-  font-family: Fira Sans;
-  font-weight: 500px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
 .organization-card-text2 {
-  color: var(--dl-color-default-primary1);
   height: auto;
-  font-size: 20px;
   align-self: auto;
-  font-style: normal;
   text-align: center;
-  font-family: Roboto;
-  font-weight: 400px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
 @media (max-width: 479px) {
@@ -127,11 +77,8 @@
   .organization-card-card-banner {
     box-shadow: 1px 5px 18px 0px #d4d4d4;
     align-items: flex-start;
-    border-radius: var(--dl-radius-radius-round);
-    background-color: var(--dl-color-default-hover2);
+    border-radius: $dl-radius-radius-round;
   }
   .organization-card-text1 {
-    font-style: normal;
-    font-weight: 500;
   }
 }

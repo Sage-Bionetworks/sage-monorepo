@@ -138,8 +138,10 @@ In `user-profile.component.html`:
 
   2. Use `<span>` and  for `{{user.bio}}`
   3. Since we already `org-card` component, move exported codes from `user-profile/src/lib/components/organization-card.[html|scss]` to `ui/src/lib/org-card/org-card.[html|scss]`
-  4. remove `<link href="./organization-card.css" rel="stylesheet" />` in `ui/src/lib/org-card/org-card.html`
-  5.
+  4. Remove `<link href="./organization-card.css" rel="stylesheet" />` in `ui/src/lib/org-card/org-card.html`
+  5. Rename `org-card` component to `organization-card` - [here]() are changes made for renaming the component
+  6. Create `_organization-card-theme.scss` and collects the colors/typography styles codes. Load `organization-card-theme` in `ui/src/_lib-theme.scss`
+  7. 
 
 
 ## TO-DOs:
