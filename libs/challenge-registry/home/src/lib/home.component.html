@@ -2,10 +2,10 @@
   <challenge-registry-challenge-search></challenge-registry-challenge-search>
   <challenge-registry-statistics-viewer></challenge-registry-statistics-viewer>
   <challenge-registry-topics-viewer></challenge-registry-topics-viewer>
-  <challenge-registry-challenge-host-list></challenge-registry-challenge-host-list>
-  <challenge-registry-challenge-registration></challenge-registry-challenge-registration>
-  <challenge-registry-featured-challenge-list></challenge-registry-featured-challenge-list>
-  <challenge-registry-sponsor-list></challenge-registry-sponsor-list>
+  <challenge-registry-challenge-host-list *appShellNoRender></challenge-registry-challenge-host-list>
+  <challenge-registry-challenge-registration *appShellNoRender></challenge-registry-challenge-registration>
+  <challenge-registry-featured-challenge-list *appShellNoRender></challenge-registry-featured-challenge-list>
+  <challenge-registry-sponsor-list *appShellNoRender></challenge-registry-sponsor-list>
 </main>
 
-<challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
+<challenge-registry-footer [version]="appVersion" *appShellNoRender></challenge-registry-footer>
