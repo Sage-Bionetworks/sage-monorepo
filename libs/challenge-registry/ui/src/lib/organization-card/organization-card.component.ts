@@ -3,11 +3,11 @@ import { Organization } from '@sagebionetworks/api-angular';
 import { Avatar } from '../avatar/avatar';
 
 @Component({
-  selector: 'challenge-registry-org-card',
-  templateUrl: './org-card.component.html',
-  styleUrls: ['./org-card.component.scss'],
+  selector: 'challenge-registry-organization-card',
+  templateUrl: './organization-card.component.html',
+  styleUrls: ['./organization-card.component.scss'],
 })
-export class OrgCardComponent implements OnInit {
+export class OrganizationCardComponent implements OnInit {
   @Input() org!: Organization;
   orgAvatar!: Avatar;
 
