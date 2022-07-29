@@ -14,9 +14,7 @@
     },
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/challenge-registry/browser",
         "index": "apps/challenge-registry/src/index.html",
@@ -43,9 +41,7 @@
             "output": ""
           }
         ],
-        "styles": [
-          "apps/challenge-registry/src/styles.scss"
-        ],
+        "styles": ["apps/challenge-registry/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -97,10 +93,7 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "apps/challenge-registry/**/*.ts",
-          "apps/challenge-registry/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/challenge-registry/**/*.ts", "apps/challenge-registry/**/*.html"]
       }
     },
     "lint-fix": {
@@ -115,9 +108,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/apps/challenge-registry"
-      ],
+      "outputs": ["coverage/apps/challenge-registry"],
       "options": {
         "jestConfig": "apps/challenge-registry/jest.config.ts",
         "passWithNoTests": true
@@ -128,9 +119,7 @@
       "options": {
         "context": "apps/challenge-registry",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-registry:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-registry:latest"]
       }
     },
     "server": {
@@ -139,7 +128,6 @@
         "outputPath": "dist/apps/challenge-registry/server",
         "main": "apps/challenge-registry/src/ssr.server.ts",
         "tsConfig": "apps/challenge-registry/tsconfig.server.json"
-        // "inlineStyleLanguage": "scss"
       },
       "configurations": {
         "production": {
@@ -169,10 +157,7 @@
       "defaultConfiguration": "development"
     }
   },
-  "tags": [
-    "type:app",
-    "scope:client"
-  ],
+  "tags": ["type:app", "scope:client"],
   "implicitDependencies": [
     "challenge-registry-styles",
     "challenge-registry-themes",

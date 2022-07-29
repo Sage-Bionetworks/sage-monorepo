@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { SharedUtilModule } from '@sagebionetworks/shared/util';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { HomeComponent } from './home.component';
 import { ChallengeSearchModule } from './challenge-search/challenge-search.module';
@@ -26,6 +27,7 @@ const routes: Routes = [{ path: '', component: HomeComponent }];
     SponsorListModule,
     StatisticsViewerModule,
     TopicsViewerModule,
+    SharedUtilModule,
   ],
   exports: [HomeComponent],
 })
