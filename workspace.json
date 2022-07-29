@@ -41,6 +41,7 @@
     "shared-java-challenge-util": "libs/shared-java/challenge-util",
     "shared-styles": "libs/shared/styles",
     "shared-themes": "libs/shared/themes",
+    "shared-util": "libs/shared/util",
     "shared-web-components": "libs/shared/web-components"
   },
   "$schema": "./node_modules/nx/schemas/workspace-schema.json"
