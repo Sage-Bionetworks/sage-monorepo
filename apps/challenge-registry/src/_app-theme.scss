@@ -4,7 +4,7 @@
 
 @include mat.core();
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
 
 $primary: mat.define-palette(pal.$dark-blue-palette, 600);
 $accent: mat.define-palette(pal.$accent-pink-palette, 400);
