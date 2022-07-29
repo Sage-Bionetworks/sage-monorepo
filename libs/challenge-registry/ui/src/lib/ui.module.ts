@@ -6,10 +6,11 @@ import { NavbarModule } from './navbar/navbar.module';
 import { AvatarModule } from './avatar/avatar.module';
 import { OrganizationCardModule } from './organization-card/organization-card.module';
 import { UserButtonModule } from './user-button/user-button.module';
+import { ChallengeCardComponent } from './challenge-card/challenge-card.component';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [],
+  declarations: [ChallengeCardComponent],
   exports: [
     AvatarModule,
     ButtonGithubModule,

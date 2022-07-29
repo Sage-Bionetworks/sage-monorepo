@@ -153,7 +153,12 @@ In `user-profile.component.html`:
           }
           ```
 
-
+- User-Profile-Overview
+  1. Create a `challenge-card` component:
+      ```console
+      nx g @nrwl/angular:component challenge-card --project=challenge-registry-ui
+      ```
+  2. 
 
 ## TO-DOs:
 

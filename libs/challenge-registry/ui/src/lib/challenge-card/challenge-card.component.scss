@@ -148,7 +148,7 @@
   height: 41px;
   display: flex;
   position: absolute;
-  border-top: 1px solid #C4C4C4;
+  border-top: 1px solid #c4c4c4;
   align-items: flex-start;
 }
 .challenge-card-status-tag {
@@ -210,7 +210,7 @@
   font-stretch: normal;
   text-decoration: none;
 }
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .challenge-card-container1 {
     border-radius: var(--dl-radius-radius-radius16);
     background-color: var(--dl-color-gray-white);
