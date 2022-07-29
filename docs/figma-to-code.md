@@ -197,11 +197,13 @@ In `user-profile.component.html`:
         color: #000;
       }
       ```
+  8. Replace status image with css codes and fix layout inside of status box
+
 ## TO-DOs:
 
 - User-Profile
-    1. Upload and link the "verified" image
-    2. Add the border/box-shadow of challenge/organization card
+    1. The icons have not been implemented. Replace icon images by using the material icons, otherwise upload the icon images.
+    2. Fix missing border/box-shadow of challenge/organization card, i.e the border color/box-shadow of `.challenge-card-container1` (I don't know how to get the information from figma)
 
 ## Issues found on the user profile component:
 

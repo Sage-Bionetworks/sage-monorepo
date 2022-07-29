@@ -120,21 +120,14 @@ $dl-radius-radius-radius16: 16px;
   display: flex;
   position: absolute;
   box-sizing: border-box;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   border: 1px solid;
 }
-.challenge-card-svg {
-  width: 126;
-  height: 41;
-  position: absolute;
-}
+
 .challenge-card-text5 {
-  top: 9px;
-  left: 22px;
-  height: auto;
-  position: absolute;
   align-self: auto;
-  text-align: left;
+  text-align: center;
   text-decoration: none;
 }
 .challenge-card-difficulty-tag {
@@ -155,6 +148,7 @@ $dl-radius-radius-radius16: 16px;
   align-self: auto;
   text-align: left;
   text-decoration: none;
+  white-space: nowrap;
 }
 // @media (max-width: 767px) {
 .challenge-card-container1 {

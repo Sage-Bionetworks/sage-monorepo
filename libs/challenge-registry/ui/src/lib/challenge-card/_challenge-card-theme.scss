@@ -95,6 +95,10 @@
     border-color: $dl-color-default-primary2;
     background-color: $dl-color-default-hover1;
     color: #000;
+
+    &.active {
+      // wait until the colors are determined
+    }
   }
 
   .challenge-card-text5 {
