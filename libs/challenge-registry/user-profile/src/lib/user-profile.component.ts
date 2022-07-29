@@ -4,7 +4,6 @@ import {
   Account,
   AccountService,
   // ModelError as ApiClientError,
-  Organization,
   User,
   UserService,
 } from '@sagebionetworks/api-angular';
@@ -26,11 +25,7 @@ import {
 } from 'rxjs';
 import { Tab } from './tab.model';
 import { USER_PROFILE_TABS } from './user-profile-tabs';
-import {
-  MOCK_USER,
-  MOCK_ORGANIZATIONS,
-  Avatar,
-} from '@sagebionetworks/challenge-registry/ui';
+import { MOCK_USER, Avatar } from '@sagebionetworks/challenge-registry/ui';
 
 @Component({
   selector: 'challenge-registry-user',
@@ -41,7 +36,6 @@ export class UserProfileComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
   user$: Observable<User> = of(MOCK_USER);
-  organizations: Organization[] = MOCK_ORGANIZATIONS;
   loggedIn = true;
   userAvatar!: Avatar;
   tabs = USER_PROFILE_TABS;
