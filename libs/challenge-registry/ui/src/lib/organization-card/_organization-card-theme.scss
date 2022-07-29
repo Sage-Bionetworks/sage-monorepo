@@ -64,9 +64,11 @@
   }
   .organization-card-card-banner {
     border-color: transparent;
+    background-color: $dl-color-default-hover2;
   }
-  .organization-card-text {
-    color: $dl-color-default-primary2;
+  .avatar-content {
+    background-color: transparent !important;
+    color: $dl-color-default-primary2 !important;
   }
   .organization-card-card-title {
     border-color: transparent;

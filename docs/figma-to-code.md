@@ -139,9 +139,20 @@ In `user-profile.component.html`:
   2. Use `<span>` and  for `{{user.bio}}`
   3. Since we already `org-card` component, move exported codes from `user-profile/src/lib/components/organization-card.[html|scss]` to `ui/src/lib/org-card/org-card.[html|scss]`
   4. Remove `<link href="./organization-card.css" rel="stylesheet" />` in `ui/src/lib/org-card/org-card.html`
-  5. Rename `org-card` component to `organization-card` - [here]() are changes made for renaming the component
+  5. Rename `org-card` component to `organization-card` - [here]() are relevant changes 
   6. Create `_organization-card-theme.scss` and collects the colors/typography styles codes. Load `organization-card-theme` in `ui/src/_lib-theme.scss`
-  7. 
+  7. Update the `organization-card-theme.html` to use the mocked organization object - [here]() are relevant changes
+  8. Further update the organization avatar to make it like in the figma: 
+      - Fix: `background-color`, `box-shadow` and `border-radius`  is missing for `.organization-card-card-banner`
+      - Since `<hallenge-registry-avatar>` is used to replace the exported codes for organization banner. Adjust background and font color to match the figma design:
+          ```scss
+          // add below properties in _organization-card-theme.scss
+          .avatar-content {
+            background-color: transparent !important;
+            color: $dl-color-default-primary2 !important;
+          }
+          ```
+
 
 
 ## TO-DOs:
@@ -155,6 +166,8 @@ In `user-profile.component.html`:
 - Ensure Layouts among similar sections (position, height, weight) are consistent.
 
 - Font weights have invalid format - with "px" after the value:
+
+- Some styles is not found from the exported codes, i.e for the background color of organization banner, I do notice later it's added to the `media`, but missing in the default styles. Not sure if it's a bug from teleportHQ.
 
 - Most of components are using `absolute` position and prefined height/weights.
   1. In the case, the components will not be reponsive enough. Take the biography tab content as example. Both "Biography" and "Organizations" has the same prefined height. If the content of "Biography" is more than the prefined size can handle, the text will be overlapped with the "Organizations" content. If the content of "Biography" only has a few words, it is a little better but will leave a lot of empty vertical space above "Organizations" headline.
