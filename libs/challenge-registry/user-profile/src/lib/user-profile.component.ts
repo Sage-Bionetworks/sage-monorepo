@@ -40,8 +40,8 @@ import {
 export class UserProfileComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
-  user$!: Observable<User>;
-  organizations: Organization[] = [];
+  user$: Observable<User> = of(MOCK_USER);
+  organizations: Organization[] = MOCK_ORG;
   loggedIn = true;
   userAvatar!: Avatar;
   tabs = USER_PROFILE_TABS;
@@ -88,8 +88,6 @@ export class UserProfileComponent implements OnInit {
     //   switchMap((account) => this.userService.getUser(account.id))
     // );
 
-    this.user$ = of(MOCK_USER);
-    const orgs$ = of(MOCK_ORG);
     // const orgs$ = this.account$.pipe(
     //   filter((account): account is Account => account !== undefined),
     //   switchMap((account) =>
@@ -114,7 +112,7 @@ export class UserProfileComponent implements OnInit {
         })
     );
 
-    const orgsSub = orgs$.subscribe((orgs) => (this.organizations = orgs));
+    // const orgsSub = orgs$.subscribe((orgs) => (this.organizations = orgs));
 
     const activeTabSub = activeTab$.subscribe((key) => {
       if (!this.tabKeys.includes(key)) {
@@ -128,7 +126,7 @@ export class UserProfileComponent implements OnInit {
     //   .isLoggedIn()
     //   .subscribe((loggedIn) => (this.loggedIn = loggedIn));
 
-    this.subscriptions.push(orgsSub);
+    // this.subscriptions.push(orgsSub);
     this.subscriptions.push(activeTabSub);
   }
 }
