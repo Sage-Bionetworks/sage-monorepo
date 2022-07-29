@@ -12,6 +12,7 @@ import { UtilModule } from '@sagebionetworks/challenge-registry/util';
 import { AuthModule } from '@sagebionetworks/challenge-registry/auth';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { AppComponent } from './app.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,6 +28,7 @@ import { AppComponent } from './app.component';
     UtilModule,
     AuthModule.forRoot(),
     UiModule,
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
