@@ -136,7 +136,12 @@ In `user-profile.component.html`:
       <span class="main-section-bio-text1">{{user.bio}}</span>
       ```
 
-  2. use `<span>` and  for `{{user.bio}}`
+  2. Use `<span>` and  for `{{user.bio}}`
+  3. Since we already `org-card` component, move exported codes from `user-profile/src/lib/components/organization-card.[html|scss]` to `ui/src/lib/org-card/org-card.[html|scss]`
+  4. remove `<link href="./organization-card.css" rel="stylesheet" />` in `ui/src/lib/org-card/org-card.html`
+  5.
+
+
 ## TO-DOs:
 
 - User-Profile
