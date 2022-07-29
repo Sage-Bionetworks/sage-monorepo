@@ -1,3 +1,5 @@
+$dl-radius-radius-radius16: 16px;
+
 .challenge-card-container {
   width: 496px;
   height: 521px;
@@ -15,7 +17,6 @@
   position: absolute;
   box-sizing: border-box;
   align-items: flex-start;
-  border-color: transparent;
 }
 .challenge-card-card-banner {
   top: 27px;
@@ -27,23 +28,14 @@
   box-sizing: border-box;
   align-items: flex-start;
   flex-shrink: 1;
-  border-color: transparent;
-  background-color: var(--dl-color-default-accent1);
 }
 .challenge-card-text {
   top: 54px;
   left: 159px;
-  color: var(--dl-color-default-darkacccent1);
   height: auto;
   position: absolute;
-  font-size: 24px;
   align-self: auto;
-  font-style: normal;
   text-align: center;
-  font-family: Fira Sans;
-  font-weight: 400px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
 .challenge-card-starred {
@@ -56,22 +48,14 @@
   box-sizing: border-box;
   align-items: flex-start;
   flex-shrink: 1;
-  border-color: transparent;
 }
 .challenge-card-text1 {
   top: 10px;
   left: 22px;
-  color: var(--dl-color-default-navbardark);
   height: auto;
   position: absolute;
-  font-size: 18px;
   align-self: auto;
-  font-style: normal;
   text-align: center;
-  font-family: Fira Sans;
-  font-weight: 600px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
 .challenge-card-icon {
@@ -82,7 +66,6 @@
   position: absolute;
   box-sizing: border-box;
   object-fit: cover;
-  border-color: transparent;
 }
 .challenge-card-card-title {
   top: 194px;
@@ -93,52 +76,30 @@
   position: absolute;
   box-sizing: border-box;
   align-items: center;
-  border-color: transparent;
   flex-direction: column;
   justify-content: space-between;
 }
 .challenge-card-text2 {
-  color: rgba(0, 0, 0, 1);
   width: 347px;
   height: auto;
-  font-size: 32px;
   align-self: auto;
-  font-style: normal;
   text-align: center;
-  font-family: Fira Sans;
-  font-weight: 500px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
 .challenge-card-text3 {
-  color: rgba(0, 0, 0, 1);
   height: auto;
-  font-size: 20px;
   align-self: auto;
-  font-style: normal;
   text-align: center;
-  font-family: Lato;
-  font-weight: 400px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
 .challenge-card-text4 {
   top: 311px;
   left: 41px;
-  color: rgba(0, 0, 0, 1);
   width: 420px;
   height: auto;
   position: absolute;
-  font-size: 16px;
   align-self: auto;
-  font-style: normal;
   text-align: left;
-  font-family: Lato;
-  font-weight: 400px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
 .challenge-card-card-footer {
@@ -160,7 +121,6 @@
   position: absolute;
   box-sizing: border-box;
   align-items: flex-start;
-  border-color: transparent;
 }
 .challenge-card-svg {
   width: 126;
@@ -170,17 +130,10 @@
 .challenge-card-text5 {
   top: 9px;
   left: 22px;
-  color: rgba(0, 0, 0, 1);
   height: auto;
   position: absolute;
-  font-size: 20px;
   align-self: auto;
-  font-style: normal;
   text-align: left;
-  font-family: Lato;
-  font-weight: 400px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
 .challenge-card-difficulty-tag {
@@ -192,33 +145,23 @@
   position: absolute;
   box-sizing: border-box;
   align-items: flex-start;
-  border-color: transparent;
 }
 .challenge-card-text6 {
   top: 0px;
   left: 31px;
-  color: rgba(0, 0, 0, 1);
   height: auto;
   position: absolute;
-  font-size: 20px;
   align-self: auto;
-  font-style: normal;
   text-align: left;
-  font-family: Lato;
-  font-weight: 400px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
 @media (max-width: 767px) {
   .challenge-card-container1 {
-    border-radius: var(--dl-radius-radius-radius16);
-    background-color: var(--dl-color-gray-white);
+    border-radius: $dl-radius-radius-radius16;
   }
   .challenge-card-starred {
     border-width: 1px;
-    border-radius: var(--dl-radius-radius-radius16);
-    background-color: var(--dl-color-default-hover1);
+    border-radius: $dl-radius-radius-radius16;
   }
   .challenge-card-card-footer {
     top: 440px;
