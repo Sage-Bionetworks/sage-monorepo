@@ -41,7 +41,7 @@ export class UserProfileComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
   user$!: Observable<User>;
-  orgs: Organization[] = [];
+  organizations: Organization[] = [];
   loggedIn = true;
   userAvatar!: Avatar;
   tabs = USER_PROFILE_TABS;
@@ -89,7 +89,7 @@ export class UserProfileComponent implements OnInit {
     // );
 
     this.user$ = of(MOCK_USER);
-    const orgs$ = of([MOCK_ORG]);
+    const orgs$ = of(MOCK_ORG);
     // const orgs$ = this.account$.pipe(
     //   filter((account): account is Account => account !== undefined),
     //   switchMap((account) =>
@@ -114,7 +114,7 @@ export class UserProfileComponent implements OnInit {
         })
     );
 
-    const orgsSub = orgs$.subscribe((orgs) => (this.orgs = orgs));
+    const orgsSub = orgs$.subscribe((orgs) => (this.organizations = orgs));
 
     const activeTabSub = activeTab$.subscribe((key) => {
       if (!this.tabKeys.includes(key)) {

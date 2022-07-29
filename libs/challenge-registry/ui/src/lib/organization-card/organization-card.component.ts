@@ -8,17 +8,17 @@ import { Avatar } from '../avatar/avatar';
   styleUrls: ['./organization-card.component.scss'],
 })
 export class OrganizationCardComponent implements OnInit {
-  @Input() org!: Organization;
-  orgAvatar!: Avatar;
+  @Input() organization!: Organization;
+  organizationAvatar!: Avatar;
 
   ngOnInit(): void {
-    if (this.org) {
-      this.orgAvatar = {
-        name: this.org.name
-          ? (this.org.name as string)
-          : this.org.login.replace(/-/g, ' '),
-        src: this.org.avatarUrl ? this.org.avatarUrl : '',
-        size: 100,
+    if (this.organization) {
+      this.organizationAvatar = {
+        name: this.organization.name
+          ? (this.organization.name as string)
+          : this.organization.login.replace(/-/g, ' '),
+        src: this.organization.avatarUrl ? this.organization.avatarUrl : '',
+        size: 188,
       };
     }
   }

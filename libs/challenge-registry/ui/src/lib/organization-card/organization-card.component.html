@@ -7,15 +7,17 @@
 
 </mat-card> -->
 
-<div>
+<div *ngIf="organization">
   <div class="organization-card-container">
     <div class="organization-card-container1">
-      <div class="organization-card-card-banner">
+      <challenge-registry-avatar  class="organization-card-card-banner" 
+        [avatar]="organizationAvatar"></challenge-registry-avatar>
+      <!-- <div class="organization-card-card-banner">
         <span class="organization-card-text"><span>AO</span></span>
-      </div>
+      </div> -->
       <div class="organization-card-card-title">
-        <span class="organization-card-text1"><span>Organization</span></span>
-        <span class="organization-card-text2"><span>@org</span></span>
+        <span class="organization-card-text1"><span>{{ organization.name }}</span></span>
+        <span class="organization-card-text2"><span>@{{ organization.login }}</span></span>
       </div>
     </div>
   </div>

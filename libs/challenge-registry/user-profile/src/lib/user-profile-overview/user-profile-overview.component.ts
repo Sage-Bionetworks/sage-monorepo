@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Organization, User } from '@sagebionetworks/api-angular';
-
+import { MOCK_ORG } from '@sagebionetworks/challenge-registry/ui';
 @Component({
   selector: 'challenge-registry-user-profile-overview',
   templateUrl: './user-profile-overview.component.html',
@@ -8,5 +8,5 @@ import { Organization, User } from '@sagebionetworks/api-angular';
 })
 export class UserProfileOverviewComponent {
   @Input() user!: User;
-  @Input() orgs: Organization[] = [];
+  @Input() organizations: Organization[] = MOCK_ORG;
 }
