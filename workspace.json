@@ -42,5 +42,6 @@
     "shared-styles": "libs/shared/styles",
     "shared-themes": "libs/shared/themes",
     "shared-web-components": "libs/shared/web-components"
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }
