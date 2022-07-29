@@ -139,9 +139,9 @@ In `user-profile.component.html`:
   2. Use `<span>` and  for `{{user.bio}}`
   3. Since we already `org-card` component, move exported codes from `user-profile/src/lib/components/organization-card.[html|scss]` to `ui/src/lib/org-card/org-card.[html|scss]`
   4. Remove `<link href="./organization-card.css" rel="stylesheet" />` in `ui/src/lib/org-card/org-card.html`
-  5. Rename `org-card` component to `organization-card` - [here]() are relevant changes 
+  5. Rename `org-card` component to `organization-card` - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/6945153) are relevant changes 
   6. Create `_organization-card-theme.scss` and collects the colors/typography styles codes. Load `organization-card-theme` in `ui/src/_lib-theme.scss`
-  7. Update the `organization-card-theme.html` to use the mocked organization object - [here]() are relevant changes
+  7. Update the `organization-card-theme.html` to use the mocked organization object - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/da3480e) are relevant changes
   8. Further update the organization avatar to make it like in the figma: 
       - Fix: `background-color`, `box-shadow` and `border-radius`  is missing for `.organization-card-card-banner`
       - Since `<hallenge-registry-avatar>` is used to replace the exported codes for organization banner. Adjust background and font color to match the figma design:
