@@ -28,7 +28,7 @@ import { Tab } from './tab.model';
 import { USER_PROFILE_TABS } from './user-profile-tabs';
 import {
   MOCK_USER,
-  MOCK_ORG,
+  MOCK_ORGANIZATIONS,
   Avatar,
 } from '@sagebionetworks/challenge-registry/ui';
 
@@ -41,7 +41,7 @@ export class UserProfileComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
   user$: Observable<User> = of(MOCK_USER);
-  organizations: Organization[] = MOCK_ORG;
+  organizations: Organization[] = MOCK_ORGANIZATIONS;
   loggedIn = true;
   userAvatar!: Avatar;
   tabs = USER_PROFILE_TABS;

@@ -1,6 +1,6 @@
 import { Organization } from '@sagebionetworks/api-angular';
 
-export const MOCK_ORG: Organization[] = [
+export const MOCK_ORGANIZATIONS: Organization[] = [
   {
     id: '613931b5ae0267da3f0275c7',
     name: 'Awesome Org',

@@ -3,7 +3,7 @@ import { AvatarModule } from '../avatar/avatar.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { OrganizationCardComponent } from './organization-card.component';
-import { MOCK_ORG } from './mock-org';
+import { MOCK_ORGANIZATIONS } from './mock-organizations';
 import { HttpClientModule } from '@angular/common/http';
 
 describe('OrganizationCardComponent', () => {
@@ -25,7 +25,7 @@ describe('OrganizationCardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(OrganizationCardComponent);
     component = fixture.componentInstance;
-    component.org = MOCK_ORG;
+    component.organization = MOCK_ORGANIZATIONS[0];
   });
 
   it('should create', () => {
@@ -34,28 +34,28 @@ describe('OrganizationCardComponent', () => {
 
   it('orgAvatar name and avatar should be defined', () => {
     fixture.detectChanges();
-    expect(component.orgAvatar).toEqual({
-      name: MOCK_ORG.name,
-      src: MOCK_ORG.avatarUrl,
+    expect(component.organizationAvatar).toEqual({
+      name: MOCK_ORGANIZATIONS[0].name,
+      src: MOCK_ORGANIZATIONS[0].avatarUrl,
       size: 100,
     });
   });
 
   it('src property of orgAvatar should be empty string', () => {
-    component.org.avatarUrl = null;
+    component.organization.avatarUrl = null;
     fixture.detectChanges();
-    expect(component.orgAvatar).toEqual({
-      name: MOCK_ORG.name,
+    expect(component.organizationAvatar).toEqual({
+      name: MOCK_ORGANIZATIONS[0].name,
       src: '',
       size: 100,
     });
   });
 
   it('login property of org should be used for orgAvatar name', () => {
-    component.org.name = null;
+    component.organization.name = null;
     fixture.detectChanges();
-    expect(component.orgAvatar).toEqual({
-      name: MOCK_ORG.login.replace(/-/g, ' '),
+    expect(component.organizationAvatar).toEqual({
+      name: MOCK_ORGANIZATIONS[0].login.replace(/-/g, ' '),
       src: '',
       size: 100,
     });
