@@ -57,10 +57,17 @@
       "options": {
         "context": "apps/challenge-elk/logspout",
         "push": false,
-        "tags": ["sagebionetworks/challenge-logspout:latest"]
+        "tags": [
+          "sagebionetworks/challenge-logspout:latest"
+        ]
       }
     }
   },
-  "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": ["challenge-logstash"]
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
+  "implicitDependencies": [
+    "challenge-logstash"
+  ]
 }

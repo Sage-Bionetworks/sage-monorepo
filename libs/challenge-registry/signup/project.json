@@ -6,7 +6,9 @@
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/challenge-registry/signup"],
+      "outputs": [
+        "coverage/libs/challenge-registry/signup"
+      ],
       "options": {
         "jestConfig": "libs/challenge-registry/signup/jest.config.ts",
         "passWithNoTests": true
@@ -22,5 +24,8 @@
       }
     }
   },
-  "tags": ["type:feature", "scope:challenge-registry"]
+  "tags": [
+    "type:feature",
+    "scope:challenge-registry"
+  ]
 }

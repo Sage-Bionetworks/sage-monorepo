@@ -57,9 +57,14 @@
       "options": {
         "context": "apps/challenge-elk/elasticsearch",
         "push": false,
-        "tags": ["sagebionetworks/challenge-elasticsearch:latest"]
+        "tags": [
+          "sagebionetworks/challenge-elasticsearch:latest"
+        ]
       }
     }
   },
-  "tags": ["type:service", "scope:backend"]
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ]
 }

@@ -18,7 +18,9 @@
     },
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": ["dist/libs/api-angular"],
+      "outputs": [
+        "dist/libs/api-angular"
+      ],
       "options": {
         "project": "libs/api-angular/ng-package.json"
       },
@@ -34,7 +36,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api-angular"],
+      "outputs": [
+        "coverage/libs/api-angular"
+      ],
       "options": {
         "jestConfig": "libs/api-angular/jest.config.ts",
         "passWithNoTests": true
@@ -43,13 +47,17 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/api-angular/src/index.ts"]
+        "lintFilePatterns": [
+          "libs/api-angular/src/index.ts"
+        ]
       }
     },
     "lint-fix": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/api-angular/src/index.ts"],
+        "lintFilePatterns": [
+          "libs/api-angular/src/index.ts"
+        ],
         "fix": true
       }
     }

@@ -85,5 +85,8 @@
       ]
     }
   },
-  "tags": ["type:service", "scope:backend"]
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ]
 }

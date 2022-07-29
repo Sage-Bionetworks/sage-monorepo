@@ -7,30 +7,28 @@
       "executor": "@nrwl/cypress:cypress",
       "options": {
         "cypressConfig": "apps/challenge-registry-e2e/cypress.json",
-        "devServerTarget": "web-app:serve:development"
+        "devServerTarget": "challenge-registry:serve:development"
       },
       "configurations": {
         "production": {
-          "devServerTarget": "web-app:serve:production"
+          "devServerTarget": "challenge-registry:serve:production"
         }
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/challenge-registry-e2e/**/*.{js,ts}"]
-      }
-    },
-    "lint-fix": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["apps/challenge-registry-e2e/**/*.{js,ts}"],
-        "fix": true
+        "lintFilePatterns": [
+          "apps/challenge-registry-e2e/**/*.{js,ts}"
+        ]
       }
     }
   },
   "tags": [],
-  "implicitDependencies": ["challenge-registry"]
+  "implicitDependencies": [
+    "challenge-registry"
+  ]
 }
