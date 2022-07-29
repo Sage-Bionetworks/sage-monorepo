@@ -153,18 +153,48 @@ In `user-profile.component.html`:
           }
           ```
 
-- User-Profile-Overview
+- User-Profile-Challenges
   1. Create a `challenge-card` component (`nx g @nrwl/angular:component challenge-card --project=challenge-registry-ui`) using exported html/scss codes from `user-profile/src/lib/components/challenge-card.[html|scss]`
   2. Create a `challenge-card` module (`nx g @nrwl/angular:module challenge-card --project=challenge-registry-ui`) and ensure it can be used in `user-profile-challenges` - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/ba19d8f) are relevant changes
   3. Remove `<link href="./challenge-card.css" rel="stylesheet" />` in `ui/src/lib/challenge-card/challenge-card.html`
   4. Create `_challenge-card-theme.scss` and collects the colors/typography styles codes. Load `challenge-card-theme` in `ui/src/_lib-theme.scss`
-  5. Update the `challenge-card.html` to use the mocked challenge object - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/) are relevant changes
+  5. Update the `challenge-card.html` to use the mocked challenge object - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/85e6d8d) are relevant changes
+  6. Similiar "bugs"/problems as mentoned in `organization-card`. Some styles only presented in the `media`, but it should be set as default. An easy fix for now is to comment out @media like below, so that the styles could be assigned.
+
+      ```scss
+      // @media (max-width: 767px) {
+        .challenge-card-container1 {
+          border-radius: $dl-radius-radius-radius16;
+        }
+        .challenge-card-starred {
+          border-width: 1px;
+          border-radius: $dl-radius-radius-radius16;
+        }
+        .challenge-card-card-footer {
+          top: 440px;
+          left: 0px;
+          right: 0px;
+          width: 451px;
+          bottom: 20px;
+          height: 71px;
+          margin: auto;
+        }
+        .challenge-card-status-tag {
+          top: 19px;
+          right: 0px;
+        }
+        .challenge-card-difficulty-tag {
+          top: 28px;
+          left: 0px;
+        }
+      // }
+      ```
   
 ## TO-DOs:
 
 - User-Profile
     1. Upload and link the "verified" image
-    2.
+    2. Add the border/box-shadow of challenge/organization card
 
 ## Issues found on the user profile component:
 

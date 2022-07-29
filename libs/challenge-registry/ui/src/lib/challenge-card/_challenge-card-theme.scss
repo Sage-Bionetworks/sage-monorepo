@@ -104,16 +104,14 @@
   .challenge-card-text6 {
     color: rgba(0, 0, 0, 1);
   }
-  @media (max-width: 767px) {
-    .challenge-card-container1 {
-      border-radius: $dl-radius-radius-radius16;
-      background-color: $dl-color-gray-white;
-    }
-    .challenge-card-starred {
-      border-radius: $dl-radius-radius-radius16;
-      background-color: $dl-color-default-hover1;
-    }
+  // @media (max-width: 767px) {
+  .challenge-card-container1 {
+    background-color: $dl-color-gray-white;
   }
+  .challenge-card-starred {
+    background-color: $dl-color-default-hover1;
+  }
+  // }
 }
 
 @mixin typography($theme) {

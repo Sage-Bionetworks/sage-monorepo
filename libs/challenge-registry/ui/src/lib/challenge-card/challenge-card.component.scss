@@ -155,29 +155,29 @@ $dl-radius-radius-radius16: 16px;
   text-align: left;
   text-decoration: none;
 }
-@media (max-width: 767px) {
-  .challenge-card-container1 {
-    border-radius: $dl-radius-radius-radius16;
-  }
-  .challenge-card-starred {
-    border-width: 1px;
-    border-radius: $dl-radius-radius-radius16;
-  }
-  .challenge-card-card-footer {
-    top: 440px;
-    left: 0px;
-    right: 0px;
-    width: 451px;
-    bottom: 20px;
-    height: 71px;
-    margin: auto;
-  }
-  .challenge-card-status-tag {
-    top: 19px;
-    right: 0px;
-  }
-  .challenge-card-difficulty-tag {
-    top: 28px;
-    left: 0px;
-  }
+// @media (max-width: 767px) {
+.challenge-card-container1 {
+  border-radius: $dl-radius-radius-radius16;
 }
+.challenge-card-starred {
+  border-width: 1px;
+  border-radius: $dl-radius-radius-radius16;
+}
+.challenge-card-card-footer {
+  top: 440px;
+  left: 0px;
+  right: 0px;
+  width: 451px;
+  bottom: 20px;
+  height: 71px;
+  margin: auto;
+}
+.challenge-card-status-tag {
+  top: 19px;
+  right: 0px;
+}
+.challenge-card-difficulty-tag {
+  top: 28px;
+  left: 0px;
+}
+// }
