@@ -189,7 +189,14 @@ In `user-profile.component.html`:
         }
       // }
       ```
-  
+  7. Fix the missing properties for status tag from exported codes:
+      ```scss
+      .challenge-card-status-tag {
+        border-color: 1px solid $dl-color-default-primary2;
+        background-color: $dl-color-default-hover1;
+        color: #000;
+      }
+      ```
 ## TO-DOs:
 
 - User-Profile

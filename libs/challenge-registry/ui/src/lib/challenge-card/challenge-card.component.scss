@@ -121,6 +121,7 @@ $dl-radius-radius-radius16: 16px;
   position: absolute;
   box-sizing: border-box;
   align-items: flex-start;
+  border: 1px solid;
 }
 .challenge-card-svg {
   width: 126;
@@ -175,6 +176,7 @@ $dl-radius-radius-radius16: 16px;
 .challenge-card-status-tag {
   top: 19px;
   right: 0px;
+  border-radius: $dl-radius-radius-radius16;
 }
 .challenge-card-difficulty-tag {
   top: 28px;

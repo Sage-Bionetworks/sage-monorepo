@@ -92,7 +92,9 @@
   }
 
   .challenge-card-status-tag {
-    border-color: transparent;
+    border-color: $dl-color-default-primary2;
+    background-color: $dl-color-default-hover1;
+    color: #000;
   }
 
   .challenge-card-text5 {
