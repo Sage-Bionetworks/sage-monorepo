@@ -2,7 +2,9 @@
   <section id="main" class="main-section-challenges-main-section">
     <span class="main-section-challenges-text">Challenges</span>
     <div id="challenges" class="main-section-challenges-card-group">
-      <challenge-registry-challenge-card></challenge-registry-challenge-card>
+      <challenge-registry-challenge-card *ngFor="let challenge of challenges"
+      [challenge]="challenge">
+      </challenge-registry-challenge-card>
     </div>
   </section>
 </main>

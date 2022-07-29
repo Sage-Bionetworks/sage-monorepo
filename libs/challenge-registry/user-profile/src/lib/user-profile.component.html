@@ -38,8 +38,8 @@
       <ng-container [ngSwitch]="activeTab">
         <challenge-registry-user-profile-overview *ngSwitchCase="tabs['overview']" [user]="user">
         </challenge-registry-user-profile-overview>
-        <challenge-registry-user-profile-challenges *ngSwitchCase="tabs['challenges']"
-          [userId]="user.id"></challenge-registry-user-profile-challenges>
+        <challenge-registry-user-profile-challenges *ngSwitchCase="tabs['challenges']" [user]="user">
+        </challenge-registry-user-profile-challenges>
         <challenge-registry-user-profile-starred *ngSwitchCase="tabs['starred']" [user]="user" [loggedIn]="loggedIn">
         </challenge-registry-user-profile-starred>
       </ng-container>

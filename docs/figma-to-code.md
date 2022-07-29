@@ -141,7 +141,7 @@ In `user-profile.component.html`:
   4. Remove `<link href="./organization-card.css" rel="stylesheet" />` in `ui/src/lib/org-card/org-card.html`
   5. Rename `org-card` component to `organization-card` - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/6945153) are relevant changes 
   6. Create `_organization-card-theme.scss` and collects the colors/typography styles codes. Load `organization-card-theme` in `ui/src/_lib-theme.scss`
-  7. Update the `organization-card-theme.html` to use the mocked organization object - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/da3480e) are relevant changes
+  7. Update the `organization-card.html` to use the mocked organization object - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/da3480e) are relevant changes
   8. Further update the organization avatar to make it like in the figma: 
       - Fix: `background-color`, `box-shadow` and `border-radius`  is missing for `.organization-card-card-banner`
       - Since `<hallenge-registry-avatar>` is used to replace the exported codes for organization banner. Adjust background and font color to match the figma design:
@@ -154,12 +154,12 @@ In `user-profile.component.html`:
           ```
 
 - User-Profile-Overview
-  1. Create a `challenge-card` component:
-      ```console
-      nx g @nrwl/angular:component challenge-card --project=challenge-registry-ui
-      ```
-  2. 
-
+  1. Create a `challenge-card` component (`nx g @nrwl/angular:component challenge-card --project=challenge-registry-ui`) using exported html/scss codes from `user-profile/src/lib/components/challenge-card.[html|scss]`
+  2. Create a `challenge-card` module (`nx g @nrwl/angular:module challenge-card --project=challenge-registry-ui`) and ensure it can be used in `user-profile-challenges` - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/ba19d8f) are relevant changes
+  3. Remove `<link href="./challenge-card.css" rel="stylesheet" />` in `ui/src/lib/challenge-card/challenge-card.html`
+  4. Create `_challenge-card-theme.scss` and collects the colors/typography styles codes. Load `challenge-card-theme` in `ui/src/_lib-theme.scss`
+  5. Update the `challenge-card.html` to use the mocked challenge object - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/) are relevant changes
+  
 ## TO-DOs:
 
 - User-Profile
