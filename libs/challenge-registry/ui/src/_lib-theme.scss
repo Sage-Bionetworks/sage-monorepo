@@ -5,8 +5,7 @@
 @use './lib/footer/footer-theme' as footer;
 @use './lib/navbar/navbar-theme' as navbar;
 @use './lib/user-button/user-button-theme' as user-button;
-@use '../../home/src/lib/featured-challenge-list/featured-challenge-list-theme'
-  as featured;
+@use '../../home/src/lib/featured-challenge-list/featured-challenge-list-theme' as featured;
 
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;500&family=Poppins:wght@500;600&display=swap');
 
@@ -23,17 +22,13 @@ $fira: mat.define-typography-config(
   $font-family: "'Fira Sans', sans-serif",
   $headline: mat.define-typography-level(46px, 56px, 600),
   $title: mat.define-typography-level(40px, 50px, 600),
-  $subheading-2:
-    mat.define-typography-level(32px, 42px, 600, $letter-spacing: -0.1px),
-  $subheading-1:
-    mat.define-typography-level(22px, 32px, 600, $letter-spacing: -0.1px),
+  $subheading-2: mat.define-typography-level(32px, 42px, 600, $letter-spacing: -0.1px),
+  $subheading-1: mat.define-typography-level(22px, 32px, 600, $letter-spacing: -0.1px),
   $body-1: mat.define-typography-level(13px, 24px, 400, "'Lato', sans-serif"),
-  $body-2:
-    mat.define-typography-level(16px, 30px, 400, "'Lato', sans-serif", -0.1px),
+  $body-2: mat.define-typography-level(16px, 30px, 400, "'Lato', sans-serif", -0.1px),
   $caption: mat.define-typography-level(11px, 20px, 400, "'Lato', sans-serif"),
   $button: mat.define-typography-level(14px, 18px, 400),
-  $input:
-    mat.define-typography-level(16px, 1.125, 400, "'Lato', sans-serif", 0.1px),
+  $input: mat.define-typography-level(16px, 1.125, 400, "'Lato', sans-serif", 0.1px),
 );
 
 $theme: mat.define-light-theme(
