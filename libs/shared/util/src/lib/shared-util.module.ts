@@ -6,5 +6,6 @@ import { AppShellNoRenderDirective } from './directives/app-shell-no-render.dire
 @NgModule({
   imports: [CommonModule],
   declarations: [AppShellRenderDirective, AppShellNoRenderDirective],
+  exports: [AppShellRenderDirective, AppShellNoRenderDirective],
 })
 export class SharedUtilModule {}

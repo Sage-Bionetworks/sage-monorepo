@@ -1,4 +1,5 @@
 {
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
     "api-angular": "libs/api-angular",
@@ -43,6 +44,5 @@
     "shared-themes": "libs/shared/themes",
     "shared-util": "libs/shared/util",
     "shared-web-components": "libs/shared/web-components"
-  },
-  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
+  }
 }

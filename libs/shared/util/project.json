@@ -1,7 +1,7 @@
 {
   "projectType": "library",
   "sourceRoot": "libs/shared/util/src",
-  "prefix": "sagebionetworks",
+  "prefix": "sage",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
@@ -18,5 +18,9 @@
       }
     }
   },
-  "tags": []
+  "tags": [
+    "type:util",
+    "scope:shared"
+  ],
+  "implicitDependencies": []
 }
