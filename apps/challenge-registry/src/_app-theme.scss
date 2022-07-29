@@ -28,6 +28,7 @@ $theme: mat.define-light-theme(
 
 // Emit styles for MatButton based on `$theme`.
 @include mat.button-theme($theme);
+@include mat.progress-spinner-theme($theme);
 
 // Include the theme mixins for other components you use here.
 @include challenge-registry.theme($theme);
