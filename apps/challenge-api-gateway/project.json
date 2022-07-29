@@ -85,6 +85,11 @@
       ]
     }
   },
-  "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": ["challenge-service-registry"]
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
+  "implicitDependencies": [
+    "challenge-service-registry"
+  ]
 }

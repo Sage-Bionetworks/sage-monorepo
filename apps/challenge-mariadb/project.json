@@ -49,9 +49,14 @@
       "options": {
         "context": "apps/challenge-mariadb",
         "push": false,
-        "tags": ["sagebionetworks/challenge-mariadb:latest"]
+        "tags": [
+          "sagebionetworks/challenge-mariadb:latest"
+        ]
       }
     }
   },
-  "tags": ["type:db", "scope:backend"]
+  "tags": [
+    "type:db",
+    "scope:backend"
+  ]
 }

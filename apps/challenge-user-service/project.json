@@ -22,12 +22,6 @@
         }
       ]
     },
-    // "test": {
-    //   "executor": "@nxrocks/nx-spring-boot:test",
-    //   "options": {
-    //     "root": "apps/challenge-user-service"
-    //   }
-    // },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
@@ -103,7 +97,10 @@
       ]
     }
   },
-  "tags": ["type:service", "scope:backend"],
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
   "implicitDependencies": [
     "challenge-mariadb",
     "challenge-keycloak",

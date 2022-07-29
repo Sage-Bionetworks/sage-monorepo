@@ -6,7 +6,9 @@
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/challenge-registry/about"],
+      "outputs": [
+        "coverage/libs/challenge-registry/about"
+      ],
       "options": {
         "jestConfig": "libs/challenge-registry/about/jest.config.ts",
         "passWithNoTests": true
@@ -24,11 +26,16 @@
     "lint-html": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["hint src/**/*.html"],
+        "commands": [
+          "hint src/**/*.html"
+        ],
         "cwd": "libs/challenge-registry/about",
         "parallel": false
       }
     }
   },
-  "tags": ["type:feature", "scope:challenge-registry"]
+  "tags": [
+    "type:feature",
+    "scope:challenge-registry"
+  ]
 }
