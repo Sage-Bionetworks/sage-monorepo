@@ -1,25 +1,7 @@
--- INSERT INTO challenge_core_user (id, email, first_name, identification_number, last_name)
--- VALUES ('1', 'sam@gmail.com', 'Sam', '808829932V', 'Silva');
--- INSERT INTO challenge.challenge_core_user (id, email, first_name, identification_number, last_name)
--- VALUES ('2', 'guru@gmail.com', 'Guru', '901830556V', 'Darmaraj');
--- INSERT INTO challenge.challenge_core_user (id, email, first_name, identification_number, last_name)
--- VALUES ('3', 'ragu@gmail.com', 'Ragu', '348829932V', 'Sivaraj');
--- INSERT INTO challenge.challenge_core_user (id, email, first_name, identification_number, last_name)
--- VALUES ('4', 'randor@gmail.com', 'Randor', '842829932V', 'Manoon');
-
--- INSERT INTO challenge_core_account
---     (actual_balance, available_balance, `number`, status, `type`, user_id)
--- VALUES (100000.00, 100000.00, 100015003000, 'ACTIVE', 'USER_ACCOUNT', '1'),
---        (100000.00, 100000.00, 100015003001, 'ACTIVE', 'USER_ACCOUNT', '1'),
---        (100000.00, 100000.00, 100015003002, 'ACTIVE', 'USER_ACCOUNT', '2'),
---        (12000.00, 12000.00, 100015003003, 'ACTIVE', 'USER_ACCOUNT', '2'),
---        (12000.00, 12000.00, 100015003004, 'ACTIVE', 'USER_ACCOUNT', '2'),
---        (12000.00, 12000.00, 100015003005, 'ACTIVE', 'USER_ACCOUNT', '3'),
---        (290000.00, 290000.00, 100015003006, 'ACTIVE', 'USER_ACCOUNT', '3'),
---        (290000.00, 290000.00, 100015003007, 'ACTIVE', 'USER_ACCOUNT', '3'),
---        (290000.00, 290000.00, 100015003008, 'ACTIVE', 'USER_ACCOUNT', '3'),
---        (365023.00, 365023.00, 100015003009, 'ACTIVE', 'USER_ACCOUNT', '3'),
---        (365023.00, 365023.00, 100015003010, 'ACTIVE', 'USER_ACCOUNT', '4'),
---        (365023.00, 89456.00, 100015003011, 'ACTIVE', 'USER_ACCOUNT', '4'),
---        (89456.00, 89456.00, 100015003012, 'ACTIVE', 'USER_ACCOUNT', '4'),
---        (889000.33, 889000.33, 100015003013, 'ACTIVE', 'USER_ACCOUNT', '4');
+INSERT INTO challenge_user
+  (id, auth_id, status, username)
+VALUES ('1', 'b9302586-876b-47e8-900c-2c09f161b888', 'PENDING', 'test'),
+  ('2', '3739ed0d-6da2-4d65-ba5a-223eb2dfe2b6', 'PENDING', 'tschaffter'),
+  ('3', '9f6abcb0-25aa-49d7-aa1b-5292c8f3e26a', 'PENDING', 'rrchai'),
+  ('4', '04b800f3-c431-4862-93c4-2bef14fc204d', 'PENDING', 'vpchung'),
+  ('5', '1212f921-6ab0-444f-a5ea-9dc154199a3c', 'PENDING', 'oakenshield');
