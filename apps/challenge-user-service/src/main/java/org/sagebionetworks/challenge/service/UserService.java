@@ -64,18 +64,18 @@ public class UserService {
         GlobalErrorCode.ERROR_INVALID_USER);
   }
 
-  public List<User> readUsers(Pageable pageable) {
+  public List<User> listUsers(Pageable pageable) {
     Page<UserEntity> allUsersInDb = userRepository.findAll(pageable);
     List<User> users = userMapper.convertToDtoList(allUsersInDb.getContent());
     users.forEach(user -> {
-      UserRepresentation userRepresentation = keycloakUserService.readUser(user.getAuthId());
+      UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
       user.setId(user.getId());
       user.setEmail(userRepresentation.getEmail());
     });
     return users;
   }
 
-  public User readUser(Long userId) {
+  public User getUser(Long userId) {
     return userMapper
         .convertToDto(userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
   }
@@ -84,7 +84,7 @@ public class UserService {
     UserEntity userEntity = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
     if (userUpdateRequest.getStatus() == UserStatus.APPROVED) {
-      UserRepresentation userRepresentation = keycloakUserService.readUser(userEntity.getAuthId());
+      UserRepresentation userRepresentation = keycloakUserService.getUser(userEntity.getAuthId());
       userRepresentation.setEnabled(true);
       userRepresentation.setEmailVerified(true);
       keycloakUserService.updateUser(userRepresentation);

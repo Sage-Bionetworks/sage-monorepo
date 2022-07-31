@@ -21,28 +21,28 @@ public class UserController {
 
   @PostMapping(value = "/register")
   public ResponseEntity<User> createUser(@RequestBody User request) {
-    log.info("Creating user with {}", request.toString());
+    log.info("Create the user with {}", request.toString());
     return ResponseEntity.ok(userService.createUser(request));
   }
 
   @PatchMapping(value = "/{id}")
   public ResponseEntity<User> updateUser(@PathVariable("id") Long userId,
       @RequestBody UserUpdateRequest userUpdateRequest) {
-    log.info("Updating user with {}", userUpdateRequest.toString());
+    log.info("Updates the user with {}", userUpdateRequest.toString());
     return ResponseEntity.ok(userService.updateUser(userId, userUpdateRequest));
   }
 
   // @RolesAllowed("user")
   @GetMapping
-  public ResponseEntity<List<User>> readUsers(Pageable pageable) {
-    log.info("Reading all users from API");
-    return ResponseEntity.ok(userService.readUsers(pageable));
+  public ResponseEntity<List<User>> listUsers(Pageable pageable) {
+    log.info("Lists all the users");
+    return ResponseEntity.ok(userService.listUsers(pageable));
   }
 
   @GetMapping(value = "/{id}")
-  public ResponseEntity<User> readUser(@PathVariable("id") Long id) {
-    log.info("Reading user by id {}", id);
-    return ResponseEntity.ok(userService.readUser(id));
+  public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+    log.info("Gets the user by id {}", id);
+    return ResponseEntity.ok(userService.getUser(id));
   }
 
 }
