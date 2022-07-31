@@ -144,5 +144,8 @@
   // Indicates whether VS Code and other devcontainer.json supporting tools
   // should stop the containers when the related tool window is closed / shut
   // down.
-  "shutdownAction": "stopContainer"
+  "shutdownAction": "stopContainer",
+
+  // An array of Docker CLI arguments
+  "runArgs": ["--name", "challenge_devcontainer"]
 }
