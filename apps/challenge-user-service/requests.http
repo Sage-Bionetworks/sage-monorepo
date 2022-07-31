@@ -48,16 +48,10 @@ POST {{apiGatewayHost}}/api/v1/users/register
 Content-Type: application/json
 
 {
-  "username": "vpchung",
-  "email": "verena.chung@sagebase.org",
+  "username": "test",
+  "email": "test@gmail.com",
   "password": "changeme"
 }
-
-# {
-#   "username": "test",
-#   "email": "test@gmail.com",
-#   "password": "changeme"
-# }
 
 ### List all the users
 

@@ -28,20 +28,20 @@ public class UserController {
   @PatchMapping(value = "/{id}")
   public ResponseEntity<User> updateUser(@PathVariable("id") Long userId,
       @RequestBody UserUpdateRequest userUpdateRequest) {
-    log.info("Updates the user with {}", userUpdateRequest.toString());
+    log.info("Update the user with {}", userUpdateRequest.toString());
     return ResponseEntity.ok(userService.updateUser(userId, userUpdateRequest));
   }
 
   // @RolesAllowed("user")
   @GetMapping
   public ResponseEntity<List<User>> listUsers(Pageable pageable) {
-    log.info("Lists all the users");
+    log.info("List all the users");
     return ResponseEntity.ok(userService.listUsers(pageable));
   }
 
   @GetMapping(value = "/{id}")
   public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
-    log.info("Gets the user by id {}", id);
+    log.info("Get the user by id {}", id);
     return ResponseEntity.ok(userService.getUser(id));
   }
 
