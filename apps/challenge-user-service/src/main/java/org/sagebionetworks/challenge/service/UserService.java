@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 // @Slf4j
 @Service
@@ -32,8 +33,7 @@ public class UserService {
   private UserMapper userMapper = new UserMapper();
 
   public User createUser(User user) {
-    List<UserRepresentation> userRepresentations = keycloakUserService.readUserByUsername(user.getUsername());
-    if (userRepresentations.size() > 0) {
+    if (keycloakUserService.getUserByUsername(user.getUsername()).isPresent()) {
       throw new UserAlreadyRegisteredException(
           "This username is already registered.",
           GlobalErrorCode.ERROR_USERNAME_REGISTERED);
@@ -53,8 +53,8 @@ public class UserService {
     Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
 
     if (userCreationResponse == 201) {
-      List<UserRepresentation> representations = keycloakUserService.readUserByUsername(user.getUsername());
-      user.setAuthId(representations.get(0).getId());
+      Optional<UserRepresentation> representation = keycloakUserService.getUserByUsername(user.getUsername());
+      user.setAuthId(representation.get().getId());
       user.setStatus(UserStatus.PENDING);
       UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
       return userMapper.convertToDto(userEntity);
@@ -64,18 +64,18 @@ public class UserService {
         GlobalErrorCode.ERROR_INVALID_USER);
   }
 
-  public List<User> readUsers(Pageable pageable) {
+  public List<User> listUsers(Pageable pageable) {
     Page<UserEntity> allUsersInDb = userRepository.findAll(pageable);
     List<User> users = userMapper.convertToDtoList(allUsersInDb.getContent());
     users.forEach(user -> {
-      UserRepresentation userRepresentation = keycloakUserService.readUser(user.getAuthId());
+      UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
       user.setId(user.getId());
       user.setEmail(userRepresentation.getEmail());
     });
     return users;
   }
 
-  public User readUser(Long userId) {
+  public User getUser(Long userId) {
     return userMapper
         .convertToDto(userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
   }
@@ -84,7 +84,7 @@ public class UserService {
     UserEntity userEntity = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
     if (userUpdateRequest.getStatus() == UserStatus.APPROVED) {
-      UserRepresentation userRepresentation = keycloakUserService.readUser(userEntity.getAuthId());
+      UserRepresentation userRepresentation = keycloakUserService.getUser(userEntity.getAuthId());
       userRepresentation.setEnabled(true);
       userRepresentation.setEmailVerified(true);
       keycloakUserService.updateUser(userRepresentation);

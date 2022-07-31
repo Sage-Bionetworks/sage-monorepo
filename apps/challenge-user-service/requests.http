@@ -1,7 +1,7 @@
-@serviceRegistryHost = http://localhost:8081
-@apiGatewayHost = http://localhost:8082
-@userServiceHost = http://localhost:8083
-@keycloakHost = http://localhost:8080
+@serviceRegistryHost = http://challenge-service-registry:8081
+@apiGatewayHost = http://challenge-api-gateway:8082
+@userServiceHost = http://challenge-user-service:8083
+@keycloakHost = http://challenge-keycloak:8080
 
 ### Check user service info
 
@@ -48,15 +48,18 @@ POST {{apiGatewayHost}}/api/v1/users/register
 Content-Type: application/json
 
 {
-  "username": "a",
-  "email": "a@gmail.com",
+  "username": "test",
+  "email": "test@gmail.com",
   "password": "changeme"
 }
 
 ### List all the users
 
-# GET {{userServiceHost}}/api/v1/users
-
 GET {{apiGatewayHost}}/api/v1/users
+Authorization: Bearer {{login.response.body.$.access_token}}
+
+### List all the users (bypass the API gateway)
+
+GET {{userServiceHost}}/api/v1/users
 Authorization: Bearer {{login.response.body.$.access_token}}
 
