@@ -48,8 +48,8 @@ POST {{apiGatewayHost}}/api/v1/users/register
 Content-Type: application/json
 
 {
-  "username": "a",
-  "email": "a@gmail.com",
+  "username": "test",
+  "email": "test@gmail.com",
   "password": "changeme"
 }
 
