@@ -78,6 +78,10 @@ Main contributors and developers:
 - [Verena Chung](https://github.com/vpchung)
 - [Rongrong Chai](https://github.com/rrchai)
 
+<!-- <a href="https://github.com/Sage-Bionetworks/challenge-registry/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Sage-Bionetworks/challenge-registry" width="20%"/>
+</a> -->
+
 <!-- Links -->
 
 [Docker Engine]: https://docs.docker.com/get-docker/
