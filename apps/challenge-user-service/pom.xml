@@ -20,7 +20,7 @@
 		<java.version>17</java.version>
 		<spring-cloud.version>2021.0.3</spring-cloud.version>
     <keycloak.version>18.0.0</keycloak.version>
-    <maven.test.skip>true</maven.test.skip>
+    <maven.test.skip>false</maven.test.skip>
     <checkstyle.config.location>${basedir}/../../checkstyle.xml</checkstyle.config.location>
 	</properties>
 
@@ -83,17 +83,17 @@
       <artifactId>keycloak-admin-client</artifactId>
       <version>${keycloak.version}</version>
     </dependency>
-    <!-- <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>2.1.212</version>
-      <scope>test</scope>
-    </dependency> -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
@@ -132,7 +132,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <!-- <configuration>
-          <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+          <jvmArguments>-Dspring.datasource.url=jdbc:h2:mem:challenge_user_service</jvmArguments>
         </configuration> -->
         <executions>
           <execution>
