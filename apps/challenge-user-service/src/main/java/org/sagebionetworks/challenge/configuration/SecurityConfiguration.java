@@ -29,7 +29,8 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     super.configure(http);
-    http.csrf().disable().cors().disable().authorizeRequests().antMatchers("/api/v1/users/register")
+    http.csrf().disable().cors().disable().authorizeRequests()
+        .antMatchers("/api/v1/users/register", "/v1/api-docs/**")
         .permitAll().anyRequest().authenticated();
 
     // Custom error handler
@@ -38,8 +39,7 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
 
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    KeycloakAuthenticationProvider keycloakAuthenticationProvider =
-        keycloakAuthenticationProvider();
+    KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
     keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
     auth.authenticationProvider(keycloakAuthenticationProvider);
   }
@@ -53,7 +53,8 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
   // // Keycloak auth exception handler
   // @Bean
   // @Override
-  // protected KeycloakAuthenticationProcessingFilter keycloakAuthenticationProcessingFilter()
+  // protected KeycloakAuthenticationProcessingFilter
+  // keycloakAuthenticationProcessingFilter()
   // throws Exception {
   // KeycloakAuthenticationProcessingFilter filter =
   // new KeycloakAuthenticationProcessingFilter(this.authenticationManagerBean());
