@@ -1,7 +1,7 @@
 {
   "java.format.enabled": true,
   "java.format.settings.url": "${workspaceFolder}/eclipse-java-google-style.xml",
-  "java.checkstyle.configuration": "${workspaceFolder}/google_checks.xml",
+  "java.checkstyle.configuration": "${workspaceFolder}/checkstyle.xml",
   "java.checkstyle.version": "10.3",
   "java.jdt.ls.lombokSupport.enabled": false,
   "python.linting.enabled": true,
