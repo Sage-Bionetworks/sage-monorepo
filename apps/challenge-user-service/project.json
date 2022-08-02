@@ -26,7 +26,13 @@
       "executor": "@nxrocks/nx-spring-boot:test",
       "options": {
         "root": "apps/challenge-user-service"
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "install",
+          "projects": "dependencies"
+        }
+      ]
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
