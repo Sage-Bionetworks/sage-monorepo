@@ -38,8 +38,7 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
 
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    KeycloakAuthenticationProvider keycloakAuthenticationProvider =
-        keycloakAuthenticationProvider();
+    KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
     keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
     auth.authenticationProvider(keycloakAuthenticationProvider);
   }
@@ -53,7 +52,8 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
   // // Keycloak auth exception handler
   // @Bean
   // @Override
-  // protected KeycloakAuthenticationProcessingFilter keycloakAuthenticationProcessingFilter()
+  // protected KeycloakAuthenticationProcessingFilter
+  // keycloakAuthenticationProcessingFilter()
   // throws Exception {
   // KeycloakAuthenticationProcessingFilter filter =
   // new KeycloakAuthenticationProcessingFilter(this.authenticationManagerBean());
