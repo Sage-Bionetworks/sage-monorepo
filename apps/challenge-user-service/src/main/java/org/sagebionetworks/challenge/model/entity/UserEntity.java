@@ -1,13 +1,16 @@
 package org.sagebionetworks.challenge.model.entity;
 
-import org.sagebionetworks.challenge.model.dto.UserStatus;
-
-import lombok.AllArgsConstructor;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
+import org.sagebionetworks.challenge.model.dto.UserStatus;
 
 @Getter
 @Setter
