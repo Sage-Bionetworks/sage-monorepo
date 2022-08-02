@@ -39,8 +39,7 @@ public class UserService {
 
   public User createUser(User user) {
     if (keycloakUserService.getUserByUsername(user.getUsername()).isPresent()) {
-      throw new UserAlreadyRegisteredException(
-          "This username is already registered.",
+      throw new UserAlreadyRegisteredException("This username is already registered.",
           GlobalErrorCode.ERROR_USERNAME_REGISTERED);
     }
 
@@ -58,7 +57,8 @@ public class UserService {
     Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
 
     if (userCreationResponse == 201) {
-      Optional<UserRepresentation> representation = keycloakUserService.getUserByUsername(user.getUsername());
+      Optional<UserRepresentation> representation =
+          keycloakUserService.getUserByUsername(user.getUsername());
       user.setAuthId(representation.get().getId());
       user.setStatus(UserStatus.PENDING);
       UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
