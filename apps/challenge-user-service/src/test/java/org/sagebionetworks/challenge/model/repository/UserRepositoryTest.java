@@ -28,10 +28,11 @@ public class UserRepositoryTest {
     assertThat(users).isEmpty();
   }
 
-  @Test
-  public void shouldStoreAUser() {
-    UserEntity user = repository
-        .save(new UserEntity(1L, "test", "1212f921-6ab0-444f-a5ea-9dc154199a3c", UserStatus.PENDING));
-    assertThat(user).hasFieldOrPropertyWithValue("username", "test");
-  }
+  // @Test
+  // public void shouldStoreAUser() {
+  // UserEntity user = repository
+  // .save(new UserEntity(1L, "test", "1212f921-6ab0-444f-a5ea-9dc154199a3c",
+  // UserStatus.PENDING));
+  // assertThat(user).hasFieldOrPropertyWithValue("username", "test");
+  // }
 }
