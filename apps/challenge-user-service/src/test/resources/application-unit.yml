@@ -1,18 +1,14 @@
 spring:
-  #application:
-#    name: challenge-user-service
     #admin:
     #  enabled: true
     #  jmx-name: org.springframework.boot:type=Admin,name=SpringApplicationTest
   datasource:
-    url: jdbc:h2:mem:challenge_user_service
-    username: root
-    password: password
+    url: jdbc:h2:mem:challenge
     driver-class-name: org.h2.Driver
-  jpa:
-    hibernate:
-      ddl-auto: none
-    database-platform: org.hibernate.dialect.H2Dialect
+  #jpa:
+    #hibernate:
+    #  ddl-auto: none
+    #database-platform: org.hibernate.dialect.H2Dialect
   flyway:
     enabled: false
 
@@ -22,24 +18,3 @@ server:
 eureka:
   client:
     enabled: false
-
-#management:
-#  info:
-#    env:
-#      enabled: true
-#  endpoints:
-#    web:
-#      exposure:
-#        include: "*"
-
-#info:
-#  application:
-#    name: ${spring.application.name}
-
-#app:
-#  config:
-#    keycloak:
-#      server-url: http://localhost:8080
-#      realm: test
-#      clientId: challenge-api-client
-#      client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb

@@ -1,21 +1,17 @@
 spring:
-  #application:
-#    name: challenge-user-service
     #admin:
       #enabled: true
       #jmx-name: org.springframework.boot:type=Admin,name=SpringApplicationIT
   datasource:
-    url: jdbc:h2:mem:challenge;DATABASE_TO_UPPER=false
-    username: root
-    password: password
+    url: jdbc:h2:mem:challenge
     driver-class-name: org.h2.Driver
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create-drop
-    database-platform: org.hibernate.dialect.H2Dialect
+  #jpa:
+    #properties:
+      #hibernate:
+        #dialect: org.hibernate.dialect.H2Dialect
+    #hibernate:
+      #ddl-auto: create-drop
+    #database-platform: org.hibernate.dialect.H2Dialect
   flyway:
     enabled: false
 
@@ -25,24 +21,3 @@ server:
 eureka:
   client:
     enabled: false
-
-#management:
-#  info:
-#    env:
-#      enabled: true
-#  endpoints:
-#    web:
-#      exposure:
-#        include: "*"
-
-#info:
-#  application:
-#    name: ${spring.application.name}
-
-#app:
-#  config:
-#    keycloak:
-#      server-url: http://localhost:8080
-#      realm: test
-#      clientId: challenge-api-client
-#      client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
