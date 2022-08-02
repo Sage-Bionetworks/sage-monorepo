@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.sagebionetworks.challenge.ChallengeUserServiceApplication;
 import org.sagebionetworks.challenge.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 // import lombok.extern.slf4j.Slf4j;
 
 // @Slf4j
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ChallengeUserServiceApplication.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("integration")
 public class UserControllerIntegrationTest {
