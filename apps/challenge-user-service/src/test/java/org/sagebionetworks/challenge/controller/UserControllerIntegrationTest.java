@@ -28,12 +28,12 @@ public class UserControllerIntegrationTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  // @Autowired
-  // private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
   @BeforeEach
   void setup() {
-    // userRepository.deleteAll();
+    userRepository.deleteAll();
   }
 
   // @DisplayName("Single test successful")
