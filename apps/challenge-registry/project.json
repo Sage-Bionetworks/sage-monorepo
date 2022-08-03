@@ -25,6 +25,7 @@
         "assets": [
           "apps/challenge-registry/src/assets",
           "apps/challenge-registry/src/config",
+          "apps/challenge-registry/src/humans.txt",
           {
             "input": "libs/shared/assets/src/assets",
             "glob": "**/*",
