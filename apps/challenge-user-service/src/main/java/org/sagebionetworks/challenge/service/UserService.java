@@ -38,35 +38,36 @@ public class UserService {
   private UserMapper userMapper = new UserMapper();
 
   public User createUser(User user) {
-    if (keycloakUserService.getUserByUsername(user.getUsername()).isPresent()) {
-      throw new UserAlreadyRegisteredException("This username is already registered.",
-          GlobalErrorCode.ERROR_USERNAME_REGISTERED);
-    }
+    return user;
+    // if (keycloakUserService.getUserByUsername(user.getUsername()).isPresent()) {
+    // throw new UserAlreadyRegisteredException("This username is already registered.",
+    // GlobalErrorCode.ERROR_USERNAME_REGISTERED);
+    // }
 
-    UserRepresentation userRepresentation = new UserRepresentation();
-    userRepresentation.setEmail(user.getEmail());
-    userRepresentation.setEmailVerified(false);
-    userRepresentation.setEnabled(true);
-    userRepresentation.setUsername(user.getUsername());
+    // UserRepresentation userRepresentation = new UserRepresentation();
+    // userRepresentation.setEmail(user.getEmail());
+    // userRepresentation.setEmailVerified(false);
+    // userRepresentation.setEnabled(true);
+    // userRepresentation.setUsername(user.getUsername());
 
-    CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-    credentialRepresentation.setValue(user.getPassword());
-    credentialRepresentation.setTemporary(false);
-    userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
+    // CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
+    // credentialRepresentation.setValue(user.getPassword());
+    // credentialRepresentation.setTemporary(false);
+    // userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
 
-    Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
+    // Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
 
-    if (userCreationResponse == 201) {
-      Optional<UserRepresentation> representation =
-          keycloakUserService.getUserByUsername(user.getUsername());
-      user.setAuthId(representation.get().getId());
-      user.setStatus(UserStatus.PENDING);
-      UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
-      return userMapper.convertToDto(userEntity);
-    }
+    // if (userCreationResponse == 201) {
+    // Optional<UserRepresentation> representation =
+    // keycloakUserService.getUserByUsername(user.getUsername());
+    // user.setAuthId(representation.get().getId());
+    // user.setStatus(UserStatus.PENDING);
+    // UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
+    // return userMapper.convertToDto(userEntity);
+    // }
 
-    throw new InvalidUserException("Unable to create the new user",
-        GlobalErrorCode.ERROR_INVALID_USER);
+    // throw new InvalidUserException("Unable to create the new user",
+    // GlobalErrorCode.ERROR_INVALID_USER);
   }
 
   public List<User> listUsers(Pageable pageable) {
