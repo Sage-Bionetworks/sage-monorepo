@@ -13,8 +13,8 @@ if (process.argv.length < 4) {
 }
 
 isSitemapValid = (sitemapFilepath) => {
-  console.log(`TODO: Check that ${sitemapFilepath} has more than one url.`)
-  return true;
+  console.log(`TODO: Check that ${sitemapFilepath} has more than one <url></url>.`)
+  return false;
 }
 
 const siteUrl = process.argv[2];
