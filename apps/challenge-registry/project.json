@@ -25,6 +25,7 @@
         "assets": [
           "apps/challenge-registry/src/assets",
           "apps/challenge-registry/src/config",
+          "apps/challenge-registry/src/robots.txt",
           "apps/challenge-registry/src/sitemap.xml",
           {
             "input": "libs/shared/assets/src/assets",
@@ -39,11 +40,6 @@
           {
             "input": "libs/shared/assets/src",
             "glob": "favicon.ico",
-            "output": ""
-          },
-          {
-            "input": "libs/shared/assets/src",
-            "glob": "robots.txt",
             "output": ""
           }
         ],
