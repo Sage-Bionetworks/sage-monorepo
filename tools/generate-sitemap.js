@@ -12,6 +12,11 @@ if (process.argv.length < 4) {
   process.exit(1);
 }
 
+isSitemapValid = (sitemapFilepath) => {
+  console.log(`TODO: Check that ${sitemapFilepath} has more than one url.`)
+  return true;
+}
+
 const siteUrl = process.argv[2];
 const sitemapFilepath = process.argv[3];
 
@@ -29,10 +34,15 @@ const generator = SitemapGenerator(siteUrl, {
 // register event listeners
 generator.on('done', () => {
   console.log('sitemaps created');
+  if (!isSitemapValid(sitemapFilepath)) {
+    console.error('sitemap.xml has only one url. Does the site crawled use server-side rendering?');
+    process.exit(1);
+  }
 });
 
 generator.on('error', (error) => {
   console.log(error);
+  process.exit(1);
 });
 
 // start the crawler

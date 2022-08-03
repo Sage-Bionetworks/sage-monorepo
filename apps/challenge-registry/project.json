@@ -157,6 +157,12 @@
         }
       },
       "defaultConfiguration": "development"
+    },
+    "build-sitemap": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/generate-sitemap.js http://localhost:4200 apps/challenge-registry/src/sitemap.xml"
+      }
     }
   },
   "tags": ["type:app", "scope:client"],
