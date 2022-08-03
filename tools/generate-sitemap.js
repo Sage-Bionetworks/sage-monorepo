@@ -1,9 +1,24 @@
 const SitemapGenerator = require('sitemap-generator');
 
+// require url to crawl
+if (process.argv.length < 3) {
+  console.log('Missing URL to crawl.')
+  process.exit(1);
+}
+
+// require path to output sitemap.xml
+if (process.argv.length < 4) {
+  console.log('Missing output sitemap location.')
+  process.exit(1);
+}
+
+const siteUrl = process.argv[2];
+const sitemapFilepath = process.argv[3];
+
 // create generator
-const generator = SitemapGenerator('http://localhost:4200', {
+const generator = SitemapGenerator(siteUrl, {
   changeFreq: 'weekly',
-  filepath: './sitemap.xml',
+  filepath: sitemapFilepath,
   lastMod: true,
   maxDepth: 0,
   maxEntriesPerFile: 50000,
