@@ -3,6 +3,7 @@
 .env
 hint-report
 nx-cloud.env
+sitemap.xml
 
 # compiled output
 /dist
