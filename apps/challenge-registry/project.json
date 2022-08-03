@@ -39,6 +39,11 @@
             "input": "libs/shared/assets/src",
             "glob": "favicon.ico",
             "output": ""
+          },
+          {
+            "input": "libs/shared/assets/src",
+            "glob": "robots.txt",
+            "output": ""
           }
         ],
         "styles": ["apps/challenge-registry/src/styles.scss"],
