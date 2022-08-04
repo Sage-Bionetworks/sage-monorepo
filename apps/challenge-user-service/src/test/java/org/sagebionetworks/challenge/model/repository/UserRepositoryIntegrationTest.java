@@ -29,7 +29,7 @@ public class UserRepositoryIntegrationTest {
   }
 
   @Test
-  public void shouldStoreOneUser() {
+  public void shouldStoreGivenUser() {
     UserEntity user = repository
         .save(new UserEntity("test", "1212f921-6ab0-444f-a5ea-9dc154199a3c", UserStatus.PENDING));
     assertThat(user).hasFieldOrProperty("id");
