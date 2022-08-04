@@ -12,32 +12,33 @@ if (process.argv.length < 4) {
   process.exit(1);
 }
 
-isSitemapValid = (sitemapFilepath) => {
-  console.log(`TODO: Check that ${sitemapFilepath} has more than one <url></url>.`)
-  return false;
-}
+// isSitemapValid = (sitemapFilepath) => {
+//   return true;
+// }
 
 const siteUrl = process.argv[2];
 const sitemapFilepath = process.argv[3];
 
+console.log(sitemapFilepath)
+
 // create generator
 const generator = SitemapGenerator(siteUrl, {
-  changeFreq: 'weekly',
+  // changeFreq: 'weekly',
   filepath: sitemapFilepath,
-  lastMod: true,
-  maxDepth: 0,
+  // lastMod: true,
+  maxDepth: 2,
   maxEntriesPerFile: 50000,
-  priorityMap: [1.0, 0.8, 0.6, 0.4, 0.2, 0],
+  // priorityMap: [1.0, 0.8, 0.6, 0.4, 0.2, 0],
   stripQuerystring: false
 });
 
 // register event listeners
 generator.on('done', () => {
   console.log('sitemaps created');
-  if (!isSitemapValid(sitemapFilepath)) {
-    console.error('sitemap.xml has only one url. Does the site crawled use server-side rendering?');
-    process.exit(1);
-  }
+  // if (!isSitemapValid(sitemapFilepath)) {
+  //   console.error('sitemap.xml has only one url. Does the site crawled use server-side rendering?');
+  //   process.exit(1);
+  // }
 });
 
 generator.on('error', (error) => {
