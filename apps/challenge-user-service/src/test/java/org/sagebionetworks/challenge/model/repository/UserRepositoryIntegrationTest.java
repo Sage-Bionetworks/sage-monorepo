@@ -11,10 +11,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.test.context.ActiveProfiles;
 
-@DataJpaTest
 @AutoConfigureWebClient
-@ActiveProfiles("unit")
-public class UserRepositoryTest {
+@DataJpaTest
+@ActiveProfiles("integration")
+public class UserRepositoryIntegrationTest {
 
   @Autowired
   private TestEntityManager entityManager;
@@ -29,10 +29,9 @@ public class UserRepositoryTest {
   }
 
   @Test
-  public void shouldStoreAUser() {
+  public void shouldStoreOneUser() {
     UserEntity user = repository
-        .save(new UserEntity("test", "1212f921-6ab0-444f-a5ea-9dc154199a3c",
-            UserStatus.PENDING));
+        .save(new UserEntity("test", "1212f921-6ab0-444f-a5ea-9dc154199a3c", UserStatus.PENDING));
     assertThat(user).hasFieldOrProperty("id");
     assertThat(user).hasFieldOrPropertyWithValue("username", "test");
     assertThat(user).hasFieldOrPropertyWithValue("authId", "1212f921-6ab0-444f-a5ea-9dc154199a3c");
@@ -41,10 +40,10 @@ public class UserRepositoryTest {
 
   @Test
   public void shouldFindAllUsers() {
-    UserEntity user1 = new UserEntity("test1", "1212f921-6ab0-444f-a5ea-9dc154199a31",
-        UserStatus.PENDING);
-    UserEntity user2 = new UserEntity("test2", "1212f921-6ab0-444f-a5ea-9dc154199a32",
-        UserStatus.PENDING);
+    UserEntity user1 =
+        new UserEntity("test1", "1212f921-6ab0-444f-a5ea-9dc154199a31", UserStatus.PENDING);
+    UserEntity user2 =
+        new UserEntity("test2", "1212f921-6ab0-444f-a5ea-9dc154199a32", UserStatus.PENDING);
     entityManager.persist(user1);
     entityManager.persist(user2);
     Iterable<UserEntity> users = repository.findAll();
@@ -53,8 +52,10 @@ public class UserRepositoryTest {
 
   @Test
   public void shouldDeleteAllUsers() {
-    entityManager.persist(new UserEntity("test1", "1212f921-6ab0-444f-a5ea-9dc154199a31", UserStatus.PENDING));
-    entityManager.persist(new UserEntity("test2", "1212f921-6ab0-444f-a5ea-9dc154199a32", UserStatus.PENDING));
+    entityManager.persist(
+        new UserEntity("test1", "1212f921-6ab0-444f-a5ea-9dc154199a31", UserStatus.PENDING));
+    entityManager.persist(
+        new UserEntity("test2", "1212f921-6ab0-444f-a5ea-9dc154199a32", UserStatus.PENDING));
     repository.deleteAll();
     assertThat(repository.findAll()).isEmpty();
   }

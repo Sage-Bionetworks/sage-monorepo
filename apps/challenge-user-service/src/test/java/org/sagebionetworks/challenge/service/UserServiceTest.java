@@ -41,10 +41,13 @@ public class UserServiceTest {
 
   @Autowired
   private UserService userService;
+
   @MockBean
   private UserRepository userRepository;
+
   @MockBean
   private KeycloakUserService keycloakUserService;
+
   private User user;
   private UserMapper userMapper = new UserMapper();
 
