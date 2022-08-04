@@ -10,7 +10,7 @@ import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.model.mapper.UserMapper;
 import org.sagebionetworks.challenge.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-// import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-// @Slf4j
-
+@Slf4j
 // @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -73,11 +72,11 @@ public class UserService {
   public List<User> listUsers(Pageable pageable) {
     Page<UserEntity> allUsersInDb = userRepository.findAll(pageable);
     List<User> users = userMapper.convertToDtoList(allUsersInDb.getContent());
-    // users.forEach(user -> {
-    //   UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
-    //   user.setId(user.getId());
-    //   user.setEmail(userRepresentation.getEmail());
-    // });
+    users.forEach(user -> {
+      UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
+      user.setId(user.getId());
+      user.setEmail(userRepresentation.getEmail());
+    });
     return users;
   }
 
