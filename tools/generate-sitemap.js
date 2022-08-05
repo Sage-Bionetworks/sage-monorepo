@@ -23,12 +23,12 @@ console.log(sitemapFilepath)
 
 // create generator
 const generator = SitemapGenerator(siteUrl, {
-  // changeFreq: 'weekly',
+  changeFreq: 'weekly',
   filepath: sitemapFilepath,
-  // lastMod: true,
+  lastMod: true,
   maxDepth: 2,
   maxEntriesPerFile: 50000,
-  // priorityMap: [1.0, 0.8, 0.6, 0.4, 0.2, 0],
+  priorityMap: [1.0, 0.8, 0.6, 0.4, 0.2, 0],
   stripQuerystring: false
 });
 
