@@ -14,7 +14,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "./mvnw dependency:resolve"
+          "./mvnw dependency:resolve -DexcludeGroupIds=org.sagebionetworks.challenge"
         ],
         "cwd": "apps/challenge-api-gateway"
       }

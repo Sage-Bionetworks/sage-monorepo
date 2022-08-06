@@ -7,7 +7,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "./mvnw dependency:resolve"
+          "./mvnw dependency:resolve -DexcludeGroupIds=org.sagebionetworks.challenge"
         ],
         "cwd": "libs/shared-java/challenge-util"
       }
