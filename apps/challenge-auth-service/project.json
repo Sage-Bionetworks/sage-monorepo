@@ -10,10 +10,23 @@
         "cwd": "apps/challenge-auth-service"
       }
     },
+    // "build": {
+    //   "executor": "@nxrocks/nx-spring-boot:build",
+    //   "options": {
+    //     "root": "apps/challenge-auth-service"
+    //   },
+    //   "dependsOn": [
+    //     {
+    //       "target": "install",
+    //       "projects": "dependencies"
+    //     }
+    //   ]
+    // },
     "build": {
-      "executor": "@nxrocks/nx-spring-boot:build",
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "root": "apps/challenge-auth-service"
+        "command": "./mvnw package",
+        "cwd": "apps/challenge-auth-service"
       },
       "dependsOn": [
         {

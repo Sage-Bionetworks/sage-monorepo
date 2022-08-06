@@ -10,11 +10,24 @@
         "cwd": "apps/challenge-service-registry"
       }
     },
+    // "build": {
+    //   "executor": "@nxrocks/nx-spring-boot:build",
+    //   "options": {
+    //     "root": "apps/challenge-service-registry"
+    //   }
+    // },
     "build": {
-      "executor": "@nxrocks/nx-spring-boot:build",
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "root": "apps/challenge-service-registry"
-      }
+        "command": "./mvnw package",
+        "cwd": "apps/challenge-service-registry"
+      },
+      "dependsOn": [
+        {
+          "target": "install",
+          "projects": "dependencies"
+        }
+      ]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",

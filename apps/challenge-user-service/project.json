@@ -10,10 +10,23 @@
         "cwd": "apps/challenge-user-service"
       }
     },
+    // "build": {
+    //   "executor": "@nxrocks/nx-spring-boot:build",
+    //   "options": {
+    //     "root": "apps/challenge-user-service"
+    //   },
+    //   "dependsOn": [
+    //     {
+    //       "target": "install",
+    //       "projects": "dependencies"
+    //     }
+    //   ]
+    // },
     "build": {
-      "executor": "@nxrocks/nx-spring-boot:build",
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "root": "apps/challenge-user-service"
+        "command": "./mvnw package",
+        "cwd": "apps/challenge-user-service"
       },
       "dependsOn": [
         {
