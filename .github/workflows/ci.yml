@@ -71,7 +71,8 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:f0afc028
+      # image: sagebionetworks/challenge-devcontainer:f0afc028
+      image: sagebionetworks/challenge-devcontainer:maven
       options: --user root
     if: ${{ github.event_name == 'pull_request' }}
     steps:
