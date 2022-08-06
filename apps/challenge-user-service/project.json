@@ -14,7 +14,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "./mvnw dependency:resolve -DexcludeGroupIds=org.sagebionetworks.challenge"
+          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge"
         ],
         "cwd": "apps/challenge-user-service"
       }
