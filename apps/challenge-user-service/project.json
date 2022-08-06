@@ -10,11 +10,11 @@
         "cwd": "apps/challenge-user-service"
       }
     },
-    "install-maven": {
+    "prepare-java": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "./mvnw --version"
+          "./mvnw dependency:resolve"
         ],
         "cwd": "apps/challenge-user-service"
       }

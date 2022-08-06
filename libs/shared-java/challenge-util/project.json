@@ -3,11 +3,11 @@
   "sourceRoot": "libs/shared-java/challenge-util/src",
   "projectType": "library",
   "targets": {
-    "install-maven": {
+    "prepare-java": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "./mvnw --version"
+          "./mvnw dependency:resolve"
         ],
         "cwd": "libs/shared-java/challenge-util"
       }

@@ -57,10 +57,11 @@ jobs:
       #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
       #   run: yarn nx python api
       - run: yarn nx affected --target=prepare
-      - run: yarn nx affected --target=install-maven --parallel=1
+      - run: yarn nx affected --target=prepare-java --parallel=1
       - run: yarn nx affected --target=lint
       - run: yarn nx affected --target=build
-      - run: yarn nx run-many --all --target=test --parallel --max-parallel=2
+      - run: yarn nx affected --target=test
+      # - run: yarn nx run-many --all --target=test --parallel --max-parallel=2
       - name: Merge coverage reports
         run: yarn coverage:merge
       - name: Push coverage report to Coveralls
@@ -110,7 +111,7 @@ jobs:
       #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
       #   run: yarn nx python api
       - run: yarn nx affected --target=prepare
-      - run: yarn nx affected --target=install-maven --parallel=1
+      - run: yarn nx affected --target=prepare-java --parallel=1
       - run: yarn nx affected --target=lint
       - run: yarn nx affected --target=build
-      - run: yarn nx affected --target=test --parallel=2
+      - run: yarn nx affected --target=test

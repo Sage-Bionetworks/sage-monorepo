@@ -3,11 +3,11 @@
   "sourceRoot": "apps/challenge-config-service/src",
   "projectType": "application",
   "targets": {
-    "install-maven": {
+    "prepare-java": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "./mvnw --version"
+          "./mvnw dependency:resolve"
         ],
         "cwd": "apps/challenge-config-service"
       }
