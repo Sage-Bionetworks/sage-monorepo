@@ -3,6 +3,15 @@
   "sourceRoot": "apps/challenge-config-service/src",
   "projectType": "application",
   "targets": {
+    "install-maven": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw --version"
+        ],
+        "cwd": "apps/challenge-config-service"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {

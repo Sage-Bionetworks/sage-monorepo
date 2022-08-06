@@ -10,6 +10,15 @@
         "cwd": "apps/challenge-api-gateway"
       }
     },
+    "install-maven": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw --version"
+        ],
+        "cwd": "apps/challenge-api-gateway"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {

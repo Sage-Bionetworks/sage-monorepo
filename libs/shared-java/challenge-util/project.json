@@ -3,6 +3,15 @@
   "sourceRoot": "libs/shared-java/challenge-util/src",
   "projectType": "library",
   "targets": {
+    "install-maven": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw --version"
+        ],
+        "cwd": "libs/shared-java/challenge-util"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {

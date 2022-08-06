@@ -10,6 +10,15 @@
         "cwd": "apps/challenge-service-registry"
       }
     },
+    "install-maven": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw --version"
+        ],
+        "cwd": "apps/challenge-service-registry"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
