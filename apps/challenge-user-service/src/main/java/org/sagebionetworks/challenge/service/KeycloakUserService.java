@@ -8,7 +8,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +17,7 @@ public class KeycloakUserService {
   private final KeycloakManager keycloakManager;
 
   public Integer createUser(UserRepresentation userRepresentation) {
-    Response response =
-        keycloakManager.getKeycloakInstanceWithRealm().users().create(userRepresentation);
+    Response response = keycloakManager.getKeycloakInstanceWithRealm().users().create(userRepresentation);
     return response.getStatus();
   }
 
@@ -27,14 +26,15 @@ public class KeycloakUserService {
         .update(userRepresentation);
   }
 
-  public List<UserRepresentation> readUserByUsername(String username) {
-    return keycloakManager.getKeycloakInstanceWithRealm().users().search(username);
+  public Optional<UserRepresentation> getUserByUsername(String username) {
+    return keycloakManager.getKeycloakInstanceWithRealm().users().search(username).stream()
+        .filter(userRep -> username.equals(userRep.getUsername()))
+        .findFirst();
   }
 
-  public UserRepresentation readUser(String authId) {
+  public UserRepresentation getUser(String authId) {
     try {
-      UserResource userResource =
-          keycloakManager.getKeycloakInstanceWithRealm().users().get(authId);
+      UserResource userResource = keycloakManager.getKeycloakInstanceWithRealm().users().get(authId);
       return userResource.toRepresentation();
     } catch (Exception e) {
       throw new RuntimeException("User not found under given ID");

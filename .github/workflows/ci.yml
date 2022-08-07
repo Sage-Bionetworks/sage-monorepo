@@ -17,7 +17,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:bf457d84
+      image: sagebionetworks/challenge-devcontainer:cf3a659f
       options: --user root
     if: ${{ github.event_name != 'pull_request' }}
     env:
@@ -53,25 +53,27 @@ jobs:
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
-      - name: Prepare the projects
-        run: yarn nx run-many --all --parallel --target=prepare
-      - name: Setup Python virtualenvs
-        if: steps.cache-pipenv.outputs.cache-hit != 'true'
-        run: yarn nx python api
-      - run: yarn nx affected --target=lint --parallel --max-parallel=3
-      - run: yarn nx affected --target=build --parallel --max-parallel=3
-      - run: yarn nx run-many --all --target=test --parallel --max-parallel=2
-      - name: Merge coverage reports
-        run: yarn coverage:merge
-      - name: Push coverage report to Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: coverage/lcov.info
+      # - name: Setup Python virtualenvs
+      #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
+      #   run: yarn nx python api
+      - run: yarn nx affected --target=prepare
+      - run: yarn nx affected --target=prepare-java --parallel=1
+      - run: yarn nx affected --target=lint
+      - run: yarn nx affected --target=build
+      - run: yarn nx affected --target=test
+      # - run: yarn nx run-many --all --target=test --parallel --max-parallel=2
+      # TODO: Fix coverage error when no projects are affected
+      # - name: Merge coverage reports
+      #   run: yarn coverage:merge
+      # - name: Push coverage report to Coveralls
+      #   uses: coverallsapp/github-action@master
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     path-to-lcov: coverage/lcov.info
   pr:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:bf457d84
+      image: sagebionetworks/challenge-devcontainer:cf3a659f
       options: --user root
     if: ${{ github.event_name == 'pull_request' }}
     steps:
@@ -88,12 +90,12 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - name: Setup pipenv cache
-        id: cache-pipenv
-        uses: actions/cache@v3
-        with:
-          path: ~/.local/share/virtualenvs
-          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+      # - name: Setup pipenv cache
+      #   id: cache-pipenv
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.local/share/virtualenvs
+      #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
       - name: Setup Maven cache
         uses: actions/cache@v3
         with:
@@ -106,11 +108,11 @@ jobs:
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
-      - name: Prepare the projects
-        run: yarn nx run-many --all --parallel --target=prepare
-      - name: Setup Python virtualenvs
-        if: steps.cache-pipenv.outputs.cache-hit != 'true'
-        run: yarn nx python api
-      - run: yarn nx affected --target=lint --parallel --max-parallel=3
-      - run: yarn nx affected --target=build --parallel --max-parallel=3
-      - run: yarn nx affected --target=test --parallel --max-parallel=2
+      # - name: Setup Python virtualenvs
+      #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
+      #   run: yarn nx python api
+      - run: yarn nx affected --target=prepare
+      - run: yarn nx affected --target=prepare-java --parallel=1
+      - run: yarn nx affected --target=lint
+      - run: yarn nx affected --target=build
+      - run: yarn nx affected --target=test

@@ -17,7 +17,8 @@ public class CustomFeignErrorDecoder implements ErrorDecoder {
   @Override
   public Exception decode(String methodKey, Response response) {
 
-    SimpleChallengeGlobalException simpleChallengeGlobalException = extractChallengeCoreGlobalException(response);
+    SimpleChallengeGlobalException simpleChallengeGlobalException =
+        extractChallengeCoreGlobalException(response);
 
     switch (response.status()) {
       case 400:
