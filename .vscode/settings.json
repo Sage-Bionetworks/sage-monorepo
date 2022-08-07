@@ -30,6 +30,10 @@
     "editor.defaultFormatter": "redhat.java",
     "editor.formatOnSave": true
   },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
