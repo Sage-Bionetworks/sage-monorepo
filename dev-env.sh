@@ -107,7 +107,7 @@ function challenge-docker-stop {
   docker stop $(docker ps -q)
 }
 
-function challenge-initialize-env {
+function workspace-initialize-env {
   challenge-welcome
 
   if [ -f "./tools/configure-hostnames.sh" ]; then
