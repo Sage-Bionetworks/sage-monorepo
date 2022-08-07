@@ -42,7 +42,7 @@ RUN useradd -m $user \
     "# source dev-env.sh if found in the current directory" \
     "if [ -f dev-env.sh ]; then" \
     "  . ./dev-env.sh" \
-    "  challenge-initialize-env" \
+    "  workspace-initialize-env" \
     "fi" | tee -a /home/$user/.bashrc
 
 USER $user
