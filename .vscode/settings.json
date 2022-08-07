@@ -42,10 +42,6 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
-  // workaround to enable prettier to lint xml files
-  "files.associations": {
-    "*.xml": "html"
-  },
   "eslint.workingDirectories": [
     "./apps/challenge-db-cli",
     "."
