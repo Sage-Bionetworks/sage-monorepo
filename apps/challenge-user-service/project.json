@@ -47,7 +47,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "./mvnw verify"
+          "./mvnw verify -Pintegration"
         ],
         "cwd": "apps/challenge-user-service"
       }
