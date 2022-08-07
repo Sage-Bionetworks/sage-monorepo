@@ -2,6 +2,7 @@
 .coveralls.yml
 .env
 hint-report
+migrations.json
 nx-cloud.env
 sitemap.xml
 
