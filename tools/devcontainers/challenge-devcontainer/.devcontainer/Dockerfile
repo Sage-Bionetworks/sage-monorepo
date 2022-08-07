@@ -13,9 +13,9 @@ RUN groupadd docker \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python-is-python3 openjdk-17-jre \
     htop unzip vim wget lsof iproute2 \
-  # Add Node.js
+  # Add Node.js repository
   && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
-  # Add GitHub CLI
+  # Add GitHub CLI repository
   && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
       gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
@@ -24,6 +24,8 @@ RUN groupadd docker \
   && apt-get install --no-install-recommends -qq -y \
     nodejs gh \
   && npm install --global yarn@latest \
+  # Install nektos/act
+  && curl https://raw.githubusercontent.com/nektos/act/v0.2.30/install.sh | bash - \
   && apt-get -y autoclean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/* \
@@ -40,7 +42,7 @@ RUN useradd -m $user \
     "# source dev-env.sh if found in the current directory" \
     "if [ -f dev-env.sh ]; then" \
     "  . ./dev-env.sh" \
-    "  challenge-initialize-env" \
+    "  workspace-initialize-env" \
     "fi" | tee -a /home/$user/.bashrc
 
 USER $user
