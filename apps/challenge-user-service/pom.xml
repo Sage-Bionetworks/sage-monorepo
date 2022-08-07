@@ -92,6 +92,7 @@
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
+      <!-- Keeping this dependency in the compile scope for the sake of integration tests. -->
       <!-- <scope>test</scope> -->
     </dependency>
     <dependency>
@@ -161,11 +162,25 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
         <configuration>
-          <includes>**/*IntegrationTest.java</includes>
+          <excludes>
+            <exclude>**/*IntegrationTest</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.22.2</version>
+        <configuration>
+          <!-- <includes>**/*IntegrationTest.java</includes> -->
           <!-- https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#integration-tests.no-starter-parent -->
           <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+          <includes>
+            <include>**/*IntegrationTest</include>
+          </includes>
           <!-- <environmentVariables>
               <mysql.version>${mysql.version}</mysql.version>
               <test.mysql.username>${test.mysql.username}</test.mysql.username>
@@ -181,6 +196,26 @@
               <goal>verify</goal>
             </goals>
           </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <!-- adding second test source directory (just for integration tests) -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.3.0</version>
+        <executions>
+            <execution>
+                <id>add-integration-test-source</id>
+                <phase>generate-test-sources</phase>
+                <goals>
+                    <goal>add-test-source</goal>
+                </goals>
+                <configuration>
+                    <sources>
+                        <source>src/integration-test/java</source>
+                    </sources>
+                </configuration>
+            </execution>
         </executions>
       </plugin>
     </plugins>
