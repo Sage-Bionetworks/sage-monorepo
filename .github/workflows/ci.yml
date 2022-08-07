@@ -17,7 +17,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:bf457d84
+      image: sagebionetworks/challenge-devcontainer:40fd0f9c
       options: --user root
     if: ${{ github.event_name != 'pull_request' }}
     env:
@@ -62,17 +62,18 @@ jobs:
       - run: yarn nx affected --target=build
       - run: yarn nx affected --target=test
       # - run: yarn nx run-many --all --target=test --parallel --max-parallel=2
-      - name: Merge coverage reports
-        run: yarn coverage:merge
-      - name: Push coverage report to Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: coverage/lcov.info
+      # TODO: Fix coverage error when no projects are affected
+      # - name: Merge coverage reports
+      #   run: yarn coverage:merge
+      # - name: Push coverage report to Coveralls
+      #   uses: coverallsapp/github-action@master
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     path-to-lcov: coverage/lcov.info
   pr:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:bf457d84
+      image: sagebionetworks/challenge-devcontainer:40fd0f9c
       options: --user root
     if: ${{ github.event_name == 'pull_request' }}
     steps:
