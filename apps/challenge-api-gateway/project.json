@@ -10,6 +10,15 @@
         "cwd": "apps/challenge-api-gateway"
       }
     },
+    "prepare-java": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
+        ],
+        "cwd": "apps/challenge-api-gateway"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {

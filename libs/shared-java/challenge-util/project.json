@@ -3,6 +3,15 @@
   "sourceRoot": "libs/shared-java/challenge-util/src",
   "projectType": "library",
   "targets": {
+    "prepare-java": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
+        ],
+        "cwd": "libs/shared-java/challenge-util"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
