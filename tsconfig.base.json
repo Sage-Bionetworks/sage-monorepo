@@ -40,6 +40,7 @@
       "@sagebionetworks/challenge-registry/pages": ["libs/challenge-registry/pages/src/index.ts"],
       "@sagebionetworks/challenge-registry/signup": ["libs/challenge-registry/signup/src/index.ts"],
       "@sagebionetworks/challenge-registry/styles": ["libs/challenge-registry/styles/src/index.ts"],
+      "@sagebionetworks/challenge-registry/team": ["libs/challenge-registry/team/src/index.ts"],
       "@sagebionetworks/challenge-registry/themes": ["libs/challenge-registry/themes/src/index.ts"],
       "@sagebionetworks/challenge-registry/ui": ["libs/challenge-registry/ui/src/index.ts"],
       "@sagebionetworks/challenge-registry/user-profile": [
