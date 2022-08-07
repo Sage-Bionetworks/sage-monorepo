@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-keycloak",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-keycloak/src",
   "projectType": "application",
   "targets": {
@@ -105,5 +105,7 @@
     "type:service",
     "scope:backend"
   ],
-  "implicitDependencies": ["challenge-postgresql"]
+  "implicitDependencies": [
+    "challenge-postgresql"
+  ]
 }

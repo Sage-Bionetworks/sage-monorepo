@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-core-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-core-service/src",
   "projectType": "application",
   "targets": {
@@ -10,13 +10,15 @@
         "cwd": "apps/challenge-core-service"
       }
     },
-    // "lint": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "command": "./mvnw checkstyle:check",
-    //     "cwd": "apps/challenge-core-service"
-    //   }
-    // },
+    "prepare-java": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
+        ],
+        "cwd": "apps/challenge-core-service"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
@@ -90,12 +92,11 @@
       ]
     },
     "build-image": {
-      "executor": "@nx-tools/nx-docker:build",
+      "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
-        "context": "apps/challenge-core-service",
-        "push": false,
-        "tags": [
-          "sagebionetworks/challenge-core-service:latest"
+        "root": "apps/challenge-core-service",
+        "args": [
+          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-core-service:latest"
         ]
       },
       "dependsOn": [

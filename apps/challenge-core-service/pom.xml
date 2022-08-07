@@ -73,8 +73,6 @@
       <groupId>org.sagebionetworks.challenge</groupId>
       <artifactId>challenge-util</artifactId>
       <version>0.0.1-SNAPSHOT</version>
-      <scope>system</scope>
-      <systemPath>${pom.basedir}/lib/challenge-util-0.0.1-SNAPSHOT.jar</systemPath>
     </dependency>
 	</dependencies>
 
@@ -104,6 +102,23 @@
 					</excludes>
 				</configuration>
 			</plugin>
+      <!-- <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.3.0</version>
+        <executions>
+          <execution>
+            <phase>dependency</phase>
+            <goals>
+              <goal>go-offline</goal>
+            </goals>
+            <configuration>
+              <excludeGroupIds>org.sagebionetworks.challenge</excludeGroupIds>
+              <excludeArtifactIds>challenge-util</excludeArtifactIds>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin> -->
 		</plugins>
     <pluginManagement>
       <plugins>

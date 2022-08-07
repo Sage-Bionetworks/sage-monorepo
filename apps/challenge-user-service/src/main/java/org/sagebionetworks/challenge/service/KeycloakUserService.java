@@ -2,43 +2,39 @@ package org.sagebionetworks.challenge.service;
 
 import org.sagebionetworks.challenge.configuration.KeycloakManager;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
-import java.util.List;
+import java.util.Optional;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class KeycloakUserService {
 
-  private final KeycloakManager keyCloakManager;
+  private final KeycloakManager keycloakManager;
 
   public Integer createUser(UserRepresentation userRepresentation) {
-    Response response =
-        keyCloakManager.getKeyCloakInstanceWithRealm().users().create(userRepresentation);
+    Response response = keycloakManager.getKeycloakInstanceWithRealm().users().create(userRepresentation);
     return response.getStatus();
   }
 
   public void updateUser(UserRepresentation userRepresentation) {
-    keyCloakManager.getKeyCloakInstanceWithRealm().users().get(userRepresentation.getId())
+    keycloakManager.getKeycloakInstanceWithRealm().users().get(userRepresentation.getId())
         .update(userRepresentation);
   }
 
-
-  public List<UserRepresentation> readUserByEmail(String email) {
-    return keyCloakManager.getKeyCloakInstanceWithRealm().users().search(email);
+  public Optional<UserRepresentation> getUserByUsername(String username) {
+    return keycloakManager.getKeycloakInstanceWithRealm().users().search(username).stream()
+        .filter(userRep -> username.equals(userRep.getUsername()))
+        .findFirst();
   }
 
-
-  public UserRepresentation readUser(String authId) {
+  public UserRepresentation getUser(String authId) {
     try {
-      UserResource userResource =
-          keyCloakManager.getKeyCloakInstanceWithRealm().users().get(authId);
+      UserResource userResource = keycloakManager.getKeycloakInstanceWithRealm().users().get(authId);
       return userResource.toRepresentation();
     } catch (Exception e) {
       throw new RuntimeException("User not found under given ID");

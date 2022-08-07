@@ -1,12 +1,14 @@
 {
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "root": "apps/challenge-platform",
   "sourceRoot": "apps/challenge-platform/src",
   "prefix": "sage-bionetworks",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/challenge-platform",
         "index": "apps/challenge-platform/src/index.html",
@@ -18,7 +20,9 @@
           "apps/challenge-platform/src/favicon.ico",
           "apps/challenge-platform/src/assets"
         ],
-        "styles": ["apps/challenge-platform/src/styles.scss"],
+        "styles": [
+          "apps/challenge-platform/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -87,9 +91,11 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/challenge-platform"],
+      "outputs": [
+        "coverage/apps/challenge-platform"
+      ],
       "options": {
-        "jestConfig": "apps/challenge-platform/jest.config.js",
+        "jestConfig": "apps/challenge-platform/jest.config.ts",
         "passWithNoTests": true
       }
     }

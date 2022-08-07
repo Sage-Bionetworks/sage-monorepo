@@ -1,5 +1,5 @@
 {
-  "root": "libs/challenge-registry/assets",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/challenge-registry/assets/src",
   "projectType": "library",
   "generators": {},

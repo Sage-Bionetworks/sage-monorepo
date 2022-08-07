@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { SharedUtilModule } from '@sagebionetworks/shared/util';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { HomeComponent } from './home.component';
 import { ChallengeSearchModule } from './challenge-search/challenge-search.module';
@@ -10,7 +11,6 @@ import { FeaturedChallengeListModule } from './featured-challenge-list/featured-
 import { SponsorListModule } from './sponsor-list/sponsor-list.module';
 import { StatisticsViewerModule } from './statistics-viewer/statistics-viewer.module';
 import { TopicsViewerModule } from './topics-viewer/topics-viewer.module';
-import { MovieListModule } from './movie-list/movie-list.module';
 
 const routes: Routes = [{ path: '', component: HomeComponent }];
 
@@ -27,7 +27,7 @@ const routes: Routes = [{ path: '', component: HomeComponent }];
     SponsorListModule,
     StatisticsViewerModule,
     TopicsViewerModule,
-    MovieListModule,
+    SharedUtilModule,
   ],
   exports: [HomeComponent],
 })

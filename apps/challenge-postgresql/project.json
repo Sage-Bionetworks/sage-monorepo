@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-postgresql",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-postgresql/src",
   "projectType": "application",
   "targets": {

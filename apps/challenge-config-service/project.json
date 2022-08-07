@@ -1,8 +1,17 @@
 {
-  "root": "apps/challenge-config-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-config-service/src",
   "projectType": "application",
   "targets": {
+    "prepare-java": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
+        ],
+        "cwd": "apps/challenge-config-service"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
@@ -71,14 +80,19 @@
       ]
     },
     "build-image": {
-      "executor": "@nx-tools/nx-docker:build",
+      "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
-        "context": "apps/challenge-config-service",
-        "push": false,
-        "tags": [
-          "sagebionetworks/challenge-config-service:latest"
+        "root": "apps/challenge-config-service",
+        "args": [
+          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-config-service:latest"
         ]
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "install",
+          "projects": "dependencies"
+        }
+      ]
     }
   },
   "tags": [

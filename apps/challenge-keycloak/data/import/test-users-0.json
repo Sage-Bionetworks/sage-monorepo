@@ -19,7 +19,47 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "test-visitor", "default-roles-test" ],
+    "realmRoles" : [ "app-user", "test-visitor", "default-roles-test" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "1212f921-6ab0-444f-a5ea-9dc154199a3c",
+    "createdTimestamp" : 1659302384564,
+    "username" : "oakenshield",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "email" : "oakenshield@gmail.com",
+    "credentials" : [ {
+      "id" : "b3007bb6-e1ec-40f3-9ddd-f4034b290d9f",
+      "type" : "password",
+      "createdDate" : 1659302384610,
+      "secretData" : "{\"value\":\"R3e03ubioHYAzNCLIXmzos6FD4K1kUfonLSyrhsccZbKlXM+3+sJktoCQUdGiPCoseC9o83KZvLboLyAr5UTpA==\",\"salt\":\"nQxU4fIFyNZrh15mmOoexA==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-test" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "9f6abcb0-25aa-49d7-aa1b-5292c8f3e26a",
+    "createdTimestamp" : 1659302483317,
+    "username" : "rrchai",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "email" : "rchai@sagebase.org",
+    "credentials" : [ {
+      "id" : "2ce53a48-82fc-418b-a913-e20c647cb959",
+      "type" : "password",
+      "createdDate" : 1659302483363,
+      "secretData" : "{\"value\":\"wQjuq7Ic1E4hgaOUTb6hswhJe4KWHPQslc5PrMmGFRzMOoGHvomM+SkrFGiQnBAYQZG7haKEduu2+JK/iuceUQ==\",\"salt\":\"XIBlzbpasw47L2CpJ4uZOw==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-test" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -58,39 +98,23 @@
     "notBefore" : 0,
     "groups" : [ ]
   }, {
-    "id" : "5ea3ca0b-af5a-49c9-8732-498e27931bf3",
-    "createdTimestamp" : 1654055477558,
-    "username" : "test@gmail.com",
-    "enabled" : false,
+    "id" : "b9302586-876b-47e8-900c-2c09f161b888",
+    "createdTimestamp" : 1659292473628,
+    "username" : "test",
+    "enabled" : true,
     "totp" : false,
     "emailVerified" : false,
-    "email" : "test@gmail.com",
+    "email" : "test@sagebase.com",
     "credentials" : [ {
-      "id" : "7c5c8d6f-66bb-417a-9ad1-c168757f632e",
+      "id" : "8f08ec0e-ed3b-4da8-ab56-b5a720a90b21",
       "type" : "password",
-      "createdDate" : 1654055477609,
-      "secretData" : "{\"value\":\"CFsPjbGAC2PQ13qvpiuwqbVR5OnpVtZGWyv8fgQRJIaijuUemNbvDUNfo3QHkrWi11Qi5eMmv3cNOmFi4U9MOQ==\",\"salt\":\"4hdjx04tt6y1FvfBbTfCkQ==\",\"additionalParameters\":{}}",
+      "createdDate" : 1659292473676,
+      "secretData" : "{\"value\":\"oaEnlBFxomZ3peABlJXFGLVCAgT3DN9maMHL/nJEBYhGVuD7dsdbqEx4AQRaQxUrPvkqmxGGQklTjd40NDERtQ==\",\"salt\":\"XswKAPOIy6uVi0dIBXzgJQ==\",\"additionalParameters\":{}}",
       "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-test" ],
-    "notBefore" : 0,
-    "groups" : [ ]
-  }, {
-    "id" : "0c23c91f-e9bb-4610-8758-e3bd405320c1",
-    "createdTimestamp" : 1653522635425,
-    "username" : "thomas.schaffter@sagebase.org",
-    "enabled" : true,
-    "totp" : false,
-    "emailVerified" : false,
-    "firstName" : "Thomas",
-    "lastName" : "Schaffter",
-    "email" : "thomas.schaffter@sagebase.org",
-    "credentials" : [ ],
-    "disableableCredentialTypes" : [ ],
-    "requiredActions" : [ ],
-    "realmRoles" : [ "test-visitor", "default-roles-test", "test-admin" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -102,7 +126,7 @@
     "emailVerified" : false,
     "firstName" : "Thomas",
     "lastName" : "Schaffter",
-    "email" : "thomas.schaffter@sagebionetworks.org",
+    "email" : "thomas.schaffter@sagebase.org",
     "credentials" : [ {
       "id" : "6047fdfb-5169-42c6-9e0d-c5e68d0b6d52",
       "type" : "password",
@@ -112,7 +136,27 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-test", "test-admin" ],
+    "realmRoles" : [ "default-roles-test", "test-admin", "app-admin" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "04b800f3-c431-4862-93c4-2bef14fc204d",
+    "createdTimestamp" : 1659302507439,
+    "username" : "vpchung",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "email" : "verena.chung@sagebase.org",
+    "credentials" : [ {
+      "id" : "21b520c8-f055-405f-b558-d14079c3518c",
+      "type" : "password",
+      "createdDate" : 1659302507485,
+      "secretData" : "{\"value\":\"vqs4gmZgm0e0OnBfEJzCAoqHw/QJbIV1R2IknL43MIkv25//UI8MrSixiNejcYtXYpi3kuD2VR+2Gh4n0Lk9sQ==\",\"salt\":\"tjQqX6y/1nD145vhhf8Jqg==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-test" ],
     "notBefore" : 0,
     "groups" : [ ]
   } ]

@@ -1,20 +1,26 @@
 {
-  "root": "libs/shared/web-components",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/web-components/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["libs/shared/web-components/**/*.ts"]
+        "lintFilePatterns": [
+          "libs/shared/web-components/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/web-components"],
+      "outputs": [
+        "coverage/libs/shared/web-components"
+      ],
       "options": {
-        "jestConfig": "libs/shared/web-components/jest.config.js",
+        "jestConfig": "libs/shared/web-components/jest.config.ts",
         "passWithNoTests": true
       }
     }

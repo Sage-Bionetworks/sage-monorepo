@@ -1,6 +1,6 @@
 {
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "libs/api-angular",
   "sourceRoot": "libs/api-angular/src",
   "prefix": "challenge-registry",
   "targets": {
@@ -40,7 +40,7 @@
         "coverage/libs/api-angular"
       ],
       "options": {
-        "jestConfig": "libs/api-angular/jest.config.js",
+        "jestConfig": "libs/api-angular/jest.config.ts",
         "passWithNoTests": true
       }
     },

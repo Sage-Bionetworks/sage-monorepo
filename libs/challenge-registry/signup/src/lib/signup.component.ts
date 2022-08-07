@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -25,7 +25,7 @@ import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 export class SignupComponent implements OnInit {
   public appVersion: string;
 
-  newUserForm!: FormGroup;
+  newUserForm!: UntypedFormGroup;
   errors = {
     alreadyExists: false,
     other: undefined,
@@ -35,7 +35,7 @@ export class SignupComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private userService: UserService,
     @Inject(APP_CONFIG) private appConfig: AppConfig
   ) {
@@ -44,16 +44,16 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
     this.newUserForm = this.formBuilder.group({
-      email: new FormControl('awesome-user@example.org', [
+      email: new UntypedFormControl('awesome-user@example.org', [
         Validators.required,
         Validators.email,
       ]),
-      password: new FormControl('yourpassword', [
+      password: new UntypedFormControl('yourpassword', [
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(64),
       ]),
-      username: new FormControl('awesome-user', [
+      username: new UntypedFormControl('awesome-user', [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(25),

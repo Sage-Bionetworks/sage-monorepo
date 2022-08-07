@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: challenge-auth-service
+
+server:
+  port: 8091
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${service.registry.url}
+  instance:
+    preferIpAddress: true
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info
+
+info:
+  application:
+    name: ${spring.application.name}
+
+keycloak:
+  realm: test
+  resource: challenge-core-client # TODO update
+  auth-server-url: ${keycloak.url}
+  ssl-required: external
+  use-resource-role-mappings: false # true: use client roles
+
+app:
+  keycloak:
+    login:
+      url: http://challenge-keycloak:8080/realms/test/protocol/openid-connect/token # TODO update
+    client-id: ${keycloak.resource}
+    client-secret: O0cNRMWg3LHsdHW8BNPlY96qKooDPhPX
+    grant-type: password

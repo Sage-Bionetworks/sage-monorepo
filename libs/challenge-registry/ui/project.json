@@ -1,6 +1,6 @@
 {
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "libs/challenge-registry/ui",
   "sourceRoot": "libs/challenge-registry/ui/src",
   "prefix": "challenge-registry",
   "targets": {
@@ -10,7 +10,7 @@
         "coverage/libs/challenge-registry/ui"
       ],
       "options": {
-        "jestConfig": "libs/challenge-registry/ui/jest.config.js",
+        "jestConfig": "libs/challenge-registry/ui/jest.config.ts",
         "passWithNoTests": true
       }
     },

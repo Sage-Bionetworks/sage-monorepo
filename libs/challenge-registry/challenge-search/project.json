@@ -1,14 +1,16 @@
 {
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "libs/challenge-registry/challenge-search",
   "sourceRoot": "libs/challenge-registry/challenge-search/src",
   "prefix": "challenge-registry",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/challenge-registry/challenge-search"],
+      "outputs": [
+        "coverage/libs/challenge-registry/challenge-search"
+      ],
       "options": {
-        "jestConfig": "libs/challenge-registry/challenge-search/jest.config.js",
+        "jestConfig": "libs/challenge-registry/challenge-search/jest.config.ts",
         "passWithNoTests": true
       }
     },

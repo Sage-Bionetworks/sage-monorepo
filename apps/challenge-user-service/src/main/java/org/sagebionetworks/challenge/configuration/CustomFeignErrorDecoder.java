@@ -6,7 +6,8 @@ import feign.Response;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.sagebionetworks.challenge.exception.SimpleChallengeGlobalException;
+import org.sagebionetworks.challenge.util.exception.SimpleChallengeGlobalException;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;

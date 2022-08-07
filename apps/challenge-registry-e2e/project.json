@@ -1,5 +1,5 @@
 {
-  "root": "apps/challenge-registry-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-registry-e2e/src",
   "projectType": "application",
   "targets": {
@@ -7,11 +7,11 @@
       "executor": "@nrwl/cypress:cypress",
       "options": {
         "cypressConfig": "apps/challenge-registry-e2e/cypress.json",
-        "devServerTarget": "web-app:serve:development"
+        "devServerTarget": "challenge-registry:serve:development"
       },
       "configurations": {
         "production": {
-          "devServerTarget": "web-app:serve:production"
+          "devServerTarget": "challenge-registry:serve:production"
         }
       }
     },
@@ -24,18 +24,6 @@
         "lintFilePatterns": [
           "apps/challenge-registry-e2e/**/*.{js,ts}"
         ]
-      }
-    },
-    "lint-fix": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
-      "options": {
-        "lintFilePatterns": [
-          "apps/challenge-registry-e2e/**/*.{js,ts}"
-        ],
-        "fix": true
       }
     }
   },
