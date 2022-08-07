@@ -43,6 +43,15 @@
         }
       ]
     },
+    "test-integration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw verify"
+        ],
+        "cwd": "apps/challenge-user-service"
+      }
+    },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
