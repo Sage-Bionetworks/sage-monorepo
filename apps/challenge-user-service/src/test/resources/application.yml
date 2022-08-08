@@ -1,16 +1,13 @@
 spring:
     #admin:
-      #enabled: true
-      #jmx-name: org.springframework.boot:type=Admin,name=SpringApplicationIT
+    #  enabled: true
+    #  jmx-name: org.springframework.boot:type=Admin,name=SpringApplicationTest
   datasource:
     url: jdbc:h2:mem:challenge
     driver-class-name: org.h2.Driver
   #jpa:
-    #properties:
-      #hibernate:
-        #dialect: org.hibernate.dialect.H2Dialect
     #hibernate:
-      #ddl-auto: create-drop
+    #  ddl-auto: none
     #database-platform: org.hibernate.dialect.H2Dialect
   flyway:
     enabled: false
@@ -21,3 +18,6 @@ server:
 eureka:
   client:
     enabled: false
+
+example:
+  firstProperty: "test"

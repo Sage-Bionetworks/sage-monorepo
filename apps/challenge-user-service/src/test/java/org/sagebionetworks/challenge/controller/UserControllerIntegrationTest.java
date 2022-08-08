@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 // @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("integration")
 public class UserControllerIntegrationTest {
 
   @Autowired

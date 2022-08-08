@@ -24,7 +24,9 @@
     <java.version>17</java.version>
     <spring-cloud.version>2021.0.3</spring-cloud.version>
     <keycloak.version>18.0.0</keycloak.version>
-    <maven.test.skip>false</maven.test.skip>
+    <!-- <maven.test.skip>false</maven.test.skip> -->
+    <skip.unit.tests>false</skip.unit.tests>
+    <skip.integration.tests>true</skip.integration.tests>
     <checkstyle.config.location>${basedir}/../../checkstyle.xml</checkstyle.config.location>
   </properties>
 
@@ -58,6 +60,11 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-openfeign</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+      <version>1.6.9</version>
     </dependency>
     <dependency>
       <groupId>org.flywaydb</groupId>
@@ -138,59 +145,59 @@
 
   <build>
     <plugins>
+      <!-- Start the Spring Boot application prior to running integration tests. -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <!-- <jvmArguments>-Dspring.datasource.url=jdbc:h2:mem:challenge_user_service</jvmArguments> -->
-          <profiles>
-            <profile>integration</profile>
-          </profiles>
-        </configuration>
+        <version>2.7.2</version>
         <executions>
           <execution>
             <id>pre-integration-test</id>
             <goals>
               <goal>start</goal>
             </goals>
-            <configuration />
+            <configuration>
+              <profiles>
+                <profile>integration-test</profile>
+              </profiles>
+              <skip>${skip.integration.tests}</skip>
+            </configuration>
           </execution>
           <execution>
             <id>post-integration-test</id>
             <goals>
               <goal>stop</goal>
             </goals>
+            <configuration>
+              <skip>${skip.integration.tests}</skip>
+            </configuration>
           </execution>
         </executions>
       </plugin>
+      <!-- Configure surefire to run only the unit tests. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.22.2</version>
         <configuration>
           <excludes>
-            <exclude>**/*IntegrationTest</exclude>
+            <exclude>**/*IntegrationTest.java</exclude>
+            <exclude>**/*ApplicationTests.java</exclude>
           </excludes>
+          <skipTests>${skip.unit.tests}</skipTests>
         </configuration>
       </plugin>
+      <!-- Configure failsafe to run the integration tests. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
         <version>2.22.2</version>
         <configuration>
-          <!-- <includes>**/*IntegrationTest.java</includes> -->
-          <!-- https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#integration-tests.no-starter-parent -->
-          <classesDirectory>${project.build.outputDirectory}</classesDirectory>
           <includes>
-            <include>**/*IntegrationTest</include>
+            <include>**/*IntegrationTest.java</include>
+            <include>**/*ApplicationTests.java</include>
           </includes>
-          <!-- <environmentVariables>
-              <mysql.version>${mysql.version}</mysql.version>
-              <test.mysql.username>${test.mysql.username}</test.mysql.username>
-              <test.mysql.password>${test.mysql.password}</test.mysql.password>
-              <test.mysql.port>${test.mysql.port}</test.mysql.port>
-              <test.mysql.db>${test.mysql.db}</test.mysql.db>
-          </environmentVariables> -->
+          <skipTests>${skip.integration.tests}</skipTests>
         </configuration>
         <executions>
           <execution>
@@ -201,8 +208,8 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Add second test source and resource directories. -->
       <plugin>
-        <!-- adding second test source directory (just for integration tests) -->
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
         <version>3.3.0</version>
@@ -219,7 +226,47 @@
               </sources>
             </configuration>
           </execution>
+          <execution>
+            <id>add-integration-resource</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>add-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>src/integration-test/resources</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
         </executions>
+      </plugin>
+      <!-- Extract the openapi.json file generated by springdoc-openapi-ui and save it to file during the execution of the integration tests. -->
+      <plugin>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-maven-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <profiles>
+                <profile>integration-test</profile>
+              </profiles>
+              <skip>${skip.integration.tests}</skip>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <apiDocsUrl>http://localhost:8083/api/v1/api-docs/openapi.json</apiDocsUrl>
+          <outputFileName>openapi.json</outputFileName>
+          <outputDir>openapi</outputDir>
+          <skip>false</skip>
+        </configuration>
       </plugin>
     </plugins>
     <pluginManagement>
@@ -242,9 +289,16 @@
 
   <profiles>
     <profile>
-      <id>integration</id>
+      <id>dev</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+    <profile>
+      <id>integration-test</id>
       <properties>
-        <maven.test.skip>true</maven.test.skip>
+        <skip.unit.tests>true</skip.unit.tests>
+        <skip.integration.tests>false</skip.integration.tests>
       </properties>
     </profile>
   </profiles>

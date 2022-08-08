@@ -3,6 +3,8 @@ package org.sagebionetworks.challenge.controller;
 import org.sagebionetworks.challenge.model.dto.User;
 import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
 import org.sagebionetworks.challenge.service.UserService;
+import org.springdoc.api.annotations.ParameterObject;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,8 @@ import java.util.List;
 @RequestMapping(value = "/api/v1/users")
 public class UserController {
 
-  // @Autowired
-  // private UserService userService;
+  @Autowired
+  UserService userService;
 
   @PostMapping(value = "/register")
   public ResponseEntity<User> createUser(@RequestBody User request) {
@@ -36,8 +38,8 @@ public class UserController {
   }
 
   // @RolesAllowed("user")
-  @GetMapping
-  public ResponseEntity<List<User>> listUsers(Pageable pageable) {
+  @GetMapping(value = "/")
+  public ResponseEntity<List<User>> listUsers(@ParameterObject Pageable pageable) {
     log.info("List all the users");
     // return ResponseEntity.ok(userService.listUsers(pageable));
     return ResponseEntity.ok(null);
