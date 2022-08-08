@@ -21,3 +21,6 @@ server:
 eureka:
   client:
     enabled: false
+
+example:
+  firstProperty: "integration-test"

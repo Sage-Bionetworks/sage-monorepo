@@ -9,7 +9,6 @@ import java.util.List;
 // import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.sagebionetworks.challenge.model.dto.User;
 import org.sagebionetworks.challenge.model.dto.UserStatus;
@@ -17,25 +16,16 @@ import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.model.mapper.UserMapper;
 import org.sagebionetworks.challenge.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 // @Slf4j
-@ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class UserServiceTest {
-
-  @TestConfiguration
-  static class UserServiceTestContextConfiguration {
-    @Bean
-    UserService userService() {
-      return new UserService();
-    }
-  }
 
   @Autowired
   private UserService userService;
@@ -49,10 +39,18 @@ public class UserServiceTest {
   private User user;
   private UserMapper userMapper = new UserMapper();
 
+  @Value("${example.firstProperty}")
+  String firstProperty;
+
   @BeforeEach
   public void setup() {
     user = User.builder().id(1L).username("test").email("test@gmail.com").password("changeme")
         .authId("1").status(UserStatus.PENDING).build();
+  }
+
+  @Test
+  public void test() {
+    assertThat(firstProperty).isEqualTo("test");
   }
 
   @Test
