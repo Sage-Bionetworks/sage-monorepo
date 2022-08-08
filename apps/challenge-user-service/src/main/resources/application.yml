@@ -2,6 +2,7 @@ spring:
   application:
     name: challenge-user-service
   datasource:
+    #url: jdbc:mysql://challenge-mariadb:3306/challenge
     url: ${db.url}
     username: challenge_user_service
     password: changeme

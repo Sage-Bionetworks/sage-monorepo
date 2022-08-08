@@ -1,0 +1,22 @@
+/* TEAM */
+Lead: Thomas Schaffter
+Contact: https://github.com/tschaffter
+
+Developer: Verena Chung
+Contact: https://github.com/vpchung
+
+Developer: Rong Chai
+Contact: https://github.com/rrchai
+
+Director: Jake Albrecht
+Contact: https://github.com/chepyle
+
+/* THANKS */
+Director: James Eddy
+Contact: https://github.com/jaeddy
+
+Program Manager: Abby Wall
+Contact: https://github.com/abbywall
+
+/* SITE */
+Last update: 2022/08/04

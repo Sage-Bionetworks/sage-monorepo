@@ -94,8 +94,7 @@ function challenge-welcome {
   if [ ! -d "node_modules" ]; then
     printf "%s\n" \
       "" \
-      "Run ${bold}challenge-install${reset} to install workspace tools like ${bold}nx${reset} and ${bold}jest${reset}." \
-      "Run this command each time ${italic}package-lock.json${reset} may have changed."
+      "Run ${bold}challenge-install${reset} to install workspace tools like ${bold}nx${reset} and ${bold}jest${reset}."
   fi
 
   if [ ! -f "nx-cloud.env" ]; then
@@ -107,7 +106,7 @@ function challenge-docker-stop {
   docker stop $(docker ps -q)
 }
 
-function challenge-initialize-env {
+function workspace-initialize-env {
   challenge-welcome
 
   if [ -f "./tools/configure-hostnames.sh" ]; then

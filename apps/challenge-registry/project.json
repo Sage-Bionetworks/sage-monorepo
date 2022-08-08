@@ -25,6 +25,9 @@
         "assets": [
           "apps/challenge-registry/src/assets",
           "apps/challenge-registry/src/config",
+          "apps/challenge-registry/src/humans.txt",
+          "apps/challenge-registry/src/robots.txt",
+          "apps/challenge-registry/src/sitemap.xml",
           {
             "input": "libs/shared/assets/src/assets",
             "glob": "**/*",
@@ -155,6 +158,12 @@
         }
       },
       "defaultConfiguration": "development"
+    },
+    "build-sitemap": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/generate-sitemap.js http://localhost:4200 apps/challenge-registry/src/sitemap.xml"
+      }
     }
   },
   "tags": ["type:app", "scope:client"],

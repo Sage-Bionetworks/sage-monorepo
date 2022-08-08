@@ -1,16 +1,17 @@
 package org.sagebionetworks.challenge.configuration;
 
-import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class KeycloakManager {
 
-  private final KeycloakManagerProperties keycloakProperties;
+  @Autowired
+  private KeycloakManagerProperties keycloakProperties;
+
   private static Keycloak keycloakInstance = null;
 
   public RealmResource getKeycloakInstanceWithRealm() {

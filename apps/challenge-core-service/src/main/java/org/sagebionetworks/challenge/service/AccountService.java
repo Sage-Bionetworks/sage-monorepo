@@ -1,10 +1,10 @@
 package org.sagebionetworks.challenge.service;
 
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.challenge.model.dto.ChallengeAccount;
 import org.sagebionetworks.challenge.model.entity.ChallengeAccountEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeAccountMapper;
 import org.sagebionetworks.challenge.repository.ChallengeAccountRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service

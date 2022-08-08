@@ -47,7 +47,7 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
 
   // Use Spring Boot property files instead of default keycloak.json
   @Bean
-  public KeycloakSpringBootConfigResolver KeycloakConfigResolver() {
+  public KeycloakSpringBootConfigResolver keycloakConfigResolver() {
     return new KeycloakSpringBootConfigResolver();
   }
 
