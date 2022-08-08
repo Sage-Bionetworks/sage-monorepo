@@ -10,9 +10,10 @@ import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.model.mapper.UserMapper;
 import org.sagebionetworks.challenge.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-// import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,20 +23,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-// @Slf4j
+@Slf4j
+// @RequiredArgsConstructor
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
-  private final KeycloakUserService keycloakUserService;
-  private final UserRepository userRepository;
+  @Autowired
+  private KeycloakUserService keycloakUserService;
+
+  @Autowired
+  private UserRepository userRepository;
 
   private UserMapper userMapper = new UserMapper();
 
   public User createUser(User user) {
     if (keycloakUserService.getUserByUsername(user.getUsername()).isPresent()) {
-      throw new UserAlreadyRegisteredException(
-          "This username is already registered.",
+      throw new UserAlreadyRegisteredException("This username is already registered.",
           GlobalErrorCode.ERROR_USERNAME_REGISTERED);
     }
 
@@ -53,7 +56,8 @@ public class UserService {
     Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
 
     if (userCreationResponse == 201) {
-      Optional<UserRepresentation> representation = keycloakUserService.getUserByUsername(user.getUsername());
+      Optional<UserRepresentation> representation =
+          keycloakUserService.getUserByUsername(user.getUsername());
       user.setAuthId(representation.get().getId());
       user.setStatus(UserStatus.PENDING);
       UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
