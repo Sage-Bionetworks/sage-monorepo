@@ -23,12 +23,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 // @Slf4j
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles("unit")
 public class UserServiceTest {
 
   @TestConfiguration
