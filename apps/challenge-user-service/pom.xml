@@ -220,8 +220,22 @@
             </goals>
             <configuration>
               <sources>
-                <source>src/integration-test/java</source>
+                <source>src/test-integration/java</source>
               </sources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-integration-test-resource</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>add-test-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>src/test-integration/resources</directory>
+                </resource>
+              </resources>
             </configuration>
           </execution>
         </executions>
