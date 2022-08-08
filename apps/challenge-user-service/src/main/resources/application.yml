@@ -4,6 +4,7 @@ spring:
   datasource:
     #url: jdbc:mysql://challenge-mariadb:3306/challenge
     url: ${db.url}
+    # url: jdbc:h2:mem:challenge
     username: challenge_user_service
     password: changeme
   jpa:
