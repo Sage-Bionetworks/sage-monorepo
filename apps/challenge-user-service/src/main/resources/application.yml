@@ -55,6 +55,7 @@ app:
       client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
 
 springdoc:
+  # version: '@springdoc.version@'
   swagger-ui:
     path: /api/v1/api-docs/ui
   api-docs:
