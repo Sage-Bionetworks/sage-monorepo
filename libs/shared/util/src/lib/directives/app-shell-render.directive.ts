@@ -8,6 +8,10 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 
+/**
+ * Hides the components annotated with this directed during server-side rendering, and hide them
+ * when the rendering is performed by the browser.
+ */
 @Directive({
   selector: '[sageAppShellRender]',
 })
