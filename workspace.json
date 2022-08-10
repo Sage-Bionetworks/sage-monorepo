@@ -27,6 +27,7 @@
     "challenge-registry-config": "libs/challenge-registry/config",
     "challenge-registry-e2e": "apps/challenge-registry-e2e",
     "challenge-registry-home": "libs/challenge-registry/home",
+    "challenge-registry-home-got": "libs/challenge-registry/home-got",
     "challenge-registry-login": "libs/challenge-registry/login",
     "challenge-registry-not-found": "libs/challenge-registry/not-found",
     "challenge-registry-org-profile": "libs/challenge-registry/org-profile",

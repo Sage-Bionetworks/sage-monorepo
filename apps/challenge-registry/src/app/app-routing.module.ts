@@ -10,10 +10,17 @@ export const routes: Routes = [
   {
     path: 'home',
     loadChildren: () =>
-      import('@sagebionetworks/challenge-registry/home').then(
+      import('@sagebionetworks/challenge-registry/home-got').then(
         (m) => m.HomeModule
       ),
   },
+  // {
+  //   path: 'home',
+  //   loadChildren: () =>
+  //     import('@sagebionetworks/challenge-registry/home').then(
+  //       (m) => m.HomeModule
+  //     ),
+  // },
   {
     path: 'about',
     loadChildren: () =>
