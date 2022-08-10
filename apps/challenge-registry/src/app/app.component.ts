@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, from } from 'rxjs';
+import { Subscription, from, filter, map, mergeMap } from 'rxjs';
 import { PageTitleService } from '@sagebionetworks/challenge-registry/util';
 import {
   Avatar,
@@ -11,9 +11,10 @@ import {
 } from '@sagebionetworks/challenge-registry/ui';
 import { APP_SECTIONS } from './app-sections';
 import { AuthService } from '@sagebionetworks/challenge-registry/auth';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { User } from '@sagebionetworks/api-angular';
+import { SeoService } from '@sagebionetworks/shared/util';
 
 @Component({
   selector: 'challenge-registry-root',
@@ -34,10 +35,29 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private pageTitleService: PageTitleService,
     private authService: AuthService,
-    private keycloakService: KeycloakService
+    private keycloakService: KeycloakService,
+    private activatedRoute: ActivatedRoute,
+    private seoService: SeoService
   ) {}
 
   ngOnInit() {
+    this.router.events
+      .pipe(
+        filter((e) => e instanceof NavigationEnd),
+        map(() => this.activatedRoute),
+        map((route) => {
+          while (route.firstChild) route = route.firstChild;
+          return route;
+        }),
+        filter((route) => route.outlet === 'primary'),
+        mergeMap((route) => route.data)
+      )
+      .subscribe((data) => {
+        const seoData = data['seo'];
+        this.seoService.updateTitle(seoData['title']);
+        this.seoService.updateMetaTags(seoData['metaTags']);
+      });
+
     this.keycloakService
       .isLoggedIn()
       .then((loggedIn) => {

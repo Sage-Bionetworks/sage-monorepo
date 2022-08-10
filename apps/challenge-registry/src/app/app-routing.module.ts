@@ -9,6 +9,33 @@ export const routes: Routes = [
       import('@sagebionetworks/challenge-registry/about').then(
         (m) => m.AboutModule
       ),
+    data: {
+      seo: {
+        title: 'About Page - Challenge Registry',
+        metaTags: [
+          {
+            name: 'description',
+            property: 'og:description',
+            content: 'A description',
+          },
+          {
+            name: 'title',
+            property: 'og:title',
+            content: 'About Page - Challenge Registry',
+          },
+          {
+            name: 'image',
+            property: 'og:image',
+            content: 'https://avatars3.githubusercontent.com/u/16628445',
+          },
+          { property: 'og:url', content: 'https://challenge-registry.io' },
+          {
+            name: 'twitter:card',
+            content: 'https://avatars3.githubusercontent.com/u/16628445',
+          },
+        ],
+      },
+    },
   },
   {
     path: 'challenges',
@@ -83,7 +110,11 @@ export const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { initialNavigation: 'enabledBlocking' }),
+    RouterModule.forRoot(routes, {
+      initialNavigation: 'enabledBlocking',
+      // this is important to use "data:title" from any level
+      // paramsInheritanceStrategy: 'always',
+    }),
   ],
   declarations: [],
   providers: [],

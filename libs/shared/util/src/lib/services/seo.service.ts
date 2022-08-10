@@ -12,6 +12,9 @@ export class SeoService {
   }
 
   updateMetaTags(metaTags: MetaDefinition[]) {
-    metaTags.forEach((m) => this.meta.updateTag(m));
+    metaTags.forEach((m) => {
+      console.log('updateTag', m);
+      this.meta.updateTag(m);
+    });
   }
 }
