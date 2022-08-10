@@ -7,6 +7,7 @@ import {
   APP_CONFIG,
   Environment,
 } from '@sagebionetworks/challenge-registry/config';
+// import { environment } from './environments/environment';
 
 function bootstrap() {
   fetch('/config/config.json')
@@ -33,3 +34,13 @@ if (document.readyState === 'complete') {
 } else {
   document.addEventListener('DOMContentLoaded', bootstrap);
 }
+
+// if (environment.production) {
+//   enableProdMode();
+// }
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   platformBrowserDynamic()
+//     .bootstrapModule(AppModule)
+//     .catch((err) => console.error(err));
+// });
