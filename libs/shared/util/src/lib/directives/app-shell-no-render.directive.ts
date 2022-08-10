@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 
 /**
- * Renders the components annotated with this directed during server-side rendering, and hide them
+ * Hides the components annotated with this directed during server-side rendering, and render them
  * when the rendering is performed by the browser.
  */
 @Directive({
