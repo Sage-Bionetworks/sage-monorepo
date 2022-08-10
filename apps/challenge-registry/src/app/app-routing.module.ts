@@ -1,8 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  {
+    path: 'home',
+    loadChildren: () =>
+      import('@sagebionetworks/challenge-registry/home').then(
+        (m) => m.HomeModule
+      ),
+  },
   {
     path: 'about',
     loadChildren: () =>
@@ -58,15 +65,6 @@ export const routes: Routes = [
       import('@sagebionetworks/challenge-registry/not-found').then(
         (m) => m.NotFoundModule
       ),
-  },
-  {
-    path: '',
-    pathMatch: 'full',
-    loadChildren: () =>
-      import('@sagebionetworks/challenge-registry/home').then(
-        (m) => m.HomeModule
-      ),
-    // canActivate: [AuthGuard],
   },
   {
     path: ':login',

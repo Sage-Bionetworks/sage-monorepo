@@ -29,6 +29,5 @@ const routes: Routes = [{ path: '', component: HomeComponent }];
     TopicsViewerModule,
     SharedUtilModule,
   ],
-  exports: [HomeComponent],
 })
 export class HomeModule {}
