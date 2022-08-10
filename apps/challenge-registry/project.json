@@ -130,12 +130,20 @@
       "options": {
         "outputPath": "dist/apps/challenge-registry/server",
         "main": "apps/challenge-registry/src/ssr.server.ts",
-        "tsConfig": "apps/challenge-registry/tsconfig.server.json"
+        "tsConfig": "apps/challenge-registry/tsconfig.server.json",
+        "externalDependencies": [
+          "@sagebionetworks/challenge-registry/home"
+        ]
       },
       "configurations": {
         "production": {
           "outputHashing": "media",
-          "fileReplacements": []
+          "fileReplacements": [
+            {
+              "replace": "src/environments/environment.ts",
+              "with": "src/environments/environment.prod.ts"
+            }
+          ]
         },
         "development": {
           "optimization": false,
