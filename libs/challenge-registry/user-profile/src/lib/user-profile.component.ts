@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
   Account,
@@ -9,10 +9,6 @@ import {
   UserService,
 } from '@sagebionetworks/api-angular';
 import { AuthService } from '@sagebionetworks/challenge-registry/auth';
-import {
-  AppConfig,
-  APP_CONFIG,
-} from '@sagebionetworks/challenge-registry/config';
 // import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 import {
   // catchError,
@@ -27,6 +23,7 @@ import {
 import { Tab } from './tab.model';
 import { USER_PROFILE_TABS } from './user-profile-tabs';
 import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/challenge-registry/ui';
+import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 @Component({
   selector: 'challenge-registry-user',
   templateUrl: './user-profile.component.html',
@@ -51,9 +48,9 @@ export class UserProfileComponent implements OnInit {
     private accountService: AccountService,
     private userService: UserService,
     private authService: AuthService,
-    @Inject(APP_CONFIG) private appConfig: AppConfig
+    private readonly configService: ConfigService
   ) {
-    this.appVersion = appConfig.appVersion;
+    this.appVersion = this.configService.config.appVersion;
   }
 
   ngOnInit(): void {
