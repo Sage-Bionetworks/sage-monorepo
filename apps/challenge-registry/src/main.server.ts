@@ -10,38 +10,11 @@ import '@angular/platform-server/init';
 import { enableProdMode } from '@angular/core';
 
 import { environment } from './environments/environment';
-// import * as fs from 'fs';
 
-// console.log('Current directory:', __dirname);
-
-// fs.readdirSync(`__dirname/..`).forEach((file) => {
-//   console.log(file);
-// });
-
-// fs.readFile('./../browser/config/config.json', (err, data) => {
-//   if (err) throw err;
-
-//   console.log(data);
-// });
-
+// TODO: Consider getting read of environment files, which have been replaced by config/*.json.
 if (environment.production) {
   enableProdMode();
 }
-
-// import {
-//   AppConfig,
-//   Environment,
-// } from '@sagebionetworks/challenge-registry/config';
-
-// fetch('/config/config.json')
-//   .then((response) => response.json() as Promise<AppConfig>)
-//   .then((config: AppConfig) => {
-//     if (
-//       [Environment.Production, Environment.Staging].includes(config.environment)
-//     ) {
-//       enableProdMode();
-//     }
-//   });
 
 export { AppServerModule } from './app/app.server.module';
 export { renderModule } from '@angular/platform-server';
