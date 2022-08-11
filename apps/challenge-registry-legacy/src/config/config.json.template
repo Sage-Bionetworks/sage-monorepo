@@ -1,5 +1,0 @@
-{
-  "environment": "${ENVIRONMENT}",
-  "apiUrl": "${API_URL}",
-  "appVersion": "${APP_VERSION}"
-}
