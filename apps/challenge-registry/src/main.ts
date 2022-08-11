@@ -2,11 +2,10 @@ import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
-import {
-  // AppConfig,
-  APP_CONFIG,
-  // Environment,
-} from '@sagebionetworks/challenge-registry/config';
+import // AppConfig,
+// APP_CONFIG,
+// Environment,
+'@sagebionetworks/challenge-registry/config';
 import { environment } from './environments/environment';
 // import { environment } from './environments/environment';
 
@@ -41,7 +40,7 @@ if (environment.production) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  platformBrowserDynamic([{ provide: APP_CONFIG, useValue: {} }])
+  platformBrowserDynamic()
     .bootstrapModule(AppModule)
     .catch((err) => console.error(err));
 });

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
+import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 // import {
 //   // APP_CONFIG,
 //   // AppConfig,
@@ -14,10 +15,12 @@ export class HomeComponent {
   // public appVersion: string;
 
   constructor(
+    private configService: ConfigService,
     // @Inject(APP_CONFIG) private appConfig: AppConfig,
     private title: Title,
     private meta: Meta
   ) {
+    console.log('CONFIG', configService.config);
     // this.appVersion = appConfig.appVersion;
     // // SEO metadata
     // this.title.setTitle('Home - Challenge Registry');
