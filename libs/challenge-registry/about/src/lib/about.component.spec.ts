@@ -1,10 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  APP_CONFIG,
-  MOCK_APP_CONFIG,
-} from '@sagebionetworks/challenge-registry/config';
-
+import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import { AboutComponent } from './about.component';
 
 describe('AboutComponent', () => {
@@ -14,7 +11,8 @@ describe('AboutComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AboutComponent],
-      providers: [{ provide: APP_CONFIG, useValue: MOCK_APP_CONFIG }],
+      imports: [HttpClientModule],
+      providers: [ConfigService],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });

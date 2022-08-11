@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { ApiModule } from '@sagebionetworks/api-angular';
@@ -14,6 +14,10 @@ import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { AppComponent } from './app.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SharedUtilModule } from '@sagebionetworks/shared/util';
+import {
+  configFactory,
+  ConfigService,
+} from '@sagebionetworks/challenge-registry/config';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,7 +36,14 @@ import { SharedUtilModule } from '@sagebionetworks/shared/util';
     MatProgressSpinnerModule,
     SharedUtilModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: configFactory,
+      deps: [ConfigService],
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormControl,
@@ -11,10 +11,7 @@ import {
   UserService,
   ModelError as ApiClientError,
 } from '@sagebionetworks/api-angular';
-import {
-  APP_CONFIG,
-  AppConfig,
-} from '@sagebionetworks/challenge-registry/config';
+import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 
 @Component({
@@ -37,9 +34,9 @@ export class SignupComponent implements OnInit {
     private router: Router,
     private formBuilder: UntypedFormBuilder,
     private userService: UserService,
-    @Inject(APP_CONFIG) private appConfig: AppConfig
+    private readonly configService: ConfigService
   ) {
-    this.appVersion = appConfig.appVersion;
+    this.appVersion = this.configService.config.appVersion;
   }
 
   ngOnInit(): void {

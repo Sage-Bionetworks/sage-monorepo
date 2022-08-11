@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   Account,
   AccountService,
@@ -14,13 +14,10 @@ import {
   switchMap,
   throwError,
 } from 'rxjs';
-import {
-  AppConfig,
-  APP_CONFIG,
-} from '@sagebionetworks/challenge-registry/config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 import { OrgProfileDataServiceService } from './org-profile-data-service.service';
+import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 
 @Component({
   selector: 'challenge-registry-org-profile',
@@ -41,9 +38,9 @@ export class OrgProfileComponent implements OnInit {
     private accountService: AccountService,
     private orgService: OrganizationService,
     private orgProfileDataService: OrgProfileDataServiceService,
-    @Inject(APP_CONFIG) private appConfig: AppConfig
+    private readonly configService: ConfigService
   ) {
-    this.appVersion = appConfig.appVersion;
+    this.appVersion = this.configService.config.appVersion;
   }
 
   ngOnInit(): void {
