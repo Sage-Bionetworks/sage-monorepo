@@ -1,18 +1,15 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   Challenge,
   ChallengeService,
   ModelError as ApiClientError,
 } from '@sagebionetworks/api-angular';
-import {
-  APP_CONFIG,
-  AppConfig,
-} from '@sagebionetworks/challenge-registry/config';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 import { CHALLENGE_SECTIONS } from './challenge-sections';
 import { ChallengeDataService } from './challenge-data.service';
+import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 
 @Component({
   selector: 'challenge-registry-challenges',
@@ -33,9 +30,9 @@ export class ChallengeComponent implements OnInit {
     private route: ActivatedRoute,
     private challengeService: ChallengeService,
     private challengeDataService: ChallengeDataService,
-    @Inject(APP_CONFIG) private appConfig: AppConfig
+    private readonly configService: ConfigService
   ) {
-    this.appVersion = appConfig.appVersion;
+    this.appVersion = this.configService.config.appVersion;
   }
 
   ngOnInit(): void {

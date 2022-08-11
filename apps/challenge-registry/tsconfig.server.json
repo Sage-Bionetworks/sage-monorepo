@@ -4,7 +4,6 @@
   "compilerOptions": {
     "outDir": "../../out-tsc/server",
     "target": "es2019",
-    // "module": "commonjs",
     "types": [
       "node"
     ]

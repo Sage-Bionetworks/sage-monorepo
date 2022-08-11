@@ -11,24 +11,10 @@ import { enableProdMode } from '@angular/core';
 
 import { environment } from './environments/environment';
 
+// TODO: Consider getting read of environment files, which have been replaced by config/*.json.
 if (environment.production) {
   enableProdMode();
 }
 
-// import {
-//   AppConfig,
-//   Environment,
-// } from '@sagebionetworks/challenge-registry/config';
-
-// fetch('/config/config.json')
-//   .then((response) => response.json() as Promise<AppConfig>)
-//   .then((config: AppConfig) => {
-//     if (
-//       [Environment.Production, Environment.Staging].includes(config.environment)
-//     ) {
-//       enableProdMode();
-//     }
-//   });
-
 export { AppServerModule } from './app/app.server.module';
-export { renderModule } from '@angular/platform-server'; // TODO: needed?
+export { renderModule } from '@angular/platform-server';

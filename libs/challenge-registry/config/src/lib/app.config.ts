@@ -1,5 +1,3 @@
-import { InjectionToken } from '@angular/core';
-
 /* eslint-disable no-unused-vars */
 export enum Environment {
   Production = 'prod',
@@ -14,6 +12,7 @@ export interface AppConfig {
   environment: Environment;
   apiUrl: string;
   appVersion: string;
+  isPlatformServer: boolean;
 }
 
-export const APP_CONFIG = new InjectionToken<AppConfig>('APP_CONFIG');
+export const EMPTY_APP_CONFIG = {} as AppConfig;
