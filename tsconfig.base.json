@@ -27,7 +27,6 @@
       ],
       "@sagebionetworks/challenge-registry/config": ["libs/challenge-registry/config/src/index.ts"],
       "@sagebionetworks/challenge-registry/home": ["libs/challenge-registry/home/src/index.ts"],
-      "@sagebionetworks/challenge-registry/home-got": ["libs/challenge-registry/home-got/src/index.ts"],
       "@sagebionetworks/challenge-registry/login": ["libs/challenge-registry/login/src/index.ts"],
       "@sagebionetworks/challenge-registry/not-found": [
         "libs/challenge-registry/not-found/src/index.ts"
