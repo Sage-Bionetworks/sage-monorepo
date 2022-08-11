@@ -7,11 +7,6 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 
 import { AppServerModule } from './main.server';
-// import {
-//   AppConfig,
-//   APP_CONFIG,
-//   Environment,
-// } from '@sagebionetworks/challenge-registry/config';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -35,12 +30,6 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', distFolder);
 
-  // const config: AppConfig = {
-  //   environment: Environment.Development,
-  //   apiUrl: 'http://localhost:4200/api',
-  //   appVersion: '0.0.2',
-  // };
-
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
   // Serve static files from /browser
@@ -59,12 +48,12 @@ export function app(): express.Express {
       req,
       providers: [
         { provide: APP_BASE_HREF, useValue: req.baseUrl },
+        // The base URL enables the app to load the app config file during server-side rendering.
         {
           provide: 'APP_BASE_URL',
           useFactory: () => `${protocol}://${host}`,
           deps: [],
         },
-        // { provide: APP_CONFIG, useValue: config },
       ],
     });
   });

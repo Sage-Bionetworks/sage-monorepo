@@ -17,3 +17,5 @@ export interface AppConfig {
 }
 
 export const APP_CONFIG = new InjectionToken<AppConfig>('APP_CONFIG');
+
+export const EMPTY_APP_CONFIG = {} as AppConfig;

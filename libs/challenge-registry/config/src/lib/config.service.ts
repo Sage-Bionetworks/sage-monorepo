@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { AppConfig } from './app.config';
-// import { tap } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
+import { AppConfig, EMPTY_APP_CONFIG } from './app.config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
-  config?: AppConfig;
+  config: AppConfig = EMPTY_APP_CONFIG;
 
   constructor(
     private http: HttpClient,
@@ -15,17 +15,16 @@ export class ConfigService {
   ) {}
 
   loadConfig(): Promise<void> {
-    console.log('baseUrl', this.baseUrl);
-
-    return (
-      this.http
-        .get<AppConfig>(`${this.baseUrl}/config/config.json`)
-        // .pipe(tap((config) => (this.config = config)));
-        .toPromise()
-        .then((config) => {
-          this.config = config;
-        })
-        .catch(() => Promise.resolve())
+    const appConfig$ = this.http.get<AppConfig>(
+      `${this.baseUrl}/config/config.json`
     );
+    return lastValueFrom(appConfig$)
+      .then((config) => {
+        this.config = config;
+      })
+      .catch((err) => {
+        console.error('Unable to load the config file: ', err);
+        return Promise.resolve();
+      });
   }
 }
