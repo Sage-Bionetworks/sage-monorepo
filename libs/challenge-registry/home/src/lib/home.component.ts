@@ -12,15 +12,20 @@ import { ConfigService } from '@sagebionetworks/challenge-registry/config';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-  // public appVersion: string;
+  public appVersion?: string;
 
   constructor(
-    private configService: ConfigService,
-    // @Inject(APP_CONFIG) private appConfig: AppConfig,
+    private readonly configService: ConfigService,
     private title: Title,
     private meta: Meta
   ) {
-    console.log('CONFIG', configService.config);
+    // console.log('appConfig', this.appConfig);
+    // this.appVersion = this.appConfig.appVersion;
+
+    console.log('config', this.configService.config);
+    this.appVersion = this.configService.config?.appVersion;
+    // console.log('CONFIG2', configService.config);
+    // this.appVersion = configService.config?.appVersion;
     // this.appVersion = appConfig.appVersion;
     // // SEO metadata
     // this.title.setTitle('Home - Challenge Registry');

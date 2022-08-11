@@ -10,6 +10,19 @@ import '@angular/platform-server/init';
 import { enableProdMode } from '@angular/core';
 
 import { environment } from './environments/environment';
+// import * as fs from 'fs';
+
+// console.log('Current directory:', __dirname);
+
+// fs.readdirSync(`__dirname/..`).forEach((file) => {
+//   console.log(file);
+// });
+
+// fs.readFile('./../browser/config/config.json', (err, data) => {
+//   if (err) throw err;
+
+//   console.log(data);
+// });
 
 if (environment.production) {
   enableProdMode();

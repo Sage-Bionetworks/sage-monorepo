@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { AppConfig } from './app.config';
 // import { tap } from 'rxjs';
 
@@ -9,20 +9,23 @@ import { AppConfig } from './app.config';
 export class ConfigService {
   config?: AppConfig;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject('APP_BASE_URL') @Optional() private readonly baseUrl: string
+  ) {}
 
-  loadConfig() {
+  loadConfig(): Promise<void> {
+    console.log('baseUrl', this.baseUrl);
+
     return (
       this.http
-        .get<AppConfig>('config/config.json')
+        .get<AppConfig>(`${this.baseUrl}/config/config.json`)
         // .pipe(tap((config) => (this.config = config)));
         .toPromise()
         .then((config) => {
           this.config = config;
         })
-        .catch((error) => {
-          console.error(error);
-        })
+        .catch(() => Promise.resolve())
     );
   }
 }
