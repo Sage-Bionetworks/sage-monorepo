@@ -2,10 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  APP_CONFIG,
-  MOCK_APP_CONFIG,
-} from '@sagebionetworks/challenge-registry/config';
+import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 
 import { ChallengeComponent } from './challenge.component';
 
@@ -17,7 +14,7 @@ describe('ChallengeComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ChallengeComponent],
       imports: [RouterTestingModule, HttpClientModule],
-      providers: [{ provide: APP_CONFIG, useValue: MOCK_APP_CONFIG }],
+      providers: [ConfigService],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
