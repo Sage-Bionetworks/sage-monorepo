@@ -20,9 +20,13 @@ RUN groupadd docker \
       gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
       tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+  # Add ngrok repository
+  && curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
+  && echo "deb https://ngrok-agent.s3.amazonaws.com bullseye main" | tee /etc/apt/sources.list.d/ngrok.list \
+  # Install extra packages
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
-    nodejs gh \
+    nodejs gh ngrok \
   && npm install --global yarn@latest \
   # Install nektos/act
   && curl https://raw.githubusercontent.com/nektos/act/v0.2.30/install.sh | bash - \
