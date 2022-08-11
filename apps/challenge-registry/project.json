@@ -130,10 +130,7 @@
       "options": {
         "outputPath": "dist/apps/challenge-registry/server",
         "main": "apps/challenge-registry/src/ssr.server.ts",
-        "tsConfig": "apps/challenge-registry/tsconfig.server.json",
-        "externalDependencies": [
-          "@sagebionetworks/challenge-registry/home"
-        ]
+        "tsConfig": "apps/challenge-registry/tsconfig.server.json"
       },
       "configurations": {
         "production": {
