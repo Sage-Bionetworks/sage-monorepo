@@ -1,5 +1,6 @@
+import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { AppConfig, EMPTY_APP_CONFIG } from './app.config';
 
@@ -11,6 +12,7 @@ export class ConfigService {
 
   constructor(
     private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: string,
     @Inject('APP_BASE_URL') @Optional() private readonly baseUrl: string
   ) {}
 
@@ -21,6 +23,7 @@ export class ConfigService {
     return lastValueFrom(appConfig$)
       .then((config) => {
         this.config = config;
+        this.config.isPlatformServer = isPlatformServer(this.platformId);
       })
       .catch((err) => {
         console.error('Unable to load the config file: ', err);
