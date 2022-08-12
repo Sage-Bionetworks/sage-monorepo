@@ -81,24 +81,26 @@
   display: flex;
   position: absolute;
   box-sizing: border-box;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 1;
 }
 .basic-stats-create {
-  top: 32px;
-  left: 116px;
+  //  top: 32px;
+  //  left: 116px;
   width: 36px;
   height: 36px;
-  position: absolute;
+  margin-right: 1rem;
+  //  position: absolute;
   box-sizing: border-box;
   object-fit: cover;
 }
 .basic-stats-text04 {
-  top: 29px;
-  left: 66px;
-  width: 444px;
+  //  top: 29px;
+  //  left: 66px;
+  // width: 444px;
   height: auto;
-  position: absolute;
+  //  position: absolute;
   align-self: auto;
   text-align: center;
   text-decoration: none;

@@ -87,6 +87,7 @@
   }
   .basic-stats-create {
     border-color: transparent;
+    color: rgba(255, 255, 255, 1);
   }
   .basic-stats-text04 {
     color: rgba(255, 255, 255, 1);
@@ -160,7 +161,10 @@
     line-height: normal;
     font-stretch: normal;
   }
-
+  .basic-stats-create {
+    font-size: 36px;
+    font-weight: 700px;
+  }
   .basic-stats-text04 {
     font-size: 36px;
     font-style: normal;

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
 import { UserProfileComponent } from './user-profile.component';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { UserProfileBarModule } from './user-profile-bar/user-profile-bar.module';
@@ -18,6 +19,7 @@ const routes: Routes = [{ path: '', component: UserProfileComponent }];
     CommonModule,
     RouterModule.forChild(routes),
     MatTabsModule,
+    MatIconModule,
     UiModule,
     UserProfileBarModule,
     UserProfileChallengesModule,
