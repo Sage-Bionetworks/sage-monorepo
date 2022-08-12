@@ -18,7 +18,7 @@ export const routes: Routes = [
       ),
     data: {
       seo: {
-        title: 'Awesome Challenge',
+        title: 'About - Challenge Registry',
         metaTags: [
           {
             name: 'description',
@@ -28,7 +28,7 @@ export const routes: Routes = [
           {
             name: 'title',
             property: 'og:title',
-            content: 'Awesome Challenge',
+            content: 'About - Challenge Registry',
           },
           {
             name: 'image',
@@ -57,7 +57,7 @@ export const routes: Routes = [
           },
           {
             name: 'twitter:title',
-            content: 'Awesome Challenge',
+            content: 'About - Challenge Registry',
           },
           {
             name: 'twitter:description',
