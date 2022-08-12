@@ -4,7 +4,7 @@ germline_heritability_server <- function(id, cohort_obj){
     function(input, output, session) {
 
       heritability <- reactive({
-        iatlas.api.client::query_heritability_results(datasets = "TCGA")
+        iatlasGraphQLClient::query_heritability_results(datasets = "TCGA")
       })
 
       ancestry_options <- reactive({

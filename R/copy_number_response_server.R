@@ -24,7 +24,7 @@ copy_number_response_server <- function(id, cohort_obj) {
       })
 
       group_tbl <- shiny::reactive({
-        iatlas.api.client::query_tags(
+        iatlasGraphQLClient::query_tags(
           cohorts = cohort_obj()$dataset_names,
           parent_tags = cohort_obj()$group_name
         ) %>%
@@ -47,12 +47,12 @@ copy_number_response_server <- function(id, cohort_obj) {
 
       # TODO: fix when query_copy_number_result_genes is not slow
       gene_tbl  <- shiny::reactive(
-        # iatlas.api.client::query_copy_number_result_genes(cohort_obj()$dataset)
-        iatlas.api.client::query_genes(entrez = 1:100) %>%
+        # iatlasGraphQLClient::query_copy_number_result_genes(cohort_obj()$dataset)
+        iatlasGraphQLClient::query_genes(entrez = 1:100) %>%
           dplyr::select("hgnc", "entrez")
       )
 
-      gene_set_tbl <- shiny::reactive(iatlas.api.client::query_gene_types())
+      gene_set_tbl <- shiny::reactive(iatlasGraphQLClient::query_gene_types())
 
       gene_choice_list <- shiny::reactive({
         shiny::req(gene_set_tbl(), gene_tbl())
@@ -99,7 +99,7 @@ copy_number_response_server <- function(id, cohort_obj) {
           !is.null(direction_query())
         )
 
-        result_tbl <- iatlas.api.client::query_copy_number_results(
+        result_tbl <- iatlasGraphQLClient::query_copy_number_results(
           datasets = cohort_obj()$dataset_names,
           tags = groups(),
           entrez = gene_entrez_query(),

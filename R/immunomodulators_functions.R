@@ -1,7 +1,7 @@
 
 build_im_dt_tbl <- function(){
   ims <-
-    iatlas.api.client::query_immunomodulators() %>%
+    iatlasGraphQLClient::query_immunomodulators() %>%
     dplyr::select(
       "hgnc",
       "entrez",

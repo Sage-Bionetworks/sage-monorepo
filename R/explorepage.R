@@ -77,10 +77,10 @@ explorepage_ui <- function(){
       "Samples:"
     ),
     value = c(
-      nrow(iatlas.api.client::query_datasets(types = "ici")),
+      nrow(iatlasGraphQLClient::query_datasets(types = "ici")),
       2,
-      nrow(iatlas.api.client::query_features()),
-      nrow(iatlas.api.client::query_samples())
+      nrow(iatlasGraphQLClient::query_features()),
+      nrow(iatlasGraphQLClient::query_samples())
     ),
     icon = purrr::map(c("search", "database", "filter", "users"), shiny::icon)
   ) %>%

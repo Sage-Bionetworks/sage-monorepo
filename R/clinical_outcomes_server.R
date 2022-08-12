@@ -10,13 +10,13 @@ clinical_outcomes_server <- function(
         cohort_obj$has_classes(c("Survival Time", "Survival Status"))
       }
 
-      call_module_server(
-        "clinical_outcomes_survival",
-        cohort_obj,
-        server_function = clinical_outcomes_survival_server,
-        ui_function = clinical_outcomes_survival_ui,
-        test_function = shiny::reactive(show_co_submodules)
-      )
+      # call_module_server(
+      #   "clinical_outcomes_survival",
+      #   cohort_obj,
+      #   server_function = clinical_outcomes_survival_server,
+      #   ui_function = clinical_outcomes_survival_ui,
+      #   test_function = shiny::reactive(show_co_submodules)
+      # )
 
       call_module_server(
         "clinical_outcomes_heatmap",
