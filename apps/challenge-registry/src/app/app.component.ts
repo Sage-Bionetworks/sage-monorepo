@@ -53,9 +53,9 @@ export class AppComponent implements OnInit, OnDestroy {
         mergeMap((route) => route.data)
       )
       .subscribe((data) => {
-        const seoData = data['seo'];
-        this.seoService.updateTitle(seoData['title']);
-        this.seoService.updateMetaTags(seoData['metaTags']);
+        // const seoData = data['seo'];
+        // this.seoService.updateTitle(seoData['title']);
+        // this.seoService.updateMetaTags(seoData['metaTags']);
       });
 
     this.keycloakService

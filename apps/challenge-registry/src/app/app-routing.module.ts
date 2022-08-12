@@ -18,7 +18,7 @@ export const routes: Routes = [
       ),
     data: {
       seo: {
-        title: 'About Page - Challenge Registry',
+        title: 'Awesome Challenge',
         metaTags: [
           {
             name: 'description',
@@ -28,7 +28,7 @@ export const routes: Routes = [
           {
             name: 'title',
             property: 'og:title',
-            content: 'About Page - Challenge Registry',
+            content: 'Awesome Challenge',
           },
           {
             name: 'image',
@@ -37,7 +37,38 @@ export const routes: Routes = [
           },
           { property: 'og:url', content: 'https://challenge-registry.io' },
           {
+            name: 'author',
+            property: 'article:author',
+            content: 'Marina Sirota, Tomiko Oskotsky, Alennie Roldan, ...',
+          },
+          // {
+          //   name: 'publish_date',
+          //   property: 'article:published_time',
+          //   content: '2022-08-11T18:23:57+00:00',
+          // },
+          {
+            name: 'keywords',
+            content:
+              'challenge, crowdsourcing, ai, microbiome, dream, sagebionetworks',
+          },
+          {
             name: 'twitter:card',
+            content: 'summary_large_image',
+          },
+          {
+            name: 'twitter:title',
+            content: 'Awesome Challenge',
+          },
+          {
+            name: 'twitter:description',
+            content: 'A description',
+          },
+          {
+            name: 'twitter:url',
+            content: 'https://challenge-registry.io',
+          },
+          {
+            name: 'twitter:image:src',
             content: 'https://avatars3.githubusercontent.com/u/16628445',
           },
         ],
@@ -72,20 +103,20 @@ export const routes: Routes = [
         (m) => m.SignupModule
       ),
   },
-  {
-    path: 'org/:login/:challenge',
-    loadChildren: () =>
-      import('@sagebionetworks/challenge-registry/challenge').then(
-        (m) => m.ChallengeModule
-      ),
-  },
-  {
-    path: 'org/:login',
-    loadChildren: () =>
-      import('@sagebionetworks/challenge-registry/org-profile').then(
-        (m) => m.OrgProfileModule
-      ),
-  },
+  // {
+  //   path: 'org/:login/:challenge',
+  //   loadChildren: () =>
+  //     import('@sagebionetworks/challenge-registry/challenge').then(
+  //       (m) => m.ChallengeModule
+  //     ),
+  // },
+  // {
+  //   path: 'org/:login',
+  //   loadChildren: () =>
+  //     import('@sagebionetworks/challenge-registry/org-profile').then(
+  //       (m) => m.OrgProfileModule
+  //     ),
+  // },
   {
     path: 'not-found',
     loadChildren: () =>
