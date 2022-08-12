@@ -1,4 +1,5 @@
 import 'zone.js/dist/zone-node';
+// import 'reflect-metadata';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
