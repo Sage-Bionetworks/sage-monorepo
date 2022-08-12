@@ -51,67 +51,36 @@ $dl-radius-radius-radius16: 16px;
   left: 0px;
   width: 198px;
   height: 71px;
-  display: flex;
   position: absolute;
   box-sizing: border-box;
   transition: 0.3s;
   align-items: flex-start;
   border-radius: $dl-radius-radius-radius16;
-}
-.main-section-stars-tab:hover {
-}
-.main-section-stars-tab:active {
-}
-.main-section-stars-text1 {
-  top: 21px;
-  left: 40px;
-  height: auto;
-  position: absolute;
-  font-size: 24px;
+  border: none;
   align-self: auto;
-  font-style: normal;
   text-align: center;
-  font-family: Fira Sans;
-  font-weight: 500px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
+
 .main-section-stars-tab1 {
   top: 0px;
   left: 198px;
   width: 217px;
   height: 71px;
-  display: flex;
   position: absolute;
   box-sizing: border-box;
   transition: 0.3s;
   align-items: flex-start;
   border-radius: $dl-radius-radius-radius16;
-}
-.main-section-stars-tab1:focus {
-}
-.main-section-stars-tab1:active {
-}
-.main-section-stars-text2 {
-  top: 21px;
-  left: 34px;
-  height: auto;
-  position: absolute;
-  font-size: 24px;
   align-self: auto;
-  font-style: normal;
   text-align: center;
-  font-family: Fira Sans;
-  font-weight: 500px;
-  line-height: normal;
-  font-stretch: normal;
   text-decoration: none;
 }
+
 .main-section-stars-card-group {
   top: 252px;
-  left: 58px;
-  width: 1200;
+  left: 0;
+  width: 1200px;
   height: 1096px;
   display: flex;
   position: absolute;

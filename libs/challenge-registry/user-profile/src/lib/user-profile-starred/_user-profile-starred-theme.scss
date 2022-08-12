@@ -79,9 +79,6 @@
     color: $dl-color-gray-white;
     background-color: $dl-color-default-navbar;
   }
-  .main-section-stars-text1 {
-    color: $dl-color-default-navbardark;
-  }
   .main-section-stars-tab1 {
     color: $dl-color-default-navbardark;
 
@@ -97,11 +94,8 @@
     color: $dl-color-gray-white;
     background-color: $dl-color-default-navbar;
   }
-  .main-section-stars-text2 {
-    color: $dl-color-default-navbardark;
-  }
   .main-section-stars-card-group {
-    background-color: $dl-color-default-hover2;
+    background-color: transparent;
   }
   .main-section-stars-paginator {
     border-color: transparent;
@@ -203,6 +197,15 @@
     font-style: normal;
     font-family: Lato;
     font-weight: 400;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .main-section-stars-tab,
+  .main-section-stars-tab1 {
+    font-size: 24px;
+    font-style: normal;
+    font-family: Fira Sans;
+    font-weight: 500px;
     line-height: normal;
     font-stretch: normal;
   }
