@@ -224,7 +224,7 @@ In `user-profile.component.html`:
      ```
   8. Replace status image with css codes and fix layout inside of status box
 
-- Replace exported codes of icons with matieral icon - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/886200c) is an example to update the star icon on challenge card:
+- Replace exported codes of icons with matieral icon - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/886200c) is an example to update the star icon on challenge card (font-weight is unnesscary for icon and removed in other commits):
 
   1. Use <mat-icon> with the corresponding icon name from [google fonts](https://fonts.google.com/icons).
   2. Add the same class name that was exported for the icon

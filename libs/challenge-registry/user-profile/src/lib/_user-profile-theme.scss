@@ -79,6 +79,7 @@
 
   .base-verified {
     border-color: transparent;
+    color: $dl-color-default-darkaccent3;
   }
   .base-group {
     border-color: transparent;
@@ -167,6 +168,9 @@
     font-weight: 500;
     line-height: normal;
     font-stretch: normal;
+  }
+  .base-verified {
+    font-size: 64px;
   }
   .base-text01 {
     font-size: 40px;
