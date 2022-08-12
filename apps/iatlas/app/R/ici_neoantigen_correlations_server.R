@@ -11,6 +11,10 @@ ici_neoantigen_correlations_server <- function(
       #get the count data for the samples in the cohort_obj
       count_df <- arrow::read_feather("inst/feather/neoantigen_classes_count.feather")
 
+      dataset_displays <- reactive({
+        setNames(cohort_obj()$dataset_displays, cohort_obj()$dataset_names)
+      })
+
       cohort_count <- shiny::reactive({
         cohort_patients <- cohort_obj()$sample_tbl %>%
           dplyr::inner_join(iatlasGraphQLClient::query_sample_patients(), by = "sample_name") %>%
@@ -55,14 +59,15 @@ ici_neoantigen_correlations_server <- function(
 
       feature_data <- shiny::reactive({
         shiny::req( input$feature_class_choice)
+
         cohort_count() %>%
           dplyr::filter(antigen_class == input$neoantigen_feature_choice) %>%
           dplyr::inner_join(.,cohort_obj()$get_feature_values(feature_classes = input$feature_class_choice), by = "sample_name") %>%
           dplyr::select(-c(dataset_name, dataset_display)) %>%
           dplyr::distinct() %>%
           dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample_name") %>%
-          dplyr::mutate(x_axis = paste(group_name, dataset_name, sep = "\n")) %>%
-          dplyr::group_by(x_axis, feature_name) %>%
+          dplyr::mutate(x_axis = paste(group_name, unname(dataset_displays()[dataset_name]), sep = "\n")) %>%
+          dplyr::group_by(x_axis, feature_display) %>%
           dplyr::summarise(COR = stats::cor(
             feature_value,
             antigen_count,
@@ -71,7 +76,8 @@ ici_neoantigen_correlations_server <- function(
           ),
           .groups = "keep") %>%
           tidyr::pivot_wider(names_from = x_axis, values_from = COR) %>%
-          tibble::column_to_rownames("feature_name")
+          tibble::column_to_rownames("feature_display")
+
       })
 
       output$plot <- plotly::renderPlotly({
