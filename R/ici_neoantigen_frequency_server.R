@@ -24,7 +24,7 @@ ici_neoantigen_frequency_server <- function(
       plot_df <- shiny::reactive({
         shiny::req(input$gene)
         df <- cohort_obj()$sample_tbl %>%
-          dplyr::inner_join(iatlas.api.client::query_sample_patients(), by = "sample_name") %>%
+          dplyr::inner_join(iatlasGraphQLClient::query_sample_patients(), by = "sample_name") %>%
           dplyr::inner_join(top_mhc_df(), by = "patient_name")
 
         if(input$gene != "All") df <- dplyr::filter(df, gene_name == input$gene)

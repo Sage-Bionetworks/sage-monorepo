@@ -13,7 +13,7 @@ ici_neoantigen_correlations_server <- function(
 
       cohort_count <- shiny::reactive({
         cohort_patients <- cohort_obj()$sample_tbl %>%
-          dplyr::inner_join(iatlas.api.client::query_sample_patients(), by = "sample_name") %>%
+          dplyr::inner_join(iatlasGraphQLClient::query_sample_patients(), by = "sample_name") %>%
           dplyr::inner_join(count_df, by = "patient_name") %>%
           dplyr::select(sample_name, antigen_class = feature_name, antigen_class_display = feature_display, antigen_count = feature_value)
       })
