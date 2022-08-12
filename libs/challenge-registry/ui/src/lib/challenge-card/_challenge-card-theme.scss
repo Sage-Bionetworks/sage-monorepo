@@ -77,6 +77,7 @@
   }
   .challenge-card-icon {
     border-color: transparent;
+    color: $dl-color-default-accent2;
   }
   .challenge-card-card-title {
     border-color: transparent;
@@ -138,7 +139,9 @@
     line-height: normal;
     font-stretch: normal;
   }
-
+  .challenge-card-icon {
+    font-size: 32px;
+  }
   .challenge-card-text2 {
     font-size: 32px;
     font-style: normal;

@@ -60,12 +60,15 @@ $dl-radius-radius-radius16: 16px;
 }
 .challenge-card-icon {
   top: 0px;
-  left: 32px;
+  left: 36px;
   width: 42px;
   height: 42px;
   position: absolute;
   box-sizing: border-box;
   object-fit: cover;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 .challenge-card-card-title {
   top: 194px;

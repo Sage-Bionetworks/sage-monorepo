@@ -6,16 +6,18 @@
         <span class="challenge-card-text"><span>banner pic</span></span>
       </div>
       <div class="challenge-card-starred">
-        <span class="challenge-card-text1"><span>{{ challenge.starredCount}}</span></span>
-        <img
-          alt="starI3130493454511"
-          src="public/playground_assets/357c9e04-a42e-4fef-b02b-6a60e8805fe0-9xx9.svg"
-          class="challenge-card-icon"
-        />
+        <span class="challenge-card-text1"
+          ><span>{{ challenge.starredCount }}</span></span
+        >
+        <mat-icon aria-hidden="true" class="challenge-card-icon">star_outline</mat-icon>
       </div>
       <div class="challenge-card-card-title">
-        <span class="challenge-card-text2"><span>{{ challenge.name }}</span></span>
-        <span class="challenge-card-text3"><span> {{ platform }} </span></span>
+        <span class="challenge-card-text2"
+          ><span>{{ challenge.name }}</span></span
+        >
+        <span class="challenge-card-text3"
+          ><span> {{ platform }} </span></span
+        >
       </div>
       <span class="challenge-card-text4">
         <span>{{ challenge.description }}</span>
@@ -24,7 +26,7 @@
         <div class="challenge-card-difficulty-tag">
           <span class="challenge-card-text6">{{ difficulty }}</span>
         </div>
-        <div class="challenge-card-status-tag"  [ngClass]="status ? status : ''">
+        <div class="challenge-card-status-tag" [ngClass]="status ? status : ''">
           <span class="challenge-card-text5">{{ status }}</span>
         </div>
       </div>
