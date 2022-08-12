@@ -2,17 +2,17 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AvatarModule } from '../avatar/avatar.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-import { OrgCardComponent } from './org-card.component';
-import { MOCK_ORG } from './mock-org';
+import { OrganizationCardComponent } from './organization-card.component';
+import { MOCK_ORGANIZATIONS } from './mock-organizations';
 import { HttpClientModule } from '@angular/common/http';
 
-describe('OrgCardComponent', () => {
-  let component: OrgCardComponent;
-  let fixture: ComponentFixture<OrgCardComponent>;
+describe('OrganizationCardComponent', () => {
+  let component: OrganizationCardComponent;
+  let fixture: ComponentFixture<OrganizationCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OrgCardComponent],
+      declarations: [OrganizationCardComponent],
       imports: [
         HttpClientModule,
         AvatarModule,
@@ -23,9 +23,9 @@ describe('OrgCardComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OrgCardComponent);
+    fixture = TestBed.createComponent(OrganizationCardComponent);
     component = fixture.componentInstance;
-    component.org = MOCK_ORG;
+    component.organization = MOCK_ORGANIZATIONS[0];
   });
 
   it('should create', () => {
@@ -34,30 +34,30 @@ describe('OrgCardComponent', () => {
 
   it('orgAvatar name and avatar should be defined', () => {
     fixture.detectChanges();
-    expect(component.orgAvatar).toEqual({
-      name: MOCK_ORG.name,
-      src: MOCK_ORG.avatarUrl,
-      size: 100,
+    expect(component.organizationAvatar).toEqual({
+      name: MOCK_ORGANIZATIONS[0].name,
+      src: MOCK_ORGANIZATIONS[0].avatarUrl,
+      size: 188,
     });
   });
 
   it('src property of orgAvatar should be empty string', () => {
-    component.org.avatarUrl = null;
+    component.organization.avatarUrl = null;
     fixture.detectChanges();
-    expect(component.orgAvatar).toEqual({
-      name: MOCK_ORG.name,
+    expect(component.organizationAvatar).toEqual({
+      name: MOCK_ORGANIZATIONS[0].name,
       src: '',
-      size: 100,
+      size: 188,
     });
   });
 
   it('login property of org should be used for orgAvatar name', () => {
-    component.org.name = null;
+    component.organization.name = null;
     fixture.detectChanges();
-    expect(component.orgAvatar).toEqual({
-      name: MOCK_ORG.login.replace(/-/g, ' '),
+    expect(component.organizationAvatar).toEqual({
+      name: MOCK_ORGANIZATIONS[0].login.replace(/-/g, ' '),
       src: '',
-      size: 100,
+      size: 188,
     });
   });
 });

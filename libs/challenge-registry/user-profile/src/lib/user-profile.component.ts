@@ -4,7 +4,6 @@ import {
   Account,
   AccountService,
   // ModelError as ApiClientError,
-  Organization,
   User,
   UserService,
 } from '@sagebionetworks/api-angular';
@@ -22,8 +21,10 @@ import {
 } from 'rxjs';
 import { Tab } from './tab.model';
 import { USER_PROFILE_TABS } from './user-profile-tabs';
-import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/challenge-registry/ui';
+import { MOCK_USER, Avatar } from '@sagebionetworks/challenge-registry/ui';
+// import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/challenge-registry/ui';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
+
 @Component({
   selector: 'challenge-registry-user',
   templateUrl: './user-profile.component.html',
@@ -32,10 +33,9 @@ import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 export class UserProfileComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
-  user$!: Observable<User>;
-  orgs: Organization[] = [];
-  loggedIn = false;
-
+  user$: Observable<User> = of(MOCK_USER);
+  loggedIn = true;
+  userAvatar!: Avatar;
   tabs = USER_PROFILE_TABS;
   tabKeys: string[] = Object.keys(this.tabs);
   activeTab: Tab = this.tabs['overview'];
@@ -80,8 +80,6 @@ export class UserProfileComponent implements OnInit {
     //   switchMap((account) => this.userService.getUser(account.id))
     // );
 
-    this.user$ = of(MOCK_USER);
-    const orgs$ = of([MOCK_ORG]);
     // const orgs$ = this.account$.pipe(
     //   filter((account): account is Account => account !== undefined),
     //   switchMap((account) =>
@@ -95,7 +93,18 @@ export class UserProfileComponent implements OnInit {
       map((key) => (key === null ? 'overview' : key))
     );
 
-    const orgsSub = orgs$.subscribe((orgs) => (this.orgs = orgs));
+    this.user$.subscribe(
+      (user) =>
+        (this.userAvatar = {
+          name: user.name
+            ? (user.name as string)
+            : user.login.replace(/-/g, ' '),
+          src: user.avatarUrl ? user.avatarUrl : '',
+          size: 320,
+        })
+    );
+
+    // const orgsSub = orgs$.subscribe((orgs) => (this.organizations = orgs));
 
     const activeTabSub = activeTab$.subscribe((key) => {
       if (!this.tabKeys.includes(key)) {
@@ -105,11 +114,11 @@ export class UserProfileComponent implements OnInit {
       }
     });
 
-    this.authService
-      .isLoggedIn()
-      .subscribe((loggedIn) => (this.loggedIn = loggedIn));
+    // this.authService
+    //   .isLoggedIn()
+    //   .subscribe((loggedIn) => (this.loggedIn = loggedIn));
 
-    this.subscriptions.push(orgsSub);
+    // this.subscriptions.push(orgsSub);
     this.subscriptions.push(activeTabSub);
   }
 }

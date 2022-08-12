@@ -1,44 +1,29 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Challenge, User, UserService } from '@sagebionetworks/api-angular';
-import { map, Subscription } from 'rxjs';
+import { Component, Input } from '@angular/core';
+import { Challenge, Organization, User } from '@sagebionetworks/api-angular';
+import { Tab } from '../tab.model';
+import { USER_PROFILE_STARRED_TABS } from './user-profile-starred-tabs';
+import {
+  MOCK_CHALLENGES,
+  MOCK_ORGANIZATIONS,
+} from '@sagebionetworks/challenge-registry/ui';
 
 @Component({
   selector: 'challenge-registry-user-profile-starred',
   templateUrl: './user-profile-starred.component.html',
   styleUrls: ['./user-profile-starred.component.scss'],
 })
-export class UserProfileStarredComponent implements OnInit, OnDestroy {
+export class UserProfileStarredComponent {
   @Input() user!: User;
   @Input() loggedIn!: boolean;
-
+  challenges: Challenge[] = MOCK_CHALLENGES;
+  organizations: Organization[] = MOCK_ORGANIZATIONS;
   stars: Challenge[] = [];
   starred!: boolean;
-  private subscriptions: Subscription[] = [];
+  tabs = USER_PROFILE_STARRED_TABS;
+  tabKeys: string[] = Object.keys(this.tabs);
+  activeTab: Tab = this.tabs['challenges'];
 
-  constructor(
-    private router: Router,
-    private userService: UserService,
-    @Inject(DOCUMENT) private document: Document
-  ) {}
-
-  ngOnInit(): void {
-    const starsSub = this.userService
-      .listUserStarredChallenges(this.user.id)
-      .pipe(map((page) => page.challenges))
-      .subscribe((stars) => (this.stars = stars));
-    this.subscriptions.push(starsSub);
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
-  }
-
-  onClick(url: string): void {
-    // TODO: review logic
-    if (!this.document.getSelection()?.toString() ?? false) {
-      this.router.navigateByUrl(url);
-    }
+  clickEvent(tab: string): void {
+    this.activeTab = this.tabs[tab];
   }
 }
