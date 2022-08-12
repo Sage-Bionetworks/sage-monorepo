@@ -9,7 +9,7 @@ cellimage_main_server <- function(
       ns <- session$ns
 
       cohort_groups <- shiny::reactive({
-        iatlas.api.client::query_tags(
+        iatlasGraphQLClient::query_tags(
           cohorts = cohort_obj()$dataset_names,
           parent_tags = cohort_obj()$group_name
         ) %>%

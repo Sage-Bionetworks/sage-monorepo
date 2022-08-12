@@ -38,7 +38,7 @@ io_target_distributions_server <- function(
       })
 
       feature_data <- shiny::reactive({
-        iatlas.api.client::query_io_targets() %>%
+        iatlasGraphQLClient::query_io_targets() %>%
           dplyr::select(
             "feature_name" = "entrez",
             "feature_display" = "hgnc",
