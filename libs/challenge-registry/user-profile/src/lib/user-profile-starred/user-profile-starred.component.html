@@ -2,15 +2,29 @@
   <section id="main" class="main-section-stars-main-section">
     <span class="main-section-stars-text">Starred</span>
     <div class="main-section-stars-tab-group">
-      <button class="main-section-stars-tab">
+      <button class="main-section-stars-tab" (click)="clickEvent('challenges')">
         <span class="main-section-stars-text1">Challenges</span>
       </button>
-      <button class="main-section-stars-tab1">
+      <button class="main-section-stars-tab1" (click)="clickEvent('organizations')">
         <span class="main-section-stars-text2">Organizations</span>
       </button>
     </div>
-    <div class="main-section-stars-card-group"></div>
-    <div class="main-section-stars-paginator">
-    </div>
+    <ng-container [ngSwitch]="activeTab">
+      <div *ngSwitchCase="tabs['challenges']" class="main-section-stars-card-group">
+        <challenge-registry-challenge-card
+          *ngFor="let challenge of challenges"
+          [challenge]="challenge"
+        >
+        </challenge-registry-challenge-card>
+      </div>
+      <div *ngSwitchCase="tabs['organizations']" class="main-section-stars-card-group">
+        <challenge-registry-organization-card
+          *ngFor="let organization of organizations"
+          [organization]="organization"
+        >
+        </challenge-registry-organization-card>
+      </div>
+    </ng-container>
+    <div class="main-section-stars-paginator"></div>
   </section>
 </main>
