@@ -31,6 +31,27 @@
         }
       ]
     },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "apps/challenge-user-service"
+      },
+      "dependsOn": [
+        {
+          "target": "install",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "test-integration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw verify -P integration-test"
+        ],
+        "cwd": "apps/challenge-user-service"
+      }
+    },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
