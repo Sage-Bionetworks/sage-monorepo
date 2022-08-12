@@ -224,6 +224,13 @@ In `user-profile.component.html`:
      ```
   8. Replace status image with css codes and fix layout inside of status box
 
+- User-Profile-Starred
+
+  1. Update contents for each tabs followed by <challenge-registry-challenge-card> and <challenge-registry-organization-card> - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/9bca88f) is the relevant changes
+  2. Fix some minor styles on the background and position of content container
+  3. Remove border of `.main-section-stars-tab`
+  4. Merge button container and text into one and fix hover colors - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/b8d961b) is the relevant changes
+
 - Replace exported codes of icons with matieral icon - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/886200c) is an example to update the star icon on challenge card (font-weight is unnesscary for icon and removed in other commits):
 
   1. Use <mat-icon> with the corresponding icon name from [google fonts](https://fonts.google.com/icons).
@@ -233,9 +240,7 @@ In `user-profile.component.html`:
 
 ## TO-DOs:
 
-- User-Profile
-  1. The icons have not been implemented. Replace icon images by using the material icons, otherwise upload the icon images.
-  2. Fix missing border/box-shadow of challenge/organization card, i.e the border color/box-shadow of `.challenge-card-container1` (I don't know how to get the information from figma)
+- Fix missing border/box-shadow of challenge/organization card, i.e the border color/box-shadow of `.challenge-card-container1` (I don't know how to get the information from figma)
 
 ## Issues found on the user profile component:
 

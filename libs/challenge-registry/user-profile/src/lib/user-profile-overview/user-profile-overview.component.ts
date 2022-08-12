@@ -9,5 +9,5 @@ import { MOCK_ORGANIZATIONS } from '@sagebionetworks/challenge-registry/ui';
 })
 export class UserProfileOverviewComponent {
   @Input() user!: User;
-  @Input() organizations: Organization[] = MOCK_ORGANIZATIONS;
+  organizations: Organization[] = MOCK_ORGANIZATIONS;
 }
