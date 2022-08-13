@@ -15,6 +15,7 @@ import {
   map,
   Observable,
   of,
+  pluck,
   Subscription,
   // switchMap,
   // throwError,
@@ -24,6 +25,7 @@ import { USER_PROFILE_TABS } from './user-profile-tabs';
 import { MOCK_USER, Avatar } from '@sagebionetworks/challenge-registry/ui';
 // import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/challenge-registry/ui';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
+import { UserProfile } from './user-profile';
 
 @Component({
   selector: 'challenge-registry-user',
@@ -43,7 +45,7 @@ export class UserProfileComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
     private userService: UserService,
@@ -54,6 +56,14 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const userProfile$: Observable<UserProfile> = this.activatedRoute.data.pipe(
+      pluck('userProfile')
+    );
+
+    userProfile$.subscribe((userProfile) => {
+      console.log('userProfile available to UserProfileComponent', userProfile);
+    });
+
     // this.account$ = this.route.params.pipe(
     //   switchMap((params) => this.accountService.getAccount(params['login'])),
     //   catchError((err) => {
@@ -88,7 +98,7 @@ export class UserProfileComponent implements OnInit {
     //   map((page) => page.organizations)
     // );
 
-    const activeTab$ = this.route.queryParamMap.pipe(
+    const activeTab$ = this.activatedRoute.queryParamMap.pipe(
       map((params: ParamMap) => params.get('tab')),
       map((key) => (key === null ? 'overview' : key))
     );
