@@ -25,6 +25,7 @@ import { USER_PROFILE_TABS } from './user-profile-tabs';
 import { MOCK_USER, Avatar } from '@sagebionetworks/challenge-registry/ui';
 // import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/challenge-registry/ui';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
+import { UserProfile } from './user-profile';
 
 @Component({
   selector: 'challenge-registry-user',
@@ -55,7 +56,9 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const userProfile$ = this.activatedRoute.data.pipe(pluck('userProfile'));
+    const userProfile$: Observable<UserProfile> = this.activatedRoute.data.pipe(
+      pluck('userProfile')
+    );
 
     userProfile$.subscribe((userProfile) => {
       console.log('userProfile available to UserProfileComponent', userProfile);
