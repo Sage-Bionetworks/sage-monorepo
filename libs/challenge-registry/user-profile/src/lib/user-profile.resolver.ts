@@ -3,7 +3,7 @@ import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import { Observable, of } from 'rxjs';
-import { EMPTY_USER_PROFILE } from './mock-user-profiles';
+import { AWESOME_USER_PROFILE, EMPTY_USER_PROFILE } from './mock-user-profiles';
 import { UserProfile } from './user-profile';
 
 @Injectable({
@@ -12,13 +12,11 @@ import { UserProfile } from './user-profile';
 export class UserProfileResolver implements Resolve<UserProfile> {
   constructor(
     private transferState: TransferState,
-    private configService: ConfigService
+    private configService: ConfigService // @Inject(PLATFORM_ID) private platformId
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<UserProfile> {
     const username = route.params['login'];
-    console.log('Username in user-profile-resolver', username);
-
     const userProfileKey = makeStateKey<UserProfile>(
       'userProfileKey-' + username
     );
@@ -39,7 +37,7 @@ export class UserProfileResolver implements Resolve<UserProfile> {
       //     }
       //   })
       // );
-      return of(EMPTY_USER_PROFILE);
+      return of(AWESOME_USER_PROFILE);
     }
   }
 }

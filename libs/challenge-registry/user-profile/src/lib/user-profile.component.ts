@@ -43,7 +43,7 @@ export class UserProfileComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
     private userService: UserService,
@@ -54,6 +54,10 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ userProfile }) => {
+      console.log('userProfile available to UserProfileComponent', userProfile);
+    });
+
     // this.account$ = this.route.params.pipe(
     //   switchMap((params) => this.accountService.getAccount(params['login'])),
     //   catchError((err) => {
@@ -88,7 +92,7 @@ export class UserProfileComponent implements OnInit {
     //   map((page) => page.organizations)
     // );
 
-    const activeTab$ = this.route.queryParamMap.pipe(
+    const activeTab$ = this.activatedRoute.queryParamMap.pipe(
       map((params: ParamMap) => params.get('tab')),
       map((key) => (key === null ? 'overview' : key))
     );
