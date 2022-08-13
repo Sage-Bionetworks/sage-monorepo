@@ -15,6 +15,7 @@ import {
   map,
   Observable,
   of,
+  pluck,
   Subscription,
   // switchMap,
   // throwError,
@@ -54,7 +55,9 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ userProfile }) => {
+    const userProfile$ = this.activatedRoute.data.pipe(pluck('userProfile'));
+
+    userProfile$.subscribe((userProfile) => {
       console.log('userProfile available to UserProfileComponent', userProfile);
     });
 
