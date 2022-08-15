@@ -67,7 +67,10 @@ combine_groups <- function(df, group2, cohort_obj){
     dplyr::inner_join(samples, by ="group")
 }
 
-
+get_plot_title <- function(dataset_name, dataset_display){
+  if(startsWith(dataset_name, "nanostring_")) return(paste(sub("\\ -.*", "", unname(dataset_display[gsub("^.{11}", "", dataset_name)])), "\n(Nanostring)"))
+  else return(sub("\\ -.*", "", unname(dataset_display[dataset_name])))
+}
 
 create_plot_onegroup <- function(dataset_data, cohort_obj, dataset_display, plot_type, dataset, feature, group1, reorder_function = "None",  ylabel){
 
@@ -100,7 +103,7 @@ create_plot_onegroup <- function(dataset_data, cohort_obj, dataset_display, plot
   group_colors <- order_plot$color
   names(group_colors) <- order_plot$group
 
-  plot_title <- (sub("\\ -.*", "", unname(dataset_display[dataset])))
+  plot_title <- get_plot_title(dataset, dataset_display)
 
   plot_type(dataset_data,
             x_col = as.character(group1),
@@ -166,7 +169,7 @@ create_plot_twogroup <- function(dataset_data, cohort_obj, dataset_display, plot
     dplyr::distinct() %>%
     tibble::deframe()
 
-  plot_title <- (sub("\\ -.*", "", unname(dataset_display[dataset])))
+  plot_title <- get_plot_title(dataset, dataset_display)
 
   dataset_data %>%
     plot_type(.,
@@ -192,11 +195,10 @@ log2foldchanges <- function(x,y){
 }
 
 get_stat_test <- function(df, group_to_split, sel_feature, dataset, dataset_title, paired = FALSE, test = t.test, label = group_to_split){
-
   data_set <- df %>%
     filter(dataset_name == dataset)
 
-  dataset_display <- (sub("\\ -.*", "", unname(dataset_title[dataset])))
+  dataset_display <- get_plot_title(dataset, dataset_title)
 
   if(paired == TRUE){
     patients <- data_set %>%
