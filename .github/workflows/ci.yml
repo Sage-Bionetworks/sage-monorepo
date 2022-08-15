@@ -17,7 +17,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:d71f60f3
+      image: sagebionetworks/challenge-devcontainer:3e1189ac
       options: --user root
     if: ${{ github.event_name != 'pull_request' }}
     env:
@@ -73,7 +73,7 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:d71f60f3
+      image: sagebionetworks/challenge-devcontainer:3e1189ac
       options: --user root
     if: ${{ github.event_name == 'pull_request' }}
     steps:
