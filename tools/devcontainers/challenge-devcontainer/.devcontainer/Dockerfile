@@ -14,7 +14,7 @@ RUN groupadd docker \
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
-    python3-pip python-is-python3 openjdk-17-jre \
+    python3-pip python-is-python3 openjdk-17-jdk \
     htop unzip vim wget lsof iproute2 \
   # Add Node.js repository
   && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
