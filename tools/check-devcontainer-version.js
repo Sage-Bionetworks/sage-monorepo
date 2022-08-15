@@ -25,7 +25,7 @@ if (currentDevcontainerVersion === undefined) {
 }
 
 if (expectedDevcontainerVersion !== currentDevcontainerVersion) {
-  console.log('🐋 The dev container has changed. Please stop it and rebuild it.');
-  console.debug(`Expected dev container version: ${expectedDevcontainerVersion}`);
-  console.debug(`Current dev container version: ${currentDevcontainerVersion}`);
+  console.info('🐋 The dev container has changed. Please stop the dev container and rebuild it.');
+  // console.debug(`Expected dev container version: ${expectedDevcontainerVersion}`);
+  // console.debug(`Current dev container version: ${currentDevcontainerVersion}`);
 }
