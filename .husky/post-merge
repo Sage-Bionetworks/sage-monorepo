@@ -1,4 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-rm -rf node_modules && yarn install --frozen-lockfile
+# rm -rf node_modules && yarn install --frozen-lockfile
+yarn install --frozen-lockfile
+
+# Notify the developer when a different dev container must be used.
+node tools/check-devcontainer-version.js
