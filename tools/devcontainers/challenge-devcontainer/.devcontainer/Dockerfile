@@ -1,6 +1,9 @@
 ARG imageVersion=bullseye-20211220-slim
 FROM debian:$imageVersion
 
+ARG devcontainerVersion=""
+ENV DEVCONTAINER_VERSION=${devcontainerVersion}
+
 # Safer bash scripts with 'set -euxo pipefail'
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
