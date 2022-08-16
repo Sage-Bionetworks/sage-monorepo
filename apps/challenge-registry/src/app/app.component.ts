@@ -27,7 +27,7 @@ import { SeoService } from '@sagebionetworks/shared/util';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Challenge Registry';
   sections: { [key: string]: NavbarSection } = APP_SECTIONS;
-  isLoggedIn = true;
+  isLoggedIn = false;
   user: User = MOCK_USER;
   userAvatar: Avatar = MOCK_AVATAR_32;
   userMenuItems: MenuItem[] = USER_MENU_ITEMS;
@@ -68,10 +68,9 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       });
 
-    //     this.keycloakService
-    // >>>>>>> main
-    //       .isLoggedIn()
-    //       .subscribe((isLoggedIn) => (this.isLoggedIn = isLoggedIn));
+    this.kauthService
+      .isLoggedIn()
+      .subscribe((isLoggedIn) => (this.isLoggedIn = isLoggedIn));
 
     this.kauthService.getUserProfile().subscribe((userProfile) => {
       this.userAvatar.name = userProfile.username ? userProfile.username : '';
