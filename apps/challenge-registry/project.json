@@ -85,7 +85,17 @@
           "browserTarget": "challenge-registry:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "publicHost": "http://localhost:4200",
+        "proxyConfig": "apps/challenge-registry/src/proxy.conf.json"
+      },
+      "dependsOn": [
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",

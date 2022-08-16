@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CountUpModule } from 'ngx-countup';
 import { HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
-import { KeycloakAngularModule } from 'keycloak-angular';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { UtilModule } from '@sagebionetworks/challenge-registry/util';
 import { AuthModule } from '@sagebionetworks/challenge-registry/auth';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
@@ -18,6 +18,7 @@ import {
   configFactory,
   ConfigService,
 } from '@sagebionetworks/challenge-registry/config';
+import { initializeKeycloakFactory } from './initialize-keycloak.factory';
 
 @NgModule({
   declarations: [AppComponent],
@@ -42,10 +43,12 @@ import {
       useFactory: configFactory,
       deps: [ConfigService],
       multi: true,
-      // <<<<<<< HEAD
-      //       deps: [APP_CONFIG, KeycloakService],
-      // =======
-      // >>>>>>> main
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloakFactory,
+      multi: true,
+      deps: [ConfigService, KeycloakService],
     },
   ],
   bootstrap: [AppComponent],
