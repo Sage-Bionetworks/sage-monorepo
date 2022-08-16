@@ -25,6 +25,9 @@
         "root": "apps/challenge-core-service",
         "args": []
       },
+      "outputs": [
+        "apps/challenge-core-service"
+      ],
       "dependsOn": [
         {
           "target": "install",
