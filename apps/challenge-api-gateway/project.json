@@ -23,7 +23,10 @@
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
         "root": "apps/challenge-api-gateway"
-      }
+      },
+      "outputs": [
+        "apps/challenge-api-gateway"
+      ]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
