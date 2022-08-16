@@ -1,0 +1,36 @@
+<div>
+  <div class="basic-stats-container">
+    <div class="basic-stats-logged-in" *ngIf="loggedIn">
+      <div class="basic-stats-frameorganizations">
+        <span class="basic-stats-text"><span>2</span></span>
+        <span class="basic-stats-text01"><span>organizations</span></span>
+      </div>
+      <div class="basic-stats-framestars">
+        <span class="basic-stats-text02"><span>1</span></span>
+        <span class="basic-stats-text03"><span>stars</span></span>
+      </div>
+      <button class="basic-stats-calltoaction">
+        <mat-icon aria-hidden="true" class="basic-stats-create">edit</mat-icon>
+        <span class="basic-stats-text04"><span>EDIT PROFILE</span></span>
+      </button>
+    </div>
+    <div class="basic-stats-public" *ngIf="!loggedIn">
+      <div class="basic-stats-frameorganizations1">
+        <span class="basic-stats-text05"><span>2</span></span>
+        <span class="basic-stats-text06"><span>organizations</span></span>
+      </div>
+      <div class="basic-stats-framestars1">
+        <span class="basic-stats-text07"><span>1</span></span>
+        <span class="basic-stats-text08"><span>stars</span></span>
+      </div>
+      <div class="basic-stats-calltoaction1">
+        <img
+          alt="mailoutline654100"
+          src="public/playground_assets/31b6d527-581e-4b61-9ab6-f35532dd93ff-fvp5.svg"
+          class="basic-stats-mailoutline"
+        />
+        <span class="basic-stats-text09"><span>SEND MESSAGE</span></span>
+      </div>
+    </div>
+  </div>
+</div>

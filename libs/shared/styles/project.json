@@ -4,5 +4,8 @@
   "projectType": "library",
   "generators": {},
   "targets": {},
-  "tags": ["type:styles", "scope:shared"]
+  "tags": [
+    "type:styles",
+    "scope:shared"
+  ]
 }

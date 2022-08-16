@@ -1,7 +1,7 @@
 {
   "java.format.enabled": true,
-  "java.format.settings.url": "${workspaceFolder}/eclipse-java-google-style.xml",
-  "java.checkstyle.configuration": "${workspaceFolder}/google_checks.xml",
+  "java.format.settings.url": "eclipse-java-google-style.xml",
+  "java.checkstyle.configuration": "checkstyle.xml",
   "java.checkstyle.version": "10.3",
   "java.jdt.ls.lombokSupport.enabled": false,
   "python.linting.enabled": true,
@@ -28,6 +28,18 @@
   },
   "[java]": {
     "editor.defaultFormatter": "redhat.java",
+    "editor.formatOnSave": true
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
   "eslint.workingDirectories": [

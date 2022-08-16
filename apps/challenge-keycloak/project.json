@@ -95,10 +95,17 @@
       "options": {
         "context": "apps/challenge-keycloak",
         "push": false,
-        "tags": ["sagebionetworks/challenge-keycloak:latest"]
+        "tags": [
+          "sagebionetworks/challenge-keycloak:latest"
+        ]
       }
     }
   },
-  "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": ["challenge-postgresql"]
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
+  "implicitDependencies": [
+    "challenge-postgresql"
+  ]
 }

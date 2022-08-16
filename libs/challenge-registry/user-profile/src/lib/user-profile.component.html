@@ -1,27 +1,60 @@
-<main>
-  <div class="container" *ngIf="user$ | async as user">
-    <challenge-registry-user-profile-bar [user]="user" [numOrgs]="orgs.length">
-    </challenge-registry-user-profile-bar>
+<div class="base-container" *ngIf="user$ | async as user">
+  <div class="base-container1">
+    <section id="top" class="base-top-section">
+      <challenge-registry-avatar
+        class="base-profile-pic"
+        [avatar]="userAvatar"
+      ></challenge-registry-avatar>
+      <span class="base-text">Awesome User</span>
+      <mat-icon aria-hidden="true" class="base-verified">verified_outline</mat-icon>
+      <span class="base-text01">@awesome-user</span>
+      <div class="base-usertypetag">
+        <span class="base-text02">User</span>
+      </div>
+      <div class="base-createdat">
+        <span class="base-text03">ROCC user since</span>
+        <span class="base-text04">01/01/2020</span>
+      </div>
+      <div class="base-updatedat">
+        <span class="base-text05">Profile last updated</span>
+        <span class="base-text06">03/31/2022</span>
+      </div>
+      <challenge-registry-user-profile-stats
+        class="base-basic-stats"
+        [loggedIn]="loggedIn"
+      ></challenge-registry-user-profile-stats>
+    </section>
 
-    <div class=main-container>
-      <nav mat-tab-nav-bar>
-        <ng-container *ngFor="let key of tabKeys">
-          <a mat-tab-link *ngIf="tabs[key].visible" routerLink="."
-            (click)="activeTab = tabs[key]" [active]="activeTab === tabs[key]"
-            [queryParams]="{tab: key}">{{tabs[key].name}}</a>
-        </ng-container>
-      </nav>
+    <div id="sidenav" class="base-side-nav">
+      <div class="base-bio">
+        <a class="base-text07" routerLink="." [queryParams]="{ tab: 'overview' }">Biography</a>
+      </div>
+      <div class="base-challenges">
+        <a class="base-text08" routerLink="." [queryParams]="{ tab: 'challenges' }">Challenges</a>
+      </div>
+      <div class="base-stars">
+        <a class="base-text09" routerLink="." [queryParams]="{ tab: 'starred' }">Starred</a>
+      </div>
+    </div>
 
+    <section id="main" class="base-main-section">
       <ng-container [ngSwitch]="activeTab">
-        <challenge-registry-user-profile-overview *ngSwitchCase="tabs['overview']" [user]="user"
-          [orgs]="orgs"></challenge-registry-user-profile-overview>
-        <challenge-registry-user-profile-challenges *ngSwitchCase="tabs['challenges']"
-          [userId]="user.id"></challenge-registry-user-profile-challenges>
-        <challenge-registry-user-profile-starred *ngSwitchCase="tabs['starred']" [user]="user" [loggedIn]="loggedIn">
+        <challenge-registry-user-profile-overview *ngSwitchCase="tabs['overview']" [user]="user">
+        </challenge-registry-user-profile-overview>
+        <challenge-registry-user-profile-challenges
+          *ngSwitchCase="tabs['challenges']"
+          [user]="user"
+        >
+        </challenge-registry-user-profile-challenges>
+        <challenge-registry-user-profile-starred
+          *ngSwitchCase="tabs['starred']"
+          [user]="user"
+          [loggedIn]="loggedIn"
+        >
         </challenge-registry-user-profile-starred>
       </ng-container>
-    </div>
+    </section>
   </div>
-</main>
+</div>
 
 <challenge-registry-footer [version]="appVersion"></challenge-registry-footer>

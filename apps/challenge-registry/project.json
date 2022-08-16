@@ -13,10 +13,10 @@
       }
     },
     "build": {
-      "executor": "@nrwl/angular:webpack-browser",
+      "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/challenge-registry",
+        "outputPath": "dist/apps/challenge-registry/browser",
         "index": "apps/challenge-registry/src/index.html",
         "main": "apps/challenge-registry/src/main.ts",
         "polyfills": "apps/challenge-registry/src/polyfills.ts",
@@ -25,6 +25,9 @@
         "assets": [
           "apps/challenge-registry/src/assets",
           "apps/challenge-registry/src/config",
+          "apps/challenge-registry/src/humans.txt",
+          "apps/challenge-registry/src/robots.txt",
+          "apps/challenge-registry/src/sitemap.xml",
           {
             "input": "libs/shared/assets/src/assets",
             "glob": "**/*",
@@ -42,11 +45,7 @@
           }
         ],
         "styles": ["apps/challenge-registry/src/styles.scss"],
-        "scripts": [],
-        "customWebpackConfig": {
-          "path": "apps/challenge-registry/webpack.config.js"
-        },
-        "buildLibsFromSource": false
+        "scripts": []
       },
       "configurations": {
         "production": {
@@ -59,14 +58,11 @@
             {
               "type": "anyComponentStyle",
               "maximumWarning": "2kb",
-              "maximumError": "8kb"
+              "maximumError": "100kb"
             }
           ],
           "fileReplacements": [],
-          "outputHashing": "all",
-          "customWebpackConfig": {
-            "path": "apps/challenge-registry/webpack.prod.config.js"
-          }
+          "outputHashing": "all"
         },
         "development": {
           "buildOptimizer": false,
@@ -80,7 +76,7 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@nrwl/angular:webpack-server",
+      "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
           "browserTarget": "challenge-registry:build:production"
@@ -89,17 +85,7 @@
           "browserTarget": "challenge-registry:build:development"
         }
       },
-      "defaultConfiguration": "development",
-      "options": {
-        "publicHost": "http://localhost:4200",
-        "proxyConfig": "apps/challenge-registry/src/proxy.conf.json"
-      },
-      "dependsOn": [
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
-      ]
+      "defaultConfiguration": "development"
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -110,10 +96,7 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "apps/challenge-registry/src/**/*.ts",
-          "apps/challenge-registry/src/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/challenge-registry/**/*.ts", "apps/challenge-registry/**/*.html"]
       }
     },
     "lint-fix": {
@@ -126,10 +109,12 @@
         "fix": true
       }
     },
-    "serve-mfe": {
-      "executor": "@nrwl/workspace:run-commands",
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/challenge-registry"],
       "options": {
-        "commands": ["nx serve challenge-registry"]
+        "jestConfig": "apps/challenge-registry/jest.config.ts",
+        "passWithNoTests": true
       }
     },
     "build-image": {
@@ -138,6 +123,64 @@
         "context": "apps/challenge-registry",
         "push": false,
         "tags": ["sagebionetworks/challenge-registry:latest"]
+      }
+    },
+    "server": {
+      "executor": "@angular-devkit/build-angular:server",
+      "options": {
+        "outputPath": "dist/apps/challenge-registry/server",
+        "main": "apps/challenge-registry/src/ssr.server.ts",
+        "tsConfig": "apps/challenge-registry/tsconfig.server.json"
+      },
+      "configurations": {
+        "production": {
+          "outputHashing": "media",
+          "fileReplacements": [
+            {
+              "replace": "src/environments/environment.ts",
+              "with": "src/environments/environment.prod.ts"
+            }
+          ]
+        },
+        "development": {
+          "optimization": false,
+          "sourceMap": true,
+          "extractLicenses": false
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve-ssr": {
+      "executor": "@nguniversal/builders:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "browserTarget": "challenge-registry:build:development",
+          "serverTarget": "challenge-registry:server:development"
+        },
+        "production": {
+          "browserTarget": "challenge-registry:build:production",
+          "serverTarget": "challenge-registry:server:production"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "prerender": {
+      "builder": "@nguniversal/builders:prerender",
+      "options": {
+      "browserTarget": "challenge-registry:build:production",
+      "serverTarget": "challenge-registry:server:production",
+      "routes": [
+          "/"
+      ]
+      },
+      "configurations": {
+        "production": {}
+      }
+    },
+    "build-sitemap": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/generate-sitemap.js http://localhost:4200 apps/challenge-registry/src/sitemap.xml"
       }
     }
   },

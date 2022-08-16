@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /api/
+Disallow: /login/
+
+Sitemap: http://www.challenge-registry.org/sitemap.xml

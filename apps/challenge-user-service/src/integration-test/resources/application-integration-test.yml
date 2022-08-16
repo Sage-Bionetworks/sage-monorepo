@@ -1,0 +1,55 @@
+spring:
+    #admin:
+      #enabled: true
+      #jmx-name: org.springframework.boot:type=Admin,name=SpringApplicationIT
+  datasource:
+    url: jdbc:h2:mem:challenge
+    driver-class-name: org.h2.Driver
+  #jpa:
+    #properties:
+      #hibernate:
+        #dialect: org.hibernate.dialect.H2Dialect
+    #hibernate:
+      #ddl-auto: create-drop
+    #database-platform: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false
+
+server:
+  port: 8083
+
+eureka:
+  client:
+    enabled: false
+
+keycloak:
+  realm: test
+  resource: challenge-user-service
+  credentials:
+    secret: GFRau7cQTxhx19CUmSdrqrqrZ1pshjjB
+  auth-server-url: http://challenge-keycloak:8080
+  ssl-required: external
+  use-resource-role-mappings: true
+  bearer-only: true
+
+app:
+  config:
+    keycloak:
+      server-url: http://challenge-keycloak:8080
+      realm: test
+      # TODO: Which client ID property is used?
+      client-id: challenge-api-client
+      clientId: challenge-api-client
+      client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
+
+springdoc:
+  swagger-ui:
+    path: /api/v1/api-docs/ui
+  api-docs:
+    path: /api/v1/api-docs/openapi.json
+    #path: /api/v1/openapi.json
+  packagesToScan: org.sagebionetworks.challenge.controller
+  pathsToMatch: /**
+
+example:
+  firstProperty: "integration-test"

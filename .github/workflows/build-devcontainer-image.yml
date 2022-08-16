@@ -44,8 +44,10 @@ jobs:
         run: |
           set -e
 
-          IMAGE_NAME="${{ env.IMAGE_REPOSITORY }}:${GITHUB_SHA::8}"
+          DEVCONTAINER_VERSION="${GITHUB_SHA::8}"
+          IMAGE_NAME="${{ env.IMAGE_REPOSITORY }}:${DEVCONTAINER_VERSION}"
           echo ::set-output name=image_name::${IMAGE_NAME}
+          echo ::set-output name=devcontainer_version::${DEVCONTAINER_VERSION}
 
       - name: Build the image
         run: |
@@ -57,6 +59,10 @@ jobs:
           # [Optional] Enable buildkit, set output to plain text for logging
           export DOCKER_BUILDKIT=1
           export BUILDKIT_PROGRESS=plain
+
+          # Export the devcontainer version, which will be set inside the image. See 
+          # devcontainer.json used to build the image.
+          export DEVCONTAINER_VERSION=${{ steps.prep.outputs.devcontainer_version }}
 
           # Build the image
           npm install -g "@vscode/dev-container-cli"

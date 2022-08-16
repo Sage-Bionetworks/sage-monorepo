@@ -1,8 +1,21 @@
-<challenge-registry-navbar class="mat-elevation-z6" [title]="title"
-  [sections]="sections" [isLoggedIn]="isLoggedIn" [userAvatar]="userAvatar"
+<challenge-registry-navbar
+  class="mat-elevation-z6"
+  [title]="title"
+  [sections]="sections"
+  [isLoggedIn]="isLoggedIn"
+  [userAvatar]="userAvatar"
   [userMenuItems]="userMenuItems"
   (userMenuItemSelected)="selectUserMenuItem($event)"
-  (logInClicked)="login()">
+  (logInClicked)="login()"
+>
 </challenge-registry-navbar>
 
-<router-outlet></router-outlet>
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
+<!-- <router-outlet></router-outlet> -->
+
+<!-- TODO: Spinner is not spinning when rendered on the server -->
+<!-- <div class="spinner-container" *sageAppShellRender>
+  <mat-spinner></mat-spinner>
+</div> -->

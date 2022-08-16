@@ -1,8 +1,8 @@
 # Challenge
 
 [![GitHub CI](https://img.shields.io/github/workflow/status/Sage-Bionetworks/challenge-registry/CI.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/challenge-registry/actions)
-[![Coverage Status](https://img.shields.io/coveralls/github/Sage-Bionetworks/challenge-registry.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=coverage&logo=Coveralls)](https://coveralls.io/github/Sage-Bionetworks/challenge-registry?branch=main)
 [![GitHub License](https://img.shields.io/github/license/Sage-Bionetworks/challenge-registry.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE)
+<!-- [![Coverage Status](https://img.shields.io/coveralls/github/Sage-Bionetworks/challenge-registry.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=coverage&logo=Coveralls)](https://coveralls.io/github/Sage-Bionetworks/challenge-registry?branch=main) -->
 
 ## Introduction
 
@@ -38,7 +38,7 @@ If you plan to contribute to this project, please create a fork and use its URL 
 more information on contributing and/or our Forking Workflow approach, see
 [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
-    git clone --depth 1 <repo url>
+    git clone --depth 1 --no-single-branch <repo url>
 
 Then open your fork repo inside our devcontainer using these instructions:
 
@@ -77,6 +77,10 @@ Main contributors and developers:
 - [Thomas Schaffter](https://github.com/tschaffter)
 - [Verena Chung](https://github.com/vpchung)
 - [Rongrong Chai](https://github.com/rrchai)
+
+<!-- <a href="https://github.com/Sage-Bionetworks/challenge-registry/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Sage-Bionetworks/challenge-registry" width="20%"/>
+</a> -->
 
 <!-- Links -->
 

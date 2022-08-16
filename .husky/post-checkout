@@ -12,4 +12,7 @@
 # When the third script parameter is "1" we are executing a branch checkout
 if [ "$3" = "1" ]; then
   yarn install --frozen-lockfile
+
+  # Notify the developer when a different dev container must be used.
+  node tools/check-devcontainer-version.js
 fi

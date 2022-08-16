@@ -6,7 +6,9 @@
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/challenge-registry/ui"],
+      "outputs": [
+        "coverage/libs/challenge-registry/ui"
+      ],
       "options": {
         "jestConfig": "libs/challenge-registry/ui/jest.config.ts",
         "passWithNoTests": true
@@ -22,6 +24,13 @@
       }
     }
   },
-  "tags": ["type:feature", "scope:challenge-registry"],
-  "implicitDependencies": ["shared-assets", "shared-styles", "shared-themes"]
+  "tags": [
+    "type:feature",
+    "scope:challenge-registry"
+  ],
+  "implicitDependencies": [
+    "shared-assets",
+    "shared-styles",
+    "shared-themes"
+  ]
 }

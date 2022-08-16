@@ -32,9 +32,14 @@
       "options": {
         "context": "apps/challenge-mongodb",
         "push": false,
-        "tags": ["sagebionetworks/challenge-mongodb:latest"]
+        "tags": [
+          "sagebionetworks/challenge-mongodb:latest"
+        ]
       }
     }
   },
-  "tags": ["type:type", "scope:backend"]
+  "tags": [
+    "type:type",
+    "scope:backend"
+  ]
 }

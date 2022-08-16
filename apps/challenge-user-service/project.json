@@ -10,6 +10,15 @@
         "cwd": "apps/challenge-user-service"
       }
     },
+    "prepare-java": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
+        ],
+        "cwd": "apps/challenge-user-service"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
@@ -22,12 +31,27 @@
         }
       ]
     },
-    // "test": {
-    //   "executor": "@nxrocks/nx-spring-boot:test",
-    //   "options": {
-    //     "root": "apps/challenge-user-service"
-    //   }
-    // },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "apps/challenge-user-service"
+      },
+      "dependsOn": [
+        {
+          "target": "install",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "test-integration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw verify -P integration-test"
+        ],
+        "cwd": "apps/challenge-user-service"
+      }
+    },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
@@ -103,7 +127,10 @@
       ]
     }
   },
-  "tags": ["type:service", "scope:backend"],
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
   "implicitDependencies": [
     "challenge-mariadb",
     "challenge-keycloak",

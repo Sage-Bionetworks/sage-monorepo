@@ -4,6 +4,11 @@
   "projectType": "library",
   "generators": {},
   "targets": {},
-  "tags": ["type:themes", "scope:challenge-registry"],
-  "implicitDependencies": ["challenge-registry-about"]
+  "tags": [
+    "type:themes",
+    "scope:challenge-registry"
+  ],
+  "implicitDependencies": [
+    "challenge-registry-about"
+  ]
 }

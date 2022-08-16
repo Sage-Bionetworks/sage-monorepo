@@ -6,15 +6,14 @@
 @use './lib/navbar/navbar-theme' as navbar;
 @use './lib/user-button/user-button-theme' as user-button;
 @use '../../home/src/lib/featured-challenge-list/featured-challenge-list-theme' as featured;
+@use './lib/challenge-card/challenge-card-theme' as challenge-card;
+@use './lib/organization-card/organization-card-theme' as organization-card;
 
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300,500&family=Poppins:wght@500,600&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;500&family=Lato:wght@400&family=Poppins:wght@500;600&display=swap');
 
 $fira: mat.define-typography-config(
   $font-family: "'Fira Sans', sans-serif",
 );
-
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300,500&family=Lato:wght@400&family=Poppins:wght@500,600&display=swap');
 
 $primary: mat.define-palette(pal.$dark-blue-palette, 600);
 $accent: mat.define-palette(pal.$accent-pink-palette, 400);
@@ -32,13 +31,15 @@ $fira: mat.define-typography-config(
   $input: mat.define-typography-level(16px, 1.125, 400, "'Lato', sans-serif", 0.1px),
 );
 
-$theme: mat.define-light-theme((
-  color: (
-    primary: $primary,
-    accent: $accent,
-  ),
-  typography: $fira,
-));
+$theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+    ),
+    typography: $fira,
+  )
+);
 
 @mixin theme($theme) {
   @include button-github.theme($theme);
@@ -48,4 +49,6 @@ $theme: mat.define-light-theme((
   @include mat.button-typography($fira);
   @include user-button.theme($theme);
   @include featured.theme($theme);
+  @include challenge-card.theme($theme);
+  @include organization-card.theme($theme);
 }

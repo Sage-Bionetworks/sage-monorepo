@@ -1,4 +1,5 @@
 lib/*.jar
+tmp/
 
 HELP.md
 target/

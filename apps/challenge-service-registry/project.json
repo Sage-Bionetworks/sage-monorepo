@@ -10,6 +10,15 @@
         "cwd": "apps/challenge-service-registry"
       }
     },
+    "prepare-java": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
+        ],
+        "cwd": "apps/challenge-service-registry"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
@@ -85,5 +94,8 @@
       ]
     }
   },
-  "tags": ["type:service", "scope:backend"]
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ]
 }

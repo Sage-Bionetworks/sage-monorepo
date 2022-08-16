@@ -1,0 +1,13 @@
+<div *ngIf="organization">
+  <div class="organization-card-container">
+    <div class="organization-card-container1">
+      <challenge-registry-avatar  class="organization-card-card-banner" 
+        [avatar]="organizationAvatar">
+      </challenge-registry-avatar>
+      <div class="organization-card-card-title">
+        <span class="organization-card-text1"><span>{{ organization.name }}</span></span>
+        <span class="organization-card-text2"><span>@{{ organization.login }}</span></span>
+      </div>
+    </div>
+  </div>
+</div>

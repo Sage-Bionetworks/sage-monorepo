@@ -10,6 +10,15 @@
         "cwd": "apps/challenge-auth-service"
       }
     },
+    "prepare-java": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
+        ],
+        "cwd": "apps/challenge-auth-service"
+      }
+    },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
@@ -103,7 +112,10 @@
       ]
     }
   },
-  "tags": ["type:service", "scope:backend"],
+  "tags": [
+    "type:service",
+    "scope:backend"
+  ],
   "implicitDependencies": [
     "challenge-keycloak",
     "challenge-service-registry",

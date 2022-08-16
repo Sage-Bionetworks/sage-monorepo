@@ -1,0 +1,35 @@
+<div *ngIf="challenge">
+  <div class="challenge-card-container">
+    <div class="challenge-card-container1">
+      <div class="challenge-card-card-banner">
+        <!-- update to retrieve banner path from challenge obj when API ready -->
+        <span class="challenge-card-text"><span>banner pic</span></span>
+      </div>
+      <div class="challenge-card-starred">
+        <span class="challenge-card-text1"
+          ><span>{{ challenge.starredCount }}</span></span
+        >
+        <mat-icon aria-hidden="true" class="challenge-card-icon">star_outline</mat-icon>
+      </div>
+      <div class="challenge-card-card-title">
+        <span class="challenge-card-text2"
+          ><span>{{ challenge.name }}</span></span
+        >
+        <span class="challenge-card-text3"
+          ><span>{{ platform }}</span></span
+        >
+      </div>
+      <span class="challenge-card-text4">
+        <span>{{ challenge.description }}</span>
+      </span>
+      <div class="challenge-card-card-footer">
+        <div class="challenge-card-difficulty-tag">
+          <span class="challenge-card-text6">{{ difficulty }}</span>
+        </div>
+        <div class="challenge-card-status-tag" [ngClass]="status ? status : ''">
+          <span class="challenge-card-text5">{{ status }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
