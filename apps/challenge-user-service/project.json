@@ -24,6 +24,9 @@
       "options": {
         "root": "apps/challenge-user-service"
       },
+      "outputs": [
+        "apps/challenge-user-service"
+      ],
       "dependsOn": [
         {
           "target": "install",

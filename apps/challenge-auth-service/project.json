@@ -24,6 +24,9 @@
       "options": {
         "root": "apps/challenge-auth-service"
       },
+      "outputs": [
+        "apps/challenge-auth-service"
+      ],
       "dependsOn": [
         {
           "target": "install",
