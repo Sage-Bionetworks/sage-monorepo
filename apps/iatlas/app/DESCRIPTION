@@ -55,6 +55,7 @@ Imports:
     shinyjs,
     stringr,
     survival,
+    survminer,
     tibble,
     tidyr,
     tidyselect,
