@@ -1,6 +1,6 @@
 {
   "name": "Challenge",
-  "image": "sagebionetworks/challenge-devcontainer:ff081d0ab",
+  "image": "sagebionetworks/challenge-devcontainer:ff081d0a",
   // "image": "sagebionetworks/challenge-devcontainer:test",
 
   "features": {
