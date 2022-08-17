@@ -65,7 +65,7 @@ ici_neoantigen_classes_server <- function(
 
       output$neoantigen_classes_plot <- plotly::renderPlotly({
         shiny::req(all_plots())
-        plotly::subplot(all_plots(), nrows = (length(all_plots())+2)%/%3, margin = 0.04)
+        plotly::subplot(all_plots(), nrows = (length(all_plots())+2)%/%3, margin = c(0.02, 0.02, 0.1, 0.1))
       })
     }
   )
