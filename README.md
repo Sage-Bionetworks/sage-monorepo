@@ -8,18 +8,9 @@
 
 This [Nx monorepo](https://nx.dev/) includes the codebase of the Challenge ecosystem.
 
-### Apps
+### Projects
 
-- Challenge Registry
-- Challenge Platform
-
-### Backend
-
-- API Gateway
-- Service Registry
-- Keycloak (IAM)
-- Databases: MariaDB, PostgreSQL, MongoDB
-- User Service
+The list of all the applications and libraries developed is available [here](docs/projects.md).
 
 ## Requirements
 
