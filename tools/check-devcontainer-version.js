@@ -9,11 +9,11 @@ const json = JSON5.parse(data);
 const image = json['image'];
 if (image === undefined) {
   console.error('The property `image` is missing.');
-  process.exit(1);
+  process.exit(0);
 }
 if (!image.includes(':')) {
   console.error('The value of `image` must include the image tag.');
-  process.exit(1);
+  process.exit(0);
 }
 
 const expectedDevcontainerVersion = image.split(':')[1];
@@ -21,7 +21,7 @@ const currentDevcontainerVersion = process.env.DEVCONTAINER_VERSION;
 
 if (currentDevcontainerVersion === undefined) {
   console.error('Unable to read the environment variable `DEVCONTAINER_VERSION`.');
-  process.exit(1);
+  process.exit(0);
 }
 
 if (expectedDevcontainerVersion !== currentDevcontainerVersion) {
