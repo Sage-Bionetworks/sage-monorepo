@@ -8,7 +8,7 @@
 
 This [Nx monorepo](https://nx.dev/) includes the codebase of the Challenge ecosystem.
 
-### Projects
+## Projects
 
 The list of all the applications and libraries developed is available [here](docs/projects.md).
 
