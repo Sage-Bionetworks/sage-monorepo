@@ -12,21 +12,6 @@
         "libs/shared-java/challenge-util/build"
       ]
     },
-    // "install": {
-    //   "executor": "@nxrocks/nx-spring-boot:build",
-    //   "options": {
-    //     "root": "libs/shared-java/challenge-util",
-    //     "args": [
-    //       "install"
-    //     ]
-    //   },
-    //   "dependsOn": [
-    //     {
-    //       "target": "build",
-    //       "projects": "self"
-    //     }
-    //   ]
-    // },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
       "options": {
@@ -35,18 +20,6 @@
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
-      "options": {
-        "root": "libs/shared-java/challenge-util"
-      }
-    },
-    "format": {
-      "executor": "@nxrocks/nx-spring-boot:format",
-      "options": {
-        "root": "libs/shared-java/challenge-util"
-      }
-    },
-    "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:format-check",
       "options": {
         "root": "libs/shared-java/challenge-util"
       }
