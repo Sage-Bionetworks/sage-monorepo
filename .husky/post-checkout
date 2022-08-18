@@ -11,7 +11,11 @@
 
 # When the third script parameter is "1" we are executing a branch checkout
 if [ "$3" = "1" ]; then
+  # Install the Node.js dependencies.
   yarn install --frozen-lockfile
+
+  # Install the Java dependencies.
+  yarn nx run-many --target=prepare-java --parallel=1
 
   # Notify the developer when a different dev container must be used.
   node tools/check-devcontainer-version.js
