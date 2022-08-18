@@ -24,6 +24,7 @@
     "webhint.vscode-webhint",
     "GitHub.vscode-pull-request-github",
     "humao.rest-client",
+    "vscjava.vscode-gradle",
     "vscjava.vscode-java-pack",
     "vscjava.vscode-lombok",
     "Pivotal.vscode-boot-dev-pack",

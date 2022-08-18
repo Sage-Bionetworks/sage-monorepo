@@ -18,7 +18,7 @@
         "root": "libs/shared-java/challenge-util"
       },
       "outputs": [
-        "libs/shared-java/challenge-util/target"
+        "libs/shared-java/challenge-util/build"
       ]
     },
     "install": {

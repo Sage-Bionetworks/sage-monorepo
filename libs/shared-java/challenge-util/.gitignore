@@ -1,4 +1,5 @@
-.gradle
+.gradle/
+maven-legacy/
 
 HELP.md
 target/

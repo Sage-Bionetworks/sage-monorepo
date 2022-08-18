@@ -10,6 +10,7 @@
     "webhint.vscode-webhint",
     "github.vscode-pull-request-github",
     "humao.rest-client",
+    "vscjava.vscode-gradle",
     "vscjava.vscode-java-pack",
     "vscjava.vscode-lombok",
     "pivotal.vscode-boot-dev-pack",
