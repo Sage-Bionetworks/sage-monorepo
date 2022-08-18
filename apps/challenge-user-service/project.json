@@ -29,18 +29,13 @@
       ],
       "dependsOn": ["^install"]
     },
-    // "test": {
-    //   "executor": "@nxrocks/nx-spring-boot:test",
-    //   "options": {
-    //     "root": "apps/challenge-user-service"
-    //   },
-    //   "dependsOn": [
-    //     {
-    //       "target": "install",
-    //       "projects": "dependencies"
-    //     }
-    //   ]
-    // },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "apps/challenge-user-service"
+      },
+      "dependsOn": ["build"]
+    },
     // "test-integration": {
     //   "executor": "@nrwl/workspace:run-commands",
     //   "options": {
