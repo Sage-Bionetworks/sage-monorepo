@@ -12,6 +12,19 @@
         "libs/shared-java/challenge-util/build"
       ]
     },
+    "install": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "./gradlew publishToMavenLocal",
+        "cwd": "libs/shared-java/challenge-util"
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
+    },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
       "options": {

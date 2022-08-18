@@ -1,7 +1,8 @@
 plugins {
-  id 'org.springframework.boot' version '2.7.2'
   id 'io.spring.dependency-management' version '1.0.12.RELEASE'
   id 'java'
+  id 'maven-publish'
+  id 'org.springframework.boot' version '2.7.2'
 }
 
 group = 'org.sagebionetworks.challenge'
@@ -22,6 +23,18 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      from(components.java)
+    }
+  }
+}
+
 // spring boot library projects don't need an executable jar, so we disable it
 bootJar {
 	enabled = false
@@ -29,4 +42,3 @@ bootJar {
 jar {
 	enabled = true
 }
-

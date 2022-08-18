@@ -1,5 +1,6 @@
 .gradle
 lib/*.jar
+maven-legacy/
 tmp/
 
 HELP.md
