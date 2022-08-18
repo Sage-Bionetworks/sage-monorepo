@@ -1,4 +1,5 @@
 .gradle
+bin/
 lib/*.jar
 maven-legacy/
 tmp/
