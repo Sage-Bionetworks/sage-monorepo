@@ -29,3 +29,4 @@ bootJar {
 jar {
 	enabled = true
 }
+
