@@ -1,7 +1,9 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-rm -rf node_modules && yarn install --frozen-lockfile
+echo "post-rebased hook called"
 
-# Notify the developer when a different dev container must be used.
-node tools/check-devcontainer-version.js
+# rm -rf node_modules && yarn install --frozen-lockfile
+
+# # Notify the developer when a different dev container must be used.
+# node tools/check-devcontainer-version.js
