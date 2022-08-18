@@ -44,6 +44,7 @@
     "shared-themes": "libs/shared/themes",
     "shared-util": "libs/shared/util",
     "shared-web-components": "libs/shared/web-components",
-    "plop": "apps/plop"
+    "gradle-app": "apps/gradle-app",
+    "gradle-lib": "libs/gradle-lib"
   }
 }

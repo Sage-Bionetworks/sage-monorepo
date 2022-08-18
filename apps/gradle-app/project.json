@@ -1,60 +1,60 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/plop/src",
+  "sourceRoot": "apps/gradle-app/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "root": "apps/plop"
+        "root": "apps/gradle-app"
       }
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
       "options": {
-        "root": "apps/plop"
+        "root": "apps/gradle-app"
       }
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
-        "root": "apps/plop"
+        "root": "apps/gradle-app"
       }
     },
     "format": {
       "executor": "@nxrocks/nx-spring-boot:format",
       "options": {
-        "root": "apps/plop"
+        "root": "apps/gradle-app"
       }
     },
     "format-check": {
       "executor": "@nxrocks/nx-spring-boot:format-check",
       "options": {
-        "root": "apps/plop"
+        "root": "apps/gradle-app"
       }
     },
     "run": {
       "executor": "@nxrocks/nx-spring-boot:run",
       "options": {
-        "root": "apps/plop"
+        "root": "apps/gradle-app"
       }
     },
     "serve": {
       "executor": "@nxrocks/nx-spring-boot:serve",
       "options": {
-        "root": "apps/plop"
+        "root": "apps/gradle-app"
       }
     },
     "buildImage": {
       "executor": "@nxrocks/nx-spring-boot:buildImage",
       "options": {
-        "root": "apps/plop"
+        "root": "apps/gradle-app"
       }
     },
     "buildInfo": {
       "executor": "@nxrocks/nx-spring-boot:buildInfo",
       "options": {
-        "root": "apps/plop"
+        "root": "apps/gradle-app"
       }
     }
   },

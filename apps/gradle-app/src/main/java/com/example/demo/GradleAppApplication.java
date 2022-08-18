@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PlopApplication {
+public class GradleAppApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(PlopApplication.class, args);
-  }
+	public static void main(String[] args) {
+		SpringApplication.run(GradleAppApplication.class, args);
+	}
 
 }
