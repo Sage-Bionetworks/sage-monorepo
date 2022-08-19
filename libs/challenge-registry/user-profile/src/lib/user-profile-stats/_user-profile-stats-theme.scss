@@ -6,6 +6,8 @@
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
+  $shadow: rgba(196, 196, 196, 1);
+  $light-bg: white;
 
   $dl-color-gray-500: #595959;
   $dl-color-gray-700: #999999;
@@ -62,8 +64,8 @@
     border-color: transparent;
   }
   .basic-stats-frameorganizations {
-    border-color: $dl-color-default-primary2;
-    background-color: rgba(255, 255, 255, 1);
+    border-color: $shadow;
+    background-color: $light-bg;
   }
   .basic-stats-text {
     color: rgba(0, 0, 0, 1);
@@ -72,8 +74,8 @@
     color: rgba(0, 0, 0, 1);
   }
   .basic-stats-framestars {
-    border-color: $dl-color-default-primary2;
-    background-color: rgba(255, 255, 255, 1);
+    border-color: $shadow;
+    background-color: $light-bg;
   }
   .basic-stats-text02 {
     color: rgba(0, 0, 0, 1);
@@ -95,19 +97,11 @@
   .basic-stats-public {
     border-color: transparent;
   }
-  .basic-stats-frameorganizations1 {
-    border-color: $dl-color-default-primary2;
-    background-color: rgba(255, 255, 255, 1);
-  }
   .basic-stats-text05 {
     color: rgba(0, 0, 0, 1);
   }
   .basic-stats-text06 {
     color: rgba(0, 0, 0, 1);
-  }
-  .basic-stats-framestars1 {
-    border-color: $dl-color-default-primary2;
-    background-color: rgba(255, 255, 255, 1);
   }
   .basic-stats-text07 {
     color: rgba(0, 0, 0, 1);
