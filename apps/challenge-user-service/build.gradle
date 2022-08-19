@@ -1,6 +1,7 @@
 plugins {
   id 'io.spring.dependency-management' version '1.0.12.RELEASE'
   id 'java'
+  id 'jvm-test-suite'
   id 'org.springframework.boot' version '2.7.2'
 }
 
@@ -11,6 +12,59 @@ sourceCompatibility = '17'
 repositories {
   mavenCentral()
   mavenLocal()
+}
+
+testing {
+  suites {
+    test {
+      useJUnitJupiter()
+    }
+
+    integrationTest(JvmTestSuite) {
+      dependencies {
+        implementation project
+      }
+      // sources {
+      //   java {
+      //     srcDirs = ['src/integrationTest/java']
+      //   }
+      // }
+      targets {
+        all {
+          testTask.configure {
+            shouldRunAfter(test)
+          }
+        }
+      }
+    }
+  }
+}
+
+configurations {
+  integrationTestImplementation.extendsFrom implementation
+  integrationTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+// configure the integrationTest to run as part of a regular build
+// tasks.named('check') {
+//   dependsOn(testing.suites.integrationTest)
+// }
+
+
+
+// tasks.test {
+// 	useJUnitPlatform()
+//   testLogging {
+//     events("passed", "skipped", "failed")
+//   }
+// }
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+test {
+  testLogging.showStandardStreams = true
 }
 
 dependencies {
@@ -28,24 +82,23 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-devtools:2.7.2'
   implementation 'com.h2database:h2:2.1.214'
   implementation 'org.sagebionetworks.challenge:challenge-util:0.0.1-SNAPSHOT'
+  compileOnly 'org.projectlombok:lombok:1.18.24'
   runtimeOnly 'mysql:mysql-connector-java:8.0.30'
+  annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
   testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.2'
   testImplementation 'org.assertj:assertj-core:3.23.1'
-  compileOnly 'org.projectlombok:lombok:1.18.24'
-  annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+  integrationTestImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.2'
+  integrationTestImplementation 'org.assertj:assertj-core:3.23.1'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-  testLogging {
-    events("passed", "skipped", "failed")
-  }
-}
+// // Setup integration tests
 
-tasks.withType(JavaCompile) {
-  options.encoding = 'UTF-8'
-}
+// sourceSets {
+//   intTest {
+//     compileClasspath += sourceSets.main.output
+//     runtimeClasspath += sourceSets.main.output
+//   }
+// }
 
-test {
-  testLogging.showStandardStreams = true
-}
