@@ -27,35 +27,53 @@ jobs:
         name: Checkout [main]
         with:
           fetch-depth: 0
+
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
+
       - name: Setup Node.js cache
         id: cache-node
         uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
       - name: Setup pipenv cache
         id: cache-pipenv
         uses: actions/cache@v3
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+
       - name: Setup Maven cache
         uses: actions/cache@v3
         with:
-          path: /root/.m2/repository
+          path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+
+      - name: Setup Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Configure hostnames
         run: ./tools/configure-hostnames.sh
+
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
+
       # - name: Setup Python virtualenvs
       #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
       #   run: yarn nx python api
+
       - run: yarn nx affected --target=prepare
       - run: yarn nx affected --target=prepare-java --parallel=1
       - run: yarn nx affected --target=lint
@@ -82,35 +100,53 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
+
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
+
       - name: Setup Node.js cache
         id: cache-node
         uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
       # - name: Setup pipenv cache
       #   id: cache-pipenv
       #   uses: actions/cache@v3
       #   with:
       #     path: ~/.local/share/virtualenvs
       #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+
       - name: Setup Maven cache
         uses: actions/cache@v3
         with:
-          path: /root/.m2/repository
+          path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+
+      - name: Setup Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Configure hostnames
         run: ./tools/configure-hostnames.sh
+
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
+
       # - name: Setup Python virtualenvs
       #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
       #   run: yarn nx python api
+
       - run: yarn nx affected --target=prepare
       - run: yarn nx affected --target=prepare-java --parallel=1
       - run: yarn nx affected --target=lint
