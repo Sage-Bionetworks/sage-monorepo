@@ -23,6 +23,7 @@
   box-sizing: border-box;
   align-items: flex-start;
   flex-shrink: 1;
+  border-style: solid;
   border-width: 1px;
 }
 .basic-stats-text {
@@ -53,6 +54,7 @@
   box-sizing: border-box;
   align-items: flex-start;
   flex-shrink: 1;
+  border-style: solid;
   border-width: 1px;
 }
 .basic-stats-text02 {
@@ -113,18 +115,6 @@
   display: flex;
   position: absolute;
 }
-.basic-stats-frameorganizations1 {
-  top: 0px;
-  left: 0px;
-  width: 225px;
-  height: 100px;
-  display: flex;
-  position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
-  border-width: 1px;
-}
 .basic-stats-text05 {
   top: 13px;
   left: 103px;
@@ -143,18 +133,6 @@
   text-align: center;
   text-decoration: none;
 }
-.basic-stats-framestars1 {
-  top: 0px;
-  left: 224px;
-  width: 225px;
-  height: 100px;
-  display: flex;
-  position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
-  border-width: 1px;
-}
 .basic-stats-text07 {
   top: 13px;
   left: 104px;
@@ -172,17 +150,6 @@
   align-self: auto;
   text-align: center;
   text-decoration: none;
-}
-.basic-stats-calltoaction1 {
-  top: 0px;
-  left: 449px;
-  width: 588px;
-  height: 100px;
-  display: flex;
-  position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
 }
 .basic-stats-mailoutline {
   top: 33px;

@@ -64,7 +64,7 @@
     border-color: transparent;
   }
   .basic-stats-frameorganizations {
-    border: solid 1px $shadow;
+    border-color: $shadow;
     background-color: $light-bg;
   }
   .basic-stats-text {
@@ -74,7 +74,7 @@
     color: rgba(0, 0, 0, 1);
   }
   .basic-stats-framestars {
-    border: solid 1px $shadow;
+    border-color: $shadow;
     background-color: $light-bg;
   }
   .basic-stats-text02 {
