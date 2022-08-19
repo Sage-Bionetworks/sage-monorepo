@@ -153,7 +153,8 @@ jobs:
       - name: Current home
         run: |
           echo $HOME
-          cd ~/.gradle/caches
+          cd /github/home/.gradle
+          # cd ~/.gradle/caches
           pwd
 
       - run: yarn nx affected --target=lint
