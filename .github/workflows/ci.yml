@@ -104,12 +104,6 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
 
-      - name: Current home
-        run: |
-          echo $HOME
-          cd ~/.gradle/caches
-          pwd
-
       - name: Setup Node.js cache
         id: cache-node
         uses: actions/cache@v3
@@ -155,6 +149,13 @@ jobs:
 
       - run: yarn nx affected --target=prepare
       - run: yarn nx affected --target=prepare-java --parallel=1
+
+      - name: Current home
+        run: |
+          echo $HOME
+          cd ~/.gradle/caches
+          pwd
+
       - run: yarn nx affected --target=lint
       - run: yarn nx affected --target=build
       - run: yarn nx affected --target=test
