@@ -62,7 +62,7 @@
     border-color: transparent;
   }
   .basic-stats-frameorganizations {
-    border-color: $dl-color-default-primary2;
+    border: rgba(196, 196, 196, 1) 1px solid;
     background-color: rgba(255, 255, 255, 1);
   }
   .basic-stats-text {
@@ -72,7 +72,7 @@
     color: rgba(0, 0, 0, 1);
   }
   .basic-stats-framestars {
-    border-color: $dl-color-default-primary2;
+    border: rgba(196, 196, 196, 1) 1px solid;
     background-color: rgba(255, 255, 255, 1);
   }
   .basic-stats-text02 {
