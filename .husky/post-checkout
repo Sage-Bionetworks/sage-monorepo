@@ -11,6 +11,10 @@
 
 # When the third script parameter is "1" we are executing a branch checkout
 if [ "$3" = "1" ]; then
+
+  changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+  echo $changed_files
+
   # Install the Node.js dependencies.
   yarn install --frozen-lockfile
 
