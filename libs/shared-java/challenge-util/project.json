@@ -7,7 +7,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
+          "./gradlew --version"
         ],
         "cwd": "libs/shared-java/challenge-util"
       }
@@ -18,16 +18,14 @@
         "root": "libs/shared-java/challenge-util"
       },
       "outputs": [
-        "libs/shared-java/challenge-util/target"
+        "libs/shared-java/challenge-util/build"
       ]
     },
     "install": {
-      "executor": "@nxrocks/nx-spring-boot:build",
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "root": "libs/shared-java/challenge-util",
-        "args": [
-          "install"
-        ]
+        "command": "./gradlew publishToMavenLocal",
+        "cwd": "libs/shared-java/challenge-util"
       },
       "dependsOn": [
         {
@@ -44,18 +42,6 @@
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
-      "options": {
-        "root": "libs/shared-java/challenge-util"
-      }
-    },
-    "format": {
-      "executor": "@nxrocks/nx-spring-boot:format",
-      "options": {
-        "root": "libs/shared-java/challenge-util"
-      }
-    },
-    "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:format-check",
       "options": {
         "root": "libs/shared-java/challenge-util"
       }

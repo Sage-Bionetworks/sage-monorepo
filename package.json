@@ -59,6 +59,7 @@
     "@angular/language-service": "14.1.1",
     "@hint/configuration-web-recommended": "^8.2.8",
     "@hint/formatter-codeframe": "^3.1.26",
+    "@jnxplus/nx-boot-gradle": "^2.3.0",
     "@nguniversal/builders": "^14.0.3",
     "@nrwl/angular": "14.5.4",
     "@nrwl/cli": "14.5.4",

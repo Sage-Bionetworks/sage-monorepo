@@ -45,3 +45,7 @@ testem.log
 Thumbs.db
 
 .angular
+
+# Gradle
+.gradle
+build
