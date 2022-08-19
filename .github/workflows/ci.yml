@@ -148,13 +148,14 @@ jobs:
       #   run: yarn nx python api
 
       - run: yarn nx affected --target=prepare
-      - run: yarn nx affected --target=prepare-java --parallel=1
+      # - run: yarn nx affected --target=prepare-java --parallel=1
+      - run: yarn nx run-many --target=prepare-java --parallel=1
 
       - name: Current home
         run: |
           echo $HOME
-          cd /github/home/.gradle
-          # cd ~/.gradle/caches
+          # cd /github/home/.gradle
+          cd ~/.gradle/caches
           pwd
 
       - run: yarn nx affected --target=lint
