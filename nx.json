@@ -34,24 +34,10 @@
     },
     "@nrwl/angular:component": {
       "style": "scss"
-    },
-    "@nrwl/react": {
-      "application": {
-        "style": "scss",
-        "linter": "eslint",
-        "babel": true
-      },
-      "component": {
-        "style": "scss"
-      },
-      "library": {
-        "style": "scss",
-        "linter": "eslint"
-      }
     }
   },
   "defaultProject": "web-app",
-  "plugins": ["@nxrocks/nx-spring-boot", "@jnxplus/nx-boot-gradle"],
+  "plugins": ["@nxrocks/nx-spring-boot"],
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
