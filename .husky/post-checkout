@@ -9,27 +9,32 @@
 #     - a branch checkout (changing branches, flag=1)
 #     - a file checkout (retrieving a file from the index, flag=0).
 
-# When the third script parameter is "1" we are executing a branch checkout
-if [ "$3" = "1" ]; then
+  DEVCONTAINER_ENV_FILE="/tmp/devcontainer.env"
+  touch "$DEVCONTAINER_ENV_FILE"
 
-  DEVCONTAINER_ENV_FILE=/tmp/devcontainer/.env
   if [ -f "$DEVCONTAINER_ENV_FILE" ]; then
-    source "$DEVCONTAINER_ENV_FILE"
+    . "$DEVCONTAINER_ENV_FILE"
   fi
 
   expected_yarn_lock_hash=$(sha256sum yarn.lock | awk '{print $1}')
   current_yarn_lock_hash=$YARN_LOCK_HASH
 
-  echo "📦 Installing Node.js packages"
+  echo "📦 Preparing Node.js packages"
   if [ "$expected_yarn_lock_hash" != "$current_yarn_lock_hash" ]; then
     yarn install --frozen-lockfile
-    sed -i 's/YARN_LOCK_HASH=.*/num1 =$expected_yarn_lock_hash/' "$DEVCONTAINER_ENV_FILE"
-    # echo "YARN_LOCK_HASH=$expected_yarn_lock_hash" > "$DEVCONTAINER_ENV_FILE"
+    sed -i "s/YARN_LOCK_HASH=.*/YARN_LOCK_HASH=$expected_yarn_lock_hash/" "$DEVCONTAINER_ENV_FILE"
+    # # sed '/^YARN_LOCK_HASH=/{h;s/=.*/='$expected_yarn_lock_hash'/};${x;/^$/{s//YARN_LOCK_HASH='$expected_yarn_lock_hash'/;H};x}' "$DEVCONTAINER_ENV_FILE"
+    # awk -i inplace -v YARN_LOCK_HASH="$expected_yarn_lock_hash" -v cuv2="$replace" '{gsub(cuv1,cuv2); print;}' "$file"
   fi
 
-  # Install the Java dependencies.
-  # yarn nx run-many --target=prepare-java --parallel=1
+# When the third script parameter is "1" we are executing a branch checkout
+# if [ "$3" = "1" ]; then
 
-  # Notify the developer when a different dev container must be used.
-  node tools/check-devcontainer-version.js
-fi
+
+
+#   # Install the Java dependencies.
+#   # yarn nx run-many --target=prepare-java --parallel=1
+
+#   # Notify the developer when a different dev container must be used.
+#   node tools/check-devcontainer-version.js
+# fi
