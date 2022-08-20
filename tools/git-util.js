@@ -1,5 +1,5 @@
 const { promisify } = require('util');
-const exec = promisify(require('child_process').exec)
+const exec = promisify(require('child_process').exec);
 
 // Returns the files tracked with git that have changed since the last git move.
 const getGitDiffFiles = async () => {
