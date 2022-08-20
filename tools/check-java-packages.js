@@ -52,7 +52,7 @@ const installJavaPackages = (projectName) => {
     });
 }
 
-console.log('✨ Preparing Java packages');
+console.log('✨ Updating Java packages');
 getGitDiffFiles().then((changedFiles) => {
   Object.entries(json['projects']).forEach(([projectName, projectLocation]) => {
     if (hasGradleProjectDefinitionChanged(projectLocation, changedFiles) || hasMavenProjectDefinitionChanged(projectLocation, changedFiles)) {
