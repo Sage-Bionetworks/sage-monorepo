@@ -7,7 +7,6 @@ const { spawn } = require("child_process");
 const { getGitDiffFiles } = require('./git-util');
 
 const installNodejsPackages = () => {
-  console.log('📦 Installing Node.js packages');
   spawn('yarn', ['install', '--frozen-lockfile'], {stdio:'inherit'})
     .on('exit', function (error) {
       if (error) {
@@ -17,7 +16,7 @@ const installNodejsPackages = () => {
     });
 }
 
-// console.log('✨ Checking Node.js packages');
+console.log('✨ Checking Node.js packages');
 getGitDiffFiles().then((changedFiles) => {
   if (changedFiles.includes('yarn.lock')) {
     installNodejsPackages();
