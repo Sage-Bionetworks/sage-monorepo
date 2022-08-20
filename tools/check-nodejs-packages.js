@@ -16,7 +16,7 @@ const installNodejsPackages = () => {
     });
 }
 
-console.log('✨ Updating Node.js packages');
+console.log('✨ Preparing Node.js packages');
 getGitDiffFiles().then((changedFiles) => {
   if (changedFiles.includes('yarn.lock')) {
     installNodejsPackages();
