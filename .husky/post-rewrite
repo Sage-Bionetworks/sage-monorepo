@@ -2,7 +2,5 @@
 . "$(dirname "$0")/_/husky.sh"
 
 node tools/check-nodejs-packages.js
+node tools/check-java-packages.js
 node tools/check-devcontainer-version.js
-
-# Install the Java dependencies.
-yarn nx run-many --target=prepare-java --parallel=1

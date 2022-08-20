@@ -8,7 +8,7 @@
 
 This [Nx monorepo](https://nx.dev/) includes the codebase of the Challenge ecosystem.
 
-### Apps
+### Apps2
 
 - Challenge Registry
 - Challenge Platform
