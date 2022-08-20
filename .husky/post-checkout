@@ -12,14 +12,18 @@
 # When the third script parameter is "1" we are executing a branch checkout
 if [ "$3" = "1" ]; then
 
-  changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
-  echo $changed_files
+  expected_yarn_lock_hash=$(sha256sum yarn.lock | awk '{print $1}')
+  current_yarn_lock_hash=$DEVCONTAINER_YARN_LOCK_HASH
 
-  # Install the Node.js dependencies.
-  yarn install --frozen-lockfile
+  if [[ "$s1" != "$s2" ]]: then
+    echo "📦 Install Node.js dependencies"
+    yarn install --frozen-lockfile
+    # TODO: Persist the variable across sessions
+    export DEVCONTAINER_YARN_LOCK_HASH=$expected_yarn_lock_hash
+  fi
 
   # Install the Java dependencies.
-  yarn nx run-many --target=prepare-java --parallel=1
+  # yarn nx run-many --target=prepare-java --parallel=1
 
   # Notify the developer when a different dev container must be used.
   node tools/check-devcontainer-version.js
