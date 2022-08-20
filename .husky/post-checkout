@@ -11,9 +11,9 @@
 
 # When the third script parameter is "1" we are executing a branch checkout
 if [ "$3" = "1" ]; then
-  node tools/check-nodejs-packages.js
-  node tools/check-devcontainer-version.js
+  # node tools/check-nodejs-packages.js
+  # node tools/check-devcontainer-version.js
 
-  # Install the Java dependencies.
-  yarn nx run-many --target=prepare-java --parallel=1
+  # # Install the Java dependencies.
+  # yarn nx run-many --target=prepare-java --parallel=1
 fi
