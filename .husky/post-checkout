@@ -15,7 +15,7 @@ if [ "$3" = "1" ]; then
   expected_yarn_lock_hash=$(sha256sum yarn.lock | awk '{print $1}')
   current_yarn_lock_hash=$DEVCONTAINER_YARN_LOCK_HASH
 
-  if [[ "$expected_yarn_lock_hash" != "$current_yarn_lock_hash" ]]; then
+  if [ "$expected_yarn_lock_hash" != "$current_yarn_lock_hash" ]; then
     echo "📦 Install Node.js dependencies"
     yarn install --frozen-lockfile
     # TODO: Persist the variable across sessions
