@@ -1,10 +1,9 @@
 'use strict';
 
 const fs = require('fs');
-const JSON5 = require('json5');
 
 const data = fs.readFileSync('.devcontainer/devcontainer.json');
-const json = JSON5.parse(data);
+const json = JSON.parse(data);
 
 const image = json['image'];
 if (image === undefined) {
@@ -25,7 +24,7 @@ if (currentDevcontainerVersion === undefined) {
 }
 
 if (expectedDevcontainerVersion !== currentDevcontainerVersion) {
-  console.info('🐋 The dev container has changed. Please stop the dev container and rebuild it.');
+  console.info('🐋 The dev container has changed. Please rebuild it.');
   // console.debug(`Expected dev container version: ${expectedDevcontainerVersion}`);
   // console.debug(`Current dev container version: ${currentDevcontainerVersion}`);
 }
