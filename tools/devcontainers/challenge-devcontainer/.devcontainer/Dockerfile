@@ -13,7 +13,7 @@ SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 RUN groupadd docker \
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
-    ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
+    ca-certificates curl git git-lfs bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python-is-python3 openjdk-17-jdk \
     htop unzip vim wget lsof iproute2 \
   # Add Node.js repository
