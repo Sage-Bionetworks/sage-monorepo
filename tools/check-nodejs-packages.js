@@ -22,7 +22,7 @@ console.log('✨ Preparing Node.js packages');
 getGitDiffFiles().then((changedFiles) => {
   if (changedFiles.includes('yarn.lock')) {
     if (gitHookName === 'post-merge') {
-      console.log('🙏 If you have any issue with `yarn`, `nx` or other Node.js packages after a `git merge`, please open an Issue in GitHub.');
+      console.log('🙏 If you have any issues with `yarn`, `nx` or any other Node.js packages after a `git merge`, please open an Issue in GitHub.');
     }
     installNodejsPackages();
   }
