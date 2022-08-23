@@ -31,7 +31,7 @@ RUN groupadd docker \
   && apt-get install --no-install-recommends -qq -y \
     nodejs gh ngrok \
   && corepack enable yarn \
-  && corepack prepare yarn --activate \
+  && corepack prepare yarn@3.2.2 --activate \
   # && npm install --global yarn@latest \
   # && yarn set version  \
   # Install nektos/act
