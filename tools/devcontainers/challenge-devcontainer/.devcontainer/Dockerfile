@@ -38,7 +38,7 @@ RUN groupadd docker \
   && apt install ./hyperfine_1.14.0_amd64.deb \
   && rm -fr hyperfine_1.14.0_amd64.deb \
   # Install AWS CLI
-  && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+  && curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
   && unzip awscliv2.zip \
   && ./aws/install \
   && rm -fr awscliv2.zip ./aws \
