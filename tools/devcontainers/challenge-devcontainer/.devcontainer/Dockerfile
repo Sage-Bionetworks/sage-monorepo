@@ -19,7 +19,7 @@ RUN groupadd docker \
   # Add Node.js repository
   && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
   # Add GitHub CLI repository
-  && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+  && curl -sSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
       gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
       tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
@@ -34,9 +34,11 @@ RUN groupadd docker \
   # Install nektos/act
   && curl https://raw.githubusercontent.com/nektos/act/v0.2.30/install.sh | bash - \
   # Install hyperfine
-  && curl https://github.com/sharkdp/hyperfine/releases/download/v1.14.0/hyperfine_1.14.0_amd64.deb \
-  && apt-get install --no-install-recommends -qq -y ./hyperfine_1.14.0_amd64.deb \
-  && rm -fr hyperfine_1.14.0_amd64.deb \
+  && curl -sSL https://github.com/sharkdp/hyperfine/releases/download/v1.14.0/hyperfine_1.14.0_amd64.deb \
+    -o /tmp/hyperfine.deb \
+  && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
+  && rm -fr /tmp/hyperfine.deb \
+  # Cleanup
   && apt-get -y autoclean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/* \
