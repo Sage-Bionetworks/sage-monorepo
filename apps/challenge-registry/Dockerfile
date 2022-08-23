@@ -17,7 +17,7 @@ WORKDIR /opt
 # Build the challenge registry
 RUN git clone --depth 1 --branch $challengeRegistryBranch https://github.com/${challengeRegistryRepository}.git \
   && cd challenge-registry \
-  && yarn install --frozen-lockfile \
+  && yarn install --immutable \
   && yarn nx build challenge-registry
 
 ENV CHALLENGE_REGISTRY_DIR=/opt/challenge-registry

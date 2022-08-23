@@ -28,7 +28,7 @@ function challenge-cd {
 export PATH="$PATH:$(yarn bin)"
 
 function challenge-install {
-  yarn install --frozen-lockfile
+  yarn install --immutable
 }
 
 function challenge-prepare {

@@ -68,7 +68,7 @@ jobs:
 
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       # - name: Setup Python virtualenvs
       #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
@@ -141,7 +141,7 @@ jobs:
 
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       # - name: Setup Python virtualenvs
       #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
