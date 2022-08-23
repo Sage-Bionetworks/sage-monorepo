@@ -7,7 +7,7 @@ const { spawn } = require("child_process");
 const { getGitDiffFiles } = require('./git-util');
 
 const installNodejsPackages = () => {
-  spawn('yarn', ['install', '--frozen-lockfile'], {stdio:'inherit'})
+  spawn('yarn', ['install', '--immutable'], {stdio:'inherit'})
     .on('exit', function (error) {
       if (error) {
         console.log(`error: ${error.message}`);
