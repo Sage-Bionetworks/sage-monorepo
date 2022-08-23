@@ -1,11 +1,13 @@
 ARG imageVersion=bullseye-20211220-slim
 FROM debian:$imageVersion
 
+# Safer bash scripts with 'set -euxo pipefail'
+SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+
 ARG devcontainerVersion=""
 ENV DEVCONTAINER_VERSION=${devcontainerVersion}
 
-# Safer bash scripts with 'set -euxo pipefail'
-SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+ARG hyperfineVersion="v1.14.0"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
@@ -34,7 +36,7 @@ RUN groupadd docker \
   # Install nektos/act
   && curl https://raw.githubusercontent.com/nektos/act/v0.2.30/install.sh | bash - \
   # Install hyperfine
-  && curl -sSL https://github.com/sharkdp/hyperfine/releases/download/v1.14.0/hyperfine_1.14.0_amd64.deb \
+  && curl -sSL https://github.com/sharkdp/hyperfine/releases/download/${hyperfineVersion}/hyperfine_1.14.0_amd64.deb \
     -o /tmp/hyperfine.deb \
   && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
   && rm -fr /tmp/hyperfine.deb \
