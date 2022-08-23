@@ -35,11 +35,11 @@ RUN groupadd docker \
   && curl https://raw.githubusercontent.com/nektos/act/v0.2.30/install.sh | bash - \
   # Install hyperfine
   && curl -OsSL https://github.com/sharkdp/hyperfine/releases/download/v1.14.0/hyperfine_1.14.0_amd64.deb \
-  && dpkg -i hyperfine_1.14.0_amd64.deb \
+  && apt install ./hyperfine_1.14.0_amd64.deb \
   && rm -fr hyperfine_1.14.0_amd64.deb \
   ## Install dvc
   && curl -OsSL https://github.com/iterative/dvc/releases/download/2.19.0/dvc_2.19.0_amd64.deb \
-  && dpkg -i dvc_2.19.0_amd64.deb \
+  && apt install ./dvc_2.19.0_amd64.deb \
   && rm -fr dvc_2.19.0_amd64.deb \
   # Cleanup
   && apt-get -y autoclean \
