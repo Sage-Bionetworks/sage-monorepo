@@ -35,9 +35,9 @@ RUN groupadd docker \
     nodejs gh ngrok \
   && npm install --global yarn@latest \
   # Install nektos/act
-  && curl https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh | bash - \
+  && curl "https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh" | bash - \
   # Install hyperfine
-  && curl -sSL https://github.com/sharkdp/hyperfine/releases/download/v${hyperfineVersion}/hyperfine_${hyperfineVersion}_amd64.deb \
+  && curl -sSL "https://github.com/sharkdp/hyperfine/releases/download/v${hyperfineVersion}/hyperfine_${hyperfineVersion}_amd64.deb" \
     -o /tmp/hyperfine.deb \
   && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
   && rm -fr /tmp/hyperfine.deb \
