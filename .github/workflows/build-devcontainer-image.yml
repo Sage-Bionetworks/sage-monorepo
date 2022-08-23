@@ -81,4 +81,5 @@ jobs:
         run: |
           IMAGE_NAME=${{ steps.prep.outputs.image_name }}
           IMAGE_TAG=${{ steps.prep.outputs.devcontainer_version }}
+          echo "${IMAGE_NAME}:test-${IMAGE_TAG}"
           docker push "${IMAGE_NAME}:test-${IMAGE_TAG}"
