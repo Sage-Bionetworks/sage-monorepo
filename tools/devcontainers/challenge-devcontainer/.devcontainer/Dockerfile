@@ -7,7 +7,8 @@ SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 ARG devcontainerVersion=""
 ENV DEVCONTAINER_VERSION=${devcontainerVersion}
 
-ARG hyperfineVersion="1.14.0"
+ARG hyperfineVersion="1.14.0" \
+  actVersion="0.2.30"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
@@ -34,7 +35,7 @@ RUN groupadd docker \
     nodejs gh ngrok \
   && npm install --global yarn@latest \
   # Install nektos/act
-  && curl https://raw.githubusercontent.com/nektos/act/v0.2.30/install.sh | bash - \
+  && curl https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh | bash - \
   # Install hyperfine
   && curl -sSL https://github.com/sharkdp/hyperfine/releases/download/v${hyperfineVersion}/hyperfine_${hyperfineVersion}_amd64.deb \
     -o /tmp/hyperfine.deb \
