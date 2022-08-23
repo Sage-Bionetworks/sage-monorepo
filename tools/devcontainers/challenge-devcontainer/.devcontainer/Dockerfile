@@ -35,7 +35,7 @@ RUN groupadd docker \
   && curl https://raw.githubusercontent.com/nektos/act/v0.2.30/install.sh | bash - \
   # Install hyperfine
   && curl https://github.com/sharkdp/hyperfine/releases/download/v1.14.0/hyperfine_1.14.0_amd64.deb \
-  && apt install ./hyperfine_1.14.0_amd64.deb \
+  && apt-get install ./hyperfine_1.14.0_amd64.deb \
   && rm -fr hyperfine_1.14.0_amd64.deb \
   && apt-get -y autoclean \
   && apt-get -y autoremove \
