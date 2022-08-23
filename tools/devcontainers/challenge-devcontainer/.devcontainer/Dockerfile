@@ -7,8 +7,8 @@ SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 ARG devcontainerVersion=""
 ENV DEVCONTAINER_VERSION=${devcontainerVersion}
 
-ARG hyperfineVersion="1.14.0" \
-  actVersion="0.2.30"
+ARG actVersion="0.2.30"
+ARG hyperfineVersion="1.14.0"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
