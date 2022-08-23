@@ -38,9 +38,7 @@ RUN groupadd docker \
   && apt install ./hyperfine_1.14.0_amd64.deb \
   && rm -fr hyperfine_1.14.0_amd64.deb \
   ## Install dvc
-  && curl -OsSL https://github.com/iterative/dvc/releases/download/2.19.0/dvc_2.19.0_amd64.deb \
-  && apt install ./dvc_2.19.0_amd64.deb \
-  && rm -fr dvc_2.19.0_amd64.deb \
+  && pip install dvc \
   # Cleanup
   && apt-get -y autoclean \
   && apt-get -y autoremove \
