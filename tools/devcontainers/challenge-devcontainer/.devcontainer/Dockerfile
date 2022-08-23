@@ -37,8 +37,8 @@ RUN groupadd docker \
   && curl -OsSL https://github.com/sharkdp/hyperfine/releases/download/v1.14.0/hyperfine_1.14.0_amd64.deb \
   && apt install ./hyperfine_1.14.0_amd64.deb \
   && rm -fr hyperfine_1.14.0_amd64.deb \
-  ## Install dvc
-  && pip install 'dvc[s3]' \
+  ## Install dvc and aws CLI
+  && pip install --upgrade 'dvc[s3]' awscli \
   # Cleanup
   && apt-get -y autoclean \
   && apt-get -y autoremove \
