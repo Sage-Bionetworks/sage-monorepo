@@ -1,0 +1,4 @@
+[core]
+    remote = upstream
+['remote "upstream"']
+    url = s3://github-challenge-registry-data
