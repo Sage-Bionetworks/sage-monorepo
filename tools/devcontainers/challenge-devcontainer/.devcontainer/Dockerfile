@@ -32,8 +32,6 @@ RUN groupadd docker \
     nodejs gh ngrok \
   && corepack enable yarn \
   && corepack prepare yarn@3.2.2 --activate \
-  # && npm install --global yarn@latest \
-  # && yarn set version  \
   # Install nektos/act
   && curl https://raw.githubusercontent.com/nektos/act/v0.2.30/install.sh | bash - \
   # Install hyperfine
