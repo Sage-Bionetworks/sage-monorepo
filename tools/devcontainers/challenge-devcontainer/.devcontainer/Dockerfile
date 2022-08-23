@@ -38,7 +38,7 @@ RUN groupadd docker \
   && apt install ./hyperfine_1.14.0_amd64.deb \
   && rm -fr hyperfine_1.14.0_amd64.deb \
   ## Install dvc
-  && pip install dvc \
+  && pip install 'dvc[s3]' \
   # Cleanup
   && apt-get -y autoclean \
   && apt-get -y autoremove \

@@ -1,4 +1,0 @@
-[core]
-    remote = gdrive
-['remote "gdrive"']
-    url = gdrive://1asTY0wejfITziM0LjjBXVwRNqKqhgimI/challenge-registry
