@@ -65,6 +65,8 @@ jobs:
           # devcontainer.json used to build the image.
           export DEVCONTAINER_VERSION=${{ steps.prep.outputs.devcontainer_version }}
 
+          echo "${IMAGE_NAME}:${IMAGE_TAG}"
+
           # Build the image
           npm install -g "@vscode/dev-container-cli"
           devcontainer build --image-name "${IMAGE_NAME}:${IMAGE_TAG}" "${FOLDER_WITH_DOT_DEVCONTAINER}"
@@ -77,10 +79,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push the image to Docker Hub
-        # if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ github.event_name != 'pull_request' }}
         run: |
           IMAGE_NAME=${{ steps.prep.outputs.image_name }}
           IMAGE_TAG=${{ steps.prep.outputs.devcontainer_version }}
-          echo "${IMAGE_NAME}:${IMAGE_TAG}"
-          docker images
           docker push "${IMAGE_NAME}:${IMAGE_TAG}"
