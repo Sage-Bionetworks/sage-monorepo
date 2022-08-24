@@ -34,25 +34,7 @@ shiny::shinyServer(function(input, output, session) {
         query[['module']]
       )
     }
-
-    observeEvent(session$clientData$url_hash, {
-      currentHash <- sub("#", "", session$clientData$url_hash)
-      if(is.null(input$explorertabs) || !is.null(currentHash) && currentHash != input$explorertabs){
-        freezeReactiveValue(input, "explorertabs")
-        updateNavbarPage(session, "explorertabs", selected = currentHash)
-      }
-    }, priority = 1)
-
-    observeEvent(input$explorertabs, {
-      currentHash <- sub("#", "", session$clientData$url_hash)
-      pushQueryString <- paste0("?module=", input$explorertabs)
-      if(is.null(currentHash) || currentHash != input$explorertabs){
-        freezeReactiveValue(input, "explorertabs")
-        updateQueryString(pushQueryString, mode = "push", session)
-      }
-    }, priority = 0)
-  })
-
+})
   # ICI Modules ----------------------------------------------------------
 
   ici_cohort_obj <- call_iatlas_module(
