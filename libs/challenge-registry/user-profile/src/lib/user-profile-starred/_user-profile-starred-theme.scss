@@ -67,18 +67,14 @@
   .main-section-stars-tab-group {
     border-color: transparent;
   }
-  .main-section-stars-tab {
-    color: $dl-color-default-navbardark;
+  .tab-item {
     background-color: $dl-color-default-hover1;
     color: $dl-color-default-navbardark;
   }
-  .main-section-stars-tab1:focus {
-    color: $dl-color-gray-white;
+  .tab-item:hover,
+  .tab-item:active {
     background-color: $dl-color-default-navbar;
-  }
-  .main-section-stars-tab1:active {
     color: $dl-color-gray-white;
-    background-color: $dl-color-default-navbar;
   }
   .main-section-stars-card-group {
     background-color: transparent;
@@ -89,90 +85,7 @@
 }
 
 @mixin typography($theme) {
-  .base-text {
-    font-size: 64px;
-    font-style: normal;
-    font-family: Fira Sans;
-    font-weight: 500;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text01 {
-    font-size: 40px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-
-  .base-text02 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-
-  .base-text03 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 600;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text04 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text05 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 600;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text06 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text07 {
-    font-size: 24px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text08 {
-    font-size: 24px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text09 {
-    font-size: 24px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .main-section-stars-tab,
-  .main-section-stars-tab1 {
+  .tab-item {
     font-size: 24px;
     font-style: normal;
     font-family: Fira Sans;

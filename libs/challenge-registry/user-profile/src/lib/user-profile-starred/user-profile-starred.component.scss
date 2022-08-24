@@ -46,12 +46,8 @@ $dl-radius-radius-radius16: 16px;
   align-items: flex-start;
   flex-shrink: 1;
 }
-.main-section-stars-tab {
-  top: 0px;
-  left: 0px;
-  width: 198px;
-  height: 71px;
-  position: absolute;
+.tab-item {
+  padding: 18px 32px;
   box-sizing: border-box;
   transition: 0.3s;
   align-items: flex-start;
@@ -61,22 +57,6 @@ $dl-radius-radius-radius16: 16px;
   text-align: center;
   text-decoration: none;
 }
-
-.main-section-stars-tab1 {
-  top: 0px;
-  left: 198px;
-  width: 217px;
-  height: 71px;
-  position: absolute;
-  box-sizing: border-box;
-  transition: 0.3s;
-  align-items: flex-start;
-  border-radius: $dl-radius-radius-radius16;
-  align-self: auto;
-  text-align: center;
-  text-decoration: none;
-}
-
 .main-section-stars-card-group {
   top: 252px;
   left: 0;
