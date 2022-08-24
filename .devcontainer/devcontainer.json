@@ -1,6 +1,6 @@
 {
   "name": "Challenge",
-  "image": "sagebionetworks/challenge-devcontainer:ff081d0a",
+  "image": "sagebionetworks/challenge-devcontainer:test-yarn-3",
 
   "features": {
     "docker-in-docker": "20.10"
