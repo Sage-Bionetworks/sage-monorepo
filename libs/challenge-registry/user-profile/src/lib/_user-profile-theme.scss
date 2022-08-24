@@ -121,12 +121,14 @@
   }
   .nav-item {
     border-color: transparent;
-    &:active,
     &:focus,
     &:hover{
       background-color: $dl-color-default-hover2;
     }
     color: black;
+  }
+  .nav-item.active-tab {
+    background-color: $dl-color-default-hover2;
   }
   .base-main-section {
     border-color: transparent;

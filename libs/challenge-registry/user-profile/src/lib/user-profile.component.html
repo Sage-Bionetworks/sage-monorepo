@@ -26,13 +26,19 @@
     </section>
 
     <div id="sidenav" class="base-side-nav">
-      <a class="nav-item" routerLink="." [queryParams]="{ tab: 'overview' }">
+      <a class="nav-item" routerLink="." 
+          [queryParams]="{ tab: 'overview' }" 
+          [ngClass]=" {'active-tab': activeTab===tabs['overview']}">
         Biography
       </a>
-      <a class="nav-item" routerLink="." [queryParams]="{ tab: 'challenges' }">
+      <a class="nav-item" routerLink="." 
+          [queryParams]="{ tab: 'challenges' }" 
+          [ngClass]=" {'active-tab': activeTab===tabs['challenges']}">
         Challenges
       </a>
-      <a class="nav-item" routerLink="." [queryParams]="{ tab: 'starred' }">
+      <a class="nav-item" routerLink="." 
+          [queryParams]="{ tab: 'starred' }" 
+          [ngClass]=" {'active-tab': activeTab===tabs['starred']}">
         Starred
       </a>
     </div>
