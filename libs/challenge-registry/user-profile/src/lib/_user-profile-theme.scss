@@ -89,7 +89,6 @@
   }
   .base-usertypetag {
     border-color: $dl-color-default-secondary2;
-
     background-color: $dl-color-default-accent4;
   }
   .base-text02 {
@@ -120,33 +119,14 @@
     border-color: $dl-color-default-primary2;
     background-color: rgba(255, 255, 255, 1);
   }
-  .base-bio,
-  .base-challenges,
-  .base-stars {
+  .nav-item {
     border-color: transparent;
+    &:active,
     &:focus,
-    &:hover,
-    &:active {
+    &:hover{
       background-color: $dl-color-default-hover2;
     }
-  }
-
-  .base-text07 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-challenges {
-    border-color: transparent;
-    background-color: rgba(255, 255, 255, 1);
-  }
-  .base-text08 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .base-stars {
-    border-color: transparent;
-    background-color: rgba(255, 255, 255, 1);
-  }
-  .base-text09 {
-    color: rgba(0, 0, 0, 1);
+    color: black;
   }
   .base-main-section {
     border-color: transparent;
@@ -222,23 +202,7 @@
     line-height: normal;
     font-stretch: normal;
   }
-  .base-text07 {
-    font-size: 24px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text08 {
-    font-size: 24px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .base-text09 {
+  .nav-item {
     font-size: 24px;
     font-style: normal;
     font-family: Lato;
