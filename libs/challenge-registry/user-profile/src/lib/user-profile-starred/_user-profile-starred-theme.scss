@@ -72,7 +72,8 @@
     color: $dl-color-default-navbardark;
   }
   .tab-item:hover,
-  .tab-item:active {
+  .tab-item:active,
+  .tab-item.active-tab {
     background-color: $dl-color-default-navbar;
     color: $dl-color-gray-white;
   }

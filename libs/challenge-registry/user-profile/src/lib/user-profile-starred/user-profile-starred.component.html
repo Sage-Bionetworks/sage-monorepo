@@ -2,10 +2,14 @@
   <section id="main" class="main-section-stars-main-section">
     <span class="main-section-stars-text">Starred</span>
     <div class="main-section-stars-tab-group">
-      <button class="tab-item" (click)="clickEvent('challenges')">Challenges</button>
-      <button class="tab-item" (click)="clickEvent('organizations')">
-        Organizations
-      </button>
+      <button class="tab-item" 
+          (click)="clickEvent('challenges')"
+          [ngClass]=" {'active-tab': activeTab===tabs['challenges']}">
+        Challenges</button>
+      <button class="tab-item" 
+          (click)="clickEvent('organizations')"
+          [ngClass]=" {'active-tab': activeTab===tabs['organizations']}">
+        Organizations</button>
     </div>
     <ng-container [ngSwitch]="activeTab">
       <div *ngSwitchCase="tabs['challenges']" class="main-section-stars-card-group">
