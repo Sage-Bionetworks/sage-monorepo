@@ -70,21 +70,7 @@
   .main-section-stars-tab {
     color: $dl-color-default-navbardark;
     background-color: $dl-color-default-hover1;
-  }
-  .main-section-stars-tab:hover {
-    color: $dl-color-gray-white;
-    background-color: $dl-color-default-navbar;
-  }
-  .main-section-stars-tab:active {
-    color: $dl-color-gray-white;
-    background-color: $dl-color-default-navbar;
-  }
-  .main-section-stars-tab1 {
     color: $dl-color-default-navbardark;
-
-    border-color: transparent;
-    border-radius: $dl-radius-radius-radius16;
-    background-color: $dl-color-default-hover1;
   }
   .main-section-stars-tab1:focus {
     color: $dl-color-gray-white;
@@ -98,21 +84,6 @@
     background-color: transparent;
   }
   .main-section-stars-paginator {
-    border-color: transparent;
-  }
-  .main-section-stars-text3 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .main-section-stars-text4 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .main-section-stars-chevronright {
-    border-color: transparent;
-  }
-  .main-section-stars-chevronright1 {
-    border-color: transparent;
-  }
-  .main-section-stars-expandmore {
     border-color: transparent;
   }
 }
