@@ -25,7 +25,7 @@ function challenge-cd {
 }
 
 # Add local npm binaries to PATH
-export PATH="$PATH:$(yarn bin)"
+export PATH="$PATH:$CHALLENGE_DIR/node_modules/.bin"
 
 function challenge-install {
   yarn install --immutable
