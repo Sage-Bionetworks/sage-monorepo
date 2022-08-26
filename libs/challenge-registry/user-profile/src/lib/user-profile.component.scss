@@ -177,61 +177,17 @@ $dl-radius-radius-round: 50%;
   border-radius: 8px;
   flex-direction: column;
 }
-.base-bio {
+.nav-item {
   width: 285px;
   height: 54px;
   margin: 0 0 18px 0;
+  padding: 13px 18px;
   display: flex;
   position: relative;
   box-sizing: border-box;
   transition: 0.3s;
   align-items: flex-start;
   flex-shrink: 1;
-}
-
-.base-text07 {
-  top: 13px;
-  left: 15px;
-  height: auto;
-  position: absolute;
-  align-self: auto;
-  text-align: left;
-  text-decoration: none;
-}
-.base-challenges {
-  width: 285px;
-  height: 54px;
-  margin: 0 0 18px 0;
-  display: flex;
-  position: relative;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
-}
-.base-text08 {
-  top: 13px;
-  left: 15px;
-  height: auto;
-  position: absolute;
-  align-self: auto;
-  text-align: left;
-  text-decoration: none;
-}
-.base-stars {
-  width: 285px;
-  height: 54px;
-  display: flex;
-  position: relative;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
-}
-.base-text09 {
-  top: 13px;
-  left: 15px;
-  height: auto;
-  position: absolute;
-  align-self: auto;
   text-align: left;
   text-decoration: none;
 }
