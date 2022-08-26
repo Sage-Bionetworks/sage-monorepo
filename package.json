@@ -68,7 +68,7 @@
     "@nrwl/web": "14.5.4",
     "@nrwl/workspace": "14.5.4",
     "@nx-tools/nx-docker": "^2.3.0",
-    "@nxrocks/nx-spring-boot": "^5.0.1",
+    "@nxrocks/nx-spring-boot": "^5.0.2",
     "@openapitools/openapi-generator-cli": "^2.4.26",
     "@prettier/plugin-xml": "^2.2.0",
     "@redocly/openapi-cli": "^1.0.0-beta.81",
