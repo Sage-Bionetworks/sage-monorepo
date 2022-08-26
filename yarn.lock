@@ -3392,22 +3392,22 @@
   optionalDependencies:
     "@nx-tools/docker-metadata" "^2.2.1"
 
-"@nxrocks/common@1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@nxrocks/common/-/common-1.2.1.tgz#54c77dfdc82a0f2f250203f368907dec13cd8df4"
-  integrity sha512-hbdBzzfvdr4hYpebOWsoqJtrV4MqHinuRFH2GW4jMnQnxB8bQOxO/Mb5OcEu3XoI9lPEob/Lb1Rx6hWX7of7TA==
+"@nxrocks/common@1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@nxrocks/common/-/common-1.2.2.tgz#1ac4e9f39fd057a706a606099662f406702d1e8d"
+  integrity sha512-fKtJoutXC11xsVe1L/Oghj85boLiE9o2daxAvMinCBdNQsoRf9tCOqBKeY1l2KQ9TnULJ40p9xPOi6PyxQJ+1A==
   dependencies:
     hpagent "^1.0.0"
     unzipper "^0.10.11"
     xmlbuilder2 "^3.0.2"
     xpath "^0.0.32"
 
-"@nxrocks/nx-spring-boot@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@nxrocks/nx-spring-boot/-/nx-spring-boot-5.0.1.tgz#336e85eb33738870e1ae5691791f7290a43d3a0e"
-  integrity sha512-xgP0CLahtI5VD5OQtd1l4dL+Fl4UoH3PlnA6RISSBt2U/YuYO/yaWsQbHowU/wkrYcwsgz9Eo1WIl9qfQxc44g==
+"@nxrocks/nx-spring-boot@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@nxrocks/nx-spring-boot/-/nx-spring-boot-5.0.2.tgz#87c376366c922e9f5495bb0c2f356fb891485d8f"
+  integrity sha512-b74uLzQQTdJ/8yiSQIU08HVO+UOhKsL96ENpA8w7U9VdQeaSzWaBLWBUy30I54rOpa/2HPDj44tY/2ZblcJpTQ==
   dependencies:
-    "@nxrocks/common" "1.2.1"
+    "@nxrocks/common" "1.2.2"
     node-fetch "^2.6.1"
 
 "@octokit/auth-token@^2.4.4":
