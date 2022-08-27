@@ -4,4 +4,5 @@
 
 devcontainer build \
   --no-cache \
+  --disable-telemetry true \
   --image-name sagebionetworks/challenge-devcontainer:test

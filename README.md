@@ -4,22 +4,13 @@
 [![GitHub License](https://img.shields.io/github/license/Sage-Bionetworks/challenge-registry.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE)
 <!-- [![Coverage Status](https://img.shields.io/coveralls/github/Sage-Bionetworks/challenge-registry.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=coverage&logo=Coveralls)](https://coveralls.io/github/Sage-Bionetworks/challenge-registry?branch=main) -->
 
-## Introduction2
+## Introduction
 
 This [Nx monorepo](https://nx.dev/) includes the codebase of the Challenge ecosystem.
 
-### Apps2
+## Projects
 
-- Challenge Registry
-- Challenge Platform
-
-### Backend
-
-- API Gateway
-- Service Registry
-- Keycloak (IAM)
-- Databases: MariaDB, PostgreSQL, MongoDB
-- User Service
+The list of all the applications and libraries developed is available [here](docs/projects.md).
 
 ## Requirements
 
