@@ -10,6 +10,8 @@ ENV DEVCONTAINER_VERSION=${devcontainerVersion}
 ARG actVersion="0.2.30"
 ARG hyperfineVersion="1.14.0"
 
+COPY requirements.txt /tmp/.
+
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
 # hadolint ignore=DL3008,DL3013
@@ -46,13 +48,14 @@ RUN groupadd docker \
   && unzip awscliv2.zip \
   && ./aws/install \
   && rm -fr awscliv2.zip ./aws \
-  # Install dvc
-  && pip install 'dvc[s3]' awscli \
+  # Install Python packages
+  && pip install --no-cache-dir --upgrade pip \
+  && pip install --no-cache-dir -r /tmp/requirements.txt \
+  && rm -fr /tmp/python \
   # Cleanup
   && apt-get -y autoclean \
   && apt-get -y autoremove \
-  && rm -rf /var/lib/apt/lists/* \
-  && pip install --no-cache-dir pipenv
+  && rm -rf /var/lib/apt/lists/*
 
 ARG user=vscode
 RUN useradd -m $user \
