@@ -1,4 +1,4 @@
 [core]
-    remote = upstream
-['remote "upstream"']
-    url = s3://github-challenge-registry-data
+    remote = gh-challenge
+['remote "gh-challenge"']
+    url = s3://gh-challenge
