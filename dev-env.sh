@@ -113,6 +113,13 @@ function workspace-initialize-env {
     source .env
   fi
 
+  # Configure dvc if it is installed
+  if command -v dvc &> /dev/null
+  then
+    dvc remote modify --local gh-challenge access_key_id "$DVC_AWS_ACCESS_KEY_ID"
+    dvc remote modify --local gh-challenge secret_access_key "$DVC_AWS_SECRET_ACCESS_KEY"
+  fi
+
   if [ -f "./tools/configure-hostnames.sh" ]; then
     sudo ./tools/configure-hostnames.sh
   fi
