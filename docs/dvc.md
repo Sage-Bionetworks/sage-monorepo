@@ -2,30 +2,26 @@
 
 ## Overview
 
-## Configuration
-
-The DVC configuration file is located at `.dvc/config`.
-
-## Add an S3 remote
+## Add a file with DVC
 
 ```console
-dvc remote add --default gh-challenge s3://gh-challenge
+$ dvc add sage.png
+100% Adding...|████████████████████████████████████████████|1/1 [00:00, 24.41file/s]
+
+To track the changes with git, run:
+
+        git add sage.png.dvc
+
+To enable auto staging, run:
+
+        dvc config core.autostage true
 ```
 
-The configuration of the S3 remote in `.dvc/config` should look something like the following.
+Now you can push data from your local machine to the AWS remote. First, add the data you want DVC to
+track with the following command:
 
-```ini
-[core]
-    remote = gh-challenge
-['remote "gh-challenge"']
-    url = s3://gh-challenge
+```console
+$ git add sage.png.dvc
 ```
-
-## Create S3 bucket
-
-
-
-
-Object URL: https://github-challenge-registry-data.s3.amazonaws.com/74/1d96c652588cd30c73150982b124d4
 
 ## References
