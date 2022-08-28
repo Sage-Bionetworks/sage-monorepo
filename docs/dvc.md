@@ -38,5 +38,49 @@ for performance reasons.
 - Location: Amazon S3 > Buckets > gh-challenge > 74/ > 1d96c652588cd30c73150982b124d4
 - Object URL: https://gh-challenge.s3.amazonaws.com/74/1d96c652588cd30c73150982b124d4
 
+## Pull data
+
+Let's remove the file `sage.png` for the sake of this demonstration. Then, we can restore the file
+with `dvc pull`.
+
+```console
+$ dvc pull
+A       sage.png
+1 file added
+```
+
+If we run the command again, DVC will tell us that everything is up to date.
+
+```console
+$ dvc pull
+Everything is up to date.
+```
+
+## Update data
+
+TODO
+
+Let's now modify the file `sage.png` with our favorite image editor, then save it. Similarly to the
+command `git status` that shows unstaged changes, we use the command `dvc status` for files tracked
+with DVC.
+
+```console
+$ dvc status
+sage.png.dvc:
+        changed outs:
+                modified:           sage.png
+```
+
+
+## Remove data
+
+First, stop tracking the file by using `dvc remove` on the `.dvc` file. This will remove `sage.png`
+from the workspace (and unlink it from the cache):
+
+```console
+dvc remove sage.png.dvc
+```
+
+Then stage the removal of `sage.png.dvc` with git.
 
 ## References
