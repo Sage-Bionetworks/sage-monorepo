@@ -8,7 +8,7 @@ const fs = require('fs');
 const { spawn } = require("child_process");
 const { getGitDiffFiles } = require('./git-util');
 
-const jsonData = fs.readFileSync(`${process.env.CHALLENGE_DIR}/workspace.json`);
+const jsonData = fs.readFileSync(`workspace.json`);
 const json = JSON.parse(jsonData);
 
 const isGradleProject = (projectLocation) => {
