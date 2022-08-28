@@ -109,6 +109,10 @@ function challenge-docker-stop {
 function workspace-initialize-env {
   challenge-welcome
 
+  if [ -f ".env" ]; then
+    source .env
+  fi
+
   if [ -f "./tools/configure-hostnames.sh" ]; then
     sudo ./tools/configure-hostnames.sh
   fi
