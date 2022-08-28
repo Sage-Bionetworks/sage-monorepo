@@ -58,7 +58,12 @@ Everything is up to date.
 
 ## Update data
 
-TODO
+Unlink the file with `dvc unprotect`. This will make `sage.png` safe to edit:
+
+```console
+$ dvc unprotect sage.png
+```
+
 
 Let's now modify the file `sage.png` with our favorite image editor, then save it. Similarly to the
 command `git status` that shows unstaged changes, we use the command `dvc status` for files tracked
