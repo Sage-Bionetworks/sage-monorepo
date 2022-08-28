@@ -249,7 +249,7 @@ Follow these instructions to connect to the instance via SSH using the command `
 
 1. Clone the GH repository of the ELK stack.
     ```console
-    git clone --depth 1 https://github.com/Sage-Bionetworks/docker-elk.git
+    git clone --filter=blob:none https://github.com/Sage-Bionetworks/docker-elk.git
     ```
 
 2. Configure the ELK stack.
