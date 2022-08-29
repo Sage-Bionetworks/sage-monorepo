@@ -1,5 +1,14 @@
+@use 'palettes' as pals;
+
 html,
 body {
   height: 100vh;
   // background-color: green;
+}
+
+// asign global variables
+:root {
+  @each $key, $value in pals.$figma_pals {
+    #{$key}: #{$value};
+  }
 }
