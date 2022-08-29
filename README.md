@@ -185,3 +185,18 @@ concordanceIndex::concordanceIndex(predictions, observations)
 ```
 
 ... where `predictions` and `observations` are numerical vectors of the same length.
+
+## Common Errors
+
+When running `shiny::runApp()`for the first time in a session, you may run into the following error:
+
+```R
+Warning in file(con, "r") :
+  cannot open file '/footer.html': No such file or directory
+Warning: Error in file: cannot open the connection
+  75: file
+  74: readLines
+  73: shiny::includeHTML
+```
+
+Can be resolved by running `devtools::load_all(".")` and then `shiny::runApp()`.
