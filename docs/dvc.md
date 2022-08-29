@@ -2,6 +2,27 @@
 
 ## Overview
 
+## Pull data
+
+
+
+
+Let's remove the file `sage.png` for the sake of this demonstration. Then, we can restore the file
+with `dvc pull`.
+
+```console
+$ dvc pull
+A       sage.png
+1 file added
+```
+
+If we run the command again, DVC will tell us that everything is up to date.
+
+```console
+$ dvc pull
+Everything is up to date.
+```
+
 ## Add a file with DVC
 
 ```console
@@ -16,6 +37,8 @@ To enable auto staging, run:
 
         dvc config core.autostage true
 ```
+
+> **Note** DVC adds the file to `.gitignore` to ensure that the file will not be tracked by git.
 
 Now you can push data from your local machine to the AWS remote. First, add the data you want DVC to
 track with the following command:
@@ -38,32 +61,14 @@ for performance reasons.
 - Location: Amazon S3 > Buckets > gh-challenge > 74/ > 1d96c652588cd30c73150982b124d4
 - Object URL: https://gh-challenge.s3.amazonaws.com/74/1d96c652588cd30c73150982b124d4
 
-## Pull data
-
-Let's remove the file `sage.png` for the sake of this demonstration. Then, we can restore the file
-with `dvc pull`.
-
-```console
-$ dvc pull
-A       sage.png
-1 file added
-```
-
-If we run the command again, DVC will tell us that everything is up to date.
-
-```console
-$ dvc pull
-Everything is up to date.
-```
-
 ## Update data
 
-Unlink the file with `dvc unprotect`. This will make `sage.png` safe to edit:
-
-```console
-$ dvc unprotect sage.png
-```
-
+DVC has four strategies to manage its cache: reflink, hardlink, symlink and copy (see [Large Dataset
+Optimization]). By default, DVC tries to use reflinks for the cache if available on your system,
+however this is not the most common case at this time, so it falls back to the copying strategy.
+Both reflink and copy enables files tracked by DVC to be edited in place. When using hardlinks and
+symlinks, the command `dvc unprotect <file>` must be run prior to editing the file to avoid
+corrupting DVC cache.
 
 Let's now modify the file `sage.png` with our favorite image editor, then save it. Similarly to the
 command `git status` that shows unstaged changes, we use the command `dvc status` for files tracked
@@ -76,16 +81,33 @@ sage.png.dvc:
                 modified:           sage.png
 ```
 
+Add the new version of the file back with DVC:
+
+```console
+dvc add sage.png
+git add sage.png.dvc
+
+git commit -m "modify sage logo"
+
+dvc push
+git push
+```
 
 ## Remove data
 
-First, stop tracking the file by using `dvc remove` on the `.dvc` file. This will remove `sage.png`
-from the workspace (and unlink it from the cache):
+Stop tracking the file by using `dvc remove` on the `.dvc` file. This will remove `sage.png` from
+the workspace (and unlink it from the cache):
 
 ```console
 dvc remove sage.png.dvc
+git add sage.png.dvc
+
+git commit -m "remove sage logo"
+git push
 ```
 
-Then stage the removal of `sage.png.dvc` with git.
-
 ## References
+
+- [Large Dataset Optimization]
+
+[Large Dataset Optimization]: https://dvc.org/doc/user-guide/large-dataset-optimization
