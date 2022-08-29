@@ -98,7 +98,17 @@
     color: #000;
 
     &.active {
-      // wait until the colors are determined
+      border-color: #71c663 !important;
+      background-color: #d0fedd;
+    }
+
+    &.completed {
+      border-color: #ffb6c1 !important;
+      background-color: #ffdde2;
+    }
+
+    &.upcoming {
+      // tbd
     }
   }
 
