@@ -60,13 +60,16 @@
       "onAutoForward": "silent"
     },
     "4200": {
-      "label": "challenge-registry"
+      "label": "challenge-registry",
+      "onAutoForward": "silent"
     },
     "4201": {
-      "label": "challenge-platform"
+      "label": "challenge-platform",
+      "onAutoForward": "silent"
     },
     "4211": {
-      "label": "nx graph"
+      "label": "nx graph",
+      "onAutoForward": "silent"
     },
     "5000": {
       "label": "challenge-logstash (TCP input)",
