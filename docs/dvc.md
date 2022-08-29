@@ -2,13 +2,12 @@
 
 ## Overview
 
-## Pull data
+TODO
 
+## Pull data files
 
-
-
-Let's remove the file `sage.png` for the sake of this demonstration. Then, we can restore the file
-with `dvc pull`.
+The command `dvc pull` instructs DVC to pull data files stored in the default remote (AWS S3 bucket
+in this workspace) using the information included in the files `*.dvc` tracked with `git`.
 
 ```console
 $ dvc pull
@@ -16,14 +15,7 @@ A       sage.png
 1 file added
 ```
 
-If we run the command again, DVC will tell us that everything is up to date.
-
-```console
-$ dvc pull
-Everything is up to date.
-```
-
-## Add a file with DVC
+## Add a file
 
 ```console
 $ dvc add sage.png
@@ -61,7 +53,7 @@ for performance reasons.
 - Location: Amazon S3 > Buckets > gh-challenge > 74/ > 1d96c652588cd30c73150982b124d4
 - Object URL: https://gh-challenge.s3.amazonaws.com/74/1d96c652588cd30c73150982b124d4
 
-## Update data
+## Update a file
 
 DVC has four strategies to manage its cache: reflink, hardlink, symlink and copy (see [Large Dataset
 Optimization]). By default, DVC tries to use reflinks for the cache if available on your system,
@@ -93,7 +85,7 @@ dvc push
 git push
 ```
 
-## Remove data
+## Remove a file
 
 Stop tracking the file by using `dvc remove` on the `.dvc` file. This will remove `sage.png` from
 the workspace (and unlink it from the cache):
