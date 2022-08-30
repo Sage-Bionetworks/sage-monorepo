@@ -1,6 +1,6 @@
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/themes/src/palettes' as pals;
-@use 'libs/challenge-registry/themes/src/fonts' as fonts;
+@use 'libs/challenge-registry/themes/src/lib/fonts' as fonts;
+@use 'libs/challenge-registry/themes/src/lib/palettes' as pals;
 @use 'libs/challenge-registry/themes/src/index' as challenge-registry;
 
 // set default typography
