@@ -1,0 +1,5 @@
+@use './lib/featured-challenge-list/featured-challenge-list-theme' as featured;
+
+@mixin theme($theme) {
+  @include featured.theme($theme);
+}

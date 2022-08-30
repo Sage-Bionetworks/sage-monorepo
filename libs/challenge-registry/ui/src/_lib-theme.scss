@@ -2,7 +2,6 @@
 @use './lib/footer/footer-theme' as footer;
 @use './lib/navbar/navbar-theme' as navbar;
 @use './lib/user-button/user-button-theme' as user-button;
-@use '../../home/src/lib/featured-challenge-list/featured-challenge-list-theme' as featured;
 @use './lib/challenge-card/challenge-card-theme' as challenge-card;
 @use './lib/organization-card/organization-card-theme' as organization-card;
 
@@ -11,7 +10,6 @@
   @include footer.theme($theme);
   @include navbar.theme($theme);
   @include user-button.theme($theme);
-  @include featured.theme($theme);
   @include challenge-card.theme($theme);
   @include organization-card.theme($theme);
 }
