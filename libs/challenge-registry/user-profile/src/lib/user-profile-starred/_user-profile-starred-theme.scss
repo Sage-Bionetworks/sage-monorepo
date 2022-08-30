@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/styles/src/lib/palettes' as pals;
+@use 'libs/challenge-registry/styles/src/lib/colors' as cols;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
@@ -18,14 +18,14 @@
     border-color: transparent;
   }
   .tab-item {
-    background-color: pals.$dl-color-default-hover1;
-    color: pals.$dl-color-default-navbardark;
+    background-color: cols.$dl-color-default-hover1;
+    color: cols.$dl-color-default-navbardark;
   }
   .tab-item:hover,
   .tab-item:active,
   .tab-item.active-tab {
-    background-color: pals.$dl-color-default-navbar;
-    color: pals.$dl-color-gray-white;
+    background-color: cols.$dl-color-default-navbar;
+    color: cols.$dl-color-gray-white;
   }
   .main-section-stars-card-group {
     background-color: transparent;

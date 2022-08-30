@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/styles/src/lib/palettes' as pals;
+@use 'libs/challenge-registry/styles/src/lib/colors' as cols;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
@@ -13,20 +13,20 @@
   }
   .challenge-card-card-banner {
     border-color: transparent;
-    background-color: pals.$dl-color-default-accent1;
+    background-color: cols.$dl-color-default-accent1;
   }
   .challenge-card-text {
-    color: pals.$dl-color-default-darkacccent1;
+    color: cols.$dl-color-default-darkacccent1;
   }
   .challenge-card-starred {
     border-color: transparent;
   }
   .challenge-card-text1 {
-    color: pals.$dl-color-default-navbardark;
+    color: cols.$dl-color-default-navbardark;
   }
   .challenge-card-icon {
     border-color: transparent;
-    color: pals.$dl-color-default-accent2;
+    color: cols.$dl-color-default-accent2;
   }
   .challenge-card-card-title {
     border-color: transparent;
@@ -42,8 +42,8 @@
   }
 
   .challenge-card-status-tag {
-    border-color: pals.$dl-color-default-primary2;
-    background-color: pals.$dl-color-default-hover1;
+    border-color: cols.$dl-color-default-primary2;
+    background-color: cols.$dl-color-default-hover1;
     color: #000;
 
     &.active {
@@ -62,10 +62,10 @@
   }
   // @media (max-width: 767px) {
   .challenge-card-container1 {
-    background-color: pals.$dl-color-gray-white;
+    background-color: cols.$dl-color-gray-white;
   }
   .challenge-card-starred {
-    background-color: pals.$dl-color-default-hover1;
+    background-color: cols.$dl-color-default-hover1;
   }
   // }
 }
