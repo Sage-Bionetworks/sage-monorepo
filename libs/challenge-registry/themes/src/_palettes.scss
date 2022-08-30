@@ -1,0 +1,169 @@
+@use 'sass:map';
+
+// Color variables
+$dark-primary-text: rgba(black, 0.87);
+$dark-secondary-text: rgba(black, 0.54);
+$dark-disabled-text: rgba(black, 0.38);
+$dark-dividers: rgba(black, 0.12);
+$dark-focused: rgba(black, 0.12);
+$light-primary-text: white;
+$light-secondary-text: rgba(white, 0.7);
+$light-disabled-text: rgba(white, 0.5);
+$light-dividers: rgba(white, 0.12);
+$light-focused: rgba(white, 0.12);
+
+$dark-blue-palette: (
+  50: #e8ebf5,
+  100: #c4cce7,
+  200: #9dabd7,
+  300: #768ac7,
+  400: #586fbc,
+  500: #3756b1,
+  600: #314fa7,
+  700: #27459b,
+  800: #1f3b8f,
+  900: #102979,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $light-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+  ),
+);
+
+$light-blue-palette: (
+  50: #dff4fb,
+  100: #ade3f4,
+  200: #76d1ed,
+  300: #39bde7,
+  400: #00b1e5,
+  500: #00a4e3,
+  600: #0096d5,
+  700: #0084c3,
+  800: #0073b0,
+  900: #005390,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $dark-primary-text,
+    600: $dark-primary-text,
+    700: $dark-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+  ),
+);
+
+$light-pink-palette: (
+  50: #ffedf1,
+  100: #ffd2da,
+  200: #f3a1a8,
+  300: #ed7c86,
+  400: #fb5c67,
+  500: #ff494f,
+  600: #f4424e,
+  700: #e23847,
+  800: #d53240,
+  900: #c62634,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $dark-primary-text,
+    600: $dark-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+  ),
+);
+
+$light-orange-palette: (
+  50: #faeeed,
+  100: #ffd8cd,
+  200: #ffbeaa,
+  300: #ffa284,
+  400: #ff8c66,
+  500: #ff774b,
+  600: #ff7146,
+  700: #ff6940,
+  800: #f2623c,
+  900: #d85533,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $dark-primary-text,
+    600: $dark-primary-text,
+    700: $dark-primary-text,
+    800: $dark-primary-text,
+    900: $light-primary-text,
+  ),
+);
+
+$light-green-palette: (
+  50: #e8fefb,
+  100: #c6fdf3,
+  200: #a5fdec,
+  300: #88f9e3,
+  400: #76f2d9,
+  500: #71ecd0,
+  600: #6adbbf,
+  700: #61c8ad,
+  800: #5bb79d,
+  900: #50977e,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $dark-primary-text,
+    600: $dark-primary-text,
+    700: $dark-primary-text,
+    800: $dark-primary-text,
+    900: $dark-primary-text,
+  ),
+);
+
+$light-purple-palette: (
+  50: #ede8ff,
+  100: #d0c6fd,
+  200: #afa0fe,
+  300: #8a78ff,
+  400: #6859ff,
+  500: #423ef5,
+  600: #2e3aee,
+  700: #0032e5,
+  800: #002ddc,
+  900: #0023ce,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $light-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+  ),
+);
+
+// Alias for "accent" usage
+$accent-pink-palette: $light-pink-palette;
+$accent-orange-palette: $light-orange-palette;
+$accent-green-palette: $light-green-palette;
+$accent-purple-palette: $light-purple-palette;
