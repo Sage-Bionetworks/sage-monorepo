@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use 'libs/challenge-registry/styles/src/lib/_patettes' as pals;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
@@ -34,7 +35,7 @@
   }
   .basic-stats-calltoaction {
     border-color: transparent;
-    background-color: var(--dl-color-default-secondary1);
+    background-color: pals.$dl-color-default-secondary1;
   }
   .basic-stats-create {
     border-color: transparent;
@@ -60,7 +61,7 @@
   }
   .basic-stats-calltoaction1 {
     border-color: transparent;
-    background-color: var(--dl-color-default-secondary1);
+    background-color: pals.$dl-color-default-secondary1;
   }
   .basic-stats-mailoutline {
     border-color: transparent;

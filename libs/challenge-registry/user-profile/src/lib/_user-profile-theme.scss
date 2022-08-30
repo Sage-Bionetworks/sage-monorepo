@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use 'libs/challenge-registry/styles/src/lib/_patettes' as pals;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
@@ -14,12 +15,12 @@
 
   .base-top-section {
     border-color: transparent;
-    background-color: var(--dl-color-default-hover1);
+    background-color: pals.$dl-color-default-hover1;
   }
 
   .base-profile-pic {
     border-color: transparent;
-    background-color: var(--dl-color-default-hover2);
+    background-color: pals.$dl-color-default-hover2;
   }
 
   .base-text {
@@ -28,17 +29,17 @@
 
   .base-verified {
     border-color: transparent;
-    color: var(--dl-color-default-darkaccent3);
+    color: pals.$dl-color-default-darkaccent3;
   }
   .base-group {
     border-color: transparent;
   }
   .base-text01 {
-    color: var(--dl-color-default-secondary1);
+    color: pals.$dl-color-default-secondary1;
   }
   .base-usertypetag {
-    border-color: var(--dl-color-default-secondary2);
-    background-color: var(--dl-color-default-accent4);
+    border-color: pals.$dl-color-default-secondary2;
+    background-color: pals.$dl-color-default-accent4;
   }
   .base-text02 {
     color: rgba(0, 0, 0, 1);
@@ -62,22 +63,22 @@
     color: rgba(0, 0, 0, 1);
   }
   .base-basic-stats {
-    background-color: var(--dl-color-default-hover2);
+    background-color: pals.$dl-color-default-hover2;
   }
   .base-side-nav {
-    border-color: var(--dl-color-default-primary2);
+    border-color: pals.$dl-color-default-primary2;
     background-color: rgba(255, 255, 255, 1);
   }
   .nav-item {
     border-color: transparent;
     &:focus,
     &:hover {
-      background-color: var(--dl-color-default-hover2);
+      background-color: pals.$dl-color-default-hover2;
     }
     color: black;
   }
   .nav-item.active-tab {
-    background-color: var(--dl-color-default-hover2);
+    background-color: pals.$dl-color-default-hover2;
   }
   .base-main-section {
     border-color: transparent;
@@ -86,7 +87,7 @@
 
   @media (max-width: 479px) {
     .base-profile-pic {
-      background-color: var(--dl-color-default-hover2);
+      background-color: pals.$dl-color-default-hover2;
     }
   }
 }

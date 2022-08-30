@@ -1,19 +1,5 @@
-@use 'constants' as csts;
-@use 'palettes' as pals;
-
 html,
 body {
   height: 100vh;
   // background-color: green;
-}
-
-// asign global variables
-:root {
-  @each $key, $value in pals.$figma_palettes {
-    #{$key}: #{$value};
-  }
-
-  @each $key, $value in csts.$figma_constants {
-    #{$key}: #{$value};
-  }
 }

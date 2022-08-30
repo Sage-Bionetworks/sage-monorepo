@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use 'libs/challenge-registry/styles/src/lib/_patettes' as pals;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
@@ -12,7 +13,7 @@
   }
   .organization-card-card-banner {
     border-color: transparent;
-    background-color: var(--dl-color-default-hover2);
+    background-color: pals.$dl-color-default-hover2;
   }
   .avatar-content {
     background-color: transparent !important;
@@ -25,11 +26,11 @@
     color: rgba(0, 0, 0, 1);
   }
   .organization-card-text2 {
-    color: var(--dl-color-default-primary1);
+    color: pals.$dl-color-default-primary1;
   }
   @media (max-width: 479px) {
     .organization-card-card-banner {
-      background-color: var(--dl-color-default-hover2);
+      background-color: pals.$dl-color-default-hover2;
     }
   }
 }

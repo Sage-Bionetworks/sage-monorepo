@@ -1,3 +1,5 @@
+@use 'libs/challenge-registry/styles/src/lib/_constants' as constants;
+
 .challenge-card-container {
   width: 496px;
   height: 521px;
@@ -153,11 +155,11 @@
 }
 // @media (max-width: 767px) {
 .challenge-card-container1 {
-  border-radius: var(--dl-radius-radius-radius16);
+  border-radius: constants.$dl-radius-radius-radius16;
 }
 .challenge-card-starred {
   border-width: 1px;
-  border-radius: var(--dl-radius-radius-radius16);
+  border-radius: constants.$dl-radius-radius-radius16;
 }
 .challenge-card-card-footer {
   top: 440px;
@@ -171,7 +173,7 @@
 .challenge-card-status-tag {
   top: 19px;
   right: 0px;
-  border-radius: var(--dl-radius-radius-radius16);
+  border-radius: constants.$dl-radius-radius-radius16;
 }
 .challenge-card-difficulty-tag {
   top: 28px;

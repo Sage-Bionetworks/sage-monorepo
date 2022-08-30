@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use 'libs/challenge-registry/styles/src/lib/_patettes' as pals;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
@@ -16,7 +17,7 @@
   }
 
   .main-section-bio-text {
-    color: var(--dl-color-gray-black);
+    color: pals.$dl-color-gray-black;
   }
 
   .main-section-bio-text1 {
@@ -30,7 +31,7 @@
     color: rgba(0, 0, 0, 1);
   }
   .main-section-bio-card-group {
-    background-color: var(--dl-color-default-hover2);
+    background-color: pals.$dl-color-default-hover2;
   }
 }
 
