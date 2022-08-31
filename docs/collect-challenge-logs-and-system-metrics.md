@@ -556,7 +556,7 @@ From there, the following actions are available:
 [ELK stack]: https://www.elastic.co/what-is/elk-stack
 [deviantony/docker-elk]: https://github.com/deviantony/docker-elk
 [Sage-Bionetworks/docker-elk]: https://github.com/Sage-Bionetworks/docker-elk
-[Install the Docker Engine]: https://docs.docker.com/engine/install/ubunt
+[Install the Docker Engine]: https://docs.docker.com/engine/install/ubuntu
 [Enable the non-root user to execute Docker commands]: https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user
 [Metricbeat]: https://www.elastic.co/beats/metricbeat
 [Install Metricbeat]: https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-installation-configuration.html#install
