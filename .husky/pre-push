@@ -3,7 +3,7 @@
 
 yarn affected:test
 
-if command -v dvc &> /dev/null
-then
-  exec dvc git-hook pre-push $@
-fi
+# if command -v dvc &> /dev/null
+# then
+#   exec dvc git-hook pre-push $@
+# fi
