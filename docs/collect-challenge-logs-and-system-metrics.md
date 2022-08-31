@@ -429,7 +429,7 @@ instance that runs the ELK stack, to monitor system log files.
     sudo systemctl status filebeat
     ```
     > **Note** Look at the logs for any error messages. If Filebeat failed to start, try restarting
-    > it with `sudo systemctl restart metricbeat`.
+    > it with `sudo systemctl restart filebeat`.
 
 Filebeat should now be sending data to the ELK Stack!
 
