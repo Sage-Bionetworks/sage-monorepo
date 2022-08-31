@@ -68,7 +68,6 @@ jobs:
           # Build the image
           npm install -g @vscode/dev-container-cli
           devcontainer build \
-            --disable-telemetry true \
             --image-name "${IMAGE_NAME}:${IMAGE_TAG}" "${FOLDER_WITH_DOT_DEVCONTAINER}"
 
           # Check that the image exists because `devcontainer` seems to always returns 0
