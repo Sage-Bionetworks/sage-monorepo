@@ -299,6 +299,9 @@ to log in:
 - user: `elastic`
 - password: `<elastic password>`
 
+Congrats! You have successfully logged into Kibana. You should be welcomed with a dialog that
+invites you to install integration components. You can skip this step.
+
 ## Deploy Beat agents
 
 ### Metricbeat
@@ -309,7 +312,7 @@ filesystem usage, and network usage. Metricbeat will send this information at th
 container levels.
 
 1. Ssh to an EC2 instance.
-2. [Install Metricbeat].
+2. [Install Metricbeat] (select the `DEB` tab).
     > **Note** The version of Metricbeat must match the version of the ELK stack. The version of the
     > ELK stack is specified in the configuration file `.env` of the ELK stack.
 
@@ -378,7 +381,7 @@ Metricbeat should now be sending data to the ELK Stack!
 instance that runs the ELK stack, to monitor system log files.
 
 1. Ssh to an EC2 instance.
-2. [Install Filebeat].
+2. [Install Filebeat] (select the `DEB` tab).
     > **Note** The version of Filebeat must match the version of the ELK stack. The version of the
     > ELK stack is specified in the configuration file `.env` of the ELK stack.
 
