@@ -2,3 +2,8 @@
 . "$(dirname "$0")/_/husky.sh"
 
 yarn affected:lint --uncommitted
+
+if command -v dvc &> /dev/null
+then
+  exec dvc git-hook pre-commit $@
+fi

@@ -5,7 +5,6 @@ node tools/check-nodejs-packages.js
 node tools/check-java-packages.js
 node tools/check-devcontainer-version.js
 
-# Run dvc post-checkout hook
 if command -v dvc &> /dev/null
 then
   exec dvc git-hook post-checkout $@
