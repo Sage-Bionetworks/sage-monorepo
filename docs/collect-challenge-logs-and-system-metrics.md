@@ -440,9 +440,11 @@ visualizing your data. To load these assets, run the following commands from the
 that runs the ELK stack.
 
 ```console
-metricbeat setup -e --dashboards
-filebeat setup -e --dashboards
+sudo metricbeat setup -e --dashboards
+sudo filebeat setup -e --dashboards
 ```
+
+These commands may take 1-2 minutes to complete.
 
 ## Explore and visualize data in Kibana
 
