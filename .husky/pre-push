@@ -2,3 +2,8 @@
 . "$(dirname "$0")/_/husky.sh"
 
 yarn affected:test
+
+if command -v dvc &> /dev/null
+then
+  exec dvc git-hook pre-push $@
+fi
