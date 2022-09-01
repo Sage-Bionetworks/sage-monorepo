@@ -1,6 +1,6 @@
 get_dataset_id <- function(ds_labels, cohort_obj){
   ds_ids <- setNames(cohort_obj$dataset_names, cohort_obj$dataset_displays)
-  sapply(ds_labels, function(x) ds_ids[[x]])
+  sapply(ds_labels, function(x) ds_ids[x])
 }
 
 get_dataset_label <- function(ds_name, cohort_obj){
@@ -237,8 +237,8 @@ get_training_object <- function(cohort_obj,
                                 previous_treat_to_exclude = NULL){
   #df with train and test
   dataset_selection <- list(
-    train = get_dataset_id(train_ds, cohort_obj),
-    test = get_dataset_id(test_ds, cohort_obj)
+    train = train_ds, #get_dataset_id(train_ds, cohort_obj),
+    test = test_ds #get_dataset_id(test_ds, cohort_obj)
   )
 
   #info about selected outcome
@@ -514,16 +514,24 @@ get_testing_results <- function(model, test_df, training_obj, survival_endpoint)
             dplyr::mutate(label_outcome = class_labels[.[[training_obj$response_var]]],
                           label_prediction = class_labels[.$prediction])
 
-    accuracy_results <- caret::confusionMatrix(as.factor(df$label_prediction), as.factor(df$label_outcome), positive = class_labels[1])
+    if(length(levels(as.factor(df$label_outcome))) > 1){
+      accuracy_results <- caret::confusionMatrix(as.factor(df$label_prediction), as.factor(df$label_outcome), positive = class_labels[1])
 
-    rocp <- pROC::roc(
-      response = factor(df[[training_obj$response_var]],  ordered = TRUE),
-      predictor = factor(df$prediction, ordered = TRUE),
-      levels = names(class_labels),
-      quiet = TRUE,
-      auc = TRUE)
+      rocp <- pROC::roc(
+        response = factor(df[[training_obj$response_var]],  ordered = TRUE),
+        predictor = factor(df$prediction, ordered = TRUE),
+        levels = names(class_labels),
+        quiet = TRUE,
+        auc = TRUE)
 
-    rplot <- pROC::ggroc(rocp) + ggplot2::labs(title = paste("AUC: ", round(rocp$auc, 3)))
+      rplot <- pROC::ggroc(rocp) + ggplot2::labs(title = paste("AUC: ", round(rocp$auc, 3)))
+
+    }else{ #dataset has only one response level, or all predictions are for only one class
+      all_levels <- union(df$label_prediction, df$label_outcome)
+      accuracy_results <-table(Prediction = factor(df$label_prediction, all_levels), Reference = factor(df$label_outcome, all_levels))
+      rplot <- "error"
+    }
+
     #KM plot
     dataset_df <- training_obj$subset_df$test %>%
         select(sample_name, OS, OS_time, PFI_1, PFI_time_1, dataset_display) %>%
