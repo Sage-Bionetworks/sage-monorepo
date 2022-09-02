@@ -10,8 +10,10 @@
 .main-section-challenges-main-section {
   top: 0px;
   left: 0px;
-  width: 1260px;
+  // width: 1260px;
+  width: calc(100% - 495px);
   height: 1200px;
+  padding-right: 113px;
   display: flex;
   position: absolute;
   box-sizing: border-box;
@@ -35,4 +37,10 @@
   display: flex;
   position: absolute;
   align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+  & > * {
+    margin-bottom: 46px;
+  }
 }
