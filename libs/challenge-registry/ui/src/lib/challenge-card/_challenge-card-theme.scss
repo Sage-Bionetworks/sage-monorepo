@@ -119,6 +119,10 @@
   .challenge-card-difficulty-tag {
     border-color: transparent;
   }
+  .challenge-card-icon2 {
+    border-color: transparent;
+    color: $dl-color-default-primary2; // TODO: update once the pr #626 is merged
+  }
   .challenge-card-text6 {
     color: rgba(0, 0, 0, 1);
   }
@@ -185,6 +189,10 @@
     font-weight: 400px;
     line-height: normal;
     font-stretch: normal;
+  }
+
+  .challenge-card-icon2 {
+    font-size: 24px;
   }
 
   .challenge-card-text6 {
