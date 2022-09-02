@@ -34,11 +34,12 @@
   height: 700px;
   display: flex;
   position: absolute;
+  box-sizing: border-box;
   align-items: flex-start;
+  flex-shrink: 1;
   flex-wrap: wrap;
-  justify-content: space-around;
 
   & > * {
-    margin-bottom: 46px;
+    margin: 16px;
   }
 }

@@ -68,10 +68,9 @@ $dl-radius-radius-radius16: 16px;
   align-items: flex-start;
   flex-shrink: 1;
   flex-wrap: wrap;
-  justify-content: space-around;
 
   & > * {
-    margin-bottom: 46px;
+    margin: 16px;
   }
 }
 .main-section-stars-paginator {
