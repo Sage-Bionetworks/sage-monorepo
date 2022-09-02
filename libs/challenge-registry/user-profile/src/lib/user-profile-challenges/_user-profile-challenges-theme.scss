@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/styles/src/lib/colors' as cols;
+@use 'libs/challenge-registry/themes/src/palettes' as palettes;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
@@ -12,7 +12,7 @@
     border-color: transparent;
   }
   .main-section-challenges-text {
-    color: cols.$dl-color-gray-black;
+    color: palettes.$dl-color-gray-black;
   }
   .main-section-challenges-card-group {
     background-color: transparent;

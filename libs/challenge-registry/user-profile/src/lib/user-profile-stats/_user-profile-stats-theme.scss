@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/styles/src/lib/colors' as cols;
+@use 'libs/challenge-registry/themes/src/palettes' as palettes;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
@@ -35,7 +35,7 @@
   }
   .basic-stats-calltoaction {
     border-color: transparent;
-    background-color: cols.$dl-color-default-secondary1;
+    background-color: palettes.$dl-color-default-secondary1;
   }
   .basic-stats-create {
     border-color: transparent;
@@ -61,7 +61,7 @@
   }
   .basic-stats-calltoaction1 {
     border-color: transparent;
-    background-color: cols.$dl-color-default-secondary1;
+    background-color: palettes.$dl-color-default-secondary1;
   }
   .basic-stats-mailoutline {
     border-color: transparent;
