@@ -198,8 +198,9 @@ $dl-radius-radius-round: 50%;
 .base-main-section {
   top: 729px;
   left: 495px;
-  width: 100%;
+  width: calc(100% - 495px);
   height: 1200px;
+  padding-right: 113px;
   display: flex;
   position: absolute;
   box-sizing: border-box;
