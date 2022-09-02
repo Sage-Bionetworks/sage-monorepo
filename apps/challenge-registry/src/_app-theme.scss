@@ -1,12 +1,12 @@
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/themes/src/palettes' as pals;
+@use 'libs/challenge-registry/themes/src/palettes' as palettes;
 @use 'libs/challenge-registry/themes/src/index' as challenge-registry;
 
 @include mat.core();
 
 // @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
-$primary: mat.define-palette(pals.$dark-blue-palette, 600);
-$accent: mat.define-palette(pals.$accent-pink-palette, 400);
+$primary: mat.define-palette(palettes.$dark-blue-palette, 600);
+$accent: mat.define-palette(palettes.$accent-pink-palette, 400);
 
 $theme: mat.define-light-theme(
   (
