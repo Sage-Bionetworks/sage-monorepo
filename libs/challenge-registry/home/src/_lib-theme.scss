@@ -1,5 +1,5 @@
-@use './lib/featured-challenge-list/featured-challenge-list-theme' as featured;
+@use './lib/featured-challenge-list/featured-challenge-list-theme' as featured-challenge-list;
 
 @mixin theme($theme) {
-  @include featured.theme($theme);
+  @include featured-challenge-list.theme($theme);
 }
