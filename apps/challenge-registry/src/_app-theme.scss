@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
 @use 'libs/challenge-registry/themes/src/palettes' as palettes;
 @use 'libs/challenge-registry/themes/src/index' as challenge-registry;
@@ -6,7 +7,7 @@
 
 // @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
 $primary: mat.define-palette(palettes.$dark-blue-palette, 600);
-$accent: mat.define-palette(palettes.$accent-pink-palette, 400);
+$accent: mat.define-palette(palettes.$light-pink-palette, 400);
 
 $theme: mat.define-light-theme(
   (
@@ -18,6 +19,16 @@ $theme: mat.define-light-theme(
       mat.define-typography-config(
         $font-family: "'Poppins', sans-serif",
       ),
+  )
+);
+
+// Add custom palettes used in figma to the theme
+$theme: map.deep-merge(
+  $theme,
+  (
+    color: (
+      figma: palettes.$figma-collection,
+    ),
   )
 );
 

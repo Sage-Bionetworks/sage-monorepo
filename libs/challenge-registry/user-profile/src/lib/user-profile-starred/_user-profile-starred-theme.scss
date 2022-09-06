@@ -1,12 +1,12 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/themes/src/palettes' as palettes;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
 
   .main-section-stars-main-section {
     border-color: transparent;
@@ -18,14 +18,14 @@
     border-color: transparent;
   }
   .tab-item {
-    background-color: palettes.$dl-color-default-hover1;
-    color: palettes.$dl-color-default-navbardark;
+    background-color: map.get($figma, dl-color-default-hover1);
+    color: map.get($figma, dl-color-default-navbardark);
   }
   .tab-item:hover,
   .tab-item:active,
   .tab-item.active-tab {
-    background-color: palettes.$dl-color-default-navbar;
-    color: palettes.$dl-color-gray-white;
+    background-color: map.get($figma, dl-color-default-navbar);
+    color: map.get($figma, dl-color-gray-white);
   }
   .main-section-stars-card-group {
     background-color: transparent;

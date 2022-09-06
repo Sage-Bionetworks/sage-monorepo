@@ -1,12 +1,12 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/themes/src/palettes' as palettes;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
   $shadow: rgba(196, 196, 196, 1);
   $light-bg: white;
 
@@ -35,7 +35,7 @@
   }
   .basic-stats-calltoaction {
     border-color: transparent;
-    background-color: palettes.$dl-color-default-secondary1;
+    background-color: map.get($figma, dl-color-default-secondary1);
   }
   .basic-stats-create {
     border-color: transparent;
@@ -61,7 +61,7 @@
   }
   .basic-stats-calltoaction1 {
     border-color: transparent;
-    background-color: palettes.$dl-color-default-secondary1;
+    background-color: map.get($figma, dl-color-default-secondary1);
   }
   .basic-stats-mailoutline {
     border-color: transparent;

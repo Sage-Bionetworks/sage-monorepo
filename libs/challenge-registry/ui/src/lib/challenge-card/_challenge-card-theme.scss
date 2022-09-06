@@ -1,32 +1,32 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/themes/src/palettes' as palettes;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
 
   .challenge-card-container1 {
     box-shadow: 1px 5px 18px 0px rgba(0, 0, 0, 0.24);
   }
   .challenge-card-card-banner {
     border-color: transparent;
-    background-color: palettes.$dl-color-default-accent1;
+    background-color: map.get($figma, dl-color-default-accent1);
   }
   .challenge-card-text {
-    color: palettes.$dl-color-default-darkacccent1;
+    color: map.get($figma, dl-color-default-darkacccent1);
   }
   .challenge-card-starred {
     border-color: transparent;
   }
   .challenge-card-text1 {
-    color: palettes.$dl-color-default-navbardark;
+    color: map.get($figma, dl-color-default-navbardark);
   }
   .challenge-card-icon {
     border-color: transparent;
-    color: palettes.$dl-color-default-accent2;
+    color: map.get($figma, dl-color-default-accent2);
   }
   .challenge-card-card-title {
     border-color: transparent;
@@ -42,8 +42,8 @@
   }
 
   .challenge-card-status-tag {
-    border-color: palettes.$dl-color-default-primary2;
-    background-color: palettes.$dl-color-default-hover1;
+    border-color: map.get($figma, dl-color-default-primary2);
+    background-color: map.get($figma, dl-color-default-hover1);
     color: #000;
 
     &.active {
@@ -62,10 +62,10 @@
   }
   // @media (max-width: 767px) {
   .challenge-card-container1 {
-    background-color: palettes.$dl-color-gray-white;
+    background-color: map.get($figma, dl-color-gray-white);
   }
   .challenge-card-starred {
-    background-color: palettes.$dl-color-default-hover1;
+    background-color: map.get($figma, dl-color-default-hover1);
   }
   // }
 }

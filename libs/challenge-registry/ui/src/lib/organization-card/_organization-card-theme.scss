@@ -1,23 +1,23 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/themes/src/palettes' as palettes;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
 
   .organization-card-container1 {
     border-color: transparent;
   }
   .organization-card-card-banner {
     border-color: transparent;
-    background-color: palettes.$dl-color-default-hover2;
+    background-color: map.get($figma, dl-color-default-hover2);
   }
   .avatar-content {
     background-color: transparent !important;
-    color: palettes.$dl-color-default-primary2 !important;
+    color: map.get($figma, dl-color-default-primary2) !important;
   }
   .organization-card-card-title {
     border-color: transparent;
@@ -26,11 +26,11 @@
     color: rgba(0, 0, 0, 1);
   }
   .organization-card-text2 {
-    color: palettes.$dl-color-default-primary1;
+    color: map.get($figma, dl-color-default-primary1);
   }
   @media (max-width: 479px) {
     .organization-card-card-banner {
-      background-color: palettes.$dl-color-default-hover2;
+      background-color: map.get($figma, dl-color-default-hover2);
     }
   }
 }

@@ -1,18 +1,18 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/themes/src/palettes' as palettes;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
 
   .main-section-challenges-main-section {
     border-color: transparent;
   }
   .main-section-challenges-text {
-    color: palettes.$dl-color-gray-black;
+    color: map.get($figma, dl-color-gray-black);
   }
   .main-section-challenges-card-group {
     background-color: transparent;
