@@ -7,12 +7,13 @@
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
 
   .main-section-challenges-main-section {
     border-color: transparent;
   }
   .main-section-challenges-text {
-    color: cols.$dl-color-gray-black;
+    color: map.get($figma, dl-color-gray-black);
   }
   .main-section-challenges-card-group {
     background-color: transparent;

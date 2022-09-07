@@ -7,6 +7,7 @@
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
 
   .base-container1 {
     border-color: transparent;
@@ -15,7 +16,7 @@
 
   .base-top-section {
     border-color: transparent;
-    background-color: cols.$dl-color-default-hover1;
+    background-color: map.get($figma, dl-color-default-hover1);
   }
 
   .base-profile-pic {
@@ -29,17 +30,17 @@
 
   .base-verified {
     border-color: transparent;
-    color: cols.$dl-color-default-darkaccent3;
+    color: map.get($figma, dl-color-default-darkaccent3);
   }
   .base-group {
     border-color: transparent;
   }
   .base-text01 {
-    color: cols.$dl-color-default-secondary1;
+    color: map.get($figma, dl-color-default-secondary1);
   }
   .base-usertypetag {
-    border-color: cols.$dl-color-default-secondary2;
-    background-color: cols.$dl-color-default-accent4;
+    border-color: map.get($figma, dl-color-default-secondary2);
+    background-color: map.get($figma, dl-color-default-accent4);
   }
   .base-text02 {
     color: rgba(0, 0, 0, 1);
@@ -63,22 +64,22 @@
     color: rgba(0, 0, 0, 1);
   }
   .base-basic-stats {
-    background-color: cols.$dl-color-default-hover2;
+    background-color: map.get($figma, dl-color-default-hover2);
   }
   .base-side-nav {
-    border-color: cols.$dl-color-default-primary2;
+    border-color: map.get($figma, dl-color-default-primary2);
     background-color: rgba(255, 255, 255, 1);
   }
   .nav-item {
     border-color: transparent;
     &:focus,
     &:hover {
-      background-color: cols.$dl-color-default-hover2;
+      background-color: map.get($figma, dl-color-default-hover2);
     }
     color: black;
   }
   .nav-item.active-tab {
-    background-color: cols.$dl-color-default-hover2;
+    background-color: map.get($figma, dl-color-default-hover2);
   }
   .base-main-section {
     border-color: transparent;
@@ -87,7 +88,7 @@
 
   @media (max-width: 479px) {
     .base-profile-pic {
-      background-color: cols.$dl-color-default-hover2;
+      background-color: map.get($figma, dl-color-default-hover2);
     }
   }
 }
