@@ -1,5 +1,5 @@
 // This script checks if the `yarn.lock` file has changed since the last git move. If it has
-// changed, then the command `yarn install --frozen-lockfile` is executed.
+// changed, then the command `yarn install --immutable` is executed.
 
 'use strict';
 
@@ -9,7 +9,7 @@ const { getGitDiffFiles } = require('./git-util');
 const gitHookName = process.argv[2];
 
 const installNodejsPackages = () => {
-  spawn('yarn', ['install', '--frozen-lockfile'], {stdio:'inherit'})
+  spawn('yarn', ['install', '--immutable'], {stdio:'inherit'})
     .on('exit', function (error) {
       if (error) {
         console.log(`error: ${error.message}`);

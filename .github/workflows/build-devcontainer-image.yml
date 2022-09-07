@@ -42,8 +42,6 @@ jobs:
       - name: Prepare the image build
         id: prep
         run: |
-          set -e
-
           DEVCONTAINER_VERSION="${GITHUB_SHA::8}"
           IMAGE_NAME="${{ env.IMAGE_REPOSITORY }}"
           echo ::set-output name=image_name::${IMAGE_NAME}
@@ -51,8 +49,6 @@ jobs:
 
       - name: Build the image
         run: |
-          set -e
-
           FOLDER_WITH_DOT_DEVCONTAINER="tools/devcontainers/challenge-devcontainer"
           IMAGE_NAME=${{ steps.prep.outputs.image_name }}
           IMAGE_TAG=${{ steps.prep.outputs.devcontainer_version }}
@@ -61,7 +57,7 @@ jobs:
           export DOCKER_BUILDKIT=1
           export BUILDKIT_PROGRESS=plain
 
-          # Export the devcontainer version, which will be set inside the image. See
+          # Export the devcontainer version, which will be set inside the image. See 
           # devcontainer.json used to build the image.
           export DEVCONTAINER_VERSION=${{ steps.prep.outputs.devcontainer_version }}
 
