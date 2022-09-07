@@ -135,7 +135,12 @@
       "configurations": {
         "production": {
           "outputHashing": "media",
-          "fileReplacements": []
+          "fileReplacements": [
+            {
+              "replace": "src/environments/environment.ts",
+              "with": "src/environments/environment.prod.ts"
+            }
+          ]
         },
         "development": {
           "optimization": false,
@@ -158,6 +163,19 @@
         }
       },
       "defaultConfiguration": "development"
+    },
+    "prerender": {
+      "builder": "@nguniversal/builders:prerender",
+      "options": {
+      "browserTarget": "challenge-registry:build:production",
+      "serverTarget": "challenge-registry:server:production",
+      "routes": [
+          "/"
+      ]
+      },
+      "configurations": {
+        "production": {}
+      }
     },
     "build-sitemap": {
       "executor": "@nrwl/workspace:run-commands",

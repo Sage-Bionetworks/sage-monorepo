@@ -1,4 +1,5 @@
 import 'zone.js/dist/zone-node';
+// import 'reflect-metadata';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
@@ -24,7 +25,6 @@ export function app(): express.Express {
     'html',
     ngExpressEngine({
       bootstrap: AppServerModule,
-      // inlineCriticalCss: false,
     })
   );
 
@@ -43,9 +43,19 @@ export function app(): express.Express {
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
+    const protocol = req.protocol;
+    const host = req.get('host');
     res.render(indexHtml, {
       req,
-      providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
+      providers: [
+        { provide: APP_BASE_HREF, useValue: req.baseUrl },
+        // The base URL enables the app to load the app config file during server-side rendering.
+        {
+          provide: 'APP_BASE_URL',
+          useFactory: () => `${protocol}://${host}`,
+          deps: [],
+        },
+      ],
     });
   });
 

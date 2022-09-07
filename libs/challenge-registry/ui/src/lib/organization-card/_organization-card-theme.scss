@@ -1,0 +1,83 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, 'primary');
+  $accent: map.get($config, 'accent');
+  $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
+
+  .organization-card-container1 {
+    border-color: transparent;
+  }
+  .organization-card-card-banner {
+    border-color: transparent;
+    background-color: map.get($figma, dl-color-default-hover2);
+  }
+  .avatar-content {
+    background-color: transparent !important;
+    color: map.get($figma, dl-color-default-primary2) !important;
+  }
+  .organization-card-card-title {
+    border-color: transparent;
+  }
+  .organization-card-text1 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .organization-card-text2 {
+    color: map.get($figma, dl-color-default-primary1);
+  }
+  @media (max-width: 479px) {
+    .organization-card-card-banner {
+      background-color: map.get($figma, dl-color-default-hover2);
+    }
+  }
+}
+
+@mixin typography($theme) {
+  $typography-config: mat.get-typography-config($theme);
+
+  .organization-card-text {
+    font-size: 64px;
+    font-style: normal;
+    font-family: Fira Sans;
+    font-weight: 500px;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .organization-card-text1 {
+    font-size: 32px;
+    font-style: normal;
+    font-family: Fira Sans;
+    font-weight: 500px;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .organization-card-text2 {
+    font-size: 20px;
+    font-style: normal;
+    font-family: Roboto;
+    font-weight: 400px;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  @media (max-width: 479px) {
+    .organization-card-text1 {
+      font-style: normal;
+      font-weight: 500;
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}

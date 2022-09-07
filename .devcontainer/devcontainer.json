@@ -1,19 +1,15 @@
 {
   "name": "Challenge",
-  "image": "sagebionetworks/challenge-devcontainer:cf3a659f",
-  // "image": "sagebionetworks/challenge-devcontainer:test",
+  "image": "sagebionetworks/challenge-devcontainer:b09b7315",
 
   "features": {
-    // docker features must be specified in the developer facing
-    // devcontainer.json for VS Code to properly mount the docker sockets.
     "docker-in-docker": "20.10"
   },
 
-  // Set *default* container specific settings.json values on container create.
   "settings": {},
 
-  // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
+    "Angular.ng-template",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
@@ -24,6 +20,7 @@
     "webhint.vscode-webhint",
     "GitHub.vscode-pull-request-github",
     "humao.rest-client",
+    "vscjava.vscode-gradle",
     "vscjava.vscode-java-pack",
     "vscjava.vscode-lombok",
     "Pivotal.vscode-boot-dev-pack",
@@ -35,8 +32,6 @@
     "1000ch.svgo"
   ],
 
-  // Use 'forwardPorts' to make a list of ports inside the container available
-	// locally.
   "forwardPorts": [
     3306,
     4200,
@@ -59,21 +54,22 @@
     27017
   ],
 
-  // Object that maps a port number, "host:port" value, range, or regular
-  // expression to a set of default options.
   "portsAttributes": {
     "3306": {
       "label": "challenge-mariadb",
       "onAutoForward": "silent"
     },
     "4200": {
-      "label": "challenge-registry"
+      "label": "challenge-registry",
+      "onAutoForward": "silent"
     },
     "4201": {
-      "label": "challenge-platform"
+      "label": "challenge-platform",
+      "onAutoForward": "silent"
     },
     "4211": {
-      "label": "nx graph"
+      "label": "nx graph",
+      "onAutoForward": "silent"
     },
     "5000": {
       "label": "challenge-logstash (TCP input)",
@@ -137,15 +133,7 @@
     }
   },
 
-  // Comment out to connect as root instead. More info:
-  // https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode",
-
-  // Indicates whether VS Code and other devcontainer.json supporting tools
-  // should stop the containers when the related tool window is closed / shut
-  // down.
   "shutdownAction": "stopContainer",
-
-  // An array of Docker CLI arguments
   "runArgs": ["--name", "challenge_devcontainer"]
 }

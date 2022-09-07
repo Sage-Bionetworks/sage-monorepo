@@ -1,4 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-rm -rf node_modules && yarn install --frozen-lockfile
+# Install the Node.js dependencies.
+# rm -rf node_modules && yarn install --frozen-lockfile
+node tools/check-nodejs-packages.js post-merge
+node tools/check-java-packages.js
+node tools/check-devcontainer-version.js

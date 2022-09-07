@@ -1,0 +1,148 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, 'primary');
+  $accent: map.get($config, 'accent');
+  $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
+
+  .challenge-card-container1 {
+    box-shadow: 1px 5px 18px 0px rgba(0, 0, 0, 0.24);
+  }
+  .challenge-card-card-banner {
+    border-color: transparent;
+    background-color: map.get($figma, dl-color-default-accent1);
+  }
+  .challenge-card-text {
+    color: map.get($figma, dl-color-default-darkacccent1);
+  }
+  .challenge-card-starred {
+    border-color: transparent;
+  }
+  .challenge-card-text1 {
+    color: map.get($figma, dl-color-default-navbardark);
+  }
+  .challenge-card-icon {
+    border-color: transparent;
+    color: map.get($figma, dl-color-default-accent2);
+  }
+  .challenge-card-card-title {
+    border-color: transparent;
+  }
+  .challenge-card-text2 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .challenge-card-text3 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .challenge-card-text4 {
+    color: rgba(0, 0, 0, 1);
+  }
+
+  .challenge-card-status-tag {
+    border-color: map.get($figma, dl-color-default-primary2);
+    background-color: map.get($figma, dl-color-default-hover1);
+    color: #000;
+
+    &.active {
+      // wait until the colors are determined
+    }
+  }
+
+  .challenge-card-text5 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .challenge-card-difficulty-tag {
+    border-color: transparent;
+  }
+  .challenge-card-text6 {
+    color: rgba(0, 0, 0, 1);
+  }
+  // @media (max-width: 767px) {
+  .challenge-card-container1 {
+    background-color: map.get($figma, dl-color-gray-white);
+  }
+  .challenge-card-starred {
+    background-color: map.get($figma, dl-color-default-hover1);
+  }
+  // }
+}
+
+@mixin typography($theme) {
+  .challenge-card-text {
+    font-size: 24px;
+    font-style: normal;
+    font-family: Fira Sans;
+    font-weight: 400px;
+    line-height: normal;
+    font-stretch: normal;
+  }
+
+  .challenge-card-text1 {
+    font-size: 18px;
+    font-style: normal;
+    font-family: Fira Sans;
+    font-weight: 600px;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .challenge-card-icon {
+    font-size: 32px;
+  }
+  .challenge-card-text2 {
+    font-size: 32px;
+    font-style: normal;
+    font-family: Fira Sans;
+    font-weight: 500px;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .challenge-card-text3 {
+    font-size: 20px;
+    font-style: normal;
+    font-family: Lato;
+    font-weight: 400px;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .challenge-card-text4 {
+    font-size: 16px;
+    font-style: normal;
+    font-family: Lato;
+    font-weight: 400px;
+    line-height: normal;
+    font-stretch: normal;
+  }
+
+  .challenge-card-text5 {
+    font-size: 20px;
+    font-style: normal;
+    font-family: Lato;
+    font-weight: 400px;
+    line-height: normal;
+    font-stretch: normal;
+  }
+
+  .challenge-card-text6 {
+    font-size: 20px;
+    font-style: normal;
+    font-family: Lato;
+    font-weight: 400px;
+    line-height: normal;
+    font-stretch: normal;
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}

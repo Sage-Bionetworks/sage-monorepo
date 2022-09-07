@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "Angular.ng-template",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
@@ -10,6 +11,7 @@
     "webhint.vscode-webhint",
     "github.vscode-pull-request-github",
     "humao.rest-client",
+    "vscjava.vscode-gradle",
     "vscjava.vscode-java-pack",
     "vscjava.vscode-lombok",
     "pivotal.vscode-boot-dev-pack",

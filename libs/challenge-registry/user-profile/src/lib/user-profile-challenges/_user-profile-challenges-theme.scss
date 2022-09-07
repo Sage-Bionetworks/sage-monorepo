@@ -1,0 +1,43 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, 'primary');
+  $accent: map.get($config, 'accent');
+  $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
+
+  .main-section-challenges-main-section {
+    border-color: transparent;
+  }
+  .main-section-challenges-text {
+    color: map.get($figma, dl-color-gray-black);
+  }
+  .main-section-challenges-card-group {
+    background-color: transparent;
+  }
+}
+
+@mixin typography($theme) {
+  .main-section-challenges-text {
+    font-size: 40px;
+    font-style: normal;
+    font-family: Fira Sans;
+    font-weight: 500;
+    line-height: normal;
+    font-stretch: normal;
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}

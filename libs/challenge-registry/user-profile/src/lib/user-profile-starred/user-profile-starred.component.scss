@@ -1,7 +1,81 @@
-main {
-  padding: 20px;
-}
+@use 'libs/challenge-registry/styles/src/lib/_constants' as constants;
 
-.rocc-user-profile-starred-container {
-  margin-top: 10px;
+.main-section-stars-container {
+  width: 100%;
+  height: 1400px;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+}
+.main-section-stars-main-section {
+  top: 0px;
+  left: 0px;
+  width: 1260px;
+  height: 1200px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+}
+.main-section-stars-text {
+  top: 0px;
+  left: 0px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  align-self: auto;
+  font-style: normal;
+  text-align: left;
+  font-family: Fira Sans;
+  font-weight: 500px;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.main-section-stars-tab-group {
+  top: 104px;
+  left: 0px;
+  width: 415px;
+  height: 71px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+}
+.tab-item {
+  padding: 18px 32px;
+  box-sizing: border-box;
+  transition: 0.3s;
+  align-items: flex-start;
+  border-radius: constants.$dl-radius-radius-radius16;
+  border: none;
+  align-self: auto;
+  text-align: center;
+  text-decoration: none;
+}
+.main-section-stars-card-group {
+  top: 252px;
+  left: 0;
+  width: 1200px;
+  height: 1096px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+}
+.main-section-stars-paginator {
+  left: 802px;
+  width: 457px;
+  bottom: 133px;
+  height: 30.000001907348633px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
 }

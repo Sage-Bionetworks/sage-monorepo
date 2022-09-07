@@ -1,21 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Challenge, UserService } from '@sagebionetworks/api-angular';
-import { map, Observable } from 'rxjs';
+import { Component, Input } from '@angular/core';
+import { Challenge, User, UserService } from '@sagebionetworks/api-angular';
+import { MOCK_CHALLENGES } from '@sagebionetworks/challenge-registry/ui';
+// import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'challenge-registry-user-profile-challenges',
   templateUrl: './user-profile-challenges.component.html',
   styleUrls: ['./user-profile-challenges.component.scss'],
 })
-export class UserProfileChallengesComponent implements OnInit {
-  @Input() userId!: string;
-  challenges$!: Observable<Challenge[]>;
+export class UserProfileChallengesComponent {
+  @Input() user!: User;
+  challenges: Challenge[] = MOCK_CHALLENGES;
 
   constructor(private userService: UserService) {}
-
-  ngOnInit(): void {
-    this.challenges$ = this.userService
-      .listUserStarredChallenges(this.userId)
-      .pipe(map((page) => page.challenges));
-  }
 }

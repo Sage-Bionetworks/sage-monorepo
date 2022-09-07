@@ -16,7 +16,10 @@
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
         "root": "apps/challenge-config-service"
-      }
+      },
+      "outputs": [
+        "apps/challenge-config-service"
+      ]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",

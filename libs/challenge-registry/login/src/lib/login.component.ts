@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormControl,
@@ -7,10 +7,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@sagebionetworks/challenge-registry/auth';
-import {
-  AppConfig,
-  APP_CONFIG,
-} from '@sagebionetworks/challenge-registry/config';
+import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 import { Subscription } from 'rxjs';
 import { ModelError as ApiClientError } from '@sagebionetworks/api-angular';
@@ -35,9 +32,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private formBuilder: UntypedFormBuilder,
     private authService: AuthService,
-    @Inject(APP_CONFIG) private appConfig: AppConfig
+    private readonly configService: ConfigService
   ) {
-    this.appVersion = appConfig.appVersion;
+    this.appVersion = this.configService.config.appVersion;
   }
 
   ngOnInit(): void {
