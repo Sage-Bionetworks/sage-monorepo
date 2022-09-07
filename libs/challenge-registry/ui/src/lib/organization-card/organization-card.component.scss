@@ -1,4 +1,4 @@
-$dl-radius-radius-round: 50%;
+@use 'libs/challenge-registry/styles/src/lib/_constants' as constants;
 
 .organization-card-container {
   width: 300px;
@@ -27,7 +27,7 @@ $dl-radius-radius-round: 50%;
   align-items: flex-start;
   flex-shrink: 1;
   box-shadow: 1px 5px 18px 0px #d4d4d4;
-  border-radius: $dl-radius-radius-round;
+  border-radius: constants.$dl-radius-radius-round;
 }
 .organization-card-text {
   top: 56px;
@@ -77,7 +77,7 @@ $dl-radius-radius-round: 50%;
   .organization-card-card-banner {
     box-shadow: 1px 5px 18px 0px #d4d4d4;
     align-items: flex-start;
-    border-radius: $dl-radius-radius-round;
+    border-radius: constants.$dl-radius-radius-round;
   }
   .organization-card-text1 {
   }

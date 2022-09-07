@@ -6,64 +6,13 @@
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
-
-  $dl-color-gray-500: #595959;
-  $dl-color-gray-700: #999999;
-  $dl-color-gray-900: #d9d9d9;
-  $dl-size-size-large: 144px;
-  $dl-size-size-small: 48px;
-  $dl-color-danger-300: #a22020;
-  $dl-color-danger-500: #bf2626;
-  $dl-color-danger-700: #e14747;
-  $dl-color-gray-black: #000000;
-  $dl-color-gray-white: #ffffff;
-  $dl-size-size-medium: 96px;
-  $dl-size-size-xlarge: 192px;
-  $dl-size-size-xsmall: 16px;
-  $dl-space-space-unit: 16px;
-  $dl-color-primary-100: #003eb3;
-  $dl-color-primary-300: #0074f0;
-  $dl-color-primary-500: #14a9ff;
-  $dl-color-primary-700: #85dcff;
-  $dl-color-success-300: #199033;
-  $dl-color-success-500: #32a94c;
-  $dl-color-success-700: #4cc366;
-  $dl-size-size-xxlarge: 288px;
-  $dl-size-size-maxwidth: 1400px;
-  $dl-radius-radius-round: 50%;
-  $dl-color-default-hover1: rgba(249, 249, 249, 1);
-  $dl-color-default-hover2: rgba(229, 229, 229, 1);
-  $dl-color-default-navbar: rgba(49, 78, 167, 1);
-  $dl-space-space-halfunit: 8px;
-  $dl-space-space-sixunits: 96px;
-  $dl-space-space-twounits: 32px;
-  $dl-color-default-accent1: rgba(255, 210, 218, 1);
-  $dl-color-default-accent2: rgba(255, 216, 205, 1);
-  $dl-color-default-accent3: rgba(198, 253, 243, 1);
-  $dl-color-default-accent4: rgba(224, 225, 254, 1);
-  $dl-radius-radius-radius2: 2px;
-  $dl-radius-radius-radius4: 4px;
-  $dl-radius-radius-radius8: 8px;
-  $dl-space-space-fiveunits: 80px;
-  $dl-space-space-fourunits: 64px;
-  $dl-color-default-primary1: rgba(73, 80, 246, 1);
-  $dl-color-default-primary2: rgba(196, 196, 196, 1);
-  $dl-radius-radius-radius16: 16px;
-  $dl-space-space-threeunits: 48px;
-  $dl-color-default-navbardark: rgba(29, 53, 128, 1);
-  $dl-color-default-secondary1: rgba(57, 189, 231, 1);
-  $dl-color-default-secondary2: rgba(139, 120, 255, 1);
-  $dl-color-default-darkaccent2: rgba(252, 161, 135, 1);
-  $dl-color-default-darkaccent3: rgba(100, 211, 191, 1);
-  $dl-color-default-darkaccent4: rgba(157, 160, 255, 1);
-  $dl-color-default-darkacccent1: rgba(255, 158, 175, 1);
-  $dl-space-space-oneandhalfunits: 24px;
+  $figma: map.get($config, 'figma');
 
   .main-section-challenges-main-section {
     border-color: transparent;
   }
   .main-section-challenges-text {
-    color: $dl-color-gray-black;
+    color: map.get($figma, dl-color-gray-black);
   }
   .main-section-challenges-card-group {
     background-color: transparent;
