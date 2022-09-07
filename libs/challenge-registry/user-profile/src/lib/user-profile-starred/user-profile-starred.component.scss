@@ -1,4 +1,4 @@
-$dl-radius-radius-radius16: 16px;
+@use 'libs/challenge-registry/styles/src/lib/_constants' as constants;
 
 .main-section-stars-container {
   width: 100%;
@@ -51,7 +51,7 @@ $dl-radius-radius-radius16: 16px;
   box-sizing: border-box;
   transition: 0.3s;
   align-items: flex-start;
-  border-radius: $dl-radius-radius-radius16;
+  border-radius: constants.$dl-radius-radius-radius16;
   border: none;
   align-self: auto;
   text-align: center;

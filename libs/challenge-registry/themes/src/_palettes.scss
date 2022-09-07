@@ -1,5 +1,6 @@
 @use 'sass:map';
 
+// Color variables
 $dark-primary-text: rgba(black, 0.87);
 $dark-secondary-text: rgba(black, 0.54);
 $dark-disabled-text: rgba(black, 0.38);
@@ -166,3 +167,25 @@ $accent-pink-palette: $light-pink-palette;
 $accent-orange-palette: $light-orange-palette;
 $accent-green-palette: $light-green-palette;
 $accent-purple-palette: $light-purple-palette;
+
+// Figma palettes variables
+$figma-collection: (
+  dl-color-default-navbar: map.get($dark-blue-palette, 600),
+  dl-color-default-accent1: map.get($accent-pink-palette, 100),
+  dl-color-default-accent2: map.get($accent-orange-palette, 100),
+  dl-color-default-accent3: map.get($accent-green-palette, 100),
+  dl-color-default-accent4: map.get($accent-purple-palette, 50),
+  dl-color-default-primary1: map.get($dark-blue-palette, 400),
+  dl-color-default-primary2: $dark-focused,
+  dl-color-default-navbardark: map.get($dark-blue-palette, 800),
+  dl-color-default-secondary1: map.get($light-blue-palette, 300),
+  dl-color-default-secondary2: map.get($accent-purple-palette, 300),
+  dl-color-default-darkaccent2: map.get($accent-orange-palette, 300),
+  dl-color-default-darkaccent3: map.get($accent-green-palette, 600),
+  dl-color-default-darkaccent4: map.get($accent-purple-palette, 200),
+  dl-color-default-darkacccent1: map.get($accent-pink-palette, 200),
+  dl-color-gray-black: #000000,
+  dl-color-gray-white: #ffffff,
+  dl-color-default-hover1: rgba(249, 249, 249, 1),
+  dl-color-default-hover2: rgba(229, 229, 229, 1),
+);
