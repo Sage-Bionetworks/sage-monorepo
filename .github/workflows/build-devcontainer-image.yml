@@ -61,8 +61,6 @@ jobs:
           # devcontainer.json used to build the image.
           export DEVCONTAINER_VERSION=${{ steps.prep.outputs.devcontainer_version }}
 
-          echo "${IMAGE_NAME}:${IMAGE_TAG}"
-
           # Build the image
           npm install -g @vscode/dev-container-cli
           devcontainer build \
