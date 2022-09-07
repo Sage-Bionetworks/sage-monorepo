@@ -42,22 +42,22 @@
   }
 
   .challenge-card-status-tag {
-    border-color: map.get($figma, dl-color-default-primary2) !important;
+    border-color: map.get($figma, dl-color-default-primary2);
     background-color: map.get($figma, dl-color-default-hover1);
     color: #000;
 
     &.active {
-      border-color: #71c663 !important;
+      border-color: #71c663;
       background-color: #d0fedd;
     }
 
     &.completed {
-      border-color: #ffb6c1 !important;
+      border-color: #ffb6c1;
       background-color: #ffdde2;
     }
 
     &.upcoming {
-      border-color: #ffc56d !important;
+      border-color: #ffc56d;
       background-color: #fff1bf;
     }
   }
