@@ -70,7 +70,7 @@
   }
   .challenge-card-icon2 {
     border-color: transparent;
-    color: $dl-color-default-primary2; // TODO: update once the pr #626 is merged
+    color: map.get($figma, dl-color-default-primary2);
   }
   .challenge-card-text6 {
     color: rgba(0, 0, 0, 1);
