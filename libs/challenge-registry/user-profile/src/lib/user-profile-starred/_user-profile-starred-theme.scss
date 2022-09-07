@@ -1,6 +1,5 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/styles/src/lib/colors' as cols;
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);

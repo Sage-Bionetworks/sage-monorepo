@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/themes/src/lib/fonts' as fonts;
+@use 'libs/challenge-registry/themes/src/fonts' as fonts;
 @use 'libs/challenge-registry/themes/src/palettes' as palettes;
 @use 'libs/challenge-registry/themes/src/index' as challenge-registry;
 
@@ -9,7 +9,6 @@
 
 $primary: mat.define-palette(palettes.$dark-blue-palette, 600);
 $accent: mat.define-palette(palettes.$accent-pink-palette, 400);
-
 
 $theme: mat.define-light-theme(
   (
