@@ -21,8 +21,4 @@ export class ChallengeCardComponent implements OnInit {
         : undefined;
     }
   }
-
-  printCamel(camel: string | undefined) {
-    return camel ? camel.replace(/([a-z])([A-Z])/g, '$1 $2') : 'No Status';
-  }
 }

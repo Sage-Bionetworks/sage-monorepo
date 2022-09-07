@@ -93,7 +93,7 @@
   }
 
   .challenge-card-status-tag {
-    border-color: $dl-color-default-primary2;
+    border-color: $dl-color-default-primary2 !important;
     background-color: $dl-color-default-hover1;
     color: #000;
 
@@ -126,14 +126,12 @@
   .challenge-card-text6 {
     color: rgba(0, 0, 0, 1);
   }
-  // @media (max-width: 767px) {
   .challenge-card-container1 {
     background-color: $dl-color-gray-white;
   }
   .challenge-card-starred {
     background-color: $dl-color-default-hover1;
   }
-  // }
 }
 
 @mixin typography($theme) {
