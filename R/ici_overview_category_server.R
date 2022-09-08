@@ -81,7 +81,6 @@ ici_overview_category_server <- function(
         plot_colors <- df_colors$plot_color
         names(plot_colors) <-  as.character(df_colors$y)
 
-        suppressWarnings( #format_plot throws an warning with the mosaic plot - supressing warning, investigate if possible to change format_plot()
         create_mosaicplot(df_mosaic %>% dplyr::select(x,y),
                                       title = stringr::str_c(input$group2, "by", input$group1, sep = " "),
                                       fill_colors = plot_colors) %>%
@@ -89,7 +88,6 @@ ici_overview_category_server <- function(
                       autosize = TRUE,
                       margin = list(b=0)
                     )
-        )
       })
 
       observeEvent(input$method_link,{
