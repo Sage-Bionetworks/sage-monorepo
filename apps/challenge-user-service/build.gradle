@@ -24,11 +24,11 @@ testing {
       dependencies {
         implementation project
       }
-      // sources {
-      //   java {
-      //     srcDirs = ['src/integrationTest/java']
-      //   }
-      // }
+      sources {
+        java {
+          srcDirs = ['src/integrationTest/java']
+        }
+      }
       targets {
         all {
           testTask.configure {
