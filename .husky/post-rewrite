@@ -1,11 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-# Install the Node.js dependencies.
-yarn install --frozen-lockfile
-
-# Install the Java dependencies.
-yarn nx run-many --target=prepare-java --parallel=1
-
-# Notify the developer when a different dev container must be used.
+node tools/check-nodejs-packages.js
+node tools/check-java-packages.js
 node tools/check-devcontainer-version.js

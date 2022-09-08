@@ -1,11 +1,14 @@
 ARG imageVersion=bullseye-20211220-slim
 FROM debian:$imageVersion
 
+# Safer bash scripts with 'set -euxo pipefail'
+SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+
 ARG devcontainerVersion=""
 ENV DEVCONTAINER_VERSION=${devcontainerVersion}
 
-# Safer bash scripts with 'set -euxo pipefail'
-SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+ARG actVersion="0.2.31"
+ARG hyperfineVersion="1.14.0"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
@@ -19,7 +22,7 @@ RUN groupadd docker \
   # Add Node.js repository
   && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
   # Add GitHub CLI repository
-  && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+  && curl -sSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
       gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
       tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
@@ -30,9 +33,16 @@ RUN groupadd docker \
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
     nodejs gh ngrok \
-  && npm install --global yarn@latest \
+  && corepack enable yarn \
+  && corepack prepare yarn@3.2.2 --activate \
   # Install nektos/act
-  && curl https://raw.githubusercontent.com/nektos/act/v0.2.30/install.sh | bash - \
+  && curl "https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh" | bash - \
+  # Install hyperfine
+  && curl -sSL "https://github.com/sharkdp/hyperfine/releases/download/v${hyperfineVersion}/hyperfine_${hyperfineVersion}_amd64.deb" \
+    -o /tmp/hyperfine.deb \
+  && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
+  && rm -fr /tmp/hyperfine.deb \
+  # Cleanup
   && apt-get -y autoclean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/* \

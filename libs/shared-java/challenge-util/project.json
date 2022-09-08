@@ -7,7 +7,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "./gradlew --version"
+          "./gradlew --version 1> /dev/null"
         ],
         "cwd": "libs/shared-java/challenge-util"
       }

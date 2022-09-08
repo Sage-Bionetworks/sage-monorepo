@@ -1,13 +1,14 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
-@use 'palette' as pal;
+@use 'libs/challenge-registry/themes/src/fonts' as fonts;
+@use 'libs/challenge-registry/themes/src/palettes' as palettes;
 @use 'libs/challenge-registry/themes/src/index' as challenge-registry;
 
-@include mat.core();
+// set default typography
+@include mat.core(fonts.$fira);
 
-// @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
-
-$primary: mat.define-palette(pal.$dark-blue-palette, 600);
-$accent: mat.define-palette(pal.$accent-pink-palette, 400);
+$primary: mat.define-palette(palettes.$dark-blue-palette, 600);
+$accent: mat.define-palette(palettes.$accent-pink-palette, 400);
 
 $theme: mat.define-light-theme(
   (
@@ -15,10 +16,20 @@ $theme: mat.define-light-theme(
       primary: $primary,
       accent: $accent,
     ),
-    typography:
-      mat.define-typography-config(
-        $font-family: "'Poppins', sans-serif",
-      ),
+    typography: (
+      fira: fonts.$fira,
+      poppins: fonts.$poppins,
+    ),
+  )
+);
+
+// Add custom palettes used in figma to the theme
+$theme: map.deep-merge(
+  $theme,
+  (
+    color: (
+      figma: palettes.$figma-collection,
+    ),
   )
 );
 
@@ -29,6 +40,7 @@ $theme: mat.define-light-theme(
 // Emit styles for MatButton based on `$theme`.
 @include mat.button-theme($theme);
 @include mat.progress-spinner-theme($theme);
+@include mat.button-typography(fonts.$fira);
 
 // Include the theme mixins for other components you use here.
 @include challenge-registry.theme($theme);

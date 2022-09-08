@@ -1,4 +1,4 @@
-$dl-radius-radius-radius16: 16px;
+@use 'libs/challenge-registry/styles/src/lib/_constants' as constants;
 
 .main-section-stars-container {
   width: 100%;
@@ -12,7 +12,7 @@ $dl-radius-radius-radius16: 16px;
 .main-section-stars-main-section {
   top: 0px;
   left: 0px;
-  width: 1260px;
+  width: 100%;
   height: 1200px;
   display: flex;
   position: absolute;
@@ -46,47 +46,32 @@ $dl-radius-radius-radius16: 16px;
   align-items: flex-start;
   flex-shrink: 1;
 }
-.main-section-stars-tab {
-  top: 0px;
-  left: 0px;
-  width: 198px;
-  height: 71px;
-  position: absolute;
+.tab-item {
+  padding: 18px 32px;
   box-sizing: border-box;
   transition: 0.3s;
   align-items: flex-start;
-  border-radius: $dl-radius-radius-radius16;
+  border-radius: constants.$dl-radius-radius-radius16;
   border: none;
   align-self: auto;
   text-align: center;
   text-decoration: none;
 }
-
-.main-section-stars-tab1 {
-  top: 0px;
-  left: 198px;
-  width: 217px;
-  height: 71px;
-  position: absolute;
-  box-sizing: border-box;
-  transition: 0.3s;
-  align-items: flex-start;
-  border-radius: $dl-radius-radius-radius16;
-  align-self: auto;
-  text-align: center;
-  text-decoration: none;
-}
-
 .main-section-stars-card-group {
   top: 252px;
   left: 0;
-  width: 1200px;
+  width: 100%;
   height: 1096px;
   display: flex;
   position: absolute;
   box-sizing: border-box;
   align-items: flex-start;
   flex-shrink: 1;
+  flex-wrap: wrap;
+
+  & > * {
+    margin: 16px;
+  }
 }
 .main-section-stars-paginator {
   left: 802px;
@@ -98,61 +83,4 @@ $dl-radius-radius-radius16: 16px;
   box-sizing: border-box;
   align-items: flex-start;
   flex-shrink: 1;
-}
-.main-section-stars-text3 {
-  top: 3px;
-  left: 0px;
-  height: auto;
-  position: absolute;
-  font-size: 20px;
-  align-self: auto;
-  font-style: normal;
-  text-align: left;
-  font-family: Lato;
-  font-weight: 400px;
-  line-height: normal;
-  font-stretch: normal;
-  text-decoration: none;
-}
-.main-section-stars-text4 {
-  top: 3px;
-  left: 256px;
-  height: auto;
-  position: absolute;
-  font-size: 20px;
-  align-self: auto;
-  font-style: normal;
-  text-align: left;
-  font-family: Lato;
-  font-weight: 400px;
-  line-height: normal;
-  font-stretch: normal;
-  text-decoration: none;
-}
-.main-section-stars-chevronright {
-  top: 0px;
-  left: 427px;
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  box-sizing: border-box;
-  object-fit: cover;
-}
-.main-section-stars-chevronright1 {
-  top: 0px;
-  right: 27px;
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  box-sizing: border-box;
-  object-fit: cover;
-}
-.main-section-stars-expandmore {
-  top: 3px;
-  left: 173px;
-  width: 24px;
-  height: 24px;
-  position: absolute;
-  box-sizing: border-box;
-  object-fit: cover;
 }

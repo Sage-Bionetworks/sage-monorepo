@@ -42,19 +42,16 @@ jobs:
       - name: Prepare the image build
         id: prep
         run: |
-          set -e
-
           DEVCONTAINER_VERSION="${GITHUB_SHA::8}"
-          IMAGE_NAME="${{ env.IMAGE_REPOSITORY }}:${DEVCONTAINER_VERSION}"
+          IMAGE_NAME="${{ env.IMAGE_REPOSITORY }}"
           echo ::set-output name=image_name::${IMAGE_NAME}
           echo ::set-output name=devcontainer_version::${DEVCONTAINER_VERSION}
 
       - name: Build the image
         run: |
-          set -e
-
           FOLDER_WITH_DOT_DEVCONTAINER="tools/devcontainers/challenge-devcontainer"
           IMAGE_NAME=${{ steps.prep.outputs.image_name }}
+          IMAGE_TAG=${{ steps.prep.outputs.devcontainer_version }}
 
           # [Optional] Enable buildkit, set output to plain text for logging
           export DOCKER_BUILDKIT=1
@@ -65,8 +62,9 @@ jobs:
           export DEVCONTAINER_VERSION=${{ steps.prep.outputs.devcontainer_version }}
 
           # Build the image
-          npm install -g "@vscode/dev-container-cli"
-          devcontainer build --image-name "${IMAGE_NAME}" "${FOLDER_WITH_DOT_DEVCONTAINER}"
+          npm install -g @vscode/dev-container-cli
+          devcontainer build \
+            --image-name "${IMAGE_NAME}:${IMAGE_TAG}" "${FOLDER_WITH_DOT_DEVCONTAINER}"
 
       - name: Login to Docker Hub
         if: ${{ github.event_name != 'pull_request' }}
@@ -78,7 +76,6 @@ jobs:
       - name: Push the image to Docker Hub
         if: ${{ github.event_name != 'pull_request' }}
         run: |
-          set -e
-
-          # Push the image to Docker Hub
-          docker push "${{ steps.prep.outputs.image_name }}"
+          IMAGE_NAME=${{ steps.prep.outputs.image_name }}
+          IMAGE_TAG=${{ steps.prep.outputs.devcontainer_version }}
+          docker push "${IMAGE_NAME}:${IMAGE_TAG}"
