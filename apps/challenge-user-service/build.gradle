@@ -46,18 +46,16 @@ configurations {
 }
 
 // configure the integrationTest to run as part of a regular build
-// tasks.named('check') {
-//   dependsOn(testing.suites.integrationTest)
-// }
+tasks.named('check') {
+  dependsOn(testing.suites.integrationTest)
+}
 
-
-
-// tasks.test {
-// 	useJUnitPlatform()
-//   testLogging {
-//     events("passed", "skipped", "failed")
-//   }
-// }
+tasks.test {
+	useJUnitPlatform()
+  testLogging {
+    events("passed", "skipped", "failed")
+  }
+}
 
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
