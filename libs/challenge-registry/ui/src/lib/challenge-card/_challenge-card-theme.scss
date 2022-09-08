@@ -47,7 +47,18 @@
     color: #000;
 
     &.active {
-      // wait until the colors are determined
+      border-color: #71c663;
+      background-color: #d0fedd;
+    }
+
+    &.completed {
+      border-color: #ffb6c1;
+      background-color: #ffdde2;
+    }
+
+    &.upcoming {
+      border-color: #ffc56d;
+      background-color: #fff1bf;
     }
   }
 
@@ -57,17 +68,19 @@
   .challenge-card-difficulty-tag {
     border-color: transparent;
   }
+  .challenge-card-icon2 {
+    border-color: transparent;
+    color: map.get($figma, dl-color-default-primary2);
+  }
   .challenge-card-text6 {
     color: rgba(0, 0, 0, 1);
   }
-  // @media (max-width: 767px) {
   .challenge-card-container1 {
     background-color: map.get($figma, dl-color-gray-white);
   }
   .challenge-card-starred {
     background-color: map.get($figma, dl-color-default-hover1);
   }
-  // }
 }
 
 @mixin typography($theme) {
@@ -123,6 +136,10 @@
     font-weight: 400px;
     line-height: normal;
     font-stretch: normal;
+  }
+
+  .challenge-card-icon2 {
+    font-size: 24px;
   }
 
   .challenge-card-text6 {

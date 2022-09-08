@@ -13,7 +13,7 @@
       </div>
       <div class="challenge-card-card-title">
         <span class="challenge-card-text2"
-          ><span>{{ challenge.name }}</span></span
+          ><span>{{ challenge.displayName }}</span></span
         >
         <span class="challenge-card-text3"
           ><span>{{ platform }}</span></span
@@ -24,9 +24,10 @@
       </span>
       <div class="challenge-card-card-footer">
         <div class="challenge-card-difficulty-tag">
+          <mat-icon aria-hidden="true" class="challenge-card-icon2">timeline</mat-icon>
           <span class="challenge-card-text6">{{ difficulty }}</span>
         </div>
-        <div class="challenge-card-status-tag" [ngClass]="status ? status : ''">
+        <div class="challenge-card-status-tag" [ngClass]="statusClass">
           <span class="challenge-card-text5">{{ status }}</span>
         </div>
       </div>

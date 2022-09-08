@@ -40,6 +40,7 @@ $theme: map.deep-merge(
 // Emit styles for MatButton based on `$theme`.
 @include mat.button-theme($theme);
 @include mat.progress-spinner-theme($theme);
+@include mat.button-typography(fonts.$fira);
 
 // Include the theme mixins for other components you use here.
 @include challenge-registry.theme($theme);

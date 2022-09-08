@@ -12,7 +12,7 @@
 .main-section-stars-main-section {
   top: 0px;
   left: 0px;
-  width: 1260px;
+  width: 100%;
   height: 1200px;
   display: flex;
   position: absolute;
@@ -60,13 +60,18 @@
 .main-section-stars-card-group {
   top: 252px;
   left: 0;
-  width: 1200px;
+  width: 100%;
   height: 1096px;
   display: flex;
   position: absolute;
   box-sizing: border-box;
   align-items: flex-start;
   flex-shrink: 1;
+  flex-wrap: wrap;
+
+  & > * {
+    margin: 16px;
+  }
 }
 .main-section-stars-paginator {
   left: 802px;

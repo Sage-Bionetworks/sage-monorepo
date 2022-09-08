@@ -125,7 +125,8 @@
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
-  border: 1px solid;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .challenge-card-text5 {
@@ -153,7 +154,6 @@
   text-decoration: none;
   white-space: nowrap;
 }
-// @media (max-width: 767px) {
 .challenge-card-container1 {
   border-radius: constants.$dl-radius-radius-radius16;
 }
@@ -179,4 +179,3 @@
   top: 28px;
   left: 0px;
 }
-// }
