@@ -26,7 +26,8 @@ ici_overview_category_ui <- function(
       br(),
       DT::DTOutput(
         ns("ici_per_ds_df")
-      )
+      ),
+      style = "overflow-y: scroll;overflow-x: scroll;",
     ),
     #test if can be in the same submodule
     iatlas.modules::sectionBox(

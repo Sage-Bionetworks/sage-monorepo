@@ -34,8 +34,7 @@ shiny::shinyServer(function(input, output, session) {
         query[['module']]
       )
     }
-  })
-
+})
   # ICI Modules ----------------------------------------------------------
 
   ici_cohort_obj <- call_iatlas_module(

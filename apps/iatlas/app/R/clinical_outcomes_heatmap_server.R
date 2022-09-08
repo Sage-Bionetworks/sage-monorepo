@@ -74,10 +74,11 @@ clinical_outcomes_heatmap_server <- function(
 
       group_data <- shiny::reactive({
         cohort_obj()$group_tbl %>%
-          dplyr::mutate("description" = stringr::str_c(
-            .data$short_name, ": ", .data$characteristics)
+          dplyr::mutate("group_description" = stringr::str_c(
+            .data$short_name, ": ", .data$characteristics),
+            "group_display" = .data$short_name
           ) %>%
-          dplyr::select("group" = "short_name", "description")
+          dplyr::select("group_name" = "short_name", "group_display", "group_description")
       })
 
       iatlas.modules::plotly_server(
