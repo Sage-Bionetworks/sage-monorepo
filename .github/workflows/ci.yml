@@ -17,7 +17,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:cf3a659f
+      image: sagebionetworks/challenge-devcontainer:ff081d0a
       options: --user root
     if: ${{ github.event_name != 'pull_request' }}
     env:
@@ -27,20 +27,36 @@ jobs:
         name: Checkout [main]
         with:
           fetch-depth: 0
+
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
+
       - name: Setup Node.js cache
         id: cache-node
         uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - name: Setup pipenv cache
-        id: cache-pipenv
-        uses: actions/cache@v3
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
-          path: ~/.local/share/virtualenvs
-          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      # - name: Setup pipenv cache
+      #   id: cache-pipenv
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.local/share/virtualenvs
+      #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+
       - name: Setup Maven cache
         uses: actions/cache@v3
         with:
@@ -48,14 +64,28 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+
+      - name: Setup Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /root/.gradle/caches
+            /root/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Configure hostnames
         run: ./tools/configure-hostnames.sh
+
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
+
       # - name: Setup Python virtualenvs
       #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
       #   run: yarn nx python api
+
       - run: yarn nx affected --target=prepare
       - run: yarn nx affected --target=prepare-java --parallel=1
       - run: yarn nx affected --target=lint
@@ -73,7 +103,7 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:cf3a659f
+      image: sagebionetworks/challenge-devcontainer:ff081d0a
       options: --user root
     if: ${{ github.event_name == 'pull_request' }}
     steps:
@@ -82,20 +112,36 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
+
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
+
       - name: Setup Node.js cache
         id: cache-node
         uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       # - name: Setup pipenv cache
       #   id: cache-pipenv
       #   uses: actions/cache@v3
       #   with:
       #     path: ~/.local/share/virtualenvs
       #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+
       - name: Setup Maven cache
         uses: actions/cache@v3
         with:
@@ -103,14 +149,28 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+
+      - name: Setup Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /root/.gradle/caches
+            /root/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Configure hostnames
         run: ./tools/configure-hostnames.sh
+
       - name: Install Node.js dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
+
       # - name: Setup Python virtualenvs
       #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
       #   run: yarn nx python api
+
       - run: yarn nx affected --target=prepare
       - run: yarn nx affected --target=prepare-java --parallel=1
       - run: yarn nx affected --target=lint

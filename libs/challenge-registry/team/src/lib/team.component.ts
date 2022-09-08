@@ -1,8 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import {
-  APP_CONFIG,
-  AppConfig,
-} from '@sagebionetworks/challenge-registry/config';
+import { Component } from '@angular/core';
+import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 
 @Component({
   selector: 'challenge-registry-team',
@@ -12,7 +9,7 @@ import {
 export class TeamComponent {
   public appVersion: string;
 
-  constructor(@Inject(APP_CONFIG) private appConfig: AppConfig) {
-    this.appVersion = appConfig.appVersion;
+  constructor(private readonly configService: ConfigService) {
+    this.appVersion = this.configService.config.appVersion;
   }
 }

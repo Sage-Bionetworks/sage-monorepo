@@ -1,16 +1,79 @@
-main {
-  padding: 40px 20px;
+.main-section-bio-container {
+  width: 100%;
+  height: 1400px;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
 }
-
-section {
-  margin-bottom: 30px;
+.main-section-bio-main-section {
+  top: 0px;
+  left: 0px;
+  width: 1260px;
+  height: 1200px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
 }
-
-h2 {
-  color: #121212;
-  font-size: 1.8em;
+.main-section-bio-container1 {
+  top: 0px;
+  left: 0px;
+  width: 1259px;
+  height: 833px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
 }
-
-p {
-  color: #404040;
+.main-section-bio-text {
+  top: 0px;
+  left: 0px;
+  height: auto;
+  position: absolute;
+  align-self: auto;
+  text-align: left;
+  text-decoration: none;
+}
+.main-section-bio-text1 {
+  top: 69px;
+  left: 0px;
+  width: 1259px;
+  height: auto;
+  position: absolute;
+  align-self: auto;
+  text-align: left;
+  text-decoration: none;
+}
+.main-section-bio-container2 {
+  top: 725px;
+  left: 0px;
+  width: 100%;
+  height: 398px;
+  display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+}
+.main-section-bio-text7 {
+  top: 0px;
+  left: 0px;
+  height: auto;
+  position: absolute;
+  align-self: auto;
+  text-align: left;
+  text-decoration: none;
+}
+.main-section-bio-card-group {
+  top: 98px;
+  left: 0px;
+  width: 100%;
+  height: 300px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
 }

@@ -8,18 +8,9 @@
 
 This [Nx monorepo](https://nx.dev/) includes the codebase of the Challenge ecosystem.
 
-### Apps
+## Projects
 
-- Challenge Registry
-- Challenge Platform
-
-### Backend
-
-- API Gateway
-- Service Registry
-- Keycloak (IAM)
-- Databases: MariaDB, PostgreSQL, MongoDB
-- User Service
+The list of all the applications and libraries developed is available [here](docs/projects.md).
 
 ## Requirements
 
@@ -38,7 +29,7 @@ If you plan to contribute to this project, please create a fork and use its URL 
 more information on contributing and/or our Forking Workflow approach, see
 [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
-    git clone --depth 1 --no-single-branch <repo url>
+    git clone --filter=blob:none <repo url>
 
 Then open your fork repo inside our devcontainer using these instructions:
 
@@ -77,6 +68,10 @@ Main contributors and developers:
 - [Thomas Schaffter](https://github.com/tschaffter)
 - [Verena Chung](https://github.com/vpchung)
 - [Rongrong Chai](https://github.com/rrchai)
+
+<!-- <a href="https://github.com/Sage-Bionetworks/challenge-registry/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Sage-Bionetworks/challenge-registry" width="20%"/>
+</a> -->
 
 <!-- Links -->
 

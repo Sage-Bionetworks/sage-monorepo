@@ -1,8 +1,32 @@
-<main>
-  <h2>{{user.name}}'s Favorites</h2>
-  <div class="rocc-user-profile-starred-container">
-    <!-- <rocc-challenge-card *ngFor="let star of stars"
-      [challenge]="star"  [loggedIn]="loggedIn" (click)="onClick('/' + star.fullName)">
-    </rocc-challenge-card> -->
-  </div>
+<main class="main-section-stars-container">
+  <section id="main" class="main-section-stars-main-section">
+    <span class="main-section-stars-text">Starred</span>
+    <div class="main-section-stars-tab-group">
+      <button class="tab-item" 
+          (click)="clickEvent('challenges')"
+          [ngClass]=" {'active-tab': activeTab===tabs['challenges']}">
+        Challenges</button>
+      <button class="tab-item" 
+          (click)="clickEvent('organizations')"
+          [ngClass]=" {'active-tab': activeTab===tabs['organizations']}">
+        Organizations</button>
+    </div>
+    <ng-container [ngSwitch]="activeTab">
+      <div *ngSwitchCase="tabs['challenges']" class="main-section-stars-card-group">
+        <challenge-registry-challenge-card
+          *ngFor="let challenge of challenges"
+          [challenge]="challenge"
+        >
+        </challenge-registry-challenge-card>
+      </div>
+      <div *ngSwitchCase="tabs['organizations']" class="main-section-stars-card-group">
+        <challenge-registry-organization-card
+          *ngFor="let organization of organizations"
+          [organization]="organization"
+        >
+        </challenge-registry-organization-card>
+      </div>
+    </ng-container>
+    <div class="main-section-stars-paginator"></div>
+  </section>
 </main>

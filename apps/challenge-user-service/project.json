@@ -14,7 +14,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
+          "./gradlew --version 1> /dev/null"
         ],
         "cwd": "apps/challenge-user-service"
       }
@@ -24,13 +24,27 @@
       "options": {
         "root": "apps/challenge-user-service"
       },
-      "dependsOn": [
-        {
-          "target": "install",
-          "projects": "dependencies"
-        }
-      ]
+      "outputs": [
+        "apps/challenge-user-service"
+      ],
+      "dependsOn": ["^install"]
     },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "apps/challenge-user-service"
+      },
+      "dependsOn": ["build"]
+    },
+    // "test-integration": {
+    //   "executor": "@nrwl/workspace:run-commands",
+    //   "options": {
+    //     "commands": [
+    //       "./mvnw verify -P integration-test"
+    //     ],
+    //     "cwd": "apps/challenge-user-service"
+    //   }
+    // },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {

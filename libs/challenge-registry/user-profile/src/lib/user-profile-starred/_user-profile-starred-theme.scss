@@ -1,0 +1,59 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, 'primary');
+  $accent: map.get($config, 'accent');
+  $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
+
+  .main-section-stars-main-section {
+    border-color: transparent;
+  }
+  .main-section-stars-text {
+    color: rgba(0, 0, 0, 1);
+  }
+  .main-section-stars-tab-group {
+    border-color: transparent;
+  }
+  .tab-item {
+    background-color: map.get($figma, dl-color-default-hover1);
+    color: map.get($figma, dl-color-default-navbardark);
+  }
+  .tab-item:hover,
+  .tab-item:active,
+  .tab-item.active-tab {
+    background-color: map.get($figma, dl-color-default-navbar);
+    color: map.get($figma, dl-color-gray-white);
+  }
+  .main-section-stars-card-group {
+    background-color: transparent;
+  }
+  .main-section-stars-paginator {
+    border-color: transparent;
+  }
+}
+
+@mixin typography($theme) {
+  .tab-item {
+    font-size: 24px;
+    font-style: normal;
+    font-family: Fira Sans;
+    font-weight: 500px;
+    line-height: normal;
+    font-stretch: normal;
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}

@@ -1,16 +1,19 @@
 package org.sagebionetworks.challenge.configuration;
 
-import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
-@RequiredArgsConstructor
 public class KeycloakManager {
 
-  private final KeycloakManagerProperties keycloakProperties;
+  @Autowired
+  private KeycloakManagerProperties keycloakProperties;
+
   private static Keycloak keycloakInstance = null;
 
   public RealmResource getKeycloakInstanceWithRealm() {
@@ -19,6 +22,7 @@ public class KeycloakManager {
 
   public Keycloak getInstance() {
     if (keycloakInstance == null) {
+      log.info("KC SERVER URL: {}", keycloakProperties.getServerUrl());
       keycloakInstance = KeycloakBuilder.builder().serverUrl(keycloakProperties.getServerUrl())
           .realm(keycloakProperties.getRealm()).grantType("client_credentials")
           .clientId(keycloakProperties.getClientId())

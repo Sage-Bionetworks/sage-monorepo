@@ -2,7 +2,9 @@ spring:
   application:
     name: challenge-user-service
   datasource:
+    #url: jdbc:mysql://challenge-mariadb:3306/challenge
     url: ${db.url}
+    # url: jdbc:h2:mem:challenge
     username: challenge_user_service
     password: changeme
   jpa:
@@ -47,6 +49,20 @@ app:
     keycloak:
       server-url: ${keycloak.url}
       realm: test
+      # TODO: Which client ID property is used?
       client-id: challenge-api-client
       clientId: challenge-api-client
       client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
+
+springdoc:
+  # version: '@springdoc.version@'
+  swagger-ui:
+    path: /api/v1/api-docs/ui
+  api-docs:
+    path: /api/v1/api-docs/openapi.json
+    #path: /api/v1/openapi.json
+  packagesToScan: org.sagebionetworks.challenge.controller
+  pathsToMatch: /**
+
+example:
+  firstProperty: "main"

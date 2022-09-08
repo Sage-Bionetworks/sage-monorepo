@@ -1,0 +1,177 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, 'primary');
+  $accent: map.get($config, 'accent');
+  $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
+
+  .base-container1 {
+    border-color: transparent;
+    background-color: rgba(255, 255, 255, 1);
+  }
+
+  .base-top-section {
+    border-color: transparent;
+    background-color: map.get($figma, dl-color-default-hover1);
+  }
+
+  .base-profile-pic {
+    border-color: transparent;
+    background-color: transparent;
+  }
+
+  .base-text {
+    color: rgba(0, 0, 0, 1);
+  }
+
+  .base-verified {
+    border-color: transparent;
+    color: map.get($figma, dl-color-default-darkaccent3);
+  }
+  .base-group {
+    border-color: transparent;
+  }
+  .base-text01 {
+    color: map.get($figma, dl-color-default-secondary1);
+  }
+  .base-usertypetag {
+    border-color: map.get($figma, dl-color-default-secondary2);
+    background-color: map.get($figma, dl-color-default-accent4);
+  }
+  .base-text02 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .base-createdat {
+    border-color: transparent;
+  }
+  .base-text03 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .base-text04 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .base-updatedat {
+    border-color: transparent;
+  }
+  .base-text05 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .base-text06 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .base-basic-stats {
+    background-color: map.get($figma, dl-color-default-hover2);
+  }
+  .base-side-nav {
+    border-color: map.get($figma, dl-color-default-primary2);
+    background-color: rgba(255, 255, 255, 1);
+  }
+  .nav-item {
+    border-color: transparent;
+    &:focus,
+    &:hover {
+      background-color: map.get($figma, dl-color-default-hover2);
+    }
+    color: black;
+  }
+  .nav-item.active-tab {
+    background-color: map.get($figma, dl-color-default-hover2);
+  }
+  .base-main-section {
+    border-color: transparent;
+    background-color: transparent;
+  }
+
+  @media (max-width: 479px) {
+    .base-profile-pic {
+      background-color: map.get($figma, dl-color-default-hover2);
+    }
+  }
+}
+
+@mixin typography($theme) {
+  .base-text {
+    font-size: 64px;
+    font-style: normal;
+    font-family: Fira Sans;
+    font-weight: 500;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .base-verified {
+    font-size: 64px;
+  }
+  .base-text01 {
+    font-size: 40px;
+    font-style: normal;
+    font-family: Lato;
+    font-weight: 400;
+    line-height: normal;
+    font-stretch: normal;
+  }
+
+  .base-text02 {
+    font-size: 20px;
+    font-style: normal;
+    font-family: Lato;
+    font-weight: 400;
+    line-height: normal;
+    font-stretch: normal;
+  }
+
+  .base-text03 {
+    font-size: 20px;
+    font-style: normal;
+    font-family: Lato;
+    font-weight: 600;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .base-text04 {
+    font-size: 20px;
+    font-style: normal;
+    font-family: Lato;
+    font-weight: 400;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .base-text05 {
+    font-size: 20px;
+    font-style: normal;
+    font-family: Lato;
+    font-weight: 600;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .base-text06 {
+    font-size: 20px;
+    font-style: normal;
+    font-family: Lato;
+    font-weight: 400;
+    line-height: normal;
+    font-stretch: normal;
+  }
+  .nav-item {
+    font-size: 24px;
+    font-style: normal;
+    font-family: Lato;
+    font-weight: 400;
+    line-height: normal;
+    font-stretch: normal;
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}
