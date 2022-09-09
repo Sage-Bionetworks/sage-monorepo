@@ -20,6 +20,7 @@
     "mtxr.sqltools-driver-pg",
     "mongodb.mongodb-vscode",
     "shengchen.vscode-checkstyle",
-    "1000ch.svgo"
+    "1000ch.svgo",
+    "ritwickdey.LiveServer"
   ]
 }
