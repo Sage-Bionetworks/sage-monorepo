@@ -53,18 +53,14 @@ tasks.named('check') {
 test {
 	useJUnitPlatform()
 
-  // show standard out and standard error of the test JVM(s) on the console
   testLogging.showStandardStreams = true
 
-  // listen to events in the test execution lifecycle
   beforeTest { descriptor ->
      logger.lifecycle("Running test: " + descriptor)
   }
 
-  // Fail the 'test' task on the first test failure
   failFast = true
 
-  // listen to standard out and standard error of the test JVM(s)
   onOutput { descriptor, event ->
      logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message )
   }
