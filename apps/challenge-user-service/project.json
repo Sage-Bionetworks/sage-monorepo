@@ -27,7 +27,9 @@
       "outputs": [
         "apps/challenge-user-service"
       ],
-      "dependsOn": ["^install"]
+      "dependsOn": [
+        "^install"
+      ]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
@@ -69,18 +71,9 @@
         "root": "apps/challenge-user-service"
       },
       "dependsOn": [
-        {
-          "target": "build",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        },
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
+        "build",
+        "prepare",
+        "^serve-detach"
       ]
     },
     "serve-detach": {
@@ -90,18 +83,9 @@
         "cwd": "apps/challenge-user-service"
       },
       "dependsOn": [
-        {
-          "target": "build-image",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        },
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
+        "build-image",
+        "prepare",
+        "^serve-detach"
       ]
     },
     "build-image": {
@@ -113,10 +97,7 @@
         ]
       },
       "dependsOn": [
-        {
-          "target": "install",
-          "projects": "dependencies"
-        }
+        "^install"
       ]
     }
   },
