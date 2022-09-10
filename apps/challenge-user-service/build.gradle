@@ -77,9 +77,9 @@ configurations {
 }
 
 // configure the integrationTest to run as part of a regular build
-tasks.named('check') {
-  dependsOn(testing.suites.integrationTest)
-}
+// tasks.named('check') {
+//   dependsOn(testing.suites.integrationTest)
+// }
 
 test {
 	useJUnitPlatform()
@@ -91,10 +91,6 @@ test {
   }
 
   failFast = true
-
-  onOutput { descriptor, event ->
-     logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message )
-  }
 
   testLogging {
     events("passed", "skipped", "failed")
