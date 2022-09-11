@@ -2,7 +2,7 @@ spring:
   application:
     name: challenge-user-service
   datasource:
-    #url: jdbc:mysql://challenge-mariadb:3306/challenge
+    # url: jdbc:mysql://challenge-mariadb:3306/challenge
     url: ${db.url}
     # url: jdbc:h2:mem:challenge
     username: challenge_user_service
@@ -17,7 +17,8 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: ${service.registry.url}
+      # defaultZone: ${service.registry.url}
+      defaultZone: http://challenge-service-registry:8081/eureka
   instance:
     preferIpAddress: true
 
@@ -39,7 +40,8 @@ keycloak:
   resource: challenge-user-service
   credentials:
     secret: GFRau7cQTxhx19CUmSdrqrqrZ1pshjjB
-  auth-server-url: ${keycloak.url}
+  # auth-server-url: ${keycloak.url}
+  auth-server-url: http://challenge-keycloak:8080
   ssl-required: external
   use-resource-role-mappings: true
   bearer-only: true
@@ -47,7 +49,8 @@ keycloak:
 app:
   config:
     keycloak:
-      server-url: ${keycloak.url}
+      # server-url: ${keycloak.url}
+      server-url: http://challenge-keycloak:8080
       realm: test
       # TODO: Which client ID property is used?
       client-id: challenge-api-client

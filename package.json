@@ -10,6 +10,7 @@
     "affected:lint": "nx affected:lint",
     "affected:build": "nx affected:build",
     "affected:test": "nx affected:test",
+    "affected:integration-test": "nx affected --target=integration-test",
     "affected:e2e": "nx affected:e2e",
     "affected:dep-graph": "nx affected:dep-graph"
   },
