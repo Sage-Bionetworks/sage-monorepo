@@ -38,15 +38,15 @@
       },
       "dependsOn": ["build"]
     },
-    // "test-integration": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "commands": [
-    //       "./mvnw verify -P integration-test"
-    //     ],
-    //     "cwd": "apps/challenge-user-service"
-    //   }
-    // },
+    "integration-test": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "./gradlew integrationTest"
+        ],
+        "cwd": "apps/challenge-user-service"
+      }
+    },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
