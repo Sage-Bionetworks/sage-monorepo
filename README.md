@@ -57,15 +57,15 @@ You can access the Challenge Registry on http://localhost:4200.
 
 Checkout the folder [docs](./docs) to learn more about this monorepo.
 
+## License
+
+[Apache License 2.0]
+
 ## Core Team
 
 - [Thomas Schaffter](https://github.com/tschaffter)
 - [Verena Chung](https://github.com/vpchung)
 - [Rongrong Chai](https://github.com/rrchai)
-
-## License
-
-[Apache License 2.0]
 
 <!-- <a href="https://github.com/Sage-Bionetworks/challenge-registry/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Sage-Bionetworks/challenge-registry" width="20%"/>
