@@ -79,10 +79,6 @@ configurations {
 //   dependsOn(testing.suites.integrationTest)
 // }
 
-// bootRun {
-//   addResources = true
-// }
-
 test {
 	useJUnitPlatform()
 
