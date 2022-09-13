@@ -14,8 +14,8 @@ The list of all the applications and libraries developed is available [here](doc
 
 ## Requirements
 
-- [Docker Engine] version **18.06.0** or newer
-- [Visual Studio Code] version **1.68.1** or newer (including [Compose V2][compose-v2])
+- [Docker Engine] version **18.06.0** or newer (including [Compose V2][compose-v2])
+- [Visual Studio Code] version **1.68.1** or newer
 
 ## Usage
 
@@ -61,9 +61,7 @@ Checkout the folder [docs](./docs) to learn more about this monorepo.
 
 [Apache License 2.0]
 
-## Contributors
-
-Main contributors and developers:
+## Core Team
 
 - [Thomas Schaffter](https://github.com/tschaffter)
 - [Verena Chung](https://github.com/vpchung)
