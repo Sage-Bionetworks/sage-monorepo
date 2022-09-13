@@ -100,7 +100,7 @@
       ]
     },
     "build-image": {
-      "executor": "@nxrocks/nx-spring-boot:buildImage",
+      "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
         "root": "apps/challenge-auth-service",
         "args": [

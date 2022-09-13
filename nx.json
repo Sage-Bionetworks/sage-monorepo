@@ -36,7 +36,7 @@
       "style": "scss"
     }
   },
-  "defaultProject": "web-app",
+  "defaultProject": "challenge-registry",
   "plugins": ["@nxrocks/nx-spring-boot"],
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {

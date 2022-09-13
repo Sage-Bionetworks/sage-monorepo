@@ -91,6 +91,7 @@ jobs:
       - run: yarn nx affected --target=lint
       - run: yarn nx affected --target=build
       - run: yarn nx affected --target=test
+      - run: yarn nx affected --target=integration-test
       # - run: yarn nx run-many --all --target=test --parallel --max-parallel=2
       # TODO: Fix coverage error when no projects are affected
       # - name: Merge coverage reports
@@ -176,3 +177,4 @@ jobs:
       - run: yarn nx affected --target=lint
       - run: yarn nx affected --target=build
       - run: yarn nx affected --target=test
+      - run: yarn nx affected --target=integration-test
