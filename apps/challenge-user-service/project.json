@@ -66,12 +66,16 @@
       }
     },
     "serve": {
-      "executor": "@nxrocks/nx-spring-boot:serve",
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "root": "apps/challenge-user-service"
+        "commands": [
+          "./gradlew build --continuous",
+          "./gradlew bootRun"
+        ],
+        "cwd": "apps/challenge-user-service",
+        "parallel": true
       },
       "dependsOn": [
-        "build",
         "prepare",
         "^serve-detach"
       ]
