@@ -17,7 +17,6 @@ import io.swagger.v3.oas.models.info.Info;
 public class ChallengeUserServiceApplication {
 
   public static void main(String[] args) {
-    int a = 1;
     SpringApplication.run(ChallengeUserServiceApplication.class, args);
   }
 
