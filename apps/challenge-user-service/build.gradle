@@ -46,29 +46,27 @@ testing {
 }
 
 dependencies {
-  implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
-  implementation "org.springframework.boot:spring-boot-starter-actuator:${springVersion}"
-  implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
-  implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
-  implementation "org.springframework.boot:spring-boot-devtools:${springVersion}"
-  implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
-  implementation "org.springframework.cloud:spring-cloud-starter-openfeign:${springCloudVersion}"
-  implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+  annotationProcessor 'org.projectlombok:lombok:1.18.24'
+  compileOnly 'org.projectlombok:lombok:1.18.24'
+  implementation 'com.h2database:h2:2.1.214'
   implementation 'org.flywaydb:flyway-core:9.3.0'
   implementation 'org.flywaydb:flyway-mysql:9.3.0'
-  implementation 'org.keycloak:keycloak-spring-boot-starter:18.0.0'
   implementation 'org.keycloak:keycloak-admin-client:18.0.0'
-  implementation 'com.h2database:h2:2.1.214'
+  implementation 'org.keycloak:keycloak-spring-boot-starter:18.0.0'
   implementation 'org.sagebionetworks.challenge:challenge-util:0.0.1-SNAPSHOT'
-  compileOnly 'org.projectlombok:lombok:1.18.24'
-  runtimeOnly 'mysql:mysql-connector-java:8.0.30'
-  annotationProcessor 'org.projectlombok:lombok:1.18.24'
-
-  testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
-  testImplementation 'org.assertj:assertj-core:3.23.1'
-
-  integrationTestImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
+  implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+  implementation "org.springframework.boot:spring-boot-devtools:${springVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-actuator:${springVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
+  implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
+  implementation "org.springframework.cloud:spring-cloud-starter-openfeign:${springCloudVersion}"
   integrationTestImplementation 'org.assertj:assertj-core:3.23.1'
+  integrationTestImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
+  runtimeOnly 'mysql:mysql-connector-java:8.0.30'
+  testImplementation 'org.assertj:assertj-core:3.23.1'
+  testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
 }
 
 configurations {
