@@ -5,6 +5,7 @@
   "java.checkstyle.version": "10.3",
   "java.jdt.ls.java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
   "java.jdt.ls.lombokSupport.enabled": false,
+  "java.trace.server": "verbose",
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
