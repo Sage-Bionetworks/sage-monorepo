@@ -100,3 +100,9 @@ test {
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
 }
+
+openApi {
+  apiDocsUrl.set("http://localhost:8083/api/v1/api-docs/openapi.json")
+  outputDir.set(file("docs"))
+  outputFileName.set("openapi.json")
+}
