@@ -58,12 +58,13 @@ app:
       client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
 
 springdoc:
-  # version: '@springdoc.version@'
+  version: openapi_3_1
   swagger-ui:
     path: /api/v1/api-docs/ui
+    # url: /api/v1/api-docs/openapi.json
   api-docs:
+    enabled: true
     path: /api/v1/api-docs/openapi.json
-    #path: /api/v1/openapi.json
   packagesToScan: org.sagebionetworks.challenge.controller
   pathsToMatch: /**
 

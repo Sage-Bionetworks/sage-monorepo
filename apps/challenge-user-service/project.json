@@ -103,6 +103,17 @@
       "dependsOn": [
         "^install"
       ]
+    },
+    "generate-openapi-definition": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "./gradlew clean generateOpenApiDocs",
+        "cwd": "apps/challenge-user-service"
+      },
+      "dependsOn": [
+        "prepare",
+        "^serve-detach"
+      ]
     }
   },
   "tags": [
