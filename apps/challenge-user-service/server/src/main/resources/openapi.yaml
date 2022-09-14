@@ -1,0 +1,183 @@
+openapi: 3.0.1
+info:
+  contact:
+    name: 'This is the User '
+    url: https://challenge-registry.org
+  description: This is the User Service of the Challenge Registry.
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt
+  termsOfService: TOC
+  title: User API
+  version: v1.0
+servers:
+- description: Generated server url
+  url: http://localhost:8083
+paths:
+  /api/v1/users/register:
+    post:
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/User'
+          description: OK
+      tags:
+      - user-controller
+      x-content-type: application/json
+      x-accepts: '*/*'
+      x-tags:
+      - tag: user-controller
+  /api/v1/users/{id}:
+    get:
+      operationId: getUser
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/User'
+          description: OK
+      tags:
+      - user-controller
+      x-accepts: '*/*'
+      x-tags:
+      - tag: user-controller
+    patch:
+      operationId: updateUser
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/User'
+          description: OK
+      tags:
+      - user-controller
+      x-content-type: application/json
+      x-accepts: '*/*'
+      x-tags:
+      - tag: user-controller
+  /api/v1/users/:
+    get:
+      operationId: listUsers
+      parameters:
+      - description: Zero-based page index (0..N)
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: The size of the page to be returned
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          default: 20
+          minimum: 1
+          type: integer
+        style: form
+      - description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                items:
+                  $ref: '#/components/schemas/User'
+                type: array
+          description: OK
+      tags:
+      - user-controller
+      x-accepts: '*/*'
+      x-tags:
+      - tag: user-controller
+components:
+  schemas:
+    User:
+      example:
+        password: password
+        id: 0
+        email: email
+        authId: authId
+        username: username
+        status: PENDING
+      properties:
+        id:
+          format: int64
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        authId:
+          type: string
+        status:
+          enum:
+          - PENDING
+          - APPROVED
+          - DISABLED
+          - BLACKLIST
+          type: string
+      type: object
+    UserUpdateRequest:
+      example:
+        status: PENDING
+      properties:
+        status:
+          enum:
+          - PENDING
+          - APPROVED
+          - DISABLED
+          - BLACKLIST
+          type: string
+      type: object
