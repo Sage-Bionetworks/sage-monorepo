@@ -102,7 +102,7 @@ tasks.withType(JavaCompile) {
 }
 
 openApi {
-  apiDocsUrl.set("http://localhost:8083/api/v1/api-docs/openapi.json")
+  apiDocsUrl.set("http://localhost:8083/api/v1/api-docs/openapi.json.yaml")
   outputDir.set(file("docs"))
-  outputFileName.set("openapi.json")
+  outputFileName.set("openapi.yaml")
 }
