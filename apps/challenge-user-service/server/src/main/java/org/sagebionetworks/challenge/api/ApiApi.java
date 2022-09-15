@@ -3,10 +3,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-package org.openapitools.api;
+package org.sagebionetworks.challenge.api;
 
-import org.openapitools.model.User;
-import org.openapitools.model.UserUpdateRequest;
+import org.sagebionetworks.challenge.model.dto.User;
+import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -15,29 +15,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-09-14T23:46:16.887276700Z[Etc/UTC]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-09-15T17:33:42.298982800Z[Etc/UTC]")
 @Validated
 @Tag(name = "api", description = "the api API")
 @RequestMapping("${openapi.user.base-path:}")
 public interface ApiApi {
 
-    default Optional<NativeWebRequest> getRequest() {
-        return Optional.empty();
+    default ApiApiDelegate getDelegate() {
+        return new ApiApiDelegate() {};
     }
 
     /**
@@ -64,17 +60,7 @@ public interface ApiApi {
     default ResponseEntity<User> createUser(
         @Parameter(name = "User", description = "", required = true) @Valid @RequestBody User user
     ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("*/*"))) {
-                    String exampleString = "{ \"password\" : \"password\", \"id\" : 0, \"email\" : \"email\", \"authId\" : \"authId\", \"username\" : \"username\", \"status\" : \"PENDING\" }";
-                    ApiUtil.setExampleResponse(request, "*/*", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
+        return getDelegate().createUser(user);
     }
 
 
@@ -101,17 +87,7 @@ public interface ApiApi {
     default ResponseEntity<User> getUser(
         @Parameter(name = "id", description = "", required = true) @PathVariable("id") Long id
     ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("*/*"))) {
-                    String exampleString = "{ \"password\" : \"password\", \"id\" : 0, \"email\" : \"email\", \"authId\" : \"authId\", \"username\" : \"username\", \"status\" : \"PENDING\" }";
-                    ApiUtil.setExampleResponse(request, "*/*", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
+        return getDelegate().getUser(id);
     }
 
 
@@ -142,17 +118,7 @@ public interface ApiApi {
         @Min(1) @Parameter(name = "size", description = "The size of the page to be returned") @Valid @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
         @Parameter(name = "sort", description = "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.") @Valid @RequestParam(value = "sort", required = false) List<String> sort
     ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("*/*"))) {
-                    String exampleString = "{ \"password\" : \"password\", \"id\" : 0, \"email\" : \"email\", \"authId\" : \"authId\", \"username\" : \"username\", \"status\" : \"PENDING\" }";
-                    ApiUtil.setExampleResponse(request, "*/*", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
+        return getDelegate().listUsers(page, size, sort);
     }
 
 
@@ -182,17 +148,7 @@ public interface ApiApi {
         @Parameter(name = "id", description = "", required = true) @PathVariable("id") Long id,
         @Parameter(name = "UserUpdateRequest", description = "", required = true) @Valid @RequestBody UserUpdateRequest userUpdateRequest
     ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("*/*"))) {
-                    String exampleString = "{ \"password\" : \"password\", \"id\" : 0, \"email\" : \"email\", \"authId\" : \"authId\", \"username\" : \"username\", \"status\" : \"PENDING\" }";
-                    ApiUtil.setExampleResponse(request, "*/*", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
+        return getDelegate().updateUser(id, userUpdateRequest);
     }
 
 }

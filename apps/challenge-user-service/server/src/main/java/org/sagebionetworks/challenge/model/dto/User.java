@@ -1,4 +1,4 @@
-package org.openapitools.model;
+package org.sagebionetworks.challenge.model.dto;
 
 import java.net.URI;
 import java.util.Objects;
@@ -19,7 +19,7 @@ import javax.annotation.Generated;
  * User
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-09-14T23:46:16.887276700Z[Etc/UTC]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-09-15T17:33:42.298982800Z[Etc/UTC]")
 public class User {
 
   @JsonProperty("id")

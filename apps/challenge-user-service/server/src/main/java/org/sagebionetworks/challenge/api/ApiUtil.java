@@ -1,4 +1,4 @@
-package org.openapitools.api;
+package org.sagebionetworks.challenge.api;
 
 import org.springframework.web.context.request.NativeWebRequest;
 

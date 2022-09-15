@@ -1,7 +1,7 @@
-package org.openapitools.api;
+package org.sagebionetworks.challenge.api;
 
-import org.openapitools.model.User;
-import org.openapitools.model.UserUpdateRequest;
+import org.sagebionetworks.challenge.model.dto.User;
+import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.constraints.*;
 import javax.validation.Valid;
@@ -27,20 +26,19 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-09-14T23:46:16.887276700Z[Etc/UTC]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-09-15T17:33:42.298982800Z[Etc/UTC]")
 @Controller
 public class ApiApiController implements ApiApi {
 
-    private final NativeWebRequest request;
+    private final ApiApiDelegate delegate;
 
-    @Autowired
-    public ApiApiController(NativeWebRequest request) {
-        this.request = request;
+    public ApiApiController(@Autowired(required = false) ApiApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new ApiApiDelegate() {});
     }
 
     @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return Optional.ofNullable(request);
+    public ApiApiDelegate getDelegate() {
+        return delegate;
     }
 
 }
