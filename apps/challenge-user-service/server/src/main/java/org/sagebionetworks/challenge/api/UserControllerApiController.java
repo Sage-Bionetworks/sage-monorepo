@@ -26,18 +26,18 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-09-15T22:55:24.066910493Z[Etc/UTC]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @Controller
-public class ApiApiController implements ApiApi {
+public class UserControllerApiController implements UserControllerApi {
 
-    private final ApiApiDelegate delegate;
+    private final UserControllerApiDelegate delegate;
 
-    public ApiApiController(@Autowired(required = false) ApiApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new ApiApiDelegate() {});
+    public UserControllerApiController(@Autowired(required = false) UserControllerApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new UserControllerApiDelegate() {});
     }
 
     @Override
-    public ApiApiDelegate getDelegate() {
+    public UserControllerApiDelegate getDelegate() {
         return delegate;
     }
 

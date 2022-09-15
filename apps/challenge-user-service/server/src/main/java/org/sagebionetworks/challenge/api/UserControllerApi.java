@@ -26,14 +26,14 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-09-15T22:55:24.066910493Z[Etc/UTC]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @Validated
-@Tag(name = "api", description = "the api API")
+@Tag(name = "UserController", description = "the UserController API")
 @RequestMapping("${openapi.user.base-path:}")
-public interface ApiApi {
+public interface UserControllerApi {
 
-    default ApiApiDelegate getDelegate() {
-        return new ApiApiDelegate() {};
+    default UserControllerApiDelegate getDelegate() {
+        return new UserControllerApiDelegate() {};
     }
 
     /**

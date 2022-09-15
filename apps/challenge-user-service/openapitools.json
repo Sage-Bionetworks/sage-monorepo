@@ -14,7 +14,9 @@
           "apiPackage": "org.sagebionetworks.challenge.api",
           "modelPackage": "org.sagebionetworks.challenge.model.dto",
           "configPackage": "org.sagebionetworks.challenge.configuration",
-          "delegatePattern": true
+          "delegatePattern": true,
+          "hideGenerationTimestamp": true,
+          "useTags": true
         }
       }
     }

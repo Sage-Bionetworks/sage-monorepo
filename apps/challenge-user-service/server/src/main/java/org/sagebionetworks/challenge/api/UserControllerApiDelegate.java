@@ -14,11 +14,11 @@ import java.util.Optional;
 import javax.annotation.Generated;
 
 /**
- * A delegate to be called by the {@link ApiApiController}}.
+ * A delegate to be called by the {@link UserControllerApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-09-15T22:55:24.066910493Z[Etc/UTC]")
-public interface ApiApiDelegate {
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+public interface UserControllerApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
@@ -29,7 +29,7 @@ public interface ApiApiDelegate {
      *
      * @param user  (required)
      * @return OK (status code 200)
-     * @see ApiApi#createUser
+     * @see UserControllerApi#createUser
      */
     default ResponseEntity<User> createUser(User user) {
         getRequest().ifPresent(request -> {
@@ -50,7 +50,7 @@ public interface ApiApiDelegate {
      *
      * @param id  (required)
      * @return OK (status code 200)
-     * @see ApiApi#getUser
+     * @see UserControllerApi#getUser
      */
     default ResponseEntity<User> getUser(Long id) {
         getRequest().ifPresent(request -> {
@@ -73,7 +73,7 @@ public interface ApiApiDelegate {
      * @param size The size of the page to be returned (optional, default to 20)
      * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
      * @return OK (status code 200)
-     * @see ApiApi#listUsers
+     * @see UserControllerApi#listUsers
      */
     default ResponseEntity<List<User>> listUsers(Integer page,
         Integer size,
@@ -97,7 +97,7 @@ public interface ApiApiDelegate {
      * @param id  (required)
      * @param userUpdateRequest  (required)
      * @return OK (status code 200)
-     * @see ApiApi#updateUser
+     * @see UserControllerApi#updateUser
      */
     default ResponseEntity<User> updateUser(Long id,
         UserUpdateRequest userUpdateRequest) {
