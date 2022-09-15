@@ -1,7 +1,14 @@
 {
-  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "$schema": "../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "6.1.0"
+    "version": "6.1.0",
+    "generators": {
+      "challenge-user-service": {
+        "generatorName": "spring",
+        "output": "server",
+        "inputSpec": "openapi.yaml"
+      }
+    }
   }
 }
