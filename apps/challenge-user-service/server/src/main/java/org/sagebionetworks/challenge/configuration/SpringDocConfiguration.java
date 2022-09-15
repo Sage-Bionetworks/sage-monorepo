@@ -1,4 +1,4 @@
-package org.openapitools.configuration;
+package org.sagebionetworks.challenge.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

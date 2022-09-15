@@ -1,4 +1,4 @@
-package org.openapitools;
+package org.sagebionetworks.challenge;
 
 import com.fasterxml.jackson.databind.Module;
 import org.openapitools.jackson.nullable.JsonNullableModule;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.openapitools", "org.sagebionetworks.challenge.api" , "org.openapitools.configuration"})
+@ComponentScan(basePackages = {"org.sagebionetworks.challenge", "org.sagebionetworks.challenge.api" , "org.sagebionetworks.challenge.configuration"})
 public class OpenApiGeneratorApplication {
 
     public static void main(String[] args) {

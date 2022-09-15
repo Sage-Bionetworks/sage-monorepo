@@ -8,10 +8,12 @@
         "generatorName": "spring",
         "output": "server",
         "inputSpec": "openapi.yaml",
-        "apiPackage": "org.sagebionetworks.challenge.api",
-        "modelPackage": "org.sagebionetworks.challenge.model.dto",
         "templateDir": "templates",
         "additionalProperties": {
+          "basePackage": "org.sagebionetworks.challenge",
+          "apiPackage": "org.sagebionetworks.challenge.api",
+          "modelPackage": "org.sagebionetworks.challenge.model.dto",
+          "configPackage": "org.sagebionetworks.challenge.configuration",
           "delegatePattern": true
         }
       }
