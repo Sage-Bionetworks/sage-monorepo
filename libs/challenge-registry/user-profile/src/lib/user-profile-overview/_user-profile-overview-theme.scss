@@ -36,29 +36,11 @@
 }
 
 @mixin typography($theme) {
-  .main-section-bio-text {
-    font-size: 40px;
-    font-style: normal;
-    font-family: Fira Sans;
-    font-weight: 500;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .main-section-bio-text1 {
-    font-size: 24px;
-    font-style: normal;
+  .section-title {
     font-family: Lato;
     font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .main-section-bio-text7 {
-    font-size: 24px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 500;
-    line-height: normal;
-    font-stretch: normal;
+    font-size: 21px;
+    text-transform: uppercase;
   }
 }
 
