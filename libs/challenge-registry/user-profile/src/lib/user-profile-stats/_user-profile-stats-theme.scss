@@ -10,155 +10,18 @@
   $shadow: rgba(196, 196, 196, 1);
   $light-bg: white;
 
-  .basic-stats-logged-in {
-    border-color: transparent;
-  }
-  .basic-stats-frameorganizations {
+  .stat-item {
     border-color: $shadow;
     background-color: $light-bg;
   }
-  .basic-stats-text {
-    color: rgba(0, 0, 0, 1);
-  }
-  .basic-stats-text01 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .basic-stats-framestars {
-    border-color: $shadow;
-    background-color: $light-bg;
-  }
-  .basic-stats-text02 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .basic-stats-text03 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .basic-stats-calltoaction {
+  .action-btn {
+    color: white;
     border-color: transparent;
     background-color: map.get($figma, dl-color-default-secondary1);
   }
-  .basic-stats-create {
-    border-color: transparent;
-    color: rgba(255, 255, 255, 1);
-  }
-  .basic-stats-text04 {
-    color: rgba(255, 255, 255, 1);
-  }
-  .basic-stats-public {
-    border-color: transparent;
-  }
-  .basic-stats-text05 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .basic-stats-text06 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .basic-stats-text07 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .basic-stats-text08 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .basic-stats-calltoaction1 {
-    border-color: transparent;
-    background-color: map.get($figma, dl-color-default-secondary1);
-  }
-  .basic-stats-mailoutline {
-    border-color: transparent;
-  }
-  .basic-stats-text09 {
-    color: rgba(255, 255, 255, 1);
-  }
 }
 
-@mixin typography($theme) {
-  .basic-stats-text {
-    font-size: 36px;
-    font-style: normal;
-    font-family: Fira Sans;
-    font-weight: 500px;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .basic-stats-text01 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400px;
-    line-height: normal;
-    font-stretch: normal;
-  }
-
-  .basic-stats-text02 {
-    font-size: 36px;
-    font-style: normal;
-    font-family: Fira Sans;
-    font-weight: 500px;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .basic-stats-text03 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400px;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .basic-stats-create {
-    font-size: 36px;
-  }
-  .basic-stats-text04 {
-    font-size: 36px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 700px;
-    line-height: normal;
-    font-stretch: normal;
-  }
-
-  .basic-stats-text05 {
-    font-size: 36px;
-    font-style: normal;
-    font-family: Fira Sans;
-    font-weight: 500px;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .basic-stats-text06 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400px;
-    line-height: normal;
-    font-stretch: normal;
-  }
-
-  .basic-stats-text07 {
-    font-size: 36px;
-    font-style: normal;
-    font-family: Fira Sans;
-    font-weight: 500px;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .basic-stats-text08 {
-    font-size: 20px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 400px;
-    line-height: normal;
-    font-stretch: normal;
-  }
-
-  .basic-stats-text09 {
-    font-size: 36px;
-    font-style: normal;
-    font-family: Lato;
-    font-weight: 700px;
-    font-stretch: normal;
-  }
-}
+@mixin typography($theme) { }
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
   @if $color-config != null {

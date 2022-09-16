@@ -11,7 +11,7 @@
   .base {
     background-color: white;
   }
-  #top {
+  #top, #stats {
     border-color: transparent;
     background-color: map.get($figma, dl-color-default-hover1);
   }
