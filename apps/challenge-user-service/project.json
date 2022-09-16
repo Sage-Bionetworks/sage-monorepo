@@ -31,22 +31,22 @@
         "^install"
       ]
     },
-    "test": {
-      "executor": "@nxrocks/nx-spring-boot:test",
-      "options": {
-        "root": "apps/challenge-user-service"
-      },
-      "dependsOn": ["build"]
-    },
-    "integration-test": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "commands": [
-          "./gradlew integrationTest"
-        ],
-        "cwd": "apps/challenge-user-service"
-      }
-    },
+    // "test": {
+    //   "executor": "@nxrocks/nx-spring-boot:test",
+    //   "options": {
+    //     "root": "apps/challenge-user-service"
+    //   },
+    //   "dependsOn": ["build"]
+    // },
+    // "integration-test": {
+    //   "executor": "@nrwl/workspace:run-commands",
+    //   "options": {
+    //     "commands": [
+    //       "./gradlew integrationTest"
+    //     ],
+    //     "cwd": "apps/challenge-user-service"
+    //   }
+    // },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
