@@ -1,193 +1,87 @@
 @use 'libs/challenge-registry/styles/src/lib/_constants' as constants;
 
-.base-container {
-  min-height: 100vh;
-}
-.base-container1 {
+.base {
   width: 100%;
-  height: 2100px;
-  display: flex;
-  overflow: hidden;
-  position: relative;
-  // max-width: 1920px;
-  box-sizing: border-box;
-  align-items: flex-start;
+  height: 100vh;
 }
-.base-top-section {
-  top: 1px;
-  left: 0px;
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   width: 100%;
-  height: 608px;
-  display: flex;
-  position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
 }
-.base-profile-pic {
-  top: 115px;
-  left: 115px;
+.col {
   display: flex;
-  position: absolute;
+  flex-direction: column;
+  flex-basis: 100%;
+}
+.col-right {
+  justify-content: flex-end;
+}
+
+// TOP SECTION
+#top {
+  min-height: 400px;
+  justify-content: center;
+}
+#top > div {
+  align-self: center;
+  flex: 1 0 auto;
+  padding: 22px;
+}
+.profile-pic {
+  // width: 40px;
+  // object-fit: cover;
+  margin: 8px;
+  align-self: center;
+  flex: 0 0 auto;
   box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
   border-radius: constants.$dl-radius-radius-round;
+  box-shadow: 1px 5px 18px 0px #d4d4d4;
 }
-.base-text {
-  top: 153px;
-  left: 495px;
-  height: auto;
-  position: absolute;
-  align-self: auto;
-  text-align: left;
-  text-decoration: none;
+#details {
+  max-width: 860px;
 }
-.base-verified {
-  top: 162px;
-  left: 943px;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  overflow: hidden;
-  position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
+#activity {
+  max-width: 220px;
 }
-.base-group {
-  top: 3.75px;
-  left: 2.5px;
-  width: 55px;
-  height: 53px;
-  position: absolute;
-  box-sizing: border-box;
-  object-fit: cover;
+.username {
+  font-size: 28px;
 }
-.base-text01 {
-  top: 230px;
-  left: 495px;
-  height: auto;
-  position: absolute;
-  align-self: auto;
-  text-align: left;
-  text-decoration: none;
-}
-.base-usertypetag {
-  top: 304px;
-  left: 477px;
-  width: 98px;
-  height: 46px;
-  display: flex;
-  position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
-  border-width: 1px;
+.user-tag {
+  width: 100%;
+  max-width: 98px;
+  margin: 8px 0;
+  padding: 5px;
   border-radius: 32px;
-}
-.base-text02 {
-  top: 11px;
-  left: 29px;
-  height: auto;
-  position: absolute;
-  align-self: auto;
   text-align: center;
-  text-decoration: none;
 }
-.base-createdat {
-  top: 241px;
-  right: 166px;
-  width: 149px;
-  height: 57px;
-  display: flex;
-  position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
+.activity-card {
+  text-align: right;
 }
-.base-text03 {
-  top: 0px;
-  left: 0px;
-  height: auto;
-  position: absolute;
-  align-self: auto;
-  text-align: left;
-  text-decoration: none;
-  white-space: nowrap;
+.card-title {
+  font-weight: 600;
 }
-.base-text04 {
-  top: 33px;
-  left: 38px;
-  height: auto;
-  position: absolute;
-  align-self: auto;
-  text-align: left;
-  text-decoration: none;
-  white-space: nowrap;
+
+#bottom {
+  justify-content: center;
 }
-.base-updatedat {
-  top: 328px;
-  right: 166px;
-  width: 173px;
-  height: 56px;
-  display: flex;
-  position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
-}
-.base-text05 {
-  top: 0px;
-  left: 0px;
-  height: auto;
-  position: absolute;
-  align-self: auto;
-  text-align: left;
-  text-decoration: none;
-  white-space: nowrap;
-}
-.base-text06 {
-  top: 32px;
-  left: 62px;
-  height: auto;
-  position: absolute;
-  align-self: auto;
-  text-align: left;
-  text-decoration: none;
-  white-space: nowrap;
-}
-.base-basic-stats {
-  right: 166px;
-  width: 954px;
-  bottom: 1px;
-  height: 100px;
-  display: flex;
-  position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
-}
-.base-side-nav {
-  top: 735px;
-  left: 113px;
-  width: 321px;
-  height: 415px;
-  display: flex;
+// SIDENAV
+.nav-group {
+  margin: 18px;
   padding: 48px 18px;
-  position: absolute;
-  box-sizing: border-box;
+  display: flex;
   align-items: flex-start;
+  flex-direction: column;
   border-style: solid;
   border-width: 2px;
   border-radius: 8px;
-  flex-direction: column;
 }
 .nav-item {
-  width: 285px;
+  width: 100%;
   height: 54px;
   margin: 0 0 18px 0;
   padding: 13px 18px;
-  display: flex;
-  position: relative;
   box-sizing: border-box;
   transition: 0.3s;
   align-items: flex-start;
@@ -195,23 +89,58 @@
   text-align: left;
   text-decoration: none;
 }
-.base-main-section {
-  top: 729px;
-  left: 495px;
-  width: calc(100% - 495px);
-  height: 1200px;
-  padding-right: 113px;
-  display: flex;
-  position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
+
+// MAIN
+.main {
+  background-color: green;
+}
+// .base-basic-stats {
+//   width: 954px;
+//   bottom: 1px;
+//   height: 100px;
+//   box-sizing: border-box;
+//   align-items: flex-start;
+//   flex-shrink: 1;
+// }
+// .base-main-section {
+//   top: 729px;
+//   left: 495px;
+//   width: calc(100% - 495px);
+//   height: 1200px;
+//   padding-right: 113px;
+//   display: flex;
+//   position: absolute;
+//   box-sizing: border-box;
+//   align-items: flex-start;
+//   flex-shrink: 1;
+// }
+
+@media screen and (max-width: 641px) {
+  #details,
+  .activity-card {
+    text-align: center;
+  }
+  #details > h2 {
+    font-size: 32px;
+  }
+  #details > h3 {
+    font-size: 21px;
+  }
+  .user-tag {
+    align-self: center;
+  }
 }
 
-@media (max-width: 479px) {
-  .base-profile-pic {
-    box-shadow: 1px 5px 18px 0px #d4d4d4;
-    align-items: flex-start;
-    border-radius: constants.$dl-radius-radius-round;
+@media screen and (min-width: 800px) {
+  .col {
+    flex: 1;
+  }
+  .sidenav {
+    flex: 1;
+    max-width: 320px;
+  }
+  .main {
+    flex: 2;
+    max-width: 1120px;
   }
 }

@@ -1,50 +1,66 @@
-<div class="base-container" *ngIf="user$ | async as user">
-  <div class="base-container1">
-    <section id="top" class="base-top-section">
-      <challenge-registry-avatar
-        class="base-profile-pic"
-        [avatar]="userAvatar"
-      ></challenge-registry-avatar>
-      <span class="base-text">Awesome User</span>
-      <mat-icon aria-hidden="true" class="base-verified">verified_outline</mat-icon>
-      <span class="base-text01">@awesome-user</span>
-      <div class="base-usertypetag">
-        <span class="base-text02">User</span>
+<div class="base mat-typography" *ngIf="user$ | async as user">
+  <section id="top" class="row">
+    <challenge-registry-avatar
+      class="profile-pic"
+      [avatar]="userAvatar"
+    ></challenge-registry-avatar>
+    <div id="details" class="col">
+      <h2>
+        Awesome User <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon>
+      </h2>
+      <p class="username">@awesome-user</p>
+      <div class="user-tag">User</div>
+    </div>
+    <div id="activity" class="col">
+      <div class="activity-card">
+        <p class="mat-body-strong card-title">ROCC user since:</p>
+        <p>01/01/2020</p>
       </div>
-      <div class="base-createdat">
-        <span class="base-text03">ROCC user since</span>
-        <span class="base-text04">01/01/2020</span>
+      <div class="activity-card">
+        <p class="mat-body-strong card-title">Profile last updated:</p>
+        <p>03/31/2022</p>
       </div>
-      <div class="base-updatedat">
-        <span class="base-text05">Profile last updated</span>
-        <span class="base-text06">03/31/2022</span>
-      </div>
-      <challenge-registry-user-profile-stats
+    </div>
+    <!-- <div class="row">
+      <div class="col col-right">
+        <challenge-registry-user-profile-stats
         class="base-basic-stats"
         [loggedIn]="loggedIn"
       ></challenge-registry-user-profile-stats>
-    </section>
-
-    <div id="sidenav" class="base-side-nav">
-      <a class="nav-item" routerLink="." 
-          [queryParams]="{ tab: 'overview' }" 
-          [ngClass]=" {'active-tab': activeTab===tabs['overview']}">
-        Biography
-      </a>
-      <a class="nav-item" routerLink="." 
-          [queryParams]="{ tab: 'challenges' }" 
-          [ngClass]=" {'active-tab': activeTab===tabs['challenges']}">
-        Challenges
-      </a>
-      <a class="nav-item" routerLink="." 
-          [queryParams]="{ tab: 'starred' }" 
-          [ngClass]=" {'active-tab': activeTab===tabs['starred']}">
-        Starred
-      </a>
+      </div>
+    </div> -->
+  </section>
+  <section id="bottom" class="row">
+    <div class="sidenav col">
+      <div class="nav-group">
+        <a
+          class="nav-item"
+          routerLink="."
+          [queryParams]="{ tab: 'overview' }"
+          [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
+        >
+          Biography
+        </a>
+        <a
+          class="nav-item"
+          routerLink="."
+          [queryParams]="{ tab: 'challenges' }"
+          [ngClass]="{ 'active-tab': activeTab === tabs['challenges'] }"
+        >
+          Challenges
+        </a>
+        <a
+          class="nav-item"
+          routerLink="."
+          [queryParams]="{ tab: 'starred' }"
+          [ngClass]="{ 'active-tab': activeTab === tabs['starred'] }"
+        >
+          Starred
+        </a>
+      </div>
     </div>
-
-    <section id="main" class="base-main-section">
-      <ng-container [ngSwitch]="activeTab">
+    <div class="main col">
+      <!-- <ng-container [ngSwitch]="activeTab">
         <challenge-registry-user-profile-overview *ngSwitchCase="tabs['overview']" [user]="user">
         </challenge-registry-user-profile-overview>
         <challenge-registry-user-profile-challenges
@@ -58,9 +74,30 @@
           [loggedIn]="loggedIn"
         >
         </challenge-registry-user-profile-starred>
-      </ng-container>
-    </section>
-  </div>
+      </ng-container> -->
+    </div>
+  </section>
 </div>
+
+<!-- <div class="base mat-typography" *ngIf="user$ | async as user">
+
+  <section id="main" class="base-main-section">
+    <ng-container [ngSwitch]="activeTab">
+      <challenge-registry-user-profile-overview *ngSwitchCase="tabs['overview']" [user]="user">
+      </challenge-registry-user-profile-overview>
+      <challenge-registry-user-profile-challenges
+        *ngSwitchCase="tabs['challenges']"
+        [user]="user"
+      >
+      </challenge-registry-user-profile-challenges>
+      <challenge-registry-user-profile-starred
+        *ngSwitchCase="tabs['starred']"
+        [user]="user"
+        [loggedIn]="loggedIn"
+      >
+      </challenge-registry-user-profile-starred>
+    </ng-container>
+  </section>
+</div> -->
 
 <challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
