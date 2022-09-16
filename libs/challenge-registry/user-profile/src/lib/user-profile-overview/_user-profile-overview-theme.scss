@@ -8,31 +8,6 @@
   $warn: map.get($config, 'warn');
   $figma: map.get($config, 'figma');
 
-  .main-section-bio-main-section {
-    border-color: transparent;
-  }
-
-  .main-section-bio-container1 {
-    border-color: transparent;
-  }
-
-  .main-section-bio-text {
-    color: map.get($figma, dl-color-gray-black);
-  }
-
-  .main-section-bio-text1 {
-    color: rgba(0, 0, 0, 1);
-  }
-
-  .main-section-bio-container2 {
-    border-color: transparent;
-  }
-  .main-section-bio-text7 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .main-section-bio-card-group {
-    background-color: map.get($figma, dl-color-default-hover2);
-  }
 }
 
 @mixin typography($theme) {
