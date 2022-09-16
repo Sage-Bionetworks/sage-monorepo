@@ -1,24 +1,15 @@
 @use 'libs/challenge-registry/styles/src/lib/_constants' as constants;
 
-.organization-card-container {
-  width: 300px;
-  height: 400px;
+.organization-card {
+  margin: 16px;
+  width: 280px;
+  min-height: 360px;
   display: flex;
   position: relative;
   align-items: flex-start;
   flex-direction: column;
 }
-.organization-card-container1 {
-  top: 98px;
-  left: 0px;
-  width: 260px;
-  height: 300px;
-  display: flex;
-  position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
-}
-.organization-card-card-banner {
+.org-card-banner {
   top: 0px;
   left: 36px;
   display: flex;
@@ -29,16 +20,8 @@
   box-shadow: 1px 5px 18px 0px #d4d4d4;
   border-radius: constants.$dl-radius-radius-round;
 }
-.organization-card-text {
-  top: 56px;
-  left: 52px;
-  height: auto;
-  position: absolute;
-  align-self: auto;
-  text-align: center;
-  text-decoration: none;
-}
-.organization-card-card-title {
+
+.card-text {
   top: 226px;
   left: 0px;
   width: 260px;
@@ -67,18 +50,13 @@
   .organization-card-container {
     align-items: center;
     justify-content: center;
-  }
-  .organization-card-container1 {
     top: 36px;
     left: 26px;
     align-items: center;
-    justify-content: center;
   }
   .organization-card-card-banner {
     box-shadow: 1px 5px 18px 0px #d4d4d4;
     align-items: flex-start;
     border-radius: constants.$dl-radius-radius-round;
-  }
-  .organization-card-text1 {
   }
 }

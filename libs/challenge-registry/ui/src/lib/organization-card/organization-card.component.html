@@ -1,13 +1,11 @@
 <div *ngIf="organization">
-  <div class="organization-card-container">
-    <div class="organization-card-container1">
-      <challenge-registry-avatar  class="organization-card-card-banner" 
-        [avatar]="organizationAvatar">
-      </challenge-registry-avatar>
-      <div class="organization-card-card-title">
-        <span class="organization-card-text1"><span>{{ organization.name }}</span></span>
-        <span class="organization-card-text2"><span>@{{ organization.login }}</span></span>
-      </div>
+  <div class="organization-card">
+    <challenge-registry-avatar  class="org-card-banner" 
+      [avatar]="organizationAvatar">
+    </challenge-registry-avatar>
+    <div class="card-text">
+      <p class="card-title">{{ organization.name }}</p>
+      <p class="card-subtitle">@{{ organization.login }}</p>
     </div>
   </div>
 </div>
