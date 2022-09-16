@@ -1,0 +1,108 @@
+plugins {
+  id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+  id 'java'
+  id 'jvm-test-suite'
+  id 'org.springframework.boot' version '2.7.3'
+  id 'org.springdoc.openapi-gradle-plugin' version '1.4.0'
+}
+
+ext {
+  springVersion = '2.7.3'
+  springCloudVersion = '3.1.3'
+  keycloakVersion = '18.0.0'
+}
+
+group = 'org.sagebionetworks.challenge'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+  mavenCentral()
+  mavenLocal()
+}
+
+testing {
+  suites {
+    test {
+      useJUnitJupiter()
+    }
+
+    integrationTest(JvmTestSuite) {
+      dependencies {
+        implementation project
+      }
+      sources {
+        java {
+          srcDirs = ['src/integrationTest/java']
+        }
+      }
+      targets {
+        all {
+          testTask.configure {
+            shouldRunAfter(test)
+          }
+        }
+      }
+    }
+  }
+}
+
+dependencies {
+  annotationProcessor 'org.projectlombok:lombok:1.18.24'
+  compileOnly 'org.projectlombok:lombok:1.18.24'
+  implementation 'com.h2database:h2:2.1.214'
+  implementation 'org.flywaydb:flyway-core:9.3.0'
+  implementation 'org.flywaydb:flyway-mysql:9.3.0'
+  implementation "org.keycloak:keycloak-admin-client:${keycloakVersion}"
+  implementation "org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}"
+  implementation 'org.sagebionetworks.challenge:challenge-util:0.0.1-SNAPSHOT'
+  implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+  implementation "org.springframework.boot:spring-boot-devtools:${springVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-actuator:${springVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
+  implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
+  implementation "org.springframework.cloud:spring-cloud-starter-openfeign:${springCloudVersion}"
+  integrationTestImplementation 'org.assertj:assertj-core:3.23.1'
+  integrationTestImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
+  runtimeOnly 'mysql:mysql-connector-java:8.0.30'
+  testImplementation 'org.assertj:assertj-core:3.23.1'
+  testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
+}
+
+configurations {
+  integrationTestImplementation.extendsFrom implementation
+  integrationTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+// configure the integrationTest to run as part of a regular build
+// tasks.named('check') {
+//   dependsOn(testing.suites.integrationTest)
+// }
+
+test {
+	useJUnitPlatform()
+
+  testLogging.showStandardStreams = true
+
+  beforeTest { descriptor ->
+     logger.lifecycle("Running test: " + descriptor)
+  }
+
+  failFast = true
+
+  testLogging {
+    events("passed", "skipped", "failed")
+  }
+}
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+openApi {
+  apiDocsUrl.set("http://localhost:8083/api/v1/api-docs/openapi.json.yaml")
+  outputDir.set(file("docs"))
+  outputFileName.set("openapi.yaml")
+}
