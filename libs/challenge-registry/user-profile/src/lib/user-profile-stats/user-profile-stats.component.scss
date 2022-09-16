@@ -10,7 +10,7 @@
   flex-direction: column;
   flex-basis: 100%;
   flex: 1;
-  height: 60px;
+  height: 54px;
   max-width: 120px;
   padding: 18px 5px 8px;
   text-align: center;
@@ -22,6 +22,7 @@
 }
 
 .action-btn {
+  min-width: 200px;
   max-width: 280px;
   justify-content: center;
   font-size: 21px;
