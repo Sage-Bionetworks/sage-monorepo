@@ -61,6 +61,13 @@
 }
 
 @mixin typography($theme) {
+  .stat-item {
+    text-align: center;
+  }
+  .action-btn {
+    font-size: 21px;
+    text-transform: uppercase;
+  }
 }
 
 @mixin theme($theme) {
