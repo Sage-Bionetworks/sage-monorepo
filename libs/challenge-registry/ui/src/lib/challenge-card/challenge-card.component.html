@@ -1,35 +1,24 @@
 <div *ngIf="challenge">
-  <div class="challenge-card-container">
-    <div class="challenge-card-container1">
-      <div class="challenge-card-card-banner">
-        <!-- update to retrieve banner path from challenge obj when API ready -->
-        <span class="challenge-card-text"><span>banner pic</span></span>
+  <div class="challenge-card">
+    <div class="card-banner">
+      <!-- update to retrieve banner path from challenge obj when API ready -->
+    </div>
+    <div class="star-btn">
+      <mat-icon aria-hidden="true" class="card-icon">star_outline</mat-icon>
+      <span class="challenge-card-text1">{{ challenge.starredCount }}</span>
+    </div>
+    <div class="card-body">
+      <p class="card-title">{{ challenge.displayName }}</p>
+      <p class="card-subtitle">{{ platform }}</p>
+      <p class="card-desc">{{ challenge.description }}</p>
+    </div>
+    <div class="card-footer">
+      <div class="difficulty-tag mat-small">
+        <mat-icon aria-hidden="true" class="card-icon">timeline</mat-icon>
+        {{ difficulty }}
       </div>
-      <div class="challenge-card-starred">
-        <span class="challenge-card-text1"
-          ><span>{{ challenge.starredCount }}</span></span
-        >
-        <mat-icon aria-hidden="true" class="challenge-card-icon">star_outline</mat-icon>
-      </div>
-      <div class="challenge-card-card-title">
-        <span class="challenge-card-text2"
-          ><span>{{ challenge.displayName }}</span></span
-        >
-        <span class="challenge-card-text3"
-          ><span>{{ platform }}</span></span
-        >
-      </div>
-      <span class="challenge-card-text4">
-        <span>{{ challenge.description }}</span>
-      </span>
-      <div class="challenge-card-card-footer">
-        <div class="challenge-card-difficulty-tag">
-          <mat-icon aria-hidden="true" class="challenge-card-icon2">timeline</mat-icon>
-          <span class="challenge-card-text6">{{ difficulty }}</span>
-        </div>
-        <div class="challenge-card-status-tag" [ngClass]="statusClass">
-          <span class="challenge-card-text5">{{ status }}</span>
-        </div>
+      <div class="status-tag mat-small" [ngClass]="statusClass">
+        {{ status }}
       </div>
     </div>
   </div>
