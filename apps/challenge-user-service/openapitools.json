@@ -6,7 +6,7 @@
     "generators": {
       "challenge-user-service": {
         "generatorName": "spring",
-        "output": "server",
+        "output": "#{cwd}",
         "inputSpec": "openapi.yaml",
         "templateDir": "templates",
         "additionalProperties": {
