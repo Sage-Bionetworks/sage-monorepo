@@ -5,17 +5,18 @@
     "version": "6.1.0",
     "generators": {
       "challenge-user-service": {
+        "config": "templates/config.yaml",
         "generatorName": "spring",
-        "output": "#{cwd}",
         "inputSpec": "openapi.yaml",
+        "output": "#{cwd}",
         "templateDir": "templates",
         "additionalProperties": {
-          "basePackage": "org.sagebionetworks.challenge",
           "apiPackage": "org.sagebionetworks.challenge.api",
-          "modelPackage": "org.sagebionetworks.challenge.model.dto",
+          "basePackage": "org.sagebionetworks.challenge",
           "configPackage": "org.sagebionetworks.challenge.configuration",
           "delegatePattern": true,
           "hideGenerationTimestamp": true,
+          "modelPackage": "org.sagebionetworks.challenge.model.dto",
           "useTags": true
         }
       }

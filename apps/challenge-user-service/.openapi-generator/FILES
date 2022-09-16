@@ -1,4 +1,4 @@
-pom.xml
+AUTHORS.md
 src/main/java/org/sagebionetworks/challenge/OpenApiGeneratorApplication.java
 src/main/java/org/sagebionetworks/challenge/RFC3339DateFormat.java
 src/main/java/org/sagebionetworks/challenge/api/ApiUtil.java
