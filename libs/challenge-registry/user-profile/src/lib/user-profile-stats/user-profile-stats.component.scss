@@ -17,12 +17,13 @@
   border-width: 1px;
 }
 .stat-item > h4 {
-  line-height: 0.7;
+  line-height: 0.5;
 }
 
 .action-btn {
   max-width: 280px;
   justify-content: center;
   font-size: 21px;
+  text-transform: uppercase;
   cursor: pointer;
 }
