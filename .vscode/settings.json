@@ -1,6 +1,5 @@
 {
   "java.format.enabled": true,
-  "java.format.settings.url": "eclipse-java-google-style.xml",
   "java.checkstyle.configuration": "checkstyle.xml",
   "java.checkstyle.version": "10.3",
   "java.jdt.ls.java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
