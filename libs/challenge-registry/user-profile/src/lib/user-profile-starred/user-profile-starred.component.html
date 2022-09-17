@@ -17,24 +17,22 @@
         Organizations
       </button>
     </div>
-    <div class="card-group">
-      <ng-container [ngSwitch]="activeTab">
-        <div *ngSwitchCase="tabs['challenges']" class="main-section-stars-card-group">
-          <challenge-registry-challenge-card
-            *ngFor="let challenge of challenges"
-            [challenge]="challenge"
-          >
-          </challenge-registry-challenge-card>
-        </div>
-        <div *ngSwitchCase="tabs['organizations']" class="main-section-stars-card-group">
-          <challenge-registry-organization-card
-            *ngFor="let organization of organizations"
-            [organization]="organization"
-          >
-          </challenge-registry-organization-card>
-        </div>
-      </ng-container>
-      <div class="card-paginator"></div>
-    </div>
+    <ng-container [ngSwitch]="activeTab">
+      <div *ngSwitchCase="tabs['challenges']" class="card-group">
+        <challenge-registry-challenge-card
+          *ngFor="let challenge of challenges"
+          [challenge]="challenge"
+        >
+        </challenge-registry-challenge-card>
+      </div>
+      <div *ngSwitchCase="tabs['organizations']" class="main-section-stars-card-group">
+        <challenge-registry-organization-card
+          *ngFor="let organization of organizations"
+          [organization]="organization"
+        >
+        </challenge-registry-organization-card>
+      </div>
+    </ng-container>
+    <div class="card-paginator"></div>
   </div>
 </main>
