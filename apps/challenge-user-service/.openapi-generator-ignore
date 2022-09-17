@@ -1,2 +1,5 @@
 pom.xml
 README.md
+
+# Ignore our Spring Boot application class
+**/OpenApiGeneratorApplication.java
