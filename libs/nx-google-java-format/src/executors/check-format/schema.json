@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "title": "Check Format executor",
+  "description": "Check that the project files are properly formatted",
+  "outputCapture": "pipe",
+  "type": "object",
+  "properties": {
+    "root": {
+      "description": "The project root",
+      "type": "string"
+    },
+    "args": {
+      "description": "The argument to be passed to the underlying google-java-format command",
+      "type": "array",
+      "default": []
+    }
+  },
+  "required": []
+}

@@ -59,8 +59,8 @@
         "root": "apps/challenge-user-service"
       }
     },
-    "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:format-check",
+    "check-format": {
+      "executor": "@sagebionetworks/nx-google-java-format:check-format",
       "options": {
         "root": "apps/challenge-user-service"
       }

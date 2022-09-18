@@ -26,7 +26,6 @@
     "editor.formatOnSave": true
   },
   "[java]": {
-    // using google-java-format instead of the default formatter (see emeraldwalk.runonsave)
     "editor.formatOnSave": false
   },
   "[html]": {
@@ -46,13 +45,10 @@
       {
         "match": "\\.java$",
         "cmd": "${workspaceRoot}/node_modules/.bin/google-java-format --replace ${file}"
-      },
-    ],
+      }
+    ]
   },
-  "eslint.workingDirectories": [
-    "./apps/challenge-db-cli",
-    "."
-  ],
+  "eslint.workingDirectories": ["./apps/challenge-db-cli", "."],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
@@ -83,5 +79,6 @@
   "java.configuration.updateBuildConfiguration": "disabled",
   "editor.inlayHints.enabled": "off",
   "rewrap.wrappingColumn": 100,
-  "editor.rulers": [100]
+  "editor.rulers": [100],
+  "eslint.validate": ["json"]
 }

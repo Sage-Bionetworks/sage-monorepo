@@ -1,0 +1,60 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/nx-google-java-format/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/nx-google-java-format",
+        "main": "libs/nx-google-java-format/src/index.ts",
+        "tsConfig": "libs/nx-google-java-format/tsconfig.lib.json",
+        "assets": [
+          "libs/nx-google-java-format/*.md",
+          {
+            "input": "./libs/nx-google-java-format/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./libs/nx-google-java-format/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./libs/nx-google-java-format",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./libs/nx-google-java-format",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/nx-google-java-format/**/*.ts",
+          "libs/nx-google-java-format/generators.json",
+          "libs/nx-google-java-format/executors.json",
+          "libs/nx-google-java-format/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/nx-google-java-format"],
+      "options": {
+        "jestConfig": "libs/nx-google-java-format/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
