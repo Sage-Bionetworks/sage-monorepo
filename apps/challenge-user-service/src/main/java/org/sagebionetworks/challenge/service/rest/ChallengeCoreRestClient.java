@@ -12,5 +12,4 @@ public interface ChallengeCoreRestClient {
 
   @RequestMapping(method = RequestMethod.GET, value = "/api/v1/user/{identification}")
   UserResponse readUser(@PathVariable("identification") String identification);
-
 }

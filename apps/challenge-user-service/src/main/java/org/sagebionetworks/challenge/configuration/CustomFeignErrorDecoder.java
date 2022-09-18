@@ -4,13 +4,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
-import org.sagebionetworks.challenge.util.exception.SimpleChallengeGlobalException;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+import org.sagebionetworks.challenge.util.exception.SimpleChallengeGlobalException;
 
 @Slf4j
 public class CustomFeignErrorDecoder implements ErrorDecoder {
@@ -22,8 +21,10 @@ public class CustomFeignErrorDecoder implements ErrorDecoder {
 
     switch (response.status()) {
       case 400:
-        log.error("Error in request went through feign client {} ",
-            simpleChallengeGlobalException.getMessage() + " - "
+        log.error(
+            "Error in request went through feign client {} ",
+            simpleChallengeGlobalException.getMessage()
+                + " - "
                 + simpleChallengeGlobalException.getCode());
         return simpleChallengeGlobalException;
       case 401:
@@ -36,7 +37,6 @@ public class CustomFeignErrorDecoder implements ErrorDecoder {
         log.error("Error in request went through feign client");
         return new Exception("Common Feign Exception");
     }
-
   }
 
   private SimpleChallengeGlobalException extractChallengeCoreGlobalException(Response response) {
