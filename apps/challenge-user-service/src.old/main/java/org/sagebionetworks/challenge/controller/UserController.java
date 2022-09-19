@@ -1,26 +1,22 @@
 package org.sagebionetworks.challenge.controller;
 
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.dto.User;
 import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
 import org.sagebionetworks.challenge.service.UserService;
 import org.springdoc.api.annotations.ParameterObject;
-
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-// import javax.annotation.security.RolesAllowed;
 
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/v1/users")
 public class UserController {
 
-  @Autowired
-  UserService userService;
+  @Autowired UserService userService;
 
   @PostMapping(value = "/register")
   public ResponseEntity<User> createUser(@RequestBody User request) {
@@ -30,8 +26,8 @@ public class UserController {
   }
 
   @PatchMapping(value = "/{id}")
-  public ResponseEntity<User> updateUser(@PathVariable("id") Long userId,
-      @RequestBody UserUpdateRequest userUpdateRequest) {
+  public ResponseEntity<User> updateUser(
+      @PathVariable("id") Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
     log.info("Update the user with {}", userUpdateRequest.toString());
     return ResponseEntity.ok(userService.updateUser(userId, userUpdateRequest));
     // return ResponseEntity.ok(null);
@@ -51,5 +47,4 @@ public class UserController {
     return ResponseEntity.ok(userService.getUser(id));
     // return ResponseEntity.ok(null);
   }
-
 }

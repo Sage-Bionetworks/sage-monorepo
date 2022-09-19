@@ -3,9 +3,6 @@ package org.sagebionetworks.challenge.configuration;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
-// import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcessingFilter;
-// import org.sagebionetworks.challenge.exception.CustomKeycloakAuthenticationHandler;
-// import org.sagebionetworks.challenge.exception.RestAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,9 +26,15 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     super.configure(http);
-    http.csrf().disable().cors().disable().authorizeRequests()
+    http.csrf()
+        .disable()
+        .cors()
+        .disable()
+        .authorizeRequests()
         .antMatchers("/api/v1/users/register", "/api/v1/api-docs/**", "/v3/**", "/api/v1/**")
-        .permitAll().anyRequest().authenticated();
+        .permitAll()
+        .anyRequest()
+        .authenticated();
 
     // Custom error handler
     // http.exceptionHandling().accessDeniedHandler(restAccessDeniedHandler);

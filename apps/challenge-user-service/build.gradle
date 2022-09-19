@@ -41,3 +41,21 @@ java {
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
+
+spotless {
+  // format 'misc', {
+  //   target '*.gradle', '*.md', '.gitignore'
+
+  //   trimTrailingWhitespace()
+  //   indentWithSpaces(2)
+  //   endWithNewline()
+  // }
+
+  java {
+    target 'src/*/java/**/*.java'
+
+    importOrder()
+    removeUnusedImports()
+    googleJavaFormat()
+  }
+}

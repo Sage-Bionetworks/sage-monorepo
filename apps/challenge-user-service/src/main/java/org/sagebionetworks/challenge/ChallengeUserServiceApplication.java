@@ -8,8 +8,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.sagebionetworks.challenge", "org.sagebionetworks.challenge.api",
-    "org.sagebionetworks.challenge.configuration"})
+@ComponentScan(
+    basePackages = {
+      "org.sagebionetworks.challenge",
+      "org.sagebionetworks.challenge.api",
+      "org.sagebionetworks.challenge.configuration"
+    })
 public class ChallengeUserServiceApplication {
 
   public static void main(String[] args) {
@@ -20,5 +24,4 @@ public class ChallengeUserServiceApplication {
   public Module jsonNullableModule() {
     return new JsonNullableModule();
   }
-
 }
