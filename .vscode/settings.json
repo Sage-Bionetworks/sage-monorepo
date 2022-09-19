@@ -40,14 +40,14 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
-  "emeraldwalk.runonsave": {
-    "commands": [
-      {
-        "match": "\\.java$",
-        "cmd": "${workspaceRoot}/node_modules/.bin/google-java-format --replace ${file}"
-      }
-    ]
-  },
+  // "emeraldwalk.runonsave": {
+  //   "commands": [
+  //     {
+  //       "match": "\\.java$",
+  //       "cmd": "${workspaceRoot}/node_modules/.bin/google-java-format --replace ${file}"
+  //     }
+  //   ]
+  // },
   "eslint.workingDirectories": ["./apps/challenge-db-cli", "."],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
