@@ -1,6 +1,4 @@
 {
-  "java.format.enabled": true,
-  "java.format.settings.url": "eclipse-java-google-style.xml",
   "java.checkstyle.configuration": "checkstyle.xml",
   "java.checkstyle.version": "10.3",
   "java.jdt.ls.java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
@@ -28,8 +26,7 @@
     "editor.formatOnSave": true
   },
   "[java]": {
-    "editor.defaultFormatter": "redhat.java",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -43,10 +40,15 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
-  "eslint.workingDirectories": [
-    "./apps/challenge-db-cli",
-    "."
-  ],
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.java$",
+        "cmd": "${workspaceRoot}/node_modules/.bin/google-java-format --replace ${file}"
+      }
+    ]
+  },
+  "eslint.workingDirectories": ["./apps/challenge-db-cli", "."],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
@@ -77,5 +79,6 @@
   "java.configuration.updateBuildConfiguration": "disabled",
   "editor.inlayHints.enabled": "off",
   "rewrap.wrappingColumn": 100,
-  "editor.rulers": [100]
+  "editor.rulers": [100],
+  "eslint.validate": ["json"]
 }

@@ -4,6 +4,7 @@ plugins {
   id 'jvm-test-suite'
   id 'org.springframework.boot' version '2.7.3'
   id 'org.springdoc.openapi-gradle-plugin' version '1.4.0'
+  id 'com.diffplug.spotless' version '6.8.0'
 }
 
 ext {
@@ -105,4 +106,22 @@ openApi {
   apiDocsUrl.set("http://localhost:8083/api/v1/api-docs/openapi.json.yaml")
   outputDir.set(file("docs"))
   outputFileName.set("openapi.yaml")
+}
+
+spotless {
+  // format 'misc', {
+  //   target '*.gradle', '*.md', '.gitignore'
+
+  //   trimTrailingWhitespace()
+  //   indentWithSpaces(2)
+  //   endWithNewline()
+  // }
+
+  java {
+    target 'src/*/java/**/*.java'
+
+    importOrder()
+    removeUnusedImports()
+    googleJavaFormat()
+  }
 }

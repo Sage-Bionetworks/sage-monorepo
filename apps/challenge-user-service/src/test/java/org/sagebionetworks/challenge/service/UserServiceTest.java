@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-// import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -27,14 +26,11 @@ import org.springframework.data.domain.Pageable;
 @SpringBootTest
 public class UserServiceTest {
 
-  @Autowired
-  private UserService userService;
+  @Autowired private UserService userService;
 
-  @MockBean
-  private UserRepository userRepository;
+  @MockBean private UserRepository userRepository;
 
-  @MockBean
-  private KeycloakUserService keycloakUserService;
+  @MockBean private KeycloakUserService keycloakUserService;
 
   private User user;
   private UserMapper userMapper = new UserMapper();
@@ -44,8 +40,15 @@ public class UserServiceTest {
 
   @BeforeEach
   public void setup() {
-    user = User.builder().id(1L).username("test").email("test@gmail.com").password("changeme")
-        .authId("1").status(UserStatus.PENDING).build();
+    user =
+        User.builder()
+            .id(1L)
+            .username("test")
+            .email("test@gmail.com")
+            .password("changeme")
+            .authId("1")
+            .status(UserStatus.PENDING)
+            .build();
   }
 
   @Test
@@ -56,21 +59,31 @@ public class UserServiceTest {
   @Test
   void givenUserList_whenGetAllUsers_thenReturnUserList() {
     // given
-    User user2 = User.builder().id(2L).username("test2").email("test2@gmail.com")
-        .password("changeme").authId("2").status(UserStatus.PENDING).build();
+    User user2 =
+        User.builder()
+            .id(2L)
+            .username("test2")
+            .email("test2@gmail.com")
+            .password("changeme")
+            .authId("2")
+            .status(UserStatus.PENDING)
+            .build();
     List<User> givenUsers = List.of(user, user2);
     List<UserEntity> givenUserList =
         List.of(userMapper.convertToEntity(user), userMapper.convertToEntity(user2));
     Page<UserEntity> userPage = new PageImpl<>(givenUserList);
     when(userRepository.findAll(isA(Pageable.class))).thenReturn(userPage);
-    when(keycloakUserService.getUser(anyString())).thenAnswer(input -> {
-      String authId = input.getArgument(0);
-      User user = givenUsers.stream().filter(u -> authId.equals(u.getAuthId())).findFirst().get();
-      UserRepresentation representation = new UserRepresentation();
-      representation.setId(user.getId().toString());
-      representation.setEmail(user.getEmail());
-      return representation;
-    });
+    when(keycloakUserService.getUser(anyString()))
+        .thenAnswer(
+            input -> {
+              String authId = input.getArgument(0);
+              User user =
+                  givenUsers.stream().filter(u -> authId.equals(u.getAuthId())).findFirst().get();
+              UserRepresentation representation = new UserRepresentation();
+              representation.setId(user.getId().toString());
+              representation.setEmail(user.getEmail());
+              return representation;
+            });
 
     // when
     List<User> users = userService.listUsers(Pageable.unpaged());

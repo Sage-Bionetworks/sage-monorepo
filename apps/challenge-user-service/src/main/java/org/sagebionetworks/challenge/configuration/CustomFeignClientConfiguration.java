@@ -12,5 +12,4 @@ public class CustomFeignClientConfiguration extends FeignClientProperties.FeignC
   public ErrorDecoder errorDecoder() {
     return new CustomFeignErrorDecoder();
   }
-
 }
