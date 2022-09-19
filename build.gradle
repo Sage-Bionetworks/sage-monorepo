@@ -1,0 +1,25 @@
+plugins {
+  id 'com.diffplug.spotless' version '6.8.0'
+}
+
+repositories {
+  mavenCentral()
+}
+
+spotless {
+  // format 'misc', {
+  //   target '*.gradle', '*.md', '.gitignore'
+
+  //   trimTrailingWhitespace()
+  //   indentWithSpaces(2)
+  //   endWithNewline()
+  // }
+
+  java {
+    target 'apps/**/src/*/java/**/*.java', 'libs/**/src/*/java/**/*.java'
+
+    importOrder()
+    removeUnusedImports()
+    googleJavaFormat()
+  }
+}
