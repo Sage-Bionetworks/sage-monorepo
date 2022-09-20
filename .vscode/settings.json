@@ -54,7 +54,7 @@
     "commands": [
       {
         "match": ".*",
-        "cmd": "yarn nx affected --target=format"
+        "cmd": "node_modules/.bin/nx affected --base=HEAD --target=format"
       }
     ]
   },
