@@ -1,37 +1,26 @@
 package org.sagebionetworks.challenge.model.dto;
 
-import java.net.URI;
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-
 import java.util.*;
+import java.util.Objects;
 import javax.annotation.Generated;
+import javax.validation.constraints.*;
 
-/**
- * UserUpdateRequest
- */
-
+/** UserUpdateRequest */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class UserUpdateRequest {
 
-  /**
-   * Gets or Sets status
-   */
+  /** Gets or Sets status */
   public enum StatusEnum {
     PENDING("PENDING"),
-    
+
     APPROVED("APPROVED"),
-    
+
     DISABLED("DISABLED"),
-    
+
     BLACKLIST("BLACKLIST");
 
     private String value;
@@ -71,9 +60,9 @@ public class UserUpdateRequest {
 
   /**
    * Get status
+   *
    * @return status
-  */
-  
+   */
   @Schema(name = "status", required = false)
   public StatusEnum getStatus() {
     return status;
@@ -110,8 +99,7 @@ public class UserUpdateRequest {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {
@@ -120,4 +108,3 @@ public class UserUpdateRequest {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

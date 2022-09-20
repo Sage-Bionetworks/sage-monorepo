@@ -1,24 +1,15 @@
 package org.sagebionetworks.challenge.model.dto;
 
-import java.net.URI;
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-
 import java.util.*;
+import java.util.Objects;
 import javax.annotation.Generated;
+import javax.validation.constraints.*;
 
-/**
- * User
- */
-
+/** User */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class User {
 
@@ -37,16 +28,14 @@ public class User {
   @JsonProperty("authId")
   private String authId;
 
-  /**
-   * Gets or Sets status
-   */
+  /** Gets or Sets status */
   public enum StatusEnum {
     PENDING("PENDING"),
-    
+
     APPROVED("APPROVED"),
-    
+
     DISABLED("DISABLED"),
-    
+
     BLACKLIST("BLACKLIST");
 
     private String value;
@@ -86,9 +75,9 @@ public class User {
 
   /**
    * Get id
+   *
    * @return id
-  */
-  
+   */
   @Schema(name = "id", required = false)
   public Long getId() {
     return id;
@@ -105,9 +94,9 @@ public class User {
 
   /**
    * Get username
+   *
    * @return username
-  */
-  
+   */
   @Schema(name = "username", required = false)
   public String getUsername() {
     return username;
@@ -124,9 +113,9 @@ public class User {
 
   /**
    * Get email
+   *
    * @return email
-  */
-  
+   */
   @Schema(name = "email", required = false)
   public String getEmail() {
     return email;
@@ -143,9 +132,9 @@ public class User {
 
   /**
    * Get password
+   *
    * @return password
-  */
-  
+   */
   @Schema(name = "password", required = false)
   public String getPassword() {
     return password;
@@ -162,9 +151,9 @@ public class User {
 
   /**
    * Get authId
+   *
    * @return authId
-  */
-  
+   */
   @Schema(name = "authId", required = false)
   public String getAuthId() {
     return authId;
@@ -181,9 +170,9 @@ public class User {
 
   /**
    * Get status
+   *
    * @return status
-  */
-  
+   */
   @Schema(name = "status", required = false)
   public StatusEnum getStatus() {
     return status;
@@ -202,12 +191,12 @@ public class User {
       return false;
     }
     User user = (User) o;
-    return Objects.equals(this.id, user.id) &&
-        Objects.equals(this.username, user.username) &&
-        Objects.equals(this.email, user.email) &&
-        Objects.equals(this.password, user.password) &&
-        Objects.equals(this.authId, user.authId) &&
-        Objects.equals(this.status, user.status);
+    return Objects.equals(this.id, user.id)
+        && Objects.equals(this.username, user.username)
+        && Objects.equals(this.email, user.email)
+        && Objects.equals(this.password, user.password)
+        && Objects.equals(this.authId, user.authId)
+        && Objects.equals(this.status, user.status);
   }
 
   @Override
@@ -230,8 +219,7 @@ public class User {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {
@@ -240,4 +228,3 @@ public class User {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

@@ -86,13 +86,16 @@
       },
       "dependsOn": ["^install"]
     },
-    "generate-openapi-definition": {
+    "generate-code": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "./gradlew clean generateOpenApiDocs",
-        "cwd": "apps/challenge-user-service"
-      },
-      "dependsOn": ["prepare", "^serve-detach"]
+        "commands": [
+          "openapi-generator-cli generate",
+          "./gradlew spotlessApply"
+        ],
+        "cwd": "apps/challenge-user-service",
+        "parallel": false
+      }
     }
   },
   "tags": ["type:service", "scope:backend"],
