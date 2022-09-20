@@ -26,18 +26,9 @@
     "editor.formatOnSave": true
   },
   "java.format.enabled": false,
-  // "[java]": {
-  //   "files.trimTrailingWhitespace": false,
-  //   "spotlessGradle.diagnostics.enable": true,
-  //   "spotlessGradle.format.enable": true,
-  //   "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
-  //   "editor.codeActionsOnSave": {
-  //     "source.fixAll.spotlessGradle": true
-  //   }
-  // },
-  // "[java]": {
-  //   "editor.formatOnSave": false
-  // },
+  "[java]": {
+    "editor.formatOnSave": false
+  },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
