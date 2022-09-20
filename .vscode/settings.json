@@ -27,13 +27,7 @@
   },
   "java.format.enabled": false,
   "[java]": {
-    "files.trimTrailingWhitespace": false,
-    "spotlessGradle.diagnostics.enable": true,
-    "spotlessGradle.format.enable": true,
-    "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
-    "editor.codeActionsOnSave": {
-      "source.fixAll.spotlessGradle": true
-    }
+    "editor.formatOnSave": false
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -47,14 +41,14 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
-  // "emeraldwalk.runonsave": {
-  //   "commands": [
-  //     {
-  //       "match": "\\.java$",
-  //       "cmd": "${workspaceRoot}/node_modules/.bin/google-java-format --replace ${file}"
-  //     }
-  //   ]
-  // },
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": ".*",
+        "cmd": "node_modules/.bin/nx affected --base=HEAD --target=format"
+      }
+    ]
+  },
   "eslint.workingDirectories": ["./apps/challenge-db-cli", "."],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [

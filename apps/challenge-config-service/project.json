@@ -17,9 +17,7 @@
       "options": {
         "root": "apps/challenge-config-service"
       },
-      "outputs": [
-        "apps/challenge-config-service"
-      ]
+      "outputs": ["apps/challenge-config-service"]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
@@ -29,18 +27,6 @@
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
-      "options": {
-        "root": "apps/challenge-config-service"
-      }
-    },
-    "format": {
-      "executor": "@nxrocks/nx-spring-boot:format",
-      "options": {
-        "root": "apps/challenge-config-service"
-      }
-    },
-    "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:format-check",
       "options": {
         "root": "apps/challenge-config-service"
       }
@@ -98,8 +84,5 @@
       ]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ]
+  "tags": ["type:service", "scope:backend"]
 }
