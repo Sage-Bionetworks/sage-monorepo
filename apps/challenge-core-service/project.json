@@ -25,9 +25,7 @@
         "root": "apps/challenge-core-service",
         "args": []
       },
-      "outputs": [
-        "apps/challenge-core-service"
-      ],
+      "outputs": ["apps/challenge-core-service"],
       "dependsOn": [
         {
           "target": "install",
@@ -37,18 +35,6 @@
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
-      "options": {
-        "root": "apps/challenge-core-service"
-      }
-    },
-    "format": {
-      "executor": "@nxrocks/nx-spring-boot:format",
-      "options": {
-        "root": "apps/challenge-core-service"
-      }
-    },
-    "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:format-check",
       "options": {
         "root": "apps/challenge-core-service"
       }
@@ -110,10 +96,7 @@
       ]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
+  "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
     "challenge-mariadb",
     "challenge-keycloak",
