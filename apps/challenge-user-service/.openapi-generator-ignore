@@ -1,5 +1,10 @@
 pom.xml
 README.md
 
-# Ignore our Spring Boot application class
+**/application.properties
 **/OpenApiGeneratorApplication.java
+
+<!-- **/*Controller.java
+**/RFC3339*.java
+**/application.properties
+**/OpenAPI2SpringBoot.java -->
