@@ -1,59 +1,21 @@
 package org.sagebionetworks.challenge.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.*;
 import java.util.Objects;
 import javax.annotation.Generated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /** UserUpdateRequest */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class UserUpdateRequest {
 
-  /** Gets or Sets status */
-  public enum StatusEnum {
-    PENDING("PENDING"),
-
-    APPROVED("APPROVED"),
-
-    DISABLED("DISABLED"),
-
-    BLACKLIST("BLACKLIST");
-
-    private String value;
-
-    StatusEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static StatusEnum fromValue(String value) {
-      for (StatusEnum b : StatusEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
-  }
-
   @JsonProperty("status")
-  private StatusEnum status;
+  private UserStatus status;
 
-  public UserUpdateRequest status(StatusEnum status) {
+  public UserUpdateRequest status(UserStatus status) {
     this.status = status;
     return this;
   }
@@ -63,12 +25,13 @@ public class UserUpdateRequest {
    *
    * @return status
    */
+  @Valid
   @Schema(name = "status", required = false)
-  public StatusEnum getStatus() {
+  public UserStatus getStatus() {
     return status;
   }
 
-  public void setStatus(StatusEnum status) {
+  public void setStatus(UserStatus status) {
     this.status = status;
   }
 

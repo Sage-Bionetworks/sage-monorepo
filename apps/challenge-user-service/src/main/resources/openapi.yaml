@@ -165,22 +165,20 @@ components:
         authId:
           type: string
         status:
-          enum:
-          - PENDING
-          - APPROVED
-          - DISABLED
-          - BLACKLIST
-          type: string
+          $ref: '#/components/schemas/UserStatus'
       type: object
     UserUpdateRequest:
       example:
         status: PENDING
       properties:
         status:
-          enum:
-          - PENDING
-          - APPROVED
-          - DISABLED
-          - BLACKLIST
-          type: string
+          $ref: '#/components/schemas/UserStatus'
       type: object
+    UserStatus:
+      enum:
+      - PENDING
+      - APPROVED
+      - DISABLED
+      - BLACKLIST
+      example: PENDING
+      type: string
