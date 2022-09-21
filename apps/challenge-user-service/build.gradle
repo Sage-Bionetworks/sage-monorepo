@@ -1,7 +1,8 @@
 plugins {
+  id 'com.diffplug.spotless' version "${spotlessVersion}"
   id 'java'
   id 'org.springframework.boot' version "${springBootVersion}"
-  id 'com.diffplug.spotless' version "${spotlessVersion}"
+  id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
 }
 
 repositories {
@@ -10,12 +11,14 @@ repositories {
 }
 
 dependencies {
+  implementation 'com.google.code.findbugs:jsr305:3.0.2'
+  implementation "org.flywaydb:flyway-core:${flywaydbVersion}"
+  implementation "org.flywaydb:flyway-mysql:${flywaydbVersion}"
+  implementation 'org.openapitools:jackson-databind-nullable:0.2.2'
+  implementation 'org.springdoc:springdoc-openapi-ui:1.6.8'
   implementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
   implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${fasterxmlVersion}"
   implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${fasterxmlVersion}"
-  implementation 'com.google.code.findbugs:jsr305:3.0.2'
-  implementation 'org.openapitools:jackson-databind-nullable:0.2.2'
-  implementation 'org.springdoc:springdoc-openapi-ui:1.6.8'
   implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
   implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
