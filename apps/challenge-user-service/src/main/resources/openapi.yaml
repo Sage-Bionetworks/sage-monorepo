@@ -167,6 +167,8 @@ components:
         status:
           $ref: '#/components/schemas/UserStatus'
       type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
     UserUpdateRequest:
       example:
         status: PENDING

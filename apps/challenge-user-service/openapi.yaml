@@ -136,6 +136,8 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/UserStatus'
+      x-java-class-annotations:
+        - '@lombok.Builder'
     UserUpdateRequest:
       type: object
       properties:
