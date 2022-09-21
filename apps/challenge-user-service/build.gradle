@@ -26,6 +26,7 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
   implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
+  runtimeOnly 'mysql:mysql-connector-java:8.0.30'
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
