@@ -86,7 +86,7 @@
       },
       "dependsOn": ["^install"]
     },
-    "generate-code": {
+    "openapi-generate": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
