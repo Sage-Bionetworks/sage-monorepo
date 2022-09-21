@@ -1,8 +1,18 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.flywaydb:flyway-mysql:${flywaydbVersion}"
+  }
+}
+
 plugins {
   id 'com.diffplug.spotless' version "${spotlessVersion}"
   id 'java'
   id 'org.springframework.boot' version "${springBootVersion}"
   id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
+  id "org.flywaydb.flyway" version "${flywaydbVersion}"
 }
 
 repositories {
@@ -28,6 +38,7 @@ dependencies {
   implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
   runtimeOnly 'mysql:mysql-connector-java:8.0.30'
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+  
 }
 
 group = 'org.sagebionetworks.challenge'
@@ -60,3 +71,15 @@ spotless {
     googleJavaFormat()
   }
 }
+
+flyway {
+  url = 'jdbc:mysql://challenge-mariadb:3306/challenge'
+  user = 'maria'
+  password = 'changeme'
+  // schemas = ['schema1', 'schema2', 'schema3']
+  // placeholders = [
+  //   'keyABC': 'valueXYZ',
+  //   'otherplaceholder': 'value123'
+  // ]
+}
+
