@@ -1,18 +1,21 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
   contact:
-    name: 'This is the User '
-    url: https://challenge-registry.org
+    name: The Challenge Registry Team
+    url: https://github.com/Sage-Bionetworks/challenge-registry
   description: This is the User Service of the Challenge Registry.
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt
   termsOfService: TOC
-  title: User API
-  version: v1.0
+  title: Challenge User API
+  version: 1.0.0
 servers:
-- description: Generated server url
+- description: Local server url
   url: http://localhost:8083
+tags:
+- description: Operations about users
+  name: User
 paths:
   /api/v1/users/register:
     post:
@@ -31,11 +34,11 @@ paths:
                 $ref: '#/components/schemas/User'
           description: OK
       tags:
-      - user-controller
+      - User
       x-content-type: application/json
       x-accepts: '*/*'
       x-tags:
-      - tag: user-controller
+      - tag: User
   /api/v1/users/{id}:
     get:
       operationId: getUser
@@ -56,10 +59,10 @@ paths:
                 $ref: '#/components/schemas/User'
           description: OK
       tags:
-      - user-controller
+      - User
       x-accepts: '*/*'
       x-tags:
-      - tag: user-controller
+      - tag: User
     patch:
       operationId: updateUser
       parameters:
@@ -85,11 +88,11 @@ paths:
                 $ref: '#/components/schemas/User'
           description: OK
       tags:
-      - user-controller
+      - User
       x-content-type: application/json
       x-accepts: '*/*'
       x-tags:
-      - tag: user-controller
+      - tag: User
   /api/v1/users/:
     get:
       operationId: listUsers
@@ -135,10 +138,10 @@ paths:
                 type: array
           description: OK
       tags:
-      - user-controller
+      - User
       x-accepts: '*/*'
       x-tags:
-      - tag: user-controller
+      - tag: User
 components:
   schemas:
     User:

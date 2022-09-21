@@ -1,9 +1,8 @@
 AUTHORS.md
-src/main/java/org/sagebionetworks/challenge/RFC3339DateFormat.java
 src/main/java/org/sagebionetworks/challenge/api/ApiUtil.java
-src/main/java/org/sagebionetworks/challenge/api/UserControllerApi.java
-src/main/java/org/sagebionetworks/challenge/api/UserControllerApiController.java
-src/main/java/org/sagebionetworks/challenge/api/UserControllerApiDelegate.java
+src/main/java/org/sagebionetworks/challenge/api/UserApi.java
+src/main/java/org/sagebionetworks/challenge/api/UserApiController.java
+src/main/java/org/sagebionetworks/challenge/api/UserApiDelegate.java
 src/main/java/org/sagebionetworks/challenge/configuration/HomeController.java
 src/main/java/org/sagebionetworks/challenge/configuration/SpringDocConfiguration.java
 src/main/java/org/sagebionetworks/challenge/model/dto/User.java

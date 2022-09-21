@@ -11,11 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
 
 /**
- * A delegate to be called by the {@link UserControllerApiController}}. Implement this interface
- * with a {@link org.springframework.stereotype.Service} annotated class.
+ * A delegate to be called by the {@link UserApiController}}. Implement this interface with a {@link
+ * org.springframework.stereotype.Service} annotated class.
  */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public interface UserControllerApiDelegate {
+public interface UserApiDelegate {
 
   default Optional<NativeWebRequest> getRequest() {
     return Optional.empty();
@@ -26,7 +26,7 @@ public interface UserControllerApiDelegate {
    *
    * @param user (required)
    * @return OK (status code 200)
-   * @see UserControllerApi#createUser
+   * @see UserApi#createUser
    */
   default ResponseEntity<User> createUser(User user) {
     getRequest()
@@ -49,7 +49,7 @@ public interface UserControllerApiDelegate {
    *
    * @param id (required)
    * @return OK (status code 200)
-   * @see UserControllerApi#getUser
+   * @see UserApi#getUser
    */
   default ResponseEntity<User> getUser(Long id) {
     getRequest()
@@ -75,7 +75,7 @@ public interface UserControllerApiDelegate {
    * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is
    *     ascending. Multiple sort criteria are supported. (optional)
    * @return OK (status code 200)
-   * @see UserControllerApi#listUsers
+   * @see UserApi#listUsers
    */
   default ResponseEntity<List<User>> listUsers(Integer page, Integer size, List<String> sort) {
     getRequest()
@@ -99,7 +99,7 @@ public interface UserControllerApiDelegate {
    * @param id (required)
    * @param userUpdateRequest (required)
    * @return OK (status code 200)
-   * @see UserControllerApi#updateUser
+   * @see UserApi#updateUser
    */
   default ResponseEntity<User> updateUser(Long id, UserUpdateRequest userUpdateRequest) {
     getRequest()

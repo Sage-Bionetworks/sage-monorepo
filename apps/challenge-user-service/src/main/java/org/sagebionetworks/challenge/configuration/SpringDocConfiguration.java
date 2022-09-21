@@ -15,16 +15,18 @@ public class SpringDocConfiguration {
     return new OpenAPI()
         .info(
             new Info()
-                .title("User API")
+                .title("Challenge User API")
                 .description("This is the User Service of the Challenge Registry.")
                 .termsOfService("TOC")
                 .contact(
-                    new Contact().name("This is the User ").url("https://challenge-registry.org"))
+                    new Contact()
+                        .name("The Challenge Registry Team")
+                        .url("https://github.com/Sage-Bionetworks/challenge-registry"))
                 .license(
                     new License()
                         .name("Apache 2.0")
                         .url(
                             "https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt"))
-                .version("v1.0"));
+                .version("1.0.0"));
   }
 }

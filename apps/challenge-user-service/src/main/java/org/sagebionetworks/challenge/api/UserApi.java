@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.*;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @Validated
-@Tag(name = "UserController", description = "the UserController API")
-@RequestMapping("${openapi.user.base-path:}")
-public interface UserControllerApi {
+@Tag(name = "User", description = "Operations about users")
+@RequestMapping("${openapi.challengeUser.base-path:}")
+public interface UserApi {
 
-  default UserControllerApiDelegate getDelegate() {
-    return new UserControllerApiDelegate() {};
+  default UserApiDelegate getDelegate() {
+    return new UserApiDelegate() {};
   }
 
   /**
@@ -38,7 +38,7 @@ public interface UserControllerApi {
    */
   @Operation(
       operationId = "createUser",
-      tags = {"user-controller"},
+      tags = {"User"},
       responses = {
         @ApiResponse(
             responseCode = "200",
@@ -63,7 +63,7 @@ public interface UserControllerApi {
    */
   @Operation(
       operationId = "getUser",
-      tags = {"user-controller"},
+      tags = {"User"},
       responses = {
         @ApiResponse(
             responseCode = "200",
@@ -90,7 +90,7 @@ public interface UserControllerApi {
    */
   @Operation(
       operationId = "listUsers",
-      tags = {"user-controller"},
+      tags = {"User"},
       responses = {
         @ApiResponse(
             responseCode = "200",
@@ -131,7 +131,7 @@ public interface UserControllerApi {
    */
   @Operation(
       operationId = "updateUser",
-      tags = {"user-controller"},
+      tags = {"User"},
       responses = {
         @ApiResponse(
             responseCode = "200",

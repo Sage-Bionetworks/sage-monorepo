@@ -8,17 +8,16 @@ import org.springframework.stereotype.Controller;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @Controller
-public class UserControllerApiController implements UserControllerApi {
+public class UserApiController implements UserApi {
 
-  private final UserControllerApiDelegate delegate;
+  private final UserApiDelegate delegate;
 
-  public UserControllerApiController(
-      @Autowired(required = false) UserControllerApiDelegate delegate) {
-    this.delegate = Optional.ofNullable(delegate).orElse(new UserControllerApiDelegate() {});
+  public UserApiController(@Autowired(required = false) UserApiDelegate delegate) {
+    this.delegate = Optional.ofNullable(delegate).orElse(new UserApiDelegate() {});
   }
 
   @Override
-  public UserControllerApiDelegate getDelegate() {
+  public UserApiDelegate getDelegate() {
     return delegate;
   }
 }

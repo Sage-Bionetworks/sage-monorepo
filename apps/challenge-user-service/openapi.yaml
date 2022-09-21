@@ -1,23 +1,26 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
-  title: User API
+  title: Challenge User API
   description: This is the User Service of the Challenge Registry.
   termsOfService: TOC
   contact:
-    name: 'This is the User '
-    url: https://challenge-registry.org
+    name: The Challenge Registry Team
+    url: https://github.com/Sage-Bionetworks/challenge-registry
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt
-  version: v1.0
+  version: 1.0.0
 servers:
-- url: http://localhost:8083
-  description: Generated server url
+  - url: http://localhost:8083
+    description: Local server url
+tags:
+  - name: User
+    description: Operations about users
 paths:
   /api/v1/users/register:
     post:
       tags:
-      - user-controller
+      - User
       operationId: createUser
       requestBody:
         content:
@@ -35,7 +38,7 @@ paths:
   /api/v1/users/{id}:
     get:
       tags:
-      - user-controller
+      - User
       operationId: getUser
       parameters:
       - name: id
@@ -53,7 +56,7 @@ paths:
                 $ref: '#/components/schemas/User'
     patch:
       tags:
-      - user-controller
+      - User
       operationId: updateUser
       parameters:
       - name: id
@@ -78,7 +81,7 @@ paths:
   /api/v1/users/:
     get:
       tags:
-      - user-controller
+      - User
       operationId: listUsers
       parameters:
       - name: page
