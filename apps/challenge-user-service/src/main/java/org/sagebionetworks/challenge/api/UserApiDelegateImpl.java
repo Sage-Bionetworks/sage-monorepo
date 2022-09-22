@@ -30,4 +30,12 @@ public class UserApiDelegateImpl implements UserApiDelegate {
     //         });
     return new ResponseEntity<>(HttpStatus.ACCEPTED);
   }
+
+  // @Override
+  // public ResponseEntity<List<User>> listUsers(Integer page, Integer size, List<String> sort) {
+  //   log.info("List all the users");
+
+  //   Pageable pageable = PageRequest.of(0, 2, sort);
+  //   return ResponseEntity.ok(userService.listUsers(pageable));
+  // }
 }
