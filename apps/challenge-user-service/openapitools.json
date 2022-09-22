@@ -16,6 +16,7 @@
           "configPackage": "org.sagebionetworks.challenge.configuration",
           "delegatePattern": true,
           "hideGenerationTimestamp": true,
+          "library": "spring-boot",
           "modelNameSuffix": "Dto",
           "modelPackage": "org.sagebionetworks.challenge.model.dto",
           "useTags": true
