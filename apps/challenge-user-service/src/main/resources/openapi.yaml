@@ -168,7 +168,9 @@ components:
           $ref: '#/components/schemas/UserStatus'
       type: object
       x-java-class-annotations:
+      - '@lombok.AllArgsConstructor'
       - '@lombok.Builder'
+      - '@lombok.NoArgsConstructor'
     UserUpdateRequest:
       example:
         status: PENDING
@@ -177,7 +179,9 @@ components:
           $ref: '#/components/schemas/UserStatus'
       type: object
       x-java-class-annotations:
+      - '@lombok.AllArgsConstructor'
       - '@lombok.Builder'
+      - '@lombok.NoArgsConstructor'
     UserStatus:
       enum:
       - PENDING

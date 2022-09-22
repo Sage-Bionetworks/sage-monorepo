@@ -137,14 +137,18 @@ components:
         status:
           $ref: '#/components/schemas/UserStatus'
       x-java-class-annotations:
+        - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
+        - '@lombok.NoArgsConstructor'
     UserUpdateRequest:
       type: object
       properties:
         status:
           $ref: '#/components/schemas/UserStatus'
       x-java-class-annotations:
+        - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
+        - '@lombok.NoArgsConstructor'
     UserStatus:
       type: string
       enum:

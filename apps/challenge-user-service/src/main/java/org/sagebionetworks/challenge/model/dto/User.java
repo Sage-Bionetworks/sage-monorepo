@@ -10,7 +10,9 @@ import javax.validation.constraints.*;
 
 /** User */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@lombok.AllArgsConstructor
 @lombok.Builder
+@lombok.NoArgsConstructor
 public class User {
 
   @JsonProperty("id")
