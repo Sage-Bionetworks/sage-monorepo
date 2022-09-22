@@ -10,9 +10,9 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.sagebionetworks.challenge.exception.GlobalErrorCode;
 import org.sagebionetworks.challenge.exception.InvalidUserException;
 import org.sagebionetworks.challenge.exception.UserAlreadyRegisteredException;
-import org.sagebionetworks.challenge.model.dto.UserDto;
-import org.sagebionetworks.challenge.model.dto.UserStatusDto;
-import org.sagebionetworks.challenge.model.dto.UserUpdateRequestDto;
+import org.sagebionetworks.challenge.model.dto.User;
+import org.sagebionetworks.challenge.model.dto.UserStatus;
+import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
 import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.model.mapper.UserMapper;
 import org.sagebionetworks.challenge.model.repository.UserRepository;
@@ -32,7 +32,7 @@ public class UserService {
 
   private UserMapper userMapper = new UserMapper();
 
-  public UserDto createUser(UserDto user) {
+  public User createUser(User user) {
     if (keycloakUserService.getUserByUsername(user.getUsername()).isPresent()) {
       throw new UserAlreadyRegisteredException(
           "This username is already registered.", GlobalErrorCode.ERROR_USERNAME_REGISTERED);
@@ -55,7 +55,7 @@ public class UserService {
       Optional<UserRepresentation> representation =
           keycloakUserService.getUserByUsername(user.getUsername());
       user.setAuthId(representation.get().getId());
-      user.setStatus(UserStatusDto.PENDING);
+      user.setStatus(UserStatus.PENDING);
       UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
       return userMapper.convertToDto(userEntity);
     }
@@ -64,9 +64,9 @@ public class UserService {
         "Unable to create the new user", GlobalErrorCode.ERROR_INVALID_USER);
   }
 
-  public List<UserDto> listUsers(Pageable pageable) {
+  public List<User> listUsers(Pageable pageable) {
     Page<UserEntity> allUsersInDb = userRepository.findAll(pageable);
-    List<UserDto> users = userMapper.convertToDtoList(allUsersInDb.getContent());
+    List<User> users = userMapper.convertToDtoList(allUsersInDb.getContent());
     users.forEach(
         user -> {
           UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
@@ -76,15 +76,15 @@ public class UserService {
     return users;
   }
 
-  public UserDto getUser(Long userId) {
+  public User getUser(Long userId) {
     return userMapper.convertToDto(
         userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
   }
 
-  public UserDto updateUser(Long id, UserUpdateRequestDto userUpdateRequest) {
+  public User updateUser(Long id, UserUpdateRequest userUpdateRequest) {
     UserEntity userEntity = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
-    if (userUpdateRequest.getStatus() == UserStatusDto.APPROVED) {
+    if (userUpdateRequest.getStatus() == UserStatus.APPROVED) {
       UserRepresentation userRepresentation = keycloakUserService.getUser(userEntity.getAuthId());
       userRepresentation.setEnabled(true);
       userRepresentation.setEmailVerified(true);

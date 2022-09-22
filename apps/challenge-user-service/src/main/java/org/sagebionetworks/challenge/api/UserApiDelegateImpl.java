@@ -1,6 +1,6 @@
 package org.sagebionetworks.challenge.api;
 
-import org.sagebionetworks.challenge.model.dto.UserDto;
+import org.sagebionetworks.challenge.model.dto.User;
 import org.sagebionetworks.challenge.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,7 @@ public class UserApiDelegateImpl implements UserApiDelegate {
   @Autowired UserService userService;
 
   @Override
-  public ResponseEntity<UserDto> createUser(UserDto userDto) {
+  public ResponseEntity<User> createUser(User user) {
     // getRequest()
     //     .ifPresent(
     //         request -> {
