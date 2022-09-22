@@ -8,7 +8,7 @@ import javax.validation.constraints.*;
 
 /** Gets or Sets UserStatus */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public enum UserStatus {
+public enum UserStatusDto {
   PENDING("PENDING"),
 
   APPROVED("APPROVED"),
@@ -19,7 +19,7 @@ public enum UserStatus {
 
   private String value;
 
-  UserStatus(String value) {
+  UserStatusDto(String value) {
     this.value = value;
   }
 
@@ -34,8 +34,8 @@ public enum UserStatus {
   }
 
   @JsonCreator
-  public static UserStatus fromValue(String value) {
-    for (UserStatus b : UserStatus.values()) {
+  public static UserStatusDto fromValue(String value) {
+    for (UserStatusDto b : UserStatusDto.values()) {
       if (b.value.equals(value)) {
         return b;
       }

@@ -172,8 +172,6 @@ components:
       - '@lombok.Builder'
       - '@lombok.NoArgsConstructor'
     UserUpdateRequest:
-      example:
-        status: PENDING
       properties:
         status:
           $ref: '#/components/schemas/UserStatus'

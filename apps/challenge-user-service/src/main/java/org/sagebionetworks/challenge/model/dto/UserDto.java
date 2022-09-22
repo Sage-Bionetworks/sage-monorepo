@@ -1,6 +1,7 @@
 package org.sagebionetworks.challenge.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.*;
 import java.util.Objects;
@@ -8,12 +9,13 @@ import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/** User */
+/** UserDto */
+@JsonTypeName("User")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @lombok.AllArgsConstructor
 @lombok.Builder
 @lombok.NoArgsConstructor
-public class User {
+public class UserDto {
 
   @JsonProperty("id")
   private Long id;
@@ -31,9 +33,9 @@ public class User {
   private String authId;
 
   @JsonProperty("status")
-  private UserStatus status;
+  private UserStatusDto status;
 
-  public User id(Long id) {
+  public UserDto id(Long id) {
     this.id = id;
     return this;
   }
@@ -52,7 +54,7 @@ public class User {
     this.id = id;
   }
 
-  public User username(String username) {
+  public UserDto username(String username) {
     this.username = username;
     return this;
   }
@@ -71,7 +73,7 @@ public class User {
     this.username = username;
   }
 
-  public User email(String email) {
+  public UserDto email(String email) {
     this.email = email;
     return this;
   }
@@ -90,7 +92,7 @@ public class User {
     this.email = email;
   }
 
-  public User password(String password) {
+  public UserDto password(String password) {
     this.password = password;
     return this;
   }
@@ -109,7 +111,7 @@ public class User {
     this.password = password;
   }
 
-  public User authId(String authId) {
+  public UserDto authId(String authId) {
     this.authId = authId;
     return this;
   }
@@ -128,7 +130,7 @@ public class User {
     this.authId = authId;
   }
 
-  public User status(UserStatus status) {
+  public UserDto status(UserStatusDto status) {
     this.status = status;
     return this;
   }
@@ -140,11 +142,11 @@ public class User {
    */
   @Valid
   @Schema(name = "status", required = false)
-  public UserStatus getStatus() {
+  public UserStatusDto getStatus() {
     return status;
   }
 
-  public void setStatus(UserStatus status) {
+  public void setStatus(UserStatusDto status) {
     this.status = status;
   }
 
@@ -156,7 +158,7 @@ public class User {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    User user = (User) o;
+    UserDto user = (UserDto) o;
     return Objects.equals(this.id, user.id)
         && Objects.equals(this.username, user.username)
         && Objects.equals(this.email, user.email)
@@ -173,7 +175,7 @@ public class User {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class User {\n");
+    sb.append("class UserDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");

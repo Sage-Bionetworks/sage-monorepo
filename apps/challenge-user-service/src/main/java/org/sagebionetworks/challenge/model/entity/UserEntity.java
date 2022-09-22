@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.sagebionetworks.challenge.model.dto.UserStatus;
+import org.sagebionetworks.challenge.model.dto.UserStatusDto;
 
 @Getter
 @Setter
@@ -26,9 +26,9 @@ public class UserEntity {
   private String authId;
 
   @Enumerated(EnumType.STRING)
-  private UserStatus status;
+  private UserStatusDto status;
 
-  public UserEntity(String username, String authId, UserStatus status) {
+  public UserEntity(String username, String authId, UserStatusDto status) {
     this.username = username;
     this.authId = authId;
     this.status = status;
