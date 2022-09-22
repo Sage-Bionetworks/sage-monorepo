@@ -39,27 +39,25 @@ server:
 #   application:
 #     name: ${spring.application.name}
 
-# keycloak:
-#   realm: test
-#   resource: challenge-user-service
-#   credentials:
-#     secret: GFRau7cQTxhx19CUmSdrqrqrZ1pshjjB
-#   # auth-server-url: ${keycloak.url}
-#   auth-server-url: http://challenge-keycloak:8080
-#   ssl-required: external
-#   use-resource-role-mappings: true
-#   bearer-only: true
+keycloak:
+  realm: test
+  resource: challenge-user-service
+  credentials:
+    secret: GFRau7cQTxhx19CUmSdrqrqrZ1pshjjB
+  auth-server-url: ${keycloak.url}
+  ssl-required: external
+  use-resource-role-mappings: true
+  bearer-only: true
 
-# app:
-#   config:
-#     keycloak:
-#       # server-url: ${keycloak.url}
-#       server-url: http://challenge-keycloak:8080
-#       realm: test
-#       # TODO: Which client ID property is used?
-#       client-id: challenge-api-client
-#       clientId: challenge-api-client
-#       client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
+app:
+  config:
+    keycloak:
+      server-url: ${keycloak.url}
+      realm: test
+      # TODO: Which client ID property is used?
+      client-id: challenge-api-client
+      clientId: challenge-api-client
+      client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
 
 # springdoc:
 #   version: openapi_3_1
