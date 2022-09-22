@@ -143,6 +143,8 @@ components:
       properties:
         status:
           $ref: '#/components/schemas/UserStatus'
+      x-java-class-annotations:
+        - '@lombok.Builder'
     UserStatus:
       type: string
       enum:

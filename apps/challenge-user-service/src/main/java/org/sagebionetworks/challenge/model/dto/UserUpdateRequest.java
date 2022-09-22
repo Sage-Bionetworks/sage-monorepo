@@ -10,6 +10,7 @@ import javax.validation.constraints.*;
 
 /** UserUpdateRequest */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@lombok.Builder
 public class UserUpdateRequest {
 
   @JsonProperty("status")
