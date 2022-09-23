@@ -7,7 +7,7 @@
       "challenge-user-service": {
         "config": "templates/config.yaml",
         "generatorName": "spring",
-        "inputSpec": "openapi.yaml",
+        "inputSpec": "api-spec/openapi.yaml",
         "output": "#{cwd}",
         "templateDir": "templates",
         "additionalProperties": {
