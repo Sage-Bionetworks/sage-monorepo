@@ -1,11 +1,14 @@
 package org.sagebionetworks.challenge.api;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.challenge.model.dto.PageableDto;
 import org.sagebionetworks.challenge.model.dto.UserDto;
+import org.sagebionetworks.challenge.model.mapper.UserMapper;
 import org.sagebionetworks.challenge.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Component;
 public class UserApiDelegateImpl implements UserApiDelegate {
 
   @Autowired UserService userService;
+
+  private UserMapper userMapper = new UserMapper();
 
   @Override
   public ResponseEntity<UserDto> createUser(UserDto user) {
@@ -36,10 +41,25 @@ public class UserApiDelegateImpl implements UserApiDelegate {
   }
 
   @Override
-  public ResponseEntity<List<UserDto>> listUsers(Pageable pageable) {
+  public ResponseEntity<List<UserDto>> listUsers(PageableDto pageable) {
     log.info("List all the users");
     log.info(pageable.toString());
+    List<UserDto> result =
+        userService
+            .listUsers(PageRequest.of(pageable.getPage(), pageable.getSize()))
+            .getContent()
+            .stream()
+            .map(userMapper::convertToDto)
+            .collect(Collectors.toList());
+    return new ResponseEntity<>(result, HttpStatus.OK);
     // return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    return ResponseEntity.ok(userService.listUsers(pageable));
+    // return ResponseEntity.ok(userService.listUsers(pageable));
   }
+
+  //   List<AccountJson> result = accountService.findAllAccounts(PageRequest.of(page, limit))
+  //   .getContent()
+  //   .stream()
+  //   .map(accountMapper::toDto)
+  //   .collect(Collectors.toList());
+  // return new ResponseEntity<>(result, HttpStatus.OK);
 }
