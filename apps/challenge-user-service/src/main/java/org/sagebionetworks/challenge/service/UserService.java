@@ -1,6 +1,5 @@
 package org.sagebionetworks.challenge.service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +17,12 @@ import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.model.mapper.UserMapper;
 import org.sagebionetworks.challenge.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-// @RequiredArgsConstructor
 @Service
 public class UserService {
 
@@ -64,16 +64,19 @@ public class UserService {
         "Unable to create the new user", GlobalErrorCode.ERROR_INVALID_USER);
   }
 
+  // TODO Return a page of Users
+  // See
+  // https://medium.com/devexperts/specification-first-make-life-easier-with-openapi-and-spring-eeaf5c22146b
+  @Transactional(readOnly = true)
   public List<UserDto> listUsers(Pageable pageable) {
-    // Page<UserEntity> allUsersInDb = userRepository.findAll(pageable);
-    List<UserDto> users = new ArrayList<>();
-    // List<User> users = userMapper.convertToDtoList(allUsersInDb.getContent());
-    // users.forEach(
-    //     user -> {
-    //       UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
-    //       user.setId(user.getId());
-    //       user.setEmail(userRepresentation.getEmail());
-    //     });
+    Page<UserEntity> allUsersInDb = userRepository.findAll(pageable);
+    List<UserDto> users = userMapper.convertToDtoList(allUsersInDb.getContent());
+    users.forEach(
+        user -> {
+          UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
+          user.setId(user.getId());
+          user.setEmail(userRepresentation.getEmail());
+        });
     return users;
   }
 
