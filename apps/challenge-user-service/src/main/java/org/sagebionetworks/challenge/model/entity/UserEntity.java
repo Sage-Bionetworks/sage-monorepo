@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.sagebionetworks.challenge.model.dto.UserStatus;
+import org.sagebionetworks.challenge.model.dto.UserStatusDto;
 
 /**
  * The User information saved to DB.
@@ -40,5 +40,5 @@ public class UserEntity {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private UserStatus status;
+  private UserStatusDto status;
 }

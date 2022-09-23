@@ -3,9 +3,9 @@ package org.sagebionetworks.challenge.api;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Generated;
-import org.sagebionetworks.challenge.model.dto.User;
-import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
-import org.springframework.data.domain.Pageable;
+import org.sagebionetworks.challenge.model.dto.PageableDto;
+import org.sagebionetworks.challenge.model.dto.UserDto;
+import org.sagebionetworks.challenge.model.dto.UserUpdateRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +25,11 @@ public interface UserApiDelegate {
   /**
    * POST /api/v1/users/register
    *
-   * @param user (required)
+   * @param userDto (required)
    * @return OK (status code 200)
    * @see UserApi#createUser
    */
-  default ResponseEntity<User> createUser(User user) {
+  default ResponseEntity<UserDto> createUser(UserDto userDto) {
     getRequest()
         .ifPresent(
             request -> {
@@ -52,7 +52,7 @@ public interface UserApiDelegate {
    * @return OK (status code 200)
    * @see UserApi#getUser
    */
-  default ResponseEntity<User> getUser(Long id) {
+  default ResponseEntity<UserDto> getUser(Long id) {
     getRequest()
         .ifPresent(
             request -> {
@@ -75,7 +75,7 @@ public interface UserApiDelegate {
    * @return OK (status code 200)
    * @see UserApi#listUsers
    */
-  default ResponseEntity<List<User>> listUsers(Pageable pageable) {
+  default ResponseEntity<List<UserDto>> listUsers(PageableDto pageable) {
     getRequest()
         .ifPresent(
             request -> {
@@ -95,11 +95,11 @@ public interface UserApiDelegate {
    * PATCH /api/v1/users/{id}
    *
    * @param id (required)
-   * @param userUpdateRequest (required)
+   * @param userUpdateRequestDto (required)
    * @return OK (status code 200)
    * @see UserApi#updateUser
    */
-  default ResponseEntity<User> updateUser(Long id, UserUpdateRequest userUpdateRequest) {
+  default ResponseEntity<UserDto> updateUser(Long id, UserUpdateRequestDto userUpdateRequestDto) {
     getRequest()
         .ifPresent(
             request -> {

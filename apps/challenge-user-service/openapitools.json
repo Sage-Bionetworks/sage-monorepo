@@ -19,6 +19,7 @@
           "library": "spring-boot",
           "modelPackage": "org.sagebionetworks.challenge.model.dto",
           "useTags": true,
+          "modelNameSuffix": "Dto",
           "importMappings": {
             "Pageable": "org.springframework.data.domain.Pageable"
           }

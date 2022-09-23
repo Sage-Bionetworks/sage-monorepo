@@ -14,9 +14,9 @@ import java.util.List;
 import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import org.sagebionetworks.challenge.model.dto.User;
-import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
-import org.springframework.data.domain.Pageable;
+import org.sagebionetworks.challenge.model.dto.PageableDto;
+import org.sagebionetworks.challenge.model.dto.UserDto;
+import org.sagebionetworks.challenge.model.dto.UserUpdateRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,7 @@ public interface UserApi {
   /**
    * POST /api/v1/users/register
    *
-   * @param user (required)
+   * @param userDto (required)
    * @return OK (status code 200)
    */
   @Operation(
@@ -44,16 +44,19 @@ public interface UserApi {
         @ApiResponse(
             responseCode = "200",
             description = "OK",
-            content = {@Content(mediaType = "*/*", schema = @Schema(implementation = User.class))})
+            content = {
+              @Content(mediaType = "*/*", schema = @Schema(implementation = UserDto.class))
+            })
       })
   @RequestMapping(
       method = RequestMethod.POST,
       value = "/api/v1/users/register",
       produces = {"*/*"},
       consumes = {"application/json"})
-  default ResponseEntity<User> createUser(
-      @Parameter(name = "User", description = "", required = true) @Valid @RequestBody User user) {
-    return getDelegate().createUser(user);
+  default ResponseEntity<UserDto> createUser(
+      @Parameter(name = "UserDto", description = "", required = true) @Valid @RequestBody
+          UserDto userDto) {
+    return getDelegate().createUser(userDto);
   }
 
   /**
@@ -69,13 +72,15 @@ public interface UserApi {
         @ApiResponse(
             responseCode = "200",
             description = "OK",
-            content = {@Content(mediaType = "*/*", schema = @Schema(implementation = User.class))})
+            content = {
+              @Content(mediaType = "*/*", schema = @Schema(implementation = UserDto.class))
+            })
       })
   @RequestMapping(
       method = RequestMethod.GET,
       value = "/api/v1/users/{id}",
       produces = {"*/*"})
-  default ResponseEntity<User> getUser(
+  default ResponseEntity<UserDto> getUser(
       @Parameter(name = "id", description = "", required = true) @PathVariable("id") Long id) {
     return getDelegate().getUser(id);
   }
@@ -93,14 +98,16 @@ public interface UserApi {
         @ApiResponse(
             responseCode = "200",
             description = "OK",
-            content = {@Content(mediaType = "*/*", schema = @Schema(implementation = User.class))})
+            content = {
+              @Content(mediaType = "*/*", schema = @Schema(implementation = UserDto.class))
+            })
       })
   @RequestMapping(
       method = RequestMethod.GET,
       value = "/api/v1/users/",
       produces = {"*/*"})
-  default ResponseEntity<List<User>> listUsers(
-      @Parameter(name = "pageable", description = "") @Valid Pageable pageable) {
+  default ResponseEntity<List<UserDto>> listUsers(
+      @Parameter(name = "pageable", description = "") @Valid PageableDto pageable) {
     return getDelegate().listUsers(pageable);
   }
 
@@ -108,7 +115,7 @@ public interface UserApi {
    * PATCH /api/v1/users/{id}
    *
    * @param id (required)
-   * @param userUpdateRequest (required)
+   * @param userUpdateRequestDto (required)
    * @return OK (status code 200)
    */
   @Operation(
@@ -118,17 +125,21 @@ public interface UserApi {
         @ApiResponse(
             responseCode = "200",
             description = "OK",
-            content = {@Content(mediaType = "*/*", schema = @Schema(implementation = User.class))})
+            content = {
+              @Content(mediaType = "*/*", schema = @Schema(implementation = UserDto.class))
+            })
       })
   @RequestMapping(
       method = RequestMethod.PATCH,
       value = "/api/v1/users/{id}",
       produces = {"*/*"},
       consumes = {"application/json"})
-  default ResponseEntity<User> updateUser(
+  default ResponseEntity<UserDto> updateUser(
       @Parameter(name = "id", description = "", required = true) @PathVariable("id") Long id,
-      @Parameter(name = "UserUpdateRequest", description = "", required = true) @Valid @RequestBody
-          UserUpdateRequest userUpdateRequest) {
-    return getDelegate().updateUser(id, userUpdateRequest);
+      @Parameter(name = "UserUpdateRequestDto", description = "", required = true)
+          @Valid
+          @RequestBody
+          UserUpdateRequestDto userUpdateRequestDto) {
+    return getDelegate().updateUser(id, userUpdateRequestDto);
   }
 }

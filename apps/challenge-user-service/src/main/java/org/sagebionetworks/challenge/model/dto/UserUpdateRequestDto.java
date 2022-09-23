@@ -1,6 +1,7 @@
 package org.sagebionetworks.challenge.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.*;
 import java.util.Objects;
@@ -8,17 +9,18 @@ import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/** UserUpdateRequest */
+/** UserUpdateRequestDto */
+@JsonTypeName("UserUpdateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @lombok.AllArgsConstructor
 @lombok.Builder
 @lombok.NoArgsConstructor
-public class UserUpdateRequest {
+public class UserUpdateRequestDto {
 
   @JsonProperty("status")
-  private UserStatus status;
+  private UserStatusDto status;
 
-  public UserUpdateRequest status(UserStatus status) {
+  public UserUpdateRequestDto status(UserStatusDto status) {
     this.status = status;
     return this;
   }
@@ -30,11 +32,11 @@ public class UserUpdateRequest {
    */
   @Valid
   @Schema(name = "status", required = false)
-  public UserStatus getStatus() {
+  public UserStatusDto getStatus() {
     return status;
   }
 
-  public void setStatus(UserStatus status) {
+  public void setStatus(UserStatusDto status) {
     this.status = status;
   }
 
@@ -46,7 +48,7 @@ public class UserUpdateRequest {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserUpdateRequest userUpdateRequest = (UserUpdateRequest) o;
+    UserUpdateRequestDto userUpdateRequest = (UserUpdateRequestDto) o;
     return Objects.equals(this.status, userUpdateRequest.status);
   }
 
@@ -58,7 +60,7 @@ public class UserUpdateRequest {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UserUpdateRequest {\n");
+    sb.append("class UserUpdateRequestDto {\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();

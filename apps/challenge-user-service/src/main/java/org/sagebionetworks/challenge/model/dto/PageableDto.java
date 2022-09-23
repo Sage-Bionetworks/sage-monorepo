@@ -1,6 +1,7 @@
 package org.sagebionetworks.challenge.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.*;
 import java.util.ArrayList;
@@ -10,10 +11,11 @@ import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/** Pageable */
+/** PageableDto */
+@JsonTypeName("Pageable")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations
-public class Pageable {
+public class PageableDto {
 
   @JsonProperty("page")
   private Integer page = 0;
@@ -25,7 +27,7 @@ public class Pageable {
   @Valid
   private List<String> sort = null;
 
-  public Pageable page(Integer page) {
+  public PageableDto page(Integer page) {
     this.page = page;
     return this;
   }
@@ -45,7 +47,7 @@ public class Pageable {
     this.page = page;
   }
 
-  public Pageable size(Integer size) {
+  public PageableDto size(Integer size) {
     this.size = size;
     return this;
   }
@@ -65,12 +67,12 @@ public class Pageable {
     this.size = size;
   }
 
-  public Pageable sort(List<String> sort) {
+  public PageableDto sort(List<String> sort) {
     this.sort = sort;
     return this;
   }
 
-  public Pageable addSortItem(String sortItem) {
+  public PageableDto addSortItem(String sortItem) {
     if (this.sort == null) {
       this.sort = new ArrayList<>();
     }
@@ -106,7 +108,7 @@ public class Pageable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Pageable pageable = (Pageable) o;
+    PageableDto pageable = (PageableDto) o;
     return Objects.equals(this.page, pageable.page)
         && Objects.equals(this.size, pageable.size)
         && Objects.equals(this.sort, pageable.sort);
@@ -120,7 +122,7 @@ public class Pageable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Pageable {\n");
+    sb.append("class PageableDto {\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
