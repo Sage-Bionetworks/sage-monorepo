@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.challenge.model.dto.User;
 import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -82,10 +83,7 @@ public interface UserApi {
   /**
    * GET /api/v1/users/
    *
-   * @param page Zero-based page index (0..N) (optional, default to 0)
-   * @param size The size of the page to be returned (optional, default to 20)
-   * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is
-   *     ascending. Multiple sort criteria are supported. (optional)
+   * @param pageable (optional)
    * @return OK (status code 200)
    */
   @Operation(
@@ -102,24 +100,8 @@ public interface UserApi {
       value = "/api/v1/users/",
       produces = {"*/*"})
   default ResponseEntity<List<User>> listUsers(
-      @Min(0)
-          @Parameter(name = "page", description = "Zero-based page index (0..N)")
-          @Valid
-          @RequestParam(value = "page", required = false, defaultValue = "0")
-          Integer page,
-      @Min(1)
-          @Parameter(name = "size", description = "The size of the page to be returned")
-          @Valid
-          @RequestParam(value = "size", required = false, defaultValue = "20")
-          Integer size,
-      @Parameter(
-              name = "sort",
-              description =
-                  "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.")
-          @Valid
-          @RequestParam(value = "sort", required = false)
-          List<String> sort) {
-    return getDelegate().listUsers(page, size, sort);
+      @Parameter(name = "pageable", description = "") @Valid Pageable pageable) {
+    return getDelegate().listUsers(pageable);
   }
 
   /**

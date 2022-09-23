@@ -97,36 +97,12 @@ paths:
     get:
       operationId: listUsers
       parameters:
-      - description: Zero-based page index (0..N)
-        explode: true
+      - explode: true
         in: query
-        name: page
+        name: pageable
         required: false
         schema:
-          default: 0
-          minimum: 0
-          type: integer
-        style: form
-      - description: The size of the page to be returned
-        explode: true
-        in: query
-        name: size
-        required: false
-        schema:
-          default: 20
-          minimum: 1
-          type: integer
-        style: form
-      - description: "Sorting criteria in the format: property,(asc|desc). Default\
-          \ sort order is ascending. Multiple sort criteria are supported."
-        explode: true
-        in: query
-        name: sort
-        required: false
-        schema:
-          items:
-            type: string
-          type: array
+          $ref: '#/components/schemas/Pageable'
         style: form
       responses:
         "200":
@@ -190,3 +166,23 @@ components:
       - BLACKLIST
       example: PENDING
       type: string
+    Pageable:
+      properties:
+        page:
+          default: 0
+          description: Zero-based page index (0..N)
+          minimum: 0
+          type: integer
+        size:
+          default: 20
+          description: The size of the page to be returned
+          minimum: 1
+          type: integer
+        sort:
+          description: "Sorting criteria in the format: property,(asc|desc). Default\
+            \ sort order is ascending. Multiple sort criteria are supported."
+          example: "id,asc"
+          items:
+            type: string
+          type: array
+      type: object

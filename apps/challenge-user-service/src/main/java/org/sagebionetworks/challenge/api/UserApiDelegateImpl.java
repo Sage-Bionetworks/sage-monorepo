@@ -1,12 +1,16 @@
 package org.sagebionetworks.challenge.api;
 
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.dto.User;
 import org.sagebionetworks.challenge.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class UserApiDelegateImpl implements UserApiDelegate {
 
@@ -31,7 +35,14 @@ public class UserApiDelegateImpl implements UserApiDelegate {
     return new ResponseEntity<>(HttpStatus.ACCEPTED);
   }
 
-  // @Override
+  @Override
+  public ResponseEntity<List<User>> listUsers(Pageable pageable) {
+    log.info("List all the users");
+    log.info(pageable.toString());
+    return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    // return ResponseEntity.ok(userService.listUsers(pageable));
+  }
+
   // public ResponseEntity<List<User>> listUsers(Integer page, Integer size, List<String> sort) {
   //   log.info("List all the users");
 

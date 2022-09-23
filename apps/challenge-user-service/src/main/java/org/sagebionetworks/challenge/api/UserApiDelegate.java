@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.annotation.Generated;
 import org.sagebionetworks.challenge.model.dto.User;
 import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -70,14 +71,11 @@ public interface UserApiDelegate {
   /**
    * GET /api/v1/users/
    *
-   * @param page Zero-based page index (0..N) (optional, default to 0)
-   * @param size The size of the page to be returned (optional, default to 20)
-   * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is
-   *     ascending. Multiple sort criteria are supported. (optional)
+   * @param pageable (optional)
    * @return OK (status code 200)
    * @see UserApi#listUsers
    */
-  default ResponseEntity<List<User>> listUsers(Integer page, Integer size, List<String> sort) {
+  default ResponseEntity<List<User>> listUsers(Pageable pageable) {
     getRequest()
         .ifPresent(
             request -> {
