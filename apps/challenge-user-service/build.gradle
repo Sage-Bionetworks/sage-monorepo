@@ -35,13 +35,13 @@ dependencies {
   implementation "org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}"
   implementation "org.sagebionetworks.challenge:challenge-util:${challengeVersion}"
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
   implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
   runtimeOnly 'mysql:mysql-connector-java:8.0.30'
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
-
 }
 
 group = 'org.sagebionetworks.challenge'
@@ -54,7 +54,11 @@ java {
 }
 
 tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+  options.encoding = 'UTF-8'
+}
+
+springBoot {
+  mainClass = 'org.sagebionetworks.challenge.ChallengeUserServiceApplication'
 }
 
 spotless {

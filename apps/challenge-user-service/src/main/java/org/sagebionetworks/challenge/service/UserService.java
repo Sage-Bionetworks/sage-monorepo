@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,6 @@ import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.model.mapper.UserMapper;
 import org.sagebionetworks.challenge.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -65,14 +65,15 @@ public class UserService {
   }
 
   public List<User> listUsers(Pageable pageable) {
-    Page<UserEntity> allUsersInDb = userRepository.findAll(pageable);
-    List<User> users = userMapper.convertToDtoList(allUsersInDb.getContent());
-    users.forEach(
-        user -> {
-          UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
-          user.setId(user.getId());
-          user.setEmail(userRepresentation.getEmail());
-        });
+    // Page<UserEntity> allUsersInDb = userRepository.findAll(pageable);
+    List<User> users = new ArrayList<>();
+    // List<User> users = userMapper.convertToDtoList(allUsersInDb.getContent());
+    // users.forEach(
+    //     user -> {
+    //       UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
+    //       user.setId(user.getId());
+    //       user.setEmail(userRepresentation.getEmail());
+    //     });
     return users;
   }
 
