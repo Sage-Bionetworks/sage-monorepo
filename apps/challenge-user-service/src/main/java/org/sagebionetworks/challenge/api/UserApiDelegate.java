@@ -34,10 +34,10 @@ public interface UserApiDelegate {
         .ifPresent(
             request -> {
               for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("*/*"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                   String exampleString =
                       "{ \"password\" : \"password\", \"id\" : 0, \"email\" : \"email\", \"authId\" : \"authId\", \"username\" : \"username\", \"status\" : \"PENDING\" }";
-                  ApiUtil.setExampleResponse(request, "*/*", exampleString);
+                  ApiUtil.setExampleResponse(request, "application/json", exampleString);
                   break;
                 }
               }
@@ -57,10 +57,10 @@ public interface UserApiDelegate {
         .ifPresent(
             request -> {
               for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("*/*"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                   String exampleString =
                       "{ \"password\" : \"password\", \"id\" : 0, \"email\" : \"email\", \"authId\" : \"authId\", \"username\" : \"username\", \"status\" : \"PENDING\" }";
-                  ApiUtil.setExampleResponse(request, "*/*", exampleString);
+                  ApiUtil.setExampleResponse(request, "application/json", exampleString);
                   break;
                 }
               }
@@ -80,10 +80,10 @@ public interface UserApiDelegate {
         .ifPresent(
             request -> {
               for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("*/*"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                   String exampleString =
                       "{ \"password\" : \"password\", \"id\" : 0, \"email\" : \"email\", \"authId\" : \"authId\", \"username\" : \"username\", \"status\" : \"PENDING\" }";
-                  ApiUtil.setExampleResponse(request, "*/*", exampleString);
+                  ApiUtil.setExampleResponse(request, "application/json", exampleString);
                   break;
                 }
               }
@@ -104,10 +104,10 @@ public interface UserApiDelegate {
         .ifPresent(
             request -> {
               for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("*/*"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                   String exampleString =
                       "{ \"password\" : \"password\", \"id\" : 0, \"email\" : \"email\", \"authId\" : \"authId\", \"username\" : \"username\", \"status\" : \"PENDING\" }";
-                  ApiUtil.setExampleResponse(request, "*/*", exampleString);
+                  ApiUtil.setExampleResponse(request, "application/json", exampleString);
                   break;
                 }
               }

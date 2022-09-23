@@ -32,7 +32,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 $ref: '#/components/schemas/User'
   /api/v1/users/{id}:
@@ -51,7 +51,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 $ref: '#/components/schemas/User'
     patch:
@@ -75,7 +75,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 $ref: '#/components/schemas/User'
   /api/v1/users/:
@@ -93,7 +93,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 type: array
                 items:

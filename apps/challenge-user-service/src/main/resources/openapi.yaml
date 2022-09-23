@@ -29,14 +29,14 @@ paths:
       responses:
         "200":
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: '#/components/schemas/User'
           description: OK
       tags:
       - User
       x-content-type: application/json
-      x-accepts: '*/*'
+      x-accepts: application/json
       x-tags:
       - tag: User
   /api/v1/users/{id}:
@@ -54,13 +54,13 @@ paths:
       responses:
         "200":
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: '#/components/schemas/User'
           description: OK
       tags:
       - User
-      x-accepts: '*/*'
+      x-accepts: application/json
       x-tags:
       - tag: User
     patch:
@@ -83,14 +83,14 @@ paths:
       responses:
         "200":
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: '#/components/schemas/User'
           description: OK
       tags:
       - User
       x-content-type: application/json
-      x-accepts: '*/*'
+      x-accepts: application/json
       x-tags:
       - tag: User
   /api/v1/users/:
@@ -107,7 +107,7 @@ paths:
       responses:
         "200":
           content:
-            '*/*':
+            application/json:
               schema:
                 items:
                   $ref: '#/components/schemas/User'
@@ -115,7 +115,7 @@ paths:
           description: OK
       tags:
       - User
-      x-accepts: '*/*'
+      x-accepts: application/json
       x-tags:
       - tag: User
 components:

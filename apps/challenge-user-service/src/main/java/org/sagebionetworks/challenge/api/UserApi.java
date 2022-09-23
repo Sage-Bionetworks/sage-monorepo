@@ -45,13 +45,15 @@ public interface UserApi {
             responseCode = "200",
             description = "OK",
             content = {
-              @Content(mediaType = "*/*", schema = @Schema(implementation = UserDto.class))
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = UserDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.POST,
       value = "/api/v1/users/register",
-      produces = {"*/*"},
+      produces = {"application/json"},
       consumes = {"application/json"})
   default ResponseEntity<UserDto> createUser(
       @Parameter(name = "UserDto", description = "", required = true) @Valid @RequestBody
@@ -73,13 +75,15 @@ public interface UserApi {
             responseCode = "200",
             description = "OK",
             content = {
-              @Content(mediaType = "*/*", schema = @Schema(implementation = UserDto.class))
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = UserDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.GET,
       value = "/api/v1/users/{id}",
-      produces = {"*/*"})
+      produces = {"application/json"})
   default ResponseEntity<UserDto> getUser(
       @Parameter(name = "id", description = "", required = true) @PathVariable("id") Long id) {
     return getDelegate().getUser(id);
@@ -99,13 +103,15 @@ public interface UserApi {
             responseCode = "200",
             description = "OK",
             content = {
-              @Content(mediaType = "*/*", schema = @Schema(implementation = UserDto.class))
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = UserDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.GET,
       value = "/api/v1/users/",
-      produces = {"*/*"})
+      produces = {"application/json"})
   default ResponseEntity<List<UserDto>> listUsers(
       @Parameter(name = "pageable", description = "") @Valid PageableDto pageable) {
     return getDelegate().listUsers(pageable);
@@ -126,13 +132,15 @@ public interface UserApi {
             responseCode = "200",
             description = "OK",
             content = {
-              @Content(mediaType = "*/*", schema = @Schema(implementation = UserDto.class))
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = UserDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.PATCH,
       value = "/api/v1/users/{id}",
-      produces = {"*/*"},
+      produces = {"application/json"},
       consumes = {"application/json"})
   default ResponseEntity<UserDto> updateUser(
       @Parameter(name = "id", description = "", required = true) @PathVariable("id") Long id,
