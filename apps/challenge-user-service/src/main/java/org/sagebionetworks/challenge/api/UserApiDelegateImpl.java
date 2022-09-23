@@ -39,19 +39,9 @@ public class UserApiDelegateImpl implements UserApiDelegate {
   @Override
   public ResponseEntity<List<UserDto>> listUsers(PageableDto pageable) {
     log.info("List all the users");
-    log.info(pageable.toString());
+    // TODO Take into account pageable.getSort()
     List<UserDto> result =
         userService.listUsers(PageRequest.of(pageable.getPage(), pageable.getSize()));
-    // return new ResponseEntity<>(result, HttpStatus.OK);
     return ResponseEntity.ok(result);
-    // return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    // return ResponseEntity.ok(userService.listUsers(pageable));
   }
-
-  //   List<AccountJson> result = accountService.findAllAccounts(PageRequest.of(page, limit))
-  //   .getContent()
-  //   .stream()
-  //   .map(accountMapper::toDto)
-  //   .collect(Collectors.toList());
-  // return new ResponseEntity<>(result, HttpStatus.OK);
 }
