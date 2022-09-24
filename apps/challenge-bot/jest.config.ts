@@ -1,16 +1,14 @@
-/* eslint-disable */
-export default {
-  displayName: 'challengebot',
+module.exports = {
+  displayName: 'challenge-bot',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
     },
   },
-  testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/challengebot',
+  coverageDirectory: '../../coverage/apps/challenge-bot',
 };

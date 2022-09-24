@@ -38,12 +38,12 @@
     "challenge-registry-user-profile": "libs/challenge-registry/user-profile",
     "challenge-service-registry": "apps/challenge-service-registry",
     "challenge-user-service": "apps/challenge-user-service",
-    "challengebot": "apps/challengebot",
     "shared-assets": "libs/shared/assets",
     "shared-java-challenge-util": "libs/shared-java/challenge-util",
     "shared-styles": "libs/shared/styles",
     "shared-themes": "libs/shared/themes",
     "shared-util": "libs/shared/util",
-    "shared-web-components": "libs/shared/web-components"
+    "shared-web-components": "libs/shared/web-components",
+    "challenge-bot": "apps/challenge-bot"
   }
 }
