@@ -14,9 +14,10 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/js:node",
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "buildTarget": "challenge-bot:build"
+        "command": "probot run ../../dist/apps/challenge-bot/src/index.js",
+        "cwd": "apps/challenge-bot"
       }
     },
     "lint": {
