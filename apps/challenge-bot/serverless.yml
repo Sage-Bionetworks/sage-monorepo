@@ -11,19 +11,18 @@
 #
 # Happy Coding!
 
-service: example-aws-lambda-serverless
+service: challenge-bot
 
 # app and org for use with dashboard.serverless.com
-app: probot-hello-world-example
-org: probot
+app: challenge-bot
+org: tschaffter
 
 frameworkVersion: "2"
 useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs12.x
-  lambdaHashingVersion: 20201221
+  runtime: nodejs16.x
   environment:
     APP_ID: ${param:APP_ID}
     PRIVATE_KEY: ${param:PRIVATE_KEY}
@@ -33,7 +32,7 @@ provider:
 
 functions:
   webhooks:
-    handler: handler.webhooks
+    handler: 'src/lambda/handler.webhooks'
     events:
       - httpApi:
           path: /api/github/webhooks

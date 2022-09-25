@@ -118,6 +118,7 @@
     "prettier": "^2.7.1",
     "redoc": "^2.0.0-rc.63",
     "redoc-cli": "^0.13.7",
+    "serverless": "^3.22.0",
     "shx": "^0.3.4",
     "smee-client": "^1.2.3",
     "ts-jest": "27.1.4",
