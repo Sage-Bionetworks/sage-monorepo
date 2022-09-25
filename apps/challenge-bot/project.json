@@ -8,7 +8,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/challenge-bot",
-        "main": "apps/challenge-bot/src/index.ts",
+        "main": "apps/challenge-bot/src/app.ts",
         "tsConfig": "apps/challenge-bot/tsconfig.app.json",
         "assets": ["apps/challenge-bot/*.md"]
       }
@@ -16,7 +16,7 @@
     "serve": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "probot run ../../dist/apps/challenge-bot/src/index.js",
+        "command": "probot run ../../dist/apps/challenge-bot/src/app.js",
         "cwd": "apps/challenge-bot"
       }
     },

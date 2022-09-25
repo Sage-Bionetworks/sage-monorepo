@@ -5126,6 +5126,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@probot/adapter-aws-lambda-serverless@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@probot/adapter-aws-lambda-serverless@npm:3.0.1"
+  dependencies:
+    "@probot/get-private-key": ^1.1.0
+    "@types/aws-lambda": ^8.10.85
+    lowercase-keys: ^2.0.0
+    probot: ^12.1.1
+  checksum: 53218dc77e7b7559462eb99bf461875d676f0dc677ef23ac5da03c083c45327901f4607c83948efb7353aa8120be6363038a0a429eb814a31ecb65a15d9786e5
+  languageName: node
+  linkType: hard
+
 "@probot/get-private-key@npm:^1.1.0":
   version: 1.1.1
   resolution: "@probot/get-private-key@npm:1.1.1"
@@ -6117,6 +6129,13 @@ __metadata:
   version: 1.0.3
   resolution: "@tsconfig/node16@npm:1.0.3"
   checksum: 3a8b657dd047495b7ad23437d6afd20297ce90380ff0bdee93fc7d39a900dbd8d9e26e53ff6b465e7967ce2adf0b218782590ce9013285121e6a5928fbd6819f
+  languageName: node
+  linkType: hard
+
+"@types/aws-lambda@npm:^8.10.85":
+  version: 8.10.106
+  resolution: "@types/aws-lambda@npm:8.10.106"
+  checksum: 989a33a58ffb59bf3997383585d22b3f49b7ff78f7ccd42cd841bd0621dd5a24bec7bdb9b14e9f31f986679d05b8428f36df9b2f057be09f0f91267b3234810d
   languageName: node
   linkType: hard
 
@@ -8952,6 +8971,7 @@ __metadata:
     "@nxrocks/nx-spring-boot": ^5.0.2
     "@openapitools/openapi-generator-cli": ^2.4.26
     "@prettier/plugin-xml": ^2.2.0
+    "@probot/adapter-aws-lambda-serverless": ^3.0.1
     "@redocly/openapi-cli": ^1.0.0-beta.81
     "@swc-node/register": ^1.4.2
     "@swc/cli": ~0.1.55
@@ -19984,7 +20004,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"probot@npm:^12.2.8":
+"probot@npm:^12.1.1, probot@npm:^12.2.8":
   version: 12.2.8
   resolution: "probot@npm:12.2.8"
   dependencies:
