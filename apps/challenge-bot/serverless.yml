@@ -17,23 +17,30 @@ service: challenge-bot
 app: challenge-bot
 org: tschaffter
 
-frameworkVersion: "2"
+frameworkVersion: '3'
 useDotenv: true
 
 provider:
   name: aws
   runtime: nodejs16.x
+  region: us-east-1
+  # environment:
+  #   APP_ID: ${param:APP_ID}
+  #   PRIVATE_KEY: ${param:PRIVATE_KEY}
+  #   WEBHOOK_SECRET: ${param:WEBHOOK_SECRET}
+  #   NODE_ENV: production
+  #   LOG_LEVEL: debug
+
   environment:
-    APP_ID: ${param:APP_ID}
-    PRIVATE_KEY: ${param:PRIVATE_KEY}
-    WEBHOOK_SECRET: ${param:WEBHOOK_SECRET}
+    APP_ID: ${ssm:/CHALLENGE_BOT_APP_ID}
+    PRIVATE_KEY: ${ssm:/CHALLENGE_BOT_PRIVATE_KEY}
+    WEBHOOK_SECRET: ${ssm:/CHALLENGE_BOT_WEBHOOK_SECRET}
     NODE_ENV: production
+    LOG_FORMAT: json
     LOG_LEVEL: debug
 
 functions:
-  webhooks:
-    handler: 'src/lambda/handler.webhooks'
+  challengeBot:
+    handler: '../../dist/apps/challenge-bot/src/lambda/handler.webhooks'
     events:
-      - httpApi:
-          path: /api/github/webhooks
-          method: post
+      - httpApi: 'POST /api/github/webhooks'
