@@ -101,6 +101,7 @@ paths:
 components:
   schemas:
     User:
+      description: "TODO Add schema description"
       type: object
       properties:
         id:
@@ -121,6 +122,7 @@ components:
         - '@lombok.Builder'
         - '@lombok.NoArgsConstructor'
     UserUpdateRequest:
+      description: "TODO Add schema description"
       type: object
       properties:
         status:
@@ -130,6 +132,7 @@ components:
         - '@lombok.Builder'
         - '@lombok.NoArgsConstructor'
     UserStatus:
+      description: "TODO Add schema description"
       type: string
       enum:
         - PENDING
@@ -138,6 +141,7 @@ components:
         - BLACKLIST
       example: PENDING
     Pageable:
+      description: "TODO Add schema description"
       type: object
       properties:
         page:

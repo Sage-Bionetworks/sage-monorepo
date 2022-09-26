@@ -11,7 +11,8 @@ import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/** PageableDto */
+/** TODO Add schema description */
+@Schema(name = "Pageable", description = "TODO Add schema description")
 @JsonTypeName("Pageable")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations

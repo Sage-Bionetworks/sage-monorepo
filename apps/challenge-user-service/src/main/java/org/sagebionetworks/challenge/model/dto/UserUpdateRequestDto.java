@@ -9,7 +9,8 @@ import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/** UserUpdateRequestDto */
+/** TODO Add schema description */
+@Schema(name = "UserUpdateRequest", description = "TODO Add schema description")
 @JsonTypeName("UserUpdateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @lombok.AllArgsConstructor

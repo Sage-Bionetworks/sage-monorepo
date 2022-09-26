@@ -6,7 +6,7 @@ import java.util.*;
 import javax.annotation.Generated;
 import javax.validation.constraints.*;
 
-/** Gets or Sets UserStatus */
+/** TODO Add schema description */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public enum UserStatusDto {
   PENDING("PENDING"),

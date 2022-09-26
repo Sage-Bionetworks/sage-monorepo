@@ -6,6 +6,7 @@
 !.yarn/versions
 apps/challenge-user-service-2
 apps/challengebot2
+apps/challenge-bot
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 .coveralls.yml
