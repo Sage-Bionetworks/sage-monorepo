@@ -78,7 +78,7 @@ public class UserService {
     return users;
   }
 
-  // TODO Review this function
+  @Transactional(readOnly = true)
   public UserDto getUser(Long userId) {
     return userMapper.convertToDto(
         userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));

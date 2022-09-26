@@ -37,8 +37,12 @@ public class UserApiDelegateImpl implements UserApiDelegate {
   }
 
   @Override
+  public ResponseEntity<UserDto> getUser(Long id) {
+    return ResponseEntity.ok(userService.getUser(id));
+  }
+
+  @Override
   public ResponseEntity<List<UserDto>> listUsers(PageableDto pageable) {
-    log.info("List all the users");
     // TODO Take into account pageable.getSort()
     List<UserDto> result =
         userService.listUsers(PageRequest.of(pageable.getPage(), pageable.getSize()));
