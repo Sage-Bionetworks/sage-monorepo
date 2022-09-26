@@ -18,13 +18,12 @@ spring:
 server:
   port: 8083
 
-# eureka:
-#   client:
-#     service-url:
-#       # defaultZone: ${service.registry.url}
-#       defaultZone: http://challenge-service-registry:8081/eureka
-#   instance:
-#     preferIpAddress: true
+eureka:
+  client:
+    service-url:
+      defaultZone: ${service.registry.url}
+  instance:
+    preferIpAddress: true
 
 management:
   info:
