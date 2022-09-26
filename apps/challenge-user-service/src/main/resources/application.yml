@@ -26,18 +26,21 @@ server:
 #   instance:
 #     preferIpAddress: true
 
-# management:
-#   info:
-#     env:
-#       enabled: true
-#   endpoints:
-#     web:
-#       exposure:
-#         include: info
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info,health
+  # endpoint:
+  #   health:
+  #     show-details: always
 
-# info:
-#   application:
-#     name: ${spring.application.name}
+info:
+  application:
+    name: ${spring.application.name}
 
 keycloak:
   realm: test
@@ -69,6 +72,3 @@ app:
 #     path: /api/v1/api-docs/openapi.json
 #   packagesToScan: org.sagebionetworks.challenge.controller
 #   pathsToMatch: /**
-
-# example:
-#   firstProperty: "main"
