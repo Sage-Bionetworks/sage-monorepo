@@ -32,6 +32,7 @@ public class UserService {
 
   private UserMapper userMapper = new UserMapper();
 
+  // TODO Review this function
   public UserDto createUser(UserDto user) {
     if (keycloakUserService.getUserByUsername(user.getUsername()).isPresent()) {
       throw new UserAlreadyRegisteredException(
@@ -68,32 +69,22 @@ public class UserService {
   public List<UserDto> listUsers(Pageable pageable) {
     Page<UserEntity> userEntities = userRepository.findAll(pageable);
     List<UserDto> users = userMapper.convertToDtoList(userEntities.getContent());
-    log.info("plop");
-
-    // int a = allUsersInDb.getContent();
-    // log.info("allUsersInDb: {}", allUsersInDb.getContent());
-    // users.forEach(
-    //     user -> {
-    //       UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
-    //       user.setId(user.getId());
-    //       user.setEmail(userRepresentation.getEmail());
-    //     });
-    // return allUsersInDb;
-    // List<UserDto> users = userMapper.convertToDtoList(allUsersInDb.getContent());
-    // users.forEach(
-    //     user -> {
-    //       UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
-    //       user.setId(user.getId());
-    //       user.setEmail(userRepresentation.getEmail());
-    //     });
+    users.forEach(
+        user -> {
+          UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
+          user.setId(user.getId());
+          user.setEmail(userRepresentation.getEmail());
+        });
     return users;
   }
 
+  // TODO Review this function
   public UserDto getUser(Long userId) {
     return userMapper.convertToDto(
         userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
   }
 
+  // TODO Review this function
   public UserDto updateUser(Long id, UserUpdateRequestDto userUpdateRequest) {
     UserEntity userEntity = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
