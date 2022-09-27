@@ -903,9 +903,7 @@ paths:
     parameters:
       - in: path
         name: organizationId
-        description: >-
-          The unique identifier of the organization, either the user ID or
-          account name
+        description: The unique identifier of the organization, either the user ID or account name
         required: true
         schema:
           $ref: '#/components/schemas/AccountId'
@@ -1458,9 +1456,7 @@ components:
           description: The HTTP status code
         detail:
           type: string
-          description: >-
-            A human readable explanation specific to this occurrence of the
-            problem
+          description: A human readable explanation specific to this occurrence of the problem
         type:
           type: string
           description: An absolute URI that identifies the problem type
@@ -1490,8 +1486,7 @@ components:
       required:
         - token
       example:
-        token: >-
-          eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2MTNlM2RiNWNhYzdjZDcwNmNjZDBjNDEiLCJpYXQiOjE2MzE0Njg5ODEsImV4cCI6MTYzMTQ2ODk4Nn0.shJH6Tp19nzjU8Bnlov55hqtkwwu6E_5ZTrhOZu8dyQ
+        token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2MTNlM2RiNWNhYzdjZDcwNmNjZDBjNDEiLCJpYXQiOjE2MzE0Njg5ODEsImV4cCI6MTYzMTQ2ODk4Nn0.shJH6Tp19nzjU8Bnlov55hqtkwwu6E_5ZTrhOZu8dyQ
     EmptyObject:
       type: object
       description: Empty JSON object
@@ -2269,9 +2264,7 @@ components:
       properties:
         state:
           type: string
-          description: >-
-            The state of the member in the organization. The `pending` state
-            indicates the user has not yet accepted an invitation.
+          description: The state of the member in the organization. The `pending` state indicates the user has not yet accepted an invitation.
           example: active
           enum:
             - active
@@ -2584,57 +2577,49 @@ components:
   links:
     GetChallengeById:
       operationId: getChallenge
-      description: >
-        The `id` value returned in the response can be used as the `challengeId`
-        parameter in `GET /challenges/{challengeId}`
+      description: |
+        The `id` value returned in the response can be used as the `challengeId` parameter in `GET /challenges/{challengeId}`
       parameters:
         challengeId: $response.body#/challengeId
     DeleteChallengeById:
       operationId: deleteChallenge
-      description: >
-        The `id` value returned in the response can be used as the `challengeId`
-        parameter in `DELETE /challenges/{challengeId}`
+      description: |
+        The `id` value returned in the response can be used as the `challengeId` parameter in `DELETE /challenges/{challengeId}`
       parameters:
         challengeId: $response.body#/challengeId
     GetGrantById:
       operationId: getGrant
-      description: >
-        The `id` value returned in the response can be used as the `grantId`
-        parameter in `GET /grants/{grantId}`
+      description: |
+        The `id` value returned in the response can be used as the `grantId` parameter in `GET /grants/{grantId}`
       parameters:
         grantId: $response.body#/grantId
     DeleteGrantById:
       operationId: deleteGrant
-      description: >
-        The `id` value returned in the response can be used as the `grantId`
-        parameter in `DELETE /grants/{grantId}`
+      description: |
+        The `id` value returned in the response can be used as the `grantId` parameter in `DELETE /grants/{grantId}`
       parameters:
         grantId: $response.body#/grantId
     GetOrganizationById:
       operationId: getOrganization
-      description: >
-        The `id` value returned in the response can be used as the
-        `organizationId` parameter in `GET /organizations/{organizationId}`
+      description: |
+        The `id` value returned in the response can be used as the `organizationId` parameter in `GET /organizations/{organizationId}`
       parameters:
         organizationId: $response.body#/organizationId
     DeleteOrganizationById:
       operationId: deleteOrganization
-      description: >
-        The `id` value returned in the response can be used as the
-        `organizationId` parameter in `DELETE /organizations/{organizationId}`
+      description: |
+        The `id` value returned in the response can be used as the `organizationId` parameter in `DELETE /organizations/{organizationId}`
       parameters:
         organizationId: $response.body#/organizationId
     GetUserById:
       operationId: getUser
-      description: >
-        The `userName` value returned in the response can be used as the
-        `userName` parameter in `GET /users/{userName}`
+      description: |
+        The `userName` value returned in the response can be used as the `userName` parameter in `GET /users/{userName}`
       parameters:
         userName: $response.body#/userName
     DeleteUserById:
       operationId: deleteUser
-      description: >
-        The `userName` value returned in the response can be used as the
-        `userName` parameter in `DELETE /users/{userName}`
+      description: |
+        The `userName` value returned in the response can be used as the `userName` parameter in `DELETE /users/{userName}`
       parameters:
         userName: $response.body#/userName
