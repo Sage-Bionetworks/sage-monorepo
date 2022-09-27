@@ -1,0 +1,27 @@
+{
+  "$schema": "../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "6.1.0",
+    "generators": {
+      "challenge-user-service": {
+        "config": "templates/config.yaml",
+        "generatorName": "spring",
+        "inputSpec": "api-spec/openapi.yaml",
+        "output": "#{cwd}",
+        "templateDir": "templates",
+        "additionalProperties": {
+          "apiPackage": "org.sagebionetworks.challenge.api",
+          "basePackage": "org.sagebionetworks.challenge",
+          "configPackage": "org.sagebionetworks.challenge.configuration",
+          "delegatePattern": true,
+          "hideGenerationTimestamp": true,
+          "library": "spring-boot",
+          "modelPackage": "org.sagebionetworks.challenge.model.dto",
+          "useTags": true,
+          "modelNameSuffix": "Dto"
+        }
+      }
+    }
+  }
+}

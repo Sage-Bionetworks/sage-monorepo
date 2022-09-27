@@ -31,9 +31,7 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
         .cors()
         .disable()
         .authorizeRequests()
-        // .antMatchers("/api/v1/users/register", "/api/v1/**", "/swagger-ui/**",
-        // "/swagger-ui.html")
-        .antMatchers("**")
+        .antMatchers("/api/v1/users/register", "/api/v1/api-docs/**", "/v3/**", "/api/v1/**")
         .permitAll()
         .anyRequest()
         .authenticated();

@@ -1,0 +1,190 @@
+openapi: 3.0.3
+info:
+  contact:
+    name: The Challenge Registry Team
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  description: This is the User Service of the Challenge Registry.
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt
+  termsOfService: TOC
+  title: Challenge User API
+  version: 1.0.0
+servers:
+- description: Local server url
+  url: http://localhost:8083
+tags:
+- description: Operations about users
+  name: User
+paths:
+  /api/v1/users/register:
+    post:
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: OK
+      tags:
+      - User
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: User
+  /api/v1/users/{id}:
+    get:
+      operationId: getUser
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: OK
+      tags:
+      - User
+      x-accepts: application/json
+      x-tags:
+      - tag: User
+    patch:
+      operationId: updateUser
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: OK
+      tags:
+      - User
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: User
+  /api/v1/users/:
+    get:
+      operationId: listUsers
+      parameters:
+      - explode: true
+        in: query
+        name: pageable
+        required: false
+        schema:
+          $ref: '#/components/schemas/Pageable'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/User'
+                type: array
+          description: OK
+      tags:
+      - User
+      x-accepts: application/json
+      x-tags:
+      - tag: User
+components:
+  schemas:
+    User:
+      description: TODO Add schema description
+      example:
+        password: password
+        id: 0
+        email: email
+        authId: authId
+        username: username
+        status: PENDING
+      properties:
+        id:
+          format: int64
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        authId:
+          type: string
+        status:
+          $ref: '#/components/schemas/UserStatus'
+      type: object
+      x-java-class-annotations:
+      - '@lombok.AllArgsConstructor'
+      - '@lombok.Builder'
+      - '@lombok.NoArgsConstructor'
+    UserUpdateRequest:
+      description: TODO Add schema description
+      properties:
+        status:
+          $ref: '#/components/schemas/UserStatus'
+      type: object
+      x-java-class-annotations:
+      - '@lombok.AllArgsConstructor'
+      - '@lombok.Builder'
+      - '@lombok.NoArgsConstructor'
+    UserStatus:
+      description: TODO Add schema description
+      enum:
+      - PENDING
+      - APPROVED
+      - DISABLED
+      - BLACKLIST
+      example: PENDING
+      type: string
+    Pageable:
+      description: TODO Add schema description
+      properties:
+        page:
+          default: 0
+          description: Zero-based page index (0..N)
+          minimum: 0
+          type: integer
+        size:
+          default: 20
+          description: The size of the page to be returned
+          minimum: 1
+          type: integer
+        sort:
+          description: "Sorting criteria in the format: property,(asc|desc). Default\
+            \ sort order is ascending. Multiple sort criteria are supported."
+          example: "id,asc"
+          items:
+            type: string
+          type: array
+      type: object

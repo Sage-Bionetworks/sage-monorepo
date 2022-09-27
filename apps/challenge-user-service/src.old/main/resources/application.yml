@@ -10,10 +10,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-  jackson:
-    date-format: org.sagebionetworks.challenge.RFC3339DateFormat
-    serialization:
-      WRITE_DATES_AS_TIMESTAMPS: false
 
 server:
   port: 8083
@@ -21,7 +17,8 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: ${service.registry.url}
+      # defaultZone: ${service.registry.url}
+      defaultZone: http://challenge-service-registry:8081/eureka
   instance:
     preferIpAddress: true
 
@@ -32,7 +29,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: info,health
+        include: info
 
 info:
   application:
@@ -43,7 +40,8 @@ keycloak:
   resource: challenge-user-service
   credentials:
     secret: GFRau7cQTxhx19CUmSdrqrqrZ1pshjjB
-  auth-server-url: ${keycloak.url}
+  # auth-server-url: ${keycloak.url}
+  auth-server-url: http://challenge-keycloak:8080
   ssl-required: external
   use-resource-role-mappings: true
   bearer-only: true
@@ -51,20 +49,24 @@ keycloak:
 app:
   config:
     keycloak:
-      server-url: ${keycloak.url}
+      # server-url: ${keycloak.url}
+      server-url: http://challenge-keycloak:8080
       realm: test
       # TODO: Which client ID property is used?
       client-id: challenge-api-client
       clientId: challenge-api-client
       client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
 
-# springdoc:
-#   version: openapi_3_1
-#   swagger-ui:
-#     path: /api/v1/api-docs/ui
-#     # url: /api/v1/api-docs/openapi.json
-#   api-docs:
-#     enabled: true
-#     path: /api/v1/api-docs/openapi.json
-#   packagesToScan: org.sagebionetworks.challenge.controller
-#   pathsToMatch: /**
+springdoc:
+  version: openapi_3_1
+  swagger-ui:
+    path: /api/v1/api-docs/ui
+    # url: /api/v1/api-docs/openapi.json
+  api-docs:
+    enabled: true
+    path: /api/v1/api-docs/openapi.json
+  packagesToScan: org.sagebionetworks.challenge.controller
+  pathsToMatch: /**
+
+example:
+  firstProperty: "main"

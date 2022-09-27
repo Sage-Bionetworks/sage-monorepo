@@ -25,20 +25,22 @@
       "outputs": ["apps/challenge-user-service"],
       "dependsOn": ["^install"]
     },
-    "test": {
-      "executor": "@nxrocks/nx-spring-boot:test",
-      "options": {
-        "root": "apps/challenge-user-service"
-      },
-      "dependsOn": ["build"]
-    },
-    "integration-test": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "commands": ["./gradlew integrationTest"],
-        "cwd": "apps/challenge-user-service"
-      }
-    },
+    // "test": {
+    //   "executor": "@nxrocks/nx-spring-boot:test",
+    //   "options": {
+    //     "root": "apps/challenge-user-service"
+    //   },
+    //   "dependsOn": ["build"]
+    // },
+    // "integration-test": {
+    //   "executor": "@nrwl/workspace:run-commands",
+    //   "options": {
+    //     "commands": [
+    //       "./gradlew integrationTest"
+    //     ],
+    //     "cwd": "apps/challenge-user-service"
+    //   }
+    // },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
@@ -84,21 +86,24 @@
       },
       "dependsOn": ["^install"]
     },
-    "generate-openapi-definition": {
+    "openapi-generate": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "./gradlew clean generateOpenApiDocs",
-        "cwd": "apps/challenge-user-service"
-      },
-      "dependsOn": ["prepare", "^serve-detach"]
+        "commands": [
+          "openapi-generator-cli generate",
+          "./gradlew spotlessApply"
+        ],
+        "cwd": "apps/challenge-user-service",
+        "parallel": false
+      }
     }
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    "challenge-mariadb",
-    "challenge-keycloak",
-    "challenge-service-registry",
-    "challenge-api-gateway",
-    "shared-java-challenge-util"
+    // "challenge-mariadb",
+    // "challenge-keycloak",
+    // "challenge-service-registry",
+    // "challenge-api-gateway",
+    // "shared-java-challenge-util"
   ]
 }

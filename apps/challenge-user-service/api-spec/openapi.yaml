@@ -1,0 +1,163 @@
+openapi: 3.0.3
+info:
+  title: Challenge User API
+  description: This is the User Service of the Challenge Registry.
+  termsOfService: TOC
+  contact:
+    name: The Challenge Registry Team
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt
+  version: 1.0.0
+servers:
+  - url: http://localhost:8083
+    description: Local server url
+tags:
+  - name: User
+    description: Operations about users
+paths:
+  /api/v1/users/register:
+    post:
+      tags:
+      - User
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/User'
+  /api/v1/users/{id}:
+    get:
+      tags:
+      - User
+      operationId: getUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/User'
+    patch:
+      tags:
+      - User
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/User'
+  /api/v1/users/:
+    get:
+      tags:
+      - User
+      operationId: listUsers
+      parameters:
+      - name: pageable
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        "200":
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+components:
+  schemas:
+    User:
+      description: "TODO Add schema description"
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        authId:
+          type: string
+        status:
+          $ref: '#/components/schemas/UserStatus'
+      x-java-class-annotations:
+        - '@lombok.AllArgsConstructor'
+        - '@lombok.Builder'
+        - '@lombok.NoArgsConstructor'
+    UserUpdateRequest:
+      description: "TODO Add schema description"
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/UserStatus'
+      x-java-class-annotations:
+        - '@lombok.AllArgsConstructor'
+        - '@lombok.Builder'
+        - '@lombok.NoArgsConstructor'
+    UserStatus:
+      description: "TODO Add schema description"
+      type: string
+      enum:
+        - PENDING
+        - APPROVED
+        - DISABLED
+        - BLACKLIST
+      example: PENDING
+    Pageable:
+      description: "TODO Add schema description"
+      type: object
+      properties:
+        page:
+          description: Zero-based page index (0..N)
+          type: integer
+          default: 0
+          minimum: 0
+        size:
+          description: The size of the page to be returned
+          type: integer
+          default: 20
+          minimum: 1
+        sort:
+          description: "Sorting criteria in the format: property,(asc|desc). Default\
+            \ sort order is ascending. Multiple sort criteria are supported."
+          type: array
+          items:
+            type: string
+          example: id,asc
