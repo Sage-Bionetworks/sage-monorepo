@@ -1,4 +1,4 @@
-openapi: 3.0.2
+openapi: 3.0.3
 info:
   version: 0.6.0
   title: Registry of Open Community Challenges API
