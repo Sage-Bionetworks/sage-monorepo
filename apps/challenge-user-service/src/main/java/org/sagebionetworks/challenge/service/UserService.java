@@ -32,7 +32,7 @@ public class UserService {
 
   private UserMapper userMapper = new UserMapper();
 
-  // TODO Review this function
+  @Transactional
   public UserDto createUser(UserDto user) {
     if (keycloakUserService.getUserByUsername(user.getUsername()).isPresent()) {
       throw new UserAlreadyRegisteredException(
@@ -72,7 +72,6 @@ public class UserService {
     users.forEach(
         user -> {
           UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
-          user.setId(user.getId());
           user.setEmail(userRepresentation.getEmail());
         });
     return users;
@@ -80,8 +79,12 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public UserDto getUser(Long userId) {
-    return userMapper.convertToDto(
-        userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
+    UserDto user =
+        userMapper.convertToDto(
+            userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
+    UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
+    user.setEmail(userRepresentation.getEmail());
+    return user;
   }
 
   // TODO Review this function
