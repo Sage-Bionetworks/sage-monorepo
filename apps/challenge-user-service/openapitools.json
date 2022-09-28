@@ -7,7 +7,7 @@
       "challenge-user-service": {
         "config": "templates/config.yaml",
         "generatorName": "spring",
-        "inputSpec": "#{cwd}/../../libs/api-spec/build/openapi.yaml",
+        "inputSpec": "#{cwd}/../../libs/api-spec/build/user.openapi.yaml",
         "output": "#{cwd}/generated",
         "templateDir": "templates",
         "additionalProperties": {
@@ -17,9 +17,9 @@
           "delegatePattern": true,
           "hideGenerationTimestamp": true,
           "library": "spring-boot",
+          "modelNameSuffix": "Dto",
           "modelPackage": "org.sagebionetworks.challenge.model.dto",
-          "useTags": true,
-          "modelNameSuffix": "Dto"
+          "useTags": true
         }
       }
     }

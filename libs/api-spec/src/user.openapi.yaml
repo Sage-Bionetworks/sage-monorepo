@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  version: 0.6.0
+  title: Challenge User API
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+tags:
+  - name: User
+    description: Operations about users
+paths:
+  /users/register:
+    $ref: paths/users/register.yaml
+  # /user/starred:
+  #   $ref: paths/user/starred.yaml
+  # /user/orgs:
+  #   $ref: paths/user/orgs.yaml
+  # /user/starred/{accountName}/{challengeName}:
+  #   $ref: paths/user/starred@{accountName}@{challengeName}.yaml
+  /users:
+    $ref: paths/users.yaml
+  /users/{userId}:
+    $ref: paths/users@{userId}.yaml
+  # /users/{userId}/orgs:
+  #   $ref: paths/users@{userId}orgs.yaml
+  # /users/{userId}/starred:
+  #   $ref: paths/users@{userId}starred.yaml
