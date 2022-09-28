@@ -34,7 +34,7 @@
     "format-check": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "prettier libs/api-spec/openapi.yaml"
+        "command": "prettier --check libs/api-spec/openapi.yaml"
       }
     }
   },
