@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-# yarn nx affected --uncommitted --target=format
+yarn nx affected --uncommitted --target=format
 yarn nx affected:lint --uncommitted

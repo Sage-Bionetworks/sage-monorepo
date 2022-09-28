@@ -5,5 +5,5 @@ required: false
 schema:
   type: string
   enum:
-  - asc
-  - desc
+    - asc
+    - desc

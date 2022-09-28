@@ -28,13 +28,13 @@
     "format": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "prettier --write libs/api-spec/openapi.yaml"
+        "command": "prettier --write libs/api-spec"
       }
     },
     "format-check": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "prettier --check libs/api-spec/openapi.yaml"
+        "command": "prettier --check libs/api-spec"
       }
     }
   },
