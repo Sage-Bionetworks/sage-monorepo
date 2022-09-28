@@ -85,18 +85,18 @@ paths:
   #   $ref: paths/orgMemberships@{orgMembershipId}.yaml
   # /registry:
   #   $ref: paths/registry.yaml
-  # /user:
-  #   $ref: paths/user.yaml
+  /user/register:
+    $ref: paths/users/register.yaml
   # /user/starred:
   #   $ref: paths/user/starred.yaml
   # /user/orgs:
   #   $ref: paths/user/orgs.yaml
   # /user/starred/{accountName}/{challengeName}:
   #   $ref: paths/user/starred@{accountName}@{challengeName}.yaml
-  # /users:
-  #   $ref: paths/users.yaml
-  # /users/{userId}:
-  #   $ref: paths/users@{userId}.yaml
+  /users:
+    $ref: paths/users.yaml
+  /users/{userId}:
+    $ref: paths/users@{userId}.yaml
   # /users/{userId}/orgs:
   #   $ref: paths/users@{userId}orgs.yaml
   # /users/{userId}/starred:
