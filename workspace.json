@@ -6,6 +6,7 @@
     "api-spec": "libs/api-spec",
     "challenge-api-gateway": "apps/challenge-api-gateway",
     "challenge-auth-service": "apps/challenge-auth-service",
+    "challenge-bot": "apps/challenge-bot",
     "challenge-config-service": "apps/challenge-config-service",
     "challenge-core-service": "apps/challenge-core-service",
     "challenge-elasticsearch": "apps/challenge-elk/elasticsearch",
@@ -43,7 +44,6 @@
     "shared-styles": "libs/shared/styles",
     "shared-themes": "libs/shared/themes",
     "shared-util": "libs/shared/util",
-    "shared-web-components": "libs/shared/web-components",
-    "challenge-bot": "apps/challenge-bot"
+    "shared-web-components": "libs/shared/web-components"
   }
 }

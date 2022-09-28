@@ -7,8 +7,8 @@ properties:
       state indicates the user has not yet accepted an invitation.
     example: active
     enum:
-    - active
-    - pending
+      - active
+      - pending
   role:
     type: string
     description: The user's membership type in the organization.
