@@ -24,6 +24,18 @@
         "command": "lint-openapi --config .validaterc --ruleset .spectral.yaml -v openapi.yaml",
         "cwd": "libs/api-spec"
       }
+    },
+    "format": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "prettier --write libs/api-spec/openapi.yaml"
+      }
+    },
+    "format-check": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "prettier libs/api-spec/openapi.yaml"
+      }
     }
   },
   "tags": []
