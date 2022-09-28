@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 0.6.0
-  title: Challenge Registry API
+  title: Challenge User API
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/challenge-registry
@@ -10,33 +10,11 @@ info:
     url: https://github.com/Sage-Bionetworks/challenge-registry
   x-logo:
     url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
-  description: |
-    The OpenAPI definition of the Challenge Registry API.
-    # Introduction
-    TODO
 tags:
   - name: User
     description: Operations about users
-  - name: HealthCheck
-    description: Operations about health checks
 paths:
-  /healthcheck:
-    get:
-      tags:
-        - HealthCheck
-      summary: Get health check information
-      description: Get information about the health of the service
-      operationId: getHealthCheck
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HealthCheck'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /user/register:
+  /users/register:
     post:
       tags:
         - User
@@ -127,38 +105,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    HealthCheck:
-      type: object
-      description: Represents the health of a service
-      properties:
-        status:
-          description: Indicates whether the service status is acceptable or not
-          type: string
-          enum:
-            - pass
-            - fail
-            - warn
-      required:
-        - status
-    Error:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-      required:
-        - title
-        - status
     Email:
       description: An email address
       type: string
@@ -211,6 +157,25 @@ components:
         - id
       example:
         id: 507f1f77bcf86cd799439011
+    Error:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+      required:
+        - title
+        - status
     ResponsePageMetadata:
       type: object
       description: A page of results
@@ -301,12 +266,6 @@ components:
       type: object
       description: Empty JSON object
   responses:
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Invalid request
       content:
@@ -315,6 +274,12 @@ components:
             $ref: '#/components/schemas/Error'
     Conflict:
       description: The request conflicts with current state of the target resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/json:
           schema:
