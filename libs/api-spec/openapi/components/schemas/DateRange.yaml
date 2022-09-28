@@ -10,5 +10,5 @@ properties:
     type: string
     format: date
 example:
-  start: "2021-07-17"
-  end: "2021-07-17"
+  start: '2021-07-17'
+  end: '2021-07-17'

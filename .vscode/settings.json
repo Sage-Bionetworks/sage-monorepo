@@ -41,10 +41,14 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
   "emeraldwalk.runonsave": {
     "commands": [
       {
-        "match": ".*",
+        "match": "\\.(java|sql)$",
         "cmd": "node_modules/.bin/nx affected --base=HEAD --target=format"
       }
     ]
