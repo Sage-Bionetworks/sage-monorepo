@@ -7,7 +7,6 @@
     "postinstall": "ngcc --properties es2020 browser module main",
     "prepare": "husky install",
     "affected:apps": "nx affected:apps",
-    "affected:lint": "nx affected:lint",
     "affected:build": "nx affected:build",
     "affected:test": "nx affected:test",
     "affected:e2e": "nx affected:e2e",
