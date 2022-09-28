@@ -7,21 +7,21 @@
     "build": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "openapi bundle -o openapi openapi/openapi.yaml",
+        "command": "openapi bundle --output build/openapi src/openapi.yaml",
         "cwd": "libs/api-spec"
       }
     },
     "serve": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "openapi preview-docs openapi/openapi.yaml",
+        "command": "openapi preview-docs src/openapi.yaml",
         "cwd": "libs/api-spec"
       }
     },
     "lint": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "lint-openapi --config .validaterc --ruleset .spectral.yaml -v openapi.yaml",
+        "command": "lint-openapi --config .validaterc --ruleset .spectral.yaml --verbose build/openapi.yaml",
         "cwd": "libs/api-spec"
       }
     },

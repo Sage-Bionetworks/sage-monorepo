@@ -1,0 +1,347 @@
+openapi: 3.0.3
+info:
+  version: 0.6.0
+  title: Challenge Registry API
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+  description: |
+    The OpenAPI definition of the Challenge Registry API.
+    # Introduction
+    TODO
+tags:
+  - name: User
+    description: Operations about users
+  - name: HealthCheck
+    description: Operations about health checks
+paths:
+  /healthcheck:
+    get:
+      tags:
+        - HealthCheck
+      summary: Get health check information
+      description: Get information about the health of the service
+      operationId: getHealthCheck
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheck'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /user/register:
+    post:
+      tags:
+        - User
+      summary: Create a user
+      description: Create a user with the specified account name
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreateResponse'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /users:
+    get:
+      tags:
+        - User
+      summary: Get all users
+      description: Returns the users
+      operationId: listUsers
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfUsers'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - User
+      summary: Delete all users
+      description: Delete all users
+      operationId: deleteAllUsers
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /users/{userId}:
+    parameters:
+      - in: path
+        name: userId
+        description: The unique identifier of the user, either the user account ID or login
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+    get:
+      tags:
+        - User
+      summary: Get a user
+      description: Returns the user specified
+      operationId: getUser
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    HealthCheck:
+      type: object
+      description: Represents the health of a service
+      properties:
+        status:
+          description: Indicates whether the service status is acceptable or not
+          type: string
+          enum:
+            - pass
+            - fail
+            - warn
+      required:
+        - status
+    Error:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+      required:
+        - title
+        - status
+    Email:
+      description: An email address
+      type: string
+      format: email
+      example: john.smith@example.com
+    UserCreateRequest:
+      type: object
+      description: The information required to create a user account
+      properties:
+        login:
+          type: string
+        email:
+          $ref: '#/components/schemas/Email'
+        password:
+          type: string
+          format: password
+        name:
+          type: string
+          nullable: true
+        avatarUrl:
+          type: string
+          format: url
+          example: https://example.com/awesome-avatar.png
+          nullable: true
+        bio:
+          type: string
+          nullable: true
+      required:
+        - login
+        - email
+        - password
+      example:
+        login: awesome-user
+        email: awesome-user@example.org
+        password: yourpassword
+        name: Awesome User
+        avatarUrl: https://example.com/awesome-avatar.png
+        bio: A great bio
+    AccountId:
+      description: The unique identifier of an account
+      type: string
+      example: 507f1f77bcf86cd799439011
+    UserCreateResponse:
+      type: object
+      description: The response returned after the creation of the user
+      properties:
+        id:
+          $ref: '#/components/schemas/AccountId'
+      required:
+        - id
+      example:
+        id: 507f1f77bcf86cd799439011
+    ResponsePageMetadata:
+      type: object
+      description: A page of results
+      properties:
+        offset:
+          description: Index of the first result that must be returned
+          type: integer
+        limit:
+          description: Maximum number of results returned
+          type: integer
+        paging:
+          description: Links to navigate to different pages of results
+          type: object
+          properties:
+            next:
+              description: Link to the next page of results
+              type: string
+              format: url
+        totalResults:
+          description: Total number of results in the result set
+          type: integer
+      required:
+        - offset
+        - limit
+        - paging
+        - totalResults
+    User:
+      type: object
+      description: A simple user
+      allOf:
+        - $ref: '#/components/schemas/UserCreateResponse'
+        - type: object
+          properties:
+            login:
+              type: string
+            email:
+              $ref: '#/components/schemas/Email'
+            name:
+              type: string
+              nullable: true
+            avatarUrl:
+              type: string
+              format: url
+              example: https://example.com/awesome-avatar.png
+              nullable: true
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            type:
+              type: string
+              example: User
+            bio:
+              type: string
+              nullable: true
+          required:
+            - login
+            - email
+            - createdAt
+            - updatedAt
+            - type
+          example:
+            login: awesome-user
+            email: awesome-user@example.org
+            name: Awesome User
+            avatarUrl: https://example.com/awesome-avatar.png
+            bio: A great bio
+            createdAt: '2017-07-08T16:18:44-04:00'
+            updatedAt: '2017-07-08T16:18:44-04:00'
+            type: User
+    PageOfUsers:
+      type: object
+      description: A page of Users
+      allOf:
+        - $ref: '#/components/schemas/ResponsePageMetadata'
+        - type: object
+          properties:
+            users:
+              description: An array of Users
+              type: array
+              items:
+                $ref: '#/components/schemas/User'
+          required:
+            - users
+    EmptyObject:
+      type: object
+      description: Empty JSON object
+  responses:
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: The request conflicts with current state of the target resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    limit:
+      name: limit
+      description: Maximum number of results returned
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 10
+        minimum: 10
+        maximum: 100
+    offset:
+      name: offset
+      description: Index of the first result that must be returned
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 0
+        minimum: 0

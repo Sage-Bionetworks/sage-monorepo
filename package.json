@@ -74,7 +74,7 @@
     "@nxrocks/nx-spring-boot": "^5.0.2",
     "@openapitools/openapi-generator-cli": "^2.4.26",
     "@prettier/plugin-xml": "^2.2.0",
-    "@redocly/openapi-cli": "^1.0.0-beta.81",
+    "@redocly/cli": "^1.0.0-beta.110",
     "@swc-node/register": "^1.4.2",
     "@swc/cli": "~0.1.55",
     "@swc/core": "^1.2.173",
