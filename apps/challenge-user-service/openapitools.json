@@ -7,8 +7,8 @@
       "challenge-user-service": {
         "config": "templates/config.yaml",
         "generatorName": "spring",
-        "inputSpec": "api-spec/openapi.yaml",
-        "output": "#{cwd}",
+        "inputSpec": "#{cwd}/../../libs/api-spec/build/openapi.yaml",
+        "output": "#{cwd}/generated",
         "templateDir": "templates",
         "additionalProperties": {
           "apiPackage": "org.sagebionetworks.challenge.api",
