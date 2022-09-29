@@ -44,9 +44,6 @@
 #activity {
   max-width: 220px;
 }
-.username {
-  font-size: 28px;
-}
 .user-tag {
   width: 100%;
   max-width: 98px;
@@ -57,9 +54,6 @@
 }
 .activity-card {
   text-align: right;
-}
-.card-title {
-  font-weight: 600;
 }
 
 #bottom {
@@ -93,12 +87,6 @@
   #details,
   .activity-card {
     text-align: center;
-  }
-  #details > h2 {
-    font-size: 32px;
-  }
-  #details > h3 {
-    font-size: 21px;
   }
   .user-tag {
     align-self: center;
