@@ -45,7 +45,3 @@ example:
   createdAt: '2017-07-08T16:18:44-04:00'
   updatedAt: '2017-07-08T16:18:44-04:00'
   type: User
-x-java-class-annotations:
-  - '@lombok.AllArgsConstructor'
-  - '@lombok.Builder'
-  - '@lombok.NoArgsConstructor'

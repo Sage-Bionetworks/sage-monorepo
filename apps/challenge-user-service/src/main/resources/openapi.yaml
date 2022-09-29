@@ -409,10 +409,6 @@ components:
       - type
       - updatedAt
       type: object
-      x-java-class-annotations:
-      - '@lombok.AllArgsConstructor'
-      - '@lombok.Builder'
-      - '@lombok.NoArgsConstructor'
     UsersPage:
       allOf:
       - $ref: '#/components/schemas/PageMetadata'

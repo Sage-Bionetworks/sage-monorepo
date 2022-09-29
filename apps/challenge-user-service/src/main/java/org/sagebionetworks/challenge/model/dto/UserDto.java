@@ -17,9 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Schema(name = "User", description = "A simple user")
 @JsonTypeName("User")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-@lombok.AllArgsConstructor
-@lombok.Builder
-@lombok.NoArgsConstructor
+// TODO Add x-java-class-annotations
 public class UserDto {
 
   @JsonProperty("id")
