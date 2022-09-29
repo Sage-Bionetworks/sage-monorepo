@@ -12,11 +12,11 @@ post:
     required: true
   responses:
     '201':
+      description: Account created
       content:
         application/json:
           schema:
             $ref: ../../components/schemas/UserCreateResponse.yaml
-      description: Success
       # links:
       #   GetUserById:
       #     $ref: ../../components/links/GetUserById.yaml
