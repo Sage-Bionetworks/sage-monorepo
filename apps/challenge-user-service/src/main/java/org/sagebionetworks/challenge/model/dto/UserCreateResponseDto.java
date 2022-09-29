@@ -18,9 +18,9 @@ import javax.validation.constraints.*;
 public class UserCreateResponseDto {
 
   @JsonProperty("id")
-  private String id;
+  private Long id;
 
-  public UserCreateResponseDto id(String id) {
+  public UserCreateResponseDto id(Long id) {
     this.id = id;
     return this;
   }
@@ -33,14 +33,14 @@ public class UserCreateResponseDto {
   @NotNull
   @Schema(
       name = "id",
-      example = "507f1f77bcf86cd799439011",
+      example = "1",
       description = "The unique identifier of an account",
       required = true)
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

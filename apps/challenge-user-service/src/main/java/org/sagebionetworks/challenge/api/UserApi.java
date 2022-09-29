@@ -139,7 +139,7 @@ public interface UserApi {
                   "The unique identifier of the user, either the user account ID or login",
               required = true)
           @PathVariable("userId")
-          String userId) {
+          Long userId) {
     return getDelegate().deleteUser(userId);
   }
 
@@ -191,7 +191,7 @@ public interface UserApi {
                   "The unique identifier of the user, either the user account ID or login",
               required = true)
           @PathVariable("userId")
-          String userId) {
+          Long userId) {
     return getDelegate().getUser(userId);
   }
 

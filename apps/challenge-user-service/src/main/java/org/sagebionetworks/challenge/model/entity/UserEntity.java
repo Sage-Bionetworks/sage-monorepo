@@ -30,7 +30,7 @@ public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
-  private String id;
+  private Long id;
 
   @Column(nullable = false)
   private String login;

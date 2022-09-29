@@ -55,7 +55,7 @@ public interface UserApiDelegate {
    *     The request cannot be fulfilled due to an unexpected server error (status code 500)
    * @see UserApi#deleteUser
    */
-  default ResponseEntity<Object> deleteUser(String userId) {
+  default ResponseEntity<Object> deleteUser(Long userId) {
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
 
@@ -67,7 +67,7 @@ public interface UserApiDelegate {
    *     The request cannot be fulfilled due to an unexpected server error (status code 500)
    * @see UserApi#getUser
    */
-  default ResponseEntity<UserDto> getUser(String userId) {
+  default ResponseEntity<UserDto> getUser(Long userId) {
     getRequest()
         .ifPresent(
             request -> {

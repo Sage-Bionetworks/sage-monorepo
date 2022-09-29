@@ -140,8 +140,9 @@ components:
         bio: A great bio
     AccountId:
       description: The unique identifier of an account
-      type: string
-      example: 507f1f77bcf86cd799439011
+      type: integer
+      format: int64
+      example: 1
     UserCreateResponse:
       type: object
       description: The response returned after the creation of the user

@@ -296,8 +296,9 @@ components:
       type: object
     AccountId:
       description: The unique identifier of an account
-      example: 507f1f77bcf86cd799439011
-      type: string
+      example: 1
+      format: int64
+      type: integer
     UserCreateResponse:
       description: The response returned after the creation of the user
       example:
@@ -305,8 +306,9 @@ components:
       properties:
         id:
           description: The unique identifier of an account
-          example: 507f1f77bcf86cd799439011
-          type: string
+          example: 1
+          format: int64
+          type: integer
       required:
       - id
       type: object
@@ -368,8 +370,9 @@ components:
       properties:
         id:
           description: The unique identifier of an account
-          example: 507f1f77bcf86cd799439011
-          type: string
+          example: 1
+          format: int64
+          type: integer
         login:
           type: string
         email:

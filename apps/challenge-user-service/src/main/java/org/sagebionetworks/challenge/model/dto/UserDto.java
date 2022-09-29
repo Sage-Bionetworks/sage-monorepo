@@ -21,7 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class UserDto {
 
   @JsonProperty("id")
-  private String id;
+  private Long id;
 
   @JsonProperty("login")
   private String login;
@@ -52,7 +52,7 @@ public class UserDto {
   @JsonProperty("bio")
   private JsonNullable<String> bio = JsonNullable.undefined();
 
-  public UserDto id(String id) {
+  public UserDto id(Long id) {
     this.id = id;
     return this;
   }
@@ -64,14 +64,14 @@ public class UserDto {
    */
   @Schema(
       name = "id",
-      example = "507f1f77bcf86cd799439011",
+      example = "1",
       description = "The unique identifier of an account",
       required = false)
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
