@@ -40,6 +40,27 @@ paths:
           $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /users:
+    get:
+      tags:
+        - User
+      summary: Get all users
+      description: Returns the users
+      operationId: listUsers
+      parameters:
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /users/{userId}:
     parameters:
       - $ref: '#/components/parameters/userId'
@@ -150,6 +171,24 @@ components:
       required:
         - title
         - status
+    PageMetadata:
+      type: object
+      description: The metadata of a page
+      properties:
+        paging:
+          description: Links to navigate to different pages of results
+          type: object
+          properties:
+            next:
+              description: Link to the next page of results
+              type: string
+              format: url
+        totalResults:
+          description: Total number of results in the result set
+          type: integer
+      required:
+        - paging
+        - totalResults
     User:
       type: object
       description: A simple user
@@ -196,6 +235,20 @@ components:
             createdAt: '2017-07-08T16:18:44-04:00'
             updatedAt: '2017-07-08T16:18:44-04:00'
             type: User
+    UsersPage:
+      type: object
+      description: A page of users
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            users:
+              description: A list of users
+              type: array
+              items:
+                $ref: '#/components/schemas/User'
+          required:
+            - users
     EmptyObject:
       type: object
       description: Empty JSON object
@@ -225,6 +278,24 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   parameters:
+    pageNumber:
+      name: pageNumber
+      description: The page number
+      in: query
+      schema:
+        type: integer
+        format: int32
+        default: 0
+        minimum: 0
+    pageSize:
+      name: pageSize
+      description: The number of items in a single page
+      in: query
+      schema:
+        type: integer
+        format: int32
+        default: 100
+        minimum: 10
     userId:
       name: userId
       in: path

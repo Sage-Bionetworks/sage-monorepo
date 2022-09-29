@@ -16,8 +16,8 @@ tags:
 paths:
   /users/register:
     $ref: paths/users/register.yaml
-  # /users:
-  #   $ref: paths/users.yaml
+  /users:
+    $ref: paths/users.yaml
   /users/{userId}:
     $ref: paths/users/@{userId}.yaml
   # /user/starred:
