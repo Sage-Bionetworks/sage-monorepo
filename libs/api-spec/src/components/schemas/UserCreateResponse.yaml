@@ -2,7 +2,7 @@ type: object
 description: The response returned after the creation of the user
 properties:
   id:
-    $ref: ../parameters/AccountId.yaml
+    $ref: AccountId.yaml
 required:
   - id
 example:

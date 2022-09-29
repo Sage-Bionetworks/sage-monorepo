@@ -2,7 +2,7 @@ type: object
 description: The unique identifier of the starred challenge
 properties:
   id:
-    $ref: ../parameters/ChallengeStarId.yaml
+    $ref: ChallengeStarId.yaml
 required:
   - id
 example:

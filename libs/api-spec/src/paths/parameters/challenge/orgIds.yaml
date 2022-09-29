@@ -5,4 +5,4 @@ required: false
 schema:
   type: array
   items:
-    $ref: ../../../components/parameters/OrgId.yaml
+    $ref: ../../../components/schemas/OrgId.yaml

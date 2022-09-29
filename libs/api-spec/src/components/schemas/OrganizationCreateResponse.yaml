@@ -2,7 +2,7 @@ type: object
 description: The unique identifier of the org created
 properties:
   id:
-    $ref: ../parameters/AccountId.yaml
+    $ref: AccountId.yaml
 required:
   - id
 example:

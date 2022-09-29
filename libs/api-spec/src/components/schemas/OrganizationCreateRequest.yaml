@@ -4,7 +4,7 @@ properties:
   login:
     type: string
   email:
-    $ref: ../parameters/Email.yaml
+    $ref: Email.yaml
   name:
     type: string
     nullable: true

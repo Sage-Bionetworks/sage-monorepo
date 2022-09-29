@@ -14,18 +14,19 @@ tags:
   - name: User
     description: Operations about users
 paths:
-  /users/register:
-    $ref: paths/users/register.yaml
+  # /users/register:
+  #   $ref: paths/users/register.yaml
+  # /users:
+  #   $ref: paths/users.yaml
+  /users/{userId}:
+    $ref: paths/users/@{userId}.yaml
+
   # /user/starred:
   #   $ref: paths/user/starred.yaml
   # /user/orgs:
   #   $ref: paths/user/orgs.yaml
   # /user/starred/{accountName}/{challengeName}:
   #   $ref: paths/user/starred@{accountName}@{challengeName}.yaml
-  /users:
-    $ref: paths/users.yaml
-  /users/{userId}:
-    $ref: paths/users@{userId}.yaml
   # /users/{userId}/orgs:
   #   $ref: paths/users@{userId}orgs.yaml
   # /users/{userId}/starred:

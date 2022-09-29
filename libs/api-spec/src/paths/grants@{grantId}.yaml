@@ -4,7 +4,7 @@ parameters:
     description: The ID of the grant that is being created
     required: true
     schema:
-      $ref: ../components/parameters/GrantId.yaml
+      $ref: ../components/schemas/GrantId.yaml
 get:
   tags:
     - Grant

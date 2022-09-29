@@ -4,12 +4,12 @@ properties:
   name:
     type: string
   login:
-    $ref: ../parameters/AccountLogin.yaml
+    $ref: AccountLogin.yaml
     nullable: true
   roles:
     type: array
     items:
-      $ref: ../parameters/ChallengeOrganizerRole.yaml
+      $ref: ChallengeOrganizerRole.yaml
 required:
   - name
 example:

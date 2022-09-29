@@ -2,9 +2,9 @@ type: object
 description: The information used to star a challenge
 properties:
   challengeId:
-    $ref: ../parameters/ChallengeId.yaml
+    $ref: ChallengeId.yaml
   userId:
-    $ref: ../parameters/UserId.yaml
+    $ref: UserId.yaml
 required:
   - challengeId
   - userId
