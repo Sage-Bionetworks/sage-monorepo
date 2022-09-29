@@ -14,7 +14,6 @@ import javax.validation.constraints.*;
     description = "The response returned after the creation of the user")
 @JsonTypeName("UserCreateResponse")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
 @lombok.Builder
 public class UserCreateResponseDto {
 

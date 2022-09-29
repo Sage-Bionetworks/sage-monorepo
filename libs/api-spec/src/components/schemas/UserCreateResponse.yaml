@@ -7,3 +7,5 @@ required:
   - id
 example:
   id: 507f1f77bcf86cd799439011
+x-java-class-annotations:
+  - '@lombok.Builder'
