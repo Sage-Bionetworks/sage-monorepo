@@ -409,12 +409,18 @@ components:
       - type
       - updatedAt
       type: object
+      x-java-class-annotations:
+      - '@lombok.AllArgsConstructor'
+      - '@lombok.Builder'
+      - '@lombok.NoArgsConstructor'
     UsersPage:
       allOf:
       - $ref: '#/components/schemas/PageMetadata'
       - $ref: '#/components/schemas/UsersPage_allOf'
       description: A page of users
       type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
     EmptyObject:
       description: Empty JSON object
       type: object

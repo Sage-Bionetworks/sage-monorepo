@@ -1,6 +1,8 @@
 package org.sagebionetworks.challenge.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +15,13 @@ import org.sagebionetworks.challenge.model.dto.UserCreateRequestDto;
 import org.sagebionetworks.challenge.model.dto.UserCreateResponseDto;
 import org.sagebionetworks.challenge.model.dto.UserDto;
 import org.sagebionetworks.challenge.model.dto.UserStatusDto;
+import org.sagebionetworks.challenge.model.dto.UsersPageDto;
 import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.model.mapper.UserMapper;
 import org.sagebionetworks.challenge.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,17 +69,23 @@ public class UserService {
         "Unable to create the new user", GlobalErrorCode.ERROR_INVALID_USER);
   }
 
-  // @Transactional(readOnly = true)
-  // public List<UserDto> listUsers(Pageable pageable) {
-  //   Page<UserEntity> userEntities = userRepository.findAll(pageable);
-  //   List<UserDto> users = userMapper.convertToDtoList(userEntities.getContent());
-  //   users.forEach(
-  //       user -> {
-  //         UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
-  //         user.setEmail(userRepresentation.getEmail());
-  //       });
-  //   return users;
-  // }
+  @Transactional(readOnly = true)
+  public UsersPageDto listUsers(Integer pageNumber, Integer pageSize) {
+    Page<UserEntity> userEntitiesPage =
+        userRepository.findAll(PageRequest.of(pageNumber, pageSize));
+    List<UserEntity> userEntities = userEntitiesPage.getContent();
+    List<UserDto> users = new ArrayList<>();
+    userEntities.forEach(
+        userEntity -> {
+          UserRepresentation userRepresentation =
+              keycloakUserService.getUser(userEntity.getAuthId());
+          UserDto user = userMapper.convertToDto(userEntity);
+          user.email(userRepresentation.getEmail());
+          user.login(userRepresentation.getUsername());
+          users.add(user);
+        });
+    return UsersPageDto.builder().users(users).totalResults(0).paging(null).build();
+  }
 
   @Transactional(readOnly = true)
   public UserDto getUser(Long userId) {

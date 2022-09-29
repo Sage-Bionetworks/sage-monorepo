@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
 @Schema(name = "UsersPage", description = "A page of users")
 @JsonTypeName("UsersPage")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@lombok.Builder
 public class UsersPageDto {
 
   @JsonProperty("paging")

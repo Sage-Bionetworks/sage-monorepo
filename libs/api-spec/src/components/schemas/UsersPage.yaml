@@ -11,3 +11,5 @@ allOf:
           $ref: User.yaml
     required:
       - users
+x-java-class-annotations:
+  - '@lombok.Builder'
