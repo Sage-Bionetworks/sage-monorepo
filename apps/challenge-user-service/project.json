@@ -90,6 +90,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
+          "xargs rm -fr <.openapi-generator/FILES",
           "openapi-generator-cli generate",
           "./gradlew spotlessApply"
         ],

@@ -342,35 +342,32 @@ components:
       - paging
       - totalResults
       type: object
+    UserStatus:
+      description: The account status of a user
+      enum:
+      - pending
+      - approved
+      - disabled
+      - blacklist
+      example: pending
+      type: string
     User:
-      allOf:
-      - $ref: '#/components/schemas/UserCreateResponse'
-      - $ref: '#/components/schemas/User_allOf'
       description: A simple user
-      type: object
-    UsersPage:
-      allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/UsersPage_allOf'
-      description: A page of users
-      type: object
-    EmptyObject:
-      description: Empty JSON object
-      type: object
-    PageMetadata_paging:
-      description: Links to navigate to different pages of results
+      example:
+        login: awesome-user
+        email: awesome-user@example.org
+        name: Awesome User
+        status: approved
+        avatarUrl: https://example.com/awesome-avatar.png
+        bio: A great bio
+        createdAt: 2017-07-08T16:18:44-04:00
+        updatedAt: 2017-07-08T16:18:44-04:00
+        type: User
       properties:
-        next:
-          description: Link to the next page of results
-          format: url
+        id:
+          description: The unique identifier of an account
+          example: 507f1f77bcf86cd799439011
           type: string
-      type: object
-    User_allOf:
-      example: "{\"login\":\"awesome-user\",\"email\":\"awesome-user@example.org\"\
-        ,\"name\":\"Awesome User\",\"avatarUrl\":\"https://example.com/awesome-avatar.png\"\
-        ,\"bio\":\"A great bio\",\"createdAt\":\"2017-07-08T16:18:44-04:00\",\"updatedAt\"\
-        :\"2017-07-08T16:18:44-04:00\",\"type\":\"User\"}"
-      properties:
         login:
           type: string
         email:
@@ -381,6 +378,8 @@ components:
         name:
           nullable: true
           type: string
+        status:
+          $ref: '#/components/schemas/UserStatus'
         avatarUrl:
           example: https://example.com/awesome-avatar.png
           format: url
@@ -404,6 +403,23 @@ components:
       - login
       - type
       - updatedAt
+      type: object
+    UsersPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/UsersPage_allOf'
+      description: A page of users
+      type: object
+    EmptyObject:
+      description: Empty JSON object
+      type: object
+    PageMetadata_paging:
+      description: Links to navigate to different pages of results
+      properties:
+        next:
+          description: Link to the next page of results
+          format: url
+          type: string
       type: object
     UsersPage_allOf:
       properties:

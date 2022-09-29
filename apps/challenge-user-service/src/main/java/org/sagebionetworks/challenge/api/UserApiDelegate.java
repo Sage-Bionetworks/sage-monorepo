@@ -73,7 +73,8 @@ public interface UserApiDelegate {
             request -> {
               for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                  String exampleString = "null";
+                  String exampleString =
+                      "{ \"login\" : \"awesome-user\", \"email\" : \"awesome-user@example.org\", \"name\" : \"Awesome User\", \"status\" : \"approved\", \"avatarUrl\" : \"https://example.com/awesome-avatar.png\", \"bio\" : \"A great bio\", \"createdAt\" : \"2017-07-08T16:18:44-04:00\", \"updatedAt\" : \"2017-07-08T16:18:44-04:00\", \"type\" : \"User\" }";
                   ApiUtil.setExampleResponse(request, "application/json", exampleString);
                   break;
                 }
