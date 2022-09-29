@@ -30,10 +30,10 @@ public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
-  private Long id;
+  private String id;
 
   @Column(nullable = false)
-  private String username;
+  private String login;
 
   @Column(nullable = false)
   private String authId;

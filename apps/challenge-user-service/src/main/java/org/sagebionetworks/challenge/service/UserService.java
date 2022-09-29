@@ -10,6 +10,8 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.sagebionetworks.challenge.exception.GlobalErrorCode;
 import org.sagebionetworks.challenge.exception.InvalidUserException;
 import org.sagebionetworks.challenge.exception.UserAlreadyRegisteredException;
+import org.sagebionetworks.challenge.model.dto.UserCreateRequestDto;
+import org.sagebionetworks.challenge.model.dto.UserCreateResponseDto;
 import org.sagebionetworks.challenge.model.dto.UserDto;
 import org.sagebionetworks.challenge.model.dto.UserStatusDto;
 import org.sagebionetworks.challenge.model.dto.UserUpdateRequestDto;
@@ -33,20 +35,20 @@ public class UserService {
   private UserMapper userMapper = new UserMapper();
 
   @Transactional
-  public UserDto createUser(UserDto user) {
-    if (keycloakUserService.getUserByUsername(user.getUsername()).isPresent()) {
+  public UserCreateResponseDto createUser(UserCreateRequestDto userCreateRequest) {
+    if (keycloakUserService.getUserByUsername(userCreateRequest.getLogin()).isPresent()) {
       throw new UserAlreadyRegisteredException(
           "This username is already registered.", GlobalErrorCode.ERROR_USERNAME_REGISTERED);
     }
 
     UserRepresentation userRepresentation = new UserRepresentation();
-    userRepresentation.setEmail(user.getEmail());
+    userRepresentation.setEmail(userCreateRequest.getEmail());
     userRepresentation.setEmailVerified(false);
     userRepresentation.setEnabled(true);
-    userRepresentation.setUsername(user.getUsername());
+    userRepresentation.setUsername(userCreateRequest.getLogin());
 
     CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-    credentialRepresentation.setValue(user.getPassword());
+    credentialRepresentation.setValue(userCreateRequest.getPassword());
     credentialRepresentation.setTemporary(false);
     userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
 
@@ -54,11 +56,12 @@ public class UserService {
 
     if (userCreationResponse == 201) {
       Optional<UserRepresentation> representation =
-          keycloakUserService.getUserByUsername(user.getUsername());
+          keycloakUserService.getUserByUsername(userCreateRequest.getLogin());
+      UserEntity user = new UserEntity();
       user.setAuthId(representation.get().getId());
       user.setStatus(UserStatusDto.PENDING);
-      UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
-      return userMapper.convertToDto(userEntity);
+      UserEntity savedUser = userRepository.save(user);
+      return UserCreateResponseDto.builder().id(savedUser.getId()).build();
     }
 
     throw new InvalidUserException(
