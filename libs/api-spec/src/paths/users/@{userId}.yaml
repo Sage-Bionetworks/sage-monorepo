@@ -1,5 +1,5 @@
 parameters:
-  - $ref: ../../components/parameters/userId.yaml
+  - $ref: ../../components/parameters/path/userId.yaml
 get:
   tags:
     - User
