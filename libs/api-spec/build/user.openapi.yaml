@@ -189,52 +189,63 @@ components:
       required:
         - paging
         - totalResults
+    UserStatus:
+      description: The account status of a user
+      type: string
+      enum:
+        - pending
+        - approved
+        - disabled
+        - blacklist
+      example: pending
     User:
       type: object
       description: A simple user
-      allOf:
-        - $ref: '#/components/schemas/UserCreateResponse'
-        - type: object
-          properties:
-            login:
-              type: string
-            email:
-              $ref: '#/components/schemas/Email'
-            name:
-              type: string
-              nullable: true
-            avatarUrl:
-              type: string
-              format: url
-              example: https://example.com/awesome-avatar.png
-              nullable: true
-            createdAt:
-              type: string
-              format: date-time
-            updatedAt:
-              type: string
-              format: date-time
-            type:
-              type: string
-              example: User
-            bio:
-              type: string
-              nullable: true
-          required:
-            - login
-            - email
-            - createdAt
-            - updatedAt
-            - type
-          example:
-            login: awesome-user
-            email: awesome-user@example.org
-            name: Awesome User
-            avatarUrl: https://example.com/awesome-avatar.png
-            bio: A great bio
-            createdAt: '2017-07-08T16:18:44-04:00'
-            updatedAt: '2017-07-08T16:18:44-04:00'
-            type: User
+      properties:
+        id:
+          $ref: '#/components/schemas/AccountId'
+        login:
+          type: string
+        email:
+          $ref: '#/components/schemas/Email'
+        name:
+          type: string
+          nullable: true
+        status:
+          $ref: '#/components/schemas/UserStatus'
+        avatarUrl:
+          type: string
+          format: url
+          example: https://example.com/awesome-avatar.png
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        type:
+          type: string
+          example: User
+        bio:
+          type: string
+          nullable: true
+      required:
+        - login
+        - email
+        - createdAt
+        - updatedAt
+        - type
+      example:
+        login: awesome-user
+        email: awesome-user@example.org
+        name: Awesome User
+        status: approved
+        avatarUrl: https://example.com/awesome-avatar.png
+        bio: A great bio
+        createdAt: '2017-07-08T16:18:44-04:00'
+        updatedAt: '2017-07-08T16:18:44-04:00'
+        type: User
     UsersPage:
       type: object
       description: A page of users

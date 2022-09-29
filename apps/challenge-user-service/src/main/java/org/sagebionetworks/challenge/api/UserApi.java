@@ -10,13 +10,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import org.sagebionetworks.challenge.model.dto.PageableDto;
+import org.sagebionetworks.challenge.model.dto.ErrorDto;
+import org.sagebionetworks.challenge.model.dto.UserCreateRequestDto;
+import org.sagebionetworks.challenge.model.dto.UserCreateResponseDto;
 import org.sagebionetworks.challenge.model.dto.UserDto;
-import org.sagebionetworks.challenge.model.dto.UserUpdateRequestDto;
+import org.sagebionetworks.challenge.model.dto.UsersPageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,122 +33,221 @@ public interface UserApi {
   }
 
   /**
-   * POST /api/v1/users/register
+   * POST /users/register : Create a user Create a user with the specified account name
    *
-   * @param userDto (required)
-   * @return OK (status code 200)
+   * @param userCreateRequestDto (required)
+   * @return Account created (status code 201) or Invalid request (status code 400) or The request
+   *     conflicts with current state of the target resource (status code 409) or The request cannot
+   *     be fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
       operationId = "createUser",
+      summary = "Create a user",
       tags = {"User"},
       responses = {
         @ApiResponse(
-            responseCode = "200",
-            description = "OK",
+            responseCode = "201",
+            description = "Account created",
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = UserDto.class))
+                  schema = @Schema(implementation = UserCreateResponseDto.class))
+            }),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid request",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class))
+            }),
+        @ApiResponse(
+            responseCode = "409",
+            description = "The request conflicts with current state of the target resource",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class))
+            }),
+        @ApiResponse(
+            responseCode = "500",
+            description = "The request cannot be fulfilled due to an unexpected server error",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.POST,
-      value = "/api/v1/users/register",
+      value = "/users/register",
       produces = {"application/json"},
       consumes = {"application/json"})
-  default ResponseEntity<UserDto> createUser(
-      @Parameter(name = "UserDto", description = "", required = true) @Valid @RequestBody
-          UserDto userDto) {
-    return getDelegate().createUser(userDto);
+  default ResponseEntity<UserCreateResponseDto> createUser(
+      @Parameter(name = "UserCreateRequestDto", description = "", required = true)
+          @Valid
+          @RequestBody
+          UserCreateRequestDto userCreateRequestDto) {
+    return getDelegate().createUser(userCreateRequestDto);
   }
 
   /**
-   * GET /api/v1/users/{id}
+   * DELETE /users/{userId} : Delete a user Deletes the user specified
    *
-   * @param id (required)
-   * @return OK (status code 200)
+   * @param userId The unique identifier of the user, either the user account ID or login (required)
+   * @return Deleted (status code 200) or The specified resource was not found (status code 400) or
+   *     The request cannot be fulfilled due to an unexpected server error (status code 500)
+   */
+  @Operation(
+      operationId = "deleteUser",
+      summary = "Delete a user",
+      tags = {"User"},
+      responses = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Deleted",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = Object.class))
+            }),
+        @ApiResponse(
+            responseCode = "400",
+            description = "The specified resource was not found",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class))
+            }),
+        @ApiResponse(
+            responseCode = "500",
+            description = "The request cannot be fulfilled due to an unexpected server error",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class))
+            })
+      })
+  @RequestMapping(
+      method = RequestMethod.DELETE,
+      value = "/users/{userId}",
+      produces = {"application/json"})
+  default ResponseEntity<Object> deleteUser(
+      @Parameter(
+              name = "userId",
+              description =
+                  "The unique identifier of the user, either the user account ID or login",
+              required = true)
+          @PathVariable("userId")
+          String userId) {
+    return getDelegate().deleteUser(userId);
+  }
+
+  /**
+   * GET /users/{userId} : Get a user Returns the user specified
+   *
+   * @param userId The unique identifier of the user, either the user account ID or login (required)
+   * @return A user (status code 200) or The specified resource was not found (status code 404) or
+   *     The request cannot be fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
       operationId = "getUser",
+      summary = "Get a user",
       tags = {"User"},
       responses = {
         @ApiResponse(
             responseCode = "200",
-            description = "OK",
+            description = "A user",
             content = {
               @Content(
                   mediaType = "application/json",
                   schema = @Schema(implementation = UserDto.class))
+            }),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The specified resource was not found",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class))
+            }),
+        @ApiResponse(
+            responseCode = "500",
+            description = "The request cannot be fulfilled due to an unexpected server error",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.GET,
-      value = "/api/v1/users/{id}",
+      value = "/users/{userId}",
       produces = {"application/json"})
   default ResponseEntity<UserDto> getUser(
-      @Parameter(name = "id", description = "", required = true) @PathVariable("id") Long id) {
-    return getDelegate().getUser(id);
+      @Parameter(
+              name = "userId",
+              description =
+                  "The unique identifier of the user, either the user account ID or login",
+              required = true)
+          @PathVariable("userId")
+          String userId) {
+    return getDelegate().getUser(userId);
   }
 
   /**
-   * GET /api/v1/users/
+   * GET /users : Get all users Returns the users
    *
-   * @param pageable (optional)
-   * @return OK (status code 200)
+   * @param pageNumber The page number (optional, default to 0)
+   * @param pageSize The number of items in a single page (optional, default to 100)
+   * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
+   *     fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
       operationId = "listUsers",
+      summary = "Get all users",
       tags = {"User"},
       responses = {
         @ApiResponse(
             responseCode = "200",
-            description = "OK",
+            description = "Success",
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = UserDto.class))
+                  schema = @Schema(implementation = UsersPageDto.class))
+            }),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid request",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class))
+            }),
+        @ApiResponse(
+            responseCode = "500",
+            description = "The request cannot be fulfilled due to an unexpected server error",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.GET,
-      value = "/api/v1/users/",
+      value = "/users",
       produces = {"application/json"})
-  default ResponseEntity<List<UserDto>> listUsers(
-      @Parameter(name = "pageable", description = "") @Valid PageableDto pageable) {
-    return getDelegate().listUsers(pageable);
-  }
-
-  /**
-   * PATCH /api/v1/users/{id}
-   *
-   * @param id (required)
-   * @param userUpdateRequestDto (required)
-   * @return OK (status code 200)
-   */
-  @Operation(
-      operationId = "updateUser",
-      tags = {"User"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "OK",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = UserDto.class))
-            })
-      })
-  @RequestMapping(
-      method = RequestMethod.PATCH,
-      value = "/api/v1/users/{id}",
-      produces = {"application/json"},
-      consumes = {"application/json"})
-  default ResponseEntity<UserDto> updateUser(
-      @Parameter(name = "id", description = "", required = true) @PathVariable("id") Long id,
-      @Parameter(name = "UserUpdateRequestDto", description = "", required = true)
+  default ResponseEntity<UsersPageDto> listUsers(
+      @Min(0)
+          @Parameter(name = "pageNumber", description = "The page number")
           @Valid
-          @RequestBody
-          UserUpdateRequestDto userUpdateRequestDto) {
-    return getDelegate().updateUser(id, userUpdateRequestDto);
+          @RequestParam(value = "pageNumber", required = false, defaultValue = "0")
+          Integer pageNumber,
+      @Min(10)
+          @Parameter(name = "pageSize", description = "The number of items in a single page")
+          @Valid
+          @RequestParam(value = "pageSize", required = false, defaultValue = "100")
+          Integer pageSize) {
+    return getDelegate().listUsers(pageNumber, pageSize);
   }
 }
