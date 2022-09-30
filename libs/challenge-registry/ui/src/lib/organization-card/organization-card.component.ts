@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Organization } from '@sagebionetworks/api-client-angular';
+// import { Organization } from '@sagebionetworks/api-client-angular';
+import { Organization } from './organization';
 import { Avatar } from '../avatar/avatar';
 
 @Component({

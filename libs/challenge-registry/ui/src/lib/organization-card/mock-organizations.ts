@@ -1,4 +1,5 @@
-import { Organization } from '@sagebionetworks/api-client-angular';
+// import { Organization } from '@sagebionetworks/api-client-angular';
+import { Organization } from './organization';
 
 export const MOCK_ORGANIZATIONS: Organization[] = [
   {
