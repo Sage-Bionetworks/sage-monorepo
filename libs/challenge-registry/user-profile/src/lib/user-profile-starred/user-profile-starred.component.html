@@ -22,10 +22,10 @@
         <p-paginator
           class="paginator"
           [first]="0"
+          [pageLinkSize]="pageSize"
           [rows]="limit"
-          [pageLinkSize]="10"
           [totalRecords]="challengeResultsCount"
-          [rowsPerPageOptions]="[1, 2, 3]"
+          [rowsPerPageOptions]="[1, 2, 3, 6, 10, 20, 30]"
           (onPageChange)="onPageChange($event)"
         ></p-paginator>
         <div class="main-section-stars-card-group">
