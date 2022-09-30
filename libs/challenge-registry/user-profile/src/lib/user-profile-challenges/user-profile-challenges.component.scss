@@ -1,20 +1,6 @@
-.row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-}
-.col {
-  display: flex;
-  flex-direction: column;
-  flex-basis: 100%;
-  flex: 1;
-}
-
 #challenges {
   margin: 18px;
 }
-
 .card-group {
   width: 100%;
   display: flex;

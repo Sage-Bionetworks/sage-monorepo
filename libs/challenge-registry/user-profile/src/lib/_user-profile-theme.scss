@@ -33,7 +33,7 @@
   .base-basic-stats {
     background-color: map.get($figma, dl-color-default-hover2);
   }
-  .sidenav {
+  .nav-group {
     border-color: map.get($figma, dl-color-default-primary2);
     background-color: rgba(255, 255, 255, 1);
   }
@@ -61,12 +61,16 @@
 }
 
 @mixin typography($theme) {
-  .stat-item {
-    text-align: center;
+  .username {
+    font-size: 28px;
   }
-  .action-btn {
-    font-size: 21px;
-    text-transform: uppercase;
+  @media screen and (max-width: 641px) {
+    #details > h2 {
+      font-size: 32px;
+    }
+    #details > h3 {
+      font-size: 21px;
+    }
   }
 }
 

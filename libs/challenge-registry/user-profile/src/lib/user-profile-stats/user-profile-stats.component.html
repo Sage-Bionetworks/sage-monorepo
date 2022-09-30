@@ -8,9 +8,9 @@
     <p class="mat-caption">stars</p>
   </div>
   <div class="stat-item action-btn" *ngIf="loggedIn">
-    <p><mat-icon>edit</mat-icon> Edit Profile</p>
+    <mat-icon aria-hidden="true" class="card-icon">edit</mat-icon> Edit Profile
   </div>
   <div class="stat-item action-btn" *ngIf="!loggedIn">
-    <p><mat-icon>email</mat-icon> Send Message</p>
+    <mat-icon aria-hidden="true" class="card-icon">email</mat-icon> Send Message
   </div>
 </div>
