@@ -42,5 +42,7 @@ provider:
 functions:
   challengeBot:
     handler: '../../dist/apps/challenge-bot/src/lambda/handler.webhooks'
+    description: Lambda function for TODO
+    memorySize: 256
     events:
       - httpApi: 'POST /api/github/webhooks'
