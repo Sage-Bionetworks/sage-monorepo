@@ -53,7 +53,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          // "xargs rm -fr <.openapi-generator/FILES",
+          "rm -fr src/lib",
           "openapi-generator-cli generate",
           "echo 'TODO Format generated code'"
         ],
