@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-// import { Challenge } from '@sagebionetworks/api-client-angular';
+import { Challenge } from '@sagebionetworks/api-client-angular-deprecated';
 
 @Component({
   selector: 'challenge-registry-challenge-header',
@@ -8,5 +8,5 @@ import { Component, Input } from '@angular/core';
 })
 export class ChallengeHeaderComponent {
   @Input() accountName = '';
-  // @Input() challenge!: Challenge;
+  @Input() challenge!: Challenge;
 }
