@@ -1,0 +1,27 @@
+{
+  "name": "challenge-bot",
+  "version": "1.0.0",
+  "description": "Challenge Bot",
+  "main": "src/app.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sage-Bionetworks/challenge-registry.git"
+  },
+  "keywords": [
+    "backend",
+    "serverless",
+    "ChallengeBot",
+    "typescript",
+    "nodejs"
+  ],
+  "author": {
+    "name": "Thomas Schaffter",
+    "email": "thomas.schaffter@protonmail.com",
+    "url": "https://github.com/tschaffter"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Sage-Bionetworks/challenge-registry/issues"
+  },
+  "homepage": "https://github.com/Sage-Bionetworks/challenge-registry#readme"
+}
