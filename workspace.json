@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "api-client-angular": "libs/api-client-angular",
+    "api-client-angular-deprecated": "libs/api-client-angular-deprecated",
     "api-spec": "libs/api-spec",
     "challenge-api-gateway": "apps/challenge-api-gateway",
     "challenge-auth-service": "apps/challenge-auth-service",
