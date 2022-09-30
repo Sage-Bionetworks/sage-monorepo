@@ -24,7 +24,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/challenge-bot/**/*.ts"]
+        "lintFilePatterns": ["apps/challenge-bot/src/**/*.ts"]
       }
     },
     "lint-fix": {

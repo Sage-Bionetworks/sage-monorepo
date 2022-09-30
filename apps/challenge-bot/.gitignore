@@ -5,5 +5,7 @@
 !.yarn/sdks
 !.yarn/versions
 
+.build
 .serverless
+.yarn
 node_modules

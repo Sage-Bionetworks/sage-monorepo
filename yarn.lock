@@ -9287,6 +9287,7 @@ __metadata:
     regenerator-runtime: 0.13.7
     rxjs: ~7.4.0
     serverless: ^3.22.0
+    serverless-plugin-typescript: ^2.1.2
     shx: ^0.3.4
     smee-client: ^1.2.3
     ts-jest: 27.1.4
@@ -13729,6 +13730,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fs-extra@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "fs-extra@npm:7.0.1"
+  dependencies:
+    graceful-fs: ^4.1.2
+    jsonfile: ^4.0.0
+    universalify: ^0.1.0
+  checksum: 141b9dccb23b66a66cefdd81f4cda959ff89282b1d721b98cea19ba08db3dcbe6f862f28841f3cf24bb299e0b7e6c42303908f65093cb7e201708e86ea5a8dcf
+  languageName: node
+  linkType: hard
+
 "fs-extra@npm:^8.1.0":
   version: 8.1.0
   resolution: "fs-extra@npm:8.1.0"
@@ -14190,6 +14202,22 @@ __metadata:
     merge2: ^1.2.3
     slash: ^3.0.0
   checksum: a16754b93eff58c1070ca9b0a92c69d9d97a184870fbc7dcb1b99a3ff202311ae66dd5662cbec874deaa888d0172024332e14d04d038c23949d5f8e29341dad2
+  languageName: node
+  linkType: hard
+
+"globby@npm:^10.0.2":
+  version: 10.0.2
+  resolution: "globby@npm:10.0.2"
+  dependencies:
+    "@types/glob": ^7.1.1
+    array-union: ^2.1.0
+    dir-glob: ^3.0.1
+    fast-glob: ^3.0.3
+    glob: ^7.1.3
+    ignore: ^5.1.1
+    merge2: ^1.2.3
+    slash: ^3.0.0
+  checksum: 167cd067f2cdc030db2ec43232a1e835fa06217577d545709dbf29fd21631b30ff8258705172069c855dc4d5766c3b2690834e35b936fbff01ad0329fb95a26f
   languageName: node
   linkType: hard
 
@@ -22820,6 +22848,20 @@ __metadata:
   version: 1.0.1
   resolution: "server-destroy@npm:1.0.1"
   checksum: cbc19d4f92d25a0a34430c6a09faccbea77d1a69563560eefe883feb67c14c3fb3a1c5af1affae0e82d537886ea0f91d317e39e46b5d6425de3acf57a3ab13e3
+  languageName: node
+  linkType: hard
+
+"serverless-plugin-typescript@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "serverless-plugin-typescript@npm:2.1.2"
+  dependencies:
+    fs-extra: ^7.0.1
+    globby: ^10.0.2
+    lodash: ^4.17.21
+  peerDependencies:
+    serverless: 2 || 3
+    typescript: ">=2.2.2"
+  checksum: af7b4049c822e181cb50994dcbcf6872df52f1e5bdc58056b30154f5a616ddb84ffacf863c318aeaab5020f642c96994b862367b775d772d01d9632097e3d72b
   languageName: node
   linkType: hard
 
