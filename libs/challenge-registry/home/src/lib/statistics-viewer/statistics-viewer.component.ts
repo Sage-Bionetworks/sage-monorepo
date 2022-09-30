@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-// import { Registry, RegistryService } from '@sagebionetworks/api-client-angular';
-// import { Observable } from 'rxjs';
+import {
+  Registry,
+  RegistryService,
+} from '@sagebionetworks/api-client-angular-deprecated';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'challenge-registry-statistics-viewer',
@@ -8,8 +11,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./statistics-viewer.component.scss'],
 })
 export class StatisticsViewerComponent {
-  // registry$!: Observable<Registry>;
-  // constructor(private registryService: RegistryService) {
-  //   // this.registry$ = this.registryService.getRegistry();
-  // }
+  registry$!: Observable<Registry>;
+  constructor(private registryService: RegistryService) {
+    this.registry$ = this.registryService.getRegistry();
+  }
 }
