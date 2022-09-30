@@ -1,5 +1,5 @@
 {
-  "name": "@sagebionetworks/api-angular",
+  "name": "@sagebionetworks/api-client-angular",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^13.2.0",

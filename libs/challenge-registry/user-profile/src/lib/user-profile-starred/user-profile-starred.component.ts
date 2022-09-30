@@ -1,5 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { Challenge, Organization, User } from '@sagebionetworks/api-angular';
+import {
+  Challenge,
+  Organization,
+  User,
+} from '@sagebionetworks/api-client-angular';
 import { Tab } from '../tab.model';
 import { USER_PROFILE_STARRED_TABS } from './user-profile-starred-tabs';
 import {

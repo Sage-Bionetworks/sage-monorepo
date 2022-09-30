@@ -1,35 +1,23 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/api-angular/src",
+  "sourceRoot": "libs/api-client-angular/src",
   "prefix": "challenge-registry",
   "targets": {
-    "generate-sources": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "commands": [
-          "rm -fr src/lib/api",
-          "rm -fr src/lib/model",
-          "openapi-generator-cli generate -g typescript-angular -o src/lib -c openapi-generator.config.yaml -i ../api-spec/openapi.yaml"
-        ],
-        "cwd": "libs/api-angular",
-        "parallel": false
-      }
-    },
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
       "outputs": [
-        "dist/libs/api-angular"
+        "dist/libs/api-client-angular"
       ],
       "options": {
-        "project": "libs/api-angular/ng-package.json"
+        "project": "libs/api-client-angular/ng-package.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "libs/api-angular/tsconfig.lib.prod.json"
+          "tsConfig": "libs/api-client-angular/tsconfig.lib.prod.json"
         },
         "development": {
-          "tsConfig": "libs/api-angular/tsconfig.lib.json"
+          "tsConfig": "libs/api-client-angular/tsconfig.lib.json"
         }
       },
       "defaultConfiguration": "production"
@@ -37,10 +25,10 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/libs/api-angular"
+        "coverage/libs/api-client-angular"
       ],
       "options": {
-        "jestConfig": "libs/api-angular/jest.config.ts",
+        "jestConfig": "libs/api-client-angular/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -48,7 +36,7 @@
       "executor": "@nrwl/linter:eslint",
       "options": {
         "lintFilePatterns": [
-          "libs/api-angular/src/index.ts"
+          "libs/api-client-angular/src/index.ts"
         ]
       }
     },
@@ -56,9 +44,21 @@
       "executor": "@nrwl/linter:eslint",
       "options": {
         "lintFilePatterns": [
-          "libs/api-angular/src/index.ts"
+          "libs/api-client-angular/src/index.ts"
         ],
         "fix": true
+      }
+    },
+    "openapi-generate": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          // "xargs rm -fr <.openapi-generator/FILES",
+          "openapi-generator-cli generate",
+          "echo 'TODO Format generated code'"
+        ],
+        "cwd": "libs/api-client-angular",
+        "parallel": false
       }
     }
   },

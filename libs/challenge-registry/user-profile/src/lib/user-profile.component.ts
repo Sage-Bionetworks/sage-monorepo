@@ -6,7 +6,7 @@ import {
   // ModelError as ApiClientError,
   User,
   UserService,
-} from '@sagebionetworks/api-angular';
+} from '@sagebionetworks/api-client-angular';
 import { AuthService } from '@sagebionetworks/challenge-registry/auth';
 // import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 import {

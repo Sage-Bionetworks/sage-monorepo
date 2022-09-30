@@ -1,4 +1,4 @@
-import { Challenge } from '@sagebionetworks/api-angular';
+import { Challenge } from '@sagebionetworks/api-client-angular';
 
 export const MOCK_CHALLENGES: Challenge[] = [
   {

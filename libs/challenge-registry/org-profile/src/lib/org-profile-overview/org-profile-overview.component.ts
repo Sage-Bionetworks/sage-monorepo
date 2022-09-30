@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Organization } from '@sagebionetworks/api-angular';
+import { Organization } from '@sagebionetworks/api-client-angular';
 import { OrgProfileDataServiceService } from '../org-profile-data-service.service';
 
 @Component({

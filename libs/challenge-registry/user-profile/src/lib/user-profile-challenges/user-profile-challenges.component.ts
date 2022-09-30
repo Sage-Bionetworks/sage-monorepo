@@ -1,5 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { Challenge, User, UserService } from '@sagebionetworks/api-angular';
+import {
+  Challenge,
+  User,
+  UserService,
+} from '@sagebionetworks/api-client-angular';
 import { MOCK_CHALLENGES } from '@sagebionetworks/challenge-registry/ui';
 // import { map, Observable } from 'rxjs';
 

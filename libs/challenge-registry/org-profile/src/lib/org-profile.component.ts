@@ -5,7 +5,7 @@ import {
   ModelError as ApiClientError,
   Organization,
   OrganizationService,
-} from '@sagebionetworks/api-angular';
+} from '@sagebionetworks/api-client-angular';
 import {
   catchError,
   filter,
