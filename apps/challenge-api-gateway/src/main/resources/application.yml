@@ -6,7 +6,7 @@ app:
 
 spring:
   application:
-    name: challenge_api_gateway
+    name: challenge-api-gateway
   security:
     oauth2:
       client:

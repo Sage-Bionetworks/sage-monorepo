@@ -1,0 +1,25 @@
+type: object
+description: The Challenge Registry
+properties:
+  name:
+    type: string
+  description:
+    type: string
+  userCount:
+    type: integer
+  orgCount:
+    type: integer
+  challengeCount:
+    type: integer
+required:
+  - name
+  - description
+  - userCount
+  - orgCount
+  - challengeCount
+example:
+  name: Challenge Registry
+  description: A great challenge registry
+  userCount: 1000
+  orgCount: 1000
+  challengeCound: 1000

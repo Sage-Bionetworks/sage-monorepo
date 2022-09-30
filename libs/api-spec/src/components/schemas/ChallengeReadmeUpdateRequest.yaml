@@ -1,0 +1,9 @@
+type: object
+description: The new README content of a challenge
+properties:
+  text:
+    type: string
+required:
+  - text
+example:
+  text: A great README text

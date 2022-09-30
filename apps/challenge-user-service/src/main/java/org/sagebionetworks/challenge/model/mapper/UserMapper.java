@@ -1,13 +1,13 @@
 package org.sagebionetworks.challenge.model.mapper;
 
-import org.sagebionetworks.challenge.model.dto.User;
+import org.sagebionetworks.challenge.model.dto.UserDto;
 import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.util.model.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
 
-public class UserMapper extends BaseMapper<UserEntity, User> {
+public class UserMapper extends BaseMapper<UserEntity, UserDto> {
   @Override
-  public UserEntity convertToEntity(User dto, Object... args) {
+  public UserEntity convertToEntity(UserDto dto, Object... args) {
     UserEntity userEntity = new UserEntity();
     if (dto != null) {
       BeanUtils.copyProperties(dto, userEntity);
@@ -16,8 +16,8 @@ public class UserMapper extends BaseMapper<UserEntity, User> {
   }
 
   @Override
-  public User convertToDto(UserEntity entity, Object... args) {
-    User user = new User();
+  public UserDto convertToDto(UserEntity entity, Object... args) {
+    UserDto user = new UserDto();
     if (entity != null) {
       BeanUtils.copyProperties(entity, user);
     }

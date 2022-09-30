@@ -5201,7 +5201,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/ajv@npm:^8.6.4, @redocly/ajv@npm:^8.6.5":
+"@redocly/ajv@npm:^8.11.0":
+  version: 8.11.0
+  resolution: "@redocly/ajv@npm:8.11.0"
+  dependencies:
+    fast-deep-equal: ^3.1.1
+    json-schema-traverse: ^1.0.0
+    require-from-string: ^2.0.2
+    uri-js: ^4.2.2
+  checksum: 3e4c7a18226aefd2016628eed88a84588c49f6e721a1009081a20873f374a3d765c6a640856f6cb6bdd1732b027e3c82ea5c06d27427bc5a8af2cf8bb69bbd9b
+  languageName: node
+  linkType: hard
+
+"@redocly/ajv@npm:^8.6.5":
   version: 8.6.5
   resolution: "@redocly/ajv@npm:8.6.5"
   dependencies:
@@ -5213,42 +5225,47 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/openapi-cli@npm:^1.0.0-beta.81":
-  version: 1.0.0-beta.94
-  resolution: "@redocly/openapi-cli@npm:1.0.0-beta.94"
+"@redocly/cli@npm:^1.0.0-beta.110":
+  version: 1.0.0-beta.110
+  resolution: "@redocly/cli@npm:1.0.0-beta.110"
   dependencies:
-    "@redocly/openapi-core": 1.0.0-beta.94
-    "@types/node": ^14.11.8
+    "@redocly/openapi-core": 1.0.0-beta.110
     assert-node-version: ^1.0.3
     chokidar: ^3.5.1
     colorette: ^1.2.0
     glob: ^7.1.6
     glob-promise: ^3.4.0
     handlebars: ^4.7.6
+    mobx: ^6.3.2
     portfinder: ^1.0.26
+    react: ^17.0.1
+    react-dom: ^17.0.1
+    redoc: ~2.0.0
     simple-websocket: ^9.0.0
+    styled-components: ^5.3.0
     yargs: 17.0.1
   bin:
     openapi: bin/cli.js
-  checksum: 9085a1b2b61fc16bbbdd17a8dfb87df7c056831d854b92aaa695e2ffe4b9d8d7c83825b8a9bae7bd93c12343ca93795ef8a01eda79e14a4cbfb51cebef0a5122
+    redocly: bin/cli.js
+  checksum: a3688ac2a1e11f406a0ffae7fe19457a489d59a6b30114fdf44e77557463998ad6464f43ed7c24664beeb85bb07ac7ac025d55ae2d424322a40316f5a3666944
   languageName: node
   linkType: hard
 
-"@redocly/openapi-core@npm:1.0.0-beta.94":
-  version: 1.0.0-beta.94
-  resolution: "@redocly/openapi-core@npm:1.0.0-beta.94"
+"@redocly/openapi-core@npm:1.0.0-beta.110":
+  version: 1.0.0-beta.110
+  resolution: "@redocly/openapi-core@npm:1.0.0-beta.110"
   dependencies:
-    "@redocly/ajv": ^8.6.4
+    "@redocly/ajv": ^8.11.0
     "@types/node": ^14.11.8
     colorette: ^1.2.0
     js-levenshtein: ^1.1.6
     js-yaml: ^4.1.0
     lodash.isequal: ^4.5.0
-    minimatch: ^3.0.4
+    minimatch: ^5.0.1
     node-fetch: ^2.6.1
     pluralize: ^8.0.0
     yaml-ast-parser: 0.0.43
-  checksum: 14b40f87185392c74f4290529c5432d9717a554f720783f903cb05328dfe13dbb93b22746b899c420db4d14a41fc67e0106f060a3bb543a64482fe5068ae9ba8
+  checksum: 17acdc9822c13a9cd823d0badbefe7b42be1782a035565c2895fbb66e4cbc379e31a5d3f4ec421f65ba044343524cb577c0d2039d7578df48684c6039948232b
   languageName: node
   linkType: hard
 
@@ -9214,7 +9231,7 @@ __metadata:
     "@openapitools/openapi-generator-cli": ^2.4.26
     "@prettier/plugin-xml": ^2.2.0
     "@probot/adapter-aws-lambda-serverless": ^3.0.1
-    "@redocly/openapi-cli": ^1.0.0-beta.81
+    "@redocly/cli": ^1.0.0-beta.110
     "@swc-node/register": ^1.4.2
     "@swc/cli": ~0.1.55
     "@swc/core": ^1.2.173
@@ -21813,6 +21830,42 @@ __metadata:
     react-dom: ^16.8.4 || ^17.0.0
     styled-components: ^4.1.1 || ^5.1.1
   checksum: 960759320a1d81236712c4ded7dbdbec7f24892d1c4c188b0b800d8f416852557f7f91d7b123dd897f709bd1e45af52233ca122a596b28902b8a396c85e5a4ab
+  languageName: node
+  linkType: hard
+
+"redoc@npm:~2.0.0":
+  version: 2.0.0
+  resolution: "redoc@npm:2.0.0"
+  dependencies:
+    "@redocly/openapi-core": ^1.0.0-beta.104
+    classnames: ^2.3.1
+    decko: ^1.2.0
+    dompurify: ^2.2.8
+    eventemitter3: ^4.0.7
+    json-pointer: ^0.6.2
+    lunr: ^2.3.9
+    mark.js: ^8.11.1
+    marked: ^4.0.15
+    mobx-react: ^7.2.0
+    openapi-sampler: ^1.3.0
+    path-browserify: ^1.0.1
+    perfect-scrollbar: ^1.5.5
+    polished: ^4.1.3
+    prismjs: ^1.27.0
+    prop-types: ^15.7.2
+    react-tabs: ^3.2.2
+    slugify: ~1.4.7
+    stickyfill: ^1.1.1
+    style-loader: ^3.3.1
+    swagger2openapi: ^7.0.6
+    url-template: ^2.0.8
+  peerDependencies:
+    core-js: ^3.1.4
+    mobx: ^6.0.4
+    react: ^16.8.4 || ^17.0.0
+    react-dom: ^16.8.4 || ^17.0.0
+    styled-components: ^4.1.1 || ^5.1.1
+  checksum: 684d43dc62fb5f66ee765604b5745c6f742bf35b4cb603e546399ba76c987c7ef61313a51c99ababbb42a703d44bf84b78e3f7d1e5666d08b62930c52e35536f
   languageName: node
   linkType: hard
 

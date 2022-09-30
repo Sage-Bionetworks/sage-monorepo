@@ -14,7 +14,12 @@
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "test", "lint", "e2e"],
+        "cacheableOperations": [
+          "build",
+          "test",
+          "lint",
+          "e2e"
+        ],
         "canTrackAnalytics": false,
         "showUsageWarnings": true,
         "scan": true
@@ -37,11 +42,15 @@
     }
   },
   "defaultProject": "challenge-registry",
-  "plugins": ["@nxrocks/nx-spring-boot"],
+  "plugins": [
+    "@nxrocks/nx-spring-boot"
+  ],
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     }
   }
 }
