@@ -18,9 +18,8 @@
       </button>
     </div>
     <ng-container [ngSwitch]="activeTab">
-      <div *ngSwitchCase="tabs['challenges']" class="content-group">
+      <div *ngSwitchCase="tabs['challenges']" class="tab-content-group">
         <p-paginator
-          class="paginator"
           [first]="0"
           [pageLinkSize]="10"
           [rows]="limit"

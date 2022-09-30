@@ -3,16 +3,12 @@
 #stars {
   margin: 18px;
 }
-.tav-nav-group {
-  top: 104px;
-  left: 0px;
-  width: 415px;
-  height: 71px;
+.tab-nav-group {
+  margin-bottom: 12px;
+}
+.tab-content-group {
   display: flex;
-  position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
+  flex-direction: column;
 }
 .tab-item {
   padding: 18px 32px;
@@ -36,14 +32,4 @@
   & > * {
     margin: 12px;
   }
-}
-.content-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.paginator {
-  position: absolute;
-  top: 180px;
-  left: 80px;
 }

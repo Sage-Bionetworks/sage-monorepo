@@ -26,16 +26,16 @@ export class UserProfileStarredComponent implements OnInit {
   tabKeys: string[] = Object.keys(this.tabs);
   activeTab: Tab = this.tabs['challenges'];
 
-  // mock up challenge/organization search results
-  limit = 1;
+  // mock up to query challenge results
+  private query: BehaviorSubject<any> = new BehaviorSubject<any>({
+    offset: 0,
+    limit: 10,
+  });
+
+  limit = 10;
   offset = 0;
   challengeResultsCount = 0;
   challenges!: Challenge[];
-
-  private query: BehaviorSubject<any> = new BehaviorSubject<any>({
-    offset: 0,
-    limit: 1,
-  });
 
   ngOnInit(): void {
     this.query
