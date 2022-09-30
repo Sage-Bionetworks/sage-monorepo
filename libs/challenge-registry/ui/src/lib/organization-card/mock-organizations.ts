@@ -1,5 +1,4 @@
-// import { Organization } from '@sagebionetworks/api-client-angular';
-import { Organization } from './organization';
+import { Organization } from '@sagebionetworks/api-client-angular-deprecated';
 
 export const MOCK_ORGANIZATIONS: Organization[] = [
   {
