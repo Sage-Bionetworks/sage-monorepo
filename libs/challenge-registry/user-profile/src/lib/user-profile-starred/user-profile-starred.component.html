@@ -21,9 +21,12 @@
       <div *ngSwitchCase="tabs['challenges']" class="content-group">
         <p-paginator
           class="paginator"
-          [rows]="10"
-          [totalRecords]="100"
-          [rowsPerPageOptions]="[10, 20, 30]"
+          [first]="0"
+          [rows]="limit"
+          [pageLinkSize]="10"
+          [totalRecords]="challengeResultsCount"
+          [rowsPerPageOptions]="[1, 2, 3]"
+          (onPageChange)="onPageChange($event)"
         ></p-paginator>
         <div class="main-section-stars-card-group">
           <challenge-registry-challenge-card
