@@ -32,14 +32,14 @@
         "passWithNoTests": true
       }
     },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/api-client-angular/src/index.ts"
-        ]
-      }
-    },
+    // "lint": {
+    //   "executor": "@nrwl/linter:eslint",
+    //   "options": {
+    //     "lintFilePatterns": [
+    //       "libs/api-client-angular/src/index.ts"
+    //     ]
+    //   }
+    // },
     "lint-fix": {
       "executor": "@nrwl/linter:eslint",
       "options": {
