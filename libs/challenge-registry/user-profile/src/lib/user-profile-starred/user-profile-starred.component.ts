@@ -29,7 +29,6 @@ export class UserProfileStarredComponent implements OnInit {
   // mock up challenge/organization search results
   limit = 1;
   offset = 0;
-  pageSize = 0;
   challengeResultsCount = 0;
   challenges!: Challenge[];
 
@@ -54,10 +53,6 @@ export class UserProfileStarredComponent implements OnInit {
         this.challenges = page.challenges;
         console.log(this.challenges);
         this.challengeResultsCount = page.totalResults;
-        this.pageSize = Math.min(
-          10,
-          Math.floor(this.challengeResultsCount / this.limit)
-        );
       });
   }
 
