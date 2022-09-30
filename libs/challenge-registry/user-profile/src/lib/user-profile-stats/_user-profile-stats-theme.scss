@@ -30,7 +30,6 @@
     line-height: 0.5;
   }
 }
-
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
   @if $color-config != null {

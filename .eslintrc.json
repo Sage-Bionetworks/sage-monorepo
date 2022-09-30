@@ -23,15 +23,8 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": [
-        "plugin:@nrwl/nx/typescript",
-        "standard", // required?
-        "eslint-config-prettier"
-      ],
-      "plugins": [
-        "@typescript-eslint",
-        "eslint-plugin-prettier"
-      ],
+      "extends": ["plugin:@nrwl/nx/typescript", "standard", "eslint-config-prettier"],
+      "plugins": ["@typescript-eslint", "eslint-plugin-prettier"],
       "rules": {
         "dot-notation": "off",
         "no-useless-constructor": "off",
@@ -50,6 +43,11 @@
     {
       "files": ["*.js", "*.jsx"],
       "extends": ["plugin:@nrwl/nx/javascript"],
+      "rules": {}
+    },
+    {
+      "files": "*.json",
+      "parser": "jsonc-eslint-parser",
       "rules": {}
     }
   ]

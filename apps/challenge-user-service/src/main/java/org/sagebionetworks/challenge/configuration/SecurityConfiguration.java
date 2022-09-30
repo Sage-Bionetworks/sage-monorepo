@@ -3,9 +3,6 @@ package org.sagebionetworks.challenge.configuration;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
-// import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcessingFilter;
-// import org.sagebionetworks.challenge.exception.CustomKeycloakAuthenticationHandler;
-// import org.sagebionetworks.challenge.exception.RestAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,9 +26,17 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     super.configure(http);
-    http.csrf().disable().cors().disable().authorizeRequests()
-        .antMatchers("/api/v1/users/register", "/api/v1/api-docs/**")
-        .permitAll().anyRequest().authenticated();
+    http.csrf()
+        .disable()
+        .cors()
+        .disable()
+        .authorizeRequests()
+        // .antMatchers("/api/v1/users/register", "/api/v1/**", "/swagger-ui/**",
+        // "/swagger-ui.html")
+        .antMatchers("**")
+        .permitAll()
+        .anyRequest()
+        .authenticated();
 
     // Custom error handler
     // http.exceptionHandling().accessDeniedHandler(restAccessDeniedHandler);
@@ -39,7 +44,8 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
 
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
+    KeycloakAuthenticationProvider keycloakAuthenticationProvider =
+        keycloakAuthenticationProvider();
     keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
     auth.authenticationProvider(keycloakAuthenticationProvider);
   }

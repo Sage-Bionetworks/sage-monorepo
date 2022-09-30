@@ -24,9 +24,7 @@
       "options": {
         "root": "apps/challenge-auth-service"
       },
-      "outputs": [
-        "apps/challenge-auth-service"
-      ],
+      "outputs": ["apps/challenge-auth-service"],
       "dependsOn": [
         {
           "target": "install",
@@ -42,18 +40,6 @@
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
-      "options": {
-        "root": "apps/challenge-auth-service"
-      }
-    },
-    "format": {
-      "executor": "@nxrocks/nx-spring-boot:format",
-      "options": {
-        "root": "apps/challenge-auth-service"
-      }
-    },
-    "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:format-check",
       "options": {
         "root": "apps/challenge-auth-service"
       }
@@ -115,10 +101,7 @@
       ]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
+  "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
     "challenge-keycloak",
     "challenge-service-registry",
