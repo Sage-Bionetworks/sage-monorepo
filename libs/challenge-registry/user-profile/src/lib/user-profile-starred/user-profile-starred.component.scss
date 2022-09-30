@@ -73,14 +73,14 @@
     margin: 16px;
   }
 }
-.main-section-stars-paginator {
-  left: 802px;
-  width: 457px;
-  bottom: 133px;
-  height: 30.000001907348633px;
+
+.content-group {
   display: flex;
+  flex-direction: column;
+}
+
+.paginator {
   position: absolute;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
+  top: 180px;
+  left: 80px;
 }
