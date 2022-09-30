@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -10,15 +11,17 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.sagebionetworks.challenge.exception.GlobalErrorCode;
 import org.sagebionetworks.challenge.exception.InvalidUserException;
 import org.sagebionetworks.challenge.exception.UserAlreadyRegisteredException;
+import org.sagebionetworks.challenge.model.dto.UserCreateRequestDto;
+import org.sagebionetworks.challenge.model.dto.UserCreateResponseDto;
 import org.sagebionetworks.challenge.model.dto.UserDto;
 import org.sagebionetworks.challenge.model.dto.UserStatusDto;
-import org.sagebionetworks.challenge.model.dto.UserUpdateRequestDto;
+import org.sagebionetworks.challenge.model.dto.UsersPageDto;
 import org.sagebionetworks.challenge.model.entity.UserEntity;
 import org.sagebionetworks.challenge.model.mapper.UserMapper;
 import org.sagebionetworks.challenge.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,20 +36,20 @@ public class UserService {
   private UserMapper userMapper = new UserMapper();
 
   @Transactional
-  public UserDto createUser(UserDto user) {
-    if (keycloakUserService.getUserByUsername(user.getUsername()).isPresent()) {
+  public UserCreateResponseDto createUser(UserCreateRequestDto userCreateRequest) {
+    if (keycloakUserService.getUserByUsername(userCreateRequest.getLogin()).isPresent()) {
       throw new UserAlreadyRegisteredException(
           "This username is already registered.", GlobalErrorCode.ERROR_USERNAME_REGISTERED);
     }
 
     UserRepresentation userRepresentation = new UserRepresentation();
-    userRepresentation.setEmail(user.getEmail());
+    userRepresentation.setEmail(userCreateRequest.getEmail());
     userRepresentation.setEmailVerified(false);
     userRepresentation.setEnabled(true);
-    userRepresentation.setUsername(user.getUsername());
+    userRepresentation.setUsername(userCreateRequest.getLogin());
 
     CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-    credentialRepresentation.setValue(user.getPassword());
+    credentialRepresentation.setValue(userCreateRequest.getPassword());
     credentialRepresentation.setTemporary(false);
     userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
 
@@ -54,11 +57,12 @@ public class UserService {
 
     if (userCreationResponse == 201) {
       Optional<UserRepresentation> representation =
-          keycloakUserService.getUserByUsername(user.getUsername());
+          keycloakUserService.getUserByUsername(userCreateRequest.getLogin());
+      UserEntity user = new UserEntity();
       user.setAuthId(representation.get().getId());
       user.setStatus(UserStatusDto.PENDING);
-      UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
-      return userMapper.convertToDto(userEntity);
+      UserEntity savedUser = userRepository.save(user);
+      return UserCreateResponseDto.builder().id(savedUser.getId()).build();
     }
 
     throw new InvalidUserException(
@@ -66,39 +70,47 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
-  public List<UserDto> listUsers(Pageable pageable) {
-    Page<UserEntity> userEntities = userRepository.findAll(pageable);
-    List<UserDto> users = userMapper.convertToDtoList(userEntities.getContent());
-    users.forEach(
-        user -> {
-          UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
-          user.setEmail(userRepresentation.getEmail());
+  public UsersPageDto listUsers(Integer pageNumber, Integer pageSize) {
+    Page<UserEntity> userEntitiesPage =
+        userRepository.findAll(PageRequest.of(pageNumber, pageSize));
+    List<UserEntity> userEntities = userEntitiesPage.getContent();
+    List<UserDto> users = new ArrayList<>();
+    userEntities.forEach(
+        userEntity -> {
+          UserRepresentation userRepresentation =
+              keycloakUserService.getUser(userEntity.getAuthId());
+          UserDto user = userMapper.convertToDto(userEntity);
+          user.email(userRepresentation.getEmail());
+          user.login(userRepresentation.getUsername());
+          users.add(user);
         });
-    return users;
+    return UsersPageDto.builder().users(users).totalResults(0).paging(null).build();
   }
 
   @Transactional(readOnly = true)
   public UserDto getUser(Long userId) {
-    UserDto user =
-        userMapper.convertToDto(
-            userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
-    UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
+    UserEntity userEntity =
+        userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+    UserRepresentation userRepresentation = keycloakUserService.getUser(userEntity.getAuthId());
+    UserDto user = userMapper.convertToDto(userEntity);
     user.setEmail(userRepresentation.getEmail());
     return user;
   }
 
-  // TODO Review this function
-  public UserDto updateUser(Long id, UserUpdateRequestDto userUpdateRequest) {
-    UserEntity userEntity = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+  // // TODO Review this function
+  // public UserDto updateUser(Long id, UserUpdateRequestDto userUpdateRequest) {
+  //   UserEntity userEntity =
+  // userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
-    if (userUpdateRequest.getStatus() == UserStatusDto.APPROVED) {
-      UserRepresentation userRepresentation = keycloakUserService.getUser(userEntity.getAuthId());
-      userRepresentation.setEnabled(true);
-      userRepresentation.setEmailVerified(true);
-      keycloakUserService.updateUser(userRepresentation);
-    }
+  //   if (userUpdateRequest.getStatus() == UserStatusDto.APPROVED) {
+  //     UserRepresentation userRepresentation =
+  // keycloakUserService.getUser(userEntity.getAuthId());
+  //     userRepresentation.setEnabled(true);
+  //     userRepresentation.setEmailVerified(true);
+  //     keycloakUserService.updateUser(userRepresentation);
+  //   }
 
-    userEntity.setStatus(userUpdateRequest.getStatus());
-    return userMapper.convertToDto(userRepository.save(userEntity));
-  }
+  //   userEntity.setStatus(userUpdateRequest.getStatus());
+  //   return userMapper.convertToDto(userRepository.save(userEntity));
+  // }
 }

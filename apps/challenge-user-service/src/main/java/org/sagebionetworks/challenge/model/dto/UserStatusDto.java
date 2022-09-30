@@ -6,16 +6,16 @@ import java.util.*;
 import javax.annotation.Generated;
 import javax.validation.constraints.*;
 
-/** TODO Add schema description */
+/** The account status of a user */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public enum UserStatusDto {
-  PENDING("PENDING"),
+  PENDING("pending"),
 
-  APPROVED("APPROVED"),
+  APPROVED("approved"),
 
-  DISABLED("DISABLED"),
+  DISABLED("disabled"),
 
-  BLACKLIST("BLACKLIST");
+  BLACKLIST("blacklist");
 
   private String value;
 

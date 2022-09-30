@@ -1,190 +1,440 @@
 openapi: 3.0.3
 info:
   contact:
-    name: The Challenge Registry Team
+    name: Support
     url: https://github.com/Sage-Bionetworks/challenge-registry
-  description: This is the User Service of the Challenge Registry.
   license:
     name: Apache 2.0
-    url: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt
-  termsOfService: TOC
+    url: https://github.com/Sage-Bionetworks/challenge-registry
   title: Challenge User API
-  version: 1.0.0
+  version: 0.6.0
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
 servers:
-- description: Local server url
-  url: http://localhost:8083
+- url: /
 tags:
 - description: Operations about users
   name: User
 paths:
-  /api/v1/users/register:
+  /users/register:
     post:
+      description: Create a user with the specified account name
       operationId: createUser
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserCreateRequest'
         required: true
       responses:
-        "200":
+        "201":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-          description: OK
+                $ref: '#/components/schemas/UserCreateResponse'
+          description: Account created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request conflicts with current state of the target resource
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Create a user
       tags:
       - User
       x-content-type: application/json
       x-accepts: application/json
       x-tags:
       - tag: User
-  /api/v1/users/{id}:
+  /users:
     get:
-      operationId: getUser
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: int64
-          type: integer
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: OK
-      tags:
-      - User
-      x-accepts: application/json
-      x-tags:
-      - tag: User
-    patch:
-      operationId: updateUser
-      parameters:
-      - explode: false
-        in: path
-        name: id
-        required: true
-        schema:
-          format: int64
-          type: integer
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserUpdateRequest'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: OK
-      tags:
-      - User
-      x-content-type: application/json
-      x-accepts: application/json
-      x-tags:
-      - tag: User
-  /api/v1/users/:
-    get:
+      description: Returns the users
       operationId: listUsers
       parameters:
-      - explode: true
+      - description: The page number
+        explode: true
         in: query
-        name: pageable
+        name: pageNumber
         required: false
         schema:
-          $ref: '#/components/schemas/Pageable'
+          default: 0
+          format: int32
+          minimum: 0
+          type: integer
+        style: form
+      - description: The number of items in a single page
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          format: int32
+          minimum: 10
+          type: integer
         style: form
       responses:
         "200":
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/User'
-                type: array
-          description: OK
+                $ref: '#/components/schemas/UsersPage'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get all users
+      tags:
+      - User
+      x-accepts: application/json
+      x-tags:
+      - tag: User
+  /users/{userId}:
+    delete:
+      description: Deletes the user specified
+      operationId: deleteUser
+      parameters:
+      - description: "The unique identifier of the user, either the user account ID\
+          \ or login"
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Deleted
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Delete a user
+      tags:
+      - User
+      x-accepts: application/json
+      x-tags:
+      - tag: User
+    get:
+      description: Returns the user specified
+      operationId: getUser
+      parameters:
+      - description: "The unique identifier of the user, either the user account ID\
+          \ or login"
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: A user
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a user
       tags:
       - User
       x-accepts: application/json
       x-tags:
       - tag: User
 components:
+  parameters:
+    pageNumber:
+      description: The page number
+      explode: true
+      in: query
+      name: pageNumber
+      required: false
+      schema:
+        default: 0
+        format: int32
+        minimum: 0
+        type: integer
+      style: form
+    pageSize:
+      description: The number of items in a single page
+      explode: true
+      in: query
+      name: pageSize
+      required: false
+      schema:
+        default: 100
+        format: int32
+        minimum: 10
+        type: integer
+      style: form
+    userId:
+      description: "The unique identifier of the user, either the user account ID\
+        \ or login"
+      explode: false
+      in: path
+      name: userId
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountId'
+      style: simple
+  responses:
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Invalid request
+    Conflict:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The request conflicts with current state of the target resource
+    InternalServerError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The request cannot be fulfilled due to an unexpected server error
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The specified resource was not found
   schemas:
-    User:
-      description: TODO Add schema description
+    Email:
+      description: An email address
+      example: john.smith@example.com
+      format: email
+      type: string
+    UserCreateRequest:
+      description: The information required to create a user account
       example:
-        password: password
-        id: 0
-        email: email
-        authId: authId
-        username: username
-        status: PENDING
+        login: awesome-user
+        email: awesome-user@example.org
+        password: yourpassword
+        name: Awesome User
+        avatarUrl: https://example.com/awesome-avatar.png
+        bio: A great bio
       properties:
-        id:
-          format: int64
-          type: integer
-        username:
+        login:
           type: string
         email:
+          description: An email address
+          example: john.smith@example.com
+          format: email
           type: string
         password:
+          format: password
           type: string
-        authId:
+        name:
+          nullable: true
           type: string
-        status:
-          $ref: '#/components/schemas/UserStatus'
+        avatarUrl:
+          example: https://example.com/awesome-avatar.png
+          format: url
+          nullable: true
+          type: string
+        bio:
+          nullable: true
+          type: string
+      required:
+      - email
+      - login
+      - password
       type: object
-      x-java-class-annotations:
-      - '@lombok.AllArgsConstructor'
-      - '@lombok.Builder'
-      - '@lombok.NoArgsConstructor'
-    UserUpdateRequest:
-      description: TODO Add schema description
+    AccountId:
+      description: The unique identifier of an account
+      example: 1
+      format: int64
+      type: integer
+    UserCreateResponse:
+      description: The response returned after the creation of the user
+      example:
+        id: 507f1f77bcf86cd799439011
       properties:
-        status:
-          $ref: '#/components/schemas/UserStatus'
+        id:
+          description: The unique identifier of an account
+          example: 1
+          format: int64
+          type: integer
+      required:
+      - id
       type: object
       x-java-class-annotations:
-      - '@lombok.AllArgsConstructor'
       - '@lombok.Builder'
-      - '@lombok.NoArgsConstructor'
+    Error:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+      required:
+      - status
+      - title
+      type: object
+    PageMetadata:
+      description: The metadata of a page
+      properties:
+        paging:
+          $ref: '#/components/schemas/PageMetadata_paging'
+        totalResults:
+          description: Total number of results in the result set
+          type: integer
+      required:
+      - paging
+      - totalResults
+      type: object
     UserStatus:
-      description: TODO Add schema description
+      description: The account status of a user
       enum:
-      - PENDING
-      - APPROVED
-      - DISABLED
-      - BLACKLIST
-      example: PENDING
+      - pending
+      - approved
+      - disabled
+      - blacklist
+      example: pending
       type: string
-    Pageable:
-      description: TODO Add schema description
+    User:
+      description: A simple user
+      example:
+        login: awesome-user
+        email: awesome-user@example.org
+        name: Awesome User
+        status: approved
+        avatarUrl: https://example.com/awesome-avatar.png
+        bio: A great bio
+        createdAt: 2017-07-08T16:18:44-04:00
+        updatedAt: 2017-07-08T16:18:44-04:00
+        type: User
       properties:
-        page:
-          default: 0
-          description: Zero-based page index (0..N)
-          minimum: 0
+        id:
+          description: The unique identifier of an account
+          example: 1
+          format: int64
           type: integer
-        size:
-          default: 20
-          description: The size of the page to be returned
-          minimum: 1
-          type: integer
-        sort:
-          description: "Sorting criteria in the format: property,(asc|desc). Default\
-            \ sort order is ascending. Multiple sort criteria are supported."
-          example: "id,asc"
+        login:
+          type: string
+        email:
+          description: An email address
+          example: john.smith@example.com
+          format: email
+          type: string
+        name:
+          nullable: true
+          type: string
+        status:
+          $ref: '#/components/schemas/UserStatus'
+        avatarUrl:
+          example: https://example.com/awesome-avatar.png
+          format: url
+          nullable: true
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        type:
+          example: User
+          type: string
+        bio:
+          nullable: true
+          type: string
+      required:
+      - createdAt
+      - email
+      - login
+      - type
+      - updatedAt
+      type: object
+    UsersPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/UsersPage_allOf'
+      description: A page of users
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    EmptyObject:
+      description: Empty JSON object
+      type: object
+    PageMetadata_paging:
+      description: Links to navigate to different pages of results
+      properties:
+        next:
+          description: Link to the next page of results
+          format: url
+          type: string
+      type: object
+    UsersPage_allOf:
+      properties:
+        users:
+          description: A list of users
           items:
-            type: string
+            $ref: '#/components/schemas/User'
           type: array
+      required:
+      - users
       type: object

@@ -16,9 +16,9 @@ properties:
       - admin
       - member
   organizationId:
-    $ref: ../parameters/OrgId.yaml
+    $ref: OrgId.yaml
   userId:
-    $ref: ../parameters/UserId.yaml
+    $ref: UserId.yaml
   # permissions:
   #   type: object
   #   properties:

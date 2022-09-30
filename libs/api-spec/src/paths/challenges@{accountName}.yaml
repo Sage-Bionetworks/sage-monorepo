@@ -4,7 +4,7 @@ parameters:
     description: The name of the account that owns the challenge
     required: true
     schema:
-      $ref: ../components/parameters/AccountLogin.yaml
+      $ref: ../components/schemas/AccountLogin.yaml
 post:
   tags:
     - Challenge

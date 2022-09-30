@@ -2,7 +2,7 @@ type: object
 description: The information used to create a challenge
 properties:
   name:
-    $ref: ../parameters/ChallengeName.yaml
+    $ref: ChallengeName.yaml
   displayName:
     type: string
     minLength: 3
@@ -16,7 +16,7 @@ properties:
     type: string
     format: url
   status:
-    $ref: ../parameters/ChallengeStatus.yaml
+    $ref: ChallengeStatus.yaml
   startDate:
     type: string
     format: date
@@ -28,17 +28,17 @@ properties:
   incentiveTypes:
     type: array
     items:
-      $ref: ../parameters/ChallengeIncentiveType.yaml
+      $ref: ChallengeIncentiveType.yaml
     nullable: true
   platformId:
-    $ref: ../parameters/ChallengePlatformId.yaml
+    $ref: ChallengePlatformId.yaml
     nullable: true
   difficulty:
-    $ref: ../parameters/ChallengeDifficulty.yaml
+    $ref: ChallengeDifficulty.yaml
   submissionTypes:
     type: array
     items:
-      $ref: ../parameters/ChallengeSubmissionType.yaml
+      $ref: ChallengeSubmissionType.yaml
     nullable: true
   topics:
     type: array
@@ -49,7 +49,7 @@ properties:
   inputDataTypes:
     type: array
     items:
-      $ref: ../parameters/ChallengeInputDataType.yaml
+      $ref: ChallengeInputDataType.yaml
     maxItems: 10
     nullable: true
   doi:

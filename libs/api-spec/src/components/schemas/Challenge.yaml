@@ -8,9 +8,9 @@ allOf:
       fullName:
         type: string
       ownerId:
-        $ref: ../parameters/AccountId.yaml
+        $ref: AccountId.yaml
       readmeId:
-        $ref: ../parameters/ChallengeReadmeId.yaml
+        $ref: ChallengeReadmeId.yaml
       featured:
         description: Whether the challenge is featured
         type: boolean

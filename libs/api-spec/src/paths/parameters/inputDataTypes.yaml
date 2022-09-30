@@ -5,4 +5,4 @@ required: false
 schema:
   type: array
   items:
-    $ref: ../../components/parameters/ChallengeInputDataType.yaml
+    $ref: ../../components/schemas/ChallengeInputDataType.yaml

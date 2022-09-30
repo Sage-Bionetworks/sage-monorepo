@@ -4,13 +4,13 @@ parameters:
     description: The name of the account that owns the challenge
     required: true
     schema:
-      $ref: ../../components/parameters/AccountLogin.yaml
+      $ref: ../../components/schemas/AccountLogin.yaml
   - in: path
     name: challengeName
     description: The name of the challenge
     required: true
     schema:
-      $ref: ../../components/parameters/ChallengeName.yaml
+      $ref: ../../components/schemas/ChallengeName.yaml
 post:
   tags:
     - Challenge

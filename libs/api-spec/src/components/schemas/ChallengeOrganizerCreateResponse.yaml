@@ -2,7 +2,7 @@ type: object
 description: The unique identifier of the challenge organizer created
 properties:
   id:
-    $ref: ../parameters/ChallengeOrganizerId.yaml
+    $ref: ChallengeOrganizerId.yaml
 required:
   - id
 example:

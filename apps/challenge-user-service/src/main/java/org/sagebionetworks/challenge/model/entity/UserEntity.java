@@ -33,7 +33,7 @@ public class UserEntity {
   private Long id;
 
   @Column(nullable = false)
-  private String username;
+  private String login;
 
   @Column(nullable = false)
   private String authId;

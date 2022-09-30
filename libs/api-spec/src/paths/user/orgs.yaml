@@ -7,8 +7,8 @@ get:
   security:
     - BearerAuth: []
   parameters:
-    - $ref: ../parameters/limit.yaml
-    - $ref: ../parameters/offset.yaml
+    - $ref: limit.yaml
+    - $ref: offset.yaml
   responses:
     '200':
       description: Success

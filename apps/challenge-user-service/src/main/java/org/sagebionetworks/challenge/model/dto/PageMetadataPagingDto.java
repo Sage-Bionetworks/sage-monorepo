@@ -6,39 +6,37 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.*;
 import java.util.Objects;
 import javax.annotation.Generated;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/** TODO Add schema description */
-@Schema(name = "UserUpdateRequest", description = "TODO Add schema description")
-@JsonTypeName("UserUpdateRequest")
+/** Links to navigate to different pages of results */
+@Schema(
+    name = "PageMetadata_paging",
+    description = "Links to navigate to different pages of results")
+@JsonTypeName("PageMetadata_paging")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-@lombok.AllArgsConstructor
-@lombok.Builder
-@lombok.NoArgsConstructor
-public class UserUpdateRequestDto {
+// TODO Add x-java-class-annotations
+public class PageMetadataPagingDto {
 
-  @JsonProperty("status")
-  private UserStatusDto status;
+  @JsonProperty("next")
+  private String next;
 
-  public UserUpdateRequestDto status(UserStatusDto status) {
-    this.status = status;
+  public PageMetadataPagingDto next(String next) {
+    this.next = next;
     return this;
   }
 
   /**
-   * Get status
+   * Link to the next page of results
    *
-   * @return status
+   * @return next
    */
-  @Valid
-  @Schema(name = "status", required = false)
-  public UserStatusDto getStatus() {
-    return status;
+  @Schema(name = "next", description = "Link to the next page of results", required = false)
+  public String getNext() {
+    return next;
   }
 
-  public void setStatus(UserStatusDto status) {
-    this.status = status;
+  public void setNext(String next) {
+    this.next = next;
   }
 
   @Override
@@ -49,20 +47,20 @@ public class UserUpdateRequestDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserUpdateRequestDto userUpdateRequest = (UserUpdateRequestDto) o;
-    return Objects.equals(this.status, userUpdateRequest.status);
+    PageMetadataPagingDto pageMetadataPaging = (PageMetadataPagingDto) o;
+    return Objects.equals(this.next, pageMetadataPaging.next);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status);
+    return Objects.hash(next);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UserUpdateRequestDto {\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("class PageMetadataPagingDto {\n");
+    sb.append("    next: ").append(toIndentedString(next)).append("\n");
     sb.append("}");
     return sb.toString();
   }

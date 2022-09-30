@@ -4,7 +4,7 @@ parameters:
     description: The unique identifier of the challenge platform
     required: true
     schema:
-      $ref: ../components/parameters/ChallengePlatformId.yaml
+      $ref: ../components/schemas/ChallengePlatformId.yaml
 get:
   tags:
     - ChallengePlatform

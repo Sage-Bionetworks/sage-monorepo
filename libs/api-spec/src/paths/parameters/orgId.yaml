@@ -3,4 +3,4 @@ description: An organization identifier used to filter the results
 in: query
 required: false
 schema:
-  $ref: ../../components/parameters/OrgId.yaml
+  $ref: ../../components/schemas/OrgId.yaml

@@ -4,7 +4,7 @@ parameters:
     description: The unique identifier of the org membership
     required: true
     schema:
-      $ref: ../components/parameters/OrgMembershipId.yaml
+      $ref: ../components/schemas/OrgMembershipId.yaml
 get:
   tags:
     - OrgMembership

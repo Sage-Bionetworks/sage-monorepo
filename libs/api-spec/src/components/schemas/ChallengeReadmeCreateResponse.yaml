@@ -2,7 +2,7 @@ type: object
 description: The unique identifier of the challenge README created
 properties:
   id:
-    $ref: ../parameters/ChallengeReadmeId.yaml
+    $ref: ChallengeReadmeId.yaml
 required:
   - id
 example:

@@ -5,4 +5,4 @@ required: false
 schema:
   type: array
   items:
-    $ref: ../../../components/parameters/ChallengeStatus.yaml
+    $ref: ../../../components/schemas/ChallengeStatus.yaml

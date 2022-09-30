@@ -1,12 +1,13 @@
 package org.sagebionetworks.challenge.api;
 
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.challenge.model.dto.PageableDto;
+import org.sagebionetworks.challenge.model.dto.UserCreateRequestDto;
+import org.sagebionetworks.challenge.model.dto.UserCreateResponseDto;
 import org.sagebionetworks.challenge.model.dto.UserDto;
+import org.sagebionetworks.challenge.model.dto.UsersPageDto;
 import org.sagebionetworks.challenge.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -17,20 +18,17 @@ public class UserApiDelegateImpl implements UserApiDelegate {
   @Autowired UserService userService;
 
   @Override
-  public ResponseEntity<UserDto> createUser(UserDto userDto) {
-    return ResponseEntity.ok(userService.createUser(userDto));
+  public ResponseEntity<UserCreateResponseDto> createUser(UserCreateRequestDto userCreateRequest) {
+    return new ResponseEntity<>(userService.createUser(userCreateRequest), HttpStatus.CREATED);
   }
 
   @Override
-  public ResponseEntity<UserDto> getUser(Long id) {
-    return ResponseEntity.ok(userService.getUser(id));
+  public ResponseEntity<UserDto> getUser(Long userId) {
+    return ResponseEntity.ok(userService.getUser(userId));
   }
 
   @Override
-  public ResponseEntity<List<UserDto>> listUsers(PageableDto pageable) {
-    // TODO Take into account pageable.getSort()
-    List<UserDto> result =
-        userService.listUsers(PageRequest.of(pageable.getPage(), pageable.getSize()));
-    return ResponseEntity.ok(result);
+  public ResponseEntity<UsersPageDto> listUsers(Integer pageNumber, Integer pageSize) {
+    return ResponseEntity.ok(userService.listUsers(pageNumber, pageSize));
   }
 }
