@@ -1,7 +1,7 @@
-<main class="main-section-stars-container">
-  <section id="main" class="main-section-stars-main-section">
-    <span class="main-section-stars-text">Starred</span>
-    <div class="main-section-stars-tab-group">
+<main>
+  <div id="stars">
+    <h3>Starred</h3>
+    <div class="tab-nav-group">
       <button
         class="tab-item"
         (click)="clickEvent('challenges')"
@@ -28,7 +28,7 @@
           [rowsPerPageOptions]="[1, 2, 3, 6, 10, 20, 30]"
           (onPageChange)="onPageChange($event)"
         ></p-paginator>
-        <div class="main-section-stars-card-group">
+        <div class="card-group">
           <challenge-registry-challenge-card
             *ngFor="let challenge of challenges"
             [challenge]="challenge"
@@ -44,5 +44,5 @@
         </challenge-registry-organization-card>
       </div>
     </ng-container>
-  </section>
+  </div>
 </main>
