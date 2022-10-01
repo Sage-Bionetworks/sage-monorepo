@@ -45,16 +45,15 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/challenge-bot/**/*.ts"],
+        "lintFilePatterns": ["apps/challenge-bot/src/**/*.ts"],
         "fix": true
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/challenge-bot"],
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "jestConfig": "apps/challenge-bot/jest.config.ts",
-        "passWithNoTests": true
+        "command": "jest",
+        "cwd": "apps/challenge-bot"
       }
     }
   },
