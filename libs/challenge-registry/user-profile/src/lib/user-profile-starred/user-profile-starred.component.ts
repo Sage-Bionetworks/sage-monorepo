@@ -3,7 +3,7 @@ import {
   Challenge,
   Organization,
   User,
-} from '@sagebionetworks/api-client-angular';
+} from '@sagebionetworks/api-client-angular-deprecated';
 import { Tab } from '../tab.model';
 import { USER_PROFILE_STARRED_TABS } from './user-profile-starred-tabs';
 import {

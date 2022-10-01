@@ -3,7 +3,7 @@ import {
   Challenge,
   User,
   UserService,
-} from '@sagebionetworks/api-client-angular';
+} from '@sagebionetworks/api-client-angular-deprecated';
 import { MOCK_CHALLENGES } from '@sagebionetworks/challenge-registry/ui';
 // import { map, Observable } from 'rxjs';
 
