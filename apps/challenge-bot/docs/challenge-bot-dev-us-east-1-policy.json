@@ -1,0 +1,180 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["cloudformation:List*", "cloudformation:Get*", "cloudformation:ValidateTemplate"],
+      "Resource": ["*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:CreateStack",
+        "cloudformation:CreateUploadBucket",
+        "cloudformation:DeleteStack",
+        "cloudformation:Describe*",
+        "cloudformation:UpdateStack",
+        "cloudformation:DeleteChangeSet",
+        "cloudformation:CreateChangeSet",
+        "cloudformation:ExecuteChangeSet"
+      ],
+      "Resource": ["arn:aws:cloudformation:us-east-1:ACCOUNT:stack/challenge-bot-dev/*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["lambda:Get*", "lambda:List*", "lambda:CreateFunction"],
+      "Resource": ["*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetBucketLocation",
+        "s3:CreateBucket",
+        "s3:DeleteBucket",
+        "s3:ListBucket",
+        "s3:GetBucketPolicy",
+        "s3:PutBucketPolicy",
+        "s3:DeleteBucketPolicy",
+        "s3:ListBucketVersions",
+        "s3:PutAccelerateConfiguration",
+        "s3:GetEncryptionConfiguration",
+        "s3:PutEncryptionConfiguration"
+      ],
+      "Resource": ["arn:aws:s3:::challenge-bot*serverlessdeploy*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"],
+      "Resource": ["arn:aws:s3:::challenge-bot*serverlessdeploy*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "lambda:AddPermission",
+        "lambda:CreateAlias",
+        "lambda:DeleteFunction",
+        "lambda:InvokeFunction",
+        "lambda:PublishVersion",
+        "lambda:RemovePermission",
+        "lambda:Update*",
+        "lambda:TagResource"
+      ],
+      "Resource": ["arn:aws:lambda:us-east-1:ACCOUNT:function:challenge-bot-dev-*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "apigateway:GET",
+        "apigateway:POST",
+        "apigateway:PUT",
+        "apigateway:DELETE",
+        "apigateway:PATCH",
+        "apigateway:UpdateRestApiPolicy",
+        "apigateway:TagResource"
+      ],
+      "Resource": [
+        "arn:aws:apigateway:*::/restapis*",
+        "arn:aws:apigateway:*::/apikeys*",
+        "arn:aws:apigateway:*::/usageplans*",
+        "arn:aws:apigateway:*::/tags/arn%3Aaws%3Aapigateway%3A*%3A%3A%2Fv2%2Fapis%2F*",
+        "arn:aws:apigateway:us-east-1::/apis",
+        "arn:aws:apigateway:*::/apis/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["iam:PassRole"],
+      "Resource": ["arn:aws:iam::ACCOUNT:role/*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": "kinesis:*",
+      "Resource": ["arn:aws:kinesis:*:*:stream/challenge-bot-dev-us-east-1"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetRole",
+        "iam:CreateRole",
+        "iam:PutRolePolicy",
+        "iam:DeleteRolePolicy",
+        "iam:DeleteRole"
+      ],
+      "Resource": [
+        "arn:aws:iam::ACCOUNT:role/challenge-bot-dev-us-east-1-lambdaRole",
+        "arn:aws:iam::ACCOUNT:role/challenge-bot-dev-EnterpriseLogAccessIamRole-*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": "sqs:*",
+      "Resource": ["arn:aws:sqs:*:ACCOUNT:challenge-bot-dev-us-east-1"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["cloudwatch:GetMetricStatistics"],
+      "Resource": ["*"]
+    },
+    {
+      "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:DeleteLogGroup"],
+      "Resource": ["arn:aws:logs:us-east-1:ACCOUNT:*"],
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams",
+        "logs:GetLogEvents",
+        "logs:FilterLogEvents",
+        "logs:PutLogEvents",
+        "logs:PutSubscriptionFilter"
+      ],
+      "Resource": ["arn:aws:logs:us-east-1:ACCOUNT:*"],
+      "Effect": "Allow"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogDelivery",
+        "logs:PutResourcePolicy",
+        "logs:UpdateLogDelivery",
+        "logs:DeleteLogDelivery",
+        "logs:CreateLogGroup",
+        "logs:DescribeResourcePolicies",
+        "logs:GetLogDelivery",
+        "logs:ListLogDeliveries"
+      ],
+      "Resource": ["*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["events:Put*", "events:Remove*", "events:Delete*"],
+      "Resource": ["arn:aws:events:us-east-1:ACCOUNT:rule/challenge-bot-dev-us-east-1"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["events:DescribeRule"],
+      "Resource": ["arn:aws:events:us-east-1:ACCOUNT:rule/challenge-bot-dev-*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["dynamodb:*"],
+      "Resource": ["arn:aws:dynamodb:*:ACCOUNT:table/*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["s3:CreateBucket"],
+      "Resource": ["arn:aws:s3:::*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["ssm:DescribeParameters"],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["ssm:GetParameter", "ssm:GetParameters"],
+      "Resource": "arn:aws:ssm:us-east-1:ACCOUNT:parameter/CHALLENGE_BOT_*"
+    }
+  ]
+}
