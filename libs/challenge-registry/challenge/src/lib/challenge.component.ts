@@ -4,7 +4,7 @@ import {
   Challenge,
   ChallengeService,
   ModelError as ApiClientError,
-} from '@sagebionetworks/api-angular';
+} from '@sagebionetworks/api-client-angular-deprecated';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 import { CHALLENGE_SECTIONS } from './challenge-sections';

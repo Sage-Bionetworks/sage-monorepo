@@ -5,7 +5,7 @@ import {
   ModelError as ApiClientError,
   Organization,
   OrganizationService,
-} from '@sagebionetworks/api-angular';
+} from '@sagebionetworks/api-client-angular-deprecated';
 import {
   catchError,
   filter,
@@ -56,23 +56,19 @@ export class OrgProfileComponent implements OnInit {
         return throwError(err);
       })
     );
-
     account$.subscribe((account) => {
       const pageTitle = account ? `${account.login}` : 'Page not found';
       console.log(pageTitle);
       // this.pageTitleService.setTitle(`${pageTitle} · ROCC`);
       // this.accountNotFound = !account;
     });
-
     this.org$ = account$.pipe(
       filter((account): account is Account => account !== undefined),
       switchMap((account) => this.orgService.getOrganization(account.id))
     );
-
     this.org$.subscribe((org) => {
       console.log(org);
       this.orgProfileDataService.setOrg(org);
-
       this.sections = [
         {
           label: 'Overview',
