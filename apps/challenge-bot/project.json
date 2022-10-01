@@ -57,11 +57,6 @@
         "passWithNoTests": true,
         "showConfig": false
       }
-      // "executor": "@nrwl/workspace:run-commands",
-      // "options": {
-      //   "command": "jest",
-      //   "cwd": "apps/challenge-bot"
-      // }
     }
   },
   "tags": ["type:app", "scope:admin"]
