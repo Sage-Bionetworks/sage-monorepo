@@ -6,9 +6,10 @@ module.exports = {
       tsconfig: '<rootDir>/tsconfig.spec.json',
     },
   },
-  transform: {
-    '^.+\\.[tj]s$': 'ts-jest',
-  },
+  // transform: {
+  //   '^.+\\.[tj]s$': 'ts-jest',
+  // },
+  // transformIgnorePatterns: ['<rootDir>/node_modules/(?!*)'],
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/challenge-bot',
   testMatch: ['<rootDir>/test/**/*.spec.ts'],

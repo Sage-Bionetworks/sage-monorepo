@@ -50,11 +50,18 @@
       }
     },
     "test": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/challenge-bot"],
       "options": {
-        "command": "jest",
-        "cwd": "apps/challenge-bot"
+        "jestConfig": "apps/challenge-bot/jest.config.ts",
+        "passWithNoTests": true,
+        "showConfig": false
       }
+      // "executor": "@nrwl/workspace:run-commands",
+      // "options": {
+      //   "command": "jest",
+      //   "cwd": "apps/challenge-bot"
+      // }
     }
   },
   "tags": ["type:app", "scope:admin"]
