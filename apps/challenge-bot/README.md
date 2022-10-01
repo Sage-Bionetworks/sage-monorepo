@@ -8,6 +8,10 @@ This GitHub App automates tasks in this repository.
 nx prepare challenge-bot
 ```
 
+## Deploying locally
+
+TODO
+
 ## Deploying to AWS
 
 1. Create an IAM user named `challenge-bot` (deployment user).
