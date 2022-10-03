@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { User, UserService } from '@sagebionetworks/api-angular';
+import {
+  User,
+  UserService,
+} from '@sagebionetworks/api-client-angular-deprecated';
 import { Avatar } from '@sagebionetworks/challenge-registry/ui';
 
 @Component({

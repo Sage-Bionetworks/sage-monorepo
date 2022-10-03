@@ -11,4 +11,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/challenge-bot',
+  testMatch: ['<rootDir>/test/**/*.spec.ts'],
 };
