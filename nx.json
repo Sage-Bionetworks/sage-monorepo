@@ -39,23 +39,9 @@
     },
     "@nrwl/angular:component": {
       "style": "scss"
-    },
-    "@nrwl/react": {
-      "application": {
-        "style": "scss",
-        "linter": "eslint",
-        "babel": true
-      },
-      "component": {
-        "style": "scss"
-      },
-      "library": {
-        "style": "scss",
-        "linter": "eslint"
-      }
     }
   },
-  "defaultProject": "web-app",
+  "defaultProject": "challenge-registry",
   "plugins": [
     "@nxrocks/nx-spring-boot"
   ],

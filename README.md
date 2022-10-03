@@ -8,23 +8,14 @@
 
 This [Nx monorepo](https://nx.dev/) includes the codebase of the Challenge ecosystem.
 
-### Apps
+## Projects
 
-- Challenge Registry
-- Challenge Platform
-
-### Backend
-
-- API Gateway
-- Service Registry
-- Keycloak (IAM)
-- Databases: MariaDB, PostgreSQL, MongoDB
-- User Service
+The list of all the applications and libraries developed is available [here](docs/projects.md).
 
 ## Requirements
 
-- [Docker Engine] version **18.06.0** or newer
-- [Visual Studio Code] version **1.68.1** or newer (including [Compose V2][compose-v2])
+- [Docker Engine] version **18.06.0** or newer (including [Compose V2][compose-v2])
+- [Visual Studio Code] version **1.68.1** or newer
 
 ## Usage
 
@@ -38,7 +29,7 @@ If you plan to contribute to this project, please create a fork and use its URL 
 more information on contributing and/or our Forking Workflow approach, see
 [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
-    git clone --depth 1 --no-single-branch <repo url>
+    git clone --filter=blob:none <repo url>
 
 Then open your fork repo inside our devcontainer using these instructions:
 
@@ -70,9 +61,7 @@ Checkout the folder [docs](./docs) to learn more about this monorepo.
 
 [Apache License 2.0]
 
-## Contributors
-
-Main contributors and developers:
+## Core Team
 
 - [Thomas Schaffter](https://github.com/tschaffter)
 - [Verena Chung](https://github.com/vpchung)

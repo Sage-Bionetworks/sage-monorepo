@@ -1,0 +1,51 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: challenge-bot
+
+# app and org for use with dashboard.serverless.com
+app: challenge-bot
+org: tschaffter
+
+frameworkVersion: '3'
+useDotenv: true
+
+plugins:
+  - serverless-plugin-typescript
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: us-east-1
+  # environment:
+  #   APP_ID: ${param:APP_ID}
+  #   PRIVATE_KEY: ${param:PRIVATE_KEY}
+  #   WEBHOOK_SECRET: ${param:WEBHOOK_SECRET}
+  #   NODE_ENV: production
+  #   LOG_LEVEL: debug
+
+  environment:
+    APP_ID: ${ssm:/CHALLENGE_BOT_APP_ID}
+    PRIVATE_KEY: ${ssm:/CHALLENGE_BOT_PRIVATE_KEY}
+    WEBHOOK_SECRET: ${ssm:/CHALLENGE_BOT_WEBHOOK_SECRET}
+    NODE_ENV: production
+    LOG_FORMAT: json
+    LOG_LEVEL: debug
+
+functions:
+  challengeBot:
+    handler: src/lambda/handler.webhooks
+    description: Lambda function for TODO
+    memorySize: 256
+    events:
+      - httpApi: 'POST /api/github/webhooks'

@@ -1,55 +1,55 @@
 package org.sagebionetworks.challenge.service;
 
-import org.sagebionetworks.challenge.model.dto.UserStatus;
-import org.sagebionetworks.challenge.exception.GlobalErrorCode;
-import org.sagebionetworks.challenge.exception.InvalidUserException;
-import org.sagebionetworks.challenge.exception.UserAlreadyRegisteredException;
-import org.sagebionetworks.challenge.model.dto.User;
-import org.sagebionetworks.challenge.model.dto.UserUpdateRequest;
-import org.sagebionetworks.challenge.model.entity.UserEntity;
-import org.sagebionetworks.challenge.model.mapper.UserMapper;
-import org.sagebionetworks.challenge.model.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.keycloak.representations.idm.CredentialRepresentation;
-import org.keycloak.representations.idm.UserRepresentation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.UserRepresentation;
+import org.sagebionetworks.challenge.exception.GlobalErrorCode;
+import org.sagebionetworks.challenge.exception.InvalidUserException;
+import org.sagebionetworks.challenge.exception.UserAlreadyRegisteredException;
+import org.sagebionetworks.challenge.model.dto.UserCreateRequestDto;
+import org.sagebionetworks.challenge.model.dto.UserCreateResponseDto;
+import org.sagebionetworks.challenge.model.dto.UserDto;
+import org.sagebionetworks.challenge.model.dto.UserStatusDto;
+import org.sagebionetworks.challenge.model.dto.UsersPageDto;
+import org.sagebionetworks.challenge.model.entity.UserEntity;
+import org.sagebionetworks.challenge.model.mapper.UserMapper;
+import org.sagebionetworks.challenge.model.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-// @RequiredArgsConstructor
 @Service
 public class UserService {
 
-  @Autowired
-  private KeycloakUserService keycloakUserService;
+  @Autowired private KeycloakUserService keycloakUserService;
 
-  @Autowired
-  private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
   private UserMapper userMapper = new UserMapper();
 
-  public User createUser(User user) {
-    if (keycloakUserService.getUserByUsername(user.getUsername()).isPresent()) {
-      throw new UserAlreadyRegisteredException("This username is already registered.",
-          GlobalErrorCode.ERROR_USERNAME_REGISTERED);
+  @Transactional
+  public UserCreateResponseDto createUser(UserCreateRequestDto userCreateRequest) {
+    if (keycloakUserService.getUserByUsername(userCreateRequest.getLogin()).isPresent()) {
+      throw new UserAlreadyRegisteredException(
+          "This username is already registered.", GlobalErrorCode.ERROR_USERNAME_REGISTERED);
     }
 
     UserRepresentation userRepresentation = new UserRepresentation();
-    userRepresentation.setEmail(user.getEmail());
+    userRepresentation.setEmail(userCreateRequest.getEmail());
     userRepresentation.setEmailVerified(false);
     userRepresentation.setEnabled(true);
-    userRepresentation.setUsername(user.getUsername());
+    userRepresentation.setUsername(userCreateRequest.getLogin());
 
     CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-    credentialRepresentation.setValue(user.getPassword());
+    credentialRepresentation.setValue(userCreateRequest.getPassword());
     credentialRepresentation.setTemporary(false);
     userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
 
@@ -57,45 +57,60 @@ public class UserService {
 
     if (userCreationResponse == 201) {
       Optional<UserRepresentation> representation =
-          keycloakUserService.getUserByUsername(user.getUsername());
+          keycloakUserService.getUserByUsername(userCreateRequest.getLogin());
+      UserEntity user = new UserEntity();
       user.setAuthId(representation.get().getId());
-      user.setStatus(UserStatus.PENDING);
-      UserEntity userEntity = userRepository.save(userMapper.convertToEntity(user));
-      return userMapper.convertToDto(userEntity);
+      user.setStatus(UserStatusDto.PENDING);
+      UserEntity savedUser = userRepository.save(user);
+      return UserCreateResponseDto.builder().id(savedUser.getId()).build();
     }
 
-    throw new InvalidUserException("Unable to create the new user",
-        GlobalErrorCode.ERROR_INVALID_USER);
+    throw new InvalidUserException(
+        "Unable to create the new user", GlobalErrorCode.ERROR_INVALID_USER);
   }
 
-  public List<User> listUsers(Pageable pageable) {
-    Page<UserEntity> allUsersInDb = userRepository.findAll(pageable);
-    List<User> users = userMapper.convertToDtoList(allUsersInDb.getContent());
-    users.forEach(user -> {
-      UserRepresentation userRepresentation = keycloakUserService.getUser(user.getAuthId());
-      user.setId(user.getId());
-      user.setEmail(userRepresentation.getEmail());
-    });
-    return users;
+  @Transactional(readOnly = true)
+  public UsersPageDto listUsers(Integer pageNumber, Integer pageSize) {
+    Page<UserEntity> userEntitiesPage =
+        userRepository.findAll(PageRequest.of(pageNumber, pageSize));
+    List<UserEntity> userEntities = userEntitiesPage.getContent();
+    List<UserDto> users = new ArrayList<>();
+    userEntities.forEach(
+        userEntity -> {
+          UserRepresentation userRepresentation =
+              keycloakUserService.getUser(userEntity.getAuthId());
+          UserDto user = userMapper.convertToDto(userEntity);
+          user.email(userRepresentation.getEmail());
+          user.login(userRepresentation.getUsername());
+          users.add(user);
+        });
+    return UsersPageDto.builder().users(users).totalResults(0).paging(null).build();
   }
 
-  public User getUser(Long userId) {
-    return userMapper
-        .convertToDto(userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
+  @Transactional(readOnly = true)
+  public UserDto getUser(Long userId) {
+    UserEntity userEntity =
+        userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+    UserRepresentation userRepresentation = keycloakUserService.getUser(userEntity.getAuthId());
+    UserDto user = userMapper.convertToDto(userEntity);
+    user.setEmail(userRepresentation.getEmail());
+    return user;
   }
 
-  public User updateUser(Long id, UserUpdateRequest userUpdateRequest) {
-    UserEntity userEntity = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+  // // TODO Review this function
+  // public UserDto updateUser(Long id, UserUpdateRequestDto userUpdateRequest) {
+  //   UserEntity userEntity =
+  // userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
-    if (userUpdateRequest.getStatus() == UserStatus.APPROVED) {
-      UserRepresentation userRepresentation = keycloakUserService.getUser(userEntity.getAuthId());
-      userRepresentation.setEnabled(true);
-      userRepresentation.setEmailVerified(true);
-      keycloakUserService.updateUser(userRepresentation);
-    }
+  //   if (userUpdateRequest.getStatus() == UserStatusDto.APPROVED) {
+  //     UserRepresentation userRepresentation =
+  // keycloakUserService.getUser(userEntity.getAuthId());
+  //     userRepresentation.setEnabled(true);
+  //     userRepresentation.setEmailVerified(true);
+  //     keycloakUserService.updateUser(userRepresentation);
+  //   }
 
-    userEntity.setStatus(userUpdateRequest.getStatus());
-    return userMapper.convertToDto(userRepository.save(userEntity));
-  }
-
+  //   userEntity.setStatus(userUpdateRequest.getStatus());
+  //   return userMapper.convertToDto(userRepository.save(userEntity));
+  // }
 }

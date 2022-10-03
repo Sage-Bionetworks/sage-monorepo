@@ -46,18 +46,9 @@
         "root": "apps/challenge-api-gateway"
       },
       "dependsOn": [
-        {
-          "target": "build",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        },
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
+        "build",
+        "prepare",
+        "^serve-detach"
       ]
     },
     "serve-detach": {
@@ -67,34 +58,20 @@
         "cwd": "apps/challenge-api-gateway"
       },
       "dependsOn": [
-        {
-          "target": "build-image",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        },
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
+        "build-image",
+        "prepare",
+        "^serve-detach"
       ]
     },
     "build-image": {
-      "executor": "@nxrocks/nx-spring-boot:buildImage",
+      "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
         "root": "apps/challenge-api-gateway",
         "args": [
           "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-api-gateway:latest"
         ]
       },
-      "dependsOn": [
-        {
-          "target": "install",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["^install"]
     }
   },
   "tags": [

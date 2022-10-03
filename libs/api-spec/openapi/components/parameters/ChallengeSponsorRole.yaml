@@ -1,9 +1,0 @@
-description: The role of a challenge sponsor
-type: string
-enum:
-  - ChallengeOrganizer
-  - ComputeProvider
-  - DataProvider
-  - Funder
-  - Other
-example: DataProvider

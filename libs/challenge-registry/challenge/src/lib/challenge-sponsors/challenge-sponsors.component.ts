@@ -4,7 +4,7 @@ import {
   Challenge,
   ChallengeService,
   ChallengeSponsor,
-} from '@sagebionetworks/api-angular';
+} from '@sagebionetworks/api-client-angular';
 import { filter, switchMap, tap } from 'rxjs';
 import { isNotUndefined } from 'type-guards';
 

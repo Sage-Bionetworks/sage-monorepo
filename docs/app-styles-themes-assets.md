@@ -79,6 +79,10 @@ _about-theme.scss                      <---- theme file
 
 Seed the theme file with the following template:
 
+> **Note**
+> `@mixin color()` collects the color-related styles, `color` and `*-color` (i.e `background-color`), while the
+[typography](https://www.w3schools.com/cssref/pr_font_font.asp) styles, `line-height` and `font-*` (i.e `font-size`), should be added into `@mixin typography()`.
+
 ```scss
 @use 'sass:map';
 @use '@angular/material' as mat;

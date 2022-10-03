@@ -1,8 +1,7 @@
 {
-  "java.format.enabled": true,
-  "java.format.settings.url": "eclipse-java-google-style.xml",
   "java.checkstyle.configuration": "checkstyle.xml",
   "java.checkstyle.version": "10.3",
+  "java.jdt.ls.java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
   "java.jdt.ls.lombokSupport.enabled": false,
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": false,
@@ -26,9 +25,9 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": true
   },
+  "java.format.enabled": false,
   "[java]": {
-    "editor.defaultFormatter": "redhat.java",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -42,10 +41,19 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
-  "eslint.workingDirectories": [
-    "./apps/challenge-db-cli",
-    "."
-  ],
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.(java|sql)$",
+        "cmd": "node_modules/.bin/nx affected --base=HEAD --target=format"
+      }
+    ]
+  },
+  "eslint.workingDirectories": ["./apps/challenge-db-cli", "."],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
@@ -76,5 +84,6 @@
   "java.configuration.updateBuildConfiguration": "disabled",
   "editor.inlayHints.enabled": "off",
   "rewrap.wrappingColumn": 100,
-  "editor.rulers": [100]
+  "editor.rulers": [100],
+  "eslint.validate": ["json"]
 }

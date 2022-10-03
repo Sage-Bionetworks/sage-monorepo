@@ -1,6 +1,0 @@
-description: The name of the challenge platform
-type: string
-minLength: 3
-maxLength: 30
-pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-example: awesome-challenge-platform

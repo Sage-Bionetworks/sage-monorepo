@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Challenge, ChallengeService } from '@sagebionetworks/api-angular';
+import {
+  Challenge,
+  ChallengeService,
+} from '@sagebionetworks/api-client-angular-deprecated';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { isNotUndefined } from 'type-guards';

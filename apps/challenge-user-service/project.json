@@ -13,9 +13,7 @@
     "prepare-java": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": [
-          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
-        ],
+        "commands": ["./gradlew --version 1> /dev/null"],
         "cwd": "apps/challenge-user-service"
       }
     },
@@ -24,37 +22,25 @@
       "options": {
         "root": "apps/challenge-user-service"
       },
-      "outputs": [
-        "apps/challenge-user-service"
-      ],
-      "dependsOn": [
-        {
-          "target": "install",
-          "projects": "dependencies"
-        }
-      ]
+      "outputs": ["apps/challenge-user-service"],
+      "dependsOn": ["^install"]
     },
-    "test": {
-      "executor": "@nxrocks/nx-spring-boot:test",
-      "options": {
-        "root": "apps/challenge-user-service"
-      },
-      "dependsOn": [
-        {
-          "target": "install",
-          "projects": "dependencies"
-        }
-      ]
-    },
-    "test-integration": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "commands": [
-          "./mvnw verify -P integration-test"
-        ],
-        "cwd": "apps/challenge-user-service"
-      }
-    },
+    // "test": {
+    //   "executor": "@nxrocks/nx-spring-boot:test",
+    //   "options": {
+    //     "root": "apps/challenge-user-service"
+    //   },
+    //   "dependsOn": ["build"]
+    // },
+    // "integration-test": {
+    //   "executor": "@nrwl/workspace:run-commands",
+    //   "options": {
+    //     "commands": [
+    //       "./gradlew integrationTest"
+    //     ],
+    //     "cwd": "apps/challenge-user-service"
+    //   }
+    // },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
@@ -68,30 +54,19 @@
       }
     },
     "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:format-check",
+      "executor": "@nxrocks/nx-spring-boot:check-format",
       "options": {
         "root": "apps/challenge-user-service"
       }
     },
     "serve": {
-      "executor": "@nxrocks/nx-spring-boot:serve",
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "root": "apps/challenge-user-service"
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "apps/challenge-user-service",
+        "parallel": true
       },
-      "dependsOn": [
-        {
-          "target": "build",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        },
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["prepare", "^serve-detach"]
     },
     "serve-detach": {
       "executor": "@nrwl/workspace:run-commands",
@@ -99,46 +74,37 @@
         "command": "docker compose up -d",
         "cwd": "apps/challenge-user-service"
       },
-      "dependsOn": [
-        {
-          "target": "build-image",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        },
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["build-image", "prepare", "^serve-detach"]
     },
     "build-image": {
-      "executor": "@nxrocks/nx-spring-boot:buildImage",
+      "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
         "root": "apps/challenge-user-service",
         "args": [
           "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-user-service:latest"
         ]
       },
-      "dependsOn": [
-        {
-          "target": "install",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["^install"]
+    },
+    "openapi-generate": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "xargs rm -fr <.openapi-generator/FILES",
+          "openapi-generator-cli generate",
+          "./gradlew spotlessApply"
+        ],
+        "cwd": "apps/challenge-user-service",
+        "parallel": false
+      }
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
+  "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    "challenge-mariadb",
-    "challenge-keycloak",
-    "challenge-service-registry",
-    "challenge-api-gateway",
-    "shared-java-challenge-util"
+    // "challenge-mariadb",
+    // "challenge-keycloak",
+    // "challenge-service-registry",
+    // "challenge-api-gateway",
+    // "shared-java-challenge-util"
   ]
 }

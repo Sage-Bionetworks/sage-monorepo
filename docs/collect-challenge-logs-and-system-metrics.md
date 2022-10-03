@@ -299,6 +299,9 @@ to log in:
 - user: `elastic`
 - password: `<elastic password>`
 
+Congrats! You have successfully logged into Kibana. You should be welcomed with a dialog that
+invites you to install integration components. You can skip this step.
+
 ## Deploy Beat agents
 
 ### Metricbeat
@@ -309,7 +312,7 @@ filesystem usage, and network usage. Metricbeat will send this information at th
 container levels.
 
 1. Ssh to an EC2 instance.
-2. [Install Metricbeat].
+2. [Install Metricbeat] (select the `DEB` tab).
     > **Note** The version of Metricbeat must match the version of the ELK stack. The version of the
     > ELK stack is specified in the configuration file `.env` of the ELK stack.
 
@@ -378,7 +381,7 @@ Metricbeat should now be sending data to the ELK Stack!
 instance that runs the ELK stack, to monitor system log files.
 
 1. Ssh to an EC2 instance.
-2. [Install Filebeat].
+2. [Install Filebeat] (select the `DEB` tab).
     > **Note** The version of Filebeat must match the version of the ELK stack. The version of the
     > ELK stack is specified in the configuration file `.env` of the ELK stack.
 
@@ -426,7 +429,7 @@ instance that runs the ELK stack, to monitor system log files.
     sudo systemctl status filebeat
     ```
     > **Note** Look at the logs for any error messages. If Filebeat failed to start, try restarting
-    > it with `sudo systemctl restart metricbeat`.
+    > it with `sudo systemctl restart filebeat`.
 
 Filebeat should now be sending data to the ELK Stack!
 
@@ -437,9 +440,11 @@ visualizing your data. To load these assets, run the following commands from the
 that runs the ELK stack.
 
 ```console
-metricbeat setup -e --dashboards
-filebeat setup -e --dashboards
+sudo metricbeat setup -e --dashboards
+sudo filebeat setup -e --dashboards
 ```
+
+These commands may take 1-2 minutes to complete.
 
 ## Explore and visualize data in Kibana
 
@@ -556,7 +561,7 @@ From there, the following actions are available:
 [ELK stack]: https://www.elastic.co/what-is/elk-stack
 [deviantony/docker-elk]: https://github.com/deviantony/docker-elk
 [Sage-Bionetworks/docker-elk]: https://github.com/Sage-Bionetworks/docker-elk
-[Install the Docker Engine]: https://docs.docker.com/engine/install/ubunt
+[Install the Docker Engine]: https://docs.docker.com/engine/install/ubuntu
 [Enable the non-root user to execute Docker commands]: https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user
 [Metricbeat]: https://www.elastic.co/beats/metricbeat
 [Install Metricbeat]: https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-installation-configuration.html#install

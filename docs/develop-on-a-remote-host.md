@@ -102,7 +102,7 @@ assume you have access to the Sage AWS Service Catalog.
 
 ### On the Service Catalog Portal
 
-- Log in to the [Service Catalog](sc.sageit.org) with your Synapse credentials.
+- Log in to the [Service Catalog](https://sc.sageit.org) with your Synapse credentials.
 - From the list of Products, select **EC2: Linux Docker**. On the Product page, click on **Launch
 product** in the upper-right corner.
 - On the next page, fill out the wizard as follows:

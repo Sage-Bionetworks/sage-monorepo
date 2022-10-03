@@ -1,14 +1,24 @@
-<main class="main-section-stars-container">
-  <section id="main" class="main-section-stars-main-section">
-    <span class="main-section-stars-text">Starred</span>
-    <div class="main-section-stars-tab-group">
-      <button class="main-section-stars-tab" (click)="clickEvent('challenges')">Challenges</button>
-      <button class="main-section-stars-tab1" (click)="clickEvent('organizations')">
+<main>
+  <div id="stars">
+    <h3>Starred</h3>
+    <div class="tab-nav-group">
+      <button
+        class="tab-item"
+        (click)="clickEvent('challenges')"
+        [ngClass]="{ 'active-tab': activeTab === tabs['challenges'] }"
+      >
+        Challenges
+      </button>
+      <button
+        class="tab-item"
+        (click)="clickEvent('organizations')"
+        [ngClass]="{ 'active-tab': activeTab === tabs['organizations'] }"
+      >
         Organizations
       </button>
     </div>
     <ng-container [ngSwitch]="activeTab">
-      <div *ngSwitchCase="tabs['challenges']" class="main-section-stars-card-group">
+      <div *ngSwitchCase="tabs['challenges']" class="card-group">
         <challenge-registry-challenge-card
           *ngFor="let challenge of challenges"
           [challenge]="challenge"
@@ -23,6 +33,6 @@
         </challenge-registry-organization-card>
       </div>
     </ng-container>
-    <div class="main-section-stars-paginator"></div>
-  </section>
+    <div class="card-paginator"></div>
+  </div>
 </main>

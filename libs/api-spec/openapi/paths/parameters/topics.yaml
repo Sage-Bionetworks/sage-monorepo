@@ -1,8 +1,0 @@
-name: topics
-description: Array of topics used to filter the results
-in: query
-required: false
-schema:
-  type: array
-  items:
-    $ref: ../../components/schemas/Topic.yaml

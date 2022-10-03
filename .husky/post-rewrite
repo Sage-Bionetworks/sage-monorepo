@@ -1,7 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn install --frozen-lockfile
-
-# Notify the developer when a different dev container must be used.
+node tools/check-nodejs-packages.js
+node tools/check-java-packages.js
 node tools/check-devcontainer-version.js
