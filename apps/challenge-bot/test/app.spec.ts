@@ -3,7 +3,7 @@
 
 import nock from 'nock';
 // Requiring our app implementation
-import myProbotApp from '../src/index';
+import { challengeBot } from '../src/index';
 import { Probot, ProbotOctokit } from 'probot';
 // Requiring our fixtures
 import payload from './fixtures/issues.opened.json';
@@ -31,7 +31,7 @@ describe('My Probot app', () => {
       }),
     });
     // Load our app into probot
-    probot.load(myProbotApp);
+    probot.load(challengeBot);
   });
 
   test('creates a comment when an issue is opened', async () => {
