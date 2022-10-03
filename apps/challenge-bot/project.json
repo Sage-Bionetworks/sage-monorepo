@@ -8,7 +8,7 @@
     //   "outputs": ["{options.outputPath}"],
     //   "options": {
     //     "outputPath": "dist/apps/challenge-bot",
-    //     "main": "apps/challenge-bot/src/app.ts",
+    //     "main": "apps/challenge-bot/src/index.ts",
     //     "tsConfig": "apps/challenge-bot/tsconfig.app.json",
     //     "assets": ["apps/challenge-bot/*.md"]
     //   }
@@ -30,7 +30,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "nodemon src/app.ts",
+        "command": "nodemon src/index.ts",
         "cwd": "apps/challenge-bot"
       }
     },
