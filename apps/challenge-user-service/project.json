@@ -79,10 +79,7 @@
     "build-image": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
-        "root": "apps/challenge-user-service",
-        "args": [
-          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-user-service:latest"
-        ]
+        "root": "apps/challenge-user-service"
       },
       "dependsOn": ["^install"]
     },
@@ -101,10 +98,10 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    // "challenge-mariadb",
-    // "challenge-keycloak",
-    // "challenge-service-registry",
-    // "challenge-api-gateway",
-    // "shared-java-challenge-util"
+    "challenge-mariadb",
+    "challenge-keycloak",
+    "challenge-service-registry",
+    "challenge-api-gateway",
+    "shared-java-challenge-util"
   ]
 }
