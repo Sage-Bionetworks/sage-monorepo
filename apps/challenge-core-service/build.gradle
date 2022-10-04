@@ -2,12 +2,16 @@ buildscript {
   repositories {
     mavenCentral()
   }
+  dependencies {
+    classpath "org.flywaydb:flyway-mysql:${flywaydbVersion}"
+  }
 }
 
 plugins {
   id 'java'
   id 'org.springframework.boot' version "${springBootVersion}"
   id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
+  id "org.flywaydb.flyway" version "${flywaydbVersion}"
 }
 
 repositories {
@@ -16,9 +20,10 @@ repositories {
 }
 
 dependencies {
+  annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+  compileOnly "org.projectlombok:lombok:${lombokVersion}"
   implementation "org.flywaydb:flyway-core:${flywaydbVersion}"
   implementation "org.flywaydb:flyway-mysql:${flywaydbVersion}"
-  implementation "org.projectlombok:lombok:${lombokVersion}"
   implementation "org.sagebionetworks.challenge:challenge-util:${challengeVersion}"
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
