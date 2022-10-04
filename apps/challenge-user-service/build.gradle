@@ -63,6 +63,10 @@ springBoot {
   mainClass = 'org.sagebionetworks.challenge.ChallengeUserServiceApplication'
 }
 
+bootBuildImage {
+  imageName = 'sagebionetworks/challenge-user-service:latest'
+}
+
 spotless {
   // format 'misc', {
   //   target '*.gradle', '*.md', '.gitignore'
