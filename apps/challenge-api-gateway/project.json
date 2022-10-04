@@ -13,9 +13,7 @@
     "prepare-java": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
-        ],
+        "commands": ["./gradlew --version 1> /dev/null"],
         "cwd": "apps/challenge-api-gateway"
       }
     },
@@ -24,7 +22,8 @@
       "options": {
         "root": "apps/challenge-api-gateway"
       },
-      "outputs": ["apps/challenge-api-gateway"]
+      "outputs": ["apps/challenge-api-gateway"],
+      "dependsOn": ["^install"]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
@@ -39,11 +38,13 @@
       }
     },
     "serve": {
-      "executor": "@nxrocks/nx-spring-boot:serve",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/challenge-api-gateway"
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "apps/challenge-api-gateway",
+        "parallel": true
       },
-      "dependsOn": ["build", "prepare", "^serve-detach"]
+      "dependsOn": ["prepare", "^serve-detach"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -56,8 +57,7 @@
     "build-image": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
-        "root": "apps/challenge-api-gateway",
-        "args": ["-Dspring-boot.build-image.imageName=sagebionetworks/challenge-api-gateway:latest"]
+        "root": "apps/challenge-api-gateway"
       },
       "dependsOn": ["^install"]
     }
