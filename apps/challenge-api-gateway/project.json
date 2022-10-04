@@ -4,14 +4,14 @@
   "projectType": "application",
   "targets": {
     "prepare": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
         "cwd": "apps/challenge-api-gateway"
       }
     },
     "prepare-java": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
@@ -24,9 +24,7 @@
       "options": {
         "root": "apps/challenge-api-gateway"
       },
-      "outputs": [
-        "apps/challenge-api-gateway"
-      ]
+      "outputs": ["apps/challenge-api-gateway"]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
@@ -45,40 +43,25 @@
       "options": {
         "root": "apps/challenge-api-gateway"
       },
-      "dependsOn": [
-        "build",
-        "prepare",
-        "^serve-detach"
-      ]
+      "dependsOn": ["build", "prepare", "^serve-detach"]
     },
     "serve-detach": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up -d",
         "cwd": "apps/challenge-api-gateway"
       },
-      "dependsOn": [
-        "build-image",
-        "prepare",
-        "^serve-detach"
-      ]
+      "dependsOn": ["build-image", "prepare", "^serve-detach"]
     },
     "build-image": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
         "root": "apps/challenge-api-gateway",
-        "args": [
-          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-api-gateway:latest"
-        ]
+        "args": ["-Dspring-boot.build-image.imageName=sagebionetworks/challenge-api-gateway:latest"]
       },
       "dependsOn": ["^install"]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
-  "implicitDependencies": [
-    "challenge-service-registry"
-  ]
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": ["challenge-service-registry"]
 }

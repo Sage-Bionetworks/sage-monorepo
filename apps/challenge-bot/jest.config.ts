@@ -1,3 +1,4 @@
+/* eslint-disable */
 module.exports = {
   displayName: 'challenge-bot',
   preset: '../../jest.preset.js',

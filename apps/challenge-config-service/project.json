@@ -4,7 +4,7 @@
   "projectType": "application",
   "targets": {
     "prepare-java": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
@@ -52,7 +52,7 @@
       ]
     },
     "serve-detach": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up -d",
         "cwd": "apps/challenge-config-service"

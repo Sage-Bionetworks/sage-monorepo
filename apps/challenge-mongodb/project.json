@@ -4,14 +4,14 @@
   "projectType": "application",
   "targets": {
     "prepare": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
         "cwd": "apps/challenge-mongodb"
       }
     },
     "serve": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up",
         "cwd": "apps/challenge-mongodb"
@@ -32,14 +32,9 @@
       "options": {
         "context": "apps/challenge-mongodb",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-mongodb:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-mongodb:latest"]
       }
     }
   },
-  "tags": [
-    "type:type",
-    "scope:backend"
-  ]
+  "tags": ["type:type", "scope:backend"]
 }

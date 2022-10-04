@@ -4,14 +4,14 @@
   "projectType": "application",
   "targets": {
     "prepare": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
         "cwd": "apps/challenge-mariadb"
       }
     },
     "serve": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up",
         "cwd": "apps/challenge-mariadb"
@@ -28,7 +28,7 @@
       ]
     },
     "serve-detach": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up -d",
         "cwd": "apps/challenge-mariadb"
@@ -49,14 +49,9 @@
       "options": {
         "context": "apps/challenge-mariadb",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-mariadb:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-mariadb:latest"]
       }
     }
   },
-  "tags": [
-    "type:db",
-    "scope:backend"
-  ]
+  "tags": ["type:db", "scope:backend"]
 }

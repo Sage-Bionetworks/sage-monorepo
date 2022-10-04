@@ -4,14 +4,14 @@
   "projectType": "application",
   "targets": {
     "prepare": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
         "cwd": "apps/challenge-user-service"
       }
     },
     "prepare-java": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
         "cwd": "apps/challenge-user-service"
@@ -25,22 +25,6 @@
       "outputs": ["apps/challenge-user-service"],
       "dependsOn": ["^install"]
     },
-    // "test": {
-    //   "executor": "@nxrocks/nx-spring-boot:test",
-    //   "options": {
-    //     "root": "apps/challenge-user-service"
-    //   },
-    //   "dependsOn": ["build"]
-    // },
-    // "integration-test": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "commands": [
-    //       "./gradlew integrationTest"
-    //     ],
-    //     "cwd": "apps/challenge-user-service"
-    //   }
-    // },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
@@ -60,7 +44,7 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
         "cwd": "apps/challenge-user-service",
@@ -69,7 +53,7 @@
       "dependsOn": ["prepare", "^serve-detach"]
     },
     "serve-detach": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up -d",
         "cwd": "apps/challenge-user-service"
@@ -84,7 +68,7 @@
       "dependsOn": ["^install"]
     },
     "openapi-generate": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "xargs rm -fr <.openapi-generator/FILES",
