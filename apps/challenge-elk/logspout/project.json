@@ -4,14 +4,14 @@
   "projectType": "application",
   "targets": {
     "prepare": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
         "cwd": "apps/challenge-elk/logspout"
       }
     },
     "serve": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up",
         "cwd": "apps/challenge-elk/logspout"
@@ -32,7 +32,7 @@
       ]
     },
     "serve-detach": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up -d",
         "cwd": "apps/challenge-elk/logspout"
@@ -57,17 +57,10 @@
       "options": {
         "context": "apps/challenge-elk/logspout",
         "push": false,
-        "tags": [
-          "sagebionetworks/challenge-logspout:latest"
-        ]
+        "tags": ["sagebionetworks/challenge-logspout:latest"]
       }
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
-  "implicitDependencies": [
-    "challenge-logstash"
-  ]
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": ["challenge-logstash"]
 }

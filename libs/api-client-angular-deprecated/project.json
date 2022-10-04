@@ -5,7 +5,7 @@
   "prefix": "challenge-registry",
   "targets": {
     "generate-sources": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "rm -fr src/lib/api",
@@ -18,9 +18,7 @@
     },
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": [
-        "dist/libs/api-client-angular-deprecated"
-      ],
+      "outputs": ["dist/libs/api-client-angular-deprecated"],
       "options": {
         "project": "libs/api-client-angular-deprecated/ng-package.json"
       },
@@ -36,9 +34,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/libs/api-client-angular-deprecated"
-      ],
+      "outputs": ["coverage/libs/api-client-angular-deprecated"],
       "options": {
         "jestConfig": "libs/api-client-angular-deprecated/jest.config.ts",
         "passWithNoTests": true
@@ -47,17 +43,13 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "libs/api-client-angular-deprecated/src/index.ts"
-        ]
+        "lintFilePatterns": ["libs/api-client-angular-deprecated/src/index.ts"]
       }
     },
     "lint-fix": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "libs/api-client-angular-deprecated/src/index.ts"
-        ],
+        "lintFilePatterns": ["libs/api-client-angular-deprecated/src/index.ts"],
         "fix": true
       }
     }
