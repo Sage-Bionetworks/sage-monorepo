@@ -53,7 +53,10 @@
       }
     ]
   },
-  "eslint.workingDirectories": ["./apps/challenge-db-cli", "."],
+  "eslint.workingDirectories": [
+    "./apps/challenge-db-cli",
+    "."
+  ],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
@@ -84,6 +87,18 @@
   "java.configuration.updateBuildConfiguration": "disabled",
   "editor.inlayHints.enabled": "off",
   "rewrap.wrappingColumn": 100,
-  "editor.rulers": [100],
-  "eslint.validate": ["json"]
+  "editor.rulers": [
+    100
+  ],
+  "eslint.validate": [
+    "json"
+  ],
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "eslint.nodePath": ".yarn/sdks",
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }

@@ -22,6 +22,7 @@
     "vscjava.vscode-gradle",
     "vscjava.vscode-java-pack",
     "vscjava.vscode-lombok",
-    "webhint.vscode-webhint"
+    "webhint.vscode-webhint",
+    "arcanis.vscode-zipfs"
   ]
 }
