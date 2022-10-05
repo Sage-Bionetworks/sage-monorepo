@@ -11,7 +11,6 @@ env:
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
-  MAVEN_CONFIG: "--no-transfer-progress"
 
 jobs:
   main:
@@ -56,14 +55,6 @@ jobs:
       #   with:
       #     path: ~/.local/share/virtualenvs
       #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-
-      - name: Setup Maven cache
-        uses: actions/cache@v3
-        with:
-          path: /root/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
 
       - name: Setup Gradle cache
         uses: actions/cache@v3
@@ -142,14 +133,6 @@ jobs:
       #   with:
       #     path: ~/.local/share/virtualenvs
       #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-
-      - name: Setup Maven cache
-        uses: actions/cache@v3
-        with:
-          path: /root/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
 
       - name: Setup Gradle cache
         uses: actions/cache@v3

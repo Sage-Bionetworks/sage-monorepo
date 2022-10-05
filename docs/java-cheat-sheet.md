@@ -25,7 +25,3 @@ TERM to the value dumb. To make it a default behavior, add `org.gradle.console=p
 ./gradlew test --console=plain
 TERM=dumb ./gradlew test
 ```
-
-## Maven
-
-- Start a Spring Boot app: `./mvnw spring-boot:run`
