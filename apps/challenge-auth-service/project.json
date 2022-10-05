@@ -13,9 +13,7 @@
     "prepare-java": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
-        ],
+        "commands": ["./gradlew --version 1> /dev/null"],
         "cwd": "apps/challenge-auth-service"
       }
     },
@@ -25,12 +23,7 @@
         "root": "apps/challenge-auth-service"
       },
       "outputs": ["apps/challenge-auth-service"],
-      "dependsOn": [
-        {
-          "target": "install",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["^install"]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
@@ -45,24 +38,13 @@
       }
     },
     "serve": {
-      "executor": "@nxrocks/nx-spring-boot:serve",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/challenge-auth-service"
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "apps/challenge-auth-service",
+        "parallel": true
       },
-      "dependsOn": [
-        {
-          "target": "build",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        },
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["prepare", "^serve-detach"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -70,42 +52,21 @@
         "command": "docker compose up -d",
         "cwd": "apps/challenge-auth-service"
       },
-      "dependsOn": [
-        {
-          "target": "build-image",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        },
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["build-image", "prepare", "^serve-detach"]
     },
     "build-image": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
-        "root": "apps/challenge-auth-service",
-        "args": [
-          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-auth-service:latest"
-        ]
+        "root": "apps/challenge-auth-service"
       },
-      "dependsOn": [
-        {
-          "target": "install",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["^install"]
     }
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
+    "challenge-api-gateway",
     "challenge-keycloak",
     "challenge-service-registry",
-    "challenge-api-gateway",
     "shared-java-challenge-util"
   ]
 }
