@@ -6,9 +6,7 @@
     "prepare-java": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
-        ],
+        "commands": ["./gradlew --version 1> /dev/null"],
         "cwd": "apps/challenge-config-service"
       }
     },
@@ -17,7 +15,8 @@
       "options": {
         "root": "apps/challenge-config-service"
       },
-      "outputs": ["apps/challenge-config-service"]
+      "outputs": ["apps/challenge-config-service"],
+      "dependsOn": ["^install"]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
@@ -32,24 +31,13 @@
       }
     },
     "serve": {
-      "executor": "@nxrocks/nx-spring-boot:serve",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/challenge-config-service"
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "apps/challenge-config-service",
+        "parallel": true
       },
-      "dependsOn": [
-        {
-          "target": "build",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        },
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["prepare", "^serve-detach"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -57,32 +45,16 @@
         "command": "docker compose up -d",
         "cwd": "apps/challenge-config-service"
       },
-      "dependsOn": [
-        {
-          "target": "build-image",
-          "projects": "self"
-        },
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["build-image", "prepare", "^serve-detach"]
     },
     "build-image": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
-        "root": "apps/challenge-config-service",
-        "args": [
-          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-config-service:latest"
-        ]
+        "root": "apps/challenge-config-service"
       },
-      "dependsOn": [
-        {
-          "target": "install",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["^install"]
     }
   },
-  "tags": ["type:service", "scope:backend"]
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": ["challenge-service-registry"]
 }
