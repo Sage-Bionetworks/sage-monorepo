@@ -18,7 +18,7 @@
     "apps/challenge-db-cli",
     "apps/challenge-elk"
   ],
-  "baseBranches": ["dependency-updates"],
+  "baseBranches": ["dependency-update"],
   "packageRules": [
     {
       "matchUpdateTypes": ["major"],
