@@ -39,6 +39,10 @@
       "groupName": "eslint"
     },
     {
+      "matchPackagePatterns": ["keycloak"],
+      "groupName": "keycloak"
+    },
+    {
       "matchPackageNames": ["aws-sdk"],
       "schedule": ["after 9pm on sunday"]
     }
