@@ -5,11 +5,7 @@
   "scripts": {
     "coverage:merge": "node ./tools/coverage-merger.js",
     "postinstall": "ngcc --properties es2020 browser module main",
-    "prepare": "husky install",
-    "affected:apps": "nx affected:apps",
-    "affected:build": "nx affected:build",
-    "affected:e2e": "nx affected:e2e",
-    "affected:dep-graph": "nx affected:dep-graph"
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
