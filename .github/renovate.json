@@ -17,6 +17,9 @@
   "gradle-wrapper": {
     "enabled": false
   },
+  "ignorePaths": [
+    "apps/challenge-elk"
+  ],
   "packageRules": [
     {
       "matchUpdateTypes": [
