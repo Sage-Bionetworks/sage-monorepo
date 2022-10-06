@@ -19,6 +19,13 @@
     </div>
     <ng-container [ngSwitch]="activeTab">
       <div *ngSwitchCase="tabs['challenges']">
+        <div class="card-group">
+          <challenge-registry-challenge-card
+            *ngFor="let challenge of challenges"
+            [challenge]="challenge"
+          >
+          </challenge-registry-challenge-card>
+        </div>
         <p-paginator
           [first]="0"
           [pageLinkSize]="10"
@@ -27,13 +34,6 @@
           [rowsPerPageOptions]="[10, 20, 30]"
           (onPageChange)="onPageChange($event)"
         ></p-paginator>
-        <div class="card-group">
-          <challenge-registry-challenge-card
-            *ngFor="let challenge of challenges"
-            [challenge]="challenge"
-          >
-          </challenge-registry-challenge-card>
-        </div>
       </div>
       <div *ngSwitchCase="tabs['organizations']" class="main-section-stars-card-group">
         <challenge-registry-organization-card
