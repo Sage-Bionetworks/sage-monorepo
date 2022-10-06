@@ -18,13 +18,14 @@
     "apps/challenge-db-cli",
     "apps/challenge-elk"
   ],
-  "baseBranches": ["dependency-update"],
+  "baseBranches": ["main"],
   "packageRules": [
     {
       "matchUpdateTypes": ["major"],
       "dependencyDashboardApproval": true
     },
     {
+      "description": "Automatically merge patch-level updates",
       "matchUpdateTypes": ["patch"],
       "automerge": true
     },
