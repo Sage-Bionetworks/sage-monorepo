@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn affected:test
-yarn nx affected --target=integration-test
+# yarn nx affected --target=test
+# yarn nx affected --target=integration-test
