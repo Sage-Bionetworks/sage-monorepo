@@ -8,7 +8,7 @@
   ],
   "semanticCommitScope": "deps",
   "automergeType": "pr",
-  "prHourlyLimit": 2,
+  "prHourlyLimit": 3,
   "prConcurrentLimit": 5,
   "packageRules": [
     {
