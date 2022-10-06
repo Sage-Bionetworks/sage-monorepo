@@ -8,7 +8,7 @@
   ],
   "semanticCommitScope": "deps",
   "automergeType": "pr",
-  "prHourlyLimit": 3,
+  "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
   "packageRules": [
     {
@@ -22,11 +22,15 @@
         "patch"
       ],
       "automerge": true
+    },
+    {
+      "matchPackageNames": ["aws-sdk"],
+      "schedule": ["after 9pm on sunday"]
     }
   ],
   "timezone": "America/Los_Angeles",
   "schedule": [
-    "after 10pm every weekday",
+    "after 12am every weekday",
     "before 5am every weekday",
     "every weekend"
   ]
