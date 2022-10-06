@@ -19,6 +19,7 @@
     "apps/challenge-elk"
   ],
   "baseBranches": ["main"],
+  "labels": ["bot", "dependencies"],
   "packageRules": [
     {
       "matchUpdateTypes": ["major"],
@@ -31,12 +32,14 @@
     },
     {
       "matchPackagePatterns": ["eslint"],
-      "groupName": "eslint"
+      "groupName": "eslint",
+      "labels": "linting"
     },
     {
       "matchPackagePatterns": ["keycloak"],
       "groupName": "keycloak",
-      "dependencyDashboardApproval": true
+      "dependencyDashboardApproval": true,
+      "labels": "iam"
     },
     {
       "matchPackageNames": ["aws-sdk"],
