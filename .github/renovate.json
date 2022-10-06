@@ -56,10 +56,5 @@
       "prCreation": "immediate"
     }
   ],
-  "timezone": "America/Los_Angeles",
-  "schedule": [
-    "after 12am every weekday",
-    "before 5am every weekday",
-    "every weekend"
-  ]
+  "timezone": "America/Los_Angeles"
 }
