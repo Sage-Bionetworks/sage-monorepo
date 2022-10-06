@@ -3,6 +3,7 @@
   "extends": [
     "config:base"
   ],
+  "enabled": true,
   "assignees": [
     "tschaffter"
   ],
@@ -10,6 +11,9 @@
   "automergeType": "pr",
   "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
+  "gradle": {
+    "enabled": false
+  },
   "packageRules": [
     {
       "matchUpdateTypes": [
