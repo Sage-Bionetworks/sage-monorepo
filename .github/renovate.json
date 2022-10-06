@@ -35,6 +35,10 @@
       "automerge": true
     },
     {
+      "matchPackagePatterns": ["eslint"],
+      "groupName": "eslint"
+    },
+    {
       "matchPackageNames": ["aws-sdk"],
       "schedule": ["after 9pm on sunday"]
     }
