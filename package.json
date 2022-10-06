@@ -8,7 +8,6 @@
     "prepare": "husky install",
     "affected:apps": "nx affected:apps",
     "affected:build": "nx affected:build",
-    "affected:test": "nx affected:test",
     "affected:e2e": "nx affected:e2e",
     "affected:dep-graph": "nx affected:dep-graph"
   },
