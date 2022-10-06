@@ -28,6 +28,7 @@
     {
       "description": "Automatically merge patch-level updates",
       "matchUpdateTypes": ["patch"],
+      "automergeType": "branch",
       "automerge": true
     },
     {
