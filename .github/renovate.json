@@ -1,12 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base"
-  ],
+  "extends": ["config:base"],
   "enabled": true,
-  "assignees": [
-    "tschaffter"
-  ],
+  "assignees": ["tschaffter"],
   "semanticCommitScope": "deps",
   "automergeType": "pr",
   "prHourlyLimit": 2,
@@ -22,17 +18,14 @@
     "apps/challenge-db-cli",
     "apps/challenge-elk"
   ],
+  "baseBranches": ["dependency-updates"],
   "packageRules": [
     {
-      "matchUpdateTypes": [
-        "major"
-      ],
+      "matchUpdateTypes": ["major"],
       "dependencyDashboardApproval": true
     },
     {
-      "matchUpdateTypes": [
-        "patch"
-      ],
+      "matchUpdateTypes": ["patch"],
       "automerge": true
     },
     {
@@ -41,7 +34,8 @@
     },
     {
       "matchPackagePatterns": ["keycloak"],
-      "groupName": "keycloak"
+      "groupName": "keycloak",
+      "dependencyDashboardApproval": true
     },
     {
       "matchPackageNames": ["aws-sdk"],
