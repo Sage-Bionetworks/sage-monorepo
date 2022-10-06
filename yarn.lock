@@ -81,7 +81,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular-architects/module-federation@npm:^14.0.7":
+"@angular-architects/module-federation@npm:14.3.10":
   version: 14.3.10
   resolution: "@angular-architects/module-federation@npm:14.3.10"
   dependencies:
@@ -335,7 +335,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/cli@npm:~14.2.0":
+"@angular/cli@npm:14.2.4":
   version: 14.2.4
   resolution: "@angular/cli@npm:14.2.4"
   dependencies:
@@ -2479,7 +2479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hint/configuration-web-recommended@npm:^8.2.15, @hint/configuration-web-recommended@npm:^8.2.8":
+"@hint/configuration-web-recommended@npm:8.2.15, @hint/configuration-web-recommended@npm:^8.2.15":
   version: 8.2.15
   resolution: "@hint/configuration-web-recommended@npm:8.2.15"
   dependencies:
@@ -2590,7 +2590,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hint/formatter-codeframe@npm:^3.1.26":
+"@hint/formatter-codeframe@npm:3.1.32":
   version: 3.1.32
   resolution: "@hint/formatter-codeframe@npm:3.1.32"
   dependencies:
@@ -4091,7 +4091,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nguniversal/builders@npm:^14.0.3":
+"@nguniversal/builders@npm:14.2.0":
   version: 14.2.0
   resolution: "@nguniversal/builders@npm:14.2.0"
   dependencies:
@@ -4126,7 +4126,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nguniversal/express-engine@npm:^14.0.3":
+"@nguniversal/express-engine@npm:14.2.0":
   version: 14.2.0
   resolution: "@nguniversal/express-engine@npm:14.2.0"
   dependencies:
@@ -4691,7 +4691,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx-tools/nx-docker@npm:^2.3.0":
+"@nx-tools/nx-docker@npm:2.3.0":
   version: 2.3.0
   resolution: "@nx-tools/nx-docker@npm:2.3.0"
   dependencies:
@@ -4726,7 +4726,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nxrocks/nx-spring-boot@npm:^5.0.2":
+"@nxrocks/nx-spring-boot@npm:5.0.2":
   version: 5.0.2
   resolution: "@nxrocks/nx-spring-boot@npm:5.0.2"
   dependencies:
@@ -5099,7 +5099,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openapitools/openapi-generator-cli@npm:^2.4.26":
+"@openapitools/openapi-generator-cli@npm:2.5.2":
   version: 2.5.2
   resolution: "@openapitools/openapi-generator-cli@npm:2.5.2"
   dependencies:
@@ -5146,7 +5146,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prettier/plugin-xml@npm:^2.2.0":
+"@prettier/plugin-xml@npm:2.2.0":
   version: 2.2.0
   resolution: "@prettier/plugin-xml@npm:2.2.0"
   dependencies:
@@ -5156,7 +5156,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@probot/adapter-aws-lambda-serverless@npm:^3.0.1":
+"@probot/adapter-aws-lambda-serverless@npm:3.0.1":
   version: 3.0.1
   resolution: "@probot/adapter-aws-lambda-serverless@npm:3.0.1"
   dependencies:
@@ -5217,7 +5217,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/cli@npm:^1.0.0-beta.110":
+"@redocly/cli@npm:1.0.0-beta.110":
   version: 1.0.0-beta.110
   resolution: "@redocly/cli@npm:1.0.0-beta.110"
   dependencies:
@@ -5992,7 +5992,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc-node/register@npm:^1.4.2":
+"@swc-node/register@npm:1.5.2":
   version: 1.5.2
   resolution: "@swc-node/register@npm:1.5.2"
   dependencies:
@@ -6017,7 +6017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/cli@npm:~0.1.55":
+"@swc/cli@npm:0.1.57":
   version: 0.1.57
   resolution: "@swc/cli@npm:0.1.57"
   dependencies:
@@ -6141,7 +6141,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core@npm:^1.2.173":
+"@swc/core@npm:1.3.4":
   version: 1.3.4
   resolution: "@swc/core@npm:1.3.4"
   dependencies:
@@ -6191,7 +6191,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/helpers@npm:~0.3.3":
+"@swc/helpers@npm:0.3.17":
   version: 0.3.17
   resolution: "@swc/helpers@npm:0.3.17"
   dependencies:
@@ -6644,7 +6644,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.123, @types/lodash@npm:^4.14.180":
+"@types/lodash@npm:4.14.186, @types/lodash@npm:^4.14.123":
   version: 4.14.186
   resolution: "@types/lodash@npm:4.14.186"
   checksum: ee0c1368a8100bb6efb88335107473a41928fc307ff1ef4ff1278868ccddba9c04c68c36d1ffe3a0392ef4a956e1955f7de3203ec09df4f1655dd1b88485c549
@@ -6856,7 +6856,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/validator@npm:^13.7.1":
+"@types/validator@npm:13.7.7":
   version: 13.7.7
   resolution: "@types/validator@npm:13.7.7"
   checksum: e32d2bc3b86317da2dff7565e371a2bd0108cdbd7c0b426070c9b9fab30cf07572eea4fb193cb7420261b2eb99b2fc112bf021d48f98eee181844a47533f817a
@@ -9204,14 +9204,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "challenge@workspace:."
   dependencies:
-    "@angular-architects/module-federation": ^14.0.7
+    "@angular-architects/module-federation": 14.3.10
     "@angular-devkit/build-angular": 14.2.4
     "@angular-eslint/eslint-plugin": 14.0.4
     "@angular-eslint/eslint-plugin-template": 14.0.4
     "@angular-eslint/template-parser": 14.0.4
     "@angular/animations": 14.2.4
     "@angular/cdk": 14.2.3
-    "@angular/cli": ~14.2.0
+    "@angular/cli": 14.2.4
     "@angular/common": 14.2.4
     "@angular/compiler": 14.2.4
     "@angular/compiler-cli": 14.2.4
@@ -9223,10 +9223,10 @@ __metadata:
     "@angular/platform-browser-dynamic": 14.2.4
     "@angular/platform-server": 14.2.4
     "@angular/router": 14.2.4
-    "@hint/configuration-web-recommended": ^8.2.8
-    "@hint/formatter-codeframe": ^3.1.26
-    "@nguniversal/builders": ^14.0.3
-    "@nguniversal/express-engine": ^14.0.3
+    "@hint/configuration-web-recommended": 8.2.15
+    "@hint/formatter-codeframe": 3.1.32
+    "@nguniversal/builders": 14.2.0
+    "@nguniversal/express-engine": 14.2.0
     "@nrwl/angular": 14.8.3
     "@nrwl/cli": 14.8.3
     "@nrwl/cypress": 14.8.3
@@ -9240,28 +9240,28 @@ __metadata:
     "@nrwl/nx-plugin": 14.8.3
     "@nrwl/web": 14.8.3
     "@nrwl/workspace": 14.8.3
-    "@nx-tools/nx-docker": ^2.3.0
-    "@nxrocks/nx-spring-boot": ^5.0.2
-    "@openapitools/openapi-generator-cli": ^2.4.26
-    "@prettier/plugin-xml": ^2.2.0
-    "@probot/adapter-aws-lambda-serverless": ^3.0.1
-    "@redocly/cli": ^1.0.0-beta.110
-    "@swc-node/register": ^1.4.2
-    "@swc/cli": ~0.1.55
-    "@swc/core": ^1.2.173
-    "@swc/helpers": ~0.3.3
+    "@nx-tools/nx-docker": 2.3.0
+    "@nxrocks/nx-spring-boot": 5.0.2
+    "@openapitools/openapi-generator-cli": 2.5.2
+    "@prettier/plugin-xml": 2.2.0
+    "@probot/adapter-aws-lambda-serverless": 3.0.1
+    "@redocly/cli": 1.0.0-beta.110
+    "@swc-node/register": 1.5.2
+    "@swc/cli": 0.1.57
+    "@swc/core": 1.3.4
+    "@swc/helpers": 0.3.17
     "@types/jest": 28.1.8
-    "@types/lodash": ^4.14.180
+    "@types/lodash": 4.14.186
     "@types/node": 18.7.1
-    "@types/validator": ^13.7.1
+    "@types/validator": 13.7.7
     "@typescript-eslint/eslint-plugin": 5.39.0
     "@typescript-eslint/parser": 5.39.0
     babel-jest: 28.1.3
-    colors: ^1.4.0
-    commander: ^8.2.0
-    core-js: ^3.6.5
-    coveralls: ^3.1.1
-    cypress: ^9.1.0
+    colors: 1.4.0
+    commander: 8.3.0
+    core-js: 3.25.5
+    coveralls: 3.1.1
+    cypress: 9.7.0
     eslint: 8.15.0
     eslint-config-prettier: 8.1.0
     eslint-config-standard: ^16.0.3
@@ -9272,47 +9272,47 @@ __metadata:
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^4.0.0
     eslint-plugin-promise: ^6.0.0
-    glob: ^7.2.0
-    google-java-format: ^1.1.0
-    hint: ^7.1.1
-    husky: ^7.0.4
-    ibm-openapi-validator: ^0.55.0
+    glob: 7.2.3
+    google-java-format: 1.1.0
+    hint: 7.1.2
+    husky: 7.0.4
+    ibm-openapi-validator: 0.55.0
     jest: 28.1.3
     jest-environment-jsdom: 28.1.1
     jest-preset-angular: 12.2.2
     jsonc-eslint-parser: ^2.1.0
     keycloak-angular: ^12.0.0
     keycloak-js: ^18.0.0
-    lodash: ^4.17.21
-    mongoose: ^6.0.9
+    lodash: 4.17.21
+    mongoose: 6.6.4
     ng-packagr: 14.2.1
-    ngx-avatars: ^1.4.0
-    ngx-countup: ^13.0.0
-    ngx-typed-js: ^2.1.1
-    nock: ^13.2.9
+    ngx-avatars: 1.4.1
+    ngx-countup: 13.1.0
+    ngx-typed-js: 2.1.1
+    nock: 13.2.9
     nx: 14.8.3
-    postcss: ^8.4.5
+    postcss: 8.4.17
     postcss-import: 14.1.0
     postcss-preset-env: 7.5.0
     postcss-url: 10.1.3
-    prettier: ^2.7.1
-    probot: ^12.2.8
-    redoc: ^2.0.0-rc.63
-    redoc-cli: ^0.13.7
+    prettier: 2.7.1
+    probot: 12.2.8
+    redoc: 2.0.0
+    redoc-cli: 0.13.20
     regenerator-runtime: 0.13.7
-    rxjs: ~7.5.0
-    serverless: ^3.22.0
-    serverless-plugin-typescript: ^2.1.2
-    shx: ^0.3.4
-    smee-client: ^1.2.3
+    rxjs: 7.5.7
+    serverless: 3.22.0
+    serverless-plugin-typescript: 2.1.3
+    shx: 0.3.4
+    smee-client: 1.2.3
     ts-jest: 28.0.8
     ts-node: 10.9.1
-    tslib: ^2.0.0
-    type-guards: ^0.15.0
+    tslib: 2.4.0
+    type-guards: 0.15.0
     typescript: 4.8.4
-    validator: ^13.6.0
-    winston: ^3.3.3
-    zone.js: ~0.11.4
+    validator: 13.7.0
+    winston: 3.8.2
+    zone.js: 0.11.8
   languageName: unknown
   linkType: soft
 
@@ -9728,7 +9728,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colors@npm:^1.4.0":
+"colors@npm:1.4.0":
   version: 1.4.0
   resolution: "colors@npm:1.4.0"
   checksum: 98aa2c2418ad87dedf25d781be69dc5fc5908e279d9d30c34d8b702e586a0474605b3a189511482b9d5ed0d20c867515d22749537f7bc546256c6014f3ebdcec
@@ -9754,7 +9754,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:8.3.0, commander@npm:^8.2.0":
+"commander@npm:8.3.0":
   version: 8.3.0
   resolution: "commander@npm:8.3.0"
   checksum: 0f82321821fc27b83bd409510bb9deeebcfa799ff0bf5d102128b500b7af22872c0c92cb6a0ebc5a4cf19c6b550fba9cedfa7329d18c6442a625f851377bacf0
@@ -10095,7 +10095,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.6.5":
+"core-js@npm:3.25.5, core-js@npm:^3.6.5":
   version: 3.25.5
   resolution: "core-js@npm:3.25.5"
   checksum: 208b308c49bc022f90d4349d4c99802a73c9d55053976b3c529f10014c1e37845926defad8c519f2c7f71ea0acf18d2b323ab6aaee34dc85b4c4b3ced0623f3f
@@ -10166,7 +10166,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"coveralls@npm:^3.1.1":
+"coveralls@npm:3.1.1":
   version: 3.1.1
   resolution: "coveralls@npm:3.1.1"
   dependencies:
@@ -10602,7 +10602,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^9.1.0":
+"cypress@npm:9.7.0":
   version: 9.7.0
   resolution: "cypress@npm:9.7.0"
   dependencies:
@@ -13881,20 +13881,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:8.0.3, glob@npm:^8.0.0, glob@npm:^8.0.1, glob@npm:^8.0.2, glob@npm:^8.0.3":
-  version: 8.0.3
-  resolution: "glob@npm:8.0.3"
-  dependencies:
-    fs.realpath: ^1.0.0
-    inflight: ^1.0.4
-    inherits: 2
-    minimatch: ^5.0.1
-    once: ^1.3.0
-  checksum: 50bcdea19d8e79d8de5f460b1939ffc2b3299eac28deb502093fdca22a78efebc03e66bf54f0abc3d3d07d8134d19a32850288b7440d77e072aa55f9d33b18c5
-  languageName: node
-  linkType: hard
-
-"glob@npm:^7.0.0, glob@npm:^7.0.5, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6, glob@npm:^7.2.0":
+"glob@npm:7.2.3, glob@npm:^7.0.0, glob@npm:^7.0.5, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6":
   version: 7.2.3
   resolution: "glob@npm:7.2.3"
   dependencies:
@@ -13905,6 +13892,19 @@ __metadata:
     once: ^1.3.0
     path-is-absolute: ^1.0.0
   checksum: 29452e97b38fa704dabb1d1045350fb2467cf0277e155aa9ff7077e90ad81d1ea9d53d3ee63bd37c05b09a065e90f16aec4a65f5b8de401d1dac40bc5605d133
+  languageName: node
+  linkType: hard
+
+"glob@npm:8.0.3, glob@npm:^8.0.0, glob@npm:^8.0.1, glob@npm:^8.0.2, glob@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "glob@npm:8.0.3"
+  dependencies:
+    fs.realpath: ^1.0.0
+    inflight: ^1.0.4
+    inherits: 2
+    minimatch: ^5.0.1
+    once: ^1.3.0
+  checksum: 50bcdea19d8e79d8de5f460b1939ffc2b3299eac28deb502093fdca22a78efebc03e66bf54f0abc3d3d07d8134d19a32850288b7440d77e072aa55f9d33b18c5
   languageName: node
   linkType: hard
 
@@ -14035,7 +14035,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"google-java-format@npm:^1.1.0":
+"google-java-format@npm:1.1.0":
   version: 1.1.0
   resolution: "google-java-format@npm:1.1.0"
   dependencies:
@@ -14295,7 +14295,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hint@npm:^7.1.1":
+"hint@npm:7.1.2":
   version: 7.1.2
   resolution: "hint@npm:7.1.2"
   dependencies:
@@ -14616,7 +14616,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:^7.0.4":
+"husky@npm:7.0.4":
   version: 7.0.4
   resolution: "husky@npm:7.0.4"
   bin:
@@ -14625,7 +14625,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ibm-openapi-validator@npm:^0.55.0":
+"ibm-openapi-validator@npm:0.55.0":
   version: 0.55.0
   resolution: "ibm-openapi-validator@npm:0.55.0"
   dependencies:
@@ -18184,7 +18184,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongoose@npm:^6.0.9":
+"mongoose@npm:6.6.4":
   version: 6.6.4
   resolution: "mongoose@npm:6.6.4"
   dependencies:
@@ -18420,7 +18420,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ngx-avatars@npm:^1.4.0":
+"ngx-avatars@npm:1.4.1":
   version: 1.4.1
   resolution: "ngx-avatars@npm:1.4.1"
   dependencies:
@@ -18433,7 +18433,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ngx-countup@npm:^13.0.0":
+"ngx-countup@npm:13.1.0":
   version: 13.1.0
   resolution: "ngx-countup@npm:13.1.0"
   dependencies:
@@ -18446,7 +18446,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ngx-typed-js@npm:^2.1.1":
+"ngx-typed-js@npm:2.1.1":
   version: 2.1.1
   resolution: "ngx-typed-js@npm:2.1.1"
   dependencies:
@@ -18496,7 +18496,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nock@npm:^13.2.9":
+"nock@npm:13.2.9":
   version: 13.2.9
   resolution: "nock@npm:13.2.9"
   dependencies:
@@ -20992,7 +20992,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.14, postcss@npm:^8.3.5, postcss@npm:^8.3.7, postcss@npm:^8.4.13, postcss@npm:^8.4.14, postcss@npm:^8.4.5, postcss@npm:^8.4.7, postcss@npm:^8.4.8":
+"postcss@npm:8.4.17, postcss@npm:^8.2.14, postcss@npm:^8.3.5, postcss@npm:^8.3.7, postcss@npm:^8.4.13, postcss@npm:^8.4.14, postcss@npm:^8.4.7, postcss@npm:^8.4.8":
   version: 8.4.17
   resolution: "postcss@npm:8.4.17"
   dependencies:
@@ -21033,7 +21033,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:>=2.4.0, prettier@npm:^2.7.1":
+"prettier@npm:2.7.1, prettier@npm:>=2.4.0":
   version: 2.7.1
   resolution: "prettier@npm:2.7.1"
   bin:
@@ -21075,7 +21075,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"probot@npm:^12.1.1, probot@npm:^12.2.8":
+"probot@npm:12.2.8, probot@npm:^12.1.1":
   version: 12.2.8
   resolution: "probot@npm:12.2.8"
   dependencies:
@@ -21697,7 +21697,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redoc-cli@npm:^0.13.7":
+"redoc-cli@npm:0.13.20":
   version: 0.13.20
   resolution: "redoc-cli@npm:0.13.20"
   dependencies:
@@ -21716,6 +21716,42 @@ __metadata:
   bin:
     redoc-cli: index.js
   checksum: 11779752c1276438aa16dc67cc4911490452fc474e92532278222e7d9655c05bee4e68a65d379cab5af8d55bd3552213f30eb707b74d8b5f3f4e354f030e835e
+  languageName: node
+  linkType: hard
+
+"redoc@npm:2.0.0, redoc@npm:~2.0.0":
+  version: 2.0.0
+  resolution: "redoc@npm:2.0.0"
+  dependencies:
+    "@redocly/openapi-core": ^1.0.0-beta.104
+    classnames: ^2.3.1
+    decko: ^1.2.0
+    dompurify: ^2.2.8
+    eventemitter3: ^4.0.7
+    json-pointer: ^0.6.2
+    lunr: ^2.3.9
+    mark.js: ^8.11.1
+    marked: ^4.0.15
+    mobx-react: ^7.2.0
+    openapi-sampler: ^1.3.0
+    path-browserify: ^1.0.1
+    perfect-scrollbar: ^1.5.5
+    polished: ^4.1.3
+    prismjs: ^1.27.0
+    prop-types: ^15.7.2
+    react-tabs: ^3.2.2
+    slugify: ~1.4.7
+    stickyfill: ^1.1.1
+    style-loader: ^3.3.1
+    swagger2openapi: ^7.0.6
+    url-template: ^2.0.8
+  peerDependencies:
+    core-js: ^3.1.4
+    mobx: ^6.0.4
+    react: ^16.8.4 || ^17.0.0
+    react-dom: ^16.8.4 || ^17.0.0
+    styled-components: ^4.1.1 || ^5.1.1
+  checksum: 684d43dc62fb5f66ee765604b5745c6f742bf35b4cb603e546399ba76c987c7ef61313a51c99ababbb42a703d44bf84b78e3f7d1e5666d08b62930c52e35536f
   languageName: node
   linkType: hard
 
@@ -21752,42 +21788,6 @@ __metadata:
     react-dom: ^16.8.4 || ^17.0.0
     styled-components: ^4.1.1 || ^5.1.1
   checksum: 960759320a1d81236712c4ded7dbdbec7f24892d1c4c188b0b800d8f416852557f7f91d7b123dd897f709bd1e45af52233ca122a596b28902b8a396c85e5a4ab
-  languageName: node
-  linkType: hard
-
-"redoc@npm:^2.0.0-rc.63, redoc@npm:~2.0.0":
-  version: 2.0.0
-  resolution: "redoc@npm:2.0.0"
-  dependencies:
-    "@redocly/openapi-core": ^1.0.0-beta.104
-    classnames: ^2.3.1
-    decko: ^1.2.0
-    dompurify: ^2.2.8
-    eventemitter3: ^4.0.7
-    json-pointer: ^0.6.2
-    lunr: ^2.3.9
-    mark.js: ^8.11.1
-    marked: ^4.0.15
-    mobx-react: ^7.2.0
-    openapi-sampler: ^1.3.0
-    path-browserify: ^1.0.1
-    perfect-scrollbar: ^1.5.5
-    polished: ^4.1.3
-    prismjs: ^1.27.0
-    prop-types: ^15.7.2
-    react-tabs: ^3.2.2
-    slugify: ~1.4.7
-    stickyfill: ^1.1.1
-    style-loader: ^3.3.1
-    swagger2openapi: ^7.0.6
-    url-template: ^2.0.8
-  peerDependencies:
-    core-js: ^3.1.4
-    mobx: ^6.0.4
-    react: ^16.8.4 || ^17.0.0
-    react-dom: ^16.8.4 || ^17.0.0
-    styled-components: ^4.1.1 || ^5.1.1
-  checksum: 684d43dc62fb5f66ee765604b5745c6f742bf35b4cb603e546399ba76c987c7ef61313a51c99ababbb42a703d44bf84b78e3f7d1e5666d08b62930c52e35536f
   languageName: node
   linkType: hard
 
@@ -22323,21 +22323,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rxjs@npm:7.5.7, rxjs@npm:^7.5.1, rxjs@npm:^7.5.5":
+  version: 7.5.7
+  resolution: "rxjs@npm:7.5.7"
+  dependencies:
+    tslib: ^2.1.0
+  checksum: edabcdb73b0f7e0f5f6e05c2077aff8c52222ac939069729704357d6406438acca831c24210db320aba269e86dbe1a400f3769c89101791885121a342fb15d9c
+  languageName: node
+  linkType: hard
+
 "rxjs@npm:^5.5.6":
   version: 5.5.12
   resolution: "rxjs@npm:5.5.12"
   dependencies:
     symbol-observable: 1.0.1
   checksum: 3c2522402b913c3aa04514cd34e1b290b2a781a2fd6b0e92ac2746eee411aacc1c335716b51b83869075b077df4a6b973831cb54d40d528b42f8f8ad26ffb77c
-  languageName: node
-  linkType: hard
-
-"rxjs@npm:^7.5.1, rxjs@npm:^7.5.5, rxjs@npm:~7.5.0":
-  version: 7.5.7
-  resolution: "rxjs@npm:7.5.7"
-  dependencies:
-    tslib: ^2.1.0
-  checksum: edabcdb73b0f7e0f5f6e05c2077aff8c52222ac939069729704357d6406438acca831c24210db320aba269e86dbe1a400f3769c89101791885121a342fb15d9c
   languageName: node
   linkType: hard
 
@@ -22736,7 +22736,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"serverless-plugin-typescript@npm:^2.1.2":
+"serverless-plugin-typescript@npm:2.1.3":
   version: 2.1.3
   resolution: "serverless-plugin-typescript@npm:2.1.3"
   dependencies:
@@ -22750,7 +22750,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"serverless@npm:^3.22.0":
+"serverless@npm:3.22.0":
   version: 3.22.0
   resolution: "serverless@npm:3.22.0"
   dependencies:
@@ -22971,7 +22971,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shx@npm:^0.3.4":
+"shx@npm:0.3.4":
   version: 0.3.4
   resolution: "shx@npm:0.3.4"
   dependencies:
@@ -23125,7 +23125,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"smee-client@npm:^1.2.3":
+"smee-client@npm:1.2.3":
   version: 1.2.3
   resolution: "smee-client@npm:1.2.3"
   dependencies:
@@ -24676,7 +24676,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-guards@npm:^0.15.0":
+"type-guards@npm:0.15.0":
   version: 0.15.0
   resolution: "type-guards@npm:0.15.0"
   checksum: 043cddfd2e02ab843b188f9580598ac322adc0c1f13de1c62cbff89f0514590053d7e9f40cf26157fc625bd9731f139bde015a46932fdca28c8b958ae3e6077c
@@ -25232,7 +25232,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"validator@npm:^13.6.0, validator@npm:^13.7.0":
+"validator@npm:13.7.0, validator@npm:^13.7.0":
   version: 13.7.0
   resolution: "validator@npm:13.7.0"
   checksum: 2b83283de1222ca549a7ef57f46e8d49c6669213348db78b7045bce36a3b5843ff1e9f709ebf74574e06223461ee1f264f8cc9a26a0060a79a27de079d8286ef
@@ -25740,7 +25740,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston@npm:^3.3.3":
+"winston@npm:3.8.2":
   version: 3.8.2
   resolution: "winston@npm:3.8.2"
   dependencies:
@@ -26196,7 +26196,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zone.js@npm:~0.11.4":
+"zone.js@npm:0.11.8":
   version: 0.11.8
   resolution: "zone.js@npm:0.11.8"
   dependencies:
