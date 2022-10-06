@@ -27,7 +27,7 @@
     "@angular/platform-server": "14.2.4",
     "@angular/router": "14.2.4",
     "@nguniversal/express-engine": "14.2.0",
-    "@swc/helpers": "0.3.17",
+    "@swc/helpers": "0.4.11",
     "commander": "8.3.0",
     "core-js": "3.25.5",
     "keycloak-angular": "^12.0.0",
