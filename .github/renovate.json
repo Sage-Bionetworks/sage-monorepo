@@ -19,6 +19,7 @@
   },
   "ignorePaths": [
     "apps/api",
+    "apps/challenge-db-cli",
     "apps/challenge-elk"
   ],
   "packageRules": [
