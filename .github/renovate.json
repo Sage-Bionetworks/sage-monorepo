@@ -18,6 +18,7 @@
     "enabled": false
   },
   "ignorePaths": [
+    "apps/api",
     "apps/challenge-elk"
   ],
   "packageRules": [
