@@ -39,7 +39,8 @@
       "matchPackagePatterns": ["keycloak"],
       "groupName": "keycloak",
       "dependencyDashboardApproval": true,
-      "labels": ["iam"]
+      "labels": ["iam"],
+      "schedule": ["every 3 months on the first day of the month"]
     },
     {
       "description": "Disables the creation of branches/PRs for any minor/patch updates of Renovate bot",
