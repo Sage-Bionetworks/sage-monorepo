@@ -42,8 +42,17 @@
       "labels": ["iam"]
     },
     {
-      "matchPackageNames": ["aws-sdk"],
-      "schedule": ["after 9pm on sunday"]
+      "description": "Disables the creation of branches/PRs for any minor/patch updates of Renovate bot",
+      "matchPaths": ["tools/renovate-update-notification/Dockerfile"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest", "rollback"],
+      "enabled": false
+    },
+    {
+      "description": "Notify us about major updates of Renovate bot",
+      "matchPaths": ["tools/renovate-update-notification/Dockerfile"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "prCreation": "immediate"
     }
   ],
   "timezone": "America/Los_Angeles",
