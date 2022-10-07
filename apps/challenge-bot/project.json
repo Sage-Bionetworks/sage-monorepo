@@ -8,15 +8,29 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/challenge-bot",
-        "main": "apps/challenge-bot/src/index.ts",
+        "main": "apps/challenge-bot/src/app.ts",
         "tsConfig": "apps/challenge-bot/tsconfig.app.json",
         "assets": ["apps/challenge-bot/*.md"]
+      }
+    },
+    "prepare": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn install --immutable",
+        "cwd": "apps/challenge-bot"
       }
     },
     "serve": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "probot run ../../dist/apps/challenge-bot/src/index.js",
+        "command": "probot run ../../dist/apps/challenge-bot/src/app.js",
+        "cwd": "apps/challenge-bot"
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "serverless deploy",
         "cwd": "apps/challenge-bot"
       }
     },
@@ -24,14 +38,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/challenge-bot/**/*.ts"]
+        "lintFilePatterns": ["apps/challenge-bot/src/**/*.ts"]
       }
     },
     "lint-fix": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/challenge-bot/**/*.ts"],
+        "lintFilePatterns": ["apps/challenge-bot/src/**/*.ts"],
         "fix": true
       }
     },
@@ -40,7 +54,8 @@
       "outputs": ["coverage/apps/challenge-bot"],
       "options": {
         "jestConfig": "apps/challenge-bot/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "showConfig": false
       }
     }
   },

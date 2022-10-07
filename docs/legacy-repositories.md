@@ -8,7 +8,7 @@ Registry. Since XXX, the codebase of these components is maintained in this mono
 | [Sage-Bionetworks/rocc-app]            | apps/web-app          |
 | [Sage-Bionetworks/rocc-db-client]      | apps/challenge-db-cli |
 | [Sage-Bionetworks/rocc-service]        | apps/api              |
-| [Sage-Bionetworks/rocc-client-angular] | libs/api-angular      |
+| [Sage-Bionetworks/rocc-client-angular] | libs/api-client-angular      |
 | [Sage-Bionetworks/rocc-client-r]       | libs/api-r            |
 | [Sage-Bionetworks/rocc-schemas]        | libs/api-spec         |
 

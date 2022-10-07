@@ -6,7 +6,7 @@ import {
   LocalAuthResponse,
   User,
   UserService,
-} from '@sagebionetworks/api-angular';
+} from '@sagebionetworks/api-client-angular-deprecated';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { TokenService } from './token/token.service';
 

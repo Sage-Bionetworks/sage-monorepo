@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { Registry, RegistryService } from '@sagebionetworks/api-angular';
+import {
+  Registry,
+  RegistryService,
+} from '@sagebionetworks/api-client-angular-deprecated';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -9,7 +12,6 @@ import { Observable } from 'rxjs';
 })
 export class StatisticsViewerComponent {
   registry$!: Observable<Registry>;
-
   constructor(private registryService: RegistryService) {
     this.registry$ = this.registryService.getRegistry();
   }
