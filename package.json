@@ -54,7 +54,7 @@
     "@angular/cli": "14.2.5",
     "@angular/compiler-cli": "14.2.4",
     "@angular/language-service": "14.2.4",
-    "@hint/configuration-web-recommended": "8.2.15",
+    "@hint/configuration-web-recommended": "8.2.16",
     "@hint/formatter-codeframe": "3.1.32",
     "@nguniversal/builders": "14.2.0",
     "@nrwl/angular": "14.8.3",
