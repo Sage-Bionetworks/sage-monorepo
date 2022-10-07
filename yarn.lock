@@ -3703,7 +3703,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/environment@npm:^28.1.1, @jest/environment@npm:^28.1.3":
+"@jest/environment@npm:^28.1.3":
   version: 28.1.3
   resolution: "@jest/environment@npm:28.1.3"
   dependencies:
@@ -3734,7 +3734,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/fake-timers@npm:^28.1.1, @jest/fake-timers@npm:^28.1.3":
+"@jest/fake-timers@npm:^28.1.3":
   version: 28.1.3
   resolution: "@jest/fake-timers@npm:28.1.3"
   dependencies:
@@ -9332,7 +9332,7 @@ __metadata:
     husky: 7.0.4
     ibm-openapi-validator: 0.55.0
     jest: 28.1.3
-    jest-environment-jsdom: 28.1.1
+    jest-environment-jsdom: 28.1.3
     jest-preset-angular: 12.2.2
     jsonc-eslint-parser: ^2.1.0
     keycloak-angular: ^12.0.0
@@ -15853,23 +15853,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-jsdom@npm:28.1.1":
-  version: 28.1.1
-  resolution: "jest-environment-jsdom@npm:28.1.1"
-  dependencies:
-    "@jest/environment": ^28.1.1
-    "@jest/fake-timers": ^28.1.1
-    "@jest/types": ^28.1.1
-    "@types/jsdom": ^16.2.4
-    "@types/node": "*"
-    jest-mock: ^28.1.1
-    jest-util: ^28.1.1
-    jsdom: ^19.0.0
-  checksum: 86db0304e1efd706c0a5eef2bd3657bab7b7933b7d8fd87c02312f81bc4631dd64cf7c87efd9b2601ae019face02ef838db6dbf2d0d079b9b5e82be214e4be53
-  languageName: node
-  linkType: hard
-
-"jest-environment-jsdom@npm:^28.0.0":
+"jest-environment-jsdom@npm:28.1.3, jest-environment-jsdom@npm:^28.0.0":
   version: 28.1.3
   resolution: "jest-environment-jsdom@npm:28.1.3"
   dependencies:
@@ -15968,7 +15952,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-mock@npm:^28.1.1, jest-mock@npm:^28.1.3":
+"jest-mock@npm:^28.1.3":
   version: 28.1.3
   resolution: "jest-mock@npm:28.1.3"
   dependencies:
