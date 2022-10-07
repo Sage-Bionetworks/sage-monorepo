@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+// import { AuthGuard } from './auth.guard';
+// import { KAuthGuard } from '@sagebionetworks/challenge-registry/auth';
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
@@ -16,6 +17,9 @@ export const routes: Routes = [
       import('@sagebionetworks/challenge-registry/about').then(
         (m) => m.AboutModule
       ),
+    // <<<<<<< HEAD
+    //     canActivate: [KAuthGuard],
+    // =======
     data: {
       seo: {
         title: 'About - Challenge Registry',

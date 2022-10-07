@@ -14,21 +14,21 @@
       }
     },
     "prepare": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn install --immutable",
         "cwd": "apps/challenge-bot"
       }
     },
     "serve": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "probot run ../../dist/apps/challenge-bot/src/app.js",
         "cwd": "apps/challenge-bot"
       }
     },
     "deploy": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "serverless deploy",
         "cwd": "apps/challenge-bot"

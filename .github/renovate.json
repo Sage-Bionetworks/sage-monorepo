@@ -1,0 +1,61 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base", ":rebaseStalePrs"],
+  "enabled": true,
+  "assignees": ["tschaffter"],
+  "semanticCommitScope": "deps",
+  "automergeType": "pr",
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 5,
+  "gradle": {
+    "enabled": false
+  },
+  "gradle-wrapper": {
+    "enabled": false
+  },
+  "ignorePaths": [
+    "apps/api",
+    "apps/challenge-db-cli",
+    "apps/challenge-elk"
+  ],
+  "baseBranches": ["main"],
+  "labels": ["bot", "dependencies"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Automatically merge patch-level updates",
+      "matchUpdateTypes": ["patch"],
+      "automergeType": "branch",
+      "automerge": true
+    },
+    {
+      "matchPackagePatterns": ["eslint"],
+      "groupName": "eslint",
+      "labels": ["linting"]
+    },
+    {
+      "matchPackagePatterns": ["keycloak"],
+      "groupName": "keycloak",
+      "dependencyDashboardApproval": true,
+      "labels": ["iam"],
+      "schedule": ["every 3 months on the first day of the month"]
+    },
+    {
+      "description": "Disables the creation of branches/PRs for any minor/patch updates of Renovate bot",
+      "matchPaths": ["tools/renovate-update-notification/Dockerfile"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest", "rollback"],
+      "enabled": false
+    },
+    {
+      "description": "Notify us about major updates of Renovate bot",
+      "matchPaths": ["tools/renovate-update-notification/Dockerfile"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "prCreation": "immediate"
+    }
+  ],
+  "timezone": "America/Los_Angeles"
+}

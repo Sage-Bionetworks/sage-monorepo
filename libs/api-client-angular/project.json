@@ -6,9 +6,7 @@
   "targets": {
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": [
-        "dist/libs/api-client-angular"
-      ],
+      "outputs": ["dist/libs/api-client-angular"],
       "options": {
         "project": "libs/api-client-angular/ng-package.json"
       },
@@ -24,9 +22,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/libs/api-client-angular"
-      ],
+      "outputs": ["coverage/libs/api-client-angular"],
       "options": {
         "jestConfig": "libs/api-client-angular/jest.config.ts",
         "passWithNoTests": true
@@ -35,22 +31,18 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "libs/api-client-angular/src/index.ts"
-        ]
+        "lintFilePatterns": ["libs/api-client-angular/src/index.ts"]
       }
     },
     "lint-fix": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "libs/api-client-angular/src/index.ts"
-        ],
+        "lintFilePatterns": ["libs/api-client-angular/src/index.ts"],
         "fix": true
       }
     },
     "openapi-generate": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "rm -fr src/lib",

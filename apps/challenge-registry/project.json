@@ -5,7 +5,7 @@
   "prefix": "challenge-registry",
   "targets": {
     "prepare": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
         "cwd": "apps/challenge-registry",
@@ -90,7 +90,17 @@
           "browserTarget": "challenge-registry:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "publicHost": "http://localhost:4200",
+        "proxyConfig": "apps/challenge-registry/src/proxy.conf.json"
+      },
+      "dependsOn": [
+        {
+          "target": "serve-detach",
+          "projects": "dependencies"
+        }
+      ]
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -170,20 +180,18 @@
       "defaultConfiguration": "development"
     },
     "prerender": {
-      "builder": "@nguniversal/builders:prerender",
+      "executor": "@nguniversal/builders:prerender",
       "options": {
-      "browserTarget": "challenge-registry:build:production",
-      "serverTarget": "challenge-registry:server:production",
-      "routes": [
-          "/"
-      ]
+        "browserTarget": "challenge-registry:build:production",
+        "serverTarget": "challenge-registry:server:production",
+        "routes": ["/"]
       },
       "configurations": {
         "production": {}
       }
     },
     "build-sitemap": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "node tools/generate-sitemap.js http://localhost:4200 apps/challenge-registry/src/sitemap.xml"
       }
@@ -191,10 +199,10 @@
   },
   "tags": ["type:app", "scope:client"],
   "implicitDependencies": [
+    "challenge-api-gateway",
+    "challenge-keycloak",
     "challenge-registry-styles",
     "challenge-registry-themes",
-    "shared-assets",
-    "challenge-api-gateway",
-    "challenge-keycloak"
+    "shared-assets"
   ]
 }
