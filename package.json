@@ -119,7 +119,7 @@
     "redoc": "2.0.0",
     "redoc-cli": "0.13.20",
     "serverless": "3.22.0",
-    "serverless-plugin-typescript": "2.1.3",
+    "serverless-plugin-typescript": "2.1.4",
     "shx": "0.3.4",
     "smee-client": "1.2.3",
     "ts-jest": "28.0.8",
