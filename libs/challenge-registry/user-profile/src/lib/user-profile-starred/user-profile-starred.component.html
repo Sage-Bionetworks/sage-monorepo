@@ -28,10 +28,12 @@
         </div>
         <p-paginator
           [first]="0"
-          [pageLinkSize]="10"
+          [pageLinkSize]="5"
           [rows]="limit"
           [totalRecords]="challengeResultsCount"
           [rowsPerPageOptions]="[10, 20, 30]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} results"
           (onPageChange)="onPageChange($event)"
         ></p-paginator>
       </div>
