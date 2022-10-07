@@ -2756,22 +2756,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hint/formatter-codeframe@npm:3.1.32":
-  version: 3.1.32
-  resolution: "@hint/formatter-codeframe@npm:3.1.32"
+"@hint/formatter-codeframe@npm:3.1.33":
+  version: 3.1.33
+  resolution: "@hint/formatter-codeframe@npm:3.1.33"
   dependencies:
-    "@hint/utils": ^7.0.20
+    "@hint/utils": ^7.0.21
     "@hint/utils-debug": ^1.0.10
-    "@hint/utils-fs": ^1.0.14
-    "@hint/utils-i18n": ^1.0.13
-    "@hint/utils-string": ^1.0.12
+    "@hint/utils-fs": ^1.0.15
+    "@hint/utils-i18n": ^1.0.14
+    "@hint/utils-string": ^1.0.13
     "@hint/utils-types": ^1.2.0
     chalk: ^4.1.2
     lodash: ^4.17.21
     strip-ansi: ^6.0.0
   peerDependencies:
     hint: ^7.0.0
-  checksum: eecf43d13605f62f083c19dcef6d4670678932961faefcaffa7a7816667b1248c69e1e0bec7db14d3446a171399c08d32b8fe647eb080d56dd49505010e035ae
+  checksum: 3059f2c50a3a33a2392d97273c1b52e028ee257e26ad759c96ddae928b4fd26523b24d8e89364504156cdb76ed81a77cc077abbae7715284b5bd418f84b60c2c
   languageName: node
   linkType: hard
 
@@ -10085,7 +10085,7 @@ __metadata:
     "@angular/platform-server": 14.2.4
     "@angular/router": 14.2.4
     "@hint/configuration-web-recommended": 8.2.16
-    "@hint/formatter-codeframe": 3.1.32
+    "@hint/formatter-codeframe": 3.1.33
     "@nguniversal/builders": 14.2.0
     "@nguniversal/express-engine": 14.2.0
     "@nrwl/angular": 14.8.3
