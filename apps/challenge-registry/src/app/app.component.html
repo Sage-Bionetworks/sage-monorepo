@@ -2,10 +2,11 @@
   class="mat-elevation-z6"
   [title]="title"
   [sections]="sections"
-  [loggedIn]="loggedIn"
+  [isLoggedIn]="isLoggedIn"
   [userAvatar]="userAvatar"
   [userMenuItems]="userMenuItems"
   (userMenuItemSelected)="selectUserMenuItem($event)"
+  (logInClicked)="login()"
 >
 </challenge-registry-navbar>
 

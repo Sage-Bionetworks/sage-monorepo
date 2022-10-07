@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ButtonGithubComponent } from '../button-github/button-github.component';
-import { MOCK_MENU_ITEMS } from '../user-button/mock-menu-items';
+import { USER_MENU_ITEMS } from '../user-button/user-menu-items';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { NavbarComponent } from './navbar.component';
@@ -39,9 +39,9 @@ describe('NavbarComponent', () => {
 
   it('should emit', () => {
     jest.spyOn(component.userMenuItemSelected, 'emit');
-    component.selectUserMenuItem(MOCK_MENU_ITEMS[0]);
+    component.selectUserMenuItem(USER_MENU_ITEMS[0]);
     expect(component.userMenuItemSelected.emit).toHaveBeenCalledWith(
-      MOCK_MENU_ITEMS[0]
+      USER_MENU_ITEMS[0]
     );
   });
 });

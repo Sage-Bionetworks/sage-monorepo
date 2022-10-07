@@ -4,18 +4,16 @@
   "projectType": "application",
   "targets": {
     "prepare": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
         "cwd": "apps/challenge-api-gateway"
       }
     },
     "prepare-java": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
-        ],
+        "commands": ["./gradlew --version 1> /dev/null"],
         "cwd": "apps/challenge-api-gateway"
       }
     },
@@ -24,9 +22,8 @@
       "options": {
         "root": "apps/challenge-api-gateway"
       },
-      "outputs": [
-        "apps/challenge-api-gateway"
-      ]
+      "outputs": ["apps/challenge-api-gateway"],
+      "dependsOn": ["^install"]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
@@ -41,44 +38,30 @@
       }
     },
     "serve": {
-      "executor": "@nxrocks/nx-spring-boot:serve",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/challenge-api-gateway"
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "apps/challenge-api-gateway",
+        "parallel": true
       },
-      "dependsOn": [
-        "build",
-        "prepare",
-        "^serve-detach"
-      ]
+      "dependsOn": ["prepare", "^serve-detach"]
     },
     "serve-detach": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up -d",
         "cwd": "apps/challenge-api-gateway"
       },
-      "dependsOn": [
-        "build-image",
-        "prepare",
-        "^serve-detach"
-      ]
+      "dependsOn": ["build-image", "prepare", "^serve-detach"]
     },
     "build-image": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
-        "root": "apps/challenge-api-gateway",
-        "args": [
-          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-api-gateway:latest"
-        ]
+        "root": "apps/challenge-api-gateway"
       },
       "dependsOn": ["^install"]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
-  "implicitDependencies": [
-    "challenge-service-registry"
-  ]
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": ["challenge-service-registry"]
 }

@@ -12,6 +12,7 @@ export interface AppConfig {
   environment: Environment;
   apiUrl: string;
   appVersion: string;
+  keycloakRealm: string;
   isPlatformServer: boolean;
 }
 

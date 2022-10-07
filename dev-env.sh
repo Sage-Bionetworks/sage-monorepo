@@ -10,7 +10,6 @@ else # Other/fail
   CHALLENGE_BUILD_PROCS=4
 fi
 export CHALLENGE_BUILD_PROCS
-export MAVEN_CONFIG="--no-transfer-progress"
 
 bold=$(tput bold)
 italic=$(tput sitm)

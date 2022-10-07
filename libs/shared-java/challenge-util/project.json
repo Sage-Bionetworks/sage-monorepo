@@ -4,11 +4,9 @@
   "projectType": "library",
   "targets": {
     "prepare-java": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "./gradlew --version 1> /dev/null"
-        ],
+        "commands": ["./gradlew --version 1> /dev/null"],
         "cwd": "libs/shared-java/challenge-util"
       }
     },
@@ -17,12 +15,10 @@
       "options": {
         "root": "libs/shared-java/challenge-util"
       },
-      "outputs": [
-        "libs/shared-java/challenge-util/build"
-      ]
+      "outputs": ["libs/shared-java/challenge-util/build"]
     },
     "install": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "./gradlew publishToMavenLocal",
         "cwd": "libs/shared-java/challenge-util"
@@ -47,8 +43,5 @@
       }
     }
   },
-  "tags": [
-    "type:feature",
-    "scope:shared"
-  ]
+  "tags": ["type:feature", "scope:shared"]
 }

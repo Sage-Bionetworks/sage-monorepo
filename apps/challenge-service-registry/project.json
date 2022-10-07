@@ -4,18 +4,16 @@
   "projectType": "application",
   "targets": {
     "prepare": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
         "cwd": "apps/challenge-service-registry"
       }
     },
     "prepare-java": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "./mvnw dependency:go-offline -DexcludeGroupIds=org.sagebionetworks.challenge || true"
-        ],
+        "commands": ["./gradlew --version 1> /dev/null"],
         "cwd": "apps/challenge-service-registry"
       }
     },
@@ -24,9 +22,8 @@
       "options": {
         "root": "apps/challenge-service-registry"
       },
-      "outputs": [
-        "apps/challenge-service-registry"
-      ]
+      "outputs": ["apps/challenge-service-registry"],
+      "dependsOn": ["^install"]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
@@ -41,64 +38,30 @@
       }
     },
     "serve": {
-      "executor": "@nxrocks/nx-spring-boot:serve",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/challenge-service-registry"
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "apps/challenge-service-registry",
+        "parallel": true
       },
-      "dependsOn": [
-        {
-          "target": "build",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        },
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["prepare", "^serve-detach"]
     },
     "serve-detach": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up -d",
         "cwd": "apps/challenge-service-registry"
       },
-      "dependsOn": [
-        {
-          "target": "build-image",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        },
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["build-image", "prepare", "^serve-detach"]
     },
     "build-image": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
-        "root": "apps/challenge-service-registry",
-        "args": [
-          "-Dspring-boot.build-image.imageName=sagebionetworks/challenge-service-registry:latest"
-        ]
+        "root": "apps/challenge-service-registry"
       },
-      "dependsOn": [
-        {
-          "target": "install",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["^install"]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ]
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": []
 }
