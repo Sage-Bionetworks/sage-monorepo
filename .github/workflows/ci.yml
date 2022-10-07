@@ -24,7 +24,7 @@ jobs:
     #   NX_BRANCH: main
     steps:
       - uses: actions/checkout@v2
-        name: Checkout [main]
+        name: Checkout [${{ github.ref_name }}]
         with:
           fetch-depth: 0
 
