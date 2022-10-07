@@ -31,7 +31,7 @@ RUN mkdir -p /opt/target \
   && mkdir -p /opt/target/html \
   && cp -rv $CHALLENGE_REGISTRY_DIR/dist/apps/challenge-registry/* /opt/target/html
 
-FROM nginx:1.21.6-alpine
+FROM nginx:1.23.1-alpine
 
 COPY --from=build /opt/target /tmp/target
 RUN cp -r /tmp/target/html/* /usr/share/nginx/html \
