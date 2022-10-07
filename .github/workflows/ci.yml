@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - 'renovate/**'
   pull_request:
 
 env:
@@ -19,11 +20,11 @@ jobs:
       image: sagebionetworks/challenge-devcontainer:ff081d0a
       options: --user root
     if: ${{ github.event_name != 'pull_request' }}
-    env:
-      NX_BRANCH: main
+    # env:
+    #   NX_BRANCH: main
     steps:
       - uses: actions/checkout@v2
-        name: Checkout [main]
+        name: Checkout [${{ github.ref_name }}]
         with:
           fetch-depth: 0
 
