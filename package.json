@@ -4,7 +4,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "coverage:merge": "node ./tools/coverage-merger.js",
-    "postinstall": "ngcc --properties es2020 browser module main",
+    "postinstall": "ngcc --properties es2020 browser module main && husky install",
     "prepare": "husky install",
     "affected:apps": "nx affected:apps",
     "affected:build": "nx affected:build",
