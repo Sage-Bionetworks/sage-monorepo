@@ -1,4 +1,4 @@
-FROM node:16.17.1-slim as build
+FROM node:18.10.0-slim as build
 
 ARG challengeRegistryRepository=Sage-Bionetworks/challenge-registry
 ARG challengeRegistryBranch=main
