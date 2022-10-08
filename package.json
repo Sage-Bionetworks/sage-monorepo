@@ -70,7 +70,7 @@
     "@nrwl/nx-plugin": "14.8.3",
     "@nrwl/web": "14.8.3",
     "@nrwl/workspace": "14.8.3",
-    "@nx-tools/nx-docker": "2.3.0",
+    "@nx-tools/nx-docker": "3.0.4",
     "@nxrocks/nx-spring-boot": "5.0.2",
     "@openapitools/openapi-generator-cli": "2.5.2",
     "@prettier/plugin-xml": "2.2.0",

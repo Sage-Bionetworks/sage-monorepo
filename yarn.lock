@@ -15,7 +15,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/exec@npm:^1.1.0":
+"@actions/exec@npm:^1.1.1":
   version: 1.1.1
   resolution: "@actions/exec@npm:1.1.1"
   dependencies:
@@ -24,7 +24,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/github@npm:^5.0.0":
+"@actions/github@npm:^5.0.3":
   version: 5.1.1
   resolution: "@actions/github@npm:5.1.1"
   dependencies:
@@ -4696,66 +4696,69 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx-tools/ci-context@npm:2.2.0, @nx-tools/ci-context@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "@nx-tools/ci-context@npm:2.2.0"
+"@nx-tools/ci-context@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@nx-tools/ci-context@npm:3.0.1"
   dependencies:
-    "@actions/github": ^5.0.0
-    "@nx-tools/core": ^2.2.0
-    ci-info: ^3.2.0
+    "@actions/github": ^5.0.3
+    "@nx-tools/core": ^3.0.1
+    "@swc/helpers": ^0.4.3
+    ci-info: ^3.3.2
   peerDependencies:
     tslib: ^2.1.0
-  checksum: e15256ffbc1d4ff19e035bfe05a61dced594ef4f2363695845e676d4006d6dc590ab9cd188c20f6c6c3ac11ce31afa2b952b1f130ad058bd794790b9f2448ad9
+  checksum: 54b7dce660382dba0a6f60c1d9a17683ff784ed8fa5c3e7988026eec46a442ea0344316e225b44a26c28ce03a8a94489ad3183b314a0b71945c1335cd436da49
   languageName: node
   linkType: hard
 
-"@nx-tools/core@npm:^2.2.0, @nx-tools/core@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "@nx-tools/core@npm:2.3.1"
+"@nx-tools/core@npm:^3.0.1":
+  version: 3.0.2
+  resolution: "@nx-tools/core@npm:3.0.2"
   dependencies:
-    "@actions/exec": ^1.1.0
+    "@actions/exec": ^1.1.1
+    "@swc/helpers": ^0.4.3
+    colorette: ^2.0.19
   peerDependencies:
-    "@nrwl/devkit": ^12.0.0 || ^13.0.0
-    tslib: ^2.1.0
-  checksum: 6e187daf08034e1b10462f7b1976333de4c76976fc6ade1dc3588ec5a0d1a7da306e7bf5fff763e256b06cb22e0cdb4fee52449e391ac2f45f908658c586e08c
+    "@nrwl/devkit": ^12.0.0 || ^13.0.0 || ^14.0.0
+  checksum: 76c3f374d1de70b9995f6e5f47a4f54589899a9ac74d70f04d89023b1f7d4d47eb04d743e8c7adbb5011b4174fa512423514d7a61941da27e70dc508737580c5
   languageName: node
   linkType: hard
 
-"@nx-tools/docker-metadata@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "@nx-tools/docker-metadata@npm:2.2.1"
+"@nx-tools/docker-metadata@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "@nx-tools/docker-metadata@npm:3.0.1"
   dependencies:
-    "@nx-tools/ci-context": ^2.2.0
-    "@nx-tools/core": ^2.3.1
+    "@nx-tools/ci-context": ^3.0.1
+    "@nx-tools/core": ^3.0.1
     "@renovate/pep440": ^1.0.0
+    "@swc/helpers": ^0.4.3
     csv-parse: ^4.16.3
     handlebars: ^4.7.7
-    moment: ^2.29.1
-    semver: ^7.3.5
+    moment: ^2.29.4
+    semver: ^7.3.7
   peerDependencies:
-    "@nrwl/devkit": ^12.0.0 || ^13.0.0
+    "@nrwl/devkit": ^12.0.0 || ^13.0.0 || ^14.0.0
     tslib: ^2.1.0
-  checksum: 5998e79d342c9a07dd3d20b55b531c6412ae7edb6f7c2cc8e8b1167be3646355c8bee249d64191a637130f2e688e01d654663996658b4dbd73fce5d5e355b9a0
+  checksum: d8f4d3a9a947ec3000f79d5e67a90bb789334245e56fe3ffe42350b8fb639975bbd92d7226296bab46273c750fc26c98322545de42dac486bdf548d8edae6cce
   languageName: node
   linkType: hard
 
-"@nx-tools/nx-docker@npm:2.3.0":
-  version: 2.3.0
-  resolution: "@nx-tools/nx-docker@npm:2.3.0"
+"@nx-tools/nx-docker@npm:3.0.4":
+  version: 3.0.4
+  resolution: "@nx-tools/nx-docker@npm:3.0.4"
   dependencies:
-    "@nx-tools/ci-context": 2.2.0
-    "@nx-tools/core": ^2.3.1
-    "@nx-tools/docker-metadata": ^2.2.1
+    "@nx-tools/core": ^3.0.1
+    "@nx-tools/docker-metadata": ^3.0.0
+    "@swc/helpers": ^0.4.3
     csv-parse: ^4.16.3
-    semver: ^7.3.5
+    semver: ^7.3.7
     tmp: ^0.2.1
   peerDependencies:
-    dotenv: ^10.0.0
+    dotenv: ">=10.0.0"
     tslib: ^2.1.0
   dependenciesMeta:
     "@nx-tools/docker-metadata":
       optional: true
-  checksum: bdadd1c664c3e4eb672fef3f45f89de5ff35f65cb4b2291459f910c882952e1d190286ef3acc46eb654d123e2e7f60debb51103595408d69e22c4f23b4409e95
+  checksum: 5c6aeb8b33f95011104638bd4ee61e103d75a02a2cd013cd5443d7b234546fdd83403e017a200bfe21e3c6f884e2d0e5cce68e49056db087f28f3783dbff2070
   languageName: node
   linkType: hard
 
@@ -6252,7 +6255,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/helpers@npm:0.4.11":
+"@swc/helpers@npm:0.4.11, @swc/helpers@npm:^0.4.3":
   version: 0.4.11
   resolution: "@swc/helpers@npm:0.4.11"
   dependencies:
@@ -9301,7 +9304,7 @@ __metadata:
     "@nrwl/nx-plugin": 14.8.3
     "@nrwl/web": 14.8.3
     "@nrwl/workspace": 14.8.3
-    "@nx-tools/nx-docker": 2.3.0
+    "@nx-tools/nx-docker": 3.0.4
     "@nxrocks/nx-spring-boot": 5.0.2
     "@openapitools/openapi-generator-cli": 2.5.2
     "@prettier/plugin-xml": 2.2.0
@@ -18195,7 +18198,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.29.1":
+"moment@npm:^2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
