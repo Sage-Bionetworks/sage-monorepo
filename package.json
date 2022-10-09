@@ -31,7 +31,7 @@
     "commander": "9.4.1",
     "core-js": "3.25.5",
     "keycloak-angular": "12.1.0",
-    "keycloak-js": "18.0.1",
+    "keycloak-js": "19.0.3",
     "lodash": "4.17.21",
     "mongoose": "6.6.5",
     "ngx-avatars": "1.4.1",

@@ -9580,7 +9580,7 @@ __metadata:
     jest-preset-angular: 12.2.2
     jsonc-eslint-parser: 2.1.0
     keycloak-angular: 12.1.0
-    keycloak-js: 18.0.1
+    keycloak-js: 19.0.3
     lodash: 4.17.21
     mongoose: 6.6.5
     ng-packagr: 14.2.1
@@ -17527,13 +17527,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"keycloak-js@npm:18.0.1":
-  version: 18.0.1
-  resolution: "keycloak-js@npm:18.0.1"
+"keycloak-js@npm:19.0.3":
+  version: 19.0.3
+  resolution: "keycloak-js@npm:19.0.3"
   dependencies:
     base64-js: ^1.5.1
     js-sha256: ^0.9.0
-  checksum: cc32de7af2f1ae203383bfeac59aceb3dd6b06d268bde5ff3b75f74914476d549e3e6bd7e820e5c375523a823507eacbabbf7a82847df10483d93b42d1946216
+  checksum: 1da8217ed8276f1ac37e0a57dfe7a726cf55e1a75677bdd9a46b747b7247c73fb1acb9f241b3496ea4de5c7a209ebad834117099b66c93c56c4c2547106fabae
   languageName: node
   linkType: hard
 
