@@ -7,9 +7,6 @@
   "automergeType": "pr",
   "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
-  "gradle": {
-    "enabled": false
-  },
   "ignorePaths": [
     "apps/api",
     "apps/challenge-db-cli",
@@ -31,13 +28,13 @@
     {
       "matchPackagePatterns": ["eslint"],
       "groupName": "eslint",
-      "labels": ["linting"]
+      "addLabels": ["linting"]
     },
     {
       "matchPackagePatterns": ["keycloak"],
       "groupName": "keycloak",
       "dependencyDashboardApproval": true,
-      "labels": ["iam"],
+      "addLabels": ["iam"],
       "schedule": ["every 3 months on the first day of the month"]
     },
     {
