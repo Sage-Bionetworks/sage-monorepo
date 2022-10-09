@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": ["config:base", ":combinePatchMinorReleases"],
   "enabled": true,
   "assignees": ["tschaffter"],
   "semanticCommitScope": "deps",
@@ -50,6 +50,11 @@
       "matchUpdateTypes": ["major"],
       "automerge": false,
       "prCreation": "immediate"
+    },
+    {
+      "description": "Ignore local packages that are not published to any remote repositories",
+      "matchPackagePatterns": ["org.sagebionetworks.challenge:challenge-util"],
+      "enabled": false
     }
   ],
   "timezone": "America/Los_Angeles"
