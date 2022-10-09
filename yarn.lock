@@ -9566,7 +9566,7 @@ __metadata:
     eslint-plugin-import: 2.26.0
     eslint-plugin-jest: 27.1.1
     eslint-plugin-jsx-a11y: 6.6.1
-    eslint-plugin-n: ^15.3.0
+    eslint-plugin-n: 15.3.0
     eslint-plugin-node: 11.1.0
     eslint-plugin-prettier: 4.2.1
     eslint-plugin-promise: 6.0.1
@@ -12723,7 +12723,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-n@npm:^15.3.0":
+"eslint-plugin-n@npm:15.3.0":
   version: 15.3.0
   resolution: "eslint-plugin-n@npm:15.3.0"
   dependencies:
