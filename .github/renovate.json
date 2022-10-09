@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", ":combinePatchMinorReleases"],
+  "extends": ["config:base"],
   "enabled": true,
   "assignees": ["tschaffter"],
   "semanticCommitScope": "deps",
