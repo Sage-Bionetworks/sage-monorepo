@@ -9337,10 +9337,10 @@ __metadata:
     cypress: 10.9.0
     eslint: 8.25.0
     eslint-config-prettier: 8.5.0
-    eslint-config-standard: 16.0.3
+    eslint-config-standard: 17.0.0
     eslint-plugin-cypress: 2.12.1
     eslint-plugin-import: 2.26.0
-    eslint-plugin-jest: 26.9.0
+    eslint-plugin-jest: 27.1.1
     eslint-plugin-jsx-a11y: 6.6.1
     eslint-plugin-node: 11.1.0
     eslint-plugin-prettier: 4.2.1
@@ -12359,15 +12359,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-standard@npm:16.0.3":
-  version: 16.0.3
-  resolution: "eslint-config-standard@npm:16.0.3"
+"eslint-config-standard@npm:17.0.0":
+  version: 17.0.0
+  resolution: "eslint-config-standard@npm:17.0.0"
   peerDependencies:
-    eslint: ^7.12.1
-    eslint-plugin-import: ^2.22.1
-    eslint-plugin-node: ^11.1.0
-    eslint-plugin-promise: ^4.2.1 || ^5.0.0
-  checksum: 6ae193634f289ae95dbbf2291dc1e7c5bedef2425c594db07ec58476c902e6eb51a2b1c9cd2bad3772e921f5515dc2f8fb5447f7a56c20c99801ef1296c3bfef
+    eslint: ^8.0.1
+    eslint-plugin-import: ^2.25.2
+    eslint-plugin-n: ^15.0.0
+    eslint-plugin-promise: ^6.0.0
+  checksum: dc0ed51e186fd963ff2c0819d33ef580afce11b11036cbcf5e74427e26e514c2b1be96b8ffe74fd2fd00263554a0d49cc873fcf76f17c3dfdba614b45d7fd7da
   languageName: node
   linkType: hard
 
@@ -12439,20 +12439,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:26.9.0":
-  version: 26.9.0
-  resolution: "eslint-plugin-jest@npm:26.9.0"
+"eslint-plugin-jest@npm:27.1.1":
+  version: 27.1.1
+  resolution: "eslint-plugin-jest@npm:27.1.1"
   dependencies:
     "@typescript-eslint/utils": ^5.10.0
   peerDependencies:
     "@typescript-eslint/eslint-plugin": ^5.0.0
-    eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
+    eslint: ^7.0.0 || ^8.0.0
   peerDependenciesMeta:
     "@typescript-eslint/eslint-plugin":
       optional: true
     jest:
       optional: true
-  checksum: 6d5fd5c95368f1ca2640389aeb7ce703d6202493c3ec6bdedb4eaca37233710508b0c75829e727765a16fd27029a466d34202bc7f2811c752038ccbbce224400
+  checksum: 215a60d0c9ca641f3c1c7c5e4ff78093ad80c5f0ee22f44c50b9c8625ec0624ec4f47bf281684157f6231a4c480a4ca40bafad4ac6438a2105bb8527920e341f
   languageName: node
   linkType: hard
 
