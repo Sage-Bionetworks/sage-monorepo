@@ -17,7 +17,8 @@
   "labels": ["bot", "dependencies"],
   "packageRules": [
     {
-      "matchUpdateTypes": ["major"],
+      "description": "Request approval before the creation of PRs for major and minor updates",
+      "matchUpdateTypes": ["major", "minor"],
       "dependencyDashboardApproval": true
     },
     {
@@ -39,12 +40,6 @@
       "schedule": ["every 3 months on the first day of the month"]
     },
     {
-      "description": "Disables the creation of branches/PRs for any minor/patch updates of Renovate bot",
-      "matchPaths": ["tools/renovate-update-notification/Dockerfile"],
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest", "rollback"],
-      "enabled": false
-    },
-    {
       "description": "Notify us about major updates of Renovate bot",
       "matchPaths": ["tools/renovate-update-notification/Dockerfile"],
       "matchUpdateTypes": ["major"],
@@ -52,10 +47,21 @@
       "prCreation": "immediate"
     },
     {
+      "description": "Disables the creation of branches/PRs for any minor/patch updates of Renovate bot",
+      "matchPaths": ["tools/renovate-update-notification/Dockerfile"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest", "rollback"],
+      "enabled": false
+    },
+    {
       "description": "Ignore local packages that are not published to any remote repositories",
       "matchPackagePatterns": ["org.sagebionetworks.challenge:challenge-util"],
       "enabled": false
     }
   ],
-  "timezone": "America/Los_Angeles"
+  "timezone": "America/Los_Angeles",
+  "schedule": [
+    "after 12am every weekday",
+    "before 5am every weekday",
+    "every weekend"
+  ]
 }
