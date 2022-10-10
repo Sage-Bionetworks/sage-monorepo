@@ -57,6 +57,9 @@
       "@sagebionetworks/challenge-registry/org-search": [
         "libs/challenge-registry/org-search/src/index.ts"
       ],
+      "@sagebionetworks/challenge-registry/organziation": [
+        "libs/challenge-registry/organziation/src/index.ts"
+      ],
       "@sagebionetworks/challenge-registry/pages": [
         "libs/challenge-registry/pages/src/index.ts"
       ],
