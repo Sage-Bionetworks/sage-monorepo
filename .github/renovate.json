@@ -17,7 +17,7 @@
   "labels": ["bot", "dependencies"],
   "packageRules": [
     {
-      "description": "Request approval before the creation of PRs for minor and magor updates",
+      "description": "Request approval before the creation of PRs for major and minor updates",
       "matchUpdateTypes": ["major", "minor"],
       "dependencyDashboardApproval": true
     },
