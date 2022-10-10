@@ -1,13 +1,13 @@
 @use './lib/organization-theme' as organization;
-// @use './lib/user-profile-overview/user-profile-overview-theme' as user-profile-overview;
-// @use './lib/user-profile-challenges/user-profile-challenges-theme' as user-profile-challenges;
-// @use './lib/user-profile-starred/user-profile-starred-theme' as user-profile-starred;
-// @use './lib/user-profile-stats/user-profile-stats-theme' as user-profile-stats;
+@use './lib/organization-overview/organization-overview-theme' as organization-overview;
+@use './lib/organization-challenges/organization-challenges-theme' as organization-challenges;
+@use './lib/organization-members/organization-members-theme' as organization-members;
+@use './lib/organization-stats/organization-stats-theme' as organization-stats;
 
 @mixin theme($theme) {
   @include organization.theme($theme);
-  // @include organization-overview.theme($theme);
-  // @include organization-challenges.theme($theme);
-  // @include organization-starred.theme($theme);
-  // @include organization-stats.theme($theme);
+  @include organization-overview.theme($theme);
+  @include organization-challenges.theme($theme);
+  @include organization-members.theme($theme);
+  @include organization-stats.theme($theme);
 }
