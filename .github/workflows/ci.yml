@@ -98,7 +98,9 @@ jobs:
     container:
       image: sagebionetworks/challenge-devcontainer:ff081d0a
       options: --user root
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ github.event_name == 'pull_request' && !contains('
+      refs/heads/renovate/
+      ', github.ref) }}
     steps:
       - uses: actions/checkout@v3
         with:
