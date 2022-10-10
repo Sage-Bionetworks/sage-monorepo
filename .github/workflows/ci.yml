@@ -14,7 +14,7 @@ env:
   NX_CLOUD_ENV_NAME: 'linux'
 
 jobs:
-  main:
+  push:
     runs-on: ubuntu-latest
     container:
       image: sagebionetworks/challenge-devcontainer:ff081d0a
@@ -93,12 +93,19 @@ jobs:
       #   with:
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
       #     path-to-lcov: coverage/lcov.info
+
   pr:
     runs-on: ubuntu-latest
     container:
       image: sagebionetworks/challenge-devcontainer:ff081d0a
       options: --user root
-    if: ${{ github.event_name == 'pull_request' && (github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name || !startsWith(github.head_ref, 'renovate/')) }}
+    if: |
+      github.event_name == 'pull_request'
+        && (
+          github.event.pull_request.head.repo.full_name != 
+            github.event.pull_request.base.repo.full_name 
+          || !startsWith(github.head_ref, 'renovate/')
+        )
     steps:
       - uses: actions/checkout@v3
         with:
