@@ -25,7 +25,7 @@ jobs:
         uses: docker://hadolint/hadolint:latest
         with:
           entrypoint: hadolint
-          args: tools/devcontainers/challenge-devcontainer/.devcontainer/Dockerfile
+          args: tools/devcontainers/challenge/.devcontainer/Dockerfile
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
