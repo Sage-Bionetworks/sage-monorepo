@@ -3650,14 +3650,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ibm-cloud/openapi-ruleset@npm:0.3.0":
-  version: 0.3.0
-  resolution: "@ibm-cloud/openapi-ruleset@npm:0.3.0"
+"@ibm-cloud/openapi-ruleset@npm:0.44.0":
+  version: 0.44.0
+  resolution: "@ibm-cloud/openapi-ruleset@npm:0.44.0"
   dependencies:
-    "@stoplight/spectral-formats": ^1.0.1
-    "@stoplight/spectral-functions": ^1.4.0
-    "@stoplight/spectral-rulesets": ^1.3.0
-  checksum: e3ad0da7aeed7c9b44710ad38a298a3626c10bdf5f3ed20e76a8e5dc26fa7c329c44ef2c9c50281378bd2f56668596106f87627cee22b2af59033e9a9eae7fb8
+    "@stoplight/spectral-formats": ^1.1.0
+    "@stoplight/spectral-functions": ^1.6.1
+    "@stoplight/spectral-rulesets": ^1.6.0
+    lodash: ^4.17.21
+  checksum: 83cc256ab8db61f8e2e218df5f2f82ed859a71ae808445aafe4372aefca81da3ed0b5f69ed0b8b8871e8ec1809b60cde8a39adb1ea598bdc6d3e2f9f181724a6
   languageName: node
   linkType: hard
 
@@ -5977,7 +5978,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/spectral-cli@npm:^6.2.1":
+"@stoplight/spectral-cli@npm:^6.4.2":
   version: 6.5.1
   resolution: "@stoplight/spectral-cli@npm:6.5.1"
   dependencies:
@@ -6010,7 +6011,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/spectral-core@npm:>=1, @stoplight/spectral-core@npm:^1.10.0, @stoplight/spectral-core@npm:^1.5.1, @stoplight/spectral-core@npm:^1.7.0, @stoplight/spectral-core@npm:^1.8.0, @stoplight/spectral-core@npm:^1.8.1":
+"@stoplight/spectral-core@npm:>=1, @stoplight/spectral-core@npm:^1.12.4, @stoplight/spectral-core@npm:^1.5.1, @stoplight/spectral-core@npm:^1.7.0, @stoplight/spectral-core@npm:^1.8.0, @stoplight/spectral-core@npm:^1.8.1":
   version: 1.14.2
   resolution: "@stoplight/spectral-core@npm:1.14.2"
   dependencies:
@@ -6040,7 +6041,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/spectral-formats@npm:>=1, @stoplight/spectral-formats@npm:^1.0.0, @stoplight/spectral-formats@npm:^1.0.1, @stoplight/spectral-formats@npm:^1.4.0":
+"@stoplight/spectral-formats@npm:>=1, @stoplight/spectral-formats@npm:^1.0.0, @stoplight/spectral-formats@npm:^1.1.0, @stoplight/spectral-formats@npm:^1.4.0":
   version: 1.4.0
   resolution: "@stoplight/spectral-formats@npm:1.4.0"
   dependencies:
@@ -6052,7 +6053,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/spectral-functions@npm:>=1, @stoplight/spectral-functions@npm:^1.0.0, @stoplight/spectral-functions@npm:^1.4.0, @stoplight/spectral-functions@npm:^1.5.1":
+"@stoplight/spectral-functions@npm:>=1, @stoplight/spectral-functions@npm:^1.0.0, @stoplight/spectral-functions@npm:^1.5.1, @stoplight/spectral-functions@npm:^1.6.1":
   version: 1.7.1
   resolution: "@stoplight/spectral-functions@npm:1.7.1"
   dependencies:
@@ -6155,7 +6156,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/spectral-rulesets@npm:>=1, @stoplight/spectral-rulesets@npm:^1.3.0":
+"@stoplight/spectral-rulesets@npm:>=1":
   version: 1.14.0
   resolution: "@stoplight/spectral-rulesets@npm:1.14.0"
   dependencies:
@@ -6174,6 +6175,28 @@ __metadata:
     lodash: ~4.17.21
     tslib: ^2.3.0
   checksum: 4591913743e2e374985e3e782d062fb1f55b6c0575db5d0bca41f997bbb0aafe6a219e307655b96c8650a1078de0f2acaddf2128e35efa6112be62f03b2b817b
+  languageName: node
+  linkType: hard
+
+"@stoplight/spectral-rulesets@npm:^1.6.0":
+  version: 1.14.1
+  resolution: "@stoplight/spectral-rulesets@npm:1.14.1"
+  dependencies:
+    "@asyncapi/specs": ^3.2.0
+    "@stoplight/better-ajv-errors": 1.0.3
+    "@stoplight/json": ^3.17.0
+    "@stoplight/spectral-core": ^1.8.1
+    "@stoplight/spectral-formats": ^1.4.0
+    "@stoplight/spectral-functions": ^1.5.1
+    "@stoplight/spectral-runtime": ^1.1.1
+    "@stoplight/types": ^13.6.0
+    "@types/json-schema": ^7.0.7
+    ajv: ^8.8.2
+    ajv-formats: ~2.1.0
+    json-schema-traverse: ^1.0.0
+    lodash: ~4.17.21
+    tslib: ^2.3.0
+  checksum: 382744c4ec2b49614a5799c384828ece4cbc0cab9036c63b3bdf85d493af3c6ef4a54a5a44a662fb8228e33d6775ba70086d86c77c31f0800d1184de13c2f944
   languageName: node
   linkType: hard
 
@@ -8923,22 +8946,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"boxen@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "boxen@npm:4.2.0"
-  dependencies:
-    ansi-align: ^3.0.0
-    camelcase: ^5.3.1
-    chalk: ^3.0.0
-    cli-boxes: ^2.2.0
-    string-width: ^4.1.0
-    term-size: ^2.1.0
-    type-fest: ^0.8.1
-    widest-line: ^3.1.0
-  checksum: ce2b565a2e44b33d11336155675cf4f7f0e13dbf7412928845aefd6a2cf65e0da2dbb0a2cb198b7620a2ae714416a2eb710926b780f15d19f6250a19633b29af
-  languageName: node
-  linkType: hard
-
 "boxen@npm:^5.0.0":
   version: 5.1.2
   resolution: "boxen@npm:5.1.2"
@@ -9583,16 +9590,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "chalk@npm:3.0.0"
-  dependencies:
-    ansi-styles: ^4.1.0
-    supports-color: ^7.1.0
-  checksum: 8e3ddf3981c4da405ddbd7d9c8d91944ddf6e33d6837756979f7840a29272a69a5189ecae0ff84006750d6d1e92368d413335eab4db5476db6e6703a1d1e0505
-  languageName: node
-  linkType: hard
-
 "challenge@workspace:.":
   version: 0.0.0-use.local
   resolution: "challenge@workspace:."
@@ -9670,7 +9667,7 @@ __metadata:
     google-java-format: 1.1.0
     hint: 7.1.3
     husky: 8.0.1
-    ibm-openapi-validator: 0.55.0
+    ibm-openapi-validator: 0.96.0
     jest: 29.1.2
     jest-environment-jsdom: 29.1.2
     jest-preset-angular: 12.2.2
@@ -9834,7 +9831,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cli-boxes@npm:^2.2.0, cli-boxes@npm:^2.2.1":
+"cli-boxes@npm:^2.2.1":
   version: 2.2.1
   resolution: "cli-boxes@npm:2.2.1"
   checksum: be79f8ec23a558b49e01311b39a1ea01243ecee30539c880cf14bf518a12e223ef40c57ead0cb44f509bffdffc5c129c746cd50d863ab879385370112af4f585
@@ -14344,15 +14341,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"global-dirs@npm:^2.0.1":
-  version: 2.1.0
-  resolution: "global-dirs@npm:2.1.0"
-  dependencies:
-    ini: 1.3.7
-  checksum: f80b74032c0359a6af7f37d153b8ced67710135ed7ab45b03efe688f5792ef859b660561beeb79ecce3106071c2547196c0971dfecdb2332139892129487233d
-  languageName: node
-  linkType: hard
-
 "global-dirs@npm:^3.0.0":
   version: 3.0.0
   resolution: "global-dirs@npm:3.0.0"
@@ -15068,13 +15056,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ibm-openapi-validator@npm:0.55.0":
-  version: 0.55.0
-  resolution: "ibm-openapi-validator@npm:0.55.0"
+"ibm-openapi-validator@npm:0.96.0":
+  version: 0.96.0
+  resolution: "ibm-openapi-validator@npm:0.96.0"
   dependencies:
-    "@ibm-cloud/openapi-ruleset": 0.3.0
-    "@stoplight/spectral-cli": ^6.2.1
-    "@stoplight/spectral-core": ^1.10.0
+    "@ibm-cloud/openapi-ruleset": 0.44.0
+    "@stoplight/spectral-cli": ^6.4.2
+    "@stoplight/spectral-core": ^1.12.4
     "@stoplight/spectral-parsers": ^1.0.1
     chalk: ^4.1.1
     commander: ^2.20.3
@@ -15090,12 +15078,11 @@ __metadata:
     pad: ^2.3.0
     require-all: ^3.0.0
     semver: ^5.7.1
-    update-notifier: ^4.1.3
     validator: ^13.7.0
     yaml-js: ^0.2.3
   bin:
     lint-openapi: src/cli-validator/index.js
-  checksum: 2ff0f8278cb34e9edbf9bcb0479f5c1c4d355a6b9803b62a0aa9b5cdcfe9da2a86e6ab15cc80217f532c98a1bcd0474535886fbad4c64047a7d6376c85cb0083
+  checksum: 69e163a054e2c28317285f59b54e30e95727d6e9bab4590772ac375c363382f662c494fe484934ef3a522582bea53f227e1f3810c4f29cbef51b930620bb0814
   languageName: node
   linkType: hard
 
@@ -15316,13 +15303,6 @@ __metadata:
   version: 2.0.3
   resolution: "inherits@npm:2.0.3"
   checksum: 78cb8d7d850d20a5e9a7f3620db31483aa00ad5f722ce03a55b110e5a723539b3716a3b463e2b96ce3fe286f33afc7c131fa2f91407528ba80cea98a7545d4c0
-  languageName: node
-  linkType: hard
-
-"ini@npm:1.3.7":
-  version: 1.3.7
-  resolution: "ini@npm:1.3.7"
-  checksum: f8f3801e8eb039f9e03cdc27ceb494a7ac6e6ca7b2dd8394a9ef97ed5ae66930fadefd5ec908e41e4b103d3c9063b5788d47de5e8e892083c7a67b489f3b962d
   languageName: node
   linkType: hard
 
@@ -15639,16 +15619,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-installed-globally@npm:^0.3.1":
-  version: 0.3.2
-  resolution: "is-installed-globally@npm:0.3.2"
-  dependencies:
-    global-dirs: ^2.0.1
-    is-path-inside: ^3.0.1
-  checksum: 7f7489ae3026cc3b9f61426108d5911c864ac545bc90ef46e2eda4461c34a1f287a64f765895893398f0769235c59e63f25283c939c661bfe9be5250b1ed99cb
-  languageName: node
-  linkType: hard
-
 "is-installed-globally@npm:^0.4.0, is-installed-globally@npm:~0.4.0":
   version: 0.4.0
   resolution: "is-installed-globally@npm:0.4.0"
@@ -15694,13 +15664,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-npm@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "is-npm@npm:4.0.0"
-  checksum: c0d1550266c5e6fa35c1c1063ccd60fde9a5235686551ca0b1fc54ac10dd021911e2466fbee3c328f0aee1ea2ddb33b8034c062538b064dc32f93ad885ba54f8
-  languageName: node
-  linkType: hard
-
 "is-npm@npm:^5.0.0":
   version: 5.0.0
   resolution: "is-npm@npm:5.0.0"
@@ -15740,7 +15703,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-path-inside@npm:^3.0.1, is-path-inside@npm:^3.0.2":
+"is-path-inside@npm:^3.0.2":
   version: 3.0.3
   resolution: "is-path-inside@npm:3.0.3"
   checksum: abd50f06186a052b349c15e55b182326f1936c89a78bf6c8f2b707412517c097ce04bc49a0ca221787bc44e1049f51f09a2ffb63d22899051988d3a618ba13e9
@@ -17695,7 +17658,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"latest-version@npm:^5.0.0, latest-version@npm:^5.1.0":
+"latest-version@npm:^5.1.0":
   version: 5.1.0
   resolution: "latest-version@npm:5.1.0"
   dependencies:
@@ -22044,7 +22007,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pupa@npm:^2.0.1, pupa@npm:^2.1.1":
+"pupa@npm:^2.1.1":
   version: 2.1.1
   resolution: "pupa@npm:2.1.1"
   dependencies:
@@ -24860,13 +24823,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"term-size@npm:^2.1.0":
-  version: 2.2.1
-  resolution: "term-size@npm:2.2.1"
-  checksum: 1ed981335483babc1e8206f843e06bd2bf89b85f0bf5a9a9d928033a0fcacdba183c03ba7d91814643015543ba002f1339f7112402a21da8f24b6c56b062a5a9
-  languageName: node
-  linkType: hard
-
 "terminal-link@npm:^2.0.0":
   version: 2.1.1
   resolution: "terminal-link@npm:2.1.1"
@@ -25438,13 +25394,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^0.8.1":
-  version: 0.8.1
-  resolution: "type-fest@npm:0.8.1"
-  checksum: d61c4b2eba24009033ae4500d7d818a94fd6d1b481a8111612ee141400d5f1db46f199c014766b9fa9b31a6a7374d96fc748c6d688a78a3ce5a33123839becb7
-  languageName: node
-  linkType: hard
-
 "type-guards@npm:0.15.0":
   version: 0.15.0
   resolution: "type-guards@npm:0.15.0"
@@ -25753,27 +25702,6 @@ __metadata:
   peerDependencies:
     dotenv: "*"
   checksum: 0b3a2dd658ca10cd2b50d587bf91d2c8cbd868762dd1a351c9d7e3b11f397fad46765e540e07f26feffdf8b483cf37d9965537ad720a4bcee63a78191250c0c8
-  languageName: node
-  linkType: hard
-
-"update-notifier@npm:^4.1.3":
-  version: 4.1.3
-  resolution: "update-notifier@npm:4.1.3"
-  dependencies:
-    boxen: ^4.2.0
-    chalk: ^3.0.0
-    configstore: ^5.0.1
-    has-yarn: ^2.1.0
-    import-lazy: ^2.1.0
-    is-ci: ^2.0.0
-    is-installed-globally: ^0.3.1
-    is-npm: ^4.0.0
-    is-yarn-global: ^0.3.0
-    latest-version: ^5.0.0
-    pupa: ^2.0.1
-    semver-diff: ^3.1.1
-    xdg-basedir: ^4.0.0
-  checksum: 67652056e6a2634881e67ac91be4524262bd0bcba98ef71107289adec33e21b72cca0a1a5fbcd9b546f40dff20fa38ebd36ef846629a7f8d97c602221ae4cfc1
   languageName: node
   linkType: hard
 
