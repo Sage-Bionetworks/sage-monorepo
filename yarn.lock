@@ -9691,7 +9691,7 @@ __metadata:
     probot: 12.2.8
     redoc: 2.0.0
     redoc-cli: 0.13.20
-    regenerator-runtime: 0.13.9
+    regenerator-runtime: 0.13.10
     rxjs: 7.5.7
     serverless: 3.22.0
     serverless-plugin-typescript: 2.1.4
@@ -22541,6 +22541,13 @@ __metadata:
   version: 1.4.2
   resolution: "regenerate@npm:1.4.2"
   checksum: 3317a09b2f802da8db09aa276e469b57a6c0dd818347e05b8862959c6193408242f150db5de83c12c3fa99091ad95fb42a6db2c3329bfaa12a0ea4cbbeb30cb0
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:0.13.10":
+  version: 0.13.10
+  resolution: "regenerator-runtime@npm:0.13.10"
+  checksum: 09893f5a9e82932642d9a999716b6c626dc53ef2a01307c952ebbf8e011802360163a37c304c18a6c358548be5a72b448e37209954a18696f21e438c81cbb4b9
   languageName: node
   linkType: hard
 
