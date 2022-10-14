@@ -111,6 +111,7 @@
     "jsonc-eslint-parser": "2.1.0",
     "ng-packagr": "14.2.1",
     "nock": "13.2.9",
+    "nodemon": "^2.0.20",
     "nx": "14.8.5",
     "prettier": "2.7.1",
     "redoc": "2.0.0",

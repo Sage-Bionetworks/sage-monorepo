@@ -9,3 +9,4 @@
 .serverless
 .yarn
 node_modules
+*.pem
