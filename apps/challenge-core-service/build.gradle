@@ -30,7 +30,7 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
   implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
-  runtimeOnly 'mysql:mysql-connector-java:8.0.29'
+  runtimeOnly 'mysql:mysql-connector-java:8.0.30'
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 

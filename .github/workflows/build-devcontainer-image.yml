@@ -4,10 +4,12 @@ on:
     branches:
       - 'main'
     paths:
-      - 'tools/devcontainers/challenge-devcontainer/**/*'
+      - '.github/workflows/build-devcontainer-image.yml'
+      - 'tools/devcontainers/challenge/**/*'
   pull_request:
     paths:
-      - 'tools/devcontainers/challenge-devcontainer/**/*'
+      - '.github/workflows/build-devcontainer-image.yml'
+      - 'tools/devcontainers/challenge/**/*'
 
 env:
   IMAGE_REPOSITORY: sagebionetworks/challenge-devcontainer
@@ -17,13 +19,13 @@ jobs:
   devcontainer:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Lint Dockerfile
         uses: docker://hadolint/hadolint:latest
         with:
           entrypoint: hadolint
-          args: tools/devcontainers/challenge-devcontainer/.devcontainer/Dockerfile
+          args: tools/devcontainers/challenge/.devcontainer/Dockerfile
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -49,7 +51,7 @@ jobs:
 
       - name: Build the image
         run: |
-          FOLDER_WITH_DOT_DEVCONTAINER="tools/devcontainers/challenge-devcontainer"
+          WORKSPACE_FOLDER="tools/devcontainers/challenge"
           IMAGE_NAME=${{ steps.prep.outputs.image_name }}
           IMAGE_TAG=${{ steps.prep.outputs.devcontainer_version }}
 
@@ -57,14 +59,15 @@ jobs:
           export DOCKER_BUILDKIT=1
           export BUILDKIT_PROGRESS=plain
 
-          # Export the devcontainer version, which will be set inside the image. See 
+          # Export the devcontainer version, which will be set inside the image. See
           # devcontainer.json used to build the image.
           export DEVCONTAINER_VERSION=${{ steps.prep.outputs.devcontainer_version }}
 
           # Build the image
-          npm install -g @vscode/dev-container-cli
+          npm install -g @devcontainers/cli
           devcontainer build \
-            --image-name "${IMAGE_NAME}:${IMAGE_TAG}" "${FOLDER_WITH_DOT_DEVCONTAINER}"
+            --image-name "${IMAGE_NAME}:${IMAGE_TAG}" \
+            --workspace-folder "${WORKSPACE_FOLDER}"
 
       - name: Login to Docker Hub
         if: ${{ github.event_name != 'pull_request' }}

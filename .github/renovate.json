@@ -1,47 +1,50 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", ":rebaseStalePrs"],
+  "extends": ["config:base"],
   "enabled": true,
   "assignees": ["tschaffter"],
   "semanticCommitScope": "deps",
   "automergeType": "pr",
   "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
-  "gradle": {
-    "enabled": false
-  },
-  "gradle-wrapper": {
-    "enabled": false
-  },
   "ignorePaths": [
     "apps/api",
     "apps/challenge-db-cli",
-    "apps/challenge-elk"
+    "apps/challenge-elk",
+    "libs/api-client-angular-deprecated"
   ],
   "baseBranches": ["main"],
   "labels": ["bot", "dependencies"],
   "packageRules": [
     {
-      "matchUpdateTypes": ["major"],
+      "description": "Request approval before the creation of PRs for major and minor updates",
+      "matchUpdateTypes": ["major", "minor"],
       "dependencyDashboardApproval": true
     },
     {
       "description": "Automatically merge patch-level updates",
       "matchUpdateTypes": ["patch"],
-      "automergeType": "branch",
-      "automerge": true
+      "automergeType": "pr",
+      "automerge": false
     },
     {
       "matchPackagePatterns": ["eslint"],
       "groupName": "eslint",
-      "labels": ["linting"]
+      "addLabels": ["linting"]
     },
     {
       "matchPackagePatterns": ["keycloak"],
       "groupName": "keycloak",
       "dependencyDashboardApproval": true,
-      "labels": ["iam"],
+      "addLabels": ["iam"],
       "schedule": ["every 3 months on the first day of the month"]
+    },
+    {
+      "description": "Notify us about major updates of Renovate bot",
+      "matchPaths": ["tools/renovate-update-notification/Dockerfile"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "prCreation": "immediate"
     },
     {
       "description": "Disables the creation of branches/PRs for any minor/patch updates of Renovate bot",
@@ -50,12 +53,13 @@
       "enabled": false
     },
     {
-      "description": "Notify us about major updates of Renovate bot",
-      "matchPaths": ["tools/renovate-update-notification/Dockerfile"],
-      "matchUpdateTypes": ["major"],
-      "automerge": false,
-      "prCreation": "immediate"
+      "description": "Ignore local packages that are not published to any remote repositories",
+      "matchPackagePatterns": ["org.sagebionetworks.challenge:challenge-util"],
+      "enabled": false
     }
   ],
-  "timezone": "America/Los_Angeles"
+  "timezone": "America/Los_Angeles",
+  "schedule": [
+    "every weekend"
+  ]
 }
