@@ -16,17 +16,18 @@ export class OrganizationResolver implements Resolve<Organization> {
 
   resolve(route: ActivatedRouteSnapshot): Observable<Organization> {
     const username = route.params['login'];
+    console.log(username, '111');
     const organizationKey = makeStateKey<Organization>(
       'organizationKey-' + username
     );
 
     if (this.transferState.hasKey(organizationKey)) {
-      const org = this.transferState.get(
+      const organization = this.transferState.get(
         organizationKey,
         MOCK_ORGANIZATIONS[0]
       );
       this.transferState.remove(organizationKey);
-      return of(org);
+      return of(organization);
     } else {
       // return this.coursesService.findCourseById(courseId).pipe(
       //   first(),

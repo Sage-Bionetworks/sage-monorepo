@@ -6,7 +6,8 @@ import { OrganizationComponent } from './organization.component';
 import { OrganizationOverviewModule } from './organization-overview/organization-overview.module';
 import { OrganizationChallengesModule } from './organization-challenges/organization-challenges.module';
 import { OrganizationMembersModule } from './organization-members/organization-members.module';
-import { OrganizationStatsModule } from './organization-stats/organization-stats';
+import { OrganizationRoutingModule } from './organization-routing.module';
+import { OrganizationStatsModule } from './organization-stats/organization-stats.module';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 
 @NgModule({
@@ -18,6 +19,7 @@ import { UiModule } from '@sagebionetworks/challenge-registry/ui';
     OrganizationOverviewModule,
     OrganizationChallengesModule,
     OrganizationMembersModule,
+    OrganizationRoutingModule,
     OrganizationStatsModule,
     UiModule,
   ],

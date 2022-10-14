@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
   Challenge,
+  Organization,
   UserService,
 } from '@sagebionetworks/api-client-angular-deprecated';
 import { MOCK_CHALLENGES } from '@sagebionetworks/challenge-registry/ui';
@@ -12,6 +13,7 @@ import { MOCK_CHALLENGES } from '@sagebionetworks/challenge-registry/ui';
   styleUrls: ['./organization-challenges.component.scss'],
 })
 export class OrganizationChallengesComponent {
+  @Input() organization!: Organization;
   challenges: Challenge[] = MOCK_CHALLENGES;
 
   constructor(private userService: UserService) {}
