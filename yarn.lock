@@ -21970,6 +21970,8 @@ __metadata:
     rxjs: ^6.0.0 || ^7.0.0
     zone.js: ^0.10.2 || ^0.11.0
   checksum: 44ea51a02002b82e7e6561f9eaa0e42d0c24159d3e8736052cabc63d348d5676720bea1c52cee175b17d4232c08228f4ddaf27d4796b5ca55bbc702bccdd3b6f
+  languageName: node
+  linkType: hard
 
 "printable-characters@npm:^1.0.42":
   version: 1.0.42
