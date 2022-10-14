@@ -1,31 +1,15 @@
-.stats-group {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+#members {
+  margin: 18px;
+}
+.card-group {
   width: 100%;
-  justify-content: center;
-}
-.stat-item:first-child {
-  border-right-width: 0;
-}
-.stat-item {
-  flex-direction: column;
-  flex: 1;
-  height: 54px;
-  max-width: 120px;
-  padding: 18px 5px 8px;
-  border-style: solid;
-  border-width: 1px;
-  text-align: center;
-}
+  display: flex;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+  flex-wrap: wrap;
 
-.action-btn {
-  min-width: 200px;
-  max-width: 280px;
-  padding: 13px 5px;
-  display: inline-flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
+  & > * {
+    margin: 12px;
+  }
 }

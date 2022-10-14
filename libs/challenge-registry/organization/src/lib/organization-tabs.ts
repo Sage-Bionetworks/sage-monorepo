@@ -9,7 +9,7 @@ export const ORGANIZATION_TABS: { [key: string]: Tab } = {
     name: 'Challenges',
     visible: true,
   },
-  starred: {
+  members: {
     name: 'Members',
     visible: true,
   },
