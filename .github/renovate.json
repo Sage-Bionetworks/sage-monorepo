@@ -24,8 +24,8 @@
     {
       "description": "Automatically merge patch-level updates",
       "matchUpdateTypes": ["patch"],
-      "automergeType": "branch",
-      "automerge": true
+      "automergeType": "pr",
+      "automerge": false
     },
     {
       "matchPackagePatterns": ["eslint"],
@@ -60,8 +60,6 @@
   ],
   "timezone": "America/Los_Angeles",
   "schedule": [
-    "after 12am every weekday",
-    "before 5am every weekday",
     "every weekend"
   ]
 }
