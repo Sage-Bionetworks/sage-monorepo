@@ -8,6 +8,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 .coveralls.yml
 .env
+.env.*
 hint-report
 migrations.json
 nx-cloud.env

@@ -1,6 +1,6 @@
-import { Probot } from 'probot';
+import { Probot, run } from 'probot';
 
-export = (app: Probot) => {
+export const challengeBot = (app: Probot) => {
   app.on('issues.opened', async (context) => {
     const issueComment = context.issue({
       body: 'Thanks for opening this issue!',
@@ -13,3 +13,5 @@ export = (app: Probot) => {
   // To get your app running against GitHub, see:
   // https://probot.github.io/docs/development/
 };
+
+run(challengeBot);
