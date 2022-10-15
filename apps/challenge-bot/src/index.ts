@@ -1,6 +1,6 @@
 import { Probot, run } from 'probot';
 
-export const challengeBot = (app: Probot) => {
+export const challengeBot = async (app: Probot): Promise<void> => {
   app.on('issues.opened', async (context) => {
     const issueComment = context.issue({
       body: 'Thanks for opening this issue!',
