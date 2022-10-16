@@ -44,9 +44,21 @@ provider:
 
 functions:
   challengeBot:
-    handler: src/lambda/handler.webhooks
+    handler: 'src/lambda/handler.webhooks'
+    # name: challenge-bot-${self:provider.stage}
     description: Lambda function for TODO
     memorySize: 256
+    timeout: 15
     events:
-      - httpApi: 'POST /api/github/webhooks'
-      - httpApi: 'GET /api/hello-world'
+      - httpApi:
+          path: /api/github/webhooks
+          method: post
+  # ping:
+  #   handler: 'src/static.catch'
+  #   # name: challenge-bot-ping-${self:provider.stage}
+  #   memorySize: 128
+  #   timeout: 5
+  #   events:
+  #     - httpApi:
+  #         path: /ping
+  #         method: get
