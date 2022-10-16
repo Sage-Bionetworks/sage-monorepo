@@ -1,19 +1,23 @@
 import { ApplicationFunctionOptions, Probot, run } from 'probot';
-// import * as express from 'express';
+import * as express from 'express';
 
 export const challengeBot = async (
   app: Probot,
   { getRouter }: ApplicationFunctionOptions
 ): Promise<void> => {
-  if (getRouter) {
-    const router = getRouter('/api');
-
-    // router.use(express.json());
-
-    router.get('/hello-world', (req, res) => {
-      res.send('Hello World');
-    });
+  if (!getRouter) {
+    throw new Error('getRouter is undefined');
   }
+
+  // if (getRouter) {
+  const router = getRouter('/api');
+
+  router.use(express.json());
+
+  router.get('/hello-world', (req, res) => {
+    res.json({ a: 1 });
+  });
+  // }
 
   // if (!getRouter) {
   //   throw new Error('getRouter is undefined');

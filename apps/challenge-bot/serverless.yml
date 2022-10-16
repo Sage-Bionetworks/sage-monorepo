@@ -49,3 +49,4 @@ functions:
     memorySize: 256
     events:
       - httpApi: 'POST /api/github/webhooks'
+      - httpApi: 'GET /api/hello-world'
