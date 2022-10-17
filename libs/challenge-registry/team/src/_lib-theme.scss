@@ -1,0 +1,5 @@
+@use './lib/team-theme' as team;
+
+@mixin theme($theme) {
+  @include team.theme($theme);
+}

@@ -107,6 +107,13 @@ export const routes: Routes = [
         (m) => m.SignupModule
       ),
   },
+  {
+    path: 'team',
+    loadChildren: () =>
+      import('@sagebionetworks/challenge-registry/team').then(
+        (m) => m.TeamModule
+      ),
+  },
   // {
   //   path: 'org/:login/:challenge',
   //   loadChildren: () =>
