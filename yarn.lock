@@ -9797,11 +9797,11 @@ __metadata:
     ngx-countup: 13.1.0
     ngx-typed-js: 2.1.1
     nock: 13.2.9
-    nodemon: ^2.0.20
+    nodemon: 2.0.20
     nx: 14.8.6
     prettier: 2.7.1
-    primeicons: ^6.0.1
-    primeng: ^14.1.2
+    primeicons: 6.0.1
+    primeng: 14.1.2
     probot: 12.2.8
     redoc: 2.0.0
     redoc-cli: 0.13.20
@@ -19555,7 +19555,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:^2.0.20":
+"nodemon@npm:2.0.20":
   version: 2.0.20
   resolution: "nodemon@npm:2.0.20"
   dependencies:
@@ -21990,14 +21990,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"primeicons@npm:^6.0.1":
+"primeicons@npm:6.0.1":
   version: 6.0.1
   resolution: "primeicons@npm:6.0.1"
   checksum: a1412fee16ddbd24e06052a7e94b973cf6f68fadb5349192101388f2681f822b3bde077948e6d53e9949f87148b495e4bf2b149ad07242de068d2e7233f4446c
   languageName: node
   linkType: hard
 
-"primeng@npm:^14.1.2":
+"primeng@npm:14.1.2":
   version: 14.1.2
   resolution: "primeng@npm:14.1.2"
   dependencies:
