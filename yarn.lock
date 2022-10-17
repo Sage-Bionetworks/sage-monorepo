@@ -9800,6 +9800,8 @@ __metadata:
     nodemon: ^2.0.20
     nx: 14.8.6
     prettier: 2.7.1
+    primeicons: ^6.0.1
+    primeng: ^14.1.2
     probot: 12.2.8
     redoc: 2.0.0
     redoc-cli: 0.13.20
@@ -21985,6 +21987,29 @@ __metadata:
     ansi-styles: ^5.0.0
     react-is: ^18.0.0
   checksum: b2c6e77666716e55094f29dcbd92e431a1b8cc0a06cd41ec1a3c8a10e5e56bb1f2d7b5942f1d8f6a0f69912712f3edb4c41713926d60cbb89f2a41355d49e7a4
+  languageName: node
+  linkType: hard
+
+"primeicons@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "primeicons@npm:6.0.1"
+  checksum: a1412fee16ddbd24e06052a7e94b973cf6f68fadb5349192101388f2681f822b3bde077948e6d53e9949f87148b495e4bf2b149ad07242de068d2e7233f4446c
+  languageName: node
+  linkType: hard
+
+"primeng@npm:^14.1.2":
+  version: 14.1.2
+  resolution: "primeng@npm:14.1.2"
+  dependencies:
+    tslib: ^2.3.0
+  peerDependencies:
+    "@angular/common": ^14.0.0
+    "@angular/core": ^14.0.0
+    "@angular/forms": ^14.0.0
+    primeicons: ^6.0.1
+    rxjs: ^6.0.0 || ^7.0.0
+    zone.js: ^0.10.2 || ^0.11.0
+  checksum: 44ea51a02002b82e7e6561f9eaa0e42d0c24159d3e8736052cabc63d348d5676720bea1c52cee175b17d4232c08228f4ddaf27d4796b5ca55bbc702bccdd3b6f
   languageName: node
   linkType: hard
 
