@@ -9809,6 +9809,7 @@ __metadata:
     serverless-plugin-typescript: 2.1.4
     shx: 0.3.4
     smee-client: 1.2.3
+    supertest: ^6.3.0
     ts-jest: 29.0.3
     ts-node: 10.9.1
     tslib: 2.4.0
@@ -24913,6 +24914,35 @@ __metadata:
     readable-stream: ^3.6.0
     semver: ^7.3.7
   checksum: b73316836003219f1a4886a6d77dd28551a6784c30e871009fb7bad699fae772b20370d39d2ccb5a543c9335ce12b43a76b959a3ca983f1d6365cb4b5682c08f
+  languageName: node
+  linkType: hard
+
+"superagent@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "superagent@npm:8.0.0"
+  dependencies:
+    component-emitter: ^1.3.0
+    cookiejar: ^2.1.3
+    debug: ^4.3.4
+    fast-safe-stringify: ^2.1.1
+    form-data: ^4.0.0
+    formidable: ^2.0.1
+    methods: ^1.1.2
+    mime: 2.6.0
+    qs: ^6.10.3
+    readable-stream: ^3.6.0
+    semver: ^7.3.7
+  checksum: 14343e59327eafd85fa230acb876017079d5efcecc72a56566abc0f965220bb460af2e070dddecd9e2856410b2d2b318d81d9cc1d342aa5922da93c29a295dd7
+  languageName: node
+  linkType: hard
+
+"supertest@npm:^6.3.0":
+  version: 6.3.0
+  resolution: "supertest@npm:6.3.0"
+  dependencies:
+    methods: ^1.1.2
+    superagent: ^8.0.0
+  checksum: 95062161af3a16669231dcde0375f89a8c57339ca8e5820b483959dd77c88a89c9d63241cad000f6178822666ae818fd2e158b44a10d865366809e173737720e
   languageName: node
   linkType: hard
 

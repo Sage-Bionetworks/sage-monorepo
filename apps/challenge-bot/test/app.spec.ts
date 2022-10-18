@@ -4,11 +4,12 @@
 import nock from 'nock';
 // Requiring our app implementation
 import { challengeBot } from '../src/index';
-import { Probot, ProbotOctokit } from 'probot';
+import { Probot, ProbotOctokit, Server } from 'probot';
 // Requiring our fixtures
 import payload from './fixtures/issues.opened.json';
 import fs from 'fs';
 import path from 'path';
+import request from 'supertest';
 const issueCreatedBody = { body: 'Thanks for opening this issue!' };
 
 const privateKey = fs.readFileSync(
@@ -18,10 +19,12 @@ const privateKey = fs.readFileSync(
 
 describe('My Probot app', () => {
   let probot: any;
+  let server: Server;
 
   beforeEach(() => {
     nock.disableNetConnect();
-    probot = new Probot({
+    probot = Probot.defaults({
+      // probot = new Probot({
       appId: 123,
       privateKey,
       // disable request throttling and retries for testing
@@ -30,8 +33,17 @@ describe('My Probot app', () => {
         throttle: { enabled: false },
       }),
     });
+    server = new Server({ Probot: probot });
+    server.load(challengeBot);
+    // server.start();
+
     // Load our app into probot
-    probot.load(challengeBot);
+    // probot.load(challengeBot);
+    // challengeBot(probot, { undefined });
+  });
+
+  test('/api/hello-world returns 200', async () => {
+    await request(server.expressApp).get('/api/hello-world').expect(200);
   });
 
   test('creates a comment when an issue is opened', async () => {
@@ -61,6 +73,7 @@ describe('My Probot app', () => {
   afterEach(() => {
     nock.cleanAll();
     nock.enableNetConnect();
+    // server.stop();
   });
 });
 
