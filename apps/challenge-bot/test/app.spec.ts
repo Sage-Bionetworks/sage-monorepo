@@ -40,6 +40,8 @@ describe('My Probot app', () => {
 
     // Load our app into probot
     // probot.load(challengeBot);
+
+    // server.expressApp._router;
     // challengeBot(probot, { undefined });
   });
 
