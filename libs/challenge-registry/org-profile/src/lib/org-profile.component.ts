@@ -1,21 +1,3 @@
-// this.sections = [
-//   {
-//     label: 'Overview',
-//     path: '.',
-//   },
-//   {
-//     label: 'Challenges',
-//     path: `/org/${org.login}/challenges`,
-//   },
-//   {
-//     label: 'People',
-//     path: `/org/${org.login}/people`,
-//   },
-//   {
-//     label: 'Settings',
-//     path: `/org/${org.login}/settings`,
-//   },
-// ];
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
