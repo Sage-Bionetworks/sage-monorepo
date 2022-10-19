@@ -50,7 +50,7 @@
         "cwd": "apps/challenge-user-service",
         "parallel": true
       },
-      "dependsOn": ["prepare", "^serve-detach"]
+      "dependsOn": ["prepare", "^install", "^serve-detach"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
