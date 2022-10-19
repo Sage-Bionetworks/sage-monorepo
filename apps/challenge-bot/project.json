@@ -3,14 +3,21 @@
   "sourceRoot": "apps/challenge-bot/src",
   "projectType": "application",
   "targets": {
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
+    // "build": {
+    //   "executor": "@nrwl/js:tsc",
+    //   "outputs": ["{options.outputPath}"],
+    //   "options": {
+    //     "outputPath": "dist/apps/challenge-bot",
+    //     "main": "apps/challenge-bot/src/index.ts",
+    //     "tsConfig": "apps/challenge-bot/tsconfig.app.json",
+    //     "assets": ["apps/challenge-bot/*.md"]
+    //   }
+    // },
+    "build-watch": {
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "outputPath": "dist/apps/challenge-bot",
-        "main": "apps/challenge-bot/src/app.ts",
-        "tsConfig": "apps/challenge-bot/tsconfig.app.json",
-        "assets": ["apps/challenge-bot/*.md"]
+        "command": "tsc -p tsconfig.app.json --watch",
+        "cwd": "apps/challenge-bot"
       }
     },
     "prepare": {
@@ -23,7 +30,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "probot run ../../dist/apps/challenge-bot/src/app.js",
+        "command": "nodemon src/index.ts",
         "cwd": "apps/challenge-bot"
       }
     },
