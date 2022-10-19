@@ -7,15 +7,16 @@ import { NavbarModule } from './navbar/navbar.module';
 import { AvatarModule } from './avatar/avatar.module';
 import { OrganizationCardModule } from './organization-card/organization-card.module';
 import { UserButtonModule } from './user-button/user-button.module';
+import { MemberCardModule } from './member-card/member-card.module';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [],
   exports: [
     AvatarModule,
     ButtonGithubModule,
     ChallengeCardModule,
     FooterModule,
+    MemberCardModule,
     NavbarModule,
     OrganizationCardModule,
     UserButtonModule,

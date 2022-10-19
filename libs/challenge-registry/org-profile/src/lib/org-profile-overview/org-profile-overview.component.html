@@ -1,2 +1,20 @@
-<p>org-profile-overview works!</p>
-<p>{{org | json}}</p>
+<main *ngIf="organization as org">
+  <div id="bio" class="row">
+    <div class="col">
+      <h3>Biography</h3>
+      <p>{{ org.description }}</p>
+    </div>
+  </div>
+  <div id="contact" class="row">
+    <div class="col">
+      <p class="section-title">WEBSITE</p>
+      <a class="link-text" href="org.websiteUrl">
+        {{ org.websiteUrl }}
+      </a>
+    </div>
+    <div class="col">
+      <p class="section-title">CONTACT EMAIL</p>
+      <a class="link-text">{{ org.email }}</a>
+    </div>
+  </div>
+</main>

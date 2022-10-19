@@ -1,22 +1,34 @@
-import { Component, Input, OnInit } from '@angular/core';
+// this.sections = [
+//   {
+//     label: 'Overview',
+//     path: '.',
+//   },
+//   {
+//     label: 'Challenges',
+//     path: `/org/${org.login}/challenges`,
+//   },
+//   {
+//     label: 'People',
+//     path: `/org/${org.login}/people`,
+//   },
+//   {
+//     label: 'Settings',
+//     path: `/org/${org.login}/settings`,
+//   },
+// ];
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
   Account,
-  AccountService,
-  ModelError as ApiClientError,
   Organization,
-  OrganizationService,
 } from '@sagebionetworks/api-client-angular-deprecated';
+import { map, Observable, of, Subscription } from 'rxjs';
+import { Tab } from './tab.model';
+import { ORG_PROFILE_TABS } from './org-profile-tabs';
 import {
-  catchError,
-  filter,
-  Observable,
-  of,
-  switchMap,
-  throwError,
-} from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
-import { OrgProfileDataServiceService } from './org-profile-data-service.service';
+  MOCK_ORGANIZATIONS,
+  Avatar,
+} from '@sagebionetworks/challenge-registry/ui';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 
 @Component({
@@ -26,67 +38,49 @@ import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 })
 export class OrgProfileComponent implements OnInit {
   public appVersion: string;
-
-  @Input() accountId!: string;
-  org$!: Observable<Organization>;
-
-  sections: any[] = [];
+  account$!: Observable<Account | undefined>;
+  organization$: Observable<Organization> = of(MOCK_ORGANIZATIONS[0]);
+  loggedIn = true;
+  organizationAvatar!: Avatar;
+  tabs = ORG_PROFILE_TABS;
+  tabKeys: string[] = Object.keys(this.tabs);
+  activeTab: Tab = this.tabs['overview'];
+  private subscriptions: Subscription[] = [];
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
-    private accountService: AccountService,
-    private orgService: OrganizationService,
-    private orgProfileDataService: OrgProfileDataServiceService,
+    private route: ActivatedRoute,
     private readonly configService: ConfigService
   ) {
     this.appVersion = this.configService.config.appVersion;
   }
 
   ngOnInit(): void {
-    const account$ = this.route.params.pipe(
-      switchMap((params) => this.accountService.getAccount(params['login'])),
-      catchError((err) => {
-        const error = err.error as ApiClientError;
-        if (isApiClientError(error)) {
-          if (error.status === 404) {
-            return of(undefined);
-          }
-        }
-        return throwError(err);
-      })
+    this.route.params.subscribe((param) => console.log(param['orgLogin']));
+
+    const activeTab$ = this.activatedRoute.queryParamMap.pipe(
+      map((params: ParamMap) => params.get('tab')),
+      map((key) => (key === null ? 'overview' : key))
     );
-    account$.subscribe((account) => {
-      const pageTitle = account ? `${account.login}` : 'Page not found';
-      console.log(pageTitle);
-      // this.pageTitleService.setTitle(`${pageTitle} · ROCC`);
-      // this.accountNotFound = !account;
-    });
-    this.org$ = account$.pipe(
-      filter((account): account is Account => account !== undefined),
-      switchMap((account) => this.orgService.getOrganization(account.id))
+
+    this.organization$.subscribe(
+      (org) =>
+        (this.organizationAvatar = {
+          name: org.name ? (org.name as string) : org.login.replace(/-/g, ' '),
+          src: org.avatarUrl ? org.avatarUrl : '',
+          size: 320,
+        })
     );
-    this.org$.subscribe((org) => {
-      console.log(org);
-      this.orgProfileDataService.setOrg(org);
-      this.sections = [
-        {
-          label: 'Overview',
-          path: '.',
-        },
-        {
-          label: 'Challenges',
-          path: `/org/${org.login}/challenges`,
-        },
-        {
-          label: 'People',
-          path: `/org/${org.login}/people`,
-        },
-        {
-          label: 'Settings',
-          path: `/org/${org.login}/settings`,
-        },
-      ];
+
+    const activeTabSub = activeTab$.subscribe((key) => {
+      if (!this.tabKeys.includes(key)) {
+        this.router.navigate([]);
+      } else {
+        this.activeTab = this.tabs[key];
+      }
     });
+
+    this.subscriptions.push(activeTabSub);
   }
 }

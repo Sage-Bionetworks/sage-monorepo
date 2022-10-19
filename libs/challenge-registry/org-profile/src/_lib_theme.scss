@@ -1,0 +1,13 @@
+@use './lib/org-profile-theme' as org-profile;
+@use './lib/org-profile-overview/org-profile-overview-theme' as org-profile-overview;
+@use './lib/org-profile-challenges/org-profile-challenges-theme' as org-profile-challenges;
+@use './lib/org-profile-members/org-profile-members-theme' as org-profile-members;
+@use './lib/org-profile-stats/org-profile-stats-theme' as org-profile-stats;
+
+@mixin theme($theme) {
+  @include org-profile.theme($theme);
+  @include org-profile-overview.theme($theme);
+  @include org-profile-challenges.theme($theme);
+  @include org-profile-members.theme($theme);
+  @include org-profile-stats.theme($theme);
+}

@@ -31,7 +31,6 @@
     "challenge-registry-not-found": "libs/challenge-registry/not-found",
     "challenge-registry-org-profile": "libs/challenge-registry/org-profile",
     "challenge-registry-org-search": "libs/challenge-registry/org-search",
-    "challenge-registry-organization": "libs/challenge-registry/organization",
     "challenge-registry-signup": "libs/challenge-registry/signup",
     "challenge-registry-styles": "libs/challenge-registry/styles",
     "challenge-registry-themes": "libs/challenge-registry/themes",

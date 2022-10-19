@@ -131,8 +131,8 @@ export const routes: Routes = [
   {
     path: ':login',
     loadChildren: () =>
-      import('@sagebionetworks/challenge-registry/organization').then(
-        (m) => m.OrganizationModule
+      import('@sagebionetworks/challenge-registry/org-profile').then(
+        (m) => m.OrgProfileModule
       ),
   },
   {
