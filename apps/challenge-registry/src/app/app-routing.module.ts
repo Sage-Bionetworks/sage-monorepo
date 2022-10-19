@@ -136,7 +136,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: ':login',
+    path: 'org',
     loadChildren: () =>
       import('@sagebionetworks/challenge-registry/org-profile').then(
         (m) => m.OrgProfileModule

@@ -8,10 +8,10 @@ import { OrgProfileStatsComponent } from './org-profile-stats/org-profile-stats.
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':orgLogin',
     component: OrgProfileComponent,
     children: [
-      { path: '', component: OrgProfileOverviewComponent },
+      { path: ':orgLogin', component: OrgProfileOverviewComponent },
       { path: 'challenges', component: OrgProfileChallengesComponent },
       { path: 'members', component: OrgProfileMembersComponent },
       { path: 'stats', component: OrgProfileStatsComponent },
