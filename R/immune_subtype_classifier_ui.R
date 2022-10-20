@@ -4,7 +4,7 @@ immune_subtype_classifier_ui <- function(id) {
 
   shiny::tagList(
 
-    iatlas.modules::titleBox("iAtlas Tools — Immune Subtype Classifier"),
+    iatlas.modules::titleBox("CRI iAtlas Tools — Immune Subtype Classifier"),
 
     iatlas.modules::textBox(
       width = 12,

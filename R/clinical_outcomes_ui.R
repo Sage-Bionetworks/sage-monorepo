@@ -2,7 +2,7 @@ clinical_outcomes_ui <- function(id) {
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlas.modules::titleBox("iAtlas Explorer — Clinical Outcomes"),
+    iatlas.modules::titleBox("CRI iAtlas Explorer — Clinical Outcomes"),
     iatlas.modules::textBox(
       width = 12,
       shiny::includeMarkdown(get_markdown_path("clinical_outcomes"))

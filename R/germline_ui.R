@@ -4,7 +4,7 @@ germline_ui <- function(id){
 
     shiny::tagList(
       iatlas.modules::titleBox(
-        "iAtlas Explorer — Germline Analysis"
+        "CRI iAtlas Explorer — Germline Analysis"
       ),
       iatlas.modules::textBox(
         width = 12,

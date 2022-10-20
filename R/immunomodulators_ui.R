@@ -3,7 +3,7 @@ immunomodulators_ui <- function(id) {
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlas.modules::titleBox("iAtlas Explorer — Immunomodulators"),
+    iatlas.modules::titleBox("CRI iAtlas Explorer — Immunomodulators"),
     iatlas.modules::textBox(
       width = 12,
       shiny::p(paste0(

@@ -1,7 +1,7 @@
-The iAtlas notebooks are a collection of Jupyter Notebooks that allows users to recreate and expand the analysis and visualizations found in the CRI iAtlas Portal.
+The CRI iAtlas notebooks are a collection of Jupyter Notebooks that allows users to recreate and expand the analysis and visualizations found in the CRI iAtlas Portal.
 
 
-## How to access the iAtlas notebooks
+## How to access the CRI iAtlas notebooks
 
 **- Locally:** notebooks are available in our [iatlas-notebooks repository on Github](https://github.com/CRI-iAtlas/iatlas-notebooks).
 

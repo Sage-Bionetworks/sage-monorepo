@@ -4,11 +4,11 @@ ici_overview_ui <- function(id){
 
   shiny::tagList(
     iatlas.modules::titleBox(
-      "iAtlas Explorer — Datasets of Treatment with Immune Checkpoint Inhibitors"
+      "CRI iAtlas Explorer — Datasets of Treatment with Immune Checkpoint Inhibitors"
     ),
     iatlas.modules::textBox(
       width = 12,
-      p("This module describes the datasets that are available in iAtlas for the analysis of molecular response to
+      p("This module describes the datasets that are available in CRI iAtlas for the analysis of molecular response to
         Immune Checkpoint Inhibitor immunotherapy(ICI). Primary data processing and scoring of immune response, including
         immune signatures and cell-content estimates were performed by UNC Lineberger team Dante Bortone, Sarah Entwistle,
         led by Benjamin G. Vincent.")

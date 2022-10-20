@@ -4,7 +4,7 @@ ici_clinical_outcomes_ui <- function(id){
 
   shiny::tagList(
     iatlas.modules::titleBox(
-      "iAtlas Explorer — Clinical Outcomes to Immune Checkpoint Inhibitors"
+      "CRI iAtlas Explorer — Clinical Outcomes to Immune Checkpoint Inhibitors"
     ),
     iatlas.modules::textBox(
       width = 12,

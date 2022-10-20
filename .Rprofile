@@ -3,7 +3,7 @@ if (file.exists("renv/activate.R")) {
 
   cat("
 --------------------------------------------------------------------------------
-Welcome to the iAtlas Shiny App
+Welcome to the CRI iAtlas Shiny App
 --------------------------------------------------------------------------------
 \n")
 
@@ -18,7 +18,7 @@ Welcome to the iAtlas Shiny App
 } else if (Sys.getenv("R_CONFIG_ACTIVE") == "shinyapps") {
   cat("
 --------------------------------------------------------------------------------
-iAtlas Shiny App: Production
+CRI iAtlas Shiny App: Production
 --------------------------------------------------------------------------------
 \n")
   source('./init.R')

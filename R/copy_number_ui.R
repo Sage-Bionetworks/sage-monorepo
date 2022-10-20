@@ -4,7 +4,7 @@ copy_number_ui <- function(id){
 
     shiny::tagList(
         iatlas.modules::titleBox(
-            "iAtlas Explorer — Association with Copy Number Variations"
+            "CRI iAtlas Explorer — Association with Copy Number Variations"
         ),
         iatlas.modules::textBox(
             width = 12,

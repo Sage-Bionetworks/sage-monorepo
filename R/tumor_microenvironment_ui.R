@@ -3,7 +3,7 @@ tumor_microenvironment_ui <- function(id) {
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlas.modules::titleBox("iAtlas Explorer — Tumor Microenvironment"),
+    iatlas.modules::titleBox("CRI iAtlas Explorer — Tumor Microenvironment"),
     iatlas.modules::textBox(
       width = 12,
       shiny::includeMarkdown(get_markdown_path("tumor_microenvironment"))
