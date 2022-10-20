@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Avatar } from '../avatar/avatar';
 import { Organization } from '@sagebionetworks/api-client-angular-deprecated';
 import { MOCK_ORGANIZATIONS } from '../organization-card/mock-organizations';
-import { ChallengeMember, OrgMember } from './members';
+import { OrgMember } from './members';
 
 @Component({
   selector: 'challenge-registry-member-card',
@@ -11,7 +11,7 @@ import { ChallengeMember, OrgMember } from './members';
 })
 export class MemberCardComponent implements OnInit {
   @Input() size = 120;
-  @Input() member!: OrgMember | ChallengeMember;
+  @Input() member!: OrgMember;
 
   memberAvatar!: Avatar;
   isAdmin!: boolean;
