@@ -1,5 +1,12 @@
 <div class="base mat-typography" *ngIf="organization$ | async as org">
   <section id="top" class="row">
+    <div class="link" class="row">
+      <mat-icon aria-hidden="true" class="link-home">home</mat-icon>
+      <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
+      <a routerLink="/orgs">organizations</a>
+      <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
+      <span>{{ org.name }}</span>
+    </div>
     <challenge-registry-avatar
       class="profile-pic"
       [avatar]="organizationAvatar"

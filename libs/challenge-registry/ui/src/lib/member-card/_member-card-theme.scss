@@ -18,13 +18,13 @@
 
   .member-card-admin-chip {
     border-color: #ffc56d;
-    background-color: #FFF1BF;
+    background-color: #fff1bf;
   }
 }
 
 @mixin typography($theme) {
   .member-card-name {
-    font-weight: 300;
+    font-weight: 600;
     font-size: 1.4em;
   }
   .member-card-affiliation {

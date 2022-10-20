@@ -14,7 +14,7 @@ export class MemberCardComponent implements OnInit {
   @Input() member!: OrgMember | ChallengeMember;
 
   memberAvatar!: Avatar;
-  memberRoles!: Array<string>;
+  isAdmin!: boolean;
   // TODO: replace by querying organziation with organizationId
   memberOrg: Organization = MOCK_ORGANIZATIONS[0];
 
@@ -26,7 +26,8 @@ export class MemberCardComponent implements OnInit {
         size: this.size,
       };
 
-      this.memberRoles = this.member.roles ? this.member.roles : [''];
+      const memberRoles = this.member.roles ? this.member.roles : [''];
+      this.isAdmin = memberRoles.includes('admin');
     }
   }
 }
