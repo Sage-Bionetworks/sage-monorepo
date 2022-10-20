@@ -4,7 +4,7 @@ cellimage_ui <- function(id){
 
   shiny::tagList(
     iatlas.modules::titleBox(
-      "iAtlas Explorer — Cell-Interaction Diagram"
+      "CRI iAtlas Explorer — Cell-Interaction Diagram"
     ),
     iatlas.modules::textBox(
       width = 12,

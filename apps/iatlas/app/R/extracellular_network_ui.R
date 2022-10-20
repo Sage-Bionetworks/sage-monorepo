@@ -4,7 +4,7 @@ extracellular_network_ui <- function(id){
 
     shiny::tagList(
         iatlas.modules::titleBox(
-            "iAtlas Explorer — Extracellular Networks"
+            "CRI iAtlas Explorer — Extracellular Networks"
         ),
         iatlas.modules::textBox(
             width = 12,

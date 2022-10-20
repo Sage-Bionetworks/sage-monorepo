@@ -4,7 +4,7 @@ ici_immune_features_ui <- function(id){
 
   shiny::tagList(
     iatlas.modules::titleBox(
-      "iAtlas Explorer — Immune Features in Immune Checkpoint Inhibitors datasets"
+      "CRI iAtlas Explorer — Immune Features in Immune Checkpoint Inhibitors datasets"
     ),
     iatlas.modules::textBox(
       width = 12,

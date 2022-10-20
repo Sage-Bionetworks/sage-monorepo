@@ -4,7 +4,7 @@ driver_associations_ui <- function(id) {
 
   shiny::tagList(
     iatlas.modules::titleBox(
-      "iAtlas Explorer — Association with Driver Mutations"
+      "CRI iAtlas Explorer — Association with Driver Mutations"
     ),
     iatlas.modules::textBox(
       width = 12,
