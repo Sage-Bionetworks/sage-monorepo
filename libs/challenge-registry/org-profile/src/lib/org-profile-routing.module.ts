@@ -3,18 +3,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { OrgProfileComponent } from './org-profile.component';
 import { OrgProfileOverviewComponent } from './org-profile-overview/org-profile-overview.component';
 import { OrgProfileChallengesComponent } from './org-profile-challenges/org-profile-challenges.component';
-import { OrgProfilePeopleComponent } from './org-profile-people/org-profile-people.component';
-import { OrgProfileSettingsComponent } from './org-profile-settings/org-profile-settings.component';
+import { OrgProfileMembersComponent } from './org-profile-members/org-profile-members.component';
+import { OrgProfileStatsComponent } from './org-profile-stats/org-profile-stats.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':orgLogin',
     component: OrgProfileComponent,
     children: [
-      { path: '', component: OrgProfileOverviewComponent },
+      { path: ':orgLogin', component: OrgProfileOverviewComponent },
       { path: 'challenges', component: OrgProfileChallengesComponent },
-      { path: 'people', component: OrgProfilePeopleComponent },
-      { path: 'settings', component: OrgProfileSettingsComponent },
+      { path: 'members', component: OrgProfileMembersComponent },
+      { path: 'stats', component: OrgProfileStatsComponent },
     ],
   },
 ];

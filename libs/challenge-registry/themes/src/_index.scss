@@ -1,10 +1,12 @@
 @use 'libs/challenge-registry/about/src/lib-theme' as challenge-registry-about;
 @use 'libs/challenge-registry/ui/src/lib-theme' as challenge-registry-ui;
+@use 'libs/challenge-registry/org-profile/src/lib-theme' as challenge-registry-org-profile;
 @use 'libs/challenge-registry/user-profile/src/lib-theme' as challenge-registry-user-profile;
 @use 'libs/challenge-registry/home/src/lib-theme' as challenge-registry-home;
 @use 'libs/challenge-registry/team/src/lib-theme' as challenge-registry-team;
 
 @mixin theme($theme) {
+  @include challenge-registry-org-profile.theme($theme);
   @include challenge-registry-user-profile.theme($theme);
   @include challenge-registry-about.theme($theme);
   @include challenge-registry-ui.theme($theme);

@@ -7,7 +7,7 @@ export const MOCK_ORGANIZATIONS: Organization[] = [
     description: 'This is an awesome organization',
     email: 'contact@example.org',
     login: 'awesome-org',
-    websiteUrl: '',
+    websiteUrl: 'https://www.awesome-organization.org',
     avatarUrl: '',
     createdAt: '',
     updatedAt: '',

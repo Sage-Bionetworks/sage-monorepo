@@ -1,0 +1,25 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { OrgProfileStatsComponent } from './org-profile-stats.component';
+
+describe('OrgProfileStatsComponent', () => {
+  let component: OrgProfileStatsComponent;
+  let fixture: ComponentFixture<OrgProfileStatsComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ OrgProfileStatsComponent ]
+    })
+    .compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(OrgProfileStatsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
