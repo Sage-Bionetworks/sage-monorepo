@@ -9,4 +9,4 @@ RUN Rscript -e "install.packages('shiny', repos='http://cran.rstudio.com/')"
 RUN apt-get install -y gdebi-core wget
 RUN wget https://download3.rstudio.org/ubuntu-18.04/x86_64/shiny-server-1.5.19.995-amd64.deb
 RUN gdebi --n shiny-server-1.5.19.995-amd64.deb
-CMD systemctl start shiny-server
+CMD ["/usr/bin/shiny-server"]
