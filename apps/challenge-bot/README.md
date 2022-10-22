@@ -35,7 +35,13 @@ TODO
 4. In your AWS parameter store, create and store values for the environment variables used in
    `serverless.yml` that are prefixed with `ssm:/` (see [Configuration](#configuration)).
 
-5. Deploy the app.
+5. Login with Serverless.
+
+    ```console
+    serverless login
+    ```
+
+6. Deploy the app.
 
     ```console
       nx deploy challenge-bot
