@@ -30,7 +30,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "nodemon src/index.ts",
+        "command": "nodemon src/run-challenge-app.ts",
         "cwd": "apps/challenge-bot"
       }
     },
