@@ -1,12 +1,14 @@
 import { Context } from 'probot';
 import pino from 'pino';
 import { version } from '../package.json';
+import { Server } from './server/server';
 
 export const logger = pino();
 
 export class ChallengeApp {
   private context: Context<'issues'>;
   private logger: pino.Logger;
+  public server: Server;
 
   constructor(context: Context<'issues'>) {
     this.context = context;
@@ -17,6 +19,7 @@ export class ChallengeApp {
       // pull_number: this.pullNumber,
       // sha: this.headSha,
     });
+    this.server = new Server();
   }
 
   async run(): Promise<void> {
