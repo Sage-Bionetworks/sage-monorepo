@@ -1,0 +1,9 @@
+<main>
+  <div id="members" class="row col">
+    <h3>Members</h3>
+    <div class="card-group">
+      <challenge-registry-member-card *ngFor="let member of members" [member]="member" [size]="120">
+      </challenge-registry-member-card>
+    </div>
+  </div>
+</main>

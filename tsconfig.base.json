@@ -66,6 +66,9 @@
       "@sagebionetworks/challenge-registry/styles": [
         "libs/challenge-registry/styles/src/index.ts"
       ],
+      "@sagebionetworks/challenge-registry/team": [
+        "libs/challenge-registry/team/src/index.ts"
+      ],
       "@sagebionetworks/challenge-registry/themes": [
         "libs/challenge-registry/themes/src/index.ts"
       ],

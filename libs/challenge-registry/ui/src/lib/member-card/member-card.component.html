@@ -1,0 +1,12 @@
+<div *ngIf="member">
+  <div class="member-card">
+    <challenge-registry-avatar class="member-card-pic" [avatar]="memberAvatar" [size]="size">
+    </challenge-registry-avatar>
+    <p class="member-card-name">{{ member.name }}</p>
+    <p class="member-card-affiliation">{{ memberOrg.name }}</p>
+    <div class="member-card-admin-chip" *ngIf="isAdmin">
+      <mat-icon aria-hidden="true"> emoji_people </mat-icon>
+      <span class="member-card-admin-chip-text">Admin</span>
+    </div>
+  </div>
+</div>

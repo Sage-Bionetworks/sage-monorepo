@@ -33,6 +33,7 @@
     "challenge-registry-org-search": "libs/challenge-registry/org-search",
     "challenge-registry-signup": "libs/challenge-registry/signup",
     "challenge-registry-styles": "libs/challenge-registry/styles",
+    "challenge-registry-team": "libs/challenge-registry/team",
     "challenge-registry-themes": "libs/challenge-registry/themes",
     "challenge-registry-ui": "libs/challenge-registry/ui",
     "challenge-registry-user-profile": "libs/challenge-registry/user-profile",
