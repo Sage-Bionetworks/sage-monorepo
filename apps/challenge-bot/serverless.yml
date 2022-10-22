@@ -53,12 +53,12 @@ functions:
       - httpApi:
           path: /api/github/webhooks
           method: post
-  # ping:
-  #   handler: 'src/static.catch'
-  #   # name: challenge-bot-ping-${self:provider.stage}
-  #   memorySize: 128
-  #   timeout: 5
-  #   events:
-  #     - httpApi:
-  #         path: /ping
-  #         method: get
+  ping:
+    handler: 'src/lambda/handler-api.api'
+    # name: challenge-bot-ping-${self:provider.stage}
+    memorySize: 128
+    timeout: 5
+    events:
+      - httpApi:
+          path: /ping
+          method: get

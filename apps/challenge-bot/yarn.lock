@@ -830,6 +830,7 @@ __metadata:
     "@types/node": 18.7.23
     nock: 13.2.9
     probot: ^12.2.4
+    serverless-http: ^3.1.0
     smee-client: 1.2.3
     tslib: ^2.0.0
     typescript: 4.8.4
@@ -2320,6 +2321,13 @@ __metadata:
     parseurl: ~1.3.3
     send: 0.18.0
   checksum: af57fc13be40d90a12562e98c0b7855cf6e8bd4c107fe9a45c212bf023058d54a1871b1c89511c3958f70626fff47faeb795f5d83f8cf88514dbaeb2b724464d
+  languageName: node
+  linkType: hard
+
+"serverless-http@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "serverless-http@npm:3.1.0"
+  checksum: 39ceb19fe9c4ed0c09d74b6973a0a980b7cd388cb04e8bb147650b27c80642ce9dffff3644c2a08abfa9c13ce80b9698bec3761eb633f03dc1e9d670da8cb6e6
   languageName: node
   linkType: hard
 
