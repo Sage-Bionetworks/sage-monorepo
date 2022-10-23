@@ -8,7 +8,7 @@ const { getGitDiffFiles } = require('./git-util');
 
 const gitHookName = process.argv[2];
 
-const installNodejsPackages = () => {
+const installNodejsDependencies = () => {
   spawn('yarn', ['install', '--immutable'], {stdio:'inherit'})
     .on('exit', function (error) {
       if (error) {
@@ -18,12 +18,12 @@ const installNodejsPackages = () => {
     });
 }
 
-console.log('✨ Preparing Node.js packages');
+console.log('✨ Preparing Node.js dependencies');
 getGitDiffFiles().then((changedFiles) => {
   if (changedFiles.includes('yarn.lock')) {
     if (gitHookName === 'post-merge') {
-      console.log('🙏 If you have any issues with `yarn`, `nx` or any other Node.js packages after a `git merge`, please open an Issue in GitHub.');
+      console.log('🙏 If you have any issues with `yarn`, `nx` or any other Node.js dependencies after a `git merge`, please open an Issue in GitHub.');
     }
-    installNodejsPackages();
+    installNodejsDependencies();
   }
 });

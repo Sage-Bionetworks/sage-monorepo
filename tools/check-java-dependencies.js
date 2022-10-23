@@ -42,7 +42,7 @@ const hasMavenProjectDefinitionChanged = (projectLocation, changedFiles) => {
   return false;
 }
 
-const installJavaPackages = (projectName) => {
+const installJavaDependencies = (projectName) => {
   spawn('yarn', ['nx', 'prepare-java', projectName], {stdio:'inherit'})
     .on('exit', function (error) {
       if (error) {
@@ -52,11 +52,11 @@ const installJavaPackages = (projectName) => {
     });
 }
 
-console.log('✨ Preparing Java packages');
+console.log('✨ Preparing Java dependencies');
 getGitDiffFiles().then((changedFiles) => {
   Object.entries(json['projects']).forEach(([projectName, projectLocation]) => {
     if (hasGradleProjectDefinitionChanged(projectLocation, changedFiles) || hasMavenProjectDefinitionChanged(projectLocation, changedFiles)) {
-      installJavaPackages(projectName);
+      installJavaDependencies(projectName);
     }
   });
 });
