@@ -26,6 +26,8 @@
     "homepage": "https://github.com/Sage-Bionetworks/challenge-registry#readme",
     "dependencies": {
         "@probot/adapter-aws-lambda-serverless": "^3.0.1",
+        "ajv": "^8.11.0",
+        "deepmerge": "^4.2.2",
         "probot": "^12.2.4",
         "serverless-http": "^3.1.0",
         "tslib": "^2.0.0"
