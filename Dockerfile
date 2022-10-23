@@ -11,5 +11,7 @@ RUN wget https://download3.rstudio.org/ubuntu-18.04/x86_64/shiny-server-1.5.19.9
 RUN gdebi --n shiny-server-1.5.19.995-amd64.deb
 # remove the default landing page and link to sample app's
 RUN rm /srv/shiny-server/*
+# Run the server as the 'shiny' user
+USER shiny
 # start up the server
 CMD ["/usr/bin/shiny-server"]
