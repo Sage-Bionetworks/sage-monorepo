@@ -35,7 +35,13 @@ TODO
 4. In your AWS parameter store, create and store values for the environment variables used in
    `serverless.yml` that are prefixed with `ssm:/` (see [Configuration](#configuration)).
 
-5. Deploy the app.
+5. Login with Serverless.
+
+    ```console
+    serverless login
+    ```
+
+6. Deploy the app.
 
     ```console
       nx deploy challenge-bot
@@ -57,6 +63,30 @@ docker build -t challengebot .
 docker run -e APP_ID=<app-id> -e PRIVATE_KEY=<pem-value> challengebot
 ```
  -->
+
+## Testing locally
+
+Send a request to an HTTP route:
+
+```console
+curl -i -X GET http://localhost:3000/api/hello-world
+
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 7
+ETag: W/"7-n4nHQM60bXQYySSnisV5QdXpZSA"
+Date: Sat, 22 Oct 2022 14:02:30 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"a":1}
+```
+
+## Notes
+
+- https://github.com/probot/probot/discussions/1608
+  - Discussion about how to start Probot app with Server.
 
 ## Contributing
 

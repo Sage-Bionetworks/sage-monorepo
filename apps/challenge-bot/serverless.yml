@@ -22,6 +22,7 @@ useDotenv: true
 
 plugins:
   - serverless-plugin-typescript
+  - serverless-offline
 
 provider:
   name: aws
@@ -44,8 +45,21 @@ provider:
 
 functions:
   challengeBot:
-    handler: src/lambda/handler.webhooks
+    handler: 'src/lambda/handler.webhooks'
+    # name: challenge-bot-${self:provider.stage}
     description: Lambda function for TODO
     memorySize: 256
+    timeout: 15
     events:
-      - httpApi: 'POST /api/github/webhooks'
+      - httpApi:
+          path: /api/github/webhooks
+          method: post
+  ping:
+    handler: 'src/lambda/handler.api'
+    # name: challenge-bot-ping-${self:provider.stage}
+    memorySize: 128
+    timeout: 5
+    events:
+      - httpApi:
+          path: /challenge-bot/ping
+          method: get
