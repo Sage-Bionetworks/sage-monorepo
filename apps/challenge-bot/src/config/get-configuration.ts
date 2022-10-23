@@ -6,13 +6,13 @@ import { InvalidConfigError } from '../error';
 import deepmerge from 'deepmerge';
 
 const CONFIG_FILE = 'challenge-bot.yml';
-const DEFAULT_MESSAGE = 'This is the default message.';
+export const DEFAULT_MESSAGE = 'This is the default message.';
 
 export const DEFAULT_CONFIGURATION: Configuration = {
   message: DEFAULT_MESSAGE,
 };
 
-export const getRepoConfiguration = async (
+export const getConfiguration = async (
   context: Context<'issues'>
 ): Promise<Configuration> => {
   const validate = ajv.compile(configSchema);
