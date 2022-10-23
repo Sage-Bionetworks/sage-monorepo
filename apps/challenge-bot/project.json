@@ -41,6 +41,13 @@
         "cwd": "apps/challenge-bot"
       }
     },
+    "deploy-offline": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "serverless offline",
+        "cwd": "apps/challenge-bot"
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

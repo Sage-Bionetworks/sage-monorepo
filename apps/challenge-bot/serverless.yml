@@ -61,5 +61,5 @@ functions:
     timeout: 5
     events:
       - httpApi:
-          path: /ping
+          path: /challenge-bot/ping
           method: get
