@@ -1,6 +1,6 @@
 import * as nock from 'nock';
 
-import { ChallengeApp, logger } from '../src/challenge-app';
+import { ChallengeApp, logger } from './challenge-app';
 import { version } from '../package.json';
 
 nock.disableNetConnect();
