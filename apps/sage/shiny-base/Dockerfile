@@ -12,7 +12,7 @@ RUN gdebi --n shiny-server-1.5.19.995-amd64.deb
 # remove the default landing page and link to sample app's
 RUN rm /srv/shiny-server/*
 COPY shiny-server.conf /etc/shiny-server/shiny-server.conf 
-RUN chmode 777 /etc/shiny-server/shiny-server.conf 
+RUN chmod 777 /etc/shiny-server/shiny-server.conf 
 # This is the app folder specified in shiny-server.conf
 RUN mkdir -p /srv/shiny-server/app
 # make the installation folder and library folder accessible to the 'shiny' user
