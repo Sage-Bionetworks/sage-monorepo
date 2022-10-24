@@ -1,4 +1,4 @@
-import { getConfiguration } from '.';
+import { getConfiguration, DEFAULT_CONFIGURATION } from '.';
 import fs from 'fs';
 import yaml from 'js-yaml';
 import { Context } from 'probot';
@@ -24,5 +24,14 @@ describe('get-configuration', () => {
     expect(config).toEqual({
       message: 'This is an awesome message.',
     });
+  });
+
+  it('should handle case where no repo config', async () => {
+    const context = {
+      config: async () => {},
+    } as unknown as Context<'issues'>;
+    await expect(getConfiguration(context)).resolves.toBe(
+      DEFAULT_CONFIGURATION
+    );
   });
 });
