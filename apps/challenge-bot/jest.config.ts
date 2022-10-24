@@ -7,5 +7,6 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/challenge-bot',
-  testMatch: ['<rootDir>/test/**/*.spec.ts'],
+  testMatch: ['<rootDir>/test/**/*.spec.ts', '<rootDir>/src/**/*.spec.ts'],
+  // testPathIgnorePatterns: ['/build/'],
 };
