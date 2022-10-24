@@ -2,6 +2,7 @@ import { Context } from 'probot';
 import pino from 'pino';
 import { version } from '../package.json';
 import { Server } from './server/server';
+import { Configuration, getConfiguration } from './config';
 
 export const logger = pino();
 
@@ -9,6 +10,7 @@ export class ChallengeApp {
   private context: Context<'issues'>;
   private logger: pino.Logger;
   public server: Server;
+  private config?: Configuration;
 
   constructor(context: Context<'issues'>) {
     this.context = context;
@@ -23,8 +25,15 @@ export class ChallengeApp {
   }
 
   async run(): Promise<void> {
+    try {
+      this.config = await getConfiguration(this.context);
+      this.logger.info({ config: this.config }, 'Loaded config');
+    } catch (err) {
+      this.logger.error('An error occured', err);
+    }
+
     const issueComment = this.context.issue({
-      body: 'Thanks for opening this issue!',
+      body: 'Thanks for opening this issue! ' + this.config?.message,
     });
     await this.context.octokit.issues.createComment(issueComment);
   }
