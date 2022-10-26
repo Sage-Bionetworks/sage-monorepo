@@ -5,7 +5,7 @@ RUN apt-get -y update && apt-get -y upgrade
 RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
 # instructions here: https://www.rstudio.com/products/shiny/download-server/ubuntu/
 RUN apt-get install -y r-base r-base-dev
-RUN apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev jq pip
+RUN apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev jq pip python3-venv
 
 RUN Rscript -e "install.packages('shiny', repos='http://cran.rstudio.com/')"
 RUN apt-get install -y gdebi-core wget
