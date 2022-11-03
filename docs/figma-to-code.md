@@ -104,8 +104,9 @@ Otherwise, you are more than welcome to add/edit the layout and responsiveness i
 
 ## Next steps
 
-After creating a new library and component within the app (see [create-a-new-component] for more
-details), copy-paste cdoe from the exported project into the app.  
+After creating a new library and component within the app, copy-paste code from the exported project
+into the app.  See [create-a-new-component] for more details on how to create the library and component,
+and where to copy-paste the code.
 
 
 [TeleportHQ]: https://teleporthq.io/
