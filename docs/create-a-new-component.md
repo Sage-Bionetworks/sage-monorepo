@@ -1,94 +1,231 @@
-## User Profile
+# New App Component
 
-In `user-profile.component.html`:
+## Overview
 
-- Update the `<div class="base-container">` to import the `user` object.
-  ```html
-  <div class="base-container" *ngIf="user$ | async as user"></div>
-  ```
-- Add the conditional section content to enable tab switcher
-  ```html
-  <section id="main" class="base-main-section">
-    <ng-container [ngSwitch]="activeTab">
-      <challenge-registry-user-profile-overview
-        *ngSwitchCase="tabs['overview']"
-        [user]="user"
-        [orgs]="orgs"
-      ></challenge-registry-user-profile-overview>
-      <challenge-registry-user-profile-challenges
-        *ngSwitchCase="tabs['challenges']"
-        [userId]="user.id"
-      ></challenge-registry-user-profile-challenges>
-      <challenge-registry-user-profile-starred
-        *ngSwitchCase="tabs['starred']"
-        [user]="user"
-        [loggedIn]="loggedIn"
-      >
-      </challenge-registry-user-profile-starred>
-    </ng-container>
-  </section>
-  ```
-- Add `[routerLink]="." [routerParams]=...` to the `<a>` elements of the menu.
-  ```html
-  <div id="sidenav" class="base-side-nav">
-    <div class="base-bio">
-      <a class="base-text07" routerLink="." [queryParams]="{tab: 'overview'}">Biography</a>
-    </div>
-    <div class="base-challenges">
-      <a class="base-text08" routerLink="." [queryParams]="{tab: 'challenges'}">Challenges</a>
-    </div>
-    <div class="base-stars">
-      <a class="base-text09" routerLink="." [queryParams]="{tab: 'starred'}">Starred</a>
-    </div>
-  </div>
-  ```
-- Enable user's avatar
+This doc will describe how to create a new library + component in the Challenge Registry app, though
+the steps can be applied to any app in this project.  This doc will also include information on
+on where/how to copy-paste code from the [Figma-to-code export] into the app.
 
-  1. Use `challenge-registry-avatar` component for `base-profile-pic` class:
+## 1. Create a new Angular library
 
-     ```html
-     <challenge-registry-avatar
-       class="base-profile-pic"
-       [avatar]="userAvatar"
-     ></challenge-registry-avatar>
-     ```
+To create a UI library within `challenge-registry`, run:
 
-  2. Create avatar variable based on the user object
-     ```typescript
-     this.user$.subscribe(
-       (user) =>
-         (this.userAvatar = {
-           name: user.name ? (user.name as string) : user.login.replace(/-/g, ' '),
-           src: user.avatarUrl ? user.avatarUrl : '',
-           size: 320,
-         })
-     );
-     ```
-  3. Remove dimensions in scss for avatar since it's defined in .ts:
-     ```scss
-     // remove below properties
-     .base-profile-pic {
-       width: 320px;
-       height: 320px;
-     }
-     ```
+```console
+nx g @nrwl/angular:lib <new library name> --directory challenge-registry
+```
+ 
+(Optional but recommended) Use `--dryrun` to first see what and where the entities will be created;
+this will help visualize and validate the intended directory structure, e.g.
 
-## Create user-profile-stats component
+```console
+$ nx g @nrwl/angular:lib awesome-lib --directory challenge-registry --dry-run
 
-1.  Create a new component `user-profile-stats` by running:
-    ```console
-    nx g @nrwl/angular:component user-profile-stats  --project=challenge-registry-user-profile
+>  NX  Generating @nrwl/angular:library
+
+...
+UPDATE workspace.json
+CREATE libs/challenge-registry/awesome-lib/README.md
+CREATE libs/challenge-registry/awesome-lib/tsconfig.lib.json
+CREATE libs/challenge-registry/awesome-lib/tsconfig.spec.json
+CREATE libs/challenge-registry/awesome-lib/src/index.ts
+CREATE libs/challenge-registry/awesome-lib/src/lib/challenge-registry-awesome-lib.module.ts
+CREATE libs/challenge-registry/awesome-lib/tsconfig.json
+CREATE libs/challenge-registry/awesome-lib/project.json
+UPDATE tsconfig.base.json
+CREATE libs/challenge-registry/awesome-lib/jest.config.ts
+CREATE libs/challenge-registry/awesome-lib/src/test-setup.ts
+CREATE libs/challenge-registry/awesome-lib/.eslintrc.json
+
+NOTE: The "dryRun" flag means no changes were made.
+```
+
+Due to how the Challenge Registry app is currently structured, some additional
+steps are required:
+
+1. Discard/undo changes made to `project.json` in other existing folders outside of the new library
+folder, e.g. `apps/challenge-api-gateway/project.json`. There should be ~12 files left after
+discarding those updates.
+2. Remove `challenge-registry-` from the filename of the module TypeScript in `src/lib/`, e.g.
     ```
-2.  Move codes from `basic-stats.html` and `basic-stats.scss` to the `user-profile-stats` component.
-3.  Add `loggedIn` variable to determine whether to use the `public` or `loggin` box.
-    ```html
-    <challenge-registry-user-profile-stats
-      class="base-basic-stats"
-      [loggedIn]="loggedIn"
-    ></challenge-registry-user-profile-stats>
+    challenge-registry-awesome-lib.module.ts → awesome-lib.module.ts
     ```
 
-## Add themes:
+3. Simiarly, in `src/index.ts`, remove `challenge-registry-` from the import filepath.
+4. In the library module (`<new library name>.module.ts`), remove `ChallengeRegistry` from 
+the class name, e.g.
+    ```
+    export class AwesomeLibModule {} → export class AwesomeLibModule {}
+    ```
+5. While in the library module, import the UI and routing modules:
+
+    ```ts
+    import { UiModule } from '@sagebionetworks/challenge-registry/ui';
+    import { RouterModule, Routes } from '@angular/router';
+    
+    const routes: Routes = [{ path: '', component: <component> }];
+    
+    @NgModule({
+      imports: [CommonModule, RouterModule.forChild(routes), UiModule],
+      ...
+    ```
+    
+where `<component>` will be created in the next step.
+
+> **Note**: still have questions about libraries?  See [Libraries] for more details.
+
+## 2. Create a new Angular component
+
+To create the component, use:
+
+```console
+nx g @nrwl/angular:component <new component name> --project <project-name>
+```
+
+where `<project name>` is the name defined in `workspace.json`.  For example, to create an Angular
+component for the `awesome-lib` library (`libs/challenge-registry/awesome-lib`), the project name
+would be `challenge-registry-awesome-lib`:
+
+```json
+{
+  ...
+  "projects": {
+    ...
+    "challenge-registry-awesome-lib": "libs/challenge-registry/awesome-lib",
+    ...
+  }
+}
+```
+
+So the command would be:
+
+```console
+$ nx g @nrwl/angular:component awesome-lib --project challenge-registry-awesome-lib --dry-run   
+
+>  NX  Generating @nrwl/angular:component
+
+CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib/awesome-lib.component.scss
+CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib/awesome-lib.component.html
+CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib/awesome-lib.component.spec.ts
+CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib/awesome-lib.component.ts
+UPDATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.module.ts
+
+NOTE: The "dryRun" flag means no changes were made.
+```
+
+To directly create the files into the parent folder, use `--flat` in the command:
+
+```console
+$ nx g @nrwl/angular:component awesome-lib --project challenge-registry-awesome-lib --flat -dry-run
+
+>  NX  Generating @nrwl/angular:component
+
+CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.component.scss
+CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.component.html
+CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.component.spec.ts
+CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.component.ts
+UPDATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.module.ts
+
+NOTE: The "dryRun" flag means no changes were made.
+```
+
+Before moving on, some edits are required:
+
+1. Remove the `component.spec` TypeScript file -- it's not needed.
+2. In the `component` TypeScript:
+    * Remove `OnInit` from the import and all instances of it from the class.
+    * Add the import: `import { ConfigService } from '@sagebionetworks/challenge-registry/config';`
+    * Update the constructor to be: `constructor(private readonly configService: ConfigService) {}`
+
+    The final result should look something like this:
+      ```ts
+      import { Component } from '@angular/core';
+      import { ConfigService } from '@sagebionetworks/challenge-registry/config';
+
+      @Component({
+        selector: 'sagebionetworks-awesome-lib',
+        templateUrl: './awesome-lib.component.html',
+        styleUrls: ['./awesome-lib.component.scss'],
+      })
+      export class AwesomeLibComponent {
+        constructor(private readonly configService: ConfigService) {}
+      }
+      ```
+3. Revisit the library module and replace `<component>` with the newly-created component, e.g.
+
+    ```ts
+    const routes: Routes = [{ path: '', component: AwesomeLibComponent }];
+    ```
+
+    Also export the newly-created Angular component, e.g.
+    
+    ```ts
+    @NgModule({
+      ...
+      exports: [AwesomeLibComponent],
+    })
+    ```
+
+## 3. Add routing
+
+In `apps/challenge-registry/src/app/app-routing.module.ts`, add a router for the new component, e.g.
+
+```ts
+  {
+    path: <new path name>,
+    loadChildren: () =>
+      import('<index>').then(
+        (m) => m.<module>
+      ),
+  },
+```
+
+where `<index>` is the path defined `tsconfig.base.json`.  For example, the base for AwesomeLib is:
+
+```json
+{
+  ...
+  "paths": {
+    "@sagebionetworks/challenge-registry/awesome-lib": [
+      "libs/challenge-registry/awesome-lib/src/index.ts"
+    ],
+    ...
+  }
+}
+```
+
+So the router would look something like this:
+
+```ts
+  {
+    path: 'awesome-path',
+    loadChildren: () =>
+      import('@sagebionetworks/challenge-registry/awesome-lib').then(
+        (m) => m.AwesomeLibModule
+      ),
+  },
+```
+
+## 4. Time to test! ☕
+
+If you haven't already, start a local server to test the new component:
+
+```
+$ challenge-registry-serve
+```
+
+If everything is setup correctly, `http://localhost:4200/<new path name>` will open a web page that
+displays something like this:
+
+```
+<component name> works!
+```
+
+## 5. Import code from the Figma-to-Code export
+
+The export should already be structured similarly to the new component's directory structure. Copy-paste
+the HTML and SCSS as needed.
+
+## 6. Add themes
 
 - User-Profile:
 
@@ -111,7 +248,7 @@ In `user-profile.component.html`:
 
 - Sub-components (repeated above step 1-3 for each sub component): `_user-profile-[overview|challenges|starred|stats]-theme.scss`.
 
-## Update styles:
+## 7. Update styles
 
 - User-Profile
 
@@ -250,3 +387,6 @@ In `user-profile.component.html`:
 
 - Most of components are using `absolute` position and prefined height/weights.
   1. In the case, the components will not be reponsive enough. Take the biography tab content as example. Both "Biography" and "Organizations" has the same prefined height. If the content of "Biography" is more than the prefined size can handle, the text will be overlapped with the "Organizations" content. If the content of "Biography" only has a few words, it is a little better but will leave a lot of empty vertical space above "Organizations" headline.
+
+  [Figma-to-code export]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/docs/figma-to-code.md
+  [Libraries]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/docs/libraries.md
