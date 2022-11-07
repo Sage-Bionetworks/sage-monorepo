@@ -59,6 +59,7 @@ the class name, e.g.
 5. While in the library module, import the UI and routing modules:
 
     ```ts
+    ...
     import { UiModule } from '@sagebionetworks/challenge-registry/ui';
     import { RouterModule, Routes } from '@angular/router';
     
