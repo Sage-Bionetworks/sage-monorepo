@@ -69,7 +69,7 @@ the class name, e.g.
       ...
     ```
     
-where `<component>` will be created in the next step.
+    where `<component>` will be created in the next step.
 
 > **Note**: still have questions about libraries?  See [Libraries] for more details.
 
