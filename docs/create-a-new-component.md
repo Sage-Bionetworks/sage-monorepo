@@ -54,7 +54,7 @@ discarding those updates.
 4. In the library module (`<new library name>.module.ts`), remove `ChallengeRegistry` from 
 the class name, e.g.
     ```
-    export class AwesomeLibModule {} → export class AwesomeLibModule {}
+    export class ChallengeRegistryAwesomeLibModule {} → export class AwesomeLibModule {}
     ```
 5. While in the library module, import the UI and routing modules:
 
