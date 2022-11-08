@@ -22,7 +22,7 @@ export class ChallengeComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
   challenge$: Observable<Challenge> = of(MOCK_CHALLENGES[0]);
-  loggedIn = true;
+  loggedIn = false;
   challengeAvatar!: Avatar;
   tabs = CHALLENGE_TABS;
   tabKeys: string[] = Object.keys(this.tabs);
@@ -48,13 +48,13 @@ export class ChallengeComponent implements OnInit {
 
     this.challenge$.subscribe(
       (challenge) =>
-        (this.challengeAvatar = {
-          name: challenge.displayName
-            ? (challenge.displayName as string)
-            : challenge.name.replace(/-/g, ' '),
-          src: '', // TODO: Replace with avatarUrl once implemented in Challenge Object
-          size: 320,
-        })
+      (this.challengeAvatar = {
+        name: challenge.displayName
+          ? (challenge.displayName as string)
+          : challenge.name.replace(/-/g, ' '),
+        src: '', // TODO: Replace with avatarUrl once implemented in Challenge Object
+        size: 320,
+      })
     );
 
     const activeTabSub = activeTab$.subscribe((key) => {
