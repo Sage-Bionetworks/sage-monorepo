@@ -8,8 +8,9 @@
   $warn: map.get($config, 'warn');
   $figma: map.get($config, 'figma');
 
-  .link-text {
-    color: map.get($figma, dl-color-default-secondary2);
+  .topic-chip {
+    border-color: map.get($figma, dl-color-default-secondary2);
+    background-color: map.get($figma, dl-color-default-accent4);
   }
 }
 

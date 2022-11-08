@@ -48,13 +48,13 @@ export class ChallengeComponent implements OnInit {
 
     this.challenge$.subscribe(
       (challenge) =>
-      (this.challengeAvatar = {
-        name: challenge.displayName
-          ? (challenge.displayName as string)
-          : challenge.name.replace(/-/g, ' '),
-        src: '', // TODO: Replace with avatarUrl once implemented in Challenge Object
-        size: 320,
-      })
+        (this.challengeAvatar = {
+          name: challenge.displayName
+            ? (challenge.displayName as string)
+            : challenge.name.replace(/-/g, ' '),
+          src: '', // TODO: Replace with avatarUrl once implemented in Challenge Object
+          size: 320,
+        })
     );
 
     const activeTabSub = activeTab$.subscribe((key) => {

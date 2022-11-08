@@ -1,8 +1,29 @@
 #bio,
-#contact {
+#info {
   margin: 18px;
 }
 
 .section-title {
   margin-top: 12px;
+}
+
+.topic-chip {
+  width: 100%;
+  max-width: 120px;
+  margin: 8px;
+  padding: 5px 16px;
+  border-radius: 32px;
+  text-align: center;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
 }

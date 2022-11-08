@@ -1,20 +1,21 @@
 <main *ngIf="challenge">
-  <div id="bio" class="row">
-    <div class="col">
-      <h3>Overview</h3>
-      <p>{{ challenge.description }}</p>
-    </div>
+  <div id="bio">
+    <h3>Overview</h3>
+    <p>{{ challenge.description }}</p>
   </div>
-  <div id="contact" class="row">
-    <div class="col">
-      <p class="section-title">WEBSITE</p>
-      <a class="link-text" href="challenge.websiteUrl">
-        {{ challenge.websiteUrl }}
-      </a>
+  <div id="info">
+    <p class="section-title">TOPICS</p>
+    <div class="row">
+      <div *ngFor="let topic of challenge.topics" class="topic-chip">
+        {{ topic }}
+      </div>
     </div>
-    <!-- <div class="col">
-      <p class="section-title">CONTACT EMAIL</p>
-      <a class="link-text">{{ challenge.email }}</a>
-    </div> -->
+    <div class="col">
+      <p class="section-title">HOSTED BY</p>
+      <challenge-registry-organization-card
+        *ngFor="let organization of organizations"
+        [organization]="organization"
+      ></challenge-registry-organization-card>
+    </div>
   </div>
 </main>
