@@ -1,23 +1,118 @@
-<main>
-  <div class="container" *ngIf="challenge$ | async as challenge">
-    <challenge-registry-challenge-header
-      [challenge]="challenge"
-      [accountName]="accountName"
-    ></challenge-registry-challenge-header>
-    <nav mat-tab-nav-bar>
-      <a
-        mat-tab-link
-        *ngFor="let section of sections"
-        [routerLink]="section.path"
-        routerLinkActive
-        #rla="routerLinkActive"
-        [routerLinkActiveOptions]="{ exact: true }"
-        [active]="rla.isActive"
-        >{{ section.label }}</a
-      >
-    </nav>
-    <router-outlet></router-outlet>
-  </div>
-</main>
+<div class="base mat-typography" *ngIf="challenge$ | async as challenge">
+  <section id="top" class="row">
+    <div class="link" class="row">
+      <mat-icon aria-hidden="true" class="link-home">home</mat-icon>
+      <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
+      <a routerLink="/challenges">challenges</a>
+      <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
+      <span>{{ challenge.name }}</span>
+    </div>
+    <challenge-registry-avatar
+      class="profile-pic"
+      [avatar]="challengeAvatar"
+    ></challenge-registry-avatar>
+    <div id="details" class="col">
+      <h2>
+        {{ challenge.displayName }}
+        <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon>
+      </h2>
+      <p class="username">@{{ challenge.name }}</p>
+      <div class="user-tag">Challenge</div>
+    </div>
+    <div id="activity" class="col">
+      <div class="activity-card">
+        <p class="mat-body-strong">Registered since:</p>
+        <p>01/01/2020</p>
+      </div>
+      <div class="activity-card">
+        <p class="mat-body-strong">Profile last updated:</p>
+        <p>03/31/2022</p>
+      </div>
+    </div>
+  </section>
+  <section id="stats" class="row">
+    <div class="col fill-empty"></div>
+    <div class="col">
+      <challenge-registry-challenge-stats
+        [loggedIn]="loggedIn"
+      ></challenge-registry-challenge-stats>
+    </div>
+  </section>
+  <section id="bottom" class="row">
+    <div class="sidenav col">
+      <div class="nav-group">
+        <a
+          class="nav-item"
+          routerLink="."
+          [queryParams]="{ tab: 'overview' }"
+          [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
+        >
+          Overview
+        </a>
+        <a
+          class="nav-item"
+          routerLink="."
+          [queryParams]="{ tab: 'details' }"
+          [ngClass]="{ 'active-tab': activeTab === tabs['details'] }"
+        >
+          Challenge Details
+        </a>
+        <a
+          class="nav-item"
+          routerLink="."
+          [queryParams]="{ tab: 'organizers' }"
+          [ngClass]="{ 'active-tab': activeTab === tabs['organizers'] }"
+        >
+          Organizers
+        </a>
+        <a
+          class="nav-item"
+          routerLink="."
+          [queryParams]="{ tab: 'sponsors' }"
+          [ngClass]="{ 'active-tab': activeTab === tabs['sponsors'] }"
+        >
+          Sponsors
+        </a>
+        <a
+          class="nav-item"
+          routerLink="."
+          [queryParams]="{ tab: 'stargazers' }"
+          [ngClass]="{ 'active-tab': activeTab === tabs['stargazers'] }"
+        >
+          Stargazers
+        </a>
+      </div>
+    </div>
+    <div class="main col">
+      <ng-container [ngSwitch]="activeTab">
+        <challenge-registry-challenge-overview
+          *ngSwitchCase="tabs['overview']"
+          [challenge]="challenge"
+        >
+        </challenge-registry-challenge-overview>
+        <challenge-registry-challenge-details
+          *ngSwitchCase="tabs['details']"
+          [challenge]="challenge"
+        >
+        </challenge-registry-challenge-details>
+        <challenge-registry-challenge-organizers
+          *ngSwitchCase="tabs['organizers']"
+          [challenge]="challenge"
+        >
+        </challenge-registry-challenge-organizers>
+        <challenge-registry-challenge-sponsors
+          *ngSwitchCase="tabs['sponsors']"
+          [challenge]="challenge"
+        >
+        </challenge-registry-challenge-sponsors>
+        <challenge-registry-challenge-stargazers
+          *ngSwitchCase="tabs['stargazers']"
+          [challenge]="challenge"
+        >
+        </challenge-registry-challenge-stargazers>
+      </ng-container>
+    </div>
+  </section>
+</div>
 
 <challenge-registry-footer [version]="appVersion"></challenge-registry-footer>

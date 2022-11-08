@@ -1,0 +1,25 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { ChallengeOrganizersComponent } from './challenge-organizers.component';
+
+describe('ChallengeOrganizersComponent', () => {
+  let component: ChallengeOrganizersComponent;
+  let fixture: ComponentFixture<ChallengeOrganizersComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ ChallengeOrganizersComponent ]
+    })
+    .compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ChallengeOrganizersComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

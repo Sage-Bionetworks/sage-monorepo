@@ -8,8 +8,9 @@ describe('ChallengeStargazersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ChallengeStargazersComponent],
-    }).compileComponents();
+      declarations: [ ChallengeStargazersComponent ]
+    })
+    .compileComponents();
   });
 
   beforeEach(() => {

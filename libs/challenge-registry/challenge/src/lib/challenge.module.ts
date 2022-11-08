@@ -1,26 +1,32 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
-import { UiModule } from '@sagebionetworks/challenge-registry/ui';
+import { MatIconModule } from '@angular/material/icon';
 import { ChallengeComponent } from './challenge.component';
-import { ChallengeRoutingModule } from './challenge-routing.modules';
-import { ChallengeHeaderModule } from './challenge-header/challenge-header.module';
-import { ChallengeStargazersModule } from './challenge-stargazers/challenge-stargazers.module';
-import { ChallengeSettingsModule } from './challenge-settings/challenge-settings.module';
+import { ChallengeDetailsModule } from './challenge-details/challenge-details.module';
+import { ChallengeOverviewModule } from './challenge-overview/challenge-overview.module';
+import { ChallengeOrganizersModule } from './challenge-organizers/challenge-organizers.module';
 import { ChallengeSponsorsModule } from './challenge-sponsors/challenge-sponsors.module';
+import { ChallengeStargazersModule } from './challenge-stargazers/challenge-stargazers.module';
+import { ChallengeRoutingModule } from './challenge-routing.module';
+import { ChallengeStatsModule } from './challenge-stats/challenge-stats.module';
+import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 
 @NgModule({
+  declarations: [ChallengeComponent],
   imports: [
     CommonModule,
     MatTabsModule,
-    UiModule,
-    ChallengeRoutingModule,
-    ChallengeHeaderModule,
-    ChallengeStargazersModule,
-    ChallengeSettingsModule,
+    MatIconModule,
+    ChallengeDetailsModule,
+    ChallengeOverviewModule,
+    ChallengeOrganizersModule,
     ChallengeSponsorsModule,
+    ChallengeStargazersModule,
+    ChallengeRoutingModule,
+    ChallengeStatsModule,
+    UiModule,
   ],
-  declarations: [ChallengeComponent],
   exports: [ChallengeComponent],
 })
 export class ChallengeModule {}

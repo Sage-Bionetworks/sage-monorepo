@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
-import { ChallengeOverviewComponent } from './challenge-overview.component';
+import { ChallengeDetailsComponent } from './challenge-details.component';
 
 @NgModule({
-  declarations: [ChallengeOverviewComponent],
+  declarations: [ChallengeDetailsComponent],
   imports: [CommonModule, UiModule],
-  exports: [ChallengeOverviewComponent],
+  exports: [ChallengeDetailsComponent],
 })
-export class ChallengeOverviewModule {}
+export class ChallengeDetailsModule {}

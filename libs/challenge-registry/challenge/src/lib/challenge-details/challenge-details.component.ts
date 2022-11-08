@@ -6,11 +6,11 @@ import {
 import { MOCK_ORGANIZATIONS } from '@sagebionetworks/challenge-registry/ui';
 
 @Component({
-  selector: 'challenge-registry-challenge-overview',
-  templateUrl: './challenge-overview.component.html',
-  styleUrls: ['./challenge-overview.component.scss'],
+  selector: 'challenge-registry-challenge-details',
+  templateUrl: './challenge-details.component.html',
+  styleUrls: ['./challenge-details.component.scss'],
 })
-export class ChallengeOverviewComponent {
+export class ChallengeDetailsComponent {
   @Input() challenge!: Challenge;
   organizations: Organization[] = MOCK_ORGANIZATIONS;
 }

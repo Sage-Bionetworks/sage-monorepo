@@ -143,6 +143,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'challenge',
+    loadChildren: () =>
+      import('@sagebionetworks/challenge-registry/challenge').then(
+        (m) => m.ChallengeModule
+      ),
+  },
+  {
     path: ':login',
     loadChildren: () =>
       import('@sagebionetworks/challenge-registry/user-profile').then(

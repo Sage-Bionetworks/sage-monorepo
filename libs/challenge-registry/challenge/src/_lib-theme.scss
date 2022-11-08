@@ -1,0 +1,15 @@
+@use './lib/challenge-theme' as challenge;
+@use './lib//challenge-overview/challenge-overview.module' as challenge-overview;
+@use './lib//challenge-organizers/challenge-organizers.module' as challenge-organizers;
+@use './lib//challenge-sponsors/challenge-sponsors.module' as challenge-sponsors;
+@use './lib//challenge-stargazers/challenge-stargazers.module' as challenge-stargazers;
+@use './lib//challenge-stats/challenge-stats.module' as challenge-stats;
+
+@mixin theme($theme) {
+  @include challenge.theme($theme);
+  @include challenge-overview.theme($theme);
+  @include challenge-organizers.theme($theme);
+  @include challenge-sponsors.theme($theme);
+  @include challenge-stargazers.theme($theme);
+  @include challenge-stats.theme($theme);
+}
