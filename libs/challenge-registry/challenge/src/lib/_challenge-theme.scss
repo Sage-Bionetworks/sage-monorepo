@@ -16,16 +16,12 @@
     border-color: transparent;
     background-color: map.get($figma, dl-color-default-hover1);
   }
-  .verified {
+  .featured {
     border-color: transparent;
-    color: map.get($figma, dl-color-default-darkaccent3);
+    color: #71c663;
   }
   .username {
     color: map.get($figma, dl-color-default-secondary1);
-  }
-  .user-tag {
-    border-color: map.get($figma, dl-color-default-secondary2);
-    background-color: map.get($figma, dl-color-default-accent4);
   }
   .base-profile-pic {
     border-color: transparent;
@@ -64,6 +60,9 @@
 @mixin typography($theme) {
   .username {
     font-size: 28px;
+  }
+  .featured > .mat-icon {
+    font-size: 60px;
   }
   @media screen and (max-width: 641px) {
     #details > h2 {

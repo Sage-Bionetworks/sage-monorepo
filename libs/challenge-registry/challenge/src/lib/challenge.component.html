@@ -12,22 +12,17 @@
       [avatar]="challengeAvatar"
     ></challenge-registry-avatar>
     <div id="details" class="col">
-      <h2>
-        {{ challenge.displayName }}
-        <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon>
-      </h2>
+      <div class="details-top row">
+        <h2>
+          {{ challenge.displayName }}
+        </h2>
+        <div class="col fill-empty"></div>
+        <div class="featured">
+          <mat-icon aria-hidden="true">military_tech</mat-icon>
+          <span>FEATURED!</span>
+        </div>
+      </div>
       <p class="username">@{{ challenge.name }}</p>
-      <div class="user-tag">Challenge</div>
-    </div>
-    <div id="activity" class="col">
-      <div class="activity-card">
-        <p class="mat-body-strong">Registered since:</p>
-        <p>01/01/2020</p>
-      </div>
-      <div class="activity-card">
-        <p class="mat-body-strong">Profile last updated:</p>
-        <p>03/31/2022</p>
-      </div>
     </div>
   </section>
   <section id="stats" class="row">

@@ -41,22 +41,18 @@
   border-radius: constants.$dl-radius-radius-round;
   box-shadow: 1px 5px 18px 0px #d4d4d4;
 }
-#details {
-  max-width: 860px;
+.details-top {
+  align-items: center;
 }
-#activity {
-  max-width: 220px;
-}
-.user-tag {
-  width: 100%;
-  max-width: 120px;
-  margin: 8px 0;
-  padding: 5px 16px;
-  border-radius: 32px;
-  text-align: center;
-}
-.activity-card {
-  text-align: right;
+.featured {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .mat-icon {
+    height: 60px;
+    width: 60px;
+  }
 }
 
 #bottom {
@@ -87,8 +83,7 @@
 }
 
 @media screen and (max-width: 641px) {
-  #details,
-  .activity-card {
+  #details {
     text-align: center;
   }
   .user-tag {
