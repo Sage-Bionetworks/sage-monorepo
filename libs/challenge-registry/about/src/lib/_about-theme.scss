@@ -20,23 +20,6 @@
   .subtitle {
     font-size: 0.75em;
   }
-
-  // $config: typography.private-typography-to-2014-config(
-  //   theming.get-typography-config($config-or-theme));
-  // .mat-badge-content {
-  //   font-weight: $font-weight;
-  //   font-size: $font-size;
-  //   font-family: typography-utils.font-family($config);
-  // }
-
-  // .mat-badge-small .mat-badge-content {
-  //   // Set the font size to 75% of the original.
-  //   font-size: $font-size * 0.75;
-  // }
-
-  // .mat-badge-large .mat-badge-content {
-  //   font-size: $font-size * 2;
-  // }
 }
 
 @mixin theme($theme) {
