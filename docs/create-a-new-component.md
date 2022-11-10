@@ -313,7 +313,7 @@ so that it uses these files:
 })
 ```
 
-### Angular export
+### HTML export
 
 If the Figma-to-code export was downloaded as HTML, the directory structure will be very simple:
 
