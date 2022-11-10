@@ -478,20 +478,6 @@ in `*.component.ts`.
   3. Update the styles of icon accordingly
   4. If the icon is before/after texts, some adjustments on dimensions might be also needed to make the icon align properly with texts - [here](https://github.com/Sage-Bionetworks/challenge-registry/pull/434/commits/8abcc7a) is an example.
 
-## TO-DOs:
-
-- Fix missing border/box-shadow of challenge/organization card, i.e the border color/box-shadow of `.challenge-card-container1` (I don't know how to get the information from figma)
-
-## Issues found on the user profile component:
-
-- Ensure Layouts among similar sections (position, height, weight) are consistent.
-
-- Font weights have invalid format - with "px" after the value:
-
-- Some styles is not found from the exported codes, i.e for the background color of organization banner, I do notice later it's added to the `media`, but missing in the default styles. Not sure if it's a bug from teleportHQ.
-
-- Most of components are using `absolute` position and prefined height/weights.
-  1. In the case, the components will not be reponsive enough. Take the biography tab content as example. Both "Biography" and "Organizations" has the same prefined height. If the content of "Biography" is more than the prefined size can handle, the text will be overlapped with the "Organizations" content. If the content of "Biography" only has a few words, it is a little better but will leave a lot of empty vertical space above "Organizations" headline.
 
 [Figma-to-code export]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/docs/figma-to-code.md
 [Libraries]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/docs/libraries.md
