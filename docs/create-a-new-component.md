@@ -4,7 +4,7 @@
 
 This doc will describe how to create a new library + component in the Challenge Registry app, though
 the steps can be applied to any app in this project.  This doc will also include information on
-on where/how to copy-paste code from the [Figma-to-code export] into the app.
+where/how to copy-paste code from the [Figma-to-code export] into the app (starting at [Step 5]).
 
 ## 1. Create a new Angular library
 
@@ -46,16 +46,15 @@ steps are required:
 folder, e.g. `apps/challenge-api-gateway/project.json`. There should be ~12 files left after
 discarding those updates.
 2. Remove `challenge-registry-` from the filename of the module TypeScript in `src/lib/`, e.g.
-    ```
-    challenge-registry-awesome-lib.module.ts → awesome-lib.module.ts
-    ```
+    
+      `challenge-registry-awesome-lib.module.ts` → `awesome-lib.module.ts`
 
 3. Simiarly, in `src/index.ts`, remove `challenge-registry-` from the import filepath.
 4. In the library module (`<new library name>.module.ts`), remove `ChallengeRegistry` from 
 the class name, e.g.
-    ```
-    export class ChallengeRegistryAwesomeLibModule {} → export class AwesomeLibModule {}
-    ```
+    
+      `export class ChallengeRegistryAwesomeLibModule {}` → `export class AwesomeLibModule {}`
+    
 5. While in the library module, import the UI and routing modules:
 
     ```ts
@@ -82,9 +81,11 @@ To create the component, use:
 nx g @nrwl/angular:component <new component name> --project <project-name>
 ```
 
-where `<project name>` is the name defined in `workspace.json`.  For example, to create an Angular
-component for the `awesome-lib` library (`libs/challenge-registry/awesome-lib`), the project name
-would be `challenge-registry-awesome-lib`:
+where `<project name>` is the name defined in `workspace.json`.
+
+For example, to create an Angular component for the `awesome-lib` library (located at
+`libs/challenge-registry/awesome-lib`), the project name would be `challenge-registry-awesome-lib`, 
+as defined in `workspace.json`:
 
 ```json
 {
@@ -97,7 +98,7 @@ would be `challenge-registry-awesome-lib`:
 }
 ```
 
-So the command would be:
+The resulting command would then be:
 
 ```console
 $ nx g @nrwl/angular:component awesome-lib --project challenge-registry-awesome-lib --dry-run   
@@ -112,6 +113,10 @@ UPDATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.module.ts
 
 NOTE: The "dryRun" flag means no changes were made.
 ```
+
+> **Note**: notice that the command above is using `dry-run`.  Again, this is just to ensure
+> that the new entities will be created in the right folder.  If everything looks correct,
+> remove the flag to actually create the new component.
 
 To directly create the files into the parent folder, use `--flat` in the command:
 
@@ -129,15 +134,19 @@ UPDATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.module.ts
 NOTE: The "dryRun" flag means no changes were made.
 ```
 
-Before moving on, some edits are required:
+Notice how the component files would be created directly in `awesome-lib/src/lib/`, compared
+with `awesome-lib/src/lib/awesome-lib/` when `--flat` is _not_ used.
 
-1. Remove the `component.spec` TypeScript file -- it's not needed.
-2. In the `component` TypeScript:
-    * Remove `OnInit` from the import and all instances of it from the class.
-    * Add the import: `import { ConfigService } from '@sagebionetworks/challenge-registry/config';`
-    * Update the constructor to be: `constructor(private readonly configService: ConfigService) {}`
+Before moving on, some additional edits are required:
+
+1. Remove the `<new component name>.component.spec.ts` file -- it is not needed.
+2. In the `<new component name>.component.ts` file:
+    * Remove `OnInit` from the import and all instances of it from the class
+    * Import `ConfigService` from `@sagebionetworks/challenge-registry/config`
+    * Pass `configService` into the constructor as `private readonly`
 
     The final result should look something like this:
+    
       ```ts
       import { Component } from '@angular/core';
       import { ConfigService } from '@sagebionetworks/challenge-registry/config';
@@ -151,13 +160,15 @@ Before moving on, some edits are required:
         constructor(private readonly configService: ConfigService) {}
       }
       ```
-3. Revisit the library module and replace `<component>` with the newly-created component, e.g.
+   
+3. Revisit the library module (`<library name>.module.ts`) and replace `<component>` 
+   with the newly-created component, e.g.
 
     ```ts
     const routes: Routes = [{ path: '', component: AwesomeLibComponent }];
     ```
 
-    Also export the newly-created Angular component, e.g.
+    Additionally, export the newly-created Angular component, e.g.
     
     ```ts
     @NgModule({
@@ -165,6 +176,25 @@ Before moving on, some edits are required:
       exports: [AwesomeLibComponent],
     })
     ```
+    
+    The final result should look something like this:
+    
+      ```ts
+      import { NgModule } from '@angular/core';
+      import { CommonModule } from '@angular/common';
+      import { UiModule } from '@sagebionetworks/challenge-registry/ui';
+      import { RouterModule, Routes } from '@angular/router';
+      import { AwesomeLibComponent } from './awesome-lib.component';
+
+      const routes: Routes = [{ path: '', component: AwesomeLibComponent }];
+
+      @NgModule({
+        imports: [CommonModule, RouterModule.forChild(routes), UiModule],
+        declarations: [AwesomeLibComponent],
+        exports: [AwesomeLibComponent],
+      })
+      export class AwesomeLibModule {}
+      ```
 
 ## 3. Add routing
 
@@ -194,7 +224,7 @@ where `<index>` is the path defined `tsconfig.base.json`.  For example, the base
 }
 ```
 
-So the router would look something like this:
+So, the resulting router would look something like this:
 
 ```ts
   {
@@ -208,7 +238,7 @@ So the router would look something like this:
 
 ## 4. Time to test! ☕
 
-If you haven't already, start a local server to test the new component:
+If you haven't already, start a local server to test the newly-created component:
 
 ```
 $ challenge-registry-serve
@@ -223,8 +253,75 @@ displays something like this:
 
 ## 5. Import code from the Figma-to-Code export
 
-The export should already be structured similarly to the new component's directory structure. Copy-paste
-the HTML and SCSS as needed.
+### Angular export
+
+If the Figma-to-code export was downloaded as Angular, the directory structure should be comparative
+to our current app structure, that is:
+
+```
+<project name>-angular
+├── angular.json
+├── browserslist
+├── package.json
+├── src
+│   ├── app
+│   │   ├── app.component.css
+│   │   ├── app.component.html
+│   │   ├── app.component.ts
+│   │   ├── app.module.ts
+│   │   ├── components
+│   │   │   └── components.module.ts
+│   │   └── pages
+│   │       ├── *
+│   │       │   ├── *.component.css
+│   │       │   ├── *.component.html
+│   │       │   ├── *.component.ts
+│   │       │   └── *.module.ts
+│   │       └── **
+│   │           ├── **.component.css
+│   │           ├── **.component.html
+│   │           ├── **.component.ts
+│   │           └── **.module.ts
+│   ├── environments
+│   │   ├── environment.prod.ts
+│   │   └── environment.ts
+│   ├── index.html
+│   ├── main.ts
+│   ├── polyfills.ts
+│   └── styles.css
+├── tsconfig.app.json
+├── tsconfig.json
+└── tslint.json
+```
+
+Locate the HTML and CSS files within `src/app/pages/`, then copy-paste the code as needed. 
+Alternatively, you can move the files into the app, then re-direct the paths in `*.component.ts`
+so that it uses these files:
+
+```ts
+@Component({
+  selector: 'challenge-registry-team',
+  templateUrl: './<new HTML file>',
+  styleUrls: ['./<new CSS/SCSS file>'],
+})
+```
+
+### Angular export
+
+If the Figma-to-code export was downloaded as HTML, the directory structure will be very simple:
+
+```
+<project name>-html
+├── *.css
+├── *.html
+├── **.css
+├── **.html
+├── package.json
+└── style.css
+```
+
+Copy-paste the HTML and CSS as needed, or move the files into the app then re-direct the paths
+in `*.component.ts`.
 
 ## 6. Add themes
 
@@ -389,5 +486,6 @@ the HTML and SCSS as needed.
 - Most of components are using `absolute` position and prefined height/weights.
   1. In the case, the components will not be reponsive enough. Take the biography tab content as example. Both "Biography" and "Organizations" has the same prefined height. If the content of "Biography" is more than the prefined size can handle, the text will be overlapped with the "Organizations" content. If the content of "Biography" only has a few words, it is a little better but will leave a lot of empty vertical space above "Organizations" headline.
 
-  [Figma-to-code export]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/docs/figma-to-code.md
-  [Libraries]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/docs/libraries.md
+[Figma-to-code export]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/docs/figma-to-code.md
+[Libraries]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/docs/libraries.md
+[Step 5]: #5-import-code-from-the-figma-to-code-export
