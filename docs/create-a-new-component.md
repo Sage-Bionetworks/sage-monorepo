@@ -236,6 +236,13 @@ So, the resulting router would look something like this:
   },
 ```
 
+> ⚠️ **IMPORTANT**: we follow [Angular's standards for routing order], that is:
+>
+> _List routes with a static path first, followed by an empty path route, which matches the default route. The wildcard route comes last because it matches every URL and the Router selects it only if no other routes match first._
+>
+> Please adhere to this recommended order when adding a new route.
+
+
 ## 4. Time to test! ☕
 
 If you haven't already, start a local server to test the newly-created component:
@@ -489,3 +496,4 @@ in `*.component.ts`.
 [Figma-to-code export]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/docs/figma-to-code.md
 [Libraries]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/docs/libraries.md
 [Step 5]: #5-import-code-from-the-figma-to-code-export
+[Angular's standards for routing order]: https://angular.io/guide/router#route-order
