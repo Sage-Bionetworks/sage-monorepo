@@ -46,6 +46,9 @@ RUN groupadd docker \
     -o /tmp/hyperfine.deb \
   && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
   && rm -fr /tmp/hyperfine.deb \
+  # Increase the max number of file watchers
+  # See https://github.com/Sage-Bionetworks/challenge-registry/issues/856
+  && echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf \
   # Cleanup
   && apt-get -y autoclean \
   && apt-get -y autoremove \
