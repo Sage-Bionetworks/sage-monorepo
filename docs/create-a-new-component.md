@@ -43,8 +43,18 @@ Due to how the Challenge Registry app is currently structured, some additional
 steps are required:
 
 1. Discard/undo changes made to `project.json` in other existing folders outside of the new library
-folder, e.g. `apps/challenge-api-gateway/project.json`. There should be ~12 files left after
-discarding those updates.
+folder, e.g. `apps/challenge-api-gateway/project.json`. You can either do this by reverting changes
+in the **Source Control** tab in VSCode or by using the terminal:
+
+    ```
+    git checkout apps/
+    git checkout libs/api-*
+    git checkout libs/shared*
+    git checkout libs/challenge-registry/<glob pattern>
+    ```
+
+    There should be ~13 files left after discarding those updates.
+
 2. Remove `challenge-registry-` from the filename of the module TypeScript in `src/lib/`, e.g.
     
       `challenge-registry-awesome-lib.module.ts` → `awesome-lib.module.ts`
