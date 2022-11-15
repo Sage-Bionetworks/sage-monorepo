@@ -44,7 +44,7 @@ jobs:
       - name: Prepare the image build
         id: prep
         run: |
-          DEVCONTAINER_VERSION="${GITHUB_SHA::8}"
+          DEVCONTAINER_VERSION="${GITHUB_SHA::7}"
           IMAGE_NAME="${{ env.IMAGE_REPOSITORY }}"
           echo ::set-output name=image_name::${IMAGE_NAME}
           echo ::set-output name=devcontainer_version::${DEVCONTAINER_VERSION}

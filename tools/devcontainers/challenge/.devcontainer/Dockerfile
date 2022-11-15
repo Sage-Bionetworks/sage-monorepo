@@ -20,7 +20,7 @@ RUN groupadd docker \
   && apt-get install --no-install-recommends -qq -y \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python-is-python3 openjdk-17-jdk \
-    htop unzip vim wget lsof iproute2 \
+    htop unzip vim wget lsof iproute2 build-essential \
   # Add Node.js repository
   && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
   # Add GitHub CLI repository
@@ -37,6 +37,8 @@ RUN groupadd docker \
     nodejs gh ngrok \
   && corepack enable yarn \
   && corepack prepare yarn@3.2.4 --activate \
+  # Install @devcontainers/cli
+  && npm install -g @devcontainers/cli@0.23.2 \
   # Install nektos/act
   && curl "https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh" | bash - \
   # Install hyperfine
