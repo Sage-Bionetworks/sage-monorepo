@@ -11,7 +11,7 @@
 }
 
 // INPUT FORMS
-.input {
+input {
   -moz-appearance: none;
   -webkit-appearance: none;
   background-color: #fff;
@@ -24,31 +24,48 @@
   border: solid #d2daf0 2px;
   box-shadow: none;
 }
-.input::-webkit-input-placeholder {
+input::-webkit-input-placeholder {
   color: #ababc9;
 }
-.input:-ms-input-placeholder {
+input:-ms-input-placeholder {
   color: #ababc9;
 }
-.input::-ms-input-placeholder {
+input::-ms-input-placeholder {
   color: #ababc9;
 }
-.input::placeholder {
+input::placeholder {
   color: #ababc9;
 }
-.input::-ms-input-placeholder {
+input::-ms-input-placeholder {
   color: #ababc9;
 }
-.input:-ms-input-placeholder {
+input:-ms-input-placeholder {
   color: #ababc9;
 }
-.input:hover {
+input:hover {
   border-color: #bfcaea;
 }
-.input:active,
-.input:focus {
+input:active,
+input:focus {
   outline: none;
   border-color: #ababc9;
+}
+.search-field {
+  position: relative;
+}
+.search-field > i {
+  position: absolute;
+  display: block;
+  transform: translate(0, -50%);
+  top: 50%;
+  color: #ababc9;
+  pointer-events: none;
+  width: 45px;
+  text-align: center;
+  font-style: normal;
+}
+.search-field > input {
+  padding: 0 45px;
 }
 
 #top {
