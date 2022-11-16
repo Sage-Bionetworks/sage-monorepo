@@ -1,6 +1,6 @@
 {
   "name": "Challenge",
-  "image": "sagebionetworks/challenge-devcontainer:34f2121",
+  "image": "sagebionetworks/challenge-devcontainer:3fcdecd",
 
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:1.0.6": {
