@@ -1,5 +1,29 @@
-<main>
-  <p>challenge-search works!</p>
-</main>
+<div class="base mat-typography">
+  <section id="top">
+    <div class="breadcrumbs">
+      <a aria-label="Back to home" href="/home"><mat-icon aria-hidden="true">home</mat-icon></a>
+      <mat-icon aria-hidden="true">chevron_right</mat-icon>
+      <span class="current-crumb">search</span>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h2>Search the Challenge Registry</h2>
+      </div>
+      <div class="col">
+        97 total challenges
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="control control-expanded">
+          <input class="input" type="search" name="search" placeholder="Search challenges" />
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="facets"></section>
+  <section id="main"></section>
+</div>
 
 <challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
