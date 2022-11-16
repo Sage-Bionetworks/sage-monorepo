@@ -17,7 +17,7 @@ jobs:
   push:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:ff081d0a
+      image: sagebionetworks/challenge-devcontainer:3fcdecd
       options: --user root
     if: ${{ github.event_name != 'pull_request' }}
     # env:
@@ -97,7 +97,7 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:ff081d0a
+      image: sagebionetworks/challenge-devcontainer:3fcdecd
       options: --user root
     # Runs this job if triggered by a PR and if at least one of these conditions are true:
     # - the PR originate from a fork
@@ -106,8 +106,8 @@ jobs:
     if: |
       github.event_name == 'pull_request'
         && (
-          github.event.pull_request.head.repo.full_name != 
-            github.event.pull_request.base.repo.full_name 
+          github.event.pull_request.head.repo.full_name !=
+            github.event.pull_request.base.repo.full_name
           || !startsWith(github.head_ref, 'renovate/')
         )
     steps:
