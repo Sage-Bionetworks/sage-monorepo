@@ -5,11 +5,13 @@ on:
       - 'main'
     paths:
       - '.github/workflows/build-devcontainer-image.yml'
-      - 'tools/devcontainers/challenge/**/*'
+      - 'tools/devcontainers/challenge/**/devcontainer.json'
+      - 'tools/devcontainers/challenge/**/Dockerfile'
   pull_request:
     paths:
       - '.github/workflows/build-devcontainer-image.yml'
-      - 'tools/devcontainers/challenge/**/*'
+      - 'tools/devcontainers/challenge/**/devcontainer.json'
+      - 'tools/devcontainers/challenge/**/Dockerfile'
 
 env:
   IMAGE_REPOSITORY: sagebionetworks/challenge-devcontainer
