@@ -10,6 +10,22 @@
   flex-basis: 100%;
 }
 
+
+@media screen and (min-width: 800px) {
+  .col-1 {
+    flex: 1;
+  }
+  .col-2 {
+    flex: 2;
+  }
+  .col-10 {
+    flex: 10;
+  }
+  .col-11 {
+    flex: 11;
+  }
+}
+
 // INPUT FORMS
 input {
   -moz-appearance: none;
@@ -73,6 +89,23 @@ input:focus {
   background-color: #F8F8F8;
 }
 
-#top h2 {
-  padding: 70px 0 12px;
+#title {
+  padding: 70px 0 32px;
+}
+
+.stats-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+}
+.stat-item {
+  flex-direction: column;
+  flex: 1;
+  max-width: 120px;
+  padding: 18px 5px 8px;
+  border-style: solid;
+  border-width: 1px;
+  text-align: center;
 }
