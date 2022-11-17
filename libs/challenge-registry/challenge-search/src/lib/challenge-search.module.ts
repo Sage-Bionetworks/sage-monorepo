@@ -4,6 +4,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { MatIconModule } from '@angular/material/icon';
 import { ChallengeSearchComponent } from './challenge-search.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
 
@@ -13,6 +16,9 @@ const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
     MatIconModule,
     RouterModule.forChild(routes),
     UiModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatCheckboxModule,
   ],
   declarations: [ChallengeSearchComponent],
   exports: [ChallengeSearchComponent],

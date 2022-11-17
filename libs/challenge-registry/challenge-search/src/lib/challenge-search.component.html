@@ -27,8 +27,38 @@
       </div>
     </div>
   </section>
-  <section id="facets"></section>
-  <section id="main"></section>
+  <section id="bottom" class="row">
+    <div class="facets col">
+      <h4>Challenge Year</h4>
+      <mat-form-field appearance="fill">
+        <mat-label></mat-label>
+        <mat-select>
+          <mat-option value="all">All</mat-option>
+          <mat-option value="2022">2022</mat-option>
+          <mat-option value="2021">2021</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <hr />
+      <div>
+        <h4>Status</h4>
+        <p><mat-checkbox formControlName="upcoming">Upcoming</mat-checkbox></p>
+        <p><mat-checkbox formControlName="active">Active</mat-checkbox></p>
+        <p><mat-checkbox formControlName="onging">Ongoing</mat-checkbox></p>
+        <p><mat-checkbox formControlName="completed">Completed</mat-checkbox></p>
+      </div>
+      <hr />
+      <div>
+        <h4>Difficulty</h4>
+        <p><mat-checkbox formControlName="beginners">Good for Beginners</mat-checkbox></p>
+        <p><mat-checkbox formControlName="general">General</mat-checkbox></p>
+        <p><mat-checkbox formControlName="advanced">Advanced</mat-checkbox></p>
+      </div>
+    </div>
+    <div class="main col">
+      <h3>Results (0)</h3>
+      <!-- TODO: cards will be listed here -->
+    </div>
+  </section>
 </div>
 
 <challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
