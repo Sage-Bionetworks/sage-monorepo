@@ -8,6 +8,18 @@ Registry, we hope to alleviate this hurdle by utilizing TeleportHQ's Figma-to-co
 website can either be built from scratch, or, in our case, from pre-defined components and frames
 created in Figma.
 
+## Requirements
+
+* Figma account
+* TeleportHQ
+
+> **Note**: Licenses are provided for both tools if you are a Sage employee.  For Figma, log in with
+> your Sage email.  For TeleportHQ, submit a [Jira ticket to Sage IT] to request team membership
+> (tag Jake Albrecht for approval).  
+>
+> Otherwise, you are allowed up to 3 Figma files and 3 projects when using the basic (free) plans
+> in Figma and TeleportHQ, respectively.
+
 ## Getting started
 
 1. Download the [TeleportHQ plug-in] in Figma (this step is only needed once). 
