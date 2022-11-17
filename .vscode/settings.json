@@ -7,8 +7,12 @@
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.formatting.provider": "black",
-  "eslint.format.enable": true,
   "editor.tabSize": 2,
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    // "source.fixAll": false,
+    "source.fixAll.eslint": true
+  },
   "python.formatting.blackArgs": [],
   "[python]": {
     "editor.formatOnSave": true,
@@ -18,13 +22,13 @@
     "editor.tabSize": 2
   },
   // "[typescript]": {
-  //   "editor.defaultFormatter": "vscode.typescript-language-features",
+  //   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  //   "editor.formatOnSave": false
+  // },
+  // "[javascript]": {
+  //   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   //   "editor.formatOnSave": true
   // },
-  "[javascript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": true
-  },
   "java.format.enabled": false,
   "[java]": {
     "editor.formatOnSave": false
