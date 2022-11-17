@@ -17,10 +17,10 @@
   "[json]": {
     "editor.tabSize": 2
   },
-  "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features",
-    "editor.formatOnSave": true
-  },
+  // "[typescript]": {
+  //   "editor.defaultFormatter": "vscode.typescript-language-features",
+  //   "editor.formatOnSave": true
+  // },
   "[javascript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": true
