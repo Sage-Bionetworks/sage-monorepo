@@ -75,7 +75,7 @@ you can add styles to the elements and/or edit the.
 ### Prepare the export
 
 Before exporting to code, we recommend reviewing the Figma-exported elements first, as the 
-Figma-to-teleportHQ export is not always perfect.
+Figma-to-TeleportHQ export is not always perfect.
 
 For example, let's say you created a set of layers in Figma that is intended to be a button, that is,
 the layer group includes a shape, a color fill, and some text.  When this gets exported to TeleportHQ,
