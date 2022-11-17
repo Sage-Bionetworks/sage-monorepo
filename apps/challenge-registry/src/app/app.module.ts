@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule, PLATFORM_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { ApiModule } from '@sagebionetworks/api-client-angular';
@@ -48,7 +48,7 @@ import { initializeKeycloakFactory } from './initialize-keycloak.factory';
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloakFactory,
       multi: true,
-      deps: [ConfigService, KeycloakService],
+      deps: [ConfigService, KeycloakService, PLATFORM_ID],
     },
   ],
   bootstrap: [AppComponent],

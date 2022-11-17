@@ -178,6 +178,12 @@
         }
       },
       "defaultConfiguration": "development"
+      // "dependsOn": [
+      //   {
+      //     "target": "serve-detach",
+      //     "projects": "dependencies"
+      //   }
+      // ]
     },
     "prerender": {
       "executor": "@nguniversal/builders:prerender",

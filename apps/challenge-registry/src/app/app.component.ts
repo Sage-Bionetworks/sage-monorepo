@@ -72,9 +72,13 @@ export class AppComponent implements OnInit, OnDestroy {
       .isLoggedIn()
       .subscribe((isLoggedIn) => (this.isLoggedIn = isLoggedIn));
 
-    this.kauthService.getUserProfile().subscribe((userProfile) => {
-      this.userAvatar.name = userProfile.username ? userProfile.username : '';
-    });
+    // TODO Call getUserProfile() only if the user is logged in, other wise an error is generated
+    // when the page is rendered with SSR.
+    // https://github.com/Sage-Bionetworks/challenge-registry/issues/880#issuecomment-1318955348
+    // this.kauthService.getUserProfile().subscribe((userProfile) => {
+    //   this.userAvatar.name = userProfile.username ? userProfile.username : '';
+    // });
+    this.userAvatar.name = 'blank';
 
     this.pageTitleService.setTitle('Challenge Registry');
   }
@@ -94,6 +98,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   login(): void {
+    console.log('Clicked on log In');
     this.kauthService.login();
   }
 }
