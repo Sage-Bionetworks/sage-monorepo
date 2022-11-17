@@ -9,8 +9,6 @@
   flex-direction: column;
   flex-basis: 100%;
 }
-
-
 @media screen and (min-width: 800px) {
   .col-1 {
     flex: 1;
@@ -24,48 +22,14 @@
   .col-11 {
     flex: 11;
   }
+  .facets {
+    max-width: 320px;
+  }
+  .main {
+    max-width: 1120px;
+  }
 }
 
-// INPUT FORMS
-input {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  background-color: #fff;
-  height: 48px;
-  max-width: 100%;
-  width: 100%;
-  font-size: 14px;
-  color: #565678;
-  padding: 13px 16px;
-  border: solid #d2daf0 2px;
-  box-shadow: none;
-}
-input::-webkit-input-placeholder {
-  color: #ababc9;
-}
-input:-ms-input-placeholder {
-  color: #ababc9;
-}
-input::-ms-input-placeholder {
-  color: #ababc9;
-}
-input::placeholder {
-  color: #ababc9;
-}
-input::-ms-input-placeholder {
-  color: #ababc9;
-}
-input:-ms-input-placeholder {
-  color: #ababc9;
-}
-input:hover {
-  border-color: #bfcaea;
-}
-input:active,
-input:focus {
-  outline: none;
-  border-color: #ababc9;
-}
 .search-field {
   position: relative;
 }
@@ -74,38 +38,76 @@ input:focus {
   display: block;
   transform: translate(0, -50%);
   top: 50%;
-  color: #ababc9;
   pointer-events: none;
   width: 45px;
   text-align: center;
   font-style: normal;
 }
 .search-field > input {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  height: 48px;
+  max-width: 100%;
+  width: 100%;
+  font-size: 14px;
+  padding: 13px 16px;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: none;
   padding: 0 45px;
+}
+.search-field > input:active,
+.search-field > input:focus {
+  outline: none;
 }
 
 #top {
   padding: 25px 32px 80px;
-  background-color: #F8F8F8;
 }
-
 #title {
   padding: 70px 0 32px;
 }
-
 .stats-group {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
   justify-content: center;
+  // justify-content: flex-end;
 }
 .stat-item {
   flex-direction: column;
   flex: 1;
-  max-width: 120px;
+  max-width: 148px;
   padding: 18px 5px 8px;
   border-style: solid;
   border-width: 1px;
   text-align: center;
+}
+#bottom {
+  margin: 50px 0;
+}
+.facets {
+  margin: 18px;
+  padding: 48px 21px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 8px;
+}
+.main {
+  margin: 18px;
+}
+.example-margin {
+  margin: 0 10px;
+}
+hr {
+  border: 0;
+  clear:both;
+  display:block;
+  width: 96%;               
+  height: 1px;
+  margin-bottom: 26px;
 }

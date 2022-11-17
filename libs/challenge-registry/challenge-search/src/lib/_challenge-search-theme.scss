@@ -1,0 +1,51 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, 'primary');
+  $accent: map.get($config, 'accent');
+  $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
+
+  .search-field > i {
+    color: map.get($figma, dl-color-default-primary2);
+  }
+  .search-field > input {
+    background-color: #fff;
+    border-color: map.get($figma, dl-color-default-hover2);
+  }
+  .search-field > input:active,
+  .search-field > input:focus {
+    border-color: map.get($figma, dl-color-default-primary1);
+  }
+  #top {
+    background-color: #F8F8F8;
+  }
+  .facets {
+    border-color: map.get($figma, dl-color-default-primary2);
+    background-color: rgba(255, 255, 255, 1);
+  }
+  hr {
+    background-color: map.get($figma, dl-color-default-primary2);
+  }
+}
+
+@mixin typography($theme) { 
+  .mat-checkbox,
+  .mat-select {
+    font-family: 'Lato', sans-serif;
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}
