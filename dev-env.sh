@@ -28,6 +28,9 @@ export PATH="$PATH:$CHALLENGE_DIR/node_modules/.bin"
 
 function challenge-install {
   yarn install --immutable
+  # TODO: Find a more efficient way than looping through all the Java project to execute the same
+  # task (download gradle), enough though caching already helps.
+  nx run-many --all --target=prepare-java --parallel=1
 }
 
 function challenge-prepare {
