@@ -110,8 +110,8 @@ Otherwise, you are more than welcome to add/edit the layout and responsiveness i
 
 1. In the top-right corner, select **Export Project** (the icon next to the Publish button).
 
-2. Select **Angular** or **HTML** as the library.  Note that exporting as **Angular** will download
-   the files as a standalone app!
+2. Select **Angular** or **HTML** as the library, whichever you are more comfortable with.  Note 
+that exporting as **Angular** will download the files as a standalone app!
 
 3. Click on the file icon at the bottom of the dropdown to download the project as a zip.
 
