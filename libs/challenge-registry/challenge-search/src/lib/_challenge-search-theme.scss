@@ -8,6 +8,9 @@
   $warn: map.get($config, 'warn');
   $figma: map.get($config, 'figma');
 
+  #breadcrumbs a {
+    color: black;
+  }
   .search-field > i {
     color: map.get($figma, dl-color-default-primary2);
   }
@@ -32,6 +35,12 @@
 }
 
 @mixin typography($theme) { 
+  #breadcrumbs a {
+    text-decoration: none;
+  }
+  #breadcrumbs span {
+    font-weight: bolder;
+  }
   .mat-checkbox,
   .mat-select {
     font-family: 'Lato', sans-serif;

@@ -29,7 +29,6 @@
     max-width: 1120px;
   }
 }
-
 .search-field {
   position: relative;
 }
@@ -97,12 +96,13 @@
   border-width: 2px;
   border-radius: 8px;
 }
+.facet-year {
+  width: 100%;
+}
 .main {
   margin: 18px;
 }
-.example-margin {
-  margin: 0 10px;
-}
+
 hr {
   border: 0;
   clear:both;
