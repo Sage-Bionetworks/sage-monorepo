@@ -8,6 +8,7 @@ import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 })
 export class ChallengeSearchComponent {
   public appVersion: string;
+  yearSelect = 'all';
   panelOpenState = true;
 
   constructor(private readonly configService: ConfigService) {

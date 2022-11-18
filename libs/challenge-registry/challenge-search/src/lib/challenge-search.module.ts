@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
 
@@ -21,6 +22,8 @@ const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
     MatSelectModule,
     MatCheckboxModule,
     MatExpansionModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   declarations: [ChallengeSearchComponent],
   exports: [ChallengeSearchComponent],
