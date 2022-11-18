@@ -19,20 +19,16 @@ TODO
 
 > **Note** Paid plans are provided for both tools at Sage upon request. Please submit a [Jira ticket
 > to Sage IT] to request a Figma and/or TeleportHQ license (tag Jake Albrecht for approval).
+> Otherwise, you are allowed up to 3 Figma files and 3 TeleportHQ projects when using the basic
+> (free).
 
 > **Note** You will need Edit access to a Figma document in order to use TeleportHQ plugin (see
 > below). If you don't have Edit access to a Figma document that you want to export, make a copy of
 > the Figma document first, then export the copy to TeleportHQ.
 
-
-For Figma, log in with your Sage
-> Google account.  For TeleportHQ, submit a [Jira ticket to Sage IT] to request team membership (tag
-> Jake Albrecht for approval).
->
-> Otherwise, you are allowed up to 3 Figma files and 3 projects when using the basic (free) plans
-> in Figma and TeleportHQ, respectively.
-
 ## Getting started
+
+This guide should work with both the web and desktop Figma app.
 
 1. Download the [TeleportHQ plug-in] in Figma (this step is only needed once).
 
@@ -44,7 +40,8 @@ styles [here].
 Layers panel. The export can include multiple components and frames -- hold the `cmd` key on a Mac
 or `shift` key on a Windows to select your desired layers.
 
-4. Right-click on the selected layer(s) from the Layers panel > Plugins > TeleportHQ - Figma to Code.
+4. Right-click on the selected layer(s) from the Layers panel > Plugins > TeleportHQ - Figma to
+   Code.
 
 5. A pop-up window will be displayed, where you can review the layers, styles, and config that will
 be included in the export. Used styles will be highlighted in blue.
