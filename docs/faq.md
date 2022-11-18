@@ -70,3 +70,9 @@ docker container prune --force && docker rmi $(docker images -aq) --force
 > **Note** When using VS Code dev container with the feature `docker-in-docker`, removing the images
 > on the host won't remove the images in the dev container. If that is the case, you can also run
 > the above command inside the dev container.
+
+Prune docker system:
+
+```console
+docker system prune
+```
