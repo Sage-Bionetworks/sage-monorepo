@@ -14,12 +14,20 @@ TODO
 
 ## Requirements
 
-* Figma account
-* TeleportHQ account
+* Figma account (free plan)
+* TeleportHQ account (free plan)
 
-> **Note**: Licenses are provided for both tools at Sage upon request.  For Figma, log in with your
-> Sage Google account.  For TeleportHQ, submit a [Jira ticket to Sage IT] to request team membership
-> (tag Jake Albrecht for approval).
+> **Note** Paid plans are provided for both tools at Sage upon request. Please submit a [Jira ticket
+> to Sage IT] to request a Figma and/or TeleportHQ license (tag Jake Albrecht for approval).
+
+> **Note** You will need Edit access to a Figma document in order to use TeleportHQ plugin (see
+> below). If you don't have Edit access to a Figma document that you want to export, make a copy of
+> the Figma document first, then export the copy to TeleportHQ.
+
+
+For Figma, log in with your Sage
+> Google account.  For TeleportHQ, submit a [Jira ticket to Sage IT] to request team membership (tag
+> Jake Albrecht for approval).
 >
 > Otherwise, you are allowed up to 3 Figma files and 3 projects when using the basic (free) plans
 > in Figma and TeleportHQ, respectively.
