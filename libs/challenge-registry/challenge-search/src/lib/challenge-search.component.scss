@@ -95,8 +95,15 @@
   border-width: 2px;
   border-radius: 8px;
 }
-.facet-year {
+.facet-year,
+.facet-difficulty {
   width: 100%;
+}
+.mat-expansion-panel-header {
+  padding: 0 18px 21px 0;
+}
+::ng-deep .mat-expansion-panel-body {
+  padding: 0 5px !important;
 }
 .main {
   margin: 18px;
