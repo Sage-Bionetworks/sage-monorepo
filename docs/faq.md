@@ -59,7 +59,7 @@ will be taken into account.
 ```
 
 Regularly building Docker images filled up the root filesystem. Consider performing the following
-actions to free up disk space:
+actions to free up disk space.
 
 Remove unused images:
 
