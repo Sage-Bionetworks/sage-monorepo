@@ -71,8 +71,23 @@ docker container prune --force && docker rmi $(docker images -aq) --force
 > on the host won't remove the images in the dev container. If that is the case, you can also run
 > the above command inside the dev container.
 
-Prune docker system:
+Prune Docker system:
 
 ```console
 docker system prune
 ```
+
+Prune Docker volumes:
+
+```console
+# remove selected volume
+docker volume ls
+docker volume rm <volume name>
+
+# remove all volume
+docker prune
+```
+
+> **Note** The volume `dind-var-lib-docker` is created by the dev container feature
+> `docker-in-docker`. The volume `vscode` is created when starting a dev container with VS Code.
+> These two volumes should not be removed if a dev container is running.
