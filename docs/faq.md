@@ -85,7 +85,7 @@ docker volume ls
 docker volume rm <volume name>
 
 # remove all volumes
-docker prune
+docker volume prune
 ```
 
 > **Note** The volume `dind-var-lib-docker` is created by the dev container feature
