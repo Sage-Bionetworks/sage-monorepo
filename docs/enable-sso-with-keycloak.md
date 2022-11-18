@@ -4,6 +4,7 @@
   - [Create a Google Application](#Create-a-Google-Application)
   - [Create a Google identify provider in Keycloak](#Create-a-Google-identify-provider-in-Keycloak)
 - [Log in to the Challenge Registry with a Google account](#Log-in-to-the-Challenge-Registry-with-a-Google-account)
+- [Notes](#Notes)
 
 ## Enable Google SSO
 
