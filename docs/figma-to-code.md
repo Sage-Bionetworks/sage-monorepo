@@ -8,6 +8,10 @@ Registry, we hope to alleviate this hurdle by utilizing TeleportHQ's Figma-to-co
 website can either be built from scratch, or, in our case, from pre-defined components and frames
 created in Figma.
 
+## Development workflow
+
+TODO
+
 ## Requirements
 
 * Figma account
