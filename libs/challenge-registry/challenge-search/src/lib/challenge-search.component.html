@@ -30,23 +30,41 @@
   </section>
   <section id="bottom" class="row">
     <div class="facets col">
-      <h4>Challenge Year</h4>
-      <mat-form-field appearance="fill" class="facet-year">
-        <mat-label></mat-label>
-        <mat-select>
-          <mat-option value="all">All</mat-option>
-          <mat-option value="2022">2022</mat-option>
-          <mat-option value="2021">2021</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <mat-accordion class="facet-year">
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false"
+                             [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Challenge Year
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-form-field appearance="fill" class="facet-year">
+            <mat-label></mat-label>
+            <mat-select [(ngModel)]="yearSelect">
+              <mat-option value="all">All</mat-option>
+              <mat-option value="2022">2022</mat-option>
+              <mat-option value="2021">2021</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-expansion-panel>
+      </mat-accordion>
       <hr />
-      <div>
-        <h4>Status</h4>
-        <p><mat-checkbox formControlName="upcoming">Upcoming</mat-checkbox></p>
-        <p><mat-checkbox formControlName="active">Active</mat-checkbox></p>
-        <p><mat-checkbox formControlName="onging">Ongoing</mat-checkbox></p>
-        <p><mat-checkbox formControlName="completed">Completed</mat-checkbox></p>
-      </div>
+      <mat-accordion class="facet-status">
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false"
+                             [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Status
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p><mat-checkbox formControlName="upcoming">Upcoming</mat-checkbox></p>
+          <p><mat-checkbox formControlName="active">Active</mat-checkbox></p>
+          <p><mat-checkbox formControlName="onging">Ongoing</mat-checkbox></p>
+          <p><mat-checkbox formControlName="completed">Completed</mat-checkbox></p>
+        </mat-expansion-panel>
+      </mat-accordion>
       <hr />
       <mat-accordion class="facet-difficulty">
         <mat-expansion-panel (opened)="panelOpenState = true"
