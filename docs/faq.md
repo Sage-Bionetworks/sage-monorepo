@@ -38,8 +38,8 @@ tmpfs           1.6G     0  1.6G   0% /run/user/1000
 ```
 
 The root filesystem (/) is indeed full. The command below lists the folders starting from the
-largest. Make sure to run this command as root, otherwise only the folders visible to the user will
-be taken into account.
+largest one. Make sure to run this command as root, otherwise only the folders visible to the user
+will be taken into account.
 
 ```console
 [ec2-user@ip-10-41-30-136 ~]$ sudo du -aBM / 2>/dev/null | sort -nr | head -n 50 | more
@@ -58,8 +58,8 @@ be taken into account.
 ...
 ```
 
-As one could have expected, regularly building Docker images filled up the root filesystem. Consider
-performing the following actions to free up disk space:
+Regularly building Docker images filled up the root filesystem. Consider performing the following
+actions to free up disk space:
 
 Remove unused images:
 
