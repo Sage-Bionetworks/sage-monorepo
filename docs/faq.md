@@ -84,7 +84,7 @@ Prune Docker volumes:
 docker volume ls
 docker volume rm <volume name>
 
-# remove all volume
+# remove all volumes
 docker prune
 ```
 
