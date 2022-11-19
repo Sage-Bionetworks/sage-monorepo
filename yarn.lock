@@ -69,29 +69,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular-architects/module-federation-runtime@npm:14.3.10":
-  version: 14.3.10
-  resolution: "@angular-architects/module-federation-runtime@npm:14.3.10"
+"@angular-architects/module-federation-runtime@npm:14.3.14":
+  version: 14.3.14
+  resolution: "@angular-architects/module-federation-runtime@npm:14.3.14"
   dependencies:
     tslib: ^2.0.0
   peerDependencies:
     "@angular/common": ">=14.0.0"
     "@angular/core": ">=14.0.0"
-  checksum: 9c8a1c004141f7037b225b0378dceb0a1da71462512964b626ac8b039647346cfe5e7aafc97467a8ef6f2ad572d52f83e7e4f6637b67831cea0b2a568542e0a7
+    "@angular/platform-browser-dynamic": ">=14.1.1"
+  checksum: 9ee09868e8c9287df2cc8e61de721c9c2874bbdf33731a8848b65c1d5958349b17287b0e38536f85f6f6d161859ab8f55fd9941349f5ec19f2ef87858b040270
   languageName: node
   linkType: hard
 
-"@angular-architects/module-federation@npm:14.3.10":
-  version: 14.3.10
-  resolution: "@angular-architects/module-federation@npm:14.3.10"
+"@angular-architects/module-federation@npm:14.3.14":
+  version: 14.3.14
+  resolution: "@angular-architects/module-federation@npm:14.3.14"
   dependencies:
-    "@angular-architects/module-federation-runtime": 14.3.10
+    "@angular-architects/module-federation-runtime": 14.3.14
     callsite: ^1.0.0
     node-fetch: ^2.6.7
-    rxjs: ~6.6.3
     semver: ^7.3.5
     word-wrap: ^1.2.3
-  checksum: fd4e8ef0db46795b528986d02ac21446d615d66d11f52230356283de0b26af4d2ebb3e7b6e880a43aa8421d366cafe10630ebae41bfa97ea8228d7bb14708bb6
+  peerDependencies:
+    "@angular/common": ">=14.1.1"
+    "@angular/core": ">=14.1.1"
+    "@angular/platform-browser-dynamic": ">=14.1.1"
+    rxjs: ">=6.6.3"
+  checksum: 04cf61d20fdf903f5418151c7af30aaada95f6c6af602780d79b16809fd03c06aa93f715407717eae68c433227c57c1718e90b2a7457838ce230af244bb59daa
   languageName: node
   linkType: hard
 
@@ -9736,7 +9741,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "challenge@workspace:."
   dependencies:
-    "@angular-architects/module-federation": 14.3.10
+    "@angular-architects/module-federation": 14.3.14
     "@angular-devkit/build-angular": 14.2.6
     "@angular-eslint/eslint-plugin": 14.1.2
     "@angular-eslint/eslint-plugin-template": 14.1.2
@@ -23292,7 +23297,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:6.6.7, rxjs@npm:^6.5.4, rxjs@npm:^6.5.5, rxjs@npm:^6.6.3, rxjs@npm:~6.6.3":
+"rxjs@npm:6.6.7, rxjs@npm:^6.5.4, rxjs@npm:^6.5.5, rxjs@npm:^6.6.3":
   version: 6.6.7
   resolution: "rxjs@npm:6.6.7"
   dependencies:
