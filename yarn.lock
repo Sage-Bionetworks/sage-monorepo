@@ -7288,10 +7288,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/validator@npm:13.7.8":
-  version: 13.7.8
-  resolution: "@types/validator@npm:13.7.8"
-  checksum: 69be66c1ec29ef19635d704699622c6745451a109cf73fa536c445e1b172db4b20d1bcc09c4b21f199aa2c37634067150057a1c6371228c5674e50ad82b89e62
+"@types/validator@npm:13.7.10":
+  version: 13.7.10
+  resolution: "@types/validator@npm:13.7.10"
+  checksum: 7b142c08019f484d62c9f3074231f640c24311558f157dd253a60810dd0cb29e41ec64ca210a192b54f6de51f4fe016bfeb2c30f90fa49c9337ed54a9d8e02aa
   languageName: node
   linkType: hard
 
@@ -9791,7 +9791,7 @@ __metadata:
     "@types/lodash": 4.14.186
     "@types/node": 18.7.1
     "@types/supertest": ^2.0.12
-    "@types/validator": 13.7.8
+    "@types/validator": 13.7.10
     "@typescript-eslint/eslint-plugin": 5.40.0
     "@typescript-eslint/parser": 5.40.0
     babel-jest: 29.1.2

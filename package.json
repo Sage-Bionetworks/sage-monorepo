@@ -83,7 +83,7 @@
     "@types/lodash": "4.14.186",
     "@types/node": "18.7.1",
     "@types/supertest": "^2.0.12",
-    "@types/validator": "13.7.8",
+    "@types/validator": "13.7.10",
     "@typescript-eslint/eslint-plugin": "5.40.0",
     "@typescript-eslint/parser": "5.40.0",
     "babel-jest": "29.1.2",
