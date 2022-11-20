@@ -9824,7 +9824,7 @@ __metadata:
     keycloak-js: 19.0.3
     lodash: 4.17.21
     mongoose: 6.6.5
-    ng-packagr: 14.2.1
+    ng-packagr: 14.2.2
     ngx-avatars: 1.4.1
     ngx-countup: 13.1.0
     ngx-typed-js: 2.1.1
@@ -19311,9 +19311,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ng-packagr@npm:14.2.1":
-  version: 14.2.1
-  resolution: "ng-packagr@npm:14.2.1"
+"ng-packagr@npm:14.2.2":
+  version: 14.2.2
+  resolution: "ng-packagr@npm:14.2.2"
   dependencies:
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-node-resolve": ^13.1.3
@@ -19349,7 +19349,7 @@ __metadata:
       optional: true
   bin:
     ng-packagr: cli/main.js
-  checksum: e277d3d9465c0ac0caaf3be36a68f04c110275324359f63d107bd08709fed73141420fbb142fec144fa8b342f2a4b42439f7ffaaa771373539d16d37a43b696c
+  checksum: 465916b1db7962aab9d773bb164876be5af83e2cf41144f7dcafa3b93e2e31d14e527d4ec44ca8e13258c49cda6cf604cde99b6f5f3e636388dc0b08c792600d
   languageName: node
   linkType: hard
 
