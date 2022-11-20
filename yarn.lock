@@ -5014,39 +5014,39 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx-tools/ci-context@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@nx-tools/ci-context@npm:3.0.1"
+"@nx-tools/ci-context@npm:^3.0.8":
+  version: 3.0.8
+  resolution: "@nx-tools/ci-context@npm:3.0.8"
   dependencies:
     "@actions/github": ^5.0.3
-    "@nx-tools/core": ^3.0.1
+    "@nx-tools/core": ^3.0.8
     "@swc/helpers": ^0.4.3
     ci-info: ^3.3.2
   peerDependencies:
     tslib: ^2.1.0
-  checksum: 54b7dce660382dba0a6f60c1d9a17683ff784ed8fa5c3e7988026eec46a442ea0344316e225b44a26c28ce03a8a94489ad3183b314a0b71945c1335cd436da49
+  checksum: 20e1e36dbbdadedab67be891f5e8f7c9e8546fc65fbd8bac6031bfe612c6ed9501c68e64cb87b68e13eaa32e3bbc2feb9b734599300c2171bac518c5ff829444
   languageName: node
   linkType: hard
 
-"@nx-tools/core@npm:^3.0.1":
-  version: 3.0.2
-  resolution: "@nx-tools/core@npm:3.0.2"
+"@nx-tools/core@npm:^3.0.8":
+  version: 3.0.8
+  resolution: "@nx-tools/core@npm:3.0.8"
   dependencies:
     "@actions/exec": ^1.1.1
     "@swc/helpers": ^0.4.3
     colorette: ^2.0.19
   peerDependencies:
-    "@nrwl/devkit": ^12.0.0 || ^13.0.0 || ^14.0.0
-  checksum: 76c3f374d1de70b9995f6e5f47a4f54589899a9ac74d70f04d89023b1f7d4d47eb04d743e8c7adbb5011b4174fa512423514d7a61941da27e70dc508737580c5
+    "@nrwl/devkit": ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
+  checksum: d796e33b097ce52c58637358fdc906ec07c65a4f51a21e897676e6c34dd7f1296abd2813977565eeb9cadf340ea871b5bc2db43f95e28293eae8c9f52c72bb1e
   languageName: node
   linkType: hard
 
-"@nx-tools/docker-metadata@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "@nx-tools/docker-metadata@npm:3.0.1"
+"@nx-tools/docker-metadata@npm:^3.0.8":
+  version: 3.0.8
+  resolution: "@nx-tools/docker-metadata@npm:3.0.8"
   dependencies:
-    "@nx-tools/ci-context": ^3.0.1
-    "@nx-tools/core": ^3.0.1
+    "@nx-tools/ci-context": ^3.0.8
+    "@nx-tools/core": ^3.0.8
     "@renovate/pep440": ^1.0.0
     "@swc/helpers": ^0.4.3
     csv-parse: ^4.16.3
@@ -5054,18 +5054,18 @@ __metadata:
     moment: ^2.29.4
     semver: ^7.3.7
   peerDependencies:
-    "@nrwl/devkit": ^12.0.0 || ^13.0.0 || ^14.0.0
+    "@nrwl/devkit": ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
     tslib: ^2.1.0
-  checksum: d8f4d3a9a947ec3000f79d5e67a90bb789334245e56fe3ffe42350b8fb639975bbd92d7226296bab46273c750fc26c98322545de42dac486bdf548d8edae6cce
+  checksum: df97c164ef0a850371b7c39c0af54a892ba64536a5ea99ce8681523e060be3d5eaa773f4b0a64eac2121582c0196e7d5b5d17990527ca8c1f7c4cf4e8df6c75b
   languageName: node
   linkType: hard
 
-"@nx-tools/nx-docker@npm:3.0.4":
-  version: 3.0.4
-  resolution: "@nx-tools/nx-docker@npm:3.0.4"
+"@nx-tools/nx-docker@npm:3.0.8":
+  version: 3.0.8
+  resolution: "@nx-tools/nx-docker@npm:3.0.8"
   dependencies:
-    "@nx-tools/core": ^3.0.1
-    "@nx-tools/docker-metadata": ^3.0.0
+    "@nx-tools/core": ^3.0.8
+    "@nx-tools/docker-metadata": ^3.0.8
     "@swc/helpers": ^0.4.3
     csv-parse: ^4.16.3
     semver: ^7.3.7
@@ -5076,7 +5076,7 @@ __metadata:
   dependenciesMeta:
     "@nx-tools/docker-metadata":
       optional: true
-  checksum: 5c6aeb8b33f95011104638bd4ee61e103d75a02a2cd013cd5443d7b234546fdd83403e017a200bfe21e3c6f884e2d0e5cce68e49056db087f28f3783dbff2070
+  checksum: 979c34e2cee0f7963836ea07b6e87bea8a57fd7a7eec6db71aed7155cd4416a1b0bbb5da5a2c9fe253718705b979d69ba2226474d48ba29e9b04e36b75bab2c1
   languageName: node
   linkType: hard
 
@@ -9735,7 +9735,7 @@ __metadata:
     "@nrwl/nx-plugin": 14.8.6
     "@nrwl/web": 14.8.6
     "@nrwl/workspace": 14.8.6
-    "@nx-tools/nx-docker": 3.0.4
+    "@nx-tools/nx-docker": 3.0.8
     "@nxrocks/nx-spring-boot": 5.0.2
     "@openapitools/openapi-generator-cli": 2.5.2
     "@prettier/plugin-xml": 2.2.0
