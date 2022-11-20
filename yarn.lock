@@ -4367,18 +4367,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nguniversal/express-engine@npm:14.2.0":
-  version: 14.2.0
-  resolution: "@nguniversal/express-engine@npm:14.2.0"
+"@nguniversal/common@npm:14.2.2":
+  version: 14.2.2
+  resolution: "@nguniversal/common@npm:14.2.2"
   dependencies:
-    "@nguniversal/common": 14.2.0
+    critters: 0.0.16
+    jsdom: 20.0.0
+    tslib: ^2.3.0
+  peerDependencies:
+    "@angular/common": ^14.2.0
+    "@angular/core": ^14.2.0
+  checksum: 7d38639d24b94c3cad01ec19be1f53c8d6920998fd0bc59b12a78f2793ce0efa7445e27e0f6ee22ee74642a257d530cf87c29de78f87c827e67beb39d25988ae
+  languageName: node
+  linkType: hard
+
+"@nguniversal/express-engine@npm:14.2.2":
+  version: 14.2.2
+  resolution: "@nguniversal/express-engine@npm:14.2.2"
+  dependencies:
+    "@nguniversal/common": 14.2.2
     tslib: ^2.3.0
   peerDependencies:
     "@angular/common": ^14.2.0
     "@angular/core": ^14.2.0
     "@angular/platform-server": ^14.2.0
     express: ^4.15.2
-  checksum: bef1415e903a0dde4dbe31f2ee1eeb4cc1d769660accc20a98d69f9c91e9ac92ecffd272469fd83da7642c880328e6f944e41c0928e0a593e33be41f05eff445
+  checksum: 646c1dc5606550706ed4f11701444fb0488f404b253fc7a989d6496ebe1f34fa7653cf7efeed397f3641652bdc5512f8bb757ebb262473d198b5bb31a9815f57
   languageName: node
   linkType: hard
 
@@ -9763,7 +9777,7 @@ __metadata:
     "@hint/configuration-web-recommended": 8.2.16
     "@hint/formatter-codeframe": 3.1.33
     "@nguniversal/builders": 14.2.0
-    "@nguniversal/express-engine": 14.2.0
+    "@nguniversal/express-engine": 14.2.2
     "@nrwl/angular": 14.8.6
     "@nrwl/cli": 14.8.6
     "@nrwl/cypress": 14.8.6
