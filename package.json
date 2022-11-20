@@ -38,7 +38,7 @@
     "ngx-countup": "13.1.0",
     "ngx-typed-js": "2.1.1",
     "probot": "12.2.8",
-    "regenerator-runtime": "0.13.10",
+    "regenerator-runtime": "0.13.11",
     "rxjs": "7.5.7",
     "tslib": "2.4.0",
     "type-guards": "0.15.0",
