@@ -23,13 +23,29 @@
   min-height: 320px;
   justify-content: center;
 }
-#top > div {
+#top > div:not(.profile-pic-container) {
   align-self: center;
   flex: 1 0 auto;
   padding: 22px;
 }
 #top > .link {
   align-items: center;
+}
+.profile-pic-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  .status {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border-radius: constants.$dl-radius-radius-radius16;
+    padding: 4px 8px;
+    min-width: 100px;
+    text-align: center;
+  }
 }
 .profile-pic {
   // width: 40px;

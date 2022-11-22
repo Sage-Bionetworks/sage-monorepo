@@ -56,6 +56,25 @@
     background-color: transparent;
   }
 
+  .status {
+    color: #000;
+
+    &.active {
+      border-color: #71c663;
+      background-color: #d0fedd;
+    }
+
+    &.completed {
+      border-color: #ffb6c1;
+      background-color: #ffdde2;
+    }
+
+    &.upcoming {
+      border-color: #ffc56d;
+      background-color: #fff1bf;
+    }
+  }
+
   @media (max-width: 479px) {
     .profile-pic {
       background-color: map.get($figma, dl-color-default-hover2);

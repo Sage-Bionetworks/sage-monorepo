@@ -7,10 +7,17 @@
       <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
       <span>{{ challenge.name }}</span>
     </div>
-    <challenge-registry-avatar
-      class="profile-pic"
-      [avatar]="challengeAvatar"
-    ></challenge-registry-avatar>
+    <div class="profile-pic-container">
+      <challenge-registry-avatar
+        class="profile-pic"
+        [avatar]="challengeAvatar"
+      ></challenge-registry-avatar>
+      <span
+        *ngIf="challenge.status"
+        [ngClass]="['status', challenge.status ? challenge.status : '']"
+        >{{ challenge.status }}</span
+      >
+    </div>
     <div id="details" class="col">
       <div class="details-top row">
         <h2>
