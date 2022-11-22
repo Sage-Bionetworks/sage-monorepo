@@ -2,8 +2,16 @@
   <div id="members" class="row col">
     <h3>Members</h3>
     <div class="card-group">
-      <challenge-registry-member-card *ngFor="let member of members" [member]="member" [size]="120">
-      </challenge-registry-member-card>
+      <challenge-registry-person-card
+        *ngFor="let member of members"
+        [name]="member.name"
+        [avatarUrl]="member.avatarUrl"
+        [avatarSize]="120"
+        [affiliation]="organization.name"
+        [role]="member.roles.includes('admin') ? 'Admin' : undefined"
+        [addChips]="true"
+      >
+      </challenge-registry-person-card>
     </div>
   </div>
 </main>

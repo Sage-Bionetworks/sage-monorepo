@@ -7,7 +7,7 @@ import { NavbarModule } from './navbar/navbar.module';
 import { AvatarModule } from './avatar/avatar.module';
 import { OrganizationCardModule } from './organization-card/organization-card.module';
 import { UserButtonModule } from './user-button/user-button.module';
-import { MemberCardModule } from './member-card/member-card.module';
+import { PersonCardModule } from './person-card/person-card.module';
 
 @NgModule({
   imports: [CommonModule],
@@ -16,7 +16,7 @@ import { MemberCardModule } from './member-card/member-card.module';
     ButtonGithubModule,
     ChallengeCardModule,
     FooterModule,
-    MemberCardModule,
+    PersonCardModule,
     NavbarModule,
     OrganizationCardModule,
     UserButtonModule,
