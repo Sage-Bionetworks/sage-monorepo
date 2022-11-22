@@ -26,6 +26,8 @@ import { MOCK_USER, Avatar } from '@sagebionetworks/challenge-registry/ui';
 // import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/challenge-registry/ui';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import { UserProfile } from './user-profile';
+import { SeoService } from '@sagebionetworks/shared/util';
+import { getTitle, getMetaTags } from './user-profile-seo';
 
 @Component({
   selector: 'challenge-registry-user',
@@ -50,7 +52,8 @@ export class UserProfileComponent implements OnInit {
     private accountService: AccountService,
     private userService: UserService,
     private authService: AuthService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private seoService: SeoService
   ) {
     this.appVersion = this.configService.config.appVersion;
   }
@@ -62,6 +65,8 @@ export class UserProfileComponent implements OnInit {
 
     userProfile$.subscribe((userProfile) => {
       console.log('userProfile available to UserProfileComponent', userProfile);
+      this.seoService.updateTitle(getTitle(userProfile));
+      this.seoService.updateMetaTags(getMetaTags(userProfile));
     });
 
     // this.account$ = this.route.params.pipe(

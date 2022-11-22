@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, filter, map, mergeMap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { PageTitleService } from '@sagebionetworks/challenge-registry/util';
 import {
   Avatar,
@@ -14,10 +14,9 @@ import {
   KAuthService,
   AuthService,
 } from '@sagebionetworks/challenge-registry/auth';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { User } from '@sagebionetworks/api-client-angular-deprecated';
-import { SeoService } from '@sagebionetworks/shared/util';
 
 @Component({
   selector: 'challenge-registry-root',
@@ -40,33 +39,32 @@ export class AppComponent implements OnInit, OnDestroy {
     private kauthService: KAuthService,
     private authService: AuthService,
     private keycloakService: KeycloakService,
-    private activatedRoute: ActivatedRoute,
-    private seoService: SeoService
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.router.events
-      .pipe(
-        filter((e) => e instanceof NavigationEnd),
-        map(() => this.activatedRoute),
-        map((route) => {
-          while (route.firstChild) route = route.firstChild;
-          return route;
-        }),
-        filter((route) => route.outlet === 'primary'),
-        mergeMap((route) => route.data)
-      )
-      .subscribe((data) => {
-        if ('seo' in data) {
-          const seoData = data['seo'];
-          if (Object.prototype.hasOwnProperty.call(seoData, 'title')) {
-            this.seoService.updateTitle(seoData['title']);
-          }
-          if (Object.prototype.hasOwnProperty.call(seoData, 'metaTags')) {
-            this.seoService.updateMetaTags(seoData['metaTags']);
-          }
-        }
-      });
+    // this.router.events
+    //   .pipe(
+    //     filter((e) => e instanceof NavigationEnd),
+    //     map(() => this.activatedRoute),
+    //     map((route) => {
+    //       while (route.firstChild) route = route.firstChild;
+    //       return route;
+    //     }),
+    //     filter((route) => route.outlet === 'primary'),
+    //     mergeMap((route) => route.data)
+    //   )
+    //   .subscribe((data) => {
+    //     if ('seo' in data) {
+    //       const seoData = data['seo'];
+    //       if (Object.prototype.hasOwnProperty.call(seoData, 'title')) {
+    //         this.seoService.updateTitle(seoData['title']);
+    //       }
+    //       if (Object.prototype.hasOwnProperty.call(seoData, 'metaTags')) {
+    //         this.seoService.updateMetaTags(seoData['metaTags']);
+    //       }
+    //     }
+    //   });
 
     this.kauthService
       .isLoggedIn()
