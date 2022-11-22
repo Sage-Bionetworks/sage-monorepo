@@ -8,17 +8,14 @@
   $warn: map.get($config, 'warn');
   $figma: map.get($config, 'figma');
 
-  .link-text {
-    color: map.get($figma, dl-color-default-secondary2);
+  .created-updated-dates {
+    color: map.get($figma, dl-color-default-primary2);
   }
 }
 
 @mixin typography($theme) {
-  .section-title {
-    font-family: Lato;
-    font-weight: 400;
-    font-size: 21px;
-    text-transform: uppercase;
+  .created-updated-dates {
+    font-style: italic;
   }
 }
 
