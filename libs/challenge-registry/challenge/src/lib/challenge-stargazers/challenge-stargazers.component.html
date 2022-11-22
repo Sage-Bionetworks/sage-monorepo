@@ -2,8 +2,13 @@
   <div id="stargazers">
     <h3>Stargazers</h3>
     <div class="card-group">
-      <!-- <challenge-registry-member-card *ngFor="let member of members" [member]="member" [size]="120">
-      </challenge-registry-member-card> -->
+      <challenge-registry-person-card
+        *ngFor="let stargazer of stargazers"
+        [name]="stargazer.name"
+        [avatarSize]="120"
+        [affiliation]="organization.name"
+      >
+      </challenge-registry-person-card>
     </div>
   </div>
 </main>

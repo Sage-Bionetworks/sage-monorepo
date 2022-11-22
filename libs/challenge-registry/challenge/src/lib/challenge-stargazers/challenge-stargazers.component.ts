@@ -1,6 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Challenge } from '@sagebionetworks/api-client-angular-deprecated';
-import { MOCK_ORG_MEMBERS } from '@sagebionetworks/challenge-registry/ui';
+import {
+  MOCK_PERSONS,
+  MOCK_ORGANIZATIONS,
+} from '@sagebionetworks/challenge-registry/ui';
 
 @Component({
   selector: 'challenge-registry-challenge-stargazers',
@@ -9,5 +12,6 @@ import { MOCK_ORG_MEMBERS } from '@sagebionetworks/challenge-registry/ui';
 })
 export class ChallengeStargazersComponent {
   @Input() challenge!: Challenge;
-  members = MOCK_ORG_MEMBERS;
+  stargazers = MOCK_PERSONS;
+  organization = MOCK_ORGANIZATIONS[0];
 }

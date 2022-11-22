@@ -2,8 +2,13 @@
   <div id="sponsors">
     <h3>Sponsors</h3>
     <div class="card-group">
-      <!-- <challenge-registry-member-card *ngFor="let member of members" [member]="member" [size]="120">
-      </challenge-registry-member-card> -->
+      <challenge-registry-person-card
+        *ngFor="let sponsor of sponsors"
+        [name]="sponsor.name"
+        [avatarSize]="120"
+        [affiliation]="organization.name"
+      >
+      </challenge-registry-person-card>
     </div>
   </div>
 </main>
