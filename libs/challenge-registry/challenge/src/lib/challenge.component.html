@@ -23,6 +23,16 @@
         </div>
       </div>
       <p class="username">@{{ challenge.name }}</p>
+      <div class="progress-bar">
+        <div class="progress-bar-top" *ngIf="remainDays">
+          <span>{{ this.remainDays }} days remains</span>
+        </div>
+        <p-progressBar [value]="progressValue" [showValue]="false"></p-progressBar>
+        <div class="progress-bar-bottom">
+          <span class="start-date">{{ challenge.startDate }}</span>
+          <span class="end-date">{{ challenge.endDate }}</span>
+        </div>
+      </div>
     </div>
   </section>
   <section id="stats" class="row">

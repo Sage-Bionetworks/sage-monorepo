@@ -54,6 +54,24 @@
     width: 60px;
   }
 }
+.progress-bar {
+  margin-top: 24px;
+  & > * {
+    margin-bottom: 8px;
+  }
+}
+.progress-bar-top {
+  display: flex;
+  justify-content: flex-end;
+}
+.progress-bar-bottom {
+  display: flex;
+  justify-content: space-between;
+}
+::ng-deep .p-progressbar {
+  height: 40px;
+  border-radius: constants.$dl-radius-radius-radius16;
+}
 
 #bottom {
   justify-content: center;

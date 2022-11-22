@@ -10,6 +10,7 @@ import { ChallengeSponsorsModule } from './challenge-sponsors/challenge-sponsors
 import { ChallengeStargazersModule } from './challenge-stargazers/challenge-stargazers.module';
 import { ChallengeRoutingModule } from './challenge-routing.module';
 import { ChallengeStatsModule } from './challenge-stats/challenge-stats.module';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 
 @NgModule({
@@ -25,6 +26,7 @@ import { UiModule } from '@sagebionetworks/challenge-registry/ui';
     ChallengeStargazersModule,
     ChallengeRoutingModule,
     ChallengeStatsModule,
+    ProgressBarModule,
     UiModule,
   ],
   exports: [ChallengeComponent],

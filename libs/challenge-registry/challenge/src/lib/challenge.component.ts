@@ -23,6 +23,8 @@ export class ChallengeComponent implements OnInit {
   account$!: Observable<Account | undefined>;
   challenge$: Observable<Challenge> = of(MOCK_CHALLENGES[0]);
   loggedIn = false;
+  progressValue = 0;
+  remainDays!: number | undefined;
   challengeAvatar!: Avatar;
   tabs = CHALLENGE_TABS;
   tabKeys: string[] = Object.keys(this.tabs);
@@ -46,16 +48,28 @@ export class ChallengeComponent implements OnInit {
       map((key) => (key === null ? 'overview' : key))
     );
 
-    this.challenge$.subscribe(
-      (challenge) =>
-        (this.challengeAvatar = {
-          name: challenge.displayName
-            ? (challenge.displayName as string)
-            : challenge.name.replace(/-/g, ' '),
-          src: '', // TODO: Replace with avatarUrl once implemented in Challenge Object
-          size: 320,
-        })
-    );
+    this.challenge$.subscribe((challenge) => {
+      this.challengeAvatar = {
+        name: challenge.displayName
+          ? (challenge.displayName as string)
+          : challenge.name.replace(/-/g, ' '),
+        src: '', // TODO: Replace with avatarUrl once implemented in Challenge Object
+        size: 320,
+      };
+
+      this.progressValue =
+        challenge.startDate && challenge.endDate
+          ? this.calcProgress(
+              new Date().toUTCString(),
+              challenge.startDate,
+              challenge.endDate
+            )
+          : 0;
+
+      this.remainDays = challenge.endDate
+        ? this.calcDays(new Date().toUTCString(), challenge.endDate)
+        : undefined;
+    });
 
     const activeTabSub = activeTab$.subscribe((key) => {
       if (!this.tabKeys.includes(key)) {
@@ -66,5 +80,17 @@ export class ChallengeComponent implements OnInit {
     });
 
     this.subscriptions.push(activeTabSub);
+  }
+
+  calcDays(startDate: string, endDate: string): number {
+    const timeDiff = +new Date(endDate) - +new Date(startDate);
+    return Math.round(timeDiff / (1000 * 60 * 60 * 24));
+  }
+
+  calcProgress(today: string, startDate: string, endDate: string): number {
+    return (
+      (this.calcDays(startDate, today) / this.calcDays(startDate, endDate)) *
+      100
+    );
   }
 }

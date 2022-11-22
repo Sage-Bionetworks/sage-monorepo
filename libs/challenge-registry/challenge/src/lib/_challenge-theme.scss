@@ -23,6 +23,12 @@
   .username {
     color: map.get($figma, dl-color-default-secondary1);
   }
+  .p-progressbar-value {
+    background: map.get($figma, dl-color-default-accent2) !important;
+  }
+  .progress-bar-top {
+    color: map.get($figma, dl-color-default-primary2);
+  }
   .base-profile-pic {
     border-color: transparent;
     background-color: transparent;
@@ -63,6 +69,9 @@
   }
   .featured > .mat-icon {
     font-size: 60px;
+  }
+  .progress-bar-top {
+    font-style: italic;
   }
   @media screen and (max-width: 641px) {
     #details > h2 {
