@@ -1,9 +1,8 @@
 <div class="person-card">
   <challenge-registry-avatar class="person-card-pic" [avatar]="avatar"> </challenge-registry-avatar>
   <p class="person-card-name" *ngIf="name">{{ name }}</p>
+  <p class="person-card-username" *ngIf="username">@{{ username }}</p>
   <p class="person-card-affiliation" *ngIf="affiliation">{{ affiliation }}</p>
-  <!-- <div *ngIf="roles" [ngSwitch]="addChips"> -->
-  <!-- the same view can be shown in more than one case -->
   <div *ngIf="role" [ngClass]="{ 'person-card-chip': 'addChips' }">
     <mat-icon aria-hidden="true"> emoji_people </mat-icon>
     <span class="person-card-chip-text">{{ role }}</span>

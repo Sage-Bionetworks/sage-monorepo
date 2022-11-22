@@ -59,6 +59,8 @@
 }
 .details-top {
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
 }
 .featured {
   display: flex;
@@ -72,6 +74,7 @@
 }
 .progress-bar {
   margin-top: 24px;
+
   & > * {
     margin-bottom: 8px;
   }
