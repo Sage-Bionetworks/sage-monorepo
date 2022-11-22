@@ -27,7 +27,7 @@ import { MOCK_USER, Avatar } from '@sagebionetworks/challenge-registry/ui';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import { UserProfile } from './user-profile';
 import { SeoService } from '@sagebionetworks/shared/util';
-import { getTitle, getMetaTags } from './user-profile-seo';
+import { getUserProfileSeoData } from './user-profile-seo-data';
 
 @Component({
   selector: 'challenge-registry-user',
@@ -65,8 +65,9 @@ export class UserProfileComponent implements OnInit {
 
     userProfile$.subscribe((userProfile) => {
       console.log('userProfile available to UserProfileComponent', userProfile);
-      this.seoService.updateTitle(getTitle(userProfile));
-      this.seoService.updateMetaTags(getMetaTags(userProfile));
+      this.seoService.setSeoData(getUserProfileSeoData(userProfile));
+      // this.seoService.updateTitle(getTitle(userProfile));
+      // this.seoService.updateMetaTags(getMetaTags(userProfile));
     });
 
     // this.account$ = this.route.params.pipe(
