@@ -1,5 +1,6 @@
 @use 'libs/challenge-registry/about/src/lib-theme' as challenge-registry-about;
 @use 'libs/challenge-registry/ui/src/lib-theme' as challenge-registry-ui;
+@use 'libs/challenge-registry/challenge/src/lib-theme' as challenge-registry-challenge;
 @use 'libs/challenge-registry/org-profile/src/lib-theme' as challenge-registry-org-profile;
 @use 'libs/challenge-registry/user-profile/src/lib-theme' as challenge-registry-user-profile;
 @use 'libs/challenge-registry/home/src/lib-theme' as challenge-registry-home;
@@ -7,6 +8,7 @@
 @use 'libs/challenge-registry/challenge-search/src/lib-theme' as challenge-search;
 
 @mixin theme($theme) {
+  @include challenge-registry-challenge.theme($theme);
   @include challenge-registry-org-profile.theme($theme);
   @include challenge-registry-user-profile.theme($theme);
   @include challenge-registry-about.theme($theme);

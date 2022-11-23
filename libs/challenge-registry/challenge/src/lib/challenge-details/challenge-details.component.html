@@ -1,0 +1,66 @@
+<main>
+  <div id="details">
+    <h3>Challenge Details</h3>
+    <table>
+      <tr>
+        <td class="detail-name">START DATE</td>
+        <td>{{ challenge.startDate }}</td>
+      </tr>
+      <tr>
+        <td class="detail-name">END DATE</td>
+        <td>{{ challenge.startDate }}</td>
+      </tr>
+      <tr>
+        <td class="detail-name">STATUS</td>
+        <td>{{ challenge.status }}</td>
+      </tr>
+      <tr>
+        <td class="detail-name">PLATFORM</td>
+        <td>{{ platform }}</td>
+      </tr>
+      <tr>
+        <td class="detail-name">WEBSITE URL</td>
+        <td>{{ challenge.websiteUrl }}</td>
+      </tr>
+      <tr>
+        <td class="detail-name">DOI</td>
+        <td>{{ challenge.doi }}</td>
+      </tr>
+      <tr>
+        <td class="detail-name">SUBMISSION TYPE</td>
+        <td>
+          <span nowrap *ngFor="let submissionType of challenge.submissionTypes; let isLast = last">
+            {{ printCamel(submissionType) }}{{ isLast ? '' : ', ' }}</span
+          >
+        </td>
+      </tr>
+      <tr>
+        <td class="detail-name">DATA TYPE(S)</td>
+        <td>
+          <span nowrap *ngFor="let dataType of challenge.inputDataTypes; let isLast = last">
+            {{ dataType }}{{ isLast ? '' : ', ' }}
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td class="detail-name">INCENTIVE(S)</td>
+        <td>
+          <span nowrap *ngFor="let incentive of challenge.incentiveTypes; let isLast = last">
+            {{ printCamel(incentive) }}{{ isLast ? '' : ', ' }}</span
+          >
+        </td>
+      </tr>
+      <tr>
+        <td class="detail-name">TOPIC(S)</td>
+        <td>
+          <span nowrap *ngFor="let topic of challenge.topics; let isLast = last">
+            {{ printCamel(topic) }}{{ isLast ? '' : ', ' }}
+          </span>
+        </td>
+      </tr>
+    </table>
+    <span class="created-updated-dates"
+      >Added to the ROCC on {{ challenge.createdAt }} and last modified on {{ challenge.updatedAt }}
+    </span>
+  </div>
+</main>

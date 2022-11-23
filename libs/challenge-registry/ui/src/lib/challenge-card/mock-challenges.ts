@@ -7,8 +7,8 @@ export const MOCK_CHALLENGES: Challenge[] = [
     displayName: 'Awesome Challenge',
     description:
       'This is the challenge tagline. It should be a short descriptive summary of the challenge',
-    websiteUrl: '',
-    status: undefined,
+    websiteUrl: 'https://www.synapse.org/',
+    status: 'active',
     startDate: '2000-01-01',
     endDate: '2030-01-01',
     readmeId: '61b26e5ee98893556289e1b3',
@@ -32,9 +32,9 @@ export const MOCK_CHALLENGES: Challenge[] = [
     starredCount: 99,
     viewCount: 9999,
     difficulty: 'GoodForBeginners',
-    doi: null,
-    createdAt: '',
-    updatedAt: '',
+    doi: '09.1937/09219137',
+    createdAt: '2000-01-01',
+    updatedAt: '2000-01-01',
   },
   {
     id: '',

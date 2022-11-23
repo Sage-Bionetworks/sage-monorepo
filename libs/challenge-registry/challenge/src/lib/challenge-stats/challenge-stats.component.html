@@ -1,0 +1,16 @@
+<div class="stats-group">
+  <div class="stat-item">
+    <h4>1937</h4>
+    <p class="mat-caption">views</p>
+  </div>
+  <div class="stat-item">
+    <h4>2</h4>
+    <p class="mat-caption">stargazers</p>
+  </div>
+  <div class="stat-item action-btn" *ngIf="loggedIn">
+    <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon> Edit
+  </div>
+  <div class="stat-item action-btn" *ngIf="!loggedIn">
+    <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon> GO TO CHALLENGE
+  </div>
+</div>

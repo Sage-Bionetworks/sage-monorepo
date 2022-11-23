@@ -1,3 +1,14 @@
-<p>challenge-sponsors works!</p>
-
-<p *ngFor="let sponsor of challengeSponsors">{{sponsor | json}}</p>
+<main>
+  <div id="sponsors">
+    <h3>Sponsors</h3>
+    <div class="card-group">
+      <challenge-registry-person-card
+        *ngFor="let sponsor of sponsors"
+        [name]="sponsor.name"
+        [avatarSize]="120"
+        [affiliation]="organization.name"
+      >
+      </challenge-registry-person-card>
+    </div>
+  </div>
+</main>
