@@ -1,5 +1,90 @@
-<main>
-  <p>challenge-search works!</p>
-</main>
+<div class="base mat-typography">
+  <section id="top">
+    <div id="breadcrumbs" class="row">
+      <a aria-label="Back to home" href="/home"><mat-icon aria-hidden="true">home</mat-icon></a>
+      <mat-icon aria-hidden="true">chevron_right</mat-icon>
+      <span>Search</span>
+    </div>
+    <div id="title" class="row">
+      <div class="col col-10">
+        <h2>Search the Challenge Registry</h2>
+        <!-- TODO: add "Add Challenge" button when service is available -->
+      </div>
+      <div class="col col-2">
+        <div class="stats-group">
+          <div class="stat-item">
+            <h4>0</h4>
+            <p class="mat-caption">total in the registry</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="search-field">
+          <input aria-label="Search the registry" type="text" placeholder="Search challenges"/>
+          <i><mat-icon aria-hidden="true">search</mat-icon></i>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="bottom" class="row">
+    <div class="facets col">
+      <mat-accordion class="facet-year">
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false"
+                             [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Challenge Year
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-form-field appearance="fill" class="facet-year">
+            <mat-label></mat-label>
+            <mat-select [(ngModel)]="yearSelect">
+              <mat-option value="all">All</mat-option>
+              <mat-option value="2022">2022</mat-option>
+              <mat-option value="2021">2021</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <hr />
+      <mat-accordion class="facet-status">
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false"
+                             [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Status
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p><mat-checkbox formControlName="upcoming">Upcoming</mat-checkbox></p>
+          <p><mat-checkbox formControlName="active">Active</mat-checkbox></p>
+          <p><mat-checkbox formControlName="onging">Ongoing</mat-checkbox></p>
+          <p><mat-checkbox formControlName="completed">Completed</mat-checkbox></p>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <hr />
+      <mat-accordion class="facet-difficulty">
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Difficulty
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p><mat-checkbox formControlName="beginners">Good for Beginners</mat-checkbox></p>
+          <p><mat-checkbox formControlName="general">General</mat-checkbox></p>
+          <p><mat-checkbox formControlName="advanced" [disabled]="true">Advanced</mat-checkbox></p>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div class="main col">
+      <h3>Results (0)</h3>
+      <!-- TODO: cards will be listed here -->
+    </div>
+  </section>
+</div>
 
 <challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
