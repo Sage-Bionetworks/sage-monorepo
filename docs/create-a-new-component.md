@@ -258,7 +258,7 @@ So, the resulting router would look something like this:
 If you haven't already, start a local server to test the newly-created component:
 
 ```
-$ challenge-registry-serve
+nx serve challenge-registry
 ```
 
 If everything is setup correctly, `http://localhost:4200/<new path name>` will open a web page that
