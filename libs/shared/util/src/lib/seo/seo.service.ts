@@ -15,7 +15,7 @@ export class SeoService {
     this.baseSeoData = getBaseSeoData();
   }
 
-  updateSeoData(seoData: SeoData): void {
+  setData(seoData: SeoData): void {
     const title = seoData.title || this.baseSeoData.title;
     const metas: MetaDefinition[] = [];
 
@@ -33,15 +33,15 @@ export class SeoService {
 
     // TODO Validate SEO data
 
-    this.updateTitle(title);
-    this.updateMetaTags(metas);
+    this.setTitle(title);
+    this.setMetaTags(metas);
   }
 
-  updateTitle(title: string) {
+  setTitle(title: string) {
     this.title.setTitle(title);
   }
 
-  updateMetaTags(metaTags: MetaDefinition[]) {
+  setMetaTags(metaTags: MetaDefinition[]) {
     metaTags.forEach((m) => this.meta.updateTag(m));
   }
 }
