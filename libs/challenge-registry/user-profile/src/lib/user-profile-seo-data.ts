@@ -23,12 +23,15 @@ const getUserProfileSeoData = (userProfile: UserProfile): SeoData => {
       TWITTER_TITLE: {
         content: getTitle(userProfile),
       },
+      TWITTER_CARD: {
+        content: 'summary_large_image',
+      },
       TWITTER_DESCRIPTION: {
         content: getDescription(userProfile),
       },
-      // TWITTER_IMAGE: {
-      //   content: '',
-      // },
+      TWITTER_IMAGE: {
+        content: 'https://i.imgur.com/VeZfqCw.png',
+      },
       TWITTER_IMAGE_ALT: {
         content: `The avatar of the user ${userProfile.username}`,
       },
@@ -38,6 +41,9 @@ const getUserProfileSeoData = (userProfile: UserProfile): SeoData => {
       TYPE: {
         content: 'website',
       },
+      // URL: {
+      //   content: url,
+      // },
     },
   };
 };

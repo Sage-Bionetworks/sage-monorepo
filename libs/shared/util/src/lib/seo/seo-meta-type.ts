@@ -12,4 +12,5 @@ export enum SeoMetaType {
   TWITTER_IMAGE_ALT = 'TWITTER_IMAGE_ALT',
   TWITTER_SITE = 'TWITTER_SITE',
   TYPE = 'TYPE',
+  URL = 'URL',
 }

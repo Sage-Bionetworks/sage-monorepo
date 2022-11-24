@@ -17,5 +17,6 @@ export interface SeoData {
     [SeoMetaType.TWITTER_SITE]?: MetaDefinition;
     [SeoMetaType.TWITTER_TITLE]?: MetaDefinition;
     [SeoMetaType.TYPE]?: MetaDefinition;
+    [SeoMetaType.URL]?: MetaDefinition;
   };
 }

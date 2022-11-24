@@ -45,6 +45,9 @@ const getBaseSeoData = (): SeoData => {
       TYPE: {
         property: 'og:type',
       },
+      URL: {
+        name: 'og:url',
+      },
     },
   };
 };
