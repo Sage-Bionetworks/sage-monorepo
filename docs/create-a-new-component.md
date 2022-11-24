@@ -2,7 +2,7 @@
 
 ## Overview
 
-This doc will describe how to create a new library + component in the Challenge Registry app, though
+This doc describes how to create a new library + component in the Challenge Registry app, though
 the steps can be applied to any app in this project.  This doc will also include information on
 where/how to copy-paste code from the [Figma-to-code export] into the app (starting at [Step 5]).
 
