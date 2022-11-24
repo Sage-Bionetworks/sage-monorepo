@@ -1,4 +1,4 @@
-# New App Component
+# Create a new Angular App Component
 
 ## Overview
 
