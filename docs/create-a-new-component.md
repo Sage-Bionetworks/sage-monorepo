@@ -44,7 +44,7 @@ steps are required:
 
 1. Discard/undo changes made to `project.json` in other existing folders outside of the new library
 folder, e.g. `apps/challenge-api-gateway/project.json`. You can either do this by reverting changes
-in the **Source Control** tab in VSCode or by using the terminal:
+in the **Source Control** tab in VS Code or by using the terminal:
 
     ```
     git checkout apps/
