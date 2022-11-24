@@ -65,7 +65,7 @@ export class UserProfileComponent implements OnInit {
 
     userProfile$.subscribe((userProfile) => {
       console.log('userProfile available to UserProfileComponent', userProfile);
-      this.seoService.setSeoData(getUserProfileSeoData(userProfile));
+      this.seoService.updateSeoData(getUserProfileSeoData(userProfile));
     });
 
     // this.account$ = this.route.params.pipe(

@@ -1,33 +1,35 @@
 import { Injectable } from '@angular/core';
 import { Meta, MetaDefinition, Title } from '@angular/platform-browser';
+import { getBaseSeoData } from './base-seo-data';
 import { SeoData } from './seo-data';
 import { SeoMetaType } from './seo-meta-type';
+import { forIn } from 'lodash';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SeoService {
-  constructor(private title: Title, private meta: Meta) {}
+  private baseSeoData: SeoData;
 
-  setSeoData(seoData: SeoData): void {
-    seoData.metas[SeoMetaType.TITLE] = {
-      ...seoData.metas[SeoMetaType.TITLE],
-      ...{
-        name: 'title',
-        property: 'og:title',
-      },
-    };
-    seoData.metas[SeoMetaType.DESCRIPTION] = {
-      ...seoData.metas[SeoMetaType.DESCRIPTION],
-      ...{
-        name: 'description',
-        property: 'og:description',
-      },
-    };
+  constructor(private title: Title, private meta: Meta) {
+    this.baseSeoData = getBaseSeoData();
+  }
 
-    this.title.setTitle(seoData.title);
-    this.meta.updateTag(seoData.metas[SeoMetaType.TITLE]);
-    this.meta.updateTag(seoData.metas[SeoMetaType.DESCRIPTION]);
+  updateSeoData(seoData: SeoData): void {
+    const title = seoData.title;
+    const metas: MetaDefinition[] = [];
+
+    forIn(SeoMetaType, (value) => {
+      if (seoData.metas[value]) {
+        metas.push({
+          ...seoData.metas[value],
+          ...this.baseSeoData.metas[value],
+        });
+      }
+    });
+
+    this.updateTitle(title);
+    this.updateMetaTags(metas);
   }
 
   updateTitle(title: string) {
@@ -35,9 +37,6 @@ export class SeoService {
   }
 
   updateMetaTags(metaTags: MetaDefinition[]) {
-    metaTags.forEach((m) => {
-      console.log('updateTag', m);
-      this.meta.updateTag(m);
-    });
+    metaTags.forEach((m) => this.meta.updateTag(m));
   }
 }
