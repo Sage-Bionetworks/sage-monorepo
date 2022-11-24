@@ -91,7 +91,7 @@ To create the component, use:
 nx g @nrwl/angular:component <new component name> --project <project-name>
 ```
 
-where `<project name>` is the name defined in `workspace.json`.
+where `<project name>` is the name of the library project defined in `workspace.json`.
 
 For example, to create an Angular component for the `awesome-lib` library (located at
 `libs/challenge-registry/awesome-lib`), the project name would be `challenge-registry-awesome-lib`, 
