@@ -1,5 +1,13 @@
 /* eslint-disable no-unused-vars */
 export enum SeoMetaType {
-  TITLE = 'TITLE',
+  AUTHOR = 'AUTHOR',
   DESCRIPTION = 'DESCRIPTION',
+  IMAGE = 'IMAGE',
+  IMAGE_ALT = 'IMAGE_ALT',
+  PUBLISH_DATE = 'PUBLISH_DATE',
+  TITLE = 'TITLE',
+  TWITTER_CARD = 'TWITTER_CARD',
+  TWITTER_IMAGE = 'TWITTER_IMAGE',
+  TWITTER_SITE = 'TWITTER_SITE',
+  TYPE = 'TYPE',
 }

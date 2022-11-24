@@ -1,10 +1,19 @@
 import { MetaDefinition } from '@angular/platform-browser';
 import { SeoMetaType } from './seo-meta-type';
 
+/** The data that a page should provide for SEO and social media sites. */
 export interface SeoData {
   title: string;
   metas: {
-    [SeoMetaType.TITLE]: MetaDefinition;
+    [SeoMetaType.AUTHOR]?: MetaDefinition;
     [SeoMetaType.DESCRIPTION]: MetaDefinition;
+    [SeoMetaType.IMAGE_ALT]?: MetaDefinition;
+    [SeoMetaType.IMAGE]?: MetaDefinition;
+    [SeoMetaType.PUBLISH_DATE]?: MetaDefinition;
+    [SeoMetaType.TITLE]: MetaDefinition;
+    [SeoMetaType.TWITTER_CARD]?: MetaDefinition;
+    [SeoMetaType.TWITTER_IMAGE]?: MetaDefinition;
+    [SeoMetaType.TWITTER_SITE]?: MetaDefinition;
+    [SeoMetaType.TYPE]?: MetaDefinition;
   };
 }
