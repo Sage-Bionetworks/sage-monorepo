@@ -43,17 +43,19 @@ Due to how the Challenge Registry app is currently structured, some additional
 steps are required:
 
 1. Discard/undo changes made to `project.json` in other existing folders outside of the new library
-folder, e.g. `apps/challenge-api-gateway/project.json`. You can either do this by reverting changes
-in the **Source Control** tab in VS Code or by using the terminal:
+folder, e.g. `apps/challenge-api-gateway/project.json`. The only files you need staged are:
 
+    * files created for the new library, e.g. `libs/challenge-registry/<new library name/*`
+    * `tsconfig.base.json`
+    * `workspace.json`
+
+    You could do something like this:
+    
     ```
-    git checkout apps/
-    git checkout libs/api-*
-    git checkout libs/shared*
-    git checkout libs/challenge-registry/<glob pattern>
+    git add libs/challenge-registry/awesome-lib/.* tsconfig.base.json workspace.json
+    git checkout -- .
     ```
 
-    There should be ~13 files left after discarding those updates.
 
 2. Remove `challenge-registry-` from the filename of the module TypeScript in `src/lib/`, e.g.
     
