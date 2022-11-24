@@ -3,35 +3,35 @@ import { UserProfile } from './user-profile';
 
 const getUserProfileSeoData = (userProfile: UserProfile): SeoData => {
   return {
-    title: `${userProfile.username} - Challenge Registry`,
+    title: getTitle(userProfile),
     metas: {
       AUTHOR: {
         content: `${userProfile.username}`,
       },
-      // DESCRIPTION: {
-      //   content: '',
-      // },
-      // IMAGE: {
-      //   content: '',
-      // },
+      DESCRIPTION: {
+        content: getDescription(userProfile),
+      },
+      IMAGE: {
+        content: 'https://i.imgur.com/VeZfqCw.png',
+      },
       // PUBLISH_DATE: {
       //   content: '',
       // },
       TITLE: {
-        content: `${userProfile.username} - Challenge Registry`,
+        content: getTitle(userProfile),
       },
       TWITTER_TITLE: {
-        content: `${userProfile.username} - Challenge Registry`,
+        content: getTitle(userProfile),
       },
-      // TWITTER_DESCRIPTION: {
-      //   content: '',
-      // },
+      TWITTER_DESCRIPTION: {
+        content: getDescription(userProfile),
+      },
       // TWITTER_IMAGE: {
       //   content: '',
       // },
-      // TWITTER_IMAGE_ALT: {
-      //   content: '',
-      // },
+      TWITTER_IMAGE_ALT: {
+        content: `The avatar of the user ${userProfile.username}`,
+      },
       // TWITTER_SITE: {
       //   content: '',
       // },
@@ -40,6 +40,14 @@ const getUserProfileSeoData = (userProfile: UserProfile): SeoData => {
       },
     },
   };
+};
+
+const getTitle = (userProfile: UserProfile): string => {
+  return `${userProfile.username} - Challenge Registry`;
+};
+
+const getDescription = (userProfile: UserProfile): string => {
+  return `The profile page of ${userProfile.username} on the Challenge Registry.`;
 };
 
 export { getUserProfileSeoData };

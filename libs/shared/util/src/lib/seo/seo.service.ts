@@ -16,17 +16,22 @@ export class SeoService {
   }
 
   updateSeoData(seoData: SeoData): void {
-    const title = seoData.title;
+    const title = seoData.title || this.baseSeoData.title;
     const metas: MetaDefinition[] = [];
 
+    // only include the meta tags specified in seoData
     forIn(SeoMetaType, (value) => {
       if (seoData.metas[value]) {
+        // the base metas are merged on top of the specified metas to ensure the proper values for
+        // fields like `name` and `property`.
         metas.push({
           ...seoData.metas[value],
           ...this.baseSeoData.metas[value],
         });
       }
     });
+
+    // TODO Validate SEO data
 
     this.updateTitle(title);
     this.updateMetaTags(metas);
