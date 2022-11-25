@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
   Account,
@@ -26,7 +26,7 @@ import { MOCK_USER, Avatar } from '@sagebionetworks/challenge-registry/ui';
 // import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/challenge-registry/ui';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import { UserProfile } from './user-profile';
-import { SeoService } from '@sagebionetworks/shared/util';
+import { JsonLdService, SeoService } from '@sagebionetworks/shared/util';
 import { getUserProfileSeoData } from './user-profile-seo-data';
 
 @Component({
@@ -53,7 +53,9 @@ export class UserProfileComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private readonly configService: ConfigService,
-    private seoService: SeoService
+    private seoService: SeoService,
+    private jsonLdService: JsonLdService,
+    private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
   }
@@ -89,6 +91,8 @@ export class UserProfileComponent implements OnInit {
     userProfile$.subscribe((userProfile) => {
       console.log('userProfile available to UserProfileComponent', userProfile);
       this.seoService.setData(getUserProfileSeoData(userProfile));
+
+      this.jsonLdService.setData(this.renderer2, { plop: true });
     });
 
     // this.account$ = this.route.params.pipe(
