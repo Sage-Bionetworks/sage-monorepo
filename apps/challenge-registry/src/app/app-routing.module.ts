@@ -20,64 +20,7 @@ export const routes: Routes = [
     // <<<<<<< HEAD
     //     canActivate: [KAuthGuard],
     // =======
-    data: {
-      seo: {
-        title: 'About - Challenge Registry',
-        metaTags: [
-          {
-            name: 'description',
-            property: 'og:description',
-            content: 'A description',
-          },
-          {
-            name: 'title',
-            property: 'og:title',
-            content: 'About - Challenge Registry',
-          },
-          {
-            name: 'image',
-            property: 'og:image',
-            content: 'https://avatars3.githubusercontent.com/u/16628445',
-          },
-          { property: 'og:url', content: 'https://challenge-registry.io' },
-          {
-            name: 'author',
-            property: 'article:author',
-            content: 'Marina Sirota, Tomiko Oskotsky, Alennie Roldan, ...',
-          },
-          // {
-          //   name: 'publish_date',
-          //   property: 'article:published_time',
-          //   content: '2022-08-11T18:23:57+00:00',
-          // },
-          {
-            name: 'keywords',
-            content:
-              'challenge, crowdsourcing, ai, microbiome, dream, sagebionetworks',
-          },
-          {
-            name: 'twitter:card',
-            content: 'summary_large_image',
-          },
-          {
-            name: 'twitter:title',
-            content: 'About - Challenge Registry',
-          },
-          {
-            name: 'twitter:description',
-            content: 'A description',
-          },
-          {
-            name: 'twitter:url',
-            content: 'https://challenge-registry.io',
-          },
-          {
-            name: 'twitter:image:src',
-            content: 'https://avatars3.githubusercontent.com/u/16628445',
-          },
-        ],
-      },
-    },
+    data: {},
   },
   {
     path: 'challenges',

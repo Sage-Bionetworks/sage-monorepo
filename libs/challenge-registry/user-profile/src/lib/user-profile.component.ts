@@ -63,6 +63,29 @@ export class UserProfileComponent implements OnInit {
       pluck('userProfile')
     );
 
+    // this.router.events
+    //   .pipe(
+    //     filter((e) => e instanceof NavigationEnd),
+    //     map(() => this.activatedRoute),
+    //     map((route) => {
+    //       while (route.firstChild) route = route.firstChild;
+    //       return route;
+    //     }),
+    //     filter((route) => route.outlet === 'primary'),
+    //     mergeMap((route) => route.data)
+    //   )
+    //   .subscribe((data) => {
+    //     if ('seo' in data) {
+    //       const seoData = data['seo'];
+    //       if (Object.prototype.hasOwnProperty.call(seoData, 'title')) {
+    //         this.seoService.updateTitle(seoData['title']);
+    //       }
+    //       if (Object.prototype.hasOwnProperty.call(seoData, 'metaTags')) {
+    //         this.seoService.updateMetaTags(seoData['metaTags']);
+    //       }
+    //     }
+    //   });
+
     userProfile$.subscribe((userProfile) => {
       console.log('userProfile available to UserProfileComponent', userProfile);
       this.seoService.setData(getUserProfileSeoData(userProfile));
