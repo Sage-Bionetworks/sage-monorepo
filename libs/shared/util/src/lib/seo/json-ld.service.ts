@@ -27,7 +27,7 @@ export class JsonLdService {
     const script = renderer2.createElement('script');
     script.type = 'application/ld+json';
     script.text = `${JSON.stringify(data)}`;
-    renderer2.appendChild(this.document.body, script);
+    renderer2.appendChild(this.document.head, script);
     // this.jsonLd = this.getObject(type, rawData);
   }
 
