@@ -5,6 +5,8 @@ import { SeoData } from './seo-data';
 import { SeoMetaType } from './seo-meta-type';
 import { forIn } from 'lodash';
 
+// TODO Add support for the "canonical" links:
+// <link rel="canonical" href="/datasets/nancyalaswad90/breast-cancer-dataset" />
 @Injectable({
   providedIn: 'root',
 })
