@@ -5,44 +5,22 @@ import { Inject, Injectable, Renderer2 } from '@angular/core';
   providedIn: 'root',
 })
 export class JsonLdService {
-  private jsonLd: any = {};
-
-  constructor(@Inject(DOCUMENT) private document: Document) {}
+  constructor(
+    private renderer2: Renderer2,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
 
   /**
-   * Set JSON-LD Microdata on the Document Body.
+   * Add JSON-LD data to the head of the document.
    *
    * @param renderer2 The Angular Renderer
    * @param data The data for the JSON-LD script
-   * @returns Void
+   * @returns {void}
    */
-  // public setJsonLd(renderer2: Renderer2, data: any): void {
-  //   const script = renderer2.createElement('script');
-  //   script.type = 'application/ld+json';
-  //   script.text = `${JSON.stringify(data)}`;
-  //   renderer2.appendChild(this._document.body, script);
-  // }
-
-  setData(renderer2: Renderer2, data: any) {
-    const script = renderer2.createElement('script');
+  addData(jsonLdData: any): void {
+    const script = this.renderer2.createElement('script');
     script.type = 'application/ld+json';
-    script.text = `${JSON.stringify(data)}`;
-    renderer2.appendChild(this.document.head, script);
-    // this.jsonLd = this.getObject(type, rawData);
-  }
-
-  getObject(type: string, rawData?: any) {
-    let object = {
-      '@context': 'http://schema.org',
-      '@type': type,
-    };
-    if (rawData) {
-      object = Object.assign({}, object, rawData);
-    }
-    return object;
-  }
-
-  toJson() {
-    return JSON.stringify(this.jsonLd);
+    script.text = `${JSON.stringify(jsonLdData)}`;
+    this.renderer2.appendChild(this.document.head, script);
   }
 }
