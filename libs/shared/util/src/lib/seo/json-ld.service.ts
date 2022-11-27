@@ -5,10 +5,7 @@ import { Inject, Injectable, Renderer2 } from '@angular/core';
   providedIn: 'root',
 })
 export class JsonLdService {
-  constructor(
-    private renderer2: Renderer2,
-    @Inject(DOCUMENT) private document: Document
-  ) {}
+  constructor(@Inject(DOCUMENT) private document: Document) {}
 
   /**
    * Add JSON-LD data to the head of the document.
@@ -17,10 +14,10 @@ export class JsonLdService {
    * @param data The data for the JSON-LD script
    * @returns {void}
    */
-  addData(jsonLdData: any): void {
-    const script = this.renderer2.createElement('script');
+  addData(jsonLdData: any, renderer2: Renderer2): void {
+    const script = renderer2.createElement('script');
     script.type = 'application/ld+json';
     script.text = `${JSON.stringify(jsonLdData)}`;
-    this.renderer2.appendChild(this.document.head, script);
+    renderer2.appendChild(this.document.head, script);
   }
 }

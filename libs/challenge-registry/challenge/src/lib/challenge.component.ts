@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
   Account,
@@ -38,7 +38,8 @@ export class ChallengeComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private readonly configService: ConfigService,
-    private seoService: SeoService
+    private seoService: SeoService,
+    private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
   }
@@ -73,7 +74,7 @@ export class ChallengeComponent implements OnInit {
         ? this.calcDays(new Date().toUTCString(), challenge.endDate)
         : undefined;
 
-      this.seoService.setData(getChallengeSeoData(challenge));
+      this.seoService.setData(getChallengeSeoData(challenge), this.renderer2);
     });
 
     const activeTabSub = activeTab$.subscribe((key) => {

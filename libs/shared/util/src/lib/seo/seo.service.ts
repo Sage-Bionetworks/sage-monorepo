@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
 import { Meta, MetaDefinition, Title } from '@angular/platform-browser';
 import { getBaseSeoData } from './base-seo-data';
 import { SeoData } from './seo-data';
@@ -22,7 +22,7 @@ export class SeoService {
     this.baseSeoData = getBaseSeoData();
   }
 
-  setData(seoData: SeoData): void {
+  setData(seoData: SeoData, renderer2: Renderer2): void {
     const title = seoData.title || this.baseSeoData.title;
     const metas: MetaDefinition[] = [];
     const jsonLds: any[] = [];
@@ -48,7 +48,7 @@ export class SeoService {
 
     this.setTitle(title);
     this.setMetas(metas);
-    this.addJsonLds(jsonLds);
+    this.addJsonLds(jsonLds, renderer2);
   }
 
   setTitle(title: string) {
@@ -59,7 +59,7 @@ export class SeoService {
     metas.forEach((m) => this.meta.updateTag(m));
   }
 
-  addJsonLds(jsonLds: any[]): void {
-    jsonLds.forEach((j) => this.jsonLdService.addData(j));
+  addJsonLds(jsonLds: any[], renderer2: Renderer2): void {
+    jsonLds.forEach((j) => this.jsonLdService.addData(j, renderer2));
   }
 }

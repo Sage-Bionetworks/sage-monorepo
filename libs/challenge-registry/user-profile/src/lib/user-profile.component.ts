@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
   Account,
@@ -53,7 +53,8 @@ export class UserProfileComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private readonly configService: ConfigService,
-    private seoService: SeoService
+    private seoService: SeoService,
+    private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
   }
@@ -88,7 +89,10 @@ export class UserProfileComponent implements OnInit {
 
     userProfile$.subscribe((userProfile) => {
       console.log('userProfile available to UserProfileComponent', userProfile);
-      this.seoService.setData(getUserProfileSeoData(userProfile));
+      this.seoService.setData(
+        getUserProfileSeoData(userProfile),
+        this.renderer2
+      );
     });
 
     // this.account$ = this.route.params.pipe(
