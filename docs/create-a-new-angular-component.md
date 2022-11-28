@@ -1,5 +1,16 @@
 # Create a new Angular App Component
 
+In this document:
+
+* [Overview](#overview)
+* [Create a new Angular library](#1-create-a-new-angular-library)
+* [Create a new Angular component](#2-create-a-new-angular-component)
+* [Add routing](#3-add-routing)
+* [Time to test! ☕](#4-time-to-test-)
+* [Import code from the Figma-to-Code export](#5-import-code-from-the-figma-to-code-export)
+* [Add themes](#6-add-themes)
+* [Update styles](#7-update-styles)
+
 ## Overview
 
 This doc describes how to create a new library + component in the Challenge Registry app, though
