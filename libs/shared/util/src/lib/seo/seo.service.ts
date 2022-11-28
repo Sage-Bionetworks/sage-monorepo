@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
 import { Meta, MetaDefinition, Title } from '@angular/platform-browser';
 import { getBaseSeoData } from './base-seo-data';
 import { SeoData } from './seo-data';
 import { SeoMetaType } from './seo-meta-type';
 import { forIn } from 'lodash';
+import { JsonLdService } from './json-ld.service';
 
 // TODO Add support for the "canonical" links:
 // <link rel="canonical" href="/datasets/nancyalaswad90/breast-cancer-dataset" />
@@ -13,13 +14,18 @@ import { forIn } from 'lodash';
 export class SeoService {
   private baseSeoData: SeoData;
 
-  constructor(private title: Title, private meta: Meta) {
+  constructor(
+    private title: Title,
+    private meta: Meta,
+    private jsonLdService: JsonLdService
+  ) {
     this.baseSeoData = getBaseSeoData();
   }
 
-  setData(seoData: SeoData): void {
+  setData(seoData: SeoData, renderer2: Renderer2): void {
     const title = seoData.title || this.baseSeoData.title;
     const metas: MetaDefinition[] = [];
+    const jsonLds: any[] = [];
 
     // only include the meta tags specified in seoData
     forIn(SeoMetaType, (value) => {
@@ -33,17 +39,27 @@ export class SeoService {
       }
     });
 
-    // TODO Validate SEO data
+    // TODO Validate metas
+
+    forIn(seoData.jsonLds, (jsonLd) => {
+      // TODO validate the json ld object
+      jsonLds.push(jsonLd);
+    });
 
     this.setTitle(title);
-    this.setMetaTags(metas);
+    this.setMetas(metas);
+    this.addJsonLds(jsonLds, renderer2);
   }
 
   setTitle(title: string) {
     this.title.setTitle(title);
   }
 
-  setMetaTags(metaTags: MetaDefinition[]) {
-    metaTags.forEach((m) => this.meta.updateTag(m));
+  setMetas(metas: MetaDefinition[]) {
+    metas.forEach((m) => this.meta.updateTag(m));
+  }
+
+  addJsonLds(jsonLds: any[], renderer2: Renderer2): void {
+    jsonLds.forEach((j) => this.jsonLdService.addData(j, renderer2));
   }
 }

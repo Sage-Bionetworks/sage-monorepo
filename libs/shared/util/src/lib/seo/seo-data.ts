@@ -19,4 +19,5 @@ export interface SeoData {
     [SeoMetaType.TYPE]?: MetaDefinition;
     [SeoMetaType.URL]?: MetaDefinition;
   };
+  jsonLds?: any[];
 }

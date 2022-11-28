@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
   Account,
@@ -12,6 +12,8 @@ import {
   Avatar,
 } from '@sagebionetworks/challenge-registry/ui';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
+import { getChallengeSeoData } from './challenge-seo';
+import { SeoService } from '@sagebionetworks/shared/util';
 
 @Component({
   selector: 'challenge-registry-challenge',
@@ -35,7 +37,9 @@ export class ChallengeComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private route: ActivatedRoute,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private seoService: SeoService,
+    private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
   }
@@ -69,6 +73,8 @@ export class ChallengeComponent implements OnInit {
       this.remainDays = challenge.endDate
         ? this.calcDays(new Date().toUTCString(), challenge.endDate)
         : undefined;
+
+      this.seoService.setData(getChallengeSeoData(challenge), this.renderer2);
     });
 
     const activeTabSub = activeTab$.subscribe((key) => {

@@ -49,6 +49,7 @@ const getBaseSeoData = (): SeoData => {
         name: 'og:url',
       },
     },
+    jsonLds: [],
   };
 };
 
