@@ -127,13 +127,13 @@ that exporting as **Angular** will download the files as a standalone app!
 ## Next steps
 
 After creating a new library and component within the app, copy-paste code from the exported project
-into the app.  See [create-a-new-component] for more details on how to create the library and
+into the app.  See [create-a-new-angular-component] for more details on how to create the library and
 component, and where to copy-paste the code.
 
 
 [TeleportHQ]: https://teleporthq.io/
 [Jira ticket to Sage IT]: https://sagebionetworks.jira.com/jira/software/c/projects/IT/boards/146
-[create-a-new-component]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/docs/create-a-new-component.md
+[create-a-new-angular-component]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/docs/create-a-new-angular-component.md
 [TeleportHQ plug-in]: https://www.figma.com/community/plugin/992726161890204477
 [here]: https://help.figma.com/hc/en-us/articles/360038746534-Create-color-text-effect-and-layout-grid-styles
 [TeleportHQ's docs]: https://help.teleporthq.io/en/
