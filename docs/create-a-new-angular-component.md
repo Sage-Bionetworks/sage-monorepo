@@ -8,8 +8,7 @@ In this document:
 - [Add routing](#3-add-routing)
 - [Time to test! ☕](#4-time-to-test-)
 - [Import code from the Figma-to-Code export](#5-import-code-from-the-figma-to-code-export)
-- [Add themes](#6-add-themes)
-- [Update styles](#7-update-styles)
+- [Update themes](#6-update-themes)
 
 ## Overview
 
@@ -344,7 +343,7 @@ If the Figma-to-code export was downloaded as HTML, the directory structure will
 Copy-paste the HTML and CSS as needed, or move the files into the app then re-direct the paths
 in `*.component.ts`.
 
-### Update themes
+## 6. Update themes
 
 Once the exported styles files are copy-pasted to the app, some additional steps are required to configurate the themes of exported pages. Take awesome-lib as an example:
 
