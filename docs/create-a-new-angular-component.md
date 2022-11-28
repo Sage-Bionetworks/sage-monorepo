@@ -77,22 +77,6 @@ folder, e.g. `apps/challenge-api-gateway/project.json`. The only files you need 
 the class name, e.g.
     
       `export class ChallengeRegistryAwesomeLibModule {}` → `export class AwesomeLibModule {}`
-    
-5. While in the library module, import the UI and routing modules:
-
-    ```ts
-    ...
-    import { UiModule } from '@sagebionetworks/challenge-registry/ui';
-    import { RouterModule, Routes } from '@angular/router';
-    
-    const routes: Routes = [{ path: '', component: <component> }];
-    
-    @NgModule({
-      imports: [CommonModule, RouterModule.forChild(routes), UiModule],
-      ...
-    ```
-    
-    where `<component>` will be created in the next step.
 
 > **Note**: still have questions about libraries?  See [Libraries] for more details.
 
@@ -183,15 +167,24 @@ Before moving on, some additional edits are required:
         constructor(private readonly configService: ConfigService) {}
       }
       ```
-   
-3. Revisit the library module (`<library name>.module.ts`) and replace `<component>` 
-   with the newly-created component, e.g.
+      
+3. Revisit the library module (`<library name>.module.ts`) and import the UI and
+routing modules:
 
     ```ts
-    const routes: Routes = [{ path: '', component: AwesomeLibComponent }];
+    ...
+    import { UiModule } from '@sagebionetworks/challenge-registry/ui';
+    import { RouterModule, Routes } from '@angular/router';
+    
+    const routes: Routes = [{ path: '', component: <component> }];
+    
+    @NgModule({
+      imports: [CommonModule, RouterModule.forChild(routes), UiModule],
+      ...
     ```
 
-    Additionally, export the newly-created Angular component, e.g.
+    where `<component>` is the newly-created Angular component. You will also need 
+    to export the newly-created Angular component, e.g.
     
     ```ts
     @NgModule({
