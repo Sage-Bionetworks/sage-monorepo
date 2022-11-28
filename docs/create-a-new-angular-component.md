@@ -52,7 +52,7 @@ folder, e.g. `apps/challenge-api-gateway/project.json`. The only files you need 
     You could do something like this:
     
     ```
-    git add libs/challenge-registry/awesome-lib/.* tsconfig.base.json workspace.json
+    git add libs/challenge-registry/<new library name>/ tsconfig.base.json workspace.json
     git checkout -- .
     ```
 
