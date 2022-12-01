@@ -50,8 +50,8 @@ jobs:
           IMAGE_NAME="${{ env.IMAGE_REPOSITORY }}"
           # echo ::set-output name=image_name::${IMAGE_NAME}
           # echo ::set-output name=devcontainer_version::${DEVCONTAINER_VERSION}
-          echo "image_name=${IMAGE_NAME}"
-          echo "devcontainer_version=${DEVCONTAINER_VERSION}"
+          echo "image_name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
+          echo "devcontainer_version=${DEVCONTAINER_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Build the image
         run: |
