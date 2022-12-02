@@ -4,16 +4,25 @@
   "sourceRoot": "libs/api-spec/src",
   "prefix": "challenge-registry",
   "targets": {
-    "build": {
+    "build-individuals": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
+          "openapi bundle --output build/base.openapi.yaml src/base.openapi.yaml",
           "openapi bundle --output build/user.openapi.yaml src/user.openapi.yaml",
           "openapi bundle --output build/organization.openapi.yaml src/organization.openapi.yaml"
         ],
         "parallel": true,
         "cwd": "libs/api-spec"
       }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "openapi-merge-cli --config openapi-merge.yaml",
+        "cwd": "libs/api-spec"
+      },
+      "dependsOn": ["build-individuals"]
     },
     "serve": {
       "executor": "nx:run-commands",

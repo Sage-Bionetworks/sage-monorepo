@@ -8005,7 +8005,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^6.10.0, ajv@npm:^6.12.3, ajv@npm:^6.12.4, ajv@npm:^6.12.5":
+"ajv@npm:^6.10.0, ajv@npm:^6.12.2, ajv@npm:^6.12.3, ajv@npm:^6.12.4, ajv@npm:^6.12.5":
   version: 6.12.6
   resolution: "ajv@npm:6.12.6"
   dependencies:
@@ -8427,6 +8427,16 @@ __metadata:
   version: 1.0.0
   resolution: "at-least-node@npm:1.0.0"
   checksum: 463e2f8e43384f1afb54bc68485c436d7622acec08b6fad269b421cb1d29cebb5af751426793d0961ed243146fe4dc983402f6d5a51b720b277818dbf6f2e49e
+  languageName: node
+  linkType: hard
+
+"atlassian-openapi@npm:^1.0.8":
+  version: 1.0.17
+  resolution: "atlassian-openapi@npm:1.0.17"
+  dependencies:
+    jsonpointer: ^5.0.0
+    urijs: ^1.19.10
+  checksum: 372a454e8f5e000e016e261b2151019f0b3dabfad908593c71aae23ebd5b9998c374ae3c0bf0d85dd55dbcca94d5d93e38edf02346d0bd2cb34d3fd20968ddaf
   languageName: node
   linkType: hard
 
@@ -9782,6 +9792,7 @@ __metadata:
     nock: 13.2.9
     nodemon: 2.0.20
     nx: 14.8.6
+    openapi-merge-cli: ^1.3.1
     prettier: 2.7.1
     primeicons: 6.0.1
     primeng: 14.2.2
@@ -12208,6 +12219,13 @@ __metadata:
   version: 3.3.1
   resolution: "es6-promise@npm:3.3.1"
   checksum: ce4044009c2b78db18b15212338eb711cd8a4d485961bc9ec18bb24e8c1e91c96d3295b0fcf63066fc0fa1b0ade36da05e6657827d4336dece382be2429b8398
+  languageName: node
+  linkType: hard
+
+"es6-promise@npm:^4.2.8":
+  version: 4.2.8
+  resolution: "es6-promise@npm:4.2.8"
+  checksum: 95614a88873611cb9165a85d36afa7268af5c03a378b35ca7bda9508e1d4f1f6f19a788d4bc755b3fd37c8ebba40782018e02034564ff24c9d6fa37e959ad57d
   languageName: node
   linkType: hard
 
@@ -16075,6 +16093,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"isomorphic-fetch@npm:^3":
+  version: 3.0.0
+  resolution: "isomorphic-fetch@npm:3.0.0"
+  dependencies:
+    node-fetch: ^2.6.1
+    whatwg-fetch: ^3.4.1
+  checksum: e5ab79a56ce5af6ddd21265f59312ad9a4bc5a72cebc98b54797b42cb30441d5c5f8d17c5cd84a99e18101c8af6f90c081ecb8d12fd79e332be1778d58486d75
+  languageName: node
+  linkType: hard
+
 "isomorphic-ws@npm:^4.0.1":
   version: 4.0.1
   resolution: "isomorphic-ws@npm:4.0.1"
@@ -17156,7 +17184,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^3.10.0, js-yaml@npm:^3.12.0, js-yaml@npm:^3.13.1, js-yaml@npm:^3.14.1":
+"js-yaml@npm:^3.10.0, js-yaml@npm:^3.12.0, js-yaml@npm:^3.13.1, js-yaml@npm:^3.14.0, js-yaml@npm:^3.14.1":
   version: 3.14.1
   resolution: "js-yaml@npm:3.14.1"
   dependencies:
@@ -20146,6 +20174,33 @@ __metadata:
     is-docker: ^2.0.0
     is-wsl: ^2.1.1
   checksum: 3333900ec0e420d64c23b831bc3467e57031461d843c801f569b2204a1acc3cd7b3ec3c7897afc9dde86491dfa289708eb92bba164093d8bd88fb2c231843c91
+  languageName: node
+  linkType: hard
+
+"openapi-merge-cli@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "openapi-merge-cli@npm:1.3.1"
+  dependencies:
+    ajv: ^6.12.2
+    commander: ^5.1.0
+    es6-promise: ^4.2.8
+    isomorphic-fetch: ^3
+    js-yaml: ^3.14.0
+    openapi-merge: ^1.2.0
+  bin:
+    openapi-merge-cli: dist/cli.js
+  checksum: 8bab7c5385412bcbb686c44937bbc73a159eabf39d0a9a66cddc3e58df02c5dbb082c8a0fcb515c267d91ca76fac963537de8f42ee7b52251a1153e5195b231d
+  languageName: node
+  linkType: hard
+
+"openapi-merge@npm:^1.2.0":
+  version: 1.3.2
+  resolution: "openapi-merge@npm:1.3.2"
+  dependencies:
+    atlassian-openapi: ^1.0.8
+    lodash: ^4.17.15
+    ts-is-present: ^1.1.1
+  checksum: 53284a563270177422db8c7536544913c133dfc5cc7058a1043f3092b5aa997b8224a83c59569d18620f94ccf0a014fcb735e22941a9259b2c60861002f01638
   languageName: node
   linkType: hard
 
@@ -25468,6 +25523,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-is-present@npm:^1.1.1":
+  version: 1.2.2
+  resolution: "ts-is-present@npm:1.2.2"
+  checksum: 3620ecf48219d0dd108e493260a207f4733d8e39a18dffec23c7ed2b1ef2aba7158d0dfafe36f3f27d0092472535a5e474ce04ade54e972e64b2b6329d20ab0b
+  languageName: node
+  linkType: hard
+
 "ts-jest@npm:29.0.3":
   version: 29.0.3
   resolution: "ts-jest@npm:29.0.3"
@@ -26116,7 +26178,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"urijs@npm:^1.19.11, urijs@npm:^1.19.6":
+"urijs@npm:^1.19.10, urijs@npm:^1.19.11, urijs@npm:^1.19.6":
   version: 1.19.11
   resolution: "urijs@npm:1.19.11"
   checksum: f9b95004560754d30fd7dbee44b47414d662dc9863f1cf5632a7c7983648df11d23c0be73b9b4f9554463b61d5b0a520b70df9e1ee963ebb4af02e6da2cc80f3
@@ -26674,6 +26736,13 @@ __metadata:
   dependencies:
     iconv-lite: 0.6.3
   checksum: 7087810c410aa9b689cbd6af8773341a53cdc1f3aae2a882c163bd5522ec8ca4cdfc269aef417a5792f411807d5d77d50df4c24e3abb00bb60192858a40cc675
+  languageName: node
+  linkType: hard
+
+"whatwg-fetch@npm:^3.4.1":
+  version: 3.6.2
+  resolution: "whatwg-fetch@npm:3.6.2"
+  checksum: ee976b7249e7791edb0d0a62cd806b29006ad7ec3a3d89145921ad8c00a3a67e4be8f3fb3ec6bc7b58498724fd568d11aeeeea1f7827e7e1e5eae6c8a275afed
   languageName: node
   linkType: hard
 

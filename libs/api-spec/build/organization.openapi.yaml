@@ -15,7 +15,6 @@ tags:
     description: Operations about organizations
 paths:
   /organizations:
-    post: null
     get:
       tags:
         - Organization
@@ -75,85 +74,13 @@ components:
       required:
         - paging
         - totalResults
-    AccountId:
-      description: The unique identifier of an account
-      type: integer
-      format: int64
-      example: 1
-    OrganizationCreateResponse:
-      type: object
-      description: The unique identifier of the org created
-      properties:
-        id:
-          $ref: '#/components/schemas/AccountId'
-      required:
-        - id
-      example:
-        id: 507f1f77bcf86cd799439011
-    Email:
-      description: An email address
-      type: string
-      format: email
-      example: john.smith@example.com
-    OrganizationCreateRequest:
-      type: object
-      description: The information required to create an org account
-      properties:
-        login:
-          type: string
-        email:
-          $ref: '#/components/schemas/Email'
-        name:
-          type: string
-          nullable: true
-        avatarUrl:
-          type: string
-          format: url
-          example: https://example.com/awesome-avatar.png
-          nullable: true
-        websiteUrl:
-          type: string
-          format: url
-          example: https://example.com
-          nullable: true
-        description:
-          type: string
-          nullable: true
-      required:
-        - login
-        - email
-      example:
-        login: awesome-org
-        email: contact@example.org
-        name: Awesome Org
-        avatarUrl: https://example.com/awesome-avatar.png
-        websiteUrl: https://example.com
-        description: A great organization
     Organization:
       type: object
       description: An organization
-      allOf:
-        - $ref: '#/components/schemas/OrganizationCreateResponse'
-        - $ref: '#/components/schemas/OrganizationCreateRequest'
-        - type: object
-          properties:
-            createdAt:
-              type: string
-              format: date-time
-            updatedAt:
-              type: string
-              format: date-time
-            type:
-              type: string
-              example: Organization
-          required:
-            - createdAt
-            - updatedAt
-            - type
-          example:
-            createdAt: '2017-07-08T16:18:44-04:00'
-            updatedAt: '2017-07-08T16:18:44-04:00'
-            type: Organization
+      properties:
+        name:
+          type: string
+          nullable: true
     OrganizationsPage:
       type: object
       description: A page of organizations
