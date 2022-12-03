@@ -24,7 +24,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # - run: cat CHANGELOG.md
+      - name: Print Changelog
+        run: |
+          echo "Print Changelog"
+          echo "${{ steps.Changelog.outputs.changelog }}"
 
       # - name: Create Release
       #   # uses: mikepenz/action-gh-release@v0.2.0-a03 #softprops/action-gh-release
