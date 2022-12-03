@@ -19,9 +19,12 @@ jobs:
         id: github_release
         uses: mikepenz/release-changelog-builder-action@v3
         with:
-          configuration: '.github/release-changelog-builder.json'
+          outputFile: 'CHANGELOG.md'
+          configuration: '.github/config/release-changelog-builder.json'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: cat CHANGELOG.md
 
       # - name: Create Release
       #   # uses: mikepenz/action-gh-release@v0.2.0-a03 #softprops/action-gh-release
