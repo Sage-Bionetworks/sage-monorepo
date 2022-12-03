@@ -1,4 +1,7 @@
 export * from './modelError';
+export * from './organization';
+export * from './organizationsPage';
+export * from './organizationsPageAllOf';
 export * from './pageMetadata';
 export * from './pageMetadataPaging';
 export * from './user';

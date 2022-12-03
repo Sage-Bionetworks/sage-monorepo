@@ -7,7 +7,7 @@
       "api-client-angular": {
         "config": "templates/config.yaml",
         "generatorName": "typescript-angular",
-        "inputSpec": "#{cwd}/../../libs/api-spec/build/user.openapi.yaml",
+        "inputSpec": "#{cwd}/../../libs/api-spec/build/openapi.yaml",
         "output": "#{cwd}/src/lib/",
         "templateDir": "templates",
         "additionalProperties": {}
