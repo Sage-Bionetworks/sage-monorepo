@@ -9,15 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Organization } from './organization';
 
 
-/**
- * The response returned after the creation of the user
- */
-export interface UserCreateResponse { 
+export interface OrganizationsPageAllOf { 
     /**
-     * The unique identifier of an account
+     * A list of organizations
      */
-    id: number;
+    organizations: Array<Organization>;
 }
 

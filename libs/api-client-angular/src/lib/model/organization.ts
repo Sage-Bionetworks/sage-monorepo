@@ -12,12 +12,9 @@
 
 
 /**
- * The response returned after the creation of the user
+ * An organization
  */
-export interface UserCreateResponse { 
-    /**
-     * The unique identifier of an account
-     */
-    id: number;
+export interface Organization { 
+    name?: string | null;
 }
 

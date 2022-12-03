@@ -9,15 +9,22 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Organization } from './organization';
+import { PageMetadataPaging } from './pageMetadataPaging';
 
 
 /**
- * The response returned after the creation of the user
+ * A page of organizations
  */
-export interface UserCreateResponse { 
+export interface OrganizationsPage { 
+    paging: PageMetadataPaging;
     /**
-     * The unique identifier of an account
+     * Total number of results in the result set
      */
-    id: number;
+    totalResults: number;
+    /**
+     * A list of organizations
+     */
+    organizations: Array<Organization>;
 }
 

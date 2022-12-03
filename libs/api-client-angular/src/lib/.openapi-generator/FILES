@@ -3,6 +3,7 @@
 README.md
 api.module.ts
 api/api.ts
+api/organization.service.ts
 api/user.service.ts
 configuration.ts
 encoder.ts
@@ -10,6 +11,9 @@ git_push.sh
 index.ts
 model/modelError.ts
 model/models.ts
+model/organization.ts
+model/organizationsPage.ts
+model/organizationsPageAllOf.ts
 model/pageMetadata.ts
 model/pageMetadataPaging.ts
 model/user.ts
