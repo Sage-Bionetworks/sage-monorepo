@@ -17,7 +17,7 @@ jobs:
           fetch-depth: 0
 
       - name: Build Changelog
-        id: github_release
+        id: changelog
         uses: mikepenz/release-changelog-builder-action@v3
         with:
           outputFile: 'CHANGELOG.md'
@@ -30,7 +30,7 @@ jobs:
       - name: Print Changelog
         run: |
           echo "Print Changelog"
-          echo "${{ steps.Changelog.outputs.changelog }}"
+          echo "${{ steps.changelog.outputs.changelog }}"
 
       # - name: Create Release
       #   # uses: mikepenz/action-gh-release@v0.2.0-a03 #softprops/action-gh-release
