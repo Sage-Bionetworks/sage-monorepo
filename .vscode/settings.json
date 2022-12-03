@@ -89,5 +89,8 @@
   "editor.inlayHints.enabled": "off",
   "rewrap.wrappingColumn": 100,
   "editor.rulers": [100],
-  "eslint.validate": ["json"]
+  "eslint.validate": [
+    "json"
+  ],
+  "java.compile.nullAnalysis.mode": "disabled"
 }

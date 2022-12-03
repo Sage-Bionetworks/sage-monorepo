@@ -1,0 +1,189 @@
+openapi: 3.0.3
+info:
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  title: Challenge Organization API
+  version: 0.6.0
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+servers:
+- url: /
+tags:
+- description: Operations about organizations
+  name: Organization
+paths:
+  /organizations:
+    get:
+      description: Returns the organizations
+      operationId: listOrganizations
+      parameters:
+      - description: The page number
+        explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 0
+          format: int32
+          minimum: 0
+          type: integer
+        style: form
+      - description: The number of items in a single page
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          format: int32
+          minimum: 10
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationsPage'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get all organizations
+      tags:
+      - Organization
+      x-accepts: application/json
+      x-tags:
+      - tag: Organization
+components:
+  parameters:
+    pageNumber:
+      description: The page number
+      explode: true
+      in: query
+      name: pageNumber
+      required: false
+      schema:
+        default: 0
+        format: int32
+        minimum: 0
+        type: integer
+      style: form
+    pageSize:
+      description: The number of items in a single page
+      explode: true
+      in: query
+      name: pageSize
+      required: false
+      schema:
+        default: 100
+        format: int32
+        minimum: 10
+        type: integer
+      style: form
+  responses:
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Invalid request
+    InternalServerError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The request cannot be fulfilled due to an unexpected server error
+  schemas:
+    PageMetadata:
+      description: The metadata of a page
+      properties:
+        paging:
+          $ref: '#/components/schemas/PageMetadata_paging'
+        totalResults:
+          description: Total number of results in the result set
+          type: integer
+      required:
+      - paging
+      - totalResults
+      type: object
+    OrganizationId:
+      description: The unique identifier of an organization
+      example: 1
+      format: int64
+      type: integer
+    Organization:
+      description: An organization
+      example:
+        name: DREAM
+      properties:
+        id:
+          description: The unique identifier of an organization
+          example: 1
+          format: int64
+          type: integer
+        name:
+          type: string
+      required:
+      - name
+      type: object
+    OrganizationsPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/OrganizationsPage_allOf'
+      description: A page of organizations
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    Error:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+      required:
+      - status
+      - title
+      type: object
+    PageMetadata_paging:
+      description: Links to navigate to different pages of results
+      properties:
+        next:
+          description: Link to the next page of results
+          format: url
+          type: string
+      type: object
+    OrganizationsPage_allOf:
+      properties:
+        organizations:
+          description: A list of organizations
+          items:
+            $ref: '#/components/schemas/Organization'
+          type: array
+      required:
+      - organizations
+      type: object
