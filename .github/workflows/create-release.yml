@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          repository: 'Sage-Bionetworks/challenge-registry'
           fetch-depth: 0
 
       - name: Build Changelog
@@ -20,6 +21,8 @@ jobs:
         uses: mikepenz/release-changelog-builder-action@v3
         with:
           outputFile: 'CHANGELOG.md'
+          fromTag: 'v0.0.1'
+          toTag: 'v0.0.2'
           configuration: '.github/config/release-changelog-builder.json'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
