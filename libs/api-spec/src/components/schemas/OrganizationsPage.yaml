@@ -1,13 +1,15 @@
 type: object
-description: A page of Organizations
+description: A page of organizations
 allOf:
-  - $ref: ResponsePageMetadata.yaml
+  - $ref: PageMetadata.yaml
   - type: object
     properties:
       organizations:
-        description: An array of Organizations
+        description: A list of organizations
         type: array
         items:
           $ref: Organization.yaml
     required:
       - organizations
+x-java-class-annotations:
+  - '@lombok.Builder'
