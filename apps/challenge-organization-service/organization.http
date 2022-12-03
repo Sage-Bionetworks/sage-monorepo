@@ -3,7 +3,7 @@
 
 ### List all the organizations
 
-GET {{userServiceHost}}/api/v1/organizations
+GET {{userServiceHost}}/organizations
 
 ### List all the organizations (via API gateway)
 
