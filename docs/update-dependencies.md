@@ -37,3 +37,14 @@ info All dependencies
 └─ @nxrocks/nx-spring-boot@4.1.0
 Done in 162.06s.
 ```
+
+## Devcontainer
+
+### Update yarn
+
+1. Update the version of `yarn` in the Dockerfile of the devcontainer.
+2. Rebuild and restart the devcontainer.
+3. Update the version of `yarn` used in the workspace.
+```console
+yarn set version <version>
+```
