@@ -8,9 +8,13 @@ ARG devcontainerVersion=""
 ENV DEVCONTAINER_VERSION=${devcontainerVersion}
 
 # https://github.com/nektos/act
-ARG actVersion="0.2.32"
+ARG actVersion="0.2.34"
 # https://github.com/sharkdp/hyperfine
 ARG hyperfineVersion="1.15.0"
+# https://github.com/yarnpkg/berry
+ARG yarnVersion="3.3.0"
+# https://www.npmjs.com/package/@devcontainers/cli
+ARG devcontainerCliVersion="0.25.2"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
@@ -22,7 +26,7 @@ RUN groupadd docker \
     python3-pip python-is-python3 openjdk-17-jdk \
     htop unzip vim wget lsof iproute2 build-essential \
   # Add Node.js repository
-  && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+  && curl -sL https://deb.nodesource.com/setup_18.x | bash - \
   # Add GitHub CLI repository
   && curl -sSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
       gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
@@ -36,9 +40,9 @@ RUN groupadd docker \
   && apt-get install --no-install-recommends -qq -y \
     nodejs gh ngrok \
   && corepack enable yarn \
-  && corepack prepare yarn@3.2.4 --activate \
+  && corepack prepare "yarn@${yarnVersion}" --activate \
   # Install @devcontainers/cli
-  && npm install -g @devcontainers/cli@0.23.2 \
+  && npm install -g "@devcontainers/cli@${devcontainerCliVersion}" \
   # Install nektos/act
   && curl "https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh" | bash - \
   # Install hyperfine
