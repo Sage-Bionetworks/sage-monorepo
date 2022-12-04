@@ -3,8 +3,8 @@
   "image": "sagebionetworks/challenge-devcontainer:3fcdecd",
 
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:1.0.6": {
-      "version": "20.10.18"
+    "ghcr.io/devcontainers/features/docker-in-docker:2.0.0": {
+      "version": "20.10.21"
     }
   },
 

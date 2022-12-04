@@ -7,7 +7,6 @@
     "api-spec": "libs/api-spec",
     "challenge-api-gateway": "apps/challenge-api-gateway",
     "challenge-auth-service": "apps/challenge-auth-service",
-    "challenge-bot": "apps/challenge-bot",
     "challenge-config-service": "apps/challenge-config-service",
     "challenge-core-service": "apps/challenge-core-service",
     "challenge-elasticsearch": "apps/challenge-elk/elasticsearch",
