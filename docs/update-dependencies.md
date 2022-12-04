@@ -45,6 +45,6 @@ Done in 162.06s.
 1. Update the version of `yarn` in the Dockerfile of the devcontainer.
 2. Rebuild and restart the devcontainer.
 3. Update the version of `yarn` used in the workspace.
-```console
-yarn set version <version>
-```
+    ```console
+    yarn set version <version>
+    ```
