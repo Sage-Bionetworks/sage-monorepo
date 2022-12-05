@@ -2,6 +2,7 @@ package org.sagebionetworks.challenge.api;
 
 import java.util.Optional;
 import javax.annotation.Generated;
+import org.sagebionetworks.challenge.model.dto.OrganizationDto;
 import org.sagebionetworks.challenge.model.dto.OrganizationsPageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +18,29 @@ public interface OrganizationApiDelegate {
 
   default Optional<NativeWebRequest> getRequest() {
     return Optional.empty();
+  }
+
+  /**
+   * GET /organizations/{organizationId} : Get an organization Returns the organization specified
+   *
+   * @param organizationId The unique identifier of the organization (required)
+   * @return An organization (status code 200) or The specified resource was not found (status code
+   *     404) or The request cannot be fulfilled due to an unexpected server error (status code 500)
+   * @see OrganizationApi#getOrganization
+   */
+  default ResponseEntity<OrganizationDto> getOrganization(Long organizationId) {
+    getRequest()
+        .ifPresent(
+            request -> {
+              for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                  String exampleString = "{ \"name\" : \"DREAM\" }";
+                  ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                  break;
+                }
+              }
+            });
+    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
 
   /**

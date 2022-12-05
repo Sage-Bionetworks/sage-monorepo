@@ -35,6 +35,26 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /organizations/{organizationId}:
+    parameters:
+      - $ref: '#/components/parameters/organizationId'
+    get:
+      tags:
+        - Organization
+      summary: Get an organization
+      description: Returns the organization specified
+      operationId: getOrganization
+      responses:
+        '200':
+          description: An organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   parameters:
     pageNumber:
@@ -55,6 +75,13 @@ components:
         format: int32
         default: 100
         minimum: 10
+    organizationId:
+      name: organizationId
+      in: path
+      description: The unique identifier of the organization
+      required: true
+      schema:
+        $ref: '#/components/schemas/OrganizationId'
   schemas:
     PageMetadata:
       type: object
@@ -135,6 +162,12 @@ components:
             $ref: '#/components/schemas/Error'
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
       content:
         application/json:
           schema:

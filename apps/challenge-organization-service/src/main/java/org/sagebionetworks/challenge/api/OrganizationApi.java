@@ -14,6 +14,7 @@ import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.challenge.model.dto.ErrorDto;
+import org.sagebionetworks.challenge.model.dto.OrganizationDto;
 import org.sagebionetworks.challenge.model.dto.OrganizationsPageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +28,57 @@ public interface OrganizationApi {
 
   default OrganizationApiDelegate getDelegate() {
     return new OrganizationApiDelegate() {};
+  }
+
+  /**
+   * GET /organizations/{organizationId} : Get an organization Returns the organization specified
+   *
+   * @param organizationId The unique identifier of the organization (required)
+   * @return An organization (status code 200) or The specified resource was not found (status code
+   *     404) or The request cannot be fulfilled due to an unexpected server error (status code 500)
+   */
+  @Operation(
+      operationId = "getOrganization",
+      summary = "Get an organization",
+      tags = {"Organization"},
+      responses = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "An organization",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = OrganizationDto.class))
+            }),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The specified resource was not found",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class))
+            }),
+        @ApiResponse(
+            responseCode = "500",
+            description = "The request cannot be fulfilled due to an unexpected server error",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class))
+            })
+      })
+  @RequestMapping(
+      method = RequestMethod.GET,
+      value = "/organizations/{organizationId}",
+      produces = {"application/json"})
+  default ResponseEntity<OrganizationDto> getOrganization(
+      @Parameter(
+              name = "organizationId",
+              description = "The unique identifier of the organization",
+              required = true)
+          @PathVariable("organizationId")
+          Long organizationId) {
+    return getDelegate().getOrganization(organizationId);
   }
 
   /**

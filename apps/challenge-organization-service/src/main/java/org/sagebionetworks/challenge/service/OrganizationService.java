@@ -1,6 +1,7 @@
 package org.sagebionetworks.challenge.service;
 
 import java.util.List;
+import javax.persistence.EntityNotFoundException;
 import org.sagebionetworks.challenge.model.dto.OrganizationDto;
 import org.sagebionetworks.challenge.model.dto.OrganizationsPageDto;
 import org.sagebionetworks.challenge.model.entity.OrganizationEntity;
@@ -30,5 +31,13 @@ public class OrganizationService {
         .totalResults(0)
         .paging(null)
         .build();
+  }
+
+  @Transactional(readOnly = true)
+  public OrganizationDto getOrganization(Long organizationId) {
+    OrganizationEntity organizationEntity =
+        organizationRepository.findById(organizationId).orElseThrow(EntityNotFoundException::new);
+    OrganizationDto organization = organizationMapper.convertToDto(organizationEntity);
+    return organization;
   }
 }
