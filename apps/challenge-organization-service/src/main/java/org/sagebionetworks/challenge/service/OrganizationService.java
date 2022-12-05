@@ -23,7 +23,7 @@ public class OrganizationService {
   private OrganizationMapper organizationMapper = new OrganizationMapper();
 
   @Transactional(readOnly = true)
-  public OrganizationsPageDto listorganizations(Integer pageNumber, Integer pageSize) {
+  public OrganizationsPageDto listOrganizations(Integer pageNumber, Integer pageSize) {
     Page<OrganizationEntity> organizationEntitiesPage =
         organizationRepository.findAll(PageRequest.of(pageNumber, pageSize));
     List<OrganizationEntity> organizationEntities = organizationEntitiesPage.getContent();
@@ -33,6 +33,7 @@ public class OrganizationService {
           OrganizationDto organization = organizationMapper.convertToDto(organizationEntity);
           organizations.add(organization);
         });
+    log.info("organizations", organizations);
     return OrganizationsPageDto.builder()
         .organizations(organizations)
         .totalResults(0)
