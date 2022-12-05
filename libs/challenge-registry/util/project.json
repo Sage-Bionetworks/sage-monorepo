@@ -22,8 +22,6 @@
       }
     }
   },
-  "tags": [
-    "type:util",
-    "scope:challenge-registry"
-  ]
+  "tags": ["type:util", "scope:challenge-registry"],
+  "name": "challenge-registry-util"
 }

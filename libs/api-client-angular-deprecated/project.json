@@ -1,4 +1,5 @@
 {
+  "name": "api-client-angular-deprecated",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/api-client-angular-deprecated/src",
@@ -18,7 +19,7 @@
     },
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": ["dist/libs/api-client-angular-deprecated"],
+      "outputs": ["{workspaceRoot}/dist/libs/api-client-angular-deprecated"],
       "options": {
         "project": "libs/api-client-angular-deprecated/ng-package.json"
       },
@@ -34,7 +35,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api-client-angular-deprecated"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api-client-angular-deprecated"],
       "options": {
         "jestConfig": "libs/api-client-angular-deprecated/jest.config.ts",
         "passWithNoTests": true

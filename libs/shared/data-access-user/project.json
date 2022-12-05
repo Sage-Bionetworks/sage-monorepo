@@ -22,8 +22,6 @@
       }
     }
   },
-  "tags": [
-    "type:feature",
-    "scope:shared"
-  ]
+  "tags": ["type:feature", "scope:shared"],
+  "name": "shared-data-access-user"
 }

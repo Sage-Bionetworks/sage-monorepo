@@ -1,4 +1,5 @@
 {
+  "name": "shared-java-challenge-util",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared-java/challenge-util/src",
   "projectType": "library",
@@ -15,7 +16,7 @@
       "options": {
         "root": "libs/shared-java/challenge-util"
       },
-      "outputs": ["libs/shared-java/challenge-util/build"]
+      "outputs": ["{projectRoot}/build"]
     },
     "install": {
       "executor": "nx:run-commands",

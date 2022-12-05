@@ -6,13 +6,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CountUpModule } from 'ngx-countup';
 import { HttpClientModule } from '@angular/common/http';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { UtilModule } from '@sagebionetworks/challenge-registry/util';
 import { AuthModule } from '@sagebionetworks/challenge-registry/auth';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { AppComponent } from './app.component';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 import { SharedUtilModule } from '@sagebionetworks/shared/util';
 import {
   configFactory,

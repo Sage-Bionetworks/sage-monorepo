@@ -1,4 +1,5 @@
 {
+  "name": "challenge-auth-service",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-auth-service/src",
   "projectType": "application",
@@ -22,7 +23,7 @@
       "options": {
         "root": "apps/challenge-auth-service"
       },
-      "outputs": ["apps/challenge-auth-service"],
+      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "test": {

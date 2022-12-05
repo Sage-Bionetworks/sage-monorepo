@@ -5,7 +5,16 @@
 @use 'libs/challenge-registry/themes/src/index' as challenge-registry;
 
 // set default typography
-@include mat.core(fonts.$fira);
+// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
+//  The following line adds:
+//    1. Default typography styles for all components
+//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
+//  If you specify typography styles for the components you use elsewhere, you should delete this line.
+//  If you don't need the default component typographies but still want the hierarchy styles,
+//  you can delete this line and instead use:
+//    `@include mat.legacy-typography-hierarchy(fonts.$fira);`
+@include mat.all-legacy-component-typographies(fonts.$fira);
+@include mat.legacy-core();
 
 $primary: mat.define-palette(palettes.$dark-blue-palette, 600);
 $accent: mat.define-palette(palettes.$accent-pink-palette, 400);
@@ -35,12 +44,12 @@ $theme: map.deep-merge(
 
 // Emit theme-dependent styles for common features used across multiple
 // components.
-@include mat.core-theme($theme);
+@include mat.legacy-core-theme($theme);
 
 // Emit styles for MatButton based on `$theme`.
-@include mat.button-theme($theme);
-@include mat.progress-spinner-theme($theme);
-@include mat.button-typography(fonts.$fira);
+@include mat.legacy-button-theme($theme);
+@include mat.legacy-progress-spinner-theme($theme);
+@include mat.legacy-button-typography(fonts.$fira);
 
 // Include the theme mixins for other components you use here.
 @include challenge-registry.theme($theme);

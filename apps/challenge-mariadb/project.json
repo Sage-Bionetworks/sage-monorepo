@@ -1,4 +1,5 @@
 {
+  "name": "challenge-mariadb",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-mariadb/src",
   "projectType": "application",

@@ -1,11 +1,12 @@
 {
+  "name": "shared-util",
   "projectType": "library",
   "sourceRoot": "libs/shared/util/src",
   "prefix": "sage",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/util"],
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/util"],
       "options": {
         "jestConfig": "libs/shared/util/jest.config.ts",
         "passWithNoTests": true

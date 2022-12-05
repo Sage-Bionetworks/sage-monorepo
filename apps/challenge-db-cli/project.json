@@ -43,5 +43,6 @@
       }
     }
   },
-  "tags": ["type:app", "scope:admin"]
+  "tags": ["type:app", "scope:admin"],
+  "name": "challenge-db-cli"
 }
