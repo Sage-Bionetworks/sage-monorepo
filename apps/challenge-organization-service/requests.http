@@ -5,10 +5,14 @@
 
 GET {{organizationServiceHost}}/organizations
 
-### List all the organizations (via API gateway)
+### List all the organizations (via the API gateway)
 
 GET {{apiGatewayHost}}/api/v1/organizations
 
 ### Get an organization by ID
 
 GET {{organizationServiceHost}}/organizations/1
+
+### Get an organization by ID (via the API gateway)
+
+GET {{apiGatewayHost}}/api/v1/organizations/1
