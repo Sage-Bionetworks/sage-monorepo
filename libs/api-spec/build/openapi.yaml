@@ -141,13 +141,23 @@ components:
       required:
         - paging
         - totalResults
+    OrganizationId:
+      description: The unique identifier of an organization
+      type: integer
+      format: int64
+      example: 1
     Organization:
       type: object
       description: An organization
       properties:
+        id:
+          $ref: '#/components/schemas/OrganizationId'
         name:
           type: string
-          nullable: true
+      required:
+        - name
+      example:
+        name: DREAM
     OrganizationsPage:
       type: object
       description: A page of organizations

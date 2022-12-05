@@ -1,0 +1,10 @@
+@apiGatewayHost = http://challenge-api-gateway:8082
+@userServiceHost = http://challenge-organization-service:8084
+
+### List all the organizations
+
+GET {{userServiceHost}}/organizations
+
+### List all the organizations (via API gateway)
+
+GET {{apiGatewayHost}}/api/v1/organizations

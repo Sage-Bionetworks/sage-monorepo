@@ -9,6 +9,8 @@
 .coveralls.yml
 .env
 .env.*
+!.env.example
+!.env.*.example
 hint-report
 migrations.json
 nx-cloud.env
