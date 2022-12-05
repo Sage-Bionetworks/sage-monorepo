@@ -2,7 +2,6 @@ package org.sagebionetworks.challenge.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.dto.OrganizationDto;
 import org.sagebionetworks.challenge.model.dto.OrganizationsPageDto;
 import org.sagebionetworks.challenge.model.entity.OrganizationEntity;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
 public class OrganizationService {
 
@@ -33,7 +31,6 @@ public class OrganizationService {
           OrganizationDto organization = organizationMapper.convertToDto(organizationEntity);
           organizations.add(organization);
         });
-    log.info("organizations", organizations);
     return OrganizationsPageDto.builder()
         .organizations(organizations)
         .totalResults(0)
