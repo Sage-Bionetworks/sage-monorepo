@@ -1,6 +1,5 @@
 package org.sagebionetworks.challenge.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.sagebionetworks.challenge.model.dto.OrganizationDto;
 import org.sagebionetworks.challenge.model.dto.OrganizationsPageDto;
@@ -24,13 +23,8 @@ public class OrganizationService {
   public OrganizationsPageDto listOrganizations(Integer pageNumber, Integer pageSize) {
     Page<OrganizationEntity> organizationEntitiesPage =
         organizationRepository.findAll(PageRequest.of(pageNumber, pageSize));
-    List<OrganizationEntity> organizationEntities = organizationEntitiesPage.getContent();
-    List<OrganizationDto> organizations = new ArrayList<>();
-    organizationEntities.forEach(
-        organizationEntity -> {
-          OrganizationDto organization = organizationMapper.convertToDto(organizationEntity);
-          organizations.add(organization);
-        });
+    List<OrganizationDto> organizations =
+        organizationMapper.convertToDtoList(organizationEntitiesPage.getContent());
     return OrganizationsPageDto.builder()
         .organizations(organizations)
         .totalResults(0)
