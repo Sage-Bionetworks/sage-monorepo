@@ -10,7 +10,7 @@ services:
     networks:
       - challenge
     ports:
-      - "8083:8083"
+      - "8084:8084"
     command: start-dev
 
 networks:
