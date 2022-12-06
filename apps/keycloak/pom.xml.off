@@ -108,7 +108,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.baeldung.auth.AuthorizationServerApp</mainClass>
+                    <mainClass>org.sagebionetworks.auth.AuthorizationServerApp</mainClass>
                     <requiresUnpack>
                         <dependency>
                             <groupId>org.keycloak</groupId>

@@ -1,4 +1,4 @@
-package com.baeldung.auth.config;
+package org.sagebionetworks.auth.config;
 
 import org.jboss.resteasy.core.Dispatcher;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;

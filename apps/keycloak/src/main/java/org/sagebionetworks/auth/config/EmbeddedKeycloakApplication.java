@@ -1,4 +1,4 @@
-package com.baeldung.auth.config;
+package org.sagebionetworks.auth.config;
 
 import java.util.NoSuchElementException;
 
@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import com.baeldung.auth.config.KeycloakServerProperties.AdminUser;
+import org.sagebionetworks.auth.config.KeycloakServerProperties.AdminUser;
 
 public class EmbeddedKeycloakApplication extends KeycloakApplication {
 

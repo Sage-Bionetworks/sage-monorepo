@@ -1,1 +1,1 @@
-com.baeldung.auth.config.SimplePlatformProvider
+org.sagebionetworks.auth.config.SimplePlatformProvider
