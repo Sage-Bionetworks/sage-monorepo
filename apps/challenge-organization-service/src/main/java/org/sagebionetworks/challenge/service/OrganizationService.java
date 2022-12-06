@@ -41,7 +41,8 @@ public class OrganizationService {
             .orElseThrow(
                 () ->
                     new OrganizationNotFoundException(
-                        String.format("Organization with ID %s does not exist.", organizationId)));
+                        String.format(
+                            "The organization with ID %s does not exist.", organizationId)));
     OrganizationDto organization = organizationMapper.convertToDto(organizationEntity);
     return organization;
   }
