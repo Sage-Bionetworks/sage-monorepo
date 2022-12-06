@@ -16,5 +16,5 @@ tags:
 paths:
   /organizations:
     $ref: paths/organizations.yaml
-  # /organizations/{organizationId}:
-  #   $ref: paths/organizations@{organizationId}.yaml
+  /organizations/{organizationId}:
+    $ref: paths/organizations/@{organizationId}.yaml

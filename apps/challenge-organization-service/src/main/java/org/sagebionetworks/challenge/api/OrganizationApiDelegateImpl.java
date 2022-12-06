@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.api;
 
+import org.sagebionetworks.challenge.model.dto.OrganizationDto;
 import org.sagebionetworks.challenge.model.dto.OrganizationsPageDto;
 import org.sagebionetworks.challenge.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,5 +16,10 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
   public ResponseEntity<OrganizationsPageDto> listOrganizations(
       Integer pageNumber, Integer pageSize) {
     return ResponseEntity.ok(organizationService.listOrganizations(pageNumber, pageSize));
+  }
+
+  @Override
+  public ResponseEntity<OrganizationDto> getOrganization(Long organizationId) {
+    return ResponseEntity.ok(organizationService.getOrganization(organizationId));
   }
 }

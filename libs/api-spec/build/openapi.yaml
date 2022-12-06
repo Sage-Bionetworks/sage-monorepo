@@ -37,6 +37,26 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  '/organizations/{organizationId}':
+    parameters:
+      - $ref: '#/components/parameters/organizationId'
+    get:
+      tags:
+        - Organization
+      summary: Get an organization
+      description: Returns the organization specified
+      operationId: getOrganization
+      responses:
+        '200':
+          description: An organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /users/register:
     post:
       tags:
@@ -339,14 +359,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Conflict:
-      description: The request conflicts with current state of the target resource
+    NotFound:
+      description: The specified resource was not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The specified resource was not found
+    Conflict:
+      description: The request conflicts with current state of the target resource
       content:
         application/json:
           schema:
@@ -370,6 +390,13 @@ components:
         format: int32
         default: 100
         minimum: 10
+    organizationId:
+      name: organizationId
+      in: path
+      description: The unique identifier of the organization
+      required: true
+      schema:
+        $ref: '#/components/schemas/OrganizationId'
     userId:
       name: userId
       in: path

@@ -1,10 +1,18 @@
 @apiGatewayHost = http://challenge-api-gateway:8082
-@userServiceHost = http://challenge-organization-service:8084
+@organizationServiceHost = http://challenge-organization-service:8084
 
 ### List all the organizations
 
-GET {{userServiceHost}}/organizations
+GET {{organizationServiceHost}}/organizations
 
-### List all the organizations (via API gateway)
+### List all the organizations (via the API gateway)
 
 GET {{apiGatewayHost}}/api/v1/organizations
+
+### Get an organization by ID
+
+GET {{organizationServiceHost}}/organizations/1
+
+### Get an organization by ID (via the API gateway)
+
+GET {{apiGatewayHost}}/api/v1/organizations/1
