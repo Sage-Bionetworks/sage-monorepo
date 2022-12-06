@@ -45,6 +45,6 @@
     "shared-themes": "libs/shared/themes",
     "shared-util": "libs/shared/util",
     "shared-web-components": "libs/shared/web-components",
-    "keycloak": "apps/keycloak"
+    "auth-service": "apps/auth-service"
   }
 }
