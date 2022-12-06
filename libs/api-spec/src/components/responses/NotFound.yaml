@@ -1,5 +1,5 @@
 description: The specified resource was not found
 content:
-  application/json:
+  application/problem+json:
     schema:
       $ref: ../schemas/Error.yaml

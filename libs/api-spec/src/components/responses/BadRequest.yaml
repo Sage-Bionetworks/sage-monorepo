@@ -1,5 +1,5 @@
 description: Invalid request
 content:
-  application/json:
+  application/problem+json:
     schema:
       $ref: ../schemas/Error.yaml
