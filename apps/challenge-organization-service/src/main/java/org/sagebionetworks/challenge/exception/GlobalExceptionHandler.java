@@ -1,6 +1,7 @@
 package org.sagebionetworks.challenge.exception;
 
 import java.util.Locale;
+import org.sagebionetworks.challenge.model.dto.ErrorDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,13 +11,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(SimpleChallengeGlobalException.class)
-  protected ResponseEntity<ErrorResponse> handleGlobalException(
+  protected ResponseEntity<ErrorDto> handleGlobalException(
       SimpleChallengeGlobalException simpleChallengeGlobalException, Locale locale) {
-    return new ResponseEntity<ErrorResponse>(
-        ErrorResponse.builder()
+    return new ResponseEntity<>(
+        ErrorDto.builder()
             .type(simpleChallengeGlobalException.getType())
-            .status(simpleChallengeGlobalException.getStatus())
             .title(simpleChallengeGlobalException.getTitle())
+            .status(simpleChallengeGlobalException.getStatus().value())
             .detail(simpleChallengeGlobalException.getDetail())
             .build(),
         simpleChallengeGlobalException.getStatus());

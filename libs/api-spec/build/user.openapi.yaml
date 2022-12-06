@@ -174,6 +174,8 @@ components:
       required:
         - title
         - status
+      x-java-class-annotations:
+        - '@lombok.Builder'
     PageMetadata:
       type: object
       description: The metadata of a page
@@ -272,25 +274,25 @@ components:
     BadRequest:
       description: Invalid request
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
     Conflict:
       description: The request conflicts with current state of the target resource
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
     NotFound:
       description: The specified resource was not found
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
   parameters:

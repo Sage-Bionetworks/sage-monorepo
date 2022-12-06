@@ -52,13 +52,13 @@ paths:
           description: Success
         "400":
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/Error'
           description: Invalid request
         "500":
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/Error'
           description: The request cannot be fulfilled due to an unexpected server
@@ -91,13 +91,13 @@ paths:
           description: An organization
         "404":
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/Error'
           description: The specified resource was not found
         "500":
           content:
-            application/json:
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/Error'
           description: The request cannot be fulfilled due to an unexpected server
@@ -146,19 +146,19 @@ components:
   responses:
     BadRequest:
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
       description: Invalid request
     InternalServerError:
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
       description: The request cannot be fulfilled due to an unexpected server error
     NotFound:
       content:
-        application/json:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
       description: The specified resource was not found
@@ -223,6 +223,8 @@ components:
       - status
       - title
       type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
     PageMetadata_paging:
       description: Links to navigate to different pages of results
       properties:

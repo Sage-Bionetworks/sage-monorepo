@@ -48,6 +48,9 @@ public interface OrganizationApi {
             content = {
               @Content(
                   mediaType = "application/json",
+                  schema = @Schema(implementation = OrganizationDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
                   schema = @Schema(implementation = OrganizationDto.class))
             }),
         @ApiResponse(
@@ -56,6 +59,9 @@ public interface OrganizationApi {
             content = {
               @Content(
                   mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
                   schema = @Schema(implementation = ErrorDto.class))
             }),
         @ApiResponse(
@@ -64,13 +70,16 @@ public interface OrganizationApi {
             content = {
               @Content(
                   mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
                   schema = @Schema(implementation = ErrorDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.GET,
       value = "/organizations/{organizationId}",
-      produces = {"application/json"})
+      produces = {"application/json", "application/problem+json"})
   default ResponseEntity<OrganizationDto> getOrganization(
       @Parameter(
               name = "organizationId",
@@ -100,6 +109,9 @@ public interface OrganizationApi {
             content = {
               @Content(
                   mediaType = "application/json",
+                  schema = @Schema(implementation = OrganizationsPageDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
                   schema = @Schema(implementation = OrganizationsPageDto.class))
             }),
         @ApiResponse(
@@ -108,6 +120,9 @@ public interface OrganizationApi {
             content = {
               @Content(
                   mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
                   schema = @Schema(implementation = ErrorDto.class))
             }),
         @ApiResponse(
@@ -116,13 +131,16 @@ public interface OrganizationApi {
             content = {
               @Content(
                   mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
                   schema = @Schema(implementation = ErrorDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.GET,
       value = "/organizations",
-      produces = {"application/json"})
+      produces = {"application/json", "application/problem+json"})
   default ResponseEntity<OrganizationsPageDto> listOrganizations(
       @Min(0)
           @Parameter(name = "pageNumber", description = "The page number")
