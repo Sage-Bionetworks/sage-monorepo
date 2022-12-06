@@ -38,6 +38,12 @@ public interface OrganizationApiDelegate {
                   ApiUtil.setExampleResponse(request, "application/json", exampleString);
                   break;
                 }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                  String exampleString =
+                      "Custom MIME type example not yet supported: application/problem+json";
+                  ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                  break;
+                }
               }
             });
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
@@ -61,6 +67,12 @@ public interface OrganizationApiDelegate {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                   String exampleString = "null";
                   ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                  break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                  String exampleString =
+                      "Custom MIME type example not yet supported: application/problem+json";
+                  ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                   break;
                 }
               }

@@ -1,8 +1,8 @@
 package org.sagebionetworks.challenge.exception;
 
 import java.util.Locale;
-import org.sagebionetworks.challenge.util.exception.ErrorResponse;
-import org.sagebionetworks.challenge.util.exception.SimpleChallengeGlobalException;
+import org.sagebionetworks.challenge.model.dto.ErrorDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,18 +12,25 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(SimpleChallengeGlobalException.class)
-  protected ResponseEntity<ErrorResponse> handleGlobalException(
+  protected ResponseEntity<ErrorDto> handleGlobalException(
       SimpleChallengeGlobalException simpleChallengeGlobalException, Locale locale) {
-    return ResponseEntity.badRequest()
-        .body(
-            ErrorResponse.builder()
-                .code(simpleChallengeGlobalException.getCode())
-                .message(simpleChallengeGlobalException.getMessage())
-                .build());
+    return new ResponseEntity<>(
+        ErrorDto.builder()
+            .type(simpleChallengeGlobalException.getType())
+            .title(simpleChallengeGlobalException.getTitle())
+            .status(simpleChallengeGlobalException.getStatus().value())
+            .detail(simpleChallengeGlobalException.getDetail())
+            .build(),
+        simpleChallengeGlobalException.getStatus());
   }
 
   @ExceptionHandler({Exception.class})
-  protected ResponseEntity<String> handleException(Exception e, Locale locale) {
-    return ResponseEntity.badRequest().body("Exception occur inside API " + e);
+  protected ResponseEntity<ErrorDto> handleException(Exception e, Locale locale) {
+    return ResponseEntity.internalServerError()
+        .body(
+            ErrorDto.builder()
+                .title("An exception occured")
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .build());
   }
 }

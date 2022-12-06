@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 @Schema(name = "Error", description = "Problem details (tools.ietf.org/html/rfc7807)")
 @JsonTypeName("Error")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@lombok.Builder
 public class ErrorDto {
 
   @JsonProperty("title")
