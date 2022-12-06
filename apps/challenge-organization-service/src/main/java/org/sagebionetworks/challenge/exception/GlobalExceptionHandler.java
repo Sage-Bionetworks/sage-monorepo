@@ -1,8 +1,6 @@
 package org.sagebionetworks.challenge.exception;
 
 import java.util.Locale;
-import org.sagebionetworks.challenge.util.exception.ErrorResponse;
-import org.sagebionetworks.challenge.util.exception.SimpleChallengeGlobalException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,12 +12,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(SimpleChallengeGlobalException.class)
   protected ResponseEntity<ErrorResponse> handleGlobalException(
       SimpleChallengeGlobalException simpleChallengeGlobalException, Locale locale) {
-    return ResponseEntity.badRequest()
-        .body(
-            ErrorResponse.builder()
-                .code(simpleChallengeGlobalException.getCode())
-                .message(simpleChallengeGlobalException.getMessage())
-                .build());
+    return new ResponseEntity<ErrorResponse>(
+        ErrorResponse.builder()
+            .type(simpleChallengeGlobalException.getType())
+            .status(simpleChallengeGlobalException.getStatus())
+            .title(simpleChallengeGlobalException.getTitle())
+            .detail(simpleChallengeGlobalException.getDetail())
+            .build(),
+        simpleChallengeGlobalException.getStatus());
   }
 
   @ExceptionHandler({Exception.class})
