@@ -1,4 +1,10 @@
-# Update Dependencies
+# Updating tools and dependencies
+
+- [Renovate](#Renovate)
+- [Dependency update workflow](#Dependency-update-workflow)
+    - [Exceptions](#Exceptions)
+    - [Dev container](#Dev-container)
+    - [Yarn](#Yarn)
 
 ## Renovate
 
@@ -18,11 +24,57 @@ notifications:
 Renovate provides this [dashboard] to manage dependency updates. The following section describes the
 workflow currently applied to update the dependencies.
 
-## Managing dependency updates
+## Dependency update workflow
 
-TODO
+> **Note**
+> This workflow is a work in progress.
 
-## Node.js
+1. Go to Renovate's [dashboard].
+2. Review the dependency updates listed in the section "Open", for which a PR is already open.
+    > **Note** Currently, Renovate is configured to open up to 5 PRs for the sake of reducing
+    > notifications.
+3. Merge the PRs that you are confident will not break the workspace.
+    > **Note** For PRs that affect projects with low test coverage, it is recommended to checkout
+    > the branch locally and manually test that the main projects still work (e.g. the Challenge
+    > Registry app).
+4. Trigger the creation of PRs from the dashboard for dependencies listed in the section
+   "Rate-Limited" (minor and patch updates) that you are confident you can merge according to the
+   criteria listed in Step 3.
+5. Trigger the creation of PRs from the dashboard for dependencies listed in the section "Pending
+   Approval" (major updates) that you are confident you can merge according to the criteria listed
+   in Step 3.
+
+### Exceptions
+
+The following tools must be updated manually as described. Continuing to ask Renovate to report on
+updates available for these dependencies are still benefitial. One improvement could be to prevent
+Renovate from automatically opening PRs for these tools. Once dependencies have been manually
+updated, Renovate will automatically remove the corresponding items from the dashboard
+
+- Major updates of Nx, Angular and Jest must be applied using Nx [`migrate` tool]. Nx will take care
+  of updating its version number as well as the version number of supported tools like Angular and
+  Jest. Nx will also modify files like the `project.json` files.
+- Node.js and Yarn are installed as part of the dev container. Renovate's attempts to update these
+  tools are currently making the CI/CD workflow fail because Renovate does not detect their version
+  numbers defined in the dev container Dockerfile.
+
+### Dev container
+
+The workflow used to update the dev container is described in this
+[ticket](https://github.com/Sage-Bionetworks/challenge-registry/issues/975).
+
+### Yarn
+
+1. Update the version of `yarn` in the Dockerfile of the devcontainer.
+2. Rebuild and restart the devcontainer.
+3. Update the version of `yarn` used in the workspace.
+    ```console
+    yarn set version <version>
+    ```
+
+## Attic
+
+### Node.js
 
 Identify whether a new version is available for a package.
 
@@ -60,18 +112,8 @@ info All dependencies
 Done in 162.06s.
 ```
 
-## Devcontainer
-
-### Update yarn
-
-1. Update the version of `yarn` in the Dockerfile of the devcontainer.
-2. Rebuild and restart the devcontainer.
-3. Update the version of `yarn` used in the workspace.
-    ```console
-    yarn set version <version>
-    ```
-
 <!-- Links -->
 
 [Renovate]: https://github.com/renovatebot/renovate
 [dashboard]: https://github.com/Sage-Bionetworks/challenge-registry/issues/798
+[`migrate` tool]: https://nx.dev/core-features/automate-updating-dependencies
