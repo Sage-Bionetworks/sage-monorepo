@@ -1,5 +1,27 @@
 # Update Dependencies
 
+## Renovate
+
+This workspace manages dependency updates using [Renovate], which is controlled by a GitHub
+workflow. The benefit of Renovate is that it's behavior can be fully customized, unlike with
+Dependabot. For example, the following strategies are used to minimize the number of email/in-app
+notifications:
+
+- Define when Renovate runs
+- Group selected dependency updates in a single PR
+- Limit the number of PRs that Renovate can open
+- Merge dependency updates automatically, thus avoiding the notification that would have come with
+  the creation of a PR.
+  > **Note**
+  > This strategy is probably viable only for projects that have a high level of test coverage.
+
+Renovate provides this [dashboard] to manage dependency updates. The following section describes the
+workflow currently applied to update the dependencies.
+
+## Managing dependency updates
+
+TODO
+
 ## Node.js
 
 Identify whether a new version is available for a package.
@@ -48,3 +70,8 @@ Done in 162.06s.
     ```console
     yarn set version <version>
     ```
+
+<!-- Links -->
+
+[Renovate]: https://github.com/renovatebot/renovate
+[dashboard]: https://github.com/Sage-Bionetworks/challenge-registry/issues/798
