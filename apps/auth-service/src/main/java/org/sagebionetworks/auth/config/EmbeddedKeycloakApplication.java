@@ -1,7 +1,6 @@
 package org.sagebionetworks.auth.config;
 
 import java.util.NoSuchElementException;
-import lombok.extern.slf4j.Slf4j;
 import org.keycloak.Config;
 import org.keycloak.exportimport.ExportImportManager;
 import org.keycloak.models.KeycloakSession;
@@ -12,11 +11,14 @@ import org.keycloak.services.resources.KeycloakApplication;
 import org.keycloak.services.util.JsonConfigProviderFactory;
 import org.keycloak.util.JsonSerialization;
 import org.sagebionetworks.auth.config.KeycloakServerProperties.AdminUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-@Slf4j
 public class EmbeddedKeycloakApplication extends KeycloakApplication {
+
+  private static final Logger LOG = LoggerFactory.getLogger(EmbeddedKeycloakApplication.class);
 
   static KeycloakServerProperties keycloakServerProperties;
 
@@ -46,7 +48,7 @@ public class EmbeddedKeycloakApplication extends KeycloakApplication {
       applianceBootstrap.createMasterRealmUser(admin.getUsername(), admin.getPassword());
       session.getTransactionManager().commit();
     } catch (Exception ex) {
-      log.warn("Couldn't create keycloak master admin user: {}", ex.getMessage());
+      LOG.warn("Couldn't create keycloak master admin user: {}", ex.getMessage());
       session.getTransactionManager().rollback();
     }
 
@@ -69,7 +71,7 @@ public class EmbeddedKeycloakApplication extends KeycloakApplication {
 
       session.getTransactionManager().commit();
     } catch (Exception ex) {
-      log.warn("Failed to import Realm json file: {}", ex.getMessage());
+      LOG.warn("Failed to import Realm json file: {}", ex.getMessage());
       session.getTransactionManager().rollback();
     }
 
