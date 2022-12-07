@@ -17,6 +17,8 @@ repositories {
 }
 
 dependencies {
+  annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+  compileOnly "org.projectlombok:lombok:${lombokVersion}"
   implementation 'org.jboss.resteasy:resteasy-jackson2-provider:3.15.1.Final'
   implementation 'org.keycloak:keycloak-dependencies-server-all:18.0.0'
   implementation "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
@@ -55,13 +57,13 @@ spotless {
   //   endWithNewline()
   // }
 
-//   java {
-//     target 'src/*/java/**/*.java'
+  java {
+    target 'src/*/java/**/*.java'
 
-//     importOrder()
-//     removeUnusedImports()
-//     googleJavaFormat()
-//   }
+    importOrder()
+    removeUnusedImports()
+    googleJavaFormat()
+  }
 }
 
 // /*
