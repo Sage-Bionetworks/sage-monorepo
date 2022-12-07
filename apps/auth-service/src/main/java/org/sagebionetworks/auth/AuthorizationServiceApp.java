@@ -15,12 +15,12 @@ import org.sagebionetworks.auth.config.KeycloakServerProperties;
 
 @SpringBootApplication(exclude = LiquibaseAutoConfiguration.class)
 @EnableConfigurationProperties({ KeycloakServerProperties.class })
-public class AuthorizationServerApp {
+public class AuthorizationServiceApp {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AuthorizationServerApp.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AuthorizationServiceApp.class);
 
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(AuthorizationServerApp.class, args);
+		SpringApplication.run(AuthorizationServiceApp.class, args);
 	}
 
 	@Bean
