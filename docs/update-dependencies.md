@@ -9,7 +9,7 @@
 ## Renovate
 
 This workspace manages dependency updates using [Renovate], which is controlled by a GitHub
-workflow. The main benefit of Renovate is that it's behavior can be fully customized, unlike
+workflow. The main benefit of Renovate is that its behavior can be fully customized, unlike
 Dependabot's. For example, the following strategies are used to minimize the number of email/in-app
 notifications:
 
