@@ -14,8 +14,8 @@ Dependabot's. For example, the following strategies are used to minimize the num
 notifications:
 
 - Define when Renovate runs
-- Group selected dependency updates in a single PR
-- Limit the number of PRs that Renovate can open
+- Group several dependency updates in a single PR
+- Limit the number of PRs that Renovate can open at a given time
 - Merge dependency updates automatically, thus avoiding the notification that would have come with
   the creation of a PR.
   > **Note**
