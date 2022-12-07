@@ -17,16 +17,16 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.7'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.6.7'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.7'
-    implementation 'org.jboss.resteasy:resteasy-jackson2-provider:3.15.1.Final'
-    implementation 'org.keycloak:keycloak-dependencies-server-all:18.0.0'
-    implementation 'org.springframework.boot:spring-boot-configuration-processor:2.6.7'
-    runtimeOnly 'com.h2database:h2:1.4.200'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.7'
-    testImplementation 'io.rest-assured:rest-assured:4.4.0'
-    testImplementation 'org.junit.vintage:junit-vintage-engine:5.8.2'
+  implementation 'org.jboss.resteasy:resteasy-jackson2-provider:3.15.1.Final'
+  implementation 'org.keycloak:keycloak-dependencies-server-all:18.0.0'
+  implementation "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+  runtimeOnly 'com.h2database:h2:1.4.200'
+  testImplementation 'io.rest-assured:rest-assured:4.4.0'
+  testImplementation 'org.junit.vintage:junit-vintage-engine:5.8.2'
+  testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
 group = 'org.springframework.boot'
