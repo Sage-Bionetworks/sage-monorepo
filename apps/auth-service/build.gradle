@@ -33,6 +33,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
     implementation 'org.jboss.resteasy:resteasy-jackson2-provider:3.15.1.Final'
+    // implementation 'org.jboss.resteasy:resteasy-jackson2-provider:6.2.1.Final'
     implementation 'org.keycloak:keycloak-dependencies-server-all:18.0.0'
     implementation "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
     runtimeOnly 'com.h2database:h2:1.4.200'
