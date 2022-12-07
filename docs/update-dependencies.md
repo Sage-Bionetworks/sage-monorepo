@@ -47,9 +47,9 @@ workflow currently applied to update the dependencies.
 ### Exceptions
 
 The following tools must be updated manually as described. Continuing to ask Renovate to report on
-updates available for these dependencies are still benefitial. One improvement could be to prevent
+updates available for these dependencies is still benefitial. One improvement could be to prevent
 Renovate from automatically opening PRs for these tools. Once dependencies have been manually
-updated, Renovate will automatically remove the corresponding items from the dashboard
+updated, Renovate will automatically remove the corresponding items from the dashboard.
 
 - Major updates of Nx, Angular and Jest must be applied using Nx [`migrate` tool]. Nx will take care
   of updating its version number as well as the version number of supported tools like Angular and
