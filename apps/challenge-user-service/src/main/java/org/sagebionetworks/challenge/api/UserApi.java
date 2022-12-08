@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import org.sagebionetworks.challenge.model.dto.ErrorDto;
+import org.sagebionetworks.challenge.model.dto.BasicErrorDto;
 import org.sagebionetworks.challenge.model.dto.UserCreateRequestDto;
 import org.sagebionetworks.challenge.model.dto.UserCreateResponseDto;
 import org.sagebionetworks.challenge.model.dto.UserDto;
@@ -51,6 +51,9 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
+                  schema = @Schema(implementation = UserCreateResponseDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
                   schema = @Schema(implementation = UserCreateResponseDto.class))
             }),
         @ApiResponse(
@@ -59,7 +62,10 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = BasicErrorDto.class))
             }),
         @ApiResponse(
             responseCode = "409",
@@ -67,7 +73,10 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = BasicErrorDto.class))
             }),
         @ApiResponse(
             responseCode = "500",
@@ -75,13 +84,16 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = BasicErrorDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.POST,
       value = "/users/register",
-      produces = {"application/json"},
+      produces = {"application/json", "application/problem+json"},
       consumes = {"application/json"})
   default ResponseEntity<UserCreateResponseDto> createUser(
       @Parameter(name = "UserCreateRequestDto", description = "", required = true)
@@ -109,6 +121,9 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
+                  schema = @Schema(implementation = Object.class)),
+              @Content(
+                  mediaType = "application/problem+json",
                   schema = @Schema(implementation = Object.class))
             }),
         @ApiResponse(
@@ -117,7 +132,10 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = BasicErrorDto.class))
             }),
         @ApiResponse(
             responseCode = "500",
@@ -125,13 +143,16 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = BasicErrorDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.DELETE,
       value = "/users/{userId}",
-      produces = {"application/json"})
+      produces = {"application/json", "application/problem+json"})
   default ResponseEntity<Object> deleteUser(
       @Parameter(
               name = "userId",
@@ -161,6 +182,9 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
+                  schema = @Schema(implementation = UserDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
                   schema = @Schema(implementation = UserDto.class))
             }),
         @ApiResponse(
@@ -169,7 +193,10 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = BasicErrorDto.class))
             }),
         @ApiResponse(
             responseCode = "500",
@@ -177,13 +204,16 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = BasicErrorDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.GET,
       value = "/users/{userId}",
-      produces = {"application/json"})
+      produces = {"application/json", "application/problem+json"})
   default ResponseEntity<UserDto> getUser(
       @Parameter(
               name = "userId",
@@ -214,6 +244,9 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
+                  schema = @Schema(implementation = UsersPageDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
                   schema = @Schema(implementation = UsersPageDto.class))
             }),
         @ApiResponse(
@@ -222,7 +255,10 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = BasicErrorDto.class))
             }),
         @ApiResponse(
             responseCode = "500",
@@ -230,13 +266,16 @@ public interface UserApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = BasicErrorDto.class))
             })
       })
   @RequestMapping(
       method = RequestMethod.GET,
       value = "/users",
-      produces = {"application/json"})
+      produces = {"application/json", "application/problem+json"})
   default ResponseEntity<UsersPageDto> listUsers(
       @Min(0)
           @Parameter(name = "pageNumber", description = "The page number")
