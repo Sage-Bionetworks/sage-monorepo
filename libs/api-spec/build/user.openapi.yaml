@@ -155,7 +155,7 @@ components:
         id: 507f1f77bcf86cd799439011
       x-java-class-annotations:
         - '@lombok.Builder'
-    Error:
+    BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
       properties:
@@ -276,25 +276,25 @@ components:
       content:
         application/problem+json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/BasicError'
     Conflict:
       description: The request conflicts with current state of the target resource
       content:
         application/problem+json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/BasicError'
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/problem+json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/BasicError'
     NotFound:
       description: The specified resource was not found
       content:
         application/problem+json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/BasicError'
   parameters:
     pageNumber:
       name: pageNumber
