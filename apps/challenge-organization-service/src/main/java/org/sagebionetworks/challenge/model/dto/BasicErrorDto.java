@@ -9,11 +9,11 @@ import javax.annotation.Generated;
 import javax.validation.constraints.*;
 
 /** Problem details (tools.ietf.org/html/rfc7807) */
-@Schema(name = "Error", description = "Problem details (tools.ietf.org/html/rfc7807)")
-@JsonTypeName("Error")
+@Schema(name = "BasicError", description = "Problem details (tools.ietf.org/html/rfc7807)")
+@JsonTypeName("BasicError")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @lombok.Builder
-public class ErrorDto {
+public class BasicErrorDto {
 
   @JsonProperty("title")
   private String title;
@@ -27,7 +27,7 @@ public class ErrorDto {
   @JsonProperty("type")
   private String type;
 
-  public ErrorDto title(String title) {
+  public BasicErrorDto title(String title) {
     this.title = title;
     return this;
   }
@@ -50,7 +50,7 @@ public class ErrorDto {
     this.title = title;
   }
 
-  public ErrorDto status(Integer status) {
+  public BasicErrorDto status(Integer status) {
     this.status = status;
     return this;
   }
@@ -70,7 +70,7 @@ public class ErrorDto {
     this.status = status;
   }
 
-  public ErrorDto detail(String detail) {
+  public BasicErrorDto detail(String detail) {
     this.detail = detail;
     return this;
   }
@@ -92,7 +92,7 @@ public class ErrorDto {
     this.detail = detail;
   }
 
-  public ErrorDto type(String type) {
+  public BasicErrorDto type(String type) {
     this.type = type;
     return this;
   }
@@ -122,11 +122,11 @@ public class ErrorDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ErrorDto error = (ErrorDto) o;
-    return Objects.equals(this.title, error.title)
-        && Objects.equals(this.status, error.status)
-        && Objects.equals(this.detail, error.detail)
-        && Objects.equals(this.type, error.type);
+    BasicErrorDto basicError = (BasicErrorDto) o;
+    return Objects.equals(this.title, basicError.title)
+        && Objects.equals(this.status, basicError.status)
+        && Objects.equals(this.detail, basicError.detail)
+        && Objects.equals(this.type, basicError.type);
   }
 
   @Override
@@ -137,7 +137,7 @@ public class ErrorDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ErrorDto {\n");
+    sb.append("class BasicErrorDto {\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    detail: ").append(toIndentedString(detail)).append("\n");
