@@ -17,7 +17,6 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { User } from '@sagebionetworks/api-client-angular-deprecated';
-import { OrganizationService } from '@sagebionetworks/api-client-angular';
 
 @Component({
   selector: 'challenge-registry-root',
@@ -40,8 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private kauthService: KAuthService,
     private authService: AuthService,
     private keycloakService: KeycloakService,
-    private activatedRoute: ActivatedRoute,
-    private organizationService: OrganizationService
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -58,11 +56,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.userAvatar.name = 'blank';
 
     this.pageTitleService.setTitle('Challenge Registry');
-
-    // demo: get list of organizations from the new backend.
-    this.organizationService
-      .listOrganizations()
-      .subscribe((page) => console.log('Organizations page', page));
   }
 
   ngOnDestroy(): void {

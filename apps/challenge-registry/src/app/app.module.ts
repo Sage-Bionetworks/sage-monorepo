@@ -1,7 +1,10 @@
 import { APP_INITIALIZER, NgModule, PLATFORM_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { ApiModule, BASE_PATH } from '@sagebionetworks/api-client-angular';
+import {
+  ApiModule,
+  BASE_PATH as API_CLIENT_BASE_PATH,
+} from '@sagebionetworks/api-client-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CountUpModule } from 'ngx-countup';
@@ -50,7 +53,7 @@ import { initializeKeycloakFactory } from './initialize-keycloak.factory';
       multi: true,
       deps: [ConfigService, KeycloakService, PLATFORM_ID],
     },
-    { provide: BASE_PATH, useValue: 'http://localhost:8082/api/v1' },
+    { provide: API_CLIENT_BASE_PATH, useValue: 'http://localhost:4200/api' },
   ],
   bootstrap: [AppComponent],
 })
