@@ -11,7 +11,7 @@ info:
   x-logo:
     url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
 servers:
-- url: /
+- url: http://localhost
 tags:
 - description: Operations about users
   name: User

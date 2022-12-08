@@ -45,7 +45,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "rm -fr src/lib",
+          "rm -fr src/lib/*",
           "openapi-generator-cli generate",
           "echo 'TODO Format generated code'"
         ],

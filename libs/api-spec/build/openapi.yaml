@@ -10,6 +10,8 @@ info:
     url: 'https://github.com/Sage-Bionetworks/challenge-registry'
   x-logo:
     url: 'https://Sage-Bionetworks.github.io/rocc-schemas/logo.png'
+servers:
+  - url: 'http://localhost'
 tags:
   - name: Organization
     description: Operations about organizations
