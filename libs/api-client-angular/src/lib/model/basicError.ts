@@ -14,7 +14,7 @@
 /**
  * Problem details (tools.ietf.org/html/rfc7807)
  */
-export interface ModelError { 
+export interface BasicError { 
     /**
      * A human readable documentation for the problem type
      */
