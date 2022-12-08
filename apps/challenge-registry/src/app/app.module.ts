@@ -53,7 +53,11 @@ import { initializeKeycloakFactory } from './initialize-keycloak.factory';
       multi: true,
       deps: [ConfigService, KeycloakService, PLATFORM_ID],
     },
-    { provide: API_CLIENT_BASE_PATH, useValue: 'http://localhost:4200/api' },
+    {
+      provide: API_CLIENT_BASE_PATH,
+      useFactory: (configService: ConfigService) => configService.config.apiUrl,
+      deps: [ConfigService],
+    },
   ],
   bootstrap: [AppComponent],
 })
