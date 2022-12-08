@@ -8,9 +8,8 @@ import javax.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
-import org.sagebionetworks.challenge.exception.GlobalErrorCode;
 import org.sagebionetworks.challenge.exception.InvalidUserException;
-import org.sagebionetworks.challenge.exception.UserAlreadyRegisteredException;
+import org.sagebionetworks.challenge.exception.UsernameAlreadyExistsException;
 import org.sagebionetworks.challenge.model.dto.UserCreateRequestDto;
 import org.sagebionetworks.challenge.model.dto.UserCreateResponseDto;
 import org.sagebionetworks.challenge.model.dto.UserDto;
@@ -38,8 +37,8 @@ public class UserService {
   @Transactional
   public UserCreateResponseDto createUser(UserCreateRequestDto userCreateRequest) {
     if (keycloakUserService.getUserByUsername(userCreateRequest.getLogin()).isPresent()) {
-      throw new UserAlreadyRegisteredException(
-          "This username is already registered.", GlobalErrorCode.ERROR_USERNAME_REGISTERED);
+      throw new UsernameAlreadyExistsException(
+          String.format("The username %s already exist.", userCreateRequest.getLogin()));
     }
 
     UserRepresentation userRepresentation = new UserRepresentation();
@@ -65,8 +64,7 @@ public class UserService {
       return UserCreateResponseDto.builder().id(savedUser.getId()).build();
     }
 
-    throw new InvalidUserException(
-        "Unable to create the new user", GlobalErrorCode.ERROR_INVALID_USER);
+    throw new InvalidUserException(null);
   }
 
   @Transactional(readOnly = true)

@@ -1,9 +1,11 @@
 package org.sagebionetworks.challenge.exception;
 
-import org.sagebionetworks.challenge.util.exception.SimpleChallengeGlobalException;
-
 public class InvalidEmailException extends SimpleChallengeGlobalException {
-  public InvalidEmailException(String message, String code) {
-    super(message, code);
+  public InvalidEmailException(String detail) {
+    super(
+        ErrorConstants.INVALID_EMAIL.getType(),
+        ErrorConstants.INVALID_EMAIL.getTitle(),
+        ErrorConstants.INVALID_EMAIL.getStatus(),
+        detail);
   }
 }
