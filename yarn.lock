@@ -4332,13 +4332,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nguniversal/builders@npm:14.2.2":
-  version: 14.2.2
-  resolution: "@nguniversal/builders@npm:14.2.2"
+"@nguniversal/builders@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@nguniversal/builders@npm:14.2.3"
   dependencies:
     "@angular-devkit/architect": ^0.1402.0
     "@angular-devkit/core": ^14.2.0
-    "@nguniversal/common": 14.2.2
+    "@nguniversal/common": 14.2.3
     browser-sync: ^2.26.7
     express: ^4.17.1
     guess-parser: ^0.4.12
@@ -4349,7 +4349,7 @@ __metadata:
     tree-kill: ^1.2.2
   peerDependencies:
     "@angular-devkit/build-angular": ^14.2.0
-  checksum: aecda7cc1fd7c696fd2d421599be68f1e433ba22b7c882598e59bfeb2a8ba1790e3757561f5dd4dbef2f6a0a3c3c5adead3298e40b3a3835fee5a00e10c67dc2
+  checksum: f745c85ce43db3c11bccad67b1cde68a332a77e5dc2d22e76c5da3a202e2078018a8bad36492f3125a9895d91a876a501b608a5a0168afed4c42a2135831eb91
   languageName: node
   linkType: hard
 
@@ -4364,6 +4364,20 @@ __metadata:
     "@angular/common": ^14.2.0
     "@angular/core": ^14.2.0
   checksum: 7d38639d24b94c3cad01ec19be1f53c8d6920998fd0bc59b12a78f2793ce0efa7445e27e0f6ee22ee74642a257d530cf87c29de78f87c827e67beb39d25988ae
+  languageName: node
+  linkType: hard
+
+"@nguniversal/common@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@nguniversal/common@npm:14.2.3"
+  dependencies:
+    critters: 0.0.16
+    jsdom: 20.0.0
+    tslib: ^2.3.0
+  peerDependencies:
+    "@angular/common": ^14.2.0
+    "@angular/core": ^14.2.0
+  checksum: 4d3dfe78ae06b011463d643c8e34b78f0a809f305d932037ceb3ed90a860cb8c387699004dc4b052766f9169bb238884028961a4d90d042834310d5b30d59963
   languageName: node
   linkType: hard
 
@@ -9723,7 +9737,7 @@ __metadata:
     "@angular/router": 14.2.11
     "@hint/configuration-web-recommended": 8.2.16
     "@hint/formatter-codeframe": 3.1.33
-    "@nguniversal/builders": 14.2.2
+    "@nguniversal/builders": 14.2.3
     "@nguniversal/express-engine": 14.2.2
     "@nrwl/angular": 14.8.6
     "@nrwl/cli": 14.8.6
