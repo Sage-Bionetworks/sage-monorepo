@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.sagebionetworks.challenge.exception.InvalidUserException;
+import org.sagebionetworks.challenge.exception.UserNotFoundException;
 import org.sagebionetworks.challenge.exception.UsernameAlreadyExistsException;
 import org.sagebionetworks.challenge.model.dto.UserCreateRequestDto;
 import org.sagebionetworks.challenge.model.dto.UserCreateResponseDto;
@@ -88,7 +88,13 @@ public class UserService {
   @Transactional(readOnly = true)
   public UserDto getUser(Long userId) {
     UserEntity userEntity =
-        userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        userRepository
+            .findById(userId)
+            .orElseThrow(
+                () ->
+                    new UserNotFoundException(
+                        String.format("The user with ID %s does not exist.", userId)));
+
     UserRepresentation userRepresentation = keycloakUserService.getUser(userEntity.getAuthId());
     UserDto user = userMapper.convertToDto(userEntity);
     user.setEmail(userRepresentation.getEmail());
