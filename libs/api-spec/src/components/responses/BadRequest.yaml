@@ -2,4 +2,4 @@ description: Invalid request
 content:
   application/problem+json:
     schema:
-      $ref: ../schemas/Error.yaml
+      $ref: ../schemas/BasicError.yaml

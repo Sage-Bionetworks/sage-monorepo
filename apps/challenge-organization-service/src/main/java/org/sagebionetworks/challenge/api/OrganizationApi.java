@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import org.sagebionetworks.challenge.model.dto.ErrorDto;
+import org.sagebionetworks.challenge.model.dto.BasicErrorDto;
 import org.sagebionetworks.challenge.model.dto.OrganizationDto;
 import org.sagebionetworks.challenge.model.dto.OrganizationsPageDto;
 import org.springframework.http.ResponseEntity;
@@ -59,10 +59,10 @@ public interface OrganizationApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class)),
+                  schema = @Schema(implementation = BasicErrorDto.class)),
               @Content(
                   mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class))
             }),
         @ApiResponse(
             responseCode = "500",
@@ -70,10 +70,10 @@ public interface OrganizationApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class)),
+                  schema = @Schema(implementation = BasicErrorDto.class)),
               @Content(
                   mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class))
             })
       })
   @RequestMapping(
@@ -120,10 +120,10 @@ public interface OrganizationApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class)),
+                  schema = @Schema(implementation = BasicErrorDto.class)),
               @Content(
                   mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class))
             }),
         @ApiResponse(
             responseCode = "500",
@@ -131,10 +131,10 @@ public interface OrganizationApi {
             content = {
               @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorDto.class)),
+                  schema = @Schema(implementation = BasicErrorDto.class)),
               @Content(
                   mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ErrorDto.class))
+                  schema = @Schema(implementation = BasicErrorDto.class))
             })
       })
   @RequestMapping(

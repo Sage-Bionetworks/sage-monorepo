@@ -9,7 +9,7 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
-model/modelError.ts
+model/basicError.ts
 model/models.ts
 model/organization.ts
 model/organizationsPage.ts

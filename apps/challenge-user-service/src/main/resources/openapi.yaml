@@ -35,21 +35,21 @@ paths:
           description: Account created
         "400":
           content:
-            application/json:
+            application/problem+json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/BasicError'
           description: Invalid request
         "409":
           content:
-            application/json:
+            application/problem+json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/BasicError'
           description: The request conflicts with current state of the target resource
         "500":
           content:
-            application/json:
+            application/problem+json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
       summary: Create a user
@@ -95,15 +95,15 @@ paths:
           description: Success
         "400":
           content:
-            application/json:
+            application/problem+json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/BasicError'
           description: Invalid request
         "500":
           content:
-            application/json:
+            application/problem+json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
       summary: Get all users
@@ -135,15 +135,15 @@ paths:
           description: Deleted
         "400":
           content:
-            application/json:
+            application/problem+json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
         "500":
           content:
-            application/json:
+            application/problem+json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
       summary: Delete a user
@@ -174,15 +174,15 @@ paths:
           description: A user
         "404":
           content:
-            application/json:
+            application/problem+json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
         "500":
           content:
-            application/json:
+            application/problem+json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
       summary: Get a user
@@ -230,27 +230,27 @@ components:
   responses:
     BadRequest:
       content:
-        application/json:
+        application/problem+json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/BasicError'
       description: Invalid request
     Conflict:
       content:
-        application/json:
+        application/problem+json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/BasicError'
       description: The request conflicts with current state of the target resource
     InternalServerError:
       content:
-        application/json:
+        application/problem+json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
     NotFound:
       content:
-        application/json:
+        application/problem+json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
   schemas:
     Email:
@@ -314,7 +314,7 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
-    Error:
+    BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
       properties:
         title:
@@ -334,6 +334,8 @@ components:
       - status
       - title
       type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
     PageMetadata:
       description: The metadata of a page
       properties:

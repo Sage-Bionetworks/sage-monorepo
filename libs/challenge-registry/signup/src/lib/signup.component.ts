@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import {
   UserCreateRequest,
   UserService,
-  ModelError as ApiClientError,
+  BasicError as ApiClientError,
 } from '@sagebionetworks/api-client-angular';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import { isApiClientError } from '@sagebionetworks/challenge-registry/util';

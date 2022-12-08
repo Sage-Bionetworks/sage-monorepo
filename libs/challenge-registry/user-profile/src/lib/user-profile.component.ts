@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
   Account,
   AccountService,
-  // ModelError as ApiClientError,
+  // BasicError as ApiClientError,
   User,
   UserService,
 } from '@sagebionetworks/api-client-angular-deprecated';

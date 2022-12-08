@@ -2,4 +2,4 @@ description: The request cannot be fulfilled due to an unexpected server error
 content:
   application/problem+json:
     schema:
-      $ref: ../schemas/Error.yaml
+      $ref: ../schemas/BasicError.yaml

@@ -1,7 +1,7 @@
 package org.sagebionetworks.challenge.exception;
 
 import java.util.Locale;
-import org.sagebionetworks.challenge.model.dto.ErrorDto;
+import org.sagebionetworks.challenge.model.dto.BasicErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,10 +12,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(SimpleChallengeGlobalException.class)
-  protected ResponseEntity<ErrorDto> handleGlobalException(
+  protected ResponseEntity<BasicErrorDto> handleGlobalException(
       SimpleChallengeGlobalException simpleChallengeGlobalException, Locale locale) {
     return new ResponseEntity<>(
-        ErrorDto.builder()
+        BasicErrorDto.builder()
             .type(simpleChallengeGlobalException.getType())
             .title(simpleChallengeGlobalException.getTitle())
             .status(simpleChallengeGlobalException.getStatus().value())
@@ -25,10 +25,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler({Exception.class})
-  protected ResponseEntity<ErrorDto> handleException(Exception e, Locale locale) {
+  protected ResponseEntity<BasicErrorDto> handleException(Exception e, Locale locale) {
     return ResponseEntity.internalServerError()
         .body(
-            ErrorDto.builder()
+            BasicErrorDto.builder()
                 .title("An exception occured")
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .build());

@@ -1,4 +1,4 @@
-export * from './modelError';
+export * from './basicError';
 export * from './organization';
 export * from './organizationsPage';
 export * from './organizationsPageAllOf';
