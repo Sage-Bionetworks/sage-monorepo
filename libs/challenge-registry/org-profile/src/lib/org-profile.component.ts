@@ -12,6 +12,10 @@ import {
   Avatar,
 } from '@sagebionetworks/challenge-registry/ui';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
+import {
+  OrganizationService,
+  OrganizationsPage,
+} from '@sagebionetworks/api-client-angular';
 
 @Component({
   selector: 'challenge-registry-org-profile',
@@ -33,7 +37,8 @@ export class OrgProfileComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private route: ActivatedRoute,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private organizationService: OrganizationService
   ) {
     this.appVersion = this.configService.config.appVersion;
   }
@@ -64,5 +69,12 @@ export class OrgProfileComponent implements OnInit {
     });
 
     this.subscriptions.push(activeTabSub);
+
+    // demo: get list of organizations from the new backend.
+    this.organizationService
+      .listOrganizations()
+      .subscribe((page: OrganizationsPage) =>
+        console.log('Organizations page', page)
+      );
   }
 }
