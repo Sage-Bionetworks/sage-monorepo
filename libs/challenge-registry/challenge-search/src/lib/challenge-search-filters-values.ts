@@ -15,7 +15,7 @@ const updateYear = (
 
 export const challengeStartYearRangeFilterValues: FilterValue[] = [
   {
-    value: undefined,
+    value: 'all',
     label: 'All',
     active: true,
   },
