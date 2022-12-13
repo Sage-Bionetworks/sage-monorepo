@@ -35,13 +35,8 @@ export const challengeStartYearRangeFilterValues: FilterValue[] = [
     active: false,
   },
   {
-    value: updateYear(thisYear, -2, -2),
-    label: (thisYear - 2).toString(),
-    active: false,
-  },
-  {
-    value: updateYear(thisYear, -6, -3),
-    label: thisYear - 6 + ' - ' + (thisYear - 3),
+    value: updateYear(thisYear, -6, -2),
+    label: thisYear - 6 + ' - ' + (thisYear - 2),
     active: false,
   },
   {
@@ -50,13 +45,8 @@ export const challengeStartYearRangeFilterValues: FilterValue[] = [
     active: false,
   },
   {
-    value: updateYear(thisYear, -17, -12),
-    label: thisYear - 17 + ' - ' + (thisYear - 12),
-    active: false,
-  },
-  {
-    value: updateYear(thisYear, -28, -18),
-    label: thisYear - 28 + ' - ' + (thisYear - 18),
+    value: updateYear(thisYear, -21, -12),
+    label: thisYear - 21 + ' - ' + (thisYear - 12),
     active: false,
   },
   {

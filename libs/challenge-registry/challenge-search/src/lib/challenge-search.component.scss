@@ -7,7 +7,6 @@
 .col {
   display: flex;
   flex-direction: column;
-  flex-basis: 100%;
 }
 @media screen and (min-width: 800px) {
   .col-1 {
@@ -22,12 +21,14 @@
   .col-11 {
     flex: 11;
   }
-  .facets {
-    max-width: 320px;
+}
+@media screen and (max-width: 768px) {
+  #bottom {
+    flex-direction: column;
   }
-  .main {
-    max-width: 1120px;
-  }
+  // .facets {
+  //   min-width: 320px;
+  // }
 }
 .search-field {
   position: relative;
@@ -64,6 +65,7 @@
 }
 #title {
   padding: 70px 0 32px;
+  align-items: center;
 }
 .stats-group {
   display: flex;
@@ -84,26 +86,41 @@
 }
 #bottom {
   margin: 50px 0;
+  display: flex;
+  flex-wrap: nowrap;
 }
+
 .facets {
   margin: 18px;
   padding: 48px 21px;
+  min-width: 320px;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
   border-style: solid;
   border-width: 2px;
   border-radius: 8px;
+
+  & > * {
+    width: 100%;
+  }
 }
-.facet {
-  width: 100%;
+
+.year-btn-group {
+  margin-bottom: 8px;
 }
-.mat-expansion-panel-header {
-  padding: 0 18px 21px 0;
+::ng-deep p-radiobutton.p-element {
+  margin-right: 8px;
 }
-::ng-deep .mat-expansion-panel-body {
-  padding: 0 5px !important;
+.calendar-group {
+  align-items: center;
 }
+// .mat-expansion-panel-header {
+//   padding: 0 18px 21px 0;
+// }
+// ::ng-deep .mat-expansion-panel-body {
+//   padding: 0 5px !important;
+// }
 .main {
   margin: 18px;
 }
@@ -114,4 +131,18 @@ hr {
   width: 96%;
   height: 1px;
   margin-bottom: 26px;
+}
+
+// challenge cards panel
+.card-group {
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+  flex-wrap: wrap;
+
+  & > * {
+    margin: 12px;
+  }
 }

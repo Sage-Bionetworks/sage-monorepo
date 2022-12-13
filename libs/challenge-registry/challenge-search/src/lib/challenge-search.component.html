@@ -13,31 +13,31 @@
       <div class="col col-2">
         <div class="stats-group">
           <div class="stat-item">
-            <h4>0</h4>
+            <h4>{{ searchResultsCount }}</h4>
             <p class="mat-caption">total in the registry</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col">
-        <div class="search-field">
-          <input aria-label="Search the registry" type="text" placeholder="Search challenges" />
-          <i><mat-icon aria-hidden="true">search</mat-icon></i>
-        </div>
-      </div>
+    <div class="search-field">
+      <input aria-label="Search the registry" type="text" placeholder="Search challenges" />
+      <i><mat-icon aria-hidden="true">search</mat-icon></i>
     </div>
   </section>
   <section id="bottom" class="row">
     <div class="facets col">
-      <div class="facet">
-        <p-panel header="Challenge Year" [toggleable]="true">
-          <div *ngFor="let year of challengeStartYearRangeFilterValues">
-            <p-radioButton [inputId]="year.label" [value]="year.value" [(ngModel)]="selectedYear"
-              >sadads</p-radioButton
-            >
-            <label [for]="year">{{ year.label }}</label>
-          </div>
+      <p-panel header="Challenge Year" [toggleable]="true">
+        <div *ngFor="let year of challengeStartYearRangeFilterValues" class="year-btn-group">
+          <p-radioButton
+            [inputId]="year.label"
+            [value]="year.value"
+            [(ngModel)]="selectedYear"
+            (onClick)="onRadioChange($event)"
+            >sadads</p-radioButton
+          >
+          <label [for]="year">{{ year.label }}</label>
+        </div>
+        <div class="col calendar-group" *ngIf="isCustomYear">
           <p-calendar
             [(ngModel)]="customYear"
             view="month"
@@ -45,12 +45,13 @@
             selectionMode="range"
             [yearNavigator]="true"
             yearRange="2000:2030"
-            [readonlyInput]="true"
+            [readonlyInput]="false"
             inputId="custombar"
           ></p-calendar>
           <label for="custombar">mm/yyyy - mm/yyyy</label>
-        </p-panel>
-        <!-- <mat-expansion-panel
+        </div>
+      </p-panel>
+      <!-- <mat-expansion-panel
           (opened)="panelOpenState = true"
           (closed)="panelOpenState = false"
           [expanded]="true"
@@ -67,7 +68,7 @@
             </mat-select>
           </mat-form-field>
         </mat-expansion-panel> -->
-        <!-- <hr />
+      <!-- <hr />
         <mat-expansion-panel
           (opened)="panelOpenState = true"
           (closed)="panelOpenState = false"
@@ -90,11 +91,16 @@
           <p><mat-checkbox formControlName="general">General</mat-checkbox></p>
           <p><mat-checkbox formControlName="advanced" [disabled]="true">Advanced</mat-checkbox></p>
         </mat-expansion-panel> -->
-      </div>
     </div>
     <div class="main col">
-      <h3>Results (0)</h3>
-      <!-- TODO: cards will be listed here -->
+      <h3>Results ({{ searchResultsCount }})</h3>
+      <div class="card-group">
+        <challenge-registry-challenge-card
+          *ngFor="let challenge of challenges"
+          [challenge]="challenge"
+        >
+        </challenge-registry-challenge-card>
+      </div>
     </div>
   </section>
 </div>
