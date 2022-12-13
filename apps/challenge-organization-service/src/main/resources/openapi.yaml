@@ -7,7 +7,7 @@ info:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/challenge-registry
   title: Challenge Organization API
-  version: 0.6.0
+  version: 1.0.0
   x-logo:
     url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
 servers:

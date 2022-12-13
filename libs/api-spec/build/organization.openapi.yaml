@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 0.6.0
+  version: 1.0.0
   title: Challenge Organization API
   license:
     name: Apache 2.0
