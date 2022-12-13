@@ -95,9 +95,7 @@
   border-width: 2px;
   border-radius: 8px;
 }
-.facet-year,
-.facet-status,
-.facet-difficulty {
+.facet {
   width: 100%;
 }
 .mat-expansion-panel-header {
@@ -111,9 +109,9 @@
 }
 hr {
   border: 0;
-  clear:both;
-  display:block;
-  width: 96%;               
+  clear: both;
+  display: block;
+  width: 96%;
   height: 1px;
   margin-bottom: 26px;
 }

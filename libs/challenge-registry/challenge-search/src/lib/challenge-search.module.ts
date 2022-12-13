@@ -9,11 +9,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PanelModule } from 'primeng/panel';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { CalendarModule } from 'primeng/calendar';
 
 const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
 
 @NgModule({
   imports: [
+    CalendarModule,
     CommonModule,
     MatIconModule,
     RouterModule.forChild(routes),
@@ -23,6 +27,8 @@ const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
     MatCheckboxModule,
     MatExpansionModule,
     FormsModule,
+    PanelModule,
+    RadioButtonModule,
     ReactiveFormsModule,
   ],
   declarations: [ChallengeSearchComponent],
