@@ -1,4 +1,5 @@
 {
+  "name": "challenge-platform",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/challenge-platform/src",
@@ -6,9 +7,7 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/challenge-platform",
         "index": "apps/challenge-platform/src/index.html",
@@ -16,13 +15,8 @@
         "polyfills": "apps/challenge-platform/src/polyfills.ts",
         "tsConfig": "apps/challenge-platform/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/challenge-platform/src/favicon.ico",
-          "apps/challenge-platform/src/assets"
-        ],
-        "styles": [
-          "apps/challenge-platform/src/styles.scss"
-        ],
+        "assets": ["apps/challenge-platform/src/favicon.ico", "apps/challenge-platform/src/assets"],
+        "styles": ["apps/challenge-platform/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -91,17 +85,12 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/apps/challenge-platform"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/apps/challenge-platform"],
       "options": {
         "jestConfig": "apps/challenge-platform/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": [
-    "type:app",
-    "scope:client"
-  ]
+  "tags": ["type:app", "scope:client"]
 }

@@ -1,4 +1,5 @@
 {
+  "name": "challenge-registry",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/challenge-registry/src",
@@ -126,7 +127,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/challenge-registry"],
+      "outputs": ["{workspaceRoot}/coverage/apps/challenge-registry"],
       "options": {
         "jestConfig": "apps/challenge-registry/jest.config.ts",
         "passWithNoTests": true
@@ -163,7 +164,21 @@
           "extractLicenses": false
         }
       },
-      "defaultConfiguration": "production"
+      "defaultConfiguration": "production",
+      "production": {
+        "outputHashing": "media",
+        "fileReplacements": [
+          {
+            "replace": "src/environments/environment.ts",
+            "with": "src/environments/environment.prod.ts"
+          }
+        ]
+      },
+      "development": {
+        "optimization": false,
+        "sourceMap": true,
+        "extractLicenses": false
+      }
     },
     "serve-ssr": {
       "executor": "@nguniversal/builders:ssr-dev-server",
@@ -178,12 +193,6 @@
         }
       },
       "defaultConfiguration": "development"
-      // "dependsOn": [
-      //   {
-      //     "target": "serve-detach",
-      //     "projects": "dependencies"
-      //   }
-      // ]
     },
     "prerender": {
       "executor": "@nguniversal/builders:prerender",

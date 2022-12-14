@@ -1,4 +1,5 @@
 {
+  "name": "challenge-config-service",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-config-service/src",
   "projectType": "application",
@@ -15,7 +16,7 @@
       "options": {
         "root": "apps/challenge-config-service"
       },
-      "outputs": ["apps/challenge-config-service"],
+      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "test": {

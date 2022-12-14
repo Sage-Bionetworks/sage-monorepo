@@ -1,4 +1,5 @@
 {
+  "name": "challenge-api-gateway",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-api-gateway/src",
   "projectType": "application",
@@ -22,7 +23,7 @@
       "options": {
         "root": "apps/challenge-api-gateway"
       },
-      "outputs": ["apps/challenge-api-gateway"],
+      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "test": {
