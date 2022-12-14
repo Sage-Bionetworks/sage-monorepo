@@ -9,14 +9,14 @@ $poppins: mat.define-typography-config(
 );
 
 $fira: mat.define-typography-config(
-  $font-family: "'Fira Sans', sans-serif",
-  $headline: mat.define-typography-level(46px, 56px, 600),
-  $title: mat.define-typography-level(40px, 50px, 600),
-  $subheading-2: mat.define-typography-level(28px, 38px, 600, $letter-spacing: -0.1px),
-  $subheading-1: mat.define-typography-level(21px, 32px, 400, $letter-spacing: -0.1px),
-  $body-1: mat.define-typography-level(15px, 24px, 400, "'Lato', sans-serif"),
-  $body-2: mat.define-typography-level(18px, 30px, 400, "'Lato', sans-serif", -0.1px),
+  // $font-family: "'Fira Sans', sans-serif",
+  $headline-5: mat.define-typography-level(46px, 56px, 600, "'Fira Sans', sans-serif"),
+  $headline-6: mat.define-typography-level(40px, 50px, 600, "'Fira Sans', sans-serif"),
+  $subtitle-1: mat.define-typography-level(28px, 38px, 600, "'Fira Sans', sans-serif", -0.1px),
+  $subtitle-2: mat.define-typography-level(18px, 30px, 400, "'Lato', sans-serif", -0.1px),
+  $body-1: mat.define-typography-level(21px, 32px, 400, "'Fira Sans', sans-serif", -0.1px),
+  $body-2: mat.define-typography-level(15px, 24px, 400, "'Lato', sans-serif"),
   $caption: mat.define-typography-level(14px, 20px, 400, "'Lato', sans-serif"),
-  $button: mat.define-typography-level(14px, 18px, 400),
-  $input: mat.define-typography-level(16px, 1.125, 400, "'Lato', sans-serif", 0.1px),
+  $button: mat.define-typography-level(14px, 18px, 400, "'Fira Sans', sans-serif"),
+  // $input: mat.define-typography-level(16px, 1.125, 400, "'Lato', sans-serif", 0.1px),
 );
