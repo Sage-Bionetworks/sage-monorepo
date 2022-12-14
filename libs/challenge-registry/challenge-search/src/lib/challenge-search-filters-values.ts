@@ -8,14 +8,14 @@ const updateYear = (
   endYearDiff: number
 ) => {
   return {
-    start: new Date(thisYear + startYearDiff, 0, 1),
-    end: new Date(thisYear + endYearDiff, 11, 31),
+    start: `${thisYear + startYearDiff}-01-01`,
+    end: `${thisYear + endYearDiff}-12-31`,
   };
 };
 
 export const challengeStartYearRangeFilterValues: FilterValue[] = [
   {
-    value: 'all',
+    value: updateYear(thisYear, -30, 10),
     label: 'All',
     active: true,
   },

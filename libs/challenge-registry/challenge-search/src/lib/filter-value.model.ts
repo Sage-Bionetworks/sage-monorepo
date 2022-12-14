@@ -1,6 +1,8 @@
+import { DateRange } from '@sagebionetworks/api-client-angular-deprecated';
+
 export interface FilterValue {
   /* The value of the filter. */
-  value: { start?: Date; end?: Date } | string | undefined;
+  value: DateRange | string | undefined;
   /* The display name of the filter value. */
   label: string;
   /* Whether this filter value is active. */

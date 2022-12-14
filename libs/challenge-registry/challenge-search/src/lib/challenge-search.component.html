@@ -13,7 +13,7 @@
       <div class="col col-2">
         <div class="stats-group">
           <div class="stat-item">
-            <h4>{{ searchResultsCount }}</h4>
+            <h4>{{ totalChallengesCount }}</h4>
             <p class="mat-caption">total in the registry</p>
           </div>
         </div>
@@ -26,13 +26,14 @@
   </section>
   <section id="bottom" class="row">
     <div class="facets col">
+      <!-- Challenge Year Filter Starts -->
       <p-panel header="Challenge Year" [toggleable]="true">
         <div *ngFor="let year of challengeStartYearRangeFilterValues" class="year-btn-group">
           <p-radioButton
             [inputId]="year.label"
             [value]="year.value"
             [(ngModel)]="selectedYear"
-            (onClick)="onRadioChange($event)"
+            (onClick)="onYearChange($event)"
           ></p-radioButton>
           <label [for]="year.label">{{ year.label }}</label>
         </div>
@@ -50,6 +51,7 @@
           <label for="custombar">mm/yyyy - mm/yyyy</label>
         </div>
       </p-panel>
+      <!-- Challenge Year Filter Ends -->
       <!-- <mat-expansion-panel
           (opened)="panelOpenState = true"
           (closed)="panelOpenState = false"
