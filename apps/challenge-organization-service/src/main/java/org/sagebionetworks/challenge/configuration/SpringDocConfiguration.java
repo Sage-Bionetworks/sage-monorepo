@@ -26,6 +26,6 @@ public class SpringDocConfiguration {
                     new License()
                         .name("Apache 2.0")
                         .url("https://github.com/Sage-Bionetworks/challenge-registry"))
-                .version("0.6.0"));
+                .version("1.0.0"));
   }
 }

@@ -49,7 +49,7 @@ spring:
           predicates:
             - Path=/api/v1/organizations/**
           filters:
-            - StripPrefix=2
+            - StripPrefix=1
         # - id: challenge-core-service
         #   uri: lb://challenge-core-service
         #   predicates:
