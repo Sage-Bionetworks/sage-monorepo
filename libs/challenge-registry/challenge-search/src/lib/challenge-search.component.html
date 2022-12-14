@@ -39,36 +39,21 @@
         </div>
         <div class="col calendar-group" *ngIf="isCustomYear">
           <p-calendar
-            [(ngModel)]="customYear"
+            #calendar
+            [(ngModel)]="customMonthRange"
             view="month"
             dateFormat="mm/yy"
             selectionMode="range"
             [yearNavigator]="true"
-            yearRange="2000:2030"
+            yearRange="2009:2030"
             [readonlyInput]="false"
             inputId="custombar"
+            (onSelect)="onCalendarChange($event)"
           ></p-calendar>
           <label for="custombar">mm/yyyy - mm/yyyy</label>
         </div>
       </p-panel>
       <!-- Challenge Year Filter Ends -->
-      <!-- <mat-expansion-panel
-          (opened)="panelOpenState = true"
-          (closed)="panelOpenState = false"
-          [expanded]="true"
-        >
-          <mat-expansion-panel-header>
-            <mat-panel-title> Challenge Year </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-form-field appearance="fill" class="facet-year">
-            <mat-label></mat-label>
-            <mat-select [(ngModel)]="yearSelect">
-              <mat-option value="all">All</mat-option>
-              <mat-option value="2022">2022</mat-option>
-              <mat-option value="2021">2021</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-expansion-panel> -->
       <!-- <hr />
         <mat-expansion-panel
           (opened)="panelOpenState = true"

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   Challenge,
   DateRange,
@@ -9,6 +9,8 @@ import { FilterValue } from './filter-value.model';
 import { MOCK_CHALLENGES } from '@sagebionetworks/challenge-registry/ui';
 import { BehaviorSubject, of, switchMap, tap } from 'rxjs';
 import { ChallengeSearchQuery } from './challenge-search-query';
+import { Calendar } from 'primeng/calendar';
+import { DatePipe } from '@angular/common';
 import { assign } from 'lodash';
 
 @Component({
@@ -18,6 +20,7 @@ import { assign } from 'lodash';
 })
 export class ChallengeSearchComponent implements OnInit {
   public appVersion: string;
+  datepipe: DatePipe = new DatePipe('en-US');
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
     new BehaviorSubject<ChallengeSearchQuery>({
@@ -29,7 +32,8 @@ export class ChallengeSearchComponent implements OnInit {
   challenges: Challenge[] = [];
   totalChallengesCount!: number;
 
-  customYear!: Date;
+  @ViewChild('calendar') calendar?: Calendar;
+  customMonthRange!: DateRange;
   isCustomYear = false;
   selectedYear!: DateRange | string | undefined;
 
@@ -59,7 +63,7 @@ export class ChallengeSearchComponent implements OnInit {
       .pipe(
         tap((query) => console.log('List challenges', query)),
         switchMap((query) => {
-          // mock up fitered query challenges
+          // mock up challengeList service with defined query
           const res = MOCK_CHALLENGES.filter((c) => {
             return (
               c.startDate &&
@@ -73,16 +77,34 @@ export class ChallengeSearchComponent implements OnInit {
         })
       )
       .subscribe((page) => {
+        // update challenges and total number of results
         this.searchResultsCount = page.length;
         this.challenges = page;
       });
   }
 
-  onYearChange(event: any) {
+  onYearChange(event: any): void {
     this.isCustomYear = event.value === 'custom';
+    const yearRange = event.value;
+    // update query with new year range
     const newQuery = assign(this.query.getValue(), {
-      startYearRange: event.value,
+      startYearRange: yearRange,
     });
     this.query.next(newQuery);
+  }
+
+  onCalendarChange(date: Date): void {
+    this.isCustomYear = true;
+    if (this.calendar) {
+      const yearRange = {
+        start: this.datepipe.transform(this.calendar.value[0], 'yyyy-MM-dd'),
+        end: this.datepipe.transform(this.calendar.value[1], 'yyyy-MM-dd'),
+      } as DateRange;
+
+      const newQuery = assign(this.query.getValue(), {
+        startYearRange: yearRange,
+      });
+      this.query.next(newQuery);
+    }
   }
 }
