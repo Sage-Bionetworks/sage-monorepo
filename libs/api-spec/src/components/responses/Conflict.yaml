@@ -1,5 +1,5 @@
 description: The request conflicts with current state of the target resource
 content:
-  application/json:
+  application/problem+json:
     schema:
-      $ref: ../schemas/Error.yaml
+      $ref: ../schemas/BasicError.yaml

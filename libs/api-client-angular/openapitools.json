@@ -10,7 +10,9 @@
         "inputSpec": "#{cwd}/../../libs/api-spec/build/openapi.yaml",
         "output": "#{cwd}/src/lib/",
         "templateDir": "templates",
-        "additionalProperties": {}
+        "additionalProperties": {
+          "ngVersion": "14.2.11"
+        }
       }
     }
   }

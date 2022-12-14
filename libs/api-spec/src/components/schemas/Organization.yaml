@@ -1,9 +1,14 @@
 type: object
 description: An organization
 properties:
+  id:
+    $ref: OrganizationId.yaml
   name:
     type: string
-    nullable: true
+required:
+  - name
+example:
+  name: DREAM
 # allOf:
 #   - $ref: OrganizationCreateResponse.yaml
 #   - $ref: OrganizationCreateRequest.yaml

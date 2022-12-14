@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 0.6.0
+  version: 1.0.0
   title: Challenge Organization API
   license:
     name: Apache 2.0
@@ -10,11 +10,13 @@ info:
     url: https://github.com/Sage-Bionetworks/challenge-registry
   x-logo:
     url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+servers:
+  - url: http://localhost/v1
 tags:
   - name: Organization
     description: Operations about organizations
 paths:
   /organizations:
     $ref: paths/organizations.yaml
-  # /organizations/{organizationId}:
-  #   $ref: paths/organizations@{organizationId}.yaml
+  /organizations/{organizationId}:
+    $ref: paths/organizations/@{organizationId}.yaml
