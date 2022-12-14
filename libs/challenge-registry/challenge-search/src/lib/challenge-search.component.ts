@@ -93,7 +93,7 @@ export class ChallengeSearchComponent implements OnInit {
     this.query.next(newQuery);
   }
 
-  onCalendarChange(date: Date): void {
+  onCalendarChange(): void {
     this.isCustomYear = true;
     if (this.calendar) {
       const yearRange = {

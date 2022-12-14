@@ -38,6 +38,7 @@
           <label [for]="year.label">{{ year.label }}</label>
         </div>
         <div class="col calendar-group" *ngIf="isCustomYear">
+          <label for="custombar">mm/yyyy - mm/yyyy</label>
           <p-calendar
             #calendar
             [(ngModel)]="customMonthRange"
@@ -45,12 +46,11 @@
             dateFormat="mm/yy"
             selectionMode="range"
             [yearNavigator]="true"
-            yearRange="2009:2030"
             [readonlyInput]="false"
             inputId="custombar"
-            (onSelect)="onCalendarChange($event)"
+            (onSelect)="onCalendarChange()"
+            (onInput)="onCalendarChange()"
           ></p-calendar>
-          <label for="custombar">mm/yyyy - mm/yyyy</label>
         </div>
       </p-panel>
       <!-- Challenge Year Filter Ends -->
