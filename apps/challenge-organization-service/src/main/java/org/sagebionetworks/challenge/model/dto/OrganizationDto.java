@@ -43,6 +43,10 @@ public class OrganizationDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
+  @JsonProperty("updatedAt")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime updatedAt;
+
   public OrganizationDto email(String email) {
     this.email = email;
     return this;
@@ -209,6 +213,26 @@ public class OrganizationDto {
     this.createdAt = createdAt;
   }
 
+  public OrganizationDto updatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+    return this;
+  }
+
+  /**
+   * Get updatedAt
+   *
+   * @return updatedAt
+   */
+  @Valid
+  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", required = false)
+  public OffsetDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -225,12 +249,14 @@ public class OrganizationDto {
         && Objects.equals(this.websiteUrl, organization.websiteUrl)
         && Objects.equals(this.description, organization.description)
         && Objects.equals(this.id, organization.id)
-        && Objects.equals(this.createdAt, organization.createdAt);
+        && Objects.equals(this.createdAt, organization.createdAt)
+        && Objects.equals(this.updatedAt, organization.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, login, name, avatarUrl, websiteUrl, description, id, createdAt);
+    return Objects.hash(
+        email, login, name, avatarUrl, websiteUrl, description, id, createdAt, updatedAt);
   }
 
   @Override
@@ -245,6 +271,7 @@ public class OrganizationDto {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
+    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

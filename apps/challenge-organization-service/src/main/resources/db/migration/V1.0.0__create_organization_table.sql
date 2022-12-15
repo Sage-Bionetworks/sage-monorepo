@@ -10,6 +10,7 @@ CREATE TABLE `challenge_organization`
     `website_url`           varchar(255) DEFAULT NULL,
     `description`           varchar(255) DEFAULT NULL,
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 
