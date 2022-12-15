@@ -31,7 +31,7 @@ public class OrganizationDto {
    *
    * @return name
    */
-  @Schema(name = "name", required = false)
+  @Schema(name = "name", example = "Example organization", required = false)
   public String getName() {
     return name;
   }
@@ -50,11 +50,12 @@ public class OrganizationDto {
    *
    * @return id
    */
+  @NotNull
   @Schema(
       name = "id",
       example = "1",
       description = "The unique identifier of an organization",
-      required = false)
+      required = true)
   public Long getId() {
     return id;
   }

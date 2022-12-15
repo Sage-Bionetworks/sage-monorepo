@@ -7,6 +7,7 @@ properties:
   #   $ref: Email.yaml
   name:
     type: string
+    example: Example organization
   # avatarUrl:
   #   type: string
   #   format: url
@@ -23,10 +24,10 @@ properties:
 # required:
 #   - login
 #   - email
-example:
-  # login: awesome-org
-  # email: contact@example.org
-  name: Awesome Org
-  # avatarUrl: https://example.com/awesome-avatar.png
-  # websiteUrl: https://example.com
-  # description: A great organization
+# example:
+# login: awesome-org
+# email: contact@example.org
+# name: Awesome Org
+# avatarUrl: https://example.com/awesome-avatar.png
+# websiteUrl: https://example.com
+# description: A great organization

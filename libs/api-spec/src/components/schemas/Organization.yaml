@@ -7,6 +7,8 @@ allOf:
     properties:
       id:
         $ref: OrganizationId.yaml
+    required:
+      - id
 # properties:
 #   id:
 #     $ref: OrganizationId.yaml

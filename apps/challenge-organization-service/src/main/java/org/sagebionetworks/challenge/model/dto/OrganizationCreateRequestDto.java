@@ -30,7 +30,7 @@ public class OrganizationCreateRequestDto {
    *
    * @return name
    */
-  @Schema(name = "name", required = false)
+  @Schema(name = "name", example = "Example organization", required = false)
   public String getName() {
     return name;
   }

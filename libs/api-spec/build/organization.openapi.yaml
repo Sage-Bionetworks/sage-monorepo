@@ -109,8 +109,7 @@ components:
       properties:
         name:
           type: string
-      example:
-        name: Awesome Org
+          example: Example organization
     OrganizationId:
       description: The unique identifier of an organization
       type: integer
@@ -125,6 +124,8 @@ components:
           properties:
             id:
               $ref: '#/components/schemas/OrganizationId'
+          required:
+            - id
     OrganizationsPage:
       type: object
       description: A page of organizations
