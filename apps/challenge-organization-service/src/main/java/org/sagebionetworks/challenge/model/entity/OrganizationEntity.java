@@ -43,4 +43,6 @@ public class OrganizationEntity {
 
   @Column(name = "website_url")
   private String websiteUrl;
+
+  @Column() private String description;
 }

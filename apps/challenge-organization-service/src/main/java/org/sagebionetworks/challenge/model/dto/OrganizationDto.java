@@ -30,6 +30,9 @@ public class OrganizationDto {
   @JsonProperty("websiteUrl")
   private String websiteUrl;
 
+  @JsonProperty("description")
+  private String description;
+
   @JsonProperty("id")
   private Long id;
 
@@ -133,6 +136,28 @@ public class OrganizationDto {
     this.websiteUrl = websiteUrl;
   }
 
+  public OrganizationDto description(String description) {
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * Get description
+   *
+   * @return description
+   */
+  @Schema(
+      name = "description",
+      example = "A short description of the organization.",
+      required = false)
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
   public OrganizationDto id(Long id) {
     this.id = id;
     return this;
@@ -171,12 +196,13 @@ public class OrganizationDto {
         && Objects.equals(this.name, organization.name)
         && Objects.equals(this.avatarUrl, organization.avatarUrl)
         && Objects.equals(this.websiteUrl, organization.websiteUrl)
+        && Objects.equals(this.description, organization.description)
         && Objects.equals(this.id, organization.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, login, name, avatarUrl, websiteUrl, id);
+    return Objects.hash(email, login, name, avatarUrl, websiteUrl, description, id);
   }
 
   @Override
@@ -188,6 +214,7 @@ public class OrganizationDto {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();

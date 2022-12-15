@@ -17,16 +17,6 @@ properties:
     type: string
     format: url
     example: https://example.com
-  # description:
-  #   type: string
-  #   nullable: true
-# required:
-#   - login
-#   - email
-# example:
-# login: awesome-org
-# email: contact@example.org
-# name: Awesome Org
-# avatarUrl: https://example.com/awesome-avatar.png
-# websiteUrl: https://example.com
-# description: A great organization
+  description:
+    type: string
+    example: A short description of the organization.

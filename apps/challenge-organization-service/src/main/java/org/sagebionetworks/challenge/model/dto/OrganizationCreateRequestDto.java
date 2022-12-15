@@ -32,6 +32,9 @@ public class OrganizationCreateRequestDto {
   @JsonProperty("websiteUrl")
   private String websiteUrl;
 
+  @JsonProperty("description")
+  private String description;
+
   public OrganizationCreateRequestDto email(String email) {
     this.email = email;
     return this;
@@ -132,6 +135,28 @@ public class OrganizationCreateRequestDto {
     this.websiteUrl = websiteUrl;
   }
 
+  public OrganizationCreateRequestDto description(String description) {
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * Get description
+   *
+   * @return description
+   */
+  @Schema(
+      name = "description",
+      example = "A short description of the organization.",
+      required = false)
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -145,12 +170,13 @@ public class OrganizationCreateRequestDto {
         && Objects.equals(this.login, organizationCreateRequest.login)
         && Objects.equals(this.name, organizationCreateRequest.name)
         && Objects.equals(this.avatarUrl, organizationCreateRequest.avatarUrl)
-        && Objects.equals(this.websiteUrl, organizationCreateRequest.websiteUrl);
+        && Objects.equals(this.websiteUrl, organizationCreateRequest.websiteUrl)
+        && Objects.equals(this.description, organizationCreateRequest.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, login, name, avatarUrl, websiteUrl);
+    return Objects.hash(email, login, name, avatarUrl, websiteUrl, description);
   }
 
   @Override
@@ -162,6 +188,7 @@ public class OrganizationCreateRequestDto {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
     return sb.toString();
   }

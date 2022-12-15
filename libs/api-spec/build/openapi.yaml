@@ -188,6 +188,9 @@ components:
           type: string
           format: url
           example: 'https://example.com'
+        description:
+          type: string
+          example: A short description of the organization.
     OrganizationId:
       description: The unique identifier of an organization
       type: integer
