@@ -54,7 +54,7 @@
       </p-panel>
       <p-divider></p-divider>
       <ng-container *ngFor="let filter of checkboxfilters">
-        <p-panel header="{{ filter.label }}" [toggleable]="true">
+        <p-panel header="{{ filter.label }}" [toggleable]="true" [collapsed]="true">
           <challenge-registry-checkbox-filter
             [values]="filter.values"
             (checkboxChange)="onCheckboxChange($event, filter.queryName)"
