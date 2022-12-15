@@ -11,6 +11,7 @@ import {
   challengeSubmissionTypesFilterValues,
   challengeInputDataTypeFilterValues,
   challengeIncentiveTypesFilterValues,
+  challengePlatformFilterValues,
 } from './challenge-search-filters-values';
 import {
   FilterValue,
@@ -70,8 +71,12 @@ export class ChallengeSearchComponent implements OnInit {
       values: challengeInputDataTypeFilterValues,
     },
     {
-      label: 'Platform',
+      label: 'Incentive Type',
       values: challengeIncentiveTypesFilterValues,
+    },
+    {
+      label: 'Platform',
+      values: challengePlatformFilterValues,
     },
   ];
 
@@ -83,7 +88,8 @@ export class ChallengeSearchComponent implements OnInit {
     this.selectedYear = this.startYearRangeValues[0].value;
     this.totalChallengesCount = MOCK_CHALLENGES.length;
 
-    this.listInputDataType().subscribe(
+    // mock up service to query all unique input data types
+    this.listInputDataTypes().subscribe(
       (dataTypes) =>
         // update input data types filter values
         (this.checkboxfilters[3].values = dataTypes.map((dataType) => ({
@@ -92,7 +98,16 @@ export class ChallengeSearchComponent implements OnInit {
           active: false,
         })))
     );
-
+    // mock up service to query all unique platforms
+    this.listPlatforms().subscribe(
+      (platforms) =>
+        // update input data types filter values
+        (this.checkboxfilters[5].values = platforms.map((platform) => ({
+          value: platform,
+          label: this.titleCase(platform, '-'),
+          active: false,
+        })))
+    );
     // triger initial query
     const defaultQuery = {
       startYearRange: this.selectedYear,
@@ -159,7 +174,7 @@ export class ChallengeSearchComponent implements OnInit {
       .join(' ');
   }
 
-  listInputDataType(): Observable<string[]> {
+  listInputDataTypes(): Observable<string[]> {
     // update input data type values - API requires
     const allTypes = [...new Set(MOCK_CHALLENGES.map((c) => c.inputDataTypes))];
     const uniqueTypes = [
@@ -168,5 +183,9 @@ export class ChallengeSearchComponent implements OnInit {
       ),
     ].sort();
     return of(uniqueTypes);
+  }
+
+  listPlatforms(): Observable<string[]> {
+    return of(['synapse', 'grand-challenges', 'camda', 'kaggle'].sort());
   }
 }

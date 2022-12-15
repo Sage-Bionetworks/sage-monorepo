@@ -134,3 +134,5 @@ export const challengeIncentiveTypesFilterValues: FilterValue[] = [
     active: false,
   },
 ];
+
+export const challengePlatformFilterValues: FilterValue[] = [];
