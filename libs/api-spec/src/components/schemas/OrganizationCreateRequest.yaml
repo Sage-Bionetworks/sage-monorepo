@@ -20,3 +20,5 @@ properties:
   description:
     type: string
     example: A short description of the organization.
+required:
+  - login

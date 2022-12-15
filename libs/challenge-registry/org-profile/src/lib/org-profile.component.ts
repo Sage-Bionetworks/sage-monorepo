@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import {
-  Account,
-  Organization,
-} from '@sagebionetworks/api-client-angular-deprecated';
+import { Account } from '@sagebionetworks/api-client-angular-deprecated';
 import { map, Observable, of, Subscription } from 'rxjs';
 import { Tab } from './tab.model';
 import { ORG_PROFILE_TABS } from './org-profile-tabs';
@@ -13,6 +10,7 @@ import {
 } from '@sagebionetworks/challenge-registry/ui';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import {
+  Organization,
   OrganizationService,
   OrganizationsPage,
 } from '@sagebionetworks/api-client-angular';

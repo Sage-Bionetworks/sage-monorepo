@@ -131,6 +131,8 @@ components:
         description:
           type: string
           example: A short description of the organization.
+      required:
+        - login
     OrganizationId:
       description: The unique identifier of an organization
       type: integer

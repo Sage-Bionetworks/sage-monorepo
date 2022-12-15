@@ -19,7 +19,7 @@ export interface Organization {
      * An email address.
      */
     email?: string;
-    login?: string;
+    login: string;
     name?: string;
     avatarUrl?: string;
     websiteUrl?: string;
