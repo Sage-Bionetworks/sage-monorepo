@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FilterValue } from './filter-value.model';
 
 @Component({
@@ -9,4 +9,9 @@ import { FilterValue } from './filter-value.model';
 export class CheckboxFilterComponent {
   @Input() values!: FilterValue[];
   @Input() selectedValues!: string[];
+  @Output() checkboxChange = new EventEmitter<string[]>();
+
+  onChange(selected: string[]): void {
+    this.checkboxChange.emit(selected);
+  }
 }

@@ -57,6 +57,7 @@
         <p-panel header="{{ filter.label }}" [toggleable]="true">
           <challenge-registry-checkbox-filter
             [values]="filter.values"
+            (checkboxChange)="onCheckboxChange($event, filter.queryName)"
           ></challenge-registry-checkbox-filter>
         </p-panel>
         <p-divider></p-divider>

@@ -37,7 +37,13 @@ export class ChallengeSearchComponent implements OnInit {
     new BehaviorSubject<ChallengeSearchQuery>({
       limit: 0,
       offset: 0,
-      startYearRange: {} as DateRange,
+      startYearRange: {},
+      status: [],
+      inputDataTypes: [],
+      difficulty: [],
+      submissionTypes: [],
+      incentiveTypes: [],
+      platforms: [],
     });
 
   challenges: Challenge[] = [];
@@ -53,28 +59,39 @@ export class ChallengeSearchComponent implements OnInit {
   searchResultsCount = 0;
 
   startYearRangeValues: FilterValue[] = challengeStartYearRangeFilterValues;
-  checkboxfilters: { label: string; values: FilterValue[] }[] = [
+  checkboxfilters: {
+    queryName: string;
+    label: string;
+    values: FilterValue[];
+  }[] = [
     {
+      queryName: 'status', // The name of the property used to query
       label: 'Status',
       values: challengeStatusFilterValues,
     },
     {
+      queryName: 'difficulty',
       label: 'Difficulty',
       values: challengeDifficultyFilterValues,
     },
     {
-      label: 'Submission Type',
-      values: challengeSubmissionTypesFilterValues,
-    },
-    {
+      queryName: 'inputDataTypes',
       label: 'Input Data Type',
       values: challengeInputDataTypeFilterValues,
     },
     {
+      queryName: 'submissionTypes',
+      label: 'Submission Type',
+      values: challengeSubmissionTypesFilterValues,
+    },
+
+    {
+      queryName: 'incentiveTypes',
       label: 'Incentive Type',
       values: challengeIncentiveTypesFilterValues,
     },
     {
+      queryName: 'platforms',
       label: 'Platform',
       values: challengePlatformFilterValues,
     },
@@ -92,7 +109,7 @@ export class ChallengeSearchComponent implements OnInit {
     this.listInputDataTypes().subscribe(
       (dataTypes) =>
         // update input data types filter values
-        (this.checkboxfilters[3].values = dataTypes.map((dataType) => ({
+        (this.checkboxfilters[2].values = dataTypes.map((dataType) => ({
           value: dataType,
           label: this.titleCase(dataType, '-'),
           active: false,
@@ -128,9 +145,16 @@ export class ChallengeSearchComponent implements OnInit {
               query.startYearRange?.start &&
               query.startYearRange?.end &&
               new Date(c.startDate) >= new Date(query.startYearRange.start) &&
-              new Date(c.startDate) <= new Date(query.startYearRange.end)
+              new Date(c.startDate) <= new Date(query.startYearRange.end) &&
+              this.checkOverlapped(c.status, query.status) &&
+              this.checkOverlapped(c.difficulty, query.difficulty) &&
+              this.checkOverlapped(c.inputDataTypes, query.inputDataTypes) &&
+              this.checkOverlapped(c.submissionTypes, query.submissionTypes) &&
+              this.checkOverlapped(c.incentiveTypes, query.incentiveTypes) &&
+              this.checkOverlapped(c.platformId, query.platforms)
             );
           });
+          console.log(res);
           return of(res);
         })
       )
@@ -166,6 +190,13 @@ export class ChallengeSearchComponent implements OnInit {
     }
   }
 
+  onCheckboxChange(selected: string[], queryName: string): void {
+    const newQuery = assign(this.query.getValue(), {
+      [queryName]: selected,
+    });
+    this.query.next(newQuery);
+  }
+
   titleCase(string: string, split: string): string {
     // tranform one word to title-case word
     return string
@@ -187,5 +218,17 @@ export class ChallengeSearchComponent implements OnInit {
 
   listPlatforms(): Observable<string[]> {
     return of(['synapse', 'grand-challenges', 'camda', 'kaggle'].sort());
+  }
+
+  // tmp - Removed once Service is used
+  checkOverlapped(property: any, filterValues: any): boolean {
+    // if property(challenge property) presents and filter (filterValues) applied,
+    // check overlap between two arrays, otherwise return true
+    if (property && filterValues && filterValues.length > 0) {
+      // x = isinstance(x, list) ? x : [x];
+      return [property].some((value: any) => filterValues?.includes(value));
+    } else {
+      return true;
+    }
   }
 }
