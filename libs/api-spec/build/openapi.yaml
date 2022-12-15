@@ -39,9 +39,9 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/organizations/{organizationId}':
+  '/organizations/{organizationLogin}':
     parameters:
-      - $ref: '#/components/parameters/organizationId'
+      - $ref: '#/components/parameters/organizationLogin'
     get:
       tags:
         - Organization
@@ -168,6 +168,13 @@ components:
       type: string
       format: email
       example: john.smith@example.com
+    OrganizationLogin:
+      description: The login of an organization
+      type: string
+      minLength: 3
+      maxLength: 25
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      example: example-org
     OrganizationCreateRequest:
       type: object
       description: The information required to create an org account
@@ -175,8 +182,7 @@ components:
         email:
           $ref: '#/components/schemas/Email'
         login:
-          type: string
-          example: example-organization
+          $ref: '#/components/schemas/OrganizationLogin'
         name:
           type: string
           example: Example organization
@@ -429,13 +435,13 @@ components:
         format: int32
         default: 100
         minimum: 10
-    organizationId:
-      name: organizationId
+    organizationLogin:
+      name: organizationLogin
       in: path
-      description: The unique identifier of the organization
+      description: The login of the organization
       required: true
       schema:
-        $ref: '#/components/schemas/OrganizationId'
+        $ref: '#/components/schemas/OrganizationLogin'
     userId:
       name: userId
       in: path

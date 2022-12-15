@@ -18,5 +18,5 @@ tags:
 paths:
   /organizations:
     $ref: paths/organizations.yaml
-  /organizations/{organizationId}:
-    $ref: paths/organizations/@{organizationId}.yaml
+  /organizations/{organizationLogin}:
+    $ref: paths/organizations/@{organizationLogin}.yaml

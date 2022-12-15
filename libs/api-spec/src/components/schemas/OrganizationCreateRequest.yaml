@@ -4,8 +4,7 @@ properties:
   email:
     $ref: Email.yaml
   login:
-    type: string
-    example: example-organization
+    $ref: OrganizationLogin.yaml
   name:
     type: string
     example: Example organization
