@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
+import { DividerModule } from 'primeng/divider';
 
 const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
 
@@ -19,6 +20,7 @@ const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
   imports: [
     CalendarModule,
     CommonModule,
+    DividerModule,
     MatIconModule,
     RouterModule.forChild(routes),
     UiModule,

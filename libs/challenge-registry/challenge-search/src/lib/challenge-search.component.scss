@@ -112,25 +112,17 @@
 ::ng-deep p-radiobutton.p-element {
   margin-right: 8px;
 }
+::ng-deep .p-panel {
+  .p-panel-header,
+  .p-panel-content {
+    border: none;
+  }
+}
 .calendar-group {
   align-items: center;
 }
-// .mat-expansion-panel-header {
-//   padding: 0 18px 21px 0;
-// }
-// ::ng-deep .mat-expansion-panel-body {
-//   padding: 0 5px !important;
-// }
 .main {
   margin: 18px;
-}
-hr {
-  border: 0;
-  clear: both;
-  display: block;
-  width: 96%;
-  height: 1px;
-  margin-bottom: 26px;
 }
 
 // challenge cards panel
