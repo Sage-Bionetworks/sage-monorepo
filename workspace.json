@@ -2,6 +2,7 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
-    "challenge-registry": "apps/challenge-registry"
+    "challenge-registry": "apps/challenge-registry",
+    "challenge-platform": "apps/challenge-platform"
   }
 }

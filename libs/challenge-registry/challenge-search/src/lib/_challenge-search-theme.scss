@@ -23,21 +23,18 @@
     border-color: map.get($figma, dl-color-default-primary1);
   }
   #top {
-    background-color: #F8F8F8;
+    background-color: #f8f8f8;
   }
   .facets {
     border-color: map.get($figma, dl-color-default-primary2);
     background-color: rgba(255, 255, 255, 1);
   }
-  .mat-option {
-    background: white;
-  }
-  hr {
-    background-color: map.get($figma, dl-color-default-primary2);
+  .p-panel .p-panel-header {
+    background: transparent !important;
   }
 }
 
-@mixin typography($theme) { 
+@mixin typography($theme) {
   #breadcrumbs a {
     text-decoration: none;
   }
