@@ -145,6 +145,10 @@ components:
           properties:
             id:
               $ref: '#/components/schemas/OrganizationId'
+            createdAt:
+              type: string
+              format: date-time
+              example: '2022-07-04T22:19:11Z'
           required:
             - id
     OrganizationsPage:

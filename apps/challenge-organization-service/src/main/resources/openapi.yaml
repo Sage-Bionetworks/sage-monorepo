@@ -262,6 +262,10 @@ components:
           example: 1
           format: int64
           type: integer
+        createdAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
       required:
       - id
       type: object

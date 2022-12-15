@@ -9,6 +9,7 @@ CREATE TABLE `challenge_organization`
     `avatar_url`            varchar(255) DEFAULT NULL,
     `website_url`           varchar(255) DEFAULT NULL,
     `description`           varchar(255) DEFAULT NULL,
+    `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 

@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.model.entity;
 
+import java.time.OffsetDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,4 +46,7 @@ public class OrganizationEntity {
   private String websiteUrl;
 
   @Column() private String description;
+
+  @Column(name = "created_at")
+  private OffsetDateTime createdAt;
 }

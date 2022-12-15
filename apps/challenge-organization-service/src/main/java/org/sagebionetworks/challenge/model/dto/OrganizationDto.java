@@ -3,10 +3,13 @@ package org.sagebionetworks.challenge.model.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.Objects;
 import javax.annotation.Generated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /** An organization */
 @Schema(name = "Organization", description = "An organization")
@@ -35,6 +38,10 @@ public class OrganizationDto {
 
   @JsonProperty("id")
   private Long id;
+
+  @JsonProperty("createdAt")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime createdAt;
 
   public OrganizationDto email(String email) {
     this.email = email;
@@ -182,6 +189,26 @@ public class OrganizationDto {
     this.id = id;
   }
 
+  public OrganizationDto createdAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
+    return this;
+  }
+
+  /**
+   * Get createdAt
+   *
+   * @return createdAt
+   */
+  @Valid
+  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", required = false)
+  public OffsetDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -197,12 +224,13 @@ public class OrganizationDto {
         && Objects.equals(this.avatarUrl, organization.avatarUrl)
         && Objects.equals(this.websiteUrl, organization.websiteUrl)
         && Objects.equals(this.description, organization.description)
-        && Objects.equals(this.id, organization.id);
+        && Objects.equals(this.id, organization.id)
+        && Objects.equals(this.createdAt, organization.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, login, name, avatarUrl, websiteUrl, description, id);
+    return Objects.hash(email, login, name, avatarUrl, websiteUrl, description, id, createdAt);
   }
 
   @Override
@@ -216,6 +244,7 @@ public class OrganizationDto {
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }
