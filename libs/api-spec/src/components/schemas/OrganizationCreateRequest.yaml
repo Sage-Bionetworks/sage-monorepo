@@ -3,8 +3,8 @@ description: The information required to create an org account
 properties:
   # login:
   #   type: string
-  # email:
-  #   $ref: Email.yaml
+  email:
+    $ref: Email.yaml
   name:
     type: string
     example: Example organization

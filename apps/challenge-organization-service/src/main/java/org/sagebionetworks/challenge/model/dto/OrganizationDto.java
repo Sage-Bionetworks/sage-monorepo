@@ -15,11 +15,38 @@ import javax.validation.constraints.*;
 // TODO Add x-java-class-annotations
 public class OrganizationDto {
 
+  @JsonProperty("email")
+  private String email;
+
   @JsonProperty("name")
   private String name;
 
   @JsonProperty("id")
   private Long id;
+
+  public OrganizationDto email(String email) {
+    this.email = email;
+    return this;
+  }
+
+  /**
+   * An email address.
+   *
+   * @return email
+   */
+  @Email
+  @Schema(
+      name = "email",
+      example = "john.smith@example.com",
+      description = "An email address.",
+      required = false)
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
   public OrganizationDto name(String name) {
     this.name = name;
@@ -73,18 +100,21 @@ public class OrganizationDto {
       return false;
     }
     OrganizationDto organization = (OrganizationDto) o;
-    return Objects.equals(this.name, organization.name) && Objects.equals(this.id, organization.id);
+    return Objects.equals(this.email, organization.email)
+        && Objects.equals(this.name, organization.name)
+        && Objects.equals(this.id, organization.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, id);
+    return Objects.hash(email, name, id);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class OrganizationDto {\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");

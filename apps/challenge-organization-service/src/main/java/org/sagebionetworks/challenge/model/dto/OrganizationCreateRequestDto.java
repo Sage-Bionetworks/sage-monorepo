@@ -17,8 +17,35 @@ import javax.validation.constraints.*;
 // TODO Add x-java-class-annotations
 public class OrganizationCreateRequestDto {
 
+  @JsonProperty("email")
+  private String email;
+
   @JsonProperty("name")
   private String name;
+
+  public OrganizationCreateRequestDto email(String email) {
+    this.email = email;
+    return this;
+  }
+
+  /**
+   * An email address.
+   *
+   * @return email
+   */
+  @Email
+  @Schema(
+      name = "email",
+      example = "john.smith@example.com",
+      description = "An email address.",
+      required = false)
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
   public OrganizationCreateRequestDto name(String name) {
     this.name = name;
@@ -48,18 +75,20 @@ public class OrganizationCreateRequestDto {
       return false;
     }
     OrganizationCreateRequestDto organizationCreateRequest = (OrganizationCreateRequestDto) o;
-    return Objects.equals(this.name, organizationCreateRequest.name);
+    return Objects.equals(this.email, organizationCreateRequest.email)
+        && Objects.equals(this.name, organizationCreateRequest.name);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name);
+    return Objects.hash(email, name);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class OrganizationCreateRequestDto {\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("}");
     return sb.toString();

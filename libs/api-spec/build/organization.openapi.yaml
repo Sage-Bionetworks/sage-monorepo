@@ -103,10 +103,17 @@ components:
       required:
         - paging
         - totalResults
+    Email:
+      description: An email address.
+      type: string
+      format: email
+      example: john.smith@example.com
     OrganizationCreateRequest:
       type: object
       description: The information required to create an org account
       properties:
+        email:
+          $ref: '#/components/schemas/Email'
         name:
           type: string
           example: Example organization

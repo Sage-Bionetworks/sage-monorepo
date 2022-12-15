@@ -175,9 +175,19 @@ components:
       - paging
       - totalResults
       type: object
+    Email:
+      description: An email address.
+      example: john.smith@example.com
+      format: email
+      type: string
     OrganizationCreateRequest:
       description: The information required to create an org account
       properties:
+        email:
+          description: An email address.
+          example: john.smith@example.com
+          format: email
+          type: string
         name:
           example: Example organization
           type: string
