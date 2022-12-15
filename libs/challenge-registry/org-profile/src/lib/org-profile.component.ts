@@ -30,6 +30,7 @@ export class OrgProfileComponent implements OnInit {
   tabKeys: string[] = Object.keys(this.tabs);
   activeTab: Tab = this.tabs['overview'];
   private subscriptions: Subscription[] = [];
+  // private useLocalOrganizationMock = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
