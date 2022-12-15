@@ -38,6 +38,9 @@ public class OrganizationEntity {
   @Column(nullable = false)
   private String login;
 
-  @Column(name = "avatar_url", nullable = true)
+  @Column(name = "avatar_url")
   private String avatarUrl;
+
+  @Column(name = "website_url")
+  private String websiteUrl;
 }

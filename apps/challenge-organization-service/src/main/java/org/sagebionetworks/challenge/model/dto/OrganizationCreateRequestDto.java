@@ -27,7 +27,10 @@ public class OrganizationCreateRequestDto {
   private String name;
 
   @JsonProperty("avatarUrl")
-  private String avatarUrl = null;
+  private String avatarUrl;
+
+  @JsonProperty("websiteUrl")
+  private String websiteUrl;
 
   public OrganizationCreateRequestDto email(String email) {
     this.email = email;
@@ -110,6 +113,25 @@ public class OrganizationCreateRequestDto {
     this.avatarUrl = avatarUrl;
   }
 
+  public OrganizationCreateRequestDto websiteUrl(String websiteUrl) {
+    this.websiteUrl = websiteUrl;
+    return this;
+  }
+
+  /**
+   * Get websiteUrl
+   *
+   * @return websiteUrl
+   */
+  @Schema(name = "websiteUrl", example = "https://example.com", required = false)
+  public String getWebsiteUrl() {
+    return websiteUrl;
+  }
+
+  public void setWebsiteUrl(String websiteUrl) {
+    this.websiteUrl = websiteUrl;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -122,12 +144,13 @@ public class OrganizationCreateRequestDto {
     return Objects.equals(this.email, organizationCreateRequest.email)
         && Objects.equals(this.login, organizationCreateRequest.login)
         && Objects.equals(this.name, organizationCreateRequest.name)
-        && Objects.equals(this.avatarUrl, organizationCreateRequest.avatarUrl);
+        && Objects.equals(this.avatarUrl, organizationCreateRequest.avatarUrl)
+        && Objects.equals(this.websiteUrl, organizationCreateRequest.websiteUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, login, name, avatarUrl);
+    return Objects.hash(email, login, name, avatarUrl, websiteUrl);
   }
 
   @Override
@@ -138,6 +161,7 @@ public class OrganizationCreateRequestDto {
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("}");
     return sb.toString();
   }
