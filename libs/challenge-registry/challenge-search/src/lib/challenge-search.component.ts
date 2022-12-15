@@ -4,9 +4,18 @@ import {
   DateRange,
 } from '@sagebionetworks/api-client-angular-deprecated';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
-import { challengeStartYearRangeFilterValues } from './challenge-search-filters-values';
-import { FilterValue } from './filter-value.model';
-import { MOCK_CHALLENGES } from '@sagebionetworks/challenge-registry/ui';
+import {
+  challengeStartYearRangeFilterValues,
+  challengeStatusFilterValues,
+  challengeDifficultyFilterValues,
+  challengeSubmissionTypesFilterValues,
+  challengeInputDataTypeFilterValues,
+  challengeIncentiveTypesFilterValues,
+} from './challenge-search-filters-values';
+import {
+  FilterValue,
+  MOCK_CHALLENGES,
+} from '@sagebionetworks/challenge-registry/ui';
 import { BehaviorSubject, of, switchMap, tap } from 'rxjs';
 import { ChallengeSearchQuery } from './challenge-search-query';
 import { Calendar } from 'primeng/calendar';
@@ -41,15 +50,36 @@ export class ChallengeSearchComponent implements OnInit {
   offset = 0;
   searchResultsCount = 0;
 
-  challengeStartYearRangeFilterValues: FilterValue[] =
-    challengeStartYearRangeFilterValues;
+  startYearRangeValues: FilterValue[] = challengeStartYearRangeFilterValues;
+  checkboxfilters: { label: string; values: FilterValue[] }[] = [
+    {
+      label: 'Status',
+      values: challengeStatusFilterValues,
+    },
+    {
+      label: 'Difficulty',
+      values: challengeDifficultyFilterValues,
+    },
+    {
+      label: 'Submission Type',
+      values: challengeSubmissionTypesFilterValues,
+    },
+    {
+      label: 'Input Data Type',
+      values: challengeInputDataTypeFilterValues,
+    },
+    {
+      label: 'Platform',
+      values: challengeIncentiveTypesFilterValues,
+    },
+  ];
 
   constructor(private readonly configService: ConfigService) {
     this.appVersion = this.configService.config.appVersion;
   }
 
   ngOnInit() {
-    this.selectedYear = this.challengeStartYearRangeFilterValues[0].value;
+    this.selectedYear = this.startYearRangeValues[0].value;
     this.totalChallengesCount = MOCK_CHALLENGES.length;
     const defaultQuery = {
       startYearRange: this.selectedYear,
@@ -107,4 +137,10 @@ export class ChallengeSearchComponent implements OnInit {
       this.query.next(newQuery);
     }
   }
+
+  titleCase = (string: string, split: string): string =>
+    string
+      .split(split)
+      .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
 }

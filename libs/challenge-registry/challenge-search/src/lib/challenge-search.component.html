@@ -28,7 +28,7 @@
     <div class="facets col">
       <!-- Challenge Year Filter Starts -->
       <p-panel header="Challenge Year" [toggleable]="true">
-        <div *ngFor="let year of challengeStartYearRangeFilterValues" class="year-btn-group">
+        <div *ngFor="let year of startYearRangeValues" class="year-btn-group">
           <p-radioButton
             [inputId]="year.label"
             [value]="year.value"
@@ -53,8 +53,18 @@
           ></p-calendar>
         </div>
       </p-panel>
-      <!-- Challenge Year Filter Ends -->
       <p-divider></p-divider>
+      <!-- Challenge Year Filter Ends -->
+      <!-- Challenge Year Filter Starts -->
+      <ng-container *ngFor="let filter of checkboxfilters">
+        <p-panel header="{{ filter.label }}" [toggleable]="true">
+          <challenge-registry-checkbox-filter
+            [values]="filter.values"
+          ></challenge-registry-checkbox-filter>
+        </p-panel>
+        <p-divider></p-divider>
+      </ng-container>
+      <!-- Challenge Year Filter Ends -->
       <!-- <hr />
         <mat-expansion-panel
           (opened)="panelOpenState = true"
