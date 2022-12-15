@@ -8,20 +8,19 @@ import java.util.Objects;
 import javax.annotation.Generated;
 import javax.validation.constraints.*;
 
-/** An organization */
-@Schema(name = "Organization", description = "An organization")
-@JsonTypeName("Organization")
+/** The information required to create an org account */
+@Schema(
+    name = "OrganizationCreateRequest",
+    description = "The information required to create an org account")
+@JsonTypeName("OrganizationCreateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations
-public class OrganizationDto {
+public class OrganizationCreateRequestDto {
 
   @JsonProperty("name")
   private String name;
 
-  @JsonProperty("id")
-  private Long id;
-
-  public OrganizationDto name(String name) {
+  public OrganizationCreateRequestDto name(String name) {
     this.name = name;
     return this;
   }
@@ -40,29 +39,6 @@ public class OrganizationDto {
     this.name = name;
   }
 
-  public OrganizationDto id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * The unique identifier of an organization
-   *
-   * @return id
-   */
-  @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of an organization",
-      required = false)
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -71,21 +47,20 @@ public class OrganizationDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OrganizationDto organization = (OrganizationDto) o;
-    return Objects.equals(this.name, organization.name) && Objects.equals(this.id, organization.id);
+    OrganizationCreateRequestDto organizationCreateRequest = (OrganizationCreateRequestDto) o;
+    return Objects.equals(this.name, organizationCreateRequest.name);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, id);
+    return Objects.hash(name);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class OrganizationDto {\n");
+    sb.append("class OrganizationCreateRequestDto {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

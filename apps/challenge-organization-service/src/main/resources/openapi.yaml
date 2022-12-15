@@ -175,25 +175,24 @@ components:
       - paging
       - totalResults
       type: object
+    OrganizationCreateRequest:
+      description: The information required to create an org account
+      example:
+        name: Awesome Org
+      properties:
+        name:
+          type: string
+      type: object
     OrganizationId:
       description: The unique identifier of an organization
       example: 1
       format: int64
       type: integer
     Organization:
+      allOf:
+      - $ref: '#/components/schemas/OrganizationCreateRequest'
+      - $ref: '#/components/schemas/Organization_allOf'
       description: An organization
-      example:
-        name: DREAM
-      properties:
-        id:
-          description: The unique identifier of an organization
-          example: 1
-          format: int64
-          type: integer
-        name:
-          type: string
-      required:
-      - name
       type: object
     OrganizationsPage:
       allOf:
@@ -232,6 +231,14 @@ components:
           description: Link to the next page of results
           format: url
           type: string
+      type: object
+    Organization_allOf:
+      properties:
+        id:
+          description: The unique identifier of an organization
+          example: 1
+          format: int64
+          type: integer
       type: object
     OrganizationsPage_allOf:
       properties:

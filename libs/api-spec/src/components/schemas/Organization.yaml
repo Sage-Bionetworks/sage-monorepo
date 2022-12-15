@@ -1,8 +1,12 @@
 type: object
 description: An organization
 allOf:
-  - $ref: OrganizationId.yaml
+  # - $ref: OrganizationId.yaml
   - $ref: OrganizationCreateRequest.yaml
+  - type: object
+    properties:
+      id:
+        $ref: OrganizationId.yaml
 # properties:
 #   id:
 #     $ref: OrganizationId.yaml

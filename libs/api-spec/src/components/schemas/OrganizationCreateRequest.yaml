@@ -7,7 +7,6 @@ properties:
   #   $ref: Email.yaml
   name:
     type: string
-    nullable: true
   # avatarUrl:
   #   type: string
   #   format: url
