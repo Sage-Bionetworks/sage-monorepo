@@ -1,4 +1,5 @@
 {
+  "name": "challenge-registry-ui",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/challenge-registry/ui/src",
@@ -6,9 +7,7 @@
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/libs/challenge-registry/ui"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/libs/challenge-registry/ui"],
       "options": {
         "jestConfig": "libs/challenge-registry/ui/jest.config.ts",
         "passWithNoTests": true
@@ -24,13 +23,6 @@
       }
     }
   },
-  "tags": [
-    "type:feature",
-    "scope:challenge-registry"
-  ],
-  "implicitDependencies": [
-    "shared-assets",
-    "shared-styles",
-    "shared-themes"
-  ]
+  "tags": ["type:feature", "scope:challenge-registry"],
+  "implicitDependencies": ["shared-assets", "shared-styles", "shared-themes"]
 }

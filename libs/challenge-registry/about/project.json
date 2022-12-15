@@ -1,4 +1,5 @@
 {
+  "name": "challenge-registry-about",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/challenge-registry/about/src",
@@ -6,7 +7,7 @@
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/challenge-registry/about"],
+      "outputs": ["{workspaceRoot}/coverage/libs/challenge-registry/about"],
       "options": {
         "jestConfig": "libs/challenge-registry/about/jest.config.ts",
         "passWithNoTests": true

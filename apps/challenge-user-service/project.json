@@ -1,4 +1,5 @@
 {
+  "name": "challenge-user-service",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-user-service/src",
   "projectType": "application",
@@ -22,7 +23,7 @@
       "options": {
         "root": "apps/challenge-user-service"
       },
-      "outputs": ["apps/challenge-user-service"],
+      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "clean": {

@@ -1,4 +1,5 @@
 {
+  "name": "challenge-kibana",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-elk/kibana/src",
   "projectType": "application",

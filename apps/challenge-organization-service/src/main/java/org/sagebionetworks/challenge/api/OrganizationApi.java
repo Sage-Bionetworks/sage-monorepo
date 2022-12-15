@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @Validated
 @Tag(name = "Organization", description = "Operations about organizations")
-@RequestMapping("${openapi.challengeOrganization.base-path:}")
+@RequestMapping("${openapi.challengeOrganization.base-path:/v1}")
 public interface OrganizationApi {
 
   default OrganizationApiDelegate getDelegate() {

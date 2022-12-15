@@ -1,4 +1,5 @@
 {
+  "name": "challenge-registry-org-profile",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/challenge-registry/org-profile/src",
@@ -6,9 +7,7 @@
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/libs/challenge-registry/org-profile"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/libs/challenge-registry/org-profile"],
       "options": {
         "jestConfig": "libs/challenge-registry/org-profile/jest.config.ts",
         "passWithNoTests": true
@@ -24,11 +23,6 @@
       }
     }
   },
-  "tags": [
-    "type:feature",
-    "scope:challenge-registry"
-  ],
-  "implicitDependencies": [
-    "challenge-registry-assets"
-  ]
+  "tags": ["type:feature", "scope:challenge-registry"],
+  "implicitDependencies": ["challenge-registry-assets"]
 }

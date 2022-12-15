@@ -1,4 +1,5 @@
 {
+  "name": "challenge-elasticsearch",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-elk/elasticsearch/src",
   "projectType": "application",

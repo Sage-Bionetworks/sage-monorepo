@@ -3,16 +3,6 @@
   "sourceRoot": "apps/challenge-bot/src",
   "projectType": "application",
   "targets": {
-    // "build": {
-    //   "executor": "@nrwl/js:tsc",
-    //   "outputs": ["{options.outputPath}"],
-    //   "options": {
-    //     "outputPath": "dist/apps/challenge-bot",
-    //     "main": "apps/challenge-bot/src/index.ts",
-    //     "tsConfig": "apps/challenge-bot/tsconfig.app.json",
-    //     "assets": ["apps/challenge-bot/*.md"]
-    //   }
-    // },
     "build-watch": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
@@ -73,5 +63,6 @@
       }
     }
   },
-  "tags": ["type:app", "scope:admin"]
+  "tags": ["type:app", "scope:admin"],
+  "name": "challenge-bot"
 }

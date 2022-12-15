@@ -1,4 +1,5 @@
 {
+  "name": "challenge-core-service",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-core-service/src",
   "projectType": "application",
@@ -22,7 +23,7 @@
       "options": {
         "root": "apps/challenge-core-service"
       },
-      "outputs": ["apps/challenge-core-service"],
+      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "clean": {

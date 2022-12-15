@@ -1,4 +1,5 @@
 {
+  "name": "challenge-logspout",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/challenge-elk/logspout/src",
   "projectType": "application",

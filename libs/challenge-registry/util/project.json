@@ -1,4 +1,6 @@
 {
+  "name": "challenge-registry-util",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "root": "libs/challenge-registry/util",
   "sourceRoot": "libs/challenge-registry/util/src",
@@ -22,8 +24,5 @@
       }
     }
   },
-  "tags": [
-    "type:util",
-    "scope:challenge-registry"
-  ]
+  "tags": ["type:util", "scope:challenge-registry"]
 }
