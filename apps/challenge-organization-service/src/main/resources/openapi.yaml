@@ -271,7 +271,9 @@ components:
           format: date-time
           type: string
       required:
+      - createdAt
       - id
+      - updatedAt
       type: object
     OrganizationsPage_allOf:
       properties:

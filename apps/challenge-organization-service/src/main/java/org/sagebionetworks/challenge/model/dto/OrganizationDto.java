@@ -203,8 +203,9 @@ public class OrganizationDto {
    *
    * @return createdAt
    */
+  @NotNull
   @Valid
-  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", required = false)
+  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", required = true)
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -223,8 +224,9 @@ public class OrganizationDto {
    *
    * @return updatedAt
    */
+  @NotNull
   @Valid
-  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", required = false)
+  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", required = true)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
