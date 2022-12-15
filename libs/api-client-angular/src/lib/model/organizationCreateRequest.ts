@@ -12,17 +12,17 @@
 
 
 /**
- * The information required to create a user account
+ * The information required to create an org account
  */
-export interface UserCreateRequest { 
-    login: string;
+export interface OrganizationCreateRequest { 
     /**
      * An email address.
      */
-    email: string;
-    password: string;
-    name?: string | null;
-    avatarUrl?: string | null;
-    bio?: string | null;
+    email?: string;
+    login?: string;
+    name?: string;
+    avatarUrl?: string;
+    websiteUrl?: string;
+    description?: string;
 }
 

@@ -22,7 +22,7 @@ export interface User {
     id?: number;
     login: string;
     /**
-     * An email address
+     * An email address.
      */
     email: string;
     name?: string | null;

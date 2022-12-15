@@ -11,6 +11,8 @@ index.ts
 model/basicError.ts
 model/models.ts
 model/organization.ts
+model/organizationAllOf.ts
+model/organizationCreateRequest.ts
 model/organizationsPage.ts
 model/organizationsPageAllOf.ts
 model/pageMetadata.ts
