@@ -16,11 +16,12 @@ import {
   FilterValue,
   MOCK_CHALLENGES,
 } from '@sagebionetworks/challenge-registry/ui';
-import { BehaviorSubject, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { ChallengeSearchQuery } from './challenge-search-query';
 import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
 import { assign } from 'lodash';
+import { isNotNullOrUndefined } from 'type-guards';
 
 @Component({
   selector: 'challenge-registry-challenge-search',
@@ -81,6 +82,18 @@ export class ChallengeSearchComponent implements OnInit {
   ngOnInit() {
     this.selectedYear = this.startYearRangeValues[0].value;
     this.totalChallengesCount = MOCK_CHALLENGES.length;
+
+    this.listInputDataType().subscribe(
+      (dataTypes) =>
+        // update input data types filter values
+        (this.checkboxfilters[3].values = dataTypes.map((dataType) => ({
+          value: dataType,
+          label: this.titleCase(dataType, '-'),
+          active: false,
+        })))
+    );
+
+    // triger initial query
     const defaultQuery = {
       startYearRange: this.selectedYear,
       ...this.query,
@@ -138,9 +151,22 @@ export class ChallengeSearchComponent implements OnInit {
     }
   }
 
-  titleCase = (string: string, split: string): string =>
-    string
+  titleCase(string: string, split: string): string {
+    // tranform one word to title-case word
+    return string
       .split(split)
-      .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+      .map((text) => text[0].toUpperCase() + text.slice(1).toLowerCase())
       .join(' ');
+  }
+
+  listInputDataType(): Observable<string[]> {
+    // update input data type values - API requires
+    const allTypes = [...new Set(MOCK_CHALLENGES.map((c) => c.inputDataTypes))];
+    const uniqueTypes = [
+      ...new Set(
+        allTypes.filter(isNotNullOrUndefined).reduce((o, c) => o.concat(c), [])
+      ),
+    ].sort();
+    return of(uniqueTypes);
+  }
 }
