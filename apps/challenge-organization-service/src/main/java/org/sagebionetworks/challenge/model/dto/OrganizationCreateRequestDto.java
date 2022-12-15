@@ -27,7 +27,7 @@ public class OrganizationCreateRequestDto {
   private String name;
 
   @JsonProperty("avatarUrl")
-  private String avatarUrl;
+  private String avatarUrl = null;
 
   public OrganizationCreateRequestDto email(String email) {
     this.email = email;

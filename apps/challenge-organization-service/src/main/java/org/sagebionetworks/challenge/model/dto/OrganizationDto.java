@@ -25,7 +25,7 @@ public class OrganizationDto {
   private String name;
 
   @JsonProperty("avatarUrl")
-  private String avatarUrl;
+  private String avatarUrl = null;
 
   @JsonProperty("id")
   private Long id;

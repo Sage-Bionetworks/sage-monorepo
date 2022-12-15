@@ -21,8 +21,8 @@ public class ChallengeOrganizationServiceApplication {
     SpringApplication.run(ChallengeOrganizationServiceApplication.class, args);
   }
 
-  @Bean
-  public Module jsonNullableModule() {
-    return new JsonNullableModule();
-  }
+  // @Bean
+  // public Module jsonNullableModule() {
+  //   return new JsonNullableModule();
+  // }
 }

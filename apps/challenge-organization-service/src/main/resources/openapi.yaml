@@ -197,6 +197,7 @@ components:
         avatarUrl:
           example: https://via.placeholder.com/300.png
           format: url
+          nullable: true
           type: string
       type: object
     OrganizationId:
