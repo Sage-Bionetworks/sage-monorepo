@@ -120,6 +120,10 @@ components:
         name:
           type: string
           example: Example organization
+        avatarUrl:
+          type: string
+          format: url
+          example: https://via.placeholder.com/300.png
     OrganizationId:
       description: The unique identifier of an organization
       type: integer

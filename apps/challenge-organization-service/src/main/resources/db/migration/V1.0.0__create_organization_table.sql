@@ -6,6 +6,7 @@ CREATE TABLE `challenge_organization`
     `name`                  varchar(255) DEFAULT NULL,
     `email`                 varchar(255) DEFAULT NULL,
     `login`                 varchar(255) DEFAULT NULL,
+    `avatar_url`            varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`)
 );
 

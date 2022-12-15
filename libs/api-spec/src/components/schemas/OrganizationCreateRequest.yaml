@@ -9,11 +9,11 @@ properties:
   name:
     type: string
     example: Example organization
-  # avatarUrl:
-  #   type: string
-  #   format: url
-  #   example: https://example.com/awesome-avatar.png
-  #   nullable: true
+  avatarUrl:
+    type: string
+    format: url
+    example: https://via.placeholder.com/300.png
+    # nullable: true
   # websiteUrl:
   #   type: string
   #   format: url

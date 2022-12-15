@@ -26,6 +26,9 @@ public class OrganizationCreateRequestDto {
   @JsonProperty("name")
   private String name;
 
+  @JsonProperty("avatarUrl")
+  private String avatarUrl;
+
   public OrganizationCreateRequestDto email(String email) {
     this.email = email;
     return this;
@@ -88,6 +91,25 @@ public class OrganizationCreateRequestDto {
     this.name = name;
   }
 
+  public OrganizationCreateRequestDto avatarUrl(String avatarUrl) {
+    this.avatarUrl = avatarUrl;
+    return this;
+  }
+
+  /**
+   * Get avatarUrl
+   *
+   * @return avatarUrl
+   */
+  @Schema(name = "avatarUrl", example = "https://via.placeholder.com/300.png", required = false)
+  public String getAvatarUrl() {
+    return avatarUrl;
+  }
+
+  public void setAvatarUrl(String avatarUrl) {
+    this.avatarUrl = avatarUrl;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -99,12 +121,13 @@ public class OrganizationCreateRequestDto {
     OrganizationCreateRequestDto organizationCreateRequest = (OrganizationCreateRequestDto) o;
     return Objects.equals(this.email, organizationCreateRequest.email)
         && Objects.equals(this.login, organizationCreateRequest.login)
-        && Objects.equals(this.name, organizationCreateRequest.name);
+        && Objects.equals(this.name, organizationCreateRequest.name)
+        && Objects.equals(this.avatarUrl, organizationCreateRequest.avatarUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, login, name);
+    return Objects.hash(email, login, name, avatarUrl);
   }
 
   @Override
@@ -114,6 +137,7 @@ public class OrganizationCreateRequestDto {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("}");
     return sb.toString();
   }

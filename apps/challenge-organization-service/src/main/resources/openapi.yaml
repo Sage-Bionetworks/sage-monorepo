@@ -194,6 +194,10 @@ components:
         name:
           example: Example organization
           type: string
+        avatarUrl:
+          example: https://via.placeholder.com/300.png
+          format: url
+          type: string
       type: object
     OrganizationId:
       description: The unique identifier of an organization
