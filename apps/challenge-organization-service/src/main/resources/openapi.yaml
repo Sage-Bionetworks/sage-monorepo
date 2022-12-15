@@ -205,6 +205,8 @@ components:
         description:
           example: A short description of the organization.
           type: string
+      required:
+      - login
       type: object
     OrganizationId:
       description: The unique identifier of an organization

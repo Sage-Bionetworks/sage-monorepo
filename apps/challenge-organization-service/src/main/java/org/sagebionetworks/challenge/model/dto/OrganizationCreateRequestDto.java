@@ -69,7 +69,8 @@ public class OrganizationCreateRequestDto {
    *
    * @return login
    */
-  @Schema(name = "login", example = "example-organization", required = false)
+  @NotNull
+  @Schema(name = "login", example = "example-organization", required = true)
   public String getLogin() {
     return login;
   }
