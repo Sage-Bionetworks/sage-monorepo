@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   Challenge,
+  ChallengePlatform,
   DateRange,
 } from '@sagebionetworks/api-client-angular-deprecated';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
@@ -23,6 +24,7 @@ import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
 import { assign } from 'lodash';
 import { isNotNullOrUndefined } from 'type-guards';
+import { MOCK_PLATFORMS } from './mock-platforms';
 
 @Component({
   selector: 'challenge-registry-challenge-search',
@@ -120,8 +122,8 @@ export class ChallengeSearchComponent implements OnInit {
       (platforms) =>
         // update input data types filter values
         (this.checkboxfilters[5].values = platforms.map((platform) => ({
-          value: platform,
-          label: this.titleCase(platform, '-'),
+          value: platform.id,
+          label: platform.displayName,
           active: false,
         })))
     );
@@ -216,8 +218,8 @@ export class ChallengeSearchComponent implements OnInit {
     return of(uniqueTypes);
   }
 
-  listPlatforms(): Observable<string[]> {
-    return of(['synapse', 'grand-challenges', 'camda', 'kaggle'].sort());
+  listPlatforms(): Observable<ChallengePlatform[]> {
+    return of(MOCK_PLATFORMS);
   }
 
   // tmp - Removed once Service is used
