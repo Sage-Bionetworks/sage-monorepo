@@ -21,7 +21,7 @@ export interface OrganizationCreateRequest {
     email?: string;
     login: string;
     name?: string;
-    avatarUrl?: string;
+    avatarUrl?: string | null;
     websiteUrl?: string;
     description?: string;
 }
