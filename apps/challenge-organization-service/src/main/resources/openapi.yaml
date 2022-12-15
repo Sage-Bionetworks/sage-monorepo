@@ -188,6 +188,9 @@ components:
           example: john.smith@example.com
           format: email
           type: string
+        login:
+          example: example-organization
+          type: string
         name:
           example: Example organization
           type: string

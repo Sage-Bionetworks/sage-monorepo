@@ -114,6 +114,9 @@ components:
       properties:
         email:
           $ref: '#/components/schemas/Email'
+        login:
+          type: string
+          example: example-organization
         name:
           type: string
           example: Example organization

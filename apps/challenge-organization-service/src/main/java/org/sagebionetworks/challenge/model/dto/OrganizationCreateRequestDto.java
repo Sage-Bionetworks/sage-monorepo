@@ -20,6 +20,9 @@ public class OrganizationCreateRequestDto {
   @JsonProperty("email")
   private String email;
 
+  @JsonProperty("login")
+  private String login;
+
   @JsonProperty("name")
   private String name;
 
@@ -45,6 +48,25 @@ public class OrganizationCreateRequestDto {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public OrganizationCreateRequestDto login(String login) {
+    this.login = login;
+    return this;
+  }
+
+  /**
+   * Get login
+   *
+   * @return login
+   */
+  @Schema(name = "login", example = "example-organization", required = false)
+  public String getLogin() {
+    return login;
+  }
+
+  public void setLogin(String login) {
+    this.login = login;
   }
 
   public OrganizationCreateRequestDto name(String name) {
@@ -76,12 +98,13 @@ public class OrganizationCreateRequestDto {
     }
     OrganizationCreateRequestDto organizationCreateRequest = (OrganizationCreateRequestDto) o;
     return Objects.equals(this.email, organizationCreateRequest.email)
+        && Objects.equals(this.login, organizationCreateRequest.login)
         && Objects.equals(this.name, organizationCreateRequest.name);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, name);
+    return Objects.hash(email, login, name);
   }
 
   @Override
@@ -89,6 +112,7 @@ public class OrganizationCreateRequestDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class OrganizationCreateRequestDto {\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("}");
     return sb.toString();

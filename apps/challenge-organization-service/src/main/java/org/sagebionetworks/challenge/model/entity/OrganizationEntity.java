@@ -34,4 +34,7 @@ public class OrganizationEntity {
 
   @Column(nullable = false)
   private String email;
+
+  @Column(nullable = false)
+  private String login;
 }
