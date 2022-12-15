@@ -1,14 +1,17 @@
 type: object
 description: An organization
-properties:
-  id:
-    $ref: OrganizationId.yaml
-  name:
-    type: string
-required:
-  - name
-example:
-  name: DREAM
+allOf:
+  - $ref: OrganizationId.yaml
+  - $ref: OrganizationCreateRequest.yaml
+# properties:
+#   id:
+#     $ref: OrganizationId.yaml
+#   name:
+#     type: string
+# required:
+#   - name
+# example:
+#   name: DREAM
 # allOf:
 #   - $ref: OrganizationCreateResponse.yaml
 #   - $ref: OrganizationCreateRequest.yaml

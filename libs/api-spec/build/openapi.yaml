@@ -168,18 +168,51 @@ components:
       type: integer
       format: int64
       example: 1
+    Email:
+      description: An email address
+      type: string
+      format: email
+      example: john.smith@example.com
+    OrganizationCreateRequest:
+      type: object
+      description: The information required to create an org account
+      properties:
+        login:
+          type: string
+        email:
+          $ref: '#/components/schemas/Email'
+        name:
+          type: string
+          nullable: true
+        avatarUrl:
+          type: string
+          format: url
+          example: 'https://example.com/awesome-avatar.png'
+          nullable: true
+        websiteUrl:
+          type: string
+          format: url
+          example: 'https://example.com'
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      required:
+        - login
+        - email
+      example:
+        login: awesome-org
+        email: contact@example.org
+        name: Awesome Org
+        avatarUrl: 'https://example.com/awesome-avatar.png'
+        websiteUrl: 'https://example.com'
+        description: A great organization
     Organization:
       type: object
       description: An organization
-      properties:
-        id:
-          $ref: '#/components/schemas/OrganizationId'
-        name:
-          type: string
-      required:
-        - name
-      example:
-        name: DREAM
+      allOf:
+        - $ref: '#/components/schemas/OrganizationId'
+        - $ref: '#/components/schemas/OrganizationCreateRequest'
     OrganizationsPage:
       type: object
       description: A page of organizations
@@ -219,11 +252,6 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
-    Email:
-      description: An email address
-      type: string
-      format: email
-      example: john.smith@example.com
     UserCreateRequest:
       type: object
       description: The information required to create a user account
