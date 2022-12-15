@@ -11,18 +11,12 @@
  */
 
 
-/**
- * The information required to create a user account
- */
-export interface UserCreateRequest { 
-    login: string;
+export interface OrganizationAllOf { 
     /**
-     * An email address.
+     * The unique identifier of an organization
      */
-    email: string;
-    password: string;
-    name?: string | null;
-    avatarUrl?: string | null;
-    bio?: string | null;
+    id: number;
+    createdAt: string;
+    updatedAt: string;
 }
 

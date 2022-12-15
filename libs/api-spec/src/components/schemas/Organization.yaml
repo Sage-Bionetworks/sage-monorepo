@@ -1,33 +1,21 @@
 type: object
 description: An organization
-properties:
-  id:
-    $ref: OrganizationId.yaml
-  name:
-    type: string
-required:
-  - name
-example:
-  name: DREAM
-# allOf:
-#   - $ref: OrganizationCreateResponse.yaml
-#   - $ref: OrganizationCreateRequest.yaml
-#   - type: object
-#     properties:
-#       createdAt:
-#         type: string
-#         format: date-time
-#       updatedAt:
-#         type: string
-#         format: date-time
-#       type:
-#         type: string
-#         example: Organization
-#     required:
-#       - createdAt
-#       - updatedAt
-#       - type
-#     example:
-#       createdAt: '2017-07-08T16:18:44-04:00'
-#       updatedAt: '2017-07-08T16:18:44-04:00'
-#       type: Organization
+allOf:
+  # - $ref: OrganizationId.yaml
+  - $ref: OrganizationCreateRequest.yaml
+  - type: object
+    properties:
+      id:
+        $ref: OrganizationId.yaml
+      createdAt:
+        type: string
+        format: date-time
+        example: '2022-07-04T22:19:11Z'
+      updatedAt:
+        type: string
+        format: date-time
+        example: '2022-07-04T22:19:11Z'
+    required:
+      - id
+      - createdAt
+      - updatedAt

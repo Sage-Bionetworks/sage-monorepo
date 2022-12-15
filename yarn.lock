@@ -11366,6 +11366,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"canvas@npm:^2.10.2":
+  version: 2.10.2
+  resolution: "canvas@npm:2.10.2"
+  dependencies:
+    "@mapbox/node-pre-gyp": ^1.0.0
+    nan: ^2.17.0
+    node-gyp: latest
+    simple-get: ^3.0.3
+  checksum: b2e3eb4c3635fa2f67857619621c3d314f935a9e51904536dadf4908ab580dff4f5bcbaafe6eb0255247fa027ca494d5cd97c33376a49a0f994997263fa9944b
+  languageName: node
+  linkType: hard
+
 "canvas@npm:^2.9.1":
   version: 2.10.1
   resolution: "canvas@npm:2.10.1"
@@ -11506,6 +11518,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.40.0
     "@typescript-eslint/parser": 5.40.0
     babel-jest: 29.1.2
+    canvas: ^2.10.2
     colors: 1.4.0
     commander: 9.4.1
     core-js: 3.25.5
@@ -21354,6 +21367,15 @@ __metadata:
   dependencies:
     node-gyp: latest
   checksum: cb16937273ea55b01ea47df244094c12297ce6b29b36e845d349f1f7c268b8d7c5abd126a102c5678a1e1afd0d36bba35ea0cc959e364928ce60561c9306064a
+  languageName: node
+  linkType: hard
+
+"nan@npm:^2.17.0":
+  version: 2.17.0
+  resolution: "nan@npm:2.17.0"
+  dependencies:
+    node-gyp: latest
+  checksum: ec609aeaf7e68b76592a3ba96b372aa7f5df5b056c1e37410b0f1deefbab5a57a922061e2c5b369bae9c7c6b5e6eecf4ad2dac8833a1a7d3a751e0a7c7f849ed
   languageName: node
   linkType: hard
 

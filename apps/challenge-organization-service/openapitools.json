@@ -19,7 +19,8 @@
           "library": "spring-boot",
           "modelNameSuffix": "Dto",
           "modelPackage": "org.sagebionetworks.challenge.model.dto",
-          "useTags": true
+          "useTags": true,
+          "openApiNullable": false
         }
       }
     }

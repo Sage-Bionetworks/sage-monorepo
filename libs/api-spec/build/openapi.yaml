@@ -163,6 +163,37 @@ components:
       required:
         - paging
         - totalResults
+    Email:
+      description: An email address.
+      type: string
+      format: email
+      example: john.smith@example.com
+    OrganizationCreateRequest:
+      type: object
+      description: The information required to create an org account
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+        login:
+          type: string
+          example: example-organization
+        name:
+          type: string
+          example: Example organization
+        avatarUrl:
+          type: string
+          format: url
+          example: 'https://via.placeholder.com/300.png'
+          nullable: true
+        websiteUrl:
+          type: string
+          format: url
+          example: 'https://example.com'
+        description:
+          type: string
+          example: A short description of the organization.
+      required:
+        - login
     OrganizationId:
       description: The unique identifier of an organization
       type: integer
@@ -171,15 +202,24 @@ components:
     Organization:
       type: object
       description: An organization
-      properties:
-        id:
-          $ref: '#/components/schemas/OrganizationId'
-        name:
-          type: string
-      required:
-        - name
-      example:
-        name: DREAM
+      allOf:
+        - $ref: '#/components/schemas/OrganizationCreateRequest'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/OrganizationId'
+            createdAt:
+              type: string
+              format: date-time
+              example: '2022-07-04T22:19:11Z'
+            updatedAt:
+              type: string
+              format: date-time
+              example: '2022-07-04T22:19:11Z'
+          required:
+            - id
+            - createdAt
+            - updatedAt
     OrganizationsPage:
       type: object
       description: A page of organizations
@@ -219,11 +259,6 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
-    Email:
-      description: An email address
-      type: string
-      format: email
-      example: john.smith@example.com
     UserCreateRequest:
       type: object
       description: The information required to create a user account

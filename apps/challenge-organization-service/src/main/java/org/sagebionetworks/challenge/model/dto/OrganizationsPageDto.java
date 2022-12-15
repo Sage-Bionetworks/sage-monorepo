@@ -78,6 +78,9 @@ public class OrganizationsPageDto {
   }
 
   public OrganizationsPageDto addOrganizationsItem(OrganizationDto organizationsItem) {
+    if (this.organizations == null) {
+      this.organizations = new ArrayList<>();
+    }
     this.organizations.add(organizationsItem);
     return this;
   }

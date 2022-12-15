@@ -3,20 +3,19 @@ package org.sagebionetworks.challenge.model.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.Objects;
 import javax.annotation.Generated;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
-/** An organization */
-@Schema(name = "Organization", description = "An organization")
-@JsonTypeName("Organization")
+/** The information required to create an org account */
+@Schema(
+    name = "OrganizationCreateRequest",
+    description = "The information required to create an org account")
+@JsonTypeName("OrganizationCreateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations
-public class OrganizationDto {
+public class OrganizationCreateRequestDto {
 
   @JsonProperty("email")
   private String email;
@@ -36,18 +35,7 @@ public class OrganizationDto {
   @JsonProperty("description")
   private String description;
 
-  @JsonProperty("id")
-  private Long id;
-
-  @JsonProperty("createdAt")
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime createdAt;
-
-  @JsonProperty("updatedAt")
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime updatedAt;
-
-  public OrganizationDto email(String email) {
+  public OrganizationCreateRequestDto email(String email) {
     this.email = email;
     return this;
   }
@@ -71,7 +59,7 @@ public class OrganizationDto {
     this.email = email;
   }
 
-  public OrganizationDto login(String login) {
+  public OrganizationCreateRequestDto login(String login) {
     this.login = login;
     return this;
   }
@@ -91,7 +79,7 @@ public class OrganizationDto {
     this.login = login;
   }
 
-  public OrganizationDto name(String name) {
+  public OrganizationCreateRequestDto name(String name) {
     this.name = name;
     return this;
   }
@@ -110,7 +98,7 @@ public class OrganizationDto {
     this.name = name;
   }
 
-  public OrganizationDto avatarUrl(String avatarUrl) {
+  public OrganizationCreateRequestDto avatarUrl(String avatarUrl) {
     this.avatarUrl = avatarUrl;
     return this;
   }
@@ -129,7 +117,7 @@ public class OrganizationDto {
     this.avatarUrl = avatarUrl;
   }
 
-  public OrganizationDto websiteUrl(String websiteUrl) {
+  public OrganizationCreateRequestDto websiteUrl(String websiteUrl) {
     this.websiteUrl = websiteUrl;
     return this;
   }
@@ -148,7 +136,7 @@ public class OrganizationDto {
     this.websiteUrl = websiteUrl;
   }
 
-  public OrganizationDto description(String description) {
+  public OrganizationCreateRequestDto description(String description) {
     this.description = description;
     return this;
   }
@@ -170,72 +158,6 @@ public class OrganizationDto {
     this.description = description;
   }
 
-  public OrganizationDto id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * The unique identifier of an organization
-   *
-   * @return id
-   */
-  @NotNull
-  @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of an organization",
-      required = true)
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public OrganizationDto createdAt(OffsetDateTime createdAt) {
-    this.createdAt = createdAt;
-    return this;
-  }
-
-  /**
-   * Get createdAt
-   *
-   * @return createdAt
-   */
-  @NotNull
-  @Valid
-  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", required = true)
-  public OffsetDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(OffsetDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public OrganizationDto updatedAt(OffsetDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-    return this;
-  }
-
-  /**
-   * Get updatedAt
-   *
-   * @return updatedAt
-   */
-  @NotNull
-  @Valid
-  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", required = true)
-  public OffsetDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(OffsetDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -244,37 +166,30 @@ public class OrganizationDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OrganizationDto organization = (OrganizationDto) o;
-    return Objects.equals(this.email, organization.email)
-        && Objects.equals(this.login, organization.login)
-        && Objects.equals(this.name, organization.name)
-        && Objects.equals(this.avatarUrl, organization.avatarUrl)
-        && Objects.equals(this.websiteUrl, organization.websiteUrl)
-        && Objects.equals(this.description, organization.description)
-        && Objects.equals(this.id, organization.id)
-        && Objects.equals(this.createdAt, organization.createdAt)
-        && Objects.equals(this.updatedAt, organization.updatedAt);
+    OrganizationCreateRequestDto organizationCreateRequest = (OrganizationCreateRequestDto) o;
+    return Objects.equals(this.email, organizationCreateRequest.email)
+        && Objects.equals(this.login, organizationCreateRequest.login)
+        && Objects.equals(this.name, organizationCreateRequest.name)
+        && Objects.equals(this.avatarUrl, organizationCreateRequest.avatarUrl)
+        && Objects.equals(this.websiteUrl, organizationCreateRequest.websiteUrl)
+        && Objects.equals(this.description, organizationCreateRequest.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-        email, login, name, avatarUrl, websiteUrl, description, id, createdAt, updatedAt);
+    return Objects.hash(email, login, name, avatarUrl, websiteUrl, description);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class OrganizationDto {\n");
+    sb.append("class OrganizationCreateRequestDto {\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
-    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

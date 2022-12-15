@@ -1,5 +1,7 @@
 export * from './basicError';
 export * from './organization';
+export * from './organizationAllOf';
+export * from './organizationCreateRequest';
 export * from './organizationsPage';
 export * from './organizationsPageAllOf';
 export * from './pageMetadata';

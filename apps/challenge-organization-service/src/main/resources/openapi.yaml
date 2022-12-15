@@ -175,25 +175,50 @@ components:
       - paging
       - totalResults
       type: object
+    Email:
+      description: An email address.
+      example: john.smith@example.com
+      format: email
+      type: string
+    OrganizationCreateRequest:
+      description: The information required to create an org account
+      properties:
+        email:
+          description: An email address.
+          example: john.smith@example.com
+          format: email
+          type: string
+        login:
+          example: example-organization
+          type: string
+        name:
+          example: Example organization
+          type: string
+        avatarUrl:
+          example: https://via.placeholder.com/300.png
+          format: url
+          nullable: true
+          type: string
+        websiteUrl:
+          example: https://example.com
+          format: url
+          type: string
+        description:
+          example: A short description of the organization.
+          type: string
+      required:
+      - login
+      type: object
     OrganizationId:
       description: The unique identifier of an organization
       example: 1
       format: int64
       type: integer
     Organization:
+      allOf:
+      - $ref: '#/components/schemas/OrganizationCreateRequest'
+      - $ref: '#/components/schemas/Organization_allOf'
       description: An organization
-      example:
-        name: DREAM
-      properties:
-        id:
-          description: The unique identifier of an organization
-          example: 1
-          format: int64
-          type: integer
-        name:
-          type: string
-      required:
-      - name
       type: object
     OrganizationsPage:
       allOf:
@@ -232,6 +257,26 @@ components:
           description: Link to the next page of results
           format: url
           type: string
+      type: object
+    Organization_allOf:
+      properties:
+        id:
+          description: The unique identifier of an organization
+          example: 1
+          format: int64
+          type: integer
+        createdAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+        updatedAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+      required:
+      - createdAt
+      - id
+      - updatedAt
       type: object
     OrganizationsPage_allOf:
       properties:

@@ -16,9 +16,19 @@
  */
 export interface Organization { 
     /**
+     * An email address.
+     */
+    email?: string;
+    login: string;
+    name?: string;
+    avatarUrl?: string | null;
+    websiteUrl?: string;
+    description?: string;
+    /**
      * The unique identifier of an organization
      */
-    id?: number;
-    name: string;
+    id: number;
+    createdAt: string;
+    updatedAt: string;
 }
 

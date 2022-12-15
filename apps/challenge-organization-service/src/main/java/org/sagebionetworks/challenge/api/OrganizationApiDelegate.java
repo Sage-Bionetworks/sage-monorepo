@@ -34,7 +34,7 @@ public interface OrganizationApiDelegate {
             request -> {
               for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                  String exampleString = "{ \"name\" : \"DREAM\" }";
+                  String exampleString = "null";
                   ApiUtil.setExampleResponse(request, "application/json", exampleString);
                   break;
                 }

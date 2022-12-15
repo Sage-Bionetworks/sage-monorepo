@@ -1,13 +1,11 @@
 package org.sagebionetworks.challenge;
 
-import com.fasterxml.jackson.databind.Module;
-import org.openapitools.jackson.nullable.JsonNullableModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 
-// @EnableEurekaClient
+@EnableEurekaClient
 @SpringBootApplication
 @ComponentScan(
     basePackages = {
@@ -21,8 +19,8 @@ public class ChallengeOrganizationServiceApplication {
     SpringApplication.run(ChallengeOrganizationServiceApplication.class, args);
   }
 
-  @Bean
-  public Module jsonNullableModule() {
-    return new JsonNullableModule();
-  }
+  // @Bean
+  // public Module jsonNullableModule() {
+  //   return new JsonNullableModule();
+  // }
 }
