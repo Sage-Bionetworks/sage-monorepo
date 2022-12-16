@@ -62,6 +62,7 @@
           <challenge-registry-checkbox-filter
             [values]="checkbox.values"
             (checkboxChange)="onCheckboxChange($event, checkbox.queryName)"
+            inputId="{{ checkbox.queryName }}"
           ></challenge-registry-checkbox-filter>
         </p-panel>
         <p-divider></p-divider>

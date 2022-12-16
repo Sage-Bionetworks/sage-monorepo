@@ -1,10 +1,10 @@
 <div *ngFor="let value of values" class="p-field-checkbox">
   <p-checkbox
-    name="{{ 'checkbox-' + value.label }}"
+    name="{{ 'checkbox-' + value.value }}"
     [value]="value.value"
     [(ngModel)]="selectedValues"
     (onChange)="onChange(selectedValues)"
-    inputId="{{ 'id-' + value.label }}"
+    inputId="{{ inputId + '-' + value.value }}"
   ></p-checkbox>
-  <label for="{{ 'id-' + value.label }}">{{ value.label }}</label>
+  <label for="{{ inputId + '-' + value.value }}">{{ value.label }}</label>
 </div>

@@ -9,6 +9,7 @@ import { FilterValue } from './filter-value.model';
 export class CheckboxFilterComponent {
   @Input() values!: FilterValue[];
   @Input() selectedValues!: string[];
+  @Input() inputId!: string;
   @Output() checkboxChange = new EventEmitter<string[]>();
 
   onChange(selected: string[]): void {
