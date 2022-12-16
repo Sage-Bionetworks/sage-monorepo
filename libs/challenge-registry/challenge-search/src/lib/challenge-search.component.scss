@@ -109,6 +109,10 @@
 .year-btn-group,
 ::ng-deep .p-field-checkbox {
   margin-bottom: 8px;
+
+  label {
+    cursor: pointer;
+  }
 }
 
 ::ng-deep .p-radiobutton.p-component,

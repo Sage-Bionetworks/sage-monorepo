@@ -129,7 +129,6 @@ export class ChallengeSearchComponent implements OnInit {
               this.checkOverlapped(c.platformId, query.platforms)
             );
           });
-          console.log(res);
           return of(res);
         })
       )
