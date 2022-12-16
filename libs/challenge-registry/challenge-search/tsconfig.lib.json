@@ -8,5 +8,5 @@
     "types": []
   },
   "exclude": ["src/test-setup.ts", "**/*.spec.ts", "**/*.test.ts", "jest.config.ts"],
-  "include": ["**/*.ts", "../ui/src/lib/checkbox-filter/filter-value.model.ts"]
+  "include": ["**/*.ts"]
 }

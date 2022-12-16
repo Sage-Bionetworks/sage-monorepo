@@ -6,18 +6,18 @@ import {
 } from '@sagebionetworks/api-client-angular-deprecated';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import {
-  challengeStartYearRangeFilterValues,
-  challengeStatusFilterValues,
-  challengeDifficultyFilterValues,
-  challengeSubmissionTypesFilterValues,
-  challengeInputDataTypeFilterValues,
-  challengeIncentiveTypesFilterValues,
-  challengePlatformFilterValues,
-} from './challenge-search-filters-values';
-import {
-  FilterValue,
+  Filter,
   MOCK_CHALLENGES,
 } from '@sagebionetworks/challenge-registry/ui';
+import {
+  challengeStartYearRangeFilter,
+  challengeStatusFilter,
+  challengeDifficultyFilter,
+  challengeSubmissionTypesFilter,
+  challengeInputDataTypeFilter,
+  challengeIncentiveTypesFilter,
+  challengePlatformFilter,
+} from './challenge-search-filters';
 import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { ChallengeSearchQuery } from './challenge-search-query';
 import { Calendar } from 'primeng/calendar';
@@ -60,43 +60,16 @@ export class ChallengeSearchComponent implements OnInit {
   offset = 0;
   searchResultsCount = 0;
 
-  startYearRangeValues: FilterValue[] = challengeStartYearRangeFilterValues;
-  checkboxfilters: {
-    queryName: string;
-    label: string;
-    values: FilterValue[];
-  }[] = [
-    {
-      queryName: 'status', // The name of the property used to query
-      label: 'Status',
-      values: challengeStatusFilterValues,
-    },
-    {
-      queryName: 'difficulty',
-      label: 'Difficulty',
-      values: challengeDifficultyFilterValues,
-    },
-    {
-      queryName: 'inputDataTypes',
-      label: 'Input Data Type',
-      values: challengeInputDataTypeFilterValues,
-    },
-    {
-      queryName: 'submissionTypes',
-      label: 'Submission Type',
-      values: challengeSubmissionTypesFilterValues,
-    },
+  // define filters
+  startYearRangeFilter: Filter = challengeStartYearRangeFilter;
 
-    {
-      queryName: 'incentiveTypes',
-      label: 'Incentive Type',
-      values: challengeIncentiveTypesFilterValues,
-    },
-    {
-      queryName: 'platforms',
-      label: 'Platform',
-      values: challengePlatformFilterValues,
-    },
+  checkboxfilters: Filter[] = [
+    challengeStatusFilter,
+    challengeDifficultyFilter,
+    challengeInputDataTypeFilter,
+    challengeSubmissionTypesFilter,
+    challengeIncentiveTypesFilter,
+    challengePlatformFilter,
   ];
 
   constructor(private readonly configService: ConfigService) {
@@ -104,7 +77,7 @@ export class ChallengeSearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.selectedYear = this.startYearRangeValues[0].value;
+    this.selectedYear = this.startYearRangeFilter.values[0].value;
     this.totalChallengesCount = MOCK_CHALLENGES.length;
 
     // mock up service to query all unique input data types
