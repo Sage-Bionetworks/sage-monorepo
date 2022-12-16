@@ -18,6 +18,8 @@ properties:
   totalResults:
     description: Total number of results in the result set
     type: integer
+    format: int64
+    example: 102
 required:
   # - offset
   # - limit

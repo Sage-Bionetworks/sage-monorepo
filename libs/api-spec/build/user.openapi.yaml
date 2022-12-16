@@ -193,6 +193,8 @@ components:
         totalResults:
           description: Total number of results in the result set
           type: integer
+          format: int64
+          example: 102
       required:
         - paging
         - totalResults
@@ -315,7 +317,7 @@ components:
         type: integer
         format: int32
         default: 100
-        minimum: 10
+        minimum: 1
     userId:
       name: userId
       in: path

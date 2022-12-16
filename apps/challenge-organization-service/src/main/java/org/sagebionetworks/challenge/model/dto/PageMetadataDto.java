@@ -20,7 +20,7 @@ public class PageMetadataDto {
   private PageMetadataPagingDto paging;
 
   @JsonProperty("totalResults")
-  private Integer totalResults;
+  private Long totalResults;
 
   public PageMetadataDto paging(PageMetadataPagingDto paging) {
     this.paging = paging;
@@ -43,7 +43,7 @@ public class PageMetadataDto {
     this.paging = paging;
   }
 
-  public PageMetadataDto totalResults(Integer totalResults) {
+  public PageMetadataDto totalResults(Long totalResults) {
     this.totalResults = totalResults;
     return this;
   }
@@ -56,13 +56,14 @@ public class PageMetadataDto {
   @NotNull
   @Schema(
       name = "totalResults",
+      example = "102",
       description = "Total number of results in the result set",
       required = true)
-  public Integer getTotalResults() {
+  public Long getTotalResults() {
     return totalResults;
   }
 
-  public void setTotalResults(Integer totalResults) {
+  public void setTotalResults(Long totalResults) {
     this.totalResults = totalResults;
   }
 

@@ -28,7 +28,7 @@ public class OrganizationService {
         organizationMapper.convertToDtoList(organizationEntitiesPage.getContent());
     return OrganizationsPageDto.builder()
         .organizations(organizations)
-        .totalResults(0)
+        .totalResults(organizationEntitiesPage.getTotalElements())
         .paging(null)
         .build();
   }

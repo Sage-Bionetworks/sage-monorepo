@@ -40,7 +40,7 @@ paths:
         schema:
           default: 100
           format: int32
-          minimum: 10
+          minimum: 1
           type: integer
         style: form
       responses:
@@ -131,7 +131,7 @@ components:
       schema:
         default: 100
         format: int32
-        minimum: 10
+        minimum: 1
         type: integer
       style: form
     organizationLogin:
@@ -170,6 +170,8 @@ components:
           $ref: '#/components/schemas/PageMetadata_paging'
         totalResults:
           description: Total number of results in the result set
+          example: 102
+          format: int64
           type: integer
       required:
       - paging

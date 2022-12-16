@@ -149,7 +149,7 @@ public interface OrganizationApi {
           @Valid
           @RequestParam(value = "pageNumber", required = false, defaultValue = "0")
           Integer pageNumber,
-      @Min(10)
+      @Min(1)
           @Parameter(name = "pageSize", description = "The number of items in a single page")
           @Valid
           @RequestParam(value = "pageSize", required = false, defaultValue = "100")
