@@ -19,6 +19,9 @@ export interface Organization {
      * An email address.
      */
     email?: string;
+    /**
+     * The login of an organization
+     */
     login: string;
     name?: string;
     avatarUrl?: string | null;

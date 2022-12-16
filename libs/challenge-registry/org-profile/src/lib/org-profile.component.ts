@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Account } from '@sagebionetworks/api-client-angular-deprecated';
-import { map, Observable, of, Subscription } from 'rxjs';
+import {
+  catchError,
+  map,
+  Observable,
+  of,
+  Subscription,
+  switchMap,
+  throwError,
+} from 'rxjs';
 import { Tab } from './tab.model';
 import { ORG_PROFILE_TABS } from './org-profile-tabs';
 import {
@@ -13,7 +21,9 @@ import {
   Organization,
   OrganizationService,
   OrganizationsPage,
+  BasicError as ApiClientBasicError,
 } from '@sagebionetworks/api-client-angular';
+import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 
 @Component({
   selector: 'challenge-registry-org-profile',
@@ -30,7 +40,7 @@ export class OrgProfileComponent implements OnInit {
   tabKeys: string[] = Object.keys(this.tabs);
   activeTab: Tab = this.tabs['overview'];
   private subscriptions: Subscription[] = [];
-  // private useLocalOrganizationMock = true;
+  private useLocalOrganizationMock = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -43,6 +53,24 @@ export class OrgProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.useLocalOrganizationMock) {
+      this.organization$ = this.route.params.pipe(
+        switchMap((params) =>
+          this.organizationService.getOrganization(params['orgLogin'])
+        ),
+        catchError((err) => {
+          const error = err.error as ApiClientBasicError;
+          if (isApiClientError(error)) {
+            if (error.status === 404) {
+              // TODO: Redirect to org not found page or component
+              // return of(undefined);
+            }
+          }
+          return throwError(() => new Error('test'));
+        })
+      );
+    }
+
     this.route.params.subscribe((param) => console.log(param['orgLogin']));
 
     const activeTab$ = this.activatedRoute.queryParamMap.pipe(
