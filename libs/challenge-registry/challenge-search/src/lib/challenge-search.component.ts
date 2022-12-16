@@ -186,8 +186,12 @@ export class ChallengeSearchComponent implements OnInit {
       ...new Set(
         allTypes.filter(isNotNullOrUndefined).reduce((o, c) => o.concat(c), [])
       ),
-    ].sort();
-    return of(uniqueTypes);
+    ];
+    const sortTypes = uniqueTypes.includes('other')
+      ? [...uniqueTypes.filter((x) => x !== 'other').sort(), 'other']
+      : uniqueTypes.sort();
+
+    return of(sortTypes);
   }
 
   listPlatforms(): Observable<ChallengePlatform[]> {
