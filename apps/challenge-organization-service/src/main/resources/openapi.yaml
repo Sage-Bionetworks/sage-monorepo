@@ -164,18 +164,43 @@ components:
       description: The specified resource was not found
   schemas:
     PageMetadata:
-      description: The metadata of a page
+      description: The metadata of a page.
       properties:
-        paging:
-          $ref: '#/components/schemas/PageMetadata_paging'
-        totalResults:
-          description: Total number of results in the result set
-          example: 102
+        number:
+          description: The page number.
+          example: 99
+          format: int32
+          type: integer
+        size:
+          description: The number of items in a single page.
+          example: 99
+          format: int32
+          type: integer
+        totalElements:
+          description: Total number of elements in the result set.
+          example: 99
           format: int64
           type: integer
+        totalPages:
+          description: Total number of pages in the result set.
+          example: 99
+          format: int32
+          type: integer
+        hasNext:
+          description: Returns if there is a next page.
+          example: true
+          type: boolean
+        hasPrevious:
+          description: Returns if there is a previous page.
+          example: true
+          type: boolean
       required:
-      - paging
-      - totalResults
+      - hasNext
+      - hasPrevious
+      - number
+      - size
+      - totalElements
+      - totalPages
       type: object
     Email:
       description: An email address.
@@ -263,14 +288,6 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
-    PageMetadata_paging:
-      description: Links to navigate to different pages of results
-      properties:
-        next:
-          description: Link to the next page of results
-          format: url
-          type: string
-      type: object
     Organization_allOf:
       properties:
         id:

@@ -28,8 +28,12 @@ public class OrganizationService {
         organizationMapper.convertToDtoList(organizationEntitiesPage.getContent());
     return OrganizationsPageDto.builder()
         .organizations(organizations)
-        .totalResults(organizationEntitiesPage.getTotalElements())
-        .paging(null)
+        .number(organizationEntitiesPage.getNumber())
+        .size(organizationEntitiesPage.getSize())
+        .totalElements(organizationEntitiesPage.getTotalElements())
+        .totalPages(organizationEntitiesPage.getTotalPages())
+        .hasNext(organizationEntitiesPage.hasNext())
+        .hasPrevious(organizationEntitiesPage.hasPrevious())
         .build();
   }
 
