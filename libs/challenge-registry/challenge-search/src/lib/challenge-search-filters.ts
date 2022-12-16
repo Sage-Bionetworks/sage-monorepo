@@ -20,7 +20,7 @@ export const challengeStatusFilter: Filter = {
   queryName: 'status',
   label: 'Status',
   values: challengeStatusFilterValues,
-  collapsed: true,
+  collapsed: false,
 };
 
 export const challengeDifficultyFilter: Filter = {
@@ -34,7 +34,7 @@ export const challengeInputDataTypeFilter: Filter = {
   queryName: 'inputDataTypes',
   label: 'Input Data Type',
   values: challengeInputDataTypeFilterValues,
-  collapsed: true,
+  collapsed: false,
 };
 
 export const challengeSubmissionTypesFilter: Filter = {
