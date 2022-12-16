@@ -165,7 +165,6 @@ export class ChallengeSearchComponent implements OnInit {
   }
 
   onCheckboxChange(selected: string[], queryName: string): void {
-    console.log(queryName, ' + ', selected);
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });

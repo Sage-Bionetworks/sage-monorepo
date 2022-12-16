@@ -15,4 +15,8 @@ export class CheckboxFilterComponent {
   onChange(selected: string[]): void {
     this.checkboxChange.emit(selected);
   }
+
+  formatId(str: string): string {
+    return str.replace(/\s+/g, '-');
+  }
 }
