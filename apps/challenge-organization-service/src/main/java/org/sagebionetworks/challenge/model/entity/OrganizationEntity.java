@@ -36,7 +36,7 @@ public class OrganizationEntity {
   @Column(nullable = false)
   private String email;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String login;
 
   @Column(name = "avatar_url", nullable = true)

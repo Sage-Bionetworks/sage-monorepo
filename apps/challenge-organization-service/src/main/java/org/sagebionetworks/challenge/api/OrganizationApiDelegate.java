@@ -21,14 +21,14 @@ public interface OrganizationApiDelegate {
   }
 
   /**
-   * GET /organizations/{organizationId} : Get an organization Returns the organization specified
+   * GET /organizations/{organizationLogin} : Get an organization Returns the organization specified
    *
-   * @param organizationId The unique identifier of the organization (required)
+   * @param organizationLogin The login of the organization (required)
    * @return An organization (status code 200) or The specified resource was not found (status code
    *     404) or The request cannot be fulfilled due to an unexpected server error (status code 500)
    * @see OrganizationApi#getOrganization
    */
-  default ResponseEntity<OrganizationDto> getOrganization(Long organizationId) {
+  default ResponseEntity<OrganizationDto> getOrganization(String organizationLogin) {
     getRequest()
         .ifPresent(
             request -> {

@@ -31,9 +31,9 @@ public interface OrganizationApi {
   }
 
   /**
-   * GET /organizations/{organizationId} : Get an organization Returns the organization specified
+   * GET /organizations/{organizationLogin} : Get an organization Returns the organization specified
    *
-   * @param organizationId The unique identifier of the organization (required)
+   * @param organizationLogin The login of the organization (required)
    * @return An organization (status code 200) or The specified resource was not found (status code
    *     404) or The request cannot be fulfilled due to an unexpected server error (status code 500)
    */
@@ -78,16 +78,18 @@ public interface OrganizationApi {
       })
   @RequestMapping(
       method = RequestMethod.GET,
-      value = "/organizations/{organizationId}",
+      value = "/organizations/{organizationLogin}",
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<OrganizationDto> getOrganization(
-      @Parameter(
-              name = "organizationId",
-              description = "The unique identifier of the organization",
+      @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
+          @Size(min = 3, max = 25)
+          @Parameter(
+              name = "organizationLogin",
+              description = "The login of the organization",
               required = true)
-          @PathVariable("organizationId")
-          Long organizationId) {
-    return getDelegate().getOrganization(organizationId);
+          @PathVariable("organizationLogin")
+          String organizationLogin) {
+    return getDelegate().getOrganization(organizationLogin);
   }
 
   /**

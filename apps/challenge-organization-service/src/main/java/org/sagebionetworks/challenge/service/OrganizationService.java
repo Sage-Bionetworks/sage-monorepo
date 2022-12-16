@@ -34,15 +34,15 @@ public class OrganizationService {
   }
 
   @Transactional(readOnly = true)
-  public OrganizationDto getOrganization(Long organizationId) {
+  public OrganizationDto getOrganization(String organizationLogin) {
     OrganizationEntity organizationEntity =
         organizationRepository
-            .findById(organizationId)
+            .findByLogin(organizationLogin)
             .orElseThrow(
                 () ->
                     new OrganizationNotFoundException(
                         String.format(
-                            "The organization with ID %s does not exist.", organizationId)));
+                            "The organization with ID %s does not exist.", organizationLogin)));
     OrganizationDto organization = organizationMapper.convertToDto(organizationEntity);
     return organization;
   }

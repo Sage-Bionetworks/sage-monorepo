@@ -69,18 +69,18 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: Organization
-  /organizations/{organizationId}:
+  /organizations/{organizationLogin}:
     get:
       description: Returns the organization specified
       operationId: getOrganization
       parameters:
-      - description: The unique identifier of the organization
+      - description: The login of the organization
         explode: false
         in: path
-        name: organizationId
+        name: organizationLogin
         required: true
         schema:
-          $ref: '#/components/schemas/OrganizationId'
+          $ref: '#/components/schemas/OrganizationLogin'
         style: simple
       responses:
         "200":
@@ -134,14 +134,14 @@ components:
         minimum: 10
         type: integer
       style: form
-    organizationId:
-      description: The unique identifier of the organization
+    organizationLogin:
+      description: The login of the organization
       explode: false
       in: path
-      name: organizationId
+      name: organizationLogin
       required: true
       schema:
-        $ref: '#/components/schemas/OrganizationId'
+        $ref: '#/components/schemas/OrganizationLogin'
       style: simple
   responses:
     BadRequest:
@@ -180,6 +180,13 @@ components:
       example: john.smith@example.com
       format: email
       type: string
+    OrganizationLogin:
+      description: The login of an organization
+      example: example-org
+      maxLength: 25
+      minLength: 3
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      type: string
     OrganizationCreateRequest:
       description: The information required to create an org account
       properties:
@@ -189,7 +196,11 @@ components:
           format: email
           type: string
         login:
-          example: example-organization
+          description: The login of an organization
+          example: example-org
+          maxLength: 25
+          minLength: 3
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           example: Example organization
