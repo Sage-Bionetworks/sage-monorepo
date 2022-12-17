@@ -65,12 +65,18 @@ public class OrganizationCreateRequestDto {
   }
 
   /**
-   * Get login
+   * The login of an organization
    *
    * @return login
    */
   @NotNull
-  @Schema(name = "login", example = "example-organization", required = true)
+  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
+  @Size(min = 3, max = 25)
+  @Schema(
+      name = "login",
+      example = "example-org",
+      description = "The login of an organization",
+      required = true)
   public String getLogin() {
     return login;
   }

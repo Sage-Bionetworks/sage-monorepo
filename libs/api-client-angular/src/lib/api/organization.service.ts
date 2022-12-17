@@ -98,16 +98,16 @@ export class OrganizationService {
     /**
      * Get an organization
      * Returns the organization specified
-     * @param organizationId The unique identifier of the organization
+     * @param organizationLogin The login of the organization
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getOrganization(organizationId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<Organization>;
-    public getOrganization(organizationId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<Organization>>;
-    public getOrganization(organizationId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<Organization>>;
-    public getOrganization(organizationId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
-        if (organizationId === null || organizationId === undefined) {
-            throw new Error('Required parameter organizationId was null or undefined when calling getOrganization.');
+    public getOrganization(organizationLogin: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<Organization>;
+    public getOrganization(organizationLogin: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<Organization>>;
+    public getOrganization(organizationLogin: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<Organization>>;
+    public getOrganization(organizationLogin: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
+        if (organizationLogin === null || organizationLogin === undefined) {
+            throw new Error('Required parameter organizationLogin was null or undefined when calling getOrganization.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -142,7 +142,7 @@ export class OrganizationService {
             }
         }
 
-        let localVarPath = `/organizations/${this.configuration.encodeParam({name: "organizationId", value: organizationId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
+        let localVarPath = `/organizations/${this.configuration.encodeParam({name: "organizationLogin", value: organizationLogin, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.get<Organization>(`${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

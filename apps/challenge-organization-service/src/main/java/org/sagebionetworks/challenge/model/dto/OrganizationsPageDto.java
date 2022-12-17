@@ -18,58 +18,166 @@ import javax.validation.constraints.*;
 @lombok.Builder
 public class OrganizationsPageDto {
 
-  @JsonProperty("paging")
-  private PageMetadataPagingDto paging;
+  @JsonProperty("number")
+  private Integer number;
 
-  @JsonProperty("totalResults")
-  private Integer totalResults;
+  @JsonProperty("size")
+  private Integer size;
+
+  @JsonProperty("totalElements")
+  private Long totalElements;
+
+  @JsonProperty("totalPages")
+  private Integer totalPages;
+
+  @JsonProperty("hasNext")
+  private Boolean hasNext;
+
+  @JsonProperty("hasPrevious")
+  private Boolean hasPrevious;
 
   @JsonProperty("organizations")
   @Valid
   private List<OrganizationDto> organizations = new ArrayList<>();
 
-  public OrganizationsPageDto paging(PageMetadataPagingDto paging) {
-    this.paging = paging;
+  public OrganizationsPageDto number(Integer number) {
+    this.number = number;
     return this;
   }
 
   /**
-   * Get paging
+   * The page number.
    *
-   * @return paging
+   * @return number
    */
   @NotNull
-  @Valid
-  @Schema(name = "paging", required = true)
-  public PageMetadataPagingDto getPaging() {
-    return paging;
+  @Schema(name = "number", example = "99", description = "The page number.", required = true)
+  public Integer getNumber() {
+    return number;
   }
 
-  public void setPaging(PageMetadataPagingDto paging) {
-    this.paging = paging;
+  public void setNumber(Integer number) {
+    this.number = number;
   }
 
-  public OrganizationsPageDto totalResults(Integer totalResults) {
-    this.totalResults = totalResults;
+  public OrganizationsPageDto size(Integer size) {
+    this.size = size;
     return this;
   }
 
   /**
-   * Total number of results in the result set
+   * The number of items in a single page.
    *
-   * @return totalResults
+   * @return size
    */
   @NotNull
   @Schema(
-      name = "totalResults",
-      description = "Total number of results in the result set",
+      name = "size",
+      example = "99",
+      description = "The number of items in a single page.",
       required = true)
-  public Integer getTotalResults() {
-    return totalResults;
+  public Integer getSize() {
+    return size;
   }
 
-  public void setTotalResults(Integer totalResults) {
-    this.totalResults = totalResults;
+  public void setSize(Integer size) {
+    this.size = size;
+  }
+
+  public OrganizationsPageDto totalElements(Long totalElements) {
+    this.totalElements = totalElements;
+    return this;
+  }
+
+  /**
+   * Total number of elements in the result set.
+   *
+   * @return totalElements
+   */
+  @NotNull
+  @Schema(
+      name = "totalElements",
+      example = "99",
+      description = "Total number of elements in the result set.",
+      required = true)
+  public Long getTotalElements() {
+    return totalElements;
+  }
+
+  public void setTotalElements(Long totalElements) {
+    this.totalElements = totalElements;
+  }
+
+  public OrganizationsPageDto totalPages(Integer totalPages) {
+    this.totalPages = totalPages;
+    return this;
+  }
+
+  /**
+   * Total number of pages in the result set.
+   *
+   * @return totalPages
+   */
+  @NotNull
+  @Schema(
+      name = "totalPages",
+      example = "99",
+      description = "Total number of pages in the result set.",
+      required = true)
+  public Integer getTotalPages() {
+    return totalPages;
+  }
+
+  public void setTotalPages(Integer totalPages) {
+    this.totalPages = totalPages;
+  }
+
+  public OrganizationsPageDto hasNext(Boolean hasNext) {
+    this.hasNext = hasNext;
+    return this;
+  }
+
+  /**
+   * Returns if there is a next page.
+   *
+   * @return hasNext
+   */
+  @NotNull
+  @Schema(
+      name = "hasNext",
+      example = "true",
+      description = "Returns if there is a next page.",
+      required = true)
+  public Boolean getHasNext() {
+    return hasNext;
+  }
+
+  public void setHasNext(Boolean hasNext) {
+    this.hasNext = hasNext;
+  }
+
+  public OrganizationsPageDto hasPrevious(Boolean hasPrevious) {
+    this.hasPrevious = hasPrevious;
+    return this;
+  }
+
+  /**
+   * Returns if there is a previous page.
+   *
+   * @return hasPrevious
+   */
+  @NotNull
+  @Schema(
+      name = "hasPrevious",
+      example = "true",
+      description = "Returns if there is a previous page.",
+      required = true)
+  public Boolean getHasPrevious() {
+    return hasPrevious;
+  }
+
+  public void setHasPrevious(Boolean hasPrevious) {
+    this.hasPrevious = hasPrevious;
   }
 
   public OrganizationsPageDto organizations(List<OrganizationDto> organizations) {
@@ -110,22 +218,31 @@ public class OrganizationsPageDto {
       return false;
     }
     OrganizationsPageDto organizationsPage = (OrganizationsPageDto) o;
-    return Objects.equals(this.paging, organizationsPage.paging)
-        && Objects.equals(this.totalResults, organizationsPage.totalResults)
+    return Objects.equals(this.number, organizationsPage.number)
+        && Objects.equals(this.size, organizationsPage.size)
+        && Objects.equals(this.totalElements, organizationsPage.totalElements)
+        && Objects.equals(this.totalPages, organizationsPage.totalPages)
+        && Objects.equals(this.hasNext, organizationsPage.hasNext)
+        && Objects.equals(this.hasPrevious, organizationsPage.hasPrevious)
         && Objects.equals(this.organizations, organizationsPage.organizations);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(paging, totalResults, organizations);
+    return Objects.hash(
+        number, size, totalElements, totalPages, hasNext, hasPrevious, organizations);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class OrganizationsPageDto {\n");
-    sb.append("    paging: ").append(toIndentedString(paging)).append("\n");
-    sb.append("    totalResults: ").append(toIndentedString(totalResults)).append("\n");
+    sb.append("    number: ").append(toIndentedString(number)).append("\n");
+    sb.append("    size: ").append(toIndentedString(size)).append("\n");
+    sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
+    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
+    sb.append("    hasNext: ").append(toIndentedString(hasNext)).append("\n");
+    sb.append("    hasPrevious: ").append(toIndentedString(hasPrevious)).append("\n");
     sb.append("    organizations: ").append(toIndentedString(organizations)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -1,0 +1,6 @@
+name: organizationLogin
+in: path
+description: The login of the organization
+required: true
+schema:
+  $ref: ../../schemas/OrganizationLogin.yaml
