@@ -26,9 +26,12 @@
   </section>
   <section id="bottom" class="row">
     <div class="facets col">
-      <!-- Challenge Year Filter Starts -->
-      <p-panel header="Challenge Year" [toggleable]="true">
-        <div *ngFor="let year of challengeStartYearRangeFilterValues" class="year-btn-group">
+      <p-panel
+        header="Challenge Year"
+        [toggleable]="true"
+        [collapsed]="startYearRangeFilter.collapsed"
+      >
+        <div *ngFor="let year of startYearRangeFilter.values" class="year-btn-group">
           <p-radioButton
             [inputId]="year.label"
             [value]="year.value"
@@ -53,31 +56,17 @@
           ></p-calendar>
         </div>
       </p-panel>
-      <!-- Challenge Year Filter Ends -->
       <p-divider></p-divider>
-      <!-- <hr />
-        <mat-expansion-panel
-          (opened)="panelOpenState = true"
-          (closed)="panelOpenState = false"
-          [expanded]="true"
-        >
-          <mat-expansion-panel-header>
-            <mat-panel-title> Status </mat-panel-title>
-          </mat-expansion-panel-header>
-          <p><mat-checkbox formControlName="upcoming">Upcoming</mat-checkbox></p>
-          <p><mat-checkbox formControlName="active">Active</mat-checkbox></p>
-          <p><mat-checkbox formControlName="onging">Ongoing</mat-checkbox></p>
-          <p><mat-checkbox formControlName="completed">Completed</mat-checkbox></p>
-        </mat-expansion-panel>
-        <hr />
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-          <mat-expansion-panel-header>
-            <mat-panel-title> Difficulty </mat-panel-title>
-          </mat-expansion-panel-header>
-          <p><mat-checkbox formControlName="beginners">Good for Beginners</mat-checkbox></p>
-          <p><mat-checkbox formControlName="general">General</mat-checkbox></p>
-          <p><mat-checkbox formControlName="advanced" [disabled]="true">Advanced</mat-checkbox></p>
-        </mat-expansion-panel> -->
+      <ng-container *ngFor="let checkbox of checkboxfilters">
+        <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
+          <challenge-registry-checkbox-filter
+            [values]="checkbox.values"
+            (checkboxChange)="onCheckboxChange($event, checkbox.queryName)"
+            inputId="{{ checkbox.queryName }}"
+          ></challenge-registry-checkbox-filter>
+        </p-panel>
+        <p-divider></p-divider>
+      </ng-container>
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>

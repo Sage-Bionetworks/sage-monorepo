@@ -8,6 +8,7 @@ import { AvatarModule } from './avatar/avatar.module';
 import { OrganizationCardModule } from './organization-card/organization-card.module';
 import { UserButtonModule } from './user-button/user-button.module';
 import { PersonCardModule } from './person-card/person-card.module';
+import { CheckboxFilterModule } from './checkbox-filter/checkbox-filter.module';
 
 @NgModule({
   imports: [CommonModule],
@@ -15,6 +16,7 @@ import { PersonCardModule } from './person-card/person-card.module';
     AvatarModule,
     ButtonGithubModule,
     ChallengeCardModule,
+    CheckboxFilterModule,
     FooterModule,
     PersonCardModule,
     NavbarModule,

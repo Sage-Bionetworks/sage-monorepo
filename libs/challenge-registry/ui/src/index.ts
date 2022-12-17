@@ -2,6 +2,8 @@ export * from './lib/ui.module';
 
 export * from './lib/avatar/avatar';
 export * from './lib/challenge-card/mock-challenges';
+export * from './lib/checkbox-filter/filter.model';
+export * from './lib/checkbox-filter/filter-value.model';
 export * from './lib/avatar/mock-avatars';
 export * from './lib/person-card/mock-org-members';
 export * from './lib/person-card/mock-challenge-organizers';

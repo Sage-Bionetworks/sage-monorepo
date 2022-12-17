@@ -106,18 +106,31 @@
   }
 }
 
-.year-btn-group {
+.year-btn-group,
+::ng-deep .p-field-checkbox {
   margin-bottom: 8px;
+
+  label {
+    cursor: pointer;
+  }
 }
-::ng-deep p-radiobutton.p-element {
+
+::ng-deep .p-radiobutton.p-component,
+::ng-deep .p-checkbox.p-component {
   margin-right: 8px;
 }
+
 ::ng-deep .p-panel {
   .p-panel-header,
   .p-panel-content {
     border: none;
   }
 }
+::ng-deep .p-panel.p-panel-toggleable .p-panel-header {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 .calendar-group {
   align-items: center;
 }
