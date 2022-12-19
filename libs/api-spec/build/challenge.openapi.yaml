@@ -1,0 +1,186 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Challenge API
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+servers:
+  - url: http://localhost/v1
+tags:
+  - name: Challenge
+    description: Operations about challenges.
+paths:
+  /challenges:
+    get:
+      tags:
+        - Challenge
+      summary: List challenges
+      description: List challenges
+      operationId: listChallenges
+      parameters:
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengesPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  parameters:
+    pageNumber:
+      name: pageNumber
+      description: The page number
+      in: query
+      schema:
+        type: integer
+        format: int32
+        default: 0
+        minimum: 0
+    pageSize:
+      name: pageSize
+      description: The number of items in a single page
+      in: query
+      schema:
+        type: integer
+        format: int32
+        default: 100
+        minimum: 1
+  schemas:
+    PageMetadata:
+      type: object
+      description: The metadata of a page.
+      properties:
+        number:
+          description: The page number.
+          type: integer
+          format: int32
+          example: 99
+        size:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          example: 99
+        totalElements:
+          description: Total number of elements in the result set.
+          type: integer
+          format: int64
+          example: 99
+        totalPages:
+          description: Total number of pages in the result set.
+          type: integer
+          format: int32
+          example: 99
+        hasNext:
+          description: Returns if there is a next page.
+          type: boolean
+          example: true
+        hasPrevious:
+          description: Returns if there is a previous page.
+          type: boolean
+          example: true
+      required:
+        - number
+        - size
+        - totalElements
+        - totalPages
+        - hasNext
+        - hasPrevious
+    ChallengeCreateRequest:
+      type: object
+      description: The information used to create a challenge
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 60
+          example: Example challenge
+      required:
+        - name
+    ChallengeId:
+      description: The unique identifier of a challenge.
+      type: integer
+      format: int64
+      example: 1
+    Challenge:
+      type: object
+      description: A challenge
+      allOf:
+        - $ref: '#/components/schemas/ChallengeCreateRequest'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/ChallengeId'
+            createdAt:
+              type: string
+              format: date-time
+              example: '2022-07-04T22:19:11Z'
+            updatedAt:
+              type: string
+              format: date-time
+              example: '2022-07-04T22:19:11Z'
+          required:
+            - id
+            - createdAt
+            - updatedAt
+    ChallengesPage:
+      type: object
+      description: A page of challenges
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            challenges:
+              description: A list of challenges
+              type: array
+              items:
+                $ref: '#/components/schemas/Challenge'
+          required:
+            - challenges
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+      required:
+        - title
+        - status
+      x-java-class-annotations:
+        - '@lombok.Builder'
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'

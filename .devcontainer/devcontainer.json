@@ -50,6 +50,7 @@
     8082,
     8083,
     8084,
+    8085,
     8090,
     8091,
     8092,
@@ -110,6 +111,10 @@
     },
     "8084": {
       "label": "challenge-organization-service",
+      "onAutoForward": "silent"
+    },
+    "8085": {
+      "label": "challenge-service",
       "onAutoForward": "silent"
     },
     "8090": {

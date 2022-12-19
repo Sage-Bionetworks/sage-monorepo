@@ -1,0 +1,234 @@
+openapi: 3.0.3
+info:
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  title: Challenge API
+  version: 1.0.0
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+servers:
+- url: http://localhost/v1
+tags:
+- description: Operations about challenges.
+  name: Challenge
+paths:
+  /challenges:
+    get:
+      description: List challenges
+      operationId: listChallenges
+      parameters:
+      - description: The page number
+        explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 0
+          format: int32
+          minimum: 0
+          type: integer
+        style: form
+      - description: The number of items in a single page
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengesPage'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List challenges
+      tags:
+      - Challenge
+      x-accepts: application/json
+      x-tags:
+      - tag: Challenge
+components:
+  parameters:
+    pageNumber:
+      description: The page number
+      explode: true
+      in: query
+      name: pageNumber
+      required: false
+      schema:
+        default: 0
+        format: int32
+        minimum: 0
+        type: integer
+      style: form
+    pageSize:
+      description: The number of items in a single page
+      explode: true
+      in: query
+      name: pageSize
+      required: false
+      schema:
+        default: 100
+        format: int32
+        minimum: 1
+        type: integer
+      style: form
+  responses:
+    BadRequest:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Invalid request
+    InternalServerError:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request cannot be fulfilled due to an unexpected server error
+  schemas:
+    PageMetadata:
+      description: The metadata of a page.
+      properties:
+        number:
+          description: The page number.
+          example: 99
+          format: int32
+          type: integer
+        size:
+          description: The number of items in a single page.
+          example: 99
+          format: int32
+          type: integer
+        totalElements:
+          description: Total number of elements in the result set.
+          example: 99
+          format: int64
+          type: integer
+        totalPages:
+          description: Total number of pages in the result set.
+          example: 99
+          format: int32
+          type: integer
+        hasNext:
+          description: Returns if there is a next page.
+          example: true
+          type: boolean
+        hasPrevious:
+          description: Returns if there is a previous page.
+          example: true
+          type: boolean
+      required:
+      - hasNext
+      - hasPrevious
+      - number
+      - size
+      - totalElements
+      - totalPages
+      type: object
+    ChallengeCreateRequest:
+      description: The information used to create a challenge
+      properties:
+        name:
+          example: Example challenge
+          maxLength: 60
+          minLength: 3
+          type: string
+      required:
+      - name
+      type: object
+    ChallengeId:
+      description: The unique identifier of a challenge.
+      example: 1
+      format: int64
+      type: integer
+    Challenge:
+      allOf:
+      - $ref: '#/components/schemas/ChallengeCreateRequest'
+      - $ref: '#/components/schemas/Challenge_allOf'
+      description: A challenge
+      type: object
+    ChallengesPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/ChallengesPage_allOf'
+      description: A page of challenges
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    BasicError:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+      required:
+      - status
+      - title
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    Challenge_allOf:
+      properties:
+        id:
+          description: The unique identifier of a challenge.
+          example: 1
+          format: int64
+          type: integer
+        createdAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+        updatedAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+      required:
+      - createdAt
+      - id
+      - updatedAt
+      type: object
+      example: null
+    ChallengesPage_allOf:
+      properties:
+        challenges:
+          description: A list of challenges
+          items:
+            $ref: '#/components/schemas/Challenge'
+          type: array
+      required:
+      - challenges
+      type: object
+      example: null

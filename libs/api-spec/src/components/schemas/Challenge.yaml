@@ -1,46 +1,50 @@
 type: object
 description: A challenge
 allOf:
-  - $ref: ChallengeCreateResponse.yaml
   - $ref: ChallengeCreateRequest.yaml
   - type: object
     properties:
-      fullName:
-        type: string
-      ownerId:
-        $ref: AccountId.yaml
-      readmeId:
-        $ref: ChallengeReadmeId.yaml
-      featured:
-        description: Whether the challenge is featured
-        type: boolean
-        default: false
-      participantCount:
-        description: Number of challenge participants
-        type: integer
-        default: 0
-      viewCount:
-        description: Number of challenge views
-        type: integer
-        default: 0
-      starredCount:
-        description: Number of times the challenge has been starred by users
-        type: integer
-        default: 0
+      id:
+        $ref: ChallengeId.yaml
+      #   fullName:
+      #     type: string
+      #   ownerId:
+      #     $ref: AccountId.yaml
+      #   readmeId:
+      #     $ref: ChallengeReadmeId.yaml
+      #   featured:
+      #     description: Whether the challenge is featured
+      #     type: boolean
+      #     default: false
+      #   participantCount:
+      #     description: Number of challenge participants
+      #     type: integer
+      #     default: 0
+      #   viewCount:
+      #     description: Number of challenge views
+      #     type: integer
+      #     default: 0
+      #   starredCount:
+      #     description: Number of times the challenge has been starred by users
+      #     type: integer
+      #     default: 0
       createdAt:
         type: string
         format: date-time
+        example: '2022-07-04T22:19:11Z'
       updatedAt:
         type: string
         format: date-time
+        example: '2022-07-04T22:19:11Z'
     required:
-      - fullName
-      - ownerId
-      - readmeId
+      - id
+      #   - fullName
+      #   - ownerId
+      #   - readmeId
       - createdAt
       - updatedAt
-    example:
-      fullName: dream/awesome-challenge
-      ownerId: 507f1f77bcf86cd799439011
-      createdAt: '2017-07-08T16:18:44-04:00'
-      updatedAt: '2017-07-08T16:18:44-04:00'
+    # example:
+    #   fullName: dream/awesome-challenge
+    #   ownerId: 507f1f77bcf86cd799439011
+    #   createdAt: '2017-07-08T16:18:44-04:00'
+    #   updatedAt: '2017-07-08T16:18:44-04:00'
