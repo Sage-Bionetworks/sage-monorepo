@@ -232,8 +232,18 @@ components:
           properties:
             id:
               $ref: '#/components/schemas/ChallengeId'
+            createdAt:
+              type: string
+              format: date-time
+              example: '2022-07-04T22:19:11Z'
+            updatedAt:
+              type: string
+              format: date-time
+              example: '2022-07-04T22:19:11Z'
           required:
             - id
+            - createdAt
+            - updatedAt
     ChallengesPage:
       type: object
       description: A page of challenges
