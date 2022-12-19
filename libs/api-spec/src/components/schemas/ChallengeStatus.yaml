@@ -1,4 +1,4 @@
-description: The status of the challenge
+description: The status of the challenge.
 type: string
 enum:
   - upcoming

@@ -148,6 +148,14 @@ components:
       - totalElements
       - totalPages
       type: object
+    ChallengeStatus:
+      description: The status of the challenge.
+      enum:
+      - upcoming
+      - active
+      - completed
+      example: active
+      type: string
     ChallengeCreateRequest:
       description: The information used to create a challenge
       properties:
@@ -156,8 +164,11 @@ components:
           maxLength: 60
           minLength: 3
           type: string
+        status:
+          $ref: '#/components/schemas/ChallengeStatus'
       required:
       - name
+      - status
       type: object
     ChallengeId:
       description: The unique identifier of a challenge.

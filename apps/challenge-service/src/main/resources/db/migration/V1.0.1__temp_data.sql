@@ -1,7 +1,12 @@
-INSERT INTO challenge (id, name)
+INSERT INTO challenge (id, name, status)
 VALUES (
     '1',
-    'The Digital Mammography DREAM Challenge'
+    'The Digital Mammography DREAM Challenge',
+    'upcoming'
   ),
-  ('2', 'Patient Mortality EHR DREAM Challenge'),
-  ('3', 'COVID-19 EHR DREAM Challenge');
+  (
+    '2',
+    'Patient Mortality EHR DREAM Challenge',
+    'active'
+  ),
+  ('3', 'COVID-19 EHR DREAM Challenge', 'completed');

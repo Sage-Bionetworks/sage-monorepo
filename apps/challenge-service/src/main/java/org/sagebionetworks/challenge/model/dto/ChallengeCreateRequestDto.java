@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.*;
 import java.util.Objects;
 import javax.annotation.Generated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /** The information used to create a challenge */
@@ -17,6 +18,9 @@ public class ChallengeCreateRequestDto {
 
   @JsonProperty("name")
   private String name;
+
+  @JsonProperty("status")
+  private ChallengeStatusDto status;
 
   public ChallengeCreateRequestDto name(String name) {
     this.name = name;
@@ -39,6 +43,27 @@ public class ChallengeCreateRequestDto {
     this.name = name;
   }
 
+  public ChallengeCreateRequestDto status(ChallengeStatusDto status) {
+    this.status = status;
+    return this;
+  }
+
+  /**
+   * Get status
+   *
+   * @return status
+   */
+  @NotNull
+  @Valid
+  @Schema(name = "status", required = true)
+  public ChallengeStatusDto getStatus() {
+    return status;
+  }
+
+  public void setStatus(ChallengeStatusDto status) {
+    this.status = status;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -48,12 +73,13 @@ public class ChallengeCreateRequestDto {
       return false;
     }
     ChallengeCreateRequestDto challengeCreateRequest = (ChallengeCreateRequestDto) o;
-    return Objects.equals(this.name, challengeCreateRequest.name);
+    return Objects.equals(this.name, challengeCreateRequest.name)
+        && Objects.equals(this.status, challengeCreateRequest.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name);
+    return Objects.hash(name, status);
   }
 
   @Override
@@ -61,6 +87,7 @@ public class ChallengeCreateRequestDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengeCreateRequestDto {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();
   }

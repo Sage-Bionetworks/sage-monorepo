@@ -21,6 +21,9 @@ public class ChallengeDto {
   @JsonProperty("name")
   private String name;
 
+  @JsonProperty("status")
+  private ChallengeStatusDto status;
+
   @JsonProperty("id")
   private Long id;
 
@@ -51,6 +54,27 @@ public class ChallengeDto {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public ChallengeDto status(ChallengeStatusDto status) {
+    this.status = status;
+    return this;
+  }
+
+  /**
+   * Get status
+   *
+   * @return status
+   */
+  @NotNull
+  @Valid
+  @Schema(name = "status", required = true)
+  public ChallengeStatusDto getStatus() {
+    return status;
+  }
+
+  public void setStatus(ChallengeStatusDto status) {
+    this.status = status;
   }
 
   public ChallengeDto id(Long id) {
@@ -129,6 +153,7 @@ public class ChallengeDto {
     }
     ChallengeDto challenge = (ChallengeDto) o;
     return Objects.equals(this.name, challenge.name)
+        && Objects.equals(this.status, challenge.status)
         && Objects.equals(this.id, challenge.id)
         && Objects.equals(this.createdAt, challenge.createdAt)
         && Objects.equals(this.updatedAt, challenge.updatedAt);
@@ -136,7 +161,7 @@ public class ChallengeDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, id, createdAt, updatedAt);
+    return Objects.hash(name, status, id, createdAt, updatedAt);
   }
 
   @Override
@@ -144,6 +169,7 @@ public class ChallengeDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengeDto {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
