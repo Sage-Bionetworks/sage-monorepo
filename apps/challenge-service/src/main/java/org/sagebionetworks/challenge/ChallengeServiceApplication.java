@@ -13,10 +13,10 @@ import org.springframework.context.annotation.ComponentScan;
       "org.sagebionetworks.challenge.api",
       "org.sagebionetworks.challenge.configuration"
     })
-public class ChallengeOrganizationServiceApplication {
+public class ChallengeServiceApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(ChallengeOrganizationServiceApplication.class, args);
+    SpringApplication.run(ChallengeServiceApplication.class, args);
   }
 
   // @Bean
