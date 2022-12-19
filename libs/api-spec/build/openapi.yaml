@@ -13,7 +13,7 @@ info:
 servers:
   - url: 'http://localhost/v1'
 tags:
-  - name: challenge
+  - name: Challenge
     description: Operations about challenges.
   - name: Organization
     description: Operations about organizations
@@ -23,7 +23,7 @@ paths:
   /challenges:
     get:
       tags:
-        - challenge
+        - Challenge
       summary: List challenges
       description: List challenges
       operationId: listChallenges

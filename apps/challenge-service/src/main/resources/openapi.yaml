@@ -14,7 +14,7 @@ servers:
 - url: http://localhost/v1
 tags:
 - description: Operations about challenges.
-  name: challenge
+  name: Challenge
 paths:
   /challenges:
     get:
@@ -65,10 +65,10 @@ paths:
             error
       summary: List challenges
       tags:
-      - challenge
+      - Challenge
       x-accepts: application/json
       x-tags:
-      - tag: challenge
+      - tag: Challenge
 components:
   parameters:
     pageNumber:

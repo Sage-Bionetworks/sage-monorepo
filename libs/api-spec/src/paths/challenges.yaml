@@ -30,7 +30,7 @@
 #       $ref: ../components/responses/InternalServerError.yaml
 get:
   tags:
-    - challenge
+    - Challenge
   summary: List challenges
   description: List challenges
   operationId: listChallenges

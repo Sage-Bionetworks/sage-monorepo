@@ -40,7 +40,7 @@ public interface ChallengeApi {
   @Operation(
       operationId = "listChallenges",
       summary = "List challenges",
-      tags = {"challenge"},
+      tags = {"Challenge"},
       responses = {
         @ApiResponse(
             responseCode = "200",
