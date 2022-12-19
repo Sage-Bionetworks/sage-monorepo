@@ -1,11 +1,11 @@
 spring:
   application:
-    name: challenge-organization-service
+    name: challenge-service
   datasource:
     # url: jdbc:mysql://challenge-mariadb:3306/challenge
     url: ${db.url}
     # url: jdbc:h2:mem:challenge
-    username: challenge_organization_service
+    username: challenge_service
     password: changeme
   jpa:
     hibernate:
