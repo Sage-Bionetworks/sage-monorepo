@@ -1,7 +1,7 @@
 #!/bin/bash
 
-openapiGeneratorVersion="6.1.x"
-destinationFolder="${PWD}/templates/v${openapiGeneratorVersion}"
+openapiGeneratorVersion="v6.2.1"
+destinationFolder="${PWD}/templates/${openapiGeneratorVersion}"
 
 mkdir -p "${destinationFolder}"
 

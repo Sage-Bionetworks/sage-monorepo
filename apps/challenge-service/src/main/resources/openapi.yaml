@@ -220,6 +220,7 @@ components:
       - id
       - updatedAt
       type: object
+      example: null
     ChallengesPage_allOf:
       properties:
         challenges:
@@ -230,3 +231,4 @@ components:
       required:
       - challenges
       type: object
+      example: null
