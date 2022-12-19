@@ -1,4 +1,4 @@
-INSERT INTO challenge_organization (id, name)
+INSERT INTO challenge (id, name)
 VALUES (
     '1',
     'The Digital Mammography DREAM Challenge'

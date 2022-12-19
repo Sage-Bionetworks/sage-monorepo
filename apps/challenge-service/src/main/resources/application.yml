@@ -19,7 +19,7 @@ spring:
   #   cleanOnValidationError: true
 
 server:
-  port: 8084
+  port: 8085
 
 eureka:
   client:
@@ -43,7 +43,7 @@ info:
 
 keycloak:
   realm: test
-  resource: challenge-organization-service
+  resource: challenge-service
   credentials:
     secret: GFRau7cQTxhx19CUmSdrqrqrZ1pshjjB
   auth-server-url: ${keycloak.url}
