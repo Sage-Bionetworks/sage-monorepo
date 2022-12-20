@@ -9,6 +9,7 @@ src/main/java/org/sagebionetworks/challenge/configuration/HomeController.java
 src/main/java/org/sagebionetworks/challenge/configuration/SpringDocConfiguration.java
 src/main/java/org/sagebionetworks/challenge/model/dto/BasicErrorDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeCreateRequestDto.java
+src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeDifficultyDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeStatusDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengesPageDto.java

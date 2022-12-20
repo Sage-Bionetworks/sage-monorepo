@@ -3,6 +3,7 @@ package org.sagebionetworks.challenge.service;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
@@ -26,9 +27,14 @@ public class ChallengeService {
 
   @Transactional(readOnly = true)
   public ChallengesPageDto listChallenges(
-      Integer pageNumber, Integer pageSize, List<ChallengeStatusDto> status) {
+      Integer pageNumber,
+      Integer pageSize,
+      List<ChallengeStatusDto> status,
+      List<ChallengeDifficultyDto> difficulty) {
 
     log.info("status {}", status);
+    log.info("difficulty {}", difficulty);
+
     QChallengeEntity qChallenge = QChallengeEntity.challengeEntity;
     BooleanExpression q = qChallenge.status.in(status.stream().map(s -> s.toString()).toList());
 

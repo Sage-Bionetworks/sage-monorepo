@@ -22,6 +22,9 @@ public class ChallengeCreateRequestDto {
   @JsonProperty("status")
   private ChallengeStatusDto status;
 
+  @JsonProperty("difficulty")
+  private ChallengeDifficultyDto difficulty;
+
   public ChallengeCreateRequestDto name(String name) {
     this.name = name;
     return this;
@@ -64,6 +67,26 @@ public class ChallengeCreateRequestDto {
     this.status = status;
   }
 
+  public ChallengeCreateRequestDto difficulty(ChallengeDifficultyDto difficulty) {
+    this.difficulty = difficulty;
+    return this;
+  }
+
+  /**
+   * Get difficulty
+   *
+   * @return difficulty
+   */
+  @Valid
+  @Schema(name = "difficulty", required = false)
+  public ChallengeDifficultyDto getDifficulty() {
+    return difficulty;
+  }
+
+  public void setDifficulty(ChallengeDifficultyDto difficulty) {
+    this.difficulty = difficulty;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -74,12 +97,13 @@ public class ChallengeCreateRequestDto {
     }
     ChallengeCreateRequestDto challengeCreateRequest = (ChallengeCreateRequestDto) o;
     return Objects.equals(this.name, challengeCreateRequest.name)
-        && Objects.equals(this.status, challengeCreateRequest.status);
+        && Objects.equals(this.status, challengeCreateRequest.status)
+        && Objects.equals(this.difficulty, challengeCreateRequest.difficulty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, status);
+    return Objects.hash(name, status, difficulty);
   }
 
   @Override
@@ -88,6 +112,7 @@ public class ChallengeCreateRequestDto {
     sb.append("class ChallengeCreateRequestDto {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("}");
     return sb.toString();
   }

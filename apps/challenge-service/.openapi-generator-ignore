@@ -28,4 +28,4 @@ README.md
 **/OpenApiGeneratorApplication.java
 
 # The template of this file has a bug: the Dto suffix is not included
-**/EnumConverterConfiguration.java
+# **/EnumConverterConfiguration.java
