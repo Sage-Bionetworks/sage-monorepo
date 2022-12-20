@@ -28,10 +28,10 @@ properties:
     #     type: string
     #     format: date
     #     nullable: true
-  incentiveTypes:
-    type: array
-    items:
-      $ref: ChallengeIncentiveType.yaml
+  # incentiveTypes:
+  #   type: array
+  #   items:
+  #     $ref: ChallengeIncentiveType.yaml
   #     nullable: true
   #   platformId:
   #     $ref: ChallengePlatformId.yaml

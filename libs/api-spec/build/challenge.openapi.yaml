@@ -133,15 +133,6 @@ components:
         - totalPages
         - hasNext
         - hasPrevious
-    ChallengeIncentiveType:
-      description: The incentive type of the challenge.
-      type: string
-      enum:
-        - monetary
-        - publication
-        - speaking_engagement
-        - other
-      example: publication
     ChallengeCreateRequest:
       type: object
       description: The information used to create a challenge
@@ -153,10 +144,6 @@ components:
           example: Example challenge
         status:
           $ref: '#/components/schemas/ChallengeStatus'
-        incentiveTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChallengeIncentiveType'
         difficulty:
           $ref: '#/components/schemas/ChallengeDifficulty'
       required:
