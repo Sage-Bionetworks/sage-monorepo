@@ -44,7 +44,7 @@ get:
     # - $ref: parameters/searchTerms.yaml
     # - $ref: parameters/topics.yaml
     # - $ref: parameters/inputDataTypes.yaml
-    # - $ref: parameters/challenge/status.yaml
+    - $ref: ../components/parameters/query/challenge/status.yaml
     # - $ref: parameters/challenge/platformIds.yaml
     # - $ref: parameters/challenge/difficulty.yaml
     # - $ref: parameters/challenge/submissionTypes.yaml
