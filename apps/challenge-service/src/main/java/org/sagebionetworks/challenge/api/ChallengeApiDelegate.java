@@ -1,7 +1,9 @@
 package org.sagebionetworks.challenge.api;
 
+import java.util.List;
 import java.util.Optional;
 import javax.annotation.Generated;
+import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,11 +26,13 @@ public interface ChallengeApiDelegate {
    *
    * @param pageNumber The page number (optional, default to 0)
    * @param pageSize The number of items in a single page (optional, default to 100)
+   * @param status Array of challenge status used to filter the results. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    * @see ChallengeApi#listChallenges
    */
-  default ResponseEntity<ChallengesPageDto> listChallenges(Integer pageNumber, Integer pageSize) {
+  default ResponseEntity<ChallengesPageDto> listChallenges(
+      Integer pageNumber, Integer pageSize, List<ChallengeStatusDto> status) {
     getRequest()
         .ifPresent(
             request -> {

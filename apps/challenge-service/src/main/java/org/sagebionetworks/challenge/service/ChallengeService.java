@@ -1,7 +1,9 @@
 package org.sagebionetworks.challenge.service;
 
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeMapper;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 public class ChallengeService {
 
@@ -20,7 +23,9 @@ public class ChallengeService {
   private ChallengeMapper challengeMapper = new ChallengeMapper();
 
   @Transactional(readOnly = true)
-  public ChallengesPageDto listChallenges(Integer pageNumber, Integer pageSize) {
+  public ChallengesPageDto listChallenges(
+      Integer pageNumber, Integer pageSize, List<ChallengeStatusDto> status) {
+    log.info("status {}", status);
     Page<ChallengeEntity> challengeEntitiesPage =
         challengeRepository.findAll(PageRequest.of(pageNumber, pageSize));
     List<ChallengeDto> challenges =

@@ -1,5 +1,7 @@
 package org.sagebionetworks.challenge.api;
 
+import java.util.List;
+import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.service.ChallengeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +14,9 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
   @Autowired ChallengeService challengeService;
 
   @Override
-  public ResponseEntity<ChallengesPageDto> listChallenges(Integer pageNumber, Integer pageSize) {
-    return ResponseEntity.ok(challengeService.listChallenges(pageNumber, pageSize));
+  public ResponseEntity<ChallengesPageDto> listChallenges(
+      Integer pageNumber, Integer pageSize, List<ChallengeStatusDto> status) {
+    return ResponseEntity.ok(challengeService.listChallenges(pageNumber, pageSize, status));
   }
 
   // @Override

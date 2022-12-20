@@ -43,6 +43,16 @@ paths:
           minimum: 1
           type: integer
         style: form
+      - description: Array of challenge status used to filter the results.
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ChallengeStatus'
+          type: array
+        style: form
       responses:
         "200":
           content:
@@ -95,6 +105,17 @@ components:
         minimum: 1
         type: integer
       style: form
+    status:
+      description: Array of challenge status used to filter the results.
+      explode: true
+      in: query
+      name: status
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeStatus'
+        type: array
+      style: form
   responses:
     BadRequest:
       content:
@@ -109,6 +130,14 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
+    ChallengeStatus:
+      description: The status of the challenge.
+      enum:
+      - upcoming
+      - active
+      - completed
+      example: active
+      type: string
     PageMetadata:
       description: The metadata of a page.
       properties:
@@ -148,14 +177,6 @@ components:
       - totalElements
       - totalPages
       type: object
-    ChallengeStatus:
-      description: The status of the challenge.
-      enum:
-      - upcoming
-      - active
-      - completed
-      example: active
-      type: string
     ChallengeCreateRequest:
       description: The information used to create a challenge
       properties:
