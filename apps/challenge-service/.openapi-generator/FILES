@@ -4,11 +4,13 @@ src/main/java/org/sagebionetworks/challenge/api/ApiUtil.java
 src/main/java/org/sagebionetworks/challenge/api/ChallengeApi.java
 src/main/java/org/sagebionetworks/challenge/api/ChallengeApiController.java
 src/main/java/org/sagebionetworks/challenge/api/ChallengeApiDelegate.java
+src/main/java/org/sagebionetworks/challenge/configuration/EnumConverterConfiguration.java
 src/main/java/org/sagebionetworks/challenge/configuration/HomeController.java
 src/main/java/org/sagebionetworks/challenge/configuration/SpringDocConfiguration.java
 src/main/java/org/sagebionetworks/challenge/model/dto/BasicErrorDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeCreateRequestDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeDto.java
+src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeStatusDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengesPageDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/PageMetadataDto.java
 src/main/resources/openapi.yaml

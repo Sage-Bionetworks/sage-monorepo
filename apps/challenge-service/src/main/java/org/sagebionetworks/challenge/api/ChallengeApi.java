@@ -10,10 +10,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.challenge.model.dto.BasicErrorDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +35,7 @@ public interface ChallengeApi {
    *
    * @param pageNumber The page number (optional, default to 0)
    * @param pageSize The number of items in a single page (optional, default to 100)
+   * @param status Array of challenge status used to filter the results. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    */
@@ -89,7 +92,13 @@ public interface ChallengeApi {
           @Parameter(name = "pageSize", description = "The number of items in a single page")
           @Valid
           @RequestParam(value = "pageSize", required = false, defaultValue = "100")
-          Integer pageSize) {
-    return getDelegate().listChallenges(pageNumber, pageSize);
+          Integer pageSize,
+      @Parameter(
+              name = "status",
+              description = "Array of challenge status used to filter the results.")
+          @Valid
+          @RequestParam(value = "status", required = false)
+          List<ChallengeStatusDto> status) {
+    return getDelegate().listChallenges(pageNumber, pageSize, status);
   }
 }

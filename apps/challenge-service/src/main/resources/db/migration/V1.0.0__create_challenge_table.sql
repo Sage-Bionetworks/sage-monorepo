@@ -4,6 +4,7 @@ CREATE TABLE `challenge`
 (
     `id`                    bigint(20) NOT NULL AUTO_INCREMENT,
     `name`                  varchar(255) DEFAULT NULL,
+    `status`                ENUM('upcoming', 'active', 'completed'),
     -- `email`                 varchar(255) DEFAULT NULL,
     -- `login`                 varchar(255) UNIQUE,
     -- `avatar_url`            varchar(255) DEFAULT NULL,

@@ -26,6 +26,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/status'
       responses:
         '200':
           content:
@@ -57,7 +58,24 @@ components:
         format: int32
         default: 100
         minimum: 1
+    status:
+      name: status
+      description: Array of challenge status used to filter the results.
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengeStatus'
   schemas:
+    ChallengeStatus:
+      description: The status of the challenge.
+      type: string
+      enum:
+        - upcoming
+        - active
+        - completed
+      example: active
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -106,8 +124,11 @@ components:
           minLength: 3
           maxLength: 60
           example: Example challenge
+        status:
+          $ref: '#/components/schemas/ChallengeStatus'
       required:
         - name
+        - status
     ChallengeId:
       description: The unique identifier of a challenge.
       type: integer

@@ -6,20 +6,20 @@ properties:
     minLength: 3
     maxLength: 60
     example: Example challenge
-#   displayName:
-#     type: string
-#     minLength: 3
-#     maxLength: 60
-#   description:
-#     description: A short description of the challenge
-#     type: string
-#     nullable: true
-#     maxLength: 280
-#   websiteUrl:
-#     type: string
-#     format: url
-#   status:
-#     $ref: ChallengeStatus.yaml
+  #   displayName:
+  #     type: string
+  #     minLength: 3
+  #     maxLength: 60
+  #   description:
+  #     description: A short description of the challenge
+  #     type: string
+  #     nullable: true
+  #     maxLength: 280
+  #   websiteUrl:
+  #     type: string
+  #     format: url
+  status:
+    $ref: ChallengeStatus.yaml
 #   startDate:
 #     type: string
 #     format: date
@@ -65,6 +65,7 @@ properties:
 #     nullable: true
 required:
   - name
+  - status
 #   - description
 # example:
 #   name: awesome-challenge
