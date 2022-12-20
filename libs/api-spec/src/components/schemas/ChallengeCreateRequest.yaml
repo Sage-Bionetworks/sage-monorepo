@@ -20,24 +20,24 @@ properties:
   #     format: url
   status:
     $ref: ChallengeStatus.yaml
-#   startDate:
-#     type: string
-#     format: date
-#     nullable: true
-#   endDate:
-#     type: string
-#     format: date
-#     nullable: true
-#   incentiveTypes:
-#     type: array
-#     items:
-#       $ref: ChallengeIncentiveType.yaml
-#     nullable: true
-#   platformId:
-#     $ref: ChallengePlatformId.yaml
-#     nullable: true
-#   difficulty:
-#     $ref: ChallengeDifficulty.yaml
+  #   startDate:
+  #     type: string
+  #     format: date
+  #     nullable: true
+  #   endDate:
+  #     type: string
+  #     format: date
+  #     nullable: true
+  #   incentiveTypes:
+  #     type: array
+  #     items:
+  #       $ref: ChallengeIncentiveType.yaml
+  #     nullable: true
+  #   platformId:
+  #     $ref: ChallengePlatformId.yaml
+  #     nullable: true
+  difficulty:
+    $ref: ChallengeDifficulty.yaml
 #   submissionTypes:
 #     type: array
 #     items:

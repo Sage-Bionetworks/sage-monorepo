@@ -46,7 +46,7 @@ get:
     # - $ref: parameters/inputDataTypes.yaml
     - $ref: ../components/parameters/query/challenge/status.yaml
     # - $ref: parameters/challenge/platformIds.yaml
-    # - $ref: parameters/challenge/difficulty.yaml
+    - $ref: ../components/parameters/query/challenge/difficulty.yaml
     # - $ref: parameters/challenge/submissionTypes.yaml
     # - $ref: parameters/challenge/incentiveTypes.yaml
     # - $ref: parameters/challenge/startDateRange.yaml

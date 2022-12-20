@@ -1,8 +1,0 @@
-name: offset
-description: Index of the first result that must be returned
-in: query
-required: false
-schema:
-  type: integer
-  default: 0
-  minimum: 0

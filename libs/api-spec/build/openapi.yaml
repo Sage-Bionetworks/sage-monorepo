@@ -31,6 +31,7 @@ paths:
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageSize'
         - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/difficulty'
       responses:
         '200':
           content:
@@ -177,6 +178,14 @@ components:
         - active
         - completed
       example: active
+    ChallengeDifficulty:
+      description: The difficulty level of a challenge.
+      type: string
+      enum:
+        - good_for_beginners
+        - intermediate
+        - advanced
+      example: intermediate
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -227,6 +236,8 @@ components:
           example: Example challenge
         status:
           $ref: '#/components/schemas/ChallengeStatus'
+        difficulty:
+          $ref: '#/components/schemas/ChallengeDifficulty'
       required:
         - name
         - status
@@ -553,6 +564,15 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeStatus'
+    difficulty:
+      name: difficulty
+      description: Array of challenge difficulty levels used to filter the results.
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengeDifficulty'
     organizationLogin:
       name: organizationLogin
       in: path
