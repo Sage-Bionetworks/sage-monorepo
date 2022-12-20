@@ -28,7 +28,6 @@ paths:
         - $ref: '#/components/parameters/pageSize'
         - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/difficulty'
-        - $ref: '#/components/parameters/incentiveTypes'
       responses:
         '200':
           content:
@@ -78,15 +77,6 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeDifficulty'
-    incentiveTypes:
-      name: incentiveTypes
-      description: Array of challenge incentive types used to filter the results.
-      in: query
-      required: false
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/ChallengeIncentiveType'
   schemas:
     ChallengeStatus:
       description: The status of the challenge.
@@ -104,15 +94,6 @@ components:
         - intermediate
         - advanced
       example: intermediate
-    ChallengeIncentiveType:
-      description: The incentive type of the challenge.
-      type: string
-      enum:
-        - monetary
-        - publication
-        - speaking_engagement
-        - other
-      example: publication
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -152,6 +133,15 @@ components:
         - totalPages
         - hasNext
         - hasPrevious
+    ChallengeIncentiveType:
+      description: The incentive type of the challenge.
+      type: string
+      enum:
+        - monetary
+        - publication
+        - speaking_engagement
+        - other
+      example: publication
     ChallengeCreateRequest:
       type: object
       description: The information used to create a challenge
