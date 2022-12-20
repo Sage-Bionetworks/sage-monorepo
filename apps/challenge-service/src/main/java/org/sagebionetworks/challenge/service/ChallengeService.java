@@ -10,7 +10,9 @@ import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.entity.QChallengeEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeMapper;
+import org.sagebionetworks.challenge.model.repository.ChallengeFilter;
 import org.sagebionetworks.challenge.model.repository.ChallengeRepository;
+import org.sagebionetworks.challenge.model.repository.ChallengeRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChallengeService {
 
   @Autowired private ChallengeRepository challengeRepository;
+  @Autowired private ChallengeRepositoryCustom challengeRepositoryCustom;
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
 
@@ -34,6 +37,11 @@ public class ChallengeService {
 
     log.info("status {}", status);
     log.info("difficulty {}", difficulty);
+
+    ChallengeFilter filter =
+        ChallengeFilter.builder().difficulty("good_for_beginners").status("upcoming").build();
+    List<ChallengeEntity> ce = challengeRepositoryCustom.findAll(filter);
+    log.info("challengeRepositoryCustom {}", ce);
 
     QChallengeEntity qChallenge = QChallengeEntity.challengeEntity;
     BooleanExpression q = qChallenge.status.in(status.stream().map(s -> s.toString()).toList());
