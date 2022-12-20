@@ -32,6 +32,7 @@ paths:
         - $ref: '#/components/parameters/pageSize'
         - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/difficulty'
+        - $ref: '#/components/parameters/incentiveTypes'
       responses:
         '200':
           content:
@@ -186,6 +187,15 @@ components:
         - intermediate
         - advanced
       example: intermediate
+    ChallengeIncentiveType:
+      description: The incentive type of the challenge.
+      type: string
+      enum:
+        - monetary
+        - publication
+        - speaking_engagement
+        - other
+      example: publication
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -236,6 +246,10 @@ components:
           example: Example challenge
         status:
           $ref: '#/components/schemas/ChallengeStatus'
+        incentiveTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeIncentiveType'
         difficulty:
           $ref: '#/components/schemas/ChallengeDifficulty'
       required:
@@ -573,6 +587,15 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeDifficulty'
+    incentiveTypes:
+      name: incentiveTypes
+      description: Array of challenge incentive types used to filter the results.
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengeIncentiveType'
     organizationLogin:
       name: organizationLogin
       in: path

@@ -48,7 +48,7 @@ get:
     # - $ref: parameters/challenge/platformIds.yaml
     - $ref: ../components/parameters/query/challenge/difficulty.yaml
     # - $ref: parameters/challenge/submissionTypes.yaml
-    # - $ref: parameters/challenge/incentiveTypes.yaml
+    - $ref: ../components/parameters/query/challenge/incentiveTypes.yaml
     # - $ref: parameters/challenge/startDateRange.yaml
     # - $ref: parameters/challenge/orgIds.yaml
     # - $ref: parameters/challenge/organizerIds.yaml
