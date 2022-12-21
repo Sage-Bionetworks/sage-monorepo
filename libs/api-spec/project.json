@@ -33,13 +33,13 @@
         "cwd": "libs/api-spec"
       }
     },
-    "lint": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "lint-openapi --config .validaterc --ruleset .spectral.yaml --verbose build/openapi.yaml build/challenge.openapi.yaml build/organization.openapi.yaml build/user.openapi.yaml",
-        "cwd": "libs/api-spec"
-      }
-    },
+    // "lint": {
+    //   "executor": "nx:run-commands",
+    //   "options": {
+    //     "command": "lint-openapi --config .validaterc --ruleset .spectral.yaml --verbose build/openapi.yaml build/challenge.openapi.yaml build/organization.openapi.yaml build/user.openapi.yaml",
+    //     "cwd": "libs/api-spec"
+    //   }
+    // },
     "format": {
       "executor": "nx:run-commands",
       "options": {
