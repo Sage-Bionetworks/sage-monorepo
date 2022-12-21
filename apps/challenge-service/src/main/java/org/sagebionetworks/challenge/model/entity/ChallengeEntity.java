@@ -32,6 +32,9 @@ public class ChallengeEntity {
   @Column(nullable = false)
   private String status;
 
+  @Column(nullable = false)
+  private String difficulty;
+
   // @Column(nullable = false)
   // private String email;
 

@@ -43,7 +43,7 @@ paths:
           minimum: 1
           type: integer
         style: form
-      - description: Array of challenge status used to filter the results.
+      - description: An array of challenge status used to filter the results.
         explode: true
         in: query
         name: status
@@ -51,6 +51,16 @@ paths:
         schema:
           items:
             $ref: '#/components/schemas/ChallengeStatus'
+          type: array
+        style: form
+      - description: An array of challenge difficulty levels used to filter the results.
+        explode: true
+        in: query
+        name: difficulty
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ChallengeDifficulty'
           type: array
         style: form
       responses:
@@ -106,7 +116,7 @@ components:
         type: integer
       style: form
     status:
-      description: Array of challenge status used to filter the results.
+      description: An array of challenge status used to filter the results.
       explode: true
       in: query
       name: status
@@ -114,6 +124,17 @@ components:
       schema:
         items:
           $ref: '#/components/schemas/ChallengeStatus'
+        type: array
+      style: form
+    difficulty:
+      description: An array of challenge difficulty levels used to filter the results.
+      explode: true
+      in: query
+      name: difficulty
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeDifficulty'
         type: array
       style: form
   responses:
@@ -137,6 +158,14 @@ components:
       - active
       - completed
       example: active
+      type: string
+    ChallengeDifficulty:
+      description: The difficulty level of a challenge.
+      enum:
+      - good_for_beginners
+      - intermediate
+      - advanced
+      example: intermediate
       type: string
     PageMetadata:
       description: The metadata of a page.
@@ -187,6 +216,8 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/ChallengeStatus'
+        difficulty:
+          $ref: '#/components/schemas/ChallengeDifficulty'
       required:
       - name
       - status

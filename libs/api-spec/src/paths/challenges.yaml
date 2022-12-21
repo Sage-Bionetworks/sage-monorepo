@@ -37,18 +37,18 @@ get:
   parameters:
     - $ref: ../components/parameters/query/pageNumber.yaml
     - $ref: ../components/parameters/query/pageSize.yaml
-    # - $ref: parameters/limit.yaml
-    # - $ref: parameters/offset.yaml
     # - $ref: parameters/sort.yaml
     # - $ref: parameters/direction.yaml
     # - $ref: parameters/searchTerms.yaml
     # - $ref: parameters/topics.yaml
     # - $ref: parameters/inputDataTypes.yaml
     - $ref: ../components/parameters/query/challenge/status.yaml
-    # - $ref: parameters/challenge/platformIds.yaml
-    # - $ref: parameters/challenge/difficulty.yaml
+    # - $ref: ../components/parameters/query/challenge/platformIds.yaml
+    - $ref: ../components/parameters/query/challenge/difficulty.yaml
     # - $ref: parameters/challenge/submissionTypes.yaml
-    # - $ref: parameters/challenge/incentiveTypes.yaml
+
+    # - $ref: ../components/parameters/query/challenge/incentiveTypes.yaml
+
     # - $ref: parameters/challenge/startDateRange.yaml
     # - $ref: parameters/challenge/orgIds.yaml
     # - $ref: parameters/challenge/organizerIds.yaml

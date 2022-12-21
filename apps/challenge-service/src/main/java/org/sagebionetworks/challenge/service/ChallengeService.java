@@ -1,18 +1,20 @@
 package org.sagebionetworks.challenge.service;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
-import org.sagebionetworks.challenge.model.entity.QChallengeEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeMapper;
+import org.sagebionetworks.challenge.model.repository.ChallengeFilter;
 import org.sagebionetworks.challenge.model.repository.ChallengeRepository;
+import org.sagebionetworks.challenge.model.repository.ChallengeRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,19 +23,30 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChallengeService {
 
   @Autowired private ChallengeRepository challengeRepository;
+  @Autowired private ChallengeRepositoryCustom challengeRepositoryCustom;
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
 
   @Transactional(readOnly = true)
   public ChallengesPageDto listChallenges(
-      Integer pageNumber, Integer pageSize, List<ChallengeStatusDto> status) {
+      Integer pageNumber,
+      Integer pageSize,
+      List<ChallengeStatusDto> status,
+      List<ChallengeDifficultyDto> difficulty) {
 
     log.info("status {}", status);
-    QChallengeEntity qChallenge = QChallengeEntity.challengeEntity;
-    BooleanExpression q = qChallenge.status.in(status.stream().map(s -> s.toString()).toList());
+    log.info("difficulty {}", difficulty);
+
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    ChallengeFilter filter =
+        ChallengeFilter.builder()
+            .difficulty(difficulty.stream().map(d -> d.toString()).toList())
+            .status(status.stream().map(s -> s.toString()).toList())
+            .build();
 
     Page<ChallengeEntity> challengeEntitiesPage =
-        challengeRepository.findAll(q, PageRequest.of(pageNumber, pageSize));
+        challengeRepositoryCustom.findAll(pageable, filter);
+    log.info("challengeRepositoryCustom {}", challengeEntitiesPage);
 
     List<ChallengeDto> challenges =
         challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());

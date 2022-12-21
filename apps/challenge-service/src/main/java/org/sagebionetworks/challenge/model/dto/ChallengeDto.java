@@ -24,6 +24,9 @@ public class ChallengeDto {
   @JsonProperty("status")
   private ChallengeStatusDto status;
 
+  @JsonProperty("difficulty")
+  private ChallengeDifficultyDto difficulty;
+
   @JsonProperty("id")
   private Long id;
 
@@ -75,6 +78,26 @@ public class ChallengeDto {
 
   public void setStatus(ChallengeStatusDto status) {
     this.status = status;
+  }
+
+  public ChallengeDto difficulty(ChallengeDifficultyDto difficulty) {
+    this.difficulty = difficulty;
+    return this;
+  }
+
+  /**
+   * Get difficulty
+   *
+   * @return difficulty
+   */
+  @Valid
+  @Schema(name = "difficulty", required = false)
+  public ChallengeDifficultyDto getDifficulty() {
+    return difficulty;
+  }
+
+  public void setDifficulty(ChallengeDifficultyDto difficulty) {
+    this.difficulty = difficulty;
   }
 
   public ChallengeDto id(Long id) {
@@ -154,6 +177,7 @@ public class ChallengeDto {
     ChallengeDto challenge = (ChallengeDto) o;
     return Objects.equals(this.name, challenge.name)
         && Objects.equals(this.status, challenge.status)
+        && Objects.equals(this.difficulty, challenge.difficulty)
         && Objects.equals(this.id, challenge.id)
         && Objects.equals(this.createdAt, challenge.createdAt)
         && Objects.equals(this.updatedAt, challenge.updatedAt);
@@ -161,7 +185,7 @@ public class ChallengeDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, status, id, createdAt, updatedAt);
+    return Objects.hash(name, status, difficulty, id, createdAt, updatedAt);
   }
 
   @Override
@@ -170,6 +194,7 @@ public class ChallengeDto {
     sb.append("class ChallengeDto {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
