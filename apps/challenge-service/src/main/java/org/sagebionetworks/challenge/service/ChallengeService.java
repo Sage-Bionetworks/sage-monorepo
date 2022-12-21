@@ -44,15 +44,16 @@ public class ChallengeService {
 
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
-    Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(q, pageable);
+    // Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(q, pageable);
 
     ChallengeFilter filter =
         ChallengeFilter.builder()
             .difficulty(difficulty.stream().map(d -> d.toString()).toList())
             .status(status.stream().map(s -> s.toString()).toList())
             .build();
-    List<ChallengeEntity> ce = challengeRepositoryCustom.findAll(pageable, filter);
-    log.info("challengeRepositoryCustom {}", ce);
+    Page<ChallengeEntity> challengeEntitiesPage =
+        challengeRepositoryCustom.findAll(pageable, filter);
+    log.info("challengeRepositoryCustom {}", challengeEntitiesPage);
 
     List<ChallengeDto> challenges =
         challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());

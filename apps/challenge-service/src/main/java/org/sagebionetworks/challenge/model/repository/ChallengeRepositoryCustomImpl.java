@@ -1,9 +1,11 @@
 package org.sagebionetworks.challenge.model.repository;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
-import java.util.List;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.entity.QChallengeEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
@@ -17,7 +19,7 @@ public class ChallengeRepositoryCustomImpl extends QuerydslRepositorySupport
   }
 
   @Override
-  public List<ChallengeEntity> findAll(Pageable pageable, ChallengeFilter filter) {
+  public Page<ChallengeEntity> findAll(Pageable pageable, ChallengeFilter filter) {
     QChallengeEntity challenge = QChallengeEntity.challengeEntity;
 
     JPQLQuery<ChallengeEntity> query = from(challenge);
@@ -32,7 +34,11 @@ public class ChallengeRepositoryCustomImpl extends QuerydslRepositorySupport
 
     query = super.getQuerydsl().applyPagination(pageable, query);
 
-    // List<ChallengeEntity> challenges = new ArrayList<>();
-    return query.fetch();
+    // SearchResults<Employees> entitys = query.listResults(QEmployees.employees);
+    // return new PageImpl<Employees>(entitys.getResults(), pageable, entitys.getTotal());
+    // SearchResults
+    QueryResults<ChallengeEntity> results = query.fetchResults();
+
+    return new PageImpl<ChallengeEntity>(results.getResults(), pageable, results.getTotal());
   }
 }
