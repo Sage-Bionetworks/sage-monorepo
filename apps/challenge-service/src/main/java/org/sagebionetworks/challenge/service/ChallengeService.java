@@ -1,6 +1,5 @@
 package org.sagebionetworks.challenge.service;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
@@ -8,7 +7,6 @@ import org.sagebionetworks.challenge.model.dto.ChallengeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
-import org.sagebionetworks.challenge.model.entity.QChallengeEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeMapper;
 import org.sagebionetworks.challenge.model.repository.ChallengeFilter;
 import org.sagebionetworks.challenge.model.repository.ChallengeRepository;
@@ -39,18 +37,13 @@ public class ChallengeService {
     log.info("status {}", status);
     log.info("difficulty {}", difficulty);
 
-    QChallengeEntity qChallenge = QChallengeEntity.challengeEntity;
-    BooleanExpression q = qChallenge.status.in(status.stream().map(s -> s.toString()).toList());
-
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
-
-    // Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(q, pageable);
-
     ChallengeFilter filter =
         ChallengeFilter.builder()
             .difficulty(difficulty.stream().map(d -> d.toString()).toList())
             .status(status.stream().map(s -> s.toString()).toList())
             .build();
+
     Page<ChallengeEntity> challengeEntitiesPage =
         challengeRepositoryCustom.findAll(pageable, filter);
     log.info("challengeRepositoryCustom {}", challengeEntitiesPage);
