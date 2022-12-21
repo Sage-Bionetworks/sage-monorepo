@@ -22,6 +22,14 @@ public class ChallengeRepositoryCustomImpl extends QuerydslRepositorySupport
 
     JPQLQuery<ChallengeEntity> query = from(challenge);
 
+    if (filter.getStatus() != null && filter.getStatus().size() > 0) {
+      query = query.where(challenge.status.in(filter.getStatus()));
+    }
+
+    if (filter.getDifficulty() != null && filter.getDifficulty().size() > 0) {
+      query = query.where(challenge.difficulty.in(filter.getDifficulty()));
+    }
+
     query = super.getQuerydsl().applyPagination(pageable, query);
 
     // List<ChallengeEntity> challenges = new ArrayList<>();

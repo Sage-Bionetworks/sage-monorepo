@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.model.repository;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChallengeFilter {
-  private String status;
-  private String difficulty;
+  private List<String> status;
+  private List<String> difficulty;
 }

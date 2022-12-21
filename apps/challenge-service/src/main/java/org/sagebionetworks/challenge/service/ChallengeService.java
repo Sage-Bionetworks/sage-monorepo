@@ -12,7 +12,7 @@ import org.sagebionetworks.challenge.model.entity.QChallengeEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeMapper;
 import org.sagebionetworks.challenge.model.repository.ChallengeFilter;
 import org.sagebionetworks.challenge.model.repository.ChallengeRepository;
-import org.sagebionetworks.challenge.model.repository.ChallengeRepositoryCustomImpl;
+import org.sagebionetworks.challenge.model.repository.ChallengeRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChallengeService {
 
   @Autowired private ChallengeRepository challengeRepository;
-  @Autowired private ChallengeRepositoryCustomImpl challengeRepositoryCustom;
+  @Autowired private ChallengeRepositoryCustom challengeRepositoryCustom;
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
 
@@ -47,7 +47,10 @@ public class ChallengeService {
     Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(q, pageable);
 
     ChallengeFilter filter =
-        ChallengeFilter.builder().difficulty("good_for_beginners").status("upcoming").build();
+        ChallengeFilter.builder()
+            .difficulty(difficulty.stream().map(d -> d.toString()).toList())
+            .status(status.stream().map(s -> s.toString()).toList())
+            .build();
     List<ChallengeEntity> ce = challengeRepositoryCustom.findAll(pageable, filter);
     log.info("challengeRepositoryCustom {}", ce);
 
