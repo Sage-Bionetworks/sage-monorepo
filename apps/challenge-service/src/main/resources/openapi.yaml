@@ -43,7 +43,7 @@ paths:
           minimum: 1
           type: integer
         style: form
-      - description: Array of challenge status used to filter the results.
+      - description: An array of challenge status used to filter the results.
         explode: true
         in: query
         name: status
@@ -53,7 +53,7 @@ paths:
             $ref: '#/components/schemas/ChallengeStatus'
           type: array
         style: form
-      - description: Array of challenge difficulty levels used to filter the results.
+      - description: An array of challenge difficulty levels used to filter the results.
         explode: true
         in: query
         name: difficulty
@@ -116,7 +116,7 @@ components:
         type: integer
       style: form
     status:
-      description: Array of challenge status used to filter the results.
+      description: An array of challenge status used to filter the results.
       explode: true
       in: query
       name: status
@@ -127,7 +127,7 @@ components:
         type: array
       style: form
     difficulty:
-      description: Array of challenge difficulty levels used to filter the results.
+      description: An array of challenge difficulty levels used to filter the results.
       explode: true
       in: query
       name: difficulty

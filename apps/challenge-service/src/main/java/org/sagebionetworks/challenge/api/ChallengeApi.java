@@ -36,8 +36,9 @@ public interface ChallengeApi {
    *
    * @param pageNumber The page number (optional, default to 0)
    * @param pageSize The number of items in a single page (optional, default to 100)
-   * @param status Array of challenge status used to filter the results. (optional)
-   * @param difficulty Array of challenge difficulty levels used to filter the results. (optional)
+   * @param status An array of challenge status used to filter the results. (optional)
+   * @param difficulty An array of challenge difficulty levels used to filter the results.
+   *     (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    */
@@ -97,13 +98,13 @@ public interface ChallengeApi {
           Integer pageSize,
       @Parameter(
               name = "status",
-              description = "Array of challenge status used to filter the results.")
+              description = "An array of challenge status used to filter the results.")
           @Valid
           @RequestParam(value = "status", required = false)
           List<ChallengeStatusDto> status,
       @Parameter(
               name = "difficulty",
-              description = "Array of challenge difficulty levels used to filter the results.")
+              description = "An array of challenge difficulty levels used to filter the results.")
           @Valid
           @RequestParam(value = "difficulty", required = false)
           List<ChallengeDifficultyDto> difficulty) {

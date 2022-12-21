@@ -61,7 +61,7 @@ components:
         minimum: 1
     status:
       name: status
-      description: Array of challenge status used to filter the results.
+      description: An array of challenge status used to filter the results.
       in: query
       required: false
       schema:
@@ -70,7 +70,7 @@ components:
           $ref: '#/components/schemas/ChallengeStatus'
     difficulty:
       name: difficulty
-      description: Array of challenge difficulty levels used to filter the results.
+      description: An array of challenge difficulty levels used to filter the results.
       in: query
       required: false
       schema:
