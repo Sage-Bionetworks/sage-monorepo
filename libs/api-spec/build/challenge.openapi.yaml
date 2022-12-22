@@ -264,18 +264,18 @@ components:
           properties:
             id:
               $ref: '#/components/schemas/ChallengePlatformId'
-            created_at:
+            createdAt:
               type: string
               format: date-time
               example: '2022-07-04T22:19:11Z'
-            updated_at:
+            updatedAt:
               type: string
               format: date-time
               example: '2022-07-04T22:19:11Z'
           required:
             - id
-            - created_at
-            - updated_at
+            - createdAt
+            - updatedAt
     ChallengePlatformsPage:
       type: object
       description: A page of challenge platforms.
