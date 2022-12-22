@@ -10,9 +10,9 @@ import javax.validation.constraints.*;
 
 /** The information used to create a challenge platform */
 @Schema(
-    name = "challenge-platform-create-request",
+    name = "ChallengePlatformCreateRequest",
     description = "The information used to create a challenge platform")
-@JsonTypeName("challenge-platform-create-request")
+@JsonTypeName("ChallengePlatformCreateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations
 public class ChallengePlatformCreateRequestDto {

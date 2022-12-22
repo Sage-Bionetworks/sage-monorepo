@@ -20,7 +20,7 @@ public interface ChallengePlatformApiDelegate {
   }
 
   /**
-   * GET /challenge-platforms : List challenge platforms List challenge platforms
+   * GET /challengePlatforms : List challenge platforms List challenge platforms
    *
    * @param pageNumber The page number (optional, default to 0)
    * @param pageSize The number of items in a single page (optional, default to 100)

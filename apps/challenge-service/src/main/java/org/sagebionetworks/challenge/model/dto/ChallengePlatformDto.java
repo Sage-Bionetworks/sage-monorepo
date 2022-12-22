@@ -12,8 +12,8 @@ import javax.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /** A challenge platform */
-@Schema(name = "challenge-platform", description = "A challenge platform")
-@JsonTypeName("challenge-platform")
+@Schema(name = "ChallengePlatform", description = "A challenge platform")
+@JsonTypeName("ChallengePlatform")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations
 public class ChallengePlatformDto {
@@ -24,11 +24,11 @@ public class ChallengePlatformDto {
   @JsonProperty("id")
   private Long id;
 
-  @JsonProperty("created_at")
+  @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
-  @JsonProperty("updated_at")
+  @JsonProperty("updatedAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
@@ -94,7 +94,7 @@ public class ChallengePlatformDto {
    */
   @NotNull
   @Valid
-  @Schema(name = "created_at", example = "2022-07-04T22:19:11Z", required = true)
+  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", required = true)
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -115,7 +115,7 @@ public class ChallengePlatformDto {
    */
   @NotNull
   @Valid
-  @Schema(name = "updated_at", example = "2022-07-04T22:19:11Z", required = true)
+  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", required = true)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }

@@ -12,8 +12,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /** A page of challenge platforms. */
-@Schema(name = "challenge-platforms-page", description = "A page of challenge platforms.")
-@JsonTypeName("challenge-platforms-page")
+@Schema(name = "ChallengePlatformsPage", description = "A page of challenge platforms.")
+@JsonTypeName("ChallengePlatformsPage")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations
 public class ChallengePlatformsPageDto {
@@ -36,7 +36,7 @@ public class ChallengePlatformsPageDto {
   @JsonProperty("hasPrevious")
   private Boolean hasPrevious;
 
-  @JsonProperty("challenge_platforms")
+  @JsonProperty("challengePlatforms")
   @Valid
   private List<ChallengePlatformDto> challengePlatforms = new ArrayList<>();
 
@@ -203,7 +203,7 @@ public class ChallengePlatformsPageDto {
   @NotNull
   @Valid
   @Schema(
-      name = "challenge_platforms",
+      name = "challengePlatforms",
       description = "An array of challenge platforms",
       required = true)
   public List<ChallengePlatformDto> getChallengePlatforms() {

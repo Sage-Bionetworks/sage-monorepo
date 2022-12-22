@@ -29,7 +29,7 @@ public interface ChallengePlatformApi {
   }
 
   /**
-   * GET /challenge-platforms : List challenge platforms List challenge platforms
+   * GET /challengePlatforms : List challenge platforms List challenge platforms
    *
    * @param pageNumber The page number (optional, default to 0)
    * @param pageSize The number of items in a single page (optional, default to 100)
@@ -77,7 +77,7 @@ public interface ChallengePlatformApi {
       })
   @RequestMapping(
       method = RequestMethod.GET,
-      value = "/challenge-platforms",
+      value = "/challengePlatforms",
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<ChallengePlatformsPageDto> listChallengePlatforms(
       @Min(0)
