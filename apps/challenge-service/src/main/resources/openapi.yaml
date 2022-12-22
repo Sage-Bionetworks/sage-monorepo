@@ -15,6 +15,8 @@ servers:
 tags:
 - description: Operations about challenges.
   name: Challenge
+- description: Operations about challenge platforms.
+  name: ChallengePlatform
 paths:
   /challenges:
     get:
@@ -89,6 +91,59 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: Challenge
+  /challenge-platforms:
+    get:
+      description: List challenge platforms
+      operationId: list-challenge-platforms
+      parameters:
+      - description: The page number
+        explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 0
+          format: int32
+          minimum: 0
+          type: integer
+        style: form
+      - description: The number of items in a single page
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/challenge-platforms-page'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List challenge platforms
+      tags:
+      - ChallengePlatform
+      x-accepts: application/json
+      x-tags:
+      - tag: ChallengePlatform
 components:
   parameters:
     pageNumber:
@@ -263,6 +318,43 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    challenge-platform-name:
+      description: The name of the challenge platform.
+      example: example-challenge-platform
+      maxLength: 30
+      minLength: 3
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      type: string
+    challenge-platform-create-request:
+      description: The information used to create a challenge platform
+      properties:
+        name:
+          description: The name of the challenge platform.
+          example: example-challenge-platform
+          maxLength: 30
+          minLength: 3
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          type: string
+      required:
+      - name
+      type: object
+    challenge-platform-id:
+      description: The unique identifier of a challenge platform
+      example: 1
+      format: int64
+      type: integer
+    challenge-platform:
+      allOf:
+      - $ref: '#/components/schemas/challenge-platform-create-request'
+      - $ref: '#/components/schemas/challenge_platform_allOf'
+      description: A challenge platform
+      type: object
+    challenge-platforms-page:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/challenge_platforms_page_allOf'
+      description: A page of challenge platforms.
+      type: object
     Challenge_allOf:
       properties:
         id:
@@ -293,5 +385,37 @@ components:
           type: array
       required:
       - challenges
+      type: object
+      example: null
+    challenge_platform_allOf:
+      properties:
+        id:
+          description: The unique identifier of a challenge platform
+          example: 1
+          format: int64
+          type: integer
+        created_at:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+        updated_at:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+      required:
+      - created_at
+      - id
+      - updated_at
+      type: object
+      example: null
+    challenge_platforms_page_allOf:
+      properties:
+        challenge_platforms:
+          description: An array of challenge platforms
+          items:
+            $ref: '#/components/schemas/challenge-platform'
+          type: array
+      required:
+      - challenge_platforms
       type: object
       example: null
