@@ -144,6 +144,45 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: ChallengePlatform
+  /challengePlatforms/{challengePlatformId}:
+    get:
+      description: Returns the challenge platform specified
+      operationId: getChallengePlatform
+      parameters:
+      - description: The unique identifier of the challenge platform.
+        explode: false
+        in: path
+        name: challengePlatformId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengePlatformId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatform'
+          description: Success
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a challenge platform
+      tags:
+      - ChallengePlatform
+      x-accepts: application/json
+      x-tags:
+      - tag: ChallengePlatform
 components:
   parameters:
     pageNumber:
@@ -192,6 +231,15 @@ components:
           $ref: '#/components/schemas/ChallengeDifficulty'
         type: array
       style: form
+    challengePlatformId:
+      description: The unique identifier of the challenge platform.
+      explode: false
+      in: path
+      name: challengePlatformId
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengePlatformId'
+      style: simple
   responses:
     BadRequest:
       content:
@@ -205,6 +253,12 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The specified resource was not found
   schemas:
     ChallengeStatus:
       description: The status of the challenge.
@@ -339,7 +393,7 @@ components:
       - name
       type: object
     ChallengePlatformId:
-      description: The unique identifier of a challenge platform
+      description: The unique identifier of a challenge platform.
       example: 1
       format: int64
       type: integer
@@ -392,7 +446,7 @@ components:
     ChallengePlatform_allOf:
       properties:
         id:
-          description: The unique identifier of a challenge platform
+          description: The unique identifier of a challenge platform.
           example: 1
           format: int64
           type: integer

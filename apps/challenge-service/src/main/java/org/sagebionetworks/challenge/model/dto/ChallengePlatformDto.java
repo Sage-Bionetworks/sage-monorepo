@@ -64,7 +64,7 @@ public class ChallengePlatformDto {
   }
 
   /**
-   * The unique identifier of a challenge platform
+   * The unique identifier of a challenge platform.
    *
    * @return id
    */
@@ -72,7 +72,7 @@ public class ChallengePlatformDto {
   @Schema(
       name = "id",
       example = "1",
-      description = "The unique identifier of a challenge platform",
+      description = "The unique identifier of a challenge platform.",
       required = true)
   public Long getId() {
     return id;

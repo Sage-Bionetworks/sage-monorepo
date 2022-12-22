@@ -62,6 +62,26 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /challengePlatforms/{challengePlatformId}:
+    parameters:
+      - $ref: '#/components/parameters/challengePlatformId'
+    get:
+      tags:
+        - ChallengePlatform
+      summary: Get a challenge platform
+      description: Returns the challenge platform specified
+      operationId: getChallengePlatform
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatform'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   parameters:
     pageNumber:
@@ -100,6 +120,13 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeDifficulty'
+    challengePlatformId:
+      name: challengePlatformId
+      in: path
+      description: The unique identifier of the challenge platform.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengePlatformId'
   schemas:
     ChallengeStatus:
       description: The status of the challenge.
@@ -251,7 +278,7 @@ components:
       required:
         - name
     ChallengePlatformId:
-      description: The unique identifier of a challenge platform
+      description: The unique identifier of a challenge platform.
       type: integer
       format: int64
       example: 1
@@ -301,6 +328,12 @@ components:
             $ref: '#/components/schemas/BasicError'
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
       content:
         application/problem+json:
           schema:

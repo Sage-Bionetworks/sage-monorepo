@@ -2,6 +2,7 @@ package org.sagebionetworks.challenge.service;
 
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.challenge.exception.ChallengePlatformNotFoundException;
 import org.sagebionetworks.challenge.model.dto.ChallengePlatformDto;
 import org.sagebionetworks.challenge.model.dto.ChallengePlatformsPageDto;
 import org.sagebionetworks.challenge.model.entity.ChallengePlatformEntity;
@@ -23,8 +24,22 @@ public class ChallengePlatformService {
   private ChallengePlatformMapper challengePlatformMapper = new ChallengePlatformMapper();
 
   @Transactional(readOnly = true)
-  public ChallengePlatformsPageDto listChallengePlatforms(Integer pageNumber, Integer pageSize) {
+  public ChallengePlatformDto getChallengePlatform(Long challengePlatformId) {
+    ChallengePlatformEntity entity =
+        challengePlatformRepository
+            .findById(challengePlatformId)
+            .orElseThrow(
+                () ->
+                    new ChallengePlatformNotFoundException(
+                        String.format(
+                            "The challenge platform with ID %d does not exist.",
+                            challengePlatformId)));
 
+    return challengePlatformMapper.convertToDto(entity);
+  }
+
+  @Transactional(readOnly = true)
+  public ChallengePlatformsPageDto listChallengePlatforms(Integer pageNumber, Integer pageSize) {
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     Page<ChallengePlatformEntity> entitiesPage = challengePlatformRepository.findAll(pageable);
 

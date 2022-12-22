@@ -2,6 +2,7 @@ package org.sagebionetworks.challenge.api;
 
 import java.util.Optional;
 import javax.annotation.Generated;
+import org.sagebionetworks.challenge.model.dto.ChallengePlatformDto;
 import org.sagebionetworks.challenge.model.dto.ChallengePlatformsPageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +18,36 @@ public interface ChallengePlatformApiDelegate {
 
   default Optional<NativeWebRequest> getRequest() {
     return Optional.empty();
+  }
+
+  /**
+   * GET /challengePlatforms/{challengePlatformId} : Get a challenge platform Returns the challenge
+   * platform specified
+   *
+   * @param challengePlatformId The unique identifier of the challenge platform. (required)
+   * @return Success (status code 200) or The specified resource was not found (status code 404) or
+   *     The request cannot be fulfilled due to an unexpected server error (status code 500)
+   * @see ChallengePlatformApi#getChallengePlatform
+   */
+  default ResponseEntity<ChallengePlatformDto> getChallengePlatform(Long challengePlatformId) {
+    getRequest()
+        .ifPresent(
+            request -> {
+              for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                  String exampleString = "null";
+                  ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                  break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                  String exampleString =
+                      "Custom MIME type example not yet supported: application/problem+json";
+                  ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                  break;
+                }
+              }
+            });
+    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
 
   /**

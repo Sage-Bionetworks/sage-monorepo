@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.api;
 
+import org.sagebionetworks.challenge.model.dto.ChallengePlatformDto;
 import org.sagebionetworks.challenge.model.dto.ChallengePlatformsPageDto;
 import org.sagebionetworks.challenge.service.ChallengePlatformService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,11 @@ import org.springframework.stereotype.Component;
 public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDelegate {
 
   @Autowired ChallengePlatformService challengePlatformService;
+
+  @Override
+  public ResponseEntity<ChallengePlatformDto> getChallengePlatform(Long challengePlatformId) {
+    return ResponseEntity.ok(challengePlatformService.getChallengePlatform(challengePlatformId));
+  }
 
   @Override
   public ResponseEntity<ChallengePlatformsPageDto> listChallengePlatforms(
