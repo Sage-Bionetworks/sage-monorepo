@@ -6,6 +6,8 @@ allOf:
     properties:
       id:
         $ref: ChallengePlatformId.yaml
+      name:
+        $ref: ChallengePlatformName.yaml
       createdAt:
         type: string
         format: date-time
@@ -16,5 +18,6 @@ allOf:
         example: '2022-07-04T22:19:11Z'
     required:
       - id
+      - name
       - createdAt
       - updatedAt

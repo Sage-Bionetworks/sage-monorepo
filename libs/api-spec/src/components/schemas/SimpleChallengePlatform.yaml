@@ -5,6 +5,9 @@ properties:
     $ref: ChallengePlatformId.yaml
   name:
     $ref: ChallengePlatformName.yaml
+  displayName:
+    $ref: ChallengePlatformDisplayName.yaml
 required:
   - id
   - name
+  - displayName

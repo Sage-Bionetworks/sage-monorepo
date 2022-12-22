@@ -292,6 +292,12 @@ components:
       maxLength: 30
       pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
       example: example-challenge-platform
+    ChallengePlatformDisplayName:
+      description: The display name of the challenge platform.
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: Example Challenge Platform
     SimpleChallengePlatform:
       type: object
       description: A simple challenge platform
@@ -300,9 +306,12 @@ components:
           $ref: '#/components/schemas/ChallengePlatformId'
         name:
           $ref: '#/components/schemas/ChallengePlatformName'
+        displayName:
+          $ref: '#/components/schemas/ChallengePlatformDisplayName'
       required:
         - id
         - name
+        - displayName
     Challenge:
       type: object
       description: A challenge
@@ -376,10 +385,10 @@ components:
       type: object
       description: The information used to create a challenge platform
       properties:
-        name:
-          $ref: '#/components/schemas/ChallengePlatformName'
+        displayName:
+          $ref: '#/components/schemas/ChallengePlatformDisplayName'
       required:
-        - name
+        - displayName
     ChallengePlatform:
       type: object
       description: A challenge platform
@@ -389,6 +398,8 @@ components:
           properties:
             id:
               $ref: '#/components/schemas/ChallengePlatformId'
+            name:
+              $ref: '#/components/schemas/ChallengePlatformName'
             createdAt:
               type: string
               format: date-time
@@ -399,6 +410,7 @@ components:
               example: '2022-07-04T22:19:11Z'
           required:
             - id
+            - name
             - createdAt
             - updatedAt
     ChallengePlatformsPage:
