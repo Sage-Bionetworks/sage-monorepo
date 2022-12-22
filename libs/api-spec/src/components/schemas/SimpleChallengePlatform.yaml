@@ -1,0 +1,10 @@
+type: object
+description: A simple challenge platform
+properties:
+  id:
+    $ref: ChallengePlatformId.yaml
+  name:
+    $ref: ChallengePlatformName.yaml
+required:
+  - id
+  - name

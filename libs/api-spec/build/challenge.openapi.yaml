@@ -183,48 +183,71 @@ components:
         - totalPages
         - hasNext
         - hasPrevious
-    ChallengeCreateRequest:
-      type: object
-      description: The information used to create a challenge
-      properties:
-        name:
-          type: string
-          minLength: 3
-          maxLength: 60
-          example: Example challenge
-        status:
-          $ref: '#/components/schemas/ChallengeStatus'
-        difficulty:
-          $ref: '#/components/schemas/ChallengeDifficulty'
-      required:
-        - name
-        - status
     ChallengeId:
       description: The unique identifier of a challenge.
       type: integer
       format: int64
       example: 1
+    ChallengeName:
+      description: The name of the a challenge
+      type: string
+      minLength: 3
+      maxLength: 60
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example: awesome-challenge
+    ChallengePlatformId:
+      description: The unique identifier of a challenge platform.
+      type: integer
+      format: int64
+      example: 1
+    ChallengePlatformName:
+      description: The name of the challenge platform.
+      type: string
+      minLength: 3
+      maxLength: 30
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example: example-challenge-platform
+    SimpleChallengePlatform:
+      type: object
+      description: A simple challenge platform
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengePlatformId'
+        name:
+          $ref: '#/components/schemas/ChallengePlatformName'
+      required:
+        - id
+        - name
     Challenge:
       type: object
       description: A challenge
-      allOf:
-        - $ref: '#/components/schemas/ChallengeCreateRequest'
-        - type: object
-          properties:
-            id:
-              $ref: '#/components/schemas/ChallengeId'
-            createdAt:
-              type: string
-              format: date-time
-              example: '2022-07-04T22:19:11Z'
-            updatedAt:
-              type: string
-              format: date-time
-              example: '2022-07-04T22:19:11Z'
-          required:
-            - id
-            - createdAt
-            - updatedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengeId'
+        name:
+          $ref: '#/components/schemas/ChallengeName'
+        status:
+          $ref: '#/components/schemas/ChallengeStatus'
+        difficulty:
+          $ref: '#/components/schemas/ChallengeDifficulty'
+        challengePlatform:
+          $ref: '#/components/schemas/SimpleChallengePlatform'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
+      required:
+        - id
+        - name
+        - status
+        - difficulty
+        - challengePlatform
+        - createdAt
+        - updatedAt
     ChallengesPage:
       type: object
       description: A page of challenges.
@@ -262,13 +285,6 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
-    ChallengePlatformName:
-      description: The name of the challenge platform.
-      type: string
-      minLength: 3
-      maxLength: 30
-      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
-      example: example-challenge-platform
     ChallengePlatformCreateRequest:
       type: object
       description: The information used to create a challenge platform
@@ -277,11 +293,6 @@ components:
           $ref: '#/components/schemas/ChallengePlatformName'
       required:
         - name
-    ChallengePlatformId:
-      description: The unique identifier of a challenge platform.
-      type: integer
-      format: int64
-      example: 1
     ChallengePlatform:
       type: object
       description: A challenge platform
