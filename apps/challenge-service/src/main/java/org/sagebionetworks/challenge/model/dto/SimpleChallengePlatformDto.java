@@ -21,6 +21,9 @@ public class SimpleChallengePlatformDto {
   @JsonProperty("name")
   private String name;
 
+  @JsonProperty("displayName")
+  private String displayName;
+
   public SimpleChallengePlatformDto id(Long id) {
     this.id = id;
     return this;
@@ -71,6 +74,31 @@ public class SimpleChallengePlatformDto {
     this.name = name;
   }
 
+  public SimpleChallengePlatformDto displayName(String displayName) {
+    this.displayName = displayName;
+    return this;
+  }
+
+  /**
+   * The display name of the challenge platform.
+   *
+   * @return displayName
+   */
+  @NotNull
+  @Size(min = 3, max = 50)
+  @Schema(
+      name = "displayName",
+      example = "Example Challenge Platform",
+      description = "The display name of the challenge platform.",
+      required = true)
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -81,12 +109,13 @@ public class SimpleChallengePlatformDto {
     }
     SimpleChallengePlatformDto simpleChallengePlatform = (SimpleChallengePlatformDto) o;
     return Objects.equals(this.id, simpleChallengePlatform.id)
-        && Objects.equals(this.name, simpleChallengePlatform.name);
+        && Objects.equals(this.name, simpleChallengePlatform.name)
+        && Objects.equals(this.displayName, simpleChallengePlatform.displayName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name);
+    return Objects.hash(id, name, displayName);
   }
 
   @Override
@@ -95,6 +124,7 @@ public class SimpleChallengePlatformDto {
     sb.append("class SimpleChallengePlatformDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
     sb.append("}");
     return sb.toString();
   }

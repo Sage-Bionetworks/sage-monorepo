@@ -13,8 +13,8 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
   @Autowired ChallengePlatformService challengePlatformService;
 
   @Override
-  public ResponseEntity<ChallengePlatformDto> getChallengePlatform(Long challengePlatformId) {
-    return ResponseEntity.ok(challengePlatformService.getChallengePlatform(challengePlatformId));
+  public ResponseEntity<ChallengePlatformDto> getChallengePlatform(String challengePlatformName) {
+    return ResponseEntity.ok(challengePlatformService.getChallengePlatform(challengePlatformName));
   }
 
   @Override

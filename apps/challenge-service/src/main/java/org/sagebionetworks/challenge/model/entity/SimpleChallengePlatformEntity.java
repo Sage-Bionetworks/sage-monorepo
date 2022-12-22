@@ -26,4 +26,7 @@ public class SimpleChallengePlatformEntity {
 
   @Column(nullable = false)
   private String name;
+
+  @Column(name = "display_name", nullable = false)
+  private String displayName;
 }

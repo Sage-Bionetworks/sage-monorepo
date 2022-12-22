@@ -24,16 +24,16 @@ public class ChallengePlatformService {
   private ChallengePlatformMapper challengePlatformMapper = new ChallengePlatformMapper();
 
   @Transactional(readOnly = true)
-  public ChallengePlatformDto getChallengePlatform(Long challengePlatformId) {
+  public ChallengePlatformDto getChallengePlatform(String challengePlatformName) {
     ChallengePlatformEntity entity =
         challengePlatformRepository
-            .findById(challengePlatformId)
+            .findByName(challengePlatformName)
             .orElseThrow(
                 () ->
                     new ChallengePlatformNotFoundException(
                         String.format(
-                            "The challenge platform with ID %d does not exist.",
-                            challengePlatformId)));
+                            "The challenge platform with name %s does not exist.",
+                            challengePlatformName)));
 
     return challengePlatformMapper.convertToDto(entity);
   }

@@ -21,15 +21,15 @@ public interface ChallengePlatformApiDelegate {
   }
 
   /**
-   * GET /challengePlatforms/{challengePlatformId} : Get a challenge platform Returns the challenge
-   * platform specified
+   * GET /challengePlatforms/{challengePlatformName} : Get a challenge platform Returns the
+   * challenge platform specified
    *
-   * @param challengePlatformId The unique identifier of the challenge platform. (required)
+   * @param challengePlatformName The unique identifier of the challenge platform. (required)
    * @return Success (status code 200) or The specified resource was not found (status code 404) or
    *     The request cannot be fulfilled due to an unexpected server error (status code 500)
    * @see ChallengePlatformApi#getChallengePlatform
    */
-  default ResponseEntity<ChallengePlatformDto> getChallengePlatform(Long challengePlatformId) {
+  default ResponseEntity<ChallengePlatformDto> getChallengePlatform(String challengePlatformName) {
     getRequest()
         .ifPresent(
             request -> {

@@ -30,10 +30,10 @@ public interface ChallengePlatformApi {
   }
 
   /**
-   * GET /challengePlatforms/{challengePlatformId} : Get a challenge platform Returns the challenge
-   * platform specified
+   * GET /challengePlatforms/{challengePlatformName} : Get a challenge platform Returns the
+   * challenge platform specified
    *
-   * @param challengePlatformId The unique identifier of the challenge platform. (required)
+   * @param challengePlatformName The unique identifier of the challenge platform. (required)
    * @return Success (status code 200) or The specified resource was not found (status code 404) or
    *     The request cannot be fulfilled due to an unexpected server error (status code 500)
    */
@@ -78,16 +78,18 @@ public interface ChallengePlatformApi {
       })
   @RequestMapping(
       method = RequestMethod.GET,
-      value = "/challengePlatforms/{challengePlatformId}",
+      value = "/challengePlatforms/{challengePlatformName}",
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<ChallengePlatformDto> getChallengePlatform(
-      @Parameter(
-              name = "challengePlatformId",
+      @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
+          @Size(min = 3, max = 30)
+          @Parameter(
+              name = "challengePlatformName",
               description = "The unique identifier of the challenge platform.",
               required = true)
-          @PathVariable("challengePlatformId")
-          Long challengePlatformId) {
-    return getDelegate().getChallengePlatform(challengePlatformId);
+          @PathVariable("challengePlatformName")
+          String challengePlatformName) {
+    return getDelegate().getChallengePlatform(challengePlatformName);
   }
 
   /**

@@ -17,33 +17,32 @@ import javax.validation.constraints.*;
 // TODO Add x-java-class-annotations
 public class ChallengePlatformCreateRequestDto {
 
-  @JsonProperty("name")
-  private String name;
+  @JsonProperty("displayName")
+  private String displayName;
 
-  public ChallengePlatformCreateRequestDto name(String name) {
-    this.name = name;
+  public ChallengePlatformCreateRequestDto displayName(String displayName) {
+    this.displayName = displayName;
     return this;
   }
 
   /**
-   * The name of the challenge platform.
+   * The display name of the challenge platform.
    *
-   * @return name
+   * @return displayName
    */
   @NotNull
-  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-  @Size(min = 3, max = 30)
+  @Size(min = 3, max = 50)
   @Schema(
-      name = "name",
-      example = "example-challenge-platform",
-      description = "The name of the challenge platform.",
+      name = "displayName",
+      example = "Example Challenge Platform",
+      description = "The display name of the challenge platform.",
       required = true)
-  public String getName() {
-    return name;
+  public String getDisplayName() {
+    return displayName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
   }
 
   @Override
@@ -56,19 +55,19 @@ public class ChallengePlatformCreateRequestDto {
     }
     ChallengePlatformCreateRequestDto challengePlatformCreateRequest =
         (ChallengePlatformCreateRequestDto) o;
-    return Objects.equals(this.name, challengePlatformCreateRequest.name);
+    return Objects.equals(this.displayName, challengePlatformCreateRequest.displayName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name);
+    return Objects.hash(displayName);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengePlatformCreateRequestDto {\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
     sb.append("}");
     return sb.toString();
   }

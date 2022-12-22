@@ -18,11 +18,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 // TODO Add x-java-class-annotations
 public class ChallengePlatformDto {
 
-  @JsonProperty("name")
-  private String name;
+  @JsonProperty("displayName")
+  private String displayName;
 
   @JsonProperty("id")
   private Long id;
+
+  @JsonProperty("name")
+  private String name;
 
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -31,6 +34,55 @@ public class ChallengePlatformDto {
   @JsonProperty("updatedAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
+
+  public ChallengePlatformDto displayName(String displayName) {
+    this.displayName = displayName;
+    return this;
+  }
+
+  /**
+   * The display name of the challenge platform.
+   *
+   * @return displayName
+   */
+  @NotNull
+  @Size(min = 3, max = 50)
+  @Schema(
+      name = "displayName",
+      example = "Example Challenge Platform",
+      description = "The display name of the challenge platform.",
+      required = true)
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
+
+  public ChallengePlatformDto id(Long id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * The unique identifier of a challenge platform.
+   *
+   * @return id
+   */
+  @NotNull
+  @Schema(
+      name = "id",
+      example = "1",
+      description = "The unique identifier of a challenge platform.",
+      required = true)
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
 
   public ChallengePlatformDto name(String name) {
     this.name = name;
@@ -56,30 +108,6 @@ public class ChallengePlatformDto {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public ChallengePlatformDto id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * The unique identifier of a challenge platform.
-   *
-   * @return id
-   */
-  @NotNull
-  @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of a challenge platform.",
-      required = true)
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public ChallengePlatformDto createdAt(OffsetDateTime createdAt) {
@@ -133,23 +161,25 @@ public class ChallengePlatformDto {
       return false;
     }
     ChallengePlatformDto challengePlatform = (ChallengePlatformDto) o;
-    return Objects.equals(this.name, challengePlatform.name)
+    return Objects.equals(this.displayName, challengePlatform.displayName)
         && Objects.equals(this.id, challengePlatform.id)
+        && Objects.equals(this.name, challengePlatform.name)
         && Objects.equals(this.createdAt, challengePlatform.createdAt)
         && Objects.equals(this.updatedAt, challengePlatform.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, id, createdAt, updatedAt);
+    return Objects.hash(displayName, id, name, createdAt, updatedAt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengePlatformDto {\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");

@@ -144,7 +144,7 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: ChallengePlatform
-  /challengePlatforms/{challengePlatformId}:
+  /challengePlatforms/{challengePlatformName}:
     get:
       description: Returns the challenge platform specified
       operationId: getChallengePlatform
@@ -152,10 +152,10 @@ paths:
       - description: The unique identifier of the challenge platform.
         explode: false
         in: path
-        name: challengePlatformId
+        name: challengePlatformName
         required: true
         schema:
-          $ref: '#/components/schemas/ChallengePlatformId'
+          $ref: '#/components/schemas/ChallengePlatformName'
         style: simple
       responses:
         "200":
@@ -231,14 +231,14 @@ components:
           $ref: '#/components/schemas/ChallengeDifficulty'
         type: array
       style: form
-    challengePlatformId:
+    challengePlatformName:
       description: The unique identifier of the challenge platform.
       explode: false
       in: path
-      name: challengePlatformId
+      name: challengePlatformName
       required: true
       schema:
-        $ref: '#/components/schemas/ChallengePlatformId'
+        $ref: '#/components/schemas/ChallengePlatformName'
       style: simple
   responses:
     BadRequest:
@@ -339,6 +339,12 @@ components:
       minLength: 3
       pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
+    ChallengePlatformDisplayName:
+      description: The display name of the challenge platform.
+      example: Example Challenge Platform
+      maxLength: 50
+      minLength: 3
+      type: string
     SimpleChallengePlatform:
       description: A simple challenge platform
       properties:
@@ -354,7 +360,14 @@ components:
           minLength: 3
           pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
+        displayName:
+          description: The display name of the challenge platform.
+          example: Example Challenge Platform
+          maxLength: 50
+          minLength: 3
+          type: string
       required:
+      - displayName
       - id
       - name
       type: object
@@ -429,15 +442,14 @@ components:
     ChallengePlatformCreateRequest:
       description: The information used to create a challenge platform
       properties:
-        name:
-          description: The name of the challenge platform.
-          example: example-challenge-platform
-          maxLength: 30
+        displayName:
+          description: The display name of the challenge platform.
+          example: Example Challenge Platform
+          maxLength: 50
           minLength: 3
-          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
       required:
-      - name
+      - displayName
       type: object
     ChallengePlatform:
       allOf:
@@ -471,6 +483,13 @@ components:
           example: 1
           format: int64
           type: integer
+        name:
+          description: The name of the challenge platform.
+          example: example-challenge-platform
+          maxLength: 30
+          minLength: 3
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          type: string
         createdAt:
           example: 2022-07-04T22:19:11Z
           format: date-time
@@ -482,6 +501,7 @@ components:
       required:
       - createdAt
       - id
+      - name
       - updatedAt
       type: object
       example: null

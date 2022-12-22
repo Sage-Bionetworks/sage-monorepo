@@ -28,6 +28,9 @@ public class ChallengePlatformEntity {
   @Column(nullable = false)
   private String name;
 
+  @Column(name = "display_name", nullable = false)
+  private String displayName;
+
   @Column(name = "created_at")
   private OffsetDateTime createdAt;
 

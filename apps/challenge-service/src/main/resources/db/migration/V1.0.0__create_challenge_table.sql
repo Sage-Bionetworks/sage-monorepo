@@ -3,7 +3,8 @@
 CREATE TABLE `challenge_platform`
 (
     `id`                    int NOT NULL AUTO_INCREMENT,
-    `name`                  varchar(255) DEFAULT NULL,
+    `name`                  varchar(255) NOT NULL UNIQUE,
+    `display_name`          varchar(255) DEFAULT NULL,
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
