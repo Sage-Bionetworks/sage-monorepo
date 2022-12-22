@@ -4,10 +4,10 @@ allOf:
   - $ref: PageMetadata.yaml
   - type: object
     properties:
-      challenge_platforms:
+      challengePlatforms:
         description: An array of challenge platforms
         type: array
         items:
-          $ref: challenge-platform.yaml
+          $ref: ChallengePlatform.yaml
     required:
-      - challenge_platforms
+      - challengePlatforms

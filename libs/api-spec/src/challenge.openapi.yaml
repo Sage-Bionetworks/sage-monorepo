@@ -22,5 +22,5 @@ paths:
     $ref: paths/challenges.yaml
   # /organizations/{organizationLogin}:
   #   $ref: paths/organizations/@{organizationLogin}.yaml
-  /challenge-platforms:
-    $ref: paths/challenge-platforms.yaml
+  /challengePlatforms:
+    $ref: paths/challengePlatforms.yaml

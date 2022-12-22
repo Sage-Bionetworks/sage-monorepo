@@ -1,11 +1,11 @@
 type: object
 description: A challenge platform
 allOf:
-  - $ref: challenge-platform-create-request.yaml
+  - $ref: ChallengePlatformCreateRequest.yaml
   - type: object
     properties:
       id:
-        $ref: challenge-platform-id.yaml
+        $ref: ChallengePlatformId.yaml
       created_at:
         type: string
         format: date-time

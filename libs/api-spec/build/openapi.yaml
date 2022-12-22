@@ -45,13 +45,13 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /challenge-platforms:
+  /challengePlatforms:
     get:
       tags:
         - ChallengePlatform
       summary: List challenge platforms
       description: List challenge platforms
-      operationId: list-challenge-platforms
+      operationId: listChallengePlatforms
       parameters:
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageSize'
@@ -60,7 +60,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/challenge-platforms-page'
+                $ref: '#/components/schemas/ChallengePlatformsPage'
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -329,35 +329,35 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
-    challenge-platform-name:
+    ChallengePlatformName:
       description: The name of the challenge platform.
       type: string
       minLength: 3
       maxLength: 30
       pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
       example: example-challenge-platform
-    challenge-platform-create-request:
+    ChallengePlatformCreateRequest:
       type: object
       description: The information used to create a challenge platform
       properties:
         name:
-          $ref: '#/components/schemas/challenge-platform-name'
+          $ref: '#/components/schemas/ChallengePlatformName'
       required:
         - name
-    challenge-platform-id:
+    ChallengePlatformId:
       description: The unique identifier of a challenge platform
       type: integer
       format: int64
       example: 1
-    challenge-platform:
+    ChallengePlatform:
       type: object
       description: A challenge platform
       allOf:
-        - $ref: '#/components/schemas/challenge-platform-create-request'
+        - $ref: '#/components/schemas/ChallengePlatformCreateRequest'
         - type: object
           properties:
             id:
-              $ref: '#/components/schemas/challenge-platform-id'
+              $ref: '#/components/schemas/ChallengePlatformId'
             created_at:
               type: string
               format: date-time
@@ -370,20 +370,20 @@ components:
             - id
             - created_at
             - updated_at
-    challenge-platforms-page:
+    ChallengePlatformsPage:
       type: object
       description: A page of challenge platforms.
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
-            challenge_platforms:
+            challengePlatforms:
               description: An array of challenge platforms
               type: array
               items:
-                $ref: '#/components/schemas/challenge-platform'
+                $ref: '#/components/schemas/ChallengePlatform'
           required:
-            - challenge_platforms
+            - challengePlatforms
     Email:
       description: An email address.
       type: string

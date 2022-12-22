@@ -35,7 +35,7 @@ get:
     - ChallengePlatform
   summary: List challenge platforms
   description: List challenge platforms
-  operationId: list-challenge-platforms
+  operationId: listChallengePlatforms
   parameters:
     - $ref: ../components/parameters/query/pageNumber.yaml
     - $ref: ../components/parameters/query/pageSize.yaml
@@ -44,7 +44,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/challenge-platforms-page.yaml
+            $ref: ../components/schemas/ChallengePlatformsPage.yaml
       description: Success
     '400':
       $ref: ../components/responses/BadRequest.yaml
