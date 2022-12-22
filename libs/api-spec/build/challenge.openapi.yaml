@@ -62,9 +62,9 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /challengePlatforms/{challengePlatformId}:
+  /challengePlatforms/{challengePlatformName}:
     parameters:
-      - $ref: '#/components/parameters/challengePlatformId'
+      - $ref: '#/components/parameters/challengePlatformName'
     get:
       tags:
         - ChallengePlatform
@@ -120,13 +120,13 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeDifficulty'
-    challengePlatformId:
-      name: challengePlatformId
+    challengePlatformName:
+      name: challengePlatformName
       in: path
       description: The unique identifier of the challenge platform.
       required: true
       schema:
-        $ref: '#/components/schemas/ChallengePlatformId'
+        $ref: '#/components/schemas/ChallengePlatformName'
   schemas:
     ChallengeStatus:
       description: The status of the challenge.

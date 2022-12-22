@@ -1,5 +1,5 @@
 parameters:
-  - $ref: ../../components/parameters/path/challengePlatformId.yaml
+  - $ref: ../../components/parameters/path/challengePlatformName.yaml
 get:
   tags:
     - ChallengePlatform
