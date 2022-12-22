@@ -230,7 +230,7 @@ components:
           $ref: '#/components/schemas/ChallengeStatus'
         difficulty:
           $ref: '#/components/schemas/ChallengeDifficulty'
-        challengePlatform:
+        platform:
           $ref: '#/components/schemas/SimpleChallengePlatform'
         createdAt:
           type: string
@@ -245,7 +245,7 @@ components:
         - name
         - status
         - difficulty
-        - challengePlatform
+        - platform
         - createdAt
         - updatedAt
     ChallengesPage:

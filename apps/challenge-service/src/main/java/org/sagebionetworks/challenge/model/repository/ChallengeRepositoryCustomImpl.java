@@ -4,6 +4,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.entity.QChallengeEntity;
+import org.sagebionetworks.challenge.model.entity.QSimpleChallengePlatformEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +22,11 @@ public class ChallengeRepositoryCustomImpl extends QuerydslRepositorySupport
   @Override
   public Page<ChallengeEntity> findAll(Pageable pageable, ChallengeFilter filter) {
     QChallengeEntity challenge = QChallengeEntity.challengeEntity;
+    QSimpleChallengePlatformEntity platform =
+        QSimpleChallengePlatformEntity.simpleChallengePlatformEntity;
 
-    JPQLQuery<ChallengeEntity> query = from(challenge);
+    JPQLQuery<ChallengeEntity> query =
+        from(challenge).leftJoin(platform).on(challenge.platform.id.eq(platform.id));
 
     if (filter.getStatus() != null && filter.getStatus().size() > 0) {
       query = query.where(challenge.status.in(filter.getStatus()));

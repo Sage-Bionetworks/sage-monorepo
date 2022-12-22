@@ -377,7 +377,7 @@ components:
           $ref: '#/components/schemas/ChallengeStatus'
         difficulty:
           $ref: '#/components/schemas/ChallengeDifficulty'
-        challengePlatform:
+        platform:
           $ref: '#/components/schemas/SimpleChallengePlatform'
         createdAt:
           example: 2022-07-04T22:19:11Z
@@ -388,11 +388,11 @@ components:
           format: date-time
           type: string
       required:
-      - challengePlatform
       - createdAt
       - difficulty
       - id
       - name
+      - platform
       - status
       - updatedAt
       type: object

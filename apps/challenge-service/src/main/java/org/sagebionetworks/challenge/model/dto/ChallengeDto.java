@@ -30,8 +30,8 @@ public class ChallengeDto {
   @JsonProperty("difficulty")
   private ChallengeDifficultyDto difficulty;
 
-  @JsonProperty("challengePlatform")
-  private SimpleChallengePlatformDto challengePlatform;
+  @JsonProperty("platform")
+  private SimpleChallengePlatformDto platform;
 
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -133,25 +133,25 @@ public class ChallengeDto {
     this.difficulty = difficulty;
   }
 
-  public ChallengeDto challengePlatform(SimpleChallengePlatformDto challengePlatform) {
-    this.challengePlatform = challengePlatform;
+  public ChallengeDto platform(SimpleChallengePlatformDto platform) {
+    this.platform = platform;
     return this;
   }
 
   /**
-   * Get challengePlatform
+   * Get platform
    *
-   * @return challengePlatform
+   * @return platform
    */
   @NotNull
   @Valid
-  @Schema(name = "challengePlatform", required = true)
-  public SimpleChallengePlatformDto getChallengePlatform() {
-    return challengePlatform;
+  @Schema(name = "platform", required = true)
+  public SimpleChallengePlatformDto getPlatform() {
+    return platform;
   }
 
-  public void setChallengePlatform(SimpleChallengePlatformDto challengePlatform) {
-    this.challengePlatform = challengePlatform;
+  public void setPlatform(SimpleChallengePlatformDto platform) {
+    this.platform = platform;
   }
 
   public ChallengeDto createdAt(OffsetDateTime createdAt) {
@@ -209,14 +209,14 @@ public class ChallengeDto {
         && Objects.equals(this.name, challenge.name)
         && Objects.equals(this.status, challenge.status)
         && Objects.equals(this.difficulty, challenge.difficulty)
-        && Objects.equals(this.challengePlatform, challenge.challengePlatform)
+        && Objects.equals(this.platform, challenge.platform)
         && Objects.equals(this.createdAt, challenge.createdAt)
         && Objects.equals(this.updatedAt, challenge.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, status, difficulty, challengePlatform, createdAt, updatedAt);
+    return Objects.hash(id, name, status, difficulty, platform, createdAt, updatedAt);
   }
 
   @Override
@@ -227,7 +227,7 @@ public class ChallengeDto {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
-    sb.append("    challengePlatform: ").append(toIndentedString(challengePlatform)).append("\n");
+    sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");

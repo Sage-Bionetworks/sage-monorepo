@@ -9,7 +9,7 @@ properties:
     $ref: ChallengeStatus.yaml
   difficulty:
     $ref: ChallengeDifficulty.yaml
-  challengePlatform:
+  platform:
     $ref: SimpleChallengePlatform.yaml
   #   fullName:
   #     type: string
@@ -46,7 +46,7 @@ required:
   - name
   - status
   - difficulty
-  - challengePlatform
+  - platform
   - createdAt
   - updatedAt
 # example:

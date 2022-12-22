@@ -7,22 +7,25 @@ VALUES ('1', 'Synapse'),
 
 -- challenge.challenge data
 
-INSERT INTO challenge (id, name, status, difficulty)
+INSERT INTO challenge (id, name, status, difficulty, platform_id)
 VALUES (
     '1',
     'The Digital Mammography DREAM Challenge',
     'upcoming',
-    'good_for_beginners'
+    'good_for_beginners',
+    '1'
   ),
   (
     '2',
     'Patient Mortality EHR DREAM Challenge',
     'active',
-    'intermediate'
+    'intermediate',
+    '1'
   ),
   (
     '3',
     'COVID-19 EHR DREAM Challenge',
     'completed',
-    'advanced'
+    'advanced',
+    '1'
   );
