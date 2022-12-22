@@ -33,6 +33,7 @@ paths:
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageSize'
         - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/platform'
         - $ref: '#/components/parameters/difficulty'
       responses:
         '200':
@@ -221,6 +222,13 @@ components:
         - active
         - completed
       example: active
+    ChallengePlatformName:
+      description: The name of the challenge platform.
+      type: string
+      minLength: 3
+      maxLength: 30
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      example: example-challenge-platform
     ChallengeDifficulty:
       description: The difficulty level of a challenge.
       type: string
@@ -285,13 +293,6 @@ components:
       type: integer
       format: int64
       example: 1
-    ChallengePlatformName:
-      description: The name of the challenge platform.
-      type: string
-      minLength: 3
-      maxLength: 30
-      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
-      example: example-challenge-platform
     ChallengePlatformDisplayName:
       description: The display name of the challenge platform.
       type: string
@@ -687,6 +688,15 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeStatus'
+    platform:
+      name: platform
+      description: An array of challenge platform ids used to filter the results.
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengePlatformName'
     difficulty:
       name: difficulty
       description: An array of challenge difficulty levels used to filter the results.

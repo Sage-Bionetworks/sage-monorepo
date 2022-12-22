@@ -27,5 +27,5 @@ VALUES (
     'COVID-19 EHR DREAM Challenge',
     'completed',
     'advanced',
-    '1'
+    '2'
   );

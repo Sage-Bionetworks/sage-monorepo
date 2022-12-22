@@ -55,6 +55,16 @@ paths:
             $ref: '#/components/schemas/ChallengeStatus'
           type: array
         style: form
+      - description: An array of challenge platform ids used to filter the results.
+        explode: true
+        in: query
+        name: platform
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ChallengePlatformName'
+          type: array
+        style: form
       - description: An array of challenge difficulty levels used to filter the results.
         explode: true
         in: query
@@ -220,6 +230,17 @@ components:
           $ref: '#/components/schemas/ChallengeStatus'
         type: array
       style: form
+    platform:
+      description: An array of challenge platform ids used to filter the results.
+      explode: true
+      in: query
+      name: platform
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengePlatformName'
+        type: array
+      style: form
     difficulty:
       description: An array of challenge difficulty levels used to filter the results.
       explode: true
@@ -267,6 +288,13 @@ components:
       - active
       - completed
       example: active
+      type: string
+    ChallengePlatformName:
+      description: The name of the challenge platform.
+      example: example-challenge-platform
+      maxLength: 30
+      minLength: 3
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     ChallengeDifficulty:
       description: The difficulty level of a challenge.
@@ -332,13 +360,6 @@ components:
       example: 1
       format: int64
       type: integer
-    ChallengePlatformName:
-      description: The name of the challenge platform.
-      example: example-challenge-platform
-      maxLength: 30
-      minLength: 3
-      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-      type: string
     ChallengePlatformDisplayName:
       description: The display name of the challenge platform.
       example: Example Challenge Platform
