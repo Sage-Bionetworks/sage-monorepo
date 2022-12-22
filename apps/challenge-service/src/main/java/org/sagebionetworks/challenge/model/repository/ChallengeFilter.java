@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChallengeFilter {
   private List<String> status;
-  private List<String> platform;
+  private List<String> platforms;
   private List<String> difficulty;
 }

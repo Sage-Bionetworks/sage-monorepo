@@ -56,9 +56,12 @@ paths:
           type: array
         style: form
       - description: An array of challenge platform ids used to filter the results.
+        example:
+        - synapse
+        - codalab
         explode: true
         in: query
-        name: platform
+        name: platforms
         required: false
         schema:
           items:
@@ -230,11 +233,14 @@ components:
           $ref: '#/components/schemas/ChallengeStatus'
         type: array
       style: form
-    platform:
+    platforms:
       description: An array of challenge platform ids used to filter the results.
+      example:
+      - synapse
+      - codalab
       explode: true
       in: query
-      name: platform
+      name: platforms
       required: false
       schema:
         items:

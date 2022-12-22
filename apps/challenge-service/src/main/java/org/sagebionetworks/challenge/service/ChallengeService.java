@@ -33,7 +33,7 @@ public class ChallengeService {
       Integer pageNumber,
       Integer pageSize,
       List<ChallengeStatusDto> status,
-      List<String> platform,
+      List<String> platforms,
       List<ChallengeDifficultyDto> difficulty) {
 
     log.info("status {}", status);
@@ -44,8 +44,8 @@ public class ChallengeService {
     if (status != null) {
       builder.status(status.stream().map(s -> s.toString()).toList());
     }
-    if (platform != null) {
-      builder.platform(platform);
+    if (platforms != null) {
+      builder.platforms(platforms);
     }
     if (difficulty != null) {
       builder.difficulty(difficulty.stream().map(d -> d.toString()).toList());

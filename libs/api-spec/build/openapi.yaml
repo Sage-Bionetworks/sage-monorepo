@@ -33,7 +33,7 @@ paths:
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageSize'
         - $ref: '#/components/parameters/status'
-        - $ref: '#/components/parameters/platform'
+        - $ref: '#/components/parameters/platforms'
         - $ref: '#/components/parameters/difficulty'
       responses:
         '200':
@@ -688,8 +688,8 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeStatus'
-    platform:
-      name: platform
+    platforms:
+      name: platforms
       description: An array of challenge platform ids used to filter the results.
       in: query
       required: false
@@ -697,6 +697,9 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengePlatformName'
+      example:
+        - synapse
+        - codalab
     difficulty:
       name: difficulty
       description: An array of challenge difficulty levels used to filter the results.
