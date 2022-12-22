@@ -292,7 +292,7 @@ components:
       allOf:
       - $ref: '#/components/schemas/PageMetadata'
       - $ref: '#/components/schemas/ChallengesPage_allOf'
-      description: A page of challenges
+      description: A page of challenges.
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
@@ -355,6 +355,8 @@ components:
       - $ref: '#/components/schemas/ChallengePlatformsPage_allOf'
       description: A page of challenge platforms.
       type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
     Challenge_allOf:
       properties:
         id:
@@ -379,7 +381,7 @@ components:
     ChallengesPage_allOf:
       properties:
         challenges:
-          description: A list of challenges
+          description: A list of challenges.
           items:
             $ref: '#/components/schemas/Challenge'
           type: array
@@ -411,7 +413,7 @@ components:
     ChallengePlatformsPage_allOf:
       properties:
         challengePlatforms:
-          description: An array of challenge platforms
+          description: A list of challenge platforms.
           items:
             $ref: '#/components/schemas/ChallengePlatform'
           type: array

@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
 @Schema(name = "ChallengePlatformsPage", description = "A page of challenge platforms.")
 @JsonTypeName("ChallengePlatformsPage")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@lombok.Builder
 public class ChallengePlatformsPageDto {
 
   @JsonProperty("number")
@@ -196,7 +196,7 @@ public class ChallengePlatformsPageDto {
   }
 
   /**
-   * An array of challenge platforms
+   * A list of challenge platforms.
    *
    * @return challengePlatforms
    */
@@ -204,7 +204,7 @@ public class ChallengePlatformsPageDto {
   @Valid
   @Schema(
       name = "challengePlatforms",
-      description = "An array of challenge platforms",
+      description = "A list of challenge platforms.",
       required = true)
   public List<ChallengePlatformDto> getChallengePlatforms() {
     return challengePlatforms;

@@ -292,13 +292,13 @@ components:
             - updatedAt
     ChallengesPage:
       type: object
-      description: A page of challenges
+      description: A page of challenges.
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
             challenges:
-              description: A list of challenges
+              description: A list of challenges.
               type: array
               items:
                 $ref: '#/components/schemas/Challenge'
@@ -378,12 +378,14 @@ components:
         - type: object
           properties:
             challengePlatforms:
-              description: An array of challenge platforms
+              description: A list of challenge platforms.
               type: array
               items:
                 $ref: '#/components/schemas/ChallengePlatform'
           required:
             - challengePlatforms
+      x-java-class-annotations:
+        - '@lombok.Builder'
     Email:
       description: An email address.
       type: string

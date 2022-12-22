@@ -11,8 +11,8 @@ import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/** A page of challenges */
-@Schema(name = "ChallengesPage", description = "A page of challenges")
+/** A page of challenges. */
+@Schema(name = "ChallengesPage", description = "A page of challenges.")
 @JsonTypeName("ChallengesPage")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @lombok.Builder
@@ -194,13 +194,13 @@ public class ChallengesPageDto {
   }
 
   /**
-   * A list of challenges
+   * A list of challenges.
    *
    * @return challenges
    */
   @NotNull
   @Valid
-  @Schema(name = "challenges", description = "A list of challenges", required = true)
+  @Schema(name = "challenges", description = "A list of challenges.", required = true)
   public List<ChallengeDto> getChallenges() {
     return challenges;
   }

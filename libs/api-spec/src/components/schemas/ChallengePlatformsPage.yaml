@@ -5,9 +5,11 @@ allOf:
   - type: object
     properties:
       challengePlatforms:
-        description: An array of challenge platforms
+        description: A list of challenge platforms.
         type: array
         items:
           $ref: ChallengePlatform.yaml
     required:
       - challengePlatforms
+x-java-class-annotations:
+  - '@lombok.Builder'

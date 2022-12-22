@@ -1,11 +1,11 @@
 type: object
-description: A page of challenges
+description: A page of challenges.
 allOf:
   - $ref: PageMetadata.yaml
   - type: object
     properties:
       challenges:
-        description: A list of challenges
+        description: A list of challenges.
         type: array
         items:
           $ref: Challenge.yaml
