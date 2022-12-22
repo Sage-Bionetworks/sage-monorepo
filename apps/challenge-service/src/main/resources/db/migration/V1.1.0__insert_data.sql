@@ -1,3 +1,12 @@
+-- challenge.challenge_platform data
+
+INSERT INTO challenge_platform (id, name)
+VALUES ('1', 'Synapse'),
+  ('2', 'CodaLab'),
+  ('3', 'Kaggle');
+
+-- challenge.challenge data
+
 INSERT INTO challenge (id, name, status, difficulty)
 VALUES (
     '1',
