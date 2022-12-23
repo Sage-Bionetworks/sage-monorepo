@@ -2,6 +2,7 @@ package org.sagebionetworks.challenge.model.mapper;
 
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.util.model.mapper.BaseMapper;
@@ -28,6 +29,10 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
       dto.setDifficulty(ChallengeDifficultyDto.fromValue(entity.getDifficulty()));
       dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
+      dto.incentives(
+          entity.getIncentives().stream()
+              .map(i -> ChallengeIncentiveDto.fromValue(i.getName()))
+              .toList());
     }
     return dto;
   }
