@@ -31,6 +31,7 @@ paths:
         - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/platforms'
         - $ref: '#/components/parameters/difficulties'
+        - $ref: '#/components/parameters/incentives'
       responses:
         '200':
           content:
@@ -121,9 +122,6 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengePlatformName'
-      example:
-        - synapse
-        - codalab
     difficulties:
       name: difficulties
       description: An array of challenge difficulty levels used to filter the results.
@@ -133,6 +131,15 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeDifficulty'
+    incentives:
+      name: incentives
+      description: An array of challenge incentive types used to filter the results.
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengeIncentive'
     challengePlatformName:
       name: challengePlatformName
       in: path
@@ -164,6 +171,15 @@ components:
         - intermediate
         - advanced
       example: intermediate
+    ChallengeIncentive:
+      description: The incentive type of the challenge.
+      type: string
+      enum:
+        - monetary
+        - publication
+        - speaking_engagement
+        - other
+      example: publication
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -254,6 +270,10 @@ components:
           $ref: '#/components/schemas/ChallengeDifficulty'
         platform:
           $ref: '#/components/schemas/SimpleChallengePlatform'
+        incentives:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
         createdAt:
           type: string
           format: date-time
