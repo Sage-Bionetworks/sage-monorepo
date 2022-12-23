@@ -15,14 +15,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** The Challenge information saved to DB. */
 @Entity
-@Table(name = "challenge")
+@Table(name = "challenge_incentive")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChallengeEntity {
+public class ChallengeIncentiveEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,23 +31,10 @@ public class ChallengeEntity {
   @Column(nullable = false)
   private String name;
 
-  @Column(nullable = false)
-  private String status;
-
-  @Column(nullable = false)
-  private String difficulty;
-
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "platform_id", nullable = false)
-  private SimpleChallengePlatformEntity platform;
-
-  // @Transient
-  // @OneToMany(mappedBy = "challenge", fetch = FetchType.EAGER)
-  // private Set<ChallengeIncentiveEntity> incentives;
+  @JoinColumn(name = "challenge_id", nullable = false)
+  private ChallengeEntity challenge;
 
   @Column(name = "created_at")
   private OffsetDateTime createdAt;
-
-  @Column(name = "updated_at")
-  private OffsetDateTime updatedAt;
 }

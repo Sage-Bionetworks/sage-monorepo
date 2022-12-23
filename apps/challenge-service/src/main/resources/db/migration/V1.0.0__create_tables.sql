@@ -41,7 +41,6 @@ CREATE TABLE `challenge_incentive`
     `name`                  ENUM('monetary', 'publication', 'speaking_engagement', 'other'),
     `challenge_id`          bigint(20) NOT NULL,
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
-    `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
     CONSTRAINT unique_incentive UNIQUE (`name`, `challenge_id`)

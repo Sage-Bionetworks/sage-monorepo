@@ -4,6 +4,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.entity.QChallengeEntity;
+import org.sagebionetworks.challenge.model.entity.QChallengeIncentiveEntity;
 import org.sagebionetworks.challenge.model.entity.QSimpleChallengePlatformEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -24,6 +25,7 @@ public class ChallengeRepositoryCustomImpl extends QuerydslRepositorySupport
     QChallengeEntity challenge = QChallengeEntity.challengeEntity;
     QSimpleChallengePlatformEntity platform =
         QSimpleChallengePlatformEntity.simpleChallengePlatformEntity;
+    QChallengeIncentiveEntity incentive = QChallengeIncentiveEntity.challengeIncentiveEntity;
 
     JPQLQuery<ChallengeEntity> query =
         from(challenge).leftJoin(platform).on(challenge.platform.id.eq(platform.id));
