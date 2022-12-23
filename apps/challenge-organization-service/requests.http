@@ -8,7 +8,7 @@
 # Send the requests to the API gateway
 @basePath = {{apiGatewayHost}}/api/v1
 
-### List all the organizations
+### List the organizations
 
 GET {{basePath}}/organizations
 

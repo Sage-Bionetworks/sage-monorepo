@@ -60,13 +60,4 @@ app:
       client-id: challenge-api-client
       clientId: challenge-api-client
       client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
-# springdoc:
-#   version: openapi_3_1
-#   swagger-ui:
-#     path: /api/v1/api-docs/ui
-#     # url: /api/v1/api-docs/openapi.json
-#   api-docs:
-#     enabled: true
-#     path: /api/v1/api-docs/openapi.json
-#   packagesToScan: org.sagebionetworks.challenge.controller
-#   pathsToMatch: /**
+
