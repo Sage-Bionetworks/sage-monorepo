@@ -4,9 +4,9 @@
 ### Select the base path
 
 # Send the requests directly to the service 
-# @basePath = {{challengeServiceHost}}/v1
+@basePath = {{challengeServiceHost}}/v1
 # Send the requests to the API gateway
-@basePath = {{apiGatewayHost}}/api/v1
+# @basePath = {{apiGatewayHost}}/api/v1
 
 ### List the challenges
 
