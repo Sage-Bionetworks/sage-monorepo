@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.annotation.Generated;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ public interface ChallengeApiDelegate {
    * @param platforms An array of challenge platform ids used to filter the results. (optional)
    * @param difficulties An array of challenge difficulty levels used to filter the results.
    *     (optional)
+   * @param incentives An array of challenge incentive types used to filter the results. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    * @see ChallengeApi#listChallenges
@@ -40,7 +42,8 @@ public interface ChallengeApiDelegate {
       Integer pageSize,
       List<ChallengeStatusDto> status,
       List<String> platforms,
-      List<ChallengeDifficultyDto> difficulties) {
+      List<ChallengeDifficultyDto> difficulties,
+      List<ChallengeIncentiveDto> incentives) {
     getRequest()
         .ifPresent(
             request -> {

@@ -37,6 +37,9 @@ public class ChallengeRepositoryCustomImpl extends QuerydslRepositorySupport
     if (filter.getDifficulties() != null && filter.getDifficulties().size() > 0) {
       query = query.where(challenge.difficulty.in(filter.getDifficulties()));
     }
+    if (filter.getIncentives() != null && filter.getIncentives().size() > 0) {
+      // query = query.where(challenge.incen.in(filter.getIncentives()));
+    }
 
     query = super.getQuerydsl().applyPagination(pageable, query);
 

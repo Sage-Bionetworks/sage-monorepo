@@ -14,4 +14,5 @@ public class ChallengeFilter {
   private List<String> status;
   private List<String> platforms;
   private List<String> difficulties;
+  private List<String> incentives;
 }

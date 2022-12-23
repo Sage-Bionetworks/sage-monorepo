@@ -42,6 +42,9 @@ public class ChallengeEntity {
   @JoinColumn(name = "platform_id")
   private SimpleChallengePlatformEntity platform;
 
+  // @Column(nullable = false)
+  // private List<String> incentives;
+
   @Column(name = "created_at")
   private OffsetDateTime createdAt;
 
