@@ -1,21 +1,21 @@
+@challengeServiceHost = http://challenge-service:8085
 @apiGatewayHost = http://challenge-api-gateway:8082
-@challengeServiceHost = http://challenge-organization-service:8085
 
-### Select the desired base path
+### Select the base path
 
-# Send the request directly to the service 
+# Send the requests directly to the service 
 # @basePath = {{challengeServiceHost}}/v1
-# Send the request to the API gateway
+# Send the requests to the API gateway
 @basePath = {{apiGatewayHost}}/api/v1
 
 ### List the challenges
 
 GET {{basePath}}/challenges
 
-### List the challenge platform
+### List the challenge platforms
 
 GET {{basePath}}/challengePlatforms
 
-### List the challenge platform (via the API gateway)
+### Get a challenge platform by ID
 
 GET {{basePath}}/challengePlatforms/synapse

@@ -53,7 +53,7 @@ spring:
         - id: challenge-service
           uri: lb://challenge-service
           predicates:
-            - Path=/api/v1/challenges/**,/api/v1/challengePlatforms/**
+            - Path=/api/v1/challenges/**
           filters:
             - StripPrefix=1
         # - id: challenge-core-service
