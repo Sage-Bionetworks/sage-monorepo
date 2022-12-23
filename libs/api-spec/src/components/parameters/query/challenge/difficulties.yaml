@@ -1,4 +1,4 @@
-name: difficulty
+name: difficulties
 description: An array of challenge difficulty levels used to filter the results.
 in: query
 required: false

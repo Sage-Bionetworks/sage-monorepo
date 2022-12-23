@@ -30,7 +30,7 @@ paths:
         - $ref: '#/components/parameters/pageSize'
         - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/platforms'
-        - $ref: '#/components/parameters/difficulty'
+        - $ref: '#/components/parameters/difficulties'
       responses:
         '200':
           content:
@@ -124,8 +124,8 @@ components:
       example:
         - synapse
         - codalab
-    difficulty:
-      name: difficulty
+    difficulties:
+      name: difficulties
       description: An array of challenge difficulty levels used to filter the results.
       in: query
       required: false
