@@ -20,6 +20,10 @@ GET {{basePath}}/challenges?platforms=synapse
 
 GET {{basePath}}/challenges?difficulties=intermediate
 
+### List the challenges with a monetary or publication incentive
+
+GET {{basePath}}/challenges?incentives=monetary,publication
+
 ### List the challenge platforms
 
 GET {{basePath}}/challengePlatforms
