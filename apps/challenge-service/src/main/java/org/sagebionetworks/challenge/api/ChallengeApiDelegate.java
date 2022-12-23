@@ -29,7 +29,7 @@ public interface ChallengeApiDelegate {
    * @param pageSize The number of items in a single page (optional, default to 100)
    * @param status An array of challenge status used to filter the results. (optional)
    * @param platforms An array of challenge platform ids used to filter the results. (optional)
-   * @param difficulty An array of challenge difficulty levels used to filter the results.
+   * @param difficulties An array of challenge difficulty levels used to filter the results.
    *     (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
@@ -40,7 +40,7 @@ public interface ChallengeApiDelegate {
       Integer pageSize,
       List<ChallengeStatusDto> status,
       List<String> platforms,
-      List<ChallengeDifficultyDto> difficulty) {
+      List<ChallengeDifficultyDto> difficulties) {
     getRequest()
         .ifPresent(
             request -> {

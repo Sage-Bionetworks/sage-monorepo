@@ -71,7 +71,7 @@ paths:
       - description: An array of challenge difficulty levels used to filter the results.
         explode: true
         in: query
-        name: difficulty
+        name: difficulties
         required: false
         schema:
           items:
@@ -247,11 +247,11 @@ components:
           $ref: '#/components/schemas/ChallengePlatformName'
         type: array
       style: form
-    difficulty:
+    difficulties:
       description: An array of challenge difficulty levels used to filter the results.
       explode: true
       in: query
-      name: difficulty
+      name: difficulties
       required: false
       schema:
         items:

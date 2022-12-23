@@ -44,7 +44,7 @@ get:
     # - $ref: parameters/inputDataTypes.yaml
     - $ref: ../components/parameters/query/challenge/status.yaml
     - $ref: ../components/parameters/query/challenge/platforms.yaml
-    - $ref: ../components/parameters/query/challenge/difficulty.yaml
+    - $ref: ../components/parameters/query/challenge/difficulties.yaml
     # - $ref: parameters/challenge/submissionTypes.yaml
 
     # - $ref: ../components/parameters/query/challenge/incentiveTypes.yaml
