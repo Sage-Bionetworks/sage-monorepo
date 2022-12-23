@@ -11,6 +11,10 @@ properties:
     $ref: ChallengeDifficulty.yaml
   platform:
     $ref: SimpleChallengePlatform.yaml
+  incentives:
+    type: array
+    items:
+      $ref: ChallengeIncentive.yaml
   #   fullName:
   #     type: string
   #   ownerId:

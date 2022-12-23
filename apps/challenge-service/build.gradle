@@ -38,6 +38,14 @@ repositories {
 dependencies {
   api 'com.querydsl:querydsl-jpa:5.0.0' // QueryDSL must have
 
+  // Querydsl
+  // implementation group: 'com.querydsl', name: 'querydsl-jpa', version: '5.0.0'
+  // implementation group: 'com.querydsl', name: 'querydsl-apt', version: '5.0.0'
+  // implementation group: 'com.querydsl', name: 'querydsl-core', version: '5.0.0'
+
+  // annotationProcessor group: 'com.querydsl', name: 'querydsl-apt', version: '5.0.0'
+  // annotationProcessor group: 'com.querydsl', 'name': 'querydsl-apt', version: '5.0.0', classifier: 'jpa'
+
   annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
   annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jpa' // QueryDSL must have (exactly this way, including :jpa)
   annotationProcessor 'javax.annotation:javax.annotation-api' // QueryDSL must have

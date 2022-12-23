@@ -29,3 +29,10 @@ VALUES (
     'advanced',
     '2'
   );
+
+-- challenge.challenge_incentive data
+
+INSERT INTO challenge_incentive (id, name, challenge_id)
+VALUES ('1', 'monetary', 1),
+  ('2', 'publication', 1),
+  ('3', 'monetary', 2);

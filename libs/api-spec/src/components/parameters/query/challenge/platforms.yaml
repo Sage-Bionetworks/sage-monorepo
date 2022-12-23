@@ -6,6 +6,3 @@ schema:
   type: array
   items:
     $ref: ../../../schemas/ChallengePlatformName.yaml
-example:
-  - synapse
-  - codalab

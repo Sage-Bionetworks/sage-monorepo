@@ -2,6 +2,7 @@ package org.sagebionetworks.challenge.api;
 
 import java.util.List;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.service.ChallengeService;
@@ -20,9 +21,11 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
       Integer pageSize,
       List<ChallengeStatusDto> status,
       List<String> platforms,
-      List<ChallengeDifficultyDto> difficulties) {
+      List<ChallengeDifficultyDto> difficulties,
+      List<ChallengeIncentiveDto> incentives) {
     return ResponseEntity.ok(
-        challengeService.listChallenges(pageNumber, pageSize, status, platforms, difficulties));
+        challengeService.listChallenges(
+            pageNumber, pageSize, status, platforms, difficulties, incentives));
   }
 
   // @Override

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.annotation.Generated;
 import javax.validation.Valid;
@@ -32,6 +34,10 @@ public class ChallengeDto {
 
   @JsonProperty("platform")
   private SimpleChallengePlatformDto platform;
+
+  @JsonProperty("incentives")
+  @Valid
+  private List<ChallengeIncentiveDto> incentives = null;
 
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -154,6 +160,34 @@ public class ChallengeDto {
     this.platform = platform;
   }
 
+  public ChallengeDto incentives(List<ChallengeIncentiveDto> incentives) {
+    this.incentives = incentives;
+    return this;
+  }
+
+  public ChallengeDto addIncentivesItem(ChallengeIncentiveDto incentivesItem) {
+    if (this.incentives == null) {
+      this.incentives = new ArrayList<>();
+    }
+    this.incentives.add(incentivesItem);
+    return this;
+  }
+
+  /**
+   * Get incentives
+   *
+   * @return incentives
+   */
+  @Valid
+  @Schema(name = "incentives", required = false)
+  public List<ChallengeIncentiveDto> getIncentives() {
+    return incentives;
+  }
+
+  public void setIncentives(List<ChallengeIncentiveDto> incentives) {
+    this.incentives = incentives;
+  }
+
   public ChallengeDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
@@ -210,13 +244,14 @@ public class ChallengeDto {
         && Objects.equals(this.status, challenge.status)
         && Objects.equals(this.difficulty, challenge.difficulty)
         && Objects.equals(this.platform, challenge.platform)
+        && Objects.equals(this.incentives, challenge.incentives)
         && Objects.equals(this.createdAt, challenge.createdAt)
         && Objects.equals(this.updatedAt, challenge.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, status, difficulty, platform, createdAt, updatedAt);
+    return Objects.hash(id, name, status, difficulty, platform, incentives, createdAt, updatedAt);
   }
 
   @Override
@@ -228,6 +263,7 @@ public class ChallengeDto {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
+    sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");

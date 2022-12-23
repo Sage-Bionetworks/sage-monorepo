@@ -4,9 +4,9 @@
 ### Select the base path
 
 # Send the requests directly to the service 
-# @basePath = {{challengeServiceHost}}/v1
+@basePath = {{challengeServiceHost}}/v1
 # Send the requests to the API gateway
-@basePath = {{apiGatewayHost}}/api/v1
+# @basePath = {{apiGatewayHost}}/api/v1
 
 ### List the challenges
 
@@ -19,6 +19,10 @@ GET {{basePath}}/challenges?platforms=synapse
 ### List the challenges with intermediate difficulty
 
 GET {{basePath}}/challenges?difficulties=intermediate
+
+### List the challenges with a monetary or publication incentive
+
+GET {{basePath}}/challenges?incentives=monetary,publication
 
 ### List the challenge platforms
 

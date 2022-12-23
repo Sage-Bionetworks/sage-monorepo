@@ -56,9 +56,6 @@ paths:
           type: array
         style: form
       - description: An array of challenge platform ids used to filter the results.
-        example:
-        - synapse
-        - codalab
         explode: true
         in: query
         name: platforms
@@ -76,6 +73,16 @@ paths:
         schema:
           items:
             $ref: '#/components/schemas/ChallengeDifficulty'
+          type: array
+        style: form
+      - description: An array of challenge incentive types used to filter the results.
+        explode: true
+        in: query
+        name: incentives
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
           type: array
         style: form
       responses:
@@ -235,9 +242,6 @@ components:
       style: form
     platforms:
       description: An array of challenge platform ids used to filter the results.
-      example:
-      - synapse
-      - codalab
       explode: true
       in: query
       name: platforms
@@ -256,6 +260,17 @@ components:
       schema:
         items:
           $ref: '#/components/schemas/ChallengeDifficulty'
+        type: array
+      style: form
+    incentives:
+      description: An array of challenge incentive types used to filter the results.
+      explode: true
+      in: query
+      name: incentives
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeIncentive'
         type: array
       style: form
     challengePlatformName:
@@ -309,6 +324,15 @@ components:
       - intermediate
       - advanced
       example: intermediate
+      type: string
+    ChallengeIncentive:
+      description: The incentive type of the challenge.
+      enum:
+      - monetary
+      - publication
+      - speaking_engagement
+      - other
+      example: publication
       type: string
     PageMetadata:
       description: The metadata of a page.
@@ -419,6 +443,10 @@ components:
           $ref: '#/components/schemas/ChallengeDifficulty'
         platform:
           $ref: '#/components/schemas/SimpleChallengePlatform'
+        incentives:
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
+          type: array
         createdAt:
           example: 2022-07-04T22:19:11Z
           format: date-time

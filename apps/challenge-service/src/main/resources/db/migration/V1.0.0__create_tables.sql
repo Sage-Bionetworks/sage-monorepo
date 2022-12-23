@@ -32,3 +32,16 @@ CREATE TABLE `challenge`
 
 -- KEY                `FKk9w2ogq595jbe8r2due7vv3xr` (`account_id`),
 -- CONSTRAINT `FKk9w2ogq595jbe8r2due7vv3xr` FOREIGN KEY (`account_id`) REFERENCES `banking_core_account` (`id`)
+
+-- challenge.challenge_incentive definition
+
+CREATE TABLE `challenge_incentive`
+(
+    `id`                    int NOT NULL AUTO_INCREMENT,
+    `name`                  ENUM('monetary', 'publication', 'speaking_engagement', 'other'),
+    `challenge_id`          bigint(20) NOT NULL,
+    `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
+    CONSTRAINT unique_incentive UNIQUE (`name`, `challenge_id`)
+);

@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
@@ -34,7 +35,8 @@ public class ChallengeService {
       Integer pageSize,
       List<ChallengeStatusDto> status,
       List<String> platforms,
-      List<ChallengeDifficultyDto> difficulties) {
+      List<ChallengeDifficultyDto> difficulties,
+      List<ChallengeIncentiveDto> incentives) {
 
     log.info("status {}", status);
     log.info("difficulty {}", difficulties);
@@ -49,6 +51,9 @@ public class ChallengeService {
     }
     if (difficulties != null) {
       builder.difficulties(difficulties.stream().map(d -> d.toString()).toList());
+    }
+    if (incentives != null) {
+      builder.incentives(incentives.stream().map(i -> i.toString()).toList());
     }
     ChallengeFilter filter = builder.build();
 
