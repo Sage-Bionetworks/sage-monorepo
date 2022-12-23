@@ -34,10 +34,10 @@ public class ChallengeService {
       Integer pageSize,
       List<ChallengeStatusDto> status,
       List<String> platforms,
-      List<ChallengeDifficultyDto> difficulty) {
+      List<ChallengeDifficultyDto> difficulties) {
 
     log.info("status {}", status);
-    log.info("difficulty {}", difficulty);
+    log.info("difficulty {}", difficulties);
 
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     ChallengeFilterBuilder builder = ChallengeFilter.builder();
@@ -47,8 +47,8 @@ public class ChallengeService {
     if (platforms != null) {
       builder.platforms(platforms);
     }
-    if (difficulty != null) {
-      builder.difficulty(difficulty.stream().map(d -> d.toString()).toList());
+    if (difficulties != null) {
+      builder.difficulties(difficulties.stream().map(d -> d.toString()).toList());
     }
     ChallengeFilter filter = builder.build();
 

@@ -16,6 +16,10 @@ GET {{basePath}}/challenges
 
 GET {{basePath}}/challenges?platforms=synapse
 
+### List the challenges with intermediate difficulty
+
+GET {{basePath}}/challenges?difficulties=intermediate
+
 ### List the challenge platforms
 
 GET {{basePath}}/challengePlatforms
