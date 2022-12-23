@@ -1,7 +1,7 @@
 package org.sagebionetworks.challenge.exception;
 
-public class OrganizationAlreadyExistsException extends SimpleChallengeGlobalException {
-  public OrganizationAlreadyExistsException(String detail) {
+public class InvalidChallengeException extends SimpleChallengeGlobalException {
+  public InvalidChallengeException(String detail) {
     super(
         ErrorConstants.ENTITY_NOT_FOUND.getType(),
         ErrorConstants.ENTITY_NOT_FOUND.getTitle(),

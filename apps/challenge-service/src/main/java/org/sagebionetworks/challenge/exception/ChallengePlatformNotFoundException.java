@@ -1,7 +1,7 @@
 package org.sagebionetworks.challenge.exception;
 
-public class InvalidOrganizationException extends SimpleChallengeGlobalException {
-  public InvalidOrganizationException(String detail) {
+public class ChallengePlatformNotFoundException extends SimpleChallengeGlobalException {
+  public ChallengePlatformNotFoundException(String detail) {
     super(
         ErrorConstants.ENTITY_NOT_FOUND.getType(),
         ErrorConstants.ENTITY_NOT_FOUND.getTitle(),

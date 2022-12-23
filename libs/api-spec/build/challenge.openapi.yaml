@@ -15,6 +15,8 @@ servers:
 tags:
   - name: Challenge
     description: Operations about challenges.
+  - name: ChallengePlatform
+    description: Operations about challenge platforms.
 paths:
   /challenges:
     get:
@@ -27,6 +29,7 @@ paths:
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageSize'
         - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/platforms'
         - $ref: '#/components/parameters/difficulty'
       responses:
         '200':
@@ -37,6 +40,47 @@ paths:
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challengePlatforms:
+    get:
+      tags:
+        - ChallengePlatform
+      summary: List challenge platforms
+      description: List challenge platforms
+      operationId: listChallengePlatforms
+      parameters:
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatformsPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challengePlatforms/{challengePlatformName}:
+    parameters:
+      - $ref: '#/components/parameters/challengePlatformName'
+    get:
+      tags:
+        - ChallengePlatform
+      summary: Get a challenge platform
+      description: Returns the challenge platform specified
+      operationId: getChallengePlatform
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatform'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -68,6 +112,18 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeStatus'
+    platforms:
+      name: platforms
+      description: An array of challenge platform ids used to filter the results.
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengePlatformName'
+      example:
+        - synapse
+        - codalab
     difficulty:
       name: difficulty
       description: An array of challenge difficulty levels used to filter the results.
@@ -77,6 +133,13 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeDifficulty'
+    challengePlatformName:
+      name: challengePlatformName
+      in: path
+      description: The unique identifier of the challenge platform.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengePlatformName'
   schemas:
     ChallengeStatus:
       description: The status of the challenge.
@@ -86,6 +149,13 @@ components:
         - active
         - completed
       example: active
+    ChallengePlatformName:
+      description: The name of the challenge platform.
+      type: string
+      minLength: 3
+      maxLength: 30
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example: example-challenge-platform
     ChallengeDifficulty:
       description: The difficulty level of a challenge.
       type: string
@@ -133,57 +203,82 @@ components:
         - totalPages
         - hasNext
         - hasPrevious
-    ChallengeCreateRequest:
-      type: object
-      description: The information used to create a challenge
-      properties:
-        name:
-          type: string
-          minLength: 3
-          maxLength: 60
-          example: Example challenge
-        status:
-          $ref: '#/components/schemas/ChallengeStatus'
-        difficulty:
-          $ref: '#/components/schemas/ChallengeDifficulty'
-      required:
-        - name
-        - status
     ChallengeId:
       description: The unique identifier of a challenge.
       type: integer
       format: int64
       example: 1
+    ChallengeName:
+      description: The name of the a challenge
+      type: string
+      minLength: 3
+      maxLength: 60
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example: awesome-challenge
+    ChallengePlatformId:
+      description: The unique identifier of a challenge platform.
+      type: integer
+      format: int64
+      example: 1
+    ChallengePlatformDisplayName:
+      description: The display name of the challenge platform.
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: Example Challenge Platform
+    SimpleChallengePlatform:
+      type: object
+      description: A simple challenge platform
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengePlatformId'
+        name:
+          $ref: '#/components/schemas/ChallengePlatformName'
+        displayName:
+          $ref: '#/components/schemas/ChallengePlatformDisplayName'
+      required:
+        - id
+        - name
+        - displayName
     Challenge:
       type: object
       description: A challenge
-      allOf:
-        - $ref: '#/components/schemas/ChallengeCreateRequest'
-        - type: object
-          properties:
-            id:
-              $ref: '#/components/schemas/ChallengeId'
-            createdAt:
-              type: string
-              format: date-time
-              example: '2022-07-04T22:19:11Z'
-            updatedAt:
-              type: string
-              format: date-time
-              example: '2022-07-04T22:19:11Z'
-          required:
-            - id
-            - createdAt
-            - updatedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengeId'
+        name:
+          $ref: '#/components/schemas/ChallengeName'
+        status:
+          $ref: '#/components/schemas/ChallengeStatus'
+        difficulty:
+          $ref: '#/components/schemas/ChallengeDifficulty'
+        platform:
+          $ref: '#/components/schemas/SimpleChallengePlatform'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
+      required:
+        - id
+        - name
+        - status
+        - difficulty
+        - platform
+        - createdAt
+        - updatedAt
     ChallengesPage:
       type: object
-      description: A page of challenges
+      description: A page of challenges.
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
             challenges:
-              description: A list of challenges
+              description: A list of challenges.
               type: array
               items:
                 $ref: '#/components/schemas/Challenge'
@@ -212,6 +307,54 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengePlatformCreateRequest:
+      type: object
+      description: The information used to create a challenge platform
+      properties:
+        displayName:
+          $ref: '#/components/schemas/ChallengePlatformDisplayName'
+      required:
+        - displayName
+    ChallengePlatform:
+      type: object
+      description: A challenge platform
+      allOf:
+        - $ref: '#/components/schemas/ChallengePlatformCreateRequest'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/ChallengePlatformId'
+            name:
+              $ref: '#/components/schemas/ChallengePlatformName'
+            createdAt:
+              type: string
+              format: date-time
+              example: '2022-07-04T22:19:11Z'
+            updatedAt:
+              type: string
+              format: date-time
+              example: '2022-07-04T22:19:11Z'
+          required:
+            - id
+            - name
+            - createdAt
+            - updatedAt
+    ChallengePlatformsPage:
+      type: object
+      description: A page of challenge platforms.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            challengePlatforms:
+              description: A list of challenge platforms.
+              type: array
+              items:
+                $ref: '#/components/schemas/ChallengePlatform'
+          required:
+            - challengePlatforms
+      x-java-class-annotations:
+        - '@lombok.Builder'
   responses:
     BadRequest:
       description: Invalid request
@@ -221,6 +364,12 @@ components:
             $ref: '#/components/schemas/BasicError'
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
       content:
         application/problem+json:
           schema:

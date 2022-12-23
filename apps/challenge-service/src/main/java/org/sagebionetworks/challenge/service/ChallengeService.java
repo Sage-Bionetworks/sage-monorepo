@@ -9,6 +9,7 @@ import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeMapper;
 import org.sagebionetworks.challenge.model.repository.ChallengeFilter;
+import org.sagebionetworks.challenge.model.repository.ChallengeFilter.ChallengeFilterBuilder;
 import org.sagebionetworks.challenge.model.repository.ChallengeRepository;
 import org.sagebionetworks.challenge.model.repository.ChallengeRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +33,24 @@ public class ChallengeService {
       Integer pageNumber,
       Integer pageSize,
       List<ChallengeStatusDto> status,
+      List<String> platforms,
       List<ChallengeDifficultyDto> difficulty) {
 
     log.info("status {}", status);
     log.info("difficulty {}", difficulty);
 
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
-    ChallengeFilter filter =
-        ChallengeFilter.builder()
-            .difficulty(difficulty.stream().map(d -> d.toString()).toList())
-            .status(status.stream().map(s -> s.toString()).toList())
-            .build();
+    ChallengeFilterBuilder builder = ChallengeFilter.builder();
+    if (status != null) {
+      builder.status(status.stream().map(s -> s.toString()).toList());
+    }
+    if (platforms != null) {
+      builder.platforms(platforms);
+    }
+    if (difficulty != null) {
+      builder.difficulty(difficulty.stream().map(d -> d.toString()).toList());
+    }
+    ChallengeFilter filter = builder.build();
 
     Page<ChallengeEntity> challengeEntitiesPage =
         challengeRepositoryCustom.findAll(pageable, filter);

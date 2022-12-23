@@ -11,27 +11,21 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-/** A challenge */
-@Schema(name = "Challenge", description = "A challenge")
-@JsonTypeName("Challenge")
+/** A challenge platform */
+@Schema(name = "ChallengePlatform", description = "A challenge platform")
+@JsonTypeName("ChallengePlatform")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations
-public class ChallengeDto {
+public class ChallengePlatformDto {
+
+  @JsonProperty("displayName")
+  private String displayName;
 
   @JsonProperty("id")
   private Long id;
 
   @JsonProperty("name")
   private String name;
-
-  @JsonProperty("status")
-  private ChallengeStatusDto status;
-
-  @JsonProperty("difficulty")
-  private ChallengeDifficultyDto difficulty;
-
-  @JsonProperty("platform")
-  private SimpleChallengePlatformDto platform;
 
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -41,13 +35,38 @@ public class ChallengeDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
-  public ChallengeDto id(Long id) {
+  public ChallengePlatformDto displayName(String displayName) {
+    this.displayName = displayName;
+    return this;
+  }
+
+  /**
+   * The display name of the challenge platform.
+   *
+   * @return displayName
+   */
+  @NotNull
+  @Size(min = 3, max = 50)
+  @Schema(
+      name = "displayName",
+      example = "Example Challenge Platform",
+      description = "The display name of the challenge platform.",
+      required = true)
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
+
+  public ChallengePlatformDto id(Long id) {
     this.id = id;
     return this;
   }
 
   /**
-   * The unique identifier of a challenge.
+   * The unique identifier of a challenge platform.
    *
    * @return id
    */
@@ -55,7 +74,7 @@ public class ChallengeDto {
   @Schema(
       name = "id",
       example = "1",
-      description = "The unique identifier of a challenge.",
+      description = "The unique identifier of a challenge platform.",
       required = true)
   public Long getId() {
     return id;
@@ -65,23 +84,23 @@ public class ChallengeDto {
     this.id = id;
   }
 
-  public ChallengeDto name(String name) {
+  public ChallengePlatformDto name(String name) {
     this.name = name;
     return this;
   }
 
   /**
-   * The name of the a challenge
+   * The name of the challenge platform.
    *
    * @return name
    */
   @NotNull
   @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-  @Size(min = 3, max = 60)
+  @Size(min = 3, max = 30)
   @Schema(
       name = "name",
-      example = "awesome-challenge",
-      description = "The name of the a challenge",
+      example = "example-challenge-platform",
+      description = "The name of the challenge platform.",
       required = true)
   public String getName() {
     return name;
@@ -91,70 +110,7 @@ public class ChallengeDto {
     this.name = name;
   }
 
-  public ChallengeDto status(ChallengeStatusDto status) {
-    this.status = status;
-    return this;
-  }
-
-  /**
-   * Get status
-   *
-   * @return status
-   */
-  @NotNull
-  @Valid
-  @Schema(name = "status", required = true)
-  public ChallengeStatusDto getStatus() {
-    return status;
-  }
-
-  public void setStatus(ChallengeStatusDto status) {
-    this.status = status;
-  }
-
-  public ChallengeDto difficulty(ChallengeDifficultyDto difficulty) {
-    this.difficulty = difficulty;
-    return this;
-  }
-
-  /**
-   * Get difficulty
-   *
-   * @return difficulty
-   */
-  @NotNull
-  @Valid
-  @Schema(name = "difficulty", required = true)
-  public ChallengeDifficultyDto getDifficulty() {
-    return difficulty;
-  }
-
-  public void setDifficulty(ChallengeDifficultyDto difficulty) {
-    this.difficulty = difficulty;
-  }
-
-  public ChallengeDto platform(SimpleChallengePlatformDto platform) {
-    this.platform = platform;
-    return this;
-  }
-
-  /**
-   * Get platform
-   *
-   * @return platform
-   */
-  @NotNull
-  @Valid
-  @Schema(name = "platform", required = true)
-  public SimpleChallengePlatformDto getPlatform() {
-    return platform;
-  }
-
-  public void setPlatform(SimpleChallengePlatformDto platform) {
-    this.platform = platform;
-  }
-
-  public ChallengeDto createdAt(OffsetDateTime createdAt) {
+  public ChallengePlatformDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
@@ -175,7 +131,7 @@ public class ChallengeDto {
     this.createdAt = createdAt;
   }
 
-  public ChallengeDto updatedAt(OffsetDateTime updatedAt) {
+  public ChallengePlatformDto updatedAt(OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
     return this;
   }
@@ -204,30 +160,26 @@ public class ChallengeDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ChallengeDto challenge = (ChallengeDto) o;
-    return Objects.equals(this.id, challenge.id)
-        && Objects.equals(this.name, challenge.name)
-        && Objects.equals(this.status, challenge.status)
-        && Objects.equals(this.difficulty, challenge.difficulty)
-        && Objects.equals(this.platform, challenge.platform)
-        && Objects.equals(this.createdAt, challenge.createdAt)
-        && Objects.equals(this.updatedAt, challenge.updatedAt);
+    ChallengePlatformDto challengePlatform = (ChallengePlatformDto) o;
+    return Objects.equals(this.displayName, challengePlatform.displayName)
+        && Objects.equals(this.id, challengePlatform.id)
+        && Objects.equals(this.name, challengePlatform.name)
+        && Objects.equals(this.createdAt, challengePlatform.createdAt)
+        && Objects.equals(this.updatedAt, challengePlatform.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, status, difficulty, platform, createdAt, updatedAt);
+    return Objects.hash(displayName, id, name, createdAt, updatedAt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ChallengeDto {\n");
+    sb.append("class ChallengePlatformDto {\n");
+    sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
-    sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");

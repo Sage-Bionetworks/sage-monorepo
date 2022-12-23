@@ -11,12 +11,12 @@ import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/** A page of challenges. */
-@Schema(name = "ChallengesPage", description = "A page of challenges.")
-@JsonTypeName("ChallengesPage")
+/** A page of challenge platforms. */
+@Schema(name = "ChallengePlatformsPage", description = "A page of challenge platforms.")
+@JsonTypeName("ChallengePlatformsPage")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @lombok.Builder
-public class ChallengesPageDto {
+public class ChallengePlatformsPageDto {
 
   @JsonProperty("number")
   private Integer number;
@@ -36,11 +36,11 @@ public class ChallengesPageDto {
   @JsonProperty("hasPrevious")
   private Boolean hasPrevious;
 
-  @JsonProperty("challenges")
+  @JsonProperty("challengePlatforms")
   @Valid
-  private List<ChallengeDto> challenges = new ArrayList<>();
+  private List<ChallengePlatformDto> challengePlatforms = new ArrayList<>();
 
-  public ChallengesPageDto number(Integer number) {
+  public ChallengePlatformsPageDto number(Integer number) {
     this.number = number;
     return this;
   }
@@ -60,7 +60,7 @@ public class ChallengesPageDto {
     this.number = number;
   }
 
-  public ChallengesPageDto size(Integer size) {
+  public ChallengePlatformsPageDto size(Integer size) {
     this.size = size;
     return this;
   }
@@ -84,7 +84,7 @@ public class ChallengesPageDto {
     this.size = size;
   }
 
-  public ChallengesPageDto totalElements(Long totalElements) {
+  public ChallengePlatformsPageDto totalElements(Long totalElements) {
     this.totalElements = totalElements;
     return this;
   }
@@ -108,7 +108,7 @@ public class ChallengesPageDto {
     this.totalElements = totalElements;
   }
 
-  public ChallengesPageDto totalPages(Integer totalPages) {
+  public ChallengePlatformsPageDto totalPages(Integer totalPages) {
     this.totalPages = totalPages;
     return this;
   }
@@ -132,7 +132,7 @@ public class ChallengesPageDto {
     this.totalPages = totalPages;
   }
 
-  public ChallengesPageDto hasNext(Boolean hasNext) {
+  public ChallengePlatformsPageDto hasNext(Boolean hasNext) {
     this.hasNext = hasNext;
     return this;
   }
@@ -156,7 +156,7 @@ public class ChallengesPageDto {
     this.hasNext = hasNext;
   }
 
-  public ChallengesPageDto hasPrevious(Boolean hasPrevious) {
+  public ChallengePlatformsPageDto hasPrevious(Boolean hasPrevious) {
     this.hasPrevious = hasPrevious;
     return this;
   }
@@ -180,33 +180,38 @@ public class ChallengesPageDto {
     this.hasPrevious = hasPrevious;
   }
 
-  public ChallengesPageDto challenges(List<ChallengeDto> challenges) {
-    this.challenges = challenges;
+  public ChallengePlatformsPageDto challengePlatforms(
+      List<ChallengePlatformDto> challengePlatforms) {
+    this.challengePlatforms = challengePlatforms;
     return this;
   }
 
-  public ChallengesPageDto addChallengesItem(ChallengeDto challengesItem) {
-    if (this.challenges == null) {
-      this.challenges = new ArrayList<>();
+  public ChallengePlatformsPageDto addChallengePlatformsItem(
+      ChallengePlatformDto challengePlatformsItem) {
+    if (this.challengePlatforms == null) {
+      this.challengePlatforms = new ArrayList<>();
     }
-    this.challenges.add(challengesItem);
+    this.challengePlatforms.add(challengePlatformsItem);
     return this;
   }
 
   /**
-   * A list of challenges.
+   * A list of challenge platforms.
    *
-   * @return challenges
+   * @return challengePlatforms
    */
   @NotNull
   @Valid
-  @Schema(name = "challenges", description = "A list of challenges.", required = true)
-  public List<ChallengeDto> getChallenges() {
-    return challenges;
+  @Schema(
+      name = "challengePlatforms",
+      description = "A list of challenge platforms.",
+      required = true)
+  public List<ChallengePlatformDto> getChallengePlatforms() {
+    return challengePlatforms;
   }
 
-  public void setChallenges(List<ChallengeDto> challenges) {
-    this.challenges = challenges;
+  public void setChallengePlatforms(List<ChallengePlatformDto> challengePlatforms) {
+    this.challengePlatforms = challengePlatforms;
   }
 
   @Override
@@ -217,32 +222,33 @@ public class ChallengesPageDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ChallengesPageDto challengesPage = (ChallengesPageDto) o;
-    return Objects.equals(this.number, challengesPage.number)
-        && Objects.equals(this.size, challengesPage.size)
-        && Objects.equals(this.totalElements, challengesPage.totalElements)
-        && Objects.equals(this.totalPages, challengesPage.totalPages)
-        && Objects.equals(this.hasNext, challengesPage.hasNext)
-        && Objects.equals(this.hasPrevious, challengesPage.hasPrevious)
-        && Objects.equals(this.challenges, challengesPage.challenges);
+    ChallengePlatformsPageDto challengePlatformsPage = (ChallengePlatformsPageDto) o;
+    return Objects.equals(this.number, challengePlatformsPage.number)
+        && Objects.equals(this.size, challengePlatformsPage.size)
+        && Objects.equals(this.totalElements, challengePlatformsPage.totalElements)
+        && Objects.equals(this.totalPages, challengePlatformsPage.totalPages)
+        && Objects.equals(this.hasNext, challengePlatformsPage.hasNext)
+        && Objects.equals(this.hasPrevious, challengePlatformsPage.hasPrevious)
+        && Objects.equals(this.challengePlatforms, challengePlatformsPage.challengePlatforms);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(number, size, totalElements, totalPages, hasNext, hasPrevious, challenges);
+    return Objects.hash(
+        number, size, totalElements, totalPages, hasNext, hasPrevious, challengePlatforms);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ChallengesPageDto {\n");
+    sb.append("class ChallengePlatformsPageDto {\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    hasNext: ").append(toIndentedString(hasNext)).append("\n");
     sb.append("    hasPrevious: ").append(toIndentedString(hasPrevious)).append("\n");
-    sb.append("    challenges: ").append(toIndentedString(challenges)).append("\n");
+    sb.append("    challengePlatforms: ").append(toIndentedString(challengePlatforms)).append("\n");
     sb.append("}");
     return sb.toString();
   }

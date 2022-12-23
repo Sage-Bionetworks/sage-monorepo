@@ -8,23 +8,27 @@ import org.sagebionetworks.challenge.util.model.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
 
 public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
+
+  private SimpleChallengePlatformMapper platformMapper = new SimpleChallengePlatformMapper();
+
   @Override
   public ChallengeEntity convertToEntity(ChallengeDto dto, Object... args) {
-    ChallengeEntity ChallengeEntity = new ChallengeEntity();
+    ChallengeEntity entity = new ChallengeEntity();
     if (dto != null) {
-      BeanUtils.copyProperties(dto, ChallengeEntity);
+      BeanUtils.copyProperties(dto, entity);
     }
-    return ChallengeEntity;
+    return entity;
   }
 
   @Override
   public ChallengeDto convertToDto(ChallengeEntity entity, Object... args) {
-    ChallengeDto user = new ChallengeDto();
+    ChallengeDto dto = new ChallengeDto();
     if (entity != null) {
-      BeanUtils.copyProperties(entity, user);
-      user.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
-      user.setDifficulty(ChallengeDifficultyDto.fromValue(entity.getDifficulty()));
+      BeanUtils.copyProperties(entity, dto);
+      dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
+      dto.setDifficulty(ChallengeDifficultyDto.fromValue(entity.getDifficulty()));
+      dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
     }
-    return user;
+    return dto;
   }
 }
