@@ -7,7 +7,7 @@
       "challenge-organization-service": {
         "config": "templates/config.yaml",
         "generatorName": "spring",
-        "inputSpec": "#{cwd}/../../libs/api-spec/build/organization.openapi.yaml",
+        "inputSpec": "#{cwd}/../../libs/challenge-registry/api-description/build/organization.openapi.yaml",
         "output": "#{cwd}",
         "templateDir": "templates",
         "additionalProperties": {

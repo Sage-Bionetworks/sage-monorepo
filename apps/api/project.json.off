@@ -22,7 +22,7 @@
     "generate-sources": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "openapi-generator-cli generate -g python-flask -i ../../libs/api-spec/openapi.yaml",
+        "command": "openapi-generator-cli generate -g python-flask -i ../../libs/challenge-registry/api-description/openapi.yaml",
         "cwd": "apps/api"
       }
     },
