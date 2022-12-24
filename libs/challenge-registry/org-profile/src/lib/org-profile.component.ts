@@ -22,7 +22,7 @@ import {
   OrganizationService,
   OrganizationsPage,
   BasicError as ApiClientBasicError,
-} from '@sagebionetworks/api-client-angular';
+} from '@sagebionetworks/challenge-registry/api-client-angular';
 import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 
 @Component({
