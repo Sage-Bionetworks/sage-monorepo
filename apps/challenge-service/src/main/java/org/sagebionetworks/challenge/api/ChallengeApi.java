@@ -18,6 +18,7 @@ import org.sagebionetworks.challenge.model.dto.BasicErrorDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -40,6 +41,8 @@ public interface ChallengeApi {
    * @param status An array of challenge status used to filter the results. (optional)
    * @param platforms An array of challenge platform ids used to filter the results. (optional)
    * @param difficulties An array of challenge difficulty levels used to filter the results.
+   *     (optional)
+   * @param submissionTypes An array of challenge submission types used to filter the results.
    *     (optional)
    * @param incentives An array of challenge incentive types used to filter the results. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
@@ -118,12 +121,19 @@ public interface ChallengeApi {
           @RequestParam(value = "difficulties", required = false)
           List<ChallengeDifficultyDto> difficulties,
       @Parameter(
+              name = "submissionTypes",
+              description = "An array of challenge submission types used to filter the results.")
+          @Valid
+          @RequestParam(value = "submissionTypes", required = false)
+          List<ChallengeSubmissionTypeDto> submissionTypes,
+      @Parameter(
               name = "incentives",
               description = "An array of challenge incentive types used to filter the results.")
           @Valid
           @RequestParam(value = "incentives", required = false)
           List<ChallengeIncentiveDto> incentives) {
     return getDelegate()
-        .listChallenges(pageNumber, pageSize, status, platforms, difficulties, incentives);
+        .listChallenges(
+            pageNumber, pageSize, status, platforms, difficulties, submissionTypes, incentives);
   }
 }

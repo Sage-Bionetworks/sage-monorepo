@@ -33,6 +33,9 @@ public class ChallengeRepositoryCustomImpl extends QuerydslRepositorySupport
     if (filter.getDifficulties() != null && filter.getDifficulties().size() > 0) {
       query = query.where(challenge.difficulty.in(filter.getDifficulties()));
     }
+    if (filter.getSubmissionTypes() != null && filter.getSubmissionTypes().size() > 0) {
+      query = query.where(challenge.submissionTypes.any().name.in(filter.getSubmissionTypes()));
+    }
     if (filter.getIncentives() != null && filter.getIncentives().size() > 0) {
       query = query.where(challenge.incentives.any().name.in(filter.getIncentives()));
     }

@@ -4,6 +4,7 @@ import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.util.model.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
@@ -29,9 +30,13 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
       dto.setDifficulty(ChallengeDifficultyDto.fromValue(entity.getDifficulty()));
       dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
+      dto.submissionTypes(
+          entity.getSubmissionTypes().stream()
+              .map(o -> ChallengeSubmissionTypeDto.fromValue(o.getName()))
+              .toList());
       dto.incentives(
           entity.getIncentives().stream()
-              .map(i -> ChallengeIncentiveDto.fromValue(i.getName()))
+              .map(o -> ChallengeIncentiveDto.fromValue(o.getName()))
               .toList());
     }
     return dto;

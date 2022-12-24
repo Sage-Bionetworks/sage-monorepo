@@ -1,8 +1,0 @@
-name: submissionTypes
-description: Array of challenge submission types used to filter the results
-in: query
-required: false
-schema:
-  type: array
-  items:
-    $ref: ../../../components/schemas/ChallengeSubmissionType.yaml

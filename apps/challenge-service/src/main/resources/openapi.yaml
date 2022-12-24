@@ -75,6 +75,16 @@ paths:
             $ref: '#/components/schemas/ChallengeDifficulty'
           type: array
         style: form
+      - description: An array of challenge submission types used to filter the results.
+        explode: true
+        in: query
+        name: submissionTypes
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
+        style: form
       - description: An array of challenge incentive types used to filter the results.
         explode: true
         in: query
@@ -262,6 +272,17 @@ components:
           $ref: '#/components/schemas/ChallengeDifficulty'
         type: array
       style: form
+    submissionTypes:
+      description: An array of challenge submission types used to filter the results.
+      explode: true
+      in: query
+      name: submissionTypes
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeSubmissionType'
+        type: array
+      style: form
     incentives:
       description: An array of challenge incentive types used to filter the results.
       explode: true
@@ -324,6 +345,14 @@ components:
       - intermediate
       - advanced
       example: intermediate
+      type: string
+    ChallengeSubmissionType:
+      description: The submission type of the challenge.
+      enum:
+      - container_image
+      - prediction_file
+      - other
+      example: container_image
       type: string
     ChallengeIncentive:
       description: The incentive type of the challenge.
@@ -447,6 +476,10 @@ components:
           items:
             $ref: '#/components/schemas/ChallengeIncentive'
           type: array
+        submissionTypes:
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
         createdAt:
           example: 2022-07-04T22:19:11Z
           format: date-time
@@ -459,9 +492,11 @@ components:
       - createdAt
       - difficulty
       - id
+      - incentives
       - name
       - platform
       - status
+      - submissionTypes
       - updatedAt
       type: object
     ChallengesPage:

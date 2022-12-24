@@ -3,7 +3,7 @@
 
 ### Select the base path
 
-# Send the requests directly to the service 
+# Send the requests directly to the service
 @basePath = {{challengeServiceHost}}/v1
 # Send the requests to the API gateway
 # @basePath = {{apiGatewayHost}}/api/v1
@@ -12,6 +12,10 @@
 
 GET {{basePath}}/challenges
 
+### List the challenges that are active and upcoming
+
+GET {{basePath}}/challenges?status=active,upcoming
+
 ### List the challenges hosted on the platform Synapse
 
 GET {{basePath}}/challenges?platforms=synapse
@@ -19,6 +23,10 @@ GET {{basePath}}/challenges?platforms=synapse
 ### List the challenges with intermediate difficulty
 
 GET {{basePath}}/challenges?difficulties=intermediate
+
+### List the challenges with a container image submissions
+
+GET {{basePath}}/challenges?submissionTypes=container_image
 
 ### List the challenges with a monetary or publication incentive
 

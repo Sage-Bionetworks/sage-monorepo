@@ -36,3 +36,10 @@ INSERT INTO challenge_incentive (id, name, challenge_id)
 VALUES ('1', 'monetary', 1),
   ('2', 'publication', 1),
   ('3', 'monetary', 2);
+
+-- challenge.challenge_submission_type data
+
+INSERT INTO challenge_submission_type (id, name, challenge_id)
+VALUES ('1', 'container_image', 1),
+  ('2', 'prediction_file', 1),
+  ('3', 'container_image', 2);

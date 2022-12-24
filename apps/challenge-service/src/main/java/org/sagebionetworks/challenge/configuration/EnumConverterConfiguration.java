@@ -3,6 +3,7 @@ package org.sagebionetworks.challenge.configuration;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -36,6 +37,16 @@ public class EnumConverterConfiguration {
       @Override
       public ChallengeStatusDto convert(String source) {
         return ChallengeStatusDto.fromValue(source);
+      }
+    };
+  }
+
+  @Bean
+  Converter<String, ChallengeSubmissionTypeDto> challengeSubmissionTypeConverter() {
+    return new Converter<String, ChallengeSubmissionTypeDto>() {
+      @Override
+      public ChallengeSubmissionTypeDto convert(String source) {
+        return ChallengeSubmissionTypeDto.fromValue(source);
       }
     };
   }

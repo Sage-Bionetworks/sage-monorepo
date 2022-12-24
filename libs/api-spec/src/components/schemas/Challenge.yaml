@@ -15,6 +15,10 @@ properties:
     type: array
     items:
       $ref: ChallengeIncentive.yaml
+  submissionTypes:
+    type: array
+    items:
+      $ref: ChallengeSubmissionType.yaml
   #   fullName:
   #     type: string
   #   ownerId:
@@ -51,10 +55,7 @@ required:
   - status
   - difficulty
   - platform
+  - incentives
+  - submissionTypes
   - createdAt
   - updatedAt
-# example:
-#   fullName: dream/awesome-challenge
-#   ownerId: 507f1f77bcf86cd799439011
-#   createdAt: '2017-07-08T16:18:44-04:00'
-#   updatedAt: '2017-07-08T16:18:44-04:00'

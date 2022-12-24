@@ -1,7 +1,6 @@
 package org.sagebionetworks.challenge.model.entity;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,12 +16,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "challenge")
+@Table(name = "challenge_submission_type")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChallengeEntity {
+public class ChallengeSubmissionTypeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,25 +31,10 @@ public class ChallengeEntity {
   @Column(nullable = false)
   private String name;
 
-  @Column(nullable = false)
-  private String status;
-
-  @Column(nullable = false)
-  private String difficulty;
-
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "platform_id", nullable = false)
-  private SimpleChallengePlatformEntity platform;
-
-  @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
-  private List<ChallengeSubmissionTypeEntity> submissionTypes;
-
-  @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
-  private List<ChallengeIncentiveEntity> incentives;
+  @JoinColumn(name = "challenge_id", nullable = false)
+  private ChallengeEntity challenge;
 
   @Column(name = "created_at")
   private OffsetDateTime createdAt;
-
-  @Column(name = "updated_at")
-  private OffsetDateTime updatedAt;
 }
