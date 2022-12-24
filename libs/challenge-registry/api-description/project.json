@@ -1,9 +1,8 @@
 {
-  "name": "api-spec",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "challenge-registry-api-description",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/challenge-registry/api-description/src",
   "projectType": "library",
-  "sourceRoot": "libs/api-spec/src",
-  "prefix": "challenge-registry",
   "targets": {
     "build-individuals": {
       "executor": "nx:run-commands",
@@ -15,14 +14,14 @@
           "openapi bundle --output build/organization.openapi.yaml src/organization.openapi.yaml"
         ],
         "parallel": true,
-        "cwd": "libs/api-spec"
+        "cwd": "libs/challenge-registry/api-description"
       }
     },
     "build": {
       "executor": "nx:run-commands",
       "options": {
         "command": "openapi-merge-cli --config openapi-merge.yaml",
-        "cwd": "libs/api-spec"
+        "cwd": "libs/challenge-registry/api-description"
       },
       "dependsOn": ["build-individuals"]
     },
@@ -30,26 +29,26 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "openapi preview-docs src/user.openapi.yaml",
-        "cwd": "libs/api-spec"
+        "cwd": "libs/challenge-registry/api-description"
       }
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
         "command": "lint-openapi --config .validaterc --ruleset .spectral.yaml --verbose build/openapi.yaml build/challenge.openapi.yaml build/organization.openapi.yaml build/user.openapi.yaml",
-        "cwd": "libs/api-spec"
+        "cwd": "libs/challenge-registry/api-description"
       }
     },
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prettier --write libs/api-spec"
+        "command": "prettier --write libs/challenge-registry/api-description"
       }
     },
     "format-check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prettier --check libs/api-spec"
+        "command": "prettier --check libs/challenge-registry/api-description"
       }
     }
   },
