@@ -37,7 +37,11 @@ public class ChallengeDto {
 
   @JsonProperty("incentives")
   @Valid
-  private List<ChallengeIncentiveDto> incentives = null;
+  private List<ChallengeIncentiveDto> incentives = new ArrayList<>();
+
+  @JsonProperty("submissionTypes")
+  @Valid
+  private List<ChallengeSubmissionTypeDto> submissionTypes = new ArrayList<>();
 
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -178,14 +182,44 @@ public class ChallengeDto {
    *
    * @return incentives
    */
+  @NotNull
   @Valid
-  @Schema(name = "incentives", required = false)
+  @Schema(name = "incentives", required = true)
   public List<ChallengeIncentiveDto> getIncentives() {
     return incentives;
   }
 
   public void setIncentives(List<ChallengeIncentiveDto> incentives) {
     this.incentives = incentives;
+  }
+
+  public ChallengeDto submissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
+    this.submissionTypes = submissionTypes;
+    return this;
+  }
+
+  public ChallengeDto addSubmissionTypesItem(ChallengeSubmissionTypeDto submissionTypesItem) {
+    if (this.submissionTypes == null) {
+      this.submissionTypes = new ArrayList<>();
+    }
+    this.submissionTypes.add(submissionTypesItem);
+    return this;
+  }
+
+  /**
+   * Get submissionTypes
+   *
+   * @return submissionTypes
+   */
+  @NotNull
+  @Valid
+  @Schema(name = "submissionTypes", required = true)
+  public List<ChallengeSubmissionTypeDto> getSubmissionTypes() {
+    return submissionTypes;
+  }
+
+  public void setSubmissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
+    this.submissionTypes = submissionTypes;
   }
 
   public ChallengeDto createdAt(OffsetDateTime createdAt) {
@@ -245,13 +279,15 @@ public class ChallengeDto {
         && Objects.equals(this.difficulty, challenge.difficulty)
         && Objects.equals(this.platform, challenge.platform)
         && Objects.equals(this.incentives, challenge.incentives)
+        && Objects.equals(this.submissionTypes, challenge.submissionTypes)
         && Objects.equals(this.createdAt, challenge.createdAt)
         && Objects.equals(this.updatedAt, challenge.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, status, difficulty, platform, incentives, createdAt, updatedAt);
+    return Objects.hash(
+        id, name, status, difficulty, platform, incentives, submissionTypes, createdAt, updatedAt);
   }
 
   @Override
@@ -264,6 +300,7 @@ public class ChallengeDto {
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
+    sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");

@@ -6,12 +6,12 @@ import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeMapper;
 import org.sagebionetworks.challenge.model.repository.ChallengeFilter;
 import org.sagebionetworks.challenge.model.repository.ChallengeFilter.ChallengeFilterBuilder;
-import org.sagebionetworks.challenge.model.repository.ChallengeRepository;
 import org.sagebionetworks.challenge.model.repository.ChallengeRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChallengeService {
 
-  @Autowired private ChallengeRepository challengeRepository;
   @Autowired private ChallengeRepositoryCustom challengeRepositoryCustom;
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
@@ -36,6 +35,7 @@ public class ChallengeService {
       List<ChallengeStatusDto> status,
       List<String> platforms,
       List<ChallengeDifficultyDto> difficulties,
+      List<ChallengeSubmissionTypeDto> submissionTypes,
       List<ChallengeIncentiveDto> incentives) {
 
     log.info("status {}", status);
@@ -52,6 +52,9 @@ public class ChallengeService {
     if (difficulties != null) {
       builder.difficulties(difficulties.stream().map(d -> d.toString()).toList());
     }
+    // if (submissionTypes != null) {
+    //   builder.submissionTypes(submissionTypes.stream().map(i -> i.toString()).toList());
+    // }
     if (incentives != null) {
       builder.incentives(incentives.stream().map(i -> i.toString()).toList());
     }
