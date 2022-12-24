@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import {
   ApiModule,
   BASE_PATH as API_CLIENT_BASE_PATH,
-} from '@sagebionetworks/api-client-angular';
+} from '@sagebionetworks/challenge-registry/api-client-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CountUpModule } from 'ngx-countup';

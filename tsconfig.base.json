@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@sagebionetworks/api-client-angular": ["libs/api-client-angular/src/index.ts"],
+      "@sagebionetworks/challenge-registry/api-client-angular": ["libs/challenge-registry/api-client-angular/src/index.ts"],
       "@sagebionetworks/api-client-angular-deprecated": [
         "libs/api-client-angular-deprecated/src/index.ts"
       ],

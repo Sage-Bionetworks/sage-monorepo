@@ -4,7 +4,7 @@ import {
   // ChallengePlatform,
   // Organization,
 } from '@sagebionetworks/api-client-angular-deprecated';
-import { Organization } from '@sagebionetworks/api-client-angular';
+import { Organization } from '@sagebionetworks/challenge-registry/api-client-angular';
 import { MOCK_ORGANIZATIONS } from '@sagebionetworks/challenge-registry/ui';
 
 @Component({
