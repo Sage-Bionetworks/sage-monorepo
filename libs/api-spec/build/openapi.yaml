@@ -35,6 +35,7 @@ paths:
         - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/platforms'
         - $ref: '#/components/parameters/difficulties'
+        - $ref: '#/components/parameters/submissionTypes'
         - $ref: '#/components/parameters/incentives'
       responses:
         '200':
@@ -238,6 +239,14 @@ components:
         - intermediate
         - advanced
       example: intermediate
+    ChallengeSubmissionType:
+      description: The submission type of the challenge.
+      type: string
+      enum:
+        - container_image
+        - prediction_file
+        - other
+      example: container_image
     ChallengeIncentive:
       description: The incentive type of the challenge.
       type: string
@@ -341,6 +350,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengeIncentive'
+        submissionTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
         createdAt:
           type: string
           format: date-time
@@ -355,6 +368,8 @@ components:
         - status
         - difficulty
         - platform
+        - incentives
+        - submissionTypes
         - createdAt
         - updatedAt
     ChallengesPage:
@@ -720,6 +735,15 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeDifficulty'
+    submissionTypes:
+      name: submissionTypes
+      description: An array of challenge submission types used to filter the results.
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/ChallengeSubmissionType'
     incentives:
       name: incentives
       description: An array of challenge incentive types used to filter the results.
