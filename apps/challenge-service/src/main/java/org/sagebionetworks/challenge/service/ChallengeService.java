@@ -44,19 +44,19 @@ public class ChallengeService {
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     ChallengeFilterBuilder builder = ChallengeFilter.builder();
     if (status != null) {
-      builder.status(status.stream().map(s -> s.toString()).toList());
+      builder.status(status.stream().map(o -> o.toString()).toList());
     }
     if (platforms != null) {
       builder.platforms(platforms);
     }
     if (difficulties != null) {
-      builder.difficulties(difficulties.stream().map(d -> d.toString()).toList());
+      builder.difficulties(difficulties.stream().map(o -> o.toString()).toList());
     }
-    // if (submissionTypes != null) {
-    //   builder.submissionTypes(submissionTypes.stream().map(i -> i.toString()).toList());
-    // }
+    if (submissionTypes != null) {
+      builder.submissionTypes(submissionTypes.stream().map(o -> o.toString()).toList());
+    }
     if (incentives != null) {
-      builder.incentives(incentives.stream().map(i -> i.toString()).toList());
+      builder.incentives(incentives.stream().map(o -> o.toString()).toList());
     }
     ChallengeFilter filter = builder.build();
 

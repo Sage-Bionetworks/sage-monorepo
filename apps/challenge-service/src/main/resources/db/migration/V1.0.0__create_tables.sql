@@ -43,5 +43,18 @@ CREATE TABLE `challenge_incentive`
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
-    CONSTRAINT unique_incentive UNIQUE (`name`, `challenge_id`)
+    CONSTRAINT unique_item UNIQUE (`name`, `challenge_id`)
+);
+
+-- challenge.challenge_submission_type definition
+
+CREATE TABLE `challenge_submission_type`
+(
+    `id`                    int NOT NULL AUTO_INCREMENT,
+    `name`                  ENUM('container_image', 'prediction_file', 'other'),
+    `challenge_id`          bigint(20) NOT NULL,
+    `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
+    CONSTRAINT unique_item UNIQUE (`name`, `challenge_id`)
 );
