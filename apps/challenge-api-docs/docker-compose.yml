@@ -5,11 +5,10 @@ services:
     image: sagebionetworks/challenge-api-docs:latest
     container_name: challenge-api-docs
     restart: always
-    # env_file:
-    #   - .env
-    # volumes:
-      # - challenge-mariadb:/data/db
-      # - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    env_file:
+      - .env
+    volumes:
+      - ../../libs/challenge-registry/api-description/build/:/usr/share/nginx/html/swagger/
     networks:
       - challenge
     ports:
