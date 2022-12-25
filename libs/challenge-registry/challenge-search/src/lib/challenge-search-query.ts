@@ -5,7 +5,7 @@ import {
   ChallengeIncentiveType,
   ChallengeSubmissionType,
   DateRange,
-} from '@sagebionetworks/api-client-angular-deprecated';
+} from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 
 export interface ChallengeSearchQuery {
   limit?: number;

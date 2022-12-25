@@ -1,5 +1,5 @@
 // TODO: To remove once this interface is available from the client library.
-import { OrgMembership } from '@sagebionetworks/api-client-angular-deprecated';
+import { OrgMembership } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 
 export interface OrgMember extends Omit<OrgMembership, 'role'> {
   name: string;

@@ -1,4 +1,4 @@
-import { ChallengePlatform } from '@sagebionetworks/api-client-angular-deprecated';
+import { ChallengePlatform } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 
 export const MOCK_PLATFORMS: ChallengePlatform[] = [
   {

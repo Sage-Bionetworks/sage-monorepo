@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Challenge } from '@sagebionetworks/api-client-angular-deprecated';
+import { Challenge } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 
 @Component({
   selector: 'challenge-registry-challenge-card',
