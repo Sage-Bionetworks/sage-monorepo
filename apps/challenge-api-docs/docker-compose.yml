@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  challenge-api-docs:
+    image: sagebionetworks/challenge-api-docs:latest
+    container_name: challenge-api-docs
+    restart: always
+    # env_file:
+    #   - .env
+    # volumes:
+      # - challenge-mariadb:/data/db
+      # - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - challenge
+    ports:
+      - "9100:80"
+
+volumes:
+  challenge-apid-docs:
+    name: challenge-api-docs
+
+networks:
+  challenge:
+    name: challenge
