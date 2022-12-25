@@ -3,7 +3,7 @@ import {
   Challenge,
   ChallengePlatform,
   DateRange,
-} from '@sagebionetworks/api-client-angular-deprecated';
+} from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import {
   Filter,

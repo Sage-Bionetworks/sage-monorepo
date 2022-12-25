@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Account } from '@sagebionetworks/api-client-angular-deprecated';
+import { Account } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 import {
   catchError,
   map,
@@ -22,7 +22,7 @@ import {
   OrganizationService,
   OrganizationsPage,
   BasicError as ApiClientBasicError,
-} from '@sagebionetworks/api-client-angular';
+} from '@sagebionetworks/challenge-registry/api-client-angular';
 import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 
 @Component({

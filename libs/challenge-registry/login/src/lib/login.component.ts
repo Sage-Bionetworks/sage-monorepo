@@ -10,7 +10,7 @@ import { AuthService } from '@sagebionetworks/challenge-registry/auth';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 import { Subscription } from 'rxjs';
-import { BasicError as ApiClientError } from '@sagebionetworks/api-client-angular';
+import { BasicError as ApiClientError } from '@sagebionetworks/challenge-registry/api-client-angular';
 
 @Component({
   selector: 'challenge-registry-login',

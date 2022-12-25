@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Challenge } from '@sagebionetworks/api-client-angular-deprecated';
+import { Challenge } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 import {
   MOCK_CHALLENGE_ORGANIZERS,
   MOCK_ORGANIZATIONS,

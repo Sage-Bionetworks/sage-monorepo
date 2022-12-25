@@ -1,44 +1,44 @@
 {
-  "name": "api-client-angular",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "challenge-registry-api-client-angular",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/challenge-registry/api-client-angular/src",
   "projectType": "library",
-  "sourceRoot": "libs/api-client-angular/src",
   "prefix": "challenge-registry",
   "targets": {
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": ["{workspaceRoot}/dist/libs/api-client-angular"],
+      "outputs": ["{workspaceRoot}/dist/libs/challenge-registry/api-client-angular"],
       "options": {
-        "project": "libs/api-client-angular/ng-package.json"
+        "project": "libs/challenge-registry/api-client-angular/ng-package.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "libs/api-client-angular/tsconfig.lib.prod.json"
+          "tsConfig": "libs/challenge-registry/api-client-angular/tsconfig.lib.prod.json"
         },
         "development": {
-          "tsConfig": "libs/api-client-angular/tsconfig.lib.json"
+          "tsConfig": "libs/challenge-registry/api-client-angular/tsconfig.lib.json"
         }
       },
       "defaultConfiguration": "production"
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/api-client-angular"],
+      "outputs": ["{workspaceRoot}/coverage/libs/challenge-registry/api-client-angular"],
       "options": {
-        "jestConfig": "libs/api-client-angular/jest.config.ts",
+        "jestConfig": "libs/challenge-registry/api-client-angular/jest.config.ts",
         "passWithNoTests": true
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/api-client-angular/src/index.ts"]
+        "lintFilePatterns": ["libs/challenge-registry/api-client-angular/src/index.ts"]
       }
     },
     "lint-fix": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/api-client-angular/src/index.ts"],
+        "lintFilePatterns": ["libs/challenge-registry/api-client-angular/src/index.ts"],
         "fix": true
       }
     },
@@ -50,7 +50,7 @@
           "openapi-generator-cli generate",
           "echo 'TODO Format generated code'"
         ],
-        "cwd": "libs/api-client-angular",
+        "cwd": "libs/challenge-registry/api-client-angular",
         "parallel": false
       }
     }

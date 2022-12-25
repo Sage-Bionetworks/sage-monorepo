@@ -3,8 +3,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
   Challenge,
   User,
-} from '@sagebionetworks/api-client-angular-deprecated';
-import { Organization } from '@sagebionetworks/api-client-angular';
+} from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
+import { Organization } from '@sagebionetworks/challenge-registry/api-client-angular';
 import { Tab } from '../tab.model';
 import { USER_PROFILE_STARRED_TABS } from './user-profile-starred-tabs';
 import {

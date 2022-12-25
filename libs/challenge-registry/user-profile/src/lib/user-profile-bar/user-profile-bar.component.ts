@@ -3,7 +3,7 @@ import { map, Observable } from 'rxjs';
 import {
   User,
   UserService,
-} from '@sagebionetworks/api-client-angular-deprecated';
+} from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 import { Avatar } from '@sagebionetworks/challenge-registry/ui';
 
 @Component({

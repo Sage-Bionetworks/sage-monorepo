@@ -1,4 +1,4 @@
-import { ChallengeOrganizer } from '@sagebionetworks/api-client-angular-deprecated';
+import { ChallengeOrganizer } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 
 export const MOCK_CHALLENGE_ORGANIZERS: ChallengeOrganizer[] = [
   {

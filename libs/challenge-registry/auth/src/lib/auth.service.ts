@@ -6,7 +6,7 @@ import {
   LocalAuthResponse,
   User,
   UserService,
-} from '@sagebionetworks/api-client-angular-deprecated';
+} from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { TokenService } from './token/token.service';
 
@@ -56,8 +56,8 @@ export class AuthService {
 
   login(login: string, password: string): Observable<User> {
     const localAuthRequest: LocalAuthRequest = {
-      login: login,
-      password: password,
+      login,
+      password,
     };
 
     return this.apiAuthService.authLocal(localAuthRequest).pipe(

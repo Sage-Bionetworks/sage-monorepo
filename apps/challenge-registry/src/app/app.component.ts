@@ -16,7 +16,7 @@ import {
 } from '@sagebionetworks/challenge-registry/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
-import { User } from '@sagebionetworks/api-client-angular-deprecated';
+import { User } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 
 @Component({
   selector: 'challenge-registry-root',
