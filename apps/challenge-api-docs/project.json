@@ -67,5 +67,8 @@
       ]
     }
   },
-  "tags": ["type:docs", "scope:backend"]
+  "tags": ["type:docs", "scope:backend"],
+  "implicitDependencies": [
+    "challenge-registry-api-description"
+  ]
 }
