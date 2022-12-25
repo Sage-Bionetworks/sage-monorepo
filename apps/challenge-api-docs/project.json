@@ -58,7 +58,13 @@
         "context": "apps/challenge-api-docs",
         "push": false,
         "tags": ["sagebionetworks/challenge-api-docs:latest"]
-      }
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
     }
   },
   "tags": ["type:docs", "scope:backend"]
