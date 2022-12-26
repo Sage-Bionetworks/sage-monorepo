@@ -18,11 +18,12 @@ spring:
     enabled: true
   #   cleanOnValidationError: true
   rabbitmq:
-    host: localhost
+    host: challenge-rabbitmq
     password: changeme
     port: 8020
     username: challenge
     exchange: challenge.exchange
+    queue: challenge.queue
     routingkey: challenge.routingkey
   message: message succesfuly sent
 
