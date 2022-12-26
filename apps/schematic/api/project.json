@@ -10,6 +10,17 @@
         "command": "shx cp -n .env.example .env",
         "cwd": "apps/schematic/api"
       }
+    },
+    "openapi-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "xargs rm -fr <.openapi-generator/FILES",
+          "openapi-generator-cli generate"
+        ],
+        "cwd": "apps/schematic/api",
+        "parallel": false
+      }
     }
     // "python": {
     //   "executor": "@nrwl/workspace:run-commands",

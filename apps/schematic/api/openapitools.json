@@ -1,7 +1,17 @@
 {
-  "$schema": "../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "5.4.0"
+    "version": "6.2.1",
+    "generators": {
+      "schematic-api": {
+        "config": "templates/config.yaml",
+        "generatorName": "python-flask",
+        "inputSpec": "#{cwd}/../../../libs/schematic/api-description/build/openapi.yaml",
+        "output": "#{cwd}",
+        "templateDir": "templates",
+        "additionalProperties": {}
+      }
+    }
   }
 }
