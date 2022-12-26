@@ -73,7 +73,10 @@ RUN useradd -m $user \
     "if [ -f dev-env.sh ]; then" \
     "  . ./dev-env.sh" \
     "  workspace-initialize-env" \
-    "fi" | tee -a /home/$user/.bashrc
+    "fi" \
+    "" \
+    "# update PATH to find Poetry" \
+    "export PATH=\$PATH:/home/${user}/.local/bin" | tee -a "/home/$user/.bashrc"
 
 USER $user
 
