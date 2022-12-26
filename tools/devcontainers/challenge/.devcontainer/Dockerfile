@@ -15,6 +15,8 @@ ARG hyperfineVersion="1.15.0"
 ARG yarnVersion="3.3.0"
 # https://www.npmjs.com/package/@devcontainers/cli
 ARG devcontainerCliVersion="0.25.2"
+# https://pypi.org/project/poetry
+ARG poetryVersion="1.2.0rc1"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
