@@ -46,6 +46,8 @@
     5432,
     5601,
     8010,
+    8020,
+    8021,
     8080,
     8081,
     8082,
@@ -96,6 +98,14 @@
     },
     "8010": {
       "label": "challenge-api-docs",
+      "onAutoForward": "silent"
+    },
+    "8020": {
+      "label": "challenge-rabbitmq",
+      "onAutoForward": "silent"
+    },
+    "8021": {
+      "label": "challenge-rabbitmq-ui",
       "onAutoForward": "silent"
     },
     "8080": {
