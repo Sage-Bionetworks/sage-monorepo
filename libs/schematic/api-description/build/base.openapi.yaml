@@ -1,0 +1,15 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Challenge Registry API
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/challenge-registry
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+servers:
+  - url: http://localhost/v1
+components: {}
