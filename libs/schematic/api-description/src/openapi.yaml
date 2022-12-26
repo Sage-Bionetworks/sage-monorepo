@@ -16,5 +16,5 @@ tags:
   - name: Storage
     description: Operations about storages.
 paths:
-  /storages/projects:
-    $ref: paths/storages/projects/@{projectId}.yaml
+  /storages/projects/{projectId}/datasets:
+    $ref: paths/storages/projects/@{projectId}/datasets.yaml

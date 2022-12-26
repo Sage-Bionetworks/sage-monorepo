@@ -7,9 +7,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "openapi bundle --output build/openapi.yaml src/openapi.yaml"
-        ],
+        "commands": ["openapi bundle --output build/openapi.yaml src/openapi.yaml"],
         "parallel": true,
         "cwd": "libs/schematic/api-description"
       }
