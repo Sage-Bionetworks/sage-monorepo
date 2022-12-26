@@ -77,4 +77,7 @@ RUN useradd -m $user \
 
 USER $user
 
+# Install Poetry
+RUN curl -sSL https://install.python-poetry.org | python3 - --version "${poetryVersion}"
+
 CMD ["bash"]
