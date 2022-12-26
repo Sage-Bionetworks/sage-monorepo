@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+click = "==8.0.4"
+black = "==22.1.0"
+flake8 = "==3.9.2"
+tox = "==3.24.5"
+pytest = "==7.1.1"
+coverage = "==6.3.2"
+mongomock = "==4.0.0"
+pytest-cov = "*"
+flask-testing = "*"
+
+[requires]
+python_version = "3.9"
+
+[packages]
+connexion = {extras = [ "swagger-ui",], version = "==2.13.0"}
+flask-cors = "==3.0.10"
+mongoengine = "==0.24.1"
+pyjwt = "==2.3.0"
+requests = "==2.27.1"
+swagger-ui-bundle = ">=0.0.9"
+werkzeug = "==2.0.3"

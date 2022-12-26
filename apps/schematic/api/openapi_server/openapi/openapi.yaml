@@ -1,0 +1,3948 @@
+openapi: 3.0.2
+info:
+  contact:
+    email: thomas.schaffter@sagebionetworks.org
+    name: The ROCC Team
+    url: https://Sage-Bionetworks.github.io/rocc-schemas
+  description: |
+    The OpenAPI specification implemented by the Challenge Registries.
+    # Introduction
+    TBA
+  license:
+    name: Apache 2.0
+    url: https://Sage-Bionetworks.github.io/rocc-schemas
+  title: Registry of Open Community Challenges API
+  version: 0.6.0
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+servers:
+- url: '{protocol}://rocc.org/api/v1'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - http
+      - https
+tags:
+- description: Operations about accounts
+  name: Account
+- description: Operations about authentication and authorization
+  name: Auth
+- description: Operations about challenges
+  name: Challenge
+- description: Operations about challenge platforms
+  name: ChallengePlatform
+- description: Operations about grants
+  name: Grant
+- description: Operations about organizations
+  name: Organization
+- description: Operations about org memberships
+  name: OrgMembership
+- description: Operations about the registry
+  name: Registry
+- description: Operations about users
+  name: User
+- description: Operations about health checks
+  name: HealthCheck
+paths:
+  /accounts/{login}:
+    get:
+      description: Returns the user or org account
+      operationId: get_account
+      parameters:
+      - description: The login of an account
+        explode: false
+        in: path
+        name: login
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get an account
+      tags:
+      - Account
+      x-openapi-router-controller: openapi_server.controllers.account_controller
+  /auth/local:
+    post:
+      description: Authentify a local account with the specified credential
+      operationId: auth_local
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalAuthRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocalAuthResponse'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Authentify a local account
+      tags:
+      - Auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /challengePlatforms:
+    delete:
+      description: Delete all challenge platforms
+      operationId: delete_all_challenge_platforms
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete all challenge platforms
+      tags:
+      - ChallengePlatform
+      x-openapi-router-controller: openapi_server.controllers.challenge_platform_controller
+    get:
+      description: Returns the challenge platforms
+      operationId: list_challenge_platforms
+      parameters:
+      - description: Maximum number of results returned
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 10
+          type: integer
+        style: form
+      - description: Index of the first result that must be returned
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfChallengePlatforms'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get all challenge platforms
+      tags:
+      - ChallengePlatform
+      x-openapi-router-controller: openapi_server.controllers.challenge_platform_controller
+    post:
+      description: Create a challenge platform with the specified ID
+      operationId: create_challenge_platform
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengePlatformCreateRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatformCreateResponse'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request conflicts with current state of the target resource
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: Create a challenge platform
+      tags:
+      - ChallengePlatform
+      x-openapi-router-controller: openapi_server.controllers.challenge_platform_controller
+  /challengePlatforms/{challengePlatformId}:
+    delete:
+      description: Deletes the challenge platform specified
+      operationId: delete_challenge_platform
+      parameters:
+      - description: The unique identifier of the challenge platform
+        explode: false
+        in: path
+        name: challengePlatformId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengePlatformId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a challenge platform
+      tags:
+      - ChallengePlatform
+      x-openapi-router-controller: openapi_server.controllers.challenge_platform_controller
+    get:
+      description: Returns the challenge platform specified
+      operationId: get_challenge_platform
+      parameters:
+      - description: The unique identifier of the challenge platform
+        explode: false
+        in: path
+        name: challengePlatformId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengePlatformId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatform'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a challenge platform
+      tags:
+      - ChallengePlatform
+      x-openapi-router-controller: openapi_server.controllers.challenge_platform_controller
+  /challenges:
+    delete:
+      description: Delete all challenges
+      operationId: delete_all_challenges
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete all challenges
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+    get:
+      description: Returns all the challenges
+      operationId: list_challenges
+      parameters:
+      - description: Maximum number of results returned
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 10
+          type: integer
+        style: form
+      - description: Index of the first result that must be returned
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: |
+          Properties used to sort the results that must be returned:
+            * featured - featured challenge, from featured to non-featured.
+            * startDate - start date of a challenge, from latest to oldest.
+            * participantCount - number of participants of a challenge, from most to least.
+            * viewCount - number of views of a challenge, from most to least.
+            * starredCount - number of stargazers of a challenge, from most to least.
+            * name - name of a challenge, from A to Z.
+            * createdAt - when a challenge is created, from latest to oldest.
+            * updatedAt - when a challenge is updated, from latest to oldest.
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          enum:
+          - featured
+          - startDate
+          - participantCount
+          - viewCount
+          - starredCount
+          - name
+          - createdAt
+          - updatedAt
+          type: string
+        style: form
+      - description: Can be either `asc` or `desc`. Ignored without `sort` parameter.
+        explode: true
+        in: query
+        name: direction
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - description: A string of search terms used to filter the results
+        explode: true
+        in: query
+        name: searchTerms
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Array of topics used to filter the results
+        explode: true
+        in: query
+        name: topics
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/Topic'
+          type: array
+        style: form
+      - description: Array of input data types used to filter the results
+        explode: true
+        in: query
+        name: inputDataTypes
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ChallengeInputDataType'
+          type: array
+        style: form
+      - description: Array of challenge status used to filter the results
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ChallengeStatus'
+          type: array
+        style: form
+      - description: Array of challenge platform ids used to filter the results
+        explode: true
+        in: query
+        name: platformIds
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ChallengePlatformId'
+          type: array
+        style: form
+      - description: Array of challenge difficulty levels used to filter the results
+        explode: true
+        in: query
+        name: difficulty
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ChallengeDifficulty'
+          type: array
+        style: form
+      - description: Array of challenge submission types used to filter the results
+        explode: true
+        in: query
+        name: submissionTypes
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
+        style: form
+      - description: Array of challenge incentive types used to filter the results
+        explode: true
+        in: query
+        name: incentiveTypes
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/ChallengeIncentiveType'
+          type: array
+        style: form
+      - description: Return challenges that start during the date range specified
+        explode: true
+        in: query
+        name: startDateRange
+        required: false
+        schema:
+          $ref: '#/components/schemas/DateRange'
+        style: deepObject
+      - description: Array of organization ids used to filter the results
+        explode: true
+        in: query
+        name: orgIds
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/OrgId'
+          type: array
+        style: form
+      - description: Array of organizer identifiers used to filter the results
+        explode: true
+        in: query
+        name: organizerIds
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/UserId'
+          type: array
+        style: form
+      - description: Array of sponsor org identifiers used to filter the results
+        explode: true
+        in: query
+        name: sponsorIds
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/OrgId'
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfChallenges'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List all the challenges
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+  /challenges/{accountName}:
+    get:
+      description: List all the challenges owned by the specified account
+      operationId: list_account_challenges
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: Maximum number of results returned
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 10
+          type: integer
+        style: form
+      - description: Index of the first result that must be returned
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: A string of search terms used to filter the results
+        explode: true
+        in: query
+        name: searchTerms
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfChallenges'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List all the challenges owned by the specified account
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+    post:
+      description: Adds a challenge
+      operationId: create_challenge
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeCreateRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeCreateResponse'
+          description: Success
+          links:
+            GetChallengeById:
+              $ref: '#/components/links/GetChallengeById'
+            DeleteChallengeById:
+              $ref: '#/components/links/DeleteChallengeById'
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request conflicts with current state of the target resource
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: Add a challenge
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+  /challenges/{accountName}/{challengeName}:
+    delete:
+      description: Deletes the challenge specified
+      operationId: delete_challenge
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a challenge
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+    get:
+      description: Returns the challenge specified
+      operationId: get_challenge
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a challenge
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+  /challenges/{accountName}/{challengeName}/organizers:
+    get:
+      description: Lists the organizers of the challenge.
+      operationId: list_challenge_organizers
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeOrganizerList'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List organizers
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+    post:
+      description: Create a challenge organizer
+      operationId: create_challenge_organizer
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeOrganizerCreateRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeOrganizerCreateResponse'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request conflicts with current state of the target resource
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: Create a challenge organizer
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+  /challenges/{accountName}/{challengeName}/organizers/{organizerId}:
+    delete:
+      description: Deletes the challenge organizer specified
+      operationId: delete_challenge_organizer
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      - description: The identifier of the challenge organizer
+        explode: false
+        in: path
+        name: organizerId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeOrganizerId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a challenge organizer
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+  /challenges/{accountName}/{challengeName}/readme:
+    get:
+      description: Returns the challenge README specified
+      operationId: get_challenge_readme
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeReadme'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a challenge README
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+    patch:
+      description: Update a challenge README
+      operationId: update_challenge_readme
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeReadmeUpdateRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request conflicts with current state of the target resource
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: Update a challenge README
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+  /challenges/{accountName}/{challengeName}/sponsors:
+    get:
+      description: Lists the sponsors of the challenge.
+      operationId: list_challenge_sponsors
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeSponsorList'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List sponsors
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+    post:
+      description: Create a challenge sponsor
+      operationId: create_challenge_sponsor
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeSponsorCreateRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeSponsorCreateResponse'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request conflicts with current state of the target resource
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: Create a challenge sponsor
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+  /challenges/{accountName}/{challengeName}/sponsors/{sponsorId}:
+    delete:
+      description: Deletes the challenge sponsor specified
+      operationId: delete_challenge_sponsor
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      - description: The identifier of the challenge sponsor
+        explode: false
+        in: path
+        name: sponsorId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeSponsorId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a challenge sponsor
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+  /challenges/{accountName}/{challengeName}/stargazers:
+    get:
+      description: Lists the people that have starred the challenge.
+      operationId: list_challenge_stargazers
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      - description: Maximum number of results returned
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 10
+          type: integer
+        style: form
+      - description: Index of the first result that must be returned
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfUsers'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List stargazers
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+  /challenges/{accountName}/{challengeName}/topics:
+    get:
+      description: Lists the challenge topics.
+      operationId: list_challenge_topics
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfTopics'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List stargazers
+      tags:
+      - Challenge
+      x-openapi-router-controller: openapi_server.controllers.challenge_controller
+  /grants:
+    delete:
+      description: Delete all grants
+      operationId: delete_all_grants
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete all grants
+      tags:
+      - Grant
+      x-openapi-router-controller: openapi_server.controllers.grant_controller
+    get:
+      description: Returns the grants
+      operationId: list_grants
+      parameters:
+      - description: Maximum number of results returned
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 10
+          type: integer
+        style: form
+      - description: Index of the first result that must be returned
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfGrants'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get all grants
+      tags:
+      - Grant
+      x-openapi-router-controller: openapi_server.controllers.grant_controller
+    post:
+      description: Create a grant with the specified name
+      operationId: create_grant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GrantCreateRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrantCreateResponse'
+          description: Success
+          links:
+            GetGrantById:
+              $ref: '#/components/links/GetGrantById'
+            DeleteGrantById:
+              $ref: '#/components/links/DeleteGrantById'
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request conflicts with current state of the target resource
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: Create a grant
+      tags:
+      - Grant
+      x-openapi-router-controller: openapi_server.controllers.grant_controller
+  /grants/{grantId}:
+    delete:
+      description: Deletes the grant specified
+      operationId: delete_grant
+      parameters:
+      - description: The ID of the grant that is being created
+        explode: false
+        in: path
+        name: grantId
+        required: true
+        schema:
+          $ref: '#/components/schemas/GrantId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a grant
+      tags:
+      - Grant
+      x-openapi-router-controller: openapi_server.controllers.grant_controller
+    get:
+      description: Returns the grant specified
+      operationId: get_grant
+      parameters:
+      - description: The ID of the grant that is being created
+        explode: false
+        in: path
+        name: grantId
+        required: true
+        schema:
+          $ref: '#/components/schemas/GrantId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grant'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a grant
+      tags:
+      - Grant
+      x-openapi-router-controller: openapi_server.controllers.grant_controller
+  /healthcheck:
+    get:
+      description: Get information about the health of the service
+      operationId: get_health_check
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheck'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get health check information
+      tags:
+      - HealthCheck
+      x-openapi-router-controller: openapi_server.controllers.health_check_controller
+  /orgMemberships:
+    delete:
+      description: Delete all org memberships
+      operationId: delete_all_org_memberships
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete all org memberships
+      tags:
+      - OrgMembership
+      x-openapi-router-controller: openapi_server.controllers.org_membership_controller
+    get:
+      description: Returns the org memberships
+      operationId: list_org_memberships
+      parameters:
+      - description: Maximum number of results returned
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 10
+          type: integer
+        style: form
+      - description: Index of the first result that must be returned
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: An organization identifier used to filter the results
+        explode: true
+        in: query
+        name: orgId
+        required: false
+        schema:
+          $ref: '#/components/schemas/OrgId'
+        style: form
+      - description: A user identifier used to filter the results
+        explode: true
+        in: query
+        name: userId
+        required: false
+        schema:
+          $ref: '#/components/schemas/UserId'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfOrgMemberships'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List all the org memberships
+      tags:
+      - OrgMembership
+      x-openapi-router-controller: openapi_server.controllers.org_membership_controller
+    post:
+      description: Create an org membership
+      operationId: create_org_membership
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrgMembershipCreateRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrgMembershipCreateResponse'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request conflicts with current state of the target resource
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Create an org membership
+      tags:
+      - OrgMembership
+      x-openapi-router-controller: openapi_server.controllers.org_membership_controller
+  /orgMemberships/{orgMembershipId}:
+    delete:
+      description: Deletes the org membership specified
+      operationId: delete_org_membership
+      parameters:
+      - description: The unique identifier of the org membership
+        explode: false
+        in: path
+        name: orgMembershipId
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrgMembershipId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete an org membership
+      tags:
+      - OrgMembership
+      x-openapi-router-controller: openapi_server.controllers.org_membership_controller
+    get:
+      description: Returns the org membership specified
+      operationId: get_org_membership
+      parameters:
+      - description: The unique identifier of the org membership
+        explode: false
+        in: path
+        name: orgMembershipId
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrgMembershipId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrgMembership'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get an org membership
+      tags:
+      - OrgMembership
+      x-openapi-router-controller: openapi_server.controllers.org_membership_controller
+  /organizations:
+    delete:
+      description: Delete all organizations
+      operationId: delete_all_organizations
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete all organizations
+      tags:
+      - Organization
+      x-openapi-router-controller: openapi_server.controllers.organization_controller
+    get:
+      description: Returns the organizations
+      operationId: list_organizations
+      parameters:
+      - description: Maximum number of results returned
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 10
+          type: integer
+        style: form
+      - description: Index of the first result that must be returned
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfOrganizations'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get all organizations
+      tags:
+      - Organization
+      x-openapi-router-controller: openapi_server.controllers.organization_controller
+    post:
+      description: Create an organization with the specified account name
+      operationId: create_organization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreateRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationCreateResponse'
+          description: Success
+          links:
+            GetOrganizationById:
+              $ref: '#/components/links/GetOrganizationById'
+            DeleteOrganizationById:
+              $ref: '#/components/links/DeleteOrganizationById'
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request conflicts with current state of the target resource
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: Create an organization
+      tags:
+      - Organization
+      x-openapi-router-controller: openapi_server.controllers.organization_controller
+  /organizations/{organizationId}:
+    delete:
+      description: Deletes the organization specified
+      operationId: delete_organization
+      parameters:
+      - description: The unique identifier of the organization, either the user ID
+          or account name
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete an organization
+      tags:
+      - Organization
+      x-openapi-router-controller: openapi_server.controllers.organization_controller
+    get:
+      description: Returns the organization specified
+      operationId: get_organization
+      parameters:
+      - description: The unique identifier of the organization, either the user ID
+          or account name
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get an organization
+      tags:
+      - Organization
+      x-openapi-router-controller: openapi_server.controllers.organization_controller
+  /registry:
+    get:
+      description: Get information about the registry
+      operationId: get_registry
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registry'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get registry information
+      tags:
+      - Registry
+      x-openapi-router-controller: openapi_server.controllers.registry_controller
+  /user:
+    get:
+      description: Get the authenticated user
+      operationId: get_authenticated_user
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: Get the authenticated user
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+  /user/orgs:
+    get:
+      description: Lists organizations the authenticated user belongs to.
+      operationId: list_authenticated_user_organizations
+      parameters:
+      - description: Maximum number of results returned
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 10
+          type: integer
+        style: form
+      - description: Index of the first result that must be returned
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfOrganizations'
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: List organizations of the authenticated user
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+  /user/starred:
+    get:
+      description: Lists challenges the authenticated user has starred.
+      operationId: list_starred_challenges
+      parameters:
+      - description: Maximum number of results returned
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 10
+          type: integer
+        style: form
+      - description: Index of the first result that must be returned
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfChallenges'
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: List challenges starred by the authenticated user
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+  /user/starred/{accountName}/{challengeName}:
+    delete:
+      description: Unstar a challenge for the authenticated user
+      operationId: unstar_challenge
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: Unstar a challenge for the authenticated user
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+    get:
+      description: Check if a challenge is starred by the authenticated user
+      operationId: is_starred_challenge
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Response if this challenge is starred by you
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: Check if a challenge is starred by the authenticated user
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+    put:
+      description: Star a challenge for the authenticated user
+      operationId: star_challenge
+      parameters:
+      - description: The name of the account that owns the challenge
+        explode: false
+        in: path
+        name: accountName
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountLogin'
+        style: simple
+      - description: The name of the challenge
+        explode: false
+        in: path
+        name: challengeName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeName'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request conflicts with current state of the target resource
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - BearerAuth: []
+      summary: Star a challenge for the authenticated user
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+  /users:
+    delete:
+      description: Delete all users
+      operationId: delete_all_users
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete all users
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+    get:
+      description: Returns the users
+      operationId: list_users
+      parameters:
+      - description: Maximum number of results returned
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 10
+          type: integer
+        style: form
+      - description: Index of the first result that must be returned
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfUsers'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get all users
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+    post:
+      description: Create a user with the specified account name
+      operationId: create_user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreateResponse'
+          description: Success
+          links:
+            GetUserById:
+              $ref: '#/components/links/GetUserById'
+            DeleteUserById:
+              $ref: '#/components/links/DeleteUserById'
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Invalid request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request conflicts with current state of the target resource
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Create a user
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+  /users/{userId}:
+    delete:
+      description: Deletes the user specified
+      operationId: delete_user
+      parameters:
+      - description: The unique identifier of the user, either the user account ID
+          or login
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a user
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+    get:
+      description: Returns the user specified
+      operationId: get_user
+      parameters:
+      - description: The unique identifier of the user, either the user account ID
+          or login
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a user
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+  /users/{userId}/orgs:
+    get:
+      description: Lists organizations a user belongs to.
+      operationId: list_user_organizations
+      parameters:
+      - description: The unique identifier of the user, either the user account ID
+          or login
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+        style: simple
+      - description: Maximum number of results returned
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 10
+          type: integer
+        style: form
+      - description: Index of the first result that must be returned
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfOrganizations'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List orgsnizations of a user
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+  /users/{userId}/starred:
+    get:
+      description: Lists challenges a user has starred.
+      operationId: list_user_starred_challenges
+      parameters:
+      - description: The unique identifier of the user, either the user account ID
+          or login
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AccountId'
+        style: simple
+      - description: Maximum number of results returned
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          maximum: 100
+          minimum: 10
+          type: integer
+        style: form
+      - description: Index of the first result that must be returned
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageOfChallenges'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List challenges starred by a user
+      tags:
+      - User
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+components:
+  links:
+    GetChallengeById:
+      description: |
+        The `id` value returned in the response can be used as the `challengeId` parameter in `GET /challenges/{challengeId}`
+      operationId: getChallenge
+      parameters:
+        challengeId: $response.body#/challengeId
+    DeleteChallengeById:
+      description: |
+        The `id` value returned in the response can be used as the `challengeId` parameter in `DELETE /challenges/{challengeId}`
+      operationId: deleteChallenge
+      parameters:
+        challengeId: $response.body#/challengeId
+    GetGrantById:
+      description: |
+        The `id` value returned in the response can be used as the `grantId` parameter in `GET /grants/{grantId}`
+      operationId: getGrant
+      parameters:
+        grantId: $response.body#/grantId
+    DeleteGrantById:
+      description: |
+        The `id` value returned in the response can be used as the `grantId` parameter in `DELETE /grants/{grantId}`
+      operationId: deleteGrant
+      parameters:
+        grantId: $response.body#/grantId
+    GetOrganizationById:
+      description: |
+        The `id` value returned in the response can be used as the `organizationId` parameter in `GET /organizations/{organizationId}`
+      operationId: getOrganization
+      parameters:
+        organizationId: $response.body#/organizationId
+    DeleteOrganizationById:
+      description: |
+        The `id` value returned in the response can be used as the `organizationId` parameter in `DELETE /organizations/{organizationId}`
+      operationId: deleteOrganization
+      parameters:
+        organizationId: $response.body#/organizationId
+    GetUserById:
+      description: |
+        The `userName` value returned in the response can be used as the `userName` parameter in `GET /users/{userName}`
+      operationId: getUser
+      parameters:
+        userName: $response.body#/userName
+    DeleteUserById:
+      description: |
+        The `userName` value returned in the response can be used as the `userName` parameter in `DELETE /users/{userName}`
+      operationId: deleteUser
+      parameters:
+        userName: $response.body#/userName
+  parameters:
+    limit:
+      description: Maximum number of results returned
+      explode: true
+      in: query
+      name: limit
+      required: false
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 10
+        type: integer
+      style: form
+    offset:
+      description: Index of the first result that must be returned
+      explode: true
+      in: query
+      name: offset
+      required: false
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+      style: form
+    sort:
+      description: |
+        Properties used to sort the results that must be returned:
+          * featured - featured challenge, from featured to non-featured.
+          * startDate - start date of a challenge, from latest to oldest.
+          * participantCount - number of participants of a challenge, from most to least.
+          * viewCount - number of views of a challenge, from most to least.
+          * starredCount - number of stargazers of a challenge, from most to least.
+          * name - name of a challenge, from A to Z.
+          * createdAt - when a challenge is created, from latest to oldest.
+          * updatedAt - when a challenge is updated, from latest to oldest.
+      explode: true
+      in: query
+      name: sort
+      required: false
+      schema:
+        enum:
+        - featured
+        - startDate
+        - participantCount
+        - viewCount
+        - starredCount
+        - name
+        - createdAt
+        - updatedAt
+        type: string
+      style: form
+    direction:
+      description: Can be either `asc` or `desc`. Ignored without `sort` parameter.
+      explode: true
+      in: query
+      name: direction
+      required: false
+      schema:
+        enum:
+        - asc
+        - desc
+        type: string
+      style: form
+    searchTerms:
+      description: A string of search terms used to filter the results
+      explode: true
+      in: query
+      name: searchTerms
+      required: false
+      schema:
+        type: string
+      style: form
+    topics:
+      description: Array of topics used to filter the results
+      explode: true
+      in: query
+      name: topics
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/Topic'
+        type: array
+      style: form
+    inputDataTypes:
+      description: Array of input data types used to filter the results
+      explode: true
+      in: query
+      name: inputDataTypes
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeInputDataType'
+        type: array
+      style: form
+    status:
+      description: Array of challenge status used to filter the results
+      explode: true
+      in: query
+      name: status
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeStatus'
+        type: array
+      style: form
+    platformIds:
+      description: Array of challenge platform ids used to filter the results
+      explode: true
+      in: query
+      name: platformIds
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengePlatformId'
+        type: array
+      style: form
+    difficulty:
+      description: Array of challenge difficulty levels used to filter the results
+      explode: true
+      in: query
+      name: difficulty
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeDifficulty'
+        type: array
+      style: form
+    submissionTypes:
+      description: Array of challenge submission types used to filter the results
+      explode: true
+      in: query
+      name: submissionTypes
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeSubmissionType'
+        type: array
+      style: form
+    incentiveTypes:
+      description: Array of challenge incentive types used to filter the results
+      explode: true
+      in: query
+      name: incentiveTypes
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeIncentiveType'
+        type: array
+      style: form
+    startDateRange:
+      description: Return challenges that start during the date range specified
+      explode: true
+      in: query
+      name: startDateRange
+      required: false
+      schema:
+        $ref: '#/components/schemas/DateRange'
+      style: deepObject
+    orgIds:
+      description: Array of organization ids used to filter the results
+      explode: true
+      in: query
+      name: orgIds
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/OrgId'
+        type: array
+      style: form
+    organizerIds:
+      description: Array of organizer identifiers used to filter the results
+      explode: true
+      in: query
+      name: organizerIds
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/UserId'
+        type: array
+      style: form
+    sponsorIds:
+      description: Array of sponsor org identifiers used to filter the results
+      explode: true
+      in: query
+      name: sponsorIds
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/OrgId'
+        type: array
+      style: form
+    orgId:
+      description: An organization identifier used to filter the results
+      explode: true
+      in: query
+      name: orgId
+      required: false
+      schema:
+        $ref: '#/components/schemas/OrgId'
+      style: form
+    userId:
+      description: A user identifier used to filter the results
+      explode: true
+      in: query
+      name: userId
+      required: false
+      schema:
+        $ref: '#/components/schemas/UserId'
+      style: form
+  responses:
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The specified resource was not found
+    InternalServerError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The request cannot be fulfilled due to an unexpected server error
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Invalid request
+    Unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unauthorized
+    Conflict:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The request conflicts with current state of the target resource
+  schemas:
+    AccountLogin:
+      description: The user or organization account name
+      example: awesome-user
+      maxLength: 25
+      minLength: 3
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      type: string
+    AccountId:
+      description: The unique identifier of an account
+      example: 507f1f77bcf86cd799439011
+      type: string
+    Account:
+      description: A user or organization account
+      example:
+        id: 507f1f77bcf86cd799439011
+        login: awesome-user
+        type: User
+      properties:
+        id:
+          description: The unique identifier of an account
+          example: 507f1f77bcf86cd799439011
+          type: string
+        login:
+          description: The user or organization account name
+          example: awesome-user
+          maxLength: 25
+          minLength: 3
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+          type: string
+        type:
+          enum:
+          - User
+          - Organization
+          type: string
+      required:
+      - id
+      - login
+      - type
+      title: Account
+      type: object
+    Error:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          title: title
+          type: string
+        status:
+          description: The HTTP status code
+          title: status
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          title: detail
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          title: type
+          type: string
+      required:
+      - status
+      - title
+      title: Error
+      type: object
+    LocalAuthRequest:
+      description: The information required to authentify a local account
+      example:
+        login: awesome-user
+        password: yourpassword
+      properties:
+        login:
+          description: The user or organization account name
+          example: awesome-user
+          maxLength: 25
+          minLength: 3
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+          type: string
+        password:
+          type: string
+      required:
+      - login
+      - password
+      type: object
+    LocalAuthResponse:
+      description: The token returned after the authentication of a local account
+      example:
+        token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2MTNlM2RiNWNhYzdjZDcwNmNjZDBjNDEiLCJpYXQiOjE2MzE0Njg5ODEsImV4cCI6MTYzMTQ2ODk4Nn0.shJH6Tp19nzjU8Bnlov55hqtkwwu6E_5ZTrhOZu8dyQ
+      properties:
+        token:
+          type: string
+      required:
+      - token
+      title: LocalAuthResponse
+      type: object
+    Topic:
+      description: The topic
+      example: '["breast-cancer","ehr"]'
+      maxLength: 30
+      minLength: 3
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      title: Topic
+      type: string
+    ChallengeInputDataType:
+      description: A challenge input data type
+      example: '["genomic","clinical"]'
+      maxLength: 30
+      minLength: 3
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      title: ChallengeInputDataType
+      type: string
+    ChallengeStatus:
+      description: The status of the challenge
+      enum:
+      - upcoming
+      - active
+      - completed
+      example: active
+      title: ChallengeStatus
+      type: string
+    ChallengePlatformId:
+      description: The unique identifier of a challenge platform
+      example: 507f1f77bcf86cd799439011
+      title: ChallengePlatformId
+      type: string
+    ChallengeDifficulty:
+      description: The difficulty level of a challenge
+      enum:
+      - GoodForBeginners
+      - Intermediate
+      - Advanced
+      example: Intermediate
+      title: ChallengeDifficulty
+      type: string
+    ChallengeSubmissionType:
+      description: The submission type of the challenge
+      enum:
+      - DockerImage
+      - PredictionFile
+      - Other
+      example: DockerImage
+      title: ChallengeSubmissionType
+      type: string
+    ChallengeIncentiveType:
+      description: The incentive type of the challenge
+      enum:
+      - Monetary
+      - Publication
+      - SpeakingEngagement
+      - Other
+      example: Monetary
+      title: ChallengeIncentiveType
+      type: string
+    DateRange:
+      description: A date range
+      example:
+        start: 2021-07-17
+        end: 2021-07-17
+      properties:
+        start:
+          description: Start date of the date range
+          format: date
+          type: string
+        end:
+          description: End date of the date range
+          format: date
+          type: string
+      title: DateRange
+      type: object
+    OrgId:
+      description: The unique identifier of an organization
+      example: 507f1f77bcf86cd799439011
+      title: OrgId
+      type: string
+    UserId:
+      description: The unique identifier of a user
+      example: 507f1f77bcf86cd799439011
+      title: UserId
+      type: string
+    ResponsePageMetadata:
+      description: A page of results
+      properties:
+        offset:
+          description: Index of the first result that must be returned
+          type: integer
+        limit:
+          description: Maximum number of results returned
+          type: integer
+        paging:
+          $ref: '#/components/schemas/ResponsePageMetadata_paging'
+        totalResults:
+          description: Total number of results in the result set
+          type: integer
+      required:
+      - limit
+      - offset
+      - paging
+      - totalResults
+      type: object
+    ChallengeId:
+      description: The unique identifier of the challenge
+      example: 507f1f77bcf86cd799439011
+      type: string
+    ChallengeCreateResponse:
+      description: The unique identifier of the challenge created
+      example:
+        id: 507f1f77bcf86cd799439011
+      properties:
+        id:
+          description: The unique identifier of the challenge
+          example: 507f1f77bcf86cd799439011
+          type: string
+      required:
+      - id
+      title: ChallengeCreateResponse
+      type: object
+    ChallengeName:
+      description: The name of the a challenge
+      example: awesome-challenge
+      maxLength: 60
+      minLength: 3
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      type: string
+    ChallengeCreateRequest:
+      description: The information used to create a challenge
+      example:
+        name: awesome-challenge
+        displayName: Awesome Challenge
+        description: This challenge is awesome.
+        websiteUrl: https://synapse.org/awesome-challenge
+        status: active
+        startDate: 2020-11-10
+        endDate: 2020-12-31
+        platformId: 507f1f77bcf86cd799439011
+        submissionTypes:
+        - PredictionFile
+        - DockerImage
+        incentiveTypes:
+        - Monetary
+        - Publication
+        topics:
+        - breast-cancer
+        - covid
+        dataTypes:
+        - genomic
+        - ehr
+        doi: http://doi.org/10.5281/zenodo.3714971
+        participantCount: 100
+      properties:
+        name:
+          description: The name of the a challenge
+          example: awesome-challenge
+          maxLength: 60
+          minLength: 3
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+          type: string
+        displayName:
+          maxLength: 60
+          minLength: 3
+          type: string
+        description:
+          description: A short description of the challenge
+          maxLength: 280
+          nullable: true
+          type: string
+        websiteUrl:
+          format: uri
+          type: string
+        status:
+          $ref: '#/components/schemas/ChallengeStatus'
+        startDate:
+          format: date
+          nullable: true
+          type: string
+        endDate:
+          format: date
+          nullable: true
+          type: string
+        incentiveTypes:
+          items:
+            $ref: '#/components/schemas/ChallengeIncentiveType'
+          nullable: true
+          type: array
+        platformId:
+          description: The unique identifier of a challenge platform
+          example: 507f1f77bcf86cd799439011
+          title: ChallengePlatformId
+          type: string
+        difficulty:
+          $ref: '#/components/schemas/ChallengeDifficulty'
+        submissionTypes:
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+          nullable: true
+          type: array
+        topics:
+          items:
+            $ref: '#/components/schemas/Topic'
+          maxItems: 30
+          type: array
+        inputDataTypes:
+          items:
+            $ref: '#/components/schemas/ChallengeInputDataType'
+          maxItems: 10
+          nullable: true
+          type: array
+        doi:
+          nullable: true
+          type: string
+        participantCount:
+          minimum: 0
+          nullable: true
+          type: integer
+      required:
+      - description
+      - name
+      type: object
+    ChallengeReadmeId:
+      description: The unique identifier of a challenge README
+      example: 507f1f77bcf86cd799439011
+      type: string
+    Challenge:
+      allOf:
+      - $ref: '#/components/schemas/ChallengeCreateResponse'
+      - $ref: '#/components/schemas/ChallengeCreateRequest'
+      - $ref: '#/components/schemas/Challenge_allOf'
+      description: A challenge
+      title: Challenge
+      type: object
+    PageOfChallenges:
+      allOf:
+      - $ref: '#/components/schemas/ResponsePageMetadata'
+      - $ref: '#/components/schemas/PageOfChallenges_allOf'
+      description: A page of Challenges
+      title: PageOfChallenges
+      type: object
+    EmptyObject:
+      description: Empty JSON object
+      type: object
+    ChallengeOrganizerId:
+      description: The unique identifier of a challenge organizer
+      example: 507f1f77bcf86cd799439011
+      type: string
+    ChallengeOrganizerCreateResponse:
+      description: The unique identifier of the challenge organizer created
+      example:
+        id: 507f1f77bcf86cd799439011
+      properties:
+        id:
+          description: The unique identifier of a challenge organizer
+          example: 507f1f77bcf86cd799439011
+          type: string
+      required:
+      - id
+      title: ChallengeOrganizerCreateResponse
+      type: object
+    ChallengeOrganizerRole:
+      description: The role of the challenge organizer
+      enum:
+      - ChallengeLead
+      - InfrastructureLead
+      example: ChallengeLead
+      title: ChallengeOrganizerRole
+      type: string
+    ChallengeOrganizerCreateRequest:
+      description: The information used to create a challenge organizer
+      example:
+        name: John Smith
+        login: jsmith
+        roles:
+        - ChallengeLead
+        - InfrastructureLead
+      properties:
+        name:
+          type: string
+        login:
+          description: The user or organization account name
+          example: awesome-user
+          maxLength: 25
+          minLength: 3
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+          type: string
+        roles:
+          items:
+            $ref: '#/components/schemas/ChallengeOrganizerRole'
+          type: array
+      required:
+      - name
+      type: object
+    ChallengeOrganizer:
+      allOf:
+      - $ref: '#/components/schemas/ChallengeOrganizerCreateResponse'
+      - $ref: '#/components/schemas/ChallengeOrganizerCreateRequest'
+      description: A challenge organizer
+      title: ChallengeOrganizer
+      type: object
+    ChallengeOrganizerList:
+      description: A list of challenge organizers
+      example:
+        challengeOrganizers:
+        - null
+        - null
+      properties:
+        challengeOrganizers:
+          description: A list of ChallengeOrganizers
+          items:
+            $ref: '#/components/schemas/ChallengeOrganizer'
+          title: challengeOrganizers
+          type: array
+      required:
+      - challengeOrganizers
+      title: ChallengeOrganizerList
+      type: object
+    ChallengeReadmeCreateResponse:
+      description: The unique identifier of the challenge README created
+      example:
+        id: 507f1f77bcf86cd799439011
+      properties:
+        id:
+          description: The unique identifier of a challenge README
+          example: 507f1f77bcf86cd799439011
+          type: string
+      required:
+      - id
+      type: object
+    ChallengeReadmeCreateRequest:
+      description: The information used to the README of a challenge
+      example:
+        text: A great README text
+      properties:
+        text:
+          type: string
+      required:
+      - text
+      type: object
+    ChallengeReadme:
+      allOf:
+      - $ref: '#/components/schemas/ChallengeReadmeCreateResponse'
+      - $ref: '#/components/schemas/ChallengeReadmeCreateRequest'
+      - $ref: '#/components/schemas/ChallengeReadme_allOf'
+      description: A challenge README
+      title: ChallengeReadme
+      type: object
+    ChallengeReadmeUpdateRequest:
+      description: The new README content of a challenge
+      example:
+        text: A great README text
+      properties:
+        text:
+          type: string
+      required:
+      - text
+      type: object
+    ChallengeSponsorId:
+      description: The unique identifier of a challenge sponsor
+      example: 507f1f77bcf86cd799439011
+      type: string
+    ChallengeSponsorCreateResponse:
+      description: The unique identifier of a challenge sponsor
+      example:
+        id: 507f1f77bcf86cd799439011
+      properties:
+        id:
+          description: The unique identifier of a challenge sponsor
+          example: 507f1f77bcf86cd799439011
+          type: string
+      required:
+      - id
+      title: ChallengeSponsorCreateResponse
+      type: object
+    ChallengeSponsorRole:
+      description: The role of a challenge sponsor
+      enum:
+      - ChallengeOrganizer
+      - ComputeProvider
+      - DataProvider
+      - Funder
+      - Other
+      example: DataProvider
+      title: ChallengeSponsorRole
+      type: string
+    ChallengeSponsorCreateRequest:
+      description: The information used to create a challenge sponsor
+      example:
+        name: IBM
+        login: ibm
+        roles:
+        - ComputeProvider
+        - DataProvider
+      properties:
+        name:
+          type: string
+        login:
+          description: The user or organization account name
+          example: awesome-user
+          maxLength: 25
+          minLength: 3
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+          type: string
+        roles:
+          items:
+            $ref: '#/components/schemas/ChallengeSponsorRole'
+          type: array
+      required:
+      - name
+      type: object
+    ChallengeSponsor:
+      allOf:
+      - $ref: '#/components/schemas/ChallengeSponsorCreateResponse'
+      - $ref: '#/components/schemas/ChallengeSponsorCreateRequest'
+      description: A challenge sponsor
+      title: ChallengeSponsor
+      type: object
+    ChallengeSponsorList:
+      description: A list of challenge sponsors
+      example:
+        challengeSponsors:
+        - null
+        - null
+      properties:
+        challengeSponsors:
+          description: A list of ChallengeSponsors
+          items:
+            $ref: '#/components/schemas/ChallengeSponsor'
+          title: challengeSponsors
+          type: array
+      required:
+      - challengeSponsors
+      title: ChallengeSponsorList
+      type: object
+    UserCreateResponse:
+      description: The response returned after the creation of the user
+      example:
+        id: 507f1f77bcf86cd799439011
+      properties:
+        id:
+          description: The unique identifier of an account
+          example: 507f1f77bcf86cd799439011
+          type: string
+      required:
+      - id
+      title: UserCreateResponse
+      type: object
+    Email:
+      description: An email address
+      example: john.smith@example.com
+      format: email
+      type: string
+    User:
+      allOf:
+      - $ref: '#/components/schemas/UserCreateResponse'
+      - $ref: '#/components/schemas/User_allOf'
+      description: A simple user
+      title: User
+      type: object
+    PageOfUsers:
+      allOf:
+      - $ref: '#/components/schemas/ResponsePageMetadata'
+      - $ref: '#/components/schemas/PageOfUsers_allOf'
+      description: A page of Users
+      title: PageOfUsers
+      type: object
+    ArrayOfTopics:
+      description: An array of topics
+      example:
+        topics:
+        - breast-cancer
+        - ehr
+      properties:
+        topics:
+          description: An array of Topics
+          items:
+            $ref: '#/components/schemas/Topic'
+          type: array
+      required:
+      - topics
+      title: ArrayOfTopics
+      type: object
+    ChallengePlatformCreateResponse:
+      description: The unique identifier of the challenge platform created
+      example:
+        id: 507f1f77bcf86cd799439011
+      properties:
+        id:
+          description: The unique identifier of a challenge platform
+          example: 507f1f77bcf86cd799439011
+          title: ChallengePlatformId
+          type: string
+      required:
+      - id
+      title: ChallengePlatformCreateResponse
+      type: object
+    ChallengePlatformName:
+      description: The name of the challenge platform
+      example: awesome-challenge-platform
+      maxLength: 30
+      minLength: 3
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      type: string
+    ChallengePlatformCreateRequest:
+      description: The information used to create a challenge platform
+      example:
+        name: awesome-challenge-platform
+        displayName: Awesome Challenge Platform
+        websiteUrl: https://awesome-challenge-platform.io
+        avatarUrl: https://awesome-challenge-platform.io/logo.png
+      properties:
+        name:
+          description: The name of the challenge platform
+          example: awesome-challenge-platform
+          maxLength: 30
+          minLength: 3
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+          type: string
+        displayName:
+          type: string
+        websiteUrl:
+          format: uri
+          type: string
+        avatarUrl:
+          format: uri
+          type: string
+      required:
+      - avatarUrl
+      - displayName
+      - name
+      - websiteUrl
+      type: object
+    ChallengePlatform:
+      allOf:
+      - $ref: '#/components/schemas/ChallengePlatformCreateResponse'
+      - $ref: '#/components/schemas/ChallengePlatformCreateRequest'
+      - $ref: '#/components/schemas/ChallengeReadme_allOf'
+      description: A challenge platform
+      title: ChallengePlatform
+      type: object
+    PageOfChallengePlatforms:
+      allOf:
+      - $ref: '#/components/schemas/ResponsePageMetadata'
+      - $ref: '#/components/schemas/PageOfChallengePlatforms_allOf'
+      description: A page of ChallengePlatforms
+      title: PageOfChallengePlatforms
+      type: object
+    GrantId:
+      description: The unique identifier of a grant
+      example: 507f1f77bcf86cd799439011
+      type: string
+    GrantCreateResponse:
+      description: The unique identifier of the grant created
+      example:
+        id: 507f1f77bcf86cd799439011
+      properties:
+        id:
+          description: The unique identifier of a grant
+          example: 507f1f77bcf86cd799439011
+          type: string
+      required:
+      - id
+      title: GrantCreateResponse
+      type: object
+    GrantCreateRequest:
+      description: The information required to create a grant
+      example:
+        name: Awesome Grant
+      properties:
+        name:
+          description: The name of the grant
+          type: string
+      required:
+      - name
+      type: object
+    Grant:
+      allOf:
+      - $ref: '#/components/schemas/GrantCreateResponse'
+      - $ref: '#/components/schemas/GrantCreateRequest'
+      description: Information about monetary resources for challenge
+      title: Grant
+      type: object
+    PageOfGrants:
+      allOf:
+      - $ref: '#/components/schemas/ResponsePageMetadata'
+      - $ref: '#/components/schemas/PageOfGrants_allOf'
+      description: A page of Grants
+      title: PageOfGrants
+      type: object
+    HealthCheck:
+      description: Represents the health of a service
+      example:
+        status: pass
+      properties:
+        status:
+          description: Indicates whether the service status is acceptable or not
+          enum:
+          - pass
+          - fail
+          - warn
+          title: status
+          type: string
+      required:
+      - status
+      title: HealthCheck
+      type: object
+    OrganizationCreateResponse:
+      description: The unique identifier of the org created
+      example:
+        id: 507f1f77bcf86cd799439011
+      properties:
+        id:
+          description: The unique identifier of an account
+          example: 507f1f77bcf86cd799439011
+          type: string
+      required:
+      - id
+      title: OrganizationCreateResponse
+      type: object
+    OrganizationCreateRequest:
+      description: The information required to create an org account
+      example:
+        login: awesome-org
+        email: contact@example.org
+        name: Awesome Org
+        avatarUrl: https://example.com/awesome-avatar.png
+        websiteUrl: https://example.com
+        description: A great organization
+      properties:
+        login:
+          type: string
+        email:
+          description: An email address
+          example: john.smith@example.com
+          format: email
+          type: string
+        name:
+          nullable: true
+          type: string
+        avatarUrl:
+          example: https://example.com/awesome-avatar.png
+          format: uri
+          nullable: true
+          type: string
+        websiteUrl:
+          example: https://example.com
+          format: uri
+          nullable: true
+          type: string
+        description:
+          nullable: true
+          type: string
+      required:
+      - email
+      - login
+      type: object
+    Organization:
+      allOf:
+      - $ref: '#/components/schemas/OrganizationCreateResponse'
+      - $ref: '#/components/schemas/OrganizationCreateRequest'
+      - $ref: '#/components/schemas/Organization_allOf'
+      description: An organization
+      title: Organization
+      type: object
+    PageOfOrganizations:
+      allOf:
+      - $ref: '#/components/schemas/ResponsePageMetadata'
+      - $ref: '#/components/schemas/PageOfOrganizations_allOf'
+      description: A page of Organizations
+      title: PageOfOrganizations
+      type: object
+    OrgMembershipId:
+      description: The unique identifier of the org membership
+      example: 507f1f77bcf86cd799439011
+      type: string
+    OrgMembershipCreateResponse:
+      description: The unique identifier of the org membership
+      example:
+        id: 507f1f77bcf86cd799439011
+      properties:
+        id:
+          description: The unique identifier of the org membership
+          example: 507f1f77bcf86cd799439011
+          type: string
+      required:
+      - id
+      title: OrgMembershipCreateResponse
+      type: object
+    OrgMembershipCreateRequest:
+      description: The information used to create an org membership
+      example:
+        state: active
+        role: admin
+        organizationId: 507f1f77bcf86cd799439011
+        userId: 507f1f77bcf86cd799439012
+      properties:
+        state:
+          description: The state of the member in the organization. The `pending`
+            state indicates the user has not yet accepted an invitation.
+          enum:
+          - active
+          - pending
+          example: active
+          type: string
+        role:
+          description: The user's membership type in the organization.
+          enum:
+          - admin
+          - member
+          type: string
+        organizationId:
+          description: The unique identifier of an organization
+          example: 507f1f77bcf86cd799439011
+          title: OrgId
+          type: string
+        userId:
+          description: The unique identifier of a user
+          example: 507f1f77bcf86cd799439011
+          title: UserId
+          type: string
+      required:
+      - organizationId
+      - role
+      - state
+      - userId
+      type: object
+    OrgMembership:
+      allOf:
+      - $ref: '#/components/schemas/OrgMembershipCreateResponse'
+      - $ref: '#/components/schemas/OrgMembershipCreateRequest'
+      description: Information about an org membership
+      title: OrgMembership
+      type: object
+    PageOfOrgMemberships:
+      allOf:
+      - $ref: '#/components/schemas/ResponsePageMetadata'
+      - $ref: '#/components/schemas/PageOfOrgMemberships_allOf'
+      description: A page of org memberships
+      title: PageOfOrgMemberships
+      type: object
+    Registry:
+      description: The Challenge Registry
+      example:
+        name: Challenge Registry
+        description: A great challenge registry
+        userCount: 1000
+        orgCount: 1000
+        challengeCound: 1000
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        userCount:
+          type: integer
+        orgCount:
+          type: integer
+        challengeCount:
+          type: integer
+      required:
+      - challengeCount
+      - description
+      - name
+      - orgCount
+      - userCount
+      title: Registry
+      type: object
+    UserCreateRequest:
+      description: The information required to create a user account
+      example:
+        login: awesome-user
+        email: awesome-user@example.org
+        password: yourpassword
+        name: Awesome User
+        avatarUrl: https://example.com/awesome-avatar.png
+        bio: A great bio
+      properties:
+        login:
+          type: string
+        email:
+          description: An email address
+          example: john.smith@example.com
+          format: email
+          type: string
+        password:
+          format: password
+          type: string
+        name:
+          nullable: true
+          type: string
+        avatarUrl:
+          example: https://example.com/awesome-avatar.png
+          format: uri
+          nullable: true
+          type: string
+        bio:
+          nullable: true
+          type: string
+      required:
+      - email
+      - login
+      - password
+      type: object
+    ResponsePageMetadata_paging:
+      description: Links to navigate to different pages of results
+      properties:
+        next:
+          description: Link to the next page of results
+          format: uri
+          title: next
+          type: string
+      title: ResponsePageMetadata_paging
+      type: object
+    Challenge_allOf:
+      example:
+        fullName: dream/awesome-challenge
+        ownerId: 507f1f77bcf86cd799439011
+        createdAt: 2017-07-08T16:18:44-04:00
+        updatedAt: 2017-07-08T16:18:44-04:00
+      properties:
+        fullName:
+          type: string
+        ownerId:
+          description: The unique identifier of an account
+          example: 507f1f77bcf86cd799439011
+          type: string
+        readmeId:
+          description: The unique identifier of a challenge README
+          example: 507f1f77bcf86cd799439011
+          type: string
+        featured:
+          default: false
+          description: Whether the challenge is featured
+          type: boolean
+        participantCount:
+          default: 0
+          description: Number of challenge participants
+          type: integer
+        viewCount:
+          default: 0
+          description: Number of challenge views
+          type: integer
+        starredCount:
+          default: 0
+          description: Number of times the challenge has been starred by users
+          type: integer
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - createdAt
+      - fullName
+      - ownerId
+      - readmeId
+      - updatedAt
+      type: object
+    PageOfChallenges_allOf:
+      properties:
+        challenges:
+          description: An array of Challenges
+          items:
+            $ref: '#/components/schemas/Challenge'
+          type: array
+      required:
+      - challenges
+      type: object
+    ChallengeReadme_allOf:
+      example:
+        createdAt: 2017-07-08T16:18:44-04:00
+        updatedAt: 2017-07-08T16:18:44-04:00
+      properties:
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - createdAt
+      - updatedAt
+      type: object
+    User_allOf:
+      example:
+        login: awesome-user
+        email: awesome-user@example.org
+        name: Awesome User
+        avatarUrl: https://example.com/awesome-avatar.png
+        bio: A great bio
+        createdAt: 2017-07-08T16:18:44-04:00
+        updatedAt: 2017-07-08T16:18:44-04:00
+        type: User
+      properties:
+        login:
+          type: string
+        email:
+          description: An email address
+          example: john.smith@example.com
+          format: email
+          type: string
+        name:
+          nullable: true
+          type: string
+        avatarUrl:
+          example: https://example.com/awesome-avatar.png
+          format: uri
+          nullable: true
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        type:
+          example: User
+          type: string
+        bio:
+          nullable: true
+          type: string
+      required:
+      - createdAt
+      - email
+      - login
+      - type
+      - updatedAt
+      type: object
+    PageOfUsers_allOf:
+      properties:
+        users:
+          description: An array of Users
+          items:
+            $ref: '#/components/schemas/User'
+          type: array
+      required:
+      - users
+      type: object
+    PageOfChallengePlatforms_allOf:
+      properties:
+        challengePlatforms:
+          description: An array of ChallengePlatforms
+          items:
+            $ref: '#/components/schemas/ChallengePlatform'
+          type: array
+      required:
+      - challengePlatforms
+      type: object
+    PageOfGrants_allOf:
+      properties:
+        grants:
+          description: An array of Grants
+          items:
+            $ref: '#/components/schemas/Grant'
+          type: array
+      required:
+      - grants
+      type: object
+    Organization_allOf:
+      example:
+        createdAt: 2017-07-08T16:18:44-04:00
+        updatedAt: 2017-07-08T16:18:44-04:00
+        type: Organization
+      properties:
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        type:
+          example: Organization
+          type: string
+      required:
+      - createdAt
+      - type
+      - updatedAt
+      type: object
+    PageOfOrganizations_allOf:
+      properties:
+        organizations:
+          description: An array of Organizations
+          items:
+            $ref: '#/components/schemas/Organization'
+          type: array
+      required:
+      - organizations
+      type: object
+    PageOfOrgMemberships_allOf:
+      properties:
+        orgMemberships:
+          description: An array of org memberships
+          items:
+            $ref: '#/components/schemas/OrgMembership'
+          type: array
+      required:
+      - orgMemberships
+      type: object
+  securitySchemes:
+    BearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+      x-bearerInfoFunc: openapi_server.controllers.security_controller_.info_from_BearerAuth
+    ApiKeyAuth:
+      in: header
+      name: X-API-Key
+      type: apiKey
+      x-apikeyInfoFunc: openapi_server.controllers.security_controller_.info_from_ApiKeyAuth
