@@ -17,7 +17,7 @@ jobs:
   push:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:f4bbbb2
+      image: sagebionetworks/challenge-devcontainer:6dfd206
       options: --user root
     if: ${{ github.event_name != 'pull_request' }}
     # env:
@@ -105,7 +105,7 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:f4bbbb2
+      image: sagebionetworks/challenge-devcontainer:6dfd206
       options: --user root
     # Runs this job if triggered by a PR and if at least one of these conditions are true:
     # - the PR originate from a fork
