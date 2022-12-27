@@ -11,6 +11,7 @@ RUN apt-get update -qq -y \
         gosu \
         libpcre3 \
         libpcre3-dev \
+        python3-dev \
     && apt-get -y autoclean \
     && apt-get -y autoremove \
     && rm -rf /var/lib/apt/lists/*
@@ -21,8 +22,7 @@ COPY pyproject.toml poetry.lock uwsgi.ini ./
 
 RUN pip install poetry \
   && poetry config --local virtualenvs.create false \
-  && poetry install --no-root --no-interaction --no-ansi \
-  && poetry add uWSGI@2.0.19.1 click@8.0.3 \
+  && poetry install --with prod --no-root --no-interaction --no-ansi \
   && pip cache purge
 
 WORKDIR /

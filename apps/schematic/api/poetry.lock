@@ -351,6 +351,14 @@ secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "ipaddress", "p
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
+name = "uwsgi"
+version = "2.0.21"
+description = "The uWSGI server"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "werkzeug"
 version = "2.2.2"
 description = "The comprehensive WSGI web application library."
@@ -379,7 +387,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco-functools", "jaraco-itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.2"
-content-hash = "7a3c3441934f104d744abdc7ae9c578564e0627c272bc5bd96a4b6399f146c60"
+content-hash = "d8db766dae50cd3d44df8019a9ade7ee8bb6bb91823341e1852559e664308465"
 
 [metadata.files]
 attrs = [
@@ -607,6 +615,9 @@ typing-extensions = [
 urllib3 = [
     {file = "urllib3-1.26.13-py2.py3-none-any.whl", hash = "sha256:47cc05d99aaa09c9e72ed5809b60e7ba354e64b59c9c173ac3018642d8bb41fc"},
     {file = "urllib3-1.26.13.tar.gz", hash = "sha256:c083dd0dce68dbfbe1129d5271cb90f9447dea7d52097c6e0126120c521ddea8"},
+]
+uwsgi = [
+    {file = "uwsgi-2.0.21.tar.gz", hash = "sha256:35a30d83791329429bc04fe44183ce4ab512fcf6968070a7bfba42fc5a0552a9"},
 ]
 werkzeug = [
     {file = "Werkzeug-2.2.2-py3-none-any.whl", hash = "sha256:f979ab81f58d7318e064e99c4506445d60135ac5cd2e177a2de0089bfd4c9bd5"},

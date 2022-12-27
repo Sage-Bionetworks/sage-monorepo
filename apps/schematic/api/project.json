@@ -11,6 +11,13 @@
         "cwd": "apps/schematic/api"
       }
     },
+    "prepare-python": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["poetry install --with prod"],
+        "cwd": "apps/schematic/api"
+      }
+    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
