@@ -21,8 +21,12 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
+.dockerignore
+.gitignore
+.openapi-generator-ignore
 .travis.yml
 Dockerfile
 git_push.sh
 README.md
+schematic_api/__main__.py
 tox.ini
