@@ -1,4 +1,4 @@
-FROM python:3.9.6-slim-buster
+FROM python:3.9.2-slim-buster
 
 ENV APP_DIR=/opt/app
 
@@ -16,12 +16,14 @@ RUN apt-get update -qq -y \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR ${APP_DIR}
-COPY openapi_server openapi_server/
-COPY Pipfile Pipfile.lock uwsgi.ini ./
+COPY schematic_api schematic_api/
+COPY pyproject.toml poetry.lock uwsgi.ini ./
 
-RUN pip install pipenv \
-  && pipenv install --deploy --system \
-  && pip install --no-cache-dir uWSGI==2.0.19.1 click==8.0.3
+RUN pip install poetry \
+  && poetry config --local virtualenvs.create false \
+  && poetry install --no-root --no-interaction --no-ansi \
+  && poetry add uWSGI@2.0.19.1 click@8.0.3 \
+  && pip cache purge
 
 WORKDIR /
 COPY docker-entrypoint.sh ./
@@ -35,21 +37,3 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 # CMD ["python", "-m", "openapi_server"]
 # Run server in production mode
 CMD ["uwsgi", "--ini", "uwsgi.ini", "--lazy", "--http", ":8080"]
-
-
-# FROM python:3-alpine
-
-# RUN mkdir -p /usr/src/app
-# WORKDIR /usr/src/app
-
-# COPY requirements.txt /usr/src/app/
-
-# RUN pip3 install --no-cache-dir -r requirements.txt
-
-# COPY . /usr/src/app
-
-# EXPOSE 8080
-
-# ENTRYPOINT ["python3"]
-
-# CMD ["-m", "schematic_api"]

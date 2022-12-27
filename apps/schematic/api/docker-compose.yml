@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  schematic-api:
+    image: sagebionetworks/schematic-api:latest
+    container_name: schematic-api
+    restart: always
+    env_file:
+      - .env
+    # volumes:
+    #   - challenge-mariadb:/data/db
+    #   - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - schematic
+    ports:
+      - "${SERVER_PORT}:7080"
+
+# volumes:
+#   challenge-mariadb:
+#     name: challenge-mariadb
+
+networks:
+  schematic:
+    name: schematic
