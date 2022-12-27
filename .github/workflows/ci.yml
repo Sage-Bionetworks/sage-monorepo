@@ -57,6 +57,13 @@ jobs:
       #     path: ~/.local/share/virtualenvs
       #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
 
+      - name: Setup poetry cache
+        id: cache-poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+
       - name: Setup Gradle cache
         uses: actions/cache@v3
         with:
@@ -146,6 +153,13 @@ jobs:
       #   with:
       #     path: ~/.local/share/virtualenvs
       #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+
+      - name: Setup poetry cache
+        id: cache-poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
       - name: Setup Gradle cache
         uses: actions/cache@v3
