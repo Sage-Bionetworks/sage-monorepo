@@ -10,7 +10,9 @@
         "inputSpec": "#{cwd}/../../../libs/schematic/api-description/build/openapi.yaml",
         "output": "#{cwd}",
         "templateDir": "templates",
-        "additionalProperties": {}
+        "additionalProperties": {
+          "packageName": "schematic_api"
+        }
       }
     }
   }
