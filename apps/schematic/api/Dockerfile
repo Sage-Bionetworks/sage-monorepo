@@ -29,11 +29,11 @@ WORKDIR /
 COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
-EXPOSE 8080
+EXPOSE 7080
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # Run server in development mode
 # CMD ["python", "-m", "openapi_server"]
 # Run server in production mode
-CMD ["uwsgi", "--ini", "uwsgi.ini", "--lazy", "--http", ":8080"]
+CMD ["uwsgi", "--ini", "uwsgi.ini", "--lazy", "--http", ":7080"]
