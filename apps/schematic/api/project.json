@@ -11,6 +11,13 @@
         "cwd": "apps/schematic/api"
       }
     },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run python -m schematic_api",
+        "cwd": "apps/schematic/api"
+      }
+    },
     "openapi-generate": {
       "executor": "nx:run-commands",
       "options": {
@@ -28,13 +35,6 @@
     //     "commands": ["pipenv install --deploy --dev", "pipenv run pip install click==8.0.3"],
     //     "cwd": "apps/api",
     //     "parallel": false
-    //   }
-    // },
-    // "generate-sources": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "command": "openapi-generator-cli generate -g python-flask -i ../../libs/challenge-registry/api-description/openapi.yaml",
-    //     "cwd": "apps/api"
     //   }
     // },
     // "serve": {
