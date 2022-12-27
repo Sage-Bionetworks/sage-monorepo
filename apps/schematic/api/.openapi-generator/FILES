@@ -1,8 +1,6 @@
 AUTHORS.md
-README.md
 requirements.txt
 schematic_api/__init__.py
-schematic_api/__main__.py
 schematic_api/controllers/__init__.py
 schematic_api/controllers/security_controller_.py
 schematic_api/controllers/storage_controller.py
