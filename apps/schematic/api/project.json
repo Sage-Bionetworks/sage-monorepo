@@ -77,14 +77,14 @@
         "command": "poetry run black ./schematic_api --exclude '(models|test)'",
         "cwd": "apps/schematic/api"
       }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run tox",
+        "cwd": "apps/schematic/api"
+      }
     }
-    // "test": {
-    //   "executor": "@nrwl/workspace:run-commands",
-    //   "options": {
-    //     "command": "pipenv run tox",
-    //     "cwd": "apps/api"
-    //   }
-    // }
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": []
