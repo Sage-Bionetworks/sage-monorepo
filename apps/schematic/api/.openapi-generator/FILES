@@ -8,6 +8,10 @@ schematic_api/encoder.py
 schematic_api/models/__init__.py
 schematic_api/models/base_model_.py
 schematic_api/models/basic_error.py
+schematic_api/models/dataset.py
+schematic_api/models/datasets_page.py
+schematic_api/models/datasets_page_all_of.py
+schematic_api/models/page_metadata.py
 schematic_api/openapi/openapi.yaml
 schematic_api/test/__init__.py
 schematic_api/test/test_storage_controller.py

@@ -27,7 +27,11 @@ paths:
       operationId: listStorageProjectDatasets
       responses:
         '200':
-          description: A list of tuples
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetsPage'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -38,6 +42,73 @@ components:
       description: A Synapse project ID.
       type: string
       example: syn26251192
+    PageMetadata:
+      type: object
+      description: The metadata of a page.
+      properties:
+        number:
+          description: The page number.
+          type: integer
+          format: int32
+          example: 99
+        size:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          example: 99
+        totalElements:
+          description: Total number of elements in the result set.
+          type: integer
+          format: int64
+          example: 99
+        totalPages:
+          description: Total number of pages in the result set.
+          type: integer
+          format: int32
+          example: 99
+        hasNext:
+          description: Returns if there is a next page.
+          type: boolean
+          example: true
+        hasPrevious:
+          description: Returns if there is a previous page.
+          type: boolean
+          example: true
+      required:
+        - number
+        - size
+        - totalElements
+        - totalPages
+        - hasNext
+        - hasPrevious
+    Dataset:
+      type: object
+      description: A dataset.
+      properties:
+        name:
+          type: string
+          description: The name of the dataset.
+          example: Example dataset
+      required:
+        - name
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    DatasetsPage:
+      type: object
+      description: A page of datasets.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            datasets:
+              description: A list of datasets.
+              type: array
+              items:
+                $ref: '#/components/schemas/Dataset'
+          required:
+            - datasets
+      x-java-class-annotations:
+        - '@lombok.Builder'
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)

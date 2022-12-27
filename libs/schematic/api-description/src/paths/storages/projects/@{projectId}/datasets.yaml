@@ -8,13 +8,11 @@ get:
   operationId: listStorageProjectDatasets
   responses:
     '200':
-      description: A list of tuples
-    # '200':
-    #   description: An organization
-    #   content:
-    #     application/json:
-    #       schema:
-    #         $ref: ../../../components/schemas/Organization.yaml
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/DatasetsPage.yaml
     '404':
       $ref: ../../../../components/responses/NotFound.yaml
     '500':

@@ -7,6 +7,7 @@ from flask import json
 from six import BytesIO
 
 from schematic_api.models.basic_error import BasicError  # noqa: E501
+from schematic_api.models.datasets_page import DatasetsPage  # noqa: E501
 from schematic_api.test import BaseTestCase
 
 
@@ -19,7 +20,7 @@ class TestStorageController(BaseTestCase):
         Gets all datasets in folder under a given storage project that the current user has access to.
         """
         headers = { 
-            'Accept': 'application/problem+json',
+            'Accept': 'application/json',
         }
         response = self.client.open(
             '/v1/storages/projects/{project_id}/datasets'.format(project_id='project_id_example'),
