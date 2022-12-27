@@ -22,6 +22,7 @@ declare -a hostnames=(
   "127.0.0.1 challenge-organization-service"
   "127.0.0.1 challenge-service"
   "127.0.0.1 challenge-rabbitmq"
+  "127.0.0.1 schematic-api"
 )
 
 # add hostnames

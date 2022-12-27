@@ -1,6 +1,6 @@
 {
   "name": "Challenge",
-  "image": "sagebionetworks/challenge-devcontainer:6c35430",
+  "image": "sagebionetworks/challenge-devcontainer:6dfd206",
 
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2.0.0": {
@@ -46,6 +46,7 @@
     5432,
     5601,
     7010,
+    7080,
     8010,
     8020,
     8021,
@@ -99,6 +100,10 @@
     },
     "7010": {
       "label": "schematic-api-docs",
+      "onAutoForward": "silent"
+    },
+    "7080": {
+      "label": "schematic-api",
       "onAutoForward": "silent"
     },
     "8010": {
