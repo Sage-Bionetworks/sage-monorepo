@@ -16,7 +16,7 @@ ARG yarnVersion="3.3.0"
 # https://www.npmjs.com/package/@devcontainers/cli
 ARG devcontainerCliVersion="0.25.2"
 # https://pypi.org/project/poetry
-ARG poetryVersion="1.2.0rc1"
+ARG poetryVersion="1.3.1"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
@@ -52,6 +52,9 @@ RUN groupadd docker \
     -o /tmp/hyperfine.deb \
   && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
   && rm -fr /tmp/hyperfine.deb \
+  # Install Poetry
+  && curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
+  && ln -s /etc/poetry/bin/poetry /usr/local/bin/. \
   # Increase the max number of file watchers
   # See https://github.com/Sage-Bionetworks/challenge-registry/issues/856
   && echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf \
@@ -74,13 +77,8 @@ RUN useradd -m $user \
     "  . ./dev-env.sh" \
     "  workspace-initialize-env" \
     "fi" \
-    "" \
-    "# update PATH to find Poetry" \
-    "export PATH=\$PATH:/home/${user}/.local/bin" | tee -a "/home/$user/.bashrc"
+    "" | tee -a "/home/$user/.bashrc"
 
 USER $user
-
-# Install Poetry
-RUN curl -sSL https://install.python-poetry.org | python3 - --version "${poetryVersion}"
 
 CMD ["bash"]
