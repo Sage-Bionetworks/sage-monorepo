@@ -14,7 +14,10 @@
     "prepare-python": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["poetry install --with prod"],
+        "commands": [
+          "poetry config virtualenvs.in-project true",
+          "poetry install --with prod"
+        ],
         "cwd": "apps/schematic/api"
       }
     },

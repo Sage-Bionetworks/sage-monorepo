@@ -23,7 +23,7 @@ class TestStorageController(BaseTestCase):
             'Accept': 'application/json',
         }
         response = self.client.open(
-            '/v1/storages/projects/{project_id}/datasets'.format(project_id='project_id_example'),
+            '/api/v1/storages/projects/{project_id}/datasets'.format(project_id='project_id_example'),
             method='GET',
             headers=headers)
         self.assert200(response,
