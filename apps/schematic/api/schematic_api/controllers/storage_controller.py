@@ -19,4 +19,4 @@ def list_storage_project_datasets(project_id):  # noqa: E501
 
     :rtype: Union[DatasetsPage, Tuple[DatasetsPage, int], Tuple[DatasetsPage, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    return "do some magic!"
