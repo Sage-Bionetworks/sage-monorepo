@@ -28,5 +28,8 @@
 Dockerfile
 git_push.sh
 README.md
+requirements.txt
 schematic_api/__main__.py
+setup.py
+test-requirements.txt
 tox.ini
