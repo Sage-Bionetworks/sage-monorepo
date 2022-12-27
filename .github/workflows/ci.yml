@@ -80,6 +80,7 @@ jobs:
 
       - run: yarn nx affected --target=prepare
       - run: yarn nx affected --target=prepare-java --parallel=1
+      - run: yarn nx affected --target=prepare-python
       - run: yarn nx affected --target=lint
       - run: yarn nx affected --target=build
       - run: yarn nx affected --target=test
@@ -169,6 +170,7 @@ jobs:
 
       - run: yarn nx affected --target=prepare
       - run: yarn nx affected --target=prepare-java --parallel=1
+      - run: yarn nx affected --target=prepare-python
       - run: yarn nx affected --target=lint
       - run: yarn nx affected --target=build
       - run: yarn nx affected --target=test
