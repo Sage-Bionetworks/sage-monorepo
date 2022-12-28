@@ -58,7 +58,14 @@
           "port": 7200
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "publicHost": "http://localhost:7200",
+        "proxyConfig": "apps/schematic/app/src/proxy.conf.json"
+      },
+      "dependsOn": [
+        "^serve-detach"
+      ]
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -82,5 +89,10 @@
       }
     }
   },
-  "tags": []
+  "tags": ["type:app", "scope:client"],
+  "implicitDependencies": [
+    // "schematic-api",
+    "schematic-api-client-angular",
+    "shared-assets"
+  ]
 }
