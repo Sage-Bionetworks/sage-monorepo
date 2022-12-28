@@ -1,24 +1,24 @@
 version: "3.8"
 
 services:
-  challenge-mariadb:
-    image: sagebionetworks/challenge-mariadb:latest
-    container_name: challenge-mariadb
+  schematic-notebook:
+    image: sagebionetworks/schematic-notebook:latest
+    container_name: schematic-notebook
     restart: always
     env_file:
       - .env
-    volumes:
-      - challenge-mariadb:/data/db
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    # volumes:
+    #   - challenge-mariadb:/data/db
+    #   - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
-      - challenge
+      - schematic
     ports:
-      - "3306:3306"
+      - "7888:8888"
 
-volumes:
-  challenge-mariadb:
-    name: challenge-mariadb
+# volumes:
+#   challenge-mariadb:
+#     name: challenge-mariadb
 
 networks:
-  challenge:
-    name: challenge
+  schematic:
+    name: schematic
