@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { MatTableModule } from '@angular/material/table';
 
 import {
   ApiModule as SchematicApiModule,
@@ -17,6 +18,7 @@ import { appRoutes } from './app.routes';
     BrowserModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     HttpClientModule,
+    MatTableModule,
     SchematicApiModule,
   ],
   providers: [
