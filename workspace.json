@@ -4,6 +4,7 @@
   "projects": {
     "challenge-platform": "apps/challenge-platform",
     "challenge-registry": "apps/challenge-registry",
-    "challenge-registry-ui": "libs/challenge-registry/ui"
+    "challenge-registry-ui": "libs/challenge-registry/ui",
+    "schematic-app": "apps/schematic/app"
   }
 }
