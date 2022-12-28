@@ -48,6 +48,7 @@
     7010,
     7080,
     7200,
+    7888,
     8010,
     8020,
     8021,
@@ -109,6 +110,10 @@
     },
     "7200": {
       "label": "schematic-app",
+      "onAutoForward": "silent"
+    },
+    "7888": {
+      "label": "schematic-notebook",
       "onAutoForward": "silent"
     },
     "8010": {

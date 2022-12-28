@@ -1,0 +1,40 @@
+{
+  "name": "schematic-notebook",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/schematic/notebook/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/schematic/notebook"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/schematic/notebook"
+      },
+      "dependsOn": ["build-image", "prepare"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/schematic/notebook"
+      },
+      "dependsOn": ["build-image", "prepare"]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/schematic/notebook",
+        "push": false,
+        "tags": ["sagebionetworks/schematic-notebook:latest"]
+      }
+    }
+  },
+  "tags": ["type:app", "scope:client"]
+}
