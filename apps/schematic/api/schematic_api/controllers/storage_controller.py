@@ -7,9 +7,7 @@ from typing import Union
 from schematic_api.models.basic_error import BasicError  # noqa: E501
 from schematic_api.models.datasets_page import DatasetsPage  # noqa: E501
 from schematic_api import util
-from schematic_api.controllers.storage_controller_impl import (
-    list_storage_project_datasets_impl,
-)
+from schematic_api.controllers import storage_controller_impl
 
 
 def list_storage_project_datasets(project_id):  # noqa: E501
@@ -22,4 +20,4 @@ def list_storage_project_datasets(project_id):  # noqa: E501
 
     :rtype: Union[DatasetsPage, Tuple[DatasetsPage, int], Tuple[DatasetsPage, int, Dict[str, str]]
     """
-    return list_storage_project_datasets_impl(project_id)
+    return storage_controller_impl.list_storage_project_datasets(project_id)

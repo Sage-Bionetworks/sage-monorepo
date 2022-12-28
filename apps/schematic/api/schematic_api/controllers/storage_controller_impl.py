@@ -3,7 +3,7 @@ from schematic_api.models.dataset import Dataset  # noqa: E501
 from schematic_api.models.datasets_page import DatasetsPage  # noqa: E501
 
 
-def list_storage_project_datasets_impl(project_id):  # noqa: E501
+def list_storage_project_datasets(project_id):  # noqa: E501
     try:
         datasets = []
         datasets.append(Dataset(name="dataset-1"))

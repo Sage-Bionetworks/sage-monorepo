@@ -7,7 +7,7 @@ from typing import Union
 {{#imports}}{{import}}  # noqa: E501
 {{/imports}}
 from {{packageName}} import util
-from {{packageName}}.controllers import {{classname}}_impl
+from {{packageName}}.controllers import {{#lambda.snakecase}}{{baseName}}{{/lambda.snakecase}}_controller_impl
 {{#operations}}
 {{#operation}}
 
@@ -111,6 +111,6 @@ def {{operationId}}({{#allParams}}{{paramName}}{{^required}}=None{{/required}}{{
             {{/items}}
         {{/isMap}}
     {{/allParams}}
-    return {{classname}}_impl.{{operationId}}({{#allParams}}{{paramName}}{{^required}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
+    return {{#lambda.snakecase}}{{baseName}}{{/lambda.snakecase}}_controller_impl.{{operationId}}({{#allParams}}{{paramName}}{{^required}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
 {{/operation}}
 {{/operations}}
