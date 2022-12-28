@@ -47,6 +47,7 @@
     5601,
     7010,
     7080,
+    7200,
     8010,
     8020,
     8021,
@@ -104,6 +105,10 @@
     },
     "7080": {
       "label": "schematic-api",
+      "onAutoForward": "silent"
+    },
+    "7200": {
+      "label": "schematic-app",
       "onAutoForward": "silent"
     },
     "8010": {
