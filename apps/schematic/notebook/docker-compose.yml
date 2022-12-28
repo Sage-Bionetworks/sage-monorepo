@@ -7,17 +7,12 @@ services:
     restart: always
     env_file:
       - .env
-    # volumes:
-    #   - challenge-mariadb:/data/db
-    #   - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    volumes:
+      - ./notebooks:/home/jovyan/notebooks
     networks:
       - schematic
     ports:
       - "7888:8888"
-
-# volumes:
-#   challenge-mariadb:
-#     name: challenge-mariadb
 
 networks:
   schematic:
