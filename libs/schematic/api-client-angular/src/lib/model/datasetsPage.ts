@@ -9,12 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Dataset } from './dataset';
 
 
 /**
- * The metadata of a page.
+ * A page of datasets.
  */
-export interface PageMetadata { 
+export interface DatasetsPage { 
     /**
      * The page number.
      */
@@ -39,5 +40,9 @@ export interface PageMetadata {
      * Returns if there is a previous page.
      */
     hasPrevious: boolean;
+    /**
+     * A list of datasets.
+     */
+    datasets: Array<Dataset>;
 }
 

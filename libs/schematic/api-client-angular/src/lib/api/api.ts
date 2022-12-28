@@ -1,5 +1,3 @@
-export * from './organization.service';
-import { OrganizationService } from './organization.service';
-export * from './user.service';
-import { UserService } from './user.service';
-export const APIS = [OrganizationService, UserService];
+export * from './storage.service';
+import { StorageService } from './storage.service';
+export const APIS = [StorageService];
