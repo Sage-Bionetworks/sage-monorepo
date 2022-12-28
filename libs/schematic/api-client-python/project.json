@@ -1,0 +1,22 @@
+{
+  "name": "schematic-api-client-python",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/schematic/api-client-python/src",
+  "projectType": "library",
+  "prefix": "schematic",
+  "targets": {
+    "openapi-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          // "rm -fr src/lib/*",
+          "openapi-generator-cli generate",
+          "echo 'TODO Format generated code'"
+        ],
+        "cwd": "libs/schematic/api-client-python",
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}
