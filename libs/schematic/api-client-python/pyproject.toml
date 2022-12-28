@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "schematic-client"
+version = "0.1.0"
+description = "Schematic REST API client"
+authors = ["Thomas Schaffter <thomas.schaffter@gmail.com>"]
+readme = "README.md"
+packages = [{include = "schematic_client"}]
+
+[tool.poetry.dependencies]
+python = "3.9.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
