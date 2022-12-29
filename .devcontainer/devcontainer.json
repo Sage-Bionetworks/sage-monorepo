@@ -73,7 +73,7 @@
       "onAutoForward": "silent"
     },
     "4200": {
-      "label": "challenge-registry",
+      "label": "challenge-registry-app",
       "onAutoForward": "silent"
     },
     "4201": {
