@@ -11,6 +11,17 @@
         "cwd": "apps/schematic/notebook"
       }
     },
+
+    "prepare-python": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "poetry config virtualenvs.in-project true",
+          "poetry install"
+        ],
+        "cwd": "apps/schematic/notebook"
+      }
+    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
