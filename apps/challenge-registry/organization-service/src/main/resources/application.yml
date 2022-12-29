@@ -1,6 +1,6 @@
 spring:
   application:
-    name: challenge-organization-service
+    name: challenge-registry-organization-service
   datasource:
     # url: jdbc:mysql://challenge-mariadb:3306/challenge
     url: ${db.url}
@@ -43,7 +43,7 @@ info:
 
 keycloak:
   realm: test
-  resource: challenge-organization-service
+  resource: challenge-registry-organization-service
   credentials:
     secret: GFRau7cQTxhx19CUmSdrqrqrZ1pshjjB
   auth-server-url: ${keycloak.url}

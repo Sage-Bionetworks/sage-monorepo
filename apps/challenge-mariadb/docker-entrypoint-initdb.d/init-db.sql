@@ -16,7 +16,7 @@ create user challenge_user_service identified by 'changeme';
 grant challenge_role_admin to challenge_user_service;
 set default role challenge_role_admin for challenge_user_service;
 
--- Create the user for challenge-organization-service
+-- Create the user for challenge-registry-organization-service
 create user challenge_organization_service identified by 'changeme';
 grant challenge_role_admin to challenge_organization_service;
 set default role challenge_role_admin for challenge_organization_service;

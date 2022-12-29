@@ -1,4 +1,4 @@
-@organizationServiceHost = http://challenge-organization-service:8084
+@organizationServiceHost = http://challenge-registry-organization-service:8084
 @apiGatewayHost = http://challenge-api-gateway:8082
 
 ### Select the base path
