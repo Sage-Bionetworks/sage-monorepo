@@ -121,11 +121,11 @@
       "onAutoForward": "silent"
     },
     "8020": {
-      "label": "challenge-rabbitmq",
+      "label": "challenge-registry-rabbitmq",
       "onAutoForward": "silent"
     },
     "8021": {
-      "label": "challenge-rabbitmq-ui",
+      "label": "challenge-registry-rabbitmq-ui",
       "onAutoForward": "silent"
     },
     "8080": {
