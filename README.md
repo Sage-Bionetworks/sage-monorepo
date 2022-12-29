@@ -49,7 +49,7 @@ Then open your fork repo inside our devcontainer using these instructions:
 
 ### Starting the Challenge Registry
 
-    challenge-registry-serve
+    nx serve challenge-registry-app
 
 You can access the Challenge Registry on http://localhost:4200.
 
