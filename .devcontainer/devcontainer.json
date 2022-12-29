@@ -177,7 +177,7 @@
       "onAutoForward": "silent"
     },
     "27017": {
-      "label": "challenge-mongodb",
+      "label": "challenge-registry-mongo",
       "onAutoForward": "silent"
     }
   },
