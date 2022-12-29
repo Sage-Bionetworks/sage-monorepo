@@ -157,7 +157,7 @@
       "onAutoForward": "silent"
     },
     "8091": {
-      "label": "challenge-auth-service",
+      "label": "challenge-registry-auth-service",
       "onAutoForward": "silent"
     },
     "8092": {
