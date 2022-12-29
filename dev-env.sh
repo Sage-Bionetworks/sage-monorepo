@@ -66,10 +66,6 @@ function challenge-graph {
   nx graph
 }
 
-function challenge-elk-serve-detach {
-  nx serve-detach challenge-kibana
-}
-
 function challenge-db-cli {
   node dist/apps/challenge-db-cli/src/index.js
 }
