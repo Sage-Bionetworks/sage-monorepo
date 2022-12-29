@@ -16,7 +16,6 @@ declare -a hostnames=(
   "127.0.0.1 challenge-mongodb"
   "127.0.0.1 challenge-platform"
   "127.0.0.1 challenge-postgresql"
-  "127.0.0.1 challenge-registry"
   "127.0.0.1 challenge-service-registry"
   "127.0.0.1 challenge-user-service"
   "127.0.0.1 challenge-organization-service"
