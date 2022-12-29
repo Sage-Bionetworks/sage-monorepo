@@ -32,8 +32,8 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: challenge-auth-service
-          uri: lb://challenge-auth-service
+        - id: challenge-registry-auth-service
+          uri: lb://challenge-registry-auth-service
           predicates:
             - Path=/api/v1/auth/**
           filters:

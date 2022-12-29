@@ -1,6 +1,6 @@
 spring:
   application:
-    name: challenge-auth-service
+    name: challenge-registry-auth-service
 
 server:
   port: 8091
