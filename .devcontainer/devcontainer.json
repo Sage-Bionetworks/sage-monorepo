@@ -153,7 +153,7 @@
       "onAutoForward": "silent"
     },
     "8090": {
-      "label": "challenge-config-service",
+      "label": "challenge-registry-config-service",
       "onAutoForward": "silent"
     },
     "8091": {

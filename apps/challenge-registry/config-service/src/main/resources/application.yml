@@ -1,7 +1,7 @@
 
 spring:
   application:
-    name: challenge-config-service
+    name: challenge-registry-config-service
   cloud:
     config:
       server:
