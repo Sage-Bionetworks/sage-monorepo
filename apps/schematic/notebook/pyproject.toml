@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Schematic notebooks"
 authors = ["Thomas Schaffter <thomas.schaffter@gmail.com>"]
 readme = "README.md"
-packages = [{include = "schematic_notebook"}]
+packages = []
 
 [tool.poetry.dependencies]
 python = "3.9.2"
