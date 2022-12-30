@@ -214,7 +214,7 @@
   },
   "tags": ["type:app", "scope:client"],
   "implicitDependencies": [
-    "challenge-api-gateway",
+    "challenge-registry-api-gateway",
     "challenge-keycloak",
     "challenge-registry-organization-service",
     "challenge-registry-styles",

@@ -1,6 +1,6 @@
 * @tschaffter
 
-/apps/challenge-api-gateway/ @tschaffter
+/apps/challenge-registry/api-gateway/ @tschaffter
 /apps/challenge-keycloak/ @tschaffter
 /apps/challenge-mariadb/ @tschaffter
 /apps/challenge-mongodb/ @tschaffter

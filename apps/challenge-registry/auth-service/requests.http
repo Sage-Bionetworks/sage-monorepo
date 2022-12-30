@@ -1,4 +1,4 @@
-@apiGatewayHost = http://challenge-api-gateway:8082
+@apiGatewayHost = http://challenge-registry-api-gateway:8082
 
 ### Login
 
