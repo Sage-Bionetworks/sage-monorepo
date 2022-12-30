@@ -24,7 +24,7 @@ dependencies {
   compileOnly "org.projectlombok:lombok:${lombokVersion}"
   implementation "org.flywaydb:flyway-core:${flywaydbVersion}"
   implementation "org.flywaydb:flyway-mysql:${flywaydbVersion}"
-  implementation "org.sagebionetworks.challenge:challenge-util:${challengeVersion}"
+  implementation "org.sagebionetworks.challenge:challenge-util:${challengeRegistryVersion}"
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
@@ -52,5 +52,5 @@ springBoot {
 }
 
 bootBuildImage {
-  imageName = 'sagebionetworks/challenge-core-service:latest'
+  imageName = 'sagebionetworks/challenge-registry-core-service:latest'
 }

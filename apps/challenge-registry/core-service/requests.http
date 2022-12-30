@@ -2,7 +2,7 @@
 @apiGatewayHost = http://challenge-api-gateway:8082
 # @userServiceHost = http://localhost:8083
 @keycloakHost = http://challenge-keycloak:8080
-@coreServiceHost = http://challenge-core-service:8092
+@coreServiceHost = http://challenge-registry-core-service:8092
 
 ### Check core service info
 

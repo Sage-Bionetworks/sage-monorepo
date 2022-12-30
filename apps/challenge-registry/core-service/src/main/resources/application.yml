@@ -1,6 +1,6 @@
 spring:
   application:
-    name: challenge-core-service
+    name: challenge-registry-core-service
   datasource:
     url: ${db.url}
     username: challenge_core_service
