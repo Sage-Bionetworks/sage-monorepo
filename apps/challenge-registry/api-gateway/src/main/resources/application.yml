@@ -50,8 +50,8 @@ spring:
             - Path=/api/v1/organizations/**
           filters:
             - StripPrefix=1
-        - id: challenge-service
-          uri: lb://challenge-service
+        - id: challenge-registry-challenge-service
+          uri: lb://challenge-registry-challenge-service
           predicates:
             - Path=/api/v1/challenges/**,/api/v1/challengePlatforms/**
           filters:

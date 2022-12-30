@@ -6,6 +6,7 @@
 declare -a hostnames=(
   "127.0.0.1 challenge-registry-api-gateway"
   "127.0.0.1 challenge-registry-auth-service"
+  "127.0.0.1 challenge-registry-challenge-service"
   "127.0.0.1 challenge-registry-config-service"
   "127.0.0.1 challenge-registry-core-service"
   "127.0.0.1 challenge-registry-keycloak"
@@ -16,7 +17,6 @@ declare -a hostnames=(
   "127.0.0.1 challenge-registry-rabbitmq"
   "127.0.0.1 challenge-registry-service-registry"
   "127.0.0.1 challenge-registry-user-service"
-  "127.0.0.1 challenge-service"
   "127.0.0.1 schematic-api"
 )
 
