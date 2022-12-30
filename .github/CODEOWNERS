@@ -7,7 +7,7 @@
 /apps/challenge-registry/postgres/ @tschaffter
 /apps/challenge-registry-app/ @tschaffter @rrchai
 /apps/challenge-registry-e2e/ @tschaffter @rrchai
-/apps/challenge-service-registry/ @tschaffter
+/apps/challenge-registry/service-registry/ @tschaffter
 /apps/challenge-user-service/ @tschaffter
 
 /libs/challenge-registry/ @tschaffter @rrchai

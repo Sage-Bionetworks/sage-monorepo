@@ -84,7 +84,7 @@
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
     "challenge-registry-mariadb",
-    "challenge-service-registry",
+    "challenge-registry-service-registry",
     "challenge-registry-api-gateway",
     "challenge-registry-keycloak",
     "shared-java-challenge-util"

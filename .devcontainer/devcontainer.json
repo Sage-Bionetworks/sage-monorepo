@@ -128,7 +128,7 @@
       "onAutoForward": "silent"
     },
     "8081": {
-      "label": "challenge-service-registry",
+      "label": "challenge-registry-service-registry",
       "onAutoForward": "silent"
     },
     "8082": {
