@@ -1,6 +1,6 @@
 spring:
   application:
-    name: challenge-service
+    name: challenge-registry-challenge-service
   datasource:
     # url: jdbc:mysql://challenge-registry-mariadb:3306/challenge
     url: ${db.url}
@@ -18,7 +18,7 @@ spring:
     enabled: true
   #   cleanOnValidationError: true
   rabbitmq:
-    host: challenge-rabbitmq
+    host: challenge-registry-rabbitmq
     password: changeme
     port: 8020
     username: challenge
@@ -52,7 +52,7 @@ info:
 
 keycloak:
   realm: test
-  resource: challenge-service
+  resource: challenge-registry-challenge-service
   credentials:
     secret: GFRau7cQTxhx19CUmSdrqrqrZ1pshjjB
   auth-server-url: ${keycloak.url}

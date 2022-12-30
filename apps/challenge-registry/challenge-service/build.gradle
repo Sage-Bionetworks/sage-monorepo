@@ -62,7 +62,7 @@ dependencies {
   implementation "org.flywaydb:flyway-mysql:${flywaydbVersion}"
   implementation "org.keycloak:keycloak-admin-client:${keycloakVersion}"
   implementation "org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}"
-  implementation "org.sagebionetworks.challenge:challenge-util:${challengeVersion}"
+  implementation "org.sagebionetworks.challenge:challenge-util:${challengeRegistryVersion}"
 
   implementation 'org.springframework.boot:spring-boot-starter-amqp:2.7.7'
 
@@ -98,7 +98,7 @@ springBoot {
 }
 
 bootBuildImage {
-  imageName = 'sagebionetworks/challenge-service:latest'
+  imageName = 'sagebionetworks/challenge-registry-challenge-service:latest'
 }
 
 spotless {
