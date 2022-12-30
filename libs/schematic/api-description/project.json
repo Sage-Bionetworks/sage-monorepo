@@ -1,0 +1,43 @@
+{
+  "name": "schematic-api-description",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/schematic/api-description/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["openapi bundle --output build/openapi.yaml src/openapi.yaml"],
+        "parallel": true,
+        "cwd": "libs/schematic/api-description"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "openapi preview-docs src/openapi.yaml",
+        "cwd": "libs/schematic/api-description"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "lint-openapi --config .validaterc --ruleset .spectral.yaml --verbose build/openapi.yaml",
+        "cwd": "libs/schematic/api-description"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --write libs/schematic/api-description"
+      }
+    },
+    "format-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --check libs/schematic/api-description"
+      }
+    }
+  },
+  "tags": []
+}

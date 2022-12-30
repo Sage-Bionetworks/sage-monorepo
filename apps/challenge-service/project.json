@@ -83,11 +83,11 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    "challenge-mariadb",
-    "challenge-service-registry",
-    "challenge-api-gateway",
-    "challenge-keycloak",
-    "shared-java-challenge-util",
-    "challenge-rabbitmq"
+    "challenge-registry-api-gateway",
+    "challenge-registry-keycloak",
+    "challenge-registry-mariadb",
+    "challenge-registry-rabbitmq",
+    "challenge-registry-service-registry",
+    "shared-java-challenge-util"
   ]
 }

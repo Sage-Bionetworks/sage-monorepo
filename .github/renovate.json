@@ -10,7 +10,6 @@
   "ignorePaths": [
     "apps/api",
     "apps/challenge-db-cli",
-    "apps/challenge-elk",
     "libs/api-client-angular-deprecated"
   ],
   "baseBranches": ["main"],

@@ -1,0 +1,68 @@
+{
+  "name": "challenge-registry-service-registry",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/challenge-registry/service-registry/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/challenge-registry/service-registry"
+      }
+    },
+    "prepare-java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "apps/challenge-registry/service-registry"
+      }
+    },
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "apps/challenge-registry/service-registry"
+      },
+      "outputs": ["{projectRoot}"],
+      "dependsOn": ["^install"]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "apps/challenge-registry/service-registry"
+      }
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "apps/challenge-registry/service-registry"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "apps/challenge-registry/service-registry",
+        "parallel": true
+      },
+      "dependsOn": ["prepare", "^serve-detach"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/challenge-registry/service-registry"
+      },
+      "dependsOn": ["build-image", "prepare", "^serve-detach"]
+    },
+    "build-image": {
+      "executor": "@nxrocks/nx-spring-boot:build-image",
+      "options": {
+        "root": "apps/challenge-registry/service-registry"
+      },
+      "dependsOn": ["^install"]
+    }
+  },
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": []
+}

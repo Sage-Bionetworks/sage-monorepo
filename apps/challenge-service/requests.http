@@ -1,5 +1,5 @@
 @challengeServiceHost = http://challenge-service:8085
-@apiGatewayHost = http://challenge-api-gateway:8082
+@apiGatewayHost = http://challenge-registry-api-gateway:8082
 
 ### Select the base path
 

@@ -43,13 +43,13 @@ Then open your fork repo inside our devcontainer using these instructions:
 
 ### Preparing the databases
 
-- Run `nx import-dev-data challenge-keycloak` to seed Keycloak database.
+- Run `nx import-dev-data challenge-registry-keycloak` to seed Keycloak database.
 
 > **Warning** Keycloak must not be running when executing this command.
 
 ### Starting the Challenge Registry
 
-    challenge-registry-serve
+    nx serve challenge-registry-app
 
 You can access the Challenge Registry on http://localhost:4200.
 

@@ -1,0 +1,50 @@
+{
+  "name": "challenge-registry-api-docs",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/challenge-registry/api-docs/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/challenge-registry/api-docs"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "redoc-cli build ../../../libs/challenge-registry/api-description/build/openapi.yaml --output ./build/redoc-static.html",
+        "cwd": "apps/challenge-registry/api-docs"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/challenge-registry/api-docs"
+      },
+      "dependsOn": ["prepare", "build-image"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/challenge-registry/api-docs"
+      },
+      "dependsOn": ["prepare", "build-image"]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/challenge-registry/api-docs",
+        "push": false,
+        "tags": ["sagebionetworks/challenge-registry-api-docs:latest"]
+      }
+    }
+  },
+  "tags": ["type:docs", "scope:backend"],
+  "implicitDependencies": [
+    "challenge-registry-api-description"
+  ]
+}

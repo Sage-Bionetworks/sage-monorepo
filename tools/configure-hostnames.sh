@@ -4,24 +4,20 @@
 
 # list of hostnames (defined in alphabetical order)
 declare -a hostnames=(
-  "127.0.0.1 challenge-api-gateway"
-  "127.0.0.1 challenge-auth-service"
-  "127.0.0.1 challenge-config-service"
-  "127.0.0.1 challenge-core-service"
-  "127.0.0.1 challenge-elasticsearch"
-  "127.0.0.1 challenge-kibana"
-  "127.0.0.1 challenge-logstash"
-  "127.0.0.1 challenge-keycloak"
-  "127.0.0.1 challenge-mariadb"
-  "127.0.0.1 challenge-mongodb"
-  "127.0.0.1 challenge-platform"
-  "127.0.0.1 challenge-postgresql"
-  "127.0.0.1 challenge-registry"
-  "127.0.0.1 challenge-service-registry"
-  "127.0.0.1 challenge-user-service"
-  "127.0.0.1 challenge-organization-service"
+  "127.0.0.1 challenge-registry-api-gateway"
+  "127.0.0.1 challenge-registry-auth-service"
+  "127.0.0.1 challenge-registry-config-service"
+  "127.0.0.1 challenge-registry-core-service"
+  "127.0.0.1 challenge-registry-keycloak"
+  "127.0.0.1 challenge-registry-mariadb"
+  "127.0.0.1 challenge-registry-mongo"
+  "127.0.0.1 challenge-registry-organization-service"
+  "127.0.0.1 challenge-registry-postgres"
+  "127.0.0.1 challenge-registry-rabbitmq"
+  "127.0.0.1 challenge-registry-service-registry"
+  "127.0.0.1 challenge-registry-user-service"
   "127.0.0.1 challenge-service"
-  "127.0.0.1 challenge-rabbitmq"
+  "127.0.0.1 schematic-api"
 )
 
 # add hostnames

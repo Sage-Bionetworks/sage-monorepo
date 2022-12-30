@@ -120,7 +120,7 @@ spotless {
 }
 
 flyway {
-  url = 'jdbc:mysql://challenge-mariadb:3306/challenge'
+  url = 'jdbc:mysql://challenge-registry-mariadb:3306/challenge'
   user = 'maria'
   password = 'changeme'
   // cleanDisabled = false

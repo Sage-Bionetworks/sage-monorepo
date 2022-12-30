@@ -1,0 +1,91 @@
+{
+  "name": "schematic-api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/schematic/api/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "prepare-python": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "poetry config virtualenvs.in-project true",
+          "poetry install --with prod"
+        ],
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run python -m schematic_api",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/schematic/api"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        }
+      ]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/schematic/api",
+        "push": false,
+        "tags": ["sagebionetworks/schematic-api:latest"]
+      }
+    },
+    "openapi-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "xargs rm -fr <.openapi-generator/FILES",
+          "openapi-generator-cli generate"
+        ],
+        "cwd": "apps/schematic/api",
+        "parallel": false
+      }
+    },
+    "lint-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run black ./schematic_api --check --exclude '(models|test)'",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run black ./schematic_api --exclude '(models|test)'",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run tox",
+        "cwd": "apps/schematic/api"
+      }
+    }
+  },
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": []
+}

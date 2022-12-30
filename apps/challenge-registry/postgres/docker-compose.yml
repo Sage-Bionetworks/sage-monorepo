@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  challenge-registry-postgres:
+    image: sagebionetworks/challenge-registry-postgres:latest
+    container_name: challenge-registry-postgres
+    env_file:
+      - .env
+    volumes:
+      - challenge-registry-postgres:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - challenge-registry
+    ports:
+      - "5432:5432"
+
+volumes:
+  challenge-registry-postgres:
+    name: challenge-registry-postgres
+
+networks:
+  challenge-registry:
+    name: challenge-registry

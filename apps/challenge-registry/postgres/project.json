@@ -1,0 +1,58 @@
+{
+  "name": "challenge-registry-postgres",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/challenge-registry/postgres/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/challenge-registry/postgres"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/challenge-registry/postgres"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        }
+      ]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/challenge-registry/postgres"
+      },
+      "dependsOn": [
+        {
+          "target": "build-image",
+          "projects": "self"
+        },
+        {
+          "target": "prepare",
+          "projects": "self"
+        }
+      ]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/challenge-registry/postgres",
+        "push": false,
+        "tags": ["sagebionetworks/challenge-registry-postgres:latest"]
+      }
+    }
+  },
+  "tags": ["type:db", "scope:backend"]
+}
