@@ -65,7 +65,7 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    "challenge-api-gateway",
+    "challenge-registry-api-gateway",
     "challenge-keycloak",
     "challenge-service-registry",
     "shared-java-challenge-util"

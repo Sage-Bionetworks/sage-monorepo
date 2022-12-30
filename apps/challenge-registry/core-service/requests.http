@@ -1,5 +1,5 @@
 # @serviceRegistryHost = http://localhost:8081
-@apiGatewayHost = http://challenge-api-gateway:8082
+@apiGatewayHost = http://challenge-registry-api-gateway:8082
 # @userServiceHost = http://localhost:8083
 @keycloakHost = http://challenge-keycloak:8080
 @coreServiceHost = http://challenge-registry-core-service:8092

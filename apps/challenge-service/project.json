@@ -85,7 +85,7 @@
   "implicitDependencies": [
     "challenge-mariadb",
     "challenge-service-registry",
-    "challenge-api-gateway",
+    "challenge-registry-api-gateway",
     "challenge-keycloak",
     "shared-java-challenge-util"
   ]

@@ -53,7 +53,7 @@ Due to how the Challenge Registry app is currently structured, some additional
 steps are required:
 
 1.  Discard/undo changes made to `project.json` in other existing folders outside of the new library
-    folder, e.g. `apps/challenge-api-gateway/project.json`. The only files you need staged are:
+    folder, e.g. `apps/challenge-registry/api-gateway/project.json`. The only files you need staged are:
 
         * files created for the new library, e.g. `libs/challenge-registry/<new library name/*`
         * `tsconfig.base.json`

@@ -132,7 +132,7 @@ The previous version of the challenge registry app generated in early 2022 is re
         "challenge-registry-styles",
         "challenge-registry-themes",
         "shared-assets",
-        "challenge-api-gateway",
+        "challenge-registry-api-gateway",
         "challenge-keycloak"
       ]
       ```

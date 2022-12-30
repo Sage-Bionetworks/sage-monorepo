@@ -137,7 +137,7 @@
       "onAutoForward": "silent"
     },
     "8082": {
-      "label": "challenge-api-gateway",
+      "label": "challenge-registry-api-gateway",
       "onAutoForward": "silent"
     },
     "8083": {

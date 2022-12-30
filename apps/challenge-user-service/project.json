@@ -86,7 +86,7 @@
     "challenge-mariadb",
     "challenge-keycloak",
     "challenge-service-registry",
-    "challenge-api-gateway",
+    "challenge-registry-api-gateway",
     "shared-java-challenge-util"
   ]
 }

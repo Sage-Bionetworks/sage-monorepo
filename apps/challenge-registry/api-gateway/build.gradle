@@ -43,5 +43,5 @@ springBoot {
 }
 
 bootBuildImage {
-  imageName = 'sagebionetworks/challenge-api-gateway:latest'
+  imageName = 'sagebionetworks/challenge-registry-api-gateway:latest'
 }

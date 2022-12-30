@@ -4,7 +4,7 @@
 
 # list of hostnames (defined in alphabetical order)
 declare -a hostnames=(
-  "127.0.0.1 challenge-api-gateway"
+  "127.0.0.1 challenge-registry-api-gateway"
   "127.0.0.1 challenge-registry-auth-service"
   "127.0.0.1 challenge-registry-config-service"
   "127.0.0.1 challenge-registry-core-service"
