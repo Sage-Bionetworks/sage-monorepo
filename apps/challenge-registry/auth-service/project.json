@@ -67,7 +67,7 @@
   "implicitDependencies": [
     "challenge-registry-api-gateway",
     "challenge-registry-keycloak",
-    "challenge-service-registry",
+    "challenge-registry-service-registry",
     "shared-java-challenge-util"
   ]
 }

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: challenge-service-registry
+    name: challenge-registry-service-registry
 
 server:
   port: 8081

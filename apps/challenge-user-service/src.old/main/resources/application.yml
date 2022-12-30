@@ -18,7 +18,7 @@ eureka:
   client:
     service-url:
       # defaultZone: ${service.registry.url}
-      defaultZone: http://challenge-service-registry:8081/eureka
+      defaultZone: http://challenge-registry-service-registry:8081/eureka
   instance:
     preferIpAddress: true
 
