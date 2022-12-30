@@ -18,7 +18,7 @@ declare -a hostnames=(
   "127.0.0.1 challenge-postgresql"
   "127.0.0.1 challenge-service-registry"
   "127.0.0.1 challenge-user-service"
-  "127.0.0.1 challenge-organization-service"
+  "127.0.0.1 challenge-registry-organization-service"
   "127.0.0.1 challenge-service"
   "127.0.0.1 challenge-registry-rabbitmq"
   "127.0.0.1 schematic-api"

@@ -1,54 +1,54 @@
 {
-  "name": "challenge-organization-service",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/challenge-organization-service/src",
+  "name": "challenge-registry-organization-service",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/challenge-registry/organization-service/src",
   "projectType": "application",
   "targets": {
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
-        "cwd": "apps/challenge-organization-service"
+        "cwd": "apps/challenge-registry/organization-service"
       }
     },
     "prepare-java": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "apps/challenge-organization-service"
+        "cwd": "apps/challenge-registry/organization-service"
       }
     },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "root": "apps/challenge-organization-service"
+        "root": "apps/challenge-registry/organization-service"
       },
-      "outputs": ["apps/challenge-organization-service"],
+      "outputs": ["apps/challenge-registry/organization-service"],
       "dependsOn": ["^install"]
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
-        "root": "apps/challenge-organization-service"
+        "root": "apps/challenge-registry/organization-service"
       }
     },
     "format": {
       "executor": "@nxrocks/nx-spring-boot:format",
       "options": {
-        "root": "apps/challenge-organization-service"
+        "root": "apps/challenge-registry/organization-service"
       }
     },
     "format-check": {
       "executor": "@nxrocks/nx-spring-boot:check-format",
       "options": {
-        "root": "apps/challenge-organization-service"
+        "root": "apps/challenge-registry/organization-service"
       }
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
-        "cwd": "apps/challenge-organization-service",
+        "cwd": "apps/challenge-registry/organization-service",
         "parallel": true
       },
       "dependsOn": ["prepare", "^install", "^serve-detach"]
@@ -57,14 +57,14 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up -d",
-        "cwd": "apps/challenge-organization-service"
+        "cwd": "apps/challenge-registry/organization-service"
       },
       "dependsOn": ["build-image", "prepare", "^serve-detach"]
     },
     "build-image": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
-        "root": "apps/challenge-organization-service"
+        "root": "apps/challenge-registry/organization-service"
       },
       "dependsOn": ["^install"]
     },
@@ -76,7 +76,7 @@
           "openapi-generator-cli generate",
           "./gradlew spotlessApply"
         ],
-        "cwd": "apps/challenge-organization-service",
+        "cwd": "apps/challenge-registry/organization-service",
         "parallel": false
       }
     }

@@ -145,7 +145,7 @@
       "onAutoForward": "silent"
     },
     "8084": {
-      "label": "challenge-organization-service",
+      "label": "challenge-registry-organization-service",
       "onAutoForward": "silent"
     },
     "8085": {
