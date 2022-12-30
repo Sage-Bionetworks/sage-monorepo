@@ -1,6 +1,6 @@
 @serviceRegistryHost = http://challenge-registry-service-registry:8081
 @apiGatewayHost = http://challenge-registry-api-gateway:8082
-@userServiceHost = http://challenge-user-service:8083
+@userServiceHost = http://challenge-registry-user-service:8083
 @keycloakHost = http://localhost:8080
 
 ### Check API gateway actuator (expected to redirect to Keycloak login page)

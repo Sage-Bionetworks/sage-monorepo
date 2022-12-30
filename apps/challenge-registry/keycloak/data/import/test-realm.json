@@ -51,7 +51,7 @@
       "composite" : true,
       "composites" : {
         "client" : {
-          "challenge-user-service" : [ "user" ]
+          "challenge-registry-user-service" : [ "user" ]
         }
       },
       "clientRole" : false,
@@ -99,7 +99,7 @@
       "composite" : true,
       "composites" : {
         "client" : {
-          "challenge-user-service" : [ "admin" ]
+          "challenge-registry-user-service" : [ "admin" ]
         }
       },
       "clientRole" : false,
@@ -283,7 +283,7 @@
         "containerId" : "4cb5ef74-bcf5-4796-bb98-cb03ebcc1aa8",
         "attributes" : { }
       } ],
-      "challenge-core-client" : [ ],
+      "challenge-registry-core-client" : [ ],
       "security-admin-console" : [ ],
       "admin-cli" : [ ],
       "challenge-api-client" : [ {
@@ -294,7 +294,7 @@
         "containerId" : "724cb050-5602-4412-a6ab-1ea2e5c2c6a9",
         "attributes" : { }
       } ],
-      "challenge-user-service" : [ {
+      "challenge-registry-user-service" : [ {
         "id" : "c43eac20-e023-44d4-940c-6cd41c483c38",
         "name" : "admin",
         "composite" : false,
@@ -714,7 +714,7 @@
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   }, {
     "id" : "5cbf6b55-3936-4ded-848f-1520e97f22f1",
-    "clientId" : "challenge-user-service",
+    "clientId" : "challenge-registry-user-service",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,

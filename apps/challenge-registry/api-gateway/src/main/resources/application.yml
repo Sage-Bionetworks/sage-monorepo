@@ -38,8 +38,8 @@ spring:
             - Path=/api/v1/auth/**
           filters:
             - StripPrefix=0
-        - id: challenge-user-service
-          uri: lb://challenge-user-service
+        - id: challenge-registry-user-service
+          uri: lb://challenge-registry-user-service
           predicates:
             - Path=/api/v1/users/**
           filters:
