@@ -101,5 +101,5 @@
     }
   },
   "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": ["challenge-postgresql"]
+  "implicitDependencies": ["challenge-registry-postgres"]
 }

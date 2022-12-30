@@ -88,7 +88,7 @@
       "onAutoForward": "silent"
     },
     "5432": {
-      "label": "challenge-postgresql",
+      "label": "challenge-registry-postgres",
       "onAutoForward": "silent"
     },
     "5601": {
