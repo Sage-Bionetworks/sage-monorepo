@@ -68,7 +68,7 @@
 
   "portsAttributes": {
     "3306": {
-      "label": "challenge-mariadb",
+      "label": "challenge-registry-mariadb",
       "onAutoForward": "silent"
     },
     "4200": {
