@@ -136,7 +136,7 @@
       "onAutoForward": "silent"
     },
     "8083": {
-      "label": "challenge-user-service",
+      "label": "challenge-registry-user-service",
       "onAutoForward": "silent"
     },
     "8084": {

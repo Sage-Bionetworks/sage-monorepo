@@ -24,7 +24,7 @@ eureka:
 
 keycloak:
   realm: test
-  resource: challenge-user-service
+  resource: challenge-registry-user-service
   credentials:
     secret: GFRau7cQTxhx19CUmSdrqrqrZ1pshjjB
   auth-server-url: http://challenge-registry-keycloak:8080
