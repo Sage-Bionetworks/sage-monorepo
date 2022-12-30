@@ -14,7 +14,7 @@
 2. Click on the dropdown near the Google Cloud logo.
 3. Click on `New Project`.
 4. Enter the information about the project.
-    - Project name: `challenge-keycloak-google`
+    - Project name: `challenge-registry-keycloak-google`
     - Organization: `sagebase.org`
     - Location: `sagebase.org`
 5. Click on `Create`.

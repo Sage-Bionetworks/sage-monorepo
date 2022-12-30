@@ -124,7 +124,7 @@
       "onAutoForward": "silent"
     },
     "8080": {
-      "label": "challenge-keycloak",
+      "label": "challenge-registry-keycloak",
       "onAutoForward": "silent"
     },
     "8081": {
