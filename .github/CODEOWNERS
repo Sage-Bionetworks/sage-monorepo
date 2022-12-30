@@ -4,8 +4,6 @@
 /apps/challenge-keycloak/ @tschaffter
 /apps/challenge-mariadb/ @tschaffter
 /apps/challenge-mongodb/ @tschaffter
-/apps/challenge-platform/ @tschaffter
-/apps/challenge-platform-e2e/ @tschaffter
 /apps/challenge-postgresql/ @tschaffter
 /apps/challenge-registry/ @tschaffter @rrchai
 /apps/challenge-registry-e2e/ @tschaffter @rrchai
@@ -13,5 +11,4 @@
 /apps/challenge-user-service/ @tschaffter
 
 /libs/challenge-registry/ @tschaffter @rrchai
-/libs/challenge-platform/ @tschaffter
 /libs/shared/ @tschaffter @rrchai
