@@ -1,6 +1,6 @@
 module.exports = {
   displayName: 'challenge-db-cli',
-  preset: '../../jest.preset.js',
+  preset: '../../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/challenge-db-cli',
+  coverageDirectory: '../../../coverage/apps/challenge-registry/db-cli',
 };
