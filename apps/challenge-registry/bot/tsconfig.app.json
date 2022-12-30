@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/apps/challenge-bot",
+    "outDir": "../../../dist/apps/challenge-registry/bot",
     "declaration": true,
     "types": []
   },
