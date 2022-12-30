@@ -64,6 +64,8 @@ dependencies {
   implementation "org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}"
   implementation "org.sagebionetworks.challenge:challenge-util:${challengeVersion}"
 
+  implementation 'org.springframework.boot:spring-boot-starter-amqp:2.7.7'
+
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   // developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

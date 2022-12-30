@@ -17,6 +17,15 @@ spring:
   flyway:
     enabled: true
   #   cleanOnValidationError: true
+  rabbitmq:
+    host: challenge-rabbitmq
+    password: changeme
+    port: 8020
+    username: challenge
+    exchange: challenge.exchange
+    queue: challenge.queue
+    routingkey: challenge.routingkey
+  message: message succesfuly sent
 
 server:
   port: 8085
@@ -60,4 +69,3 @@ app:
       client-id: challenge-api-client
       clientId: challenge-api-client
       client-secret: mg2DrRcxHx19PIITibdOnbNEbJUKjGKb
-

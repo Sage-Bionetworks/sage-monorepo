@@ -2,6 +2,7 @@ package org.sagebionetworks.challenge.service;
 
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.challenge.model.domain.ChallengeDomain;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
@@ -25,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChallengeService {
 
   @Autowired private ChallengeRepositoryCustom challengeRepositoryCustom;
+
+  @Autowired private ProducerService producerService;
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
 
@@ -66,6 +69,10 @@ public class ChallengeService {
 
     List<ChallengeDto> challenges =
         challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());
+
+    ChallengeDomain challengeDomain = new ChallengeDomain("plop");
+    log.info("challenge sent: {}", challengeDomain);
+    producerService.sendMessage(challengeDomain);
 
     return ChallengesPageDto.builder()
         .challenges(challenges)
