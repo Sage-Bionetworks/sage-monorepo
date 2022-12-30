@@ -39,7 +39,6 @@
   "forwardPorts": [
     3306,
     4200,
-    4201,
     4211,
     5000,
     5044,
@@ -74,10 +73,6 @@
     },
     "4200": {
       "label": "challenge-registry-app",
-      "onAutoForward": "silent"
-    },
-    "4201": {
-      "label": "challenge-platform",
       "onAutoForward": "silent"
     },
     "4211": {
