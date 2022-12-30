@@ -161,7 +161,7 @@
       "onAutoForward": "silent"
     },
     "8092": {
-      "label": "challenge-core-service",
+      "label": "challenge-registry-core-service",
       "onAutoForward": "silent"
     },
     "9200": {
