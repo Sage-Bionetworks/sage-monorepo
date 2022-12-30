@@ -88,7 +88,7 @@
       "onAutoForward": "silent"
     },
     "5432": {
-      "label": "challenge-postgresql",
+      "label": "challenge-registry-postgres",
       "onAutoForward": "silent"
     },
     "5601": {
@@ -124,7 +124,7 @@
       "onAutoForward": "silent"
     },
     "8080": {
-      "label": "challenge-keycloak",
+      "label": "challenge-registry-keycloak",
       "onAutoForward": "silent"
     },
     "8081": {

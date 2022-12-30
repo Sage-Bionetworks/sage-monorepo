@@ -1,10 +1,10 @@
 * @tschaffter
 
 /apps/challenge-registry/api-gateway/ @tschaffter
-/apps/challenge-keycloak/ @tschaffter
+/apps/challenge-registry-keycloak/ @tschaffter
 /apps/challenge-mariadb/ @tschaffter
 /apps/challenge-mongodb/ @tschaffter
-/apps/challenge-postgresql/ @tschaffter
+/apps/challenge-registry/postgres/ @tschaffter
 /apps/challenge-registry/ @tschaffter @rrchai
 /apps/challenge-registry-e2e/ @tschaffter @rrchai
 /apps/challenge-service-registry/ @tschaffter

@@ -35,7 +35,7 @@ keycloak:
 app:
   keycloak:
     login:
-      url: http://challenge-keycloak:8080/realms/test/protocol/openid-connect/token # TODO update
+      url: http://challenge-registry-keycloak:8080/realms/test/protocol/openid-connect/token # TODO update
     client-id: ${keycloak.resource}
     client-secret: O0cNRMWg3LHsdHW8BNPlY96qKooDPhPX
     grant-type: password

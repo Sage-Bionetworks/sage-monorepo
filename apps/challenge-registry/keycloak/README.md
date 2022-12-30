@@ -7,14 +7,14 @@ TODO
 ## Preparing
 
 ```console
-nx prepare challenge-keycloak
-nx docker challenge-keycloak
+nx prepare challenge-registry-keycloak
+nx docker challenge-registry-keycloak
 ```
 
 ## Deploying
 
 ```console
-nx serve challenge-keycloak
+nx serve challenge-registry-keycloak
 ```
 
 ## Accessing Kecloak Admin Console
@@ -33,7 +33,7 @@ Import development data from JSON file and generate data in `./data/h2/`. This
 command must be run when the Keycloak server is not running.
 
 ```console
-nx import-dev-data challenge-keycloak
+nx import-dev-data challenge-registry-keycloak
 ```
 
 ### Editing KC data
@@ -41,7 +41,7 @@ nx import-dev-data challenge-keycloak
 Start Keycloak in development mode and make edits.
 
 ```console
-nx serve challenge-keycloak
+nx serve challenge-registry-keycloak
 ```
 
 ### Exporting realms and users
@@ -50,5 +50,5 @@ Export development data from `./data/h2/` to JSON files. This command must be
 run when the Keycloak server is not running.
 
 ```console
-nx export-dev-data challenge-keycloak
+nx export-dev-data challenge-registry-keycloak
 ```
