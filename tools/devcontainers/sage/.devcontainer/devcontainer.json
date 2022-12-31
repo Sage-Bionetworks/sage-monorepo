@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/main/containers/docker-existing-dockerfile
 {
-  "name": "Challenge Dev Container",
+  "name": "Sage Dev Container",
 
 	"build": {
 		"dockerfile": "Dockerfile",
@@ -48,5 +48,5 @@
   "shutdownAction": "stopContainer",
 
   // An array of Docker CLI arguments
-  "runArgs": ["--name", "challenge_devcontainer"]
+  "runArgs": ["--name", "sage_devcontainer"]
 }

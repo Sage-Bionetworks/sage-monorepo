@@ -3,5 +3,5 @@
 # This script must be run from the folder that includes it.
 
 devcontainer build \
-  --image-name sagebionetworks/challenge-devcontainer:test \
-  --workspace-folder challenge
+  --image-name sagebionetworks/sage-devcontainer:test \
+  --workspace-folder sage
