@@ -1,20 +1,20 @@
 {
-  "name": "shared-java-challenge-util",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared-java/challenge-util/src",
+  "name": "shared-java-util",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/java/util/src",
   "projectType": "library",
   "targets": {
     "prepare-java": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "libs/shared-java/challenge-util"
+        "cwd": "libs/shared/java/util"
       }
     },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "root": "libs/shared-java/challenge-util"
+        "root": "libs/shared/java/util"
       },
       "outputs": ["{projectRoot}/build"]
     },
@@ -22,7 +22,7 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "./gradlew publishToMavenLocal",
-        "cwd": "libs/shared-java/challenge-util"
+        "cwd": "libs/shared/java/util"
       },
       "dependsOn": [
         {
@@ -34,13 +34,13 @@
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
       "options": {
-        "root": "libs/shared-java/challenge-util"
+        "root": "libs/shared/java/util"
       }
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
-        "root": "libs/shared-java/challenge-util"
+        "root": "libs/shared/java/util"
       }
     }
   },

@@ -1,4 +1,4 @@
-package org.sagebionetworks.challenge.util.model.mapper;
+package org.sagebionetworks.util.model.mapper;
 
 import java.util.Collection;
 import java.util.List;

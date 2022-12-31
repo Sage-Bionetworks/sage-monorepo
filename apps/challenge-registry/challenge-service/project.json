@@ -88,6 +88,6 @@
     "challenge-registry-mariadb",
     "challenge-registry-rabbitmq",
     "challenge-registry-service-registry",
-    "shared-java-challenge-util"
+    "shared-java-util"
   ]
 }

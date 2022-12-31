@@ -87,6 +87,6 @@
     "challenge-registry-keycloak",
     "challenge-registry-service-registry",
     "challenge-registry-api-gateway",
-    "shared-java-challenge-util"
+    "shared-java-util"
   ]
 }

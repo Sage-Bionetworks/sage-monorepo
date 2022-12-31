@@ -1,4 +1,4 @@
-package org.sagebionetworks.challenge.util.exception;
+package org.sagebionetworks.util.exception;
 
 import lombok.Builder;
 import lombok.Data;
