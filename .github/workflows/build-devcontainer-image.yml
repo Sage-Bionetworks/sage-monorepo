@@ -5,16 +5,16 @@ on:
       - 'main'
     paths:
       - '.github/workflows/build-devcontainer-image.yml'
-      - 'tools/devcontainers/challenge/**/devcontainer.json'
-      - 'tools/devcontainers/challenge/**/Dockerfile'
+      - 'tools/devcontainers/sage/**/devcontainer.json'
+      - 'tools/devcontainers/sage/**/Dockerfile'
   pull_request:
     paths:
       - '.github/workflows/build-devcontainer-image.yml'
-      - 'tools/devcontainers/challenge/**/devcontainer.json'
-      - 'tools/devcontainers/challenge/**/Dockerfile'
+      - 'tools/devcontainers/sage/**/devcontainer.json'
+      - 'tools/devcontainers/sage/**/Dockerfile'
 
 env:
-  IMAGE_REPOSITORY: sagebionetworks/challenge-devcontainer
+  IMAGE_REPOSITORY: sagebionetworks/sage-devcontainer
   DEFAULT_BRANCH: main
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
         uses: docker://hadolint/hadolint:latest
         with:
           entrypoint: hadolint
-          args: tools/devcontainers/challenge/.devcontainer/Dockerfile
+          args: tools/devcontainers/sage/.devcontainer/Dockerfile
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -53,7 +53,7 @@ jobs:
 
       - name: Build the image
         run: |
-          WORKSPACE_FOLDER="tools/devcontainers/challenge"
+          WORKSPACE_FOLDER="tools/devcontainers/sage"
           IMAGE_NAME=${{ steps.prep.outputs.image_name }}
           IMAGE_TAG=${{ steps.prep.outputs.devcontainer_version }}
 
