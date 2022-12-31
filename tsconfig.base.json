@@ -53,9 +53,8 @@
         "libs/challenge-registry/user-profile/src/index.ts"
       ],
       "@sagebionetworks/challenge-registry/util": ["libs/challenge-registry/util/src/index.ts"],
-      "@sagebionetworks/shared/data-access-user": ["libs/shared/data-access-user/src/index.ts"],
-      "@sagebionetworks/shared/util": ["libs/shared/util/src/index.ts"],
-      "@sagebionetworks/shared/web-components": ["libs/shared/web-components/src/index.ts"],
+      "@sagebionetworks/shared/typescript/util": ["libs/shared/typescript/util/src/index.ts"],
+      "@sagebionetworks/shared/typescript/web-components": ["libs/shared/typescript/web-components/src/index.ts"],
       "@sagebionetworks/schematic/api-client-angular": [
         "libs/schematic/api-client-angular/src/index.ts"
       ]

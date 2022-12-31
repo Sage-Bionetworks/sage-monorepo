@@ -1,5 +1,5 @@
 import { Challenge } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
-import { SeoData } from '@sagebionetworks/shared/util';
+import { SeoData } from '@sagebionetworks/shared/typescript/util';
 
 const getChallengeSeoData = (challenge: Challenge): SeoData => {
   return {

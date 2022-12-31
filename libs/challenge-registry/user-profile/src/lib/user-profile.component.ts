@@ -26,7 +26,7 @@ import { MOCK_USER, Avatar } from '@sagebionetworks/challenge-registry/ui';
 // import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/challenge-registry/ui';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import { UserProfile } from './user-profile';
-import { SeoService } from '@sagebionetworks/shared/util';
+import { SeoService } from '@sagebionetworks/shared/typescript/util';
 import { getUserProfileSeoData } from './user-profile-seo';
 
 @Component({

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedUtilModule } from '@sagebionetworks/shared/util';
+import { SharedUtilModule } from '@sagebionetworks/shared/typescript/util';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { HomeComponent } from './home.component';
 import { ChallengeSearchModule } from './challenge-search/challenge-search.module';

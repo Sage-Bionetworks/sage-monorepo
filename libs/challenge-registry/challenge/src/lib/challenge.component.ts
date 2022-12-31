@@ -13,7 +13,7 @@ import {
 } from '@sagebionetworks/challenge-registry/ui';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import { getChallengeSeoData } from './challenge-seo';
-import { SeoService } from '@sagebionetworks/shared/util';
+import { SeoService } from '@sagebionetworks/shared/typescript/util';
 
 @Component({
   selector: 'challenge-registry-challenge',
