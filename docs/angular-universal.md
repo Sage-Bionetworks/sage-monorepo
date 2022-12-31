@@ -131,7 +131,7 @@ The previous version of the challenge registry app generated in early 2022 is re
       "implicitDependencies": [
         "challenge-registry-styles",
         "challenge-registry-themes",
-        "shared-assets",
+        "shared-typescript-assets",
         "challenge-registry-api-gateway",
         "challenge-registry-keycloak"
       ]

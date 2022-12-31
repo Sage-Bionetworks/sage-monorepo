@@ -1,0 +1,9 @@
+{
+  "name": "shared-typescript-styles",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/typescript/styles/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": ["type:styles", "scope:shared"]
+}

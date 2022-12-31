@@ -1,19 +1,20 @@
 {
-  "extends": ["../../../.eslintrc.json"],
+  "extends": ["../../../../.eslintrc.json"],
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
       "files": ["*.ts"],
       "extends": [
         "plugin:@nrwl/nx/angular",
-        "plugin:@angular-eslint/template/process-inline-templates"
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:jest/recommended"
       ],
       "rules": {
         "@angular-eslint/directive-selector": [
           "error",
           {
             "type": "attribute",
-            "prefix": "challengeRegistry",
+            "prefix": "sage",
             "style": "camelCase"
           }
         ],
@@ -21,7 +22,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "challenge-registry",
+            "prefix": "sage",
             "style": "kebab-case"
           }
         ]

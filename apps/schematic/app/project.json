@@ -93,6 +93,6 @@
   "implicitDependencies": [
     // "schematic-api",
     "schematic-api-client-angular",
-    "shared-assets"
+    "shared-typescript-assets"
   ]
 }

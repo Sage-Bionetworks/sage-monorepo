@@ -57,7 +57,7 @@ asset files from these libraries. This example shows how to import an image from
 app-specific asset libraries.
 
 ```html
-<img src="/shared-assets/images/github.png">
+<img src="/shared-typescript-assets/images/github.png">
 <img src="/challenge-registry-assets/images/challenge-view-header-background.png">
 ```
 

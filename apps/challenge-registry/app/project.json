@@ -219,6 +219,6 @@
     "challenge-registry-organization-service",
     "challenge-registry-styles",
     "challenge-registry-themes",
-    "shared-assets"
+    "shared-typescript-assets"
   ]
 }
