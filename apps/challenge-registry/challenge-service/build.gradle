@@ -36,6 +36,9 @@ repositories {
 }
 
 dependencies {
+  implementation "org.hibernate.search:hibernate-search-mapper-orm:${hibernateSearchVersion}"
+  implementation "org.hibernate.search:hibernate-search-backend-elasticsearch:${hibernateSearchVersion}"
+
   api 'com.querydsl:querydsl-jpa:5.0.0' // QueryDSL must have
 
   // Querydsl
