@@ -13,7 +13,7 @@ import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeMapper;
 import org.sagebionetworks.challenge.model.repository.ChallengeFilter;
 import org.sagebionetworks.challenge.model.repository.ChallengeFilter.ChallengeFilterBuilder;
-import org.sagebionetworks.challenge.model.repository.ChallengeRepositoryCustom;
+import org.sagebionetworks.challenge.model.repository.ChallengeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChallengeService {
 
-  @Autowired private ChallengeRepositoryCustom challengeRepositoryCustom;
+  @Autowired private ChallengeRepository challengeRepository;
 
   @Autowired private ProducerService producerService;
 
@@ -63,9 +63,8 @@ public class ChallengeService {
     }
     ChallengeFilter filter = builder.build();
 
-    Page<ChallengeEntity> challengeEntitiesPage =
-        challengeRepositoryCustom.findAll(pageable, filter);
-    log.info("challengeRepositoryCustom {}", challengeEntitiesPage);
+    Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(pageable, filter);
+    log.info("challengeRepository {}", challengeEntitiesPage);
 
     List<ChallengeDto> challenges =
         challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());

@@ -11,10 +11,10 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ChallengeRepositoryCustomImpl extends QuerydslRepositorySupport
-    implements ChallengeRepositoryCustom {
+public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
+    implements CustomChallengeRepository {
 
-  public ChallengeRepositoryCustomImpl() {
+  public CustomChallengeRepositoryImpl() {
     super(ChallengeEntity.class);
   }
 
