@@ -1,4 +1,4 @@
-import { SeoData } from '@sagebionetworks/shared/typescript/util';
+import { SeoData } from '@sagebionetworks/shared/util';
 import { UserProfile } from './user-profile';
 
 const getUserProfileSeoData = (userProfile: UserProfile): SeoData => {

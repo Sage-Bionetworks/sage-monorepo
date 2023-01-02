@@ -16,7 +16,7 @@ import { AuthModule } from '@sagebionetworks/challenge-registry/auth';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { AppComponent } from './app.component';
 import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
-import { SharedUtilModule } from '@sagebionetworks/shared/typescript/util';
+import { SharedUtilModule } from '@sagebionetworks/shared/util';
 import {
   configFactory,
   ConfigService,
