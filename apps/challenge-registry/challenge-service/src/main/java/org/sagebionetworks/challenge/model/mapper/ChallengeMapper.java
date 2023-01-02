@@ -6,7 +6,7 @@ import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
-import org.sagebionetworks.challenge.util.model.mapper.BaseMapper;
+import org.sagebionetworks.util.model.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
 
 public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {

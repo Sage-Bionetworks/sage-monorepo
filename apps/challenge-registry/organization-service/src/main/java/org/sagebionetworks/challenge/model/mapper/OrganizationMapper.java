@@ -2,7 +2,7 @@ package org.sagebionetworks.challenge.model.mapper;
 
 import org.sagebionetworks.challenge.model.dto.OrganizationDto;
 import org.sagebionetworks.challenge.model.entity.OrganizationEntity;
-import org.sagebionetworks.challenge.util.model.mapper.BaseMapper;
+import org.sagebionetworks.util.model.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
 
 public class OrganizationMapper extends BaseMapper<OrganizationEntity, OrganizationDto> {

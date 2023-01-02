@@ -1,8 +1,8 @@
 package org.sagebionetworks.challenge.exception;
 
 import java.util.Locale;
-import org.sagebionetworks.challenge.util.exception.ErrorResponse;
-import org.sagebionetworks.challenge.util.exception.SimpleChallengeGlobalException;
+import org.sagebionetworks.util.exception.ErrorResponse;
+import org.sagebionetworks.util.exception.SimpleChallengeGlobalException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

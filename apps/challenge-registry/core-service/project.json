@@ -63,6 +63,6 @@
     "challenge-registry-keycloak",
     "challenge-registry-mariadb",
     "challenge-registry-service-registry",
-    "shared-java-challenge-util"
+    "shared-java-util"
   ]
 }

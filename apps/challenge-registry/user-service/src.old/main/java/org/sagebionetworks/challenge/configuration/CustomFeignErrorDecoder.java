@@ -9,7 +9,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.sagebionetworks.challenge.util.exception.SimpleChallengeGlobalException;
+import org.sagebionetworks.util.exception.SimpleChallengeGlobalException;
 
 @Slf4j
 public class CustomFeignErrorDecoder implements ErrorDecoder {
