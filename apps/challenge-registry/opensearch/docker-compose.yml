@@ -13,8 +13,8 @@ services:
     networks:
       - challenge-registry
     ports:
-      - "9200:9200"
-      - "9600:9600"
+      - "9200:9200"  # REST API
+      - "9600:9600"  # Performance Analyzer
 
 # volumes:
 #   challenge-registry-opensearch:
