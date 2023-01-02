@@ -24,12 +24,7 @@
         "command": "./gradlew publishToMavenLocal",
         "cwd": "libs/shared/java/util"
       },
-      "dependsOn": [
-        {
-          "target": "build",
-          "projects": "self"
-        }
-      ]
+      "dependsOn": ["build"]
     },
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",

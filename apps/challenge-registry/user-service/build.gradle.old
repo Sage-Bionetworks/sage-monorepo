@@ -55,7 +55,7 @@ dependencies {
   implementation 'org.flywaydb:flyway-mysql:9.3.0'
   implementation "org.keycloak:keycloak-admin-client:${keycloakVersion}"
   implementation "org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}"
-  implementation 'org.sagebionetworks.challenge:challenge-util:0.0.1-SNAPSHOT'
+  implementation 'org.sagebionetworks:util:0.0.1-SNAPSHOT'
   implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
   implementation "org.springframework.boot:spring-boot-devtools:${springVersion}"
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springVersion}"

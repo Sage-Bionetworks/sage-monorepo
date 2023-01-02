@@ -53,7 +53,7 @@
     },
     {
       "description": "Ignore local packages that are not published to any remote repositories",
-      "matchPackagePatterns": ["org.sagebionetworks.challenge:challenge-util"],
+      "matchPackagePatterns": ["org.sagebionetworks:util"],
       "enabled": false
     }
   ],
