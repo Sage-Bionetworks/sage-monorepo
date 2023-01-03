@@ -17,6 +17,8 @@ import {
   challengeInputDataTypeFilter,
   challengeIncentiveTypesFilter,
   challengePlatformFilter,
+  challengeOrganizationFilter,
+  challengeOrganizerFilter,
 } from './challenge-search-filters';
 import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { ChallengeSearchQuery } from './challenge-search-query';
@@ -70,6 +72,11 @@ export class ChallengeSearchComponent implements OnInit {
     challengeSubmissionTypesFilter,
     challengeIncentiveTypesFilter,
     challengePlatformFilter,
+  ];
+
+  dropdownfilters: Filter[] = [
+    challengeOrganizationFilter,
+    challengeOrganizerFilter,
   ];
 
   constructor(private readonly configService: ConfigService) {

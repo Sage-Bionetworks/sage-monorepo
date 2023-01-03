@@ -7,6 +7,8 @@ import {
   challengeSubmissionTypesFilterValues,
   challengeIncentiveTypesFilterValues,
   challengePlatformFilterValues,
+  challengeOrganizationFilterValues,
+  challengeOrganizerFilterValues,
 } from './challenge-search-filters-values';
 
 export const challengeStartYearRangeFilter: Filter = {
@@ -55,5 +57,19 @@ export const challengePlatformFilter: Filter = {
   queryName: 'platforms',
   label: 'Platform',
   values: challengePlatformFilterValues,
+  collapsed: true,
+};
+
+export const challengeOrganizationFilter: Filter = {
+  queryName: 'organizations',
+  label: 'Organization',
+  values: challengeOrganizationFilterValues,
+  collapsed: true,
+};
+
+export const challengeOrganizerFilter: Filter = {
+  queryName: 'organizers',
+  label: 'Organizer',
+  values: challengeOrganizerFilterValues,
   collapsed: true,
 };
