@@ -67,6 +67,12 @@
         </p-panel>
         <p-divider></p-divider>
       </ng-container>
+      <ng-container *ngFor="let dropdown of dropdownfilters; last as isLast">
+        <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
+          <challenge-registry-search-dropdown-filter></challenge-registry-search-dropdown-filter>
+        </p-panel>
+        <p-divider *ngIf="!isLast"></p-divider>
+      </ng-container>
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
