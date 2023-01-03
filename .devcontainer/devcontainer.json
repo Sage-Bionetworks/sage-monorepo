@@ -40,8 +40,6 @@
     3306,
     4200,
     4211,
-    5000,
-    5044,
     5432,
     5601,
     7010,
@@ -61,7 +59,6 @@
     8091,
     8092,
     9200,
-    9300,
     9600,
     27017
   ],
@@ -79,20 +76,12 @@
       "label": "nx graph",
       "onAutoForward": "silent"
     },
-    "5000": {
-      "label": "challenge-logstash (TCP input)",
-      "onAutoForward": "silent"
-    },
-    "5044": {
-      "label": "challenge-logstash (Beats input)",
-      "onAutoForward": "silent"
-    },
     "5432": {
       "label": "challenge-registry-postgres",
       "onAutoForward": "silent"
     },
     "5601": {
-      "label": "challenge-kibana",
+      "label": "challenge-registry-opensearch-dashboards",
       "onAutoForward": "silent"
     },
     "7010": {
@@ -160,15 +149,11 @@
       "onAutoForward": "silent"
     },
     "9200": {
-      "label": "challenge-elasticsearch (HTTP)",
-      "onAutoForward": "silent"
-    },
-    "9300": {
-      "label": "challenge-elasticsearch (TCP transport)",
+      "label": "challenge-registry-opensearch",
       "onAutoForward": "silent"
     },
     "9600": {
-      "label": "challenge-logstash (monitoring API)",
+      "label": "challenge-registry-opensearch (Performance Analyzer)",
       "onAutoForward": "silent"
     },
     "27017": {
