@@ -71,6 +71,7 @@
         <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
           <challenge-registry-search-dropdown-filter
             [values]="dropdown.values"
+            [name]="dropdown.queryName"
             (dropdownChange)="onDropdownChange($event, dropdown.queryName)"
           ></challenge-registry-search-dropdown-filter>
         </p-panel>

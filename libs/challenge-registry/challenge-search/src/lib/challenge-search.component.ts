@@ -113,6 +113,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
         (this.dropdownfilters[0].values = organizations.map((org) => ({
           value: org.login,
           label: org.name,
+          avatarUrl: org.avatarUrl,
           active: false,
         })))
     );
@@ -229,13 +230,14 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
 
   // tmp - Removed once Service is used
   checkOverlapped(property: any, filterValues: any): boolean {
-    // if property(challenge property) presents and filter (filterValues) applied,
-    // check overlap between two arrays, otherwise return true
-    if (property && filterValues && filterValues.length > 0) {
-      // x = isinstance(x, list) ? x : [x];
-      return [property].some((value: any) => filterValues?.includes(value));
+    if (filterValues && filterValues.length > 0) {
+      // filter applied, but no property presents
+      if (!property) return false;
+      // check overlap between two arrays, otherwise return true
+      const propertyValues = property instanceof Array ? property : [property];
+      return propertyValues.some((value: any) => filterValues?.includes(value));
     } else {
-      return true;
+      return true; // no filter applied
     }
   }
 }

@@ -1,0 +1,24 @@
+:host ::ng-deep .p-multiselect {
+  width: 250px;
+}
+
+:host ::ng-deep .p-multiselect-label {
+  white-space: nowrap;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:host ::ng-deep .p-multiselect-item {
+  .item-container {
+    display: inline-flex;
+    align-items: center;
+
+    .item-label {
+      margin-left: 6px;
+      max-width: 120px;
+      word-wrap: break-word;
+      white-space: normal;
+    }
+  }
+}
