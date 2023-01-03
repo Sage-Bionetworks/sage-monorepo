@@ -67,7 +67,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
   {
     id: '',
     name: 'dream-challenge',
-    displayName: 'Dream Challenge',
+    displayName: 'DREAM Challenge',
     description:
       'This is the challenge tagline. It should be a short descriptive summary of the challenge',
     websiteUrl: '',
