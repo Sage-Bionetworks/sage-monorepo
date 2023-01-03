@@ -15,8 +15,8 @@ spring:
         search:
           enabled: true
           backend:
-            version_check: false
-            version: 'opensearch:1.3.7'
+            # version_check: false
+            # version: 'opensearch:1.3.7'
             # type: elasticsearch
             hosts: challenge-registry-opensearch:9200
             username: admin
