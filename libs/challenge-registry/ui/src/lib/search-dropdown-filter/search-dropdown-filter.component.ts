@@ -1,8 +1,5 @@
-import { Component, Input } from '@angular/core';
-import {
-  ChallengeOrganizer,
-  Organization,
-} from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { FilterValue } from '../checkbox-filter/filter-value.model';
 // import { Avatar } from '../avatar/avatar';
 
 @Component({
@@ -11,11 +8,11 @@ import {
   styleUrls: ['./search-dropdown-filter.component.scss'],
 })
 export class SearchDropdownFilterComponent {
-  @Input() values!: Organization[] | ChallengeOrganizer[];
+  @Input() values!: FilterValue[];
+  @Input() selectedValues!: string[];
+  @Output() dropdownChange = new EventEmitter<string[]>();
 
-  selectedValues!: Organization | ChallengeOrganizer;
-
-  constructor() {
-    this.values = [];
+  onChange(selected: string[]): void {
+    this.dropdownChange.emit(selected);
   }
 }

@@ -1,1 +1,5 @@
-<p-multiSelect [options]="values" [(ngModel)]="selectedValues"></p-multiSelect>
+<p-multiSelect
+  [options]="values"
+  [(ngModel)]="selectedValues"
+  (onChange)="onChange(selectedValues)"
+></p-multiSelect>

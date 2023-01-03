@@ -14,6 +14,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     readmeId: '61b26e5ee98893556289e1b3',
     platformId: '61b26e5ee98893556289e1a8',
     ownerId: '61b26e5ce98893556289df29',
+    organizations: ['awesome-org'],
     topics: ['breast', 'cancer'],
     fullName: 'dream/awesome-challenge',
     inputDataTypes: [
@@ -49,6 +50,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     readmeId: '61b26e5ee98893556289e1b3',
     platformId: '61b26e5ee98893556289e1a8',
     ownerId: '61b26e5ce98893556289df29',
+    organizations: ['awesome-org'],
     topics: ['drug', 'multi-targeting-drug'],
     fullName: 'dream/active-challenge',
     inputDataTypes: ['other', 'clinical', 'chemical-structure', 'drug-target'],

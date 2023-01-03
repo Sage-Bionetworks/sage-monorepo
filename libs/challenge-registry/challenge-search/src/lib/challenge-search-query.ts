@@ -21,7 +21,7 @@ export interface ChallengeSearchQuery {
   difficulty?: ChallengeDifficulty[];
   submissionTypes?: ChallengeSubmissionType[];
   incentiveTypes?: ChallengeIncentiveType[];
-  // orgIds?: string[];
-  // organizerIds?: string[];
+  organizations?: string[];
+  // organizers?: string[];
   // sponsorIds?: string[];
 }
