@@ -16,6 +16,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 @Entity
 @Table(name = "challenge")
@@ -23,6 +26,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Indexed
 public class ChallengeEntity {
 
   @Id
@@ -30,6 +34,8 @@ public class ChallengeEntity {
   @Column(nullable = false, updatable = false)
   private Long id;
 
+  @FullTextField()
+  @NaturalId()
   @Column(nullable = false)
   private String name;
 
