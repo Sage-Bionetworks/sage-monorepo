@@ -4,12 +4,14 @@ import {
   ChallengePlatform,
   DateRange,
 } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
+import { Organization } from '@sagebionetworks/challenge-registry/api-client-angular';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import {
   Filter,
   MOCK_CHALLENGES,
   MOCK_ORGANIZATIONS,
 } from '@sagebionetworks/challenge-registry/ui';
+import { MOCK_PLATFORMS } from './mock-platforms';
 import {
   challengeStartYearRangeFilter,
   challengeStatusFilter,
@@ -26,8 +28,6 @@ import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
 import { assign } from 'lodash';
 import { isNotNullOrUndefined } from 'type-guards';
-import { MOCK_PLATFORMS } from './mock-platforms';
-import { Organization } from '@sagebionetworks/challenge-registry/api-client-angular';
 
 @Component({
   selector: 'challenge-registry-challenge-search',
