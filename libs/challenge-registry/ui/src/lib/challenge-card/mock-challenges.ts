@@ -39,8 +39,8 @@ export const MOCK_CHALLENGES: Challenge[] = [
   },
   {
     id: '',
-    name: 'active-challenge',
-    displayName: 'Active Challenge',
+    name: 'synapse-challenge',
+    displayName: 'Synapse Challenge',
     description:
       'This is the challenge tagline. It should be a short descriptive summary of the challenge',
     websiteUrl: '',
@@ -50,7 +50,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     readmeId: '61b26e5ee98893556289e1b3',
     platformId: '61b26e5ee98893556289e1a8',
     ownerId: '61b26e5ce98893556289df29',
-    organizations: ['awesome-org', 'synapse'],
+    organizations: ['synapse'],
     topics: ['drug', 'multi-targeting-drug'],
     fullName: 'dream/active-challenge',
     inputDataTypes: ['other', 'clinical', 'chemical-structure', 'drug-target'],
@@ -66,8 +66,8 @@ export const MOCK_CHALLENGES: Challenge[] = [
   },
   {
     id: '',
-    name: 'completed-challenge',
-    displayName: 'Completed Challenge',
+    name: 'dream-challenge',
+    displayName: 'Dream Challenge',
     description:
       'This is the challenge tagline. It should be a short descriptive summary of the challenge',
     websiteUrl: '',
@@ -77,6 +77,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     readmeId: '61b26e5ee98893556289e1b3',
     platformId: '61b26e5ee98893556289e1a8',
     ownerId: '61b26e5ce98893556289df29',
+    organizations: ['dream'],
     topics: ['preterm-birth'],
     fullName: 'dream/completed-challenge',
     inputDataTypes: ['genomic', 'gene-expression', 'microarray'],
