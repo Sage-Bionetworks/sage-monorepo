@@ -12,4 +12,28 @@ export const MOCK_ORGANIZATIONS: Organization[] = [
     createdAt: '',
     updatedAt: '',
   },
+  {
+    id: 2,
+    name: 'DREAM',
+    description: 'This is an awesome organization',
+    email: 'contact@example.org',
+    login: 'dream',
+    websiteUrl: '',
+    avatarUrl:
+      'https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/dream.png',
+    createdAt: '',
+    updatedAt: '',
+  },
+  {
+    id: 3,
+    name: 'Synapse',
+    description: 'This is an awesome organization',
+    email: 'contact@example.org',
+    login: 'synapse',
+    websiteUrl: '',
+    avatarUrl:
+      'https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/synapse.png',
+    createdAt: '',
+    updatedAt: '',
+  },
 ];

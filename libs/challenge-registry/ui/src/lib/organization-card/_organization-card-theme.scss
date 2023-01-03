@@ -15,7 +15,7 @@
     border-color: transparent;
     background-color: map.get($figma, dl-color-default-hover2);
   }
-  .avatar-content {
+  .organization-card > .avatar-content {
     background-color: transparent !important;
     color: map.get($figma, dl-color-default-primary2) !important;
   }
