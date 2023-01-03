@@ -58,6 +58,10 @@ export interface Challenge {
    */
   ownerId: string;
   /**
+   * The logins of organizations associated with the challenge
+   */
+  organizations?: Array<string>;
+  /**
    * The unique identifier of a challenge README
    */
   readmeId: string;
