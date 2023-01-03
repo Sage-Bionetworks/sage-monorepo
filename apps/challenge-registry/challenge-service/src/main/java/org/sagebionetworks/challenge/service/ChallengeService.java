@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.service;
 
+import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.domain.ChallengeDomain;
@@ -30,6 +31,8 @@ public class ChallengeService {
   @Autowired private ProducerService producerService;
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
+
+  private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
 
   @Transactional(readOnly = true)
   public ChallengesPageDto listChallenges(
@@ -72,6 +75,12 @@ public class ChallengeService {
     ChallengeDomain challengeDomain = new ChallengeDomain("plop");
     log.info("challenge sent: {}", challengeDomain);
     producerService.sendMessage(challengeDomain);
+
+    // Text search
+    List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
+    List<ChallengeEntity> foundEntities =
+        challengeRepository.searchBy("challenge", 10, fieldsToSearchBy.toArray(new String[0]));
+    log.info("foundEntities {}", foundEntities);
 
     return ChallengesPageDto.builder()
         .challenges(challenges)
