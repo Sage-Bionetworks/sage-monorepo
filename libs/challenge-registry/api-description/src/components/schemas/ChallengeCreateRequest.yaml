@@ -10,11 +10,15 @@ properties:
   #     type: string
   #     minLength: 3
   #     maxLength: 60
-  #   description:
-  #     description: A short description of the challenge
-  #     type: string
-  #     nullable: true
-  #     maxLength: 280
+  headline:
+    description: The headline of the challenge
+    type: string
+    nullable: true
+    maxLength: 80
+  description:
+    description: The description of the challenge
+    type: string
+    maxLength: 200
   #   websiteUrl:
   #     type: string
   #     format: url
@@ -64,6 +68,7 @@ properties:
 #     nullable: true
 required:
   - name
+  - description
   - status
 #   - description
 # example:
