@@ -10,7 +10,7 @@ import { Avatar } from '../avatar/avatar';
 export class SearchDropdownFilterComponent {
   @Input() values!: FilterValue[];
   @Input() selectedValues!: string[];
-  @Input() name!: string;
+  @Input() name = 'items';
   @Input() showAvatar = true;
   @Output() dropdownChange = new EventEmitter<string[]>();
 
