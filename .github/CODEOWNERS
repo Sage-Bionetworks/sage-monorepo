@@ -1,14 +1,5 @@
 * @tschaffter
 
-/apps/challenge-registry/api-gateway/ @tschaffter
-/apps/challenge-registry/keycloak/ @tschaffter
-/apps/challenge-registry/mariadb/ @tschaffter
-/apps/challenge-registry/mongo/ @tschaffter
-/apps/challenge-registry/postgres/ @tschaffter
-/apps/challenge-registry-app/ @tschaffter @rrchai
-/apps/challenge-registry-e2e/ @tschaffter @rrchai
-/apps/challenge-registry/service-registry/ @tschaffter
-/apps/challenge-registry-user-service/ @tschaffter
-
-/libs/challenge-registry/ @tschaffter @rrchai
-/libs/shared/ @tschaffter @rrchai
+/apps/challenge-registry/ @tschaffter @rrchai @vpchung
+/libs/challenge-registry/ @tschaffter @rrchai @vpchung
+/libs/shared/ @tschaffter

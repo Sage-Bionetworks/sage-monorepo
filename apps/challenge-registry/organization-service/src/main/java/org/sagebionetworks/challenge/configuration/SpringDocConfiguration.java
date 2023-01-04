@@ -21,11 +21,11 @@ public class SpringDocConfiguration {
                 .contact(
                     new Contact()
                         .name("Support")
-                        .url("https://github.com/Sage-Bionetworks/challenge-registry"))
+                        .url("https://github.com/Sage-Bionetworks/sage-monorepo"))
                 .license(
                     new License()
                         .name("Apache 2.0")
-                        .url("https://github.com/Sage-Bionetworks/challenge-registry"))
+                        .url("https://github.com/Sage-Bionetworks/sage-monorepo"))
                 .version("1.0.0"));
   }
 }
