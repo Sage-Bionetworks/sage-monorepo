@@ -30,36 +30,37 @@ function workspace-install {
   yarn install --immutable
   # TODO: Find a more efficient way than looping through all the Java project to execute the same
   # task (download gradle), enough though caching already helps.
-  nx run-many --all --target=prepare-java --parallel=1
+  nx run-many --target=prepare-java --parallel=1
+  nx run-many --target=prepare-python
 }
 
 function workspace-prepare {
-  nx run-many --all --parallel --target=prepare
+  nx run-many --parallel --target=prepare
 }
 
 # Setup Python virtualenvs
 # function challenge-python {
-#   nx run-many --all --parallel --target=python
+#   nx run-many --parallel --target=python
 # }
 
 function workspace-lint {
-  nx run-many --all --target=lint
+  nx run-many --target=lint
 }
 
 function workspace-lint-html {
-  nx run-many --all --target=lint-html
+  nx run-many --target=lint-html
 }
 
 function workspace-build {
-  nx run-many --all --target=build
+  nx run-many --target=build
 }
 
 function workspace-test {
-  nx run-many --all --target=test
+  nx run-many --target=test
 }
 
 function workspace-build-images {
-  nx run-many --all --parallel --target=build-image
+  nx run-many --parallel --target=build-image
 }
 
 function workspace-graph {
