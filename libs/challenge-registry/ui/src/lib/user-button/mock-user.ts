@@ -1,4 +1,4 @@
-import { User } from '@sagebionetworks/api-client-angular-deprecated';
+import { User } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 
 export const MOCK_USER: User = {
   id: '',

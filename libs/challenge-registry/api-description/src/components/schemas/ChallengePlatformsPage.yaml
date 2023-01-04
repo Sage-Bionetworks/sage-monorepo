@@ -1,0 +1,15 @@
+type: object
+description: A page of challenge platforms.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      challengePlatforms:
+        description: A list of challenge platforms.
+        type: array
+        items:
+          $ref: ChallengePlatform.yaml
+    required:
+      - challengePlatforms
+x-java-class-annotations:
+  - '@lombok.Builder'

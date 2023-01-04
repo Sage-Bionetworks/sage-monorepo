@@ -17,7 +17,7 @@ jobs:
   push:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:3fcdecd
+      image: sagebionetworks/sage-devcontainer:3de9f17
       options: --user root
     if: ${{ github.event_name != 'pull_request' }}
     # env:
@@ -57,6 +57,13 @@ jobs:
       #     path: ~/.local/share/virtualenvs
       #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
 
+      - name: Setup poetry cache
+        id: cache-poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+
       - name: Setup Gradle cache
         uses: actions/cache@v3
         with:
@@ -80,6 +87,7 @@ jobs:
 
       - run: yarn nx affected --target=prepare
       - run: yarn nx affected --target=prepare-java --parallel=1
+      - run: yarn nx affected --target=prepare-python
       - run: yarn nx affected --target=lint
       - run: yarn nx affected --target=build
       - run: yarn nx affected --target=test
@@ -97,7 +105,7 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/challenge-devcontainer:3fcdecd
+      image: sagebionetworks/sage-devcontainer:3de9f17
       options: --user root
     # Runs this job if triggered by a PR and if at least one of these conditions are true:
     # - the PR originate from a fork
@@ -146,6 +154,13 @@ jobs:
       #     path: ~/.local/share/virtualenvs
       #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
 
+      - name: Setup poetry cache
+        id: cache-poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+
       - name: Setup Gradle cache
         uses: actions/cache@v3
         with:
@@ -169,6 +184,7 @@ jobs:
 
       - run: yarn nx affected --target=prepare
       - run: yarn nx affected --target=prepare-java --parallel=1
+      - run: yarn nx affected --target=prepare-python
       - run: yarn nx affected --target=lint
       - run: yarn nx affected --target=build
       - run: yarn nx affected --target=test

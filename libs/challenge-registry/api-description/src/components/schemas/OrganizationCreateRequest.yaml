@@ -1,0 +1,24 @@
+type: object
+description: The information required to create an org account
+properties:
+  email:
+    $ref: Email.yaml
+  login:
+    $ref: OrganizationLogin.yaml
+  name:
+    type: string
+    example: Example organization
+  avatarUrl:
+    type: string
+    format: url
+    example: https://via.placeholder.com/300.png
+    nullable: true
+  websiteUrl:
+    type: string
+    format: url
+    example: https://example.com
+  description:
+    type: string
+    example: A short description of the organization.
+required:
+  - login

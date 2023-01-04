@@ -1,0 +1,81 @@
+# post:
+#   tags:
+#     - Challenge
+#   summary: Add a challenge
+#   description: Adds a challenge
+#   operationId: createChallenge
+#   requestBody:
+#     content:
+#       application/json:
+#         schema:
+#           $ref: ../components/schemas/ChallengeCreateRequest.yaml
+#     required: true
+#   responses:
+#     '201':
+#       content:
+#         application/json:
+#           schema:
+#             $ref: ../components/schemas/ChallengeCreateResponse.yaml
+#       description: Success
+#       links:
+#         GetChallengeById:
+#           $ref: ../components/links/GetChallengeById.yaml
+#         DeleteChallengeById:
+#           $ref: ../components/links/DeleteChallengeById.yaml
+#     '400':
+#       $ref: ../components/responses/BadRequest.yaml
+#     '409':
+#       $ref: ../components/responses/Conflict.yaml
+#     '500':
+#       $ref: ../components/responses/InternalServerError.yaml
+get:
+  tags:
+    - Challenge
+  summary: List challenges
+  description: List challenges
+  operationId: listChallenges
+  parameters:
+    - $ref: ../components/parameters/query/pageNumber.yaml
+    - $ref: ../components/parameters/query/pageSize.yaml
+    # - $ref: parameters/sort.yaml
+    # - $ref: parameters/direction.yaml
+    # - $ref: parameters/searchTerms.yaml
+    # - $ref: parameters/topics.yaml
+    # - $ref: parameters/inputDataTypes.yaml
+    - $ref: ../components/parameters/query/challenge/status.yaml
+    - $ref: ../components/parameters/query/challenge/platforms.yaml
+    - $ref: ../components/parameters/query/challenge/difficulties.yaml
+    - $ref: ../components/parameters/query/challenge/submissionTypes.yaml
+    - $ref: ../components/parameters/query/challenge/incentives.yaml
+    # - $ref: parameters/challenge/startDateRange.yaml
+    # - $ref: parameters/challenge/orgIds.yaml
+    # - $ref: parameters/challenge/organizerIds.yaml
+    # - $ref: parameters/challenge/sponsorIds.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ChallengesPage.yaml
+      description: Success
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
+# delete:
+#   tags:
+#     - challenge
+#   summary: Delete all challenges
+#   description: Delete all challenges
+#   operationId: deleteAllChallenges
+#   security:
+#     - ApiKeyAuth: []
+#   responses:
+#     '200':
+#       description: Success
+#       content:
+#         application/json:
+#           schema:
+#             $ref: ../components/schemas/EmptyObject.yaml
+#     '500':
+#       $ref: ../components/responses/InternalServerError.yaml

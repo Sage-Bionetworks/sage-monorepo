@@ -1,0 +1,24 @@
+{
+  "name": "shared-typescript-util",
+  "projectType": "library",
+  "sourceRoot": "libs/shared/typescript/util/src",
+  "prefix": "sage",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/typescript/util"],
+      "options": {
+        "jestConfig": "libs/shared/typescript/util/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/shared/typescript/util/**/*.ts", "libs/shared/typescript/util/**/*.html"]
+      }
+    }
+  },
+  "tags": ["type:util", "scope:shared"],
+  "implicitDependencies": []
+}

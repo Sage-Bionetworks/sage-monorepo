@@ -1,0 +1,61 @@
+type: object
+description: A challenge
+properties:
+  id:
+    $ref: ChallengeId.yaml
+  name:
+    $ref: ChallengeName.yaml
+  status:
+    $ref: ChallengeStatus.yaml
+  difficulty:
+    $ref: ChallengeDifficulty.yaml
+  platform:
+    $ref: SimpleChallengePlatform.yaml
+  incentives:
+    type: array
+    items:
+      $ref: ChallengeIncentive.yaml
+  submissionTypes:
+    type: array
+    items:
+      $ref: ChallengeSubmissionType.yaml
+  #   fullName:
+  #     type: string
+  #   ownerId:
+  #     $ref: AccountId.yaml
+  #   readmeId:
+  #     $ref: ChallengeReadmeId.yaml
+  #   featured:
+  #     description: Whether the challenge is featured
+  #     type: boolean
+  #     default: false
+  #   participantCount:
+  #     description: Number of challenge participants
+  #     type: integer
+  #     default: 0
+  #   viewCount:
+  #     description: Number of challenge views
+  #     type: integer
+  #     default: 0
+  #   starredCount:
+  #     description: Number of times the challenge has been starred by users
+  #     type: integer
+  #     default: 0
+  createdAt:
+    type: string
+    format: date-time
+    example: '2022-07-04T22:19:11Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2022-07-04T22:19:11Z'
+required:
+  - id
+  - name
+  - status
+  - difficulty
+  - platform
+  - incentives
+  - submissionTypes
+  - createdAt
+  - updatedAt

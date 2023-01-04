@@ -1,0 +1,36 @@
+parameters:
+  - $ref: ../../components/parameters/path/organizationLogin.yaml
+get:
+  tags:
+    - Organization
+  summary: Get an organization
+  description: Returns the organization specified
+  operationId: getOrganization
+  responses:
+    '200':
+      description: An organization
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Organization.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
+# delete:
+#   tags:
+#     - User
+#   summary: Delete a user
+#   description: Deletes the user specified
+#   operationId: deleteUser
+#   responses:
+#     '200':
+#       description: Deleted
+#       content:
+#         application/json:
+#           schema:
+#             $ref: ../../components/schemas/EmptyObject.yaml
+#     '400':
+#       $ref: ../../components/responses/NotFound.yaml
+#     '500':
+#       $ref: ../../components/responses/InternalServerError.yaml

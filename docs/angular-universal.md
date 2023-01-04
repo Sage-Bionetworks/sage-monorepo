@@ -82,7 +82,7 @@ The previous version of the challenge registry app generated in early 2022 is re
         "apps/challenge-registry/src/assets",
         "apps/challenge-registry/src/config",
         {
-          "input": "libs/shared/assets/src/assets",
+          "input": "libs/shared/typescript/assets/src/assets",
           "glob": "**/*",
           "output": "assets"
         },
@@ -92,7 +92,7 @@ The previous version of the challenge registry app generated in early 2022 is re
           "output": "challenge-registry-assets"
         },
         {
-          "input": "libs/shared/assets/src",
+          "input": "libs/shared/typescript/assets/src",
           "glob": "favicon.ico",
           "output": ""
         }
@@ -131,9 +131,9 @@ The previous version of the challenge registry app generated in early 2022 is re
       "implicitDependencies": [
         "challenge-registry-styles",
         "challenge-registry-themes",
-        "shared-assets",
-        "challenge-api-gateway",
-        "challenge-keycloak"
+        "shared-typescript-assets",
+        "challenge-registry-api-gateway",
+        "challenge-registry-keycloak"
       ]
       ```
 

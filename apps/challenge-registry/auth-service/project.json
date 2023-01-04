@@ -1,0 +1,73 @@
+{
+  "name": "challenge-registry-auth-service",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/challenge-registry/auth-service/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/challenge-registry/auth-service"
+      }
+    },
+    "prepare-java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "apps/challenge-registry/auth-service"
+      }
+    },
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "apps/challenge-registry/auth-service"
+      },
+      "outputs": ["{projectRoot}"],
+      "dependsOn": ["^install"]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "apps/challenge-registry/auth-service"
+      }
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "apps/challenge-registry/auth-service"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "apps/challenge-registry/auth-service",
+        "parallel": true
+      },
+      "dependsOn": ["prepare", "^serve-detach"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/challenge-registry/auth-service"
+      },
+      "dependsOn": ["build-image", "prepare", "^serve-detach"]
+    },
+    "build-image": {
+      "executor": "@nxrocks/nx-spring-boot:build-image",
+      "options": {
+        "root": "apps/challenge-registry/auth-service"
+      },
+      "dependsOn": ["^install"]
+    }
+  },
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": [
+    "challenge-registry-api-gateway",
+    "challenge-registry-keycloak",
+    "challenge-registry-service-registry",
+    "shared-java-util"
+  ]
+}

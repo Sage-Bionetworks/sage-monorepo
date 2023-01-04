@@ -1,6 +1,6 @@
 {
-  "name": "Challenge",
-  "image": "sagebionetworks/challenge-devcontainer:6c35430",
+  "name": "Sage",
+  "image": "sagebionetworks/sage-devcontainer:3de9f17",
 
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2.0.0": {
@@ -39,110 +39,130 @@
   "forwardPorts": [
     3306,
     4200,
-    4201,
     4211,
-    5000,
-    5044,
     5432,
     5601,
+    7010,
+    7080,
+    7200,
+    7888,
+    8010,
+    8020,
+    8021,
     8080,
     8081,
     8082,
     8083,
     8084,
+    8085,
     8090,
     8091,
     8092,
     9200,
-    9300,
     9600,
     27017
   ],
 
   "portsAttributes": {
     "3306": {
-      "label": "challenge-mariadb",
+      "label": "challenge-registry-mariadb",
       "onAutoForward": "silent"
     },
     "4200": {
-      "label": "challenge-registry",
-      "onAutoForward": "silent"
-    },
-    "4201": {
-      "label": "challenge-platform",
+      "label": "challenge-registry-app",
       "onAutoForward": "silent"
     },
     "4211": {
       "label": "nx graph",
       "onAutoForward": "silent"
     },
-    "5000": {
-      "label": "challenge-logstash (TCP input)",
-      "onAutoForward": "silent"
-    },
-    "5044": {
-      "label": "challenge-logstash (Beats input)",
-      "onAutoForward": "silent"
-    },
     "5432": {
-      "label": "challenge-postgresql",
+      "label": "challenge-registry-postgres",
       "onAutoForward": "silent"
     },
     "5601": {
-      "label": "challenge-kibana",
+      "label": "challenge-registry-opensearch-dashboards",
+      "onAutoForward": "silent"
+    },
+    "7010": {
+      "label": "schematic-api-docs",
+      "onAutoForward": "silent"
+    },
+    "7080": {
+      "label": "schematic-api",
+      "onAutoForward": "silent"
+    },
+    "7200": {
+      "label": "schematic-app",
+      "onAutoForward": "silent"
+    },
+    "7888": {
+      "label": "schematic-notebook",
+      "onAutoForward": "silent"
+    },
+    "8010": {
+      "label": "challenge-registry-api-docs",
+      "onAutoForward": "silent"
+    },
+    "8020": {
+      "label": "challenge-registry-rabbitmq",
+      "onAutoForward": "silent"
+    },
+    "8021": {
+      "label": "challenge-registry-rabbitmq-ui",
       "onAutoForward": "silent"
     },
     "8080": {
-      "label": "challenge-keycloak",
+      "label": "challenge-registry-keycloak",
       "onAutoForward": "silent"
     },
     "8081": {
-      "label": "challenge-service-registry",
+      "label": "challenge-registry-service-registry",
       "onAutoForward": "silent"
     },
     "8082": {
-      "label": "challenge-api-gateway",
+      "label": "challenge-registry-api-gateway",
       "onAutoForward": "silent"
     },
     "8083": {
-      "label": "challenge-user-service",
+      "label": "challenge-registry-user-service",
       "onAutoForward": "silent"
     },
     "8084": {
-      "label": "challenge-organization-service",
+      "label": "challenge-registry-organization-service",
+      "onAutoForward": "silent"
+    },
+    "8085": {
+      "label": "challenge-registry-challenge-service",
       "onAutoForward": "silent"
     },
     "8090": {
-      "label": "challenge-config-service",
+      "label": "challenge-registry-config-service",
       "onAutoForward": "silent"
     },
     "8091": {
-      "label": "challenge-auth-service",
+      "label": "challenge-registry-auth-service",
       "onAutoForward": "silent"
     },
     "8092": {
-      "label": "challenge-core-service",
+      "label": "challenge-registry-core-service",
       "onAutoForward": "silent"
     },
     "9200": {
-      "label": "challenge-elasticsearch (HTTP)",
-      "onAutoForward": "silent"
-    },
-    "9300": {
-      "label": "challenge-elasticsearch (TCP transport)",
+      "label": "challenge-registry-opensearch",
       "onAutoForward": "silent"
     },
     "9600": {
-      "label": "challenge-logstash (monitoring API)",
+      "label": "challenge-registry-opensearch (Performance Analyzer)",
       "onAutoForward": "silent"
     },
     "27017": {
-      "label": "challenge-mongodb",
+      "label": "challenge-registry-mongo",
       "onAutoForward": "silent"
     }
   },
 
 	"remoteUser": "vscode",
   "shutdownAction": "stopContainer",
-  "runArgs": ["--name", "challenge_devcontainer"]
+  "runArgs": ["--name", "sage_devcontainer"]
 }

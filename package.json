@@ -1,5 +1,5 @@
 {
-  "name": "challenge",
+  "name": "sage-monorepo",
   "version": "0.0.0",
   "license": "Apache-2.0",
   "scripts": {
@@ -80,7 +80,7 @@
     "@swc/cli": "0.1.57",
     "@swc/core": "1.3.19",
     "@types/jest": "29.2.4",
-    "@types/lodash": "4.14.189",
+    "@types/lodash": "4.14.191",
     "@types/node": "18.7.1",
     "@types/supertest": "^2.0.12",
     "@types/validator": "13.7.10",

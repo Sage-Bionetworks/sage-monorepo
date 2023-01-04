@@ -1,4 +1,4 @@
-import { FilterValue } from './filter-value.model';
+import { FilterValue } from '@sagebionetworks/challenge-registry/ui';
 
 const thisYear = new Date().getFullYear();
 
@@ -55,3 +55,84 @@ export const challengeStartYearRangeFilterValues: FilterValue[] = [
     active: false,
   },
 ];
+
+export const challengeStatusFilterValues: FilterValue[] = [
+  {
+    value: 'active',
+    label: 'Active',
+    active: false,
+  },
+  {
+    value: 'upcoming',
+    label: 'Upcoming',
+    active: false,
+  },
+  {
+    value: 'completed',
+    label: 'Completed',
+    active: false,
+  },
+];
+
+export const challengeDifficultyFilterValues: FilterValue[] = [
+  {
+    value: 'GoodForBeginners',
+    label: 'Good For Beginners',
+    active: false,
+  },
+  {
+    value: 'Intermediate',
+    label: 'Intermediate',
+    active: false,
+  },
+  {
+    value: 'Advanced',
+    label: 'Advanced',
+    active: false,
+  },
+];
+
+export const challengeSubmissionTypesFilterValues: FilterValue[] = [
+  {
+    value: 'DockerImage',
+    label: 'Docker Image',
+    active: false,
+  },
+  {
+    value: 'PredictionFile',
+    label: 'Prediction File',
+    active: false,
+  },
+  {
+    value: 'Other',
+    label: 'Other',
+    active: false,
+  },
+];
+
+export const challengeInputDataTypeFilterValues: FilterValue[] = [];
+
+export const challengeIncentiveTypesFilterValues: FilterValue[] = [
+  {
+    value: 'Monetary',
+    label: 'Monetary',
+    active: false,
+  },
+  {
+    value: 'Publication',
+    label: 'Publication',
+    active: false,
+  },
+  {
+    value: 'SpeakingEngagement',
+    label: 'Speaking Engagement',
+    active: false,
+  },
+  {
+    value: 'Other',
+    label: 'Other',
+    active: false,
+  },
+];
+
+export const challengePlatformFilterValues: FilterValue[] = [];

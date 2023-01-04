@@ -64,7 +64,7 @@
       "server": "localhost",
       "port": 5432,
       "driver": "PostgreSQL",
-      "name": "challenge-postgresql",
+      "name": "challenge-registry-postgres",
       "database": "challenge",
       "username": "postgres",
       "password": "changeme"
@@ -74,10 +74,10 @@
         "authProtocol": "default"
       },
       "previewLimit": 50,
-      "server": "challenge-mariadb",
+      "server": "challenge-registry-mariadb",
       "port": 3306,
       "driver": "MariaDB",
-      "name": "challenge-mariadb",
+      "name": "challenge-registry-mariadb",
       "database": "challenge",
       "username": "maria",
       "password": "changeme"

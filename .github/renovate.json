@@ -10,7 +10,6 @@
   "ignorePaths": [
     "apps/api",
     "apps/challenge-db-cli",
-    "apps/challenge-elk",
     "libs/api-client-angular-deprecated"
   ],
   "baseBranches": ["main"],
@@ -54,7 +53,7 @@
     },
     {
       "description": "Ignore local packages that are not published to any remote repositories",
-      "matchPackagePatterns": ["org.sagebionetworks.challenge:challenge-util"],
+      "matchPackagePatterns": ["org.sagebionetworks:util"],
       "enabled": false
     }
   ],

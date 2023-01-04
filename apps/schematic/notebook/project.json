@@ -1,0 +1,51 @@
+{
+  "name": "schematic-notebook",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/schematic/notebook/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/schematic/notebook"
+      }
+    },
+
+    "prepare-python": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "poetry config virtualenvs.in-project true",
+          "poetry install"
+        ],
+        "cwd": "apps/schematic/notebook"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run jupyter lab --config=jupyter_lab_config.py",
+        "cwd": "apps/schematic/notebook"
+      },
+      "dependsOn": ["prepare"]
+    }
+    // "serve-detach": {
+    //   "executor": "nx:run-commands",
+    //   "options": {
+    //     "command": "docker compose up -d",
+    //     "cwd": "apps/schematic/notebook"
+    //   },
+    //   "dependsOn": ["build-image", "prepare"]
+    // },
+    // "build-image": {
+    //   "executor": "@nx-tools/nx-docker:build",
+    //   "options": {
+    //     "context": "apps/schematic/notebook",
+    //     "push": false,
+    //     "tags": ["sagebionetworks/schematic-notebook:latest"]
+    //   }
+    // }
+  },
+  "tags": ["type:app", "scope:client"]
+}

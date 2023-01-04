@@ -10,7 +10,7 @@ import {
   UserCreateRequest,
   UserService,
   BasicError as ApiClientError,
-} from '@sagebionetworks/api-client-angular';
+} from '@sagebionetworks/challenge-registry/api-client-angular';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 

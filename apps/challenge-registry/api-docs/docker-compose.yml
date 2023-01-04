@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  challenge-registry-api-docs:
+    image: sagebionetworks/challenge-registry-api-docs:latest
+    container_name: challenge-registry-api-docs
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ../../../libs/challenge-registry/api-description/build/:/usr/share/nginx/html/swagger/
+    networks:
+      - challenge
+    ports:
+      - "8010:80"
+
+volumes:
+  challenge-registry-api-docs:
+    name: challenge-registry-api-docs
+
+networks:
+  challenge:
+    name: challenge

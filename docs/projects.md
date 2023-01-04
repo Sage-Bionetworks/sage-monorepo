@@ -36,7 +36,7 @@
 | challenge-registry-ui | Challenge Registry reusable UI components |
 | challenge-registry-user-profile | Challenge Registry User profile page |
 | shared-assets | Assets shared by multiple TypeScript projects |
-| shared-java-challenge-util | Util library shared by multiple Java projects |
+| shared-java-util | Util library shared by multiple Java projects |
 | shared-styles | SCSS styles shared by multiple TypeScript projects |
 | shared-theme | SCSS themes shared by multiple TypeScript projects |
 | shared-util | Util library shared by multiple TypeScript projects |

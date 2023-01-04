@@ -1,0 +1,20 @@
+openapi: 3.0.3
+info:
+  title: Schematic REST API
+  version: 0.1.0
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+servers:
+  - url: http://localhost/api/v1
+tags:
+  - name: Storage
+    description: Operations about storages.
+paths:
+  /storages/projects/{projectId}/datasets:
+    $ref: paths/storages/projects/@{projectId}/datasets.yaml

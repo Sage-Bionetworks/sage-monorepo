@@ -1,0 +1,608 @@
+openapi: 3.0.3
+info:
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  title: Challenge API
+  version: 1.0.0
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+servers:
+  - url: http://localhost/v1
+tags:
+  - description: Operations about challenges.
+    name: Challenge
+  - description: Operations about challenge platforms.
+    name: ChallengePlatform
+paths:
+  /challenges:
+    get:
+      description: List challenges
+      operationId: listChallenges
+      parameters:
+        - description: The page number
+          explode: true
+          in: query
+          name: pageNumber
+          required: false
+          schema:
+            default: 0
+            format: int32
+            minimum: 0
+            type: integer
+          style: form
+        - description: The number of items in a single page
+          explode: true
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 100
+            format: int32
+            minimum: 1
+            type: integer
+          style: form
+        - description: An array of challenge status used to filter the results.
+          explode: true
+          in: query
+          name: status
+          required: false
+          schema:
+            items:
+              $ref: '#/components/schemas/ChallengeStatus'
+            type: array
+          style: form
+        - description: An array of challenge platform ids used to filter the results.
+          explode: true
+          in: query
+          name: platforms
+          required: false
+          schema:
+            items:
+              $ref: '#/components/schemas/ChallengePlatformName'
+            type: array
+          style: form
+        - description: An array of challenge difficulty levels used to filter the results.
+          explode: true
+          in: query
+          name: difficulties
+          required: false
+          schema:
+            items:
+              $ref: '#/components/schemas/ChallengeDifficulty'
+            type: array
+          style: form
+        - description: An array of challenge submission types used to filter the results.
+          explode: true
+          in: query
+          name: submissionTypes
+          required: false
+          schema:
+            items:
+              $ref: '#/components/schemas/ChallengeSubmissionType'
+            type: array
+          style: form
+        - description: An array of challenge incentive types used to filter the results.
+          explode: true
+          in: query
+          name: incentives
+          required: false
+          schema:
+            items:
+              $ref: '#/components/schemas/ChallengeIncentive'
+            type: array
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengesPage'
+          description: Success
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List challenges
+      tags:
+        - Challenge
+      x-accepts: application/json
+      x-tags:
+        - tag: Challenge
+  /challengePlatforms:
+    get:
+      description: List challenge platforms
+      operationId: listChallengePlatforms
+      parameters:
+        - description: The page number
+          explode: true
+          in: query
+          name: pageNumber
+          required: false
+          schema:
+            default: 0
+            format: int32
+            minimum: 0
+            type: integer
+          style: form
+        - description: The number of items in a single page
+          explode: true
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 100
+            format: int32
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatformsPage'
+          description: Success
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List challenge platforms
+      tags:
+        - ChallengePlatform
+      x-accepts: application/json
+      x-tags:
+        - tag: ChallengePlatform
+  /challengePlatforms/{challengePlatformName}:
+    get:
+      description: Returns the challenge platform specified
+      operationId: getChallengePlatform
+      parameters:
+        - description: The unique identifier of the challenge platform.
+          explode: false
+          in: path
+          name: challengePlatformName
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengePlatformName'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatform'
+          description: Success
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a challenge platform
+      tags:
+        - ChallengePlatform
+      x-accepts: application/json
+      x-tags:
+        - tag: ChallengePlatform
+components:
+  parameters:
+    pageNumber:
+      description: The page number
+      explode: true
+      in: query
+      name: pageNumber
+      required: false
+      schema:
+        default: 0
+        format: int32
+        minimum: 0
+        type: integer
+      style: form
+    pageSize:
+      description: The number of items in a single page
+      explode: true
+      in: query
+      name: pageSize
+      required: false
+      schema:
+        default: 100
+        format: int32
+        minimum: 1
+        type: integer
+      style: form
+    status:
+      description: An array of challenge status used to filter the results.
+      explode: true
+      in: query
+      name: status
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeStatus'
+        type: array
+      style: form
+    platforms:
+      description: An array of challenge platform ids used to filter the results.
+      explode: true
+      in: query
+      name: platforms
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengePlatformName'
+        type: array
+      style: form
+    difficulties:
+      description: An array of challenge difficulty levels used to filter the results.
+      explode: true
+      in: query
+      name: difficulties
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeDifficulty'
+        type: array
+      style: form
+    submissionTypes:
+      description: An array of challenge submission types used to filter the results.
+      explode: true
+      in: query
+      name: submissionTypes
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeSubmissionType'
+        type: array
+      style: form
+    incentives:
+      description: An array of challenge incentive types used to filter the results.
+      explode: true
+      in: query
+      name: incentives
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ChallengeIncentive'
+        type: array
+      style: form
+    challengePlatformName:
+      description: The unique identifier of the challenge platform.
+      explode: false
+      in: path
+      name: challengePlatformName
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengePlatformName'
+      style: simple
+  responses:
+    BadRequest:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Invalid request
+    InternalServerError:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request cannot be fulfilled due to an unexpected server error
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The specified resource was not found
+  schemas:
+    ChallengeStatus:
+      description: The status of the challenge.
+      enum:
+        - upcoming
+        - active
+        - completed
+      example: active
+      type: string
+    ChallengePlatformName:
+      description: The name of the challenge platform.
+      example: example-challenge-platform
+      maxLength: 30
+      minLength: 3
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      type: string
+    ChallengeDifficulty:
+      description: The difficulty level of a challenge.
+      enum:
+        - good_for_beginners
+        - intermediate
+        - advanced
+      example: intermediate
+      type: string
+    ChallengeSubmissionType:
+      description: The submission type of the challenge.
+      enum:
+        - container_image
+        - prediction_file
+        - other
+      example: container_image
+      type: string
+    ChallengeIncentive:
+      description: The incentive type of the challenge.
+      enum:
+        - monetary
+        - publication
+        - speaking_engagement
+        - other
+      example: publication
+      type: string
+    PageMetadata:
+      description: The metadata of a page.
+      properties:
+        number:
+          description: The page number.
+          example: 99
+          format: int32
+          type: integer
+        size:
+          description: The number of items in a single page.
+          example: 99
+          format: int32
+          type: integer
+        totalElements:
+          description: Total number of elements in the result set.
+          example: 99
+          format: int64
+          type: integer
+        totalPages:
+          description: Total number of pages in the result set.
+          example: 99
+          format: int32
+          type: integer
+        hasNext:
+          description: Returns if there is a next page.
+          example: true
+          type: boolean
+        hasPrevious:
+          description: Returns if there is a previous page.
+          example: true
+          type: boolean
+      required:
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
+      type: object
+    ChallengeId:
+      description: The unique identifier of a challenge.
+      example: 1
+      format: int64
+      type: integer
+    ChallengeName:
+      description: The name of the a challenge
+      example: awesome-challenge
+      maxLength: 60
+      minLength: 3
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      type: string
+    ChallengePlatformId:
+      description: The unique identifier of a challenge platform.
+      example: 1
+      format: int64
+      type: integer
+    ChallengePlatformDisplayName:
+      description: The display name of the challenge platform.
+      example: Example Challenge Platform
+      maxLength: 50
+      minLength: 3
+      type: string
+    SimpleChallengePlatform:
+      description: A simple challenge platform
+      properties:
+        id:
+          description: The unique identifier of a challenge platform.
+          example: 1
+          format: int64
+          type: integer
+        name:
+          description: The name of the challenge platform.
+          example: example-challenge-platform
+          maxLength: 30
+          minLength: 3
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        displayName:
+          description: The display name of the challenge platform.
+          example: Example Challenge Platform
+          maxLength: 50
+          minLength: 3
+          type: string
+      required:
+        - displayName
+        - id
+        - name
+      type: object
+    Challenge:
+      description: A challenge
+      properties:
+        id:
+          description: The unique identifier of a challenge.
+          example: 1
+          format: int64
+          type: integer
+        name:
+          description: The name of the a challenge
+          example: awesome-challenge
+          maxLength: 60
+          minLength: 3
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        status:
+          $ref: '#/components/schemas/ChallengeStatus'
+        difficulty:
+          $ref: '#/components/schemas/ChallengeDifficulty'
+        platform:
+          $ref: '#/components/schemas/SimpleChallengePlatform'
+        incentives:
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
+          type: array
+        submissionTypes:
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
+        createdAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+        updatedAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+      required:
+        - createdAt
+        - difficulty
+        - id
+        - incentives
+        - name
+        - platform
+        - status
+        - submissionTypes
+        - updatedAt
+      type: object
+    ChallengesPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - $ref: '#/components/schemas/ChallengesPage_allOf'
+      description: A page of challenges.
+      type: object
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    BasicError:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+      required:
+        - status
+        - title
+      type: object
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ChallengePlatformCreateRequest:
+      description: The information used to create a challenge platform
+      properties:
+        displayName:
+          description: The display name of the challenge platform.
+          example: Example Challenge Platform
+          maxLength: 50
+          minLength: 3
+          type: string
+      required:
+        - displayName
+      type: object
+    ChallengePlatform:
+      allOf:
+        - $ref: '#/components/schemas/ChallengePlatformCreateRequest'
+        - $ref: '#/components/schemas/ChallengePlatform_allOf'
+      description: A challenge platform
+      type: object
+    ChallengePlatformsPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - $ref: '#/components/schemas/ChallengePlatformsPage_allOf'
+      description: A page of challenge platforms.
+      type: object
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ChallengesPage_allOf:
+      properties:
+        challenges:
+          description: A list of challenges.
+          items:
+            $ref: '#/components/schemas/Challenge'
+          type: array
+      required:
+        - challenges
+      type: object
+      example: null
+    ChallengePlatform_allOf:
+      properties:
+        id:
+          description: The unique identifier of a challenge platform.
+          example: 1
+          format: int64
+          type: integer
+        name:
+          description: The name of the challenge platform.
+          example: example-challenge-platform
+          maxLength: 30
+          minLength: 3
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        createdAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+        updatedAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+      required:
+        - createdAt
+        - id
+        - name
+        - updatedAt
+      type: object
+      example: null
+    ChallengePlatformsPage_allOf:
+      properties:
+        challengePlatforms:
+          description: A list of challenge platforms.
+          items:
+            $ref: '#/components/schemas/ChallengePlatform'
+          type: array
+      required:
+        - challengePlatforms
+      type: object
+      example: null

@@ -1,0 +1,28 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Challenge API
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+servers:
+  - url: http://localhost/v1
+tags:
+  - name: Challenge
+    description: Operations about challenges.
+  - name: ChallengePlatform
+    description: Operations about challenge platforms.
+paths:
+  /challenges:
+    $ref: paths/challenges.yaml
+  # /organizations/{organizationLogin}:
+  #   $ref: paths/organizations/@{organizationLogin}.yaml
+  /challengePlatforms:
+    $ref: paths/challengePlatforms.yaml
+  /challengePlatforms/{challengePlatformName}:
+    $ref: paths/challengePlatforms/@{challengePlatformName}.yaml

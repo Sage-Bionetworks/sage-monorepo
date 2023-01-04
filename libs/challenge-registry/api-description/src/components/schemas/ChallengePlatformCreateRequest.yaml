@@ -1,0 +1,23 @@
+type: object
+description: The information used to create a challenge platform
+properties:
+  displayName:
+    $ref: ChallengePlatformDisplayName.yaml
+  # displayName:
+  #   type: string
+  # websiteUrl:
+  #   type: string
+  #   format: url
+  # avatarUrl:
+  #   type: string
+  #   format: url
+required:
+  - displayName
+  # - displayName
+  # - websiteUrl
+  # - avatarUrl
+# example:
+#   name: awesome-challenge-platform
+#   displayName: Awesome Challenge Platform
+#   websiteUrl: https://awesome-challenge-platform.io
+#   avatarUrl: https://awesome-challenge-platform.io/logo.png

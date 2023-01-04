@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
   Account,
   Challenge,
-} from '@sagebionetworks/api-client-angular-deprecated';
+} from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 import { map, Observable, of, Subscription } from 'rxjs';
 import { Tab } from './tab.model';
 import { CHALLENGE_TABS } from './challenge-tabs';

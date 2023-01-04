@@ -1,0 +1,17 @@
+@organizationServiceHost = http://challenge-registry-organization-service:8084
+@apiGatewayHost = http://challenge-registry-api-gateway:8082
+
+### Select the base path
+
+# Send the requests directly to the service 
+# @basePath = {{organizationServiceHost}}/v1
+# Send the requests to the API gateway
+@basePath = {{apiGatewayHost}}/api/v1
+
+### List the organizations
+
+GET {{basePath}}/organizations
+
+### Get an organization by ID
+
+GET {{basePath}}/organizations/dream

@@ -1,0 +1,23 @@
+type: object
+description: A challenge platform
+allOf:
+  - $ref: ChallengePlatformCreateRequest.yaml
+  - type: object
+    properties:
+      id:
+        $ref: ChallengePlatformId.yaml
+      name:
+        $ref: ChallengePlatformName.yaml
+      createdAt:
+        type: string
+        format: date-time
+        example: '2022-07-04T22:19:11Z'
+      updatedAt:
+        type: string
+        format: date-time
+        example: '2022-07-04T22:19:11Z'
+    required:
+      - id
+      - name
+      - createdAt
+      - updatedAt

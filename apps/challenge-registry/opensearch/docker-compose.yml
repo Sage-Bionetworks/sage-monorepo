@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  challenge-registry-opensearch:
+    image: sagebionetworks/challenge-registry-opensearch:latest
+    container_name: challenge-registry-opensearch
+    restart: always
+    env_file:
+      - .env
+    # volumes:
+    #   - challenge-registry-opensearch:/data/db
+    #   - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - challenge-registry
+    ports:
+      - "9200:9200"  # REST API
+      - "9600:9600"  # Performance Analyzer
+
+# volumes:
+#   challenge-registry-opensearch:
+#     name: challenge-registry-opensearch
+
+networks:
+  challenge-registry:
+    name: challenge-registry

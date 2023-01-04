@@ -1,0 +1,6 @@
+name: challengePlatformId
+in: path
+description: The unique identifier of the challenge platform.
+required: true
+schema:
+  $ref: ../../schemas/ChallengePlatformId.yaml

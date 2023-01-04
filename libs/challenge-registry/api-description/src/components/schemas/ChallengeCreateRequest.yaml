@@ -1,0 +1,91 @@
+type: object
+description: The information used to create a challenge
+properties:
+  name:
+    type: string
+    minLength: 3
+    maxLength: 60
+    example: Example challenge
+  #   displayName:
+  #     type: string
+  #     minLength: 3
+  #     maxLength: 60
+  #   description:
+  #     description: A short description of the challenge
+  #     type: string
+  #     nullable: true
+  #     maxLength: 280
+  #   websiteUrl:
+  #     type: string
+  #     format: url
+  status:
+    $ref: ChallengeStatus.yaml
+    #   startDate:
+    #     type: string
+    #     format: date
+    #     nullable: true
+    #   endDate:
+    #     type: string
+    #     format: date
+    #     nullable: true
+  # incentives:
+  #   type: array
+  #   items:
+  #     $ref: ChallengeIncentive.yaml
+  #   platformId:
+  #     $ref: ChallengePlatformId.yaml
+  #     nullable: true
+  difficulty:
+    $ref: ChallengeDifficulty.yaml
+#   submissionTypes:
+#     type: array
+#     items:
+#       $ref: ChallengeSubmissionType.yaml
+#     nullable: true
+#   topics:
+#     type: array
+#     items:
+#       $ref: Topic.yaml
+#     # uniqueItems: true
+#     maxItems: 30
+#   inputDataTypes:
+#     type: array
+#     items:
+#       $ref: ChallengeInputDataType.yaml
+#     maxItems: 10
+#     nullable: true
+#   doi:
+#     type: string
+#     # pattern: "^10.\d{4,9}/[-._;()/:A-Z0-9]+$"
+#     nullable: true
+#   participantCount:
+#     type: integer
+#     minimum: 0
+#     nullable: true
+required:
+  - name
+  - status
+#   - description
+# example:
+#   name: awesome-challenge
+#   displayName: Awesome Challenge
+#   description: This challenge is awesome.
+#   websiteUrl: https://synapse.org/awesome-challenge
+#   status: active
+#   startDate: '2020-11-10'
+#   endDate: '2020-12-31'
+#   platformId: 507f1f77bcf86cd799439011
+#   submissionTypes:
+#     - PredictionFile
+#     - DockerImage
+#   incentiveTypes:
+#     - Monetary
+#     - Publication
+#   topics:
+#     - breast-cancer
+#     - covid
+#   dataTypes:
+#     - genomic
+#     - ehr
+#   doi: http://doi.org/10.5281/zenodo.3714971
+#   participantCount: 100

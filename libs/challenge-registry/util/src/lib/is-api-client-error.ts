@@ -1,4 +1,4 @@
-import { BasicError as ApiClientError } from '@sagebionetworks/api-client-angular';
+import { BasicError as ApiClientError } from '@sagebionetworks/challenge-registry/api-client-angular';
 
 // Type guard for ApiClientError
 export function isApiClientError(error: any): error is ApiClientError {
