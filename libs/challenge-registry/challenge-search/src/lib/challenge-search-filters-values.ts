@@ -138,3 +138,16 @@ export const challengeIncentiveTypesFilterValues: FilterValue[] = [
 export const challengePlatformFilterValues: FilterValue[] = [];
 
 export const challengeOrganizationFilterValues: FilterValue[] = [];
+
+export const challengeDateSortValues: FilterValue[] = [
+  {
+    value: 'startDate',
+    label: 'Starting Soon',
+    active: false,
+  },
+  {
+    value: 'endDate',
+    label: 'Closing Soon',
+    active: false,
+  },
+];
