@@ -25,6 +25,6 @@ public class OpenApiConfiguration {
                     new License()
                         .name("Apache 2.0")
                         .url(
-                            "https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt")));
+                            "https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt")));
   }
 }

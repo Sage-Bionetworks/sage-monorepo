@@ -4,10 +4,10 @@ info:
   title: Challenge Registry API
   license:
     name: Apache 2.0
-    url: 'https://github.com/Sage-Bionetworks/challenge-registry'
+    url: 'https://github.com/Sage-Bionetworks/sage-monorepo'
   contact:
     name: Support
-    url: 'https://github.com/Sage-Bionetworks/challenge-registry'
+    url: 'https://github.com/Sage-Bionetworks/sage-monorepo'
   x-logo:
     url: 'https://Sage-Bionetworks.github.io/rocc-schemas/logo.png'
 servers:

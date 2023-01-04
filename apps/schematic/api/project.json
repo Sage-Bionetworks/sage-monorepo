@@ -16,7 +16,7 @@
       "options": {
         "commands": [
           "poetry config virtualenvs.in-project true",
-          "poetry install --with prod"
+          "poetry install --with prod,dev"
         ],
         "cwd": "apps/schematic/api"
       }

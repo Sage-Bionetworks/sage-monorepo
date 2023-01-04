@@ -74,7 +74,7 @@ environment to developers.
 ### Data collection
 
 - Runtimes are obtained from [this
-  commit](https://github.com/Sage-Bionetworks/challenge-registry/tree/25f2292388d9e71bf46ba137aa530aefb571deab).
+  commit](https://github.com/Sage-Bionetworks/sage-monorepo/tree/25f2292388d9e71bf46ba137aa530aefb571deab).
 - Identification of the compute resources.
   ```console
   $ nproc

@@ -2,19 +2,19 @@ openapi: 3.0.3
 info:
   contact:
     name: Support
-    url: https://github.com/Sage-Bionetworks/challenge-registry
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
   license:
     name: Apache 2.0
-    url: https://github.com/Sage-Bionetworks/challenge-registry
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
   title: Schematic REST API
   version: 0.1.0
   x-logo:
     url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
 servers:
-- url: http://localhost/api/v1
+  - url: http://localhost/api/v1
 tags:
-- description: Operations about storages.
-  name: Storage
+  - description: Operations about storages.
+    name: Storage
 paths:
   /storages/projects/{projectId}/datasets:
     get:
@@ -22,28 +22,28 @@ paths:
         the current user has access to.
       operationId: list_storage_project_datasets
       parameters:
-      - description: The Synapse ID of a storage project.
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-        style: simple
+        - description: The Synapse ID of a storage project.
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProjectId'
+          style: simple
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DatasetsPage'
           description: Success
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -53,7 +53,7 @@ paths:
       summary: Gets all datasets in folder under a given storage project that the
         current user has access to.
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
 components:
   parameters:
@@ -122,12 +122,12 @@ components:
           title: hasPrevious
           type: boolean
       required:
-      - hasNext
-      - hasPrevious
-      - number
-      - size
-      - totalElements
-      - totalPages
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
       title: PageMetadata
       type: object
     Dataset:
@@ -139,20 +139,20 @@ components:
           title: name
           type: string
       required:
-      - name
+        - name
       title: Dataset
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     DatasetsPage:
       allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/DatasetsPage_allOf'
+        - $ref: '#/components/schemas/PageMetadata'
+        - $ref: '#/components/schemas/DatasetsPage_allOf'
       description: A page of datasets.
       title: DatasetsPage
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
       properties:
@@ -174,12 +174,12 @@ components:
           title: type
           type: string
       required:
-      - status
-      - title
+        - status
+        - title
       title: BasicError
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     DatasetsPage_allOf:
       properties:
         datasets:
@@ -189,7 +189,7 @@ components:
           title: datasets
           type: array
       required:
-      - datasets
+        - datasets
       title: DatasetsPage_allOf
       type: object
       example: null

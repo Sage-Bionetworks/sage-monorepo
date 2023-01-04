@@ -1,12 +1,12 @@
-# Challenge
+# Sage Monorepo
 
-[![GitHub CI](https://img.shields.io/github/workflow/status/Sage-Bionetworks/challenge-registry/CI.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/challenge-registry/actions)
-[![GitHub License](https://img.shields.io/github/license/Sage-Bionetworks/challenge-registry.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE)
-<!-- [![Coverage Status](https://img.shields.io/coveralls/github/Sage-Bionetworks/challenge-registry.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=coverage&logo=Coveralls)](https://coveralls.io/github/Sage-Bionetworks/challenge-registry?branch=main) -->
+[![GitHub CI](https://img.shields.io/github/workflow/status/Sage-Bionetworks/sage-monorepo/CI.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/sage-monorepo/actions)
+[![GitHub License](https://img.shields.io/github/license/Sage-Bionetworks/sage-monorepo.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE)
+<!-- [![Coverage Status](https://img.shields.io/coveralls/github/Sage-Bionetworks/sage-monorepo.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=coverage&logo=Coveralls)](https://coveralls.io/github/Sage-Bionetworks/sage-monorepo?branch=main) -->
 
 ## Introduction
 
-This [Nx monorepo](https://nx.dev/) includes the codebase of the Challenge ecosystem.
+This [Nx monorepo](https://nx.dev/) includes the codebase of several Sage projects.
 
 ## Projects
 
@@ -23,7 +23,7 @@ The list of all the applications and libraries developed is available [here](doc
 
 Click on this badge to open the workspace in VS Code using our development container.
 
-[![Open in Remote - Containers](https://img.shields.io/static/v1?label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode&style=for-the-badge)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Sage-Bionetworks/challenge-registry "Open in VS Code Remote - Containers")
+[![Open in Remote - Containers](https://img.shields.io/static/v1?label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode&style=for-the-badge)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Sage-Bionetworks/sage-monorepo "Open in VS Code Remote - Containers")
 
 If you plan to contribute to this project, please create a fork and use its URL for cloning. For
 more information on contributing and/or our Forking Workflow approach, see
@@ -38,8 +38,8 @@ Then open your fork repo inside our devcontainer using these instructions:
 
 ### Preparing the workspace
 
-- Run `challenge-install` to install workspace tools like `nx` and `jest`.
-- Run `challenge-nx-cloud-help` to start configuring Nx Cloud (optional).
+- Run `workspace-install` to install workspace tools like `nx` and `jest`.
+- Run `workspace-nx-cloud-help` to start configuring Nx Cloud (optional).
 
 ### Preparing the databases
 
@@ -67,8 +67,8 @@ Checkout the folder [docs](./docs) to learn more about this monorepo.
 - [Verena Chung](https://github.com/vpchung)
 - [Rongrong Chai](https://github.com/rrchai)
 
-<!-- <a href="https://github.com/Sage-Bionetworks/challenge-registry/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Sage-Bionetworks/challenge-registry" width="20%"/>
+<!-- <a href="https://github.com/Sage-Bionetworks/sage-monorepo/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Sage-Bionetworks/sage-monorepo" width="20%"/>
 </a> -->
 
 <!-- Links -->
@@ -76,4 +76,4 @@ Checkout the folder [docs](./docs) to learn more about this monorepo.
 [Docker Engine]: https://docs.docker.com/get-docker/
 [compose-v2]: https://docs.docker.com/compose/cli-command/
 [Visual Studio Code]: https://code.visualstudio.com/
-[Apache License 2.0]: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt
+[Apache License 2.0]: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt

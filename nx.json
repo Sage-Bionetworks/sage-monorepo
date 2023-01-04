@@ -29,7 +29,7 @@
       "style": "scss"
     }
   },
-  "defaultProject": "challenge-registry",
+  "defaultProject": "challenge-registry-app",
   "plugins": ["@nxrocks/nx-spring-boot"],
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {

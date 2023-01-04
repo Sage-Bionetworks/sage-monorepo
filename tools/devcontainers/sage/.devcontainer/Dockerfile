@@ -56,7 +56,7 @@ RUN groupadd docker \
   && curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
   && ln -s /etc/poetry/bin/poetry /usr/local/bin/. \
   # Increase the max number of file watchers
-  # See https://github.com/Sage-Bionetworks/challenge-registry/issues/856
+  # See https://github.com/Sage-Bionetworks/sage-monorepo/issues/856
   && echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf \
   # Cleanup
   && apt-get -y autoclean \

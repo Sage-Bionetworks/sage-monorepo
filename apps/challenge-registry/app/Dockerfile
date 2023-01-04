@@ -1,6 +1,6 @@
 FROM node:18.10.0-slim as build
 
-ARG challengeRegistryRepository=Sage-Bionetworks/challenge-registry
+ARG challengeRegistryRepository=Sage-Bionetworks/sage-monorepo
 ARG challengeRegistryBranch=main
 
 ENV DEBIAN_FRONTEND=noninteractive
