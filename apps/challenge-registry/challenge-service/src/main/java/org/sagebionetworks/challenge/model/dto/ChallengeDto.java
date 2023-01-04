@@ -26,6 +26,12 @@ public class ChallengeDto {
   @JsonProperty("name")
   private String name;
 
+  @JsonProperty("headline")
+  private String headline;
+
+  @JsonProperty("description")
+  private String description;
+
   @JsonProperty("status")
   private ChallengeStatusDto status;
 
@@ -99,6 +105,55 @@ public class ChallengeDto {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public ChallengeDto headline(String headline) {
+    this.headline = headline;
+    return this;
+  }
+
+  /**
+   * The headline of the a challenge
+   *
+   * @return headline
+   */
+  @Size(min = 0, max = 80)
+  @Schema(
+      name = "headline",
+      example = "Example challenge headline",
+      description = "The headline of the a challenge",
+      required = false)
+  public String getHeadline() {
+    return headline;
+  }
+
+  public void setHeadline(String headline) {
+    this.headline = headline;
+  }
+
+  public ChallengeDto description(String description) {
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * The headline of the a challenge
+   *
+   * @return description
+   */
+  @NotNull
+  @Size(min = 0, max = 280)
+  @Schema(
+      name = "description",
+      example = "This is an example challenge description.",
+      description = "The headline of the a challenge",
+      required = true)
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public ChallengeDto status(ChallengeStatusDto status) {
@@ -275,6 +330,8 @@ public class ChallengeDto {
     ChallengeDto challenge = (ChallengeDto) o;
     return Objects.equals(this.id, challenge.id)
         && Objects.equals(this.name, challenge.name)
+        && Objects.equals(this.headline, challenge.headline)
+        && Objects.equals(this.description, challenge.description)
         && Objects.equals(this.status, challenge.status)
         && Objects.equals(this.difficulty, challenge.difficulty)
         && Objects.equals(this.platform, challenge.platform)
@@ -287,7 +344,17 @@ public class ChallengeDto {
   @Override
   public int hashCode() {
     return Objects.hash(
-        id, name, status, difficulty, platform, incentives, submissionTypes, createdAt, updatedAt);
+        id,
+        name,
+        headline,
+        description,
+        status,
+        difficulty,
+        platform,
+        incentives,
+        submissionTypes,
+        createdAt,
+        updatedAt);
   }
 
   @Override
@@ -296,6 +363,8 @@ public class ChallengeDto {
     sb.append("class ChallengeDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    headline: ").append(toIndentedString(headline)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
