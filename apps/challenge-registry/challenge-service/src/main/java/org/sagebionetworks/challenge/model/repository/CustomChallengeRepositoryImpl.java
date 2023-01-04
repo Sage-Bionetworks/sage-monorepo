@@ -2,6 +2,12 @@ package org.sagebionetworks.challenge.model.repository;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.hibernate.search.engine.search.query.SearchResult;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.entity.QChallengeEntity;
 import org.springframework.data.domain.Page;
@@ -13,6 +19,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
     implements CustomChallengeRepository {
+
+  @PersistenceContext private EntityManager entityManager;
 
   public CustomChallengeRepositoryImpl() {
     super(ChallengeEntity.class);
@@ -43,5 +51,23 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
 
     QueryResults<ChallengeEntity> results = query.fetchResults();
     return new PageImpl<ChallengeEntity>(results.getResults(), pageable, results.getTotal());
+  }
+
+  @Override
+  public List<ChallengeEntity> searchBy(String text, String... fields) {
+    SearchResult<ChallengeEntity> result = getSearchResult(text, 10, fields);
+
+    return result.hits();
+  }
+
+  private SearchResult<ChallengeEntity> getSearchResult(String text, int limit, String[] fields) {
+    SearchSession searchSession = Search.session(entityManager);
+
+    SearchResult<ChallengeEntity> result =
+        searchSession
+            .search(ChallengeEntity.class) // Book.class
+            .where(f -> f.match().fields(fields).matching(text).fuzzy(2))
+            .fetch(limit);
+    return result;
   }
 }

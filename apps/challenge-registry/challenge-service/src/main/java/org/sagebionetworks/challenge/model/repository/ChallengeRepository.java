@@ -7,5 +7,4 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 public interface ChallengeRepository
     extends JpaRepository<ChallengeEntity, Long>,
         QuerydslPredicateExecutor<ChallengeEntity>,
-        CustomChallengeRepository,
-        SearchRepository<ChallengeEntity, Long> {}
+        CustomChallengeRepository {}

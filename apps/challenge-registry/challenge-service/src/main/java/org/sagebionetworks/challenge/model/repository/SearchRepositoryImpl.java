@@ -28,9 +28,9 @@ public class SearchRepositoryImpl<T, ID extends Serializable> extends SimpleJpaR
   }
 
   @Override
-  public List<T> searchBy(String text, int limit, String... fields) {
+  public List<T> searchBy(String text, String... fields) {
 
-    SearchResult<T> result = getSearchResult(text, limit, fields);
+    SearchResult<T> result = getSearchResult(text, 10, fields);
 
     return result.hits();
   }
@@ -40,7 +40,7 @@ public class SearchRepositoryImpl<T, ID extends Serializable> extends SimpleJpaR
 
     SearchResult<T> result =
         searchSession
-            .search(getDomainClass())
+            .search(getDomainClass()) // Book.class
             .where(f -> f.match().fields(fields).matching(text).fuzzy(2))
             .fetch(limit);
     return result;

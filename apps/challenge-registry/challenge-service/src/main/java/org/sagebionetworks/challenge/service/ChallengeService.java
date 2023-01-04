@@ -79,7 +79,7 @@ public class ChallengeService {
     // Text search
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
     List<ChallengeEntity> foundEntities =
-        challengeRepository.searchBy("challenge", 10, fieldsToSearchBy.toArray(new String[0]));
+        challengeRepository.searchBy("challenge", fieldsToSearchBy.toArray(new String[0]));
     log.info("foundEntities {}", foundEntities);
 
     return ChallengesPageDto.builder()
