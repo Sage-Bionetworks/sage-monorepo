@@ -52,26 +52,12 @@ NOTE: The "dryRun" flag means no changes were made.
 Due to how the Challenge Registry app is currently structured, some additional
 steps are required:
 
-1.  Discard/undo changes made to `project.json` in other existing folders outside of the new library
-    folder, e.g. `apps/challenge-api-gateway/project.json`. The only files you need staged are:
-
-        * files created for the new library, e.g. `libs/challenge-registry/<new library name/*`
-        * `tsconfig.base.json`
-        * `workspace.json`
-
-        You could do something like this:
-
-        ```
-        git add libs/challenge-registry/<new library name>/ tsconfig.base.json workspace.json
-        git checkout -- .
-        ```
-
-2.  Remove `challenge-registry-` from the filename of the module TypeScript in `src/lib/`, e.g.
+1.  Remove `challenge-registry-` from the filename of the module TypeScript in `src/lib/`, e.g.
 
     `challenge-registry-awesome-lib.module.ts` → `awesome-lib.module.ts`
 
-3.  Simiarly, in `src/index.ts`, remove `challenge-registry-` from the import filepath.
-4.  In the library module (`<new library name>.module.ts`), remove `ChallengeRegistry` from
+2.  Simiarly, in `src/index.ts`, remove `challenge-registry-` from the import filepath.
+3.  In the library module (`<new library name>.module.ts`), remove `ChallengeRegistry` from
     the class name, e.g.
           `export class ChallengeRegistryAwesomeLibModule {}` → `export class AwesomeLibModule {}`
 
@@ -85,20 +71,18 @@ To create the component, use:
 nx g @nrwl/angular:component <new component name> --project <project-name>
 ```
 
-where `<project name>` is the name of the library project defined in `workspace.json`.
+where `<project name>` is the name of the project defined in `project.json` of the newly-created
+Angular library.
 
-For example, to create an Angular component for the `awesome-lib` library (located at
-`libs/challenge-registry/awesome-lib`), the project name would be `challenge-registry-awesome-lib`,
-as defined in `workspace.json`:
+For example, to create an Angular component for the `awesome-lib` library, the project name would be
+`challenge-registry-awesome-lib`, as defined in `libs/challenge-registry/awesome-lib/project.json`:
 
 ```json
 {
+  "name": "challenge-registry-awesome-lib",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
   ...
-  "projects": {
-    ...
-    "challenge-registry-awesome-lib": "libs/challenge-registry/awesome-lib",
-    ...
-  }
 }
 ```
 
