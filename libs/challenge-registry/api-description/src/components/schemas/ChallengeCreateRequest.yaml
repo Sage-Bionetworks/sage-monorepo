@@ -18,7 +18,7 @@ properties:
   description:
     description: The description of the challenge
     type: string
-    maxLength: 200
+    maxLength: 280
   #   websiteUrl:
   #     type: string
   #     format: url
