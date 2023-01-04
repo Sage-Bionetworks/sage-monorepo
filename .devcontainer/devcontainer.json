@@ -1,5 +1,5 @@
 {
-  "name": "Sage",
+  "name": "Sage Monorepo",
   "image": "sagebionetworks/sage-devcontainer:3de9f17",
 
   "features": {
@@ -164,5 +164,5 @@
 
 	"remoteUser": "vscode",
   "shutdownAction": "stopContainer",
-  "runArgs": ["--name", "sage_devcontainer"]
+  "runArgs": ["--name", "sage_monorepo_devcontainer"]
 }
