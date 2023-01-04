@@ -61,7 +61,7 @@ updated, Renovate will automatically remove the corresponding items from the das
 ### Dev container
 
 The workflow used to update the dev container is described in this
-[ticket](https://github.com/Sage-Bionetworks/challenge-registry/issues/975).
+[ticket](https://github.com/Sage-Bionetworks/sage-monorepo/issues/975).
 
 ### Yarn
 
@@ -115,5 +115,5 @@ Done in 162.06s.
 <!-- Links -->
 
 [Renovate]: https://github.com/renovatebot/renovate
-[dashboard]: https://github.com/Sage-Bionetworks/challenge-registry/issues/798
+[dashboard]: https://github.com/Sage-Bionetworks/sage-monorepo/issues/798
 [`migrate` tool]: https://nx.dev/core-features/automate-updating-dependencies

@@ -90,11 +90,11 @@ We recommend that you add this repository as an [upstream remote] to your local
 git repository so that you can fetch the latest updates.
 
 ```console
-$ git remote add upstream https://github.com/Sage-Bionetworks/challenge-registry.git
+$ git remote add upstream https://github.com/Sage-Bionetworks/sage-monorepo.git
 $ git remote -v
 > ...
-> upstream  https://github.com/Sage-Bionetworks/challenge-registry.git (fetch)
-> upstream  https://github.com/Sage-Bionetworks/challenge-registry.git (push)
+> upstream  https://github.com/Sage-Bionetworks/sage-monorepo.git (fetch)
+> upstream  https://github.com/Sage-Bionetworks/sage-monorepo.git (push)
 ```
 
 On your local machine make sure you have the latest version of the `main` branch
