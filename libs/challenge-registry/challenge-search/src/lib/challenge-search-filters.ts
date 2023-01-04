@@ -8,6 +8,8 @@ import {
   challengeIncentiveTypesFilterValues,
   challengePlatformFilterValues,
   challengeOrganizationFilterValues,
+  challengeStartDateSortFilterValues,
+  challengeEndDateSortFilterValues,
 } from './challenge-search-filters-values';
 
 export const challengeStartYearRangeFilter: Filter = {
@@ -63,5 +65,19 @@ export const challengeOrganizationFilter: Filter = {
   queryName: 'organizations',
   label: 'Organization',
   values: challengeOrganizationFilterValues,
+  collapsed: true,
+};
+
+export const challengeStartDateSortFilter: Filter = {
+  queryName: 'startDate',
+  label: 'Starting Soon',
+  values: challengeStartDateSortFilterValues,
+  collapsed: true,
+};
+
+export const challengeEndDateSortFilter: Filter = {
+  queryName: 'endDate',
+  label: 'Closing Soon',
+  values: challengeEndDateSortFilterValues,
   collapsed: true,
 };

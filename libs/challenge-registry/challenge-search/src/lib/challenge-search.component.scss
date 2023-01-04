@@ -30,8 +30,13 @@
   //   min-width: 320px;
   // }
 }
+.search-sort-container {
+  gap: 24px;
+  justify-content: space-between;
+}
 .search-field {
   position: relative;
+  flex-grow: 1;
 }
 .search-field > i {
   position: absolute;
@@ -59,6 +64,17 @@
 .search-field > input:active,
 .search-field > input:focus {
   outline: none;
+}
+::ng-deep .p-dropdown {
+  width: 11.5rem;
+}
+.sort-field {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.sort-title {
+  white-space: nowrap;
 }
 #top {
   padding: 25px 32px 80px;

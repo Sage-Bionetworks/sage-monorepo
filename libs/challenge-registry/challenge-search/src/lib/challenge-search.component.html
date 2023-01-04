@@ -24,6 +24,14 @@
         <input aria-label="Search the registry" type="text" placeholder="Search challenges" />
         <i><mat-icon aria-hidden="true">search</mat-icon></i>
       </div>
+      <div class="sort-field">
+        <span class="sort-title">Sort by</span>
+        <p-dropdown
+          [options]="sortFilters"
+          [(ngModel)]="sortedBy"
+          optionLabel="label"
+        ></p-dropdown>
+      </div>
     </div>
   </section>
   <section id="bottom" class="row">
@@ -59,7 +67,7 @@
         </div>
       </p-panel>
       <p-divider></p-divider>
-      <ng-container *ngFor="let checkbox of checkboxfilters">
+      <ng-container *ngFor="let checkbox of checkboxFilters">
         <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
           <challenge-registry-checkbox-filter
             [values]="checkbox.values"
@@ -69,7 +77,7 @@
         </p-panel>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngFor="let dropdown of dropdownfilters; last as isLast">
+      <ng-container *ngFor="let dropdown of dropdownFilters; last as isLast">
         <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
           <challenge-registry-search-dropdown-filter
             [values]="dropdown.values"

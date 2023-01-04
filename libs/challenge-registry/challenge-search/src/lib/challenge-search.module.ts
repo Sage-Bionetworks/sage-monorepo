@@ -13,6 +13,7 @@ import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
 
 const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
 
@@ -21,6 +22,7 @@ const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
     CalendarModule,
     CommonModule,
     DividerModule,
+    DropdownModule,
     MatIconModule,
     RouterModule.forChild(routes),
     UiModule,

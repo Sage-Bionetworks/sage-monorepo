@@ -21,6 +21,8 @@ import {
   challengeIncentiveTypesFilter,
   challengePlatformFilter,
   challengeOrganizationFilter,
+  challengeEndDateSortFilter,
+  challengeStartDateSortFilter,
 } from './challenge-search-filters';
 import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { ChallengeSearchQuery } from './challenge-search-query';
@@ -67,7 +69,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
   // define filters
   startYearRangeFilter: Filter = challengeStartYearRangeFilter;
 
-  checkboxfilters: Filter[] = [
+  checkboxFilters: Filter[] = [
     challengeStatusFilter,
     challengeDifficultyFilter,
     challengeInputDataTypeFilter,
@@ -76,8 +78,14 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     challengePlatformFilter,
   ];
 
-  dropdownfilters: Filter[] = [challengeOrganizationFilter];
+  dropdownFilters: Filter[] = [challengeOrganizationFilter];
 
+  sortFilters: Filter[] = [
+    challengeStartDateSortFilter,
+    challengeEndDateSortFilter,
+  ];
+
+  sortedBy!: string;
   constructor(private readonly configService: ConfigService) {
     this.appVersion = this.configService.config.appVersion;
   }
@@ -90,7 +98,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     this.listInputDataTypes().subscribe(
       (dataTypes) =>
         // update input data types filter values
-        (this.checkboxfilters[2].values = dataTypes.map((dataType) => ({
+        (this.checkboxFilters[2].values = dataTypes.map((dataType) => ({
           value: dataType,
           label: this.titleCase(dataType, '-'),
           active: false,
@@ -100,7 +108,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     this.listPlatforms().subscribe(
       (platforms) =>
         // update input data types filter values
-        (this.checkboxfilters[5].values = platforms.map((platform) => ({
+        (this.checkboxFilters[5].values = platforms.map((platform) => ({
           value: platform.id,
           label: platform.displayName,
           active: false,
@@ -110,7 +118,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     this.listOrganizations().subscribe(
       (organizations) =>
         // update input data types filter values
-        (this.dropdownfilters[0].values = organizations.map((org) => ({
+        (this.dropdownFilters[0].values = organizations.map((org) => ({
           value: org.login,
           label: org.name,
           avatarUrl: org.avatarUrl,
