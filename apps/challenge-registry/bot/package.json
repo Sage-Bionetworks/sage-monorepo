@@ -5,7 +5,7 @@
     "main": "src/app.ts",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Sage-Bionetworks/challenge-registry.git"
+        "url": "https://github.com/Sage-Bionetworks/sage-monorepo.git"
     },
     "keywords": [
         "backend",
@@ -21,9 +21,9 @@
     },
     "license": "Apache-2.0",
     "bugs": {
-        "url": "https://github.com/Sage-Bionetworks/challenge-registry/issues"
+        "url": "https://github.com/Sage-Bionetworks/sage-monorepo/issues"
     },
-    "homepage": "https://github.com/Sage-Bionetworks/challenge-registry#readme",
+    "homepage": "https://github.com/Sage-Bionetworks/sage-monorepo#readme",
     "dependencies": {
         "@probot/adapter-aws-lambda-serverless": "^3.0.1",
         "probot": "^12.2.4",

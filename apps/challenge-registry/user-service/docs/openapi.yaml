@@ -8,16 +8,16 @@ info:
     url: https://challenge-registry.org
   license:
     name: Apache 2.0
-    url: https://github.com/Sage-Bionetworks/challenge-registry/blob/main/LICENSE.txt
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   version: v1.0
 servers:
-- url: http://localhost:8083
-  description: Generated server url
+  - url: http://localhost:8083
+    description: Generated server url
 paths:
   /api/v1/users/register:
     post:
       tags:
-      - user-controller
+        - user-controller
       operationId: createUser
       requestBody:
         content:
@@ -26,7 +26,7 @@ paths:
               $ref: '#/components/schemas/User'
         required: true
       responses:
-        "200":
+        '200':
           description: OK
           content:
             '*/*':
@@ -35,17 +35,17 @@ paths:
   /api/v1/users/{id}:
     get:
       tags:
-      - user-controller
+        - user-controller
       operationId: getUser
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        "200":
+        '200':
           description: OK
           content:
             '*/*':
@@ -53,15 +53,15 @@ paths:
                 $ref: '#/components/schemas/User'
     patch:
       tags:
-      - user-controller
+        - user-controller
       operationId: updateUser
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
@@ -69,7 +69,7 @@ paths:
               $ref: '#/components/schemas/UserUpdateRequest'
         required: true
       responses:
-        "200":
+        '200':
           description: OK
           content:
             '*/*':
@@ -78,36 +78,36 @@ paths:
   /api/v1/users/:
     get:
       tags:
-      - user-controller
+        - user-controller
       operationId: listUsers
       parameters:
-      - name: page
-        in: query
-        description: Zero-based page index (0..N)
-        required: false
-        schema:
-          minimum: 0
-          type: integer
-          default: 0
-      - name: size
-        in: query
-        description: The size of the page to be returned
-        required: false
-        schema:
-          minimum: 1
-          type: integer
-          default: 20
-      - name: sort
-        in: query
-        description: "Sorting criteria in the format: property,(asc|desc). Default\
-          \ sort order is ascending. Multiple sort criteria are supported."
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
+        - name: page
+          in: query
+          description: Zero-based page index (0..N)
+          required: false
+          schema:
+            minimum: 0
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: The size of the page to be returned
+          required: false
+          schema:
+            minimum: 1
+            type: integer
+            default: 20
+        - name: sort
+          in: query
+          description: "Sorting criteria in the format: property,(asc|desc). Default\
+            \ sort order is ascending. Multiple sort criteria are supported."
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
-        "200":
+        '200':
           description: OK
           content:
             '*/*':
@@ -134,17 +134,17 @@ components:
         status:
           type: string
           enum:
-          - PENDING
-          - APPROVED
-          - DISABLED
-          - BLACKLIST
+            - PENDING
+            - APPROVED
+            - DISABLED
+            - BLACKLIST
     UserUpdateRequest:
       type: object
       properties:
         status:
           type: string
           enum:
-          - PENDING
-          - APPROVED
-          - DISABLED
-          - BLACKLIST
+            - PENDING
+            - APPROVED
+            - DISABLED
+            - BLACKLIST
