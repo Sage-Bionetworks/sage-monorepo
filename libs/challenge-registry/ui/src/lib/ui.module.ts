@@ -9,6 +9,7 @@ import { OrganizationCardModule } from './organization-card/organization-card.mo
 import { UserButtonModule } from './user-button/user-button.module';
 import { PersonCardModule } from './person-card/person-card.module';
 import { CheckboxFilterModule } from './checkbox-filter/checkbox-filter.module';
+import { SearchDropdownFilterModule } from './search-dropdown-filter/search-dropdown-filter.module';
 
 @NgModule({
   imports: [CommonModule],
@@ -21,7 +22,9 @@ import { CheckboxFilterModule } from './checkbox-filter/checkbox-filter.module';
     PersonCardModule,
     NavbarModule,
     OrganizationCardModule,
+    SearchDropdownFilterModule,
     UserButtonModule,
   ],
+  declarations: [],
 })
 export class UiModule {}
