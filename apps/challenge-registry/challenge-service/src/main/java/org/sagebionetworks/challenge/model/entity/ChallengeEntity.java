@@ -26,7 +26,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Indexed
+@Indexed(index = "challenge-registry-challenge")
 public class ChallengeEntity {
 
   @Id
