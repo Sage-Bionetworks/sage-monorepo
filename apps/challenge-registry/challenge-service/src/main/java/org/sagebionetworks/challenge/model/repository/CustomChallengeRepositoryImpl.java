@@ -2,7 +2,6 @@ package org.sagebionetworks.challenge.model.repository;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.hibernate.search.engine.search.query.SearchResult;
@@ -50,24 +49,24 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
     query = super.getQuerydsl().applyPagination(pageable, query);
 
     QueryResults<ChallengeEntity> results = query.fetchResults();
-    return new PageImpl<ChallengeEntity>(results.getResults(), pageable, results.getTotal());
+    return new PageImpl<>(results.getResults(), pageable, results.getTotal());
   }
 
   @Override
-  public List<ChallengeEntity> searchBy(String text, String... fields) {
-    SearchResult<ChallengeEntity> result = getSearchResult(text, 10, fields);
-
-    return result.hits();
+  public Page<ChallengeEntity> searchBy(Pageable pageable, String text, String... fields) {
+    SearchResult<ChallengeEntity> result = getSearchResult(pageable, text, fields);
+    return new PageImpl<>(result.hits(), pageable, result.total().hitCount());
   }
 
-  private SearchResult<ChallengeEntity> getSearchResult(String text, int limit, String[] fields) {
+  private SearchResult<ChallengeEntity> getSearchResult(
+      Pageable pageable, String text, String[] fields) {
     SearchSession searchSession = Search.session(entityManager);
 
     SearchResult<ChallengeEntity> result =
         searchSession
             .search(ChallengeEntity.class) // Book.class
             .where(f -> f.match().fields(fields).matching(text).fuzzy(2))
-            .fetch(limit);
+            .fetch((int) pageable.getOffset(), pageable.getPageSize());
     return result;
   }
 }
