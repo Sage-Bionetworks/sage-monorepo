@@ -273,7 +273,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
         .filter((c) => c.status === status)
         .sort(
           (a, b) =>
-            +new Date(b.startDate as string) - +new Date(a.startDate as string)
+            +new Date(b[sortBy] as string) - +new Date(a[sortBy] as string)
         );
     } else {
       return challenges.sort(
