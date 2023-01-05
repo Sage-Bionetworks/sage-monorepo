@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 @Entity
@@ -45,6 +46,7 @@ public class ChallengeEntity {
   @Column(nullable = false)
   private String description;
 
+  @GenericField()
   @Column(nullable = false)
   private String status;
 

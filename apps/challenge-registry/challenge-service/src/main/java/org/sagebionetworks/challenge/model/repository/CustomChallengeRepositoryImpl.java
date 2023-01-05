@@ -79,6 +79,15 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
               .toPredicate());
     }
 
+    if (filter.getStatus() != null && filter.getStatus().size() > 0) {
+      predicates.add(pf.bool(b -> {
+        for (String status: filter.getStatus()) {
+          b.should(pf.match().field("status")
+                  .matching(status));
+        }
+      }).toPredicate());
+    }
+
     SearchPredicate topLevelPredicate =
         pf.bool(
                 b -> {
