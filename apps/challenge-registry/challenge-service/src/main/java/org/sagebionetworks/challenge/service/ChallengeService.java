@@ -64,13 +64,14 @@ public class ChallengeService {
     if (incentives != null) {
       builder.incentives(incentives.stream().map(o -> o.toString()).toList());
     }
+    builder.searchTerms("mortality");
     ChallengeFilter filter = builder.build();
 
-    Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(pageable, filter);
-    log.info("challengeRepository {}", challengeEntitiesPage);
+    // Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(pageable, filter);
+    // log.info("challengeRepository {}", challengeEntitiesPage);
 
-    List<ChallengeDto> challenges =
-        challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());
+    // List<ChallengeDto> challenges =
+    //     challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());
 
     ChallengeDomain challengeDomain = new ChallengeDomain("plop");
     log.info("challenge sent: {}", challengeDomain);
@@ -78,12 +79,13 @@ public class ChallengeService {
 
     // Text search
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
-    Page<ChallengeEntity> foundEntities =
+    Page<ChallengeEntity> challengeEntitiesPage =
         challengeRepository.searchBy(
             pageable, filter, "Mortality", fieldsToSearchBy.toArray(new String[0]));
-    log.info("foundEntities {}", foundEntities);
-    challengeEntitiesPage = foundEntities;
-    // log.info("foundEntities {}", foundEntities.size());
+    log.info("challengeEntitiesPage {}", challengeEntitiesPage);
+
+    List<ChallengeDto> challenges =
+        challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());
 
     return ChallengesPageDto.builder()
         .challenges(challenges)

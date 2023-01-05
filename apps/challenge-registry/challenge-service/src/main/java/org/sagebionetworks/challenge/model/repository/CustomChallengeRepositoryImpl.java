@@ -2,8 +2,13 @@ package org.sagebionetworks.challenge.model.repository;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.hibernate.search.engine.search.common.BooleanOperator;
+import org.hibernate.search.engine.search.predicate.SearchPredicate;
+import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
@@ -53,7 +58,8 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
   }
 
   @Override
-  public Page<ChallengeEntity> searchBy(Pageable pageable, ChallengeFilter filter, String text, String... fields) {
+  public Page<ChallengeEntity> searchBy(
+      Pageable pageable, ChallengeFilter filter, String text, String... fields) {
     SearchResult<ChallengeEntity> result = getSearchResult(pageable, filter, text, fields);
     return new PageImpl<>(result.hits(), pageable, result.total().hitCount());
   }
@@ -61,11 +67,33 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
   private SearchResult<ChallengeEntity> getSearchResult(
       Pageable pageable, ChallengeFilter filter, String text, String[] fields) {
     SearchSession searchSession = Search.session(entityManager);
+    SearchPredicateFactory pf = searchSession.scope(ChallengeEntity.class).predicate();
+    List<SearchPredicate> predicates = new ArrayList<>();
+
+    if (filter.getSearchTerms() != null && !filter.getSearchTerms().isBlank()) {
+      predicates.add(
+          pf.simpleQueryString()
+              .fields(fields)
+              .matching(filter.getSearchTerms())
+              .defaultOperator(BooleanOperator.AND)
+              .toPredicate());
+    }
+
+    SearchPredicate topLevelPredicate =
+        pf.bool(
+                b -> {
+                  b.must(f -> f.matchAll());
+                  for (SearchPredicate predicate : predicates) {
+                    b.must(predicate);
+                  }
+                })
+            .toPredicate();
 
     SearchResult<ChallengeEntity> result =
         searchSession
             .search(ChallengeEntity.class) // Book.class
-            .where(f -> f.match().fields(fields).matching(text).fuzzy(2))
+            .where(topLevelPredicate)
+            // .where(f -> f.match().fields(fields).matching(text).fuzzy(2))
             // .sort( f -> f.field( "pageCount" ).desc())
             .fetch((int) pageable.getOffset(), pageable.getPageSize());
     return result;

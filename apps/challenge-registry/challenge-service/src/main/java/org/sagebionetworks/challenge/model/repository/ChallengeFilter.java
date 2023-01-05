@@ -16,4 +16,5 @@ public class ChallengeFilter {
   private List<String> difficulties;
   private List<String> submissionTypes;
   private List<String> incentives;
+  private String searchTerms;
 }
