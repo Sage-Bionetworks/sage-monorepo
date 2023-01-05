@@ -139,15 +139,12 @@ export const challengePlatformFilterValues: FilterValue[] = [];
 
 export const challengeOrganizationFilterValues: FilterValue[] = [];
 
-export const challengeStartDateSortFilterValues: FilterValue[] = [
+export const challengeDateSortFilterValues: FilterValue[] = [
   {
     value: 'startDate',
     label: 'Starting Soon',
     active: false,
   },
-];
-
-export const challengeEndDateSortFilterValues: FilterValue[] = [
   {
     value: 'endDate',
     label: 'Closing Soon',

@@ -8,6 +8,7 @@ import { Organization } from '@sagebionetworks/challenge-registry/api-client-ang
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import {
   Filter,
+  FilterValue,
   MOCK_CHALLENGES,
   MOCK_ORGANIZATIONS,
 } from '@sagebionetworks/challenge-registry/ui';
@@ -21,9 +22,8 @@ import {
   challengeIncentiveTypesFilter,
   challengePlatformFilter,
   challengeOrganizationFilter,
-  challengeEndDateSortFilter,
-  challengeStartDateSortFilter,
 } from './challenge-search-filters';
+import { challengeDateSortFilterValues } from './challenge-search-filters-values';
 import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { ChallengeSearchQuery } from './challenge-search-query';
 import { Calendar } from 'primeng/calendar';
@@ -44,6 +44,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     new BehaviorSubject<ChallengeSearchQuery>({
       limit: 0,
       offset: 0,
+      sort: undefined,
       startYearRange: {},
       status: [],
       inputDataTypes: [],
@@ -80,12 +81,9 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
 
   dropdownFilters: Filter[] = [challengeOrganizationFilter];
 
-  sortFilters: Filter[] = [
-    challengeStartDateSortFilter,
-    challengeEndDateSortFilter,
-  ];
-
+  sortFilters: FilterValue[] = challengeDateSortFilterValues;
   sortedBy!: string;
+
   constructor(private readonly configService: ConfigService) {
     this.appVersion = this.configService.config.appVersion;
   }
@@ -129,6 +127,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     // triger initial query
     const defaultQuery = {
       startYearRange: this.selectedYear,
+      sort: this.sortFilters[0].value,
       ...this.query,
     } as ChallengeSearchQuery;
     this.query.next(defaultQuery);
@@ -156,7 +155,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
               this.checkOverlapped(c.organizations, query.organizations)
             );
           });
-          return of(res);
+          return of(this.sortChallenges(res, query.sort));
         })
       )
       .subscribe((page) => {
@@ -205,6 +204,13 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     this.query.next(newQuery);
   }
 
+  onSortChange(event: any): void {
+    const newQuery = assign(this.query.getValue(), {
+      sort: event.value,
+    });
+    this.query.next(newQuery);
+  }
+
   titleCase(string: string, split: string): string {
     // tranform one word to title-case word
     return string
@@ -246,6 +252,33 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
       return propertyValues.some((value: any) => filterValues?.includes(value));
     } else {
       return true; // no filter applied
+    }
+  }
+
+  // mock up sorting challenges by certain property
+  private sortChallenges(
+    challenges: Challenge[],
+    sortBy: keyof Challenge | undefined
+  ): Challenge[] {
+    if (!sortBy) return challenges;
+
+    if (['startDate', 'endDate'].includes(sortBy as string)) {
+      // if it's starting soon, the status should be 'upcoming',
+      // otherwise, it's closing soon and status should be 'active',
+      const status = sortBy === 'startDate' ? 'upcoming' : 'active';
+      // sort challenges by startDate
+      // the sooner the challenge is going to start/end, the closer to the 1st card
+      // note: since it's a mock up func, the undefined of startDate/endDate is not considered here
+      return challenges
+        .filter((c) => c.status === status)
+        .sort(
+          (a, b) =>
+            +new Date(b.startDate as string) - +new Date(a.startDate as string)
+        );
+    } else {
+      return challenges.sort(
+        (a, b) => (a[sortBy] as number) - (b[sortBy] as number)
+      );
     }
   }
 }

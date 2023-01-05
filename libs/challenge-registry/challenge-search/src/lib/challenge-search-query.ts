@@ -5,12 +5,13 @@ import {
   ChallengeIncentiveType,
   ChallengeSubmissionType,
   DateRange,
+  Challenge,
 } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 
 export interface ChallengeSearchQuery {
   limit?: number;
   offset?: number;
-  // sort?: 'createdAt' | 'updatedAt';
+  sort?: keyof Challenge;
   // direction?: 'asc' | 'desc';
   // searchTerms?: string;
   // topics?: string[];

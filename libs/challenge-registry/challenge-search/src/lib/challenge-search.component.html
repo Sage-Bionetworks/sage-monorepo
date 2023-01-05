@@ -30,6 +30,8 @@
           [options]="sortFilters"
           [(ngModel)]="sortedBy"
           optionLabel="label"
+          optionValue="value"
+          (onChange)="onSortChange($event)"
         ></p-dropdown>
       </div>
     </div>
