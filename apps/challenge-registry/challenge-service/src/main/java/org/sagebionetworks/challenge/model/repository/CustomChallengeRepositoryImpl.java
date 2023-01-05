@@ -66,6 +66,7 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
         searchSession
             .search(ChallengeEntity.class) // Book.class
             .where(f -> f.match().fields(fields).matching(text).fuzzy(2))
+            // .sort( f -> f.field( "pageCount" ).desc())
             .fetch((int) pageable.getOffset(), pageable.getPageSize());
     return result;
   }
