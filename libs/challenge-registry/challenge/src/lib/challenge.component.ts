@@ -50,6 +50,7 @@ export class ChallengeComponent implements OnInit {
         (c) => c.name === param['challengeName']
       );
       if (challenge) {
+        console.log(challenge);
         this.challenge$ = of(challenge);
       }
     });
