@@ -77,15 +77,7 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
       predicates.add(getChallengeStatusPredicate(pf, filter));
     }
 
-    SearchPredicate topLevelPredicate =
-        pf.bool(
-                b -> {
-                  b.must(f -> f.matchAll());
-                  for (SearchPredicate predicate : predicates) {
-                    b.must(predicate);
-                  }
-                })
-            .toPredicate();
+    SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
 
     SearchResult<ChallengeEntity> result =
         searchSession
@@ -112,6 +104,18 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
             b -> {
               for (String status : filter.getStatus()) {
                 b.should(pf.match().field("status").matching(status));
+              }
+            })
+        .toPredicate();
+  }
+
+  private SearchPredicate buildTopLevelPredicate(
+      SearchPredicateFactory pf, List<SearchPredicate> predicates) {
+    return pf.bool(
+            b -> {
+              b.must(f -> f.matchAll());
+              for (SearchPredicate predicate : predicates) {
+                b.must(predicate);
               }
             })
         .toPredicate();
