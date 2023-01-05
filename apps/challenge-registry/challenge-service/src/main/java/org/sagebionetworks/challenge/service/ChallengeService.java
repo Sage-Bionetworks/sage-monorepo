@@ -80,7 +80,7 @@ public class ChallengeService {
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
     Page<ChallengeEntity> foundEntities =
         challengeRepository.searchBy(
-            pageable, "Mortality", fieldsToSearchBy.toArray(new String[0]));
+            pageable, filter, "Mortality", fieldsToSearchBy.toArray(new String[0]));
     log.info("foundEntities {}", foundEntities);
     challengeEntitiesPage = foundEntities;
     // log.info("foundEntities {}", foundEntities.size());
