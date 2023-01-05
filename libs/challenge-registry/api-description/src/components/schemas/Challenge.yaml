@@ -5,6 +5,10 @@ properties:
     $ref: ChallengeId.yaml
   name:
     $ref: ChallengeName.yaml
+  headline:
+    $ref: ChallengeHeadline.yaml
+  description:
+    $ref: ChallengeDescription.yaml
   status:
     $ref: ChallengeStatus.yaml
   difficulty:
@@ -52,6 +56,7 @@ properties:
 required:
   - id
   - name
+  - description
   - status
   - difficulty
   - platform

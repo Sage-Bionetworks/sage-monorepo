@@ -16,6 +16,8 @@ CREATE TABLE `challenge`
 (
     `id`                    bigint(20) NOT NULL AUTO_INCREMENT,
     `name`                  varchar(255) DEFAULT NULL,
+    `headline`              varchar(80),
+    `description`           varchar(280) NOT NULL,
     `status`                ENUM('upcoming', 'active', 'completed'),
     `difficulty`            ENUM('good_for_beginners', 'intermediate', 'advanced'),
     `platform_id`           int,
