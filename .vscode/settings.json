@@ -48,14 +48,14 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
-  "emeraldwalk.runonsave": {
-    "commands": [
-      {
-        "match": "\\.(java|sql)$",
-        "cmd": "node_modules/.bin/nx affected --base=HEAD --target=format"
-      }
-    ]
-  },
+  // "emeraldwalk.runonsave": {
+  //   "commands": [
+  //     {
+  //       "match": "\\.(java|sql)$",
+  //       "cmd": "node_modules/.bin/nx affected --base=HEAD --target=format"
+  //     }
+  //   ]
+  // },
   "eslint.workingDirectories": ["./apps/challenge-db-cli", "."],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
