@@ -1,4 +1,4 @@
-description: The headline of the a challenge
+description: The headline of the challenge.
 type: string
 minLength: 0
 maxLength: 80

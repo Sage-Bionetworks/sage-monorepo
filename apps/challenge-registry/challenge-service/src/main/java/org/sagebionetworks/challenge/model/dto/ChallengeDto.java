@@ -113,7 +113,7 @@ public class ChallengeDto {
   }
 
   /**
-   * The headline of the a challenge
+   * The headline of the challenge.
    *
    * @return headline
    */
@@ -121,7 +121,7 @@ public class ChallengeDto {
   @Schema(
       name = "headline",
       example = "Example challenge headline",
-      description = "The headline of the a challenge",
+      description = "The headline of the challenge.",
       required = false)
   public String getHeadline() {
     return headline;
@@ -137,7 +137,7 @@ public class ChallengeDto {
   }
 
   /**
-   * The headline of the a challenge
+   * The description of the challenge.
    *
    * @return description
    */
@@ -145,8 +145,8 @@ public class ChallengeDto {
   @Size(min = 0, max = 280)
   @Schema(
       name = "description",
-      example = "This is an example challenge description.",
-      description = "The headline of the a challenge",
+      example = "This is an example description of the challenge.",
+      description = "The description of the challenge.",
       required = true)
   public String getDescription() {
     return description;

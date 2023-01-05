@@ -415,14 +415,14 @@ components:
       pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     ChallengeHeadline:
-      description: The headline of the a challenge
+      description: The headline of the challenge.
       example: Example challenge headline
       maxLength: 80
       minLength: 0
       type: string
     ChallengeDescription:
-      description: The headline of the a challenge
-      example: This is an example challenge description.
+      description: The description of the challenge.
+      example: This is an example description of the challenge.
       maxLength: 280
       minLength: 0
       type: string
@@ -479,14 +479,14 @@ components:
           pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         headline:
-          description: The headline of the a challenge
+          description: The headline of the challenge.
           example: Example challenge headline
           maxLength: 80
           minLength: 0
           type: string
         description:
-          description: The headline of the a challenge
-          example: This is an example challenge description.
+          description: The description of the challenge.
+          example: This is an example description of the challenge.
           maxLength: 280
           minLength: 0
           type: string
