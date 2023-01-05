@@ -5,4 +5,5 @@
 # rm -rf node_modules && yarn install --immutable
 node tools/check-nodejs-dependencies.js post-merge
 node tools/check-java-dependencies.js
+node tools/check-python-dependencies.js
 node tools/check-devcontainer-version.js
