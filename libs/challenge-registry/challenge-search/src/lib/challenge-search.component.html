@@ -96,7 +96,7 @@
         <challenge-registry-challenge-card
           *ngFor="let challenge of challenges"
           [challenge]="challenge"
-          routerLink="/challenge/{{ challenge.name }}"
+          [routerLink]="['/challenge', challenge.name]"
         >
         </challenge-registry-challenge-card>
       </div>
