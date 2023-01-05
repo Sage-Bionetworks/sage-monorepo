@@ -3,4 +3,5 @@
 
 node tools/check-nodejs-dependencies.js
 node tools/check-java-dependencies.js
+node tools/check-python-dependencies.js
 node tools/check-devcontainer-version.js
