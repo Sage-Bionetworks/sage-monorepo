@@ -71,21 +71,10 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
     List<SearchPredicate> predicates = new ArrayList<>();
 
     if (filter.getSearchTerms() != null && !filter.getSearchTerms().isBlank()) {
-      predicates.add(
-          pf.simpleQueryString()
-              .fields(fields)
-              .matching(filter.getSearchTerms())
-              .defaultOperator(BooleanOperator.AND)
-              .toPredicate());
+      predicates.add(getSearchTermsPredicate(pf, filter, fields));
     }
-
     if (filter.getStatus() != null && filter.getStatus().size() > 0) {
-      predicates.add(pf.bool(b -> {
-        for (String status: filter.getStatus()) {
-          b.should(pf.match().field("status")
-                  .matching(status));
-        }
-      }).toPredicate());
+      predicates.add(getChallengeStatusPredicate(pf, filter));
     }
 
     SearchPredicate topLevelPredicate =
@@ -106,5 +95,25 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
             // .sort( f -> f.field( "pageCount" ).desc())
             .fetch((int) pageable.getOffset(), pageable.getPageSize());
     return result;
+  }
+
+  private SearchPredicate getSearchTermsPredicate(
+      SearchPredicateFactory pf, ChallengeFilter filter, String[] fields) {
+    return pf.simpleQueryString()
+        .fields(fields)
+        .matching(filter.getSearchTerms())
+        .defaultOperator(BooleanOperator.AND)
+        .toPredicate();
+  }
+
+  private SearchPredicate getChallengeStatusPredicate(
+      SearchPredicateFactory pf, ChallengeFilter filter) {
+    return pf.bool(
+            b -> {
+              for (String status : filter.getStatus()) {
+                b.should(pf.match().field("status").matching(status));
+              }
+            })
+        .toPredicate();
   }
 }
