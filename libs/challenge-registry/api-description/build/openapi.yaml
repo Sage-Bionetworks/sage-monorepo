@@ -307,6 +307,18 @@ components:
       maxLength: 60
       pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
       example: awesome-challenge
+    ChallengeHeadline:
+      description: The headline of the challenge.
+      type: string
+      minLength: 0
+      maxLength: 80
+      example: Example challenge headline
+    ChallengeDescription:
+      description: The description of the challenge.
+      type: string
+      minLength: 0
+      maxLength: 280
+      example: This is an example description of the challenge.
     ChallengePlatformId:
       description: The unique identifier of a challenge platform.
       type: integer
@@ -340,6 +352,10 @@ components:
           $ref: '#/components/schemas/ChallengeId'
         name:
           $ref: '#/components/schemas/ChallengeName'
+        headline:
+          $ref: '#/components/schemas/ChallengeHeadline'
+        description:
+          $ref: '#/components/schemas/ChallengeDescription'
         status:
           $ref: '#/components/schemas/ChallengeStatus'
         difficulty:
@@ -365,6 +381,7 @@ components:
       required:
         - id
         - name
+        - description
         - status
         - difficulty
         - platform

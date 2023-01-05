@@ -1,14 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
   Challenge,
   ChallengePlatform,
   DateRange,
 } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
+import { Organization } from '@sagebionetworks/challenge-registry/api-client-angular';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import {
   Filter,
   MOCK_CHALLENGES,
+  MOCK_ORGANIZATIONS,
 } from '@sagebionetworks/challenge-registry/ui';
+import { MOCK_PLATFORMS } from './mock-platforms';
 import {
   challengeStartYearRangeFilter,
   challengeStatusFilter,
@@ -17,6 +20,7 @@ import {
   challengeInputDataTypeFilter,
   challengeIncentiveTypesFilter,
   challengePlatformFilter,
+  challengeOrganizationFilter,
 } from './challenge-search-filters';
 import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { ChallengeSearchQuery } from './challenge-search-query';
@@ -24,14 +28,13 @@ import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
 import { assign } from 'lodash';
 import { isNotNullOrUndefined } from 'type-guards';
-import { MOCK_PLATFORMS } from './mock-platforms';
 
 @Component({
   selector: 'challenge-registry-challenge-search',
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
 })
-export class ChallengeSearchComponent implements OnInit {
+export class ChallengeSearchComponent implements OnInit, AfterContentInit {
   public appVersion: string;
   datepipe: DatePipe = new DatePipe('en-US');
 
@@ -46,6 +49,7 @@ export class ChallengeSearchComponent implements OnInit {
       submissionTypes: [],
       incentiveTypes: [],
       platforms: [],
+      organizations: [],
     });
 
   challenges: Challenge[] = [];
@@ -71,6 +75,8 @@ export class ChallengeSearchComponent implements OnInit {
     challengeIncentiveTypesFilter,
     challengePlatformFilter,
   ];
+
+  dropdownfilters: Filter[] = [challengeOrganizationFilter];
 
   constructor(private readonly configService: ConfigService) {
     this.appVersion = this.configService.config.appVersion;
@@ -100,6 +106,18 @@ export class ChallengeSearchComponent implements OnInit {
           active: false,
         })))
     );
+    // mock up service to query all unique organizations
+    this.listOrganizations().subscribe(
+      (organizations) =>
+        // update input data types filter values
+        (this.dropdownfilters[0].values = organizations.map((org) => ({
+          value: org.login,
+          label: org.name,
+          avatarUrl: org.avatarUrl,
+          active: false,
+        })))
+    );
+
     // triger initial query
     const defaultQuery = {
       startYearRange: this.selectedYear,
@@ -126,7 +144,8 @@ export class ChallengeSearchComponent implements OnInit {
               this.checkOverlapped(c.inputDataTypes, query.inputDataTypes) &&
               this.checkOverlapped(c.submissionTypes, query.submissionTypes) &&
               this.checkOverlapped(c.incentiveTypes, query.incentiveTypes) &&
-              this.checkOverlapped(c.platformId, query.platforms)
+              this.checkOverlapped(c.platformId, query.platforms) &&
+              this.checkOverlapped(c.organizations, query.organizations)
             );
           });
           return of(res);
@@ -171,6 +190,13 @@ export class ChallengeSearchComponent implements OnInit {
     this.query.next(newQuery);
   }
 
+  onDropdownChange(selected: string[], queryName: string): void {
+    const newQuery = assign(this.query.getValue(), {
+      [queryName]: selected,
+    });
+    this.query.next(newQuery);
+  }
+
   titleCase(string: string, split: string): string {
     // tranform one word to title-case word
     return string
@@ -179,7 +205,7 @@ export class ChallengeSearchComponent implements OnInit {
       .join(' ');
   }
 
-  listInputDataTypes(): Observable<string[]> {
+  private listInputDataTypes(): Observable<string[]> {
     // update input data type values - API requires
     const allTypes = [...new Set(MOCK_CHALLENGES.map((c) => c.inputDataTypes))];
     const uniqueTypes = [
@@ -194,19 +220,24 @@ export class ChallengeSearchComponent implements OnInit {
     return of(sortTypes);
   }
 
-  listPlatforms(): Observable<ChallengePlatform[]> {
+  private listPlatforms(): Observable<ChallengePlatform[]> {
     return of(MOCK_PLATFORMS);
+  }
+
+  private listOrganizations(): Observable<Organization[]> {
+    return of(MOCK_ORGANIZATIONS);
   }
 
   // tmp - Removed once Service is used
   checkOverlapped(property: any, filterValues: any): boolean {
-    // if property(challenge property) presents and filter (filterValues) applied,
-    // check overlap between two arrays, otherwise return true
-    if (property && filterValues && filterValues.length > 0) {
-      // x = isinstance(x, list) ? x : [x];
-      return [property].some((value: any) => filterValues?.includes(value));
+    if (filterValues && filterValues.length > 0) {
+      // filter applied, but no property presents
+      if (!property) return false;
+      // check overlap between two arrays, otherwise return true
+      const propertyValues = property instanceof Array ? property : [property];
+      return propertyValues.some((value: any) => filterValues?.includes(value));
     } else {
-      return true;
+      return true; // no filter applied
     }
   }
 }
