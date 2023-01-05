@@ -23,7 +23,7 @@ import {
   challengePlatformFilter,
   challengeOrganizationFilter,
 } from './challenge-search-filters';
-import { challengeDateSortFilterValues } from './challenge-search-filters-values';
+import { challengeSortFilterValues } from './challenge-search-filters-values';
 import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { ChallengeSearchQuery } from './challenge-search-query';
 import { Calendar } from 'primeng/calendar';
@@ -81,7 +81,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
 
   dropdownFilters: Filter[] = [challengeOrganizationFilter];
 
-  sortFilters: FilterValue[] = challengeDateSortFilterValues;
+  sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
 
   constructor(private readonly configService: ConfigService) {
@@ -277,7 +277,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
         );
     } else {
       return challenges.sort(
-        (a, b) => (a[sortBy] as number) - (b[sortBy] as number)
+        (a, b) => (b[sortBy] as number) - (a[sortBy] as number)
       );
     }
   }
