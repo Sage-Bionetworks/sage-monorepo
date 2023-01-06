@@ -14,14 +14,6 @@
   .search-field > i {
     color: map.get($figma, dl-color-default-primary2);
   }
-  .search-field > input {
-    background-color: #fff;
-    border-color: map.get($figma, dl-color-default-hover2);
-  }
-  .search-field > input:active,
-  .search-field > input:focus {
-    border-color: map.get($figma, dl-color-default-primary1);
-  }
   #top {
     background-color: #f8f8f8;
   }

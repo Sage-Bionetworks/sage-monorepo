@@ -31,16 +31,16 @@
             placeholder="Search challenges"
           />
         </span>
-        <div class="sort-field">
-          <span class="sort-title">Sort by</span>
-          <p-dropdown
-            [options]="sortFilters"
-            [(ngModel)]="sortedBy"
-            optionLabel="label"
-            optionValue="value"
-            (onChange)="onSortChange($event)"
-          ></p-dropdown>
-        </div>
+      </div>
+      <div class="sort-field">
+        <span class="sort-title">Sort by</span>
+        <p-dropdown
+          [options]="sortFilters"
+          [(ngModel)]="sortedBy"
+          optionLabel="label"
+          optionValue="value"
+          (onChange)="onSortChange($event)"
+        ></p-dropdown>
       </div>
     </div>
   </section>
