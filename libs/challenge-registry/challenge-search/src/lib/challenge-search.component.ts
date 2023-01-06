@@ -24,7 +24,8 @@ import {
   challengeOrganizationFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
-import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ChallengeSearchQuery } from './challenge-search-query';
 import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
@@ -45,6 +46,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
       limit: 0,
       offset: 0,
       sort: undefined,
+      searchTerms: undefined,
       startYearRange: {},
       status: [],
       inputDataTypes: [],
@@ -54,6 +56,16 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
       platforms: [],
       organizations: [],
     });
+
+  // set a default behaviorSubject to trigger searchTearm's changes
+  private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
+    ''
+  );
+
+  private destroy = new Subject<void>();
+  searchTermValue!: string;
+
+  // private destroy$ = new Subject<void>();
 
   challenges: Challenge[] = [];
   totalChallengesCount!: number;
@@ -124,7 +136,6 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
         })))
     );
 
-    // triger initial query
     const defaultQuery = {
       startYearRange: this.selectedYear,
       sort: this.sortFilters[0].value,
@@ -134,12 +145,28 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
+    this.searchTerms
+      .pipe(
+        debounceTime(1000), // wait for 1s
+        distinctUntilChanged(),
+        takeUntil(this.destroy)
+      )
+      .subscribe((search) => {
+        const newQuery = assign(this.query.getValue(), {
+          searchTerms: search,
+        });
+        this.query.next(newQuery);
+      });
+
     this.query
       .pipe(
         tap((query) => console.log('List challenges', query)),
         switchMap((query) => {
           // mock up challengeList service with defined query
-          const res = MOCK_CHALLENGES.filter((c) => {
+          const challenges = query.searchTerms
+            ? this.searchChallenges(MOCK_CHALLENGES, query.searchTerms)
+            : MOCK_CHALLENGES;
+          const res = challenges.filter((c) => {
             return (
               c.startDate &&
               query.startYearRange?.start &&
@@ -163,6 +190,11 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
         this.searchResultsCount = page.length;
         this.challenges = page;
       });
+  }
+
+  onSearchChange(): void {
+    // update searchTerms to trigger the query' searchTerm
+    this.searchTerms.next(this.searchTermValue);
   }
 
   onYearChange(event: any): void {
@@ -280,5 +312,22 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
         (a, b) => (b[sortBy] as number) - (a[sortBy] as number)
       );
     }
+  }
+
+  // mock up the service to filter challenge by search term
+  private searchChallenges(
+    challenges: Challenge[],
+    searchTerm: string
+  ): Challenge[] {
+    return challenges.filter((challenge) =>
+      (Object.keys(challenge) as [keyof Challenge]).some((k) =>
+        isNotNullOrUndefined(challenge[k])
+          ? (challenge[k] as string)
+              .toString()
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())
+          : false
+      )
+    );
   }
 }

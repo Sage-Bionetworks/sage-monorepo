@@ -13,7 +13,7 @@ export interface ChallengeSearchQuery {
   offset?: number;
   sort?: keyof Challenge;
   // direction?: 'asc' | 'desc';
-  // searchTerms?: string;
+  searchTerms?: string;
   // topics?: string[];
   status?: ChallengeStatus[];
   platforms?: ChallengePlatform[]; // assume to query platform name instead of ids
