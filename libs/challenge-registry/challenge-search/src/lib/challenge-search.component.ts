@@ -1,4 +1,10 @@
-import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   Challenge,
   ChallengePlatform,
@@ -37,7 +43,9 @@ import { isNotNullOrUndefined } from 'type-guards';
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
 })
-export class ChallengeSearchComponent implements OnInit, AfterContentInit {
+export class ChallengeSearchComponent
+  implements OnInit, AfterContentInit, OnDestroy
+{
   public appVersion: string;
   datepipe: DatePipe = new DatePipe('en-US');
 
@@ -64,8 +72,6 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
 
   private destroy = new Subject<void>();
   searchTermValue!: string;
-
-  // private destroy$ = new Subject<void>();
 
   challenges: Challenge[] = [];
   totalChallengesCount!: number;
@@ -190,6 +196,11 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
         this.searchResultsCount = page.length;
         this.challenges = page;
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 
   onSearchChange(): void {
