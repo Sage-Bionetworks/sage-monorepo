@@ -1,4 +1,10 @@
-import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   Challenge,
   ChallengePlatform,
@@ -23,8 +29,8 @@ import {
   challengeOrganizationFilter,
   challengeSearchTermsFilter,
 } from './challenge-search-filters';
-import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ChallengeSearchQuery } from './challenge-search-query';
 import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
@@ -36,7 +42,9 @@ import { isNotNullOrUndefined } from 'type-guards';
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
 })
-export class ChallengeSearchComponent implements OnInit, AfterContentInit {
+export class ChallengeSearchComponent
+  implements OnInit, AfterContentInit, OnDestroy
+{
   public appVersion: string;
   datepipe: DatePipe = new DatePipe('en-US');
 
@@ -60,9 +68,9 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     ''
   );
 
-  searchTermValue!: string;
+  private destroy = new Subject<void>();
 
-  // private destroy$ = new Subject<void>();
+  searchTermValue!: string;
 
   challenges: Challenge[] = [];
   totalChallengesCount!: number;
@@ -143,8 +151,8 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     this.searchTerms
       .pipe(
         debounceTime(1000), // wait for 1s
-        distinctUntilChanged()
-        takeUntil(this.destroy$)
+        distinctUntilChanged(),
+        takeUntil(this.destroy)
       )
       .subscribe((search) => {
         const newQuery = assign(this.query.getValue(), {
@@ -185,6 +193,11 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
         this.searchResultsCount = page.length;
         this.challenges = page;
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 
   onSearchChange(): void {
