@@ -10,10 +10,10 @@ import { ChallengeStatsModule } from './challenge-stats/challenge-stats.module';
 
 const routes: Routes = [
   {
-    path: ':challengeLogin',
+    path: ':challengeName',
     component: ChallengeComponent,
     children: [
-      { path: ':challengeLogin', component: ChallengeOverviewModule },
+      { path: ':challengeName', component: ChallengeOverviewModule },
       { path: 'details', component: ChallengeDetailsModule },
       { path: 'organizers', component: ChallengeOrganizersModule },
       { path: 'sponsors', component: ChallengeSponsorsModule },

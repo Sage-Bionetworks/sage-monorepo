@@ -45,6 +45,10 @@
   .mat-select {
     font-family: 'Lato', sans-serif;
   }
+  .sort-title {
+    font-weight: 700;
+    font-size: 1.1em;
+  }
 }
 
 @mixin theme($theme) {

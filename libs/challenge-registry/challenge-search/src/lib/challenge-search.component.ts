@@ -8,6 +8,7 @@ import { Organization } from '@sagebionetworks/challenge-registry/api-client-ang
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import {
   Filter,
+  FilterValue,
   MOCK_CHALLENGES,
   MOCK_ORGANIZATIONS,
 } from '@sagebionetworks/challenge-registry/ui';
@@ -22,6 +23,7 @@ import {
   challengePlatformFilter,
   challengeOrganizationFilter,
 } from './challenge-search-filters';
+import { challengeSortFilterValues } from './challenge-search-filters-values';
 import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { ChallengeSearchQuery } from './challenge-search-query';
 import { Calendar } from 'primeng/calendar';
@@ -42,6 +44,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     new BehaviorSubject<ChallengeSearchQuery>({
       limit: 0,
       offset: 0,
+      sort: undefined,
       startYearRange: {},
       status: [],
       inputDataTypes: [],
@@ -67,7 +70,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
   // define filters
   startYearRangeFilter: Filter = challengeStartYearRangeFilter;
 
-  checkboxfilters: Filter[] = [
+  checkboxFilters: Filter[] = [
     challengeStatusFilter,
     challengeDifficultyFilter,
     challengeInputDataTypeFilter,
@@ -76,7 +79,10 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     challengePlatformFilter,
   ];
 
-  dropdownfilters: Filter[] = [challengeOrganizationFilter];
+  dropdownFilters: Filter[] = [challengeOrganizationFilter];
+
+  sortFilters: FilterValue[] = challengeSortFilterValues;
+  sortedBy!: string;
 
   constructor(private readonly configService: ConfigService) {
     this.appVersion = this.configService.config.appVersion;
@@ -90,7 +96,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     this.listInputDataTypes().subscribe(
       (dataTypes) =>
         // update input data types filter values
-        (this.checkboxfilters[2].values = dataTypes.map((dataType) => ({
+        (this.checkboxFilters[2].values = dataTypes.map((dataType) => ({
           value: dataType,
           label: this.titleCase(dataType, '-'),
           active: false,
@@ -100,7 +106,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     this.listPlatforms().subscribe(
       (platforms) =>
         // update input data types filter values
-        (this.checkboxfilters[5].values = platforms.map((platform) => ({
+        (this.checkboxFilters[5].values = platforms.map((platform) => ({
           value: platform.id,
           label: platform.displayName,
           active: false,
@@ -110,7 +116,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     this.listOrganizations().subscribe(
       (organizations) =>
         // update input data types filter values
-        (this.dropdownfilters[0].values = organizations.map((org) => ({
+        (this.dropdownFilters[0].values = organizations.map((org) => ({
           value: org.login,
           label: org.name,
           avatarUrl: org.avatarUrl,
@@ -121,6 +127,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     // triger initial query
     const defaultQuery = {
       startYearRange: this.selectedYear,
+      sort: this.sortFilters[0].value,
       ...this.query,
     } as ChallengeSearchQuery;
     this.query.next(defaultQuery);
@@ -148,7 +155,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
               this.checkOverlapped(c.organizations, query.organizations)
             );
           });
-          return of(res);
+          return of(this.sortChallenges(res, query.sort));
         })
       )
       .subscribe((page) => {
@@ -197,6 +204,13 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     this.query.next(newQuery);
   }
 
+  onSortChange(event: any): void {
+    const newQuery = assign(this.query.getValue(), {
+      sort: event.value,
+    });
+    this.query.next(newQuery);
+  }
+
   titleCase(string: string, split: string): string {
     // tranform one word to title-case word
     return string
@@ -238,6 +252,33 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
       return propertyValues.some((value: any) => filterValues?.includes(value));
     } else {
       return true; // no filter applied
+    }
+  }
+
+  // mock up sorting challenges by certain property
+  private sortChallenges(
+    challenges: Challenge[],
+    sortBy: keyof Challenge | undefined
+  ): Challenge[] {
+    if (!sortBy) return challenges;
+
+    if (['startDate', 'endDate'].includes(sortBy as string)) {
+      // if it's starting soon, the status should be 'upcoming',
+      // otherwise, it's closing soon and status should be 'active',
+      const status = sortBy === 'startDate' ? 'upcoming' : 'active';
+      // sort challenges by startDate
+      // the sooner the challenge is going to start/end, the closer to the 1st card
+      // note: since it's a mock up func, the undefined of startDate/endDate is not considered here
+      return challenges
+        .filter((c) => c.status === status)
+        .sort(
+          (a, b) =>
+            +new Date(b[sortBy] as string) - +new Date(a[sortBy] as string)
+        );
+    } else {
+      return challenges.sort(
+        (a, b) => (b[sortBy] as number) - (a[sortBy] as number)
+      );
     }
   }
 }

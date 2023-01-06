@@ -4,15 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { UiModule } from '@sagebionetworks/challenge-registry/ui';
 import { MatIconModule } from '@angular/material/icon';
 import { ChallengeSearchComponent } from './challenge-search.component';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatSelectModule } from '@angular/material/select';
-// import { MatCheckboxModule } from '@angular/material/checkbox';
-// import { MatExpansionModule } from '@angular/material/expansion';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
 
 const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
 
@@ -21,13 +18,10 @@ const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
     CalendarModule,
     CommonModule,
     DividerModule,
+    DropdownModule,
     MatIconModule,
     RouterModule.forChild(routes),
     UiModule,
-    // MatFormFieldModule,
-    // MatSelectModule,
-    // MatCheckboxModule,
-    // MatExpansionModule,
     FormsModule,
     PanelModule,
     RadioButtonModule,

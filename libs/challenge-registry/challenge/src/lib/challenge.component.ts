@@ -45,7 +45,15 @@ export class ChallengeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe((param) => console.log(param['orgLogin']));
+    this.route.params.subscribe((param) => {
+      const challenge = MOCK_CHALLENGES.find(
+        (c) => c.name === param['challengeName']
+      );
+      if (challenge) {
+        console.log(challenge);
+        this.challenge$ = of(challenge);
+      }
+    });
 
     const activeTab$ = this.activatedRoute.queryParamMap.pipe(
       map((params: ParamMap) => params.get('tab')),
