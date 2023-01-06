@@ -20,8 +20,18 @@
       </div>
     </div>
     <div class="search-field">
-      <input aria-label="Search the registry" type="text" placeholder="Search challenges" />
-      <i><mat-icon aria-hidden="true">search</mat-icon></i>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="searchTermValue"
+          (input)="onSearchChange()"
+          placeholder="Search challenges"
+        />
+      </span>
+      <!-- <input aria-label="Search the registry" type="text" placeholder="Search challenges" />
+      <i><mat-icon aria-hidden="true">search</mat-icon></i> -->
     </div>
   </section>
   <section id="bottom" class="row">
