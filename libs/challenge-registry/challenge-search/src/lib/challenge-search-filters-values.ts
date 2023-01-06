@@ -152,7 +152,7 @@ export const challengeSortFilterValues: FilterValue[] = [
   },
   {
     value: 'starredCount',
-    label: 'Popularity',
+    label: 'Most Starred',
     active: false,
   },
 ];
