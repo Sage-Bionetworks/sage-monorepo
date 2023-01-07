@@ -32,7 +32,8 @@ public class ChallengeService {
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
 
-  private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
+  private static final List<String> SEARCHABLE_FIELDS =
+      Arrays.asList("name", "headline", "description");
 
   @Transactional(readOnly = true)
   public ChallengesPageDto listChallenges(
@@ -68,20 +69,13 @@ public class ChallengeService {
     builder.searchTerms(searchTerms);
     ChallengeFilter filter = builder.build();
 
-    // Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(pageable, filter);
-    // log.info("challengeRepository {}", challengeEntitiesPage);
-
-    // List<ChallengeDto> challenges =
-    //     challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());
-
     ChallengeDomain challengeDomain = new ChallengeDomain("plop");
     log.info("challenge sent: {}", challengeDomain);
     producerService.sendMessage(challengeDomain);
 
-    // Text search
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
     Page<ChallengeEntity> challengeEntitiesPage =
-        challengeRepository.searchBy(pageable, filter, fieldsToSearchBy.toArray(new String[0]));
+        challengeRepository.findAll(pageable, filter, fieldsToSearchBy.toArray(new String[0]));
     log.info("challengeEntitiesPage {}", challengeEntitiesPage);
 
     List<ChallengeDto> challenges =
