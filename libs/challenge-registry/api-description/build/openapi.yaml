@@ -345,6 +345,18 @@ components:
         - id
         - name
         - displayName
+    ChallengeStartDate:
+      description: The start date of the challenge.
+      type: string
+      format: date
+      nullable: true
+      example: '2017-07-21'
+    ChallengeEndDate:
+      description: The end date of the challenge.
+      type: string
+      format: date
+      nullable: true
+      example: '2017-07-21'
     Challenge:
       type: object
       description: A challenge
@@ -371,6 +383,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
+        startDate:
+          $ref: '#/components/schemas/ChallengeStartDate'
+        endDate:
+          $ref: '#/components/schemas/ChallengeEndDate'
         starredCount:
           description: The number of times the challenge has been starred by users.
           type: integer
