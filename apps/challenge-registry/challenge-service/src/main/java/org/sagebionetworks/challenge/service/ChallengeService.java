@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.service;
 
+import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.domain.ChallengeDomain;
@@ -31,6 +32,8 @@ public class ChallengeService {
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
 
+  private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
+
   @Transactional(readOnly = true)
   public ChallengesPageDto listChallenges(
       Integer pageNumber,
@@ -39,7 +42,8 @@ public class ChallengeService {
       List<String> platforms,
       List<ChallengeDifficultyDto> difficulties,
       List<ChallengeSubmissionTypeDto> submissionTypes,
-      List<ChallengeIncentiveDto> incentives) {
+      List<ChallengeIncentiveDto> incentives,
+      String searchTerms) {
 
     log.info("status {}", status);
     log.info("difficulty {}", difficulties);
@@ -61,17 +65,27 @@ public class ChallengeService {
     if (incentives != null) {
       builder.incentives(incentives.stream().map(o -> o.toString()).toList());
     }
+    builder.searchTerms(searchTerms);
     ChallengeFilter filter = builder.build();
 
-    Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(pageable, filter);
-    log.info("challengeRepository {}", challengeEntitiesPage);
+    // Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(pageable, filter);
+    // log.info("challengeRepository {}", challengeEntitiesPage);
 
-    List<ChallengeDto> challenges =
-        challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());
+    // List<ChallengeDto> challenges =
+    //     challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());
 
     ChallengeDomain challengeDomain = new ChallengeDomain("plop");
     log.info("challenge sent: {}", challengeDomain);
     producerService.sendMessage(challengeDomain);
+
+    // Text search
+    List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
+    Page<ChallengeEntity> challengeEntitiesPage =
+        challengeRepository.searchBy(pageable, filter, fieldsToSearchBy.toArray(new String[0]));
+    log.info("challengeEntitiesPage {}", challengeEntitiesPage);
+
+    List<ChallengeDto> challenges =
+        challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());
 
     return ChallengesPageDto.builder()
         .challenges(challenges)

@@ -33,6 +33,7 @@ paths:
         - $ref: '#/components/parameters/difficulties'
         - $ref: '#/components/parameters/submissionTypes'
         - $ref: '#/components/parameters/incentives'
+        - $ref: '#/components/parameters/searchTerms'
       responses:
         '200':
           content:
@@ -150,6 +151,13 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeIncentive'
+    searchTerms:
+      name: searchTerms
+      description: A string of search terms used to filter the results.
+      in: query
+      required: false
+      schema:
+        type: string
     challengePlatformName:
       name: challengePlatformName
       in: path

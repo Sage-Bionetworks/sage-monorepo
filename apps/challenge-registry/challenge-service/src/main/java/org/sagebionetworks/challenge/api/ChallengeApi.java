@@ -45,6 +45,7 @@ public interface ChallengeApi {
    * @param submissionTypes An array of challenge submission types used to filter the results.
    *     (optional)
    * @param incentives An array of challenge incentive types used to filter the results. (optional)
+   * @param searchTerms A string of search terms used to filter the results. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    */
@@ -131,9 +132,22 @@ public interface ChallengeApi {
               description = "An array of challenge incentive types used to filter the results.")
           @Valid
           @RequestParam(value = "incentives", required = false)
-          List<ChallengeIncentiveDto> incentives) {
+          List<ChallengeIncentiveDto> incentives,
+      @Parameter(
+              name = "searchTerms",
+              description = "A string of search terms used to filter the results.")
+          @Valid
+          @RequestParam(value = "searchTerms", required = false)
+          String searchTerms) {
     return getDelegate()
         .listChallenges(
-            pageNumber, pageSize, status, platforms, difficulties, submissionTypes, incentives);
+            pageNumber,
+            pageSize,
+            status,
+            platforms,
+            difficulties,
+            submissionTypes,
+            incentives,
+            searchTerms);
   }
 }

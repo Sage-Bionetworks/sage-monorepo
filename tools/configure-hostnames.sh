@@ -9,6 +9,7 @@ declare -a hostnames=(
   "127.0.0.1 challenge-registry-challenge-service"
   "127.0.0.1 challenge-registry-config-service"
   "127.0.0.1 challenge-registry-core-service"
+  "127.0.0.1 challenge-registry-elasticsearch"
   "127.0.0.1 challenge-registry-keycloak"
   "127.0.0.1 challenge-registry-mariadb"
   "127.0.0.1 challenge-registry-mongo"

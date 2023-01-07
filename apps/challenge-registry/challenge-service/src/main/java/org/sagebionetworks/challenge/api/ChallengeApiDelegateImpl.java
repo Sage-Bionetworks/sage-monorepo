@@ -24,10 +24,18 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
       List<String> platforms,
       List<ChallengeDifficultyDto> difficulties,
       List<ChallengeSubmissionTypeDto> submissionTypes,
-      List<ChallengeIncentiveDto> incentives) {
+      List<ChallengeIncentiveDto> incentives,
+      String searchTerms) {
     return ResponseEntity.ok(
         challengeService.listChallenges(
-            pageNumber, pageSize, status, platforms, difficulties, submissionTypes, incentives));
+            pageNumber,
+            pageSize,
+            status,
+            platforms,
+            difficulties,
+            submissionTypes,
+            incentives,
+            searchTerms));
   }
 
   // @Override

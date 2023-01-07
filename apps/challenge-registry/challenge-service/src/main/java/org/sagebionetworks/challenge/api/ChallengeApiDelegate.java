@@ -36,6 +36,7 @@ public interface ChallengeApiDelegate {
    * @param submissionTypes An array of challenge submission types used to filter the results.
    *     (optional)
    * @param incentives An array of challenge incentive types used to filter the results. (optional)
+   * @param searchTerms A string of search terms used to filter the results. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    * @see ChallengeApi#listChallenges
@@ -47,7 +48,8 @@ public interface ChallengeApiDelegate {
       List<String> platforms,
       List<ChallengeDifficultyDto> difficulties,
       List<ChallengeSubmissionTypeDto> submissionTypes,
-      List<ChallengeIncentiveDto> incentives) {
+      List<ChallengeIncentiveDto> incentives,
+      String searchTerms) {
     getRequest()
         .ifPresent(
             request -> {

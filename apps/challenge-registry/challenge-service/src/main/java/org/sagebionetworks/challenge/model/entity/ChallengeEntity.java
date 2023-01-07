@@ -16,6 +16,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
 
 @Entity
 @Table(name = "challenge")
@@ -23,6 +29,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Indexed(index = "challenge-registry-challenge")
 public class ChallengeEntity {
 
   @Id
@@ -31,28 +38,37 @@ public class ChallengeEntity {
   private Long id;
 
   @Column(nullable = false)
+  @FullTextField()
   private String name;
 
   @Column(nullable = false)
+  @FullTextField()
   private String headline;
 
   @Column(nullable = false)
+  @FullTextField()
   private String description;
 
   @Column(nullable = false)
+  @GenericField()
   private String status;
 
   @Column(nullable = false)
+  @GenericField()
   private String difficulty;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "platform_id", nullable = false)
+  @IndexedEmbedded(includePaths = {"name"})
+  @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private SimpleChallengePlatformEntity platform;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
+  @IndexedEmbedded(includePaths = {"name"})
   private List<ChallengeSubmissionTypeEntity> submissionTypes;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
+  @IndexedEmbedded(includePaths = {"name"})
   private List<ChallengeIncentiveEntity> incentives;
 
   @Column(name = "created_at")

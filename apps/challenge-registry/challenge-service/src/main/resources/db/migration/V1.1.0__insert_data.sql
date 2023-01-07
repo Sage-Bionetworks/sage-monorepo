@@ -47,5 +47,5 @@ VALUES ('1', 'monetary', 1),
 
 INSERT INTO challenge_submission_type (id, name, challenge_id)
 VALUES ('1', 'container_image', 1),
-  ('2', 'prediction_file', 1),
+  ('2', 'prediction_file', 2),
   ('3', 'container_image', 2);
