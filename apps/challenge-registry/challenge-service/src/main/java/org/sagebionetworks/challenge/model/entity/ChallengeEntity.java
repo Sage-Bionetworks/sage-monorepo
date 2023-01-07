@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.model.entity;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import javax.persistence.Column;
@@ -76,6 +77,12 @@ public class ChallengeEntity {
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
   @LazyCollection(LazyCollectionOption.EXTRA)
   private List<ChallengeStar> stars;
+
+  @Column(name = "start_date", columnDefinition = "DATE")
+  private LocalDate startDate;
+
+  @Column(name = "end_date", columnDefinition = "DATE")
+  private LocalDate endDate;
 
   @Column(name = "created_at")
   private OffsetDateTime createdAt;
