@@ -14,18 +14,12 @@ import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
-    implements CustomChallengeRepository {
+public class CustomChallengeRepositoryImpl implements CustomChallengeRepository {
 
   @PersistenceContext private EntityManager entityManager;
-
-  public CustomChallengeRepositoryImpl() {
-    super(ChallengeEntity.class);
-  }
 
   @Override
   public Page<ChallengeEntity> findAll(
@@ -65,7 +59,6 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
         searchSession
             .search(ChallengeEntity.class) // Book.class
             .where(topLevelPredicate)
-            // .where(f -> f.match().fields(fields).matching(text).fuzzy(2))
             // .sort( f -> f.field( "pageCount" ).desc())
             .fetch((int) pageable.getOffset(), pageable.getPageSize());
     return result;

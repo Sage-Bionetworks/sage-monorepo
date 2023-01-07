@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface CustomChallengeRepository {
 
-  Page<ChallengeEntity> searchBy(Pageable pageable, ChallengeFilter filter, String... fields);
+  Page<ChallengeEntity> findAll(Pageable pageable, ChallengeFilter filter, String... fields);
 }
