@@ -60,3 +60,15 @@ CREATE TABLE `challenge_submission_type`
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
     CONSTRAINT unique_item UNIQUE (`name`, `challenge_id`)
 );
+
+-- challenge.starred_challenge definition
+
+CREATE TABLE `starred_challenge`
+(
+    `id`                    int NOT NULL AUTO_INCREMENT,
+    `challenge_id`          bigint(20) NOT NULL,
+    `user_id`               bigint(20) NOT NULL,
+    `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    CONSTRAINT unique_item UNIQUE (`challenge_id`, `user_id`)
+);
