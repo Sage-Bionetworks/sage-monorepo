@@ -79,9 +79,11 @@ public class ChallengeEntity {
   private List<ChallengeStar> stars;
 
   @Column(name = "start_date", columnDefinition = "DATE")
+  @GenericField()
   private LocalDate startDate;
 
   @Column(name = "end_date", columnDefinition = "DATE")
+  @GenericField()
   private LocalDate endDate;
 
   @Column(name = "created_at")
