@@ -32,6 +32,10 @@ GET {{basePath}}/challenges?submissionTypes=container_image
 
 GET {{basePath}}/challenges?incentives=monetary,publication
 
+### List the challenges that match the full-text search terms "mortality dream"
+
+GET {{basePath}}/challenges?searchTerms=mortality%20dream
+
 ### List the challenge platforms
 
 GET {{basePath}}/challengePlatforms
