@@ -50,9 +50,9 @@ VALUES ('1', 'container_image', 1),
   ('2', 'prediction_file', 2),
   ('3', 'container_image', 2);
 
--- challenge.starred_challenge data
+-- challenge.challenge_star data
 
-INSERT INTO starred_challenge (id, challenge_id, user_id)
+INSERT INTO challenge_star (id, challenge_id, user_id)
 VALUES ('1', 1, 1),
   ('2', 2, 1),
   ('3', 1, 2);

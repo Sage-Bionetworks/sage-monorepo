@@ -61,9 +61,9 @@ CREATE TABLE `challenge_submission_type`
     CONSTRAINT unique_item UNIQUE (`name`, `challenge_id`)
 );
 
--- challenge.starred_challenge definition
+-- challenge.challenge_star definition
 
-CREATE TABLE `starred_challenge`
+CREATE TABLE `challenge_star`
 (
     `id`                    int NOT NULL AUTO_INCREMENT,
     `challenge_id`          bigint(20) NOT NULL,

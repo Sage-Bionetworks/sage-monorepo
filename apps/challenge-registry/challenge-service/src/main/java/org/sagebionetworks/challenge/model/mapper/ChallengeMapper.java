@@ -26,7 +26,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
   public ChallengeDto convertToDto(ChallengeEntity entity, Object... args) {
     ChallengeDto dto = new ChallengeDto();
     if (entity != null) {
-      BeanUtils.copyProperties(entity, dto);
+      BeanUtils.copyProperties(entity, dto, "stars");
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
       dto.setDifficulty(ChallengeDifficultyDto.fromValue(entity.getDifficulty()));
       dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
@@ -38,6 +38,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
           entity.getIncentives().stream()
               .map(o -> ChallengeIncentiveDto.fromValue(o.getName()))
               .toList());
+      dto.starredCount(entity.getStars().size());
     }
     return dto;
   }
