@@ -70,5 +70,6 @@ CREATE TABLE `starred_challenge`
     `user_id`               bigint(20) NOT NULL,
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
+    FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
     CONSTRAINT unique_item UNIQUE (`challenge_id`, `user_id`)
 );

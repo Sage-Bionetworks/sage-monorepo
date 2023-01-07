@@ -71,6 +71,10 @@ public class ChallengeEntity {
   @IndexedEmbedded(includePaths = {"name"})
   private List<ChallengeIncentiveEntity> incentives;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "challenge_id", nullable = false)
+  private List<StarredChallenge> starred;
+
   @Column(name = "created_at")
   private OffsetDateTime createdAt;
 
