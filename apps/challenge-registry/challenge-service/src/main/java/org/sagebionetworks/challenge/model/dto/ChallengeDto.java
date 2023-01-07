@@ -49,6 +49,9 @@ public class ChallengeDto {
   @Valid
   private List<ChallengeSubmissionTypeDto> submissionTypes = new ArrayList<>();
 
+  @JsonProperty("starredCount")
+  private Integer starredCount = 0;
+
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -277,6 +280,29 @@ public class ChallengeDto {
     this.submissionTypes = submissionTypes;
   }
 
+  public ChallengeDto starredCount(Integer starredCount) {
+    this.starredCount = starredCount;
+    return this;
+  }
+
+  /**
+   * The number of times the challenge has been starred by users.
+   *
+   * @return starredCount
+   */
+  @NotNull
+  @Schema(
+      name = "starredCount",
+      description = "The number of times the challenge has been starred by users.",
+      required = true)
+  public Integer getStarredCount() {
+    return starredCount;
+  }
+
+  public void setStarredCount(Integer starredCount) {
+    this.starredCount = starredCount;
+  }
+
   public ChallengeDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
@@ -337,6 +363,7 @@ public class ChallengeDto {
         && Objects.equals(this.platform, challenge.platform)
         && Objects.equals(this.incentives, challenge.incentives)
         && Objects.equals(this.submissionTypes, challenge.submissionTypes)
+        && Objects.equals(this.starredCount, challenge.starredCount)
         && Objects.equals(this.createdAt, challenge.createdAt)
         && Objects.equals(this.updatedAt, challenge.updatedAt);
   }
@@ -353,6 +380,7 @@ public class ChallengeDto {
         platform,
         incentives,
         submissionTypes,
+        starredCount,
         createdAt,
         updatedAt);
   }
@@ -370,6 +398,7 @@ public class ChallengeDto {
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
+    sb.append("    starredCount: ").append(toIndentedString(starredCount)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
