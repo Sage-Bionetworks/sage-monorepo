@@ -49,3 +49,10 @@ INSERT INTO challenge_submission_type (id, name, challenge_id)
 VALUES ('1', 'container_image', 1),
   ('2', 'prediction_file', 2),
   ('3', 'container_image', 2);
+
+-- challenge.challenge_star data
+
+INSERT INTO challenge_star (id, challenge_id, user_id)
+VALUES ('1', 1, 1),
+  ('2', 2, 1),
+  ('3', 1, 2);

@@ -16,6 +16,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
@@ -70,6 +72,10 @@ public class ChallengeEntity {
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
   @IndexedEmbedded(includePaths = {"name"})
   private List<ChallengeIncentiveEntity> incentives;
+
+  @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
+  @LazyCollection(LazyCollectionOption.EXTRA)
+  private List<ChallengeStar> stars;
 
   @Column(name = "created_at")
   private OffsetDateTime createdAt;

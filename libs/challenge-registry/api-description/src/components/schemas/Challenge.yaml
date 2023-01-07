@@ -41,10 +41,10 @@ properties:
   #     description: Number of challenge views
   #     type: integer
   #     default: 0
-  #   starredCount:
-  #     description: Number of times the challenge has been starred by users
-  #     type: integer
-  #     default: 0
+  starredCount:
+    description: The number of times the challenge has been starred by users.
+    type: integer
+    default: 0
   createdAt:
     type: string
     format: date-time
@@ -62,5 +62,6 @@ required:
   - platform
   - incentives
   - submissionTypes
+  - starredCount
   - createdAt
   - updatedAt
