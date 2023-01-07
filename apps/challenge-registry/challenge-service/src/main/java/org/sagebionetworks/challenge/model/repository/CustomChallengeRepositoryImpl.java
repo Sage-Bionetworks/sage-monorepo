@@ -36,9 +36,9 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
 
     JPQLQuery<ChallengeEntity> query = from(challenge);
 
-    // if (filter.getStatus() != null && filter.getStatus().size() > 0) {
-    //   query = query.where(challenge.status.in(filter.getStatus()));
-    // }
+    if (filter.getStatus() != null && filter.getStatus().size() > 0) {
+      query = query.where(challenge.status.in(filter.getStatus()));
+    }
     if (filter.getPlatforms() != null && filter.getPlatforms().size() > 0) {
       query = query.where(challenge.platform.name.in(filter.getPlatforms()));
     }
@@ -76,8 +76,17 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
     if (filter.getStatus() != null && filter.getStatus().size() > 0) {
       predicates.add(getChallengeStatusPredicate(pf, filter));
     }
+    if (filter.getDifficulties() != null && filter.getDifficulties().size() > 0) {
+      predicates.add(getChallengeDifficultyPredicate(pf, filter));
+    }
     if (filter.getPlatforms() != null && filter.getPlatforms().size() > 0) {
       predicates.add(getChallengePlatformPredicate(pf, filter));
+    }
+    if (filter.getSubmissionTypes() != null && filter.getSubmissionTypes().size() > 0) {
+      predicates.add(getChallengeSubmissionTypesPredicate(pf, filter));
+    }
+    if (filter.getIncentives() != null && filter.getIncentives().size() > 0) {
+      predicates.add(getChallengeIncentivesPredicate(pf, filter));
     }
 
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
@@ -120,6 +129,24 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
   }
 
   /**
+   * Matches challenges whose difficulty is in the list of difficulties specified.
+   *
+   * @param pf
+   * @param filter
+   * @return
+   */
+  private SearchPredicate getChallengeDifficultyPredicate(
+      SearchPredicateFactory pf, ChallengeFilter filter) {
+    return pf.bool(
+            b -> {
+              for (String difficulty : filter.getDifficulties()) {
+                b.should(pf.match().field("difficulty").matching(difficulty));
+              }
+            })
+        .toPredicate();
+  }
+
+  /**
    * Matches challenges whose platform is in the list of platforms specified.
    *
    * @param pf
@@ -132,6 +159,44 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
             b -> {
               for (String platform : filter.getPlatforms()) {
                 b.should(pf.match().field("platform.name").matching(platform));
+              }
+            })
+        .toPredicate();
+  }
+
+  /**
+   * Matches challenges whose at least one of their submission types is in the list of submission
+   * types specified.
+   *
+   * @param pf
+   * @param filter
+   * @return
+   */
+  private SearchPredicate getChallengeSubmissionTypesPredicate(
+      SearchPredicateFactory pf, ChallengeFilter filter) {
+    return pf.bool(
+            b -> {
+              for (String submissionType : filter.getSubmissionTypes()) {
+                b.should(pf.match().field("submissionTypes.name").matching(submissionType));
+              }
+            })
+        .toPredicate();
+  }
+
+  /**
+   * Matches challenges whose at least one of their submission types is in the list of submission
+   * types specified.
+   *
+   * @param pf
+   * @param filter
+   * @return
+   */
+  private SearchPredicate getChallengeIncentivesPredicate(
+      SearchPredicateFactory pf, ChallengeFilter filter) {
+    return pf.bool(
+            b -> {
+              for (String incentive : filter.getIncentives()) {
+                b.should(pf.match().field("incentives.name").matching(incentive));
               }
             })
         .toPredicate();

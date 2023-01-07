@@ -54,6 +54,7 @@ public class ChallengeEntity {
   private String status;
 
   @Column(nullable = false)
+  @GenericField()
   private String difficulty;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -63,9 +64,11 @@ public class ChallengeEntity {
   private SimpleChallengePlatformEntity platform;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
+  @IndexedEmbedded(includePaths = {"name"})
   private List<ChallengeSubmissionTypeEntity> submissionTypes;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
+  @IndexedEmbedded(includePaths = {"name"})
   private List<ChallengeIncentiveEntity> incentives;
 
   @Column(name = "created_at")
