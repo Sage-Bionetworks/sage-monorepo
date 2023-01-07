@@ -8,6 +8,7 @@ import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
+import org.sagebionetworks.challenge.model.dto.DateRangeDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public interface ChallengeApiDelegate {
    *
    * @param pageNumber The page number (optional, default to 0)
    * @param pageSize The number of items in a single page (optional, default to 100)
+   * @param searchTerms A string of search terms used to filter the results. (optional)
    * @param status An array of challenge status used to filter the results. (optional)
    * @param platforms An array of challenge platform ids used to filter the results. (optional)
    * @param difficulties An array of challenge difficulty levels used to filter the results.
@@ -36,7 +38,7 @@ public interface ChallengeApiDelegate {
    * @param submissionTypes An array of challenge submission types used to filter the results.
    *     (optional)
    * @param incentives An array of challenge incentive types used to filter the results. (optional)
-   * @param searchTerms A string of search terms used to filter the results. (optional)
+   * @param startDateRange Return challenges that start during the date range specified. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    * @see ChallengeApi#listChallenges
@@ -44,12 +46,13 @@ public interface ChallengeApiDelegate {
   default ResponseEntity<ChallengesPageDto> listChallenges(
       Integer pageNumber,
       Integer pageSize,
+      String searchTerms,
       List<ChallengeStatusDto> status,
       List<String> platforms,
       List<ChallengeDifficultyDto> difficulties,
       List<ChallengeSubmissionTypeDto> submissionTypes,
       List<ChallengeIncentiveDto> incentives,
-      String searchTerms) {
+      DateRangeDto startDateRange) {
     getRequest()
         .ifPresent(
             request -> {

@@ -45,6 +45,14 @@ paths:
           minimum: 1
           type: integer
         style: form
+      - description: A string of search terms used to filter the results.
+        explode: true
+        in: query
+        name: searchTerms
+        required: false
+        schema:
+          type: string
+        style: form
       - description: An array of challenge status used to filter the results.
         explode: true
         in: query
@@ -95,14 +103,14 @@ paths:
             $ref: '#/components/schemas/ChallengeIncentive'
           type: array
         style: form
-      - description: A string of search terms used to filter the results.
+      - description: Return challenges that start during the date range specified.
         explode: true
         in: query
-        name: searchTerms
+        name: startDateRange
         required: false
         schema:
-          type: string
-        style: form
+          $ref: '#/components/schemas/DateRange'
+        style: deepObject
       responses:
         "200":
           content:
@@ -247,6 +255,15 @@ components:
         minimum: 1
         type: integer
       style: form
+    searchTerms:
+      description: A string of search terms used to filter the results.
+      explode: true
+      in: query
+      name: searchTerms
+      required: false
+      schema:
+        type: string
+      style: form
     status:
       description: An array of challenge status used to filter the results.
       explode: true
@@ -302,15 +319,15 @@ components:
           $ref: '#/components/schemas/ChallengeIncentive'
         type: array
       style: form
-    searchTerms:
-      description: A string of search terms used to filter the results.
+    startDateRange:
+      description: Return challenges that start during the date range specified.
       explode: true
       in: query
-      name: searchTerms
+      name: startDateRange
       required: false
       schema:
-        type: string
-      style: form
+        $ref: '#/components/schemas/DateRange'
+      style: deepObject
     challengePlatformName:
       description: The unique identifier of the challenge platform.
       explode: false
@@ -380,6 +397,20 @@ components:
       - other
       example: publication
       type: string
+    DateRange:
+      description: A date range.
+      properties:
+        start:
+          description: The start date of the date range.
+          example: 2021-07-17
+          format: date
+          type: string
+        end:
+          description: The end date of the date range.
+          example: 2021-07-17
+          format: date
+          type: string
+      type: object
     PageMetadata:
       description: The metadata of a page.
       properties:

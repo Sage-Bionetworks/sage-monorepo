@@ -32,12 +32,13 @@ paths:
       parameters:
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/searchTerms'
         - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/platforms'
         - $ref: '#/components/parameters/difficulties'
         - $ref: '#/components/parameters/submissionTypes'
         - $ref: '#/components/parameters/incentives'
-        - $ref: '#/components/parameters/searchTerms'
+        - $ref: '#/components/parameters/startDateRange'
       responses:
         '200':
           content:
@@ -257,6 +258,20 @@ components:
         - speaking_engagement
         - other
       example: publication
+    DateRange:
+      type: object
+      description: A date range.
+      properties:
+        start:
+          description: The start date of the date range.
+          type: string
+          format: date
+          example: '2021-07-17'
+        end:
+          description: The end date of the date range.
+          type: string
+          format: date
+          example: '2021-07-17'
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -747,6 +762,13 @@ components:
         format: int32
         default: 100
         minimum: 1
+    searchTerms:
+      name: searchTerms
+      description: A string of search terms used to filter the results.
+      in: query
+      required: false
+      schema:
+        type: string
     status:
       name: status
       description: An array of challenge status used to filter the results.
@@ -792,13 +814,15 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeIncentive'
-    searchTerms:
-      name: searchTerms
-      description: A string of search terms used to filter the results.
+    startDateRange:
+      name: startDateRange
+      description: Return challenges that start during the date range specified.
       in: query
       required: false
+      style: deepObject
+      explode: true
       schema:
-        type: string
+        $ref: '#/components/schemas/DateRange'
     challengePlatformName:
       name: challengePlatformName
       in: path
