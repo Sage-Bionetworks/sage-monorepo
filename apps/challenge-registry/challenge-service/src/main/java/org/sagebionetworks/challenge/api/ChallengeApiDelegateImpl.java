@@ -6,6 +6,7 @@ import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
+import org.sagebionetworks.challenge.model.dto.DateRangeDto;
 import org.sagebionetworks.challenge.service.ChallengeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,22 +21,24 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
   public ResponseEntity<ChallengesPageDto> listChallenges(
       Integer pageNumber,
       Integer pageSize,
+      String searchTerms,
       List<ChallengeStatusDto> status,
       List<String> platforms,
       List<ChallengeDifficultyDto> difficulties,
       List<ChallengeSubmissionTypeDto> submissionTypes,
       List<ChallengeIncentiveDto> incentives,
-      String searchTerms) {
+      DateRangeDto startDateRange) {
     return ResponseEntity.ok(
         challengeService.listChallenges(
             pageNumber,
             pageSize,
+            searchTerms,
             status,
             platforms,
             difficulties,
             submissionTypes,
             incentives,
-            searchTerms));
+            startDateRange));
   }
 
   // @Override
