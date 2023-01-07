@@ -42,7 +42,8 @@ public class ChallengeService {
       List<String> platforms,
       List<ChallengeDifficultyDto> difficulties,
       List<ChallengeSubmissionTypeDto> submissionTypes,
-      List<ChallengeIncentiveDto> incentives) {
+      List<ChallengeIncentiveDto> incentives,
+      String searchTerms) {
 
     log.info("status {}", status);
     log.info("difficulty {}", difficulties);
@@ -64,7 +65,7 @@ public class ChallengeService {
     if (incentives != null) {
       builder.incentives(incentives.stream().map(o -> o.toString()).toList());
     }
-    builder.searchTerms("mortality");
+    builder.searchTerms(searchTerms);
     ChallengeFilter filter = builder.build();
 
     // Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(pageable, filter);
@@ -80,8 +81,7 @@ public class ChallengeService {
     // Text search
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
     Page<ChallengeEntity> challengeEntitiesPage =
-        challengeRepository.searchBy(
-            pageable, filter, "Mortality", fieldsToSearchBy.toArray(new String[0]));
+        challengeRepository.searchBy(pageable, filter, fieldsToSearchBy.toArray(new String[0]));
     log.info("challengeEntitiesPage {}", challengeEntitiesPage);
 
     List<ChallengeDto> challenges =

@@ -59,13 +59,13 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
 
   @Override
   public Page<ChallengeEntity> searchBy(
-      Pageable pageable, ChallengeFilter filter, String text, String... fields) {
-    SearchResult<ChallengeEntity> result = getSearchResult(pageable, filter, text, fields);
+      Pageable pageable, ChallengeFilter filter, String... fields) {
+    SearchResult<ChallengeEntity> result = getSearchResult(pageable, filter, fields);
     return new PageImpl<>(result.hits(), pageable, result.total().hitCount());
   }
 
   private SearchResult<ChallengeEntity> getSearchResult(
-      Pageable pageable, ChallengeFilter filter, String text, String[] fields) {
+      Pageable pageable, ChallengeFilter filter, String[] fields) {
     SearchSession searchSession = Search.session(entityManager);
     SearchPredicateFactory pf = searchSession.scope(ChallengeEntity.class).predicate();
     List<SearchPredicate> predicates = new ArrayList<>();
@@ -202,6 +202,13 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
         .toPredicate();
   }
 
+  /**
+   * Combines the challenge search predicates.
+   *
+   * @param pf
+   * @param predicates
+   * @return
+   */
   private SearchPredicate buildTopLevelPredicate(
       SearchPredicateFactory pf, List<SearchPredicate> predicates) {
     return pf.bool(

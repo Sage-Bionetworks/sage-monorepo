@@ -95,6 +95,14 @@ paths:
             $ref: '#/components/schemas/ChallengeIncentive'
           type: array
         style: form
+      - description: A string of search terms used to filter the results.
+        explode: true
+        in: query
+        name: searchTerms
+        required: false
+        schema:
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -293,6 +301,15 @@ components:
         items:
           $ref: '#/components/schemas/ChallengeIncentive'
         type: array
+      style: form
+    searchTerms:
+      description: A string of search terms used to filter the results.
+      explode: true
+      in: query
+      name: searchTerms
+      required: false
+      schema:
+        type: string
       style: form
     challengePlatformName:
       description: The unique identifier of the challenge platform.

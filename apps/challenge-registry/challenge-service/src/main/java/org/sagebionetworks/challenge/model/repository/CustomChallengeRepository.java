@@ -8,6 +8,5 @@ public interface CustomChallengeRepository {
 
   Page<ChallengeEntity> findAll(Pageable pageable, ChallengeFilter filter);
 
-  Page<ChallengeEntity> searchBy(
-      Pageable pageable, ChallengeFilter filter, String text, String... fields);
+  Page<ChallengeEntity> searchBy(Pageable pageable, ChallengeFilter filter, String... fields);
 }
