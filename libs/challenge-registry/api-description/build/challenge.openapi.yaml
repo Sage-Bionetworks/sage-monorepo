@@ -320,6 +320,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
+        starredCount:
+          description: The number of times the challenge has been starred by users.
+          type: integer
+          default: 0
         createdAt:
           type: string
           format: date-time
@@ -337,6 +341,7 @@ components:
         - platform
         - incentives
         - submissionTypes
+        - starredCount
         - createdAt
         - updatedAt
     ChallengesPage:
