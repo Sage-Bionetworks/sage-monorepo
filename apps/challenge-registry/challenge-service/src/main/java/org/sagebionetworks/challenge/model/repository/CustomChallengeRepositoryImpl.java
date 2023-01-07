@@ -36,9 +36,9 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
 
     JPQLQuery<ChallengeEntity> query = from(challenge);
 
-    if (filter.getStatus() != null && filter.getStatus().size() > 0) {
-      query = query.where(challenge.status.in(filter.getStatus()));
-    }
+    // if (filter.getStatus() != null && filter.getStatus().size() > 0) {
+    //   query = query.where(challenge.status.in(filter.getStatus()));
+    // }
     if (filter.getPlatforms() != null && filter.getPlatforms().size() > 0) {
       query = query.where(challenge.platform.name.in(filter.getPlatforms()));
     }
@@ -76,6 +76,9 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
     if (filter.getStatus() != null && filter.getStatus().size() > 0) {
       predicates.add(getChallengeStatusPredicate(pf, filter));
     }
+    if (filter.getPlatforms() != null && filter.getPlatforms().size() > 0) {
+      predicates.add(getChallengePlatformPredicate(pf, filter));
+    }
 
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
 
@@ -98,12 +101,37 @@ public class CustomChallengeRepositoryImpl extends QuerydslRepositorySupport
         .toPredicate();
   }
 
+  /**
+   * Matches challenges whose status is in the list of status specified.
+   *
+   * @param pf
+   * @param filter
+   * @return
+   */
   private SearchPredicate getChallengeStatusPredicate(
       SearchPredicateFactory pf, ChallengeFilter filter) {
     return pf.bool(
             b -> {
               for (String status : filter.getStatus()) {
                 b.should(pf.match().field("status").matching(status));
+              }
+            })
+        .toPredicate();
+  }
+
+  /**
+   * Matches challenges whose platform is in the list of platforms specified.
+   *
+   * @param pf
+   * @param filter
+   * @return
+   */
+  private SearchPredicate getChallengePlatformPredicate(
+      SearchPredicateFactory pf, ChallengeFilter filter) {
+    return pf.bool(
+            b -> {
+              for (String platform : filter.getPlatforms()) {
+                b.should(pf.match().field("platform.name").matching(platform));
               }
             })
         .toPredicate();

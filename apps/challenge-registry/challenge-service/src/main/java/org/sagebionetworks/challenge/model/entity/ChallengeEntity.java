@@ -16,9 +16,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
 
 @Entity
 @Table(name = "challenge")
@@ -34,20 +37,20 @@ public class ChallengeEntity {
   @Column(nullable = false, updatable = false)
   private Long id;
 
-  @FullTextField()
   @Column(nullable = false)
+  @FullTextField()
   private String name;
 
-  @FullTextField()
   @Column(nullable = false)
+  @FullTextField()
   private String headline;
 
-  @FullTextField()
   @Column(nullable = false)
+  @FullTextField()
   private String description;
 
-  @GenericField()
   @Column(nullable = false)
+  @GenericField()
   private String status;
 
   @Column(nullable = false)
@@ -55,6 +58,8 @@ public class ChallengeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "platform_id", nullable = false)
+  @IndexedEmbedded(includePaths = {"name"})
+  @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private SimpleChallengePlatformEntity platform;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
