@@ -53,3 +53,4 @@ properties:
   searchTerms:
     description: A string of search terms used to filter the results.
     type: string
+    example: 'dream challenge'

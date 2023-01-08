@@ -306,6 +306,7 @@ components:
         searchTerms:
           description: A string of search terms used to filter the results.
           type: string
+          example: dream challenge
     PageMetadata:
       type: object
       description: The metadata of a page.

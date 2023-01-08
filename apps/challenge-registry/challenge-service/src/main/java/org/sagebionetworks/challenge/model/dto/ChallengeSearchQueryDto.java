@@ -315,6 +315,7 @@ public class ChallengeSearchQueryDto {
    */
   @Schema(
       name = "searchTerms",
+      example = "dream challenge",
       description = "A string of search terms used to filter the results.",
       required = false)
   public String getSearchTerms() {

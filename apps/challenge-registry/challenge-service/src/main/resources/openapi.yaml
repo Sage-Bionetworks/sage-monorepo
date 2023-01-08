@@ -308,6 +308,7 @@ components:
           type: array
         searchTerms:
           description: A string of search terms used to filter the results.
+          example: dream challenge
           type: string
       type: object
     PageMetadata:
