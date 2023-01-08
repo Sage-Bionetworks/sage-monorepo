@@ -1,7 +1,9 @@
 package org.sagebionetworks.challenge.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.*;
@@ -25,6 +27,78 @@ public class ChallengeSearchQueryDto {
 
   @JsonProperty("pageSize")
   private Integer pageSize = 100;
+
+  /** What to sort results by. */
+  public enum SortEnum {
+    CREATED("created"),
+
+    STARRED("starred");
+
+    private String value;
+
+    SortEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static SortEnum fromValue(String value) {
+      for (SortEnum b : SortEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  @JsonProperty("sort")
+  private SortEnum sort = SortEnum.CREATED;
+
+  /** The direction to sort the results by. */
+  public enum DirectionEnum {
+    ASC("asc"),
+
+    DESC("desc");
+
+    private String value;
+
+    DirectionEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static DirectionEnum fromValue(String value) {
+      for (DirectionEnum b : DirectionEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  @JsonProperty("direction")
+  private DirectionEnum direction = DirectionEnum.DESC;
 
   @JsonProperty("difficulties")
   @Valid
@@ -98,6 +172,47 @@ public class ChallengeSearchQueryDto {
 
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
+  }
+
+  public ChallengeSearchQueryDto sort(SortEnum sort) {
+    this.sort = sort;
+    return this;
+  }
+
+  /**
+   * What to sort results by.
+   *
+   * @return sort
+   */
+  @Schema(name = "sort", description = "What to sort results by.", required = false)
+  public SortEnum getSort() {
+    return sort;
+  }
+
+  public void setSort(SortEnum sort) {
+    this.sort = sort;
+  }
+
+  public ChallengeSearchQueryDto direction(DirectionEnum direction) {
+    this.direction = direction;
+    return this;
+  }
+
+  /**
+   * The direction to sort the results by.
+   *
+   * @return direction
+   */
+  @Schema(
+      name = "direction",
+      description = "The direction to sort the results by.",
+      required = false)
+  public DirectionEnum getDirection() {
+    return direction;
+  }
+
+  public void setDirection(DirectionEnum direction) {
+    this.direction = direction;
   }
 
   public ChallengeSearchQueryDto difficulties(List<ChallengeDifficultyDto> difficulties) {
@@ -337,6 +452,8 @@ public class ChallengeSearchQueryDto {
     ChallengeSearchQueryDto challengeSearchQuery = (ChallengeSearchQueryDto) o;
     return Objects.equals(this.pageNumber, challengeSearchQuery.pageNumber)
         && Objects.equals(this.pageSize, challengeSearchQuery.pageSize)
+        && Objects.equals(this.sort, challengeSearchQuery.sort)
+        && Objects.equals(this.direction, challengeSearchQuery.direction)
         && Objects.equals(this.difficulties, challengeSearchQuery.difficulties)
         && Objects.equals(this.incentives, challengeSearchQuery.incentives)
         && Objects.equals(this.minStartDate, challengeSearchQuery.minStartDate)
@@ -352,6 +469,8 @@ public class ChallengeSearchQueryDto {
     return Objects.hash(
         pageNumber,
         pageSize,
+        sort,
+        direction,
         difficulties,
         incentives,
         minStartDate,
@@ -368,6 +487,8 @@ public class ChallengeSearchQueryDto {
     sb.append("class ChallengeSearchQueryDto {\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    difficulties: ").append(toIndentedString(difficulties)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    minStartDate: ").append(toIndentedString(minStartDate)).append("\n");

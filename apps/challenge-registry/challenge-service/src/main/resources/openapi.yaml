@@ -268,6 +268,20 @@ components:
           format: int32
           minimum: 1
           type: integer
+        sort:
+          default: created
+          description: What to sort results by.
+          enum:
+          - created
+          - starred
+          type: string
+        direction:
+          default: desc
+          description: The direction to sort the results by.
+          enum:
+          - asc
+          - desc
+          type: string
         difficulties:
           description: An array of challenge difficulty levels used to filter the
             results.
