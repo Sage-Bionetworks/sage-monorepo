@@ -11,7 +11,7 @@ import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeFilterDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
@@ -28,34 +28,34 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
 
   @Override
   public Page<ChallengeEntity> findAll(
-      Pageable pageable, ChallengeFilterDto filter, String... fields) {
-    SearchResult<ChallengeEntity> result = getSearchResult(pageable, filter, fields);
+      Pageable pageable, ChallengeSearchQueryDto query, String... fields) {
+    SearchResult<ChallengeEntity> result = getSearchResult(pageable, query, fields);
     return new PageImpl<>(result.hits(), pageable, result.total().hitCount());
   }
 
   private SearchResult<ChallengeEntity> getSearchResult(
-      Pageable pageable, ChallengeFilterDto filter, String[] fields) {
+      Pageable pageable, ChallengeSearchQueryDto query, String[] fields) {
     SearchSession searchSession = Search.session(entityManager);
     SearchPredicateFactory pf = searchSession.scope(ChallengeEntity.class).predicate();
     List<SearchPredicate> predicates = new ArrayList<>();
 
-    if (filter.getSearchTerms() != null && !filter.getSearchTerms().isBlank()) {
-      predicates.add(getSearchTermsPredicate(pf, filter, fields));
+    if (query.getSearchTerms() != null && !query.getSearchTerms().isBlank()) {
+      predicates.add(getSearchTermsPredicate(pf, query, fields));
     }
-    if (filter.getStatus() != null && filter.getStatus().size() > 0) {
-      predicates.add(getChallengeStatusPredicate(pf, filter));
+    if (query.getStatus() != null && query.getStatus().size() > 0) {
+      predicates.add(getChallengeStatusPredicate(pf, query));
     }
-    if (filter.getDifficulties() != null && filter.getDifficulties().size() > 0) {
-      predicates.add(getChallengeDifficultyPredicate(pf, filter));
+    if (query.getDifficulties() != null && query.getDifficulties().size() > 0) {
+      predicates.add(getChallengeDifficultyPredicate(pf, query));
     }
-    if (filter.getPlatforms() != null && filter.getPlatforms().size() > 0) {
-      predicates.add(getChallengePlatformPredicate(pf, filter));
+    if (query.getPlatforms() != null && query.getPlatforms().size() > 0) {
+      predicates.add(getChallengePlatformPredicate(pf, query));
     }
-    if (filter.getSubmissionTypes() != null && filter.getSubmissionTypes().size() > 0) {
-      predicates.add(getChallengeSubmissionTypesPredicate(pf, filter));
+    if (query.getSubmissionTypes() != null && query.getSubmissionTypes().size() > 0) {
+      predicates.add(getChallengeSubmissionTypesPredicate(pf, query));
     }
-    if (filter.getIncentives() != null && filter.getIncentives().size() > 0) {
-      predicates.add(getChallengeIncentivesPredicate(pf, filter));
+    if (query.getIncentives() != null && query.getIncentives().size() > 0) {
+      predicates.add(getChallengeIncentivesPredicate(pf, query));
     }
 
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
@@ -70,10 +70,10 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   }
 
   private SearchPredicate getSearchTermsPredicate(
-      SearchPredicateFactory pf, ChallengeFilterDto filter, String[] fields) {
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query, String[] fields) {
     return pf.simpleQueryString()
         .fields(fields)
-        .matching(filter.getSearchTerms())
+        .matching(query.getSearchTerms())
         .defaultOperator(BooleanOperator.AND)
         .toPredicate();
   }
@@ -82,14 +82,14 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * Matches challenges whose status is in the list of status specified.
    *
    * @param pf
-   * @param filter
+   * @param query
    * @return
    */
   private SearchPredicate getChallengeStatusPredicate(
-      SearchPredicateFactory pf, ChallengeFilterDto filter) {
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
     return pf.bool(
             b -> {
-              for (ChallengeStatusDto status : filter.getStatus()) {
+              for (ChallengeStatusDto status : query.getStatus()) {
                 b.should(pf.match().field("status").matching(status.toString()));
               }
             })
@@ -100,14 +100,14 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * Matches challenges whose difficulty is in the list of difficulties specified.
    *
    * @param pf
-   * @param filter
+   * @param query
    * @return
    */
   private SearchPredicate getChallengeDifficultyPredicate(
-      SearchPredicateFactory pf, ChallengeFilterDto filter) {
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
     return pf.bool(
             b -> {
-              for (ChallengeDifficultyDto difficulty : filter.getDifficulties()) {
+              for (ChallengeDifficultyDto difficulty : query.getDifficulties()) {
                 b.should(pf.match().field("difficulty").matching(difficulty.toString()));
               }
             })
@@ -118,14 +118,14 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * Matches challenges whose platform is in the list of platforms specified.
    *
    * @param pf
-   * @param filter
+   * @param query
    * @return
    */
   private SearchPredicate getChallengePlatformPredicate(
-      SearchPredicateFactory pf, ChallengeFilterDto filter) {
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
     return pf.bool(
             b -> {
-              for (String platform : filter.getPlatforms()) {
+              for (String platform : query.getPlatforms()) {
                 b.should(pf.match().field("platform.name").matching(platform));
               }
             })
@@ -137,14 +137,14 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * types specified.
    *
    * @param pf
-   * @param filter
+   * @param query
    * @return
    */
   private SearchPredicate getChallengeSubmissionTypesPredicate(
-      SearchPredicateFactory pf, ChallengeFilterDto filter) {
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
     return pf.bool(
             b -> {
-              for (ChallengeSubmissionTypeDto submissionType : filter.getSubmissionTypes()) {
+              for (ChallengeSubmissionTypeDto submissionType : query.getSubmissionTypes()) {
                 b.should(
                     pf.match().field("submissionTypes.name").matching(submissionType.toString()));
               }
@@ -157,14 +157,14 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * types specified.
    *
    * @param pf
-   * @param filter
+   * @param query
    * @return
    */
   private SearchPredicate getChallengeIncentivesPredicate(
-      SearchPredicateFactory pf, ChallengeFilterDto filter) {
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
     return pf.bool(
             b -> {
-              for (ChallengeIncentiveDto incentive : filter.getIncentives()) {
+              for (ChallengeIncentiveDto incentive : query.getIncentives()) {
                 b.should(pf.match().field("incentives.name").matching(incentive.toString()));
               }
             })

@@ -53,8 +53,8 @@ public interface ChallengePlatformApiDelegate {
   /**
    * GET /challengePlatforms : List challenge platforms List challenge platforms
    *
-   * @param pageNumber The page number (optional, default to 0)
-   * @param pageSize The number of items in a single page (optional, default to 100)
+   * @param pageNumber The page number. (optional, default to 0)
+   * @param pageSize The number of items in a single page. (optional, default to 100)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    * @see ChallengePlatformApi#listChallengePlatforms

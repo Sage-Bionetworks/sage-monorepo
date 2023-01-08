@@ -1,5 +1,5 @@
 name: pageSize
-description: The number of items in a single page
+description: The number of items in a single page.
 in: query
 schema:
   type: integer

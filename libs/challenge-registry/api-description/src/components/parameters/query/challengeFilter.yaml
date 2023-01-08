@@ -1,6 +1,0 @@
-name: challengeFilter
-description: A challenge filter.
-in: query
-required: false
-schema:
-  $ref: ../../schemas/ChallengeFilter.yaml

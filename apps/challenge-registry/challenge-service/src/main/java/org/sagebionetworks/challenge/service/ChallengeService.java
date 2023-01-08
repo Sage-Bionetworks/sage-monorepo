@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.domain.ChallengeDomain;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeFilterDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeMapper;
@@ -31,30 +31,11 @@ public class ChallengeService {
       Arrays.asList("name", "headline", "description");
 
   @Transactional(readOnly = true)
-  public ChallengesPageDto listChallenges(
-      Integer pageNumber, Integer pageSize, ChallengeFilterDto challengeFilter) {
+  public ChallengesPageDto listChallenges(ChallengeSearchQueryDto query) {
 
-    log.info("challengeFilter {}", challengeFilter);
+    log.info("query {}", query);
 
-    Pageable pageable = PageRequest.of(pageNumber, pageSize);
-    // ChallengeFilterBuilder builder = ChallengeFilter.builder();
-    // if (status != null) {
-    //   builder.status(status.stream().map(o -> o.toString()).toList());
-    // }
-    // if (platforms != null) {
-    //   builder.platforms(platforms);
-    // }
-    // if (difficulties != null) {
-    //   builder.difficulties(difficulties.stream().map(o -> o.toString()).toList());
-    // }
-    // if (submissionTypes != null) {
-    //   builder.submissionTypes(submissionTypes.stream().map(o -> o.toString()).toList());
-    // }
-    // if (incentives != null) {
-    //   builder.incentives(incentives.stream().map(o -> o.toString()).toList());
-    // }
-    // builder.searchTerms(searchTerms);
-    // ChallengeFilter filter = builder.build();
+    Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
     ChallengeDomain challengeDomain = new ChallengeDomain("plop");
     log.info("challenge sent: {}", challengeDomain);
@@ -62,8 +43,7 @@ public class ChallengeService {
 
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
     Page<ChallengeEntity> challengeEntitiesPage =
-        challengeRepository.findAll(
-            pageable, challengeFilter, fieldsToSearchBy.toArray(new String[0]));
+        challengeRepository.findAll(pageable, query, fieldsToSearchBy.toArray(new String[0]));
     log.info("challengeEntitiesPage {}", challengeEntitiesPage);
 
     List<ChallengeDto> challenges =

@@ -23,35 +23,13 @@ paths:
       description: List challenges
       operationId: listChallenges
       parameters:
-      - description: The page number
+      - description: The search query used to find challenges.
         explode: true
         in: query
-        name: pageNumber
+        name: challengeSearchQuery
         required: false
         schema:
-          default: 0
-          format: int32
-          minimum: 0
-          type: integer
-        style: form
-      - description: The number of items in a single page
-        explode: true
-        in: query
-        name: pageSize
-        required: false
-        schema:
-          default: 100
-          format: int32
-          minimum: 1
-          type: integer
-        style: form
-      - description: A challenge filter.
-        explode: true
-        in: query
-        name: challengeFilter
-        required: false
-        schema:
-          $ref: '#/components/schemas/ChallengeFilter'
+          $ref: '#/components/schemas/ChallengeSearchQuery'
         style: form
       responses:
         "200":
@@ -84,7 +62,7 @@ paths:
       description: List challenge platforms
       operationId: listChallengePlatforms
       parameters:
-      - description: The page number
+      - description: The page number.
         explode: true
         in: query
         name: pageNumber
@@ -95,7 +73,7 @@ paths:
           minimum: 0
           type: integer
         style: form
-      - description: The number of items in a single page
+      - description: The number of items in a single page.
         explode: true
         in: query
         name: pageSize
@@ -173,8 +151,17 @@ paths:
       - tag: ChallengePlatform
 components:
   parameters:
+    challengeSearchQuery:
+      description: The search query used to find challenges.
+      explode: true
+      in: query
+      name: challengeSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/ChallengeSearchQuery'
+      style: form
     pageNumber:
-      description: The page number
+      description: The page number.
       explode: true
       in: query
       name: pageNumber
@@ -186,7 +173,7 @@ components:
         type: integer
       style: form
     pageSize:
-      description: The number of items in a single page
+      description: The number of items in a single page.
       explode: true
       in: query
       name: pageSize
@@ -196,15 +183,6 @@ components:
         format: int32
         minimum: 1
         type: integer
-      style: form
-    challengeFilter:
-      description: A challenge filter.
-      explode: true
-      in: query
-      name: challengeFilter
-      required: false
-      schema:
-        $ref: '#/components/schemas/ChallengeFilter'
       style: form
     challengePlatformName:
       description: The unique identifier of the challenge platform.
@@ -275,9 +253,21 @@ components:
       - other
       example: container_image
       type: string
-    ChallengeFilter:
-      description: A challenge filter.
+    ChallengeSearchQuery:
+      description: A challenge search query.
       properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          format: int32
+          minimum: 1
+          type: integer
         difficulties:
           description: An array of challenge difficulty levels used to filter the
             results.

@@ -13,12 +13,18 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-/** A challenge filter. */
-@Schema(name = "ChallengeFilter", description = "A challenge filter.")
-@JsonTypeName("ChallengeFilter")
+/** A challenge search query. */
+@Schema(name = "ChallengeSearchQuery", description = "A challenge search query.")
+@JsonTypeName("ChallengeSearchQuery")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations
-public class ChallengeFilterDto {
+public class ChallengeSearchQueryDto {
+
+  @JsonProperty("pageNumber")
+  private Integer pageNumber = 0;
+
+  @JsonProperty("pageSize")
+  private Integer pageSize = 100;
 
   @JsonProperty("difficulties")
   @Valid
@@ -51,12 +57,55 @@ public class ChallengeFilterDto {
   @JsonProperty("searchTerms")
   private String searchTerms;
 
-  public ChallengeFilterDto difficulties(List<ChallengeDifficultyDto> difficulties) {
+  public ChallengeSearchQueryDto pageNumber(Integer pageNumber) {
+    this.pageNumber = pageNumber;
+    return this;
+  }
+
+  /**
+   * The page number. minimum: 0
+   *
+   * @return pageNumber
+   */
+  @Min(0)
+  @Schema(name = "pageNumber", description = "The page number.", required = false)
+  public Integer getPageNumber() {
+    return pageNumber;
+  }
+
+  public void setPageNumber(Integer pageNumber) {
+    this.pageNumber = pageNumber;
+  }
+
+  public ChallengeSearchQueryDto pageSize(Integer pageSize) {
+    this.pageSize = pageSize;
+    return this;
+  }
+
+  /**
+   * The number of items in a single page. minimum: 1
+   *
+   * @return pageSize
+   */
+  @Min(1)
+  @Schema(
+      name = "pageSize",
+      description = "The number of items in a single page.",
+      required = false)
+  public Integer getPageSize() {
+    return pageSize;
+  }
+
+  public void setPageSize(Integer pageSize) {
+    this.pageSize = pageSize;
+  }
+
+  public ChallengeSearchQueryDto difficulties(List<ChallengeDifficultyDto> difficulties) {
     this.difficulties = difficulties;
     return this;
   }
 
-  public ChallengeFilterDto addDifficultiesItem(ChallengeDifficultyDto difficultiesItem) {
+  public ChallengeSearchQueryDto addDifficultiesItem(ChallengeDifficultyDto difficultiesItem) {
     if (this.difficulties == null) {
       this.difficulties = new ArrayList<>();
     }
@@ -82,12 +131,12 @@ public class ChallengeFilterDto {
     this.difficulties = difficulties;
   }
 
-  public ChallengeFilterDto incentives(List<ChallengeIncentiveDto> incentives) {
+  public ChallengeSearchQueryDto incentives(List<ChallengeIncentiveDto> incentives) {
     this.incentives = incentives;
     return this;
   }
 
-  public ChallengeFilterDto addIncentivesItem(ChallengeIncentiveDto incentivesItem) {
+  public ChallengeSearchQueryDto addIncentivesItem(ChallengeIncentiveDto incentivesItem) {
     if (this.incentives == null) {
       this.incentives = new ArrayList<>();
     }
@@ -113,7 +162,7 @@ public class ChallengeFilterDto {
     this.incentives = incentives;
   }
 
-  public ChallengeFilterDto minStartDate(LocalDate minStartDate) {
+  public ChallengeSearchQueryDto minStartDate(LocalDate minStartDate) {
     this.minStartDate = minStartDate;
     return this;
   }
@@ -137,7 +186,7 @@ public class ChallengeFilterDto {
     this.minStartDate = minStartDate;
   }
 
-  public ChallengeFilterDto maxStartDate(LocalDate maxStartDate) {
+  public ChallengeSearchQueryDto maxStartDate(LocalDate maxStartDate) {
     this.maxStartDate = maxStartDate;
     return this;
   }
@@ -161,12 +210,12 @@ public class ChallengeFilterDto {
     this.maxStartDate = maxStartDate;
   }
 
-  public ChallengeFilterDto platforms(List<String> platforms) {
+  public ChallengeSearchQueryDto platforms(List<String> platforms) {
     this.platforms = platforms;
     return this;
   }
 
-  public ChallengeFilterDto addPlatformsItem(String platformsItem) {
+  public ChallengeSearchQueryDto addPlatformsItem(String platformsItem) {
     if (this.platforms == null) {
       this.platforms = new ArrayList<>();
     }
@@ -191,12 +240,12 @@ public class ChallengeFilterDto {
     this.platforms = platforms;
   }
 
-  public ChallengeFilterDto status(List<ChallengeStatusDto> status) {
+  public ChallengeSearchQueryDto status(List<ChallengeStatusDto> status) {
     this.status = status;
     return this;
   }
 
-  public ChallengeFilterDto addStatusItem(ChallengeStatusDto statusItem) {
+  public ChallengeSearchQueryDto addStatusItem(ChallengeStatusDto statusItem) {
     if (this.status == null) {
       this.status = new ArrayList<>();
     }
@@ -222,12 +271,13 @@ public class ChallengeFilterDto {
     this.status = status;
   }
 
-  public ChallengeFilterDto submissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
+  public ChallengeSearchQueryDto submissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
     this.submissionTypes = submissionTypes;
     return this;
   }
 
-  public ChallengeFilterDto addSubmissionTypesItem(ChallengeSubmissionTypeDto submissionTypesItem) {
+  public ChallengeSearchQueryDto addSubmissionTypesItem(
+      ChallengeSubmissionTypeDto submissionTypesItem) {
     if (this.submissionTypes == null) {
       this.submissionTypes = new ArrayList<>();
     }
@@ -253,7 +303,7 @@ public class ChallengeFilterDto {
     this.submissionTypes = submissionTypes;
   }
 
-  public ChallengeFilterDto searchTerms(String searchTerms) {
+  public ChallengeSearchQueryDto searchTerms(String searchTerms) {
     this.searchTerms = searchTerms;
     return this;
   }
@@ -283,20 +333,24 @@ public class ChallengeFilterDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ChallengeFilterDto challengeFilter = (ChallengeFilterDto) o;
-    return Objects.equals(this.difficulties, challengeFilter.difficulties)
-        && Objects.equals(this.incentives, challengeFilter.incentives)
-        && Objects.equals(this.minStartDate, challengeFilter.minStartDate)
-        && Objects.equals(this.maxStartDate, challengeFilter.maxStartDate)
-        && Objects.equals(this.platforms, challengeFilter.platforms)
-        && Objects.equals(this.status, challengeFilter.status)
-        && Objects.equals(this.submissionTypes, challengeFilter.submissionTypes)
-        && Objects.equals(this.searchTerms, challengeFilter.searchTerms);
+    ChallengeSearchQueryDto challengeSearchQuery = (ChallengeSearchQueryDto) o;
+    return Objects.equals(this.pageNumber, challengeSearchQuery.pageNumber)
+        && Objects.equals(this.pageSize, challengeSearchQuery.pageSize)
+        && Objects.equals(this.difficulties, challengeSearchQuery.difficulties)
+        && Objects.equals(this.incentives, challengeSearchQuery.incentives)
+        && Objects.equals(this.minStartDate, challengeSearchQuery.minStartDate)
+        && Objects.equals(this.maxStartDate, challengeSearchQuery.maxStartDate)
+        && Objects.equals(this.platforms, challengeSearchQuery.platforms)
+        && Objects.equals(this.status, challengeSearchQuery.status)
+        && Objects.equals(this.submissionTypes, challengeSearchQuery.submissionTypes)
+        && Objects.equals(this.searchTerms, challengeSearchQuery.searchTerms);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
+        pageNumber,
+        pageSize,
         difficulties,
         incentives,
         minStartDate,
@@ -310,7 +364,9 @@ public class ChallengeFilterDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ChallengeFilterDto {\n");
+    sb.append("class ChallengeSearchQueryDto {\n");
+    sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
+    sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    difficulties: ").append(toIndentedString(difficulties)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    minStartDate: ").append(toIndentedString(minStartDate)).append("\n");

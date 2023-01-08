@@ -30,9 +30,7 @@ paths:
       description: List challenges
       operationId: listChallenges
       parameters:
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageSize'
-        - $ref: '#/components/parameters/challengeFilter'
+        - $ref: '#/components/parameters/challengeSearchQuery'
       responses:
         '200':
           content:
@@ -252,10 +250,22 @@ components:
         - prediction_file
         - other
       example: container_image
-    ChallengeFilter:
+    ChallengeSearchQuery:
       type: object
-      description: A challenge filter.
+      description: A challenge search query.
       properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
         difficulties:
           description: An array of challenge difficulty levels used to filter the results.
           type: array
@@ -768,9 +778,15 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
   parameters:
+    challengeSearchQuery:
+      name: challengeSearchQuery
+      description: The search query used to find challenges.
+      in: query
+      schema:
+        $ref: '#/components/schemas/ChallengeSearchQuery'
     pageNumber:
       name: pageNumber
-      description: The page number
+      description: The page number.
       in: query
       schema:
         type: integer
@@ -779,20 +795,13 @@ components:
         minimum: 0
     pageSize:
       name: pageSize
-      description: The number of items in a single page
+      description: The number of items in a single page.
       in: query
       schema:
         type: integer
         format: int32
         default: 100
         minimum: 1
-    challengeFilter:
-      name: challengeFilter
-      description: A challenge filter.
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/ChallengeFilter'
     challengePlatformName:
       name: challengePlatformName
       in: path
