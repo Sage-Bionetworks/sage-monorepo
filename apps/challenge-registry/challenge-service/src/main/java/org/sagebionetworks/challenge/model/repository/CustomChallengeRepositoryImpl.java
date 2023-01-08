@@ -24,7 +24,10 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
 
   @Override
   public Page<ChallengeEntity> findAll(
-      Pageable pageable, ChallengeFilter filter, ChallengeFilterDto challengeFilter, String... fields) {
+      Pageable pageable,
+      ChallengeFilter filter,
+      ChallengeFilterDto challengeFilter,
+      String... fields) {
     SearchResult<ChallengeEntity> result = getSearchResult(pageable, filter, fields);
     return new PageImpl<>(result.hits(), pageable, result.total().hitCount());
   }

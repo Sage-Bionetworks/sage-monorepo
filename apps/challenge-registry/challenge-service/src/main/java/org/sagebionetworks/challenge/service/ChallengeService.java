@@ -83,7 +83,8 @@ public class ChallengeService {
 
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
     Page<ChallengeEntity> challengeEntitiesPage =
-        challengeRepository.findAll(pageable, filter, challengeFilter, fieldsToSearchBy.toArray(new String[0]));
+        challengeRepository.findAll(
+            pageable, filter, challengeFilter, fieldsToSearchBy.toArray(new String[0]));
     log.info("challengeEntitiesPage {}", challengeEntitiesPage);
 
     List<ChallengeDto> challenges =
