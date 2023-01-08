@@ -125,6 +125,14 @@ paths:
           nullable: true
           type: string
         style: form
+      - description: A challenge filter.
+        explode: true
+        in: query
+        name: challengeFilter
+        required: false
+        schema:
+          $ref: '#/components/schemas/ChallengeFilter'
+        style: form
       responses:
         "200":
           content:
@@ -357,6 +365,15 @@ components:
         nullable: true
         type: string
       style: form
+    challengeFilter:
+      description: A challenge filter.
+      explode: true
+      in: query
+      name: challengeFilter
+      required: false
+      schema:
+        $ref: '#/components/schemas/ChallengeFilter'
+      style: form
     challengePlatformName:
       description: The unique identifier of the challenge platform.
       explode: false
@@ -426,6 +443,21 @@ components:
       - other
       example: publication
       type: string
+    ChallengeFilter:
+      description: A challenge filter.
+      properties:
+        difficulties:
+          description: An array of challenge difficulty levels used to filter the
+            results.
+          items:
+            $ref: '#/components/schemas/ChallengeDifficulty'
+          type: array
+        incentives:
+          description: An array of challenge incentive types used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
+          type: array
+      type: object
     PageMetadata:
       description: The metadata of a page.
       properties:

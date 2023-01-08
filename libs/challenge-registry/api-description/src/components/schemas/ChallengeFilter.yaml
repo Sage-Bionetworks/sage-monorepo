@@ -1,0 +1,13 @@
+type: object
+description: A challenge filter.
+properties:
+  difficulties:
+    description: An array of challenge difficulty levels used to filter the results.
+    type: array
+    items:
+      $ref: ChallengeDifficulty.yaml
+  incentives:
+    description: An array of challenge incentive types used to filter the results.
+    type: array
+    items:
+      $ref: ChallengeIncentive.yaml

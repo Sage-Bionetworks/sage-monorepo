@@ -50,6 +50,7 @@ get:
     # - $ref: ../components/parameters/query/challenge/startDateRange.yaml
     - $ref: ../components/parameters/query/challenge/minStartDate.yaml
     - $ref: ../components/parameters/query/challenge/maxStartDate.yaml
+    - $ref: ../components/parameters/query/challengeFilter.yaml
     # - $ref: parameters/challenge/orgIds.yaml
     # - $ref: parameters/challenge/organizerIds.yaml
     # - $ref: parameters/challenge/sponsorIds.yaml

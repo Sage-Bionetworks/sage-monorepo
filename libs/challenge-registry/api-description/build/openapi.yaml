@@ -40,6 +40,7 @@ paths:
         - $ref: '#/components/parameters/incentives'
         - $ref: '#/components/parameters/minStartDate'
         - $ref: '#/components/parameters/maxStartDate'
+        - $ref: '#/components/parameters/challengeFilter'
       responses:
         '200':
           content:
@@ -259,6 +260,20 @@ components:
         - speaking_engagement
         - other
       example: publication
+    ChallengeFilter:
+      type: object
+      description: A challenge filter.
+      properties:
+        difficulties:
+          description: An array of challenge difficulty levels used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeDifficulty'
+        incentives:
+          description: An array of challenge incentive types used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -821,6 +836,13 @@ components:
         format: date
         nullable: true
         example: '2017-07-21'
+    challengeFilter:
+      name: challengeFilter
+      description: A challenge filter.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/ChallengeFilter'
     challengePlatformName:
       name: challengePlatformName
       in: path

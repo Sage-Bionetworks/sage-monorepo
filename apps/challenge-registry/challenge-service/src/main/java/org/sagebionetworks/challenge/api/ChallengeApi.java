@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.challenge.model.dto.BasicErrorDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeFilterDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
@@ -50,6 +51,7 @@ public interface ChallengeApi {
    * @param incentives An array of challenge incentive types used to filter the results. (optional)
    * @param minStartDate Keep the challenges that start at this date or later. (optional)
    * @param maxStartDate Keep the challenges that start at this date or sooner. (optional)
+   * @param challengeFilter A challenge filter. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    */
@@ -156,7 +158,9 @@ public interface ChallengeApi {
           @Valid
           @RequestParam(value = "maxStartDate", required = false)
           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-          LocalDate maxStartDate) {
+          LocalDate maxStartDate,
+      @Parameter(name = "challengeFilter", description = "A challenge filter.") @Valid
+          ChallengeFilterDto challengeFilter) {
     return getDelegate()
         .listChallenges(
             pageNumber,
@@ -168,6 +172,7 @@ public interface ChallengeApi {
             submissionTypes,
             incentives,
             minStartDate,
-            maxStartDate);
+            maxStartDate,
+            challengeFilter);
   }
 }

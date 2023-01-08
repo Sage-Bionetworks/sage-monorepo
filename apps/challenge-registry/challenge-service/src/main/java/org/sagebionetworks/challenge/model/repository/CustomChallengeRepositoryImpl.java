@@ -10,6 +10,7 @@ import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
+import org.sagebionetworks.challenge.model.dto.ChallengeFilterDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,7 +24,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
 
   @Override
   public Page<ChallengeEntity> findAll(
-      Pageable pageable, ChallengeFilter filter, String... fields) {
+      Pageable pageable, ChallengeFilter filter, ChallengeFilterDto challengeFilter, String... fields) {
     SearchResult<ChallengeEntity> result = getSearchResult(pageable, filter, fields);
     return new PageImpl<>(result.hits(), pageable, result.total().hitCount());
   }

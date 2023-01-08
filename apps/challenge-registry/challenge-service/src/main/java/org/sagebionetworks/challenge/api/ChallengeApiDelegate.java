@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.annotation.Generated;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeFilterDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
@@ -40,6 +41,7 @@ public interface ChallengeApiDelegate {
    * @param incentives An array of challenge incentive types used to filter the results. (optional)
    * @param minStartDate Keep the challenges that start at this date or later. (optional)
    * @param maxStartDate Keep the challenges that start at this date or sooner. (optional)
+   * @param challengeFilter A challenge filter. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    * @see ChallengeApi#listChallenges
@@ -54,7 +56,8 @@ public interface ChallengeApiDelegate {
       List<ChallengeSubmissionTypeDto> submissionTypes,
       List<ChallengeIncentiveDto> incentives,
       LocalDate minStartDate,
-      LocalDate maxStartDate) {
+      LocalDate maxStartDate,
+      ChallengeFilterDto challengeFilter) {
     getRequest()
         .ifPresent(
             request -> {

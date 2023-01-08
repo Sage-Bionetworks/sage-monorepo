@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.domain.ChallengeDomain;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeFilterDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
@@ -47,11 +48,14 @@ public class ChallengeService {
       List<ChallengeSubmissionTypeDto> submissionTypes,
       List<ChallengeIncentiveDto> incentives,
       LocalDate minStartDate,
-      LocalDate maxStartDate) {
+      LocalDate maxStartDate,
+      ChallengeFilterDto challengeFilter) {
 
     log.info("status {}", status);
     log.info("difficulty {}", difficulties);
     log.info("minStartDate {}", minStartDate);
+
+    log.info("challengeFilter", challengeFilter);
 
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     ChallengeFilterBuilder builder = ChallengeFilter.builder();
@@ -79,7 +83,7 @@ public class ChallengeService {
 
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
     Page<ChallengeEntity> challengeEntitiesPage =
-        challengeRepository.findAll(pageable, filter, fieldsToSearchBy.toArray(new String[0]));
+        challengeRepository.findAll(pageable, filter, challengeFilter, fieldsToSearchBy.toArray(new String[0]));
     log.info("challengeEntitiesPage {}", challengeEntitiesPage);
 
     List<ChallengeDto> challenges =

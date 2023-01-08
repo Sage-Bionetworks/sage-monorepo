@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.model.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,4 +18,6 @@ public class ChallengeFilter {
   private List<String> submissionTypes;
   private List<String> incentives;
   private String searchTerms;
+  private LocalDate minStartDate;
+  private LocalDate maxStartDate;
 }

@@ -3,6 +3,7 @@ package org.sagebionetworks.challenge.api;
 import java.time.LocalDate;
 import java.util.List;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeFilterDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
@@ -28,7 +29,8 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
       List<ChallengeSubmissionTypeDto> submissionTypes,
       List<ChallengeIncentiveDto> incentives,
       LocalDate minStartDate,
-      LocalDate maxStartDate) {
+      LocalDate maxStartDate,
+      ChallengeFilterDto challengeFilter) {
     return ResponseEntity.ok(
         challengeService.listChallenges(
             pageNumber,
@@ -40,7 +42,8 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
             submissionTypes,
             incentives,
             minStartDate,
-            maxStartDate));
+            maxStartDate,
+            challengeFilter));
   }
 
   // @Override
