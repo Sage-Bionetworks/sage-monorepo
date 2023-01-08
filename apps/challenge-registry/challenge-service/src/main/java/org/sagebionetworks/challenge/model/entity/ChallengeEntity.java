@@ -76,6 +76,7 @@ public class ChallengeEntity {
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
   @LazyCollection(LazyCollectionOption.EXTRA)
+  @IndexedEmbedded(includePaths = {"userId"})
   private List<ChallengeStar> stars;
 
   @Column(name = "start_date", columnDefinition = "DATE")

@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,6 +36,7 @@ public class ChallengeStar {
   private ChallengeEntity challenge;
 
   @Column(name = "user_id", nullable = false)
+  @GenericField()
   private int userId;
 
   @Column(name = "created_at")
