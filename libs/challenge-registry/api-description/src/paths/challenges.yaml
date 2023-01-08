@@ -47,7 +47,9 @@ get:
     - $ref: ../components/parameters/query/challenge/difficulties.yaml
     - $ref: ../components/parameters/query/challenge/submissionTypes.yaml
     - $ref: ../components/parameters/query/challenge/incentives.yaml
-    - $ref: ../components/parameters/query/challenge/startDateRange.yaml
+    # - $ref: ../components/parameters/query/challenge/startDateRange.yaml
+    - $ref: ../components/parameters/query/challenge/minStartDate.yaml
+    - $ref: ../components/parameters/query/challenge/maxStartDate.yaml
     # - $ref: parameters/challenge/orgIds.yaml
     # - $ref: parameters/challenge/organizerIds.yaml
     # - $ref: parameters/challenge/sponsorIds.yaml

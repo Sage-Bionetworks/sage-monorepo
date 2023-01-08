@@ -5,4 +5,11 @@ required: false
 style: deepObject
 explode: true
 schema:
-  $ref: ../../../schemas/DateRange.yaml
+  # $ref: ../../../schemas/DateRange.yaml
+  type: array
+  items:
+    type: string
+    format: date
+    nullable: true
+    example: '2017-07-21'
+  maxItems: 2

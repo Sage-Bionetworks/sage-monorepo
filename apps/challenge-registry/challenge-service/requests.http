@@ -40,6 +40,10 @@ GET {{basePath}}/challenges?searchTerms=mortality%20dream
 
 GET {{basePath}}/challenges?start=2023-01-07&end=2023-01-07
 
+###
+
+GET {{basePath}}/challenges?startDateRange[start]=2023-01-07&startDateRange[end]=2023-01-07
+
 ### List the challenge platforms
 
 GET {{basePath}}/challengePlatforms

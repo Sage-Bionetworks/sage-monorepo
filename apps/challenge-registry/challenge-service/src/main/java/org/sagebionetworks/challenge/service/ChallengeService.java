@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,6 @@ import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
-import org.sagebionetworks.challenge.model.dto.DateRangeDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeMapper;
 import org.sagebionetworks.challenge.model.repository.ChallengeFilter;
@@ -46,11 +46,12 @@ public class ChallengeService {
       List<ChallengeDifficultyDto> difficulties,
       List<ChallengeSubmissionTypeDto> submissionTypes,
       List<ChallengeIncentiveDto> incentives,
-      DateRangeDto startDateRange) {
+      LocalDate minStartDate,
+      LocalDate maxStartDate) {
 
     log.info("status {}", status);
     log.info("difficulty {}", difficulties);
-    log.info("startDateRange {}", startDateRange);
+    log.info("minStartDate {}", minStartDate);
 
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     ChallengeFilterBuilder builder = ChallengeFilter.builder();

@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.api;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Generated;
@@ -8,7 +9,6 @@ import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
-import org.sagebionetworks.challenge.model.dto.DateRangeDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +38,8 @@ public interface ChallengeApiDelegate {
    * @param submissionTypes An array of challenge submission types used to filter the results.
    *     (optional)
    * @param incentives An array of challenge incentive types used to filter the results. (optional)
-   * @param startDateRange Return challenges that start during the date range specified. (optional)
+   * @param minStartDate Keep the challenges that start at this date or later. (optional)
+   * @param maxStartDate Keep the challenges that start at this date or sooner. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    * @see ChallengeApi#listChallenges
@@ -52,7 +53,8 @@ public interface ChallengeApiDelegate {
       List<ChallengeDifficultyDto> difficulties,
       List<ChallengeSubmissionTypeDto> submissionTypes,
       List<ChallengeIncentiveDto> incentives,
-      DateRangeDto startDateRange) {
+      LocalDate minStartDate,
+      LocalDate maxStartDate) {
     getRequest()
         .ifPresent(
             request -> {

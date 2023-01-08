@@ -38,7 +38,8 @@ paths:
         - $ref: '#/components/parameters/difficulties'
         - $ref: '#/components/parameters/submissionTypes'
         - $ref: '#/components/parameters/incentives'
-        - $ref: '#/components/parameters/startDateRange'
+        - $ref: '#/components/parameters/minStartDate'
+        - $ref: '#/components/parameters/maxStartDate'
       responses:
         '200':
           content:
@@ -258,20 +259,6 @@ components:
         - speaking_engagement
         - other
       example: publication
-    DateRange:
-      type: object
-      description: A date range.
-      properties:
-        start:
-          description: The start date of the date range.
-          type: string
-          format: date
-          example: '2021-07-17'
-        end:
-          description: The end date of the date range.
-          type: string
-          format: date
-          example: '2021-07-17'
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -814,15 +801,26 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/ChallengeIncentive'
-    startDateRange:
-      name: startDateRange
-      description: Return challenges that start during the date range specified.
+    minStartDate:
+      name: minStartDate
+      description: Keep the challenges that start at this date or later.
       in: query
       required: false
-      style: deepObject
-      explode: true
       schema:
-        $ref: '#/components/schemas/DateRange'
+        type: string
+        format: date
+        nullable: true
+        example: '2017-07-21'
+    maxStartDate:
+      name: maxStartDate
+      description: Keep the challenges that start at this date or sooner.
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+        nullable: true
+        example: '2017-07-21'
     challengePlatformName:
       name: challengePlatformName
       in: path

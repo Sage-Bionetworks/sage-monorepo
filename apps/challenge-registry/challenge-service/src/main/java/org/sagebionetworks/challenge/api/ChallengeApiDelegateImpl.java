@@ -1,12 +1,12 @@
 package org.sagebionetworks.challenge.api;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
-import org.sagebionetworks.challenge.model.dto.DateRangeDto;
 import org.sagebionetworks.challenge.service.ChallengeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,8 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
       List<ChallengeDifficultyDto> difficulties,
       List<ChallengeSubmissionTypeDto> submissionTypes,
       List<ChallengeIncentiveDto> incentives,
-      DateRangeDto startDateRange) {
+      LocalDate minStartDate,
+      LocalDate maxStartDate) {
     return ResponseEntity.ok(
         challengeService.listChallenges(
             pageNumber,
@@ -38,7 +39,8 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
             difficulties,
             submissionTypes,
             incentives,
-            startDateRange));
+            minStartDate,
+            maxStartDate));
   }
 
   // @Override

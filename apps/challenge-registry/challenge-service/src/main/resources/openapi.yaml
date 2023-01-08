@@ -103,14 +103,28 @@ paths:
             $ref: '#/components/schemas/ChallengeIncentive'
           type: array
         style: form
-      - description: Return challenges that start during the date range specified.
+      - description: Keep the challenges that start at this date or later.
         explode: true
         in: query
-        name: startDateRange
+        name: minStartDate
         required: false
         schema:
-          $ref: '#/components/schemas/DateRange'
-        style: deepObject
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        style: form
+      - description: Keep the challenges that start at this date or sooner.
+        explode: true
+        in: query
+        name: maxStartDate
+        required: false
+        schema:
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -319,15 +333,30 @@ components:
           $ref: '#/components/schemas/ChallengeIncentive'
         type: array
       style: form
-    startDateRange:
-      description: Return challenges that start during the date range specified.
+    minStartDate:
+      description: Keep the challenges that start at this date or later.
       explode: true
       in: query
-      name: startDateRange
+      name: minStartDate
       required: false
       schema:
-        $ref: '#/components/schemas/DateRange'
-      style: deepObject
+        example: 2017-07-21
+        format: date
+        nullable: true
+        type: string
+      style: form
+    maxStartDate:
+      description: Keep the challenges that start at this date or sooner.
+      explode: true
+      in: query
+      name: maxStartDate
+      required: false
+      schema:
+        example: 2017-07-21
+        format: date
+        nullable: true
+        type: string
+      style: form
     challengePlatformName:
       description: The unique identifier of the challenge platform.
       explode: false
@@ -397,20 +426,6 @@ components:
       - other
       example: publication
       type: string
-    DateRange:
-      description: A date range.
-      properties:
-        start:
-          description: The start date of the date range.
-          example: 2021-07-17
-          format: date
-          type: string
-        end:
-          description: The end date of the date range.
-          example: 2021-07-17
-          format: date
-          type: string
-      type: object
     PageMetadata:
       description: The metadata of a page.
       properties:
