@@ -36,6 +36,10 @@ GET {{basePath}}/challenges?incentives=monetary,publication
 
 GET {{basePath}}/challenges?searchTerms=mortality%20dream
 
+### List the challenges that start in 2017
+
+GET {{basePath}}/challenges?minStartDate=2017-01-01&maxStartDate=2017-12-31
+
 ### List the challenge platforms
 
 GET {{basePath}}/challengePlatforms

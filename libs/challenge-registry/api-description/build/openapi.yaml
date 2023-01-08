@@ -30,14 +30,7 @@ paths:
       description: List challenges
       operationId: listChallenges
       parameters:
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageSize'
-        - $ref: '#/components/parameters/status'
-        - $ref: '#/components/parameters/platforms'
-        - $ref: '#/components/parameters/difficulties'
-        - $ref: '#/components/parameters/submissionTypes'
-        - $ref: '#/components/parameters/incentives'
-        - $ref: '#/components/parameters/searchTerms'
+        - $ref: '#/components/parameters/challengeSearchQuery'
       responses:
         '200':
           content:
@@ -217,21 +210,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    ChallengeStatus:
-      description: The status of the challenge.
-      type: string
-      enum:
-        - upcoming
-        - active
-        - completed
-      example: active
-    ChallengePlatformName:
-      description: The name of the challenge platform.
-      type: string
-      minLength: 3
-      maxLength: 30
-      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
-      example: example-challenge-platform
     ChallengeDifficulty:
       description: The difficulty level of a challenge.
       type: string
@@ -240,14 +218,6 @@ components:
         - intermediate
         - advanced
       example: intermediate
-    ChallengeSubmissionType:
-      description: The submission type of the challenge.
-      type: string
-      enum:
-        - container_image
-        - prediction_file
-        - other
-      example: container_image
     ChallengeIncentive:
       description: The incentive type of the challenge.
       type: string
@@ -257,6 +227,86 @@ components:
         - speaking_engagement
         - other
       example: publication
+    ChallengePlatformName:
+      description: The name of the challenge platform.
+      type: string
+      minLength: 3
+      maxLength: 30
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      example: example-challenge-platform
+    ChallengeStatus:
+      description: The status of the challenge.
+      type: string
+      enum:
+        - upcoming
+        - active
+        - completed
+      example: active
+    ChallengeSubmissionType:
+      description: The submission type of the challenge.
+      type: string
+      enum:
+        - container_image
+        - prediction_file
+        - other
+      example: container_image
+    ChallengeSearchQuery:
+      type: object
+      description: A challenge search query.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+        difficulties:
+          description: An array of challenge difficulty levels used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeDifficulty'
+        incentives:
+          description: An array of challenge incentive types used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
+        minStartDate:
+          description: Keep the challenges that start at this date or later.
+          type: string
+          format: date
+          nullable: true
+          example: '2017-07-21'
+        maxStartDate:
+          description: Keep the challenges that start at this date or sooner.
+          type: string
+          format: date
+          nullable: true
+          example: '2017-07-21'
+        platforms:
+          description: An array of challenge platform ids used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengePlatformName'
+        status:
+          description: An array of challenge status used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeStatus'
+        submissionTypes:
+          description: An array of challenge submission types used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          type: string
+          example: dream challenge
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -345,6 +395,18 @@ components:
         - id
         - name
         - displayName
+    ChallengeStartDate:
+      description: The start date of the challenge.
+      type: string
+      format: date
+      nullable: true
+      example: '2017-07-21'
+    ChallengeEndDate:
+      description: The end date of the challenge.
+      type: string
+      format: date
+      nullable: true
+      example: '2017-07-21'
     Challenge:
       type: object
       description: A challenge
@@ -371,6 +433,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
+        startDate:
+          $ref: '#/components/schemas/ChallengeStartDate'
+        endDate:
+          $ref: '#/components/schemas/ChallengeEndDate'
         starredCount:
           description: The number of times the challenge has been starred by users.
           type: integer
@@ -713,9 +779,15 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
   parameters:
+    challengeSearchQuery:
+      name: challengeSearchQuery
+      description: The search query used to find challenges.
+      in: query
+      schema:
+        $ref: '#/components/schemas/ChallengeSearchQuery'
     pageNumber:
       name: pageNumber
-      description: The page number
+      description: The page number.
       in: query
       schema:
         type: integer
@@ -724,65 +796,13 @@ components:
         minimum: 0
     pageSize:
       name: pageSize
-      description: The number of items in a single page
+      description: The number of items in a single page.
       in: query
       schema:
         type: integer
         format: int32
         default: 100
         minimum: 1
-    status:
-      name: status
-      description: An array of challenge status used to filter the results.
-      in: query
-      required: false
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/ChallengeStatus'
-    platforms:
-      name: platforms
-      description: An array of challenge platform ids used to filter the results.
-      in: query
-      required: false
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/ChallengePlatformName'
-    difficulties:
-      name: difficulties
-      description: An array of challenge difficulty levels used to filter the results.
-      in: query
-      required: false
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/ChallengeDifficulty'
-    submissionTypes:
-      name: submissionTypes
-      description: An array of challenge submission types used to filter the results.
-      in: query
-      required: false
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/ChallengeSubmissionType'
-    incentives:
-      name: incentives
-      description: An array of challenge incentive types used to filter the results.
-      in: query
-      required: false
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/ChallengeIncentive'
-    searchTerms:
-      name: searchTerms
-      description: A string of search terms used to filter the results.
-      in: query
-      required: false
-      schema:
-        type: string
     challengePlatformName:
       name: challengePlatformName
       in: path

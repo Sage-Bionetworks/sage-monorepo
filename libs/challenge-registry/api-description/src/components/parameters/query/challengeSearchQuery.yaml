@@ -1,0 +1,5 @@
+name: challengeSearchQuery
+description: The search query used to find challenges.
+in: query
+schema:
+  $ref: ../../schemas/ChallengeSearchQuery.yaml

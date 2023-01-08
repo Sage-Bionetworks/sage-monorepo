@@ -41,6 +41,10 @@ properties:
   #     description: Number of challenge views
   #     type: integer
   #     default: 0
+  startDate:
+    $ref: ChallengeStartDate.yaml
+  endDate:
+    $ref: ChallengeEndDate.yaml
   starredCount:
     description: The number of times the challenge has been starred by users.
     type: integer

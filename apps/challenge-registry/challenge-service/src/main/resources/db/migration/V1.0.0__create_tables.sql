@@ -21,6 +21,8 @@ CREATE TABLE `challenge`
     `status`                ENUM('upcoming', 'active', 'completed'),
     `difficulty`            ENUM('good_for_beginners', 'intermediate', 'advanced'),
     `platform_id`           int,
+    `start_date`            DATE,
+    `end_date`              DATE,
     -- `email`                 varchar(255) DEFAULT NULL,
     -- `login`                 varchar(255) UNIQUE,
     -- `avatar_url`            varchar(255) DEFAULT NULL,
