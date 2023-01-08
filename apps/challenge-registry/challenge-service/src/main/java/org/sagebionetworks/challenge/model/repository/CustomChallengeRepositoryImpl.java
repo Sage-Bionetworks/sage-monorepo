@@ -57,6 +57,9 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     if (query.getIncentives() != null && query.getIncentives().size() > 0) {
       predicates.add(getChallengeIncentivesPredicate(pf, query));
     }
+    if (query.getMinStartDate() != null || query.getMaxStartDate() != null) {
+      predicates.add(getChallengeStartDatePredicate(pf, query));
+    }
 
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
 
@@ -69,6 +72,14 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     return result;
   }
 
+  /**
+   * Searches the challenges using the search terms specified
+   *
+   * @param pf
+   * @param query
+   * @param fields
+   * @return
+   */
   private SearchPredicate getSearchTermsPredicate(
       SearchPredicateFactory pf, ChallengeSearchQueryDto query, String[] fields) {
     return pf.simpleQueryString()
@@ -79,7 +90,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   }
 
   /**
-   * Matches challenges whose status is in the list of status specified.
+   * Matches the challenges whose status is in the list of status specified.
    *
    * @param pf
    * @param query
@@ -97,7 +108,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   }
 
   /**
-   * Matches challenges whose difficulty is in the list of difficulties specified.
+   * Matches the challenges whose difficulty is in the list of difficulties specified.
    *
    * @param pf
    * @param query
@@ -115,7 +126,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   }
 
   /**
-   * Matches challenges whose platform is in the list of platforms specified.
+   * Matches the challenges whose platform is in the list of platforms specified.
    *
    * @param pf
    * @param query
@@ -133,8 +144,8 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   }
 
   /**
-   * Matches challenges whose at least one of their submission types is in the list of submission
-   * types specified.
+   * Matches the challenges whose at least one of their submission types is in the list of
+   * submission types specified.
    *
    * @param pf
    * @param query
@@ -153,8 +164,8 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   }
 
   /**
-   * Matches challenges whose at least one of their submission types is in the list of submission
-   * types specified.
+   * Matches the challenges whose at least one of their submission types is in the list of
+   * submission types specified.
    *
    * @param pf
    * @param query
@@ -168,6 +179,21 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
                 b.should(pf.match().field("incentives.name").matching(incentive.toString()));
               }
             })
+        .toPredicate();
+  }
+
+  /**
+   * Matches the challenges whose start date is between the min and max start dates specified.
+   *
+   * @param pf
+   * @param query
+   * @return
+   */
+  private SearchPredicate getChallengeStartDatePredicate(
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
+    return pf.range()
+        .field("startDate")
+        .between(query.getMinStartDate(), query.getMaxStartDate())
         .toPredicate();
   }
 
