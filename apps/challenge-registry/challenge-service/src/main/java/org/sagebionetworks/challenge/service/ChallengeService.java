@@ -1,21 +1,14 @@
 package org.sagebionetworks.challenge.service;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.domain.ChallengeDomain;
-import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeFilterDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeMapper;
-import org.sagebionetworks.challenge.model.repository.ChallengeFilter;
-import org.sagebionetworks.challenge.model.repository.ChallengeFilter.ChallengeFilterBuilder;
 import org.sagebionetworks.challenge.model.repository.ChallengeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,43 +32,29 @@ public class ChallengeService {
 
   @Transactional(readOnly = true)
   public ChallengesPageDto listChallenges(
-      Integer pageNumber,
-      Integer pageSize,
-      String searchTerms,
-      List<ChallengeStatusDto> status,
-      List<String> platforms,
-      List<ChallengeDifficultyDto> difficulties,
-      List<ChallengeSubmissionTypeDto> submissionTypes,
-      List<ChallengeIncentiveDto> incentives,
-      LocalDate minStartDate,
-      LocalDate maxStartDate,
-      ChallengeFilterDto challengeFilter) {
+      Integer pageNumber, Integer pageSize, ChallengeFilterDto challengeFilter) {
 
-    log.info("status {}", status);
-    log.info("difficulty {}", difficulties);
-    log.info("minStartDate {}", minStartDate);
-
-    log.info("challengeFilter", challengeFilter);
+    log.info("challengeFilter {}", challengeFilter);
 
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
-    ChallengeFilterBuilder builder = ChallengeFilter.builder();
-    if (status != null) {
-      builder.status(status.stream().map(o -> o.toString()).toList());
-    }
-    if (platforms != null) {
-      builder.platforms(platforms);
-    }
-    if (difficulties != null) {
-      builder.difficulties(difficulties.stream().map(o -> o.toString()).toList());
-    }
-    if (submissionTypes != null) {
-      builder.submissionTypes(submissionTypes.stream().map(o -> o.toString()).toList());
-    }
-    if (incentives != null) {
-      builder.incentives(incentives.stream().map(o -> o.toString()).toList());
-    }
-    builder.searchTerms(searchTerms);
-    ChallengeFilter filter = builder.build();
+    // ChallengeFilterBuilder builder = ChallengeFilter.builder();
+    // if (status != null) {
+    //   builder.status(status.stream().map(o -> o.toString()).toList());
+    // }
+    // if (platforms != null) {
+    //   builder.platforms(platforms);
+    // }
+    // if (difficulties != null) {
+    //   builder.difficulties(difficulties.stream().map(o -> o.toString()).toList());
+    // }
+    // if (submissionTypes != null) {
+    //   builder.submissionTypes(submissionTypes.stream().map(o -> o.toString()).toList());
+    // }
+    // if (incentives != null) {
+    //   builder.incentives(incentives.stream().map(o -> o.toString()).toList());
+    // }
+    // builder.searchTerms(searchTerms);
+    // ChallengeFilter filter = builder.build();
 
     ChallengeDomain challengeDomain = new ChallengeDomain("plop");
     log.info("challenge sent: {}", challengeDomain);
@@ -84,7 +63,7 @@ public class ChallengeService {
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
     Page<ChallengeEntity> challengeEntitiesPage =
         challengeRepository.findAll(
-            pageable, filter, challengeFilter, fieldsToSearchBy.toArray(new String[0]));
+            pageable, challengeFilter, fieldsToSearchBy.toArray(new String[0]));
     log.info("challengeEntitiesPage {}", challengeEntitiesPage);
 
     List<ChallengeDto> challenges =

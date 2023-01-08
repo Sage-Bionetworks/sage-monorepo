@@ -1,12 +1,6 @@
 package org.sagebionetworks.challenge.api;
 
-import java.time.LocalDate;
-import java.util.List;
-import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeFilterDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.service.ChallengeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,30 +14,9 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
 
   @Override
   public ResponseEntity<ChallengesPageDto> listChallenges(
-      Integer pageNumber,
-      Integer pageSize,
-      String searchTerms,
-      List<ChallengeStatusDto> status,
-      List<String> platforms,
-      List<ChallengeDifficultyDto> difficulties,
-      List<ChallengeSubmissionTypeDto> submissionTypes,
-      List<ChallengeIncentiveDto> incentives,
-      LocalDate minStartDate,
-      LocalDate maxStartDate,
-      ChallengeFilterDto challengeFilter) {
+      Integer pageNumber, Integer pageSize, ChallengeFilterDto challengeFilter) {
     return ResponseEntity.ok(
-        challengeService.listChallenges(
-            pageNumber,
-            pageSize,
-            searchTerms,
-            status,
-            platforms,
-            difficulties,
-            submissionTypes,
-            incentives,
-            minStartDate,
-            maxStartDate,
-            challengeFilter));
+        challengeService.listChallenges(pageNumber, pageSize, challengeFilter));
   }
 
   // @Override

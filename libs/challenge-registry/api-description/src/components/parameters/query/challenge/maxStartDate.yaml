@@ -1,9 +1,0 @@
-name: maxStartDate
-description: Keep the challenges that start at this date or sooner.
-in: query
-required: false
-schema:
-  type: string
-  format: date
-  nullable: true
-  example: '2017-07-21'

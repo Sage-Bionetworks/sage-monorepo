@@ -45,86 +45,6 @@ paths:
           minimum: 1
           type: integer
         style: form
-      - description: A string of search terms used to filter the results.
-        explode: true
-        in: query
-        name: searchTerms
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: An array of challenge status used to filter the results.
-        explode: true
-        in: query
-        name: status
-        required: false
-        schema:
-          items:
-            $ref: '#/components/schemas/ChallengeStatus'
-          type: array
-        style: form
-      - description: An array of challenge platform ids used to filter the results.
-        explode: true
-        in: query
-        name: platforms
-        required: false
-        schema:
-          items:
-            $ref: '#/components/schemas/ChallengePlatformName'
-          type: array
-        style: form
-      - description: An array of challenge difficulty levels used to filter the results.
-        explode: true
-        in: query
-        name: difficulties
-        required: false
-        schema:
-          items:
-            $ref: '#/components/schemas/ChallengeDifficulty'
-          type: array
-        style: form
-      - description: An array of challenge submission types used to filter the results.
-        explode: true
-        in: query
-        name: submissionTypes
-        required: false
-        schema:
-          items:
-            $ref: '#/components/schemas/ChallengeSubmissionType'
-          type: array
-        style: form
-      - description: An array of challenge incentive types used to filter the results.
-        explode: true
-        in: query
-        name: incentives
-        required: false
-        schema:
-          items:
-            $ref: '#/components/schemas/ChallengeIncentive'
-          type: array
-        style: form
-      - description: Keep the challenges that start at this date or later.
-        explode: true
-        in: query
-        name: minStartDate
-        required: false
-        schema:
-          example: 2017-07-21
-          format: date
-          nullable: true
-          type: string
-        style: form
-      - description: Keep the challenges that start at this date or sooner.
-        explode: true
-        in: query
-        name: maxStartDate
-        required: false
-        schema:
-          example: 2017-07-21
-          format: date
-          nullable: true
-          type: string
-        style: form
       - description: A challenge filter.
         explode: true
         in: query
@@ -277,94 +197,6 @@ components:
         minimum: 1
         type: integer
       style: form
-    searchTerms:
-      description: A string of search terms used to filter the results.
-      explode: true
-      in: query
-      name: searchTerms
-      required: false
-      schema:
-        type: string
-      style: form
-    status:
-      description: An array of challenge status used to filter the results.
-      explode: true
-      in: query
-      name: status
-      required: false
-      schema:
-        items:
-          $ref: '#/components/schemas/ChallengeStatus'
-        type: array
-      style: form
-    platforms:
-      description: An array of challenge platform ids used to filter the results.
-      explode: true
-      in: query
-      name: platforms
-      required: false
-      schema:
-        items:
-          $ref: '#/components/schemas/ChallengePlatformName'
-        type: array
-      style: form
-    difficulties:
-      description: An array of challenge difficulty levels used to filter the results.
-      explode: true
-      in: query
-      name: difficulties
-      required: false
-      schema:
-        items:
-          $ref: '#/components/schemas/ChallengeDifficulty'
-        type: array
-      style: form
-    submissionTypes:
-      description: An array of challenge submission types used to filter the results.
-      explode: true
-      in: query
-      name: submissionTypes
-      required: false
-      schema:
-        items:
-          $ref: '#/components/schemas/ChallengeSubmissionType'
-        type: array
-      style: form
-    incentives:
-      description: An array of challenge incentive types used to filter the results.
-      explode: true
-      in: query
-      name: incentives
-      required: false
-      schema:
-        items:
-          $ref: '#/components/schemas/ChallengeIncentive'
-        type: array
-      style: form
-    minStartDate:
-      description: Keep the challenges that start at this date or later.
-      explode: true
-      in: query
-      name: minStartDate
-      required: false
-      schema:
-        example: 2017-07-21
-        format: date
-        nullable: true
-        type: string
-      style: form
-    maxStartDate:
-      description: Keep the challenges that start at this date or sooner.
-      explode: true
-      in: query
-      name: maxStartDate
-      required: false
-      schema:
-        example: 2017-07-21
-        format: date
-        nullable: true
-        type: string
-      style: form
     challengeFilter:
       description: A challenge filter.
       explode: true
@@ -403,21 +235,6 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
   schemas:
-    ChallengeStatus:
-      description: The status of the challenge.
-      enum:
-      - upcoming
-      - active
-      - completed
-      example: active
-      type: string
-    ChallengePlatformName:
-      description: The name of the challenge platform.
-      example: example-challenge-platform
-      maxLength: 30
-      minLength: 3
-      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-      type: string
     ChallengeDifficulty:
       description: The difficulty level of a challenge.
       enum:
@@ -425,14 +242,6 @@ components:
       - intermediate
       - advanced
       example: intermediate
-      type: string
-    ChallengeSubmissionType:
-      description: The submission type of the challenge.
-      enum:
-      - container_image
-      - prediction_file
-      - other
-      example: container_image
       type: string
     ChallengeIncentive:
       description: The incentive type of the challenge.
@@ -442,6 +251,29 @@ components:
       - speaking_engagement
       - other
       example: publication
+      type: string
+    ChallengePlatformName:
+      description: The name of the challenge platform.
+      example: example-challenge-platform
+      maxLength: 30
+      minLength: 3
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      type: string
+    ChallengeStatus:
+      description: The status of the challenge.
+      enum:
+      - upcoming
+      - active
+      - completed
+      example: active
+      type: string
+    ChallengeSubmissionType:
+      description: The submission type of the challenge.
+      enum:
+      - container_image
+      - prediction_file
+      - other
+      example: container_image
       type: string
     ChallengeFilter:
       description: A challenge filter.
@@ -457,6 +289,36 @@ components:
           items:
             $ref: '#/components/schemas/ChallengeIncentive'
           type: array
+        minStartDate:
+          description: Keep the challenges that start at this date or later.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        maxStartDate:
+          description: Keep the challenges that start at this date or sooner.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        platforms:
+          description: An array of challenge platform ids used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengePlatformName'
+          type: array
+        status:
+          description: An array of challenge status used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengeStatus'
+          type: array
+        submissionTypes:
+          description: An array of challenge submission types used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          type: string
       type: object
     PageMetadata:
       description: The metadata of a page.

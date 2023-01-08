@@ -11,3 +11,33 @@ properties:
     type: array
     items:
       $ref: ChallengeIncentive.yaml
+  minStartDate:
+    description: Keep the challenges that start at this date or later.
+    type: string
+    format: date
+    nullable: true
+    example: '2017-07-21'
+  maxStartDate:
+    description: Keep the challenges that start at this date or sooner.
+    type: string
+    format: date
+    nullable: true
+    example: '2017-07-21'
+  platforms:
+    description: An array of challenge platform ids used to filter the results.
+    type: array
+    items:
+      $ref: ChallengePlatformName.yaml
+  status:
+    description: An array of challenge status used to filter the results.
+    type: array
+    items:
+      $ref: ChallengeStatus.yaml
+  submissionTypes:
+    description: An array of challenge submission types used to filter the results.
+    type: array
+    items:
+      $ref: ChallengeSubmissionType.yaml
+  searchTerms:
+    description: A string of search terms used to filter the results.
+    type: string
