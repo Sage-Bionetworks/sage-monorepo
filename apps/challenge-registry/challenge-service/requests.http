@@ -42,7 +42,7 @@ GET {{basePath}}/challenges?minStartDate=2017-01-01&maxStartDate=2017-12-31
 
 ### Sort the challenges by their starred count in desc oder
 
-GET {{basePath}}/challenges?sort=starred&order=desc
+GET {{basePath}}/challenges?sort=starred&order=asc
 
 ### List the challenge platforms
 
