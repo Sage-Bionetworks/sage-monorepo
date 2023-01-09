@@ -20,7 +20,7 @@ spring:
             # version_check: false
             # version: 'opensearch:1.3.7'
             # type: elasticsearch
-            hosts: challenge-registry-opensearch:9200
+            hosts: challenge-registry-elasticsearch:9200
             username: admin
             password: admin
 
