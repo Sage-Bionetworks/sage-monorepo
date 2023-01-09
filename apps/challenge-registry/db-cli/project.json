@@ -1,0 +1,48 @@
+{
+  "name": "challenge-registry-db-cli",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/challenge-registry/db-cli/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/challenge-registry/db-cli",
+        "main": "apps/challenge-registry/db-cli/src/index.ts",
+        "tsConfig": "apps/challenge-registry/db-cli/tsconfig.app.json",
+        "assets": ["apps/challenge-registry/db-cli/*.md"]
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "challenge-registry-db-cli:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/challenge-registry/db-cli/**/*.ts"]
+      }
+    },
+    "lint-fix": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/challenge-registry/db-cli/**/*.ts"],
+        "fix": true
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/challenge-registry/db-cli"],
+      "options": {
+        "jestConfig": "apps/challenge-registry/db-cli/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["type:app", "scope:admin"]
+}
