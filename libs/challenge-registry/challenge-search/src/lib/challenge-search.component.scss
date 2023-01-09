@@ -38,32 +38,11 @@
   position: relative;
   flex-grow: 1;
 }
-.search-field > i {
-  position: absolute;
-  display: block;
-  transform: translate(0, -50%);
-  top: 50%;
-  pointer-events: none;
-  width: 45px;
-  text-align: center;
-  font-style: normal;
-}
-.search-field > input {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  height: 48px;
-  max-width: 100%;
-  width: 100%;
-  font-size: 14px;
-  padding: 13px 16px;
-  border-style: solid;
-  border-width: 2px;
-  box-shadow: none;
-  padding: 0 45px;
-}
-.search-field > input:active,
-.search-field > input:focus {
-  outline: none;
+::ng-deep .search-field {
+  .p-input-icon-left,
+  input {
+    width: 100%;
+  }
 }
 ::ng-deep .p-dropdown {
   width: 11.5rem;

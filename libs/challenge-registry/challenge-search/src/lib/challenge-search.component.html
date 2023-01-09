@@ -21,8 +21,16 @@
     </div>
     <div class="search-sort-container row">
       <div class="search-field">
-        <input aria-label="Search the registry" type="text" placeholder="Search challenges" />
-        <i><mat-icon aria-hidden="true">search</mat-icon></i>
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="searchTermValue"
+            (input)="onSearchChange()"
+            placeholder="Search challenges"
+          />
+        </span>
       </div>
       <div class="sort-field">
         <span class="sort-title">Sort by</span>
