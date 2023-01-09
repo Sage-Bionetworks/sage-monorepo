@@ -12,12 +12,12 @@
 
 
 /**
- * Links to navigate to different pages of results
+ * The direction to sort the results by.
  */
-export interface PageMetadataPaging { 
-    /**
-     * Link to the next page of results
-     */
-    next?: string;
-}
+export type ChallengeDirection = 'asc' | 'desc';
+
+export const ChallengeDirection = {
+    Asc: 'asc' as ChallengeDirection,
+    Desc: 'desc' as ChallengeDirection
+};
 

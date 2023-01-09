@@ -2,6 +2,8 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
+import { ChallengeService } from './api/challenge.service';
+import { ChallengePlatformService } from './api/challengePlatform.service';
 import { OrganizationService } from './api/organization.service';
 import { UserService } from './api/user.service';
 

@@ -9,13 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Organization } from './organization';
+import { Challenge } from './challenge';
 
 
 /**
- * A page of organizations
+ * A page of challenges.
  */
-export interface OrganizationsPage { 
+export interface ChallengesPage { 
     /**
      * The page number.
      */
@@ -41,8 +41,8 @@ export interface OrganizationsPage {
      */
     hasPrevious: boolean;
     /**
-     * A list of organizations
+     * A list of challenges.
      */
-    organizations: Array<Organization>;
+    challenges: Array<Challenge>;
 }
 

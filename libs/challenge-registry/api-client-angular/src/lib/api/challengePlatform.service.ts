@@ -21,9 +21,9 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basicError';
 // @ts-ignore
-import { Organization } from '../model/organization';
+import { ChallengePlatform } from '../model/challengePlatform';
 // @ts-ignore
-import { OrganizationsPage } from '../model/organizationsPage';
+import { ChallengePlatformsPage } from '../model/challengePlatformsPage';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -34,7 +34,7 @@ import { Configuration }                                     from '../configurat
 @Injectable({
   providedIn: 'root'
 })
-export class OrganizationService {
+export class ChallengePlatformService {
 
     protected basePath = 'http://localhost/v1';
     public defaultHeaders = new HttpHeaders();
@@ -96,18 +96,18 @@ export class OrganizationService {
     }
 
     /**
-     * Get an organization
-     * Returns the organization specified
-     * @param organizationLogin The login of the organization
+     * Get a challenge platform
+     * Returns the challenge platform specified
+     * @param challengePlatformName The unique identifier of the challenge platform.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getOrganization(organizationLogin: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<Organization>;
-    public getOrganization(organizationLogin: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<Organization>>;
-    public getOrganization(organizationLogin: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<Organization>>;
-    public getOrganization(organizationLogin: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
-        if (organizationLogin === null || organizationLogin === undefined) {
-            throw new Error('Required parameter organizationLogin was null or undefined when calling getOrganization.');
+    public getChallengePlatform(challengePlatformName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<ChallengePlatform>;
+    public getChallengePlatform(challengePlatformName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<ChallengePlatform>>;
+    public getChallengePlatform(challengePlatformName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<ChallengePlatform>>;
+    public getChallengePlatform(challengePlatformName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
+        if (challengePlatformName === null || challengePlatformName === undefined) {
+            throw new Error('Required parameter challengePlatformName was null or undefined when calling getChallengePlatform.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -142,8 +142,8 @@ export class OrganizationService {
             }
         }
 
-        let localVarPath = `/organizations/${this.configuration.encodeParam({name: "organizationLogin", value: organizationLogin, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        return this.httpClient.get<Organization>(`${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/challengePlatforms/${this.configuration.encodeParam({name: "challengePlatformName", value: challengePlatformName, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        return this.httpClient.get<ChallengePlatform>(`${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -156,17 +156,17 @@ export class OrganizationService {
     }
 
     /**
-     * Get all organizations
-     * Returns the organizations
+     * List challenge platforms
+     * List challenge platforms
      * @param pageNumber The page number.
      * @param pageSize The number of items in a single page.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listOrganizations(pageNumber?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<OrganizationsPage>;
-    public listOrganizations(pageNumber?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<OrganizationsPage>>;
-    public listOrganizations(pageNumber?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<OrganizationsPage>>;
-    public listOrganizations(pageNumber?: number, pageSize?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
+    public listChallengePlatforms(pageNumber?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<ChallengePlatformsPage>;
+    public listChallengePlatforms(pageNumber?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<ChallengePlatformsPage>>;
+    public listChallengePlatforms(pageNumber?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<ChallengePlatformsPage>>;
+    public listChallengePlatforms(pageNumber?: number, pageSize?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (pageNumber !== undefined && pageNumber !== null) {
@@ -210,8 +210,8 @@ export class OrganizationService {
             }
         }
 
-        let localVarPath = `/organizations`;
-        return this.httpClient.get<OrganizationsPage>(`${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/challengePlatforms`;
+        return this.httpClient.get<ChallengePlatformsPage>(`${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
