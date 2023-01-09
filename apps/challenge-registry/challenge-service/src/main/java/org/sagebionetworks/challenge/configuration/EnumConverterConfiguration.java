@@ -1,8 +1,9 @@
 package org.sagebionetworks.challenge.configuration;
 
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeDirectionDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeSearchQueryDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeSortDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.springframework.context.annotation.Bean;
@@ -23,11 +24,31 @@ public class EnumConverterConfiguration {
   }
 
   @Bean
+  Converter<String, ChallengeDirectionDto> challengeDirectionConverter() {
+    return new Converter<String, ChallengeDirectionDto>() {
+      @Override
+      public ChallengeDirectionDto convert(String source) {
+        return ChallengeDirectionDto.fromValue(source);
+      }
+    };
+  }
+
+  @Bean
   Converter<String, ChallengeIncentiveDto> challengeIncentiveConverter() {
     return new Converter<String, ChallengeIncentiveDto>() {
       @Override
       public ChallengeIncentiveDto convert(String source) {
         return ChallengeIncentiveDto.fromValue(source);
+      }
+    };
+  }
+
+  @Bean
+  Converter<String, ChallengeSortDto> challengeSortConverter() {
+    return new Converter<String, ChallengeSortDto>() {
+      @Override
+      public ChallengeSortDto convert(String source) {
+        return ChallengeSortDto.fromValue(source);
       }
     };
   }
@@ -48,27 +69,6 @@ public class EnumConverterConfiguration {
       @Override
       public ChallengeSubmissionTypeDto convert(String source) {
         return ChallengeSubmissionTypeDto.fromValue(source);
-      }
-    };
-  }
-
-  @Bean
-  Converter<String, ChallengeSearchQueryDto.SortEnum> challengeSearchQuerySortTypeConverter() {
-    return new Converter<String, ChallengeSearchQueryDto.SortEnum>() {
-      @Override
-      public ChallengeSearchQueryDto.SortEnum convert(String source) {
-        return ChallengeSearchQueryDto.SortEnum.fromValue(source);
-      }
-    };
-  }
-
-  @Bean
-  Converter<String, ChallengeSearchQueryDto.DirectionEnum>
-      challengeSearchQueryDirectionTypeConverter() {
-    return new Converter<String, ChallengeSearchQueryDto.DirectionEnum>() {
-      @Override
-      public ChallengeSearchQueryDto.DirectionEnum convert(String source) {
-        return ChallengeSearchQueryDto.DirectionEnum.fromValue(source);
       }
     };
   }

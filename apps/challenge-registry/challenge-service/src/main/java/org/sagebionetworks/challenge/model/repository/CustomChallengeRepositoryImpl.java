@@ -14,6 +14,7 @@ import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeDirectionDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
@@ -239,9 +240,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       }
     }
     SortOrder order =
-        query.getDirection() == ChallengeSearchQueryDto.DirectionEnum.DESC
-            ? SortOrder.DESC
-            : SortOrder.ASC;
+        query.getDirection() == ChallengeDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
     return sf.field(sort).order(order).toSort();
   }
 }

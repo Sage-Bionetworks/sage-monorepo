@@ -1,9 +1,7 @@
 package org.sagebionetworks.challenge.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.*;
@@ -28,77 +26,11 @@ public class ChallengeSearchQueryDto {
   @JsonProperty("pageSize")
   private Integer pageSize = 100;
 
-  /** What to sort results by. */
-  public enum SortEnum {
-    CREATED("created"),
-
-    STARRED("starred");
-
-    private String value;
-
-    SortEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static SortEnum fromValue(String value) {
-      for (SortEnum b : SortEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
-  }
-
   @JsonProperty("sort")
-  private SortEnum sort = SortEnum.CREATED;
-
-  /** The direction to sort the results by. */
-  public enum DirectionEnum {
-    ASC("asc"),
-
-    DESC("desc");
-
-    private String value;
-
-    DirectionEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static DirectionEnum fromValue(String value) {
-      for (DirectionEnum b : DirectionEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
-  }
+  private ChallengeSortDto sort = ChallengeSortDto.CREATED;
 
   @JsonProperty("direction")
-  private DirectionEnum direction = DirectionEnum.DESC;
+  private ChallengeDirectionDto direction = ChallengeDirectionDto.DESC;
 
   @JsonProperty("difficulties")
   @Valid
@@ -174,44 +106,43 @@ public class ChallengeSearchQueryDto {
     this.pageSize = pageSize;
   }
 
-  public ChallengeSearchQueryDto sort(SortEnum sort) {
+  public ChallengeSearchQueryDto sort(ChallengeSortDto sort) {
     this.sort = sort;
     return this;
   }
 
   /**
-   * What to sort results by.
+   * Get sort
    *
    * @return sort
    */
-  @Schema(name = "sort", description = "What to sort results by.", required = false)
-  public SortEnum getSort() {
+  @Valid
+  @Schema(name = "sort", required = false)
+  public ChallengeSortDto getSort() {
     return sort;
   }
 
-  public void setSort(SortEnum sort) {
+  public void setSort(ChallengeSortDto sort) {
     this.sort = sort;
   }
 
-  public ChallengeSearchQueryDto direction(DirectionEnum direction) {
+  public ChallengeSearchQueryDto direction(ChallengeDirectionDto direction) {
     this.direction = direction;
     return this;
   }
 
   /**
-   * The direction to sort the results by.
+   * Get direction
    *
    * @return direction
    */
-  @Schema(
-      name = "direction",
-      description = "The direction to sort the results by.",
-      required = false)
-  public DirectionEnum getDirection() {
+  @Valid
+  @Schema(name = "direction", required = false)
+  public ChallengeDirectionDto getDirection() {
     return direction;
   }
 
-  public void setDirection(DirectionEnum direction) {
+  public void setDirection(ChallengeDirectionDto direction) {
     this.direction = direction;
   }
 

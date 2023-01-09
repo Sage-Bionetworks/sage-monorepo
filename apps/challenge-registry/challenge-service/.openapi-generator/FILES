@@ -12,12 +12,14 @@ src/main/java/org/sagebionetworks/challenge/configuration/HomeController.java
 src/main/java/org/sagebionetworks/challenge/configuration/SpringDocConfiguration.java
 src/main/java/org/sagebionetworks/challenge/model/dto/BasicErrorDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeDifficultyDto.java
+src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeDirectionDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeIncentiveDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengePlatformCreateRequestDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengePlatformDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengePlatformsPageDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeSearchQueryDto.java
+src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeSortDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeStatusDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengeSubmissionTypeDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/ChallengesPageDto.java

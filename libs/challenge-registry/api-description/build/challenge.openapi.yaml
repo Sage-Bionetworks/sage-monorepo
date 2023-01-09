@@ -81,6 +81,20 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    ChallengeSort:
+      description: What to sort results by.
+      type: string
+      default: created
+      enum:
+        - created
+        - starred
+    ChallengeDirection:
+      description: The direction to sort the results by.
+      type: string
+      default: desc
+      enum:
+        - asc
+        - desc
     ChallengeDifficulty:
       description: The difficulty level of a challenge.
       type: string
@@ -138,19 +152,9 @@ components:
           default: 100
           minimum: 1
         sort:
-          description: What to sort results by.
-          type: string
-          default: created
-          enum:
-            - created
-            - starred
+          $ref: '#/components/schemas/ChallengeSort'
         direction:
-          description: The direction to sort the results by.
-          type: string
-          default: desc
-          enum:
-            - asc
-            - desc
+          $ref: '#/components/schemas/ChallengeDirection'
         difficulties:
           description: An array of challenge difficulty levels used to filter the results.
           type: array
