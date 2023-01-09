@@ -14,12 +14,6 @@
         "assets": ["apps/challenge-registry/db-cli/*.md"]
       }
     },
-    "serve": {
-      "executor": "@nrwl/js:node",
-      "options": {
-        "buildTarget": "challenge-registry-db-cli:build"
-      }
-    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

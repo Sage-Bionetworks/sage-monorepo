@@ -67,9 +67,9 @@ function workspace-graph {
   nx graph
 }
 
-# function challenge-db-cli {
-#   node dist/apps/challenge-db-cli/src/index.js
-# }
+function openchallenges-db-cli {
+  node dist/apps/challenge-registry/db-cli/src/index.js
+}
 
 # function challenge-seed-db {
 #   node dist/apps/challenge-db-cli/src/index.js seed "$WORKSPACE_DIR/apps/challenge-db-cli/data/seeds/production/"
