@@ -1,0 +1,5 @@
+description: The start date of the challenge.
+type: string
+format: date
+nullable: true
+example: '2017-07-21'

@@ -84,6 +84,7 @@
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
     "challenge-registry-api-gateway",
+    "challenge-registry-elasticsearch",
     "challenge-registry-keycloak",
     "challenge-registry-mariadb",
     "challenge-registry-rabbitmq",

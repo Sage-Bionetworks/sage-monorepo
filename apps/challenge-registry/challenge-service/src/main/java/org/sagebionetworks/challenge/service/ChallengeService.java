@@ -1,18 +1,14 @@
 package org.sagebionetworks.challenge.service;
 
+import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.domain.ChallengeDomain;
-import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.challenge.model.mapper.ChallengeMapper;
-import org.sagebionetworks.challenge.model.repository.ChallengeFilter;
-import org.sagebionetworks.challenge.model.repository.ChallengeFilter.ChallengeFilterBuilder;
 import org.sagebionetworks.challenge.model.repository.ChallengeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,47 +27,27 @@ public class ChallengeService {
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
 
+  private static final List<String> SEARCHABLE_FIELDS =
+      Arrays.asList("name", "headline", "description");
+
   @Transactional(readOnly = true)
-  public ChallengesPageDto listChallenges(
-      Integer pageNumber,
-      Integer pageSize,
-      List<ChallengeStatusDto> status,
-      List<String> platforms,
-      List<ChallengeDifficultyDto> difficulties,
-      List<ChallengeSubmissionTypeDto> submissionTypes,
-      List<ChallengeIncentiveDto> incentives) {
+  public ChallengesPageDto listChallenges(ChallengeSearchQueryDto query) {
 
-    log.info("status {}", status);
-    log.info("difficulty {}", difficulties);
+    log.info("query {}", query);
 
-    Pageable pageable = PageRequest.of(pageNumber, pageSize);
-    ChallengeFilterBuilder builder = ChallengeFilter.builder();
-    if (status != null) {
-      builder.status(status.stream().map(o -> o.toString()).toList());
-    }
-    if (platforms != null) {
-      builder.platforms(platforms);
-    }
-    if (difficulties != null) {
-      builder.difficulties(difficulties.stream().map(o -> o.toString()).toList());
-    }
-    if (submissionTypes != null) {
-      builder.submissionTypes(submissionTypes.stream().map(o -> o.toString()).toList());
-    }
-    if (incentives != null) {
-      builder.incentives(incentives.stream().map(o -> o.toString()).toList());
-    }
-    ChallengeFilter filter = builder.build();
-
-    Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(pageable, filter);
-    log.info("challengeRepository {}", challengeEntitiesPage);
-
-    List<ChallengeDto> challenges =
-        challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());
+    Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
     ChallengeDomain challengeDomain = new ChallengeDomain("plop");
     log.info("challenge sent: {}", challengeDomain);
     producerService.sendMessage(challengeDomain);
+
+    List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
+    Page<ChallengeEntity> challengeEntitiesPage =
+        challengeRepository.findAll(pageable, query, fieldsToSearchBy.toArray(new String[0]));
+    log.info("challengeEntitiesPage {}", challengeEntitiesPage);
+
+    List<ChallengeDto> challenges =
+        challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());
 
     return ChallengesPageDto.builder()
         .challenges(challenges)

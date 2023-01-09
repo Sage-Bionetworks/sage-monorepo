@@ -3,6 +3,7 @@ package org.sagebionetworks.challenge.model.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.ArrayList;
@@ -48,6 +49,17 @@ public class ChallengeDto {
   @JsonProperty("submissionTypes")
   @Valid
   private List<ChallengeSubmissionTypeDto> submissionTypes = new ArrayList<>();
+
+  @JsonProperty("startDate")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private LocalDate startDate = null;
+
+  @JsonProperty("endDate")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private LocalDate endDate = null;
+
+  @JsonProperty("starredCount")
+  private Integer starredCount = 0;
 
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -277,6 +289,77 @@ public class ChallengeDto {
     this.submissionTypes = submissionTypes;
   }
 
+  public ChallengeDto startDate(LocalDate startDate) {
+    this.startDate = startDate;
+    return this;
+  }
+
+  /**
+   * The start date of the challenge.
+   *
+   * @return startDate
+   */
+  @Valid
+  @Schema(
+      name = "startDate",
+      example = "Fri Jul 21 00:00:00 UTC 2017",
+      description = "The start date of the challenge.",
+      required = false)
+  public LocalDate getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(LocalDate startDate) {
+    this.startDate = startDate;
+  }
+
+  public ChallengeDto endDate(LocalDate endDate) {
+    this.endDate = endDate;
+    return this;
+  }
+
+  /**
+   * The end date of the challenge.
+   *
+   * @return endDate
+   */
+  @Valid
+  @Schema(
+      name = "endDate",
+      example = "Fri Jul 21 00:00:00 UTC 2017",
+      description = "The end date of the challenge.",
+      required = false)
+  public LocalDate getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(LocalDate endDate) {
+    this.endDate = endDate;
+  }
+
+  public ChallengeDto starredCount(Integer starredCount) {
+    this.starredCount = starredCount;
+    return this;
+  }
+
+  /**
+   * The number of times the challenge has been starred by users.
+   *
+   * @return starredCount
+   */
+  @NotNull
+  @Schema(
+      name = "starredCount",
+      description = "The number of times the challenge has been starred by users.",
+      required = true)
+  public Integer getStarredCount() {
+    return starredCount;
+  }
+
+  public void setStarredCount(Integer starredCount) {
+    this.starredCount = starredCount;
+  }
+
   public ChallengeDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
@@ -337,6 +420,9 @@ public class ChallengeDto {
         && Objects.equals(this.platform, challenge.platform)
         && Objects.equals(this.incentives, challenge.incentives)
         && Objects.equals(this.submissionTypes, challenge.submissionTypes)
+        && Objects.equals(this.startDate, challenge.startDate)
+        && Objects.equals(this.endDate, challenge.endDate)
+        && Objects.equals(this.starredCount, challenge.starredCount)
         && Objects.equals(this.createdAt, challenge.createdAt)
         && Objects.equals(this.updatedAt, challenge.updatedAt);
   }
@@ -353,6 +439,9 @@ public class ChallengeDto {
         platform,
         incentives,
         submissionTypes,
+        startDate,
+        endDate,
+        starredCount,
         createdAt,
         updatedAt);
   }
@@ -370,6 +459,9 @@ public class ChallengeDto {
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
+    sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
+    sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
+    sb.append("    starredCount: ").append(toIndentedString(starredCount)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");

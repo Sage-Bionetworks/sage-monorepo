@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
 @Entity
 @Table(name = "challenge_platform")
@@ -25,6 +26,7 @@ public class SimpleChallengePlatformEntity {
   private Long id;
 
   @Column(nullable = false)
+  @GenericField()
   private String name;
 
   @Column(name = "display_name", nullable = false)

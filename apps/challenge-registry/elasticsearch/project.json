@@ -1,21 +1,21 @@
 {
-  "name": "challenge-registry-opensearch-dashboards",
+  "name": "challenge-registry-elasticsearch",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/challenge-registry-opensearch-dashboards/src",
+  "sourceRoot": "apps/challenge-registry-elasticsearch/src",
   "projectType": "application",
   "targets": {
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
-        "cwd": "apps/challenge-registry/opensearch-dashboards"
+        "cwd": "apps/challenge-registry/elasticsearch"
       }
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up",
-        "cwd": "apps/challenge-registry/opensearch-dashboards"
+        "cwd": "apps/challenge-registry/elasticsearch"
       },
       "dependsOn": ["prepare", "build-image"]
     },
@@ -23,21 +23,18 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up -d",
-        "cwd": "apps/challenge-registry/opensearch-dashboards"
+        "cwd": "apps/challenge-registry/elasticsearch"
       },
       "dependsOn": ["prepare", "build-image"]
     },
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "context": "apps/challenge-registry/opensearch-dashboards",
+        "context": "apps/challenge-registry/elasticsearch",
         "push": false,
-        "tags": ["sagebionetworks/challenge-registry-opensearch-dashboards:latest"]
+        "tags": ["sagebionetworks/challenge-registry-elasticsearch:latest"]
       }
     }
   },
-  "tags": ["type:db", "scope:backend"],
-  "implicitDependencies": [
-    "challenge-registry-opensearch"
-  ]
+  "tags": ["type:db", "scope:backend"]
 }

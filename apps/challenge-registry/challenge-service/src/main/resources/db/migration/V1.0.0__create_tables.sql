@@ -21,6 +21,8 @@ CREATE TABLE `challenge`
     `status`                ENUM('upcoming', 'active', 'completed'),
     `difficulty`            ENUM('good_for_beginners', 'intermediate', 'advanced'),
     `platform_id`           int,
+    `start_date`            DATE,
+    `end_date`              DATE,
     -- `email`                 varchar(255) DEFAULT NULL,
     -- `login`                 varchar(255) UNIQUE,
     -- `avatar_url`            varchar(255) DEFAULT NULL,
@@ -59,4 +61,17 @@ CREATE TABLE `challenge_submission_type`
     PRIMARY KEY (`id`),
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
     CONSTRAINT unique_item UNIQUE (`name`, `challenge_id`)
+);
+
+-- challenge.challenge_star definition
+
+CREATE TABLE `challenge_star`
+(
+    `id`                    int NOT NULL AUTO_INCREMENT,
+    `challenge_id`          bigint(20) NOT NULL,
+    `user_id`               bigint(20) NOT NULL,
+    `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
+    CONSTRAINT unique_item UNIQUE (`challenge_id`, `user_id`)
 );
