@@ -10,7 +10,10 @@ import {
   ChallengePlatform,
   DateRange,
 } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
-import { Organization } from '@sagebionetworks/challenge-registry/api-client-angular';
+import {
+  Organization,
+  ChallengeService,
+} from '@sagebionetworks/challenge-registry/api-client-angular';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import {
   Filter,
@@ -102,7 +105,10 @@ export class ChallengeSearchComponent
   sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private challengeService: ChallengeService,
+    private readonly configService: ConfigService
+  ) {
     this.appVersion = this.configService.config.appVersion;
   }
 
@@ -192,6 +198,11 @@ export class ChallengeSearchComponent
         this.searchResultsCount = page.length;
         this.challenges = page;
       });
+
+    // test challenge search
+    this.challengeService.listChallenges().subscribe((page) => {
+      console.log('List of challenges received from the backend', page);
+    });
   }
 
   ngOnDestroy(): void {
