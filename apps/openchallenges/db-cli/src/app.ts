@@ -51,7 +51,7 @@ export class App {
         'MongoDB uri',
         'mongodb://localhost:27017/challenge-registry'
       )
-      .option('--username <username>', 'MongoDB username', 'challenge-registry')
+      .option('--username <username>', 'MongoDB username', 'openchallenges')
       .option('--password <password>', 'MongoDB password', 'changeme');
   }
 
