@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
 @Entity
 @Table(name = "challenge_star")
@@ -33,6 +34,7 @@ public class ChallengeStar {
   private ChallengeEntity challenge;
 
   @Column(name = "user_id", nullable = false)
+  @GenericField()
   private int userId;
 
   @Column(name = "created_at")

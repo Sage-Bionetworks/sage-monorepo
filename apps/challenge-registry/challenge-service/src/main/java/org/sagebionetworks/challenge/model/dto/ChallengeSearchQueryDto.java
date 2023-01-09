@@ -26,6 +26,12 @@ public class ChallengeSearchQueryDto {
   @JsonProperty("pageSize")
   private Integer pageSize = 100;
 
+  @JsonProperty("sort")
+  private ChallengeSortDto sort = ChallengeSortDto.CREATED;
+
+  @JsonProperty("direction")
+  private ChallengeDirectionDto direction = ChallengeDirectionDto.DESC;
+
   @JsonProperty("difficulties")
   @Valid
   private List<ChallengeDifficultyDto> difficulties = null;
@@ -98,6 +104,46 @@ public class ChallengeSearchQueryDto {
 
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
+  }
+
+  public ChallengeSearchQueryDto sort(ChallengeSortDto sort) {
+    this.sort = sort;
+    return this;
+  }
+
+  /**
+   * Get sort
+   *
+   * @return sort
+   */
+  @Valid
+  @Schema(name = "sort", required = false)
+  public ChallengeSortDto getSort() {
+    return sort;
+  }
+
+  public void setSort(ChallengeSortDto sort) {
+    this.sort = sort;
+  }
+
+  public ChallengeSearchQueryDto direction(ChallengeDirectionDto direction) {
+    this.direction = direction;
+    return this;
+  }
+
+  /**
+   * Get direction
+   *
+   * @return direction
+   */
+  @Valid
+  @Schema(name = "direction", required = false)
+  public ChallengeDirectionDto getDirection() {
+    return direction;
+  }
+
+  public void setDirection(ChallengeDirectionDto direction) {
+    this.direction = direction;
   }
 
   public ChallengeSearchQueryDto difficulties(List<ChallengeDifficultyDto> difficulties) {
@@ -337,6 +383,8 @@ public class ChallengeSearchQueryDto {
     ChallengeSearchQueryDto challengeSearchQuery = (ChallengeSearchQueryDto) o;
     return Objects.equals(this.pageNumber, challengeSearchQuery.pageNumber)
         && Objects.equals(this.pageSize, challengeSearchQuery.pageSize)
+        && Objects.equals(this.sort, challengeSearchQuery.sort)
+        && Objects.equals(this.direction, challengeSearchQuery.direction)
         && Objects.equals(this.difficulties, challengeSearchQuery.difficulties)
         && Objects.equals(this.incentives, challengeSearchQuery.incentives)
         && Objects.equals(this.minStartDate, challengeSearchQuery.minStartDate)
@@ -352,6 +400,8 @@ public class ChallengeSearchQueryDto {
     return Objects.hash(
         pageNumber,
         pageSize,
+        sort,
+        direction,
         difficulties,
         incentives,
         minStartDate,
@@ -368,6 +418,8 @@ public class ChallengeSearchQueryDto {
     sb.append("class ChallengeSearchQueryDto {\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    difficulties: ").append(toIndentedString(difficulties)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    minStartDate: ").append(toIndentedString(minStartDate)).append("\n");

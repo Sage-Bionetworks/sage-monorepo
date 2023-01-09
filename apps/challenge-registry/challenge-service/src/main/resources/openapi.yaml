@@ -213,6 +213,20 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
   schemas:
+    ChallengeSort:
+      default: created
+      description: What to sort results by.
+      enum:
+      - created
+      - starred
+      type: string
+    ChallengeDirection:
+      default: desc
+      description: The direction to sort the results by.
+      enum:
+      - asc
+      - desc
+      type: string
     ChallengeDifficulty:
       description: The difficulty level of a challenge.
       enum:
@@ -268,6 +282,10 @@ components:
           format: int32
           minimum: 1
           type: integer
+        sort:
+          $ref: '#/components/schemas/ChallengeSort'
+        direction:
+          $ref: '#/components/schemas/ChallengeDirection'
         difficulties:
           description: An array of challenge difficulty levels used to filter the
             results.

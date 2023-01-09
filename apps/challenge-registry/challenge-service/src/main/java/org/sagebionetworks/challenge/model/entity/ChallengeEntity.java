@@ -19,7 +19,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtract;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
@@ -67,7 +71,9 @@ public class ChallengeEntity {
   private SimpleChallengePlatformEntity platform;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
-  @IndexedEmbedded(includePaths = {"name"})
+  @IndexedEmbedded(
+      name = "submission_types",
+      includePaths = {"name"})
   private List<ChallengeSubmissionTypeEntity> submissionTypes;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
@@ -76,17 +82,24 @@ public class ChallengeEntity {
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
   @LazyCollection(LazyCollectionOption.EXTRA)
+  // @IndexedEmbedded(includePaths = {"userId"})
+  @GenericField(
+      name = "starred_count",
+      valueBridge = @ValueBridgeRef(type = CollectionSizeBridge.class),
+      extraction = @ContainerExtraction(extract = ContainerExtract.NO),
+      sortable = Sortable.YES)
   private List<ChallengeStar> stars;
 
   @Column(name = "start_date", columnDefinition = "DATE")
-  @GenericField()
+  @GenericField(name = "start_date")
   private LocalDate startDate;
 
   @Column(name = "end_date", columnDefinition = "DATE")
-  @GenericField()
+  @GenericField(name = "end_date")
   private LocalDate endDate;
 
   @Column(name = "created_at")
+  @GenericField(name = "created_at", sortable = Sortable.YES)
   private OffsetDateTime createdAt;
 
   @Column(name = "updated_at")
