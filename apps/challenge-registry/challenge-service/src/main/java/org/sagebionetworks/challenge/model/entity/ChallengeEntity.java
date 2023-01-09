@@ -19,7 +19,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtract;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
@@ -76,7 +80,12 @@ public class ChallengeEntity {
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
   @LazyCollection(LazyCollectionOption.EXTRA)
-  @IndexedEmbedded(includePaths = {"userId"})
+  // @IndexedEmbedded(includePaths = {"userId"})
+  @GenericField(
+      name = "starredCount",
+      valueBridge = @ValueBridgeRef(type = CollectionSizeBridge.class),
+      extraction = @ContainerExtraction(extract = ContainerExtract.NO),
+      sortable = Sortable.YES)
   private List<ChallengeStar> stars;
 
   @Column(name = "start_date", columnDefinition = "DATE")
