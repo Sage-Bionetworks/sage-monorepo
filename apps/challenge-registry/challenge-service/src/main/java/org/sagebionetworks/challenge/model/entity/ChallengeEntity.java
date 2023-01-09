@@ -71,7 +71,9 @@ public class ChallengeEntity {
   private SimpleChallengePlatformEntity platform;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
-  @IndexedEmbedded(includePaths = {"name"})
+  @IndexedEmbedded(
+      name = "submission_types",
+      includePaths = {"name"})
   private List<ChallengeSubmissionTypeEntity> submissionTypes;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
@@ -82,21 +84,22 @@ public class ChallengeEntity {
   @LazyCollection(LazyCollectionOption.EXTRA)
   // @IndexedEmbedded(includePaths = {"userId"})
   @GenericField(
-      name = "starredCount",
+      name = "starred_count",
       valueBridge = @ValueBridgeRef(type = CollectionSizeBridge.class),
       extraction = @ContainerExtraction(extract = ContainerExtract.NO),
       sortable = Sortable.YES)
   private List<ChallengeStar> stars;
 
   @Column(name = "start_date", columnDefinition = "DATE")
-  @GenericField()
+  @GenericField(name = "start_date")
   private LocalDate startDate;
 
   @Column(name = "end_date", columnDefinition = "DATE")
-  @GenericField()
+  @GenericField(name = "end_date")
   private LocalDate endDate;
 
   @Column(name = "created_at")
+  @GenericField(name = "created_at", sortable = Sortable.YES)
   private OffsetDateTime createdAt;
 
   @Column(name = "updated_at")

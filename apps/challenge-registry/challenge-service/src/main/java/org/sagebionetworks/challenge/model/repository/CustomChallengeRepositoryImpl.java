@@ -8,6 +8,9 @@ import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.engine.search.predicate.SearchPredicate;
 import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
 import org.hibernate.search.engine.search.query.SearchResult;
+import org.hibernate.search.engine.search.sort.SearchSort;
+import org.hibernate.search.engine.search.sort.dsl.SearchSortFactory;
+import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
@@ -37,6 +40,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       Pageable pageable, ChallengeSearchQueryDto query, String[] fields) {
     SearchSession searchSession = Search.session(entityManager);
     SearchPredicateFactory pf = searchSession.scope(ChallengeEntity.class).predicate();
+    SearchSortFactory sf = searchSession.scope(ChallengeEntity.class).sort();
     List<SearchPredicate> predicates = new ArrayList<>();
 
     if (query.getSearchTerms() != null && !query.getSearchTerms().isBlank()) {
@@ -62,13 +66,13 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     }
 
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
+    SearchSort sort = getSearchSort(sf, query);
 
     SearchResult<ChallengeEntity> result =
         searchSession
             .search(ChallengeEntity.class) // Book.class
             .where(topLevelPredicate)
-            // .sort(f -> f.field("stars").)
-            // .sort( f -> f.field( "pageCount" ).desc())
+            .sort(sort)
             .fetch((int) pageable.getOffset(), pageable.getPageSize());
     return result;
   }
@@ -158,7 +162,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
             b -> {
               for (ChallengeSubmissionTypeDto submissionType : query.getSubmissionTypes()) {
                 b.should(
-                    pf.match().field("submissionTypes.name").matching(submissionType.toString()));
+                    pf.match().field("submission_types.name").matching(submissionType.toString()));
               }
             })
         .toPredicate();
@@ -193,7 +197,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   private SearchPredicate getChallengeStartDatePredicate(
       SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
     return pf.range()
-        .field("startDate")
+        .field("start_date")
         .between(query.getMinStartDate(), query.getMaxStartDate())
         .toPredicate();
   }
@@ -215,5 +219,29 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
               }
             })
         .toPredicate();
+  }
+
+  /**
+   * Sorts the challenges according to the sort and direction values specified.
+   *
+   * @param sf
+   * @param query
+   * @return
+   */
+  private SearchSort getSearchSort(SearchSortFactory sf, ChallengeSearchQueryDto query) {
+    String sort = "created_at";
+    switch (query.getSort()) {
+      case STARRED -> {
+        sort = "starred_count";
+      }
+      default -> {
+        break;
+      }
+    }
+    SortOrder order =
+        query.getDirection() == ChallengeSearchQueryDto.DirectionEnum.DESC
+            ? SortOrder.DESC
+            : SortOrder.ASC;
+    return sf.field(sort).order(order).toSort();
   }
 }
