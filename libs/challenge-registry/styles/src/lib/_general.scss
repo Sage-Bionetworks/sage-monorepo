@@ -1,9 +1,9 @@
 html,
 body {
   height: 100vh;
-
 }
 
+// GRID
 .base {
   width: 100%;
 }
@@ -22,8 +22,38 @@ body {
   max-width: 920px;
 }
 
+// TEXT
+.text-left {
+  text-align: left;
+}
+
+// BUTTONS
+.btn {
+  padding: 6px 32px !important;
+  text-transform: uppercase;
+  transition: background 0.15s ease !important;
+}
+.btn-block {
+  width: 100%;
+  padding: 6px 32px !important;
+  text-transform: uppercase;
+}
+.btn-group {
+  display: flex;
+  flex-flow: column wrap;
+  align-content: center;
+}
+.btn-group>*:first-child {
+  align-self: stretch;
+}
+.btn-group button {
+  margin: 5px;
+  padding: 3px 32px;
+}
+
 @media screen and (min-width: 800px) {
-  .col, .col-1 {
+  .col,
+  .col-1 {
     flex: 1;
   }
   .col-2 {

@@ -12,23 +12,13 @@ $screen-sm: 481px;
   text-align: center;
   margin-bottom: 42px;
 }
-.text-left {
-  text-align: left;
-}
+
 .text-light {
   color: rgba(255, 255, 255, 0.4);
 }
 .text-light h1,
 .text-light h2 {
   color: #fff !important;
-}
-
-// BUTTONS
-.btn {
-  width: 100%;
-  text-transform: uppercase;
-  transition: background 0.15s ease;
-  text-align: center;
 }
 
 // SECTION: organizers call-to-action
