@@ -153,7 +153,7 @@ export class ChallengeSearchComponent
   ngAfterContentInit(): void {
     this.searchTerms
       .pipe(
-        debounceTime(1000), // wait for 1s
+        debounceTime(400),
         distinctUntilChanged(),
         takeUntil(this.destroy)
       )
