@@ -1,39 +1,39 @@
 {
-  "name": "challenge-registry-db-cli",
+  "name": "openchallenges-db-cli",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/challenge-registry/db-cli/src",
+  "sourceRoot": "apps/openchallenges/db-cli/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/challenge-registry/db-cli",
-        "main": "apps/challenge-registry/db-cli/src/index.ts",
-        "tsConfig": "apps/challenge-registry/db-cli/tsconfig.app.json",
-        "assets": ["apps/challenge-registry/db-cli/*.md"]
+        "outputPath": "dist/apps/openchallenges/db-cli",
+        "main": "apps/openchallenges/db-cli/src/index.ts",
+        "tsConfig": "apps/openchallenges/db-cli/tsconfig.app.json",
+        "assets": ["apps/openchallenges/db-cli/*.md"]
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/challenge-registry/db-cli/**/*.ts"]
+        "lintFilePatterns": ["apps/openchallenges/db-cli/**/*.ts"]
       }
     },
     "lint-fix": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/challenge-registry/db-cli/**/*.ts"],
+        "lintFilePatterns": ["apps/openchallenges/db-cli/**/*.ts"],
         "fix": true
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/challenge-registry/db-cli"],
+      "outputs": ["coverage/apps/openchallenges/db-cli"],
       "options": {
-        "jestConfig": "apps/challenge-registry/db-cli/jest.config.ts",
+        "jestConfig": "apps/openchallenges/db-cli/jest.config.ts",
         "passWithNoTests": true
       }
     }
