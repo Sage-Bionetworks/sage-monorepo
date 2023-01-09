@@ -67,6 +67,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
         searchSession
             .search(ChallengeEntity.class) // Book.class
             .where(topLevelPredicate)
+            // .sort(f -> f.field("stars").)
             // .sort( f -> f.field( "pageCount" ).desc())
             .fetch((int) pageable.getOffset(), pageable.getPageSize());
     return result;
