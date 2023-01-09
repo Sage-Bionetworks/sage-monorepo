@@ -152,11 +152,7 @@ export class ChallengeSearchComponent
 
   ngAfterContentInit(): void {
     this.searchTerms
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        takeUntil(this.destroy)
-      )
+      .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy))
       .subscribe((search) => {
         const newQuery = assign(this.query.getValue(), {
           searchTerms: search,
