@@ -5,13 +5,8 @@ $screen-sm: 481px;
   width: 100%;
   margin: 0 auto;
 }
-.row {
-  display: flex;
-  flex-wrap: wrap;
+#organizer-cta .row {
   padding: 18px 88px;
-}
-.col {
-  flex: 1;
 }
 .section-title {
   text-align: center;

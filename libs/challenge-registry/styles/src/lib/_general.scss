@@ -3,3 +3,30 @@ body {
   height: 100vh;
   // background-color: green;
 }
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+}
+
+@media screen and (min-width: 800px) {
+  .col, .col-1 {
+    flex: 1;
+  }
+  .col-2 {
+    flex: 2;
+  }
+  .col-10 {
+    flex: 10;
+  }
+  .col-11 {
+    flex: 11;
+  }
+}

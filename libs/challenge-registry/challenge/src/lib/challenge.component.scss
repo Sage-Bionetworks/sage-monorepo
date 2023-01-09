@@ -3,17 +3,7 @@
 .base {
   width: 100%;
 }
-.row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-}
-.col {
-  display: flex;
-  flex-direction: column;
-  flex-basis: 100%;
-}
+
 .fill-empty {
   max-width: 920px;
 }
@@ -129,9 +119,6 @@
 }
 
 @media screen and (min-width: 800px) {
-  .col {
-    flex: 1;
-  }
   .sidenav {
     max-width: 320px;
   }
