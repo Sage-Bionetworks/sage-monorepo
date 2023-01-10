@@ -27,8 +27,6 @@ export class UserProfileChallengesComponent {
     limit: 10,
   });
 
-  constructor(private userService: UserService) {}
-
   ngOnInit(): void {
     this.query
       .pipe(
@@ -61,4 +59,6 @@ export class UserProfileChallengesComponent {
     this.limit = event.rows;
     this.updateQuery();
   }
+
+  constructor(private userService: UserService) {}
 }
