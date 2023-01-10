@@ -13,6 +13,9 @@ import {
 import {
   Organization,
   ChallengeService,
+  ChallengeSearchQuery as ChallengeSearchQueryBackend,
+  ChallengeSort,
+  ChallengeDirection,
 } from '@sagebionetworks/challenge-registry/api-client-angular';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import {
@@ -199,8 +202,14 @@ export class ChallengeSearchComponent
         this.challenges = page;
       });
 
-    // test challenge search
-    this.challengeService.listChallenges().subscribe((page) => {
+    // example: get challenges from the backend
+    const queryBackend: ChallengeSearchQueryBackend = {
+      pageNumber: 0, // starts at 0
+      pageSize: 50,
+      sort: ChallengeSort.Starred,
+      direction: ChallengeDirection.Desc,
+    } as ChallengeSearchQueryBackend;
+    this.challengeService.listChallenges(queryBackend).subscribe((page) => {
       console.log('List of challenges received from the backend', page);
     });
   }
