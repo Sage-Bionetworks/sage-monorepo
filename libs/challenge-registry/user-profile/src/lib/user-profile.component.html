@@ -1,5 +1,5 @@
 <div class="base mat-typography" *ngIf="user$ | async as user">
-  <section id="top" class="row">
+  <section id="profile-top" class="row">
     <challenge-registry-avatar
       class="profile-pic"
       [avatar]="userAvatar"
@@ -30,7 +30,7 @@
     ></challenge-registry-user-profile-stats>
     </div>
   </section>
-  <section id="bottom" class="row">
+  <section id="profile-bottom" class="row">
     <div class="sidenav col">
       <div class="nav-group">
         <a
@@ -59,7 +59,7 @@
         </a>
       </div>
     </div>
-    <div class="main col">
+    <div class="col">
       <ng-container [ngSwitch]="activeTab">
         <challenge-registry-user-profile-overview *ngSwitchCase="tabs['overview']" [user]="user">
         </challenge-registry-user-profile-overview>

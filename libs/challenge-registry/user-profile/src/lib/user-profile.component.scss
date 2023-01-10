@@ -1,11 +1,14 @@
 @use 'libs/challenge-registry/styles/src/lib/_constants' as constants;
 
-// TOP SECTION
-#top {
+#profile-top,
+#profile-bottom {
+  padding-top: 32px;
   min-height: 320px;
   justify-content: center;
 }
-#top > div {
+
+// TOP SECTION
+#profile-top > div {
   align-self: center;
   flex: 1 0 auto;
   padding: 22px;
@@ -38,9 +41,6 @@
   text-align: right;
 }
 
-#bottom {
-  justify-content: center;
-}
 // SIDENAV
 .nav-group {
   margin: 18px;
