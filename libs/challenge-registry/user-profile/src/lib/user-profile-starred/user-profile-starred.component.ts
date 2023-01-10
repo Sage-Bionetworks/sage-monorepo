@@ -34,10 +34,10 @@ export class UserProfileStarredComponent implements OnInit {
   // mock up to query challenge results
   private query: BehaviorSubject<any> = new BehaviorSubject<any>({
     offset: 0,
-    limit: 10,
+    limit: 12,
   });
 
-  limit = 10;
+  limit = 12;
   offset = 0;
   challengeResultsCount = 0;
   challenges!: Challenge[];
