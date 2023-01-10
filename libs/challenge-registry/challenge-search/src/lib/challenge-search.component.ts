@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import {
   Challenge,
+  ChallengeOrganizer,
   ChallengePlatform,
   DateRange,
 } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
@@ -16,6 +17,7 @@ import {
   Filter,
   FilterValue,
   MOCK_CHALLENGES,
+  MOCK_CHALLENGE_ORGANIZERS,
   MOCK_ORGANIZATIONS,
 } from '@sagebionetworks/challenge-registry/ui';
 import { MOCK_PLATFORMS } from './mock-platforms';
@@ -28,6 +30,7 @@ import {
   challengeIncentiveTypesFilter,
   challengePlatformFilter,
   challengeOrganizationFilter,
+  challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
 import { BehaviorSubject, Observable, of, Subject, switchMap, tap } from 'rxjs';
@@ -63,6 +66,7 @@ export class ChallengeSearchComponent
       incentiveTypes: [],
       platforms: [],
       organizations: [],
+      organizers: [],
     });
 
   // set a default behaviorSubject to trigger searchTearm's changes
@@ -79,7 +83,7 @@ export class ChallengeSearchComponent
   @ViewChild('calendar') calendar?: Calendar;
   customMonthRange!: DateRange;
   isCustomYear = false;
-  selectedYear!: DateRange | string | undefined;
+  selectedYear!: DateRange;
 
   limit = 10;
   offset = 0;
@@ -97,7 +101,10 @@ export class ChallengeSearchComponent
     challengePlatformFilter,
   ];
 
-  dropdownFilters: Filter[] = [challengeOrganizationFilter];
+  dropdownFilters: Filter[] = [
+    challengeOrganizationFilter,
+    challengeOrganizaterFilter,
+  ];
 
   sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
@@ -107,7 +114,7 @@ export class ChallengeSearchComponent
   }
 
   ngOnInit() {
-    this.selectedYear = this.startYearRangeFilter.values[0].value;
+    this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
     this.totalChallengesCount = MOCK_CHALLENGES.length;
 
     // mock up service to query all unique input data types
@@ -138,6 +145,16 @@ export class ChallengeSearchComponent
           value: org.login,
           label: org.name,
           avatarUrl: org.avatarUrl,
+          active: false,
+        })))
+    );
+    // mock up service to query all unique organizers
+    this.listOrganizers().subscribe(
+      (organizers) =>
+        (this.dropdownFilters[1].values = organizers.map((organizer) => ({
+          value: organizer.challengeIds,
+          label: organizer.name,
+          avatarUrl: organizer.avatarUrl,
           active: false,
         })))
     );
@@ -181,7 +198,8 @@ export class ChallengeSearchComponent
               this.checkOverlapped(c.submissionTypes, query.submissionTypes) &&
               this.checkOverlapped(c.incentiveTypes, query.incentiveTypes) &&
               this.checkOverlapped(c.platformId, query.platforms) &&
-              this.checkOverlapped(c.organizations, query.organizations)
+              this.checkOverlapped(c.organizations, query.organizations) &&
+              this.checkOverlapped(c.id, query.organizers)
             );
           });
           return of(this.sortChallenges(res, query.sort));
@@ -281,8 +299,12 @@ export class ChallengeSearchComponent
     return of(MOCK_ORGANIZATIONS);
   }
 
+  private listOrganizers(): Observable<ChallengeOrganizer[]> {
+    return of(MOCK_CHALLENGE_ORGANIZERS);
+  }
+
   // tmp - Removed once Service is used
-  checkOverlapped(property: any, filterValues: any): boolean {
+  private checkOverlapped(property: any, filterValues: any): boolean {
     if (filterValues && filterValues.length > 0) {
       // filter applied, but no property presents
       if (!property) return false;

@@ -23,6 +23,6 @@ export interface ChallengeSearchQuery {
   submissionTypes?: ChallengeSubmissionType[];
   incentiveTypes?: ChallengeIncentiveType[];
   organizations?: string[];
-  // organizers?: string[];
+  organizers?: string[];
   // sponsorIds?: string[];
 }
