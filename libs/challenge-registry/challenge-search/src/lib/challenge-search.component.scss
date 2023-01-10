@@ -1,27 +1,3 @@
-.row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-}
-.col {
-  display: flex;
-  flex-direction: column;
-}
-@media screen and (min-width: 800px) {
-  .col-1 {
-    flex: 1;
-  }
-  .col-2 {
-    flex: 2;
-  }
-  .col-10 {
-    flex: 10;
-  }
-  .col-11 {
-    flex: 11;
-  }
-}
 @media screen and (max-width: 768px) {
   #bottom {
     flex-direction: column;

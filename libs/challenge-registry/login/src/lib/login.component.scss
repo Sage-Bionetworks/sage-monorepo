@@ -39,18 +39,7 @@ mat-form-field.password {
   flex-direction: column;
   align-items: flex-end;
 }
-.btn-group {
-  display: flex;
-  flex-flow: column wrap;
-  align-content: center;
-}
-.btn-group>*:first-child {
-  align-self: stretch;
-}
-.btn-group button {
-  margin: 5px;
-  padding: 3px 32px;
-}
+
 .alternative {
   margin-top: 68px;
   display: flex;

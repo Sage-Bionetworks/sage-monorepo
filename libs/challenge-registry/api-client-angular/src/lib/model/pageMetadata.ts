@@ -9,17 +9,35 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { PageMetadataPaging } from './pageMetadataPaging';
 
 
 /**
- * The metadata of a page
+ * The metadata of a page.
  */
 export interface PageMetadata { 
-    paging: PageMetadataPaging;
     /**
-     * Total number of results in the result set
+     * The page number.
      */
-    totalResults: number;
+    number: number;
+    /**
+     * The number of items in a single page.
+     */
+    size: number;
+    /**
+     * Total number of elements in the result set.
+     */
+    totalElements: number;
+    /**
+     * Total number of pages in the result set.
+     */
+    totalPages: number;
+    /**
+     * Returns if there is a next page.
+     */
+    hasNext: boolean;
+    /**
+     * Returns if there is a previous page.
+     */
+    hasPrevious: boolean;
 }
 

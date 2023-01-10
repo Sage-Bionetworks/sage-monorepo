@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../coverage/apps/challenge-registry/db-cli',
+  coverageDirectory: '../../../coverage/apps/openchallenges/db-cli',
 };
