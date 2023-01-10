@@ -1,5 +1,10 @@
 <div class="base mat-typography" *ngIf="user$ | async as user">
   <section id="profile-top" class="row">
+    <div class="link" class="row">
+      <mat-icon aria-hidden="true" class="link-home">home</mat-icon>
+      <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
+      <span>{{ user.name }}</span>
+    </div>
     <challenge-registry-avatar
       class="profile-pic"
       [avatar]="userAvatar"
@@ -11,9 +16,9 @@
       <p class="username">@awesome-user</p>
       <div class="user-tag">User</div>
     </div>
-    <div id="activity" class="col">
+    <div id="activity" class="col-4">
       <div class="activity-card">
-        <p class="mat-body-strong">ROCC user since:</p>
+        <p class="mat-body-strong">Registered:</p>
         <p>01/01/2020</p>
       </div>
       <div class="activity-card">
@@ -59,7 +64,7 @@
         </a>
       </div>
     </div>
-    <div class="col">
+    <div class="main col">
       <ng-container [ngSwitch]="activeTab">
         <challenge-registry-user-profile-overview *ngSwitchCase="tabs['overview']" [user]="user">
         </challenge-registry-user-profile-overview>

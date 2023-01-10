@@ -2,9 +2,12 @@
 
 #profile-top,
 #profile-bottom {
-  padding-top: 32px;
   min-height: 320px;
   justify-content: center;
+}
+
+#profile-bottom {
+  padding-top: 32px;
 }
 
 // TOP SECTION
@@ -24,10 +27,10 @@
   box-shadow: 1px 5px 18px 0px #d4d4d4;
 }
 #details {
-  max-width: 860px;
+  max-width: 760px;
 }
 #activity {
-  max-width: 220px;
+  max-width: 320px;
 }
 .user-tag {
   width: 100%;

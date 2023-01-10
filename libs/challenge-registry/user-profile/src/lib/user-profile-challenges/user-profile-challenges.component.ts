@@ -18,13 +18,13 @@ import { assign } from 'lodash';
 export class UserProfileChallengesComponent {
   @Input() user!: User;
   challenges: Challenge[] = MOCK_CHALLENGES;
-  limit = 10;
+  limit = 12;
   offset = 0;
   challengeResultsCount = 0;
 
   private query: BehaviorSubject<any> = new BehaviorSubject<any>({
     offset: 0,
-    limit: 10,
+    limit: 12,
   });
 
   ngOnInit(): void {
