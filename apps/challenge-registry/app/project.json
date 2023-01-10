@@ -217,6 +217,7 @@
     "challenge-registry-api-gateway",
     "challenge-registry-keycloak",
     "challenge-registry-organization-service",
+    "challenge-registry-challenge-service",
     "challenge-registry-styles",
     "challenge-registry-themes",
     "shared-typescript-assets"
