@@ -152,7 +152,7 @@ export class ChallengeSearchComponent
     this.listOrganizers().subscribe(
       (organizers) =>
         (this.dropdownFilters[1].values = organizers.map((organizer) => ({
-          value: organizer.challengeIds,
+          value: organizer.challengeId,
           label: organizer.name,
           avatarUrl: organizer.avatarUrl,
           active: false,

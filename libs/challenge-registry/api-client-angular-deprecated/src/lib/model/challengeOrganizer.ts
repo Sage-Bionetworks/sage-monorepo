@@ -22,7 +22,7 @@ export interface ChallengeOrganizer {
    */
   id: string;
   name: string;
-  challengeIds: Array<string>;
+  challengeId: string;
   /**
    * The user or organization account name
    */
