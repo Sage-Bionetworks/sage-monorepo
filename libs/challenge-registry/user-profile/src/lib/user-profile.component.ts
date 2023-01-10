@@ -141,7 +141,7 @@ export class UserProfileComponent implements OnInit {
             ? (user.name as string)
             : user.login.replace(/-/g, ' '),
           src: user.avatarUrl ? user.avatarUrl : '',
-          size: 320,
+          size: 250,
         })
     );
 
