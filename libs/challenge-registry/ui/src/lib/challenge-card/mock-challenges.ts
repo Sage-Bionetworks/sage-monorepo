@@ -2,7 +2,7 @@ import { Challenge } from '@sagebionetworks/challenge-registry/api-client-angula
 
 export const MOCK_CHALLENGES: Challenge[] = [
   {
-    id: '',
+    id: '1',
     name: 'awesome-challenge',
     displayName: 'Awesome Challenge',
     description:
@@ -38,7 +38,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     updatedAt: '2000-01-01',
   },
   {
-    id: '',
+    id: '2',
     name: 'synapse-challenge',
     displayName: 'Synapse Challenge',
     description:
@@ -65,7 +65,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     updatedAt: '',
   },
   {
-    id: '',
+    id: '3',
     name: 'dream-challenge',
     displayName: 'DREAM Challenge',
     description:
@@ -92,7 +92,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     updatedAt: '',
   },
   {
-    id: '',
+    id: '4',
     name: 'upcoming-challenge',
     displayName: 'Upcoming Challenge',
     description:

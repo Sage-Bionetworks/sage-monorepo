@@ -139,6 +139,8 @@ export const challengePlatformFilterValues: FilterValue[] = [];
 
 export const challengeOrganizationFilterValues: FilterValue[] = [];
 
+export const challengeOrganizerFilterValues: FilterValue[] = [];
+
 export const challengeSortFilterValues: FilterValue[] = [
   {
     value: 'startDate',

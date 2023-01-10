@@ -22,9 +22,11 @@ export interface ChallengeOrganizer {
    */
   id: string;
   name: string;
+  challengeId: string;
   /**
    * The user or organization account name
    */
   login?: string;
+  avatarUrl?: string;
   roles?: Array<ChallengeOrganizerRole>;
 }
