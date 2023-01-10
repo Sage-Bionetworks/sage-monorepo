@@ -1,17 +1,20 @@
 @use 'libs/challenge-registry/styles/src/lib/_constants' as constants;
 
-// TOP SECTION
-#top {
+#profile-top,
+#profile-bottom {
   min-height: 320px;
   justify-content: center;
 }
-#top > div {
+
+#profile-bottom {
+  padding-top: 32px;
+}
+
+// TOP SECTION
+#profile-top > div {
   align-self: center;
   flex: 1 0 auto;
   padding: 22px;
-}
-#top > .link {
-  align-items: center;
 }
 .profile-pic {
   // width: 40px;
@@ -24,16 +27,16 @@
   box-shadow: 1px 5px 18px 0px #d4d4d4;
 }
 #details {
-  max-width: 860px;
+  max-width: 760px;
 }
 #activity {
-  max-width: 220px;
+  max-width: 320px;
 }
 .user-tag {
   width: 100%;
-  max-width: 120px;
+  max-width: 118px;
   margin: 8px 0;
-  padding: 5px 16px;
+  padding: 5px;
   border-radius: 32px;
   text-align: center;
 }
@@ -41,9 +44,6 @@
   text-align: right;
 }
 
-#bottom {
-  justify-content: center;
-}
 // SIDENAV
 .nav-group {
   margin: 18px;
