@@ -3,7 +3,6 @@ package org.sagebionetworks.challenge.service;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.challenge.model.domain.ChallengeDomain;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
@@ -23,7 +22,7 @@ public class ChallengeService {
 
   @Autowired private ChallengeRepository challengeRepository;
 
-  @Autowired private ProducerService producerService;
+  // @Autowired private ProducerService producerService;
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
 
@@ -37,9 +36,9 @@ public class ChallengeService {
 
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
-    ChallengeDomain challengeDomain = new ChallengeDomain("plop");
-    log.info("challenge sent: {}", challengeDomain);
-    producerService.sendMessage(challengeDomain);
+    // ChallengeDomain challengeDomain = new ChallengeDomain("plop");
+    // log.info("challenge sent: {}", challengeDomain);
+    // producerService.sendMessage(challengeDomain);
 
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
     Page<ChallengeEntity> challengeEntitiesPage =

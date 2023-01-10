@@ -10,7 +10,7 @@ services:
     networks:
       - challenge-registry
     ports:
-      - "8084:8084"
+      - "8085:8085"
     command: start-dev
 
 networks:
