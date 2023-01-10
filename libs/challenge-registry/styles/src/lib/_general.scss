@@ -52,6 +52,20 @@ body {
   padding: 3px 32px;
 }
 
+// CARDS
+.card-group {
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+  flex-wrap: wrap;
+
+  & > * {
+    margin: 12px;
+  }
+}
+
 @media screen and (min-width: 800px) {
   .col,
   .col-1 {

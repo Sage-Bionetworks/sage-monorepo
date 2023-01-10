@@ -17,16 +17,3 @@
   text-align: center;
   text-decoration: none;
 }
-.card-group {
-  width: 100%;
-  display: flex;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-
-  & > * {
-    margin: 12px;
-  }
-}
