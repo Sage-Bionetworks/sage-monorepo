@@ -23,18 +23,18 @@
       <div class="search-field">
         <span class="p-input-icon-left">
           <i class="pi pi-search"></i>
-          <!-- <input
+          <input
             type="text"
             pInputText
             [(ngModel)]="searchTermValue"
             (input)="onSearchChange()"
             placeholder="Search challenges"
-          /> -->
+          />
         </span>
       </div>
       <div class="sort-field">
-        <span class="sort-title">Sort by</span>
-        <!-- <p-dropdown
+        <!-- <span class="sort-title">Sort by</span>
+        <p-dropdown
           [options]="sortFilters"
           [(ngModel)]="sortedBy"
           optionLabel="label"
@@ -46,23 +46,23 @@
   </section>
   <section id="bottom" class="row">
     <div class="facets">
-      <p-panel
+      <!-- <p-panel
         header="Challenge Year"
         [toggleable]="true"
         [collapsed]="startYearRangeFilter.collapsed"
       >
         <div *ngFor="let year of startYearRangeFilter.values" class="year-btn-group">
-          <!-- <p-radioButton
+          <p-radioButton
             [inputId]="year.label!"
             [value]="year.value"
             [(ngModel)]="selectedYear"
             (onClick)="onYearChange($event)"
-          ></p-radioButton> -->
+          ></p-radioButton>
           <label [for]="year.label">{{ year.label }}</label>
         </div>
         <div class="col calendar-group" *ngIf="isCustomYear">
           <label for="custombar">mm/yyyy - mm/yyyy</label>
-          <!-- <p-calendar
+          <p-calendar
             #calendar
             [(ngModel)]="customMonthRange"
             view="month"
@@ -73,30 +73,30 @@
             inputId="custombar"
             (onSelect)="onCalendarChange()"
             (onInput)="onCalendarChange()"
-          ></p-calendar> -->
+          ></p-calendar>
         </div>
       </p-panel>
       <p-divider></p-divider>
       <ng-container *ngFor="let checkbox of checkboxFilters">
         <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
-          <!-- <challenge-registry-checkbox-filter
+          <challenge-registry-checkbox-filter
             [values]="checkbox.values"
             (checkboxChange)="onCheckboxChange($event, checkbox.queryName)"
             inputId="{{ checkbox.queryName }}"
-          ></challenge-registry-checkbox-filter> -->
+          ></challenge-registry-checkbox-filter>
         </p-panel>
         <p-divider></p-divider>
       </ng-container>
       <ng-container *ngFor="let dropdown of dropdownFilters; last as isLast">
         <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
-          <!-- <challenge-registry-search-dropdown-filter
+          <challenge-registry-search-dropdown-filter
             [values]="dropdown.values"
             [name]="dropdown.queryName"
             (dropdownChange)="onDropdownChange($event, dropdown.queryName)"
-          ></challenge-registry-search-dropdown-filter> -->
+          ></challenge-registry-search-dropdown-filter>
         </p-panel>
         <p-divider *ngIf="!isLast"></p-divider>
-      </ng-container>
+      </ng-container> -->
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>

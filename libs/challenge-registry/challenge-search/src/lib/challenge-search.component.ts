@@ -18,6 +18,7 @@ import {
   ChallengeSearchQuery,
   // ChallengeSort,
   // ChallengeDirection,
+  BasicError as ApiClientBasicError,
 } from '@sagebionetworks/challenge-registry/api-client-angular';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import {
@@ -41,14 +42,20 @@ import {
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
 // import { BehaviorSubject, Observable, of, Subject, switchMap, tap } from 'rxjs';
-import { BehaviorSubject, Subject, switchMap, tap } from 'rxjs';
-// import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Subject, switchMap, tap, throwError } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  takeUntil,
+} from 'rxjs/operators';
 // import { ChallengeSearchQuery } from './challenge-search-query';
 import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
-// import { assign } from 'lodash';
+import { assign } from 'lodash';
 // import { isNotNullOrUndefined } from 'type-guards';
 import { DateRange } from './date-range';
+import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
 
 @Component({
   selector: 'challenge-registry-challenge-search',
@@ -89,15 +96,15 @@ export class ChallengeSearchComponent
   searchTermValue!: string;
 
   challenges: Challenge[] = [];
-  totalChallengesCount!: number;
+  totalChallengesCount = 0;
 
   @ViewChild('calendar') calendar?: Calendar;
   customMonthRange!: DateRange;
   isCustomYear = false;
   selectedYear!: DateRange;
 
-  limit = 10;
-  offset = 0;
+  pageNumber = 0;
+  pageSize = 50;
   searchResultsCount = 0;
 
   // define filters
@@ -129,7 +136,6 @@ export class ChallengeSearchComponent
 
   ngOnInit() {
     this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
-    // this.totalChallengesCount = MOCK_CHALLENGES.length;
     // mock up service to query all unique input data types
     // this.listInputDataTypes().subscribe(
     //   (dataTypes) =>
@@ -188,15 +194,15 @@ export class ChallengeSearchComponent
   }
 
   ngAfterContentInit(): void {
-    console.log('haha');
-    // this.searchTerms
-    //   .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy))
-    //   .subscribe((search) => {
-    //     const newQuery = assign(this.query.getValue(), {
-    //       searchTerms: search,
-    //     });
-    //     this.query.next(newQuery);
-    //   });
+    this.searchTerms
+      .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy))
+      .subscribe((search) => {
+        const newQuery = assign(this.query.getValue(), {
+          searchTerms: search,
+        });
+        this.query.next(newQuery);
+      });
+
     this.query
       .pipe(
         tap((query) => console.log('List challenges', query)),
@@ -223,7 +229,17 @@ export class ChallengeSearchComponent
           //   );
           // });
           // return of(this.sortChallenges(res, query.sort));
-        )
+        ),
+        catchError((err) => {
+          const error = err.error as ApiClientBasicError;
+          if (isApiClientError(error)) {
+            if (error.status === 404) {
+              // TODO: Redirect to org not found page or component
+              // return of(undefined);
+            }
+          }
+          return throwError(() => new Error('test'));
+        })
       )
       .subscribe((page) => {
         // update challenges and total number of results
@@ -247,10 +263,10 @@ export class ChallengeSearchComponent
     this.destroy.complete();
   }
 
-  // onSearchChange(): void {
-  //   // update searchTerms to trigger the query' searchTerm
-  //   this.searchTerms.next(this.searchTermValue);
-  // }
+  onSearchChange(): void {
+    // update searchTerms to trigger the query' searchTerm
+    this.searchTerms.next(this.searchTermValue);
+  }
 
   // onYearChange(event: any): void {
   //   this.isCustomYear = event.value === 'custom';
