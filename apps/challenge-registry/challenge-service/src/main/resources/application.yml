@@ -33,9 +33,9 @@ spring:
   #   cleanOnValidationError: true
   rabbitmq:
     host: challenge-registry-rabbitmq
-    password: changeme
     port: 8020
-    username: challenge
+    username: openchallenges
+    password: changeme
     exchange: challenge.exchange
     queue: challenge.queue
     routingkey: challenge.routingkey
