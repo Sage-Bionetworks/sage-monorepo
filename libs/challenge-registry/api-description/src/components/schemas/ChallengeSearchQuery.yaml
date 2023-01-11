@@ -1,0 +1,60 @@
+type: object
+description: A challenge search query.
+properties:
+  pageNumber:
+    description: The page number.
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+  pageSize:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+  sort:
+    $ref: ChallengeSort.yaml
+  direction:
+    $ref: ChallengeDirection.yaml
+  difficulties:
+    description: An array of challenge difficulty levels used to filter the results.
+    type: array
+    items:
+      $ref: ChallengeDifficulty.yaml
+  incentives:
+    description: An array of challenge incentive types used to filter the results.
+    type: array
+    items:
+      $ref: ChallengeIncentive.yaml
+  minStartDate:
+    description: Keep the challenges that start at this date or later.
+    type: string
+    format: date
+    nullable: true
+    example: '2017-07-21'
+  maxStartDate:
+    description: Keep the challenges that start at this date or sooner.
+    type: string
+    format: date
+    nullable: true
+    example: '2017-07-21'
+  platforms:
+    description: An array of challenge platform ids used to filter the results.
+    type: array
+    items:
+      $ref: ChallengePlatformName.yaml
+  status:
+    description: An array of challenge status used to filter the results.
+    type: array
+    items:
+      $ref: ChallengeStatus.yaml
+  submissionTypes:
+    description: An array of challenge submission types used to filter the results.
+    type: array
+    items:
+      $ref: ChallengeSubmissionType.yaml
+  searchTerms:
+    description: A string of search terms used to filter the results.
+    type: string
+    example: 'dream challenge'

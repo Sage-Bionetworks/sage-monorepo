@@ -5,6 +5,10 @@ properties:
     $ref: ChallengeId.yaml
   name:
     $ref: ChallengeName.yaml
+  headline:
+    $ref: ChallengeHeadline.yaml
+  description:
+    $ref: ChallengeDescription.yaml
   status:
     $ref: ChallengeStatus.yaml
   difficulty:
@@ -37,10 +41,14 @@ properties:
   #     description: Number of challenge views
   #     type: integer
   #     default: 0
-  #   starredCount:
-  #     description: Number of times the challenge has been starred by users
-  #     type: integer
-  #     default: 0
+  startDate:
+    $ref: ChallengeStartDate.yaml
+  endDate:
+    $ref: ChallengeEndDate.yaml
+  starredCount:
+    description: The number of times the challenge has been starred by users.
+    type: integer
+    default: 0
   createdAt:
     type: string
     format: date-time
@@ -52,10 +60,12 @@ properties:
 required:
   - id
   - name
+  - description
   - status
   - difficulty
   - platform
   - incentives
   - submissionTypes
+  - starredCount
   - createdAt
   - updatedAt

@@ -95,8 +95,8 @@ public interface ChallengePlatformApi {
   /**
    * GET /challengePlatforms : List challenge platforms List challenge platforms
    *
-   * @param pageNumber The page number (optional, default to 0)
-   * @param pageSize The number of items in a single page (optional, default to 100)
+   * @param pageNumber The page number. (optional, default to 0)
+   * @param pageSize The number of items in a single page. (optional, default to 100)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    */
@@ -145,12 +145,12 @@ public interface ChallengePlatformApi {
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<ChallengePlatformsPageDto> listChallengePlatforms(
       @Min(0)
-          @Parameter(name = "pageNumber", description = "The page number")
+          @Parameter(name = "pageNumber", description = "The page number.")
           @Valid
           @RequestParam(value = "pageNumber", required = false, defaultValue = "0")
           Integer pageNumber,
       @Min(1)
-          @Parameter(name = "pageSize", description = "The number of items in a single page")
+          @Parameter(name = "pageSize", description = "The number of items in a single page.")
           @Valid
           @RequestParam(value = "pageSize", required = false, defaultValue = "100")
           Integer pageSize) {

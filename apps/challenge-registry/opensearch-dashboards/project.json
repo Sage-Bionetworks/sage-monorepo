@@ -36,5 +36,8 @@
       }
     }
   },
-  "tags": ["type:db", "scope:backend"]
+  "tags": ["type:db", "scope:backend"],
+  "implicitDependencies": [
+    "challenge-registry-opensearch"
+  ]
 }

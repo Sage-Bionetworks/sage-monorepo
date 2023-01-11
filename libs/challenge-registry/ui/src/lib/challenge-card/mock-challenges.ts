@@ -2,7 +2,7 @@ import { Challenge } from '@sagebionetworks/challenge-registry/api-client-angula
 
 export const MOCK_CHALLENGES: Challenge[] = [
   {
-    id: '',
+    id: '1',
     name: 'awesome-challenge',
     displayName: 'Awesome Challenge',
     description:
@@ -30,7 +30,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     submissionTypes: ['PredictionFile'],
     incentiveTypes: ['Publication', 'SpeakingEngagement'],
     featured: true,
-    starredCount: 99,
+    starredCount: 9999,
     viewCount: 9999,
     difficulty: 'GoodForBeginners',
     doi: '09.1937/09219137',
@@ -38,7 +38,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     updatedAt: '2000-01-01',
   },
   {
-    id: '',
+    id: '2',
     name: 'synapse-challenge',
     displayName: 'Synapse Challenge',
     description:
@@ -65,7 +65,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     updatedAt: '',
   },
   {
-    id: '',
+    id: '3',
     name: 'dream-challenge',
     displayName: 'DREAM Challenge',
     description:
@@ -84,7 +84,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     submissionTypes: ['PredictionFile'],
     incentiveTypes: [],
     featured: false,
-    starredCount: 99,
+    starredCount: 999,
     viewCount: 9999,
     difficulty: 'Intermediate',
     doi: null,
@@ -92,7 +92,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     updatedAt: '',
   },
   {
-    id: '',
+    id: '4',
     name: 'upcoming-challenge',
     displayName: 'Upcoming Challenge',
     description:
@@ -119,7 +119,7 @@ export const MOCK_CHALLENGES: Challenge[] = [
     submissionTypes: ['DockerImage'],
     incentiveTypes: [],
     featured: false,
-    starredCount: 99,
+    starredCount: 9,
     viewCount: 9999,
     difficulty: 'Advanced',
     doi: null,

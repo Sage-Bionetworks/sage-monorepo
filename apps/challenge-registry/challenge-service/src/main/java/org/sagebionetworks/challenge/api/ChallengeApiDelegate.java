@@ -1,12 +1,8 @@
 package org.sagebionetworks.challenge.api;
 
-import java.util.List;
 import java.util.Optional;
 import javax.annotation.Generated;
-import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,27 +23,13 @@ public interface ChallengeApiDelegate {
   /**
    * GET /challenges : List challenges List challenges
    *
-   * @param pageNumber The page number (optional, default to 0)
-   * @param pageSize The number of items in a single page (optional, default to 100)
-   * @param status An array of challenge status used to filter the results. (optional)
-   * @param platforms An array of challenge platform ids used to filter the results. (optional)
-   * @param difficulties An array of challenge difficulty levels used to filter the results.
-   *     (optional)
-   * @param submissionTypes An array of challenge submission types used to filter the results.
-   *     (optional)
-   * @param incentives An array of challenge incentive types used to filter the results. (optional)
+   * @param challengeSearchQuery The search query used to find challenges. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    * @see ChallengeApi#listChallenges
    */
   default ResponseEntity<ChallengesPageDto> listChallenges(
-      Integer pageNumber,
-      Integer pageSize,
-      List<ChallengeStatusDto> status,
-      List<String> platforms,
-      List<ChallengeDifficultyDto> difficulties,
-      List<ChallengeSubmissionTypeDto> submissionTypes,
-      List<ChallengeIncentiveDto> incentives) {
+      ChallengeSearchQueryDto challengeSearchQuery) {
     getRequest()
         .ifPresent(
             request -> {

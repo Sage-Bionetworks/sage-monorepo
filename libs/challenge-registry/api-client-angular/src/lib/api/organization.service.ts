@@ -158,8 +158,8 @@ export class OrganizationService {
     /**
      * Get all organizations
      * Returns the organizations
-     * @param pageNumber The page number
-     * @param pageSize The number of items in a single page
+     * @param pageNumber The page number.
+     * @param pageSize The number of items in a single page.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */

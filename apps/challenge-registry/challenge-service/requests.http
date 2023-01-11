@@ -32,6 +32,18 @@ GET {{basePath}}/challenges?submissionTypes=container_image
 
 GET {{basePath}}/challenges?incentives=monetary,publication
 
+### List the challenges that match the full-text search terms "mortality dream"
+
+GET {{basePath}}/challenges?searchTerms=mortality%20dream
+
+### List the challenges that start in 2017
+
+GET {{basePath}}/challenges?minStartDate=2017-01-01&maxStartDate=2017-12-31
+
+### Sort the challenges by their starred count in desc oder
+
+GET {{basePath}}/challenges?sort=starred&direction=desc
+
 ### List the challenge platforms
 
 GET {{basePath}}/challengePlatforms

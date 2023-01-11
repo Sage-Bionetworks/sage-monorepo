@@ -1,0 +1,42 @@
+{
+  "name": "openchallenges-db-cli",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/db-cli/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/openchallenges/db-cli",
+        "main": "apps/openchallenges/db-cli/src/index.ts",
+        "tsConfig": "apps/openchallenges/db-cli/tsconfig.app.json",
+        "assets": ["apps/openchallenges/db-cli/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/openchallenges/db-cli/**/*.ts"]
+      }
+    },
+    "lint-fix": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/openchallenges/db-cli/**/*.ts"],
+        "fix": true
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/openchallenges/db-cli"],
+      "options": {
+        "jestConfig": "apps/openchallenges/db-cli/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["type:app", "scope:admin"]
+}

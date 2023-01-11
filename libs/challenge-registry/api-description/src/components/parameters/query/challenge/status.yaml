@@ -1,8 +1,0 @@
-name: status
-description: An array of challenge status used to filter the results.
-in: query
-required: false
-schema:
-  type: array
-  items:
-    $ref: ../../../schemas/ChallengeStatus.yaml

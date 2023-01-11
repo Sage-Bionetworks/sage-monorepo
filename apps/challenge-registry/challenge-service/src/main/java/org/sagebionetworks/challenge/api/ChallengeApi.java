@@ -10,15 +10,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.challenge.model.dto.BasicErrorDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
-import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.challenge.model.dto.ChallengesPageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -36,15 +32,7 @@ public interface ChallengeApi {
   /**
    * GET /challenges : List challenges List challenges
    *
-   * @param pageNumber The page number (optional, default to 0)
-   * @param pageSize The number of items in a single page (optional, default to 100)
-   * @param status An array of challenge status used to filter the results. (optional)
-   * @param platforms An array of challenge platform ids used to filter the results. (optional)
-   * @param difficulties An array of challenge difficulty levels used to filter the results.
-   *     (optional)
-   * @param submissionTypes An array of challenge submission types used to filter the results.
-   *     (optional)
-   * @param incentives An array of challenge incentive types used to filter the results. (optional)
+   * @param challengeSearchQuery The search query used to find challenges. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    */
@@ -92,48 +80,11 @@ public interface ChallengeApi {
       value = "/challenges",
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<ChallengesPageDto> listChallenges(
-      @Min(0)
-          @Parameter(name = "pageNumber", description = "The page number")
-          @Valid
-          @RequestParam(value = "pageNumber", required = false, defaultValue = "0")
-          Integer pageNumber,
-      @Min(1)
-          @Parameter(name = "pageSize", description = "The number of items in a single page")
-          @Valid
-          @RequestParam(value = "pageSize", required = false, defaultValue = "100")
-          Integer pageSize,
       @Parameter(
-              name = "status",
-              description = "An array of challenge status used to filter the results.")
+              name = "challengeSearchQuery",
+              description = "The search query used to find challenges.")
           @Valid
-          @RequestParam(value = "status", required = false)
-          List<ChallengeStatusDto> status,
-      @Parameter(
-              name = "platforms",
-              description = "An array of challenge platform ids used to filter the results.")
-          @Valid
-          @RequestParam(value = "platforms", required = false)
-          List<String> platforms,
-      @Parameter(
-              name = "difficulties",
-              description = "An array of challenge difficulty levels used to filter the results.")
-          @Valid
-          @RequestParam(value = "difficulties", required = false)
-          List<ChallengeDifficultyDto> difficulties,
-      @Parameter(
-              name = "submissionTypes",
-              description = "An array of challenge submission types used to filter the results.")
-          @Valid
-          @RequestParam(value = "submissionTypes", required = false)
-          List<ChallengeSubmissionTypeDto> submissionTypes,
-      @Parameter(
-              name = "incentives",
-              description = "An array of challenge incentive types used to filter the results.")
-          @Valid
-          @RequestParam(value = "incentives", required = false)
-          List<ChallengeIncentiveDto> incentives) {
-    return getDelegate()
-        .listChallenges(
-            pageNumber, pageSize, status, platforms, difficulties, submissionTypes, incentives);
+          ChallengeSearchQueryDto challengeSearchQuery) {
+    return getDelegate().listChallenges(challengeSearchQuery);
   }
 }

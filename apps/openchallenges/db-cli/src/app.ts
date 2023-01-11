@@ -18,7 +18,7 @@ export class App {
     this.program = new Command();
 
     this.program
-      .name('challenge-db-cli')
+      .name('openchallenges-db-cli')
       .usage('[global options] command')
       .version(Pkg.version, '-v, --version', 'output the current version')
       .description(Pkg.description);
@@ -51,7 +51,7 @@ export class App {
         'MongoDB uri',
         'mongodb://localhost:27017/challenge-registry'
       )
-      .option('--username <username>', 'MongoDB username', 'challenge-registry')
+      .option('--username <username>', 'MongoDB username', 'openchallenges')
       .option('--password <password>', 'MongoDB password', 'changeme');
   }
 

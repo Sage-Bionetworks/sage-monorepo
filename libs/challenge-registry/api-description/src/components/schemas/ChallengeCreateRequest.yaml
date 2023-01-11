@@ -2,19 +2,11 @@ type: object
 description: The information used to create a challenge
 properties:
   name:
-    type: string
-    minLength: 3
-    maxLength: 60
-    example: Example challenge
-  #   displayName:
-  #     type: string
-  #     minLength: 3
-  #     maxLength: 60
-  #   description:
-  #     description: A short description of the challenge
-  #     type: string
-  #     nullable: true
-  #     maxLength: 280
+    $ref: ChallengeName.yaml
+  headline:
+    $ref: ChallengeHeadline.yaml
+  description:
+    $ref: ChallengeDescription.yaml
   #   websiteUrl:
   #     type: string
   #     format: url
@@ -64,6 +56,7 @@ properties:
 #     nullable: true
 required:
   - name
+  - description
   - status
 #   - description
 # example:

@@ -35,19 +35,13 @@ get:
   description: List challenges
   operationId: listChallenges
   parameters:
-    - $ref: ../components/parameters/query/pageNumber.yaml
-    - $ref: ../components/parameters/query/pageSize.yaml
+    # - $ref: ../components/parameters/query/pageNumber.yaml
+    # - $ref: ../components/parameters/query/pageSize.yaml
     # - $ref: parameters/sort.yaml
     # - $ref: parameters/direction.yaml
-    # - $ref: parameters/searchTerms.yaml
     # - $ref: parameters/topics.yaml
     # - $ref: parameters/inputDataTypes.yaml
-    - $ref: ../components/parameters/query/challenge/status.yaml
-    - $ref: ../components/parameters/query/challenge/platforms.yaml
-    - $ref: ../components/parameters/query/challenge/difficulties.yaml
-    - $ref: ../components/parameters/query/challenge/submissionTypes.yaml
-    - $ref: ../components/parameters/query/challenge/incentives.yaml
-    # - $ref: parameters/challenge/startDateRange.yaml
+    - $ref: ../components/parameters/query/challengeSearchQuery.yaml
     # - $ref: parameters/challenge/orgIds.yaml
     # - $ref: parameters/challenge/organizerIds.yaml
     # - $ref: parameters/challenge/sponsorIds.yaml

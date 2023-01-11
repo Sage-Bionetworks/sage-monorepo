@@ -1,14 +1,29 @@
-import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   Challenge,
+  ChallengeOrganizer,
   ChallengePlatform,
   DateRange,
 } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
-import { Organization } from '@sagebionetworks/challenge-registry/api-client-angular';
+import {
+  Organization,
+  ChallengeService,
+  ChallengeSearchQuery as ChallengeSearchQueryBackend,
+  ChallengeSort,
+  ChallengeDirection,
+} from '@sagebionetworks/challenge-registry/api-client-angular';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import {
   Filter,
+  FilterValue,
   MOCK_CHALLENGES,
+  MOCK_CHALLENGE_ORGANIZERS,
   MOCK_ORGANIZATIONS,
 } from '@sagebionetworks/challenge-registry/ui';
 import { MOCK_PLATFORMS } from './mock-platforms';
@@ -21,8 +36,11 @@ import {
   challengeIncentiveTypesFilter,
   challengePlatformFilter,
   challengeOrganizationFilter,
+  challengeOrganizaterFilter,
 } from './challenge-search-filters';
-import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
+import { challengeSortFilterValues } from './challenge-search-filters-values';
+import { BehaviorSubject, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ChallengeSearchQuery } from './challenge-search-query';
 import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
@@ -34,7 +52,9 @@ import { isNotNullOrUndefined } from 'type-guards';
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
 })
-export class ChallengeSearchComponent implements OnInit, AfterContentInit {
+export class ChallengeSearchComponent
+  implements OnInit, AfterContentInit, OnDestroy
+{
   public appVersion: string;
   datepipe: DatePipe = new DatePipe('en-US');
 
@@ -42,6 +62,8 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     new BehaviorSubject<ChallengeSearchQuery>({
       limit: 0,
       offset: 0,
+      sort: undefined,
+      searchTerms: undefined,
       startYearRange: {},
       status: [],
       inputDataTypes: [],
@@ -50,7 +72,16 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
       incentiveTypes: [],
       platforms: [],
       organizations: [],
+      organizers: [],
     });
+
+  // set a default behaviorSubject to trigger searchTearm's changes
+  private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
+    ''
+  );
+
+  private destroy = new Subject<void>();
+  searchTermValue!: string;
 
   challenges: Challenge[] = [];
   totalChallengesCount!: number;
@@ -58,7 +89,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
   @ViewChild('calendar') calendar?: Calendar;
   customMonthRange!: DateRange;
   isCustomYear = false;
-  selectedYear!: DateRange | string | undefined;
+  selectedYear!: DateRange;
 
   limit = 10;
   offset = 0;
@@ -67,7 +98,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
   // define filters
   startYearRangeFilter: Filter = challengeStartYearRangeFilter;
 
-  checkboxfilters: Filter[] = [
+  checkboxFilters: Filter[] = [
     challengeStatusFilter,
     challengeDifficultyFilter,
     challengeInputDataTypeFilter,
@@ -76,21 +107,30 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     challengePlatformFilter,
   ];
 
-  dropdownfilters: Filter[] = [challengeOrganizationFilter];
+  dropdownFilters: Filter[] = [
+    challengeOrganizationFilter,
+    challengeOrganizaterFilter,
+  ];
 
-  constructor(private readonly configService: ConfigService) {
+  sortFilters: FilterValue[] = challengeSortFilterValues;
+  sortedBy!: string;
+
+  constructor(
+    private challengeService: ChallengeService,
+    private readonly configService: ConfigService
+  ) {
     this.appVersion = this.configService.config.appVersion;
   }
 
   ngOnInit() {
-    this.selectedYear = this.startYearRangeFilter.values[0].value;
+    this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
     this.totalChallengesCount = MOCK_CHALLENGES.length;
 
     // mock up service to query all unique input data types
     this.listInputDataTypes().subscribe(
       (dataTypes) =>
         // update input data types filter values
-        (this.checkboxfilters[2].values = dataTypes.map((dataType) => ({
+        (this.checkboxFilters[2].values = dataTypes.map((dataType) => ({
           value: dataType,
           label: this.titleCase(dataType, '-'),
           active: false,
@@ -100,7 +140,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     this.listPlatforms().subscribe(
       (platforms) =>
         // update input data types filter values
-        (this.checkboxfilters[5].values = platforms.map((platform) => ({
+        (this.checkboxFilters[5].values = platforms.map((platform) => ({
           value: platform.id,
           label: platform.displayName,
           active: false,
@@ -110,29 +150,51 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     this.listOrganizations().subscribe(
       (organizations) =>
         // update input data types filter values
-        (this.dropdownfilters[0].values = organizations.map((org) => ({
+        (this.dropdownFilters[0].values = organizations.map((org) => ({
           value: org.login,
           label: org.name,
           avatarUrl: org.avatarUrl,
           active: false,
         })))
     );
+    // mock up service to query all unique organizers
+    this.listOrganizers().subscribe(
+      (organizers) =>
+        (this.dropdownFilters[1].values = organizers.map((organizer) => ({
+          value: organizer.challengeId,
+          label: organizer.name,
+          avatarUrl: organizer.avatarUrl,
+          active: false,
+        })))
+    );
 
-    // triger initial query
     const defaultQuery = {
       startYearRange: this.selectedYear,
+      sort: this.sortFilters[0].value,
       ...this.query,
     } as ChallengeSearchQuery;
     this.query.next(defaultQuery);
   }
 
   ngAfterContentInit(): void {
+    this.searchTerms
+      .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy))
+      .subscribe((search) => {
+        const newQuery = assign(this.query.getValue(), {
+          searchTerms: search,
+        });
+        this.query.next(newQuery);
+      });
+
     this.query
       .pipe(
         tap((query) => console.log('List challenges', query)),
         switchMap((query) => {
           // mock up challengeList service with defined query
-          const res = MOCK_CHALLENGES.filter((c) => {
+          const challenges = query.searchTerms
+            ? this.searchChallenges(MOCK_CHALLENGES, query.searchTerms)
+            : MOCK_CHALLENGES;
+          const res = challenges.filter((c) => {
             return (
               c.startDate &&
               query.startYearRange?.start &&
@@ -145,10 +207,11 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
               this.checkOverlapped(c.submissionTypes, query.submissionTypes) &&
               this.checkOverlapped(c.incentiveTypes, query.incentiveTypes) &&
               this.checkOverlapped(c.platformId, query.platforms) &&
-              this.checkOverlapped(c.organizations, query.organizations)
+              this.checkOverlapped(c.organizations, query.organizations) &&
+              this.checkOverlapped(c.id, query.organizers)
             );
           });
-          return of(res);
+          return of(this.sortChallenges(res, query.sort));
         })
       )
       .subscribe((page) => {
@@ -156,6 +219,27 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
         this.searchResultsCount = page.length;
         this.challenges = page;
       });
+
+    // example: get challenges from the backend
+    const queryBackend: ChallengeSearchQueryBackend = {
+      pageNumber: 0, // starts at 0
+      pageSize: 50,
+      sort: ChallengeSort.Starred,
+      direction: ChallengeDirection.Desc,
+    } as ChallengeSearchQueryBackend;
+    this.challengeService.listChallenges(queryBackend).subscribe((page) => {
+      console.log('List of challenges received from the backend', page);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
+  }
+
+  onSearchChange(): void {
+    // update searchTerms to trigger the query' searchTerm
+    this.searchTerms.next(this.searchTermValue);
   }
 
   onYearChange(event: any): void {
@@ -197,6 +281,13 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     this.query.next(newQuery);
   }
 
+  onSortChange(event: any): void {
+    const newQuery = assign(this.query.getValue(), {
+      sort: event.value,
+    });
+    this.query.next(newQuery);
+  }
+
   titleCase(string: string, split: string): string {
     // tranform one word to title-case word
     return string
@@ -228,8 +319,12 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     return of(MOCK_ORGANIZATIONS);
   }
 
+  private listOrganizers(): Observable<ChallengeOrganizer[]> {
+    return of(MOCK_CHALLENGE_ORGANIZERS);
+  }
+
   // tmp - Removed once Service is used
-  checkOverlapped(property: any, filterValues: any): boolean {
+  private checkOverlapped(property: any, filterValues: any): boolean {
     if (filterValues && filterValues.length > 0) {
       // filter applied, but no property presents
       if (!property) return false;
@@ -239,5 +334,49 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit {
     } else {
       return true; // no filter applied
     }
+  }
+
+  // mock up sorting challenges by certain property
+  private sortChallenges(
+    challenges: Challenge[],
+    sortBy: keyof Challenge | undefined
+  ): Challenge[] {
+    if (!sortBy) return challenges;
+
+    if (['startDate', 'endDate'].includes(sortBy as string)) {
+      // if it's starting soon, the status should be 'upcoming',
+      // otherwise, it's closing soon and status should be 'active',
+      const status = sortBy === 'startDate' ? 'upcoming' : 'active';
+      // sort challenges by startDate
+      // the sooner the challenge is going to start/end, the closer to the 1st card
+      // note: since it's a mock up func, the undefined of startDate/endDate is not considered here
+      return challenges
+        .filter((c) => c.status === status)
+        .sort(
+          (a, b) =>
+            +new Date(b[sortBy] as string) - +new Date(a[sortBy] as string)
+        );
+    } else {
+      return challenges.sort(
+        (a, b) => (b[sortBy] as number) - (a[sortBy] as number)
+      );
+    }
+  }
+
+  // mock up the service to filter challenge by search term
+  private searchChallenges(
+    challenges: Challenge[],
+    searchTerm: string
+  ): Challenge[] {
+    return challenges.filter((challenge) =>
+      (Object.keys(challenge) as [keyof Challenge]).some((k) =>
+        isNotNullOrUndefined(challenge[k])
+          ? (challenge[k] as string)
+              .toString()
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())
+          : false
+      )
+    );
   }
 }

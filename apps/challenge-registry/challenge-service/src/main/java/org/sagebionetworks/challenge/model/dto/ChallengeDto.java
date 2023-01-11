@@ -3,6 +3,7 @@ package org.sagebionetworks.challenge.model.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.ArrayList;
@@ -26,6 +27,12 @@ public class ChallengeDto {
   @JsonProperty("name")
   private String name;
 
+  @JsonProperty("headline")
+  private String headline;
+
+  @JsonProperty("description")
+  private String description;
+
   @JsonProperty("status")
   private ChallengeStatusDto status;
 
@@ -42,6 +49,17 @@ public class ChallengeDto {
   @JsonProperty("submissionTypes")
   @Valid
   private List<ChallengeSubmissionTypeDto> submissionTypes = new ArrayList<>();
+
+  @JsonProperty("startDate")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private LocalDate startDate = null;
+
+  @JsonProperty("endDate")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private LocalDate endDate = null;
+
+  @JsonProperty("starredCount")
+  private Integer starredCount = 0;
 
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -99,6 +117,55 @@ public class ChallengeDto {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public ChallengeDto headline(String headline) {
+    this.headline = headline;
+    return this;
+  }
+
+  /**
+   * The headline of the challenge.
+   *
+   * @return headline
+   */
+  @Size(min = 0, max = 80)
+  @Schema(
+      name = "headline",
+      example = "Example challenge headline",
+      description = "The headline of the challenge.",
+      required = false)
+  public String getHeadline() {
+    return headline;
+  }
+
+  public void setHeadline(String headline) {
+    this.headline = headline;
+  }
+
+  public ChallengeDto description(String description) {
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * The description of the challenge.
+   *
+   * @return description
+   */
+  @NotNull
+  @Size(min = 0, max = 280)
+  @Schema(
+      name = "description",
+      example = "This is an example description of the challenge.",
+      description = "The description of the challenge.",
+      required = true)
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public ChallengeDto status(ChallengeStatusDto status) {
@@ -222,6 +289,77 @@ public class ChallengeDto {
     this.submissionTypes = submissionTypes;
   }
 
+  public ChallengeDto startDate(LocalDate startDate) {
+    this.startDate = startDate;
+    return this;
+  }
+
+  /**
+   * The start date of the challenge.
+   *
+   * @return startDate
+   */
+  @Valid
+  @Schema(
+      name = "startDate",
+      example = "Fri Jul 21 00:00:00 UTC 2017",
+      description = "The start date of the challenge.",
+      required = false)
+  public LocalDate getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(LocalDate startDate) {
+    this.startDate = startDate;
+  }
+
+  public ChallengeDto endDate(LocalDate endDate) {
+    this.endDate = endDate;
+    return this;
+  }
+
+  /**
+   * The end date of the challenge.
+   *
+   * @return endDate
+   */
+  @Valid
+  @Schema(
+      name = "endDate",
+      example = "Fri Jul 21 00:00:00 UTC 2017",
+      description = "The end date of the challenge.",
+      required = false)
+  public LocalDate getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(LocalDate endDate) {
+    this.endDate = endDate;
+  }
+
+  public ChallengeDto starredCount(Integer starredCount) {
+    this.starredCount = starredCount;
+    return this;
+  }
+
+  /**
+   * The number of times the challenge has been starred by users.
+   *
+   * @return starredCount
+   */
+  @NotNull
+  @Schema(
+      name = "starredCount",
+      description = "The number of times the challenge has been starred by users.",
+      required = true)
+  public Integer getStarredCount() {
+    return starredCount;
+  }
+
+  public void setStarredCount(Integer starredCount) {
+    this.starredCount = starredCount;
+  }
+
   public ChallengeDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
@@ -275,11 +413,16 @@ public class ChallengeDto {
     ChallengeDto challenge = (ChallengeDto) o;
     return Objects.equals(this.id, challenge.id)
         && Objects.equals(this.name, challenge.name)
+        && Objects.equals(this.headline, challenge.headline)
+        && Objects.equals(this.description, challenge.description)
         && Objects.equals(this.status, challenge.status)
         && Objects.equals(this.difficulty, challenge.difficulty)
         && Objects.equals(this.platform, challenge.platform)
         && Objects.equals(this.incentives, challenge.incentives)
         && Objects.equals(this.submissionTypes, challenge.submissionTypes)
+        && Objects.equals(this.startDate, challenge.startDate)
+        && Objects.equals(this.endDate, challenge.endDate)
+        && Objects.equals(this.starredCount, challenge.starredCount)
         && Objects.equals(this.createdAt, challenge.createdAt)
         && Objects.equals(this.updatedAt, challenge.updatedAt);
   }
@@ -287,7 +430,20 @@ public class ChallengeDto {
   @Override
   public int hashCode() {
     return Objects.hash(
-        id, name, status, difficulty, platform, incentives, submissionTypes, createdAt, updatedAt);
+        id,
+        name,
+        headline,
+        description,
+        status,
+        difficulty,
+        platform,
+        incentives,
+        submissionTypes,
+        startDate,
+        endDate,
+        starredCount,
+        createdAt,
+        updatedAt);
   }
 
   @Override
@@ -296,11 +452,16 @@ public class ChallengeDto {
     sb.append("class ChallengeDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    headline: ").append(toIndentedString(headline)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
+    sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
+    sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
+    sb.append("    starredCount: ").append(toIndentedString(starredCount)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");

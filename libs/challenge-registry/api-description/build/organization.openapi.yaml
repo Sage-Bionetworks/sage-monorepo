@@ -61,7 +61,7 @@ components:
   parameters:
     pageNumber:
       name: pageNumber
-      description: The page number
+      description: The page number.
       in: query
       schema:
         type: integer
@@ -70,7 +70,7 @@ components:
         minimum: 0
     pageSize:
       name: pageSize
-      description: The number of items in a single page
+      description: The number of items in a single page.
       in: query
       schema:
         type: integer
