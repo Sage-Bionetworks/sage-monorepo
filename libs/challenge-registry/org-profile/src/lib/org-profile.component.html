@@ -1,9 +1,9 @@
 <div class="base mat-typography" *ngIf="organization$ | async as org">
-  <section id="top" class="row">
+  <section id="profile-top" class="row">
     <div class="link" class="row">
       <mat-icon aria-hidden="true" class="link-home">home</mat-icon>
       <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
-      <a routerLink="/orgs">organizations</a>
+      <a routerLink="/orgs">Organizations</a>
       <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
       <span>{{ org.name }}</span>
     </div>
@@ -19,9 +19,9 @@
       <p class="username">@{{ org.login }}</p>
       <div class="user-tag">Organization</div>
     </div>
-    <div id="activity" class="col">
+    <div id="activity" class="co-4">
       <div class="activity-card">
-        <p class="mat-body-strong">Registered since:</p>
+        <p class="mat-body-strong">Registered:</p>
         <p>01/01/2020</p>
       </div>
       <div class="activity-card">
@@ -38,7 +38,7 @@
       ></challenge-registry-org-profile-stats>
     </div>
   </section>
-  <section id="bottom" class="row">
+  <section id="profile-bottom" class="row">
     <div class="sidenav col">
       <div class="nav-group">
         <a
@@ -88,5 +88,4 @@
     </div>
   </section>
 </div>
-
 <challenge-registry-footer [version]="appVersion"></challenge-registry-footer>

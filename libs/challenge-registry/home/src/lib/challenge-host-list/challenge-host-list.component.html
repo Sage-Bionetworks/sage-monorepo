@@ -2,41 +2,12 @@
   <div class="container">
     <h3 class="section-title">Discover challenge hosts</h3>
     <div class="row">
-      <!-- TODO: replace hard-coded cards with ngFor -->
-      <div class="col org-card text-center">
-        <img
-          src="/challenge-registry-assets/images/sage.png"
-          alt="sage">
-        <h4>Sage Bionetworks</h4>
-        <div class="card-footer">
-          <a href="#">@sage</a>
-        </div>
-      </div>
-      <div class="col org-card text-center">
-        <img
-          src="/challenge-registry-assets/images/miccai.png"
-          alt="miccai">
-        <h4>MICCAI</h4>
-        <div class="card-footer">
-          <a href="#">@miccai</a>
-        </div>
-      </div>
-      <div class="col org-card text-center">
-        <img
-          src="/challenge-registry-assets/images/cagi.png"
-          alt="cagi">
-        <h4>CAGI</h4>
-        <div class="card-footer">
-          <a href="#">@cagi</a>
-        </div>
-      </div>
-      <div class="col org-card text-center">
-        <img src="/challenge-registry-assets/images/precisionfda.png"
-          alt="precisionfda">
-        <h4>PrecisionFDA</h4>
-        <div class="card-footer">
-          <a href="#">@precisionfda</a>
-        </div>
+      <div class="card-group">
+        <challenge-registry-organization-card
+        *ngFor="let organization of organizations"
+        [organization]="organization"
+        >
+        </challenge-registry-organization-card>
       </div>
     </div>
   </div>
