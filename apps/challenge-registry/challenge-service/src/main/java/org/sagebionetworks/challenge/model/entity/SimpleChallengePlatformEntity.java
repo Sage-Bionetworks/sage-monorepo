@@ -26,9 +26,15 @@ public class SimpleChallengePlatformEntity {
   private Long id;
 
   @Column(nullable = false)
+  private String slug;
+
+  @Column(nullable = false)
   @GenericField()
   private String name;
 
-  @Column(name = "display_name", nullable = false)
-  private String displayName;
+  @Column(name = "avatar_url", nullable = false)
+  private String avatarUrl;
+
+  @Column(name = "website_url", nullable = false)
+  private String websiteUrl;
 }
