@@ -1,10 +1,12 @@
+@use 'libs/challenge-registry/styles/src/lib/_constants' as constants;
+
 html,
 body {
   height: 100vh;
   margin: 0;
 }
 
-// GRID
+// GRID & LAYOUT
 .base {
   width: 100%;
 }
@@ -23,9 +25,90 @@ body {
   max-width: 920px;
 }
 
+// INPUT
+.input {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: #fff;
+  height: 48px;
+  max-width: 100%;
+  width: 100%;
+  color: #565678;
+  padding: 13px 16px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d2daf0;
+  border-radius: 2px;
+  box-shadow: none;
+}
+.input::-webkit-input-placeholder {
+  color: #ababc9;
+}
+.input:-ms-input-placeholder {
+  color: #ababc9;
+}
+.input::-ms-input-placeholder {
+  color: #ababc9;
+}
+.input::placeholder {
+  color: #ababc9;
+}
+.input::-ms-input-placeholder {
+  color: #ababc9;
+}
+.input:-ms-input-placeholder {
+  color: #ababc9;
+}
+.input:hover {
+  border-color: #bfcaea;
+}
+.input:active,
+.input:focus {
+  outline: none;
+  border-color: constants.$primary-color;
+}
+.field-grouped > .control:not(:last-child) {
+  margin-bottom: 8px;
+}
+@media (min-width: constants.$screen-lg) {
+  .field-grouped {
+    display: flex;
+  }
+  .field-grouped > .control {
+    flex-shrink: 0;
+  }
+  .field-grouped > .control.control-expanded {
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+  .field-grouped > .control:not(:last-child) {
+    margin-bottom: 0;
+    margin-right: 8px;
+  }
+}
+
 // TEXT
+.section-title {
+  text-align: center;
+  margin-bottom: 42px;
+}
+.text-sm {
+  font-size: 16px;
+  line-height: 21px;
+  letter-spacing: -0.1px;
+}
 .text-left {
   text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-light {
+  color: rgba(255, 255, 255, 0.4);
+}
+.text-light h1,
+.text-light h2 {
+  color: #fff !important;
 }
 
 // BUTTONS

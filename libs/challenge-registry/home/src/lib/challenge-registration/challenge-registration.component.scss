@@ -1,32 +1,13 @@
-$screen-sm: 481px;
-
-// GENERAL CLASSES
-.container {
+#organizer-cta {
   width: 100%;
   margin: 0 auto;
-}
-#organizer-cta .row {
-  padding: 18px 88px;
-}
-.section-title {
-  text-align: center;
-  margin-bottom: 42px;
-}
-
-.text-light {
-  color: rgba(255, 255, 255, 0.4);
-}
-.text-light h1,
-.text-light h2 {
-  color: #fff !important;
-}
-
-// SECTION: organizers call-to-action
-#organizer-cta {
   padding: 188px 0;
+
+  .row {
+    padding: 18px 88px;
+  }
 }
 .dark {
   position: relative;
   background-color: #11103e;
 }
-

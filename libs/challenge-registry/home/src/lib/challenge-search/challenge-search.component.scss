@@ -1,110 +1,36 @@
-$primary-color: #4950f6;
-$screen-sm: 481px;
-$screen-lg: 641px;
+@use 'libs/challenge-registry/styles/src/lib/_constants' as constants;
 
-// TAGS
 a, .typing {
-  color: $primary-color;
+  color: constants.$primary-color;
 }
 a:hover,
 a:active {
   outline: 0;
   text-decoration: underline;
 }
-
-// GENERAL CLASSES
-.container {
-  display: flex;
-  max-width: 1128px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-@media (min-width: $screen-sm) {
-  .container{
-    padding: 0 24px;
-  }
-}
-
-// INPUT FORMS
-.input {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  background-color: #fff;
-  height: 48px;
-  max-width: 100%;
-  width: 100%;
-  color: #565678;
-  padding: 13px 16px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #d2daf0;
-  border-radius: 2px;
-  box-shadow: none;
-}
-.input::-webkit-input-placeholder {
-  color: #ababc9;
-}
-.input:-ms-input-placeholder {
-  color: #ababc9;
-}
-.input::-ms-input-placeholder {
-  color: #ababc9;
-}
-.input::placeholder {
-  color: #ababc9;
-}
-.input::-ms-input-placeholder {
-  color: #ababc9;
-}
-.input:-ms-input-placeholder {
-  color: #ababc9;
-}
-.input:hover {
-  border-color: #bfcaea;
-}
-.input:active,
-.input:focus {
-  outline: none;
-  border-color: $primary-color;
-}
-.field-grouped > .control:not(:last-child) {
-  margin-bottom: 8px;
-}
-@media (min-width: $screen-lg) {
-  .field-grouped {
-    display: flex;
-  }
-  .field-grouped > .control {
-    flex-shrink: 0;
-  }
-  .field-grouped > .control.control-expanded {
-    flex-grow: 1;
-    flex-shrink: 1;
-  }
-  .field-grouped > .control:not(:last-child) {
-    margin-bottom: 0;
-    margin-right: 8px;
-  }
-}
-
-// SECTION: landing
 #landing {
   height: 40vh;
   padding: 210px 64px 72px;
   background-color: #F8F8F8;
+
+  .container {
+    display: flex;
+    max-width: 1128px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+ .search {
+    max-width: 360px;
+    margin: 0 auto;
+  }
 }
 .about-rocc {
   margin-bottom: 40px;
   max-width: 100%;
 }
-#landing {
-  .search {
-  max-width: 360px;
-  margin: 0 auto;
-  }
-}
-@media (min-width: $screen-sm) {
+
+@media (min-width: constants.$screen-sm) {
   .about-rocc {
     font-size: 18px;
     line-height: 32px;
@@ -113,7 +39,11 @@ a:active {
   }
   #landing {
     height: 100%;
-    
+
+    .container {
+      padding: 0 24px;
+    }
+
     .search {
       max-width: 540px;
       margin: 0;

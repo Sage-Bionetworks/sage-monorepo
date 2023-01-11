@@ -1,50 +1,28 @@
-$screen-sm: 481px;
-$screen-lg: 641px;
-
-// TAGS
-a:hover,
-a:active {
-  outline: 0;
-  text-decoration: underline;
-}
-
-// GENERAL CLASSES
-.container {
-  max-width: 1128px;
-  width: 100%;
-  margin: 0 auto;
-  padding-left: 16px;
-  padding-right: 16px;
-}
-.section-title {
-  text-align: center;
-  margin-bottom: 42px;
-}
-.text-center {
-  text-align: center;
-}
-@media (min-width: $screen-sm) {
-  .container,
-  .container-sm {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-}
+@use 'libs/challenge-registry/styles/src/lib/_constants' as constants;
 
 #organizations {
   background-color: #F8F8F8;
   padding: 88px 0;
+
+  .container {
+    max-width: 1128px;
+    width: 100%;
+    margin: 0 auto;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
 
-// CARDS
-.org-card img {
-  width: 150px;
-  height: auto;
-  border-radius: 50%;
-  box-shadow: 0 16px 24px rgba(17, 16, 62, 0.12);
-  margin-bottom: 16px;
+.section-title {
+  padding-top: 88px;
 }
-.card-footer {
-  align-self: flex-end;
-  margin-bottom: 12px;
+
+.card-group {
+  justify-content: center;
+}
+
+@media (min-width: constants.$screen-sm) {
+  #organizations {
+    padding: 0 24px;
+  }
 }

@@ -1,19 +1,13 @@
-.container {
-  max-width: 1128px;
-  width: 100%;
-  margin: 0 auto;
-  padding-left: 16px;
-  padding-right: 16px;
-}
-.section-title {
-  text-align: center;
-  margin-bottom: 42px;
-}
-.text-center {
-  text-align: center;
-}
 #acknowledgements {
   background: #F8F8F8;;
   margin-top: 12px;
   padding: 88px 0;
+
+  .container {
+    max-width: 1128px;
+    width: 100%;
+    margin: 0 auto;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
