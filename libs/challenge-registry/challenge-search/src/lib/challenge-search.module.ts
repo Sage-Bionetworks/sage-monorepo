@@ -11,6 +11,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
 
@@ -22,6 +23,7 @@ const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
     DropdownModule,
     InputTextModule,
     MatIconModule,
+    MatSnackBarModule,
     RouterModule.forChild(routes),
     UiModule,
     FormsModule,

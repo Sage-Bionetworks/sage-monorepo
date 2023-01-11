@@ -18,7 +18,6 @@ import {
   ChallengeSearchQuery,
   // ChallengeSort,
   // ChallengeDirection,
-  BasicError as ApiClientBasicError,
 } from '@sagebionetworks/challenge-registry/api-client-angular';
 import { ConfigService } from '@sagebionetworks/challenge-registry/config';
 import {
@@ -55,7 +54,7 @@ import { DatePipe } from '@angular/common';
 import { assign } from 'lodash';
 // import { isNotNullOrUndefined } from 'type-guards';
 import { DateRange } from './date-range';
-import { isApiClientError } from '@sagebionetworks/challenge-registry/util';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'challenge-registry-challenge-search',
@@ -129,7 +128,8 @@ export class ChallengeSearchComponent
 
   constructor(
     private challengeService: ChallengeService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private _snackBar: MatSnackBar
   ) {
     this.appVersion = this.configService.config.appVersion;
   }
@@ -186,6 +186,7 @@ export class ChallengeSearchComponent
     const defaultQuery: ChallengeSearchQuery = {
       pageNumber: 0, // starts at 0
       pageSize: 50,
+      minStartDate: 'sss',
       // startYearRange: this.selectedYear,
       // sort: this.sortFilters[0].value,
       // direction: ChallengeDirection.Desc,
@@ -231,14 +232,13 @@ export class ChallengeSearchComponent
           // return of(this.sortChallenges(res, query.sort));
         ),
         catchError((err) => {
-          const error = err.error as ApiClientBasicError;
-          if (isApiClientError(error)) {
-            if (error.status === 404) {
-              // TODO: Redirect to org not found page or component
-              // return of(undefined);
-            }
+          console.log(err);
+          if (err.message) {
+            this.openSnackBar(
+              'Unable to get the challenges. Please refresh the page and try again.'
+            );
           }
-          return throwError(() => new Error('test'));
+          return throwError(() => new Error(err.message));
         })
       )
       .subscribe((page) => {
@@ -246,6 +246,7 @@ export class ChallengeSearchComponent
         this.searchResultsCount = page.totalElements;
         this.challenges = page.challenges;
       });
+
     // example: get challenges from the backend
     // const queryBackend: ChallengeSearchQuery = {
     //   pageNumber: 0, // starts at 0
@@ -405,4 +406,10 @@ export class ChallengeSearchComponent
   //     )
   //   );
   // }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, undefined, {
+      duration: 30000,
+    });
+  }
 }
