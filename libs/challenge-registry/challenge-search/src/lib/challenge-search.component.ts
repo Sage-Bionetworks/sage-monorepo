@@ -184,12 +184,8 @@ export class ChallengeSearchComponent
     // } as ChallengeSearchQuery;
     // this.query.next(defaultQuery);
     const defaultQuery: ChallengeSearchQuery = {
-      pageNumber: 0, // starts at 0
+      pageNumber: 0,
       pageSize: 50,
-      minStartDate: 'sss',
-      // startYearRange: this.selectedYear,
-      // sort: this.sortFilters[0].value,
-      // direction: ChallengeDirection.Desc,
     } as ChallengeSearchQuery;
     this.query.next(defaultQuery);
   }
@@ -209,9 +205,6 @@ export class ChallengeSearchComponent
         tap((query) => console.log('List challenges', query)),
         switchMap(
           (query) => this.challengeService.listChallenges(query)
-          // const challenges = query.searchTerms
-          //   ? this.searchChallenges(MOCK_CHALLENGES, query.searchTerms)
-          //   : MOCK_CHALLENGES;
           // const res = challenges.filter((c) => {
           //   return (
           //     c.startDate &&
@@ -232,7 +225,6 @@ export class ChallengeSearchComponent
           // return of(this.sortChallenges(res, query.sort));
         ),
         catchError((err) => {
-          console.log(err);
           if (err.message) {
             this.openSnackBar(
               'Unable to get the challenges. Please refresh the page and try again.'
@@ -388,23 +380,6 @@ export class ChallengeSearchComponent
   //       (a, b) => (b[sortBy] as number) - (a[sortBy] as number)
   //     );
   //   }
-  // }
-
-  // // mock up the service to filter challenge by search term
-  // private searchChallenges(
-  //   challenges: Challenge[],
-  //   searchTerm: string
-  // ): Challenge[] {
-  //   return challenges.filter((challenge) =>
-  //     (Object.keys(challenge) as [keyof Challenge]).some((k) =>
-  //       isNotNullOrUndefined(challenge[k])
-  //         ? (challenge[k] as string)
-  //             .toString()
-  //             .toLowerCase()
-  //             .includes(searchTerm.toLowerCase())
-  //         : false
-  //     )
-  //   );
   // }
 
   openSnackBar(message: string) {
