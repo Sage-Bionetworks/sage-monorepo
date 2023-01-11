@@ -81,8 +81,7 @@ public interface ChallengePlatformApi {
       value = "/challengePlatforms/{challengePlatformName}",
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<ChallengePlatformDto> getChallengePlatform(
-      @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-          @Size(min = 3, max = 30)
+      @Size(min = 3, max = 30)
           @Parameter(
               name = "challengePlatformName",
               description = "The unique identifier of the challenge platform.",

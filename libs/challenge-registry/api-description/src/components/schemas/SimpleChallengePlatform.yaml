@@ -1,13 +1,13 @@
 type: object
-description: A simple challenge platform
+description: A simple challenge platform.
 properties:
   id:
     $ref: ChallengePlatformId.yaml
+  slug:
+    $ref: ChallengePlatformSlug.yaml
   name:
     $ref: ChallengePlatformName.yaml
-  displayName:
-    $ref: ChallengePlatformDisplayName.yaml
 required:
   - id
+  - slug
   - name
-  - displayName
