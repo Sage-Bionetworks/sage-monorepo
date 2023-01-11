@@ -48,10 +48,6 @@
   .nav-item.active-tab {
     background-color: map.get($figma, dl-color-default-hover2);
   }
-  .base-main-section {
-    border-color: transparent;
-    background-color: transparent;
-  }
 
   @media (max-width: 479px) {
     .profile-pic {
