@@ -8,7 +8,7 @@ services:
     env_file:
       - .env
     # volumes:
-    #   - challenge-registry-mariadb:/data/db
+    #   - openchallenges-mariadb:/data/db
     #   - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - schematic
@@ -16,8 +16,8 @@ services:
       - "${SERVER_PORT}:7080"
 
 # volumes:
-#   challenge-registry-mariadb:
-#     name: challenge-registry-mariadb
+#   openchallenges-mariadb:
+#     name: openchallenges-mariadb
 
 networks:
   schematic:
