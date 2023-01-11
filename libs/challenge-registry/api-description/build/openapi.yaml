@@ -246,8 +246,6 @@ components:
       type: string
       minLength: 3
       maxLength: 30
-      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
-      example: example-challenge-platform
     ChallengeStatus:
       description: The status of the challenge.
       type: string
@@ -518,38 +516,47 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
-    ChallengePlatformCreateRequest:
-      type: object
-      description: The information used to create a challenge platform
-      properties:
-        displayName:
-          $ref: '#/components/schemas/ChallengePlatformDisplayName'
-      required:
-        - displayName
+    ChallengePlatformSlug:
+      description: The slug of the challenge platform.
+      type: string
+      minLength: 3
+      maxLength: 30
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      example: example-challenge-platform
     ChallengePlatform:
       type: object
       description: A challenge platform
-      allOf:
-        - $ref: '#/components/schemas/ChallengePlatformCreateRequest'
-        - type: object
-          properties:
-            id:
-              $ref: '#/components/schemas/ChallengePlatformId'
-            name:
-              $ref: '#/components/schemas/ChallengePlatformName'
-            createdAt:
-              type: string
-              format: date-time
-              example: '2022-07-04T22:19:11Z'
-            updatedAt:
-              type: string
-              format: date-time
-              example: '2022-07-04T22:19:11Z'
-          required:
-            - id
-            - name
-            - createdAt
-            - updatedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengePlatformId'
+        slug:
+          $ref: '#/components/schemas/ChallengePlatformSlug'
+        name:
+          $ref: '#/components/schemas/ChallengePlatformName'
+        avatarUrl:
+          type: string
+          format: url
+          example: 'https://via.placeholder.com/300.png'
+        websiteUrl:
+          type: string
+          format: url
+          example: 'https://example.com'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
+      required:
+        - id
+        - slug
+        - name
+        - avatarUrl
+        - websiteUrl
+        - createdAt
+        - updatedAt
     ChallengePlatformsPage:
       type: object
       description: A page of challenge platforms.
