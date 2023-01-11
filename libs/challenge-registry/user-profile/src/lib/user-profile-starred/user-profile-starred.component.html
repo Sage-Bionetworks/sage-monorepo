@@ -37,7 +37,7 @@
           (onPageChange)="onPageChange($event)"
         ></p-paginator>
       </div>
-      <div *ngSwitchCase="tabs['organizations']" class="main-section-stars-card-group">
+      <div *ngSwitchCase="tabs['organizations']" class="card-group">
         <challenge-registry-organization-card
           *ngFor="let organization of organizations"
           [organization]="organization"
