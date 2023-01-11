@@ -77,8 +77,8 @@
       "server": "openchallenges-mariadb",
       "port": 3306,
       "driver": "MariaDB",
-      "name": "openchallenges_challenge_service",
-      "database": "openchallenges_challenge_service",
+      "name": "openchallenges-challenge-service",
+      "database": "challenge_service",
       "username": "maria",
       "password": "changeme"
     },
@@ -90,8 +90,8 @@
       "server": "openchallenges-mariadb",
       "port": 3306,
       "driver": "MariaDB",
-      "name": "openchallenges_organization_service",
-      "database": "openchallenges_organization_service",
+      "name": "openchallenges-organization-service",
+      "database": "organization_service",
       "username": "maria",
       "password": "changeme"
     },
@@ -103,8 +103,8 @@
       "server": "openchallenges-mariadb",
       "port": 3306,
       "driver": "MariaDB",
-      "name": "openchallenges_user_service",
-      "database": "openchallenges_user_service",
+      "name": "openchallenges-user-service",
+      "database": "user_service",
       "username": "maria",
       "password": "changeme"
     }
