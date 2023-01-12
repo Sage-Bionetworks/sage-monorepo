@@ -1,7 +1,7 @@
 package org.sagebionetworks.challenge.exception;
 
-public class SortNotImplemented extends SimpleChallengeGlobalException {
-  public SortNotImplemented(String detail) {
+public class SortNotImplementedException extends SimpleChallengeGlobalException {
+  public SortNotImplementedException(String detail) {
     super(
         ErrorConstants.SORT_NOT_IMPLEMENTED.getType(),
         ErrorConstants.SORT_NOT_IMPLEMENTED.getTitle(),
