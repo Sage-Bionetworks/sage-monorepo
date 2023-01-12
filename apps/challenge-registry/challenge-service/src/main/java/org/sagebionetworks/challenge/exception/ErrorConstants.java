@@ -11,7 +11,9 @@ public enum ErrorConstants {
   ORGANIZATION_ALREADY_EXISTS(
       "CHALLENGE-SERVICE-1001", "Challenge already exists", HttpStatus.CONFLICT),
   INVALID_ORGANIZATION("CHALLENGE-SERVICE-1002", "Invalid challenge", HttpStatus.BAD_REQUEST),
-  BAD_REQUEST("CHALLENGE-SERVICE-1003", "Bad request", HttpStatus.BAD_REQUEST);
+  BAD_REQUEST("CHALLENGE-SERVICE-1003", "Bad request", HttpStatus.BAD_REQUEST),
+  SORTING_STRATEGY_NOT_IMPLEMENTED(
+      "CHALLENGE-SERVICE-1004", "Unsupported sorting strategy", HttpStatus.NOT_IMPLEMENTED);
 
   private String type;
   private String title;
