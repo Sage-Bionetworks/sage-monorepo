@@ -3,12 +3,16 @@
     <div class="cards-inner section-inner">
       <div class="cards-header text-center">
         <h3 class="section-title">Featured challenges</h3>
-        <p class="text-sm">Not sure where to start? Try one of the following featured challenges!</p>
+        <p class="text-sm">
+          Not sure where to start? Try one of the following featured challenges!
+        </p>
       </div>
       <div class="cards-wrap">
         <div class="card-group">
-          <challenge-registry-challenge-card *ngFor="let challenge of challenges"
-          [challenge]="challenge">
+          <challenge-registry-challenge-card
+            *ngFor="let challenge of challenges"
+            [deprecatedChallenge]="challenge"
+          >
           </challenge-registry-challenge-card>
         </div>
       </div>
