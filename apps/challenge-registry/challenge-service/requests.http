@@ -51,7 +51,3 @@ GET {{basePath}}/challengePlatforms
 ### Get a challenge platform by ID
 
 GET {{basePath}}/challengePlatforms/synapse
-
-### Test sort and direction
-
-GET {{basePath}}/challenges?sort=plop
