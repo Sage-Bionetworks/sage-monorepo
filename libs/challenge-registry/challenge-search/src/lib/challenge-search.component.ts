@@ -100,7 +100,7 @@ export class ChallengeSearchComponent
   @ViewChild('calendar') calendar?: Calendar;
   customMonthRange!: DateRange;
   isCustomYear = false;
-  selectedYear!: DateRange;
+  selectedYear!: DateRange | undefined;
 
   pageNumber = 0;
   pageSize = 50;
@@ -135,7 +135,6 @@ export class ChallengeSearchComponent
   }
 
   ngOnInit() {
-    this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
     // mock up service to query all unique input data types
     // this.listInputDataTypes().subscribe(
     //   (dataTypes) =>
@@ -261,15 +260,16 @@ export class ChallengeSearchComponent
     this.searchTerms.next(this.searchTermValue);
   }
 
-  // onYearChange(event: any): void {
-  //   this.isCustomYear = event.value === 'custom';
-  //   const yearRange = event.value;
-  //   // update query with new year range
-  //   const newQuery = assign(this.query.getValue(), {
-  //     startYearRange: yearRange,
-  //   });
-  //   this.query.next(newQuery);
-  // }
+  onYearChange(): void {
+    this.isCustomYear = (this.selectedYear as string) === 'custom';
+    const yearRange = this.selectedYear;
+    // update query with new year range
+    const newQuery = assign(this.query.getValue(), {
+      minStartDate: yearRange ? yearRange.start : undefined,
+      maxStartDate: yearRange ? yearRange.end : undefined,
+    });
+    this.query.next(newQuery);
+  }
 
   // onCalendarChange(): void {
   //   this.isCustomYear = true;

@@ -46,7 +46,7 @@
   </section>
   <section id="bottom" class="row">
     <div class="facets">
-      <!-- <p-panel
+      <p-panel
         header="Challenge Year"
         [toggleable]="true"
         [collapsed]="startYearRangeFilter.collapsed"
@@ -56,11 +56,11 @@
             [inputId]="year.label!"
             [value]="year.value"
             [(ngModel)]="selectedYear"
-            (onClick)="onYearChange($event)"
+            (onClick)="onYearChange()"
           ></p-radioButton>
           <label [for]="year.label">{{ year.label }}</label>
         </div>
-        <div class="col calendar-group" *ngIf="isCustomYear">
+        <!--  <div class="col calendar-group" *ngIf="isCustomYear">
           <label for="custombar">mm/yyyy - mm/yyyy</label>
           <p-calendar
             #calendar
@@ -74,10 +74,10 @@
             (onSelect)="onCalendarChange()"
             (onInput)="onCalendarChange()"
           ></p-calendar>
-        </div>
+        </div>  -->
       </p-panel>
       <p-divider></p-divider>
-      <ng-container *ngFor="let checkbox of checkboxFilters">
+      <!-- <ng-container *ngFor="let checkbox of checkboxFilters">
         <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
           <challenge-registry-checkbox-filter
             [values]="checkbox.values"
@@ -96,7 +96,8 @@
           ></challenge-registry-search-dropdown-filter>
         </p-panel>
         <p-divider *ngIf="!isLast"></p-divider>
-      </ng-container> -->
+      </ng-container>
+      -->
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
