@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.NotImplementedException;
 import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.engine.search.predicate.SearchPredicate;
 import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
@@ -15,6 +14,7 @@ import org.hibernate.search.engine.search.sort.dsl.SearchSortFactory;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
+import org.sagebionetworks.challenge.exception.BadRequestException;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDirectionDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
@@ -254,8 +254,8 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
         return sf.field("starred_count").order(order).toSort();
       }
       default -> {
-        // TODO Thrown custom error
-        throw new NotImplementedException();
+        throw new BadRequestException(
+            String.format("Unhandled sorting strategy '%s'", query.getSort()));
       }
     }
   }
