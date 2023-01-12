@@ -15,6 +15,7 @@ import {
   //   Organization,
   Challenge,
   ChallengeService,
+  ChallengePlatformService,
   ChallengeSearchQuery,
   // ChallengeSort,
   // ChallengeDirection,
@@ -33,9 +34,9 @@ import {
   challengeStatusFilter,
   challengeDifficultyFilter,
   challengeSubmissionTypesFilter,
-  // challengeInputDataTypeFilter,
+  challengeInputDataTypeFilter,
   challengeIncentiveTypesFilter,
-  // challengePlatformFilter,
+  challengePlatformFilter,
   challengeOrganizationFilter,
   challengeOrganizaterFilter,
 } from './challenge-search-filters';
@@ -112,10 +113,10 @@ export class ChallengeSearchComponent
   checkboxFilters: Filter[] = [
     challengeStatusFilter,
     challengeDifficultyFilter,
-    // challengeInputDataTypeFilter,
+    challengeInputDataTypeFilter,
     challengeSubmissionTypesFilter,
     challengeIncentiveTypesFilter,
-    // challengePlatformFilter,
+    challengePlatformFilter,
   ];
 
   dropdownFilters: Filter[] = [
@@ -128,6 +129,7 @@ export class ChallengeSearchComponent
 
   constructor(
     private challengeService: ChallengeService,
+    private challengePlatformService: ChallengePlatformService,
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar
   ) {
@@ -145,16 +147,17 @@ export class ChallengeSearchComponent
     //       active: false,
     //     })))
     // );
-    // // mock up service to query all unique platforms
-    // this.listPlatforms().subscribe(
-    //   (platforms) =>
-    //     // update input data types filter values
-    //     (this.checkboxFilters[5].values = platforms.map((platform) => ({
-    //       value: platform.id,
-    //       label: platform.displayName,
-    //       active: false,
-    //     })))
-    // );
+    // update platform filter values
+    this.challengePlatformService.listChallengePlatforms().subscribe(
+      (page) =>
+        (this.checkboxFilters[5].values = page.challengePlatforms.map(
+          (platform) => ({
+            value: platform.name,
+            label: platform.displayName,
+            active: false,
+          })
+        ))
+    );
     // // mock up service to query all unique organizations
     // this.listOrganizations().subscribe(
     //   (organizations) =>
@@ -295,10 +298,6 @@ export class ChallengeSearchComponent
   //     : uniqueTypes.sort();
 
   //   return of(sortTypes);
-  // }
-
-  // private listPlatforms(): Observable<ChallengePlatform[]> {
-  //   return of(MOCK_PLATFORMS);
   // }
 
   // private listOrganizations(): Observable<Organization[]> {
