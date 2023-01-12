@@ -24,7 +24,7 @@ import { User } from '@sagebionetworks/challenge-registry/api-client-angular-dep
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'Challenge Registry';
+  title = 'OpenChallenges';
   sections: { [key: string]: NavbarSection } = APP_SECTIONS;
   isLoggedIn = false;
   user: User = MOCK_USER;
@@ -55,7 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
     // });
     this.userAvatar.name = 'blank';
 
-    this.pageTitleService.setTitle('Challenge Registry');
+    this.pageTitleService.setTitle('OpenChallenges');
   }
 
   ngOnDestroy(): void {
