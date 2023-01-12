@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import org.apache.commons.lang.NotImplementedException;
 import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.engine.search.predicate.SearchPredicate;
 import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
@@ -25,6 +27,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class CustomChallengeRepositoryImpl implements CustomChallengeRepository {
 
@@ -235,7 +240,10 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
 
     SearchSort createdSort = sf.field("created_at").order(order).toSort();
     SearchSort scoreSort = sf.score().order(order).toSort();
-    SearchSort relevanceSort = query.getSearchTerms().isBlank() ? createdSort : scoreSort;
+    SearchSort relevanceSort =
+        (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
+            ? createdSort
+            : scoreSort;
 
     switch (query.getSort()) {
       case CREATED -> {
@@ -248,7 +256,8 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
         return sf.field("starred_count").order(order).toSort();
       }
       default -> {
-        return relevanceSort;
+        // TODO Thrown custom error
+        throw new NotImplementedException();
       }
     }
   }
