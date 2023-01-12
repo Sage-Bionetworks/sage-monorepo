@@ -214,10 +214,11 @@ components:
       description: The specified resource was not found
   schemas:
     ChallengeSort:
-      default: created
+      default: relevance
       description: What to sort results by.
       enum:
       - created
+      - relevance
       - starred
       type: string
     ChallengeDirection:

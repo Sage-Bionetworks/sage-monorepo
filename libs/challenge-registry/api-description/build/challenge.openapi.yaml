@@ -84,9 +84,10 @@ components:
     ChallengeSort:
       description: What to sort results by.
       type: string
-      default: created
+      default: relevance
       enum:
         - created
+        - relevance
         - starred
     ChallengeDirection:
       description: The direction to sort the results by.
