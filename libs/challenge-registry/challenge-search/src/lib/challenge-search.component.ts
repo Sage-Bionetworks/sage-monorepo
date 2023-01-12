@@ -271,20 +271,22 @@ export class ChallengeSearchComponent
     this.query.next(newQuery);
   }
 
-  // onCalendarChange(): void {
-  //   this.isCustomYear = true;
-  //   if (this.calendar) {
-  //     const yearRange = {
-  //       start: this.datepipe.transform(this.calendar.value[0], 'yyyy-MM-dd'),
-  //       end: this.datepipe.transform(this.calendar.value[1], 'yyyy-MM-dd'),
-  //     } as DateRange;
-
-  //     const newQuery = assign(this.query.getValue(), {
-  //       startYearRange: yearRange,
-  //     });
-  //     this.query.next(newQuery);
-  //   }
-  // }
+  onCalendarChange(): void {
+    this.isCustomYear = true;
+    if (this.calendar) {
+      const newQuery = assign(this.query.getValue(), {
+        minStartDate: this.datepipe.transform(
+          this.calendar.value[0],
+          'yyyy-MM-dd'
+        ),
+        maxStartDate: this.datepipe.transform(
+          this.calendar.value[1],
+          'yyyy-MM-dd'
+        ),
+      });
+      this.query.next(newQuery);
+    }
+  }
 
   // onCheckboxChange(selected: string[], queryName: string): void {
   //   const newQuery = assign(this.query.getValue(), {
