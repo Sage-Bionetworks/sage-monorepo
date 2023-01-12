@@ -137,9 +137,7 @@ export class ChallengeSearchComponent
   }
 
   ngOnInit() {
-    // mock up service to query all unique input data types
-    // this.listInputDataTypes().subscribe(
-    //   (dataTypes) =>
+    this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
     //     // update input data types filter values
     //     (this.checkboxFilters[2].values = dataTypes.map((dataType) => ({
     //       value: dataType,
@@ -179,7 +177,6 @@ export class ChallengeSearchComponent
     //       active: false,
     //     })))
     // );
-
     const defaultQuery: ChallengeSearchQuery = {
       pageNumber: 0,
       pageSize: 50,
