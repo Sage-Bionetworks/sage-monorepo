@@ -17,6 +17,7 @@ import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDirectionDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSearchQueryDto;
+import org.sagebionetworks.challenge.model.dto.ChallengeSortDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
@@ -230,17 +231,26 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchSort getSearchSort(SearchSortFactory sf, ChallengeSearchQueryDto query) {
-    String sort = "created_at";
-    switch (query.getSort()) {
-      case STARRED -> {
-        sort = "starred_count";
-      }
-      default -> {
-        break;
-      }
-    }
     SortOrder order =
         query.getDirection() == ChallengeDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
-    return sf.field(sort).order(order).toSort();
+
+    SearchSort createdSort = sf.field("created_at").order(order).toSort();
+    SearchSort scoreSort = sf.score().order(order).toSort();
+    SearchSort relevanceSort = query.getSearchTerms().isBlank() ? createdSort : scoreSort;
+
+    switch (query.getSort()) {
+      case CREATED -> {
+        return createdSort;
+      }
+      case RELEVANCE -> {
+        return relevanceSort;
+      }
+      case STARRED -> {
+        return sf.field("starred_count").order(order).toSort();
+      }
+      default -> {
+        return relevanceSort;
+      }
+    }
   }
 }
