@@ -33,9 +33,9 @@ import {
   challengeStatusFilter,
   challengeDifficultyFilter,
   challengeSubmissionTypesFilter,
-  challengeInputDataTypeFilter,
+  // challengeInputDataTypeFilter,
   challengeIncentiveTypesFilter,
-  challengePlatformFilter,
+  // challengePlatformFilter,
   challengeOrganizationFilter,
   challengeOrganizaterFilter,
 } from './challenge-search-filters';
@@ -112,10 +112,10 @@ export class ChallengeSearchComponent
   checkboxFilters: Filter[] = [
     challengeStatusFilter,
     challengeDifficultyFilter,
-    challengeInputDataTypeFilter,
+    // challengeInputDataTypeFilter,
     challengeSubmissionTypesFilter,
     challengeIncentiveTypesFilter,
-    challengePlatformFilter,
+    // challengePlatformFilter,
   ];
 
   dropdownFilters: Filter[] = [
@@ -176,12 +176,7 @@ export class ChallengeSearchComponent
     //       active: false,
     //     })))
     // );
-    // const defaultQuery = {
-    //   startYearRange: this.selectedYear,
-    //   sort: this.sortFilters[0].value,
-    //   ...this.query,
-    // } as ChallengeSearchQuery;
-    // this.query.next(defaultQuery);
+
     const defaultQuery: ChallengeSearchQuery = {
       pageNumber: 0,
       pageSize: 50,
@@ -202,27 +197,8 @@ export class ChallengeSearchComponent
     this.query
       .pipe(
         tap((query) => console.log('List challenges', query)),
-        switchMap(
-          (query) => this.challengeService.listChallenges(query)
-          // const res = challenges.filter((c) => {
-          //   return (
-          //     c.startDate &&
-          //     query.startYearRange?.start &&
-          //     query.startYearRange?.end &&
-          //     new Date(c.startDate) >= new Date(query.startYearRange.start) &&
-          //     new Date(c.startDate) <= new Date(query.startYearRange.end) &&
-          //     this.checkOverlapped(c.status, query.status) &&
-          //     this.checkOverlapped(c.difficulty, query.difficulty) &&
-          //     this.checkOverlapped(c.inputDataTypes, query.inputDataTypes) &&
-          //     this.checkOverlapped(c.submissionTypes, query.submissionTypes) &&
-          //     this.checkOverlapped(c.incentiveTypes, query.incentiveTypes) &&
-          //     this.checkOverlapped(c.platformId, query.platforms) &&
-          //     this.checkOverlapped(c.organizations, query.organizations) &&
-          //     this.checkOverlapped(c.id, query.organizers)
-          //   );
-          // });
-          // return of(this.sortChallenges(res, query.sort));
-        ),
+        switchMap((query) => this.challengeService.listChallenges(query)),
+        tap((page) => console.log('List of challenges: ', page.challenges)),
         catchError((err) => {
           if (err.message) {
             this.openSnackBar(
@@ -237,17 +213,6 @@ export class ChallengeSearchComponent
         this.searchResultsCount = page.totalElements;
         this.challenges = page.challenges;
       });
-
-    // example: get challenges from the backend
-    // const queryBackend: ChallengeSearchQuery = {
-    //   pageNumber: 0, // starts at 0
-    //   pageSize: 50,
-    //   sort: ChallengeSort.Starred,
-    //   direction: ChallengeDirection.Desc,
-    // } as ChallengeSearchQuery;
-    // this.challengeService.listChallenges(queryBackend).subscribe((page) => {
-    //   console.log('List of challenges received from the backend', page);
-    // });
   }
 
   ngOnDestroy(): void {
@@ -288,12 +253,12 @@ export class ChallengeSearchComponent
     }
   }
 
-  // onCheckboxChange(selected: string[], queryName: string): void {
-  //   const newQuery = assign(this.query.getValue(), {
-  //     [queryName]: selected,
-  //   });
-  //   this.query.next(newQuery);
-  // }
+  onCheckboxChange(selected: string[], queryName: string): void {
+    const newQuery = assign(this.query.getValue(), {
+      [queryName]: selected,
+    });
+    this.query.next(newQuery);
+  }
 
   // onDropdownChange(selected: string[], queryName: string): void {
   //   const newQuery = assign(this.query.getValue(), {
@@ -342,19 +307,6 @@ export class ChallengeSearchComponent
 
   // private listOrganizers(): Observable<ChallengeOrganizer[]> {
   //   return of(MOCK_CHALLENGE_ORGANIZERS);
-  // }
-
-  // // tmp - Removed once Service is used
-  // private checkOverlapped(property: any, filterValues: any): boolean {
-  //   if (filterValues && filterValues.length > 0) {
-  //     // filter applied, but no property presents
-  //     if (!property) return false;
-  //     // check overlap between two arrays, otherwise return true
-  //     const propertyValues = property instanceof Array ? property : [property];
-  //     return propertyValues.some((value: any) => filterValues?.includes(value));
-  //   } else {
-  //     return true; // no filter applied
-  //   }
   // }
 
   // // mock up sorting challenges by certain property

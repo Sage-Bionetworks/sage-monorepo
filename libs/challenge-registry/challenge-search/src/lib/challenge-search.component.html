@@ -60,7 +60,7 @@
           ></p-radioButton>
           <label [for]="year.label">{{ year.label }}</label>
         </div>
-         <div class="col calendar-group" *ngIf="isCustomYear">
+        <div class="col calendar-group" *ngIf="isCustomYear">
           <label for="custombar">mm/yyyy - mm/yyyy</label>
           <p-calendar
             #calendar
@@ -74,10 +74,10 @@
             (onSelect)="onCalendarChange()"
             (onInput)="onCalendarChange()"
           ></p-calendar>
-        </div> 
+        </div>
       </p-panel>
       <p-divider></p-divider>
-      <!-- <ng-container *ngFor="let checkbox of checkboxFilters">
+      <ng-container *ngFor="let checkbox of checkboxFilters">
         <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
           <challenge-registry-checkbox-filter
             [values]="checkbox.values"
@@ -87,7 +87,7 @@
         </p-panel>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngFor="let dropdown of dropdownFilters; last as isLast">
+      <!-- <ng-container *ngFor="let dropdown of dropdownFilters; last as isLast">
         <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
           <challenge-registry-search-dropdown-filter
             [values]="dropdown.values"
