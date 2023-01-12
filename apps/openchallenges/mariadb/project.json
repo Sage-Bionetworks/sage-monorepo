@@ -1,21 +1,20 @@
 {
-  "name": "challenge-registry-mariadb",
+  "name": "openchallenges-mariadb",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/challenge-registry-mariadb/src",
   "projectType": "application",
   "targets": {
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
-        "cwd": "apps/challenge-registry/mariadb"
+        "cwd": "apps/openchallenges/mariadb"
       }
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up",
-        "cwd": "apps/challenge-registry/mariadb"
+        "cwd": "apps/openchallenges/mariadb"
       },
       "dependsOn": ["prepare", "build-image"]
     },
@@ -23,16 +22,16 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up -d",
-        "cwd": "apps/challenge-registry/mariadb"
+        "cwd": "apps/openchallenges/mariadb"
       },
       "dependsOn": ["prepare", "build-image"]
     },
     "build-image": {
       "executor": "@nx-tools/nx-docker:build",
       "options": {
-        "context": "apps/challenge-registry/mariadb",
+        "context": "apps/openchallenges/mariadb",
         "push": false,
-        "tags": ["sagebionetworks/challenge-registry-mariadb:latest"]
+        "tags": ["sagebionetworks/openchallenges-mariadb:latest"]
       }
     }
   },

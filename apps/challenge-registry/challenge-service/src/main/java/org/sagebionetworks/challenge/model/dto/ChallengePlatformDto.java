@@ -18,14 +18,20 @@ import org.springframework.format.annotation.DateTimeFormat;
 // TODO Add x-java-class-annotations
 public class ChallengePlatformDto {
 
-  @JsonProperty("displayName")
-  private String displayName;
-
   @JsonProperty("id")
   private Long id;
 
+  @JsonProperty("slug")
+  private String slug;
+
   @JsonProperty("name")
   private String name;
+
+  @JsonProperty("avatarUrl")
+  private String avatarUrl;
+
+  @JsonProperty("websiteUrl")
+  private String websiteUrl;
 
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -34,31 +40,6 @@ public class ChallengePlatformDto {
   @JsonProperty("updatedAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
-
-  public ChallengePlatformDto displayName(String displayName) {
-    this.displayName = displayName;
-    return this;
-  }
-
-  /**
-   * The display name of the challenge platform.
-   *
-   * @return displayName
-   */
-  @NotNull
-  @Size(min = 3, max = 50)
-  @Schema(
-      name = "displayName",
-      example = "Example Challenge Platform",
-      description = "The display name of the challenge platform.",
-      required = true)
-  public String getDisplayName() {
-    return displayName;
-  }
-
-  public void setDisplayName(String displayName) {
-    this.displayName = displayName;
-  }
 
   public ChallengePlatformDto id(Long id) {
     this.id = id;
@@ -84,6 +65,32 @@ public class ChallengePlatformDto {
     this.id = id;
   }
 
+  public ChallengePlatformDto slug(String slug) {
+    this.slug = slug;
+    return this;
+  }
+
+  /**
+   * The slug of the challenge platform.
+   *
+   * @return slug
+   */
+  @NotNull
+  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
+  @Size(min = 3, max = 30)
+  @Schema(
+      name = "slug",
+      example = "example-challenge-platform",
+      description = "The slug of the challenge platform.",
+      required = true)
+  public String getSlug() {
+    return slug;
+  }
+
+  public void setSlug(String slug) {
+    this.slug = slug;
+  }
+
   public ChallengePlatformDto name(String name) {
     this.name = name;
     return this;
@@ -95,19 +102,54 @@ public class ChallengePlatformDto {
    * @return name
    */
   @NotNull
-  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
   @Size(min = 3, max = 30)
-  @Schema(
-      name = "name",
-      example = "example-challenge-platform",
-      description = "The name of the challenge platform.",
-      required = true)
+  @Schema(name = "name", description = "The name of the challenge platform.", required = true)
   public String getName() {
     return name;
   }
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public ChallengePlatformDto avatarUrl(String avatarUrl) {
+    this.avatarUrl = avatarUrl;
+    return this;
+  }
+
+  /**
+   * Get avatarUrl
+   *
+   * @return avatarUrl
+   */
+  @NotNull
+  @Schema(name = "avatarUrl", example = "https://via.placeholder.com/300.png", required = true)
+  public String getAvatarUrl() {
+    return avatarUrl;
+  }
+
+  public void setAvatarUrl(String avatarUrl) {
+    this.avatarUrl = avatarUrl;
+  }
+
+  public ChallengePlatformDto websiteUrl(String websiteUrl) {
+    this.websiteUrl = websiteUrl;
+    return this;
+  }
+
+  /**
+   * Get websiteUrl
+   *
+   * @return websiteUrl
+   */
+  @NotNull
+  @Schema(name = "websiteUrl", example = "https://example.com", required = true)
+  public String getWebsiteUrl() {
+    return websiteUrl;
+  }
+
+  public void setWebsiteUrl(String websiteUrl) {
+    this.websiteUrl = websiteUrl;
   }
 
   public ChallengePlatformDto createdAt(OffsetDateTime createdAt) {
@@ -161,25 +203,29 @@ public class ChallengePlatformDto {
       return false;
     }
     ChallengePlatformDto challengePlatform = (ChallengePlatformDto) o;
-    return Objects.equals(this.displayName, challengePlatform.displayName)
-        && Objects.equals(this.id, challengePlatform.id)
+    return Objects.equals(this.id, challengePlatform.id)
+        && Objects.equals(this.slug, challengePlatform.slug)
         && Objects.equals(this.name, challengePlatform.name)
+        && Objects.equals(this.avatarUrl, challengePlatform.avatarUrl)
+        && Objects.equals(this.websiteUrl, challengePlatform.websiteUrl)
         && Objects.equals(this.createdAt, challengePlatform.createdAt)
         && Objects.equals(this.updatedAt, challengePlatform.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(displayName, id, name, createdAt, updatedAt);
+    return Objects.hash(id, slug, name, avatarUrl, websiteUrl, createdAt, updatedAt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengePlatformDto {\n");
-    sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");

@@ -1,23 +1,23 @@
 version: "3.8"
 
 services:
-  challenge-registry-mariadb:
-    image: sagebionetworks/challenge-registry-mariadb:latest
-    container_name: challenge-registry-mariadb
+  openchallenges-mariadb:
+    image: sagebionetworks/openchallenges-mariadb:latest
+    container_name: openchallenges-mariadb
     restart: always
     env_file:
       - .env
     volumes:
-      - challenge-registry-mariadb:/data/db
+      # - openchallenges-mariadb:/data/db
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - challenge-registry
     ports:
       - "3306:3306"
 
-volumes:
-  challenge-registry-mariadb:
-    name: challenge-registry-mariadb
+# volumes:
+#   openchallenges-mariadb:
+#     name: openchallenges-mariadb
 
 networks:
   challenge-registry:

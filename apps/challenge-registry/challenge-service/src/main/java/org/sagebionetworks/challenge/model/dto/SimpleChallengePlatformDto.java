@@ -8,8 +8,8 @@ import java.util.Objects;
 import javax.annotation.Generated;
 import javax.validation.constraints.*;
 
-/** A simple challenge platform */
-@Schema(name = "SimpleChallengePlatform", description = "A simple challenge platform")
+/** A simple challenge platform. */
+@Schema(name = "SimpleChallengePlatform", description = "A simple challenge platform.")
 @JsonTypeName("SimpleChallengePlatform")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations
@@ -18,11 +18,11 @@ public class SimpleChallengePlatformDto {
   @JsonProperty("id")
   private Long id;
 
+  @JsonProperty("slug")
+  private String slug;
+
   @JsonProperty("name")
   private String name;
-
-  @JsonProperty("displayName")
-  private String displayName;
 
   public SimpleChallengePlatformDto id(Long id) {
     this.id = id;
@@ -48,6 +48,32 @@ public class SimpleChallengePlatformDto {
     this.id = id;
   }
 
+  public SimpleChallengePlatformDto slug(String slug) {
+    this.slug = slug;
+    return this;
+  }
+
+  /**
+   * The slug of the challenge platform.
+   *
+   * @return slug
+   */
+  @NotNull
+  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
+  @Size(min = 3, max = 30)
+  @Schema(
+      name = "slug",
+      example = "example-challenge-platform",
+      description = "The slug of the challenge platform.",
+      required = true)
+  public String getSlug() {
+    return slug;
+  }
+
+  public void setSlug(String slug) {
+    this.slug = slug;
+  }
+
   public SimpleChallengePlatformDto name(String name) {
     this.name = name;
     return this;
@@ -59,44 +85,14 @@ public class SimpleChallengePlatformDto {
    * @return name
    */
   @NotNull
-  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
   @Size(min = 3, max = 30)
-  @Schema(
-      name = "name",
-      example = "example-challenge-platform",
-      description = "The name of the challenge platform.",
-      required = true)
+  @Schema(name = "name", description = "The name of the challenge platform.", required = true)
   public String getName() {
     return name;
   }
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public SimpleChallengePlatformDto displayName(String displayName) {
-    this.displayName = displayName;
-    return this;
-  }
-
-  /**
-   * The display name of the challenge platform.
-   *
-   * @return displayName
-   */
-  @NotNull
-  @Size(min = 3, max = 50)
-  @Schema(
-      name = "displayName",
-      example = "Example Challenge Platform",
-      description = "The display name of the challenge platform.",
-      required = true)
-  public String getDisplayName() {
-    return displayName;
-  }
-
-  public void setDisplayName(String displayName) {
-    this.displayName = displayName;
   }
 
   @Override
@@ -109,13 +105,13 @@ public class SimpleChallengePlatformDto {
     }
     SimpleChallengePlatformDto simpleChallengePlatform = (SimpleChallengePlatformDto) o;
     return Objects.equals(this.id, simpleChallengePlatform.id)
-        && Objects.equals(this.name, simpleChallengePlatform.name)
-        && Objects.equals(this.displayName, simpleChallengePlatform.displayName);
+        && Objects.equals(this.slug, simpleChallengePlatform.slug)
+        && Objects.equals(this.name, simpleChallengePlatform.name);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, displayName);
+    return Objects.hash(id, slug, name);
   }
 
   @Override
@@ -123,8 +119,8 @@ public class SimpleChallengePlatformDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class SimpleChallengePlatformDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -1,8 +1,8 @@
 -- challenge.challenge_platform data
-INSERT INTO challenge_platform (id, name, display_name)
-VALUES ('1', 'synapse', 'Synapse'),
-  ('2', 'codalab', 'CodaLab'),
-  ('3', 'kaggle', 'Kaggle');
+INSERT INTO challenge_platform (id, slug, name, avatar_url, website_url)
+VALUES ('1', 'synapse', 'Synapse', 'https://via.placeholder.com/300.png', 'https://synapse.org'),
+  ('2', 'codalab', 'CodaLab', 'https://via.placeholder.com/300.png', 'https://codalab.org'),
+  ('3', 'kaggle', 'Kaggle', 'https://via.placeholder.com/300.png', 'https://www.kaggle.com');
 -- challenge.challenge data
 INSERT INTO challenge (
     id,

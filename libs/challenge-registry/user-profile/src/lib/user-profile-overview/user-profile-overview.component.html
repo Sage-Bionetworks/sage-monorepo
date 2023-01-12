@@ -8,11 +8,13 @@
   <div id="orgs" class="row">
     <div class="col">
       <p class="section-title">Organizations</p>
-      <challenge-registry-organization-card
+      <div class="card-group">
+        <challenge-registry-organization-card
         *ngFor="let organization of organizations"
         [organization]="organization"
-      >
-      </challenge-registry-organization-card>
+        >
+        </challenge-registry-organization-card>
+      </div>
     </div>
   </div>
 </main>

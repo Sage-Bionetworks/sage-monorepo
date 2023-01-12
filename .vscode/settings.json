@@ -74,11 +74,37 @@
         "authProtocol": "default"
       },
       "previewLimit": 50,
-      "server": "challenge-registry-mariadb",
+      "server": "openchallenges-mariadb",
       "port": 3306,
       "driver": "MariaDB",
-      "name": "challenge-registry-mariadb",
-      "database": "challenge",
+      "name": "openchallenges-challenge-service",
+      "database": "challenge_service",
+      "username": "maria",
+      "password": "changeme"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "openchallenges-mariadb",
+      "port": 3306,
+      "driver": "MariaDB",
+      "name": "openchallenges-organization-service",
+      "database": "organization_service",
+      "username": "maria",
+      "password": "changeme"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "openchallenges-mariadb",
+      "port": 3306,
+      "driver": "MariaDB",
+      "name": "openchallenges-user-service",
+      "database": "user_service",
       "username": "maria",
       "password": "changeme"
     }

@@ -2,10 +2,10 @@ spring:
   application:
     name: challenge-registry-organization-service
   datasource:
-    # url: jdbc:mysql://challenge-registry-mariadb:3306/challenge
+    # url: jdbc:mysql://openchallenges-mariadb:3306/challenge
     url: ${db.url}
     # url: jdbc:h2:mem:challenge
-    username: challenge_organization_service
+    username: organization_service
     password: changeme
   jpa:
     hibernate:

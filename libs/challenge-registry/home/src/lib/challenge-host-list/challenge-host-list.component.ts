@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Organization } from '@sagebionetworks/challenge-registry/api-client-angular';
+import { MOCK_ORGANIZATIONS } from '@sagebionetworks/challenge-registry/ui';
 
 @Component({
   selector: 'challenge-registry-challenge-host-list',
@@ -8,4 +10,5 @@ import { Component } from '@angular/core';
 export class ChallengeHostListComponent {
   // constructor() {}
   // ngOnInit(): void {}
+  organizations: Organization[] = MOCK_ORGANIZATIONS;
 }
