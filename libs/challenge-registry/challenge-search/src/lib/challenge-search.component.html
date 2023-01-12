@@ -33,20 +33,20 @@
         </span>
       </div>
       <div class="sort-field">
-        <span class="sort-title">Sort by</span>
+        <!-- <span class="sort-title">Sort by</span>
         <p-dropdown
           [options]="sortFilters"
           [(ngModel)]="sortedBy"
           optionLabel="label"
           optionValue="value"
           (onChange)="onSortChange($event)"
-        ></p-dropdown>
+        ></p-dropdown> -->
       </div>
     </div>
   </section>
   <section id="bottom" class="row">
     <div class="facets">
-      <p-panel
+      <!-- <p-panel
         header="Challenge Year"
         [toggleable]="true"
         [collapsed]="startYearRangeFilter.collapsed"
@@ -96,7 +96,7 @@
           ></challenge-registry-search-dropdown-filter>
         </p-panel>
         <p-divider *ngIf="!isLast"></p-divider>
-      </ng-container>
+      </ng-container> -->
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>

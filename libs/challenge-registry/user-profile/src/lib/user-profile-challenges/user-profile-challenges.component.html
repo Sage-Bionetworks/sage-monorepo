@@ -2,8 +2,10 @@
   <div id="challenges" class="row col">
     <h3>Challenges</h3>
     <div class="card-group">
-      <challenge-registry-challenge-card *ngFor="let challenge of challenges"
-      [challenge]="challenge">
+      <challenge-registry-challenge-card
+        *ngFor="let challenge of challenges"
+        [deprecatedChallenge]="challenge"
+      >
       </challenge-registry-challenge-card>
     </div>
     <p-paginator
@@ -18,4 +20,3 @@
         ></p-paginator>
   </div>
 </main>
-
