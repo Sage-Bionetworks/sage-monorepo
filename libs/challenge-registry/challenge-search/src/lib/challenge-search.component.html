@@ -56,7 +56,7 @@
             [inputId]="year.label!"
             [value]="year.value"
             [(ngModel)]="selectedYear"
-            (onClick)="onYearChange($event)"
+            (onClick)="onYearChange()"
           ></p-radioButton>
           <label [for]="year.label">{{ year.label }}</label>
         </div>
@@ -96,7 +96,8 @@
           ></challenge-registry-search-dropdown-filter>
         </p-panel>
         <p-divider *ngIf="!isLast"></p-divider>
-      </ng-container> -->
+      </ng-container>
+      -->
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>

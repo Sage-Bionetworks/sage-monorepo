@@ -15,6 +15,7 @@ import {
   //   Organization,
   Challenge,
   ChallengeService,
+  ChallengePlatformService,
   ChallengeSearchQuery,
   // ChallengeSort,
   // ChallengeDirection,
@@ -100,7 +101,7 @@ export class ChallengeSearchComponent
   @ViewChild('calendar') calendar?: Calendar;
   customMonthRange!: DateRange;
   isCustomYear = false;
-  selectedYear!: DateRange;
+  selectedYear!: DateRange | undefined;
 
   pageNumber = 0;
   pageSize = 50;
@@ -128,6 +129,7 @@ export class ChallengeSearchComponent
 
   constructor(
     private challengeService: ChallengeService,
+    private challengePlatformService: ChallengePlatformService,
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar
   ) {
@@ -136,9 +138,6 @@ export class ChallengeSearchComponent
 
   ngOnInit() {
     this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
-    // mock up service to query all unique input data types
-    // this.listInputDataTypes().subscribe(
-    //   (dataTypes) =>
     //     // update input data types filter values
     //     (this.checkboxFilters[2].values = dataTypes.map((dataType) => ({
     //       value: dataType,
@@ -146,16 +145,17 @@ export class ChallengeSearchComponent
     //       active: false,
     //     })))
     // );
-    // // mock up service to query all unique platforms
-    // this.listPlatforms().subscribe(
-    //   (platforms) =>
-    //     // update input data types filter values
-    //     (this.checkboxFilters[5].values = platforms.map((platform) => ({
-    //       value: platform.id,
-    //       label: platform.displayName,
-    //       active: false,
-    //     })))
-    // );
+    // update platform filter values
+    this.challengePlatformService.listChallengePlatforms().subscribe(
+      (page) =>
+        (this.checkboxFilters[5].values = page.challengePlatforms.map(
+          (platform) => ({
+            value: platform.name,
+            label: platform.displayName,
+            active: false,
+          })
+        ))
+    );
     // // mock up service to query all unique organizations
     // this.listOrganizations().subscribe(
     //   (organizations) =>
@@ -177,12 +177,6 @@ export class ChallengeSearchComponent
     //       active: false,
     //     })))
     // );
-    // const defaultQuery = {
-    //   startYearRange: this.selectedYear,
-    //   sort: this.sortFilters[0].value,
-    //   ...this.query,
-    // } as ChallengeSearchQuery;
-    // this.query.next(defaultQuery);
     const defaultQuery: ChallengeSearchQuery = {
       pageNumber: 0,
       pageSize: 50,
@@ -203,27 +197,8 @@ export class ChallengeSearchComponent
     this.query
       .pipe(
         tap((query) => console.log('List challenges', query)),
-        switchMap(
-          (query) => this.challengeService.listChallenges(query)
-          // const res = challenges.filter((c) => {
-          //   return (
-          //     c.startDate &&
-          //     query.startYearRange?.start &&
-          //     query.startYearRange?.end &&
-          //     new Date(c.startDate) >= new Date(query.startYearRange.start) &&
-          //     new Date(c.startDate) <= new Date(query.startYearRange.end) &&
-          //     this.checkOverlapped(c.status, query.status) &&
-          //     this.checkOverlapped(c.difficulty, query.difficulty) &&
-          //     this.checkOverlapped(c.inputDataTypes, query.inputDataTypes) &&
-          //     this.checkOverlapped(c.submissionTypes, query.submissionTypes) &&
-          //     this.checkOverlapped(c.incentiveTypes, query.incentiveTypes) &&
-          //     this.checkOverlapped(c.platformId, query.platforms) &&
-          //     this.checkOverlapped(c.organizations, query.organizations) &&
-          //     this.checkOverlapped(c.id, query.organizers)
-          //   );
-          // });
-          // return of(this.sortChallenges(res, query.sort));
-        ),
+        switchMap((query) => this.challengeService.listChallenges(query)),
+        tap((page) => console.log('List of challenges: ', page.challenges)),
         catchError((err) => {
           if (err.message) {
             this.openSnackBar(
@@ -238,17 +213,6 @@ export class ChallengeSearchComponent
         this.searchResultsCount = page.totalElements;
         this.challenges = page.challenges;
       });
-
-    // example: get challenges from the backend
-    // const queryBackend: ChallengeSearchQuery = {
-    //   pageNumber: 0, // starts at 0
-    //   pageSize: 50,
-    //   sort: ChallengeSort.Starred,
-    //   direction: ChallengeDirection.Desc,
-    // } as ChallengeSearchQuery;
-    // this.challengeService.listChallenges(queryBackend).subscribe((page) => {
-    //   console.log('List of challenges received from the backend', page);
-    // });
   }
 
   ngOnDestroy(): void {
@@ -261,37 +225,40 @@ export class ChallengeSearchComponent
     this.searchTerms.next(this.searchTermValue);
   }
 
-  // onYearChange(event: any): void {
-  //   this.isCustomYear = event.value === 'custom';
-  //   const yearRange = event.value;
-  //   // update query with new year range
-  //   const newQuery = assign(this.query.getValue(), {
-  //     startYearRange: yearRange,
-  //   });
-  //   this.query.next(newQuery);
-  // }
+  onYearChange(): void {
+    this.isCustomYear = (this.selectedYear as string) === 'custom';
+    const yearRange = this.selectedYear;
+    // update query with new year range
+    const newQuery = assign(this.query.getValue(), {
+      minStartDate: yearRange ? yearRange.start : undefined,
+      maxStartDate: yearRange ? yearRange.end : undefined,
+    });
+    this.query.next(newQuery);
+  }
 
-  // onCalendarChange(): void {
-  //   this.isCustomYear = true;
-  //   if (this.calendar) {
-  //     const yearRange = {
-  //       start: this.datepipe.transform(this.calendar.value[0], 'yyyy-MM-dd'),
-  //       end: this.datepipe.transform(this.calendar.value[1], 'yyyy-MM-dd'),
-  //     } as DateRange;
+  onCalendarChange(): void {
+    this.isCustomYear = true;
+    if (this.calendar) {
+      const newQuery = assign(this.query.getValue(), {
+        minStartDate: this.datepipe.transform(
+          this.calendar.value[0],
+          'yyyy-MM-dd'
+        ),
+        maxStartDate: this.datepipe.transform(
+          this.calendar.value[1],
+          'yyyy-MM-dd'
+        ),
+      });
+      this.query.next(newQuery);
+    }
+  }
 
-  //     const newQuery = assign(this.query.getValue(), {
-  //       startYearRange: yearRange,
-  //     });
-  //     this.query.next(newQuery);
-  //   }
-  // }
-
-  // onCheckboxChange(selected: string[], queryName: string): void {
-  //   const newQuery = assign(this.query.getValue(), {
-  //     [queryName]: selected,
-  //   });
-  //   this.query.next(newQuery);
-  // }
+  onCheckboxChange(selected: string[], queryName: string): void {
+    const newQuery = assign(this.query.getValue(), {
+      [queryName]: selected,
+    });
+    this.query.next(newQuery);
+  }
 
   // onDropdownChange(selected: string[], queryName: string): void {
   //   const newQuery = assign(this.query.getValue(), {
@@ -330,29 +297,12 @@ export class ChallengeSearchComponent
   //   return of(sortTypes);
   // }
 
-  // private listPlatforms(): Observable<ChallengePlatform[]> {
-  //   return of(MOCK_PLATFORMS);
-  // }
-
   // private listOrganizations(): Observable<Organization[]> {
   //   return of(MOCK_ORGANIZATIONS);
   // }
 
   // private listOrganizers(): Observable<ChallengeOrganizer[]> {
   //   return of(MOCK_CHALLENGE_ORGANIZERS);
-  // }
-
-  // // tmp - Removed once Service is used
-  // private checkOverlapped(property: any, filterValues: any): boolean {
-  //   if (filterValues && filterValues.length > 0) {
-  //     // filter applied, but no property presents
-  //     if (!property) return false;
-  //     // check overlap between two arrays, otherwise return true
-  //     const propertyValues = property instanceof Array ? property : [property];
-  //     return propertyValues.some((value: any) => filterValues?.includes(value));
-  //   } else {
-  //     return true; // no filter applied
-  //   }
   // }
 
   // // mock up sorting challenges by certain property
