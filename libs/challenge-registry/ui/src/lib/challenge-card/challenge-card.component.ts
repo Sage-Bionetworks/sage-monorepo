@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Challenge } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
+import { Challenge } from '@sagebionetworks/challenge-registry/api-client-angular';
+import { Challenge as DeprecatedChallenge } from '@sagebionetworks/challenge-registry/api-client-angular-deprecated';
 
 @Component({
   selector: 'challenge-registry-challenge-card',
@@ -8,6 +9,8 @@ import { Challenge } from '@sagebionetworks/challenge-registry/api-client-angula
 })
 export class ChallengeCardComponent implements OnInit {
   @Input() challenge!: Challenge;
+  // TODO: remove the deprecatedChallenge when real Challenge has all required properties
+  @Input() deprecatedChallenge!: DeprecatedChallenge;
   // tmp platform
   platform = 'Platform';
   status!: string | undefined;

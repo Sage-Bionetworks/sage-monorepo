@@ -1,0 +1,64 @@
+name: Bug Report
+description: File a bug report
+title: '[Bug]: <title>'
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the bug you encountered.
+      options:
+        - label: I have searched the existing issues
+          required: true
+  - type: dropdown
+    id: projects
+    attributes:
+      label: What projects are you seeing the problem on?
+      multiple: true
+      options:
+        - OpenChallenges
+        - Schematic
+  - type: textarea
+    attributes:
+      label: Current behavior
+      description: A concise description of what you're experiencing.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: A concise description of what you expected to happen.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Anything else?
+      description: |
+        Links? References? Logs? Screenshot? Anything that will give us more context about the issue you are encountering!
+  - type: input
+    id: commit-id
+    attributes:
+      label: Commit ID
+      description: What is the 7-character ID of the commit where the issue occurred?
+      placeholder: ex. a4f87ca
+    validations:
+      required: false
+  - type: checkboxes
+    attributes:
+      label: Are you developing inside the dev container?
+      description: Please confirm that you're experiencing the issue while using the development container provided by this repository.
+      options:
+        - label: I am using the dev container
+          required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/.github/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

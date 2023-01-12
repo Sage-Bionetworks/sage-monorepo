@@ -24,6 +24,11 @@
   .p-panel .p-panel-header {
     background: transparent !important;
   }
+  .mat-mdc-snack-bar-container {
+    --mat-mdc-snack-bar-button-color: #ff4081;
+    --mdc-snackbar-container-color: #333333;
+    --mdc-snackbar-supporting-text-color: hotpink;
+  }
 }
 
 @mixin typography($theme) {
