@@ -82,7 +82,9 @@ public class ChallengeEntity {
       name = "challenge_x_challenge_input_data_type",
       joinColumns = @JoinColumn(name = "challenge_id"),
       inverseJoinColumns = @JoinColumn(name = "challenge_input_data_type_id"))
-  @IndexedEmbedded(name = "input_data_types", includePaths = {"slug", "name"})
+  @IndexedEmbedded(
+      name = "input_data_types",
+      includePaths = {"slug", "name"})
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private List<SimpleChallengeInputDataTypeEntity> inputDataTypes;
 
