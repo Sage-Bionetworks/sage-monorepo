@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -75,6 +76,13 @@ public class ChallengeEntity {
       name = "submission_types",
       includePaths = {"name"})
   private List<ChallengeSubmissionTypeEntity> submissionTypes;
+
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "challenge_x_challenge_input_data_type",
+      joinColumns = @JoinColumn(name = "challenge_id"),
+      inverseJoinColumns = @JoinColumn(name = "challenge_input_data_type"))
+  private List<SimpleChallengeInputDataTypeEntity> inputDataTypes;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
   @IndexedEmbedded(includePaths = {"name"})
