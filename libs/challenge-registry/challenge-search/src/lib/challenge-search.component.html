@@ -91,7 +91,7 @@
         <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
           <challenge-registry-search-dropdown-filter
             [values]="dropdown.values"
-            placeholder="{{ dropdown.label + '(s)' }}"
+            placeholder="{{ dropdown.label.toLowerCase() + '(s)' }}  "
             (dropdownChange)="onDropdownChange($event, dropdown.query)"
           ></challenge-registry-search-dropdown-filter>
         </p-panel>
