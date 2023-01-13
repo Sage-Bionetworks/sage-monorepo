@@ -24,9 +24,9 @@ paths:
     $ref: paths/challenges.yaml
   # /organizations/{organizationLogin}:
   #   $ref: paths/organizations/@{organizationLogin}.yaml
+  /challengeInputDataTypes:
+    $ref: paths/challengeInputDataTypes.yaml
   /challengePlatforms:
     $ref: paths/challengePlatforms.yaml
   /challengePlatforms/{challengePlatformName}:
     $ref: paths/challengePlatforms/@{challengePlatformName}.yaml
-  /inputDataTypes:
-    $ref: paths/challengeInputDataTypes.yaml

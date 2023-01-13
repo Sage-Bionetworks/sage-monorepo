@@ -40,6 +40,27 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /challengeInputDataTypes:
+    get:
+      tags:
+        - ChallengeInputDataType
+      summary: List challenge input data types
+      description: List challenge input data types
+      operationId: listChallengeInputDataTypes
+      parameters:
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeInputDataTypesPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /challengePlatforms:
     get:
       tags:
@@ -79,27 +100,6 @@ paths:
                 $ref: '#/components/schemas/ChallengePlatform'
         '404':
           $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /inputDataTypes:
-    get:
-      tags:
-        - ChallengeInputDataType
-      summary: List challenge input data types
-      description: List challenge input data types
-      operationId: listChallengeInputDataTypes
-      parameters:
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageSize'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChallengeInputDataTypesPage'
-          description: Success
-        '400':
-          $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -410,56 +410,6 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
-    ChallengePlatform:
-      type: object
-      description: A challenge platform
-      properties:
-        id:
-          $ref: '#/components/schemas/ChallengePlatformId'
-        slug:
-          $ref: '#/components/schemas/ChallengePlatformSlug'
-        name:
-          $ref: '#/components/schemas/ChallengePlatformName'
-        avatarUrl:
-          type: string
-          format: url
-          example: https://via.placeholder.com/300.png
-        websiteUrl:
-          type: string
-          format: url
-          example: https://example.com
-        createdAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
-        updatedAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
-      required:
-        - id
-        - slug
-        - name
-        - avatarUrl
-        - websiteUrl
-        - createdAt
-        - updatedAt
-    ChallengePlatformsPage:
-      type: object
-      description: A page of challenge platforms.
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            challengePlatforms:
-              description: A list of challenge platforms.
-              type: array
-              items:
-                $ref: '#/components/schemas/ChallengePlatform'
-          required:
-            - challengePlatforms
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengeInputDataTypeId:
       description: The unique identifier of a challenge input data type.
       type: integer
@@ -515,6 +465,56 @@ components:
                 $ref: '#/components/schemas/ChallengeInputDataType'
           required:
             - challengeInputDataTypes
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ChallengePlatform:
+      type: object
+      description: A challenge platform
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengePlatformId'
+        slug:
+          $ref: '#/components/schemas/ChallengePlatformSlug'
+        name:
+          $ref: '#/components/schemas/ChallengePlatformName'
+        avatarUrl:
+          type: string
+          format: url
+          example: https://via.placeholder.com/300.png
+        websiteUrl:
+          type: string
+          format: url
+          example: https://example.com
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
+      required:
+        - id
+        - slug
+        - name
+        - avatarUrl
+        - websiteUrl
+        - createdAt
+        - updatedAt
+    ChallengePlatformsPage:
+      type: object
+      description: A page of challenge platforms.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            challengePlatforms:
+              description: A list of challenge platforms.
+              type: array
+              items:
+                $ref: '#/components/schemas/ChallengePlatform'
+          required:
+            - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
   parameters:
