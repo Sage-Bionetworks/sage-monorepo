@@ -344,6 +344,8 @@ components:
         - id
         - slug
         - name
+      x-java-class-annotations:
+        - '@lombok.Builder'
     ChallengeStartDate:
       description: The start date of the challenge.
       type: string

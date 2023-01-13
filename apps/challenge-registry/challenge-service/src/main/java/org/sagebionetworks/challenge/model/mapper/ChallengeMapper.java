@@ -5,6 +5,7 @@ import org.sagebionetworks.challenge.model.dto.ChallengeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeSubmissionTypeDto;
+import org.sagebionetworks.challenge.model.dto.SimpleChallengeInputDataTypeDto;
 import org.sagebionetworks.challenge.model.entity.ChallengeEntity;
 import org.sagebionetworks.util.model.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
@@ -26,7 +27,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
   public ChallengeDto convertToDto(ChallengeEntity entity, Object... args) {
     ChallengeDto dto = new ChallengeDto();
     if (entity != null) {
-      BeanUtils.copyProperties(entity, dto, "stars");
+      BeanUtils.copyProperties(entity, dto, "stars", "inputDataTypes");
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
       dto.setDifficulty(ChallengeDifficultyDto.fromValue(entity.getDifficulty()));
       dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
@@ -37,6 +38,16 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
       dto.incentives(
           entity.getIncentives().stream()
               .map(o -> ChallengeIncentiveDto.fromValue(o.getName()))
+              .toList());
+      dto.inputDataTypes(
+          entity.getInputDataTypes().stream()
+              .map(
+                  o ->
+                      SimpleChallengeInputDataTypeDto.builder()
+                          .id(o.getId())
+                          .slug(o.getSlug())
+                          .name(o.getName())
+                          .build())
               .toList());
       dto.starredCount(entity.getStars().size());
     }

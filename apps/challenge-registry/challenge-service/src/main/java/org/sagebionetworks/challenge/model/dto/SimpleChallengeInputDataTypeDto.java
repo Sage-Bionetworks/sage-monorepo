@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 @Schema(name = "SimpleChallengeInputDataType", description = "A simple challenge input data type.")
 @JsonTypeName("SimpleChallengeInputDataType")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@lombok.Builder
 public class SimpleChallengeInputDataTypeDto {
 
   @JsonProperty("id")
