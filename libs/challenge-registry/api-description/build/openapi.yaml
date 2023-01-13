@@ -477,6 +477,8 @@ components:
         - name
       x-java-class-annotations:
         - '@lombok.Builder'
+        - '@lombok.NoArgsConstructor'
+        - '@lombok.AllArgsConstructor'
     ChallengeStartDate:
       description: The start date of the challenge.
       type: string

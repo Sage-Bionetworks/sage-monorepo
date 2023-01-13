@@ -535,6 +535,8 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+      - '@lombok.NoArgsConstructor'
+      - '@lombok.AllArgsConstructor'
     ChallengeStartDate:
       description: The start date of the challenge.
       example: 2017-07-21

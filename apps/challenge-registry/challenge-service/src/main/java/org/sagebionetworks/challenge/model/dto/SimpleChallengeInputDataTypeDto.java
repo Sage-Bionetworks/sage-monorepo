@@ -13,6 +13,8 @@ import javax.validation.constraints.*;
 @JsonTypeName("SimpleChallengeInputDataType")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @lombok.Builder
+@lombok.NoArgsConstructor
+@lombok.AllArgsConstructor
 public class SimpleChallengeInputDataTypeDto {
 
   @JsonProperty("id")
