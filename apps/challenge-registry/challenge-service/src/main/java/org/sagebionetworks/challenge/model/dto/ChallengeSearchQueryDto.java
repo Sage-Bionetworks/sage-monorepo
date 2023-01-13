@@ -52,6 +52,10 @@ public class ChallengeSearchQueryDto {
   @Valid
   private List<String> platforms = null;
 
+  @JsonProperty("inputDataTypes")
+  @Valid
+  private List<String> inputDataTypes = null;
+
   @JsonProperty("status")
   @Valid
   private List<ChallengeStatusDto> status = null;
@@ -286,6 +290,36 @@ public class ChallengeSearchQueryDto {
     this.platforms = platforms;
   }
 
+  public ChallengeSearchQueryDto inputDataTypes(List<String> inputDataTypes) {
+    this.inputDataTypes = inputDataTypes;
+    return this;
+  }
+
+  public ChallengeSearchQueryDto addInputDataTypesItem(String inputDataTypesItem) {
+    if (this.inputDataTypes == null) {
+      this.inputDataTypes = new ArrayList<>();
+    }
+    this.inputDataTypes.add(inputDataTypesItem);
+    return this;
+  }
+
+  /**
+   * An array of challenge input data type ids used to filter the results.
+   *
+   * @return inputDataTypes
+   */
+  @Schema(
+      name = "inputDataTypes",
+      description = "An array of challenge input data type ids used to filter the results.",
+      required = false)
+  public List<String> getInputDataTypes() {
+    return inputDataTypes;
+  }
+
+  public void setInputDataTypes(List<String> inputDataTypes) {
+    this.inputDataTypes = inputDataTypes;
+  }
+
   public ChallengeSearchQueryDto status(List<ChallengeStatusDto> status) {
     this.status = status;
     return this;
@@ -390,6 +424,7 @@ public class ChallengeSearchQueryDto {
         && Objects.equals(this.minStartDate, challengeSearchQuery.minStartDate)
         && Objects.equals(this.maxStartDate, challengeSearchQuery.maxStartDate)
         && Objects.equals(this.platforms, challengeSearchQuery.platforms)
+        && Objects.equals(this.inputDataTypes, challengeSearchQuery.inputDataTypes)
         && Objects.equals(this.status, challengeSearchQuery.status)
         && Objects.equals(this.submissionTypes, challengeSearchQuery.submissionTypes)
         && Objects.equals(this.searchTerms, challengeSearchQuery.searchTerms);
@@ -407,6 +442,7 @@ public class ChallengeSearchQueryDto {
         minStartDate,
         maxStartDate,
         platforms,
+        inputDataTypes,
         status,
         submissionTypes,
         searchTerms);
@@ -425,6 +461,7 @@ public class ChallengeSearchQueryDto {
     sb.append("    minStartDate: ").append(toIndentedString(minStartDate)).append("\n");
     sb.append("    maxStartDate: ").append(toIndentedString(maxStartDate)).append("\n");
     sb.append("    platforms: ").append(toIndentedString(platforms)).append("\n");
+    sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
     sb.append("    searchTerms: ").append(toIndentedString(searchTerms)).append("\n");
