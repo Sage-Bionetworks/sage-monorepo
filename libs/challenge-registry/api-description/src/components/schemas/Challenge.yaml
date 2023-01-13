@@ -23,6 +23,10 @@ properties:
     type: array
     items:
       $ref: ChallengeSubmissionType.yaml
+  inputDataTypes:
+    type: array
+    items:
+      $ref: SimpleChallengeInputDataType.yaml
   #   fullName:
   #     type: string
   #   ownerId:
