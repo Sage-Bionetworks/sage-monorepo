@@ -4,30 +4,28 @@
       <img src="assets/images/registry_b.png" alt="Challenge Registry"/>
       <h3>Welcome back!</h3>
     </div>
-    <mat-card-content>
-      <form class="form-container" [formGroup]="loginForm" novalidate>
-        <mat-form-field class="login-username" appearance="outline">
-          <input matInput placeholder="Username" type="text" formControlName="username">
-          <mat-error *ngIf="username?.invalid">{{getUsernameErrorMessage()}}
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="login-password" appearance="outline">
-          <input matInput placeholder="Password" type="password" formControlName="password">
-          <mat-error *ngIf="password?.invalid">{{getPasswordErrorMessage()}}
-          </mat-error>
-        </mat-form-field>
-        <a class="forgot-password" href="#">Forgot password?</a>
-        <mat-error *ngIf="errors.other">{{errors.other}}</mat-error>
-        <div class="btn-group">
-          <button mat-raised-button color="primary"
-            [disabled]="loginForm.invalid" (click)="login()">Log in</button>
-          <div class="login-options">
-            <button mat-stroked-button color="basic">Log in with Google</button>
-            <button mat-stroked-button color="basic">Log in with Synapse</button>
-          </div>
+    <form class="form-container" [formGroup]="loginForm" novalidate>
+      <mat-form-field class="login-username" appearance="outline">
+        <input matInput placeholder="Username" type="text" formControlName="username">
+        <mat-error *ngIf="username?.invalid">{{getUsernameErrorMessage()}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="login-password" appearance="outline">
+        <input matInput placeholder="Password" type="password" formControlName="password">
+        <mat-error *ngIf="password?.invalid">{{getPasswordErrorMessage()}}
+        </mat-error>
+      </mat-form-field>
+      <a class="forgot-password" href="#">Forgot password?</a>
+      <mat-error *ngIf="errors.other">{{errors.other}}</mat-error>
+      <div class="btn-group">
+        <button mat-raised-button color="primary"
+          [disabled]="loginForm.invalid" (click)="login()">Log in</button>
+        <div class="login-options">
+          <button mat-stroked-button color="basic">Log in with Google</button>
+          <button mat-stroked-button color="basic">Log in with Synapse</button>
         </div>
-      </form>
-    </mat-card-content>
+      </div>
+    </form>
     <div class="alternative">
       <p class="mat-body">Don't have an account? <a href="/signup">Create one!</a></p>
     </div>

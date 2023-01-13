@@ -1,35 +1,47 @@
 main {
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  padding: 16px;
 }
-
-.container {
-  width: 500px;
-  max-width: 500px;
+.register-container {
+  min-width: 320px;
+  max-width: 420px;
+  width: 100%
 }
-
 .title {
-  height: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 32px;
 }
-
+.title img {
+  height: 120px;
+  margin-bottom: 8px;
+}
 .form-container {
   display: flex;
   flex-direction: column;
 }
-
-mat-form-field.email {
+mat-form-field.new-username,
+mat-form-field.new-password,
+mat-form-field.new-email {
   height: 70px;
 }
-
-mat-form-field.password {
-  height: 70px;
+input.mat-input-element {
+  padding: 10px 0;
+}
+.disclaimer {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
-mat-form-field.username {
-  height: 70px;
+.alternative {
+  margin-top: 68px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
