@@ -1,38 +1,36 @@
 main {
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  padding: 16px;
 }
-
-.container {
-  width: 400px;
+.login-container {
+  min-width: 320px;
   max-width: 400px;
+  width: 100%
 }
-
 .title {
-  padding: 52px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 32px;
 }
 .title img {
-  height: 60px;
-  width: 56px;
+  height: 120px;
   margin-bottom: 8px;
 }
-
 .form-container {
   display: flex;
   flex-direction: column;
 }
-
-mat-form-field.username {
+mat-form-field.login-username,
+mat-form-field.login-password {
   height: 70px;
 }
-
-mat-form-field.password {
-  height: 70px;
+input.mat-input-element {
+  padding: 10px 0;
 }
 .forgot-password {
   display: flex;

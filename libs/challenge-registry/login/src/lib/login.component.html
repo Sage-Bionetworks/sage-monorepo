@@ -1,20 +1,18 @@
-<main>
-  <div class="container mat-body">
+<main class="mat-typography">
+  <div class="login-container">
     <div class="title">
       <img src="assets/images/registry_b.png" alt="Challenge Registry"/>
-      <mat-card-title>Log in to ROCC</mat-card-title>
+      <h3>Welcome back!</h3>
     </div>
     <mat-card-content>
       <form class="form-container" [formGroup]="loginForm" novalidate>
-        <mat-form-field class="username" appearance="fill">
-          <mat-label>Username</mat-label>
-          <input matInput placeholder="" type="text" formControlName="username">
+        <mat-form-field class="login-username" appearance="outline">
+          <input matInput placeholder="Username" type="text" formControlName="username">
           <mat-error *ngIf="username?.invalid">{{getUsernameErrorMessage()}}
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="password" appearance="fill">
-          <mat-label>Password</mat-label>
-          <input matInput placeholder="" type="password" formControlName="password">
+        <mat-form-field class="login-password" appearance="outline">
+          <input matInput placeholder="Password" type="password" formControlName="password">
           <mat-error *ngIf="password?.invalid">{{getPasswordErrorMessage()}}
           </mat-error>
         </mat-form-field>
