@@ -27,7 +27,7 @@ public class ChallengeSearchQueryDto {
   private Integer pageSize = 100;
 
   @JsonProperty("sort")
-  private ChallengeSortDto sort = ChallengeSortDto.CREATED;
+  private ChallengeSortDto sort = ChallengeSortDto.RELEVANCE;
 
   @JsonProperty("direction")
   private ChallengeDirectionDto direction = ChallengeDirectionDto.DESC;

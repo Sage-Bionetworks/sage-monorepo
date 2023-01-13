@@ -1,6 +1,7 @@
 description: What to sort results by.
 type: string
-default: created
+default: relevance
 enum:
   - created
+  - relevance
   - starred

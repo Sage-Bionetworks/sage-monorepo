@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.engine.search.predicate.SearchPredicate;
 import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
@@ -13,6 +14,7 @@ import org.hibernate.search.engine.search.sort.dsl.SearchSortFactory;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
+import org.sagebionetworks.challenge.exception.BadRequestException;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDirectionDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
@@ -25,6 +27,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 public class CustomChallengeRepositoryImpl implements CustomChallengeRepository {
 
@@ -230,17 +233,30 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchSort getSearchSort(SearchSortFactory sf, ChallengeSearchQueryDto query) {
-    String sort = "created_at";
-    switch (query.getSort()) {
-      case STARRED -> {
-        sort = "starred_count";
-      }
-      default -> {
-        break;
-      }
-    }
     SortOrder order =
         query.getDirection() == ChallengeDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
-    return sf.field(sort).order(order).toSort();
+
+    SearchSort createdSort = sf.field("created_at").order(order).toSort();
+    SearchSort scoreSort = sf.score().order(order).toSort();
+    SearchSort relevanceSort =
+        (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
+            ? createdSort
+            : scoreSort;
+
+    switch (query.getSort()) {
+      case CREATED -> {
+        return createdSort;
+      }
+      case RELEVANCE -> {
+        return relevanceSort;
+      }
+      case STARRED -> {
+        return sf.field("starred_count").order(order).toSort();
+      }
+      default -> {
+        throw new BadRequestException(
+            String.format("Unhandled sorting strategy '%s'", query.getSort()));
+      }
+    }
   }
 }
