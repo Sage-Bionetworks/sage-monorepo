@@ -2,7 +2,7 @@
   [options]="values"
   [(ngModel)]="selectedValues"
   (onChange)="onChange(selectedValues)"
-  placeholder="Search {{ name.slice(0, -1) + '(s)' }}"
+  [placeholder]="placeholder"
   [maxSelectedLabels]="2"
   selectedItemsLabel="{0} items selected"
   [showTransitionOptions]="'0ms'"

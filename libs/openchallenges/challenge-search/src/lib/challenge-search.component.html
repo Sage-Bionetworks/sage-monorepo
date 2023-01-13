@@ -46,7 +46,7 @@
   </section>
   <section id="bottom" class="row">
     <div class="facets">
-      <!-- <p-panel
+      <p-panel
         header="Challenge Year"
         [toggleable]="true"
         [collapsed]="startYearRangeFilter.collapsed"
@@ -81,9 +81,9 @@
         <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
           <openchallenges-checkbox-filter
             [values]="checkbox.values"
-            (checkboxChange)="onCheckboxChange($event, checkbox.queryName)"
-            inputId="{{ checkbox.queryName }}"
-          ></openchallenges-checkbox-filter>
+            (checkboxChange)="onCheckboxChange($event, checkbox.query)"
+            inputId="{{ checkbox.query }}"
+          ></challenge-registry-checkbox-filter>
         </p-panel>
         <p-divider></p-divider>
       </ng-container>
@@ -91,13 +91,12 @@
         <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
           <openchallenges-search-dropdown-filter
             [values]="dropdown.values"
-            [name]="dropdown.queryName"
-            (dropdownChange)="onDropdownChange($event, dropdown.queryName)"
-          ></openchallenges-search-dropdown-filter>
+            placeholder="{{ dropdown.label + '(s)' }}"
+            (dropdownChange)="onDropdownChange($event, dropdown.query)"
+          ></challenge-registry-search-dropdown-filter>
         </p-panel>
         <p-divider *ngIf="!isLast"></p-divider>
       </ng-container>
-      -->
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
