@@ -1,7 +1,7 @@
 <!-- TODO: figure out if the <nav> should go inside of a <header> element. -->
 <nav class="sage-navbar-header" aria-label="Top Toolbar">
   <a mat-button class="home-btn" routerLink="/" aria-label="Sage Angular">
-    <img class="logo" src="assets/images/registry.png" alt="Challenge Registry" />
+    <img class="logo" src="assets/images/registry.png" alt="OpenChallenges" />
     <span>{{ title }}</span>
   </a>
 
@@ -22,9 +22,6 @@
     (click)="logInClicked.emit(true)"
     aria-label="Log In"
     >Log In</a
-  >
-  <a mat-button class="sage-button" *ngIf="!isLoggedIn" routerLink="/signup" aria-label="Sign Up"
-    >Sign Up</a
   >
 
   <!-- *ngIf="isLoggedIn" -->

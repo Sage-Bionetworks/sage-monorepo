@@ -26,7 +26,11 @@
   }
 }
 
-@mixin typography($theme) {}
+@mixin typography($theme) {
+  button.mat-menu-item{
+    font-size: 13px;
+  }
+}
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
