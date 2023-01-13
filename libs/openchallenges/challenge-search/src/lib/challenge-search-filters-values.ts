@@ -110,8 +110,6 @@ export const challengeSubmissionTypesFilterValues: FilterValue[] = [
   },
 ];
 
-export const challengeInputDataTypeFilterValues: FilterValue[] = [];
-
 export const challengeIncentiveTypesFilterValues: FilterValue[] = [
   {
     value: 'Monetary',
@@ -136,6 +134,8 @@ export const challengeIncentiveTypesFilterValues: FilterValue[] = [
 ];
 
 export const challengePlatformFilterValues: FilterValue[] = [];
+
+export const challengeInputDataTypeFilterValues: FilterValue[] = [];
 
 export const challengeOrganizationFilterValues: FilterValue[] = [];
 

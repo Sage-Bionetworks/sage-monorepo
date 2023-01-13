@@ -2,7 +2,7 @@ import { FilterValue } from './filter-value.model';
 
 export interface Filter {
   /* The property name used to to query the data  */
-  queryName: string;
+  query: string;
   /* The label name of the filter  */
   label: string;
   /* The values of the filter. */

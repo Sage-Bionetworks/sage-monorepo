@@ -17,6 +17,7 @@ import {
   ChallengeService,
   ChallengePlatformService,
   ChallengeSearchQuery,
+  ChallengeInputDataTypeService,
   // ChallengeSort,
   // ChallengeDirection,
 } from '@sagebionetworks/openchallenges/api-client-angular';
@@ -78,11 +79,11 @@ export class ChallengeSearchComponent
       minStartDate: undefined,
       maxStartDate: undefined,
       status: [],
-      // inputDataTypes: [],
       difficulties: [],
       submissionTypes: [],
       incentives: [],
       platforms: [],
+      inputDataTypes: [],
       // organizations: [],
       // organizers: [],
     });
@@ -113,13 +114,13 @@ export class ChallengeSearchComponent
   checkboxFilters: Filter[] = [
     challengeStatusFilter,
     challengeDifficultyFilter,
-    challengeInputDataTypeFilter,
     challengeSubmissionTypesFilter,
     challengeIncentiveTypesFilter,
     challengePlatformFilter,
   ];
 
   dropdownFilters: Filter[] = [
+    challengeInputDataTypeFilter,
     challengeOrganizationFilter,
     challengeOrganizaterFilter,
   ];
@@ -130,6 +131,7 @@ export class ChallengeSearchComponent
   constructor(
     private challengeService: ChallengeService,
     private challengePlatformService: ChallengePlatformService,
+    private challengeInputDataTypeService: ChallengeInputDataTypeService,
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar
   ) {
@@ -138,17 +140,23 @@ export class ChallengeSearchComponent
 
   ngOnInit() {
     this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
-    //     // update input data types filter values
-    //     (this.checkboxFilters[2].values = dataTypes.map((dataType) => ({
-    //       value: dataType,
-    //       label: this.titleCase(dataType, '-'),
-    //       active: false,
-    //     })))
-    // );
+
+    // update input data types filter values
+    this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
+      (page) =>
+        (this.dropdownFilters[0].values = page.challengeInputDataTypes.map(
+          (datatype) => ({
+            value: datatype.slug,
+            label: datatype.name,
+            active: false,
+          })
+        ))
+    );
+
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (this.checkboxFilters[5].values = page.challengePlatforms.map(
+        (this.checkboxFilters[4].values = page.challengePlatforms.map(
           (platform) => ({
             value: platform.slug,
             label: platform.name,
@@ -260,41 +268,18 @@ export class ChallengeSearchComponent
     this.query.next(newQuery);
   }
 
-  // onDropdownChange(selected: string[], queryName: string): void {
-  //   const newQuery = assign(this.query.getValue(), {
-  //     [queryName]: selected,
-  //   });
-  //   this.query.next(newQuery);
-  // }
+  onDropdownChange(selected: string[], queryName: string): void {
+    const newQuery = assign(this.query.getValue(), {
+      [queryName]: selected,
+    });
+    this.query.next(newQuery);
+  }
 
   // onSortChange(event: any): void {
   //   const newQuery = assign(this.query.getValue(), {
   //     sort: event.value,
   //   });
   //   this.query.next(newQuery);
-  // }
-
-  // titleCase(string: string, split: string): string {
-  //   // tranform one word to title-case word
-  //   return string
-  //     .split(split)
-  //     .map((text) => text[0].toUpperCase() + text.slice(1).toLowerCase())
-  //     .join(' ');
-  // }
-
-  // private listInputDataTypes(): Observable<string[]> {
-  //   // update input data type values - API requires
-  //   const allTypes = [...new Set(MOCK_CHALLENGES.map((c) => c.inputDataTypes))];
-  //   const uniqueTypes = [
-  //     ...new Set(
-  //       allTypes.filter(isNotNullOrUndefined).reduce((o, c) => o.concat(c), [])
-  //     ),
-  //   ];
-  //   const sortTypes = uniqueTypes.includes('other')
-  //     ? [...uniqueTypes.filter((x) => x !== 'other').sort(), 'other']
-  //     : uniqueTypes.sort();
-
-  //   return of(sortTypes);
   // }
 
   // private listOrganizations(): Observable<Organization[]> {
