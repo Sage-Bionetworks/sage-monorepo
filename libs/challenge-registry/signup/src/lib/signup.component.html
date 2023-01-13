@@ -1,35 +1,44 @@
-<main>
-  <mat-card class="container">
-    <mat-card-title class="title">Join ROCC</mat-card-title>
-    <mat-card-content>
-      <form class="form-container" [formGroup]="newUserForm" novalidate>
-        <mat-form-field class="email">
-          <input matInput placeholder="Enter your email" type="email"
-            formControlName="email">
-          <mat-error *ngIf="email?.invalid">{{getEmailErrorMessage()}}
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="password">
-          <input matInput placeholder="Create a password" type="password"
-            formControlName="password">
-          <mat-error *ngIf="password?.invalid">{{getPasswordErrorMessage()}}
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="username">
-          <input matInput placeholder="Enter a username" type="text"
-            formControlName="username">
-          <mat-error *ngIf="username?.invalid">{{getUsernameErrorMessage()}}
-          </mat-error>
-        </mat-form-field>
-        <mat-error *ngIf="errors.other">{{errors.other}}</mat-error>
-        <div>
-          <button mat-raised-button color="primary"
-            [disabled]="newUserForm.invalid" (click)="createUserAccount()">Sign
-            up</button>
+<main class="mat-typography">
+  <div class="register-container">
+    <div class="title">
+      <img src="assets/images/registry_b.png" alt="Challenge Registry"/>
+      <h3>Join Us on OpenChallenges!</h3>
+    </div>
+    <form class="form-container" [formGroup]="newUserForm" novalidate>
+      <mat-form-field class="new-email" appearance="outline">
+        <input matInput placeholder="Email" type="email"
+          formControlName="email">
+        <mat-error *ngIf="email?.invalid">{{getEmailErrorMessage()}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="new-username" appearance="outline">
+        <input matInput placeholder="Username" type="text"
+          formControlName="username">
+        <mat-error *ngIf="username?.invalid">{{getUsernameErrorMessage()}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="new-password" appearance="outline">
+        <input matInput placeholder="Password" type="password"
+          formControlName="password">
+        <mat-error *ngIf="password?.invalid">{{getPasswordErrorMessage()}}
+        </mat-error>
+      </mat-form-field>
+      <mat-error *ngIf="errors.other">{{errors.other}}</mat-error>
+      <div class="disclaimer"><p>
+        By creating an account, you agree to the <a href="#">Terms of Service</a> of
+        OpenChallenges. Our Privacy Statement can be read <a href="#">here</a>.
+      </p></div>
+      <div class="btn-group">
+        <button mat-raised-button color="primary"
+          [disabled]="newUserForm.invalid" (click)="createUserAccount()">Create Account</button>
+        <div class="login-options">
+          <button mat-stroked-button color="basic">Sign up with Google</button>
+          <button mat-stroked-button color="basic">Sign up with Synapse</button>
         </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+      </div>
+    </form>
+    <div class="alternative">
+      <p class="mat-body">Already have an account? <a href="/login">Login here.</a></p>
+    </div>
+  </div>
 </main>
-
-<challenge-registry-footer [version]="appVersion"></challenge-registry-footer>
