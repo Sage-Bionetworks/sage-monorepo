@@ -300,10 +300,19 @@ components:
       - other
       example: publication
       type: string
-    ChallengePlatformName:
-      description: The name of the challenge platform.
+    ChallengePlatformSlug:
+      description: The slug of the challenge platform.
+      example: example-challenge-platform
       maxLength: 30
       minLength: 3
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      type: string
+    ChallengeInputDataTypeSlug:
+      description: The slug of the challenge input data type.
+      example: gene-expression
+      maxLength: 30
+      minLength: 3
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     ChallengeStatus:
       description: The status of the challenge.
@@ -366,7 +375,13 @@ components:
         platforms:
           description: An array of challenge platform ids used to filter the results.
           items:
-            $ref: '#/components/schemas/ChallengePlatformName'
+            $ref: '#/components/schemas/ChallengePlatformSlug'
+          type: array
+        inputDataTypes:
+          description: An array of challenge input data type ids used to filter the
+            results.
+          items:
+            $ref: '#/components/schemas/ChallengeInputDataTypeSlug'
           type: array
         status:
           description: An array of challenge status used to filter the results.
@@ -451,12 +466,10 @@ components:
       example: 1
       format: int64
       type: integer
-    ChallengePlatformSlug:
-      description: The slug of the challenge platform.
-      example: example-challenge-platform
+    ChallengePlatformName:
+      description: The name of the challenge platform.
       maxLength: 30
       minLength: 3
-      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     SimpleChallengePlatform:
       description: A simple challenge platform.
@@ -483,6 +496,47 @@ components:
       - name
       - slug
       type: object
+    ChallengeInputDataTypeId:
+      description: The unique identifier of a challenge input data type.
+      example: 1
+      format: int64
+      type: integer
+    ChallengeInputDataTypeName:
+      description: The name of the challenge input data type.
+      example: gene expression
+      maxLength: 50
+      minLength: 3
+      type: string
+    SimpleChallengeInputDataType:
+      description: A simple challenge input data type.
+      properties:
+        id:
+          description: The unique identifier of a challenge input data type.
+          example: 1
+          format: int64
+          type: integer
+        slug:
+          description: The slug of the challenge input data type.
+          example: gene-expression
+          maxLength: 30
+          minLength: 3
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          type: string
+        name:
+          description: The name of the challenge input data type.
+          example: gene expression
+          maxLength: 50
+          minLength: 3
+          type: string
+      required:
+      - id
+      - name
+      - slug
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+      - '@lombok.NoArgsConstructor'
+      - '@lombok.AllArgsConstructor'
     ChallengeStartDate:
       description: The start date of the challenge.
       example: 2017-07-21
@@ -535,6 +589,10 @@ components:
         submissionTypes:
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
+        inputDataTypes:
+          items:
+            $ref: '#/components/schemas/SimpleChallengeInputDataType'
           type: array
         startDate:
           description: The start date of the challenge.
@@ -603,25 +661,8 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
-    ChallengeInputDataTypeId:
-      description: The unique identifier of a challenge input data type.
-      example: 1
-      format: int64
-      type: integer
-    ChallengeInputDataTypeSlug:
-      description: The slug of the challenge input data type.
-      example: gene-expression
-      maxLength: 30
-      minLength: 3
-      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-      type: string
-    ChallengeInputDataTypeName:
-      description: The name of the challenge input data type.
-      maxLength: 50
-      minLength: 3
-      type: string
     ChallengeInputDataType:
-      description: A challenge input data type
+      description: A challenge input data type.
       properties:
         id:
           description: The unique identifier of a challenge input data type.
@@ -637,6 +678,7 @@ components:
           type: string
         name:
           description: The name of the challenge input data type.
+          example: gene expression
           maxLength: 50
           minLength: 3
           type: string

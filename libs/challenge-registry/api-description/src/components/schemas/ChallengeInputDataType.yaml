@@ -1,5 +1,5 @@
 type: object
-description: A challenge input data type
+description: A challenge input data type.
 properties:
   id:
     $ref: ChallengeInputDataTypeId.yaml

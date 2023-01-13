@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { SimpleChallengePlatform } from './simpleChallengePlatform';
+import { SimpleChallengeInputDataType } from './simpleChallengeInputDataType';
 import { ChallengeDifficulty } from './challengeDifficulty';
 import { ChallengeStatus } from './challengeStatus';
 import { ChallengeIncentive } from './challengeIncentive';
@@ -41,6 +42,7 @@ export interface Challenge {
     platform: SimpleChallengePlatform;
     incentives: Array<ChallengeIncentive>;
     submissionTypes: Array<ChallengeSubmissionType>;
+    inputDataTypes?: Array<SimpleChallengeInputDataType>;
     /**
      * The start date of the challenge.
      */

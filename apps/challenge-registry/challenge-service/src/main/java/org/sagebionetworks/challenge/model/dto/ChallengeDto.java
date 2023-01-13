@@ -50,6 +50,10 @@ public class ChallengeDto {
   @Valid
   private List<ChallengeSubmissionTypeDto> submissionTypes = new ArrayList<>();
 
+  @JsonProperty("inputDataTypes")
+  @Valid
+  private List<SimpleChallengeInputDataTypeDto> inputDataTypes = null;
+
   @JsonProperty("startDate")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate startDate = null;
@@ -289,6 +293,34 @@ public class ChallengeDto {
     this.submissionTypes = submissionTypes;
   }
 
+  public ChallengeDto inputDataTypes(List<SimpleChallengeInputDataTypeDto> inputDataTypes) {
+    this.inputDataTypes = inputDataTypes;
+    return this;
+  }
+
+  public ChallengeDto addInputDataTypesItem(SimpleChallengeInputDataTypeDto inputDataTypesItem) {
+    if (this.inputDataTypes == null) {
+      this.inputDataTypes = new ArrayList<>();
+    }
+    this.inputDataTypes.add(inputDataTypesItem);
+    return this;
+  }
+
+  /**
+   * Get inputDataTypes
+   *
+   * @return inputDataTypes
+   */
+  @Valid
+  @Schema(name = "inputDataTypes", required = false)
+  public List<SimpleChallengeInputDataTypeDto> getInputDataTypes() {
+    return inputDataTypes;
+  }
+
+  public void setInputDataTypes(List<SimpleChallengeInputDataTypeDto> inputDataTypes) {
+    this.inputDataTypes = inputDataTypes;
+  }
+
   public ChallengeDto startDate(LocalDate startDate) {
     this.startDate = startDate;
     return this;
@@ -420,6 +452,7 @@ public class ChallengeDto {
         && Objects.equals(this.platform, challenge.platform)
         && Objects.equals(this.incentives, challenge.incentives)
         && Objects.equals(this.submissionTypes, challenge.submissionTypes)
+        && Objects.equals(this.inputDataTypes, challenge.inputDataTypes)
         && Objects.equals(this.startDate, challenge.startDate)
         && Objects.equals(this.endDate, challenge.endDate)
         && Objects.equals(this.starredCount, challenge.starredCount)
@@ -439,6 +472,7 @@ public class ChallengeDto {
         platform,
         incentives,
         submissionTypes,
+        inputDataTypes,
         startDate,
         endDate,
         starredCount,
@@ -459,6 +493,7 @@ public class ChallengeDto {
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
+    sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    starredCount: ").append(toIndentedString(starredCount)).append("\n");

@@ -12,6 +12,8 @@ import org.springframework.beans.BeanUtils;
 public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
 
   private SimpleChallengePlatformMapper platformMapper = new SimpleChallengePlatformMapper();
+  private SimpleChallengeInputDataTypeMapper inputDataTypeMapper =
+      new SimpleChallengeInputDataTypeMapper();
 
   @Override
   public ChallengeEntity convertToEntity(ChallengeDto dto, Object... args) {
@@ -26,7 +28,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
   public ChallengeDto convertToDto(ChallengeEntity entity, Object... args) {
     ChallengeDto dto = new ChallengeDto();
     if (entity != null) {
-      BeanUtils.copyProperties(entity, dto, "stars");
+      BeanUtils.copyProperties(entity, dto, "stars", "inputDataTypes");
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
       dto.setDifficulty(ChallengeDifficultyDto.fromValue(entity.getDifficulty()));
       dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
@@ -38,6 +40,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
           entity.getIncentives().stream()
               .map(o -> ChallengeIncentiveDto.fromValue(o.getName()))
               .toList());
+      dto.inputDataTypes(inputDataTypeMapper.convertToDtoList(entity.getInputDataTypes()));
       dto.starredCount(entity.getStars().size());
     }
     return dto;

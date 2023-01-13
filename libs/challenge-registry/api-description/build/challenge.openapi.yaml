@@ -136,11 +136,20 @@ components:
         - speaking_engagement
         - other
       example: publication
-    ChallengePlatformName:
-      description: The name of the challenge platform.
+    ChallengePlatformSlug:
+      description: The slug of the challenge platform.
       type: string
       minLength: 3
       maxLength: 30
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example: example-challenge-platform
+    ChallengeInputDataTypeSlug:
+      description: The slug of the challenge input data type.
+      type: string
+      minLength: 3
+      maxLength: 30
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example: gene-expression
     ChallengeStatus:
       description: The status of the challenge.
       type: string
@@ -203,7 +212,12 @@ components:
           description: An array of challenge platform ids used to filter the results.
           type: array
           items:
-            $ref: '#/components/schemas/ChallengePlatformName'
+            $ref: '#/components/schemas/ChallengePlatformSlug'
+        inputDataTypes:
+          description: An array of challenge input data type ids used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeInputDataTypeSlug'
         status:
           description: An array of challenge status used to filter the results.
           type: array
@@ -286,13 +300,11 @@ components:
       type: integer
       format: int64
       example: 1
-    ChallengePlatformSlug:
-      description: The slug of the challenge platform.
+    ChallengePlatformName:
+      description: The name of the challenge platform.
       type: string
       minLength: 3
       maxLength: 30
-      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
-      example: example-challenge-platform
     SimpleChallengePlatform:
       type: object
       description: A simple challenge platform.
@@ -307,6 +319,35 @@ components:
         - id
         - slug
         - name
+    ChallengeInputDataTypeId:
+      description: The unique identifier of a challenge input data type.
+      type: integer
+      format: int64
+      example: 1
+    ChallengeInputDataTypeName:
+      description: The name of the challenge input data type.
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: gene expression
+    SimpleChallengeInputDataType:
+      type: object
+      description: A simple challenge input data type.
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengeInputDataTypeId'
+        slug:
+          $ref: '#/components/schemas/ChallengeInputDataTypeSlug'
+        name:
+          $ref: '#/components/schemas/ChallengeInputDataTypeName'
+      required:
+        - id
+        - slug
+        - name
+      x-java-class-annotations:
+        - '@lombok.Builder'
+        - '@lombok.NoArgsConstructor'
+        - '@lombok.AllArgsConstructor'
     ChallengeStartDate:
       description: The start date of the challenge.
       type: string
@@ -345,6 +386,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
+        inputDataTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleChallengeInputDataType'
         startDate:
           $ref: '#/components/schemas/ChallengeStartDate'
         endDate:
@@ -410,26 +455,9 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
-    ChallengeInputDataTypeId:
-      description: The unique identifier of a challenge input data type.
-      type: integer
-      format: int64
-      example: 1
-    ChallengeInputDataTypeSlug:
-      description: The slug of the challenge input data type.
-      type: string
-      minLength: 3
-      maxLength: 30
-      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
-      example: gene-expression
-    ChallengeInputDataTypeName:
-      description: The name of the challenge input data type.
-      type: string
-      minLength: 3
-      maxLength: 50
     ChallengeInputDataType:
       type: object
-      description: A challenge input data type
+      description: A challenge input data type.
       properties:
         id:
           $ref: '#/components/schemas/ChallengeInputDataTypeId'

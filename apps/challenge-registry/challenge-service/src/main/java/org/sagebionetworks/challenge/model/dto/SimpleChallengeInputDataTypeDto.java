@@ -3,20 +3,19 @@ package org.sagebionetworks.challenge.model.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.Objects;
 import javax.annotation.Generated;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
-/** A challenge input data type. */
-@Schema(name = "ChallengeInputDataType", description = "A challenge input data type.")
-@JsonTypeName("ChallengeInputDataType")
+/** A simple challenge input data type. */
+@Schema(name = "SimpleChallengeInputDataType", description = "A simple challenge input data type.")
+@JsonTypeName("SimpleChallengeInputDataType")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
-public class ChallengeInputDataTypeDto {
+@lombok.Builder
+@lombok.NoArgsConstructor
+@lombok.AllArgsConstructor
+public class SimpleChallengeInputDataTypeDto {
 
   @JsonProperty("id")
   private Long id;
@@ -27,15 +26,7 @@ public class ChallengeInputDataTypeDto {
   @JsonProperty("name")
   private String name;
 
-  @JsonProperty("createdAt")
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime createdAt;
-
-  @JsonProperty("updatedAt")
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime updatedAt;
-
-  public ChallengeInputDataTypeDto id(Long id) {
+  public SimpleChallengeInputDataTypeDto id(Long id) {
     this.id = id;
     return this;
   }
@@ -59,7 +50,7 @@ public class ChallengeInputDataTypeDto {
     this.id = id;
   }
 
-  public ChallengeInputDataTypeDto slug(String slug) {
+  public SimpleChallengeInputDataTypeDto slug(String slug) {
     this.slug = slug;
     return this;
   }
@@ -85,7 +76,7 @@ public class ChallengeInputDataTypeDto {
     this.slug = slug;
   }
 
-  public ChallengeInputDataTypeDto name(String name) {
+  public SimpleChallengeInputDataTypeDto name(String name) {
     this.name = name;
     return this;
   }
@@ -110,48 +101,6 @@ public class ChallengeInputDataTypeDto {
     this.name = name;
   }
 
-  public ChallengeInputDataTypeDto createdAt(OffsetDateTime createdAt) {
-    this.createdAt = createdAt;
-    return this;
-  }
-
-  /**
-   * Get createdAt
-   *
-   * @return createdAt
-   */
-  @NotNull
-  @Valid
-  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", required = true)
-  public OffsetDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(OffsetDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public ChallengeInputDataTypeDto updatedAt(OffsetDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-    return this;
-  }
-
-  /**
-   * Get updatedAt
-   *
-   * @return updatedAt
-   */
-  @NotNull
-  @Valid
-  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", required = true)
-  public OffsetDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(OffsetDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -160,28 +109,25 @@ public class ChallengeInputDataTypeDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ChallengeInputDataTypeDto challengeInputDataType = (ChallengeInputDataTypeDto) o;
-    return Objects.equals(this.id, challengeInputDataType.id)
-        && Objects.equals(this.slug, challengeInputDataType.slug)
-        && Objects.equals(this.name, challengeInputDataType.name)
-        && Objects.equals(this.createdAt, challengeInputDataType.createdAt)
-        && Objects.equals(this.updatedAt, challengeInputDataType.updatedAt);
+    SimpleChallengeInputDataTypeDto simpleChallengeInputDataType =
+        (SimpleChallengeInputDataTypeDto) o;
+    return Objects.equals(this.id, simpleChallengeInputDataType.id)
+        && Objects.equals(this.slug, simpleChallengeInputDataType.slug)
+        && Objects.equals(this.name, simpleChallengeInputDataType.name);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, slug, name, createdAt, updatedAt);
+    return Objects.hash(id, slug, name);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ChallengeInputDataTypeDto {\n");
+    sb.append("class SimpleChallengeInputDataTypeDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
-    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

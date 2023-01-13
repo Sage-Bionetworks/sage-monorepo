@@ -3,6 +3,7 @@ README.md
 api.module.ts
 api/api.ts
 api/challenge.service.ts
+api/challengeInputDataType.service.ts
 api/challengePlatform.service.ts
 api/organization.service.ts
 api/user.service.ts
@@ -15,9 +16,10 @@ model/challenge.ts
 model/challengeDifficulty.ts
 model/challengeDirection.ts
 model/challengeIncentive.ts
+model/challengeInputDataType.ts
+model/challengeInputDataTypesPage.ts
+model/challengeInputDataTypesPageAllOf.ts
 model/challengePlatform.ts
-model/challengePlatformAllOf.ts
-model/challengePlatformCreateRequest.ts
 model/challengePlatformsPage.ts
 model/challengePlatformsPageAllOf.ts
 model/challengeSearchQuery.ts
@@ -33,6 +35,7 @@ model/organizationCreateRequest.ts
 model/organizationsPage.ts
 model/organizationsPageAllOf.ts
 model/pageMetadata.ts
+model/simpleChallengeInputDataType.ts
 model/simpleChallengePlatform.ts
 model/user.ts
 model/userCreateRequest.ts

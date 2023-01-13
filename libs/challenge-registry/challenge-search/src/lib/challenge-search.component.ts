@@ -150,8 +150,8 @@ export class ChallengeSearchComponent
       (page) =>
         (this.checkboxFilters[5].values = page.challengePlatforms.map(
           (platform) => ({
-            value: platform.name,
-            label: platform.displayName,
+            value: platform.slug,
+            label: platform.name,
             active: false,
           })
         ))
