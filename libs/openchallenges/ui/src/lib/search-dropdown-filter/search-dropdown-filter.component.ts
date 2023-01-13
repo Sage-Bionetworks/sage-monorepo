@@ -14,6 +14,11 @@ export class SearchDropdownFilterComponent {
   @Input() showAvatar = true;
   @Output() dropdownChange = new EventEmitter<string[]>();
 
+  overlayOptions = {
+    showTransitionOptions: '0ms',
+    hideTransitionOptions: '0ms',
+  };
+
   onChange(selected: string[]): void {
     this.dropdownChange.emit(selected);
   }
