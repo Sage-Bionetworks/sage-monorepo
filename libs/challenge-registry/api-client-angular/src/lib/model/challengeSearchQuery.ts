@@ -52,6 +52,10 @@ export interface ChallengeSearchQuery {
      */
     platforms?: Array<string>;
     /**
+     * An array of challenge input data type ids used to filter the results.
+     */
+    inputDataTypes?: Array<string>;
+    /**
      * An array of challenge status used to filter the results.
      */
     status?: Array<ChallengeStatus>;

@@ -16,17 +16,19 @@
  */
 export interface ChallengePlatform { 
     /**
-     * The display name of the challenge platform.
-     */
-    displayName: string;
-    /**
      * The unique identifier of a challenge platform.
      */
     id: number;
     /**
+     * The slug of the challenge platform.
+     */
+    slug: string;
+    /**
      * The name of the challenge platform.
      */
     name: string;
+    avatarUrl: string;
+    websiteUrl: string;
     createdAt: string;
     updatedAt: string;
 }

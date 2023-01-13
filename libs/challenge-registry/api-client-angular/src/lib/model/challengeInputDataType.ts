@@ -12,20 +12,22 @@
 
 
 /**
- * A simple challenge platform.
+ * A challenge input data type.
  */
-export interface SimpleChallengePlatform { 
+export interface ChallengeInputDataType { 
     /**
-     * The unique identifier of a challenge platform.
+     * The unique identifier of a challenge input data type.
      */
     id: number;
     /**
-     * The slug of the challenge platform.
+     * The slug of the challenge input data type.
      */
     slug: string;
     /**
-     * The name of the challenge platform.
+     * The name of the challenge input data type.
      */
     name: string;
+    createdAt: string;
+    updatedAt: string;
 }
 

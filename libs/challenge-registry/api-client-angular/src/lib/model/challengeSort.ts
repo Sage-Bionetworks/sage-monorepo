@@ -14,10 +14,11 @@
 /**
  * What to sort results by.
  */
-export type ChallengeSort = 'created' | 'starred';
+export type ChallengeSort = 'created' | 'relevance' | 'starred';
 
 export const ChallengeSort = {
     Created: 'created' as ChallengeSort,
+    Relevance: 'relevance' as ChallengeSort,
     Starred: 'starred' as ChallengeSort
 };
 

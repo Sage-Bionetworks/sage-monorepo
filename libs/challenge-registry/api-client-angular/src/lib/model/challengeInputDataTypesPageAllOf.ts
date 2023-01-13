@@ -9,18 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ChallengeInputDataType } from './challengeInputDataType';
 
 
-export interface ChallengePlatformAllOf { 
+export interface ChallengeInputDataTypesPageAllOf { 
     /**
-     * The unique identifier of a challenge platform.
+     * A list of challenge input data types.
      */
-    id: number;
-    /**
-     * The name of the challenge platform.
-     */
-    name: string;
-    createdAt: string;
-    updatedAt: string;
+    challengeInputDataTypes: Array<ChallengeInputDataType>;
 }
 
