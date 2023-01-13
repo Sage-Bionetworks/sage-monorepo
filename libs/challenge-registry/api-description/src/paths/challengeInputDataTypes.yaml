@@ -1,0 +1,20 @@
+get:
+  tags:
+    - ChallengeInputDataType
+  summary: List challenge input data types
+  description: List challenge input data types
+  operationId: listChallengeInputDataTypes
+  parameters:
+    - $ref: ../components/parameters/query/pageNumber.yaml
+    - $ref: ../components/parameters/query/pageSize.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ChallengeInputDataTypesPage.yaml
+      description: Success
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

@@ -17,6 +17,8 @@ tags:
   name: Challenge
 - description: Operations about challenge platforms.
   name: ChallengePlatform
+- description: Operations about challenge input data types.
+  name: ChallengeInputDataType
 paths:
   /challenges:
     get:
@@ -57,6 +59,59 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: Challenge
+  /challengeInputDataTypes:
+    get:
+      description: List challenge input data types
+      operationId: listChallengeInputDataTypes
+      parameters:
+      - description: The page number.
+        explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 0
+          format: int32
+          minimum: 0
+          type: integer
+        style: form
+      - description: The number of items in a single page.
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeInputDataTypesPage'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List challenge input data types
+      tags:
+      - ChallengeInputDataType
+      x-accepts: application/json
+      x-tags:
+      - tag: ChallengeInputDataType
   /challengePlatforms:
     get:
       description: List challenge platforms
@@ -548,6 +603,66 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    ChallengeInputDataTypeId:
+      description: The unique identifier of a challenge input data type.
+      example: 1
+      format: int64
+      type: integer
+    ChallengeInputDataTypeSlug:
+      description: The slug of the challenge input data type.
+      example: gene-expression
+      maxLength: 30
+      minLength: 3
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      type: string
+    ChallengeInputDataTypeName:
+      description: The name of the challenge input data type.
+      maxLength: 50
+      minLength: 3
+      type: string
+    ChallengeInputDataType:
+      description: A challenge input data type
+      properties:
+        id:
+          description: The unique identifier of a challenge input data type.
+          example: 1
+          format: int64
+          type: integer
+        slug:
+          description: The slug of the challenge input data type.
+          example: gene-expression
+          maxLength: 30
+          minLength: 3
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          type: string
+        name:
+          description: The name of the challenge input data type.
+          maxLength: 50
+          minLength: 3
+          type: string
+        createdAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+        updatedAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+      required:
+      - createdAt
+      - id
+      - name
+      - slug
+      - updatedAt
+      type: object
+    ChallengeInputDataTypesPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/ChallengeInputDataTypesPage_allOf'
+      description: A page of challenge input data types.
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
     ChallengePlatform:
       description: A challenge platform
       example:
@@ -618,6 +733,17 @@ components:
           type: array
       required:
       - challenges
+      type: object
+      example: null
+    ChallengeInputDataTypesPage_allOf:
+      properties:
+        challengeInputDataTypes:
+          description: A list of challenge input data types.
+          items:
+            $ref: '#/components/schemas/ChallengeInputDataType'
+          type: array
+      required:
+      - challengeInputDataTypes
       type: object
       example: null
     ChallengePlatformsPage_allOf:

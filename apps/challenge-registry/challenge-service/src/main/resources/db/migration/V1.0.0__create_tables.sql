@@ -1,4 +1,4 @@
--- challenge.challenge_platform definition
+-- challenge_platform definition
 
 CREATE TABLE `challenge_platform`
 (
@@ -12,7 +12,19 @@ CREATE TABLE `challenge_platform`
     PRIMARY KEY (`id`)
 );
 
--- challenge.challenge definition
+-- challenge_input_data_type definition
+
+CREATE TABLE `challenge_input_data_type`
+(
+    `id`                    int NOT NULL AUTO_INCREMENT,
+    `slug`                  varchar(255) NOT NULL UNIQUE,
+    `name`                  varchar(255) NOT NULL UNIQUE,
+    `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+);
+
+-- challenge definition
 
 CREATE TABLE `challenge`
 (
@@ -39,7 +51,7 @@ CREATE TABLE `challenge`
 -- KEY                `FKk9w2ogq595jbe8r2due7vv3xr` (`account_id`),
 -- CONSTRAINT `FKk9w2ogq595jbe8r2due7vv3xr` FOREIGN KEY (`account_id`) REFERENCES `banking_core_account` (`id`)
 
--- challenge.challenge_incentive definition
+-- challenge_incentive definition
 
 CREATE TABLE `challenge_incentive`
 (
@@ -52,7 +64,7 @@ CREATE TABLE `challenge_incentive`
     CONSTRAINT unique_item UNIQUE (`name`, `challenge_id`)
 );
 
--- challenge.challenge_submission_type definition
+-- challenge_submission_type definition
 
 CREATE TABLE `challenge_submission_type`
 (
@@ -65,7 +77,7 @@ CREATE TABLE `challenge_submission_type`
     CONSTRAINT unique_item UNIQUE (`name`, `challenge_id`)
 );
 
--- challenge.challenge_star definition
+-- challenge_star definition
 
 CREATE TABLE `challenge_star`
 (

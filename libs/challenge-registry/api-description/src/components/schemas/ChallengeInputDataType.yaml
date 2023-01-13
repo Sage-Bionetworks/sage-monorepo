@@ -1,8 +1,23 @@
+type: object
 description: A challenge input data type
-type: string
-minLength: 3
-maxLength: 30
-pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
-example:
-  - genomic
-  - clinical
+properties:
+  id:
+    $ref: ChallengeInputDataTypeId.yaml
+  slug:
+    $ref: ChallengeInputDataTypeSlug.yaml
+  name:
+    $ref: ChallengeInputDataTypeName.yaml
+  createdAt:
+    type: string
+    format: date-time
+    example: '2022-07-04T22:19:11Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2022-07-04T22:19:11Z'
+required:
+  - id
+  - slug
+  - name
+  - createdAt
+  - updatedAt
