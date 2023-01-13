@@ -17,6 +17,8 @@ tags:
     description: Operations about challenges.
   - name: ChallengePlatform
     description: Operations about challenge platforms.
+  - name: ChallengeInputDataType
+    description: Operations about challenge input data types.
 paths:
   /challenges:
     get:
@@ -77,6 +79,27 @@ paths:
                 $ref: '#/components/schemas/ChallengePlatform'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /inputDataTypes:
+    get:
+      tags:
+        - ChallengeInputDataType
+      summary: List challenge input data types
+      description: List challenge input data types
+      operationId: listChallengeInputDataTypes
+      parameters:
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeInputDataTypesPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -435,6 +458,63 @@ components:
                 $ref: '#/components/schemas/ChallengePlatform'
           required:
             - challengePlatforms
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ChallengeInputDataTypeId:
+      description: The unique identifier of a challenge input data type.
+      type: integer
+      format: int64
+      example: 1
+    ChallengeInputDataTypeSlug:
+      description: The slug of the challenge input data type.
+      type: string
+      minLength: 3
+      maxLength: 30
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example: gene-expression
+    ChallengeInputDataTypeName:
+      description: The name of the challenge input data type.
+      type: string
+      minLength: 3
+      maxLength: 50
+    ChallengeInputDataType:
+      type: object
+      description: A challenge input data type
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengeInputDataTypeId'
+        slug:
+          $ref: '#/components/schemas/ChallengeInputDataTypeSlug'
+        name:
+          $ref: '#/components/schemas/ChallengeInputDataTypeName'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
+      required:
+        - id
+        - slug
+        - name
+        - createdAt
+        - updatedAt
+    ChallengeInputDataTypesPage:
+      type: object
+      description: A page of challenge input data types.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            challengeInputDataTypes:
+              description: A list of challenge input data types.
+              type: array
+              items:
+                $ref: '#/components/schemas/ChallengeInputDataType'
+          required:
+            - challengeInputDataTypes
       x-java-class-annotations:
         - '@lombok.Builder'
   parameters:
