@@ -67,7 +67,7 @@ public class ChallengeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "platform_id", nullable = false)
-  @IndexedEmbedded(includePaths = {"name"})
+  @IndexedEmbedded(includePaths = {"slug", "name"})
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private SimpleChallengePlatformEntity platform;
 
@@ -82,6 +82,8 @@ public class ChallengeEntity {
       name = "challenge_x_challenge_input_data_type",
       joinColumns = @JoinColumn(name = "challenge_id"),
       inverseJoinColumns = @JoinColumn(name = "challenge_input_data_type_id"))
+  @IndexedEmbedded(name = "input_data_types", includePaths = {"slug", "name"})
+  @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private List<SimpleChallengeInputDataTypeEntity> inputDataTypes;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)

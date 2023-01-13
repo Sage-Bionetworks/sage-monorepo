@@ -6,6 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +29,10 @@ public class SimpleChallengeInputDataTypeEntity {
   private Long id;
 
   @Column(nullable = false)
+  @GenericField
   private String slug;
 
   @Column(nullable = false)
+  @FullTextField()
   private String name;
 }

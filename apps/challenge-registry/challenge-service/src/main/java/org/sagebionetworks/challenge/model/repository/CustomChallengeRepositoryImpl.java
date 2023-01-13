@@ -50,23 +50,26 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     if (query.getSearchTerms() != null && !query.getSearchTerms().isBlank()) {
       predicates.add(getSearchTermsPredicate(pf, query, fields));
     }
-    if (query.getStatus() != null && query.getStatus().size() > 0) {
+    if (query.getStatus() != null && !query.getStatus().isEmpty()) {
       predicates.add(getChallengeStatusPredicate(pf, query));
     }
-    if (query.getDifficulties() != null && query.getDifficulties().size() > 0) {
+    if (query.getDifficulties() != null && !query.getDifficulties().isEmpty()) {
       predicates.add(getChallengeDifficultyPredicate(pf, query));
     }
-    if (query.getPlatforms() != null && query.getPlatforms().size() > 0) {
+    if (query.getPlatforms() != null && !query.getPlatforms().isEmpty()) {
       predicates.add(getChallengePlatformPredicate(pf, query));
     }
-    if (query.getSubmissionTypes() != null && query.getSubmissionTypes().size() > 0) {
+    if (query.getSubmissionTypes() != null && !query.getSubmissionTypes().isEmpty()) {
       predicates.add(getChallengeSubmissionTypesPredicate(pf, query));
     }
-    if (query.getIncentives() != null && query.getIncentives().size() > 0) {
+    if (query.getIncentives() != null && !query.getIncentives().isEmpty()) {
       predicates.add(getChallengeIncentivesPredicate(pf, query));
     }
     if (query.getMinStartDate() != null || query.getMaxStartDate() != null) {
       predicates.add(getChallengeStartDatePredicate(pf, query));
+    }
+    if (query.getInputDataTypes() != null && !query.getInputDataTypes().isEmpty()) {
+      predicates.add(getChallengeInputDataTypesPredicate(pf, query));
     }
 
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
@@ -146,7 +149,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     return pf.bool(
             b -> {
               for (String platform : query.getPlatforms()) {
-                b.should(pf.match().field("platform.name").matching(platform));
+                b.should(pf.match().field("platform.slug").matching(platform));
               }
             })
         .toPredicate();
@@ -167,6 +170,25 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
               for (ChallengeSubmissionTypeDto submissionType : query.getSubmissionTypes()) {
                 b.should(
                     pf.match().field("submission_types.name").matching(submissionType.toString()));
+              }
+            })
+        .toPredicate();
+  }
+
+  /**
+   * Matches the challenges whose at least one of their input data types is in the list of input
+   * data types specified.
+   *
+   * @param pf
+   * @param query
+   * @return
+   */
+  private SearchPredicate getChallengeInputDataTypesPredicate(
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
+    return pf.bool(
+            b -> {
+              for (String inputDataType : query.getInputDataTypes()) {
+                b.should(pf.match().field("input_data_types.slug").matching(inputDataType));
               }
             })
         .toPredicate();
