@@ -503,6 +503,7 @@ components:
       type: integer
     ChallengeInputDataTypeName:
       description: The name of the challenge input data type.
+      example: gene expression
       maxLength: 50
       minLength: 3
       type: string
@@ -523,6 +524,7 @@ components:
           type: string
         name:
           description: The name of the challenge input data type.
+          example: gene expression
           maxLength: 50
           minLength: 3
           type: string
@@ -672,6 +674,7 @@ components:
           type: string
         name:
           description: The name of the challenge input data type.
+          example: gene expression
           maxLength: 50
           minLength: 3
           type: string

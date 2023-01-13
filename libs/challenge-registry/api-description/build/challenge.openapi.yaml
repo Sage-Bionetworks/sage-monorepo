@@ -329,6 +329,7 @@ components:
       type: string
       minLength: 3
       maxLength: 50
+      example: gene expression
     SimpleChallengeInputDataType:
       type: object
       description: A simple challenge input data type.

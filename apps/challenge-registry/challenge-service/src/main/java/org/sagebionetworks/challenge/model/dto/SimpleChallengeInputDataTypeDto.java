@@ -88,6 +88,7 @@ public class SimpleChallengeInputDataTypeDto {
   @Size(min = 3, max = 50)
   @Schema(
       name = "name",
+      example = "gene expression",
       description = "The name of the challenge input data type.",
       required = true)
   public String getName() {
