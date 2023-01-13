@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
 @Entity
@@ -26,10 +27,11 @@ public class SimpleChallengePlatformEntity {
   private Long id;
 
   @Column(nullable = false)
+  @GenericField()
   private String slug;
 
   @Column(nullable = false)
-  @GenericField()
+  @FullTextField()
   private String name;
 
   @Column(name = "avatar_url", nullable = false)
