@@ -1,6 +1,5 @@
 package org.sagebionetworks.challenge.model.mapper;
 
-import java.util.ArrayList;
 import org.sagebionetworks.challenge.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeDto;
 import org.sagebionetworks.challenge.model.dto.ChallengeIncentiveDto;
