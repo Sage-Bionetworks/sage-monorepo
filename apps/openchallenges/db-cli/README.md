@@ -1,6 +1,6 @@
 # DB Client
 
-This CLI is a tool to manage the content of the Challenge Registry MongoDB
+This CLI is a tool to manage the content of the OpenChallenges MongoDB
 instance.
 
 ## Usage

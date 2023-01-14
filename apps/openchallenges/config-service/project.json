@@ -1,0 +1,61 @@
+{
+  "name": "openchallenges-config-service",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/config-service/src",
+  "projectType": "application",
+  "targets": {
+    "prepare-java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "apps/openchallenges/config-service"
+      }
+    },
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "apps/openchallenges/config-service"
+      },
+      "outputs": ["{projectRoot}"],
+      "dependsOn": ["^install"]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "apps/openchallenges/config-service"
+      }
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "apps/openchallenges/config-service"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "apps/openchallenges/config-service",
+        "parallel": true
+      },
+      "dependsOn": ["prepare", "^serve-detach"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/openchallenges/config-service"
+      },
+      "dependsOn": ["build-image", "prepare", "^serve-detach"]
+    },
+    "build-image": {
+      "executor": "@nxrocks/nx-spring-boot:build-image",
+      "options": {
+        "root": "apps/openchallenges/config-service"
+      },
+      "dependsOn": ["^install"]
+    }
+  },
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": ["openchallenges-service-registry"]
+}

@@ -11,11 +11,11 @@ repo_token: "coveralls-token-for-your-repo"
 Generate the coverage report for a project.
 
 ```console
-nx test challenge-registry-about
+nx test openchallenges-about
 ```
 
 Push a coverage report to Coveralls.
 
 ```console
-npx coveralls < coverage/libs/challenge-registry/about/lcov.info
+npx coveralls < coverage/libs/openchallenges/about/lcov.info
 ```

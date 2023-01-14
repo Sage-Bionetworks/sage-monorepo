@@ -1,0 +1,22 @@
+<main>
+  <div id="challenges" class="row col">
+    <h3>Challenges</h3>
+    <div class="card-group">
+      <openchallenges-challenge-card
+        *ngFor="let challenge of challenges"
+        [deprecatedChallenge]="challenge"
+      >
+      </openchallenges-challenge-card>
+    </div>
+    <p-paginator
+      [first]="0"
+      [pageLinkSize]="5"
+      [rows]="limit"
+      [totalRecords]="challengeResultsCount"
+      [rowsPerPageOptions]="[12, 24, 36]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} results"
+      (onPageChange)="onPageChange($event)"
+    ></p-paginator>
+  </div>
+</main>

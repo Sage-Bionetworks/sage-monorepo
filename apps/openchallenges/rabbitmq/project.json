@@ -1,0 +1,40 @@
+{
+  "name": "openchallenges-rabbitmq",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/rabbitmq/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/rabbitmq"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/openchallenges/rabbitmq"
+      },
+      "dependsOn": ["prepare", "build-image"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/openchallenges/rabbitmq"
+      },
+      "dependsOn": ["prepare", "build-image"]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/openchallenges/rabbitmq",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-rabbitmq:latest"]
+      }
+    }
+  },
+  "tags": ["type:message", "scope:backend"]
+}

@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  openchallenges-postgres:
+    image: sagebionetworks/openchallenges-postgres:latest
+    container_name: openchallenges-postgres
+    env_file:
+      - .env
+    volumes:
+      - openchallenges-postgres:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - openchallenges
+    ports:
+      - "5432:5432"
+
+volumes:
+  openchallenges-postgres:
+    name: openchallenges-postgres
+
+networks:
+  openchallenges:
+    name: openchallenges

@@ -58,7 +58,7 @@ app-specific asset libraries.
 
 ```html
 <img src="/shared-typescript-assets/images/github.png">
-<img src="/challenge-registry-assets/images/challenge-view-header-background.png">
+<img src="/openchallenges-assets/images/challenge-view-header-background.png">
 ```
 
 ## Applying a theme to a component

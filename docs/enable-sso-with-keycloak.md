@@ -3,7 +3,7 @@
 - [Enable Google SSO](#Enable-Google-SSO)
   - [Create a Google Application](#Create-a-Google-Application)
   - [Create a Google identify provider in Keycloak](#Create-a-Google-identify-provider-in-Keycloak)
-- [Log in to the Challenge Registry with a Google account](#Log-in-to-the-Challenge-Registry-with-a-Google-account)
+- [Log in to the OpenChallenges with a Google account](#Log-in-to-the-Challenge-Registry-with-a-Google-account)
 - [Notes](#Notes)
 
 ## Enable Google SSO
@@ -14,7 +14,7 @@
 2. Click on the dropdown near the Google Cloud logo.
 3. Click on `New Project`.
 4. Enter the information about the project.
-    - Project name: `challenge-registry-keycloak-google`
+    - Project name: `openchallenges-keycloak-google`
     - Organization: `sagebase.org`
     - Location: `sagebase.org`
 5. Click on `Create`.
@@ -29,8 +29,8 @@
     - User support email: `<support email>`
     - Specify app logo (Optional)
 12. Enter the App domain information.
-    - Application home page: `http://localhost:4200` (Challenge Registry web app)
-    - Authorized domain 1: `challenge-registry.org` (Optional)
+    - Application home page: `http://localhost:4200` (OpenChallenges web app)
+    - Authorized domain 1: `openchallenges.org` (Optional)
 13. Enter the Developer contact information.
     - Email addresses: `<contact addresses>`
 14. Click on `Save and Continue`.
@@ -63,7 +63,7 @@
 5. Specify the Client ID and Client Secret in the `Add Google provider`.
 6. Click on `Add`.
 
-## Log in to the Challenge Registry with a Google account
+## Log in to the OpenChallenges with a Google account
 
 1. Click on `Log In`.
 2. The option to sign in with Google should now be available. Click on `Google`.

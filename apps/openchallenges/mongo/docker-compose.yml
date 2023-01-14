@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  openchallenges-mongo:
+    image: sagebionetworks/openchallenges-mongo:latest
+    container_name: openchallenges-mongo
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - challenge
+    volumes:
+      - openchallenges-mongo:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  openchallenges-mongo:
+    name: openchallenges-mongo
+
+networks:
+  challenge:
+    name: challenge

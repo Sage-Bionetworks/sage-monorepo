@@ -287,7 +287,7 @@ Port 5601 opened for sessionId ...
 Waiting for connections...
 ```
 
-> **Note** For developers of the Challenge Registry, VS Code is already forwarding the port 5601 to
+> **Note** For developers of the OpenChallenges, VS Code is already forwarding the port 5601 to
 > localhost when running the project dev container. Either make sure that the dev container is not
 > running when accessing Kibana or forward the Kibana port to another port on localhost, e.g. with
 > `--parameters '{"portNumber":["5601"], "localPortNumber":["56010"]}'` (notice the trailing `0`).

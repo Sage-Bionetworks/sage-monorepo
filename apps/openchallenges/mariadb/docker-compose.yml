@@ -11,7 +11,7 @@ services:
       # - openchallenges-mariadb:/data/db
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
-      - challenge-registry
+      - openchallenges
     ports:
       - "3306:3306"
 
@@ -20,5 +20,5 @@ services:
 #     name: openchallenges-mariadb
 
 networks:
-  challenge-registry:
-    name: challenge-registry
+  openchallenges:
+    name: openchallenges

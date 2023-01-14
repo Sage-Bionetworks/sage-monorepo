@@ -1,0 +1,27 @@
+{
+  "name": "openchallenges-home",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/openchallenges/home/src",
+  "prefix": "openchallenges",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/home"],
+      "options": {
+        "jestConfig": "libs/openchallenges/home/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/openchallenges/home/src/**/*.ts",
+          "libs/openchallenges/home/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:openchallenges"]
+}

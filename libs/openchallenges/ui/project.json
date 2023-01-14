@@ -1,0 +1,28 @@
+{
+  "name": "openchallenges-ui",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/openchallenges/ui/src",
+  "prefix": "openchallenges",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/ui"],
+      "options": {
+        "jestConfig": "libs/openchallenges/ui/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/openchallenges/ui/src/**/*.ts",
+          "libs/openchallenges/ui/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:openchallenges"],
+  "implicitDependencies": ["shared-typescript-assets", "shared-typescript-styles", "shared-typescript-themes"]
+}

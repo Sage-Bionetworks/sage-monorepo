@@ -64,7 +64,7 @@
       "server": "localhost",
       "port": 5432,
       "driver": "PostgreSQL",
-      "name": "challenge-registry-postgres",
+      "name": "openchallenges-postgres",
       "database": "challenge",
       "username": "postgres",
       "password": "changeme"

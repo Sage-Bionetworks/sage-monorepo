@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  openchallenges-core-service:
+    image: sagebionetworks/openchallenges-core-service:latest
+    container_name: openchallenges-core-service
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - openchallenges
+    ports:
+      - "8092:8092"
+    command: start-dev
+
+networks:
+  openchallenges:
+    name: openchallenges
