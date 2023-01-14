@@ -1,0 +1,49 @@
+<main>
+  <div id="stars" class="row col">
+    <h3>Starred</h3>
+    <div class="tab-nav-group">
+      <button
+        class="tab-item"
+        (click)="clickEvent('challenges')"
+        [ngClass]="{ 'active-tab': activeTab === tabs['challenges'] }"
+      >
+        Challenges
+      </button>
+      <button
+        class="tab-item"
+        (click)="clickEvent('organizations')"
+        [ngClass]="{ 'active-tab': activeTab === tabs['organizations'] }"
+      >
+        Organizations
+      </button>
+    </div>
+    <ng-container [ngSwitch]="activeTab">
+      <div *ngSwitchCase="tabs['challenges']">
+        <div class="card-group">
+          <openchallenges-challenge-card
+            *ngFor="let challenge of challenges"
+            [deprecatedChallenge]="challenge"
+          >
+          </openchallenges-challenge-card>
+        </div>
+        <p-paginator
+          [first]="0"
+          [pageLinkSize]="5"
+          [rows]="limit"
+          [totalRecords]="challengeResultsCount"
+          [rowsPerPageOptions]="[12, 24, 36]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} results"
+          (onPageChange)="onPageChange($event)"
+        ></p-paginator>
+      </div>
+      <div *ngSwitchCase="tabs['organizations']" class="card-group">
+        <openchallenges-organization-card
+          *ngFor="let organization of organizations"
+          [organization]="organization"
+        >
+        </openchallenges-organization-card>
+      </div>
+    </ng-container>
+  </div>
+</main>

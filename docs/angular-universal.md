@@ -35,30 +35,30 @@ We are going to go start with an existing Angular application, and we will progr
 into an Angular Universal application while explaining every step along the way!
 
 The second part of the instructions describe how to tweak the app to meet the need of this project.
-The previous version of the challenge registry app generated in early 2022 is referenced as the
-"legacy" app.
+The previous version of the OpenChallenges app generated in early 2022 is referenced as the "legacy"
+app.
 
 1. Create an Angular app.
     ```console
-    nx generate @nrwl/angular:app challenge-registry --routing=true --style=scss
+    nx generate @nrwl/angular:app openchallenges --routing=true --style=scss
     ```
     > **Note** Add the option `--dry-run` to preview the output of Nx commands.
 
-    > **Note** The legacy challenge registry app generated early 2022 was build with the generator
+    > **Note** The legacy OpenChallenges app generated early 2022 was build with the generator
     > `@nrwl/angular:webpack-browser`. The newly generated app is now built with
     > `@angular-devkit/build-angular:browser` (see `project.json`).
 
 2. Let's use the Angular Universal schematic to initialize our SSR setup for the
-   `challenge-registry` application by running the following in the terminal:
+   `openchallenges` application by running the following in the terminal:
     ```console
-    nx generate @schematics/angular:universal --project=challenge-registry
+    nx generate @schematics/angular:universal --project=openchallenges
     ```
 
 3. Follow the instructions listed in the article [Server-side rendering (SSR) with Angular for Nx
    workspaces] to add the project target `serve-ssr`.
 
 4. Delete the folder `src/assets` and `src/environments`. Import the folder `src/assets` and
-   `src/config` from the legacy challenge registry app.
+   `src/config` from the legacy OpenChallenges app.
 
 5. Update `project.json`
     - Add this line to the top of `project.json` is missing.
@@ -68,7 +68,7 @@ The previous version of the challenge registry app generated in early 2022 is re
 
     - Update the value of `prefix`.
       ```console
-      "prefix": "challenge-registry",
+      "prefix": "openchallenges",
       ```
 
     - Copy-paste the following targets from the legacy app.
@@ -79,17 +79,17 @@ The previous version of the challenge registry app generated in early 2022 is re
     - Update the value of `assets` specified in the `build` target.
       ```console
       "assets": [
-        "apps/challenge-registry/src/assets",
-        "apps/challenge-registry/src/config",
+        "apps/openchallenges/src/assets",
+        "apps/openchallenges/src/config",
         {
           "input": "libs/shared/typescript/assets/src/assets",
           "glob": "**/*",
           "output": "assets"
         },
         {
-          "input": "libs/challenge-registry/assets/src/assets",
+          "input": "libs/openchallenges/assets/src/assets",
           "glob": "**/*",
-          "output": "challenge-registry-assets"
+          "output": "openchallenges-assets"
         },
         {
           "input": "libs/shared/typescript/assets/src",
@@ -129,11 +129,11 @@ The previous version of the challenge registry app generated in early 2022 is re
     - Set the project `implicitDependencies`.
       ```console
       "implicitDependencies": [
-        "challenge-registry-styles",
-        "challenge-registry-themes",
+        "openchallenges-styles",
+        "openchallenges-themes",
         "shared-typescript-assets",
-        "challenge-registry-api-gateway",
-        "challenge-registry-keycloak"
+        "openchallenges-api-gateway",
+        "openchallenges-keycloak"
       ]
       ```
 
@@ -148,7 +148,7 @@ The previous version of the challenge registry app generated in early 2022 is re
       AppConfig,
       APP_CONFIG,
       Environment,
-    } from '@sagebionetworks/challenge-registry/config';
+    } from '@sagebionetworks/openchallenges/config';
 
     function bootstrap() {
       fetch('/config/config.json')
@@ -162,7 +162,7 @@ The previous version of the challenge registry app generated in early 2022 is re
             enableProdMode();
           }
 
-          console.log('challenge-registry config', config);
+          console.log('openchallenges config', config);
 
           platformBrowserDynamic([{ provide: APP_CONFIG, useValue: config }])
             .bootstrapModule(AppModule)
@@ -193,9 +193,9 @@ The previous version of the challenge registry app generated in early 2022 is re
 ## Build the Angular Universal Bundle
 
 ```console
-nx server challenge-registry --prod
+nx server openchallenges --prod
 
-$ ls -alh dist/apps/challenge-registry/server/
+$ ls -alh dist/apps/openchallenges/server/
 total 5.3M
 drwxr-xr-x 2 vscode vscode 4.0K Jul 28 15:39 .
 drwxr-xr-x 3 vscode vscode 4.0K Jul 28 15:39 ..

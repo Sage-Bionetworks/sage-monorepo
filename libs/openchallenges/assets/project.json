@@ -1,0 +1,9 @@
+{
+  "name": "openchallenges-assets",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/openchallenges/assets/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": ["type:assets", "scope:openchallenges"]
+}

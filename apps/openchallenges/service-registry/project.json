@@ -1,0 +1,68 @@
+{
+  "name": "openchallenges-service-registry",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/service-registry/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/service-registry"
+      }
+    },
+    "prepare-java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "apps/openchallenges/service-registry"
+      }
+    },
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "apps/openchallenges/service-registry"
+      },
+      "outputs": ["{projectRoot}"],
+      "dependsOn": ["^install"]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "apps/openchallenges/service-registry"
+      }
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "apps/openchallenges/service-registry"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "apps/openchallenges/service-registry",
+        "parallel": true
+      },
+      "dependsOn": ["prepare", "^serve-detach"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/openchallenges/service-registry"
+      },
+      "dependsOn": ["build-image", "prepare", "^serve-detach"]
+    },
+    "build-image": {
+      "executor": "@nxrocks/nx-spring-boot:build-image",
+      "options": {
+        "root": "apps/openchallenges/service-registry"
+      },
+      "dependsOn": ["^install"]
+    }
+  },
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": []
+}

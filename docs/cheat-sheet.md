@@ -1,4 +1,4 @@
-# Challenge Registry Cheat Sheet
+# OpenChallenges Cheat Sheet
 
 ## Overview
 
@@ -9,7 +9,7 @@ This cheat sheet provides an overview of the commands needed when developing in 
 The workspace of this monorepo was generated with:
 
 ```console
-yarn create nx-workspace challenge-registry --preset=empty --packageManager=yarn
+yarn create nx-workspace openchallenges --preset=empty --packageManager=yarn
 ```
 
 ## Project

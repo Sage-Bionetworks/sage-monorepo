@@ -2,7 +2,7 @@ import { SeoData } from './seo-data';
 
 const getBaseSeoData = (): SeoData => {
   return {
-    title: 'Challenge Registry',
+    title: 'OpenChallenges',
     metas: {
       AUTHOR: {
         name: 'author',

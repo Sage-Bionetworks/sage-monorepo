@@ -1,8 +1,8 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/challenge-registry/themes/src/fonts' as fonts;
-@use 'libs/challenge-registry/themes/src/palettes' as palettes;
-@use 'libs/challenge-registry/themes/src/index' as challenge-registry;
+@use 'libs/openchallenges/themes/src/fonts' as fonts;
+@use 'libs/openchallenges/themes/src/palettes' as palettes;
+@use 'libs/openchallenges/themes/src/index' as openchallenges;
 
 @include mat.legacy-typography-hierarchy(fonts.$fira);
 @include mat.legacy-core();
@@ -43,4 +43,4 @@ $theme: map.deep-merge(
 // @include mat.legacy-button-typography(fonts.$fira);
 
 // Include the theme mixins for other components you use here.
-// @include challenge-registry.theme($theme);
+// @include openchallenges.theme($theme);

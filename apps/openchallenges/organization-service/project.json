@@ -1,0 +1,92 @@
+{
+  "name": "openchallenges-organization-service",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/organization-service/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/organization-service"
+      }
+    },
+    "prepare-java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "apps/openchallenges/organization-service"
+      }
+    },
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "apps/openchallenges/organization-service"
+      },
+      "outputs": ["apps/openchallenges/organization-service"],
+      "dependsOn": ["^install"]
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "apps/openchallenges/organization-service"
+      }
+    },
+    "format": {
+      "executor": "@nxrocks/nx-spring-boot:format",
+      "options": {
+        "root": "apps/openchallenges/organization-service"
+      }
+    },
+    "format-check": {
+      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "options": {
+        "root": "apps/openchallenges/organization-service"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "apps/openchallenges/organization-service",
+        "parallel": true
+      },
+      "dependsOn": ["prepare", "^install", "^serve-detach"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/openchallenges/organization-service"
+      },
+      "dependsOn": ["build-image", "prepare", "^serve-detach"]
+    },
+    "build-image": {
+      "executor": "@nxrocks/nx-spring-boot:build-image",
+      "options": {
+        "root": "apps/openchallenges/organization-service"
+      },
+      "dependsOn": ["^install"]
+    },
+    "openapi-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "xargs rm -fr <.openapi-generator/FILES",
+          "openapi-generator-cli generate",
+          "./gradlew spotlessApply"
+        ],
+        "cwd": "apps/openchallenges/organization-service",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": [
+    "openchallenges-mariadb",
+    "openchallenges-service-registry",
+    "openchallenges-api-gateway",
+    "openchallenges-keycloak",
+    "shared-java-util"
+  ]
+}

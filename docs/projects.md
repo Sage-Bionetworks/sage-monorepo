@@ -12,29 +12,29 @@
 | challenge-mariadb | MariaDB database |
 | challenge-mongodb | MongoDB database |
 | challenge-postgresql | PostgreSQL database |
-| challenge-registry | Challenge Registry application |
-| challenge-registry-e2e | Challenge Registry E2E test |
+| openchallenges | OpenChallenges application |
+| openchallenges-e2e | OpenChallenges E2E test |
 | challenge-service-registry | Service registration and discovery |
 
 ## Libraries
 
 | Project | Description |
 |---------|-------------|
-| challenge-registry-about | Challenge Registry About page |
-| challenge-registry-assets | Challenge Registry assets |
-| challenge-registry-auth | Challenge Registry AuthN/AuthZ |
-| challenge-registry-challenge | Challenge Registry Challenge page |
-| challenge-registry-challenge-search | Challenge Registry Challenge search page |
-| challenge-registry-config | Challenge Registry configuration |
-| challenge-registry-home | Challenge Registry Home page |
-| challenge-registry-not-found | Challenge Registry Not found page |
-| challenge-registry-org-profile | Challenge Registry Organization profile page |
-| challenge-registry-org-search | Challenge Registry Organization search page |
-| challenge-registry-signup | Challenge Registry Signup page |
-| challenge-registry-styles | Challenge Registry SCSS styles |
-| challenge-registry-themes | Challenge Registry SCSS themes |
-| challenge-registry-ui | Challenge Registry reusable UI components |
-| challenge-registry-user-profile | Challenge Registry User profile page |
+| openchallenges-about | OpenChallenges About page |
+| openchallenges-assets | OpenChallenges assets |
+| openchallenges-auth | OpenChallenges AuthN/AuthZ |
+| openchallenges-challenge | OpenChallenges Challenge page |
+| openchallenges-challenge-search | OpenChallenges Challenge search page |
+| openchallenges-config | OpenChallenges configuration |
+| openchallenges-home | OpenChallenges Home page |
+| openchallenges-not-found | OpenChallenges Not found page |
+| openchallenges-org-profile | OpenChallenges Organization profile page |
+| openchallenges-org-search | OpenChallenges Organization search page |
+| openchallenges-signup | OpenChallenges Signup page |
+| openchallenges-styles | OpenChallenges SCSS styles |
+| openchallenges-themes | OpenChallenges SCSS themes |
+| openchallenges-ui | OpenChallenges reusable UI components |
+| openchallenges-user-profile | OpenChallenges User profile page |
 | shared-assets | Assets shared by multiple TypeScript projects |
 | shared-java-util | Util library shared by multiple Java projects |
 | shared-styles | SCSS styles shared by multiple TypeScript projects |

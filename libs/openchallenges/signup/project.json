@@ -1,0 +1,27 @@
+{
+  "name": "openchallenges-signup",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/openchallenges/signup/src",
+  "prefix": "openchallenges",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/signup"],
+      "options": {
+        "jestConfig": "libs/openchallenges/signup/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/openchallenges/signup/src/**/*.ts",
+          "libs/openchallenges/signup/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:openchallenges"]
+}

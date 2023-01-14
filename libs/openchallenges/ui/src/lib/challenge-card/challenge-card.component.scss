@@ -1,0 +1,76 @@
+@use 'libs/openchallenges/styles/src/lib/_constants' as constants;
+
+.challenge-card {
+  width: 340px;
+  min-height: 360px;
+  padding: 12px;
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  flex-direction: column;
+  border-radius: constants.$dl-radius-radius-radius16;
+}
+
+// BANNER
+.card-banner {
+  width: 100%;
+  height: 130px;
+  display: flex;
+  align-items: flex-start;
+}
+.star-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  height: 32px;
+  padding: 0 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: constants.$dl-radius-radius-radius16;
+  cursor: pointer;
+}
+.card-icon {
+  margin: 0 2px;
+}
+
+// BODY
+.card-body {
+  width: 100%;
+  margin: 8px;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+// FOOTER
+.card-footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  border-top: 1px solid #c4c4c4;
+  align-items: center;
+  height: 50px;
+}
+.difficulty-tag {
+  display: flex;
+  flex: 1;
+  height: 24px;
+}
+.status-tag {
+  max-width: 120px;
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: constants.$dl-radius-radius-radius16;
+}

@@ -1,0 +1,32 @@
+{
+  "name": "openchallenges-mongo",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/mongo/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/mongo"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/openchallenges/mongo"
+      },
+      "dependsOn": ["prepare", "build-image"]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/openchallenges/mongo",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-mongo:latest"]
+      }
+    }
+  },
+  "tags": ["type:db", "scope:backend"]
+}

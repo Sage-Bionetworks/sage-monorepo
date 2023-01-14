@@ -1,0 +1,26 @@
+{
+  "name": "openchallenges-team",
+  "projectType": "library",
+  "sourceRoot": "libs/openchallenges/team/src",
+  "prefix": "openchallenges",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/team"],
+      "options": {
+        "jestConfig": "libs/openchallenges/team/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/openchallenges/team/src/**/*.ts",
+          "libs/openchallenges/team/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:openchallenges"]
+}

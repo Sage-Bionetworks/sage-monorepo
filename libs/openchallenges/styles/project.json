@@ -1,0 +1,10 @@
+{
+  "name": "openchallenges-styles",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/openchallenges/styles/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": ["type:styles", "scope:openchallenges"],
+  "implicitDependencies": ["shared-typescript-styles"]
+}

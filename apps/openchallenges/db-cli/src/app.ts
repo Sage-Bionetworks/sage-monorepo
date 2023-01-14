@@ -49,7 +49,7 @@ export class App {
       .option(
         '--uri <uri>',
         'MongoDB uri',
-        'mongodb://localhost:27017/challenge-registry'
+        'mongodb://localhost:27017/openchallenges'
       )
       .option('--username <username>', 'MongoDB username', 'openchallenges')
       .option('--password <password>', 'MongoDB password', 'changeme');

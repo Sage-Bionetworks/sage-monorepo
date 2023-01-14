@@ -21,7 +21,7 @@ issue, assessing changes, and helping you finalize your pull requests.
     - [Setup Development Environment](#setup-development-environment)
     - [Linting](#linting)
     - [Testing](#testing)
-    - [Start the Challenge Registry]
+    - [Start the OpenChallenges]
 - [Release Procedure](#release-procedure)
 - [Getting Help](#getting-help)
 
@@ -118,7 +118,7 @@ Source `dev-env.sh`.
 
 Prepare the development environment.
 
-    challenge-registry-prepare
+    openchallenges-prepare
 
 ### Linting
 
@@ -135,7 +135,7 @@ yarn build
 yarn test
 ```
 
-### Start the Challenge Registry
+### Start the OpenChallenges
 
 Start the web app and its dependencies (API, API database).
 

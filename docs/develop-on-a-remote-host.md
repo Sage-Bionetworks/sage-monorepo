@@ -185,7 +185,7 @@ instructions to do so.
 
 - `Remote-Containers: Open Folder in Container...`
 - Select the project folder and click on `OK`.
-- Verify that the bottom-left corner of the VSCode window shows `Dev Container: Challenge Registry @
+- Verify that the bottom-left corner of the VSCode window shows `Dev Container: OpenChallenges @
   ssh://<host name>`.
 
   <img src="images/vscode-remote-ssh-devcontainer-button.png" height="58">

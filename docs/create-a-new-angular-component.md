@@ -12,51 +12,51 @@ In this document:
 
 ## Overview
 
-This doc describes how to create a new library + component in the Challenge Registry app, though
+This doc describes how to create a new library + component in the OpenChallenges app, though
 the steps can be applied to any app in this project. This doc will also include information on
 where/how to copy-paste code from the [Figma-to-code export] into the app (starting at [Step 5]).
 
 ## 1. Create a new Angular library
 
-To create a UI library within `challenge-registry`, run:
+To create a UI library within `openchallenges`, run:
 
 ```console
-nx g @nrwl/angular:lib <new library name> --directory challenge-registry
+nx g @nrwl/angular:lib <new library name> --directory openchallenges
 ```
 
 (Optional but recommended) Use `--dryrun` to first see what and where the entities will be created;
 this will help visualize and validate the intended directory structure, e.g.
 
 ```console
-$ nx g @nrwl/angular:lib awesome-lib --directory challenge-registry --dry-run
+$ nx g @nrwl/angular:lib awesome-lib --directory openchallenges --dry-run
 
 >  NX  Generating @nrwl/angular:library
 
 ...
 UPDATE workspace.json
-CREATE libs/challenge-registry/awesome-lib/README.md
-CREATE libs/challenge-registry/awesome-lib/tsconfig.lib.json
-CREATE libs/challenge-registry/awesome-lib/tsconfig.spec.json
-CREATE libs/challenge-registry/awesome-lib/src/index.ts
-CREATE libs/challenge-registry/awesome-lib/src/lib/challenge-registry-awesome-lib.module.ts
-CREATE libs/challenge-registry/awesome-lib/tsconfig.json
-CREATE libs/challenge-registry/awesome-lib/project.json
+CREATE libs/openchallenges/awesome-lib/README.md
+CREATE libs/openchallenges/awesome-lib/tsconfig.lib.json
+CREATE libs/openchallenges/awesome-lib/tsconfig.spec.json
+CREATE libs/openchallenges/awesome-lib/src/index.ts
+CREATE libs/openchallenges/awesome-lib/src/lib/openchallenges-awesome-lib.module.ts
+CREATE libs/openchallenges/awesome-lib/tsconfig.json
+CREATE libs/openchallenges/awesome-lib/project.json
 UPDATE tsconfig.base.json
-CREATE libs/challenge-registry/awesome-lib/jest.config.ts
-CREATE libs/challenge-registry/awesome-lib/src/test-setup.ts
-CREATE libs/challenge-registry/awesome-lib/.eslintrc.json
+CREATE libs/openchallenges/awesome-lib/jest.config.ts
+CREATE libs/openchallenges/awesome-lib/src/test-setup.ts
+CREATE libs/openchallenges/awesome-lib/.eslintrc.json
 
 NOTE: The "dryRun" flag means no changes were made.
 ```
 
-Due to how the Challenge Registry app is currently structured, some additional
+Due to how the OpenChallenges app is currently structured, some additional
 steps are required:
 
-1.  Remove `challenge-registry-` from the filename of the module TypeScript in `src/lib/`, e.g.
+1.  Remove `openchallenges-` from the filename of the module TypeScript in `src/lib/`, e.g.
 
-    `challenge-registry-awesome-lib.module.ts` → `awesome-lib.module.ts`
+    `openchallenges-awesome-lib.module.ts` → `awesome-lib.module.ts`
 
-2.  Simiarly, in `src/index.ts`, remove `challenge-registry-` from the import filepath.
+2.  Simiarly, in `src/index.ts`, remove `openchallenges-` from the import filepath.
 3.  In the library module (`<new library name>.module.ts`), remove `ChallengeRegistry` from
     the class name, e.g.
           `export class ChallengeRegistryAwesomeLibModule {}` → `export class AwesomeLibModule {}`
@@ -75,11 +75,11 @@ where `<project name>` is the name of the project defined in `project.json` of t
 Angular library.
 
 For example, to create an Angular component for the `awesome-lib` library, the project name would be
-`challenge-registry-awesome-lib`, as defined in `libs/challenge-registry/awesome-lib/project.json`:
+`openchallenges-awesome-lib`, as defined in `libs/openchallenges/awesome-lib/project.json`:
 
 ```json
 {
-  "name": "challenge-registry-awesome-lib",
+  "name": "openchallenges-awesome-lib",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   ...
@@ -89,15 +89,15 @@ For example, to create an Angular component for the `awesome-lib` library, the p
 The resulting command would then be:
 
 ```console
-$ nx g @nrwl/angular:component awesome-lib --project challenge-registry-awesome-lib --dry-run
+$ nx g @nrwl/angular:component awesome-lib --project openchallenges-awesome-lib --dry-run
 
 >  NX  Generating @nrwl/angular:component
 
-CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib/awesome-lib.component.scss
-CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib/awesome-lib.component.html
-CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib/awesome-lib.component.spec.ts
-CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib/awesome-lib.component.ts
-UPDATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.module.ts
+CREATE libs/openchallenges/awesome-lib/src/lib/awesome-lib/awesome-lib.component.scss
+CREATE libs/openchallenges/awesome-lib/src/lib/awesome-lib/awesome-lib.component.html
+CREATE libs/openchallenges/awesome-lib/src/lib/awesome-lib/awesome-lib.component.spec.ts
+CREATE libs/openchallenges/awesome-lib/src/lib/awesome-lib/awesome-lib.component.ts
+UPDATE libs/openchallenges/awesome-lib/src/lib/awesome-lib.module.ts
 
 NOTE: The "dryRun" flag means no changes were made.
 ```
@@ -109,15 +109,15 @@ NOTE: The "dryRun" flag means no changes were made.
 To directly create the files into the parent folder, use `--flat` in the command:
 
 ```console
-$ nx g @nrwl/angular:component awesome-lib --project challenge-registry-awesome-lib --flat -dry-run
+$ nx g @nrwl/angular:component awesome-lib --project openchallenges-awesome-lib --flat -dry-run
 
 >  NX  Generating @nrwl/angular:component
 
-CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.component.scss
-CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.component.html
-CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.component.spec.ts
-CREATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.component.ts
-UPDATE libs/challenge-registry/awesome-lib/src/lib/awesome-lib.module.ts
+CREATE libs/openchallenges/awesome-lib/src/lib/awesome-lib.component.scss
+CREATE libs/openchallenges/awesome-lib/src/lib/awesome-lib.component.html
+CREATE libs/openchallenges/awesome-lib/src/lib/awesome-lib.component.spec.ts
+CREATE libs/openchallenges/awesome-lib/src/lib/awesome-lib.component.ts
+UPDATE libs/openchallenges/awesome-lib/src/lib/awesome-lib.module.ts
 
 NOTE: The "dryRun" flag means no changes were made.
 ```
@@ -131,14 +131,14 @@ Before moving on, some additional edits are required:
 2.  In the `<new component name>.component.ts` file:
 
     - Remove `OnInit` from the import and all instances of it from the class
-    - Import `ConfigService` from `@sagebionetworks/challenge-registry/config`
+    - Import `ConfigService` from `@sagebionetworks/openchallenges/config`
     - Pass `configService` into the constructor as `private readonly`
 
     The final result should look something like this:
 
     ```ts
     import { Component } from '@angular/core';
-    import { ConfigService } from '@sagebionetworks/challenge-registry/config';
+    import { ConfigService } from '@sagebionetworks/openchallenges/config';
 
     @Component({
       selector: 'sagebionetworks-awesome-lib',
@@ -155,7 +155,7 @@ Before moving on, some additional edits are required:
 
         ```ts
         ...
-        import { UiModule } from '@sagebionetworks/challenge-registry/ui';
+        import { UiModule } from '@sagebionetworks/openchallenges/ui';
         import { RouterModule, Routes } from '@angular/router';
 
         const routes: Routes = [{ path: '', component: <component> }];
@@ -180,7 +180,7 @@ Before moving on, some additional edits are required:
           ```ts
           import { NgModule } from '@angular/core';
           import { CommonModule } from '@angular/common';
-          import { UiModule } from '@sagebionetworks/challenge-registry/ui';
+          import { UiModule } from '@sagebionetworks/openchallenges/ui';
           import { RouterModule, Routes } from '@angular/router';
           import { AwesomeLibComponent } from './awesome-lib.component';
 
@@ -196,7 +196,7 @@ Before moving on, some additional edits are required:
 
 ## 3. Add routing
 
-In `apps/challenge-registry/src/app/app-routing.module.ts`, add a router for the new component, e.g.
+In `apps/openchallenges/src/app/app-routing.module.ts`, add a router for the new component, e.g.
 
 ```ts
   {
@@ -214,8 +214,8 @@ where `<index>` is the path defined `tsconfig.base.json`. For example, the base 
 {
   ...
   "paths": {
-    "@sagebionetworks/challenge-registry/awesome-lib": [
-      "libs/challenge-registry/awesome-lib/src/index.ts"
+    "@sagebionetworks/openchallenges/awesome-lib": [
+      "libs/openchallenges/awesome-lib/src/index.ts"
     ],
     ...
   }
@@ -228,7 +228,7 @@ So, the resulting router would look something like this:
   {
     path: 'awesome-path',
     loadChildren: () =>
-      import('@sagebionetworks/challenge-registry/awesome-lib').then(
+      import('@sagebionetworks/openchallenges/awesome-lib').then(
         (m) => m.AwesomeLibModule
       ),
   },
@@ -245,7 +245,7 @@ So, the resulting router would look something like this:
 If you haven't already, start a local server to test the newly-created component:
 
 ```
-nx serve challenge-registry
+nx serve openchallenges
 ```
 
 If everything is setup correctly, `http://localhost:4200/<new path name>` will open a web page that
@@ -304,7 +304,7 @@ so that it uses these files:
 
 ```ts
 @Component({
-  selector: 'challenge-registry-team',
+  selector: 'openchallenges-team',
   templateUrl: './<new HTML file>',
   styleUrls: ['./<new CSS/SCSS file>'],
 })
@@ -347,7 +347,7 @@ Once the exported styles files are copy-pasted to the app, some additional steps
 ...
 ```
 
-1. Create theme files `_<component-name>-theme.scss` in each component, i.e. `libs/challenge-registry/awesome-lib/_awesome-lib-theme.scss` and `libs/challenge-registry/awesome-lib/src/lib/sub-awesome-lib/_sub-awesome-lib-theme.css` (repeat the step for each sub-component if any). Copy-paste below essential codes into all `_<component-name>-theme.scss` files:
+1. Create theme files `_<component-name>-theme.scss` in each component, i.e. `libs/openchallenges/awesome-lib/_awesome-lib-theme.scss` and `libs/openchallenges/awesome-lib/src/lib/sub-awesome-lib/_sub-awesome-lib-theme.css` (repeat the step for each sub-component if any). Copy-paste below essential codes into all `_<component-name>-theme.scss` files:
 
    ```scss
    @use 'sass:map';
@@ -388,12 +388,12 @@ Once the exported styles files are copy-pasted to the app, some additional steps
    }
    ```
 
-3. Load the themes of awesome-lib library in `libs/challenge-registry/themes/src/_index.scss` with below snippet:
+3. Load the themes of awesome-lib library in `libs/openchallenges/themes/src/_index.scss` with below snippet:
 
    ```scss
-   @use 'libs/challenge-registry/awesome-lib/src/lib-theme' as challenge-registry-awesome-lib;
+   @use 'libs/openchallenges/awesome-lib/src/lib-theme' as openchallenges-awesome-lib;
    @mixin theme($theme) {
-     @include challenge-registry-awesome-lib.theme($theme);
+     @include openchallenges-awesome-lib.theme($theme);
    }
    ```
 
@@ -423,7 +423,7 @@ Once the exported styles files are copy-pasted to the app, some additional steps
 5. Now, the themes of new exported page has been configurated. However, some manually fine-tunes will still require to make page look like what figma's design. It's recommended to adjust the styles with the app's local server
 
    ```
-   nx serve challenge-registry
+   nx serve openchallenges
    ```
 
 Most palettes used in the figma has been already configured in the app and defined in `libs/themes/src/_palettes.scss`. The palettes can be always retrieved via `map.get(<theme-object-name>, <color-variable-name>)`, i.e. `map.get($figma, dl-color-default-hover1)`. It's similar with the constant variables defined in `libs/styles/src/lib/_constants.scss`, i.e. `border-radius: constants.$dl-radius-radius-radius16;`

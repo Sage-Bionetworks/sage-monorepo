@@ -1,0 +1,18 @@
+<button mat-button class="user-button" [matMenuTriggerFor]="userMenu">
+  <div>
+    <openchallenges-avatar [avatar]="avatar"></openchallenges-avatar>
+    {{ avatar.name }}
+    <mat-icon class="app-hide-small" aria-hidden="true">keyboard_arrow_down </mat-icon>
+  </div>
+</button>
+<mat-menu class="user-dropdown" #userMenu="matMenu" xPosition="before" [overlapTrigger]="false">
+  <button
+    mat-menu-item
+    *ngFor="let item of menuItems"
+    [attr.aria-label]="item.name"
+    (click)="selectMenuItem(item)"
+  >
+    <mat-icon *ngIf="!!item.icon" aria-hidden="true">{{ item.icon }}</mat-icon>
+    <span>{{ item.name }}</span>
+  </button>
+</mat-menu>

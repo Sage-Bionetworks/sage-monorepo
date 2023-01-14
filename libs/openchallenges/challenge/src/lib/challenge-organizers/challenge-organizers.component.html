@@ -1,0 +1,14 @@
+<main>
+  <div id="organizers">
+    <h3>Organizers</h3>
+    <div class="card-group">
+      <openchallenges-person-card
+        *ngFor="let organizer of organizers"
+        [name]="organizer.name"
+        [avatarSize]="120"
+        [affiliation]="organization.name"
+      >
+      </openchallenges-person-card>
+    </div>
+  </div>
+</main>

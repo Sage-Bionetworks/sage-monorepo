@@ -68,7 +68,7 @@
       "onAutoForward": "silent"
     },
     "4200": {
-      "label": "challenge-registry-app",
+      "label": "openchallenges-app",
       "onAutoForward": "silent"
     },
     "4211": {
@@ -76,11 +76,11 @@
       "onAutoForward": "silent"
     },
     "5432": {
-      "label": "challenge-registry-postgres",
+      "label": "openchallenges-postgres",
       "onAutoForward": "silent"
     },
     "5601": {
-      "label": "challenge-registry-opensearch-dashboards",
+      "label": "openchallenges-opensearch-dashboards",
       "onAutoForward": "silent"
     },
     "7010": {
@@ -100,59 +100,59 @@
       "onAutoForward": "silent"
     },
     "8010": {
-      "label": "challenge-registry-api-docs",
+      "label": "openchallenges-api-docs",
       "onAutoForward": "silent"
     },
     "8020": {
-      "label": "challenge-registry-rabbitmq",
+      "label": "openchallenges-rabbitmq",
       "onAutoForward": "silent"
     },
     "8021": {
-      "label": "challenge-registry-rabbitmq-ui",
+      "label": "openchallenges-rabbitmq-ui",
       "onAutoForward": "silent"
     },
     "8080": {
-      "label": "challenge-registry-keycloak",
+      "label": "openchallenges-keycloak",
       "onAutoForward": "silent"
     },
     "8081": {
-      "label": "challenge-registry-service-registry",
+      "label": "openchallenges-service-registry",
       "onAutoForward": "silent"
     },
     "8082": {
-      "label": "challenge-registry-api-gateway",
+      "label": "openchallenges-api-gateway",
       "onAutoForward": "silent"
     },
     "8083": {
-      "label": "challenge-registry-user-service",
+      "label": "openchallenges-user-service",
       "onAutoForward": "silent"
     },
     "8084": {
-      "label": "challenge-registry-organization-service",
+      "label": "openchallenges-organization-service",
       "onAutoForward": "silent"
     },
     "8085": {
-      "label": "challenge-registry-challenge-service",
+      "label": "openchallenges-challenge-service",
       "onAutoForward": "silent"
     },
     "8090": {
-      "label": "challenge-registry-config-service",
+      "label": "openchallenges-config-service",
       "onAutoForward": "silent"
     },
     "8091": {
-      "label": "challenge-registry-auth-service",
+      "label": "openchallenges-auth-service",
       "onAutoForward": "silent"
     },
     "8092": {
-      "label": "challenge-registry-core-service",
+      "label": "openchallenges-core-service",
       "onAutoForward": "silent"
     },
     "9200": {
-      "label": "challenge-registry-elasticsearch",
+      "label": "openchallenges-elasticsearch",
       "onAutoForward": "silent"
     },
     "27017": {
-      "label": "challenge-registry-mongo",
+      "label": "openchallenges-mongo",
       "onAutoForward": "silent"
     }
   },
