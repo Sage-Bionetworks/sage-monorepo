@@ -6,5 +6,5 @@
   "generators": {},
   "targets": {},
   "tags": ["type:themes", "scope:openchallenges"],
-  "implicitDependencies": ["openchallenges-about"]
+  "implicitDependencies": []
 }

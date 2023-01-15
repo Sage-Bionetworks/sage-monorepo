@@ -38,5 +38,6 @@
       }
     }
   },
-  "tags": ["type:app", "scope:admin"]
+  "tags": ["type:app", "scope:admin"],
+  "implicitDependencies": []
 }

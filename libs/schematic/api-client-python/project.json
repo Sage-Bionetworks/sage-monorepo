@@ -28,5 +28,8 @@
       }
     }
   },
-  "tags": []
+  "tags": [],
+  "implicitDependencies": [
+    "schematic-api-description"
+  ]
 }

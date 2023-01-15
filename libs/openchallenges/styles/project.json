@@ -6,5 +6,5 @@
   "generators": {},
   "targets": {},
   "tags": ["type:styles", "scope:openchallenges"],
-  "implicitDependencies": ["shared-typescript-styles"]
+  "implicitDependencies": []
 }

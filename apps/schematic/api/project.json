@@ -87,5 +87,7 @@
     }
   },
   "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": []
+  "implicitDependencies": [
+    "schematic-api-description"
+  ]
 }

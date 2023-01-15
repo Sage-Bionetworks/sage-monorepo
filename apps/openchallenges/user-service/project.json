@@ -83,10 +83,10 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    "openchallenges-mariadb",
-    "openchallenges-keycloak",
-    "openchallenges-service-registry",
     "openchallenges-api-gateway",
+    "openchallenges-keycloak",
+    "openchallenges-mariadb",
+    "openchallenges-service-registry",
     "shared-java-util"
   ]
 }
