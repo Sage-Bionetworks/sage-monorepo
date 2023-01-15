@@ -47,5 +47,8 @@
     //   }
     // }
   },
-  "tags": ["type:app", "scope:client"]
+  "tags": ["type:app", "scope:client"],
+  "implicitDependencies": [
+    "schematic-api-client-python"
+  ]
 }
