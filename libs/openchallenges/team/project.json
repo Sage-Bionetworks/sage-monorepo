@@ -22,5 +22,6 @@
       }
     }
   },
-  "tags": ["type:feature", "scope:openchallenges"]
+  "tags": ["type:feature", "scope:openchallenges"],
+  "implicitDependencies": []
 }

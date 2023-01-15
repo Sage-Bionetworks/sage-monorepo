@@ -55,5 +55,8 @@
       }
     }
   },
-  "tags": []
+  "tags": [],
+  "implicitDependencies": [
+    "openchallenges-api-description"
+  ]
 }
