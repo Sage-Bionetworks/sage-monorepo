@@ -36,5 +36,6 @@
       }
     }
   },
-  "tags": ["type:message", "scope:backend"]
+  "tags": ["type:message", "scope:backend"],
+  "implicitDependencies": []
 }
