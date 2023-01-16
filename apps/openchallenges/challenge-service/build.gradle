@@ -54,7 +54,8 @@ dependencies {
   runtimeOnly 'mysql:mysql-connector-java:8.0.30'
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
-  implementation 'org.springframework.cloud:spring-cloud-starter-sleuth:2.2.8.RELEASE'
+  implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudVersion}"
+  implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudVersion}"
 }
 
 group = 'org.sagebionetworks.challenge'
