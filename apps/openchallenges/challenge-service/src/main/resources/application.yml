@@ -23,7 +23,6 @@ spring:
             hosts: openchallenges-elasticsearch:9200
             username: admin
             password: admin
-
   jackson:
     date-format: org.sagebionetworks.challenge.RFC3339DateFormat
     serialization:
@@ -40,6 +39,8 @@ spring:
     queue: challenge.queue
     routingkey: challenge.routingkey
   message: message succesfuly sent
+  zipkin:
+    base-url: http://openchallenges-zipkin:9411/
 
 server:
   port: 8085
