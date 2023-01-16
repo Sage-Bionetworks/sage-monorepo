@@ -59,6 +59,7 @@
     8091,
     8092,
     9200,
+    9411,
     27017
   ],
 
@@ -149,6 +150,10 @@
     },
     "9200": {
       "label": "openchallenges-elasticsearch",
+      "onAutoForward": "silent"
+    },
+    "9411": {
+      "label": "openchallenges-zipkin",
       "onAutoForward": "silent"
     },
     "27017": {

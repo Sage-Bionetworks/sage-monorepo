@@ -1,0 +1,40 @@
+{
+  "name": "openchallenges-zipkin",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges-zipkin/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/zipkin"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/openchallenges/zipkin"
+      },
+      "dependsOn": ["prepare", "build-image"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/openchallenges/zipkin"
+      },
+      "dependsOn": ["prepare", "build-image"]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/openchallenges/zipkin",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-zipkin:latest"]
+      }
+    }
+  },
+  "tags": ["type:db", "scope:backend"]
+}
