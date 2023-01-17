@@ -94,7 +94,7 @@ export class ChallengeSearchComponent
   );
 
   private destroy = new Subject<void>();
-  searchTermValue!: string;
+  searchTermValue = '';
 
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
@@ -203,6 +203,7 @@ export class ChallengeSearchComponent
           searchTerms: search,
         });
         this.query.next(newQuery);
+        // also update sort value if it's based on the relevance
         if (this.sortedBy.substring(1) === 'relevance') this.onSortChange();
       });
 
@@ -280,7 +281,6 @@ export class ChallengeSearchComponent
   }
 
   onSortChange(): void {
-    console.log(this.searchTermValue);
     const sortDirection =
       this.sortedBy.substring(0, 1) === '-' ? 'desc' : 'asc';
     const sortBy =
@@ -289,7 +289,7 @@ export class ChallengeSearchComponent
         : this.sortedBy.substring(1);
 
     const newQuery = assign(this.query.getValue(), {
-      sort: sortBy || '',
+      sort: sortBy,
       direction: sortDirection,
     });
     this.query.next(newQuery);
