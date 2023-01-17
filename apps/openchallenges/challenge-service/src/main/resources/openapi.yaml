@@ -273,8 +273,10 @@ components:
       description: What to sort results by.
       enum:
       - created
+      - ending_soon
       - relevance
       - starred
+      - starting_soon
       type: string
     ChallengeDirection:
       default: desc

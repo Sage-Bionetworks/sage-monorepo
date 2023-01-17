@@ -238,8 +238,8 @@ components:
       type: string
       default: relevance
       enum:
-        - closing_soon
         - created
+        - ending_soon
         - relevance
         - starred
         - starting_soon
