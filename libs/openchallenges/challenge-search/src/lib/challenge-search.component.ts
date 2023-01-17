@@ -278,12 +278,18 @@ export class ChallengeSearchComponent
     this.query.next(newQuery);
   }
 
-  // onSortChange(event: any): void {
-  //   const newQuery = assign(this.query.getValue(), {
-  //     sort: event.value,
-  //   });
-  //   this.query.next(newQuery);
-  // }
+  onSortChange(): void {
+    if (this.sortedBy) {
+      const sortDirection =
+        this.sortedBy.substring(0, 1) === '-' ? 'desc' : 'asc';
+      const sortBy = this.sortedBy.substring(1);
+      const newQuery = assign(this.query.getValue(), {
+        sort: sortBy,
+        direction: sortDirection,
+      });
+      this.query.next(newQuery);
+    }
+  }
 
   // private listOrganizations(): Observable<Organization[]> {
   //   return of(MOCK_ORGANIZATIONS);
