@@ -1,5 +1,7 @@
 package org.sagebionetworks.challenge.model.repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -72,8 +74,13 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       predicates.add(getChallengeInputDataTypesPredicate(pf, query));
     }
 
-    SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
     SearchSort sort = getSearchSort(sf, query);
+    SearchPredicate sortPredicate = getSearchSortPredicate(pf, query);
+    if (sortPredicate != null) {
+      predicates.add(sortPredicate);
+    }
+
+    SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
 
     SearchResult<ChallengeEntity> result =
         searchSession
@@ -269,15 +276,37 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       case CREATED -> {
         return createdSort;
       }
+      case ENDING_SOON -> {
+        return sf.field("end_date").order(order).toSort();
+      }
       case RELEVANCE -> {
         return relevanceSort;
       }
       case STARRED -> {
         return sf.field("starred_count").order(order).toSort();
       }
+      case STARTING_SOON -> {
+        return sf.field("start_date").order(order).toSort();
+      }
       default -> {
         throw new BadRequestException(
             String.format("Unhandled sorting strategy '%s'", query.getSort()));
+      }
+    }
+  }
+
+  private SearchPredicate getSearchSortPredicate(
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
+    LocalDate now = LocalDate.now();
+    switch (query.getSort()) {
+      case ENDING_SOON -> {
+        return pf.range().field("end_date").between(now, null).toPredicate();
+      }
+      case STARTING_SOON -> {
+        return pf.range().field("start_date").between(now, null).toPredicate();
+      }
+      default -> {
+        return null;
       }
     }
   }

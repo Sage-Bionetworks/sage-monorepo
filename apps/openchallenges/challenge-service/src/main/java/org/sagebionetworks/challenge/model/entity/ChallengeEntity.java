@@ -103,11 +103,11 @@ public class ChallengeEntity {
   private List<ChallengeStar> stars;
 
   @Column(name = "start_date", columnDefinition = "DATE")
-  @GenericField(name = "start_date")
+  @GenericField(name = "start_date", sortable = Sortable.YES)
   private LocalDate startDate;
 
   @Column(name = "end_date", columnDefinition = "DATE")
-  @GenericField(name = "end_date")
+  @GenericField(name = "end_date", sortable = Sortable.YES)
   private LocalDate endDate;
 
   @Column(name = "created_at")

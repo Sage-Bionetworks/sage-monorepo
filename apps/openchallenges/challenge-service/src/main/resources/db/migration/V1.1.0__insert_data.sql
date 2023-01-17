@@ -75,6 +75,28 @@ VALUES (
     '2',
     '2019-01-01',
     '2019-02-01'
+  ),
+    (
+    '4',
+    'Awesome Challenge 2024',
+    'Example headline',
+    'Example description',
+    'completed',
+    'advanced',
+    '2',
+    '2024-01-01',
+    '2024-02-01'
+  ),
+    (
+    '5',
+    'Awesome Challenge 2025',
+    'Example headline',
+    'Example description',
+    'completed',
+    'advanced',
+    '2',
+    '2025-01-01',
+    '2025-02-01'
   );
 
 -- challenge_incentive data
