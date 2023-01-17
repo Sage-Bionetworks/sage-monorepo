@@ -109,9 +109,11 @@ components:
       type: string
       default: relevance
       enum:
+        - closing_soon
         - created
         - relevance
         - starred
+        - starting_soon
     ChallengeDirection:
       description: The direction to sort the results by.
       type: string

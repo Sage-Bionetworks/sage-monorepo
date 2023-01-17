@@ -2,6 +2,8 @@ description: What to sort results by.
 type: string
 default: relevance
 enum:
+  - closing_soon
   - created
   - relevance
   - starred
+  - starting_soon
