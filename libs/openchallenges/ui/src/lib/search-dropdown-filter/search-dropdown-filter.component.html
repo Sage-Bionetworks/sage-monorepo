@@ -10,7 +10,7 @@
   <!-- custom list items -->
   <ng-template let-value pTemplate="values">
     <div class="item-container">
-      <openchallenges-avatar [avatar]="getAvatar(value)"></openchallenges-avatar>
+      <openchallenges-avatar *ngIf="showAvatar" [avatar]="getAvatar(value)"></openchallenges-avatar>
       <span class="item-label">{{ value.label }}</span>
     </div>
   </ng-template>

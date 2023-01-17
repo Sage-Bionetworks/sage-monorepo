@@ -142,18 +142,16 @@ export class ChallengeSearchComponent
     this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
 
     // update input data types filter values
-    this.challengeInputDataTypeService
-      .listChallengeInputDataTypes()
-      .subscribe((page) => {
-        console.log('hahah');
-        console.log(page);
-        return (this.dropdownFilters[0].values =
-          page.challengeInputDataTypes.map((datatype) => ({
+    this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
+      (page) =>
+        (this.dropdownFilters[0].values = page.challengeInputDataTypes.map(
+          (datatype) => ({
             value: datatype.slug,
             label: datatype.name,
             active: false,
-          })));
-      });
+          })
+        ))
+    );
 
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
