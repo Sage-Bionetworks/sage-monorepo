@@ -261,11 +261,13 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchSort getSearchSort(SearchSortFactory sf, ChallengeSearchQueryDto query) {
-    SortOrder order =
+    SortOrder orderWithDefaultAsc =
         query.getDirection() == ChallengeDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
+    SortOrder orderWithDefaultDesc =
+        query.getDirection() == ChallengeDirectionDto.ASC ? SortOrder.ASC : SortOrder.DESC;
 
-    SearchSort createdSort = sf.field("created_at").order(order).toSort();
-    SearchSort scoreSort = sf.score().order(order).toSort();
+    SearchSort createdSort = sf.field("created_at").order(orderWithDefaultAsc).toSort();
+    SearchSort scoreSort = sf.score().order(orderWithDefaultAsc).toSort();
     SearchSort relevanceSort =
         (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
             ? createdSort
@@ -276,16 +278,16 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
         return createdSort;
       }
       case ENDING_SOON -> {
-        return sf.field("end_date").order(order).toSort();
+        return sf.field("end_date").order(orderWithDefaultAsc).toSort();
       }
       case RELEVANCE -> {
         return relevanceSort;
       }
       case STARRED -> {
-        return sf.field("starred_count").order(order).toSort();
+        return sf.field("starred_count").order(orderWithDefaultDesc).toSort();
       }
       case STARTING_SOON -> {
-        return sf.field("start_date").order(order).toSort();
+        return sf.field("start_date").order(orderWithDefaultAsc).toSort();
       }
       default -> {
         throw new BadRequestException(

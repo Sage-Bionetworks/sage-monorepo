@@ -117,7 +117,7 @@ components:
     ChallengeDirection:
       description: The direction to sort the results by.
       type: string
-      default: desc
+      nullable: true
       enum:
         - asc
         - desc

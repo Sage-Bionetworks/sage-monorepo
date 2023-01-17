@@ -30,7 +30,7 @@ public class ChallengeSearchQueryDto {
   private ChallengeSortDto sort = ChallengeSortDto.RELEVANCE;
 
   @JsonProperty("direction")
-  private ChallengeDirectionDto direction = ChallengeDirectionDto.DESC;
+  private ChallengeDirectionDto direction = null;
 
   @JsonProperty("difficulties")
   @Valid
