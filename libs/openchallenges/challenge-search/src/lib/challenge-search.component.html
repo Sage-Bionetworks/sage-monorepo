@@ -83,7 +83,7 @@
             [values]="checkbox.values"
             (checkboxChange)="onCheckboxChange($event, checkbox.query)"
             inputId="{{ checkbox.query }}"
-          ></challenge-registry-checkbox-filter>
+          ></openchallenges-checkbox-filter>
         </p-panel>
         <p-divider></p-divider>
       </ng-container>
@@ -93,7 +93,7 @@
             [values]="dropdown.values"
             placeholder="{{ dropdown.label.toLowerCase() + '(s)' }}  "
             (dropdownChange)="onDropdownChange($event, dropdown.query)"
-          ></challenge-registry-search-dropdown-filter>
+          ></openchallenges-search-dropdown-filter>
         </p-panel>
         <p-divider *ngIf="!isLast"></p-divider>
       </ng-container>
