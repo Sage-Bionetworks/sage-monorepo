@@ -38,8 +38,8 @@ import {
   challengeInputDataTypeFilter,
   challengeIncentiveTypesFilter,
   challengePlatformFilter,
-  challengeOrganizationFilter,
-  challengeOrganizaterFilter,
+  // challengeOrganizationFilter,
+  // challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
 // import { BehaviorSubject, Observable, of, Subject, switchMap, tap } from 'rxjs';
@@ -121,8 +121,8 @@ export class ChallengeSearchComponent
 
   dropdownFilters: Filter[] = [
     challengeInputDataTypeFilter,
-    challengeOrganizationFilter,
-    challengeOrganizaterFilter,
+    // challengeOrganizationFilter,
+    // challengeOrganizaterFilter,
   ];
 
   sortFilters: FilterValue[] = challengeSortFilterValues;
