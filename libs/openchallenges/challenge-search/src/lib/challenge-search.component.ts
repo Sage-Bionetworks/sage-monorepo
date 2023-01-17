@@ -203,6 +203,7 @@ export class ChallengeSearchComponent
           searchTerms: search,
         });
         this.query.next(newQuery);
+        if (this.sortedBy.substring(1) === 'relevance') this.onSortChange();
       });
 
     this.query
@@ -279,16 +280,19 @@ export class ChallengeSearchComponent
   }
 
   onSortChange(): void {
-    if (this.sortedBy) {
-      const sortDirection =
-        this.sortedBy.substring(0, 1) === '-' ? 'desc' : 'asc';
-      const sortBy = this.sortedBy.substring(1);
-      const newQuery = assign(this.query.getValue(), {
-        sort: sortBy,
-        direction: sortDirection,
-      });
-      this.query.next(newQuery);
-    }
+    console.log(this.searchTermValue);
+    const sortDirection =
+      this.sortedBy.substring(0, 1) === '-' ? 'desc' : 'asc';
+    const sortBy =
+      this.sortedBy.substring(1) === 'relevance'
+        ? this.searchTermValue
+        : this.sortedBy.substring(1);
+
+    const newQuery = assign(this.query.getValue(), {
+      sort: sortBy || '',
+      direction: sortDirection,
+    });
+    this.query.next(newQuery);
   }
 
   // private listOrganizations(): Observable<Organization[]> {

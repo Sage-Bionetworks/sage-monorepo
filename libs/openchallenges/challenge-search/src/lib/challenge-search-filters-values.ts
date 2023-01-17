@@ -143,6 +143,11 @@ export const challengeOrganizerFilterValues: FilterValue[] = [];
 
 export const challengeSortFilterValues: FilterValue[] = [
   {
+    value: '-relevance',
+    label: 'Relevance',
+    active: true,
+  },
+  {
     value: '-startDate',
     label: 'Starting Soon',
     active: false,
