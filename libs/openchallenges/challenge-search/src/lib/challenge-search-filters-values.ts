@@ -76,17 +76,17 @@ export const challengeStatusFilterValues: FilterValue[] = [
 
 export const challengeDifficultyFilterValues: FilterValue[] = [
   {
-    value: 'GoodForBeginners',
+    value: 'good_for_beginners',
     label: 'Good For Beginners',
     active: false,
   },
   {
-    value: 'Intermediate',
+    value: 'intermediate',
     label: 'Intermediate',
     active: false,
   },
   {
-    value: 'Advanced',
+    value: 'advanced',
     label: 'Advanced',
     active: false,
   },
@@ -94,48 +94,48 @@ export const challengeDifficultyFilterValues: FilterValue[] = [
 
 export const challengeSubmissionTypesFilterValues: FilterValue[] = [
   {
-    value: 'DockerImage',
-    label: 'Docker Image',
+    value: 'container_image',
+    label: 'Container Image',
     active: false,
   },
   {
-    value: 'PredictionFile',
+    value: 'prediction_file',
     label: 'Prediction File',
     active: false,
   },
   {
-    value: 'Other',
+    value: 'other',
     label: 'Other',
     active: false,
   },
 ];
 
-export const challengeInputDataTypeFilterValues: FilterValue[] = [];
-
 export const challengeIncentiveTypesFilterValues: FilterValue[] = [
   {
-    value: 'Monetary',
+    value: 'monetary',
     label: 'Monetary',
     active: false,
   },
   {
-    value: 'Publication',
+    value: 'publication',
     label: 'Publication',
     active: false,
   },
   {
-    value: 'SpeakingEngagement',
+    value: 'speaking_engagement',
     label: 'Speaking Engagement',
     active: false,
   },
   {
-    value: 'Other',
+    value: 'other',
     label: 'Other',
     active: false,
   },
 ];
 
 export const challengePlatformFilterValues: FilterValue[] = [];
+
+export const challengeInputDataTypeFilterValues: FilterValue[] = [];
 
 export const challengeOrganizationFilterValues: FilterValue[] = [];
 

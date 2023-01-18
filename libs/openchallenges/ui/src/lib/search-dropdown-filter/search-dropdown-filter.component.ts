@@ -10,9 +10,14 @@ import { Avatar } from '../avatar/avatar';
 export class SearchDropdownFilterComponent {
   @Input() values!: FilterValue[];
   @Input() selectedValues!: string[];
-  @Input() name = 'items';
+  @Input() placeholder = 'Search items';
   @Input() showAvatar = true;
   @Output() dropdownChange = new EventEmitter<string[]>();
+
+  overlayOptions = {
+    showTransitionOptions: '0ms',
+    hideTransitionOptions: '0ms',
+  };
 
   onChange(selected: string[]): void {
     this.dropdownChange.emit(selected);
