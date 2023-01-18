@@ -142,18 +142,16 @@ export class ChallengeSearchComponent
     this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
 
     // update input data types filter values
-    this.challengeInputDataTypeService
-      .listChallengeInputDataTypes()
-      .subscribe((page) => {
-        console.log('hahah');
-        console.log(page);
-        return (this.dropdownFilters[0].values =
-          page.challengeInputDataTypes.map((datatype) => ({
+    this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
+      (page) =>
+        (this.dropdownFilters[0].values = page.challengeInputDataTypes.map(
+          (datatype) => ({
             value: datatype.slug,
             label: datatype.name,
             active: false,
-          })));
-      });
+          })
+        ))
+    );
 
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
@@ -281,16 +279,8 @@ export class ChallengeSearchComponent
   }
 
   onSortChange(): void {
-    const sortDirection =
-      this.sortedBy.substring(0, 1) === '-' ? 'desc' : 'asc';
-    const sortBy =
-      this.sortedBy.substring(1) === 'relevance'
-        ? this.searchTermValue
-        : this.sortedBy.substring(1);
-
     const newQuery = assign(this.query.getValue(), {
-      sort: sortBy,
-      direction: sortDirection,
+      sort: this.sortedBy,
     });
     this.query.next(newQuery);
   }

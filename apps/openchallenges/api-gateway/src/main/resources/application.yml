@@ -53,7 +53,7 @@ spring:
         - id: openchallenges-challenge-service
           uri: lb://openchallenges-challenge-service
           predicates:
-            - Path=/api/v1/challenges/**,/api/v1/challengePlatforms/**
+            - Path=/api/v1/challenges/**,/api/v1/challengePlatforms/**,/api/v1/challengeInputDataTypes/**
           filters:
             - StripPrefix=1
         # - id: openchallenges-core-service

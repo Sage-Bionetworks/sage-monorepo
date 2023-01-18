@@ -92,6 +92,7 @@
           <openchallenges-search-dropdown-filter
             [values]="dropdown.values"
             placeholder="{{ dropdown.label.toLowerCase() + '(s)' }}  "
+            [showAvatar]="false"
             (dropdownChange)="onDropdownChange($event, dropdown.query)"
           ></openchallenges-search-dropdown-filter>
         </p-panel>
