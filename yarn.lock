@@ -21571,16 +21571,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ngx-avatars@npm:1.4.1":
-  version: 1.4.1
-  resolution: "ngx-avatars@npm:1.4.1"
+"ngx-avatars@npm:1.5.0":
+  version: 1.5.0
+  resolution: "ngx-avatars@npm:1.5.0"
   dependencies:
     ts-md5: ^1.3.1
     tslib: ^2.4.0
   peerDependencies:
-    "@angular/common": ^14.0.0
-    "@angular/core": ^14.0.0
-  checksum: 161d3099952d8623ba9b6e50cd4016541cb185cae2116e5311f81dbb708f24d3f48ed75280968502a70271e72e60d90e9deed6443c1434470ec5a084399e27e2
+    "@angular/common": ^15.0.0
+    "@angular/core": ^15.0.0
+  checksum: 04ec7c5c6ec0c1600e1b51c7e28dff204bca08a8af8ee6fef2c1cb7c82572e8693ee0ec21dc370fc4f27868a4bcba4640940913f372326abd858914a9b280ef4
   languageName: node
   linkType: hard
 
@@ -25643,7 +25643,7 @@ __metadata:
     lodash: 4.17.21
     mongoose: 6.6.5
     ng-packagr: 15.0.1
-    ngx-avatars: 1.4.1
+    ngx-avatars: 1.5.0
     ngx-countup: 13.1.0
     ngx-typed-js: 2.1.1
     nock: 13.2.9
