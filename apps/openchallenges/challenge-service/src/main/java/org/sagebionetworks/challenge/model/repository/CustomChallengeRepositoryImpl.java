@@ -266,8 +266,8 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     SortOrder orderWithDefaultDesc =
         query.getDirection() == ChallengeDirectionDto.ASC ? SortOrder.ASC : SortOrder.DESC;
 
-    SearchSort createdSort = sf.field("created_at").order(orderWithDefaultAsc).toSort();
-    SearchSort scoreSort = sf.score().order(orderWithDefaultAsc).toSort();
+    SearchSort createdSort = sf.field("created_at").order(orderWithDefaultDesc).toSort();
+    SearchSort scoreSort = sf.score().order(orderWithDefaultDesc).toSort();
     SearchSort relevanceSort =
         (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
             ? createdSort
