@@ -125,14 +125,14 @@ export const challengeSortFilterValues: FilterValue[] = [
     value: 'relevance',
     label: 'Relevance',
   },
-  // {
-  //   value: 'startDate',
-  //   label: 'Starting Soon',
-  // },
-  // {
-  //   value: 'endDate',
-  //   label: 'Closing Soon',
-  // },
+  {
+    value: 'starting_soon',
+    label: 'Starting Soon',
+  },
+  {
+    value: 'ending_soon',
+    label: 'Closing Soon',
+  },
   {
     value: 'starred',
     label: 'Most Starred',
