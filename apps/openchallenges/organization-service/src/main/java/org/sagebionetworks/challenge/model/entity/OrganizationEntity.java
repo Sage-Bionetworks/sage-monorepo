@@ -37,7 +37,7 @@ public class OrganizationEntity {
   @Column(nullable = false)
   private String email;
 
-  @NaturalId
+  @NaturalId(mutable = true)
   @Column(nullable = false, unique = true)
   private String login;
 

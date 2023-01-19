@@ -1,12 +1,9 @@
 package org.sagebionetworks.challenge.service;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.sagebionetworks.challenge.exception.OrganizationNotFoundException;
 import org.sagebionetworks.challenge.model.dto.OrganizationDto;
 import org.sagebionetworks.challenge.model.dto.OrganizationsPageDto;
@@ -51,11 +48,14 @@ public class OrganizationService {
     em.getTransaction().begin();
     Session session = em.unwrap(Session.class);
     OrganizationEntity orgEntity =
-        session.bySimpleNaturalId(OrganizationEntity.class).load(organizationLogin);
-    if (orgEntity == null) {
-      throw new OrganizationNotFoundException(
-          String.format("The organization with ID %s does not exist.", organizationLogin));
-    }
+        session
+            .bySimpleNaturalId(OrganizationEntity.class)
+            .loadOptional(organizationLogin)
+            .orElseThrow(
+                () ->
+                    new OrganizationNotFoundException(
+                        String.format(
+                            "The organization with ID %s does not exist.", organizationLogin)));
     return organizationMapper.convertToDto(orgEntity);
   }
 }
