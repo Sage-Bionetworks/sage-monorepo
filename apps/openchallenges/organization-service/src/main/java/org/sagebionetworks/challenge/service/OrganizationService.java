@@ -1,9 +1,6 @@
 package org.sagebionetworks.challenge.service;
 
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import org.hibernate.Session;
 import org.sagebionetworks.challenge.exception.OrganizationNotFoundException;
 import org.sagebionetworks.challenge.model.dto.OrganizationDto;
 import org.sagebionetworks.challenge.model.dto.OrganizationsPageDto;
@@ -22,8 +19,6 @@ public class OrganizationService {
   @Autowired private OrganizationRepository organizationRepository;
 
   private OrganizationMapper organizationMapper = new OrganizationMapper();
-
-  @Autowired private EntityManagerFactory entityManagerFactory;
 
   @Transactional(readOnly = true)
   public OrganizationsPageDto listOrganizations(Integer pageNumber, Integer pageSize) {
@@ -44,13 +39,9 @@ public class OrganizationService {
 
   @Transactional(readOnly = true)
   public OrganizationDto getOrganization(String organizationLogin) {
-    EntityManager em = entityManagerFactory.createEntityManager();
-    em.getTransaction().begin();
-    Session session = em.unwrap(Session.class);
     OrganizationEntity orgEntity =
-        session
-            .bySimpleNaturalId(OrganizationEntity.class)
-            .loadOptional(organizationLogin)
+        organizationRepository
+            .findBySimpleNaturalId(organizationLogin)
             .orElseThrow(
                 () ->
                     new OrganizationNotFoundException(
