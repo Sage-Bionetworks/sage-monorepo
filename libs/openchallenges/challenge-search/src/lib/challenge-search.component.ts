@@ -5,31 +5,15 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-// import {
-//   Challenge,
-//   ChallengeOrganizer,
-//   ChallengePlatform,
-//   DateRange,
-// } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 import {
-  //   Organization,
   Challenge,
   ChallengeService,
   ChallengePlatformService,
   ChallengeSearchQuery,
   ChallengeInputDataTypeService,
-  // ChallengeSort,
-  // ChallengeDirection,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import {
-  Filter,
-  FilterValue,
-  //   MOCK_CHALLENGES,
-  //   MOCK_CHALLENGE_ORGANIZERS,
-  //   MOCK_ORGANIZATIONS,
-} from '@sagebionetworks/openchallenges/ui';
-// import { MOCK_PLATFORMS } from './mock-platforms';
+import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
 import {
   challengeStartYearRangeFilter,
   challengeStatusFilter,
@@ -42,7 +26,6 @@ import {
   challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
-// import { BehaviorSubject, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { BehaviorSubject, Subject, switchMap, tap, throwError } from 'rxjs';
 import {
   catchError,
@@ -50,11 +33,9 @@ import {
   distinctUntilChanged,
   takeUntil,
 } from 'rxjs/operators';
-// import { ChallengeSearchQuery } from './challenge-search-query';
 import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
 import { assign } from 'lodash';
-// import { isNotNullOrUndefined } from 'type-guards';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
