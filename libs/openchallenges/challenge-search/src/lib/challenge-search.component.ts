@@ -75,7 +75,7 @@ export class ChallengeSearchComponent
   );
 
   private destroy = new Subject<void>();
-  searchTermValue = '';
+  searchTermValue!: string;
 
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
@@ -173,6 +173,8 @@ export class ChallengeSearchComponent
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
       sort: this.sortedBy,
+      minStartDate: this.selectedYear?.start || undefined,
+      maxStartDate: this.selectedYear?.end || undefined,
     } as ChallengeSearchQuery;
     this.query.next(defaultQuery);
   }
