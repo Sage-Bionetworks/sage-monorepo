@@ -107,7 +107,7 @@ export class ChallengeSearchComponent
   ];
 
   sortFilters: FilterValue[] = challengeSortFilterValues;
-  sortedBy: string = challengeSortFilterValues[0].value as string;
+  sortedBy!: string;
 
   constructor(
     private challengeService: ChallengeService,
@@ -120,7 +120,10 @@ export class ChallengeSearchComponent
   }
 
   ngOnInit() {
+    // set default selection
     this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
+    this.sortedBy = challengeSortFilterValues[0].value as string;
+
     // update input data types filter values
     this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
       (page) =>
