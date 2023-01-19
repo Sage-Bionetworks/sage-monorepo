@@ -21,20 +21,21 @@ public interface OrganizationApiDelegate {
   }
 
   /**
-   * GET /organizations/{organizationLogin} : Get an organization Returns the organization specified
+   * GET /organizations/{org} : Get an organization Returns the organization specified
    *
-   * @param organizationLogin The login of the organization (required)
+   * @param org The unique identifier of the organization. (required)
    * @return An organization (status code 200) or The specified resource was not found (status code
    *     404) or The request cannot be fulfilled due to an unexpected server error (status code 500)
    * @see OrganizationApi#getOrganization
    */
-  default ResponseEntity<OrganizationDto> getOrganization(String organizationLogin) {
+  default ResponseEntity<OrganizationDto> getOrganization(String org) {
     getRequest()
         .ifPresent(
             request -> {
               for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                  String exampleString = "null";
+                  String exampleString =
+                      "{ \"createdAt\" : \"2022-07-04T22:19:11Z\", \"avatarUrl\" : \"https://via.placeholder.com/300.png\", \"websiteUrl\" : \"https://example.com\", \"name\" : \"Example organization\", \"description\" : \"A description of the organization.\", \"login\" : \"example-org\", \"email\" : \"john.smith@example.com\", \"updatedAt\" : \"2022-07-04T22:19:11Z\" }";
                   ApiUtil.setExampleResponse(request, "application/json", exampleString);
                   break;
                 }
@@ -52,8 +53,8 @@ public interface OrganizationApiDelegate {
   /**
    * GET /organizations : Get all organizations Returns the organizations
    *
-   * @param pageNumber The page number (optional, default to 0)
-   * @param pageSize The number of items in a single page (optional, default to 100)
+   * @param pageNumber The page number. (optional, default to 0)
+   * @param pageSize The number of items in a single page. (optional, default to 100)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    * @see OrganizationApi#listOrganizations

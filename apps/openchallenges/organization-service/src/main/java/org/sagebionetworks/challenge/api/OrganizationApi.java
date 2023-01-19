@@ -31,9 +31,9 @@ public interface OrganizationApi {
   }
 
   /**
-   * GET /organizations/{organizationLogin} : Get an organization Returns the organization specified
+   * GET /organizations/{org} : Get an organization Returns the organization specified
    *
-   * @param organizationLogin The login of the organization (required)
+   * @param org The unique identifier of the organization. (required)
    * @return An organization (status code 200) or The specified resource was not found (status code
    *     404) or The request cannot be fulfilled due to an unexpected server error (status code 500)
    */
@@ -78,25 +78,25 @@ public interface OrganizationApi {
       })
   @RequestMapping(
       method = RequestMethod.GET,
-      value = "/organizations/{organizationLogin}",
+      value = "/organizations/{org}",
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<OrganizationDto> getOrganization(
       @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
           @Size(min = 3, max = 25)
           @Parameter(
-              name = "organizationLogin",
-              description = "The login of the organization",
+              name = "org",
+              description = "The unique identifier of the organization.",
               required = true)
-          @PathVariable("organizationLogin")
-          String organizationLogin) {
-    return getDelegate().getOrganization(organizationLogin);
+          @PathVariable("org")
+          String org) {
+    return getDelegate().getOrganization(org);
   }
 
   /**
    * GET /organizations : Get all organizations Returns the organizations
    *
-   * @param pageNumber The page number (optional, default to 0)
-   * @param pageSize The number of items in a single page (optional, default to 100)
+   * @param pageNumber The page number. (optional, default to 0)
+   * @param pageSize The number of items in a single page. (optional, default to 100)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    */
@@ -145,12 +145,12 @@ public interface OrganizationApi {
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<OrganizationsPageDto> listOrganizations(
       @Min(0)
-          @Parameter(name = "pageNumber", description = "The page number")
+          @Parameter(name = "pageNumber", description = "The page number.")
           @Valid
           @RequestParam(value = "pageNumber", required = false, defaultValue = "0")
           Integer pageNumber,
       @Min(1)
-          @Parameter(name = "pageSize", description = "The number of items in a single page")
+          @Parameter(name = "pageSize", description = "The number of items in a single page.")
           @Valid
           @RequestParam(value = "pageSize", required = false, defaultValue = "100")
           Integer pageSize) {

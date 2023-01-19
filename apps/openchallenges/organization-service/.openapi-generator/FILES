@@ -7,7 +7,6 @@ src/main/java/org/sagebionetworks/challenge/api/OrganizationApiDelegate.java
 src/main/java/org/sagebionetworks/challenge/configuration/HomeController.java
 src/main/java/org/sagebionetworks/challenge/configuration/SpringDocConfiguration.java
 src/main/java/org/sagebionetworks/challenge/model/dto/BasicErrorDto.java
-src/main/java/org/sagebionetworks/challenge/model/dto/OrganizationCreateRequestDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/OrganizationDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/OrganizationsPageDto.java
 src/main/java/org/sagebionetworks/challenge/model/dto/PageMetadataDto.java

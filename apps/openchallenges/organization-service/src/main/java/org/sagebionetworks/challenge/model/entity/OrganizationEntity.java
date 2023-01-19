@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 
 /**
  * The User information saved to DB.
@@ -36,16 +37,18 @@ public class OrganizationEntity {
   @Column(nullable = false)
   private String email;
 
+  @NaturalId
   @Column(nullable = false, unique = true)
   private String login;
 
   @Column(name = "avatar_url", nullable = true)
   private String avatarUrl;
 
-  @Column(name = "website_url")
+  @Column(name = "website_url", nullable = true)
   private String websiteUrl;
 
-  @Column() private String description;
+  @Column(nullable = true)
+  private String description;
 
   @Column(name = "created_at")
   private OffsetDateTime createdAt;
