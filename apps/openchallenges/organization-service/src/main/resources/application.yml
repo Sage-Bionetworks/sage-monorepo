@@ -17,6 +17,8 @@ spring:
   flyway:
     enabled: true
   #   cleanOnValidationError: true
+  zipkin:
+    base-url: http://openchallenges-zipkin:9411
 
 server:
   port: 8084
