@@ -1,21 +1,39 @@
 type: object
 description: An organization
-allOf:
-  # - $ref: OrganizationId.yaml
-  - $ref: OrganizationCreateRequest.yaml
-  - type: object
-    properties:
-      id:
-        $ref: OrganizationId.yaml
-      createdAt:
-        type: string
-        format: date-time
-        example: '2022-07-04T22:19:11Z'
-      updatedAt:
-        type: string
-        format: date-time
-        example: '2022-07-04T22:19:11Z'
-    required:
-      - id
-      - createdAt
-      - updatedAt
+properties:
+  name:
+    type: string
+    example: Example organization
+  email:
+    $ref: Email.yaml
+  login:
+    $ref: OrganizationLogin.yaml
+  description:
+    type: string
+    example: A description of the organization.
+  avatarUrl:
+    type: string
+    format: url
+    example: https://via.placeholder.com/300.png
+    nullable: true
+  websiteUrl:
+    type: string
+    format: url
+    example: https://example.com
+  createdAt:
+    type: string
+    format: date-time
+    example: '2022-07-04T22:19:11Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2022-07-04T22:19:11Z'
+required:
+  - name
+  - email
+  - login
+  - description
+  - avatarUrl
+  - websiteUrl
+  - createdAt
+  - updatedAt

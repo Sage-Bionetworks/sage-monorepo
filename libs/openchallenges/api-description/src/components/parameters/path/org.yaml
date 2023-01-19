@@ -1,0 +1,6 @@
+name: org
+in: path
+description: The unique identifier of the organization.
+required: true
+schema:
+  $ref: ../../schemas/OrganizationLogin.yaml

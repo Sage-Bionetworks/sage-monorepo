@@ -1,5 +1,5 @@
 parameters:
-  - $ref: ../../components/parameters/path/organizationLogin.yaml
+  - $ref: ../../components/parameters/path/org.yaml
 get:
   tags:
     - Organization
