@@ -273,15 +273,17 @@ components:
       description: What to sort results by.
       enum:
       - created
+      - ending_soon
       - relevance
       - starred
+      - starting_soon
       type: string
     ChallengeDirection:
-      default: desc
       description: The direction to sort the results by.
       enum:
       - asc
       - desc
+      nullable: true
       type: string
     ChallengeDifficulty:
       description: The difficulty level of a challenge.

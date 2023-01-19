@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.model.repository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -72,8 +73,13 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       predicates.add(getChallengeInputDataTypesPredicate(pf, query));
     }
 
-    SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
     SearchSort sort = getSearchSort(sf, query);
+    SearchPredicate sortPredicate = getSearchSortPredicate(pf, query);
+    if (sortPredicate != null) {
+      predicates.add(sortPredicate);
+    }
+
+    SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
 
     SearchResult<ChallengeEntity> result =
         searchSession
@@ -255,11 +261,13 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchSort getSearchSort(SearchSortFactory sf, ChallengeSearchQueryDto query) {
-    SortOrder order =
+    SortOrder orderWithDefaultAsc =
         query.getDirection() == ChallengeDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
+    SortOrder orderWithDefaultDesc =
+        query.getDirection() == ChallengeDirectionDto.ASC ? SortOrder.ASC : SortOrder.DESC;
 
-    SearchSort createdSort = sf.field("created_at").order(order).toSort();
-    SearchSort scoreSort = sf.score().order(order).toSort();
+    SearchSort createdSort = sf.field("created_at").order(orderWithDefaultDesc).toSort();
+    SearchSort scoreSort = sf.score().order(orderWithDefaultDesc).toSort();
     SearchSort relevanceSort =
         (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
             ? createdSort
@@ -269,15 +277,37 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       case CREATED -> {
         return createdSort;
       }
+      case ENDING_SOON -> {
+        return sf.field("end_date").order(orderWithDefaultAsc).toSort();
+      }
       case RELEVANCE -> {
         return relevanceSort;
       }
       case STARRED -> {
-        return sf.field("starred_count").order(order).toSort();
+        return sf.field("starred_count").order(orderWithDefaultDesc).toSort();
+      }
+      case STARTING_SOON -> {
+        return sf.field("start_date").order(orderWithDefaultAsc).toSort();
       }
       default -> {
         throw new BadRequestException(
             String.format("Unhandled sorting strategy '%s'", query.getSort()));
+      }
+    }
+  }
+
+  private SearchPredicate getSearchSortPredicate(
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
+    LocalDate now = LocalDate.now();
+    switch (query.getSort()) {
+      case ENDING_SOON -> {
+        return pf.range().field("end_date").between(now, null).toPredicate();
+      }
+      case STARTING_SOON -> {
+        return pf.range().field("start_date").between(now, null).toPredicate();
+      }
+      default -> {
+        return null;
       }
     }
   }
