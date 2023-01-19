@@ -126,7 +126,7 @@ export class ChallengeSearchComponent
   ];
 
   sortFilters: FilterValue[] = challengeSortFilterValues;
-  sortedBy!: string;
+  sortedBy: string = challengeSortFilterValues[0].value as string;
 
   constructor(
     private challengeService: ChallengeService,
@@ -140,7 +140,6 @@ export class ChallengeSearchComponent
 
   ngOnInit() {
     this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
-
     // update input data types filter values
     this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
       (page) =>
@@ -187,8 +186,9 @@ export class ChallengeSearchComponent
     //     })))
     // );
     const defaultQuery: ChallengeSearchQuery = {
-      pageNumber: 0,
-      pageSize: 50,
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize,
+      sort: this.sortedBy,
     } as ChallengeSearchQuery;
     this.query.next(defaultQuery);
   }
@@ -201,8 +201,6 @@ export class ChallengeSearchComponent
           searchTerms: search,
         });
         this.query.next(newQuery);
-        // also update sort value if it's based on the relevance
-        if (this.sortedBy.substring(1) === 'relevance') this.onSortChange();
       });
 
     this.query
@@ -291,33 +289,6 @@ export class ChallengeSearchComponent
 
   // private listOrganizers(): Observable<ChallengeOrganizer[]> {
   //   return of(MOCK_CHALLENGE_ORGANIZERS);
-  // }
-
-  // // mock up sorting challenges by certain property
-  // private sortChallenges(
-  //   challenges: Challenge[],
-  //   sortBy: keyof Challenge | undefined
-  // ): Challenge[] {
-  //   if (!sortBy) return challenges;
-
-  //   if (['startDate', 'endDate'].includes(sortBy as string)) {
-  //     // if it's starting soon, the status should be 'upcoming',
-  //     // otherwise, it's closing soon and status should be 'active',
-  //     const status = sortBy === 'startDate' ? 'upcoming' : 'active';
-  //     // sort challenges by startDate
-  //     // the sooner the challenge is going to start/end, the closer to the 1st card
-  //     // note: since it's a mock up func, the undefined of startDate/endDate is not considered here
-  //     return challenges
-  //       .filter((c) => c.status === status)
-  //       .sort(
-  //         (a, b) =>
-  //           +new Date(b[sortBy] as string) - +new Date(a[sortBy] as string)
-  //       );
-  //   } else {
-  //     return challenges.sort(
-  //       (a, b) => (b[sortBy] as number) - (a[sortBy] as number)
-  //     );
-  //   }
   // }
 
   openSnackBar(message: string) {
