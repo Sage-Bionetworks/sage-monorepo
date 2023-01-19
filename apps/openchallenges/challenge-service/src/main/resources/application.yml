@@ -40,7 +40,7 @@ spring:
     routingkey: challenge.routingkey
   message: message succesfuly sent
   zipkin:
-    base-url: http://openchallenges-zipkin:9411/
+    base-url: http://openchallenges-zipkin:9411
 
 server:
   port: 8085
