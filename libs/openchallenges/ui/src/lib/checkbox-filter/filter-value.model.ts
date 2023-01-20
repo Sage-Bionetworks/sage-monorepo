@@ -7,6 +7,4 @@ export interface FilterValue {
   label: string | undefined;
   /* The avatar url of the filter value. */
   avatarUrl?: string | null;
-  /* Whether this filter value is active. */
-  active: boolean;
 }

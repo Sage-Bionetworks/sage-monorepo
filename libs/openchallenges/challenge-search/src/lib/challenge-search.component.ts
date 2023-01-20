@@ -5,31 +5,15 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-// import {
-//   Challenge,
-//   ChallengeOrganizer,
-//   ChallengePlatform,
-//   DateRange,
-// } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 import {
-  //   Organization,
   Challenge,
   ChallengeService,
   ChallengePlatformService,
   ChallengeSearchQuery,
   ChallengeInputDataTypeService,
-  // ChallengeSort,
-  // ChallengeDirection,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import {
-  Filter,
-  FilterValue,
-  //   MOCK_CHALLENGES,
-  //   MOCK_CHALLENGE_ORGANIZERS,
-  //   MOCK_ORGANIZATIONS,
-} from '@sagebionetworks/openchallenges/ui';
-// import { MOCK_PLATFORMS } from './mock-platforms';
+import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
 import {
   challengeStartYearRangeFilter,
   challengeStatusFilter,
@@ -38,11 +22,10 @@ import {
   challengeInputDataTypeFilter,
   challengeIncentiveTypesFilter,
   challengePlatformFilter,
-  // challengeOrganizationFilter,
-  // challengeOrganizaterFilter,
+  challengeOrganizationFilter,
+  challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
-// import { BehaviorSubject, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { BehaviorSubject, Subject, switchMap, tap, throwError } from 'rxjs';
 import {
   catchError,
@@ -50,11 +33,9 @@ import {
   distinctUntilChanged,
   takeUntil,
 } from 'rxjs/operators';
-// import { ChallengeSearchQuery } from './challenge-search-query';
 import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
 import { assign } from 'lodash';
-// import { isNotNullOrUndefined } from 'type-guards';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -94,7 +75,7 @@ export class ChallengeSearchComponent
   );
 
   private destroy = new Subject<void>();
-  searchTermValue!: string;
+  searchTermValue = '';
 
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
@@ -121,8 +102,8 @@ export class ChallengeSearchComponent
 
   dropdownFilters: Filter[] = [
     challengeInputDataTypeFilter,
-    // challengeOrganizationFilter,
-    // challengeOrganizaterFilter,
+    challengeOrganizationFilter,
+    challengeOrganizaterFilter,
   ];
 
   sortFilters: FilterValue[] = challengeSortFilterValues;
@@ -139,7 +120,9 @@ export class ChallengeSearchComponent
   }
 
   ngOnInit() {
+    // set default selection
     this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
+    this.sortedBy = challengeSortFilterValues[0].value as string;
 
     // update input data types filter values
     this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
@@ -187,8 +170,12 @@ export class ChallengeSearchComponent
     //     })))
     // );
     const defaultQuery: ChallengeSearchQuery = {
-      pageNumber: 0,
-      pageSize: 50,
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize,
+      searchTerms: this.searchTermValue,
+      sort: this.sortedBy,
+      minStartDate: this.selectedYear?.start || undefined,
+      maxStartDate: this.selectedYear?.end || undefined,
     } as ChallengeSearchQuery;
     this.query.next(defaultQuery);
   }
@@ -276,12 +263,12 @@ export class ChallengeSearchComponent
     this.query.next(newQuery);
   }
 
-  // onSortChange(event: any): void {
-  //   const newQuery = assign(this.query.getValue(), {
-  //     sort: event.value,
-  //   });
-  //   this.query.next(newQuery);
-  // }
+  onSortChange(): void {
+    const newQuery = assign(this.query.getValue(), {
+      sort: this.sortedBy,
+    });
+    this.query.next(newQuery);
+  }
 
   // private listOrganizations(): Observable<Organization[]> {
   //   return of(MOCK_ORGANIZATIONS);
@@ -289,33 +276,6 @@ export class ChallengeSearchComponent
 
   // private listOrganizers(): Observable<ChallengeOrganizer[]> {
   //   return of(MOCK_CHALLENGE_ORGANIZERS);
-  // }
-
-  // // mock up sorting challenges by certain property
-  // private sortChallenges(
-  //   challenges: Challenge[],
-  //   sortBy: keyof Challenge | undefined
-  // ): Challenge[] {
-  //   if (!sortBy) return challenges;
-
-  //   if (['startDate', 'endDate'].includes(sortBy as string)) {
-  //     // if it's starting soon, the status should be 'upcoming',
-  //     // otherwise, it's closing soon and status should be 'active',
-  //     const status = sortBy === 'startDate' ? 'upcoming' : 'active';
-  //     // sort challenges by startDate
-  //     // the sooner the challenge is going to start/end, the closer to the 1st card
-  //     // note: since it's a mock up func, the undefined of startDate/endDate is not considered here
-  //     return challenges
-  //       .filter((c) => c.status === status)
-  //       .sort(
-  //         (a, b) =>
-  //           +new Date(b[sortBy] as string) - +new Date(a[sortBy] as string)
-  //       );
-  //   } else {
-  //     return challenges.sort(
-  //       (a, b) => (b[sortBy] as number) - (a[sortBy] as number)
-  //     );
-  //   }
   // }
 
   openSnackBar(message: string) {
