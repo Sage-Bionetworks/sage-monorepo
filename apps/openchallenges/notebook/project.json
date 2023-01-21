@@ -1,0 +1,52 @@
+{
+  "name": "openchallenges-notebook",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/notebook/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/notebook"
+      }
+    },
+
+    "prepare-python": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "poetry config virtualenvs.in-project true",
+          "poetry install"
+        ],
+        "cwd": "apps/openchallenges/notebook"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run jupyter lab --config=jupyter_lab_config.py",
+        "cwd": "apps/openchallenges/notebook"
+      },
+      "dependsOn": ["prepare"]
+    }
+    // "serve-detach": {
+    //   "executor": "nx:run-commands",
+    //   "options": {
+    //     "command": "docker compose up -d",
+    //     "cwd": "apps/openchallenges/notebook"
+    //   },
+    //   "dependsOn": ["build-image", "prepare"]
+    // },
+    // "build-image": {
+    //   "executor": "@nx-tools/nx-docker:build",
+    //   "options": {
+    //     "context": "apps/openchallenges/notebook",
+    //     "push": false,
+    //     "tags": ["sagebionetworks/openchallenges-notebook:latest"]
+    //   }
+    // }
+  },
+  "tags": ["type:app", "scope:client"],
+  "implicitDependencies": []
+}
