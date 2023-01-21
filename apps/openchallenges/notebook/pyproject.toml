@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "openchallenges-notebook"
+version = "0.1.0"
+description = "OpenChallenges notebooks"
+authors = ["Thomas Schaffter <thomas.schaffter@gmail.com>"]
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = "3.9.2"
+kaggle = "1.5.12"
+
+[tool.poetry.group.dev.dependencies]
+jupyterlab = "3.5.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

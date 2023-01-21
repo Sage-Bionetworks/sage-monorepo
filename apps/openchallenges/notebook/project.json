@@ -1,14 +1,14 @@
 {
-  "name": "schematic-notebook",
+  "name": "openchallenges-notebook",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/schematic/notebook/src",
+  "sourceRoot": "apps/openchallenges/notebook/src",
   "projectType": "application",
   "targets": {
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
-        "cwd": "apps/schematic/notebook"
+        "cwd": "apps/openchallenges/notebook"
       }
     },
 
@@ -19,7 +19,7 @@
           "poetry config virtualenvs.in-project true",
           "poetry install"
         ],
-        "cwd": "apps/schematic/notebook"
+        "cwd": "apps/openchallenges/notebook"
       }
     },
     "serve": {
@@ -28,7 +28,7 @@
         "commands": [
           "poetry run jupyter lab --config=jupyter_lab_config.py"
         ],
-        "cwd": "apps/schematic/notebook"
+        "cwd": "apps/openchallenges/notebook"
       },
       "dependsOn": ["prepare"]
     }
@@ -36,21 +36,19 @@
     //   "executor": "nx:run-commands",
     //   "options": {
     //     "command": "docker compose up -d",
-    //     "cwd": "apps/schematic/notebook"
+    //     "cwd": "apps/openchallenges/notebook"
     //   },
     //   "dependsOn": ["build-image", "prepare"]
     // },
     // "build-image": {
     //   "executor": "@nx-tools/nx-docker:build",
     //   "options": {
-    //     "context": "apps/schematic/notebook",
+    //     "context": "apps/openchallenges/notebook",
     //     "push": false,
-    //     "tags": ["sagebionetworks/schematic-notebook:latest"]
+    //     "tags": ["sagebionetworks/openchallenges-notebook:latest"]
     //   }
     // }
   },
   "tags": ["type:app", "scope:client"],
-  "implicitDependencies": [
-    "schematic-api-client-python"
-  ]
+  "implicitDependencies": []
 }
