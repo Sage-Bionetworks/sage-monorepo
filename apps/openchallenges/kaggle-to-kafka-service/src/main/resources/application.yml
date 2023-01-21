@@ -8,3 +8,4 @@ kaggle-to-kafka-service:
     - life sciences
     - medicine
     - neuro
+  welcome-message: 'Welcome to Kaggle to Kafka service'
