@@ -8,6 +8,7 @@ packages = []
 
 [tool.poetry.dependencies]
 python = "3.9.2"
+kaggle = "1.5.12"
 
 [tool.poetry.group.dev.dependencies]
 jupyterlab = "3.5.2"

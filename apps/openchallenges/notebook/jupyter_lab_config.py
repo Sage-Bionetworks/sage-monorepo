@@ -944,7 +944,7 @@ c = get_config()  #noqa
 
 ## The port the server will listen on (env: JUPYTER_PORT).
 #  Default: 0
-c.ServerApp.port = 7888
+c.ServerApp.port = 8888
 
 ## The number of additional ports to try if the specified port is not available
 #  (env: JUPYTER_PORT_RETRIES).
