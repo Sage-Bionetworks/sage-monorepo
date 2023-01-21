@@ -50,7 +50,7 @@ function workspace-kill-port {
     echo "There are no processes listening to the port $port."
   else
     echo "Killing the processes listening to the port $port."
-    kill $(lsof -t -i:$pids)
+    kill $pids
   fi
 }
 

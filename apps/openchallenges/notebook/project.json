@@ -25,7 +25,9 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run jupyter lab --config=jupyter_lab_config.py",
+        "commands": [
+          "poetry run jupyter lab --config=jupyter_lab_config.py"
+        ],
         "cwd": "apps/openchallenges/notebook"
       },
       "dependsOn": ["prepare"]
