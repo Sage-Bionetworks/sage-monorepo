@@ -10,8 +10,10 @@ kaggle-to-kafka-service:
     - neuro
   kaggle-username: ${KAGGLE_USERNAME}
   kaggle-key: ${KAGGLE_KEY}
+  kaggle-base-url: https://www.kaggle.com/api/v1
+  kaggle-basic-token: ${KAGGLE_KEY}
   welcome-message: 'Welcome to Kaggle to Kafka service'
-  enable-mock-challenges: true
+  enable-mock-challenges: false
   mock-min-challenge-name-length: 5
   mock-max-challenge-name-length: 20
   mock-sleep-ms: 10000
