@@ -32,6 +32,7 @@ public class KaggleToKafkaServiceApplication implements CommandLineRunner {
   public void run(String... args) throws Exception {
     log.info(config.getWelcomeMessage());
     log.info("{}", config.getKaggleSearchTerms());
-    streamRunner.start();
+    log.info(config.getKaggleKey());
+    // streamRunner.start();
   }
 }

@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "kaggle-to-kafka-service")
 public class KaggleToKafkaServiceConfiguration {
   private List<String> kaggleSearchTerms;
+  private String kaggleUsername;
+  private String kaggleKey;
   private String welcomeMessage;
   private Boolean enableMockChallenges;
   private Long mockSleepMs;

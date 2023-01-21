@@ -3,6 +3,7 @@ bin/
 lib/*.jar
 maven-legacy/
 tmp/
+log/
 
 HELP.md
 target/
