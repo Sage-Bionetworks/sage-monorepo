@@ -9,3 +9,7 @@ kaggle-to-kafka-service:
     - medicine
     - neuro
   welcome-message: 'Welcome to Kaggle to Kafka service'
+  enable-mock-challenges: true
+  mock-min-challenge-name-length: 5
+  mock-max-challenge-name-length: 20
+  mock-sleep-ms: 10000

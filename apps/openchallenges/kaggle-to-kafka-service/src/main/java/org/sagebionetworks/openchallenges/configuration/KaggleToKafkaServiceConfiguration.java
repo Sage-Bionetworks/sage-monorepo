@@ -11,4 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class KaggleToKafkaServiceConfiguration {
   private List<String> kaggleSearchTerms;
   private String welcomeMessage;
+  private Boolean enableMockChallenges;
+  private Long mockSleepMs;
+  private Integer mockMinChallengeNameLength;
+  private Integer mockMaxChallengeNameLength;
 }

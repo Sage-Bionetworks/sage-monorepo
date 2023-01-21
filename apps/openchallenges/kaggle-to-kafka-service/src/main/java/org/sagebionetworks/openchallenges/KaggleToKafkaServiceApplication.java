@@ -18,7 +18,8 @@ public class KaggleToKafkaServiceApplication implements CommandLineRunner {
   private final StreamRunner streamRunner;
 
   public KaggleToKafkaServiceApplication(
-      KaggleToKafkaServiceConfiguration kaggleToKafkaServiceConfiguration, StreamRunner streamRunner) {
+      KaggleToKafkaServiceConfiguration kaggleToKafkaServiceConfiguration,
+      StreamRunner streamRunner) {
     this.config = kaggleToKafkaServiceConfiguration;
     this.streamRunner = streamRunner;
   }
@@ -29,8 +30,8 @@ public class KaggleToKafkaServiceApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    log.info(this.config.getWelcomeMessage());
-    log.info("{}", this.config.getKaggleSearchTerms());
-    this.streamRunner.start();
+    log.info(config.getWelcomeMessage());
+    log.info("{}", config.getKaggleSearchTerms());
+    streamRunner.start();
   }
 }
