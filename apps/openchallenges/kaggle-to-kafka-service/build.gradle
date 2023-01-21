@@ -2,9 +2,6 @@ buildscript {
   repositories {
     mavenCentral()
   }
-  dependencies {
-    classpath "org.flywaydb:flyway-mysql:${flywaydbVersion}"
-  }
 }
 
 plugins {
@@ -12,7 +9,6 @@ plugins {
   id 'java'
   id 'org.springframework.boot' version "${springBootVersion}"
   id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
-  id "org.flywaydb.flyway" version "${flywaydbVersion}"
 }
 
 repositories {
@@ -21,36 +17,30 @@ repositories {
 }
 
 dependencies {
+  // Lombok
   annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
   compileOnly "org.projectlombok:lombok:${lombokVersion}"
-  implementation 'com.google.code.findbugs:jsr305:3.0.2'
-  implementation 'org.openapitools:jackson-databind-nullable:0.2.3'
-  implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
-  implementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
-  implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${fasterxmlVersion}"
-  implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${fasterxmlVersion}"
-  implementation "org.flywaydb:flyway-core:${flywaydbVersion}"
-  implementation "org.flywaydb:flyway-mysql:${flywaydbVersion}"
-  implementation "org.keycloak:keycloak-admin-client:${keycloakVersion}"
-  implementation "org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}"
+
+
+  // implementation 'com.google.code.findbugs:jsr305:3.0.2'
+  // implementation 'org.openapitools:jackson-databind-nullable:0.2.3'
+  // implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
+  // implementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
+  // implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${fasterxmlVersion}"
+  // implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${fasterxmlVersion}"
   implementation "org.sagebionetworks:util:${openchallengesVersion}"
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
-  implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
-  implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
-  implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
-  implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
-  implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-  implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
-  implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
-  runtimeOnly 'mysql:mysql-connector-java:8.0.30'
+  // implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+  // implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
+  // implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
+  // implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
+  // implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+  // implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
+  // implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
-
-  // Enable distributed tracing
-  implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudVersion}"
-  implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudVersion}"
 }
 
-group = 'org.sagebionetworks.challenge'
+group = 'org.sagebionetworks.openchallenges'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -61,10 +51,6 @@ java {
 
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
-}
-
-springBoot {
-  mainClass = 'org.sagebionetworks.challenge.ChallengeOrganizationServiceApplication'
 }
 
 bootBuildImage {
@@ -89,15 +75,4 @@ spotless {
   }
 }
 
-flyway {
-  url = 'jdbc:mysql://openchallenges-mariadb:3306/challenge'
-  user = 'maria'
-  password = 'changeme'
-  // cleanDisabled = false
-  // schemas = ['schema1', 'schema2', 'schema3']
-  // placeholders = [
-  //   'keyABC': 'valueXYZ',
-  //   'otherplaceholder': 'value123'
-  // ]
-}
 
