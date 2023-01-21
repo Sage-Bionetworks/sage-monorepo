@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  openchallenges-notebook:
+    image: sagebionetworks/openchallenges-notebook:latest
+    container_name: openchallenges-notebook
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./notebooks:/home/jovyan/notebooks
+    networks:
+      - openchallenges
+    ports:
+      - "8888:8888"
+
+networks:
+  openchallenges:
+    name: openchallenges
