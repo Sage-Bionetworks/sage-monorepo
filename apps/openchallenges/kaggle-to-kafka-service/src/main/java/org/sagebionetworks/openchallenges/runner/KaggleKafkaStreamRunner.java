@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.runner;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -12,8 +13,6 @@ import org.sagebionetworks.openchallenges.configuration.KaggleToKafkaServiceConf
 import org.sagebionetworks.openchallenges.model.mapper.dto.KaggleCompetitionDto;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Slf4j
 @Component
@@ -54,7 +53,8 @@ public class KaggleKafkaStreamRunner implements StreamRunner {
       System.out.println(responseBody);
 
       ObjectMapper mapper = new ObjectMapper();
-      KaggleCompetitionDto[] competitions = mapper.readValue(responseBody, KaggleCompetitionDto[].class);
+      KaggleCompetitionDto[] competitions =
+          mapper.readValue(responseBody, KaggleCompetitionDto[].class);
       log.info("Competitions: {}", (Object) competitions);
     }
   }
