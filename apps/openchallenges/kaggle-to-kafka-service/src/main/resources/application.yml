@@ -11,7 +11,6 @@ kaggle-to-kafka-service:
   kaggle-username: ${KAGGLE_USERNAME}
   kaggle-key: ${KAGGLE_KEY}
   kaggle-base-url: https://www.kaggle.com/api/v1
-  kaggle-basic-token: ${KAGGLE_KEY}
   welcome-message: 'Welcome to Kaggle to Kafka service'
   enable-mock-challenges: false
   mock-min-challenge-name-length: 5
