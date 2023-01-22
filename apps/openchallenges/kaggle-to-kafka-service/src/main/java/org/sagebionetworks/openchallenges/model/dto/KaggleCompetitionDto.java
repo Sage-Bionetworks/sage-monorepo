@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.model.mapper.dto;
+package org.sagebionetworks.openchallenges.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;

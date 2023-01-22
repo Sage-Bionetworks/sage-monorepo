@@ -10,7 +10,7 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.utils.Base64;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.sagebionetworks.openchallenges.configuration.KaggleToKafkaServiceConfiguration;
-import org.sagebionetworks.openchallenges.model.mapper.dto.KaggleCompetitionDto;
+import org.sagebionetworks.openchallenges.model.dto.KaggleCompetitionDto;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
