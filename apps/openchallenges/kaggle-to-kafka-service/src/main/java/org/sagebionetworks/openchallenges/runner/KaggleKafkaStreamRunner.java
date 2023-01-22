@@ -9,8 +9,11 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.utils.Base64;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.sagebionetworks.openchallenges.configuration.KaggleToKafkaServiceConfiguration;
+import org.sagebionetworks.openchallenges.model.mapper.dto.KaggleCompetitionDto;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Slf4j
 @Component
@@ -49,6 +52,10 @@ public class KaggleKafkaStreamRunner implements StreamRunner {
       HttpClientResponseHandler<String> responseHandler = new BasicHttpClientResponseHandler();
       final String responseBody = httpClient.execute(httpGet, responseHandler);
       System.out.println(responseBody);
+
+      ObjectMapper mapper = new ObjectMapper();
+      KaggleCompetitionDto[] competitions = mapper.readValue(responseBody, KaggleCompetitionDto[].class);
+      log.info("Competitions: {}", (Object) competitions);
     }
   }
 }
