@@ -4,6 +4,8 @@ default: relevance
 enum:
   - created
   - ending_soon
+  - recently_ended
+  - recently_started
   - relevance
   - starred
   - starting_soon
