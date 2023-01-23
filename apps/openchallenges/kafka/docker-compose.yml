@@ -1,28 +1,47 @@
 version: "3.8"
 
 services:
-  openchallenges-elasticsearch:
-    image: sagebionetworks/openchallenges-elasticsearch:latest
-    container_name: openchallenges-elasticsearch
-    restart: always
-    env_file:
-      - .env
-    # volumes:
-    #   - openchallenges-elasticsearch:/data/db
-    #   - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+  openchallenges-zookeeper:
+    image: confluentinc/cp-zookeeper:6.1.9
+    container_name: openchallenges-zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: zookeeper:2888:3888
     networks:
       - openchallenges
-    ports:
-      - "9200:9200"
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-
-# volumes:
-#   openchallenges-elasticsearch:
-#     name: openchallenges-elasticsearch
-
-networks:
-  openchallenges:
-    name: openchallenges
+  # openchallenges-schema-registry:
+  #   image: confluentinc/cp-schema-registry:6.1.9
+  #   hostname: openchallenges-schema-registry
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka-broker-1
+  #     - kafka-broker-2
+  #     - kafka-broker-3
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     SCHEMA_REGISTRY_HOST_NAME: schema-registry
+  #     SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+  #     SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
+  #     SCHEMA_REGISTRY_DEBUG: 'true'
+  #   networks:
+  #     - ${GLOBAL_NETWORK:-kafka}
+  # openchallenges-kafka-broker-1:
+  #   image: sagebionetworks/openchallenges-kafka:latest
+  #   container_name: openchallenges-kafka-broker-1
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   # volumes:
+  #   #   - openchallenges-elasticsearch:/data/db
+  #   #   - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+  #   networks:
+  #     - ${NETWORK_NAME:-kafka}
+  #   ports:
+  #     - "9200:9200"

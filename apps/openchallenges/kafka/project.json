@@ -14,7 +14,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up",
+        "command": "docker compose -f ../../../docker/openchallenges/network.yml -f docker-compose.yml up",
         "cwd": "apps/openchallenges/kafka"
       },
       "dependsOn": ["prepare", "build-image"]
@@ -22,7 +22,7 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
+        "command": "docker compose -f ../../../docker/openchallenges/network.yml -f docker-compose.yml up -d",
         "cwd": "apps/openchallenges/kafka"
       },
       "dependsOn": ["prepare", "build-image"]

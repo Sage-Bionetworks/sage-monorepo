@@ -1,1 +1,2 @@
-FROM elasticsearch:7.17.8
+ARG imageVersion="6.1.9"
+FROM confluentinc/cp-kafka:$imageVersion
