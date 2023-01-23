@@ -27,6 +27,7 @@ RUN groupadd docker \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python3-dev python-is-python3 openjdk-17-jdk \
     htop unzip vim wget lsof iproute2 build-essential \
+    kafkacat \
   # Add Node.js repository
   && curl -sL https://deb.nodesource.com/setup_18.x | bash - \
   # Add GitHub CLI repository
