@@ -1,0 +1,68 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+}
+
+plugins {
+  id 'com.diffplug.spotless' version "${spotlessVersion}"
+  id 'java'
+  id 'org.springframework.boot' version "${springBootVersion}"
+  id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
+}
+
+repositories {
+  mavenCentral()
+  mavenLocal()
+}
+
+dependencies {
+  // Lombok (needs org.springframework.data:spring-data-commons)
+  annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+  compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+  implementation "org.apache.httpcomponents.client5:httpclient5-fluent:${apacheHttpcomponentsVersion}"
+  implementation "org.apache.httpcomponents.client5:httpclient5:${apacheHttpcomponentsVersion}"
+  implementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
+  implementation "org.sagebionetworks:util:${openchallengesVersion}"
+  implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+  implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
+  testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+}
+
+group = 'org.sagebionetworks.openchallenges'
+version = '0.0.1-SNAPSHOT'
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+}
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+bootBuildImage {
+  imageName = 'sagebionetworks/openchallenges-kaggle-to-kafka-service:latest'
+}
+
+spotless {
+  // format 'misc', {
+  //   target '*.gradle', '*.md', '.gitignore'
+
+  //   trimTrailingWhitespace()
+  //   indentWithSpaces(2)
+  //   endWithNewline()
+  // }
+
+  java {
+    target 'src/*/java/**/*.java'
+
+    importOrder()
+    removeUnusedImports()
+    googleJavaFormat()
+  }
+}
+
+
