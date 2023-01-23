@@ -43,6 +43,17 @@ function workspace-prepare {
 #   nx run-many --parallel --target=python
 # }
 
+function workspace-kill-port {
+  port="$1"
+  pids="$(lsof -t -i:$port)"
+  if [ -z "$pids" ]; then
+    echo "There are no processes listening to the port $port."
+  else
+    echo "Killing the processes listening to the port $port."
+    kill $pids
+  fi
+}
+
 function workspace-lint {
   nx run-many --target=lint
 }

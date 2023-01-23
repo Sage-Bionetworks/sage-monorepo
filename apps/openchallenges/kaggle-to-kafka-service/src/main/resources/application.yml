@@ -1,0 +1,18 @@
+kaggle-to-kafka-service:
+  kaggle-search-terms:
+    - biology
+    - cancer
+    - cell
+    - drug
+    - health
+    - life sciences
+    - medicine
+    - neuro
+  kaggle-username: ${KAGGLE_USERNAME}
+  kaggle-key: ${KAGGLE_KEY}
+  kaggle-base-url: https://www.kaggle.com/api/v1
+  welcome-message: 'Welcome to Kaggle to Kafka service'
+  enable-mock-challenges: false
+  mock-min-challenge-name-length: 5
+  mock-max-challenge-name-length: 20
+  mock-sleep-ms: 10000

@@ -48,6 +48,14 @@ GET {{basePath}}/challenges?inputDataTypes=genomic
 
 GET {{basePath}}/challenges?sort=starred&direction=desc
 
+### Sort the challenges by how soon they start
+
+GET {{basePath}}/challenges?sort=starting_soon
+
+### Sort the challenges by how soon they end
+
+GET {{basePath}}/challenges?sort=ending_soon
+
 ### List the challenge platforms
 
 GET {{basePath}}/challengePlatforms

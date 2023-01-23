@@ -48,7 +48,7 @@ VALUES (
     'The Digital Mammography DREAM Challenge',
     'Example headline',
     'Example description',
-    'upcoming',
+    'completed',
     'good_for_beginners',
     '1',
     '2017-01-01',
@@ -59,7 +59,7 @@ VALUES (
     'Patient Mortality EHR DREAM Challenge',
     'Example headline',
     'Example description',
-    'active',
+    'completed',
     'intermediate',
     '1',
     '2018-01-01',
@@ -75,6 +75,39 @@ VALUES (
     '2',
     '2019-01-01',
     '2019-02-01'
+  ),
+    (
+    '4',
+    'Awesome Challenge 2023',
+    'Example headline',
+    'Example description',
+    'active',
+    'advanced',
+    '2',
+    '2023-01-01',
+    '2023-12-31'
+  ),
+    (
+    '5',
+    'Awesome Challenge 2024',
+    'Example headline',
+    'Example description',
+    'upcoming',
+    'advanced',
+    '2',
+    '2024-01-01',
+    '2024-02-01'
+  ),
+    (
+    '6',
+    'Awesome Challenge 2025',
+    'Example headline',
+    'Example description',
+    'upcoming',
+    'advanced',
+    '2',
+    '2025-01-01',
+    '2025-02-01'
   );
 
 -- challenge_incentive data

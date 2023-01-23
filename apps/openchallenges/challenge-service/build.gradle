@@ -54,6 +54,7 @@ dependencies {
   runtimeOnly 'mysql:mysql-connector-java:8.0.30'
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
+  // Enable distributed tracing
   implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudVersion}"
   implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudVersion}"
 }
