@@ -14,11 +14,15 @@
 /**
  * What to sort results by.
  */
-export type ChallengeSort = 'created' | 'relevance' | 'starred';
+export type ChallengeSort = 'created' | 'ending_soon' | 'recently_ended' | 'recently_started' | 'relevance' | 'starred' | 'starting_soon';
 
 export const ChallengeSort = {
     Created: 'created' as ChallengeSort,
+    EndingSoon: 'ending_soon' as ChallengeSort,
+    RecentlyEnded: 'recently_ended' as ChallengeSort,
+    RecentlyStarted: 'recently_started' as ChallengeSort,
     Relevance: 'relevance' as ChallengeSort,
-    Starred: 'starred' as ChallengeSort
+    Starred: 'starred' as ChallengeSort,
+    StartingSoon: 'starting_soon' as ChallengeSort
 };
 

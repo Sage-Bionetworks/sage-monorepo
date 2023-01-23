@@ -12,58 +12,66 @@
 
 GET {{basePath}}/challenges
 
-### List the challenges that are active and upcoming
+### List the challenges that are active and upcoming.
 
 GET {{basePath}}/challenges?status=active,upcoming
 
-### List the challenges hosted on the platform Synapse
+### List the challenges hosted on the platform Synapse.
 
 GET {{basePath}}/challenges?platforms=synapse
 
-### List the challenges with intermediate difficulty
+### List the challenges with intermediate difficulty.
 
 GET {{basePath}}/challenges?difficulties=intermediate
 
-### List the challenges with a container image submissions
+### List the challenges with a container image submissions.
 
 GET {{basePath}}/challenges?submissionTypes=container_image
 
-### List the challenges with a monetary or publication incentive
+### List the challenges with a monetary or publication incentive.
 
 GET {{basePath}}/challenges?incentives=monetary,publication
 
-### List the challenges that match the full-text search terms "mortality dream"
+### List the challenges that match the full-text search terms "mortality dream".
 
 GET {{basePath}}/challenges?searchTerms=mortality%20dream
 
-### List the challenges that start in 2017
+### List the challenges that start in 2017.
 
 GET {{basePath}}/challenges?minStartDate=2017-01-01&maxStartDate=2017-12-31
 
-### List the challenges that include the input data type 'genomic'
+### List the challenges that include the input data type 'genomic'.
 
 GET {{basePath}}/challenges?inputDataTypes=genomic
 
-### Sort the challenges by their starred count in desc oder
+### Sort the challenges by their starred count in desc oder.
 
 GET {{basePath}}/challenges?sort=starred&direction=desc
 
-### Sort the challenges by how soon they start
+### Sort the challenges by how soon they start.
 
 GET {{basePath}}/challenges?sort=starting_soon
 
-### Sort the challenges by how soon they end
+### Sort the challenges by how soon they end.
 
 GET {{basePath}}/challenges?sort=ending_soon
 
-### List the challenge platforms
+### Sort the challenges by how recently they have started.
+
+GET {{basePath}}/challenges?sort=recently_started
+
+### Sort the challenges by how recently they have ended.
+
+GET {{basePath}}/challenges?sort=recently_ended
+
+### List the challenge platforms.
 
 GET {{basePath}}/challengePlatforms
 
-### Get a challenge platform by ID
+### Get a challenge platform by ID.
 
 GET {{basePath}}/challengePlatforms/synapse
 
-### List the challenge input data types
+### List the challenge input data types.
 
 GET {{basePath}}/challengeInputDataTypes
