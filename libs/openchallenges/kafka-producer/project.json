@@ -1,0 +1,59 @@
+{
+  "name": "openchallenges-kafka-producer",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/openchallenges/kafka-producer/src",
+  "projectType": "library",
+  "targets": {
+    "prepare-java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "libs/openchallenges/kafka-producer"
+      }
+    },
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "libs/openchallenges/kafka-producer"
+      },
+      "outputs": ["{projectRoot}/build"],
+      "dependsOn": ["^install"]
+    },
+    "install": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew publishToMavenLocal",
+        "cwd": "libs/openchallenges/kafka-producer"
+      },
+      "dependsOn": ["build"]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "libs/openchallenges/kafka-producer"
+      }
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "libs/openchallenges/kafka-producer"
+      }
+    },
+    "format": {
+      "executor": "@nxrocks/nx-spring-boot:format",
+      "options": {
+        "root": "libs/openchallenges/kafka-producer"
+      }
+    },
+    "format-check": {
+      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "options": {
+        "root": "libs/openchallenges/kafka-producer"
+      }
+    }
+  },
+  "tags": ["type:library", "scope:openchallenges"],
+  "implicitDependencies": [
+    "openchallenges-kafka-model"
+  ]
+}
