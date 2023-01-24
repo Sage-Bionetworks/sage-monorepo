@@ -33,7 +33,12 @@ dependencies {
   implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
   implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
-  implementation 'io.confluent:kafka-avro-serializer:5.5.13'
+  implementation('io.confluent:kafka-avro-serializer:5.5.13') {
+    exclude module: 'org.slf4j:slf4j-log4j12'
+    exclude module: 'log4j:log4j'
+    exclude module: 'io.swagger:swagger-annotations'
+    exclude module: 'swagger-core'
+  }
   // implementation "org.springframework.retry:spring-retry:${springRetryVersion}"
   // implementation "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
   // implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
