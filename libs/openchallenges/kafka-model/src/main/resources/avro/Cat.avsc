@@ -1,0 +1,8 @@
+{
+  "name": "Cat",
+  "namespace": "org.sagebionetworks.openchallenges.kafka.model",
+  "type": "record",
+  "fields" : [
+    {"name": "breed", "type": "Breed"}
+  ]
+}

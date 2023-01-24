@@ -18,6 +18,18 @@
       },
       "outputs": ["{projectRoot}/build"]
     },
+    "avro-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "rm -fr src/main/java/org/sagebionetworks/openchallenges/kafka/model",
+          "./gradlew generateAvro",
+          "echo 'TODO Format generated code'"
+        ],
+        "cwd": "libs/openchallenges/kafka-model",
+        "parallel": false
+      }
+    },
     "install": {
       "executor": "nx:run-commands",
       "options": {

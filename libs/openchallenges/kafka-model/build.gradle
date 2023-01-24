@@ -1,11 +1,15 @@
+import com.github.davidmc24.gradle.plugin.avro.GenerateAvroJavaTask
+
 plugins {
   id 'io.spring.dependency-management' version '1.0.14.RELEASE'
   id 'java'
   id 'maven-publish'
   id 'org.springframework.boot' version '2.7.4'
+  // id 'com.github.davidmc24.gradle.plugin.avro' version '1.5.0'
+  id 'com.github.davidmc24.gradle.plugin.avro-base' version '1.5.0'
 }
 
-group = 'org.sagebionetworks'
+group = 'org.sagebionetworks.openchallenges'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
@@ -14,10 +18,17 @@ repositories {
 }
 
 dependencies {
-  implementation 'org.springframework.boot:spring-boot-starter:2.7.4'
-  testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.4'
-  compileOnly 'org.projectlombok:lombok:1.18.24'
   annotationProcessor 'org.projectlombok:lombok:1.18.24'
+  compileOnly 'org.projectlombok:lombok:1.18.24'
+  implementation 'org.apache.avro:avro:1.11.1'
+  implementation 'org.springframework.boot:spring-boot-starter:2.7.4'
+  implementation "org.apache.avro:avro:1.11.0"
+  testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.4'
+}
+
+def generateAvro = tasks.register("generateAvro", GenerateAvroJavaTask) {
+  source("src/main/resources/avro")
+  outputDir = file("src/main/java")
 }
 
 tasks.named('test') {
@@ -26,6 +37,7 @@ tasks.named('test') {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+    // source(generateAvro)
 }
 
 publishing {
