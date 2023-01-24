@@ -16,3 +16,20 @@ kaggle-to-kafka-service:
   mock-min-challenge-name-length: 5
   mock-max-challenge-name-length: 20
   mock-sleep-ms: 10000
+
+retry-configuration:
+  initial-interval-ms: 1000
+  max-interval-ms: 10000
+  multiplier: 2.0
+  maxAttempts: 3
+  sleep-time-ms: 2000
+
+kafka-configuration:
+  bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
+  schema-registry-url-key: schema.registry.url
+  schema-registry-url: http://localhost:8081
+  topic-name: kaggle-topic
+  topic-names-to-create:
+    - kaggle-topic
+  num-of-partitions: 3
+  replication-factor: 3

@@ -83,6 +83,7 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
+    "openchallenges-kafka-admin",
     "shared-java-util"
   ]
 }

@@ -1,0 +1,36 @@
+package org.sagebionetworks.openchallenges.kafka.admin.configuration;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.retry.backoff.ExponentialBackOffPolicy;
+import org.springframework.retry.policy.SimpleRetryPolicy;
+import org.springframework.retry.support.RetryTemplate;
+
+@Configuration
+public class RetryConfiguration {
+
+  private final RetryConfigurationData retryConfigurationData;
+
+  public RetryConfiguration(RetryConfigurationData configurationData) {
+    this.retryConfigurationData = configurationData;
+  }
+
+  @Bean
+  public RetryTemplate retryTemplate() {
+    RetryTemplate retryTemplate = new RetryTemplate();
+
+    ExponentialBackOffPolicy exponentialBackOffPolicy = new ExponentialBackOffPolicy();
+    exponentialBackOffPolicy.setInitialInterval(retryConfigurationData.getInitialIntervalMs());
+    exponentialBackOffPolicy.setMaxInterval(retryConfigurationData.getMaxIntervalMs());
+    exponentialBackOffPolicy.setMultiplier(retryConfigurationData.getMultiplier());
+
+    retryTemplate.setBackOffPolicy(exponentialBackOffPolicy);
+
+    SimpleRetryPolicy simpleRetryPolicy = new SimpleRetryPolicy();
+    simpleRetryPolicy.setMaxAttempts(retryConfigurationData.getMaxAttempts());
+
+    retryTemplate.setRetryPolicy(simpleRetryPolicy);
+
+    return retryTemplate;
+  }
+}
