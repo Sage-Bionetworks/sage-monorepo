@@ -137,4 +137,12 @@ export const challengeSortFilterValues: FilterValue[] = [
     value: 'starred',
     label: 'Most Starred',
   },
+  {
+    value: 'recently_started',
+    label: 'Recently Started',
+  },
+  {
+    value: 'recently_ended',
+    label: 'Recently Ended',
+  },
 ];
