@@ -53,7 +53,7 @@ export class ChallengeSearchComponent
   private query: BehaviorSubject<ChallengeSearchQuery> =
     new BehaviorSubject<ChallengeSearchQuery>({
       pageNumber: 0,
-      pageSize: 0,
+      pageSize: undefined,
       sort: undefined,
       direction: undefined,
       searchTerms: undefined,
@@ -169,6 +169,12 @@ export class ChallengeSearchComponent
     //       active: false,
     //     })))
     // );
+
+    // update the total number of challenges in database
+    this.challengeService
+      .listChallenges(this.query as ChallengeSearchQuery)
+      .subscribe((page) => (this.totalChallengesCount = page.totalElements));
+
     const defaultQuery: ChallengeSearchQuery = {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
