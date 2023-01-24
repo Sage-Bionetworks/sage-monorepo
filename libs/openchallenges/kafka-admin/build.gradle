@@ -32,6 +32,7 @@ dependencies {
   implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
   implementation "org.springframework.retry:spring-retry:${springRetryVersion}"
   implementation "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
 }
 
 group = 'org.sagebionetworks.openchallenges'
