@@ -12,6 +12,7 @@ import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { PaginatorModule } from 'primeng/paginator';
 
 const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
 
@@ -27,6 +28,7 @@ const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
     RouterModule.forChild(routes),
     UiModule,
     FormsModule,
+    PaginatorModule,
     PanelModule,
     RadioButtonModule,
     ReactiveFormsModule,

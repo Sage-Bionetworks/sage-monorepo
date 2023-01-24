@@ -86,7 +86,7 @@ export class ChallengeSearchComponent
   selectedYear!: DateRange | undefined;
 
   pageNumber = 0;
-  pageSize = 50;
+  pageSize = 1;
   searchResultsCount = 0;
 
   // define filters
@@ -169,6 +169,11 @@ export class ChallengeSearchComponent
     //       active: false,
     //     })))
     // );
+
+    this.challengeService
+      .listChallenges(this.query as ChallengeSearchQuery)
+      .subscribe((page) => (this.totalChallengesCount = page.totalElements));
+
     const defaultQuery: ChallengeSearchQuery = {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
@@ -277,6 +282,17 @@ export class ChallengeSearchComponent
   // private listOrganizers(): Observable<ChallengeOrganizer[]> {
   //   return of(MOCK_CHALLENGE_ORGANIZERS);
   // }
+
+  onPageChange(event: any) {
+    console.log(event);
+    this.pageNumber = event.page;
+    this.pageSize = event.rows;
+    const newQuery = assign(this.query.getValue(), {
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize,
+    });
+    this.query.next(newQuery);
+  }
 
   openSnackBar(message: string) {
     this._snackBar.open(message, undefined, {

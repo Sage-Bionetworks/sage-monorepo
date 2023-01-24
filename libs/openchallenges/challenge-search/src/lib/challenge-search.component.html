@@ -109,6 +109,16 @@
         >
         </openchallenges-challenge-card>
       </div>
+      <p-paginator
+        [first]="pageNumber"
+        [pageLinkSize]="5"
+        [rows]="pageSize"
+        [totalRecords]="totalChallengesCount"
+        [rowsPerPageOptions]="[1, 2, 3]"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} results"
+        (onPageChange)="onPageChange($event)"
+      ></p-paginator>
     </div>
   </section>
 </div>
