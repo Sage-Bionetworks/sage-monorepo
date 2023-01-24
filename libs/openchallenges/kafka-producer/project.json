@@ -54,6 +54,7 @@
   },
   "tags": ["type:library", "scope:openchallenges"],
   "implicitDependencies": [
+    "openchallenges-kafka-admin",
     "openchallenges-kafka-model"
   ]
 }
