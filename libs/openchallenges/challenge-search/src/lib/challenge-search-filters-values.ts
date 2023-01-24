@@ -143,6 +143,6 @@ export const challengeSortFilterValues: FilterValue[] = [
   },
   {
     value: 'recently_ended',
-    label: 'Recently Completed',
+    label: 'Recently Closed',
   },
 ];
