@@ -124,6 +124,11 @@ export class ChallengeSearchComponent
     this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
     this.sortedBy = challengeSortFilterValues[0].value as string;
 
+    // update the total number of challenges in database with emtpy query
+    this.challengeService
+      .listChallenges({} as ChallengeSearchQuery)
+      .subscribe((page) => (this.totalChallengesCount = page.totalElements));
+
     // update input data types filter values
     this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
       (page) =>
@@ -169,11 +174,6 @@ export class ChallengeSearchComponent
     //       active: false,
     //     })))
     // );
-
-    // update the total number of challenges in database
-    this.challengeService
-      .listChallenges(this.query as ChallengeSearchQuery)
-      .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
     const defaultQuery: ChallengeSearchQuery = {
       pageNumber: this.pageNumber,
