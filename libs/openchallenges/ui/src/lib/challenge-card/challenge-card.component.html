@@ -1,5 +1,5 @@
 <div *ngIf="challenge">
-  <div class="challenge-card">
+  <div class="challenge-card" [routerLink]="['/challenge', challenge.name]">
     <div class="card-banner">
       <!-- update to retrieve banner path from challenge obj when API ready -->
     </div>

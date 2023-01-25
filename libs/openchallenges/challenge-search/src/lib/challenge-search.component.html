@@ -39,6 +39,7 @@
           [(ngModel)]="sortedBy"
           optionLabel="label"
           optionValue="value"
+          scrollHeight="unset"
           (onChange)="onSortChange()"
         ></p-dropdown>
       </div>
@@ -102,11 +103,7 @@
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
       <div class="card-group">
-        <openchallenges-challenge-card
-          *ngFor="let challenge of challenges"
-          [challenge]="challenge"
-          [routerLink]="['/challenge', challenge.name]"
-        >
+        <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge">
         </openchallenges-challenge-card>
       </div>
       <p-paginator
