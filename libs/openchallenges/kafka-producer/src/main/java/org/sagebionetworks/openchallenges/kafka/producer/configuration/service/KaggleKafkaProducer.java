@@ -1,11 +1,9 @@
 package org.sagebionetworks.openchallenges.kafka.producer.configuration.service;
 
-import lombok.extern.slf4j.Slf4j;
-
 import javax.annotation.PreDestroy;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.sagebionetworks.openchallenges.kafka.model.Cat;
+import org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
@@ -14,17 +12,17 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Slf4j
 @Service
-public class KaggleKafkaProducer implements KafkaProducer<Long, Cat> {
+public class KaggleKafkaProducer implements KafkaProducer<Long, KaggleCompetitionAvroModel> {
 
-  private KafkaTemplate<Long, Cat> kafkaTemplate;
+  private KafkaTemplate<Long, KaggleCompetitionAvroModel> kafkaTemplate;
 
-  public KaggleKafkaProducer(KafkaTemplate<Long, Cat> template) {
+  public KaggleKafkaProducer(KafkaTemplate<Long, KaggleCompetitionAvroModel> template) {
     this.kafkaTemplate = template;
   }
 
-  public void send(String topicName, Long key, Cat message) {
+  public void send(String topicName, Long key, KaggleCompetitionAvroModel message) {
     log.info("Sending message='{}' to topic={}", message, topicName);
-    ListenableFuture<SendResult<Long, Cat>> kafkaResultFuture =
+    ListenableFuture<SendResult<Long, KaggleCompetitionAvroModel>> kafkaResultFuture =
         kafkaTemplate.send(topicName, key, message);
     addCallback(topicName, message, kafkaResultFuture);
   }
@@ -38,7 +36,9 @@ public class KaggleKafkaProducer implements KafkaProducer<Long, Cat> {
   }
 
   private void addCallback(
-      String topicName, Cat message, ListenableFuture<SendResult<Long, Cat>> kafkaResultFuture) {
+      String topicName,
+      KaggleCompetitionAvroModel message,
+      ListenableFuture<SendResult<Long, KaggleCompetitionAvroModel>> kafkaResultFuture) {
     kafkaResultFuture.addCallback(
         new ListenableFutureCallback<>() {
           @Override
@@ -47,7 +47,7 @@ public class KaggleKafkaProducer implements KafkaProducer<Long, Cat> {
           }
 
           @Override
-          public void onSuccess(SendResult<Long, Cat> result) {
+          public void onSuccess(SendResult<Long, KaggleCompetitionAvroModel> result) {
             RecordMetadata metadata = result.getRecordMetadata();
             log.debug(
                 "Received new metadata. Topic: {}, Partition: {}, Offset: {}, Timestamp: {}, at time {}",
