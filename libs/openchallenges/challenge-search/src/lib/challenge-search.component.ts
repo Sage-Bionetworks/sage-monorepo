@@ -86,7 +86,7 @@ export class ChallengeSearchComponent
   selectedYear!: DateRange | undefined;
 
   pageNumber = 0;
-  pageSize = 50;
+  pageSize = 20;
   searchResultsCount = 0;
 
   // define filters
