@@ -124,7 +124,7 @@ export class ChallengeSearchComponent
     this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
     this.sortedBy = challengeSortFilterValues[0].value as string;
 
-    // update the total number of challenges in database with emtpy query
+    // update the total number of challenges in database with empty query
     this.challengeService
       .listChallenges({} as ChallengeSearchQuery)
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
