@@ -13,6 +13,7 @@ plugins {
 
 repositories {
   mavenCentral()
+  // TODO needed to use openchallenges-kafka-producer, but how to remove?
   maven {
     url "https://packages.confluent.io/maven/"
   }
@@ -34,6 +35,9 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+
+  // TODO needed to use openchallenges-kafka-model, but how to remove?
+  implementation "org.apache.avro:avro:1.11.0"
 }
 
 group = 'org.sagebionetworks.openchallenges'
