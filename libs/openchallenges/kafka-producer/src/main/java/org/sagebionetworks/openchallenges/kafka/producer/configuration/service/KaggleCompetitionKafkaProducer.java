@@ -12,7 +12,8 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Slf4j
 @Service
-public class KaggleCompetitionKafkaProducer implements KafkaProducer<Long, KaggleCompetitionAvroModel> {
+public class KaggleCompetitionKafkaProducer
+    implements KafkaProducer<Long, KaggleCompetitionAvroModel> {
 
   private KafkaTemplate<Long, KaggleCompetitionAvroModel> kafkaTemplate;
 
