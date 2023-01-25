@@ -16,7 +16,7 @@ import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.apache.hc.core5.net.URIBuilder;
 import org.sagebionetworks.openchallenges.kafka.admin.configuration.KafkaConfigurationData;
 import org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel;
-import org.sagebionetworks.openchallenges.kafka.producer.configuration.service.KafkaProducer;
+import org.sagebionetworks.openchallenges.kafka.producer.service.KafkaProducer;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.configuration.KaggleToKafkaServiceConfiguration;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.model.dto.KaggleCompetitionDto;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.transformer.KaggleCompetitionToAvroTransformer;

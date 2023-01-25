@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.kafka.producer.configuration.service;
+package org.sagebionetworks.openchallenges.kafka.producer.service;
 
 import java.io.Serializable;
 import org.apache.avro.specific.SpecificRecordBase;

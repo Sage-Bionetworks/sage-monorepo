@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.kafka.producer.configuration.service;
+package org.sagebionetworks.openchallenges.kafka.producer.service;
 
 import javax.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +21,7 @@ public class KaggleCompetitionKafkaProducer
     this.kafkaTemplate = template;
   }
 
+  @Override
   public void send(String topicName, Long key, KaggleCompetitionAvroModel message) {
     log.info("Sending message='{}' to topic={}", message, topicName);
     ListenableFuture<SendResult<Long, KaggleCompetitionAvroModel>> kafkaResultFuture =
