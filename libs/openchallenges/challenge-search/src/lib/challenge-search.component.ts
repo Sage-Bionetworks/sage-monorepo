@@ -51,23 +51,7 @@ export class ChallengeSearchComponent
   datepipe: DatePipe = new DatePipe('en-US');
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
-    new BehaviorSubject<ChallengeSearchQuery>({
-      pageNumber: 0,
-      pageSize: 0,
-      sort: undefined,
-      direction: undefined,
-      searchTerms: undefined,
-      minStartDate: undefined,
-      maxStartDate: undefined,
-      status: [],
-      difficulties: [],
-      submissionTypes: [],
-      incentives: [],
-      platforms: [],
-      inputDataTypes: [],
-      // organizations: [],
-      // organizers: [],
-    });
+    new BehaviorSubject<ChallengeSearchQuery>({});
 
   // set a default behaviorSubject to trigger searchTearm's changes
   private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
@@ -285,12 +269,9 @@ export class ChallengeSearchComponent
   // }
 
   onPageChange(event: any) {
-    console.log(event);
-    this.pageNumber = event.page;
-    this.pageSize = event.rows;
     const newQuery = assign(this.query.getValue(), {
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize,
+      pageNumber: event.page,
+      pageSize: event.rows,
     });
     this.query.next(newQuery);
   }
