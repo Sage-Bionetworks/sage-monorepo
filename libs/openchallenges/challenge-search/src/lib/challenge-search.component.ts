@@ -53,7 +53,7 @@ export class ChallengeSearchComponent
   private query: BehaviorSubject<ChallengeSearchQuery> =
     new BehaviorSubject<ChallengeSearchQuery>({
       pageNumber: 0,
-      pageSize: undefined,
+      pageSize: 0,
       sort: undefined,
       direction: undefined,
       searchTerms: undefined,
