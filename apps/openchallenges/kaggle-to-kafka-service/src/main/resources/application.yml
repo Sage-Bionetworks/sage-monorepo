@@ -38,7 +38,7 @@ kafka-producer-configuration:
   key-serializer-class: org.apache.kafka.common.serialization.LongSerializer
   value-serializer-class: io.confluent.kafka.serializers.KafkaAvroSerializer
   compression-type: snappy
-  acsk: all
+  acks: all
   batch-size: 16384
   batch-size-boost-factor: 100
   linger-ms: 5
