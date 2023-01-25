@@ -1,10 +1,10 @@
-package org.sagebionetworks.openchallenges.runner;
+package org.sagebionetworks.openchallenges.kaggle.to.kafka.service.runner;
 
 import java.util.Arrays;
 import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.configuration.KaggleToKafkaServiceConfiguration;
-import org.sagebionetworks.openchallenges.exception.KaggleToKafkaServiceException;
+import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.configuration.KaggleToKafkaServiceConfiguration;
+import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.exception.KaggleToKafkaServiceException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 

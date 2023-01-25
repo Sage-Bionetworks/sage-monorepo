@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.runner;
+package org.sagebionetworks.openchallenges.kaggle.to.kafka.service.runner;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,8 +14,8 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.utils.Base64;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.apache.hc.core5.net.URIBuilder;
-import org.sagebionetworks.openchallenges.configuration.KaggleToKafkaServiceConfiguration;
-import org.sagebionetworks.openchallenges.model.dto.KaggleCompetitionDto;
+import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.configuration.KaggleToKafkaServiceConfiguration;
+import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.model.dto.KaggleCompetitionDto;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 

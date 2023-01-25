@@ -1,8 +1,8 @@
-package org.sagebionetworks.openchallenges;
+package org.sagebionetworks.openchallenges.kaggle.to.kafka.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.configuration.KaggleToKafkaServiceConfiguration;
-import org.sagebionetworks.openchallenges.runner.StreamRunner;
+import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.configuration.KaggleToKafkaServiceConfiguration;
+import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.runner.StreamRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

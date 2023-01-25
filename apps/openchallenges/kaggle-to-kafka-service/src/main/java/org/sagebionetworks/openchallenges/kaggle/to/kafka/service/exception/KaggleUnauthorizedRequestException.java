@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.exception;
+package org.sagebionetworks.openchallenges.kaggle.to.kafka.service.exception;
 
 public class KaggleUnauthorizedRequestException extends RuntimeException {
 

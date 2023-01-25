@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.configuration;
+package org.sagebionetworks.openchallenges.kaggle.to.kafka.service.configuration;
 
 import java.util.List;
 import lombok.Data;

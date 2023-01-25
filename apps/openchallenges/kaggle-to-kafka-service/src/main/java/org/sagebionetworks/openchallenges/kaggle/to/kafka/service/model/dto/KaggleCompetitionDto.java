@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.model.dto;
+package org.sagebionetworks.openchallenges.kaggle.to.kafka.service.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
