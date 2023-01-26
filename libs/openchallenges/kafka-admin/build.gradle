@@ -7,15 +7,13 @@ buildscript {
 plugins {
   id 'com.diffplug.spotless' version "${spotlessVersion}"
   id 'java'
+  id 'maven-publish'
   id 'org.springframework.boot' version "${springBootVersion}"
   id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
 }
 
 repositories {
   mavenCentral()
-  maven {
-    url "https://packages.confluent.io/maven/"
-  }
   mavenLocal()
 }
 
@@ -24,34 +22,46 @@ dependencies {
   annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
   compileOnly "org.projectlombok:lombok:${lombokVersion}"
 
-  implementation "org.apache.httpcomponents.client5:httpclient5-fluent:${apacheHttpcomponentsVersion}"
-  implementation "org.apache.httpcomponents.client5:httpclient5:${apacheHttpcomponentsVersion}"
-  implementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
-  implementation "org.sagebionetworks:util:${openchallengesVersion}"
-  implementation "org.sagebionetworks.openchallenges:openchallenges-kafka-admin:${openchallengesVersion}"
-  implementation "org.sagebionetworks.openchallenges:openchallenges-kafka-model:${openchallengesVersion}"
-  implementation "org.sagebionetworks.openchallenges:openchallenges-kafka-producer:${openchallengesVersion}"
+  // implementation "org.apache.httpcomponents.client5:httpclient5-fluent:${apacheHttpcomponentsVersion}"
+  // implementation "org.apache.httpcomponents.client5:httpclient5:${apacheHttpcomponentsVersion}"
+  // implementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
+  // implementation "org.sagebionetworks:util:${openchallengesVersion}"
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
-  implementation "org.apache.avro:avro:1.11.0"
+  implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+  implementation "org.springframework.retry:spring-retry:${springRetryVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
 }
 
 group = 'org.sagebionetworks.openchallenges'
 version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
 
-java {
-  toolchain {
-    languageVersion = JavaLanguageVersion.of(17)
-  }
+tasks.named('test') {
+	useJUnitPlatform()
 }
 
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
 }
 
-bootBuildImage {
-  imageName = 'sagebionetworks/openchallenges-kaggle-to-kafka-service:latest'
+publishing {
+  publications {
+    maven(MavenPublication) {
+      from(components.java)
+    }
+  }
+}
+
+// spring boot library projects don't need an executable jar, so we disable it
+bootJar {
+	enabled = false
+}
+jar {
+	enabled = true
+  archiveClassifier = '' // use empty string
 }
 
 spotless {

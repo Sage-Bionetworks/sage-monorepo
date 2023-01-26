@@ -1,0 +1,55 @@
+{
+  "name": "openchallenges-kafka-admin",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/openchallenges/kafka-admin/src",
+  "projectType": "library",
+  "targets": {
+    "prepare-java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "libs/openchallenges/kafka-admin"
+      }
+    },
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "libs/openchallenges/kafka-admin"
+      },
+      "outputs": ["{projectRoot}/build"]
+    },
+    "install": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew publishToMavenLocal",
+        "cwd": "libs/openchallenges/kafka-admin"
+      },
+      "dependsOn": ["build"]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "libs/openchallenges/kafka-admin"
+      }
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "libs/openchallenges/kafka-admin"
+      }
+    },
+    "format": {
+      "executor": "@nxrocks/nx-spring-boot:format",
+      "options": {
+        "root": "libs/openchallenges/kafka-admin"
+      }
+    },
+    "format-check": {
+      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "options": {
+        "root": "libs/openchallenges/kafka-admin"
+      }
+    }
+  },
+  "tags": ["type:library", "scope:openchallenges"]
+}
