@@ -10,6 +10,7 @@ import { UserButtonModule } from './user-button/user-button.module';
 import { PersonCardModule } from './person-card/person-card.module';
 import { CheckboxFilterModule } from './checkbox-filter/checkbox-filter.module';
 import { SearchDropdownFilterModule } from './search-dropdown-filter/search-dropdown-filter.module';
+import { PaginatorModule } from './paginator/paginator.module';
 
 @NgModule({
   imports: [CommonModule],
@@ -19,12 +20,12 @@ import { SearchDropdownFilterModule } from './search-dropdown-filter/search-drop
     ChallengeCardModule,
     CheckboxFilterModule,
     FooterModule,
+    PaginatorModule,
     PersonCardModule,
     NavbarModule,
     OrganizationCardModule,
     SearchDropdownFilterModule,
     UserButtonModule,
   ],
-  declarations: [],
 })
 export class UiModule {}

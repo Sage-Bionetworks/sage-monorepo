@@ -1,0 +1,10 @@
+<p-paginator
+  [first]="pageNumber"
+  [pageLinkSize]="5"
+  [rows]="pageSize"
+  [totalRecords]="totalRecords"
+  [rowsPerPageOptions]="itemsPerPage"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} results"
+  (onPageChange)="onPageChange($event)"
+></p-paginator>
