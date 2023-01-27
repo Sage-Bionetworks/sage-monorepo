@@ -50,8 +50,10 @@ body:
       required: false
   - type: checkboxes
     attributes:
-      label: Are you developing inside the dev container? description: Please confirm that you're
-      experiencing the issue while using the development container provided by this repository.
+      label: Are you developing inside the dev container?
+      description: |
+        Please confirm that you're experiencing the issue while using the development container
+        provided by this repository.
       options:
         - label: I am using the dev container
           required: true
