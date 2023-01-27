@@ -1,0 +1,52 @@
+name: Create a Story
+description: Create a Story (for Team members only).
+title: '[Story] <title>'
+labels: []
+body:
+  - type: dropdown
+    id: projects
+    attributes:
+      label: What projects is this story for?
+      multiple: true
+      options:
+        - OpenChallenges
+        - Schematic
+  - type: textarea
+    attributes:
+      label: 'As a user, I want'
+      description: A user story that follows the "As a user, I want" template.
+      placeholder: As a <persona>, I want to <goal> so that <some reason>.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Description
+      description: A clear description of the story that should results in a finished piece of work.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Acceptance criteria
+      description: What does done look like? Be specific.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Tasks
+      description: |
+        List the tasks that composes this story. Turn them later into GitHub issue to track their
+        progress separately.
+  - type: textarea
+    attributes:
+      label: Anything else?
+      description: |
+        Links? References? Screenshot?
+  - type: checkboxes
+    attributes:
+      label: Have you linked this story to a GitHub Project?
+      description: |
+        Please confirm that you have linked this story to a GitHub Project and that you have set its
+        metadata. You must first create the ticket before being able to set its metadata.
+      options:
+        - label: I have linked this story to a GitHub Project and set its metadata.
+          required: true
