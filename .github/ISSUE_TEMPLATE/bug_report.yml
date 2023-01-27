@@ -1,6 +1,6 @@
-name: Bug Report
-description: File a bug report
-title: '[Bug]: <title>'
+name: Report a bug
+description: Report a bug.
+title: '[Bug] <title>'
 labels: ['bug']
 body:
   - type: markdown
@@ -38,7 +38,8 @@ body:
     attributes:
       label: Anything else?
       description: |
-        Links? References? Logs? Screenshot? Anything that will give us more context about the issue you are encountering!
+        Links? References? Logs? Screenshot? Anything that will give us more context about the issue
+        you are encountering!
   - type: input
     id: commit-id
     attributes:
@@ -50,7 +51,9 @@ body:
   - type: checkboxes
     attributes:
       label: Are you developing inside the dev container?
-      description: Please confirm that you're experiencing the issue while using the development container provided by this repository.
+      description: |
+        Please confirm that you're experiencing the issue while using the development container
+        provided by this repository.
       options:
         - label: I am using the dev container
           required: true
@@ -58,7 +61,9 @@ body:
     id: terms
     attributes:
       label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/.github/CODE_OF_CONDUCT.md)
+      description: |
+        By submitting this issue, you agree to follow our [Code of
+        Conduct](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/.github/CODE_OF_CONDUCT.md)
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true
