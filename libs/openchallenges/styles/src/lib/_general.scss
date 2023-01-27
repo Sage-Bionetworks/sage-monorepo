@@ -44,7 +44,7 @@ body {
   flex-flow: column wrap;
   align-content: center;
 }
-.btn-group > *:first-child {
+.btn-group>*:first-child {
   align-self: stretch;
 }
 .btn-group button {
@@ -54,32 +54,17 @@ body {
 
 // CARDS
 .card-group {
-  // width: 100%;
-  // display: flex;
-  // box-sizing: border-box;
-  // align-items: flex-start;
-  // flex-shrink: 1;
-  // flex-wrap: wrap;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 24px;
-  overflow-y: hidden;
-  // & > * {
-  //   margin: 12px;
-  // }
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+  align-items: flex-start;
+  flex-shrink: 1;
+  flex-wrap: wrap;
+
+  & > * {
+    margin: 12px;
+  }
 }
-
-// @media screen and (max-width: 839px) {
-//   .card-group {
-//     gap: 16px;
-//   }
-// }
-
-// @media screen and (min-width: 1280px) {
-//   .card-group {
-//     grid-template-columns: repeat(4, 1fr);
-//   }
-// }
 
 @media screen and (min-width: 800px) {
   .col,
