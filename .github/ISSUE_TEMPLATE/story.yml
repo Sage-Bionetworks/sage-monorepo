@@ -36,6 +36,9 @@ body:
       description: |
         List the tasks that composes this story. Turn them later into GitHub issue to track their
         progress separately.
+      placeholder: |
+        - [ ] Title of a task
+        - [ ] Title of another task
   - type: textarea
     attributes:
       label: Anything else?
