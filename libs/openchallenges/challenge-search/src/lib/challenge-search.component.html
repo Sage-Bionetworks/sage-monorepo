@@ -106,6 +106,13 @@
         <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge">
         </openchallenges-challenge-card>
       </div>
+      <openchallenges-paginator
+        [pageNumber]="pageNumber"
+        [pageSize]="pageSize"
+        [totalRecords]="totalChallengesCount"
+        [itemsPerPage]="[20, 50, 100]"
+        (pageChange)="onPageChange($event)"
+      ></openchallenges-paginator>
     </div>
   </section>
 </div>
