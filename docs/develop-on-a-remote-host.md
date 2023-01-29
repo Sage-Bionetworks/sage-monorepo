@@ -214,15 +214,21 @@ Congratulations, you are now ready to develop in the devcontainer that runs on t
 5. Wait for the codespace to be created.
 6. Configure the monorepo and install its dependencies (see README).
 
-### Open a Codespace with VS Code
+### Stopping a Codespace instance
 
-If you prefer to develop with VS Code rather than inside your browser:
+If your codespace is open in your browser, you can stop it with the following step. Note that a
+codespace stops automatically after one hour of inactivity.
 
 1. Click on the button "Codespaces" located in the bottom-left corner.
 2. Click on "Stop Current Codespace".
-3. Open your browser and go to [GitHub Codespaces].
-4. Find the codespace that you want to open with VS Code.
-5. Click on the three-dot menu > "Open in ..." > "Open in Visual Studio Code"
+
+### Opening a Codespace with VS Code
+
+If you prefer to develop with VS Code rather than inside your browser:
+
+1. Open your browser and go to [GitHub Codespaces].
+2. Find the codespace that you want to open with VS Code.
+3. Click on the three-dot menu > "Open in ..." > "Open in Visual Studio Code"
 
 ## Accessing apps and services
 
