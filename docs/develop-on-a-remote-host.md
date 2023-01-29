@@ -209,7 +209,8 @@ Congratulations, you are now ready to develop in the devcontainer that runs on t
     - `Dev container configuration`: Select the dev container definition
     - `Region`: Select your preferred region
     - `Machine type`: Select the machine type
-        > **Note** 4-core is preferred for the OpenChallenges project as a trade-off between performance and cost.
+        > **Note** 4-core is preferred for the OpenChallenges project as a trade-off between
+        > performance and cost.
 4. Click on "Create codespace".
 5. Wait for the codespace to be created.
 6. Configure the monorepo and install its dependencies (see README).
