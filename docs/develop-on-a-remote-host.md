@@ -32,22 +32,26 @@ the team members. The table also includes the runtimes in seconds of different t
 or testing all the projects included in the monorepo (the method used to generate these results is
 described in the next section).
 
-|                                                        | Shirou       | Rin          | Sakura       | m5.2xlarge   | t3a.xlarge   | 4-core           |
+|                                                        | Shirou       | Rin          | Sakura       | m5.2xlarge   | t3a.xlarge   | 4-core Codespace |
 | ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ---------------- |
 | Computer Type                                          | Desktop PC   | MacBook Pro  | MacBook Pro  | Amazon EC2   | Amazon EC2   | GitHub Codespace |
 | Architecture                                           | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86)     |
 | CPU Count                                              | 8            | 4            | 4            | 8            | 4            | 4                |
 | CPU Frequency (GHz)                                    | 3.6          | 2.4          | 1.7          | 2.5          | 2.2          | 2.7              |
 | Memory (GB)                                            | 32           | 16           | 16           | 32           | 16           | 8                |
-| Runtime: Lint All Projects (s)                         | 15.4         | 208.9        | 183.8        | 18.6         | 33.4         |
-| Runtime: Build All Projects (s)                        | 19.4         | 196.2        | 162.2        | 26.7         | 44.9         |
-| Runtime: Test All Projects (s)                         | 12.4         | 117.1        | 82.8         | 15.3         | 29.2         |
-| Runtime: Test api (s)                                  | 6.2          | 29.6         | 21.3         | 7.2          | 10.4         |
-| Runtime: Test web-app (s)                              | 5.3          | 43.0         | 35.0         | 6.5          | 9.2          |
-| Download speed (Mbit/s)                                | 395.9        | 52.1         | 160.1        | 2165.0       | 1606.7       |
-| Upload speed (Mbit/s)                                  | 183.3        | 15.6         | 10.3         | 1861.0       | 1030.2       |
+| Runtime: Lint All Projects (s)                         | 15.4         | 208.9        | 183.8        | 18.6         | 33.4         | 24.6             |
+| Runtime: Build All Projects (s)                        | 19.4         | 196.2        | 162.2        | 26.7         | 44.9         | 32.3             |
+| Runtime: Test All Projects (s)                         | 12.4         | 117.1        | 82.8         | 15.3         | 29.2         | 31.6             |
+| Runtime: Test api (s)                                  | 6.2          | 29.6         | 21.3         | 7.2          | 10.4         | 6.5              |
+| Runtime: Test web-app (s)                              | 5.3          | 43.0         | 35.0         | 6.5          | 9.2          | 6.7              |
+| Download speed (Mbit/s)                                | 395.9        | 52.1         | 160.1        | 2165.0       | 1606.7       | 8571             |
+| Upload speed (Mbit/s)                                  | 183.3        | 15.6         | 10.3         | 1861.0       | 1030.2       | 4893             |
 | On-Demand Cost ($/day)                                 | n/a          | n/a          | n/a          | 9.2          | 3.6          | 8.64             |
-| On-Demand Cost ($/year)                                | n/a          | n/a          | n/a          | 3363.8       | 1317.5       | 3153.6           |
+| On-Demand Cost ($/year)                                | n/a          | n/a          | n/a          | 3363.8       | 1317.5       | 3153.6*          |
+
+* GitHub codespaces stop automatically after 1h of inactivity. As an example, a codespace used by an
+  engineer with 100 %FTE and 8 working hours per day would cost 8 hours/day * 5 days/week * 52 weeks
+  * $0.36/hour (4-core) = $748/year.
 
 Note that developers have been asked to measure runtimes and internet speeds while keeping open the
 applications that are usually running when they develop (e.g. Spotify, several instances of VS Code,
@@ -57,15 +61,15 @@ larger that those reported by another developer who has less compute resources a
 The table below shows the number of times a task is faster than the slowest runtime (denoted by
 "1.0").
 
-|                                                        | Shirou       | Rin       | Sakura         | m5.2xlarge   | t3a.xlarge   |
+|                                                        | Shirou       | Rin          | Sakura       | m5.2xlarge   | t3a.xlarge   |
 | ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
-| Runtime: Lint All Projects  | 13.6         | 1.0          | 1.1          | 11.2         | 6.3          |
-| Runtime: Build All Projects | 10.1         | 1.0          | 1.2          | 7.3          | 4.4          |
-| Runtime: Test All Projects  | 9.4          | 1.0          | 1.4          | 7.6          | 4.0          |
-| Runtime: Test api           | 4.8          | 1.0          | 1.4          | 4.1          | 2.8          |
-| Runtime: Test web-app       | 8.0          | 1.0          | 1.2          | 6.6          | 4.6          |
-| Download speed              | 7.6          | 1.0          | 3.1          | 41.5         | 30.8         |
-| Upload speed                | 17.8         | 1.5          | 1.0          | 180.5        | 99.9         |
+| Runtime: Lint All Projects                             | 13.6         | 1.0          | 1.1          | 11.2         | 6.3          |
+| Runtime: Build All Projects                            | 10.1         | 1.0          | 1.2          | 7.3          | 4.4          |
+| Runtime: Test All Projects                             | 9.4          | 1.0          | 1.4          | 7.6          | 4.0          |
+| Runtime: Test api                                      | 4.8          | 1.0          | 1.4          | 4.1          | 2.8          |
+| Runtime: Test web-app                                  | 8.0          | 1.0          | 1.2          | 6.6          | 4.6          |
+| Download speed                                         | 7.6          | 1.0          | 3.1          | 41.5         | 30.8         |
+| Upload speed                                           | 17.8         | 1.5          | 1.0          | 180.5        | 99.9         |
 
 For example, linting all the projects of this monorepo is 13.6 times faster on Shirou's computer
 than on Rin's. Moreover, all the developers can benefit from improved download speeds (up to 41.5
@@ -88,8 +92,8 @@ environment to developers.
   [hyperfine](https://github.com/sharkdp/hyperfine).
   ```console
   $ hyperfine --warmup 1 --runs 10 'nx run-many --all --target=lint --skip-nx-cache'
-  $ hyperfine --warmup 1 --runs 10 'nx run-many --all --target=test --skip-nx-cache'
   $ hyperfine --warmup 1 --runs 10 'nx run-many --all --target=build --skip-nx-cache'
+  $ hyperfine --warmup 1 --runs 10 'nx run-many --all --target=test --skip-nx-cache'
   $ hyperfine --warmup 1 --runs 10 'nx test api --skip-nx-cache'
   $ hyperfine --warmup 1 --runs 10 'nx test web-ui --skip-nx-cache'
   ```
