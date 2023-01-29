@@ -21,21 +21,24 @@ Code](https://code.visualstudio.com/remote/advancedcontainers/develop-remote-hos
 developers to continue working [inside the devcontainer](#devcontainer) provided with this project,
 hence further contributing to the standardization of the development envrionment.
 
+> **Note** 2023-01-28: Added documentation to connect to a GitHub Codespace.
+
 ## Use case
 
 This table summarizes the local compute resources available to the developers of the challenge
-registry. The same information is displayed for two types of Amazon EC2 instances that were selected
-as candidate alternative development environments for the team members. The table also includes the
-runtimes in seconds of different tasks such as linting or testing all the projects included in the
-monorepo (the method used to generate these results is described in the next section).
+registry. The same information is displayed for two types of Amazon EC2 instances and one type of
+GitHub Codespace instance that were selected as candidate alternative development environments for
+the team members. The table also includes the runtimes in seconds of different tasks such as linting
+or testing all the projects included in the monorepo (the method used to generate these results is
+described in the next section).
 
-|                                                        | Shirou       | Rin          | Sakura       | m5.2xlarge   | t3a.xlarge   |
-| ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
-| Computer Type                                          | Desktop PC   | MacBook Pro  | MacBook Pro  | Amazon EC2   | Amazon EC2   |
-| Architecture                                           | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) |
-| CPU Count                                              | 8            | 4            | 4            | 8            | 4            |
-| CPU Frequency (GHz)                                    | 3.6          | 2.4          | 1.7          | 2.5          | 2.2          |
-| Memory (GB)                                            | 32           | 16           | 16           | 32           | 16           |
+|                                                        | Shirou       | Rin          | Sakura       | m5.2xlarge   | t3a.xlarge   | 4-core           |
+| ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ---------------- |
+| Computer Type                                          | Desktop PC   | MacBook Pro  | MacBook Pro  | Amazon EC2   | Amazon EC2   | GitHub Codespace |
+| Architecture                                           | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86)     |
+| CPU Count                                              | 8            | 4            | 4            | 8            | 4            | 4                |
+| CPU Frequency (GHz)                                    | 3.6          | 2.4          | 1.7          | 2.5          | 2.2          | 2.7              |
+| Memory (GB)                                            | 32           | 16           | 16           | 32           | 16           | 8                |
 | Runtime: Lint All Projects (s)                         | 15.4         | 208.9        | 183.8        | 18.6         | 33.4         |
 | Runtime: Build All Projects (s)                        | 19.4         | 196.2        | 162.2        | 26.7         | 44.9         |
 | Runtime: Test All Projects (s)                         | 12.4         | 117.1        | 82.8         | 15.3         | 29.2         |
@@ -43,8 +46,8 @@ monorepo (the method used to generate these results is described in the next sec
 | Runtime: Test web-app (s)                              | 5.3          | 43.0         | 35.0         | 6.5          | 9.2          |
 | Download speed (Mbit/s)                                | 395.9        | 52.1         | 160.1        | 2165.0       | 1606.7       |
 | Upload speed (Mbit/s)                                  | 183.3        | 15.6         | 10.3         | 1861.0       | 1030.2       |
-| On-Demand Cost ($/day)                                 | n/a          | n/a          | n/a          | 9.2          | 3.6          |
-| On-Demand Cost ($/year)                                | n/a          | n/a          | n/a          | 3363.8       | 1317.5       |
+| On-Demand Cost ($/day)                                 | n/a          | n/a          | n/a          | 9.2          | 3.6          | 8.64             |
+| On-Demand Cost ($/year)                                | n/a          | n/a          | n/a          | 3363.8       | 1317.5       | 3153.6           |
 
 Note that developers have been asked to measure runtimes and internet speeds while keeping open the
 applications that are usually running when they develop (e.g. Spotify, several instances of VS Code,
@@ -95,7 +98,7 @@ environment to developers.
   $ speedtest
   ```
 
-## Preparing the remote host
+## Preparing the remote host (AWS EC2)
 
 This section describes how to instantiate an AWS EC2 as the remote host.  Steps outlined below will
 assume you have access to the Sage AWS Service Catalog.
@@ -192,6 +195,31 @@ instructions to do so.
 
 Congratulations, you are now ready to develop in the devcontainer that runs on the EC2 instance! 🚀
 
+## Preparing the remote host (GitHub Codespace)
+
+1. Open your browser and go to [GitHub Codespaces].
+2. Click on the "New codespace".
+3. Enter the information requested:
+    - `Repository`: Select your fork of the monorepo
+    - `Branch`: Select the default branch
+    - `Dev container configuration`: Select the dev container definition
+    - `Region`: Select your preferred region
+    - `Machine type`: Select the machine type
+        > **Note** 4-core is preferred for the OpenChallenges project as a trade-off between performance and cost.
+4. Click on "Create codespace".
+5. Wait for the codespace to be created.
+6. Configure the monorepo and install its dependencies (see README).
+
+### Open a Codespace with VS Code
+
+If you prefer to develop with VS Code rather than inside your browser:
+
+1. Click on the button "Codespaces" located in the bottom-left corner.
+2. Click on "Stop Current Codespace".
+3. Open your browser and go to [GitHub Codespaces].
+4. Find the codespace that you want to open with VS Code.
+5. Click on the three-dot menu > "Open in ..." > "Open in Visual Studio Code"
+
 ## Accessing apps and services
 
 The devcontainer provided with this project uses the VS Code devcontainer feature
@@ -215,3 +243,7 @@ Click on the button in the bottom-left corner of VS Code and select one of these
 
 - `Close Remote Connection` to close the connection with the remote host.
 - `Reopen Folder in SSH` if you want to stop the devcontainer but stay connected to the remote host.
+
+<!-- Links -->
+
+[GitHub Codespaces]: https://github.com/codespaces
