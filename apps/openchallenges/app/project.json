@@ -216,12 +216,12 @@
   },
   "tags": ["type:app", "scope:client"],
   "implicitDependencies": [
-    // "openchallenges-api-gateway",
-    // "openchallenges-challenge-service",
-    // "openchallenges-keycloak",
-    // "openchallenges-organization-service",
-    // "openchallenges-styles",
-    // "openchallenges-themes",
+    "openchallenges-api-gateway",
+    "openchallenges-challenge-service",
+    "openchallenges-keycloak",
+    "openchallenges-organization-service",
+    "openchallenges-styles",
+    "openchallenges-themes",
     "shared-typescript-assets"
   ]
 }
