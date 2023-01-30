@@ -9,7 +9,6 @@
 .search-sort-container {
   gap: 24px;
   justify-content: space-between;
-  align-items: center;
 }
 .search-field {
   position: relative;
@@ -22,7 +21,7 @@
   }
 }
 ::ng-deep .p-dropdown {
-  min-width: 14rem;
+  width: 11.5rem;
 }
 .sort-field {
   display: flex;
