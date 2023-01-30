@@ -46,7 +46,6 @@
 
 // SIDENAV
 .nav-group {
-  margin: 18px;
   padding: 48px 18px;
   display: flex;
   align-items: flex-start;
@@ -82,7 +81,7 @@
   .sidenav {
     max-width: 320px;
   }
-  .main {
-    max-width: 1120px;
-  }
+  // .main {
+  //   max-width: 1120px;
+  // }
 }
