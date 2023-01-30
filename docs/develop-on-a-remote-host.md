@@ -32,11 +32,11 @@ the team members. The table also includes the runtimes in seconds of different t
 or testing all the projects included in the monorepo (the method used to generate these results is
 described in the next section).
 
-|                                                        | Shirou       | Rin          | Sakura       | m5.2xlarge   | t3a.xlarge   | 4-core Codespace |
-| ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ---------------- |
-| Computer Type                                          | Desktop PC   | MacBook Pro  | MacBook Pro  | Amazon EC2   | Amazon EC2   | GitHub Codespace |
-| Architecture                                           | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86)     |
-| CPU Count                                              | 8            | 4            | 4            | 8            | 4            | 4                |
+|                                                        | Shirou       | Rin          | Sakura       | m5.2xlarge   | t3a.xlarge   | 4-core Codespace | 8-core Codespace |
+| ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ---------------- | ---------------- |
+| Computer Type                                          | Desktop PC   | MacBook Pro  | MacBook Pro  | Amazon EC2   | Amazon EC2   | GitHub Codespace | GitHub Codespace |
+| Architecture                                           | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86)     | 64-bit (x86)     |
+| CPU Count                                              | 8            | 4            | 4            | 8            | 4            | 4                | 8                |
 | CPU Frequency (GHz)                                    | 3.6          | 2.4          | 1.7          | 2.5          | 2.2          | 2.7              |
 | Memory (GB)                                            | 32           | 16           | 16           | 32           | 16           | 8                |
 | Runtime: Lint All Projects (s)                         | 15.4         | 208.9        | 183.8        | 18.6         | 33.4         | 24.6             |
@@ -46,12 +46,19 @@ described in the next section).
 | Runtime: Test web-app (s)                              | 5.3          | 43.0         | 35.0         | 6.5          | 9.2          | 6.7              |
 | Download speed (Mbit/s)                                | 395.9        | 52.1         | 160.1        | 2165.0       | 1606.7       | 8571             |
 | Upload speed (Mbit/s)                                  | 183.3        | 15.6         | 10.3         | 1861.0       | 1030.2       | 4893             |
-| On-Demand Cost ($/day)                                 | n/a          | n/a          | n/a          | 9.2          | 3.6          | 8.64             |
-| On-Demand Cost ($/year)                                | n/a          | n/a          | n/a          | 3363.8       | 1317.5       | 3153.6*          |
+| On-Demand Cost ($/day)                                 | n/a          | n/a          | n/a          | 9.2          | 3.6          | 8.64 (1,2)       | 17.28 (1,2)      |
+| On-Demand Cost ($/year)                                | n/a          | n/a          | n/a          | 3363.8       | 1317.5       | 3153.6 (1,2)     | 6307.2 (1,2)     |
 
-* GitHub codespaces stop automatically after 1h of inactivity. As an example, a codespace used by an
-  engineer with 100 %FTE and 8 working hours per day would cost 8 hours/day * 5 days/week * 52 weeks
-  * $0.36/hour (4-core) = $748/year.
+(1) GitHub codespaces stop automatically after 1h of inactivity. As an example, a codespace used by
+an engineer with 100 %FTE and 8 working hours per day would cost 8 hours/day * 5 days/week * 52
+weeks * $0.36/hour (4-core) = $748/year (See [Codespaces pricing]). Similarly, the cost for an
+8-core codespace would become $1496/year. In addition, GitHub bills $0.07 of GB of storage.
+
+(2) GitHub offers core hours and storage. For example, a Free user can use a 2-core instance for 60
+hours per month for free or an 8-core instance for 15 hours. You will be notified by email when you
+have used 75%, 90%, and 100% of your included quotas.
+  - Free users: 120 core hours/month and 15 GB month of storage
+  - Pro users: 180 core hours/month and 20 GB month of storage
 
 Note that developers have been asked to measure runtimes and internet speeds while keeping open the
 applications that are usually running when they develop (e.g. Spotify, several instances of VS Code,
@@ -231,6 +238,17 @@ If you prefer to develop with VS Code rather than inside your browser:
 2. Find the codespace that you want to open with VS Code.
 3. Click on the three-dot menu > "Open in ..." > "Open in Visual Studio Code"
 
+### Changing the machine type
+
+The type of machine used by a codespace can be changed at any time, for example when a beefier
+codespace instance is needed. To change the machine type of an existing codespace.
+
+1. Stop the codespace.
+2. Open your browser and go to [GitHub Codespaces].
+3. Find the codespace that you want to open with VS Code.
+4. Click on the three-dot menu > "Change machine type".
+5. Update the properties of the machine and click on "Update codespace".
+
 ## Accessing apps and services
 
 The devcontainer provided with this project uses the VS Code devcontainer feature
@@ -258,3 +276,4 @@ Click on the button in the bottom-left corner of VS Code and select one of these
 <!-- Links -->
 
 [GitHub Codespaces]: https://github.com/codespaces
+[Codespaces pricing]: https://docs.github.com/en/billing/managing-billing-for-github-codespaces/about-billing-for-github-codespaces
