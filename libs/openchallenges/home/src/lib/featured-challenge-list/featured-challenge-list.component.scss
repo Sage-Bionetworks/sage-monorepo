@@ -36,6 +36,9 @@ $screen-lg: 641px;
   max-width: 388px;
   flex-grow: 1;
 }
+.card-group {
+  justify-content: center;
+}
 .card-inner {
   position: relative;
   height: 280px;
