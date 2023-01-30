@@ -23,9 +23,13 @@ body {
   max-width: 920px;
 }
 .main-content {
-  max-width: 1600px;
+  @extend .row;
+  max-width: 2000px;
   margin: auto;
+  padding: 48px 32px;
+  gap: 36px;
 }
+
 // TEXT
 .text-left {
   text-align: left;
@@ -59,11 +63,9 @@ body {
 .card-group {
   width: 100%;
   display: flex;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 24px;
+  padding: 28px 0;
 }
 
 @media screen and (min-width: 800px) {

@@ -56,13 +56,11 @@
   text-align: center;
 }
 #bottom {
-  // margin: 50px 0;
   display: flex;
   flex-wrap: nowrap;
 }
 
 .facets {
-  margin: 18px;
   padding: 48px 21px;
   min-width: 320px;
   display: flex;
@@ -105,6 +103,6 @@
 .calendar-group {
   align-items: center;
 }
-.main {
-  margin: 18px;
-}
+// .main {
+//   margin: 18px;
+// }
