@@ -1,10 +1,10 @@
 <div *ngIf="organization">
   <div class="organization-card">
-    <openchallenges-avatar class="org-card-banner" [avatar]="organizationAvatar">
+    <openchallenges-avatar class="organization-card-banner" [avatar]="organizationAvatar">
     </openchallenges-avatar>
-    <div class="card-text">
-      <p class="card-title">{{ organization.name }}</p>
-      <a class="card-subtitle" [routerLink]="['/org', organization.login]"
+    <div class="organization-card-text">
+      <p class="organization-card-title">{{ organization.name }}</p>
+      <a class="organization-card-subtitle" [routerLink]="['/org', organization.login]"
         >@{{ organization.login }}</a
       >
     </div>
