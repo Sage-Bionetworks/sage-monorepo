@@ -93,7 +93,7 @@
       },
       "defaultConfiguration": "development",
       "options": {
-        "host": "0.0.0.0",
+        "host": "127.0.0.1",
         "port": 4200,
         "publicHost": "http://localhost:4200",
         "proxyConfig": "apps/openchallenges/app/src/proxy.conf.json"
@@ -216,12 +216,12 @@
   },
   "tags": ["type:app", "scope:client"],
   "implicitDependencies": [
-    "openchallenges-api-gateway",
-    "openchallenges-challenge-service",
-    "openchallenges-keycloak",
-    "openchallenges-organization-service",
-    "openchallenges-styles",
-    "openchallenges-themes",
+    // "openchallenges-api-gateway",
+    // "openchallenges-challenge-service",
+    // "openchallenges-keycloak",
+    // "openchallenges-organization-service",
+    // "openchallenges-styles",
+    // "openchallenges-themes",
     "shared-typescript-assets"
   ]
 }
