@@ -22,7 +22,10 @@ body {
 .fill-empty {
   max-width: 920px;
 }
-
+.main-content {
+  max-width: 1600px;
+  margin: auto;
+}
 // TEXT
 .text-left {
   text-align: left;
@@ -44,7 +47,7 @@ body {
   flex-flow: column wrap;
   align-content: center;
 }
-.btn-group>*:first-child {
+.btn-group > *:first-child {
   align-self: stretch;
 }
 .btn-group button {
@@ -60,10 +63,7 @@ body {
   align-items: flex-start;
   flex-shrink: 1;
   flex-wrap: wrap;
-
-  & > * {
-    margin: 12px;
-  }
+  gap: 12px;
 }
 
 @media screen and (min-width: 800px) {
