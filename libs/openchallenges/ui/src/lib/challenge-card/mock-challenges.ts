@@ -1,6 +1,28 @@
-import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
+import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
+import { Challenge as deprecatedChallenge } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
+import { MOCK_PLATFORMS } from './mock-platforms';
 
 export const MOCK_CHALLENGES: Challenge[] = [
+  {
+    id: 1,
+    name: 'Awesome Challenge',
+    headline: 'This is the challenge headline',
+    description: 'This is the challenge description.',
+    status: 'completed',
+    difficulty: 'intermediate',
+    platform: MOCK_PLATFORMS[0],
+    incentives: [],
+    submissionTypes: [],
+    inputDataTypes: [],
+    startDate: '2000-01-01',
+    endDate: '2001-01-01',
+    starredCount: 99,
+    createdAt: '',
+    updatedAt: '',
+  },
+];
+
+export const DEPRECATED_MOCK_CHALLENGES: deprecatedChallenge[] = [
   {
     id: '1',
     name: 'awesome-challenge',

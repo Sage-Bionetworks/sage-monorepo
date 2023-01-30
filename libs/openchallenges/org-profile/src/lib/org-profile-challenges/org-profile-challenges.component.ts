@@ -1,14 +1,12 @@
 import { Component, Input } from '@angular/core';
 import {
   Challenge,
-  UserService,
-} from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
-import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
-import { MOCK_CHALLENGES } from '@sagebionetworks/openchallenges/ui';
-import { Paginator } from 'primeng/paginator';
-import { BehaviorSubject, of, switchMap } from 'rxjs';
+  ChallengeSearchQuery,
+  ChallengeService,
+  Organization,
+} from '@sagebionetworks/openchallenges/api-client-angular';
+import { BehaviorSubject, switchMap } from 'rxjs';
 import { assign } from 'lodash';
-// import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-org-profile-challenges',
@@ -17,48 +15,30 @@ import { assign } from 'lodash';
 })
 export class OrgProfileChallengesComponent {
   @Input() organization!: Organization;
-  challenges: Challenge[] = MOCK_CHALLENGES;
-  limit = 12;
-  offset = 0;
-  challengeResultsCount = 0;
+  challenges: Challenge[] = [];
+  pageNumber = 0;
+  pageSize = 12;
+  totalChallengesCount = 0;
 
-  private query: BehaviorSubject<any> = new BehaviorSubject<any>({
-    offset: 0,
-    limit: 12,
-  });
+  private query: BehaviorSubject<ChallengeSearchQuery> =
+    new BehaviorSubject<ChallengeSearchQuery>({});
+
+  constructor(private challengeService: ChallengeService) {}
 
   ngOnInit(): void {
     this.query
-      .pipe(
-        switchMap((query: any) =>
-          of({
-            challenges: []
-              .concat(...new Array(100).fill(MOCK_CHALLENGES))
-              .slice(query.offset, query.offset + query.limit),
-            totalResults: 100 * MOCK_CHALLENGES.length,
-          })
-        )
-      )
+      .pipe(switchMap((query) => this.challengeService.listChallenges(query)))
       .subscribe((page) => {
+        this.totalChallengesCount = page.totalElements;
         this.challenges = page.challenges;
-        console.log(this.challenges);
-        this.challengeResultsCount = page.totalResults;
       });
   }
 
-  updateQuery(): void {
-    const query = assign(this.query.getValue(), {
-      offset: this.offset,
-      limit: this.limit,
+  onPageChange(event: any) {
+    const newQuery = assign(this.query.getValue(), {
+      pageNumber: event.page,
+      pageSize: event.rows,
     });
-    this.query.next(query);
+    this.query.next(newQuery);
   }
-
-  onPageChange(event: Paginator) {
-    this.offset = event.first;
-    this.limit = event.rows;
-    this.updateQuery();
-  }
-
-  constructor(private userService: UserService) {}
 }

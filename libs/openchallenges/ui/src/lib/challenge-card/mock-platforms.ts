@@ -1,19 +1,19 @@
-import { ChallengePlatform } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
+import { ChallengePlatform } from '@sagebionetworks/openchallenges/api-client-angular';
 
 export const MOCK_PLATFORMS: ChallengePlatform[] = [
   {
-    id: '61b26e5ee98893556289e1a8',
-    name: 'synapse',
-    displayName: 'Synapse',
+    id: 1,
+    slug: 'synapse',
+    name: 'Synapse',
     websiteUrl: 'https://synapse.org',
     avatarUrl: 'https://via.placeholder.com/200x200',
     createdAt: '',
     updatedAt: '',
   },
   {
-    id: '61b26e5ee98893556289e1b0',
-    name: 'grand-challenges',
-    displayName: 'Grand Challenges',
+    id: 2,
+    slug: 'grand-challenges',
+    name: 'Grand Challenges',
     websiteUrl: 'https://grand-challenge.org',
     avatarUrl: 'https://via.placeholder.com/200x200',
     createdAt: '',
