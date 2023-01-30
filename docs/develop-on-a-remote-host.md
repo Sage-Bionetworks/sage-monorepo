@@ -49,10 +49,11 @@ described in the next section).
 | On-Demand Cost ($/day)                                 | n/a          | n/a          | n/a          | 9.2          | 3.6          | 8.64 (1,2)       | 17.28 (1,2)      |
 | On-Demand Cost ($/year)                                | n/a          | n/a          | n/a          | 3363.8       | 1317.5       | 3153.6 (1,2)     | 6307.2 (1,2)     |
 
-(1) GitHub codespaces stop automatically after 1h of inactivity. As an example, a codespace used by
-an engineer with 100 %FTE and 8 working hours per day would cost 8 hours/day * 5 days/week * 52
-weeks * $0.36/hour (4-core) = $748/year (See [Codespaces pricing]). Similarly, the cost for an
-8-core codespace would become $1496/year. In addition, GitHub bills $0.07 of GB of storage.
+(1) GitHub codespaces stop automatically after 1h of inactivity. A codespace used by an engineer
+with 100 %FTE and 8 working hours per day - without taking into account vacation for the sake of
+simplicity - would cost 8 hours/day * 5 days/week * 52 weeks * $0.36/hour (4-core) = $748/year (see
+[Codespaces pricing]). Similarly, the cost for an 8-core codespace would become $1496/year. In
+addition, GitHub bills $0.07 of GB of storage.
 
 (2) GitHub offers core hours and storage. For example, a Free user can use a 2-core instance for 60
 hours per month for free or an 8-core instance for 15 hours. You will be notified by email when you
