@@ -9,7 +9,9 @@
     </div>
     <div class="card-body">
       <p class="card-title">{{ challenge.name }}</p>
-      <p class="card-subtitle">{{ platform }}</p>
+      <p class="card-subtitle" *ngIf="platform">
+        {{ platform.name }}
+      </p>
       <p class="card-desc">{{ challenge.headline }}</p>
     </div>
     <div class="card-footer">
