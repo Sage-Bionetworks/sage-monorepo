@@ -59,11 +59,9 @@ export class ChallengeComponent implements OnInit {
 
     this.challenge$.subscribe((challenge) => {
       this.challengeAvatar = {
-        name: challenge.displayName
-          ? (challenge.displayName as string)
-          : challenge.name.replace(/-/g, ' '),
+        name: challenge.displayName || challenge.name,
         src: '', // TODO: Replace with avatarUrl once implemented in Challenge Object
-        size: 320,
+        size: 250,
       };
 
       this.progressValue =
