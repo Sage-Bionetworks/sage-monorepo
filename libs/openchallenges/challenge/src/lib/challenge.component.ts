@@ -60,7 +60,7 @@ export class ChallengeComponent implements OnInit {
 
     this.challenge$.subscribe((challenge) => {
       this.challengeAvatar = {
-        name: challenge.displayName || challenge.name,
+        name: challenge.displayName || challenge.name.replace(/-/g, ' '),
         src: 'https://via.placeholder.com/300.png', // TODO: Replace with avatarUrl once implemented in Challenge Object
         size: 250,
       };
