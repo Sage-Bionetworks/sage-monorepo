@@ -22,20 +22,17 @@
         <div class="card-group">
           <openchallenges-challenge-card
             *ngFor="let challenge of challenges"
-            [deprecatedChallenge]="challenge"
+            [challenge]="challenge"
           >
           </openchallenges-challenge-card>
         </div>
-        <p-paginator
-          [first]="0"
-          [pageLinkSize]="5"
-          [rows]="limit"
-          [totalRecords]="challengeResultsCount"
-          [rowsPerPageOptions]="[12, 24, 36]"
-          [showCurrentPageReport]="true"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} results"
-          (onPageChange)="onPageChange($event)"
-        ></p-paginator>
+        <openchallenges-paginator
+          [pageNumber]="pageNumber"
+          [pageSize]="pageSize"
+          [totalRecords]="totalChallengesCount"
+          [itemsPerPage]="[12, 24, 36]"
+          (pageChange)="onPageChange($event)"
+        ></openchallenges-paginator>
       </div>
       <div *ngSwitchCase="tabs['organizations']" class="card-group">
         <openchallenges-organization-card

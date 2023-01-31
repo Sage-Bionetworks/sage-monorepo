@@ -1,6 +1,62 @@
-import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
+import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
+import { Challenge as deprecatedChallenge } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
+import { MOCK_PLATFORMS } from './mock-platforms';
 
 export const MOCK_CHALLENGES: Challenge[] = [
+  {
+    id: 1,
+    name: 'The Digital Mammography DREAM Challenge',
+    headline: 'Example headline',
+    description: 'Example description',
+    status: 'active',
+    difficulty: 'good_for_beginners',
+    platform: MOCK_PLATFORMS[0],
+    incentives: [],
+    submissionTypes: [],
+    inputDataTypes: [],
+    startDate: '2017-01-01',
+    endDate: '2030-01-01',
+    starredCount: 99,
+    createdAt: '',
+    updatedAt: '',
+  },
+  {
+    id: 2,
+    name: 'Patient Mortality EHR DREAM Challenge',
+    headline: 'Example headline',
+    description: 'Example description',
+    status: 'upcoming',
+    difficulty: 'intermediate',
+    platform: MOCK_PLATFORMS[0],
+    incentives: [],
+    submissionTypes: [],
+    inputDataTypes: [],
+    startDate: '2024-01-01',
+    endDate: '2030-02-01',
+    starredCount: 9,
+    createdAt: '',
+    updatedAt: '',
+  },
+  {
+    id: 3,
+    name: 'COVID-19 EHR DREAM Challenge',
+    headline: 'Example headline',
+    description: 'Example description',
+    status: 'completed',
+    difficulty: 'advanced',
+    platform: MOCK_PLATFORMS[0],
+    incentives: [],
+    submissionTypes: [],
+    inputDataTypes: [],
+    startDate: '2000-01-01',
+    endDate: '2010-01-01',
+    starredCount: 999,
+    createdAt: '',
+    updatedAt: '',
+  },
+];
+
+export const DEPRECATED_MOCK_CHALLENGES: deprecatedChallenge[] = [
   {
     id: '1',
     name: 'awesome-challenge',

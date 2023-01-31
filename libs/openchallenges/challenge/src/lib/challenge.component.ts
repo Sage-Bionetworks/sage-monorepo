@@ -7,7 +7,10 @@ import {
 import { map, Observable, of, Subscription } from 'rxjs';
 import { Tab } from './tab.model';
 import { CHALLENGE_TABS } from './challenge-tabs';
-import { MOCK_CHALLENGES, Avatar } from '@sagebionetworks/openchallenges/ui';
+import {
+  DEPRECATED_MOCK_CHALLENGES,
+  Avatar,
+} from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { getChallengeSeoData } from './challenge-seo';
 import { SeoService } from '@sagebionetworks/shared/util';
@@ -20,7 +23,7 @@ import { SeoService } from '@sagebionetworks/shared/util';
 export class ChallengeComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
-  challenge$: Observable<Challenge> = of(MOCK_CHALLENGES[0]);
+  challenge$: Observable<Challenge> = of(DEPRECATED_MOCK_CHALLENGES[0]);
   loggedIn = false;
   progressValue = 0;
   remainDays!: number | undefined;
@@ -43,7 +46,7 @@ export class ChallengeComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((param) => {
-      const challenge = MOCK_CHALLENGES.find(
+      const challenge = DEPRECATED_MOCK_CHALLENGES.find(
         (c) => c.name === param['challengeName']
       );
       if (challenge) {
