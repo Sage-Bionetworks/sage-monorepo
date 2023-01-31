@@ -20,7 +20,7 @@ import { SeoService } from '@sagebionetworks/shared/util';
 export class ChallengeComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
-  challenge$: Observable<Challenge> = of(MOCK_CHALLENGES[0]);
+  challenge$!: Observable<Challenge>;
   loggedIn = false;
   progressValue = 0;
   remainDays!: number | undefined;
@@ -47,7 +47,6 @@ export class ChallengeComponent implements OnInit {
         (c) => c.name === param['challengeName']
       );
       if (challenge) {
-        console.log(challenge);
         this.challenge$ = of(challenge);
       }
     });

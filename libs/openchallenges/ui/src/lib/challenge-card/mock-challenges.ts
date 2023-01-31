@@ -3,8 +3,8 @@ import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular-de
 export const MOCK_CHALLENGES: Challenge[] = [
   {
     id: '1',
-    name: 'awesome-challenge',
-    displayName: 'Awesome Challenge',
+    name: 'awesome-challenge-2023',
+    displayName: 'Awesome Challenge 2023',
     description:
       'This is the challenge tagline. It should be a short descriptive summary of the challenge',
     websiteUrl: 'https://www.synapse.org/',

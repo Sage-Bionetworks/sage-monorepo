@@ -27,4 +27,10 @@ export class ChallengeCardComponent implements OnInit {
         : undefined;
     }
   }
+
+  // TODO: remove once the property to redirect to challenge page is determined
+  snakeCase(value: string): string {
+    console.log(value);
+    return value.replace(/ /g, '-').toLowerCase();
+  }
 }
