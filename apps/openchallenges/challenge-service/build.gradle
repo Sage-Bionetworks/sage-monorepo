@@ -59,7 +59,7 @@ dependencies {
   implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudVersion}"
 }
 
-group = 'org.sagebionetworks.challenge'
+group = 'org.sagebionetworks.openchallenges'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -70,10 +70,6 @@ java {
 
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
-}
-
-springBoot {
-  mainClass = 'org.sagebionetworks.challenge.ChallengeServiceApplication'
 }
 
 bootBuildImage {

@@ -11,14 +11,14 @@
         "output": "#{cwd}",
         "templateDir": "templates",
         "additionalProperties": {
-          "apiPackage": "org.sagebionetworks.challenge.api",
-          "basePackage": "org.sagebionetworks.challenge",
-          "configPackage": "org.sagebionetworks.challenge.configuration",
+          "apiPackage": "org.sagebionetworks.openchallenges.challenge.service.api",
+          "basePackage": "org.sagebionetworks.openchallenges.challenge.service",
+          "configPackage": "org.sagebionetworks.openchallenges.challenge.service.configuration",
           "delegatePattern": true,
           "hideGenerationTimestamp": true,
           "library": "spring-boot",
           "modelNameSuffix": "Dto",
-          "modelPackage": "org.sagebionetworks.challenge.model.dto",
+          "modelPackage": "org.sagebionetworks.openchallenges.challenge.service.model.dto",
           "useTags": true,
           "openApiNullable": false
         }
