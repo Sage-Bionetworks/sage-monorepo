@@ -33,7 +33,6 @@ export class ChallengeComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private route: ActivatedRoute,
     private readonly configService: ConfigService,
     private seoService: SeoService,
     private renderer2: Renderer2
@@ -42,7 +41,7 @@ export class ChallengeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe((param) => {
+    this.activatedRoute.params.subscribe((param) => {
       const challenge = MOCK_CHALLENGES.find(
         (c) => c.name === param['challengeName']
       );
