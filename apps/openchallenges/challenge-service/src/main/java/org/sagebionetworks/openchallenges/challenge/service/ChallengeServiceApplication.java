@@ -7,10 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @EnableEurekaClient
 @SpringBootApplication
-@ComponentScan(
-    basePackages = {
-      "org.sagebionetworks.openchallenges.challenge.service"
-    })
+@ComponentScan(basePackages = {"org.sagebionetworks.openchallenges.challenge.service"})
 public class ChallengeServiceApplication {
 
   public static void main(String[] args) {

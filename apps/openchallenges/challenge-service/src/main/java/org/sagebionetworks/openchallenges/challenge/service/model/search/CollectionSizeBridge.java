@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.challenge.service.model.entity;
+package org.sagebionetworks.openchallenges.challenge.service.model.search;
 
 import java.util.Collection;
 import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
