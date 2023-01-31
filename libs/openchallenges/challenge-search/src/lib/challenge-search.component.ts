@@ -38,6 +38,7 @@ import { DatePipe } from '@angular/common';
 import { assign } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ChallengeSearchDataService } from '@sagebionetworks/openchallenges/home';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -97,6 +98,7 @@ export class ChallengeSearchComponent
     private challengeService: ChallengeService,
     private challengePlatformService: ChallengePlatformService,
     private challengeInputDataTypeService: ChallengeInputDataTypeService,
+    private challengeSearchDataService: ChallengeSearchDataService,
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar
   ) {
@@ -158,6 +160,14 @@ export class ChallengeSearchComponent
     //       active: false,
     //     })))
     // );
+
+    // set searchterm from home search button
+    this.challengeSearchDataService.getSearchTerm().subscribe((searchTerm) => {
+      if (searchTerm) {
+        this.searchTermValue = searchTerm;
+        this.searchTerms.next(searchTerm);
+      }
+    });
 
     const defaultQuery: ChallengeSearchQuery = {
       pageNumber: this.pageNumber,
