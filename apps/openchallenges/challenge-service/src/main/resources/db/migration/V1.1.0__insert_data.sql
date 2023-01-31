@@ -28,7 +28,8 @@ VALUES (
 INSERT INTO challenge_input_data_type (id, slug, name)
 VALUES ('1', 'genomic', 'genomic'),
   ('2', 'proteomic', 'proteomic'),
-  ('3', 'gene-expression', 'gene expression');
+  ('3', 'gene-expression', 'gene expression'),
+  ('4', 'metabolomic', 'metabolomic');
 
 -- challenge data
 
@@ -79,11 +80,11 @@ VALUES (
     (
     '4',
     'Awesome Challenge 2023',
-    'Example headline',
+    'Sprint review meeting',
     'Example description',
     'active',
     'advanced',
-    '2',
+    '1',
     '2023-01-01',
     '2023-12-31'
   ),
@@ -94,7 +95,7 @@ VALUES (
     'Example description',
     'upcoming',
     'advanced',
-    '2',
+    '3',
     '2024-01-01',
     '2024-02-01'
   ),
@@ -136,4 +137,5 @@ VALUES ('1', 1, 1),
 INSERT INTO challenge_x_challenge_input_data_type (id, challenge_id, challenge_input_data_type_id)
 VALUES ('1', 1, 1),
   ('2', 2, 1),
-  ('3', 1, 2);
+  ('3', 1, 2),
+  ('4', 4, 4);
