@@ -22,10 +22,16 @@
       <h4>Let the ROCC help find the perfect challenge for you!</h4>
       <div class="search field field-grouped">
         <div class="control control-expanded">
-          <input class="input" type="search" name="search" placeholder="I am interested in..." />
+          <input
+            class="input"
+            type="search"
+            name="search"
+            placeholder="I am interested in..."
+            [(ngModel)]="searchTerm"
+          />
         </div>
         <div class="control">
-          <a mat-raised-button class="btn" color="primary" href="/search">Search</a>
+          <a mat-raised-button class="btn" color="primary" (click)="onClick()">Search</a>
         </div>
       </div>
     </div>
