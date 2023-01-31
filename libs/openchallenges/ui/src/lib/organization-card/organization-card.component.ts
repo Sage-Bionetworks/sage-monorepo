@@ -14,7 +14,8 @@ export class OrganizationCardComponent implements OnInit {
   ngOnInit(): void {
     if (this.organization) {
       this.organizationAvatar = {
-        name: this.organization.name || this.organization.login,
+        name:
+          this.organization.name || this.organization.login.replace(/-/g, ' '),
         src: this.organization.avatarUrl || '',
         size: 120,
       };
