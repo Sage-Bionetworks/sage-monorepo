@@ -45,7 +45,7 @@
       </div>
     </div>
   </section>
-  <section id="bottom" class="row">
+  <section id="bottom" class="content">
     <div class="facets">
       <p-panel
         header="Challenge Year"
@@ -100,7 +100,7 @@
         <p-divider *ngIf="!isLast"></p-divider>
       </ng-container>
     </div>
-    <div class="main col">
+    <div class="main">
       <h3>Results ({{ searchResultsCount }})</h3>
       <div class="card-group">
         <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge">
