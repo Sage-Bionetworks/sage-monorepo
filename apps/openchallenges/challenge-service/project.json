@@ -87,7 +87,6 @@
     // "openchallenges-elasticsearch",
     // "openchallenges-keycloak",
     // "openchallenges-mariadb",
-    // "openchallenges-rabbitmq",
     // "openchallenges-service-registry",
     // "openchallenges-zipkin",
     "shared-java-util"

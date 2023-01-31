@@ -30,15 +30,6 @@ spring:
   flyway:
     enabled: true
   #   cleanOnValidationError: true
-  rabbitmq:
-    host: openchallenges-rabbitmq
-    port: 8020
-    username: openchallenges
-    password: changeme
-    exchange: challenge.exchange
-    queue: challenge.queue
-    routingkey: challenge.routingkey
-  message: message succesfuly sent
   zipkin:
     base-url: http://openchallenges-zipkin:9411
 
