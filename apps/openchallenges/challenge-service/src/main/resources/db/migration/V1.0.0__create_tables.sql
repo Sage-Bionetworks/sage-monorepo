@@ -6,7 +6,7 @@ CREATE TABLE `challenge_platform`
     `slug`                  varchar(255) NOT NULL UNIQUE,
     `name`                  varchar(255) NOT NULL UNIQUE,
     `avatar_url`            varchar(255) NOT NULL,
-    `website_url`            varchar(255) NOT NULL,
+    `website_url`           varchar(255) NOT NULL,
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
@@ -32,6 +32,8 @@ CREATE TABLE `challenge`
     `name`                  varchar(255) DEFAULT NULL,
     `headline`              varchar(80),
     `description`           varchar(280) NOT NULL,
+    `avatar_url`            varchar(255),
+    `website_url`           varchar(255) NOT NULL,
     `status`                ENUM('upcoming', 'active', 'completed'),
     `difficulty`            ENUM('good_for_beginners', 'intermediate', 'advanced'),
     `platform_id`           int,

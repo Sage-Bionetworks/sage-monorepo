@@ -382,6 +382,12 @@ components:
           $ref: '#/components/schemas/ChallengeDifficulty'
         platform:
           $ref: '#/components/schemas/SimpleChallengePlatform'
+        websiteUrl:
+          type: string
+          format: url
+        avatarUrl:
+          type: string
+          format: url
         incentives:
           type: array
           items:

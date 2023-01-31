@@ -57,6 +57,12 @@ public class ChallengeEntity {
   @FullTextField()
   private String description;
 
+  @Column(name = "avatar_url", nullable = true)
+  private String avatarUrl;
+
+  @Column(name = "website_url", nullable = false)
+  private String websiteUrl;
+
   @Column(nullable = false)
   @GenericField()
   private String status;

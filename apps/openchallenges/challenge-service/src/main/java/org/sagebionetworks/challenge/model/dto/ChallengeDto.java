@@ -42,6 +42,12 @@ public class ChallengeDto {
   @JsonProperty("platform")
   private SimpleChallengePlatformDto platform;
 
+  @JsonProperty("websiteUrl")
+  private String websiteUrl;
+
+  @JsonProperty("avatarUrl")
+  private String avatarUrl;
+
   @JsonProperty("incentives")
   @Valid
   private List<ChallengeIncentiveDto> incentives = new ArrayList<>();
@@ -233,6 +239,44 @@ public class ChallengeDto {
 
   public void setPlatform(SimpleChallengePlatformDto platform) {
     this.platform = platform;
+  }
+
+  public ChallengeDto websiteUrl(String websiteUrl) {
+    this.websiteUrl = websiteUrl;
+    return this;
+  }
+
+  /**
+   * Get websiteUrl
+   *
+   * @return websiteUrl
+   */
+  @Schema(name = "websiteUrl", required = false)
+  public String getWebsiteUrl() {
+    return websiteUrl;
+  }
+
+  public void setWebsiteUrl(String websiteUrl) {
+    this.websiteUrl = websiteUrl;
+  }
+
+  public ChallengeDto avatarUrl(String avatarUrl) {
+    this.avatarUrl = avatarUrl;
+    return this;
+  }
+
+  /**
+   * Get avatarUrl
+   *
+   * @return avatarUrl
+   */
+  @Schema(name = "avatarUrl", required = false)
+  public String getAvatarUrl() {
+    return avatarUrl;
+  }
+
+  public void setAvatarUrl(String avatarUrl) {
+    this.avatarUrl = avatarUrl;
   }
 
   public ChallengeDto incentives(List<ChallengeIncentiveDto> incentives) {
@@ -450,6 +494,8 @@ public class ChallengeDto {
         && Objects.equals(this.status, challenge.status)
         && Objects.equals(this.difficulty, challenge.difficulty)
         && Objects.equals(this.platform, challenge.platform)
+        && Objects.equals(this.websiteUrl, challenge.websiteUrl)
+        && Objects.equals(this.avatarUrl, challenge.avatarUrl)
         && Objects.equals(this.incentives, challenge.incentives)
         && Objects.equals(this.submissionTypes, challenge.submissionTypes)
         && Objects.equals(this.inputDataTypes, challenge.inputDataTypes)
@@ -470,6 +516,8 @@ public class ChallengeDto {
         status,
         difficulty,
         platform,
+        websiteUrl,
+        avatarUrl,
         incentives,
         submissionTypes,
         inputDataTypes,
@@ -491,6 +539,8 @@ public class ChallengeDto {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
+    sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
+    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
     sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
