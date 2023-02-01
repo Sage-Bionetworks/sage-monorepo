@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { NotFoundComponent } from './not-found.component';
-import { UiModule } from '@sagebionetworks/openchallenges/ui';
+import { FooterComponent, UiModule } from '@sagebionetworks/openchallenges/ui';
 
 const routes: Routes = [{ path: '', component: NotFoundComponent }];
 
@@ -14,6 +14,7 @@ const routes: Routes = [{ path: '', component: NotFoundComponent }];
     RouterModule.forChild(routes),
     MatCardModule,
     UiModule,
+    FooterComponent,
   ],
   exports: [NotFoundComponent],
 })

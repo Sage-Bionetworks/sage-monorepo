@@ -8,7 +8,7 @@ import { OrgProfileChallengesModule } from './org-profile-challenges/org-profile
 import { OrgProfileMembersModule } from './org-profile-members/org-profile-members.module';
 import { OrgProfileRoutingModule } from './org-profile-routing.module';
 import { OrgProfileStatsModule } from './org-profile-stats/org-profile-stats.module';
-import { UiModule } from '@sagebionetworks/openchallenges/ui';
+import { FooterComponent, UiModule } from '@sagebionetworks/openchallenges/ui';
 
 @NgModule({
   declarations: [OrgProfileComponent],
@@ -22,6 +22,7 @@ import { UiModule } from '@sagebionetworks/openchallenges/ui';
     OrgProfileRoutingModule,
     OrgProfileStatsModule,
     UiModule,
+    FooterComponent,
   ],
   exports: [OrgProfileComponent],
 })
