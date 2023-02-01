@@ -16,8 +16,6 @@ export * from './challengeSubmissionType';
 export * from './challengesPage';
 export * from './challengesPageAllOf';
 export * from './organization';
-export * from './organizationAllOf';
-export * from './organizationCreateRequest';
 export * from './organizationsPage';
 export * from './organizationsPageAllOf';
 export * from './pageMetadata';
