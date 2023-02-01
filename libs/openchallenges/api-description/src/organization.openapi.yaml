@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: Challenge Organization API
+  title: OpenChallenges Organization REST API
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo
@@ -18,5 +18,5 @@ tags:
 paths:
   /organizations:
     $ref: paths/organizations.yaml
-  /organizations/{organizationLogin}:
-    $ref: paths/organizations/@{organizationLogin}.yaml
+  /organizations/{org}:
+    $ref: paths/organizations/@{org}.yaml

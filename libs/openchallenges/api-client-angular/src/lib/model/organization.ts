@@ -15,22 +15,18 @@
  * An organization
  */
 export interface Organization { 
+    name: string;
     /**
      * An email address.
      */
-    email?: string;
+    email: string;
     /**
      * The login of an organization
      */
     login: string;
-    name?: string;
-    avatarUrl?: string | null;
-    websiteUrl?: string;
-    description?: string;
-    /**
-     * The unique identifier of an organization
-     */
-    id: number;
+    description: string;
+    avatarUrl: string | null;
+    websiteUrl: string;
     createdAt: string;
     updatedAt: string;
 }

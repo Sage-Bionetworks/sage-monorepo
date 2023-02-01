@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: Challenge Organization API
+  title: OpenChallenges Organization REST API
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo
@@ -37,9 +37,9 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /organizations/{organizationLogin}:
+  /organizations/{org}:
     parameters:
-      - $ref: '#/components/parameters/organizationLogin'
+      - $ref: '#/components/parameters/org'
     get:
       tags:
         - Organization
@@ -77,10 +77,10 @@ components:
         format: int32
         default: 100
         minimum: 1
-    organizationLogin:
-      name: organizationLogin
+    org:
+      name: org
       in: path
-      description: The login of the organization
+      description: The unique identifier of the organization.
       required: true
       schema:
         $ref: '#/components/schemas/OrganizationLogin'
@@ -136,17 +136,20 @@ components:
       maxLength: 25
       pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
       example: example-org
-    OrganizationCreateRequest:
+    Organization:
       type: object
-      description: The information required to create an org account
+      description: An organization
       properties:
+        name:
+          type: string
+          example: Example organization
         email:
           $ref: '#/components/schemas/Email'
         login:
           $ref: '#/components/schemas/OrganizationLogin'
-        name:
+        description:
           type: string
-          example: Example organization
+          example: A description of the organization.
         avatarUrl:
           type: string
           format: url
@@ -156,37 +159,23 @@ components:
           type: string
           format: url
           example: https://example.com
-        description:
+        createdAt:
           type: string
-          example: A short description of the organization.
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
       required:
+        - name
+        - email
         - login
-    OrganizationId:
-      description: The unique identifier of an organization
-      type: integer
-      format: int64
-      example: 1
-    Organization:
-      type: object
-      description: An organization
-      allOf:
-        - $ref: '#/components/schemas/OrganizationCreateRequest'
-        - type: object
-          properties:
-            id:
-              $ref: '#/components/schemas/OrganizationId'
-            createdAt:
-              type: string
-              format: date-time
-              example: '2022-07-04T22:19:11Z'
-            updatedAt:
-              type: string
-              format: date-time
-              example: '2022-07-04T22:19:11Z'
-          required:
-            - id
-            - createdAt
-            - updatedAt
+        - description
+        - avatarUrl
+        - websiteUrl
+        - createdAt
+        - updatedAt
     OrganizationsPage:
       type: object
       description: A page of organizations
