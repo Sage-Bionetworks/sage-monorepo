@@ -13,11 +13,8 @@ export const routes: Routes = [
     path: 'about',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/about').then(
-        (m) => m.AboutModule
+        (routes) => routes.routes
       ),
-    // <<<<<<< HEAD
-    //     canActivate: [KAuthGuard],
-    // =======
     data: {},
   },
   {

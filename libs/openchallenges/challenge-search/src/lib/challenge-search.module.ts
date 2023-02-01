@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { UiModule } from '@sagebionetworks/openchallenges/ui';
+import { FooterComponent, UiModule } from '@sagebionetworks/openchallenges/ui';
 import { MatIconModule } from '@angular/material/icon';
 import { ChallengeSearchComponent } from './challenge-search.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -30,6 +30,7 @@ const routes: Routes = [{ path: '', component: ChallengeSearchComponent }];
     PanelModule,
     RadioButtonModule,
     ReactiveFormsModule,
+    FooterComponent,
   ],
   declarations: [ChallengeSearchComponent],
   exports: [ChallengeSearchComponent],

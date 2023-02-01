@@ -15,3 +15,4 @@ export * from './lib/organization-card/mock-organizations';
 export * from './lib/user-button/menu-item';
 export * from './lib/user-button/user-menu-items';
 export * from './lib/user-button/mock-user';
+export * from './lib/footer/footer.component';

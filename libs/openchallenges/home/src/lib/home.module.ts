@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedUtilModule } from '@sagebionetworks/shared/util';
-import { UiModule } from '@sagebionetworks/openchallenges/ui';
+import { FooterComponent, UiModule } from '@sagebionetworks/openchallenges/ui';
 import { HomeComponent } from './home.component';
 import { ChallengeSearchModule } from './challenge-search/challenge-search.module';
 import { ChallengeHostListModule } from './challenge-host-list/challenge-host-list.module';
@@ -26,6 +26,7 @@ import { HomeRoutingModule } from './home-routing.module';
     StatisticsViewerModule,
     TopicsViewerModule,
     SharedUtilModule,
+    FooterComponent,
   ],
 })
 export class HomeModule {}
