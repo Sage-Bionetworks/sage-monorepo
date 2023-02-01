@@ -11,7 +11,7 @@ spring:
     hibernate:
       ddl-auto: update
   jackson:
-    date-format: org.sagebionetworks.challenge.RFC3339DateFormat
+    date-format: org.sagebionetworks.openchallenges.organization.service.RFC3339DateFormat
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
   flyway:
@@ -70,5 +70,5 @@ app:
 #   api-docs:
 #     enabled: true
 #     path: /api/v1/api-docs/openapi.json
-#   packagesToScan: org.sagebionetworks.challenge.controller
+#   packagesToScan: org.sagebionetworks.openchallenges.organization.service.controller
 #   pathsToMatch: /**
