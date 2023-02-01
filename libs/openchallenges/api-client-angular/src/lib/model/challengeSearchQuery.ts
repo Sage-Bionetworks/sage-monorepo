@@ -30,7 +30,7 @@ export interface ChallengeSearchQuery {
      */
     pageSize?: number;
     sort?: ChallengeSort;
-    direction?: ChallengeDirection;
+    direction?: ChallengeDirection | null;
     /**
      * An array of challenge difficulty levels used to filter the results.
      */

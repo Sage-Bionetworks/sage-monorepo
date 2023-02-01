@@ -24,24 +24,18 @@
       ],
       "@sagebionetworks/openchallenges/assets": ["libs/openchallenges/assets/src/index.ts"],
       "@sagebionetworks/openchallenges/auth": ["libs/openchallenges/auth/src/index.ts"],
-      "@sagebionetworks/openchallenges/challenge": [
-        "libs/openchallenges/challenge/src/index.ts"
-      ],
+      "@sagebionetworks/openchallenges/challenge": ["libs/openchallenges/challenge/src/index.ts"],
       "@sagebionetworks/openchallenges/challenge-search": [
         "libs/openchallenges/challenge-search/src/index.ts"
       ],
       "@sagebionetworks/openchallenges/config": ["libs/openchallenges/config/src/index.ts"],
       "@sagebionetworks/openchallenges/home": ["libs/openchallenges/home/src/index.ts"],
       "@sagebionetworks/openchallenges/login": ["libs/openchallenges/login/src/index.ts"],
-      "@sagebionetworks/openchallenges/not-found": [
-        "libs/openchallenges/not-found/src/index.ts"
-      ],
+      "@sagebionetworks/openchallenges/not-found": ["libs/openchallenges/not-found/src/index.ts"],
       "@sagebionetworks/openchallenges/org-profile": [
         "libs/openchallenges/org-profile/src/index.ts"
       ],
-      "@sagebionetworks/openchallenges/org-search": [
-        "libs/openchallenges/org-search/src/index.ts"
-      ],
+      "@sagebionetworks/openchallenges/org-search": ["libs/openchallenges/org-search/src/index.ts"],
       "@sagebionetworks/openchallenges/pages": ["libs/openchallenges/pages/src/index.ts"],
       "@sagebionetworks/openchallenges/signup": ["libs/openchallenges/signup/src/index.ts"],
       "@sagebionetworks/openchallenges/styles": ["libs/openchallenges/styles/src/index.ts"],

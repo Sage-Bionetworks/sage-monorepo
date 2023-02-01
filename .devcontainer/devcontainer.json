@@ -1,6 +1,6 @@
 {
   "name": "Sage",
-  "image": "sagebionetworks/sage-devcontainer:3de9f17",
+  "image": "sagebionetworks/sage-devcontainer:67f8864",
 
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2.0.0": {
@@ -27,10 +27,10 @@
     "mtxr.sqltools-driver-pg",
     "mtxr.sqltools",
     "nrwl.angular-console",
-    "Pivotal.vscode-boot-dev-pack",
     "ritwickdey.LiveServer",
     "shengchen.vscode-checkstyle",
     "stkb.rewrap",
+    "vmware.vscode-boot-dev-pack",
     "vscjava.vscode-gradle",
     "vscjava.vscode-java-pack",
     "webhint.vscode-webhint"

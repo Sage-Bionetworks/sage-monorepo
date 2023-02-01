@@ -1,0 +1,3 @@
+# OpenChallenges Kafka Model
+
+TBD

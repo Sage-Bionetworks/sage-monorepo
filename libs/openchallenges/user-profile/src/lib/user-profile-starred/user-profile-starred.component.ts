@@ -1,18 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-// import { Challenge, Organization, User } from '@sagebionetworks/api-angular';
+import { User } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 import {
   Challenge,
-  User,
-} from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
-import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
+  ChallengeSearchQuery,
+  ChallengeService,
+  Organization,
+} from '@sagebionetworks/openchallenges/api-client-angular';
 import { Tab } from '../tab.model';
 import { USER_PROFILE_STARRED_TABS } from './user-profile-starred-tabs';
-import {
-  MOCK_CHALLENGES,
-  MOCK_ORGANIZATIONS,
-} from '@sagebionetworks/openchallenges/ui';
-import { Paginator } from 'primeng/paginator';
-import { BehaviorSubject, of, switchMap } from 'rxjs';
+import { MOCK_ORGANIZATIONS } from '@sagebionetworks/openchallenges/ui';
+import { BehaviorSubject, switchMap } from 'rxjs';
 import { assign } from 'lodash';
 
 @Component({
@@ -23,7 +20,6 @@ import { assign } from 'lodash';
 export class UserProfileStarredComponent implements OnInit {
   @Input() user!: User;
   @Input() loggedIn!: boolean;
-  // challenges: Challenge[] = MOCK_CHALLENGES;
   organizations: Organization[] = MOCK_ORGANIZATIONS;
   stars: Challenge[] = [];
   starred!: boolean;
@@ -31,51 +27,34 @@ export class UserProfileStarredComponent implements OnInit {
   tabKeys: string[] = Object.keys(this.tabs);
   activeTab: Tab = this.tabs['challenges'];
 
-  // mock up to query challenge results
-  private query: BehaviorSubject<any> = new BehaviorSubject<any>({
-    offset: 0,
-    limit: 12,
-  });
+  challenges: Challenge[] = [];
+  pageNumber = 0;
+  pageSize = 12;
+  totalChallengesCount = 0;
 
-  limit = 12;
-  offset = 0;
-  challengeResultsCount = 0;
-  challenges!: Challenge[];
+  private query: BehaviorSubject<ChallengeSearchQuery> =
+    new BehaviorSubject<ChallengeSearchQuery>({});
+
+  constructor(private challengeService: ChallengeService) {}
 
   ngOnInit(): void {
     this.query
-      .pipe(
-        switchMap((query: any) =>
-          of({
-            challenges: []
-              .concat(...new Array(100).fill(MOCK_CHALLENGES))
-              .slice(query.offset, query.offset + query.limit),
-            totalResults: 100 * MOCK_CHALLENGES.length,
-          })
-        )
-      )
+      .pipe(switchMap((query) => this.challengeService.listChallenges(query)))
       .subscribe((page) => {
-        this.challenges = page.challenges;
-        console.log(this.challenges);
-        this.challengeResultsCount = page.totalResults;
+        this.totalChallengesCount = page.totalElements;
+        this.challenges = page.challenges.filter((c) => c.starredCount > 0);
       });
   }
 
-  updateQuery(): void {
-    const query = assign(this.query.getValue(), {
-      offset: this.offset,
-      limit: this.limit,
+  onPageChange(event: any) {
+    const newQuery = assign(this.query.getValue(), {
+      pageNumber: event.page,
+      pageSize: event.rows,
     });
-    this.query.next(query);
+    this.query.next(newQuery);
   }
 
   clickEvent(tab: string): void {
     this.activeTab = this.tabs[tab];
-  }
-
-  onPageChange(event: Paginator) {
-    this.offset = event.first;
-    this.limit = event.rows;
-    this.updateQuery();
   }
 }

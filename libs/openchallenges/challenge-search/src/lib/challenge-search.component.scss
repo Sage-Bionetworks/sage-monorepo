@@ -1,11 +1,3 @@
-@media screen and (max-width: 768px) {
-  #bottom {
-    flex-direction: column;
-  }
-  // .facets {
-  //   min-width: 320px;
-  // }
-}
 .search-sort-container {
   gap: 24px;
   justify-content: space-between;
@@ -56,13 +48,11 @@
   text-align: center;
 }
 #bottom {
-  margin: 50px 0;
   display: flex;
   flex-wrap: nowrap;
 }
 
 .facets {
-  margin: 18px;
   padding: 48px 21px;
   min-width: 320px;
   display: flex;
@@ -104,7 +94,4 @@
 
 .calendar-group {
   align-items: center;
-}
-.main {
-  margin: 18px;
 }

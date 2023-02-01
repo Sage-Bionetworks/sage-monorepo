@@ -280,6 +280,12 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       case ENDING_SOON -> {
         return sf.field("end_date").order(orderWithDefaultAsc).toSort();
       }
+      case RECENTLY_ENDED -> {
+        return sf.field("end_date").order(orderWithDefaultDesc).toSort();
+      }
+      case RECENTLY_STARTED -> {
+        return sf.field("start_date").order(orderWithDefaultDesc).toSort();
+      }
       case RELEVANCE -> {
         return relevanceSort;
       }
@@ -302,6 +308,12 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     switch (query.getSort()) {
       case ENDING_SOON -> {
         return pf.range().field("end_date").between(now, null).toPredicate();
+      }
+      case RECENTLY_ENDED -> {
+        return pf.range().field("end_date").between(null, now).toPredicate();
+      }
+      case RECENTLY_STARTED -> {
+        return pf.range().field("start_date").between(null, now).toPredicate();
       }
       case STARTING_SOON -> {
         return pf.range().field("start_date").between(now, null).toPredicate();

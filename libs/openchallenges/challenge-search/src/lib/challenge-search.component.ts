@@ -51,23 +51,7 @@ export class ChallengeSearchComponent
   datepipe: DatePipe = new DatePipe('en-US');
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
-    new BehaviorSubject<ChallengeSearchQuery>({
-      pageNumber: 0,
-      pageSize: 0,
-      sort: undefined,
-      direction: undefined,
-      searchTerms: undefined,
-      minStartDate: undefined,
-      maxStartDate: undefined,
-      status: [],
-      difficulties: [],
-      submissionTypes: [],
-      incentives: [],
-      platforms: [],
-      inputDataTypes: [],
-      // organizations: [],
-      // organizers: [],
-    });
+    new BehaviorSubject<ChallengeSearchQuery>({});
 
   // set a default behaviorSubject to trigger searchTearm's changes
   private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
@@ -86,7 +70,7 @@ export class ChallengeSearchComponent
   selectedYear!: DateRange | undefined;
 
   pageNumber = 0;
-  pageSize = 50;
+  pageSize = 20;
   searchResultsCount = 0;
 
   // define filters
@@ -123,6 +107,11 @@ export class ChallengeSearchComponent
     // set default selection
     this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
     this.sortedBy = challengeSortFilterValues[0].value as string;
+
+    // update the total number of challenges in database with empty query
+    this.challengeService
+      .listChallenges({} as ChallengeSearchQuery)
+      .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
     // update input data types filter values
     this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
@@ -169,6 +158,7 @@ export class ChallengeSearchComponent
     //       active: false,
     //     })))
     // );
+
     const defaultQuery: ChallengeSearchQuery = {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
@@ -277,6 +267,14 @@ export class ChallengeSearchComponent
   // private listOrganizers(): Observable<ChallengeOrganizer[]> {
   //   return of(MOCK_CHALLENGE_ORGANIZERS);
   // }
+
+  onPageChange(event: any) {
+    const newQuery = assign(this.query.getValue(), {
+      pageNumber: event.page,
+      pageSize: event.rows,
+    });
+    this.query.next(newQuery);
+  }
 
   openSnackBar(message: string) {
     this._snackBar.open(message, undefined, {

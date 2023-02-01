@@ -39,12 +39,13 @@
           [(ngModel)]="sortedBy"
           optionLabel="label"
           optionValue="value"
+          scrollHeight="unset"
           (onChange)="onSortChange()"
         ></p-dropdown>
       </div>
     </div>
   </section>
-  <section id="bottom" class="row">
+  <section id="bottom" class="content">
     <div class="facets">
       <p-panel
         header="Challenge Year"
@@ -99,16 +100,19 @@
         <p-divider *ngIf="!isLast"></p-divider>
       </ng-container>
     </div>
-    <div class="main col">
+    <div class="main">
       <h3>Results ({{ searchResultsCount }})</h3>
       <div class="card-group">
-        <openchallenges-challenge-card
-          *ngFor="let challenge of challenges"
-          [challenge]="challenge"
-          [routerLink]="['/challenge', challenge.name]"
-        >
+        <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge">
         </openchallenges-challenge-card>
       </div>
+      <openchallenges-paginator
+        [pageNumber]="pageNumber"
+        [pageSize]="pageSize"
+        [totalRecords]="totalChallengesCount"
+        [itemsPerPage]="[20, 50, 100]"
+        (pageChange)="onPageChange($event)"
+      ></openchallenges-paginator>
     </div>
   </section>
 </div>

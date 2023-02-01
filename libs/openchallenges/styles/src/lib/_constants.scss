@@ -4,7 +4,7 @@
 $pi: 3.14159264;
 $padding-test: 20px;
 
-// figma variables
+// Figma variables
 $dl-size-size-large: 144px;
 $dl-size-size-small: 48px;
 $dl-size-size-medium: 96px;
@@ -25,3 +25,10 @@ $dl-space-space-fourunits: 64px;
 $dl-radius-radius-radius16: 16px;
 $dl-space-space-threeunits: 48px;
 $dl-space-space-oneandhalfunits: 24px;
+
+// Breakpoints from https://getbootstrap.com/docs/5.0/layout/breakpoints/
+$sm-breakpoint: 576px;
+$md-breakpoint: 768px;
+$lg-breakpoint: 992px;
+$xl-breakpoint: 1200px;
+$xxl-breakpoint: 1400px;

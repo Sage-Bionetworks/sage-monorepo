@@ -1,3 +1,5 @@
+@use './lib/constants';
+
 html,
 body {
   height: 100vh;
@@ -22,6 +24,13 @@ body {
 .fill-empty {
   max-width: 920px;
 }
+.content {
+  @extend .row;
+  max-width: 2000px;
+  margin: auto;
+  padding: 48px 32px;
+  gap: 36px;
+}
 
 // TEXT
 .text-left {
@@ -44,7 +53,7 @@ body {
   flex-flow: column wrap;
   align-content: center;
 }
-.btn-group>*:first-child {
+.btn-group > *:first-child {
   align-self: stretch;
 }
 .btn-group button {
@@ -56,13 +65,18 @@ body {
 .card-group {
   width: 100%;
   display: flex;
-  box-sizing: border-box;
-  align-items: flex-start;
-  flex-shrink: 1;
   flex-wrap: wrap;
+  gap: 24px;
+  padding: 28px 0;
+}
 
-  & > * {
-    margin: 12px;
+@media screen and (max-width: constants.$md-breakpoint) {
+  .content {
+    flex-direction: column;
+  }
+  .card-group {
+    flex-direction: column;
+    align-items: center;
   }
 }
 
