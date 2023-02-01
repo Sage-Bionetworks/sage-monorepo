@@ -24,21 +24,12 @@ spring:
             username: admin
             password: admin
   jackson:
-    date-format: org.sagebionetworks.challenge.RFC3339DateFormat
+    date-format: org.sagebionetworks.openchallenges.challenge.service.RFC3339DateFormat
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
   flyway:
     enabled: true
   #   cleanOnValidationError: true
-  rabbitmq:
-    host: openchallenges-rabbitmq
-    port: 8020
-    username: openchallenges
-    password: changeme
-    exchange: challenge.exchange
-    queue: challenge.queue
-    routingkey: challenge.routingkey
-  message: message succesfuly sent
   zipkin:
     base-url: http://openchallenges-zipkin:9411
 

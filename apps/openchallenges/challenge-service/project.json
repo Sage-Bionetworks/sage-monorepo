@@ -83,13 +83,12 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    "openchallenges-api-gateway",
-    "openchallenges-elasticsearch",
-    "openchallenges-keycloak",
-    "openchallenges-mariadb",
-    "openchallenges-rabbitmq",
-    "openchallenges-service-registry",
-    "openchallenges-zipkin",
+    // "openchallenges-api-gateway",
+    // "openchallenges-elasticsearch",
+    // "openchallenges-keycloak",
+    // "openchallenges-mariadb",
+    // "openchallenges-service-registry",
+    // "openchallenges-zipkin",
     "shared-java-util"
   ]
 }

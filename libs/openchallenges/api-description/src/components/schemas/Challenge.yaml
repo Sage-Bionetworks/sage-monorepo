@@ -15,6 +15,12 @@ properties:
     $ref: ChallengeDifficulty.yaml
   platform:
     $ref: SimpleChallengePlatform.yaml
+  websiteUrl:
+    type: string
+    format: url
+  avatarUrl:
+    type: string
+    format: url
   incentives:
     type: array
     items:

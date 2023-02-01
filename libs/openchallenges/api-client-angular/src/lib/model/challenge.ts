@@ -40,6 +40,8 @@ export interface Challenge {
     status: ChallengeStatus;
     difficulty: ChallengeDifficulty;
     platform: SimpleChallengePlatform;
+    websiteUrl?: string;
+    avatarUrl?: string;
     incentives: Array<ChallengeIncentive>;
     submissionTypes: Array<ChallengeSubmissionType>;
     inputDataTypes?: Array<SimpleChallengeInputDataType>;
