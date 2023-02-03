@@ -5,22 +5,19 @@ import {
   catchError,
   map,
   Observable,
-  of,
   Subscription,
   switchMap,
   throwError,
 } from 'rxjs';
 import { Tab } from './tab.model';
 import { ORG_PROFILE_TABS } from './org-profile-tabs';
-import { MOCK_ORGANIZATIONS, Avatar } from '@sagebionetworks/openchallenges/ui';
+import { Avatar } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
   Organization,
   OrganizationService,
-  OrganizationsPage,
   BasicError as ApiClientBasicError,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { isApiClientError } from '@sagebionetworks/openchallenges/util';
 
 @Component({
   selector: 'openchallenges-org-profile',
@@ -30,19 +27,17 @@ import { isApiClientError } from '@sagebionetworks/openchallenges/util';
 export class OrgProfileComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
-  organization$: Observable<Organization> = of(MOCK_ORGANIZATIONS[0]);
+  organization$!: Observable<Organization>;
   loggedIn = true;
   organizationAvatar!: Avatar;
   tabs = ORG_PROFILE_TABS;
   tabKeys: string[] = Object.keys(this.tabs);
   activeTab: Tab = this.tabs['overview'];
   private subscriptions: Subscription[] = [];
-  private useLocalOrganizationMock = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private route: ActivatedRoute,
     private readonly configService: ConfigService,
     private organizationService: OrganizationService
   ) {
@@ -50,25 +45,18 @@ export class OrgProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.useLocalOrganizationMock) {
-      this.organization$ = this.route.params.pipe(
-        switchMap((params) =>
-          this.organizationService.getOrganization(params['orgLogin'])
-        ),
-        catchError((err) => {
-          const error = err.error as ApiClientBasicError;
-          if (isApiClientError(error)) {
-            if (error.status === 404) {
-              // TODO: Redirect to org not found page or component
-              // return of(undefined);
-            }
-          }
-          return throwError(() => new Error('test'));
-        })
-      );
-    }
-
-    this.route.params.subscribe((param) => console.log(param['orgLogin']));
+    this.organization$ = this.activatedRoute.params.pipe(
+      switchMap((params) =>
+        this.organizationService.getOrganization(params['orgLogin'])
+      ),
+      catchError((err) => {
+        const error = err.error as ApiClientBasicError;
+        if (error.status === 404) {
+          this.router.navigate(['/not-found']);
+        }
+        return throwError(() => new Error(error.detail));
+      })
+    );
 
     const activeTab$ = this.activatedRoute.queryParamMap.pipe(
       map((params: ParamMap) => params.get('tab')),
@@ -78,8 +66,8 @@ export class OrgProfileComponent implements OnInit {
     this.organization$.subscribe(
       (org) =>
         (this.organizationAvatar = {
-          name: org.name ? (org.name as string) : org.login.replace(/-/g, ' '),
-          src: org.avatarUrl ? org.avatarUrl : '',
+          name: org.name || org.login.replace(/-/g, ' '),
+          src: org.avatarUrl || '',
           size: 250,
         })
     );
@@ -93,12 +81,5 @@ export class OrgProfileComponent implements OnInit {
     });
 
     this.subscriptions.push(activeTabSub);
-
-    // demo: get list of organizations from the new backend.
-    this.organizationService
-      .listOrganizations()
-      .subscribe((page: OrganizationsPage) =>
-        console.log('Organizations page', page)
-      );
   }
 }

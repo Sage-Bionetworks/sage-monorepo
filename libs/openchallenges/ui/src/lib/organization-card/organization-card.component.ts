@@ -14,11 +14,10 @@ export class OrganizationCardComponent implements OnInit {
   ngOnInit(): void {
     if (this.organization) {
       this.organizationAvatar = {
-        name: this.organization.name
-          ? (this.organization.name as string)
-          : this.organization.login.replace(/-/g, ' '),
-        src: this.organization.avatarUrl ? this.organization.avatarUrl : '',
-        size: 188,
+        name:
+          this.organization.name || this.organization.login.replace(/-/g, ' '),
+        src: this.organization.avatarUrl || '',
+        size: 120,
       };
     }
   }

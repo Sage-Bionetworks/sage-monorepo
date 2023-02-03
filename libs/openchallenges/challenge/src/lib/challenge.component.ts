@@ -23,7 +23,7 @@ import { SeoService } from '@sagebionetworks/shared/util';
 export class ChallengeComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
-  challenge$: Observable<Challenge> = of(DEPRECATED_MOCK_CHALLENGES[0]);
+  challenge$!: Observable<Challenge>;
   loggedIn = false;
   progressValue = 0;
   remainDays!: number | undefined;
@@ -36,7 +36,6 @@ export class ChallengeComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private route: ActivatedRoute,
     private readonly configService: ConfigService,
     private seoService: SeoService,
     private renderer2: Renderer2
@@ -45,12 +44,11 @@ export class ChallengeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe((param) => {
+    this.activatedRoute.params.subscribe((param) => {
       const challenge = DEPRECATED_MOCK_CHALLENGES.find(
         (c) => c.name === param['challengeName']
       );
       if (challenge) {
-        console.log(challenge);
         this.challenge$ = of(challenge);
       }
     });
@@ -62,11 +60,9 @@ export class ChallengeComponent implements OnInit {
 
     this.challenge$.subscribe((challenge) => {
       this.challengeAvatar = {
-        name: challenge.displayName
-          ? (challenge.displayName as string)
-          : challenge.name.replace(/-/g, ' '),
-        src: '', // TODO: Replace with avatarUrl once implemented in Challenge Object
-        size: 320,
+        name: challenge.displayName || challenge.name.replace(/-/g, ' '),
+        src: 'https://via.placeholder.com/300.png', // TODO: Replace with avatarUrl once implemented in Challenge Object
+        size: 250,
       };
 
       this.progressValue =

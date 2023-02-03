@@ -12,8 +12,13 @@
 .text-center {
   text-align: center;
 }
+.sponsor-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 #acknowledgements {
-  background: #F8F8F8;;
+  background: #f8f8f8;
   margin-top: 12px;
   padding: 88px 0;
 }

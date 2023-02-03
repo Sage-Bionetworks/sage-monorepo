@@ -12,10 +12,12 @@
     </div>
     <div class="col">
       <p class="section-title">HOSTED BY</p>
-      <openchallenges-organization-card
-        *ngFor="let organization of organizations"
-        [organization]="organization"
-      ></openchallenges-organization-card>
+      <div class="card-group">
+        <openchallenges-organization-card
+          *ngFor="let organization of organizations"
+          [organization]="organization"
+        ></openchallenges-organization-card>
+      </div>
     </div>
   </div>
 </main>

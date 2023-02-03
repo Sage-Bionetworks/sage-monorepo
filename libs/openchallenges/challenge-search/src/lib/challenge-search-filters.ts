@@ -26,7 +26,7 @@ export const challengeStatusFilter: Filter = {
 };
 
 export const challengeDifficultyFilter: Filter = {
-  query: 'difficulty',
+  query: 'difficulties',
   label: 'Difficulty',
   values: challengeDifficultyFilterValues,
   collapsed: true,
@@ -40,7 +40,7 @@ export const challengeSubmissionTypesFilter: Filter = {
 };
 
 export const challengeIncentiveTypesFilter: Filter = {
-  query: 'incentiveTypes',
+  query: 'incentives',
   label: 'Incentive Type',
   values: challengeIncentiveTypesFilterValues,
   collapsed: true,

@@ -1,5 +1,5 @@
 <div *ngIf="challenge">
-  <div class="challenge-card" [routerLink]="['/challenge', challenge.name]">
+  <div class="challenge-card" [routerLink]="['/challenge', snakeCase(challenge.name)]">
     <div class="card-banner">
       <!-- update to retrieve banner path from challenge obj when API ready -->
     </div>
@@ -9,7 +9,9 @@
     </div>
     <div class="card-body">
       <p class="card-title">{{ challenge.name }}</p>
-      <p class="card-subtitle">{{ platform }}</p>
+      <p class="card-subtitle" *ngIf="platform">
+        {{ platform.name }}
+      </p>
       <p class="card-desc">{{ challenge.headline }}</p>
     </div>
     <div class="card-footer">

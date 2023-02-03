@@ -37,7 +37,7 @@ describe('OrganizationCardComponent', () => {
     expect(component.organizationAvatar).toEqual({
       name: MOCK_ORGANIZATIONS[0].name,
       src: MOCK_ORGANIZATIONS[0].avatarUrl,
-      size: 188,
+      size: 120,
     });
   });
 
@@ -47,7 +47,7 @@ describe('OrganizationCardComponent', () => {
     expect(component.organizationAvatar).toEqual({
       name: MOCK_ORGANIZATIONS[0].name,
       src: '',
-      size: 188,
+      size: 120,
     });
   });
 
@@ -57,7 +57,7 @@ describe('OrganizationCardComponent', () => {
     expect(component.organizationAvatar).toEqual({
       name: MOCK_ORGANIZATIONS[0].login.replace(/-/g, ' '),
       src: '',
-      size: 188,
+      size: 120,
     });
   });
 });
