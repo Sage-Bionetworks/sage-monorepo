@@ -29,6 +29,7 @@ CREATE TABLE `challenge_input_data_type`
 CREATE TABLE `challenge`
 (
     `id`                    bigint(20) NOT NULL AUTO_INCREMENT,
+    `slug`                  varchar(255) NOT NULL UNIQUE,
     `name`                  varchar(255) DEFAULT NULL,
     `headline`              varchar(80),
     `description`           varchar(280) NOT NULL,
@@ -41,9 +42,8 @@ CREATE TABLE `challenge`
     `end_date`              DATE,
     -- `email`                 varchar(255) DEFAULT NULL,
     -- `login`                 varchar(255) UNIQUE,
-    -- `avatar_url`            varchar(255) DEFAULT NULL,
-    -- `website_url`           varchar(255) DEFAULT NULL,
-    -- `description`           varchar(255) DEFAULT NULL,
+    `avatar_url`            varchar(255) DEFAULT NULL,
+    `website_url`           varchar(255) DEFAULT NULL,
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
