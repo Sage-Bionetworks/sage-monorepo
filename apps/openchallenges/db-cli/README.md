@@ -7,15 +7,15 @@ instance.
 
 Check the code style.
 
-    nx lint challenge-db-cli
+    nx lint openchallenges-db-cli
 
 Test the client.
 
-    nx test challenge-db-cli
+    nx test openchallenges-db-clii
 
 Build the client.
 
-    nx build challenge-db-cli
+    nx build openchallenges-db-cli
 
 Run the client in watch mode.
 
@@ -23,7 +23,7 @@ Run the client in watch mode.
 
 Run the client.
 
-    yarn run challenge-db-cli --help
+    openchallenges-db-cli --help
 
 Seed the DB with local data (e.g., using the `production` seed).
 
