@@ -2,6 +2,8 @@ HELP.md
 target/
 !**/src/main/**/target/
 !**/src/test/**/target/
+.env
+log/
 
 ### STS ###
 .apt_generated

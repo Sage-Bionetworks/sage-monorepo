@@ -5,7 +5,10 @@ spring:
     config:
       server:
         git:
-          uri: file://workspaces/sage-monorepo/apps/openchallenges/config-server-repository
+          uri: ${CONFIG_SERVER_GIT_URI}
+          default-label: test
+          username: ${CONFIG_SERVER_GIT_USERNAME}
+          password: ${CONFIG_SERVER_GIT_TOKEN}
           clone-on-start: true
     fail-fast: true
 

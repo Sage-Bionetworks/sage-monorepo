@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "organization-service")
+@ConfigurationProperties(prefix = "openchallenges-organization-service")
 public class OrganizationServiceConfigData {
   private String welcomeMessage;
 }
