@@ -3,7 +3,8 @@ package org.sagebionetworks.openchallenges.kaggle.to.kafka.service.runner;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.configuration.KaggleToKafkaServiceConfiguration;
+
+import org.sagebionetworks.openchallenges.app.config.data.KaggleToKafkaServiceConfigData;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.exception.KaggleToKafkaServiceException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
     havingValue = "true")
 public class MockKafkaStreamRunner implements StreamRunner {
 
-  private final KaggleToKafkaServiceConfiguration config;
+  private final KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData;
 
   // private static final Random RANDOM = new Random();
 
@@ -40,16 +41,16 @@ public class MockKafkaStreamRunner implements StreamRunner {
   //       "aliqua"
   //     };
 
-  public MockKafkaStreamRunner(KaggleToKafkaServiceConfiguration config) {
-    this.config = config;
+  public MockKafkaStreamRunner(KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData) {
+    this.kaggleToKafkaServiceConfigData = kaggleToKafkaServiceConfigData;
   }
 
   @Override
   public void start() {
-    String[] searchTerms = config.getKaggleSearchTerms().toArray(String[]::new);
+    String[] searchTerms = kaggleToKafkaServiceConfigData.getKaggleSearchTerms().toArray(String[]::new);
     // int minChallengeNameLength = config.getMockMinChallengeNameLength();
     // int maxChallengeNameLength = config.getMockMaxChallengeNameLength();
-    long sleepMs = config.getMockSleepMs();
+    long sleepMs = kaggleToKafkaServiceConfigData.getMockSleepMs();
 
     log.info(
         "Starting mock filtering Kaggle challenges for search terms {}",

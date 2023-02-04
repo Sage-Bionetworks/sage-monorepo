@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.kaggle.to.kafka.service.configuration;
+package org.sagebionetworks.openchallenges.app.config.data;
 
 import java.util.List;
 import lombok.Data;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "kaggle-to-kafka-service")
-public class KaggleToKafkaServiceConfiguration {
+public class KaggleToKafkaServiceConfigData {
   private List<String> kaggleSearchTerms;
   private String kaggleUsername;
   private String kaggleKey;

@@ -28,6 +28,7 @@ dependencies {
   implementation "org.apache.httpcomponents.client5:httpclient5:${apacheHttpcomponentsVersion}"
   implementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
   implementation "org.sagebionetworks:util:${openchallengesVersion}"
+  implementation "org.sagebionetworks.openchallenges:openchallenges-app-config-data:${openchallengesVersion}"
   implementation "org.sagebionetworks.openchallenges:openchallenges-kafka-admin:${openchallengesVersion}"
   implementation "org.sagebionetworks.openchallenges:openchallenges-kafka-model:${openchallengesVersion}"
   implementation "org.sagebionetworks.openchallenges:openchallenges-kafka-producer:${openchallengesVersion}"

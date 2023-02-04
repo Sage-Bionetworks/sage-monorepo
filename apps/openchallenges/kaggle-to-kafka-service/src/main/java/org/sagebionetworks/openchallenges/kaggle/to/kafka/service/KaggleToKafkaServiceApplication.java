@@ -1,7 +1,8 @@
 package org.sagebionetworks.openchallenges.kaggle.to.kafka.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.configuration.KaggleToKafkaServiceConfiguration;
+
+import org.sagebionetworks.openchallenges.app.config.data.KaggleToKafkaServiceConfigData;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.initializer.StreamInitializer;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.runner.StreamRunner;
 import org.springframework.boot.CommandLineRunner;
@@ -14,17 +15,17 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = "org.sagebionetworks.openchallenges")
 public class KaggleToKafkaServiceApplication implements CommandLineRunner {
 
-  private final KaggleToKafkaServiceConfiguration config;
+  private final KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData;
 
   private final StreamRunner streamRunner;
 
   private final StreamInitializer streamInitializer;
 
   public KaggleToKafkaServiceApplication(
-      KaggleToKafkaServiceConfiguration kaggleToKafkaServiceConfiguration,
+      KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData,
       StreamRunner streamRunner,
       StreamInitializer streamInitializer) {
-    this.config = kaggleToKafkaServiceConfiguration;
+    this.kaggleToKafkaServiceConfigData = kaggleToKafkaServiceConfigData;
     this.streamRunner = streamRunner;
     this.streamInitializer = streamInitializer;
   }
@@ -35,8 +36,8 @@ public class KaggleToKafkaServiceApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    log.info(config.getWelcomeMessage());
-    log.info("{}", config.getKaggleSearchTerms());
+    log.info(kaggleToKafkaServiceConfigData.getWelcomeMessage());
+    log.info("{}", kaggleToKafkaServiceConfigData.getKaggleSearchTerms());
     streamInitializer.init();
     streamRunner.start();
   }
