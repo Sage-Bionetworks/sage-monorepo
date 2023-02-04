@@ -83,6 +83,7 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
+    "openchallenges-app-config-data",
     "openchallenges-kafka-admin",
     "openchallenges-kafka-model",
     "openchallenges-kafka-producer",

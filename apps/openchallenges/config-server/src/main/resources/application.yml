@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: openchallenges-config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${GIT_URI}
+          default-label: ${GIT_DEFAULT_LABEL}
+          username: ${GIT_USERNAME}
+          password: ${GIT_TOKEN}
+          clone-on-start: true
+    fail-fast: true
+
+server:
+  port: 8090
+
+logging:
+  level:
+    ROOT: INFO
+    org.spring.framework.cloud.config: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: env

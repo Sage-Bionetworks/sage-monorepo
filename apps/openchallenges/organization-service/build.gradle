@@ -48,6 +48,10 @@ dependencies {
   // Enable distributed tracing
   implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudVersion}"
   implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudVersion}"
+
+  implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}"
+
+  implementation "org.sagebionetworks.openchallenges:openchallenges-app-config-data:${openchallengesVersion}"
 }
 
 group = 'org.sagebionetworks.openchallenges'

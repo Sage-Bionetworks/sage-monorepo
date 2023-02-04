@@ -1,14 +1,9 @@
-.gradle
-bin/
-lib/*.jar
-maven-legacy/
-tmp/
-log/
-
 HELP.md
 target/
 !**/src/main/**/target/
 !**/src/test/**/target/
+.env
+log/
 
 ### STS ###
 .apt_generated

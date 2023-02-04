@@ -19,6 +19,10 @@ spring:
   #   cleanOnValidationError: true
   zipkin:
     base-url: http://openchallenges-zipkin:9411
+  config:
+    import: 'configserver:http://openchallenges-config-server:8090'
+  profiles:
+    active: dev,local
 
 server:
   port: 8084
