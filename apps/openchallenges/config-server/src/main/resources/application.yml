@@ -5,10 +5,10 @@ spring:
     config:
       server:
         git:
-          uri: ${CONFIG_SERVER_GIT_URI}
+          uri: ${GIT_URI}
           default-label: test
-          username: ${CONFIG_SERVER_GIT_USERNAME}
-          password: ${CONFIG_SERVER_GIT_TOKEN}
+          username: ${GIT_USERNAME}
+          password: ${GIT_TOKEN}
           clone-on-start: true
     fail-fast: true
 

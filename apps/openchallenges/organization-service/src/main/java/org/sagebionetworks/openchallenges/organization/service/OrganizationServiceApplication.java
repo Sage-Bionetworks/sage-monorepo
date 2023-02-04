@@ -27,6 +27,6 @@ public class OrganizationServiceApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    log.info("Welcome message: {}", organizationServiceConfigData.getWelcomeMessage());
+    log.info(organizationServiceConfigData.getWelcomeMessage());
   }
 }
