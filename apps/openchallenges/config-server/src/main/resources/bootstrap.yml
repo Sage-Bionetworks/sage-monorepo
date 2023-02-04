@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: openchallenges-config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: file://workspaces/sage-monorepo/apps/openchallenges/config-server-repository
+          clone-on-start: true
+    fail-fast: true

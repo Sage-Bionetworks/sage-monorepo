@@ -1,26 +1,19 @@
-spring:
-  application:
-    name: openchallenges-config-server
-  cloud:
-    config:
-      server:
-        git:
-          uri: https://github.com/Sage-Bionetworks/sage-monorepo.git
-          search-paths: configuration
-          default-label: main
-
 server:
   port: 8090
 
-management:
-  info:
-    env:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: info
+logging:
+  level:
+    ROOT: INFO
+    org.spring.framework.cloud.config: DEBUG
+# management:
+#   info:
+#     env:
+#       enabled: true
+#   endpoints:
+#     web:
+#       exposure:
+#         include: info
 
-info:
-  app:
-    name: ${spring.application.name}
+# info:
+#   app:
+#     name: ${spring.application.name}
