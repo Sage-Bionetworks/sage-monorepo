@@ -6,7 +6,7 @@ spring:
       server:
         git:
           uri: ${GIT_URI}
-          default-label: test
+          default-label: ${GIT_DEFAULT_LABEL}
           username: ${GIT_USERNAME}
           password: ${GIT_TOKEN}
           clone-on-start: true
