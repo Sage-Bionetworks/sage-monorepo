@@ -22,7 +22,7 @@ dependencies {
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
-group = 'org.sagebionetworks.challenge'
+group = 'org.sagebionetworks.openchallenges'
 version = '0.0.1-SNAPSHOT'
 
 java {

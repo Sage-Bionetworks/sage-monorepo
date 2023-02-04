@@ -1,4 +1,4 @@
-package org.sagebionetworks.challenge;
+package org.sagebionetworks.openchallenges.config.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 
 @EnableConfigServer
 @SpringBootApplication
-public class ChallengeConfigServiceApplication {
+public class OpenChallengesConfigServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ChallengeConfigServiceApplication.class, args);
+		SpringApplication.run(OpenChallengesConfigServerApplication.class, args);
 	}
 
 }
