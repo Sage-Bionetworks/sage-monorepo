@@ -5,8 +5,8 @@ services:
     image: sagebionetworks/openchallenges-config-server:latest
     container_name: openchallenges-config-server
     restart: always
-    # env_file:
-    #   - .env
+    env_file:
+      - .env
     networks:
       - challenge
     ports:
