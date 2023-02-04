@@ -126,3 +126,23 @@ If you are using the git profile, you need to set a Git URI in your configuratio
 2023-02-04 14:45:28 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8090"]
 2023-02-04 14:45:28 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8090 (http) with context path ''
 2023-02-04 14:45:28 [restartedMain] INFO  o.s.o.c.s.OpenChallengesConfigServerApplication - Started OpenChallengesConfigServerApplication in 3.308 seconds (JVM running for 3.926)
+2023-02-04 14:49:42 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final
+2023-02-04 14:49:42 [restartedMain] INFO  o.s.o.c.s.OpenChallengesConfigServerApplication - Starting OpenChallengesConfigServerApplication using Java 17.0.4 on 131d17258f7f with PID 661 (/workspaces/sage-monorepo/apps/openchallenges/config-server/build/classes/java/main started by vscode in /workspaces/sage-monorepo/apps/openchallenges/config-server)
+2023-02-04 14:49:42 [restartedMain] INFO  o.s.o.c.s.OpenChallengesConfigServerApplication - No active profile set, falling back to 1 default profile: "default"
+2023-02-04 14:49:42 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-02-04 14:49:42 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-02-04 14:49:44 [restartedMain] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=1c787a32-f92f-36a7-b846-e93787b25891
+2023-02-04 14:49:45 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8090 (http)
+2023-02-04 14:49:45 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8090"]
+2023-02-04 14:49:45 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2023-02-04 14:49:45 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.65]
+2023-02-04 14:49:46 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2023-02-04 14:49:46 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3746 ms
+2023-02-04 14:49:47 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2023-02-04 14:49:47 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2023-02-04 14:49:47 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8090"]
+2023-02-04 14:49:48 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8090 (http) with context path ''
+2023-02-04 14:49:48 [restartedMain] INFO  o.s.o.c.s.OpenChallengesConfigServerApplication - Started OpenChallengesConfigServerApplication in 6.626 seconds (JVM running for 7.931)
+2023-02-04 14:50:03 [http-nio-8090-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-02-04 14:50:03 [http-nio-8090-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2023-02-04 14:50:03 [http-nio-8090-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms

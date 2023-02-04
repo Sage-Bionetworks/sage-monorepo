@@ -16,3 +16,9 @@ logging:
   level:
     ROOT: INFO
     org.spring.framework.cloud.config: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: env
