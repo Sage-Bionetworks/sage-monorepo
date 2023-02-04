@@ -1,3 +1,14 @@
+spring:
+  application:
+    name: openchallenges-config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: file://workspaces/sage-monorepo/apps/openchallenges/config-server-repository
+          clone-on-start: true
+    fail-fast: true
+
 server:
   port: 8090
 
@@ -5,15 +16,3 @@ logging:
   level:
     ROOT: INFO
     org.spring.framework.cloud.config: DEBUG
-# management:
-#   info:
-#     env:
-#       enabled: true
-#   endpoints:
-#     web:
-#       exposure:
-#         include: info
-
-# info:
-#   app:
-#     name: ${spring.application.name}

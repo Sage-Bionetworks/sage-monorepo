@@ -6,10 +6,10 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 
 @EnableConfigServer
 @SpringBootApplication
-public class OpenChallengesConfigServer {
+public class OpenChallengesConfigServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OpenChallengesConfigServer.class, args);
+		SpringApplication.run(OpenChallengesConfigServerApplication.class, args);
 	}
 
 }
