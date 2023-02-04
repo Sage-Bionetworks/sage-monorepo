@@ -1,6 +1,6 @@
 spring:
   application:
-    name: openchallenges-config-service
+    name: openchallenges-config-server
   cloud:
     config:
       server:

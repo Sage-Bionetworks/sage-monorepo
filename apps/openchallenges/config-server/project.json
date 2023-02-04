@@ -1,20 +1,20 @@
 {
-  "name": "openchallenges-config-service",
+  "name": "openchallenges-config-server",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/openchallenges/config-service/src",
+  "sourceRoot": "apps/openchallenges/config-server/src",
   "projectType": "application",
   "targets": {
     "prepare-java": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "apps/openchallenges/config-service"
+        "cwd": "apps/openchallenges/config-server"
       }
     },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "root": "apps/openchallenges/config-service"
+        "root": "apps/openchallenges/config-server"
       },
       "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
@@ -22,20 +22,20 @@
     "test": {
       "executor": "@nxrocks/nx-spring-boot:test",
       "options": {
-        "root": "apps/openchallenges/config-service"
+        "root": "apps/openchallenges/config-server"
       }
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
-        "root": "apps/openchallenges/config-service"
+        "root": "apps/openchallenges/config-server"
       }
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
-        "cwd": "apps/openchallenges/config-service",
+        "cwd": "apps/openchallenges/config-server",
         "parallel": true
       },
       "dependsOn": ["prepare", "^serve-detach"]
@@ -44,14 +44,14 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "docker compose up -d",
-        "cwd": "apps/openchallenges/config-service"
+        "cwd": "apps/openchallenges/config-server"
       },
       "dependsOn": ["build-image", "prepare", "^serve-detach"]
     },
     "build-image": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
-        "root": "apps/openchallenges/config-service"
+        "root": "apps/openchallenges/config-server"
       },
       "dependsOn": ["^install"]
     }

@@ -138,7 +138,7 @@
       "onAutoForward": "silent"
     },
     "8090": {
-      "label": "openchallenges-config-service",
+      "label": "openchallenges-config-server",
       "onAutoForward": "silent"
     },
     "8091": {

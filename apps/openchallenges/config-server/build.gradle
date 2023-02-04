@@ -35,10 +35,6 @@ tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
 }
 
-springBoot {
-  mainClass = 'org.sagebionetworks.challenge.ChallengeConfigServiceApplication'
-}
-
 bootBuildImage {
-  imageName = 'sagebionetworks/openchallenges-config-service:latest'
+  imageName = 'sagebionetworks/openchallenges-config-server:latest'
 }
