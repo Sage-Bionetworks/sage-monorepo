@@ -8,9 +8,9 @@ services:
     env_file:
       - .env
     networks:
-      - challenge
+      - openchallenges
     ports:
-      - "8082:8082"
+      - "8090:8090"
     command: start-dev
 
 networks:
