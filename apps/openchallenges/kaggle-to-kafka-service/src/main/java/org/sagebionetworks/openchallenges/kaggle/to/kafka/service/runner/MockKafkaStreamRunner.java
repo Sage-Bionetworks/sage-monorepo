@@ -3,7 +3,6 @@ package org.sagebionetworks.openchallenges.kaggle.to.kafka.service.runner;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
-
 import org.sagebionetworks.openchallenges.app.config.data.KaggleToKafkaServiceConfigData;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.exception.KaggleToKafkaServiceException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -47,7 +46,8 @@ public class MockKafkaStreamRunner implements StreamRunner {
 
   @Override
   public void start() {
-    String[] searchTerms = kaggleToKafkaServiceConfigData.getKaggleSearchTerms().toArray(String[]::new);
+    String[] searchTerms =
+        kaggleToKafkaServiceConfigData.getKaggleSearchTerms().toArray(String[]::new);
     // int minChallengeNameLength = config.getMockMinChallengeNameLength();
     // int maxChallengeNameLength = config.getMockMaxChallengeNameLength();
     long sleepMs = kaggleToKafkaServiceConfigData.getMockSleepMs();

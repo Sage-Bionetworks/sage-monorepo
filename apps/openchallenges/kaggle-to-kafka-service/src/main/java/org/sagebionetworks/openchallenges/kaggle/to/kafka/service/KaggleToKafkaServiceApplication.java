@@ -1,7 +1,6 @@
 package org.sagebionetworks.openchallenges.kaggle.to.kafka.service;
 
 import lombok.extern.slf4j.Slf4j;
-
 import org.sagebionetworks.openchallenges.app.config.data.KaggleToKafkaServiceConfigData;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.initializer.StreamInitializer;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.runner.StreamRunner;
