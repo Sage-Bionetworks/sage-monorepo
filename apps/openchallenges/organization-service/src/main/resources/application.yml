@@ -22,7 +22,7 @@ spring:
   config:
     import: 'configserver:http://openchallenges-config-server:8090'
   profiles:
-    active: dev
+    active: dev,local
 
 server:
   port: 8084
