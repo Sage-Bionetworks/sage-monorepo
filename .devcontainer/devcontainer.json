@@ -58,6 +58,7 @@
     8090,
     8091,
     8092,
+    8200,
     8888,
     9200,
     9411,
@@ -147,6 +148,10 @@
     },
     "8092": {
       "label": "openchallenges-core-service",
+      "onAutoForward": "silent"
+    },
+    "8200": {
+      "label": "openchallenges-vault",
       "onAutoForward": "silent"
     },
     "8888": {
