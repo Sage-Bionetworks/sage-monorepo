@@ -8,6 +8,7 @@ plugins {
   id 'java'
   id 'org.springframework.boot' version "${springBootVersion}"
   id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
+  id 'com.diffplug.spotless' version "${spotlessVersion}"
 }
 
 repositories {
@@ -20,6 +21,7 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   implementation "org.springframework.cloud:spring-cloud-config-server:${springCloudVersion}"
+  implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
@@ -38,4 +40,22 @@ tasks.withType(JavaCompile) {
 
 bootBuildImage {
   imageName = 'sagebionetworks/openchallenges-config-server:latest'
+}
+
+spotless {
+  // format 'misc', {
+  //   target '*.gradle', '*.md', '.gitignore'
+
+  //   trimTrailingWhitespace()
+  //   indentWithSpaces(2)
+  //   endWithNewline()
+  // }
+
+  java {
+    target 'src/*/java/**/*.java'
+
+    importOrder()
+    removeUnusedImports()
+    googleJavaFormat()
+  }
 }
