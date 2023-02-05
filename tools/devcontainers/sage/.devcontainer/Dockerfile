@@ -45,6 +45,9 @@ RUN groupadd docker \
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
     nodejs gh ngrok vault \
+  # Fix Vault CLI
+  # See https://github.com/hashicorp/vault/issues/10924
+  && setcap -r /usr/bin/vault \
   && corepack enable yarn \
   && corepack prepare "yarn@${yarnVersion}" --activate \
   # Install @devcontainers/cli
