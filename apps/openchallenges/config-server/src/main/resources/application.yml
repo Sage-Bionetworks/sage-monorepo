@@ -22,6 +22,10 @@ spring:
     fail-fast: true
   profiles:
     active: git,vault
+  security:
+    user:
+      name: openchallenges
+      password: changeme
 
 server:
   port: 8090
