@@ -38,10 +38,13 @@ RUN groupadd docker \
   # Add ngrok repository
   && curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
   && echo "deb https://ngrok-agent.s3.amazonaws.com bullseye main" | tee /etc/apt/sources.list.d/ngrok.list \
+  # Add hashicorp repository
+  && curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add - \
+  && echo "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list \
   # Install extra packages
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
-    nodejs gh ngrok \
+    nodejs gh ngrok vault \
   && corepack enable yarn \
   && corepack prepare "yarn@${yarnVersion}" --activate \
   # Install @devcontainers/cli
