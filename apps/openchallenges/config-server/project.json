@@ -31,6 +31,18 @@
         "root": "apps/openchallenges/config-server"
       }
     },
+    "format": {
+      "executor": "@nxrocks/nx-spring-boot:format",
+      "options": {
+        "root": "apps/openchallenges/config-server"
+      }
+    },
+    "format-check": {
+      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "options": {
+        "root": "apps/openchallenges/config-server"
+      }
+    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
@@ -38,7 +50,7 @@
         "cwd": "apps/openchallenges/config-server",
         "parallel": true
       },
-      "dependsOn": ["prepare", "^serve-detach"]
+      "dependsOn": ["prepare", "^install", "^serve-detach"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -57,5 +69,8 @@
     }
   },
   "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": ["openchallenges-app-config-data"]
+  "implicitDependencies": [
+    "openchallenges-app-config-data",
+    "openchallenges-service-registry"
+  ]
 }

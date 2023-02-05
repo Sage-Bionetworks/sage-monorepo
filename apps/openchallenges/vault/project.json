@@ -1,0 +1,40 @@
+{
+  "name": "openchallenges-vault",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/vault"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/openchallenges/vault"
+      },
+      "dependsOn": ["prepare", "build-image"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/openchallenges/vault"
+      },
+      "dependsOn": ["prepare", "build-image"]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-docker:build",
+      "options": {
+        "context": "apps/openchallenges/vault",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-vault:latest"]
+      }
+    }
+  },
+  "tags": ["type:db", "scope:backend"],
+  "implicitDependencies": []
+}
