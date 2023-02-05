@@ -28,7 +28,7 @@ server:
 
 eureka:
   client:
-    serviceUrl:
+    service-url:
       defaultZone: http://openchallenges-service-registry:8081/eureka
 
 logging:
