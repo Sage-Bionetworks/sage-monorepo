@@ -7,7 +7,7 @@ declare -a hostnames=(
   "127.0.0.1 openchallenges-api-gateway"
   "127.0.0.1 openchallenges-auth-service"
   "127.0.0.1 openchallenges-challenge-service"
-  "127.0.0.1 openchallenges-config-service"
+  "127.0.0.1 openchallenges-config-server"
   "127.0.0.1 openchallenges-core-service"
   "127.0.0.1 openchallenges-elasticsearch"
   "127.0.0.1 openchallenges-keycloak"
@@ -19,6 +19,7 @@ declare -a hostnames=(
   "127.0.0.1 openchallenges-rabbitmq"
   "127.0.0.1 openchallenges-service-registry"
   "127.0.0.1 openchallenges-user-service"
+  "127.0.0.1 openchallenges-vault"
   "127.0.0.1 openchallenges-zipkin"
   "127.0.0.1 schematic-api"
 )

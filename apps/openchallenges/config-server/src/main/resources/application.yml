@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: openchallenges-config-server
+  cloud:
+    config:
+      server:
+        vault:
+          host: openchallenges-vault
+          port: 8200
+          scheme: http
+          order: 1
+          kv-version: 2
+          authentication: TOKEN
+          token: changeme
+        git:
+          uri: ${GIT_URI}
+          default-label: ${GIT_DEFAULT_LABEL}
+          username: ${GIT_USERNAME}
+          password: ${GIT_TOKEN}
+          clone-on-start: true
+          order: 2
+    fail-fast: true
+  profiles:
+    active: git,vault
+  security:
+    user:
+      name: openchallenges
+      password: changeme
+
+server:
+  port: 8090
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://openchallenges-service-registry:8081/eureka
+
+logging:
+  level:
+    ROOT: INFO
+    org.spring.framework.cloud.config: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: env

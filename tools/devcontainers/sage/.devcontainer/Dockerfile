@@ -27,7 +27,7 @@ RUN groupadd docker \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python3-dev python-is-python3 openjdk-17-jdk \
     htop unzip vim wget lsof iproute2 build-essential \
-    kafkacat \
+    kafkacat jq \
   # Add Node.js repository
   && curl -sL https://deb.nodesource.com/setup_18.x | bash - \
   # Add GitHub CLI repository
@@ -38,10 +38,16 @@ RUN groupadd docker \
   # Add ngrok repository
   && curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
   && echo "deb https://ngrok-agent.s3.amazonaws.com bullseye main" | tee /etc/apt/sources.list.d/ngrok.list \
+  # Add hashicorp repository
+  && curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add - \
+  && echo "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list \
   # Install extra packages
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
-    nodejs gh ngrok \
+    nodejs gh ngrok vault \
+  # Fix Vault CLI
+  # See https://github.com/hashicorp/vault/issues/10924
+  && setcap -r /usr/bin/vault \
   && corepack enable yarn \
   && corepack prepare "yarn@${yarnVersion}" --activate \
   # Install @devcontainers/cli

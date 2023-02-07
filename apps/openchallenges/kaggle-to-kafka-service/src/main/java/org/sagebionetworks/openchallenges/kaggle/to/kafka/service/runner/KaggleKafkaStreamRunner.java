@@ -14,10 +14,10 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.utils.Base64;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.apache.hc.core5.net.URIBuilder;
+import org.sagebionetworks.openchallenges.app.config.data.KaggleToKafkaServiceConfigData;
 import org.sagebionetworks.openchallenges.kafka.admin.configuration.KafkaConfigurationData;
 import org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel;
 import org.sagebionetworks.openchallenges.kafka.producer.service.KafkaProducer;
-import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.configuration.KaggleToKafkaServiceConfiguration;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.model.dto.KaggleCompetitionDto;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.transformer.KaggleCompetitionToAvroTransformer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
     matchIfMissing = true)
 public class KaggleKafkaStreamRunner implements StreamRunner {
 
-  private final KaggleToKafkaServiceConfiguration kaggleToKafkaServiceConfiguration;
+  private final KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData;
 
   private final KafkaConfigurationData kafkaConfigurationData;
 
@@ -40,11 +40,11 @@ public class KaggleKafkaStreamRunner implements StreamRunner {
   private final KaggleCompetitionToAvroTransformer kaggleCompetitionToAvroTransformer;
 
   public KaggleKafkaStreamRunner(
-      KaggleToKafkaServiceConfiguration kaggleToKafkaServiceConfiguration,
+      KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData,
       KafkaConfigurationData kafkaConfigurationData,
       KafkaProducer<Long, KaggleCompetitionAvroModel> kafkaProducer,
       KaggleCompetitionToAvroTransformer kaggleCompetitionToAvroTransformer) {
-    this.kaggleToKafkaServiceConfiguration = kaggleToKafkaServiceConfiguration;
+    this.kaggleToKafkaServiceConfigData = kaggleToKafkaServiceConfigData;
     this.kafkaConfigurationData = kafkaConfigurationData;
     this.kafkaProducer = kafkaProducer;
     this.kaggleCompetitionToAvroTransformer = kaggleCompetitionToAvroTransformer;
@@ -69,8 +69,8 @@ public class KaggleKafkaStreamRunner implements StreamRunner {
           Base64.encodeBase64String(
               String.format(
                       "%s:%s",
-                      kaggleToKafkaServiceConfiguration.getKaggleUsername(),
-                      kaggleToKafkaServiceConfiguration.getKaggleKey())
+                      kaggleToKafkaServiceConfigData.getKaggleUsername(),
+                      kaggleToKafkaServiceConfigData.getKaggleKey())
                   .getBytes());
 
       URIBuilder builder = new URIBuilder();

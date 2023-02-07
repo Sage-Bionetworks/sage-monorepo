@@ -1,6 +1,6 @@
 {
   "name": "Sage",
-  "image": "sagebionetworks/sage-devcontainer:67f8864",
+  "image": "sagebionetworks/sage-devcontainer:0cde36d",
 
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2.0.0": {
@@ -58,6 +58,7 @@
     8090,
     8091,
     8092,
+    8200,
     8888,
     9200,
     9411,
@@ -138,7 +139,7 @@
       "onAutoForward": "silent"
     },
     "8090": {
-      "label": "openchallenges-config-service",
+      "label": "openchallenges-config-server",
       "onAutoForward": "silent"
     },
     "8091": {
@@ -147,6 +148,10 @@
     },
     "8092": {
       "label": "openchallenges-core-service",
+      "onAutoForward": "silent"
+    },
+    "8200": {
+      "label": "openchallenges-vault",
       "onAutoForward": "silent"
     },
     "8888": {
