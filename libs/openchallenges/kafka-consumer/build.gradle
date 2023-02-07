@@ -44,6 +44,8 @@ dependencies {
   // implementation "org.springframework.retry:spring-retry:${springRetryVersion}"
   // implementation "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
   // implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
+
+  implementation "org.sagebionetworks.openchallenges:openchallenges-app-config-data:${openchallengesVersion}"
 }
 
 group = 'org.sagebionetworks.openchallenges'
