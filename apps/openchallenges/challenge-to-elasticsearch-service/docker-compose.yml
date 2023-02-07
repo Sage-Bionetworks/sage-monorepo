@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  openchallenges-challenge-to-elasticsearch-service:
+    image: sagebionetworks/openchallenges-challenge-to-elasticsearch-service:latest
+    container_name: openchallenges-challenge-to-elasticsearch-service
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - openchallenges
+    ports:
+      - "8084:8084"
+    command: start-dev
+
+networks:
+  openchallenges:
+    name: openchallenges

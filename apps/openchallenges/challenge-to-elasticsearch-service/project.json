@@ -1,0 +1,93 @@
+{
+  "name": "openchallenges-challenge-to-elasticsearch-service",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/challenge-to-elasticsearch-service/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/challenge-to-elasticsearch-service"
+      }
+    },
+    "prepare-java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "apps/openchallenges/challenge-to-elasticsearch-service"
+      }
+    },
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "apps/openchallenges/challenge-to-elasticsearch-service"
+      },
+      "outputs": ["apps/openchallenges/challenge-to-elasticsearch-service"],
+      "dependsOn": ["^install"]
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "apps/openchallenges/challenge-to-elasticsearch-service"
+      }
+    },
+    "format": {
+      "executor": "@nxrocks/nx-spring-boot:format",
+      "options": {
+        "root": "apps/openchallenges/challenge-to-elasticsearch-service"
+      }
+    },
+    "format-check": {
+      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "options": {
+        "root": "apps/openchallenges/challenge-to-elasticsearch-service"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "apps/openchallenges/challenge-to-elasticsearch-service",
+        "parallel": true
+      },
+      "dependsOn": ["prepare", "^install", "^serve-detach"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "apps/openchallenges/challenge-to-elasticsearch-service"
+      },
+      "dependsOn": ["build-image", "prepare", "^serve-detach"]
+    },
+    "build-image": {
+      "executor": "@nxrocks/nx-spring-boot:build-image",
+      "options": {
+        "root": "apps/openchallenges/challenge-to-elasticsearch-service"
+      },
+      "dependsOn": ["^install"]
+    },
+    "openapi-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "xargs rm -fr <.openapi-generator/FILES",
+          "openapi-generator-cli generate",
+          "./gradlew spotlessApply"
+        ],
+        "cwd": "apps/openchallenges/challenge-to-elasticsearch-service",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": [
+    "openchallenges-app-config-data",
+    "openchallenges-config-server",
+    "openchallenges-kafka-admin",
+    "openchallenges-kafka-consumer",
+    "openchallenges-kafka-model",
+    "shared-java-util"
+  ]
+}
