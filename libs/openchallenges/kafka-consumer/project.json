@@ -1,0 +1,60 @@
+{
+  "name": "openchallenges-kafka-consumer",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/openchallenges/kafka-consumer/src",
+  "projectType": "library",
+  "targets": {
+    "prepare-java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "libs/openchallenges/kafka-consumer"
+      }
+    },
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "libs/openchallenges/kafka-consumer"
+      },
+      "outputs": ["{projectRoot}/build"],
+      "dependsOn": ["^install"]
+    },
+    "install": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew publishToMavenLocal",
+        "cwd": "libs/openchallenges/kafka-consumer"
+      },
+      "dependsOn": ["build"]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "libs/openchallenges/kafka-consumer"
+      }
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "libs/openchallenges/kafka-consumer"
+      }
+    },
+    "format": {
+      "executor": "@nxrocks/nx-spring-boot:format",
+      "options": {
+        "root": "libs/openchallenges/kafka-consumer"
+      }
+    },
+    "format-check": {
+      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "options": {
+        "root": "libs/openchallenges/kafka-consumer"
+      }
+    }
+  },
+  "tags": ["type:library", "scope:openchallenges"],
+  "implicitDependencies": [
+    "openchallenges-kafka-admin",
+    "openchallenges-kafka-model"
+  ]
+}
