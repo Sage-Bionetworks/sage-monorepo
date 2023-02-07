@@ -1,10 +1,10 @@
-package org.sagebionetworks.openchallenges;
+package org.sagebionetworks.openchallenges.challenge.to.elasticsearch.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class KaggleToKafkaServiceApplicationTests {
+class ChallengeToElasticsearchServiceApplicationTests {
 
   @Test
   void contextLoads() {}
