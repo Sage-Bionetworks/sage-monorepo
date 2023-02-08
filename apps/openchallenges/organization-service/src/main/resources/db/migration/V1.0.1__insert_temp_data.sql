@@ -135,7 +135,7 @@ VALUES (
   ),
   (
     '15',
-    'NIH',
+    'National Institutes of Health',
     '',
     'nih',
     'https://via.placeholder.com/300.png',
@@ -497,7 +497,7 @@ VALUES (
     '55',
     'CorEvitas',
     '',
-    'cor-evitas',
+    'corevitas',
     'https://via.placeholder.com/300.png',
     'https://www.corevitas.com/',
     ''
@@ -585,15 +585,6 @@ VALUES (
   ),
   (
     '65',
-    'VA Durham Health Care',
-    '',
-    'va-durham-health-care',
-    'https://via.placeholder.com/300.png',
-    'https://www.durham.va.gov/ ',
-    ''
-  ),
-  (
-    '66',
     'Early Signal Foundation',
     '',
     'early-signal',
@@ -602,7 +593,7 @@ VALUES (
     ''
   ),
   (
-    '67',
+    '66',
     'Eck Institute for Global Health',
     '',
     'eck-institute-for-global-health',
@@ -611,7 +602,7 @@ VALUES (
     ''
   ),
   (
-    '68',
+    '67',
     'Eli Lilly and Company',
     '',
     'lilly',
@@ -620,7 +611,7 @@ VALUES (
     ''
   ),
   (
-    '69',
+    '68',
     'Elixir',
     '',
     'elixir',
@@ -629,7 +620,7 @@ VALUES (
     ''
   ),
   (
-    '70',
+    '69',
     'Encyclopedia of DNA Elements Data Coordinating Center',
     '',
     'encode',
@@ -638,7 +629,7 @@ VALUES (
     ''
   ),
   (
-    '71',
+    '70',
     'ENIGMA Consortium',
     '',
     'enigma',
@@ -647,7 +638,7 @@ VALUES (
     ''
   ),
   (
-    '72',
+    '71',
     'ETH Zurich',
     '',
     'eth',
@@ -656,7 +647,7 @@ VALUES (
     ''
   ),
   (
-    '73',
+    '72',
     'Eunice Kennedy Shriver National Institute',
     '',
     'nichd',
@@ -665,7 +656,7 @@ VALUES (
     ''
   ),
   (
-    '74',
+    '73',
     'European Bioinformatics Institute',
     '',
     'embl-ebi',
@@ -674,7 +665,7 @@ VALUES (
     ''
   ),
   (
-    '75',
+    '74',
     'European Medicines Agency',
     '',
     'european-medicines-agency',
@@ -683,7 +674,7 @@ VALUES (
     ''
   ),
   (
-    '76',
+    '75',
     'European Union',
     '',
     'eu',
@@ -692,7 +683,7 @@ VALUES (
     ''
   ),
   (
-    '77',
+    '76',
     'Evidation Health',
     '',
     'evidation',
@@ -701,7 +692,7 @@ VALUES (
     ''
   ),
   (
-    '78',
+    '77',
     'Fehling Instruments',
     '',
     'fehling-instruments',
@@ -710,7 +701,7 @@ VALUES (
     ''
   ),
   (
-    '79',
+    '78',
     'Feinstein Institutes for Medical Research',
     '',
     'feinstein-institute',
@@ -719,7 +710,7 @@ VALUES (
     ''
   ),
   (
-    '80',
+    '79',
     'Francis Crick Institute',
     '',
     'francis-crick-institute',
@@ -728,7 +719,7 @@ VALUES (
     ''
   ),
   (
-    '81',
+    '80',
     'Fred Hutchinson Cancer Research Center',
     '',
     'fred-hutchinson-cancer-research-center',
@@ -737,7 +728,7 @@ VALUES (
     ''
   ),
   (
-    '82',
+    '81',
     'Genome Canada',
     '',
     'genome-canada',
@@ -746,7 +737,7 @@ VALUES (
     ''
   ),
   (
-    '83',
+    '82',
     'George Washington University',
     '',
     'gwu',
@@ -755,7 +746,7 @@ VALUES (
     ''
   ),
   (
-    '84',
+    '83',
     'Georgetown University',
     '',
     'georgetown-university',
@@ -764,7 +755,7 @@ VALUES (
     ''
   ),
   (
-    '85',
+    '84',
     'German Cancer Research Center',
     '',
     'dkfz',
@@ -773,7 +764,7 @@ VALUES (
     ''
   ),
   (
-    '86',
+    '85',
     'Global Alliance for Genomics and Health',
     '',
     'ga4gh',
@@ -782,7 +773,7 @@ VALUES (
     ''
   ),
   (
-    '87',
+    '86',
     'H. Lee Moffitt Cancer Center and Research Institute',
     '',
     'moffitt',
@@ -791,7 +782,7 @@ VALUES (
     ''
   ),
   (
-    '88',
+    '87',
     'H3ABioNet',
     '',
     'h3abionet',
@@ -800,7 +791,7 @@ VALUES (
     ''
   ),
   (
-    '89',
+    '88',
     'Harvard University',
     '',
     'harvard',
@@ -809,7 +800,7 @@ VALUES (
     ''
   ),
   (
-    '90',
+    '89',
     'Heidelberg University',
     '',
     'heidelberg-university',
@@ -818,7 +809,7 @@ VALUES (
     ''
   ),
   (
-    '91',
+    '90',
     'HistoSonics Inc.',
     '',
     'histosonics-inc.',
@@ -827,7 +818,7 @@ VALUES (
     ''
   ),
   (
-    '92',
+    '91',
     'Hospital for Sick Children',
     '',
     'sickkids',
@@ -836,7 +827,7 @@ VALUES (
     ''
   ),
   (
-    '93',
+    '92',
     'Human Protein Atlas',
     '',
     'hpa',
@@ -845,7 +836,7 @@ VALUES (
     'The Human Protein Atlas is a Swedish-based program initiated in 2003 with the aim to map the expression and spatial distribution of all human proteins in cells and tissues using an integration of various omics technologies, including antibody-based imaging, mass spectrometry...'
   ),
   (
-    '94',
+    '93',
     'IBM',
     '',
     'ibm',
@@ -854,7 +845,7 @@ VALUES (
     ''
   ),
   (
-    '95',
+    '94',
     'Innovative Medicines Initiative',
     '',
     'imi',
@@ -863,7 +854,7 @@ VALUES (
     ''
   ),
   (
-    '96',
+    '95',
     'Institut Curie',
     '',
     'institut-curie',
@@ -872,7 +863,7 @@ VALUES (
     ''
   ),
   (
-    '97',
+    '96',
     'Institute for Molecular Medicine Finland',
     '',
     'fimm',
@@ -881,7 +872,7 @@ VALUES (
     ''
   ),
   (
-    '98',
+    '97',
     'Institute of Translational Health Sciences',
     '',
     'iths',
@@ -890,7 +881,7 @@ VALUES (
     ''
   ),
   (
-    '99',
+    '98',
     'Intel',
     '',
     'intel',
@@ -899,7 +890,7 @@ VALUES (
     'Intel(R) Software sits at the intersection of hardware, interoperability, and amazing customer experiences. We partner with the global technology ecosystem to make development EASY, OPEN, and SCALABLE so developers can do what they do best: deliver groundbreaking application...'
   ),
   (
-    '100',
+    '99',
     'International Cancer Genome Consortium',
     '',
     'icgc',
@@ -908,7 +899,7 @@ VALUES (
     ''
   ),
   (
-    '101',
+    '100',
     'International Flavors and Fragrances Inc.',
     '',
     'iff',
@@ -917,7 +908,7 @@ VALUES (
     ''
   ),
   (
-    '102',
+    '101',
     'International Genome Sample Resource',
     '',
     'igsr',
@@ -926,7 +917,7 @@ VALUES (
     ''
   ),
   (
-    '103',
+    '102',
     'International Society for Computational Biology',
     '',
     'cosi',
@@ -935,7 +926,7 @@ VALUES (
     ''
   ),
   (
-    '104',
+    '103',
     'Intuitive Surgical Inc.',
     '',
     'intuitive',
@@ -944,7 +935,7 @@ VALUES (
     ''
   ),
   (
-    '105',
+    '104',
     'Iowa State University',
     '',
     'iowa-state-university',
@@ -953,13 +944,22 @@ VALUES (
     ''
   ),
   (
-    '106',
+    '105',
     'Kaggle',
     '',
     'kaggle',
     'https://via.placeholder.com/300.png',
     'https://www.kaggle.com/',
     'Kaggle is a community of data scientists and data enthusiasts. Our platform enables you to learn from and mentor each other on your personal, academic, and professional data science journeys. \n\nTo get involved, you can [enter a machine learning competition](https://www.kag...'
+  ),
+  (
+    '106',
+    'Kaiser Permanente Washington Health Research Institute',
+    '',
+    'kaiser',
+    'https://via.placeholder.com/300.png',
+    'https://www.kpwashingtonresearch.org/',
+    ''
   ),
   (
     '107',
@@ -1017,6 +1017,15 @@ VALUES (
   ),
   (
     '113',
+    'Ligue Nationale Contre le Cancer',
+    '',
+    'lingue-cancer',
+    'https://via.placeholder.com/300.png',
+    'https://www.ligue-cancer.net/ ',
+    ''
+  ),
+  (
+    '114',
     'London''s Global University',
     '',
     'ucl',
@@ -1025,7 +1034,7 @@ VALUES (
     ''
   ),
   (
-    '114',
+    '115',
     'Ludwig Maximilian University of Munich',
     '',
     'lmu-munich',
@@ -1034,7 +1043,7 @@ VALUES (
     ''
   ),
   (
-    '115',
+    '116',
     'Mahidol Oxford Tropical Medicine Research Unit',
     '',
     'moru',
@@ -1043,7 +1052,7 @@ VALUES (
     ''
   ),
   (
-    '116',
+    '117',
     'March of Dimes',
     '',
     'march-of-dimes',
@@ -1052,7 +1061,7 @@ VALUES (
     ''
   ),
   (
-    '117',
+    '118',
     'Massachusetts General Hospital',
     '',
     'mgh',
@@ -1061,7 +1070,7 @@ VALUES (
     ''
   ),
   (
-    '118',
+    '119',
     'Massachusetts Institute of Technology',
     '',
     'mit',
@@ -1070,7 +1079,7 @@ VALUES (
     ''
   ),
   (
-    '119',
+    '120',
     'MathWorks',
     '',
     'mathworks',
@@ -1079,7 +1088,7 @@ VALUES (
     ''
   ),
   (
-    '120',
+    '121',
     'Max Delbruck Center for Molecular Medicine',
     '',
     'mdc',
@@ -1088,7 +1097,7 @@ VALUES (
     ''
   ),
   (
-    '121',
+    '122',
     'MD Anderson Cancer Center',
     '',
     'md-anderson-cancer-center',
@@ -1097,7 +1106,7 @@ VALUES (
     ''
   ),
   (
-    '122',
+    '123',
     'Medical Research Council',
     '',
     'mrc',
@@ -1106,7 +1115,7 @@ VALUES (
     ''
   ),
   (
-    '123',
+    '124',
     'Memorial Sloan Kettering Cancer Center',
     '',
     'msk',
@@ -1115,7 +1124,7 @@ VALUES (
     ''
   ),
   (
-    '124',
+    '125',
     'Merck Co.',
     '',
     'merck',
@@ -1124,7 +1133,7 @@ VALUES (
     ''
   ),
   (
-    '125',
+    '126',
     'Michael J. Fox Foundation',
     '',
     'michael-j.-fox-foundation',
@@ -1133,7 +1142,7 @@ VALUES (
     ''
   ),
   (
-    '126',
+    '127',
     'MINES ParisTech',
     '',
     'mines-paristech',
@@ -1142,7 +1151,7 @@ VALUES (
     ''
   ),
   (
-    '127',
+    '128',
     'Mount Sinai',
     '',
     'mt.-sinai',
@@ -1151,943 +1160,7 @@ VALUES (
     ''
   ),
   (
-    '128',
-    'Nathan S. Kline Institute for Psychiatric Research',
-    '',
-    'nki',
-    'https://via.placeholder.com/300.png',
-    'https://www.nki.rfmh.org/',
-    ''
-  ),
-  (
     '129',
-    'National Cancer Institute',
-    '',
-    'nci',
-    'https://via.placeholder.com/300.png',
-    'https://www.cancer.gov/',
-    ''
-  ),
-  (
-    '130',
-    'National Center for Advancing Translational Sciences',
-    '',
-    'ncats',
-    'https://via.placeholder.com/300.png',
-    'https://ncats.nih.gov/',
-    ''
-  ),
-  (
-    '131',
-    'National Center for Data to Health',
-    '',
-    'cd2h',
-    'https://via.placeholder.com/300.png',
-    'https://cd2h.org/',
-    ''
-  ),
-  (
-    '132',
-    'National Institute of Environmental Health Sciences',
-    '',
-    'niehs',
-    'https://via.placeholder.com/300.png',
-    'https://www.niehs.nih.gov/',
-    ''
-  ),
-  (
-    '133',
-    'National Institute of General Medical Sciences',
-    '',
-    'nigms',
-    'https://via.placeholder.com/300.png',
-    'https://www.nigms.nih.gov/',
-    ''
-  ),
-  (
-    '134',
-    'National Institute of Standards and Technology',
-    '',
-    'nist',
-    'https://via.placeholder.com/300.png',
-    'https://www.nist.gov/',
-    ''
-  ),
-  (
-    '135',
-    'National Science Foundation',
-    '',
-    'nsf',
-    'https://via.placeholder.com/300.png',
-    'https://www.nsf.gov/',
-    ''
-  ),
-  (
-    '136',
-    'Natural Sciences and Engineering Research Council',
-    '',
-    'nserc',
-    'https://via.placeholder.com/300.png',
-    'https://www.nserc-crsng.gc.ca/index_eng.asp',
-    ''
-  ),
-  (
-    '137',
-    'Neosoma Inc.',
-    '',
-    'neosoma-inc.',
-    'https://via.placeholder.com/300.png',
-    'https://neosomainc.com/',
-    ''
-  ),
-  (
-    '138',
-    'Neurological Clinical Research Institute',
-    '',
-    'ncri',
-    'https://via.placeholder.com/300.png',
-    'https://www.massgeneral.org/ncri',
-    ''
-  ),
-  (
-    '139',
-    'New York University',
-    '',
-    'nyc',
-    'https://via.placeholder.com/300.png',
-    'https://www.nyu.edu/',
-    ''
-  ),
-  (
-    '140',
-    'Northeast ALS Consortium',
-    '',
-    'neals',
-    'https://via.placeholder.com/300.png',
-    'https://www.neals.org/',
-    ''
-  ),
-  (
-    '141',
-    'Northeastern University',
-    '',
-    'neu',
-    'https://via.placeholder.com/300.png',
-    'https://www.northeastern.edu/',
-    ''
-  ),
-  (
-    '142',
-    'Northwestern University',
-    '',
-    'nu',
-    'https://via.placeholder.com/300.png',
-    'https://www.northwestern.edu/',
-    ''
-  ),
-  (
-    '143',
-    'Novo Nordisk',
-    '',
-    'novo-nordisk',
-    'https://via.placeholder.com/300.png',
-    'https://www.novonordisk-us.com/',
-    ''
-  ),
-  (
-    '144',
-    'Numerate',
-    '',
-    'numerate',
-    'https://via.placeholder.com/300.png',
-    'http://www.numerate.com/',
-    ''
-  ),
-  (
-    '145',
-    'NVIDIA',
-    '',
-    'nvidia',
-    'https://via.placeholder.com/300.png',
-    'https://www.nvidia.com/en-us/',
-    ''
-  ),
-  (
-    '146',
-    'Ohio State University',
-    '',
-    'osu',
-    'https://via.placeholder.com/300.png',
-    'https://www.osu.edu/',
-    ''
-  ),
-  (
-    '147',
-    'Ontario Institute for Cancer Research',
-    '',
-    'oicr',
-    'https://via.placeholder.com/300.png',
-    'https://oicr.on.ca/',
-    ''
-  ),
-  (
-    '148',
-    'Oregon Health and Science University',
-    '',
-    'ohsu',
-    'https://via.placeholder.com/300.png',
-    'https://www.ohsu.edu/',
-    ''
-  ),
-  (
-    '149',
-    'Oslo University Hospital',
-    '',
-    'oslo-university-hospital',
-    'https://via.placeholder.com/300.png',
-    'https://oslo-universitetssykehus.no/oslo-university-hospital',
-    ''
-  ),
-  (
-    '150',
-    'Pacific Northwest National Laboratory',
-    '',
-    'pnnl',
-    'https://via.placeholder.com/300.png',
-    'https://www.pnnl.gov/',
-    ''
-  ),
-  (
-    '151',
-    'Pfizer',
-    '',
-    'pfizer',
-    'https://via.placeholder.com/300.png',
-    'https://www.pfizer.com/',
-    ''
-  ),
-  (
-    '152',
-    'Prize4Life',
-    '',
-    'prize4life',
-    'https://via.placeholder.com/300.png',
-    'https://en.wikipedia.org/wiki/Prize4Life',
-    ''
-  ),
-  (
-    '153',
-    'Prostate Cancer Canada',
-    '',
-    'prostate-cancer-canada',
-    'https://via.placeholder.com/300.png',
-    'https://cancer.ca/en/about-us/prostate-cancer',
-    ''
-  ),
-  (
-    '154',
-    'Prostate Cancer Foundation',
-    '',
-    'pcf',
-    'https://via.placeholder.com/300.png',
-    'https://www.pcf.org/',
-    ''
-  ),
-  (
-    '155',
-    'Providence Health and Services',
-    '',
-    'providence',
-    'https://via.placeholder.com/300.png',
-    'https://www.providence.org/en',
-    ''
-  ),
-  (
-    '156',
-    'QIMR Berghofer Medical Research Institute',
-    '',
-    'qimr-berghofer',
-    'https://via.placeholder.com/300.png',
-    'https://www.qimrberghofer.edu.au/',
-    ''
-  ),
-  (
-    '157',
-    'Queen''s University',
-    '',
-    'queens',
-    'https://via.placeholder.com/300.png',
-    'https://www.queensu.ca/',
-    ''
-  ),
-  (
-    '158',
-    'Radboud University',
-    '',
-    'radboudumc',
-    'https://via.placeholder.com/300.png',
-    'https://www.radboudumc.nl/en/research',
-    ''
-  ),
-  (
-    '159',
-    'Radiological Society of North America',
-    '',
-    'rsna',
-    'https://via.placeholder.com/300.png',
-    'https://www.rsna.org/',
-    'The Radiological Society of North America (RSNA(R)) is an international society of radiologists, medical physicists and other medical professionals with more than 53,400 members from 136 countries across the globe. RSNA hosts the world’s premier radiology forum, drawing appr...'
-  ),
-  (
-    '160',
-    'Ray and Dagmar Dolby Family Fund',
-    '',
-    'ray-and-dagmar-dolby-family-fund',
-    'https://via.placeholder.com/300.png',
-    'http://www.dolbyventures.com/',
-    ''
-  ),
-  (
-    '161',
-    'Rice University',
-    '',
-    'rice',
-    'https://via.placeholder.com/300.png',
-    'https://www.rice.edu/',
-    ''
-  ),
-  (
-    '162',
-    'Robert Wood Johnson Foundation',
-    '',
-    'rwjf',
-    'https://via.placeholder.com/300.png',
-    'https://www.rwjf.org/',
-    ''
-  ),
-  (
-    '163',
-    'Rockefeller University',
-    '',
-    'rockefeller',
-    'https://via.placeholder.com/300.png',
-    'https://www.rockefeller.edu/',
-    ''
-  ),
-  (
-    '164',
-    'Rosenberg Alzheimer''s Project',
-    '',
-    'rosenberg-alzheimers-project',
-    'https://via.placeholder.com/300.png',
-    'https://en.wikipedia.org/wiki/Douglas_Rosenberg',
-    ''
-  ),
-  (
-    '165',
-    'Rush University Medical Center',
-    '',
-    'rush',
-    'https://via.placeholder.com/300.png',
-    'https://www.rush.edu/',
-    ''
-  ),
-  (
-    '166',
-    'RWTH Aachen University',
-    '',
-    'rwth-aachen',
-    'https://via.placeholder.com/300.png',
-    'https://www.rwth-aachen.de/go/id/a/?lidx=1',
-    ''
-  ),
-  (
-    '167',
-    'Sage Bionetworks',
-    '',
-    'sage',
-    'https://via.placeholder.com/300.png',
-    'https://sagebionetworks.org/',
-    ''
-  ),
-  (
-    '168',
-    'Sanofi',
-    '',
-    'sanofi',
-    'https://via.placeholder.com/300.png',
-    'https://www.sanofi.com/',
-    ''
-  ),
-  (
-    '169',
-    'Sapienza University of Rome',
-    '',
-    'bologna',
-    'https://via.placeholder.com/300.png',
-    'https://www.uniroma1.it/en/pagina-strutturale/home',
-    ''
-  ),
-  (
-    '170',
-    'Sartorius AG',
-    '',
-    'sartorius',
-    'https://via.placeholder.com/300.png',
-    'https://www.sartorius.com/en',
-    'Sartorius AG is an international pharmaceutical and laboratory equipment supplier, covering the segments of Bioprocess Solutions and Lab Products & Services.'
-  ),
-  (
-    '171',
-    'Seattle Cancer Care Alliance',
-    '',
-    'scca',
-    'https://via.placeholder.com/300.png',
-    'https://www.seattlecca.org/',
-    ''
-  ),
-  (
-    '172',
-    'Semmelweis University',
-    '',
-    'semmelweis-university',
-    'https://via.placeholder.com/300.png',
-    'https://semmelweis.hu/english/',
-    ''
-  ),
-  (
-    '173',
-    'Sentieon',
-    '',
-    'sentieon',
-    'https://via.placeholder.com/300.png',
-    'https://www.sentieon.com/',
-    ''
-  ),
-  (
-    '174',
-    'Siemens Healthineers',
-    '',
-    'siemens-healthineers',
-    'https://via.placeholder.com/300.png',
-    'https://www.siemens-healthineers.com/',
-    ''
-  ),
-  (
-    '175',
-    'Stanford University',
-    '',
-    'stanford',
-    'https://via.placeholder.com/300.png',
-    'https://www.stanford.edu/',
-    ''
-  ),
-  (
-    '176',
-    'Swiss Initiative in Systems Biology',
-    '',
-    'systemsx',
-    'https://via.placeholder.com/300.png',
-    'http://www.systemsx.ch/',
-    ''
-  ),
-  (
-    '177',
-    'Takeda',
-    '',
-    'takeda',
-    'https://via.placeholder.com/300.png',
-    'https://www.takeda.com/en-us/',
-    ''
-  ),
-  (
-    '178',
-    'Texas Biomedical Research Institute',
-    '',
-    'texas-biomedical-research-institute',
-    'https://via.placeholder.com/300.png',
-    'https://www.txbiomed.org/',
-    ''
-  ),
-  (
-    '180',
-    'The University of California-Davis',
-    '',
-    'uc-davis',
-    'https://via.placeholder.com/300.png',
-    'https://www.ucdavis.edu/',
-    ''
-  ),
-  (
-    '181',
-    'The University of Texas at Austin',
-    '',
-    'ut',
-    'https://via.placeholder.com/300.png',
-    'https://www.utexas.edu/',
-    ''
-  ),
-  (
-    '182',
-    'Thomas Jefferson University Hospital',
-    '',
-    'thomas-jefferson-university-hospital',
-    'https://via.placeholder.com/300.png',
-    'https://hospitals.jefferson.edu/',
-    ''
-  ),
-  (
-    '183',
-    'TracInnovations',
-    '',
-    'tracinnovations',
-    'https://via.placeholder.com/300.png',
-    'https://tracinnovations.com/',
-    ''
-  ),
-  (
-    '184',
-    'Trinity College Institute of Neuroscience',
-    '',
-    'tcd---neuroscience',
-    'https://via.placeholder.com/300.png',
-    'https://www.tcd.ie/Neuroscience/',
-    ''
-  ),
-  (
-    '185',
-    'Tulane University',
-    '',
-    'tulane',
-    'https://via.placeholder.com/300.png',
-    'https://tulane.edu/',
-    ''
-  ),
-  (
-    '186',
-    'U.S. Food and Drug Administration',
-    '',
-    'fda',
-    'https://via.placeholder.com/300.png',
-    'https://www.fda.gov/home',
-    ''
-  ),
-  (
-    '187',
-    'UNC Eshelman School of Pharmacy',
-    '',
-    'unc-eshelman-school-of-pharmacy',
-    'https://via.placeholder.com/300.png',
-    'https://pharmacy.unc.edu/',
-    ''
-  ),
-  (
-    '188',
-    'University of Alabama',
-    '',
-    'ua',
-    'https://via.placeholder.com/300.png',
-    'https://www.ua.edu/',
-    ''
-  ),
-  (
-    '189',
-    'University of Alabama at Birmingham',
-    '',
-    'uab',
-    'https://via.placeholder.com/300.png',
-    'https://www.uab.edu/home/',
-    ''
-  ),
-  (
-    '190',
-    'University of Arkansas for Medical Sciences',
-    '',
-    'uams',
-    'https://via.placeholder.com/300.png',
-    'https://www.uams.edu/',
-    ''
-  ),
-  (
-    '191',
-    'University of Basel',
-    '',
-    'university-of-basel',
-    'https://via.placeholder.com/300.png',
-    'https://www.unibas.ch/en.html',
-    ''
-  ),
-  (
-    '192',
-    'University of California San Diego',
-    '',
-    'ucsd',
-    'https://via.placeholder.com/300.png',
-    'https://ucsd.edu/',
-    ''
-  ),
-  (
-    '193',
-    'University of California San Francisco',
-    '',
-    'ucsf',
-    'https://via.placeholder.com/300.png',
-    'https://www.ucsf.edu/',
-    ''
-  ),
-  (
-    '194',
-    'University of California Santa Cruz',
-    '',
-    'ucsc',
-    'https://via.placeholder.com/300.png',
-    'https://www.ucsc.edu/',
-    ''
-  ),
-  (
-    '195',
-    'University of Cincinnati',
-    '',
-    'uc',
-    'https://via.placeholder.com/300.png',
-    'https://www.uc.edu/',
-    ''
-  ),
-  (
-    '196',
-    'University of Colorado Anschutz Medical Campus',
-    '',
-    'cu-anschutz',
-    'https://via.placeholder.com/300.png',
-    'https://www.cuanschutz.edu/',
-    ''
-  ),
-  (
-    '197',
-    'University of Connecticut',
-    '',
-    'uconn',
-    'https://via.placeholder.com/300.png',
-    'https://uconn.edu/',
-    ''
-  ),
-  (
-    '198',
-    'University of Houston',
-    '',
-    'uh',
-    'https://via.placeholder.com/300.png',
-    'https://www.uh.edu/',
-    ''
-  ),
-  (
-    '199',
-    'University of Illinois Urbana-Champaign',
-    '',
-    'uiuc',
-    'https://via.placeholder.com/300.png',
-    'https://illinois.edu/',
-    ''
-  ),
-  (
-    '200',
-    'University of Kent',
-    '',
-    'university-of-kent',
-    'https://via.placeholder.com/300.png',
-    'https://www.kent.ac.uk/',
-    ''
-  ),
-  (
-    '201',
-    'University of Kentucky',
-    '',
-    'uky',
-    'https://via.placeholder.com/300.png',
-    'http://www.uky.edu/',
-    ''
-  ),
-  (
-    '202',
-    'University of Lausanne',
-    '',
-    'unil',
-    'https://via.placeholder.com/300.png',
-    'https://www.unil.ch/central/en/home.html',
-    ''
-  ),
-  (
-    '203',
-    'University of Lisbon',
-    '',
-    'u-lisbon',
-    'https://via.placeholder.com/300.png',
-    'https://www.ulisboa.pt/en',
-    ''
-  ),
-  (
-    '204',
-    'University of London',
-    '',
-    'uol',
-    'https://via.placeholder.com/300.png',
-    'https://london.ac.uk/',
-    ''
-  ),
-  (
-    '205',
-    'University of Luxembourg',
-    '',
-    'university-of-luxembourg',
-    'https://via.placeholder.com/300.png',
-    'https://wwwen.uni.lu/',
-    ''
-  ),
-  (
-    '206',
-    'University of Maryland',
-    '',
-    'umd',
-    'https://via.placeholder.com/300.png',
-    'https://www.umd.edu/',
-    ''
-  ),
-  (
-    '207',
-    'University of Michigan',
-    '',
-    'umich',
-    'https://via.placeholder.com/300.png',
-    'https://umich.edu/',
-    ''
-  ),
-  (
-    '208',
-    'University of North Carolina at Chapel Hill',
-    '',
-    'unc',
-    'https://via.placeholder.com/300.png',
-    'https://www.unc.edu/',
-    ''
-  ),
-  (
-    '209',
-    'University of Notre Dame',
-    '',
-    'notre-dame',
-    'https://via.placeholder.com/300.png',
-    'https://www.nd.edu/',
-    ''
-  ),
-  (
-    '210',
-    'University of Padova',
-    '',
-    'university-of-padova',
-    'https://via.placeholder.com/300.png',
-    'https://www.unipd.it/en/',
-    ''
-  ),
-  (
-    '211',
-    'University of Padua',
-    '',
-    'university-of-padua',
-    'https://via.placeholder.com/300.png',
-    'https://www.unipd.it/en/',
-    ''
-  ),
-  (
-    '212',
-    'University of Pennsylvania',
-    '',
-    'upenn',
-    'https://via.placeholder.com/300.png',
-    'https://www.upenn.edu/',
-    ''
-  ),
-  (
-    '213',
-    'University of Rochester',
-    '',
-    'university-of-rochester',
-    'https://via.placeholder.com/300.png',
-    'https://www.urmedicine.org/',
-    ''
-  ),
-  (
-    '214',
-    'University of South Florida',
-    '',
-    'usf',
-    'https://via.placeholder.com/300.png',
-    'https://www.usf.edu/',
-    ''
-  ),
-  (
-    '215',
-    'University of Southampton',
-    '',
-    'university-of-southampton',
-    'https://via.placeholder.com/300.png',
-    'https://www.southampton.ac.uk/',
-    ''
-  ),
-  (
-    '216',
-    'University of Texas Southwestern',
-    '',
-    'utsw',
-    'https://via.placeholder.com/300.png',
-    'https://www.utsouthwestern.edu/',
-    ''
-  ),
-  (
-    '217',
-    'University of Toronto',
-    '',
-    'uoft',
-    'https://via.placeholder.com/300.png',
-    'https://www.utoronto.ca/',
-    ''
-  ),
-  (
-    '218',
-    'University of Vermont',
-    '',
-    'uvm',
-    'https://via.placeholder.com/300.png',
-    'https://www.uvm.edu/',
-    ''
-  ),
-  (
-    '219',
-    'University of Verona',
-    '',
-    'university-of-verona',
-    'https://via.placeholder.com/300.png',
-    'https://www.univr.it/en/international',
-    ''
-  ),
-  (
-    '220',
-    'University of Virginia',
-    '',
-    'uva',
-    'https://via.placeholder.com/300.png',
-    'https://www.virginia.edu/',
-    ''
-  ),
-  (
-    '221',
-    'University of Washington',
-    '',
-    'uw',
-    'https://via.placeholder.com/300.png',
-    'https://www.washington.edu/',
-    ''
-  ),
-  (
-    '222',
-    'University of Wisconsin-Madison',
-    '',
-    'uw-madison',
-    'https://via.placeholder.com/300.png',
-    'https://www.wisc.edu/',
-    ''
-  ),
-  (
-    '223',
-    'University of Zurich',
-    '',
-    'uzh',
-    'https://via.placeholder.com/300.png',
-    'https://www.uzh.ch/en.html',
-    ''
-  ),
-  (
-    '224',
-    'Urban Green Energy',
-    '',
-    'uge',
-    'https://via.placeholder.com/300.png',
-    'https://www.ugei.com/',
-    ''
-  ),
-  (
-    '225',
-    'US Army Medical Research Institute of Infectious Diseases',
-    '',
-    'usamriid',
-    'https://via.placeholder.com/300.png',
-    'https://www.usamriid.army.mil/',
-    ''
-  ),
-  (
-    '226',
-    'Verily',
-    '',
-    'verily',
-    'https://via.placeholder.com/300.png',
-    'https://verily.com/',
-    ''
-  ),
-  (
-    '227',
-    'VHA Innovation Ecosystem',
-    '',
-    'vha-ie',
-    'https://via.placeholder.com/300.png',
-    'https://www.va.gov/innovationecosystem/',
-    ''
-  ),
-  (
-    '228',
-    'Washington University in St. Louis',
-    '',
-    'wustl',
-    'https://via.placeholder.com/300.png',
-    'https://wustl.edu/',
-    ''
-  ),
-  (
-    '229',
-    'Wayne State University',
-    '',
-    'wayne-state-university',
-    'https://via.placeholder.com/300.png',
-    'https://wayne.edu/',
-    ''
-  ),
-  (
-    '230',
-    'Weizmann Institute of Science',
-    '',
-    'weizmann-institute-of-science',
-    'https://via.placeholder.com/300.png',
-    'https://www.weizmann.ac.il/pages/',
-    ''
-  ),
-  (
-    '231',
-    'Wellcome Sanger Institute',
-    '',
-    'sanger',
-    'https://via.placeholder.com/300.png',
-    'https://www.sanger.ac.uk/',
-    ''
-  ),
-  (
-    '232',
-    'White House Office of Science and Technology Policy',
-    '',
-    'ostp',
-    'https://via.placeholder.com/300.png',
-    'https://www.whitehouse.gov/ostp/',
-    ''
-  ),
-  (
-    '233',
     'Multiple Myeloma Research Foundation',
     '',
     'mmrf',
@@ -2096,11 +1169,965 @@ VALUES (
     ''
   ),
   (
-    '234',
-    'Kaiser Permanente Washington Health Research Institute',
+    '130',
+    'Nathan S. Kline Institute for Psychiatric Research',
     '',
-    'kaiser',
+    'nki',
     'https://via.placeholder.com/300.png',
-    'https://www.kpwashingtonresearch.org/',
+    'https://www.nki.rfmh.org/',
+    ''
+  ),
+  (
+    '131',
+    'National Cancer Institute',
+    '',
+    'nci',
+    'https://via.placeholder.com/300.png',
+    'https://www.cancer.gov/',
+    ''
+  ),
+  (
+    '132',
+    'National Center for Advancing Translational Sciences',
+    '',
+    'ncats',
+    'https://via.placeholder.com/300.png',
+    'https://ncats.nih.gov/',
+    ''
+  ),
+  (
+    '133',
+    'National Center for Data to Health',
+    '',
+    'cd2h',
+    'https://via.placeholder.com/300.png',
+    'https://cd2h.org/',
+    ''
+  ),
+  (
+    '134',
+    'National Institute of Environmental Health Sciences',
+    '',
+    'niehs',
+    'https://via.placeholder.com/300.png',
+    'https://www.niehs.nih.gov/',
+    ''
+  ),
+  (
+    '135',
+    'National Institute of General Medical Sciences',
+    '',
+    'nigms',
+    'https://via.placeholder.com/300.png',
+    'https://www.nigms.nih.gov/',
+    ''
+  ),
+  (
+    '136',
+    'National Institute of Standards and Technology',
+    '',
+    'nist',
+    'https://via.placeholder.com/300.png',
+    'https://www.nist.gov/',
+    ''
+  ),
+  (
+    '137',
+    'National Science Foundation',
+    '',
+    'nsf',
+    'https://via.placeholder.com/300.png',
+    'https://www.nsf.gov/',
+    ''
+  ),
+  (
+    '138',
+    'Natural Sciences and Engineering Research Council',
+    '',
+    'nserc',
+    'https://via.placeholder.com/300.png',
+    'https://www.nserc-crsng.gc.ca/index_eng.asp',
+    ''
+  ),
+  (
+    '139',
+    'Neosoma Inc.',
+    '',
+    'neosoma-inc.',
+    'https://via.placeholder.com/300.png',
+    'https://neosomainc.com/',
+    ''
+  ),
+  (
+    '140',
+    'Neurological Clinical Research Institute',
+    '',
+    'ncri',
+    'https://via.placeholder.com/300.png',
+    'https://www.massgeneral.org/ncri',
+    ''
+  ),
+  (
+    '141',
+    'New York University',
+    '',
+    'nyc',
+    'https://via.placeholder.com/300.png',
+    'https://www.nyu.edu/',
+    ''
+  ),
+  (
+    '142',
+    'Northeast ALS Consortium',
+    '',
+    'neals',
+    'https://via.placeholder.com/300.png',
+    'https://www.neals.org/',
+    ''
+  ),
+  (
+    '143',
+    'Northeastern University',
+    '',
+    'neu',
+    'https://via.placeholder.com/300.png',
+    'https://www.northeastern.edu/',
+    ''
+  ),
+  (
+    '144',
+    'Northwestern University',
+    '',
+    'nu',
+    'https://via.placeholder.com/300.png',
+    'https://www.northwestern.edu/',
+    ''
+  ),
+  (
+    '145',
+    'Novo Nordisk',
+    '',
+    'novo-nordisk',
+    'https://via.placeholder.com/300.png',
+    'https://www.novonordisk-us.com/',
+    ''
+  ),
+  (
+    '146',
+    'Numerate',
+    '',
+    'numerate',
+    'https://via.placeholder.com/300.png',
+    'http://www.numerate.com/',
+    ''
+  ),
+  (
+    '147',
+    'NVIDIA',
+    '',
+    'nvidia',
+    'https://via.placeholder.com/300.png',
+    'https://www.nvidia.com/en-us/',
+    ''
+  ),
+  (
+    '148',
+    'Ohio State University',
+    '',
+    'osu',
+    'https://via.placeholder.com/300.png',
+    'https://www.osu.edu/',
+    ''
+  ),
+  (
+    '149',
+    'Ontario Institute for Cancer Research',
+    '',
+    'oicr',
+    'https://via.placeholder.com/300.png',
+    'https://oicr.on.ca/',
+    ''
+  ),
+  (
+    '150',
+    'Oregon Health and Science University',
+    '',
+    'ohsu',
+    'https://via.placeholder.com/300.png',
+    'https://www.ohsu.edu/',
+    ''
+  ),
+  (
+    '151',
+    'Oslo University Hospital',
+    '',
+    'oslo-university-hospital',
+    'https://via.placeholder.com/300.png',
+    'https://oslo-universitetssykehus.no/oslo-university-hospital',
+    ''
+  ),
+  (
+    '152',
+    'Pacific Northwest National Laboratory',
+    '',
+    'pnnl',
+    'https://via.placeholder.com/300.png',
+    'https://www.pnnl.gov/',
+    ''
+  ),
+  (
+    '153',
+    'Pfizer',
+    '',
+    'pfizer',
+    'https://via.placeholder.com/300.png',
+    'https://www.pfizer.com/',
+    ''
+  ),
+  (
+    '154',
+    'Prize4Life',
+    '',
+    'prize4life',
+    'https://via.placeholder.com/300.png',
+    'https://en.wikipedia.org/wiki/Prize4Life',
+    ''
+  ),
+  (
+    '155',
+    'Project Data Sphere',
+    '',
+    'project-data-sphere',
+    'https://via.placeholder.com/300.png',
+    'https://www.projectdatasphere.org/ ',
+    'At Project Data Sphere®, we believe in breaking down barriers to cancer clinical trial data sharing — barriers that historically have kept valuable trial data from ultimately benefitting the patients who so selflessly participate in them. By aggregating trial data from bioph...'
+  ),
+  (
+    '156',
+    'Prostate Cancer Canada',
+    '',
+    'prostate-cancer-canada',
+    'https://via.placeholder.com/300.png',
+    'https://cancer.ca/en/about-us/prostate-cancer',
+    ''
+  ),
+  (
+    '157',
+    'Prostate Cancer Foundation',
+    '',
+    'pcf',
+    'https://via.placeholder.com/300.png',
+    'https://www.pcf.org/',
+    ''
+  ),
+  (
+    '158',
+    'Providence Health and Services',
+    '',
+    'providence',
+    'https://via.placeholder.com/300.png',
+    'https://www.providence.org/en',
+    ''
+  ),
+  (
+    '159',
+    'QIMR Berghofer Medical Research Institute',
+    '',
+    'qimr-berghofer',
+    'https://via.placeholder.com/300.png',
+    'https://www.qimrberghofer.edu.au/',
+    ''
+  ),
+  (
+    '160',
+    'Queen''s University',
+    '',
+    'queens',
+    'https://via.placeholder.com/300.png',
+    'https://www.queensu.ca/',
+    ''
+  ),
+  (
+    '161',
+    'Radboud University',
+    '',
+    'radboudumc',
+    'https://via.placeholder.com/300.png',
+    'https://www.radboudumc.nl/en/research',
+    ''
+  ),
+  (
+    '162',
+    'Radiological Society of North America',
+    '',
+    'rsna',
+    'https://via.placeholder.com/300.png',
+    'https://www.rsna.org/',
+    'The Radiological Society of North America (RSNA(R)) is an international society of radiologists, medical physicists and other medical professionals with more than 53,400 members from 136 countries across the globe. RSNA hosts the world’s premier radiology forum, drawing appr...'
+  ),
+  (
+    '163',
+    'Radish Medical Solutions',
+    '',
+    'radish-medical-solutions',
+    'https://via.placeholder.com/300.png',
+    '',
+    ''
+  ),
+  (
+    '164',
+    'Ray and Dagmar Dolby Family Fund',
+    '',
+    'ray-and-dagmar-dolby-family-fund',
+    'https://via.placeholder.com/300.png',
+    'http://www.dolbyventures.com/',
+    ''
+  ),
+  (
+    '165',
+    'Rice University',
+    '',
+    'rice',
+    'https://via.placeholder.com/300.png',
+    'https://www.rice.edu/',
+    ''
+  ),
+  (
+    '166',
+    'Robert Wood Johnson Foundation',
+    '',
+    'rwjf',
+    'https://via.placeholder.com/300.png',
+    'https://www.rwjf.org/',
+    ''
+  ),
+  (
+    '167',
+    'Rockefeller University',
+    '',
+    'rockefeller',
+    'https://via.placeholder.com/300.png',
+    'https://www.rockefeller.edu/',
+    ''
+  ),
+  (
+    '168',
+    'Rosenberg Alzheimer''s Project',
+    '',
+    'rosenberg-alzheimers-project',
+    'https://via.placeholder.com/300.png',
+    'https://en.wikipedia.org/wiki/Douglas_Rosenberg',
+    ''
+  ),
+  (
+    '169',
+    'Rush University Medical Center',
+    '',
+    'rush',
+    'https://via.placeholder.com/300.png',
+    'https://www.rush.edu/',
+    ''
+  ),
+  (
+    '170',
+    'RWTH Aachen University',
+    '',
+    'rwth-aachen',
+    'https://via.placeholder.com/300.png',
+    'https://www.rwth-aachen.de/go/id/a/?lidx=1',
+    ''
+  ),
+  (
+    '171',
+    'Sage Bionetworks',
+    '',
+    'sage',
+    'https://via.placeholder.com/300.png',
+    'https://sagebionetworks.org/',
+    ''
+  ),
+  (
+    '172',
+    'Sanofi',
+    '',
+    'sanofi',
+    'https://via.placeholder.com/300.png',
+    'https://www.sanofi.com/',
+    ''
+  ),
+  (
+    '173',
+    'Sapienza University of Rome',
+    '',
+    'bologna',
+    'https://via.placeholder.com/300.png',
+    'https://www.uniroma1.it/en/pagina-strutturale/home',
+    ''
+  ),
+  (
+    '174',
+    'Sartorius AG',
+    '',
+    'sartorius',
+    'https://via.placeholder.com/300.png',
+    'https://www.sartorius.com/en',
+    'Sartorius AG is an international pharmaceutical and laboratory equipment supplier, covering the segments of Bioprocess Solutions and Lab Products & Services.'
+  ),
+  (
+    '175',
+    'Seattle Cancer Care Alliance',
+    '',
+    'scca',
+    'https://via.placeholder.com/300.png',
+    'https://www.seattlecca.org/',
+    ''
+  ),
+  (
+    '176',
+    'Semmelweis University',
+    '',
+    'semmelweis-university',
+    'https://via.placeholder.com/300.png',
+    'https://semmelweis.hu/english/',
+    ''
+  ),
+  (
+    '177',
+    'Sentieon',
+    '',
+    'sentieon',
+    'https://via.placeholder.com/300.png',
+    'https://www.sentieon.com/',
+    ''
+  ),
+  (
+    '178',
+    'Siemens Healthineers',
+    '',
+    'siemens-healthineers',
+    'https://via.placeholder.com/300.png',
+    'https://www.siemens-healthineers.com/',
+    ''
+  ),
+  (
+    '180',
+    'Stanford University',
+    '',
+    'stanford',
+    'https://via.placeholder.com/300.png',
+    'https://www.stanford.edu/',
+    ''
+  ),
+  (
+    '181',
+    'Swiss Initiative in Systems Biology',
+    '',
+    'systemsx',
+    'https://via.placeholder.com/300.png',
+    'http://www.systemsx.ch/',
+    ''
+  ),
+  (
+    '182',
+    'Takeda',
+    '',
+    'takeda',
+    'https://via.placeholder.com/300.png',
+    'https://www.takeda.com/en-us/',
+    ''
+  ),
+  (
+    '183',
+    'Texas Biomedical Research Institute',
+    '',
+    'texas-biomedical-research-institute',
+    'https://via.placeholder.com/300.png',
+    'https://www.txbiomed.org/',
+    ''
+  ),
+  (
+    '184',
+    'The University of California-Davis',
+    '',
+    'uc-davis',
+    'https://via.placeholder.com/300.png',
+    'https://www.ucdavis.edu/',
+    ''
+  ),
+  (
+    '185',
+    'The University of Texas at Austin',
+    '',
+    'ut',
+    'https://via.placeholder.com/300.png',
+    'https://www.utexas.edu/',
+    ''
+  ),
+  (
+    '186',
+    'Thomas Jefferson University Hospital',
+    '',
+    'thomas-jefferson-university-hospital',
+    'https://via.placeholder.com/300.png',
+    'https://hospitals.jefferson.edu/',
+    ''
+  ),
+  (
+    '187',
+    'TracInnovations',
+    '',
+    'tracinnovations',
+    'https://via.placeholder.com/300.png',
+    'https://tracinnovations.com/',
+    ''
+  ),
+  (
+    '188',
+    'Trinity College Institute of Neuroscience',
+    '',
+    'tcd---neuroscience',
+    'https://via.placeholder.com/300.png',
+    'https://www.tcd.ie/Neuroscience/',
+    ''
+  ),
+  (
+    '189',
+    'Tulane University',
+    '',
+    'tulane',
+    'https://via.placeholder.com/300.png',
+    'https://tulane.edu/',
+    ''
+  ),
+  (
+    '190',
+    'U.S. Food and Drug Administration',
+    '',
+    'fda',
+    'https://via.placeholder.com/300.png',
+    'https://www.fda.gov/home',
+    ''
+  ),
+  (
+    '191',
+    'UNC Eshelman School of Pharmacy',
+    '',
+    'unc-eshelman-school-of-pharmacy',
+    'https://via.placeholder.com/300.png',
+    'https://pharmacy.unc.edu/',
+    ''
+  ),
+  (
+    '192',
+    'University of Alabama',
+    '',
+    'ua',
+    'https://via.placeholder.com/300.png',
+    'https://www.ua.edu/',
+    ''
+  ),
+  (
+    '193',
+    'University of Alabama at Birmingham',
+    '',
+    'uab',
+    'https://via.placeholder.com/300.png',
+    'https://www.uab.edu/home/',
+    ''
+  ),
+  (
+    '194',
+    'University of Arkansas for Medical Sciences',
+    '',
+    'uams',
+    'https://via.placeholder.com/300.png',
+    'https://www.uams.edu/',
+    ''
+  ),
+  (
+    '195',
+    'University of Basel',
+    '',
+    'university-of-basel',
+    'https://via.placeholder.com/300.png',
+    'https://www.unibas.ch/en.html',
+    ''
+  ),
+  (
+    '196',
+    'University of California San Diego',
+    '',
+    'ucsd',
+    'https://via.placeholder.com/300.png',
+    'https://ucsd.edu/',
+    ''
+  ),
+  (
+    '197',
+    'University of California San Francisco',
+    '',
+    'ucsf',
+    'https://via.placeholder.com/300.png',
+    'https://www.ucsf.edu/',
+    ''
+  ),
+  (
+    '198',
+    'University of California Santa Cruz',
+    '',
+    'ucsc',
+    'https://via.placeholder.com/300.png',
+    'https://www.ucsc.edu/',
+    ''
+  ),
+  (
+    '199',
+    'University of Cincinnati',
+    '',
+    'uc',
+    'https://via.placeholder.com/300.png',
+    'https://www.uc.edu/',
+    ''
+  ),
+  (
+    '200',
+    'University of Colorado Anschutz Medical Campus',
+    '',
+    'cu-anschutz',
+    'https://via.placeholder.com/300.png',
+    'https://www.cuanschutz.edu/',
+    ''
+  ),
+  (
+    '201',
+    'University of Connecticut',
+    '',
+    'uconn',
+    'https://via.placeholder.com/300.png',
+    'https://uconn.edu/',
+    ''
+  ),
+  (
+    '202',
+    'University of Houston',
+    '',
+    'uh',
+    'https://via.placeholder.com/300.png',
+    'https://www.uh.edu/',
+    ''
+  ),
+  (
+    '203',
+    'University of Illinois Urbana-Champaign',
+    '',
+    'uiuc',
+    'https://via.placeholder.com/300.png',
+    'https://illinois.edu/',
+    ''
+  ),
+  (
+    '204',
+    'University of Kent',
+    '',
+    'university-of-kent',
+    'https://via.placeholder.com/300.png',
+    'https://www.kent.ac.uk/',
+    ''
+  ),
+  (
+    '205',
+    'University of Kentucky',
+    '',
+    'uky',
+    'https://via.placeholder.com/300.png',
+    'http://www.uky.edu/',
+    ''
+  ),
+  (
+    '206',
+    'University of Lausanne',
+    '',
+    'unil',
+    'https://via.placeholder.com/300.png',
+    'https://www.unil.ch/central/en/home.html',
+    ''
+  ),
+  (
+    '207',
+    'University of Lisbon',
+    '',
+    'u-lisbon',
+    'https://via.placeholder.com/300.png',
+    'https://www.ulisboa.pt/en',
+    ''
+  ),
+  (
+    '208',
+    'University of London',
+    '',
+    'uol',
+    'https://via.placeholder.com/300.png',
+    'https://london.ac.uk/',
+    ''
+  ),
+  (
+    '209',
+    'University of Luxembourg',
+    '',
+    'university-of-luxembourg',
+    'https://via.placeholder.com/300.png',
+    'https://wwwen.uni.lu/',
+    ''
+  ),
+  (
+    '210',
+    'University of Maryland',
+    '',
+    'umd',
+    'https://via.placeholder.com/300.png',
+    'https://www.umd.edu/',
+    ''
+  ),
+  (
+    '211',
+    'University of Michigan',
+    '',
+    'umich',
+    'https://via.placeholder.com/300.png',
+    'https://umich.edu/',
+    ''
+  ),
+  (
+    '212',
+    'University of North Carolina at Chapel Hill',
+    '',
+    'unc',
+    'https://via.placeholder.com/300.png',
+    'https://www.unc.edu/',
+    ''
+  ),
+  (
+    '213',
+    'University of Notre Dame',
+    '',
+    'notre-dame',
+    'https://via.placeholder.com/300.png',
+    'https://www.nd.edu/',
+    ''
+  ),
+  (
+    '214',
+    'University of Padova',
+    '',
+    'university-of-padova',
+    'https://via.placeholder.com/300.png',
+    'https://www.unipd.it/en/',
+    ''
+  ),
+  (
+    '215',
+    'University of Padua',
+    '',
+    'university-of-padua',
+    'https://via.placeholder.com/300.png',
+    'https://www.unipd.it/en/',
+    ''
+  ),
+  (
+    '216',
+    'University of Pennsylvania',
+    '',
+    'upenn',
+    'https://via.placeholder.com/300.png',
+    'https://www.upenn.edu/',
+    ''
+  ),
+  (
+    '217',
+    'University of Rochester',
+    '',
+    'university-of-rochester',
+    'https://via.placeholder.com/300.png',
+    'https://www.urmedicine.org/',
+    ''
+  ),
+  (
+    '218',
+    'University of South Florida',
+    '',
+    'usf',
+    'https://via.placeholder.com/300.png',
+    'https://www.usf.edu/',
+    ''
+  ),
+  (
+    '219',
+    'University of Southampton',
+    '',
+    'university-of-southampton',
+    'https://via.placeholder.com/300.png',
+    'https://www.southampton.ac.uk/',
+    ''
+  ),
+  (
+    '220',
+    'University of Texas Southwestern Medical Center',
+    '',
+    'utsw',
+    'https://via.placeholder.com/300.png',
+    'https://www.utsouthwestern.edu/ ',
+    ''
+  ),
+  (
+    '221',
+    'University of Toronto',
+    '',
+    'uoft',
+    'https://via.placeholder.com/300.png',
+    'https://www.utoronto.ca/',
+    ''
+  ),
+  (
+    '222',
+    'University of Vermont',
+    '',
+    'uvm',
+    'https://via.placeholder.com/300.png',
+    'https://www.uvm.edu/',
+    ''
+  ),
+  (
+    '223',
+    'University of Verona',
+    '',
+    'university-of-verona',
+    'https://via.placeholder.com/300.png',
+    'https://www.univr.it/en/international',
+    ''
+  ),
+  (
+    '224',
+    'University of Virginia',
+    '',
+    'uva',
+    'https://via.placeholder.com/300.png',
+    'https://www.virginia.edu/',
+    ''
+  ),
+  (
+    '225',
+    'University of Washington',
+    '',
+    'uw',
+    'https://via.placeholder.com/300.png',
+    'https://www.washington.edu/',
+    ''
+  ),
+  (
+    '226',
+    'University of Wisconsin-Madison',
+    '',
+    'uw-madison',
+    'https://via.placeholder.com/300.png',
+    'https://www.wisc.edu/',
+    ''
+  ),
+  (
+    '227',
+    'University of Zurich',
+    '',
+    'uzh',
+    'https://via.placeholder.com/300.png',
+    'https://www.uzh.ch/en.html',
+    ''
+  ),
+  (
+    '228',
+    'Urban Green Energy',
+    '',
+    'uge',
+    'https://via.placeholder.com/300.png',
+    'https://www.ugei.com/',
+    ''
+  ),
+  (
+    '229',
+    'US Army Medical Research Institute of Infectious Diseases',
+    '',
+    'usamriid',
+    'https://via.placeholder.com/300.png',
+    'https://www.usamriid.army.mil/',
+    ''
+  ),
+  (
+    '230',
+    'VA Durham Health Care',
+    '',
+    'va-durham-health-care',
+    'https://via.placeholder.com/300.png',
+    'https://www.durham.va.gov/ ',
+    ''
+  ),
+  (
+    '231',
+    'Verily',
+    '',
+    'verily',
+    'https://via.placeholder.com/300.png',
+    'https://verily.com/',
+    ''
+  ),
+  (
+    '232',
+    'VHA Innovation Ecosystem',
+    '',
+    'vha-ie',
+    'https://via.placeholder.com/300.png',
+    'https://www.va.gov/innovationecosystem/',
+    ''
+  ),
+  (
+    '233',
+    'Washington University in St. Louis',
+    '',
+    'wustl',
+    'https://via.placeholder.com/300.png',
+    'https://wustl.edu/',
+    ''
+  ),
+  (
+    '234',
+    'Wayne State University',
+    '',
+    'wayne-state-university',
+    'https://via.placeholder.com/300.png',
+    'https://wayne.edu/',
+    ''
+  ),
+  (
+    '235',
+    'Weizmann Institute of Science',
+    '',
+    'weizmann-institute-of-science',
+    'https://via.placeholder.com/300.png',
+    'https://www.weizmann.ac.il/pages/',
+    ''
+  ),
+  (
+    '236',
+    'Wellcome Sanger Institute',
+    '',
+    'sanger',
+    'https://via.placeholder.com/300.png',
+    'https://www.sanger.ac.uk/',
+    ''
+  ),
+  (
+    '237',
+    'White House Office of Science and Technology Policy',
+    '',
+    'ostp',
+    'https://via.placeholder.com/300.png',
+    'https://www.whitehouse.gov/ostp/',
     ''
   );
