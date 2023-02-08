@@ -1,27 +1,27 @@
-package org.sagebionetworks.openchallenges.kafka.admin.configuration;
+package org.sagebionetworks.openchallenges.kafka.admin.config;
 
 import java.util.Map;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.admin.AdminClient;
+import org.sagebionetworks.openchallenges.app.config.data.KafkaConfigData;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.annotation.EnableRetry;
 
 @EnableRetry
 @Configuration
-public class KafkaAdminConfiguration {
+public class KafkaAdminConfig {
 
-  private final KafkaConfigurationData kafkaConfigurationData;
+  private final KafkaConfigData kafkaConfigData;
 
-  public KafkaAdminConfiguration(KafkaConfigurationData configurationData) {
-    this.kafkaConfigurationData = configurationData;
+  public KafkaAdminConfig(KafkaConfigData kafkaConfigData) {
+    this.kafkaConfigData = kafkaConfigData;
   }
 
   @Bean
   public AdminClient adminClient() {
     return AdminClient.create(
         Map.of(
-            CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG,
-            kafkaConfigurationData.getBootstrapServers()));
+            CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, kafkaConfigData.getBootstrapServers()));
   }
 }
