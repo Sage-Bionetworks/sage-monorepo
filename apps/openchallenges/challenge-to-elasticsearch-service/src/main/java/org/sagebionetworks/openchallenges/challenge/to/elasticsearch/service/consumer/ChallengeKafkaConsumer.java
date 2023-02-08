@@ -39,8 +39,8 @@ public class ChallengeKafkaConsumer implements KafkaConsumer<Long, KaggleCompeti
       @Header(KafkaHeaders.RECEIVED_PARTITION_ID) List<Integer> partitions,
       @Header(KafkaHeaders.OFFSET) List<Long> offsets) {
     log.info(
-        "{} number of message received with keys {}, partitions {} and offsets {}, "
-            + "sending it to elasticsearch: Thread id {}",
+        "{} number of messages received with keys {}, partitions {} and offsets {}, "
+            + "sending them to elasticsearch: Thread id {}",
         messages.size(),
         keys.toString(),
         partitions.toString(),

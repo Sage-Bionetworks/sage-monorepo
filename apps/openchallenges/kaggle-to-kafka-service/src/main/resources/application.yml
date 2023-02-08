@@ -1,3 +1,6 @@
+server:
+  port: 8086
+
 openchallenges-kaggle-to-kafka-service:
   kaggle-search-terms:
     - biology
@@ -27,7 +30,7 @@ openchallenges-retry:
 openchallenges-kafka:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
   schema-registry-url-key: schema.registry.url
-  schema-registry-url: http://localhost:8071
+  schema-registry-url: http://localhost:8061
   topic-name: kaggle-topic
   topic-names-to-create:
     - kaggle-topic
