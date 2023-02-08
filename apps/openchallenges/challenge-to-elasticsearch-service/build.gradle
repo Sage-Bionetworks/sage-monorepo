@@ -37,6 +37,7 @@ dependencies {
   implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}"
   implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudVersion}"
   implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
+  implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
