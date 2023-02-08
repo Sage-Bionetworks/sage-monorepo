@@ -17,14 +17,14 @@ kaggle-to-kafka-service:
   mock-max-challenge-name-length: 20
   mock-sleep-ms: 10000
 
-retry-configuration:
+retry:
   initial-interval-ms: 1000
   max-interval-ms: 10000
   multiplier: 2.0
   maxAttempts: 3
   sleep-time-ms: 2000
 
-kafka-configuration:
+kafka:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
   schema-registry-url-key: schema.registry.url
   schema-registry-url: http://localhost:8081
@@ -34,7 +34,7 @@ kafka-configuration:
   num-of-partitions: 3
   replication-factor: 3
 
-kafka-producer-configuration:
+kafka-producer:
   key-serializer-class: org.apache.kafka.common.serialization.LongSerializer
   value-serializer-class: io.confluent.kafka.serializers.KafkaAvroSerializer
   compression-type: snappy

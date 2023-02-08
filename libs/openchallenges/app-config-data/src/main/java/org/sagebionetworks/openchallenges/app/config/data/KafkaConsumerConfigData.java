@@ -6,8 +6,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "kafka-consumer-config")
+@ConfigurationProperties(prefix = "kafka-consumer")
 public class KafkaConsumerConfigData {
+
   private String keyDeserializer;
   private String valueDeserializer;
   private String consumerGroupId;

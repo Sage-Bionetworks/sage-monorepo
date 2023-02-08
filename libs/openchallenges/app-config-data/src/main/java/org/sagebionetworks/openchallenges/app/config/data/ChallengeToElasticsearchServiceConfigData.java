@@ -8,5 +8,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "challenge-to-elasticsearch-service")
 public class ChallengeToElasticsearchServiceConfigData {
+
   private String welcomeMessage;
 }
