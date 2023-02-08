@@ -14,11 +14,12 @@
 /**
  * The submission type of the challenge.
  */
-export type ChallengeSubmissionType = 'container_image' | 'prediction_file' | 'other';
+export type ChallengeSubmissionType = 'container_image' | 'prediction_file' | 'notebook' | 'other';
 
 export const ChallengeSubmissionType = {
     ContainerImage: 'container_image' as ChallengeSubmissionType,
     PredictionFile: 'prediction_file' as ChallengeSubmissionType,
+    Notebook: 'notebook' as ChallengeSubmissionType,
     Other: 'other' as ChallengeSubmissionType
 };
 
