@@ -27,7 +27,7 @@ retry:
 kafka:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
   schema-registry-url-key: schema.registry.url
-  schema-registry-url: http://localhost:8081
+  schema-registry-url: http://localhost:8071
   topic-name: kaggle-topic
   topic-names-to-create:
     - kaggle-topic

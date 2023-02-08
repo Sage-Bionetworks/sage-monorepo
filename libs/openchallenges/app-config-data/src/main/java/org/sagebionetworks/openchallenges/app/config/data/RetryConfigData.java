@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "retry-config")
+@ConfigurationProperties(prefix = "openchallenges-retry")
 public class RetryConfigData {
 
   private Long initialIntervalMs;
