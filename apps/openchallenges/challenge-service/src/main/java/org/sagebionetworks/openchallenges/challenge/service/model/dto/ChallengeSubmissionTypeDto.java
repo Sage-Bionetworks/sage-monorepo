@@ -13,6 +13,8 @@ public enum ChallengeSubmissionTypeDto {
 
   PREDICTION_FILE("prediction_file"),
 
+  NOTEBOOK("notebook"),
+
   OTHER("other");
 
   private String value;
