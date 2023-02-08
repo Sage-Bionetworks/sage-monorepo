@@ -1,49 +1,11 @@
-server:
-  port: 8086
-
-openchallenges-kaggle-to-kafka-service:
-  kaggle-search-terms:
-    - biology
-    - cancer
-    - cell
-    - drug
-    - health
-    - life sciences
-    - medicine
-    - neuro
-  kaggle-username: ${KAGGLE_USERNAME}
-  kaggle-key: ${KAGGLE_KEY}
-  kaggle-base-url: https://www.kaggle.com/api/v1
-  welcome-message: 'Welcome to Kaggle to Kafka service.'
-  enable-mock-challenges: true
-  mock-min-challenge-name-length: 5
-  mock-max-challenge-name-length: 20
-  mock-sleep-ms: 10000
-
-openchallenges-retry:
-  initial-interval-ms: 1000
-  max-interval-ms: 10000
-  multiplier: 2.0
-  maxAttempts: 3
-  sleep-time-ms: 2000
-
-openchallenges-kafka:
-  bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
-  schema-registry-url-key: schema.registry.url
-  schema-registry-url: http://localhost:8061
-  topic-name: kaggle-topic
-  topic-names-to-create:
-    - kaggle-topic
-  num-of-partitions: 3
-  replication-factor: 3
-
-openchallenges-kafka-producer:
-  key-serializer-class: org.apache.kafka.common.serialization.LongSerializer
-  value-serializer-class: io.confluent.kafka.serializers.KafkaAvroSerializer
-  compression-type: snappy
-  acks: all
-  batch-size: 16384
-  batch-size-boost-factor: 100
-  linger-ms: 5
-  request-timeout-ms: 60000
-  retry-count: 5
+spring:
+  application:
+    name: openchallenges-kaggle-to-kafka-service
+  profiles:
+    active: development,local
+  config:
+    import: 'configserver:http://openchallenges-config-server:8090'
+  cloud:
+    config:
+      username: openchallenges
+      password: changeme

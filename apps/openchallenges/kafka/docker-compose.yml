@@ -19,7 +19,7 @@ services:
     image: confluentinc/cp-schema-registry:6.1.9
     container_name: openchallenges-schema-registry
     ports:
-      - "8071:8081"
+      - "8071:8071"
     environment:
       SCHEMA_REGISTRY_HOST_NAME: openchallenges-schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'openchallenges-zookeeper:2181'
