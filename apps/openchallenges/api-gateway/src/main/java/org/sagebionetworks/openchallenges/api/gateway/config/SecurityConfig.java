@@ -1,4 +1,4 @@
-package org.sagebionetworks.challenge.configuration;
+package org.sagebionetworks.openchallenges.api.gateway.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
@@ -8,7 +8,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-public class SecurityConfiguration {
+public class SecurityConfig {
   @Bean
   SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
     http.authorizeExchange()

@@ -82,6 +82,10 @@ function openchallenges-db-cli {
   node dist/apps/openchallenges/db-cli/src/index.js
 }
 
+# function openchallenges-infra-base-serve-detach {
+#   nx run-many --parallel --target=serve-detach --projects=openchallenges-config,openchallenges-kafka,openchallenges-zipkin
+# }
+
 # function challenge-seed-db {
 #   node dist/apps/challenge-db-cli/src/index.js seed "$WORKSPACE_DIR/apps/challenge-db-cli/data/seeds/production/"
 # }

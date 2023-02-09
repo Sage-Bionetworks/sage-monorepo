@@ -20,12 +20,15 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-oauth2-client:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server:${springBootVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
+  implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}"
   implementation "org.springframework.cloud:spring-cloud-starter-gateway:${springCloudVersion}"
   implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+  implementation "org.sagebionetworks.openchallenges:openchallenges-app-config-data:${openchallengesVersion}"
 }
 
-group = 'org.sagebionetworks.challenge'
+group = 'org.sagebionetworks.openchallenges'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -36,10 +39,6 @@ java {
 
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
-}
-
-springBoot {
-  mainClass = 'org.sagebionetworks.challenge.ChallengeApiGatewayApplication'
 }
 
 bootBuildImage {
