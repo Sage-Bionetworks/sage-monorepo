@@ -16,6 +16,8 @@ repositories {
 }
 
 dependencies {
+  annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+  compileOnly "org.projectlombok:lombok:${lombokVersion}"
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-oauth2-client:${springBootVersion}"
