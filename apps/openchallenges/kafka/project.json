@@ -38,9 +38,9 @@
     "list-broker": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "kafkacat -L -b localhost:19092",
-        "cwd": "apps/openchallenges/kafka"
-      }
+        "command": "kafkacat -L -b localhost:19092"
+      },
+      "parallel": false
     }
   },
   "tags": ["type:message", "scope:backend"],
