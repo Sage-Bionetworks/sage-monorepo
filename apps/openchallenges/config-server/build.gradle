@@ -38,8 +38,10 @@ tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
 }
 
+
+
 bootBuildImage {
-  imageName = 'sagebionetworks/openchallenges-config-server:latest'
+  imageName = "sagebionetworks/${project.name}-base:latest"
 }
 
 spotless {

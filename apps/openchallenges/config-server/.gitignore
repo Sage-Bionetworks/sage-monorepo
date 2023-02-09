@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 .env
 log/
+tools/curl
 
 ### STS ###
 .apt_generated

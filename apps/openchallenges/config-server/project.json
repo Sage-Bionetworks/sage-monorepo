@@ -7,7 +7,10 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
+        "commands": [
+          "shx cp -n .env.example .env",
+          "curl -sL https://github.com/moparisthebest/static-curl/releases/download/v7.87.0/curl-amd64 --output tools/curl"
+        ],
         "cwd": "apps/openchallenges/config-server"
       }
     },
@@ -67,12 +70,20 @@
       },
       "dependsOn": ["build-image", "prepare", "^serve-detach"]
     },
-    "build-image": {
+    "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
         "root": "apps/openchallenges/config-server"
       },
       "dependsOn": ["^install"]
+    },
+    "build-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["docker build -t sagebionetworks/openchallenges-config-server:latest ."],
+        "cwd": "apps/openchallenges/config-server"
+      },
+      "dependsOn": ["prepare", "build-image-base"]
     }
   },
   "tags": ["type:service", "scope:backend"],
