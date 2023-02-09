@@ -12,6 +12,10 @@ services:
     ports:
       - "8090:8090"
     command: start-dev
+    deploy:
+      resources:
+        limits:
+          memory: 500M
 
 networks:
   openchallenges:

@@ -1,3 +1,6 @@
+openchallenges-config-server:
+  welcome-message: 'Welcome to the OpenChallenges Config Server.'
+
 spring:
   application:
     name: openchallenges-config-server

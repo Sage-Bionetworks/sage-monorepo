@@ -22,7 +22,6 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
   implementation "org.springframework.cloud:spring-cloud-config-server:${springCloudVersion}"
-  implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 

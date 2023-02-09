@@ -83,7 +83,7 @@ function openchallenges-db-cli {
 }
 
 # function openchallenges-infra-base-serve-detach {
-#   nx run-many --parallel --target=serve-detach --projects=openchallenges-config,openchallenges-kafka,openchallenges-zipkin
+#   nx run-many --target=serve-detach --projects=openchallenges-config,openchallenges-kafka,openchallenges-zipkin
 # }
 
 # function challenge-seed-db {
