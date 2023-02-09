@@ -23,8 +23,8 @@ spring:
           clone-on-start: true
           order: 2
     fail-fast: true
-  profiles:
-    active: git,vault
+  # profiles:
+  #   active: git,vault
   security:
     user:
       name: openchallenges
@@ -32,19 +32,18 @@ spring:
 
 server:
   port: 8090
+  # shutdown: graceful # for prod
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://openchallenges-service-registry:8081/eureka
-
-logging:
-  level:
-    ROOT: INFO
-    org.spring.framework.cloud.config: DEBUG
+# logging:
+#   level:
+#     ROOT: INFO
+#     org.spring.framework.cloud.config: DEBUG
 
 management:
   endpoints:
+    health:
+      probes:
+        enabled: true
     web:
       exposure:
-        include: env
+        include: env # for development
