@@ -33,7 +33,7 @@ CREATE TABLE `challenge`
     `name`                  varchar(255) DEFAULT NULL,
     `headline`              varchar(80),
     `description`           varchar(280) NOT NULL,
-    -- `avatar_url`            varchar(255),
+    `avatar_url`            varchar(255),
     `website_url`           varchar(255) NOT NULL,
     `status`                ENUM('upcoming', 'active', 'completed'),
     `difficulty`            ENUM('good_for_beginners', 'intermediate', 'advanced'),
@@ -53,7 +53,7 @@ CREATE TABLE `challenge`
 
 -- challenge_organization_role definition
 
-CREATE TABLE `challenge_organization_role`
+CREATE TABLE `challenge_contribution_role`
 (
     `id`                    int NOT NULL AUTO_INCREMENT,
     `challenge_id`          bigint(20) NOT NULL,
