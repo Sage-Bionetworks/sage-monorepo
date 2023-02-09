@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.app.config.data.KafkaConfigData;
 import org.sagebionetworks.openchallenges.kafka.admin.client.KafkaAdminClient;
 import org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -31,8 +33,18 @@ public class ChallengeKafkaConsumer implements KafkaConsumer<Long, KaggleCompeti
     this.kafkaConfigData = kafkaConfigData;
   }
 
+  @EventListener
+  public void onAppStarted(ApplicationStartedEvent event) {
+    kafkaAdminClient.checkTopicsCreated();
+    log.info(
+        "Topics with name {} is ready for operations.",
+        kafkaConfigData.getTopicNamesToCreate().toArray());
+    kafkaListenerEndpointRegistry.getListenerContainer("challengeTopicListener").start();
+  }
+
+  // ${openchallenges-kafka.topic-name}
   @Override
-  @KafkaListener(id = "challengeTopicListener", topics = "${openchallenges-kafka.topic-name}")
+  @KafkaListener(id = "challengeTopicListener", topics = "kaggle-topic")
   public void receive(
       @Payload List<KaggleCompetitionAvroModel> messages,
       @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) List<Integer> keys,
