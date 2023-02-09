@@ -1,10 +1,10 @@
-package org.sagebionetworks.challenge;
+package org.sagebionetworks.openchallenges.service.registry;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ChallengeServiceRegistryApplicationTests {
+class ServiceRegistryApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -64,5 +64,7 @@
     }
   },
   "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": []
+  "implicitDependencies": [
+    "openchallenges-app-config-data"
+  ]
 }
