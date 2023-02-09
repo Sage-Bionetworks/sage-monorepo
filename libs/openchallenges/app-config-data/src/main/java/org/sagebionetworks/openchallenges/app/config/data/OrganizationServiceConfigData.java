@@ -8,5 +8,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "openchallenges-organization-service")
 public class OrganizationServiceConfigData {
+
   private String welcomeMessage;
 }

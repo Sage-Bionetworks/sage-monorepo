@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: openchallenges-kaggle-to-kafka-service
+  profiles:
+    active: development,local
+  config:
+    import: 'configserver:http://openchallenges-config-server:8090'
+  cloud:
+    config:
+      username: openchallenges
+      password: changeme

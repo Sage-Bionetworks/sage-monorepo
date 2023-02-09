@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.kafka.admin.configuration;
+package org.sagebionetworks.openchallenges.app.config.data;
 
 import java.util.List;
 import lombok.Data;
@@ -7,8 +7,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "kafka-configuration")
-public class KafkaConfigurationData {
+@ConfigurationProperties(prefix = "openchallenges-kafka")
+public class KafkaConfigData {
+
   private String bootstrapServers;
   private String schemaRegistryUrlKey;
   private String schemaRegistryUrl;

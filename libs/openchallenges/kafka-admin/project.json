@@ -16,7 +16,8 @@
       "options": {
         "root": "libs/openchallenges/kafka-admin"
       },
-      "outputs": ["{projectRoot}/build"]
+      "outputs": ["{projectRoot}/build"],
+      "dependsOn": ["^install"]
     },
     "install": {
       "executor": "nx:run-commands",
@@ -51,5 +52,8 @@
       }
     }
   },
-  "tags": ["type:library", "scope:openchallenges"]
+  "tags": ["type:library", "scope:openchallenges"],
+  "implicitDependencies": [
+    "openchallenges-app-config-data"
+  ]
 }

@@ -49,6 +49,7 @@
     8010,
     8020,
     8021,
+    8071,
     8080,
     8081,
     8082,
@@ -112,6 +113,10 @@
     },
     "8021": {
       "label": "openchallenges-rabbitmq-ui",
+      "onAutoForward": "silent"
+    },
+    "8071": {
+      "label": "openchallenges-schema-registry",
       "onAutoForward": "silent"
     },
     "8080": {

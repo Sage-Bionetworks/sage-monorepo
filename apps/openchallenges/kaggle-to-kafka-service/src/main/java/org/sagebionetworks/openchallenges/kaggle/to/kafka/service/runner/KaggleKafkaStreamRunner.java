@@ -14,8 +14,8 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.utils.Base64;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.apache.hc.core5.net.URIBuilder;
+import org.sagebionetworks.openchallenges.app.config.data.KafkaConfigData;
 import org.sagebionetworks.openchallenges.app.config.data.KaggleToKafkaServiceConfigData;
-import org.sagebionetworks.openchallenges.kafka.admin.configuration.KafkaConfigurationData;
 import org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel;
 import org.sagebionetworks.openchallenges.kafka.producer.service.KafkaProducer;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.model.dto.KaggleCompetitionDto;
@@ -33,7 +33,7 @@ public class KaggleKafkaStreamRunner implements StreamRunner {
 
   private final KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData;
 
-  private final KafkaConfigurationData kafkaConfigurationData;
+  private final KafkaConfigData kafkaConfigData;
 
   private final KafkaProducer<Long, KaggleCompetitionAvroModel> kafkaProducer;
 
@@ -41,11 +41,11 @@ public class KaggleKafkaStreamRunner implements StreamRunner {
 
   public KaggleKafkaStreamRunner(
       KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData,
-      KafkaConfigurationData kafkaConfigurationData,
+      KafkaConfigData kafkaConfigData,
       KafkaProducer<Long, KaggleCompetitionAvroModel> kafkaProducer,
       KaggleCompetitionToAvroTransformer kaggleCompetitionToAvroTransformer) {
     this.kaggleToKafkaServiceConfigData = kaggleToKafkaServiceConfigData;
-    this.kafkaConfigurationData = kafkaConfigurationData;
+    this.kafkaConfigData = kafkaConfigData;
     this.kafkaProducer = kafkaProducer;
     this.kaggleCompetitionToAvroTransformer = kaggleCompetitionToAvroTransformer;
   }
@@ -113,7 +113,7 @@ public class KaggleKafkaStreamRunner implements StreamRunner {
           kaggleCompetitionToAvroTransformer.getKaggleCompetitionAvroModelFromDto(
               competitions.get(0));
       kafkaProducer.send(
-          kafkaConfigurationData.getTopicName(),
+          kafkaConfigData.getTopicName(),
           kaggleCompetitionAvroModel.getId(),
           kaggleCompetitionAvroModel);
     }

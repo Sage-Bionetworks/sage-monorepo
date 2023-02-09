@@ -7,8 +7,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "kaggle-to-kafka-service")
+@ConfigurationProperties(prefix = "openchallenges-kaggle-to-kafka-service")
 public class KaggleToKafkaServiceConfigData {
+
   private List<String> kaggleSearchTerms;
   private String kaggleUsername;
   private String kaggleKey;
