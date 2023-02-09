@@ -79,7 +79,7 @@ function workspace-graph {
 }
 
 function openchallenges-db-cli {
-  node dist/apps/openchallenges/db-cli/src/index.js
+  node dist/apps/openchallenges/db-cli/src/index.js "$@"
 }
 
 # function challenge-seed-db {
