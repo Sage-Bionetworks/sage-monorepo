@@ -331,6 +331,7 @@ components:
       enum:
       - container_image
       - prediction_file
+      - notebook
       - other
       example: container_image
       type: string
