@@ -1,19 +1,20 @@
 package org.sagebionetworks.openchallenges.service.registry;
 
 import org.sagebionetworks.openchallenges.app.config.data.ServiceRegistryConfigData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.context.annotation.ComponentScan;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @EnableEurekaServer
 @SpringBootApplication
 @ComponentScan(basePackages = "org.sagebionetworks.openchallenges")
 public class ServiceRegistryApplication implements CommandLineRunner {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ServiceRegistryApplication.class);
 
   private final ServiceRegistryConfigData serviceRegistryConfigData;
 
@@ -27,7 +28,7 @@ public class ServiceRegistryApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    log.info(serviceRegistryConfigData.getWelcomeMessage());
+    LOG.info(serviceRegistryConfigData.getWelcomeMessage());
   }
 
 }

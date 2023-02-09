@@ -65,8 +65,6 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    "openchallenges-app-config-data",
-    "openchallenges-config-server",
-    "openchallenges-service-registry"
+    "openchallenges-app-config-data"
   ]
 }
