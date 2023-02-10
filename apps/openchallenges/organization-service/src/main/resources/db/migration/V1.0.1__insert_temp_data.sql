@@ -299,7 +299,7 @@ VALUES (
     '33',
     'BioMarin Pharmaceutical Inc.',
     '',
-    'biomarin-',
+    'biomarin',
     'https://via.placeholder.com/300.png',
     'https://www.biomarin.com/',
     ''
@@ -335,7 +335,7 @@ VALUES (
     '37',
     'Brigham And Women''s Hospital',
     '',
-    'ƒnumer',
+    'bwh',
     'https://via.placeholder.com/300.png',
     'https://www.brighamandwomens.org/',
     ''
