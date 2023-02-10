@@ -4,6 +4,7 @@
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+.nx-container/
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 .coveralls.yml

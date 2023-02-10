@@ -4,8 +4,6 @@ services:
   openchallenges-vault:
     image: sagebionetworks/openchallenges-vault:latest
     container_name: openchallenges-vault
-    build:
-      context: .
     restart: always
     env_file:
       - .env
