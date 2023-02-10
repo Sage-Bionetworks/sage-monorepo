@@ -41,7 +41,7 @@
     //   "dependsOn": ["build-image", "prepare"]
     // },
     // "build-image": {
-    //   "executor": "@nx-tools/nx-docker:build",
+    //   "executor": "@nx-tools/nx-container:build",
     //   "options": {
     //     "context": "apps/openchallenges/notebook",
     //     "push": false,
