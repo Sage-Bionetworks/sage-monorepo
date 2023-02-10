@@ -1,6 +1,6 @@
-FROM sagebionetworks/openchallenges-config-server-base:latest
+FROM sagebionetworks/openchallenges-service-registry-base:latest
 
-ARG SERVER_PORT="8090"
+ARG SERVER_PORT="8081"
 
 USER root
 

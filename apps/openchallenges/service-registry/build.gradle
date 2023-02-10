@@ -39,5 +39,5 @@ tasks.withType(JavaCompile) {
 }
 
 bootBuildImage {
-  imageName = 'sagebionetworks/openchallenges-service-registry:latest'
+  imageName = "sagebionetworks/${project.name}-base:latest"
 }

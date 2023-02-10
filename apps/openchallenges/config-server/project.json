@@ -8,8 +8,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "shx cp -n .env.example .env",
-          "curl -sL https://github.com/moparisthebest/static-curl/releases/download/v7.87.0/curl-amd64 --output tools/curl"
+          "shx cp -n .env.example .env"
         ],
         "cwd": "apps/openchallenges/config-server"
       }
@@ -84,7 +83,7 @@
         "push": false,
         "tags": ["sagebionetworks/openchallenges-config-server:latest"]
       },
-      "dependsOn": ["prepare", "build-image-base"]
+      "dependsOn": ["build-image-base"]
     }
   },
   "tags": ["type:service", "scope:backend"],
