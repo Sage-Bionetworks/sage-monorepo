@@ -4,13 +4,15 @@ services:
   openchallenges-vault:
     image: sagebionetworks/openchallenges-vault:latest
     container_name: openchallenges-vault
+    build:
+      context: .
     restart: always
     env_file:
       - .env
     networks:
       - openchallenges
     ports:
-      - "8200:8200"
+      - "${SERVER_PORT}:8200"
     cap_add:
       - IPC_LOCK
     deploy:
