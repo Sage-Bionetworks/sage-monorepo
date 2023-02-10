@@ -78,10 +78,11 @@
       "dependsOn": ["^install"]
     },
     "build-image": {
-      "executor": "nx:run-commands",
+      "executor": "@nx-tools/nx-container:build",
       "options": {
-        "commands": ["docker compose build"],
-        "cwd": "apps/openchallenges/config-server"
+        "context": "apps/openchallenges/config-server",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-config-server:latest"]
       },
       "dependsOn": ["prepare", "build-image-base"]
     }

@@ -1,52 +1,37 @@
 version: "3.8"
 
 services:
-  openchallenges-zipkin:
-    image: sagebionetworks/openchallenges-zipkin:latest
-    container_name: openchallenges-zipkin
-    restart: always
-    env_file:
-      - ./zipkin/.env
-    networks:
-      - openchallenges
-    ports:
-      - "9411:9411"
-    deploy:
-      resources:
-        limits:
-          memory: 500M
+  # openchallenges-api-gateway:
+  #   image: sagebionetworks/openchallenges-api-gateway:latest
+  #   container_name: openchallenges-api-gateway
+  #   restart: always
+  #   env_file:
+  #     - ./api-gateway/.env
+  #   networks:
+  #     - openchallenges
+  #   ports:
+  #     - "8082:8082"
+  #   command: start-dev
+  #   depends_on:
+  #     openchallenges-config-server:
+  #       condition: service_healthy
+  #     openchallenges-service-registry:
+  #       condition: service_started
 
-  openchallenges-api-gateway:
-    image: sagebionetworks/openchallenges-api-gateway:latest
-    container_name: openchallenges-api-gateway
-    restart: always
-    env_file:
-      - ./api-gateway/.env
-    networks:
-      - openchallenges
-    ports:
-      - "8082:8082"
-    command: start-dev
-    depends_on:
-      openchallenges-config-server:
-        condition: service_healthy
-      openchallenges-service-registry:
-        considtion: service_started
-
-  openchallenges-service-registry:
-    image: sagebionetworks/openchallenges-service-registry:latest
-    container_name: openchallenges-service-registry
-    restart: always
-    environment:
-      - DEFAULT_ZONE=http://openchallenges-service-registry:8081/eureka
-    networks:
-      - openchallenges
-    ports:
-      - "8081:8081"
-    command: start-dev
-    depends_on:
-      openchallenges-config-server:
-        condition: service_healthy
+  # openchallenges-service-registry:
+  #   image: sagebionetworks/openchallenges-service-registry:latest
+  #   container_name: openchallenges-service-registry
+  #   restart: always
+  #   environment:
+  #     - DEFAULT_ZONE=http://openchallenges-service-registry:8081/eureka
+  #   networks:
+  #     - openchallenges
+  #   ports:
+  #     - "8081:8081"
+  #   command: start-dev
+  #   depends_on:
+  #     openchallenges-config-server:
+  #       condition: service_healthy
 
   openchallenges-config-server:
     image: sagebionetworks/openchallenges-config-server:latest
@@ -64,7 +49,8 @@ services:
         limits:
           memory: 1G
     depends_on:
-      - openchallenges-vault
+      openchallenges-vault:
+        condition: service_healthy
 
   openchallenges-vault:
     image: sagebionetworks/openchallenges-vault:latest
@@ -82,6 +68,21 @@ services:
       resources:
         limits:
           memory: 200M
+
+  # openchallenges-zipkin:
+  #   image: sagebionetworks/openchallenges-zipkin:latest
+  #   container_name: openchallenges-zipkin
+  #   restart: always
+  #   env_file:
+  #     - ./zipkin/.env
+  #   networks:
+  #     - openchallenges
+  #   ports:
+  #     - "9411:9411"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 500M
 
 networks:
   openchallenges:
