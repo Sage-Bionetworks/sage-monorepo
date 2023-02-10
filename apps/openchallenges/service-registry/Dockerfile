@@ -1,7 +1,5 @@
 FROM sagebionetworks/openchallenges-service-registry-base:latest
 
-ARG SERVER_PORT="8081"
-
 USER root
 
 RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
@@ -11,6 +9,7 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/*
 
+# Requires the environment variable SERVER_PORT at runtime
 HEALTHCHECK --interval=2s --timeout=3s --retries=5 --start-period=2s \
   CMD curl --fail --silent "localhost:${SERVER_PORT}/actuator/health/readiness" | jq '.status' | grep UP || exit 1
 

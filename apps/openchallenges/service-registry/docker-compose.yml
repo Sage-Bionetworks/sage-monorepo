@@ -5,15 +5,17 @@ services:
     image: sagebionetworks/openchallenges-service-registry:latest
     container_name: openchallenges-service-registry
     restart: always
-    environment:
-      - DEFAULT_ZONE=http://openchallenges-service-registry:8081/eureka
+    env_file:
+      - .env
     networks:
       - openchallenges
     ports:
       - "8081:8081"
     command: start-dev
-    # depends_on:
-    #   - openchallenges-config-server
+    deploy:
+      resources:
+        limits:
+          memory: 1G
 
 networks:
   openchallenges:
