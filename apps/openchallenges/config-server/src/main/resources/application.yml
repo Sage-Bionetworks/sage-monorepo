@@ -31,7 +31,7 @@ spring:
       password: changeme
 
 server:
-  port: 8090
+  port: ${SERVER_PORT}
   # shutdown: graceful # for prod
 
 # logging:
@@ -41,9 +41,16 @@ server:
 
 management:
   endpoints:
+    web:
+      exposure:
+        include: env,health,refresh
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
     health:
       probes:
         enabled: true
-    web:
-      exposure:
-        include: env # for development
+

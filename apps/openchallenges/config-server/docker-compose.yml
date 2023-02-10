@@ -4,6 +4,10 @@ services:
   openchallenges-config-server:
     image: sagebionetworks/openchallenges-config-server:latest
     container_name: openchallenges-config-server
+    build:
+      context: .
+      args:
+        SERVER_PORT: ${SERVER_PORT}
     restart: always
     env_file:
       - .env

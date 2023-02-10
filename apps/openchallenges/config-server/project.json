@@ -80,7 +80,7 @@
     "build-image": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["docker build -t sagebionetworks/openchallenges-config-server:latest ."],
+        "commands": ["docker compose build"],
         "cwd": "apps/openchallenges/config-server"
       },
       "dependsOn": ["prepare", "build-image-base"]
