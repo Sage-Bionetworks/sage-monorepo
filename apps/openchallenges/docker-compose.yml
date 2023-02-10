@@ -1,22 +1,22 @@
 version: "3.8"
 
 services:
-  # openchallenges-api-gateway:
-  #   image: sagebionetworks/openchallenges-api-gateway:latest
-  #   container_name: openchallenges-api-gateway
-  #   restart: always
-  #   env_file:
-  #     - ./api-gateway/.env
-  #   networks:
-  #     - openchallenges
-  #   ports:
-  #     - "8082:8082"
-  #   command: start-dev
-  #   depends_on:
-  #     openchallenges-config-server:
-  #       condition: service_healthy
-  #     openchallenges-service-registry:
-  #       condition: service_started
+  openchallenges-api-gateway:
+    image: sagebionetworks/openchallenges-api-gateway:latest
+    container_name: openchallenges-api-gateway
+    restart: always
+    env_file:
+      - ./api-gateway/.env
+    networks:
+      - openchallenges
+    ports:
+      - "8082:8082"
+    command: start-dev
+    depends_on:
+      openchallenges-config-server:
+        condition: service_healthy
+      openchallenges-service-registry:
+        condition: service_started
 
   openchallenges-service-registry:
     image: sagebionetworks/openchallenges-service-registry:latest

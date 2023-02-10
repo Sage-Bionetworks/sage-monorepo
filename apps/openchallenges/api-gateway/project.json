@@ -55,16 +55,27 @@
       },
       "dependsOn": ["build-image", "prepare", "^serve-detach"]
     },
-    "build-image": {
+    "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
         "root": "apps/openchallenges/api-gateway"
       },
       "dependsOn": ["^install"]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/api-gateway",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-api-gateway:latest"]
+      },
+      "dependsOn": ["build-image-base"]
     }
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    "openchallenges-app-config-data"
+    "openchallenges-app-config-data",
+    "openchallenges-config-server",
+    "openchallenges-service-registry"
   ]
 }

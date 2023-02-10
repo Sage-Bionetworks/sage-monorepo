@@ -18,6 +18,7 @@ public class SecurityConfig {
         .permitAll().pathMatchers("/api/v1/challenges/**")
         .permitAll().pathMatchers("/api/v1/challengePlatforms/**")
         .permitAll().pathMatchers("/api/v1/challengeInputDataTypes/**")
+        .permitAll().pathMatchers("/actuator/health/readiness")
         .permitAll()
         // ALL OTHER APIS ARE AUTHENTICATED
         .anyExchange().authenticated().and().csrf().disable().oauth2Login().and()

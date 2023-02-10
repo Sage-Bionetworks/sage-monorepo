@@ -1,4 +1,4 @@
-FROM sagebionetworks/openchallenges-config-server-base:latest
+FROM sagebionetworks/openchallenges-api-gateway-base:latest
 
 USER root
 
