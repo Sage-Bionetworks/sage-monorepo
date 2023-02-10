@@ -28,8 +28,10 @@ services:
       - "8082:8082"
     command: start-dev
     depends_on:
-      - openchallenges-config-server
-      - openchallenges-service-registry
+      openchallenges-config-server:
+        condition: service_healthy
+      openchallenges-service-registry:
+        considtion: service_started
 
   openchallenges-service-registry:
     image: sagebionetworks/openchallenges-service-registry:latest
@@ -43,7 +45,8 @@ services:
       - "8081:8081"
     command: start-dev
     depends_on:
-      - openchallenges-config-server
+      openchallenges-config-server:
+        condition: service_healthy
 
   openchallenges-config-server:
     image: sagebionetworks/openchallenges-config-server:latest
