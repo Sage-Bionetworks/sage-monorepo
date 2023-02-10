@@ -29,7 +29,7 @@ CREATE TABLE `challenge_input_data_type`
 CREATE TABLE `challenge`
 (
     `id`                    bigint(20) NOT NULL AUTO_INCREMENT,
-    `slug`                  varchar(255) NOT NULL UNIQUE,
+    `slug`                  varchar(255) NOT NULL,
     `name`                  varchar(255) DEFAULT NULL,
     `headline`              varchar(80),
     `description`           varchar(280) NOT NULL,
@@ -61,7 +61,6 @@ CREATE TABLE `challenge_contribution_role`
     `role`                  ENUM('challenge_organizer', 'data_contributor', 'sponsor'),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
-    -- FOREIGN KEY (`organization_id`) REFERENCES organization_service.challenge_organization(`id`),
     CONSTRAINT unique_item UNIQUE (`id`)
 );
 
