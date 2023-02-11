@@ -1,0 +1,3 @@
+id,name,slug,headline,avatar_url,website_url,description,tags,status,difficulty,platform,incentives,submission_types,input_data,start_date,end_date,starredCount,_platform
+1,Network Topology and Parameter Inference,network-topology-and-parameter-inference,,,https://www.synapse.org/#!Synapse:syn2821735,"Participants are asked to develop and/or apply optimization methods, including the selection of the most informative experiments, to accurately estimate parameters and
+ predict outcomes of perturbations in Systems Biology models.",,completed,intermediate,1,publication,prediction_file,,2012-06-01,2012-10-01,0,Synapse
