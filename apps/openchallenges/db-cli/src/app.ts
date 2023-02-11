@@ -1,6 +1,8 @@
 import { Command } from 'commander';
 import {
   connect,
+  listDatabases,
+  listTables,
   ping,
 } from './database';
 import { config } from './config';
@@ -11,6 +13,7 @@ import { logger, Level } from './logger';
 export class App {
   private program: Command;
   private conn!: any;
+  private padding = 35;
 
   constructor() {
     this.program = new Command();
@@ -22,15 +25,16 @@ export class App {
       .description(Pkg.description);
 
     this.program
-      .command('ping')
-      .description('ping the MongoDB instance')
-      .action(() => this.ping())
+      .command('list-dbs')
+      .description('list available databases')
+      .action(() => this.listDatabases())
       .hook('preAction', () => this.setConfig(this.program.opts()));
 
     this.program
-      .command('remove-collections')
-      .description('remove all collections')
-      .action(() => this.removeCollections())
+      .command('list-tables')
+      .description('list tables in a database')
+      .argument('<database>')
+      .action((database: string) => this.listTables(database))
       .hook('preAction', () => this.setConfig(this.program.opts()));
 
     this.program
@@ -58,16 +62,44 @@ export class App {
     return Promise.resolve();
   }
 
-  private async ping(): Promise<void> {
+  private async listDatabases(): Promise<void> {
     try {
-      this.mongoose = await connectToDatabase();
-      const pong = await pingDatabase();
-      logger.info(pong ? 'pong' : 'No pong received');
+      this.conn = await connect();
+      const databases = await listDatabases(this.conn);
+      console.log('database'.padEnd(this.padding, ' ') + '\ttables_count');
+      console.log('-'.repeat(this.padding) + '\t------------');
+      for (const database of databases) {
+        console.log(
+          database.name.padEnd(this.padding, ' ') + '\t' + database.tablesCount
+        );
+      }
       return this.gracefulShutdown('', () => {
-        process.exit(pong ? 0 : -1);
+        process.exit(databases ? 0 : -1);
       });
-    } catch (err) {
-      logger.error('Unable to ping the database', err);
+    } catch (err: any) {
+      logger.error('unable to list databases:', err.text);
+      return this.gracefulShutdown('', () => {
+        process.exit(-1);
+      });
+    }
+  }
+
+  private async listTables(database: string): Promise<void> {
+    try {
+      this.conn = await connect(database);
+      const tables = await listTables(this.conn);
+      console.log('table'.padEnd(this.padding, ' ') + '\trecords_count');
+      console.log('-'.repeat(this.padding) + '\t------------');
+      for (const table of tables) {
+        console.log(
+          table.name.padEnd(this.padding, ' ') + '\t' + table.rowsCount
+        );
+      }
+      return this.gracefulShutdown('', () => {
+        process.exit(tables ? 0 : -1);
+      });
+    } catch (err: any) {
+      logger.error('database not found');
       return this.gracefulShutdown('', () => {
         process.exit(-1);
       });

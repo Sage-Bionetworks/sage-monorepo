@@ -40,47 +40,45 @@ export const ping = async (conn: any): Promise<boolean> => {
   return res === 'ok';
 };
 
-export const pingDatabase = async (): Promise<boolean> => {
-  const res = await connection.db.admin().ping();
-  return !!res && res['ok'] === 1;
-};
-
-export const seedDatabase = async (directory: string): Promise<boolean> => {
-  await removeCollections();
-  const seedFiles = await listSeedFiles(directory);
-  // The order of the seeds matters
-  const seeds = [
-    { name: 'users', model: UserModel },
-    { name: 'organizations', model: OrganizationModel },
-    { name: 'orgMemberships', model: OrgMembershipModel },
-    { name: 'challengePlatforms', model: ChallengePlatformModel },
-    { name: 'challenges', model: ChallengeModel },
-    { name: 'challengeReadmes', model: ChallengeReadmeModel },
-    { name: 'challengeOrganizers', model: ChallengeOrganizerModel },
-    { name: 'challengeSponsors', model: ChallengeSponsorModel },
-  ] as any[];
-  for (const seed of seeds) {
-    await seedCollection(seedFiles[seed.name], seed.name, seed.model);
+export const listDatabases = async (conn: any): Promise<Array<any>> => {
+  const res = await conn.query({ sql: 'SHOW DATABASES;', rowsAsArray: true });
+  const microserviceDbs: Array<any> = [];
+  for (const db of res) {
+    if (db[0].endsWith('_service')) {
+      await conn
+        .query({
+          sql: `SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '${db}';`,
+          rowsAsArray: true,
+          bigIntAsNumber: true,
+        })
+        .then((count: any) => {
+          const finalCount = count[0][0] - 1; // un-tally `flyway_schema_history` table
+          microserviceDbs.push({
+            name: db[0],
+            tablesCount: finalCount >= 0 ? finalCount : 0,
+          });
+        });
+    }
   }
-  return true;
+  return microserviceDbs;
 };
 
-const readSeedFile = async (seedFile: string): Promise<any> => {
-  return promises
-    .readFile(seedFile, 'utf8')
-    .then((data) => JSON.parse(data))
-    .catch((err: any) => logger.error('Unable to read seed file', err));
-};
-
-const seedCollection = async <T>(
-  seedFile: string,
-  name: string,
-  model: Model<T>
-): Promise<any> => {
-  return readSeedFile(seedFile)
-    .then((data) => model.create(data[name]))
-    .then(() => logger.info(`🌱 Seeding ${name} completed`))
-    .catch((err: any) => logger.error(`Unable to seed ${name}`, err));
+export const listTables = async (conn: any): Promise<Array<any>> => {
+  const res = await conn.query({ sql: 'SHOW TABLES;', rowsAsArray: true });
+  const tables: Array<any> = [];
+  for (const table of res) {
+    if (table[0] !== 'flyway_schema_history') {
+      await conn
+        .query({ sql: `SELECT COUNT(*) FROM ${table};`, rowsAsArray: true })
+        .then((count: any) => {
+          tables.push({
+            name: table[0],
+            rowsCount: count[0][0],
+          });
+        });
+    }
+  }
+  return tables;
 };
 
 const listSeedFiles = async (directory: string): Promise<SeedFiles> => {
