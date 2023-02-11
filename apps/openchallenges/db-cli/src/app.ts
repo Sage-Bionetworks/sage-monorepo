@@ -1,13 +1,13 @@
 import { Command } from 'commander';
 import {
   connect,
+  ping,
   listDatabases,
   listTables,
-  ping,
+  removeTables,
+  seedTables,
 } from './database';
-import { config } from './config';
 import * as Pkg from '../package.json';
-import { Mongoose } from 'mongoose';
 import { logger, Level } from './logger';
 
 export class App {
@@ -23,6 +23,12 @@ export class App {
       .usage('[global options] command')
       .version(Pkg.version, '-v, --version', 'output the current version')
       .description(Pkg.description);
+
+    this.program
+      .command('ping')
+      .description('ping the mariadb instance')
+      .action(() => this.ping())
+      .hook('preAction', () => this.setConfig(this.program.opts()));
 
     this.program
       .command('list-dbs')
@@ -45,10 +51,16 @@ export class App {
       .hook('preAction', () => this.setConfig(this.program.opts()));
 
     this.program
-      .command('ping')
-      .description('ping the mariadb instance')
-      .action(() => this.ping())
+      .command('seed-database')
+      .description(
+        'empty and seed a database with the JSON files from the directory specified'
+      )
+      .argument('<database>')
+      .argument('<directory>')
+      .action((database: string, dir: string) => this.seed(database, dir))
       .hook('preAction', () => this.setConfig(this.program.opts()));
+
+    this.program.option('-d, --debug', 'output extra debugging');
   }
 
   public async gracefulShutdown(msg: string, callback: any): Promise<void> {
@@ -119,6 +131,21 @@ export class App {
     }
   }
 
+  private async seed(database: string, dir: string): Promise<void> {
+    try {
+      this.conn = await connect(database);
+      const success = await seedTables(this.conn, dir);
+      return this.gracefulShutdown('', () => {
+        process.exit(success ? 0 : -1);
+      });
+    } catch (err) {
+      logger.error('Unable to seed the database:', err);
+      return this.gracefulShutdown('', () => {
+        process.exit(-1);
+      });
+    }
+  }
+
   private async ping(): Promise<void> {
     try {
       this.conn = await connect();
@@ -136,9 +163,9 @@ export class App {
   }
 
   private setConfig(options: any): void {
-    config.mongo.uri = options.uri;
-    config.mongo.options.user = options.username;
-    config.mongo.options.pass = options.password;
+    // config.mongo.uri = options.uri;
+    // config.mongo.options.user = options.username;
+    // config.mongo.options.pass = options.password;
     if (options.debug) {
       logger.setLevel(Level.Debug);
     }

@@ -1,18 +1,8 @@
 import * as mariadb from 'mariadb';
 import { config } from './config';
-// import { glob } from 'glob';
-// import * as path from 'path';
-// import { promises } from 'fs';
-// import {
-//   ChallengeModel,
-//   ChallengeOrganizerModel,
-//   ChallengePlatformModel,
-//   ChallengeReadmeModel,
-//   ChallengeSponsorModel,
-//   OrganizationModel,
-//   OrgMembershipModel,
-//   UserModel,
-// } from './models';
+import { glob } from 'glob';
+import * as path from 'path';
+import { promises } from 'fs';
 import { logger } from './logger';
 
 export const connect = async (database = '') => {
@@ -81,20 +71,73 @@ export const listTables = async (conn: any): Promise<Array<any>> => {
   return tables;
 };
 
-const listSeedFiles = async (directory: string): Promise<SeedFiles> => {
+export const removeTables = async (conn: any): Promise<boolean> => {
+  const tables = await listTables(conn);
+  await conn
+    .query('SET FOREIGN_KEY_CHECKS = 0;')
+    .then(() => {
+      for (const table of tables) {
+        conn
+          .query(`DROP TABLE IF EXISTS ${table.name}`)
+          .then(() => logger.info(`Table dropped: ${table.name}`))
+          .catch((err: any) => logger.error('Unable to drop table:', err));
+      }
+    })
+    .then(() => conn.query('SET FOREIGN_KEY_CHECKS = 1;'));
+  return true;
+};
+
+export const seedTables = async (conn: any, dir: string): Promise<boolean> => {
+  await removeTables(conn);
+  await createTables(conn, dir);
+  const seedFiles = await listSeedFiles(dir);
+  for (const seed of seedFiles) {
+    const res = (await readInputFile(seed.file)).split(/\r\n(?=\d+?,)/);
+    console.log(res);
+  }
+  return true;
+};
+
+const createTables = async (conn: any, dir: string): Promise<boolean> => {
+  const schema = await readInputFile(dir + '/_create.txt');
+  await conn
+    .query(schema)
+    .then(() => logger.info(`🎉 tables created`))
+    .catch(() => logger.error('tables not created'));
+  return true;
+};
+
+const readInputFile = async (seedFile: string): Promise<any> => {
+  return promises
+    .readFile(seedFile, 'utf8')
+    .then((data) => data.toString())
+    .catch((err: any) =>
+      logger.error('something wrong with the input file:', err.message)
+    );
+};
+
+// const seedCollection = async <any>(
+//   seedFile: string,
+//   name: string
+// ): Promise<any> => {
+//   return readInputFile(seedFile)
+//     .then(() => logger.info(`🌱 Seeding ${name} completed`))
+//     .catch((err: any) => logger.error(`Unable to seed ${name}`, err));
+// };
+
+const listSeedFiles = async (dir: string): Promise<Array<any>> => {
   return new Promise((resolve, reject) => {
-    glob(directory + '/*.json', { ignore: 'nodir' }, function (err, files) {
+    glob(dir + '/*.csv', { ignore: 'nodir' }, function (err, files) {
       if (err) {
         reject(err);
       } else {
-        // TODO consider throwing an error if an unexpected json file is found
-        // in the directory specified, e.g. when a key is not in the interface
-        // SeedFiles
-        const seedFiles: SeedFiles = {};
-        files.forEach((file) => {
-          const key = path.basename(file, '.json');
-          seedFiles[key] = file;
-        });
+        const seedFiles: Array<any> = [];
+        for (const file of files) {
+          seedFiles.push({
+            table_name: path.basename(file, '.csv'),
+            file,
+          });
+        }
         resolve(seedFiles);
       }
     });
