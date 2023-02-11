@@ -10,7 +10,7 @@ services:
     networks:
       - openchallenges
     ports:
-      - "9411:9411"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     deploy:
       resources:
         limits:
