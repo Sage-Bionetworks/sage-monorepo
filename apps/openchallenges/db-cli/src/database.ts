@@ -1,49 +1,43 @@
-import { connect, connection, Model, Mongoose } from 'mongoose';
+import * as mariadb from 'mariadb';
 import { config } from './config';
-import { glob } from 'glob';
-import * as path from 'path';
-import { promises } from 'fs';
-import {
-  ChallengeModel,
-  ChallengeOrganizerModel,
-  ChallengePlatformModel,
-  ChallengeReadmeModel,
-  ChallengeSponsorModel,
-  OrganizationModel,
-  OrgMembershipModel,
-  UserModel,
-} from './models';
+// import { glob } from 'glob';
+// import * as path from 'path';
+// import { promises } from 'fs';
+// import {
+//   ChallengeModel,
+//   ChallengeOrganizerModel,
+//   ChallengePlatformModel,
+//   ChallengeReadmeModel,
+//   ChallengeSponsorModel,
+//   OrganizationModel,
+//   OrgMembershipModel,
+//   UserModel,
+// } from './models';
 import { logger } from './logger';
 
-interface SeedFiles {
-  [key: string]: string;
-}
-
-export const connectToDatabase = async (): Promise<Mongoose> => {
-  const mongooseConnection = connect(config.mongo.uri, config.mongo.options);
-  connection.on('connected', function () {
-    logger.verbose(`Mongoose connected to ${config.mongo.uri}`);
-  });
-  connection.on('error', (err: any) => {
-    logger.error(`Mongoose connection error: ${err}`);
-  });
-  connection.on('disconnected', function () {
-    logger.verbose('Mongoose disconnected');
-  });
-  return mongooseConnection;
+export const connect = async (database = '') => {
+  const conn = await mariadb
+    .createConnection({
+      host: config.mariadb.host,
+      user: config.mariadb.user,
+      password: config.mariadb.pass,
+      port: config.mariadb.port,
+      database,
+    })
+    .catch((err: any) => {
+      logger.error('mariadb connection error:', err.text);
+    });
+  return conn;
 };
 
-export const removeCollections = async (): Promise<boolean> => {
-  const db: any = connection.db;
-  const collections = await db.listCollections().toArray();
-  const promises: Promise<any>[] = collections.map((collection: any) => {
-    return db
-      .dropCollection(collection.name)
-      .then(() => logger.info(`Collection ${collection.name} removed`))
-      .catch((err: any) => logger.error('Unable to remove collection', err));
-  });
-  await Promise.all(promises);
-  return true;
+export const ping = async (conn: any): Promise<boolean> => {
+  const res = await conn
+    .ping()
+    .then(() => {
+      return 'ok';
+    })
+    .catch((err: any) => logger.error('Unable to ping', err));
+  return res === 'ok';
 };
 
 export const pingDatabase = async (): Promise<boolean> => {

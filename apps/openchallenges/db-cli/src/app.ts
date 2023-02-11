@@ -1,9 +1,7 @@
 import { Command } from 'commander';
 import {
-  connectToDatabase,
-  removeCollections,
-  pingDatabase,
-  seedDatabase,
+  connect,
+  ping,
 } from './database';
 import { config } from './config';
 import * as Pkg from '../package.json';
@@ -12,7 +10,7 @@ import { logger, Level } from './logger';
 
 export class App {
   private program: Command;
-  private mongoose!: Mongoose;
+  private conn!: any;
 
   constructor() {
     this.program = new Command();
@@ -45,20 +43,16 @@ export class App {
       .hook('preAction', () => this.setConfig(this.program.opts()));
 
     this.program
-      .option('-d, --debug', 'output extra debugging')
-      .option(
-        '--uri <uri>',
-        'MongoDB uri',
-        'mongodb://localhost:27017/openchallenges'
-      )
-      .option('--username <username>', 'MongoDB username', 'openchallenges')
-      .option('--password <password>', 'MongoDB password', 'changeme');
+      .command('ping')
+      .description('ping the mariadb instance')
+      .action(() => this.ping())
+      .hook('preAction', () => this.setConfig(this.program.opts()));
   }
 
   public async gracefulShutdown(msg: string, callback: any): Promise<void> {
     logger.debug('Gracefully shutdown');
-    if (this.mongoose) {
-      await this.mongoose.connection.close();
+    if (this.conn) {
+      await this.conn.end();
     }
     callback();
     return Promise.resolve();
@@ -95,15 +89,16 @@ export class App {
     }
   }
 
-  private async seed(directory: string): Promise<void> {
+  private async ping(): Promise<void> {
     try {
-      this.mongoose = await connectToDatabase();
-      const success = await seedDatabase(directory);
+      this.conn = await connect();
+      const pong = await ping(this.conn);
+      logger.info(pong ? 'pong' : 'No pong received');
       return this.gracefulShutdown('', () => {
-        process.exit(success ? 0 : -1);
+        process.exit(pong ? 0 : -1);
       });
     } catch (err) {
-      logger.error('Unable to seed the database', err);
+      logger.error('unable to ping the database', err);
       return this.gracefulShutdown('', () => {
         process.exit(-1);
       });
