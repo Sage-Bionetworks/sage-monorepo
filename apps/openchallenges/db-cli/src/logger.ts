@@ -50,8 +50,8 @@ class Logger {
   constructor() {
     this.logger = winston.createLogger({
       level: Level.Info,
-      transports: transports,
-      format: format,
+      transports,
+      format,
     });
     winston.addColors(colors);
   }

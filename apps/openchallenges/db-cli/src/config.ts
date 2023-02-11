@@ -6,4 +6,10 @@ export const config = {
     },
     uri: 'mongodb://localhost:27017/openchallenges',
   },
+  mariadb: {
+    host: 'localhost',
+    user: 'maria',
+    pass: 'changeme',
+    port: 3306,
+  },
 };
