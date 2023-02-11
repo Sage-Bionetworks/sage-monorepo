@@ -38,12 +38,10 @@ export class App {
       .hook('preAction', () => this.setConfig(this.program.opts()));
 
     this.program
-      .command('seed')
-      .description(
-        'empty and seed the db with the JSON files from the directory specified'
-      )
-      .argument('<directory>')
-      .action((directory: string) => this.seed(directory))
+      .command('drop-tables')
+      .description('remove all tables from a database')
+      .argument('<database>')
+      .action((database: string) => this.removeTables(database))
       .hook('preAction', () => this.setConfig(this.program.opts()));
 
     this.program
@@ -106,15 +104,15 @@ export class App {
     }
   }
 
-  private async removeCollections(): Promise<void> {
+  private async removeTables(database: string): Promise<void> {
     try {
-      this.mongoose = await connectToDatabase();
-      const success = await removeCollections();
+      this.conn = await connect(database);
+      const res = await removeTables(this.conn);
       return this.gracefulShutdown('', () => {
-        process.exit(success ? 0 : -1);
+        process.exit(res ? 0 : -1);
       });
-    } catch (err) {
-      logger.error('Unable to remove the collections', err);
+    } catch (err: any) {
+      logger.error('database not found');
       return this.gracefulShutdown('', () => {
         process.exit(-1);
       });
