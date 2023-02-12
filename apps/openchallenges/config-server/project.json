@@ -55,19 +55,22 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "commands": [
+          "./gradlew build --continuous",
+          "./gradlew bootRun"
+        ],
         "cwd": "apps/openchallenges/config-server",
         "parallel": true
       },
-      "dependsOn": ["prepare", "^install", "^serve-detach"]
+      "dependsOn": ["^install"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
+        "command": "docker compose --file ../docker-compose.yml up openchallenges-config-server",
         "cwd": "apps/openchallenges/config-server"
       },
-      "dependsOn": ["build-image", "prepare", "^serve-detach"]
+      "dependsOn": ["build-image", "^build-image"]
     },
     "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",

@@ -29,6 +29,9 @@ spring:
     user:
       name: openchallenges
       password: changeme
+  devtools:
+    remote:
+      secret: changeme
 
 server:
   port: ${SERVER_PORT}
