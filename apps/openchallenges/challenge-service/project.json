@@ -47,11 +47,14 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "commands": [
+          "./gradlew build --continuous",
+          "./gradlew bootRun"
+        ],
         "cwd": "apps/openchallenges/challenge-service",
         "parallel": true
       },
-      "dependsOn": ["prepare", "^install", "^serve-detach"]
+      "dependsOn": ["^install", "^serve-detach"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",

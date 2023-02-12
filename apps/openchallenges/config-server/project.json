@@ -62,7 +62,7 @@
         "cwd": "apps/openchallenges/config-server",
         "parallel": true
       },
-      "dependsOn": ["^install"]
+      "dependsOn": ["^install", "^serve-detach"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
