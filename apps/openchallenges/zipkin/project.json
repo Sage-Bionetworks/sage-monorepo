@@ -22,10 +22,9 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
-        "cwd": "apps/openchallenges/zipkin"
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-zipkin"
       },
-      "dependsOn": ["prepare", "build-image"]
+      "dependsOn": ["build-image", "^build-image"]
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",

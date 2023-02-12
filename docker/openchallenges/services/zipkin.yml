@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   openchallenges-zipkin:
@@ -6,16 +6,12 @@ services:
     container_name: openchallenges-zipkin
     restart: always
     env_file:
-      - .env
+      - ../../../apps/openchallenges/zipkin/.env
     networks:
       - openchallenges
     ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
+      - '9411:9411'
     deploy:
       resources:
         limits:
           memory: 500M
-
-networks:
-  openchallenges:
-    name: openchallenges
