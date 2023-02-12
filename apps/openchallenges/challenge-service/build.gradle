@@ -54,6 +54,8 @@ dependencies {
   runtimeOnly 'mysql:mysql-connector-java:8.0.30'
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
+  implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}"
+
   // Enable distributed tracing
   implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudVersion}"
   implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudVersion}"
@@ -73,7 +75,7 @@ tasks.withType(JavaCompile) {
 }
 
 bootBuildImage {
-  imageName = 'sagebionetworks/openchallenges-challenge-service:latest'
+  imageName = "sagebionetworks/${project.name}-base:latest"
 }
 
 spotless {

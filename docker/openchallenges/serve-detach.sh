@@ -3,6 +3,7 @@
 args=(
   # List of services listed in alphanumeric order
   --file docker/openchallenges/services/api-gateway.yml
+  --file docker/openchallenges/services/challenge-service.yml
   --file docker/openchallenges/services/config-server.yml
   --file docker/openchallenges/services/elasticsearch.yml
   --file docker/openchallenges/services/mariadb.yml
