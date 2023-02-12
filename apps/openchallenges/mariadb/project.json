@@ -10,21 +10,12 @@
         "cwd": "apps/openchallenges/mariadb"
       }
     },
-    "serve": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker compose up",
-        "cwd": "apps/openchallenges/mariadb"
-      },
-      "dependsOn": ["prepare", "build-image"]
-    },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
-        "cwd": "apps/openchallenges/mariadb"
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-mariadb"
       },
-      "dependsOn": ["prepare", "build-image"]
+      "dependsOn": ["build-image", "^build-image"]
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",

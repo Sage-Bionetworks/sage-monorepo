@@ -11,14 +11,6 @@
         "cwd": "apps/openchallenges/zipkin"
       }
     },
-    "serve": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker compose up",
-        "cwd": "apps/openchallenges/zipkin"
-      },
-      "dependsOn": ["prepare", "build-image"]
-    },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {

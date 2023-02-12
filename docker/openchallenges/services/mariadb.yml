@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   openchallenges-mariadb:
@@ -6,19 +6,11 @@ services:
     container_name: openchallenges-mariadb
     restart: always
     env_file:
-      - .env
+      - ../../../apps/openchallenges/mariadb/.env
     volumes:
       # - openchallenges-mariadb:/data/db
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ../../../apps/openchallenges/mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - openchallenges
     ports:
-      - "3306:3306"
-
-# volumes:
-#   openchallenges-mariadb:
-#     name: openchallenges-mariadb
-
-networks:
-  openchallenges:
-    name: openchallenges
+      - '3306:3306'

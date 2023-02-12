@@ -10,14 +10,6 @@
         "cwd": "apps/openchallenges/vault"
       }
     },
-    "serve": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker compose up",
-        "cwd": "apps/openchallenges/vault"
-      },
-      "dependsOn": ["prepare", "build-image"]
-    },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {

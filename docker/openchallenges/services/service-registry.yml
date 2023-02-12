@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   openchallenges-service-registry:
@@ -6,17 +6,16 @@ services:
     container_name: openchallenges-service-registry
     restart: always
     env_file:
-      - .env
+      - ../../../apps/openchallenges/service-registry/.env
     networks:
       - openchallenges
     ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
+      - '8081:8081'
     command: start-dev
     deploy:
       resources:
         limits:
           memory: 1G
-
-networks:
-  openchallenges:
-    name: openchallenges
+    depends_on:
+      openchallenges-config-server:
+        condition: service_healthy
