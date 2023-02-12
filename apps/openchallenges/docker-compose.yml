@@ -46,7 +46,7 @@ services:
     networks:
       - openchallenges
     ports:
-      - "8090:8090"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     command: start-dev
     deploy:
       resources:
@@ -65,7 +65,7 @@ services:
     networks:
       - openchallenges
     ports:
-      - "8200:8200"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     cap_add:
       - IPC_LOCK
     deploy:

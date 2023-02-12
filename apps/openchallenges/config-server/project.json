@@ -67,10 +67,9 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose --file ../docker-compose.yml up openchallenges-config-server",
-        "cwd": "apps/openchallenges/config-server"
-      },
-      "dependsOn": ["build-image", "^build-image"]
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-config-server"
+      }
+      // "dependsOn": ["build-image", "^build-image"]
     },
     "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
