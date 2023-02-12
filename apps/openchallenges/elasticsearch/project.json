@@ -11,21 +11,12 @@
         "cwd": "apps/openchallenges/elasticsearch"
       }
     },
-    "serve": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker compose up",
-        "cwd": "apps/openchallenges/elasticsearch"
-      },
-      "dependsOn": ["prepare", "build-image"]
-    },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
-        "cwd": "apps/openchallenges/elasticsearch"
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-elasticsearch"
       },
-      "dependsOn": ["prepare", "build-image"]
+      "dependsOn": ["build-image", "^build-image"]
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
