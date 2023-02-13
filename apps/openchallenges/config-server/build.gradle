@@ -18,11 +18,11 @@ repositories {
 
 dependencies {
   implementation "org.sagebionetworks.openchallenges:openchallenges-app-config-data:${openchallengesVersion}"
+  // developmentOnly
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
   implementation "org.springframework.cloud:spring-cloud-config-server:${springCloudVersion}"
-  implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
@@ -39,8 +39,16 @@ tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
 }
 
+// springBoot {
+//   excludeDevtools = false
+// }
+
+// bootJar {
+// 	excludeDevtools = false
+// }
+
 bootBuildImage {
-  imageName = 'sagebionetworks/openchallenges-config-server:latest'
+  imageName = "sagebionetworks/${project.name}-base:latest"
 }
 
 spotless {

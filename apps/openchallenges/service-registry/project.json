@@ -7,7 +7,9 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
+        "commands": [
+          "shx cp -n .env.example .env"
+        ],
         "cwd": "apps/openchallenges/service-registry"
       }
     },
@@ -41,28 +43,42 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "commands": [
+          "./gradlew build --continuous",
+          "./gradlew bootRun"
+        ],
         "cwd": "apps/openchallenges/service-registry",
         "parallel": true
       },
-      "dependsOn": ["prepare", "^serve-detach"]
+      "dependsOn": ["^install", "^serve-detach"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
-        "cwd": "apps/openchallenges/service-registry"
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-service-registry"
       },
-      "dependsOn": ["build-image", "prepare", "^serve-detach"]
+      "dependsOn": ["build-image", "^build-image"]
     },
-    "build-image": {
+    "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
         "root": "apps/openchallenges/service-registry"
       },
       "dependsOn": ["^install"]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/service-registry",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-service-registry:latest"]
+      },
+      "dependsOn": ["build-image-base"]
     }
   },
   "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": []
+  "implicitDependencies": [
+    "openchallenges-app-config-data",
+    "openchallenges-config-server"
+  ]
 }

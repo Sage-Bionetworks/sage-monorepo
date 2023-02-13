@@ -47,26 +47,37 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "commands": [
+          "./gradlew build --continuous",
+          "./gradlew bootRun"
+        ],
         "cwd": "apps/openchallenges/challenge-service",
         "parallel": true
       },
-      "dependsOn": ["prepare", "^install", "^serve-detach"]
+      "dependsOn": ["^install", "^serve-detach"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
-        "cwd": "apps/openchallenges/challenge-service"
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-challenge-service"
       },
-      "dependsOn": ["build-image", "prepare", "^serve-detach"]
+      "dependsOn": ["build-image", "^build-image"]
     },
-    "build-image": {
+    "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
         "root": "apps/openchallenges/challenge-service"
       },
       "dependsOn": ["^install"]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/challenge-service",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-challenge-service:latest"]
+      },
+      "dependsOn": ["build-image-base"]
     },
     "openapi-generate": {
       "executor": "nx:run-commands",
@@ -83,12 +94,15 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    "openchallenges-api-gateway",
+    // "openchallenges-api-gateway",
     "openchallenges-elasticsearch",
-    "openchallenges-keycloak",
+    // "openchallenges-keycloak",
     "openchallenges-mariadb",
     "openchallenges-service-registry",
-    "openchallenges-zipkin",
+    "openchallenges-config-server",
+    "openchallenges-app-config-data",
+    "openchallenges-config-server",
+    // "openchallenges-zipkin",
     "shared-java-util"
   ]
 }

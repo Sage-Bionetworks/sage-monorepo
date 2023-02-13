@@ -50,7 +50,6 @@ dependencies {
   implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudVersion}"
 
   implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}"
-
   implementation "org.sagebionetworks.openchallenges:openchallenges-app-config-data:${openchallengesVersion}"
 }
 
@@ -68,7 +67,7 @@ tasks.withType(JavaCompile) {
 }
 
 bootBuildImage {
-  imageName = 'sagebionetworks/openchallenges-organization-service:latest'
+  imageName = "sagebionetworks/${project.name}-base:latest"
 }
 
 spotless {

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  openchallenges-mariadb:
+    image: sagebionetworks/openchallenges-mariadb:latest
+    container_name: openchallenges-mariadb
+    restart: always
+    env_file:
+      - ../../../apps/openchallenges/mariadb/.env
+    volumes:
+      # - openchallenges-mariadb:/data/db
+      - ../../../apps/openchallenges/mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - openchallenges
+    ports:
+      - '3306:3306'
+    deploy:
+      resources:
+        limits:
+          memory: 500M

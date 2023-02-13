@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: challenge_api_gateway
-  cloud:
-    config:
-      uri: http://openchallenges-config-server:8090
