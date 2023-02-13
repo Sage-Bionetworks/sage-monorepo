@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 args=(
-  # List of services listed in alphanumeric order
+  # List of services in alphanumeric order
   --file docker/openchallenges/services/api-gateway.yml
   --file docker/openchallenges/services/challenge-service.yml
   --file docker/openchallenges/services/config-server.yml
