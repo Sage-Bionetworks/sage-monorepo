@@ -5996,7 +5996,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx-tools/nx-container@npm:^4.0.3":
+"@nx-tools/nx-container@npm:4.0.3":
   version: 4.0.3
   resolution: "@nx-tools/nx-container@npm:4.0.3"
   dependencies:
@@ -25511,7 +25511,7 @@ __metadata:
     "@nrwl/nx-plugin": 15.3.3
     "@nrwl/web": 15.3.3
     "@nrwl/workspace": 15.3.3
-    "@nx-tools/nx-container": ^4.0.3
+    "@nx-tools/nx-container": 4.0.3
     "@nxrocks/nx-spring-boot": 6.0.0
     "@openapitools/openapi-generator-cli": 2.5.2
     "@prettier/plugin-xml": 2.2.0
