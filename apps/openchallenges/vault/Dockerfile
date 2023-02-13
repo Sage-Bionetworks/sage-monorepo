@@ -1,7 +1,5 @@
 FROM vault:1.12.2
 
-ARG SERVER_PORT="8200"
-
 RUN apk add curl jq
 
 HEALTHCHECK --interval=2s --timeout=3s --retries=5 --start-period=2s \
