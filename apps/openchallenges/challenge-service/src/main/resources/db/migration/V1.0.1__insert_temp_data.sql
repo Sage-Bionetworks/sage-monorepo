@@ -2197,7 +2197,7 @@ VALUES (
 
   -- challenge_organization_role data
 
-INSERT INTO challenge_organization_role (id, challenge_id, organization_id, role)
+INSERT INTO challenge_contribution_role (id, challenge_id, organization_id, role)
 VALUES ('1', 1, 75, 'sponsor'),
   ('2', 2, 28, 'data_contributor'),
   ('3', 2, 45, 'data_contributor'),
