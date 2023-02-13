@@ -14,3 +14,7 @@ services:
       - openchallenges
     ports:
       - '3306:3306'
+    deploy:
+      resources:
+        limits:
+          memory: 500M
