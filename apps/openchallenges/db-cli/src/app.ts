@@ -1,4 +1,4 @@
-import { Command } from 'commander';
+import { Command, Option } from 'commander';
 import {
   connect,
   ping,
@@ -7,6 +7,7 @@ import {
   removeTables,
   seedTables,
 } from './database';
+import { config } from './config';
 import * as Pkg from '../package.json';
 import { logger, Level } from './logger';
 
@@ -60,7 +61,32 @@ export class App {
       .action((database: string, dir: string) => this.seed(database, dir))
       .hook('preAction', () => this.setConfig(this.program.opts()));
 
-    this.program.option('-d, --debug', 'output extra debugging');
+    this.program
+      .option('-d, --debug', 'output extra debugging')
+      .addOption(
+        new Option(
+          '--host <host>',
+          'IP address or DNS of the database server'
+        ).default(config.mariadb.host, 'value defined in config file')
+      )
+      .addOption(
+        new Option('--port <port>', 'database server port number').default(
+          config.mariadb.port,
+          'value defined in config file'
+        )
+      )
+      .addOption(
+        new Option('--user <user>', 'user to access database').default(
+          config.mariadb.user,
+          'value defined in config file'
+        )
+      )
+      .addOption(
+        new Option('--password <password>', 'user password').default(
+          config.mariadb.pass,
+          'value defined in config file'
+        )
+      );
   }
 
   public async gracefulShutdown(msg: string, callback: any): Promise<void> {
@@ -163,9 +189,10 @@ export class App {
   }
 
   private setConfig(options: any): void {
-    // config.mongo.uri = options.uri;
-    // config.mongo.options.user = options.username;
-    // config.mongo.options.pass = options.password;
+    config.mariadb.host = options.host;
+    config.mariadb.user = options.user;
+    config.mariadb.pass = options.password;
+    config.mariadb.port = options.port;
     if (options.debug) {
       logger.setLevel(Level.Debug);
     }
