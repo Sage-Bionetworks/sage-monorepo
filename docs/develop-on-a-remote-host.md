@@ -126,7 +126,7 @@ product** in the upper-right corner.
   - **Parameters**:
     - EC2 Instance Type: `t3a.xlarge`
     - Base Image: `AmazonLinuxDocker` (leave default)
-    - Disk Size: 50
+    - Disk Size: 80
   - **Manage tags**:
     - `Department`: `IBC` or `CNB` (selected from [this
       list](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Departments.json))
