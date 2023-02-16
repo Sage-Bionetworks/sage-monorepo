@@ -30,7 +30,7 @@
         ],
         "cwd": "apps/schematic/notebook"
       },
-      "dependsOn": ["prepare"]
+      "dependsOn": []
     }
     // "serve-detach": {
     //   "executor": "nx:run-commands",

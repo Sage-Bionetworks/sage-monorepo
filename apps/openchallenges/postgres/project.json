@@ -17,16 +17,7 @@
         "command": "docker compose up",
         "cwd": "apps/openchallenges/postgres"
       },
-      "dependsOn": [
-        {
-          "target": "build-image",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        }
-      ]
+      "dependsOn": []
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -34,16 +25,7 @@
         "command": "docker compose up -d",
         "cwd": "apps/openchallenges/postgres"
       },
-      "dependsOn": [
-        {
-          "target": "build-image",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        }
-      ]
+      "dependsOn": []
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",

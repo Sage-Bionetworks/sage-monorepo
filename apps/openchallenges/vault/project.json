@@ -15,7 +15,7 @@
       "options": {
         "command": "docker/openchallenges/serve-detach.sh openchallenges-vault"
       },
-      "dependsOn": ["build-image", "^build-image"]
+      "dependsOn": []
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",

@@ -61,7 +61,7 @@
       "options": {
         "command": "docker/openchallenges/serve-detach.sh openchallenges-challenge-service"
       },
-      "dependsOn": ["build-image", "^build-image"]
+      "dependsOn": []
     },
     "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",

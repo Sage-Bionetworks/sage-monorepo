@@ -83,10 +83,9 @@ function openchallenges-db-cli {
   node dist/apps/openchallenges/db-cli/src/index.js
 }
 
-# function openchallenges-infra-base-serve-detach {
-#   nx run-many --target=build-image --projects=openchallenges-config-server,openchallenges-service-registry,openchallenges-api-gateway,openchallenges-zipkin
-#   docker compose --file apps/openchallenges/docker-compose.yml up
-# }
+function openchallenges-build-images {
+  nx run-many --target=build-image --projects=openchallenges-* --exclude=openchallenges-app --parallel=3
+}
 
 # function challenge-seed-db {
 #   node dist/apps/challenge-db-cli/src/index.js seed "$WORKSPACE_DIR/apps/challenge-db-cli/data/seeds/production/"

@@ -17,7 +17,7 @@
         "command": "docker compose up",
         "cwd": "apps/openchallenges/mongo"
       },
-      "dependsOn": ["prepare", "build-image"]
+      "dependsOn": []
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
