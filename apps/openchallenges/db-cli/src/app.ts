@@ -14,7 +14,6 @@ import { logger, Level } from './logger';
 export class App {
   private program: Command;
   private conn!: any;
-  private padding = 35;
 
   constructor() {
     this.program = new Command();
@@ -102,11 +101,12 @@ export class App {
     try {
       this.conn = await connect();
       const databases = await listDatabases(this.conn);
-      console.log('database'.padEnd(this.padding, ' ') + '\ttables_count');
-      console.log('-'.repeat(this.padding) + '\t------------');
+      const padding = Math.max(...databases.map((db) => db.name.length));
+      logger.info('database'.padEnd(padding, ' ') + '\ttables_count');
+      logger.info('-'.repeat(padding) + '\t' + '-'.repeat(12));
       for (const database of databases) {
-        console.log(
-          database.name.padEnd(this.padding, ' ') + '\t' + database.tablesCount
+        logger.info(
+          database.name.padEnd(padding, ' ') + '\t' + database.tablesCount
         );
       }
       return this.gracefulShutdown('', () => {
@@ -124,12 +124,11 @@ export class App {
     try {
       this.conn = await connect(database);
       const tables = await listTables(this.conn);
-      console.log('table'.padEnd(this.padding, ' ') + '\trecords_count');
-      console.log('-'.repeat(this.padding) + '\t------------');
+      const padding = Math.max(...tables.map((tb) => tb.name.length));
+      logger.info('table'.padEnd(padding, ' ') + '\trecords_count');
+      logger.info('-'.repeat(padding) + '\t' + '-'.repeat(13));
       for (const table of tables) {
-        console.log(
-          table.name.padEnd(this.padding, ' ') + '\t' + table.rowsCount
-        );
+        logger.info(table.name.padEnd(padding, ' ') + '\t' + table.rowsCount);
       }
       return this.gracefulShutdown('', () => {
         process.exit(tables ? 0 : -1);
