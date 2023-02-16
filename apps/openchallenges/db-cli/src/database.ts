@@ -31,24 +31,25 @@ export const ping = async (conn: any): Promise<boolean> => {
 };
 
 export const listDatabases = async (conn: any): Promise<Array<any>> => {
-  const res = await conn.query({ sql: 'SHOW DATABASES;', rowsAsArray: true });
+  const res = await conn.query({
+    sql: 'SHOW DATABASES LIKE "%service";',
+    rowsAsArray: true,
+  });
   const microserviceDbs: Array<any> = [];
   for (const db of res) {
-    if (db[0].endsWith('_service')) {
-      await conn
-        .query({
-          sql: `SELECT COUNT(*) FROM information_schema.tables \
-          WHERE table_schema = '${db}' AND table_name NOT IN ('flyway_schema_history');`,
-          rowsAsArray: true,
-          bigIntAsNumber: true,
-        })
-        .then((count: any) => {
-          microserviceDbs.push({
-            name: db[0],
-            tablesCount: count[0][0],
-          });
+    await conn
+      .query({
+        sql: `SELECT COUNT(*) FROM information_schema.tables \
+        WHERE table_schema = '${db}' AND table_name NOT IN ('flyway_schema_history');`,
+        rowsAsArray: true,
+        bigIntAsNumber: true,
+      })
+      .then((count: any) => {
+        microserviceDbs.push({
+          name: db[0],
+          tablesCount: count[0][0],
         });
-    }
+      });
   }
   return microserviceDbs;
 };
