@@ -16,7 +16,7 @@ services:
       openchallenges-config-server:
         condition: service_healthy
       openchallenges-elasticsearch:
-        condition: service_started
+        condition: service_healthy
       openchallenges-mariadb:
         condition: service_healthy
       openchallenges-service-registry:
