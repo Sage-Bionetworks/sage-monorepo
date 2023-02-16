@@ -15,7 +15,7 @@ export const connect = async (database = '') => {
       database,
     })
     .catch((err: any) => {
-      logger.error('mariadb connection error:', err.text);
+      logger.error('mariadb connection error:', err.message);
     });
   return conn;
 };
@@ -26,7 +26,7 @@ export const ping = async (conn: any): Promise<boolean> => {
     .then(() => {
       return 'ok';
     })
-    .catch((err: any) => logger.error('Unable to ping', err));
+    .catch((err: any) => logger.error('unable to ping', err.message));
   return res === 'ok';
 };
 
@@ -80,7 +80,9 @@ export const removeTables = async (conn: any): Promise<boolean> => {
         conn
           .query(`DROP TABLE IF EXISTS ${table.name}`)
           .then(() => logger.info(`table dropped: ${table.name}`))
-          .catch((err: any) => logger.error('unable to drop table:', err));
+          .catch((err: any) =>
+            logger.error('unable to drop table:', err.message)
+          );
       }
     })
     .then(() => conn.query('SET FOREIGN_KEY_CHECKS = 1;'));
@@ -156,7 +158,7 @@ const seedTable = async (
     .then((res: any) =>
       logger.info(`🌱 table seeded: ${table} (${res.affectedRows} records)`)
     )
-    .catch((err: any) => logger.error(`unable to seed ${table}`, err));
+    .catch((err: any) => logger.error(`unable to seed ${table}`, err.message));
   return true;
 };
 

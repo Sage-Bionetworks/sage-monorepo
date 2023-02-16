@@ -113,7 +113,7 @@ export class App {
         process.exit(databases ? 0 : -1);
       });
     } catch (err: any) {
-      logger.error('unable to list databases:', err.text);
+      logger.error('unable to list databases');
       return this.gracefulShutdown('', () => {
         process.exit(-1);
       });
@@ -165,7 +165,7 @@ export class App {
         process.exit(success ? 0 : -1);
       });
     } catch (err) {
-      logger.error('Unable to seed the database:', err);
+      logger.error('unable to seed the database:');
       return this.gracefulShutdown('', () => {
         process.exit(-1);
       });
@@ -181,7 +181,7 @@ export class App {
         process.exit(pong ? 0 : -1);
       });
     } catch (err) {
-      logger.error('unable to ping the database', err);
+      logger.error('unable to ping the database');
       return this.gracefulShutdown('', () => {
         process.exit(-1);
       });
