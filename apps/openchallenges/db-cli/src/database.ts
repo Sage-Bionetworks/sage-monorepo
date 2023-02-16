@@ -114,7 +114,7 @@ const listSeedFiles = async (dir: string): Promise<Array<any>> => {
         const seedFiles: Array<any> = [];
         for (const file of files) {
           seedFiles.push({
-            table_name: path.basename(file, '.json').replace(/^_/, ''),
+            table_name: path.basename(file, '.json').replace(/^\d+-/, ''),
             file,
           });
         }
