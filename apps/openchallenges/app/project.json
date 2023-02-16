@@ -100,6 +100,13 @@
       },
       "dependsOn": []
     },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-app"
+      },
+      "dependsOn": []
+    },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
