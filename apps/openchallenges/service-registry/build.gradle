@@ -16,14 +16,16 @@ repositories {
 }
 
 dependencies {
+  implementation "org.sagebionetworks.openchallenges:openchallenges-app-config-data:${openchallengesVersion}"
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+  implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}"
   implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-server:${springCloudVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
-group = 'org.sagebionetworks.challenge'
+group = 'org.sagebionetworks.openchallenges'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -36,10 +38,6 @@ tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
 }
 
-springBoot {
-  mainClass = 'org.sagebionetworks.challenge.ChallengeServiceRegistryApplication'
-}
-
 bootBuildImage {
-  imageName = 'sagebionetworks/openchallenges-service-registry:latest'
+  imageName = "sagebionetworks/${project.name}-base:latest"
 }

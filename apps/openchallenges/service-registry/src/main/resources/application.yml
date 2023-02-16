@@ -1,26 +1,11 @@
 spring:
   application:
     name: openchallenges-service-registry
-
-server:
-  port: 8081
-
-eureka:
-  client:
-    service-url:
-      defaultZone: ${default.zone}
-    fetch-registry: false
-    register-with-eureka: false
-
-management:
-  info:
-    env:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: info
-
-info:
-  application:
-    name: ${spring.application.name}
+  profiles:
+    active: development,local
+  config:
+    import: 'configserver:http://openchallenges-config-server:8090'
+  cloud:
+    config:
+      username: openchallenges
+      password: changeme

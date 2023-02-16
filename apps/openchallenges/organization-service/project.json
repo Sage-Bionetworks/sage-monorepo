@@ -47,26 +47,37 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "commands": [
+          "./gradlew build --continuous",
+          "./gradlew bootRun"
+        ],
         "cwd": "apps/openchallenges/organization-service",
         "parallel": true
       },
-      "dependsOn": ["prepare", "^install", "^serve-detach"]
+      "dependsOn": ["^install", "^serve-detach"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
-        "cwd": "apps/openchallenges/organization-service"
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-organization-service"
       },
-      "dependsOn": ["build-image", "prepare", "^serve-detach"]
+      "dependsOn": ["build-image", "^build-image"]
     },
-    "build-image": {
+    "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
         "root": "apps/openchallenges/organization-service"
       },
       "dependsOn": ["^install"]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/organization-service",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-organization-service:latest"]
+      },
+      "dependsOn": ["build-image-base"]
     },
     "openapi-generate": {
       "executor": "nx:run-commands",
@@ -83,13 +94,13 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    "openchallenges-api-gateway",
+    // "openchallenges-api-gateway",
     "openchallenges-app-config-data",
     "openchallenges-config-server",
-    "openchallenges-keycloak",
+    // "openchallenges-keycloak",
     "openchallenges-mariadb",
     "openchallenges-service-registry",
-    "openchallenges-zipkin",
+    // "openchallenges-zipkin",
     "shared-java-util"
   ]
 }

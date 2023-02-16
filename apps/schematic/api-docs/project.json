@@ -53,7 +53,7 @@
       ]
     },
     "build-image": {
-      "executor": "@nx-tools/nx-docker:build",
+      "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/schematic/api-docs",
         "push": false,

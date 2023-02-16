@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  openchallenges-zipkin:
+    image: sagebionetworks/openchallenges-zipkin:latest
+    container_name: openchallenges-zipkin
+    restart: always
+    env_file:
+      - ../../../apps/openchallenges/zipkin/.env
+    networks:
+      - openchallenges
+    ports:
+      - '9411:9411'
+    deploy:
+      resources:
+        limits:
+          memory: 500M

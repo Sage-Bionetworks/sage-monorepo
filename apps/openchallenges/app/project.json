@@ -98,12 +98,7 @@
         "publicHost": "http://localhost:4200",
         "proxyConfig": "apps/openchallenges/app/src/proxy.conf.json"
       },
-      "dependsOn": [
-        {
-          "target": "serve-detach",
-          "projects": "dependencies"
-        }
-      ]
+      "dependsOn": ["^serve-detach"]
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -136,7 +131,7 @@
       }
     },
     "build-image": {
-      "executor": "@nx-tools/nx-docker:build",
+      "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/openchallenges/app",
         "push": false,

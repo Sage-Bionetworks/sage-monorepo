@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  openchallenges-service-registry:
+    image: sagebionetworks/openchallenges-service-registry:latest
+    container_name: openchallenges-service-registry
+    restart: always
+    env_file:
+      - ../../../apps/openchallenges/service-registry/.env
+    networks:
+      - openchallenges
+    ports:
+      - '8081:8081'
+    command: start-dev
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    depends_on:
+      openchallenges-config-server:
+        condition: service_healthy
