@@ -37,15 +37,15 @@ export const listDatabases = async (conn: any): Promise<Array<any>> => {
     if (db[0].endsWith('_service')) {
       await conn
         .query({
-          sql: `SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '${db}';`,
+          sql: `SELECT COUNT(*) FROM information_schema.tables \
+          WHERE table_schema = '${db}' AND table_name NOT IN ('flyway_schema_history');`,
           rowsAsArray: true,
           bigIntAsNumber: true,
         })
         .then((count: any) => {
-          const finalCount = count[0][0] - 1; // un-tally `flyway_schema_history` table
           microserviceDbs.push({
             name: db[0],
-            tablesCount: finalCount >= 0 ? finalCount : 0,
+            tablesCount: count[0][0],
           });
         });
     }
