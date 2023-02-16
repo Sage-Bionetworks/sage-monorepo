@@ -54,7 +54,7 @@
         "cwd": "apps/openchallenges/challenge-service",
         "parallel": true
       },
-      "dependsOn": ["^install", "^serve-detach"]
+      "dependsOn": ["^install"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",

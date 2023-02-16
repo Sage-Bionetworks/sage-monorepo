@@ -45,7 +45,7 @@
         "cwd": "apps/openchallenges/api-gateway",
         "parallel": true
       },
-      "dependsOn": ["^serve-detach"]
+      "dependsOn": []
     },
     "serve-detach": {
       "executor": "nx:run-commands",
