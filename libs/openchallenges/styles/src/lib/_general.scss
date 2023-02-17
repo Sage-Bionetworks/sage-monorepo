@@ -1,4 +1,4 @@
-@use './lib/constants';
+@use 'libs/openchallenges/styles/src/lib/constants';
 
 html,
 body {
@@ -9,6 +9,7 @@ body {
 // GRID
 .base {
   width: 100%;
+  min-height: calc(100vh - constants.$navbar-height - constants.$footer-height);
 }
 .row {
   display: flex;
