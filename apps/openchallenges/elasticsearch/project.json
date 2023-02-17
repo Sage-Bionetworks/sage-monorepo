@@ -16,7 +16,7 @@
       "options": {
         "command": "docker/openchallenges/serve-detach.sh openchallenges-elasticsearch-node-1"
       },
-      "dependsOn": ["build-image", "^build-image"]
+      "dependsOn": []
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",

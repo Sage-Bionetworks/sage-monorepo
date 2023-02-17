@@ -17,7 +17,7 @@
         "command": "docker compose up",
         "cwd": "apps/openchallenges/keycloak"
       },
-      "dependsOn": ["prepare", "build-image", "^serve-detach"]
+      "dependsOn": []
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -25,7 +25,7 @@
         "command": "docker compose up -d",
         "cwd": "apps/openchallenges/keycloak"
       },
-      "dependsOn": ["prepare", "build-image", "^serve-detach"]
+      "dependsOn": []
     },
     "import-dev-data": {
       "executor": "nx:run-commands",
@@ -35,7 +35,7 @@
         ],
         "cwd": "apps/openchallenges/keycloak"
       },
-      "dependsOn": ["prepare", "build-image"]
+      "dependsOn": []
     },
     "export-dev-data": {
       "executor": "nx:run-commands",
@@ -45,7 +45,7 @@
         ],
         "cwd": "apps/openchallenges/keycloak"
       },
-      "dependsOn": ["prepare", "build-image"]
+      "dependsOn": []
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",

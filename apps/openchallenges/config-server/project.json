@@ -62,14 +62,14 @@
         "cwd": "apps/openchallenges/config-server",
         "parallel": true
       },
-      "dependsOn": ["^install", "^serve-detach"]
+      "dependsOn": ["^install"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
         "command": "docker/openchallenges/serve-detach.sh openchallenges-config-server"
       },
-      "dependsOn": ["build-image", "^build-image"]
+      "dependsOn": []
     },
     "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",

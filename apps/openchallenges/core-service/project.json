@@ -39,7 +39,7 @@
         "cwd": "apps/openchallenges/core-service",
         "parallel": true
       },
-      "dependsOn": ["prepare", "^serve-detach"]
+      "dependsOn": []
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -47,7 +47,7 @@
         "command": "docker compose up -d",
         "cwd": "apps/openchallenges/core-service"
       },
-      "dependsOn": ["build-image", "prepare", "^serve-detach"]
+      "dependsOn": []
     },
     "build-image": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
