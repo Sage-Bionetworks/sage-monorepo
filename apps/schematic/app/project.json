@@ -63,9 +63,7 @@
         "publicHost": "http://localhost:7200",
         "proxyConfig": "apps/schematic/app/src/proxy.conf.json"
       },
-      "dependsOn": [
-        "^serve-detach"
-      ]
+      "dependsOn": []
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
