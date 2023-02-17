@@ -84,7 +84,7 @@ function openchallenges-db-cli {
 }
 
 function openchallenges-build-images {
-  nx run-many --target=build-image --projects=openchallenges-* --exclude=openchallenges-app --parallel=3
+  nx run-many --target=build-image --projects=openchallenges-* --parallel=3
 }
 
 # function challenge-seed-db {
