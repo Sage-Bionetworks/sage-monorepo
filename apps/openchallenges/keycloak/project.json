@@ -57,5 +57,5 @@
     }
   },
   "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": ["openchallenges-postgres"]
+  "implicitDependencies": []
 }

@@ -1,15 +1,15 @@
 version: '3.8'
 
 services:
-  openchallenges-elasticsearch-node-1:
+  openchallenges-elasticsearch:
     image: sagebionetworks/openchallenges-elasticsearch:${ELASTIC_VERION:-latest}
-    container_name: openchallenges-elasticsearch-node-1
+    container_name: openchallenges-elasticsearch
     restart: always
     environment:
-      - node.name=openchallenges-elasticsearch-node-1
+      - node.name=openchallenges-elasticsearch
       - cluster.name=openchallenges-elasticsearch
       - discovery.seed_hosts=openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
-      - cluster.initial_master_nodes=openchallenges-elasticsearch-node-1,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
+      - cluster.initial_master_nodes=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
     networks:
@@ -26,9 +26,9 @@ services:
           memory: 2G
     depends_on:
       openchallenges-elasticsearch-node-2:
-        condition: service_started
+        condition: service_healthy
       openchallenges-elasticsearch-node-3:
-        condition: service_started
+        condition: service_healthy
 
   openchallenges-elasticsearch-node-2:
     image: sagebionetworks/openchallenges-elasticsearch:${ELASTIC_VERION:-latest}
@@ -37,8 +37,8 @@ services:
     environment:
       - node.name=openchallenges-elasticsearch-node-2
       - cluster.name=openchallenges-elasticsearch
-      - discovery.seed_hosts=openchallenges-elasticsearch-node-1,openchallenges-elasticsearch-node-3
-      - cluster.initial_master_nodes=openchallenges-elasticsearch-node-1,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
+      - discovery.seed_hosts=openchallenges-elasticsearch,openchallenges-elasticsearch-node-3
+      - cluster.initial_master_nodes=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
     networks:
@@ -59,8 +59,8 @@ services:
     environment:
       - node.name=openchallenges-elasticsearch-node-3
       - cluster.name=openchallenges-elasticsearch
-      - discovery.seed_hosts=openchallenges-elasticsearch-node-1,openchallenges-elasticsearch-node-2
-      - cluster.initial_master_nodes=openchallenges-elasticsearch-node-1,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
+      - discovery.seed_hosts=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2
+      - cluster.initial_master_nodes=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
     networks:

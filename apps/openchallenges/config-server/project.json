@@ -90,7 +90,6 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    "openchallenges-app-config-data",
-    "openchallenges-vault"
+    "openchallenges-app-config-data"
   ]
 }
