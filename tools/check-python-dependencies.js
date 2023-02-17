@@ -8,8 +8,8 @@ const fs = require('fs');
 const { spawn } = require("child_process");
 const { getGitDiffFiles } = require('./git-util');
 
-const jsonData = fs.readFileSync(`workspace.json`);
-const json = JSON.parse(jsonData);
+// const jsonData = fs.readFileSync(`workspace.json`);
+// const json = JSON.parse(jsonData);
 
 const isPoetryProject = (projectLocation) => {
   const filenames = fs.readdirSync(projectLocation);
@@ -37,13 +37,23 @@ const installPythonDependencies = (projectName) => {
     });
 }
 
-console.log('✨ Preparing Python dependencies');
+console.log('✨ Preparing Python dependencies (Disabled)');
 getGitDiffFiles().then((changedFiles) => {
-  Object.entries(json['projects']).forEach(([projectName, projectLocation]) => {
-    if (hasPoetryProjectDefinitionChanged(projectLocation, changedFiles)) {
-      installPythonDependencies(projectName);
+  // find project dirs
+  changedFiles.push('apps/openchallenges/notebook/project.json');
+  changedFiles.push('apps/openchallenges/notebook/poetry.lock');
+  let projectDirs = [];
+  changedFiles.forEach((changedFile) => {
+    if (changedFile.endsWith('project.json')) {
+      projectDirs.push(changedFile.substring(0, changedFile.indexOf('/project.json')));
     }
-  });
+  })
+
+  // Object.entries(projectDirs).forEach(([projectName, projectLocation]) => {
+  //   if (hasPoetryProjectDefinitionChanged(projectLocation, changedFiles)) {
+  //     installPythonDependencies(projectName);
+  //   }
+  // });
 });
 
 
