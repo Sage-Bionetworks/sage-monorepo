@@ -43,9 +43,29 @@ console.log('✨ Preparing Python dependencies (Disabled)');
 //   console.log('Nx projects', projects);
 // })
 
-getNxProjects().then((projectFiles) => {
-  console.log(projectFiles);
-})
+// getNxProjects().then((projectFiles) => {
+//   console.log(projectFiles);
+// })
+
+getGitDiffFiles().then((changedFiles) => {
+  console.log(changedFiles);
+
+  // find project dirs
+  // changedFiles.push('apps/openchallenges/notebook/project.json');
+  // changedFiles.push('apps/openchallenges/notebook/poetry.lock');
+  // let projectDirs = [];
+  // changedFiles.forEach((changedFile) => {
+  //   if (changedFile.endsWith('project.json')) {
+  //     projectDirs.push(changedFile.substring(0, changedFile.indexOf('/project.json')));
+  //   }
+  // })
+
+  // Object.entries(projectDirs).forEach(([projectName, projectLocation]) => {
+  //   if (hasPoetryProjectDefinitionChanged(projectLocation, changedFiles)) {
+  //     installPythonDependencies(projectName);
+  //   }
+  // });
+});
 
 
 // getGitDiffFiles().then((changedFiles) => {
