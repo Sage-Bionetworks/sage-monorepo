@@ -1,90 +1,65 @@
-// For each Python project in the workspace, this script checks if the project definition has
-// changed since the last git move. If it has changed, then the target `prepare-python` of the
-// project is executed.
+// For each Python project in the workspace, this script checks if their dependencies as defined in
+// their lock files have changed since the last git operation. The Nx target `prepare-python` is
+// then run for all the projects that had their dependencies updated.
 
 'use strict';
 
 const fs = require('fs');
-const { spawn } = require("child_process");
+const { spawn } = require('child_process');
 const { getGitDiffFiles } = require('./git-util');
 const { getNxProjects, getNxProjectFiles } = require('./nx-util');
 
-// const jsonData = fs.readFileSync(`workspace.json`);
-// const json = JSON.parse(jsonData);
-
-const isPoetryProject = (projectLocation) => {
-  const filenames = fs.readdirSync(projectLocation);
+// Returns true if the directory specified includes a Poetry lock file.
+const isPoetryProject = (projectDir) => {
+  const filenames = fs.readdirSync(projectDir);
   return filenames.includes('poetry.lock');
-}
+};
 
-const hasPoetryProjectDefinitionChanged = (projectLocation, changedFiles) => {
-  if (isPoetryProject(projectLocation)) {
-    const projectDefinitionPaths = ['poetry.lock']
-      .map(filename => `${projectLocation}/${filename}`);
-    if (projectDefinitionPaths.some(projectDefinitionPath => changedFiles.includes(projectDefinitionPath))) {
+// Returns true if the project dir specified includes a Poetry lock file that has changed.
+const hasPoetryProjectDefinitionChanged = (projectDir, changedFiles) => {
+  if (isPoetryProject(projectDir)) {
+    const projectDefinitionPaths = ['poetry.lock'].map((filename) => `${projectDir}/${filename}`);
+    if (
+      projectDefinitionPaths.some((projectDefinitionPath) =>
+        changedFiles.includes(projectDefinitionPath)
+      )
+    ) {
       return true;
     }
   }
   return false;
-}
+};
 
-const installPythonDependencies = (projectName) => {
-  spawn('yarn', ['nx', 'prepare-python', projectName], {stdio:'inherit'})
-    .on('exit', function (error) {
-      if (error) {
-        console.log(`error: ${error.message}`);
-        return;
+// Installs the Python dependencies of the comma-separated list of projects.
+const installPythonDependencies = (projectNames) => {
+  spawn('nx', ['run-many', '--target=prepare-python', `--projects=${projectNames}`], {
+    stdio: 'inherit',
+  }).on('exit', function (error) {
+    if (error) {
+      console.log(`error: ${error.message}`);
+      return;
+    }
+  });
+};
+
+console.log('✨ Preparing Python dependencies');
+getGitDiffFiles().then((changedFiles) => {
+  // changedFiles.push('apps/openchallenges/notebook/poetry.lock');
+  // changedFiles.push('apps/schematic/notebook/poetry.lock');
+  // console.log(changedFiles);
+
+  getNxProjects()
+    .then((projects) => {
+      const toUpdate = (project) =>
+        hasPoetryProjectDefinitionChanged(project['projectDir'], changedFiles);
+      return projects.filter(toUpdate);
+    })
+    .then((projectsToUpdate) => {
+      // generate a list of comma-separated project names
+      let projectNames = projectsToUpdate.map((project) => project['projectName']);
+      projectNames = projectNames.join(',');
+      if (projectNames) {
+        installPythonDependencies(projectNames);
       }
     });
-}
-
-console.log('✨ Preparing Python dependencies (Disabled)');
-// getNxProjects().then((projects) => {
-//   console.log('Nx projects', projects);
-// })
-
-// getNxProjects().then((projectFiles) => {
-//   console.log(projectFiles);
-// })
-
-getGitDiffFiles().then((changedFiles) => {
-  console.log(changedFiles);
-
-  // find project dirs
-  // changedFiles.push('apps/openchallenges/notebook/project.json');
-  // changedFiles.push('apps/openchallenges/notebook/poetry.lock');
-  // let projectDirs = [];
-  // changedFiles.forEach((changedFile) => {
-  //   if (changedFile.endsWith('project.json')) {
-  //     projectDirs.push(changedFile.substring(0, changedFile.indexOf('/project.json')));
-  //   }
-  // })
-
-  // Object.entries(projectDirs).forEach(([projectName, projectLocation]) => {
-  //   if (hasPoetryProjectDefinitionChanged(projectLocation, changedFiles)) {
-  //     installPythonDependencies(projectName);
-  //   }
-  // });
 });
-
-
-// getGitDiffFiles().then((changedFiles) => {
-//   // find project dirs
-//   changedFiles.push('apps/openchallenges/notebook/project.json');
-//   changedFiles.push('apps/openchallenges/notebook/poetry.lock');
-//   let projectDirs = [];
-//   changedFiles.forEach((changedFile) => {
-//     if (changedFile.endsWith('project.json')) {
-//       projectDirs.push(changedFile.substring(0, changedFile.indexOf('/project.json')));
-//     }
-//   })
-
-//   // Object.entries(projectDirs).forEach(([projectName, projectLocation]) => {
-//   //   if (hasPoetryProjectDefinitionChanged(projectLocation, changedFiles)) {
-//   //     installPythonDependencies(projectName);
-//   //   }
-//   // });
-// });
-
-
-

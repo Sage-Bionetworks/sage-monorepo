@@ -17,7 +17,7 @@ const getNxProjects = async () => {
     return projectFile.slice(projectFile.indexOf(prefix) + prefix.length);
   });
   projects = projectFiles.map((projectFile) => {
-    projectDir = projectFile.substring(0, projectFile.indexOf('project.json'));
+    projectDir = projectFile.substring(0, projectFile.indexOf('/project.json'));
     const jsonData = fs.readFileSync(projectFile);
     const json = JSON5.parse(jsonData);
     const projectName = json['name'];
