@@ -73,18 +73,3 @@ services:
       resources:
         limits:
           memory: 2G
-
-  # openchallenges-elasticsearch:
-  #   image: sagebionetworks/openchallenges-elasticsearch:latest
-  #   container_name: openchallenges-elasticsearch
-  #   restart: always
-  #   env_file:
-  #     - ../../../apps/openchallenges/elasticsearch/.env
-  #   networks:
-  #     - openchallenges
-  #   ports:
-  #     - '9200:9200'
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 2G
