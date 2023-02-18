@@ -51,7 +51,7 @@
         "cwd": "apps/openchallenges/kaggle-to-kafka-service",
         "parallel": true
       },
-      "dependsOn": ["prepare", "^install", "^serve-detach"]
+      "dependsOn": ["^install"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -59,7 +59,7 @@
         "command": "docker compose up -d",
         "cwd": "apps/openchallenges/kaggle-to-kafka-service"
       },
-      "dependsOn": ["build-image", "prepare", "^serve-detach"]
+      "dependsOn": []
     },
     "build-image": {
       "executor": "@nxrocks/nx-spring-boot:build-image",

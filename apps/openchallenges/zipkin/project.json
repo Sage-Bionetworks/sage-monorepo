@@ -16,7 +16,7 @@
       "options": {
         "command": "docker/openchallenges/serve-detach.sh openchallenges-zipkin"
       },
-      "dependsOn": ["build-image", "^build-image"]
+      "dependsOn": []
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
@@ -27,5 +27,6 @@
       }
     }
   },
-  "tags": ["type:service", "scope:backend"]
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": []
 }

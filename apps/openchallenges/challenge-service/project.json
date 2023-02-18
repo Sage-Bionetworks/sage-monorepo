@@ -54,14 +54,14 @@
         "cwd": "apps/openchallenges/challenge-service",
         "parallel": true
       },
-      "dependsOn": ["^install", "^serve-detach"]
+      "dependsOn": ["^install"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
         "command": "docker/openchallenges/serve-detach.sh openchallenges-challenge-service"
       },
-      "dependsOn": ["build-image", "^build-image"]
+      "dependsOn": []
     },
     "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
@@ -94,15 +94,7 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    // "openchallenges-api-gateway",
-    "openchallenges-elasticsearch",
-    // "openchallenges-keycloak",
-    "openchallenges-mariadb",
-    "openchallenges-service-registry",
-    "openchallenges-config-server",
     "openchallenges-app-config-data",
-    "openchallenges-config-server",
-    // "openchallenges-zipkin",
     "shared-java-util"
   ]
 }

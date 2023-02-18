@@ -1,36 +1,38 @@
-<main class="mat-typography">
+<main class="base mat-typography">
   <div class="register-container">
     <div class="title">
-      <img src="assets/images/registry_b.png" alt="OpenChallenges"/>
+      <img src="assets/images/registry_b.png" alt="OpenChallenges" />
       <h3>Join Us on OpenChallenges!</h3>
     </div>
     <form class="form-container" [formGroup]="newUserForm" novalidate>
       <mat-form-field class="new-email" appearance="outline">
-        <input matInput placeholder="Email" type="email"
-          formControlName="email">
-        <mat-error *ngIf="email?.invalid">{{getEmailErrorMessage()}}
-        </mat-error>
+        <input matInput placeholder="Email" type="email" formControlName="email" />
+        <mat-error *ngIf="email?.invalid">{{ getEmailErrorMessage() }} </mat-error>
       </mat-form-field>
       <mat-form-field class="new-username" appearance="outline">
-        <input matInput placeholder="Username" type="text"
-          formControlName="username">
-        <mat-error *ngIf="username?.invalid">{{getUsernameErrorMessage()}}
-        </mat-error>
+        <input matInput placeholder="Username" type="text" formControlName="username" />
+        <mat-error *ngIf="username?.invalid">{{ getUsernameErrorMessage() }} </mat-error>
       </mat-form-field>
       <mat-form-field class="new-password" appearance="outline">
-        <input matInput placeholder="Password" type="password"
-          formControlName="password">
-        <mat-error *ngIf="password?.invalid">{{getPasswordErrorMessage()}}
-        </mat-error>
+        <input matInput placeholder="Password" type="password" formControlName="password" />
+        <mat-error *ngIf="password?.invalid">{{ getPasswordErrorMessage() }} </mat-error>
       </mat-form-field>
-      <mat-error *ngIf="errors.other">{{errors.other}}</mat-error>
-      <div class="disclaimer"><p>
-        By creating an account, you agree to the <a href="#">Terms of Service</a> of
-        OpenChallenges. Our Privacy Statement can be read <a href="#">here</a>.
-      </p></div>
+      <mat-error *ngIf="errors.other">{{ errors.other }}</mat-error>
+      <div class="disclaimer">
+        <p>
+          By creating an account, you agree to the <a href="#">Terms of Service</a> of
+          OpenChallenges. Our Privacy Statement can be read <a href="#">here</a>.
+        </p>
+      </div>
       <div class="btn-group">
-        <button mat-raised-button color="primary"
-          [disabled]="newUserForm.invalid" (click)="createUserAccount()">Create Account</button>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="newUserForm.invalid"
+          (click)="createUserAccount()"
+        >
+          Create Account
+        </button>
         <div class="login-options">
           <button mat-stroked-button color="basic">Sign up with Google</button>
           <button mat-stroked-button color="basic">Sign up with Synapse</button>

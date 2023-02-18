@@ -1,4 +1,7 @@
+@use 'libs/openchallenges/styles/src/lib/constants';
+
 .sage-navbar-header {
+  height: constants.$navbar-height;
   display: flex;
   flex-wrap: wrap;
   align-items: center;

@@ -1,115 +1,125 @@
-<div class="base mat-typography" *ngIf="challenge$ | async as challenge">
-  <section id="top" class="row">
-    <div class="link" class="row">
-      <mat-icon aria-hidden="true" class="link-home">home</mat-icon>
-      <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
-      <a routerLink="/challenges">challenges</a>
-      <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
-      <span>{{ challenge.name }}</span>
-    </div>
-    <div class="profile-pic-container">
-      <openchallenges-avatar class="profile-pic" [avatar]="challengeAvatar"></openchallenges-avatar>
-      <span
-        *ngIf="challenge.status"
-        [ngClass]="['status', challenge.status ? challenge.status : '']"
-        >{{ challenge.status }}</span
-      >
-    </div>
-    <div id="details" class="col">
-      <div class="details-top row">
-        <h2>
-          {{ challenge.displayName }}
-        </h2>
-        <div class="featured">
-          <mat-icon aria-hidden="true">military_tech</mat-icon>
-          <span>FEATURED!</span>
+<main class="base mat-typography">
+  <div *ngIf="challenge$ | async as challenge">
+    <section id="top" class="row">
+      <div class="link" class="row">
+        <mat-icon aria-hidden="true" class="link-home">home</mat-icon>
+        <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
+        <a routerLink="/challenges">challenges</a>
+        <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
+        <span>{{ challenge.name }}</span>
+      </div>
+      <div class="profile-pic-container">
+        <openchallenges-avatar
+          class="profile-pic"
+          [avatar]="challengeAvatar"
+        ></openchallenges-avatar>
+        <span
+          *ngIf="challenge.status"
+          [ngClass]="['status', challenge.status ? challenge.status : '']"
+          >{{ challenge.status }}</span
+        >
+      </div>
+      <div id="details" class="col">
+        <div class="details-top row">
+          <h2>
+            {{ challenge.displayName }}
+          </h2>
+          <div class="featured">
+            <mat-icon aria-hidden="true">military_tech</mat-icon>
+            <span>FEATURED!</span>
+          </div>
+        </div>
+        <p class="username">@{{ challenge.name }}</p>
+        <div class="progress-bar">
+          <div class="progress-bar-top" *ngIf="remainDays">
+            <span>{{ this.remainDays }} days remains</span>
+          </div>
+          <p-progressBar [value]="progressValue" [showValue]="false"></p-progressBar>
+          <div class="progress-bar-bottom">
+            <span class="start-date">{{ challenge.startDate }}</span>
+            <span class="end-date">{{ challenge.endDate }}</span>
+          </div>
         </div>
       </div>
-      <p class="username">@{{ challenge.name }}</p>
-      <div class="progress-bar">
-        <div class="progress-bar-top" *ngIf="remainDays">
-          <span>{{ this.remainDays }} days remains</span>
-        </div>
-        <p-progressBar [value]="progressValue" [showValue]="false"></p-progressBar>
-        <div class="progress-bar-bottom">
-          <span class="start-date">{{ challenge.startDate }}</span>
-          <span class="end-date">{{ challenge.endDate }}</span>
+    </section>
+    <section id="stats" class="row">
+      <div class="col fill-empty"></div>
+      <div class="col">
+        <openchallenges-challenge-stats [loggedIn]="loggedIn"></openchallenges-challenge-stats>
+      </div>
+    </section>
+    <section id="bottom" class="content">
+      <div class="sidenav col">
+        <div class="nav-group">
+          <a
+            class="nav-item"
+            routerLink="."
+            [queryParams]="{ tab: 'overview' }"
+            [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
+          >
+            Overview
+          </a>
+          <a
+            class="nav-item"
+            routerLink="."
+            [queryParams]="{ tab: 'details' }"
+            [ngClass]="{ 'active-tab': activeTab === tabs['details'] }"
+          >
+            Challenge Details
+          </a>
+          <a
+            class="nav-item"
+            routerLink="."
+            [queryParams]="{ tab: 'organizers' }"
+            [ngClass]="{ 'active-tab': activeTab === tabs['organizers'] }"
+          >
+            Organizers
+          </a>
+          <a
+            class="nav-item"
+            routerLink="."
+            [queryParams]="{ tab: 'sponsors' }"
+            [ngClass]="{ 'active-tab': activeTab === tabs['sponsors'] }"
+          >
+            Sponsors
+          </a>
+          <a
+            class="nav-item"
+            routerLink="."
+            [queryParams]="{ tab: 'stargazers' }"
+            [ngClass]="{ 'active-tab': activeTab === tabs['stargazers'] }"
+          >
+            Stargazers
+          </a>
         </div>
       </div>
-    </div>
-  </section>
-  <section id="stats" class="row">
-    <div class="col fill-empty"></div>
-    <div class="col">
-      <openchallenges-challenge-stats [loggedIn]="loggedIn"></openchallenges-challenge-stats>
-    </div>
-  </section>
-  <section id="bottom" class="content">
-    <div class="sidenav col">
-      <div class="nav-group">
-        <a
-          class="nav-item"
-          routerLink="."
-          [queryParams]="{ tab: 'overview' }"
-          [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
-        >
-          Overview
-        </a>
-        <a
-          class="nav-item"
-          routerLink="."
-          [queryParams]="{ tab: 'details' }"
-          [ngClass]="{ 'active-tab': activeTab === tabs['details'] }"
-        >
-          Challenge Details
-        </a>
-        <a
-          class="nav-item"
-          routerLink="."
-          [queryParams]="{ tab: 'organizers' }"
-          [ngClass]="{ 'active-tab': activeTab === tabs['organizers'] }"
-        >
-          Organizers
-        </a>
-        <a
-          class="nav-item"
-          routerLink="."
-          [queryParams]="{ tab: 'sponsors' }"
-          [ngClass]="{ 'active-tab': activeTab === tabs['sponsors'] }"
-        >
-          Sponsors
-        </a>
-        <a
-          class="nav-item"
-          routerLink="."
-          [queryParams]="{ tab: 'stargazers' }"
-          [ngClass]="{ 'active-tab': activeTab === tabs['stargazers'] }"
-        >
-          Stargazers
-        </a>
+      <div class="main col">
+        <ng-container [ngSwitch]="activeTab">
+          <openchallenges-challenge-overview
+            *ngSwitchCase="tabs['overview']"
+            [challenge]="challenge"
+          >
+          </openchallenges-challenge-overview>
+          <openchallenges-challenge-details *ngSwitchCase="tabs['details']" [challenge]="challenge">
+          </openchallenges-challenge-details>
+          <openchallenges-challenge-organizers
+            *ngSwitchCase="tabs['organizers']"
+            [challenge]="challenge"
+          >
+          </openchallenges-challenge-organizers>
+          <openchallenges-challenge-sponsors
+            *ngSwitchCase="tabs['sponsors']"
+            [challenge]="challenge"
+          >
+          </openchallenges-challenge-sponsors>
+          <openchallenges-challenge-stargazers
+            *ngSwitchCase="tabs['stargazers']"
+            [challenge]="challenge"
+          >
+          </openchallenges-challenge-stargazers>
+        </ng-container>
       </div>
-    </div>
-    <div class="main col">
-      <ng-container [ngSwitch]="activeTab">
-        <openchallenges-challenge-overview *ngSwitchCase="tabs['overview']" [challenge]="challenge">
-        </openchallenges-challenge-overview>
-        <openchallenges-challenge-details *ngSwitchCase="tabs['details']" [challenge]="challenge">
-        </openchallenges-challenge-details>
-        <openchallenges-challenge-organizers
-          *ngSwitchCase="tabs['organizers']"
-          [challenge]="challenge"
-        >
-        </openchallenges-challenge-organizers>
-        <openchallenges-challenge-sponsors *ngSwitchCase="tabs['sponsors']" [challenge]="challenge">
-        </openchallenges-challenge-sponsors>
-        <openchallenges-challenge-stargazers
-          *ngSwitchCase="tabs['stargazers']"
-          [challenge]="challenge"
-        >
-        </openchallenges-challenge-stargazers>
-      </ng-container>
-    </div>
-  </section>
-</div>
-
+    </section>
+  </div>
+</main>
 <openchallenges-footer [version]="appVersion"></openchallenges-footer>

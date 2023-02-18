@@ -34,16 +34,7 @@
         "command": "docker compose up -d",
         "cwd": "apps/schematic/api"
       },
-      "dependsOn": [
-        {
-          "target": "build-image",
-          "projects": "self"
-        },
-        {
-          "target": "prepare",
-          "projects": "self"
-        }
-      ]
+      "dependsOn": []
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",

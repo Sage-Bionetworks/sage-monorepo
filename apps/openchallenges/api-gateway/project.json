@@ -45,14 +45,14 @@
         "cwd": "apps/openchallenges/api-gateway",
         "parallel": true
       },
-      "dependsOn": ["prepare", "^serve-detach"]
+      "dependsOn": []
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
         "command": "docker/openchallenges/serve-detach.sh openchallenges-api-gateway"
       },
-      "dependsOn": ["build-image", "^build-image"]
+      "dependsOn": []
     },
     "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
@@ -73,8 +73,6 @@
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
-    "openchallenges-app-config-data",
-    "openchallenges-config-server",
-    "openchallenges-service-registry"
+    "openchallenges-app-config-data"
   ]
 }
