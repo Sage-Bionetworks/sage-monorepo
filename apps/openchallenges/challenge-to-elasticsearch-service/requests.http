@@ -1,17 +1,58 @@
-@organizationServiceHost = http://openchallenges-organization-service:8084
-@apiGatewayHost = http://openchallenges-api-gateway:8082
+@elasticsearchHost = http://openchallenges-elasticsearch:9200
 
-### Select the base path
+### Get information about the ES cluster
 
-# Send the requests directly to the service
-# @basePath = {{organizationServiceHost}}/v1
-# Send the requests to the API gateway
-@basePath = {{apiGatewayHost}}/api/v1
+GET {{elasticsearchHost}}
 
-### List the organizations
+### Create challenge index
 
-GET {{basePath}}/organizations
+PUT {{elasticsearchHost}}/challenge-index
+content-type: application/json
 
-### Get an organization by ID
+{
+  "mappings": {
+    "properties": {
+      "userId": {
+        "type": "long"
+      },
+      "id": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "createdAt": {
+        "type": "date",
+        "format": "yyyy-MM-dd'T'HH:mm:ssZZ"
+      },
+      "text": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      }
+    }
+  }
+}
 
-GET {{basePath}}/organizations/dream
+### Create example document
+
+POST {{elasticsearchHost}}/challenge-index/_doc/1
+content-type: application/json
+
+{
+  "userId": "1",
+  "id": "1",
+  "createdAt": "2020-01-01T23:00:50+0000",
+  "text": "test multi word"
+}
+
+### Search example document with id="1"
+
+GET {{elasticsearchHost}}/challenge-index/_search?q=id:1
