@@ -47,7 +47,7 @@ const prepareJavaProject = (projectNames) => {
   });
 };
 
-console.log('✨ Preparing Java dependencies');
+console.log('✨ Preparing Java environments');
 getGitDiffFiles().then((changedFiles) => {
   // changedFiles.push('apps/openchallenges/challenge-service/gradlew');
   getNxProjects()
