@@ -14,27 +14,14 @@ plugins {
 
 repositories {
   mavenCentral()
-  mavenLocal()
 }
 
 dependencies {
-  // Lombok (needs org.springframework.data:spring-data-commons)
   annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
   compileOnly "org.projectlombok:lombok:${lombokVersion}"
-
-  // implementation "org.apache.httpcomponents.client5:httpclient5-fluent:${apacheHttpcomponentsVersion}"
-  // implementation "org.apache.httpcomponents.client5:httpclient5:${apacheHttpcomponentsVersion}"
-  // implementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
-  // implementation "org.sagebionetworks:util:${openchallengesVersion}"
-  implementation "org.sagebionetworks.openchallenges:openchallenges-app-config-data:${openchallengesVersion}"
-
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
-  implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch:${springBootVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
-  implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
-  implementation "org.springframework.retry:spring-retry:${springRetryVersion}"
-  implementation "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
-  implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
 }
 
 group = 'org.sagebionetworks.openchallenges'
@@ -84,5 +71,3 @@ spotless {
     googleJavaFormat()
   }
 }
-
-

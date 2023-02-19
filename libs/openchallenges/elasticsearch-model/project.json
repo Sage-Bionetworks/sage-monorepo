@@ -1,0 +1,43 @@
+{
+  "name": "openchallenges-elasticsearch-model",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/openchallenges/elasticsearch-model/src",
+  "projectType": "library",
+  "targets": {
+    "prepare-java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "libs/openchallenges/elasticsearch-model"
+      }
+    },
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "libs/openchallenges/elasticsearch-model"
+      },
+      "outputs": ["{projectRoot}/build"]
+    },
+    "install": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew publishToMavenLocal",
+        "cwd": "libs/openchallenges/elasticsearch-model"
+      },
+      "dependsOn": ["build"]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "libs/openchallenges/elasticsearch-model"
+      }
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "libs/openchallenges/elasticsearch-model"
+      }
+    }
+  },
+  "tags": ["type:library", "scope:openchallenges"]
+}
