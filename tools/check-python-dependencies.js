@@ -47,7 +47,6 @@ getGitDiffFiles().then((changedFiles) => {
   // changedFiles.push('apps/openchallenges/notebook/poetry.lock');
   // changedFiles.push('apps/schematic/notebook/poetry.lock');
   // console.log(changedFiles);
-
   getNxProjects()
     .then((projects) => {
       const toUpdate = (project) =>
