@@ -6,11 +6,14 @@ import org.sagebionetworks.openchallenges.elasticsearch.index.client.repository.
 import org.sagebionetworks.openchallenges.elasticsearch.model.index.ChallengeIndexModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-@Primary
 @Service
+@ConditionalOnProperty(
+    name = "elasticsearch-config.is-repository",
+    havingValue = "true",
+    matchIfMissing = true)
 public class ChallengeElasticsearchRepositoryIndexClient
     implements ElasticsearchIndexClient<ChallengeIndexModel> {
 

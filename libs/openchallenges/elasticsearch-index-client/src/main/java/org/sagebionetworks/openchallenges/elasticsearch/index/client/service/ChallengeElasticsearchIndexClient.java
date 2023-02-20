@@ -7,12 +7,14 @@ import org.sagebionetworks.openchallenges.elasticsearch.index.client.util.Elasti
 import org.sagebionetworks.openchallenges.elasticsearch.model.index.ChallengeIndexModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Service;
 
 @Service
+@ConditionalOnProperty(name = "elasticsearch-config.is-repository", havingValue = "false")
 public class ChallengeElasticsearchIndexClient
     implements ElasticsearchIndexClient<ChallengeIndexModel> {
 
