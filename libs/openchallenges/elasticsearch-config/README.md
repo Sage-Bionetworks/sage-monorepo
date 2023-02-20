@@ -1,0 +1,3 @@
+# OpenChallenges Elasticsearch Config
+
+TBD

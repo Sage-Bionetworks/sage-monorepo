@@ -1,0 +1,59 @@
+{
+  "name": "openchallenges-elasticsearch-config",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/openchallenges/elasticsearch-config/src",
+  "projectType": "library",
+  "targets": {
+    "prepare-java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "libs/openchallenges/elasticsearch-config"
+      }
+    },
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "libs/openchallenges/elasticsearch-config"
+      },
+      "outputs": ["{projectRoot}/build"],
+      "dependsOn": ["^install"]
+    },
+    "install": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew publishToMavenLocal",
+        "cwd": "libs/openchallenges/elasticsearch-config"
+      },
+      "dependsOn": ["build"]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "libs/openchallenges/elasticsearch-config"
+      }
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "libs/openchallenges/elasticsearch-config"
+      }
+    },
+    "format": {
+      "executor": "@nxrocks/nx-spring-boot:format",
+      "options": {
+        "root": "libs/openchallenges/elasticsearch-config"
+      }
+    },
+    "format-check": {
+      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "options": {
+        "root": "libs/openchallenges/elasticsearch-config"
+      }
+    }
+  },
+  "tags": ["type:library", "scope:openchallenges"],
+  "implicitDependencies": [
+    "openchallenges-app-config-data"
+  ]
+}

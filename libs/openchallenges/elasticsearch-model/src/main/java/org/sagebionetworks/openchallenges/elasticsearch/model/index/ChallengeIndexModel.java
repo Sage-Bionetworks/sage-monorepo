@@ -2,7 +2,6 @@ package org.sagebionetworks.openchallenges.elasticsearch.model.index;
 
 import java.time.LocalDateTime;
 
-import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
