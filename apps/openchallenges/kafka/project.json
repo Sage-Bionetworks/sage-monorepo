@@ -11,29 +11,12 @@
         "cwd": "apps/openchallenges/kafka"
       }
     },
-    "serve": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker compose -f ../../../docker/openchallenges/network.yml -f docker-compose.yml up",
-        "cwd": "apps/openchallenges/kafka"
-      },
-      "dependsOn": []
-    },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose -f ../../../docker/openchallenges/network.yml -f docker-compose.yml up -d",
-        "cwd": "apps/openchallenges/kafka"
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-schema-registry"
       },
       "dependsOn": []
-    },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/openchallenges/kafka",
-        "push": false,
-        "tags": ["sagebionetworks/openchallenges-kafka:latest"]
-      }
     },
     "list-broker": {
       "executor": "nx:run-commands",
