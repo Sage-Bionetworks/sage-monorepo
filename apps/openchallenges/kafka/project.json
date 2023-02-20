@@ -14,7 +14,7 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker/openchallenges/serve-detach.sh openchallenges-kafka"
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-schema-registry"
       },
       "dependsOn": []
     },
