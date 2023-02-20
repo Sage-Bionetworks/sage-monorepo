@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @ConditionalOnProperty(
-    name = "elasticsearch-config.is-repository",
+    name = "openchallenges-elasticsearch.is-repository",
     havingValue = "true",
     matchIfMissing = true)
 public class ChallengeElasticsearchRepositoryIndexClient

@@ -14,7 +14,7 @@ import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Service;
 
 @Service
-@ConditionalOnProperty(name = "elasticsearch-config.is-repository", havingValue = "false")
+@ConditionalOnProperty(name = "openchallenges-elasticsearch.is-repository", havingValue = "false")
 public class ChallengeElasticsearchIndexClient
     implements ElasticsearchIndexClient<ChallengeIndexModel> {
 

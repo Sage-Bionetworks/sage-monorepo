@@ -84,6 +84,9 @@
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
     "openchallenges-app-config-data",
+    "openchallenges-elasticsearch-config",
+    "openchallenges-elasticsearch-index-client",
+    "openchallenges-elasticsearch-model",
     "openchallenges-kafka-admin",
     "openchallenges-kafka-consumer",
     "openchallenges-kafka-model",
