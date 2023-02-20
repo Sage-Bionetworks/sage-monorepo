@@ -18,8 +18,8 @@ repositories {
 }
 
 dependencies {
-  annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-  compileOnly "org.projectlombok:lombok:${lombokVersion}"
+  implementation "org.sagebionetworks.openchallenges:openchallenges-app-config-data:${openchallengesVersion}"
+  implementation "org.sagebionetworks.openchallenges:openchallenges-elasticsearch-model:${openchallengesVersion}"
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch:${springBootVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
