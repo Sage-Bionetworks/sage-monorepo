@@ -1,11 +1,11 @@
-version: "3.8"
+version: '3.8'
 
 services:
   openchallenges-zookeeper:
     image: confluentinc/cp-zookeeper:6.1.9
     container_name: openchallenges-zookeeper
     ports:
-      - "2181:2181"
+      - '2181:2181'
     environment:
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -15,11 +15,12 @@ services:
       ZOOKEEPER_SERVERS: zookeeper:2888:3888
     networks:
       - openchallenges
+
   openchallenges-schema-registry:
     image: confluentinc/cp-schema-registry:6.1.9
     container_name: openchallenges-schema-registry
     ports:
-      - "8071:8071"
+      - '8071:8071'
     environment:
       SCHEMA_REGISTRY_HOST_NAME: openchallenges-schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'openchallenges-zookeeper:2181'
@@ -32,6 +33,7 @@ services:
       - openchallenges-kafka-broker-1
       - openchallenges-kafka-broker-2
       - openchallenges-kafka-broker-3
+
   openchallenges-kafka-broker-1:
     image: confluentinc/cp-kafka:6.1.9
     container_name: openchallenges-kafka-broker-1
@@ -45,9 +47,10 @@ services:
     networks:
       - openchallenges
     ports:
-      - "19092:19092"
+      - '19092:19092'
     depends_on:
       - openchallenges-zookeeper
+
   openchallenges-kafka-broker-2:
     image: confluentinc/cp-kafka:6.1.9
     container_name: openchallenges-kafka-broker-2
@@ -61,9 +64,10 @@ services:
     networks:
       - openchallenges
     ports:
-      - "29092:29092"
+      - '29092:29092'
     depends_on:
       - openchallenges-zookeeper
+
   openchallenges-kafka-broker-3:
     image: confluentinc/cp-kafka:6.1.9
     container_name: openchallenges-kafka-broker-3
@@ -77,6 +81,6 @@ services:
     networks:
       - openchallenges
     ports:
-      - "39092:39092"
+      - '39092:39092'
     depends_on:
       - openchallenges-zookeeper
