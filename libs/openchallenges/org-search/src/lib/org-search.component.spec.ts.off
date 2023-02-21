@@ -3,15 +3,15 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 
-import { OrgSearchComponent } from './org-search.component';
+import { ChallengeSearchComponent } from './challenge-search.component';
 
-describe('OrgSearchComponent', () => {
-  let component: OrgSearchComponent;
-  let fixture: ComponentFixture<OrgSearchComponent>;
+describe('ChallengeSearchComponent', () => {
+  let component: ChallengeSearchComponent;
+  let fixture: ComponentFixture<ChallengeSearchComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OrgSearchComponent],
+      declarations: [ChallengeSearchComponent],
       imports: [HttpClientModule],
       providers: [ConfigService],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -19,7 +19,7 @@ describe('OrgSearchComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OrgSearchComponent);
+    fixture = TestBed.createComponent(ChallengeSearchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
