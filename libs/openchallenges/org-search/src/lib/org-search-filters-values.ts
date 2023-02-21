@@ -1,17 +1,13 @@
 import { FilterValue } from '@sagebionetworks/openchallenges/ui';
 
-export const challengeStatusFilterValues: FilterValue[] = [
+export const organizationTypesFilterValues: FilterValue[] = [
   {
-    value: 'active',
-    label: 'Active',
+    value: 'owner',
+    label: 'Owner',
   },
   {
-    value: 'upcoming',
-    label: 'Upcoming',
-  },
-  {
-    value: 'completed',
-    label: 'Completed',
+    value: 'sponsor',
+    label: 'Sponsor',
   },
 ];
 

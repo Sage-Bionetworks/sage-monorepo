@@ -45,39 +45,8 @@
       </div>
     </div>
   </section>
-  <!-- <section id="bottom" class="content">
+  <section id="bottom" class="content">
     <div class="facets">
-      <p-panel
-        header="Challenge Year"
-        [toggleable]="true"
-        [collapsed]="startYearRangeFilter.collapsed"
-      >
-        <div *ngFor="let year of startYearRangeFilter.values" class="year-btn-group">
-          <p-radioButton
-            [inputId]="year.label!"
-            [value]="year.value"
-            [(ngModel)]="selectedYear"
-            (onClick)="onYearChange()"
-          ></p-radioButton>
-          <label [for]="year.label">{{ year.label }}</label>
-        </div>
-        <div class="col calendar-group" *ngIf="isCustomYear">
-          <label for="custombar">mm/yyyy - mm/yyyy</label>
-          <p-calendar
-            #calendar
-            [(ngModel)]="customMonthRange"
-            view="month"
-            dateFormat="mm/yy"
-            selectionMode="range"
-            [yearNavigator]="true"
-            [readonlyInput]="false"
-            inputId="custombar"
-            (onSelect)="onCalendarChange()"
-            (onInput)="onCalendarChange()"
-          ></p-calendar>
-        </div>
-      </p-panel>
-      <p-divider></p-divider>
       <ng-container *ngFor="let checkbox of checkboxFilters">
         <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
           <openchallenges-checkbox-filter
@@ -86,35 +55,24 @@
             inputId="{{ checkbox.query }}"
           ></openchallenges-checkbox-filter>
         </p-panel>
-        <p-divider></p-divider>
-      </ng-container>
-      <ng-container *ngFor="let dropdown of dropdownFilters; last as isLast">
-        <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
-          <openchallenges-search-dropdown-filter
-            [values]="dropdown.values"
-            placeholder="{{ dropdown.label.toLowerCase() + '(s)' }}  "
-            [showAvatar]="false"
-            (dropdownChange)="onDropdownChange($event, dropdown.query)"
-          ></openchallenges-search-dropdown-filter>
-        </p-panel>
-        <p-divider *ngIf="!isLast"></p-divider>
+        <!-- <p-divider></p-divider> -->
       </ng-container>
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
       <div class="card-group">
-        <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge">
-        </openchallenges-challenge-card>
+        <openchallenges-organization-card *ngFor="let org of organizations" [organization]="org">
+        </openchallenges-organization-card>
       </div>
       <openchallenges-paginator
         [pageNumber]="pageNumber"
         [pageSize]="pageSize"
-        [totalRecords]="totalChallengesCount"
+        [totalRecords]="totalOrgCount"
         [itemsPerPage]="[20, 50, 100]"
         (pageChange)="onPageChange($event)"
       ></openchallenges-paginator>
     </div>
-  </section> -->
+  </section>
 </main>
 
 <openchallenges-footer [version]="appVersion"></openchallenges-footer>
