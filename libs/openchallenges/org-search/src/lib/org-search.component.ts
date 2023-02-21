@@ -6,7 +6,7 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { OrganizationSearchQuery } from './org-search-query';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { Filter } from '@sagebionetworks/openchallenges/ui';
+import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
 // import {
 //   challengeStartYearRangeFilter,
 //   challengeStatusFilter,
@@ -18,7 +18,7 @@ import { Filter } from '@sagebionetworks/openchallenges/ui';
 //   challengeOrganizationFilter,
 //   challengeOrganizaterFilter,
 // } from './org-search-filters';
-// import { challengeSortFilterValues } from './org-search-filters-values';
+import { organizationSortFilterValues } from './org-search-filters-values';
 import { BehaviorSubject, Subject, switchMap, tap, throwError } from 'rxjs';
 import {
   catchError,
@@ -58,7 +58,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   // define filters
   checkboxFilters: Filter[] = [];
   dropdownFilters: Filter[] = [];
-  // sortFilters: FilterValue[] = challengeSortFilterValues;
+  sortFilters: FilterValue[] = organizationSortFilterValues;
   sortedBy!: string;
 
   constructor(
@@ -71,7 +71,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   ngOnInit() {
     // set default selection
-    // this.sortedBy = challengeSortFilterValues[0].value as string;
+    this.sortedBy = organizationSortFilterValues[0].value as string;
 
     // update the total number of challenges in database with empty query
     this.organizationService

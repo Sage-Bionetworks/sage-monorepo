@@ -7,7 +7,6 @@ import { OrgSearchComponent } from './org-search.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { CalendarModule } from 'primeng/calendar';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
@@ -17,7 +16,6 @@ const routes: Routes = [{ path: '', component: OrgSearchComponent }];
 
 @NgModule({
   imports: [
-    CalendarModule,
     CommonModule,
     DividerModule,
     DropdownModule,
