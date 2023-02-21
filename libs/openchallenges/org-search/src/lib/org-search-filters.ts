@@ -1,9 +1,9 @@
 import { Filter } from '@sagebionetworks/openchallenges/ui';
-import { organizationRolesFilterValues } from './org-search-filters-values';
+import { contributionRolesFilterValues } from './org-search-filters-values';
 
-export const organizationRolesFilter: Filter = {
-  query: 'roles',
-  label: 'Role',
-  values: organizationRolesFilterValues,
+export const contributionRolesFilter: Filter = {
+  query: 'CcontributionRoles',
+  label: 'Contribution Role',
+  values: contributionRolesFilterValues,
   collapsed: false,
 };
