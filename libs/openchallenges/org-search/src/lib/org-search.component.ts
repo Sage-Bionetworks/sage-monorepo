@@ -4,7 +4,7 @@ import {
   OrganizationService,
   // OrganizationSearchQuery
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { OrganizationSearchQuery } from './org-search-query';
+import { OrganizationSearchQuery } from './org-search-query'; // temp
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
 import { organizationTypesFilter } from './org-search-filters';
@@ -47,7 +47,6 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   // define filters
   checkboxFilters: Filter[] = [organizationTypesFilter];
-  dropdownFilters: Filter[] = [];
   sortFilters: FilterValue[] = organizationSortFilterValues;
   sortedBy!: string;
 
@@ -124,13 +123,6 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   onCheckboxChange(selected: string[], queryName: string): void {
-    const newQuery = assign(this.query.getValue(), {
-      [queryName]: selected,
-    });
-    this.query.next(newQuery);
-  }
-
-  onDropdownChange(selected: string[], queryName: string): void {
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });
