@@ -8,6 +8,7 @@ args=(
   --file docker/openchallenges/services/config-server.yml
   --file docker/openchallenges/services/elasticsearch.yml
   --file docker/openchallenges/services/kafka.yml
+  --file docker/openchallenges/services/kaggle-to-kafka-service.yml
   --file docker/openchallenges/services/mariadb.yml
   --file docker/openchallenges/services/organization-service.yml
   --file docker/openchallenges/services/service-registry.yml

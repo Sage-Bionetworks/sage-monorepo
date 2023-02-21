@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+curl --fail --silent "localhost:${SERVER_PORT}/actuator/health/readiness" | \
+  jq '.status' | grep UP || exit 1

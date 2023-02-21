@@ -47,7 +47,10 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "commands": [
+          "./gradlew build --continuous",
+          "./gradlew bootRun"
+        ],
         "cwd": "apps/openchallenges/kaggle-to-kafka-service",
         "parallel": true
       },
@@ -56,17 +59,25 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
-        "cwd": "apps/openchallenges/kaggle-to-kafka-service"
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-kaggle-to-kafka-service"
       },
       "dependsOn": []
     },
-    "build-image": {
+    "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
         "root": "apps/openchallenges/kaggle-to-kafka-service"
       },
       "dependsOn": ["^install"]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/kaggle-to-kafka-service",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-kaggle-to-kafka-service:latest"]
+      },
+      "dependsOn": ["build-image-base"]
     },
     "openapi-generate": {
       "executor": "nx:run-commands",
