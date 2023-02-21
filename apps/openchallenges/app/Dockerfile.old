@@ -1,6 +1,6 @@
 FROM node:18.10.0-slim as build
 
-ARG openchallengesRepository=Sage-Bionetworks/sage-monorepo
+ARG openchallengesRepository=sage-monorepo
 ARG openchallengesBranch=main
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -15,21 +15,20 @@ RUN apt-get update -qq -y && apt-get install --no-install-recommends -qq -y \
 WORKDIR /opt
 
 # Build the app
-RUN git clone --depth 1 --branch $openchallengesBranch https://github.com/${openchallengesRepository}.git \
-  && cd openchallenges \
+RUN git clone --depth 1 --branch $openchallengesBranch https://github.com/Sage-Bionetworks/${openchallengesRepository}.git \
+  && cd ${openchallengesRepository} \
   && yarn install --immutable \
-  && yarn nx build openchallenges
+  && yarn nx build openchallenges-app
 
-ENV CHALLENGE_REGISTRY_DIR=/opt/openchallenges
-ENV CHALLENGE_REGISTRY_DIR="$CHALLENGE_REGISTRY_DIR/apps/openchallenges"
+ENV APP_DIR="${openchallengesRepository}/apps/openchallenges/app"
 
-# Package the files required to run the app
+# # Package the files required to run the app
 RUN mkdir -p /opt/target \
-  && cp -v $CHALLENGE_REGISTRY_DIR/docker/10-envsubst-on-app-config-template.sh /opt/target \
+  && cp -v $APP_DIR/docker/10-envsubst-on-app-config-template.sh /opt/target \
   && mkdir -p /opt/target/nginx \
-  && cp -rv $CHALLENGE_REGISTRY_DIR/docker/nginx/* /opt/target/nginx \
+  && cp -rv $APP_DIR/docker/nginx/* /opt/target/nginx \
   && mkdir -p /opt/target/html \
-  && cp -rv $CHALLENGE_REGISTRY_DIR/dist/apps/openchallenges/* /opt/target/html
+  && cp -rv ${openchallengesRepository}/dist/apps/openchallenges/* /opt/target/html
 
 FROM nginx:1.23.2-alpine
 
@@ -44,5 +43,4 @@ RUN cp -r /tmp/target/html/* /usr/share/nginx/html \
 
 EXPOSE 80
 
-# ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
