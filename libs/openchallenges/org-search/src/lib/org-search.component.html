@@ -1,5 +1,77 @@
 <main class="base mat-typography">
-  <p>org-search works!</p>
+  <section id="top">
+    <div id="breadcrumbs" class="row">
+      <a aria-label="Back to home" href="/home"><mat-icon aria-hidden="true">home</mat-icon></a>
+      <mat-icon aria-hidden="true">chevron_right</mat-icon>
+      <span>Search</span>
+    </div>
+    <div id="title" class="row">
+      <div class="col col-10">
+        <h2>Search Organization Profiles</h2>
+      </div>
+      <div class="col col-2">
+        <div class="stats-group">
+          <div class="stat-item">
+            <h4>{{ totalOrgCount }}</h4>
+            <p class="mat-caption">total in the registry</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="search-sort-container row">
+      <div class="search-field">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="searchTermValue"
+            (input)="onSearchChange()"
+            placeholder="Search organizations"
+          />
+        </span>
+      </div>
+      <div class="sort-field">
+        <span class="sort-title">Sort by</span>
+        <p-dropdown
+          [options]="sortFilters"
+          [(ngModel)]="sortedBy"
+          optionLabel="label"
+          optionValue="value"
+          scrollHeight="unset"
+          (onChange)="onSortChange()"
+        ></p-dropdown>
+      </div>
+    </div>
+  </section>
+  <section id="bottom" class="content">
+    <div class="facets">
+      <ng-container *ngFor="let checkbox of checkboxFilters">
+        <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
+          <openchallenges-checkbox-filter
+            [values]="checkbox.values"
+            (checkboxChange)="onCheckboxChange($event, checkbox.query)"
+            inputId="{{ checkbox.query }}"
+          ></openchallenges-checkbox-filter>
+        </p-panel>
+        <!-- <p-divider></p-divider> -->
+      </ng-container>
+    </div>
+    <div class="main col">
+      <h3>Results ({{ searchResultsCount }})</h3>
+      <div class="card-group">
+        <openchallenges-organization-card *ngFor="let org of organizations" [organization]="org">
+        </openchallenges-organization-card>
+      </div>
+      <openchallenges-paginator
+        [pageNumber]="pageNumber"
+        [pageSize]="pageSize"
+        [totalRecords]="totalOrgCount"
+        [itemsPerPage]="[20, 50, 100]"
+        (pageChange)="onPageChange($event)"
+      ></openchallenges-paginator>
+    </div>
+  </section>
 </main>
 
 <openchallenges-footer [version]="appVersion"></openchallenges-footer>

@@ -1,0 +1,5 @@
+@use './lib/org-search-theme' as org-search;
+
+@mixin theme($theme) {
+  @include org-search.theme($theme);
+}

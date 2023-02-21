@@ -9,4 +9,8 @@ export const APP_SECTIONS: { [key: string]: NavbarSection } = {
     name: 'Challenges',
     summary: 'Explore challenges',
   },
+  orgs: {
+    name: 'Organizations',
+    summary: 'Explore organizations',
+  },
 };
