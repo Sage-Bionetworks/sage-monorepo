@@ -2,18 +2,20 @@ package org.sagebionetworks.openchallenges.kaggle.to.kafka.service.runner;
 
 import java.util.Arrays;
 import java.util.concurrent.Executors;
-import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.app.config.data.KaggleToKafkaServiceConfigData;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.exception.KaggleToKafkaServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
 @ConditionalOnProperty(
     name = "kaggle-to-kafka-service.enable-mock-challenges",
     havingValue = "true")
 public class MockKafkaStreamRunner implements StreamRunner {
+
+  private static final Logger LOG = LoggerFactory.getLogger(MockKafkaStreamRunner.class);
 
   private final KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData;
 
@@ -52,7 +54,7 @@ public class MockKafkaStreamRunner implements StreamRunner {
     // int maxChallengeNameLength = config.getMockMaxChallengeNameLength();
     long sleepMs = kaggleToKafkaServiceConfigData.getMockSleepMs();
 
-    log.info(
+    LOG.info(
         "Starting mock filtering Kaggle challenges for search terms {}",
         Arrays.toString(searchTerms));
     simulateChallengeStream(sleepMs);
@@ -63,7 +65,7 @@ public class MockKafkaStreamRunner implements StreamRunner {
         .submit(
             () -> {
               while (true) {
-                log.info("plop");
+                LOG.info("plop");
                 sleep(sleepMs);
               }
             });

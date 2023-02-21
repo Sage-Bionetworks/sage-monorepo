@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.BasicHttpClientResponseHandler;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -20,16 +19,19 @@ import org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel
 import org.sagebionetworks.openchallenges.kafka.producer.service.KafkaProducer;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.model.dto.KaggleCompetitionDto;
 import org.sagebionetworks.openchallenges.kaggle.to.kafka.service.transformer.KaggleCompetitionToAvroTransformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
 @ConditionalOnProperty(
     name = "kaggle-to-kafka-service.enable-mock-challenges",
     havingValue = "false",
     matchIfMissing = true)
 public class KaggleKafkaStreamRunner implements StreamRunner {
+
+  private static final Logger LOG = LoggerFactory.getLogger(KaggleKafkaStreamRunner.class);
 
   private final KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData;
 
@@ -105,8 +107,8 @@ public class KaggleKafkaStreamRunner implements StreamRunner {
       ObjectMapper mapper = new ObjectMapper();
       List<KaggleCompetitionDto> competitions =
           mapper.readValue(responseBody, new TypeReference<List<KaggleCompetitionDto>>() {});
-      log.info("Competitions: {}", competitions);
-      log.info("Competitions count: {}", competitions.size());
+      LOG.info("Competitions: {}", competitions);
+      LOG.info("Competitions count: {}", competitions.size());
 
       // send the first competition to kafka
       KaggleCompetitionAvroModel kaggleCompetitionAvroModel =
