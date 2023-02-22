@@ -20,12 +20,11 @@ paths:
     get:
       tags:
         - Organization
-      summary: Get all organizations
-      description: Returns the organizations
+      summary: List organizations
+      description: List organizations
       operationId: listOrganizations
       parameters:
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/organizationSearchQuery'
       responses:
         '200':
           content:
@@ -58,33 +57,45 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  parameters:
-    pageNumber:
-      name: pageNumber
-      description: The page number.
-      in: query
-      schema:
-        type: integer
-        format: int32
-        default: 0
-        minimum: 0
-    pageSize:
-      name: pageSize
-      description: The number of items in a single page.
-      in: query
-      schema:
-        type: integer
-        format: int32
-        default: 100
-        minimum: 1
-    org:
-      name: org
-      in: path
-      description: The unique identifier of the organization.
-      required: true
-      schema:
-        $ref: '#/components/schemas/OrganizationLogin'
   schemas:
+    OrganizationSort:
+      description: What to sort results by.
+      type: string
+      default: relevance
+      enum:
+        - created
+        - relevance
+    OrganizationDirection:
+      description: The direction to sort the results by.
+      type: string
+      nullable: true
+      enum:
+        - asc
+        - desc
+    OrganizationSearchQuery:
+      type: object
+      description: An organization search query.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+        sort:
+          $ref: '#/components/schemas/OrganizationSort'
+        direction:
+          $ref: '#/components/schemas/OrganizationDirection'
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          type: string
+          example: data provider
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -213,6 +224,20 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
+  parameters:
+    organizationSearchQuery:
+      name: organizationSearchQuery
+      description: The search query used to find organizations.
+      in: query
+      schema:
+        $ref: '#/components/schemas/OrganizationSearchQuery'
+    org:
+      name: org
+      in: path
+      description: The unique identifier of the organization.
+      required: true
+      schema:
+        $ref: '#/components/schemas/OrganizationLogin'
   responses:
     BadRequest:
       description: Invalid request
