@@ -320,3 +320,4 @@ components:
       required:
       - organizations
       type: object
+      example: null

@@ -2,6 +2,7 @@ package org.sagebionetworks.openchallenges.organization.service.service;
 
 import java.util.Arrays;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
@@ -17,8 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
