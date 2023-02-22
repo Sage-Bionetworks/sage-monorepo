@@ -18,6 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class OrganizationService {
 
@@ -32,6 +35,7 @@ public class OrganizationService {
   @Transactional(readOnly = true)
   public OrganizationsPageDto listOrganizations(OrganizationSearchQueryDto query) {
     LOG.info("query {}", query);
+    log.info("query 2 {}", query);
 
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
