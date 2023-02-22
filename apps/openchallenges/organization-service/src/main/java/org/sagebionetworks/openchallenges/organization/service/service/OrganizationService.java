@@ -2,7 +2,6 @@ package org.sagebionetworks.openchallenges.organization.service.service;
 
 import java.util.Arrays;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
 public class OrganizationService {
 
@@ -34,7 +32,6 @@ public class OrganizationService {
   @Transactional(readOnly = true)
   public OrganizationsPageDto listOrganizations(OrganizationSearchQueryDto query) {
     LOG.info("query {}", query);
-    log.info("query 2 {}", query);
 
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
