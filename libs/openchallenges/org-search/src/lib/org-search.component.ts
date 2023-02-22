@@ -2,9 +2,8 @@ import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import {
   Organization,
   OrganizationService,
-  // OrganizationSearchQuery
+  OrganizationSearchQuery,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { OrganizationSearchQuery } from './org-search-query'; // temp
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
 import { contributionRolesFilter } from './org-search-filters';
@@ -64,7 +63,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
     // update the total number of challenges in database with empty query
     this.organizationService
-      .listOrganizations()
+      .listOrganizations({})
       .subscribe((page) => (this.totalOrgCount = page.totalElements));
 
     const defaultQuery: OrganizationSearchQuery = {
@@ -89,12 +88,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     this.query
       .pipe(
         tap((query) => console.log('Query: ', query)),
-        switchMap((query) =>
-          this.organizationService.listOrganizations(
-            query.pageNumber,
-            query.pageSize
-          )
-        ),
+        switchMap((query) => this.organizationService.listOrganizations(query)),
         tap((page) => console.log('List of orgs: ', page.organizations)),
         catchError((err) => {
           if (err.message) {
