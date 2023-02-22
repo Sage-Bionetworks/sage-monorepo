@@ -17,7 +17,7 @@
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/openchallenges/app/browser",
+        "outputPath": "apps/openchallenges/app/dist/apps/openchallenges/app/browser",
         "index": "apps/openchallenges/app/src/index.html",
         "main": "apps/openchallenges/app/src/main.ts",
         "polyfills": "apps/openchallenges/app/src/polyfills.ts",
