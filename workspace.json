@@ -1,9 +1,0 @@
-{
-  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
-  "version": 2,
-  "projects": {
-    "openchallenges-app": "apps/openchallenges/app",
-    "openchallenges-ui": "libs/openchallenges/ui",
-    "schematic-app": "apps/schematic/app"
-  }
-}
