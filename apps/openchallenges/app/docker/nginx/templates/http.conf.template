@@ -9,10 +9,10 @@ http {
 
   server {
     listen 80;
-    server_name rocc;
+    server_name openchallenges-app;
 
-    error_log   /var/log/nginx/rocc.error.log;
-    access_log  /var/log/nginx/rocc.access.log;
+    error_log   /var/log/nginx/openchallenges-app.error.log;
+    access_log  /var/log/nginx/openchallenges-app.access.log;
 
     location / {
       root   /usr/share/nginx/html;
