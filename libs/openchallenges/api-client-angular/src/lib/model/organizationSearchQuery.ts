@@ -9,35 +9,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrganizationSort } from './organizationSort';
+import { OrganizationDirection } from './organizationDirection';
 
 
 /**
- * The metadata of a page.
+ * An organization search query.
  */
-export interface PageMetadata { 
+export interface OrganizationSearchQuery { 
     /**
      * The page number.
      */
-    number: number;
+    pageNumber?: number;
     /**
      * The number of items in a single page.
      */
-    size: number;
+    pageSize?: number;
+    sort?: OrganizationSort;
+    direction?: OrganizationDirection | null;
     /**
-     * Total number of elements in the result set.
+     * A string of search terms used to filter the results.
      */
-    totalElements: number;
-    /**
-     * Total number of pages in the result set.
-     */
-    totalPages: number;
-    /**
-     * Returns if there is a next page.
-     */
-    hasNext: boolean;
-    /**
-     * Returns if there is a previous page.
-     */
-    hasPrevious: boolean;
+    searchTerms?: string;
 }
 

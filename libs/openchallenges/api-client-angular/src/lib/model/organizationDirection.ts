@@ -9,13 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Challenge } from './challenge';
 
 
-export interface ChallengesPageAllOf { 
-    /**
-     * A list of challenges.
-     */
-    challenges: Array<Challenge>;
-}
+/**
+ * The direction to sort the results by.
+ */
+export type OrganizationDirection = 'asc' | 'desc';
+
+export const OrganizationDirection = {
+    Asc: 'asc' as OrganizationDirection,
+    Desc: 'desc' as OrganizationDirection
+};
 
