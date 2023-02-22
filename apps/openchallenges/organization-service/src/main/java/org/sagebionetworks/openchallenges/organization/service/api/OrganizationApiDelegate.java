@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.organization.service.api;
 import java.util.Optional;
 import javax.annotation.Generated;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationsPageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,16 +52,15 @@ public interface OrganizationApiDelegate {
   }
 
   /**
-   * GET /organizations : Get all organizations Returns the organizations
+   * GET /organizations : List organizations List organizations
    *
-   * @param pageNumber The page number. (optional, default to 0)
-   * @param pageSize The number of items in a single page. (optional, default to 100)
+   * @param organizationSearchQuery The search query used to find organizations. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    * @see OrganizationApi#listOrganizations
    */
   default ResponseEntity<OrganizationsPageDto> listOrganizations(
-      Integer pageNumber, Integer pageSize) {
+      OrganizationSearchQueryDto organizationSearchQuery) {
     getRequest()
         .ifPresent(
             request -> {

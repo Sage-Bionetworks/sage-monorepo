@@ -18,30 +18,16 @@ tags:
 paths:
   /organizations:
     get:
-      description: Returns the organizations
+      description: List organizations
       operationId: listOrganizations
       parameters:
-      - description: The page number.
+      - description: The search query used to find organizations.
         explode: true
         in: query
-        name: pageNumber
+        name: organizationSearchQuery
         required: false
         schema:
-          default: 0
-          format: int32
-          minimum: 0
-          type: integer
-        style: form
-      - description: The number of items in a single page.
-        explode: true
-        in: query
-        name: pageSize
-        required: false
-        schema:
-          default: 100
-          format: int32
-          minimum: 1
-          type: integer
+          $ref: '#/components/schemas/OrganizationSearchQuery'
         style: form
       responses:
         "200":
@@ -63,7 +49,7 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: Get all organizations
+      summary: List organizations
       tags:
       - Organization
       x-accepts: application/json
@@ -110,29 +96,14 @@ paths:
       - tag: Organization
 components:
   parameters:
-    pageNumber:
-      description: The page number.
+    organizationSearchQuery:
+      description: The search query used to find organizations.
       explode: true
       in: query
-      name: pageNumber
+      name: organizationSearchQuery
       required: false
       schema:
-        default: 0
-        format: int32
-        minimum: 0
-        type: integer
-      style: form
-    pageSize:
-      description: The number of items in a single page.
-      explode: true
-      in: query
-      name: pageSize
-      required: false
-      schema:
-        default: 100
-        format: int32
-        minimum: 1
-        type: integer
+        $ref: '#/components/schemas/OrganizationSearchQuery'
       style: form
     org:
       description: The unique identifier of the organization.
@@ -163,6 +134,44 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
   schemas:
+    OrganizationSort:
+      default: relevance
+      description: What to sort results by.
+      enum:
+      - created
+      - relevance
+      type: string
+    OrganizationDirection:
+      description: The direction to sort the results by.
+      enum:
+      - asc
+      - desc
+      nullable: true
+      type: string
+    OrganizationSearchQuery:
+      description: An organization search query.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          format: int32
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/OrganizationSort'
+        direction:
+          $ref: '#/components/schemas/OrganizationDirection'
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          example: data provider
+          type: string
+      type: object
     PageMetadata:
       description: The metadata of a page.
       properties:

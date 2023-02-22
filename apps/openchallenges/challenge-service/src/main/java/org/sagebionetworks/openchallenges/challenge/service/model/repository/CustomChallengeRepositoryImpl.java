@@ -83,7 +83,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
 
     SearchResult<ChallengeEntity> result =
         searchSession
-            .search(ChallengeEntity.class) // Book.class
+            .search(ChallengeEntity.class)
             .where(topLevelPredicate)
             .sort(sort)
             .fetch((int) pageable.getOffset(), pageable.getPageSize());
@@ -91,7 +91,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   }
 
   /**
-   * Searches the challenges using the search terms specified
+   * Searches the challenges using the search terms specified.
    *
    * @param pf
    * @param query

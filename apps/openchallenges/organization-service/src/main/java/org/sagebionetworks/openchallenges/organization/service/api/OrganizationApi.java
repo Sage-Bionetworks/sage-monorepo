@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationsPageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -93,16 +94,15 @@ public interface OrganizationApi {
   }
 
   /**
-   * GET /organizations : Get all organizations Returns the organizations
+   * GET /organizations : List organizations List organizations
    *
-   * @param pageNumber The page number. (optional, default to 0)
-   * @param pageSize The number of items in a single page. (optional, default to 100)
+   * @param organizationSearchQuery The search query used to find organizations. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
       operationId = "listOrganizations",
-      summary = "Get all organizations",
+      summary = "List organizations",
       tags = {"Organization"},
       responses = {
         @ApiResponse(
@@ -144,16 +144,11 @@ public interface OrganizationApi {
       value = "/organizations",
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<OrganizationsPageDto> listOrganizations(
-      @Min(0)
-          @Parameter(name = "pageNumber", description = "The page number.")
+      @Parameter(
+              name = "organizationSearchQuery",
+              description = "The search query used to find organizations.")
           @Valid
-          @RequestParam(value = "pageNumber", required = false, defaultValue = "0")
-          Integer pageNumber,
-      @Min(1)
-          @Parameter(name = "pageSize", description = "The number of items in a single page.")
-          @Valid
-          @RequestParam(value = "pageSize", required = false, defaultValue = "100")
-          Integer pageSize) {
-    return getDelegate().listOrganizations(pageNumber, pageSize);
+          OrganizationSearchQueryDto organizationSearchQuery) {
+    return getDelegate().listOrganizations(organizationSearchQuery);
   }
 }
