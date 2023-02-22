@@ -33,12 +33,11 @@
 get:
   tags:
     - Organization
-  summary: Get all organizations
-  description: Returns the organizations
+  summary: List organizations
+  description: List organizations
   operationId: listOrganizations
   parameters:
-    - $ref: ../components/parameters/query/pageNumber.yaml
-    - $ref: ../components/parameters/query/pageSize.yaml
+    - $ref: ../components/parameters/query/organizationSearchQuery.yaml
   responses:
     '200':
       content:
