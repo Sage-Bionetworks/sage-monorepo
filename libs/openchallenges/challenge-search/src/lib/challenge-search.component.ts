@@ -39,7 +39,7 @@ import { DatePipe } from '@angular/common';
 import { assign } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router, UrlSerializer } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -52,7 +52,6 @@ export class ChallengeSearchComponent
   public appVersion: string;
   datepipe: DatePipe = new DatePipe('en-US');
 
-  private queryString!: string;
   private query: BehaviorSubject<ChallengeSearchQuery> =
     new BehaviorSubject<ChallengeSearchQuery>({});
 
@@ -99,7 +98,6 @@ export class ChallengeSearchComponent
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private serializer: UrlSerializer,
     private challengeService: ChallengeService,
     private challengePlatformService: ChallengePlatformService,
     private challengeInputDataTypeService: ChallengeInputDataTypeService,
@@ -298,14 +296,4 @@ export class ChallengeSearchComponent
       duration: 30000,
     });
   }
-
-  getQueryString(queryObject: ChallengeSearchQuery): string {
-    const tree = this.router.createUrlTree([], { queryParams: queryObject });
-    return this.serializer.serialize(tree);
-  }
-
-  // getQueryString(queryObject: ChallengeSearchQuery): string {
-  //   const tree = this.router.createUrlTree([], { queryParams: queryObject });
-  //   return this.serializer.serialize(tree);
-  // }
 }
