@@ -50,20 +50,6 @@ export const routes: Routes = [
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/team').then((m) => m.TeamModule),
   },
-  // {
-  //   path: 'org/:login/:challenge',
-  //   loadChildren: () =>
-  //     import('@sagebionetworks/openchallenges/challenge').then(
-  //       (m) => m.ChallengeModule
-  //     ),
-  // },
-  // {
-  //   path: 'org/:login',
-  //   loadChildren: () =>
-  //     import('@sagebionetworks/openchallenges/org-profile').then(
-  //       (m) => m.OrgProfileModule
-  //     ),
-  // },
   {
     path: 'not-found',
     loadChildren: () =>
