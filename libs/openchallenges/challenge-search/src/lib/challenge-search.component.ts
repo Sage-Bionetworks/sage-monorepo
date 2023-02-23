@@ -31,6 +31,7 @@ import {
   catchError,
   debounceTime,
   distinctUntilChanged,
+  skip,
   takeUntil,
 } from 'rxjs/operators';
 import { Calendar } from 'primeng/calendar';
@@ -38,7 +39,7 @@ import { DatePipe } from '@angular/common';
 import { assign } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ChallengeSearchDataService } from '@sagebionetworks/openchallenges/home';
+import { ActivatedRoute, Router, UrlSerializer } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -51,6 +52,7 @@ export class ChallengeSearchComponent
   public appVersion: string;
   datepipe: DatePipe = new DatePipe('en-US');
 
+  private queryString!: string;
   private query: BehaviorSubject<ChallengeSearchQuery> =
     new BehaviorSubject<ChallengeSearchQuery>({});
 
@@ -95,10 +97,12 @@ export class ChallengeSearchComponent
   sortedBy!: string;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private serializer: UrlSerializer,
     private challengeService: ChallengeService,
     private challengePlatformService: ChallengePlatformService,
     private challengeInputDataTypeService: ChallengeInputDataTypeService,
-    private challengeSearchDataService: ChallengeSearchDataService,
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar
   ) {
@@ -161,14 +165,6 @@ export class ChallengeSearchComponent
     //     })))
     // );
 
-    // set searchterm from home search button
-    this.challengeSearchDataService.getSearchTerm().subscribe((searchTerm) => {
-      if (searchTerm) {
-        this.searchTermValue = searchTerm;
-        this.searchTerms.next(searchTerm);
-      }
-    });
-
     const defaultQuery: ChallengeSearchQuery = {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
@@ -177,17 +173,28 @@ export class ChallengeSearchComponent
       minStartDate: this.selectedYear?.start || undefined,
       maxStartDate: this.selectedYear?.end || undefined,
     } as ChallengeSearchQuery;
-    this.query.next(defaultQuery);
+
+    this.activatedRoute.queryParams.subscribe((params) => {
+      // only support querying by searchTerm from query url for now
+      if (params['searchTerms']) {
+        this.searchTermValue = params['searchTerms'];
+        defaultQuery['searchTerms'] = params['searchTerms'];
+      }
+      this.query.next(defaultQuery);
+    });
   }
 
   ngAfterContentInit(): void {
     this.searchTerms
-      .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy))
+      .pipe(
+        skip(1),
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy)
+      )
       .subscribe((search) => {
-        const newQuery = assign(this.query.getValue(), {
-          searchTerms: search,
-        });
-        this.query.next(newQuery);
+        // update query string in url
+        this.router.navigate([], { queryParams: { searchTerms: search } });
       });
 
     this.query
@@ -291,4 +298,14 @@ export class ChallengeSearchComponent
       duration: 30000,
     });
   }
+
+  getQueryString(queryObject: ChallengeSearchQuery): string {
+    const tree = this.router.createUrlTree([], { queryParams: queryObject });
+    return this.serializer.serialize(tree);
+  }
+
+  // getQueryString(queryObject: ChallengeSearchQuery): string {
+  //   const tree = this.router.createUrlTree([], { queryParams: queryObject });
+  //   return this.serializer.serialize(tree);
+  // }
 }

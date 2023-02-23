@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { ChallengeSearchDataService } from './challenge-search-data.service';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -14,14 +13,12 @@ export class ChallengeSearchComponent {
 
   constructor(
     private readonly configService: ConfigService,
-    private router: Router,
-    private challengeSearchDataService: ChallengeSearchDataService
+    private router: Router
   ) {
     this.isPlatformServer = this.configService.config.isPlatformServer;
   }
 
   onClick(): void {
-    this.challengeSearchDataService.setSearchTerm(this.searchTerm);
-    this.router.navigate(['/challenges']);
+    this.router.navigateByUrl('/challenges?searchTerms=' + this.searchTerm);
   }
 }
