@@ -72,7 +72,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: ':login',
+    path: 'user',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/user-profile').then(
         (m) => m.UserProfileModule
