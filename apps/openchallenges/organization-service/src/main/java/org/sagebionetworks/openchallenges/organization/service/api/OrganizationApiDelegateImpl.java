@@ -1,6 +1,7 @@
 package org.sagebionetworks.openchallenges.organization.service.api;
 
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationsPageDto;
 import org.sagebionetworks.openchallenges.organization.service.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,8 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
   @Autowired OrganizationService organizationService;
 
   @Override
-  public ResponseEntity<OrganizationsPageDto> listOrganizations(
-      Integer pageNumber, Integer pageSize) {
-    return ResponseEntity.ok(organizationService.listOrganizations(pageNumber, pageSize));
+  public ResponseEntity<OrganizationsPageDto> listOrganizations(OrganizationSearchQueryDto query) {
+    return ResponseEntity.ok(organizationService.listOrganizations(query));
   }
 
   @Override

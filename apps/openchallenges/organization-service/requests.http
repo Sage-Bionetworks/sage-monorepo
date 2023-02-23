@@ -4,13 +4,21 @@
 ### Select the base path
 
 # Send the requests directly to the service
-# @basePath = {{organizationServiceHost}}/v1
+@basePath = {{organizationServiceHost}}/v1
 # Send the requests to the API gateway
-@basePath = {{apiGatewayHost}}/api/v1
+# @basePath = {{apiGatewayHost}}/api/v1
 
 ### List the organizations
 
 GET {{basePath}}/organizations
+
+### List the orgs that match the full-text search terms "dream".
+
+GET {{basePath}}/organizations?searchTerms=dream
+
+### Sort the orgs by their creation time in desc oder.
+
+GET {{basePath}}/organizations?sort=created&direction=desc
 
 ### Get an organization by ID
 
