@@ -4,6 +4,7 @@ import { Account } from '@sagebionetworks/openchallenges/api-client-angular-depr
 import {
   catchError,
   map,
+  tap,
   Observable,
   Subscription,
   switchMap,
@@ -18,6 +19,7 @@ import {
   OrganizationService,
   BasicError as ApiClientBasicError,
 } from '@sagebionetworks/openchallenges/api-client-angular';
+import { isApiClientError } from '@sagebionetworks/openchallenges/util';
 
 @Component({
   selector: 'openchallenges-org-profile',
@@ -32,7 +34,7 @@ export class OrgProfileComponent implements OnInit {
   organizationAvatar!: Avatar;
   tabs = ORG_PROFILE_TABS;
   tabKeys: string[] = Object.keys(this.tabs);
-  activeTab: Tab = this.tabs['overview'];
+  activeTab!: Tab;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -46,21 +48,22 @@ export class OrgProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.organization$ = this.activatedRoute.params.pipe(
+      tap((params) => console.log(params)),
       switchMap((params) =>
-        this.organizationService.getOrganization(params['orgLogin'])
+        this.organizationService.getOrganization(params['slug'])
       ),
       catchError((err) => {
         const error = err.error as ApiClientBasicError;
-        if (error.status === 404) {
+        if (isApiClientError(error) && error.status === 404) {
+          // redirect to not-found for 404
           this.router.navigate(['/not-found']);
+          return throwError(() => new Error(error.detail));
+        } else {
+          // redirect to org search for invalid url
+          this.router.navigate(['/orgs']);
+          return throwError(() => new Error(err.message));
         }
-        return throwError(() => new Error(error.detail));
       })
-    );
-
-    const activeTab$ = this.activatedRoute.queryParamMap.pipe(
-      map((params: ParamMap) => params.get('tab')),
-      map((key) => (key === null ? 'overview' : key))
     );
 
     this.organization$.subscribe(
@@ -72,13 +75,12 @@ export class OrgProfileComponent implements OnInit {
         })
     );
 
-    const activeTabSub = activeTab$.subscribe((key) => {
-      if (!this.tabKeys.includes(key)) {
-        this.router.navigate([]);
-      } else {
-        this.activeTab = this.tabs[key];
-      }
-    });
+    const activeTabSub = this.activatedRoute.queryParamMap
+      .pipe(
+        map((params: ParamMap) => params.get('tab')),
+        map((key) => (key === null ? 'overview' : key))
+      )
+      .subscribe((key) => (this.activeTab = this.tabs[key]));
 
     this.subscriptions.push(activeTabSub);
   }
