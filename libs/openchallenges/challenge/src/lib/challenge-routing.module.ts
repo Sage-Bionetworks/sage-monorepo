@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ChallengeComponent } from './challenge.component';
-import { ChallengeOverviewModule } from './challenge-overview/challenge-overview.module';
 
-const routes: Routes = [
+export const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
-    path: ':challengeName',
+    path: ':slug',
     component: ChallengeComponent,
-    children: [{ path: ':challengeName', component: ChallengeOverviewModule }],
+    children: [{ path: '**', component: ChallengeComponent }],
   },
 ];
 

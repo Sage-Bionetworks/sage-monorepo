@@ -1,19 +1,32 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+// import {
+//   Challenge,
+// ChallengeService,
+// BasicError as ApiClientBasicError,
+// } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
-  Account,
   Challenge,
+  // ChallengeService,
+  // BasicError as ApiClientBasicError,
 } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
-import { map, Observable, of, Subscription } from 'rxjs';
+import {
+  // catchError,
+  map,
+  Observable,
+  of,
+  Subscription,
+  // switchMap,
+  // throwError,
+} from 'rxjs';
 import { Tab } from './tab.model';
 import { CHALLENGE_TABS } from './challenge-tabs';
 import {
-  DEPRECATED_MOCK_CHALLENGES,
   Avatar,
+  DEPRECATED_MOCK_CHALLENGES,
 } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { getChallengeSeoData } from './challenge-seo';
-import { SeoService } from '@sagebionetworks/shared/util';
+// import { isApiClientError } from '@sagebionetworks/openchallenges/util';
 
 @Component({
   selector: 'openchallenges-challenge',
@@ -22,7 +35,6 @@ import { SeoService } from '@sagebionetworks/shared/util';
 })
 export class ChallengeComponent implements OnInit {
   public appVersion: string;
-  account$!: Observable<Account | undefined>;
   challenge$!: Observable<Challenge>;
   loggedIn = false;
   progressValue = 0;
@@ -30,15 +42,14 @@ export class ChallengeComponent implements OnInit {
   challengeAvatar!: Avatar;
   tabs = CHALLENGE_TABS;
   tabKeys: string[] = Object.keys(this.tabs);
-  activeTab: Tab = this.tabs['overview'];
+  activeTab!: Tab;
   private subscriptions: Subscription[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private readonly configService: ConfigService,
-    private seoService: SeoService,
-    private renderer2: Renderer2
+    // private challengeService: ChallengeService,
+    private readonly configService: ConfigService
   ) {
     this.appVersion = this.configService.config.appVersion;
   }
@@ -46,17 +57,29 @@ export class ChallengeComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((param) => {
       const challenge = DEPRECATED_MOCK_CHALLENGES.find(
-        (c) => c.name === param['challengeName']
+        (c) => c.name === param['slug']
       );
       if (challenge) {
         this.challenge$ = of(challenge);
       }
     });
-
-    const activeTab$ = this.activatedRoute.queryParamMap.pipe(
-      map((params: ParamMap) => params.get('tab')),
-      map((key) => (key === null ? 'overview' : key))
-    );
+    // TODO: get chalenge using below chunk once
+    // the `slug` property and `getChallenge` service are added
+    // this.challenge$ = this.activatedRoute.params.pipe(
+    //   switchMap((params) => this.challengeService.getChallenge(params['slug'])),
+    //   catchError((err) => {
+    //     const error = err.error as ApiClientBasicError;
+    //     if (isApiClientError(error) && error.status === 404) {
+    //       // redirect to not-found for 404
+    //       this.router.navigate(['/not-found']);
+    //       return throwError(() => new Error(error.detail));
+    //     } else {
+    //       // redirect to org search for invalid url
+    //       this.router.navigate(['/challenges']);
+    //       return throwError(() => new Error(err.message));
+    //     }
+    //   })
+    // );
 
     this.challenge$.subscribe((challenge) => {
       this.challengeAvatar = {
@@ -77,17 +100,14 @@ export class ChallengeComponent implements OnInit {
       this.remainDays = challenge.endDate
         ? this.calcDays(new Date().toUTCString(), challenge.endDate)
         : undefined;
-
-      this.seoService.setData(getChallengeSeoData(challenge), this.renderer2);
     });
 
-    const activeTabSub = activeTab$.subscribe((key) => {
-      if (!this.tabKeys.includes(key)) {
-        this.router.navigate([]);
-      } else {
-        this.activeTab = this.tabs[key];
-      }
-    });
+    const activeTabSub = this.activatedRoute.queryParamMap
+      .pipe(
+        map((params: ParamMap) => params.get('tab')),
+        map((key) => (key === null ? 'overview' : key))
+      )
+      .subscribe((key) => (this.activeTab = this.tabs[key]));
 
     this.subscriptions.push(activeTabSub);
   }
