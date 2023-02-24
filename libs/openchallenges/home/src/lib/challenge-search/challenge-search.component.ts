@@ -9,7 +9,7 @@ import { ConfigService } from '@sagebionetworks/openchallenges/config';
 })
 export class ChallengeSearchComponent {
   public isPlatformServer = false;
-  searchTerm!: string | undefined;
+  searchTerms!: string | undefined;
 
   constructor(
     private readonly configService: ConfigService,
@@ -19,6 +19,6 @@ export class ChallengeSearchComponent {
   }
 
   onClick(): void {
-    this.router.navigateByUrl('/challenges?searchTerms=' + this.searchTerm);
+    this.router.navigateByUrl('/challenges?searchTerms=' + this.searchTerms);
   }
 }

@@ -190,9 +190,9 @@ export class ChallengeSearchComponent
         distinctUntilChanged(),
         takeUntil(this.destroy)
       )
-      .subscribe((search) => {
+      .subscribe((searchTerms) => {
         // update query string in url
-        this.router.navigate([], { queryParams: { searchTerms: search } });
+        this.router.navigate([], { queryParams: { searchTerms } });
       });
 
     this.query
