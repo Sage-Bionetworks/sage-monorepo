@@ -37,6 +37,7 @@
   ],
 
   "forwardPorts": [
+    2181,
     3306,
     4200,
     4211,
@@ -61,10 +62,17 @@
     8888,
     9200,
     9411,
-    27017
+    19092,  // openchallenges-kafka-broker-1
+    27017,  // openchallenges-mongodb
+    29092,  // openchallenges-kafka-broker-2
+    39092   // openchallenges-kafka-broker-3
   ],
 
   "portsAttributes": {
+    "2181": {
+      "label": "openchallenges-zookeeper",
+      "onAutoForward": "silent"
+    },
     "3306": {
       "label": "openchallenges-mariadb",
       "onAutoForward": "silent"
@@ -161,10 +169,22 @@
       "label": "openchallenges-zipkin",
       "onAutoForward": "silent"
     },
+    "19092": {
+      "label": "openchallenges-kafka-broker-1",
+      "onAutoForward": "silent"
+    },
     "27017": {
       "label": "openchallenges-mongo",
       "onAutoForward": "silent"
-    }
+    },
+    "29092": {
+      "label": "openchallenges-kafka-broker-2",
+      "onAutoForward": "silent"
+    },
+    "39092": {
+      "label": "openchallenges-kafka-broker-3",
+      "onAutoForward": "silent"
+    },
   },
 
 	"remoteUser": "vscode",

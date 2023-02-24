@@ -10,6 +10,9 @@ declare -a hostnames=(
   "127.0.0.1 openchallenges-config-server"
   "127.0.0.1 openchallenges-core-service"
   "127.0.0.1 openchallenges-elasticsearch"
+  "127.0.0.1 openchallenges-kafka-broker-1"
+  "127.0.0.1 openchallenges-kafka-broker-2"
+  "127.0.0.1 openchallenges-kafka-broker-3"
   "127.0.0.1 openchallenges-keycloak"
   "127.0.0.1 openchallenges-mariadb"
   "127.0.0.1 openchallenges-mongo"
@@ -17,10 +20,12 @@ declare -a hostnames=(
   "127.0.0.1 openchallenges-organization-service"
   "127.0.0.1 openchallenges-postgres"
   "127.0.0.1 openchallenges-schema-registry"
+  "127.0.0.1 openchallenges-schema-registry"
   "127.0.0.1 openchallenges-service-registry"
   "127.0.0.1 openchallenges-user-service"
   "127.0.0.1 openchallenges-vault"
   "127.0.0.1 openchallenges-zipkin"
+  "127.0.0.1 openchallenges-zookeeper"
   "127.0.0.1 schematic-api"
 )
 
