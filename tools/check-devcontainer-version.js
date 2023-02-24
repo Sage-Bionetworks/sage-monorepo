@@ -1,9 +1,10 @@
 'use strict';
 
 const fs = require('fs');
+import JSON5 from 'json5'
 
 const data = fs.readFileSync('.devcontainer/devcontainer.json');
-const json = JSON.parse(data);
+const json = JSON5.parse(data);
 
 const image = json['image'];
 if (image === undefined) {
