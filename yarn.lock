@@ -7216,11 +7216,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/cli@npm:1.0.0-beta.114":
-  version: 1.0.0-beta.114
-  resolution: "@redocly/cli@npm:1.0.0-beta.114"
+"@redocly/cli@npm:1.0.0-beta.123":
+  version: 1.0.0-beta.123
+  resolution: "@redocly/cli@npm:1.0.0-beta.123"
   dependencies:
-    "@redocly/openapi-core": 1.0.0-beta.114
+    "@redocly/openapi-core": 1.0.0-beta.123
     assert-node-version: ^1.0.3
     chokidar: ^3.5.1
     colorette: ^1.2.0
@@ -7238,13 +7238,13 @@ __metadata:
   bin:
     openapi: bin/cli.js
     redocly: bin/cli.js
-  checksum: e2c19d93dd8b30d0633b0ff7af8801ab1bce73b5957ba22f38c4ba078cbb522707a9ea1f24a839b782a8b94b11d974fcea5f3dd8757ff83b3ad116c486c96cf0
+  checksum: cdc2532a0fa2d05ba7d08f5e6a3992aebb98fb846c53294353fbd5f9af299d7d050e27bc5876abf54f5fe1fdd3ee7cde9228ffaedfcc4233bb1c1d8aacbc22e6
   languageName: node
   linkType: hard
 
-"@redocly/openapi-core@npm:1.0.0-beta.114":
-  version: 1.0.0-beta.114
-  resolution: "@redocly/openapi-core@npm:1.0.0-beta.114"
+"@redocly/openapi-core@npm:1.0.0-beta.123":
+  version: 1.0.0-beta.123
+  resolution: "@redocly/openapi-core@npm:1.0.0-beta.123"
   dependencies:
     "@redocly/ajv": ^8.11.0
     "@types/node": ^14.11.8
@@ -7256,7 +7256,7 @@ __metadata:
     node-fetch: ^2.6.1
     pluralize: ^8.0.0
     yaml-ast-parser: 0.0.43
-  checksum: a368a78c4cecc905dad557cae6ee26940897e0581de211c9498f2659d91f8f9bf585f035f477d463320c10fd53aaf13fa740926c5c4e003845eccebbb8c316e0
+  checksum: a9cacd3352db8ddf5a73059158cd4bdc15252290c58928081f08e07ec5870c74035b3fdd20a7c10417c5614134ce079c320ac76547d467794c3dcd80d24e9b87
   languageName: node
   linkType: hard
 
@@ -25583,7 +25583,7 @@ __metadata:
     "@openapitools/openapi-generator-cli": 2.5.2
     "@prettier/plugin-xml": 2.2.0
     "@probot/adapter-aws-lambda-serverless": 3.0.1
-    "@redocly/cli": 1.0.0-beta.114
+    "@redocly/cli": 1.0.0-beta.123
     "@swc-node/register": 1.5.4
     "@swc/cli": 0.1.57
     "@swc/core": 1.3.19
