@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs');
-import JSON5 from 'json5'
+const JSON5 = require('json5')
 
 const data = fs.readFileSync('.devcontainer/devcontainer.json');
 const json = JSON5.parse(data);
