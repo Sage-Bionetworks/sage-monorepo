@@ -18,7 +18,7 @@ export class ChallengeSearchComponent {
     this.isPlatformServer = this.configService.config.isPlatformServer;
   }
 
-  onClick(): void {
+  onSearch(): void {
     this.router.navigateByUrl('/challenges?searchTerms=' + this.searchTerms);
   }
 }

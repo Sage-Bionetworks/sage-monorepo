@@ -26,12 +26,13 @@
             class="input"
             type="search"
             name="search"
+            (keydown.enter)="onSearch()"
             placeholder="I am interested in..."
             [(ngModel)]="searchTerms"
           />
         </div>
         <div class="control">
-          <a mat-raised-button class="btn" color="primary" (click)="onClick()">Search</a>
+          <button mat-raised-button class="btn" color="primary" (click)="onSearch()">Search</button>
         </div>
       </div>
     </div>
